@@ -172,7 +172,10 @@ Partial Class Zeitreihendarstellung
         '
         'OpenFileDialog1
         '
-        Me.OpenFileDialog1.FileName = "OpenFileDialog1"
+        Me.OpenFileDialog1.DefaultExt = "txt"
+        Me.OpenFileDialog1.Filter = "Text-Dateien (*.txt)|*.txt|CSV-Dateien (*.csv)|*.csv|ZRE-Dateien (*.zre)|*.zre|Al" & _
+            "le Dateien (*.*)|*.*"
+        Me.OpenFileDialog1.Title = "Textdatei öffnen"
         '
         'TEN_Import
         '
