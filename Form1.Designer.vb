@@ -24,11 +24,11 @@ Partial Class Zeitreihendarstellung
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container
         Me.TChart1 = New Steema.TeeChart.TChart
-        Me.ZR_Import = New System.Windows.Forms.Button
+        Me.Button_TxtImport = New System.Windows.Forms.Button
         Me.TextSource1 = New Steema.TeeChart.Data.TextSource
         Me.Commander1 = New Steema.TeeChart.Commander
         Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog
-        Me.TEN_Import = New System.Windows.Forms.Button
+        Me.Button_TENImport = New System.Windows.Forms.Button
         Me.SuspendLayout()
         '
         'TChart1
@@ -141,14 +141,14 @@ Partial Class Zeitreihendarstellung
         '
         Me.TChart1.Walls.Right.AutoHide = False
         '
-        'ZR_Import
+        'Button_TxtImport
         '
-        Me.ZR_Import.Location = New System.Drawing.Point(12, 43)
-        Me.ZR_Import.Name = "ZR_Import"
-        Me.ZR_Import.Size = New System.Drawing.Size(150, 23)
-        Me.ZR_Import.TabIndex = 1
-        Me.ZR_Import.Text = "Zeitreihe importieren"
-        Me.ZR_Import.UseVisualStyleBackColor = True
+        Me.Button_TxtImport.Location = New System.Drawing.Point(12, 43)
+        Me.Button_TxtImport.Name = "Button_TxtImport"
+        Me.Button_TxtImport.Size = New System.Drawing.Size(150, 23)
+        Me.Button_TxtImport.TabIndex = 1
+        Me.Button_TxtImport.Text = "Zeitreihe importieren"
+        Me.Button_TxtImport.UseVisualStyleBackColor = True
         '
         'TextSource1
         '
@@ -177,23 +177,23 @@ Partial Class Zeitreihendarstellung
             "le Dateien (*.*)|*.*"
         Me.OpenFileDialog1.Title = "Textdatei öffnen"
         '
-        'TEN_Import
+        'Button_TENImport
         '
-        Me.TEN_Import.Location = New System.Drawing.Point(168, 43)
-        Me.TEN_Import.Name = "TEN_Import"
-        Me.TEN_Import.Size = New System.Drawing.Size(150, 23)
-        Me.TEN_Import.TabIndex = 3
-        Me.TEN_Import.Text = "TEN importieren"
-        Me.TEN_Import.UseVisualStyleBackColor = True
+        Me.Button_TENImport.Location = New System.Drawing.Point(168, 43)
+        Me.Button_TENImport.Name = "Button_TENImport"
+        Me.Button_TENImport.Size = New System.Drawing.Size(150, 23)
+        Me.Button_TENImport.TabIndex = 3
+        Me.Button_TENImport.Text = "TEN importieren"
+        Me.Button_TENImport.UseVisualStyleBackColor = True
         '
         'Zeitreihendarstellung
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(1181, 1009)
-        Me.Controls.Add(Me.TEN_Import)
+        Me.ClientSize = New System.Drawing.Size(1181, 1002)
+        Me.Controls.Add(Me.Button_TENImport)
         Me.Controls.Add(Me.Commander1)
-        Me.Controls.Add(Me.ZR_Import)
+        Me.Controls.Add(Me.Button_TxtImport)
         Me.Controls.Add(Me.TChart1)
         Me.Name = "Zeitreihendarstellung"
         Me.Text = "Zeitreihendarstellung"
@@ -202,10 +202,10 @@ Partial Class Zeitreihendarstellung
 
     End Sub
     Friend WithEvents TChart1 As Steema.TeeChart.TChart
-    Friend WithEvents ZR_Import As System.Windows.Forms.Button
+    Friend WithEvents Button_TxtImport As System.Windows.Forms.Button
     Friend WithEvents TextSource1 As Steema.TeeChart.Data.TextSource
     Friend WithEvents Commander1 As Steema.TeeChart.Commander
     Friend WithEvents OpenFileDialog1 As System.Windows.Forms.OpenFileDialog
-    Friend WithEvents TEN_Import As System.Windows.Forms.Button
+    Friend WithEvents Button_TENImport As System.Windows.Forms.Button
 
 End Class
