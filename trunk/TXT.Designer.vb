@@ -1,5 +1,5 @@
 <Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
-Partial Class TxtEinstellungen
+Partial Class TXT
     Inherits System.Windows.Forms.Form
 
     'Das Formular überschreibt den Löschvorgang, um die Komponentenliste zu bereinigen.
@@ -148,7 +148,7 @@ Partial Class TxtEinstellungen
         Me.Controls.Add(Me.Button_OK)
         Me.Controls.Add(Me.Button_Cancel)
         Me.Name = "TxtEinstellungen"
-        Me.Text = "Einstellungen"
+        Me.Text = "Einstellungen für Textdatei"
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
