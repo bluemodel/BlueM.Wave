@@ -28,13 +28,13 @@ Public Class Zeitreihendarstellung
                     '--------------
                     Dim Line1 As New Steema.TeeChart.Styles.Line(Me.TChart1.Chart)
                     'Namen vergeben
-                    Line1.Title = Path.GetFileNameWithoutExtension(Me.OpenFileDialog1.FileName)
+                    Line1.Title = ZRE.Zeitreihe.Title
                     'X-Werte als Zeitdaten einstellen
                     Line1.XValues.DateTime = True
                     'Anzahl Serien bestimmen
                     Dim AnzahlSerien As Integer = Me.TChart1.Series.Count
                     'Neue Serie hinzufügen
-                    Me.TChart1.Chart.Series(AnzahlSerien - 1).Add(ZRE.XWerte, ZRE.YWerte)
+                    Me.TChart1.Chart.Series(AnzahlSerien - 1).Add(ZRE.Zeitreihe.XWerte, ZRE.Zeitreihe.YWerte)
 
                 Case ".WEL"
                     'WEL-Dialog initialisieren
@@ -43,18 +43,18 @@ Public Class Zeitreihendarstellung
 
                     DialogResult = WEL.ShowDialog()
                     If (DialogResult = Windows.Forms.DialogResult.OK) Then
-                        For i = 0 To WEL.Spalten.GetUpperBound(0) - 1
+                        For i = 0 To WEL.Zeitreihen.GetUpperBound(0)
                             'Serie zeichnen
                             '--------------
                             Dim Line1 As New Steema.TeeChart.Styles.Line(Me.TChart1.Chart)
                             'X-Werte als Zeitdaten einstellen
                             Line1.XValues.DateTime = True
                             'Namen vergeben
-                            Line1.Title = WEL.Spalten(i + 1) '1. Spalte ist Datum_Zeit!
+                            Line1.Title = WEL.Zeitreihen(i).Title
                             'Anzahl Serien bestimmen
                             Dim AnzahlSerien As Integer = Me.TChart1.Series.Count
                             'Neue Serie hinzufügen
-                            Me.TChart1.Chart.Series(AnzahlSerien - 1).Add(WEL.XWerte, WEL.AllYWerte(i).YWerte)
+                            Me.TChart1.Chart.Series(AnzahlSerien - 1).Add(WEL.Zeitreihen(i).XWerte, WEL.Zeitreihen(i).YWerte)
                         Next
                     End If
 

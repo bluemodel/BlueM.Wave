@@ -2,20 +2,31 @@ Imports System.IO
 
 Public Class ZRE
 
+#Region "Eigenschaften"
+
+    'Eigenschaften
+    '#############
+
     Private _DateiPfad As String
 
     Private Const ZREHEaderLen As Integer = 4       'Die ersten 4 Zeilen der ZRE-Datei gehören zum Header
 
-    Public XWerte() As DateTime
-    Public YWerte() As Double
+    Public Zeitreihe As Zeitreihe
+
+#End Region
+
+#Region "Methoden"
+
+    'Methoden
+    '########
 
     'Konstruktor
     '***********
     Public Sub New(ByVal DateiPfad As String)
         Me._DateiPfad = DateiPfad
+        Me.Zeitreihe = New Zeitreihe(Path.GetFileNameWithoutExtension(DateiPfad))
         Call Me.Read_ZRE()
     End Sub
-
 
     'Eine ZRE-Datei einlesen
     '***********************
@@ -34,8 +45,8 @@ Public Class ZRE
             AnzZeil += 1
         Loop Until StrRead.Peek() = -1
 
-        ReDim Me.XWerte(AnzZeil - ZREHEaderLen - 1)
-        ReDim Me.YWerte(AnzZeil - ZREHEaderLen - 1)
+        'Zeitreihe redimensionieren
+        Me.Zeitreihe.Length = AnzZeil - ZREHEaderLen
 
         'Zurück zum Dateianfang und lesen
         FiStr.Seek(0, SeekOrigin.Begin)
@@ -44,9 +55,9 @@ Public Class ZRE
             Zeile = StrRead.ReadLine.ToString()
             If (j >= ZREHEaderLen) Then
                 'Datum
-                Me.XWerte(j - ZREHEaderLen) = New System.DateTime(Zeile.Substring(0, 4), Zeile.Substring(4, 2), Zeile.Substring(6, 2), Zeile.Substring(9, 2), Zeile.Substring(12, 2), 0, New System.Globalization.GregorianCalendar())
+                Me.Zeitreihe.XWerte(j - ZREHEaderLen) = New System.DateTime(Zeile.Substring(0, 4), Zeile.Substring(4, 2), Zeile.Substring(6, 2), Zeile.Substring(9, 2), Zeile.Substring(12, 2), 0, New System.Globalization.GregorianCalendar())
                 'Wert
-                Me.YWerte(j - ZREHEaderLen) = Convert.ToDouble(Zeile.Substring(15, 14))
+                Me.Zeitreihe.YWerte(j - ZREHEaderLen) = Convert.ToDouble(Zeile.Substring(15, 14))
             End If
         Next
 
@@ -54,5 +65,7 @@ Public Class ZRE
         FiStr.Close()
 
     End Sub
+
+#End Region 'Methoden
 
 End Class
