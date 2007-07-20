@@ -11,11 +11,7 @@ Public Class WEL
     Private _dezimaltrennzeichen As Zeichen             'Dezimaltrennzeichen
     Private _spalten() As String                        'Array der Spaltennamen
 
-    Public XWerte() As DateTime
-    Public Structure Struct_YWerte
-        Public YWerte() As Double
-    End Structure
-    Public AllYWerte() As Struct_YWerte
+    Public Zeitreihen() As Zeitreihe
 
     Private Const WELHeaderLen As Integer = 3           'Die ersten 3 Zeilen der WEL-Datei gehören zum Header
 
@@ -126,10 +122,17 @@ Public Class WEL
             Zeile = StrRead.ReadLine.ToString
         Next
 
-        'Spaltennamen übergeben
+        'Spaltennamen auslesen
         Me.Spalten() = Zeile.Split(New Char() {Me.Trennzeichen.Character}, StringSplitOptions.RemoveEmptyEntries)
         For i = 0 To Spalten.GetUpperBound(0)
             Spalten(i) = Spalten(i).Trim()
+        Next
+
+        'Anzahl Zeitreihen bestimmen
+        ReDim Me.Zeitreihen(Me.Spalten.GetUpperBound(0) - 1)
+        'Zeitreihen neu instanzieren
+        For i = 0 To Me.Spalten.GetUpperBound(0) - 1
+            Me.Zeitreihen(i) = New Zeitreihe(Spalten(i + 1))
         Next
 
         'Listbox aktualisieren
@@ -156,11 +159,13 @@ Public Class WEL
             AnzZeil += 1
         Loop Until StrRead.Peek() = -1
 
-        ReDim XWerte(AnzZeil - WELHeaderLen - 1)
-        ReDim AllYWerte(Me.Spalten.GetUpperBound(0) - 1)
-        For i = 0 To AllYWerte.GetUpperBound(0)
-            ReDim AllYWerte(i).YWerte(AnzZeil - WELHeaderLen - 1)
+        'Zeitreihen redimensionieren
+        For i = 0 To Me.Zeitreihen.GetUpperBound(0)
+            Me.Zeitreihen(i).Length = AnzZeil - WELHeaderLen
         Next
+
+        'temoräres Array für XWerte
+        Dim tmpXWerte(AnzZeil - WELHeaderLen - 1) as DateTime
 
         'Auf Anfang setzen und einlesen
         '------------------------------
@@ -170,12 +175,17 @@ Public Class WEL
             Werte = StrRead.ReadLine.ToString.Split(New Char() {Me.Trennzeichen.Character}, StringSplitOptions.RemoveEmptyEntries)
             If (i >= WELHeaderLen) Then
                 'Erste Spalte: Datum_Zeit
-                XWerte(i - WELHeaderLen) = New System.DateTime(Werte(0).Substring(6, 4), Werte(0).Substring(3, 2), Werte(0).Substring(0, 2), Werte(0).Substring(11, 2), Werte(0).Substring(14, 2), 0, New System.Globalization.GregorianCalendar())
+                tmpXWerte(i - WELHeaderLen) = New System.DateTime(Werte(0).Substring(6, 4), Werte(0).Substring(3, 2), Werte(0).Substring(0, 2), Werte(0).Substring(11, 2), Werte(0).Substring(14, 2), 0, New System.Globalization.GregorianCalendar())
                 'Restliche Spalten: Werte
-                For j = 1 To Me.Spalten.GetUpperBound(0)
-                    AllYWerte(j - 1).YWerte(i - WELHeaderLen) = Convert.ToDouble(Werte(j))
+                For j = 0 To Me.Zeitreihen.GetUpperBound(0)
+                    Me.Zeitreihen(j).YWerte(i - WELHeaderLen) = Convert.ToDouble(Werte(j + 1))
                 Next
             End If
+        Next
+
+        'XWerte an alle Zeitreihen übergeben
+        For i = 0 To Me.Zeitreihen.GetUpperBound(0)
+            Me.Zeitreihen(i).XWerte = tmpXWerte
         Next
 
         StrRead.Close()

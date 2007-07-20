@@ -87,6 +87,7 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Zeichen.vb" />
+    <Compile Include="Zeitreihe.vb" />
     <Compile Include="ZRE.vb" />
   </ItemGroup>
   <ItemGroup>
