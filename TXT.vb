@@ -1,4 +1,4 @@
-Public Class TxtEinstellungen
+Public Class TXT
 
 #Region "Eigenschaften"
 
@@ -12,8 +12,8 @@ Public Class TxtEinstellungen
     Private semikolon As zeichen = New zeichen(";")
     Private komma As zeichen = New zeichen(",")
     Private punkt As zeichen = New zeichen(".")
-    private leerzeichen As zeichen = New zeichen(" ")
-    private tab As zeichen = New zeichen(Chr(09))
+    Private leerzeichen As zeichen = New zeichen(" ")
+    Private tab As zeichen = New zeichen(Chr(9))
 
 #End Region 'Eigenschaften
 
@@ -69,7 +69,7 @@ Public Class TxtEinstellungen
 
     'Form laden
     '**********
-    Private Sub TextSourceSettings_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
+    Private Sub TXT_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
 
         'Combobox Trennzeichen initialisieren
         Me.ComboBox_Trennzeichen.BeginUpdate()
@@ -102,7 +102,7 @@ Public Class TxtEinstellungen
 
     'OK Button gedrückt
     '******************
-    Private Sub Button_OK_Click( ByVal sender As System.Object,  ByVal e As System.EventArgs) Handles Button_OK.Click
+    Private Sub Button_OK_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button_OK.Click
 
         'Einstellungen übernehmen
         '------------------------
@@ -110,7 +110,7 @@ Public Class TxtEinstellungen
         'Trenn- und Dezimaltrennzeichen
         Me.Trennzeichen = Me.ComboBox_Trennzeichen.SelectedItem
         Me.Dezimaltrennzeichen = Me.ComboBox_Dezimaltrennzeichen.SelectedItem
-        
+
         'Anzahl Kopfzeilen
         Me.TextBox_AnzKopfzeilen.ValidatingType = GetType(System.Int32)
         If (Me.TextBox_AnzKopfzeilen.ValidateText() = Nothing) Then
@@ -125,49 +125,5 @@ Public Class TxtEinstellungen
     End Sub
 
 #End Region 'Methoden
-
-End Class
-
-Public Class zeichen
-
-    Private _char As Char
-
-    Public Property Character() As Char
-        Get
-            Return _char
-        End Get
-        Set(ByVal value As Char)
-            _char = value
-        End Set
-    End Property
-
-    'Konstruktoren
-    '*************
-    Public Sub New(ByVal str As String)
-        Character = Convert.ToChar(str)
-    End Sub
-
-    Public Sub New(ByVal chr As Char)
-        Character = chr
-    End Sub
-
-    'Zeichenausgabe als String
-    '*************************
-    Public Overrides Function tostring() As String
-
-        Dim output As String
-
-        Select Case Character
-            Case Chr(32)
-                output = "Leerzeichen"
-            Case Chr(9)
-                output = "Tab"
-            Case Else
-                output = Convert.ToString(Character)
-        End Select
-
-        Return output
-
-    End Function
 
 End Class

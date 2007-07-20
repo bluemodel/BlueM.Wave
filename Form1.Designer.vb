@@ -38,6 +38,7 @@ Partial Class Zeitreihendarstellung
         '
         Me.TChart1.Aspect.ElevationFloat = 345
         Me.TChart1.Aspect.RotationFloat = 345
+        Me.TChart1.Aspect.View3D = False
         '
         '
         '
@@ -102,6 +103,7 @@ Partial Class Zeitreihendarstellung
         '
         '
         '
+        Me.TChart1.Legend.LegendStyle = Steema.TeeChart.LegendStyles.Series
         '
         '
         '
@@ -173,8 +175,7 @@ Partial Class Zeitreihendarstellung
         'OpenFileDialog1
         '
         Me.OpenFileDialog1.DefaultExt = "txt"
-        Me.OpenFileDialog1.Filter = "Text-Dateien (*.txt)|*.txt|CSV-Dateien (*.csv)|*.csv|ZRE-Dateien (*.zre)|*.zre|Al" & _
-            "le Dateien (*.*)|*.*"
+        Me.OpenFileDialog1.Filter = "Text-Dateien (*.txt)|*.txt|ZRE-Dateien (*.zre)|*.zre|CSV-Dateien (*.csv)|*.csv|WEL-Dateien (*.wel)|*.wel|Alle Dateien (*.*)|*.*"
         Me.OpenFileDialog1.Title = "Textdatei öffnen"
         '
         'Button_TENImport

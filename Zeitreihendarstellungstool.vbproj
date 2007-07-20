@@ -74,12 +74,20 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="TxtEinstellungen.Designer.vb">
-      <DependentUpon>TxtEinstellungen.vb</DependentUpon>
+    <Compile Include="TXT.Designer.vb">
+      <DependentUpon>TXT.vb</DependentUpon>
     </Compile>
-    <Compile Include="TxtEinstellungen.vb">
+    <Compile Include="TXT.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="WEL.Designer.vb">
+      <DependentUpon>WEL.vb</DependentUpon>
+    </Compile>
+    <Compile Include="WEL.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Zeichen.vb" />
+    <Compile Include="ZRE.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Form1.resx">
@@ -93,9 +101,13 @@
       <CustomToolNamespace>My.Resources</CustomToolNamespace>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="TxtEinstellungen.resx">
+    <EmbeddedResource Include="TXT.resx">
       <SubType>Designer</SubType>
-      <DependentUpon>TxtEinstellungen.vb</DependentUpon>
+      <DependentUpon>TXT.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WEL.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>WEL.vb</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
