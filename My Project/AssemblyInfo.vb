@@ -8,11 +8,11 @@ Imports System.Runtime.InteropServices
 
 ' Die Werte der Assemblyattribute überprüfen
 
-<Assembly: AssemblyTitle("WindowsApplication2")> 
+<Assembly: AssemblyTitle("Wave")> 
 <Assembly: AssemblyDescription("")> 
-<Assembly: AssemblyCompany("tud")> 
-<Assembly: AssemblyProduct("WindowsApplication2")> 
-<Assembly: AssemblyCopyright("Copyright © tud 2007")> 
+<Assembly: AssemblyCompany("IHWB - TU-Darmstadt")> 
+<Assembly: AssemblyProduct("Wave")> 
+<Assembly: AssemblyCopyright("Copyright © IHWB 2007")> 
 <Assembly: AssemblyTrademark("")> 
 
 <Assembly: ComVisible(False)>

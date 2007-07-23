@@ -1,6 +1,6 @@
 Imports System.IO
 
-Public Class Zeitreihendarstellung
+Public Class Wave
 
     'Eigenschaften
     '#############
