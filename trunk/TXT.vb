@@ -115,8 +115,8 @@ Public Class TXT
         Me.Dezimaltrennzeichen = Me.ComboBox_Dezimaltrennzeichen.SelectedItem
 
         'Anzahl Kopfzeilen
-        Me.TextBox_AnzKopfzeilen.ValidatingType = GetType(System.Int32)
-        If (Me.TextBox_AnzKopfzeilen.ValidateText() = Nothing) Then
+
+        If (Me.TextBox_AnzKopfzeilen.Text < 0) Then
             MsgBox("Bitte eine Zahl für die Anzahl der Kopfzeilen eingeben!", MsgBoxStyle.Exclamation, "Fehler")
             Me.TextBox_AnzKopfzeilen.Focus()
             Me.DialogResult = Windows.Forms.DialogResult.None
