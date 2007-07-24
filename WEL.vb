@@ -2,24 +2,29 @@ Imports System.IO
 
 Public Class WEL
 
-#Region "Eigenschaften"
-
-    'Eigenschaften
-    '#############
-    Private _file As String                             'Pfad zur Datei
-    Private _trennzeichen As Zeichen                    'Spaltentrennzeichen
-    Private _dezimaltrennzeichen As Zeichen             'Dezimaltrennzeichen
-    Private _spalten() As String                        'Array der Spaltennamen
-
-    Public Zeitreihen() As Zeitreihe
-
-    Private Const WELHeaderLen As Integer = 3           'Die ersten 3 Zeilen der WEL-Datei gehören zum Header
-
+    'oft verwendete Zeichen (quasi Konstanten)
+    '-----------------------------------------
     Private semikolon As Zeichen = New Zeichen(";")
     Private komma As Zeichen = New Zeichen(",")
     Private punkt As Zeichen = New Zeichen(".")
     Private leerzeichen As Zeichen = New Zeichen(" ")
     Private tab As Zeichen = New Zeichen(Chr(9))
+
+#Region "Eigenschaften"
+
+    'Eigenschaften
+    '#############
+
+    Private _file As String                             'Pfad zur Datei
+    Private _trennzeichen As Zeichen = semikolon        'Spaltentrennzeichen (standardmäßig Semikolon)
+    Private _dezimaltrennzeichen As Zeichen = punkt     'Dezimaltrennzeichen (standardmäßig Punkt)
+    Private _spalten() As String                        'Array der vorhandenen Spaltennamen
+    Private _spaltenSel() As String                     'Array der ausgewählten Spaltennamen
+
+    Public Zeitreihen() As Zeitreihe
+
+    Private Const WELHeaderLen As Integer = 3           'Die ersten 3 Zeilen der WEL-Datei gehören zum Header
+
 
 #End Region
 
@@ -65,12 +70,50 @@ Public Class WEL
         End Set
     End Property
 
+    Public Property SpaltenSel() As String()
+        Get
+            Return _spaltenSel
+        End Get
+        Set(ByVal value As String())
+            _spaltenSel = value
+        End Set
+    End Property
+
 #End Region 'Properties
 
 #Region "Methoden"
 
     'Methoden
     '########
+
+    'Konstruktor
+    '***********
+    Public Sub New(ByVal FileName As String, ByVal ParamArray spaltenSel() As String)
+
+        ' Dieser Aufruf ist für den Windows Form-Designer erforderlich.
+        InitializeComponent()
+
+        ' Fügen Sie Initialisierungen nach dem InitializeComponent()-Aufruf hinzu.
+
+        'Dateinamen setzen
+        Me.File = FileName
+
+        'Spalten auslesen
+        Call Me.SpaltenAuslesen()
+
+        'Spaltenauswahl
+        If (spaltenSel.Length = 0) Then
+            'Wenn keine Spaltenauswahl gegeben ist, Dialog anzeigen
+            If (Not Me.ShowDialog() = Windows.Forms.DialogResult.OK) Then
+                Exit Sub
+            End If
+        Else
+            'Ansonsten Spaltenauswahl übergeben und WEL einlesen
+            Me.SpaltenSel = spaltenSel
+            Call Me.Read_WEL()
+        End If
+
+    End Sub
 
     'Form laden
     '**********
@@ -85,23 +128,18 @@ Public Class WEL
         Me.ComboBox_Trennzeichen.Items.Add(Me.tab)
         Me.ComboBox_Trennzeichen.EndUpdate()
 
+        Me.ComboBox_Trennzeichen.SelectedItem = Me.Trennzeichen
+
         'Combobox Dezimaltrennzeichen initialisieren
         Me.ComboBox_Dezimaltrennzeichen.BeginUpdate()
         Me.ComboBox_Dezimaltrennzeichen.Items.Add(Me.komma)
         Me.ComboBox_Dezimaltrennzeichen.Items.Add(Me.punkt)
         Me.ComboBox_Dezimaltrennzeichen.EndUpdate()
 
-        'Standard-Trennzeichen setzen
-        Me.Trennzeichen = Me.semikolon
-
-        'Standard-Dezimaltrennzeichen setzen
-        Me.Dezimaltrennzeichen = Me.punkt
+        Me.ComboBox_Dezimaltrennzeichen.SelectedItem = Me.Dezimaltrennzeichen
 
         'Datei als Vorschau anzeigen
         Me.RichTextBox_Vorschau.LoadFile(Me.File, RichTextBoxStreamType.PlainText)
-
-        'Spalten auslesen
-        SpaltenAuslesen()
 
     End Sub
 
@@ -128,13 +166,6 @@ Public Class WEL
             Spalten(i) = Spalten(i).Trim()
         Next
 
-        'Anzahl Zeitreihen bestimmen
-        ReDim Me.Zeitreihen(Me.Spalten.GetUpperBound(0) - 1)
-        'Zeitreihen neu instanzieren
-        For i = 0 To Me.Spalten.GetUpperBound(0) - 1
-            Me.Zeitreihen(i) = New Zeitreihe(Spalten(i + 1))
-        Next
-
         'Listbox aktualisieren
         Me.ListBox_Spalten.Items.Clear()
         Me.ListBox_Spalten.Items.AddRange(Me.Spalten)
@@ -143,10 +174,10 @@ Public Class WEL
 
     'WEL-Datei einlesen
     '******************
-    Public Sub Read_WEL()
+    Public Function Read_WEL() As Zeitreihe()
 
         Dim AnzZeil As Integer = 0
-        Dim i, j As Integer
+        Dim i, j, n As Integer
         Dim Zeile As String
         Dim Werte() As String = {}
 
@@ -159,13 +190,17 @@ Public Class WEL
             AnzZeil += 1
         Loop Until StrRead.Peek() = -1
 
+        'Anzahl Zeitreihen bestimmen
+        ReDim Me.Zeitreihen(Me.SpaltenSel.GetUpperBound(0))
+
         'Zeitreihen redimensionieren
         For i = 0 To Me.Zeitreihen.GetUpperBound(0)
+            Me.Zeitreihen(i) = New Zeitreihe(SpaltenSel(i))
             Me.Zeitreihen(i).Length = AnzZeil - WELHeaderLen
         Next
 
         'temoräres Array für XWerte
-        Dim tmpXWerte(AnzZeil - WELHeaderLen - 1) as DateTime
+        Dim tmpXWerte(AnzZeil - WELHeaderLen - 1) As DateTime
 
         'Auf Anfang setzen und einlesen
         '------------------------------
@@ -177,21 +212,42 @@ Public Class WEL
                 'Erste Spalte: Datum_Zeit
                 tmpXWerte(i - WELHeaderLen) = New System.DateTime(Werte(0).Substring(6, 4), Werte(0).Substring(3, 2), Werte(0).Substring(0, 2), Werte(0).Substring(11, 2), Werte(0).Substring(14, 2), 0, New System.Globalization.GregorianCalendar())
                 'Restliche Spalten: Werte
-                For j = 0 To Me.Zeitreihen.GetUpperBound(0)
-                    Me.Zeitreihen(j).YWerte(i - WELHeaderLen) = Convert.ToDouble(Werte(j + 1))
+                n = 0
+                For j = 1 To Me.Spalten.GetUpperBound(0)
+                    If (isSelected(Me.Spalten(j))) Then
+                        Me.Zeitreihen(n).YWerte(i - WELHeaderLen) = Convert.ToDouble(Werte(j))
+                        n += 1
+                    End If
                 Next
             End If
         Next
+
+        StrRead.Close()
+        FiStr.Close()
 
         'XWerte an alle Zeitreihen übergeben
         For i = 0 To Me.Zeitreihen.GetUpperBound(0)
             Me.Zeitreihen(i).XWerte = tmpXWerte
         Next
 
-        StrRead.Close()
-        FiStr.Close()
+        Return Me.Zeitreihen
 
-    End Sub
+    End Function
+
+    'Überprüfung, ob eine Spalte ausgewählt ist
+    '******************************************
+    Private Function isSelected(ByVal spalte As String) As Boolean
+
+        isSelected = False
+        Dim i As Integer
+
+        For i = 0 To Me.SpaltenSel.GetUpperBound(0)
+            If (Me.SpaltenSel(i) = spalte) Then
+                Return True
+            End If
+        Next
+
+    End Function
 
     'OK Button gedrückt
     '******************
@@ -204,6 +260,9 @@ Public Class WEL
         Me.Dezimaltrennzeichen = Me.ComboBox_Dezimaltrennzeichen.SelectedItem
 
         'TODO: Ausgewählte Spalten übernehmen
+        'momentan werden alle Spalten ausser "Datum_Zeit" übernommen
+        ReDim Me.SpaltenSel(Me.Spalten.GetUpperBound(0) - 1)
+        Array.Copy(Me.Spalten, 1, Me.SpaltenSel, 0, Me.Spalten.Length - 1)
 
         'WEL-Datei einlesen
         Call Me.Read_WEL()

@@ -1,19 +1,22 @@
 Public Class TXT
 
+    'oft verwendete Zeichen (quasi Konstanten)
+    '-----------------------------------------
+    Private semikolon As Zeichen = New Zeichen(";")
+    Private komma As Zeichen = New Zeichen(",")
+    Private punkt As Zeichen = New Zeichen(".")
+    Private leerzeichen As Zeichen = New Zeichen(" ")
+    Private tab As Zeichen = New Zeichen(Chr(9))
+
 #Region "Eigenschaften"
 
     'Eigenschaften
     '#############
+
     Private _file As String                     'Pfad zur Datei
     Private _trennzeichen As zeichen            'Spaltentrennzeichen
     Private _dezimaltrennzeichen As zeichen     'Dezimaltrennzeichen
     Private _anzKopfzeilen As Integer           'Anzahl Kopfzeilen
-
-    Private semikolon As zeichen = New zeichen(";")
-    Private komma As zeichen = New zeichen(",")
-    Private punkt As zeichen = New zeichen(".")
-    Private leerzeichen As zeichen = New zeichen(" ")
-    Private tab As zeichen = New zeichen(Chr(9))
 
 #End Region 'Eigenschaften
 

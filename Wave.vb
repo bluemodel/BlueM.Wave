@@ -39,7 +39,7 @@ Public Class Wave
     '*********************
     Public Sub Import_ZRE(ByVal FileName As String)
 
-        'ZRE-Objekt intialisieren
+        'ZRE-Objekt instanzieren
         Dim ZRE As New ZRE(FileName)
         'Serie zeichnen
         '--------------
@@ -57,29 +57,28 @@ Public Class Wave
 
     'WEL-Datei importieren
     '*********************
-    Public Sub Import_WEL(ByVal FileName As String)
-        
-        Dim i as Integer
-        
-        'WEL-Dialog initialisieren
-        Dim WEL As New WEL()
-        WEL.File = FileName
+    Public Sub Import_WEL(ByVal FileName As String, ByVal ParamArray spaltenSel() As String)
 
-        If (WEL.ShowDialog() = Windows.Forms.DialogResult.OK) Then
-            For i = 0 To WEL.Zeitreihen.GetUpperBound(0)
-                'Serie zeichnen
-                '--------------
-                Dim Line1 As New Steema.TeeChart.Styles.Line(Me.TChart1.Chart)
-                'X-Werte als Zeitdaten einstellen
-                Line1.XValues.DateTime = True
-                'Namen vergeben
-                Line1.Title = WEL.Zeitreihen(i).Title
-                'Anzahl Serien bestimmen
-                Dim AnzahlSerien As Integer = Me.TChart1.Series.Count
-                'Neue Serie hinzufügen
-                Me.TChart1.Chart.Series(AnzahlSerien - 1).Add(WEL.Zeitreihen(i).XWerte, WEL.Zeitreihen(i).YWerte)
-            Next
-        End If
+        Dim i As Integer
+
+        'WEL-Objekt instanzieren
+        Dim WEL As New WEL(FileName, spaltenSel)
+
+        'Serien zeichnen
+        '---------------
+        For i = 0 To WEL.Zeitreihen.GetUpperBound(0)
+
+            Dim Line1 As New Steema.TeeChart.Styles.Line(Me.TChart1.Chart)
+            'X-Werte als Zeitdaten einstellen
+            Line1.XValues.DateTime = True
+            'Namen vergeben
+            Line1.Title = WEL.Zeitreihen(i).Title
+            'Anzahl Serien bestimmen
+            Dim AnzahlSerien As Integer = Me.TChart1.Series.Count
+            'Neue Serie hinzufügen
+            Me.TChart1.Chart.Series(AnzahlSerien - 1).Add(WEL.Zeitreihen(i).XWerte, WEL.Zeitreihen(i).YWerte)
+
+        Next
 
     End Sub
 
@@ -87,7 +86,7 @@ Public Class Wave
     '*********************
     Public Sub Import_TXT(FileName as String)
 
-        'TXT-Dialog initialisieren
+        'TXT-Objekt instanzieren
         Dim TXT As New TXT()
         TXT.File = FileName
 
@@ -120,6 +119,22 @@ Public Class Wave
             Me.TChart1.Chart.Series(AnzahlSerien - 1).DataSource = Me.TextSource1.Series
 
         End If
+    End Sub
+
+    'Zeitreihe importieren
+    '*********************
+    Public Sub Import_Zeitreihe(ByVal zre As Zeitreihe)
+
+        Dim Line1 As New Steema.TeeChart.Styles.Line(Me.TChart1.Chart)
+        'X-Werte als Zeitdaten einstellen
+        Line1.XValues.DateTime = True
+        'Namen vergeben
+        Line1.Title = zre.Title
+        'Anzahl Serien bestimmen
+        Dim AnzahlSerien As Integer = Me.TChart1.Series.Count
+        'Neue Serie hinzufügen
+        Me.TChart1.Chart.Series(AnzahlSerien - 1).Add(zre.XWerte, zre.YWerte)
+
     End Sub
 
     'TEN-Datei importieren

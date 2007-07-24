@@ -175,7 +175,8 @@ Partial Class Wave
         'OpenFileDialog1
         '
         Me.OpenFileDialog1.DefaultExt = "txt"
-        Me.OpenFileDialog1.Filter = "Text-Dateien (*.txt)|*.txt|ZRE-Dateien (*.zre)|*.zre|CSV-Dateien (*.csv)|*.csv|WEL-Dateien (*.wel)|*.wel|Alle Dateien (*.*)|*.*"
+        Me.OpenFileDialog1.Filter = "Text-Dateien (*.txt)|*.txt|ZRE-Dateien (*.zre)|*.zre|CSV-Dateien (*.csv)|*.csv|WE" & _
+            "L-Dateien (*.wel)|*.wel|Alle Dateien (*.*)|*.*"
         Me.OpenFileDialog1.Title = "Textdatei öffnen"
         '
         'Button_TENImport
@@ -187,7 +188,7 @@ Partial Class Wave
         Me.Button_TENImport.Text = "TEN importieren"
         Me.Button_TENImport.UseVisualStyleBackColor = True
         '
-        'Zeitreihendarstellung
+        'Wave
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
@@ -196,17 +197,17 @@ Partial Class Wave
         Me.Controls.Add(Me.Commander1)
         Me.Controls.Add(Me.Button_TxtImport)
         Me.Controls.Add(Me.TChart1)
-        Me.Name = "Zeitreihendarstellung"
+        Me.Name = "Wave"
         Me.Text = "Zeitreihendarstellung"
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
     End Sub
-    Friend WithEvents TChart1 As Steema.TeeChart.TChart
     Friend WithEvents Button_TxtImport As System.Windows.Forms.Button
     Friend WithEvents TextSource1 As Steema.TeeChart.Data.TextSource
     Friend WithEvents Commander1 As Steema.TeeChart.Commander
     Friend WithEvents OpenFileDialog1 As System.Windows.Forms.OpenFileDialog
     Friend WithEvents Button_TENImport As System.Windows.Forms.Button
+    Public WithEvents TChart1 As Steema.TeeChart.TChart
 
 End Class
