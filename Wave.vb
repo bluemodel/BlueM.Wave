@@ -66,20 +66,24 @@ Public Class Wave
 
         'Serien zeichnen
         '---------------
-        For i = 0 To WEL.Zeitreihen.GetUpperBound(0)
+        If (Not IsNothing(WEL.Zeitreihen)) Then
 
-            Dim Line1 As New Steema.TeeChart.Styles.Line(Me.TChart1.Chart)
-            'X-Werte als Zeitdaten einstellen
-            Line1.XValues.DateTime = True
-            'Namen vergeben
-            Line1.Title = WEL.Zeitreihen(i).Title
-            'Anzahl Serien bestimmen
-            Dim AnzahlSerien As Integer = Me.TChart1.Series.Count
-            'Neue Serie hinzufügen
-            Me.TChart1.Chart.Series(AnzahlSerien - 1).Add(WEL.Zeitreihen(i).XWerte, WEL.Zeitreihen(i).YWerte)
+            For i = 0 To WEL.Zeitreihen.GetUpperBound(0)
 
-        Next
+                Dim Line1 As New Steema.TeeChart.Styles.Line(Me.TChart1.Chart)
+                'X-Werte als Zeitdaten einstellen
+                Line1.XValues.DateTime = True
+                'Namen vergeben
+                Line1.Title = WEL.Zeitreihen(i).Title
+                'Anzahl Serien bestimmen
+                Dim AnzahlSerien As Integer = Me.TChart1.Series.Count
+                'Neue Serie hinzufügen
+                Me.TChart1.Chart.Series(AnzahlSerien - 1).Add(WEL.Zeitreihen(i).XWerte, WEL.Zeitreihen(i).YWerte)
 
+            Next
+
+        End If
+        
     End Sub
 
     'TXT-Datei importieren

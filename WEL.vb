@@ -113,12 +113,12 @@ Public Class WEL
 
         'Spaltenauswahl
         If (spaltenSel.Length = 0) Then
-            'Wenn keine Spaltenauswahl gegeben ist, Dialog anzeigen
+            'Wenn keine Spaltenauswahl gegeben ist, WEL-Dialog anzeigen
             If (Not Me.ShowDialog() = Windows.Forms.DialogResult.OK) Then
                 Exit Sub
             End If
         Else
-            'Ansonsten Spaltenauswahl übergeben und WEL einlesen
+            'Ansonsten Spaltenauswahl übergeben und WEL direkt einlesen
             Me.SpaltenSel = spaltenSel
             Call Me.Read_WEL()
         End If
@@ -142,8 +142,8 @@ Public Class WEL
 
         'Combobox Dezimaltrennzeichen initialisieren
         Me.ComboBox_Dezimaltrennzeichen.BeginUpdate()
-        Me.ComboBox_Dezimaltrennzeichen.Items.Add(Me.komma)
         Me.ComboBox_Dezimaltrennzeichen.Items.Add(Me.punkt)
+        Me.ComboBox_Dezimaltrennzeichen.Items.Add(Me.komma)
         Me.ComboBox_Dezimaltrennzeichen.EndUpdate()
 
         Me.ComboBox_Dezimaltrennzeichen.SelectedItem = Me.Dezimaltrennzeichen
@@ -283,10 +283,16 @@ Public Class WEL
 
         'Ausgewählte Spalten
         Dim i As Integer
-        ReDim Me.SpaltenSel(Me.ListBox_YSpalten.SelectedItems.Count - 1)
-        For i = 0 To Me.ListBox_YSpalten.SelectedItems.Count - 1
-            Me.SpaltenSel(i) = Me.ListBox_YSpalten.SelectedItems(i)
-        Next
+        If (Me.ListBox_YSpalten.SelectedItems.Count < 1) Then
+            MsgBox("Bitte mindestens eine Y-Spalte auswählen!", MsgBoxStyle.Exclamation, "Fehler")
+            Me.DialogResult = Windows.Forms.DialogResult.None
+            Exit Sub
+        Else
+            ReDim Me.SpaltenSel(Me.ListBox_YSpalten.SelectedItems.Count - 1)
+            For i = 0 To Me.ListBox_YSpalten.SelectedItems.Count - 1
+                Me.SpaltenSel(i) = Me.ListBox_YSpalten.SelectedItems(i)
+            Next
+        End If
 
         'WEL-Datei einlesen
         Call Me.Read_WEL()
@@ -296,8 +302,10 @@ Public Class WEL
     'Wenn Trennzeichen geändert wird, Spalten neu auslesen
     '*****************************************************
     Private Sub ComboBox_Trennzeichen_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ComboBox_Trennzeichen.SelectedIndexChanged
+
         Me.Trennzeichen = Me.ComboBox_Trennzeichen.SelectedItem
         Call Me.SpaltenAuslesen()
+
     End Sub
 
 #End Region 'Methoden

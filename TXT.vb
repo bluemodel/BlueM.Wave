@@ -85,8 +85,8 @@ Public Class TXT
 
         'Combobox Dezimaltrennzeichen initialisieren
         Me.ComboBox_Dezimaltrennzeichen.BeginUpdate()
-        Me.ComboBox_Dezimaltrennzeichen.Items.Add(Me.komma)
         Me.ComboBox_Dezimaltrennzeichen.Items.Add(Me.punkt)
+        Me.ComboBox_Dezimaltrennzeichen.Items.Add(Me.komma)
         Me.ComboBox_Dezimaltrennzeichen.EndUpdate()
 
         'Standard-Trennzeichen setzen
