@@ -16,8 +16,9 @@ Public Class WEL
     '#############
 
     Private _file As String                             'Pfad zur Datei
+    Private _zeichengetrennt As Boolean = True          'Zeichengetrennte (standardmäßig) oder Spalten mit fester Breite
     Private _trennzeichen As Zeichen = semikolon        'Spaltentrennzeichen (standardmäßig Semikolon)
-    Private _dezimaltrennzeichen As Zeichen = punkt     'Dezimaltrennzeichen (standardmäßig Punkt)
+    Private _spaltenbreite As Integer = 16              'Breite einer Spalte (standardmäßig 17)
     Private _XSpalte As String                          'X-Spalte
     Private _Yspalten() As String                       'Array der vorhandenen Y-Spaltennamen
     Private _spaltenSel() As String                     'Array der ausgewählten Y-Spaltennamen
@@ -25,6 +26,7 @@ Public Class WEL
     Public Zeitreihen() As Zeitreihe
 
     Private Const WELHeaderLen As Integer = 3           'Die ersten 3 Zeilen der WEL-Datei gehören zum Header
+    Private Const SpaltenOffset As Integer = 1          'Anzahl Zeichen bevor die erste Spalte anfängt (nur bei Spalten mit fester Breite)
 
 
 #End Region
@@ -42,6 +44,25 @@ Public Class WEL
         End Set
     End Property
 
+    Public Property Zeichengetrennt() As Boolean
+        Get
+            Return _zeichengetrennt
+        End Get
+        Set(ByVal value As Boolean)
+            _zeichengetrennt = value
+            If (_zeichengetrennt) Then
+                Me.RadioButton_Zeichengetrennt.Checked = True
+                Me.ComboBox_Trennzeichen.Enabled = True
+                Me.TextBox_Spaltenbreite.Enabled = False
+            Else
+                Me.RadioButton_Zeichengetrennt.Checked = False
+                Me.ComboBox_Trennzeichen.Enabled = False
+                Me.TextBox_Spaltenbreite.Enabled = True
+            End If
+
+        End Set
+    End Property
+
     Public Property Trennzeichen() As Zeichen
         Get
             Return _trennzeichen
@@ -52,13 +73,13 @@ Public Class WEL
         End Set
     End Property
 
-    Public Property Dezimaltrennzeichen() As Zeichen
+    Public Property Spaltenbreite() As Integer
         Get
-            Return _dezimaltrennzeichen
+            Return _spaltenbreite
         End Get
-        Set(ByVal value As Zeichen)
-            _dezimaltrennzeichen = value
-            Me.ComboBox_Dezimaltrennzeichen.SelectedItem = _dezimaltrennzeichen
+        Set(ByVal value As Integer)
+            _spaltenbreite = value
+            Me.TextBox_Spaltenbreite.Text = _spaltenbreite.ToString()
         End Set
     End Property
 
@@ -138,15 +159,10 @@ Public Class WEL
         Me.ComboBox_Trennzeichen.Items.Add(Me.tab)
         Me.ComboBox_Trennzeichen.EndUpdate()
 
-        Me.ComboBox_Trennzeichen.SelectedItem = Me.Trennzeichen
-
-        'Combobox Dezimaltrennzeichen initialisieren
-        Me.ComboBox_Dezimaltrennzeichen.BeginUpdate()
-        Me.ComboBox_Dezimaltrennzeichen.Items.Add(Me.punkt)
-        Me.ComboBox_Dezimaltrennzeichen.Items.Add(Me.komma)
-        Me.ComboBox_Dezimaltrennzeichen.EndUpdate()
-
-        Me.ComboBox_Dezimaltrennzeichen.SelectedItem = Me.Dezimaltrennzeichen
+        'Standardeinstellungen setzen
+        Me.Zeichengetrennt = True
+        Me.Trennzeichen = Me.semikolon
+        Me.Spaltenbreite = 16
 
         'Datei als Vorschau anzeigen
         Me.RichTextBox_Vorschau.LoadFile(Me.File, RichTextBoxStreamType.PlainText)
@@ -173,7 +189,19 @@ Public Class WEL
         'Spaltennamen auslesen
         '---------------------
         Dim alleSpalten() As String
-        alleSpalten = Zeile.Split(New Char() {Me.Trennzeichen.Character}, StringSplitOptions.RemoveEmptyEntries)
+
+        If (Me.Zeichengetrennt) Then
+            'Zeichengetrennt
+            alleSpalten = Zeile.Split(New Char() {Me.Trennzeichen.Character}, StringSplitOptions.RemoveEmptyEntries)
+        Else
+            'Spalten mit fester Breite
+            Dim anzSpalten as Integer = Math.Ceiling(Zeile.Length / Me.Spaltenbreite)
+            ReDim alleSpalten(anzSpalten - 1)
+            For i = 0 To anzSpalten - 1
+                alleSpalten(i) = Zeile.Substring((i * Me.Spaltenbreite) + SpaltenOffset, Math.Min(Me.Spaltenbreite, Zeile.Substring((i * Me.Spaltenbreite) + SpaltenOffset).Length))
+            Next
+        End If
+
         'Leerzeichen entfernen
         For i = 0 To alleSpalten.GetUpperBound(0)
             alleSpalten(i) = alleSpalten(i).Trim()
@@ -181,7 +209,7 @@ Public Class WEL
         'X-Spalte übernehmen
         Me.XSpalte = alleSpalten(0)
         'Y-Spalten übernehmen
-        Redim Me.YSpalten(alleSpalten.GetUpperBound(0) - 1)
+        ReDim Me.YSpalten(alleSpalten.GetUpperBound(0) - 1)
         Array.Copy(alleSpalten, 1, Me.YSpalten, 0, alleSpalten.Length - 1)
 
         'Anzeige aktualisieren
@@ -229,19 +257,38 @@ Public Class WEL
         FiStr.Seek(0, SeekOrigin.Begin)
 
         For i = 0 To AnzZeil - 1
-            Werte = StrRead.ReadLine.ToString.Split(New Char() {Me.Trennzeichen.Character}, StringSplitOptions.RemoveEmptyEntries)
-            If (i >= WELHeaderLen) Then
-                'Erste Spalte: Datum_Zeit
-                tmpXWerte(i - WELHeaderLen) = New System.DateTime(Werte(0).Substring(6, 4), Werte(0).Substring(3, 2), Werte(0).Substring(0, 2), Werte(0).Substring(11, 2), Werte(0).Substring(14, 2), 0, New System.Globalization.GregorianCalendar())
-                'Restliche Spalten: Werte
-                n = 0
-                For j = 0 To Me.YSpalten.GetUpperBound(0)
-                    If (isSelected(Me.YSpalten(j))) Then
-                        Me.Zeitreihen(n).YWerte(i - WELHeaderLen) = Convert.ToDouble(Werte(j + 1))
-                        n += 1
-                    End If
-                Next
+            If (Me.Zeichengetrennt) Then
+                'Zeichengetrennt
+                Werte = StrRead.ReadLine.ToString.Split(New Char() {Me.Trennzeichen.Character}, StringSplitOptions.RemoveEmptyEntries)
+                If (i >= WELHeaderLen) Then
+                    'Erste Spalte: Datum_Zeit
+                    tmpXWerte(i - WELHeaderLen) = New System.DateTime(Werte(0).Substring(6, 4), Werte(0).Substring(3, 2), Werte(0).Substring(0, 2), Werte(0).Substring(11, 2), Werte(0).Substring(14, 2), 0, New System.Globalization.GregorianCalendar())
+                    'Restliche Spalten: Werte
+                    n = 0
+                    For j = 0 To Me.YSpalten.GetUpperBound(0)
+                        If (isSelected(Me.YSpalten(j))) Then
+                            Me.Zeitreihen(n).YWerte(i - WELHeaderLen) = Convert.ToDouble(Werte(j + 1))
+                            n += 1
+                        End If
+                    Next
+                End If
+            Else
+                'Spalten mit fester Breite
+                Zeile = StrRead.ReadLine.ToString()
+                If (i >= WELHeaderLen) Then
+                    'Erste Spalte: Datum_Zeit
+                    tmpXWerte(i - WELHeaderLen) = New System.DateTime(Zeile.Substring(6 + SpaltenOffset, 4), Zeile.Substring(3 + SpaltenOffset, 2), Zeile.Substring(0 + SpaltenOffset, 2), Zeile.Substring(11 + SpaltenOffset, 2), Zeile.Substring(14 + SpaltenOffset, 2), 0, New System.Globalization.GregorianCalendar())
+                    'Restliche Spalten: Werte
+                    n = 0
+                    For j = 0 To Me.YSpalten.GetUpperBound(0)
+                        If (isSelected(Me.YSpalten(j))) Then
+                            Me.Zeitreihen(n).YWerte(i - WELHeaderLen) = Convert.ToDouble(Zeile.Substring(((j + 1) * Me.Spaltenbreite) + SpaltenOffset, Math.Min(Me.Spaltenbreite, Zeile.Substring(((j + 1) * Me.Spaltenbreite) + SpaltenOffset).Length)))
+                            n += 1
+                        End If
+                    Next
+                End If
             End If
+            
         Next
 
         StrRead.Close()
@@ -277,9 +324,8 @@ Public Class WEL
 
         'Einstellungen übernehmen
         '------------------------
-        'Trenn- und Dezimaltrennzeichen
+        'Trennzeichen
         Me.Trennzeichen = Me.ComboBox_Trennzeichen.SelectedItem
-        Me.Dezimaltrennzeichen = Me.ComboBox_Dezimaltrennzeichen.SelectedItem
 
         'Ausgewählte Spalten
         Dim i As Integer
@@ -299,11 +345,41 @@ Public Class WEL
 
     End Sub
 
+    'Wenn Spaltenart geändert wird, Spalten neu auslesen
+    '***************************************************
+    Private Sub RadioButton_Spalten_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton_Spaltenbreite.CheckedChanged
+
+        If (Me.RadioButton_Zeichengetrennt.Checked) Then
+            Me.Zeichengetrennt = True
+        Else
+            Me.Zeichengetrennt = False
+        End If
+
+        Call Me.SpaltenAuslesen()
+
+    End Sub
+
     'Wenn Trennzeichen geändert wird, Spalten neu auslesen
     '*****************************************************
     Private Sub ComboBox_Trennzeichen_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ComboBox_Trennzeichen.SelectedIndexChanged
 
         Me.Trennzeichen = Me.ComboBox_Trennzeichen.SelectedItem
+        Call Me.SpaltenAuslesen()
+
+    End Sub
+
+    'Wenn Spaltenbreite geändert wird, Spalten neu auslesen
+    '******************************************************
+    Private Sub TextBox_Spaltenbreite_TextChanged( ByVal sender As System.Object,  ByVal e As System.EventArgs) Handles TextBox_Spaltenbreite.TextChanged
+
+        If (Convert.ToInt16(Me.TextBox_Spaltenbreite.Text) < 1)
+            MsgBox("Bitte eine Zahl größer 0 für die Spaltenbreite angeben!", MsgBoxStyle.Exclamation, "Fehler")
+            Me.TextBox_Spaltenbreite.Focus()
+            Exit Sub
+        End If
+
+        Me.Spaltenbreite = Convert.ToInt16(Me.TextBox_Spaltenbreite.Text)
+
         Call Me.SpaltenAuslesen()
 
     End Sub
