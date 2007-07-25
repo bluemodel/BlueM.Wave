@@ -87,7 +87,6 @@ Partial Class TXT
         Me.ComboBox_Dezimaltrennzeichen.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.ComboBox_Dezimaltrennzeichen.DropDownWidth = 50
         Me.ComboBox_Dezimaltrennzeichen.FormattingEnabled = True
-        Me.ComboBox_Dezimaltrennzeichen.Items.AddRange(New Object() {".", ","})
         Me.ComboBox_Dezimaltrennzeichen.Location = New System.Drawing.Point(349, 10)
         Me.ComboBox_Dezimaltrennzeichen.Name = "ComboBox_Dezimaltrennzeichen"
         Me.ComboBox_Dezimaltrennzeichen.Size = New System.Drawing.Size(50, 21)
@@ -132,7 +131,7 @@ Partial Class TXT
         Me.Label_Vorschau.TabIndex = 9
         Me.Label_Vorschau.Text = "Vorschau:"
         '
-        'TxtEinstellungen
+        'TXT
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
@@ -147,7 +146,7 @@ Partial Class TXT
         Me.Controls.Add(Me.Label_Trennzeichen)
         Me.Controls.Add(Me.Button_OK)
         Me.Controls.Add(Me.Button_Cancel)
-        Me.Name = "TxtEinstellungen"
+        Me.Name = "TXT"
         Me.Text = "Einstellungen für Textdatei"
         Me.ResumeLayout(False)
         Me.PerformLayout()

@@ -62,7 +62,6 @@ Partial Class WEL
         Me.ComboBox_Dezimaltrennzeichen.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.ComboBox_Dezimaltrennzeichen.DropDownWidth = 50
         Me.ComboBox_Dezimaltrennzeichen.FormattingEnabled = True
-        Me.ComboBox_Dezimaltrennzeichen.Items.AddRange(New Object() {".", ","})
         Me.ComboBox_Dezimaltrennzeichen.Location = New System.Drawing.Point(348, 12)
         Me.ComboBox_Dezimaltrennzeichen.Name = "ComboBox_Dezimaltrennzeichen"
         Me.ComboBox_Dezimaltrennzeichen.Size = New System.Drawing.Size(50, 21)
