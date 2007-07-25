@@ -30,8 +30,10 @@ Partial Class WEL
         Me.Label_Trennzeichen = New System.Windows.Forms.Label
         Me.Button_OK = New System.Windows.Forms.Button
         Me.Button_Cancel = New System.Windows.Forms.Button
-        Me.ListBox_Spalten = New System.Windows.Forms.ListBox
-        Me.Label_Spalten = New System.Windows.Forms.Label
+        Me.ListBox_YSpalten = New System.Windows.Forms.ListBox
+        Me.Label_YSpalten = New System.Windows.Forms.Label
+        Me.Label_XSpalte = New System.Windows.Forms.Label
+        Me.TextBox_XSpalte = New System.Windows.Forms.TextBox
         Me.SuspendLayout()
         '
         'Label_Vorschau
@@ -114,31 +116,50 @@ Partial Class WEL
         Me.Button_Cancel.Text = "Abbrechen"
         Me.Button_Cancel.UseVisualStyleBackColor = True
         '
-        'ListBox_Spalten
+        'ListBox_YSpalten
         '
-        Me.ListBox_Spalten.FormattingEnabled = True
-        Me.ListBox_Spalten.Location = New System.Drawing.Point(266, 79)
-        Me.ListBox_Spalten.Name = "ListBox_Spalten"
-        Me.ListBox_Spalten.SelectionMode = System.Windows.Forms.SelectionMode.None
-        Me.ListBox_Spalten.Size = New System.Drawing.Size(120, 186)
-        Me.ListBox_Spalten.TabIndex = 18
+        Me.ListBox_YSpalten.FormattingEnabled = True
+        Me.ListBox_YSpalten.Location = New System.Drawing.Point(266, 131)
+        Me.ListBox_YSpalten.Name = "ListBox_YSpalten"
+        Me.ListBox_YSpalten.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended
+        Me.ListBox_YSpalten.Size = New System.Drawing.Size(120, 134)
+        Me.ListBox_YSpalten.TabIndex = 18
         '
-        'Label_Spalten
+        'Label_YSpalten
         '
-        Me.Label_Spalten.AutoSize = True
-        Me.Label_Spalten.Location = New System.Drawing.Point(263, 53)
-        Me.Label_Spalten.Name = "Label_Spalten"
-        Me.Label_Spalten.Size = New System.Drawing.Size(46, 13)
-        Me.Label_Spalten.TabIndex = 17
-        Me.Label_Spalten.Text = "Spalten:"
+        Me.Label_YSpalten.AutoSize = True
+        Me.Label_YSpalten.Location = New System.Drawing.Point(263, 106)
+        Me.Label_YSpalten.Name = "Label_YSpalten"
+        Me.Label_YSpalten.Size = New System.Drawing.Size(56, 13)
+        Me.Label_YSpalten.TabIndex = 17
+        Me.Label_YSpalten.Text = "Y-Spalten:"
+        '
+        'Label_XSpalte
+        '
+        Me.Label_XSpalte.AutoSize = True
+        Me.Label_XSpalte.Location = New System.Drawing.Point(263, 53)
+        Me.Label_XSpalte.Name = "Label_XSpalte"
+        Me.Label_XSpalte.Size = New System.Drawing.Size(50, 13)
+        Me.Label_XSpalte.TabIndex = 17
+        Me.Label_XSpalte.Text = "X-Spalte:"
+        '
+        'TextBox_XSpalte
+        '
+        Me.TextBox_XSpalte.Location = New System.Drawing.Point(266, 79)
+        Me.TextBox_XSpalte.Name = "TextBox_XSpalte"
+        Me.TextBox_XSpalte.ReadOnly = True
+        Me.TextBox_XSpalte.Size = New System.Drawing.Size(120, 20)
+        Me.TextBox_XSpalte.TabIndex = 19
         '
         'WEL
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(417, 315)
-        Me.Controls.Add(Me.ListBox_Spalten)
-        Me.Controls.Add(Me.Label_Spalten)
+        Me.Controls.Add(Me.TextBox_XSpalte)
+        Me.Controls.Add(Me.ListBox_YSpalten)
+        Me.Controls.Add(Me.Label_XSpalte)
+        Me.Controls.Add(Me.Label_YSpalten)
         Me.Controls.Add(Me.Label_Vorschau)
         Me.Controls.Add(Me.RichTextBox_Vorschau)
         Me.Controls.Add(Me.ComboBox_Dezimaltrennzeichen)
@@ -161,6 +182,8 @@ Partial Class WEL
     Friend WithEvents Label_Trennzeichen As System.Windows.Forms.Label
     Friend WithEvents Button_OK As System.Windows.Forms.Button
     Friend WithEvents Button_Cancel As System.Windows.Forms.Button
-    Friend WithEvents ListBox_Spalten As System.Windows.Forms.ListBox
-    Friend WithEvents Label_Spalten As System.Windows.Forms.Label
+    Friend WithEvents ListBox_YSpalten As System.Windows.Forms.ListBox
+    Friend WithEvents Label_YSpalten As System.Windows.Forms.Label
+    Friend WithEvents Label_XSpalte As System.Windows.Forms.Label
+    Friend WithEvents TextBox_XSpalte As System.Windows.Forms.TextBox
 End Class
