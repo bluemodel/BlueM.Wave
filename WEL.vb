@@ -18,8 +18,9 @@ Public Class WEL
     Private _file As String                             'Pfad zur Datei
     Private _trennzeichen As Zeichen = semikolon        'Spaltentrennzeichen (standardmäßig Semikolon)
     Private _dezimaltrennzeichen As Zeichen = punkt     'Dezimaltrennzeichen (standardmäßig Punkt)
-    Private _spalten() As String                        'Array der vorhandenen Spaltennamen
-    Private _spaltenSel() As String                     'Array der ausgewählten Spaltennamen
+    Private _XSpalte As String                          'X-Spalte
+    Private _Yspalten() As String                       'Array der vorhandenen Y-Spaltennamen
+    Private _spaltenSel() As String                     'Array der ausgewählten Y-Spaltennamen
 
     Public Zeitreihen() As Zeitreihe
 
@@ -61,12 +62,21 @@ Public Class WEL
         End Set
     End Property
 
-    Public Property Spalten() As String()
+    Public Property XSpalte() As String
         Get
-            Return _spalten
+            Return _XSpalte
+        End Get
+        Set(ByVal value As String)
+            _XSpalte = value
+        End Set
+    End Property
+
+    Public Property YSpalten() As String()
+        Get
+            Return _Yspalten
         End Get
         Set(ByVal value As String())
-            _spalten = value
+            _Yspalten = value
         End Set
     End Property
 
@@ -161,14 +171,26 @@ Public Class WEL
         Next
 
         'Spaltennamen auslesen
-        Me.Spalten() = Zeile.Split(New Char() {Me.Trennzeichen.Character}, StringSplitOptions.RemoveEmptyEntries)
-        For i = 0 To Spalten.GetUpperBound(0)
-            Spalten(i) = Spalten(i).Trim()
+        '---------------------
+        Dim alleSpalten() As String
+        alleSpalten = Zeile.Split(New Char() {Me.Trennzeichen.Character}, StringSplitOptions.RemoveEmptyEntries)
+        'Leerzeichen entfernen
+        For i = 0 To alleSpalten.GetUpperBound(0)
+            alleSpalten(i) = alleSpalten(i).Trim()
         Next
+        'X-Spalte übernehmen
+        Me.XSpalte = alleSpalten(0)
+        'Y-Spalten übernehmen
+        Redim Me.YSpalten(alleSpalten.GetUpperBound(0) - 1)
+        Array.Copy(alleSpalten, 1, Me.YSpalten, 0, alleSpalten.Length - 1)
 
-        'Listbox aktualisieren
-        Me.ListBox_Spalten.Items.Clear()
-        Me.ListBox_Spalten.Items.AddRange(Me.Spalten)
+        'Anzeige aktualisieren
+        '---------------------
+        'XSpalte
+        Me.TextBox_XSpalte.Text = Me.XSpalte
+        'YSpalten
+        Me.ListBox_YSpalten.Items.Clear()
+        Me.ListBox_YSpalten.Items.AddRange(Me.YSpalten)
 
     End Sub
 
@@ -213,9 +235,9 @@ Public Class WEL
                 tmpXWerte(i - WELHeaderLen) = New System.DateTime(Werte(0).Substring(6, 4), Werte(0).Substring(3, 2), Werte(0).Substring(0, 2), Werte(0).Substring(11, 2), Werte(0).Substring(14, 2), 0, New System.Globalization.GregorianCalendar())
                 'Restliche Spalten: Werte
                 n = 0
-                For j = 1 To Me.Spalten.GetUpperBound(0)
-                    If (isSelected(Me.Spalten(j))) Then
-                        Me.Zeitreihen(n).YWerte(i - WELHeaderLen) = Convert.ToDouble(Werte(j))
+                For j = 0 To Me.YSpalten.GetUpperBound(0)
+                    If (isSelected(Me.YSpalten(j))) Then
+                        Me.Zeitreihen(n).YWerte(i - WELHeaderLen) = Convert.ToDouble(Werte(j + 1))
                         n += 1
                     End If
                 Next
@@ -259,10 +281,12 @@ Public Class WEL
         Me.Trennzeichen = Me.ComboBox_Trennzeichen.SelectedItem
         Me.Dezimaltrennzeichen = Me.ComboBox_Dezimaltrennzeichen.SelectedItem
 
-        'TODO: Ausgewählte Spalten übernehmen
-        'momentan werden alle Spalten ausser "Datum_Zeit" übernommen
-        ReDim Me.SpaltenSel(Me.Spalten.GetUpperBound(0) - 1)
-        Array.Copy(Me.Spalten, 1, Me.SpaltenSel, 0, Me.Spalten.Length - 1)
+        'Ausgewählte Spalten
+        Dim i As Integer
+        ReDim Me.SpaltenSel(Me.ListBox_YSpalten.SelectedItems.Count - 1)
+        For i = 0 To Me.ListBox_YSpalten.SelectedItems.Count - 1
+            Me.SpaltenSel(i) = Me.ListBox_YSpalten.SelectedItems(i)
+        Next
 
         'WEL-Datei einlesen
         Call Me.Read_WEL()
