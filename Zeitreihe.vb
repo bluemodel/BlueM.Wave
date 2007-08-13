@@ -129,6 +129,54 @@ Public Class Zeitreihe
 
     End Sub
 
+    'Einen Wert aus einer Zeitreihe berechnen
+    'WertTyp: MaxWert, MinWert, Average, AnfWert, EndWert
+    '****************************************************
+    Public Function getWert(ByVal WertTyp As String) As Double
+
+        Dim i As Integer
+        Dim Wert As Double
+
+        Select Case WertTyp
+
+            Case "MaxWert"
+                Wert = 0
+                For i = 0 To Me.Length - 1
+                    If (Me.YWerte(i) > Wert) Then
+                        Wert = Me.YWerte(i)
+                    End If
+                Next
+
+            Case "MinWert"
+                Wert = 999999999999999999
+                For i = 0 To Me.Length - 1
+                    If (Me.YWerte(i) < Wert) Then
+                        Wert = Me.YWerte(i)
+                    End If
+                Next
+
+            Case "Average"
+                Wert = 0
+                For i = 0 To Me.Length - 1
+                    Wert += Me.YWerte(i)
+                Next
+                Wert = Wert / Me.Length
+
+            Case "AnfWert"
+                Wert = Me.YWerte(0)
+
+            Case "EndWert"
+                Wert = Me.YWerte(Me.Length - 1)
+
+            Case Else
+                Throw New Exception("Der Werttyp '" & WertTyp & "' wird nicht unterstützt!")
+
+        End Select
+
+        Return Wert
+
+    End Function
+
 #End Region 'Methoden
 
 End Class
