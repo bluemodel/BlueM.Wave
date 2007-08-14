@@ -176,7 +176,7 @@ Partial Class Wave
         '
         Me.OpenFileDialog1.DefaultExt = "txt"
         Me.OpenFileDialog1.Filter = "Text-Dateien (*.txt)|*.txt|ZRE-Dateien (*.zre)|*.zre|CSV-Dateien (*.csv)|*.csv|WE" & _
-            "L-Dateien (*.wel)|*.wel|Alle Dateien (*.*)|*.*"
+            "L-Dateien (*.wel, *.kwl)|*.wel;*.kwl|Alle Dateien (*.*)|*.*"
         Me.OpenFileDialog1.Title = "Textdatei öffnen"
         '
         'Button_TENImport
