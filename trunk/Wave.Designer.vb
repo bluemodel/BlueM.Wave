@@ -119,7 +119,7 @@ Partial Class Wave
         '
         '
         Me.TChart1.Legend.Title.Pen.Visible = False
-        Me.TChart1.Location = New System.Drawing.Point(12, 72)
+        Me.TChart1.Location = New System.Drawing.Point(7, 43)
         Me.TChart1.Name = "TChart1"
         Me.TChart1.Size = New System.Drawing.Size(1139, 812)
         Me.TChart1.TabIndex = 0
@@ -145,7 +145,7 @@ Partial Class Wave
         '
         'Button_TxtImport
         '
-        Me.Button_TxtImport.Location = New System.Drawing.Point(12, 43)
+        Me.Button_TxtImport.Location = New System.Drawing.Point(362, 7)
         Me.Button_TxtImport.Name = "Button_TxtImport"
         Me.Button_TxtImport.Size = New System.Drawing.Size(150, 23)
         Me.Button_TxtImport.TabIndex = 1
@@ -169,7 +169,7 @@ Partial Class Wave
         Me.Commander1.Location = New System.Drawing.Point(0, 0)
         Me.Commander1.Name = "Commander1"
         Me.Commander1.ShowToolTips = True
-        Me.Commander1.Size = New System.Drawing.Size(1181, 37)
+        Me.Commander1.Size = New System.Drawing.Size(1155, 37)
         Me.Commander1.TabIndex = 2
         '
         'OpenFileDialog1
@@ -181,7 +181,7 @@ Partial Class Wave
         '
         'Button_TENImport
         '
-        Me.Button_TENImport.Location = New System.Drawing.Point(168, 43)
+        Me.Button_TENImport.Location = New System.Drawing.Point(518, 7)
         Me.Button_TENImport.Name = "Button_TENImport"
         Me.Button_TENImport.Size = New System.Drawing.Size(150, 23)
         Me.Button_TENImport.TabIndex = 3
@@ -190,15 +190,16 @@ Partial Class Wave
         '
         'Wave
         '
+        Me.AllowDrop = True
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(1181, 1002)
+        Me.ClientSize = New System.Drawing.Size(1155, 863)
         Me.Controls.Add(Me.Button_TENImport)
-        Me.Controls.Add(Me.Commander1)
         Me.Controls.Add(Me.Button_TxtImport)
+        Me.Controls.Add(Me.Commander1)
         Me.Controls.Add(Me.TChart1)
         Me.Name = "Wave"
-        Me.Text = "Zeitreihendarstellung"
+        Me.Text = "Wave"
         Me.ResumeLayout(False)
         Me.PerformLayout()
 

@@ -8,30 +8,32 @@ Public Class Wave
     'Methoden
     '########
 
-    'Textdatei als Zeitreihe importieren
-    '***********************************
-    Private Sub Import_File(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button_TxtImport.Click
+    'Datei öffnen Dialog anzeigen
+    '****************************
+    Private Sub Import_File_Dialog(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button_TxtImport.Click
 
-        Dim DialogResult As DialogResult
-
-        'Datei-öffnen Dialog anzeigen
-        DialogResult = Me.OpenFileDialog1.ShowDialog()
-        If (DialogResult = Windows.Forms.DialogResult.OK) Then
-
-            Select Case Path.GetExtension(Me.OpenFileDialog1.FileName).ToUpper()
-
-                Case ".ZRE"
-                    Import_ZRE(Me.OpenFileDialog1.FileName)
-
-                Case ".WEL", ".KWL"
-                    Import_WEL(Me.OpenFileDialog1.FileName)
-
-                Case Else
-                    Import_TXT(Me.OpenFileDialog1.FileName)
-
-            End Select
-
+        If (Me.OpenFileDialog1.ShowDialog() = Windows.Forms.DialogResult.OK) Then
+            Call Import_File(Me.OpenFileDialog1.FileName)
         End If
+
+    End Sub
+
+    'Datei als Zeitreihe importieren
+    '*******************************
+    Private Sub Import_File(ByVal file As String)
+
+        Select Case Path.GetExtension(file).ToUpper()
+
+            Case ".ZRE"
+                Import_ZRE(file)
+
+            Case ".WEL", ".KWL"
+                Import_WEL(file)
+
+            Case Else
+                Import_TXT(file)
+
+        End Select
 
     End Sub
 
@@ -147,4 +149,31 @@ Public Class Wave
         TChart1.Import.ShowImportDialog()
     End Sub
 
+    'Drag & Drop von Dateien verarbeiten
+    '***********************************
+    Private Sub Wave_DragDrop(ByVal sender As System.Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles MyBase.DragDrop
+
+        If (e.Data.GetDataPresent(DataFormats.FileDrop)) Then
+
+            Dim dateien() As String
+            Dim i As Integer
+
+            'Dateien einem Array zuweisen
+            dateien = e.Data.GetData(DataFormats.FileDrop)
+
+            'Die einzelnen Dateien importieren
+            For i = 0 To dateien.GetUpperBound(0)
+                Call Import_File(dateien(i))
+            Next
+        End If
+
+    End Sub
+
+    'Drag & Drop von Dateien zulassen
+    '********************************
+    Private Sub Wave_DragEnter(ByVal sender As System.Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles MyBase.DragEnter
+        If (e.Data.GetDataPresent(DataFormats.FileDrop)) Then
+            e.Effect = DragDropEffects.All
+        End If
+    End Sub
 End Class
