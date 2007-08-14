@@ -23,7 +23,7 @@ Public Class Wave
                 Case ".ZRE"
                     Import_ZRE(Me.OpenFileDialog1.FileName)
 
-                Case ".WEL"
+                Case ".WEL", ".KWL"
                     Import_WEL(Me.OpenFileDialog1.FileName)
 
                 Case Else
