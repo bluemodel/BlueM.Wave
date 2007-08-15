@@ -22,7 +22,7 @@ Partial Class WEL
     'Das Bearbeiten mit dem Code-Editor ist nicht möglich.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-        Me.Label_Vorschau = New System.Windows.Forms.Label
+        Me.Label_Datei = New System.Windows.Forms.Label
         Me.RichTextBox_Vorschau = New System.Windows.Forms.RichTextBox
         Me.ComboBox_Trennzeichen = New System.Windows.Forms.ComboBox
         Me.Button_OK = New System.Windows.Forms.Button
@@ -38,14 +38,14 @@ Partial Class WEL
         Me.GroupBox_Spaltenmodus.SuspendLayout()
         Me.SuspendLayout()
         '
-        'Label_Vorschau
+        'Label_Datei
         '
-        Me.Label_Vorschau.AutoSize = True
-        Me.Label_Vorschau.Location = New System.Drawing.Point(12, 115)
-        Me.Label_Vorschau.Name = "Label_Vorschau"
-        Me.Label_Vorschau.Size = New System.Drawing.Size(55, 13)
-        Me.Label_Vorschau.TabIndex = 17
-        Me.Label_Vorschau.Text = "Vorschau:"
+        Me.Label_Datei.AutoSize = True
+        Me.Label_Datei.Location = New System.Drawing.Point(12, 115)
+        Me.Label_Datei.Name = "Label_Datei"
+        Me.Label_Datei.Size = New System.Drawing.Size(35, 13)
+        Me.Label_Datei.TabIndex = 17
+        Me.Label_Datei.Text = "Datei:"
         '
         'RichTextBox_Vorschau
         '
@@ -176,7 +176,7 @@ Partial Class WEL
         Me.Controls.Add(Me.ListBox_YSpalten)
         Me.Controls.Add(Me.Label_XSpalte)
         Me.Controls.Add(Me.Label_YSpalten)
-        Me.Controls.Add(Me.Label_Vorschau)
+        Me.Controls.Add(Me.Label_Datei)
         Me.Controls.Add(Me.RichTextBox_Vorschau)
         Me.Controls.Add(Me.Button_OK)
         Me.Controls.Add(Me.Button_Cancel)
@@ -188,7 +188,7 @@ Partial Class WEL
         Me.PerformLayout()
 
     End Sub
-    Friend WithEvents Label_Vorschau As System.Windows.Forms.Label
+    Friend WithEvents Label_Datei As System.Windows.Forms.Label
     Friend WithEvents RichTextBox_Vorschau As System.Windows.Forms.RichTextBox
     Friend WithEvents ComboBox_Trennzeichen As System.Windows.Forms.ComboBox
     Friend WithEvents Button_OK As System.Windows.Forms.Button
