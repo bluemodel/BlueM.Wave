@@ -123,7 +123,41 @@
   <metadata name="OpenFileDialog1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>125, 10</value>
   </metadata>
+  <metadata name="MenuStrip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>257, 10</value>
+  </metadata>
+  <metadata name="ToolStrip1.Locked" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="ToolStrip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>365, 10</value>
+  </metadata>
   <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>40</value>
   </metadata>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        AAABAAEAEBAAAAEAIABoBAAAFgAAACgAAAAQAAAAIAAAAAEAIAAAAAAAAAAAABMLAAATCwAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAALRpK/+zaCv/smgq/7FoKv+wZir/r2Yq/69mKf+uZSn/rmUo/61kKP+tZCj/rGQo/6tj
+        KP+rYyj/AAAAAAAAAAC2ai3/KWgyTydoMUY5UCdFJ2gxCQAAAABIKBMdAAAAAAAAAABCJRIdAAAAACdv
+        MhosWihoKHM1DAAAAAAAAAAAt2st/yx0ORkrdTiZLXU34it1OO0sdjhoAAAAAAAAAAAAAAAAAAAAACt/
+        OAgsgjjeK4Q2kwAAAAAAAAAAAAAAALltLv8oFZxAAAAAAAAAAAAyiEGWMolB8TGKQKIxjEAMAAAAAAAA
+        AAAxj0CIL5I+7wAAAAAAAAAAAAAAAAAAAAC7bi//BAD5VAQA+xcAAAAAAAAAADmZSko5mUjoN5pI4Dib
+        Rq02nUW+NZ9E9DOgQl8AAAAAEQ39GgAAAAAAAAAAvW8w/wUB/08GAv/cAAAAAAAAAAAAAAAA3FAAd0Ci
+        Spc8pEvMOqRJzTejRlcAAAAAAAAAABsX+7AAAAAAAAAAAL5xMP9QMHsvEQ39/hIO/IbgWACE4FcA/+BX
+        Av3gVwP+31YGVwAAAAAAAAAAAAAAAAAAAAAkIfn6AAAAAAAAAADAcjL/AAAAABoW+6UcGfn7uk499+Bh
+        CpLhYg0D32IQuN5hEfjdYhV+AAAAAAAAAAAtKvnALiv38AAAAAAAAAAAwnMy/wAAAAAAAAAAOSrr/kUx
+        4fkAAAAAAAAAAAAAAADgbyCo3nIk+95zJ581MvclNjP2/4hbppcAAAAAAAAAAMNzM/+ARyId4XYbiq9g
+        Z/o4MvX3OTb2lQAAAAAAAAAAAAAAAOB/M43fgTf934I5+9+GPPnfiD7+AAAAAAAAAADEdDT/4oAmA+B/
+        LPnggTC2QT71h0NA9P5GQ/M8AAAAAAAAAABJRvMiS0jx8VBK7vbgk0uAAAAAAAAAAAAAAAAAxXU0/+CH
+        ODPeiT/93oxBCQAAAABQTfHDUk/y+lJP8spTUfDdU1Hw+1NR8OJTUfAiAAAAAAAAAAAAAAAAAAAAAMZ2
+        NP/GfT9m3ZJPpwAAAAAAAAAAAAAAAFpY74paWO/gWVfv01lX714AAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AADGdjT/3ZdbVAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAA//8AAIABAAC//wAAo/MAALjnAAC+DwAArx0AAKB9AAChOQAAs4kAAKHBAACh4wAArA8AAK4/
+        //+//////////w==
+</value>
+  </data>
 </root>

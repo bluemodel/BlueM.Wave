@@ -31,7 +31,7 @@ Partial Class TXT
         Me.Label_AnzKopfzeilen = New System.Windows.Forms.Label
         Me.TextBox_AnzKopfzeilen = New System.Windows.Forms.MaskedTextBox
         Me.RichTextBox_Vorschau = New System.Windows.Forms.RichTextBox
-        Me.Label_Vorschau = New System.Windows.Forms.Label
+        Me.Label_Datei = New System.Windows.Forms.Label
         Me.SuspendLayout()
         '
         'Button_Cancel
@@ -122,21 +122,21 @@ Partial Class TXT
         Me.RichTextBox_Vorschau.Text = ""
         Me.RichTextBox_Vorschau.WordWrap = False
         '
-        'Label_Vorschau
+        'Label_Datei
         '
-        Me.Label_Vorschau.AutoSize = True
-        Me.Label_Vorschau.Location = New System.Drawing.Point(13, 86)
-        Me.Label_Vorschau.Name = "Label_Vorschau"
-        Me.Label_Vorschau.Size = New System.Drawing.Size(55, 13)
-        Me.Label_Vorschau.TabIndex = 9
-        Me.Label_Vorschau.Text = "Vorschau:"
+        Me.Label_Datei.AutoSize = True
+        Me.Label_Datei.Location = New System.Drawing.Point(13, 86)
+        Me.Label_Datei.Name = "Label_Datei"
+        Me.Label_Datei.Size = New System.Drawing.Size(35, 13)
+        Me.Label_Datei.TabIndex = 9
+        Me.Label_Datei.Text = "Datei:"
         '
         'TXT
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(455, 356)
-        Me.Controls.Add(Me.Label_Vorschau)
+        Me.Controls.Add(Me.Label_Datei)
         Me.Controls.Add(Me.RichTextBox_Vorschau)
         Me.Controls.Add(Me.TextBox_AnzKopfzeilen)
         Me.Controls.Add(Me.Label_AnzKopfzeilen)
@@ -161,5 +161,5 @@ Partial Class TXT
     Friend WithEvents Label_AnzKopfzeilen As System.Windows.Forms.Label
     Friend WithEvents TextBox_AnzKopfzeilen As System.Windows.Forms.MaskedTextBox
     Friend WithEvents RichTextBox_Vorschau As System.Windows.Forms.RichTextBox
-    Friend WithEvents Label_Vorschau As System.Windows.Forms.Label
+    Friend WithEvents Label_Datei As System.Windows.Forms.Label
 End Class

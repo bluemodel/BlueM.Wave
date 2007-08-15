@@ -165,6 +165,7 @@ Public Class WEL
         Me.Spaltenbreite = 16
 
         'Datei als Vorschau anzeigen
+        Me.Label_Datei.Text += " " & Path.GetFileName(Me.File)
         Me.RichTextBox_Vorschau.LoadFile(Me.File, RichTextBoxStreamType.PlainText)
 
     End Sub

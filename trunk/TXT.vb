@@ -1,3 +1,5 @@
+Imports System.IO
+
 Public Class TXT
 
     'oft verwendete Zeichen (quasi Konstanten)
@@ -14,8 +16,8 @@ Public Class TXT
     '#############
 
     Private _file As String                     'Pfad zur Datei
-    Private _trennzeichen As zeichen            'Spaltentrennzeichen
-    Private _dezimaltrennzeichen As zeichen     'Dezimaltrennzeichen
+    Private _trennzeichen As Zeichen            'Spaltentrennzeichen
+    Private _dezimaltrennzeichen As Zeichen     'Dezimaltrennzeichen
     Private _anzKopfzeilen As Integer           'Anzahl Kopfzeilen
 
 #End Region 'Eigenschaften
@@ -33,21 +35,21 @@ Public Class TXT
         End Set
     End Property
 
-    Public Property Trennzeichen() As zeichen
+    Public Property Trennzeichen() As Zeichen
         Get
             Return _trennzeichen
         End Get
-        Set(ByVal value As zeichen)
+        Set(ByVal value As Zeichen)
             _trennzeichen = value
             Me.ComboBox_Trennzeichen.SelectedItem = _trennzeichen
         End Set
     End Property
 
-    Public Property Dezimaltrennzeichen() As zeichen
+    Public Property Dezimaltrennzeichen() As Zeichen
         Get
             Return _dezimaltrennzeichen
         End Get
-        Set(ByVal value As zeichen)
+        Set(ByVal value As Zeichen)
             _dezimaltrennzeichen = value
             Me.ComboBox_Dezimaltrennzeichen.SelectedItem = _dezimaltrennzeichen
         End Set
@@ -99,6 +101,7 @@ Public Class TXT
         Me.AnzKopfzeilen = 1
 
         'Datei als Vorschau anzeigen
+        Me.Label_Datei.Text += " " & Path.GetFileName(Me.File)
         Me.RichTextBox_Vorschau.LoadFile(Me.File, RichTextBoxStreamType.PlainText)
 
     End Sub
