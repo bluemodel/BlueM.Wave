@@ -94,7 +94,7 @@ Public Class Zeitreihe
         tmpZeitreihe = Me.copy()
 
         'Zeitschrittweite feststellen
-        'BUG 105: Es wird von konstanten Zeitschritten ausgegangen
+        'BUG 218: Es wird von konstanten Zeitschritten ausgegangen
         Dim dt As TimeSpan = Me.XWerte(1) - Me.XWerte(0)
 
         'Wenn dt >= 1 Tag, Start und Ende auf Tage runden
