@@ -22,6 +22,7 @@ Partial Class WEL
     'Das Bearbeiten mit dem Code-Editor ist nicht möglich.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(WEL))
         Me.Label_Datei = New System.Windows.Forms.Label
         Me.RichTextBox_Vorschau = New System.Windows.Forms.RichTextBox
         Me.ComboBox_Trennzeichen = New System.Windows.Forms.ComboBox
@@ -180,8 +181,9 @@ Partial Class WEL
         Me.Controls.Add(Me.RichTextBox_Vorschau)
         Me.Controls.Add(Me.Button_OK)
         Me.Controls.Add(Me.Button_Cancel)
+        Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Name = "WEL"
-        Me.Text = "Einstellungen für WEL-Datei"
+        Me.Text = "WEL-Datei: Spalten auswählen"
         Me.GroupBox_Spaltenmodus.ResumeLayout(False)
         Me.GroupBox_Spaltenmodus.PerformLayout()
         Me.ResumeLayout(False)
