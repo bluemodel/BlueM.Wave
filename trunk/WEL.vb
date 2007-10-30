@@ -110,6 +110,20 @@ Public Class WEL
         End Set
     End Property
 
+    'Eine Zeitreihe anhand des Titels holen
+    '**************************************
+    Public ReadOnly Property getReihe(ByVal title As String) As Zeitreihe
+        Get
+            For i As Integer = 0 To Me.Zeitreihen.GetUpperBound(0)
+                If (Me.Zeitreihen(i).Title = title) Then
+                    Return Me.Zeitreihen(i)
+                End If
+            Next
+            'Zeitreihe nicht vorhanden
+            Return New Zeitreihe("unbekannt")
+        End Get
+    End Property
+
 #End Region 'Properties
 
 #Region "Methoden"
@@ -196,7 +210,7 @@ Public Class WEL
             alleSpalten = Zeile.Split(New Char() {Me.Trennzeichen.Character}, StringSplitOptions.RemoveEmptyEntries)
         Else
             'Spalten mit fester Breite
-            Dim anzSpalten as Integer = Math.Ceiling(Zeile.Length / Me.Spaltenbreite)
+            Dim anzSpalten As Integer = Math.Ceiling(Zeile.Length / Me.Spaltenbreite)
             ReDim alleSpalten(anzSpalten - 1)
             For i = 0 To anzSpalten - 1
                 alleSpalten(i) = Zeile.Substring((i * Me.Spaltenbreite) + SpaltenOffset, Math.Min(Me.Spaltenbreite, Zeile.Substring((i * Me.Spaltenbreite) + SpaltenOffset).Length))
@@ -289,7 +303,7 @@ Public Class WEL
                     Next
                 End If
             End If
-            
+
         Next
 
         StrRead.Close()
@@ -369,9 +383,9 @@ Public Class WEL
 
     'Wenn Spaltenbreite geändert wird, Spalten neu auslesen
     '******************************************************
-    Private Sub TextBox_Spaltenbreite_TextChanged( ByVal sender As System.Object,  ByVal e As System.EventArgs) Handles TextBox_Spaltenbreite.TextChanged
+    Private Sub TextBox_Spaltenbreite_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TextBox_Spaltenbreite.TextChanged
 
-        If (Convert.ToInt16(Me.TextBox_Spaltenbreite.Text) < 1)
+        If (Convert.ToInt16(Me.TextBox_Spaltenbreite.Text) < 1) Then
             MsgBox("Bitte eine Zahl größer 0 für die Spaltenbreite angeben!", MsgBoxStyle.Exclamation, "Fehler")
             Me.TextBox_Spaltenbreite.Focus()
             Exit Sub

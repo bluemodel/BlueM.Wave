@@ -62,7 +62,8 @@ Public Class Zeitreihe
     'Konstruktor
     '***********
     Public Sub New(ByVal title As String)
-        Me.Title = title
+        Me._title = title
+        Me._length = 0
     End Sub
 
     'Public Shared Operator =(ByVal zre1 As Zeitreihe, ByVal zre2 As Zeitreihe) As Zeitreihe
