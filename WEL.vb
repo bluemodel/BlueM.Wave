@@ -225,7 +225,7 @@ Public Class WEL
 
     'WEL-Datei einlesen
     '******************
-    Public Function Read_WEL() As Zeitreihe()
+    Private Sub Read_WEL()
 
         Dim AnzZeil As Integer = 0
         Dim i, j, n As Integer
@@ -300,9 +300,7 @@ Public Class WEL
             Me.Zeitreihen(i).XWerte = tmpXWerte
         Next
 
-        Return Me.Zeitreihen
-
-    End Function
+    End Sub
 
     'Überprüfung, ob eine Spalte ausgewählt ist
     '******************************************
