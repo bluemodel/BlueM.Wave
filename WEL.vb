@@ -131,8 +131,8 @@ Public Class WEL
     'Methoden
     '########
 
-    'Konstruktor
-    '***********
+    'Konstruktor für das Einlesen ausgewählter Spalten
+    '*************************************************
     Public Sub New(ByVal FileName As String, ByVal ParamArray spaltenSel() As String)
 
         ' Dieser Aufruf ist für den Windows Form-Designer erforderlich.
@@ -157,6 +157,28 @@ Public Class WEL
             Me.SpaltenSel = spaltenSel
             Call Me.Read_WEL()
         End If
+
+    End Sub
+
+    'Konstruktor für das Einlesen aller Spalten
+    '******************************************
+    Public Sub New(ByVal FileName As String)
+
+        ' Dieser Aufruf ist für den Windows Form-Designer erforderlich.
+        InitializeComponent()
+
+        ' Fügen Sie Initialisierungen nach dem InitializeComponent()-Aufruf hinzu.
+
+        'Dateinamen setzen
+        Me.File = FileName
+
+        'Spalten auslesen
+        Call Me.SpaltenAuslesen()
+
+        'Alle Y-Spalten einlesen
+        Me.SpaltenSel = Me.YSpalten
+
+        Call Me.Read_WEL()
 
     End Sub
 
