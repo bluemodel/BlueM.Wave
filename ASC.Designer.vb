@@ -126,7 +126,7 @@ Partial Class ASC
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Name = "ASC"
-        Me.Text = "WEL-Datei: Spalten auswählen"
+        Me.Text = "ASC-Datei: Spalten auswählen"
         Me.ResumeLayout(False)
         Me.PerformLayout()
 

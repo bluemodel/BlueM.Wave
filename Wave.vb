@@ -180,7 +180,7 @@ Public Class Wave
     End Sub
 
     'ASC-Datei importieren (SMUSI)
-    '*********************
+    '*****************************
     Public Sub Import_ASC(ByVal FileName As String, ByVal ParamArray spaltenSel() As String)
 
         Dim i As Integer

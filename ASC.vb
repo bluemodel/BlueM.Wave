@@ -104,12 +104,12 @@ Public Class ASC
 
         'Spaltenauswahl
         If (spaltenSel.Length = 0) Then
-            'Wenn keine Spaltenauswahl gegeben ist, WEL-Dialog anzeigen
+            'Wenn keine Spaltenauswahl gegeben ist, ASC-Dialog anzeigen
             If (Not Me.ShowDialog() = Windows.Forms.DialogResult.OK) Then
                 Exit Sub
             End If
         Else
-            'Ansonsten Spaltenauswahl übergeben und WEL direkt einlesen
+            'Ansonsten Spaltenauswahl übergeben und ASC direkt einlesen
             Me.SpaltenSel = spaltenSel
             Call Me.Read_ASC()
         End If
@@ -174,7 +174,7 @@ Public Class ASC
 
     'ASC-Datei einlesen
     '******************
-    Public Function Read_ASC() As Zeitreihe()
+    Public Sub Read_ASC()
 
         Dim AnzZeil As Integer = 0
         Dim AnzZeilLeer As Integer
@@ -309,9 +309,7 @@ Public Class ASC
             Me.Zeitreihen(i).XWerte = tmpXWerte
         Next
 
-        Return Me.Zeitreihen
-
-    End Function
+    End Sub
 
     'Überprüfung, ob eine Spalte ausgewählt ist
     '******************************************
@@ -332,9 +330,6 @@ Public Class ASC
     '******************
     Private Sub Button_OK_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button_OK.Click
 
-        'Einstellungen übernehmen
-        '------------------------
-
         'Ausgewählte Spalten
         Dim i As Integer
         If (Me.ListBox_YSpalten.SelectedItems.Count < 1) Then
@@ -348,51 +343,11 @@ Public Class ASC
             Next
         End If
 
-        'WEL-Datei einlesen
+        'ASC-Datei einlesen
         Call Me.Read_ASC()
 
     End Sub
 
-    ''Wenn Spaltenart geändert wird, Spalten neu auslesen
-    ''***************************************************
-    'Private Sub RadioButton_Spalten_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton_Spaltenbreite.CheckedChanged
-
-    '    If (Me.RadioButton_Zeichengetrennt.Checked) Then
-    '        Me.Zeichengetrennt = True
-    '    Else
-    '        Me.Zeichengetrennt = False
-    '    End If
-
-    '    Call Me.SpaltenAuslesen()
-
-    'End Sub
-
-    'Wenn Trennzeichen geändert wird, Spalten neu auslesen
-    '*****************************************************
-    'Private Sub ComboBox_Trennzeichen_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ComboBox_Trennzeichen.SelectedIndexChanged
-
-    '    Me.Trennzeichen = Me.ComboBox_Trennzeichen.SelectedItem
-    '    Call Me.SpaltenAuslesen()
-
-    'End Sub
-
-    'Wenn Spaltenbreite geändert wird, Spalten neu auslesen
-    '******************************************************
-    'Private Sub TextBox_Spaltenbreite_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TextBox_Spaltenbreite.TextChanged
-
-    '    If (Convert.ToInt16(Me.TextBox_Spaltenbreite.Text) < 1) Then
-    '        MsgBox("Bitte eine Zahl größer 0 für die Spaltenbreite angeben!", MsgBoxStyle.Exclamation, "Fehler")
-    '        Me.TextBox_Spaltenbreite.Focus()
-    '        Exit Sub
-    '    End If
-
-    '    Me.Spaltenbreite = Convert.ToInt16(Me.TextBox_Spaltenbreite.Text)
-
-    '    Call Me.SpaltenAuslesen()
-
-    'End Sub
-
 #End Region 'Methoden
-
 
 End Class
