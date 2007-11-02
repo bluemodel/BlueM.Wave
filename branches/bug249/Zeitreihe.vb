@@ -50,8 +50,8 @@ Public Class Zeitreihe
         End Get
         Set(ByVal value As Integer)
             _length = value
-            ReDim Me.XWerte(_length - 1)
-            ReDim Me.YWerte(_length - 1)
+            ReDim Preserve Me.XWerte(_length - 1)
+            ReDim Preserve Me.YWerte(_length - 1)
         End Set
     End Property
 

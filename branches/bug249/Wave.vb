@@ -4,6 +4,7 @@ Public Class Wave
 
     'Eigenschaften
     '#############
+    Private WithEvents colorBand1 As Steema.TeeChart.Tools.ColorBand
 
     'Methoden
     '########
@@ -70,6 +71,31 @@ Public Class Wave
         End If
     End Sub
 
+	'Resize
+	'******
+    Private Sub Wave_Resize(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Resize
+        Me.TChart2.Width = Me.SplitContainer1.Panel1.Width
+        Me.TChart2.Height = Me.SplitContainer1.Panel1.Height
+        Me.TChart1.Width = Me.SplitContainer1.Panel2.Width
+        Me.TChart1.Height = Me.SplitContainer1.Panel2.Height
+    End Sub
+
+	'Splitter Resize
+	'***************
+    Private Sub SplitContainer1_SplitterMoved(ByVal sender As Object, ByVal e As System.Windows.Forms.SplitterEventArgs) Handles SplitContainer1.SplitterMoved
+        Me.TChart2.Width = Me.SplitContainer1.Panel1.Width
+        Me.TChart2.Height = Me.SplitContainer1.Panel1.Height
+        Me.TChart1.Width = Me.SplitContainer1.Panel2.Width
+        Me.TChart1.Height = Me.SplitContainer1.Panel2.Height
+    End Sub
+
+	'Ausschnitt aktualisieren
+	'************************
+    Private Sub TChart2_MouseUp1(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles TChart2.MouseUp
+        Me.TChart1.Axes.Bottom.Minimum = Me.colorBand1.Start
+        Me.TChart1.Axes.Bottom.Maximum = Me.colorBand1.End
+    End Sub
+
     'Form schliessen
     '***************
     Private Sub MenuItem_Exit_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuItem_Exit.Click
@@ -91,6 +117,9 @@ Public Class Wave
 
             Case ".WEL", ".KWL"
                 Call Me.Import_WEL(file)
+
+            Case ".ASC"
+                Call Me.Import_ASC(file)
 
             Case Else
                 Call Me.Import_TXT(file)
@@ -144,6 +173,65 @@ Public Class Wave
                 'Neue Serie hinzufügen
                 Me.TChart1.Chart.Series(AnzahlSerien - 1).Add(WEL.Zeitreihen(i).XWerte, WEL.Zeitreihen(i).YWerte)
 
+            Next
+
+        End If
+
+    End Sub
+
+    'ASC-Datei importieren (SMUSI)
+    '*********************
+    Public Sub Import_ASC(ByVal FileName As String, ByVal ParamArray spaltenSel() As String)
+
+        Dim i As Integer
+        Dim Linie1 As Steema.TeeChart.Styles.Line
+        Dim Linie2 As Steema.TeeChart.Styles.Line
+
+        'WEL-Objekt instanzieren
+        Dim ASC As New ASC(FileName, spaltenSel)
+
+        'Serien zeichnen
+        '---------------
+        If (Not IsNothing(ASC.Zeitreihen)) Then
+
+            Me.TChart1.Panel.Brush.Color = Color.White
+            Me.TChart2.Panel.Brush.Color = Color.White
+            Me.TChart1.Zoom.Direction = Steema.TeeChart.ZoomDirections.Vertical
+            Me.TChart2.Zoom.Active = False
+
+            For i = 0 To ASC.Zeitreihen.GetUpperBound(0)
+                'Neue Serien Instanzieren
+                Linie1 = New Steema.TeeChart.Styles.Line(Me.TChart1.Chart)
+                Linie2 = New Steema.TeeChart.Styles.Line(Me.TChart2.Chart)
+                'X-Werte als Zeitdaten einstellen
+                Linie1.XValues.DateTime = True
+                Linie2.XValues.DateTime = True
+                'Namen vergeben
+                Linie1.Title = ASC.Zeitreihen(i).Title
+                Linie2.Title = ASC.Zeitreihen(i).Title
+                'Anzahl Serien bestimmen
+                Dim AnzahlSerien As Integer = Me.TChart1.Series.Count
+                'Neue Serie hinzufügen
+                Me.TChart1.Chart.Series(AnzahlSerien - 1).Add(ASC.Zeitreihen(i).XWerte, ASC.Zeitreihen(i).YWerte)
+                Me.TChart2.Chart.Series(AnzahlSerien - 1).Add(ASC.Zeitreihen(i).XWerte, ASC.Zeitreihen(i).YWerte)
+                Me.TChart1.Axes.Bottom.Automatic = False
+                Me.TChart1.Axes.Bottom.Minimum = DateTime.Parse(ASC.Zeitreihen(i).XWerte(0)).ToOADate
+                Me.TChart1.Axes.Bottom.Maximum = DateTime.Parse(ASC.Zeitreihen(i).XWerte(0)).AddDays(7).ToOADate
+                Me.TChart2.Axes.Bottom.Automatic = False
+                Me.TChart2.Axes.Bottom.Minimum = DateTime.Parse(ASC.Zeitreihen(i).XWerte(0)).ToOADate
+                Me.TChart2.Axes.Bottom.Maximum = DateTime.Parse(ASC.Zeitreihen(i).XWerte(ASC.Zeitreihen(i).XWerte.GetUpperBound(0))).ToOADate
+                'ColorBand einrichtenASC.Zeitreihen(i).XWerte
+                If (IsNothing(colorBand1)) Then
+                    colorBand1 = New Steema.TeeChart.Tools.ColorBand
+                    Me.TChart2.Tools.Add(colorBand1)
+                    colorBand1.Axis = Me.TChart2.Axes.Bottom
+                    colorBand1.Brush.Color = Color.Coral
+                    colorBand1.End = Me.TChart1.Axes.Bottom.Maximum
+                    colorBand1.ResizeEnd = True
+                    colorBand1.ResizeStart = True
+                    colorBand1.Start = Me.TChart1.Axes.Bottom.Minimum
+                    colorBand1.Brush.Transparency = 50
+                End If
             Next
 
         End If
