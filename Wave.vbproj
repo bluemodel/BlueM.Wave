@@ -53,6 +53,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplicationEvents.vb" />
+    <Compile Include="ASC.Designer.vb">
+      <DependentUpon>ASC.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ASC.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
@@ -106,10 +112,6 @@
       <DependentUpon>Wave.vb</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="WEL.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>WEL.vb</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <None Include="My Project\Application.myapp">
@@ -123,9 +125,17 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="ASC.resx">
+      <DependentUpon>ASC.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\chart_line_add.png" />
     <EmbeddedResource Include="Resources\icon_teechart.png" />
     <EmbeddedResource Include="Resources\Wave.ico" />
+    <EmbeddedResource Include="WEL.resx">
+      <DependentUpon>WEL.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Content Include="TeeChart.dll" />
