@@ -148,14 +148,36 @@ Public Class Wave
 
     End Sub
 
+    'Import-Formular anzeigen
+    '*********************
+    Private Sub showImportDialog(ByRef _datei As Dateiformat)
+
+        _datei.ImportDiag = New Import(_datei)
+
+        Dim DiagResult As DialogResult
+
+        'Dialog anzeigen
+        DiagResult = _datei.ImportDiag.ShowDialog()
+
+        If (DiagResult = Windows.Forms.DialogResult.OK) Then
+            'Datei einlesen
+            Call _datei.Read_File()
+        Else
+            Exit Sub
+        End If
+    End Sub
+
     'WEL-Datei importieren
     '*********************
-    Public Sub Import_WEL(ByVal FileName As String, ByVal ParamArray spaltenSel() As String)
+    Public Sub Import_WEL(ByVal FileName As String)
 
         Dim i As Integer
 
         'WEL-Objekt instanzieren
-        Dim WEL As New WEL(FileName, spaltenSel)
+        Dim WEL As New WEL(FileName)
+
+        'Import-Dialog anzeigen
+        Call Me.showImportDialog(WEL)
 
         'Serien zeichnen
         '---------------

@@ -1,215 +1,34 @@
 Imports System.IO
 
 Public Class WEL
-
-    'oft verwendete Zeichen (quasi Konstanten)
-    '-----------------------------------------
-    Private semikolon As Zeichen = New Zeichen(";")
-    Private komma As Zeichen = New Zeichen(",")
-    Private punkt As Zeichen = New Zeichen(".")
-    Private leerzeichen As Zeichen = New Zeichen(" ")
-    Private tab As Zeichen = New Zeichen(Chr(9))
+    Inherits Dateiformat
 
 #Region "Eigenschaften"
 
     'Eigenschaften
     '#############
 
-    Private _file As String                             'Pfad zur Datei
-    Private _zeichengetrennt As Boolean = True          'Zeichengetrennte (standardmäßig) oder Spalten mit fester Breite
-    Private _trennzeichen As Zeichen = semikolon        'Spaltentrennzeichen (standardmäßig Semikolon)
-    Private _spaltenbreite As Integer = 16              'Breite einer Spalte (standardmäßig 17)
-    Private _XSpalte As String                          'X-Spalte
-    Private _Yspalten() As String                       'Array der vorhandenen Y-Spaltennamen
-    Private _spaltenSel() As String                     'Array der ausgewählten Y-Spaltennamen
-
-    Public Zeitreihen() As Zeitreihe
-
     Private Const WELHeaderLen As Integer = 3           'Die ersten 3 Zeilen der WEL-Datei gehören zum Header
     Private Const SpaltenOffset As Integer = 1          'Anzahl Zeichen bevor die erste Spalte anfängt (nur bei Spalten mit fester Breite)
 
-
 #End Region
 
-#Region "Properties"
-
-    'Properties
-    '##########
-    Public Property File() As String
-        Get
-            Return _file
-        End Get
-        Set(ByVal value As String)
-            _file = value
-        End Set
-    End Property
-
-    Public Property Zeichengetrennt() As Boolean
-        Get
-            Return _zeichengetrennt
-        End Get
-        Set(ByVal value As Boolean)
-            _zeichengetrennt = value
-            If (_zeichengetrennt) Then
-                Me.RadioButton_Zeichengetrennt.Checked = True
-                Me.ComboBox_Trennzeichen.Enabled = True
-                Me.TextBox_Spaltenbreite.Enabled = False
-            Else
-                Me.RadioButton_Zeichengetrennt.Checked = False
-                Me.ComboBox_Trennzeichen.Enabled = False
-                Me.TextBox_Spaltenbreite.Enabled = True
-            End If
-
-        End Set
-    End Property
-
-    Public Property Trennzeichen() As Zeichen
-        Get
-            Return _trennzeichen
-        End Get
-        Set(ByVal value As Zeichen)
-            _trennzeichen = value
-            Me.ComboBox_Trennzeichen.SelectedItem = _trennzeichen
-        End Set
-    End Property
-
-    Public Property Spaltenbreite() As Integer
-        Get
-            Return _spaltenbreite
-        End Get
-        Set(ByVal value As Integer)
-            _spaltenbreite = value
-            Me.TextBox_Spaltenbreite.Text = _spaltenbreite.ToString()
-        End Set
-    End Property
-
-    Public Property XSpalte() As String
-        Get
-            Return _XSpalte
-        End Get
-        Set(ByVal value As String)
-            _XSpalte = value
-        End Set
-    End Property
-
-    Public Property YSpalten() As String()
-        Get
-            Return _Yspalten
-        End Get
-        Set(ByVal value As String())
-            _Yspalten = value
-        End Set
-    End Property
-
-    Public Property SpaltenSel() As String()
-        Get
-            Return _spaltenSel
-        End Get
-        Set(ByVal value As String())
-            _spaltenSel = value
-        End Set
-    End Property
-
-    'Eine Zeitreihe anhand des Titels holen
-    '**************************************
-    Public ReadOnly Property getReihe(ByVal title As String) As Zeitreihe
-        Get
-            For i As Integer = 0 To Me.Zeitreihen.GetUpperBound(0)
-                If (Me.Zeitreihen(i).Title = title) Then
-                    Return Me.Zeitreihen(i)
-                End If
-            Next
-            'Zeitreihe nicht vorhanden
-            Return New Zeitreihe("unbekannt")
-        End Get
-    End Property
-
-#End Region 'Properties
 
 #Region "Methoden"
 
     'Methoden
     '########
 
-    'Konstruktor für das Einlesen ausgewählter Spalten
-    '*************************************************
-    Public Sub New(ByVal FileName As String, ByVal ParamArray spaltenSel() As String)
-
-        ' Dieser Aufruf ist für den Windows Form-Designer erforderlich.
-        InitializeComponent()
-
-        ' Fügen Sie Initialisierungen nach dem InitializeComponent()-Aufruf hinzu.
-
-        'Dateinamen setzen
-        Me.File = FileName
-
-        'Spalten auslesen
-        Call Me.SpaltenAuslesen()
-
-        'Spaltenauswahl
-        If (spaltenSel.Length = 0) Then
-            'Wenn keine Spaltenauswahl gegeben ist, WEL-Dialog anzeigen
-            If (Not Me.ShowDialog() = Windows.Forms.DialogResult.OK) Then
-                Exit Sub
-            End If
-        Else
-            'Ansonsten Spaltenauswahl übergeben und WEL direkt einlesen
-            Me.SpaltenSel = spaltenSel
-            Call Me.Read_WEL()
-        End If
-
-    End Sub
-
-    'Konstruktor für das Einlesen aller Spalten
-    '******************************************
+    'Konstruktor
+    '***********
     Public Sub New(ByVal FileName As String)
-
-        ' Dieser Aufruf ist für den Windows Form-Designer erforderlich.
-        InitializeComponent()
-
-        ' Fügen Sie Initialisierungen nach dem InitializeComponent()-Aufruf hinzu.
-
-        'Dateinamen setzen
-        Me.File = FileName
-
-        'Spalten auslesen
-        Call Me.SpaltenAuslesen()
-
-        'Alle Y-Spalten einlesen
-        Me.SpaltenSel = Me.YSpalten
-
-        Call Me.Read_WEL()
-
-    End Sub
-
-    'Form laden
-    '**********
-    Private Sub WEL_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
-
-        'Combobox Trennzeichen initialisieren
-        Me.ComboBox_Trennzeichen.BeginUpdate()
-        Me.ComboBox_Trennzeichen.Items.Add(Me.semikolon)
-        Me.ComboBox_Trennzeichen.Items.Add(Me.komma)
-        Me.ComboBox_Trennzeichen.Items.Add(Me.punkt)
-        Me.ComboBox_Trennzeichen.Items.Add(Me.leerzeichen)
-        Me.ComboBox_Trennzeichen.Items.Add(Me.tab)
-        Me.ComboBox_Trennzeichen.EndUpdate()
-
-        'Standardeinstellungen setzen
-        Me.Zeichengetrennt = True
-        Me.Trennzeichen = Me.semikolon
-        Me.Spaltenbreite = 16
-
-        'Datei als Vorschau anzeigen
-        Me.Label_Datei.Text += " " & Path.GetFileName(Me.File)
-        Me.RichTextBox_Vorschau.LoadFile(Me.File, RichTextBoxStreamType.PlainText)
-
+        MyBase.New(FileName)
     End Sub
 
 
     'Spalten auslesen
     '****************
-    Private Sub SpaltenAuslesen()
+    Public Overrides Sub SpaltenAuslesen()
 
         Dim i As Integer
 
@@ -249,19 +68,11 @@ Public Class WEL
         ReDim Me.YSpalten(alleSpalten.GetUpperBound(0) - 1)
         Array.Copy(alleSpalten, 1, Me.YSpalten, 0, alleSpalten.Length - 1)
 
-        'Anzeige aktualisieren
-        '---------------------
-        'XSpalte
-        Me.TextBox_XSpalte.Text = Me.XSpalte
-        'YSpalten
-        Me.ListBox_YSpalten.Items.Clear()
-        Me.ListBox_YSpalten.Items.AddRange(Me.YSpalten)
-
     End Sub
 
     'WEL-Datei einlesen
     '******************
-    Private Sub Read_WEL()
+    Public Overrides Sub Read_File()
 
         Dim AnzZeil As Integer = 0
         Dim i, j, n As Integer
@@ -352,72 +163,6 @@ Public Class WEL
         Next
 
     End Function
-
-    'OK Button gedrückt
-    '******************
-    Private Sub Button_OK_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button_OK.Click
-
-        'Einstellungen übernehmen
-        '------------------------
-        'Trennzeichen
-        Me.Trennzeichen = Me.ComboBox_Trennzeichen.SelectedItem
-
-        'Ausgewählte Spalten
-        Dim i As Integer
-        If (Me.ListBox_YSpalten.SelectedItems.Count < 1) Then
-            MsgBox("Bitte mindestens eine Y-Spalte auswählen!", MsgBoxStyle.Exclamation, "Fehler")
-            Me.DialogResult = Windows.Forms.DialogResult.None
-            Exit Sub
-        Else
-            ReDim Me.SpaltenSel(Me.ListBox_YSpalten.SelectedItems.Count - 1)
-            For i = 0 To Me.ListBox_YSpalten.SelectedItems.Count - 1
-                Me.SpaltenSel(i) = Me.ListBox_YSpalten.SelectedItems(i)
-            Next
-        End If
-
-        'WEL-Datei einlesen
-        Call Me.Read_WEL()
-
-    End Sub
-
-    'Wenn Spaltenart geändert wird, Spalten neu auslesen
-    '***************************************************
-    Private Sub RadioButton_Spalten_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton_Spaltenbreite.CheckedChanged
-
-        If (Me.RadioButton_Zeichengetrennt.Checked) Then
-            Me.Zeichengetrennt = True
-        Else
-            Me.Zeichengetrennt = False
-        End If
-
-        Call Me.SpaltenAuslesen()
-
-    End Sub
-
-    'Wenn Trennzeichen geändert wird, Spalten neu auslesen
-    '*****************************************************
-    Private Sub ComboBox_Trennzeichen_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ComboBox_Trennzeichen.SelectedIndexChanged
-
-        Me.Trennzeichen = Me.ComboBox_Trennzeichen.SelectedItem
-        Call Me.SpaltenAuslesen()
-
-    End Sub
-
-    'Wenn Spaltenbreite geändert wird, Spalten neu auslesen
-    '******************************************************
-    Private Sub TextBox_Spaltenbreite_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TextBox_Spaltenbreite.TextChanged
-
-        If (Convert.ToInt16(Me.TextBox_Spaltenbreite.Text) < 1) Then
-            MsgBox("Bitte eine Zahl größer 0 für die Spaltenbreite angeben!", MsgBoxStyle.Exclamation, "Fehler")
-            Me.TextBox_Spaltenbreite.Focus()
-            Exit Sub
-        End If
-
-        Me.Spaltenbreite = Convert.ToInt16(Me.TextBox_Spaltenbreite.Text)
-
-        Call Me.SpaltenAuslesen()
-
-    End Sub
 
 #End Region 'Methoden
 

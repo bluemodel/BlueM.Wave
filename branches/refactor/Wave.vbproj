@@ -59,6 +59,13 @@
     <Compile Include="Dateiformate\ASC.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Dateiformate\Dateiformat.vb" />
+    <Compile Include="Import.designer.vb">
+      <DependentUpon>Import.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Import.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
@@ -86,11 +93,7 @@
     <Compile Include="Wave.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Dateiformate\WEL.Designer.vb">
-      <DependentUpon>WEL.vb</DependentUpon>
-    </Compile>
     <Compile Include="Dateiformate\WEL.vb">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="Zeichen.vb" />
     <Compile Include="Zeitreihe.vb" />
@@ -129,13 +132,13 @@
       <DependentUpon>ASC.vb</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Import.resx">
+      <DependentUpon>Import.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\chart_line_add.png" />
     <EmbeddedResource Include="Resources\icon_teechart.png" />
     <EmbeddedResource Include="Resources\Wave.ico" />
-    <EmbeddedResource Include="Dateiformate\WEL.resx">
-      <DependentUpon>WEL.vb</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Content Include="TeeChart.dll" />

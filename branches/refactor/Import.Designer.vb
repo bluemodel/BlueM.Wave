@@ -1,5 +1,5 @@
 <Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
-Partial Class WEL
+Partial Class Import
     Inherits System.Windows.Forms.Form
 
     'Das Formular überschreibt den Löschvorgang, um die Komponentenliste zu bereinigen.
@@ -22,7 +22,7 @@ Partial Class WEL
     'Das Bearbeiten mit dem Code-Editor ist nicht möglich.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(WEL))
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Import))
         Me.Label_Datei = New System.Windows.Forms.Label
         Me.RichTextBox_Vorschau = New System.Windows.Forms.RichTextBox
         Me.ComboBox_Trennzeichen = New System.Windows.Forms.ComboBox
@@ -167,7 +167,7 @@ Partial Class WEL
         Me.TextBox_Spaltenbreite.Size = New System.Drawing.Size(97, 20)
         Me.TextBox_Spaltenbreite.TabIndex = 22
         '
-        'WEL
+        'WELForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
