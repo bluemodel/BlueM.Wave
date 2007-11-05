@@ -24,8 +24,8 @@ Partial Class Wave
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Wave))
-        Me.TextSource1 = New Steema.TeeChart.Data.TextSource
         Me.Commander1 = New Steema.TeeChart.Commander
+        Me.TChart1 = New Steema.TeeChart.TChart
         Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog
         Me.MenuStrip1 = New System.Windows.Forms.MenuStrip
         Me.DateiToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem
@@ -40,21 +40,12 @@ Partial Class Wave
         Me.DateTimePicker1 = New System.Windows.Forms.DateTimePicker
         Me.SplitContainer1 = New System.Windows.Forms.SplitContainer
         Me.TChart2 = New Steema.TeeChart.TChart
-        Me.TChart1 = New Steema.TeeChart.TChart
         Me.MenuStrip1.SuspendLayout()
         Me.ToolStrip1.SuspendLayout()
         Me.SplitContainer1.Panel1.SuspendLayout()
         Me.SplitContainer1.Panel2.SuspendLayout()
         Me.SplitContainer1.SuspendLayout()
         Me.SuspendLayout()
-        '
-        'TextSource1
-        '
-        Me.TextSource1.DecimalSeparator = Global.Microsoft.VisualBasic.ChrW(46)
-        Me.TextSource1.Fields.AddRange(New Steema.TeeChart.Data.TextField() {New Steema.TeeChart.Data.TextField(0, "x"), New Steema.TeeChart.Data.TextField(1, "y")})
-        Me.TextSource1.HeaderLines = 1
-        Me.TextSource1.Separator = Global.Microsoft.VisualBasic.ChrW(59)
-        Me.TextSource1.Series = Nothing
         '
         'Commander1
         '
@@ -71,6 +62,118 @@ Partial Class Wave
         Me.Commander1.ShowToolTips = True
         Me.Commander1.Size = New System.Drawing.Size(345, 34)
         Me.Commander1.TabIndex = 2
+        '
+        'TChart1
+        '
+        '
+        '
+        '
+        Me.TChart1.Aspect.ElevationFloat = 345
+        Me.TChart1.Aspect.RotationFloat = 345
+        Me.TChart1.Aspect.View3D = False
+        '
+        '
+        '
+        '
+        '
+        '
+        Me.TChart1.Axes.Bottom.Automatic = True
+        '
+        '
+        '
+        Me.TChart1.Axes.Bottom.Grid.Style = System.Drawing.Drawing2D.DashStyle.Dash
+        Me.TChart1.Axes.Bottom.Grid.ZPosition = 0
+        '
+        '
+        '
+        Me.TChart1.Axes.Depth.Automatic = True
+        '
+        '
+        '
+        Me.TChart1.Axes.Depth.Grid.Style = System.Drawing.Drawing2D.DashStyle.Dash
+        Me.TChart1.Axes.Depth.Grid.ZPosition = 0
+        '
+        '
+        '
+        Me.TChart1.Axes.DepthTop.Automatic = True
+        '
+        '
+        '
+        Me.TChart1.Axes.DepthTop.Grid.Style = System.Drawing.Drawing2D.DashStyle.Dash
+        Me.TChart1.Axes.DepthTop.Grid.ZPosition = 0
+        '
+        '
+        '
+        Me.TChart1.Axes.Left.Automatic = True
+        '
+        '
+        '
+        Me.TChart1.Axes.Left.Grid.Style = System.Drawing.Drawing2D.DashStyle.Dash
+        Me.TChart1.Axes.Left.Grid.ZPosition = 0
+        '
+        '
+        '
+        Me.TChart1.Axes.Right.Automatic = True
+        '
+        '
+        '
+        Me.TChart1.Axes.Right.Grid.Style = System.Drawing.Drawing2D.DashStyle.Dash
+        Me.TChart1.Axes.Right.Grid.ZPosition = 0
+        '
+        '
+        '
+        Me.TChart1.Axes.Top.Automatic = True
+        '
+        '
+        '
+        Me.TChart1.Axes.Top.Grid.Style = System.Drawing.Drawing2D.DashStyle.Dash
+        Me.TChart1.Axes.Top.Grid.ZPosition = 0
+        '
+        '
+        '
+        Me.TChart1.Header.Lines = New String() {"TeeChart"}
+        '
+        '
+        '
+        Me.TChart1.Legend.LegendStyle = Steema.TeeChart.LegendStyles.Series
+        '
+        '
+        '
+        Me.TChart1.Legend.Shadow.Visible = True
+        '
+        '
+        '
+        '
+        '
+        '
+        Me.TChart1.Legend.Title.Font.Bold = True
+        '
+        '
+        '
+        Me.TChart1.Legend.Title.Pen.Visible = False
+        Me.TChart1.Location = New System.Drawing.Point(-2, -2)
+        Me.TChart1.Name = "TChart1"
+        Me.TChart1.Size = New System.Drawing.Size(945, 190)
+        Me.TChart1.TabIndex = 4
+        '
+        '
+        '
+        '
+        '
+        '
+        Me.TChart1.Walls.Back.AutoHide = False
+        '
+        '
+        '
+        Me.TChart1.Walls.Bottom.AutoHide = False
+        '
+        '
+        '
+        Me.TChart1.Walls.Left.AutoHide = False
+        '
+        '
+        '
+        Me.TChart1.Walls.Right.AutoHide = False
         '
         'OpenFileDialog1
         '
@@ -302,118 +405,6 @@ Partial Class Wave
         '
         Me.TChart2.Walls.Right.AutoHide = False
         '
-        'TChart1
-        '
-        '
-        '
-        '
-        Me.TChart1.Aspect.ElevationFloat = 345
-        Me.TChart1.Aspect.RotationFloat = 345
-        Me.TChart1.Aspect.View3D = False
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart1.Axes.Bottom.Automatic = True
-        '
-        '
-        '
-        Me.TChart1.Axes.Bottom.Grid.Style = System.Drawing.Drawing2D.DashStyle.Dash
-        Me.TChart1.Axes.Bottom.Grid.ZPosition = 0
-        '
-        '
-        '
-        Me.TChart1.Axes.Depth.Automatic = True
-        '
-        '
-        '
-        Me.TChart1.Axes.Depth.Grid.Style = System.Drawing.Drawing2D.DashStyle.Dash
-        Me.TChart1.Axes.Depth.Grid.ZPosition = 0
-        '
-        '
-        '
-        Me.TChart1.Axes.DepthTop.Automatic = True
-        '
-        '
-        '
-        Me.TChart1.Axes.DepthTop.Grid.Style = System.Drawing.Drawing2D.DashStyle.Dash
-        Me.TChart1.Axes.DepthTop.Grid.ZPosition = 0
-        '
-        '
-        '
-        Me.TChart1.Axes.Left.Automatic = True
-        '
-        '
-        '
-        Me.TChart1.Axes.Left.Grid.Style = System.Drawing.Drawing2D.DashStyle.Dash
-        Me.TChart1.Axes.Left.Grid.ZPosition = 0
-        '
-        '
-        '
-        Me.TChart1.Axes.Right.Automatic = True
-        '
-        '
-        '
-        Me.TChart1.Axes.Right.Grid.Style = System.Drawing.Drawing2D.DashStyle.Dash
-        Me.TChart1.Axes.Right.Grid.ZPosition = 0
-        '
-        '
-        '
-        Me.TChart1.Axes.Top.Automatic = True
-        '
-        '
-        '
-        Me.TChart1.Axes.Top.Grid.Style = System.Drawing.Drawing2D.DashStyle.Dash
-        Me.TChart1.Axes.Top.Grid.ZPosition = 0
-        '
-        '
-        '
-        Me.TChart1.Header.Lines = New String() {"TeeChart"}
-        '
-        '
-        '
-        Me.TChart1.Legend.LegendStyle = Steema.TeeChart.LegendStyles.Series
-        '
-        '
-        '
-        Me.TChart1.Legend.Shadow.Visible = True
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart1.Legend.Title.Font.Bold = True
-        '
-        '
-        '
-        Me.TChart1.Legend.Title.Pen.Visible = False
-        Me.TChart1.Location = New System.Drawing.Point(-2, -2)
-        Me.TChart1.Name = "TChart1"
-        Me.TChart1.Size = New System.Drawing.Size(945, 190)
-        Me.TChart1.TabIndex = 4
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart1.Walls.Back.AutoHide = False
-        '
-        '
-        '
-        Me.TChart1.Walls.Bottom.AutoHide = False
-        '
-        '
-        '
-        Me.TChart1.Walls.Left.AutoHide = False
-        '
-        '
-        '
-        Me.TChart1.Walls.Right.AutoHide = False
-        '
         'Wave
         '
         Me.AllowDrop = True
@@ -441,7 +432,6 @@ Partial Class Wave
         Me.PerformLayout()
 
     End Sub
-    Friend WithEvents TextSource1 As Steema.TeeChart.Data.TextSource
     Friend WithEvents Commander1 As Steema.TeeChart.Commander
     Friend WithEvents OpenFileDialog1 As System.Windows.Forms.OpenFileDialog
     Friend WithEvents MenuStrip1 As System.Windows.Forms.MenuStrip

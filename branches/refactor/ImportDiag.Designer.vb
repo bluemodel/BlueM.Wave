@@ -36,13 +36,19 @@ Partial Class ImportDiag
         Me.RadioButton_Zeichengetrennt = New System.Windows.Forms.RadioButton
         Me.GroupBox_Spaltenmodus = New System.Windows.Forms.GroupBox
         Me.TextBox_Spaltenbreite = New System.Windows.Forms.TextBox
+        Me.TextBox_AnzKopfzeilen = New System.Windows.Forms.MaskedTextBox
+        Me.Label_AnzKopfzeilen = New System.Windows.Forms.Label
+        Me.ComboBox_Dezimaltrennzeichen = New System.Windows.Forms.ComboBox
+        Me.Label_Dezimaltrennzeichen = New System.Windows.Forms.Label
+        Me.GroupBox_Einstellungen = New System.Windows.Forms.GroupBox
         Me.GroupBox_Spaltenmodus.SuspendLayout()
+        Me.GroupBox_Einstellungen.SuspendLayout()
         Me.SuspendLayout()
         '
         'Label_Datei
         '
         Me.Label_Datei.AutoSize = True
-        Me.Label_Datei.Location = New System.Drawing.Point(12, 115)
+        Me.Label_Datei.Location = New System.Drawing.Point(12, 183)
         Me.Label_Datei.Name = "Label_Datei"
         Me.Label_Datei.Size = New System.Drawing.Size(35, 13)
         Me.Label_Datei.TabIndex = 17
@@ -52,7 +58,7 @@ Partial Class ImportDiag
         '
         Me.RichTextBox_Vorschau.BackColor = System.Drawing.Color.White
         Me.RichTextBox_Vorschau.Font = New System.Drawing.Font("Courier New", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.RichTextBox_Vorschau.Location = New System.Drawing.Point(12, 141)
+        Me.RichTextBox_Vorschau.Location = New System.Drawing.Point(12, 209)
         Me.RichTextBox_Vorschau.Name = "RichTextBox_Vorschau"
         Me.RichTextBox_Vorschau.ReadOnly = True
         Me.RichTextBox_Vorschau.Size = New System.Drawing.Size(230, 186)
@@ -73,7 +79,7 @@ Partial Class ImportDiag
         'Button_OK
         '
         Me.Button_OK.DialogResult = System.Windows.Forms.DialogResult.OK
-        Me.Button_OK.Location = New System.Drawing.Point(230, 342)
+        Me.Button_OK.Location = New System.Drawing.Point(230, 410)
         Me.Button_OK.Name = "Button_OK"
         Me.Button_OK.Size = New System.Drawing.Size(75, 23)
         Me.Button_OK.TabIndex = 11
@@ -83,7 +89,7 @@ Partial Class ImportDiag
         'Button_Cancel
         '
         Me.Button_Cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel
-        Me.Button_Cancel.Location = New System.Drawing.Point(311, 342)
+        Me.Button_Cancel.Location = New System.Drawing.Point(311, 410)
         Me.Button_Cancel.Name = "Button_Cancel"
         Me.Button_Cancel.Size = New System.Drawing.Size(75, 23)
         Me.Button_Cancel.TabIndex = 10
@@ -93,7 +99,7 @@ Partial Class ImportDiag
         'ListBox_YSpalten
         '
         Me.ListBox_YSpalten.FormattingEnabled = True
-        Me.ListBox_YSpalten.Location = New System.Drawing.Point(266, 193)
+        Me.ListBox_YSpalten.Location = New System.Drawing.Point(266, 261)
         Me.ListBox_YSpalten.Name = "ListBox_YSpalten"
         Me.ListBox_YSpalten.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended
         Me.ListBox_YSpalten.Size = New System.Drawing.Size(120, 134)
@@ -102,7 +108,7 @@ Partial Class ImportDiag
         'Label_YSpalten
         '
         Me.Label_YSpalten.AutoSize = True
-        Me.Label_YSpalten.Location = New System.Drawing.Point(263, 168)
+        Me.Label_YSpalten.Location = New System.Drawing.Point(263, 236)
         Me.Label_YSpalten.Name = "Label_YSpalten"
         Me.Label_YSpalten.Size = New System.Drawing.Size(56, 13)
         Me.Label_YSpalten.TabIndex = 17
@@ -111,7 +117,7 @@ Partial Class ImportDiag
         'Label_XSpalte
         '
         Me.Label_XSpalte.AutoSize = True
-        Me.Label_XSpalte.Location = New System.Drawing.Point(263, 115)
+        Me.Label_XSpalte.Location = New System.Drawing.Point(263, 183)
         Me.Label_XSpalte.Name = "Label_XSpalte"
         Me.Label_XSpalte.Size = New System.Drawing.Size(50, 13)
         Me.Label_XSpalte.TabIndex = 17
@@ -119,7 +125,7 @@ Partial Class ImportDiag
         '
         'TextBox_XSpalte
         '
-        Me.TextBox_XSpalte.Location = New System.Drawing.Point(266, 141)
+        Me.TextBox_XSpalte.Location = New System.Drawing.Point(266, 209)
         Me.TextBox_XSpalte.Name = "TextBox_XSpalte"
         Me.TextBox_XSpalte.ReadOnly = True
         Me.TextBox_XSpalte.Size = New System.Drawing.Size(120, 20)
@@ -167,11 +173,62 @@ Partial Class ImportDiag
         Me.TextBox_Spaltenbreite.Size = New System.Drawing.Size(97, 20)
         Me.TextBox_Spaltenbreite.TabIndex = 22
         '
-        'WELForm
+        'TextBox_AnzKopfzeilen
+        '
+        Me.TextBox_AnzKopfzeilen.Location = New System.Drawing.Point(115, 20)
+        Me.TextBox_AnzKopfzeilen.Mask = "0#"
+        Me.TextBox_AnzKopfzeilen.Name = "TextBox_AnzKopfzeilen"
+        Me.TextBox_AnzKopfzeilen.PromptChar = Global.Microsoft.VisualBasic.ChrW(32)
+        Me.TextBox_AnzKopfzeilen.Size = New System.Drawing.Size(50, 20)
+        Me.TextBox_AnzKopfzeilen.TabIndex = 24
+        '
+        'Label_AnzKopfzeilen
+        '
+        Me.Label_AnzKopfzeilen.AutoSize = True
+        Me.Label_AnzKopfzeilen.Location = New System.Drawing.Point(12, 23)
+        Me.Label_AnzKopfzeilen.Name = "Label_AnzKopfzeilen"
+        Me.Label_AnzKopfzeilen.Size = New System.Drawing.Size(94, 13)
+        Me.Label_AnzKopfzeilen.TabIndex = 23
+        Me.Label_AnzKopfzeilen.Text = "Anzahl Kopfzeilen:"
+        '
+        'ComboBox_Dezimaltrennzeichen
+        '
+        Me.ComboBox_Dezimaltrennzeichen.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.ComboBox_Dezimaltrennzeichen.DropDownWidth = 50
+        Me.ComboBox_Dezimaltrennzeichen.FormattingEnabled = True
+        Me.ComboBox_Dezimaltrennzeichen.Location = New System.Drawing.Point(318, 19)
+        Me.ComboBox_Dezimaltrennzeichen.Name = "ComboBox_Dezimaltrennzeichen"
+        Me.ComboBox_Dezimaltrennzeichen.Size = New System.Drawing.Size(50, 21)
+        Me.ComboBox_Dezimaltrennzeichen.TabIndex = 26
+        '
+        'Label_Dezimaltrennzeichen
+        '
+        Me.Label_Dezimaltrennzeichen.AutoSize = True
+        Me.Label_Dezimaltrennzeichen.Location = New System.Drawing.Point(201, 22)
+        Me.Label_Dezimaltrennzeichen.Name = "Label_Dezimaltrennzeichen"
+        Me.Label_Dezimaltrennzeichen.Size = New System.Drawing.Size(108, 13)
+        Me.Label_Dezimaltrennzeichen.TabIndex = 25
+        Me.Label_Dezimaltrennzeichen.Text = "Dezimaltrennzeichen:"
+        '
+        'GroupBox_Einstellungen
+        '
+        Me.GroupBox_Einstellungen.Controls.Add(Me.Label_Dezimaltrennzeichen)
+        Me.GroupBox_Einstellungen.Controls.Add(Me.TextBox_AnzKopfzeilen)
+        Me.GroupBox_Einstellungen.Controls.Add(Me.ComboBox_Dezimaltrennzeichen)
+        Me.GroupBox_Einstellungen.Controls.Add(Me.Label_AnzKopfzeilen)
+        Me.GroupBox_Einstellungen.Location = New System.Drawing.Point(12, 108)
+        Me.GroupBox_Einstellungen.Name = "GroupBox_Einstellungen"
+        Me.GroupBox_Einstellungen.Size = New System.Drawing.Size(374, 49)
+        Me.GroupBox_Einstellungen.TabIndex = 27
+        Me.GroupBox_Einstellungen.TabStop = False
+        Me.GroupBox_Einstellungen.Text = "Einstellungen"
+        '
+        'ImportDiag
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(397, 375)
+        Me.ClientSize = New System.Drawing.Size(399, 525)
+        Me.Controls.Add(Me.GroupBox_Einstellungen)
         Me.Controls.Add(Me.GroupBox_Spaltenmodus)
         Me.Controls.Add(Me.TextBox_XSpalte)
         Me.Controls.Add(Me.ListBox_YSpalten)
@@ -182,10 +239,12 @@ Partial Class ImportDiag
         Me.Controls.Add(Me.Button_OK)
         Me.Controls.Add(Me.Button_Cancel)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
-        Me.Name = "WEL"
+        Me.Name = "ImportDiag"
         Me.Text = "WEL-Datei: Spalten auswählen"
         Me.GroupBox_Spaltenmodus.ResumeLayout(False)
         Me.GroupBox_Spaltenmodus.PerformLayout()
+        Me.GroupBox_Einstellungen.ResumeLayout(False)
+        Me.GroupBox_Einstellungen.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -203,4 +262,9 @@ Partial Class ImportDiag
     Friend WithEvents RadioButton_Zeichengetrennt As System.Windows.Forms.RadioButton
     Friend WithEvents GroupBox_Spaltenmodus As System.Windows.Forms.GroupBox
     Friend WithEvents TextBox_Spaltenbreite As System.Windows.Forms.TextBox
+    Friend WithEvents TextBox_AnzKopfzeilen As System.Windows.Forms.MaskedTextBox
+    Friend WithEvents Label_AnzKopfzeilen As System.Windows.Forms.Label
+    Friend WithEvents ComboBox_Dezimaltrennzeichen As System.Windows.Forms.ComboBox
+    Friend WithEvents Label_Dezimaltrennzeichen As System.Windows.Forms.Label
+    Friend WithEvents GroupBox_Einstellungen As System.Windows.Forms.GroupBox
 End Class

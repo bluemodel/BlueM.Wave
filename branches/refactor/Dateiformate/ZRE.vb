@@ -3,15 +3,6 @@ Imports System.IO
 Public Class ZRE
     Inherits Dateiformat
 
-#Region "Eigenschaften"
-
-    'Eigenschaften
-    '#############
-
-    Private Const ZREHEaderLen As Integer = 4       'Die ersten 4 Zeilen der ZRE-Datei gehören zum Header
-
-#End Region
-
 #Region "Methoden"
 
     'Methoden
@@ -20,7 +11,15 @@ Public Class ZRE
     'Konstruktor
     '***********
     Public Sub New(ByVal FileName As String)
+
         MyBase.New(FileName)
+
+        'Voreinstellungen
+        Me.AnzKopfzeilen = 4                        'Die ersten 4 Zeilen der ZRE-Datei gehören zum Header
+
+        'Sofort Spalten auslesen (bei ZRE kein ImportDialog!)
+        Call Me.SpaltenAuslesen()
+
     End Sub
 
     'Spalten auslesen
@@ -70,18 +69,18 @@ Public Class ZRE
         'Zeitreihe redimensionieren
         ReDim Me.Zeitreihen(0)
         Me.Zeitreihen(0) = New Zeitreihe(Me.SpaltenSel(0))
-        Me.Zeitreihen(0).Length = AnzZeil - ZREHEaderLen
+        Me.Zeitreihen(0).Length = AnzZeil - Me.AnzKopfzeilen
 
         'Zurück zum Dateianfang und lesen
         FiStr.Seek(0, SeekOrigin.Begin)
 
         For j = 0 To AnzZeil - 1
             Zeile = StrRead.ReadLine.ToString()
-            If (j >= ZREHEaderLen) Then
+            If (j >= Me.AnzKopfzeilen) Then
                 'Datum
-                Me.Zeitreihen(0).XWerte(j - ZREHEaderLen) = New System.DateTime(Zeile.Substring(0, 4), Zeile.Substring(4, 2), Zeile.Substring(6, 2), Zeile.Substring(9, 2), Zeile.Substring(12, 2), 0, New System.Globalization.GregorianCalendar())
+                Me.Zeitreihen(0).XWerte(j - Me.AnzKopfzeilen) = New System.DateTime(Zeile.Substring(0, 4), Zeile.Substring(4, 2), Zeile.Substring(6, 2), Zeile.Substring(9, 2), Zeile.Substring(12, 2), 0, New System.Globalization.GregorianCalendar())
                 'Wert
-                Me.Zeitreihen(0).YWerte(j - ZREHEaderLen) = Convert.ToDouble(Zeile.Substring(15, 14))
+                Me.Zeitreihen(0).YWerte(j - Me.AnzKopfzeilen) = Convert.ToDouble(Zeile.Substring(15, 14))
             End If
         Next
 

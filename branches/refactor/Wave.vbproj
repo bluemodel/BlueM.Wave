@@ -81,11 +81,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <AutoGen>True</AutoGen>
     </Compile>
-    <Compile Include="Dateiformate\TXT.Designer.vb">
-      <DependentUpon>TXT.vb</DependentUpon>
-    </Compile>
-    <Compile Include="Dateiformate\TXT.vb">
-      <SubType>Form</SubType>
+    <Compile Include="Dateiformate\CSV.vb">
     </Compile>
     <Compile Include="Wave.Designer.vb">
       <DependentUpon>Wave.vb</DependentUpon>
@@ -106,10 +102,6 @@
       <LastGenOutput>Resources.Designer.vb</LastGenOutput>
       <CustomToolNamespace>My.Resources</CustomToolNamespace>
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Dateiformate\TXT.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>TXT.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Wave.resx">
       <DependentUpon>Wave.vb</DependentUpon>

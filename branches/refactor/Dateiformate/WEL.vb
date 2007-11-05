@@ -8,7 +8,6 @@ Public Class WEL
     'Eigenschaften
     '#############
 
-    Private Const WELHeaderLen As Integer = 3           'Die ersten 3 Zeilen der WEL-Datei gehören zum Header
     Private Const SpaltenOffset As Integer = 1          'Anzahl Zeichen bevor die erste Spalte anfängt (nur bei Spalten mit fester Breite)
 
 #End Region
@@ -22,7 +21,12 @@ Public Class WEL
     'Konstruktor
     '***********
     Public Sub New(ByVal FileName As String)
+
         MyBase.New(FileName)
+
+        'Voreinstellungen
+        Me.AnzKopfzeilen = 3                            'Die ersten 3 Zeilen der WEL-Datei gehören zum Header
+
     End Sub
 
 
@@ -36,11 +40,14 @@ Public Class WEL
         Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
         Dim StrRead As StreamReader = New StreamReader(FiStr, System.Text.Encoding.GetEncoding("iso8859-1"))
 
-        '2. Zeile (Spaltenüberschriften) auslesen
+        'Spaltenüberschriften auslesen
         Dim Zeile As String = ""
-        For i = 1 To 2
+        For i = 1 To Me.AnzKopfzeilen - 1
             Zeile = StrRead.ReadLine.ToString
         Next
+
+        StrRead.Close()
+        FiStr.Close()
 
         'Spaltennamen auslesen
         '---------------------
@@ -62,6 +69,7 @@ Public Class WEL
         For i = 0 To alleSpalten.GetUpperBound(0)
             alleSpalten(i) = alleSpalten(i).Trim()
         Next
+
         'X-Spalte übernehmen
         Me.XSpalte = alleSpalten(0)
         'Y-Spalten übernehmen
@@ -94,11 +102,11 @@ Public Class WEL
         'Zeitreihen redimensionieren
         For i = 0 To Me.Zeitreihen.GetUpperBound(0)
             Me.Zeitreihen(i) = New Zeitreihe(SpaltenSel(i))
-            Me.Zeitreihen(i).Length = AnzZeil - WELHeaderLen
+            Me.Zeitreihen(i).Length = AnzZeil - Me.AnzKopfzeilen
         Next
 
         'temoräres Array für XWerte
-        Dim tmpXWerte(AnzZeil - WELHeaderLen - 1) As DateTime
+        Dim tmpXWerte(AnzZeil - Me.AnzKopfzeilen - 1) As DateTime
 
         'Auf Anfang setzen und einlesen
         '------------------------------
@@ -108,14 +116,14 @@ Public Class WEL
             If (Me.Zeichengetrennt) Then
                 'Zeichengetrennt
                 Werte = StrRead.ReadLine.ToString.Split(New Char() {Me.Trennzeichen.Character}, StringSplitOptions.RemoveEmptyEntries)
-                If (i >= WELHeaderLen) Then
+                If (i >= Me.AnzKopfzeilen) Then
                     'Erste Spalte: Datum_Zeit
-                    tmpXWerte(i - WELHeaderLen) = New System.DateTime(Werte(0).Substring(6, 4), Werte(0).Substring(3, 2), Werte(0).Substring(0, 2), Werte(0).Substring(11, 2), Werte(0).Substring(14, 2), 0, New System.Globalization.GregorianCalendar())
+                    tmpXWerte(i - Me.AnzKopfzeilen) = New System.DateTime(Werte(0).Substring(6, 4), Werte(0).Substring(3, 2), Werte(0).Substring(0, 2), Werte(0).Substring(11, 2), Werte(0).Substring(14, 2), 0, New System.Globalization.GregorianCalendar())
                     'Restliche Spalten: Werte
                     n = 0
                     For j = 0 To Me.YSpalten.GetUpperBound(0)
                         If (isSelected(Me.YSpalten(j))) Then
-                            Me.Zeitreihen(n).YWerte(i - WELHeaderLen) = Convert.ToDouble(Werte(j + 1))
+                            Me.Zeitreihen(n).YWerte(i - Me.AnzKopfzeilen) = Convert.ToDouble(Werte(j + 1))
                             n += 1
                         End If
                     Next
@@ -123,14 +131,14 @@ Public Class WEL
             Else
                 'Spalten mit fester Breite
                 Zeile = StrRead.ReadLine.ToString()
-                If (i >= WELHeaderLen) Then
+                If (i >= Me.AnzKopfzeilen) Then
                     'Erste Spalte: Datum_Zeit
-                    tmpXWerte(i - WELHeaderLen) = New System.DateTime(Zeile.Substring(6 + SpaltenOffset, 4), Zeile.Substring(3 + SpaltenOffset, 2), Zeile.Substring(0 + SpaltenOffset, 2), Zeile.Substring(11 + SpaltenOffset, 2), Zeile.Substring(14 + SpaltenOffset, 2), 0, New System.Globalization.GregorianCalendar())
+                    tmpXWerte(i - Me.AnzKopfzeilen) = New System.DateTime(Zeile.Substring(6 + SpaltenOffset, 4), Zeile.Substring(3 + SpaltenOffset, 2), Zeile.Substring(0 + SpaltenOffset, 2), Zeile.Substring(11 + SpaltenOffset, 2), Zeile.Substring(14 + SpaltenOffset, 2), 0, New System.Globalization.GregorianCalendar())
                     'Restliche Spalten: Werte
                     n = 0
                     For j = 0 To Me.YSpalten.GetUpperBound(0)
                         If (isSelected(Me.YSpalten(j))) Then
-                            Me.Zeitreihen(n).YWerte(i - WELHeaderLen) = Convert.ToDouble(Zeile.Substring(((j + 1) * Me.Spaltenbreite) + SpaltenOffset, Math.Min(Me.Spaltenbreite, Zeile.Substring(((j + 1) * Me.Spaltenbreite) + SpaltenOffset).Length)))
+                            Me.Zeitreihen(n).YWerte(i - Me.AnzKopfzeilen) = Convert.ToDouble(Zeile.Substring(((j + 1) * Me.Spaltenbreite) + SpaltenOffset, Math.Min(Me.Spaltenbreite, Zeile.Substring(((j + 1) * Me.Spaltenbreite) + SpaltenOffset).Length)))
                             n += 1
                         End If
                     Next
@@ -148,21 +156,6 @@ Public Class WEL
         Next
 
     End Sub
-
-    'Überprüfung, ob eine Spalte ausgewählt ist
-    '******************************************
-    Private Function isSelected(ByVal spalte As String) As Boolean
-
-        isSelected = False
-        Dim i As Integer
-
-        For i = 0 To Me.SpaltenSel.GetUpperBound(0)
-            If (Me.SpaltenSel(i) = spalte) Then
-                Return True
-            End If
-        Next
-
-    End Function
 
 #End Region 'Methoden
 

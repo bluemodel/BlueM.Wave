@@ -18,10 +18,12 @@ Public MustInherit Class Dateiformat
     Private _file As String                             'Pfad zur Datei
     Private _zeichengetrennt As Boolean = True          'Zeichengetrennte (standardm‰ﬂig) oder Spalten mit fester Breite
     Private _trennzeichen As Zeichen = semikolon        'Spaltentrennzeichen (standardm‰ﬂig Semikolon)
-    Private _spaltenbreite As Integer = 16              'Breite einer Spalte (standardm‰ﬂig 17)
-    Private _XSpalte As String                          'X-Spalte
-    Private _Yspalten() As String                       'Array der vorhandenen Y-Spaltennamen
-    Private _spaltenSel() As String                     'Array der ausgew‰hlten Y-Spaltennamen
+    Private _dezimaltrennzeichen As Zeichen = punkt     'Dezimaltrennzeichen (standardm‰ﬂig Punkt)
+    Private _anzKopfzeilen As Integer = 1               'Anzahl Kopfzeilen
+    Private _spaltenbreite As Integer = 16              'Breite einer Spalte (standardm‰ﬂig 16)
+    Private _XSpalte As String = ""                     'X-Spalte
+    Private _Yspalten() As String = {}                  'Array der vorhandenen Y-Spaltennamen
+    Private _spaltenSel() As String = {}                'Array der ausgew‰hlten Y-Spaltennamen
 
     Public ImportDiag As ImportDiag
 
@@ -47,18 +49,6 @@ Public MustInherit Class Dateiformat
         End Get
         Set(ByVal value As Boolean)
             _zeichengetrennt = value
-            'Dialoganzeige aktualisieren
-            If (Not IsNothing(Me.ImportDiag)) Then
-                If (_zeichengetrennt) Then
-                    Me.ImportDiag.RadioButton_Zeichengetrennt.Checked = True
-                    Me.ImportDiag.ComboBox_Trennzeichen.Enabled = True
-                    Me.ImportDiag.TextBox_Spaltenbreite.Enabled = False
-                Else
-                    Me.ImportDiag.RadioButton_Zeichengetrennt.Checked = False
-                    Me.ImportDiag.ComboBox_Trennzeichen.Enabled = False
-                    Me.ImportDiag.TextBox_Spaltenbreite.Enabled = True
-                End If
-            End If
         End Set
     End Property
 
@@ -71,6 +61,32 @@ Public MustInherit Class Dateiformat
             'Dialoganzeige aktualisieren
             If (Not IsNothing(Me.ImportDiag)) Then
                 Me.ImportDiag.ComboBox_Trennzeichen.SelectedItem = _trennzeichen
+            End If
+        End Set
+    End Property
+
+    Public Property Dezimaltrennzeichen() As Zeichen
+        Get
+            Return _dezimaltrennzeichen
+        End Get
+        Set(ByVal value As Zeichen)
+            _dezimaltrennzeichen = value
+            'Dialoganzeige aktualisieren
+            If (Not IsNothing(Me.ImportDiag)) Then
+                Me.ImportDiag.ComboBox_Dezimaltrennzeichen.SelectedItem = _dezimaltrennzeichen
+            End If
+        End Set
+    End Property
+
+    Public Property AnzKopfzeilen() As Integer
+        Get
+            Return _anzKopfzeilen
+        End Get
+        Set(ByVal value As Integer)
+            _anzKopfzeilen = value
+            'Dialoganzeige aktualisieren
+            If (Not IsNothing(Me.ImportDiag)) Then
+                Me.ImportDiag.TextBox_AnzKopfzeilen.Text = _anzKopfzeilen.ToString()
             End If
         End Set
     End Property
@@ -143,17 +159,6 @@ Public MustInherit Class Dateiformat
         'Dateinamen setzen
         Me.File = FileName
 
-        'Zuerst versuchen, komplett einzulesen
-        '-------------------------------------
-        'Spalten auslesen
-        Call Me.SpaltenAuslesen()
-
-        'Alle Y-Spalten ausw‰hlen
-        Me.SpaltenSel = Me.YSpalten
-
-        'Datei einlesen
-        Call Me.Read_File()
-
     End Sub
 
     'Spalten auslesen
@@ -163,6 +168,21 @@ Public MustInherit Class Dateiformat
     'Datei einlesen
     '**************
     Public MustOverride Sub Read_File()
+
+    '‹berpr¸fung, ob eine Spalte ausgew‰hlt ist
+    '******************************************
+    Protected Function isSelected(ByVal spalte As String) As Boolean
+
+        isSelected = False
+        Dim i As Integer
+
+        For i = 0 To Me.SpaltenSel.GetUpperBound(0)
+            If (Me.SpaltenSel(i) = spalte) Then
+                Return True
+            End If
+        Next
+
+    End Function
 
 #End Region 'Methoden
 

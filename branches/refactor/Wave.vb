@@ -122,7 +122,7 @@ Public Class Wave
                 Call Me.Import_ASC(file)
 
             Case Else
-                Call Me.Import_TXT(file)
+                Call Me.Import_CSV(file)
 
         End Select
 
@@ -142,25 +142,6 @@ Public Class Wave
         '--------------
         Call Me.Display_Series(ZRE.Zeitreihen(0))
 
-    End Sub
-
-    'Import-Formular anzeigen
-    '*********************
-    Private Sub showImportDialog(ByRef _datei As Dateiformat)
-
-        _datei.ImportDiag = New ImportDiag(_datei)
-
-        Dim DiagResult As DialogResult
-
-        'Dialog anzeigen
-        DiagResult = _datei.ImportDiag.ShowDialog()
-
-        If (DiagResult = Windows.Forms.DialogResult.OK) Then
-            'Datei einlesen
-            Call _datei.Read_File()
-        Else
-            Exit Sub
-        End If
     End Sub
 
     'WEL-Datei importieren
@@ -246,42 +227,49 @@ Public Class Wave
 
     End Sub
 
-    'TXT-Datei importieren
+    'CSV-Datei importieren
     '*********************
-    Public Sub Import_TXT(ByVal FileName As String)
+    Public Sub Import_CSV(ByVal FileName As String)
 
-        'TXT-Objekt instanzieren
-        Dim TXT As New TXT()
-        TXT.File = FileName
+        Dim i As Integer
 
-        'Einstellungen-Dialog anzeigen
-        If (TXT.ShowDialog() = Windows.Forms.DialogResult.OK) Then
+        'CSV-Objekt instanzieren
+        Dim CSV As New CSV(FileName)
 
-            Dim Line1 As New Steema.TeeChart.Styles.Line(Me.TChart1.Chart)
-            'Namen vergeben
-            Line1.Title = Path.GetFileNameWithoutExtension(TXT.File)
-            'X-Werte als Zeitdaten einstellen
-            Line1.XValues.DateTime = True
+        'Import-Dialog anzeigen
+        Call Me.showImportDialog(CSV)
 
-            'An TextSource übergeben
-            '-----------------------
-            Me.TextSource1.Series = Line1
-            'Trennzeichen einstellen
-            Me.TextSource1.Separator = TXT.Trennzeichen.Character
-            'Dezimaltrennzeichen einstellen
-            Me.TextSource1.DecimalSeparator = TXT.Dezimaltrennzeichen.Character
-            'Anzahl Kopfzeilen einstellen
-            Me.TextSource1.HeaderLines = TXT.AnzKopfzeilen
+        'CSV einlesen
+        Call CSV.Read_File()
+
+        'Serien zeichnen
+        '---------------
+        If (Not IsNothing(CSV.Zeitreihen)) Then
+
+            For i = 0 To CSV.Zeitreihen.GetUpperBound(0)
+                Call Me.Display_Series(CSV.Zeitreihen(i))
+            Next
+
+        End If
+
+    End Sub
+
+    'Import-Formular anzeigen
+    '*********************
+    Private Sub showImportDialog(ByRef _datei As Dateiformat)
+
+        _datei.ImportDiag = New ImportDiag(_datei)
+
+        Dim DiagResult As DialogResult
+
+        'Dialog anzeigen
+        DiagResult = _datei.ImportDiag.ShowDialog()
+
+        If (DiagResult = Windows.Forms.DialogResult.OK) Then
             'Datei einlesen
-            Me.TextSource1.LoadFromFile(TXT.File)
-
-            'Serie zeichnen
-            '--------------
-            'Anzahl Serien bestimmen
-            Dim AnzahlSerien As Integer = Me.TChart1.Series.Count
-            'Neue Serie hinzufügen
-            Me.TChart1.Chart.Series(AnzahlSerien - 1).DataSource = Me.TextSource1.Series
-
+            Call _datei.Read_File()
+        Else
+            Exit Sub
         End If
     End Sub
 

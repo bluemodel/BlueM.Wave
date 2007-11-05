@@ -54,7 +54,17 @@ Partial Public Class ImportDiag
         Me.ComboBox_Trennzeichen.Items.Add(Me.datei.tab)
         Me.ComboBox_Trennzeichen.EndUpdate()
 
-        Call Me.updateDisplay()
+        'Combobox Dezimaltrennzeichen initialisieren
+        Me.ComboBox_Dezimaltrennzeichen.BeginUpdate()
+        Me.ComboBox_Dezimaltrennzeichen.Items.Add(Me.datei.punkt)
+        Me.ComboBox_Dezimaltrennzeichen.Items.Add(Me.datei.komma)
+        Me.ComboBox_Dezimaltrennzeichen.EndUpdate()
+
+        'Versuchen, die Spalten auszulesen (mit Standardeinstellungen)
+        Call Me.datei.SpaltenAuslesen()
+
+        'Anzeige aktualisieren
+        Call Me.aktualisieren()
 
         'Datei als Vorschau anzeigen
         Me.Label_Datei.Text += " " & Path.GetFileName(Me.datei.File)
@@ -90,6 +100,20 @@ Partial Public Class ImportDiag
         'Trennzeichen
         Me.datei.Trennzeichen = Me.ComboBox_Trennzeichen.SelectedItem
 
+        'Anzahl Kopfzeilen
+        If (Me.TextBox_AnzKopfzeilen.Text < 0) Then
+            MsgBox("Bitte eine Zahl für die Anzahl der Kopfzeilen eingeben!", MsgBoxStyle.Exclamation, "Fehler")
+            Me.TextBox_AnzKopfzeilen.Focus()
+            Me.DialogResult = Windows.Forms.DialogResult.None
+            Exit Sub
+        Else
+            Me.datei.AnzKopfzeilen = Convert.ToInt32(TextBox_AnzKopfzeilen.Text)
+        End If
+
+        'Trenn- und Dezimaltrennzeichen
+        Me.datei.Trennzeichen = Me.ComboBox_Trennzeichen.SelectedItem
+        Me.datei.Dezimaltrennzeichen = Me.ComboBox_Dezimaltrennzeichen.SelectedItem
+
         'Ausgewählte Spalten
         Dim i As Integer
         If (Me.ListBox_YSpalten.SelectedItems.Count < 1) Then
@@ -112,19 +136,19 @@ Partial Public Class ImportDiag
     '***************************************************
     Private Sub RadioButton_Spalten_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton_Spaltenbreite.CheckedChanged
 
-        'If (Me.IsInitializing = True) Then
-        '    Exit Sub
-        'Else
-        If (Me.RadioButton_Zeichengetrennt.Checked) Then
-            Me.datei.Zeichengetrennt = True
+        If (Me.IsInitializing = True) Then
+            Exit Sub
         Else
-            Me.datei.Zeichengetrennt = False
+            If (Me.RadioButton_Zeichengetrennt.Checked) Then
+                Me.datei.Zeichengetrennt = True
+            Else
+                Me.datei.Zeichengetrennt = False
+            End If
+
+            Call Me.datei.SpaltenAuslesen()
+
+            Call Me.aktualisieren()
         End If
-
-        Call Me.datei.SpaltenAuslesen()
-
-        Call Me.updateDisplay()
-        'End If
 
     End Sub
 
@@ -132,14 +156,14 @@ Partial Public Class ImportDiag
     '*****************************************************
     Private Sub ComboBox_Trennzeichen_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ComboBox_Trennzeichen.SelectedIndexChanged
 
-        'If (Me.IsInitializing = True) Then
-        '    Exit Sub
-        'Else
-        Me.datei.Trennzeichen = Me.ComboBox_Trennzeichen.SelectedItem
-        Call Me.datei.SpaltenAuslesen()
+        If (Me.IsInitializing = True) Then
+            Exit Sub
+        Else
+            Me.datei.Trennzeichen = Me.ComboBox_Trennzeichen.SelectedItem
+            Call Me.datei.SpaltenAuslesen()
 
-        Call Me.updateDisplay()
-        'End If
+            Call Me.aktualisieren()
+        End If
 
     End Sub
 
@@ -147,35 +171,71 @@ Partial Public Class ImportDiag
     '******************************************************
     Private Sub TextBox_Spaltenbreite_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TextBox_Spaltenbreite.TextChanged
 
-        'If (Me.IsInitializing = True) Then
-        '    Exit Sub
-        'Else
-        If (Convert.ToInt16(Me.TextBox_Spaltenbreite.Text) < 1) Then
-            MsgBox("Bitte eine Zahl größer 0 für die Spaltenbreite angeben!", MsgBoxStyle.Exclamation, "Fehler")
-            Me.TextBox_Spaltenbreite.Focus()
+        If (Me.IsInitializing = True) Then
             Exit Sub
+        Else
+            If (Convert.ToInt16(Me.TextBox_Spaltenbreite.Text) < 1) Then
+                MsgBox("Bitte eine Zahl größer 0 für die Spaltenbreite angeben!", MsgBoxStyle.Exclamation, "Fehler")
+                Me.TextBox_Spaltenbreite.Focus()
+                Exit Sub
+            End If
+
+            Me.datei.Spaltenbreite = Convert.ToInt16(Me.TextBox_Spaltenbreite.Text)
+
+            Call Me.datei.SpaltenAuslesen()
+
+            Call Me.aktualisieren()
         End If
 
-        Me.datei.Spaltenbreite = Convert.ToInt16(Me.TextBox_Spaltenbreite.Text)
+    End Sub
 
-        Call Me.datei.SpaltenAuslesen()
+    'Wenn Anzahl Kopfzeilen geändert wird, Spalten neu auslesen
+    '**********************************************************
+    Private Sub TextBox_AnzKopfzeilen_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TextBox_AnzKopfzeilen.TextChanged
 
-        Call Me.updateDisplay()
-        'End If
+        If (Me.IsInitializing = True) Then
+            Exit Sub
+        Else
+            Me.datei.AnzKopfzeilen = Convert.ToInt16(Me.TextBox_AnzKopfzeilen.Text)
+
+            Call Me.datei.SpaltenAuslesen()
+
+            Call Me.aktualisieren()
+        End If
 
     End Sub
 
     'Anzeige aktualisieren
     '*********************
-    Private Sub updateDisplay()
+    Private Sub aktualisieren()
 
-        'Einstellungen anzeigen
+        'Spaltenformat
         Me.RadioButton_Zeichengetrennt.Checked = Me.datei.Zeichengetrennt
+        If (Me.datei.Zeichengetrennt) Then
+            Me.RadioButton_Zeichengetrennt.Checked = True
+            Me.ComboBox_Trennzeichen.Enabled = True
+            Me.TextBox_Spaltenbreite.Enabled = False
+        Else
+            Me.RadioButton_Zeichengetrennt.Checked = False
+            Me.ComboBox_Trennzeichen.Enabled = False
+            Me.TextBox_Spaltenbreite.Enabled = True
+        End If
+
+        'Trennzeichen
         Me.ComboBox_Trennzeichen.SelectedItem = Me.datei.Trennzeichen
+
+        'Spaltenbreite
         Me.TextBox_Spaltenbreite.Text = Me.datei.Spaltenbreite
+
+        'Anzahl Kopfzeilen
+        Me.TextBox_AnzKopfzeilen.Text = Me.datei.AnzKopfzeilen
+
+        'Dezimaltrennzeichen
+        Me.ComboBox_Dezimaltrennzeichen.SelectedItem = Me.datei.Dezimaltrennzeichen
 
         'XSpalte
         Me.TextBox_XSpalte.Text = Me.datei.XSpalte
+
         'YSpalten
         Me.ListBox_YSpalten.Items.Clear()
         Me.ListBox_YSpalten.Items.AddRange(Me.datei.YSpalten)
