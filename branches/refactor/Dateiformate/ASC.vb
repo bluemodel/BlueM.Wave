@@ -12,7 +12,7 @@ Public Class ASC
 
     'Konstruktor
     '***********
-    Public Sub New(ByVal FileName As String)
+    Public Sub New(ByVal FileName As String, Optional ByVal ReadNow As Boolean = False)
 
         MyBase.New(FileName)
 
@@ -21,6 +21,13 @@ Public Class ASC
         Me.Zeichengetrennt = True
         Me.Trennzeichen = Me.leerzeichen
         Me.Dezimaltrennzeichen = Me.punkt
+
+        If (ReadNow) Then
+            'Datei komplett einlesen
+            Call Me.SpaltenAuslesen()
+            Me.SpaltenSel = Me.YSpalten
+            Call Me.Read_File()
+        End If
 
     End Sub
 

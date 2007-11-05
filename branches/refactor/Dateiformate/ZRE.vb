@@ -10,15 +10,19 @@ Public Class ZRE
 
     'Konstruktor
     '***********
-    Public Sub New(ByVal FileName As String)
+    Public Sub New(ByVal FileName As String, Optional ByVal ReadNow As Boolean = False)
 
         MyBase.New(FileName)
 
         'Voreinstellungen
         Me.AnzKopfzeilen = 4
 
-        'Sofort Spalten auslesen (bei ZRE kein ImportDialog!)
-        Call Me.SpaltenAuslesen()
+        If (ReadNow) Then
+            'Datei komplett einlesen
+            Call Me.SpaltenAuslesen()
+            Me.SpaltenSel = Me.YSpalten
+            Call Me.Read_File()
+        End If
 
     End Sub
 

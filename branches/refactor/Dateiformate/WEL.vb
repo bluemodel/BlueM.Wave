@@ -20,7 +20,7 @@ Public Class WEL
 
     'Konstruktor
     '***********
-    Public Sub New(ByVal FileName As String)
+    Public Sub New(ByVal FileName As String, Optional ByVal ReadNow As Boolean = False)
 
         MyBase.New(FileName)
 
@@ -30,8 +30,14 @@ Public Class WEL
         Me.Trennzeichen = Me.semikolon
         Me.Dezimaltrennzeichen = Me.punkt
 
-    End Sub
+        If (ReadNow) Then
+            'Datei komplett einlesen
+            Call Me.SpaltenAuslesen()
+            Me.SpaltenSel = Me.YSpalten
+            Call Me.Read_File()
+        End If
 
+    End Sub
 
     'Spalten auslesen
     '****************
