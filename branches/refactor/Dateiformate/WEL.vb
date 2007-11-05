@@ -25,7 +25,10 @@ Public Class WEL
         MyBase.New(FileName)
 
         'Voreinstellungen
-        Me.AnzKopfzeilen = 3                            'Die ersten 3 Zeilen der WEL-Datei gehören zum Header
+        Me.AnzKopfzeilen = 3
+        Me.Zeichengetrennt = True
+        Me.Trennzeichen = Me.semikolon
+        Me.Dezimaltrennzeichen = Me.punkt
 
     End Sub
 

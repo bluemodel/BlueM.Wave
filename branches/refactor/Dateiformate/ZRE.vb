@@ -15,7 +15,7 @@ Public Class ZRE
         MyBase.New(FileName)
 
         'Voreinstellungen
-        Me.AnzKopfzeilen = 4                        'Die ersten 4 Zeilen der ZRE-Datei gehören zum Header
+        Me.AnzKopfzeilen = 4
 
         'Sofort Spalten auslesen (bei ZRE kein ImportDialog!)
         Call Me.SpaltenAuslesen()

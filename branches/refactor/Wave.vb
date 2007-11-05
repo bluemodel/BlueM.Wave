@@ -191,12 +191,18 @@ Public Class Wave
 
     'ASC-Datei importieren (SMUSI)
     '*****************************
-    Public Sub Import_ASC(ByVal FileName As String, ByVal ParamArray spaltenSel() As String)
+    Public Sub Import_ASC(ByVal FileName As String)
 
         Dim i As Integer
 
         'ASC-Objekt instanzieren
-        Dim ASC As New ASC(FileName, spaltenSel)
+        Dim ASC As New ASC(FileName)
+
+        'Import-Dialog anzeigen
+        Call Me.showImportDialog(ASC)
+
+        'CSV einlesen
+        Call ASC.Read_File()
 
         'Serien zeichnen
         '---------------

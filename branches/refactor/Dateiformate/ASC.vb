@@ -2,85 +2,8 @@ Imports System.IO
 Imports System.Globalization
 
 Public Class ASC
+    Inherits Dateiformat
 
-
-    'oft verwendete Zeichen (quasi Konstanten)
-    '-----------------------------------------
-    Private semikolon As Zeichen = New Zeichen(";")
-    Private komma As Zeichen = New Zeichen(",")
-    Private punkt As Zeichen = New Zeichen(".")
-    Private leerzeichen As Zeichen = New Zeichen(" ")
-    Private tab As Zeichen = New Zeichen(Chr(9))
-
-#Region "Eigenschaften"
-
-    'Eigenschaften
-    '#############
-
-    Private _file As String                             'Pfad zur Datei
-    Private _trennzeichen As Zeichen = leerzeichen      'Spaltentrennzeichen (standardmäßig Leerzeichen)
-    Private _XSpalte As String                          'X-Spalte
-    Private _Yspalten() As String                       'Array der vorhandenen Y-Spaltennamen
-    Private _spaltenSel() As String                     'Array der ausgewählten Y-Spaltennamen
-
-    Public Zeitreihen() As Zeitreihe
-
-    Private Const WELHeaderLen As Integer = 4           'Die ersten 3 Zeilen der WEL-Datei gehören zum Header
-    Private Const SpaltenOffset As Integer = 1          'Anzahl Zeichen bevor die erste Spalte anfängt (nur bei Spalten mit fester Breite)
-
-
-#End Region
-
-#Region "Properties"
-
-    'Properties
-    '##########
-    Public Property File() As String
-        Get
-            Return _file
-        End Get
-        Set(ByVal value As String)
-            _file = value
-        End Set
-    End Property
-
-    Public Property XSpalte() As String
-        Get
-            Return _XSpalte
-        End Get
-        Set(ByVal value As String)
-            _XSpalte = value
-        End Set
-    End Property
-
-    Public Property YSpalten() As String()
-        Get
-            Return _Yspalten
-        End Get
-        Set(ByVal value As String())
-            _Yspalten = value
-        End Set
-    End Property
-
-    Public Property SpaltenSel() As String()
-        Get
-            Return _spaltenSel
-        End Get
-        Set(ByVal value As String())
-            _spaltenSel = value
-        End Set
-    End Property
-
-    Public Property Trennzeichen() As Zeichen
-        Get
-            Return _trennzeichen
-        End Get
-        Set(ByVal value As Zeichen)
-            _trennzeichen = value
-        End Set
-    End Property
-
-#End Region 'Properties
 
 #Region "Methoden"
 
@@ -89,50 +12,21 @@ Public Class ASC
 
     'Konstruktor
     '***********
-    Public Sub New(ByVal FileName As String, ByVal ParamArray spaltenSel() As String)
+    Public Sub New(ByVal FileName As String)
 
-        ' Dieser Aufruf ist für den Windows Form-Designer erforderlich.
-        InitializeComponent()
+        MyBase.New(FileName)
 
-        ' Fügen Sie Initialisierungen nach dem InitializeComponent()-Aufruf hinzu.
-
-        'Dateinamen setzen
-        Me.File = FileName
-
-        'Spalten auslesen
-        Call Me.SpaltenAuslesen()
-
-        'Spaltenauswahl
-        If (spaltenSel.Length = 0) Then
-            'Wenn keine Spaltenauswahl gegeben ist, ASC-Dialog anzeigen
-            If (Not Me.ShowDialog() = Windows.Forms.DialogResult.OK) Then
-                Exit Sub
-            End If
-        Else
-            'Ansonsten Spaltenauswahl übergeben und ASC direkt einlesen
-            Me.SpaltenSel = spaltenSel
-            Call Me.Read_ASC()
-        End If
-
-    End Sub
-
-    'Form laden
-    '**********
-    Private Sub ASC_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
-
-        'Standardeinstellungen setzen
+        'Voreinstellungen
+        Me.AnzKopfzeilen = 3
+        Me.Zeichengetrennt = True
         Me.Trennzeichen = Me.leerzeichen
-
-        'Datei als Vorschau anzeigen
-        Me.Label_Datei.Text += " " & Path.GetFileName(Me.File)
-        Me.RichTextBox_Vorschau.LoadFile(Me.File, RichTextBoxStreamType.PlainText)
+        Me.Dezimaltrennzeichen = Me.punkt
 
     End Sub
-
 
     'Spalten auslesen
     '****************
-    Private Sub SpaltenAuslesen()
+    Public Overrides Sub SpaltenAuslesen()
 
         Dim i As Integer
 
@@ -142,9 +36,12 @@ Public Class ASC
 
         '2. Zeile (Spaltenüberschriften) auslesen
         Dim Zeile As String = ""
-        For i = 1 To 2
+        For i = 1 To Me.AnzKopfzeilen - 1
             Zeile = StrRead.ReadLine.ToString
         Next
+
+        StrRead.Close()
+        FiStr.Close()
 
         'Spaltennamen auslesen
         '---------------------
@@ -156,25 +53,18 @@ Public Class ASC
         For i = 0 To alleSpalten.GetUpperBound(0)
             alleSpalten(i) = alleSpalten(i).Trim()
         Next
+
         'X-Spalte übernehmen
         Me.XSpalte = alleSpalten(0)
         'Y-Spalten übernehmen
         ReDim Me.YSpalten(alleSpalten.GetUpperBound(0) - 1)
         Array.Copy(alleSpalten, 1, Me.YSpalten, 0, alleSpalten.Length - 1)
 
-        'Anzeige aktualisieren
-        '---------------------
-        'XSpalte
-        Me.TextBox_XSpalte.Text = Me.XSpalte
-        'YSpalten
-        Me.ListBox_YSpalten.Items.Clear()
-        Me.ListBox_YSpalten.Items.AddRange(Me.YSpalten)
-
     End Sub
 
     'ASC-Datei einlesen
     '******************
-    Public Sub Read_ASC()
+    Public Overrides Sub Read_File()
 
         Dim AnzZeil As Integer = 0
         Dim AnzZeilLeer As Integer
@@ -212,9 +102,9 @@ Public Class ASC
 
         'Zeitreihen mit vorläufiger Zeilennanzahl Dimensionieren
         If AnzZeilLeer > 1 Then
-            AnzWerte = AnzZeil - WELHeaderLen + AnzZeilLeer
+            AnzWerte = AnzZeil - Me.AnzKopfzeilen + AnzZeilLeer
         Else
-            AnzWerte = AnzZeil - WELHeaderLen
+            AnzWerte = AnzZeil - Me.AnzKopfzeilen
         End If
         For i = 0 To Me.Zeitreihen.GetUpperBound(0)
             Me.Zeitreihen(i) = New Zeitreihe(SpaltenSel(i))
@@ -228,7 +118,7 @@ Public Class ASC
         'Auf Anfang setzten
         FiStr.Seek(0, SeekOrigin.Begin)
         'Kopfzeilen Überspringen
-        For i = 1 To WELHeaderLen
+        For i = 1 To Me.AnzKopfzeilen
             StrRead.ReadLine()
         Next
         'Einlesen
@@ -257,7 +147,7 @@ Public Class ASC
             Else
                 'Eine Zeile mit Werten wird eingelesen
                 'Erste Spalte: Datum_Zeit
-                tmpXWerte(i) = New System.DateTime(Werte(0).Substring(7, 4), Werte(0).Substring(4, 2), Werte(0).Substring(1, 2), Werte(1).Substring(0, 2), Werte(1).Substring(3, 2), 0, New System.Globalization.GregorianCalendar())
+                tmpXWerte(i) = New System.DateTime(Werte(0).Substring(6, 4), Werte(0).Substring(3, 2), Werte(0).Substring(0, 2), Werte(1).Substring(0, 2), Werte(1).Substring(3, 2), 0, New System.Globalization.GregorianCalendar())
                 If Not Ereignisende Then
                     If Not (tmpXWerte(i - 1).AddMinutes(5) = tmpXWerte(i)) Then
                         tmpXWerte(i + 1) = tmpXWerte(i)
@@ -300,6 +190,7 @@ Public Class ASC
         For i = 0 To Me.Zeitreihen.GetUpperBound(0)
             Me.Zeitreihen(i).Length = AnzZeil
         Next
+
         'Datei schließen
         StrRead.Close()
         FiStr.Close()
@@ -308,43 +199,6 @@ Public Class ASC
         For i = 0 To Me.Zeitreihen.GetUpperBound(0)
             Me.Zeitreihen(i).XWerte = tmpXWerte
         Next
-
-    End Sub
-
-    'Überprüfung, ob eine Spalte ausgewählt ist
-    '******************************************
-    Private Function isSelected(ByVal spalte As String) As Boolean
-
-        isSelected = False
-        Dim i As Integer
-
-        For i = 0 To Me.SpaltenSel.GetUpperBound(0)
-            If (Me.SpaltenSel(i) = spalte) Then
-                Return True
-            End If
-        Next
-
-    End Function
-
-    'OK Button gedrückt
-    '******************
-    Private Sub Button_OK_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button_OK.Click
-
-        'Ausgewählte Spalten
-        Dim i As Integer
-        If (Me.ListBox_YSpalten.SelectedItems.Count < 1) Then
-            MsgBox("Bitte mindestens eine Y-Spalte auswählen!", MsgBoxStyle.Exclamation, "Fehler")
-            Me.DialogResult = Windows.Forms.DialogResult.None
-            Exit Sub
-        Else
-            ReDim Me.SpaltenSel(Me.ListBox_YSpalten.SelectedItems.Count - 1)
-            For i = 0 To Me.ListBox_YSpalten.SelectedItems.Count - 1
-                Me.SpaltenSel(i) = Me.ListBox_YSpalten.SelectedItems(i)
-            Next
-        End If
-
-        'ASC-Datei einlesen
-        Call Me.Read_ASC()
 
     End Sub
 
