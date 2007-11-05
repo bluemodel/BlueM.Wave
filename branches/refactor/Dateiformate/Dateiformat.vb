@@ -19,9 +19,12 @@ Public MustInherit Class Dateiformat
     Private _zeichengetrennt As Boolean = True          'Zeichengetrennte (standardm‰ﬂig) oder Spalten mit fester Breite
     Private _trennzeichen As Zeichen = semikolon        'Spaltentrennzeichen (standardm‰ﬂig Semikolon)
     Private _dezimaltrennzeichen As Zeichen = punkt     'Dezimaltrennzeichen (standardm‰ﬂig Punkt)
-    Private _anzKopfzeilen As Integer = 1               'Anzahl Kopfzeilen
+    Private _iZeile‹berschriften As Integer = 1         'Zeile mit den Spalten¸berschriften
+    Private _iZeileEinheiten As Integer = 2             'Zeile mit den Spalteneinheiten
+    Private _iZeileDaten As Integer = 3                 'Erste Zeile mit Daten
+    Private _useEinheiten As Boolean = True             'Einheiten auslesen?
     Private _spaltenbreite As Integer = 16              'Breite einer Spalte (standardm‰ﬂig 16)
-    Private _XSpalte As String = ""                     'X-Spalte
+    Private _XSpalte As String = ""                     'Name der X-Spalte
     Private _Yspalten() As String = {}                  'Array der vorhandenen Y-Spaltennamen
     Private _spaltenSel() As String = {}                'Array der ausgew‰hlten Y-Spaltennamen
 
@@ -58,10 +61,6 @@ Public MustInherit Class Dateiformat
         End Get
         Set(ByVal value As Zeichen)
             _trennzeichen = value
-            'Dialoganzeige aktualisieren
-            If (Not IsNothing(Me.ImportDiag)) Then
-                Me.ImportDiag.ComboBox_Trennzeichen.SelectedItem = _trennzeichen
-            End If
         End Set
     End Property
 
@@ -71,23 +70,48 @@ Public MustInherit Class Dateiformat
         End Get
         Set(ByVal value As Zeichen)
             _dezimaltrennzeichen = value
-            'Dialoganzeige aktualisieren
-            If (Not IsNothing(Me.ImportDiag)) Then
-                Me.ImportDiag.ComboBox_Dezimaltrennzeichen.SelectedItem = _dezimaltrennzeichen
-            End If
         End Set
     End Property
 
-    Public Property AnzKopfzeilen() As Integer
+    Public Property iZeile‹berschriften() As Integer
         Get
-            Return _anzKopfzeilen
+            Return _iZeile‹berschriften
         End Get
         Set(ByVal value As Integer)
-            _anzKopfzeilen = value
-            'Dialoganzeige aktualisieren
-            If (Not IsNothing(Me.ImportDiag)) Then
-                Me.ImportDiag.TextBox_AnzKopfzeilen.Text = _anzKopfzeilen.ToString()
-            End If
+            _iZeile‹berschriften = value
+        End Set
+    End Property
+
+    Public Property iZeileEinheiten() As Integer
+        Get
+            Return _iZeileEinheiten
+        End Get
+        Set(ByVal value As Integer)
+            _iZeileEinheiten = value
+        End Set
+    End Property
+
+    Public Property iZeileDaten() As Integer
+        Get
+            Return _iZeileDaten
+        End Get
+        Set(ByVal value As Integer)
+            _iZeileDaten = value
+        End Set
+    End Property
+
+    Public ReadOnly Property nZeilenHeader() As Integer
+        Get
+            Return _iZeileDaten - 1
+        End Get
+    End Property
+
+    Public Property UseEinheiten() As Boolean
+        Get
+            Return _useEinheiten
+        End Get
+        Set(ByVal value As Boolean)
+            _useEinheiten = value
         End Set
     End Property
 
@@ -97,10 +121,6 @@ Public MustInherit Class Dateiformat
         End Get
         Set(ByVal value As Integer)
             _spaltenbreite = value
-            'Dialoganzeige aktualisieren
-            If (Not IsNothing(Me.ImportDiag)) Then
-                Me.ImportDiag.TextBox_Spaltenbreite.Text = _spaltenbreite.ToString()
-            End If
         End Set
     End Property
 
@@ -141,6 +161,7 @@ Public MustInherit Class Dateiformat
                 End If
             Next
             'Zeitreihe nicht vorhanden
+            'TODO: Throw Exception?
             Return New Zeitreihe("unbekannt")
         End Get
     End Property

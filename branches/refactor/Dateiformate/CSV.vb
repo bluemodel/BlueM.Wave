@@ -19,15 +19,19 @@ Public Class CSV
     Public Overrides Sub SpaltenAuslesen()
 
         Dim i As Integer
+        Dim Zeile As String = ""
+        Dim ZeileSpalten As String = ""
+        Dim ZeileEinheiten As String = ""
 
         'Datei öffnen
         Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
         Dim StrRead As StreamReader = New StreamReader(FiStr, System.Text.Encoding.GetEncoding("iso8859-1"))
 
         'Spaltenüberschriften auslesen
-        Dim Zeile As String = ""
-        For i = 0 To Me.AnzKopfzeilen - 1
+        For i = 1 To Me.iZeileDaten
             Zeile = StrRead.ReadLine.ToString
+            If (i = Me.iZeileÜberschriften) Then ZeileSpalten = Zeile
+            If (i = Me.iZeileEinheiten) Then ZeileEinheiten = Zeile
         Next
 
         StrRead.Close()
@@ -35,30 +39,46 @@ Public Class CSV
 
         'Spaltennamen auslesen
         '---------------------
-        Dim alleSpalten() As String
+        Dim Namen() As String
+        Dim Einheiten() As String
 
         If (Me.Zeichengetrennt) Then
             'Zeichengetrennt
-            alleSpalten = Zeile.Split(New Char() {Me.Trennzeichen.Character}, StringSplitOptions.RemoveEmptyEntries)
+            Namen = ZeileSpalten.Split(New Char() {Me.Trennzeichen.Character}, StringSplitOptions.RemoveEmptyEntries)
+            Einheiten = ZeileEinheiten.Split(New Char() {Me.Trennzeichen.Character}, StringSplitOptions.RemoveEmptyEntries)
         Else
             'Spalten mit fester Breite
-            Dim anzSpalten As Integer = Math.Ceiling(Zeile.Length / Me.Spaltenbreite)
-            ReDim alleSpalten(anzSpalten - 1)
+            Dim anzSpalten As Integer = Math.Ceiling(ZeileSpalten.Length / Me.Spaltenbreite)
+            ReDim Namen(anzSpalten - 1)
+            ReDim Einheiten(anzSpalten - 1)
             For i = 0 To anzSpalten - 1
-                alleSpalten(i) = Zeile.Substring(i * Me.Spaltenbreite, Math.Min(Me.Spaltenbreite, Zeile.Substring(i * Me.Spaltenbreite).Length))
+                Namen(i) = ZeileSpalten.Substring(i * Me.Spaltenbreite, Math.Min(Me.Spaltenbreite, ZeileSpalten.Substring(i * Me.Spaltenbreite).Length))
+                Einheiten(i) = ZeileEinheiten.Substring(i * Me.Spaltenbreite, Math.Min(Me.Spaltenbreite, ZeileSpalten.Substring(i * Me.Spaltenbreite).Length))
             Next
         End If
 
-        'Leerzeichen entfernen
-        For i = 0 To alleSpalten.GetUpperBound(0)
-            alleSpalten(i) = alleSpalten(i).Trim()
-            If (alleSpalten(i).Length = 0) Then alleSpalten(i) = "[" & i.ToString() & "]"
+        'Sicherstellen, dass es so viele Einheiten wie Spalten gibt:
+        ReDim Preserve Einheiten(Namen.GetUpperBound(0))
+        For i = 0 To Einheiten.GetUpperBound(0)
+            If (IsNothing(Einheiten(i))) Then Einheiten(i) = "-"
         Next
+
+        'Leerzeichen entfernen
+        For i = 0 To Namen.GetUpperBound(0)
+            Namen(i) = Namen(i).Trim()
+            If (Namen(i).Length = 0) Then Namen(i) = "{" & i.ToString() & "}"
+            'Einheiten anhängen
+            If (Me.UseEinheiten) Then
+                Namen(i) &= " [" & Einheiten(i).Trim() & "]"
+            End If
+        Next
+
         'X-Spalte übernehmen
-        Me.XSpalte = alleSpalten(0)
+        Me.XSpalte = Namen(0)
+
         'Y-Spalten übernehmen
-        ReDim Me.YSpalten(alleSpalten.GetUpperBound(0) - 1)
-        Array.Copy(alleSpalten, 1, Me.YSpalten, 0, alleSpalten.Length - 1)
+        ReDim Me.YSpalten(Namen.GetUpperBound(0) - 1)
+        Array.Copy(Namen, 1, Me.YSpalten, 0, Namen.Length - 1)
 
     End Sub
 
@@ -88,11 +108,11 @@ Public Class CSV
             'Zeitreihen redimensionieren
             For i = 0 To Me.Zeitreihen.GetUpperBound(0)
                 Me.Zeitreihen(i) = New Zeitreihe(SpaltenSel(i))
-                Me.Zeitreihen(i).Length = AnzZeil - AnzKopfzeilen
+                Me.Zeitreihen(i).Length = AnzZeil - Me.nZeilenHeader
             Next
 
             'temoräres Array für XWerte
-            Dim tmpXWerte(AnzZeil - AnzKopfzeilen - 1) As DateTime
+            Dim tmpXWerte(AnzZeil - Me.nZeilenHeader - 1) As DateTime
 
             'Auf Anfang setzen und einlesen
             '------------------------------
@@ -102,14 +122,14 @@ Public Class CSV
                 If (Me.Zeichengetrennt) Then
                     'Zeichengetrennt
                     Werte = StrRead.ReadLine.ToString.Split(New Char() {Me.Trennzeichen.Character}, StringSplitOptions.RemoveEmptyEntries)
-                    If (i >= AnzKopfzeilen) Then
+                    If (i >= Me.nZeilenHeader) Then
                         'Erste Spalte: Datum_Zeit
-                        tmpXWerte(i - AnzKopfzeilen) = New System.DateTime(Werte(0).Substring(6, 4), Werte(0).Substring(3, 2), Werte(0).Substring(0, 2), Werte(0).Substring(11, 2), Werte(0).Substring(14, 2), 0, New System.Globalization.GregorianCalendar())
+                        tmpXWerte(i - Me.nZeilenHeader) = New System.DateTime(Werte(0).Substring(6, 4), Werte(0).Substring(3, 2), Werte(0).Substring(0, 2), Werte(0).Substring(11, 2), Werte(0).Substring(14, 2), 0, New System.Globalization.GregorianCalendar())
                         'Restliche Spalten: Werte
                         n = 0
                         For j = 0 To Me.YSpalten.GetUpperBound(0)
                             If (isSelected(Me.YSpalten(j))) Then
-                                Me.Zeitreihen(n).YWerte(i - AnzKopfzeilen) = Convert.ToDouble(Werte(j + 1))
+                                Me.Zeitreihen(n).YWerte(i - Me.nZeilenHeader) = Convert.ToDouble(Werte(j + 1))
                                 n += 1
                             End If
                         Next
@@ -117,14 +137,14 @@ Public Class CSV
                 Else
                     'Spalten mit fester Breite
                     Zeile = StrRead.ReadLine.ToString()
-                    If (i >= AnzKopfzeilen) Then
+                    If (i >= Me.nZeilenHeader) Then
                         'Erste Spalte: Datum_Zeit
-                        tmpXWerte(i - AnzKopfzeilen) = New System.DateTime(Zeile.Substring(6, 4), Zeile.Substring(3, 2), Zeile.Substring(0, 2), Zeile.Substring(11, 2), Zeile.Substring(14, 2), 0, New System.Globalization.GregorianCalendar())
+                        tmpXWerte(i - Me.nZeilenHeader) = New System.DateTime(Zeile.Substring(6, 4), Zeile.Substring(3, 2), Zeile.Substring(0, 2), Zeile.Substring(11, 2), Zeile.Substring(14, 2), 0, New System.Globalization.GregorianCalendar())
                         'Restliche Spalten: Werte
                         n = 0
                         For j = 0 To Me.YSpalten.GetUpperBound(0)
                             If (isSelected(Me.YSpalten(j))) Then
-                                Me.Zeitreihen(n).YWerte(i - AnzKopfzeilen) = Convert.ToDouble(Zeile.Substring((j + 1) * Me.Spaltenbreite, Math.Min(Me.Spaltenbreite, Zeile.Substring((j + 1) * Me.Spaltenbreite).Length)))
+                                Me.Zeitreihen(n).YWerte(i - Me.nZeilenHeader) = Convert.ToDouble(Zeile.Substring((j + 1) * Me.Spaltenbreite, Math.Min(Me.Spaltenbreite, Zeile.Substring((j + 1) * Me.Spaltenbreite).Length)))
                                 n += 1
                             End If
                         Next
@@ -141,7 +161,7 @@ Public Class CSV
                 Me.Zeitreihen(i).XWerte = tmpXWerte
             Next
 
-        Catch ex as Exception
+        Catch ex As Exception
             MsgBox("Konnte CSV-Datei nicht einlesen." & Chr(13) & Chr(10) & "Bitte Einstellungen anpassen!", MsgBoxStyle.Exclamation, "Wave")
         End Try
 

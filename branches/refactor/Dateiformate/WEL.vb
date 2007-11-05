@@ -25,7 +25,10 @@ Public Class WEL
         MyBase.New(FileName)
 
         'Voreinstellungen
-        Me.AnzKopfzeilen = 3
+        Me.iZeileÜberschriften = 2
+        Me.UseEinheiten = True
+        Me.iZeileEinheiten = 3
+        Me.iZeileDaten = 4
         Me.Zeichengetrennt = True
         Me.Trennzeichen = Me.semikolon
         Me.Dezimaltrennzeichen = Me.punkt
@@ -44,15 +47,19 @@ Public Class WEL
     Public Overrides Sub SpaltenAuslesen()
 
         Dim i As Integer
+        Dim Zeile As String = ""
+        Dim ZeileSpalten As String = ""
+        Dim ZeileEinheiten As String = ""
 
         'Datei öffnen
         Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
         Dim StrRead As StreamReader = New StreamReader(FiStr, System.Text.Encoding.GetEncoding("iso8859-1"))
 
         'Spaltenüberschriften auslesen
-        Dim Zeile As String = ""
-        For i = 1 To Me.AnzKopfzeilen - 1
+        For i = 1 To Me.iZeileDaten
             Zeile = StrRead.ReadLine.ToString
+            If (i = Me.iZeileÜberschriften) Then ZeileSpalten = Zeile
+            If (i = Me.iZeileEinheiten) Then ZeileEinheiten = Zeile
         Next
 
         StrRead.Close()
@@ -60,30 +67,51 @@ Public Class WEL
 
         'Spaltennamen auslesen
         '---------------------
-        Dim alleSpalten() As String
+        Dim Namen() As String
+        Dim Einheiten() As String
 
         If (Me.Zeichengetrennt) Then
             'Zeichengetrennt
-            alleSpalten = Zeile.Split(New Char() {Me.Trennzeichen.Character}, StringSplitOptions.RemoveEmptyEntries)
+            Namen = ZeileSpalten.Split(New Char() {Me.Trennzeichen.Character}, StringSplitOptions.RemoveEmptyEntries)
+            Einheiten = ZeileEinheiten.Split(New Char() {Me.Trennzeichen.Character}, StringSplitOptions.RemoveEmptyEntries)
         Else
             'Spalten mit fester Breite
-            Dim anzSpalten As Integer = Math.Ceiling(Zeile.Length / Me.Spaltenbreite)
-            ReDim alleSpalten(anzSpalten - 1)
+            Dim anzSpalten As Integer = Math.Ceiling(ZeileSpalten.Length / Me.Spaltenbreite)
+            ReDim Namen(anzSpalten - 1)
+            ReDim Einheiten(anzSpalten - 1)
             For i = 0 To anzSpalten - 1
-                alleSpalten(i) = Zeile.Substring((i * Me.Spaltenbreite) + SpaltenOffset, Math.Min(Me.Spaltenbreite, Zeile.Substring((i * Me.Spaltenbreite) + SpaltenOffset).Length))
+                Namen(i) = ZeileSpalten.Substring((i * Me.Spaltenbreite) + SpaltenOffset, Math.Min(Me.Spaltenbreite, ZeileSpalten.Substring((i * Me.Spaltenbreite) + SpaltenOffset).Length))
+                Einheiten(i) = ZeileEinheiten.Substring((i * Me.Spaltenbreite) + SpaltenOffset, Math.Min(Me.Spaltenbreite, ZeileSpalten.Substring((i * Me.Spaltenbreite) + SpaltenOffset).Length))
             Next
         End If
 
-        'Leerzeichen entfernen
-        For i = 0 To alleSpalten.GetUpperBound(0)
-            alleSpalten(i) = alleSpalten(i).Trim()
+        'Sicherstellen, dass es so viele Einheiten wie Spalten gibt:
+        ReDim Preserve Einheiten(Namen.GetUpperBound(0))
+        For i = 0 To Einheiten.GetUpperBound(0)
+            If (IsNothing(Einheiten(i))) Then Einheiten(i) = "-"
         Next
 
+        'Leerzeichen entfernen
+        For i = 0 To Namen.GetUpperBound(0)
+            Namen(i) = Namen(i).Trim()
+            'Einheiten anhängen
+            If (Me.UseEinheiten) Then
+                Namen(i) &= " [" & Einheiten(i).Trim() & "]"
+            End If
+        Next
+
+        If (Namen.GetLength(0) < 1) Then
+            ReDim Namen(1)
+            Namen(0) = ""
+            Namen(1) = ""
+        End If
+
         'X-Spalte übernehmen
-        Me.XSpalte = alleSpalten(0)
+        Me.XSpalte = Namen(0)
+
         'Y-Spalten übernehmen
-        ReDim Me.YSpalten(alleSpalten.GetUpperBound(0) - 1)
-        Array.Copy(alleSpalten, 1, Me.YSpalten, 0, alleSpalten.Length - 1)
+        ReDim Me.YSpalten(Namen.GetUpperBound(0) - 1)
+        Array.Copy(Namen, 1, Me.YSpalten, 0, Namen.Length - 1)
 
     End Sub
 
@@ -111,11 +139,11 @@ Public Class WEL
         'Zeitreihen redimensionieren
         For i = 0 To Me.Zeitreihen.GetUpperBound(0)
             Me.Zeitreihen(i) = New Zeitreihe(SpaltenSel(i))
-            Me.Zeitreihen(i).Length = AnzZeil - Me.AnzKopfzeilen
+            Me.Zeitreihen(i).Length = AnzZeil - Me.nZeilenHeader
         Next
 
         'temoräres Array für XWerte
-        Dim tmpXWerte(AnzZeil - Me.AnzKopfzeilen - 1) As DateTime
+        Dim tmpXWerte(AnzZeil - Me.nZeilenHeader - 1) As DateTime
 
         'Auf Anfang setzen und einlesen
         '------------------------------
@@ -125,14 +153,14 @@ Public Class WEL
             If (Me.Zeichengetrennt) Then
                 'Zeichengetrennt
                 Werte = StrRead.ReadLine.ToString.Split(New Char() {Me.Trennzeichen.Character}, StringSplitOptions.RemoveEmptyEntries)
-                If (i >= Me.AnzKopfzeilen) Then
+                If (i >= Me.nZeilenHeader) Then
                     'Erste Spalte: Datum_Zeit
-                    tmpXWerte(i - Me.AnzKopfzeilen) = New System.DateTime(Werte(0).Substring(6, 4), Werte(0).Substring(3, 2), Werte(0).Substring(0, 2), Werte(0).Substring(11, 2), Werte(0).Substring(14, 2), 0, New System.Globalization.GregorianCalendar())
+                    tmpXWerte(i - Me.nZeilenHeader) = New System.DateTime(Werte(0).Substring(6, 4), Werte(0).Substring(3, 2), Werte(0).Substring(0, 2), Werte(0).Substring(11, 2), Werte(0).Substring(14, 2), 0, New System.Globalization.GregorianCalendar())
                     'Restliche Spalten: Werte
                     n = 0
                     For j = 0 To Me.YSpalten.GetUpperBound(0)
                         If (isSelected(Me.YSpalten(j))) Then
-                            Me.Zeitreihen(n).YWerte(i - Me.AnzKopfzeilen) = Convert.ToDouble(Werte(j + 1))
+                            Me.Zeitreihen(n).YWerte(i - Me.nZeilenHeader) = Convert.ToDouble(Werte(j + 1))
                             n += 1
                         End If
                     Next
@@ -140,14 +168,14 @@ Public Class WEL
             Else
                 'Spalten mit fester Breite
                 Zeile = StrRead.ReadLine.ToString()
-                If (i >= Me.AnzKopfzeilen) Then
+                If (i >= Me.nZeilenHeader) Then
                     'Erste Spalte: Datum_Zeit
-                    tmpXWerte(i - Me.AnzKopfzeilen) = New System.DateTime(Zeile.Substring(6 + SpaltenOffset, 4), Zeile.Substring(3 + SpaltenOffset, 2), Zeile.Substring(0 + SpaltenOffset, 2), Zeile.Substring(11 + SpaltenOffset, 2), Zeile.Substring(14 + SpaltenOffset, 2), 0, New System.Globalization.GregorianCalendar())
+                    tmpXWerte(i - Me.nZeilenHeader) = New System.DateTime(Zeile.Substring(6 + SpaltenOffset, 4), Zeile.Substring(3 + SpaltenOffset, 2), Zeile.Substring(0 + SpaltenOffset, 2), Zeile.Substring(11 + SpaltenOffset, 2), Zeile.Substring(14 + SpaltenOffset, 2), 0, New System.Globalization.GregorianCalendar())
                     'Restliche Spalten: Werte
                     n = 0
                     For j = 0 To Me.YSpalten.GetUpperBound(0)
                         If (isSelected(Me.YSpalten(j))) Then
-                            Me.Zeitreihen(n).YWerte(i - Me.AnzKopfzeilen) = Convert.ToDouble(Zeile.Substring(((j + 1) * Me.Spaltenbreite) + SpaltenOffset, Math.Min(Me.Spaltenbreite, Zeile.Substring(((j + 1) * Me.Spaltenbreite) + SpaltenOffset).Length)))
+                            Me.Zeitreihen(n).YWerte(i - (Me.iZeileDaten - 1)) = Convert.ToDouble(Zeile.Substring(((j + 1) * Me.Spaltenbreite) + SpaltenOffset, Math.Min(Me.Spaltenbreite, Zeile.Substring(((j + 1) * Me.Spaltenbreite) + SpaltenOffset).Length)))
                             n += 1
                         End If
                     Next

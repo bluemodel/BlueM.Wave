@@ -15,7 +15,8 @@ Public Class ZRE
         MyBase.New(FileName)
 
         'Voreinstellungen
-        Me.AnzKopfzeilen = 4
+        Me.iZeileDaten = 5
+        Me.UseEinheiten = True
 
         If (ReadNow) Then
             'Datei komplett einlesen
@@ -43,8 +44,14 @@ Public Class ZRE
 
         'Spalten übernehmen
         Me.XSpalte = "Datum_Zeit"
+
         ReDim Me.YSpalten(0)
         Me.YSpalten(0) = Zeile.Substring(0, 15)
+
+        'Einheit anhängen
+        If (Me.UseEinheiten) Then
+            Me.YSpalten(0) &= " [" & Zeile.Substring(15, 5).Trim() & "]"
+        End If
 
         Me.SpaltenSel = Me.YSpalten
 
@@ -73,18 +80,18 @@ Public Class ZRE
         'Zeitreihe redimensionieren
         ReDim Me.Zeitreihen(0)
         Me.Zeitreihen(0) = New Zeitreihe(Me.SpaltenSel(0))
-        Me.Zeitreihen(0).Length = AnzZeil - Me.AnzKopfzeilen
+        Me.Zeitreihen(0).Length = AnzZeil - Me.nZeilenHeader
 
         'Zurück zum Dateianfang und lesen
         FiStr.Seek(0, SeekOrigin.Begin)
 
         For j = 0 To AnzZeil - 1
             Zeile = StrRead.ReadLine.ToString()
-            If (j >= Me.AnzKopfzeilen) Then
+            If (j >= Me.nZeilenHeader) Then
                 'Datum
-                Me.Zeitreihen(0).XWerte(j - Me.AnzKopfzeilen) = New System.DateTime(Zeile.Substring(0, 4), Zeile.Substring(4, 2), Zeile.Substring(6, 2), Zeile.Substring(9, 2), Zeile.Substring(12, 2), 0, New System.Globalization.GregorianCalendar())
+                Me.Zeitreihen(0).XWerte(j - Me.nZeilenHeader) = New System.DateTime(Zeile.Substring(0, 4), Zeile.Substring(4, 2), Zeile.Substring(6, 2), Zeile.Substring(9, 2), Zeile.Substring(12, 2), 0, New System.Globalization.GregorianCalendar())
                 'Wert
-                Me.Zeitreihen(0).YWerte(j - Me.AnzKopfzeilen) = Convert.ToDouble(Zeile.Substring(15, 14))
+                Me.Zeitreihen(0).YWerte(j - Me.nZeilenHeader) = Convert.ToDouble(Zeile.Substring(15, 14))
             End If
         Next
 

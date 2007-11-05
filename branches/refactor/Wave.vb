@@ -11,20 +11,12 @@ Public Class Wave
 
 #Region "UI"
 
-    'Form wird geladen
-    '*****************
-    Private Sub Wave_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
+    'Konstruktor
+    '***********
+    Public Sub New()
 
-        'Übergabeparameter verarbeiten
-        '-----------------------------
-        For Each param As String In My.Application.CommandLineArgs
-
-            'Dateien öffnen
-            If (File.Exists(param)) Then
-                Call Me.Import_File(param)
-            End If
-
-        Next
+        ' Dieser Aufruf ist für den Windows Form-Designer erforderlich.
+        InitializeComponent()
 
         'Charts einrichten
         '-----------------
@@ -44,6 +36,23 @@ Public Class Wave
         colorBand1.ResizeEnd = True
         colorBand1.ResizeStart = True
         colorBand1.Brush.Transparency = 50
+
+    End Sub
+
+    'Form wird geladen
+    '*****************
+    Private Sub Wave_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
+
+        'Übergabeparameter verarbeiten
+        '-----------------------------
+        For Each param As String In My.Application.CommandLineArgs
+
+            'Dateien öffnen
+            If (File.Exists(param)) Then
+                Call Me.Import_File(param)
+            End If
+
+        Next
 
     End Sub
 
@@ -92,8 +101,8 @@ Public Class Wave
         End If
     End Sub
 
-	'Form Resize
-	'***********
+    'Form Resize
+    '***********
     Private Sub Wave_Resize(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Resize
         Me.TChart2.Width = Me.SplitContainer1.Panel1.Width
         Me.TChart2.Height = Me.SplitContainer1.Panel1.Height
@@ -101,8 +110,8 @@ Public Class Wave
         Me.TChart1.Height = Me.SplitContainer1.Panel2.Height
     End Sub
 
-	'Splitter Resize
-	'***************
+    'Splitter Resize
+    '***************
     Private Sub SplitContainer1_SplitterMoved(ByVal sender As Object, ByVal e As System.Windows.Forms.SplitterEventArgs) Handles SplitContainer1.SplitterMoved
         Me.TChart2.Width = Me.SplitContainer1.Panel1.Width
         Me.TChart2.Height = Me.SplitContainer1.Panel1.Height
@@ -110,7 +119,7 @@ Public Class Wave
         Me.TChart1.Height = Me.SplitContainer1.Panel2.Height
     End Sub
 
-	'Auswahlbereich aktualisieren
+    'Auswahlbereich aktualisieren
     '****************************
     Private Sub TChart2_MouseUp1(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles TChart2.MouseUp
         Me.TChart1.Axes.Bottom.Minimum = Me.colorBand1.Start
@@ -155,6 +164,9 @@ Public Class Wave
 
         'ZRE-Objekt instanzieren
         Dim ZRE As New ZRE(FileName)
+
+        'Sofort Spalten auslesen (bei ZRE kein ImportDialog!)
+        Call ZRE.SpaltenAuslesen()
 
         'ZRE einlesen
         Call ZRE.Read_File()
@@ -201,9 +213,6 @@ Public Class Wave
         'Import-Dialog anzeigen
         Call Me.showImportDialog(ASC)
 
-        'CSV einlesen
-        Call ASC.Read_File()
-
         'Serien zeichnen
         '---------------
         If (Not IsNothing(ASC.Zeitreihen)) Then
@@ -227,9 +236,6 @@ Public Class Wave
 
         'Import-Dialog anzeigen
         Call Me.showImportDialog(CSV)
-
-        'CSV einlesen
-        Call CSV.Read_File()
 
         'Serien zeichnen
         '---------------
@@ -266,7 +272,7 @@ Public Class Wave
     '***********************
     Public Sub Display_Series(ByVal zre As Zeitreihe)
 
-        Dim i as Integer
+        Dim i As Integer
 
         'Linien instanzieren
         Dim Line1 As New Steema.TeeChart.Styles.Line(Me.TChart1.Chart)

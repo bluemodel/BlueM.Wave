@@ -36,19 +36,27 @@ Partial Class ImportDiag
         Me.RadioButton_Zeichengetrennt = New System.Windows.Forms.RadioButton
         Me.GroupBox_Spaltenmodus = New System.Windows.Forms.GroupBox
         Me.TextBox_Spaltenbreite = New System.Windows.Forms.TextBox
-        Me.TextBox_AnzKopfzeilen = New System.Windows.Forms.MaskedTextBox
-        Me.Label_AnzKopfzeilen = New System.Windows.Forms.Label
+        Me.TextBox_ZeileÜberschriften = New System.Windows.Forms.MaskedTextBox
+        Me.Label_ZeileÜberschriften = New System.Windows.Forms.Label
         Me.ComboBox_Dezimaltrennzeichen = New System.Windows.Forms.ComboBox
-        Me.Label_Dezimaltrennzeichen = New System.Windows.Forms.Label
         Me.GroupBox_Einstellungen = New System.Windows.Forms.GroupBox
+        Me.GroupBox_Vorschau = New System.Windows.Forms.GroupBox
+        Me.Label_ZeileDaten = New System.Windows.Forms.Label
+        Me.TextBox_ZeileDaten = New System.Windows.Forms.MaskedTextBox
+        Me.TextBox_ZeileEinheiten = New System.Windows.Forms.MaskedTextBox
+        Me.GroupBox_Dezimaltrennzeichen = New System.Windows.Forms.GroupBox
+        Me.CheckBox_Einheiten = New System.Windows.Forms.CheckBox
+        Me.Label_Dezimaltrennzeichen = New System.Windows.Forms.Label
         Me.GroupBox_Spaltenmodus.SuspendLayout()
         Me.GroupBox_Einstellungen.SuspendLayout()
+        Me.GroupBox_Vorschau.SuspendLayout()
+        Me.GroupBox_Dezimaltrennzeichen.SuspendLayout()
         Me.SuspendLayout()
         '
         'Label_Datei
         '
         Me.Label_Datei.AutoSize = True
-        Me.Label_Datei.Location = New System.Drawing.Point(12, 183)
+        Me.Label_Datei.Location = New System.Drawing.Point(12, 24)
         Me.Label_Datei.Name = "Label_Datei"
         Me.Label_Datei.Size = New System.Drawing.Size(35, 13)
         Me.Label_Datei.TabIndex = 17
@@ -58,10 +66,10 @@ Partial Class ImportDiag
         '
         Me.RichTextBox_Vorschau.BackColor = System.Drawing.Color.White
         Me.RichTextBox_Vorschau.Font = New System.Drawing.Font("Courier New", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.RichTextBox_Vorschau.Location = New System.Drawing.Point(12, 209)
+        Me.RichTextBox_Vorschau.Location = New System.Drawing.Point(12, 50)
         Me.RichTextBox_Vorschau.Name = "RichTextBox_Vorschau"
         Me.RichTextBox_Vorschau.ReadOnly = True
-        Me.RichTextBox_Vorschau.Size = New System.Drawing.Size(230, 186)
+        Me.RichTextBox_Vorschau.Size = New System.Drawing.Size(227, 186)
         Me.RichTextBox_Vorschau.TabIndex = 16
         Me.RichTextBox_Vorschau.Text = ""
         Me.RichTextBox_Vorschau.WordWrap = False
@@ -79,7 +87,7 @@ Partial Class ImportDiag
         'Button_OK
         '
         Me.Button_OK.DialogResult = System.Windows.Forms.DialogResult.OK
-        Me.Button_OK.Location = New System.Drawing.Point(230, 410)
+        Me.Button_OK.Location = New System.Drawing.Point(230, 471)
         Me.Button_OK.Name = "Button_OK"
         Me.Button_OK.Size = New System.Drawing.Size(75, 23)
         Me.Button_OK.TabIndex = 11
@@ -89,7 +97,7 @@ Partial Class ImportDiag
         'Button_Cancel
         '
         Me.Button_Cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel
-        Me.Button_Cancel.Location = New System.Drawing.Point(311, 410)
+        Me.Button_Cancel.Location = New System.Drawing.Point(311, 471)
         Me.Button_Cancel.Name = "Button_Cancel"
         Me.Button_Cancel.Size = New System.Drawing.Size(75, 23)
         Me.Button_Cancel.TabIndex = 10
@@ -99,7 +107,7 @@ Partial Class ImportDiag
         'ListBox_YSpalten
         '
         Me.ListBox_YSpalten.FormattingEnabled = True
-        Me.ListBox_YSpalten.Location = New System.Drawing.Point(266, 261)
+        Me.ListBox_YSpalten.Location = New System.Drawing.Point(248, 102)
         Me.ListBox_YSpalten.Name = "ListBox_YSpalten"
         Me.ListBox_YSpalten.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended
         Me.ListBox_YSpalten.Size = New System.Drawing.Size(120, 134)
@@ -108,7 +116,7 @@ Partial Class ImportDiag
         'Label_YSpalten
         '
         Me.Label_YSpalten.AutoSize = True
-        Me.Label_YSpalten.Location = New System.Drawing.Point(263, 236)
+        Me.Label_YSpalten.Location = New System.Drawing.Point(245, 77)
         Me.Label_YSpalten.Name = "Label_YSpalten"
         Me.Label_YSpalten.Size = New System.Drawing.Size(56, 13)
         Me.Label_YSpalten.TabIndex = 17
@@ -117,7 +125,7 @@ Partial Class ImportDiag
         'Label_XSpalte
         '
         Me.Label_XSpalte.AutoSize = True
-        Me.Label_XSpalte.Location = New System.Drawing.Point(263, 183)
+        Me.Label_XSpalte.Location = New System.Drawing.Point(245, 24)
         Me.Label_XSpalte.Name = "Label_XSpalte"
         Me.Label_XSpalte.Size = New System.Drawing.Size(50, 13)
         Me.Label_XSpalte.TabIndex = 17
@@ -125,7 +133,7 @@ Partial Class ImportDiag
         '
         'TextBox_XSpalte
         '
-        Me.TextBox_XSpalte.Location = New System.Drawing.Point(266, 209)
+        Me.TextBox_XSpalte.Location = New System.Drawing.Point(248, 50)
         Me.TextBox_XSpalte.Name = "TextBox_XSpalte"
         Me.TextBox_XSpalte.ReadOnly = True
         Me.TextBox_XSpalte.Size = New System.Drawing.Size(120, 20)
@@ -159,9 +167,9 @@ Partial Class ImportDiag
         Me.GroupBox_Spaltenmodus.Controls.Add(Me.RadioButton_Zeichengetrennt)
         Me.GroupBox_Spaltenmodus.Controls.Add(Me.ComboBox_Trennzeichen)
         Me.GroupBox_Spaltenmodus.Controls.Add(Me.RadioButton_Spaltenbreite)
-        Me.GroupBox_Spaltenmodus.Location = New System.Drawing.Point(12, 13)
+        Me.GroupBox_Spaltenmodus.Location = New System.Drawing.Point(12, 125)
         Me.GroupBox_Spaltenmodus.Name = "GroupBox_Spaltenmodus"
-        Me.GroupBox_Spaltenmodus.Size = New System.Drawing.Size(374, 89)
+        Me.GroupBox_Spaltenmodus.Size = New System.Drawing.Size(374, 84)
         Me.GroupBox_Spaltenmodus.TabIndex = 22
         Me.GroupBox_Spaltenmodus.TabStop = False
         Me.GroupBox_Spaltenmodus.Text = "Spalten"
@@ -173,80 +181,144 @@ Partial Class ImportDiag
         Me.TextBox_Spaltenbreite.Size = New System.Drawing.Size(97, 20)
         Me.TextBox_Spaltenbreite.TabIndex = 22
         '
-        'TextBox_AnzKopfzeilen
+        'TextBox_ZeileÜberschriften
         '
-        Me.TextBox_AnzKopfzeilen.Location = New System.Drawing.Point(115, 20)
-        Me.TextBox_AnzKopfzeilen.Mask = "0#"
-        Me.TextBox_AnzKopfzeilen.Name = "TextBox_AnzKopfzeilen"
-        Me.TextBox_AnzKopfzeilen.PromptChar = Global.Microsoft.VisualBasic.ChrW(32)
-        Me.TextBox_AnzKopfzeilen.Size = New System.Drawing.Size(50, 20)
-        Me.TextBox_AnzKopfzeilen.TabIndex = 24
+        Me.TextBox_ZeileÜberschriften.Location = New System.Drawing.Point(105, 23)
+        Me.TextBox_ZeileÜberschriften.Mask = "0#"
+        Me.TextBox_ZeileÜberschriften.Name = "TextBox_ZeileÜberschriften"
+        Me.TextBox_ZeileÜberschriften.PromptChar = Global.Microsoft.VisualBasic.ChrW(32)
+        Me.TextBox_ZeileÜberschriften.Size = New System.Drawing.Size(50, 20)
+        Me.TextBox_ZeileÜberschriften.TabIndex = 24
         '
-        'Label_AnzKopfzeilen
+        'Label_ZeileÜberschriften
         '
-        Me.Label_AnzKopfzeilen.AutoSize = True
-        Me.Label_AnzKopfzeilen.Location = New System.Drawing.Point(12, 23)
-        Me.Label_AnzKopfzeilen.Name = "Label_AnzKopfzeilen"
-        Me.Label_AnzKopfzeilen.Size = New System.Drawing.Size(94, 13)
-        Me.Label_AnzKopfzeilen.TabIndex = 23
-        Me.Label_AnzKopfzeilen.Text = "Anzahl Kopfzeilen:"
+        Me.Label_ZeileÜberschriften.AutoSize = True
+        Me.Label_ZeileÜberschriften.Location = New System.Drawing.Point(12, 26)
+        Me.Label_ZeileÜberschriften.Name = "Label_ZeileÜberschriften"
+        Me.Label_ZeileÜberschriften.Size = New System.Drawing.Size(73, 13)
+        Me.Label_ZeileÜberschriften.TabIndex = 23
+        Me.Label_ZeileÜberschriften.Text = "Überschriften:"
         '
         'ComboBox_Dezimaltrennzeichen
         '
         Me.ComboBox_Dezimaltrennzeichen.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.ComboBox_Dezimaltrennzeichen.DropDownWidth = 50
         Me.ComboBox_Dezimaltrennzeichen.FormattingEnabled = True
-        Me.ComboBox_Dezimaltrennzeichen.Location = New System.Drawing.Point(318, 19)
+        Me.ComboBox_Dezimaltrennzeichen.Location = New System.Drawing.Point(120, 23)
         Me.ComboBox_Dezimaltrennzeichen.Name = "ComboBox_Dezimaltrennzeichen"
         Me.ComboBox_Dezimaltrennzeichen.Size = New System.Drawing.Size(50, 21)
         Me.ComboBox_Dezimaltrennzeichen.TabIndex = 26
         '
+        'GroupBox_Einstellungen
+        '
+        Me.GroupBox_Einstellungen.Controls.Add(Me.CheckBox_Einheiten)
+        Me.GroupBox_Einstellungen.Controls.Add(Me.TextBox_ZeileEinheiten)
+        Me.GroupBox_Einstellungen.Controls.Add(Me.TextBox_ZeileDaten)
+        Me.GroupBox_Einstellungen.Controls.Add(Me.TextBox_ZeileÜberschriften)
+        Me.GroupBox_Einstellungen.Controls.Add(Me.Label_ZeileDaten)
+        Me.GroupBox_Einstellungen.Controls.Add(Me.Label_ZeileÜberschriften)
+        Me.GroupBox_Einstellungen.Location = New System.Drawing.Point(12, 12)
+        Me.GroupBox_Einstellungen.Name = "GroupBox_Einstellungen"
+        Me.GroupBox_Einstellungen.Size = New System.Drawing.Size(185, 107)
+        Me.GroupBox_Einstellungen.TabIndex = 27
+        Me.GroupBox_Einstellungen.TabStop = False
+        Me.GroupBox_Einstellungen.Text = "Zeilennummern"
+        '
+        'GroupBox_Vorschau
+        '
+        Me.GroupBox_Vorschau.Controls.Add(Me.Label_Datei)
+        Me.GroupBox_Vorschau.Controls.Add(Me.RichTextBox_Vorschau)
+        Me.GroupBox_Vorschau.Controls.Add(Me.Label_YSpalten)
+        Me.GroupBox_Vorschau.Controls.Add(Me.TextBox_XSpalte)
+        Me.GroupBox_Vorschau.Controls.Add(Me.Label_XSpalte)
+        Me.GroupBox_Vorschau.Controls.Add(Me.ListBox_YSpalten)
+        Me.GroupBox_Vorschau.Location = New System.Drawing.Point(12, 215)
+        Me.GroupBox_Vorschau.Name = "GroupBox_Vorschau"
+        Me.GroupBox_Vorschau.Size = New System.Drawing.Size(374, 250)
+        Me.GroupBox_Vorschau.TabIndex = 28
+        Me.GroupBox_Vorschau.TabStop = False
+        Me.GroupBox_Vorschau.Text = "Vorschau"
+        '
+        'Label_ZeileDaten
+        '
+        Me.Label_ZeileDaten.AutoSize = True
+        Me.Label_ZeileDaten.Location = New System.Drawing.Point(12, 78)
+        Me.Label_ZeileDaten.Name = "Label_ZeileDaten"
+        Me.Label_ZeileDaten.Size = New System.Drawing.Size(87, 13)
+        Me.Label_ZeileDaten.TabIndex = 23
+        Me.Label_ZeileDaten.Text = "Erste Datenzeile:"
+        '
+        'TextBox_ZeileDaten
+        '
+        Me.TextBox_ZeileDaten.Location = New System.Drawing.Point(105, 75)
+        Me.TextBox_ZeileDaten.Mask = "0#"
+        Me.TextBox_ZeileDaten.Name = "TextBox_ZeileDaten"
+        Me.TextBox_ZeileDaten.PromptChar = Global.Microsoft.VisualBasic.ChrW(32)
+        Me.TextBox_ZeileDaten.Size = New System.Drawing.Size(50, 20)
+        Me.TextBox_ZeileDaten.TabIndex = 24
+        '
+        'TextBox_ZeileEinheiten
+        '
+        Me.TextBox_ZeileEinheiten.Location = New System.Drawing.Point(105, 49)
+        Me.TextBox_ZeileEinheiten.Mask = "0#"
+        Me.TextBox_ZeileEinheiten.Name = "TextBox_ZeileEinheiten"
+        Me.TextBox_ZeileEinheiten.PromptChar = Global.Microsoft.VisualBasic.ChrW(32)
+        Me.TextBox_ZeileEinheiten.Size = New System.Drawing.Size(50, 20)
+        Me.TextBox_ZeileEinheiten.TabIndex = 24
+        '
+        'GroupBox_Dezimaltrennzeichen
+        '
+        Me.GroupBox_Dezimaltrennzeichen.Controls.Add(Me.ComboBox_Dezimaltrennzeichen)
+        Me.GroupBox_Dezimaltrennzeichen.Controls.Add(Me.Label_Dezimaltrennzeichen)
+        Me.GroupBox_Dezimaltrennzeichen.Location = New System.Drawing.Point(203, 12)
+        Me.GroupBox_Dezimaltrennzeichen.Name = "GroupBox_Dezimaltrennzeichen"
+        Me.GroupBox_Dezimaltrennzeichen.Size = New System.Drawing.Size(183, 107)
+        Me.GroupBox_Dezimaltrennzeichen.TabIndex = 29
+        Me.GroupBox_Dezimaltrennzeichen.TabStop = False
+        Me.GroupBox_Dezimaltrennzeichen.Text = "Dezimaltrennzeichen"
+        '
+        'CheckBox_Einheiten
+        '
+        Me.CheckBox_Einheiten.AutoSize = True
+        Me.CheckBox_Einheiten.Location = New System.Drawing.Point(15, 52)
+        Me.CheckBox_Einheiten.Name = "CheckBox_Einheiten"
+        Me.CheckBox_Einheiten.Size = New System.Drawing.Size(73, 17)
+        Me.CheckBox_Einheiten.TabIndex = 25
+        Me.CheckBox_Einheiten.Text = "Einheiten:"
+        Me.CheckBox_Einheiten.UseVisualStyleBackColor = True
+        '
         'Label_Dezimaltrennzeichen
         '
         Me.Label_Dezimaltrennzeichen.AutoSize = True
-        Me.Label_Dezimaltrennzeichen.Location = New System.Drawing.Point(201, 22)
+        Me.Label_Dezimaltrennzeichen.Location = New System.Drawing.Point(6, 26)
         Me.Label_Dezimaltrennzeichen.Name = "Label_Dezimaltrennzeichen"
         Me.Label_Dezimaltrennzeichen.Size = New System.Drawing.Size(108, 13)
-        Me.Label_Dezimaltrennzeichen.TabIndex = 25
+        Me.Label_Dezimaltrennzeichen.TabIndex = 23
         Me.Label_Dezimaltrennzeichen.Text = "Dezimaltrennzeichen:"
-        '
-        'GroupBox_Einstellungen
-        '
-        Me.GroupBox_Einstellungen.Controls.Add(Me.Label_Dezimaltrennzeichen)
-        Me.GroupBox_Einstellungen.Controls.Add(Me.TextBox_AnzKopfzeilen)
-        Me.GroupBox_Einstellungen.Controls.Add(Me.ComboBox_Dezimaltrennzeichen)
-        Me.GroupBox_Einstellungen.Controls.Add(Me.Label_AnzKopfzeilen)
-        Me.GroupBox_Einstellungen.Location = New System.Drawing.Point(12, 108)
-        Me.GroupBox_Einstellungen.Name = "GroupBox_Einstellungen"
-        Me.GroupBox_Einstellungen.Size = New System.Drawing.Size(374, 49)
-        Me.GroupBox_Einstellungen.TabIndex = 27
-        Me.GroupBox_Einstellungen.TabStop = False
-        Me.GroupBox_Einstellungen.Text = "Einstellungen"
         '
         'ImportDiag
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(399, 525)
+        Me.ClientSize = New System.Drawing.Size(392, 500)
+        Me.Controls.Add(Me.GroupBox_Dezimaltrennzeichen)
+        Me.Controls.Add(Me.GroupBox_Vorschau)
         Me.Controls.Add(Me.GroupBox_Einstellungen)
         Me.Controls.Add(Me.GroupBox_Spaltenmodus)
-        Me.Controls.Add(Me.TextBox_XSpalte)
-        Me.Controls.Add(Me.ListBox_YSpalten)
-        Me.Controls.Add(Me.Label_XSpalte)
-        Me.Controls.Add(Me.Label_YSpalten)
-        Me.Controls.Add(Me.Label_Datei)
-        Me.Controls.Add(Me.RichTextBox_Vorschau)
         Me.Controls.Add(Me.Button_OK)
         Me.Controls.Add(Me.Button_Cancel)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Name = "ImportDiag"
-        Me.Text = "WEL-Datei: Spalten auswählen"
+        Me.Text = "Datei importieren"
         Me.GroupBox_Spaltenmodus.ResumeLayout(False)
         Me.GroupBox_Spaltenmodus.PerformLayout()
         Me.GroupBox_Einstellungen.ResumeLayout(False)
         Me.GroupBox_Einstellungen.PerformLayout()
+        Me.GroupBox_Vorschau.ResumeLayout(False)
+        Me.GroupBox_Vorschau.PerformLayout()
+        Me.GroupBox_Dezimaltrennzeichen.ResumeLayout(False)
+        Me.GroupBox_Dezimaltrennzeichen.PerformLayout()
         Me.ResumeLayout(False)
-        Me.PerformLayout()
 
     End Sub
     Friend WithEvents Label_Datei As System.Windows.Forms.Label
@@ -262,9 +334,15 @@ Partial Class ImportDiag
     Friend WithEvents RadioButton_Zeichengetrennt As System.Windows.Forms.RadioButton
     Friend WithEvents GroupBox_Spaltenmodus As System.Windows.Forms.GroupBox
     Friend WithEvents TextBox_Spaltenbreite As System.Windows.Forms.TextBox
-    Friend WithEvents TextBox_AnzKopfzeilen As System.Windows.Forms.MaskedTextBox
-    Friend WithEvents Label_AnzKopfzeilen As System.Windows.Forms.Label
+    Friend WithEvents TextBox_ZeileÜberschriften As System.Windows.Forms.MaskedTextBox
+    Friend WithEvents Label_ZeileÜberschriften As System.Windows.Forms.Label
     Friend WithEvents ComboBox_Dezimaltrennzeichen As System.Windows.Forms.ComboBox
-    Friend WithEvents Label_Dezimaltrennzeichen As System.Windows.Forms.Label
     Friend WithEvents GroupBox_Einstellungen As System.Windows.Forms.GroupBox
+    Friend WithEvents GroupBox_Vorschau As System.Windows.Forms.GroupBox
+    Friend WithEvents TextBox_ZeileEinheiten As System.Windows.Forms.MaskedTextBox
+    Friend WithEvents TextBox_ZeileDaten As System.Windows.Forms.MaskedTextBox
+    Friend WithEvents Label_ZeileDaten As System.Windows.Forms.Label
+    Friend WithEvents CheckBox_Einheiten As System.Windows.Forms.CheckBox
+    Friend WithEvents GroupBox_Dezimaltrennzeichen As System.Windows.Forms.GroupBox
+    Friend WithEvents Label_Dezimaltrennzeichen As System.Windows.Forms.Label
 End Class

@@ -17,7 +17,10 @@ Public Class ASC
         MyBase.New(FileName)
 
         'Voreinstellungen
-        Me.AnzKopfzeilen = 3
+        Me.iZeileÜberschriften = 2
+        Me.UseEinheiten = True
+        Me.iZeileEinheiten = 3
+        Me.iZeileDaten = 4
         Me.Zeichengetrennt = True
         Me.Trennzeichen = Me.leerzeichen
         Me.Dezimaltrennzeichen = Me.punkt
@@ -36,15 +39,19 @@ Public Class ASC
     Public Overrides Sub SpaltenAuslesen()
 
         Dim i As Integer
+        Dim Zeile As String = ""
+        Dim ZeileSpalten As String = ""
+        Dim ZeileEinheiten As String = ""
 
         'Datei öffnen
         Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
         Dim StrRead As StreamReader = New StreamReader(FiStr, System.Text.Encoding.GetEncoding("iso8859-1"))
 
-        '2. Zeile (Spaltenüberschriften) auslesen
-        Dim Zeile As String = ""
-        For i = 1 To Me.AnzKopfzeilen - 1
+        'Spaltenüberschriften
+        For i = 1 To Me.iZeileDaten
             Zeile = StrRead.ReadLine.ToString
+            If (i = Me.iZeileÜberschriften) Then ZeileSpalten = Zeile
+            If (i = Me.iZeileEinheiten) Then ZeileEinheiten = Zeile
         Next
 
         StrRead.Close()
@@ -52,20 +59,33 @@ Public Class ASC
 
         'Spaltennamen auslesen
         '---------------------
-        Dim alleSpalten() As String
+        Dim Namen() As String
+        Dim Einheiten() As String
 
-        alleSpalten = Zeile.Split(New Char() {Me.Trennzeichen.Character}, StringSplitOptions.RemoveEmptyEntries)
+        Namen = ZeileSpalten.Split(New Char() {Me.Trennzeichen.Character}, StringSplitOptions.RemoveEmptyEntries)
+        Einheiten = ZeileEinheiten.Split(New Char() {Me.Trennzeichen.Character}, StringSplitOptions.RemoveEmptyEntries)
+
+        'Sicherstellen, dass es so viele Einheiten wie Spalten gibt:
+        ReDim Preserve Einheiten(Namen.GetUpperBound(0))
+        For i = 0 To Einheiten.GetUpperBound(0)
+            If (IsNothing(Einheiten(i))) Then Einheiten(i) = "-"
+        Next
 
         'Leerzeichen entfernen
-        For i = 0 To alleSpalten.GetUpperBound(0)
-            alleSpalten(i) = alleSpalten(i).Trim()
+        For i = 0 To Namen.GetUpperBound(0)
+            Namen(i) = Namen(i).Trim()
+            'Einheiten anhängen
+            If (Me.UseEinheiten) Then
+                Namen(i) &= " [" & Einheiten(i).Trim() & "]"
+            End If
         Next
 
         'X-Spalte übernehmen
-        Me.XSpalte = alleSpalten(0)
+        Me.XSpalte = Namen(0)
+
         'Y-Spalten übernehmen
-        ReDim Me.YSpalten(alleSpalten.GetUpperBound(0) - 1)
-        Array.Copy(alleSpalten, 1, Me.YSpalten, 0, alleSpalten.Length - 1)
+        ReDim Me.YSpalten(Namen.GetUpperBound(0) - 1)
+        Array.Copy(Namen, 1, Me.YSpalten, 0, Namen.Length - 1)
 
     End Sub
 
@@ -109,9 +129,9 @@ Public Class ASC
 
         'Zeitreihen mit vorläufiger Zeilennanzahl Dimensionieren
         If AnzZeilLeer > 1 Then
-            AnzWerte = AnzZeil - Me.AnzKopfzeilen + AnzZeilLeer
+            AnzWerte = AnzZeil - Me.nZeilenHeader + AnzZeilLeer
         Else
-            AnzWerte = AnzZeil - Me.AnzKopfzeilen
+            AnzWerte = AnzZeil - Me.nZeilenHeader
         End If
         For i = 0 To Me.Zeitreihen.GetUpperBound(0)
             Me.Zeitreihen(i) = New Zeitreihe(SpaltenSel(i))
@@ -125,7 +145,7 @@ Public Class ASC
         'Auf Anfang setzten
         FiStr.Seek(0, SeekOrigin.Begin)
         'Kopfzeilen Überspringen
-        For i = 1 To Me.AnzKopfzeilen
+        For i = 1 To Me.nZeilenHeader
             StrRead.ReadLine()
         Next
         'Einlesen
