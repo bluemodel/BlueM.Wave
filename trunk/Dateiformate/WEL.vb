@@ -270,12 +270,13 @@ Public Class WEL
 
         Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
         Dim StrRead As StreamReader = New StreamReader(FiStr, System.Text.Encoding.GetEncoding("iso8859-1"))
+        Dim StrReadSync = TextReader.Synchronized(StrRead)
 
         'Anzahl der Zeilen feststellen
         Do
-            Zeile = StrRead.ReadLine.ToString
+            Zeile = StrReadSync.ReadLine.ToString
             AnzZeil += 1
-        Loop Until StrRead.Peek() = -1
+        Loop Until StrReadSync.Peek() = -1
 
         'Anzahl Zeitreihen bestimmen
         ReDim Me.Zeitreihen(Me.SpaltenSel.GetUpperBound(0))
@@ -296,7 +297,7 @@ Public Class WEL
         For i = 0 To AnzZeil - 1
             If (Me.Zeichengetrennt) Then
                 'Zeichengetrennt
-                Werte = StrRead.ReadLine.ToString.Split(New Char() {Me.Trennzeichen.Character}, StringSplitOptions.RemoveEmptyEntries)
+                Werte = StrReadSync.ReadLine.ToString.Split(New Char() {Me.Trennzeichen.Character}, StringSplitOptions.RemoveEmptyEntries)
                 If (i >= WELHeaderLen) Then
                     'Erste Spalte: Datum_Zeit
                     tmpXWerte(i - WELHeaderLen) = New System.DateTime(Werte(0).Substring(6, 4), Werte(0).Substring(3, 2), Werte(0).Substring(0, 2), Werte(0).Substring(11, 2), Werte(0).Substring(14, 2), 0, New System.Globalization.GregorianCalendar())
@@ -311,7 +312,7 @@ Public Class WEL
                 End If
             Else
                 'Spalten mit fester Breite
-                Zeile = StrRead.ReadLine.ToString()
+                Zeile = StrReadSync.ReadLine.ToString()
                 If (i >= WELHeaderLen) Then
                     'Erste Spalte: Datum_Zeit
                     tmpXWerte(i - WELHeaderLen) = New System.DateTime(Zeile.Substring(6 + SpaltenOffset, 4), Zeile.Substring(3 + SpaltenOffset, 2), Zeile.Substring(0 + SpaltenOffset, 2), Zeile.Substring(11 + SpaltenOffset, 2), Zeile.Substring(14 + SpaltenOffset, 2), 0, New System.Globalization.GregorianCalendar())
@@ -328,6 +329,7 @@ Public Class WEL
 
         Next
 
+        StrReadSync.Close()
         StrRead.Close()
         FiStr.Close()
 
