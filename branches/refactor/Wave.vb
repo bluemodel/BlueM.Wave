@@ -134,17 +134,13 @@ Public Class Wave
 
         'ZRE-Objekt instanzieren
         Dim ZRE As New ZRE(FileName)
+
+        'ZRE einlesen
+        Call ZRE.Read_File()
+
         'Serie zeichnen
         '--------------
-        Dim Line1 As New Steema.TeeChart.Styles.Line(Me.TChart1.Chart)
-        'Namen vergeben
-        Line1.Title = ZRE.Zeitreihe.Title
-        'X-Werte als Zeitdaten einstellen
-        Line1.XValues.DateTime = True
-        'Anzahl Serien bestimmen
-        Dim AnzahlSerien As Integer = Me.TChart1.Series.Count
-        'Neue Serie hinzufügen
-        Me.TChart1.Chart.Series(AnzahlSerien - 1).Add(ZRE.Zeitreihe.XWerte, ZRE.Zeitreihe.YWerte)
+        Call Me.Display_Series(ZRE.Zeitreihen(0))
 
     End Sub
 
@@ -184,17 +180,7 @@ Public Class Wave
         If (Not IsNothing(WEL.Zeitreihen)) Then
 
             For i = 0 To WEL.Zeitreihen.GetUpperBound(0)
-
-                Dim Line1 As New Steema.TeeChart.Styles.Line(Me.TChart1.Chart)
-                'X-Werte als Zeitdaten einstellen
-                Line1.XValues.DateTime = True
-                'Namen vergeben
-                Line1.Title = WEL.Zeitreihen(i).Title
-                'Anzahl Serien bestimmen
-                Dim AnzahlSerien As Integer = Me.TChart1.Series.Count
-                'Neue Serie hinzufügen
-                Me.TChart1.Chart.Series(AnzahlSerien - 1).Add(WEL.Zeitreihen(i).XWerte, WEL.Zeitreihen(i).YWerte)
-
+                Call Me.Display_Series(WEL.Zeitreihen(i))
             Next
 
         End If
