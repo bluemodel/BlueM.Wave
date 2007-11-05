@@ -1,5 +1,5 @@
 <Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
-Partial Class Import
+Partial Class ImportDiag
     Inherits System.Windows.Forms.Form
 
     'Das Formular überschreibt den Löschvorgang, um die Komponentenliste zu bereinigen.
@@ -22,7 +22,7 @@ Partial Class Import
     'Das Bearbeiten mit dem Code-Editor ist nicht möglich.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Import))
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(ImportDiag))
         Me.Label_Datei = New System.Windows.Forms.Label
         Me.RichTextBox_Vorschau = New System.Windows.Forms.RichTextBox
         Me.ComboBox_Trennzeichen = New System.Windows.Forms.ComboBox

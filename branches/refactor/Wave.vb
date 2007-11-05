@@ -152,7 +152,7 @@ Public Class Wave
     '*********************
     Private Sub showImportDialog(ByRef _datei As Dateiformat)
 
-        _datei.ImportDiag = New Import(_datei)
+        _datei.ImportDiag = New ImportDiag(_datei)
 
         Dim DiagResult As DialogResult
 

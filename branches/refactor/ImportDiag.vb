@@ -1,6 +1,6 @@
 Imports System.IO
 
-Partial Public Class Import
+Partial Public Class ImportDiag
     Inherits System.Windows.Forms.Form
 
 #Region "Eigenschaften"
@@ -31,7 +31,7 @@ Partial Public Class Import
     '***********
     Public Sub New(ByRef _dateiobjekt As Dateiformat)
 
-        Call Mybase.New()
+        Call MyBase.New()
 
         IsInitializing = True
 

@@ -23,7 +23,7 @@ Public MustInherit Class Dateiformat
     Private _Yspalten() As String                       'Array der vorhandenen Y-Spaltennamen
     Private _spaltenSel() As String                     'Array der ausgewählten Y-Spaltennamen
 
-    Public ImportDiag As Import
+    Public ImportDiag As ImportDiag
 
 #End Region 'Eigenschaften
 
