@@ -40,6 +40,7 @@ Partial Class Wave
         Me.DateTimePicker1 = New System.Windows.Forms.DateTimePicker
         Me.SplitContainer1 = New System.Windows.Forms.SplitContainer
         Me.TChart2 = New Steema.TeeChart.TChart
+        Me.CheckBox_Uebersicht = New System.Windows.Forms.CheckBox
         Me.MenuStrip1.SuspendLayout()
         Me.ToolStrip1.SuspendLayout()
         Me.SplitContainer1.Panel1.SuspendLayout()
@@ -54,13 +55,13 @@ Partial Class Wave
         Me.Commander1.ButtonSize = New System.Drawing.Size(32, 32)
         Me.Commander1.Chart = Me.TChart1
         Me.Commander1.Divider = False
-        Me.Commander1.Dock = System.Windows.Forms.DockStyle.None
+        Me.Commander1.Dock = System.Windows.Forms.DockStyle.Bottom
         Me.Commander1.DropDownArrows = True
         Me.Commander1.LabelValues = True
-        Me.Commander1.Location = New System.Drawing.Point(88, 24)
+        Me.Commander1.Location = New System.Drawing.Point(0, 446)
         Me.Commander1.Name = "Commander1"
         Me.Commander1.ShowToolTips = True
-        Me.Commander1.Size = New System.Drawing.Size(345, 34)
+        Me.Commander1.Size = New System.Drawing.Size(941, 34)
         Me.Commander1.TabIndex = 2
         '
         'TChart1
@@ -151,7 +152,7 @@ Partial Class Wave
         '
         '
         Me.TChart1.Legend.Title.Pen.Visible = False
-        Me.TChart1.Location = New System.Drawing.Point(-2, -2)
+        Me.TChart1.Location = New System.Drawing.Point(-2, -8)
         Me.TChart1.Name = "TChart1"
         Me.TChart1.Size = New System.Drawing.Size(945, 190)
         Me.TChart1.TabIndex = 4
@@ -286,6 +287,7 @@ Partial Class Wave
         'SplitContainer1.Panel2
         '
         Me.SplitContainer1.Panel2.Controls.Add(Me.TChart1)
+        Me.SplitContainer1.Panel2.Controls.Add(Me.Commander1)
         Me.SplitContainer1.Panel2MinSize = 100
         Me.SplitContainer1.Size = New System.Drawing.Size(945, 602)
         Me.SplitContainer1.SplitterDistance = 114
@@ -405,6 +407,18 @@ Partial Class Wave
         '
         Me.TChart2.Walls.Right.AutoHide = False
         '
+        'CheckBox_Uebersicht
+        '
+        Me.CheckBox_Uebersicht.AutoSize = True
+        Me.CheckBox_Uebersicht.Checked = True
+        Me.CheckBox_Uebersicht.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.CheckBox_Uebersicht.Location = New System.Drawing.Point(87, 33)
+        Me.CheckBox_Uebersicht.Name = "CheckBox_Uebersicht"
+        Me.CheckBox_Uebersicht.Size = New System.Drawing.Size(71, 17)
+        Me.CheckBox_Uebersicht.TabIndex = 7
+        Me.CheckBox_Uebersicht.Text = "Übersicht"
+        Me.CheckBox_Uebersicht.UseVisualStyleBackColor = True
+        '
         'Wave
         '
         Me.AllowDrop = True
@@ -412,9 +426,9 @@ Partial Class Wave
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.SystemColors.Control
         Me.ClientSize = New System.Drawing.Size(945, 660)
+        Me.Controls.Add(Me.CheckBox_Uebersicht)
         Me.Controls.Add(Me.SplitContainer1)
         Me.Controls.Add(Me.DateTimePicker1)
-        Me.Controls.Add(Me.Commander1)
         Me.Controls.Add(Me.ToolStrip1)
         Me.Controls.Add(Me.MenuStrip1)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
@@ -448,5 +462,6 @@ Partial Class Wave
     Friend WithEvents SplitContainer1 As System.Windows.Forms.SplitContainer
     Public WithEvents TChart2 As Steema.TeeChart.TChart
     Public WithEvents TChart1 As Steema.TeeChart.TChart
+    Friend WithEvents CheckBox_Uebersicht As System.Windows.Forms.CheckBox
 
 End Class

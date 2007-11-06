@@ -28,6 +28,9 @@ Public Class Wave
         Me.TChart1.Axes.Bottom.Automatic = False
         Me.TChart2.Axes.Bottom.Automatic = False
 
+        'Übersichtslegende
+        Me.TChart2.Legend.CheckBoxes = True
+
         'ColorBand einrichten
         colorBand1 = New Steema.TeeChart.Tools.ColorBand
         Me.TChart2.Tools.Add(colorBand1)
@@ -54,23 +57,6 @@ Public Class Wave
 
         Next
 
-    End Sub
-
-    'Datei öffnen Dialog anzeigen
-    '****************************
-    Private Sub Import_File_Dialog(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_OpenFile.Click, MenuItem_OpenFile.Click
-
-        If (Me.OpenFileDialog1.ShowDialog() = Windows.Forms.DialogResult.OK) Then
-            Call Me.Import_File(Me.OpenFileDialog1.FileName)
-        End If
-
-    End Sub
-
-    'TEN-Datei importieren
-    '*********************
-    Public Sub Import_TEN(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_OpenTEN.Click, MenuItem_OpenTEN.Click
-        'TODO: Warnen, wenn bereits Serien vorhanden (Chart wird komplett überschrieben!)
-        TChart1.Import.ShowImportDialog()
     End Sub
 
     'Drag & Drop von Dateien verarbeiten
@@ -104,19 +90,13 @@ Public Class Wave
     'Form Resize
     '***********
     Private Sub Wave_Resize(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Resize
-        Me.TChart2.Width = Me.SplitContainer1.Panel1.Width
-        Me.TChart2.Height = Me.SplitContainer1.Panel1.Height
-        Me.TChart1.Width = Me.SplitContainer1.Panel2.Width
-        Me.TChart1.Height = Me.SplitContainer1.Panel2.Height
+        Call Me.resizeCharts()
     End Sub
 
     'Splitter Resize
     '***************
     Private Sub SplitContainer1_SplitterMoved(ByVal sender As Object, ByVal e As System.Windows.Forms.SplitterEventArgs) Handles SplitContainer1.SplitterMoved
-        Me.TChart2.Width = Me.SplitContainer1.Panel1.Width
-        Me.TChart2.Height = Me.SplitContainer1.Panel1.Height
-        Me.TChart1.Width = Me.SplitContainer1.Panel2.Width
-        Me.TChart1.Height = Me.SplitContainer1.Panel2.Height
+        Call Me.resizeCharts()
     End Sub
 
     'Auswahlbereich aktualisieren
@@ -124,6 +104,29 @@ Public Class Wave
     Private Sub TChart2_MouseUp1(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles TChart2.MouseUp
         Me.TChart1.Axes.Bottom.Minimum = Me.colorBand1.Start
         Me.TChart1.Axes.Bottom.Maximum = Me.colorBand1.End
+    End Sub
+
+    'Übersicht an/aus
+    '****************
+    Private Sub CheckBox_Übersicht_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox_Uebersicht.CheckedChanged
+
+        If (CheckBox_Uebersicht.Checked) Then
+            Me.SplitContainer1.Panel1Collapsed = False
+            Call Me.resizeCharts()
+        Else
+            Me.SplitContainer1.Panel1Collapsed = True
+            Call Me.resizeCharts()
+        End If
+
+    End Sub
+
+    'Größe von Charts anpassen
+    '*************************
+    Private Sub resizeCharts()
+        Me.TChart2.Width = Me.SplitContainer1.Panel1.Width
+        Me.TChart2.Height = Me.SplitContainer1.Panel1.Height
+        Me.TChart1.Width = Me.SplitContainer1.Panel2.Width
+        Me.TChart1.Height = Me.SplitContainer1.Panel2.Height - 34 'Höhe vom Commander
     End Sub
 
     'Form schliessen
@@ -135,6 +138,23 @@ Public Class Wave
 #End Region 'UI
 
 #Region "Funktionalität"
+
+    'Datei öffnen Dialog anzeigen
+    '****************************
+    Private Sub Import_File_Dialog(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_OpenFile.Click, MenuItem_OpenFile.Click
+
+        If (Me.OpenFileDialog1.ShowDialog() = Windows.Forms.DialogResult.OK) Then
+            Call Me.Import_File(Me.OpenFileDialog1.FileName)
+        End If
+
+    End Sub
+
+    'TEN-Datei importieren
+    '*********************
+    Public Sub Import_TEN(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_OpenTEN.Click, MenuItem_OpenTEN.Click
+        'TODO: Warnen, wenn bereits Serien vorhanden (Chart wird komplett überschrieben!)
+        TChart1.Import.ShowImportDialog()
+    End Sub
 
     'Datei als Zeitreihe importieren
     '*******************************
