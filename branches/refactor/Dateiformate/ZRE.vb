@@ -46,7 +46,7 @@ Public Class ZRE
         Me.XSpalte = "Datum_Zeit"
 
         ReDim Me.YSpalten(0)
-        Me.YSpalten(0) = Zeile.Substring(0, 15)
+        Me.YSpalten(0) = Zeile.Substring(0, 15).Trim()
 
         'Einheit anhängen
         If (Me.UseEinheiten) Then
