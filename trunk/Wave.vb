@@ -11,11 +11,43 @@ Public Class Wave
 
 #Region "UI"
 
+    'Konstruktor
+    '***********
+    Public Sub New()
+
+        ' Dieser Aufruf ist für den Windows Form-Designer erforderlich.
+        InitializeComponent()
+
+        'Charts einrichten
+        '-----------------
+        'Zoom
+        Me.TChart1.Zoom.Direction = Steema.TeeChart.ZoomDirections.Vertical
+        Me.TChart2.Zoom.Active = False
+
+        'Achsen
+        Me.TChart1.Axes.Bottom.Automatic = False
+        Me.TChart2.Axes.Bottom.Automatic = False
+
+        'Übersichtslegende
+        Me.TChart2.Legend.CheckBoxes = True
+
+        'ColorBand einrichten
+        colorBand1 = New Steema.TeeChart.Tools.ColorBand
+        Me.TChart2.Tools.Add(colorBand1)
+        colorBand1.Axis = Me.TChart2.Axes.Bottom
+        colorBand1.Brush.Color = Color.Coral
+        colorBand1.ResizeEnd = True
+        colorBand1.ResizeStart = True
+        colorBand1.Brush.Transparency = 50
+
+    End Sub
+
     'Form wird geladen
     '*****************
     Private Sub Wave_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
 
         'Übergabeparameter verarbeiten
+        '-----------------------------
         For Each param As String In My.Application.CommandLineArgs
 
             'Dateien öffnen
@@ -25,22 +57,6 @@ Public Class Wave
 
         Next
 
-    End Sub
-
-    'Datei öffnen Dialog anzeigen
-    '****************************
-    Private Sub Import_File_Dialog(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_OpenFile.Click, MenuItem_OpenFile.Click
-
-        If (Me.OpenFileDialog1.ShowDialog() = Windows.Forms.DialogResult.OK) Then
-            Call Me.Import_File(Me.OpenFileDialog1.FileName)
-        End If
-
-    End Sub
-
-    'TEN-Datei importieren
-    '*********************
-    Public Sub Import_TEN(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_OpenTEN.Click, MenuItem_OpenTEN.Click
-        TChart1.Import.ShowImportDialog()
     End Sub
 
     'Drag & Drop von Dateien verarbeiten
@@ -71,29 +87,46 @@ Public Class Wave
         End If
     End Sub
 
-	'Form Resize
-	'***********
+    'Form Resize
+    '***********
     Private Sub Wave_Resize(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Resize
-        Me.TChart2.Width = Me.SplitContainer1.Panel1.Width
-        Me.TChart2.Height = Me.SplitContainer1.Panel1.Height
-        Me.TChart1.Width = Me.SplitContainer1.Panel2.Width
-        Me.TChart1.Height = Me.SplitContainer1.Panel2.Height
+        Call Me.resizeCharts()
     End Sub
 
-	'Splitter Resize
-	'***************
+    'Splitter Resize
+    '***************
     Private Sub SplitContainer1_SplitterMoved(ByVal sender As Object, ByVal e As System.Windows.Forms.SplitterEventArgs) Handles SplitContainer1.SplitterMoved
-        Me.TChart2.Width = Me.SplitContainer1.Panel1.Width
-        Me.TChart2.Height = Me.SplitContainer1.Panel1.Height
-        Me.TChart1.Width = Me.SplitContainer1.Panel2.Width
-        Me.TChart1.Height = Me.SplitContainer1.Panel2.Height
+        Call Me.resizeCharts()
     End Sub
 
-	'Ausschnitt aktualisieren
-	'************************
+    'Auswahlbereich aktualisieren
+    '****************************
     Private Sub TChart2_MouseUp1(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles TChart2.MouseUp
         Me.TChart1.Axes.Bottom.Minimum = Me.colorBand1.Start
         Me.TChart1.Axes.Bottom.Maximum = Me.colorBand1.End
+    End Sub
+
+    'Übersicht an/aus
+    '****************
+    Private Sub CheckBox_Übersicht_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox_Uebersicht.CheckedChanged
+
+        If (CheckBox_Uebersicht.Checked) Then
+            Me.SplitContainer1.Panel1Collapsed = False
+            Call Me.resizeCharts()
+        Else
+            Me.SplitContainer1.Panel1Collapsed = True
+            Call Me.resizeCharts()
+        End If
+
+    End Sub
+
+    'Größe von Charts anpassen
+    '*************************
+    Private Sub resizeCharts()
+        Me.TChart2.Width = Me.SplitContainer1.Panel1.Width
+        Me.TChart2.Height = Me.SplitContainer1.Panel1.Height
+        Me.TChart1.Width = Me.SplitContainer1.Panel2.Width
+        Me.TChart1.Height = Me.SplitContainer1.Panel2.Height - 34 'Höhe vom Commander
     End Sub
 
     'Form schliessen
@@ -105,6 +138,23 @@ Public Class Wave
 #End Region 'UI
 
 #Region "Funktionalität"
+
+    'Datei öffnen Dialog anzeigen
+    '****************************
+    Private Sub Import_File_Dialog(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_OpenFile.Click, MenuItem_OpenFile.Click
+
+        If (Me.OpenFileDialog1.ShowDialog() = Windows.Forms.DialogResult.OK) Then
+            Call Me.Import_File(Me.OpenFileDialog1.FileName)
+        End If
+
+    End Sub
+
+    'TEN-Datei importieren
+    '*********************
+    Public Sub Import_TEN(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_OpenTEN.Click, MenuItem_OpenTEN.Click
+        'TODO: Warnen, wenn bereits Serien vorhanden (Chart wird komplett überschrieben!)
+        TChart1.Import.ShowImportDialog()
+    End Sub
 
     'Datei als Zeitreihe importieren
     '*******************************
@@ -122,7 +172,7 @@ Public Class Wave
                 Call Me.Import_ASC(file)
 
             Case Else
-                Call Me.Import_TXT(file)
+                Call Me.Import_CSV(file)
 
         End Select
 
@@ -134,45 +184,37 @@ Public Class Wave
 
         'ZRE-Objekt instanzieren
         Dim ZRE As New ZRE(FileName)
+
+        'Sofort Spalten auslesen (bei ZRE kein ImportDialog!)
+        Call ZRE.SpaltenAuslesen()
+
+        'ZRE einlesen
+        Call ZRE.Read_File()
+
         'Serie zeichnen
         '--------------
-        Dim Line1 As New Steema.TeeChart.Styles.Line(Me.TChart1.Chart)
-        'Namen vergeben
-        Line1.Title = ZRE.Zeitreihe.Title
-        'X-Werte als Zeitdaten einstellen
-        Line1.XValues.DateTime = True
-        'Anzahl Serien bestimmen
-        Dim AnzahlSerien As Integer = Me.TChart1.Series.Count
-        'Neue Serie hinzufügen
-        Me.TChart1.Chart.Series(AnzahlSerien - 1).Add(ZRE.Zeitreihe.XWerte, ZRE.Zeitreihe.YWerte)
+        Call Me.Display_Series(ZRE.Zeitreihen(0))
 
     End Sub
 
     'WEL-Datei importieren
     '*********************
-    Public Sub Import_WEL(ByVal FileName As String, ByVal ParamArray spaltenSel() As String)
+    Public Sub Import_WEL(ByVal FileName As String)
 
         Dim i As Integer
 
         'WEL-Objekt instanzieren
-        Dim WEL As New WEL(FileName, spaltenSel)
+        Dim WEL As New WEL(FileName)
+
+        'Import-Dialog anzeigen
+        Call Me.showImportDialog(WEL)
 
         'Serien zeichnen
         '---------------
         If (Not IsNothing(WEL.Zeitreihen)) Then
 
             For i = 0 To WEL.Zeitreihen.GetUpperBound(0)
-
-                Dim Line1 As New Steema.TeeChart.Styles.Line(Me.TChart1.Chart)
-                'X-Werte als Zeitdaten einstellen
-                Line1.XValues.DateTime = True
-                'Namen vergeben
-                Line1.Title = WEL.Zeitreihen(i).Title
-                'Anzahl Serien bestimmen
-                Dim AnzahlSerien As Integer = Me.TChart1.Series.Count
-                'Neue Serie hinzufügen
-                Me.TChart1.Chart.Series(AnzahlSerien - 1).Add(WEL.Zeitreihen(i).XWerte, WEL.Zeitreihen(i).YWerte)
-
+                Call Me.Display_Series(WEL.Zeitreihen(i))
             Next
 
         End If
@@ -181,99 +223,68 @@ Public Class Wave
 
     'ASC-Datei importieren (SMUSI)
     '*****************************
-    Public Sub Import_ASC(ByVal FileName As String, ByVal ParamArray spaltenSel() As String)
+    Public Sub Import_ASC(ByVal FileName As String)
 
         Dim i As Integer
-        Dim Linie1 As Steema.TeeChart.Styles.Line
-        Dim Linie2 As Steema.TeeChart.Styles.Line
 
-        'WEL-Objekt instanzieren
-        Dim ASC As New ASC(FileName, spaltenSel)
+        'ASC-Objekt instanzieren
+        Dim ASC As New ASC(FileName)
+
+        'Import-Dialog anzeigen
+        Call Me.showImportDialog(ASC)
 
         'Serien zeichnen
         '---------------
         If (Not IsNothing(ASC.Zeitreihen)) Then
 
-            Me.TChart1.Panel.Brush.Color = Color.White
-            Me.TChart2.Panel.Brush.Color = Color.White
-            Me.TChart1.Zoom.Direction = Steema.TeeChart.ZoomDirections.Vertical
-            Me.TChart2.Zoom.Active = False
-
             For i = 0 To ASC.Zeitreihen.GetUpperBound(0)
-                'Neue Serien Instanzieren
-                Linie1 = New Steema.TeeChart.Styles.Line(Me.TChart1.Chart)
-                Linie2 = New Steema.TeeChart.Styles.Line(Me.TChart2.Chart)
-                'X-Werte als Zeitdaten einstellen
-                Linie1.XValues.DateTime = True
-                Linie2.XValues.DateTime = True
-                'Namen vergeben
-                Linie1.Title = ASC.Zeitreihen(i).Title
-                Linie2.Title = ASC.Zeitreihen(i).Title
-                'Anzahl Serien bestimmen
-                Dim AnzahlSerien As Integer = Me.TChart1.Series.Count
-                'Neue Serie hinzufügen
-                Me.TChart1.Chart.Series(AnzahlSerien - 1).Add(ASC.Zeitreihen(i).XWerte, ASC.Zeitreihen(i).YWerte)
-                Me.TChart2.Chart.Series(AnzahlSerien - 1).Add(ASC.Zeitreihen(i).XWerte, ASC.Zeitreihen(i).YWerte)
-                Me.TChart1.Axes.Bottom.Automatic = False
-                Me.TChart1.Axes.Bottom.Minimum = DateTime.Parse(ASC.Zeitreihen(i).XWerte(0)).ToOADate
-                Me.TChart1.Axes.Bottom.Maximum = DateTime.Parse(ASC.Zeitreihen(i).XWerte(0)).AddDays(7).ToOADate
-                Me.TChart2.Axes.Bottom.Automatic = False
-                Me.TChart2.Axes.Bottom.Minimum = DateTime.Parse(ASC.Zeitreihen(i).XWerte(0)).ToOADate
-                Me.TChart2.Axes.Bottom.Maximum = DateTime.Parse(ASC.Zeitreihen(i).XWerte(ASC.Zeitreihen(i).XWerte.GetUpperBound(0))).ToOADate
-                'ColorBand einrichtenASC.Zeitreihen(i).XWerte
-                If (IsNothing(colorBand1)) Then
-                    colorBand1 = New Steema.TeeChart.Tools.ColorBand
-                    Me.TChart2.Tools.Add(colorBand1)
-                    colorBand1.Axis = Me.TChart2.Axes.Bottom
-                    colorBand1.Brush.Color = Color.Coral
-                    colorBand1.End = Me.TChart1.Axes.Bottom.Maximum
-                    colorBand1.ResizeEnd = True
-                    colorBand1.ResizeStart = True
-                    colorBand1.Start = Me.TChart1.Axes.Bottom.Minimum
-                    colorBand1.Brush.Transparency = 50
-                End If
+                Call Me.Display_Series(ASC.Zeitreihen(i))
             Next
 
         End If
 
     End Sub
 
-    'TXT-Datei importieren
+    'CSV-Datei importieren
     '*********************
-    Public Sub Import_TXT(ByVal FileName As String)
+    Public Sub Import_CSV(ByVal FileName As String)
 
-        'TXT-Objekt instanzieren
-        Dim TXT As New TXT()
-        TXT.File = FileName
+        Dim i As Integer
 
-        'Einstellungen-Dialog anzeigen
-        If (TXT.ShowDialog() = Windows.Forms.DialogResult.OK) Then
+        'CSV-Objekt instanzieren
+        Dim CSV As New CSV(FileName)
 
-            Dim Line1 As New Steema.TeeChart.Styles.Line(Me.TChart1.Chart)
-            'Namen vergeben
-            Line1.Title = Path.GetFileNameWithoutExtension(TXT.File)
-            'X-Werte als Zeitdaten einstellen
-            Line1.XValues.DateTime = True
+        'Import-Dialog anzeigen
+        Call Me.showImportDialog(CSV)
 
-            'An TextSource übergeben
-            '-----------------------
-            Me.TextSource1.Series = Line1
-            'Trennzeichen einstellen
-            Me.TextSource1.Separator = TXT.Trennzeichen.Character
-            'Dezimaltrennzeichen einstellen
-            Me.TextSource1.DecimalSeparator = TXT.Dezimaltrennzeichen.Character
-            'Anzahl Kopfzeilen einstellen
-            Me.TextSource1.HeaderLines = TXT.AnzKopfzeilen
+        'Serien zeichnen
+        '---------------
+        If (Not IsNothing(CSV.Zeitreihen)) Then
+
+            For i = 0 To CSV.Zeitreihen.GetUpperBound(0)
+                Call Me.Display_Series(CSV.Zeitreihen(i))
+            Next
+
+        End If
+
+    End Sub
+
+    'Import-Formular anzeigen
+    '*********************
+    Private Sub showImportDialog(ByRef _datei As Dateiformat)
+
+        _datei.ImportDiag = New ImportDiag(_datei)
+
+        Dim DiagResult As DialogResult
+
+        'Dialog anzeigen
+        DiagResult = _datei.ImportDiag.ShowDialog()
+
+        If (DiagResult = Windows.Forms.DialogResult.OK) Then
             'Datei einlesen
-            Me.TextSource1.LoadFromFile(TXT.File)
-
-            'Serie zeichnen
-            '--------------
-            'Anzahl Serien bestimmen
-            Dim AnzahlSerien As Integer = Me.TChart1.Series.Count
-            'Neue Serie hinzufügen
-            Me.TChart1.Chart.Series(AnzahlSerien - 1).DataSource = Me.TextSource1.Series
-
+            Call _datei.Read_File()
+        Else
+            Exit Sub
         End If
     End Sub
 
@@ -281,15 +292,53 @@ Public Class Wave
     '***********************
     Public Sub Display_Series(ByVal zre As Zeitreihe)
 
+        Dim i As Integer
+
+        'Linien instanzieren
         Dim Line1 As New Steema.TeeChart.Styles.Line(Me.TChart1.Chart)
+        Dim Line2 As New Steema.TeeChart.Styles.Line(Me.TChart2.Chart)
+
         'X-Werte als Zeitdaten einstellen
         Line1.XValues.DateTime = True
+        Line2.XValues.DateTime = True
+
         'Namen vergeben
         Line1.Title = zre.Title
+        Line2.Title = zre.Title
+
         'Anzahl Serien bestimmen
         Dim AnzahlSerien As Integer = Me.TChart1.Series.Count
+
         'Neue Serie hinzufügen
         Me.TChart1.Chart.Series(AnzahlSerien - 1).Add(zre.XWerte, zre.YWerte)
+        Me.TChart2.Chart.Series(AnzahlSerien - 1).Add(zre.XWerte, zre.YWerte)
+
+        'Anzeigebereich anpassen
+        '-----------------------
+        'kleinsten und größten X-Wert bestimmen
+        Dim Xmin, Xmax, tmpXmin, tmpXmax As DateTime
+        Xmin = Date.FromOADate(Me.TChart1.Series(0).MinXValue)
+        Xmax = Date.FromOADate(Me.TChart1.Series(0).MaxXValue)
+        For i = 1 To AnzahlSerien - 1
+            tmpXmin = Date.FromOADate(Me.TChart1.Series(i).MinXValue)
+            tmpXmax = Date.FromOADate(Me.TChart1.Series(i).MaxXValue)
+            If (tmpXmin < Xmin) Then Xmin = tmpXmin
+            If (tmpXmax > Xmax) Then Xmax = tmpXmax
+        Next
+
+        'Übersicht neu skalieren
+        Me.TChart2.Axes.Bottom.Minimum = Xmin.ToOADate()
+        Me.TChart2.Axes.Bottom.Maximum = Xmax.ToOADate()
+
+        'Auswahlbereich skalieren (nur bei der ersten hinzugefügten Serie)
+        If (AnzahlSerien = 1) Then
+            colorBand1.Start = Me.TChart2.Axes.Bottom.Minimum
+            colorBand1.End = Me.TChart2.Axes.Bottom.Maximum
+        End If
+
+        'Hauptdiagramm neu skalieren
+        Me.TChart1.Axes.Bottom.Minimum = colorBand1.Start
+        Me.TChart1.Axes.Bottom.Maximum = colorBand1.End
 
     End Sub
 

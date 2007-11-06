@@ -1,19 +1,7 @@
 Imports System.IO
 
 Public Class ZRE
-
-#Region "Eigenschaften"
-
-    'Eigenschaften
-    '#############
-
-    Private _DateiPfad As String
-
-    Private Const ZREHEaderLen As Integer = 4       'Die ersten 4 Zeilen der ZRE-Datei gehören zum Header
-
-    Public Zeitreihe As Zeitreihe
-
-#End Region
+    Inherits Dateiformat
 
 #Region "Methoden"
 
@@ -22,21 +10,65 @@ Public Class ZRE
 
     'Konstruktor
     '***********
-    Public Sub New(ByVal DateiPfad As String)
-        Me._DateiPfad = DateiPfad
-        Me.Zeitreihe = New Zeitreihe(Path.GetFileNameWithoutExtension(DateiPfad))
-        Call Me.Read_ZRE()
+    Public Sub New(ByVal FileName As String, Optional ByVal ReadNow As Boolean = False)
+
+        MyBase.New(FileName)
+
+        'Voreinstellungen
+        Me.iZeileDaten = 5
+        Me.UseEinheiten = True
+
+        If (ReadNow) Then
+            'Datei komplett einlesen
+            Call Me.SpaltenAuslesen()
+            Me.SpaltenSel = Me.YSpalten
+            Call Me.Read_File()
+        End If
+
     End Sub
 
-    'Eine ZRE-Datei einlesen
-    '***********************
-    Private Sub Read_ZRE()
+    'Spalten auslesen
+    '****************
+    Public Overrides Sub SpaltenAuslesen()
+
+        Dim i As Integer
+        Dim Zeile As String = ""
+
+        Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
+        Dim StrRead As StreamReader = New StreamReader(FiStr, System.Text.Encoding.GetEncoding("iso8859-1"))
+
+        'Reihentitel steht in 2. Zeile:
+        For i = 0 To 1
+            Zeile = StrRead.ReadLine.ToString()
+        Next
+
+        'Spalten übernehmen
+        Me.XSpalte = "Datum_Zeit"
+
+        ReDim Me.YSpalten(0)
+        Me.YSpalten(0) = Zeile.Substring(0, 15).Trim()
+
+        'Einheit anhängen
+        If (Me.UseEinheiten) Then
+            Me.YSpalten(0) &= " [" & Zeile.Substring(15, 5).Trim() & "]"
+        End If
+
+        Me.SpaltenSel = Me.YSpalten
+
+        StrRead.Close()
+        FiStr.Close()
+
+    End Sub
+
+    'ZRE-Datei einlesen
+    '******************
+    Public Overrides Sub Read_File()
 
         Dim AnzZeil As Integer = 0
         Dim j As Integer = 0
         Dim Zeile As String
 
-        Dim FiStr As FileStream = New FileStream(Me._DateiPfad, FileMode.Open, IO.FileAccess.Read)
+        Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
         Dim StrRead As StreamReader = New StreamReader(FiStr, System.Text.Encoding.GetEncoding("iso8859-1"))
 
         'Anzahl der Zeilen feststellen
@@ -46,18 +78,20 @@ Public Class ZRE
         Loop Until StrRead.Peek() = -1
 
         'Zeitreihe redimensionieren
-        Me.Zeitreihe.Length = AnzZeil - ZREHEaderLen
+        ReDim Me.Zeitreihen(0)
+        Me.Zeitreihen(0) = New Zeitreihe(Me.SpaltenSel(0))
+        Me.Zeitreihen(0).Length = AnzZeil - Me.nZeilenHeader
 
         'Zurück zum Dateianfang und lesen
         FiStr.Seek(0, SeekOrigin.Begin)
 
         For j = 0 To AnzZeil - 1
             Zeile = StrRead.ReadLine.ToString()
-            If (j >= ZREHEaderLen) Then
+            If (j >= Me.nZeilenHeader) Then
                 'Datum
-                Me.Zeitreihe.XWerte(j - ZREHEaderLen) = New System.DateTime(Zeile.Substring(0, 4), Zeile.Substring(4, 2), Zeile.Substring(6, 2), Zeile.Substring(9, 2), Zeile.Substring(12, 2), 0, New System.Globalization.GregorianCalendar())
+                Me.Zeitreihen(0).XWerte(j - Me.nZeilenHeader) = New System.DateTime(Zeile.Substring(0, 4), Zeile.Substring(4, 2), Zeile.Substring(6, 2), Zeile.Substring(9, 2), Zeile.Substring(12, 2), 0, New System.Globalization.GregorianCalendar())
                 'Wert
-                Me.Zeitreihe.YWerte(j - ZREHEaderLen) = Convert.ToDouble(Zeile.Substring(15, 14))
+                Me.Zeitreihen(0).YWerte(j - Me.nZeilenHeader) = Convert.ToDouble(Zeile.Substring(15, 14))
             End If
         Next
 
