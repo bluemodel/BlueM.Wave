@@ -26,7 +26,7 @@ Public Class WEL
 
         'Voreinstellungen
         Me.iZeile‹berschriften = 2
-        Me.UseEinheiten = True
+        Me.UseEinheiten = False
         Me.iZeileEinheiten = 3
         Me.iZeileDaten = 4
         Me.Zeichengetrennt = True
