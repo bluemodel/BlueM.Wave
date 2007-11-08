@@ -116,13 +116,13 @@ Partial Public Class ImportDiag
             'Eingaben speichern
             '------------------
             'Zeilennummern
-            Me.datei.iZeile‹berschriften = Convert.ToInt32(Me.TextBox_Zeile‹berschriften.Text)
-            Me.datei.iZeileDaten = Convert.ToInt32(Me.TextBox_ZeileDaten.Text)
+            Me.datei.iZeile‹berschriften = Me.TextBox_Zeile‹berschriften.Value
+            Me.datei.iZeileDaten = Me.TextBox_ZeileDaten.Value
 
             'Einheiten
             Me.datei.UseEinheiten = Me.CheckBox_Einheiten.Checked
             If (Me.CheckBox_Einheiten.Checked) Then
-                Me.datei.iZeileEinheiten = Convert.ToInt32(Me.TextBox_ZeileEinheiten.Text)
+                Me.datei.iZeileEinheiten = Me.TextBox_ZeileEinheiten.Value
             End If
 
             'Dezimaltrennzeichen
