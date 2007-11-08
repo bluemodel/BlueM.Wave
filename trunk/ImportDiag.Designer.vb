@@ -36,19 +36,22 @@ Partial Class ImportDiag
         Me.RadioButton_Zeichengetrennt = New System.Windows.Forms.RadioButton
         Me.GroupBox_Spaltenmodus = New System.Windows.Forms.GroupBox
         Me.TextBox_Spaltenbreite = New System.Windows.Forms.TextBox
-        Me.TextBox_ZeileÜberschriften = New System.Windows.Forms.MaskedTextBox
+        Me.TextBox_ZeileÜberschriften = New System.Windows.Forms.NumericUpDown
         Me.Label_ZeileÜberschriften = New System.Windows.Forms.Label
         Me.ComboBox_Dezimaltrennzeichen = New System.Windows.Forms.ComboBox
         Me.GroupBox_Einstellungen = New System.Windows.Forms.GroupBox
-        Me.GroupBox_Vorschau = New System.Windows.Forms.GroupBox
-        Me.Label_ZeileDaten = New System.Windows.Forms.Label
-        Me.TextBox_ZeileDaten = New System.Windows.Forms.MaskedTextBox
-        Me.TextBox_ZeileEinheiten = New System.Windows.Forms.MaskedTextBox
-        Me.GroupBox_Dezimaltrennzeichen = New System.Windows.Forms.GroupBox
         Me.CheckBox_Einheiten = New System.Windows.Forms.CheckBox
+        Me.TextBox_ZeileEinheiten = New System.Windows.Forms.NumericUpDown
+        Me.TextBox_ZeileDaten = New System.Windows.Forms.NumericUpDown
+        Me.Label_ZeileDaten = New System.Windows.Forms.Label
+        Me.GroupBox_Vorschau = New System.Windows.Forms.GroupBox
+        Me.GroupBox_Dezimaltrennzeichen = New System.Windows.Forms.GroupBox
         Me.Label_Dezimaltrennzeichen = New System.Windows.Forms.Label
         Me.GroupBox_Spaltenmodus.SuspendLayout()
+        CType(Me.TextBox_ZeileÜberschriften, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.GroupBox_Einstellungen.SuspendLayout()
+        CType(Me.TextBox_ZeileEinheiten, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.TextBox_ZeileDaten, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.GroupBox_Vorschau.SuspendLayout()
         Me.GroupBox_Dezimaltrennzeichen.SuspendLayout()
         Me.SuspendLayout()
@@ -184,11 +187,11 @@ Partial Class ImportDiag
         'TextBox_ZeileÜberschriften
         '
         Me.TextBox_ZeileÜberschriften.Location = New System.Drawing.Point(105, 23)
-        Me.TextBox_ZeileÜberschriften.Mask = "0#"
+        Me.TextBox_ZeileÜberschriften.Minimum = New Decimal(New Integer() {1, 0, 0, 0})
         Me.TextBox_ZeileÜberschriften.Name = "TextBox_ZeileÜberschriften"
-        Me.TextBox_ZeileÜberschriften.PromptChar = Global.Microsoft.VisualBasic.ChrW(32)
         Me.TextBox_ZeileÜberschriften.Size = New System.Drawing.Size(50, 20)
         Me.TextBox_ZeileÜberschriften.TabIndex = 24
+        Me.TextBox_ZeileÜberschriften.Value = New Decimal(New Integer() {1, 0, 0, 0})
         '
         'Label_ZeileÜberschriften
         '
@@ -224,6 +227,43 @@ Partial Class ImportDiag
         Me.GroupBox_Einstellungen.TabStop = False
         Me.GroupBox_Einstellungen.Text = "Zeilennummern"
         '
+        'CheckBox_Einheiten
+        '
+        Me.CheckBox_Einheiten.AutoSize = True
+        Me.CheckBox_Einheiten.Location = New System.Drawing.Point(15, 52)
+        Me.CheckBox_Einheiten.Name = "CheckBox_Einheiten"
+        Me.CheckBox_Einheiten.Size = New System.Drawing.Size(73, 17)
+        Me.CheckBox_Einheiten.TabIndex = 25
+        Me.CheckBox_Einheiten.Text = "Einheiten:"
+        Me.CheckBox_Einheiten.UseVisualStyleBackColor = True
+        '
+        'TextBox_ZeileEinheiten
+        '
+        Me.TextBox_ZeileEinheiten.Location = New System.Drawing.Point(105, 49)
+        Me.TextBox_ZeileEinheiten.Minimum = New Decimal(New Integer() {1, 0, 0, 0})
+        Me.TextBox_ZeileEinheiten.Name = "TextBox_ZeileEinheiten"
+        Me.TextBox_ZeileEinheiten.Size = New System.Drawing.Size(50, 20)
+        Me.TextBox_ZeileEinheiten.TabIndex = 24
+        Me.TextBox_ZeileEinheiten.Value = New Decimal(New Integer() {1, 0, 0, 0})
+        '
+        'TextBox_ZeileDaten
+        '
+        Me.TextBox_ZeileDaten.Location = New System.Drawing.Point(105, 75)
+        Me.TextBox_ZeileDaten.Minimum = New Decimal(New Integer() {1, 0, 0, 0})
+        Me.TextBox_ZeileDaten.Name = "TextBox_ZeileDaten"
+        Me.TextBox_ZeileDaten.Size = New System.Drawing.Size(50, 20)
+        Me.TextBox_ZeileDaten.TabIndex = 24
+        Me.TextBox_ZeileDaten.Value = New Decimal(New Integer() {1, 0, 0, 0})
+        '
+        'Label_ZeileDaten
+        '
+        Me.Label_ZeileDaten.AutoSize = True
+        Me.Label_ZeileDaten.Location = New System.Drawing.Point(12, 78)
+        Me.Label_ZeileDaten.Name = "Label_ZeileDaten"
+        Me.Label_ZeileDaten.Size = New System.Drawing.Size(87, 13)
+        Me.Label_ZeileDaten.TabIndex = 23
+        Me.Label_ZeileDaten.Text = "Erste Datenzeile:"
+        '
         'GroupBox_Vorschau
         '
         Me.GroupBox_Vorschau.Controls.Add(Me.Label_Datei)
@@ -239,33 +279,6 @@ Partial Class ImportDiag
         Me.GroupBox_Vorschau.TabStop = False
         Me.GroupBox_Vorschau.Text = "Vorschau"
         '
-        'Label_ZeileDaten
-        '
-        Me.Label_ZeileDaten.AutoSize = True
-        Me.Label_ZeileDaten.Location = New System.Drawing.Point(12, 78)
-        Me.Label_ZeileDaten.Name = "Label_ZeileDaten"
-        Me.Label_ZeileDaten.Size = New System.Drawing.Size(87, 13)
-        Me.Label_ZeileDaten.TabIndex = 23
-        Me.Label_ZeileDaten.Text = "Erste Datenzeile:"
-        '
-        'TextBox_ZeileDaten
-        '
-        Me.TextBox_ZeileDaten.Location = New System.Drawing.Point(105, 75)
-        Me.TextBox_ZeileDaten.Mask = "0#"
-        Me.TextBox_ZeileDaten.Name = "TextBox_ZeileDaten"
-        Me.TextBox_ZeileDaten.PromptChar = Global.Microsoft.VisualBasic.ChrW(32)
-        Me.TextBox_ZeileDaten.Size = New System.Drawing.Size(50, 20)
-        Me.TextBox_ZeileDaten.TabIndex = 24
-        '
-        'TextBox_ZeileEinheiten
-        '
-        Me.TextBox_ZeileEinheiten.Location = New System.Drawing.Point(105, 49)
-        Me.TextBox_ZeileEinheiten.Mask = "0#"
-        Me.TextBox_ZeileEinheiten.Name = "TextBox_ZeileEinheiten"
-        Me.TextBox_ZeileEinheiten.PromptChar = Global.Microsoft.VisualBasic.ChrW(32)
-        Me.TextBox_ZeileEinheiten.Size = New System.Drawing.Size(50, 20)
-        Me.TextBox_ZeileEinheiten.TabIndex = 24
-        '
         'GroupBox_Dezimaltrennzeichen
         '
         Me.GroupBox_Dezimaltrennzeichen.Controls.Add(Me.ComboBox_Dezimaltrennzeichen)
@@ -276,16 +289,6 @@ Partial Class ImportDiag
         Me.GroupBox_Dezimaltrennzeichen.TabIndex = 29
         Me.GroupBox_Dezimaltrennzeichen.TabStop = False
         Me.GroupBox_Dezimaltrennzeichen.Text = "Dezimaltrennzeichen"
-        '
-        'CheckBox_Einheiten
-        '
-        Me.CheckBox_Einheiten.AutoSize = True
-        Me.CheckBox_Einheiten.Location = New System.Drawing.Point(15, 52)
-        Me.CheckBox_Einheiten.Name = "CheckBox_Einheiten"
-        Me.CheckBox_Einheiten.Size = New System.Drawing.Size(73, 17)
-        Me.CheckBox_Einheiten.TabIndex = 25
-        Me.CheckBox_Einheiten.Text = "Einheiten:"
-        Me.CheckBox_Einheiten.UseVisualStyleBackColor = True
         '
         'Label_Dezimaltrennzeichen
         '
@@ -312,8 +315,11 @@ Partial Class ImportDiag
         Me.Text = "Datei importieren"
         Me.GroupBox_Spaltenmodus.ResumeLayout(False)
         Me.GroupBox_Spaltenmodus.PerformLayout()
+        CType(Me.TextBox_ZeileÜberschriften, System.ComponentModel.ISupportInitialize).EndInit()
         Me.GroupBox_Einstellungen.ResumeLayout(False)
         Me.GroupBox_Einstellungen.PerformLayout()
+        CType(Me.TextBox_ZeileEinheiten, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.TextBox_ZeileDaten, System.ComponentModel.ISupportInitialize).EndInit()
         Me.GroupBox_Vorschau.ResumeLayout(False)
         Me.GroupBox_Vorschau.PerformLayout()
         Me.GroupBox_Dezimaltrennzeichen.ResumeLayout(False)
@@ -334,13 +340,13 @@ Partial Class ImportDiag
     Friend WithEvents RadioButton_Zeichengetrennt As System.Windows.Forms.RadioButton
     Friend WithEvents GroupBox_Spaltenmodus As System.Windows.Forms.GroupBox
     Friend WithEvents TextBox_Spaltenbreite As System.Windows.Forms.TextBox
-    Friend WithEvents TextBox_ZeileÜberschriften As System.Windows.Forms.MaskedTextBox
+    Friend WithEvents TextBox_ZeileÜberschriften As System.Windows.Forms.NumericUpDown
     Friend WithEvents Label_ZeileÜberschriften As System.Windows.Forms.Label
     Friend WithEvents ComboBox_Dezimaltrennzeichen As System.Windows.Forms.ComboBox
     Friend WithEvents GroupBox_Einstellungen As System.Windows.Forms.GroupBox
     Friend WithEvents GroupBox_Vorschau As System.Windows.Forms.GroupBox
-    Friend WithEvents TextBox_ZeileEinheiten As System.Windows.Forms.MaskedTextBox
-    Friend WithEvents TextBox_ZeileDaten As System.Windows.Forms.MaskedTextBox
+    Friend WithEvents TextBox_ZeileEinheiten As System.Windows.Forms.NumericUpDown
+    Friend WithEvents TextBox_ZeileDaten As System.Windows.Forms.NumericUpDown
     Friend WithEvents Label_ZeileDaten As System.Windows.Forms.Label
     Friend WithEvents CheckBox_Einheiten As System.Windows.Forms.CheckBox
     Friend WithEvents GroupBox_Dezimaltrennzeichen As System.Windows.Forms.GroupBox
