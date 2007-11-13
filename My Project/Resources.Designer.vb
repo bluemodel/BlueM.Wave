@@ -67,13 +67,6 @@ Namespace My.Resources
             End Get
         End Property
         
-        Friend ReadOnly Property icon_teechart() As System.Drawing.Bitmap
-            Get
-                Dim obj As Object = ResourceManager.GetObject("icon_teechart", resourceCulture)
-                Return CType(obj,System.Drawing.Bitmap)
-            End Get
-        End Property
-        
         Friend ReadOnly Property wave() As System.Drawing.Icon
             Get
                 Dim obj As Object = ResourceManager.GetObject("wave", resourceCulture)
