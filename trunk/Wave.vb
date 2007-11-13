@@ -149,18 +149,14 @@ Public Class Wave
 
     End Sub
 
-    'TEN-Datei importieren
-    '*********************
-    Public Sub Import_TEN(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_OpenTEN.Click, MenuItem_OpenTEN.Click
-        'TODO: Warnen, wenn bereits Serien vorhanden (Chart wird komplett überschrieben!)
-        TChart1.Import.ShowImportDialog()
-    End Sub
-
     'Datei als Zeitreihe importieren
     '*******************************
     Friend Sub Import_File(ByVal file As String)
 
         Select Case Path.GetExtension(file).ToUpper()
+
+            Case ".TEN"
+                Call Me.Import_TEN(file)
 
             Case ".ZRE"
                 Call Me.Import_ZRE(file)
@@ -175,6 +171,27 @@ Public Class Wave
                 Call Me.Import_CSV(file)
 
         End Select
+
+    End Sub
+
+    'TEN-Datei importieren
+    '*********************
+    Public Sub Import_TEN(ByVal FileName As String)
+
+        Dim res As DialogResult
+
+        'Warnen, wenn bereits Serien vorhanden (Chart wird komplett überschrieben!)
+        If (TChart1.Series.Count() > 0) Then
+            res = MsgBox("Die vorhandenen Serien werden überschrieben!" & Chr(13) & Chr(10) & "Fortfahren?", MsgBoxStyle.OkCancel)
+            If (Not res = Windows.Forms.DialogResult.OK) Then Exit Sub
+        End If
+
+        'Übersicht zurücksetzen und ausblenden (wird bei TEN nicht genutzt)
+        Me.TChart2.Clear()
+        Me.CheckBox_Uebersicht.Checked = False
+
+        'TEN-Datei importieren
+        Call TChart1.Import.Template.Load(FileName)
 
     End Sub
 

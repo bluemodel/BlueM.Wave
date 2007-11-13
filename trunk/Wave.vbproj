@@ -121,7 +121,6 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\chart_line_add.png" />
-    <EmbeddedResource Include="Resources\icon_teechart.png" />
     <EmbeddedResource Include="Resources\Wave.ico" />
   </ItemGroup>
   <ItemGroup>

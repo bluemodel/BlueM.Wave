@@ -30,12 +30,10 @@ Partial Class Wave
         Me.MenuStrip1 = New System.Windows.Forms.MenuStrip
         Me.DateiToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem
         Me.MenuItem_OpenFile = New System.Windows.Forms.ToolStripMenuItem
-        Me.MenuItem_OpenTEN = New System.Windows.Forms.ToolStripMenuItem
         Me.ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator
         Me.MenuItem_Exit = New System.Windows.Forms.ToolStripMenuItem
         Me.ToolStrip1 = New System.Windows.Forms.ToolStrip
         Me.ToolStripButton_OpenFile = New System.Windows.Forms.ToolStripButton
-        Me.ToolStripButton_OpenTEN = New System.Windows.Forms.ToolStripButton
         Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator
         Me.DateTimePicker1 = New System.Windows.Forms.DateTimePicker
         Me.SplitContainer1 = New System.Windows.Forms.SplitContainer
@@ -179,10 +177,14 @@ Partial Class Wave
         'OpenFileDialog1
         '
         Me.OpenFileDialog1.DefaultExt = "txt"
-        Me.OpenFileDialog1.Filter = "Text-Dateien (*.txt)|*.txt|SMUSI-Dateien (*.asc)|*.asc|ZRE-Dateien (*.zre)|*.zre|" & _
-            "CSV-Dateien (*.csv)|*.csv|WEL-Dateien (*.wel, *.kwl)|*.wel;*.kwl|Alle Dateien (*" & _
-            ".*)|*.*"
-        Me.OpenFileDialog1.Title = "Textdatei öffnen"
+        Me.OpenFileDialog1.Filter = "Text-Dateien (*.txt)|*.txt|" & _
+            "SMUSI-Dateien (*.asc)|*.asc|" & _
+            "ZRE-Dateien (*.zre)|*.zre|" & _
+            "CSV-Dateien (*.csv)|*.csv|" & _
+            "WEL-Dateien (*.wel, *.kwl)|*.wel;*.kwl|" & _
+            "TeeChart-Dateien (*.ten)|*.ten|" & _
+            "Alle Dateien (*.*)|*.*"
+        Me.OpenFileDialog1.Title = "Datei importieren"
         '
         'MenuStrip1
         '
@@ -195,7 +197,7 @@ Partial Class Wave
         '
         'DateiToolStripMenuItem
         '
-        Me.DateiToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.MenuItem_OpenFile, Me.MenuItem_OpenTEN, Me.ToolStripSeparator2, Me.MenuItem_Exit})
+        Me.DateiToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.MenuItem_OpenFile, Me.ToolStripSeparator2, Me.MenuItem_Exit})
         Me.DateiToolStripMenuItem.Name = "DateiToolStripMenuItem"
         Me.DateiToolStripMenuItem.ShortcutKeys = CType((System.Windows.Forms.Keys.Alt Or System.Windows.Forms.Keys.D), System.Windows.Forms.Keys)
         Me.DateiToolStripMenuItem.Size = New System.Drawing.Size(44, 20)
@@ -206,33 +208,25 @@ Partial Class Wave
         Me.MenuItem_OpenFile.Image = Global.Wave.My.Resources.Resources.chart_line_add
         Me.MenuItem_OpenFile.Name = "MenuItem_OpenFile"
         Me.MenuItem_OpenFile.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.O), System.Windows.Forms.Keys)
-        Me.MenuItem_OpenFile.Size = New System.Drawing.Size(221, 22)
-        Me.MenuItem_OpenFile.Text = "Textdatei öffnen..."
-        '
-        'MenuItem_OpenTEN
-        '
-        Me.MenuItem_OpenTEN.Image = Global.Wave.My.Resources.Resources.icon_teechart
-        Me.MenuItem_OpenTEN.Name = "MenuItem_OpenTEN"
-        Me.MenuItem_OpenTEN.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.T), System.Windows.Forms.Keys)
-        Me.MenuItem_OpenTEN.Size = New System.Drawing.Size(221, 22)
-        Me.MenuItem_OpenTEN.Text = "TEN-Datei öffnen..."
+        Me.MenuItem_OpenFile.Size = New System.Drawing.Size(222, 22)
+        Me.MenuItem_OpenFile.Text = "Datei importieren..."
         '
         'ToolStripSeparator2
         '
         Me.ToolStripSeparator2.Name = "ToolStripSeparator2"
-        Me.ToolStripSeparator2.Size = New System.Drawing.Size(218, 6)
+        Me.ToolStripSeparator2.Size = New System.Drawing.Size(219, 6)
         '
         'MenuItem_Exit
         '
         Me.MenuItem_Exit.Name = "MenuItem_Exit"
-        Me.MenuItem_Exit.Size = New System.Drawing.Size(221, 22)
+        Me.MenuItem_Exit.Size = New System.Drawing.Size(222, 22)
         Me.MenuItem_Exit.Text = "Schließen"
         '
         'ToolStrip1
         '
         Me.ToolStrip1.AutoSize = False
         Me.ToolStrip1.BackColor = System.Drawing.SystemColors.Control
-        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButton_OpenFile, Me.ToolStripButton_OpenTEN, Me.ToolStripSeparator1})
+        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButton_OpenFile, Me.ToolStripSeparator1})
         Me.ToolStrip1.Location = New System.Drawing.Point(0, 24)
         Me.ToolStrip1.Name = "ToolStrip1"
         Me.ToolStrip1.Size = New System.Drawing.Size(945, 34)
@@ -247,17 +241,7 @@ Partial Class Wave
         Me.ToolStripButton_OpenFile.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.ToolStripButton_OpenFile.Name = "ToolStripButton_OpenFile"
         Me.ToolStripButton_OpenFile.Size = New System.Drawing.Size(32, 32)
-        Me.ToolStripButton_OpenFile.Text = "Textdatei öffnen"
-        '
-        'ToolStripButton_OpenTEN
-        '
-        Me.ToolStripButton_OpenTEN.AutoSize = False
-        Me.ToolStripButton_OpenTEN.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.ToolStripButton_OpenTEN.Image = Global.Wave.My.Resources.Resources.icon_teechart
-        Me.ToolStripButton_OpenTEN.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.ToolStripButton_OpenTEN.Name = "ToolStripButton_OpenTEN"
-        Me.ToolStripButton_OpenTEN.Size = New System.Drawing.Size(32, 32)
-        Me.ToolStripButton_OpenTEN.Text = "TEN-Datei öffnen"
+        Me.ToolStripButton_OpenFile.Text = "Datei importieren..."
         '
         'ToolStripSeparator1
         '
@@ -412,7 +396,7 @@ Partial Class Wave
         Me.CheckBox_Uebersicht.AutoSize = True
         Me.CheckBox_Uebersicht.Checked = True
         Me.CheckBox_Uebersicht.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.CheckBox_Uebersicht.Location = New System.Drawing.Point(87, 33)
+        Me.CheckBox_Uebersicht.Location = New System.Drawing.Point(862, 35)
         Me.CheckBox_Uebersicht.Name = "CheckBox_Uebersicht"
         Me.CheckBox_Uebersicht.Size = New System.Drawing.Size(71, 17)
         Me.CheckBox_Uebersicht.TabIndex = 7
@@ -451,10 +435,8 @@ Partial Class Wave
     Friend WithEvents MenuStrip1 As System.Windows.Forms.MenuStrip
     Friend WithEvents DateiToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents MenuItem_OpenFile As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents MenuItem_OpenTEN As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolStrip1 As System.Windows.Forms.ToolStrip
     Friend WithEvents ToolStripButton_OpenFile As System.Windows.Forms.ToolStripButton
-    Friend WithEvents ToolStripButton_OpenTEN As System.Windows.Forms.ToolStripButton
     Friend WithEvents ToolStripSeparator1 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents ToolStripSeparator2 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents MenuItem_Exit As System.Windows.Forms.ToolStripMenuItem
