@@ -124,6 +124,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\pencil.png" />
+    <None Include="Resources\application_split.png" />
     <Content Include="TeeChart.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.VisualBasic.targets" />
