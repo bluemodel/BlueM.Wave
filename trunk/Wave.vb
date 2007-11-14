@@ -35,9 +35,9 @@ Public Class Wave
 
         'Charts einrichten
         '-----------------
-        'Zoom
-        Me.TChart1.Zoom.Direction = Steema.TeeChart.ZoomDirections.Vertical
-        Me.TChart2.Zoom.Active = False
+        'Übersicht darf nicht gescrolled oder gezoomt werden
+        Me.TChart2.Zoom.Allow = False
+        Me.TChart2.Panning.Allow = Steema.TeeChart.ScrollModes.None
 
         'Achsen
         Me.TChart1.Axes.Bottom.Automatic = False
@@ -108,37 +108,69 @@ Public Class Wave
         Call Me.ResizeCharts()
     End Sub
 
-    'Auswahlbereich aktualisieren
-    '****************************
-    Private Sub TChart2_MouseUp1(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles TChart2.MouseUp
-        Me.TChart1.Axes.Bottom.Minimum = Me.colorBand1.Start
-        Me.TChart1.Axes.Bottom.Maximum = Me.colorBand1.End
-    End Sub
+#End Region 'Form behavior
+
+#Region "Chart behvior"
 
     'Größe von Charts anpassen
     '*************************
     Private Sub ResizeCharts()
-        Me.TChart2.Width = Me.SplitContainer1.Panel1.Width
-        Me.TChart2.Height = Me.SplitContainer1.Panel1.Height
-        Me.TChart1.Width = Me.SplitContainer1.Panel2.Width
-        Me.TChart1.Height = Me.SplitContainer1.Panel2.Height
+        Me.TChart2.Width = Me.SplitContainer1.Panel1.Width - 5
+        Me.TChart2.Height = Me.SplitContainer1.Panel1.Height - 5
+        Me.TChart1.Width = Me.SplitContainer1.Panel2.Width - 5
+        Me.TChart1.Height = Me.SplitContainer1.Panel2.Height - 5
     End Sub
 
     'ColorBand einrichten
     '********************
     Private Sub ColorBandEinrichten()
-
         colorBand1 = New Steema.TeeChart.Tools.ColorBand
         Me.TChart2.Tools.Add(colorBand1)
         colorBand1.Axis = Me.TChart2.Axes.Bottom
         colorBand1.Brush.Color = Color.Coral
+        colorBand1.Brush.Transparency = 50
         colorBand1.ResizeEnd = True
         colorBand1.ResizeStart = True
-        colorBand1.Brush.Transparency = 50
-
+        colorBand1.EndLinePen.Visible = False
+        colorBand1.StartLinePen.Visible = False
     End Sub
 
-#End Region 'Form behavior
+    'Cursor für TChart1
+    '******************
+    Private Sub TChart1_MouseDown(ByVal sender As System.Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles TChart1.MouseDown
+        Select Case e.Button
+            Case Windows.Forms.MouseButtons.Right
+                Cursor = Cursors.SizeAll
+            Case Windows.Forms.MouseButtons.Left
+                Cursor = Cursors.Cross
+        End Select
+    End Sub
+
+    Private Sub TChart1_MouseUp(ByVal sender As System.Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles TChart1.MouseUp
+        Cursor = Cursors.Default
+    End Sub
+
+    'TChart1 Scrolled, Zoomed, ZoomUndone
+    '************************************
+    Private Sub TChart1Scrolled(ByVal sender As Object, ByVal e As System.EventArgs) Handles TChart1.Scroll, TChart1.Zoomed, TChart1.UndoneZoom
+        Me.colorBand1.Start = Me.TChart1.Axes.Bottom.Minimum
+        Me.colorBand1.End = Me.TChart1.Axes.Bottom.Maximum
+    End Sub
+
+    'ColorBand Resized
+    '*****************
+    Private Sub TChart2_MouseUp(ByVal sender As System.Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles TChart2.MouseUp
+        Me.TChart1.Axes.Bottom.Minimum = Me.colorBand1.Start
+        Me.TChart1.Axes.Bottom.Maximum = Me.colorBand1.End
+    End Sub
+
+    'TChart2 DoubleClick
+    '*******************
+    Private Sub TChart2_DoubleClick(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TChart2.DoubleClick
+        Me.TChart2.ShowEditor()
+    End Sub
+
+#End Region 'Chart behavior'
 
 #Region "UI"
 
