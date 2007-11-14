@@ -190,9 +190,9 @@ Public Class Wave
 
     'Übersicht an/aus
     '****************
-    Private Sub CheckBox_Übersicht_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ÜbersichtToolStripMenuItem.Click
+    Private Sub Übersicht_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ÜbersichtToolStripButton.Click
 
-        If (ÜbersichtToolStripMenuItem.Checked) Then
+        If (ÜbersichtToolStripButton.Checked) Then
             Me.SplitContainer1.Panel1Collapsed = False
             Call Me.ResizeCharts()
         Else
@@ -245,7 +245,7 @@ Public Class Wave
 
         'Übersicht zurücksetzen und ausblenden (wird bei TEN nicht genutzt)
         Me.TChart2.Clear()
-        Me.ÜbersichtToolStripMenuItem.Checked = False
+        Me.ÜbersichtToolStripButton.Checked = False
 
         'TEN-Datei importieren
         Call TChart1.Import.Template.Load(FileName)
