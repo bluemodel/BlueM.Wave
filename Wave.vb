@@ -9,7 +9,7 @@ Public Class Wave
     'Methoden
     '########
 
-#Region "UI"
+#Region "Form behavior"
 
     'Konstruktor
     '***********
@@ -32,13 +32,7 @@ Public Class Wave
         Me.TChart2.Legend.CheckBoxes = True
 
         'ColorBand einrichten
-        colorBand1 = New Steema.TeeChart.Tools.ColorBand
-        Me.TChart2.Tools.Add(colorBand1)
-        colorBand1.Axis = Me.TChart2.Axes.Bottom
-        colorBand1.Brush.Color = Color.Coral
-        colorBand1.ResizeEnd = True
-        colorBand1.ResizeStart = True
-        colorBand1.Brush.Transparency = 50
+        Call Me.ColorBandEinrichten()
 
     End Sub
 
@@ -90,13 +84,13 @@ Public Class Wave
     'Form Resize
     '***********
     Private Sub Wave_Resize(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Resize
-        Call Me.resizeCharts()
+        Call Me.ResizeCharts()
     End Sub
 
     'Splitter Resize
     '***************
     Private Sub SplitContainer1_SplitterMoved(ByVal sender As Object, ByVal e As System.Windows.Forms.SplitterEventArgs) Handles SplitContainer1.SplitterMoved
-        Call Me.resizeCharts()
+        Call Me.ResizeCharts()
     End Sub
 
     'Auswahlbereich aktualisieren
@@ -106,42 +100,46 @@ Public Class Wave
         Me.TChart1.Axes.Bottom.Maximum = Me.colorBand1.End
     End Sub
 
-    'Übersicht an/aus
-    '****************
-    Private Sub CheckBox_Übersicht_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox_Uebersicht.CheckedChanged
-
-        If (CheckBox_Uebersicht.Checked) Then
-            Me.SplitContainer1.Panel1Collapsed = False
-            Call Me.resizeCharts()
-        Else
-            Me.SplitContainer1.Panel1Collapsed = True
-            Call Me.resizeCharts()
-        End If
-
-    End Sub
-
     'Größe von Charts anpassen
     '*************************
-    Private Sub resizeCharts()
+    Private Sub ResizeCharts()
         Me.TChart2.Width = Me.SplitContainer1.Panel1.Width
         Me.TChart2.Height = Me.SplitContainer1.Panel1.Height
         Me.TChart1.Width = Me.SplitContainer1.Panel2.Width
-        Me.TChart1.Height = Me.SplitContainer1.Panel2.Height - 34 'Höhe vom Commander
+        Me.TChart1.Height = Me.SplitContainer1.Panel2.Height
     End Sub
 
-    'Form schliessen
-    '***************
-    Private Sub MenuItem_Exit_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuItem_Exit.Click
-        Me.Close()
+    'ColorBand einrichten
+    '********************
+    Private Sub ColorBandEinrichten()
+
+        colorBand1 = New Steema.TeeChart.Tools.ColorBand
+        Me.TChart2.Tools.Add(colorBand1)
+        colorBand1.Axis = Me.TChart2.Axes.Bottom
+        colorBand1.Brush.Color = Color.Coral
+        colorBand1.ResizeEnd = True
+        colorBand1.ResizeStart = True
+        colorBand1.Brush.Transparency = 50
+
     End Sub
 
-#End Region 'UI
+#End Region 'Form behavior
 
-#Region "Funktionalität"
+#Region "UI"
 
-    'Datei öffnen Dialog anzeigen
-    '****************************
-    Private Sub Import_File_Dialog(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_OpenFile.Click, MenuItem_OpenFile.Click
+    'Neu
+    '***
+    Private Sub Neu(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles NeuToolStripButton.Click
+
+        Me.TChart1.Clear()
+        Me.TChart2.Clear()
+        Call ColorBandEinrichten()
+
+    End Sub
+
+    'Öffnen
+    '******
+    Private Sub Öffnen(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ÖffnenToolStripButton.Click
 
         If (Me.OpenFileDialog1.ShowDialog() = Windows.Forms.DialogResult.OK) Then
             Call Me.Import_File(Me.OpenFileDialog1.FileName)
@@ -149,8 +147,66 @@ Public Class Wave
 
     End Sub
 
-    'Datei als Zeitreihe importieren
-    '*******************************
+    'Editieren
+    '*********
+    Private Sub Editieren(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles EditToolStripButton.Click
+
+        Call Me.TChart1.ShowEditor()
+
+    End Sub
+
+    'Speichern
+    '*********
+    Private Sub Speichern(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles SpeichernToolStripButton.Click
+
+        Call Me.TChart2.Export.ShowExportDialog()
+
+    End Sub
+
+    'Drucken
+    '*******
+    Private Sub Drucken(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles DruckenToolStripButton.Click
+
+        Call Me.TChart1.Printer.Preview()
+
+    End Sub
+
+    'Kopieren (als PNG)
+    '******************
+    Private Sub Kopieren(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles KopierenToolStripButton.Click
+
+        Call Me.TChart1.Export.Image.PNG.CopyToClipboard()
+
+    End Sub
+
+    'Hilfe
+    '*****
+    Private Sub Hilfe(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles HilfeToolStripButton.Click
+
+        Call Process.Start("http://130.83.196.154/BlueM/wiki/index.php/Wave")
+
+    End Sub
+
+    'Übersicht an/aus
+    '****************
+    Private Sub CheckBox_Übersicht_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox_Uebersicht.CheckedChanged
+
+        If (CheckBox_Uebersicht.Checked) Then
+            Me.SplitContainer1.Panel1Collapsed = False
+            Call Me.ResizeCharts()
+        Else
+            Me.SplitContainer1.Panel1Collapsed = True
+            Call Me.ResizeCharts()
+        End If
+
+    End Sub
+
+#End Region 'UI
+
+#Region "Funktionalität"
+
+    'Datei importieren
+    '*****************
     Friend Sub Import_File(ByVal file As String)
 
         Select Case Path.GetExtension(file).ToUpper()

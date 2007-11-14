@@ -120,10 +120,10 @@
       <DependentUpon>ImportDiag.vb</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\chart_line_add.png" />
     <EmbeddedResource Include="Resources\Wave.ico" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\pencil.png" />
     <Content Include="TeeChart.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.VisualBasic.targets" />
