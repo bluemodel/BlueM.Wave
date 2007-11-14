@@ -2,9 +2,24 @@ Imports System.IO
 
 Public Class Wave
 
+    '*******************************************************************************
+    '*******************************************************************************
+    '**** Klasse Wave                                                           ****
+    '****                                                                       ****
+    '**** Tool zur Darstellung von Zeitreihen in TeeChart                       ****
+    '****                                                                       ****
+    '**** Autoren: Michael Bach, Felix Froehlich,                               ****
+    '****          Dirk Muschalla, Christoph Hübner                             ****
+    '****                                                                       ****
+    '**** Fachgebiet Ingenieurhydrologie und Wasserbewirtschaftung              ****
+    '**** TU Darmstadt                                                          ****
+    '*******************************************************************************
+    '*******************************************************************************
+
     'Eigenschaften
     '#############
     Private WithEvents colorBand1 As Steema.TeeChart.Tools.ColorBand
+    Private Const HelpURL As String = "http://130.83.196.154/BlueM/wiki/index.php/Wave"
 
     'Methoden
     '########
@@ -130,68 +145,54 @@ Public Class Wave
     'Neu
     '***
     Private Sub Neu(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles NeuToolStripButton.Click
-
         Me.TChart1.Clear()
         Me.TChart2.Clear()
         Call ColorBandEinrichten()
-
     End Sub
 
     'Öffnen
     '******
     Private Sub Öffnen(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ÖffnenToolStripButton.Click
-
         If (Me.OpenFileDialog1.ShowDialog() = Windows.Forms.DialogResult.OK) Then
             Call Me.Import_File(Me.OpenFileDialog1.FileName)
         End If
-
     End Sub
 
     'Editieren
     '*********
     Private Sub Editieren(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles EditToolStripButton.Click
-
         Call Me.TChart1.ShowEditor()
-
     End Sub
 
     'Speichern
     '*********
     Private Sub Speichern(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles SpeichernToolStripButton.Click
-
         Call Me.TChart2.Export.ShowExportDialog()
-
     End Sub
 
     'Drucken
     '*******
     Private Sub Drucken(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles DruckenToolStripButton.Click
-
         Call Me.TChart1.Printer.Preview()
-
     End Sub
 
     'Kopieren (als PNG)
     '******************
     Private Sub Kopieren(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles KopierenToolStripButton.Click
-
         Call Me.TChart1.Export.Image.PNG.CopyToClipboard()
-
     End Sub
 
     'Hilfe
     '*****
     Private Sub Hilfe(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles HilfeToolStripButton.Click
-
-        Call Process.Start("http://130.83.196.154/BlueM/wiki/index.php/Wave")
-
+        Call Process.Start(HelpURL)
     End Sub
 
     'Übersicht an/aus
     '****************
-    Private Sub CheckBox_Übersicht_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox_Uebersicht.CheckedChanged
+    Private Sub CheckBox_Übersicht_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ÜbersichtToolStripMenuItem.Click
 
-        If (CheckBox_Uebersicht.Checked) Then
+        If (ÜbersichtToolStripMenuItem.Checked) Then
             Me.SplitContainer1.Panel1Collapsed = False
             Call Me.ResizeCharts()
         Else
@@ -244,7 +245,7 @@ Public Class Wave
 
         'Übersicht zurücksetzen und ausblenden (wird bei TEN nicht genutzt)
         Me.TChart2.Clear()
-        Me.CheckBox_Uebersicht.Checked = False
+        Me.ÜbersichtToolStripMenuItem.Checked = False
 
         'TEN-Datei importieren
         Call TChart1.Import.Template.Load(FileName)
