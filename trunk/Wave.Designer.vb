@@ -22,45 +22,28 @@ Partial Class Wave
     'Das Bearbeiten mit dem Code-Editor ist nicht möglich.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-        Me.components = New System.ComponentModel.Container
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Wave))
-        Me.Commander1 = New Steema.TeeChart.Commander
         Me.TChart1 = New Steema.TeeChart.TChart
         Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog
-        Me.MenuStrip1 = New System.Windows.Forms.MenuStrip
-        Me.DateiToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem
-        Me.MenuItem_OpenFile = New System.Windows.Forms.ToolStripMenuItem
-        Me.ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator
-        Me.MenuItem_Exit = New System.Windows.Forms.ToolStripMenuItem
         Me.ToolStrip1 = New System.Windows.Forms.ToolStrip
-        Me.ToolStripButton_OpenFile = New System.Windows.Forms.ToolStripButton
-        Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator
+        Me.NeuToolStripButton = New System.Windows.Forms.ToolStripButton
+        Me.ÖffnenToolStripButton = New System.Windows.Forms.ToolStripButton
+        Me.EditToolStripButton = New System.Windows.Forms.ToolStripButton
+        Me.SpeichernToolStripButton = New System.Windows.Forms.ToolStripButton
+        Me.DruckenToolStripButton = New System.Windows.Forms.ToolStripButton
+        Me.toolStripSeparator = New System.Windows.Forms.ToolStripSeparator
+        Me.KopierenToolStripButton = New System.Windows.Forms.ToolStripButton
+        Me.toolStripSeparator3 = New System.Windows.Forms.ToolStripSeparator
+        Me.HilfeToolStripButton = New System.Windows.Forms.ToolStripButton
         Me.DateTimePicker1 = New System.Windows.Forms.DateTimePicker
         Me.SplitContainer1 = New System.Windows.Forms.SplitContainer
         Me.TChart2 = New Steema.TeeChart.TChart
         Me.CheckBox_Uebersicht = New System.Windows.Forms.CheckBox
-        Me.MenuStrip1.SuspendLayout()
         Me.ToolStrip1.SuspendLayout()
         Me.SplitContainer1.Panel1.SuspendLayout()
         Me.SplitContainer1.Panel2.SuspendLayout()
         Me.SplitContainer1.SuspendLayout()
         Me.SuspendLayout()
-        '
-        'Commander1
-        '
-        Me.Commander1.Appearance = System.Windows.Forms.ToolBarAppearance.Flat
-        Me.Commander1.AutoSize = False
-        Me.Commander1.ButtonSize = New System.Drawing.Size(32, 32)
-        Me.Commander1.Chart = Me.TChart1
-        Me.Commander1.Divider = False
-        Me.Commander1.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.Commander1.DropDownArrows = True
-        Me.Commander1.LabelValues = True
-        Me.Commander1.Location = New System.Drawing.Point(0, 446)
-        Me.Commander1.Name = "Commander1"
-        Me.Commander1.ShowToolTips = True
-        Me.Commander1.Size = New System.Drawing.Size(941, 34)
-        Me.Commander1.TabIndex = 2
         '
         'TChart1
         '
@@ -177,76 +160,94 @@ Partial Class Wave
         'OpenFileDialog1
         '
         Me.OpenFileDialog1.DefaultExt = "txt"
-        Me.OpenFileDialog1.Filter = "Text-Dateien (*.txt)|*.txt|" & _
-            "SMUSI-Dateien (*.asc)|*.asc|" & _
-            "ZRE-Dateien (*.zre)|*.zre|" & _
-            "CSV-Dateien (*.csv)|*.csv|" & _
-            "WEL-Dateien (*.wel, *.kwl)|*.wel;*.kwl|" & _
-            "TeeChart-Dateien (*.ten)|*.ten|" & _
-            "Alle Dateien (*.*)|*.*"
+        Me.OpenFileDialog1.Filter = "Text-Dateien (*.txt)|*.txt|SMUSI-Dateien (*.asc)|*.asc|ZRE-Dateien (*.zre)|*.zre|" & _
+            "CSV-Dateien (*.csv)|*.csv|WEL-Dateien (*.wel, *.kwl)|*.wel;*.kwl|TeeChart-Dateie" & _
+            "n (*.ten)|*.ten|Alle Dateien (*.*)|*.*"
         Me.OpenFileDialog1.Title = "Datei importieren"
-        '
-        'MenuStrip1
-        '
-        Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.DateiToolStripMenuItem})
-        Me.MenuStrip1.Location = New System.Drawing.Point(0, 0)
-        Me.MenuStrip1.Name = "MenuStrip1"
-        Me.MenuStrip1.Size = New System.Drawing.Size(945, 24)
-        Me.MenuStrip1.TabIndex = 0
-        Me.MenuStrip1.Text = "MenuStrip1"
-        '
-        'DateiToolStripMenuItem
-        '
-        Me.DateiToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.MenuItem_OpenFile, Me.ToolStripSeparator2, Me.MenuItem_Exit})
-        Me.DateiToolStripMenuItem.Name = "DateiToolStripMenuItem"
-        Me.DateiToolStripMenuItem.ShortcutKeys = CType((System.Windows.Forms.Keys.Alt Or System.Windows.Forms.Keys.D), System.Windows.Forms.Keys)
-        Me.DateiToolStripMenuItem.Size = New System.Drawing.Size(44, 20)
-        Me.DateiToolStripMenuItem.Text = "Datei"
-        '
-        'MenuItem_OpenFile
-        '
-        Me.MenuItem_OpenFile.Image = Global.Wave.My.Resources.Resources.chart_line_add
-        Me.MenuItem_OpenFile.Name = "MenuItem_OpenFile"
-        Me.MenuItem_OpenFile.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.O), System.Windows.Forms.Keys)
-        Me.MenuItem_OpenFile.Size = New System.Drawing.Size(222, 22)
-        Me.MenuItem_OpenFile.Text = "Datei importieren..."
-        '
-        'ToolStripSeparator2
-        '
-        Me.ToolStripSeparator2.Name = "ToolStripSeparator2"
-        Me.ToolStripSeparator2.Size = New System.Drawing.Size(219, 6)
-        '
-        'MenuItem_Exit
-        '
-        Me.MenuItem_Exit.Name = "MenuItem_Exit"
-        Me.MenuItem_Exit.Size = New System.Drawing.Size(222, 22)
-        Me.MenuItem_Exit.Text = "Schließen"
         '
         'ToolStrip1
         '
         Me.ToolStrip1.AutoSize = False
         Me.ToolStrip1.BackColor = System.Drawing.SystemColors.Control
-        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButton_OpenFile, Me.ToolStripSeparator1})
-        Me.ToolStrip1.Location = New System.Drawing.Point(0, 24)
+        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.NeuToolStripButton, Me.ÖffnenToolStripButton, Me.EditToolStripButton, Me.SpeichernToolStripButton, Me.DruckenToolStripButton, Me.toolStripSeparator, Me.KopierenToolStripButton, Me.toolStripSeparator3, Me.HilfeToolStripButton})
+        Me.ToolStrip1.Location = New System.Drawing.Point(0, 0)
         Me.ToolStrip1.Name = "ToolStrip1"
         Me.ToolStrip1.Size = New System.Drawing.Size(945, 34)
         Me.ToolStrip1.TabIndex = 1
         Me.ToolStrip1.Text = "ToolStrip1"
         '
-        'ToolStripButton_OpenFile
+        'NeuToolStripButton
         '
-        Me.ToolStripButton_OpenFile.AutoSize = False
-        Me.ToolStripButton_OpenFile.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.ToolStripButton_OpenFile.Image = Global.Wave.My.Resources.Resources.chart_line_add
-        Me.ToolStripButton_OpenFile.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.ToolStripButton_OpenFile.Name = "ToolStripButton_OpenFile"
-        Me.ToolStripButton_OpenFile.Size = New System.Drawing.Size(32, 32)
-        Me.ToolStripButton_OpenFile.Text = "Datei importieren..."
+        Me.NeuToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.NeuToolStripButton.Image = CType(resources.GetObject("NeuToolStripButton.Image"), System.Drawing.Image)
+        Me.NeuToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.NeuToolStripButton.Name = "NeuToolStripButton"
+        Me.NeuToolStripButton.Size = New System.Drawing.Size(23, 31)
+        Me.NeuToolStripButton.Text = "&Neu"
         '
-        'ToolStripSeparator1
+        'ÖffnenToolStripButton
         '
-        Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
-        Me.ToolStripSeparator1.Size = New System.Drawing.Size(6, 34)
+        Me.ÖffnenToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.ÖffnenToolStripButton.Image = CType(resources.GetObject("ÖffnenToolStripButton.Image"), System.Drawing.Image)
+        Me.ÖffnenToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ÖffnenToolStripButton.Name = "ÖffnenToolStripButton"
+        Me.ÖffnenToolStripButton.Size = New System.Drawing.Size(23, 31)
+        Me.ÖffnenToolStripButton.Text = "Ö&ffnen"
+        '
+        'EditToolStripButton
+        '
+        Me.EditToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.EditToolStripButton.Image = Global.Wave.My.Resources.Resources.pencil
+        Me.EditToolStripButton.ImageTransparentColor = System.Drawing.SystemColors.Control
+        Me.EditToolStripButton.Name = "EditToolStripButton"
+        Me.EditToolStripButton.Size = New System.Drawing.Size(23, 31)
+        Me.EditToolStripButton.Text = "Bearbeiten"
+        '
+        'SpeichernToolStripButton
+        '
+        Me.SpeichernToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.SpeichernToolStripButton.Image = CType(resources.GetObject("SpeichernToolStripButton.Image"), System.Drawing.Image)
+        Me.SpeichernToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.SpeichernToolStripButton.Name = "SpeichernToolStripButton"
+        Me.SpeichernToolStripButton.Size = New System.Drawing.Size(23, 31)
+        Me.SpeichernToolStripButton.Text = "&Speichern"
+        '
+        'DruckenToolStripButton
+        '
+        Me.DruckenToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.DruckenToolStripButton.Image = CType(resources.GetObject("DruckenToolStripButton.Image"), System.Drawing.Image)
+        Me.DruckenToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.DruckenToolStripButton.Name = "DruckenToolStripButton"
+        Me.DruckenToolStripButton.Size = New System.Drawing.Size(23, 31)
+        Me.DruckenToolStripButton.Text = "&Drucken"
+        '
+        'toolStripSeparator
+        '
+        Me.toolStripSeparator.Name = "toolStripSeparator"
+        Me.toolStripSeparator.Size = New System.Drawing.Size(6, 34)
+        '
+        'KopierenToolStripButton
+        '
+        Me.KopierenToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.KopierenToolStripButton.Image = CType(resources.GetObject("KopierenToolStripButton.Image"), System.Drawing.Image)
+        Me.KopierenToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.KopierenToolStripButton.Name = "KopierenToolStripButton"
+        Me.KopierenToolStripButton.Size = New System.Drawing.Size(23, 31)
+        Me.KopierenToolStripButton.Text = "&Kopieren (PNG)"
+        '
+        'toolStripSeparator3
+        '
+        Me.toolStripSeparator3.Name = "toolStripSeparator3"
+        Me.toolStripSeparator3.Size = New System.Drawing.Size(6, 34)
+        '
+        'HilfeToolStripButton
+        '
+        Me.HilfeToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.HilfeToolStripButton.Image = CType(resources.GetObject("HilfeToolStripButton.Image"), System.Drawing.Image)
+        Me.HilfeToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.HilfeToolStripButton.Name = "HilfeToolStripButton"
+        Me.HilfeToolStripButton.Size = New System.Drawing.Size(23, 31)
+        Me.HilfeToolStripButton.Text = "Hi&lfe"
         '
         'DateTimePicker1
         '
@@ -259,7 +260,7 @@ Partial Class Wave
         '
         Me.SplitContainer1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.SplitContainer1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.SplitContainer1.Location = New System.Drawing.Point(0, 58)
+        Me.SplitContainer1.Location = New System.Drawing.Point(0, 34)
         Me.SplitContainer1.Name = "SplitContainer1"
         Me.SplitContainer1.Orientation = System.Windows.Forms.Orientation.Horizontal
         '
@@ -271,10 +272,9 @@ Partial Class Wave
         'SplitContainer1.Panel2
         '
         Me.SplitContainer1.Panel2.Controls.Add(Me.TChart1)
-        Me.SplitContainer1.Panel2.Controls.Add(Me.Commander1)
         Me.SplitContainer1.Panel2MinSize = 100
-        Me.SplitContainer1.Size = New System.Drawing.Size(945, 602)
-        Me.SplitContainer1.SplitterDistance = 114
+        Me.SplitContainer1.Size = New System.Drawing.Size(945, 626)
+        Me.SplitContainer1.SplitterDistance = 118
         Me.SplitContainer1.TabIndex = 6
         '
         'TChart2
@@ -396,11 +396,11 @@ Partial Class Wave
         Me.CheckBox_Uebersicht.AutoSize = True
         Me.CheckBox_Uebersicht.Checked = True
         Me.CheckBox_Uebersicht.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.CheckBox_Uebersicht.Location = New System.Drawing.Point(862, 35)
+        Me.CheckBox_Uebersicht.Location = New System.Drawing.Point(816, 11)
         Me.CheckBox_Uebersicht.Name = "CheckBox_Uebersicht"
-        Me.CheckBox_Uebersicht.Size = New System.Drawing.Size(71, 17)
+        Me.CheckBox_Uebersicht.Size = New System.Drawing.Size(117, 17)
         Me.CheckBox_Uebersicht.TabIndex = 7
-        Me.CheckBox_Uebersicht.Text = "Übersicht"
+        Me.CheckBox_Uebersicht.Text = "Übersicht anzeigen"
         Me.CheckBox_Uebersicht.UseVisualStyleBackColor = True
         '
         'Wave
@@ -410,17 +410,13 @@ Partial Class Wave
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.SystemColors.Control
         Me.ClientSize = New System.Drawing.Size(945, 660)
-        Me.Controls.Add(Me.CheckBox_Uebersicht)
         Me.Controls.Add(Me.SplitContainer1)
         Me.Controls.Add(Me.DateTimePicker1)
+        Me.Controls.Add(Me.CheckBox_Uebersicht)
         Me.Controls.Add(Me.ToolStrip1)
-        Me.Controls.Add(Me.MenuStrip1)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
-        Me.MainMenuStrip = Me.MenuStrip1
         Me.Name = "Wave"
         Me.Text = "Wave"
-        Me.MenuStrip1.ResumeLayout(False)
-        Me.MenuStrip1.PerformLayout()
         Me.ToolStrip1.ResumeLayout(False)
         Me.ToolStrip1.PerformLayout()
         Me.SplitContainer1.Panel1.ResumeLayout(False)
@@ -430,20 +426,21 @@ Partial Class Wave
         Me.PerformLayout()
 
     End Sub
-    Friend WithEvents Commander1 As Steema.TeeChart.Commander
     Friend WithEvents OpenFileDialog1 As System.Windows.Forms.OpenFileDialog
-    Friend WithEvents MenuStrip1 As System.Windows.Forms.MenuStrip
-    Friend WithEvents DateiToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents MenuItem_OpenFile As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolStrip1 As System.Windows.Forms.ToolStrip
-    Friend WithEvents ToolStripButton_OpenFile As System.Windows.Forms.ToolStripButton
-    Friend WithEvents ToolStripSeparator1 As System.Windows.Forms.ToolStripSeparator
-    Friend WithEvents ToolStripSeparator2 As System.Windows.Forms.ToolStripSeparator
-    Friend WithEvents MenuItem_Exit As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents DateTimePicker1 As System.Windows.Forms.DateTimePicker
     Friend WithEvents SplitContainer1 As System.Windows.Forms.SplitContainer
     Public WithEvents TChart2 As Steema.TeeChart.TChart
     Public WithEvents TChart1 As Steema.TeeChart.TChart
     Friend WithEvents CheckBox_Uebersicht As System.Windows.Forms.CheckBox
+    Friend WithEvents NeuToolStripButton As System.Windows.Forms.ToolStripButton
+    Friend WithEvents ÖffnenToolStripButton As System.Windows.Forms.ToolStripButton
+    Friend WithEvents SpeichernToolStripButton As System.Windows.Forms.ToolStripButton
+    Friend WithEvents DruckenToolStripButton As System.Windows.Forms.ToolStripButton
+    Friend WithEvents toolStripSeparator As System.Windows.Forms.ToolStripSeparator
+    Friend WithEvents KopierenToolStripButton As System.Windows.Forms.ToolStripButton
+    Friend WithEvents toolStripSeparator3 As System.Windows.Forms.ToolStripSeparator
+    Friend WithEvents HilfeToolStripButton As System.Windows.Forms.ToolStripButton
+    Friend WithEvents EditToolStripButton As System.Windows.Forms.ToolStripButton
 
 End Class
