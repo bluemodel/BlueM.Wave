@@ -134,10 +134,10 @@ Partial Class Wave
         '
         '
         Me.TChart1.Legend.Title.Pen.Visible = False
-        Me.TChart1.Location = New System.Drawing.Point(-2, -8)
+        Me.TChart1.Location = New System.Drawing.Point(0, 0)
         Me.TChart1.Name = "TChart1"
         Me.TChart1.Size = New System.Drawing.Size(945, 190)
-        Me.TChart1.TabIndex = 4
+        Me.TChart1.TabIndex = 0
         '
         '
         '
@@ -174,7 +174,7 @@ Partial Class Wave
         Me.ToolStrip1.Location = New System.Drawing.Point(0, 0)
         Me.ToolStrip1.Name = "ToolStrip1"
         Me.ToolStrip1.Size = New System.Drawing.Size(945, 34)
-        Me.ToolStrip1.TabIndex = 1
+        Me.ToolStrip1.TabIndex = 0
         Me.ToolStrip1.Text = "ToolStrip1"
         '
         'NeuToolStripButton
@@ -272,7 +272,7 @@ Partial Class Wave
         Me.DateTimePicker1.Location = New System.Drawing.Point(12, 64)
         Me.DateTimePicker1.Name = "DateTimePicker1"
         Me.DateTimePicker1.Size = New System.Drawing.Size(195, 20)
-        Me.DateTimePicker1.TabIndex = 4
+        Me.DateTimePicker1.TabIndex = 2
         '
         'SplitContainer1
         '
@@ -293,7 +293,7 @@ Partial Class Wave
         Me.SplitContainer1.Panel2MinSize = 100
         Me.SplitContainer1.Size = New System.Drawing.Size(945, 626)
         Me.SplitContainer1.SplitterDistance = 118
-        Me.SplitContainer1.TabIndex = 6
+        Me.SplitContainer1.TabIndex = 1
         '
         'TChart2
         '
@@ -385,10 +385,10 @@ Partial Class Wave
         '
         '
         Me.TChart2.Legend.Title.Pen.Visible = False
-        Me.TChart2.Location = New System.Drawing.Point(-2, -2)
+        Me.TChart2.Location = New System.Drawing.Point(0, 0)
         Me.TChart2.Name = "TChart2"
         Me.TChart2.Size = New System.Drawing.Size(942, 106)
-        Me.TChart2.TabIndex = 6
+        Me.TChart2.TabIndex = 0
         '
         '
         '
