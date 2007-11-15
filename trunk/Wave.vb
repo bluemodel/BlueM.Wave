@@ -19,6 +19,8 @@ Public Class Wave
     'Eigenschaften
     '#############
     Private WithEvents colorBand1 As Steema.TeeChart.Tools.ColorBand
+    Private selectionMade As Boolean									'Flag zeigt an, ob bereits ein Auswahlbereich ausgewählt wurde
+    
     Private Const HelpURL As String = "http://130.83.196.154/BlueM/wiki/index.php/Wave"
 
     'Methoden
@@ -47,6 +49,7 @@ Public Class Wave
         Me.TChart2.Legend.CheckBoxes = True
 
         'ColorBand einrichten
+        Me.selectionMade = False
         Call Me.ColorBandEinrichten()
 
     End Sub
@@ -135,6 +138,41 @@ Public Class Wave
         colorBand1.StartLinePen.Visible = False
     End Sub
 
+    'Charts aktualisieren
+    '********************
+    Private Sub UpdateCharts()
+
+        Dim i, AnzSerien As Integer
+
+        AnzSerien = Me.TChart1.Series.Count()
+
+        'kleinsten und größten X-Wert bestimmen
+        Dim Xmin, Xmax, tmpXmin, tmpXmax As DateTime
+        Xmin = Date.FromOADate(Me.TChart1.Series(0).MinXValue)
+        Xmax = Date.FromOADate(Me.TChart1.Series(0).MaxXValue)
+        For i = 1 To AnzSerien - 1
+            tmpXmin = Date.FromOADate(Me.TChart1.Series(i).MinXValue)
+            tmpXmax = Date.FromOADate(Me.TChart1.Series(i).MaxXValue)
+            If (tmpXmin < Xmin) Then Xmin = tmpXmin
+            If (tmpXmax > Xmax) Then Xmax = tmpXmax
+        Next
+
+        'Übersicht neu skalieren
+        Me.TChart2.Axes.Bottom.Minimum = Xmin.ToOADate()
+        Me.TChart2.Axes.Bottom.Maximum = Xmax.ToOADate()
+
+        If (Not Me.selectionMade) Then
+            'Alles auswählen
+            colorBand1.Start = Me.TChart2.Axes.Bottom.Minimum
+            colorBand1.End = Me.TChart2.Axes.Bottom.Maximum
+        End If
+
+        'Hauptdiagramm neu skalieren
+        Me.TChart1.Axes.Bottom.Minimum = colorBand1.Start
+        Me.TChart1.Axes.Bottom.Maximum = colorBand1.End
+
+    End Sub
+
     'Cursor für TChart1
     '******************
     Private Sub TChart1_MouseDown(ByVal sender As System.Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles TChart1.MouseDown
@@ -155,6 +193,7 @@ Public Class Wave
     Private Sub TChart1Scrolled(ByVal sender As Object, ByVal e As System.EventArgs) Handles TChart1.Scroll, TChart1.Zoomed, TChart1.UndoneZoom
         Me.colorBand1.Start = Me.TChart1.Axes.Bottom.Minimum
         Me.colorBand1.End = Me.TChart1.Axes.Bottom.Maximum
+        Me.selectionMade = True
     End Sub
 
     'ColorBand Resized
@@ -162,6 +201,7 @@ Public Class Wave
     Private Sub TChart2_MouseUp(ByVal sender As System.Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles TChart2.MouseUp
         Me.TChart1.Axes.Bottom.Minimum = Me.colorBand1.Start
         Me.TChart1.Axes.Bottom.Maximum = Me.colorBand1.End
+        Me.selectionMade = True
     End Sub
 
     'TChart2 DoubleClick
@@ -275,12 +315,19 @@ Public Class Wave
             If (Not res = Windows.Forms.DialogResult.OK) Then Exit Sub
         End If
 
-        'Übersicht zurücksetzen und ausblenden (wird bei TEN nicht genutzt)
-        Me.TChart2.Clear()
-        Me.ÜbersichtToolStripButton.Checked = False
-
         'TEN-Datei importieren
         Call TChart1.Import.Template.Load(FileName)
+        Call TChart2.Import.Template.Load(FileName)
+        
+        'Übersicht anpassen
+        TChart2.Header.Visible = False
+
+        'ColorBand neu einrichten (geht bei TEN-Import verloren)
+        Call Me.ColorBandEinrichten()
+
+        'Charts aktualisieren
+        Me.selectionMade = False
+        Call Me.UpdateCharts()
 
     End Sub
 
@@ -398,8 +445,6 @@ Public Class Wave
     '***********************
     Public Sub Display_Series(ByVal zre As Zeitreihe)
 
-        Dim i As Integer
-
         'Linien instanzieren
         Dim Line1 As New Steema.TeeChart.Styles.Line(Me.TChart1.Chart)
         Dim Line2 As New Steema.TeeChart.Styles.Line(Me.TChart2.Chart)
@@ -419,32 +464,8 @@ Public Class Wave
         Me.TChart1.Chart.Series(AnzahlSerien - 1).Add(zre.XWerte, zre.YWerte)
         Me.TChart2.Chart.Series(AnzahlSerien - 1).Add(zre.XWerte, zre.YWerte)
 
-        'Anzeigebereich anpassen
-        '-----------------------
-        'kleinsten und größten X-Wert bestimmen
-        Dim Xmin, Xmax, tmpXmin, tmpXmax As DateTime
-        Xmin = Date.FromOADate(Me.TChart1.Series(0).MinXValue)
-        Xmax = Date.FromOADate(Me.TChart1.Series(0).MaxXValue)
-        For i = 1 To AnzahlSerien - 1
-            tmpXmin = Date.FromOADate(Me.TChart1.Series(i).MinXValue)
-            tmpXmax = Date.FromOADate(Me.TChart1.Series(i).MaxXValue)
-            If (tmpXmin < Xmin) Then Xmin = tmpXmin
-            If (tmpXmax > Xmax) Then Xmax = tmpXmax
-        Next
-
-        'Übersicht neu skalieren
-        Me.TChart2.Axes.Bottom.Minimum = Xmin.ToOADate()
-        Me.TChart2.Axes.Bottom.Maximum = Xmax.ToOADate()
-
-        'Auswahlbereich skalieren (nur bei der ersten hinzugefügten Serie)
-        If (AnzahlSerien = 1) Then
-            colorBand1.Start = Me.TChart2.Axes.Bottom.Minimum
-            colorBand1.End = Me.TChart2.Axes.Bottom.Maximum
-        End If
-
-        'Hauptdiagramm neu skalieren
-        Me.TChart1.Axes.Bottom.Minimum = colorBand1.Start
-        Me.TChart1.Axes.Bottom.Maximum = colorBand1.End
+        'Charts aktualisieren
+        Call Me.UpdateCharts()
 
     End Sub
 
