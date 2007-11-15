@@ -32,6 +32,7 @@
     <DocumentationFile>
     </DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -125,7 +126,7 @@
   <ItemGroup>
     <None Include="Resources\pencil.png" />
     <None Include="Resources\application_split.png" />
-    <Content Include="TeeChart.dll" />
+    <None Include="Resources\TeeChart.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
