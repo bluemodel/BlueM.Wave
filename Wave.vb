@@ -239,7 +239,7 @@ Public Class Wave
     'Speichern
     '*********
     Private Sub Speichern(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles SpeichernToolStripButton.Click
-        Call Me.TChart2.Export.ShowExportDialog()
+        Call Me.TChart1.Export.ShowExportDialog()
     End Sub
 
     'Drucken
