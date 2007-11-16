@@ -232,7 +232,7 @@ Public Class Wave
 
     'Editieren
     '*********
-    Private Sub Editieren(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles EditToolStripButton.Click
+    Private Sub Editieren(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles EditToolStripButton.Click, TChart1.DoubleClick
         Call Me.TChart1.ShowEditor()
     End Sub
 
