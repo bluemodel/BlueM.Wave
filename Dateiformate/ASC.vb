@@ -104,6 +104,7 @@ Public Class ASC
 
         Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
         Dim StrRead As StreamReader = New StreamReader(FiStr, System.Text.Encoding.GetEncoding("iso8859-1"))
+        Dim StrReadSync = TextReader.Synchronized(StrRead)
 
         'SMUSI gibt immer Punkt als Dezimalseperator aus, convert.todouble(String, IFormatProvider) erlaubt eeine
         'von den L‰ndereinstellungen unabh‰ngige Konvertierung
@@ -145,7 +146,7 @@ Public Class ASC
         'Auf Anfang setzten
         FiStr.Seek(0, SeekOrigin.Begin)
         'Kopfzeilen ‹berspringen
-        For i = 1 To Me.nZeilenHeader
+        For i = 1 To Me.nZeilenHeader + 1
             StrRead.ReadLine()
         Next
         'Einlesen
@@ -174,7 +175,7 @@ Public Class ASC
             Else
                 'Eine Zeile mit Werten wird eingelesen
                 'Erste Spalte: Datum_Zeit
-                tmpXWerte(i) = New System.DateTime(Werte(0).Substring(6, 4), Werte(0).Substring(3, 2), Werte(0).Substring(0, 2), Werte(1).Substring(0, 2), Werte(1).Substring(3, 2), 0, New System.Globalization.GregorianCalendar())
+                tmpXWerte(i) = New System.DateTime(Werte(0).Substring(7, 4), Werte(0).Substring(4, 2), Werte(0).Substring(1, 2), Werte(1).Substring(0, 2), Werte(1).Substring(3, 2), 0, New System.Globalization.GregorianCalendar())
                 If Not Ereignisende Then
                     If Not (tmpXWerte(i - 1).AddMinutes(5) = tmpXWerte(i)) Then
                         tmpXWerte(i + 1) = tmpXWerte(i)
@@ -219,6 +220,7 @@ Public Class ASC
         Next
 
         'Datei schlieﬂen
+        StrReadSync.Close()
         StrRead.Close()
         FiStr.Close()
 
