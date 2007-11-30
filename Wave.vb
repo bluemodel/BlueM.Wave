@@ -398,6 +398,22 @@ Public Class Wave
 
     End Sub
 
+    Public Sub Select_ASC(ByVal Workdir As String)
+
+        Dim FileName As String
+
+        OpenFileDialog1.FilterIndex = 2
+        OpenFileDialog1.InitialDirectory = Workdir
+
+        If OpenFileDialog1.ShowDialog() = Windows.Forms.DialogResult.OK Then
+            FileName = OpenFileDialog1.FileName
+            If Not (FileName Is Nothing) Then
+                Call Import_ASC(FileName)
+            End If
+        End If
+
+    End Sub
+
     'CSV-Datei importieren
     '*********************
     Public Sub Import_CSV(ByVal FileName As String)
