@@ -1,3 +1,5 @@
+Imports System.Globalization
+
 Public MustInherit Class Dateiformat
 
     'oft verwendete Zeichen (quasi Konstanten)
@@ -29,6 +31,8 @@ Public MustInherit Class Dateiformat
     Private _spaltenSel() As String = {}                'Array der ausgewählten Y-Spaltennamen
 
     Public ImportDiag As ImportDiag
+
+    Protected FortranProvider As NumberFormatInfo       'Zahlenformatierungsanweisung für Fortran
 
 #End Region 'Eigenschaften
 
@@ -179,6 +183,12 @@ Public MustInherit Class Dateiformat
 
         'Dateinamen setzen
         Me.File = FileName
+
+        'Provider einrichten
+        FortranProvider = New NumberFormatInfo()
+        FortranProvider.NumberDecimalSeparator = "."
+        FortranProvider.NumberGroupSeparator = ""
+        FortranProvider.NumberGroupSizes = New Integer() {3}
 
     End Sub
 

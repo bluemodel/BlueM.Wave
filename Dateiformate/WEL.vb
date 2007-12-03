@@ -161,7 +161,7 @@ Public Class WEL
                     n = 0
                     For j = 0 To Me.YSpalten.GetUpperBound(0)
                         If (isSelected(Me.YSpalten(j))) Then
-                            Me.Zeitreihen(n).YWerte(i - Me.nZeilenHeader) = Convert.ToDouble(Werte(j + 1))
+                            Me.Zeitreihen(n).YWerte(i - Me.nZeilenHeader) = Convert.ToDouble(Werte(j + 1), FortranProvider)
                             n += 1
                         End If
                     Next
@@ -176,7 +176,7 @@ Public Class WEL
                     n = 0
                     For j = 0 To Me.YSpalten.GetUpperBound(0)
                         If (isSelected(Me.YSpalten(j))) Then
-                            Me.Zeitreihen(n).YWerte(i - (Me.iZeileDaten - 1)) = Convert.ToDouble(Zeile.Substring(((j + 1) * Me.Spaltenbreite) + SpaltenOffset, Math.Min(Me.Spaltenbreite, Zeile.Substring(((j + 1) * Me.Spaltenbreite) + SpaltenOffset).Length)))
+                            Me.Zeitreihen(n).YWerte(i - (Me.iZeileDaten - 1)) = Convert.ToDouble(Zeile.Substring(((j + 1) * Me.Spaltenbreite) + SpaltenOffset, Math.Min(Me.Spaltenbreite, Zeile.Substring(((j + 1) * Me.Spaltenbreite) + SpaltenOffset).Length)), FortranProvider)
                             n += 1
                         End If
                     Next
