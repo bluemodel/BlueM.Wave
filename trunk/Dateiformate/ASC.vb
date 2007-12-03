@@ -106,14 +106,6 @@ Public Class ASC
         Dim StrRead As StreamReader = New StreamReader(FiStr, System.Text.Encoding.GetEncoding("iso8859-1"))
         Dim StrReadSync = TextReader.Synchronized(StrRead)
 
-        'SMUSI gibt immer Punkt als Dezimalseperator aus, convert.todouble(String, IFormatProvider) erlaubt eeine
-        'von den Ländereinstellungen unabhängige Konvertierung
-        Dim provider As NumberFormatInfo = New NumberFormatInfo()
-
-        provider.NumberDecimalSeparator = "."
-        provider.NumberGroupSeparator = ","
-        provider.NumberGroupSizes = New Integer() {3}
-
         dt = New TimeSpan(0, 5, 0)
 
         'Anzahl der Zeilen feststellen
@@ -184,7 +176,7 @@ Public Class ASC
                         For j = 0 To Me.YSpalten.GetUpperBound(0)
                             If (isSelected(Me.YSpalten(j))) Then
                                 Me.Zeitreihen(n).YWerte(i) = 0.0
-                                Me.Zeitreihen(n).YWerte(i + 1) = Convert.ToDouble(Werte(j + 2), provider)
+                                Me.Zeitreihen(n).YWerte(i + 1) = Convert.ToDouble(Werte(j + 2), FortranProvider)
                                 n += 1
                             End If
                         Next
@@ -194,7 +186,7 @@ Public Class ASC
                         n = 0
                         For j = 0 To Me.YSpalten.GetUpperBound(0)
                             If (isSelected(Me.YSpalten(j))) Then
-                                Me.Zeitreihen(n).YWerte(i) = Convert.ToDouble(Werte(j + 2), provider)
+                                Me.Zeitreihen(n).YWerte(i) = Convert.ToDouble(Werte(j + 2), FortranProvider)
                                 n += 1
                             End If
                         Next
@@ -205,7 +197,7 @@ Public Class ASC
                     n = 0
                     For j = 0 To Me.YSpalten.GetUpperBound(0)
                         If (isSelected(Me.YSpalten(j))) Then
-                            Me.Zeitreihen(n).YWerte(i) = Convert.ToDouble(Werte(j + 2), provider)
+                            Me.Zeitreihen(n).YWerte(i) = Convert.ToDouble(Werte(j + 2), FortranProvider)
                             n += 1
                         End If
                     Next

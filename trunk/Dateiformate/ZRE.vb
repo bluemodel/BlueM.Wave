@@ -91,7 +91,7 @@ Public Class ZRE
                 'Datum
                 Me.Zeitreihen(0).XWerte(j - Me.nZeilenHeader) = New System.DateTime(Zeile.Substring(0, 4), Zeile.Substring(4, 2), Zeile.Substring(6, 2), Zeile.Substring(9, 2), Zeile.Substring(12, 2), 0, New System.Globalization.GregorianCalendar())
                 'Wert
-                Me.Zeitreihen(0).YWerte(j - Me.nZeilenHeader) = Convert.ToDouble(Zeile.Substring(15, 14))
+                Me.Zeitreihen(0).YWerte(j - Me.nZeilenHeader) = Convert.ToDouble(Zeile.Substring(15, 14), FortranProvider)
             End If
         Next
 
