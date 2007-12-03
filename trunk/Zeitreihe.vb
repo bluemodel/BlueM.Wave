@@ -74,6 +74,10 @@ Public Class Zeitreihe
     '    return zre1
     'End Operator
 
+    Public Overrides Function ToString() As String
+        Return Me.Title
+    End Function
+
     'Zeitreihe kopieren
     '******************
     Public Function copy() As Zeitreihe
