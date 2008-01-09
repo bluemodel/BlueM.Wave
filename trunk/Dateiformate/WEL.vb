@@ -54,14 +54,17 @@ Public Class WEL
         'Datei öffnen
         Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
         Dim StrRead As StreamReader = New StreamReader(FiStr, System.Text.Encoding.GetEncoding("iso8859-1"))
+        Dim StrReadSync = TextReader.Synchronized(StrRead)
+
 
         'Spaltenüberschriften auslesen
         For i = 1 To Me.iZeileDaten
-            Zeile = StrRead.ReadLine.ToString
+            Zeile = StrReadSync.ReadLine.ToString
             If (i = Me.iZeileÜberschriften) Then ZeileSpalten = Zeile
             If (i = Me.iZeileEinheiten) Then ZeileEinheiten = Zeile
         Next
 
+        StrReadSync.close()
         StrRead.Close()
         FiStr.Close()
 

@@ -36,10 +36,11 @@ Public Class ZRE
 
         Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
         Dim StrRead As StreamReader = New StreamReader(FiStr, System.Text.Encoding.GetEncoding("iso8859-1"))
+        Dim StrReadSync = TextReader.Synchronized(StrRead)
 
         'Reihentitel steht in 2. Zeile:
         For i = 0 To 1
-            Zeile = StrRead.ReadLine.ToString()
+            Zeile = StrReadSync.ReadLine.ToString()
         Next
 
         'Spalten übernehmen
@@ -55,6 +56,7 @@ Public Class ZRE
 
         Me.SpaltenSel = Me.YSpalten
 
+        StrReadSync.close()
         StrRead.Close()
         FiStr.Close()
 
@@ -70,12 +72,13 @@ Public Class ZRE
 
         Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
         Dim StrRead As StreamReader = New StreamReader(FiStr, System.Text.Encoding.GetEncoding("iso8859-1"))
+        Dim StrReadSync = TextReader.Synchronized(StrRead)
 
         'Anzahl der Zeilen feststellen
         Do
-            Zeile = StrRead.ReadLine.ToString()
+            Zeile = StrReadSync.ReadLine.ToString()
             AnzZeil += 1
-        Loop Until StrRead.Peek() = -1
+        Loop Until StrReadSync.Peek() = -1
 
         'Zeitreihe redimensionieren
         ReDim Me.Zeitreihen(0)
@@ -86,7 +89,7 @@ Public Class ZRE
         FiStr.Seek(0, SeekOrigin.Begin)
 
         For j = 0 To AnzZeil - 1
-            Zeile = StrRead.ReadLine.ToString()
+            Zeile = StrReadSync.ReadLine.ToString()
             If (j >= Me.nZeilenHeader) Then
                 'Datum
                 Me.Zeitreihen(0).XWerte(j - Me.nZeilenHeader) = New System.DateTime(Zeile.Substring(0, 4), Zeile.Substring(4, 2), Zeile.Substring(6, 2), Zeile.Substring(9, 2), Zeile.Substring(12, 2), 0, New System.Globalization.GregorianCalendar())
@@ -95,6 +98,7 @@ Public Class ZRE
             End If
         Next
 
+        StrReadSync.close()
         StrRead.Close()
         FiStr.Close()
 
