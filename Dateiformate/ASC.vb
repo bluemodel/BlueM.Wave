@@ -46,14 +46,15 @@ Public Class ASC
         'Datei öffnen
         Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
         Dim StrRead As StreamReader = New StreamReader(FiStr, System.Text.Encoding.GetEncoding("iso8859-1"))
+        Dim StrReadSync = TextReader.Synchronized(StrRead)
 
         'Spaltenüberschriften
         For i = 1 To Me.iZeileDaten
-            Zeile = StrRead.ReadLine.ToString
+            Zeile = StrReadSync.ReadLine.ToString
             If (i = Me.iZeileÜberschriften) Then ZeileSpalten = Zeile
             If (i = Me.iZeileEinheiten) Then ZeileEinheiten = Zeile
         Next
-
+        StrReadSync.close()
         StrRead.Close()
         FiStr.Close()
 
@@ -110,12 +111,12 @@ Public Class ASC
 
         'Anzahl der Zeilen feststellen
         Do
-            Zeile = StrRead.ReadLine.ToString
+            Zeile = StrReadSync.ReadLine.ToString
             AnzZeil += 1
             If Trim(Zeile).Length = 0 Then
                 AnzZeilLeer += 1
             End If
-        Loop Until StrRead.Peek() = -1
+        Loop Until StrReadSync.Peek() = -1
 
         'Anzahl Zeitreihen bestimmen und Array entsprechend dimensionieren
         ReDim Me.Zeitreihen(Me.SpaltenSel.GetUpperBound(0))
@@ -139,14 +140,14 @@ Public Class ASC
         FiStr.Seek(0, SeekOrigin.Begin)
         'Kopfzeilen Überspringen
         For i = 1 To Me.nZeilenHeader + 1
-            StrRead.ReadLine()
+            StrReadSync.ReadLine()
         Next
         'Einlesen
         i = 0
         Ereignisende = True
-        Do While Not StrRead.EndOfStream
+        Do While Not StrReadSync.Peek() = -1
             'Komplette Zeile einlesen
-            Werte = StrRead.ReadLine.ToString.Split(New Char() {Me.Trennzeichen.Character}, StringSplitOptions.RemoveEmptyEntries)
+            Werte = StrReadSync.ReadLine.ToString.Split(New Char() {Me.Trennzeichen.Character}, StringSplitOptions.RemoveEmptyEntries)
             'Falls eine leere Zeile eingelesen wurde
             If Werte.Length = 0 Then
                 'Leere Zeile befindet sich am Ende eines Ereignisses
