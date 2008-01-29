@@ -35,6 +35,17 @@ Public Class Wave
         ' Dieser Aufruf ist für den Windows Form-Designer erforderlich.
         InitializeComponent()
 
+        'Dateiformate definieren
+        '-----------------------
+        Me.OpenFileDialog1.Filter = "Text-Dateien (*.txt)|*.txt|" & _
+            "SMUSI-Dateien (*.asc)|*.asc|" & _
+            "ZRE-Dateien (*.zre)|*.zre|" & _
+            "CSV-Dateien (*.csv)|*.csv|" & _
+            "RVA-Dateien (*.rva)|*.rva|" & _
+            "WEL-Dateien (*.wel, *.kwl)|*.wel;*.kwl|" & _
+            "TeeChart-Dateien (*.ten)|*.ten|" & _
+            "Alle Dateien (*.*)|*.*"
+
         'Charts einrichten
         '-----------------
         'Übersicht darf nicht gescrolled oder gezoomt werden
@@ -264,13 +275,19 @@ Public Class Wave
     '****************
     Private Sub Übersicht_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ÜbersichtToolStripButton.Click
 
-        If (ÜbersichtToolStripButton.Checked) Then
+        Call Übersicht_Toggle(ÜbersichtToolStripButton.Checked)
+
+    End Sub
+
+    Private Sub Übersicht_Toggle(ByVal showÜbersicht As Boolean)
+
+        If (showÜbersicht) Then
             Me.SplitContainer1.Panel1Collapsed = False
-            Call Me.ResizeCharts()
         Else
             Me.SplitContainer1.Panel1Collapsed = True
-            Call Me.ResizeCharts()
         End If
+
+        Call Me.ResizeCharts()
 
     End Sub
 
@@ -295,6 +312,9 @@ Public Class Wave
 
             Case ".ASC"
                 Call Me.Import_ASC(file)
+
+            Case ".RVA"
+                Call Me.Import_RVA(file)
 
             Case Else
                 Call Me.Import_CSV(file)
@@ -414,6 +434,21 @@ Public Class Wave
 
     End Sub
 
+    'RVA-Datei importieren
+    '*********************
+    Public Sub Import_RVA(ByVal FileName As String)
+
+        'RVA-Objekt instanzieren
+        Dim RVA As New RVA(FileName)
+
+        'Chart vorbereiten
+        Call Me.PrepareChart_RVA()
+
+        'Serie zeichnen
+        Call Display_RVA(RVA)
+
+    End Sub
+
     'CSV-Datei importieren
     '*********************
     Public Sub Import_CSV(ByVal FileName As String)
@@ -482,6 +517,69 @@ Public Class Wave
 
         'Charts aktualisieren
         Call Me.UpdateCharts()
+
+    End Sub
+
+    'RVA-Ergebnis in Chart anzeigen
+    '******************************
+    Public Sub Display_RVA(ByVal RVA As RVA, Optional ByVal title As String = "")
+
+        Dim i, j As Integer
+
+        'Chart formatieren
+        Call PrepareChart_RVA()
+
+        'Säulen (HA-Werte)
+        '-----------------
+        Dim bar As New Steema.TeeChart.Styles.Bar(Me.TChart1.Chart)
+        bar.Marks.Visible = False
+        bar.Title = "HA Middle"
+        If (title <> "") Then bar.Title &= " (" & title & ")"
+
+        'Linie (fx(HA)-Werte)
+        '--------------------
+        Dim line As New Steema.TeeChart.Styles.Line(Me.TChart1.Chart)
+        line.Title = "fx(HA)"
+        If (title <> "") Then line.Title &= " (" & title & ")"
+
+        'Werte eintragen
+        '---------------
+        With RVA.RVAValues
+
+            'Schleife über Parametergruppen
+            For i = 0 To .IHAParamGroups.GetUpperBound(0)
+                ''Gruppenname schreiben (Mit Wert 0)
+                'bar.Add(0, .IHAParamGroups(i).GName)
+                'Schleife über Parameter
+                For j = 0 To .IHAParamGroups(i).IHAParams.GetUpperBound(0)
+                    'Parameter eintragen
+                    bar.Add(.IHAParamGroups(i).IHAParams(j).HAMiddle, .IHAParamGroups(i).IHAParams(j).PName)
+                    'fx_HA eintragen
+                    line.Add(.IHAParamGroups(i).IHAParams(j).fx_HA, .IHAParamGroups(i).IHAParams(j).PName)
+                Next
+            Next
+
+        End With
+
+    End Sub
+
+    'Chart für RVA-Anzeige formatieren
+    '*********************************
+    Public Sub PrepareChart_RVA()
+
+        'Übersicht ausschalten
+        Call Me.Übersicht_Toggle(False)
+
+        'Achsen formatieren
+        Me.TChart1.Axes.Bottom.Automatic = True
+        Me.TChart1.Axes.Bottom.Labels.Angle = 90
+        Me.TChart1.Axes.Bottom.Title.Caption = "IHA Parameter"
+        Me.TChart1.Axes.Bottom.MinorTicks.Visible = False
+
+        Me.TChart1.Axes.Left.AutomaticMinimum = False
+        Me.TChart1.Axes.Left.Minimum = -1.1
+        Me.TChart1.Axes.Left.Labels.ValueFormat = "#,##0.0##"
+        Me.TChart1.Axes.Left.Title.Caption = "Hydrologic Alteration"
 
     End Sub
 

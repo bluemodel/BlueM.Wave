@@ -161,9 +161,6 @@ Partial Class Wave
         'OpenFileDialog1
         '
         Me.OpenFileDialog1.DefaultExt = "txt"
-        Me.OpenFileDialog1.Filter = "Text-Dateien (*.txt)|*.txt|SMUSI-Dateien (*.asc)|*.asc|ZRE-Dateien (*.zre)|*.zre|" & _
-            "CSV-Dateien (*.csv)|*.csv|WEL-Dateien (*.wel, *.kwl)|*.wel;*.kwl|TeeChart-Dateie" & _
-            "n (*.ten)|*.ten|Alle Dateien (*.*)|*.*"
         Me.OpenFileDialog1.Title = "Datei importieren"
         '
         'ToolStrip1

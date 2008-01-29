@@ -57,6 +57,7 @@
     <Compile Include="Dateiformate\ASC.vb">
     </Compile>
     <Compile Include="Dateiformate\Dateiformat.vb" />
+    <Compile Include="Dateiformate\RVA.vb" />
     <Compile Include="ImportDiag.designer.vb">
       <DependentUpon>ImportDiag.vb</DependentUpon>
     </Compile>
