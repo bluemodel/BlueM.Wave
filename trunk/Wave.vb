@@ -445,7 +445,7 @@ Public Class Wave
         Call Me.PrepareChart_RVA()
 
         'Serie zeichnen
-        Call Display_RVA(RVA)
+        Call Display_RVA(RVA.RVAValues)
 
     End Sub
 
@@ -522,7 +522,7 @@ Public Class Wave
 
     'RVA-Ergebnis in Chart anzeigen
     '******************************
-    Public Sub Display_RVA(ByVal RVA As RVA, Optional ByVal title As String = "")
+    Public Sub Display_RVA(ByVal RVAResult As RVA.Struct_RVAValues, Optional ByVal title As String = "")
 
         Dim i, j As Integer
 
@@ -544,7 +544,7 @@ Public Class Wave
 
         'Werte eintragen
         '---------------
-        With RVA.RVAValues
+        With RVAResult
 
             'Schleife über Parametergruppen
             For i = 0 To .IHAParamGroups.GetUpperBound(0)
