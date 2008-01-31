@@ -24,24 +24,35 @@ Public Class RVA
     '---------------------------
     Public Structure IHAParam                           'Struktur für RVA Ergebnis eines Parameters
         Public PName As String                          'Parametername
+        Public HALow As Double                          'Hydrologic Alteration (HA) - Low RVA Category
         Public HAMiddle As Double                       'Hydrologic Alteration (HA) - Middle RVA Category
-        Public ReadOnly Property fx_HA() As Double      'normalverteilter Funktionswert des HA-Werts
-            Get
-                Return fx(HAMiddle)
-            End Get
-        End Property
+        Public HAHigh As Double                         'Hydrologic Alteration (HA) - High RVA Category
     End Structure
 
     Public Structure IHAParamGroup                      'Struktur für RVA Ergebnis einer Parametergruppe
         Public No As Short                              'Gruppennummer
         Public GName As String                          'Gruppennname
-        Public Avg_fx_HA As Double                      'Mittelwert der fx(HA)-Werte der Gruppe
-        Public IHAParams() As IHAParam                  'Liste der Paremeter
+        Public IHAParams() As IHAParam                  'Liste der Parameter
+        Public ReadOnly Property NParams() As Integer   'Anzahl Parameter in der Gruppe
+            Get
+                Return Me.IHAParams.Length()
+            End Get
+        End Property
     End Structure
 
     Public Structure Struct_RVAValues                   'Struktur für alle RVA Ergebnisse zusammen
-        Public GAvg_fx_HA As Double                     'Mittelwert der fx(HA)-Werte über alle Gruppen
+        Public Title As String                          'Titel
         Public IHAParamGroups() As IHAParamGroup        'Liste der Parametergruppen
+        Public ReadOnly Property NGroups() As Integer   'Anzahl der Parametergruppen
+            Get
+                Return Me.IHAParamGroups.Length()
+            End Get
+        End Property
+        Public Shadows ReadOnly Property ToString() As String
+            Get
+                Return Me.Title
+            End Get
+        End Property
     End Structure
 
     Public RVAValues As Struct_RVAValues
@@ -101,11 +112,16 @@ Public Class RVA
 
         Dim i, j As Integer
         Dim Zeile As String
-        Dim Psum, Gsum As Double                        'Summen der fx_HA Werte
+        Dim Werte() As String
+
+        'Datei bis zu RVA-Ergebnissen vorspulen
+        '--------------------------------------
+        Do
+            Zeile = StrReadSync.ReadLine.ToString()
+        Loop Until (Zeile.Trim = "Assessment of Hydrologic Alteration")
 
         'Schleife über Parametergruppen
         '------------------------------
-        Gsum = 0
         For i = 0 To Me.RVAValues.IHAParamGroups.GetUpperBound(0)
 
             'Ergebnisse einer Parametergruppe einlesen
@@ -114,25 +130,23 @@ Public Class RVA
 
                 Do
                     Zeile = StrReadSync.ReadLine.ToString
-                    If (Zeile.Contains("Parameter Group #" & .No)) Then
+                    If (Zeile.Trim = "Parameter Group #" & .No) Then
 
-                        Psum = 0
                         'Schleife über Parameter
                         For j = 0 To .IHAParams.GetUpperBound(0)
-                            Zeile = StrReadSync.ReadLine.ToString
-                            .IHAParams(j).PName = Zeile.Substring(0, 20).Trim
-                            .IHAParams(j).HAMiddle = Convert.ToDouble(Zeile.Substring(171, 14).Trim)
-                            Psum += .IHAParams(j).fx_HA
+                            Zeile = StrReadSync.ReadLine.ToString()
+                            'Name einlesen
+                            .IHAParams(j).PName = Zeile.Substring(0, 22).Trim()
+                            'Werte einlesen
+                            Werte = Zeile.Substring(22).Split(New Char() {leerzeichen.Character}, StringSplitOptions.RemoveEmptyEntries)
+                            .IHAParams(j).HAMiddle = Convert.ToDouble(Werte(2), Me.FortranProvider)
+                            .IHAParams(j).HAHigh = Convert.ToDouble(Werte(5), Me.FortranProvider)
+                            .IHAParams(j).HALow = Convert.ToDouble(Werte(8), Me.FortranProvider)
                         Next
 
                         Exit Do
                     End If
                 Loop Until StrReadSync.Peek() = -1
-
-                'Mittelwert für eine Parametergruppe berechnen
-                '---------------------------------------------
-                .Avg_fx_HA = Psum / .IHAParams.GetLength(0)
-                Gsum += .Avg_fx_HA
 
             End With
 
@@ -142,28 +156,9 @@ Public Class RVA
         StrRead.Close()
         FiStr.Close()
 
-        'Mittelwert aller Parametergruppen berechnen
-        '-------------------------------------------
-        Me.RVAValues.GAvg_fx_HA = Gsum / Me.RVAValues.IHAParamGroups.GetLength(0)
-
     End Sub
 
-    'Transformiert einen HA-Wert in einen normalverteilten Funktionswert
-    '*******************************************************************
-    Private Shared Function fx(ByVal HA As Double) As Double
-
-        'Parameter für Normalverteilung mit f(0) ~= 1
-        '[EXCEL:] 1/(std*WURZEL(2*PI()))*EXP(-1/2*((X-avg)/std)^2)
-        Dim std As Double = 0.398942423706863                   'Standardabweichung
-        Dim avg As Double = 0                                   'Erwartungswert
-
-        fx = 1 / (std * Math.Sqrt(2 * Math.PI)) * Math.Exp(-1 / 2 * ((HA - avg) / std) ^ 2)
-
-        Return fx
-
-    End Function
-
     Public Overrides Sub SpaltenAuslesen()
-		'nix
+        'nix
     End Sub
 End Class

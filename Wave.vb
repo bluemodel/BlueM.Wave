@@ -445,7 +445,7 @@ Public Class Wave
         Call Me.PrepareChart_RVA()
 
         'Serie zeichnen
-        Call Display_RVA(RVA.RVAValues)
+        Call Me.Display_RVA(RVA.RVAValues)
 
     End Sub
 
@@ -522,7 +522,7 @@ Public Class Wave
 
     'RVA-Ergebnis in Chart anzeigen
     '******************************
-    Public Sub Display_RVA(ByVal RVAResult As RVA.Struct_RVAValues, Optional ByVal title As String = "")
+    Public Sub Display_RVA(ByVal RVAResult As RVA.Struct_RVAValues)
 
         Dim i, j As Integer
 
@@ -531,16 +531,23 @@ Public Class Wave
 
         'Säulen (HA-Werte)
         '-----------------
-        Dim bar As New Steema.TeeChart.Styles.Bar(Me.TChart1.Chart)
-        bar.Marks.Visible = False
-        bar.Title = "HA Middle"
-        If (title <> "") Then bar.Title &= " (" & title & ")"
+        Dim barLow As New Steema.TeeChart.Styles.Bar(Me.TChart1.Chart)
+        barLow.Marks.Visible = False
+        barLow.Title = "HA Low"
+        barLow.Color = Color.Green
+        If (RVAResult.Title <> "") Then barLow.Title &= " (" & RVAResult.Title & ")"
 
-        'Linie (fx(HA)-Werte)
-        '--------------------
-        Dim line As New Steema.TeeChart.Styles.Line(Me.TChart1.Chart)
-        line.Title = "fx(HA)"
-        If (title <> "") Then line.Title &= " (" & title & ")"
+        Dim barMiddle As New Steema.TeeChart.Styles.Bar(Me.TChart1.Chart)
+        barMiddle.Marks.Visible = False
+        barMiddle.Title = "HA Middle"
+        barMiddle.Color = Color.Yellow
+        If (RVAResult.Title <> "") Then barMiddle.Title &= " (" & RVAResult.Title & ")"
+
+        Dim barHigh As New Steema.TeeChart.Styles.Bar(Me.TChart1.Chart)
+        barHigh.Marks.Visible = False
+        barHigh.Title = "HA High"
+        barHigh.Color = Color.Red
+        If (RVAResult.Title <> "") Then barHigh.Title &= " (" & RVAResult.Title & ")"
 
         'Werte eintragen
         '---------------
@@ -553,9 +560,9 @@ Public Class Wave
                 'Schleife über Parameter
                 For j = 0 To .IHAParamGroups(i).IHAParams.GetUpperBound(0)
                     'Parameter eintragen
-                    bar.Add(.IHAParamGroups(i).IHAParams(j).HAMiddle, .IHAParamGroups(i).IHAParams(j).PName)
-                    'fx_HA eintragen
-                    line.Add(.IHAParamGroups(i).IHAParams(j).fx_HA, .IHAParamGroups(i).IHAParams(j).PName)
+                    barLow.Add(.IHAParamGroups(i).IHAParams(j).HALow, .IHAParamGroups(i).IHAParams(j).PName)
+                    barMiddle.Add(.IHAParamGroups(i).IHAParams(j).HAMiddle, .IHAParamGroups(i).IHAParams(j).PName)
+                    barHigh.Add(.IHAParamGroups(i).IHAParams(j).HAHigh, .IHAParamGroups(i).IHAParams(j).PName)
                 Next
             Next
 
@@ -570,16 +577,28 @@ Public Class Wave
         'Übersicht ausschalten
         Call Me.Übersicht_Toggle(False)
 
+        'Titel
+        Me.TChart1.Header.Text = "RVA Analysis"
+
         'Achsen formatieren
         Me.TChart1.Axes.Bottom.Automatic = True
         Me.TChart1.Axes.Bottom.Labels.Angle = 90
         Me.TChart1.Axes.Bottom.Title.Caption = "IHA Parameter"
         Me.TChart1.Axes.Bottom.MinorTicks.Visible = False
 
-        Me.TChart1.Axes.Left.AutomaticMinimum = False
+        Me.TChart1.Axes.Left.Automatic = False
         Me.TChart1.Axes.Left.Minimum = -1.1
+        Me.TChart1.Axes.Left.Maximum = 2
         Me.TChart1.Axes.Left.Labels.ValueFormat = "#,##0.0##"
         Me.TChart1.Axes.Left.Title.Caption = "Hydrologic Alteration"
+
+        'Legende
+        Me.TChart1.Legend.CheckBoxes = True
+
+        'Markstips
+        Dim markstip As New Steema.TeeChart.Tools.MarksTip()
+        markstip.Style = Steema.TeeChart.Styles.MarksStyles.Value
+        Me.TChart1.Tools.Add(markstip)
 
     End Sub
 
