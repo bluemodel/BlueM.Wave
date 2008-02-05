@@ -38,9 +38,8 @@
     <Reference Include="System" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
-    <Reference Include="TeeChart, Version=2.0.2652.22325, Culture=neutral, PublicKeyToken=9c8126276c77bdb7, processorArchitecture=MSIL">
+    <Reference Include="TeeChart, Version=2.0.2887.28040, Culture=neutral, PublicKeyToken=9c8126276c77bdb7, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>.\TeeChart.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
