@@ -153,7 +153,7 @@ Public Class Zeitreihe
                 Next
 
             Case "MinWert"
-                Wert = 999999999999999999
+                Wert = Double.MaxValue
                 For i = 0 To Me.Length - 1
                     If (Me.YWerte(i) < Wert) Then
                         Wert = Me.YWerte(i)
