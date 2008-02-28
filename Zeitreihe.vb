@@ -80,7 +80,7 @@ Public Class Zeitreihe
 
     'Zeitreihe kopieren
     '******************
-    Public Function copy() As Zeitreihe
+    Public Function Clone() As Zeitreihe
         Dim target As New Zeitreihe(Me.Title)
         target.Length = Me.Length
         target.XWerte = Me.XWerte
@@ -90,19 +90,19 @@ Public Class Zeitreihe
 
     'Zeitreihe kürzen
     '****************
-    Public Sub cut(ByVal start As DateTime, ByVal ende As DateTime)
+    Public Sub Cut(ByVal start As DateTime, ByVal ende As DateTime)
 
         Dim j, k As Integer
 
         'Zeitreihe kopieren
-        Dim tmpZeitreihe As New Zeitreihe("tmp")
-        tmpZeitreihe = Me.copy()
+        Dim tmpZeitreihe As Zeitreihe
+        tmpZeitreihe = Me.Clone()
 
         'Zeitschrittweite feststellen
         'BUG 218: Es wird von konstanten Zeitschritten ausgegangen
         Dim dt As TimeSpan = Me.XWerte(1) - Me.XWerte(0)
 
-        'Wenn dt >= 1 Tag, Start und Ende auf Tage runden
+        'Wenn dt >= 1 Tag, Start und Ende auf ganze Tage runden
         If (dt.TotalDays >= 1) Then
             start = start.Date
             ende = ende.Date
