@@ -61,6 +61,13 @@ Public Class Zeitreihe
 
     'Konstruktor
     '***********
+    Public Sub New()
+        Me._title = "[nicht gesetzt]"
+        Me._length = 0
+    End Sub
+
+    'Konstruktor
+    '***********
     Public Sub New(ByVal title As String)
         Me._title = title
         Me._length = 0
