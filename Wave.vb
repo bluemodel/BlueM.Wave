@@ -445,7 +445,7 @@ Public Class Wave
         Call Me.PrepareChart_RVA()
 
         'Serie zeichnen
-        Call Me.Display_RVA(RVA.RVAValues)
+        Call Me.Display_RVA(RVA.RVAValues, True)
 
     End Sub
 
@@ -522,31 +522,29 @@ Public Class Wave
 
     'RVA-Ergebnis in Chart anzeigen
     '******************************
-    Public Sub Display_RVA(ByVal RVAResult As RVA.Struct_RVAValues)
+    Public Sub Display_RVA(ByVal RVAResult As RVA.Struct_RVAValues, Optional ByVal showAll As Boolean = False)
 
         Dim i, j As Integer
+        Dim barLow, barMiddle, barHigh As Steema.TeeChart.Styles.Bar
 
         'Chart formatieren
         Call PrepareChart_RVA()
 
         'Säulen (HA-Werte)
         '-----------------
-        Dim barLow As New Steema.TeeChart.Styles.Bar(Me.TChart1.Chart)
-        barLow.Marks.Visible = False
-        barLow.Title = "HA Low"
-        barLow.Color = Color.Green
-        If (RVAResult.Title <> "") Then barLow.Title &= " (" & RVAResult.Title & ")"
-
-        Dim barMiddle As New Steema.TeeChart.Styles.Bar(Me.TChart1.Chart)
+        barMiddle = New Steema.TeeChart.Styles.Bar(Me.TChart1.Chart)
         barMiddle.Marks.Visible = False
         barMiddle.Title = "HA Middle"
-        barMiddle.Color = Color.Yellow
         If (RVAResult.Title <> "") Then barMiddle.Title &= " (" & RVAResult.Title & ")"
 
-        Dim barHigh As New Steema.TeeChart.Styles.Bar(Me.TChart1.Chart)
+        barLow = New Steema.TeeChart.Styles.Bar(Me.TChart1.Chart)
+        barLow.Marks.Visible = False
+        barLow.Title = "HA Low"
+        If (RVAResult.Title <> "") Then barLow.Title &= " (" & RVAResult.Title & ")"
+
+        barHigh = New Steema.TeeChart.Styles.Bar(Me.TChart1.Chart)
         barHigh.Marks.Visible = False
         barHigh.Title = "HA High"
-        barHigh.Color = Color.Red
         If (RVAResult.Title <> "") Then barHigh.Title &= " (" & RVAResult.Title & ")"
 
         'Werte eintragen
@@ -560,13 +558,19 @@ Public Class Wave
                 'Schleife über Parameter
                 For j = 0 To .IHAParamGroups(i).IHAParams.GetUpperBound(0)
                     'Parameter eintragen
-                    barLow.Add(.IHAParamGroups(i).IHAParams(j).HALow, .IHAParamGroups(i).IHAParams(j).PName)
                     barMiddle.Add(.IHAParamGroups(i).IHAParams(j).HAMiddle, .IHAParamGroups(i).IHAParams(j).PName)
+                    barLow.Add(.IHAParamGroups(i).IHAParams(j).HALow, .IHAParamGroups(i).IHAParams(j).PName)
                     barHigh.Add(.IHAParamGroups(i).IHAParams(j).HAHigh, .IHAParamGroups(i).IHAParams(j).PName)
                 Next
             Next
 
         End With
+
+        'Wenn showAll = False dann nur HAMiddle-Serie anzeigen
+        If (Not showAll) Then
+            barLow.Active = False
+            barHigh.Active = False
+        End If
 
     End Sub
 
