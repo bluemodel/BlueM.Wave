@@ -12,7 +12,7 @@ Public Class ASC
 
     'Konstruktor
     '***********
-    Public Sub New(ByVal FileName As String, Optional ByVal ReadNow As Boolean = False)
+    Public Sub New(ByVal FileName As String, Optional ByVal ReadAllNow As Boolean = False)
 
         MyBase.New(FileName)
 
@@ -25,9 +25,10 @@ Public Class ASC
         Me.Trennzeichen = Me.leerzeichen
         Me.Dezimaltrennzeichen = Me.punkt
 
-        If (ReadNow) Then
+        Call Me.SpaltenAuslesen()
+
+        If (ReadAllNow) Then
             'Datei komplett einlesen
-            Call Me.SpaltenAuslesen()
             Me.SpaltenSel = Me.YSpalten
             Call Me.Read_File()
         End If
@@ -43,50 +44,55 @@ Public Class ASC
         Dim ZeileSpalten As String = ""
         Dim ZeileEinheiten As String = ""
 
-        'Datei öffnen
-        Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
-        Dim StrRead As StreamReader = New StreamReader(FiStr, System.Text.Encoding.GetEncoding("iso8859-1"))
-        Dim StrReadSync = TextReader.Synchronized(StrRead)
+        Try
+            'Datei öffnen
+            Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
+            Dim StrRead As StreamReader = New StreamReader(FiStr, System.Text.Encoding.GetEncoding("iso8859-1"))
+            Dim StrReadSync = TextReader.Synchronized(StrRead)
 
-        'Spaltenüberschriften
-        For i = 1 To Me.iZeileDaten
-            Zeile = StrReadSync.ReadLine.ToString
-            If (i = Me.iZeileÜberschriften) Then ZeileSpalten = Zeile
-            If (i = Me.iZeileEinheiten) Then ZeileEinheiten = Zeile
-        Next
-        StrReadSync.close()
-        StrRead.Close()
-        FiStr.Close()
+            'Spaltenüberschriften
+            For i = 1 To Me.iZeileDaten
+                Zeile = StrReadSync.ReadLine.ToString
+                If (i = Me.iZeileÜberschriften) Then ZeileSpalten = Zeile
+                If (i = Me.iZeileEinheiten) Then ZeileEinheiten = Zeile
+            Next
+            StrReadSync.close()
+            StrRead.Close()
+            FiStr.Close()
 
-        'Spaltennamen auslesen
-        '---------------------
-        Dim Namen() As String
-        Dim Einheiten() As String
+            'Spaltennamen auslesen
+            '---------------------
+            Dim Namen() As String
+            Dim Einheiten() As String
 
-        Namen = ZeileSpalten.Split(New Char() {Me.Trennzeichen.Character}, StringSplitOptions.RemoveEmptyEntries)
-        Einheiten = ZeileEinheiten.Split(New Char() {Me.Trennzeichen.Character}, StringSplitOptions.RemoveEmptyEntries)
+            Namen = ZeileSpalten.Split(New Char() {Me.Trennzeichen.Character}, StringSplitOptions.RemoveEmptyEntries)
+            Einheiten = ZeileEinheiten.Split(New Char() {Me.Trennzeichen.Character}, StringSplitOptions.RemoveEmptyEntries)
 
-        'Sicherstellen, dass es so viele Einheiten wie Spalten gibt:
-        ReDim Preserve Einheiten(Namen.GetUpperBound(0))
-        For i = 0 To Einheiten.GetUpperBound(0)
-            If (IsNothing(Einheiten(i))) Then Einheiten(i) = "-"
-        Next
+            'Sicherstellen, dass es so viele Einheiten wie Spalten gibt:
+            ReDim Preserve Einheiten(Namen.GetUpperBound(0))
+            For i = 0 To Einheiten.GetUpperBound(0)
+                If (IsNothing(Einheiten(i))) Then Einheiten(i) = "-"
+            Next
 
-        'Leerzeichen entfernen
-        For i = 0 To Namen.GetUpperBound(0)
-            Namen(i) = Namen(i).Trim()
-            'Einheiten anhängen
-            If (Me.UseEinheiten) Then
-                Namen(i) &= " [" & Einheiten(i).Trim() & "]"
-            End If
-        Next
+            'Leerzeichen entfernen
+            For i = 0 To Namen.GetUpperBound(0)
+                Namen(i) = Namen(i).Trim()
+                'Einheiten anhängen
+                If (Me.UseEinheiten) Then
+                    Namen(i) &= " [" & Einheiten(i).Trim() & "]"
+                End If
+            Next
 
-        'X-Spalte übernehmen
-        Me.XSpalte = Namen(0)
+            'X-Spalte übernehmen
+            Me.XSpalte = Namen(0)
 
-        'Y-Spalten übernehmen
-        ReDim Me.YSpalten(Namen.GetUpperBound(0) - 1)
-        Array.Copy(Namen, 1, Me.YSpalten, 0, Namen.Length - 1)
+            'Y-Spalten übernehmen
+            ReDim Me.YSpalten(Namen.GetUpperBound(0) - 1)
+            Array.Copy(Namen, 1, Me.YSpalten, 0, Namen.Length - 1)
+
+        Catch ex As Exception
+            MsgBox("Konnte Datei nicht einlesen!" & eol & eol & "Fehler: " & ex.Message, MsgBoxStyle.Critical, "Fehler")
+        End Try
 
     End Sub
 

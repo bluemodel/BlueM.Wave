@@ -18,9 +18,10 @@ Public Class ZRE
         Me.iZeileDaten = 5
         Me.UseEinheiten = True
 
+        Call Me.SpaltenAuslesen()
+
         If (ReadNow) Then
             'Datei komplett einlesen
-            Call Me.SpaltenAuslesen()
             Me.SpaltenSel = Me.YSpalten
             Call Me.Read_File()
         End If
@@ -34,31 +35,37 @@ Public Class ZRE
         Dim i As Integer
         Dim Zeile As String = ""
 
-        Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
-        Dim StrRead As StreamReader = New StreamReader(FiStr, System.Text.Encoding.GetEncoding("iso8859-1"))
-        Dim StrReadSync = TextReader.Synchronized(StrRead)
+        Try
+            'Datei öffnen
+            Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
+            Dim StrRead As StreamReader = New StreamReader(FiStr, System.Text.Encoding.GetEncoding("iso8859-1"))
+            Dim StrReadSync = TextReader.Synchronized(StrRead)
 
-        'Reihentitel steht in 2. Zeile:
-        For i = 0 To 1
-            Zeile = StrReadSync.ReadLine.ToString()
-        Next
+            'Reihentitel steht in 2. Zeile:
+            For i = 0 To 1
+                Zeile = StrReadSync.ReadLine.ToString()
+            Next
 
-        'Spalten übernehmen
-        Me.XSpalte = "Datum_Zeit"
+            StrReadSync.close()
+            StrRead.Close()
+            FiStr.Close()
 
-        ReDim Me.YSpalten(0)
-        Me.YSpalten(0) = Zeile.Substring(0, 15).Trim()
+            'Spalten übernehmen
+            Me.XSpalte = "Datum_Zeit"
 
-        'Einheit anhängen
-        If (Me.UseEinheiten) Then
-            Me.YSpalten(0) &= " [" & Zeile.Substring(15).Trim() & "]"
-        End If
+            ReDim Me.YSpalten(0)
+            Me.YSpalten(0) = Zeile.Substring(0, 15).Trim()
 
-        Me.SpaltenSel = Me.YSpalten
+            'Einheit anhängen
+            If (Me.UseEinheiten) Then
+                Me.YSpalten(0) &= " [" & Zeile.Substring(15).Trim() & "]"
+            End If
 
-        StrReadSync.close()
-        StrRead.Close()
-        FiStr.Close()
+            Me.SpaltenSel = Me.YSpalten
+
+        Catch ex As Exception
+            MsgBox("Konnte Datei nicht einlesen!" & eol & eol & "Fehler: " & ex.Message, MsgBoxStyle.Critical, "Fehler")
+        End Try
 
     End Sub
 

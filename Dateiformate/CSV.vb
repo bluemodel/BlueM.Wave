@@ -23,68 +23,73 @@ Public Class CSV
         Dim ZeileSpalten As String = ""
         Dim ZeileEinheiten As String = ""
 
-        'Datei öffnen
-        Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
-        Dim StrRead As StreamReader = New StreamReader(FiStr, System.Text.Encoding.GetEncoding("iso8859-1"))
-        Dim StrReadSync = TextReader.Synchronized(StrRead)
+        Try
+            'Datei öffnen
+            Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
+            Dim StrRead As StreamReader = New StreamReader(FiStr, System.Text.Encoding.GetEncoding("iso8859-1"))
+            Dim StrReadSync = TextReader.Synchronized(StrRead)
 
-        'Spaltenüberschriften auslesen
-        For i = 1 To Me.iZeileDaten
-            Zeile = StrReadSync.ReadLine.ToString
-            If (i = Me.iZeileÜberschriften) Then ZeileSpalten = Zeile
-            If (i = Me.iZeileEinheiten) Then ZeileEinheiten = Zeile
-        Next
-
-        StrReadSync.Close()
-        StrRead.Close()
-        FiStr.Close()
-
-        'Spaltennamen auslesen
-        '---------------------
-        Dim Namen() As String
-        Dim Einheiten() As String
-
-        If (Me.Zeichengetrennt) Then
-            'Zeichengetrennt
-            Namen = ZeileSpalten.Split(New Char() {Me.Trennzeichen.Character}, StringSplitOptions.RemoveEmptyEntries)
-            Einheiten = ZeileEinheiten.Split(New Char() {Me.Trennzeichen.Character}, StringSplitOptions.RemoveEmptyEntries)
-        Else
-            'Spalten mit fester Breite
-            Dim anzSpalten As Integer = Math.Ceiling(ZeileSpalten.Length / Me.Spaltenbreite)
-            ReDim Namen(anzSpalten - 1)
-            ReDim Einheiten(anzSpalten - 1)
-            For i = 0 To anzSpalten - 1
-                Namen(i) = ZeileSpalten.Substring(i * Me.Spaltenbreite, Math.Min(Me.Spaltenbreite, ZeileSpalten.Substring(i * Me.Spaltenbreite).Length))
-                Einheiten(i) = ZeileEinheiten.Substring(i * Me.Spaltenbreite, Math.Min(Me.Spaltenbreite, ZeileSpalten.Substring(i * Me.Spaltenbreite).Length))
+            'Spaltenüberschriften auslesen
+            For i = 1 To Me.iZeileDaten
+                Zeile = StrReadSync.ReadLine.ToString
+                If (i = Me.iZeileÜberschriften) Then ZeileSpalten = Zeile
+                If (i = Me.iZeileEinheiten) Then ZeileEinheiten = Zeile
             Next
-        End If
 
-        'Sicherstellen, dass es so viele Einheiten wie Spalten gibt:
-        ReDim Preserve Einheiten(Namen.GetUpperBound(0))
-        For i = 0 To Einheiten.GetUpperBound(0)
-            If (IsNothing(Einheiten(i))) Then Einheiten(i) = "-"
-        Next
+            StrReadSync.Close()
+            StrRead.Close()
+            FiStr.Close()
 
-        'Leerzeichen entfernen
-        For i = 0 To Namen.GetUpperBound(0)
-            Namen(i) = Namen(i).Trim()
-            If (Namen(i).Length = 0) Then Namen(i) = "{" & i.ToString() & "}"
-            'Einheiten anhängen
-            If (Me.UseEinheiten) Then
-                Namen(i) &= " [" & Einheiten(i).Trim() & "]"
+            'Spaltennamen auslesen
+            '---------------------
+            Dim Namen() As String
+            Dim Einheiten() As String
+
+            If (Me.Zeichengetrennt) Then
+                'Zeichengetrennt
+                Namen = ZeileSpalten.Split(New Char() {Me.Trennzeichen.Character}, StringSplitOptions.RemoveEmptyEntries)
+                Einheiten = ZeileEinheiten.Split(New Char() {Me.Trennzeichen.Character}, StringSplitOptions.RemoveEmptyEntries)
+            Else
+                'Spalten mit fester Breite
+                Dim anzSpalten As Integer = Math.Ceiling(ZeileSpalten.Length / Me.Spaltenbreite)
+                ReDim Namen(anzSpalten - 1)
+                ReDim Einheiten(anzSpalten - 1)
+                For i = 0 To anzSpalten - 1
+                    Namen(i) = ZeileSpalten.Substring(i * Me.Spaltenbreite, Math.Min(Me.Spaltenbreite, ZeileSpalten.Substring(i * Me.Spaltenbreite).Length))
+                    Einheiten(i) = ZeileEinheiten.Substring(i * Me.Spaltenbreite, Math.Min(Me.Spaltenbreite, ZeileSpalten.Substring(i * Me.Spaltenbreite).Length))
+                Next
             End If
-        Next
 
-        'X-Spalte übernehmen
-        Me.XSpalte = Namen(0)
+            'Sicherstellen, dass es so viele Einheiten wie Spalten gibt:
+            ReDim Preserve Einheiten(Namen.GetUpperBound(0))
+            For i = 0 To Einheiten.GetUpperBound(0)
+                If (IsNothing(Einheiten(i))) Then Einheiten(i) = "-"
+            Next
 
-        'Y-Spalten übernehmen
-        ReDim Me.YSpalten(Namen.GetUpperBound(0) - 1)
-        Array.Copy(Namen, 1, Me.YSpalten, 0, Namen.Length - 1)
+            'Leerzeichen entfernen
+            For i = 0 To Namen.GetUpperBound(0)
+                Namen(i) = Namen(i).Trim()
+                If (Namen(i).Length = 0) Then Namen(i) = "{" & i.ToString() & "}"
+                'Einheiten anhängen
+                If (Me.UseEinheiten) Then
+                    Namen(i) &= " [" & Einheiten(i).Trim() & "]"
+                End If
+            Next
+
+            'X-Spalte übernehmen
+            Me.XSpalte = Namen(0)
+
+            'Y-Spalten übernehmen
+            ReDim Me.YSpalten(Namen.GetUpperBound(0) - 1)
+            Array.Copy(Namen, 1, Me.YSpalten, 0, Namen.Length - 1)
+
+        Catch ex As Exception
+            MsgBox("Konnte Datei nicht einlesen!" & eol & eol & "Fehler: " & ex.Message, MsgBoxStyle.Critical, "Fehler")
+        End Try
 
     End Sub
 
-    'TXT-Datei einlesen
+    'CSV-Datei einlesen
     '******************
     Public Overrides Sub Read_File()
 
@@ -166,7 +171,7 @@ Public Class CSV
             Next
 
         Catch ex As Exception
-            MsgBox("Konnte CSV-Datei nicht einlesen." & Chr(13) & Chr(10) & "Bitte Einstellungen anpassen!", MsgBoxStyle.Exclamation, "Wave")
+            MsgBox("Konnte Datei nicht einlesen!" & eol & eol & "Fehler: " & ex.Message, MsgBoxStyle.Critical, "Fehler")
         End Try
 
     End Sub
