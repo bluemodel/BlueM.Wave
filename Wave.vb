@@ -22,6 +22,9 @@ Public Class Wave
     Private selectionMade As Boolean									'Flag zeigt an, ob bereits ein Auswahlbereich ausgewählt wurde
     
     Private Const HelpURL As String = "http://130.83.196.154/BlueM/wiki/index.php/Wave"
+    Private Zeitreihen As Collection
+
+
 
     'Methoden
     '########
@@ -45,6 +48,11 @@ Public Class Wave
             "WEL-Dateien (*.wel, *.kwl)|*.wel;*.kwl|" & _
             "TeeChart-Dateien (*.ten)|*.ten|" & _
             "Alle Dateien (*.*)|*.*"
+
+        'Kollektionen einrichten
+        '-----------------------
+        Me.Zeitreihen = New Collection
+
 
         'Charts einrichten
         '-----------------
@@ -231,6 +239,7 @@ Public Class Wave
         Me.TChart1.Clear()
         Me.TChart2.Clear()
         Call ColorBandEinrichten()
+        Me.Zeitreihen.Clear()
     End Sub
 
     'Öffnen
@@ -364,6 +373,9 @@ Public Class Wave
         'ZRE einlesen
         Call ZRE.Read_File()
 
+        'Serie abspeichern
+        Me.Zeitreihen.Add(ZRE.Zeitreihen(0))
+
         'Serie zeichnen
         '--------------
         Call Me.Display_Series(ZRE.Zeitreihen(0))
@@ -382,12 +394,14 @@ Public Class Wave
         'Import-Dialog anzeigen
         Call Me.showImportDialog(WEL)
 
-        'Serien zeichnen
-        '---------------
+        'Serien zeichnen und abspeichern
+        '-------------------------------
         If (Not IsNothing(WEL.Zeitreihen)) Then
 
             For i = 0 To WEL.Zeitreihen.GetUpperBound(0)
                 Call Me.Display_Series(WEL.Zeitreihen(i))
+                'Serie abspeichen
+                Me.Zeitreihen.Add(WEL.Zeitreihen(i))
             Next
 
         End If
@@ -412,6 +426,8 @@ Public Class Wave
 
             For i = 0 To ASC.Zeitreihen.GetUpperBound(0)
                 Call Me.Display_Series(ASC.Zeitreihen(i))
+                'Serie abspeichern
+                Me.Zeitreihen.Add(ASC.Zeitreihen(i))
             Next
 
         End If
@@ -467,6 +483,8 @@ Public Class Wave
 
             For i = 0 To CSV.Zeitreihen.GetUpperBound(0)
                 Call Me.Display_Series(CSV.Zeitreihen(i))
+                ' Serie abspeichern
+                Me.Zeitreihen.Add(CSV.Zeitreihen(i))
             Next
 
         End If
@@ -608,4 +626,32 @@ Public Class Wave
 
 #End Region 'Funktionalität
 
+    Private Sub ToolStripButton_Export_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_Export.Click
+        'ZRE-Export
+        Dim ExportDiag As New ExportDiag
+        Dim DiagResult As DialogResult
+        Dim Reihe As Zeitreihe
+
+
+        For Each Reihe In Me.Zeitreihen
+            ExportDiag.CheckedListBox_Zeitreihen.Items.Add(Reihe)
+        Next
+        ExportDiag.ComboBox_Format.DataSource = System.Enum.GetValues(GetType(formate))
+        DiagResult = ExportDiag.ShowDialog()
+        If (DiagResult = Windows.Forms.DialogResult.OK) Then
+            If (Me.SaveFileDialog1.ShowDialog() = Windows.Forms.DialogResult.OK) Then
+                Select Case ExportDiag.ComboBox_Format.SelectedItem
+                    Case formate.ZRE
+                        For Each item As Object In ExportDiag.CheckedListBox_Zeitreihen.SelectedItems
+                            Reihe = CType(item, Zeitreihe)
+                            Call ZRE.Writefile(Reihe, Me.SaveFileDialog1.FileName)
+                        Next
+                    Case Else
+                        MsgBox("Noch nicht implementiert!", MsgBoxStyle.Information, "Das geht nicht!")
+                End Select
+
+
+            End If
+        End If
+    End Sub
 End Class

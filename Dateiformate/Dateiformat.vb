@@ -32,10 +32,11 @@ Public MustInherit Class Dateiformat
     Private _XSpalte As String = ""                     'Name der X-Spalte
     Private _Yspalten() As String = {}                  'Array der vorhandenen Y-Spaltennamen
     Private _spaltenSel() As String = {}                'Array der ausgewählten Y-Spaltennamen
+    Private _Einheiten() As String = {}                  'Array der Einheiten
 
     Public ImportDiag As ImportDiag
 
-    Protected FortranProvider As NumberFormatInfo       'Zahlenformatierungsanweisung für Fortran
+    Protected Shared FortranProvider As NumberFormatInfo       'Zahlenformatierungsanweisung für Fortran
 
 #End Region 'Eigenschaften
 
@@ -155,6 +156,14 @@ Public MustInherit Class Dateiformat
         End Get
         Set(ByVal value As String())
             _spaltenSel = value
+        End Set
+    End Property
+    Public Property Einheiten() As String()
+        Get
+            Return _Einheiten
+        End Get
+        Set(ByVal value As String())
+            _Einheiten = value
         End Set
     End Property
 

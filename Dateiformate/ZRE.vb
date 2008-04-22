@@ -56,10 +56,9 @@ Public Class ZRE
             ReDim Me.YSpalten(0)
             Me.YSpalten(0) = Zeile.Substring(0, 15).Trim()
 
-            'Einheit anhängen
-            If (Me.UseEinheiten) Then
-                Me.YSpalten(0) &= " [" & Zeile.Substring(15).Trim() & "]"
-            End If
+            'Einheit übernehmen
+            ReDim Me.Einheiten(0)
+            Me.Einheiten(0) = Zeile.Substring(15).Trim()
 
             Me.SpaltenSel = Me.YSpalten
 
@@ -93,6 +92,7 @@ Public Class ZRE
         'Zeitreihe redimensionieren
         ReDim Me.Zeitreihen(0)
         Me.Zeitreihen(0) = New Zeitreihe(Me.SpaltenSel(0))
+        Me.Zeitreihen(0).Einheit = Me.Einheiten(0)
         Me.Zeitreihen(0).Length = AnzZeil - Me.nZeilenHeader
 
         'Zurück zum Dateianfang und lesen
@@ -127,6 +127,37 @@ Public Class ZRE
         FiStr.Close()
 
     End Sub
+
+    'ZRE-Datei exportieren
+    '******************
+    Public Shared Sub Writefile(ByVal Reihe As Zeitreihe, ByVal File As String)
+
+        Dim strwrite As StreamWriter
+
+        strwrite = New StreamWriter(File)
+
+        strwrite.WriteLine("*ZRE")
+        Dim Titel As String
+        If Reihe.Title.Length > 15 Then
+            Titel = Reihe.Title.Substring(0, 15)
+        Else
+            Titel = Reihe.Title.PadRight(15)
+        End If
+        strwrite.WriteLine(Titel & Reihe.Einheit)
+        strwrite.WriteLine("0                      0.        0.        0.")
+        strwrite.WriteLine(Reihe.XWerte(0).ToString("yyyyMMdd HH:mm") & " " & Reihe.XWerte(Reihe.Length - 1).ToString("yyyyMMdd HH:mm"))
+        Dim i As Integer
+        For i = 0 To Reihe.Length - 1
+            strwrite.Write(Reihe.XWerte(i).ToString("yyyyMMdd HH:mm") & " " & Reihe.YWerte(i).ToString(FortranProvider))
+            If i < Reihe.Length - 1 Then
+                strwrite.WriteLine()
+            End If
+
+        Next
+        strwrite.Close()
+    End Sub
+
+
 
 #End Region 'Methoden
 

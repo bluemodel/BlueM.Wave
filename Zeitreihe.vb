@@ -9,6 +9,8 @@ Public Class Zeitreihe
     Private _XWerte() As DateTime
     Private _YWerte() As Double
     Private _length As Integer
+    Private _Einheit As String
+
 
 #End Region 'Eigenschaften
 
@@ -52,6 +54,15 @@ Public Class Zeitreihe
             _length = value
             ReDim Preserve Me.XWerte(_length - 1)
             ReDim Preserve Me.YWerte(_length - 1)
+        End Set
+    End Property
+
+    Public Property Einheit() As String
+        Get
+            Return _Einheit
+        End Get
+        Set(ByVal value As String)
+            _Einheit = value
         End Set
     End Property
 

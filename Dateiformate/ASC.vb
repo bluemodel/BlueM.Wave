@@ -76,11 +76,8 @@ Public Class ASC
 
             'Leerzeichen entfernen
             For i = 0 To Namen.GetUpperBound(0)
+                Einheiten(i) = Einheiten(i).Trim()
                 Namen(i) = Namen(i).Trim()
-                'Einheiten anhängen
-                If (Me.UseEinheiten) Then
-                    Namen(i) &= " [" & Einheiten(i).Trim() & "]"
-                End If
             Next
 
             'X-Spalte übernehmen
@@ -88,7 +85,9 @@ Public Class ASC
 
             'Y-Spalten übernehmen
             ReDim Me.YSpalten(Namen.GetUpperBound(0) - 1)
+            ReDim Me.Einheiten(Namen.GetUpperBound(0) - 1)
             Array.Copy(Namen, 1, Me.YSpalten, 0, Namen.Length - 1)
+            Array.Copy(Einheiten, 1, Me.Einheiten, 0, Namen.Length - 1)
 
         Catch ex As Exception
             MsgBox("Konnte Datei nicht einlesen!" & eol & eol & "Fehler: " & ex.Message, MsgBoxStyle.Critical, "Fehler")
@@ -164,6 +163,7 @@ Public Class ASC
                     'Alle Werte auf 0.0 setzen
                     For j = 0 To Me.YSpalten.GetUpperBound(0)
                         If (isSelected(Me.YSpalten(j))) Then
+                            Me.Zeitreihen(n).Einheit = Me.Einheiten(j)
                             Me.Zeitreihen(n).YWerte(i) = 0.0
                             n += 1
                         End If
@@ -182,6 +182,7 @@ Public Class ASC
                         n = 0
                         For j = 0 To Me.YSpalten.GetUpperBound(0)
                             If (isSelected(Me.YSpalten(j))) Then
+                                Me.Zeitreihen(n).Einheit = Me.Einheiten(j)
                                 Me.Zeitreihen(n).YWerte(i) = 0.0
                                 Me.Zeitreihen(n).YWerte(i + 1) = Convert.ToDouble(Werte(j + 2), FortranProvider)
                                 n += 1
@@ -193,6 +194,7 @@ Public Class ASC
                         n = 0
                         For j = 0 To Me.YSpalten.GetUpperBound(0)
                             If (isSelected(Me.YSpalten(j))) Then
+                                Me.Zeitreihen(n).Einheit = Me.Einheiten(j)
                                 Me.Zeitreihen(n).YWerte(i) = Convert.ToDouble(Werte(j + 2), FortranProvider)
                                 n += 1
                             End If
@@ -204,6 +206,7 @@ Public Class ASC
                     n = 0
                     For j = 0 To Me.YSpalten.GetUpperBound(0)
                         If (isSelected(Me.YSpalten(j))) Then
+                            Me.Zeitreihen(n).Einheit = Me.Einheiten(j)
                             Me.Zeitreihen(n).YWerte(i) = Convert.ToDouble(Werte(j + 2), FortranProvider)
                             n += 1
                         End If

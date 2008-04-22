@@ -68,12 +68,9 @@ Public Class CSV
 
             'Leerzeichen entfernen
             For i = 0 To Namen.GetUpperBound(0)
+                Einheiten(i) = Einheiten(i).Trim()
                 Namen(i) = Namen(i).Trim()
                 If (Namen(i).Length = 0) Then Namen(i) = "{" & i.ToString() & "}"
-                'Einheiten anhängen
-                If (Me.UseEinheiten) Then
-                    Namen(i) &= " [" & Einheiten(i).Trim() & "]"
-                End If
             Next
 
             'X-Spalte übernehmen
@@ -81,7 +78,9 @@ Public Class CSV
 
             'Y-Spalten übernehmen
             ReDim Me.YSpalten(Namen.GetUpperBound(0) - 1)
+            ReDim Me.Einheiten(Namen.GetUpperBound(0) - 1)
             Array.Copy(Namen, 1, Me.YSpalten, 0, Namen.Length - 1)
+            Array.Copy(Einheiten, 1, Me.Einheiten, 0, Namen.Length - 1)
 
         Catch ex As Exception
             MsgBox("Konnte Datei nicht einlesen!" & eol & eol & "Fehler: " & ex.Message, MsgBoxStyle.Critical, "Fehler")
@@ -137,6 +136,7 @@ Public Class CSV
                         n = 0
                         For j = 0 To Me.YSpalten.GetUpperBound(0)
                             If (isSelected(Me.YSpalten(j))) Then
+                                Me.Zeitreihen(n).Einheit = Me.Einheiten(j)
                                 Me.Zeitreihen(n).YWerte(i - Me.nZeilenHeader) = Convert.ToDouble(Werte(j + 1))
                                 n += 1
                             End If
@@ -152,6 +152,7 @@ Public Class CSV
                         n = 0
                         For j = 0 To Me.YSpalten.GetUpperBound(0)
                             If (isSelected(Me.YSpalten(j))) Then
+                                Me.Zeitreihen(n).Einheit = Me.Einheiten(j)
                                 Me.Zeitreihen(n).YWerte(i - Me.nZeilenHeader) = Convert.ToDouble(Zeile.Substring((j + 1) * Me.Spaltenbreite, Math.Min(Me.Spaltenbreite, Zeile.Substring((j + 1) * Me.Spaltenbreite).Length)))
                                 n += 1
                             End If
