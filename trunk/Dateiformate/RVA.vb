@@ -139,9 +139,9 @@ Public Class RVA
                             .IHAParams(j).PName = Zeile.Substring(0, 22).Trim()
                             'Werte einlesen
                             Werte = Zeile.Substring(22).Split(New Char() {leerzeichen.Character}, StringSplitOptions.RemoveEmptyEntries)
-                            .IHAParams(j).HAMiddle = Convert.ToDouble(Werte(2), Me.FortranProvider)
-                            .IHAParams(j).HAHigh = Convert.ToDouble(Werte(5), Me.FortranProvider)
-                            .IHAParams(j).HALow = Convert.ToDouble(Werte(8), Me.FortranProvider)
+                            .IHAParams(j).HAMiddle = Convert.ToDouble(Werte(2), FortranProvider)
+                            .IHAParams(j).HAHigh = Convert.ToDouble(Werte(5), FortranProvider)
+                            .IHAParams(j).HALow = Convert.ToDouble(Werte(8), FortranProvider)
                         Next
 
                         Exit Do

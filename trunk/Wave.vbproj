@@ -57,12 +57,19 @@
     </Compile>
     <Compile Include="Dateiformate\Dateiformat.vb" />
     <Compile Include="Dateiformate\RVA.vb" />
+    <Compile Include="ExportDiag.Designer.vb">
+      <DependentUpon>ExportDiag.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ExportDiag.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="ImportDiag.designer.vb">
       <DependentUpon>ImportDiag.vb</DependentUpon>
     </Compile>
     <Compile Include="ImportDiag.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Konstanten.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
@@ -117,6 +124,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="ExportDiag.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>ExportDiag.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ImportDiag.resx">
       <DependentUpon>ImportDiag.vb</DependentUpon>
       <SubType>Designer</SubType>
