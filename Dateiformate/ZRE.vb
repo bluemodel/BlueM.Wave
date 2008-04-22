@@ -80,6 +80,9 @@ Public Class ZRE
         Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
         Dim StrRead As StreamReader = New StreamReader(FiStr, System.Text.Encoding.GetEncoding("iso8859-1"))
         Dim StrReadSync = TextReader.Synchronized(StrRead)
+        Dim Stunde, Minute, Tag, Monat, Jahr As Integer
+        Dim Datum As DateTime
+
 
         'Anzahl der Zeilen feststellen
         Do
@@ -99,7 +102,21 @@ Public Class ZRE
             Zeile = StrReadSync.ReadLine.ToString()
             If (j >= Me.nZeilenHeader) Then
                 'Datum
-                Me.Zeitreihen(0).XWerte(j - Me.nZeilenHeader) = New System.DateTime(Zeile.Substring(0, 4), Zeile.Substring(4, 2), Zeile.Substring(6, 2), Zeile.Substring(9, 2), Zeile.Substring(12, 2), 0, New System.Globalization.GregorianCalendar())
+                Jahr = Zeile.Substring(0, 4)
+                Monat = Zeile.Substring(4, 2)
+                Tag = Zeile.Substring(6, 2)
+                Stunde = Zeile.Substring(9, 2)
+                Minute = Zeile.Substring(12, 2)
+                Datum = New System.DateTime(Jahr, Monat, Tag, 0, 0, 0, New System.Globalization.GregorianCalendar())
+                ' Wenn Uhrzeit als 24:00 gegeben ist, wird der Tag um eins hochgezählt und die Zeit auf 00:00 gesetzt
+                If (Stunde = 24) Then
+                    Stunde = 0
+                    Datum = Datum.AddDays(1)
+                End If
+                Datum = Datum.AddHours(Stunde)
+                Datum = Datum.AddMinutes(Minute)
+
+                Me.Zeitreihen(0).XWerte(j - Me.nZeilenHeader) = Datum
                 'Wert
                 Me.Zeitreihen(0).YWerte(j - Me.nZeilenHeader) = Convert.ToDouble(Zeile.Substring(15), FortranProvider)
             End If
