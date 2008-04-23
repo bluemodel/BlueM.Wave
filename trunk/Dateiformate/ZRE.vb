@@ -3,6 +3,8 @@ Imports System.IO
 Public Class ZRE
     Inherits Dateiformat
 
+    Const DatumsformatZRE As String = "yyyyMMdd HH:mm"
+
 #Region "Methoden"
 
     'Methoden
@@ -75,13 +77,12 @@ Public Class ZRE
         Dim AnzZeil As Integer = 0
         Dim j As Integer = 0
         Dim Zeile As String
+        Dim Stunde, Minute, Tag, Monat, Jahr As Integer
+        Dim Datum As DateTime
 
         Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
         Dim StrRead As StreamReader = New StreamReader(FiStr, System.Text.Encoding.GetEncoding("iso8859-1"))
         Dim StrReadSync = TextReader.Synchronized(StrRead)
-        Dim Stunde, Minute, Tag, Monat, Jahr As Integer
-        Dim Datum As DateTime
-
 
         'Anzahl der Zeilen feststellen
         Do
@@ -130,31 +131,30 @@ Public Class ZRE
 
     'ZRE-Datei exportieren
     '******************
-    Public Shared Sub Writefile(ByVal Reihe As Zeitreihe, ByVal File As String)
+    Public Shared Sub Write_File(ByVal Reihe As Zeitreihe, ByVal File As String)
 
         Dim strwrite As StreamWriter
+        Dim i As Integer
 
         strwrite = New StreamWriter(File)
 
+        '1. Zeile
         strwrite.WriteLine("*ZRE")
-        Dim Titel As String
-        If Reihe.Title.Length > 15 Then
-            Titel = Reihe.Title.Substring(0, 15)
-        Else
-            Titel = Reihe.Title.PadRight(15)
-        End If
-        strwrite.WriteLine(Titel & Reihe.Einheit)
+        '2. Zeile: Titel und Einheit
+        strwrite.WriteLine(Reihe.Title.PadRight(15).Substring(0, 15) & Reihe.Einheit)
+        '3. Zeile: Parameter
         strwrite.WriteLine("0                      0.        0.        0.")
-        strwrite.WriteLine(Reihe.XWerte(0).ToString("yyyyMMdd HH:mm") & " " & Reihe.XWerte(Reihe.Length - 1).ToString("yyyyMMdd HH:mm"))
-        Dim i As Integer
+        '4. Zeile: Anfangs- und Enddatum
+        strwrite.WriteLine(Reihe.XWerte(0).ToString(DatumsformatZRE) & " " & Reihe.XWerte(Reihe.Length - 1).ToString(DatumsformatZRE))
+        'ab 5. Zeile: Werte
         For i = 0 To Reihe.Length - 1
-            strwrite.Write(Reihe.XWerte(i).ToString("yyyyMMdd HH:mm") & " " & Reihe.YWerte(i).ToString(FortranProvider))
-            If i < Reihe.Length - 1 Then
+            strwrite.Write(Reihe.XWerte(i).ToString(DatumsformatZRE) & " " & Reihe.YWerte(i).ToString(FortranProvider))
+            If (i < Reihe.Length - 1) Then 'kein Zeilenumbruch nach der letzten Zeile!
                 strwrite.WriteLine()
             End If
-
         Next
         strwrite.Close()
+
     End Sub
 
 

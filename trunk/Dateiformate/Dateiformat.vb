@@ -1,5 +1,3 @@
-Imports System.Globalization
-
 Public MustInherit Class Dateiformat
 
     'oft verwendete Zeichen (quasi Konstanten)
@@ -9,9 +7,6 @@ Public MustInherit Class Dateiformat
     Public punkt As Zeichen = New Zeichen(".")
     Public leerzeichen As Zeichen = New Zeichen(" ")
     Public tab As Zeichen = New Zeichen(Chr(9))
-
-    'echte Konstanten
-    Protected Const eol As String = Chr(13) & Chr(10)   'Zeilenumbruch
 
 #Region "Eigenschaften"
 
@@ -35,8 +30,6 @@ Public MustInherit Class Dateiformat
     Private _Einheiten() As String = {}                  'Array der Einheiten
 
     Public ImportDiag As ImportDiag
-
-    Protected Shared FortranProvider As NumberFormatInfo       'Zahlenformatierungsanweisung für Fortran
 
 #End Region 'Eigenschaften
 
@@ -211,12 +204,6 @@ Public MustInherit Class Dateiformat
 
         'Dateinamen setzen
         Me.File = FileName
-
-        'Provider einrichten
-        FortranProvider = New NumberFormatInfo()
-        FortranProvider.NumberDecimalSeparator = "."
-        FortranProvider.NumberGroupSeparator = ""
-        FortranProvider.NumberGroupSizes = New Integer() {3}
 
     End Sub
 
