@@ -148,7 +148,7 @@ Public Class ZRE
         strwrite.WriteLine(Reihe.XWerte(0).ToString(DatumsformatZRE) & " " & Reihe.XWerte(Reihe.Length - 1).ToString(DatumsformatZRE))
         'ab 5. Zeile: Werte
         For i = 0 To Reihe.Length - 1
-            strwrite.Write(Reihe.XWerte(i).ToString(DatumsformatZRE) & " " & Reihe.YWerte(i).ToString(FortranProvider))
+            strwrite.Write(Reihe.XWerte(i).ToString(DatumsformatZRE) & " " & Reihe.YWerte(i).ToString(FortranProvider).PadLeft(14))
             If (i < Reihe.Length - 1) Then 'kein Zeilenumbruch nach der letzten Zeile!
                 strwrite.WriteLine()
             End If
