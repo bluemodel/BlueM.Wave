@@ -29,6 +29,7 @@ Partial Class Wave
         Me.NeuToolStripButton = New System.Windows.Forms.ToolStripButton
         Me.ÖffnenToolStripButton = New System.Windows.Forms.ToolStripButton
         Me.SpeichernToolStripButton = New System.Windows.Forms.ToolStripButton
+        Me.ToolStripButton_Export = New System.Windows.Forms.ToolStripButton
         Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator
         Me.EditToolStripButton = New System.Windows.Forms.ToolStripButton
         Me.ÜbersichtToolStripButton = New System.Windows.Forms.ToolStripButton
@@ -40,7 +41,6 @@ Partial Class Wave
         Me.DateTimePicker1 = New System.Windows.Forms.DateTimePicker
         Me.SplitContainer1 = New System.Windows.Forms.SplitContainer
         Me.TChart2 = New Steema.TeeChart.TChart
-        Me.ToolStripButton_Export = New System.Windows.Forms.ToolStripButton
         Me.SaveFileDialog1 = New System.Windows.Forms.SaveFileDialog
         Me.ToolStrip1.SuspendLayout()
         Me.SplitContainer1.Panel1.SuspendLayout()
@@ -169,7 +169,7 @@ Partial Class Wave
         '
         Me.ToolStrip1.AutoSize = False
         Me.ToolStrip1.BackColor = System.Drawing.SystemColors.Control
-        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.NeuToolStripButton, Me.ÖffnenToolStripButton, Me.SpeichernToolStripButton, Me.ToolStripSeparator1, Me.EditToolStripButton, Me.ÜbersichtToolStripButton, Me.toolStripSeparator, Me.DruckenToolStripButton, Me.KopierenToolStripButton, Me.toolStripSeparator3, Me.HilfeToolStripButton, Me.ToolStripButton_Export})
+        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.NeuToolStripButton, Me.ÖffnenToolStripButton, Me.SpeichernToolStripButton, Me.ToolStripButton_Export, Me.ToolStripSeparator1, Me.EditToolStripButton, Me.ÜbersichtToolStripButton, Me.toolStripSeparator, Me.DruckenToolStripButton, Me.KopierenToolStripButton, Me.toolStripSeparator3, Me.HilfeToolStripButton})
         Me.ToolStrip1.Location = New System.Drawing.Point(0, 0)
         Me.ToolStrip1.Name = "ToolStrip1"
         Me.ToolStrip1.Size = New System.Drawing.Size(945, 34)
@@ -202,6 +202,16 @@ Partial Class Wave
         Me.SpeichernToolStripButton.Name = "SpeichernToolStripButton"
         Me.SpeichernToolStripButton.Size = New System.Drawing.Size(23, 31)
         Me.SpeichernToolStripButton.Text = "&Speichern"
+        '
+        'ToolStripButton_Export
+        '
+        Me.ToolStripButton_Export.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.ToolStripButton_Export.Image = Global.Wave.My.Resources.Resources.page_white_go
+        Me.ToolStripButton_Export.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ToolStripButton_Export.Name = "ToolStripButton_Export"
+        Me.ToolStripButton_Export.Size = New System.Drawing.Size(23, 31)
+        Me.ToolStripButton_Export.Text = "Exportieren"
+        Me.ToolStripButton_Export.ToolTipText = "Exportieren"
         '
         'ToolStripSeparator1
         '
@@ -407,15 +417,6 @@ Partial Class Wave
         '
         '
         Me.TChart2.Walls.Right.AutoHide = False
-        '
-        'ToolStripButton_Export
-        '
-        Me.ToolStripButton_Export.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.ToolStripButton_Export.Image = CType(resources.GetObject("ToolStripButton_Export.Image"), System.Drawing.Image)
-        Me.ToolStripButton_Export.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.ToolStripButton_Export.Name = "ToolStripButton_Export"
-        Me.ToolStripButton_Export.Size = New System.Drawing.Size(23, 31)
-        Me.ToolStripButton_Export.Text = "Export"
         '
         'Wave
         '

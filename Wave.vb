@@ -262,6 +262,73 @@ Public Class Wave
         Call Me.TChart1.Export.ShowExportDialog()
     End Sub
 
+    'Exportieren
+    '***********
+    Private Sub Exportieren(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_Export.Click
+
+        Dim ExportDiag As New ExportDiag()
+        Dim Reihe As Zeitreihe
+
+        'Wenn keine Zeitreihen vorhanden, abbrechen!
+        If (Me.Zeitreihen.Count < 1) Then
+            MsgBox("Es sind keine Zeitreihen für den Export verfügbar!", MsgBoxStyle.Exclamation, "Wave")
+            Exit Sub
+        End If
+
+        'Exportdialog vorbereiten
+        '------------------------
+        'Liste der Formate
+        ExportDiag.ComboBox_Format.DataSource = System.Enum.GetValues(GetType(Konstanten.Formate))
+        'Zeitreihen in Listbox eintragen
+        For Each Reihe In Me.Zeitreihen
+            ExportDiag.ListBox_Zeitreihen.Items.Add(Reihe)
+        Next
+
+        'Exportdialog anzeigen
+        '---------------------
+        If (ExportDiag.ShowDialog() = Windows.Forms.DialogResult.OK) Then
+
+            'Speichern-Dialog vorbereiten
+            '----------------------------
+            Me.SaveFileDialog1.Title = "Speichern unter..."
+            Me.SaveFileDialog1.AddExtension = True
+            Select Case ExportDiag.ComboBox_Format.SelectedItem
+                Case Formate.ASC
+                    Me.SaveFileDialog1.DefaultExt = "asc"
+                    Me.SaveFileDialog1.Filter = "ASC-Dateien (*.asc)|*.asc"
+                Case Formate.CSV
+                    Me.SaveFileDialog1.DefaultExt = "csv"
+                    Me.SaveFileDialog1.Filter = "CSV-Dateien (*.csv)|*.csv"
+                Case Formate.WEL
+                    Me.SaveFileDialog1.DefaultExt = "wel"
+                    Me.SaveFileDialog1.Filter = "WEL-Dateien (*.wel)|*.wel"
+                Case Formate.ZRE
+                    Me.SaveFileDialog1.DefaultExt = "zre"
+                    Me.SaveFileDialog1.Filter = "ZRE-Dateien (*.zre)|*.zre"
+            End Select
+            Me.SaveFileDialog1.Filter &= "|Alle Dateien (*.*)|*.*"
+            Me.SaveFileDialog1.FilterIndex = 1
+
+            'Speichern-Dialog anzeigen
+            '-------------------------
+            If (Me.SaveFileDialog1.ShowDialog() = Windows.Forms.DialogResult.OK) Then
+
+                'Reihen exportieren
+                Select Case ExportDiag.ComboBox_Format.SelectedItem
+                    Case Formate.ZRE
+                        For Each item As Object In ExportDiag.ListBox_Zeitreihen.SelectedItems
+                            Reihe = CType(item, Zeitreihe)
+                            Call ZRE.Write_File(Reihe, Me.SaveFileDialog1.FileName)
+                        Next
+                    Case Else
+                        MsgBox("Noch nicht implementiert!", MsgBoxStyle.Exclamation, "Wave")
+                End Select
+
+                MsgBox("Zeitreihe erfolgreich exportiert!", MsgBoxStyle.Information, "Wave")
+            End If
+        End If
+    End Sub
+
     'Drucken
     '*******
     Private Sub Drucken(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles DruckenToolStripButton.Click
@@ -626,32 +693,4 @@ Public Class Wave
 
 #End Region 'Funktionalität
 
-    Private Sub ToolStripButton_Export_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_Export.Click
-        'ZRE-Export
-        Dim ExportDiag As New ExportDiag
-        Dim DiagResult As DialogResult
-        Dim Reihe As Zeitreihe
-
-
-        For Each Reihe In Me.Zeitreihen
-            ExportDiag.CheckedListBox_Zeitreihen.Items.Add(Reihe)
-        Next
-        ExportDiag.ComboBox_Format.DataSource = System.Enum.GetValues(GetType(formate))
-        DiagResult = ExportDiag.ShowDialog()
-        If (DiagResult = Windows.Forms.DialogResult.OK) Then
-            If (Me.SaveFileDialog1.ShowDialog() = Windows.Forms.DialogResult.OK) Then
-                Select Case ExportDiag.ComboBox_Format.SelectedItem
-                    Case formate.ZRE
-                        For Each item As Object In ExportDiag.CheckedListBox_Zeitreihen.SelectedItems
-                            Reihe = CType(item, Zeitreihe)
-                            Call ZRE.Writefile(Reihe, Me.SaveFileDialog1.FileName)
-                        Next
-                    Case Else
-                        MsgBox("Noch nicht implementiert!", MsgBoxStyle.Information, "Das geht nicht!")
-                End Select
-
-
-            End If
-        End If
-    End Sub
 End Class

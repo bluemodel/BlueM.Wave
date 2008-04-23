@@ -22,23 +22,29 @@ Partial Class ExportDiag
     'Das Bearbeiten mit dem Code-Editor ist nicht möglich.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-        Me.CheckedListBox_Zeitreihen = New System.Windows.Forms.ListBox
+        Dim Label_Format As System.Windows.Forms.Label
+        Dim Label_Zeitreihen As System.Windows.Forms.Label
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(ExportDiag))
+        Me.ListBox_Zeitreihen = New System.Windows.Forms.ListBox
         Me.Button_OK = New System.Windows.Forms.Button
         Me.ComboBox_Format = New System.Windows.Forms.ComboBox
+        Me.Button_Cancel = New System.Windows.Forms.Button
+        Label_Format = New System.Windows.Forms.Label
+        Label_Zeitreihen = New System.Windows.Forms.Label
         Me.SuspendLayout()
         '
-        'CheckedListBox_Zeitreihen
+        'ListBox_Zeitreihen
         '
-        Me.CheckedListBox_Zeitreihen.FormattingEnabled = True
-        Me.CheckedListBox_Zeitreihen.Location = New System.Drawing.Point(26, 89)
-        Me.CheckedListBox_Zeitreihen.Name = "CheckedListBox_Zeitreihen"
-        Me.CheckedListBox_Zeitreihen.Size = New System.Drawing.Size(243, 109)
-        Me.CheckedListBox_Zeitreihen.TabIndex = 0
+        Me.ListBox_Zeitreihen.FormattingEnabled = True
+        Me.ListBox_Zeitreihen.Location = New System.Drawing.Point(12, 62)
+        Me.ListBox_Zeitreihen.Name = "ListBox_Zeitreihen"
+        Me.ListBox_Zeitreihen.Size = New System.Drawing.Size(169, 108)
+        Me.ListBox_Zeitreihen.TabIndex = 0
         '
         'Button_OK
         '
         Me.Button_OK.DialogResult = System.Windows.Forms.DialogResult.OK
-        Me.Button_OK.Location = New System.Drawing.Point(49, 226)
+        Me.Button_OK.Location = New System.Drawing.Point(106, 186)
         Me.Button_OK.Name = "Button_OK"
         Me.Button_OK.Size = New System.Drawing.Size(75, 23)
         Me.Button_OK.TabIndex = 1
@@ -49,25 +55,61 @@ Partial Class ExportDiag
         '
         Me.ComboBox_Format.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.ComboBox_Format.FormattingEnabled = True
-        Me.ComboBox_Format.Location = New System.Drawing.Point(26, 13)
+        Me.ComboBox_Format.Location = New System.Drawing.Point(60, 9)
         Me.ComboBox_Format.Name = "ComboBox_Format"
         Me.ComboBox_Format.Size = New System.Drawing.Size(121, 21)
         Me.ComboBox_Format.TabIndex = 2
+        '
+        'Label_Format
+        '
+        Label_Format.AutoSize = True
+        Label_Format.Location = New System.Drawing.Point(12, 12)
+        Label_Format.Name = "Label_Format"
+        Label_Format.Size = New System.Drawing.Size(42, 13)
+        Label_Format.TabIndex = 3
+        Label_Format.Text = "Format:"
+        '
+        'Label_Zeitreihen
+        '
+        Label_Zeitreihen.AutoSize = True
+        Label_Zeitreihen.Location = New System.Drawing.Point(12, 46)
+        Label_Zeitreihen.Name = "Label_Zeitreihen"
+        Label_Zeitreihen.Size = New System.Drawing.Size(63, 13)
+        Label_Zeitreihen.TabIndex = 4
+        Label_Zeitreihen.Text = "Zeitreihe(n):"
+        '
+        'Button_Cancel
+        '
+        Me.Button_Cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel
+        Me.Button_Cancel.Location = New System.Drawing.Point(25, 186)
+        Me.Button_Cancel.Name = "Button_Cancel"
+        Me.Button_Cancel.Size = New System.Drawing.Size(75, 23)
+        Me.Button_Cancel.TabIndex = 5
+        Me.Button_Cancel.Text = "Abbrechen"
+        Me.Button_Cancel.UseVisualStyleBackColor = True
         '
         'ExportDiag
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(292, 273)
+        Me.ClientSize = New System.Drawing.Size(193, 221)
+        Me.Controls.Add(Me.Button_Cancel)
+        Me.Controls.Add(Label_Zeitreihen)
+        Me.Controls.Add(Label_Format)
         Me.Controls.Add(Me.ComboBox_Format)
         Me.Controls.Add(Me.Button_OK)
-        Me.Controls.Add(Me.CheckedListBox_Zeitreihen)
+        Me.Controls.Add(Me.ListBox_Zeitreihen)
+        Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
+        Me.MaximizeBox = False
+        Me.MinimizeBox = False
         Me.Name = "ExportDiag"
-        Me.Text = "ExportDiag"
+        Me.Text = "Zeitreihen exportieren"
         Me.ResumeLayout(False)
+        Me.PerformLayout()
 
     End Sub
-    Friend WithEvents CheckedListBox_Zeitreihen As System.Windows.Forms.ListBox
+    Friend WithEvents ListBox_Zeitreihen As System.Windows.Forms.ListBox
     Friend WithEvents Button_OK As System.Windows.Forms.Button
     Friend WithEvents ComboBox_Format As System.Windows.Forms.ComboBox
+    Private WithEvents Button_Cancel As System.Windows.Forms.Button
 End Class
