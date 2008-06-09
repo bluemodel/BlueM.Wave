@@ -404,24 +404,54 @@ Public Class Wave
     Public Sub Import_TEN(ByVal FileName As String)
 
         Dim res As DialogResult
+        Dim i As Integer
+        Dim reihe As Zeitreihe
 
         'Warnen, wenn bereits Serien vorhanden (Chart wird komplett überschrieben!)
+        '--------------------------------------------------------------------------
         If (TChart1.Series.Count() > 0) Then
             res = MsgBox("Die vorhandenen Serien werden überschrieben!" & Chr(13) & Chr(10) & "Fortfahren?", MsgBoxStyle.OkCancel)
             If (Not res = Windows.Forms.DialogResult.OK) Then Exit Sub
         End If
 
         'TEN-Datei importieren
+        '---------------------
         Call TChart1.Import.Template.Load(FileName)
         Call TChart2.Import.Template.Load(FileName)
-        
+
+        'Zeitreihen-Objekte aus TChart importieren
+        '-----------------------------------------
+        'Alte Zeitreihen löschen
+        Me.Zeitreihen.Clear()
+
+        'Alle Reihen durchlaufen
+        For Each series As Steema.TeeChart.Styles.Series In TChart1.Series
+
+            'Nur Zeitreihen importieren!
+            If (series.GetHorizAxis.IsDateTime)
+
+                reihe = New Zeitreihe(series.Title)
+                reihe.Length = series.XValues.Count
+
+                For i = 0 To reihe.Length - 1
+                    reihe.XWerte(i) = Date.FromOADate(series.XValues(i))
+                    reihe.YWerte(i) = series.YValues(i)
+                Next
+
+                Me.Zeitreihen.Add(reihe)
+            End If
+        Next
+
         'Übersicht anpassen
+        '------------------
         TChart2.Header.Visible = False
 
         'ColorBand neu einrichten (geht bei TEN-Import verloren)
+        '-------------------------------------------------------
         Call Me.ColorBandEinrichten()
 
         'Charts aktualisieren
+        '--------------------
         Me.selectionMade = False
         Call Me.UpdateCharts()
 
