@@ -52,6 +52,15 @@
     <Import Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Analysis\Analysis.vb" />
+    <Compile Include="Analysis\Monatsauswertung.vb" />
+    <Compile Include="Analysis\AnalysisFactory.vb" />
+    <Compile Include="Analysis\AnalysisDialog.Designer.vb">
+      <DependentUpon>AnalysisDialog.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Analysis\AnalysisDialog.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="ApplicationEvents.vb" />
     <Compile Include="Dateiformate\ASC.vb">
     </Compile>
@@ -124,6 +133,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Analysis\AnalysisDialog.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>AnalysisDialog.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ExportDiag.resx">
       <SubType>Designer</SubType>
       <DependentUpon>ExportDiag.vb</DependentUpon>
@@ -141,6 +154,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\page_white_go.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\calculator.png" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
