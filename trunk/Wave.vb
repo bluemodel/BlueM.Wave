@@ -6,7 +6,7 @@ Public Class Wave
     '*******************************************************************************
     '**** Klasse Wave                                                           ****
     '****                                                                       ****
-    '**** Tool zur Darstellung von Zeitreihen in TeeChart                       ****
+    '**** Tool zur Darstellung und Analyse von Zeitreihen in TeeChart           ****
     '****                                                                       ****
     '**** Autoren: Michael Bach, Felix Froehlich,                               ****
     '****          Dirk Muschalla, Christoph Hübner                             ****
@@ -235,7 +235,7 @@ Public Class Wave
 
     'Neu
     '***
-    Private Sub Neu(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles NeuToolStripButton.Click
+    Private Sub Neu(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_Neu.Click
         Me.TChart1.Clear()
         Me.TChart2.Clear()
         Call ColorBandEinrichten()
@@ -244,7 +244,7 @@ Public Class Wave
 
     'Öffnen
     '******
-    Private Sub Öffnen(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ÖffnenToolStripButton.Click
+    Private Sub Öffnen(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_Öffnen.Click
         If (Me.OpenFileDialog1.ShowDialog() = Windows.Forms.DialogResult.OK) Then
             Call Me.Import_File(Me.OpenFileDialog1.FileName)
         End If
@@ -252,13 +252,13 @@ Public Class Wave
 
     'Editieren
     '*********
-    Private Sub Editieren(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles EditToolStripButton.Click, TChart1.DoubleClick
+    Private Sub Editieren(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_Edit.Click, TChart1.DoubleClick
         Call Me.TChart1.ShowEditor()
     End Sub
 
     'Speichern
     '*********
-    Private Sub Speichern(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles SpeichernToolStripButton.Click
+    Private Sub Speichern(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_Speichern.Click
         Call Me.TChart1.Export.ShowExportDialog()
     End Sub
 
@@ -329,29 +329,65 @@ Public Class Wave
         End If
     End Sub
 
+    'Analysieren
+    '***********
+    Private Sub Analyse(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_Analysis.Click
+
+        'Wenn keine Zeitreihen vorhanden, abbrechen!
+        If (Me.Zeitreihen.Count < 1) Then
+            MsgBox("Es sind keine Zeitreihen für die Analyse verfügbar!", MsgBoxStyle.Exclamation, "Wave")
+            Exit Sub
+        End If
+
+        Dim oAnalysisDialog As New AnalysisDialog(Me.Zeitreihen)
+
+        'Analysisdialog anzeigen
+        '-----------------------
+        If (oAnalysisDialog.ShowDialog() = Windows.Forms.DialogResult.OK) Then
+
+            'Analyse instanzieren
+            Dim oAnalysis As Analysis
+            oAnalysis = AnalysisFactory.CreateAnalysis(oAnalysisDialog.selectedAnalysisFunction, oAnalysisDialog.selectedZeitreihen)
+
+            'Analyse ausführen
+            Call oAnalysis.ProcessAnalysis()
+
+            'Analyse-Ergebnis-Chart anzeigen
+            If (oAnalysis.hasResultChart) Then
+                Dim Wave2 As New Wave()
+                Wave2.Text = "Analyse-Ergebnis"
+                Wave2.Übersicht_Toggle(False)
+                Wave2.TChart1.Chart = oAnalysis.ResultChart()
+                Call Wave2.Show()
+            End If
+
+        End If
+
+    End Sub
+
     'Drucken
     '*******
-    Private Sub Drucken(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles DruckenToolStripButton.Click
+    Private Sub Drucken(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_Drucken.Click
         Call Me.TChart1.Printer.Preview()
     End Sub
 
     'Kopieren (als PNG)
     '******************
-    Private Sub Kopieren(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles KopierenToolStripButton.Click
+    Private Sub Kopieren(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_Kopieren.Click
         Call Me.TChart1.Export.Image.PNG.CopyToClipboard()
     End Sub
 
     'Hilfe
     '*****
-    Private Sub Hilfe(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles HilfeToolStripButton.Click
+    Private Sub Hilfe(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_Hilfe.Click
         Call Process.Start(HelpURL)
     End Sub
 
     'Übersicht an/aus
     '****************
-    Private Sub Übersicht_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ÜbersichtToolStripButton.Click
+    Private Sub Übersicht_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_Übersicht.Click
 
-        Call Übersicht_Toggle(ÜbersichtToolStripButton.Checked)
+        Call Übersicht_Toggle(ToolStripButton_Übersicht.Checked)
 
     End Sub
 
@@ -359,8 +395,10 @@ Public Class Wave
 
         If (showÜbersicht) Then
             Me.SplitContainer1.Panel1Collapsed = False
+            Me.ToolStripButton_Übersicht.Checked = True
         Else
             Me.SplitContainer1.Panel1Collapsed = True
+            Me.ToolStripButton_Übersicht.Checked = False
         End If
 
         Call Me.ResizeCharts()

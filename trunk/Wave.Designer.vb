@@ -22,31 +22,52 @@ Partial Class Wave
     'Das Bearbeiten mit dem Code-Editor ist nicht möglich.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
+        Dim ToolStripSeparator1 As System.Windows.Forms.ToolStripSeparator
+        Dim toolStripSeparator As System.Windows.Forms.ToolStripSeparator
+        Dim toolStripSeparator3 As System.Windows.Forms.ToolStripSeparator
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Wave))
+        Dim ToolStripSeparator2 As System.Windows.Forms.ToolStripSeparator
         Me.TChart1 = New Steema.TeeChart.TChart
         Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog
         Me.ToolStrip1 = New System.Windows.Forms.ToolStrip
-        Me.NeuToolStripButton = New System.Windows.Forms.ToolStripButton
-        Me.ÖffnenToolStripButton = New System.Windows.Forms.ToolStripButton
-        Me.SpeichernToolStripButton = New System.Windows.Forms.ToolStripButton
+        Me.ToolStripButton_Neu = New System.Windows.Forms.ToolStripButton
+        Me.ToolStripButton_Öffnen = New System.Windows.Forms.ToolStripButton
+        Me.ToolStripButton_Speichern = New System.Windows.Forms.ToolStripButton
         Me.ToolStripButton_Export = New System.Windows.Forms.ToolStripButton
-        Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator
-        Me.EditToolStripButton = New System.Windows.Forms.ToolStripButton
-        Me.ÜbersichtToolStripButton = New System.Windows.Forms.ToolStripButton
-        Me.toolStripSeparator = New System.Windows.Forms.ToolStripSeparator
-        Me.DruckenToolStripButton = New System.Windows.Forms.ToolStripButton
-        Me.KopierenToolStripButton = New System.Windows.Forms.ToolStripButton
-        Me.toolStripSeparator3 = New System.Windows.Forms.ToolStripSeparator
-        Me.HilfeToolStripButton = New System.Windows.Forms.ToolStripButton
+        Me.ToolStripButton_Analysis = New System.Windows.Forms.ToolStripButton
+        Me.ToolStripButton_Edit = New System.Windows.Forms.ToolStripButton
+        Me.ToolStripButton_Übersicht = New System.Windows.Forms.ToolStripButton
+        Me.ToolStripButton_Drucken = New System.Windows.Forms.ToolStripButton
+        Me.ToolStripButton_Kopieren = New System.Windows.Forms.ToolStripButton
+        Me.ToolStripButton_Hilfe = New System.Windows.Forms.ToolStripButton
         Me.DateTimePicker1 = New System.Windows.Forms.DateTimePicker
         Me.SplitContainer1 = New System.Windows.Forms.SplitContainer
         Me.TChart2 = New Steema.TeeChart.TChart
         Me.SaveFileDialog1 = New System.Windows.Forms.SaveFileDialog
+        ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator
+        toolStripSeparator = New System.Windows.Forms.ToolStripSeparator
+        toolStripSeparator3 = New System.Windows.Forms.ToolStripSeparator
+        ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator
         Me.ToolStrip1.SuspendLayout()
         Me.SplitContainer1.Panel1.SuspendLayout()
         Me.SplitContainer1.Panel2.SuspendLayout()
         Me.SplitContainer1.SuspendLayout()
         Me.SuspendLayout()
+        '
+        'ToolStripSeparator1
+        '
+        ToolStripSeparator1.Name = "ToolStripSeparator1"
+        ToolStripSeparator1.Size = New System.Drawing.Size(6, 34)
+        '
+        'toolStripSeparator
+        '
+        toolStripSeparator.Name = "toolStripSeparator"
+        toolStripSeparator.Size = New System.Drawing.Size(6, 34)
+        '
+        'toolStripSeparator3
+        '
+        toolStripSeparator3.Name = "toolStripSeparator3"
+        toolStripSeparator3.Size = New System.Drawing.Size(6, 34)
         '
         'TChart1
         '
@@ -169,39 +190,39 @@ Partial Class Wave
         '
         Me.ToolStrip1.AutoSize = False
         Me.ToolStrip1.BackColor = System.Drawing.SystemColors.Control
-        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.NeuToolStripButton, Me.ÖffnenToolStripButton, Me.SpeichernToolStripButton, Me.ToolStripButton_Export, Me.ToolStripSeparator1, Me.EditToolStripButton, Me.ÜbersichtToolStripButton, Me.toolStripSeparator, Me.DruckenToolStripButton, Me.KopierenToolStripButton, Me.toolStripSeparator3, Me.HilfeToolStripButton})
+        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButton_Neu, Me.ToolStripButton_Öffnen, Me.ToolStripButton_Speichern, ToolStripSeparator2, Me.ToolStripButton_Export, Me.ToolStripButton_Analysis, ToolStripSeparator1, Me.ToolStripButton_Edit, Me.ToolStripButton_Übersicht, toolStripSeparator, Me.ToolStripButton_Drucken, Me.ToolStripButton_Kopieren, toolStripSeparator3, Me.ToolStripButton_Hilfe})
         Me.ToolStrip1.Location = New System.Drawing.Point(0, 0)
         Me.ToolStrip1.Name = "ToolStrip1"
         Me.ToolStrip1.Size = New System.Drawing.Size(945, 34)
         Me.ToolStrip1.TabIndex = 0
         Me.ToolStrip1.Text = "ToolStrip1"
         '
-        'NeuToolStripButton
+        'ToolStripButton_Neu
         '
-        Me.NeuToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.NeuToolStripButton.Image = CType(resources.GetObject("NeuToolStripButton.Image"), System.Drawing.Image)
-        Me.NeuToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.NeuToolStripButton.Name = "NeuToolStripButton"
-        Me.NeuToolStripButton.Size = New System.Drawing.Size(23, 31)
-        Me.NeuToolStripButton.Text = "&Neu"
+        Me.ToolStripButton_Neu.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.ToolStripButton_Neu.Image = CType(resources.GetObject("ToolStripButton_Neu.Image"), System.Drawing.Image)
+        Me.ToolStripButton_Neu.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ToolStripButton_Neu.Name = "ToolStripButton_Neu"
+        Me.ToolStripButton_Neu.Size = New System.Drawing.Size(23, 31)
+        Me.ToolStripButton_Neu.Text = "&Neu"
         '
-        'ÖffnenToolStripButton
+        'ToolStripButton_Öffnen
         '
-        Me.ÖffnenToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.ÖffnenToolStripButton.Image = CType(resources.GetObject("ÖffnenToolStripButton.Image"), System.Drawing.Image)
-        Me.ÖffnenToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.ÖffnenToolStripButton.Name = "ÖffnenToolStripButton"
-        Me.ÖffnenToolStripButton.Size = New System.Drawing.Size(23, 31)
-        Me.ÖffnenToolStripButton.Text = "Ö&ffnen"
+        Me.ToolStripButton_Öffnen.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.ToolStripButton_Öffnen.Image = CType(resources.GetObject("ToolStripButton_Öffnen.Image"), System.Drawing.Image)
+        Me.ToolStripButton_Öffnen.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ToolStripButton_Öffnen.Name = "ToolStripButton_Öffnen"
+        Me.ToolStripButton_Öffnen.Size = New System.Drawing.Size(23, 31)
+        Me.ToolStripButton_Öffnen.Text = "Ö&ffnen"
         '
-        'SpeichernToolStripButton
+        'ToolStripButton_Speichern
         '
-        Me.SpeichernToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.SpeichernToolStripButton.Image = CType(resources.GetObject("SpeichernToolStripButton.Image"), System.Drawing.Image)
-        Me.SpeichernToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.SpeichernToolStripButton.Name = "SpeichernToolStripButton"
-        Me.SpeichernToolStripButton.Size = New System.Drawing.Size(23, 31)
-        Me.SpeichernToolStripButton.Text = "&Speichern"
+        Me.ToolStripButton_Speichern.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.ToolStripButton_Speichern.Image = CType(resources.GetObject("ToolStripButton_Speichern.Image"), System.Drawing.Image)
+        Me.ToolStripButton_Speichern.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ToolStripButton_Speichern.Name = "ToolStripButton_Speichern"
+        Me.ToolStripButton_Speichern.Size = New System.Drawing.Size(23, 31)
+        Me.ToolStripButton_Speichern.Text = "&Speichern"
         '
         'ToolStripButton_Export
         '
@@ -213,68 +234,62 @@ Partial Class Wave
         Me.ToolStripButton_Export.Text = "Exportieren"
         Me.ToolStripButton_Export.ToolTipText = "Exportieren"
         '
-        'ToolStripSeparator1
+        'ToolStripButton_Analysis
         '
-        Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
-        Me.ToolStripSeparator1.Size = New System.Drawing.Size(6, 34)
+        Me.ToolStripButton_Analysis.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.ToolStripButton_Analysis.Image = Global.Wave.My.Resources.Resources.calculator
+        Me.ToolStripButton_Analysis.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ToolStripButton_Analysis.Name = "ToolStripButton_Analysis"
+        Me.ToolStripButton_Analysis.Size = New System.Drawing.Size(23, 31)
+        Me.ToolStripButton_Analysis.Text = "Analyse"
         '
-        'EditToolStripButton
+        'ToolStripButton_Edit
         '
-        Me.EditToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.EditToolStripButton.Image = Global.Wave.My.Resources.Resources.pencil
-        Me.EditToolStripButton.ImageTransparentColor = System.Drawing.SystemColors.Control
-        Me.EditToolStripButton.Name = "EditToolStripButton"
-        Me.EditToolStripButton.Size = New System.Drawing.Size(23, 31)
-        Me.EditToolStripButton.Text = "Bearbeiten"
+        Me.ToolStripButton_Edit.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.ToolStripButton_Edit.Image = Global.Wave.My.Resources.Resources.pencil
+        Me.ToolStripButton_Edit.ImageTransparentColor = System.Drawing.SystemColors.Control
+        Me.ToolStripButton_Edit.Name = "ToolStripButton_Edit"
+        Me.ToolStripButton_Edit.Size = New System.Drawing.Size(23, 31)
+        Me.ToolStripButton_Edit.Text = "Bearbeiten"
         '
-        'ÜbersichtToolStripButton
+        'ToolStripButton_Übersicht
         '
-        Me.ÜbersichtToolStripButton.Checked = True
-        Me.ÜbersichtToolStripButton.CheckOnClick = True
-        Me.ÜbersichtToolStripButton.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.ÜbersichtToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.ÜbersichtToolStripButton.Image = Global.Wave.My.Resources.Resources.application_split
-        Me.ÜbersichtToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.ÜbersichtToolStripButton.Name = "ÜbersichtToolStripButton"
-        Me.ÜbersichtToolStripButton.Size = New System.Drawing.Size(23, 31)
-        Me.ÜbersichtToolStripButton.Text = "Übersicht"
+        Me.ToolStripButton_Übersicht.Checked = True
+        Me.ToolStripButton_Übersicht.CheckOnClick = True
+        Me.ToolStripButton_Übersicht.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.ToolStripButton_Übersicht.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.ToolStripButton_Übersicht.Image = Global.Wave.My.Resources.Resources.application_split
+        Me.ToolStripButton_Übersicht.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ToolStripButton_Übersicht.Name = "ToolStripButton_Übersicht"
+        Me.ToolStripButton_Übersicht.Size = New System.Drawing.Size(23, 31)
+        Me.ToolStripButton_Übersicht.Text = "Übersicht"
         '
-        'toolStripSeparator
+        'ToolStripButton_Drucken
         '
-        Me.toolStripSeparator.Name = "toolStripSeparator"
-        Me.toolStripSeparator.Size = New System.Drawing.Size(6, 34)
+        Me.ToolStripButton_Drucken.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.ToolStripButton_Drucken.Image = CType(resources.GetObject("ToolStripButton_Drucken.Image"), System.Drawing.Image)
+        Me.ToolStripButton_Drucken.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ToolStripButton_Drucken.Name = "ToolStripButton_Drucken"
+        Me.ToolStripButton_Drucken.Size = New System.Drawing.Size(23, 31)
+        Me.ToolStripButton_Drucken.Text = "&Drucken"
         '
-        'DruckenToolStripButton
+        'ToolStripButton_Kopieren
         '
-        Me.DruckenToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.DruckenToolStripButton.Image = CType(resources.GetObject("DruckenToolStripButton.Image"), System.Drawing.Image)
-        Me.DruckenToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.DruckenToolStripButton.Name = "DruckenToolStripButton"
-        Me.DruckenToolStripButton.Size = New System.Drawing.Size(23, 31)
-        Me.DruckenToolStripButton.Text = "&Drucken"
+        Me.ToolStripButton_Kopieren.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.ToolStripButton_Kopieren.Image = CType(resources.GetObject("ToolStripButton_Kopieren.Image"), System.Drawing.Image)
+        Me.ToolStripButton_Kopieren.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ToolStripButton_Kopieren.Name = "ToolStripButton_Kopieren"
+        Me.ToolStripButton_Kopieren.Size = New System.Drawing.Size(23, 31)
+        Me.ToolStripButton_Kopieren.Text = "&Kopieren (PNG)"
         '
-        'KopierenToolStripButton
+        'ToolStripButton_Hilfe
         '
-        Me.KopierenToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.KopierenToolStripButton.Image = CType(resources.GetObject("KopierenToolStripButton.Image"), System.Drawing.Image)
-        Me.KopierenToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.KopierenToolStripButton.Name = "KopierenToolStripButton"
-        Me.KopierenToolStripButton.Size = New System.Drawing.Size(23, 31)
-        Me.KopierenToolStripButton.Text = "&Kopieren (PNG)"
-        '
-        'toolStripSeparator3
-        '
-        Me.toolStripSeparator3.Name = "toolStripSeparator3"
-        Me.toolStripSeparator3.Size = New System.Drawing.Size(6, 34)
-        '
-        'HilfeToolStripButton
-        '
-        Me.HilfeToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.HilfeToolStripButton.Image = CType(resources.GetObject("HilfeToolStripButton.Image"), System.Drawing.Image)
-        Me.HilfeToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.HilfeToolStripButton.Name = "HilfeToolStripButton"
-        Me.HilfeToolStripButton.Size = New System.Drawing.Size(23, 31)
-        Me.HilfeToolStripButton.Text = "Hi&lfe"
+        Me.ToolStripButton_Hilfe.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.ToolStripButton_Hilfe.Image = CType(resources.GetObject("ToolStripButton_Hilfe.Image"), System.Drawing.Image)
+        Me.ToolStripButton_Hilfe.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ToolStripButton_Hilfe.Name = "ToolStripButton_Hilfe"
+        Me.ToolStripButton_Hilfe.Size = New System.Drawing.Size(23, 31)
+        Me.ToolStripButton_Hilfe.Text = "Hi&lfe"
         '
         'DateTimePicker1
         '
@@ -418,6 +433,11 @@ Partial Class Wave
         '
         Me.TChart2.Walls.Right.AutoHide = False
         '
+        'ToolStripSeparator2
+        '
+        ToolStripSeparator2.Name = "ToolStripSeparator2"
+        ToolStripSeparator2.Size = New System.Drawing.Size(6, 34)
+        '
         'Wave
         '
         Me.AllowDrop = True
@@ -445,18 +465,16 @@ Partial Class Wave
     Friend WithEvents SplitContainer1 As System.Windows.Forms.SplitContainer
     Public WithEvents TChart2 As Steema.TeeChart.TChart
     Public WithEvents TChart1 As Steema.TeeChart.TChart
-    Friend WithEvents NeuToolStripButton As System.Windows.Forms.ToolStripButton
-    Friend WithEvents ÖffnenToolStripButton As System.Windows.Forms.ToolStripButton
-    Friend WithEvents SpeichernToolStripButton As System.Windows.Forms.ToolStripButton
-    Friend WithEvents DruckenToolStripButton As System.Windows.Forms.ToolStripButton
-    Friend WithEvents toolStripSeparator As System.Windows.Forms.ToolStripSeparator
-    Friend WithEvents KopierenToolStripButton As System.Windows.Forms.ToolStripButton
-    Friend WithEvents toolStripSeparator3 As System.Windows.Forms.ToolStripSeparator
-    Friend WithEvents HilfeToolStripButton As System.Windows.Forms.ToolStripButton
-    Friend WithEvents EditToolStripButton As System.Windows.Forms.ToolStripButton
-    Friend WithEvents ToolStripSeparator1 As System.Windows.Forms.ToolStripSeparator
-    Friend WithEvents ÜbersichtToolStripButton As System.Windows.Forms.ToolStripButton
+    Friend WithEvents ToolStripButton_Neu As System.Windows.Forms.ToolStripButton
+    Friend WithEvents ToolStripButton_Öffnen As System.Windows.Forms.ToolStripButton
+    Friend WithEvents ToolStripButton_Speichern As System.Windows.Forms.ToolStripButton
+    Friend WithEvents ToolStripButton_Drucken As System.Windows.Forms.ToolStripButton
+    Friend WithEvents ToolStripButton_Kopieren As System.Windows.Forms.ToolStripButton
+    Friend WithEvents ToolStripButton_Hilfe As System.Windows.Forms.ToolStripButton
+    Friend WithEvents ToolStripButton_Edit As System.Windows.Forms.ToolStripButton
+    Friend WithEvents ToolStripButton_Übersicht As System.Windows.Forms.ToolStripButton
     Friend WithEvents ToolStripButton_Export As System.Windows.Forms.ToolStripButton
     Friend WithEvents SaveFileDialog1 As System.Windows.Forms.SaveFileDialog
+    Friend WithEvents ToolStripButton_Analysis As System.Windows.Forms.ToolStripButton
 
 End Class
