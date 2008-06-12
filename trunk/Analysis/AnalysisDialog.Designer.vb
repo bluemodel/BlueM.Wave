@@ -88,7 +88,7 @@ Partial Class AnalysisDialog
         Me.ComboBox_Funktion.Size = New System.Drawing.Size(129, 21)
         Me.ComboBox_Funktion.TabIndex = 10
         '
-        'AnalysisDiag
+        'AnalysisDialog
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
@@ -100,7 +100,7 @@ Partial Class AnalysisDialog
         Me.Controls.Add(Me.Button_OK)
         Me.Controls.Add(Me.ListBox_Zeitreihen)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
-        Me.Name = "AnalysisDiag"
+        Me.Name = "AnalysisDialog"
         Me.Text = "Analyse"
         Me.ResumeLayout(False)
         Me.PerformLayout()
