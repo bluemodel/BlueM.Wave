@@ -117,7 +117,7 @@ Public Class ZRE
 
                 Me.Zeitreihen(0).XWerte(j - Me.nZeilenHeader) = Datum
                 'Wert
-                Me.Zeitreihen(0).YWerte(j - Me.nZeilenHeader) = Convert.ToDouble(Zeile.Substring(15), Konstanten.FortranProvider)
+                Me.Zeitreihen(0).YWerte(j - Me.nZeilenHeader) = StringToDouble(Zeile.Substring(15))
             End If
         Next
 
