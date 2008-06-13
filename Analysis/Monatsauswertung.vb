@@ -78,7 +78,9 @@ Public Class Monatsauswertung
 
         'Werte in Monate einsortieren
         For i = 0 To reihe.Length - 1
-            Me.mErgebnis.Monatswerte(reihe.XWerte(i).Month() - 1).werte.Add(reihe.YWerte(i))
+            If (Not reihe.YWerte(i) = Konstanten.NaN) Then 
+                Me.mErgebnis.Monatswerte(reihe.XWerte(i).Month() - 1).werte.Add(reihe.YWerte(i))
+            End If
         Next
 
         'Monate analysieren
@@ -87,27 +89,31 @@ Public Class Monatsauswertung
                 summe = 0
                 summequadrate = 0
                 N = .werte.Count
-                'Summen berechnen
-                For j = 0 To N - 1
-                    summe += .werte(j)
-                    summequadrate += .werte(j) ^ 2
-                Next
-                'Mittelwert
-                .mittelwert = summe / N
-                'Standardabweichung
-                .stdabw = Math.Sqrt((N * summequadrate - summe ^ 2) / (N * (N - 1)))
-                'Werte sortieren
-                Call .werte.Sort()
-                'Min und Max
-                .min = .werte(0)
-                .max = .werte(N - 1)
-                'Median
-                If (N Mod 2 = 0) Then
-                    'gerade Anzahl Werte: Mittelwert aus den 2 mittleren Werten
-                    .median = (.werte((N / 2) - 1) + .werte(N / 2)) / 2
+                If (N > 0) Then
+                    'Summen berechnen
+                    For j = 0 To N - 1
+                        summe += .werte(j)
+                        summequadrate += .werte(j) ^ 2
+                    Next
+                    'Mittelwert
+                    .mittelwert = summe / N
+                    'Standardabweichung
+                    .stdabw = Math.Sqrt((N * summequadrate - summe ^ 2) / (N * (N - 1)))
+                    'Werte sortieren
+                    Call .werte.Sort()
+                    'Min und Max
+                    .min = .werte(0)
+                    .max = .werte(N - 1)
+                    'Median
+                    If (N Mod 2 = 0) Then
+                        'gerade Anzahl Werte: Mittelwert aus den 2 mittleren Werten
+                        .median = (.werte((N / 2) - 1) + .werte(N / 2)) / 2
+                    Else
+                        'ungerade Anzahl Werte: mittlerer Wert
+                        .median = .werte(((N + 1) / 2) - 1)
+                    End If
                 Else
-                    'ungerade Anzahl Werte: mittlerer Wert
-                    .median = .werte(((N + 1) / 2) - 1)
+                    MsgBox("Für den Monat " & .monatsname & " liegen keine Werte vor!", MsgBoxStyle.Exclamation, "Warnung")
                 End If
 
             End With
