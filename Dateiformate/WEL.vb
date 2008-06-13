@@ -56,11 +56,11 @@ Public Class WEL
             'Datei öffnen
             Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
             Dim StrRead As StreamReader = New StreamReader(FiStr, System.Text.Encoding.GetEncoding("iso8859-1"))
-            Dim StrReadSync = TextReader.Synchronized(StrRead)
+            Dim StrReadSync As TextReader = TextReader.Synchronized(StrRead)
 
             'Spaltenüberschriften auslesen
             For i = 1 To Me.iZeileDaten
-                Zeile = StrReadSync.ReadLine.ToString
+                Zeile = StrReadSync.ReadLine.ToString()
                 If (i = Me.iZeileÜberschriften) Then ZeileSpalten = Zeile
                 If (i = Me.iZeileEinheiten) Then ZeileEinheiten = Zeile
             Next
@@ -117,7 +117,7 @@ Public Class WEL
             Array.Copy(Einheiten, 1, Me.Einheiten, 0, Namen.Length - 1)
 
         Catch ex As Exception
-            MsgBox("Konnte Datei nicht einlesen!" & eol & eol & "Fehler: " & ex.Message, MsgBoxStyle.Critical, "Fehler")
+            MsgBox("Konnte die Datei '" & Path.GetFileName(Me.File) & "' nicht einlesen!" & eol & eol & "Fehler: " & ex.Message, MsgBoxStyle.Critical, "Fehler")
         End Try
 
     End Sub
@@ -169,7 +169,7 @@ Public Class WEL
                     For j = 0 To Me.YSpalten.GetUpperBound(0)
                         If (isSelected(Me.YSpalten(j))) Then
                             Me.Zeitreihen(n).Einheit = Me.Einheiten(j)
-                            Me.Zeitreihen(n).YWerte(i - Me.nZeilenHeader) = Convert.ToDouble(Werte(j + 1), FortranProvider)
+                            Me.Zeitreihen(n).YWerte(i - Me.nZeilenHeader) = Convert.ToDouble(Werte(j + 1), Konstanten.FortranProvider)
                             n += 1
                         End If
                     Next
@@ -185,7 +185,7 @@ Public Class WEL
                     For j = 0 To Me.YSpalten.GetUpperBound(0)
                         If (isSelected(Me.YSpalten(j))) Then
                             Me.Zeitreihen(n).Einheit = Me.Einheiten(j)
-                            Me.Zeitreihen(n).YWerte(i - (Me.iZeileDaten - 1)) = Convert.ToDouble(Zeile.Substring(((j + 1) * Me.Spaltenbreite) + SpaltenOffset, Math.Min(Me.Spaltenbreite, Zeile.Substring(((j + 1) * Me.Spaltenbreite) + SpaltenOffset).Length)), FortranProvider)
+                            Me.Zeitreihen(n).YWerte(i - (Me.iZeileDaten - 1)) = Convert.ToDouble(Zeile.Substring(((j + 1) * Me.Spaltenbreite) + SpaltenOffset, Math.Min(Me.Spaltenbreite, Zeile.Substring(((j + 1) * Me.Spaltenbreite) + SpaltenOffset).Length)), Konstanten.FortranProvider)
                             n += 1
                         End If
                     Next

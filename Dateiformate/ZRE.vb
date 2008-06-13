@@ -12,7 +12,7 @@ Public Class ZRE
 
     'Konstruktor
     '***********
-    Public Sub New(ByVal FileName As String, Optional ByVal ReadNow As Boolean = False)
+    Public Sub New(ByVal FileName As String)
 
         MyBase.New(FileName)
 
@@ -22,11 +22,9 @@ Public Class ZRE
 
         Call Me.SpaltenAuslesen()
 
-        If (ReadNow) Then
-            'Datei komplett einlesen
-            Me.SpaltenSel = Me.YSpalten
-            Call Me.Read_File()
-        End If
+        'ZRE-Dateien immer direkt einlesen
+        Me.SpaltenSel = Me.YSpalten
+        Call Me.Read_File()
 
     End Sub
 
@@ -119,7 +117,7 @@ Public Class ZRE
 
                 Me.Zeitreihen(0).XWerte(j - Me.nZeilenHeader) = Datum
                 'Wert
-                Me.Zeitreihen(0).YWerte(j - Me.nZeilenHeader) = Convert.ToDouble(Zeile.Substring(15), FortranProvider)
+                Me.Zeitreihen(0).YWerte(j - Me.nZeilenHeader) = Convert.ToDouble(Zeile.Substring(15), Konstanten.FortranProvider)
             End If
         Next
 
