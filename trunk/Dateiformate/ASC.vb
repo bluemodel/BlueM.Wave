@@ -48,7 +48,7 @@ Public Class ASC
             'Datei öffnen
             Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
             Dim StrRead As StreamReader = New StreamReader(FiStr, System.Text.Encoding.GetEncoding("iso8859-1"))
-            Dim StrReadSync = TextReader.Synchronized(StrRead)
+            Dim StrReadSync As TextReader = TextReader.Synchronized(StrRead)
 
             'Spaltenüberschriften
             For i = 1 To Me.iZeileDaten
@@ -184,7 +184,7 @@ Public Class ASC
                             If (isSelected(Me.YSpalten(j))) Then
                                 Me.Zeitreihen(n).Einheit = Me.Einheiten(j)
                                 Me.Zeitreihen(n).YWerte(i) = 0.0
-                                Me.Zeitreihen(n).YWerte(i + 1) = Convert.ToDouble(Werte(j + 2), FortranProvider)
+                                Me.Zeitreihen(n).YWerte(i + 1) = StringToDouble(Werte(j + 2))
                                 n += 1
                             End If
                         Next
@@ -195,7 +195,7 @@ Public Class ASC
                         For j = 0 To Me.YSpalten.GetUpperBound(0)
                             If (isSelected(Me.YSpalten(j))) Then
                                 Me.Zeitreihen(n).Einheit = Me.Einheiten(j)
-                                Me.Zeitreihen(n).YWerte(i) = Convert.ToDouble(Werte(j + 2), FortranProvider)
+                                Me.Zeitreihen(n).YWerte(i) = StringToDouble(Werte(j + 2))
                                 n += 1
                             End If
                         Next
@@ -207,7 +207,7 @@ Public Class ASC
                     For j = 0 To Me.YSpalten.GetUpperBound(0)
                         If (isSelected(Me.YSpalten(j))) Then
                             Me.Zeitreihen(n).Einheit = Me.Einheiten(j)
-                            Me.Zeitreihen(n).YWerte(i) = Convert.ToDouble(Werte(j + 2), FortranProvider)
+                            Me.Zeitreihen(n).YWerte(i) = StringToDouble(Werte(j + 2))
                             n += 1
                         End If
                     Next
