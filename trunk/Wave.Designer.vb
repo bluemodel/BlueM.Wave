@@ -25,8 +25,8 @@ Partial Class Wave
         Dim ToolStripSeparator1 As System.Windows.Forms.ToolStripSeparator
         Dim toolStripSeparator As System.Windows.Forms.ToolStripSeparator
         Dim toolStripSeparator3 As System.Windows.Forms.ToolStripSeparator
-        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Wave))
         Dim ToolStripSeparator2 As System.Windows.Forms.ToolStripSeparator
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Wave))
         Me.TChart1 = New Steema.TeeChart.TChart
         Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog
         Me.ToolStrip1 = New System.Windows.Forms.ToolStrip
@@ -39,7 +39,7 @@ Partial Class Wave
         Me.ToolStripButton_Übersicht = New System.Windows.Forms.ToolStripButton
         Me.ToolStripButton_Drucken = New System.Windows.Forms.ToolStripButton
         Me.ToolStripButton_Kopieren = New System.Windows.Forms.ToolStripButton
-        Me.ToolStripButton_Hilfe = New System.Windows.Forms.ToolStripButton
+        Me.ToolStripButton_Info = New System.Windows.Forms.ToolStripButton
         Me.DateTimePicker1 = New System.Windows.Forms.DateTimePicker
         Me.SplitContainer1 = New System.Windows.Forms.SplitContainer
         Me.TChart2 = New Steema.TeeChart.TChart
@@ -69,115 +69,21 @@ Partial Class Wave
         toolStripSeparator3.Name = "toolStripSeparator3"
         toolStripSeparator3.Size = New System.Drawing.Size(6, 34)
         '
+        'ToolStripSeparator2
+        '
+        ToolStripSeparator2.Name = "ToolStripSeparator2"
+        ToolStripSeparator2.Size = New System.Drawing.Size(6, 34)
+        '
         'TChart1
         '
         '
         '
         '
-        Me.TChart1.Aspect.ElevationFloat = 345
-        Me.TChart1.Aspect.RotationFloat = 345
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart1.Axes.Bottom.Automatic = True
-        '
-        '
-        '
-        Me.TChart1.Axes.Bottom.Grid.Style = System.Drawing.Drawing2D.DashStyle.Dash
-        Me.TChart1.Axes.Bottom.Grid.ZPosition = 0
-        '
-        '
-        '
-        Me.TChart1.Axes.Depth.Automatic = True
-        '
-        '
-        '
-        Me.TChart1.Axes.Depth.Grid.Style = System.Drawing.Drawing2D.DashStyle.Dash
-        Me.TChart1.Axes.Depth.Grid.ZPosition = 0
-        '
-        '
-        '
-        Me.TChart1.Axes.DepthTop.Automatic = True
-        '
-        '
-        '
-        Me.TChart1.Axes.DepthTop.Grid.Style = System.Drawing.Drawing2D.DashStyle.Dash
-        Me.TChart1.Axes.DepthTop.Grid.ZPosition = 0
-        '
-        '
-        '
-        Me.TChart1.Axes.Left.Automatic = True
-        '
-        '
-        '
-        Me.TChart1.Axes.Left.Grid.Style = System.Drawing.Drawing2D.DashStyle.Dash
-        Me.TChart1.Axes.Left.Grid.ZPosition = 0
-        '
-        '
-        '
-        Me.TChart1.Axes.Right.Automatic = True
-        '
-        '
-        '
-        Me.TChart1.Axes.Right.Grid.Style = System.Drawing.Drawing2D.DashStyle.Dash
-        Me.TChart1.Axes.Right.Grid.ZPosition = 0
-        '
-        '
-        '
-        Me.TChart1.Axes.Top.Automatic = True
-        '
-        '
-        '
-        Me.TChart1.Axes.Top.Grid.Style = System.Drawing.Drawing2D.DashStyle.Dash
-        Me.TChart1.Axes.Top.Grid.ZPosition = 0
-        '
-        '
-        '
-        Me.TChart1.Header.Lines = New String() {"TeeChart"}
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart1.Legend.Shadow.Visible = True
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart1.Legend.Title.Font.Bold = True
-        '
-        '
-        '
-        Me.TChart1.Legend.Title.Pen.Visible = False
+        Me.TChart1.Aspect.ZOffset = 0
         Me.TChart1.Location = New System.Drawing.Point(0, 0)
         Me.TChart1.Name = "TChart1"
         Me.TChart1.Size = New System.Drawing.Size(945, 190)
         Me.TChart1.TabIndex = 0
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart1.Walls.Back.AutoHide = False
-        '
-        '
-        '
-        Me.TChart1.Walls.Bottom.AutoHide = False
-        '
-        '
-        '
-        Me.TChart1.Walls.Left.AutoHide = False
-        '
-        '
-        '
-        Me.TChart1.Walls.Right.AutoHide = False
         '
         'OpenFileDialog1
         '
@@ -188,7 +94,7 @@ Partial Class Wave
         '
         Me.ToolStrip1.AutoSize = False
         Me.ToolStrip1.BackColor = System.Drawing.SystemColors.Control
-        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButton_Neu, Me.ToolStripButton_Öffnen, Me.ToolStripButton_Speichern, ToolStripSeparator2, Me.ToolStripButton_Export, Me.ToolStripButton_Analysis, ToolStripSeparator1, Me.ToolStripButton_Edit, Me.ToolStripButton_Übersicht, toolStripSeparator, Me.ToolStripButton_Drucken, Me.ToolStripButton_Kopieren, toolStripSeparator3, Me.ToolStripButton_Hilfe})
+        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButton_Neu, Me.ToolStripButton_Öffnen, Me.ToolStripButton_Speichern, ToolStripSeparator2, Me.ToolStripButton_Export, Me.ToolStripButton_Analysis, ToolStripSeparator1, Me.ToolStripButton_Edit, Me.ToolStripButton_Übersicht, toolStripSeparator, Me.ToolStripButton_Drucken, Me.ToolStripButton_Kopieren, toolStripSeparator3, Me.ToolStripButton_Info})
         Me.ToolStrip1.Location = New System.Drawing.Point(0, 0)
         Me.ToolStrip1.Name = "ToolStrip1"
         Me.ToolStrip1.Size = New System.Drawing.Size(945, 34)
@@ -260,7 +166,8 @@ Partial Class Wave
         Me.ToolStripButton_Übersicht.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.ToolStripButton_Übersicht.Name = "ToolStripButton_Übersicht"
         Me.ToolStripButton_Übersicht.Size = New System.Drawing.Size(23, 31)
-        Me.ToolStripButton_Übersicht.Text = "Übersicht"
+        Me.ToolStripButton_Übersicht.Text = "Übersicht an/aus"
+        Me.ToolStripButton_Übersicht.ToolTipText = "Übersicht an/aus"
         '
         'ToolStripButton_Drucken
         '
@@ -278,16 +185,17 @@ Partial Class Wave
         Me.ToolStripButton_Kopieren.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.ToolStripButton_Kopieren.Name = "ToolStripButton_Kopieren"
         Me.ToolStripButton_Kopieren.Size = New System.Drawing.Size(23, 31)
-        Me.ToolStripButton_Kopieren.Text = "&Kopieren (PNG)"
+        Me.ToolStripButton_Kopieren.Text = "Diagramm &Kopieren (PNG)"
         '
-        'ToolStripButton_Hilfe
+        'ToolStripButton_Info
         '
-        Me.ToolStripButton_Hilfe.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.ToolStripButton_Hilfe.Image = CType(resources.GetObject("ToolStripButton_Hilfe.Image"), System.Drawing.Image)
-        Me.ToolStripButton_Hilfe.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.ToolStripButton_Hilfe.Name = "ToolStripButton_Hilfe"
-        Me.ToolStripButton_Hilfe.Size = New System.Drawing.Size(23, 31)
-        Me.ToolStripButton_Hilfe.Text = "Hi&lfe"
+        Me.ToolStripButton_Info.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right
+        Me.ToolStripButton_Info.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.ToolStripButton_Info.Image = CType(resources.GetObject("ToolStripButton_Info.Image"), System.Drawing.Image)
+        Me.ToolStripButton_Info.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ToolStripButton_Info.Name = "ToolStripButton_Info"
+        Me.ToolStripButton_Info.Size = New System.Drawing.Size(23, 31)
+        Me.ToolStripButton_Info.Text = "&Info"
         '
         'DateTimePicker1
         '
@@ -322,116 +230,12 @@ Partial Class Wave
         '
         '
         '
-        Me.TChart2.Aspect.ElevationFloat = 345
-        Me.TChart2.Aspect.RotationFloat = 345
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart2.Axes.Bottom.Automatic = True
-        '
-        '
-        '
-        Me.TChart2.Axes.Bottom.Grid.Style = System.Drawing.Drawing2D.DashStyle.Dash
-        Me.TChart2.Axes.Bottom.Grid.ZPosition = 0
-        '
-        '
-        '
-        Me.TChart2.Axes.Depth.Automatic = True
-        '
-        '
-        '
-        Me.TChart2.Axes.Depth.Grid.Style = System.Drawing.Drawing2D.DashStyle.Dash
-        Me.TChart2.Axes.Depth.Grid.ZPosition = 0
-        '
-        '
-        '
-        Me.TChart2.Axes.DepthTop.Automatic = True
-        '
-        '
-        '
-        Me.TChart2.Axes.DepthTop.Grid.Style = System.Drawing.Drawing2D.DashStyle.Dash
-        Me.TChart2.Axes.DepthTop.Grid.ZPosition = 0
-        '
-        '
-        '
-        Me.TChart2.Axes.Left.Automatic = True
-        '
-        '
-        '
-        Me.TChart2.Axes.Left.Grid.Style = System.Drawing.Drawing2D.DashStyle.Dash
-        Me.TChart2.Axes.Left.Grid.ZPosition = 0
-        '
-        '
-        '
-        Me.TChart2.Axes.Right.Automatic = True
-        '
-        '
-        '
-        Me.TChart2.Axes.Right.Grid.Style = System.Drawing.Drawing2D.DashStyle.Dash
-        Me.TChart2.Axes.Right.Grid.ZPosition = 0
-        '
-        '
-        '
-        Me.TChart2.Axes.Top.Automatic = True
-        '
-        '
-        '
-        Me.TChart2.Axes.Top.Grid.Style = System.Drawing.Drawing2D.DashStyle.Dash
-        Me.TChart2.Axes.Top.Grid.ZPosition = 0
+        Me.TChart2.Aspect.ZOffset = 0
         Me.TChart2.Cursor = System.Windows.Forms.Cursors.Default
-        '
-        '
-        '
-        Me.TChart2.Header.Lines = New String() {"TeeChart"}
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart2.Legend.Shadow.Visible = True
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart2.Legend.Title.Font.Bold = True
-        '
-        '
-        '
-        Me.TChart2.Legend.Title.Pen.Visible = False
         Me.TChart2.Location = New System.Drawing.Point(0, 0)
         Me.TChart2.Name = "TChart2"
         Me.TChart2.Size = New System.Drawing.Size(942, 106)
         Me.TChart2.TabIndex = 0
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart2.Walls.Back.AutoHide = False
-        '
-        '
-        '
-        Me.TChart2.Walls.Bottom.AutoHide = False
-        '
-        '
-        '
-        Me.TChart2.Walls.Left.AutoHide = False
-        '
-        '
-        '
-        Me.TChart2.Walls.Right.AutoHide = False
-        '
-        'ToolStripSeparator2
-        '
-        ToolStripSeparator2.Name = "ToolStripSeparator2"
-        ToolStripSeparator2.Size = New System.Drawing.Size(6, 34)
         '
         'Wave
         '
@@ -465,7 +269,7 @@ Partial Class Wave
     Friend WithEvents ToolStripButton_Speichern As System.Windows.Forms.ToolStripButton
     Friend WithEvents ToolStripButton_Drucken As System.Windows.Forms.ToolStripButton
     Friend WithEvents ToolStripButton_Kopieren As System.Windows.Forms.ToolStripButton
-    Friend WithEvents ToolStripButton_Hilfe As System.Windows.Forms.ToolStripButton
+    Friend WithEvents ToolStripButton_Info As System.Windows.Forms.ToolStripButton
     Friend WithEvents ToolStripButton_Edit As System.Windows.Forms.ToolStripButton
     Friend WithEvents ToolStripButton_Übersicht As System.Windows.Forms.ToolStripButton
     Friend WithEvents ToolStripButton_Export As System.Windows.Forms.ToolStripButton
