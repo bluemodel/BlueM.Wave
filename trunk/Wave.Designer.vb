@@ -26,10 +26,12 @@ Partial Class Wave
         Dim toolStripSeparator As System.Windows.Forms.ToolStripSeparator
         Dim toolStripSeparator3 As System.Windows.Forms.ToolStripSeparator
         Dim ToolStripSeparator2 As System.Windows.Forms.ToolStripSeparator
+        Dim StatusStrip1 As System.Windows.Forms.StatusStrip
+        Dim ToolStrip1 As System.Windows.Forms.ToolStrip
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Wave))
+        Me.ToolStripStatusLabel_Messages = New System.Windows.Forms.ToolStripStatusLabel
         Me.TChart1 = New Steema.TeeChart.TChart
         Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog
-        Me.ToolStrip1 = New System.Windows.Forms.ToolStrip
         Me.ToolStripButton_Neu = New System.Windows.Forms.ToolStripButton
         Me.ToolStripButton_Öffnen = New System.Windows.Forms.ToolStripButton
         Me.ToolStripButton_Speichern = New System.Windows.Forms.ToolStripButton
@@ -48,7 +50,10 @@ Partial Class Wave
         toolStripSeparator = New System.Windows.Forms.ToolStripSeparator
         toolStripSeparator3 = New System.Windows.Forms.ToolStripSeparator
         ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator
-        Me.ToolStrip1.SuspendLayout()
+        StatusStrip1 = New System.Windows.Forms.StatusStrip
+        ToolStrip1 = New System.Windows.Forms.ToolStrip
+        StatusStrip1.SuspendLayout()
+        ToolStrip1.SuspendLayout()
         Me.SplitContainer1.Panel1.SuspendLayout()
         Me.SplitContainer1.Panel2.SuspendLayout()
         Me.SplitContainer1.SuspendLayout()
@@ -74,6 +79,30 @@ Partial Class Wave
         ToolStripSeparator2.Name = "ToolStripSeparator2"
         ToolStripSeparator2.Size = New System.Drawing.Size(6, 34)
         '
+        'StatusStrip1
+        '
+        StatusStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripStatusLabel_Messages})
+        StatusStrip1.Location = New System.Drawing.Point(0, 478)
+        StatusStrip1.Name = "StatusStrip1"
+        StatusStrip1.RightToLeft = System.Windows.Forms.RightToLeft.Yes
+        StatusStrip1.ShowItemToolTips = True
+        StatusStrip1.Size = New System.Drawing.Size(941, 22)
+        StatusStrip1.SizingGrip = False
+        StatusStrip1.TabIndex = 1
+        StatusStrip1.Text = "StatusStrip1"
+        '
+        'ToolStripStatusLabel_Messages
+        '
+        Me.ToolStripStatusLabel_Messages.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.ToolStripStatusLabel_Messages.Enabled = False
+        Me.ToolStripStatusLabel_Messages.Image = Global.Wave.My.Resources.Resources.warning
+        Me.ToolStripStatusLabel_Messages.Margin = New System.Windows.Forms.Padding(3, 3, 0, 2)
+        Me.ToolStripStatusLabel_Messages.Name = "ToolStripStatusLabel_Messages"
+        Me.ToolStripStatusLabel_Messages.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.ToolStripStatusLabel_Messages.Size = New System.Drawing.Size(16, 17)
+        Me.ToolStripStatusLabel_Messages.Text = "Messages"
+        Me.ToolStripStatusLabel_Messages.ToolTipText = "Messages"
+        '
         'TChart1
         '
         '
@@ -92,14 +121,14 @@ Partial Class Wave
         '
         'ToolStrip1
         '
-        Me.ToolStrip1.AutoSize = False
-        Me.ToolStrip1.BackColor = System.Drawing.SystemColors.Control
-        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButton_Neu, Me.ToolStripButton_Öffnen, Me.ToolStripButton_Speichern, ToolStripSeparator2, Me.ToolStripButton_Export, Me.ToolStripButton_Analysis, ToolStripSeparator1, Me.ToolStripButton_Edit, Me.ToolStripButton_Übersicht, toolStripSeparator, Me.ToolStripButton_Drucken, Me.ToolStripButton_Kopieren, toolStripSeparator3, Me.ToolStripButton_Info})
-        Me.ToolStrip1.Location = New System.Drawing.Point(0, 0)
-        Me.ToolStrip1.Name = "ToolStrip1"
-        Me.ToolStrip1.Size = New System.Drawing.Size(945, 34)
-        Me.ToolStrip1.TabIndex = 0
-        Me.ToolStrip1.Text = "ToolStrip1"
+        ToolStrip1.AutoSize = False
+        ToolStrip1.BackColor = System.Drawing.SystemColors.Control
+        ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButton_Neu, Me.ToolStripButton_Öffnen, Me.ToolStripButton_Speichern, ToolStripSeparator2, Me.ToolStripButton_Export, Me.ToolStripButton_Analysis, ToolStripSeparator1, Me.ToolStripButton_Edit, Me.ToolStripButton_Übersicht, toolStripSeparator, Me.ToolStripButton_Drucken, Me.ToolStripButton_Kopieren, toolStripSeparator3, Me.ToolStripButton_Info})
+        ToolStrip1.Location = New System.Drawing.Point(0, 0)
+        ToolStrip1.Name = "ToolStrip1"
+        ToolStrip1.Size = New System.Drawing.Size(945, 34)
+        ToolStrip1.TabIndex = 0
+        ToolStrip1.Text = "ToolStrip1"
         '
         'ToolStripButton_Neu
         '
@@ -219,6 +248,7 @@ Partial Class Wave
         '
         'SplitContainer1.Panel2
         '
+        Me.SplitContainer1.Panel2.Controls.Add(StatusStrip1)
         Me.SplitContainer1.Panel2.Controls.Add(Me.TChart1)
         Me.SplitContainer1.Panel2MinSize = 100
         Me.SplitContainer1.Size = New System.Drawing.Size(945, 626)
@@ -246,20 +276,22 @@ Partial Class Wave
         Me.ClientSize = New System.Drawing.Size(945, 660)
         Me.Controls.Add(Me.SplitContainer1)
         Me.Controls.Add(Me.DateTimePicker1)
-        Me.Controls.Add(Me.ToolStrip1)
+        Me.Controls.Add(ToolStrip1)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Name = "Wave"
         Me.Text = "Wave"
-        Me.ToolStrip1.ResumeLayout(False)
-        Me.ToolStrip1.PerformLayout()
+        StatusStrip1.ResumeLayout(False)
+        StatusStrip1.PerformLayout()
+        ToolStrip1.ResumeLayout(False)
+        ToolStrip1.PerformLayout()
         Me.SplitContainer1.Panel1.ResumeLayout(False)
         Me.SplitContainer1.Panel2.ResumeLayout(False)
+        Me.SplitContainer1.Panel2.PerformLayout()
         Me.SplitContainer1.ResumeLayout(False)
         Me.ResumeLayout(False)
 
     End Sub
     Friend WithEvents OpenFileDialog1 As System.Windows.Forms.OpenFileDialog
-    Friend WithEvents ToolStrip1 As System.Windows.Forms.ToolStrip
     Friend WithEvents DateTimePicker1 As System.Windows.Forms.DateTimePicker
     Friend WithEvents SplitContainer1 As System.Windows.Forms.SplitContainer
     Public WithEvents TChart2 As Steema.TeeChart.TChart
@@ -275,5 +307,6 @@ Partial Class Wave
     Friend WithEvents ToolStripButton_Export As System.Windows.Forms.ToolStripButton
     Friend WithEvents SaveFileDialog1 As System.Windows.Forms.SaveFileDialog
     Friend WithEvents ToolStripButton_Analysis As System.Windows.Forms.ToolStripButton
+    Friend WithEvents ToolStripStatusLabel_Messages As System.Windows.Forms.ToolStripStatusLabel
 
 End Class

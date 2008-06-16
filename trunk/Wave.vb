@@ -54,6 +54,10 @@ Public Class Wave
         '-----------------
         Call Me.Init_Charts()
 
+        'MessageDialog instanzieren
+        '--------------------------
+        MsgDialog = New MessageDialog()
+
     End Sub
 
     'Form wird geladen
@@ -157,7 +161,7 @@ Public Class Wave
         Me.TChart2.Width = Me.SplitContainer1.Panel1.Width - 5
         Me.TChart2.Height = Me.SplitContainer1.Panel1.Height - 5
         Me.TChart1.Width = Me.SplitContainer1.Panel2.Width - 5
-        Me.TChart1.Height = Me.SplitContainer1.Panel2.Height - 5
+        Me.TChart1.Height = Me.SplitContainer1.Panel2.Height - 5 - 22
     End Sub
 
     'ColorBand einrichten
@@ -239,11 +243,25 @@ Public Class Wave
     '***
     Private Sub Neu(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_Neu.Click
 
+        Dim res as MsgBoxResult
+
+        'Warnen, wenn bereits Serien vorhanden
+        '-------------------------------------
+        If (Me.TChart1.Series.Count() > 0) Then
+            res = MsgBox("Alle vorhandenen Serien werden gelöscht!" & eol & "Fortfahren?", MsgBoxStyle.OkCancel)
+            If (Not res = Windows.Forms.DialogResult.OK) Then Exit Sub
+        End If
+
         'Charts zurücksetzen
         Call Me.Init_Charts()
 
         'Collection zurücksetzen
         Me.Zeitreihen.Clear()
+
+        'Messages zurücksetzen
+        Call MsgDialog.ClearMessages()
+        Call MsgDialog.Hide()
+        Me.ToolStripStatusLabel_Messages.Enabled = False
 
     End Sub
 
@@ -382,6 +400,17 @@ Public Class Wave
         Call Me.TChart1.Export.Image.PNG.CopyToClipboard()
     End Sub
 
+    'Messages
+    '********
+    Private Sub Messages(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripStatusLabel_Messages.Click
+
+        'MessageDialog anzeigen
+        Call MsgDialog.Show()
+        MsgDialog.WindowState = FormWindowState.Normal
+        Call MsgDialog.BringToFront()
+
+    End Sub
+
     'Hilfe
     '*****
     Private Sub Info(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_Info.Click
@@ -453,8 +482,8 @@ Public Class Wave
 
         'Warnen, wenn bereits Serien vorhanden (Chart wird komplett überschrieben!)
         '--------------------------------------------------------------------------
-        If (TChart1.Series.Count() > 0) Then
-            res = MsgBox("Die vorhandenen Serien werden überschrieben!" & Chr(13) & Chr(10) & "Fortfahren?", MsgBoxStyle.OkCancel)
+        If (Me.TChart1.Series.Count() > 0) Then
+            res = MsgBox("Die vorhandenen Serien werden überschrieben!" & eol & "Fortfahren?", MsgBoxStyle.OkCancel)
             If (Not res = Windows.Forms.DialogResult.OK) Then Exit Sub
         End If
 
