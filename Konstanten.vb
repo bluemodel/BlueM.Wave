@@ -16,6 +16,9 @@ Module Konstanten
         ASC = 4
     End Enum
 
+    'Message-Dialog
+    Friend MsgDialog As MessageDialog
+
     'Zahlenformatanweisung
     Public ReadOnly Property FortranProvider() As NumberFormatInfo
         Get
@@ -37,10 +40,22 @@ Module Konstanten
             wert = Convert.ToDouble(str, Konstanten.FortranProvider)
         Catch ex As Exception
             wert = Konstanten.NaN
+            Call AddMessage("Der Wert '" & str & "' wurde durch " & Konstanten.NaN.ToString() & " ersetzt!")
         End Try
 
         Return wert
 
     End Function
+
+    'Message hinzufügen
+    '******************
+    Public Sub AddMessage(ByVal msg As String)
+
+        Wave.ToolStripStatusLabel_Messages.Enabled = True
+
+        'Message hinzufügen
+        Call MsgDialog.AddMessage(msg)
+
+    End Sub
 
 End Module
