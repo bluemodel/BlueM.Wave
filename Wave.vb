@@ -20,11 +20,7 @@ Public Class Wave
     '#############
     Private WithEvents colorBand1 As Steema.TeeChart.Tools.ColorBand
     Private selectionMade As Boolean									'Flag zeigt an, ob bereits ein Auswahlbereich ausgewählt wurde
-    
-    Private Const HelpURL As String = "http://130.83.196.154/BlueM/wiki/index.php/Wave"
     Private Zeitreihen As Collection
-
-
 
     'Methoden
     '########
@@ -388,8 +384,9 @@ Public Class Wave
 
     'Hilfe
     '*****
-    Private Sub Hilfe(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_Hilfe.Click
-        Call Process.Start(HelpURL)
+    Private Sub Info(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_Info.Click
+        Dim AboutDialog As New AboutDialog()
+        Call AboutDialog.ShowDialog()
     End Sub
 
     'Übersicht an/aus

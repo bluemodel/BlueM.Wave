@@ -9,10 +9,10 @@ Imports System.Runtime.InteropServices
 ' Die Werte der Assemblyattribute überprüfen
 
 <Assembly: AssemblyTitle("Wave")> 
-<Assembly: AssemblyDescription("")> 
+<Assembly: AssemblyDescription("Wave ist ein Tool zum Einlesen, zur Analyse und zur flexiblen graphischen Darstellung von Zeitreihen." & eol & eol & "Mehr infos hier: http://130.83.196.154/BlueM/wiki/index.php/Wave")> 
 <Assembly: AssemblyCompany("IHWB - TU-Darmstadt")> 
 <Assembly: AssemblyProduct("Wave")> 
-<Assembly: AssemblyCopyright("Copyright © IHWB 2007")> 
+<Assembly: AssemblyCopyright("Copyright © IHWB 2008")> 
 <Assembly: AssemblyTrademark("")> 
 
 <Assembly: ComVisible(False)>

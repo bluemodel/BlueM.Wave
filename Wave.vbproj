@@ -50,6 +50,12 @@
     <Import Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AboutDialog.Designer.vb">
+      <DependentUpon>AboutDialog.vb</DependentUpon>
+    </Compile>
+    <Compile Include="AboutDialog.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Analysis\Analysis.vb" />
     <Compile Include="Analysis\Monatsauswertung.vb" />
     <Compile Include="Analysis\AnalysisFactory.vb" />
@@ -130,6 +136,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="AboutDialog.resx">
+      <DependentUpon>AboutDialog.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Analysis\AnalysisDialog.resx">
       <SubType>Designer</SubType>
       <DependentUpon>AnalysisDialog.vb</DependentUpon>
