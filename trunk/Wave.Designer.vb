@@ -76,7 +76,6 @@ Partial Class Wave
         '
         Me.TChart1.Aspect.ElevationFloat = 345
         Me.TChart1.Aspect.RotationFloat = 345
-        Me.TChart1.Aspect.View3D = False
         '
         '
         '
@@ -141,7 +140,6 @@ Partial Class Wave
         '
         '
         '
-        Me.TChart1.Legend.LegendStyle = Steema.TeeChart.LegendStyles.Series
         '
         '
         '
@@ -326,7 +324,6 @@ Partial Class Wave
         '
         Me.TChart2.Aspect.ElevationFloat = 345
         Me.TChart2.Aspect.RotationFloat = 345
-        Me.TChart2.Aspect.View3D = False
         '
         '
         '
@@ -389,11 +386,9 @@ Partial Class Wave
         '
         '
         Me.TChart2.Header.Lines = New String() {"TeeChart"}
-        Me.TChart2.Header.Visible = False
         '
         '
         '
-        Me.TChart2.Legend.LegendStyle = Steema.TeeChart.LegendStyles.Series
         '
         '
         '

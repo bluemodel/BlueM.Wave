@@ -40,36 +40,23 @@ Public Class Wave
 
         'Dateiformate definieren
         '-----------------------
-        Me.OpenFileDialog1.Filter = "Text-Dateien (*.txt)|*.txt|" & _
-            "SMUSI-Dateien (*.asc)|*.asc|" & _
-            "ZRE-Dateien (*.zre)|*.zre|" & _
+        Me.OpenFileDialog1.Filter = _
+            "Alle Dateien (*.*)|*.*|" & _
+            "Text-Dateien (*.txt)|*.txt|" & _
             "CSV-Dateien (*.csv)|*.csv|" & _
-            "RVA-Dateien (*.rva)|*.rva|" & _
+            "ZRE-Dateien (*.zre)|*.zre|" & _
             "WEL-Dateien (*.wel, *.kwl)|*.wel;*.kwl|" & _
-            "TeeChart-Dateien (*.ten)|*.ten|" & _
-            "Alle Dateien (*.*)|*.*"
+            "RVA-Dateien (*.rva)|*.rva|" & _
+            "SMUSI-Dateien (*.asc)|*.asc|" & _
+            "TeeChart-Dateien (*.ten)|*.ten"
 
         'Kollektionen einrichten
         '-----------------------
-        Me.Zeitreihen = New Collection
-
+        Me.Zeitreihen = New Collection()
 
         'Charts einrichten
         '-----------------
-        'Übersicht darf nicht gescrolled oder gezoomt werden
-        Me.TChart2.Zoom.Allow = False
-        Me.TChart2.Panning.Allow = Steema.TeeChart.ScrollModes.None
-
-        'Achsen
-        Me.TChart1.Axes.Bottom.Automatic = False
-        Me.TChart2.Axes.Bottom.Automatic = False
-
-        'Übersichtslegende
-        Me.TChart2.Legend.CheckBoxes = True
-
-        'ColorBand einrichten
-        Me.selectionMade = False
-        Call Me.ColorBandEinrichten()
+        Call Me.Init_Charts()
 
     End Sub
 
@@ -134,6 +121,40 @@ Public Class Wave
 
 #Region "Chart behvior"
 
+    'Charts neu einrichten
+    '*********************
+    Private Sub Init_Charts()
+
+        'Charts zurücksetzen
+        Me.TChart1.Clear()
+        Me.TChart1.Aspect.View3D = False
+
+        Me.TChart2.Clear()
+        Me.TChart2.Aspect.View3D = False
+        Me.TChart2.Header.Visible = False
+
+        'Übersicht darf nicht gescrolled oder gezoomt werden
+        Me.TChart2.Zoom.Allow = False
+        Me.TChart2.Panning.Allow = Steema.TeeChart.ScrollModes.None
+
+        'Hauptdiagramm darf nur horizontal gescrolled oder gezoomt werden
+        Me.TChart1.Zoom.Direction = Steema.TeeChart.ZoomDirections.Horizontal
+        Me.TChart2.Panning.Allow = Steema.TeeChart.ScrollModes.Horizontal
+
+        'Achsen
+        Me.TChart1.Axes.Bottom.Automatic = False
+        Me.TChart2.Axes.Bottom.Automatic = False
+
+        'Legenden
+        Me.TChart1.Legend.LegendStyle = Steema.TeeChart.LegendStyles.Series
+        Me.TChart2.Legend.LegendStyle = Steema.TeeChart.LegendStyles.Series
+
+        'ColorBand einrichten
+        Me.selectionMade = False
+        Call Me.Init_ColorBand()
+
+    End Sub
+
     'Größe von Charts anpassen
     '*************************
     Private Sub ResizeCharts()
@@ -145,8 +166,8 @@ Public Class Wave
 
     'ColorBand einrichten
     '********************
-    Private Sub ColorBandEinrichten()
-        colorBand1 = New Steema.TeeChart.Tools.ColorBand
+    Private Sub Init_ColorBand()
+        colorBand1 = New Steema.TeeChart.Tools.ColorBand()
         Me.TChart2.Tools.Add(colorBand1)
         colorBand1.Axis = Me.TChart2.Axes.Bottom
         colorBand1.Brush.Color = Color.Coral
@@ -192,24 +213,9 @@ Public Class Wave
 
     End Sub
 
-    'Cursor für TChart1
-    '******************
-    Private Sub TChart1_MouseDown(ByVal sender As System.Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles TChart1.MouseDown
-        Select Case e.Button
-            Case Windows.Forms.MouseButtons.Right
-                Cursor = Cursors.SizeAll
-            Case Windows.Forms.MouseButtons.Left
-                Cursor = Cursors.Cross
-        End Select
-    End Sub
-
-    Private Sub TChart1_MouseUp(ByVal sender As System.Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles TChart1.MouseUp
-        Cursor = Cursors.Default
-    End Sub
-
     'TChart1 Scrolled, Zoomed, ZoomUndone
     '************************************
-    Private Sub TChart1Scrolled(ByVal sender As Object, ByVal e As System.EventArgs) Handles TChart1.Scroll, TChart1.Zoomed, TChart1.UndoneZoom
+    Private Sub TChart1_Scrolled(ByVal sender As Object, ByVal e As System.EventArgs) Handles TChart1.Scroll, TChart1.Zoomed, TChart1.UndoneZoom
         Me.colorBand1.Start = Me.TChart1.Axes.Bottom.Minimum
         Me.colorBand1.End = Me.TChart1.Axes.Bottom.Maximum
         Me.selectionMade = True
@@ -236,10 +242,13 @@ Public Class Wave
     'Neu
     '***
     Private Sub Neu(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_Neu.Click
-        Me.TChart1.Clear()
-        Me.TChart2.Clear()
-        Call ColorBandEinrichten()
+
+        'Charts zurücksetzen
+        Call Me.Init_Charts()
+
+        'Collection zurücksetzen
         Me.Zeitreihen.Clear()
+
     End Sub
 
     'Öffnen
@@ -466,7 +475,7 @@ Public Class Wave
         For Each series As Steema.TeeChart.Styles.Series In TChart1.Series
 
             'Nur Zeitreihen importieren!
-            If (series.GetHorizAxis.IsDateTime)
+            If (series.GetHorizAxis.IsDateTime) Then
 
                 reihe = New Zeitreihe(series.Title)
                 reihe.Length = series.XValues.Count
@@ -486,7 +495,7 @@ Public Class Wave
 
         'ColorBand neu einrichten (geht bei TEN-Import verloren)
         '-------------------------------------------------------
-        Call Me.ColorBandEinrichten()
+        Call Me.Init_ColorBand()
 
         'Charts aktualisieren
         '--------------------
