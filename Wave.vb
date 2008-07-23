@@ -446,7 +446,13 @@ Public Class Wave
 
     'Datei importieren
     '*****************
-    Friend Sub Import_File(ByVal file As String)
+    Public Sub Import_File(ByVal file As String)
+
+        'Kontrolle
+        If (Not System.IO.File.Exists(file)) Then
+            MsgBox("Datei '" & file & "' nicht gefunden!", MsgBoxStyle.Critical)
+            Exit Sub
+        End If
 
         Select Case Path.GetExtension(file).ToUpper()
 
@@ -474,7 +480,7 @@ Public Class Wave
 
     'TEN-Datei importieren
     '*********************
-    Public Sub Import_TEN(ByVal FileName As String)
+    Private Sub Import_TEN(ByVal FileName As String)
 
         Dim res As DialogResult
         Dim i As Integer
@@ -532,7 +538,7 @@ Public Class Wave
 
     'ZRE-Datei importieren
     '*********************
-    Public Sub Import_ZRE(ByVal FileName As String)
+    Private Sub Import_ZRE(ByVal FileName As String)
 
         'ZRE-Objekt instanzieren
         Dim ZRE As New ZRE(FileName)
@@ -554,7 +560,7 @@ Public Class Wave
 
     'WEL-Datei importieren
     '*********************
-    Public Sub Import_WEL(ByVal FileName As String)
+    Private Sub Import_WEL(ByVal FileName As String)
 
         Dim i As Integer
 
@@ -580,7 +586,7 @@ Public Class Wave
 
     'ASC-Datei importieren (SMUSI)
     '*****************************
-    Public Sub Import_ASC(ByVal FileName As String)
+    Private Sub Import_ASC(ByVal FileName As String)
 
         Dim i As Integer
 
@@ -622,7 +628,7 @@ Public Class Wave
 
     'RVA-Datei importieren
     '*********************
-    Public Sub Import_RVA(ByVal FileName As String)
+    Private Sub Import_RVA(ByVal FileName As String)
 
         'RVA-Objekt instanzieren
         Dim RVA As New RVA(FileName)
