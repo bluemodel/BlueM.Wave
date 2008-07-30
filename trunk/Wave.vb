@@ -1,7 +1,6 @@
 Imports System.IO
 
 Public Class Wave
-
     '*******************************************************************************
     '*******************************************************************************
     '**** Klasse Wave                                                           ****
@@ -22,6 +21,16 @@ Public Class Wave
     Private selectionMade As Boolean									'Flag zeigt an, ob bereits ein Auswahlbereich ausgewählt wurde
     Private Zeitreihen As Collection
 
+    Private Const FileFilter_TEN As String = "TeeChart-Dateien (*.ten)|*.ten"
+    Private Const FileFilter_Import As String = _
+            "Alle Dateien (*.*)|*.*|" & _
+            "Text-Dateien (*.txt)|*.txt|" & _
+            "CSV-Dateien (*.csv)|*.csv|" & _
+            "ZRE-Dateien (*.zre)|*.zre|" & _
+            "WEL-Dateien (*.wel, *.kwl)|*.wel;*.kwl|" & _
+            "RVA-Dateien (*.rva)|*.rva|" & _
+            "SMUSI-Dateien (*.asc)|*.asc"
+
     'Methoden
     '########
 
@@ -33,18 +42,6 @@ Public Class Wave
 
         ' Dieser Aufruf ist für den Windows Form-Designer erforderlich.
         InitializeComponent()
-
-        'Dateiformate definieren
-        '-----------------------
-        Me.OpenFileDialog1.Filter = _
-            "Alle Dateien (*.*)|*.*|" & _
-            "Text-Dateien (*.txt)|*.txt|" & _
-            "CSV-Dateien (*.csv)|*.csv|" & _
-            "ZRE-Dateien (*.zre)|*.zre|" & _
-            "WEL-Dateien (*.wel, *.kwl)|*.wel;*.kwl|" & _
-            "RVA-Dateien (*.rva)|*.rva|" & _
-            "SMUSI-Dateien (*.asc)|*.asc|" & _
-            "TeeChart-Dateien (*.ten)|*.ten"
 
         'Kollektionen einrichten
         '-----------------------
@@ -265,9 +262,21 @@ Public Class Wave
 
     End Sub
 
-    'Öffnen
-    '******
+    'TEN-Datei öffnen
+    '****************
     Private Sub Öffnen(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_Öffnen.Click
+        Me.OpenFileDialog1.Title = "TEN-Datei öffnen"
+        Me.OpenFileDialog1.Filter = FileFilter_TEN
+        If (Me.OpenFileDialog1.ShowDialog() = Windows.Forms.DialogResult.OK) Then
+            Call Me.Open_TEN(Me.OpenFileDialog1.FileName)
+        End If
+    End Sub
+
+    'Serie(n) importieren
+    '********************
+    Private Sub Importieren(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_Import.Click
+        Me.OpenFileDialog1.Title = "Serie(n) importieren"
+        Me.OpenFileDialog1.Filter = FileFilter_Import
         If (Me.OpenFileDialog1.ShowDialog() = Windows.Forms.DialogResult.OK) Then
             Call Me.Import_File(Me.OpenFileDialog1.FileName)
         End If
@@ -444,43 +453,9 @@ Public Class Wave
 
 #Region "Funktionalität"
 
-    'Datei importieren
-    '*****************
-    Public Sub Import_File(ByVal file As String)
-
-        'Kontrolle
-        If (Not System.IO.File.Exists(file)) Then
-            MsgBox("Datei '" & file & "' nicht gefunden!", MsgBoxStyle.Critical)
-            Exit Sub
-        End If
-
-        Select Case Path.GetExtension(file).ToUpper()
-
-            Case ".TEN"
-                Call Me.Import_TEN(file)
-
-            Case ".ZRE"
-                Call Me.Import_ZRE(file)
-
-            Case ".WEL", ".KWL"
-                Call Me.Import_WEL(file)
-
-            Case ".ASC"
-                Call Me.Import_ASC(file)
-
-            Case ".RVA"
-                Call Me.Import_RVA(file)
-
-            Case Else
-                Call Me.Import_CSV(file)
-
-        End Select
-
-    End Sub
-
     'TEN-Datei importieren
     '*********************
-    Private Sub Import_TEN(ByVal FileName As String)
+    Private Sub Open_TEN(ByVal FileName As String)
 
         Dim res As DialogResult
         Dim i As Integer
@@ -533,6 +508,40 @@ Public Class Wave
         '--------------------
         Me.selectionMade = False
         Call Me.UpdateCharts()
+
+    End Sub
+
+    'Datei importieren
+    '*****************
+    Public Sub Import_File(ByVal file As String)
+
+        'Kontrolle
+        If (Not System.IO.File.Exists(file)) Then
+            MsgBox("Datei '" & file & "' nicht gefunden!", MsgBoxStyle.Critical)
+            Exit Sub
+        End If
+
+        Select Case Path.GetExtension(file).ToUpper()
+
+            Case ".ZRE"
+                Call Me.Import_ZRE(file)
+
+            Case ".WEL", ".KWL"
+                Call Me.Import_WEL(file)
+
+            Case ".ASC"
+                Call Me.Import_ASC(file)
+
+            Case ".RVA"
+                Call Me.Import_RVA(file)
+
+            Case ".TEN"
+                Call Me.Open_TEN(file)
+
+            Case Else
+                Call Me.Import_CSV(file)
+
+        End Select
 
     End Sub
 
@@ -614,7 +623,8 @@ Public Class Wave
 
         Dim FileName As String
 
-        OpenFileDialog1.FilterIndex = 2
+        OpenFileDialog1.Title = "ASC-Datei auswählen"
+        OpenFileDialog1.Filter = "SMUSI-Dateien (*.asc)|*.asc"
         OpenFileDialog1.InitialDirectory = Workdir
 
         If OpenFileDialog1.ShowDialog() = Windows.Forms.DialogResult.OK Then
