@@ -30,10 +30,9 @@ Partial Class Wave
         Dim ToolStrip1 As System.Windows.Forms.ToolStrip
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Wave))
         Me.ToolStripStatusLabel_Messages = New System.Windows.Forms.ToolStripStatusLabel
-        Me.TChart1 = New Steema.TeeChart.TChart
-        Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog
         Me.ToolStripButton_Neu = New System.Windows.Forms.ToolStripButton
         Me.ToolStripButton_Öffnen = New System.Windows.Forms.ToolStripButton
+        Me.ToolStripButton_Import = New System.Windows.Forms.ToolStripButton
         Me.ToolStripButton_Speichern = New System.Windows.Forms.ToolStripButton
         Me.ToolStripButton_Export = New System.Windows.Forms.ToolStripButton
         Me.ToolStripButton_Analysis = New System.Windows.Forms.ToolStripButton
@@ -42,6 +41,8 @@ Partial Class Wave
         Me.ToolStripButton_Drucken = New System.Windows.Forms.ToolStripButton
         Me.ToolStripButton_Kopieren = New System.Windows.Forms.ToolStripButton
         Me.ToolStripButton_Info = New System.Windows.Forms.ToolStripButton
+        Me.TChart1 = New Steema.TeeChart.TChart
+        Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog
         Me.DateTimePicker1 = New System.Windows.Forms.DateTimePicker
         Me.SplitContainer1 = New System.Windows.Forms.SplitContainer
         Me.TChart2 = New Steema.TeeChart.TChart
@@ -103,27 +104,11 @@ Partial Class Wave
         Me.ToolStripStatusLabel_Messages.Text = "Messages"
         Me.ToolStripStatusLabel_Messages.ToolTipText = "Messages"
         '
-        'TChart1
-        '
-        '
-        '
-        '
-        Me.TChart1.Aspect.ZOffset = 0
-        Me.TChart1.Location = New System.Drawing.Point(0, 0)
-        Me.TChart1.Name = "TChart1"
-        Me.TChart1.Size = New System.Drawing.Size(945, 190)
-        Me.TChart1.TabIndex = 0
-        '
-        'OpenFileDialog1
-        '
-        Me.OpenFileDialog1.DefaultExt = "txt"
-        Me.OpenFileDialog1.Title = "Datei importieren"
-        '
         'ToolStrip1
         '
         ToolStrip1.AutoSize = False
         ToolStrip1.BackColor = System.Drawing.SystemColors.Control
-        ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButton_Neu, Me.ToolStripButton_Öffnen, Me.ToolStripButton_Speichern, ToolStripSeparator2, Me.ToolStripButton_Export, Me.ToolStripButton_Analysis, ToolStripSeparator1, Me.ToolStripButton_Edit, Me.ToolStripButton_Übersicht, toolStripSeparator, Me.ToolStripButton_Drucken, Me.ToolStripButton_Kopieren, toolStripSeparator3, Me.ToolStripButton_Info})
+        ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButton_Neu, Me.ToolStripButton_Öffnen, Me.ToolStripButton_Speichern, Me.ToolStripButton_Import, ToolStripSeparator2, Me.ToolStripButton_Export, Me.ToolStripButton_Analysis, ToolStripSeparator1, Me.ToolStripButton_Edit, Me.ToolStripButton_Übersicht, toolStripSeparator, Me.ToolStripButton_Drucken, Me.ToolStripButton_Kopieren, toolStripSeparator3, Me.ToolStripButton_Info})
         ToolStrip1.Location = New System.Drawing.Point(0, 0)
         ToolStrip1.Name = "ToolStrip1"
         ToolStrip1.Size = New System.Drawing.Size(945, 34)
@@ -146,7 +131,16 @@ Partial Class Wave
         Me.ToolStripButton_Öffnen.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.ToolStripButton_Öffnen.Name = "ToolStripButton_Öffnen"
         Me.ToolStripButton_Öffnen.Size = New System.Drawing.Size(23, 31)
-        Me.ToolStripButton_Öffnen.Text = "Ö&ffnen"
+        Me.ToolStripButton_Öffnen.Text = "TEN-Datei Öffnen"
+        '
+        'ToolStripButton_Import
+        '
+        Me.ToolStripButton_Import.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.ToolStripButton_Import.Image = Global.Wave.My.Resources.Resources.chart_line_add
+        Me.ToolStripButton_Import.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ToolStripButton_Import.Name = "ToolStripButton_Import"
+        Me.ToolStripButton_Import.Size = New System.Drawing.Size(23, 31)
+        Me.ToolStripButton_Import.Text = "Serie(n) importieren"
         '
         'ToolStripButton_Speichern
         '
@@ -225,6 +219,17 @@ Partial Class Wave
         Me.ToolStripButton_Info.Name = "ToolStripButton_Info"
         Me.ToolStripButton_Info.Size = New System.Drawing.Size(23, 31)
         Me.ToolStripButton_Info.Text = "&Info"
+        '
+        'TChart1
+        '
+        '
+        '
+        '
+        Me.TChart1.Aspect.ZOffset = 0
+        Me.TChart1.Location = New System.Drawing.Point(0, 0)
+        Me.TChart1.Name = "TChart1"
+        Me.TChart1.Size = New System.Drawing.Size(945, 190)
+        Me.TChart1.TabIndex = 0
         '
         'DateTimePicker1
         '
@@ -308,5 +313,6 @@ Partial Class Wave
     Friend WithEvents SaveFileDialog1 As System.Windows.Forms.SaveFileDialog
     Friend WithEvents ToolStripButton_Analysis As System.Windows.Forms.ToolStripButton
     Friend WithEvents ToolStripStatusLabel_Messages As System.Windows.Forms.ToolStripStatusLabel
+    Friend WithEvents ToolStripButton_Import As System.Windows.Forms.ToolStripButton
 
 End Class
