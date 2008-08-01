@@ -1,7 +1,7 @@
 Public Class ExportDiag
 
-    'Formatuswahl verändert
-    '**********************
+    'Formatauswahl verändert
+    '***********************
     Private Sub ComboBox_Format_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ComboBox_Format.SelectedIndexChanged
 
         Select Case ComboBox_Format.SelectedItem
@@ -12,7 +12,7 @@ Public Class ExportDiag
             Case Else
                 Me.ListBox_Zeitreihen.SelectionMode = SelectionMode.MultiExtended
                 'Noch nicht implementiert
-                MsgBox("Noch nicht implementiert!", MsgBoxStyle.Exclamation, "Wave")
+                MsgBox("Noch nicht implementiert!", MsgBoxStyle.Exclamation)
                 ComboBox_Format.SelectedItem = Konstanten.Formate.ZRE
         End Select
 
@@ -23,7 +23,7 @@ Public Class ExportDiag
     Private Sub Button_OK_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button_OK.Click
         'Eingabekontrolle
         If (Me.ListBox_Zeitreihen.SelectedItems.Count < 1) Then
-            MsgBox("Bitte mindestens eine Zeitreihe auswählen!", MsgBoxStyle.Exclamation, "Wave")
+            MsgBox("Bitte mindestens eine Zeitreihe auswählen!", MsgBoxStyle.Exclamation)
             Me.DialogResult = Windows.Forms.DialogResult.None
         End If
     End Sub
