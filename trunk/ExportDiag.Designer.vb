@@ -33,6 +33,24 @@ Partial Class ExportDiag
         Label_Zeitreihen = New System.Windows.Forms.Label
         Me.SuspendLayout()
         '
+        'Label_Format
+        '
+        Label_Format.AutoSize = True
+        Label_Format.Location = New System.Drawing.Point(12, 12)
+        Label_Format.Name = "Label_Format"
+        Label_Format.Size = New System.Drawing.Size(42, 13)
+        Label_Format.TabIndex = 3
+        Label_Format.Text = "Format:"
+        '
+        'Label_Zeitreihen
+        '
+        Label_Zeitreihen.AutoSize = True
+        Label_Zeitreihen.Location = New System.Drawing.Point(12, 46)
+        Label_Zeitreihen.Name = "Label_Zeitreihen"
+        Label_Zeitreihen.Size = New System.Drawing.Size(63, 13)
+        Label_Zeitreihen.TabIndex = 4
+        Label_Zeitreihen.Text = "Zeitreihe(n):"
+        '
         'ListBox_Zeitreihen
         '
         Me.ListBox_Zeitreihen.FormattingEnabled = True
@@ -60,24 +78,6 @@ Partial Class ExportDiag
         Me.ComboBox_Format.Size = New System.Drawing.Size(121, 21)
         Me.ComboBox_Format.TabIndex = 2
         '
-        'Label_Format
-        '
-        Label_Format.AutoSize = True
-        Label_Format.Location = New System.Drawing.Point(12, 12)
-        Label_Format.Name = "Label_Format"
-        Label_Format.Size = New System.Drawing.Size(42, 13)
-        Label_Format.TabIndex = 3
-        Label_Format.Text = "Format:"
-        '
-        'Label_Zeitreihen
-        '
-        Label_Zeitreihen.AutoSize = True
-        Label_Zeitreihen.Location = New System.Drawing.Point(12, 46)
-        Label_Zeitreihen.Name = "Label_Zeitreihen"
-        Label_Zeitreihen.Size = New System.Drawing.Size(63, 13)
-        Label_Zeitreihen.TabIndex = 4
-        Label_Zeitreihen.Text = "Zeitreihe(n):"
-        '
         'Button_Cancel
         '
         Me.Button_Cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel
@@ -103,6 +103,8 @@ Partial Class ExportDiag
         Me.MaximizeBox = False
         Me.MinimizeBox = False
         Me.Name = "ExportDiag"
+        Me.ShowInTaskbar = False
+        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
         Me.Text = "Zeitreihen exportieren"
         Me.ResumeLayout(False)
         Me.PerformLayout()

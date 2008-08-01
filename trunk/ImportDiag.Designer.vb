@@ -312,6 +312,8 @@ Partial Class ImportDiag
         Me.Controls.Add(Me.Button_Cancel)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Name = "ImportDiag"
+        Me.ShowInTaskbar = False
+        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
         Me.Text = "Datei importieren"
         Me.GroupBox_Spaltenmodus.ResumeLayout(False)
         Me.GroupBox_Spaltenmodus.PerformLayout()
