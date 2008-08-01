@@ -29,6 +29,7 @@ Partial Class Wave
         Dim StatusStrip1 As System.Windows.Forms.StatusStrip
         Dim ToolStrip1 As System.Windows.Forms.ToolStrip
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Wave))
+        Dim ToolStripSeparator4 As System.Windows.Forms.ToolStripSeparator
         Me.ToolStripStatusLabel_Messages = New System.Windows.Forms.ToolStripStatusLabel
         Me.ToolStripButton_Neu = New System.Windows.Forms.ToolStripButton
         Me.ToolStripButton_Öffnen = New System.Windows.Forms.ToolStripButton
@@ -54,6 +55,7 @@ Partial Class Wave
         ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator
         StatusStrip1 = New System.Windows.Forms.StatusStrip
         ToolStrip1 = New System.Windows.Forms.ToolStrip
+        ToolStripSeparator4 = New System.Windows.Forms.ToolStripSeparator
         StatusStrip1.SuspendLayout()
         ToolStrip1.SuspendLayout()
         Me.SplitContainer1.Panel1.SuspendLayout()
@@ -109,7 +111,7 @@ Partial Class Wave
         '
         ToolStrip1.AutoSize = False
         ToolStrip1.BackColor = System.Drawing.SystemColors.Control
-        ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButton_Neu, Me.ToolStripButton_Öffnen, Me.ToolStripButton_Speichern, Me.ToolStripButton_Import, Me.ToolStripButton_EnterSeries, ToolStripSeparator2, Me.ToolStripButton_Export, Me.ToolStripButton_Analysis, ToolStripSeparator1, Me.ToolStripButton_EditChart, Me.ToolStripButton_Übersicht, toolStripSeparator, Me.ToolStripButton_Drucken, Me.ToolStripButton_Kopieren, toolStripSeparator3, Me.ToolStripButton_Info})
+        ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButton_Neu, Me.ToolStripButton_Öffnen, Me.ToolStripButton_Speichern, ToolStripSeparator4, Me.ToolStripButton_Import, Me.ToolStripButton_EnterSeries, ToolStripSeparator2, Me.ToolStripButton_Export, Me.ToolStripButton_Analysis, ToolStripSeparator1, Me.ToolStripButton_EditChart, Me.ToolStripButton_Übersicht, toolStripSeparator, Me.ToolStripButton_Drucken, Me.ToolStripButton_Kopieren, toolStripSeparator3, Me.ToolStripButton_Info})
         ToolStrip1.Location = New System.Drawing.Point(0, 0)
         ToolStrip1.Name = "ToolStrip1"
         ToolStrip1.Size = New System.Drawing.Size(945, 34)
@@ -281,6 +283,11 @@ Partial Class Wave
         Me.TChart2.Name = "TChart2"
         Me.TChart2.Size = New System.Drawing.Size(942, 106)
         Me.TChart2.TabIndex = 0
+        '
+        'ToolStripSeparator4
+        '
+        ToolStripSeparator4.Name = "ToolStripSeparator4"
+        ToolStripSeparator4.Size = New System.Drawing.Size(6, 34)
         '
         'Wave
         '

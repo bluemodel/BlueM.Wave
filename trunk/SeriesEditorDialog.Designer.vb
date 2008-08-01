@@ -40,7 +40,7 @@ Partial Class SeriesEditorDialog
         Label_Title.Location = New System.Drawing.Point(12, 15)
         Label_Title.Name = "Label_Title"
         Label_Title.Size = New System.Drawing.Size(30, 13)
-        Label_Title.TabIndex = 4
+        Label_Title.TabIndex = 0
         Label_Title.Text = "Titel:"
         '
         'DataGridView1
@@ -52,7 +52,7 @@ Partial Class SeriesEditorDialog
         Me.DataGridView1.Location = New System.Drawing.Point(12, 67)
         Me.DataGridView1.Name = "DataGridView1"
         Me.DataGridView1.Size = New System.Drawing.Size(268, 184)
-        Me.DataGridView1.TabIndex = 0
+        Me.DataGridView1.TabIndex = 3
         '
         'ColumnDate
         '
@@ -73,7 +73,7 @@ Partial Class SeriesEditorDialog
         Me.Button_Paste.Location = New System.Drawing.Point(12, 38)
         Me.Button_Paste.Name = "Button_Paste"
         Me.Button_Paste.Size = New System.Drawing.Size(75, 23)
-        Me.Button_Paste.TabIndex = 1
+        Me.Button_Paste.TabIndex = 2
         Me.Button_Paste.Text = "Einfügen"
         Me.Button_Paste.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         Me.Button_Paste.UseVisualStyleBackColor = True
@@ -84,7 +84,7 @@ Partial Class SeriesEditorDialog
         Me.Button_OK.Location = New System.Drawing.Point(205, 257)
         Me.Button_OK.Name = "Button_OK"
         Me.Button_OK.Size = New System.Drawing.Size(75, 23)
-        Me.Button_OK.TabIndex = 2
+        Me.Button_OK.TabIndex = 4
         Me.Button_OK.Text = "OK"
         Me.Button_OK.UseVisualStyleBackColor = True
         '
@@ -93,7 +93,7 @@ Partial Class SeriesEditorDialog
         Me.TextBox_Title.Location = New System.Drawing.Point(58, 12)
         Me.TextBox_Title.Name = "TextBox_Title"
         Me.TextBox_Title.Size = New System.Drawing.Size(222, 20)
-        Me.TextBox_Title.TabIndex = 5
+        Me.TextBox_Title.TabIndex = 1
         '
         'SeriesEditorDialog
         '
