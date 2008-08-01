@@ -77,6 +77,12 @@
     </Compile>
     <Compile Include="Dateiformate\Dateiformat.vb" />
     <Compile Include="Dateiformate\RVA.vb" />
+    <Compile Include="SeriesEditorDialog.Designer.vb">
+      <DependentUpon>SeriesEditorDialog.vb</DependentUpon>
+    </Compile>
+    <Compile Include="SeriesEditorDialog.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="ExportDiag.Designer.vb">
       <DependentUpon>ExportDiag.vb</DependentUpon>
     </Compile>
@@ -157,6 +163,10 @@
       <SubType>Designer</SubType>
       <DependentUpon>AnalysisDialog.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="SeriesEditorDialog.resx">
+      <DependentUpon>SeriesEditorDialog.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="ExportDiag.resx">
       <SubType>Designer</SubType>
       <DependentUpon>ExportDiag.vb</DependentUpon>
@@ -188,6 +198,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\chart_line_add.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\chart_line_edit.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\page_paste.png" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
