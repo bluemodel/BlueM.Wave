@@ -282,9 +282,19 @@ Public Class Wave
         End If
     End Sub
 
-    'Editieren
-    '*********
-    Private Sub Editieren(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_Edit.Click, TChart1.DoubleClick
+    'Serie eingeben
+    '**************
+    Private Sub Eingeben(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_EnterSeries.Click
+        Dim SeriesEditor As New SeriesEditorDialog()
+        If (SeriesEditor.ShowDialog() = Windows.Forms.DialogResult.OK) Then
+            Me.Zeitreihen.Add(SeriesEditor.Zeitreihe)
+            Call Me.Display_Series(SeriesEditor.Zeitreihe)
+        End If
+    End Sub
+
+    'Edit Chart
+    '**********
+    Private Sub EditChart(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_EditChart.Click, TChart1.DoubleClick
         Call Me.TChart1.ShowEditor()
     End Sub
 

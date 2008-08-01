@@ -32,11 +32,12 @@ Partial Class Wave
         Me.ToolStripStatusLabel_Messages = New System.Windows.Forms.ToolStripStatusLabel
         Me.ToolStripButton_Neu = New System.Windows.Forms.ToolStripButton
         Me.ToolStripButton_Öffnen = New System.Windows.Forms.ToolStripButton
-        Me.ToolStripButton_Import = New System.Windows.Forms.ToolStripButton
         Me.ToolStripButton_Speichern = New System.Windows.Forms.ToolStripButton
+        Me.ToolStripButton_Import = New System.Windows.Forms.ToolStripButton
+        Me.ToolStripButton_EnterSeries = New System.Windows.Forms.ToolStripButton
         Me.ToolStripButton_Export = New System.Windows.Forms.ToolStripButton
         Me.ToolStripButton_Analysis = New System.Windows.Forms.ToolStripButton
-        Me.ToolStripButton_Edit = New System.Windows.Forms.ToolStripButton
+        Me.ToolStripButton_EditChart = New System.Windows.Forms.ToolStripButton
         Me.ToolStripButton_Übersicht = New System.Windows.Forms.ToolStripButton
         Me.ToolStripButton_Drucken = New System.Windows.Forms.ToolStripButton
         Me.ToolStripButton_Kopieren = New System.Windows.Forms.ToolStripButton
@@ -108,7 +109,7 @@ Partial Class Wave
         '
         ToolStrip1.AutoSize = False
         ToolStrip1.BackColor = System.Drawing.SystemColors.Control
-        ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButton_Neu, Me.ToolStripButton_Öffnen, Me.ToolStripButton_Speichern, Me.ToolStripButton_Import, ToolStripSeparator2, Me.ToolStripButton_Export, Me.ToolStripButton_Analysis, ToolStripSeparator1, Me.ToolStripButton_Edit, Me.ToolStripButton_Übersicht, toolStripSeparator, Me.ToolStripButton_Drucken, Me.ToolStripButton_Kopieren, toolStripSeparator3, Me.ToolStripButton_Info})
+        ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButton_Neu, Me.ToolStripButton_Öffnen, Me.ToolStripButton_Speichern, Me.ToolStripButton_Import, Me.ToolStripButton_EnterSeries, ToolStripSeparator2, Me.ToolStripButton_Export, Me.ToolStripButton_Analysis, ToolStripSeparator1, Me.ToolStripButton_EditChart, Me.ToolStripButton_Übersicht, toolStripSeparator, Me.ToolStripButton_Drucken, Me.ToolStripButton_Kopieren, toolStripSeparator3, Me.ToolStripButton_Info})
         ToolStrip1.Location = New System.Drawing.Point(0, 0)
         ToolStrip1.Name = "ToolStrip1"
         ToolStrip1.Size = New System.Drawing.Size(945, 34)
@@ -133,6 +134,15 @@ Partial Class Wave
         Me.ToolStripButton_Öffnen.Size = New System.Drawing.Size(23, 31)
         Me.ToolStripButton_Öffnen.Text = "TEN-Datei Öffnen"
         '
+        'ToolStripButton_Speichern
+        '
+        Me.ToolStripButton_Speichern.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.ToolStripButton_Speichern.Image = CType(resources.GetObject("ToolStripButton_Speichern.Image"), System.Drawing.Image)
+        Me.ToolStripButton_Speichern.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ToolStripButton_Speichern.Name = "ToolStripButton_Speichern"
+        Me.ToolStripButton_Speichern.Size = New System.Drawing.Size(23, 31)
+        Me.ToolStripButton_Speichern.Text = "&Speichern"
+        '
         'ToolStripButton_Import
         '
         Me.ToolStripButton_Import.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
@@ -142,14 +152,14 @@ Partial Class Wave
         Me.ToolStripButton_Import.Size = New System.Drawing.Size(23, 31)
         Me.ToolStripButton_Import.Text = "Serie(n) importieren"
         '
-        'ToolStripButton_Speichern
+        'ToolStripButton_EnterSeries
         '
-        Me.ToolStripButton_Speichern.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.ToolStripButton_Speichern.Image = CType(resources.GetObject("ToolStripButton_Speichern.Image"), System.Drawing.Image)
-        Me.ToolStripButton_Speichern.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.ToolStripButton_Speichern.Name = "ToolStripButton_Speichern"
-        Me.ToolStripButton_Speichern.Size = New System.Drawing.Size(23, 31)
-        Me.ToolStripButton_Speichern.Text = "&Speichern"
+        Me.ToolStripButton_EnterSeries.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.ToolStripButton_EnterSeries.Image = Global.Wave.My.Resources.Resources.chart_line_edit
+        Me.ToolStripButton_EnterSeries.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ToolStripButton_EnterSeries.Name = "ToolStripButton_EnterSeries"
+        Me.ToolStripButton_EnterSeries.Size = New System.Drawing.Size(23, 31)
+        Me.ToolStripButton_EnterSeries.Text = "Zeitreihe eingeben"
         '
         'ToolStripButton_Export
         '
@@ -170,14 +180,14 @@ Partial Class Wave
         Me.ToolStripButton_Analysis.Size = New System.Drawing.Size(23, 31)
         Me.ToolStripButton_Analysis.Text = "Analyse"
         '
-        'ToolStripButton_Edit
+        'ToolStripButton_EditChart
         '
-        Me.ToolStripButton_Edit.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.ToolStripButton_Edit.Image = Global.Wave.My.Resources.Resources.pencil
-        Me.ToolStripButton_Edit.ImageTransparentColor = System.Drawing.SystemColors.Control
-        Me.ToolStripButton_Edit.Name = "ToolStripButton_Edit"
-        Me.ToolStripButton_Edit.Size = New System.Drawing.Size(23, 31)
-        Me.ToolStripButton_Edit.Text = "Bearbeiten"
+        Me.ToolStripButton_EditChart.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.ToolStripButton_EditChart.Image = Global.Wave.My.Resources.Resources.pencil
+        Me.ToolStripButton_EditChart.ImageTransparentColor = System.Drawing.SystemColors.Control
+        Me.ToolStripButton_EditChart.Name = "ToolStripButton_EditChart"
+        Me.ToolStripButton_EditChart.Size = New System.Drawing.Size(23, 31)
+        Me.ToolStripButton_EditChart.Text = "Diagramm bearbeiten"
         '
         'ToolStripButton_Übersicht
         '
@@ -307,12 +317,13 @@ Partial Class Wave
     Friend WithEvents ToolStripButton_Drucken As System.Windows.Forms.ToolStripButton
     Friend WithEvents ToolStripButton_Kopieren As System.Windows.Forms.ToolStripButton
     Friend WithEvents ToolStripButton_Info As System.Windows.Forms.ToolStripButton
-    Friend WithEvents ToolStripButton_Edit As System.Windows.Forms.ToolStripButton
+    Friend WithEvents ToolStripButton_EditChart As System.Windows.Forms.ToolStripButton
     Friend WithEvents ToolStripButton_Übersicht As System.Windows.Forms.ToolStripButton
     Friend WithEvents ToolStripButton_Export As System.Windows.Forms.ToolStripButton
     Friend WithEvents SaveFileDialog1 As System.Windows.Forms.SaveFileDialog
     Friend WithEvents ToolStripButton_Analysis As System.Windows.Forms.ToolStripButton
     Friend WithEvents ToolStripStatusLabel_Messages As System.Windows.Forms.ToolStripStatusLabel
     Friend WithEvents ToolStripButton_Import As System.Windows.Forms.ToolStripButton
+    Friend WithEvents ToolStripButton_EnterSeries As System.Windows.Forms.ToolStripButton
 
 End Class
