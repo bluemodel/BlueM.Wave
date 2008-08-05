@@ -192,7 +192,6 @@
     <EmbeddedResource Include="Resources\Wave.ico" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\pencil.png" />
     <None Include="Resources\application_split.png" />
     <None Include="Resources\TeeChart.dll" />
   </ItemGroup>
@@ -216,6 +215,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\cut.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\chart_curve_edit.png" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

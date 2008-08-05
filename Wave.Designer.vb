@@ -200,7 +200,7 @@ Partial Class Wave
         'ToolStripButton_EditChart
         '
         Me.ToolStripButton_EditChart.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.ToolStripButton_EditChart.Image = Global.Wave.My.Resources.Resources.pencil
+        Me.ToolStripButton_EditChart.Image = Global.Wave.My.Resources.Resources.chart_curve_edit
         Me.ToolStripButton_EditChart.ImageTransparentColor = System.Drawing.SystemColors.Control
         Me.ToolStripButton_EditChart.Name = "ToolStripButton_EditChart"
         Me.ToolStripButton_EditChart.Size = New System.Drawing.Size(23, 31)
