@@ -292,6 +292,32 @@ Public Class Wave
         End If
     End Sub
 
+    'Zeitreihe zuschneiden
+    '*********************
+    Private Sub Zuschneiden(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_Cut.Click
+
+        'Wenn keine Zeitreihen vorhanden, abbrechen!
+        If (Me.Zeitreihen.Count < 1) Then
+            MsgBox("Es sind keine Zeitreihen zum Zuschneiden verfügbar!", MsgBoxStyle.Exclamation)
+            Exit Sub
+        End If
+
+        'Dialog vorbereiten
+        '------------------
+        Dim cutter As New CutDialog()
+        'Zeitreihen zu Combobox hinzufügen
+        For Each ZRE As Zeitreihe In Me.Zeitreihen
+            cutter.ComboBox_Zeitreihen.Items.Add(zre)
+        Next
+
+        If (cutter.ShowDialog() = Windows.Forms.DialogResult.OK) Then
+            'Neue Reihe speichern und anzeigen
+            Me.Zeitreihen.Add(cutter.zreCut)
+            Me.Display_Series(cutter.zreCut)
+        End If
+
+    End Sub
+
     'Edit Chart
     '**********
     Private Sub EditChart(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_EditChart.Click, TChart1.DoubleClick

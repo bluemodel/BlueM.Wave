@@ -73,6 +73,12 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="ApplicationEvents.vb" />
+    <Compile Include="CutDialog.Designer.vb">
+      <DependentUpon>CutDialog.vb</DependentUpon>
+    </Compile>
+    <Compile Include="CutDialog.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Dateiformate\ASC.vb">
     </Compile>
     <Compile Include="Dateiformate\Dateiformat.vb" />
@@ -163,6 +169,9 @@
       <SubType>Designer</SubType>
       <DependentUpon>AnalysisDialog.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="CutDialog.resx">
+      <DependentUpon>CutDialog.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="SeriesEditorDialog.resx">
       <DependentUpon>SeriesEditorDialog.vb</DependentUpon>
       <SubType>Designer</SubType>
@@ -204,6 +213,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\page_paste.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\cut.png" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
