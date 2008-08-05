@@ -88,6 +88,13 @@ Namespace My.Resources
             End Get
         End Property
         
+        Friend ReadOnly Property cut() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("cut", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
         Friend ReadOnly Property page_paste() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("page_paste", resourceCulture)
