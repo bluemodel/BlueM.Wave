@@ -171,6 +171,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="CutDialog.resx">
       <DependentUpon>CutDialog.vb</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="SeriesEditorDialog.resx">
       <DependentUpon>SeriesEditorDialog.vb</DependentUpon>
