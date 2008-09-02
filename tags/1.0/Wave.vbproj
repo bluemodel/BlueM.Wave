@@ -1,0 +1,236 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{BCD1BBE3-5AB2-4C3F-AC12-43EB977C6F6F}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <StartupObject>Wave.My.MyApplication</StartupObject>
+    <RootNamespace>Wave</RootNamespace>
+    <AssemblyName>Wave</AssemblyName>
+    <MyType>WindowsForms</MyType>
+    <ApplicationIcon>Resources\Wave.ico</ApplicationIcon>
+    <GenerateManifests>false</GenerateManifests>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DocumentationFile>Wave.xml</DocumentationFile>
+    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>None</DebugType>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DocumentationFile>
+    </DocumentationFile>
+    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="TeeChart, Version=3.5.3146.24806, Culture=neutral, PublicKeyToken=9c8126276c77bdb7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Import Include="Microsoft.VisualBasic" />
+    <Import Include="System" />
+    <Import Include="System.Collections" />
+    <Import Include="System.Collections.Generic" />
+    <Import Include="System.Drawing" />
+    <Import Include="System.Diagnostics" />
+    <Import Include="System.Windows.Forms" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AboutDialog.Designer.vb">
+      <DependentUpon>AboutDialog.vb</DependentUpon>
+    </Compile>
+    <Compile Include="AboutDialog.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Analysis\Analysis.vb" />
+    <Compile Include="Analysis\Monatsauswertung.vb" />
+    <Compile Include="Analysis\AnalysisFactory.vb" />
+    <Compile Include="Analysis\AnalysisDialog.Designer.vb">
+      <DependentUpon>AnalysisDialog.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Analysis\AnalysisDialog.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ApplicationEvents.vb" />
+    <Compile Include="CutDialog.Designer.vb">
+      <DependentUpon>CutDialog.vb</DependentUpon>
+    </Compile>
+    <Compile Include="CutDialog.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dateiformate\ASC.vb">
+    </Compile>
+    <Compile Include="Dateiformate\Dateiformat.vb" />
+    <Compile Include="Dateiformate\RVA.vb" />
+    <Compile Include="SeriesEditorDialog.Designer.vb">
+      <DependentUpon>SeriesEditorDialog.vb</DependentUpon>
+    </Compile>
+    <Compile Include="SeriesEditorDialog.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ExportDiag.Designer.vb">
+      <DependentUpon>ExportDiag.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ExportDiag.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ImportDiag.designer.vb">
+      <DependentUpon>ImportDiag.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ImportDiag.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Konstanten.vb" />
+    <Compile Include="MessageDialog.Designer.vb">
+      <DependentUpon>MessageDialog.vb</DependentUpon>
+    </Compile>
+    <Compile Include="MessageDialog.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="My Project\AssemblyInfo.vb" />
+    <Compile Include="My Project\Application.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Application.myapp</DependentUpon>
+    </Compile>
+    <Compile Include="My Project\Resources.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="My Project\Settings.Designer.vb">
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Include="Dateiformate\CSV.vb">
+    </Compile>
+    <Compile Include="Wave.Designer.vb">
+      <DependentUpon>Wave.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Wave.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dateiformate\WEL.vb">
+    </Compile>
+    <Compile Include="Zeichen.vb" />
+    <Compile Include="Zeitreihe.vb" />
+    <Compile Include="Dateiformate\ZRE.vb" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="My Project\Resources.resx">
+      <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.vb</LastGenOutput>
+      <CustomToolNamespace>My.Resources</CustomToolNamespace>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Wave.resx">
+      <DependentUpon>Wave.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="My Project\Application.myapp">
+      <Generator>MyApplicationCodeGenerator</Generator>
+      <LastGenOutput>Application.Designer.vb</LastGenOutput>
+    </None>
+    <None Include="My Project\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.vb</LastGenOutput>
+      <CustomToolNamespace>My</CustomToolNamespace>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="AboutDialog.resx">
+      <DependentUpon>AboutDialog.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Analysis\AnalysisDialog.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>AnalysisDialog.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CutDialog.resx">
+      <DependentUpon>CutDialog.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SeriesEditorDialog.resx">
+      <DependentUpon>SeriesEditorDialog.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ExportDiag.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>ExportDiag.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ImportDiag.resx">
+      <DependentUpon>ImportDiag.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MessageDialog.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>MessageDialog.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="My Project\licenses.licx" />
+    <EmbeddedResource Include="Resources\Wave.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\application_split.png" />
+    <None Include="Resources\TeeChart.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\page_white_go.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\calculator.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\warning.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\chart_line_add.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\chart_line_edit.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\page_paste.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\cut.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\chart_curve_edit.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="RELEASE-NOTES.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.VisualBasic.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
