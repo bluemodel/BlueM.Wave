@@ -1,8 +1,7 @@
+''' <summary>
+''' Basisklasse für Analysefunktionen
+''' </summary>
 Public MustInherit Class Analysis
-
-    '*********************************
-    'Basisklasse für Analysefunktionen
-    '*********************************
 
     'Allgemeine Eigenschaften
     Protected _zeitreihen As Collection
@@ -10,29 +9,40 @@ Public MustInherit Class Analysis
     Protected _chart As Steema.TeeChart.Chart
     Protected isProcessed As Boolean
 
-    'Flag, der anzeigt, ob die Analysefunktion ein Ergebnisdiagramm erzeugt
+    ''' <summary>
+    ''' Flag, der anzeigt, ob die Analysefunktion ein Ergebnisdiagramm erzeugt
+    ''' </summary>
     Public hasResultChart As Boolean
 
-    'Konstruktor
-    '***********
+    ''' <summary>
+    ''' Konstruktor
+    ''' </summary>
+    ''' <param name="zeitreihen">Collection von Zeitreihen</param>
     Public Sub New(ByRef zeitreihen As Collection)
         Me._zeitreihen = zeitreihen
     End Sub
 
-    'Ergebnis
-    '********
+    ''' <summary>
+    ''' Analyseergebnis in Form eines Arrays von Double
+    ''' </summary>
+    ''' <remarks>Je nach Analyse</remarks>
     Public MustOverride ReadOnly Property Result() As Double()
 
-    'Ergebnistext
-    '************
+    ''' <summary>
+    ''' Analyseergebnis in Form von Text
+    ''' </summary>
+    ''' <remarks>Je nach Analyse</remarks>
     Public MustOverride Function ResultText() As String
 
-    'Analyse durchführen
-    '*******************
+    ''' <summary>
+    ''' Analyse durchführen
+    ''' </summary>
     Public MustOverride Sub ProcessAnalysis()
 
-    'Optional: Ergebnischart
-    '***********************
+    ''' <summary>
+    ''' Analyseergebnis in Form eines Diagramms
+    ''' </summary>
+    ''' <remarks>Je nach Analyse</remarks>
     Public Overridable Function ResultChart() As Steema.TeeChart.Chart
         Return New Steema.TeeChart.Chart()
     End Function

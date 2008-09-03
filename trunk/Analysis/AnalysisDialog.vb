@@ -40,31 +40,6 @@ Public Class AnalysisDialog
         End Get
     End Property
 
-    'Analysefunktion verändert
-    '*************************
-    Private Sub ComboBox_Funktion_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ComboBox_Funktion.SelectedIndexChanged
-
-        'Umschalten zwischen Einfach- und Mehrfachauswahl von Zeitreihen:
-        '----------------------------------------------------------------
-        Select Case ComboBox_Funktion.SelectedItem
-
-            '   Analysefunktionen für einzelne Zeitreihen
-            Case AnalysisFactory.AnalysisFunctions.Monatsauswertung
-                Me.ListBox_Zeitreihen.SelectionMode = SelectionMode.One
-
-                'Analysefunktionen für mehrere Zeitreihen
-            Case AnalysisFactory.AnalysisFunctions.Nash_Sutcliffe
-                Me.ListBox_Zeitreihen.SelectionMode = SelectionMode.MultiExtended
-
-            Case Else
-                'Noch nicht implementiert
-                MsgBox("Noch nicht implementiert!", MsgBoxStyle.Exclamation, "Wave")
-                'Standardauswahl setzen:
-                ComboBox_Funktion.SelectedItem = AnalysisFactory.AnalysisFunctions.Monatsauswertung
-        End Select
-
-    End Sub
-
     'OK-Button gedrückt
     '******************
     Private Sub Button_OK_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button_OK.Click

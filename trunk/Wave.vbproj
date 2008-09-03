@@ -64,6 +64,7 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Analysis\Analysis.vb" />
+    <Compile Include="Analysis\Doppelsummenanalyse.vb" />
     <Compile Include="Analysis\Monatsauswertung.vb" />
     <Compile Include="Analysis\AnalysisFactory.vb" />
     <Compile Include="Analysis\AnalysisDialog.Designer.vb">

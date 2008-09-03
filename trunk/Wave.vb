@@ -413,21 +413,33 @@ Public Class Wave
         '-----------------------
         If (oAnalysisDialog.ShowDialog() = Windows.Forms.DialogResult.OK) Then
 
-            'Analyse instanzieren
-            Dim oAnalysis As Analysis
-            oAnalysis = AnalysisFactory.CreateAnalysis(oAnalysisDialog.selectedAnalysisFunction, oAnalysisDialog.selectedZeitreihen)
+            Try
+                'Wait-Cursor
+                Me.Cursor = Cursors.WaitCursor
 
-            'Analyse ausführen
-            Call oAnalysis.ProcessAnalysis()
+                'Analyse instanzieren
+                Dim oAnalysis As Analysis
+                oAnalysis = AnalysisFactory.CreateAnalysis(oAnalysisDialog.selectedAnalysisFunction, oAnalysisDialog.selectedZeitreihen)
 
-            'Analyse-Ergebnis-Chart anzeigen
-            If (oAnalysis.hasResultChart) Then
-                Dim Wave2 As New Wave()
-                Wave2.Text = "Analyse-Ergebnis"
-                Wave2.Übersicht_Toggle(False)
-                Wave2.TChart1.Chart = oAnalysis.ResultChart()
-                Call Wave2.Show()
-            End If
+                'Analyse ausführen
+                Call oAnalysis.ProcessAnalysis()
+
+                'Default-Cursor
+                Me.Cursor = Cursors.Default
+
+                'Analyse-Ergebnis-Chart anzeigen
+                If (oAnalysis.hasResultChart) Then
+                    Dim Wave2 As New Wave()
+                    Wave2.Text = "Analyse-Ergebnis"
+                    Wave2.Übersicht_Toggle(False)
+                    Wave2.TChart1.Chart = oAnalysis.ResultChart()
+                    Call Wave2.Show()
+                End If
+
+            Catch ex As Exception
+                Me.Cursor = Cursors.Default
+                MsgBox("Analyse fehlgeschlagen:" & eol & ex.Message, MsgBoxStyle.Critical)
+            End Try
 
         End If
 
@@ -547,8 +559,10 @@ Public Class Wave
 
     End Sub
 
-    'Datei importieren
-    '*****************
+    ''' <summary>
+    ''' Zeitreihe(n) aus einer Datei importieren
+    ''' </summary>
+    ''' <param name="file">Pfad zur Datei</param>
     Public Sub Import_File(ByVal file As String)
 
         'Kontrolle
@@ -732,8 +746,10 @@ Public Class Wave
         End If
     End Sub
 
-    'Serie im Chart anzeigen
-    '***********************
+    ''' <summary>
+    ''' Eine Zeitreihe zum Diagramm hinzufügen
+    ''' </summary>
+    ''' <param name="zre">Die hinzuzufügende Zeitreihe</param>
     Public Sub Display_Series(ByVal zre As Zeitreihe)
 
         'Linien instanzieren

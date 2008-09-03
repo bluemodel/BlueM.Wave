@@ -18,6 +18,9 @@ Public Class Zeitreihe
     'Properties
     '##########
 
+    ''' <summary>
+    ''' Titel der Zeitreihe
+    ''' </summary>
     Public Property Title() As String
         Get
             Return _title
@@ -27,6 +30,9 @@ Public Class Zeitreihe
         End Set
     End Property
 
+    ''' <summary>
+    ''' Die X-Werte der Zeitreihe als Array von DateTime
+    ''' </summary>
     Public Property XWerte() As DateTime()
         Get
             Return _XWerte
@@ -36,6 +42,10 @@ Public Class Zeitreihe
         End Set
     End Property
 
+    ''' <summary>
+    ''' Die Y-Werte der Zeitreihe als Array von Double
+    ''' </summary>
+    ''' <value></value>
     Public Property YWerte() As Double()
         Get
             Return _YWerte
@@ -45,6 +55,10 @@ Public Class Zeitreihe
         End Set
     End Property
 
+    ''' <summary>
+    ''' Die Länge (Anzahl Stützstellen) der Zeitreihe
+    ''' </summary>
+    ''' <remarks>Wird die Länge neu gesetzt, bleiben vorhandene Werte erhalten</remarks>
     Public Property Length() As Integer
         Get
             Return Me.XWerte.GetLength(0)
@@ -55,6 +69,9 @@ Public Class Zeitreihe
         End Set
     End Property
 
+    ''' <summary>
+    ''' Einheit der Zeitreihe
+    ''' </summary>
     Public Property Einheit() As String
         Get
             Return _Einheit
@@ -64,12 +81,18 @@ Public Class Zeitreihe
         End Set
     End Property
 
+    ''' <summary>
+    ''' Anfangsdatum
+    ''' </summary>
     Public ReadOnly Property Anfangsdatum() As DateTime
         Get
             Return Me.XWerte(0)
         End Get
     End Property
 
+    ''' <summary>
+    ''' Enddatum
+    ''' </summary>
     Public ReadOnly Property Enddatum() As DateTime
         Get
             Return Me.XWerte(Me.XWerte.GetUpperBound(0))
@@ -80,26 +103,36 @@ Public Class Zeitreihe
 
 #Region "Methoden"
 
-    'Konstruktor
-    '***********
+    'Methoden
+    '########
+
+    ''' <summary>
+    ''' Default Konstruktor
+    ''' </summary>
     Public Sub New()
         Me._title = "[nicht gesetzt]"
         Me.Length = 0
     End Sub
 
-    'Konstruktor
-    '***********
+    ''' <summary>
+    ''' Konstruktor
+    ''' </summary>
+    ''' <param name="title">Titel der Zeireihe</param>
     Public Sub New(ByVal title As String)
         Me._title = title
         Me.Length = 0
     End Sub
 
+    ''' <summary>
+    ''' Gibt den Zeitreihen-Titel zurück
+    ''' </summary>
     Public Overrides Function ToString() As String
         Return Me.Title
     End Function
 
-    'Zeitreihe kopieren
-    '******************
+    ''' <summary>
+    ''' Zeitreihe kopieren
+    ''' </summary>
     Public Function Clone() As Zeitreihe
         Dim target As New Zeitreihe(Me.Title)
         target.Length = Me.Length
@@ -108,9 +141,13 @@ Public Class Zeitreihe
         Return target
     End Function
 
-    'Zeitreihe kürzen
-    '****************
-    Public Sub Cut(ByVal start As DateTime, ByVal ende As DateTime)
+    ''' <summary>
+    ''' Zeitreihe zuschneiden
+    ''' </summary>
+    ''' <param name="start">Startdatum</param>
+    ''' <param name="ende">Enddatum</param>
+    ''' <remarks>Wenn Anfangs- und/oder Enddatum nicht genau als Stützstellen vorliegen, wird an den nächstaußeren Stützstellen abgeschnitten</remarks>
+    Public Overloads Sub Cut(ByVal start As DateTime, ByVal ende As DateTime)
 
         Dim j, k, n As Integer
 
@@ -155,9 +192,24 @@ Public Class Zeitreihe
 
     End Sub
 
-    'Einen Wert aus einer Zeitreihe berechnen
-    'WertTyp: MaxWert, MinWert, Average, AnfWert, EndWert
-    '****************************************************
+    ''' <summary>
+    ''' Schneidet die Zeitreihe auf den Zeitraum einer 2. Zeitreihe zu
+    ''' </summary>
+    ''' <param name="zre2">die 2. Zeitreihe</param>
+    ''' <remarks></remarks>
+    Public Overloads Sub Cut(ByVal zre2 As Zeitreihe)
+
+        If (Me.Anfangsdatum < zre2.Anfangsdatum Or Me.Enddatum > zre2.Enddatum) Then
+            Call Me.Cut(zre2.Anfangsdatum, zre2.Enddatum)
+        End If
+
+    End Sub
+
+    ''' <summary>
+    ''' Einen Wert aus einer Zeitreihe berechnen
+    ''' </summary>
+    ''' <param name="WertTyp">MaxWert, MinWert, Average, AnfWert, EndWert</param>
+    ''' <returns>der berechnete Wert</returns>
     Public Function getWert(ByVal WertTyp As String) As Double
 
         Dim i As Integer
