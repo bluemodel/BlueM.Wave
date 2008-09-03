@@ -29,6 +29,11 @@ Public Class Monatsauswertung
 
         Call MyBase.New(zeitreihen)
 
+        'Prüfung: Genau 1 Zeitreihe erlaubt
+        If (zeitreihen.Count <> 1) Then
+            Throw New Exception("Bei der Monatsauswertung muss genau 1 Zeitreihe ausgewählt werden!")
+        End If
+
         Dim i As Integer
 
         Me.hasResultChart = True
@@ -153,7 +158,7 @@ Public Class Monatsauswertung
         If (Not isProcessed) Then Throw New Exception("Ergebnis ist noch nicht berechnet!")
 
         'TODO: Ergebnistext generieren
-        Return "siehe Chart"
+        Return "Siehe Diagramm"
 
     End Function
 
