@@ -3,36 +3,91 @@
 ''' </summary>
 Public MustInherit Class Analysis
 
-    'Allgemeine Eigenschaften
-    Protected _zeitreihen As Collection
-    Protected _result() As Double
-    Protected _chart As Steema.TeeChart.Chart
-    Protected isProcessed As Boolean
+#Region "Eigenschaften"
+
+    ''' <summary>
+    ''' Die zu analysierenden Zeitreihen
+    ''' </summary>
+    Protected mZeitreihen As Collection
+
+    ''' <summary>
+    ''' Ergebnistext
+    ''' </summary>
+    ''' <remarks>Optional</remarks>
+    Protected mResultText As String
+
+    ''' <summary>
+    ''' Ergebniswerte
+    ''' </summary>
+    ''' <remarks>Optional</remarks>
+    Protected mResultValues() As Double
+
+    ''' <summary>
+    ''' Ergebnisdiagramm
+    ''' </summary>
+    ''' <remarks>Optional</remarks>
+    Protected mResultChart As Steema.TeeChart.Chart
+
+#End Region 'Eigenschaften
+
+#Region "Properties"
+
+    ''' <summary>
+    ''' Flag, der anzeigt, ob die Analysefunktion einen Ergebnistext erzeugt
+    ''' </summary>
+    Public MustOverride ReadOnly Property hasResultText() As Boolean
+
+    ''' <summary>
+    ''' Flag, der anzeigt, ob die Analysefunktion Ergebniswerte erzeugt
+    ''' </summary>
+    Public MustOverride ReadOnly Property hasResultValues() As Boolean
 
     ''' <summary>
     ''' Flag, der anzeigt, ob die Analysefunktion ein Ergebnisdiagramm erzeugt
     ''' </summary>
-    Public hasResultChart As Boolean
+    Public MustOverride ReadOnly Property hasResultChart() As Boolean
+
+    ''' <summary>
+    ''' Analyseergebnis in Form von Text
+    ''' </summary>
+    ''' <remarks>Optional</remarks>
+    Public ReadOnly Property getResultText() As String
+        Get
+            Return Me.mResultText
+        End Get
+    End Property
+
+    ''' <summary>
+    ''' Analyseergebnis in Form eines Arrays von Double
+    ''' </summary>
+    ''' <remarks>Optional</remarks>
+    Public ReadOnly Property getResultValues() As Double()
+        Get
+            Return Me.mResultValues
+        End Get
+    End Property
+
+    ''' <summary>
+    ''' Analyseergebnis in Form eines Diagramms
+    ''' </summary>
+    ''' <remarks>Optional</remarks>
+    Public ReadOnly Property getResultChart() As Steema.TeeChart.Chart
+        Get
+            Return Me.mResultChart
+        End Get
+    End Property
+
+#End Region 'Properties
+
+#Region "Methoden"
 
     ''' <summary>
     ''' Konstruktor
     ''' </summary>
     ''' <param name="zeitreihen">Collection von Zeitreihen</param>
     Public Sub New(ByRef zeitreihen As Collection)
-        Me._zeitreihen = zeitreihen
+        Me.mZeitreihen = zeitreihen
     End Sub
-
-    ''' <summary>
-    ''' Analyseergebnis in Form eines Arrays von Double
-    ''' </summary>
-    ''' <remarks>Je nach Analyse</remarks>
-    Public MustOverride ReadOnly Property Result() As Double()
-
-    ''' <summary>
-    ''' Analyseergebnis in Form von Text
-    ''' </summary>
-    ''' <remarks>Je nach Analyse</remarks>
-    Public MustOverride Function ResultText() As String
 
     ''' <summary>
     ''' Analyse durchführen
@@ -40,11 +95,10 @@ Public MustInherit Class Analysis
     Public MustOverride Sub ProcessAnalysis()
 
     ''' <summary>
-    ''' Analyseergebnis in Form eines Diagramms
+    ''' Ergebnisse aufbereiten
     ''' </summary>
-    ''' <remarks>Je nach Analyse</remarks>
-    Public Overridable Function ResultChart() As Steema.TeeChart.Chart
-        Return New Steema.TeeChart.Chart()
-    End Function
+    Public MustOverride Sub PrepareResults()
+
+#End Region 'Methoden
 
 End Class

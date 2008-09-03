@@ -1,11 +1,44 @@
-﻿Public Class Doppelsummenanalyse
+﻿''' <summary>
+''' Doppelsummenanalyse zweier Zeitreihen
+''' </summary>
+''' <remarks>http://130.83.196.154/BlueM/wiki/index.php/Wave:Doppelsummenanalyse</remarks>
+Public Class Doppelsummenanalyse
     Inherits Analysis
 
     Dim summe1(), summe2() As Double
-    Dim datume() As Datetime
+    Dim datume() As DateTime
 
-    'Konstruktor
-    '***********
+    ''' <summary>
+    ''' Flag, der anzeigt, ob die Analysefunktion einen Ergebnistext erzeugt
+    ''' </summary>
+    Public Overrides ReadOnly Property hasResultText() As Boolean
+        Get
+            Return False
+        End Get
+    End Property
+
+    ''' <summary>
+    ''' Flag, der anzeigt, ob die Analysefunktion Ergebniswerte erzeugt
+    ''' </summary>
+    Public Overrides ReadOnly Property hasResultValues() As Boolean
+        Get
+            Return False
+        End Get
+    End Property
+
+    ''' <summary>
+    ''' Flag, der anzeigt, ob die Analysefunktion ein Ergebnisdiagramm erzeugt
+    ''' </summary>
+    Public Overrides ReadOnly Property hasResultChart() As Boolean
+        Get
+            Return True
+        End Get
+    End Property
+
+    ''' <summary>
+    ''' Konstruktor
+    ''' </summary>
+    ''' <param name="zeitreihen">zu analysierende Zeitreihen</param>
     Public Sub New(ByRef zeitreihen As Collection)
 
         Call MyBase.New(zeitreihen)
@@ -15,18 +48,19 @@
             Throw New Exception("Für die Doppelsummenanalyse müssen genau 2 Zeitreihen ausgewählt werden!")
         End If
 
-        Me.hasResultChart = True
-
     End Sub
 
+    ''' <summary>
+    ''' Analyse durchführen
+    ''' </summary>
     Public Overrides Sub ProcessAnalysis()
 
         Dim i, j, n As Integer
         Dim zre1, zre2 As Zeitreihe
         Dim found As Boolean
 
-        zre1 = Me._zeitreihen.Item(1)
-        zre2 = Me._zeitreihen.Item(2)
+        zre1 = Me.mZeitreihen.Item(1)
+        zre2 = Me.mZeitreihen.Item(2)
 
         'zunächst die Zeitreihen zuschneiden
         Call zre1.Cut(zre2)
@@ -100,55 +134,36 @@
             End If
         Loop
 
-        Me.isProcessed = True
-
     End Sub
 
-    Public Overrides ReadOnly Property Result() As Double()
-        Get
-            If (Not isProcessed) Then Throw New Exception("Ergebnis ist noch nicht berechnet!")
-
-            Return New Double() {}
-
-        End Get
-    End Property
-
-    Public Overrides Function ResultText() As String
-
-        If (Not isProcessed) Then Throw New Exception("Ergebnis ist noch nicht berechnet!")
-
-        Return "Siehe Diagramm"
-
-    End Function
-
-    'Ergebnisdiagramm
-    '****************
-    Public Overrides Function ResultChart() As Steema.TeeChart.Chart
-
-        If (Not isProcessed) Then Throw New Exception("Ergebnis ist noch nicht berechnet!")
+    ''' <summary>
+    ''' Ergebnisse aufbereiten
+    ''' </summary>
+    ''' <remarks>Hier nur Ergebnisdiagramm</remarks>
+    Public Overrides Sub PrepareResults()
 
         Dim i As Integer
         Dim doppelsumme As Steema.TeeChart.Styles.Line
 
-        'Chart
-        '-----
-        Me._chart = New Steema.TeeChart.Chart()
-        Me._chart.Aspect.View3D = False
-        Me._chart.Header.Text = "Doppelsummenanalyse (" & Me._zeitreihen(1).Title & " / " & Me._zeitreihen(2).Title & ")"
-        Me._chart.Legend.LegendStyle = Steema.TeeChart.LegendStyles.Series
-        Me._chart.Legend.Visible = False
+        'Diagramm
+        '--------
+        Me.mResultChart = New Steema.TeeChart.Chart()
+        Me.mResultChart.Aspect.View3D = False
+        Me.mResultChart.Header.Text = "Doppelsummenanalyse (" & Me.mZeitreihen(1).Title & " / " & Me.mZeitreihen(2).Title & ")"
+        Me.mResultChart.Legend.LegendStyle = Steema.TeeChart.LegendStyles.Series
+        Me.mResultChart.Legend.Visible = False
 
         'Achsen
         '------
-        Me._chart.Axes.Bottom.Title.Caption = "Summe " & Me._zeitreihen(1).Title
-        Me._chart.Axes.Bottom.Labels.Style = Steema.TeeChart.AxisLabelStyle.Value
-        Me._chart.Axes.Left.Title.Caption = "Summe " & Me._zeitreihen(2).Title
-        Me._chart.Axes.Left.Labels.Style = Steema.TeeChart.AxisLabelStyle.Value
+        Me.mResultChart.Axes.Bottom.Title.Caption = "Summe " & Me.mZeitreihen(1).Title
+        Me.mResultChart.Axes.Bottom.Labels.Style = Steema.TeeChart.AxisLabelStyle.Value
+        Me.mResultChart.Axes.Left.Title.Caption = "Summe " & Me.mZeitreihen(2).Title
+        Me.mResultChart.Axes.Left.Labels.Style = Steema.TeeChart.AxisLabelStyle.Value
 
         'Reihen
         '------
-        doppelsumme = New Steema.TeeChart.Styles.Line(Me._chart)
-        doppelsumme.Title = "Doppelsumme " & Me._zeitreihen(1).Title & " - " & Me._zeitreihen(2).Title
+        doppelsumme = New Steema.TeeChart.Styles.Line(Me.mResultChart)
+        doppelsumme.Title = "Doppelsumme " & Me.mZeitreihen(1).Title & " - " & Me.mZeitreihen(2).Title
         doppelsumme.Pointer.Visible = True
         doppelsumme.Pointer.Style = Steema.TeeChart.Styles.PointerStyles.Circle
         doppelsumme.Pointer.HorizSize = 2
@@ -162,12 +177,10 @@
 
         'Markstips
         '---------
-        Dim markstips As New Steema.TeeChart.Tools.MarksTip(Me._chart)
+        Dim markstips As New Steema.TeeChart.Tools.MarksTip(Me.mResultChart)
         markstips.MouseAction = Steema.TeeChart.Tools.MarksTipMouseAction.Move
         markstips.Style = Steema.TeeChart.Styles.MarksStyles.Label
 
-        Return Me._chart
-
-    End Function
+    End Sub
 
 End Class
