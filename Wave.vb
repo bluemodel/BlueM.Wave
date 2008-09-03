@@ -424,15 +424,28 @@ Public Class Wave
                 'Analyse ausführen
                 Call oAnalysis.ProcessAnalysis()
 
+                'Ergebnisse aufbereiten
+                Call oAnalysis.PrepareResults()
+
                 'Default-Cursor
                 Me.Cursor = Cursors.Default
 
-                'Analyse-Ergebnis-Chart anzeigen
+                'Ergebnisse anzeigen:
+                '--------------------
+                If (oAnalysis.hasResultValues) Then
+                    'TODO: Ergebniswerte anzeigen
+                End If
+
+                If (oAnalysis.hasResultText) Then
+                    'TODO: Ergebnistext anzeigen
+                End If
+
+                'Ergebnisdiagramm anzeigen
                 If (oAnalysis.hasResultChart) Then
                     Dim Wave2 As New Wave()
                     Wave2.Text = "Analyse-Ergebnis"
                     Wave2.Übersicht_Toggle(False)
-                    Wave2.TChart1.Chart = oAnalysis.ResultChart()
+                    Wave2.TChart1.Chart = oAnalysis.getResultChart()
                     Call Wave2.Show()
                 End If
 

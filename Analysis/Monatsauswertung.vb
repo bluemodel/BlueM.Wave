@@ -1,15 +1,14 @@
+'************************************************************************************
+'Analysiert eine Zeitreihe auf Monatsbasis:
+'Für jeden Monat werden Mittelwert, Median, Standardabweichung, Min und Max berechnet
+'************************************************************************************
 Public Class Monatsauswertung
     Inherits Analysis
 
-    '************************************************************************************
-    'Analysiert eine Zeitreihe auf Monatsbasis:
-    'Für jeden Monat werden Mittelwert, Median, Standardabweichung, Min und Max berechnet
-    '************************************************************************************
-
-    Private Structure struct_Ergebnis
-        Dim Monatswerte() As struct_Monatswerte
-    End Structure
-
+    ''' <summary>
+    ''' Struktur für Monatswerte
+    ''' </summary>
+    ''' <remarks></remarks>
     Private Structure struct_Monatswerte
         Dim monatsname As String
         Dim monatsort As Integer
@@ -21,10 +20,24 @@ Public Class Monatsauswertung
         Dim median As Double
     End Structure
 
+    ''' <summary>
+    ''' Ergebnisstruktur
+    ''' </summary>
+    ''' <remarks></remarks>
+    Private Structure struct_Ergebnis
+        Dim Monatswerte() As struct_Monatswerte
+    End Structure
+
+    ''' <summary>
+    ''' internes Ergebnis
+    ''' </summary>
     Private mErgebnis As struct_Ergebnis
 
-    'Konstruktor
-    '***********
+    ''' <summary>
+    ''' Konstruktor
+    ''' </summary>
+    ''' <param name="zeitreihen"></param>
+    ''' <remarks></remarks>
     Public Sub New(ByRef zeitreihen As Collection)
 
         Call MyBase.New(zeitreihen)
@@ -35,8 +48,6 @@ Public Class Monatsauswertung
         End If
 
         Dim i As Integer
-
-        Me.hasResultChart = True
 
         'Ergebnisstruktur instanzieren
         ReDim Me.mErgebnis.Monatswerte(11)
@@ -71,6 +82,33 @@ Public Class Monatsauswertung
 
     End Sub
 
+    ''' <summary>
+    ''' Flag, der anzeigt, ob die Analysefunktion einen Ergebnistext erzeugt
+    ''' </summary>
+    Public Overrides ReadOnly Property hasResultText() As Boolean
+        Get
+            Return False
+        End Get
+    End Property
+
+    ''' <summary>
+    ''' Flag, der anzeigt, ob die Analysefunktion Ergebniswerte erzeugt
+    ''' </summary>
+    Public Overrides ReadOnly Property hasResultValues() As Boolean
+        Get
+            Return False
+        End Get
+    End Property
+
+    ''' <summary>
+    ''' Flag, der anzeigt, ob die Analysefunktion ein Ergebnisdiagramm erzeugt
+    ''' </summary>
+    Public Overrides ReadOnly Property hasResultChart() As Boolean
+        Get
+            Return True
+        End Get
+    End Property
+
     'Analyse ausführen
     '*****************
     Public Overrides Sub ProcessAnalysis()
@@ -79,11 +117,11 @@ Public Class Monatsauswertung
         Dim i, j, N As Integer
         Dim summe, summequadrate As Double
 
-        reihe = Me._zeitreihen.Item(1)
+        reihe = Me.mZeitreihen.Item(1)
 
         'Werte in Monate einsortieren
         For i = 0 To reihe.Length - 1
-            If (Not reihe.YWerte(i) = Konstanten.NaN) Then 
+            If (Not reihe.YWerte(i) = Konstanten.NaN) Then
                 Me.mErgebnis.Monatswerte(reihe.XWerte(i).Month() - 1).werte.Add(reihe.YWerte(i))
             End If
         Next
@@ -124,72 +162,36 @@ Public Class Monatsauswertung
             End With
         Next
 
-        Me.isProcessed = True
-
     End Sub
 
-    'Ergebnis
-    '********
-    Public Overrides ReadOnly Property Result() As Double()
-        Get
-            If (Not isProcessed) Then Throw New Exception("Ergebnis ist noch nicht berechnet!")
-
-            'Es werden die Mittelwerte jedes Monats zurückgegeben
-            'Result(0): Mittelwert für Januar,
-            'Result(1): Mittelwert für Februar, etc.
-
-            Dim i As Integer
-
-            ReDim Me._result(11)
-
-            For i = 0 To 11
-                Me._result(i) = Me.mErgebnis.Monatswerte(i).mittelwert
-            Next
-
-            Return Me._result
-
-        End Get
-    End Property
-
-    'Ergebnistext
-    '************
-    Public Overrides Function ResultText() As String
-
-        If (Not isProcessed) Then Throw New Exception("Ergebnis ist noch nicht berechnet!")
-
-        'TODO: Ergebnistext generieren
-        Return "Siehe Diagramm"
-
-    End Function
-
-    'Ergebnisdiagramm
-    '****************
-    Public Overrides Function ResultChart() As Steema.TeeChart.Chart
-
-        If (Not isProcessed) Then Throw New Exception("Ergebnis ist noch nicht berechnet!")
+    ''' <summary>
+    ''' Ergebnisse aufbereiten
+    ''' </summary>
+    ''' <remarks>Hier nur Ergebnisdiagramm</remarks>
+    Public Overrides Sub PrepareResults()
 
         Dim i As Integer
         Dim mittelwert, median As Steema.TeeChart.Styles.Line
         Dim stdabw As Steema.TeeChart.Styles.Error
         Dim minmax As Steema.TeeChart.Styles.HighLow
 
-        'Chart
-        '-----
-        Me._chart = New Steema.TeeChart.Chart()
-        Me._chart.Aspect.View3D = False
-        Me._chart.Header.Text = "Monatsauswertung (" & Me._zeitreihen(1).Title & ")"
+        'Diagramm
+        '--------
+        Me.mResultChart = New Steema.TeeChart.Chart()
+        Me.mResultChart.Aspect.View3D = False
+        Me.mResultChart.Header.Text = "Monatsauswertung (" & Me.mZeitreihen(1).Title & ")"
 
         'Achsen
         '------
-        Me._chart.Axes.Bottom.Labels.Style = Steema.TeeChart.AxisLabelStyle.Text
-        Me._chart.Axes.Bottom.Labels.Angle = 90
-        Me._chart.Axes.Bottom.MinorTickCount = 0
+        Me.mResultChart.Axes.Bottom.Labels.Style = Steema.TeeChart.AxisLabelStyle.Text
+        Me.mResultChart.Axes.Bottom.Labels.Angle = 90
+        Me.mResultChart.Axes.Bottom.MinorTickCount = 0
 
         'Reihen
         '------
 
         'MinMax
-        minmax = New Steema.TeeChart.Styles.HighLow(Me._chart)
+        minmax = New Steema.TeeChart.Styles.HighLow(Me.mResultChart)
         minmax.Title = "Min / Max"
         minmax.Color = Color.DarkGray
         minmax.Pen.Color = Color.DarkGray
@@ -201,7 +203,7 @@ Public Class Monatsauswertung
         Next
 
         'Standardabweichung
-        stdabw = New Steema.TeeChart.Styles.Error(Me._chart)
+        stdabw = New Steema.TeeChart.Styles.Error(Me.mResultChart)
         stdabw.Title = "Standardabweichung"
         stdabw.Color = Color.Red
         stdabw.ErrorWidth = 50
@@ -210,7 +212,7 @@ Public Class Monatsauswertung
         Next
 
         'Mittelwert
-        mittelwert = New Steema.TeeChart.Styles.Line(Me._chart)
+        mittelwert = New Steema.TeeChart.Styles.Line(Me.mResultChart)
         mittelwert.Title = "Mittelwert"
         mittelwert.Color = Color.Blue
         mittelwert.LinePen.Width = 2
@@ -219,15 +221,13 @@ Public Class Monatsauswertung
         Next
 
         'Median
-        median = New Steema.TeeChart.Styles.Line(Me._chart)
+        median = New Steema.TeeChart.Styles.Line(Me.mResultChart)
         median.Title = "Median"
         median.Color = Color.Green
         For i = 0 To 11
             median.Add(Me.mErgebnis.Monatswerte(i).monatsort, Me.mErgebnis.Monatswerte(i).median, Me.mErgebnis.Monatswerte(i).monatsname)
         Next
 
-        Return Me._chart
-
-    End Function
+    End Sub
 
 End Class
