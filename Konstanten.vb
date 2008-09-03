@@ -16,6 +16,8 @@ Module Konstanten
         ASC = 4
     End Enum
 
+    Public Const Datumsformat As String = "dd.MM.yyyy HH:mm"
+
     'Message-Dialog
     Friend MsgDialog As MessageDialog
 

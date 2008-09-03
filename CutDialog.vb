@@ -8,7 +8,6 @@ Public Class CutDialog
     ''' <remarks></remarks>
 
     Private IsInitializing As Boolean
-    Private Const Datumsformat As String = "dd.MM.yyyy HH:mm"
     Private colorBand1 As Steema.TeeChart.Tools.ColorBand
     Private Anfang, Ende As DateTime
     Private zreOrig As Zeitreihe
@@ -67,8 +66,8 @@ Public Class CutDialog
         colorBand1.StartLinePen.Visible = False
 
         'Original Anfangs- und Enddatum anzeigen
-        Me.Label_Anfangsdatum.Text = Me.Anfang.ToString(Datumsformat)
-        Me.Label_Enddatum.Text = Me.Ende.ToString(Datumsformat)
+        Me.Label_Anfangsdatum.Text = Me.Anfang.ToString(Konstanten.Datumsformat)
+        Me.Label_Enddatum.Text = Me.Ende.ToString(Konstanten.Datumsformat)
 
         Me.IsInitializing = True 'um eine Kettenreaktionen zu verhindern
 
@@ -165,7 +164,7 @@ Public Class CutDialog
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button_OK.Click
 
         'Prüfung
-        If (Me.ComboBox_Zeitreihen.SelectedIndex = 0) Then
+        If (Me.ComboBox_Zeitreihen.SelectedIndex = -1) Then
             MsgBox("Bitte zuerst eine Zeitreihe auswählen!", MsgBoxStyle.Exclamation)
             Me.DialogResult = Windows.Forms.DialogResult.None
             Exit Sub
