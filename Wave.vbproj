@@ -73,7 +73,6 @@
     <Compile Include="Analysis\AnalysisDialog.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ApplicationEvents.vb" />
     <Compile Include="CutDialog.Designer.vb">
       <DependentUpon>CutDialog.vb</DependentUpon>
     </Compile>
@@ -84,6 +83,7 @@
     </Compile>
     <Compile Include="Dateiformate\Dateiformat.vb" />
     <Compile Include="Dateiformate\RVA.vb" />
+    <Compile Include="My Project\ApplicationEvents.vb" />
     <Compile Include="SeriesEditorDialog.Designer.vb">
       <DependentUpon>SeriesEditorDialog.vb</DependentUpon>
     </Compile>
