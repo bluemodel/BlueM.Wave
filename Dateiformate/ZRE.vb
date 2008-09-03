@@ -72,8 +72,7 @@ Public Class ZRE
     '******************
     Public Overrides Sub Read_File()
 
-        Dim AnzZeil As Integer = 0
-        Dim j As Integer = 0
+        Dim j, n As Integer
         Dim Zeile As String
         Dim Stunde, Minute, Tag, Monat, Jahr As Integer
         Dim Datum As DateTime
@@ -82,25 +81,21 @@ Public Class ZRE
         Dim StrRead As StreamReader = New StreamReader(FiStr, System.Text.Encoding.GetEncoding("iso8859-1"))
         Dim StrReadSync = TextReader.Synchronized(StrRead)
 
-        'Anzahl der Zeilen feststellen
-        Do
-            Zeile = StrReadSync.ReadLine.ToString()
-            AnzZeil += 1
-        Loop Until StrReadSync.Peek() = -1
-
         'Zeitreihe redimensionieren
-        ReDim Me.Zeitreihen(0)
+        ReDim Me.Zeitreihen(0) 'bei ZRE gibt es nur eine Zeitreihe
         Me.Zeitreihen(0) = New Zeitreihe(Me.SpaltenSel(0))
         Me.Zeitreihen(0).Einheit = Me.Einheiten(0)
-        Me.Zeitreihen(0).Length = AnzZeil - Me.nZeilenHeader
 
-        'Zurück zum Dateianfang und lesen
-        FiStr.Seek(0, SeekOrigin.Begin)
+        j = 0
+        n = 0
 
-        For j = 0 To AnzZeil - 1
+        Do
             Zeile = StrReadSync.ReadLine.ToString()
-            If (j >= Me.nZeilenHeader) Then
-                'Datum
+            j += 1
+            If (j > Me.nZeilenHeader And Zeile.Length > 0) Then
+
+                'Datum erkennen
+                '--------------
                 Jahr = Zeile.Substring(0, 4)
                 Monat = Zeile.Substring(4, 2)
                 Tag = Zeile.Substring(6, 2)
@@ -115,11 +110,15 @@ Public Class ZRE
                 Datum = Datum.AddHours(Stunde)
                 Datum = Datum.AddMinutes(Minute)
 
-                Me.Zeitreihen(0).XWerte(j - Me.nZeilenHeader) = Datum
-                'Wert
-                Me.Zeitreihen(0).YWerte(j - Me.nZeilenHeader) = StringToDouble(Zeile.Substring(15))
+                'Datum und Wert zur Zeitreihe hinzufügen
+                '---------------------------------------
+                Me.Zeitreihen(0).Length = n + 1
+                Me.Zeitreihen(0).XWerte(n) = Datum
+                Me.Zeitreihen(0).YWerte(n) = StringToDouble(Zeile.Substring(15))
+                n += 1
+
             End If
-        Next
+        Loop Until StrReadSync.Peek() = -1
 
         StrReadSync.close()
         StrRead.Close()
