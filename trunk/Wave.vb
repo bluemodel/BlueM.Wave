@@ -61,6 +61,8 @@ Public Class Wave
     '*****************
     Private Sub Wave_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
 
+        Call Me.Show()
+
         'Übergabeparameter verarbeiten
         '-----------------------------
         For Each param As String In My.Application.CommandLineArgs
