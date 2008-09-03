@@ -1,14 +1,22 @@
+''' <summary>
+''' Fabrik zum Erzeugen von Analyse-Objekten
+''' </summary>
 Module AnalysisFactory
 
-    'Liste der Analysefunktionen
-    '***************************
+    ''' <summary>
+    ''' Liste der Analysefunktionen
+    ''' </summary>
     Public Enum AnalysisFunctions
         Monatsauswertung = 1
-        Nash_Sutcliffe = 2
+        Doppelsummenalyse = 2
     End Enum
 
-    'Fabrikmethode zur Erzeugung einer Analyse
-    '*****************************************
+    ''' <summary>
+    ''' Fabrikmethode zur Erzeugung einer Analyse
+    ''' </summary>
+    ''' <param name="analysisfunction">Das zu erzeugende Analyse-Objekt</param>
+    ''' <param name="zeitreihen">Collection von zu analysierenden Zeitreihen</param>
+    ''' <returns>Das Analyse-Objekt</returns>
     Public Function CreateAnalysis(ByVal analysisfunction As AnalysisFunctions, ByVal zeitreihen As Collection) As Analysis
 
         Dim oAnalysis As Analysis
@@ -18,8 +26,8 @@ Module AnalysisFactory
             Case AnalysisFunctions.Monatsauswertung
                 oAnalysis = New Monatsauswertung(zeitreihen)
 
-                'Case AnalysisFunctions.Nash_Sutcliffe
-                'oAnalysis = New NashSutcliffe()
+            Case AnalysisFunctions.Doppelsummenalyse
+                oAnalysis = New Doppelsummenanalyse(zeitreihen)
 
             Case Else
                 Throw New Exception("Analysefunktion nicht gefunden!")

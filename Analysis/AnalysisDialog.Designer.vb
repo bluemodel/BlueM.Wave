@@ -76,6 +76,7 @@ Partial Class AnalysisDialog
         Me.ListBox_Zeitreihen.FormattingEnabled = True
         Me.ListBox_Zeitreihen.Location = New System.Drawing.Point(12, 62)
         Me.ListBox_Zeitreihen.Name = "ListBox_Zeitreihen"
+        Me.ListBox_Zeitreihen.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended
         Me.ListBox_Zeitreihen.Size = New System.Drawing.Size(186, 108)
         Me.ListBox_Zeitreihen.TabIndex = 6
         '
