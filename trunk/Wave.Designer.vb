@@ -100,7 +100,7 @@ Partial Class Wave
         '
         Me.ToolStripStatusLabel_Messages.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
         Me.ToolStripStatusLabel_Messages.Enabled = False
-        Me.ToolStripStatusLabel_Messages.Image = Global.Wave.My.Resources.Resources.warning
+        Me.ToolStripStatusLabel_Messages.Image = Global.IHWB.Wave.My.Resources.Resources.warning
         Me.ToolStripStatusLabel_Messages.Margin = New System.Windows.Forms.Padding(3, 3, 0, 2)
         Me.ToolStripStatusLabel_Messages.Name = "ToolStripStatusLabel_Messages"
         Me.ToolStripStatusLabel_Messages.RightToLeft = System.Windows.Forms.RightToLeft.No
@@ -149,7 +149,7 @@ Partial Class Wave
         'ToolStripButton_Export
         '
         Me.ToolStripButton_Export.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.ToolStripButton_Export.Image = Global.Wave.My.Resources.Resources.page_white_go
+        Me.ToolStripButton_Export.Image = Global.IHWB.Wave.My.Resources.Resources.page_white_go
         Me.ToolStripButton_Export.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.ToolStripButton_Export.Name = "ToolStripButton_Export"
         Me.ToolStripButton_Export.Size = New System.Drawing.Size(23, 31)
@@ -164,7 +164,7 @@ Partial Class Wave
         'ToolStripButton_Import
         '
         Me.ToolStripButton_Import.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.ToolStripButton_Import.Image = Global.Wave.My.Resources.Resources.chart_line_add
+        Me.ToolStripButton_Import.Image = Global.IHWB.Wave.My.Resources.Resources.chart_line_add
         Me.ToolStripButton_Import.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.ToolStripButton_Import.Name = "ToolStripButton_Import"
         Me.ToolStripButton_Import.Size = New System.Drawing.Size(23, 31)
@@ -173,7 +173,7 @@ Partial Class Wave
         'ToolStripButton_EnterSeries
         '
         Me.ToolStripButton_EnterSeries.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.ToolStripButton_EnterSeries.Image = Global.Wave.My.Resources.Resources.chart_line_edit
+        Me.ToolStripButton_EnterSeries.Image = Global.IHWB.Wave.My.Resources.Resources.chart_line_edit
         Me.ToolStripButton_EnterSeries.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.ToolStripButton_EnterSeries.Name = "ToolStripButton_EnterSeries"
         Me.ToolStripButton_EnterSeries.Size = New System.Drawing.Size(23, 31)
@@ -182,7 +182,7 @@ Partial Class Wave
         'ToolStripButton_Cut
         '
         Me.ToolStripButton_Cut.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.ToolStripButton_Cut.Image = Global.Wave.My.Resources.Resources.cut
+        Me.ToolStripButton_Cut.Image = Global.IHWB.Wave.My.Resources.Resources.cut
         Me.ToolStripButton_Cut.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.ToolStripButton_Cut.Name = "ToolStripButton_Cut"
         Me.ToolStripButton_Cut.Size = New System.Drawing.Size(23, 31)
@@ -191,7 +191,7 @@ Partial Class Wave
         'ToolStripButton_Analysis
         '
         Me.ToolStripButton_Analysis.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.ToolStripButton_Analysis.Image = Global.Wave.My.Resources.Resources.calculator
+        Me.ToolStripButton_Analysis.Image = Global.IHWB.Wave.My.Resources.Resources.calculator
         Me.ToolStripButton_Analysis.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.ToolStripButton_Analysis.Name = "ToolStripButton_Analysis"
         Me.ToolStripButton_Analysis.Size = New System.Drawing.Size(23, 31)
@@ -200,7 +200,7 @@ Partial Class Wave
         'ToolStripButton_EditChart
         '
         Me.ToolStripButton_EditChart.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.ToolStripButton_EditChart.Image = Global.Wave.My.Resources.Resources.chart_curve_edit
+        Me.ToolStripButton_EditChart.Image = Global.IHWB.Wave.My.Resources.Resources.chart_curve_edit
         Me.ToolStripButton_EditChart.ImageTransparentColor = System.Drawing.SystemColors.Control
         Me.ToolStripButton_EditChart.Name = "ToolStripButton_EditChart"
         Me.ToolStripButton_EditChart.Size = New System.Drawing.Size(23, 31)
@@ -212,7 +212,7 @@ Partial Class Wave
         Me.ToolStripButton_Übersicht.CheckOnClick = True
         Me.ToolStripButton_Übersicht.CheckState = System.Windows.Forms.CheckState.Checked
         Me.ToolStripButton_Übersicht.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.ToolStripButton_Übersicht.Image = Global.Wave.My.Resources.Resources.application_split
+        Me.ToolStripButton_Übersicht.Image = Global.IHWB.Wave.My.Resources.Resources.application_split
         Me.ToolStripButton_Übersicht.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.ToolStripButton_Übersicht.Name = "ToolStripButton_Übersicht"
         Me.ToolStripButton_Übersicht.Size = New System.Drawing.Size(23, 31)

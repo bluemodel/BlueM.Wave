@@ -7,8 +7,8 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{BCD1BBE3-5AB2-4C3F-AC12-43EB977C6F6F}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <StartupObject>Wave.My.MyApplication</StartupObject>
-    <RootNamespace>Wave</RootNamespace>
+    <StartupObject>IHWB.Wave.My.MyApplication</StartupObject>
+    <RootNamespace>IHWB.Wave</RootNamespace>
     <AssemblyName>Wave</AssemblyName>
     <MyType>WindowsForms</MyType>
     <ApplicationIcon>Resources\Wave.ico</ApplicationIcon>
