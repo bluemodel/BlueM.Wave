@@ -12,9 +12,9 @@ Module AnalysisFactory
     End Enum
 
     ''' <summary>
-    ''' Fabrikmethode zur Erzeugung einer Analyse
+    ''' Fabrikmethode zur Erzeugung eines Analyse-Objekts
     ''' </summary>
-    ''' <param name="analysisfunction">Das zu erzeugende Analyse-Objekt</param>
+    ''' <param name="analysisfunction">Typ des zu erzeugenden Analyse-Objekts</param>
     ''' <param name="zeitreihen">Collection von zu analysierenden Zeitreihen</param>
     ''' <returns>Das Analyse-Objekt</returns>
     Public Function CreateAnalysis(ByVal analysisfunction As AnalysisFunctions, ByVal zeitreihen As Collection) As Analysis
