@@ -116,9 +116,9 @@ Namespace My.Resources
             End Get
         End Property
         
-        Friend ReadOnly Property warning() As System.Drawing.Bitmap
+        Friend ReadOnly Property script() As System.Drawing.Bitmap
             Get
-                Dim obj As Object = ResourceManager.GetObject("warning", resourceCulture)
+                Dim obj As Object = ResourceManager.GetObject("script", resourceCulture)
                 Return CType(obj,System.Drawing.Bitmap)
             End Get
         End Property

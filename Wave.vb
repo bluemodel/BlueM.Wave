@@ -53,7 +53,7 @@ Public Class Wave
 
         'MessageDialog instanzieren
         '--------------------------
-        MsgDialog = New MessageDialog()
+        Log = New LogWindow()
 
     End Sub
 
@@ -247,9 +247,8 @@ Public Class Wave
         Me.Zeitreihen.Clear()
 
         'Messages zurücksetzen
-        Call MsgDialog.ClearMessages()
-        Call MsgDialog.Hide()
-        Me.ToolStripStatusLabel_Messages.Enabled = False
+        Call Log.ClearLog()
+        Call Log.Hide()
 
     End Sub
 
@@ -337,7 +336,7 @@ Public Class Wave
         'Exportdialog vorbereiten
         '------------------------
         'Liste der Formate
-        ExportDiag.ComboBox_Format.DataSource = System.Enum.GetValues(GetType(Konstanten.Formate))
+        ExportDiag.ComboBox_Format.DataSource = System.Enum.GetValues(GetType(Konstanten.Dateiformate))
         'Zeitreihen in Listbox eintragen
         For Each Reihe In Me.Zeitreihen
             ExportDiag.ListBox_Zeitreihen.Items.Add(Reihe)
@@ -352,16 +351,16 @@ Public Class Wave
             Me.SaveFileDialog1.Title = "Speichern unter..."
             Me.SaveFileDialog1.AddExtension = True
             Select Case ExportDiag.ComboBox_Format.SelectedItem
-                Case Formate.ASC
+                Case Dateiformate.ASC
                     Me.SaveFileDialog1.DefaultExt = "asc"
                     Me.SaveFileDialog1.Filter = "ASC-Dateien (*.asc)|*.asc"
-                Case Formate.CSV
+                Case Dateiformate.CSV
                     Me.SaveFileDialog1.DefaultExt = "csv"
                     Me.SaveFileDialog1.Filter = "CSV-Dateien (*.csv)|*.csv"
-                Case Formate.WEL
+                Case Dateiformate.WEL
                     Me.SaveFileDialog1.DefaultExt = "wel"
                     Me.SaveFileDialog1.Filter = "WEL-Dateien (*.wel)|*.wel"
-                Case Formate.ZRE
+                Case Dateiformate.ZRE
                     Me.SaveFileDialog1.DefaultExt = "zre"
                     Me.SaveFileDialog1.Filter = "ZRE-Dateien (*.zre)|*.zre"
             End Select
@@ -374,7 +373,7 @@ Public Class Wave
 
                 'Reihen exportieren
                 Select Case ExportDiag.ComboBox_Format.SelectedItem
-                    Case Formate.ZRE
+                    Case Dateiformate.ZRE
                         For Each item As Object In ExportDiag.ListBox_Zeitreihen.SelectedItems
                             Reihe = CType(item, Zeitreihe)
                             Call ZRE.Write_File(Reihe, Me.SaveFileDialog1.FileName)
@@ -461,14 +460,14 @@ Public Class Wave
         Call Me.TChart1.Export.Image.PNG.CopyToClipboard()
     End Sub
 
-    'Messages
-    '********
-    Private Sub Messages(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripStatusLabel_Messages.Click
+    'Log anzeigen
+    '************
+    Private Sub ShowLog(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripStatusLabel_Log.Click
 
         'MessageDialog anzeigen
-        Call MsgDialog.Show()
-        MsgDialog.WindowState = FormWindowState.Normal
-        Call MsgDialog.BringToFront()
+        Call Log.Show()
+        Log.WindowState = FormWindowState.Normal
+        Call Log.BringToFront()
 
     End Sub
 
@@ -575,6 +574,9 @@ Public Class Wave
             Exit Sub
         End If
 
+        'Log
+        Call AddLogEntry("Importiere Datei '" & file & "' ...")
+
         Select Case Path.GetExtension(file).ToUpper()
 
             Case ".ZRE"
@@ -596,6 +598,9 @@ Public Class Wave
                 Call Me.Import_CSV(file)
 
         End Select
+
+        'Log
+        Call AddLogEntry("... Import abgeschlossen.")
 
     End Sub
 

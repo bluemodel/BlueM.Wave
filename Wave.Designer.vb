@@ -30,7 +30,7 @@ Partial Class Wave
         Dim ToolStrip1 As System.Windows.Forms.ToolStrip
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Wave))
         Dim ToolStripSeparator4 As System.Windows.Forms.ToolStripSeparator
-        Me.ToolStripStatusLabel_Messages = New System.Windows.Forms.ToolStripStatusLabel
+        Me.ToolStripStatusLabel_Log = New System.Windows.Forms.ToolStripStatusLabel
         Me.ToolStripButton_Neu = New System.Windows.Forms.ToolStripButton
         Me.ToolStripButton_Öffnen = New System.Windows.Forms.ToolStripButton
         Me.ToolStripButton_Speichern = New System.Windows.Forms.ToolStripButton
@@ -86,7 +86,7 @@ Partial Class Wave
         '
         'StatusStrip1
         '
-        StatusStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripStatusLabel_Messages})
+        StatusStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripStatusLabel_Log})
         StatusStrip1.Location = New System.Drawing.Point(0, 478)
         StatusStrip1.Name = "StatusStrip1"
         StatusStrip1.RightToLeft = System.Windows.Forms.RightToLeft.Yes
@@ -96,17 +96,16 @@ Partial Class Wave
         StatusStrip1.TabIndex = 1
         StatusStrip1.Text = "StatusStrip1"
         '
-        'ToolStripStatusLabel_Messages
+        'ToolStripStatusLabel_Log
         '
-        Me.ToolStripStatusLabel_Messages.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.ToolStripStatusLabel_Messages.Enabled = False
-        Me.ToolStripStatusLabel_Messages.Image = Global.IHWB.Wave.My.Resources.Resources.warning
-        Me.ToolStripStatusLabel_Messages.Margin = New System.Windows.Forms.Padding(3, 3, 0, 2)
-        Me.ToolStripStatusLabel_Messages.Name = "ToolStripStatusLabel_Messages"
-        Me.ToolStripStatusLabel_Messages.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.ToolStripStatusLabel_Messages.Size = New System.Drawing.Size(16, 17)
-        Me.ToolStripStatusLabel_Messages.Text = "Messages"
-        Me.ToolStripStatusLabel_Messages.ToolTipText = "Messages"
+        Me.ToolStripStatusLabel_Log.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.ToolStripStatusLabel_Log.Image = Global.IHWB.Wave.My.Resources.Resources.script
+        Me.ToolStripStatusLabel_Log.Margin = New System.Windows.Forms.Padding(3, 3, 0, 2)
+        Me.ToolStripStatusLabel_Log.Name = "ToolStripStatusLabel_Log"
+        Me.ToolStripStatusLabel_Log.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.ToolStripStatusLabel_Log.Size = New System.Drawing.Size(16, 17)
+        Me.ToolStripStatusLabel_Log.Text = "Log anzeigen"
+        Me.ToolStripStatusLabel_Log.ToolTipText = "Log anzeigen"
         '
         'ToolStrip1
         '
@@ -339,7 +338,7 @@ Partial Class Wave
     Friend WithEvents ToolStripButton_Export As System.Windows.Forms.ToolStripButton
     Friend WithEvents SaveFileDialog1 As System.Windows.Forms.SaveFileDialog
     Friend WithEvents ToolStripButton_Analysis As System.Windows.Forms.ToolStripButton
-    Friend WithEvents ToolStripStatusLabel_Messages As System.Windows.Forms.ToolStripStatusLabel
+    Friend WithEvents ToolStripStatusLabel_Log As System.Windows.Forms.ToolStripStatusLabel
     Friend WithEvents ToolStripButton_Import As System.Windows.Forms.ToolStripButton
     Friend WithEvents ToolStripButton_EnterSeries As System.Windows.Forms.ToolStripButton
     Friend WithEvents ToolStripButton_Cut As System.Windows.Forms.ToolStripButton

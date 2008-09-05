@@ -6,14 +6,14 @@ Public Class ExportDiag
 
         Select Case ComboBox_Format.SelectedItem
 
-            Case Konstanten.Formate.ZRE
+            Case Konstanten.Dateiformate.ZRE
                 Me.ListBox_Zeitreihen.SelectionMode = SelectionMode.One
 
             Case Else
                 Me.ListBox_Zeitreihen.SelectionMode = SelectionMode.MultiExtended
                 'Noch nicht implementiert
                 MsgBox("Noch nicht implementiert!", MsgBoxStyle.Exclamation)
-                ComboBox_Format.SelectedItem = Konstanten.Formate.ZRE
+                ComboBox_Format.SelectedItem = Konstanten.Dateiformate.ZRE
         End Select
 
     End Sub
