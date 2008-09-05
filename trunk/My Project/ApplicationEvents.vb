@@ -16,8 +16,6 @@ Namespace My
             '-----------------------------
             For Each param As String In e.CommandLine
 
-                MsgBox(param)
-
                 'Dateien öffnen
                 If (IO.File.Exists(param)) Then
                     Call Wave.Import_File(param)
