@@ -84,6 +84,11 @@
     <Compile Include="Dateiformate\Dateiformat.vb" />
     <Compile Include="Dateiformate\RVA.vb" />
     <Compile Include="My Project\ApplicationEvents.vb" />
+    <Compile Include="My Project\Resources.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="SeriesEditorDialog.Designer.vb">
       <DependentUpon>SeriesEditorDialog.vb</DependentUpon>
     </Compile>
@@ -103,21 +108,16 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Konstanten.vb" />
-    <Compile Include="MessageDialog.Designer.vb">
-      <DependentUpon>MessageDialog.vb</DependentUpon>
+    <Compile Include="LogWindow.Designer.vb">
+      <DependentUpon>LogWindow.vb</DependentUpon>
     </Compile>
-    <Compile Include="MessageDialog.vb">
+    <Compile Include="LogWindow.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
       <DependentUpon>Application.myapp</DependentUpon>
-    </Compile>
-    <Compile Include="My Project\Resources.Designer.vb">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="My Project\Settings.Designer.vb">
       <DependentUpon>Settings.settings</DependentUpon>
@@ -141,7 +141,6 @@
   <ItemGroup>
     <EmbeddedResource Include="My Project\Resources.resx">
       <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.vb</LastGenOutput>
       <CustomToolNamespace>My.Resources</CustomToolNamespace>
       <SubType>Designer</SubType>
     </EmbeddedResource>
@@ -186,9 +185,9 @@
       <DependentUpon>ImportDiag.vb</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="MessageDialog.resx">
+    <EmbeddedResource Include="LogWindow.resx">
       <SubType>Designer</SubType>
-      <DependentUpon>MessageDialog.vb</DependentUpon>
+      <DependentUpon>LogWindow.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="My Project\licenses.licx" />
     <EmbeddedResource Include="Resources\Wave.ico" />
@@ -202,9 +201,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\calculator.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\warning.ico" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\chart_line_add.png" />
@@ -225,6 +221,7 @@
     <Content Include="RELEASE-NOTES.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="Resources\script.png" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
