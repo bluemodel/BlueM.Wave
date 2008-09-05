@@ -61,18 +61,7 @@ Public Class Wave
     '*****************
     Private Sub Wave_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
 
-        Call Me.Show()
-
-        'Übergabeparameter verarbeiten
-        '-----------------------------
-        For Each param As String In My.Application.CommandLineArgs
-
-            'Dateien öffnen
-            If (File.Exists(param)) Then
-                Call Me.Import_File(param)
-            End If
-
-        Next
+        'nix zu tun
 
     End Sub
 
@@ -242,7 +231,7 @@ Public Class Wave
     '***
     Private Sub Neu(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_Neu.Click
 
-        Dim res as MsgBoxResult
+        Dim res As MsgBoxResult
 
         'Warnen, wenn bereits Serien vorhanden
         '-------------------------------------
@@ -309,7 +298,7 @@ Public Class Wave
         Dim cutter As New CutDialog()
         'Zeitreihen zu Combobox hinzufügen
         For Each ZRE As Zeitreihe In Me.Zeitreihen
-            cutter.ComboBox_Zeitreihen.Items.Add(zre)
+            cutter.ComboBox_Zeitreihen.Items.Add(ZRE)
         Next
 
         If (cutter.ShowDialog() = Windows.Forms.DialogResult.OK) Then
@@ -762,10 +751,12 @@ Public Class Wave
     End Sub
 
     ''' <summary>
-    ''' Eine Zeitreihe zum Diagramm hinzufügen
+    ''' Eine Zeitreihe im Diagramm anzeigen
     ''' </summary>
-    ''' <param name="zre">Die hinzuzufügende Zeitreihe</param>
+    ''' <param name="zre">Die anzuzeigende Zeitreihe</param>
     Public Sub Display_Series(ByVal zre As Zeitreihe)
+
+        'Serie zu Hauptdiagramm und zu Übersichtsdiagramm hinzufügen
 
         'Linien instanzieren
         Dim Line1 As New Steema.TeeChart.Styles.Line(Me.TChart1.Chart)
@@ -779,12 +770,9 @@ Public Class Wave
         Line1.Title = zre.Title
         Line2.Title = zre.Title
 
-        'Anzahl Serien bestimmen
-        Dim AnzahlSerien As Integer = Me.TChart1.Series.Count
-
         'Neue Serie hinzufügen
-        Me.TChart1.Chart.Series(AnzahlSerien - 1).Add(zre.XWerte, zre.YWerte)
-        Me.TChart2.Chart.Series(AnzahlSerien - 1).Add(zre.XWerte, zre.YWerte)
+        Line1.Add(zre.XWerte, zre.YWerte)
+        Line2.Add(zre.XWerte, zre.YWerte)
 
         'Charts aktualisieren
         Call Me.UpdateCharts()
