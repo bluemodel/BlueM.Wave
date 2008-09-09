@@ -154,8 +154,9 @@ Public Class Zeitreihe
         'Ende finden
         For k = Me.Length - 1 To 0 Step -1
             If (Me.XWerte(k) <= ende) Then
-                If (Me.XWerte(k) < ende) Then
-                    'Wenn Ende nicht genau getroffen, eine Stützstelle vor
+                'Wenn Ende nicht genau getroffen, 
+                'dann eine weitere Stützstelle hinten mitnehmen
+                If (Me.XWerte(k) < ende And k < Me.Length - 1) Then
                     k += 1
                 End If
                 Exit For
@@ -169,8 +170,9 @@ Public Class Zeitreihe
         'Anfang finden
         For j = 0 To Me.Length - 1
             If (Me.XWerte(j) >= start) Then
-                If (Me.XWerte(j) > start) Then
-                    'Wenn Anfang nicht genau getroffen, eine Stützstelle zurück
+                'Wenn Anfang nicht genau getroffen,
+                'dann eine weitere Stützstelle vorne mitnehmen
+                If (Me.XWerte(j) > start And j > 0) Then
                     j -= 1
                 End If
                 Exit For
