@@ -13,7 +13,7 @@ Public Class Doppelsummenanalyse
     ''' </summary>
     Public Overrides ReadOnly Property hasResultText() As Boolean
         Get
-            Return False
+            Return True
         End Get
     End Property
 
@@ -55,98 +55,51 @@ Public Class Doppelsummenanalyse
     ''' </summary>
     Public Overrides Sub ProcessAnalysis()
 
-        Dim i, j, n As Integer
+        Dim i As Integer
         Dim zre1, zre2 As Zeitreihe
-        Dim found As Boolean
+        Dim values(,) As Double
 
-        zre1 = Me.mZeitreihen.Item(1)
-        zre2 = Me.mZeitreihen.Item(2)
+        zre1 = Me.mZeitreihen(1)
+        zre2 = Me.mZeitreihen(2)
 
-        'zunächst die Zeitreihen zuschneiden
-        Call zre1.Cut(zre2)
-        Call zre2.Cut(zre1)
+        'nur gemeinsame Stützstellen nutzen
+        values = AnalysisHelper.getConcurrentValues(zre1, zre2)
 
-        ReDim summe1(0)
-        ReDim summe2(0)
-        ReDim datume(0)
+        ReDim Me.summe1(values.GetUpperBound(0))
+        ReDim Me.summe2(values.GetUpperBound(0))
 
-        'Ersten gemeinsamen Wert finden
-        found = False
-        j = 0
-        For i = 0 To zre1.Length - 1
-            'Ende von zre2 abfangen
-            If (j > zre2.Length - 1) Then
-                Exit For
-            End If
-            'NaN-Werte in zre1 überspringen
-            If (zre1.YWerte(i) <> NaN) Then
-                'Korrepondierenden Wert in zre2 suchen
-                Do
-                    'Ende von zre2 abfangen
-                    If (j > zre2.Length - 1) Then
-                        Exit Do
-                    End If
-                    If (zre2.XWerte(j) = zre1.XWerte(i)) Then
-                        'NaN-Werte in zre2 überspringen
-                        If (zre2.YWerte(j) <> NaN) Then
-                            'Übereinstimmung gefunden!
-                            summe1(0) = zre1.YWerte(i)
-                            summe2(0) = zre2.YWerte(j)
-                            datume(0) = zre1.XWerte(i)
-                            found = True
-                        End If
-                    End If
-                    j += 1
-                Loop Until (zre2.XWerte(j) > zre1.XWerte(i))
-            End If
-            If (found) Then Exit For
+        'Erster Wert
+        Me.summe1(0) = values(0, 0)
+        Me.summe2(0) = values(0, 1)
+
+        'Weitere Werte kumulativ aufsummieren
+        For i = 1 To values.GetUpperBound(0)
+            Me.summe1(i) = values(i, 0) + summe1(i - 1)
+            Me.summe2(i) = values(i, 1) + summe2(i - 1)
         Next
 
-        If (Not found) Then Throw New Exception("Es konnte keine gemeinsame Stützstelle gefunden werden!")
-
-        'Weitere gemeinsame Werte aufsummieren
-        n = 1
-        Do Until (i > (zre1.Length - 1) Or j > (zre2.Length - 1))
-            i += 1
-            'NaN-Werte in zre1 überspringen
-            If (zre1.YWerte(i) <> NaN) Then
-                'Korrepondierenden Wert in zre2 suchen
-                Do
-                    If (zre2.XWerte(j) = zre1.XWerte(i)) Then
-                        'NaN-Werte in zre2 überspringen
-                        If (zre2.YWerte(j) <> NaN) Then
-                            'Übereinstimmung gefunden!
-                            ReDim Preserve summe1(n)
-                            ReDim Preserve summe2(n)
-                            summe1(n) = zre1.YWerte(i) + summe1(n - 1)
-                            summe2(n) = zre2.YWerte(j) + summe2(n - 1)
-                            ReDim Preserve datume(n)
-                            datume(n) = zre1.XWerte(i)
-                            n += 1
-                        End If
-                    End If
-                    j += 1
-                    'Ende von zre2 abfangen
-                    If (j > zre2.Length - 1) Then
-                        Exit Do
-                    End If
-                Loop Until (zre2.XWerte(j) > zre1.XWerte(i))
-            End If
-        Loop
+        'Datume übernehmen (werden später für Punkte-Labels im Diagramm gebraucht)
+        datume = zre1.XWerte
 
     End Sub
 
     ''' <summary>
     ''' Ergebnisse aufbereiten
     ''' </summary>
-    ''' <remarks>Hier nur Ergebnisdiagramm</remarks>
     Public Overrides Sub PrepareResults()
 
-        Dim i As Integer
-        Dim doppelsumme As Steema.TeeChart.Styles.Line
+        'Text:
+        '-----
+        Me.mResultText = "Doppelsummenanalyse:" & eol _
+                        & eol _
+                        & "Die Analyse basiert auf " & Me.summe1.Length & " gemeinsamen Stützstellen zwischen " & Me.datume(0).ToString(Datumsformat) & " und " & Me.datume(Me.datume.Length - 1).ToString(Datumsformat) & eol _
+                        & eol
 
-        'Diagramm
-        '--------
+        'Diagramm:
+        '---------
+        Dim i As Integer
+        Dim doppelsumme, gerade As Steema.TeeChart.Styles.Line
+
         Me.mResultChart = New Steema.TeeChart.Chart()
         Me.mResultChart.Aspect.View3D = False
         Me.mResultChart.Header.Text = "Doppelsummenanalyse (" & Me.mZeitreihen(1).Title & " / " & Me.mZeitreihen(2).Title & ")"
@@ -168,18 +121,28 @@ Public Class Doppelsummenanalyse
         doppelsumme.Pointer.Style = Steema.TeeChart.Styles.PointerStyles.Circle
         doppelsumme.Pointer.HorizSize = 2
         doppelsumme.Pointer.VertSize = 2
-        doppelsumme.Cursor = Cursors.Help
+
+        gerade = New Steema.TeeChart.Styles.Line(Me.mResultChart)
+        gerade.Title = "45° Gerade"
+        gerade.Color = Color.DarkGray
+        gerade.linepen.Style = Drawing2D.DashStyle.Dash
 
         'Werte eintragen
         For i = 0 To summe1.Length - 1
             doppelsumme.Add(summe1(i), summe2(i), datume(i).ToString(Konstanten.Datumsformat))
         Next
 
+        gerade.Add(0, 0)
+        Dim maxwert As Double = Math.Min(Me.mResultChart.Axes.Bottom.MaxXValue, Me.mResultChart.Axes.Left.MaxYValue)
+        gerade.Add(maxwert, maxwert)
+
         'Markstips
         '---------
         Dim markstips As New Steema.TeeChart.Tools.MarksTip(Me.mResultChart)
         markstips.MouseAction = Steema.TeeChart.Tools.MarksTipMouseAction.Move
         markstips.Style = Steema.TeeChart.Styles.MarksStyles.Label
+        markstips.Series = doppelsumme
+        doppelsumme.Cursor = Cursors.Help
 
     End Sub
 
