@@ -34,7 +34,7 @@ Public Class AnalysisDialog
         Get
             Dim zeitreihen As New Collection()
             For Each item As Object In Me.ListBox_Zeitreihen.SelectedItems
-                zeitreihen.Add(CType(item, Zeitreihe), CType(item, Zeitreihe).Title)
+                zeitreihen.Add(CType(item, Zeitreihe))
             Next
             Return zeitreihen
         End Get
