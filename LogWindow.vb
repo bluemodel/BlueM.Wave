@@ -33,16 +33,23 @@ Public Class LogWindow
 
 #End Region 'Form behavior
 
-    'Log-Eintrag hinzufügen
-    '**********************
+    ''' <summary>
+    ''' Einen Log-Eintrag hinzufügen
+    ''' </summary>
+    ''' <param name="msg">Eintrag</param>
     Public Sub AddLogEntry(ByVal msg As String)
 
-        Me.TextBox_Log.Text &= "* " & DateTime.Now.ToString(Konstanten.Datumsformat) & ": " & msg & eol
+        'Wenn Eintrag mehrzeilig, dann formatieren
+        If (msg.Contains(Konstanten.eol)) Then msg = Konstanten.eol & "  " & msg.Replace(Konstanten.eol, Konstanten.eol & "  ")
+
+        'Text hinzufügen
+        Me.TextBox_Log.Text &= "* " & DateTime.Now.ToString(Konstanten.Datumsformat) & ": " & msg & Konstanten.eol
 
     End Sub
 
-    'Log zurücksetzen
-    '****************
+    ''' <summary>
+    ''' Log zurücksetzen (allen Text löschen)
+    ''' </summary>
     Public Sub ClearLog()
 
         Me.TextBox_Log.Clear()
