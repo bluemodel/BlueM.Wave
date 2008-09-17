@@ -9,6 +9,7 @@ Module AnalysisFactory
     Public Enum AnalysisFunctions
         Monatsauswertung = 1
         Doppelsummenalyse = 2
+        GoodnessOfFit = 3
     End Enum
 
     ''' <summary>
@@ -28,6 +29,9 @@ Module AnalysisFactory
 
             Case AnalysisFunctions.Doppelsummenalyse
                 oAnalysis = New Doppelsummenanalyse(zeitreihen)
+
+            Case AnalysisFunctions.GoodnessOfFit
+                oAnalysis = New GoodnessOfFit(zeitreihen)
 
             Case Else
                 Throw New Exception("Analysefunktion nicht gefunden!")
