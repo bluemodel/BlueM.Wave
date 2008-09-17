@@ -55,9 +55,11 @@ Public Class Wave
         '-----------------
         Call Me.Init_Charts()
 
-        'MessageDialog instanzieren
-        '--------------------------
-        Log = New LogWindow()
+        'Logfenster nur beim ersten Mal instanzieren
+        '-------------------------------------------
+        If (isNothing(Log)) Then
+            Log = New LogWindow()
+        End If
 
     End Sub
 
