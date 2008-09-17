@@ -38,7 +38,8 @@ Public Class Zeitreihe
             Return _XWerte
         End Get
         Set(ByVal value As DateTime())
-            _XWerte = value
+            ReDim Me._XWerte(value.Length - 1)
+            Call Array.Copy(value, Me._XWerte, value.Length)
         End Set
     End Property
 
@@ -51,14 +52,15 @@ Public Class Zeitreihe
             Return _YWerte
         End Get
         Set(ByVal value As Double())
-            _YWerte = value
+            ReDim Me._YWerte(value.Length - 1)
+            Call Array.Copy(value, Me._YWerte, value.Length)
         End Set
     End Property
 
     ''' <summary>
     ''' Die Länge (Anzahl Stützstellen) der Zeitreihe
     ''' </summary>
-    ''' <remarks>Wird die Länge neu gesetzt, bleiben vorhandene Werte erhalten</remarks>
+    ''' <value>Die neu zu setzenden Länge. Ist die neue Länge kürzer als die aktuelle Länge, wird von hinten abgeschnitten, andernfalls wird mit leeren Werten aufgefüllt</value>
     Public Property Length() As Integer
         Get
             Return Me.XWerte.GetLength(0)
