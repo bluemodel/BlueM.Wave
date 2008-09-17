@@ -17,6 +17,10 @@ Public Class Wave
 
     'Eigenschaften
     '#############
+
+    'Log-Fenster
+    Friend Shared Log As LogWindow
+
     Private WithEvents colorBand1 As Steema.TeeChart.Tools.ColorBand
     Private selectionMade As Boolean									'Flag zeigt an, ob bereits ein Auswahlbereich ausgewählt wurde
     Private Zeitreihen As Collection
@@ -407,6 +411,8 @@ Public Class Wave
                 'Wait-Cursor
                 Me.Cursor = Cursors.WaitCursor
 
+                Call Wave.Log.AddLogEntry("Starte Analyse " & oAnalysisDialog.selectedAnalysisFunction.ToString() & " ...")
+
                 'Analyse instanzieren
                 Dim oAnalysis As Analysis
                 oAnalysis = AnalysisFactory.CreateAnalysis(oAnalysisDialog.selectedAnalysisFunction, oAnalysisDialog.selectedZeitreihen)
@@ -414,22 +420,18 @@ Public Class Wave
                 'Analyse ausführen
                 Call oAnalysis.ProcessAnalysis()
 
+                Call Wave.Log.AddLogEntry("... Analyseergebnis aufbereiten ...")
+
                 'Ergebnisse aufbereiten
                 Call oAnalysis.PrepareResults()
+
+                Call Wave.Log.AddLogEntry("... Analyse abgeschlossen")
 
                 'Default-Cursor
                 Me.Cursor = Cursors.Default
 
                 'Ergebnisse anzeigen:
                 '--------------------
-                If (oAnalysis.hasResultValues) Then
-                    'TODO: Ergebniswerte anzeigen
-                End If
-
-                If (oAnalysis.hasResultText) Then
-                    'TODO: Ergebnistext anzeigen
-                End If
-
                 'Ergebnisdiagramm anzeigen
                 If (oAnalysis.hasResultChart) Then
                     Dim Wave2 As New Wave()
@@ -439,8 +441,22 @@ Public Class Wave
                     Call Wave2.Show()
                 End If
 
+                'Ergebnistext in Log schreiben und anzeigen
+                If (oAnalysis.hasResultText) Then
+                    Call Wave.Log.AddLogEntry(oAnalysis.getResultText)
+                    Call Wave.Log.Show()
+                End If
+
+                'Ergebniswerte anzeigen
+                If (oAnalysis.hasResultValues) Then
+                    'TODO: Ergebniswerte anzeigen
+                End If
+
             Catch ex As Exception
                 Me.Cursor = Cursors.Default
+                'Logeintrag
+                Call Wave.Log.AddLogEntry("Analyse fehlgeschlagen:" & eol & ex.Message)
+                'Alert
                 MsgBox("Analyse fehlgeschlagen:" & eol & ex.Message, MsgBoxStyle.Critical)
             End Try
 
@@ -575,7 +591,7 @@ Public Class Wave
         End If
 
         'Log
-        Call AddLogEntry("Importiere Datei '" & file & "' ...")
+        Call Wave.Log.AddLogEntry("Importiere Datei '" & file & "' ...")
 
         Select Case Path.GetExtension(file).ToUpper()
 
@@ -600,7 +616,7 @@ Public Class Wave
         End Select
 
         'Log
-        Call AddLogEntry("... Import abgeschlossen.")
+        Call Wave.Log.AddLogEntry("... Import abgeschlossen.")
 
     End Sub
 
