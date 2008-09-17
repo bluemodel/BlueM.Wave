@@ -64,6 +64,7 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Analysis\Analysis.vb" />
+    <Compile Include="Analysis\AnalysisHelper.vb" />
     <Compile Include="Analysis\Doppelsummenanalyse.vb" />
     <Compile Include="Analysis\Monatsauswertung.vb" />
     <Compile Include="Analysis\AnalysisFactory.vb" />
@@ -73,6 +74,7 @@
     <Compile Include="Analysis\AnalysisDialog.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Analysis\GoodnessOfFit.vb" />
     <Compile Include="CutDialog.Designer.vb">
       <DependentUpon>CutDialog.vb</DependentUpon>
     </Compile>
