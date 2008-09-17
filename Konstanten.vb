@@ -2,9 +2,6 @@ Imports System.Globalization
 
 Module Konstanten
 
-    'Log-Fenster
-    Friend Log As LogWindow
-
     'Zeilenumbruch
     Public Const eol As String = Chr(13) & Chr(10)
 
@@ -47,22 +44,11 @@ Module Konstanten
             wert = Convert.ToDouble(str, Konstanten.Zahlenformat)
         Catch ex As Exception
             wert = Konstanten.NaN
-            Call AddLogEntry("Der Wert '" & str & "' konnte nicht gelesen werden und wurde durch NaN (" & Konstanten.NaN.ToString() & ") ersetzt!")
+            Call Wave.Log.AddLogEntry("Der Wert '" & str & "' konnte nicht gelesen werden und wurde durch NaN (" & Konstanten.NaN.ToString() & ") ersetzt!")
         End Try
 
         Return wert
 
     End Function
-
-    ''' <summary>
-    ''' Einen Eintrag zum Log hinzufügen
-    ''' </summary>
-    ''' <param name="msg">Der hinzuzufügende Log-Eintrag</param>
-    Public Sub AddLogEntry(ByVal msg As String)
-
-        'Eintrag hinzufügen
-        Call Log.AddLogEntry(msg)
-
-    End Sub
 
 End Module
