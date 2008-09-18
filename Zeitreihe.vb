@@ -63,11 +63,11 @@ Public Class Zeitreihe
     ''' <value>Die neu zu setzenden Länge. Ist die neue Länge kürzer als die aktuelle Länge, wird von hinten abgeschnitten, andernfalls wird mit leeren Werten aufgefüllt</value>
     Public Property Length() As Integer
         Get
-            Return Me.XWerte.GetLength(0)
+            Return Me._XWerte.GetLength(0)
         End Get
         Set(ByVal value As Integer)
-            ReDim Preserve Me.XWerte(value - 1)
-            ReDim Preserve Me.YWerte(value - 1)
+            ReDim Preserve Me._XWerte(value - 1)
+            ReDim Preserve Me._YWerte(value - 1)
         End Set
     End Property
 
