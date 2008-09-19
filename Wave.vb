@@ -1,19 +1,23 @@
+'*******************************************************************************
+'*******************************************************************************
+'**** Klasse Wave                                                           ****
+'****                                                                       ****
+'**** Tool zur Darstellung und Analyse von Zeitreihen in TeeChart           ****
+'****                                                                       ****
+'**** Autoren: Michael Bach, Felix Froehlich,                               ****
+'****          Dirk Muschalla, Christoph Hübner                             ****
+'****                                                                       ****
+'**** Fachgebiet Ingenieurhydrologie und Wasserbewirtschaftung              ****
+'**** TU Darmstadt                                                          ****
+'*******************************************************************************
+'*******************************************************************************
+
 Imports System.IO
 
+''' <summary>
+''' Hauptformular
+''' </summary>
 Public Class Wave
-    '*******************************************************************************
-    '*******************************************************************************
-    '**** Klasse Wave                                                           ****
-    '****                                                                       ****
-    '**** Tool zur Darstellung und Analyse von Zeitreihen in TeeChart           ****
-    '****                                                                       ****
-    '**** Autoren: Michael Bach, Felix Froehlich,                               ****
-    '****          Dirk Muschalla, Christoph Hübner                             ****
-    '****                                                                       ****
-    '**** Fachgebiet Ingenieurhydrologie und Wasserbewirtschaftung              ****
-    '**** TU Darmstadt                                                          ****
-    '*******************************************************************************
-    '*******************************************************************************
 
     'Eigenschaften
     '#############
@@ -22,7 +26,7 @@ Public Class Wave
     Friend Shared Log As LogWindow
 
     Private WithEvents colorBand1 As Steema.TeeChart.Tools.ColorBand
-    Private selectionMade As Boolean									'Flag zeigt an, ob bereits ein Auswahlbereich ausgewählt wurde
+    Private selectionMade As Boolean                                    'Flag zeigt an, ob bereits ein Auswahlbereich ausgewählt wurde
     Private Zeitreihen As Collection
 
     Private Const FileFilter_TEN As String = "TeeChart-Dateien (*.ten)|*.ten"
@@ -57,7 +61,7 @@ Public Class Wave
 
         'Logfenster nur beim ersten Mal instanzieren
         '-------------------------------------------
-        If (isNothing(Log)) Then
+        If (IsNothing(Log)) Then
             Log = New LogWindow()
         End If
 
