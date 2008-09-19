@@ -116,7 +116,7 @@ Partial Public Class ImportDiag
             'Eingaben speichern
             '------------------
             'Zeilennummern
-            Me.datei.iZeile‹berschriften = Me.TextBox_Zeile‹berschriften.Value
+            Me.datei.iZeileUeberschriften = Me.TextBox_Zeile‹berschriften.Value
             Me.datei.iZeileDaten = Me.TextBox_ZeileDaten.Value
 
             'Einheiten
@@ -155,7 +155,7 @@ Partial Public Class ImportDiag
         Me.ComboBox_Dezimaltrennzeichen.SelectedItem = Me.datei.Dezimaltrennzeichen
 
         'Zeilennummern
-        Me.TextBox_Zeile‹berschriften.Text = Me.datei.iZeile‹berschriften
+        Me.TextBox_Zeile‹berschriften.Text = Me.datei.iZeileUeberschriften
         Me.TextBox_ZeileDaten.Text = Me.datei.iZeileDaten
 
         'Einheiten

@@ -1,3 +1,6 @@
+''' <summary>
+''' Basisklasse für importierbare Dateiformate
+''' </summary>
 Public MustInherit Class Dateiformat
 
     'oft verwendete Zeichen (quasi Konstanten)
@@ -13,22 +16,28 @@ Public MustInherit Class Dateiformat
     'Eigenschaften
     '#############
 
+    Private _file As String
+    Private _zeichengetrennt As Boolean = True
+    Private _trennzeichen As Zeichen = semikolon
+    Private _dezimaltrennzeichen As Zeichen = punkt
+    Private _iZeileUeberschriften As Integer = 1
+    Private _iZeileEinheiten As Integer = 2
+    Private _iZeileDaten As Integer = 3
+    Private _useEinheiten As Boolean = True
+    Private _spaltenbreite As Integer = 16
+    Private _XSpalte As String = ""
+    Private _Yspalten() As String = {}
+    Private _spaltenSel() As String = {}
+    Private _Einheiten() As String = {}
+
+    ''' <summary>
+    ''' Array der in der Datei enhaltenen Zeitreihen
+    ''' </summary>
     Public Zeitreihen() As Zeitreihe
 
-    Private _file As String                             'Pfad zur Datei
-    Private _zeichengetrennt As Boolean = True          'Zeichengetrennte (standardmäßig) oder Spalten mit fester Breite
-    Private _trennzeichen As Zeichen = semikolon        'Spaltentrennzeichen (standardmäßig Semikolon)
-    Private _dezimaltrennzeichen As Zeichen = punkt     'Dezimaltrennzeichen (standardmäßig Punkt)
-    Private _iZeileÜberschriften As Integer = 1         'Zeile mit den Spaltenüberschriften
-    Private _iZeileEinheiten As Integer = 2             'Zeile mit den Spalteneinheiten
-    Private _iZeileDaten As Integer = 3                 'Erste Zeile mit Daten
-    Private _useEinheiten As Boolean = True             'Einheiten auslesen?
-    Private _spaltenbreite As Integer = 16              'Breite einer Spalte (standardmäßig 16)
-    Private _XSpalte As String = ""                     'Name der X-Spalte
-    Private _Yspalten() As String = {}                  'Array der vorhandenen Y-Spaltennamen
-    Private _spaltenSel() As String = {}                'Array der ausgewählten Y-Spaltennamen
-    Private _Einheiten() As String = {}                  'Array der Einheiten
-
+    ''' <summary>
+    ''' Der ImportDialog
+    ''' </summary>
     Public ImportDiag As ImportDiag
 
 #End Region 'Eigenschaften
@@ -37,7 +46,9 @@ Public MustInherit Class Dateiformat
 
     'Properties
     '##########
-
+    ''' <summary>
+    ''' Pfad zur Datei
+    ''' </summary>
     Public Property File() As String
         Get
             Return _file
@@ -47,6 +58,9 @@ Public MustInherit Class Dateiformat
         End Set
     End Property
 
+    ''' <summary>
+    ''' True: Zeichengetrennt (standardmäßig), False: Spalten mit fester Breite
+    ''' </summary>
     Public Property Zeichengetrennt() As Boolean
         Get
             Return _zeichengetrennt
@@ -56,6 +70,9 @@ Public MustInherit Class Dateiformat
         End Set
     End Property
 
+    ''' <summary>
+    ''' Spaltentrennzeichen (standardmäßig Semikolon)
+    ''' </summary>
     Public Property Trennzeichen() As Zeichen
         Get
             Return _trennzeichen
@@ -65,6 +82,9 @@ Public MustInherit Class Dateiformat
         End Set
     End Property
 
+    ''' <summary>
+    ''' Dezimaltrennzeichen (standardmäßig Punkt)
+    ''' </summary>
     Public Property Dezimaltrennzeichen() As Zeichen
         Get
             Return _dezimaltrennzeichen
@@ -74,15 +94,21 @@ Public MustInherit Class Dateiformat
         End Set
     End Property
 
-    Public Property iZeileÜberschriften() As Integer
+    ''' <summary>
+    ''' Nummer der Zeile mit den Spaltenüberschriften
+    ''' </summary>
+    Public Property iZeileUeberschriften() As Integer
         Get
-            Return _iZeileÜberschriften
+            Return _iZeileUeberschriften
         End Get
         Set(ByVal value As Integer)
-            _iZeileÜberschriften = value
+            _iZeileUeberschriften = value
         End Set
     End Property
 
+    ''' <summary>
+    ''' Nummer der Zeile mit den Spalteneinheiten
+    ''' </summary>
     Public Property iZeileEinheiten() As Integer
         Get
             Return _iZeileEinheiten
@@ -92,6 +118,9 @@ Public MustInherit Class Dateiformat
         End Set
     End Property
 
+    ''' <summary>
+    ''' Nummer der ersten Zeile, die Daten enthält
+    ''' </summary>
     Public Property iZeileDaten() As Integer
         Get
             Return _iZeileDaten
@@ -101,12 +130,18 @@ Public MustInherit Class Dateiformat
         End Set
     End Property
 
+    ''' <summary>
+    ''' Anzahl Header-Zeilen
+    ''' </summary>
     Public ReadOnly Property nZeilenHeader() As Integer
         Get
             Return _iZeileDaten - 1
         End Get
     End Property
 
+    ''' <summary>
+    ''' Einheiten auslesen?
+    ''' </summary>
     Public Property UseEinheiten() As Boolean
         Get
             Return _useEinheiten
@@ -116,6 +151,10 @@ Public MustInherit Class Dateiformat
         End Set
     End Property
 
+    ''' <summary>
+    ''' Breite einer Spalte (standardmäßig 16)
+    ''' </summary>
+    ''' <remarks>nur bei Spalten fester Breite</remarks>
     Public Property Spaltenbreite() As Integer
         Get
             Return _spaltenbreite
@@ -125,6 +164,9 @@ Public MustInherit Class Dateiformat
         End Set
     End Property
 
+    ''' <summary>
+    ''' Name der X-Spalte
+    ''' </summary>
     Public Property XSpalte() As String
         Get
             Return _XSpalte
@@ -134,6 +176,9 @@ Public MustInherit Class Dateiformat
         End Set
     End Property
 
+    ''' <summary>
+    ''' Array der vorhandenen Y-Spaltennamen
+    ''' </summary>
     Public Property YSpalten() As String()
         Get
             Return _Yspalten
@@ -143,6 +188,9 @@ Public MustInherit Class Dateiformat
         End Set
     End Property
 
+    ''' <summary>
+    ''' Array der ausgewählten Y-Spaltennamen
+    ''' </summary>
     Public Property SpaltenSel() As String()
         Get
             Return _spaltenSel
@@ -151,6 +199,10 @@ Public MustInherit Class Dateiformat
             _spaltenSel = value
         End Set
     End Property
+
+    ''' <summary>
+    ''' Array der Einheiten
+    ''' </summary>
     Public Property Einheiten() As String()
         Get
             Return _Einheiten
@@ -160,8 +212,12 @@ Public MustInherit Class Dateiformat
         End Set
     End Property
 
-    'Eine Zeitreihe anhand des Titels holen
-    '**************************************
+    ''' <summary>
+    ''' Aus der Datei eine Zeitreihe anhand ihres Titels holen
+    ''' </summary>
+    ''' <param name="title">Titel der zu holenden Zeitreihe</param>
+    ''' <returns>Die Zeitreihe</returns>
+    ''' <remarks>falls noch nicht eingelesen, wird dies nachgeholt. Schmeiss eine Exception, wenn die Zeitreihe nicht gefunden werdn kann.</remarks>
     Public ReadOnly Property getReihe(ByVal title As String) As Zeitreihe
         Get
             For i As Integer = 0 To Me.Zeitreihen.GetUpperBound(0)
@@ -195,8 +251,10 @@ Public MustInherit Class Dateiformat
     'Methoden
     '########
 
-    'Konstruktor
-    '***********
+    ''' <summary>
+    ''' Konstruktor
+    ''' </summary>
+    ''' <param name="FileName">Kompletter Pfad zur einzulesenden Datei</param>
     Public Sub New(ByVal FileName As String)
 
         'Objektstruktur initialisieren
@@ -207,16 +265,21 @@ Public MustInherit Class Dateiformat
 
     End Sub
 
-    'Spalten auslesen
-    '****************
+    ''' <summary>
+    ''' Liest die Spaltennamen aus der Datei
+    ''' </summary>
     Public MustOverride Sub SpaltenAuslesen()
 
-    'Datei einlesen
-    '**************
+    ''' <summary>
+    ''' Liest die ausgewählten Spalten (siehe SpaltenSel) ein und legt sie im Array Zeitreihen ab.
+    ''' </summary>
     Public MustOverride Sub Read_File()
 
-    'Überprüfung, ob eine Spalte ausgewählt ist
-    '******************************************
+    ''' <summary>
+    ''' Prüft, ob eine Spalte ausgewählt ist
+    ''' </summary>
+    ''' <param name="spalte">Name der zu prüfenden Spalte</param>
+    ''' <returns>True wenn die Spalte ausgewählt wurde, ansonsten False</returns>
     Protected Function isSelected(ByVal spalte As String) As Boolean
 
         isSelected = False

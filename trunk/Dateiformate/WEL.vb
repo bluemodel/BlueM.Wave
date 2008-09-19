@@ -1,5 +1,9 @@
 Imports System.IO
 
+''' <summary>
+''' Klasse für das WEL-Dateiformat
+''' </summary>
+''' <remarks>Format siehe http://130.83.196.154/BlueM/wiki/index.php/WEL-Format</remarks>
 Public Class WEL
     Inherits Dateiformat
 
@@ -25,7 +29,7 @@ Public Class WEL
         MyBase.New(FileName)
 
         'Voreinstellungen
-        Me.iZeileÜberschriften = 2
+        Me.iZeileUeberschriften = 2
         Me.UseEinheiten = False
         Me.iZeileEinheiten = 3
         Me.iZeileDaten = 4
@@ -61,11 +65,11 @@ Public Class WEL
             'Spaltenüberschriften auslesen
             For i = 1 To Me.iZeileDaten
                 Zeile = StrReadSync.ReadLine.ToString()
-                If (i = Me.iZeileÜberschriften) Then ZeileSpalten = Zeile
+                If (i = Me.iZeileUeberschriften) Then ZeileSpalten = Zeile
                 If (i = Me.iZeileEinheiten) Then ZeileEinheiten = Zeile
             Next
 
-            StrReadSync.close()
+            StrReadSync.Close()
             StrRead.Close()
             FiStr.Close()
 

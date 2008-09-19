@@ -1,5 +1,9 @@
 Imports System.IO
 
+''' <summary>
+''' Klasse für das ZRE-Dateiformat
+''' </summary>
+''' <remarks>Format siehe http://130.83.196.154/BlueM/wiki/index.php/ZRE-Format</remarks>
 Public Class ZRE
     Inherits Dateiformat
 
@@ -126,8 +130,11 @@ Public Class ZRE
 
     End Sub
 
-    'ZRE-Datei exportieren
-    '******************
+    ''' <summary>
+    ''' Exportiert eine Zeitreihe als ZRE-Datei
+    ''' </summary>
+    ''' <param name="Reihe">Die zu exportierende Zeitreihe</param>
+    ''' <param name="File">Pfad zur anzulegenden Datei</param>
     Public Shared Sub Write_File(ByVal Reihe As Zeitreihe, ByVal File As String)
 
         Dim strwrite As StreamWriter
@@ -153,8 +160,6 @@ Public Class ZRE
         strwrite.Close()
 
     End Sub
-
-
 
 #End Region 'Methoden
 

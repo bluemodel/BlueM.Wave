@@ -1,6 +1,9 @@
 Imports System.IO
 Imports System.Globalization
 
+''' <summary>
+''' Klasse für ASC-Dateiformat (SMUSI)
+''' </summary>
 Public Class ASC
     Inherits Dateiformat
 
@@ -17,7 +20,7 @@ Public Class ASC
         MyBase.New(FileName)
 
         'Voreinstellungen
-        Me.iZeileÜberschriften = 2
+        Me.iZeileUeberschriften = 2
         Me.UseEinheiten = False
         Me.iZeileEinheiten = 3
         Me.iZeileDaten = 4
@@ -53,10 +56,10 @@ Public Class ASC
             'Spaltenüberschriften
             For i = 1 To Me.iZeileDaten
                 Zeile = StrReadSync.ReadLine.ToString
-                If (i = Me.iZeileÜberschriften) Then ZeileSpalten = Zeile
+                If (i = Me.iZeileUeberschriften) Then ZeileSpalten = Zeile
                 If (i = Me.iZeileEinheiten) Then ZeileEinheiten = Zeile
             Next
-            StrReadSync.close()
+            StrReadSync.Close()
             StrRead.Close()
             FiStr.Close()
 

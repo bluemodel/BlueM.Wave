@@ -1,49 +1,83 @@
 Imports System.IO
 
+''' <summary>
+''' Klasse für RVA-Dateiformat
+''' </summary>
+''' <remarks>
+''' RVA-Dateien werden generiert von der Konsolenversion von "IHA Software" v7.03 
+''' von The Nature Conservancy, siehe http://www.nature.org/initiatives/freshwater/conservationtools/art17004.html
+''' </remarks>
 Public Class RVA
     Inherits Dateiformat
 
-    '***************************************************************************************
-    '***************************************************************************************
-    '**** Klasse RVA                                                                    ****
-    '****                                                                               ****
-    '**** Liest eine rva-Datei ein, wie sie erstellt wird durch die Konsolenversion von ****
-    '**** "IHA Software" v7.03 von The Nature Conservancy                               ****
-    '**** http://www.nature.org/initiatives/freshwater/conservationtools/art17004.html  ****
-    '****                                                                               ****
-    '**** Autoren: Felix Froehlich,                                                     ****
-    '****                                                                               ****
-    '**** Fachgebiet Ingenieurhydrologie und Wasserbewirtschaftung                      ****
-    '**** TU Darmstadt                                                                  ****
-    '***************************************************************************************
-    '***************************************************************************************
-
 #Region "Properties"
 
-    'Struktur für RVA-Ergebnisse
-    '---------------------------
-    Public Structure IHAParam                           'Struktur für RVA Ergebnis eines Parameters
-        Public PName As String                          'Parametername
-        Public HALow As Double                          'Hydrologic Alteration (HA) - Low RVA Category
-        Public HAMiddle As Double                       'Hydrologic Alteration (HA) - Middle RVA Category
-        Public HAHigh As Double                         'Hydrologic Alteration (HA) - High RVA Category
+    ''' <summary>
+    ''' Struktur für RVA-Ergebnisse eines IHA-Parameters
+    ''' </summary>
+    Public Structure IHAParam
+        ''' <summary>
+        ''' Parametername
+        ''' </summary>
+        Public PName As String
+        ''' <summary>
+        ''' Hydrologic Alteration (HA) - Low RVA Category
+        ''' </summary>
+        Public HALow As Double
+        ''' <summary>
+        ''' Hydrologic Alteration (HA) - Middle RVA Category
+        ''' </summary>
+        Public HAMiddle As Double
+        ''' <summary>
+        ''' Hydrologic Alteration (HA) - High RVA Category
+        ''' </summary>
+        ''' <remarks></remarks>
+        Public HAHigh As Double
     End Structure
 
-    Public Structure IHAParamGroup                      'Struktur für RVA Ergebnis einer Parametergruppe
-        Public No As Short                              'Gruppennummer
-        Public GName As String                          'Gruppennname
-        Public IHAParams() As IHAParam                  'Liste der Parameter
-        Public ReadOnly Property NParams() As Integer   'Anzahl Parameter in der Gruppe
+    ''' <summary>
+    ''' Struktur für RVA Ergebnis einer ganzen Parametergruppe
+    ''' </summary>
+    ''' <remarks></remarks>
+    Public Structure IHAParamGroup
+        ''' <summary>
+        ''' Gruppennummer
+        ''' </summary>
+        Public No As Short
+        ''' <summary>
+        ''' Gruppennname
+        ''' </summary>
+        Public GName As String
+        ''' <summary>
+        ''' Liste der Parameter in der Gruppe
+        ''' </summary>
+        Public IHAParams() As IHAParam
+        ''' <summary>
+        ''' Anzahl Parameter in der Gruppe
+        ''' </summary>
+        Public ReadOnly Property NParams() As Integer
             Get
                 Return Me.IHAParams.Length()
             End Get
         End Property
     End Structure
 
-    Public Structure Struct_RVAValues                   'Struktur für alle RVA Ergebnisse zusammen
-        Public Title As String                          'Titel
-        Public IHAParamGroups() As IHAParamGroup        'Liste der Parametergruppen
-        Public ReadOnly Property NGroups() As Integer   'Anzahl der Parametergruppen
+    ''' <summary>
+    ''' Struktur für alle RVA Ergebnisse zusammen
+    ''' </summary>
+    Public Structure Struct_RVAValues
+        ''' <summary>
+        ''' Titel
+        ''' </summary>
+        Public Title As String
+        ''' <summary>
+        ''' Liste der Parametergruppen
+        ''' </summary>
+        Public IHAParamGroups() As IHAParamGroup
+        ''' <summary>
+        ''' Anzahl der Parametergruppen
+        ''' </summary>
+        Public ReadOnly Property NGroups() As Integer
             Get
                 Return Me.IHAParamGroups.Length()
             End Get
@@ -55,6 +89,9 @@ Public Class RVA
         End Property
     End Structure
 
+    ''' <summary>
+    ''' Das RVA Ergebnis
+    ''' </summary>
     Public RVAValues As Struct_RVAValues
 
 #End Region

@@ -1,5 +1,8 @@
 Imports System.IO
 
+''' <summary>
+''' Klasse für generisches Textformat
+''' </summary>
 Public Class CSV
     Inherits Dateiformat
 
@@ -32,7 +35,7 @@ Public Class CSV
             'Spaltenüberschriften auslesen
             For i = 1 To Me.iZeileDaten
                 Zeile = StrReadSync.ReadLine.ToString
-                If (i = Me.iZeileÜberschriften) Then ZeileSpalten = Zeile
+                If (i = Me.iZeileUeberschriften) Then ZeileSpalten = Zeile
                 If (i = Me.iZeileEinheiten) Then ZeileEinheiten = Zeile
             Next
 
