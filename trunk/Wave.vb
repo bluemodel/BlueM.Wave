@@ -303,13 +303,9 @@ Public Class Wave
         End If
 
         'Dialog vorbereiten
-        '------------------
-        Dim cutter As New CutDialog()
-        'Zeitreihen zu Combobox hinzufügen
-        For Each ZRE As Zeitreihe In Me.Zeitreihen
-            cutter.ComboBox_Zeitreihen.Items.Add(ZRE)
-        Next
+        Dim cutter As New CutDialog(Me.Zeitreihen)
 
+		'Dialog anzeigen
         If (cutter.ShowDialog() = Windows.Forms.DialogResult.OK) Then
             'Neue Reihe speichern und anzeigen
             Me.Zeitreihen.Add(cutter.zreCut)
