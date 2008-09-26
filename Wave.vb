@@ -117,7 +117,7 @@ Public Class Wave
 
 #End Region 'Form behavior
 
-#Region "Chart behvior"
+#Region "Chart behavior"
 
     'Charts neu einrichten
     '*********************
@@ -595,30 +595,37 @@ Public Class Wave
         'Log
         Call Wave.Log.AddLogEntry("Importiere Datei '" & file & "' ...")
 
-        Select Case Path.GetExtension(file).ToUpper()
+        Try
 
-            Case ".ZRE"
-                Call Me.Import_ZRE(file)
+            Select Case Path.GetExtension(file).ToUpper()
 
-            Case ".WEL", ".KWL"
-                Call Me.Import_WEL(file)
+                Case ".ZRE"
+                    Call Me.Import_ZRE(file)
 
-            Case ".ASC"
-                Call Me.Import_ASC(file)
+                Case ".WEL", ".KWL"
+                    Call Me.Import_WEL(file)
 
-            Case ".RVA"
-                Call Me.Import_RVA(file)
+                Case ".ASC"
+                    Call Me.Import_ASC(file)
 
-            Case ".TEN"
-                Call Me.Open_TEN(file)
+                Case ".RVA"
+                    Call Me.Import_RVA(file)
 
-            Case Else
-                Call Me.Import_CSV(file)
+                Case ".TEN"
+                    Call Me.Open_TEN(file)
 
-        End Select
+                Case Else
+                    Call Me.Import_CSV(file)
 
-        'Log
-        Call Wave.Log.AddLogEntry("... Import abgeschlossen.")
+            End Select
+
+            'Logeintrag
+            Call Wave.Log.AddLogEntry("... Import abgeschlossen.")
+
+        Catch ex As Exception
+            MsgBox("Fehler beim Import:" & eol & ex.Message, MsgBoxStyle.Critical)
+            Call Wave.Log.AddLogEntry("... Fehler beim Import:" & eol & ex.Message)
+        End Try
 
     End Sub
 
