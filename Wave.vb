@@ -38,6 +38,7 @@ Public Class Wave
             "WEL-Dateien (*.wel, *.kwl)|*.wel;*.kwl|" & _
             "RVA-Dateien (*.rva)|*.rva|" & _
             "SMUSI-Dateien (*.asc)|*.asc"
+    Public UsedUnits As New Collection
 
     'Methoden
     '########
@@ -146,6 +147,10 @@ Public Class Wave
         'Legenden
         Me.TChart1.Legend.LegendStyle = Steema.TeeChart.LegendStyles.Series
         Me.TChart2.Legend.LegendStyle = Steema.TeeChart.LegendStyles.Series
+        Me.TChart1.Legend.CheckBoxes = True
+        Me.TChart2.Legend.CheckBoxes = True
+        Me.TChart1.Legend.FontSeriesColor = True
+        Me.TChart2.Legend.FontSeriesColor = True
 
         'ColorBand einrichten
         Me.selectionMade = False
@@ -786,6 +791,11 @@ Public Class Wave
     ''' <param name="zre">Die anzuzeigende Zeitreihe</param>
     Public Sub Display_Series(ByVal zre As Zeitreihe)
 
+        'Verwendete werden gespeichert um sie später wieder zuzuordnen
+        If Not UsedUnits.Contains(zre.Einheit) Then
+            UsedUnits.Add(UsedUnits.Count, zre.Einheit)
+        End If
+
         'Serie zu Hauptdiagramm und zu Übersichtsdiagramm hinzufügen
 
         'Linien instanzieren
@@ -803,6 +813,15 @@ Public Class Wave
         'Neue Serie hinzufügen
         Line1.Add(zre.XWerte, zre.YWerte)
         Line2.Add(zre.XWerte, zre.YWerte)
+
+        'Einheiten werden auf die beiden Achsen verteilt
+        If UsedUnits(zre.Einheit) Mod 2 = 0 Then
+            Line1.VertAxis = Steema.TeeChart.Styles.VerticalAxis.Left
+            Line2.VertAxis = Steema.TeeChart.Styles.VerticalAxis.Left
+        Else
+            Line1.VertAxis = Steema.TeeChart.Styles.VerticalAxis.Right
+            Line2.VertAxis = Steema.TeeChart.Styles.VerticalAxis.Right
+        End If
 
         'Charts aktualisieren
         Call Me.UpdateCharts()
