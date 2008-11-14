@@ -27,7 +27,7 @@ Public Module AnalysisHelper
         zre2_temp = New Zeitreihe(zre2.Title & " (bereinigt)")
         zre2_temp.Einheit = zre2.Einheit
 
-        'Erste gemeinsame Stützstelle finden
+        'ERSTE gemeinsame Stützstelle finden
         zre1_temp.Length = 1
         zre2_temp.Length = 1
         found = False
@@ -46,9 +46,10 @@ Public Module AnalysisHelper
                         Exit Do
                     End If
                     If (zre2.XWerte(j) = zre1.XWerte(i)) Then
+                        'Übereinstimmung gefunden!
+
                         'NaN-Werte in zre2 überspringen
                         If (zre2.YWerte(j) <> NaN) Then
-                            'Übereinstimmung gefunden!
                             'Stützstelle kopieren
                             zre1_temp.XWerte(0) = zre1.XWerte(i)
                             zre2_temp.XWerte(0) = zre2.XWerte(j)
@@ -65,18 +66,24 @@ Public Module AnalysisHelper
 
         If (Not found) Then Throw New Exception("Es konnte keine gemeinsame Stützstelle gefunden werden!")
 
-        'Weitere gemeinsame Stützstellen finden
+        'WEITERE gemeinsame Stützstellen finden
         n = 1
         Do Until (i > (zre1.Length - 1) Or j > (zre2.Length - 1))
+
+            'zre1 eins weiter setzen
             i += 1
+
             'NaN-Werte in zre1 überspringen
             If (zre1.YWerte(i) <> NaN) Then
+
                 'Korrepondierenden Wert in zre2 suchen
-                Do
+                Do Until (zre2.XWerte(j) > zre1.XWerte(i))
+
                     If (zre2.XWerte(j) = zre1.XWerte(i)) Then
+                        'Übereinstimmung gefunden!
+
                         'NaN-Werte in zre2 überspringen
                         If (zre2.YWerte(j) <> NaN) Then
-                            'Übereinstimmung gefunden!
                             n += 1
                             'Stützstelle kopieren
                             zre1_temp.Length = n
@@ -87,12 +94,15 @@ Public Module AnalysisHelper
                             zre2_temp.YWerte(n - 1) = zre2.YWerte(j)
                         End If
                     End If
+
+                    'zre2 eins weiter setzen
                     j += 1
+
                     'Ende von zre2 abfangen
                     If (j > zre2.Length - 1) Then
                         Exit Do
                     End If
-                Loop Until (zre2.XWerte(j) > zre1.XWerte(i))
+                Loop
             End If
         Loop
 
