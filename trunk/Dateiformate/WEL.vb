@@ -30,7 +30,7 @@ Public Class WEL
 
         'Voreinstellungen
         Me.iZeileUeberschriften = 2
-        Me.UseEinheiten = False
+        Me.UseEinheiten = True
         Me.iZeileEinheiten = 3
         Me.iZeileDaten = 4
         Me.Zeichengetrennt = True
