@@ -112,7 +112,8 @@ Public Class Zeitreihe
     ''' Default Konstruktor
     ''' </summary>
     Public Sub New()
-        Me._title = "[nicht gesetzt]"
+        Me._title = "-"
+        Me._Einheit = "-"
         Me.Length = 0
     End Sub
 
@@ -122,6 +123,7 @@ Public Class Zeitreihe
     ''' <param name="title">Titel der Zeireihe</param>
     Public Sub New(ByVal title As String)
         Me._title = title
+        Me._Einheit = "-"
         Me.Length = 0
     End Sub
 
@@ -137,6 +139,7 @@ Public Class Zeitreihe
     ''' </summary>
     Public Function Clone() As Zeitreihe
         Dim target As New Zeitreihe(Me.Title)
+        target.Einheit = Me.Einheit
         target.Length = Me.Length
         target.XWerte = Me.XWerte
         target.YWerte = Me.YWerte
