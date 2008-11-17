@@ -40,11 +40,8 @@ Public Module AnalysisHelper
             'NaN-Werte in zre1 überspringen
             If (zre1.YWerte(i) <> NaN) Then
                 'Korrepondierenden Wert in zre2 suchen
-                Do
-                    'Ende von zre2 abfangen
-                    If (j > zre2.Length - 1) Then
-                        Exit Do
-                    End If
+                Do Until (zre2.XWerte(j) > zre1.XWerte(i))
+
                     If (zre2.XWerte(j) = zre1.XWerte(i)) Then
                         'Übereinstimmung gefunden!
 
@@ -58,8 +55,15 @@ Public Module AnalysisHelper
                             found = True
                         End If
                     End If
+
+                    'zre2 eins weiter setzen
                     j += 1
-                Loop Until (zre2.XWerte(j) > zre1.XWerte(i))
+
+                    'Ende von zre2 abfangen
+                    If (j > zre2.Length - 1) Then
+                        Exit Do
+                    End If
+                Loop
             End If
             If (found) Then Exit For
         Next
