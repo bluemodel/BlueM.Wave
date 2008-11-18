@@ -39,6 +39,11 @@ Public Class Wave
             "RVA-Dateien (*.rva)|*.rva|" & _
             "SMUSI-Dateien (*.asc)|*.asc"
     Public UsedUnits As New Collection
+    Public CustomAxis1L As New Steema.TeeChart.Axis
+    Public CustomAxis1R As New Steema.TeeChart.Axis
+    Public CustomAxis2L As New Steema.TeeChart.Axis
+    Public CustomAxis2R As New Steema.TeeChart.Axis
+
 
     'Methoden
     '########
@@ -127,7 +132,6 @@ Public Class Wave
         'Charts zurücksetzen
         Me.TChart1.Clear()
         Me.TChart1.Aspect.View3D = False
-
         Me.TChart2.Clear()
         Me.TChart2.Aspect.View3D = False
         Me.TChart2.Header.Visible = False
@@ -142,19 +146,48 @@ Public Class Wave
 
         'Achsen
         Me.TChart1.Axes.Bottom.Automatic = False
+        Me.TChart1.Axes.Bottom.Labels.Angle = 90
+        Me.TChart1.Axes.Bottom.Labels.DateTimeFormat = "dd.MM.yy hh:mm"
+        Me.TChart1.Axes.Right.Title.Angle = 90
         Me.TChart2.Axes.Bottom.Automatic = False
+        Me.TChart2.Axes.Right.Title.Angle = 90
 
         'Legenden
         Me.TChart1.Legend.LegendStyle = Steema.TeeChart.LegendStyles.Series
-        Me.TChart2.Legend.LegendStyle = Steema.TeeChart.LegendStyles.Series
         Me.TChart1.Legend.CheckBoxes = True
-        Me.TChart2.Legend.CheckBoxes = True
         Me.TChart1.Legend.FontSeriesColor = True
+        Me.TChart2.Legend.LegendStyle = Steema.TeeChart.LegendStyles.Series
+        Me.TChart2.Legend.CheckBoxes = True
         Me.TChart2.Legend.FontSeriesColor = True
 
         'ColorBand einrichten
         Me.selectionMade = False
         Call Me.Init_ColorBand()
+
+        'Zusätzliche Achsen einrichten und den Charts zuweisen
+        CustomAxis1L.OtherSide = False
+        CustomAxis1L.Visible = False
+        CustomAxis1L.RelativePosition = 8
+        CustomAxis1L.Title.Angle = 90
+        Me.TChart1.Chart.Axes.Custom.Add(CustomAxis1L)
+
+        CustomAxis1R.OtherSide = True
+        CustomAxis1R.Visible = False
+        CustomAxis1R.RelativePosition = 8
+        CustomAxis1R.Title.Angle = 90
+        Me.TChart1.Chart.Axes.Custom.Add(CustomAxis1R)
+
+        CustomAxis2L.OtherSide = False
+        CustomAxis2L.Visible = False
+        CustomAxis2L.RelativePosition = 8
+        CustomAxis2L.Title.Angle = 90
+        Me.TChart2.Chart.Axes.Custom.Add(CustomAxis2L)
+
+        CustomAxis2R.OtherSide = True
+        CustomAxis2R.Visible = False
+        CustomAxis2R.RelativePosition = 8
+        CustomAxis2R.Title.Angle = 90
+        Me.TChart2.Chart.Axes.Custom.Add(CustomAxis2R)
 
     End Sub
 
@@ -310,7 +343,7 @@ Public Class Wave
         'Dialog vorbereiten
         Dim cutter As New CutDialog(Me.Zeitreihen)
 
-		'Dialog anzeigen
+        'Dialog anzeigen
         If (cutter.ShowDialog() = Windows.Forms.DialogResult.OK) Then
             'Neue Reihe speichern und anzeigen
             Me.Zeitreihen.Add(cutter.zreCut)
@@ -791,9 +824,21 @@ Public Class Wave
     ''' <param name="zre">Die anzuzeigende Zeitreihe</param>
     Public Sub Display_Series(ByVal zre As Zeitreihe)
 
-        'Verwendete werden gespeichert um sie später wieder zuzuordnen
-        If Not UsedUnits.Contains(zre.Einheit) Then
-            UsedUnits.Add(UsedUnits.Count, zre.Einheit)
+        'Falls alle Serien im Chart gelöscht wurden
+        If Not UsedUnits.Count = 0 And TChart1.Chart.Series.Count = 0 Then
+            UsedUnits.Clear()
+            Me.TChart1.Chart.Axes.Left.Title.Text = ""
+            Me.TChart2.Chart.Axes.Left.Title.Text = ""
+            Me.TChart1.Chart.Axes.Right.Title.Text = ""
+            Me.TChart2.Chart.Axes.Right.Title.Text = ""
+            CustomAxis1L.Title.Text = ""
+            CustomAxis2L.Title.Text = ""
+            CustomAxis1R.Title.Text = ""
+            CustomAxis2R.Title.Text = ""
+            CustomAxis1L.Visible = False
+            CustomAxis2L.Visible = False
+            CustomAxis1R.Visible = False
+            CustomAxis2R.Visible = False
         End If
 
         'Serie zu Hauptdiagramm und zu Übersichtsdiagramm hinzufügen
@@ -814,14 +859,48 @@ Public Class Wave
         Line1.Add(zre.XWerte, zre.YWerte)
         Line2.Add(zre.XWerte, zre.YWerte)
 
-        'Einheiten werden auf die beiden Achsen verteilt
-        If UsedUnits(zre.Einheit) Mod 2 = 0 Then
-            Line1.VertAxis = Steema.TeeChart.Styles.VerticalAxis.Left
-            Line2.VertAxis = Steema.TeeChart.Styles.VerticalAxis.Left
-        Else
-            Line1.VertAxis = Steema.TeeChart.Styles.VerticalAxis.Right
-            Line2.VertAxis = Steema.TeeChart.Styles.VerticalAxis.Right
+        'Verwendete Einheiten werden gespeichert um sie später wieder zuzuordnen
+        If Not UsedUnits.Contains(zre.Einheit) Then
+            UsedUnits.Add(UsedUnits.Count + 1, zre.Einheit)
+
+            Select Case UsedUnits.Count
+                Case 1
+                    Me.TChart1.Chart.Axes.Left.Title.Text = zre.Einheit
+                    Me.TChart2.Chart.Axes.Left.Title.Text = zre.Einheit
+                Case 2
+                    Me.TChart1.Chart.Axes.Right.Title.Text = zre.Einheit
+                    Me.TChart2.Chart.Axes.Right.Title.Text = zre.Einheit
+                Case 3
+                    CustomAxis1L.Title.Text = zre.Einheit
+                    CustomAxis1L.Visible = True
+                    CustomAxis2L.Title.Text = zre.Einheit
+                    CustomAxis2L.Visible = True
+                Case 4
+                    CustomAxis1R.Title.Text = zre.Einheit
+                    CustomAxis1R.Visible = True
+                    CustomAxis2R.Title.Text = zre.Einheit
+                    CustomAxis2R.Visible = True
+                Case 5
+                    CustomAxis1R.Title.Text = ""
+                    CustomAxis2R.Title.Text = ""
+            End Select
         End If
+
+        'Lines werden auf die beiden Achsen verteilt
+        Select Case UsedUnits(zre.Einheit)
+            Case 1
+                Line1.VertAxis = Steema.TeeChart.Styles.VerticalAxis.Left
+                Line2.VertAxis = Steema.TeeChart.Styles.VerticalAxis.Left
+            Case 2
+                Line1.VertAxis = Steema.TeeChart.Styles.VerticalAxis.Right
+                Line2.VertAxis = Steema.TeeChart.Styles.VerticalAxis.Right
+            Case 3
+                Line1.CustomVertAxis = CustomAxis1L
+                Line2.CustomVertAxis = CustomAxis2L
+            Case Else
+                Line1.CustomVertAxis = CustomAxis1R
+                Line2.CustomVertAxis = CustomAxis2R
+        End Select
 
         'Charts aktualisieren
         Call Me.UpdateCharts()
