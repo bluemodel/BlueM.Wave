@@ -9,6 +9,7 @@ Version 1.x
 -----------
 New:
 * Analysefunktionen: Doppelsummenanalyse, GoodnessOfFit
+* Serien werden automatisch anhand ihrer Einheiten auf verschiedene Achsen verteilt
 
 Fixed:
 * Zeitreihe zuschneiden
