@@ -11,7 +11,7 @@
 '**** TU Darmstadt                                                          ****
 '*******************************************************************************
 '*******************************************************************************
-
+Imports System.Text.RegularExpressions
 Imports System.IO
 
 ''' <summary>
@@ -25,10 +25,8 @@ Public Class Wave
     'Log-Fenster
     Friend Shared Log As LogWindow
 
-    Private WithEvents colorBand1 As Steema.TeeChart.Tools.ColorBand
-    Private selectionMade As Boolean                                    'Flag zeigt an, ob bereits ein Auswahlbereich ausgewählt wurde
+    'Interne Zeitreihen-Collection
     Private Zeitreihen As Collection
-    Private MyAxes1, MyAxes2 As Dictionary(Of String, Steema.TeeChart.Axis)
 
     Private Const FileFilter_TEN As String = "TeeChart-Dateien (*.ten)|*.ten"
     Private Const FileFilter_Import As String = _
@@ -39,6 +37,11 @@ Public Class Wave
             "WEL-Dateien (*.wel, *.kwl)|*.wel;*.kwl|" & _
             "RVA-Dateien (*.rva)|*.rva|" & _
             "SMUSI-Dateien (*.asc)|*.asc"
+
+    'Chart-Zeugs
+    Private WithEvents colorBand1 As Steema.TeeChart.Tools.ColorBand
+    Private selectionMade As Boolean                                    'Flag zeigt an, ob bereits ein Auswahlbereich ausgewählt wurde
+    Private MyAxes1, MyAxes2 As Dictionary(Of String, Steema.TeeChart.Axis)
 
     'Methoden
     '########
@@ -298,7 +301,7 @@ Public Class Wave
     Private Sub Eingeben(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_EnterSeries.Click
         Dim SeriesEditor As New SeriesEditorDialog()
         If (SeriesEditor.ShowDialog() = Windows.Forms.DialogResult.OK) Then
-            Me.Zeitreihen.Add(SeriesEditor.Zeitreihe)
+            Me.AddZeitreihe(SeriesEditor.Zeitreihe)
             Call Me.Display_Series(SeriesEditor.Zeitreihe)
         End If
     End Sub
@@ -319,7 +322,7 @@ Public Class Wave
         'Dialog anzeigen
         If (cutter.ShowDialog() = Windows.Forms.DialogResult.OK) Then
             'Neue Reihe speichern und anzeigen
-            Me.Zeitreihen.Add(cutter.zreCut)
+            Me.AddZeitreihe(cutter.zreCut)
             Me.Display_Series(cutter.zreCut)
         End If
 
@@ -533,6 +536,31 @@ Public Class Wave
 
 #Region "Funktionalität"
 
+    'Zeitreihe intern hinzufügen
+    '***************************
+    Private Sub AddZeitreihe(ByRef zre As Zeitreihe)
+
+        Dim n As Integer = 1
+
+        'Umbenennen, falls Titel schon vergeben
+        'Format: "Titel (n)"
+        Do While (Me.Zeitreihen.Contains(zre.Title))
+
+            Dim pattern As String = "(?<name>.*)\s\(\d+\)$"
+            Dim match As Match = Regex.Match(zre.Title, pattern)
+
+            If (match.Success) Then
+                n += 1
+                zre.Title = Regex.Replace(zre.Title, pattern, "${name} (" & n.ToString() & ")")
+            Else
+                zre.Title &= " (1)"
+            End If
+        Loop
+
+        Me.Zeitreihen.Add(zre, zre.Title)
+
+    End Sub
+
     'TEN-Datei importieren
     '*********************
     Private Sub Open_TEN(ByVal FileName As String)
@@ -572,7 +600,7 @@ Public Class Wave
                     reihe.YWerte(i) = series.YValues(i)
                 Next
 
-                Me.Zeitreihen.Add(reihe)
+                Call Me.AddZeitreihe(reihe)
             End If
         Next
 
@@ -654,7 +682,7 @@ Public Class Wave
         Call ZRE.Read_File()
 
         'Serie abspeichern
-        Me.Zeitreihen.Add(ZRE.Zeitreihen(0))
+        Me.AddZeitreihe(ZRE.Zeitreihen(0))
 
         'Serie zeichnen
         Call Me.Display_Series(ZRE.Zeitreihen(0))
@@ -678,9 +706,10 @@ Public Class Wave
         If (Not IsNothing(WEL.Zeitreihen)) Then
 
             For i = 0 To WEL.Zeitreihen.GetUpperBound(0)
-                Call Me.Display_Series(WEL.Zeitreihen(i))
                 'Serie abspeichen
-                Me.Zeitreihen.Add(WEL.Zeitreihen(i))
+                Me.AddZeitreihe(WEL.Zeitreihen(i))
+                'Serie anzeigen
+                Call Me.Display_Series(WEL.Zeitreihen(i))
             Next
 
         End If
@@ -704,9 +733,10 @@ Public Class Wave
         If (Not IsNothing(ASC.Zeitreihen)) Then
 
             For i = 0 To ASC.Zeitreihen.GetUpperBound(0)
-                Call Me.Display_Series(ASC.Zeitreihen(i))
                 'Serie abspeichern
-                Me.Zeitreihen.Add(ASC.Zeitreihen(i))
+                Me.AddZeitreihe(ASC.Zeitreihen(i))
+                'Serie anzeigen
+                Call Me.Display_Series(ASC.Zeitreihen(i))
             Next
 
         End If
@@ -762,9 +792,10 @@ Public Class Wave
         If (Not IsNothing(CSV.Zeitreihen)) Then
 
             For i = 0 To CSV.Zeitreihen.GetUpperBound(0)
-                Call Me.Display_Series(CSV.Zeitreihen(i))
                 ' Serie abspeichern
-                Me.Zeitreihen.Add(CSV.Zeitreihen(i))
+                Me.AddZeitreihe(CSV.Zeitreihen(i))
+                'Serie anzeigen
+                Call Me.Display_Series(CSV.Zeitreihen(i))
             Next
 
         End If
