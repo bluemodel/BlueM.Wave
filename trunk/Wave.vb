@@ -28,6 +28,7 @@ Public Class Wave
     'Interne Zeitreihen-Collection
     Private Zeitreihen As Collection
 
+    'Dateifilter
     Private Const FileFilter_TEN As String = "TeeChart-Dateien (*.ten)|*.ten"
     Private Const FileFilter_Import As String = _
             "Alle Dateien (*.*)|*.*|" & _
@@ -40,8 +41,9 @@ Public Class Wave
 
     'Chart-Zeugs
     Private WithEvents colorBand1 As Steema.TeeChart.Tools.ColorBand
-    Private selectionMade As Boolean                                    'Flag zeigt an, ob bereits ein Auswahlbereich ausgewählt wurde
+    Private selectionMade As Boolean 'Flag zeigt an, ob bereits ein Auswahlbereich ausgewählt wurde
     Private MyAxes1, MyAxes2 As Dictionary(Of String, Steema.TeeChart.Axis)
+    Private WithEvents ChartListBox1 As Steema.TeeChart.ChartListBox
 
     'Methoden
     '########
@@ -63,6 +65,7 @@ Public Class Wave
 
         'Charts einrichten
         '-----------------
+        Me.ChartListBox1 = New Steema.TeeChart.ChartListBox()
         Call Me.Init_Charts()
 
         'Logfenster nur beim ersten Mal instanzieren
@@ -159,6 +162,9 @@ Public Class Wave
         Me.TChart2.Legend.CheckBoxes = True
         Me.TChart2.Legend.FontSeriesColor = True
 
+        'ChartListBox
+        Me.ChartListBox1.Chart = Me.TChart1
+
         'ColorBand einrichten
         Me.selectionMade = False
         Call Me.Init_ColorBand()
@@ -243,6 +249,39 @@ Public Class Wave
     '*******************
     Private Sub TChart2_DoubleClick(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TChart2.DoubleClick
         Me.TChart2.ShowEditor()
+    End Sub
+
+    'Eine Serie wurde im Editor gelöscht
+    '***********************************
+    Private Sub SeriesDeleted(ByVal sender As Object, ByVal e As System.EventArgs) Handles ChartListBox1.RemovedSeries
+
+        Dim found As Boolean
+
+        'Alle internen Zeitreihen durchlaufen und prüfen, ob es sie noch gibt
+        For Each zre As Zeitreihe In Me.Zeitreihen
+            found = False
+            For Each s As Steema.TeeChart.Styles.Series In Me.ChartListBox1.Items
+                If (s.Title = zre.Title) Then
+                    found = True
+                    Exit For
+                End If
+            Next
+            'Nicht gefundene löschen
+            If (Not found) Then
+
+                'Aus der internen Collection löschen
+                Me.Zeitreihen.Remove(zre.Title)
+
+                'Aus der Übersicht löschen
+                For Each s As Steema.TeeChart.Styles.Series In Me.TChart2.Series
+                    If (s.Title = zre.Title) Then
+                        Call Me.TChart2.Series.Remove(s)
+                        Exit For
+                    End If
+                Next
+            End If
+        Next
+
     End Sub
 
 #End Region 'Chart behavior'
