@@ -215,7 +215,7 @@ Public Class Zeitreihe
     ''' <summary>
     ''' Einen Wert aus einer Zeitreihe berechnen
     ''' </summary>
-    ''' <param name="WertTyp">MaxWert, MinWert, Average, AnfWert, EndWert</param>
+    ''' <param name="WertTyp">MaxWert, MinWert, Average, AnfWert, EndWert, Summe</param>
     ''' <returns>der berechnete Wert</returns>
     Public Function getWert(ByVal WertTyp As String) As Double
 
@@ -252,6 +252,12 @@ Public Class Zeitreihe
 
             Case "EndWert"
                 Wert = Me.YWerte(Me.Length - 1)
+
+            Case "Summe"
+                Wert = 0
+                For i = 0 To Me.Length - 1
+                    Wert += Me.YWerte(i)
+                Next
 
             Case Else
                 Throw New Exception("Der Werttyp '" & WertTyp & "' wird nicht unterstützt!")
