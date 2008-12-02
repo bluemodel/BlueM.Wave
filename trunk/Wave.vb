@@ -135,9 +135,22 @@ Public Class Wave
         'Charts zurücksetzen
         Me.TChart1.Clear()
         Me.TChart1.Aspect.View3D = False
+        Me.TChart1.BackColor = Color.White
+        Me.TChart1.Panel.Gradient.Visible = False
+        Me.TChart1.Panel.Brush.Color = Color.White
+        Me.TChart1.Walls.Back.Transparent = False
+        Me.TChart1.Walls.Back.Gradient.Visible = False
+        Me.TChart1.Walls.Back.Color = Color.White
+
         Me.TChart2.Clear()
         Me.TChart2.Aspect.View3D = False
         Me.TChart2.Header.Visible = False
+        Me.TChart2.BackColor = Color.White
+        Me.TChart2.Panel.Gradient.Visible = False
+        Me.TChart2.Panel.Brush.Color = Color.White
+        Me.TChart2.Walls.Back.Transparent = False
+        Me.TChart2.Walls.Back.Gradient.Visible = False
+        Me.TChart2.Walls.Back.Color = Color.White
 
         'Übersicht darf nicht gescrolled oder gezoomt werden
         Me.TChart2.Zoom.Allow = False
