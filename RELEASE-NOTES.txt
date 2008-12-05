@@ -8,7 +8,7 @@ Website: http://130.83.196.154/BlueM/wiki/index.php/Wave
 Version 1.x
 -----------
 New:
-* Analysefunktionen: Doppelsummenanalyse, GoodnessOfFit
+* Analysefunktionen: Doppelsummenanalyse, GoodnessOfFit, Statistik
 * Serien werden automatisch anhand ihrer Einheiten auf verschiedene Achsen verteilt
 
 Fixed:
