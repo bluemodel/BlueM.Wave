@@ -102,6 +102,13 @@ Namespace My.Resources
             End Get
         End Property
         
+        Friend ReadOnly Property log() As System.Drawing.Icon
+            Get
+                Dim obj As Object = ResourceManager.GetObject("log", resourceCulture)
+                Return CType(obj,System.Drawing.Icon)
+            End Get
+        End Property
+        
         Friend ReadOnly Property page_paste() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("page_paste", resourceCulture)

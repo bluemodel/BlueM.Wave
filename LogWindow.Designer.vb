@@ -100,7 +100,7 @@ Partial Class LogWindow
         Me.MaximizeBox = False
         Me.Name = "LogWindow"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = "Log"
+        Me.Text = "WaveLog"
         ToolStrip1.ResumeLayout(False)
         ToolStrip1.PerformLayout()
         Me.ResumeLayout(False)
