@@ -5,12 +5,12 @@
 Public Class Statistik
     Inherits Analysis
 
-    Private Const AnzKlassen As Integer = 20
+    Private Const AnzKlassen As Integer = 100
+    Dim klassengrösse As Double
+    Dim klassen As Double()
 
     Private Structure ErgebnisWerte
         Dim Titel As String
-        Dim klassen As Double()
-        Dim klassengrösse As Double
         Dim häufigkeiten, summenhäufigkeiten As Integer()
         Dim menge As Integer
         Dim wahrscheinlichkeiten As Double()
@@ -79,25 +79,35 @@ Public Class Statistik
         Dim i, j, n As Integer
         Dim min, max As Double
 
-        'Alle Zeitreihen durchlaufen
-        n = 0
+        'Min und max aller Zeitreihen bestimmen
+        '--------------------------------------
+        min = Double.MaxValue
+        max = Double.MinValue
         For Each zre As Zeitreihe In Me.mZeitreihen
 
-            'Min und Max bestimmen
-            min = zre.getWert("MinWert")
-            max = zre.getWert("MaxWert")
+            'Min und Max
+            min = Math.Min(min, zre.getWert("MinWert"))
+            max = Math.Max(max, zre.getWert("MaxWert"))
+
+        Next
+
+        'Klassenaufteilung
+        '-----------------
+        ReDim Me.klassen(AnzKlassen - 1)
+        Me.klassengrösse = (max - min) / (AnzKlassen)
+        For i = 0 To AnzKlassen - 1
+            Me.klassen(i) = min + i * Me.klassengrösse
+        Next
+
+        'Zeitreihen analysieren
+        '----------------------
+        n = 0
+        For Each zre As Zeitreihe In Me.mZeitreihen
 
             With Me.Ergebnisse(n)
 
                 'Titel
                 .Titel = zre.Title
-
-                'Klassenaufteilung
-                ReDim .klassen(AnzKlassen - 1)
-                .klassengrösse = (max - min) / (AnzKlassen)
-                For i = 0 To AnzKlassen - 1
-                    .klassen(i) = min + i * .klassengrösse
-                Next
 
                 'Häufigkeiten bestimmen
                 '----------------------
@@ -108,8 +118,8 @@ Public Class Statistik
                     For j = 0 To AnzKlassen - 1
                         'NaN-Werte überspringen
                         If (zre.YWerte(i) <> Konstanten.NaN) Then
-                            If (zre.YWerte(i) >= .klassen(j) And zre.YWerte(i) < (.klassen(j) + .klassengrösse)) Then
-                                'Klasse gefunden
+                            If (zre.YWerte(i) >= Me.klassen(j) And zre.YWerte(i) < (Me.klassen(j) + Me.klassengrösse)) Then
+                                'Klasse gefunden: Häufigkeit hochzählen
                                 .häufigkeiten(j) += 1
                                 Exit For
                             End If
@@ -117,7 +127,7 @@ Public Class Statistik
                     Next
                 Next
 
-                'Häufigkeiten zusammenzählen
+                'Gesamtmenge bestimmen
                 .menge = 0
                 For i = 0 To AnzKlassen - 1
                     .menge += .häufigkeiten(i)
@@ -155,15 +165,12 @@ Public Class Statistik
 
         'Ergebnistext
         '------------
-        Me.mResultText = "Statistik wurde berechnet:" & eol & eol
+        Me.mResultText = "Statistik wurde berechnet:" & eol
         Me.mResultText &= "Folgende Klassenaufteilung wurde verwendet:" & eol & eol
-        For Each erg As ErgebnisWerte In Me.Ergebnisse
-            Me.mResultText &= erg.Titel & ":" & eol
-            For i As Integer = 0 To AnzKlassen - 1
-                Me.mResultText &= "Klasse " & i + 1 & ": " & erg.klassen(i) & " - " & (erg.klassen(i) + erg.klassengrösse) & eol
-            Next
-            Me.mResultText &= eol
+        For i As Integer = 0 To AnzKlassen - 1
+            Me.mResultText &= "Klasse " & i + 1 & ": " & Me.klassen(i) & " - " & (Me.klassen(i) + Me.klassengrösse) & eol
         Next
+        Me.mResultText &= eol
 
         'Ergebniswerte
         '-------------
@@ -205,7 +212,7 @@ Public Class Statistik
             serieP.Marks.Visible = False
 
             For i As Integer = 0 To AnzKlassen - 1
-                serieP.Add(erg.klassen(i) + erg.klassengrösse / 2, erg.wahrscheinlichkeiten(i), erg.klassen(i).ToString)
+                serieP.Add(Me.klassen(i) + Me.klassengrösse / 2, erg.wahrscheinlichkeiten(i), "Klasse " & (i + 1).ToString & ": " & erg.wahrscheinlichkeiten(i).ToString("F2") & "%")
             Next
 
             Dim seriePU As New Steema.TeeChart.Styles.Line(Me.mResultChart)
@@ -218,7 +225,7 @@ Public Class Statistik
             seriePU.Pointer.VertSize = 2
 
             For i As Integer = 0 To AnzKlassen - 1
-                seriePU.Add(erg.klassen(i) + erg.klassengrösse / 2, erg.PU(i), erg.klassen(i).ToString)
+                seriePU.Add(Me.klassen(i) + Me.klassengrösse / 2, erg.PU(i), "Klasse " & (i + 1).ToString & ": " & erg.PU(i).ToString("F2") & "%")
             Next
 
         Next
