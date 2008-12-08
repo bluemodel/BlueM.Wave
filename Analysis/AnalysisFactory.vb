@@ -11,6 +11,7 @@ Module AnalysisFactory
         Doppelsummenalyse = 2
         GoodnessOfFit = 3
         Statistik = 4
+        Gegenueberstellung = 5
     End Enum
 
     ''' <summary>
@@ -36,6 +37,9 @@ Module AnalysisFactory
 
             Case AnalysisFunctions.Statistik
                 oAnalysis = New Statistik(zeitreihen)
+
+            Case AnalysisFunctions.Gegenueberstellung
+                oAnalysis = New Gegenueberstellung(zeitreihen)
 
             Case Else
                 Throw New Exception("Analysefunktion nicht gefunden!")

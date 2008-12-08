@@ -69,6 +69,7 @@
     </Compile>
     <Compile Include="Analysis\Analysis.vb" />
     <Compile Include="Analysis\AnalysisHelper.vb" />
+    <Compile Include="Analysis\Gegenueberstellung.vb" />
     <Compile Include="Analysis\Statistik.vb" />
     <Compile Include="Analysis\Doppelsummenanalyse.vb" />
     <Compile Include="Analysis\Monatsauswertung.vb" />
