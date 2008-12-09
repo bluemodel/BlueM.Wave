@@ -25,6 +25,7 @@ Partial Class Gegenueberstellung_Dialog
         Me.RadioButton_Reihe1 = New System.Windows.Forms.RadioButton
         Me.RadioButton_Reihe2 = New System.Windows.Forms.RadioButton
         Me.Label1 = New System.Windows.Forms.Label
+        Me.Button_OK = New System.Windows.Forms.Button
         Me.SuspendLayout()
         '
         'RadioButton_Reihe1
@@ -59,11 +60,22 @@ Partial Class Gegenueberstellung_Dialog
         Me.Label1.TabIndex = 2
         Me.Label1.Text = "Label1"
         '
+        'Button_OK
+        '
+        Me.Button_OK.DialogResult = System.Windows.Forms.DialogResult.OK
+        Me.Button_OK.Location = New System.Drawing.Point(30, 113)
+        Me.Button_OK.Name = "Button_OK"
+        Me.Button_OK.Size = New System.Drawing.Size(75, 23)
+        Me.Button_OK.TabIndex = 3
+        Me.Button_OK.Text = "OK"
+        Me.Button_OK.UseVisualStyleBackColor = True
+        '
         'Gegenueberstellung_Dialog
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(846, 165)
+        Me.Controls.Add(Me.Button_OK)
         Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.RadioButton_Reihe2)
         Me.Controls.Add(Me.RadioButton_Reihe1)
@@ -76,4 +88,5 @@ Partial Class Gegenueberstellung_Dialog
     Friend WithEvents RadioButton_Reihe1 As System.Windows.Forms.RadioButton
     Friend WithEvents RadioButton_Reihe2 As System.Windows.Forms.RadioButton
     Friend WithEvents Label1 As System.Windows.Forms.Label
+    Friend WithEvents Button_OK As System.Windows.Forms.Button
 End Class

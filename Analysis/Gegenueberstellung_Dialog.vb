@@ -24,7 +24,7 @@
 
     End Sub
 
-    Private Sub Button1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
+    Private Sub Button1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button_OK.Click
         If (Not RadioButton_Reihe1.Checked And Not RadioButton_Reihe2.Checked) Then
             MsgBox("Bitte eine Zeitreihe als x-Achse auswählen!")
             Me.DialogResult = Windows.Forms.DialogResult.None
