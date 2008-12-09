@@ -5,8 +5,10 @@
 Public Class Gegenueberstellung
     Inherits Analysis
 
-    Dim ergebnisreihe(,) As Double
     Dim datume() As DateTime
+    Dim ergebnisreihe(,) As Double ' Ergebnis der Gegenueberstellung: y-Werte der Reihe(xnummer) werden x-Achsen-Werte, y-Werte der Reihe(ynummer) werden y-Achsen-Werte  
+    Dim xnummer As Integer ' Nummer mit der auf mZeitreihen(i) zugegriffen wird, xnummer = Zeitreihe soll auf x-Achse
+    Dim ynummer As Integer ' Nummer mit der auf mZeitreihen(i) zugegriffen wird, xnummer = Zeitreihe soll auf y-Achse
 
     ''' <summary>
     ''' Flag, der anzeigt, ob die Analysefunktion einen Ergebnistext erzeugt
@@ -59,26 +61,44 @@ Public Class Gegenueberstellung
         Dim reihe1, reihe2 As Zeitreihe
         Dim values(,) As Double
 
-        reihe1 = Me.mZeitreihen(1)
-        reihe2 = Me.mZeitreihen(2)
+        ' Dialogaufruf zur Auswahl der x-Achse
+        Dim dialog As New Gegenueberstellung_Dialog(Me.mZeitreihen(1).title, Me.mZeitreihen(2).title)
 
-        'nur gemeinsame Stützstellen nutzen
-        values = AnalysisHelper.getConcurrentValues(reihe1, reihe2)
-        If (values.GetUpperBound(0) + 1 < reihe1.Length) Then  ' + Weil value-Array von 0 zählt
-            MessageBox.Show("ACHTUNG: Es wurden Werte entfernt!")
+        ' Nur wenn eine Zeitreihe als x-Aschse gewählt wurde, gehts los
+        If (dialog.ShowDialog() = DialogResult.OK) Then
+
+            ' Zuweisen der x-Achse
+            Dim xachse As String
+            xachse = dialog.xAchse
+            If (xachse = Me.mZeitreihen(1).title) Then
+                xnummer = 1
+                ynummer = 2
+            Else
+                xnummer = 2
+                ynummer = 1
+            End If
+            reihe1 = Me.mZeitreihen(xnummer)
+            reihe2 = Me.mZeitreihen(ynummer)
+
+            'Nur gemeinsame Stützstellen nutzen
+            values = AnalysisHelper.getConcurrentValues(reihe1, reihe2)
+            If (values.GetUpperBound(0) + 1 < reihe1.Length) Then  ' + Weil value-Array von 0 zählt
+                MessageBox.Show("ACHTUNG: Es wurden Werte entfernt!")
+            End If
+
+            ' Ergebnisreihe allokieren
+            ReDim Me.ergebnisreihe(values.GetUpperBound(0), 1)
+
+            ' x- und y-Werte der Ergebnisreihe zuweisen
+            For i = 0 To values.GetUpperBound(0)
+                ergebnisreihe(i, 0) = values(i, 0)
+                ergebnisreihe(i, 1) = values(i, 1)
+            Next
+
+            'Datume übernehmen (werden später für Punkte-Labels im Diagramm gebraucht)
+            datume = reihe1.XWerte
+
         End If
-
-        ' Ergebnisreihe allokieren
-        ReDim Me.ergebnisreihe(values.GetUpperBound(0), 1)
-
-        ' x- und y-Werte der Ergebnisreihe zuweisen
-        For i = 0 To values.GetUpperBound(0)
-            ergebnisreihe(i, 0) = values(i, 0)
-            ergebnisreihe(i, 1) = values(i, 1)
-        Next
-
-        'Datume übernehmen (werden später für Punkte-Labels im Diagramm gebraucht)
-        datume = reihe1.XWerte
 
     End Sub
 
@@ -101,21 +121,21 @@ Public Class Gegenueberstellung
 
         Me.mResultChart = New Steema.TeeChart.Chart()
         Me.mResultChart.Aspect.View3D = False
-        Me.mResultChart.Header.Text = "Gegenüberstellung (" & Me.mZeitreihen(1).Title & " / " & Me.mZeitreihen(2).Title & ")"
+        Me.mResultChart.Header.Text = "Gegenüberstellung (" & Me.mZeitreihen(xnummer).Title & " / " & Me.mZeitreihen(ynummer).Title & ")"
         Me.mResultChart.Legend.LegendStyle = Steema.TeeChart.LegendStyles.Series
         Me.mResultChart.Legend.Visible = False
 
         'Achsen
         '------
-        Me.mResultChart.Axes.Bottom.Title.Caption = Me.mZeitreihen(1).Title & " [" & Me.mZeitreihen(1).Einheit & "]"
+        Me.mResultChart.Axes.Bottom.Title.Caption = Me.mZeitreihen(xnummer).Title & " [" & Me.mZeitreihen(xnummer).Einheit & "]"
         Me.mResultChart.Axes.Bottom.Labels.Style = Steema.TeeChart.AxisLabelStyle.Value
-        Me.mResultChart.Axes.Left.Title.Caption = Me.mZeitreihen(2).Title & " [" & Me.mZeitreihen(2).Einheit & "]"
+        Me.mResultChart.Axes.Left.Title.Caption = Me.mZeitreihen(ynummer).Title & " [" & Me.mZeitreihen(ynummer).Einheit & "]"
         Me.mResultChart.Axes.Left.Labels.Style = Steema.TeeChart.AxisLabelStyle.Value
 
         'Reihen
         '------
         gegenueberstellung_linie = New Steema.TeeChart.Styles.Line(Me.mResultChart)
-        gegenueberstellung_linie.Title = "Vergleich" & Me.mZeitreihen(1).Title & " - " & Me.mZeitreihen(2).Title
+        gegenueberstellung_linie.Title = "Vergleich" & Me.mZeitreihen(xnummer).Title & " - " & Me.mZeitreihen(ynummer).Title
         gegenueberstellung_linie.Pointer.Visible = True
         gegenueberstellung_linie.Pointer.Style = Steema.TeeChart.Styles.PointerStyles.Circle
         gegenueberstellung_linie.Pointer.HorizSize = 2
