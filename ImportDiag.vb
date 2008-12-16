@@ -197,4 +197,13 @@ Partial Public Class ImportDiag
 
 #End Region 'Methoden
 
+    'Reihe in den YSpalten suchen
+    '****************************
+    Private Sub TextBox_YSpalte_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TextBox_YSpalte.TextChanged
+
+        Me.ListBox_YSpalten.ClearSelected()
+        Dim index As Integer = Me.ListBox_YSpalten.FindString(Me.TextBox_YSpalte.Text)
+        If index <> -1 Then ListBox_YSpalten.SetSelected(index, True)
+    End Sub
+
 End Class

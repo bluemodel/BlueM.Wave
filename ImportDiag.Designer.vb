@@ -45,6 +45,7 @@ Partial Class ImportDiag
         Me.TextBox_ZeileDaten = New System.Windows.Forms.NumericUpDown
         Me.Label_ZeileDaten = New System.Windows.Forms.Label
         Me.GroupBox_Vorschau = New System.Windows.Forms.GroupBox
+        Me.TextBox_YSpalte = New System.Windows.Forms.TextBox
         Me.GroupBox_Dezimaltrennzeichen = New System.Windows.Forms.GroupBox
         Me.Label_Dezimaltrennzeichen = New System.Windows.Forms.Label
         Me.GroupBox_Spaltenmodus.SuspendLayout()
@@ -69,10 +70,10 @@ Partial Class ImportDiag
         '
         Me.RichTextBox_Vorschau.BackColor = System.Drawing.Color.White
         Me.RichTextBox_Vorschau.Font = New System.Drawing.Font("Courier New", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.RichTextBox_Vorschau.Location = New System.Drawing.Point(12, 50)
+        Me.RichTextBox_Vorschau.Location = New System.Drawing.Point(12, 40)
         Me.RichTextBox_Vorschau.Name = "RichTextBox_Vorschau"
         Me.RichTextBox_Vorschau.ReadOnly = True
-        Me.RichTextBox_Vorschau.Size = New System.Drawing.Size(227, 186)
+        Me.RichTextBox_Vorschau.Size = New System.Drawing.Size(227, 196)
         Me.RichTextBox_Vorschau.TabIndex = 16
         Me.RichTextBox_Vorschau.Text = ""
         Me.RichTextBox_Vorschau.WordWrap = False
@@ -110,16 +111,16 @@ Partial Class ImportDiag
         'ListBox_YSpalten
         '
         Me.ListBox_YSpalten.FormattingEnabled = True
-        Me.ListBox_YSpalten.Location = New System.Drawing.Point(248, 102)
+        Me.ListBox_YSpalten.Location = New System.Drawing.Point(249, 102)
         Me.ListBox_YSpalten.Name = "ListBox_YSpalten"
         Me.ListBox_YSpalten.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended
-        Me.ListBox_YSpalten.Size = New System.Drawing.Size(120, 134)
+        Me.ListBox_YSpalten.Size = New System.Drawing.Size(119, 134)
         Me.ListBox_YSpalten.TabIndex = 18
         '
         'Label_YSpalten
         '
         Me.Label_YSpalten.AutoSize = True
-        Me.Label_YSpalten.Location = New System.Drawing.Point(245, 77)
+        Me.Label_YSpalten.Location = New System.Drawing.Point(245, 79)
         Me.Label_YSpalten.Name = "Label_YSpalten"
         Me.Label_YSpalten.Size = New System.Drawing.Size(56, 13)
         Me.Label_YSpalten.TabIndex = 17
@@ -128,7 +129,7 @@ Partial Class ImportDiag
         'Label_XSpalte
         '
         Me.Label_XSpalte.AutoSize = True
-        Me.Label_XSpalte.Location = New System.Drawing.Point(245, 24)
+        Me.Label_XSpalte.Location = New System.Drawing.Point(246, 24)
         Me.Label_XSpalte.Name = "Label_XSpalte"
         Me.Label_XSpalte.Size = New System.Drawing.Size(50, 13)
         Me.Label_XSpalte.TabIndex = 17
@@ -136,7 +137,7 @@ Partial Class ImportDiag
         '
         'TextBox_XSpalte
         '
-        Me.TextBox_XSpalte.Location = New System.Drawing.Point(248, 50)
+        Me.TextBox_XSpalte.Location = New System.Drawing.Point(248, 40)
         Me.TextBox_XSpalte.Name = "TextBox_XSpalte"
         Me.TextBox_XSpalte.ReadOnly = True
         Me.TextBox_XSpalte.Size = New System.Drawing.Size(120, 20)
@@ -266,6 +267,7 @@ Partial Class ImportDiag
         '
         'GroupBox_Vorschau
         '
+        Me.GroupBox_Vorschau.Controls.Add(Me.TextBox_YSpalte)
         Me.GroupBox_Vorschau.Controls.Add(Me.Label_Datei)
         Me.GroupBox_Vorschau.Controls.Add(Me.RichTextBox_Vorschau)
         Me.GroupBox_Vorschau.Controls.Add(Me.Label_YSpalten)
@@ -278,6 +280,13 @@ Partial Class ImportDiag
         Me.GroupBox_Vorschau.TabIndex = 28
         Me.GroupBox_Vorschau.TabStop = False
         Me.GroupBox_Vorschau.Text = "Vorschau"
+        '
+        'TextBox_YSpalte
+        '
+        Me.TextBox_YSpalte.Location = New System.Drawing.Point(307, 76)
+        Me.TextBox_YSpalte.Name = "TextBox_YSpalte"
+        Me.TextBox_YSpalte.Size = New System.Drawing.Size(61, 20)
+        Me.TextBox_YSpalte.TabIndex = 23
         '
         'GroupBox_Dezimaltrennzeichen
         '
@@ -353,4 +362,5 @@ Partial Class ImportDiag
     Friend WithEvents CheckBox_Einheiten As System.Windows.Forms.CheckBox
     Friend WithEvents GroupBox_Dezimaltrennzeichen As System.Windows.Forms.GroupBox
     Friend WithEvents Label_Dezimaltrennzeichen As System.Windows.Forms.Label
+    Friend WithEvents TextBox_YSpalte As System.Windows.Forms.TextBox
 End Class
