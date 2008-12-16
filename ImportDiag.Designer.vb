@@ -22,6 +22,7 @@ Partial Class ImportDiag
     'Das Bearbeiten mit dem Code-Editor ist nicht möglich.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
+        Me.components = New System.ComponentModel.Container
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(ImportDiag))
         Me.Label_Datei = New System.Windows.Forms.Label
         Me.RichTextBox_Vorschau = New System.Windows.Forms.RichTextBox
@@ -48,6 +49,7 @@ Partial Class ImportDiag
         Me.TextBox_YSpalte = New System.Windows.Forms.TextBox
         Me.GroupBox_Dezimaltrennzeichen = New System.Windows.Forms.GroupBox
         Me.Label_Dezimaltrennzeichen = New System.Windows.Forms.Label
+        Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
         Me.GroupBox_Spaltenmodus.SuspendLayout()
         CType(Me.TextBox_ZeileÜberschriften, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.GroupBox_Einstellungen.SuspendLayout()
@@ -68,6 +70,9 @@ Partial Class ImportDiag
         '
         'RichTextBox_Vorschau
         '
+        Me.RichTextBox_Vorschau.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+                    Or System.Windows.Forms.AnchorStyles.Left) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.RichTextBox_Vorschau.BackColor = System.Drawing.Color.White
         Me.RichTextBox_Vorschau.Font = New System.Drawing.Font("Courier New", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.RichTextBox_Vorschau.Location = New System.Drawing.Point(12, 40)
@@ -90,6 +95,7 @@ Partial Class ImportDiag
         '
         'Button_OK
         '
+        Me.Button_OK.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Button_OK.DialogResult = System.Windows.Forms.DialogResult.OK
         Me.Button_OK.Location = New System.Drawing.Point(230, 443)
         Me.Button_OK.Name = "Button_OK"
@@ -100,6 +106,7 @@ Partial Class ImportDiag
         '
         'Button_Cancel
         '
+        Me.Button_Cancel.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Button_Cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel
         Me.Button_Cancel.Location = New System.Drawing.Point(311, 443)
         Me.Button_Cancel.Name = "Button_Cancel"
@@ -110,6 +117,8 @@ Partial Class ImportDiag
         '
         'ListBox_YSpalten
         '
+        Me.ListBox_YSpalten.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.ListBox_YSpalten.FormattingEnabled = True
         Me.ListBox_YSpalten.Location = New System.Drawing.Point(249, 102)
         Me.ListBox_YSpalten.Name = "ListBox_YSpalten"
@@ -119,6 +128,8 @@ Partial Class ImportDiag
         '
         'Label_YSpalten
         '
+        Me.Label_YSpalten.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Label_YSpalten.AutoSize = True
         Me.Label_YSpalten.Location = New System.Drawing.Point(245, 79)
         Me.Label_YSpalten.Name = "Label_YSpalten"
@@ -128,15 +139,19 @@ Partial Class ImportDiag
         '
         'Label_XSpalte
         '
+        Me.Label_XSpalte.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Label_XSpalte.AutoSize = True
         Me.Label_XSpalte.Location = New System.Drawing.Point(246, 24)
         Me.Label_XSpalte.Name = "Label_XSpalte"
-        Me.Label_XSpalte.Size = New System.Drawing.Size(50, 13)
+        Me.Label_XSpalte.Size = New System.Drawing.Size(106, 13)
         Me.Label_XSpalte.TabIndex = 17
-        Me.Label_XSpalte.Text = "X-Spalte:"
+        Me.Label_XSpalte.Text = "X-Spalte (Zeitachse):"
         '
         'TextBox_XSpalte
         '
+        Me.TextBox_XSpalte.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.TextBox_XSpalte.Location = New System.Drawing.Point(248, 40)
         Me.TextBox_XSpalte.Name = "TextBox_XSpalte"
         Me.TextBox_XSpalte.ReadOnly = True
@@ -187,6 +202,8 @@ Partial Class ImportDiag
         '
         'TextBox_ZeileÜberschriften
         '
+        Me.TextBox_ZeileÜberschriften.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+                    Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.TextBox_ZeileÜberschriften.Location = New System.Drawing.Point(15, 46)
         Me.TextBox_ZeileÜberschriften.Minimum = New Decimal(New Integer() {1, 0, 0, 0})
         Me.TextBox_ZeileÜberschriften.Name = "TextBox_ZeileÜberschriften"
@@ -196,6 +213,8 @@ Partial Class ImportDiag
         '
         'Label_ZeileÜberschriften
         '
+        Me.Label_ZeileÜberschriften.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+                    Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.Label_ZeileÜberschriften.AutoSize = True
         Me.Label_ZeileÜberschriften.Location = New System.Drawing.Point(12, 25)
         Me.Label_ZeileÜberschriften.Name = "Label_ZeileÜberschriften"
@@ -215,6 +234,8 @@ Partial Class ImportDiag
         '
         'GroupBox_Einstellungen
         '
+        Me.GroupBox_Einstellungen.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.GroupBox_Einstellungen.Controls.Add(Me.CheckBox_Einheiten)
         Me.GroupBox_Einstellungen.Controls.Add(Me.TextBox_ZeileEinheiten)
         Me.GroupBox_Einstellungen.Controls.Add(Me.TextBox_ZeileDaten)
@@ -230,6 +251,7 @@ Partial Class ImportDiag
         '
         'CheckBox_Einheiten
         '
+        Me.CheckBox_Einheiten.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom), System.Windows.Forms.AnchorStyles)
         Me.CheckBox_Einheiten.AutoSize = True
         Me.CheckBox_Einheiten.Location = New System.Drawing.Point(151, 24)
         Me.CheckBox_Einheiten.Name = "CheckBox_Einheiten"
@@ -240,6 +262,7 @@ Partial Class ImportDiag
         '
         'TextBox_ZeileEinheiten
         '
+        Me.TextBox_ZeileEinheiten.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom), System.Windows.Forms.AnchorStyles)
         Me.TextBox_ZeileEinheiten.Location = New System.Drawing.Point(151, 46)
         Me.TextBox_ZeileEinheiten.Minimum = New Decimal(New Integer() {1, 0, 0, 0})
         Me.TextBox_ZeileEinheiten.Name = "TextBox_ZeileEinheiten"
@@ -249,6 +272,8 @@ Partial Class ImportDiag
         '
         'TextBox_ZeileDaten
         '
+        Me.TextBox_ZeileDaten.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.TextBox_ZeileDaten.Location = New System.Drawing.Point(284, 46)
         Me.TextBox_ZeileDaten.Minimum = New Decimal(New Integer() {1, 0, 0, 0})
         Me.TextBox_ZeileDaten.Name = "TextBox_ZeileDaten"
@@ -258,6 +283,8 @@ Partial Class ImportDiag
         '
         'Label_ZeileDaten
         '
+        Me.Label_ZeileDaten.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Label_ZeileDaten.AutoSize = True
         Me.Label_ZeileDaten.Location = New System.Drawing.Point(281, 25)
         Me.Label_ZeileDaten.Name = "Label_ZeileDaten"
@@ -267,6 +294,9 @@ Partial Class ImportDiag
         '
         'GroupBox_Vorschau
         '
+        Me.GroupBox_Vorschau.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+                    Or System.Windows.Forms.AnchorStyles.Left) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.GroupBox_Vorschau.Controls.Add(Me.TextBox_YSpalte)
         Me.GroupBox_Vorschau.Controls.Add(Me.Label_Datei)
         Me.GroupBox_Vorschau.Controls.Add(Me.RichTextBox_Vorschau)
@@ -283,13 +313,17 @@ Partial Class ImportDiag
         '
         'TextBox_YSpalte
         '
+        Me.TextBox_YSpalte.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.TextBox_YSpalte.Location = New System.Drawing.Point(307, 76)
         Me.TextBox_YSpalte.Name = "TextBox_YSpalte"
         Me.TextBox_YSpalte.Size = New System.Drawing.Size(61, 20)
         Me.TextBox_YSpalte.TabIndex = 23
+        Me.ToolTip1.SetToolTip(Me.TextBox_YSpalte, "Suche")
         '
         'GroupBox_Dezimaltrennzeichen
         '
+        Me.GroupBox_Dezimaltrennzeichen.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.GroupBox_Dezimaltrennzeichen.Controls.Add(Me.ComboBox_Dezimaltrennzeichen)
         Me.GroupBox_Dezimaltrennzeichen.Controls.Add(Me.Label_Dezimaltrennzeichen)
         Me.GroupBox_Dezimaltrennzeichen.Location = New System.Drawing.Point(260, 12)
@@ -338,29 +372,30 @@ Partial Class ImportDiag
         Me.ResumeLayout(False)
 
     End Sub
-    Friend WithEvents Label_Datei As System.Windows.Forms.Label
-    Friend WithEvents RichTextBox_Vorschau As System.Windows.Forms.RichTextBox
-    Friend WithEvents ComboBox_Trennzeichen As System.Windows.Forms.ComboBox
-    Friend WithEvents Button_OK As System.Windows.Forms.Button
-    Friend WithEvents Button_Cancel As System.Windows.Forms.Button
-    Friend WithEvents ListBox_YSpalten As System.Windows.Forms.ListBox
-    Friend WithEvents Label_YSpalten As System.Windows.Forms.Label
-    Friend WithEvents Label_XSpalte As System.Windows.Forms.Label
-    Friend WithEvents TextBox_XSpalte As System.Windows.Forms.TextBox
-    Friend WithEvents RadioButton_Spaltenbreite As System.Windows.Forms.RadioButton
-    Friend WithEvents RadioButton_Zeichengetrennt As System.Windows.Forms.RadioButton
-    Friend WithEvents GroupBox_Spaltenmodus As System.Windows.Forms.GroupBox
-    Friend WithEvents TextBox_Spaltenbreite As System.Windows.Forms.TextBox
-    Friend WithEvents TextBox_ZeileÜberschriften As System.Windows.Forms.NumericUpDown
-    Friend WithEvents Label_ZeileÜberschriften As System.Windows.Forms.Label
-    Friend WithEvents ComboBox_Dezimaltrennzeichen As System.Windows.Forms.ComboBox
-    Friend WithEvents GroupBox_Einstellungen As System.Windows.Forms.GroupBox
-    Friend WithEvents GroupBox_Vorschau As System.Windows.Forms.GroupBox
-    Friend WithEvents TextBox_ZeileEinheiten As System.Windows.Forms.NumericUpDown
-    Friend WithEvents TextBox_ZeileDaten As System.Windows.Forms.NumericUpDown
-    Friend WithEvents Label_ZeileDaten As System.Windows.Forms.Label
-    Friend WithEvents CheckBox_Einheiten As System.Windows.Forms.CheckBox
-    Friend WithEvents GroupBox_Dezimaltrennzeichen As System.Windows.Forms.GroupBox
-    Friend WithEvents Label_Dezimaltrennzeichen As System.Windows.Forms.Label
-    Friend WithEvents TextBox_YSpalte As System.Windows.Forms.TextBox
+    Private WithEvents GroupBox_Einstellungen As System.Windows.Forms.GroupBox
+    Private WithEvents GroupBox_Spaltenmodus As System.Windows.Forms.GroupBox
+    Private WithEvents Button_OK As System.Windows.Forms.Button
+    Private WithEvents Button_Cancel As System.Windows.Forms.Button
+    Private WithEvents GroupBox_Vorschau As System.Windows.Forms.GroupBox
+    Private WithEvents GroupBox_Dezimaltrennzeichen As System.Windows.Forms.GroupBox
+    Private WithEvents Label_Datei As System.Windows.Forms.Label
+    Private WithEvents RichTextBox_Vorschau As System.Windows.Forms.RichTextBox
+    Private WithEvents ComboBox_Trennzeichen As System.Windows.Forms.ComboBox
+    Private WithEvents ListBox_YSpalten As System.Windows.Forms.ListBox
+    Private WithEvents Label_YSpalten As System.Windows.Forms.Label
+    Private WithEvents Label_XSpalte As System.Windows.Forms.Label
+    Private WithEvents TextBox_XSpalte As System.Windows.Forms.TextBox
+    Private WithEvents RadioButton_Spaltenbreite As System.Windows.Forms.RadioButton
+    Private WithEvents RadioButton_Zeichengetrennt As System.Windows.Forms.RadioButton
+    Private WithEvents TextBox_Spaltenbreite As System.Windows.Forms.TextBox
+    Private WithEvents TextBox_ZeileÜberschriften As System.Windows.Forms.NumericUpDown
+    Private WithEvents Label_ZeileÜberschriften As System.Windows.Forms.Label
+    Private WithEvents ComboBox_Dezimaltrennzeichen As System.Windows.Forms.ComboBox
+    Private WithEvents TextBox_ZeileEinheiten As System.Windows.Forms.NumericUpDown
+    Private WithEvents TextBox_ZeileDaten As System.Windows.Forms.NumericUpDown
+    Private WithEvents Label_ZeileDaten As System.Windows.Forms.Label
+    Private WithEvents CheckBox_Einheiten As System.Windows.Forms.CheckBox
+    Private WithEvents Label_Dezimaltrennzeichen As System.Windows.Forms.Label
+    Private WithEvents TextBox_YSpalte As System.Windows.Forms.TextBox
+    Private WithEvents ToolTip1 As System.Windows.Forms.ToolTip
 End Class
