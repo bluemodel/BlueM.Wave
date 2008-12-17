@@ -38,7 +38,8 @@ Public Class Wave
             "WEL-Dateien (*.wel, *.kwl)|*.wel;*.kwl|" & _
             "RVA-Dateien (*.rva)|*.rva|" & _
             "SMUSI-Dateien (*.asc)|*.asc|" & _
-            "SIMBA-Dateien (*.smb)|*.smb"
+            "SIMBA-Dateien (*.smb)|*.smb|" & _
+            "Hystem-Dateien (*.dat)|*.dat"
 
     'Chart-Zeugs
     Private WithEvents colorBand1 As Steema.TeeChart.Tools.ColorBand
@@ -436,6 +437,9 @@ Public Class Wave
                 Case Dateiformate.ZRE
                     Me.SaveFileDialog1.DefaultExt = "zre"
                     Me.SaveFileDialog1.Filter = "ZRE-Dateien (*.zre)|*.zre"
+                Case Dateiformate.REG
+                    Me.SaveFileDialog1.DefaultExt = "reg"
+                    Me.SaveFileDialog1.Filter = "ZRE-Dateien (*.reg)|*.reg"
             End Select
             Me.SaveFileDialog1.Filter &= "|Alle Dateien (*.*)|*.*"
             Me.SaveFileDialog1.FilterIndex = 1
@@ -450,6 +454,11 @@ Public Class Wave
                         For Each item As Object In ExportDiag.ListBox_Zeitreihen.SelectedItems
                             Reihe = CType(item, Zeitreihe)
                             Call ZRE.Write_File(Reihe, Me.SaveFileDialog1.FileName)
+                        Next
+                    Case Dateiformate.REG
+                        For Each item As Object In ExportDiag.ListBox_Zeitreihen.SelectedItems
+                            Reihe = CType(item, Zeitreihe)
+                            Call REG.Write_File(Reihe, Me.SaveFileDialog1.FileName)
                         Next
                     Case Else
                         MsgBox("Noch nicht implementiert!", MsgBoxStyle.Exclamation, "Wave")
@@ -704,7 +713,10 @@ Public Class Wave
                     Call Me.Import_RVA(file)
 
                 Case ".SMB"
-                    Call Me.import_SMB(file)
+                    Call Me.Import_SMB(file)
+
+                Case ".DAT"
+                    Call Me.Import_REG(file)
 
                 Case ".TEN"
                     Call Me.Open_TEN(file)
@@ -730,12 +742,6 @@ Public Class Wave
 
         'ZRE-Objekt instanzieren
         Dim ZRE As New ZRE(FileName)
-
-        'Sofort Spalten auslesen (bei ZRE kein ImportDialog!)
-        Call ZRE.SpaltenAuslesen()
-
-        'ZRE einlesen
-        Call ZRE.Read_File()
 
         'Serie abspeichern
         Me.AddZeitreihe(ZRE.Zeitreihen(0))
@@ -798,24 +804,34 @@ Public Class Wave
         End If
 
     End Sub
+
    'SMB-Datei importieren
     '*********************
     Private Sub Import_SMB(ByVal FileName As String)
 
-        'ZRE-Objekt instanzieren
+        'SMB-Objekt instanzieren
         Dim SMB As New SMB(FileName)
-
-        'Sofort Spalten auslesen (bei ZRE kein ImportDialog!)
-        Call SMB.SpaltenAuslesen()
-
-        'ZRE einlesen
-        Call SMB.Read_File()
 
         'Serie abspeichern
         Me.AddZeitreihe(SMB.Zeitreihen(0))
 
         'Serie zeichnen
         Call Me.Display_Series(SMB.Zeitreihen(0))
+
+    End Sub
+
+    'REG-Datei importieren
+    '*********************
+    Private Sub Import_REG(ByVal FileName As String)
+
+        'ZRE-Objekt instanzieren
+        Dim REG As New REG(FileName)
+
+        'Serie abspeichern
+        Me.AddZeitreihe(REG.Zeitreihen(0))
+
+        'Serie zeichnen
+        Call Me.Display_Series(REG.Zeitreihen(0))
 
     End Sub
 

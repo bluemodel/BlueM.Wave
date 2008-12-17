@@ -28,6 +28,7 @@ Module Konstanten
         WEL = 2
         CSV = 3
         ASC = 4
+        REG = 5
     End Enum
 
     ''' <summary>
