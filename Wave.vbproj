@@ -95,6 +95,7 @@
     </Compile>
     <Compile Include="Dateiformate\ASC.vb">
     </Compile>
+    <Compile Include="Dateiformate\SMB.vb" />
     <Compile Include="Dateiformate\Dateiformat.vb" />
     <Compile Include="Dateiformate\RVA.vb" />
     <Compile Include="My Project\ApplicationEvents.vb" />

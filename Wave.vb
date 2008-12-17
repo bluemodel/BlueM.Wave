@@ -37,7 +37,8 @@ Public Class Wave
             "ZRE-Dateien (*.zre)|*.zre|" & _
             "WEL-Dateien (*.wel, *.kwl)|*.wel;*.kwl|" & _
             "RVA-Dateien (*.rva)|*.rva|" & _
-            "SMUSI-Dateien (*.asc)|*.asc"
+            "SMUSI-Dateien (*.asc)|*.asc|" & _
+            "SIMBA-Dateien (*.smb)|*.smb"
 
     'Chart-Zeugs
     Private WithEvents colorBand1 As Steema.TeeChart.Tools.ColorBand
@@ -702,6 +703,9 @@ Public Class Wave
                 Case ".RVA"
                     Call Me.Import_RVA(file)
 
+                Case ".SMB"
+                    Call Me.import_SMB(file)
+
                 Case ".TEN"
                     Call Me.Open_TEN(file)
 
@@ -792,6 +796,26 @@ Public Class Wave
             Next
 
         End If
+
+    End Sub
+   'SMB-Datei importieren
+    '*********************
+    Private Sub Import_SMB(ByVal FileName As String)
+
+        'ZRE-Objekt instanzieren
+        Dim SMB As New SMB(FileName)
+
+        'Sofort Spalten auslesen (bei ZRE kein ImportDialog!)
+        Call SMB.SpaltenAuslesen()
+
+        'ZRE einlesen
+        Call SMB.Read_File()
+
+        'Serie abspeichern
+        Me.AddZeitreihe(SMB.Zeitreihen(0))
+
+        'Serie zeichnen
+        Call Me.Display_Series(SMB.Zeitreihen(0))
 
     End Sub
 
