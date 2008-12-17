@@ -135,7 +135,7 @@ Public Class SMB
                 Next
                 'Minute = Zeile.Substring(0, 3)
                 Datum = Anfangsdatum.AddMinutes(Minute)
-                Debug.Print(Datum)
+                'Debug.Print(Datum)
 
                 'Datum und Wert zur Zeitreihe hinzufügen
                 '---------------------------------------
