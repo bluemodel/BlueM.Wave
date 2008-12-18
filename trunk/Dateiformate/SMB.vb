@@ -7,7 +7,6 @@ Imports System.IO
 Public Class SMB
     Inherits Dateiformat
 
-    Const DatumsformatSMB As String = "yyyyMMdd HH:mm"
 
 #Region "Methoden"
 

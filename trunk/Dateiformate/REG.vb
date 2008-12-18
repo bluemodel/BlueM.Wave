@@ -3,26 +3,60 @@ Imports System.IO
 ''' <summary>
 ''' Klasse für das REG-Dateiformat (Hystem-Extran-Regendaten)
 ''' </summary>
-''' <remarks>Format siehe http://130.83.196.154/BlueM/wiki/index.php/DAT-Format</remarks>
+''' <remarks>Format siehe http://130.83.196.154/BlueM/wiki/index.php/REG-Format</remarks>
 Public Class REG
     Inherits Dateiformat
 
     Const DatumsformatREG As String = "ddMMyyyyHHmmss"
-    Const AnzZeichen As Integer = 5   'Anzahl der Zeichen für ein Wert in der reg/dat-Datei
+    Const LenString As Integer = 5   'Länge des Strings eines Wertes in der reg/dat-Datei
+    Const iDim As Integer = 3        'Dezimalfaktor wird erstmal global auf 3 gesetzt
 
 #Region "Eigenschaften"
 
     'Eigenschaften
     '#############
 
-    Private Zeitintervall As Integer
-    Private AnzZeilenWerte As Integer
-    Private DezFaktor As Integer
+    Private _Zeitintervall As Integer
+    Private _WerteProZeile As Integer
+    Private _DezFaktor As Integer
 
 #End Region
 
 #Region "Properties"
 
+   Public Property Zeitintervall() As Integer
+      Get
+         Return _Zeitintervall
+      End Get
+      Set(ByVal value As Integer)
+         _Zeitintervall = value
+      End Set
+   End Property
+
+   Public Property DezFaktor() As Integer
+      Get
+         Return _DezFaktor
+      End Get
+      Set(ByVal value As Integer)
+         _DezFaktor = value
+      End Set
+   End Property
+
+   Public Property WerteProZeile(ByVal dt As Integer) As Integer
+      Get
+         Select Case dt  'siehe KN-Anwenderhandbuch S.384
+            Case 1, 5, 10, 15, 20, 30, 60, 120
+               Return 12
+            Case 2, 3
+               Return 10
+            Case 720
+               Return 2
+         End Select
+      End Get
+      Set(ByVal value As Integer)
+         _WerteProZeile = value
+      End Set
+   End Property
 
 #End Region
 
@@ -77,13 +111,6 @@ Public Class REG
             'Zeitintervall auslesen
             Me.Zeitintervall = Convert.ToSingle(Zeile.Substring(23, 2).Trim)
 
-            Select Case Me.Zeitintervall
-               Case 5
-                  Me.AnzZeilenWerte = 12
-               Case Else
-            End Select
-
-
             'Reihentitel steht in 3. Zeile:
             Zeile = StrReadSync.ReadLine.ToString()
 
@@ -133,7 +160,7 @@ Public Class REG
         ReDim Me.Zeitreihen(0) 'bei REG gibt es nur eine Zeitreihe
         Me.Zeitreihen(0) = New Zeitreihe(Me.SpaltenSel(0))
         Me.Zeitreihen(0).Einheit = Me.Einheiten(0)
-        Me.Zeitreihen(0).Length = (AnzZeilen - Me.nZeilenHeader - 1) * AnzZeilenWerte
+        Me.Zeitreihen(0).Length = (AnzZeilen - Me.nZeilenHeader - 1) * Me.WerteProZeile(Me.Zeitintervall)
 
         'Datei wieder auf Anfang setzen und einlesen
         FiStr.Seek(0, SeekOrigin.Begin)
@@ -160,10 +187,10 @@ Public Class REG
                 '---------------------------------------
                 'alle bis auf den letzten Wert einlesen
                 'beim letzten Wert besteht die Möglichkeit, dass nicht alle Zeichen belegt sind
-                For i = 0 To AnzZeilenWerte - 1
+                For i = 0 To Me.WerteProZeile(Me.Zeitintervall) - 1
                    Datum = Zeilendatum.AddMinutes(i * Me.Zeitintervall)
                    Me.Zeitreihen(0).XWerte(n) = Datum
-                   Me.Zeitreihen(0).YWerte(n) = StringToDouble(Zeile.Substring(20 + AnzZeichen * i, AnzZeichen)) * 10 ^ (-DezFaktor)
+                   Me.Zeitreihen(0).YWerte(n) = StringToDouble(Zeile.Substring(20 + LenString * i, LenString)) * 10 ^ (-DezFaktor)
                    n += 1
                 Next
 
@@ -182,39 +209,68 @@ Public Class REG
     ''' </summary>
     ''' <param name="Reihe">Die zu exportierende Zeitreihe</param>
     ''' <param name="File">Pfad zur anzulegenden Datei</param>
-    Public Shared Sub Write_File(ByVal Reihe As Zeitreihe, ByVal File As String)
+      Public Shared Sub Write_File(ByVal Reihe As Zeitreihe, ByVal File As String)
 
-        Dim strwrite As StreamWriter
-        Dim iZeile, j, n As Integer
-        Const WerteproZeile As Integer = 12
-        strwrite = New StreamWriter(File)
+      Dim dt As Integer
+      Dim KontiReihe As KontiZeitreihe
 
-        '1. Zeile
-        strwrite.WriteLine("TUD   0 0   0 1 0 0                                      0        0           0")
-        '2. Zeile: 
-        'todo: -3 == Dezimalfaktor, muss in Variable gepackt werden
-        'todo: Anfangs- und Enddatum aus Zeitreihenobjekt auslesen
-        strwrite.WriteLine("TUD   0 0   0 2 0 0     5   -311 42008 0 0 014 42008 0 0 0    3N    MM / IB   ")
-        '3. Zeile: 
-        strwrite.WriteLine("TUD   0 0   0 3 0 0 Niederschlag Ober-Ramstadt                                  ")
-        '4. Zeile: Anfangs- und Enddatum
-        strwrite.WriteLine("TUD   0 0   0 4 0 0 Dauer: xy min                                               ")
-        '5. Zeile: Werte
-        strwrite.WriteLine("TUD   0 0   0 5 0 0 Wiederkehrzeit: x.yz a                                      ")
+      ''Zeitintervall aus ersten und zweiten Zeitschritt der Reihe ermitteln
+      dt = DateDiff(DateInterval.Minute, Reihe.XWerte(0), Reihe.XWerte(1))
+      KontiReihe = Reihe.MakeKontiZeitreihe(dt)
+      KontiReihe.Zeitintervall = dt
+      
 
-        n = 0   'n = Anzahl der Zeitreihenwerte
-        For iZeile = 0 To (Reihe.Length / WerteproZeile) - 1
-            strwrite.Write(Reihe.XWerte(n).ToString(DatumsformatREG) & " ")
-            For j = 1 To WerteproZeile
-               'todo: * 1000 wegen Dezimalfaktor 3, muss in Variable gepackt werden
-               strwrite.Write((Reihe.YWerte(n) * 1000).ToString(Zahlenformat).PadLeft(5))
-               n = n + 1
-            Next
-            strwrite.WriteLine()
-        Next
-        strwrite.Close()
+      Dim strwrite As StreamWriter
+      Dim iZeile, j, n As Integer
+      Const WerteproZeile As Integer = 12
+      strwrite = New StreamWriter(File)
+      Dim IntWert As Long
 
-    End Sub
+      '1. Zeile
+      strwrite.WriteLine("TUD   0 0   0 1 0 0                                      0        0           0")
+
+      '2. Zeile: 
+      'Standard
+      strwrite.Write("TUD   0 0   0 2 0 0 ")
+      'Zeitintervall
+      strwrite.Write(KontiReihe.Zeitintervall.ToString.PadLeft(5))
+      'Dimension der Zehnerprotenz
+      strwrite.Write((iDim * (-1)).ToString.PadLeft(5))
+      'Anfangsdatum
+      strwrite.Write(KontiReihe.Anfangsdatum.ToString(DatumsformatREG))
+      'Enddatum
+      strwrite.Write(KontiReihe.Enddatum.ToString(DatumsformatREG))
+      'Anzahl der Kommentarzeilen nach Zeile 2, wird = 3 gesetzt
+      strwrite.Write("    3")
+      'Art der Daten, N = Niederschlag, Q = Abfluss
+      strwrite.Write("    N")
+      'Einheit
+      strwrite.WriteLine("MM / IB   ")
+
+      '3. Zeile: 
+      strwrite.WriteLine("TUD   0 0   0 3 0 0 Beginn         Kommentarzeile 1                         Ende")
+
+      '4. Zeile: Anfangs- und Enddatum
+      strwrite.WriteLine("TUD   0 0   0 4 0 0 Beginn         Kommentarzeile 2                         Ende")
+
+      '5. Zeile: Werte
+      strwrite.WriteLine("TUD   0 0   0 5 0 0 Beginn         Kommentarzeile 3                         Ende")
+
+      n = 0   'n = Anzahl der Zeitreihenwerte
+      For iZeile = 0 To (KontiReihe.Length / WerteproZeile) - 1
+         strwrite.Write(KontiReihe.XWerte(n).ToString(DatumsformatREG) & " ")
+         For j = 1 To WerteproZeile
+            IntWert = KontiReihe.YWerte(n) * 10 ^ (iDim)
+            strwrite.Write(IntWert.ToString.PadLeft(5))
+            n = n + 1
+         Next
+         strwrite.WriteLine()
+      Next
+      strwrite.WriteLine(" 0 09999 0 0 0E")
+      strwrite.Close()
+
+   End Sub
+
 
 #End Region 'Methoden
 
