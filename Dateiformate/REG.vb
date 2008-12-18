@@ -227,7 +227,7 @@ Public Class REG
       Dim IntWert As Long
 
       '1. Zeile
-      strwrite.WriteLine("TUD   0 0   0 1 0 0                                      0        0           0")
+      strwrite.WriteLine("TUD   0 0   0 1 0 0 Messstelle / Station                 0        0           0")
 
       '2. Zeile: 
       'Standard
@@ -243,21 +243,22 @@ Public Class REG
       'Anzahl der Kommentarzeilen nach Zeile 2, wird = 3 gesetzt
       strwrite.Write("    3")
       'Art der Daten, N = Niederschlag, Q = Abfluss
-      strwrite.Write("    N")
+      strwrite.Write("N    ")
       'Einheit
       strwrite.WriteLine("MM / IB   ")
 
       '3. Zeile: 
-      strwrite.WriteLine("TUD   0 0   0 3 0 0 Beginn         Kommentarzeile 1                         Ende")
+      strwrite.WriteLine("TUD   0 0   0 3 0 0 Beginn         Kommentarzeile 1                        Ende")
 
       '4. Zeile: Anfangs- und Enddatum
-      strwrite.WriteLine("TUD   0 0   0 4 0 0 Beginn         Kommentarzeile 2                         Ende")
+      strwrite.WriteLine("TUD   0 0   0 4 0 0 Beginn         Kommentarzeile 2                        Ende")
 
       '5. Zeile: Werte
-      strwrite.WriteLine("TUD   0 0   0 5 0 0 Beginn         Kommentarzeile 3                         Ende")
+      strwrite.WriteLine("TUD   0 0   0 5 0 0 Beginn         Kommentarzeile 3                        Ende")
 
       n = 0   'n = Anzahl der Zeitreihenwerte
       For iZeile = 0 To (KontiReihe.Length / WerteproZeile) - 1
+         strwrite.Write("TUD  ")
          strwrite.Write(KontiReihe.XWerte(n).ToString(DatumsformatREG) & " ")
          For j = 1 To WerteproZeile
             IntWert = KontiReihe.YWerte(n) * 10 ^ (iDim)
@@ -266,7 +267,7 @@ Public Class REG
          Next
          strwrite.WriteLine()
       Next
-      strwrite.WriteLine(" 0 09999 0 0 0E")
+      strwrite.WriteLine("TUD   0 09999 0 0 0E")
       strwrite.Close()
 
    End Sub
