@@ -400,6 +400,7 @@ Public Class Wave
 
         Dim ExportDiag As New ExportDiag()
         Dim Reihe As Zeitreihe
+        
 
         'Wenn keine Zeitreihen vorhanden, abbrechen!
         If (Me.Zeitreihen.Count < 1) Then
@@ -439,7 +440,7 @@ Public Class Wave
                     Me.SaveFileDialog1.Filter = "ZRE-Dateien (*.zre)|*.zre"
                 Case Dateiformate.REG
                     Me.SaveFileDialog1.DefaultExt = "reg"
-                    Me.SaveFileDialog1.Filter = "ZRE-Dateien (*.reg)|*.reg"
+               Me.SaveFileDialog1.Filter = "REG-Dateien (*.reg)|*.reg"
             End Select
             Me.SaveFileDialog1.Filter &= "|Alle Dateien (*.*)|*.*"
             Me.SaveFileDialog1.FilterIndex = 1
@@ -460,13 +461,13 @@ Public Class Wave
                             Reihe = CType(item, Zeitreihe)
                             Call REG.Write_File(Reihe, Me.SaveFileDialog1.FileName)
                         Next
-                    Case Else
-                        MsgBox("Noch nicht implementiert!", MsgBoxStyle.Exclamation, "Wave")
-                End Select
+               Case Else
+                  MsgBox("Noch nicht implementiert!", MsgBoxStyle.Exclamation, "Wave")
+            End Select
 
-                MsgBox("Zeitreihe erfolgreich exportiert!", MsgBoxStyle.Information, "Wave")
-            End If
-        End If
+            MsgBox("Zeitreihe erfolgreich exportiert!", MsgBoxStyle.Information, "Wave")
+         End If
+      End If
     End Sub
 
     'Analysieren
@@ -715,7 +716,7 @@ Public Class Wave
                 Case ".SMB"
                     Call Me.Import_SMB(file)
 
-                Case ".DAT"
+                Case ".REG", ".DAT"
                     Call Me.Import_REG(file)
 
                 Case ".TEN"
