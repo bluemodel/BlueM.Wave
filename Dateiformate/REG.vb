@@ -88,7 +88,6 @@ Public Class REG
     '****************
     Public Overrides Sub SpaltenAuslesen()
 
-        Dim i As Integer
         Dim Zeile As String = ""
 
         Try
