@@ -44,10 +44,10 @@ Public Class SMB
             Dim StrRead As StreamReader = New StreamReader(FiStr, System.Text.Encoding.GetEncoding("iso8859-1"))
             Dim StrReadSync = TextReader.Synchronized(StrRead)
 
-            'Reihentitel steht in 2. Zeile:
-            'For i = 0 To 1
-            '    Zeile = StrReadSync.ReadLine.ToString()
-            'Next
+            'Reihentitel steht in 1. Zeile:
+            Zeile = StrReadSync.ReadLine.ToString()
+            ReDim Me.YSpalten(0)
+            Me.YSpalten(0) = Zeile.Substring(15).Trim()
 
             StrReadSync.close()
             StrRead.Close()
@@ -56,9 +56,6 @@ Public Class SMB
             'Spalten übernehmen
             Me.XSpalte = "Datum_Zeit"
             
-            ReDim Me.YSpalten(0)
-            Me.YSpalten(0) = "SMB-Format"
-
             'Annahme, dass SMB-Dateien Regenreihen sind, daher Einheit mm fest verdrahtet
             'Einheit übernehmen
             ReDim Me.Einheiten(0)
