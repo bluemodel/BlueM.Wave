@@ -97,11 +97,14 @@ Public Class REG
             Dim StrRead As StreamReader = New StreamReader(FiStr, System.Text.Encoding.GetEncoding("iso8859-1"))
             Dim StrReadSync = TextReader.Synchronized(StrRead)
 
-            'Einheit steht in 2. Zeile:
-            For i = 0 To 1
-                Zeile = StrReadSync.ReadLine.ToString()
-            Next
+            'Reihentitel steht in 1. Zeile:
+            Zeile = StrReadSync.ReadLine.ToString()
+            ReDim Me.YSpalten(0)
+            Me.YSpalten(0) = Zeile.Substring(20,30).Trim()
 
+            'Einheit steht in 2. Zeile:
+            Zeile = StrReadSync.ReadLine.ToString()
+            
             'Einheit übernehmen
             ReDim Me.Einheiten(0)
             Me.Einheiten(0) = Zeile.Substring(68, 2)
@@ -110,12 +113,6 @@ Public Class REG
 
             'Zeitintervall auslesen
             Me.Zeitintervall = Convert.ToSingle(Zeile.Substring(23, 2).Trim)
-
-            'Reihentitel steht in 3. Zeile:
-            Zeile = StrReadSync.ReadLine.ToString()
-
-            ReDim Me.YSpalten(0)
-            Me.YSpalten(0) = Zeile.Substring(20).Trim()
 
             'Spalten übernehmen
             Me.XSpalte = "Datum_Zeit"
