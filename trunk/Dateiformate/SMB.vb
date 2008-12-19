@@ -35,7 +35,6 @@ Public Class SMB
     '****************
     Public Overrides Sub SpaltenAuslesen()
 
-        Dim i As Integer
         Dim Zeile As String = ""
 
         Try
@@ -147,37 +146,6 @@ Public Class SMB
         FiStr.Close()
 
     End Sub
-
-    ''' <summary>
-    ''' Exportiert eine Zeitreihe als SMB-Datei
-    ''' </summary>
-    ''' <param name="Reihe">Die zu exportierende Zeitreihe</param>
-    ''' <param name="File">Pfad zur anzulegenden Datei</param>
-    'Public Shared Sub Write_File(ByVal Reihe As Zeitreihe, ByVal File As String)
-
-    '    Dim strwrite As StreamWriter
-    '    Dim i As Integer
-
-    '    strwrite = New StreamWriter(File)
-
-    '    '1. Zeile
-    '    strwrite.WriteLine("*ZRE")
-    '    '2. Zeile: Titel und Einheit
-    '    strwrite.WriteLine(Reihe.Title.PadRight(15).Substring(0, 15) & Reihe.Einheit)
-    '    '3. Zeile: Parameter
-    '    strwrite.WriteLine("0                      0.        0.        0.")
-    '    '4. Zeile: Anfangs- und Enddatum
-    '    strwrite.WriteLine(Reihe.XWerte(0).ToString(DatumsformatZRE) & " " & Reihe.XWerte(Reihe.Length - 1).ToString(DatumsformatZRE))
-    '    'ab 5. Zeile: Werte
-    '    For i = 0 To Reihe.Length - 1
-    '        strwrite.Write(Reihe.XWerte(i).ToString(DatumsformatZRE) & " " & Reihe.YWerte(i).ToString(Zahlenformat).PadLeft(14))
-    '        If (i < Reihe.Length - 1) Then 'kein Zeilenumbruch nach der letzten Zeile!
-    '            strwrite.WriteLine()
-    '        End If
-    '    Next
-    '    strwrite.Close()
-
-    'End Sub
 
 #End Region 'Methoden
 
