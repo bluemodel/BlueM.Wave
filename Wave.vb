@@ -615,7 +615,7 @@ Public Class Wave
             Exit Sub
         End If
 
-        'Dateiliste generieren
+        'Dateiliste in Textform generieren
         Dateiliste = ""
         For Each Datei In Me.ImportedFiles
             Dateiliste &= Datei.File & eol
@@ -633,7 +633,7 @@ Public Class Wave
             'Collection zurücksetzen
             Me.Zeitreihen.Clear()
 
-            'Alle Datein durchlaufen
+            'Alle Dateien durchlaufen
             For Each Datei In Me.ImportedFiles
                 'Jede Datei neu einlesen
                 Call Datei.Read_File()
@@ -742,167 +742,55 @@ Public Class Wave
     ''' <param name="file">Pfad zur Datei</param>
     Public Sub Import_File(ByVal file As String)
 
-        'Kontrolle
-        If (Not System.IO.File.Exists(file)) Then
-            MsgBox("Datei '" & file & "' nicht gefunden!", MsgBoxStyle.Critical)
-            Exit Sub
-        End If
-
-        'Log
-        Call Wave.Log.AddLogEntry("Importiere Datei '" & file & "' ...")
-
+        Dim Datei As Dateiformat
+        Dim i As Integer
 
         Try
+            'Log
+            Call Wave.Log.AddLogEntry("Importiere Datei '" & file & "' ...")
 
-            Select Case Path.GetExtension(file).ToUpper()
+            'Datei-Instanz erzeugen
+            Datei = Dateifactory.getDateiInstanz(file)
 
-                Case ".ZRE"
-                    Call Me.Import_ZRE(file)
+            'Falls Importdialog erforderlich, diesen anzeigen
+            If (Datei.UseImportDialog) Then
+                Call Me.showImportDialog(Datei)
+            End If
 
-                Case ".WEL", ".KWL"
-                    Call Me.Import_WEL(file)
+            'Log
+            Call Wave.Log.AddLogEntry("... Datei '" & file & "' erfolgreich importiert!")
 
-                Case ".ASC"
-                    Call Me.Import_ASC(file)
+            'Datei abspeichern
+            Me.ImportedFiles.Add(Datei)
 
-                Case ".RVA"
-                    Call Me.Import_RVA(file)
+            'HACK: Sonderfall RVA-Datei
+            '--------------------------
+            If (TypeOf (Datei) Is RVA) Then
 
-                Case ".SMB"
-                    Call Me.Import_SMB(file)
+                'Chart vorbereiten
+                Call Me.PrepareChart_RVA()
 
-                Case ".REG", ".DAT"
-                    Call Me.Import_REG(file)
+                'Serie zeichnen
+                Call Me.Display_RVA(CType(Datei, RVA).RVAValues, True)
 
-                Case ".TEN"
-                    Call Me.Open_TEN(file)
+            Else
+                'Normalfall:
+                '-----------
 
-                Case Else
-                    Call Me.Import_CSV(file)
+                'Alle eingelesenen Zeitreihen der Datei durchlaufen
+                For i = 0 To Datei.Zeitreihen.GetUpperBound(0)
+                    'Serie abspeichen
+                    Me.AddZeitreihe(Datei.Zeitreihen(i))
+                    'Serie anzeigen
+                    Call Me.Display_Series(Datei.Zeitreihen(i))
+                Next
 
-            End Select
-
-            'Logeintrag
-            Call Wave.Log.AddLogEntry("... Import abgeschlossen.")
+            End If
 
         Catch ex As Exception
             MsgBox("Fehler beim Import:" & eol & ex.Message, MsgBoxStyle.Critical)
             Call Wave.Log.AddLogEntry("... Fehler beim Import:" & eol & ex.Message)
         End Try
-
-    End Sub
-
-    'ZRE-Datei importieren
-    '*********************
-    Private Sub Import_ZRE(ByVal FileName As String)
-
-        'ZRE-Objekt instanzieren
-        Dim ZRE As New ZRE(FileName)
-
-		'Datei abspeichern
-		Me.ImportedFiles.Add(ZRE)
-
-        'Serie abspeichern
-        Me.AddZeitreihe(ZRE.Zeitreihen(0))
-
-        'Serie zeichnen
-        Call Me.Display_Series(ZRE.Zeitreihen(0))
-
-    End Sub
-
-    'WEL-Datei importieren
-    '*********************
-    Private Sub Import_WEL(ByVal FileName As String)
-
-        Dim i As Integer
-
-        'WEL-Objekt instanzieren
-        Dim WEL As New WEL(FileName)
-
-        'Import-Dialog anzeigen
-        Call Me.showImportDialog(WEL)
-
-        'Serien zeichnen und abspeichern
-        '-------------------------------
-        If (Not IsNothing(WEL.Zeitreihen)) Then
-
-			'Datei abspeichern
-			Me.ImportedFiles.Add(WEL)
-
-            For i = 0 To WEL.Zeitreihen.GetUpperBound(0)
-                'Serie abspeichen
-                Me.AddZeitreihe(WEL.Zeitreihen(i))
-                'Serie anzeigen
-                Call Me.Display_Series(WEL.Zeitreihen(i))
-            Next
-
-        End If
-
-    End Sub
-
-    'ASC-Datei importieren (SMUSI)
-    '*****************************
-    Private Sub Import_ASC(ByVal FileName As String)
-
-        Dim i As Integer
-
-        'ASC-Objekt instanzieren
-        Dim ASC As New ASC(FileName)
-
-        'Import-Dialog anzeigen
-        Call Me.showImportDialog(ASC)
-
-        'Serien zeichnen
-        '---------------
-        If (Not IsNothing(ASC.Zeitreihen)) Then
-
-			'Datei abspeichern
-			Me.ImportedFiles.Add(ASC)
-
-            For i = 0 To ASC.Zeitreihen.GetUpperBound(0)
-                'Serie abspeichern
-                Me.AddZeitreihe(ASC.Zeitreihen(i))
-                'Serie anzeigen
-                Call Me.Display_Series(ASC.Zeitreihen(i))
-            Next
-
-        End If
-
-    End Sub
-
-   'SMB-Datei importieren
-    '*********************
-    Private Sub Import_SMB(ByVal FileName As String)
-
-        'SMB-Objekt instanzieren
-        Dim SMB As New SMB(FileName)
-
-		'Datei abspeichern
-		Me.ImportedFiles.Add(SMB)
-
-        'Serie abspeichern
-        Me.AddZeitreihe(SMB.Zeitreihen(0))
-
-        'Serie zeichnen
-        Call Me.Display_Series(SMB.Zeitreihen(0))
-
-    End Sub
-
-    'REG-Datei importieren
-    '*********************
-    Private Sub Import_REG(ByVal FileName As String)
-
-        'ZRE-Objekt instanzieren
-        Dim REG As New REG(FileName)
-
-		'Datei abspeichern
-		Me.ImportedFiles.Add(REG)
-
-        'Serie abspeichern
-        Me.AddZeitreihe(REG.Zeitreihen(0))
-
-        'Serie zeichnen
-        Call Me.Display_Series(REG.Zeitreihen(0))
 
     End Sub
 
@@ -917,74 +805,28 @@ Public Class Wave
         If OpenFileDialog1.ShowDialog() = Windows.Forms.DialogResult.OK Then
             FileName = OpenFileDialog1.FileName
             If Not (FileName Is Nothing) Then
-                Call Import_ASC(FileName)
+                Call Import_File(FileName)
             End If
         End If
 
     End Sub
 
-    'RVA-Datei importieren
-    '*********************
-    Private Sub Import_RVA(ByVal FileName As String)
+    ''' <summary>
+    ''' Zeigt den Importdialog an und liest im Anschluss die Datei mit den eingegebenen Einstellungn ein
+    ''' </summary>
+    ''' <param name="Datei">Instanz der Datei, die importiert werden soll</param>
+    Private Sub showImportDialog(ByRef Datei As Dateiformat)
 
-        'RVA-Objekt instanzieren
-        Dim RVA As New RVA(FileName)
-
-		'Datei abspeichern
-		Me.ImportedFiles.Add(RVA)
-
-        'Chart vorbereiten
-        Call Me.PrepareChart_RVA()
-
-        'Serie zeichnen
-        Call Me.Display_RVA(RVA.RVAValues, True)
-
-    End Sub
-
-    'CSV-Datei importieren
-    '*********************
-    Public Sub Import_CSV(ByVal FileName As String)
-
-        Dim i As Integer
-
-        'CSV-Objekt instanzieren
-        Dim CSV As New CSV(FileName)
-
-        'Import-Dialog anzeigen
-        Call Me.showImportDialog(CSV)
-
-        'Serien zeichnen
-        '---------------
-        If (Not IsNothing(CSV.Zeitreihen)) Then
-
-			'Datei abspeichern
-			Me.ImportedFiles.Add(CSV)
-
-            For i = 0 To CSV.Zeitreihen.GetUpperBound(0)
-                ' Serie abspeichern
-                Me.AddZeitreihe(CSV.Zeitreihen(i))
-                'Serie anzeigen
-                Call Me.Display_Series(CSV.Zeitreihen(i))
-            Next
-
-        End If
-
-    End Sub
-
-    'Import-Formular anzeigen
-    '*********************
-    Private Sub showImportDialog(ByRef _datei As Dateiformat)
-
-        _datei.ImportDiag = New ImportDiag(_datei)
+        Datei.ImportDiag = New ImportDiag(Datei)
 
         Dim DiagResult As DialogResult
 
         'Dialog anzeigen
-        DiagResult = _datei.ImportDiag.ShowDialog()
+        DiagResult = Datei.ImportDiag.ShowDialog()
 
         If (DiagResult = Windows.Forms.DialogResult.OK) Then
             'Datei einlesen
-            Call _datei.Read_File()
+            Call Datei.Read_File()
         Else
             Exit Sub
         End If

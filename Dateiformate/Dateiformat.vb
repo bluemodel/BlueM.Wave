@@ -244,6 +244,11 @@ Public MustInherit Class Dateiformat
         End Get
     End Property
 
+    ''' <summary>
+    ''' Gibt an, ob beim Import des Dateiformats der Importdialog angezeigt werden soll
+    ''' </summary>
+    Public MustOverride ReadOnly Property UseImportDialog() As Boolean
+
 #End Region 'Properties
 
 #Region "Methoden"

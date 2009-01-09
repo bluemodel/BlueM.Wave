@@ -4,9 +4,18 @@ Imports System.Globalization
 ''' <summary>
 ''' Klasse für ASC-Dateiformat (SMUSI)
 ''' </summary>
+''' <remarks>Format siehe http://130.83.196.154/BlueM/wiki/index.php/ASC-Format</remarks>
 Public Class ASC
     Inherits Dateiformat
 
+    ''' <summary>
+    ''' Gibt an, ob beim Import des Dateiformats der Importdialog angezeigt werden soll
+    ''' </summary>
+    Public Overrides ReadOnly Property UseImportDialog() As Boolean
+        Get
+            Return True
+        End Get
+    End Property
 
 #Region "Methoden"
 

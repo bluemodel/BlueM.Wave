@@ -9,6 +9,15 @@ Public Class ZRE
 
     Const DatumsformatZRE As String = "yyyyMMdd HH:mm"
 
+    ''' <summary>
+    ''' Gibt an, ob beim Import des Dateiformats der Importdialog angezeigt werden soll
+    ''' </summary>
+    Public Overrides ReadOnly Property UseImportDialog() As Boolean
+        Get
+            Return False
+        End Get
+    End Property
+
 #Region "Methoden"
 
     'Methoden

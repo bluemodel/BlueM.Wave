@@ -24,14 +24,23 @@ Public Class REG
 
 #Region "Properties"
 
-   Public Property Zeitintervall() As Integer
-      Get
-         Return _Zeitintervall
-      End Get
-      Set(ByVal value As Integer)
-         _Zeitintervall = value
-      End Set
-   End Property
+    ''' <summary>
+    ''' Gibt an, ob beim Import des Dateiformats der Importdialog angezeigt werden soll
+    ''' </summary>
+    Public Overrides ReadOnly Property UseImportDialog() As Boolean
+        Get
+            Return False
+        End Get
+    End Property
+
+    Public Property Zeitintervall() As Integer
+        Get
+            Return _Zeitintervall
+        End Get
+        Set(ByVal value As Integer)
+            _Zeitintervall = value
+        End Set
+    End Property
 
    Public Property DezFaktor() As Integer
       Get
