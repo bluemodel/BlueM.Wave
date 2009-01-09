@@ -10,6 +10,9 @@ Version 1.x
 New:
 * Analysefunktionen: Doppelsummenanalyse, GoodnessOfFit, Statistik
 * Serien werden automatisch anhand ihrer Einheiten auf verschiedene Achsen verteilt
+* Neues Feature "ReRead Files": Löscht alle vorhandenen Serien und liest alle aus  
+  Dateien importierten Zeitreihen mit den bereits verwendeten Einstellungen neu ein 
+  (Bug 388)
 
 Fixed:
 * Zeitreihe zuschneiden
