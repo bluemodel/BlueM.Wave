@@ -16,6 +16,18 @@ Public Class WEL
 
 #End Region
 
+#Region "Properties"
+
+    ''' <summary>
+    ''' Gibt an, ob beim Import des Dateiformats der Importdialog angezeigt werden soll
+    ''' </summary>
+    Public Overrides ReadOnly Property UseImportDialog() As Boolean
+        Get
+            Return True
+        End Get
+    End Property
+
+#End Region 'Properties
 
 #Region "Methoden"
 

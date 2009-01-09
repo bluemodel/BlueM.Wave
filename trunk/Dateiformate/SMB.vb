@@ -7,6 +7,15 @@ Imports System.IO
 Public Class SMB
     Inherits Dateiformat
 
+    ''' <summary>
+    ''' Gibt an, ob beim Import des Dateiformats der Importdialog angezeigt werden soll
+    ''' </summary>
+    Public Overrides ReadOnly Property UseImportDialog() As Boolean
+        Get
+            Return False
+        End Get
+    End Property
+
 
 #Region "Methoden"
 

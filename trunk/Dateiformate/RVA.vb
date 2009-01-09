@@ -13,6 +13,15 @@ Public Class RVA
 #Region "Properties"
 
     ''' <summary>
+    ''' Gibt an, ob beim Import des Dateiformats der Importdialog angezeigt werden soll
+    ''' </summary>
+    Public Overrides ReadOnly Property UseImportDialog() As Boolean
+        Get
+            Return False
+        End Get
+    End Property
+
+    ''' <summary>
     ''' Struktur für RVA-Ergebnisse eines IHA-Parameters
     ''' </summary>
     Public Structure IHAParam
