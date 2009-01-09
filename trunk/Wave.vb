@@ -25,6 +25,9 @@ Public Class Wave
     'Log-Fenster
     Friend Shared Log As LogWindow
 
+	'Collection von importierten Dateien
+	Private ImportedFiles As Collections.Generic.List(Of Dateiformat)
+
     'Interne Zeitreihen-Collection
     Private Zeitreihen As Collection
 
@@ -60,7 +63,8 @@ Public Class Wave
         InitializeComponent()
 
         'Kollektionen einrichten
-        '-----------------------
+		'-----------------------
+		Me.ImportedFiles = New Collections.Generic.List(Of Dateiformat)
         Me.Zeitreihen = New Collection()
         Me.MyAxes1 = New Dictionary(Of String, Steema.TeeChart.Axis)
         Me.MyAxes2 = New Dictionary(Of String, Steema.TeeChart.Axis)
@@ -319,7 +323,8 @@ Public Class Wave
         'Charts zurücksetzen
         Call Me.Init_Charts()
 
-        'Collections zurücksetzen
+		'Collections zurücksetzen
+		Me.ImportedFiles.Clear()
         Me.Zeitreihen.Clear()
         Me.MyAxes1.Clear()
         Me.MyAxes2.Clear()
@@ -595,7 +600,56 @@ Public Class Wave
 
     End Sub
 
-#End Region 'UI
+    ''' <summary>
+    ''' Löscht alle vorhandenen Serien und liest alle importierten Zeitreihen neu ein
+    ''' </summary>
+	Private Sub ReRead_Files(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_ReRead.Click
+
+        Dim Datei As Dateiformat
+        Dim Dateiliste As String
+        Dim Answer As MsgBoxResult
+
+        'Wenn keine Dateien vorhanden, abbrechen
+        If (Me.ImportedFiles.Count = 0) Then
+            MsgBox("Es sind keine Dateien bekannt, die neu eingelesen werden könnten!", MsgBoxStyle.Information, "Dateien neu einlesen")
+            Exit Sub
+        End If
+
+        'Dateiliste generieren
+        Dateiliste = ""
+        For Each Datei In Me.ImportedFiles
+            Dateiliste &= Datei.File & eol
+        Next
+
+        'Dialog anzeigen
+        Answer = MsgBox("Alle Serien löschen und folgende Dateien neu einlesen?" & eol & Dateiliste, MsgBoxStyle.OkCancel, "Dateien neu einlesen")
+
+        If (Answer = MsgBoxResult.Ok) Then
+
+            'Alle Serien löschen
+            Me.TChart1.Series.RemoveAllSeries()
+            Me.TChart2.Series.RemoveAllSeries()
+
+            'Collection zurücksetzen
+            Me.Zeitreihen.Clear()
+
+            'Alle Datein durchlaufen
+            For Each Datei In Me.ImportedFiles
+                'Jede Datei neu einlesen
+                Call Datei.Read_File()
+                'Alle Zeitreihen der Datei durchlaufen
+                For Each zre As Zeitreihe In Datei.Zeitreihen
+	                'Jede Zeitreihe abspeichern und anzeigen
+	                Call Me.AddZeitreihe(zre)
+	                Call Me.Display_Series(zre)
+                Next
+            Next
+        
+        End If
+
+	End Sub
+
+#End Region	'UI
 
 #Region "Funktionalität"
 
@@ -697,6 +751,7 @@ Public Class Wave
         'Log
         Call Wave.Log.AddLogEntry("Importiere Datei '" & file & "' ...")
 
+
         Try
 
             Select Case Path.GetExtension(file).ToUpper()
@@ -744,6 +799,9 @@ Public Class Wave
         'ZRE-Objekt instanzieren
         Dim ZRE As New ZRE(FileName)
 
+		'Datei abspeichern
+		Me.ImportedFiles.Add(ZRE)
+
         'Serie abspeichern
         Me.AddZeitreihe(ZRE.Zeitreihen(0))
 
@@ -767,6 +825,9 @@ Public Class Wave
         'Serien zeichnen und abspeichern
         '-------------------------------
         If (Not IsNothing(WEL.Zeitreihen)) Then
+
+			'Datei abspeichern
+			Me.ImportedFiles.Add(WEL)
 
             For i = 0 To WEL.Zeitreihen.GetUpperBound(0)
                 'Serie abspeichen
@@ -795,6 +856,9 @@ Public Class Wave
         '---------------
         If (Not IsNothing(ASC.Zeitreihen)) Then
 
+			'Datei abspeichern
+			Me.ImportedFiles.Add(ASC)
+
             For i = 0 To ASC.Zeitreihen.GetUpperBound(0)
                 'Serie abspeichern
                 Me.AddZeitreihe(ASC.Zeitreihen(i))
@@ -813,6 +877,9 @@ Public Class Wave
         'SMB-Objekt instanzieren
         Dim SMB As New SMB(FileName)
 
+		'Datei abspeichern
+		Me.ImportedFiles.Add(SMB)
+
         'Serie abspeichern
         Me.AddZeitreihe(SMB.Zeitreihen(0))
 
@@ -827,6 +894,9 @@ Public Class Wave
 
         'ZRE-Objekt instanzieren
         Dim REG As New REG(FileName)
+
+		'Datei abspeichern
+		Me.ImportedFiles.Add(REG)
 
         'Serie abspeichern
         Me.AddZeitreihe(REG.Zeitreihen(0))
@@ -860,6 +930,9 @@ Public Class Wave
         'RVA-Objekt instanzieren
         Dim RVA As New RVA(FileName)
 
+		'Datei abspeichern
+		Me.ImportedFiles.Add(RVA)
+
         'Chart vorbereiten
         Call Me.PrepareChart_RVA()
 
@@ -883,6 +956,9 @@ Public Class Wave
         'Serien zeichnen
         '---------------
         If (Not IsNothing(CSV.Zeitreihen)) Then
+
+			'Datei abspeichern
+			Me.ImportedFiles.Add(CSV)
 
             For i = 0 To CSV.Zeitreihen.GetUpperBound(0)
                 ' Serie abspeichern
@@ -1122,6 +1198,8 @@ Public Class Wave
         Me.TChart1.Tools.Add(markstip)
 
     End Sub
+
+
 
 #End Region 'Funktionalität
 

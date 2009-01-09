@@ -44,6 +44,7 @@ Partial Class Wave
         Me.ToolStripButton_Drucken = New System.Windows.Forms.ToolStripButton
         Me.ToolStripButton_Kopieren = New System.Windows.Forms.ToolStripButton
         Me.ToolStripButton_Info = New System.Windows.Forms.ToolStripButton
+        Me.ToolStripButton_ReRead = New System.Windows.Forms.ToolStripButton
         Me.TChart1 = New Steema.TeeChart.TChart
         Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog
         Me.DateTimePicker1 = New System.Windows.Forms.DateTimePicker
@@ -111,7 +112,7 @@ Partial Class Wave
         '
         ToolStrip1.AutoSize = False
         ToolStrip1.BackColor = System.Drawing.SystemColors.Control
-        ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButton_Neu, Me.ToolStripButton_Öffnen, Me.ToolStripButton_Speichern, Me.ToolStripButton_Export, ToolStripSeparator4, Me.ToolStripButton_Import, Me.ToolStripButton_EnterSeries, ToolStripSeparator2, Me.ToolStripButton_Cut, Me.ToolStripButton_Analysis, ToolStripSeparator1, Me.ToolStripButton_EditChart, Me.ToolStripButton_Übersicht, toolStripSeparator, Me.ToolStripButton_Drucken, Me.ToolStripButton_Kopieren, toolStripSeparator3, Me.ToolStripButton_Info})
+        ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButton_Neu, Me.ToolStripButton_Öffnen, Me.ToolStripButton_Speichern, Me.ToolStripButton_Export, ToolStripSeparator4, Me.ToolStripButton_Import, Me.ToolStripButton_EnterSeries, ToolStripSeparator2, Me.ToolStripButton_Cut, Me.ToolStripButton_Analysis, ToolStripSeparator1, Me.ToolStripButton_EditChart, Me.ToolStripButton_Übersicht, toolStripSeparator, Me.ToolStripButton_Drucken, Me.ToolStripButton_Kopieren, toolStripSeparator3, Me.ToolStripButton_Info, Me.ToolStripButton_ReRead})
         ToolStrip1.Location = New System.Drawing.Point(0, 0)
         ToolStrip1.Name = "ToolStrip1"
         ToolStrip1.Size = New System.Drawing.Size(945, 34)
@@ -246,6 +247,16 @@ Partial Class Wave
         Me.ToolStripButton_Info.Size = New System.Drawing.Size(23, 31)
         Me.ToolStripButton_Info.Text = "&Info"
         '
+        'ToolStripButton_ReRead
+        '
+        Me.ToolStripButton_ReRead.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.ToolStripButton_ReRead.Image = CType(resources.GetObject("ToolStripButton_ReRead.Image"), System.Drawing.Image)
+        Me.ToolStripButton_ReRead.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ToolStripButton_ReRead.Name = "ToolStripButton_ReRead"
+        Me.ToolStripButton_ReRead.Size = New System.Drawing.Size(23, 31)
+        Me.ToolStripButton_ReRead.Text = "ReRead"
+        Me.ToolStripButton_ReRead.ToolTipText = "Importierte Zeitreihen neu einlesen"
+        '
         'TChart1
         '
         '
@@ -342,5 +353,6 @@ Partial Class Wave
     Friend WithEvents ToolStripButton_Import As System.Windows.Forms.ToolStripButton
     Friend WithEvents ToolStripButton_EnterSeries As System.Windows.Forms.ToolStripButton
     Friend WithEvents ToolStripButton_Cut As System.Windows.Forms.ToolStripButton
+    Private WithEvents ToolStripButton_ReRead As System.Windows.Forms.ToolStripButton
 
 End Class
