@@ -24,6 +24,7 @@ Public Class CSV
     '***********
     Public Sub New(ByVal FileName As String)
         MyBase.New(FileName)
+        DatumsspalteSetzen = true
     End Sub
 
     'Spalten auslesen
@@ -86,7 +87,7 @@ Public Class CSV
             Next
 
             'X-Spalte übernehmen
-            Me.XSpalte = Namen(0)
+            Me.XSpalte = Namen(me.Datumsspalte)
 
             'Y-Spalten übernehmen
             ReDim Me.YSpalten(Namen.GetUpperBound(0) - 1)
@@ -143,7 +144,7 @@ Public Class CSV
                     Werte = StrReadSync.ReadLine.ToString.Split(New Char() {Me.Trennzeichen.Character}, StringSplitOptions.RemoveEmptyEntries)
                     If (i >= Me.nZeilenHeader) Then
                         'Erste Spalte: Datum_Zeit
-                        tmpXWerte(i - Me.nZeilenHeader) = New System.DateTime(Werte(0).Substring(6, 4), Werte(0).Substring(3, 2), Werte(0).Substring(0, 2), Werte(0).Substring(11, 2), Werte(0).Substring(14, 2), 0, New System.Globalization.GregorianCalendar())
+                        tmpXWerte(i - Me.nZeilenHeader) = New System.DateTime(Werte(me.Datumsspalte).Substring(6, 4), Werte(me.Datumsspalte).Substring(3, 2), Werte(me.Datumsspalte).Substring(0, 2), Werte(me.Datumsspalte).Substring(11, 2), Werte(me.Datumsspalte).Substring(14, 2), 0, New System.Globalization.GregorianCalendar())
                         'Restliche Spalten: Werte
                         n = 0
                         For j = 0 To Me.YSpalten.GetUpperBound(0)
@@ -159,7 +160,7 @@ Public Class CSV
                     Zeile = StrReadSync.ReadLine.ToString()
                     If (i >= Me.nZeilenHeader) Then
                         'Erste Spalte: Datum_Zeit
-                        tmpXWerte(i - Me.nZeilenHeader) = New System.DateTime(Zeile.Substring(6, 4), Zeile.Substring(3, 2), Zeile.Substring(0, 2), Zeile.Substring(11, 2), Zeile.Substring(14, 2), 0, New System.Globalization.GregorianCalendar())
+                        tmpXWerte(i - Me.nZeilenHeader) = New System.DateTime(Zeile.Substring(me.Datumsspalte+6+SpaltenOffset, 4), Zeile.Substring(me.Datumsspalte+3+SpaltenOffset, 2), Zeile.Substring(me.Datumsspalte+0+SpaltenOffset, 2), Zeile.Substring(me.Datumsspalte+11+SpaltenOffset, 2), Zeile.Substring(me.Datumsspalte+14+SpaltenOffset, 2), 0, New System.Globalization.GregorianCalendar())
                         'Restliche Spalten: Werte
                         n = 0
                         For j = 0 To Me.YSpalten.GetUpperBound(0)

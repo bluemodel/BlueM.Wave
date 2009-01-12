@@ -32,6 +32,7 @@ Partial Public Class ImportDiag
 
         Me.datei = _dateiobjekt
 
+        NumericUpDown_Datumszeile.Enabled = me.datei.DatumsspalteSetzen
     End Sub
 
     'Form laden
@@ -58,10 +59,6 @@ Partial Public Class ImportDiag
 
         'Anzeige aktualisieren
         Call Me.aktualisieren()
-
-        'Datei als Vorschau anzeigen
-        Me.Label_Datei.Text += " " & Path.GetFileName(Me.datei.File)
-        Me.RichTextBox_Vorschau.LoadFile(Me.datei.File, RichTextBoxStreamType.PlainText)
 
         'Ende der Initialisierung
         IsInitializing = False
@@ -101,6 +98,9 @@ Partial Public Class ImportDiag
             Next
         End If
 
+        'Datumsspalte setzen
+        Me.datei.Datumsspalte = NumericUpDown_Datumszeile.Value - 1 'immer ein weniger wie du !
+
         'Datei einlesen
         Call Me.datei.Read_File()
 
@@ -108,7 +108,7 @@ Partial Public Class ImportDiag
 
     'Benutzereingabe verarbeiten
     '***************************
-    Private Sub inputChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TextBox_Zeile‹berschriften.TextChanged, TextBox_ZeileEinheiten.TextChanged, TextBox_ZeileDaten.TextChanged, CheckBox_Einheiten.CheckedChanged, ComboBox_Dezimaltrennzeichen.SelectedIndexChanged, RadioButton_Zeichengetrennt.CheckedChanged, ComboBox_Trennzeichen.SelectedIndexChanged, TextBox_Spaltenbreite.TextChanged
+    Private Sub inputChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TextBox_Zeile‹berschriften.TextChanged, TextBox_ZeileEinheiten.TextChanged, TextBox_ZeileDaten.TextChanged, CheckBox_Einheiten.CheckedChanged, ComboBox_Dezimaltrennzeichen.SelectedIndexChanged, RadioButton_Zeichengetrennt.CheckedChanged, ComboBox_Trennzeichen.SelectedIndexChanged, TextBox_Spaltenbreite.TextChanged, NumericUpDown_Datumszeile.ValueChanged
 
         If (Me.IsInitializing = True) Then
             Exit Sub
@@ -136,6 +136,9 @@ Partial Public Class ImportDiag
                 Me.datei.Zeichengetrennt = False
                 Me.datei.Spaltenbreite = Convert.ToInt32(Me.TextBox_Spaltenbreite.Text)
             End If
+            
+            'Datum
+            me.datei.Datumsspalte = NumericUpDown_Datumszeile.Value - 1 'Immer eins weniger wie du ! 
 
             'Spalten neu auslesen
             Call Me.datei.SpaltenAuslesen()
@@ -205,5 +208,26 @@ Partial Public Class ImportDiag
         Dim index As Integer = Me.ListBox_YSpalten.FindString(Me.TextBox_YSpalte.Text)
         If index <> -1 Then ListBox_YSpalten.SetSelected(index, True)
     End Sub
+
+    Private Sub Label_YSpalten_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Label_YSpalten.Click
+
+    End Sub
+
+Private Sub Button_VorschauEinblenden_Click( ByVal sender As System.Object,  ByVal e As System.EventArgs) Handles Button_VorschauEinblenden.Click
+
+    Button_VorschauEinblenden.Visible = false
+    RichTextBox_Vorschau.Visible = true
+
+    'Laden des Textes in Steuerelement
+    'Datei als Vorschau anzeigen
+    Me.Label_Datei.Text += " " & Path.GetFileName(Me.datei.File)
+    Me.RichTextBox_Vorschau.LoadFile(Me.datei.File, RichTextBoxStreamType.PlainText)
+    
+
+End Sub
+
+
+
+
 
 End Class

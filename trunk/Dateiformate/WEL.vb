@@ -12,7 +12,6 @@ Public Class WEL
     'Eigenschaften
     '#############
 
-    Private Const SpaltenOffset As Integer = 1          'Anzahl Zeichen bevor die erste Spalte anfängt (nur bei Spalten mit fester Breite)
 
 #End Region
 
@@ -40,6 +39,8 @@ Public Class WEL
 
         MyBase.New(FileName)
 
+        SpaltenOffset = 1
+        
         'Voreinstellungen
         Me.iZeileUeberschriften = 2
         Me.UseEinheiten = True
@@ -57,6 +58,7 @@ Public Class WEL
             Call Me.Read_File()
         End If
 
+        
     End Sub
 
     'Spalten auslesen
@@ -124,7 +126,7 @@ Public Class WEL
             End If
 
             'X-Spalte übernehmen
-            Me.XSpalte = Namen(0)
+            Me.XSpalte = Namen(me.Datumsspalte)
 
             'Y-Spalten übernehmen
             ReDim Me.YSpalten(Namen.GetUpperBound(0) - 1)

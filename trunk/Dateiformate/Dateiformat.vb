@@ -11,6 +11,10 @@ Public MustInherit Class Dateiformat
     Public leerzeichen As Zeichen = New Zeichen(" ")
     Public tab As Zeichen = New Zeichen(Chr(9))
 
+#Region "allgemeine Eigenschaften"
+    protected SpaltenOffset As Integer = 0          'Anzahl Zeichen bevor die erste Spalte anfängt (nur bei Spalten mit fester Breite)
+#end region
+
 #Region "Eigenschaften"
 
     'Eigenschaften
@@ -25,6 +29,8 @@ Public MustInherit Class Dateiformat
     Private _iZeileDaten As Integer = 3
     Private _useEinheiten As Boolean = True
     Private _spaltenbreite As Integer = 16
+    Private _DatumsspalteSetzen As Boolean = false
+    Private _Datumsspalte As Integer = 0
     Private _XSpalte As String = ""
     Private _Yspalten() As String = {}
     Private _spaltenSel() As String = {}
@@ -43,6 +49,36 @@ Public MustInherit Class Dateiformat
 #End Region 'Eigenschaften
 
 #Region "Properties"
+
+    'Properties
+    '##########
+    ''' <summary>
+    ''' Darf ich eine Datumsspalte auswählen ?
+    ''' 0 = erste Spalte
+    ''' </summary>
+    Public Property DatumsspalteSetzen() As Boolean
+        Get
+            Return _DatumsspalteSetzen
+        End Get
+        Set(ByVal value As Boolean)
+            _DatumsspalteSetzen = value
+        End Set
+    End Property
+
+    'Properties
+    '##########
+    ''' <summary>
+    ''' In welcher Spalte ist das Datum
+    ''' 0 = erste Spalte
+    ''' </summary>
+    Public Property Datumsspalte() As Integer
+        Get
+            Return _Datumsspalte
+        End Get
+        Set(ByVal value As Integer)
+            _Datumsspalte = value
+        End Set
+    End Property
 
     'Properties
     '##########
