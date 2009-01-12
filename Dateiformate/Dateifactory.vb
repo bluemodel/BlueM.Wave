@@ -49,6 +49,9 @@ Module Dateifactory
             Case FileExtZRE
                 Datei = New ZRE(file)
 
+            Case FileExtCSV
+                Datei = New CSV(file)
+
             Case Else
                 Throw New Exception("Die Dateiendung '" & FileExt & "' ist nicht bekannt!")
 

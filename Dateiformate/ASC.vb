@@ -93,7 +93,8 @@ Public Class ASC
             Next
 
             'X-Spalte übernehmen
-            Me.XSpalte = Namen(0)
+            Dim iDatumspalte As Integer = 0
+            Me.XSpalte = Namen(iDatumspalte)
 
             'Y-Spalten übernehmen
             ReDim Me.YSpalten(Namen.GetUpperBound(0) - 1)
