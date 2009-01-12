@@ -6,9 +6,11 @@ Module Dateifactory
     Public Const FileExtASC As String = ".ASC"
     Public Const FileExtCSV As String = ".CSV"
     Public Const FileExtREG As String = ".REG"
+    Public Const FileExtDAT As String = ".DAT"
     Public Const FileExtRVA As String = ".RVA"
     Public Const FileExtSMB As String = ".SMB"
     Public Const FileExtWEL As String = ".WEL"
+    Public Const FileExtKWL As String = ".KWL"
     Public Const FileExtZRE As String = ".ZRE"
 
     ''' <summary>
@@ -34,7 +36,7 @@ Module Dateifactory
             Case FileExtASC
                 Datei = New ASC(file)
 
-            Case FileExtREG
+            Case FileExtREG, FileExtDAT
                 Datei = New REG(file)
 
             Case FileExtRVA
@@ -43,7 +45,7 @@ Module Dateifactory
             Case FileExtSMB
                 Datei = New SMB(file)
 
-            Case FileExtWEL
+            Case FileExtWEL, FileExtKWL
                 Datei = New WEL(file)
 
             Case FileExtZRE
