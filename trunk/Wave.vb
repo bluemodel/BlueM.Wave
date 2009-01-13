@@ -693,33 +693,47 @@ Public Class Wave
             If (Not res = Windows.Forms.DialogResult.OK) Then Exit Sub
         End If
 
-        'TEN-Datei importieren
-        '---------------------
-        Call TChart1.Import.Template.Load(FileName)
-        Call TChart2.Import.Template.Load(FileName)
+        Try
 
-        'Zeitreihen-Objekte aus TChart importieren
-        '-----------------------------------------
-        'Alte Zeitreihen löschen
-        Me.Zeitreihen.Clear()
+            'Log
+            Call Wave.Log.AddLogEntry("Öffne Datei '" & FileName & "' ...")
 
-        'Alle Reihen durchlaufen
-        For Each series As Steema.TeeChart.Styles.Series In TChart1.Series
+            'TEN-Datei importieren
+            '---------------------
+            Call TChart1.Import.Template.Load(FileName)
+            Call TChart2.Import.Template.Load(FileName)
 
-            'Nur Zeitreihen importieren!
-            If (series.GetHorizAxis.IsDateTime) Then
+            'Zeitreihen-Objekte aus TChart importieren
+            '-----------------------------------------
+            'Alte Zeitreihen löschen
+            Me.Zeitreihen.Clear()
 
-                reihe = New Zeitreihe(series.Title)
-                reihe.Length = series.XValues.Count
+            'Alle Reihen durchlaufen
+            For Each series As Steema.TeeChart.Styles.Series In TChart1.Series
 
-                For i = 0 To reihe.Length - 1
-                    reihe.XWerte(i) = Date.FromOADate(series.XValues(i))
-                    reihe.YWerte(i) = series.YValues(i)
-                Next
+                'Nur Zeitreihen importieren!
+                If (series.GetHorizAxis.IsDateTime) Then
 
-                Call Me.AddZeitreihe(reihe)
-            End If
-        Next
+                    reihe = New Zeitreihe(series.Title)
+                    reihe.Length = series.XValues.Count
+
+                    For i = 0 To reihe.Length - 1
+                        reihe.XWerte(i) = Date.FromOADate(series.XValues(i))
+                        reihe.YWerte(i) = series.YValues(i)
+                    Next
+
+                    'Zeitreihe abspeichern
+                    Call Me.AddZeitreihe(reihe)
+                End If
+            Next
+
+            'Log
+            Call Wave.Log.AddLogEntry("... Datei '" & FileName & "' erfolgreich geöffnet!")
+
+        Catch ex As Exception
+            MsgBox("Fehler beim Öffnen:" & eol & ex.Message, MsgBoxStyle.Critical)
+            Call Wave.Log.AddLogEntry("... Fehler beim Öffnen:" & eol & ex.Message)
+        End Try
 
         'Übersicht anpassen
         '------------------
@@ -745,52 +759,55 @@ Public Class Wave
         Dim Datei As Dateiformat
         Dim i As Integer
 
-        Try
-            'Log
-            Call Wave.Log.AddLogEntry("Importiere Datei '" & file & "' ...")
+        'Sonderfälle abfangen:
+        '---------------------
+        Select Case Path.GetExtension(file).ToUpper()
 
-            'Datei-Instanz erzeugen
-            Datei = Dateifactory.getDateiInstanz(file)
+            Case Dateifactory.FileExtTEN
+                '.TEN-Datei
+                Call Me.Open_TEN(file)
 
-            'Falls Importdialog erforderlich, diesen anzeigen
-            If (Datei.UseImportDialog) Then
-                Call Me.showImportDialog(Datei)
-            End If
+            Case Dateifactory.FileExtRVA
+                '.RVA-Datei
+                Call Me.Import_RVA(file)
 
-            'Log
-            Call Wave.Log.AddLogEntry("... Datei '" & file & "' erfolgreich importiert!")
+            Case Else
 
-            'Datei abspeichern
-            Me.ImportedFiles.Add(Datei)
-
-            'HACK: Sonderfall RVA-Datei
-            '--------------------------
-            If (TypeOf (Datei) Is RVA) Then
-
-                'Chart vorbereiten
-                Call Me.PrepareChart_RVA()
-
-                'Serie zeichnen
-                Call Me.Display_RVA(CType(Datei, RVA).RVAValues, True)
-
-            Else
                 'Normalfall:
                 '-----------
 
-                'Alle eingelesenen Zeitreihen der Datei durchlaufen
-                For i = 0 To Datei.Zeitreihen.GetUpperBound(0)
-                    'Serie abspeichen
-                    Me.AddZeitreihe(Datei.Zeitreihen(i))
-                    'Serie anzeigen
-                    Call Me.Display_Series(Datei.Zeitreihen(i))
-                Next
+                Try
+                    'Log
+                    Call Wave.Log.AddLogEntry("Importiere Datei '" & file & "' ...")
 
-            End If
+                    'Datei-Instanz erzeugen
+                    Datei = Dateifactory.getDateiInstanz(file)
 
-        Catch ex As Exception
-            MsgBox("Fehler beim Import:" & eol & ex.Message, MsgBoxStyle.Critical)
-            Call Wave.Log.AddLogEntry("... Fehler beim Import:" & eol & ex.Message)
-        End Try
+                    'Falls Importdialog erforderlich, diesen anzeigen
+                    If (Datei.UseImportDialog) Then
+                        Call Me.showImportDialog(Datei)
+                    End If
+
+                    'Log
+                    Call Wave.Log.AddLogEntry("... Datei '" & file & "' erfolgreich importiert!")
+
+                    'Datei abspeichern
+                    Me.ImportedFiles.Add(Datei)
+
+                    'Alle eingelesenen Zeitreihen der Datei durchlaufen
+                    For i = 0 To Datei.Zeitreihen.GetUpperBound(0)
+                        'Serie abspeichen
+                        Me.AddZeitreihe(Datei.Zeitreihen(i))
+                        'Serie anzeigen
+                        Call Me.Display_Series(Datei.Zeitreihen(i))
+                    Next
+
+                Catch ex As Exception
+                    MsgBox("Fehler beim Import:" & eol & ex.Message, MsgBoxStyle.Critical)
+                    Call Wave.Log.AddLogEntry("... Fehler beim Import:" & eol & ex.Message)
+                End Try
+
+        End Select
 
     End Sub
 
@@ -805,9 +822,44 @@ Public Class Wave
         If OpenFileDialog1.ShowDialog() = Windows.Forms.DialogResult.OK Then
             FileName = OpenFileDialog1.FileName
             If Not (FileName Is Nothing) Then
-                Call Import_File(FileName)
+                Call Me.Import_File(FileName)
             End If
         End If
+
+    End Sub
+
+    ''' <summary>
+    ''' Eine RVA-Datei importieren
+    ''' </summary>
+    ''' <param name="file">Pfad zur Datei</param>
+    ''' <remarks>Sonderfall, weil keine Zeitreihen</remarks>
+    Private Sub Import_RVA(ByVal file As String)
+
+        Dim RVADatei As RVA
+
+        Try
+            'Log
+            Call Wave.Log.AddLogEntry("Importiere Datei '" & file & "' ...")
+
+            'Datei-Instanz erzeugen
+            RVADatei = Dateifactory.getDateiInstanz(file)
+
+            'Log
+            Call Wave.Log.AddLogEntry("... Datei '" & file & "' erfolgreich importiert!")
+
+            'Datei abspeichern
+            Me.ImportedFiles.Add(RVADatei)
+
+            'Chart vorbereiten
+            Call Me.PrepareChart_RVA()
+
+            'Serie zeichnen
+            Call Me.Display_RVA(RVADatei.RVAValues, True)
+
+        Catch ex As Exception
+            MsgBox("Fehler beim Import:" & eol & ex.Message, MsgBoxStyle.Critical)
+            Call Wave.Log.AddLogEntry("... Fehler beim Import:" & eol & ex.Message)
+        End Try
 
     End Sub
 

@@ -12,6 +12,7 @@ Module Dateifactory
     Public Const FileExtWEL As String = ".WEL"
     Public Const FileExtKWL As String = ".KWL"
     Public Const FileExtZRE As String = ".ZRE"
+    Public Const FileExtTEN As String = ".TEN"
 
     ''' <summary>
     ''' Erzeugt eine zur Dateiendung passenden Datei-Instanz
