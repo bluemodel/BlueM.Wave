@@ -501,6 +501,8 @@ Public Class Wave
                 Dim oAnalysis As Analysis
                 oAnalysis = AnalysisFactory.CreateAnalysis(oAnalysisDialog.selectedAnalysisFunction, oAnalysisDialog.selectedZeitreihen)
 
+                Call Wave.Log.AddLogEntry("... Analyse ausführen ...")
+
                 'Analyse ausführen
                 Call oAnalysis.ProcessAnalysis()
 
@@ -1092,8 +1094,6 @@ Public Class Wave
         Me.TChart1.Tools.Add(markstip)
 
     End Sub
-
-
 
 #End Region 'Funktionalität
 
