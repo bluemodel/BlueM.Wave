@@ -43,7 +43,7 @@ Public Class LogWindow
         If (msg.Contains(Konstanten.eol)) Then msg = Konstanten.eol & "  " & msg.Replace(Konstanten.eol, Konstanten.eol & "  ")
 
         'Text hinzufügen
-        Me.TextBox_Log.Text &= "* " & DateTime.Now.ToString(Konstanten.Datumsformat) & ": " & msg & Konstanten.eol
+        Me.TextBox_Log.AppendText("* " & DateTime.Now.ToString(Konstanten.Datumsformat) & ": " & msg & Konstanten.eol)
 
     End Sub
 
