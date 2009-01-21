@@ -14,8 +14,10 @@ Public Module AnalysisHelper
 
         Dim values(,) As Double
         Dim zre1_temp, zre2_temp As Zeitreihe
-        Dim i, j, n As Integer
+        Dim i, j, n, NaNCounter As Integer
         Dim found As Boolean
+
+        NaNCounter = 0
 
         'Zeitreihen aufeinander zuschneiden
         Call zre1.Cut(zre2)
@@ -53,6 +55,8 @@ Public Module AnalysisHelper
                             zre1_temp.YWerte(0) = zre1.YWerte(i)
                             zre2_temp.YWerte(0) = zre2.YWerte(j)
                             found = True
+                        Else
+                            NaNCounter += 1
                         End If
                     End If
 
@@ -64,6 +68,8 @@ Public Module AnalysisHelper
                         Exit Do
                     End If
                 Loop
+            Else
+                NaNCounter += 1
             End If
             If (found) Then Exit For
         Next
@@ -96,6 +102,8 @@ Public Module AnalysisHelper
                             zre2_temp.XWerte(n - 1) = zre2.XWerte(j)
                             zre1_temp.YWerte(n - 1) = zre1.YWerte(i)
                             zre2_temp.YWerte(n - 1) = zre2.YWerte(j)
+                        Else
+                            NaNCounter += 1
                         End If
                     End If
 
@@ -107,6 +115,8 @@ Public Module AnalysisHelper
                         Exit Do
                     End If
                 Loop
+            Else
+                NaNCounter += 1
             End If
         Loop
 
@@ -120,6 +130,9 @@ Public Module AnalysisHelper
             values(i, 0) = zre1.YWerte(i)
             values(i, 1) = zre2.YWerte(i)
         Next
+
+        'Log
+        Call Wave.Log.AddLogEntry("... " & NaNCounter.ToString() & " NaN-Werte (" & Konstanten.NaN.ToString() & ") wurden bereinigt.")
 
         Return values
 

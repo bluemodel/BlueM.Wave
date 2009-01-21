@@ -35,18 +35,27 @@ Module Konstanten
     ''' Wandelt einen String zu Double um
     ''' </summary>
     ''' <param name="str">umzuwandelnder String</param>
-    ''' <returns>Double-Wert, NaN falls String nicht umwandelbar</returns>
+    ''' <returns>Double-Wert, gesetzt auf Konstanten.NaN (-999) falls Wert NaN, Infinity oder unlesbar</returns>
     ''' <remarks></remarks>
     Public Function StringToDouble(ByVal str As String) As Double
 
         Dim wert As Double
+        Dim success As Boolean
 
-        Try
-            wert = Convert.ToDouble(str, Konstanten.Zahlenformat)
-        Catch ex As Exception
+        success = Double.TryParse(str, NumberStyles.Any, Konstanten.Zahlenformat, wert)
+
+        If (Not success) Then
+            'Wert ist unlesbar
             wert = Konstanten.NaN
-            Call Wave.Log.AddLogEntry("Der Wert '" & str & "' konnte nicht gelesen werden und wurde durch NaN (" & Konstanten.NaN.ToString() & ") ersetzt!")
-        End Try
+            Call Wave.Log.AddLogEntry("Der Wert '" & str.Trim() & "' ist unlesbar und wurde durch " & Konstanten.NaN.ToString() & " ersetzt!")
+        Else
+            'BUG 395: NaN und Infinity abfangen
+            If (Double.IsNaN(wert) _
+                Or Double.IsInfinity(wert)) Then
+                wert = Konstanten.NaN
+                Call Wave.Log.AddLogEntry("Der Wert '" & str.Trim() & "' wurde durch " & Konstanten.NaN.ToString() & " ersetzt!")
+            End If
+        End If
 
         Return wert
 
