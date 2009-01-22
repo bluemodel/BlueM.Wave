@@ -1,0 +1,22 @@
+﻿===============================================================
+Wave Release Notes
+===============================================================
+(c) IHWB TU-Darmstadt
+Website: http://130.83.196.154/BlueM/wiki/index.php/Wave
+===============================================================
+
+Version 1.x
+-----------
+New:
+* Analysefunktionen: Doppelsummenanalyse, GoodnessOfFit, Statistik
+* Serien werden automatisch anhand ihrer Einheiten auf verschiedene Achsen verteilt
+* Neues Feature "ReRead Files": Löscht alle vorhandenen Serien und liest alle aus  
+  Dateien importierten Zeitreihen mit den bereits verwendeten Einstellungen neu ein 
+  (Bug 388)
+
+Fixed:
+* Zeitreihe zuschneiden
+
+Version 1.0
+-----------
+* Anfang der Versionierung
