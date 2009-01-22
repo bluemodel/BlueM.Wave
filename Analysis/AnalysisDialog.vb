@@ -6,16 +6,16 @@ Public Class AnalysisDialog
 
     'Konstruktor
     '***********
-    Public Sub New(ByVal zeitreihen As Collection)
+    Public Sub New(ByVal zeitreihen As Dictionary(Of String, Zeitreihe))
 
         Call InitializeComponent()
 
-        'Liste der Formate
+        'Liste der Analysefunktionen
         Me.ComboBox_Funktion.DataSource = System.Enum.GetValues(GetType(AnalysisFactory.AnalysisFunctions))
 
         'Zeitreihen in Listbox eintragen
-        For Each item As Object In zeitreihen
-            Me.ListBox_Zeitreihen.Items.Add(item)
+        For Each zre As Zeitreihe In zeitreihen.Values
+            Me.ListBox_Zeitreihen.Items.Add(zre)
         Next
 
     End Sub
@@ -30,9 +30,9 @@ Public Class AnalysisDialog
 
     'Ausgewählte Zeitreihen
     '**********************
-    Friend ReadOnly Property selectedZeitreihen() As Collection
+    Friend ReadOnly Property selectedZeitreihen() As List(Of Zeitreihe)
         Get
-            Dim zeitreihen As New Collection()
+            Dim zeitreihen As New List(Of Zeitreihe)()
             For Each item As Object In Me.ListBox_Zeitreihen.SelectedItems
                 zeitreihen.Add(CType(item, Zeitreihe))
             Next

@@ -85,7 +85,7 @@ Public Class ZRE
     '******************
     Public Overrides Sub Read_File()
 
-        Dim j, n, AnzZeilen As Integer
+        Dim j As Integer
         Dim Zeile As String
         Dim Stunde, Minute, Tag, Monat, Jahr As Integer
         Dim Datum As DateTime
@@ -94,30 +94,17 @@ Public Class ZRE
         Dim StrRead As StreamReader = New StreamReader(FiStr, System.Text.Encoding.GetEncoding("iso8859-1"))
         Dim StrReadSync = TextReader.Synchronized(StrRead)
 
-        'Anzahl der Zeilen feststellen
-        AnzZeilen = 0
-        Do
-            Zeile = StrReadSync.ReadLine.ToString()
-            If (Zeile.Length > 0) Then
-                AnzZeilen += 1
-            End If
-        Loop Until StrReadSync.Peek() = -1
-
-        'Zeitreihe redimensionieren
-        ReDim Me.Zeitreihen(0) 'bei ZRE gibt es nur eine Zeitreihe
+        'Zeitreihe instanzieren
+        ReDim Me.Zeitreihen(0)
         Me.Zeitreihen(0) = New Zeitreihe(Me.SpaltenSel(0))
         Me.Zeitreihen(0).Einheit = Me.Einheiten(0)
-        Me.Zeitreihen(0).Length = AnzZeilen - Me.nZeilenHeader
 
-        'Datei wieder auf Anfang setzen und einlesen
-        FiStr.Seek(0, SeekOrigin.Begin)
-
+        'Einlesen
+        '--------
         j = 0
-        n = 0
-
         Do
-            Zeile = StrReadSync.ReadLine.ToString()
             j += 1
+            Zeile = StrReadSync.ReadLine.ToString()
             If (j > Me.nZeilenHeader And Zeile.Length > 0) Then
 
                 'Datum erkennen
@@ -138,9 +125,7 @@ Public Class ZRE
 
                 'Datum und Wert zur Zeitreihe hinzufügen
                 '---------------------------------------
-                Me.Zeitreihen(0).XWerte(n) = Datum
-                Me.Zeitreihen(0).YWerte(n) = StringToDouble(Zeile.Substring(15))
-                n += 1
+                Me.Zeitreihen(0).AddNode(Datum, StringToDouble(Zeile.Substring(15)))
 
             End If
         Loop Until StrReadSync.Peek() = -1

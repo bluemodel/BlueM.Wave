@@ -17,7 +17,7 @@ Public Class CutDialog
 
     'Konstruktor
     '***********
-    Public Sub New(ByRef zeitreihen As Collection)
+    Public Sub New(ByRef zeitreihen As Dictionary(Of String, Zeitreihe))
 
         Me.IsInitializing = True
 
@@ -29,7 +29,7 @@ Public Class CutDialog
         ' Add any initialization after the InitializeComponent() call.
 
         'Zeitreihen zu Listboxen hinzufügen
-        For Each zre As Zeitreihe In zeitreihen
+        For Each zre As Zeitreihe In zeitreihen.Values
             Me.ComboBox_ZeitreiheCut.Items.Add(zre)
             Me.ComboBox_ZeitreiheRef.Items.Add(zre)
         Next
@@ -250,8 +250,7 @@ Public Class CutDialog
 
         'Zeitreihe zuschneiden
         Me.zreCut = Me.zreOrig.Clone()
-        Me.zreCut.Title &= " (cut)"
-        Me.zreCut.Cut(Me.Anfang, Me.Ende)
+        Call Me.zreCut.Cut(Me.Anfang, Me.Ende)
 
         Me.DialogResult = System.Windows.Forms.DialogResult.OK
         Me.Close()

@@ -108,7 +108,8 @@ Public Class CSV
         Dim AnzZeil As Integer = 0
         Dim i, j, n As Integer
         Dim Zeile As String
-        Dim Werte() As String = {}
+        Dim datum As DateTime
+        Dim Werte() As String
 
         Try
 
@@ -116,41 +117,29 @@ Public Class CSV
             Dim StrRead As StreamReader = New StreamReader(FiStr, System.Text.Encoding.GetEncoding("iso8859-1"))
             Dim StrReadSync = TextReader.Synchronized(StrRead)
 
-            'Anzahl der Zeilen feststellen
-            Do
-                Zeile = StrReadSync.ReadLine.ToString
-                AnzZeil += 1
-            Loop Until StrReadSync.Peek() = -1
-
             'Anzahl Zeitreihen bestimmen
             ReDim Me.Zeitreihen(Me.SpaltenSel.GetUpperBound(0))
 
             'Zeitreihen redimensionieren
             For i = 0 To Me.Zeitreihen.GetUpperBound(0)
                 Me.Zeitreihen(i) = New Zeitreihe(SpaltenSel(i))
-                Me.Zeitreihen(i).Length = AnzZeil - Me.nZeilenHeader
             Next
 
-            'temoräres Array für XWerte
-            Dim tmpXWerte(AnzZeil - Me.nZeilenHeader - 1) As DateTime
-
-            'Auf Anfang setzen und einlesen
-            '------------------------------
-            FiStr.Seek(0, SeekOrigin.Begin)
-
+            'Einlesen
+            '--------
             For i = 0 To AnzZeil - 1
                 If (Me.Zeichengetrennt) Then
                     'Zeichengetrennt
                     Werte = StrReadSync.ReadLine.ToString.Split(New Char() {Me.Trennzeichen.Character}, StringSplitOptions.RemoveEmptyEntries)
                     If (i >= Me.nZeilenHeader) Then
                         'Erste Spalte: Datum_Zeit
-                        tmpXWerte(i - Me.nZeilenHeader) = New System.DateTime(Werte(me.Datumsspalte).Substring(6, 4), Werte(me.Datumsspalte).Substring(3, 2), Werte(me.Datumsspalte).Substring(0, 2), Werte(me.Datumsspalte).Substring(11, 2), Werte(me.Datumsspalte).Substring(14, 2), 0, New System.Globalization.GregorianCalendar())
+                        datum = New System.DateTime(Werte(Me.Datumsspalte).Substring(6, 4), Werte(Me.Datumsspalte).Substring(3, 2), Werte(Me.Datumsspalte).Substring(0, 2), Werte(Me.Datumsspalte).Substring(11, 2), Werte(Me.Datumsspalte).Substring(14, 2), 0, New System.Globalization.GregorianCalendar())
                         'Restliche Spalten: Werte
                         n = 0
                         For j = 0 To Me.YSpalten.GetUpperBound(0)
                             If (isSelected(Me.YSpalten(j))) Then
-                                Me.Zeitreihen(n).Einheit = Me.Einheiten(j)
-                                Me.Zeitreihen(n).YWerte(i - Me.nZeilenHeader) = StringToDouble(Werte(j + 1))
+                                Me.Zeitreihen(n).Einheit = Me.Einheiten(j) 'TODO: einmal würde auch reichen
+                                Me.Zeitreihen(n).AddNode(datum, StringToDouble(Werte(j + 1)))
                                 n += 1
                             End If
                         Next
@@ -160,13 +149,13 @@ Public Class CSV
                     Zeile = StrReadSync.ReadLine.ToString()
                     If (i >= Me.nZeilenHeader) Then
                         'Erste Spalte: Datum_Zeit
-                        tmpXWerte(i - Me.nZeilenHeader) = New System.DateTime(Zeile.Substring(me.Datumsspalte+6+SpaltenOffset, 4), Zeile.Substring(me.Datumsspalte+3+SpaltenOffset, 2), Zeile.Substring(me.Datumsspalte+0+SpaltenOffset, 2), Zeile.Substring(me.Datumsspalte+11+SpaltenOffset, 2), Zeile.Substring(me.Datumsspalte+14+SpaltenOffset, 2), 0, New System.Globalization.GregorianCalendar())
+                        datum = New System.DateTime(Zeile.Substring(Me.Datumsspalte + 6 + SpaltenOffset, 4), Zeile.Substring(Me.Datumsspalte + 3 + SpaltenOffset, 2), Zeile.Substring(Me.Datumsspalte + 0 + SpaltenOffset, 2), Zeile.Substring(Me.Datumsspalte + 11 + SpaltenOffset, 2), Zeile.Substring(Me.Datumsspalte + 14 + SpaltenOffset, 2), 0, New System.Globalization.GregorianCalendar())
                         'Restliche Spalten: Werte
                         n = 0
                         For j = 0 To Me.YSpalten.GetUpperBound(0)
                             If (isSelected(Me.YSpalten(j))) Then
-                                Me.Zeitreihen(n).Einheit = Me.Einheiten(j)
-                                Me.Zeitreihen(n).YWerte(i - Me.nZeilenHeader) = StringToDouble(Zeile.Substring((j + 1) * Me.Spaltenbreite, Math.Min(Me.Spaltenbreite, Zeile.Substring((j + 1) * Me.Spaltenbreite).Length)))
+                                Me.Zeitreihen(n).Einheit = Me.Einheiten(j) 'TODO: einmal würde auch reichen
+                                Me.Zeitreihen(n).AddNode(datum, StringToDouble(Zeile.Substring((j + 1) * Me.Spaltenbreite, Math.Min(Me.Spaltenbreite, Zeile.Substring((j + 1) * Me.Spaltenbreite).Length))))
                                 n += 1
                             End If
                         Next
@@ -178,11 +167,6 @@ Public Class CSV
             StrReadSync.Close()
             StrRead.Close()
             FiStr.Close()
-
-            'XWerte an alle Zeitreihen übergeben
-            For i = 0 To Me.Zeitreihen.GetUpperBound(0)
-                Me.Zeitreihen(i).XWerte = tmpXWerte
-            Next
 
         Catch ex As Exception
             MsgBox("Konnte Datei nicht einlesen!" & eol & eol & "Fehler: " & ex.Message, MsgBoxStyle.Critical, "Fehler")

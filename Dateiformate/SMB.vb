@@ -81,7 +81,7 @@ Public Class SMB
     '******************
     Public Overrides Sub Read_File()
 
-        Dim i, j, n, AnzZeilen As Integer
+        Dim i, j As Integer
         Dim Zeile As String
         Dim Stunde, Minute, Tag, Monat, Jahr As Integer
         Dim Datum As DateTime
@@ -92,27 +92,13 @@ Public Class SMB
         Dim StrRead As StreamReader = New StreamReader(FiStr, System.Text.Encoding.GetEncoding("iso8859-1"))
         Dim StrReadSync = TextReader.Synchronized(StrRead)
 
-        'Anzahl der Zeilen feststellen
-        AnzZeilen = 0
-        Do
-            Zeile = StrReadSync.ReadLine.ToString()
-            If (Zeile.Length > 0) Then
-                AnzZeilen += 1
-            End If
-        Loop Until StrReadSync.Peek() = -1
-
-        'Zeitreihe redimensionieren
+        'Zeitreihe instanzieren
         ReDim Me.Zeitreihen(0) 'bei ZRE gibt es nur eine Zeitreihe
         Me.Zeitreihen(0) = New Zeitreihe(Me.SpaltenSel(0))
         Me.Zeitreihen(0).Einheit = Me.Einheiten(0)
-        Me.Zeitreihen(0).Length = AnzZeilen - Me.nZeilenHeader
-
-        'Datei wieder auf Anfang setzen und einlesen
-        FiStr.Seek(0, SeekOrigin.Begin)
 
         j = 1
-        n = 0
-         
+
         'Anfangsdatum einlesen
         Zeile = StrReadSync.ReadLine.ToString()
         Tag = Zeile.Substring(0, 2)
@@ -122,7 +108,9 @@ Public Class SMB
         Minute = Zeile.Substring(10, 2)
         
         Anfangsdatum = New System.DateTime(Jahr, Monat, Tag, Stunde, Minute, 0, New System.Globalization.GregorianCalendar())
-        
+
+        'Einlesen
+        '--------
         Do
             Zeile = StrReadSync.ReadLine.ToString()
             j += 1
@@ -139,13 +127,10 @@ Public Class SMB
                 Next
                 'Minute = Zeile.Substring(0, 3)
                 Datum = Anfangsdatum.AddMinutes(Minute)
-                'Debug.Print(Datum)
 
                 'Datum und Wert zur Zeitreihe hinzufügen
                 '---------------------------------------
-                Me.Zeitreihen(0).XWerte(n) = Datum
-                Me.Zeitreihen(0).YWerte(n) = StringToDouble(Zeile.Substring(i + 2))
-                n += 1
+                Me.Zeitreihen(0).AddNode(Datum, StringToDouble(Zeile.Substring(i + 2)))
 
             End If
         Loop Until StrReadSync.Peek() = -1
