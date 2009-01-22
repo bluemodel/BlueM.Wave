@@ -6,6 +6,8 @@ Imports System.IO
 Public Class CSV
     Inherits Dateiformat
 
+    Public Const DatumsformatCSV As String = "dd.MM.yyyy HH:mm"
+
     ''' <summary>
     ''' Gibt an, ob beim Import des Dateiformats der Importdialog angezeigt werden soll
     ''' </summary>
@@ -108,6 +110,7 @@ Public Class CSV
         Dim AnzZeil As Integer = 0
         Dim i, j, n As Integer
         Dim Zeile As String
+        Dim ok As Boolean
         Dim datum As DateTime
         Dim Werte() As String
 
@@ -125,44 +128,65 @@ Public Class CSV
                 Me.Zeitreihen(i) = New Zeitreihe(SpaltenSel(i))
             Next
 
+            'Einheiten übergeben
+            If (Me.UseEinheiten) Then
+                n = 0
+                For j = 0 To Me.YSpalten.GetUpperBound(0)
+                    If (isSelected(Me.YSpalten(j))) Then
+                        Me.Zeitreihen(n).Einheit = Me.Einheiten(j)
+                        n += 1
+                    End If
+                Next
+            End If
+
+            'Kopfzeilen überspringen
+            For i = 0 To Me.nZeilenHeader - 1
+                StrReadSync.ReadLine()
+            Next
+
             'Einlesen
             '--------
-            For i = 0 To AnzZeil - 1
+            Do
+                Zeile = StrReadSync.ReadLine.ToString()
+
                 If (Me.Zeichengetrennt) Then
+
                     'Zeichengetrennt
-                    Werte = StrReadSync.ReadLine.ToString.Split(New Char() {Me.Trennzeichen.Character}, StringSplitOptions.RemoveEmptyEntries)
-                    If (i >= Me.nZeilenHeader) Then
+                    '---------------
+                    Werte = Zeile.Split(New Char() {Me.Trennzeichen.Character}, StringSplitOptions.RemoveEmptyEntries)
+
+                    If (Werte.Length > 0) Then
                         'Erste Spalte: Datum_Zeit
-                        datum = New System.DateTime(Werte(Me.Datumsspalte).Substring(6, 4), Werte(Me.Datumsspalte).Substring(3, 2), Werte(Me.Datumsspalte).Substring(0, 2), Werte(Me.Datumsspalte).Substring(11, 2), Werte(Me.Datumsspalte).Substring(14, 2), 0, New System.Globalization.GregorianCalendar())
+                        ok = DateTime.TryParseExact(Werte(Me.Datumsspalte), DatumsformatCSV, Konstanten.Zahlenformat, Globalization.DateTimeStyles.None, datum)
+                        If (Not ok) Then
+                            Throw New Exception("Kann das Datumsformat '" & Werte(Me.Datumsspalte) & "' nicht erkennen! " & eol & "Sollte in der Form '" & DatumsformatCSV & "' vorliegen!")
+                        End If
                         'Restliche Spalten: Werte
                         n = 0
                         For j = 0 To Me.YSpalten.GetUpperBound(0)
                             If (isSelected(Me.YSpalten(j))) Then
-                                Me.Zeitreihen(n).Einheit = Me.Einheiten(j) 'TODO: einmal würde auch reichen
                                 Me.Zeitreihen(n).AddNode(datum, StringToDouble(Werte(j + 1)))
                                 n += 1
                             End If
                         Next
                     End If
+
                 Else
                     'Spalten mit fester Breite
-                    Zeile = StrReadSync.ReadLine.ToString()
-                    If (i >= Me.nZeilenHeader) Then
-                        'Erste Spalte: Datum_Zeit
-                        datum = New System.DateTime(Zeile.Substring(Me.Datumsspalte + 6 + SpaltenOffset, 4), Zeile.Substring(Me.Datumsspalte + 3 + SpaltenOffset, 2), Zeile.Substring(Me.Datumsspalte + 0 + SpaltenOffset, 2), Zeile.Substring(Me.Datumsspalte + 11 + SpaltenOffset, 2), Zeile.Substring(Me.Datumsspalte + 14 + SpaltenOffset, 2), 0, New System.Globalization.GregorianCalendar())
-                        'Restliche Spalten: Werte
-                        n = 0
-                        For j = 0 To Me.YSpalten.GetUpperBound(0)
-                            If (isSelected(Me.YSpalten(j))) Then
-                                Me.Zeitreihen(n).Einheit = Me.Einheiten(j) 'TODO: einmal würde auch reichen
-                                Me.Zeitreihen(n).AddNode(datum, StringToDouble(Zeile.Substring((j + 1) * Me.Spaltenbreite, Math.Min(Me.Spaltenbreite, Zeile.Substring((j + 1) * Me.Spaltenbreite).Length))))
-                                n += 1
-                            End If
-                        Next
-                    End If
+                    '-------------------------
+                    'Erste Spalte: Datum_Zeit
+                    datum = New System.DateTime(Zeile.Substring(Me.Datumsspalte + 6 + SpaltenOffset, 4), Zeile.Substring(Me.Datumsspalte + 3 + SpaltenOffset, 2), Zeile.Substring(Me.Datumsspalte + 0 + SpaltenOffset, 2), Zeile.Substring(Me.Datumsspalte + 11 + SpaltenOffset, 2), Zeile.Substring(Me.Datumsspalte + 14 + SpaltenOffset, 2), 0, New System.Globalization.GregorianCalendar())
+                    'Restliche Spalten: Werte
+                    n = 0
+                    For j = 0 To Me.YSpalten.GetUpperBound(0)
+                        If (isSelected(Me.YSpalten(j))) Then
+                            Me.Zeitreihen(n).AddNode(datum, StringToDouble(Zeile.Substring((j + 1) * Me.Spaltenbreite, Math.Min(Me.Spaltenbreite, Zeile.Substring((j + 1) * Me.Spaltenbreite).Length))))
+                            n += 1
+                        End If
+                    Next
                 End If
 
-            Next
+            Loop Until StrReadSync.Peek() = -1
 
             StrReadSync.Close()
             StrRead.Close()
