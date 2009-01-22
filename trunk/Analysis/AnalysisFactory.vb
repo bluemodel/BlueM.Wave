@@ -20,7 +20,7 @@ Module AnalysisFactory
     ''' <param name="analysisfunction">Typ des zu erzeugenden Analyse-Objekts</param>
     ''' <param name="zeitreihen">Collection von zu analysierenden Zeitreihen</param>
     ''' <returns>Das Analyse-Objekt</returns>
-    Public Function CreateAnalysis(ByVal analysisfunction As AnalysisFunctions, ByVal zeitreihen As Collection) As Analysis
+    Public Function CreateAnalysis(ByVal analysisfunction As AnalysisFunctions, ByVal zeitreihen As List(Of Zeitreihe)) As Analysis
 
         Dim oAnalysis As Analysis
 

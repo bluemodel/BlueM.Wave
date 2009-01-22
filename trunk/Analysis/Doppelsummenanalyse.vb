@@ -6,7 +6,7 @@ Public Class Doppelsummenanalyse
     Inherits Analysis
 
     Dim summe1(), summe2() As Double
-    Dim datume() As DateTime
+    Dim datume As IList(Of DateTime)
 
     ''' <summary>
     ''' Flag, der anzeigt, ob die Analysefunktion einen Ergebnistext erzeugt
@@ -39,7 +39,7 @@ Public Class Doppelsummenanalyse
     ''' Konstruktor
     ''' </summary>
     ''' <param name="zeitreihen">zu analysierende Zeitreihen</param>
-    Public Sub New(ByRef zeitreihen As Collection)
+    Public Sub New(ByRef zeitreihen As List(Of Zeitreihe))
 
         Call MyBase.New(zeitreihen)
 
@@ -59,8 +59,8 @@ Public Class Doppelsummenanalyse
         Dim zre1, zre2 As Zeitreihe
         Dim values(,) As Double
 
-        zre1 = Me.mZeitreihen(1)
-        zre2 = Me.mZeitreihen(2)
+        zre1 = Me.mZeitreihen(0)
+        zre2 = Me.mZeitreihen(1)
 
         'nur gemeinsame Stützstellen nutzen
         values = AnalysisHelper.getConcurrentValues(zre1, zre2)
@@ -92,7 +92,7 @@ Public Class Doppelsummenanalyse
         '-----
         Me.mResultText = "Doppelsummenanalyse:" & eol _
                         & eol _
-                        & "Die Analyse basiert auf " & Me.summe1.Length & " gemeinsamen Stützstellen zwischen " & Me.datume(0).ToString(Datumsformat) & " und " & Me.datume(Me.datume.Length - 1).ToString(Datumsformat) & eol _
+                        & "Die Analyse basiert auf " & Me.summe1.Length & " gemeinsamen Stützstellen zwischen " & Me.datume(0).ToString(Datumsformat) & " und " & Me.datume(Me.datume.Count - 1).ToString(Datumsformat) & eol _
                         & eol
 
         'Diagramm:
@@ -102,21 +102,21 @@ Public Class Doppelsummenanalyse
 
         Me.mResultChart = New Steema.TeeChart.Chart()
         Me.mResultChart.Aspect.View3D = False
-        Me.mResultChart.Header.Text = "Doppelsummenanalyse (" & Me.mZeitreihen(1).Title & " / " & Me.mZeitreihen(2).Title & ")"
+        Me.mResultChart.Header.Text = "Doppelsummenanalyse (" & Me.mZeitreihen(0).Title & " / " & Me.mZeitreihen(1).Title & ")"
         Me.mResultChart.Legend.LegendStyle = Steema.TeeChart.LegendStyles.Series
         Me.mResultChart.Legend.Visible = False
 
         'Achsen
         '------
-        Me.mResultChart.Axes.Bottom.Title.Caption = "Summe " & Me.mZeitreihen(1).Title
+        Me.mResultChart.Axes.Bottom.Title.Caption = "Summe " & Me.mZeitreihen(0).Title
         Me.mResultChart.Axes.Bottom.Labels.Style = Steema.TeeChart.AxisLabelStyle.Value
-        Me.mResultChart.Axes.Left.Title.Caption = "Summe " & Me.mZeitreihen(2).Title
+        Me.mResultChart.Axes.Left.Title.Caption = "Summe " & Me.mZeitreihen(1).Title
         Me.mResultChart.Axes.Left.Labels.Style = Steema.TeeChart.AxisLabelStyle.Value
 
         'Reihen
         '------
         doppelsumme = New Steema.TeeChart.Styles.Line(Me.mResultChart)
-        doppelsumme.Title = "Doppelsumme " & Me.mZeitreihen(1).Title & " - " & Me.mZeitreihen(2).Title
+        doppelsumme.Title = "Doppelsumme " & Me.mZeitreihen(0).Title & " - " & Me.mZeitreihen(1).Title
         doppelsumme.Pointer.Visible = True
         doppelsumme.Pointer.Style = Steema.TeeChart.Styles.PointerStyles.Circle
         doppelsumme.Pointer.HorizSize = 2

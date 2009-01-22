@@ -30,7 +30,7 @@ Public Class ASC
 
         'Voreinstellungen
         Me.iZeileUeberschriften = 2
-        Me.UseEinheiten = False
+        Me.UseEinheiten = True
         Me.iZeileEinheiten = 3
         Me.iZeileDaten = 4
         Me.Zeichengetrennt = True
@@ -56,55 +56,50 @@ Public Class ASC
         Dim ZeileSpalten As String = ""
         Dim ZeileEinheiten As String = ""
 
-        Try
-            'Datei öffnen
-            Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
-            Dim StrRead As StreamReader = New StreamReader(FiStr, System.Text.Encoding.GetEncoding("iso8859-1"))
-            Dim StrReadSync As TextReader = TextReader.Synchronized(StrRead)
+        'Datei öffnen
+        Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
+        Dim StrRead As StreamReader = New StreamReader(FiStr, System.Text.Encoding.GetEncoding("iso8859-1"))
+        Dim StrReadSync As TextReader = TextReader.Synchronized(StrRead)
 
-            'Spaltenüberschriften
-            For i = 1 To Me.iZeileDaten
-                Zeile = StrReadSync.ReadLine.ToString
-                If (i = Me.iZeileUeberschriften) Then ZeileSpalten = Zeile
-                If (i = Me.iZeileEinheiten) Then ZeileEinheiten = Zeile
-            Next
-            StrReadSync.Close()
-            StrRead.Close()
-            FiStr.Close()
+        'Spaltenüberschriften
+        For i = 1 To Me.iZeileDaten
+            Zeile = StrReadSync.ReadLine.ToString
+            If (i = Me.iZeileUeberschriften) Then ZeileSpalten = Zeile
+            If (i = Me.iZeileEinheiten) Then ZeileEinheiten = Zeile
+        Next
+        StrReadSync.Close()
+        StrRead.Close()
+        FiStr.Close()
 
-            'Spaltennamen auslesen
-            '---------------------
-            Dim Namen() As String
-            Dim Einheiten() As String
+        'Spaltennamen auslesen
+        '---------------------
+        Dim Namen() As String
+        Dim Einheiten() As String
 
-            Namen = ZeileSpalten.Split(New Char() {Me.Trennzeichen.Character}, StringSplitOptions.RemoveEmptyEntries)
-            Einheiten = ZeileEinheiten.Split(New Char() {Me.Trennzeichen.Character}, StringSplitOptions.RemoveEmptyEntries)
+        Namen = ZeileSpalten.Split(New Char() {Me.Trennzeichen.Character}, StringSplitOptions.RemoveEmptyEntries)
+        Einheiten = ZeileEinheiten.Split(New Char() {Me.Trennzeichen.Character}, StringSplitOptions.RemoveEmptyEntries)
 
-            'Sicherstellen, dass es so viele Einheiten wie Spalten gibt:
-            ReDim Preserve Einheiten(Namen.GetUpperBound(0))
-            For i = 0 To Einheiten.GetUpperBound(0)
-                If (IsNothing(Einheiten(i))) Then Einheiten(i) = "-"
-            Next
+        'Sicherstellen, dass es so viele Einheiten wie Spalten gibt:
+        ReDim Preserve Einheiten(Namen.GetUpperBound(0))
+        For i = 0 To Einheiten.GetUpperBound(0)
+            If (IsNothing(Einheiten(i))) Then Einheiten(i) = "-"
+        Next
 
-            'Leerzeichen entfernen
-            For i = 0 To Namen.GetUpperBound(0)
-                Einheiten(i) = Einheiten(i).Trim()
-                Namen(i) = Namen(i).Trim()
-            Next
+        'Leerzeichen entfernen
+        For i = 0 To Namen.GetUpperBound(0)
+            Einheiten(i) = Einheiten(i).Trim()
+            Namen(i) = Namen(i).Trim()
+        Next
 
-            'X-Spalte übernehmen
-            Dim iDatumspalte As Integer = 0
-            Me.XSpalte = Namen(iDatumspalte)
+        'X-Spalte übernehmen
+        Dim iDatumspalte As Integer = 0
+        Me.XSpalte = Namen(iDatumspalte)
 
-            'Y-Spalten übernehmen
-            ReDim Me.YSpalten(Namen.GetUpperBound(0) - 1)
-            ReDim Me.Einheiten(Namen.GetUpperBound(0) - 1)
-            Array.Copy(Namen, 1, Me.YSpalten, 0, Namen.Length - 1)
-            Array.Copy(Einheiten, 1, Me.Einheiten, 0, Namen.Length - 1)
-
-        Catch ex As Exception
-            MsgBox("Konnte Datei nicht einlesen!" & eol & eol & "Fehler: " & ex.Message, MsgBoxStyle.Critical, "Fehler")
-        End Try
+        'Y-Spalten übernehmen
+        ReDim Me.YSpalten(Namen.GetUpperBound(0) - 1)
+        ReDim Me.Einheiten(Namen.GetUpperBound(0) - 1)
+        Array.Copy(Namen, 1, Me.YSpalten, 0, Namen.Length - 1)
+        Array.Copy(Einheiten, 1, Me.Einheiten, 0, Namen.Length - 1)
 
     End Sub
 
@@ -112,12 +107,10 @@ Public Class ASC
     '******************
     Public Overrides Sub Read_File()
 
-        Dim AnzZeil As Integer = 0
-        Dim AnzZeilLeer As Integer
-        Dim AnzWerte As Integer
         Dim i, j, n As Integer
         Dim Zeile As String
-        Dim Werte() As String = {}
+        Dim Werte() As String
+        Dim datum, datumLast As DateTime
         Dim Ereignisende As Boolean
         Dim dt As TimeSpan
 
@@ -127,122 +120,97 @@ Public Class ASC
 
         dt = New TimeSpan(0, 5, 0)
 
-        'Anzahl der Zeilen feststellen
-        Do
-            Zeile = StrReadSync.ReadLine.ToString
-            AnzZeil += 1
-            If Trim(Zeile).Length = 0 Then
-                AnzZeilLeer += 1
-            End If
-        Loop Until StrReadSync.Peek() = -1
-
-        'Anzahl Zeitreihen bestimmen und Array entsprechend dimensionieren
+        'Zeitreihen instanzieren
         ReDim Me.Zeitreihen(Me.SpaltenSel.GetUpperBound(0))
-
-        'Zeitreihen mit vorläufiger Zeilennanzahl Dimensionieren
-        If AnzZeilLeer > 1 Then
-            AnzWerte = AnzZeil - Me.nZeilenHeader + AnzZeilLeer
-        Else
-            AnzWerte = AnzZeil - Me.nZeilenHeader
-        End If
         For i = 0 To Me.Zeitreihen.GetUpperBound(0)
             Me.Zeitreihen(i) = New Zeitreihe(SpaltenSel(i))
-            Me.Zeitreihen(i).Length = AnzWerte
         Next
 
-        'temoräres Array für XWerte
-        Dim tmpXWerte(AnzWerte - 1) As DateTime
-        'Auf Anfang setzen, Kopfzeile überspringen und einlesen
-        '------------------------------
-        'Auf Anfang setzten
-        FiStr.Seek(0, SeekOrigin.Begin)
-        'Kopfzeilen Überspringen
+        'Einheiten
+        If (Me.UseEinheiten) Then
+            n = 0
+            For j = 0 To Me.YSpalten.GetUpperBound(0)
+                If (isSelected(Me.YSpalten(j))) Then
+                    Me.Zeitreihen(n).Einheit = Me.Einheiten(j)
+                    n += 1
+                End If
+            Next
+        End If
+
+        'Einlesen
+        '--------
+
+        'Kopfzeilen
         For i = 1 To Me.nZeilenHeader + 1
             StrReadSync.ReadLine()
         Next
-        'Einlesen
-        i = 0
-        Ereignisende = True
+
+        Ereignisende = False
         Do While Not StrReadSync.Peek() = -1
-            'Komplette Zeile einlesen
-            Werte = StrReadSync.ReadLine.ToString.Split(New Char() {Me.Trennzeichen.Character}, StringSplitOptions.RemoveEmptyEntries)
-            'Falls eine leere Zeile eingelesen wurde
-            If Werte.Length = 0 Then
-                'Leere Zeile befindet sich am Ende eines Ereignisses
-                If Ereignisende Then
-                    n = 0
-                    'Letztes Datum um fünf Minuten hochzählen
-                    tmpXWerte(i) = tmpXWerte(i - 1).AddMinutes(5)
-                    'Alle Werte auf 0.0 setzen
-                    For j = 0 To Me.YSpalten.GetUpperBound(0)
-                        If (isSelected(Me.YSpalten(j))) Then
-                            Me.Zeitreihen(n).Einheit = Me.Einheiten(j)
-                            Me.Zeitreihen(n).YWerte(i) = 0.0
-                            n += 1
-                        End If
-                    Next
-                End If
-                '
-                Ereignisende = False
-            Else
+
+            'Zeile einlesen
+            Zeile = StrReadSync.ReadLine()
+
+            '* am Anfang ignorieren
+            If (Zeile.StartsWith("*")) Then Zeile = Zeile.Substring(1)
+
+            Werte = Zeile.ToString.Split(New Char() {Me.Trennzeichen.Character}, StringSplitOptions.RemoveEmptyEntries)
+
+            If Werte.Length > 0 Then
+
                 'Eine Zeile mit Werten wird eingelesen
-                'Erste Spalte: Datum_Zeit
-                tmpXWerte(i) = New System.DateTime(Werte(0).Substring(7, 4), Werte(0).Substring(4, 2), Werte(0).Substring(1, 2), Werte(1).Substring(0, 2), Werte(1).Substring(3, 2), 0, New System.Globalization.GregorianCalendar())
-                If Not Ereignisende Then
-                    If Not (tmpXWerte(i - 1).AddMinutes(5) = tmpXWerte(i)) Then
-                        tmpXWerte(i + 1) = tmpXWerte(i)
-                        tmpXWerte(i) = tmpXWerte(i + 1).Subtract(dt)
+                'Ersten zwei Spalten: Datum_Zeit
+                'Dim ok As Boolean
+                'ok = DateTime.TryParseExact(Werte(0) & " " & Werte(1), "dd.MM.yyyy HH:mm", Konstanten.Zahlenformat, DateTimeStyles.None, datum)
+                datum = New System.DateTime(Werte(0).Substring(6, 4), Werte(0).Substring(3, 2), Werte(0).Substring(0, 2), Werte(1).Substring(0, 2), Werte(1).Substring(3, 2), 0, New System.Globalization.GregorianCalendar())
+
+                'Wenn vorher eine leere Zeile eingelesen wurde
+                If (Ereignisende) Then
+
+                    'Mit Stützstellen vom Wert 0 Lücke zwischen Ereignissen abschliessen
+                    datumLast = Me.Zeitreihen(0).Enddatum
+                    If (datum.Subtract(datumLast) > dt) Then 'nur wenn Lücke größer als dt ist
                         n = 0
                         For j = 0 To Me.YSpalten.GetUpperBound(0)
                             If (isSelected(Me.YSpalten(j))) Then
-                                Me.Zeitreihen(n).Einheit = Me.Einheiten(j)
-                                Me.Zeitreihen(n).YWerte(i) = 0.0
-                                Me.Zeitreihen(n).YWerte(i + 1) = StringToDouble(Werte(j + 2))
+                                'Eine Null nach dem letzten Datum
+                                Me.Zeitreihen(n).AddNode(datumLast.Add(dt), 0.0)
+                                If (datum.Subtract(dt) > datumLast.Add(dt)) Then 'nur wenn Lücke damit noch nicht geschlossen ist
+                                    'Eine Null vor dem aktuellen Datum
+                                    Me.Zeitreihen(n).AddNode(datum.Subtract(dt), 0.0)
+                                End If
                                 n += 1
                             End If
                         Next
-                        i += 1
-                    Else
-                        'Restliche Spalten: Werte
-                        n = 0
-                        For j = 0 To Me.YSpalten.GetUpperBound(0)
-                            If (isSelected(Me.YSpalten(j))) Then
-                                Me.Zeitreihen(n).Einheit = Me.Einheiten(j)
-                                Me.Zeitreihen(n).YWerte(i) = StringToDouble(Werte(j + 2))
-                                n += 1
-                            End If
-                        Next
+                        'Log
+                        Call Wave.Log.AddLogEntry("... Die Lücke zwischen " & datumLast.ToString(Konstanten.Datumsformat) & " und " & datum.ToString(Konstanten.Datumsformat) & " wurde mit 0-Werten abgeschlossen.")
                     End If
-                    Ereignisende = True
-                Else
-                    'Restliche Spalten: Werte
-                    n = 0
-                    For j = 0 To Me.YSpalten.GetUpperBound(0)
-                        If (isSelected(Me.YSpalten(j))) Then
-                            Me.Zeitreihen(n).Einheit = Me.Einheiten(j)
-                            Me.Zeitreihen(n).YWerte(i) = StringToDouble(Werte(j + 2))
-                            n += 1
-                        End If
-                    Next
+                    Ereignisende = False 'zurücksetzen
+
                 End If
+
+                'eingelesene Stützstelle hinzufügen
+                n = 0
+                For j = 0 To Me.YSpalten.GetUpperBound(0)
+                    If (isSelected(Me.YSpalten(j))) Then
+                        Me.Zeitreihen(n).AddNode(datum, StringToDouble(Werte(j + 2)))
+                        n += 1
+                    End If
+                Next
+
+
+
+            Else
+                'Falls eine leere Zeile eingelesen wurde
+                Ereignisende = True
+
             End If
-            i += 1
         Loop
-        AnzZeil = i
-        ReDim Preserve tmpXWerte(AnzZeil - 1)
-        For i = 0 To Me.Zeitreihen.GetUpperBound(0)
-            Me.Zeitreihen(i).Length = AnzZeil
-        Next
 
         'Datei schließen
         StrReadSync.Close()
         StrRead.Close()
         FiStr.Close()
-
-        'XWerte an alle Zeitreihen übergeben
-        For i = 0 To Me.Zeitreihen.GetUpperBound(0)
-            Me.Zeitreihen(i).XWerte = tmpXWerte
-        Next
 
     End Sub
 

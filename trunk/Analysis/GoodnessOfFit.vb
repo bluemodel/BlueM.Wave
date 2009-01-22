@@ -26,7 +26,7 @@ Public Class GoodnessOfFit
         End Get
     End Property
 
-    Public Sub New(ByRef zeitreihen As Collection)
+    Public Sub New(ByRef zeitreihen As List(Of Zeitreihe))
 
         Call MyBase.New(zeitreihen)
 
@@ -42,8 +42,13 @@ Public Class GoodnessOfFit
         Dim i As Integer
         Dim mittelwert, sum_qmittelwertabweichung, values(,) As Double
 
-        Me.zre_gemessen = Me.mZeitreihen(1)
-        Me.zre_simuliert = Me.mZeitreihen(2)
+        'Zeitreihen zuweisen
+        Me.zre_gemessen = Me.mZeitreihen(0)
+        Me.zre_simuliert = Me.mZeitreihen(1)
+
+        'Zeitreihen säubern
+        Call Me.zre_gemessen.Clean()
+        Call Me.zre_simuliert.Clean()
 
         'Auf gemeinsame Stützstellen beschränken
         values = AnalysisHelper.getConcurrentValues(Me.zre_gemessen, Me.zre_simuliert)
@@ -71,6 +76,8 @@ Public Class GoodnessOfFit
     End Sub
 
     Public Overrides Sub PrepareResults()
+
+        Dim i As Integer
 
         'Text:
         '-----
@@ -119,10 +126,16 @@ Public Class GoodnessOfFit
         line_simuliert.XValues.DateTime = True
         line_fehlerquadrate.XValues.DateTime = True
 
-        'Werte hinzufügen
-        line_gemessen.Add(Me.zre_gemessen.XWerte, Me.zre_gemessen.YWerte)
-        line_simuliert.Add(Me.zre_simuliert.XWerte, Me.zre_simuliert.YWerte)
-        line_fehlerquadrate.Add(Me.zre_gemessen.XWerte, Me.fehlerquadrate)
+        'Werte zu Serien hinzufügen
+        For i = 0 to Me.zre_gemessen.Length - 1
+            line_gemessen.Add(Me.zre_gemessen.XWerte(i), Me.zre_gemessen.YWerte(i))
+        Next
+        For i = 0 to Me.zre_gemessen.Length - 1
+            line_simuliert.Add(Me.zre_gemessen.XWerte(i), Me.zre_gemessen.YWerte(i))
+        Next
+        For i = 0 To Me.zre_simuliert.Length - 1
+            line_fehlerquadrate.Add(Me.zre_simuliert.XWerte(i), Me.fehlerquadrate(i))
+        Next
 
     End Sub
 

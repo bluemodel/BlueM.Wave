@@ -8,7 +8,7 @@ Public MustInherit Class Analysis
     ''' <summary>
     ''' Die zu analysierenden Zeitreihen
     ''' </summary>
-    Protected mZeitreihen As Collection
+    Protected mZeitreihen As List(Of Zeitreihe)
 
     ''' <summary>
     ''' Ergebnistext
@@ -85,7 +85,7 @@ Public MustInherit Class Analysis
     ''' Konstruktor
     ''' </summary>
     ''' <param name="zeitreihen">Collection von Zeitreihen</param>
-    Public Sub New(ByRef zeitreihen As Collection)
+    Public Sub New(ByRef zeitreihen As List(Of Zeitreihe))
         Me.mZeitreihen = zeitreihen
     End Sub
 

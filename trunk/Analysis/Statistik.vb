@@ -50,7 +50,7 @@ Public Class Statistik
     ''' Konstruktor
     ''' </summary>
     ''' <param name="zeitreihen">zu analysierende Zeitreihen</param>
-    Public Sub New(ByRef zeitreihen As Collection)
+    Public Sub New(ByRef zeitreihen As List(Of Zeitreihe))
 
         'Konstruktor der Basisklasse aufrufen!
         Call MyBase.New(zeitreihen)
@@ -78,6 +78,11 @@ Public Class Statistik
 
         Dim i, j, n As Integer
         Dim min, max As Double
+
+        'Zeitreihen säubern
+        For Each zre As Zeitreihe In Me.mZeitreihen
+            Call zre.Clean()
+        Next
 
         'Min und max aller Zeitreihen bestimmen
         '--------------------------------------
@@ -202,7 +207,7 @@ Public Class Statistik
         Me.mResultChart.Axes.Right.Maximum = 100
 
         Me.mResultChart.Axes.Bottom.Labels.Style = Steema.TeeChart.AxisLabelStyle.Value
-        Me.mResultChart.Axes.Bottom.Title.Caption = "Wert [" & Me.mZeitreihen(1).Einheit & "]"
+        Me.mResultChart.Axes.Bottom.Title.Caption = "Wert [" & Me.mZeitreihen(0).Einheit & "]"
 
         'Serien
         For Each erg As ErgebnisWerte In Me.Ergebnisse

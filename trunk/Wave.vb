@@ -26,10 +26,10 @@ Public Class Wave
     Friend Shared Log As LogWindow
 
 	'Collection von importierten Dateien
-	Private ImportedFiles As Collections.Generic.List(Of Dateiformat)
+	Private ImportedFiles As List(Of Dateiformat)
 
     'Interne Zeitreihen-Collection
-    Private Zeitreihen As Collection
+    Private Zeitreihen As Dictionary(Of String, Zeitreihe)
 
     'Dateifilter
     Private Const FileFilter_TEN As String = "TeeChart-Dateien (*.ten)|*.ten"
@@ -64,8 +64,8 @@ Public Class Wave
 
         'Kollektionen einrichten
 		'-----------------------
-		Me.ImportedFiles = New Collections.Generic.List(Of Dateiformat)
-        Me.Zeitreihen = New Collection()
+		Me.ImportedFiles = New List(Of Dateiformat)()
+        Me.Zeitreihen = New Dictionary(Of String, Zeitreihe)()
         Me.MyAxes1 = New Dictionary(Of String, Steema.TeeChart.Axis)
         Me.MyAxes2 = New Dictionary(Of String, Steema.TeeChart.Axis)
 
@@ -277,7 +277,7 @@ Public Class Wave
         Dim found As Boolean
 
         'Alle internen Zeitreihen durchlaufen und prüfen, ob es sie noch gibt
-        For Each zre As Zeitreihe In Me.Zeitreihen
+        For Each zre As Zeitreihe In Me.Zeitreihen.Values
             found = False
             For Each s As Steema.TeeChart.Styles.Series In Me.ChartListBox1.Items
                 If (s.Title = zre.Title) Then
@@ -418,7 +418,7 @@ Public Class Wave
         'Liste der Formate
         ExportDiag.ComboBox_Format.DataSource = System.Enum.GetValues(GetType(Konstanten.Dateiformate))
         'Zeitreihen in Listbox eintragen
-        For Each Reihe In Me.Zeitreihen
+        For Each Reihe In Me.Zeitreihen.Values
             ExportDiag.ListBox_Zeitreihen.Items.Add(Reihe)
         Next
 
@@ -511,7 +511,7 @@ Public Class Wave
                 'Ergebnisse aufbereiten
                 Call oAnalysis.PrepareResults()
 
-                Call Wave.Log.AddLogEntry("... Analyse abgeschlossen")
+                Call Wave.Log.AddLogEntry("Analyse abgeschlossen")
 
                 'Default-Cursor
                 Me.Cursor = Cursors.Default
@@ -663,7 +663,7 @@ Public Class Wave
 
         'Umbenennen, falls Titel schon vergeben
         'Format: "Titel (n)"
-        Do While (Me.Zeitreihen.Contains(zre.Title))
+        Do While (Me.Zeitreihen.ContainsKey(zre.Title))
 
             Dim pattern As String = "(?<name>.*)\s\(\d+\)$"
             Dim match As Match = Regex.Match(zre.Title, pattern)
@@ -676,7 +676,7 @@ Public Class Wave
             End If
         Loop
 
-        Me.Zeitreihen.Add(zre, zre.Title)
+        Me.Zeitreihen.Add(zre.Title, zre)
 
     End Sub
 
@@ -717,11 +717,9 @@ Public Class Wave
                 If (series.GetHorizAxis.IsDateTime) Then
 
                     reihe = New Zeitreihe(series.Title)
-                    reihe.Length = series.XValues.Count
 
                     For i = 0 To reihe.Length - 1
-                        reihe.XWerte(i) = Date.FromOADate(series.XValues(i))
-                        reihe.YWerte(i) = series.YValues(i)
+                        reihe.AddNode(Date.FromOADate(series.XValues(i)), series.YValues(i))
                     Next
 
                     'Zeitreihe abspeichern
@@ -791,7 +789,7 @@ Public Class Wave
                     End If
 
                     'Log
-                    Call Wave.Log.AddLogEntry("... Datei '" & file & "' erfolgreich importiert!")
+                    Call Wave.Log.AddLogEntry("Datei '" & file & "' erfolgreich importiert!")
 
                     'Datei abspeichern
                     Me.ImportedFiles.Add(Datei)
@@ -806,7 +804,7 @@ Public Class Wave
 
                 Catch ex As Exception
                     MsgBox("Fehler beim Import:" & eol & ex.Message, MsgBoxStyle.Critical)
-                    Call Wave.Log.AddLogEntry("... Fehler beim Import:" & eol & ex.Message)
+                    Call Wave.Log.AddLogEntry("Fehler beim Import:" & eol & ex.Message)
                 End Try
 
         End Select
@@ -909,8 +907,10 @@ Public Class Wave
         Line2.Title = zre.Title
 
         'Punkte zur Serie hinzufügen
-        Line1.Add(zre.XWerte, zre.YWerte)
-        Line2.Add(zre.XWerte, zre.YWerte)
+        For Each node As KeyValuePair(Of DateTime, Double) In zre.Nodes
+            Line1.Add(node.Key, node.Value)
+            Line2.Add(node.Key, node.Value)
+        Next
 
         'Achsenzuordnung
         AxisNo = getAxisNo(zre.Einheit)

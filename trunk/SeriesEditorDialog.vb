@@ -178,6 +178,8 @@ Public Class SeriesEditorDialog
     Private Sub Button_OK_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button_OK.Click
 
         Dim i As Integer
+        Dim datum As DateTime
+        Dim wert As Double
 
         'Titel prüfen
         If (Me.TextBox_Title.Text = String.Empty) Then
@@ -193,13 +195,13 @@ Public Class SeriesEditorDialog
             Exit Sub
         End If
 
-        'Zeitreihe abspeichern
+        'Zeitreihe instanzieren
         Me.mZeitreihe = New Zeitreihe(Me.Title)
-        Me.mZeitreihe.Length = Me.DataGridView1.RowCount - 1
 
         For i = 0 To Me.DataGridView1.RowCount - 2 '(letzte Zeile nicht mitnehmen)
-            Me.mZeitreihe.XWerte(i) = DateTime.Parse(Me.DataGridView1.Rows(i).Cells(0).Value)
-            Me.mZeitreihe.YWerte(i) = Convert.ToDouble(Me.DataGridView1.Rows(i).Cells(1).Value)
+            datum = DateTime.Parse(Me.DataGridView1.Rows(i).Cells(0).Value)
+            wert = Convert.ToDouble(Me.DataGridView1.Rows(i).Cells(1).Value)
+            Me.mZeitreihe.AddNode(datum, wert)
         Next
 
         Me.Close()

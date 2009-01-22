@@ -143,7 +143,7 @@ Public Class REG
     '******************
     Public Overrides Sub Read_File()
 
-        Dim i, j, n, AnzZeilen As Integer
+        Dim i, j As Integer
         Dim Zeile As String
         Dim Stunde, Minute, Tag, Monat, Jahr As Integer
         Dim Datum, Zeilendatum As DateTime
@@ -152,31 +152,21 @@ Public Class REG
         Dim StrRead As StreamReader = New StreamReader(FiStr, System.Text.Encoding.GetEncoding("iso8859-1"))
         Dim StrReadSync = TextReader.Synchronized(StrRead)
 
-        'Anzahl der Zeilen feststellen
-        AnzZeilen = 0
-        Do
-            Zeile = StrReadSync.ReadLine.ToString()
-            If (Zeile.Length > 0) Then
-                AnzZeilen += 1
-            End If
-        Loop Until StrReadSync.Peek() = -1
-
-        'Zeitreihe redimensionieren
+        'Zeitreihe instanzieren
         ReDim Me.Zeitreihen(0) 'bei REG gibt es nur eine Zeitreihe
         Me.Zeitreihen(0) = New Zeitreihe(Me.SpaltenSel(0))
         Me.Zeitreihen(0).Einheit = Me.Einheiten(0)
-        Me.Zeitreihen(0).Length = (AnzZeilen - Me.nZeilenHeader - 1) * Me.WerteProZeile(Me.Zeitintervall)
 
-        'Datei wieder auf Anfang setzen und einlesen
-        FiStr.Seek(0, SeekOrigin.Begin)
-
+        'Einlesen
+        '--------
         j = 0
-        n = 0
 
         Do
-            Zeile = StrReadSync.ReadLine.ToString()
-            If Zeile.Substring(5) = " 0 09999 0 0 0E" Then Exit Do
             j += 1
+            Zeile = StrReadSync.ReadLine.ToString()
+
+            If Zeile.Substring(5) = " 0 09999 0 0 0E" Then Exit Do
+
             If (j > Me.nZeilenHeader And Zeile.Length > 0) Then
 
                 'Datum erkennen
@@ -193,12 +183,9 @@ Public Class REG
                 'alle bis auf den letzten Wert einlesen
                 'beim letzten Wert besteht die Möglichkeit, dass nicht alle Zeichen belegt sind
                 For i = 0 To Me.WerteProZeile(Me.Zeitintervall) - 1
-                   Datum = Zeilendatum.AddMinutes(i * Me.Zeitintervall)
-                   Me.Zeitreihen(0).XWerte(n) = Datum
-                   Me.Zeitreihen(0).YWerte(n) = StringToDouble(Zeile.Substring(20 + LenString * i, LenString)) * 10 ^ (-DezFaktor)
-                   n += 1
+                    Datum = Zeilendatum.AddMinutes(i * Me.Zeitintervall)
+                    Me.Zeitreihen(0).AddNode(Datum, StringToDouble(Zeile.Substring(20 + LenString * i, LenString)) * 10 ^ (-DezFaktor))
                 Next
-
 
             End If
         Loop Until StrReadSync.Peek() = -1
@@ -219,7 +206,7 @@ Public Class REG
       Dim dt As Integer
       Dim KontiReihe As KontiZeitreihe
 
-      ''Zeitintervall aus ersten und zweiten Zeitschritt der Reihe ermitteln
+        'Zeitintervall aus ersten und zweiten Zeitschritt der Reihe ermitteln
       dt = DateDiff(DateInterval.Minute, Reihe.XWerte(0), Reihe.XWerte(1))
       KontiReihe = Reihe.MakeKontiZeitreihe(dt)
       KontiReihe.Zeitintervall = dt

@@ -5,7 +5,7 @@
 Public Class Gegenueberstellung
     Inherits Analysis
 
-    Dim datume() As DateTime
+    Dim datume As IList(Of DateTime)
     Dim ergebnisreihe(,) As Double ' Ergebnis der Gegenueberstellung: y-Werte der Reihe(xnummer) werden x-Achsen-Werte, y-Werte der Reihe(ynummer) werden y-Achsen-Werte  
     Dim xnummer As Integer ' Nummer mit der auf mZeitreihen(i) zugegriffen wird, xnummer = Zeitreihe soll auf x-Achse
     Dim ynummer As Integer ' Nummer mit der auf mZeitreihen(i) zugegriffen wird, xnummer = Zeitreihe soll auf y-Achse
@@ -41,7 +41,7 @@ Public Class Gegenueberstellung
     ''' Konstruktor
     ''' </summary>
     ''' <param name="zeitreihen">zu analysierende Zeitreihen</param>
-    Public Sub New(ByRef zeitreihen As Collection)
+    Public Sub New(ByRef zeitreihen As List(Of Zeitreihe))
 
         Call MyBase.New(zeitreihen)
 
@@ -62,29 +62,30 @@ Public Class Gegenueberstellung
         Dim values(,) As Double
 
         ' Dialogaufruf zur Auswahl der x-Achse
-        Dim dialog As New Gegenueberstellung_Dialog(Me.mZeitreihen(1).title, Me.mZeitreihen(2).title)
+        Dim dialog As New Gegenueberstellung_Dialog(Me.mZeitreihen(0).Title, Me.mZeitreihen(1).Title)
 
-        ' Nur wenn eine Zeitreihe als x-Aschse gewählt wurde, gehts los
+        ' Nur wenn eine Zeitreihe als x-Achse gewählt wurde, gehts los
         If (dialog.ShowDialog() = DialogResult.OK) Then
 
             ' Zuweisen der x-Achse
             Dim xachse As String
             xachse = dialog.xAchse
-            If (xachse = Me.mZeitreihen(1).title) Then
-                xnummer = 1
-                ynummer = 2
-            Else
-                xnummer = 2
+            If (xachse = Me.mZeitreihen(0).Title) Then
+                xnummer = 0
                 ynummer = 1
+            Else
+                xnummer = 1
+                ynummer = 0
             End If
             reihe1 = Me.mZeitreihen(xnummer)
             reihe2 = Me.mZeitreihen(ynummer)
 
+            'Reihen säubern
+            Call reihe1.Clean()
+            Call reihe2.Clean()
+
             'Nur gemeinsame Stützstellen nutzen
             values = AnalysisHelper.getConcurrentValues(reihe1, reihe2)
-            If (values.GetUpperBound(0) + 1 < reihe1.Length) Then  ' + Weil value-Array von 0 zählt
-                MessageBox.Show("ACHTUNG: Es wurden Werte entfernt!")
-            End If
 
             ' Ergebnisreihe allokieren
             ReDim Me.ergebnisreihe(values.GetUpperBound(0), 1)
@@ -111,7 +112,7 @@ Public Class Gegenueberstellung
         '-----
         Me.mResultText = "Gegenüberstellung:" & eol _
                         & eol _
-                        & "Die Analyse basiert auf " & Me.ergebnisreihe.Length & " gemeinsamen Stützstellen zwischen " & Me.datume(0).ToString(Datumsformat) & " und " & Me.datume(Me.datume.Length - 1).ToString(Datumsformat) & eol _
+                        & "Die Analyse basiert auf " & Me.ergebnisreihe.Length & " gemeinsamen Stützstellen zwischen " & Me.datume(0).ToString(Datumsformat) & " und " & Me.datume(Me.datume.Count - 1).ToString(Datumsformat) & eol _
                         & eol
 
         'Diagramm:

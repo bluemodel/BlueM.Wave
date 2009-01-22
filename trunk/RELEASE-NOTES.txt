@@ -5,15 +5,21 @@ Wave Release Notes
 Website: http://130.83.196.154/BlueM/wiki/index.php/Wave
 ===============================================================
 
-Version 1.x
+Version 1.2
+-----------
+* Interne Speicherung von Stützstellen überarbeitet
+
+
+Version 1.1
 -----------
 New:
-* Analysefunktionen: Doppelsummenanalyse, GoodnessOfFit, Statistik
+* Analysefunktionen: Doppelsummenanalyse, GoodnessOfFit, Statistik, 
+  Gegenüberstellung
+* Importformate SMB und REG
 * Serien werden automatisch anhand ihrer Einheiten auf verschiedene Achsen verteilt
 * Neues Feature "ReRead Files": Löscht alle vorhandenen Serien und liest alle aus  
-  Dateien importierten Zeitreihen mit den bereits verwendeten Einstellungen neu ein 
+  Dateien importierten Zeitreihen mit den bereits verwendeten Einstellungen neu ein
   (Bug 388)
-
 Fixed:
 * Zeitreihe zuschneiden
 

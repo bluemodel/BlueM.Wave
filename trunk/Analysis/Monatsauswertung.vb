@@ -76,7 +76,7 @@ Public Class Monatsauswertung
     ''' Konstruktor
     ''' </summary>
     ''' <param name="zeitreihen">zu analysierende Zeitreihen</param>
-    Public Sub New(ByRef zeitreihen As Collection)
+    Public Sub New(ByRef zeitreihen As List(Of Zeitreihe))
 
         Call MyBase.New(zeitreihen)
 
@@ -128,7 +128,7 @@ Public Class Monatsauswertung
         Dim i, j, N As Integer
         Dim summe, summequadrate As Double
 
-        reihe = Me.mZeitreihen.Item(1)
+        reihe = Me.mZeitreihen.Item(0)
 
         'Werte in Monate einsortieren
         For i = 0 To reihe.Length - 1
@@ -190,7 +190,7 @@ Public Class Monatsauswertung
         '--------
         Me.mResultChart = New Steema.TeeChart.Chart()
         Me.mResultChart.Aspect.View3D = False
-        Me.mResultChart.Header.Text = "Monatsauswertung (" & Me.mZeitreihen(1).Title & ")"
+        Me.mResultChart.Header.Text = "Monatsauswertung (" & Me.mZeitreihen(0).Title & ")"
 
         'Achsen
         '------
