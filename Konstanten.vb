@@ -47,13 +47,13 @@ Module Konstanten
         If (Not success) Then
             'Wert ist unlesbar
             wert = Konstanten.NaN
-            Call Wave.Log.AddLogEntry("Der Wert '" & str.Trim() & "' ist unlesbar und wurde durch " & Konstanten.NaN.ToString() & " ersetzt!")
+            Call Log.AddLogEntry("Der Wert '" & str.Trim() & "' ist unlesbar und wurde durch " & Konstanten.NaN.ToString() & " ersetzt!")
         Else
             'BUG 395: NaN und Infinity abfangen
             If (Double.IsNaN(wert) _
                 Or Double.IsInfinity(wert)) Then
                 wert = Konstanten.NaN
-                Call Wave.Log.AddLogEntry("Der Wert '" & str.Trim() & "' wurde durch " & Konstanten.NaN.ToString() & " ersetzt!")
+                Call Log.AddLogEntry("Der Wert '" & str.Trim() & "' wurde durch " & Konstanten.NaN.ToString() & " ersetzt!")
             End If
         End If
 

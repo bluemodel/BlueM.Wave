@@ -183,7 +183,7 @@ Public Class ASC
                             End If
                         Next
                         'Log
-                        Call Wave.Log.AddLogEntry("... Die Lücke zwischen " & datumLast.ToString(Konstanten.Datumsformat) & " und " & datum.ToString(Konstanten.Datumsformat) & " wurde mit 0-Werten abgeschlossen.")
+                        Call Log.AddLogEntry("... Die Lücke zwischen " & datumLast.ToString(Konstanten.Datumsformat) & " und " & datum.ToString(Konstanten.Datumsformat) & " wurde mit 0-Werten abgeschlossen.")
                     End If
                     Ereignisende = False 'zurücksetzen
 

@@ -4,9 +4,26 @@ Public Class LogWindow
 
 #Region "Form behavior"
 
+    Private WithEvents myLog As Log
+
+    Public Sub New()
+
+        ' This call is required by the Windows Form Designer.
+        InitializeComponent()
+
+        ' Add any initialization after the InitializeComponent() call.
+        Me.myLog = Log.getInstance()
+
+    End Sub
+
+    Private Sub LogChanged() Handles myLog.LogChanged
+        'Textbox mit Logtext aktualisieren
+        Me.TextBox_Log.Text = Log.Text
+    End Sub
+
     'Form schließen
     '**************
-    Private Sub Log_FormClosing(ByVal sender As System.Object, ByVal e As System.Windows.Forms.FormClosingEventArgs) Handles MyBase.FormClosing
+    Private Sub LogWindow_FormClosing(ByVal sender As System.Object, ByVal e As System.Windows.Forms.FormClosingEventArgs) Handles MyBase.FormClosing
 
         'verhindern, dass das Formular komplett gelöscht wird
         e.Cancel = True
@@ -17,7 +34,7 @@ Public Class LogWindow
     End Sub
 
     Private Sub ToolStripButton_New_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_New.Click
-        Call Me.ClearLog()
+        Call Log.ClearLog()
     End Sub
 
     Private Sub ToolStripButton_Save_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_Save.Click
@@ -26,34 +43,6 @@ Public Class LogWindow
         End If
     End Sub
 
-    Private Sub LogWindow_Resize(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Resize
-        Me.TextBox_Log.Width = Me.ClientSize.Width - 20
-        Me.TextBox_Log.Height = Me.ClientSize.Height - 10 - 25
-    End Sub
-
 #End Region 'Form behavior
-
-    ''' <summary>
-    ''' Einen Log-Eintrag hinzufügen
-    ''' </summary>
-    ''' <param name="msg">Eintrag</param>
-    Public Sub AddLogEntry(ByVal msg As String)
-
-        'Wenn Eintrag mehrzeilig, dann formatieren
-        If (msg.Contains(Konstanten.eol)) Then msg = Konstanten.eol & "  " & msg.Replace(Konstanten.eol, Konstanten.eol & "  ")
-
-        'Text hinzufügen
-        Me.TextBox_Log.AppendText("* " & DateTime.Now.ToString(Konstanten.Datumsformat) & ": " & msg & Konstanten.eol)
-
-    End Sub
-
-    ''' <summary>
-    ''' Log zurücksetzen (allen Text löschen)
-    ''' </summary>
-    Public Sub ClearLog()
-
-        Me.TextBox_Log.Clear()
-
-    End Sub
 
 End Class

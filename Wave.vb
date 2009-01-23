@@ -23,10 +23,10 @@ Public Class Wave
     '#############
 
     'Log-Fenster
-    Friend Shared Log As LogWindow
+    Private LogWindow As LogWindow
 
-	'Collection von importierten Dateien
-	Private ImportedFiles As List(Of Dateiformat)
+    'Collection von importierten Dateien
+    Private ImportedFiles As List(Of Dateiformat)
 
     'Interne Zeitreihen-Collection
     Private Zeitreihen As Dictionary(Of String, Zeitreihe)
@@ -63,8 +63,8 @@ Public Class Wave
         InitializeComponent()
 
         'Kollektionen einrichten
-		'-----------------------
-		Me.ImportedFiles = New List(Of Dateiformat)()
+        '-----------------------
+        Me.ImportedFiles = New List(Of Dateiformat)()
         Me.Zeitreihen = New Dictionary(Of String, Zeitreihe)()
         Me.MyAxes1 = New Dictionary(Of String, Steema.TeeChart.Axis)
         Me.MyAxes2 = New Dictionary(Of String, Steema.TeeChart.Axis)
@@ -76,8 +76,8 @@ Public Class Wave
 
         'Logfenster nur beim ersten Mal instanzieren
         '-------------------------------------------
-        If (IsNothing(Log)) Then
-            Log = New LogWindow()
+        If (IsNothing(LogWindow)) Then
+            LogWindow = New LogWindow()
         End If
 
     End Sub
@@ -323,15 +323,15 @@ Public Class Wave
         'Charts zurücksetzen
         Call Me.Init_Charts()
 
-		'Collections zurücksetzen
-		Me.ImportedFiles.Clear()
+        'Collections zurücksetzen
+        Me.ImportedFiles.Clear()
         Me.Zeitreihen.Clear()
         Me.MyAxes1.Clear()
         Me.MyAxes2.Clear()
 
-        'Messages zurücksetzen
+        'Log zurücksetzen
         Call Log.ClearLog()
-        Call Log.Hide()
+        Call Me.LogWindow.Hide()
 
     End Sub
 
@@ -405,7 +405,7 @@ Public Class Wave
 
         Dim ExportDiag As New ExportDiag()
         Dim Reihe As Zeitreihe
-        
+
 
         'Wenn keine Zeitreihen vorhanden, abbrechen!
         If (Me.Zeitreihen.Count < 1) Then
@@ -445,7 +445,7 @@ Public Class Wave
                     Me.SaveFileDialog1.Filter = "ZRE-Dateien (*.zre)|*.zre"
                 Case Dateiformate.REG
                     Me.SaveFileDialog1.DefaultExt = "reg"
-               Me.SaveFileDialog1.Filter = "REG-Dateien (*.reg)|*.reg"
+                    Me.SaveFileDialog1.Filter = "REG-Dateien (*.reg)|*.reg"
             End Select
             Me.SaveFileDialog1.Filter &= "|Alle Dateien (*.*)|*.*"
             Me.SaveFileDialog1.FilterIndex = 1
@@ -466,13 +466,13 @@ Public Class Wave
                             Reihe = CType(item, Zeitreihe)
                             Call REG.Write_File(Reihe, Me.SaveFileDialog1.FileName)
                         Next
-               Case Else
-                  MsgBox("Noch nicht implementiert!", MsgBoxStyle.Exclamation, "Wave")
-            End Select
+                    Case Else
+                        MsgBox("Noch nicht implementiert!", MsgBoxStyle.Exclamation, "Wave")
+                End Select
 
-            MsgBox("Zeitreihe erfolgreich exportiert!", MsgBoxStyle.Information, "Wave")
-         End If
-      End If
+                MsgBox("Zeitreihe erfolgreich exportiert!", MsgBoxStyle.Information, "Wave")
+            End If
+        End If
     End Sub
 
     'Analysieren
@@ -495,23 +495,23 @@ Public Class Wave
                 'Wait-Cursor
                 Me.Cursor = Cursors.WaitCursor
 
-                Call Wave.Log.AddLogEntry("Starte Analyse " & oAnalysisDialog.selectedAnalysisFunction.ToString() & " ...")
+                Call Log.AddLogEntry("Starte Analyse " & oAnalysisDialog.selectedAnalysisFunction.ToString() & " ...")
 
                 'Analyse instanzieren
                 Dim oAnalysis As Analysis
                 oAnalysis = AnalysisFactory.CreateAnalysis(oAnalysisDialog.selectedAnalysisFunction, oAnalysisDialog.selectedZeitreihen)
 
-                Call Wave.Log.AddLogEntry("... Analyse ausführen ...")
+                Call Log.AddLogEntry("... Analyse ausführen ...")
 
                 'Analyse ausführen
                 Call oAnalysis.ProcessAnalysis()
 
-                Call Wave.Log.AddLogEntry("... Analyseergebnis aufbereiten ...")
+                Call Log.AddLogEntry("... Analyseergebnis aufbereiten ...")
 
                 'Ergebnisse aufbereiten
                 Call oAnalysis.PrepareResults()
 
-                Call Wave.Log.AddLogEntry("Analyse abgeschlossen")
+                Call Log.AddLogEntry("Analyse abgeschlossen")
 
                 'Default-Cursor
                 Me.Cursor = Cursors.Default
@@ -529,8 +529,8 @@ Public Class Wave
 
                 'Ergebnistext in Log schreiben und anzeigen
                 If (oAnalysis.hasResultText) Then
-                    Call Wave.Log.AddLogEntry(oAnalysis.getResultText)
-                    Call Wave.Log.Show()
+                    Call Log.AddLogEntry(oAnalysis.getResultText)
+                    Call Me.LogWindow.Show()
                 End If
 
                 'Ergebniswerte anzeigen
@@ -541,7 +541,7 @@ Public Class Wave
             Catch ex As Exception
                 Me.Cursor = Cursors.Default
                 'Logeintrag
-                Call Wave.Log.AddLogEntry("Analyse fehlgeschlagen:" & eol & ex.Message)
+                Call Log.AddLogEntry("Analyse fehlgeschlagen:" & eol & ex.Message)
                 'Alert
                 MsgBox("Analyse fehlgeschlagen:" & eol & ex.Message, MsgBoxStyle.Critical)
             End Try
@@ -567,9 +567,9 @@ Public Class Wave
     Private Sub ShowLog(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripStatusLabel_Log.Click
 
         'MessageDialog anzeigen
-        Call Log.Show()
-        Log.WindowState = FormWindowState.Normal
-        Call Log.BringToFront()
+        Call Me.LogWindow.Show()
+        Me.LogWindow.WindowState = FormWindowState.Normal
+        Call Me.LogWindow.BringToFront()
 
     End Sub
 
@@ -605,7 +605,7 @@ Public Class Wave
     ''' <summary>
     ''' Löscht alle vorhandenen Serien und liest alle importierten Zeitreihen neu ein
     ''' </summary>
-	Private Sub ReRead_Files(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_ReRead.Click
+    Private Sub ReRead_Files(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_ReRead.Click
 
         Dim Datei As Dateiformat
         Dim Dateiliste As String
@@ -641,17 +641,17 @@ Public Class Wave
                 Call Datei.Read_File()
                 'Alle Zeitreihen der Datei durchlaufen
                 For Each zre As Zeitreihe In Datei.Zeitreihen
-	                'Jede Zeitreihe abspeichern und anzeigen
-	                Call Me.AddZeitreihe(zre)
-	                Call Me.Display_Series(zre)
+                    'Jede Zeitreihe abspeichern und anzeigen
+                    Call Me.AddZeitreihe(zre)
+                    Call Me.Display_Series(zre)
                 Next
             Next
-        
+
         End If
 
-	End Sub
+    End Sub
 
-#End Region	'UI
+#End Region 'UI
 
 #Region "Funktionalität"
 
@@ -698,7 +698,7 @@ Public Class Wave
         Try
 
             'Log
-            Call Wave.Log.AddLogEntry("Öffne Datei '" & FileName & "' ...")
+            Call Log.AddLogEntry("Öffne Datei '" & FileName & "' ...")
 
             'TEN-Datei importieren
             '---------------------
@@ -728,11 +728,11 @@ Public Class Wave
             Next
 
             'Log
-            Call Wave.Log.AddLogEntry("... Datei '" & FileName & "' erfolgreich geöffnet!")
+            Call Log.AddLogEntry("... Datei '" & FileName & "' erfolgreich geöffnet!")
 
         Catch ex As Exception
             MsgBox("Fehler beim Öffnen:" & eol & ex.Message, MsgBoxStyle.Critical)
-            Call Wave.Log.AddLogEntry("... Fehler beim Öffnen:" & eol & ex.Message)
+            Call Log.AddLogEntry("... Fehler beim Öffnen:" & eol & ex.Message)
         End Try
 
         'Übersicht anpassen
@@ -778,7 +778,7 @@ Public Class Wave
 
                 Try
                     'Log
-                    Call Wave.Log.AddLogEntry("Importiere Datei '" & file & "' ...")
+                    Call Log.AddLogEntry("Importiere Datei '" & file & "' ...")
 
                     'Datei-Instanz erzeugen
                     Datei = Dateifactory.getDateiInstanz(file)
@@ -789,7 +789,7 @@ Public Class Wave
                     End If
 
                     'Log
-                    Call Wave.Log.AddLogEntry("Datei '" & file & "' erfolgreich importiert!")
+                    Call Log.AddLogEntry("Datei '" & file & "' erfolgreich importiert!")
 
                     'Datei abspeichern
                     Me.ImportedFiles.Add(Datei)
@@ -804,7 +804,7 @@ Public Class Wave
 
                 Catch ex As Exception
                     MsgBox("Fehler beim Import:" & eol & ex.Message, MsgBoxStyle.Critical)
-                    Call Wave.Log.AddLogEntry("Fehler beim Import:" & eol & ex.Message)
+                    Call Log.AddLogEntry("Fehler beim Import:" & eol & ex.Message)
                 End Try
 
         End Select
@@ -839,13 +839,13 @@ Public Class Wave
 
         Try
             'Log
-            Call Wave.Log.AddLogEntry("Importiere Datei '" & file & "' ...")
+            Call Log.AddLogEntry("Importiere Datei '" & file & "' ...")
 
             'Datei-Instanz erzeugen
             RVADatei = Dateifactory.getDateiInstanz(file)
 
             'Log
-            Call Wave.Log.AddLogEntry("... Datei '" & file & "' erfolgreich importiert!")
+            Call Log.AddLogEntry("... Datei '" & file & "' erfolgreich importiert!")
 
             'Datei abspeichern
             Me.ImportedFiles.Add(RVADatei)
@@ -858,7 +858,7 @@ Public Class Wave
 
         Catch ex As Exception
             MsgBox("Fehler beim Import:" & eol & ex.Message, MsgBoxStyle.Critical)
-            Call Wave.Log.AddLogEntry("... Fehler beim Import:" & eol & ex.Message)
+            Call Log.AddLogEntry("... Fehler beim Import:" & eol & ex.Message)
         End Try
 
     End Sub

@@ -218,11 +218,9 @@ Public Class Zeitreihe
             Call Me.Nodes.TrimExcess()
 
             'Log 
-            If (Not IsNothing(Wave.Log)) Then
-                Call Wave.Log.AddLogEntry("Zeitreihe '" & Me.Title & "' von " & lengthOld.ToString() & " auf " & lengthNew.ToString() & " Stützstellen gekürzt.")
-            End If
+            Call Log.AddLogEntry("Zeitreihe '" & Me.Title & "' von " & lengthOld.ToString() & " auf " & lengthNew.ToString() & " Stützstellen gekürzt.")
 
-            End If
+        End If
 
     End Sub
 
@@ -335,7 +333,7 @@ Public Class Zeitreihe
     End Function
 
     ''' <summary>
-    ''' Säubert die Zeitreihe, indem alle Stützstellen vom Wert NaN (-999) entfernt werden
+    ''' Säubert die Zeitreihe, in dem alle Stützstellen vom Wert NaN (-999) entfernt werden
     ''' </summary>
     Public Sub Clean()
 
@@ -361,9 +359,7 @@ Public Class Zeitreihe
             Call Me.Nodes.TrimExcess()
 
             'Log
-            If (Not IsNothing(Wave.Log)) Then
-                Call Wave.Log.AddLogEntry("... " & Me.Title & ": " & keysToBeRemoved.Count.ToString() & " NaN-Werte (" & Konstanten.NaN.ToString() & ") wurden bereinigt.")
-            End If
+            Call Log.AddLogEntry("... " & Me.Title & ": " & keysToBeRemoved.Count.ToString() & " NaN-Werte (" & Konstanten.NaN.ToString() & ") wurden bereinigt.")
 
         End If
 
