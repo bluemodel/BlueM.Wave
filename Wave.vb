@@ -793,7 +793,7 @@ Public Class Wave
 
                 Catch ex As Exception
                     MsgBox("Fehler beim Import:" & eol & ex.Message, MsgBoxStyle.Critical)
-                    Call Log.AddLogEntry("Fehler beim Import:" & eol & ex.Message)
+                    Call Log.AddLogEntry("Fehler beim Import: " & ex.Message)
                 End Try
 
         End Select
