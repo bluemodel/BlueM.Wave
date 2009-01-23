@@ -73,12 +73,15 @@ Partial Class LogWindow
         '
         'TextBox_Log
         '
+        Me.TextBox_Log.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+                    Or System.Windows.Forms.AnchorStyles.Left) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.TextBox_Log.BackColor = System.Drawing.Color.White
         Me.TextBox_Log.Font = New System.Drawing.Font("Courier New", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.TextBox_Log.Location = New System.Drawing.Point(10, 30)
         Me.TextBox_Log.Name = "TextBox_Log"
         Me.TextBox_Log.ReadOnly = True
-        Me.TextBox_Log.Size = New System.Drawing.Size(410, 275)
+        Me.TextBox_Log.Size = New System.Drawing.Size(413, 275)
         Me.TextBox_Log.TabIndex = 0
         Me.TextBox_Log.Text = ""
         '
