@@ -5,6 +5,7 @@
 Public Class Log
 
     Private Shared myInstance As Log
+    Private myLastMessage As String
     Private myText As String
 
     ''' <summary>
@@ -18,6 +19,15 @@ Public Class Log
     Public Shared ReadOnly Property Text() As String
         Get
             Return Log.getInstance.myText
+        End Get
+    End Property
+
+    ''' <summary>
+    ''' Die letzte Meldung im Log
+    ''' </summary>
+    Public Shared ReadOnly Property LastMessage() As String
+        Get
+            Return Log.getInstance.myLastMessage
         End Get
     End Property
 
@@ -41,10 +51,15 @@ Public Class Log
     ''' <param name="msg">Eintrag</param>
     Public Shared Sub AddLogEntry(ByVal msg As String)
 
-        'Wenn Eintrag mehrzeilig, dann formatieren
-        If (msg.Contains(Konstanten.eol)) Then msg = Konstanten.eol & "  " & msg.Replace(Konstanten.eol, Konstanten.eol & "  ")
+        If (msg.Contains(Konstanten.eol)) Then
+            'Wenn Eintrag mehrzeilig, dann formatieren
+            msg = Konstanten.eol & "  " & msg.Replace(Konstanten.eol, Konstanten.eol & "  ")
+        Else
+            'Ansonsten als Letzte Meldung speichern
+            Log.getInstance.myLastMessage = msg
+        End If
 
-        'Text hinzufügen
+        'Meldung zu Text hinzufügen
         Log.getInstance.myText &= "* " & DateTime.Now.ToString(Konstanten.Datumsformat) & ": " & msg & Konstanten.eol
 
         RaiseEvent LogChanged()
@@ -57,6 +72,7 @@ Public Class Log
     Public Shared Sub ClearLog()
 
         Log.getInstance.myText = ""
+        Log.getInstance.myLastMessage = ""
 
         RaiseEvent LogChanged()
 
