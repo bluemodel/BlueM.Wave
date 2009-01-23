@@ -23,7 +23,10 @@ Public Class Wave
     '#############
 
     'Log-Fenster
-    Private LogWindow As LogWindow
+    Private myLogWindow As LogWindow
+
+    'Log
+    Private WithEvents myLog As Log
 
     'Collection von importierten Dateien
     Private ImportedFiles As List(Of Dateiformat)
@@ -76,18 +79,27 @@ Public Class Wave
 
         'Logfenster nur beim ersten Mal instanzieren
         '-------------------------------------------
-        If (IsNothing(LogWindow)) Then
-            LogWindow = New LogWindow()
+        If (IsNothing(myLogWindow)) Then
+            myLogWindow = New LogWindow()
         End If
+
+        'Log (Singleton) Instanz holen
+        Me.myLog = Log.getInstance()
 
     End Sub
 
     'Form wird geladen
     '*****************
     Private Sub Wave_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
-
         'nix zu tun
+    End Sub
 
+    ''' <summary>
+    ''' Wenn sich der Log verändert hat, Statustext aktualisieren
+    ''' </summary>
+    Private Sub LogChanged() Handles myLog.LogChanged
+        'Status Info aktualisieren
+        Me.ToolStripStatusLabel_Log.Text = Log.LastMessage
     End Sub
 
     'Drag & Drop von Dateien verarbeiten
@@ -116,18 +128,6 @@ Public Class Wave
         If (e.Data.GetDataPresent(DataFormats.FileDrop)) Then
             e.Effect = DragDropEffects.All
         End If
-    End Sub
-
-    'Form Resize
-    '***********
-    Private Sub Wave_Resize(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Resize
-        Call Me.ResizeCharts()
-    End Sub
-
-    'Splitter Resize
-    '***************
-    Private Sub SplitContainer1_SplitterMoved(ByVal sender As Object, ByVal e As System.Windows.Forms.SplitterEventArgs) Handles SplitContainer1.SplitterMoved
-        Call Me.ResizeCharts()
     End Sub
 
 #End Region 'Form behavior
@@ -188,15 +188,6 @@ Public Class Wave
         Me.selectionMade = False
         Call Me.Init_ColorBand()
 
-    End Sub
-
-    'Größe von Charts anpassen
-    '*************************
-    Private Sub ResizeCharts()
-        Me.TChart2.Width = Me.SplitContainer1.Panel1.Width - 5
-        Me.TChart2.Height = Me.SplitContainer1.Panel1.Height - 5
-        Me.TChart1.Width = Me.SplitContainer1.Panel2.Width - 5
-        Me.TChart1.Height = Me.SplitContainer1.Panel2.Height - 5 - 22
     End Sub
 
     'ColorBand einrichten
@@ -331,7 +322,7 @@ Public Class Wave
 
         'Log zurücksetzen
         Call Log.ClearLog()
-        Call Me.LogWindow.Hide()
+        Call Me.myLogWindow.Hide()
 
     End Sub
 
@@ -530,7 +521,7 @@ Public Class Wave
                 'Ergebnistext in Log schreiben und anzeigen
                 If (oAnalysis.hasResultText) Then
                     Call Log.AddLogEntry(oAnalysis.getResultText)
-                    Call Me.LogWindow.Show()
+                    Call Me.myLogWindow.Show()
                 End If
 
                 'Ergebniswerte anzeigen
@@ -566,10 +557,10 @@ Public Class Wave
     '************
     Private Sub ShowLog(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripStatusLabel_Log.Click
 
-        'MessageDialog anzeigen
-        Call Me.LogWindow.Show()
-        Me.LogWindow.WindowState = FormWindowState.Normal
-        Call Me.LogWindow.BringToFront()
+        'LogWindow anzeigen
+        Call Me.myLogWindow.Show()
+        Me.myLogWindow.WindowState = FormWindowState.Normal
+        Call Me.myLogWindow.BringToFront()
 
     End Sub
 
@@ -597,8 +588,6 @@ Public Class Wave
             Me.SplitContainer1.Panel1Collapsed = True
             Me.ToolStripButton_Übersicht.Checked = False
         End If
-
-        Call Me.ResizeCharts()
 
     End Sub
 

@@ -88,25 +88,27 @@ Partial Class Wave
         'StatusStrip1
         '
         StatusStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripStatusLabel_Log})
-        StatusStrip1.Location = New System.Drawing.Point(0, 478)
+        StatusStrip1.Location = New System.Drawing.Point(0, 638)
         StatusStrip1.Name = "StatusStrip1"
-        StatusStrip1.RightToLeft = System.Windows.Forms.RightToLeft.Yes
+        StatusStrip1.RightToLeft = System.Windows.Forms.RightToLeft.No
         StatusStrip1.ShowItemToolTips = True
-        StatusStrip1.Size = New System.Drawing.Size(941, 22)
+        StatusStrip1.Size = New System.Drawing.Size(945, 22)
         StatusStrip1.SizingGrip = False
         StatusStrip1.TabIndex = 1
         StatusStrip1.Text = "StatusStrip1"
         '
         'ToolStripStatusLabel_Log
         '
-        Me.ToolStripStatusLabel_Log.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.ToolStripStatusLabel_Log.ActiveLinkColor = System.Drawing.SystemColors.ControlDarkDark
         Me.ToolStripStatusLabel_Log.Image = Global.IHWB.Wave.My.Resources.Resources.script
+        Me.ToolStripStatusLabel_Log.IsLink = True
+        Me.ToolStripStatusLabel_Log.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
+        Me.ToolStripStatusLabel_Log.LinkColor = System.Drawing.SystemColors.ControlDarkDark
         Me.ToolStripStatusLabel_Log.Margin = New System.Windows.Forms.Padding(3, 3, 0, 2)
         Me.ToolStripStatusLabel_Log.Name = "ToolStripStatusLabel_Log"
-        Me.ToolStripStatusLabel_Log.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.ToolStripStatusLabel_Log.Size = New System.Drawing.Size(16, 17)
-        Me.ToolStripStatusLabel_Log.Text = "Log anzeigen"
         Me.ToolStripStatusLabel_Log.ToolTipText = "Log anzeigen"
+        Me.ToolStripStatusLabel_Log.VisitedLinkColor = System.Drawing.SystemColors.ControlDarkDark
         '
         'ToolStrip1
         '
@@ -263,9 +265,10 @@ Partial Class Wave
         '
         '
         Me.TChart1.Aspect.ZOffset = 0
+        Me.TChart1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TChart1.Location = New System.Drawing.Point(0, 0)
         Me.TChart1.Name = "TChart1"
-        Me.TChart1.Size = New System.Drawing.Size(945, 190)
+        Me.TChart1.Size = New System.Drawing.Size(941, 435)
         Me.TChart1.TabIndex = 0
         '
         'DateTimePicker1
@@ -277,8 +280,10 @@ Partial Class Wave
         '
         'SplitContainer1
         '
+        Me.SplitContainer1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+                    Or System.Windows.Forms.AnchorStyles.Left) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.SplitContainer1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
-        Me.SplitContainer1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.SplitContainer1.Location = New System.Drawing.Point(0, 34)
         Me.SplitContainer1.Name = "SplitContainer1"
         Me.SplitContainer1.Orientation = System.Windows.Forms.Orientation.Horizontal
@@ -290,11 +295,10 @@ Partial Class Wave
         '
         'SplitContainer1.Panel2
         '
-        Me.SplitContainer1.Panel2.Controls.Add(StatusStrip1)
         Me.SplitContainer1.Panel2.Controls.Add(Me.TChart1)
         Me.SplitContainer1.Panel2MinSize = 100
-        Me.SplitContainer1.Size = New System.Drawing.Size(945, 626)
-        Me.SplitContainer1.SplitterDistance = 118
+        Me.SplitContainer1.Size = New System.Drawing.Size(945, 605)
+        Me.SplitContainer1.SplitterDistance = 162
         Me.SplitContainer1.TabIndex = 1
         '
         'TChart2
@@ -304,9 +308,10 @@ Partial Class Wave
         '
         Me.TChart2.Aspect.ZOffset = 0
         Me.TChart2.Cursor = System.Windows.Forms.Cursors.Default
+        Me.TChart2.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TChart2.Location = New System.Drawing.Point(0, 0)
         Me.TChart2.Name = "TChart2"
-        Me.TChart2.Size = New System.Drawing.Size(942, 106)
+        Me.TChart2.Size = New System.Drawing.Size(941, 158)
         Me.TChart2.TabIndex = 0
         '
         'Wave
@@ -316,9 +321,10 @@ Partial Class Wave
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.SystemColors.Control
         Me.ClientSize = New System.Drawing.Size(945, 660)
+        Me.Controls.Add(ToolStrip1)
         Me.Controls.Add(Me.SplitContainer1)
         Me.Controls.Add(Me.DateTimePicker1)
-        Me.Controls.Add(ToolStrip1)
+        Me.Controls.Add(StatusStrip1)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Name = "Wave"
         Me.Text = "Wave"
@@ -328,9 +334,9 @@ Partial Class Wave
         ToolStrip1.PerformLayout()
         Me.SplitContainer1.Panel1.ResumeLayout(False)
         Me.SplitContainer1.Panel2.ResumeLayout(False)
-        Me.SplitContainer1.Panel2.PerformLayout()
         Me.SplitContainer1.ResumeLayout(False)
         Me.ResumeLayout(False)
+        Me.PerformLayout()
 
     End Sub
     Friend WithEvents OpenFileDialog1 As System.Windows.Forms.OpenFileDialog
