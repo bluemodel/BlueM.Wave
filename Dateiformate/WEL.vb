@@ -54,7 +54,7 @@ Public Class WEL
 
         If (ReadAllNow) Then
             'Datei komplett einlesen
-            Me.SpaltenSel = Me.YSpalten
+            Call Me.selectAllSpalten()
             Call Me.Read_File()
         End If
 
@@ -87,8 +87,9 @@ Public Class WEL
             StrRead.Close()
             FiStr.Close()
 
-            'Spaltennamen auslesen
-            '---------------------
+            'Spalteninformationen auslesen
+            '-----------------------------
+            Dim anzSpalten As Integer
             Dim Namen() As String
             Dim Einheiten() As String
 
@@ -96,43 +97,23 @@ Public Class WEL
                 'Zeichengetrennt
                 Namen = ZeileSpalten.Split(New Char() {Me.Trennzeichen.Character}, StringSplitOptions.RemoveEmptyEntries)
                 Einheiten = ZeileEinheiten.Split(New Char() {Me.Trennzeichen.Character}, StringSplitOptions.RemoveEmptyEntries)
+                anzSpalten = Namen.Length
+                ReDim Me.Spalten(anzSpalten - 1)
+                For i = 0 To anzSpalten - 1
+                    Me.Spalten(i).Name = Namen(i).Trim()
+                    Me.Spalten(i).Einheit = Einheiten(i).Trim()
+                    Me.Spalten(i).Index = i
+                Next
             Else
                 'Spalten mit fester Breite
-                Dim anzSpalten As Integer = Math.Ceiling(ZeileSpalten.Length / Me.Spaltenbreite)
-                ReDim Namen(anzSpalten - 1)
-                ReDim Einheiten(anzSpalten - 1)
+                anzSpalten = Math.Ceiling(ZeileSpalten.Length / Me.Spaltenbreite)
+                ReDim Me.Spalten(anzSpalten - 1)
                 For i = 0 To anzSpalten - 1
-                    Namen(i) = ZeileSpalten.Substring((i * Me.Spaltenbreite) + SpaltenOffset, Math.Min(Me.Spaltenbreite, ZeileSpalten.Substring((i * Me.Spaltenbreite) + SpaltenOffset).Length))
-                    Einheiten(i) = ZeileEinheiten.Substring((i * Me.Spaltenbreite) + SpaltenOffset, Math.Min(Me.Spaltenbreite, ZeileSpalten.Substring((i * Me.Spaltenbreite) + SpaltenOffset).Length))
+                    Me.Spalten(i).Name = ZeileSpalten.Substring((i * Me.Spaltenbreite) + SpaltenOffset, Math.Min(Me.Spaltenbreite, ZeileSpalten.Substring((i * Me.Spaltenbreite) + SpaltenOffset).Length)).Trim()
+                    Me.Spalten(i).Einheit = ZeileEinheiten.Substring((i * Me.Spaltenbreite) + SpaltenOffset, Math.Min(Me.Spaltenbreite, ZeileSpalten.Substring((i * Me.Spaltenbreite) + SpaltenOffset).Length)).Trim()
+                    Me.Spalten(i).Index = i
                 Next
             End If
-
-            'Sicherstellen, dass es so viele Einheiten wie Spalten gibt:
-            ReDim Preserve Einheiten(Namen.GetUpperBound(0))
-            For i = 0 To Einheiten.GetUpperBound(0)
-                If (IsNothing(Einheiten(i))) Then Einheiten(i) = "-"
-            Next
-
-            'Leerzeichen entfernen
-            For i = 0 To Namen.GetUpperBound(0)
-                Einheiten(i) = Einheiten(i).Trim()
-                Namen(i) = Namen(i).Trim()
-            Next
-
-            If (Namen.GetLength(0) < 1) Then
-                ReDim Namen(1)
-                Namen(0) = ""
-                Namen(1) = ""
-            End If
-
-            'X-Spalte übernehmen
-            Me.XSpalte = Namen(me.Datumsspalte)
-
-            'Y-Spalten übernehmen
-            ReDim Me.YSpalten(Namen.GetUpperBound(0) - 1)
-            ReDim Me.Einheiten(Namen.GetUpperBound(0) - 1)
-            Array.Copy(Namen, 1, Me.YSpalten, 0, Namen.Length - 1)
-            Array.Copy(Einheiten, 1, Me.Einheiten, 0, Namen.Length - 1)
 
         Catch ex As Exception
             MsgBox("Konnte die Datei '" & Path.GetFileName(Me.File) & "' nicht einlesen!" & eol & eol & "Fehler: " & ex.Message, MsgBoxStyle.Critical, "Fehler")
@@ -144,7 +125,7 @@ Public Class WEL
     '******************
     Public Overrides Sub Read_File()
 
-        Dim i, j, n As Integer
+        Dim iZeile, i As Integer
         Dim Zeile As String
         Dim Werte() As String
         Dim datum As DateTime
@@ -154,53 +135,54 @@ Public Class WEL
         Dim StrReadSync = TextReader.Synchronized(StrRead)
 
         'Anzahl Zeitreihen bestimmen
-        ReDim Me.Zeitreihen(Me.SpaltenSel.GetUpperBound(0))
+        ReDim Me.Zeitreihen(Me.SpaltenSel.Length - 1)
 
         'Zeitreihen instanzieren
-        For i = 0 To Me.Zeitreihen.GetUpperBound(0)
-            Me.Zeitreihen(i) = New Zeitreihe(SpaltenSel(i))
+        For i = 0 To Me.SpaltenSel.Length - 1
+            Me.Zeitreihen(i) = New Zeitreihe(Me.SpaltenSel(i).Name)
         Next
+
+        'Einheiten?
+        If (Me.UseEinheiten) Then
+            'Alle ausgewählten Spalten durchlaufen
+            For i = 0 To Me.SpaltenSel.Length - 1
+                Me.Zeitreihen(i).Einheit = Me.SpaltenSel(i).Einheit
+            Next
+        End If
 
         'Einlesen
         '--------
-        i = 0
+
+        'Header
+        For iZeile = 1 To Me.nZeilenHeader
+            Zeile = StrReadSync.ReadLine.ToString()
+        Next
+
+        'Daten
         Do
-            i += 1
             Zeile = StrReadSync.ReadLine.ToString()
 
             If (Me.Zeichengetrennt) Then
                 'Zeichengetrennt
                 '---------------
                 Werte = Zeile.Split(New Char() {Me.Trennzeichen.Character}, StringSplitOptions.RemoveEmptyEntries)
-                If (i > Me.nZeilenHeader) Then
-                    'Erste Spalte: Datum_Zeit
-                    datum = New System.DateTime(Werte(0).Substring(6, 4), Werte(0).Substring(3, 2), Werte(0).Substring(0, 2), Werte(0).Substring(11, 2), Werte(0).Substring(14, 2), 0, New System.Globalization.GregorianCalendar())
-                    'Restliche Spalten: Werte
-                    n = 0
-                    For j = 0 To Me.YSpalten.GetUpperBound(0)
-                        If (isSelected(Me.YSpalten(j))) Then
-                            Me.Zeitreihen(n).Einheit = Me.Einheiten(j) 'TODO: einmal würde auch reichen
-                            Me.Zeitreihen(n).AddNode(datum, StringToDouble(Werte(j + 1)))
-                            n += 1
-                        End If
-                    Next
-                End If
+                'Erste Spalte: Datum_Zeit
+                datum = New System.DateTime(Werte(0).Substring(6, 4), Werte(0).Substring(3, 2), Werte(0).Substring(0, 2), Werte(0).Substring(11, 2), Werte(0).Substring(14, 2), 0, New System.Globalization.GregorianCalendar())
+                'Restliche Spalten: Werte
+                'Alle ausgewählten Spalten durchlaufen
+                For i = 0 To Me.SpaltenSel.Length - 1
+                    Me.Zeitreihen(i).AddNode(datum, StringToDouble(Werte(Me.SpaltenSel(i).Index)))
+                Next
             Else
                 'Spalten mit fester Breite
                 '-------------------------
-                If (i > Me.nZeilenHeader) Then
-                    'Erste Spalte: Datum_Zeit
-                    datum = New System.DateTime(Zeile.Substring(6 + SpaltenOffset, 4), Zeile.Substring(3 + SpaltenOffset, 2), Zeile.Substring(0 + SpaltenOffset, 2), Zeile.Substring(11 + SpaltenOffset, 2), Zeile.Substring(14 + SpaltenOffset, 2), 0, New System.Globalization.GregorianCalendar())
-                    'Restliche Spalten: Werte
-                    n = 0
-                    For j = 0 To Me.YSpalten.GetUpperBound(0)
-                        If (isSelected(Me.YSpalten(j))) Then
-                            Me.Zeitreihen(n).Einheit = Me.Einheiten(j) 'TODO: einmal würde auch reichen
-                            Me.Zeitreihen(n).AddNode(datum, StringToDouble(Zeile.Substring(((j + 1) * Me.Spaltenbreite) + SpaltenOffset, Math.Min(Me.Spaltenbreite, Zeile.Substring(((j + 1) * Me.Spaltenbreite) + SpaltenOffset).Length))))
-                            n += 1
-                        End If
-                    Next
-                End If
+                'Erste Spalte: Datum_Zeit
+                datum = New System.DateTime(Zeile.Substring(6 + SpaltenOffset, 4), Zeile.Substring(3 + SpaltenOffset, 2), Zeile.Substring(0 + SpaltenOffset, 2), Zeile.Substring(11 + SpaltenOffset, 2), Zeile.Substring(14 + SpaltenOffset, 2), 0, New System.Globalization.GregorianCalendar())
+                'Restliche Spalten: Werte
+                'Alle ausgewählten Spalten durchlaufen
+                For i = 0 To Me.SpaltenSel.Length - 1
+                    Me.Zeitreihen(i).AddNode(datum, StringToDouble(Zeile.Substring((Me.SpaltenSel(i).Index * Me.Spaltenbreite) + SpaltenOffset, Math.Min(Me.Spaltenbreite, Zeile.Substring((Me.SpaltenSel(i).Index * Me.Spaltenbreite) + SpaltenOffset).Length))))
+                Next
             End If
 
         Loop Until StrReadSync.Peek() = -1

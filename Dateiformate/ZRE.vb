@@ -36,7 +36,7 @@ Public Class ZRE
         Call Me.SpaltenAuslesen()
 
         'ZRE-Dateien immer direkt einlesen
-        Me.SpaltenSel = Me.YSpalten
+        Call Me.selectAllSpalten()
         Call Me.Read_File()
 
     End Sub
@@ -63,17 +63,11 @@ Public Class ZRE
             StrRead.Close()
             FiStr.Close()
 
-            'Spalten übernehmen
-            Me.XSpalte = "Datum_Zeit"
-
-            ReDim Me.YSpalten(0)
-            Me.YSpalten(0) = Zeile.Substring(0, 15).Trim()
-
-            'Einheit übernehmen
-            ReDim Me.Einheiten(0)
-            Me.Einheiten(0) = Zeile.Substring(15).Trim()
-
-            Me.SpaltenSel = Me.YSpalten
+            ReDim Me.Spalten(1)
+            Me.Spalten(0).Name = "Datum_Zeit"
+            Me.Spalten(1).Name = Zeile.Substring(0, 15).Trim()
+            Me.Spalten(1).Einheit = Zeile.Substring(15).Trim()
+            Me.Spalten(1).Index = 1
 
         Catch ex As Exception
             MsgBox("Konnte Datei nicht einlesen!" & eol & eol & "Fehler: " & ex.Message, MsgBoxStyle.Critical, "Fehler")
@@ -94,10 +88,10 @@ Public Class ZRE
         Dim StrRead As StreamReader = New StreamReader(FiStr, System.Text.Encoding.GetEncoding("iso8859-1"))
         Dim StrReadSync = TextReader.Synchronized(StrRead)
 
-        'Zeitreihe instanzieren
+        'Zeitreihe instanzieren (nur eine)
         ReDim Me.Zeitreihen(0)
-        Me.Zeitreihen(0) = New Zeitreihe(Me.SpaltenSel(0))
-        Me.Zeitreihen(0).Einheit = Me.Einheiten(0)
+        Me.Zeitreihen(0) = New Zeitreihe(Me.SpaltenSel(0).Name)
+        Me.Zeitreihen(0).Einheit = Me.SpaltenSel(0).Einheit
 
         'Einlesen
         '--------
