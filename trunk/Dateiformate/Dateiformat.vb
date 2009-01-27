@@ -29,12 +29,18 @@ Public MustInherit Class Dateiformat
     Private _iZeileDaten As Integer = 3
     Private _useEinheiten As Boolean = True
     Private _spaltenbreite As Integer = 16
-    Private _DatumsspalteSetzen As Boolean = false
-    Private _Datumsspalte As Integer = 0
-    Private _XSpalte As String = ""
-    Private _Yspalten() As String = {}
-    Private _spaltenSel() As String = {}
-    Private _Einheiten() As String = {}
+    Private _XSpalte As Integer = 0
+    Private _Spalten() As SpaltenInfo
+    Private _spaltenSel() As SpaltenInfo
+
+    Public Structure SpaltenInfo
+        Public Name As String
+        Public Einheit As String
+        Public Index As Integer
+        Public Overrides Function ToString() As String
+            Return Me.Name
+        End Function
+    End Structure
 
     ''' <summary>
     ''' Array der in der Datei enhaltenen Zeitreihen
@@ -49,36 +55,6 @@ Public MustInherit Class Dateiformat
 #End Region 'Eigenschaften
 
 #Region "Properties"
-
-    'Properties
-    '##########
-    ''' <summary>
-    ''' Darf ich eine Datumsspalte auswählen ?
-    ''' 0 = erste Spalte
-    ''' </summary>
-    Public Property DatumsspalteSetzen() As Boolean
-        Get
-            Return _DatumsspalteSetzen
-        End Get
-        Set(ByVal value As Boolean)
-            _DatumsspalteSetzen = value
-        End Set
-    End Property
-
-    'Properties
-    '##########
-    ''' <summary>
-    ''' In welcher Spalte ist das Datum
-    ''' 0 = erste Spalte
-    ''' </summary>
-    Public Property Datumsspalte() As Integer
-        Get
-            Return _Datumsspalte
-        End Get
-        Set(ByVal value As Integer)
-            _Datumsspalte = value
-        End Set
-    End Property
 
     'Properties
     '##########
@@ -201,52 +177,61 @@ Public MustInherit Class Dateiformat
     End Property
 
     ''' <summary>
-    ''' Name der X-Spalte
+    ''' Index der X-Spalte
     ''' </summary>
-    Public Property XSpalte() As String
+    Public Property XSpalte() As Integer
         Get
             Return _XSpalte
         End Get
-        Set(ByVal value As String)
+        Set(ByVal value As Integer)
             _XSpalte = value
         End Set
     End Property
 
     ''' <summary>
-    ''' Array der vorhandenen Y-Spaltennamen
+    ''' Array aller in der Datei vorhandenen Spalten
     ''' </summary>
-    Public Property YSpalten() As String()
+	''' <remarks>inklusive X-Spalte!</remarks>
+    Public Property Spalten() As SpaltenInfo()
         Get
-            Return _Yspalten
+            Return _Spalten
         End Get
-        Set(ByVal value As String())
-            _Yspalten = value
+        Set(ByVal value As SpaltenInfo())
+            _Spalten = value
         End Set
     End Property
 
     ''' <summary>
-    ''' Array der ausgewählten Y-Spaltennamen
+    ''' Array der ausgewählten Spalten
     ''' </summary>
-    Public Property SpaltenSel() As String()
+    Public Property SpaltenSel() As SpaltenInfo()
         Get
             Return _spaltenSel
         End Get
-        Set(ByVal value As String())
+        Set(ByVal value As SpaltenInfo())
             _spaltenSel = value
         End Set
     End Property
 
     ''' <summary>
-    ''' Array der Einheiten
+    ''' Alle vorhandenen Spalten für den Import auswählen
     ''' </summary>
-    Public Property Einheiten() As String()
-        Get
-            Return _Einheiten
-        End Get
-        Set(ByVal value As String())
-            _Einheiten = value
-        End Set
-    End Property
+    ''' <remarks>Die X-Spalte wird nicht mit ausgewählt</remarks>
+    Public Sub selectAllSpalten()
+
+        Dim i, n As Integer
+
+        ReDim Me.SpaltenSel(Me.Spalten.Length - 2) 'X-Spalte weglassen
+
+        n = 0
+        For i = 0 To Me.Spalten.Length - 1
+            If (Me.Spalten(i).Index <> Me.XSpalte) Then
+                Me.SpaltenSel(n) = Me.Spalten(i)
+                n += 1
+            End If
+        Next
+
+    End Sub
 
     ''' <summary>
     ''' Aus der Datei eine Zeitreihe anhand ihres Titels holen
@@ -264,11 +249,11 @@ Public MustInherit Class Dateiformat
             Next
             'Zeitreihe ist noch nicht eingelesen!
             'Vielleicht ist die Zeitreihe trotzdem in der Datei vorhanden?
-            For Each spalte As String In Me.YSpalten
-                If (spalte = title) Then
+            For Each spalte As SpaltenInfo In Me.Spalten
+                If (spalte.Name = title) Then
                     'gewünschte Zeitreihe zur Spaltenauswahl hinzufügen
                     ReDim Preserve Me.SpaltenSel(Me.SpaltenSel.GetUpperBound(0) + 1)
-                    Me.SpaltenSel(Me.SpaltenSel.GetUpperBound(0)) = title
+                    Me.SpaltenSel(Me.SpaltenSel.GetUpperBound(0)) = spalte
                     'Zeitreihen erneut einlesen
                     Call Me.Read_File()
                     'Zeitreihe zurückgeben
@@ -315,24 +300,6 @@ Public MustInherit Class Dateiformat
     ''' Liest die ausgewählten Spalten (siehe SpaltenSel) ein und legt sie im Array Zeitreihen ab.
     ''' </summary>
     Public MustOverride Sub Read_File()
-
-    ''' <summary>
-    ''' Prüft, ob eine Spalte ausgewählt ist
-    ''' </summary>
-    ''' <param name="spalte">Name der zu prüfenden Spalte</param>
-    ''' <returns>True wenn die Spalte ausgewählt wurde, ansonsten False</returns>
-    Protected Function isSelected(ByVal spalte As String) As Boolean
-
-        isSelected = False
-        Dim i As Integer
-
-        For i = 0 To Me.SpaltenSel.GetUpperBound(0)
-            If (Me.SpaltenSel(i) = spalte) Then
-                Return True
-            End If
-        Next
-
-    End Function
 
 #End Region 'Methoden
 

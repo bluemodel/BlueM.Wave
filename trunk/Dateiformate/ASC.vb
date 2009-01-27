@@ -36,12 +36,13 @@ Public Class ASC
         Me.Zeichengetrennt = True
         Me.Trennzeichen = Me.leerzeichen
         Me.Dezimaltrennzeichen = Me.punkt
+        Me.XSpalte = 0
 
         Call Me.SpaltenAuslesen()
 
         If (ReadAllNow) Then
             'Datei komplett einlesen
-            Me.SpaltenSel = Me.YSpalten
+            Call Me.selectAllSpalten()
             Call Me.Read_File()
         End If
 
@@ -73,33 +74,21 @@ Public Class ASC
 
         'Spaltennamen auslesen
         '---------------------
+        Dim anzSpalten As Integer
         Dim Namen() As String
         Dim Einheiten() As String
 
         Namen = ZeileSpalten.Split(New Char() {Me.Trennzeichen.Character}, StringSplitOptions.RemoveEmptyEntries)
         Einheiten = ZeileEinheiten.Split(New Char() {Me.Trennzeichen.Character}, StringSplitOptions.RemoveEmptyEntries)
 
-        'Sicherstellen, dass es so viele Einheiten wie Spalten gibt:
-        ReDim Preserve Einheiten(Namen.GetUpperBound(0))
-        For i = 0 To Einheiten.GetUpperBound(0)
-            If (IsNothing(Einheiten(i))) Then Einheiten(i) = "-"
+        anzSpalten = Namen.Length - 1
+
+        ReDim Me.Spalten(anzSpalten - 1)
+        For i = 0 To anzSpalten - 1
+            Me.Spalten(i).Name = Namen(i).Trim()
+            Me.Spalten(i).Einheit = Einheiten(i).Trim()
+            Me.Spalten(i).Index = i
         Next
-
-        'Leerzeichen entfernen
-        For i = 0 To Namen.GetUpperBound(0)
-            Einheiten(i) = Einheiten(i).Trim()
-            Namen(i) = Namen(i).Trim()
-        Next
-
-        'X-Spalte übernehmen
-        Dim iDatumspalte As Integer = 0
-        Me.XSpalte = Namen(iDatumspalte)
-
-        'Y-Spalten übernehmen
-        ReDim Me.YSpalten(Namen.GetUpperBound(0) - 1)
-        ReDim Me.Einheiten(Namen.GetUpperBound(0) - 1)
-        Array.Copy(Namen, 1, Me.YSpalten, 0, Namen.Length - 1)
-        Array.Copy(Einheiten, 1, Me.Einheiten, 0, Namen.Length - 1)
 
     End Sub
 
@@ -107,7 +96,7 @@ Public Class ASC
     '******************
     Public Overrides Sub Read_File()
 
-        Dim i, j, n As Integer
+        Dim i As Integer
         Dim Zeile As String
         Dim Werte() As String
         Dim datum, datumLast As DateTime
@@ -120,31 +109,30 @@ Public Class ASC
 
         dt = New TimeSpan(0, 5, 0)
 
+        'Anzahl Zeitreihen
+        ReDim Me.Zeitreihen(Me.SpaltenSel.Length - 1)
+
         'Zeitreihen instanzieren
-        ReDim Me.Zeitreihen(Me.SpaltenSel.GetUpperBound(0))
-        For i = 0 To Me.Zeitreihen.GetUpperBound(0)
-            Me.Zeitreihen(i) = New Zeitreihe(SpaltenSel(i))
+        For i = 0 To Me.SpaltenSel.Length - 1
+            Me.Zeitreihen(i) = New Zeitreihe(Me.SpaltenSel(i).Name)
         Next
 
-        'Einheiten
+        'Einheiten?
         If (Me.UseEinheiten) Then
-            n = 0
-            For j = 0 To Me.YSpalten.GetUpperBound(0)
-                If (isSelected(Me.YSpalten(j))) Then
-                    Me.Zeitreihen(n).Einheit = Me.Einheiten(j)
-                    n += 1
-                End If
+            For i = 0 To Me.SpaltenSel.Length - 1
+                Me.Zeitreihen(i).Einheit = Me.SpaltenSel(i).Einheit
             Next
         End If
 
         'Einlesen
         '--------
 
-        'Kopfzeilen
+        'Header
         For i = 1 To Me.nZeilenHeader + 1
             StrReadSync.ReadLine()
         Next
 
+        'Daten
         Ereignisende = False
         Do While Not StrReadSync.Peek() = -1
 
@@ -170,18 +158,16 @@ Public Class ASC
                     'Mit Stützstellen vom Wert 0 Lücke zwischen Ereignissen abschliessen
                     datumLast = Me.Zeitreihen(0).Enddatum
                     If (datum.Subtract(datumLast) > dt) Then 'nur wenn Lücke größer als dt ist
-                        n = 0
-                        For j = 0 To Me.YSpalten.GetUpperBound(0)
-                            If (isSelected(Me.YSpalten(j))) Then
-                                'Eine Null nach dem letzten Datum
-                                Me.Zeitreihen(n).AddNode(datumLast.Add(dt), 0.0)
-                                If (datum.Subtract(dt) > datumLast.Add(dt)) Then 'nur wenn Lücke damit noch nicht geschlossen ist
-                                    'Eine Null vor dem aktuellen Datum
-                                    Me.Zeitreihen(n).AddNode(datum.Subtract(dt), 0.0)
-                                End If
-                                n += 1
+
+                        For i = 0 To Me.SpaltenSel.Length - 1
+                            'Eine Null nach dem letzten Datum
+                            Me.Zeitreihen(i).AddNode(datumLast.Add(dt), 0.0)
+                            If (datum.Subtract(dt) > datumLast.Add(dt)) Then 'nur wenn Lücke damit noch nicht geschlossen ist
+                                'Eine Null vor dem aktuellen Datum
+                                Me.Zeitreihen(i).AddNode(datum.Subtract(dt), 0.0)
                             End If
                         Next
+
                         'Log
                         Call Log.AddLogEntry("... Die Lücke zwischen " & datumLast.ToString(Konstanten.Datumsformat) & " und " & datum.ToString(Konstanten.Datumsformat) & " wurde mit 0-Werten abgeschlossen.")
                     End If
@@ -189,16 +175,10 @@ Public Class ASC
 
                 End If
 
-                'eingelesene Stützstelle hinzufügen
-                n = 0
-                For j = 0 To Me.YSpalten.GetUpperBound(0)
-                    If (isSelected(Me.YSpalten(j))) Then
-                        Me.Zeitreihen(n).AddNode(datum, StringToDouble(Werte(j + 2)))
-                        n += 1
-                    End If
+                'eingelesene Stützstellen hinzufügen
+                For i = 0 To Me.SpaltenSel.Length - 1
+                    Me.Zeitreihen(i).AddNode(datum, StringToDouble(Werte(Me.SpaltenSel(i).Index + 1))) '+1 weil Datum auch ein Leerzeichen enthält
                 Next
-
-
 
             Else
                 'Falls eine leere Zeile eingelesen wurde

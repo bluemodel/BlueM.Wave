@@ -35,7 +35,7 @@ Public Class SMB
         Call Me.SpaltenAuslesen()
 
         'ZRE-Dateien immer direkt einlesen
-        Me.SpaltenSel = Me.YSpalten
+        Call Me.selectAllSpalten()
         Call Me.Read_File()
 
     End Sub
@@ -52,24 +52,25 @@ Public Class SMB
             Dim StrRead As StreamReader = New StreamReader(FiStr, System.Text.Encoding.GetEncoding("iso8859-1"))
             Dim StrReadSync = TextReader.Synchronized(StrRead)
 
+            'Es gibt immer 2 Spalten
+            ReDim Me.Spalten(1)
+
+            '1. Spalte (X)
+            Me.Spalten(0).Name = "Datum_Zeit"
+            Me.Spalten(0).Index = 0
+
+            '2. Spalte (Y)
+
             'Reihentitel steht in 1. Zeile:
             Zeile = StrReadSync.ReadLine.ToString()
-            ReDim Me.YSpalten(0)
-            Me.YSpalten(0) = Zeile.Substring(15).Trim()
+            Me.Spalten(1).Name = Zeile.Substring(15).Trim()
+            'Annahme, dass SMB-Dateien Regenreihen sind, daher Einheit mm fest verdrahtet
+            Me.Spalten(1).Einheit = "mm"
+            Me.Spalten(1).Index = 1
 
             StrReadSync.close()
             StrRead.Close()
             FiStr.Close()
-
-            'Spalten übernehmen
-            Me.XSpalte = "Datum_Zeit"
-            
-            'Annahme, dass SMB-Dateien Regenreihen sind, daher Einheit mm fest verdrahtet
-            'Einheit übernehmen
-            ReDim Me.Einheiten(0)
-            Me.Einheiten(0) = "mm"
-
-            Me.SpaltenSel = Me.YSpalten
 
         Catch ex As Exception
             MsgBox("Konnte Datei nicht einlesen!" & eol & eol & "Fehler: " & ex.Message, MsgBoxStyle.Critical, "Fehler")
@@ -93,9 +94,9 @@ Public Class SMB
         Dim StrReadSync = TextReader.Synchronized(StrRead)
 
         'Zeitreihe instanzieren
-        ReDim Me.Zeitreihen(0) 'bei ZRE gibt es nur eine Zeitreihe
-        Me.Zeitreihen(0) = New Zeitreihe(Me.SpaltenSel(0))
-        Me.Zeitreihen(0).Einheit = Me.Einheiten(0)
+        ReDim Me.Zeitreihen(0) 'bei SMB gibt es nur eine Zeitreihe
+        Me.Zeitreihen(0) = New Zeitreihe(Me.SpaltenSel(0).Name)
+        Me.Zeitreihen(0).Einheit = Me.SpaltenSel(0).Einheit
 
         j = 1
 
@@ -106,7 +107,7 @@ Public Class SMB
         Jahr = Zeile.Substring(4, 4)
         Stunde = Zeile.Substring(8, 2)
         Minute = Zeile.Substring(10, 2)
-        
+
         Anfangsdatum = New System.DateTime(Jahr, Monat, Tag, Stunde, Minute, 0, New System.Globalization.GregorianCalendar())
 
         'Einlesen
@@ -119,11 +120,11 @@ Public Class SMB
                 'Datum erkennen
                 '--------------
                 For i = 0 To Zeile.Length
-                  tmpWert = Zeile.Substring(i, 2)
-                  If tmpWert = "  " Then
-                     Minute = Zeile.Substring(0, i)
-                     Exit For
-                  End If
+                    tmpWert = Zeile.Substring(i, 2)
+                    If tmpWert = "  " Then
+                        Minute = Zeile.Substring(0, i)
+                        Exit For
+                    End If
                 Next
                 'Minute = Zeile.Substring(0, 3)
                 Datum = Anfangsdatum.AddMinutes(Minute)

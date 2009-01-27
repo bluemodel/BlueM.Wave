@@ -32,7 +32,6 @@ Partial Public Class ImportDiag
 
         Me.datei = _dateiobjekt
 
-        NumericUpDown_Datumszeile.Enabled = me.datei.DatumsspalteSetzen
     End Sub
 
     'Form laden
@@ -65,22 +64,6 @@ Partial Public Class ImportDiag
 
     End Sub
 
-
-    'Überprüfung, ob eine Spalte ausgewählt ist
-    '******************************************
-    Private Function isSelected(ByVal spalte As String) As Boolean
-
-        isSelected = False
-        Dim i As Integer
-
-        For i = 0 To Me.datei.SpaltenSel.GetUpperBound(0)
-            If (Me.datei.SpaltenSel(i) = spalte) Then
-                Return True
-            End If
-        Next
-
-    End Function
-
     'OK Button gedrückt
     '******************
     Private Sub Button_OK_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button_OK.Click
@@ -98,17 +81,11 @@ Partial Public Class ImportDiag
             Next
         End If
 
-        'Datumsspalte setzen
-        Me.datei.Datumsspalte = NumericUpDown_Datumszeile.Value - 1 'immer ein weniger wie du !
-
-        'Datei einlesen
-        Call Me.datei.Read_File()
-
     End Sub
 
     'Benutzereingabe verarbeiten
     '***************************
-    Private Sub inputChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TextBox_ZeileÜberschriften.TextChanged, TextBox_ZeileEinheiten.TextChanged, TextBox_ZeileDaten.TextChanged, CheckBox_Einheiten.CheckedChanged, ComboBox_Dezimaltrennzeichen.SelectedIndexChanged, RadioButton_Zeichengetrennt.CheckedChanged, ComboBox_Trennzeichen.SelectedIndexChanged, TextBox_Spaltenbreite.TextChanged, NumericUpDown_Datumszeile.ValueChanged
+    Private Sub inputChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TextBox_ZeileÜberschriften.TextChanged, TextBox_ZeileEinheiten.TextChanged, TextBox_ZeileDaten.TextChanged, CheckBox_Einheiten.CheckedChanged, ComboBox_Dezimaltrennzeichen.SelectedIndexChanged, RadioButton_Zeichengetrennt.CheckedChanged, ComboBox_Trennzeichen.SelectedIndexChanged, TextBox_Spaltenbreite.TextChanged, NumericUpDown_DatumsSpalte.ValueChanged
 
         If (Me.IsInitializing = True) Then
             Exit Sub
@@ -136,9 +113,9 @@ Partial Public Class ImportDiag
                 Me.datei.Zeichengetrennt = False
                 Me.datei.Spaltenbreite = Convert.ToInt32(Me.TextBox_Spaltenbreite.Text)
             End If
-            
+
             'Datum
-            me.datei.Datumsspalte = NumericUpDown_Datumszeile.Value - 1 'Immer eins weniger wie du ! 
+            Me.datei.XSpalte = Me.NumericUpDown_DatumsSpalte.Value - 1 'Immer eins weniger wie du ! 
 
             'Spalten neu auslesen
             Call Me.datei.SpaltenAuslesen()
@@ -153,6 +130,8 @@ Partial Public Class ImportDiag
     'Anzeige aktualisieren
     '*********************
     Private Sub aktualisieren()
+
+        Dim i As Integer
 
         'Dezimaltrennzeichen
         Me.ComboBox_Dezimaltrennzeichen.SelectedItem = Me.datei.Dezimaltrennzeichen
@@ -190,11 +169,17 @@ Partial Public Class ImportDiag
         Me.TextBox_Spaltenbreite.Text = Me.datei.Spaltenbreite
 
         'XSpalte
-        Me.TextBox_XSpalte.Text = Me.datei.XSpalte
+        Me.TextBox_XSpalte.Text = Me.datei.Spalten(Me.datei.XSpalte).Name
 
         'YSpalten
         Me.ListBox_YSpalten.Items.Clear()
-        Me.ListBox_YSpalten.Items.AddRange(Me.datei.YSpalten)
+        Call Me.ListBox_YSpalten.BeginUpdate()
+        For i = 0 To datei.Spalten.Length - 1
+            If (i <> datei.XSpalte) Then
+                Me.ListBox_YSpalten.Items.Add(datei.Spalten(i))
+            End If
+        Next
+        Call Me.ListBox_YSpalten.EndUpdate()
 
     End Sub
 
@@ -209,22 +194,18 @@ Partial Public Class ImportDiag
         If index <> -1 Then ListBox_YSpalten.SetSelected(index, True)
     End Sub
 
-    Private Sub Label_YSpalten_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Label_YSpalten.Click
+    Private Sub Button_VorschauEinblenden_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button_VorschauEinblenden.Click
+
+        Button_VorschauEinblenden.Visible = False
+        RichTextBox_Vorschau.Visible = True
+
+        'Laden des Textes in Steuerelement
+        'Datei als Vorschau anzeigen
+        Me.Label_Datei.Text += " " & Path.GetFileName(Me.datei.File)
+        Me.RichTextBox_Vorschau.LoadFile(Me.datei.File, RichTextBoxStreamType.PlainText)
+
 
     End Sub
-
-Private Sub Button_VorschauEinblenden_Click( ByVal sender As System.Object,  ByVal e As System.EventArgs) Handles Button_VorschauEinblenden.Click
-
-    Button_VorschauEinblenden.Visible = false
-    RichTextBox_Vorschau.Visible = true
-
-    'Laden des Textes in Steuerelement
-    'Datei als Vorschau anzeigen
-    Me.Label_Datei.Text += " " & Path.GetFileName(Me.datei.File)
-    Me.RichTextBox_Vorschau.LoadFile(Me.datei.File, RichTextBoxStreamType.PlainText)
-    
-
-End Sub
 
 
 
