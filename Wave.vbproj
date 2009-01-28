@@ -95,7 +95,6 @@
     <Compile Include="Dateiformate\SMB.vb" />
     <Compile Include="Dateiformate\Dateiformat.vb" />
     <Compile Include="Dateiformate\RVA.vb" />
-    <Compile Include="KontiZeitreihe.vb" />
     <Compile Include="Log.vb" />
     <Compile Include="My Project\ApplicationEvents.vb" />
     <Compile Include="My Project\Resources.Designer.vb">

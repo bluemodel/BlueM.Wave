@@ -203,13 +203,13 @@ Public Class REG
     Public Shared Sub Write_File(ByVal Reihe As Zeitreihe, ByVal File As String)
 
         Dim dt As Integer
-        Dim KontiReihe As KontiZeitreihe
+        Dim KontiReihe As Zeitreihe
 
         'Zeitintervall aus ersten und zweiten Zeitschritt der Reihe ermitteln
         dt = DateDiff(DateInterval.Minute, Reihe.XWerte(0), Reihe.XWerte(1))
-        KontiReihe = Reihe.MakeKontiZeitreihe(dt)
-        KontiReihe.Zeitintervall = dt
 
+        'Äquidistante Zeitreihe erzeugen
+        KontiReihe = Reihe.getKontiZRE(dt)
 
         Dim strwrite As StreamWriter
         Dim iZeile, j, n As Integer
@@ -224,7 +224,7 @@ Public Class REG
         'Standard
         strwrite.Write("TUD   0 0   0 2 0 0 ")
         'Zeitintervall
-        strwrite.Write(KontiReihe.Zeitintervall.ToString.PadLeft(5))
+        strwrite.Write(dt.ToString.PadLeft(5))
         'Dimension der Zehnerprotenz
         strwrite.Write((iDim * (-1)).ToString.PadLeft(5))
         'Anfangsdatum

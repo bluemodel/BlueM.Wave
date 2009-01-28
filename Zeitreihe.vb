@@ -293,10 +293,10 @@ Public Class Zeitreihe
     End Function
 
     ''' <summary>
-    ''' Erstellt eine neue äquidistante Zeitreihe
+    ''' Erstellt eine neue äquidistante Zeitreihe, neue Stützstellen kriegen den Wert 0
     ''' </summary>
     ''' <param name="Soll_dT">Sollzeitschritt (in Minuten)</param>      
-    Public Function MakeKontiZeitreihe(ByVal Soll_dT As Integer) As KontiZeitreihe
+    Public Function getKontiZRE(ByVal Soll_dT As Integer) As Zeitreihe
 
         Dim i As Integer
         Dim intloop As Integer
@@ -304,7 +304,7 @@ Public Class Zeitreihe
         Dim AnzZusWerte As Integer
         Dim SumZusWerte As Long
 
-        Dim OutZR As New KontiZeitreihe("Konti_" & Me.Title)
+        Dim OutZR As New Zeitreihe("Konti_" & Me.Title)
         OutZR.Einheit = Me.Einheit
 
         SumZusWerte = 0
