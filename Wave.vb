@@ -109,15 +109,15 @@ Public Class Wave
         If (e.Data.GetDataPresent(DataFormats.FileDrop)) Then
 
             Dim dateien() As String
-            Dim i As Integer
 
             'Dateien einem Array zuweisen
             dateien = e.Data.GetData(DataFormats.FileDrop)
 
             'Die einzelnen Dateien importieren
-            For i = 0 To dateien.GetUpperBound(0)
-                Call Import_File(dateien(i))
+            For Each datei As String In dateien
+                Call Me.Import_File(datei)
             Next
+
         End If
 
     End Sub
@@ -126,7 +126,9 @@ Public Class Wave
     '********************************
     Private Sub Wave_DragEnter(ByVal sender As System.Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles MyBase.DragEnter
         If (e.Data.GetDataPresent(DataFormats.FileDrop)) Then
-            e.Effect = DragDropEffects.All
+            e.Effect = DragDropEffects.Copy
+        Else
+            e.Effect = DragDropEffects.None
         End If
     End Sub
 
@@ -863,7 +865,7 @@ Public Class Wave
         Dim DiagResult As DialogResult
 
         'Dialog anzeigen
-        DiagResult = Datei.ImportDiag.ShowDialog()
+        DiagResult = Datei.ImportDiag.ShowDialog(Me)
 
         If (DiagResult = Windows.Forms.DialogResult.OK) Then
             'Datei einlesen
