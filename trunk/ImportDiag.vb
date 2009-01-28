@@ -62,6 +62,52 @@ Partial Public Class ImportDiag
         'Ende der Initialisierung
         IsInitializing = False
 
+        'Datei als Vorschau anzeigen
+        Call Me.VorschauAnzeigen()
+
+    End Sub
+
+    'Vorschau der Datei anzeigen
+    '***************************
+    Private Sub VorschauAnzeigen()
+
+        Const anzZeilen As Integer = 50 'maximal 50 Zeilen anzeigen
+        Const anzSpalten As Integer = 3500 'maximal 3500 Spalten anzeigen (bei mehr wird immer umgebrochen!)
+        Dim line, text As string
+
+        'Dateiname anzeigen
+        Me.Label_Datei.Text &= " " & Path.GetFileName(Me.datei.File)
+
+        'Vorschau anzeigen
+        Dim fs As New FileStream(Me.datei.File, FileMode.Open, FileAccess.Read)
+        Dim StrRead As New StreamReader(fs, System.Text.Encoding.GetEncoding("iso8859-1"))
+
+        text = ""
+
+        For i As Integer = 1 To anzZeilen
+
+            line = StrRead.ReadLine.ToString()
+
+            'gucken, ob Zeile zu lang
+            If (line.Length > anzSpalten) Then
+                line = line.Substring(0, anzSpalten) & " ..."
+            End If
+
+            text &= line & Konstanten.eol
+
+            'gucken, ob Dateiende
+            If (StrRead.Peek = -1) Then Exit For
+        Next
+
+        If (StrRead.Peek <> -1) Then
+            text &= "..."
+        End If
+
+        Me.TextBox_Vorschau.Text = text
+
+        StrRead.Close()
+        fs.Close()
+
     End Sub
 
     'OK Button gedrückt
@@ -187,28 +233,11 @@ Partial Public Class ImportDiag
 
     'Reihe in den YSpalten suchen
     '****************************
-    Private Sub TextBox_YSpalte_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TextBox_YSpalte.TextChanged
+    Private Sub TextBox_YSpalte_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TextBox_Suche.TextChanged
 
         Me.ListBox_YSpalten.ClearSelected()
-        Dim index As Integer = Me.ListBox_YSpalten.FindString(Me.TextBox_YSpalte.Text)
+        Dim index As Integer = Me.ListBox_YSpalten.FindString(Me.TextBox_Suche.Text)
         If index <> -1 Then ListBox_YSpalten.SetSelected(index, True)
     End Sub
-
-    Private Sub Button_VorschauEinblenden_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button_VorschauEinblenden.Click
-
-        Button_VorschauEinblenden.Visible = False
-        RichTextBox_Vorschau.Visible = True
-
-        'Laden des Textes in Steuerelement
-        'Datei als Vorschau anzeigen
-        Me.Label_Datei.Text += " " & Path.GetFileName(Me.datei.File)
-        Me.RichTextBox_Vorschau.LoadFile(Me.datei.File, RichTextBoxStreamType.PlainText)
-
-
-    End Sub
-
-
-
-
 
 End Class
