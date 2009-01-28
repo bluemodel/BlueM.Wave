@@ -79,12 +79,11 @@ Partial Class ImportDiag
         Me.TextBox_Vorschau.BackColor = System.Drawing.Color.White
         Me.TextBox_Vorschau.Font = New System.Drawing.Font("Courier New", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.TextBox_Vorschau.Location = New System.Drawing.Point(12, 42)
-        Me.TextBox_Vorschau.Multiline = True
         Me.TextBox_Vorschau.Name = "TextBox_Vorschau"
         Me.TextBox_Vorschau.ReadOnly = True
-        Me.TextBox_Vorschau.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Both
         Me.TextBox_Vorschau.Size = New System.Drawing.Size(226, 259)
         Me.TextBox_Vorschau.TabIndex = 16
+        Me.TextBox_Vorschau.Text = ""
         Me.TextBox_Vorschau.WordWrap = False
         '
         'ComboBox_Trennzeichen
@@ -372,6 +371,7 @@ Partial Class ImportDiag
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
+        Me.CancelButton = Me.Button_Cancel
         Me.ClientSize = New System.Drawing.Size(392, 534)
         Me.Controls.Add(Me.GroupBox_Dezimaltrennzeichen)
         Me.Controls.Add(Me.GroupBox_Vorschau)
@@ -380,6 +380,8 @@ Partial Class ImportDiag
         Me.Controls.Add(Me.Button_OK)
         Me.Controls.Add(Me.Button_Cancel)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
+        Me.MaximizeBox = False
+        Me.MinimizeBox = False
         Me.MinimumSize = New System.Drawing.Size(400, 500)
         Me.Name = "ImportDiag"
         Me.ShowInTaskbar = False
