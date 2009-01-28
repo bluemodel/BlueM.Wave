@@ -235,6 +235,7 @@
     <Content Include="RELEASE-NOTES.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="Resources\arrow_refresh.png" />
     <EmbeddedResource Include="Analysis\Gegenueberstellung_Dialog.resx">
       <DependentUpon>Gegenueberstellung_Dialog.vb</DependentUpon>
       <SubType>Designer</SubType>
