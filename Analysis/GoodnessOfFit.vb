@@ -42,13 +42,9 @@ Public Class GoodnessOfFit
         Dim i As Integer
         Dim mittelwert, sum_qmittelwertabweichung, values(,) As Double
 
-        'Zeitreihen zuweisen
-        Me.zre_gemessen = Me.mZeitreihen(0)
-        Me.zre_simuliert = Me.mZeitreihen(1)
-
-        'Zeitreihen säubern
-        Call Me.zre_gemessen.Clean()
-        Call Me.zre_simuliert.Clean()
+        'Zeitreihen säubern und zuweisen
+        Me.zre_gemessen = Me.mZeitreihen(0).getCleanZRE()
+        Me.zre_simuliert = Me.mZeitreihen(1).getCleanZRE()
 
         'Auf gemeinsame Stützstellen beschränken
         values = AnalysisHelper.getConcurrentValues(Me.zre_gemessen, Me.zre_simuliert)

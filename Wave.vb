@@ -883,6 +883,9 @@ Public Class Wave
 
         Dim AxisNo As Integer
 
+        'NaN und Infinity-Stützstellen entfernen
+        zre = zre.getCleanZRE()
+
         'Serie zu Hauptdiagramm und zu Übersichtsdiagramm hinzufügen
 
         'Linien instanzieren

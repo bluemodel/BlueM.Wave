@@ -333,37 +333,52 @@ Public Class Zeitreihe
     End Function
 
     ''' <summary>
-    ''' Säubert die Zeitreihe, in dem alle Stützstellen vom Wert NaN (-999) entfernt werden
+    ''' Erzeugt eine Kopie der Zeitreihe, in der alle Stützstellen mit Wert NaN oder Infinity entfernt wurden.
     ''' </summary>
-    Public Sub Clean()
+    ''' <returns>eine gesäuberte Zeitreihe</returns>
+    Public Function getCleanZRE() As Zeitreihe
 
-        Dim keysToBeRemoved As New List(Of DateTime)()
+        Dim NaNCounter As Integer
+        Dim newnodes As SortedList(Of DateTime, Double)
+        Dim cleanZRE As Zeitreihe
 
-        If (Me.YWerte.Contains(Konstanten.NaN)) Then
+        'Neue Zeitreihe instanzieren
+        cleanZRE = New Zeitreihe(Me.Title)
+        cleanZRE.Einheit = Me.Einheit
 
-            Me.Title &= " (clean)"
+        NaNCounter = 0
 
-            'NaN-Stützstellen finden
+        If (Me.YWerte.Contains(Double.NaN) Or _
+            Me.YWerte.Contains(Double.NegativeInfinity) Or _
+            Me.YWerte.Contains(Double.PositiveInfinity)) Then
+
+            newnodes = New SortedList(Of DateTime, Double)()
+
             For Each node As KeyValuePair(Of DateTime, Double) In Me.Nodes
-                If (node.Value = Konstanten.NaN) Then
-                    keysToBeRemoved.Add(node.Key)
+                If (Double.IsNaN(node.Value) Or _
+                    Double.IsInfinity(node.Value)) Then
+                    'Stützstelle überspringen und Zähler hochsetzen
+                    NaNCounter += 1
+                Else
+                    'Stützstelle kopieren
+                    newnodes.Add(node.Key, node.Value)
                 End If
             Next
 
-            'NaN-Stützstellen entfernen
-            For Each key As DateTime In keysToBeRemoved
-                Me.Nodes.Remove(key)
-            Next
-
-            'Überflüssige Kapazität entfernen
-            Call Me.Nodes.TrimExcess()
-
             'Log
-            Call Log.AddLogEntry("... " & Me.Title & ": " & keysToBeRemoved.Count.ToString() & " NaN-Werte (" & Konstanten.NaN.ToString() & ") wurden bereinigt.")
+            Call Log.AddLogEntry(Me.Title & ": Es wurden " & NaNCounter.ToString() & " Stützstellen mit Wert NaN, Infinity oder -Infinity entfernt!")
 
+        Else
+            'Alle Stützstellen kopieren
+            newnodes = New SortedList(Of DateTime, Double)(Me.Nodes)
         End If
 
-    End Sub
+        'Stützstellen zuweisen
+        cleanZRE._nodes = newnodes
+
+        Return cleanZRE
+
+    End Function
 
 #End Region 'Methoden
 

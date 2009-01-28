@@ -128,13 +128,11 @@ Public Class Monatsauswertung
         Dim i, j, N As Integer
         Dim summe, summequadrate As Double
 
-        reihe = Me.mZeitreihen.Item(0)
+        reihe = Me.mZeitreihen.Item(0).getCleanZRE()
 
         'Werte in Monate einsortieren
         For i = 0 To reihe.Length - 1
-            If (Not reihe.YWerte(i) = Konstanten.NaN) Then
-                Me.mErgebnis.Monatswerte(reihe.XWerte(i).Month() - 1).werte.Add(reihe.YWerte(i))
-            End If
+            Me.mErgebnis.Monatswerte(reihe.XWerte(i).Month() - 1).werte.Add(reihe.YWerte(i))
         Next
 
         'Monate analysieren
