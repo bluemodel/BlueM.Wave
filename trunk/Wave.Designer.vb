@@ -252,7 +252,7 @@ Partial Class Wave
         'ToolStripButton_ReRead
         '
         Me.ToolStripButton_ReRead.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.ToolStripButton_ReRead.Image = CType(resources.GetObject("ToolStripButton_ReRead.Image"), System.Drawing.Image)
+        Me.ToolStripButton_ReRead.Image = Global.IHWB.Wave.My.Resources.Resources.arrow_refresh
         Me.ToolStripButton_ReRead.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.ToolStripButton_ReRead.Name = "ToolStripButton_ReRead"
         Me.ToolStripButton_ReRead.Size = New System.Drawing.Size(23, 31)
