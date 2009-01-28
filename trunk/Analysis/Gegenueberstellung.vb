@@ -77,12 +77,10 @@ Public Class Gegenueberstellung
                 xnummer = 1
                 ynummer = 0
             End If
-            reihe1 = Me.mZeitreihen(xnummer)
-            reihe2 = Me.mZeitreihen(ynummer)
 
-            'Reihen säubern
-            Call reihe1.Clean()
-            Call reihe2.Clean()
+            'Reihen säubern und zuweisen
+            reihe1 = Me.mZeitreihen(xnummer).getCleanZRE()
+            reihe2 = Me.mZeitreihen(ynummer).getCleanZRE()
 
             'Nur gemeinsame Stützstellen nutzen
             values = AnalysisHelper.getConcurrentValues(reihe1, reihe2)

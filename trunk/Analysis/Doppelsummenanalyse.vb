@@ -59,8 +59,8 @@ Public Class Doppelsummenanalyse
         Dim zre1, zre2 As Zeitreihe
         Dim values(,) As Double
 
-        zre1 = Me.mZeitreihen(0)
-        zre2 = Me.mZeitreihen(1)
+        zre1 = Me.mZeitreihen(0).getCleanZRE()
+        zre2 = Me.mZeitreihen(1).getCleanZRE()
 
         'nur gemeinsame Stützstellen nutzen
         values = AnalysisHelper.getConcurrentValues(zre1, zre2)

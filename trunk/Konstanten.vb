@@ -5,9 +5,6 @@ Module Konstanten
     'Zeilenumbruch
     Public Const eol As String = Chr(13) & Chr(10)
 
-    'Not a Number
-    Public Const NaN As Double = -999
-
     'Datumsformat
     Public Const Datumsformat As String = "dd.MM.yyyy HH:mm"
 
@@ -35,7 +32,7 @@ Module Konstanten
     ''' Wandelt einen String zu Double um
     ''' </summary>
     ''' <param name="str">umzuwandelnder String</param>
-    ''' <returns>Double-Wert, gesetzt auf Konstanten.NaN (-999) falls Wert NaN, Infinity oder unlesbar</returns>
+    ''' <returns>Double-Wert, gesetzt auf NaN falls Wert unlesbar. NaN und Infinity werden erkannt und übernommen</returns>
     ''' <remarks></remarks>
     Public Function StringToDouble(ByVal str As String) As Double
 
@@ -46,15 +43,8 @@ Module Konstanten
 
         If (Not success) Then
             'Wert ist unlesbar
-            wert = Konstanten.NaN
-            Call Log.AddLogEntry("Der Wert '" & str.Trim() & "' ist unlesbar und wurde durch " & Konstanten.NaN.ToString() & " ersetzt!")
-        Else
-            'BUG 395: NaN und Infinity abfangen
-            If (Double.IsNaN(wert) _
-                Or Double.IsInfinity(wert)) Then
-                wert = Konstanten.NaN
-                Call Log.AddLogEntry("Der Wert '" & str.Trim() & "' wurde durch " & Konstanten.NaN.ToString() & " ersetzt!")
-            End If
+            wert = Double.NaN
+            Call Log.AddLogEntry("Der Wert '" & str.Trim() & "' ist unlesbar und wurde durch NaN ersetzt!")
         End If
 
         Return wert

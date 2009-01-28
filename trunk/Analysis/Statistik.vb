@@ -81,7 +81,7 @@ Public Class Statistik
 
         'Zeitreihen säubern
         For Each zre As Zeitreihe In Me.mZeitreihen
-            Call zre.Clean()
+            zre = zre.getCleanZRE()
         Next
 
         'Min und max aller Zeitreihen bestimmen
@@ -121,13 +121,10 @@ Public Class Statistik
                 For i = 0 To zre.Length - 1
                     'Klassen durchlaufen
                     For j = 0 To AnzKlassen - 1
-                        'NaN-Werte überspringen
-                        If (zre.YWerte(i) <> Konstanten.NaN) Then
-                            If (zre.YWerte(i) >= Me.klassen(j) And zre.YWerte(i) < (Me.klassen(j) + Me.klassengrösse)) Then
-                                'Klasse gefunden: Häufigkeit hochzählen
-                                .häufigkeiten(j) += 1
-                                Exit For
-                            End If
+                        If (zre.YWerte(i) >= Me.klassen(j) And zre.YWerte(i) < (Me.klassen(j) + Me.klassengrösse)) Then
+                            'Klasse gefunden: Häufigkeit hochzählen
+                            .häufigkeiten(j) += 1
+                            Exit For
                         End If
                     Next
                 Next
