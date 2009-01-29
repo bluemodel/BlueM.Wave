@@ -749,6 +749,7 @@ Public Class Wave
 
         Dim Datei As Dateiformat
         Dim i As Integer
+        Dim ok As Boolean
 
         'Sonderfälle abfangen:
         '---------------------
@@ -774,28 +775,57 @@ Public Class Wave
                     'Datei-Instanz erzeugen
                     Datei = Dateifactory.getDateiInstanz(file)
 
-                    'Falls Importdialog erforderlich, diesen anzeigen
                     If (Datei.UseImportDialog) Then
-                        Call Me.showImportDialog(Datei)
+                        'Falls Importdialog erforderlich, diesen anzeigen
+                        ok = Me.showImportDialog(Datei)
+                        Call Application.DoEvents()
+                    Else
+                        'Ansonsten alle Spalten auswählen
+                        Call Datei.selectAllSpalten()
+                        ok = True
                     End If
 
-                    'Log
-                    Call Log.AddLogEntry("Datei '" & file & "' erfolgreich importiert!")
+                    If (ok) Then
 
-                    'Datei abspeichern
-                    Me.ImportedFiles.Add(Datei)
+                        Cursor = Cursors.WaitCursor
 
-                    'Alle eingelesenen Zeitreihen der Datei durchlaufen
-                    For i = 0 To Datei.Zeitreihen.GetUpperBound(0)
-                        'Serie abspeichen
-                        Me.AddZeitreihe(Datei.Zeitreihen(i))
-                        'Serie anzeigen
-                        Call Me.Display_Series(Datei.Zeitreihen(i))
-                    Next
+                        'Datei einlesen
+                        Call Datei.Read_File()
+
+                        'Log
+                        Call Log.AddLogEntry("Datei '" & file & "' erfolgreich importiert!")
+                        Application.DoEvents()
+
+                        'Datei abspeichern
+                        Me.ImportedFiles.Add(Datei)
+
+                        'Log
+                        Call Log.AddLogEntry("Zeitreihen in Diagramm laden...")
+                        Application.DoEvents()
+
+                        'Alle eingelesenen Zeitreihen der Datei durchlaufen
+                        For i = 0 To Datei.Zeitreihen.GetUpperBound(0)
+                            'Serie abspeichen
+                            Me.AddZeitreihe(Datei.Zeitreihen(i))
+                            'Serie anzeigen
+                            Call Me.Display_Series(Datei.Zeitreihen(i))
+                        Next
+
+                        'Log
+                        Call Log.AddLogEntry("Zeitreihen erfolgreich in Diagramm geladen!")
+
+                    Else
+                        'Import abgebrochen
+                        Log.AddLogEntry("Import abgebrochen!")
+
+                    End If
 
                 Catch ex As Exception
                     MsgBox("Fehler beim Import:" & eol & ex.Message, MsgBoxStyle.Critical)
                     Call Log.AddLogEntry("Fehler beim Import: " & ex.Message)
+
+                Finally
+                    Cursor = Cursors.Default
                 End Try
 
         End Select
@@ -835,6 +865,9 @@ Public Class Wave
             'Datei-Instanz erzeugen
             RVADatei = Dateifactory.getDateiInstanz(file)
 
+            'Einlesen
+            Call RVADatei.Read_File()
+
             'Log
             Call Log.AddLogEntry("... Datei '" & file & "' erfolgreich importiert!")
 
@@ -858,7 +891,7 @@ Public Class Wave
     ''' Zeigt den Importdialog an und liest im Anschluss die Datei mit den eingegebenen Einstellungn ein
     ''' </summary>
     ''' <param name="Datei">Instanz der Datei, die importiert werden soll</param>
-    Private Sub showImportDialog(ByRef Datei As Dateiformat)
+    Private Function showImportDialog(ByRef Datei As Dateiformat) As Boolean
 
         Datei.ImportDiag = New ImportDiag(Datei)
 
@@ -868,12 +901,12 @@ Public Class Wave
         DiagResult = Datei.ImportDiag.ShowDialog(Me)
 
         If (DiagResult = Windows.Forms.DialogResult.OK) Then
-            'Datei einlesen
-            Call Datei.Read_File()
+            Return True
         Else
-            Exit Sub
+            Return False
         End If
-    End Sub
+
+    End Function
 
     ''' <summary>
     ''' Eine Zeitreihe im Diagramm anzeigen
