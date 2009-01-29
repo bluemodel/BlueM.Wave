@@ -107,7 +107,7 @@ Public Class RVA
 
     'Konstruktor
     '***********
-    Public Sub New(ByVal FileName As String)
+    Public Sub New(ByVal FileName As String, Optional ByVal ReadAllNow As Boolean = False)
 
         Call MyBase.New(FileName)
 
@@ -144,7 +144,10 @@ Public Class RVA
 
         End With
 
-        Call Me.Read_File()
+        If (ReadAllNow) Then
+            'Direkt einlesen
+            Call Me.Read_File()
+        End If
 
     End Sub
 

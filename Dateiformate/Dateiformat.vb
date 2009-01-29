@@ -238,7 +238,7 @@ Public MustInherit Class Dateiformat
     ''' </summary>
     ''' <param name="title">Titel der zu holenden Zeitreihe</param>
     ''' <returns>Die Zeitreihe</returns>
-    ''' <remarks>falls noch nicht eingelesen, wird dies nachgeholt. Schmeiss eine Exception, wenn die Zeitreihe nicht gefunden werdn kann.</remarks>
+    ''' <remarks>falls noch nicht eingelesen, wird dies nachgeholt. Schmeisst eine Exception, wenn die Zeitreihe nicht gefunden werden kann.</remarks>
     Public ReadOnly Property getReihe(ByVal title As String) As Zeitreihe
         Get
             For i As Integer = 0 To Me.Zeitreihen.GetUpperBound(0)
@@ -266,6 +266,36 @@ Public MustInherit Class Dateiformat
     End Property
 
     ''' <summary>
+    ''' Aus der Datei eine Zeitreihe anhand ihres Index holen
+    ''' </summary>
+    ''' <param name="index">0-basierter Index der Zeitreihe (0 => 1. Zeitreihenspalte)</param>
+    ''' <returns>Die Zeitreihe</returns>
+    ''' <remarks>falls noch nicht eingelesen, wird dies nachgeholt. Schmeisst eine Exception, wenn die Zeitreihe nicht gefunden werden kann.</remarks>
+    Public ReadOnly Property getReihe(ByVal index As Integer) As Zeitreihe
+        Get
+            If (index <= Me.Zeitreihen.GetUpperBound(0)) Then
+                'Zeitreihe zurückgeben
+                Return Me.Zeitreihen(index)
+            End If
+
+            'Zeitreihe ist noch nicht eingelesen!
+            For Each spalte As SpaltenInfo In Me.Spalten
+                If (spalte.Index <> Me.XSpalte And spalte.Index - 1 = index) Then
+                    'gewünschte Zeitreihe zur Spaltenauswahl hinzufügen
+                    ReDim Preserve Me.SpaltenSel(Me.SpaltenSel.GetUpperBound(0) + 1)
+                    Me.SpaltenSel(Me.SpaltenSel.GetUpperBound(0)) = spalte
+                    'Zeitreihen erneut einlesen
+                    Call Me.Read_File()
+                    'Zeitreihe zurückgeben
+                    Return Me.getReihe(index)
+                End If
+            Next
+            'Zeitreihe nicht vorhanden!
+            Throw New Exception("Zeitreihe '" & index.ToString() & "' in Datei '" & System.IO.Path.GetFileName(Me.File) & "' nicht gefunden!")
+        End Get
+    End Property
+
+    ''' <summary>
     ''' Gibt an, ob beim Import des Dateiformats der Importdialog angezeigt werden soll
     ''' </summary>
     Public MustOverride ReadOnly Property UseImportDialog() As Boolean
@@ -285,6 +315,7 @@ Public MustInherit Class Dateiformat
 
         'Objektstruktur initialisieren
         ReDim Me.Zeitreihen(-1)
+        ReDim Me.SpaltenSel(-1)
 
         'Dateinamen setzen
         Me.File = FileName

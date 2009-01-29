@@ -24,7 +24,7 @@ Public Class SMB
 
     'Konstruktor
     '***********
-    Public Sub New(ByVal FileName As String)
+    Public Sub New(ByVal FileName As String, Optional ByVal ReadAllNow As Boolean = False)
 
         MyBase.New(FileName)
 
@@ -34,9 +34,11 @@ Public Class SMB
 
         Call Me.SpaltenAuslesen()
 
-        'ZRE-Dateien immer direkt einlesen
-        Call Me.selectAllSpalten()
-        Call Me.Read_File()
+        If (ReadAllNow) Then
+            'Direkt einlesen
+            Call Me.selectAllSpalten()
+            Call Me.Read_File()
+        End If
 
     End Sub
 
