@@ -263,36 +263,49 @@ Public Class Wave
         Me.TChart2.ShowEditor()
     End Sub
 
-    'Eine Serie wurde im Editor gelöscht
-    '***********************************
-    Private Sub SeriesDeleted(ByVal sender As Object, ByVal e As System.EventArgs) Handles ChartListBox1.RemovedSeries
+    ''' <summary>
+    ''' Eine im TeeChart-Editor gelöschte Serie intern löschen
+    ''' </summary>
+    ''' <remarks>
+    ''' Wird für jede gelöschte Serie ein Mal aufgerufen.
+    ''' Funktioniert nur unter der Annahme, dass alle Serien unterschiedliche Titel haben.
+    ''' </remarks>
+    Private Sub DeleteSeriesInternally(ByVal sender As Object, ByVal e As System.EventArgs) Handles ChartListBox1.RemovedSeries
 
         Dim found As Boolean
+        Dim title As String
+        Dim s As Steema.TeeChart.Styles.Series
+
+        title = ""
 
         'Alle internen Zeitreihen durchlaufen und prüfen, ob es sie noch gibt
         For Each zre As Zeitreihe In Me.Zeitreihen.Values
             found = False
-            For Each s As Steema.TeeChart.Styles.Series In Me.ChartListBox1.Items
+            For Each s In Me.ChartListBox1.Items
                 If (s.Title = zre.Title) Then
-                    found = True
+                    found = True 'diese Serie gibt es noch
                     Exit For
                 End If
             Next
-            'Nicht gefundene löschen
             If (Not found) Then
-
-                'Aus der internen Collection löschen
-                Me.Zeitreihen.Remove(zre.Title)
-
-                'Aus der Übersicht löschen
-                For Each s As Steema.TeeChart.Styles.Series In Me.TChart2.Series
-                    If (s.Title = zre.Title) Then
-                        Call Me.TChart2.Series.Remove(s)
-                        Exit For
-                    End If
-                Next
+                title = zre.Title 'diese Serie gibt es nicht mehr
+                Exit For
             End If
         Next
+
+        If (title <> "") Then
+            'Aus der internen Collection löschen
+            Me.Zeitreihen.Remove(title)
+
+            'Aus der Übersicht löschen
+            For i As Integer = Me.TChart2.Series.Count - 1 To 0 Step -1
+                If (Me.TChart2.Series.Item(i).Title = title) Then
+                    Me.TChart2.Series.RemoveAt(i)
+                    Me.TChart2.Refresh()
+                    Exit For
+                End If
+            Next
+        End If
 
     End Sub
 
