@@ -97,38 +97,47 @@ Public Class ZRE
 
         'Einlesen
         '--------
-        j = 0
-        Do
-            j += 1
-            Zeile = StrReadSync.ReadLine.ToString()
-            If (j > Me.nZeilenHeader And Zeile.Length > 0) Then
+        Try
+            j = 0
+            Do
+                j += 1
+                Zeile = StrReadSync.ReadLine.ToString()
+                If (j > Me.nZeilenHeader And Zeile.Length > 0) Then
 
-                'Datum erkennen
-                '--------------
-                Jahr = Zeile.Substring(0, 4)
-                Monat = Zeile.Substring(4, 2)
-                Tag = Zeile.Substring(6, 2)
-                Stunde = Zeile.Substring(9, 2)
-                Minute = Zeile.Substring(12, 2)
-                Datum = New System.DateTime(Jahr, Monat, Tag, 0, 0, 0, New System.Globalization.GregorianCalendar())
-                ' Wenn Uhrzeit als 24:00 gegeben ist, wird der Tag um eins hochgezählt und die Zeit auf 00:00 gesetzt
-                If (Stunde = 24) Then
-                    Stunde = 0
-                    Datum = Datum.AddDays(1)
+                    'Datum erkennen
+                    '--------------
+                    Jahr = Zeile.Substring(0, 4)
+                    Monat = Zeile.Substring(4, 2)
+                    Tag = Zeile.Substring(6, 2)
+                    Stunde = Zeile.Substring(9, 2)
+                    Minute = Zeile.Substring(12, 2)
+                    Datum = New System.DateTime(Jahr, Monat, Tag, 0, 0, 0, New System.Globalization.GregorianCalendar())
+                    ' Wenn Uhrzeit als 24:00 gegeben ist, wird der Tag um eins hochgezählt und die Zeit auf 00:00 gesetzt
+                    If (Stunde = 24) Then
+                        Stunde = 0
+                        Datum = Datum.AddDays(1)
+                    End If
+                    Datum = Datum.AddHours(Stunde)
+                    Datum = Datum.AddMinutes(Minute)
+
+                    'Datum und Wert zur Zeitreihe hinzufügen
+                    '---------------------------------------
+                    Me.Zeitreihen(0).AddNode(Datum, StringToDouble(Zeile.Substring(15)))
+
                 End If
-                Datum = Datum.AddHours(Stunde)
-                Datum = Datum.AddMinutes(Minute)
+            Loop Until StrReadSync.Peek() = -1
 
-                'Datum und Wert zur Zeitreihe hinzufügen
-                '---------------------------------------
-                Me.Zeitreihen(0).AddNode(Datum, StringToDouble(Zeile.Substring(15)))
+        Catch ex As Exception
+            'Fehler weiterschmeissen
+            Throw ex
 
-            End If
-        Loop Until StrReadSync.Peek() = -1
+        Finally
+            'Datei schliessen
+            StrReadSync.close()
+            StrRead.Close()
+            FiStr.Close()
 
-        StrReadSync.close()
-        StrRead.Close()
-        FiStr.Close()
+        End Try
 
     End Sub
 
