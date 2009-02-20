@@ -52,7 +52,7 @@ Public Class RVA
         ''' <summary>
         ''' Gruppennummer
         ''' </summary>
-        Public No As Short
+        Public No As Integer
         ''' <summary>
         ''' Gruppennname
         ''' </summary>
