@@ -22,6 +22,7 @@ Partial Class Gegenueberstellung_Dialog
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Gegenueberstellung_Dialog))
         Me.RadioButton_Reihe1 = New System.Windows.Forms.RadioButton
         Me.RadioButton_Reihe2 = New System.Windows.Forms.RadioButton
         Me.Label1 = New System.Windows.Forms.Label
@@ -31,39 +32,37 @@ Partial Class Gegenueberstellung_Dialog
         'RadioButton_Reihe1
         '
         Me.RadioButton_Reihe1.AutoSize = True
-        Me.RadioButton_Reihe1.Location = New System.Drawing.Point(30, 49)
+        Me.RadioButton_Reihe1.Checked = True
+        Me.RadioButton_Reihe1.Location = New System.Drawing.Point(12, 34)
         Me.RadioButton_Reihe1.Name = "RadioButton_Reihe1"
-        Me.RadioButton_Reihe1.Size = New System.Drawing.Size(84, 17)
+        Me.RadioButton_Reihe1.Size = New System.Drawing.Size(90, 17)
         Me.RadioButton_Reihe1.TabIndex = 0
         Me.RadioButton_Reihe1.TabStop = True
-        Me.RadioButton_Reihe1.Text = "RadioButton"
-        Me.RadioButton_Reihe1.UseVisualStyleBackColor = True
+        Me.RadioButton_Reihe1.Text = "RadioButton1"
         '
         'RadioButton_Reihe2
         '
         Me.RadioButton_Reihe2.AutoSize = True
-        Me.RadioButton_Reihe2.Location = New System.Drawing.Point(30, 72)
+        Me.RadioButton_Reihe2.Location = New System.Drawing.Point(12, 57)
         Me.RadioButton_Reihe2.Name = "RadioButton_Reihe2"
         Me.RadioButton_Reihe2.Size = New System.Drawing.Size(90, 17)
         Me.RadioButton_Reihe2.TabIndex = 1
-        Me.RadioButton_Reihe2.TabStop = True
-        Me.RadioButton_Reihe2.Text = "RadioButton1"
-        Me.RadioButton_Reihe2.UseVisualStyleBackColor = True
+        Me.RadioButton_Reihe2.Text = "RadioButton2"
         '
         'Label1
         '
         Me.Label1.AutoSize = True
-        Me.Label1.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, CType((System.Drawing.FontStyle.Bold Or System.Drawing.FontStyle.Underline), System.Drawing.FontStyle), System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label1.Location = New System.Drawing.Point(27, 13)
+        Me.Label1.Location = New System.Drawing.Point(12, 9)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(45, 13)
+        Me.Label1.Size = New System.Drawing.Size(309, 13)
         Me.Label1.TabIndex = 2
-        Me.Label1.Text = "Label1"
+        Me.Label1.Text = "Bitte die Zeitreihe auswählen, die auf die x-Achse kommen soll..."
         '
         'Button_OK
         '
+        Me.Button_OK.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Button_OK.DialogResult = System.Windows.Forms.DialogResult.OK
-        Me.Button_OK.Location = New System.Drawing.Point(30, 113)
+        Me.Button_OK.Location = New System.Drawing.Point(245, 91)
         Me.Button_OK.Name = "Button_OK"
         Me.Button_OK.Size = New System.Drawing.Size(75, 23)
         Me.Button_OK.TabIndex = 3
@@ -74,19 +73,24 @@ Partial Class Gegenueberstellung_Dialog
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(846, 165)
+        Me.ClientSize = New System.Drawing.Size(332, 126)
         Me.Controls.Add(Me.Button_OK)
         Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.RadioButton_Reihe2)
         Me.Controls.Add(Me.RadioButton_Reihe1)
+        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog
+        Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
+        Me.MaximizeBox = False
+        Me.MinimizeBox = False
         Me.Name = "Gegenueberstellung_Dialog"
-        Me.Text = "Gegenueberstellung_Dialog"
+        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
+        Me.Text = "Gegenüberstellung"
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
     End Sub
-    Friend WithEvents RadioButton_Reihe1 As System.Windows.Forms.RadioButton
-    Friend WithEvents RadioButton_Reihe2 As System.Windows.Forms.RadioButton
-    Friend WithEvents Label1 As System.Windows.Forms.Label
     Friend WithEvents Button_OK As System.Windows.Forms.Button
+    Private WithEvents Label1 As System.Windows.Forms.Label
+    Private WithEvents RadioButton_Reihe1 As System.Windows.Forms.RadioButton
+    Private WithEvents RadioButton_Reihe2 As System.Windows.Forms.RadioButton
 End Class

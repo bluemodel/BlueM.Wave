@@ -53,6 +53,7 @@ Partial Class AnalysisDialog
         '
         'Button_Cancel
         '
+        Me.Button_Cancel.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Button_Cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel
         Me.Button_Cancel.Location = New System.Drawing.Point(42, 186)
         Me.Button_Cancel.Name = "Button_Cancel"
@@ -63,12 +64,13 @@ Partial Class AnalysisDialog
         '
         'Button_OK
         '
+        Me.Button_OK.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Button_OK.DialogResult = System.Windows.Forms.DialogResult.OK
         Me.Button_OK.Location = New System.Drawing.Point(123, 186)
         Me.Button_OK.Name = "Button_OK"
         Me.Button_OK.Size = New System.Drawing.Size(75, 23)
         Me.Button_OK.TabIndex = 7
-        Me.Button_OK.Text = "Ok"
+        Me.Button_OK.Text = "OK"
         Me.Button_OK.UseVisualStyleBackColor = True
         '
         'ListBox_Zeitreihen
@@ -100,8 +102,13 @@ Partial Class AnalysisDialog
         Me.Controls.Add(Label_Zeitreihen)
         Me.Controls.Add(Me.Button_OK)
         Me.Controls.Add(Me.ListBox_Zeitreihen)
+        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
+        Me.MaximizeBox = False
+        Me.MinimizeBox = False
         Me.Name = "AnalysisDialog"
+        Me.ShowInTaskbar = False
+        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
         Me.Text = "Analyse"
         Me.ResumeLayout(False)
         Me.PerformLayout()

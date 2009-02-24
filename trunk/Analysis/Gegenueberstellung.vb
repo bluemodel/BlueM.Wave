@@ -64,40 +64,39 @@ Public Class Gegenueberstellung
         ' Dialogaufruf zur Auswahl der x-Achse
         Dim dialog As New Gegenueberstellung_Dialog(Me.mZeitreihen(0).Title, Me.mZeitreihen(1).Title)
 
-        ' Nur wenn eine Zeitreihe als x-Achse gewählt wurde, gehts los
-        If (dialog.ShowDialog() = DialogResult.OK) Then
-
-            ' Zuweisen der x-Achse
-            Dim xachse As String
-            xachse = dialog.xAchse
-            If (xachse = Me.mZeitreihen(0).Title) Then
-                xnummer = 0
-                ynummer = 1
-            Else
-                xnummer = 1
-                ynummer = 0
-            End If
-
-            'Reihen säubern und zuweisen
-            reihe1 = Me.mZeitreihen(xnummer).getCleanZRE()
-            reihe2 = Me.mZeitreihen(ynummer).getCleanZRE()
-
-            'Nur gemeinsame Stützstellen nutzen
-            values = AnalysisHelper.getConcurrentValues(reihe1, reihe2)
-
-            ' Ergebnisreihe allokieren
-            ReDim Me.ergebnisreihe(values.GetUpperBound(0), 1)
-
-            ' x- und y-Werte der Ergebnisreihe zuweisen
-            For i = 0 To values.GetUpperBound(0)
-                ergebnisreihe(i, 0) = values(i, 0)
-                ergebnisreihe(i, 1) = values(i, 1)
-            Next
-
-            'Datume übernehmen (werden später für Punkte-Labels im Diagramm gebraucht)
-            datume = reihe1.XWerte
-
+        If (dialog.ShowDialog() <> DialogResult.OK) Then
+            Throw New Exception("User abort")
         End If
+
+        ' Zuweisen der x-Achse
+        Dim xachse As String
+        xachse = dialog.xAchse
+        If (xachse = Me.mZeitreihen(0).Title) Then
+            xnummer = 0
+            ynummer = 1
+        Else
+            xnummer = 1
+            ynummer = 0
+        End If
+
+        'Reihen säubern und zuweisen
+        reihe1 = Me.mZeitreihen(xnummer).getCleanZRE()
+        reihe2 = Me.mZeitreihen(ynummer).getCleanZRE()
+
+        'Nur gemeinsame Stützstellen nutzen
+        values = AnalysisHelper.getConcurrentValues(reihe1, reihe2)
+
+        ' Ergebnisreihe allokieren
+        ReDim Me.ergebnisreihe(values.GetUpperBound(0), 1)
+
+        ' x- und y-Werte der Ergebnisreihe zuweisen
+        For i = 0 To values.GetUpperBound(0)
+            ergebnisreihe(i, 0) = values(i, 0)
+            ergebnisreihe(i, 1) = values(i, 1)
+        Next
+
+        'Datume übernehmen (werden später für Punkte-Labels im Diagramm gebraucht)
+        datume = reihe1.XWerte
 
     End Sub
 
