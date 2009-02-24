@@ -71,6 +71,12 @@
     <Compile Include="Analysis\Gegenueberstellung_Dialog.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Analysis\GoodnessOfFit_Dialog.Designer.vb">
+      <DependentUpon>GoodnessOfFit_Dialog.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Analysis\GoodnessOfFit_Dialog.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Analysis\Statistik.vb" />
     <Compile Include="Analysis\Doppelsummenanalyse.vb" />
     <Compile Include="Analysis\Monatsauswertung.vb" />
@@ -238,6 +244,9 @@
     <EmbeddedResource Include="Analysis\Gegenueberstellung_Dialog.resx">
       <DependentUpon>Gegenueberstellung_Dialog.vb</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Analysis\GoodnessOfFit_Dialog.resx">
+      <DependentUpon>GoodnessOfFit_Dialog.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\log.ico" />
     <None Include="Resources\script.png" />

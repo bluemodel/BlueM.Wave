@@ -41,10 +41,23 @@ Public Class GoodnessOfFit
 
         Dim i As Integer
         Dim mittelwert, sum_qmittelwertabweichung, values(,) As Double
+        Dim diagresult As DialogResult
 
-        'Zeitreihen säubern und zuweisen
-        Me.zre_gemessen = Me.mZeitreihen(0).getCleanZRE()
-        Me.zre_simuliert = Me.mZeitreihen(1).getCleanZRE()
+        'Dialog anzeigen
+        Dim dialog As New GoodnessOfFit_Dialog(Me.mZeitreihen(0).Title, Me.mZeitreihen(1).Title)
+        diagresult = dialog.ShowDialog()
+        If (diagresult <> DialogResult.OK) Then
+            Throw New Exception("User abort")
+        End If
+
+        'Zeitreihen zuweisen (und säubern)
+        If (dialog.getNrGemesseneReihe = 1) Then
+            Me.zre_gemessen = Me.mZeitreihen(0).getCleanZRE()
+            Me.zre_simuliert = Me.mZeitreihen(1).getCleanZRE()
+        Else
+            Me.zre_gemessen = Me.mZeitreihen(1).getCleanZRE()
+            Me.zre_simuliert = Me.mZeitreihen(0).getCleanZRE()
+        End If
 
         'Auf gemeinsame Stützstellen beschränken
         values = AnalysisHelper.getConcurrentValues(Me.zre_gemessen, Me.zre_simuliert)
