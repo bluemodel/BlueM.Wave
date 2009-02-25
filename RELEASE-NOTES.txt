@@ -7,12 +7,15 @@ Website: http://130.83.196.154/BlueM/wiki/index.php/Wave
 
 Version 1.2
 -----------
+UPDATE:
 * Interne Speicherung von Stützstellen überarbeitet
+NEW:
+* Analysefunktion GoodnessOfFit berechnet jetzt auch den Volumenfehler
 
 
 Version 1.1
 -----------
-New:
+NEW:
 * Analysefunktionen: Doppelsummenanalyse, GoodnessOfFit, Statistik, 
   Gegenüberstellung
 * Importformate SMB und REG
@@ -20,7 +23,7 @@ New:
 * Neues Feature "ReRead Files": Löscht alle vorhandenen Serien und liest alle aus  
   Dateien importierten Zeitreihen mit den bereits verwendeten Einstellungen neu ein
   (Bug 388)
-Fixed:
+FIXED:
 * Zeitreihe zuschneiden
 
 Version 1.0
