@@ -142,23 +142,11 @@ Public Class Wave
 
         'Charts zurücksetzen
         Me.TChart1.Clear()
-        Me.TChart1.Aspect.View3D = False
-        Me.TChart1.BackColor = Color.White
-        Me.TChart1.Panel.Gradient.Visible = False
-        Me.TChart1.Panel.Brush.Color = Color.White
-        Me.TChart1.Walls.Back.Transparent = False
-        Me.TChart1.Walls.Back.Gradient.Visible = False
-        Me.TChart1.Walls.Back.Color = Color.White
+        Call Wave.formatChart(Me.TChart1.Chart)
 
         Me.TChart2.Clear()
-        Me.TChart2.Aspect.View3D = False
+        Call Wave.formatChart(Me.TChart2.Chart)
         Me.TChart2.Header.Visible = False
-        Me.TChart2.BackColor = Color.White
-        Me.TChart2.Panel.Gradient.Visible = False
-        Me.TChart2.Panel.Brush.Color = Color.White
-        Me.TChart2.Walls.Back.Transparent = False
-        Me.TChart2.Walls.Back.Gradient.Visible = False
-        Me.TChart2.Walls.Back.Color = Color.White
 
         'Übersicht darf nicht gescrolled oder gezoomt werden
         Me.TChart2.Zoom.Allow = False
@@ -174,14 +162,6 @@ Public Class Wave
         Me.TChart1.Axes.Bottom.Labels.DateTimeFormat = "dd.MM.yy HH:mm"
         Me.TChart1.Axes.Right.Title.Angle = 90
         Me.TChart2.Axes.Bottom.Automatic = False
-
-        'Legenden
-        Me.TChart1.Legend.LegendStyle = Steema.TeeChart.LegendStyles.Series
-        Me.TChart1.Legend.CheckBoxes = True
-        Me.TChart1.Legend.FontSeriesColor = True
-        Me.TChart2.Legend.LegendStyle = Steema.TeeChart.LegendStyles.Series
-        Me.TChart2.Legend.CheckBoxes = True
-        Me.TChart2.Legend.FontSeriesColor = True
 
         'ChartListBox
         Me.ChartListBox1.Chart = Me.TChart1
@@ -1102,6 +1082,30 @@ Public Class Wave
         Return AxisNo
 
     End Function
+
+    ''' <summary>
+    ''' Führt Standardformatierung eines TCharts aus
+    ''' </summary>
+    ''' <param name="chart"></param>
+    Public Shared Sub formatChart(ByRef chart As Steema.TeeChart.Chart)
+
+        chart.Aspect.View3D = False
+        'chart.BackColor = Color.White
+        chart.Panel.Gradient.Visible = False
+        chart.Panel.Brush.Color = Color.White
+        chart.Walls.Back.Transparent = False
+        chart.Walls.Back.Gradient.Visible = False
+        chart.Walls.Back.Color = Color.White
+
+        'Header
+        chart.Header.Text = ""
+
+        'Legende
+        chart.Legend.LegendStyle = Steema.TeeChart.LegendStyles.Series
+        chart.Legend.FontSeriesColor = True
+        chart.Legend.CheckBoxes = True
+
+    End Sub
 
     'Chart für RVA-Anzeige formatieren
     '*********************************

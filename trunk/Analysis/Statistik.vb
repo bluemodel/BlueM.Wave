@@ -183,11 +183,8 @@ Public Class Statistik
 
         'Diagramm formatieren
         Me.mResultChart = New Steema.TeeChart.Chart()
-        Me.mResultChart.Aspect.View3D = False
+        Call Wave.formatChart(Me.mResultChart)
         Me.mResultChart.Header.Text = "Statistische Auswertung"
-
-        'Legende
-        Me.mResultChart.Legend.LegendStyle = Steema.TeeChart.LegendStyles.Series
 
         'Achsen
         Me.mResultChart.Axes.Left.Title.Caption = "Wahrscheinlichkeit [%]"

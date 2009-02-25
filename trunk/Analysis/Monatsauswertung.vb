@@ -187,7 +187,7 @@ Public Class Monatsauswertung
         'Diagramm
         '--------
         Me.mResultChart = New Steema.TeeChart.Chart()
-        Me.mResultChart.Aspect.View3D = False
+        Call Wave.formatChart(Me.mResultChart)
         Me.mResultChart.Header.Text = "Monatsauswertung (" & Me.mZeitreihen(0).Title & ")"
 
         'Achsen
