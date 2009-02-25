@@ -1,11 +1,11 @@
 ﻿''' <summary>
-''' Goodness Of Fit: Summe der Fehlerquadrate und Nash-Sutcliffe berechnen
+''' Goodness Of Fit: Berechnet diverse Gütekriterien für die Anpassung
 ''' </summary>
 ''' <remarks>http://130.83.196.154/BlueM/wiki/index.php/Wave:GoodnessOfFit</remarks>
 Public Class GoodnessOfFit
     Inherits Analysis
 
-    Private fehlerquadrate(), nash_sutcliffe, sum_fehlerquadrate As Double
+    Private fehlerquadrate(), sum_fehlerquadrate, nash_sutcliffe, volumenfehler As Double
     Private zre_gemessen, zre_simuliert As Zeitreihe
 
     Public Overrides ReadOnly Property hasResultChart() As Boolean
@@ -40,7 +40,7 @@ Public Class GoodnessOfFit
     Public Overrides Sub ProcessAnalysis()
 
         Dim i As Integer
-        Dim mittelwert, sum_qmittelwertabweichung, values(,) As Double
+        Dim fehler(), sum_fehler, avg_gemessen, sum_qmittelwertabweichung, sum_simuliert, sum_gemessen, values(,) As Double
         Dim diagresult As DialogResult
 
         'Preprocessing
@@ -68,21 +68,33 @@ Public Class GoodnessOfFit
         'Berechnungen
         '------------
 
-        'Summe der Fehlerquadrate
+        'Fehler, Fehlerquadrate und Summen
         ReDim Me.fehlerquadrate(values.GetUpperBound(0))
+        ReDim fehler(values.GetUpperBound(0))
+        sum_fehler = 0
         Me.sum_fehlerquadrate = 0
+        sum_gemessen = 0
+        sum_simuliert = 0
+
         For i = 0 To values.GetUpperBound(0)
-            Me.fehlerquadrate(i) = (values(i, 0) - values(i, 1)) ^ 2
+            fehler(i) = values(i, 1) - values(i, 0) 'simuliert - gemessen
+            sum_fehler += fehler(i)
+            sum_gemessen += values(i, 0)
+            sum_simuliert += values(i, 1)
+            Me.fehlerquadrate(i) = fehler(i) ^ 2
             Me.sum_fehlerquadrate += Me.fehlerquadrate(i)
         Next
 
+        'Volumenfehler [%]
+        Me.volumenfehler = 100 * (sum_simuliert - sum_gemessen) / sum_gemessen
+
         'Mittelwert der gemessenen Zeitreihe
-        mittelwert = Me.zre_gemessen.getWert("Average")
+        avg_gemessen = sum_gemessen / values.GetUpperBound(0)
 
         'quadratische Abweichung der gemessenen Werte vom Mittelwert
         sum_qmittelwertabweichung = 0
         For i = 0 To values.GetUpperBound(0)
-            sum_qmittelwertabweichung += (values(i, 0) - mittelwert) ^ 2
+            sum_qmittelwertabweichung += (values(i, 0) - avg_gemessen) ^ 2
         Next
 
         'Nash-Sutcliffe - Koeffizient
@@ -103,14 +115,16 @@ Public Class GoodnessOfFit
                         & eol _
                         & "Die Analyse basiert auf " & Me.zre_gemessen.Length & " gemeinsamen Stützstellen zwischen " & Me.zre_gemessen.Anfangsdatum.ToString(Datumsformat) & " und " & Me.zre_gemessen.Enddatum.ToString(Datumsformat) & eol _
                         & eol _
+                        & "Volumenfehler: " & Me.volumenfehler.ToString() & " %" & eol _
                         & "Summe der Fehlerquadrate: " & Me.sum_fehlerquadrate.ToString() & eol _
                         & "Nash-Sutcliffe Koeffizient: " & Me.nash_sutcliffe.ToString()
 
         'Werte:
         '------
-        ReDim Me.mResultValues(1)
-        Me.mResultValues(0) = Me.sum_fehlerquadrate
-        Me.mResultValues(1) = Me.nash_sutcliffe
+        ReDim Me.mResultValues(2)
+        Me.mResultValues(0) = Me.volumenfehler
+        Me.mResultValues(1) = Me.sum_fehlerquadrate
+        Me.mResultValues(2) = Me.nash_sutcliffe
 
         'Diagramm:
         '---------
@@ -137,6 +151,9 @@ Public Class GoodnessOfFit
         line_simuliert.Title = Me.zre_simuliert.Title
         line_fehlerquadrate.Title = "Fehlerquadrate"
 
+        'Reihen formatieren
+        line_fehlerquadrate.Color = Color.LightGray
+
         'X-Werte als Zeitdaten einstellen
         line_gemessen.XValues.DateTime = True
         line_simuliert.XValues.DateTime = True
@@ -146,8 +163,8 @@ Public Class GoodnessOfFit
         For i = 0 to Me.zre_gemessen.Length - 1
             line_gemessen.Add(Me.zre_gemessen.XWerte(i), Me.zre_gemessen.YWerte(i))
         Next
-        For i = 0 to Me.zre_gemessen.Length - 1
-            line_simuliert.Add(Me.zre_gemessen.XWerte(i), Me.zre_gemessen.YWerte(i))
+        For i = 0 to Me.zre_simuliert.Length - 1
+            line_simuliert.Add(Me.zre_simuliert.XWerte(i), Me.zre_simuliert.YWerte(i))
         Next
         For i = 0 To Me.zre_simuliert.Length - 1
             line_fehlerquadrate.Add(Me.zre_simuliert.XWerte(i), Me.fehlerquadrate(i))
