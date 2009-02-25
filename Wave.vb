@@ -517,6 +517,7 @@ Public Class Wave
                 If (oAnalysis.hasResultText) Then
                     Call Log.AddLogEntry(oAnalysis.getResultText)
                     Call Me.myLogWindow.Show()
+                    Call Me.myLogWindow.BringToFront()
                 End If
 
                 'Ergebniswerte anzeigen
