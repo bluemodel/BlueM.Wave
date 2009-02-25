@@ -43,6 +43,9 @@ Public Class GoodnessOfFit
         Dim mittelwert, sum_qmittelwertabweichung, values(,) As Double
         Dim diagresult As DialogResult
 
+        'Preprocessing
+        '-------------
+
         'Dialog anzeigen
         Dim dialog As New GoodnessOfFit_Dialog(Me.mZeitreihen(0).Title, Me.mZeitreihen(1).Title)
         diagresult = dialog.ShowDialog()
@@ -61,6 +64,9 @@ Public Class GoodnessOfFit
 
         'Auf gemeinsame Stützstellen beschränken
         values = AnalysisHelper.getConcurrentValues(Me.zre_gemessen, Me.zre_simuliert)
+
+        'Berechnungen
+        '------------
 
         'Summe der Fehlerquadrate
         ReDim Me.fehlerquadrate(values.GetUpperBound(0))
@@ -109,7 +115,7 @@ Public Class GoodnessOfFit
         'Diagramm:
         '---------
         Me.mResultChart = New Steema.TeeChart.Chart()
-        Me.mResultChart.Aspect.View3D = False
+        Call Wave.formatChart(Me.mResultChart)
         Me.mResultChart.Header.Text = "Goodness of Fit"
 
         'Linien instanzieren
@@ -124,6 +130,7 @@ Public Class GoodnessOfFit
         line_fehlerquadrate.CustomVertAxis = Me.mResultChart.Axes.Right
         Me.mResultChart.Axes.Right.Title.Caption = "Fehlerquadrate"
         Me.mResultChart.Axes.Right.Grid.Visible = False
+        Me.mResultChart.Axes.Right.Inverted = True
 
         'Namen vergeben
         line_gemessen.Title = Me.zre_gemessen.Title

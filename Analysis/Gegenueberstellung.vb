@@ -118,9 +118,8 @@ Public Class Gegenueberstellung
         Dim gegenueberstellung_linie As Steema.TeeChart.Styles.Line
 
         Me.mResultChart = New Steema.TeeChart.Chart()
-        Me.mResultChart.Aspect.View3D = False
+        Call Wave.formatChart(Me.mResultChart)
         Me.mResultChart.Header.Text = "Gegenüberstellung (" & Me.mZeitreihen(xnummer).Title & " / " & Me.mZeitreihen(ynummer).Title & ")"
-        Me.mResultChart.Legend.LegendStyle = Steema.TeeChart.LegendStyles.Series
         Me.mResultChart.Legend.Visible = False
 
         'Achsen
