@@ -522,7 +522,7 @@ Public Class Wave
 
                 'Ergebniswerte anzeigen
                 If (oAnalysis.hasResultValues) Then
-                    'TODO: Ergebniswerte anzeigen
+                    'TODO: Ergebniswerte anzeigen?
                 End If
 
             Catch ex As Exception

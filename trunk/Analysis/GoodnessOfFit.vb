@@ -171,7 +171,7 @@ Public Class GoodnessOfFit
         '-----
         shortText = "Volumenfehler: m = " & Me.volumenfehler.ToString(formatstring) & " %" & eol _
                      & "Summe der Fehlerquadrate: F² = " & Me.sum_fehlerquadrate.ToString(formatstring) & eol _
-                     & "Nash-Sutcliffe Koeffizient: E = " & Me.nash_sutcliffe.ToString(formatstring) & eol _
+                     & "Nash-Sutcliffe Effizienz: E = " & Me.nash_sutcliffe.ToString(formatstring) & eol _
                      & "Korrelationskoeffizient: r = " & Me.korrelationskoeffizient.ToString(formatstring) & eol _
                      & "Bestimmtheitsmaß: r² = " & Me.bestimmtheitsmass.ToString(formatstring) & eol _
                      & "Hydrologische Deviation: DEV = " & Me.hydrodev.ToString(formatstring)
@@ -187,13 +187,12 @@ Public Class GoodnessOfFit
 
         'Werte:
         '------
-        ReDim Me.mResultValues(5)
-        Me.mResultValues(0) = Me.volumenfehler
-        Me.mResultValues(1) = Me.sum_fehlerquadrate
-        Me.mResultValues(2) = Me.nash_sutcliffe
-        Me.mResultValues(3) = Me.korrelationskoeffizient
-        Me.mResultValues(4) = Me.bestimmtheitsmass
-        Me.mResultValues(5) = Me.hydrodev
+        Me.mResultValues.Add("Volumenfehler", Me.volumenfehler)
+        Me.mResultValues.Add("Summe der Fehlerquadrate", Me.sum_fehlerquadrate)
+        Me.mResultValues.Add("Nash-Sutcliffe Effizienz", Me.nash_sutcliffe)
+        Me.mResultValues.Add("Korrelationskoeffizient", Me.korrelationskoeffizient)
+        Me.mResultValues.Add("Bestimmtheitsmaß", Me.bestimmtheitsmass)
+        Me.mResultValues.Add("Hydrologische Deviation", Me.hydrodev)
 
         'Diagramm:
         '---------
