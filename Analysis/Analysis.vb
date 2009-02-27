@@ -20,7 +20,7 @@ Public MustInherit Class Analysis
     ''' Ergebniswerte
     ''' </summary>
     ''' <remarks>Optional</remarks>
-    Protected mResultValues() As Double
+    Protected mResultValues As Dictionary(Of String, Double)
 
     ''' <summary>
     ''' Ergebnisdiagramm
@@ -58,10 +58,10 @@ Public MustInherit Class Analysis
     End Property
 
     ''' <summary>
-    ''' Analyseergebnis in Form eines Arrays von Double
+    ''' Analyseergebnis in Form eines Dictionary(Of String, Double)
     ''' </summary>
     ''' <remarks>Optional</remarks>
-    Public ReadOnly Property getResultValues() As Double()
+    Public ReadOnly Property getResultValues() As Dictionary(Of String, Double)
         Get
             Return Me.mResultValues
         End Get
@@ -86,7 +86,12 @@ Public MustInherit Class Analysis
     ''' </summary>
     ''' <param name="zeitreihen">Collection von Zeitreihen</param>
     Public Sub New(ByRef zeitreihen As List(Of Zeitreihe))
+
+        'Zeitreihen 
         Me.mZeitreihen = zeitreihen
+
+        'Datenstrukturen initialisieren
+        Me.mResultValues = New Dictionary(Of String, Double)
     End Sub
 
     ''' <summary>
