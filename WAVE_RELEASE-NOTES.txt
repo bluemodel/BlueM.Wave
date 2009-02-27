@@ -10,7 +10,8 @@ Version 1.2
 UPDATE:
 * Interne Speicherung von Stützstellen überarbeitet
 NEW:
-* Analysefunktion GoodnessOfFit berechnet jetzt auch den Volumenfehler
+* Analysefunktion GoodnessOfFit erweitert um folgende Indikatoren: 
+  Volumenfehler, Korrelationskoeffizient, Hydrologische Deviation
 
 
 Version 1.1
