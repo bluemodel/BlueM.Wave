@@ -237,7 +237,7 @@
     <None Include="Resources\chart_curve_edit.png" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="RELEASE-NOTES.txt">
+    <Content Include="WAVE_RELEASE-NOTES.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <None Include="Resources\arrow_refresh.png" />

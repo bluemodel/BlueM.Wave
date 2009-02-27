@@ -5,8 +5,14 @@
 Public Class GoodnessOfFit
     Inherits Analysis
 
-    Private fehlerquadrate(), sum_fehlerquadrate, nash_sutcliffe, volumenfehler, bestimmtheitsmass, korrelationskoeffizient As Double
     Private zre_gemessen, zre_simuliert As Zeitreihe
+    Private fehlerquadrate() As Double
+    Private sum_fehlerquadrate As Double
+    Private nash_sutcliffe As Double
+    Private volumenfehler As Double
+    Private bestimmtheitsmass As Double
+    Private korrelationskoeffizient As Double
+    Private hydrodev As Double
 
     Public Overrides ReadOnly Property hasResultChart() As Boolean
         Get
@@ -40,11 +46,23 @@ Public Class GoodnessOfFit
     Public Overrides Sub ProcessAnalysis()
 
         Dim i, n As Integer
-        Dim fehler(), sum_fehler, avg_gemessen, sum_qmittelwertabweichung, sum_simuliert, sum_gemessen, kovar, std_simuliert, std_gemessen, avg_simuliert, values(,) As Double
+        Dim values(,) As Double
+        Dim fehler() As Double
+        Dim sum_fehler As Double
+        Dim avg_gemessen As Double
+        Dim sum_qmittelwertabweichung As Double
+        Dim sum_simuliert As Double
+        Dim sum_gemessen As Double
+        Dim kovar As Double
+        Dim std_simuliert As Double
+        Dim std_gemessen As Double
+        Dim avg_simuliert As Double
+        Dim max_gemessen As Double
+        Dim zaehler As Double
         Dim diagresult As DialogResult
 
         'Preprocessing
-        '-------------
+        '=============
 
         'Dialog anzeigen
         Dim dialog As New GoodnessOfFit_Dialog(Me.mZeitreihen(0).Title, Me.mZeitreihen(1).Title)
@@ -66,7 +84,9 @@ Public Class GoodnessOfFit
         values = AnalysisHelper.getConcurrentValues(Me.zre_gemessen, Me.zre_simuliert)
 
         'Berechnungen
-        '------------
+        'values(i, 0) -> gemessen
+        'values(i, 1) -> simuliert
+        '=========================
 
         'Anzahl Werte
         n = values.GetLength(0)
@@ -108,7 +128,7 @@ Public Class GoodnessOfFit
         'Korrelationskoeffizient
         '-----------------------
         'Formel: r = sxy / (sx * sy)
-        'Standardabweichung: sx = sqrt( 1 / (n-1) * SUMME[(x_i - x_avg)^2] )
+        'Standardabweichung: sx = SQRT[ 1 / (n-1) * SUMME[(x_i - x_avg)^2] ]
         'Kovarianz: kovar = sxy = 1 / (n-1) * SUMME[(x_i - x_avg) * (y_i - y_avg)]
         kovar = 0
         std_simuliert = 0
@@ -129,20 +149,32 @@ Public Class GoodnessOfFit
         'Bestimmtheitsmaß
         Me.bestimmtheitsmass = Me.korrelationskoeffizient ^ 2
 
+        'Hydrologische Deviation
+        '-----------------------
+        max_gemessen = zre_gemessen.getWert("MaxWert")
+
+        zaehler = 0
+        For i = 0 To n - 1
+            zaehler += Math.Abs(values(i, 0) - values(i, 1)) * values(i, 0)
+        Next
+        Me.hydrodev = 200 * zaehler / (n * max_gemessen ^ 2)
+
     End Sub
 
     Public Overrides Sub PrepareResults()
 
         Dim i As Integer
-        Dim resultText As String
+        Dim shortText As String
+        Const formatstring As String = "F4"
 
         'Text:
         '-----
-        resultText = "Volumenfehler: m = " & Me.volumenfehler.ToString() & " %" & eol _
-                     & "Summe der Fehlerquadrate: F² = " & Me.sum_fehlerquadrate.ToString() & eol _
-                     & "Nash-Sutcliffe Koeffizient: E = " & Me.nash_sutcliffe.ToString() & eol _
-                     & "Korrelationskoeffizient: r = " & Me.korrelationskoeffizient.ToString() & eol _
-                     & "Bestimmtheitsmaß: r² = " & Me.bestimmtheitsmass.ToString()
+        shortText = "Volumenfehler: m = " & Me.volumenfehler.ToString(formatstring) & " %" & eol _
+                     & "Summe der Fehlerquadrate: F² = " & Me.sum_fehlerquadrate.ToString(formatstring) & eol _
+                     & "Nash-Sutcliffe Koeffizient: E = " & Me.nash_sutcliffe.ToString(formatstring) & eol _
+                     & "Korrelationskoeffizient: r = " & Me.korrelationskoeffizient.ToString(formatstring) & eol _
+                     & "Bestimmtheitsmaß: r² = " & Me.bestimmtheitsmass.ToString(formatstring) & eol _
+                     & "Hydrologische Deviation: DEV = " & Me.hydrodev.ToString(formatstring)
 
         Me.mResultText = "Goodness of Fit Analyse:" & eol _
                          & eol _
@@ -151,16 +183,17 @@ Public Class GoodnessOfFit
                          & eol _
                          & "Die Analyse basiert auf " & Me.zre_gemessen.Length & " gemeinsamen Stützstellen zwischen " & Me.zre_gemessen.Anfangsdatum.ToString(Datumsformat) & " und " & Me.zre_gemessen.Enddatum.ToString(Datumsformat) & eol _
                          & eol _
-                         & resultText
+                         & shortText
 
         'Werte:
         '------
-        ReDim Me.mResultValues(4)
+        ReDim Me.mResultValues(5)
         Me.mResultValues(0) = Me.volumenfehler
         Me.mResultValues(1) = Me.sum_fehlerquadrate
         Me.mResultValues(2) = Me.nash_sutcliffe
         Me.mResultValues(3) = Me.korrelationskoeffizient
         Me.mResultValues(4) = Me.bestimmtheitsmass
+        Me.mResultValues(5) = Me.hydrodev
 
         'Diagramm:
         '---------
@@ -171,8 +204,7 @@ Public Class GoodnessOfFit
         'Text in Diagramm einfügen
         Dim annot As New Steema.TeeChart.Tools.Annotation(Me.mResultChart)
         annot.Position = Steema.TeeChart.Tools.AnnotationPositions.RightBottom
-        annot.Text = resultText
-        annot.Shape.Font.Name = "Courier New"
+        annot.Text = shortText
 
         'Linien instanzieren
         Dim line_gemessen As New Steema.TeeChart.Styles.Line(Me.mResultChart)
