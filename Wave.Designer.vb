@@ -43,8 +43,10 @@ Partial Class Wave
         Me.ToolStripButton_Übersicht = New System.Windows.Forms.ToolStripButton
         Me.ToolStripButton_Drucken = New System.Windows.Forms.ToolStripButton
         Me.ToolStripButton_Kopieren = New System.Windows.Forms.ToolStripButton
-        Me.ToolStripButton_Info = New System.Windows.Forms.ToolStripButton
         Me.ToolStripButton_ReRead = New System.Windows.Forms.ToolStripButton
+        Me.ToolStripSplitButton_Help = New System.Windows.Forms.ToolStripSplitButton
+        Me.HilfeToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem
+        Me.AboutToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem
         Me.TChart1 = New Steema.TeeChart.TChart
         Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog
         Me.DateTimePicker1 = New System.Windows.Forms.DateTimePicker
@@ -114,7 +116,7 @@ Partial Class Wave
         '
         ToolStrip1.AutoSize = False
         ToolStrip1.BackColor = System.Drawing.SystemColors.Control
-        ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButton_Neu, Me.ToolStripButton_Öffnen, Me.ToolStripButton_Speichern, Me.ToolStripButton_Export, ToolStripSeparator4, Me.ToolStripButton_Import, Me.ToolStripButton_EnterSeries, ToolStripSeparator2, Me.ToolStripButton_Cut, Me.ToolStripButton_Analysis, ToolStripSeparator1, Me.ToolStripButton_EditChart, Me.ToolStripButton_Übersicht, toolStripSeparator, Me.ToolStripButton_Drucken, Me.ToolStripButton_Kopieren, toolStripSeparator3, Me.ToolStripButton_Info, Me.ToolStripButton_ReRead})
+        ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButton_Neu, Me.ToolStripButton_Öffnen, Me.ToolStripButton_Speichern, Me.ToolStripButton_Export, ToolStripSeparator4, Me.ToolStripButton_Import, Me.ToolStripButton_EnterSeries, ToolStripSeparator2, Me.ToolStripButton_Cut, Me.ToolStripButton_Analysis, ToolStripSeparator1, Me.ToolStripButton_EditChart, Me.ToolStripButton_Übersicht, toolStripSeparator, Me.ToolStripButton_Drucken, Me.ToolStripButton_Kopieren, toolStripSeparator3, Me.ToolStripButton_ReRead, Me.ToolStripSplitButton_Help})
         ToolStrip1.Location = New System.Drawing.Point(0, 0)
         ToolStrip1.Name = "ToolStrip1"
         ToolStrip1.Size = New System.Drawing.Size(945, 34)
@@ -239,16 +241,6 @@ Partial Class Wave
         Me.ToolStripButton_Kopieren.Size = New System.Drawing.Size(23, 31)
         Me.ToolStripButton_Kopieren.Text = "Diagramm &Kopieren (PNG)"
         '
-        'ToolStripButton_Info
-        '
-        Me.ToolStripButton_Info.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right
-        Me.ToolStripButton_Info.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.ToolStripButton_Info.Image = CType(resources.GetObject("ToolStripButton_Info.Image"), System.Drawing.Image)
-        Me.ToolStripButton_Info.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.ToolStripButton_Info.Name = "ToolStripButton_Info"
-        Me.ToolStripButton_Info.Size = New System.Drawing.Size(23, 31)
-        Me.ToolStripButton_Info.Text = "&Info"
-        '
         'ToolStripButton_ReRead
         '
         Me.ToolStripButton_ReRead.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
@@ -258,6 +250,30 @@ Partial Class Wave
         Me.ToolStripButton_ReRead.Size = New System.Drawing.Size(23, 31)
         Me.ToolStripButton_ReRead.Text = "ReRead"
         Me.ToolStripButton_ReRead.ToolTipText = "Importierte Zeitreihen neu einlesen"
+        '
+        'ToolStripSplitButton_Help
+        '
+        Me.ToolStripSplitButton_Help.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right
+        Me.ToolStripSplitButton_Help.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.ToolStripSplitButton_Help.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.HilfeToolStripMenuItem, Me.AboutToolStripMenuItem})
+        Me.ToolStripSplitButton_Help.Image = Global.IHWB.Wave.My.Resources.Resources.help
+        Me.ToolStripSplitButton_Help.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ToolStripSplitButton_Help.Name = "ToolStripSplitButton_Help"
+        Me.ToolStripSplitButton_Help.RightToLeft = System.Windows.Forms.RightToLeft.Yes
+        Me.ToolStripSplitButton_Help.Size = New System.Drawing.Size(32, 31)
+        Me.ToolStripSplitButton_Help.Text = "Help"
+        '
+        'HilfeToolStripMenuItem
+        '
+        Me.HilfeToolStripMenuItem.Name = "HilfeToolStripMenuItem"
+        Me.HilfeToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.HilfeToolStripMenuItem.Text = "Hilfe"
+        '
+        'AboutToolStripMenuItem
+        '
+        Me.AboutToolStripMenuItem.Name = "AboutToolStripMenuItem"
+        Me.AboutToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.AboutToolStripMenuItem.Text = "About"
         '
         'TChart1
         '
@@ -349,7 +365,6 @@ Partial Class Wave
     Friend WithEvents ToolStripButton_Speichern As System.Windows.Forms.ToolStripButton
     Friend WithEvents ToolStripButton_Drucken As System.Windows.Forms.ToolStripButton
     Friend WithEvents ToolStripButton_Kopieren As System.Windows.Forms.ToolStripButton
-    Friend WithEvents ToolStripButton_Info As System.Windows.Forms.ToolStripButton
     Friend WithEvents ToolStripButton_EditChart As System.Windows.Forms.ToolStripButton
     Friend WithEvents ToolStripButton_Übersicht As System.Windows.Forms.ToolStripButton
     Friend WithEvents ToolStripButton_Export As System.Windows.Forms.ToolStripButton
@@ -360,5 +375,8 @@ Partial Class Wave
     Friend WithEvents ToolStripButton_EnterSeries As System.Windows.Forms.ToolStripButton
     Friend WithEvents ToolStripButton_Cut As System.Windows.Forms.ToolStripButton
     Private WithEvents ToolStripButton_ReRead As System.Windows.Forms.ToolStripButton
+    Friend WithEvents ToolStripSplitButton_Help As System.Windows.Forms.ToolStripSplitButton
+    Friend WithEvents HilfeToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents AboutToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
 
 End Class

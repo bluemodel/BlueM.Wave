@@ -1,8 +1,8 @@
 ﻿===============================================================
 Wave Release Notes
 ===============================================================
-(c) IHWB TU-Darmstadt
-Website: http://130.83.196.154/BlueM/wiki/index.php/Wave
+(c) TU Darmstadt - ihwb
+Website: http://ihwb.tu-darmstadt.de/bluem/
 ===============================================================
 
 Version 1.2
