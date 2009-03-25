@@ -53,6 +53,8 @@ Public Class Wave
     Private MyAxes1, MyAxes2 As Dictionary(Of String, Steema.TeeChart.Axis)
     Private WithEvents ChartListBox1 As Steema.TeeChart.ChartListBox
 
+    Private Const HelpURL As String = "http://130.83.196.154/BlueM/wiki/index.php/Wave"
+
     'Methoden
     '########
 
@@ -560,13 +562,6 @@ Public Class Wave
 
     End Sub
 
-    'Hilfe
-    '*****
-    Private Sub Info(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_Info.Click
-        Dim AboutDialog As New AboutDialog()
-        Call AboutDialog.ShowDialog()
-    End Sub
-
     'Übersicht an/aus
     '****************
     Private Sub Übersicht_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_Übersicht.Click
@@ -634,6 +629,30 @@ Public Class Wave
 
         End If
 
+    End Sub
+
+    ''' <summary>
+    ''' Info Click
+    ''' </summary>
+    Private Sub Info(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripSplitButton_Help.ButtonClick
+        'keine Funktionalität, nur Dropdown
+        Me.ToolStripSplitButton_Help.ShowDropDown()
+    End Sub
+
+    ''' <summary>
+    ''' About Click
+    ''' </summary>
+    Private Sub About(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles AboutToolStripMenuItem.Click
+        Dim about As New AboutBox()
+        Call about.ShowDialog(Me)
+    End Sub
+
+    ''' <summary>
+    ''' Hilfe Click (URL zum Wiki)
+    ''' </summary>
+    ''' <remarks></remarks>
+    Private Sub Hilfe(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles HilfeToolStripMenuItem.Click
+        Process.Start(HelpURL)
     End Sub
 
 #End Region 'UI

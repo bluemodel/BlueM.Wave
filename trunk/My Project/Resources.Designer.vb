@@ -74,6 +74,13 @@ Namespace My.Resources
             End Get
         End Property
         
+        Friend ReadOnly Property BlueM() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("BlueM", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
         Friend ReadOnly Property calculator() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("calculator", resourceCulture)
@@ -105,6 +112,13 @@ Namespace My.Resources
         Friend ReadOnly Property cut() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("cut", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        Friend ReadOnly Property help() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("help", resourceCulture)
                 Return CType(obj,System.Drawing.Bitmap)
             End Get
         End Property
