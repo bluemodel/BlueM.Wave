@@ -81,7 +81,16 @@ Public Class ASC
         Namen = ZeileSpalten.Split(New Char() {Me.Trennzeichen.Character}, StringSplitOptions.RemoveEmptyEntries)
         Einheiten = ZeileEinheiten.Split(New Char() {Me.Trennzeichen.Character}, StringSplitOptions.RemoveEmptyEntries)
 
-        anzSpalten = Namen.Length - 1
+        'Bei ASC hat die Datumsspalte (manchmal) keine Einheit
+        If (Einheiten.Length = Namen.Length - 1) Then
+            'Einheit für Datumsspalte ergänzen
+            Array.Reverse(Einheiten)
+            ReDim Preserve Einheiten(Einheiten.Length)
+            Array.Reverse(Einheiten)
+            Einheiten(0) = "-"
+        End If
+
+        anzSpalten = Namen.Length
 
         ReDim Me.Spalten(anzSpalten - 1)
         For i = 0 To anzSpalten - 1
