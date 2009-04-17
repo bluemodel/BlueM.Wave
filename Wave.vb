@@ -722,7 +722,7 @@ Public Class Wave
 
                     reihe = New Zeitreihe(series.Title)
 
-                    For i = 0 To reihe.Length - 1
+                    For i = 0 To series.Count - 1
                         reihe.AddNode(Date.FromOADate(series.XValues(i)), series.YValues(i))
                     Next
 

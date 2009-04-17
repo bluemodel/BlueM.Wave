@@ -5,6 +5,11 @@ Wave Release Notes
 Website: http://ihwb.tu-darmstadt.de/bluem/
 ===============================================================
 
+Version 1.3
+-----------
+FIXED:
+* Einlesen von Zeitreihen aus ten-Dateien
+
 Version 1.2
 -----------
 UPDATE:
