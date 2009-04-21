@@ -1,7 +1,7 @@
 ﻿''' <summary>
 ''' Factory zur Erzeugung von Datei-Instanzen
 ''' </summary>
-Module Dateifactory
+Public Module Dateifactory
 
     Public Const FileExtASC As String = ".ASC"
     Public Const FileExtCSV As String = ".CSV"
@@ -15,7 +15,7 @@ Module Dateifactory
     Public Const FileExtTEN As String = ".TEN"
 
     ''' <summary>
-    ''' Erzeugt eine zur Dateiendung passenden Datei-Instanz
+    ''' Erzeugt eine zur Dateiendung passende Datei-Instanz
     ''' </summary>
     ''' <param name="file">Pfad zur Datei</param>
     ''' <returns>Eine Instanz der Datei</returns>
