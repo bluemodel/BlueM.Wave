@@ -13,6 +13,8 @@ Public Module Dateifactory
     Public Const FileExtKWL As String = ".KWL"
     Public Const FileExtZRE As String = ".ZRE"
     Public Const FileExtTEN As String = ".TEN"
+    Public Const FileExtDTL As String = ".DTL" 'DWD-Daten: Temperatur und Luftfeuchte
+
 
     ''' <summary>
     ''' Erzeugt eine zur Dateiendung passende Datei-Instanz
@@ -54,6 +56,9 @@ Public Module Dateifactory
 
             Case FileExtCSV
                 Datei = New CSV(file)
+
+            Case FileExtDTL
+                Datei = New DWD_T_L(file)
 
             Case Else
                 Throw New Exception("Die Dateiendung '" & FileExt & "' ist nicht bekannt!")

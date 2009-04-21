@@ -45,7 +45,8 @@ Public Class Wave
             "RVA-Dateien (*.rva)|*.rva|" & _
             "SMUSI-Dateien (*.asc)|*.asc|" & _
             "SIMBA-Dateien (*.smb)|*.smb|" & _
-            "Hystem-Dateien (*.dat)|*.dat"
+            "Hystem-Dateien (*.dat)|*.dat|" & _
+            "DWD-Temperatur-Feuchte (*.dtl)|*.dtl"
 
     'Chart-Zeugs
     Private WithEvents colorBand1 As Steema.TeeChart.Tools.ColorBand

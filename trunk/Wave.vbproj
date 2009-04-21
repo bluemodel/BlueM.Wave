@@ -98,6 +98,13 @@
     <Compile Include="Dateiformate\ASC.vb">
     </Compile>
     <Compile Include="Dateiformate\Dateifactory.vb" />
+    <Compile Include="Dateiformate\DWD_Stationswahl.Designer.vb">
+      <DependentUpon>DWD_Stationswahl.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Dateiformate\DWD_Stationswahl.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dateiformate\DWD_T_L.vb" />
     <Compile Include="Dateiformate\REG.vb" />
     <Compile Include="Dateiformate\SMB.vb" />
     <Compile Include="Dateiformate\Dateiformat.vb" />
@@ -251,6 +258,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Analysis\GoodnessOfFit_Dialog.resx">
       <DependentUpon>GoodnessOfFit_Dialog.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dateiformate\DWD_Stationswahl.resx">
+      <DependentUpon>DWD_Stationswahl.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\log.ico" />
     <None Include="Resources\script.png" />
