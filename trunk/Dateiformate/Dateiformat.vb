@@ -241,12 +241,17 @@ Public MustInherit Class Dateiformat
     ''' <remarks>falls noch nicht eingelesen, wird dies nachgeholt. Schmeisst eine Exception, wenn die Zeitreihe nicht gefunden werden kann.</remarks>
     Public ReadOnly Property getReihe(ByVal title As String) As Zeitreihe
         Get
+            'Wenn leerer Titel angegeben, dann erste Zeitreihe zurückgeben
+            If (title.Length = 0) Then Return Me.getReihe(0)
+
+            'Passenden Titel suchen
             For i As Integer = 0 To Me.Zeitreihen.GetUpperBound(0)
                 If (Me.Zeitreihen(i).Title = title) Then
                     'Zeitreihe zurückgeben
                     Return Me.Zeitreihen(i)
                 End If
             Next
+
             'Zeitreihe ist noch nicht eingelesen!
             'Vielleicht ist die Zeitreihe trotzdem in der Datei vorhanden?
             For Each spalte As SpaltenInfo In Me.Spalten
