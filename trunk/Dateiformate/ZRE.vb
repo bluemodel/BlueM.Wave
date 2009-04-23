@@ -151,7 +151,7 @@ Public Class ZRE
         Dim strwrite As StreamWriter
         Dim i As Integer
 
-        strwrite = New StreamWriter(File)
+        strwrite = New StreamWriter(File, False, System.Text.Encoding.GetEncoding("iso8859-1"))
 
         '1. Zeile
         strwrite.WriteLine("*ZRE")
