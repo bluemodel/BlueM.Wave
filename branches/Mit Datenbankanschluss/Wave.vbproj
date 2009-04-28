@@ -25,8 +25,10 @@
     <DefineDebug>true</DefineDebug>
     <DefineTrace>true</DefineTrace>
     <OutputPath>bin\Debug\</OutputPath>
-    <DocumentationFile>Wave.xml</DocumentationFile>
+    <DocumentationFile>
+    </DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>None</DebugType>
@@ -41,8 +43,11 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Web.Services" />
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
     <Reference Include="TeeChart, Version=3.5.3371.26406, Culture=neutral, PublicKeyToken=9c8126276c77bdb7, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
     </Reference>
@@ -95,27 +100,42 @@
     <Compile Include="CutDialog.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Dateiformate\ASC.vb">
-    </Compile>
-    <Compile Include="Dateiformate\Dateifactory.vb" />
-    <Compile Include="Dateiformate\DWD_Stationswahl.Designer.vb">
-      <DependentUpon>DWD_Stationswahl.vb</DependentUpon>
-    </Compile>
-    <Compile Include="Dateiformate\DWD_Stationswahl.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Dateiformate\DWD_T_L.vb" />
-    <Compile Include="Dateiformate\REG.vb" />
-    <Compile Include="Dateiformate\SMB.vb" />
-    <Compile Include="Dateiformate\Dateiformat.vb" />
-    <Compile Include="Dateiformate\RVA.vb" />
-    <Compile Include="Log.vb" />
-    <Compile Include="My Project\ApplicationEvents.vb" />
-    <Compile Include="My Project\Resources.Designer.vb">
+    <Compile Include="My Project\Resources1.Designer.vb">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="ZeitreihenFormate\DIRCDataSet.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DIRCDataSet.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Importdialoge\ImportFromDatabaseDialog.Designer.vb">
+      <DependentUpon>ImportFromDatabaseDialog.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Importdialoge\ImportFromDatabaseDialog.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ZeitreihenFormate\ASC.vb">
+    </Compile>
+    <Compile Include="ZeitreihenFormate\Dateifactory.vb" />
+    <Compile Include="ZeitreihenFormate\DIRCDataSet.vb">
+      <DependentUpon>DIRCDataSet.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="ZeitreihenFormate\DWD_Stationswahl.Designer.vb">
+      <DependentUpon>DWD_Stationswahl.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ZeitreihenFormate\DWD_Stationswahl.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ZeitreihenFormate\DWD_T_L.vb" />
+    <Compile Include="ZeitreihenFormate\REG.vb" />
+    <Compile Include="ZeitreihenFormate\SMB.vb" />
+    <Compile Include="ZeitreihenFormate\ZeitreihenDatabase.vb" />
+    <Compile Include="ZeitreihenFormate\ZeitreihenDatei.vb" />
+    <Compile Include="ZeitreihenFormate\RVA.vb" />
+    <Compile Include="Log.vb" />
+    <Compile Include="My Project\ApplicationEvents.vb" />
     <Compile Include="SeriesEditorDialog.Designer.vb">
       <DependentUpon>SeriesEditorDialog.vb</DependentUpon>
     </Compile>
@@ -128,10 +148,10 @@
     <Compile Include="ExportDiag.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ImportDiag.designer.vb">
+    <Compile Include="Importdialoge\ImportDiag.designer.vb">
       <DependentUpon>ImportDiag.vb</DependentUpon>
     </Compile>
-    <Compile Include="ImportDiag.vb">
+    <Compile Include="Importdialoge\ImportDiag.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Konstanten.vb" />
@@ -151,7 +171,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <AutoGen>True</AutoGen>
     </Compile>
-    <Compile Include="Dateiformate\CSV.vb">
+    <Compile Include="ZeitreihenFormate\CSV.vb">
     </Compile>
     <Compile Include="Wave.Designer.vb">
       <DependentUpon>Wave.vb</DependentUpon>
@@ -159,11 +179,12 @@
     <Compile Include="Wave.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Dateiformate\WEL.vb">
+    <Compile Include="ZeitreihenFormate\WEL.vb">
     </Compile>
     <Compile Include="Zeichen.vb" />
     <Compile Include="Zeitreihe.vb" />
-    <Compile Include="Dateiformate\ZRE.vb" />
+    <Compile Include="ZeitreihenFormate\ZeitreihenExtern.vb" />
+    <Compile Include="ZeitreihenFormate\ZRE.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="My Project\Resources.resx">
@@ -209,7 +230,7 @@
       <SubType>Designer</SubType>
       <DependentUpon>ExportDiag.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ImportDiag.resx">
+    <EmbeddedResource Include="Importdialoge\ImportDiag.resx">
       <DependentUpon>ImportDiag.vb</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
@@ -246,7 +267,21 @@
     <None Include="Resources\chart_curve_edit.png" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
+    <None Include="ClassDiagram1.cd" />
+    <None Include="ZeitreihenFormate\DIRCDataSet.xsc">
+      <DependentUpon>DIRCDataSet.xsd</DependentUpon>
+    </None>
+    <None Include="ZeitreihenFormate\DIRCDataSet.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>DIRCDataSet.Designer.vb</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="ZeitreihenFormate\DIRCDataSet.xss">
+      <DependentUpon>DIRCDataSet.xsd</DependentUpon>
+    </None>
     <None Include="Resources\BlueM.png" />
+    <None Include="Resources\database_refresh.png" />
     <Content Include="Resources\help.png" />
     <Content Include="WAVE_RELEASE-NOTES.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -259,7 +294,10 @@
     <EmbeddedResource Include="Analysis\GoodnessOfFit_Dialog.resx">
       <DependentUpon>GoodnessOfFit_Dialog.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Dateiformate\DWD_Stationswahl.resx">
+    <EmbeddedResource Include="Importdialoge\ImportFromDatabaseDialog.resx">
+      <DependentUpon>ImportFromDatabaseDialog.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ZeitreihenFormate\DWD_Stationswahl.resx">
       <DependentUpon>DWD_Stationswahl.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\log.ico" />

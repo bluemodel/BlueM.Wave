@@ -29,7 +29,7 @@ Public Class Wave
     Private WithEvents myLog As Log
 
     'Collection von importierten Dateien
-    Private ImportedFiles As List(Of Dateiformat)
+    Private ImportedFiles As List(Of ZeitreihenDatei)
 
     'Interne Zeitreihen-Collection
     Private Zeitreihen As Dictionary(Of String, Zeitreihe)
@@ -70,7 +70,7 @@ Public Class Wave
 
         'Kollektionen einrichten
         '-----------------------
-        Me.ImportedFiles = New List(Of Dateiformat)()
+        Me.ImportedFiles = New List(Of ZeitreihenDatei)()
         Me.Zeitreihen = New Dictionary(Of String, Zeitreihe)()
         Me.MyAxes1 = New Dictionary(Of String, Steema.TeeChart.Axis)
         Me.MyAxes2 = New Dictionary(Of String, Steema.TeeChart.Axis)
@@ -588,7 +588,7 @@ Public Class Wave
     ''' </summary>
     Private Sub ReRead_Files(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_ReRead.Click
 
-        Dim Datei As Dateiformat
+        Dim Datei As ZeitreihenDatei
         Dim Dateiliste As String
         Dim Answer As MsgBoxResult
 
@@ -619,7 +619,7 @@ Public Class Wave
             'Alle Dateien durchlaufen
             For Each Datei In Me.ImportedFiles
                 'Jede Datei neu einlesen
-                Call Datei.Read_File()
+                Call Datei.Zeitreihe_Einlesen()
                 'Alle Zeitreihen der Datei durchlaufen
                 For Each zre As Zeitreihe In Datei.Zeitreihen
                     'Jede Zeitreihe abspeichern und anzeigen
@@ -755,13 +755,81 @@ Public Class Wave
 
     End Sub
 
+
+    Public Sub Import_DB()
+        Dim ZRFormat As ZeitreihenExtern
+        Dim connStr As String
+        Dim ok As Boolean
+        Dim i As Long
+
+        connStr = "DB"
+
+        Try
+            'Log
+            Call Log.AddLogEntry("Importiere Datenbank '" & connStr & "' ...")
+
+            'Datei-Instanz erzeugen
+            ZRFormat = ZeitreihenExtern_factory.CreateZRExtern(ZeitreihenExtern.ZREQuellenTyp.ZRDatabase, connStr)
+
+            If (ZRFormat.UseImportDialog) Then
+                'Falls Importdialog erforderlich, diesen anzeigen
+                ok = Me.showImportDialog(ZRFormat)
+                Call Application.DoEvents()
+            Else
+                'Ansonsten alle Spalten auswählen
+                Call ZRFormat.selectAll_Zeitreihen()
+                ok = True
+            End If
+
+            If (ok) Then
+
+                Cursor = Cursors.WaitCursor
+
+                'Datei einlesen
+                Call ZRFormat.Zeitreihe_Einlesen()
+
+                'Log
+                Call Log.AddLogEntry("Datei '" & connStr & "' erfolgreich importiert!")
+                Application.DoEvents()
+
+                'Log
+                Call Log.AddLogEntry("Zeitreihen in Diagramm laden...")
+                Application.DoEvents()
+
+                'Alle eingelesenen Zeitreihen der Datei durchlaufen
+                For i = 0 To ZRFormat.Zeitreihen.GetUpperBound(0)
+                    'Serie abspeichen
+                    Me.AddZeitreihe(ZRFormat.Zeitreihen(i))
+                    'Serie anzeigen
+                    Call Me.Display_Series(ZRFormat.Zeitreihen(i))
+                Next
+
+                'Log
+                Call Log.AddLogEntry("Zeitreihen erfolgreich in Diagramm geladen!")
+
+            Else
+                'Import abgebrochen
+                Log.AddLogEntry("Import abgebrochen!")
+
+            End If
+
+        Catch ex As Exception
+            MsgBox("Fehler beim Import:" & eol & ex.Message, MsgBoxStyle.Critical)
+            Call Log.AddLogEntry("Fehler beim Import: " & ex.Message)
+
+        Finally
+            Cursor = Cursors.Default
+        End Try
+
+    End Sub
+
     ''' <summary>
     ''' Zeitreihe(n) aus einer Datei importieren
     ''' </summary>
     ''' <param name="file">Pfad zur Datei</param>
     Public Sub Import_File(ByVal file As String)
 
-        Dim Datei As Dateiformat
+        Dim ZRFormat As ZeitreihenExtern
         Dim i As Integer
         Dim ok As Boolean
 
@@ -769,11 +837,11 @@ Public Class Wave
         '---------------------
         Select Case Path.GetExtension(file).ToUpper()
 
-            Case Dateifactory.FileExtTEN
+            Case ZeitreihenExtern_factory.FileExtTEN
                 '.TEN-Datei
                 Call Me.Open_TEN(file)
 
-            Case Dateifactory.FileExtRVA
+            Case ZeitreihenExtern_factory.FileExtRVA
                 '.RVA-Datei
                 Call Me.Import_RVA(file)
 
@@ -787,15 +855,15 @@ Public Class Wave
                     Call Log.AddLogEntry("Importiere Datei '" & file & "' ...")
 
                     'Datei-Instanz erzeugen
-                    Datei = Dateifactory.getDateiInstanz(file)
+                    ZRFormat = ZeitreihenExtern_factory.CreateZRExtern(file)
 
-                    If (Datei.UseImportDialog) Then
+                    If (ZRFormat.UseImportDialog) Then
                         'Falls Importdialog erforderlich, diesen anzeigen
-                        ok = Me.showImportDialog(Datei)
+                        ok = Me.showImportDialog(ZRFormat)
                         Call Application.DoEvents()
                     Else
                         'Ansonsten alle Spalten auswählen
-                        Call Datei.selectAllSpalten()
+                        Call ZRFormat.selectAll_Zeitreihen()
                         ok = True
                     End If
 
@@ -804,25 +872,25 @@ Public Class Wave
                         Cursor = Cursors.WaitCursor
 
                         'Datei einlesen
-                        Call Datei.Read_File()
+                        Call ZRFormat.Zeitreihe_Einlesen()
 
                         'Log
                         Call Log.AddLogEntry("Datei '" & file & "' erfolgreich importiert!")
                         Application.DoEvents()
 
                         'Datei abspeichern
-                        Me.ImportedFiles.Add(Datei)
+                        Me.ImportedFiles.Add(ZRFormat)
 
                         'Log
                         Call Log.AddLogEntry("Zeitreihen in Diagramm laden...")
                         Application.DoEvents()
 
                         'Alle eingelesenen Zeitreihen der Datei durchlaufen
-                        For i = 0 To Datei.Zeitreihen.GetUpperBound(0)
+                        For i = 0 To ZRFormat.Zeitreihen.GetUpperBound(0)
                             'Serie abspeichen
-                            Me.AddZeitreihe(Datei.Zeitreihen(i))
+                            Me.AddZeitreihe(ZRFormat.Zeitreihen(i))
                             'Serie anzeigen
-                            Call Me.Display_Series(Datei.Zeitreihen(i))
+                            Call Me.Display_Series(ZRFormat.Zeitreihen(i))
                         Next
 
                         'Log
@@ -877,10 +945,10 @@ Public Class Wave
             Call Log.AddLogEntry("Importiere Datei '" & file & "' ...")
 
             'Datei-Instanz erzeugen
-            RVADatei = Dateifactory.getDateiInstanz(file)
+            RVADatei = ZeitreihenExtern_factory.CreateZRExtern(file)
 
             'Einlesen
-            Call RVADatei.Read_File()
+            Call RVADatei.Zeitreihe_Einlesen()
 
             'Log
             Call Log.AddLogEntry("... Datei '" & file & "' erfolgreich importiert!")
@@ -901,18 +969,55 @@ Public Class Wave
 
     End Sub
 
+    Private Function showImportDialog(ByRef ZR As ZeitreihenExtern) As Boolean
+
+        select case ZR.Typ
+            case ZeitreihenExtern.ZREQuellenTyp.ZRDatei
+                return showImportDialog(cType(ZR,ZeitreihenDatei))    
+            case ZeitreihenExtern.ZREQuellenTyp.ZRDatabase
+                Return showImportDialog(CType(ZR, ZeitreihenDatabase))
+        end select
+
+    end Function
+
     ''' <summary>
-    ''' Zeigt den Importdialog an und liest im Anschluss die Datei mit den eingegebenen Einstellungn ein
+    '''' Zeigt den Importdialog an und liest im Anschluss die Datei mit den eingegebenen Einstellungn ein
     ''' </summary>
     ''' <param name="Datei">Instanz der Datei, die importiert werden soll</param>
-    Private Function showImportDialog(ByRef Datei As Dateiformat) As Boolean
+    Private Function showImportDialog(ByRef ZRDatabase As ZeitreihenDatabase) As Boolean
 
-        Datei.ImportDiag = New ImportDiag(Datei)
+        Dim dlgImportDiag As New ImportFromDatabaseDialog()
 
         Dim DiagResult As DialogResult
 
         'Dialog anzeigen
-        DiagResult = Datei.ImportDiag.ShowDialog(Me)
+        DiagResult = dlgImportDiag.ShowDialog(Me)
+
+        If (DiagResult = Windows.Forms.DialogResult.OK) Then
+            For Each zre As ImportFromDatabaseDialog.TypeSelResultID In dlgImportDiag.SelectedResultIDs
+                ZRDatabase.AddZRE(zre.ElemID, zre.DimensionID)
+            Next
+
+            Return True
+        Else
+            Return False
+        End If
+
+    End Function
+
+
+    ''' <summary>
+    ''' Zeigt den Importdialog an und liest im Anschluss die Datei mit den eingegebenen Einstellungn ein
+    ''' </summary>
+    ''' <param name="Datei">Instanz der Datei, die importiert werden soll</param>
+    Private Function showImportDialog(ByRef ZRDatei As ZeitreihenDatei) As Boolean
+
+        dim dlgImportDiag as New ImportDiag(ZRDatei)
+        
+        Dim DiagResult As DialogResult
+
+        'Dialog anzeigen
+        DiagResult = dlgImportDiag.ShowDialog(Me)
 
         If (DiagResult = Windows.Forms.DialogResult.OK) Then
             Return True
@@ -1162,4 +1267,7 @@ Public Class Wave
 
 #End Region 'Funktionalität
 
+    Private Sub ToolStripButton_ImportFromDB_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_ImportFromDB.Click
+        Call Me.Import_DB()
+    End Sub
 End Class

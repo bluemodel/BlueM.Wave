@@ -10,7 +10,7 @@ Partial Public Class ImportDiag
 
     Private IsInitializing As Boolean
 
-    Private datei As Dateiformat
+    Private datei As ZeitreihenDatei
 
 
 #End Region
@@ -22,7 +22,7 @@ Partial Public Class ImportDiag
 
     'Konstruktor
     '***********
-    Public Sub New(ByRef _dateiobjekt As Dateiformat)
+    Public Sub New(ByRef _dateiobjekt As ZeitreihenDatei)
 
         Call MyBase.New()
 
@@ -54,7 +54,7 @@ Partial Public Class ImportDiag
         Me.ComboBox_Dezimaltrennzeichen.EndUpdate()
 
         'Versuchen, die Spalten auszulesen (mit Standardeinstellungen)
-        Call Me.datei.SpaltenAuslesen()
+        Call Me.datei.Zeitreihen_Infos_Lesen()
 
         'Anzeige aktualisieren
         Call Me.aktualisieren()
@@ -164,7 +164,7 @@ Partial Public Class ImportDiag
             Me.datei.XSpalte = Me.NumericUpDown_DatumsSpalte.Value - 1 'Immer eins weniger wie du ! 
 
             'Spalten neu auslesen
-            Call Me.datei.SpaltenAuslesen()
+            Call Me.datei.Zeitreihen_Infos_Lesen()
 
             'Anzeige aktualisieren
             Call Me.aktualisieren()
