@@ -994,8 +994,8 @@ Public Class Wave
         DiagResult = dlgImportDiag.ShowDialog(Me)
 
         If (DiagResult = Windows.Forms.DialogResult.OK) Then
-            For Each zre As ImportFromDatabaseDialog.TypeSelResultID In dlgImportDiag.SelectedResultIDs
-                ZRDatabase.AddZRE(zre.ElemID, zre.DimensionID)
+            For Each zre As Long In dlgImportDiag.SelectedResultIDs
+                ZRDatabase.AddZRE(zre)
             Next
 
             Return True

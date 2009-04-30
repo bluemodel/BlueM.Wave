@@ -100,28 +100,25 @@
     <Compile Include="CutDialog.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="My Project\Resources1.Designer.vb">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-    <Compile Include="ZeitreihenFormate\DIRCDataSet.Designer.vb">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>DIRCDataSet.xsd</DependentUpon>
-    </Compile>
     <Compile Include="Importdialoge\ImportFromDatabaseDialog.Designer.vb">
       <DependentUpon>ImportFromDatabaseDialog.vb</DependentUpon>
     </Compile>
     <Compile Include="Importdialoge\ImportFromDatabaseDialog.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="My Project\Resources1.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="ZeitreihenFormate\ASC.vb">
     </Compile>
-    <Compile Include="ZeitreihenFormate\Dateifactory.vb" />
-    <Compile Include="ZeitreihenFormate\DIRCDataSet.vb">
-      <DependentUpon>DIRCDataSet.xsd</DependentUpon>
+    <Compile Include="ZeitreihenFormate\BlueMOrbDataSet.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>BlueMOrbDataSet.xsd</DependentUpon>
     </Compile>
+    <Compile Include="ZeitreihenFormate\Dateifactory.vb" />
     <Compile Include="ZeitreihenFormate\DWD_Stationswahl.Designer.vb">
       <DependentUpon>DWD_Stationswahl.vb</DependentUpon>
     </Compile>
@@ -269,16 +266,8 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="ClassDiagram1.cd" />
-    <None Include="ZeitreihenFormate\DIRCDataSet.xsc">
-      <DependentUpon>DIRCDataSet.xsd</DependentUpon>
-    </None>
-    <None Include="ZeitreihenFormate\DIRCDataSet.xsd">
-      <Generator>MSDataSetGenerator</Generator>
-      <LastGenOutput>DIRCDataSet.Designer.vb</LastGenOutput>
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="ZeitreihenFormate\DIRCDataSet.xss">
-      <DependentUpon>DIRCDataSet.xsd</DependentUpon>
+    <None Include="Importdialoge\DatenbankVerbindung.udl">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Resources\BlueM.png" />
     <None Include="Resources\database_refresh.png" />
@@ -302,6 +291,17 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\log.ico" />
     <None Include="Resources\script.png" />
+    <None Include="ZeitreihenFormate\BlueMOrbDataSet.xsc">
+      <DependentUpon>BlueMOrbDataSet.xsd</DependentUpon>
+    </None>
+    <None Include="ZeitreihenFormate\BlueMOrbDataSet.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>BlueMOrbDataSet.Designer.vb</LastGenOutput>
+    </None>
+    <None Include="ZeitreihenFormate\BlueMOrbDataSet.xss">
+      <DependentUpon>BlueMOrbDataSet.xsd</DependentUpon>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

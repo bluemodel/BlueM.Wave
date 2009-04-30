@@ -27,24 +27,21 @@ Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel
 Me.OK_Button = New System.Windows.Forms.Button
 Me.Cancel_Button = New System.Windows.Forms.Button
 Me.DataGridView_Auswahl = New System.Windows.Forms.DataGridView
-Me.ELEMENTSET_ID = New System.Windows.Forms.DataGridViewTextBoxColumn
-Me.DIMENSION_ID = New System.Windows.Forms.DataGridViewTextBoxColumn
-Me.DIMENSIONNAMEDataGridViewTextBoxColumn = New System.Windows.Forms.DataGridViewTextBoxColumn
-Me.DIMENSIONEINHEITDataGridViewTextBoxColumn = New System.Windows.Forms.DataGridViewTextBoxColumn
-Me.ELEMENTSETNAMEDataGridViewTextBoxColumn = New System.Windows.Forms.DataGridViewTextBoxColumn
+Me.BlueMOrbDataSet = New IHWB.Wave.BlueMOrbDataSet
+Me.AllInfosAboutSimResultsBindingSource = New System.Windows.Forms.BindingSource(Me.components)
+Me.AllInfosAboutSimResultsTableAdapter = New IHWB.Wave.BlueMOrbDataSetTableAdapters.AllInfosAboutSimResultsTableAdapter
+Me.SIMRESULTIDDataGridViewTextBoxColumn = New System.Windows.Forms.DataGridViewTextBoxColumn
+Me.SIMULATIONNAMEDataGridViewTextBoxColumn = New System.Windows.Forms.DataGridViewTextBoxColumn
+Me.SIMULATIONDATEDataGridViewTextBoxColumn = New System.Windows.Forms.DataGridViewTextBoxColumn
 Me.MODELSOFTWAREDataGridViewTextBoxColumn = New System.Windows.Forms.DataGridViewTextBoxColumn
 Me.MODELDATASETDataGridViewTextBoxColumn = New System.Windows.Forms.DataGridViewTextBoxColumn
-Me.SIMULATIONDATEDataGridViewTextBoxColumn = New System.Windows.Forms.DataGridViewTextBoxColumn
-Me.SIMULATIONNAMEDataGridViewTextBoxColumn = New System.Windows.Forms.DataGridViewTextBoxColumn
-Me.ALLbutValuesBindingSource1 = New System.Windows.Forms.BindingSource(Me.components)
-Me.DIRCDataSet = New IHWB.Wave.DIRCDataSet
-Me.ALLbutValuesBindingSource = New System.Windows.Forms.BindingSource(Me.components)
-Me.ALLbutValuesTableAdapter = New IHWB.Wave.DIRCDataSetTableAdapters.ALLbutValuesTableAdapter
+Me.ELEMENTSETNAMEDataGridViewTextBoxColumn = New System.Windows.Forms.DataGridViewTextBoxColumn
+Me.DIMENSIONNAMEDataGridViewTextBoxColumn = New System.Windows.Forms.DataGridViewTextBoxColumn
+Me.DIMENSIONEINHEITDataGridViewTextBoxColumn = New System.Windows.Forms.DataGridViewTextBoxColumn
 Me.TableLayoutPanel1.SuspendLayout()
 CType(Me.DataGridView_Auswahl, System.ComponentModel.ISupportInitialize).BeginInit()
-CType(Me.ALLbutValuesBindingSource1, System.ComponentModel.ISupportInitialize).BeginInit()
-CType(Me.DIRCDataSet, System.ComponentModel.ISupportInitialize).BeginInit()
-CType(Me.ALLbutValuesBindingSource, System.ComponentModel.ISupportInitialize).BeginInit()
+CType(Me.BlueMOrbDataSet, System.ComponentModel.ISupportInitialize).BeginInit()
+CType(Me.AllInfosAboutSimResultsBindingSource, System.ComponentModel.ISupportInitialize).BeginInit()
 Me.SuspendLayout()
 '
 'TableLayoutPanel1
@@ -55,7 +52,7 @@ Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(Syste
 Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
 Me.TableLayoutPanel1.Controls.Add(Me.OK_Button, 0, 0)
 Me.TableLayoutPanel1.Controls.Add(Me.Cancel_Button, 1, 0)
-Me.TableLayoutPanel1.Location = New System.Drawing.Point(736, 522)
+Me.TableLayoutPanel1.Location = New System.Drawing.Point(722, 572)
 Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
 Me.TableLayoutPanel1.RowCount = 1
 Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
@@ -88,51 +85,49 @@ Me.DataGridView_Auswahl.AllowUserToDeleteRows = False
 Me.DataGridView_Auswahl.AllowUserToOrderColumns = True
 Me.DataGridView_Auswahl.AutoGenerateColumns = False
 Me.DataGridView_Auswahl.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-Me.DataGridView_Auswahl.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.ELEMENTSET_ID, Me.DIMENSION_ID, Me.DIMENSIONNAMEDataGridViewTextBoxColumn, Me.DIMENSIONEINHEITDataGridViewTextBoxColumn, Me.ELEMENTSETNAMEDataGridViewTextBoxColumn, Me.MODELSOFTWAREDataGridViewTextBoxColumn, Me.MODELDATASETDataGridViewTextBoxColumn, Me.SIMULATIONDATEDataGridViewTextBoxColumn, Me.SIMULATIONNAMEDataGridViewTextBoxColumn})
-Me.DataGridView_Auswahl.DataSource = Me.ALLbutValuesBindingSource1
-Me.DataGridView_Auswahl.Location = New System.Drawing.Point(12, 12)
+Me.DataGridView_Auswahl.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.SIMRESULTIDDataGridViewTextBoxColumn, Me.SIMULATIONNAMEDataGridViewTextBoxColumn, Me.SIMULATIONDATEDataGridViewTextBoxColumn, Me.MODELSOFTWAREDataGridViewTextBoxColumn, Me.MODELDATASETDataGridViewTextBoxColumn, Me.ELEMENTSETNAMEDataGridViewTextBoxColumn, Me.DIMENSIONNAMEDataGridViewTextBoxColumn, Me.DIMENSIONEINHEITDataGridViewTextBoxColumn})
+Me.DataGridView_Auswahl.DataSource = Me.AllInfosAboutSimResultsBindingSource
+Me.DataGridView_Auswahl.Location = New System.Drawing.Point(18, 25)
 Me.DataGridView_Auswahl.Name = "DataGridView_Auswahl"
 Me.DataGridView_Auswahl.ReadOnly = True
-Me.DataGridView_Auswahl.RowTemplate.ReadOnly = True
-Me.DataGridView_Auswahl.Size = New System.Drawing.Size(859, 416)
+Me.DataGridView_Auswahl.Size = New System.Drawing.Size(846, 534)
 Me.DataGridView_Auswahl.TabIndex = 1
 '
-'ELEMENTSET_ID
+'BlueMOrbDataSet
 '
-Me.ELEMENTSET_ID.DataPropertyName = "ELEMENTSET_ID"
-Me.ELEMENTSET_ID.HeaderText = "ELEMENTSET_ID"
-Me.ELEMENTSET_ID.Name = "ELEMENTSET_ID"
-Me.ELEMENTSET_ID.ReadOnly = True
-Me.ELEMENTSET_ID.Visible = False
+Me.BlueMOrbDataSet.DataSetName = "BlueMOrbDataSet"
+Me.BlueMOrbDataSet.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema
 '
-'DIMENSION_ID
+'AllInfosAboutSimResultsBindingSource
 '
-Me.DIMENSION_ID.DataPropertyName = "DIMENSION_ID"
-Me.DIMENSION_ID.HeaderText = "DIMENSION_ID"
-Me.DIMENSION_ID.Name = "DIMENSION_ID"
-Me.DIMENSION_ID.ReadOnly = True
-Me.DIMENSION_ID.Visible = False
+Me.AllInfosAboutSimResultsBindingSource.DataMember = "AllInfosAboutSimResults"
+Me.AllInfosAboutSimResultsBindingSource.DataSource = Me.BlueMOrbDataSet
 '
-'DIMENSIONNAMEDataGridViewTextBoxColumn
+'AllInfosAboutSimResultsTableAdapter
 '
-Me.DIMENSIONNAMEDataGridViewTextBoxColumn.DataPropertyName = "DIMENSION_NAME"
-Me.DIMENSIONNAMEDataGridViewTextBoxColumn.HeaderText = "DIMENSION_NAME"
-Me.DIMENSIONNAMEDataGridViewTextBoxColumn.Name = "DIMENSIONNAMEDataGridViewTextBoxColumn"
-Me.DIMENSIONNAMEDataGridViewTextBoxColumn.ReadOnly = True
+Me.AllInfosAboutSimResultsTableAdapter.ClearBeforeFill = True
 '
-'DIMENSIONEINHEITDataGridViewTextBoxColumn
+'SIMRESULTIDDataGridViewTextBoxColumn
 '
-Me.DIMENSIONEINHEITDataGridViewTextBoxColumn.DataPropertyName = "DIMENSION_EINHEIT"
-Me.DIMENSIONEINHEITDataGridViewTextBoxColumn.HeaderText = "DIMENSION_EINHEIT"
-Me.DIMENSIONEINHEITDataGridViewTextBoxColumn.Name = "DIMENSIONEINHEITDataGridViewTextBoxColumn"
-Me.DIMENSIONEINHEITDataGridViewTextBoxColumn.ReadOnly = True
+Me.SIMRESULTIDDataGridViewTextBoxColumn.DataPropertyName = "SIMRESULT_ID"
+Me.SIMRESULTIDDataGridViewTextBoxColumn.HeaderText = "SIMRESULT_ID"
+Me.SIMRESULTIDDataGridViewTextBoxColumn.Name = "SIMRESULTIDDataGridViewTextBoxColumn"
+Me.SIMRESULTIDDataGridViewTextBoxColumn.ReadOnly = True
+Me.SIMRESULTIDDataGridViewTextBoxColumn.Visible = False
 '
-'ELEMENTSETNAMEDataGridViewTextBoxColumn
+'SIMULATIONNAMEDataGridViewTextBoxColumn
 '
-Me.ELEMENTSETNAMEDataGridViewTextBoxColumn.DataPropertyName = "ELEMENTSET_NAME"
-Me.ELEMENTSETNAMEDataGridViewTextBoxColumn.HeaderText = "ELEMENTSET_NAME"
-Me.ELEMENTSETNAMEDataGridViewTextBoxColumn.Name = "ELEMENTSETNAMEDataGridViewTextBoxColumn"
-Me.ELEMENTSETNAMEDataGridViewTextBoxColumn.ReadOnly = True
+Me.SIMULATIONNAMEDataGridViewTextBoxColumn.DataPropertyName = "SIMULATION_NAME"
+Me.SIMULATIONNAMEDataGridViewTextBoxColumn.HeaderText = "SIMULATION_NAME"
+Me.SIMULATIONNAMEDataGridViewTextBoxColumn.Name = "SIMULATIONNAMEDataGridViewTextBoxColumn"
+Me.SIMULATIONNAMEDataGridViewTextBoxColumn.ReadOnly = True
+'
+'SIMULATIONDATEDataGridViewTextBoxColumn
+'
+Me.SIMULATIONDATEDataGridViewTextBoxColumn.DataPropertyName = "SIMULATION_DATE"
+Me.SIMULATIONDATEDataGridViewTextBoxColumn.HeaderText = "SIMULATION_DATE"
+Me.SIMULATIONDATEDataGridViewTextBoxColumn.Name = "SIMULATIONDATEDataGridViewTextBoxColumn"
+Me.SIMULATIONDATEDataGridViewTextBoxColumn.ReadOnly = True
 '
 'MODELSOFTWAREDataGridViewTextBoxColumn
 '
@@ -148,38 +143,26 @@ Me.MODELDATASETDataGridViewTextBoxColumn.HeaderText = "MODEL_DATASET"
 Me.MODELDATASETDataGridViewTextBoxColumn.Name = "MODELDATASETDataGridViewTextBoxColumn"
 Me.MODELDATASETDataGridViewTextBoxColumn.ReadOnly = True
 '
-'SIMULATIONDATEDataGridViewTextBoxColumn
+'ELEMENTSETNAMEDataGridViewTextBoxColumn
 '
-Me.SIMULATIONDATEDataGridViewTextBoxColumn.DataPropertyName = "SIMULATION_DATE"
-Me.SIMULATIONDATEDataGridViewTextBoxColumn.HeaderText = "SIMULATION_DATE"
-Me.SIMULATIONDATEDataGridViewTextBoxColumn.Name = "SIMULATIONDATEDataGridViewTextBoxColumn"
-Me.SIMULATIONDATEDataGridViewTextBoxColumn.ReadOnly = True
+Me.ELEMENTSETNAMEDataGridViewTextBoxColumn.DataPropertyName = "ELEMENTSET_NAME"
+Me.ELEMENTSETNAMEDataGridViewTextBoxColumn.HeaderText = "ELEMENTSET_NAME"
+Me.ELEMENTSETNAMEDataGridViewTextBoxColumn.Name = "ELEMENTSETNAMEDataGridViewTextBoxColumn"
+Me.ELEMENTSETNAMEDataGridViewTextBoxColumn.ReadOnly = True
 '
-'SIMULATIONNAMEDataGridViewTextBoxColumn
+'DIMENSIONNAMEDataGridViewTextBoxColumn
 '
-Me.SIMULATIONNAMEDataGridViewTextBoxColumn.DataPropertyName = "SIMULATION_NAME"
-Me.SIMULATIONNAMEDataGridViewTextBoxColumn.HeaderText = "SIMULATION_NAME"
-Me.SIMULATIONNAMEDataGridViewTextBoxColumn.Name = "SIMULATIONNAMEDataGridViewTextBoxColumn"
-Me.SIMULATIONNAMEDataGridViewTextBoxColumn.ReadOnly = True
+Me.DIMENSIONNAMEDataGridViewTextBoxColumn.DataPropertyName = "DIMENSION_NAME"
+Me.DIMENSIONNAMEDataGridViewTextBoxColumn.HeaderText = "DIMENSION_NAME"
+Me.DIMENSIONNAMEDataGridViewTextBoxColumn.Name = "DIMENSIONNAMEDataGridViewTextBoxColumn"
+Me.DIMENSIONNAMEDataGridViewTextBoxColumn.ReadOnly = True
 '
-'ALLbutValuesBindingSource1
+'DIMENSIONEINHEITDataGridViewTextBoxColumn
 '
-Me.ALLbutValuesBindingSource1.DataMember = "ALLbutValues"
-Me.ALLbutValuesBindingSource1.DataSource = Me.DIRCDataSet
-'
-'DIRCDataSet
-'
-Me.DIRCDataSet.DataSetName = "DIRCDataSet"
-Me.DIRCDataSet.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema
-'
-'ALLbutValuesBindingSource
-'
-Me.ALLbutValuesBindingSource.DataMember = "ALLbutValues"
-Me.ALLbutValuesBindingSource.DataSource = Me.DIRCDataSet
-'
-'ALLbutValuesTableAdapter
-'
-Me.ALLbutValuesTableAdapter.ClearBeforeFill = True
+Me.DIMENSIONEINHEITDataGridViewTextBoxColumn.DataPropertyName = "DIMENSION_EINHEIT"
+Me.DIMENSIONEINHEITDataGridViewTextBoxColumn.HeaderText = "DIMENSION_EINHEIT"
+Me.DIMENSIONEINHEITDataGridViewTextBoxColumn.Name = "DIMENSIONEINHEITDataGridViewTextBoxColumn"
+Me.DIMENSIONEINHEITDataGridViewTextBoxColumn.ReadOnly = True
 '
 'ImportFromDatabaseDialog
 '
@@ -187,7 +170,7 @@ Me.AcceptButton = Me.OK_Button
 Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
 Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
 Me.CancelButton = Me.Cancel_Button
-Me.ClientSize = New System.Drawing.Size(894, 563)
+Me.ClientSize = New System.Drawing.Size(880, 613)
 Me.Controls.Add(Me.DataGridView_Auswahl)
 Me.Controls.Add(Me.TableLayoutPanel1)
 Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog
@@ -199,9 +182,8 @@ Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
 Me.Text = "ImportFromDatabaseDialog"
 Me.TableLayoutPanel1.ResumeLayout(False)
 CType(Me.DataGridView_Auswahl, System.ComponentModel.ISupportInitialize).EndInit()
-CType(Me.ALLbutValuesBindingSource1, System.ComponentModel.ISupportInitialize).EndInit()
-CType(Me.DIRCDataSet, System.ComponentModel.ISupportInitialize).EndInit()
-CType(Me.ALLbutValuesBindingSource, System.ComponentModel.ISupportInitialize).EndInit()
+CType(Me.BlueMOrbDataSet, System.ComponentModel.ISupportInitialize).EndInit()
+CType(Me.AllInfosAboutSimResultsBindingSource, System.ComponentModel.ISupportInitialize).EndInit()
 Me.ResumeLayout(False)
 
 End Sub
@@ -209,18 +191,16 @@ End Sub
     Friend WithEvents OK_Button As System.Windows.Forms.Button
     Friend WithEvents Cancel_Button As System.Windows.Forms.Button
     Friend WithEvents DataGridView_Auswahl As System.Windows.Forms.DataGridView
-    Friend WithEvents DIRCDataSet As IHWB.Wave.DIRCDataSet
-    Friend WithEvents ALLbutValuesBindingSource As System.Windows.Forms.BindingSource
-    Friend WithEvents ALLbutValuesTableAdapter As IHWB.Wave.DIRCDataSetTableAdapters.ALLbutValuesTableAdapter
-    Friend WithEvents ALLbutValuesBindingSource1 As System.Windows.Forms.BindingSource
-    Friend WithEvents ELEMENTSET_ID As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents DIMENSION_ID As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents DIMENSIONNAMEDataGridViewTextBoxColumn As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents DIMENSIONEINHEITDataGridViewTextBoxColumn As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents ELEMENTSETNAMEDataGridViewTextBoxColumn As System.Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents BlueMOrbDataSet As IHWB.Wave.BlueMOrbDataSet
+    Friend WithEvents AllInfosAboutSimResultsBindingSource As System.Windows.Forms.BindingSource
+    Friend WithEvents AllInfosAboutSimResultsTableAdapter As IHWB.Wave.BlueMOrbDataSetTableAdapters.AllInfosAboutSimResultsTableAdapter
+    Friend WithEvents SIMRESULTIDDataGridViewTextBoxColumn As System.Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents SIMULATIONNAMEDataGridViewTextBoxColumn As System.Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents SIMULATIONDATEDataGridViewTextBoxColumn As System.Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents MODELSOFTWAREDataGridViewTextBoxColumn As System.Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents MODELDATASETDataGridViewTextBoxColumn As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents SIMULATIONDATEDataGridViewTextBoxColumn As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents SIMULATIONNAMEDataGridViewTextBoxColumn As System.Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents ELEMENTSETNAMEDataGridViewTextBoxColumn As System.Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents DIMENSIONNAMEDataGridViewTextBoxColumn As System.Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents DIMENSIONEINHEITDataGridViewTextBoxColumn As System.Windows.Forms.DataGridViewTextBoxColumn
 
 End Class
