@@ -265,6 +265,12 @@
     <EmbeddedResource Include="Resources\log.ico" />
     <None Include="Resources\script.png" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\NPlot\NPlot.csproj">
+      <Project>{E6867FF5-74EC-4464-8958-D71CB46232F3}</Project>
+      <Name>NPlot</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
