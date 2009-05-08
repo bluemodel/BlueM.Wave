@@ -51,7 +51,8 @@ Public Class Wave
     'Chart-Zeugs
     Private WithEvents colorBand1 As Steema.TeeChart.Tools.ColorBand
     Private selectionMade As Boolean 'Flag zeigt an, ob bereits ein Auswahlbereich ausgewählt wurde
-    Private MyAxes1, MyAxes2 As Dictionary(Of String, Steema.TeeChart.Axis)
+    Private MyAxes1 As Dictionary(Of String, NPlot.Axis)
+    Private MyAxes2 As Dictionary(Of String, Steema.TeeChart.Axis)
     Private WithEvents ChartListBox1 As Steema.TeeChart.ChartListBox
 
     Private Const HelpURL As String = "http://130.83.196.154/BlueM/wiki/index.php/Wave"
@@ -72,7 +73,7 @@ Public Class Wave
         '-----------------------
         Me.ImportedFiles = New List(Of Dateiformat)()
         Me.Zeitreihen = New Dictionary(Of String, Zeitreihe)()
-        Me.MyAxes1 = New Dictionary(Of String, Steema.TeeChart.Axis)
+        Me.MyAxes1 = New Dictionary(Of String, NPlot.Axis)
         Me.MyAxes2 = New Dictionary(Of String, Steema.TeeChart.Axis)
 
         'Charts einrichten
@@ -143,9 +144,17 @@ Public Class Wave
     '*********************
     Private Sub Init_Charts()
 
-        'Charts zurücksetzen
-        Me.TChart1.Clear()
-        Call Wave.formatChart(Me.TChart1.Chart)
+        'Charts zurücksetzen und formatieren
+        Me.NPlot1.Clear()
+        Me.NPlot1.Title = "NPlot"
+        Me.NPlot1.Legend = New NPlot.Legend()
+        Me.NPlot1.DateTimeToolTip = True
+        ''Add a background grid for better chart readability.
+        'Dim grid As NPlot.Grid = New NPlot.Grid()
+        'grid.VerticalGridType = NPlot.Grid.GridType.Coarse
+        'grid.HorizontalGridType = NPlot.Grid.GridType.Coarse
+        'grid.MajorGridPen = New Pen(Color.LightGray, 1.0F)
+        'Me.NPlot1.Add(grid)
 
         Me.TChart2.Clear()
         Call Wave.formatChart(Me.TChart2.Chart)
@@ -155,19 +164,26 @@ Public Class Wave
         Me.TChart2.Zoom.Allow = False
         Me.TChart2.Panning.Allow = Steema.TeeChart.ScrollModes.None
 
-        'Hauptdiagramm darf nur horizontal gescrolled oder gezoomt werden
-        Me.TChart1.Zoom.Direction = Steema.TeeChart.ZoomDirections.Horizontal
-        Me.TChart1.Panning.Allow = Steema.TeeChart.ScrollModes.Horizontal
+        'Hauptdiagramm
+        'Me.NPlot1.AddInteraction(New NPlot.Windows.PlotSurface2D.Interactions.HorizontalGuideline())
+        'Me.NPlot1.AddInteraction(New NPlot.Windows.PlotSurface2D.Interactions.VerticalGuideline())
+        Me.NPlot1.AddInteraction(New NPlot.Windows.PlotSurface2D.Interactions.HorizontalRangeSelection())
+        Me.NPlot1.AddInteraction(New NPlot.Windows.PlotSurface2D.Interactions.MouseWheelZoom())
+        Me.NPlot1.RightMenu = New NPlot.Windows.PlotSurface2D.PlotContextMenu()
 
         'Achsen
-        Me.TChart1.Axes.Bottom.Automatic = False
-        Me.TChart1.Axes.Bottom.Labels.Angle = 90
-        Me.TChart1.Axes.Bottom.Labels.DateTimeFormat = "dd.MM.yy HH:mm"
-        Me.TChart1.Axes.Right.Title.Angle = 90
+        Me.NPlot1.XAxis1 = New NPlot.DateTimeAxis()
+        Me.NPlot1.XAxis1.NumberFormat = "dd.MM.yy HH:mm"
+        'Me.NPlot1.XAxis1.WorldMin = DateTime.Now.Subtract(New TimeSpan(24, 0, 0)).Ticks
+        'Me.NPlot1.XAxis1.WorldMax = DateTime.Now.Ticks
+        'Me.NPlot1.YAxis1 = New NPlot.Axis()
+        'Me.NPlot1.YAxis1.WorldMin = 0
+        'Me.NPlot1.YAxis1.WorldMax = 10
+
         Me.TChart2.Axes.Bottom.Automatic = False
 
-        'ChartListBox
-        Me.ChartListBox1.Chart = Me.TChart1
+        ''ChartListBox
+        'Me.ChartListBox1.Chart = Me.TChart1
 
         'ColorBand einrichten
         Me.selectionMade = False
@@ -193,19 +209,17 @@ Public Class Wave
     '********************
     Private Sub UpdateCharts()
 
-        Dim i, AnzSerien As Integer
-
-        AnzSerien = Me.TChart1.Series.Count()
-
         'kleinsten und größten X-Wert bestimmen
-        Dim Xmin, Xmax, tmpXmin, tmpXmax As DateTime
-        Xmin = Date.FromOADate(Me.TChart1.Series(0).MinXValue)
-        Xmax = Date.FromOADate(Me.TChart1.Series(0).MaxXValue)
-        For i = 1 To AnzSerien - 1
-            tmpXmin = Date.FromOADate(Me.TChart1.Series(i).MinXValue)
-            tmpXmax = Date.FromOADate(Me.TChart1.Series(i).MaxXValue)
-            If (tmpXmin < Xmin) Then Xmin = tmpXmin
-            If (tmpXmax > Xmax) Then Xmax = tmpXmax
+        Dim Xmin, Xmax As DateTime
+        Xmin = DateTime.MaxValue
+        Xmax = DateTime.MinValue
+        For Each zre As Zeitreihe In Me.Zeitreihen.Values
+            If (zre.Anfangsdatum < Xmin) Then
+                Xmin = zre.Anfangsdatum
+            End If
+            If (zre.Enddatum > Xmax) Then
+                Xmax = zre.Enddatum
+            End If
         Next
 
         'Übersicht neu skalieren
@@ -219,24 +233,27 @@ Public Class Wave
         End If
 
         'Hauptdiagramm neu skalieren
-        Me.TChart1.Axes.Bottom.Minimum = colorBand1.Start
-        Me.TChart1.Axes.Bottom.Maximum = colorBand1.End
+        Me.NPlot1.XAxis1.WorldMin = DateTime.FromOADate(colorBand1.Start).Ticks
+        Me.NPlot1.XAxis1.WorldMax = DateTime.FromOADate(colorBand1.End).Ticks
+
+        Me.NPlot1.Refresh()
 
     End Sub
 
-    'TChart1 Scrolled, Zoomed, ZoomUndone
-    '************************************
-    Private Sub TChart1_Scrolled(ByVal sender As Object, ByVal e As System.EventArgs) Handles TChart1.Scroll, TChart1.Zoomed, TChart1.UndoneZoom
-        Me.colorBand1.Start = Me.TChart1.Axes.Bottom.Minimum
-        Me.colorBand1.End = Me.TChart1.Axes.Bottom.Maximum
+    'NPlot1 changed
+    '**************
+    Private Sub NPlot1_Changed(ByVal sender As Object) Handles NPlot1.InteractionOccured
+        Me.colorBand1.Start = New DateTime(Me.NPlot1.XAxis1.WorldMin).ToOADate()
+        Me.colorBand1.End = New DateTime(Me.NPlot1.XAxis1.WorldMax).ToOADate()
         Me.selectionMade = True
     End Sub
 
     'ColorBand Resized
     '*****************
     Private Sub TChart2_MouseUp(ByVal sender As System.Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles TChart2.MouseUp
-        Me.TChart1.Axes.Bottom.Minimum = Me.colorBand1.Start
-        Me.TChart1.Axes.Bottom.Maximum = Me.colorBand1.End
+        Me.NPlot1.XAxis1.WorldMin = DateTime.FromOADate(Me.colorBand1.Start).Ticks
+        Me.NPlot1.XAxis1.WorldMax = DateTime.FromOADate(Me.colorBand1.End).Ticks
+        Me.NPlot1.Refresh()
         Me.selectionMade = True
     End Sub
 
@@ -304,7 +321,7 @@ Public Class Wave
 
         'Warnen, wenn bereits Serien vorhanden
         '-------------------------------------
-        If (Me.TChart1.Series.Count() > 0) Then
+        If (Me.Zeitreihen.Count > 0) Then
             res = MsgBox("Alle vorhandenen Serien werden gelöscht!" & eol & "Fortfahren?", MsgBoxStyle.OkCancel)
             If (Not res = Windows.Forms.DialogResult.OK) Then Exit Sub
         End If
@@ -378,14 +395,34 @@ Public Class Wave
 
     'Edit Chart
     '**********
-    Private Sub EditChart(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_EditChart.Click, TChart1.DoubleClick
-        Call Me.TChart1.ShowEditor()
+    Private Sub EditChart(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_EditChart.Click
+        'Call Me.TChart1.ShowEditor()
     End Sub
 
     'Speichern
     '*********
     Private Sub Speichern(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_Speichern.Click
-        Call Me.TChart1.Export.ShowExportDialog()
+
+        Dim filename As String
+
+        Me.SaveFileDialog1.Title = "Speichern unter..."
+        Me.SaveFileDialog1.Filter = "Enhanced Meta Files (*.emf)|*.emf"
+        Me.SaveFileDialog1.DefaultExt = "emf"
+        Me.SaveFileDialog1.AddExtension = True
+
+        If (Me.SaveFileDialog1.ShowDialog() = DialogResult.OK) Then
+
+            filename = Me.SaveFileDialog1.FileName
+
+            Dim g As Graphics = Me.NPlot1.CreateGraphics()
+            Dim hdc As IntPtr = g.GetHdc()
+            Dim mf As New System.Drawing.Imaging.Metafile(filename, hdc)
+            Dim mg As Graphics = Graphics.FromImage(mf)
+            Me.NPlot1.Draw(mg, Me.NPlot1.Bounds)
+            g.ReleaseHdc(hdc)
+
+        End If
+
     End Sub
 
     'Exportieren
@@ -512,7 +549,7 @@ Public Class Wave
                     Dim Wave2 As New Wave()
                     Wave2.Text = "Analyse-Ergebnis"
                     Wave2.Übersicht_Toggle(False)
-                    Wave2.TChart1.Chart = oAnalysis.getResultChart()
+                    'Wave2.TChart1.Chart = oAnalysis.getResultChart()
                     Call Wave2.Show()
                 End If
 
@@ -543,13 +580,13 @@ Public Class Wave
     'Drucken
     '*******
     Private Sub Drucken(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_Drucken.Click
-        Call Me.TChart1.Printer.Preview()
+        'Call Me.TChart1.Printer.Preview()
     End Sub
 
     'Kopieren (als PNG)
     '******************
     Private Sub Kopieren(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_Kopieren.Click
-        Call Me.TChart1.Export.Image.PNG.CopyToClipboard()
+        'Call Me.TChart1.Export.Image.PNG.CopyToClipboard()
     End Sub
 
     'Log anzeigen
@@ -610,7 +647,7 @@ Public Class Wave
         If (Answer = MsgBoxResult.Ok) Then
 
             'Alle Serien löschen
-            Me.TChart1.Series.RemoveAllSeries()
+            'Me.TChart1.Series.RemoveAllSeries()
             Me.TChart2.Series.RemoveAllSeries()
 
             'Collection zurücksetzen
@@ -689,69 +726,69 @@ Public Class Wave
     '*********************
     Private Sub Open_TEN(ByVal FileName As String)
 
-        Dim res As DialogResult
-        Dim i As Integer
-        Dim reihe As Zeitreihe
+        'Dim res As DialogResult
+        'Dim i As Integer
+        'Dim reihe As Zeitreihe
 
-        'Warnen, wenn bereits Serien vorhanden (Chart wird komplett überschrieben!)
-        '--------------------------------------------------------------------------
-        If (Me.TChart1.Series.Count() > 0) Then
-            res = MsgBox("Die vorhandenen Serien werden überschrieben!" & eol & "Fortfahren?", MsgBoxStyle.OkCancel)
-            If (Not res = Windows.Forms.DialogResult.OK) Then Exit Sub
-        End If
+        ''Warnen, wenn bereits Serien vorhanden (Chart wird komplett überschrieben!)
+        ''--------------------------------------------------------------------------
+        'If (Me.TChart1.Series.Count() > 0) Then
+        '    res = MsgBox("Die vorhandenen Serien werden überschrieben!" & eol & "Fortfahren?", MsgBoxStyle.OkCancel)
+        '    If (Not res = Windows.Forms.DialogResult.OK) Then Exit Sub
+        'End If
 
-        Try
+        'Try
 
-            'Log
-            Call Log.AddLogEntry("Öffne Datei '" & FileName & "' ...")
+        '    'Log
+        '    Call Log.AddLogEntry("Öffne Datei '" & FileName & "' ...")
 
-            'TEN-Datei importieren
-            '---------------------
-            Call TChart1.Import.Template.Load(FileName)
-            Call TChart2.Import.Template.Load(FileName)
+        '    'TEN-Datei importieren
+        '    '---------------------
+        '    Call TChart1.Import.Template.Load(FileName)
+        '    Call TChart2.Import.Template.Load(FileName)
 
-            'Zeitreihen-Objekte aus TChart importieren
-            '-----------------------------------------
-            'Alte Zeitreihen löschen
-            Me.Zeitreihen.Clear()
+        '    'Zeitreihen-Objekte aus TChart importieren
+        '    '-----------------------------------------
+        '    'Alte Zeitreihen löschen
+        '    Me.Zeitreihen.Clear()
 
-            'Alle Reihen durchlaufen
-            For Each series As Steema.TeeChart.Styles.Series In TChart1.Series
+        '    'Alle Reihen durchlaufen
+        '    For Each series As Steema.TeeChart.Styles.Series In TChart1.Series
 
-                'Nur Zeitreihen importieren!
-                If (series.GetHorizAxis.IsDateTime) Then
+        '        'Nur Zeitreihen importieren!
+        '        If (series.GetHorizAxis.IsDateTime) Then
 
-                    reihe = New Zeitreihe(series.Title)
+        '            reihe = New Zeitreihe(series.Title)
 
-                    For i = 0 To series.Count - 1
-                        reihe.AddNode(Date.FromOADate(series.XValues(i)), series.YValues(i))
-                    Next
+        '            For i = 0 To series.Count - 1
+        '                reihe.AddNode(Date.FromOADate(series.XValues(i)), series.YValues(i))
+        '            Next
 
-                    'Zeitreihe abspeichern
-                    Call Me.AddZeitreihe(reihe)
-                End If
-            Next
+        '            'Zeitreihe abspeichern
+        '            Call Me.AddZeitreihe(reihe)
+        '        End If
+        '    Next
 
-            'Log
-            Call Log.AddLogEntry("... Datei '" & FileName & "' erfolgreich geöffnet!")
+        '    'Log
+        '    Call Log.AddLogEntry("... Datei '" & FileName & "' erfolgreich geöffnet!")
 
-        Catch ex As Exception
-            MsgBox("Fehler beim Öffnen:" & eol & ex.Message, MsgBoxStyle.Critical)
-            Call Log.AddLogEntry("... Fehler beim Öffnen:" & eol & ex.Message)
-        End Try
+        'Catch ex As Exception
+        '    MsgBox("Fehler beim Öffnen:" & eol & ex.Message, MsgBoxStyle.Critical)
+        '    Call Log.AddLogEntry("... Fehler beim Öffnen:" & eol & ex.Message)
+        'End Try
 
-        'Übersicht anpassen
-        '------------------
-        TChart2.Header.Visible = False
+        ''Übersicht anpassen
+        ''------------------
+        'TChart2.Header.Visible = False
 
-        'ColorBand neu einrichten (geht bei TEN-Import verloren)
-        '-------------------------------------------------------
-        Call Me.Init_ColorBand()
+        ''ColorBand neu einrichten (geht bei TEN-Import verloren)
+        ''-------------------------------------------------------
+        'Call Me.Init_ColorBand()
 
-        'Charts aktualisieren
-        '--------------------
-        Me.selectionMade = False
-        Call Me.UpdateCharts()
+        ''Charts aktualisieren
+        ''--------------------
+        'Me.selectionMade = False
+        'Call Me.UpdateCharts()
 
     End Sub
 
@@ -936,41 +973,55 @@ Public Class Wave
         'Serie zu Hauptdiagramm und zu Übersichtsdiagramm hinzufügen
 
         'Linien instanzieren
-        Dim Line1 As New Steema.TeeChart.Styles.Line(Me.TChart1.Chart)
+        Dim Line1 As New NPlot.LinePlot()
+        'Dim Line1 As New Steema.TeeChart.Styles.Line(Me.TChart1.Chart)
         Dim Line2 As New Steema.TeeChart.Styles.Line(Me.TChart2.Chart)
 
         'X-Werte als Zeitdaten einstellen
-        Line1.XValues.DateTime = True
+        'Line1.XValues.DateTime = True
         Line2.XValues.DateTime = True
 
         'Namen vergeben
-        Line1.Title = zre.Title
+        Line1.Label = zre.Title
+        'Line1.Title = zre.Title
         Line2.Title = zre.Title
+
+        Dim xdata As New List(Of DateTime)
+        Dim ydata As New List(Of Double)
 
         'Punkte zur Serie hinzufügen
         For Each node As KeyValuePair(Of DateTime, Double) In zre.Nodes
-            Line1.Add(node.Key, node.Value)
+            'Line1.Add(node.Key, node.Value)
+            xdata.Add(node.Key)
+            ydata.Add(node.Value)
             Line2.Add(node.Key, node.Value)
         Next
+        Line1.AbscissaData = xdata
+        Line1.OrdinateData = ydata
+
+        Line1.Color = Me.RandomRGBColor()
+
+        Me.NPlot1.Add(Line1)
 
         'Achsenzuordnung
         AxisNo = getAxisNo(zre.Einheit)
+        'AxisNo = 1
 
         'Reihe der Achse zuordnen
         '(Unterscheidung zwischen Standard- und Custom-Achsen notwendig)
         Select Case AxisNo
             Case 1
                 'Linke Achse
-                Line1.VertAxis = Steema.TeeChart.Styles.VerticalAxis.Left
+                'Line1.VertAxis = Steema.TeeChart.Styles.VerticalAxis.Left
                 Line2.VertAxis = Steema.TeeChart.Styles.VerticalAxis.Left
             Case 2
                 'Rechte Achse
-                Line1.VertAxis = Steema.TeeChart.Styles.VerticalAxis.Right
+                'Line1.VertAxis = Steema.TeeChart.Styles.VerticalAxis.Right
                 Line2.VertAxis = Steema.TeeChart.Styles.VerticalAxis.Right
             Case Else
                 'Custom Achse
-                Line1.VertAxis = Steema.TeeChart.Styles.VerticalAxis.Custom
-                Line1.CustomVertAxis = Me.MyAxes1(zre.Einheit)
+                'Line1.VertAxis = Steema.TeeChart.Styles.VerticalAxis.Custom
+                'Line1.CustomVertAxis = Me.MyAxes1(zre.Einheit)
                 Line2.VertAxis = Steema.TeeChart.Styles.VerticalAxis.Custom
                 Line2.CustomVertAxis = Me.MyAxes2(zre.Einheit)
         End Select
@@ -984,53 +1035,53 @@ Public Class Wave
     '******************************
     Public Sub Display_RVA(ByVal RVAResult As RVA.Struct_RVAValues, Optional ByVal showAll As Boolean = False)
 
-        Dim i, j As Integer
-        Dim barLow, barMiddle, barHigh As Steema.TeeChart.Styles.Bar
+        'Dim i, j As Integer
+        'Dim barLow, barMiddle, barHigh As Steema.TeeChart.Styles.Bar
 
-        'Chart formatieren
-        Call PrepareChart_RVA()
+        ''Chart formatieren
+        'Call PrepareChart_RVA()
 
-        'Säulen (HA-Werte)
-        '-----------------
-        barMiddle = New Steema.TeeChart.Styles.Bar(Me.TChart1.Chart)
-        barMiddle.Marks.Visible = False
-        barMiddle.Title = "HA Middle"
-        If (RVAResult.Title <> "") Then barMiddle.Title &= " (" & RVAResult.Title & ")"
+        ''Säulen (HA-Werte)
+        ''-----------------
+        'barMiddle = New Steema.TeeChart.Styles.Bar(Me.TChart1.Chart)
+        'barMiddle.Marks.Visible = False
+        'barMiddle.Title = "HA Middle"
+        'If (RVAResult.Title <> "") Then barMiddle.Title &= " (" & RVAResult.Title & ")"
 
-        barLow = New Steema.TeeChart.Styles.Bar(Me.TChart1.Chart)
-        barLow.Marks.Visible = False
-        barLow.Title = "HA Low"
-        If (RVAResult.Title <> "") Then barLow.Title &= " (" & RVAResult.Title & ")"
+        'barLow = New Steema.TeeChart.Styles.Bar(Me.TChart1.Chart)
+        'barLow.Marks.Visible = False
+        'barLow.Title = "HA Low"
+        'If (RVAResult.Title <> "") Then barLow.Title &= " (" & RVAResult.Title & ")"
 
-        barHigh = New Steema.TeeChart.Styles.Bar(Me.TChart1.Chart)
-        barHigh.Marks.Visible = False
-        barHigh.Title = "HA High"
-        If (RVAResult.Title <> "") Then barHigh.Title &= " (" & RVAResult.Title & ")"
+        'barHigh = New Steema.TeeChart.Styles.Bar(Me.TChart1.Chart)
+        'barHigh.Marks.Visible = False
+        'barHigh.Title = "HA High"
+        'If (RVAResult.Title <> "") Then barHigh.Title &= " (" & RVAResult.Title & ")"
 
-        'Werte eintragen
-        '---------------
-        With RVAResult
+        ''Werte eintragen
+        ''---------------
+        'With RVAResult
 
-            'Schleife über Parametergruppen
-            For i = 0 To .IHAParamGroups.GetUpperBound(0)
-                ''Gruppenname schreiben (Mit Wert 0)
-                'bar.Add(0, .IHAParamGroups(i).GName)
-                'Schleife über Parameter
-                For j = 0 To .IHAParamGroups(i).IHAParams.GetUpperBound(0)
-                    'Parameter eintragen
-                    barMiddle.Add(.IHAParamGroups(i).IHAParams(j).HAMiddle, .IHAParamGroups(i).IHAParams(j).PName)
-                    barLow.Add(.IHAParamGroups(i).IHAParams(j).HALow, .IHAParamGroups(i).IHAParams(j).PName)
-                    barHigh.Add(.IHAParamGroups(i).IHAParams(j).HAHigh, .IHAParamGroups(i).IHAParams(j).PName)
-                Next
-            Next
+        '    'Schleife über Parametergruppen
+        '    For i = 0 To .IHAParamGroups.GetUpperBound(0)
+        '        ''Gruppenname schreiben (Mit Wert 0)
+        '        'bar.Add(0, .IHAParamGroups(i).GName)
+        '        'Schleife über Parameter
+        '        For j = 0 To .IHAParamGroups(i).IHAParams.GetUpperBound(0)
+        '            'Parameter eintragen
+        '            barMiddle.Add(.IHAParamGroups(i).IHAParams(j).HAMiddle, .IHAParamGroups(i).IHAParams(j).PName)
+        '            barLow.Add(.IHAParamGroups(i).IHAParams(j).HALow, .IHAParamGroups(i).IHAParams(j).PName)
+        '            barHigh.Add(.IHAParamGroups(i).IHAParams(j).HAHigh, .IHAParamGroups(i).IHAParams(j).PName)
+        '        Next
+        '    Next
 
-        End With
+        'End With
 
-        'Wenn showAll = False dann nur HAMiddle-Serie anzeigen
-        If (Not showAll) Then
-            barLow.Active = False
-            barHigh.Active = False
-        End If
+        ''Wenn showAll = False dann nur HAMiddle-Serie anzeigen
+        'If (Not showAll) Then
+        '    barLow.Active = False
+        '    barHigh.Active = False
+        'End If
 
     End Sub
 
@@ -1064,36 +1115,38 @@ Public Class Wave
 
                 Case 1
                     'Erste Einheit links
-                    Me.TChart1.Chart.Axes.Left.Title.Caption = einheit
-                    Me.MyAxes1.Add(einheit, Me.TChart1.Chart.Axes.Left)
+                    Me.NPlot1.YAxis1.Label = einheit
+                    Me.MyAxes1.Add(einheit, Me.NPlot1.YAxis1)
                     Me.MyAxes2.Add(einheit, Me.TChart2.Chart.Axes.Left)
 
                 Case 2
                     'Zweite Einheit rechts
-                    Me.TChart1.Chart.Axes.Right.Title.Caption = einheit
-                    Me.MyAxes1.Add(einheit, Me.TChart1.Chart.Axes.Right)
+                    Me.NPlot1.YAxis2 = New NPlot.Axis()
+                    Me.NPlot1.YAxis2.Label = einheit
+                    Me.MyAxes1.Add(einheit, Me.NPlot1.YAxis2)
                     Me.MyAxes2.Add(einheit, Me.TChart2.Chart.Axes.Right)
 
                 Case Else
                     'Ab der dritten Einheit Custom Achsen erstellen
+                    'Bei NPlot gibts maximal 2 Achsen!
                     Dim customaxis1, customaxis2 As Steema.TeeChart.Axis
-                    customaxis1 = Steema.TeeChart.Axes.CreateNewAxis(Me.TChart1.Chart)
+                    'customaxis1 = Steema.TeeChart.Axes.CreateNewAxis(Me.TChart1.Chart)
                     customaxis2 = Steema.TeeChart.Axes.CreateNewAxis(Me.TChart2.Chart)
-                    customaxis1.Visible = True
+                    'customaxis1.Visible = True
                     customaxis2.Visible = True
                     'Jede zweite Achse rechts anzeigen
                     If ((AxisNo) Mod 2 = 0) Then
-                        customaxis1.OtherSide = True
+                        'customaxis1.OtherSide = True
                         customaxis2.OtherSide = True
                     End If
                     'Abstand berechnen
-                    customaxis1.RelativePosition = Math.Ceiling((AxisNo - 2) / 2) * 8
+                    'customaxis1.RelativePosition = Math.Ceiling((AxisNo - 2) / 2) * 8
                     customaxis2.RelativePosition = Math.Ceiling((AxisNo - 2) / 2) * 8
 
-                    customaxis1.Title.Caption = einheit
-                    customaxis1.Title.Angle = 90
+                    'customaxis1.Title.Caption = einheit
+                    'customaxis1.Title.Angle = 90
 
-                    Me.MyAxes1.Add(einheit, customaxis1)
+                    'Me.MyAxes1.Add(einheit, customaxis1)
                     Me.MyAxes2.Add(einheit, customaxis2)
 
             End Select
@@ -1132,33 +1185,42 @@ Public Class Wave
     '*********************************
     Public Sub PrepareChart_RVA()
 
-        'Übersicht ausschalten
-        Call Me.Übersicht_Toggle(False)
+        ''Übersicht ausschalten
+        'Call Me.Übersicht_Toggle(False)
 
-        'Titel
-        Me.TChart1.Header.Text = "RVA Analysis"
+        ''Titel
+        'Me.TChart1.Header.Text = "RVA Analysis"
 
-        'Achsen formatieren
-        Me.TChart1.Axes.Bottom.Automatic = True
-        Me.TChart1.Axes.Bottom.Labels.Angle = 90
-        Me.TChart1.Axes.Bottom.Title.Caption = "IHA Parameter"
-        Me.TChart1.Axes.Bottom.MinorTicks.Visible = False
+        ''Achsen formatieren
+        'Me.TChart1.Axes.Bottom.Automatic = True
+        'Me.TChart1.Axes.Bottom.Labels.Angle = 90
+        'Me.TChart1.Axes.Bottom.Title.Caption = "IHA Parameter"
+        'Me.TChart1.Axes.Bottom.MinorTicks.Visible = False
 
-        Me.TChart1.Axes.Left.Automatic = False
-        Me.TChart1.Axes.Left.Minimum = -1.1
-        Me.TChart1.Axes.Left.Maximum = 2
-        Me.TChart1.Axes.Left.Labels.ValueFormat = "#,##0.0##"
-        Me.TChart1.Axes.Left.Title.Caption = "Hydrologic Alteration"
+        'Me.TChart1.Axes.Left.Automatic = False
+        'Me.TChart1.Axes.Left.Minimum = -1.1
+        'Me.TChart1.Axes.Left.Maximum = 2
+        'Me.TChart1.Axes.Left.Labels.ValueFormat = "#,##0.0##"
+        'Me.TChart1.Axes.Left.Title.Caption = "Hydrologic Alteration"
 
-        'Legende
-        Me.TChart1.Legend.CheckBoxes = True
+        ''Legende
+        'Me.TChart1.Legend.CheckBoxes = True
 
-        'Markstips
-        Dim markstip As New Steema.TeeChart.Tools.MarksTip()
-        markstip.Style = Steema.TeeChart.Styles.MarksStyles.Value
-        Me.TChart1.Tools.Add(markstip)
+        ''Markstips
+        'Dim markstip As New Steema.TeeChart.Tools.MarksTip()
+        'markstip.Style = Steema.TeeChart.Styles.MarksStyles.Value
+        'Me.TChart1.Tools.Add(markstip)
 
     End Sub
+
+    ' Return a random RGB color.
+    Public Function RandomRGBColor() As Color
+        Dim m_Rnd As New Random
+        Return Color.FromArgb(255, _
+            m_Rnd.Next(0, 255), _
+            m_Rnd.Next(0, 255), _
+            m_Rnd.Next(0, 255))
+    End Function
 
 #End Region 'Funktionalität
 
