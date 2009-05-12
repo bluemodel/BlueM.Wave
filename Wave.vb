@@ -349,8 +349,7 @@ Public Class Wave
     Private Sub Eingeben(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_EnterSeries.Click
         Dim SeriesEditor As New SeriesEditorDialog()
         If (SeriesEditor.ShowDialog() = Windows.Forms.DialogResult.OK) Then
-            Me.AddZeitreihe(SeriesEditor.Zeitreihe)
-            Call Me.Display_Series(SeriesEditor.Zeitreihe)
+            Call Me.Import_Series(SeriesEditor.Zeitreihe)
         End If
     End Sub
 
@@ -369,9 +368,8 @@ Public Class Wave
 
         'Dialog anzeigen
         If (cutter.ShowDialog() = Windows.Forms.DialogResult.OK) Then
-            'Neue Reihe speichern und anzeigen
-            Me.AddZeitreihe(cutter.zreCut)
-            Me.Display_Series(cutter.zreCut)
+            'Neue Reihe importieren
+            Me.Import_Series(cutter.zreCut)
         End If
 
     End Sub
@@ -622,9 +620,8 @@ Public Class Wave
                 Call Datei.Read_File()
                 'Alle Zeitreihen der Datei durchlaufen
                 For Each zre As Zeitreihe In Datei.Zeitreihen
-                    'Jede Zeitreihe abspeichern und anzeigen
-                    Call Me.AddZeitreihe(zre)
-                    Call Me.Display_Series(zre)
+                    'Jede Zeitreihe importieren
+                    Call Me.Import_Series(zre)
                 Next
             Next
 
@@ -819,10 +816,8 @@ Public Class Wave
 
                         'Alle eingelesenen Zeitreihen der Datei durchlaufen
                         For i = 0 To Datei.Zeitreihen.GetUpperBound(0)
-                            'Serie abspeichen
-                            Me.AddZeitreihe(Datei.Zeitreihen(i))
-                            'Serie anzeigen
-                            Call Me.Display_Series(Datei.Zeitreihen(i))
+                            'Serie importieren
+                            Call Me.Import_Series(Datei.Zeitreihen(i))
                         Next
 
                         'Log
@@ -923,10 +918,22 @@ Public Class Wave
     End Function
 
     ''' <summary>
+    ''' Import a time series
+    ''' </summary>
+    ''' <param name="zre">the time series</param>
+    ''' <remarks>saves and then display the time series</remarks>
+    Public Sub Import_Series(ByVal zre As Zeitreihe)
+        'Serie abspeichen
+        Me.AddZeitreihe(zre)
+        'Serie anzeigen
+        Call Me.Display_Series(zre)
+    End Sub
+
+    ''' <summary>
     ''' Eine Zeitreihe im Diagramm anzeigen
     ''' </summary>
     ''' <param name="zre">Die anzuzeigende Zeitreihe</param>
-    Public Sub Display_Series(ByVal zre As Zeitreihe)
+    Private Sub Display_Series(ByVal zre As Zeitreihe)
 
         Dim AxisNo As Integer
 
