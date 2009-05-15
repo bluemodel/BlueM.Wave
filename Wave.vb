@@ -193,27 +193,22 @@ Public Class Wave
     '********************
     Private Sub UpdateCharts()
 
-        Dim i, AnzSerien As Integer
+        Dim Xmin, Xmax As DateTime
 
-        AnzSerien = Me.TChart1.Series.Count()
-
-        'kleinsten und größten X-Wert bestimmen
-        Dim Xmin, Xmax, tmpXmin, tmpXmax As DateTime
-        Xmin = Date.FromOADate(Me.TChart1.Series(0).MinXValue)
-        Xmax = Date.FromOADate(Me.TChart1.Series(0).MaxXValue)
-        For i = 1 To AnzSerien - 1
-            tmpXmin = Date.FromOADate(Me.TChart1.Series(i).MinXValue)
-            tmpXmax = Date.FromOADate(Me.TChart1.Series(i).MaxXValue)
-            If (tmpXmin < Xmin) Then Xmin = tmpXmin
-            If (tmpXmax > Xmax) Then Xmax = tmpXmax
+        'Min- und Max-Datum bestimmen
+        Xmin = DateTime.MaxValue
+        Xmax = DateTime.MinValue
+        For Each zre As Zeitreihe In Me.Zeitreihen.Values
+            If (zre.Anfangsdatum < Xmin) Then Xmin = zre.Anfangsdatum
+            If (zre.Enddatum > Xmax) Then Xmax = zre.Enddatum
         Next
 
         'Übersicht neu skalieren
         Me.TChart2.Axes.Bottom.Minimum = Xmin.ToOADate()
         Me.TChart2.Axes.Bottom.Maximum = Xmax.ToOADate()
 
+        'Wenn noch nicht gezoomed wurde, Gesamtzeitraum auswählen
         If (Not Me.selectionMade) Then
-            'Alles auswählen
             colorBand1.Start = Me.TChart2.Axes.Bottom.Minimum
             colorBand1.End = Me.TChart2.Axes.Bottom.Maximum
         End If
