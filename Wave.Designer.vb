@@ -358,8 +358,8 @@ Partial Class Wave
     Friend WithEvents OpenFileDialog1 As System.Windows.Forms.OpenFileDialog
     Friend WithEvents DateTimePicker1 As System.Windows.Forms.DateTimePicker
     Friend WithEvents SplitContainer1 As System.Windows.Forms.SplitContainer
-    Public WithEvents TChart2 As Steema.TeeChart.TChart
-    Public WithEvents TChart1 As Steema.TeeChart.TChart
+    Friend WithEvents TChart2 As Steema.TeeChart.TChart
+    Friend WithEvents TChart1 As Steema.TeeChart.TChart
     Friend WithEvents ToolStripButton_Neu As System.Windows.Forms.ToolStripButton
     Friend WithEvents ToolStripButton_Öffnen As System.Windows.Forms.ToolStripButton
     Friend WithEvents ToolStripButton_Speichern As System.Windows.Forms.ToolStripButton
@@ -374,7 +374,7 @@ Partial Class Wave
     Friend WithEvents ToolStripButton_Import As System.Windows.Forms.ToolStripButton
     Friend WithEvents ToolStripButton_EnterSeries As System.Windows.Forms.ToolStripButton
     Friend WithEvents ToolStripButton_Cut As System.Windows.Forms.ToolStripButton
-    Private WithEvents ToolStripButton_ReRead As System.Windows.Forms.ToolStripButton
+    Friend WithEvents ToolStripButton_ReRead As System.Windows.Forms.ToolStripButton
     Friend WithEvents ToolStripSplitButton_Help As System.Windows.Forms.ToolStripSplitButton
     Friend WithEvents HilfeToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents AboutToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
