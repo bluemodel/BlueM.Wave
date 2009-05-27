@@ -428,6 +428,9 @@ Public Class Wave
                 Case Dateiformate.REG
                     Me.SaveFileDialog1.DefaultExt = "reg"
                     Me.SaveFileDialog1.Filter = "REG-Dateien (*.reg)|*.reg"
+                Case Dateiformate.SREG
+                    Me.SaveFileDialog1.DefaultExt = "reg"
+                    Me.SaveFileDialog1.Filter = "SMUSI-REG-Dateien (*.reg)|*.reg"
             End Select
             Me.SaveFileDialog1.Filter &= "|Alle Dateien (*.*)|*.*"
             Me.SaveFileDialog1.FilterIndex = 1
@@ -448,6 +451,12 @@ Public Class Wave
                             Reihe = CType(item, Zeitreihe)
                             Call REG.Write_File(Reihe, Me.SaveFileDialog1.FileName)
                         Next
+                    Case Dateiformate.SREG
+                        For Each item As Object In ExportDiag.ListBox_Zeitreihen.SelectedItems
+                            Reihe = CType(item, Zeitreihe)
+                            Call SMUSI_REG.Write_File(Reihe, Me.SaveFileDialog1.FileName)
+                        Next
+                        
                     Case Else
                         MsgBox("Noch nicht implementiert!", MsgBoxStyle.Exclamation, "Wave")
                 End Select
