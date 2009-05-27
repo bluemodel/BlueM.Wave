@@ -26,6 +26,7 @@ Module Konstanten
         CSV = 3
         ASC = 4
         REG = 5
+        SREG = 6
     End Enum
 
     ''' <summary>

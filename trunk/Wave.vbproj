@@ -104,10 +104,13 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Dateiformate\DWD_T_L.vb" />
-    <Compile Include="Dateiformate\REG.vb" />
+    <Compile Include="Dateiformate\REG.vb">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Dateiformate\SMB.vb" />
     <Compile Include="Dateiformate\Dateiformat.vb" />
     <Compile Include="Dateiformate\RVA.vb" />
+    <Compile Include="Dateiformate\SMUSI_REG.vb" />
     <Compile Include="Log.vb" />
     <Compile Include="My Project\ApplicationEvents.vb" />
     <Compile Include="My Project\Resources.Designer.vb">
