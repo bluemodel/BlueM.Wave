@@ -42,7 +42,7 @@
     <Reference Include="System" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
-    <Reference Include="TeeChart, Version=3.5.3371.26406, Culture=neutral, PublicKeyToken=9c8126276c77bdb7, processorArchitecture=MSIL">
+    <Reference Include="TeeChart, Version=4.0.2009.16184, Culture=neutral, PublicKeyToken=9c8126276c77bdb7, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
     </Reference>
   </ItemGroup>
@@ -216,7 +216,6 @@
       <SubType>Designer</SubType>
       <DependentUpon>LogWindow.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="My Project\licenses.licx" />
     <EmbeddedResource Include="Resources\Wave.ico" />
   </ItemGroup>
   <ItemGroup>
@@ -261,6 +260,7 @@
     <EmbeddedResource Include="Dateiformate\DWD_Stationswahl.resx">
       <DependentUpon>DWD_Stationswahl.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="My Project\licenses.licx" />
     <EmbeddedResource Include="Resources\log.ico" />
     <None Include="Resources\script.png" />
   </ItemGroup>

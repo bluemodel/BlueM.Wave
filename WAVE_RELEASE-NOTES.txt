@@ -8,7 +8,9 @@ Website: http://ihwb.tu-darmstadt.de/bluem/
 Version 1.3
 -----------
 FIXED:
-* Einlesen von Zeitreihen aus ten-Dateien
+* Einlesen von Zeitreihen aus TEN-Dateien
+CHANGED:
+* Upgrade auf TeeChart v4
 
 Version 1.2
 -----------
@@ -17,7 +19,6 @@ UPDATE:
 NEW:
 * Analysefunktion GoodnessOfFit erweitert um folgende Indikatoren: 
   Volumenfehler, Korrelationskoeffizient, Hydrologische Deviation
-
 
 Version 1.1
 -----------
