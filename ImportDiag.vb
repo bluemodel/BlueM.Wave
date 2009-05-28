@@ -179,53 +179,60 @@ Partial Public Class ImportDiag
 
         Dim i As Integer
 
-        'Dezimaltrennzeichen
-        Me.ComboBox_Dezimaltrennzeichen.SelectedItem = Me.datei.Dezimaltrennzeichen
+        Try
 
-        'Zeilennummern
-        Me.TextBox_Zeile‹berschriften.Text = Me.datei.iZeileUeberschriften
-        Me.TextBox_ZeileDaten.Text = Me.datei.iZeileDaten
+            'Dezimaltrennzeichen
+            Me.ComboBox_Dezimaltrennzeichen.SelectedItem = Me.datei.Dezimaltrennzeichen
 
-        'Einheiten
-        If (Me.datei.UseEinheiten) Then
-            Me.CheckBox_Einheiten.Checked = True
-            Me.TextBox_ZeileEinheiten.Enabled = True
-        Else
-            Me.CheckBox_Einheiten.Checked = False
-            Me.TextBox_ZeileEinheiten.Enabled = False
-        End If
-        Me.TextBox_ZeileEinheiten.Text = Me.datei.iZeileEinheiten
+            'Zeilennummern
+            Me.TextBox_Zeile‹berschriften.Text = Me.datei.iZeileUeberschriften
+            Me.TextBox_ZeileDaten.Text = Me.datei.iZeileDaten
 
-        'Spaltenformat
-        Me.RadioButton_Zeichengetrennt.Checked = Me.datei.Zeichengetrennt
-        If (Me.datei.Zeichengetrennt) Then
-            Me.RadioButton_Zeichengetrennt.Checked = True
-            Me.ComboBox_Trennzeichen.Enabled = True
-            Me.TextBox_Spaltenbreite.Enabled = False
-        Else
-            Me.RadioButton_Zeichengetrennt.Checked = False
-            Me.ComboBox_Trennzeichen.Enabled = False
-            Me.TextBox_Spaltenbreite.Enabled = True
-        End If
-
-        'Trennzeichen
-        Me.ComboBox_Trennzeichen.SelectedItem = Me.datei.Trennzeichen
-
-        'Spaltenbreite
-        Me.TextBox_Spaltenbreite.Text = Me.datei.Spaltenbreite
-
-        'XSpalte
-        Me.TextBox_XSpalte.Text = Me.datei.Spalten(Me.datei.XSpalte).Name
-
-        'YSpalten
-        Me.ListBox_YSpalten.Items.Clear()
-        Call Me.ListBox_YSpalten.BeginUpdate()
-        For i = 0 To datei.Spalten.Length - 1
-            If (i <> datei.XSpalte) Then
-                Me.ListBox_YSpalten.Items.Add(datei.Spalten(i))
+            'Einheiten
+            If (Me.datei.UseEinheiten) Then
+                Me.CheckBox_Einheiten.Checked = True
+                Me.TextBox_ZeileEinheiten.Enabled = True
+            Else
+                Me.CheckBox_Einheiten.Checked = False
+                Me.TextBox_ZeileEinheiten.Enabled = False
             End If
-        Next
-        Call Me.ListBox_YSpalten.EndUpdate()
+            Me.TextBox_ZeileEinheiten.Text = Me.datei.iZeileEinheiten
+
+            'Spaltenformat
+            Me.RadioButton_Zeichengetrennt.Checked = Me.datei.Zeichengetrennt
+            If (Me.datei.Zeichengetrennt) Then
+                Me.RadioButton_Zeichengetrennt.Checked = True
+                Me.ComboBox_Trennzeichen.Enabled = True
+                Me.TextBox_Spaltenbreite.Enabled = False
+            Else
+                Me.RadioButton_Zeichengetrennt.Checked = False
+                Me.ComboBox_Trennzeichen.Enabled = False
+                Me.TextBox_Spaltenbreite.Enabled = True
+            End If
+
+            'Trennzeichen
+            Me.ComboBox_Trennzeichen.SelectedItem = Me.datei.Trennzeichen
+
+            'Spaltenbreite
+            Me.TextBox_Spaltenbreite.Text = Me.datei.Spaltenbreite
+
+            'XSpalte
+            Me.TextBox_XSpalte.Text = Me.datei.Spalten(Me.datei.XSpalte).Name
+
+            'YSpalten
+            Me.ListBox_YSpalten.Items.Clear()
+            Call Me.ListBox_YSpalten.BeginUpdate()
+            For i = 0 To datei.Spalten.Length - 1
+                If (i <> datei.XSpalte) Then
+                    Me.ListBox_YSpalten.Items.Add(datei.Spalten(i))
+                End If
+            Next
+            Call Me.ListBox_YSpalten.EndUpdate()
+
+        Catch ex As Exception
+
+        End Try
+        
 
     End Sub
 

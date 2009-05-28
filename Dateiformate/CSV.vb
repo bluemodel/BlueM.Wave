@@ -44,7 +44,7 @@ Public Class CSV
             Dim StrReadSync = TextReader.Synchronized(StrRead)
 
             'Spaltenüberschriften auslesen
-            For i = 1 To Me.iZeileDaten
+            For i = 1 To math.Max(Me.iZeileDaten,me.iZeileUeberschriften+1)
                 Zeile = StrReadSync.ReadLine.ToString
                 If (i = Me.iZeileUeberschriften) Then ZeileSpalten = Zeile
                 If (i = Me.iZeileEinheiten) Then ZeileEinheiten = Zeile
@@ -64,7 +64,7 @@ Public Class CSV
                 'Zeichengetrennt
                 Namen = ZeileSpalten.Split(New Char() {Me.Trennzeichen.Character}, StringSplitOptions.RemoveEmptyEntries)
                 Einheiten = ZeileEinheiten.Split(New Char() {Me.Trennzeichen.Character}, StringSplitOptions.RemoveEmptyEntries)
-                anzSpalten = Namen.Length - 1
+                anzSpalten = Namen.Length 
             Else
                 'Spalten mit fester Breite
                 anzSpalten = Math.Ceiling(ZeileSpalten.Length / Me.Spaltenbreite)
@@ -78,14 +78,17 @@ Public Class CSV
 
             'Spalten abspeichern
             ReDim Me.Spalten(anzSpalten - 1)
-            For i = 0 To anzSpalten - 1
+            For i = 0 To Namen.Length - 1
                 Me.Spalten(i).Name = Namen(i).Trim()
-                Me.Spalten(i).Einheit = Einheiten(i).Trim()
                 Me.Spalten(i).Index = i
             Next
 
+            For i = 0 to Einheiten.Length -1
+                Me.Spalten(i).Einheit = Einheiten(i).Trim()
+            Next
+
         Catch ex As Exception
-            MsgBox("Konnte Datei nicht einlesen!" & eol & eol & "Fehler: " & ex.Message, MsgBoxStyle.Critical, "Fehler")
+            'MsgBox("Konnte Datei nicht einlesen!" & eol & eol & "Fehler: " & ex.Message, MsgBoxStyle.Critical, "Fehler")
         End Try
 
     End Sub
@@ -139,7 +142,7 @@ Public Class CSV
                     '---------------
                     Werte = Zeile.Split(New Char() {Me.Trennzeichen.Character}, StringSplitOptions.RemoveEmptyEntries)
 
-                    If (Werte.Length > 0) Then
+                    If (Werte.Length > 0 and Zeile.Trim.Length > 1) Then
                         'Erste Spalte: Datum_Zeit
                         ok = DateTime.TryParseExact(Werte(Me.XSpalte), DatumsformatCSV, Konstanten.Zahlenformat, Globalization.DateTimeStyles.None, datum)
                         If (Not ok) Then
