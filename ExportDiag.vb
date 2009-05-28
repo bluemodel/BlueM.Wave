@@ -9,10 +9,10 @@ Public Class ExportDiag
             Case Konstanten.Dateiformate.ZRE
                 Me.ListBox_Zeitreihen.SelectionMode = SelectionMode.One
 
-            Case Konstanten.Dateiformate.REG
+            Case Konstanten.Dateiformate.REG_HYSTEM
                 Me.ListBox_Zeitreihen.SelectionMode = SelectionMode.One
 
-            Case Konstanten.Dateiformate.SREG
+            Case Konstanten.Dateiformate.REG_SMUSI
                 Me.ListBox_Zeitreihen.SelectionMode = SelectionMode.One
 
             Case Else
