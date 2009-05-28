@@ -1,4 +1,5 @@
-﻿''' <summary>
+﻿Imports System.IO
+''' <summary>
 ''' Factory zur Erzeugung von Datei-Instanzen
 ''' </summary>
 Public Module Dateifactory
@@ -14,7 +15,7 @@ Public Module Dateifactory
     Public Const FileExtZRE As String = ".ZRE"
     Public Const FileExtTEN As String = ".TEN"
     Public Const FileExtDTL As String = ".DTL" 'DWD-Daten: Temperatur und Luftfeuchte
-    Public Const FileExtSREG As String = ".SREG" 'SMUSI-REGEN
+    'Public Const FileExtSREG As String = ".SREG" 'SMUSI-REGEN
 
     ''' <summary>
     ''' Erzeugt eine zur Dateiendung passende Datei-Instanz
@@ -38,13 +39,35 @@ Public Module Dateifactory
 
             Case FileExtASC
                 Datei = New ASC(file)
-            
-            'TODO: Abfrage ob SMUSI ODER HYSTEM
-            Case FileExtREG, FileExtDAT
-                Datei = New REG(file)
 
-            Case FileExtSREG
-                Datei = New SMUSI_REG(file)
+            Case FileExtDAT
+                Datei = New REG(file) 'Hystem-Extran
+
+            
+            Case FileExtREG
+                'Abfrage ob SMUSI oder HYSTEM
+                Dim FiStr As FileStream = New FileStream(file, FileMode.Open, IO.FileAccess.Read)
+                Dim StrRead As StreamReader = New StreamReader(FiStr, System.Text.Encoding.GetEncoding("iso8859-1"))
+                Dim StrReadSync = TextReader.Synchronized(StrRead)
+                Dim Zeile As String = ""
+
+                '2 Zeilen einlesen
+                Zeile = StrReadSync.ReadLine.ToString()
+                Zeile = StrReadSync.ReadLine.ToString()
+
+                StrReadSync.close()
+                StrRead.Close()
+                FiStr.Close()
+                
+                If Zeile.Substring(0,4) = "hN =" Then
+                    'SMUSI-Regenreihe
+                    Datei = New SMUSI_REG(file)
+                Else
+                    'Hystem-Regenreihen
+                    Datei = New REG(file)
+                End If
+            'Case FileExtSREG
+                
 
             Case FileExtRVA
                 Datei = New RVA(file)

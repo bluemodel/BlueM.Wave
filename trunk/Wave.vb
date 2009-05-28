@@ -425,10 +425,10 @@ Public Class Wave
                 Case Dateiformate.ZRE
                     Me.SaveFileDialog1.DefaultExt = "zre"
                     Me.SaveFileDialog1.Filter = "ZRE-Dateien (*.zre)|*.zre"
-                Case Dateiformate.REG
+                Case Dateiformate.REG_HYSTEM
                     Me.SaveFileDialog1.DefaultExt = "reg"
-                    Me.SaveFileDialog1.Filter = "REG-Dateien (*.reg)|*.reg"
-                Case Dateiformate.SREG
+                    Me.SaveFileDialog1.Filter = "HYSTEM-REG-Dateien (*.reg)|*.reg"
+                Case Dateiformate.REG_SMUSI
                     Me.SaveFileDialog1.DefaultExt = "reg"
                     Me.SaveFileDialog1.Filter = "SMUSI-REG-Dateien (*.reg)|*.reg"
             End Select
@@ -446,12 +446,12 @@ Public Class Wave
                             Reihe = CType(item, Zeitreihe)
                             Call ZRE.Write_File(Reihe, Me.SaveFileDialog1.FileName)
                         Next
-                    Case Dateiformate.REG
+                    Case Dateiformate.REG_HYSTEM
                         For Each item As Object In ExportDiag.ListBox_Zeitreihen.SelectedItems
                             Reihe = CType(item, Zeitreihe)
                             Call REG.Write_File(Reihe, Me.SaveFileDialog1.FileName)
                         Next
-                    Case Dateiformate.SREG
+                    Case Dateiformate.REG_SMUSI
                         For Each item As Object In ExportDiag.ListBox_Zeitreihen.SelectedItems
                             Reihe = CType(item, Zeitreihe)
                             Call SMUSI_REG.Write_File(Reihe, Me.SaveFileDialog1.FileName)
