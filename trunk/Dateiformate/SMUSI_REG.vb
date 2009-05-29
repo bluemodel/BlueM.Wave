@@ -222,18 +222,44 @@ Public Class SMUSI_REG
 
         Summe = 0 ' Jahresniederschlagshöhe
 
-        '1. Zeile
-        'strwrite.WriteLine("KONVertierte REG-Reihe")
-
-        '2. Zeile: 
-        'strwrite.WriteLine("hN =???? mm/a")
+        'Anfangsdatum und Enddatum der zu exporierenden Zeitreihe bestimmen
+        'Es müssen 12 Stundenwerte in der Zeitreihe vorliegen, sonst wird
+        'abgeschniten
         
-        '3. Zeile: 
-        'strwrite.WriteLine("================================================================================")
+        'ExportStartDatum
+        Dim Datum, ExportStartDatum, ExportEndDatum As DateTime
+        Dim iDatum As Integer
+        iDatum = 0
+        Datum = KontiReihe.Xwerte(iDatum)
+        Do While Datum.Minute > 0
+            iDatum = iDatum + 1
+            Datum = KontiReihe.Xwerte(iDatum)
+        Loop
+        ExportStartDatum = Datum
+
+        'ExportEndDatum
+        Datum = KontiReihe.XWerte(KontiReihe.Length-1)
+        Dim Endstunde As Integer
+        If Datum.Minute <> 55
+            Endstunde = Datum.Hour-1
+        Else 
+            Endstunde = Datum.Hour
+        End If
+        ExportEndDatum = New System.DateTime(Datum.Year, Datum.Month, Datum.Day,Endstunde, 55, 0, New System.Globalization.GregorianCalendar())
+        Dim iDatumEnd As Integer
+        iDatumEnd = KontiReihe.Length-1
+        Datum = KontiReihe.Xwerte(iDatumEnd)
+        Do While Datum  <> ExportEndDatum
+            iDatumEnd = iDatumEnd-1
+            Datum = KontiReihe.Xwerte(iDatumEnd)
+        Loop
+        
+        Dim AnzahlZeilen As Integer
+        AnzahlZeilen = (iDatumEnd-iDatum)/WerteproZeile
 
         'Wertezeilen...
-        n = 0   'n = Anzahl der Zeitreihenwerte
-        For iZeile = 0 To (KontiReihe.Length / WerteproZeile) - 1
+        n = iDatum   'Ausgabe beginnt bei ersten vollen Stunde in der Zeitreihe
+        For iZeile = 0 To Anzahlzeilen -1
             strwrite.Write("KONV ")
             strwrite.Write(KontiReihe.XWerte(n).ToString(DatumsformatSMUSI_REG))
             For j = 1 To WerteproZeile
@@ -243,7 +269,6 @@ Public Class SMUSI_REG
                 n = n + 1
             Next
             strwrite.WriteLine()
-                    
         Next
         strwrite.Close()
 
@@ -254,7 +279,7 @@ Public Class SMUSI_REG
 
         'Mittlere Jahresniederschlagshöhe berechnen
         Spanne = KontiReihe.Enddatum - KontiReihe.Anfangsdatum
-        Divisor = Spanne.TotalDays /365
+        Divisor = Math.Max(Spanne.TotalDays /365,1)
         hn_A_Mittel = Summe/1000 *1/Divisor
 
         'Komplette Datei einlesen
