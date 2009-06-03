@@ -230,7 +230,7 @@ Public Class SMUSI_REG
         Dim Datum, ExportStartDatum, ExportEndDatum As DateTime
         Dim iDatum As Integer
         iDatum = 0
-        Datum = KontiReihe.Xwerte(iDatum)
+        Datum = KontiReihe.Anfangsdatum
         Do While Datum.Minute > 0
             iDatum = iDatum + 1
             Datum = KontiReihe.Xwerte(iDatum)
@@ -238,20 +238,20 @@ Public Class SMUSI_REG
         ExportStartDatum = Datum
 
         'ExportEndDatum
-        Datum = KontiReihe.XWerte(KontiReihe.Length-1)
+        Datum = KontiReihe.Enddatum
         Dim Endstunde As Integer
         If Datum.Minute <> 55
-            Endstunde = Datum.Hour-1
+            Endstunde = Datum.Hour - 1
         Else 
             Endstunde = Datum.Hour
         End If
         ExportEndDatum = New System.DateTime(Datum.Year, Datum.Month, Datum.Day,Endstunde, 55, 0, New System.Globalization.GregorianCalendar())
         Dim iDatumEnd As Integer
-        iDatumEnd = KontiReihe.Length-1
-        Datum = KontiReihe.Xwerte(iDatumEnd)
+        iDatumEnd = KontiReihe.Length - 1
+        Datum = KontiReihe.Enddatum
         Do While Datum  <> ExportEndDatum
-            iDatumEnd = iDatumEnd-1
-            Datum = KontiReihe.Xwerte(iDatumEnd)
+            iDatumEnd = iDatumEnd - 1
+            Datum = KontiReihe.XWerte(iDatumEnd)
         Loop
         
         Dim AnzahlZeilen As Integer
@@ -259,7 +259,7 @@ Public Class SMUSI_REG
 
         'Wertezeilen...
         n = iDatum   'Ausgabe beginnt bei ersten vollen Stunde in der Zeitreihe
-        For iZeile = 0 To Anzahlzeilen -1
+        For iZeile = 0 To Anzahlzeilen - 1
             strwrite.Write("KONV ")
             strwrite.Write(KontiReihe.XWerte(n).ToString(DatumsformatSMUSI_REG))
             For j = 1 To WerteproZeile
@@ -279,12 +279,13 @@ Public Class SMUSI_REG
 
         'Mittlere Jahresniederschlagshöhe berechnen
         Spanne = KontiReihe.Enddatum - KontiReihe.Anfangsdatum
-        Divisor = Math.Max(Spanne.TotalDays /365,1)
-        hn_A_Mittel = Summe/1000 *1/Divisor
+        Divisor = Math.Max(Spanne.TotalDays / 365, 1)
+        hn_A_Mittel = Summe / 1000 * 1 / Divisor
 
         'Komplette Datei einlesen
         alles = StrRead.ReadToEnd()
-        StrRead.Close
+        StrRead.Close()
+        FiStr.Close()
 
         strwrite = New StreamWriter(File)
         strwrite.WriteLine("KONVertierte REG-Reihe")
@@ -295,7 +296,8 @@ Public Class SMUSI_REG
         strwrite.WriteLine("================================================================================")
 
         strwrite.Write(alles)
-        strwrite.Close
+        strwrite.Close()
+
     End Sub
 
     ''' <summary>
