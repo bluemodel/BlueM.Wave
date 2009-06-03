@@ -298,6 +298,32 @@ Public Class SMUSI_REG
         strwrite.Close
     End Sub
 
+    ''' <summary>
+    ''' Prüft, ob es sich um eine SMUSI-REG-Datei handelt
+    ''' </summary>
+    ''' <param name="file">Pfad zur Datei</param>
+    ''' <returns></returns>
+    Public Shared Function verifyFormat(ByVal file As String) As Boolean
+
+        Dim FiStr As FileStream = New FileStream(file, FileMode.Open, IO.FileAccess.Read)
+        Dim StrRead As StreamReader = New StreamReader(FiStr, System.Text.Encoding.GetEncoding("iso8859-1"))
+        Dim Zeile As String = ""
+
+        '2 Zeilen einlesen
+        Zeile = StrRead.ReadLine.ToString()
+        Zeile = StrRead.ReadLine.ToString()
+
+        StrRead.Close()
+        FiStr.Close()
+
+        If (Zeile.Substring(0, 4) = "hN =") Then
+            'Es ist eine SMUSI-Regenreihe!
+            Return True
+        Else
+            Return False
+        End If
+
+    End Function
 
 #End Region 'Methoden
 
