@@ -22,7 +22,6 @@ Partial Class ImportDiag
     'Das Bearbeiten mit dem Code-Editor ist nicht möglich.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-        Me.components = New System.ComponentModel.Container
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(ImportDiag))
         Me.Label_Datei = New System.Windows.Forms.Label
         Me.TextBox_Vorschau = New System.Windows.Forms.RichTextBox
@@ -51,7 +50,8 @@ Partial Class ImportDiag
         Me.TextBox_Suche = New System.Windows.Forms.TextBox
         Me.GroupBox_Dezimaltrennzeichen = New System.Windows.Forms.GroupBox
         Me.Label_Dezimaltrennzeichen = New System.Windows.Forms.Label
-        Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
+        Me.StatusStrip1 = New System.Windows.Forms.StatusStrip
+        Me.StatusImage = New System.Windows.Forms.ToolStripStatusLabel
         Me.GroupBox_Spaltenmodus.SuspendLayout()
         CType(Me.TextBox_ZeileÜberschriften, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.GroupBox_Einstellungen.SuspendLayout()
@@ -60,6 +60,7 @@ Partial Class ImportDiag
         Me.GroupBox_Vorschau.SuspendLayout()
         CType(Me.NumericUpDown_DatumsSpalte, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.GroupBox_Dezimaltrennzeichen.SuspendLayout()
+        Me.StatusStrip1.SuspendLayout()
         Me.SuspendLayout()
         '
         'Label_Datei
@@ -81,7 +82,7 @@ Partial Class ImportDiag
         Me.TextBox_Vorschau.Location = New System.Drawing.Point(12, 42)
         Me.TextBox_Vorschau.Name = "TextBox_Vorschau"
         Me.TextBox_Vorschau.ReadOnly = True
-        Me.TextBox_Vorschau.Size = New System.Drawing.Size(226, 259)
+        Me.TextBox_Vorschau.Size = New System.Drawing.Size(226, 252)
         Me.TextBox_Vorschau.TabIndex = 16
         Me.TextBox_Vorschau.Text = ""
         Me.TextBox_Vorschau.WordWrap = False
@@ -100,7 +101,7 @@ Partial Class ImportDiag
         '
         Me.Button_OK.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Button_OK.DialogResult = System.Windows.Forms.DialogResult.OK
-        Me.Button_OK.Location = New System.Drawing.Point(229, 505)
+        Me.Button_OK.Location = New System.Drawing.Point(229, 498)
         Me.Button_OK.Name = "Button_OK"
         Me.Button_OK.Size = New System.Drawing.Size(75, 23)
         Me.Button_OK.TabIndex = 11
@@ -111,7 +112,7 @@ Partial Class ImportDiag
         '
         Me.Button_Cancel.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Button_Cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel
-        Me.Button_Cancel.Location = New System.Drawing.Point(310, 505)
+        Me.Button_Cancel.Location = New System.Drawing.Point(310, 498)
         Me.Button_Cancel.Name = "Button_Cancel"
         Me.Button_Cancel.Size = New System.Drawing.Size(75, 23)
         Me.Button_Cancel.TabIndex = 10
@@ -126,14 +127,14 @@ Partial Class ImportDiag
         Me.ListBox_YSpalten.Location = New System.Drawing.Point(247, 91)
         Me.ListBox_YSpalten.Name = "ListBox_YSpalten"
         Me.ListBox_YSpalten.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended
-        Me.ListBox_YSpalten.Size = New System.Drawing.Size(121, 186)
+        Me.ListBox_YSpalten.Size = New System.Drawing.Size(121, 173)
         Me.ListBox_YSpalten.TabIndex = 18
         '
         'Label_Suche
         '
         Me.Label_Suche.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Label_Suche.AutoSize = True
-        Me.Label_Suche.Location = New System.Drawing.Point(244, 288)
+        Me.Label_Suche.Location = New System.Drawing.Point(244, 281)
         Me.Label_Suche.Name = "Label_Suche"
         Me.Label_Suche.Size = New System.Drawing.Size(41, 13)
         Me.Label_Suche.TabIndex = 17
@@ -310,7 +311,7 @@ Partial Class ImportDiag
         Me.GroupBox_Vorschau.Controls.Add(Me.ListBox_YSpalten)
         Me.GroupBox_Vorschau.Location = New System.Drawing.Point(12, 187)
         Me.GroupBox_Vorschau.Name = "GroupBox_Vorschau"
-        Me.GroupBox_Vorschau.Size = New System.Drawing.Size(373, 312)
+        Me.GroupBox_Vorschau.Size = New System.Drawing.Size(373, 305)
         Me.GroupBox_Vorschau.TabIndex = 28
         Me.GroupBox_Vorschau.TabStop = False
         Me.GroupBox_Vorschau.Text = "Vorschau"
@@ -340,11 +341,10 @@ Partial Class ImportDiag
         'TextBox_Suche
         '
         Me.TextBox_Suche.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TextBox_Suche.Location = New System.Drawing.Point(291, 285)
+        Me.TextBox_Suche.Location = New System.Drawing.Point(291, 278)
         Me.TextBox_Suche.Name = "TextBox_Suche"
         Me.TextBox_Suche.Size = New System.Drawing.Size(77, 20)
         Me.TextBox_Suche.TabIndex = 23
-        Me.ToolTip1.SetToolTip(Me.TextBox_Suche, "Suche")
         '
         'GroupBox_Dezimaltrennzeichen
         '
@@ -367,12 +367,29 @@ Partial Class ImportDiag
         Me.Label_Dezimaltrennzeichen.TabIndex = 23
         Me.Label_Dezimaltrennzeichen.Text = "Dezimaltrennzeichen:"
         '
+        'StatusStrip1
+        '
+        Me.StatusStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.StatusImage})
+        Me.StatusStrip1.Location = New System.Drawing.Point(0, 524)
+        Me.StatusStrip1.Name = "StatusStrip1"
+        Me.StatusStrip1.Size = New System.Drawing.Size(392, 22)
+        Me.StatusStrip1.TabIndex = 30
+        Me.StatusStrip1.Text = "StatusStrip1"
+        '
+        'StatusImage
+        '
+        Me.StatusImage.Image = Global.IHWB.Wave.My.Resources.Resources.tick
+        Me.StatusImage.Name = "StatusImage"
+        Me.StatusImage.Size = New System.Drawing.Size(37, 17)
+        Me.StatusImage.Text = "OK"
+        '
         'ImportDiag
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.CancelButton = Me.Button_Cancel
-        Me.ClientSize = New System.Drawing.Size(392, 534)
+        Me.ClientSize = New System.Drawing.Size(392, 546)
+        Me.Controls.Add(Me.StatusStrip1)
         Me.Controls.Add(Me.GroupBox_Dezimaltrennzeichen)
         Me.Controls.Add(Me.GroupBox_Vorschau)
         Me.Controls.Add(Me.GroupBox_Einstellungen)
@@ -399,7 +416,10 @@ Partial Class ImportDiag
         CType(Me.NumericUpDown_DatumsSpalte, System.ComponentModel.ISupportInitialize).EndInit()
         Me.GroupBox_Dezimaltrennzeichen.ResumeLayout(False)
         Me.GroupBox_Dezimaltrennzeichen.PerformLayout()
+        Me.StatusStrip1.ResumeLayout(False)
+        Me.StatusStrip1.PerformLayout()
         Me.ResumeLayout(False)
+        Me.PerformLayout()
 
     End Sub
     Private WithEvents GroupBox_Einstellungen As System.Windows.Forms.GroupBox
@@ -427,7 +447,8 @@ Partial Class ImportDiag
     Private WithEvents CheckBox_Einheiten As System.Windows.Forms.CheckBox
     Private WithEvents Label_Dezimaltrennzeichen As System.Windows.Forms.Label
     Private WithEvents TextBox_Suche As System.Windows.Forms.TextBox
-    Private WithEvents ToolTip1 As System.Windows.Forms.ToolTip
     Private WithEvents Label_Spaltenauswahl As System.Windows.Forms.Label
     Private WithEvents NumericUpDown_DatumsSpalte As System.Windows.Forms.NumericUpDown
+    Friend WithEvents StatusStrip1 As System.Windows.Forms.StatusStrip
+    Friend WithEvents StatusImage As System.Windows.Forms.ToolStripStatusLabel
 End Class
