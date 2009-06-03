@@ -248,7 +248,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\BlueM.png" />
-    <Content Include="Resources\help.png" />
+    <None Include="Resources\error.png" />
+    <None Include="Resources\help.png" />
+    <None Include="Resources\tick.png" />
     <Content Include="WAVE_RELEASE-NOTES.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
