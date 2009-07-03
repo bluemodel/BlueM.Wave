@@ -238,7 +238,7 @@ Public Class Wave
     'TChart2 DoubleClick
     '*******************
     Private Sub TChart2_DoubleClick(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TChart2.DoubleClick
-        Me.TChart2.ShowEditor()
+        Call Steema.TeeChart.Editor.Show(Me.TChart2)
     End Sub
 
     ''' <summary>
@@ -372,7 +372,7 @@ Public Class Wave
     'Edit Chart
     '**********
     Private Sub EditChart(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_EditChart.Click, TChart1.DoubleClick
-        Call Me.TChart1.ShowEditor()
+        Call Steema.TeeChart.Editor.Show(Me.TChart1)
     End Sub
 
     'Speichern
