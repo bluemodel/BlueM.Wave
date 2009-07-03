@@ -207,13 +207,13 @@ Public Class DWD_T_L
 
     End Sub
 
-    ''' <summary>
-    ''' TODO
-    ''' Exportiert eine Zeitreihe als dtl-Datei
-    ''' Nur zu Überprüfungszwecken
-    ''' </summary>
-    ''' <param name="Reihe">Die zu exportierende Zeitreihe</param>
-    ''' <param name="File">Pfad zur anzulegenden Datei</param>
+    '''' <summary>
+    '''' TODO
+    '''' Exportiert eine Zeitreihe als dtl-Datei
+    '''' Nur zu Überprüfungszwecken
+    '''' </summary>
+    '''' <param name="Reihe">Die zu exportierende Zeitreihe</param>
+    '''' <param name="File">Pfad zur anzulegenden Datei</param>
     'Public Shared Sub Write_File(ByVal Reihe As Zeitreihe, ByVal File As String)
 
     '    Dim dt As Integer
