@@ -62,8 +62,8 @@ Public Class CSV
 
             If (Me.Zeichengetrennt) Then
                 'Zeichengetrennt
-                Namen = ZeileSpalten.Split(New Char() {Me.Trennzeichen.Character}, StringSplitOptions.RemoveEmptyEntries)
-                Einheiten = ZeileEinheiten.Split(New Char() {Me.Trennzeichen.Character}, StringSplitOptions.RemoveEmptyEntries)
+                Namen = ZeileSpalten.Split(New Char() {Me.Trennzeichen.Character})
+                Einheiten = ZeileEinheiten.Split(New Char() {Me.Trennzeichen.Character})
                 anzSpalten = Namen.Length 
             Else
                 'Spalten mit fester Breite
@@ -140,7 +140,7 @@ Public Class CSV
 
                     'Zeichengetrennt
                     '---------------
-                    Werte = Zeile.Split(New Char() {Me.Trennzeichen.Character}, StringSplitOptions.RemoveEmptyEntries)
+                    Werte = Zeile.Split(New Char() {Me.Trennzeichen.Character})
 
                     If (Werte.Length > 0 and Zeile.Trim.Length > 1) Then
                         'Erste Spalte: Datum_Zeit
