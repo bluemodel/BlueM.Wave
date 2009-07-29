@@ -72,6 +72,7 @@ Public Class Zeitreihe
             Return _Einheit
         End Get
         Set(ByVal value As String)
+            If (value.Trim() = "") Then value = "-"
             _Einheit = value
         End Set
     End Property
