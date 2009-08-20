@@ -9,6 +9,9 @@ Version 1.3
 -----------
 FIXED:
 * Einlesen von Zeitreihen aus TEN-Dateien
+UPDATE:
+* Import von SMUSI REG-Dateien: Leerzeilen (Trockenperioden) 
+  werden durch 0-Stellen davor und dahinter berücksichtigt
 CHANGED:
 * Upgrade auf TeeChart v4
 
