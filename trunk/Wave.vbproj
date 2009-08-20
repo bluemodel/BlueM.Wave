@@ -105,7 +105,7 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Dateiformate\DWD_T_L.vb" />
-    <Compile Include="Dateiformate\REG.vb">
+    <Compile Include="Dateiformate\HystemExtran_REG.vb">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Dateiformate\SMB.vb" />
