@@ -1,13 +1,13 @@
 Imports System.IO
 
 ''' <summary>
-''' Klasse für das REG-Dateiformat (Hystem-Extran-Regendaten)
+''' Klasse für das Hystem-Extran REG-Dateiformat
 ''' </summary>
-''' <remarks>Format siehe http://130.83.196.154/BlueM/wiki/index.php/REG-Format</remarks>
-Public Class REG
+''' <remarks>Format siehe http://130.83.196.220/bluem/wiki/index.php/Hystem-Extran_REG-Format</remarks>
+Public Class HystemExtran_REG
     Inherits Dateiformat
 
-    Const DatumsformatREG As String = "ddMMyyyyHHmmss"
+    Const DatumsformatHystemExtran As String = "ddMMyyyyHHmmss"
     Const LenString As Integer = 5   'Länge des Strings eines Wertes in der reg/dat-Datei
     Const iDim As Integer = 3        'Dezimalfaktor wird erstmal global auf 3 gesetzt
 
@@ -229,9 +229,9 @@ Public Class REG
         'Dimension der Zehnerprotenz
         strwrite.Write((iDim * (-1)).ToString.PadLeft(5))
         'Anfangsdatum
-        strwrite.Write(KontiReihe.Anfangsdatum.ToString(DatumsformatREG))
+        strwrite.Write(KontiReihe.Anfangsdatum.ToString(DatumsformatHystemExtran))
         'Enddatum
-        strwrite.Write(KontiReihe.Enddatum.ToString(DatumsformatREG))
+        strwrite.Write(KontiReihe.Enddatum.ToString(DatumsformatHystemExtran))
         'Anzahl der Kommentarzeilen nach Zeile 2, wird = 3 gesetzt
         strwrite.Write("    3")
         'Art der Daten, N = Niederschlag, Q = Abfluss
@@ -251,7 +251,7 @@ Public Class REG
         n = 0   'n = Anzahl der Zeitreihenwerte
         For iZeile = 0 To (KontiReihe.Length / WerteproZeile) - 1
             strwrite.Write("TUD  ")
-            strwrite.Write(KontiReihe.XWerte(n).ToString(DatumsformatREG) & " ")
+            strwrite.Write(KontiReihe.XWerte(n).ToString(DatumsformatHystemExtran) & " ")
             For j = 1 To WerteproZeile
                 IntWert = KontiReihe.YWerte(n) * 10 ^ (iDim)
                 strwrite.Write(IntWert.ToString.PadLeft(5))

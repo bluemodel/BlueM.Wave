@@ -40,7 +40,7 @@ Public Module Dateifactory
                 Datei = New ASC(file)
 
             Case FileExtDAT
-                Datei = New REG(file) 'Hystem-Extran
+                Datei = New HystemExtran_REG(file)
 
             Case FileExtREG
                 'Dateiformat prüfen:
@@ -48,8 +48,8 @@ Public Module Dateifactory
                     'SMUSI-Regenreihe
                     Datei = New SMUSI_REG(file)
                 Else
-                    'Hystem-Regenreihe
-                    Datei = New REG(file)
+                    'Hystem-Extran-Regenreihe
+                    Datei = New HystemExtran_REG(file)
                 End If
 
             Case FileExtRVA
