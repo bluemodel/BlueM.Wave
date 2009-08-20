@@ -65,7 +65,8 @@ Public Class SMUSI_REG
     '****************
     Public Overrides Sub SpaltenAuslesen()
 
-        Dim Zeile As String = ""
+        Dim Zeile As String
+        Dim i As Integer
 
         Try
             'Datei öffnen
@@ -83,12 +84,14 @@ Public Class SMUSI_REG
             '2. Spalte (Y)
             Me.Spalten(1).Index = 1
 
-            'Reihentitel steht in 1. Zeile:
-            Zeile = StrReadSync.ReadLine.ToString()
+            'Reihentitel steht in 1. Spalte bei den Werten:
+            Zeile = ""
+            For i = 0 To Me.nZeilenHeader
+                Zeile = StrReadSync.ReadLine.ToString()
+            Next
             Me.Spalten(1).Name = Zeile.Substring(0, 4).Trim()
 
-            'Einheit steht in 2. Zeile:
-            Zeile = StrReadSync.ReadLine.ToString()
+            'Einheit ist immer mm
             Me.Spalten(1).Einheit = "mm"
 
             StrReadSync.close()
