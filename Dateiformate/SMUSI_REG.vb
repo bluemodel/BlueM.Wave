@@ -1,26 +1,17 @@
 ﻿Imports System.IO
 
 ''' <summary>
-''' Klasse für das REG-Dateiformat (Hystem-Extran-Regendaten)
+''' Klasse für das SMUSI REG-Dateiformat (SMUSI-Regendateien)
 ''' </summary>
-''' <remarks>Format siehe http://130.83.196.154/BlueM/wiki/index.php/REG-Format</remarks>
+''' <remarks>Format siehe http://130.83.196.220/bluem/wiki/index.php/SMUSI_REG-Format</remarks>
 Public Class SMUSI_REG
     Inherits Dateiformat
 
     Const DatumsformatSMUSI_REG As String = "dd MM yyyy   HH"
-    Const LenString As Integer = 5   'Länge des Strings eines Wertes in der reg/dat-Datei
-    Const iDim As Integer = 3        'Dezimalfaktor wird erstmal global auf 3 gesetzt
-
-#Region "Eigenschaften"
-
-    'Eigenschaften
-    '#############
-
-    Private _Zeitintervall As Integer
-    Private _WerteProZeile As Integer
-    Private _DezFaktor As Integer
-
-#End Region
+    Const WerteproZeile As Integer = 12
+    Const LenWert As Integer = 5
+    Const LenZeilenanfang As Integer = 20
+    Const dt_min As Integer = 5
 
 #Region "Properties"
 
@@ -33,35 +24,14 @@ Public Class SMUSI_REG
         End Get
     End Property
 
-    Public Property Zeitintervall() As Integer
+    ''' <summary>
+    ''' Zeitintervall von SMUSI-Regenreihen
+    ''' </summary>
+    ''' <remarks>5 Minuten</remarks>
+    Private ReadOnly Property Zeitintervall() As TimeSpan
         Get
-            Return _Zeitintervall
+            Return New TimeSpan(0, SMUSI_REG.dt_min, 0)
         End Get
-        Set(ByVal value As Integer)
-            _Zeitintervall = value
-        End Set
-    End Property
-
-    Public Property DezFaktor() As Integer
-        Get
-            Return _DezFaktor
-        End Get
-        Set(ByVal value As Integer)
-            _DezFaktor = value
-        End Set
-    End Property
-
-    Public Property WerteProZeile(ByVal dt As Integer) As Integer
-        Get
-            Select Case dt
-                Case 5
-                    Return 12
-            End Select
-        End Get
-
-        Set(ByVal value As Integer)
-            _WerteProZeile = 12
-        End Set
     End Property
 
 #End Region
@@ -121,11 +91,6 @@ Public Class SMUSI_REG
             Zeile = StrReadSync.ReadLine.ToString()
             Me.Spalten(1).Einheit = "mm"
 
-            Me.DezFaktor = 3
-
-            'Zeitintervall auslesen
-            Me.Zeitintervall = 5
-
             StrReadSync.close()
             StrRead.Close()
             FiStr.Close()
@@ -141,9 +106,10 @@ Public Class SMUSI_REG
     Public Overrides Sub Read_File()
 
         Dim i, j As Integer
+        Dim leerzeile As Boolean
         Dim Zeile As String
         Dim Stunde, Minute, Tag, Monat, Jahr As Integer
-        Dim Datum, Zeilendatum As DateTime
+        Dim DatumCurrent, DatumZeile, DatumTmp As DateTime
         Dim Wert As Double
 
         Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
@@ -158,6 +124,7 @@ Public Class SMUSI_REG
         'Einlesen
         '--------
         j = 0
+        leerzeile = False
 
         Do
             j += 1
@@ -165,26 +132,49 @@ Public Class SMUSI_REG
 
             'If Zeile.Substring(5) = " 0 09999 0 0 0E" Then Exit Do
 
-            If (j > Me.nZeilenHeader And Zeile.Trim.Length > 0) Then
+            If (j > Me.nZeilenHeader) Then
 
-                'Datum erkennen
-                '--------------
-                Jahr = Zeile.Substring(11, 4)
-                Monat = Zeile.Substring(8, 2 )
-                Tag = Zeile.Substring(5, 2)
-                Stunde = Zeile.Substring(18, 2)
-                Minute = 0
-                Zeilendatum = New System.DateTime(Jahr, Monat, Tag, Stunde, Minute, 0, New System.Globalization.GregorianCalendar())
-                'Datum und Wert zur Zeitreihe hinzufügen
-                '---------------------------------------
-                'alle bis auf den letzten Wert einlesen
-                'beim letzten Wert besteht die Möglichkeit, dass nicht alle Zeichen belegt sind
-                For i = 0 To 12 - 1
-                    Datum = Zeilendatum.AddMinutes(i * 5)
-                    Wert = StringToDouble(Zeile.Substring(20 + LenString * i, LenString)) /1000
-                    Me.Zeitreihen(0).AddNode(Datum, Wert)
-                Next
+                If (Zeile.Trim.Length < 1) Then
+                    'Leere Zeile
+                    '-----------
+                    leerzeile = True
+                Else
+                    'Zeile mit Werten
+                    '----------------
+                    'Zeilendatum erkennen
+                    Jahr = Zeile.Substring(11, 4)
+                    Monat = Zeile.Substring(8, 2)
+                    Tag = Zeile.Substring(5, 2)
+                    Stunde = Zeile.Substring(18, 2)
+                    Minute = 0
+                    DatumZeile = New System.DateTime(Jahr, Monat, Tag, Stunde, Minute, 0, New System.Globalization.GregorianCalendar())
 
+                    If (leerzeile) Then
+                        'Bei vorheriger leeren Zeile: 0-Stelle 5 min nach letztem Datum einfügen
+                        DatumTmp = DatumCurrent.Add(Me.Zeitintervall)
+                        If (Not DatumTmp = DatumZeile) Then
+                            Me.Zeitreihen(0).AddNode(DatumTmp, 0)
+                        End If
+                    End If
+
+                    '12 x Datum und Wert zur Zeitreihe hinzufügen
+                    '---------------------------------------
+                    For i = 0 To SMUSI_REG.WerteproZeile - 1
+                        DatumCurrent = DatumZeile.AddMinutes(i * SMUSI_REG.dt_min)
+                        Wert = StringToDouble(Zeile.Substring(LenZeilenanfang + LenWert * i, LenWert)) / 1000
+                        Me.Zeitreihen(0).AddNode(DatumCurrent, Wert)
+                    Next
+
+                    If (leerzeile) Then
+                        'Bei vorheriger leeren Zeile: 0-Stelle 5 min vor Zeilendatum einfügen
+                        DatumTmp = DatumZeile.Subtract(Me.Zeitintervall)
+                        If (Not Zeitreihen(0).Nodes.ContainsKey(DatumTmp)) Then
+                            Me.Zeitreihen(0).AddNode(DatumTmp, 0)
+                        End If
+                    End If
+
+                    leerzeile = False
+                End If
             End If
         Loop Until StrReadSync.Peek() = -1
 
@@ -206,7 +196,7 @@ Public Class SMUSI_REG
         Dim Spanne As TimeSpan
         Dim Divisor As Integer
         Dim hn_A_Mittel As Integer
-        
+
         'Zeitintervall aus ersten und zweiten Zeitschritt der Reihe ermitteln
         dt = DateDiff(DateInterval.Minute, Reihe.XWerte(0), Reihe.XWerte(1))
 
@@ -215,7 +205,6 @@ Public Class SMUSI_REG
 
         Dim strwrite As StreamWriter
         Dim iZeile, j, n As Integer
-        Const WerteproZeile As Integer = 12
         strwrite = New StreamWriter(File)
         Dim IntWert As Long
         Dim Summe As Integer
@@ -225,7 +214,7 @@ Public Class SMUSI_REG
         'Anfangsdatum und Enddatum der zu exporierenden Zeitreihe bestimmen
         'Es müssen 12 Stundenwerte in der Zeitreihe vorliegen, sonst wird
         'abgeschniten
-        
+
         'ExportStartDatum
         Dim Datum, ExportStartDatum, ExportEndDatum As DateTime
         Dim iDatum As Integer
@@ -233,33 +222,33 @@ Public Class SMUSI_REG
         Datum = KontiReihe.Anfangsdatum
         Do While Datum.Minute > 0
             iDatum = iDatum + 1
-            Datum = KontiReihe.Xwerte(iDatum)
+            Datum = KontiReihe.XWerte(iDatum)
         Loop
         ExportStartDatum = Datum
 
         'ExportEndDatum
         Datum = KontiReihe.Enddatum
         Dim Endstunde As Integer
-        If Datum.Minute <> 55
+        If Datum.Minute <> 55 Then
             Endstunde = Datum.Hour - 1
-        Else 
+        Else
             Endstunde = Datum.Hour
         End If
-        ExportEndDatum = New System.DateTime(Datum.Year, Datum.Month, Datum.Day,Endstunde, 55, 0, New System.Globalization.GregorianCalendar())
+        ExportEndDatum = New System.DateTime(Datum.Year, Datum.Month, Datum.Day, Endstunde, 55, 0, New System.Globalization.GregorianCalendar())
         Dim iDatumEnd As Integer
         iDatumEnd = KontiReihe.Length - 1
         Datum = KontiReihe.Enddatum
-        Do While Datum  <> ExportEndDatum
+        Do While Datum <> ExportEndDatum
             iDatumEnd = iDatumEnd - 1
             Datum = KontiReihe.XWerte(iDatumEnd)
         Loop
-        
+
         Dim AnzahlZeilen As Integer
-        AnzahlZeilen = (iDatumEnd-iDatum)/WerteproZeile
+        AnzahlZeilen = (iDatumEnd - iDatum) / WerteproZeile
 
         'Wertezeilen...
         n = iDatum   'Ausgabe beginnt bei ersten vollen Stunde in der Zeitreihe
-        For iZeile = 0 To Anzahlzeilen - 1
+        For iZeile = 0 To AnzahlZeilen - 1
             strwrite.Write("KONV ")
             strwrite.Write(KontiReihe.XWerte(n).ToString(DatumsformatSMUSI_REG))
             For j = 1 To WerteproZeile
@@ -272,7 +261,7 @@ Public Class SMUSI_REG
         Next
         strwrite.Close()
 
-       'Header anpassen (Summe und Betrachungszeitraum)
+        'Header anpassen (Summe und Betrachungszeitraum)
         Dim FiStr As FileStream = New FileStream(File, FileMode.Open, IO.FileAccess.Read)
         Dim StrRead As StreamReader = New StreamReader(FiStr, System.Text.Encoding.GetEncoding("iso8859-1"))
         Dim alles As String
