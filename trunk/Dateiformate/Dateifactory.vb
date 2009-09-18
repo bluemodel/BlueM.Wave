@@ -15,13 +15,13 @@ Public Module Dateifactory
     Public Const FileExtZRE As String = ".ZRE"
     Public Const FileExtTEN As String = ".TEN"
     Public Const FileExtDTL As String = ".DTL" 'DWD-Daten: Temperatur und Luftfeuchte
+    Public Const FileExtOUT As String = ".OUT" 'SWMM binäre Ergebnisdatei 
 
     ''' <summary>
     ''' Erzeugt eine zur Dateiendung passende Datei-Instanz
     ''' </summary>
     ''' <param name="file">Pfad zur Datei</param>
     ''' <returns>Eine Instanz der Datei</returns>
-    ''' <remarks></remarks>
     Public Function getDateiInstanz(ByVal file As String) As Dateiformat
 
         Dim Datei As Dateiformat
@@ -70,6 +70,9 @@ Public Module Dateifactory
             Case FileExtDTL
                 Datei = New DWD_T_L(file)
 
+            Case FileExtOUT
+                Datei = New SWMM_OUT(file)
+
             Case Else
                 Throw New Exception("Die Dateiendung '" & FileExt & "' ist nicht bekannt!")
 
@@ -80,4 +83,3 @@ Public Module Dateifactory
     End Function
 
 End Module
-
