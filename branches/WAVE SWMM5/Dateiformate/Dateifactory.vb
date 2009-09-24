@@ -22,7 +22,6 @@ Public Module Dateifactory
     ''' </summary>
     ''' <param name="file">Pfad zur Datei</param>
     ''' <returns>Eine Instanz der Datei</returns>
-    ''' <remarks></remarks>
     Public Function getDateiInstanz(ByVal file As String) As Dateiformat
 
         Dim Datei As Dateiformat
@@ -84,4 +83,3 @@ Public Module Dateifactory
     End Function
 
 End Module
-
