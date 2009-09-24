@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{BCD1BBE3-5AB2-4C3F-AC12-43EB977C6F6F}</ProjectGuid>
     <OutputType>WinExe</OutputType>
@@ -39,10 +39,6 @@
     <UseVSHostingProcess>false</UseVSHostingProcess>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="IHWB.SWMM.DllAdapter, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\bin\Debug\IHWB.SWMM.DllAdapter.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -277,6 +273,12 @@
     <EmbeddedResource Include="My Project\licenses.licx" />
     <EmbeddedResource Include="Resources\log.ico" />
     <None Include="Resources\script.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SWMM.DLLAdapter\IHWB.SWMM.DllAdapter\modelEAU.SWMM.DllAdapter.csproj">
+      <Project>{C7F2B930-7743-44B5-B22A-8332DD05ED6B}</Project>
+      <Name>modelEAU.SWMM.DllAdapter</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
