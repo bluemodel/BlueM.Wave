@@ -49,7 +49,7 @@ Public Class SWMM_OUT
 
     'Konstruktor
     '***********
-    Public Sub New(ByVal FileName As String)
+    Public Sub New(ByVal FileName As String, Optional ByVal Series As String = "")
 
         MyBase.New(FileName)
 
@@ -66,6 +66,10 @@ Public Class SWMM_OUT
         oSWMM = New modelEAU.SWMM.DllAdapter.SWMM_iface()
 
         Call Me.SpaltenAuslesen()
+
+        If Series <> "" Then
+            Read_File(Series)
+        End If
 
     End Sub
 
@@ -210,6 +214,32 @@ Public Class SWMM_OUT
                     Next
                 End If
             Next
+        Next
+    End Sub
+
+    Private Overloads Sub Read_File(ByVal Series As String)
+        Dim i, j, period As Integer
+        Dim value As Double
+        Dim index As Integer
+        Dim anzahlZeitreihen As Integer
+        Dim datum As Double
+
+        'Anzahl Zeitreihen
+        anzahlZeitreihen = 1
+        ReDim Me.Zeitreihen(anzahlZeitreihen - 1)
+        'Indexarray
+        'ReDim index(anzahlZeitreihen)
+        'Zeitreihen instanzieren
+        Me.Zeitreihen(i) = New Zeitreihe(series)
+        For j = 0 To anzSpalten - 1
+            If Series = Me.Spalten(j).Name Then
+                index = j
+                For period = 0 To oSWMM.NPeriods - 1
+                    oSWMM.GetSwmmDate(period, datum)
+                    oSWMM.GetSwmmResult(SWMMBinaryFileIndex(index).iType, SWMMBinaryFileIndex(index).iIndex, SWMMBinaryFileIndex(index).vIndex, period, value)
+                    Me.Zeitreihen(i).AddNode(Date.FromOADate(datum), value)
+                Next
+            End If
         Next
     End Sub
 
