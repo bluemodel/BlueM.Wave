@@ -259,6 +259,7 @@
     <None Include="Resources\error.png" />
     <None Include="Resources\help.png" />
     <None Include="Resources\tick.png" />
+    <Content Include="Resources\modelEAU.SWMM.DllAdapter.dll" />
     <Content Include="WAVE_RELEASE-NOTES.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
