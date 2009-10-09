@@ -255,7 +255,6 @@
     <None Include="Resources\chart_curve_edit.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="ClassDiagram1.cd" />
     <None Include="Resources\BlueM.png" />
     <None Include="Resources\error.png" />
     <None Include="Resources\help.png" />
