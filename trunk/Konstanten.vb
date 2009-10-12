@@ -27,6 +27,8 @@ Module Konstanten
         ASC = 4
         REG_HYSTEM = 5
         REG_SMUSI = 6
+        DAT_SWMM_MASS = 7
+        DAT_SWMM_TIME = 8
     End Enum
 
     ''' <summary>

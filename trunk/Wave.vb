@@ -46,7 +46,8 @@ Public Class Wave
             "SMUSI-Dateien (*.asc)|*.asc|" & _
             "SIMBA-Dateien (*.smb)|*.smb|" & _
             "Hystem-Dateien (*.dat)|*.dat|" & _
-            "DWD-Temperatur-Feuchte (*.dtl)|*.dtl"
+            "DWD-Temperatur-Feuchte (*.dtl)|*.dtl|" & _
+            "SWMM-Dateien (*.out)|*.out"
 
     'Chart-Zeugs
     Private WithEvents colorBand1 As Steema.TeeChart.Tools.ColorBand
@@ -431,6 +432,9 @@ Public Class Wave
                 Case Dateiformate.REG_SMUSI
                     Me.SaveFileDialog1.DefaultExt = "reg"
                     Me.SaveFileDialog1.Filter = "SMUSI-REG-Dateien (*.reg)|*.reg"
+                Case Dateiformate.DAT_SWMM_MASS, Dateiformate.DAT_SWMM_TIME
+                    Me.SaveFileDialog1.DefaultExt = "dat"
+                    Me.SaveFileDialog1.Filter = "SWMM-DAT-Dateien (*.dat)|*.dat"
             End Select
             Me.SaveFileDialog1.Filter &= "|Alle Dateien (*.*)|*.*"
             Me.SaveFileDialog1.FilterIndex = 1
@@ -455,6 +459,16 @@ Public Class Wave
                         For Each item As Object In ExportDiag.ListBox_Zeitreihen.SelectedItems
                             Reihe = CType(item, Zeitreihe)
                             Call SMUSI_REG.Write_File(Reihe, Me.SaveFileDialog1.FileName)
+                        Next
+                    Case Dateiformate.DAT_SWMM_MASS
+                        For Each item As Object In ExportDiag.ListBox_Zeitreihen.SelectedItems
+                            Reihe = CType(item, Zeitreihe)
+                            Call SWMM_DAT_MASS.Write_File(Reihe, Me.SaveFileDialog1.FileName, 5) 'Zeitschritt ist noch nicht dynamisch definiert
+                        Next
+                    Case Dateiformate.DAT_SWMM_TIME
+                        For Each item As Object In ExportDiag.ListBox_Zeitreihen.SelectedItems
+                            Reihe = CType(item, Zeitreihe)
+                            Call SWMM_DAT_TIME.Write_File(Reihe, Me.SaveFileDialog1.FileName, 5) 'Zeitschritt ist noch nicht dynamisch definiert
                         Next
                         
                     Case Else
