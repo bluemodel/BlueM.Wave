@@ -39,6 +39,10 @@
     <UseVSHostingProcess>false</UseVSHostingProcess>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="modelEAU.SWMM.DllAdapter, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Resources\modelEAU.SWMM.DllAdapter.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -112,6 +116,9 @@
     <Compile Include="Dateiformate\Dateiformat.vb" />
     <Compile Include="Dateiformate\RVA.vb" />
     <Compile Include="Dateiformate\SMUSI_REG.vb" />
+    <Compile Include="Dateiformate\SWMM_DAT_TIME.vb" />
+    <Compile Include="Dateiformate\SWMM_DAT_MASS.vb" />
+    <Compile Include="Dateiformate\SWMM_OUT.vb" />
     <Compile Include="Log.vb" />
     <Compile Include="My Project\ApplicationEvents.vb" />
     <Compile Include="My Project\Resources.Designer.vb">
@@ -252,6 +259,7 @@
     <None Include="Resources\error.png" />
     <None Include="Resources\help.png" />
     <None Include="Resources\tick.png" />
+    <Content Include="Resources\modelEAU.SWMM.DllAdapter.dll" />
     <Content Include="WAVE_RELEASE-NOTES.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -262,9 +270,11 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Analysis\GoodnessOfFit_Dialog.resx">
       <DependentUpon>GoodnessOfFit_Dialog.vb</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Dateiformate\DWD_Stationswahl.resx">
       <DependentUpon>DWD_Stationswahl.vb</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="My Project\licenses.licx" />
     <EmbeddedResource Include="Resources\log.ico" />

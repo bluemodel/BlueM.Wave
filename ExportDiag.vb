@@ -15,6 +15,12 @@ Public Class ExportDiag
             Case Konstanten.Dateiformate.REG_SMUSI
                 Me.ListBox_Zeitreihen.SelectionMode = SelectionMode.One
 
+            Case Konstanten.Dateiformate.DAT_SWMM_MASS
+                Me.ListBox_Zeitreihen.SelectionMode = SelectionMode.One
+
+            Case Konstanten.Dateiformate.DAT_SWMM_TIME
+                Me.ListBox_Zeitreihen.SelectionMode = SelectionMode.One
+
             Case Else
                 Me.ListBox_Zeitreihen.SelectionMode = SelectionMode.MultiExtended
                 'Noch nicht implementiert

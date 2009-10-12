@@ -73,7 +73,7 @@ Partial Public Class ImportDiag
 
         Const anzZeilen As Integer = 50 'maximal 50 Zeilen anzeigen
         Const anzSpalten As Integer = 3500 'maximal 3500 Spalten anzeigen (bei mehr wird immer umgebrochen!)
-        Dim line, text As string
+        Dim line, text, FileExt As String
 
         'Dateiname anzeigen
         Me.Label_Datei.Text &= " " & Path.GetFileName(Me.datei.File)
@@ -107,6 +107,15 @@ Partial Public Class ImportDiag
 
         StrRead.Close()
         fs.Close()
+
+        FileExt = System.IO.Path.GetExtension(Me.datei.File).ToUpper()
+        If FileExt = ".OUT" Then
+            Me.TextBox_Vorschau.Text = Path.GetFileName(Me.datei.File) & " is a" & vbCrLf & "binary file." & vbCrLf & "Preview is not available!"
+            Me.NumericUpDown_DatumsSpalte.Enabled = False
+            Me.GroupBox_Spaltenmodus.Enabled = False
+            Me.GroupBox_Dezimaltrennzeichen.Enabled = False
+            Me.GroupBox_Einstellungen.Enabled = False
+        End If
 
     End Sub
 

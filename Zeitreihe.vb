@@ -334,6 +334,154 @@ Public Class Zeitreihe
     End Function
 
     ''' <summary>
+    ''' Erstellt eine neue äquidistante Zeitreihe, neue Stützstellen kriegen aus original Zeitreihe konvertierten Wert, geignet für Massenbezogenen Zeitreihen
+    ''' </summary>
+    ''' <param name="Soll_dT">Sollzeitschritt (in Minuten)</param>      
+    Public Function getKontiZRE2(ByVal Soll_dT As Integer) As Zeitreihe
+
+        Dim i, j As Integer
+        Dim intloop As Integer
+        Dim n_dT As Integer
+        Dim NewNodes As Integer
+        Dim newValue As Double
+        Dim sumValues As Double
+
+        Dim TempZR As New Zeitreihe("Temp_" & Me.Title)
+        Dim OutZR As New Zeitreihe("Konti_" & Me.Title)
+        OutZR.Einheit = Me.Einheit
+
+        'Zuerst wird eine Zeitreihe auf der Basis von Minutenwerten erstellt (kleinst mögliche Einheit)
+        For i = 0 To Me.Length - 2
+
+            NewNodes = 0
+            n_dT = DateDiff(DateInterval.Minute, Me.XWerte(i), Me.XWerte(i + 1))
+            NewNodes = n_dT
+
+            If NewNodes > 1 Then
+                newValue = Me.YWerte(i) / NewNodes
+                TempZR.AddNode(Me.XWerte(i), newValue)
+                For intloop = 1 To NewNodes - 1
+                    TempZR.AddNode(XWerte(i).AddMinutes(intloop), newValue)
+                Next
+            Else
+                TempZR.AddNode(Me.XWerte(i), Me.YWerte(i))
+            End If
+        Next
+
+        TempZR.AddNode(Me.XWerte(i), Me.YWerte(i))
+
+
+        'Zeitreihe mit neuer Schrittweite wird generiert
+
+        'Die Zeitreihe sollte mindestens einen Sollzeitschritt umfassen
+        If TempZR.Length < Soll_dT Then
+            Throw New Exception("Die Zeitreihe umfasst nicht genug Werte für die definierte Zeitschrittlänge")
+        End If
+        'Abarbeiten aller Werte die innerhalb ganzer Sollzeitschritte liegen.
+        i = 0
+        Do While i <= TempZR.Length - Soll_dT
+            j = 0
+            sumValues = 0
+            For j = 0 To Soll_dT - 1
+                sumValues += TempZR.YWerte(i + j)
+            Next
+            OutZR.AddNode(TempZR.XWerte(i), sumValues)
+            i += Soll_dT
+        Loop
+
+        'Aufaddieren des Rests
+        If i Mod 5 <> 0 Then
+            sumValues = 0
+            For j = i To TempZR.Length - 1
+                sumValues += TempZR.YWerte(j)
+            Next
+
+            'letzten Wert schreiben
+            OutZR.AddNode(TempZR.XWerte(i), sumValues)
+
+        End If
+
+        Return OutZR
+
+
+    End Function
+
+    ''' <summary>
+    ''' Erstellt eine neue äquidistante Zeitreihe, neue Stützstellen kriegen aus original Zeitreihe konvertierten Wert, geignet für zeitabhängige Zeitreihen
+    ''' </summary>
+    ''' <param name="Soll_dT">Sollzeitschritt (in Minuten)</param>      
+    Public Function getKontiZRE3(ByVal Soll_dT As Integer) As Zeitreihe
+
+        Dim i As Integer
+        Dim intloop As Integer
+        Dim n_dT As Integer
+        Dim NewNodes As Integer
+        Dim newValue As Double
+
+        Dim TempZR As New Zeitreihe("Temp_" & Me.Title)
+        Dim OutZR As New Zeitreihe("Konti_" & Me.Title)
+        OutZR.Einheit = Me.Einheit
+
+        'Zuerst wird eine Zeitreihe auf der Basis von Minutenwerten erstellt (kleinst mögliche Einheit)
+        For i = 0 To Me.Length - 2
+
+            NewNodes = 0
+            n_dT = DateDiff(DateInterval.Minute, Me.XWerte(i), Me.XWerte(i + 1))
+            NewNodes = n_dT
+
+            If NewNodes > 1 Then
+                newValue = Me.YWerte(i)
+                TempZR.AddNode(Me.XWerte(i), newValue)
+                For intloop = 1 To NewNodes - 1
+                    TempZR.AddNode(XWerte(i).AddMinutes(intloop), newValue)
+                Next
+            Else
+                TempZR.AddNode(Me.XWerte(i), Me.YWerte(i))
+            End If
+        Next
+
+        TempZR.AddNode(Me.XWerte(i), Me.YWerte(i))
+
+
+        'Zeitreihe mit neuer Schrittweite wird generiert
+
+        'Die Zeitreihe sollte mindestens einen Sollzeitschritt umfassen
+        If TempZR.Length < Soll_dT Then
+            Throw New Exception("Die Zeitreihe umfasst nicht genug Werte für die definierte Zeitschrittlänge")
+        End If
+        'Abarbeiten aller Werte die innerhalb ganzer Sollzeitschritte liegen.
+        i = 0
+        Do While i <= TempZR.Length - Soll_dT
+            'j = 0
+            'sumValues = 0
+            'For j = 0 To Soll_dT - 1
+            '    sumValues += TempZR.YWerte(i + j)
+            'Next
+            'newValue = sumValues / Soll_dT
+            'OutZR.AddNode(TempZR.XWerte(i), newValue)
+            'i += Soll_dT
+            OutZR.AddNode(TempZR.XWerte(i), TempZR.YWerte(i))
+            i += Soll_dT
+        Loop
+
+        'Aufaddieren des Rests
+        If i Mod 5 <> 0 Then
+            'sumValues = 0
+            'For j = i To TempZR.Length - 1
+            '    sumValues += TempZR.YWerte(j)
+            'Next
+            'newValue = sumValues / Soll_dT
+            ''letzten Wert schreiben
+            'OutZR.AddNode(TempZR.XWerte(i), sumValues)
+            OutZR.AddNode(TempZR.XWerte(i), TempZR.YWerte(i))
+        End If
+
+        Return OutZR
+
+
+    End Function
+
+    ''' <summary>
     ''' Erzeugt eine Kopie der Zeitreihe, in der alle Stützstellen mit Wert NaN oder Infinity entfernt wurden.
     ''' </summary>
     ''' <returns>eine gesäuberte Zeitreihe</returns>
