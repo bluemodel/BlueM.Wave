@@ -8,9 +8,21 @@ Public Class SeriesEditorDialog
 
     'Titel
     '*****
-    Public ReadOnly Property Title() As String
+    Private ReadOnly Property Title() As String
         Get
             Return Me.TextBox_Title.Text
+        End Get
+    End Property
+
+    'Einheit
+    '*******
+    Private ReadOnly Property Einheit() As String
+        Get
+            If (Not Me.TextBox_Einheit.Text.Trim() = "")
+                Return Me.TextBox_Einheit.Text
+            Else
+                Return "-"
+            End If
         End Get
     End Property
 
@@ -197,6 +209,9 @@ Public Class SeriesEditorDialog
 
         'Zeitreihe instanzieren
         Me.mZeitreihe = New Zeitreihe(Me.Title)
+
+        'Einheit schreiben
+        Me.Zeitreihe.Einheit = Me.Einheit
 
         For i = 0 To Me.DataGridView1.RowCount - 2 '(letzte Zeile nicht mitnehmen)
             datum = DateTime.Parse(Me.DataGridView1.Rows(i).Cells(0).Value)
