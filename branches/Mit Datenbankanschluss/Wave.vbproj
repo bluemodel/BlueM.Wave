@@ -111,11 +111,20 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Splashscreen\SplashScreen_Leitfaden.Designer.vb">
+      <DependentUpon>SplashScreen_Leitfaden.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Splashscreen\SplashScreen_Leitfaden.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="ZeitreihenFormate\ASC.vb">
     </Compile>
     <Compile Include="ZeitreihenFormate\BlueMOrbDataSet.Designer.vb">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
+      <DependentUpon>BlueMOrbDataSet.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="ZeitreihenFormate\BlueMOrbDataSet.vb">
       <DependentUpon>BlueMOrbDataSet.xsd</DependentUpon>
     </Compile>
     <Compile Include="ZeitreihenFormate\Dateifactory.vb" />
@@ -285,6 +294,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Importdialoge\ImportFromDatabaseDialog.resx">
       <DependentUpon>ImportFromDatabaseDialog.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Splashscreen\SplashScreen_Leitfaden.resx">
+      <DependentUpon>SplashScreen_Leitfaden.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ZeitreihenFormate\DWD_Stationswahl.resx">
       <DependentUpon>DWD_Stationswahl.vb</DependentUpon>
