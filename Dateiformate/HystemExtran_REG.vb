@@ -264,6 +264,31 @@ Public Class HystemExtran_REG
 
     End Sub
 
+    ''' <summary>
+    ''' Prüft, ob es sich um eine SMUSI-REG-Datei handelt
+    ''' </summary>
+    ''' <param name="file">Pfad zur Datei</param>
+    ''' <returns></returns>
+    Public Shared Function verifyFormat(ByVal file As String) As Boolean
+
+        Dim FiStr As FileStream = New FileStream(file, FileMode.Open, IO.FileAccess.Read)
+        Dim StrRead As StreamReader = New StreamReader(FiStr, System.Text.Encoding.GetEncoding("iso8859-1"))
+        Dim Zeile As String = ""
+
+        '1 Zeile einlesen
+        Zeile = StrRead.ReadLine.ToString()
+
+        StrRead.Close()
+        FiStr.Close()
+
+        If (Zeile.Substring(5, 8) = " 0 0   0") Then
+            'Es ist eine Hystem-Regenreihe!
+            Return True
+        Else
+            Return False
+        End If
+
+    End Function
 
 #End Region 'Methoden
 
