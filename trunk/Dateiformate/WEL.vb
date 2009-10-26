@@ -29,12 +29,10 @@ Public Class WEL
 #End Region 'Properties
 
 #Region "Methoden"
-
-    'Methoden
-    '########
-
-    'Konstruktor
-    '***********
+    
+    ''' <summary>
+    ''' Konstruktor
+    ''' </summary>
     Public Sub New(ByVal FileName As String, Optional ByVal ReadAllNow As Boolean = False)
 
         MyBase.New(FileName)
@@ -61,8 +59,9 @@ Public Class WEL
         
     End Sub
 
-    'Spalten auslesen
-    '****************
+    ''' <summary>
+    ''' Spalten auslesen
+    ''' </summary>
     Public Overrides Sub SpaltenAuslesen()
 
         Dim i As Integer
@@ -121,8 +120,9 @@ Public Class WEL
 
     End Sub
 
-    'WEL-Datei einlesen
-    '******************
+    ''' <summary>
+    ''' WEL-Datei einlesen
+    ''' </summary>
     Public Overrides Sub Read_File()
 
         Dim iZeile, i As Integer
@@ -192,6 +192,33 @@ Public Class WEL
         FiStr.Close()
 
     End Sub
+
+    ''' <summary>
+    ''' Prüft, ob es sich um eine WEL-Datei für BlueM handelt
+    ''' </summary>
+    ''' <param name="file">Pfad zur Datei</param>
+    ''' <returns></returns>
+    Public Shared Function verifyFormat(ByVal file As String) As Boolean
+
+        Dim FiStr As FileStream = New FileStream(file, FileMode.Open, IO.FileAccess.Read)
+        Dim StrRead As StreamReader = New StreamReader(FiStr, System.Text.Encoding.GetEncoding("iso8859-1"))
+        Dim Zeile As String = ""
+
+        '2 Zeilen einlesen
+        Zeile = StrRead.ReadLine.ToString()
+        Zeile = Trim(zeile)
+        
+        StrRead.Close()
+        FiStr.Close()
+
+        If (Zeile.StartsWith("*WEL")) Then
+            'Es ist eine WEL-Reihe für BlueM
+            Return True
+        Else
+            Return False
+        End If
+
+    End Function
 
 #End Region 'Methoden
 

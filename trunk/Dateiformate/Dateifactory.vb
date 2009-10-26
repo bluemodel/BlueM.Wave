@@ -61,7 +61,14 @@ Public Module Dateifactory
                 Datei = New SMB(file)
 
             Case FileExtWEL, FileExtKWL
-                Datei = New WEL(file)
+                'Datei = New WEL(file)
+                'Dateiformat prüfen:
+                If (HystemExtran_WEL.verifyFormat(file)) Then
+                    'Hystem-Extran-Regenreihe
+                    Datei = New HystemExtran_WEL(file)
+                Else
+                    Datei = New WEL(file)
+                End If
 
             Case FileExtZRE
                 Datei = New ZRE(file)
