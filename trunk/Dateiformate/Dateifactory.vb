@@ -47,9 +47,11 @@ Public Module Dateifactory
                 If (SMUSI_REG.verifyFormat(file)) Then
                     'SMUSI-Regenreihe
                     Datei = New SMUSI_REG(file)
-                Else
+                ElseIf (HystemExtran_REG.verifyFormat(file)) Then
                     'Hystem-Extran-Regenreihe
                     Datei = New HystemExtran_REG(file)
+                Else
+                    Throw New Exception("Es handelt es sich weder um eine SMUSI- noch um eine Hystem-Regendatei")
                 End If
 
             Case FileExtRVA
