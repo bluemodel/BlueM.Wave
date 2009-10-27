@@ -98,7 +98,7 @@ Public Class CutDialog
     End Sub
 
     Private Sub TChart1_DoubleClick(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TChart1.DoubleClick
-        Call Me.TChart1.ShowEditor()
+        Call Steema.TeeChart.Editor.Show(Me.TChart1)
     End Sub
 
     'ColorBand verändert
