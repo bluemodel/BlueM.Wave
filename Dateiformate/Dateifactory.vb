@@ -15,7 +15,8 @@ Public Module Dateifactory
     Public Const FileExtZRE As String = ".ZRE"
     Public Const FileExtTEN As String = ".TEN"
     Public Const FileExtDTL As String = ".DTL" 'DWD-Daten: Temperatur und Luftfeuchte
-    Public Const FileExtOUT As String = ".OUT" 'SWMM binäre Ergebnisdatei 
+    Public Const FileExtOUT As String = ".OUT" 'SWMM binäre Ergebnisdatei
+    Public Const FileExtTXT As String = ".TXT" 'SWMM Routingfiles
 
     ''' <summary>
     ''' Erzeugt eine zur Dateiendung passende Datei-Instanz
@@ -81,6 +82,9 @@ Public Module Dateifactory
 
             Case FileExtOUT
                 Datei = New SWMM_OUT(file)
+
+            Case FileExtTXT
+                Datei = New SWMM_TXT(file)
 
             Case Else
                 Throw New Exception("Die Dateiendung '" & FileExt & "' ist nicht bekannt!")
