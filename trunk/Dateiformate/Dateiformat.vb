@@ -32,6 +32,7 @@ Public MustInherit Class Dateiformat
     Private _XSpalte As Integer = 0
     Private _Spalten() As SpaltenInfo
     Private _spaltenSel() As SpaltenInfo
+    Private _nZeilen As Integer = 1
 
     Public Structure SpaltenInfo
         Public Name As String
@@ -210,6 +211,18 @@ Public MustInherit Class Dateiformat
         End Get
         Set(ByVal value As SpaltenInfo())
             _spaltenSel = value
+        End Set
+    End Property
+
+''' <summary>
+    ''' Anzahl der Zeilen pro Zeitstempel
+    ''' </summary>
+    Public Property nZeilen() As Integer
+        Get
+            Return _nZeilen
+        End Get
+        Set(ByVal value As Integer)
+            _nZeilen = value
         End Set
     End Property
 
