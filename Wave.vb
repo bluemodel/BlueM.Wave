@@ -388,6 +388,8 @@ Public Class Wave
 
         Dim ExportDiag As New ExportDiag()
         Dim Reihe As Zeitreihe
+        Dim MultiReihe() As Zeitreihe
+        Dim iReihe As Long
 
 
         'Wenn keine Zeitreihen vorhanden, abbrechen!
@@ -435,6 +437,10 @@ Public Class Wave
                 Case Dateiformate.DAT_SWMM_MASS, Dateiformate.DAT_SWMM_TIME
                     Me.SaveFileDialog1.DefaultExt = "dat"
                     Me.SaveFileDialog1.Filter = "SWMM-DAT-Dateien (*.dat)|*.dat"
+                Case Dateiformate.TXT
+                    Me.SaveFileDialog1.DefaultExt = "txt"
+                    Me.SaveFileDialog1.Filter = "SWMM-Interface-Dateien (*.txt)|*.txt"
+
             End Select
             Me.SaveFileDialog1.Filter &= "|Alle Dateien (*.*)|*.*"
             Me.SaveFileDialog1.FilterIndex = 1
@@ -470,7 +476,14 @@ Public Class Wave
                             Reihe = CType(item, Zeitreihe)
                             Call SWMM_DAT_TIME.Write_File(Reihe, Me.SaveFileDialog1.FileName, 5) 'Zeitschritt ist noch nicht dynamisch definiert
                         Next
-                        
+                    Case Dateiformate.TXT
+                        ReDim MultiReihe(ExportDiag.ListBox_Zeitreihen.SelectedItems.Count - 1)
+                        iReihe = 0
+                        For Each item As Object In ExportDiag.ListBox_Zeitreihen.SelectedItems
+                            MultiReihe(iReihe) = CType(item, Zeitreihe)
+                            iReihe = iReihe + 1
+                        Next
+                        Call SWMM_TXT.Write_File(MultiReihe, Me.SaveFileDialog1.FileName)
                     Case Else
                         MsgBox("Noch nicht implementiert!", MsgBoxStyle.Exclamation, "Wave")
                 End Select
