@@ -54,6 +54,8 @@ Public Class SWMM_TXT
         End Get
     End Property
 
+    
+
 #End Region 'Properties
 
 #Region "Methoden"
@@ -193,9 +195,9 @@ Public Class SWMM_TXT
         Dim tmpArray() As String
         Dim IDWerte As Long
         'Dim AnzConstituents As Integer
-        Dim AllConstituents () As string
-        Dim AllNodes () As String
-        
+        Dim AllConstituents() As String
+        Dim AllNodes() As String
+
 
         Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
         Dim StrRead As StreamReader = New StreamReader(FiStr, System.Text.Encoding.GetEncoding("iso8859-1"))
@@ -211,21 +213,21 @@ Public Class SWMM_TXT
 
         'Einheiten?
         If (Me.UseEinheiten = False) Then
-            MsgBox ("Beim Einlesen eines SWMM-Interface-Files müssen immer die Einheiten gesetzt sein!")
+            MsgBox("Beim Einlesen eines SWMM-Interface-Files müssen immer die Einheiten gesetzt sein!")
             Exit Sub
-        End if
-        
-        ReDim AllConstituents(me.SpaltenSel.Length-1)
-        ReDim AllNodes (me.SpaltenSel.Length-1)
+        End If
+
+        ReDim AllConstituents(Me.SpaltenSel.Length - 1)
+        ReDim AllNodes(Me.SpaltenSel.Length - 1)
         'Alle ausgewählten Spalten durchlaufen
         For i = 0 To Me.SpaltenSel.Length - 1
             Me.Zeitreihen(i).Einheit = Me.SpaltenSel(i).Einheit
             Me.Zeitreihen(i).Objekt = Me.SpaltenSel(i).Objekt
-            AllConstituents(i) = Me.SpaltenSel(i).type
+            AllConstituents(i) = Me.SpaltenSel(i).Type
             Me.Zeitreihen(i).Type = Me.SpaltenSel(i).Type
-            AllNodes (i)= Me.SpaltenSel(i).objekt
+            AllNodes(i) = Me.SpaltenSel(i).Objekt
         Next
-        
+
 
         'Einlesen
         '--------
@@ -272,16 +274,17 @@ Public Class SWMM_TXT
     Public Shared Sub Write_File(ByVal Reihen As Zeitreihe(), ByVal File As String)
 
         Dim strwrite As StreamWriter
-        Dim i,j,k As Integer
-        Dim AllConstituents () as Constituent
-        Dim UniqueConstituents (0) As Constituent
+        Dim i, j, k As Integer
+        Dim AllConstituents() As Constituent
+        Dim UniqueConstituents(0) As Constituent
         'Dim AnzConstituents As Integer
-        Dim AllNodes () as string
-        Dim UniqueNodes (0) As String
+        Dim AllNodes() As String
+        Dim UniqueNodes(0) As String
         Dim AnzOutNodes As Integer
         Dim LenReihe As Long
-        
-        
+        Dim KonFaktor As Integer
+
+
         'SWMM5 Interface File
         'RTC-Demo 
         ' 60 - reporting time step in sec
@@ -291,8 +294,8 @@ Public Class SWMM_TXT
         'S101
         'Node          Year Mon Day Hr  Min Sec         FLOW
         'S101          2001 6   10  0   0   0          0.000
-        
-        
+
+
         strwrite = New StreamWriter(File, False, System.Text.Encoding.GetEncoding("iso8859-1"))
 
         Dim dt As Integer
@@ -307,81 +310,84 @@ Public Class SWMM_TXT
         'Zeitintervall
         strwrite.Write(dt.ToString.PadLeft(5))
         strwrite.WriteLine(" - reporting time step in sec")
-        
+
         'Erstmal alle Constituents (FLOW, COD,...) ermitteln, da diese im Textkopf angegeben werden müssen
-        ReDim AllConstituents (reihen.length - 1)
-        For i = 0 to Reihen.Length - 1
+        ReDim AllConstituents(Reihen.Length - 1)
+        For i = 0 To Reihen.Length - 1
             AllConstituents(i).Type = Reihen(i).Type
             AllConstituents(i).Unit = Reihen(i).Einheit
         Next
-        GetUniqueConstituents(allconstituents, UniqueConstituents)
-        
-        strwrite.Write (UniqueConstituents.Length)
-        strwrite.WriteLine (" - number of constituents as listed below:")
-        
-        For i = 0 to UniqueConstituents.Length - 1
-            strwrite.Write (UniqueConstituents(i).Type)
-            strwrite.Write ("   ")
-            strwrite.writeline (UniqueConstituents(i).Unit)
+        GetUniqueConstituents(AllConstituents, UniqueConstituents)
+
+        strwrite.Write(UniqueConstituents.Length)
+        strwrite.WriteLine(" - number of constituents as listed below:")
+
+        For i = 0 To UniqueConstituents.Length - 1
+            strwrite.Write(UniqueConstituents(i).Type)
+            strwrite.Write("   ")
+            strwrite.WriteLine("LPS")
         Next
-        
+
         'Alle Zuflussknoten ermitteln, da diese im Textkopf angegeben werden müsen
-        ReDim Allnodes (reihen.length - 1)
-        For i = 0 to Reihen.Length - 1
-            Allnodes (i)= Reihen(i).Objekt
+        ReDim AllNodes(Reihen.Length - 1)
+        For i = 0 To Reihen.Length - 1
+            AllNodes(i) = Reihen(i).Objekt
         Next
-        GetUniqueNodes(allnodes, Uniquenodes)
+        GetUniqueNodes(AllNodes, UniqueNodes)
         AnzOutNodes = UniqueNodes.Length
-        
-        strwrite.Write (AnzOutNodes)
-        strwrite.WriteLine (" - number of nodes as listed below:")
-        
-        For i = 0 to AnzOutNodes - 1
-            strwrite.writeline (UniqueNodes(i))
+
+        strwrite.Write(AnzOutNodes)
+        strwrite.WriteLine(" - number of nodes as listed below:")
+
+        For i = 0 To AnzOutNodes - 1
+            strwrite.WriteLine(UniqueNodes(i))
         Next
-        
+
         'TO DO: Hier muss noch geprüft werden, ob für alle Objects (Zuflussknoten) auch alle Constituents existieren
-        
+
         'Schreiben der Überschrift, d.h. Datum und Constituents
         'Datum
-        strwrite.Write ("Node          Year Mon Day Hr  Min Sec         ")
+        strwrite.Write("Node          Year Mon Day Hr  Min Sec         ")
         'Constituents
-        For i = 0 to UniqueConstituents.Length - 1
-            If i < UniqueConstituents.Length - 1 then
-                strwrite.Write (UniqueConstituents(i).Type)
-                strwrite.Write ("   ")
-            ElseIf i = UniqueConstituents.Length -1 then
-                strwrite.WriteLine (UniqueConstituents(i).Type)
+        For i = 0 To UniqueConstituents.Length - 1
+            If i < UniqueConstituents.Length - 1 Then
+                strwrite.Write(UniqueConstituents(i).Type)
+                strwrite.Write("   ")
+            ElseIf i = UniqueConstituents.Length - 1 Then
+                strwrite.WriteLine(UniqueConstituents(i).Type)
             End If
         Next
-        
+
+        'SWMM-Reihen immer in l/s
+        KonFaktor = FakConv(Reihen(0).Einheit)
+
         'Zeitreihen rausschreiben
         'TO DO: Bei mehreren Constituents muss im Moment die richtige Reihenfolge vorab gegeben sein
         'd.h. eigentlich muss beim rausschreiben noch Objekt und Constituent geprüft werden
-        LenReihe=Reihen(0).Length
-        For i = 0 to LenReihe - 1
-            For j = 0 to AnzOutNodes - 1
-                strwrite.Write (UniqueNodes(j).PadRight(12))
+        LenReihe = Reihen(0).Length
+        For i = 0 To LenReihe - 1
+            For j = 0 To AnzOutNodes - 1
+                strwrite.Write(UniqueNodes(j).PadRight(12))
                 strwrite.Write("   ")
-                strwrite.Write(Reihen(j).XWerte(i).ToString (DatumsformatSWMM_TXT))
+                strwrite.Write(Reihen(j).XWerte(i).ToString(DatumsformatSWMM_TXT))
                 strwrite.Write(" 00   ")
-                strwrite.Write(Reihen(j * UniqueConstituents.Length).YWerte(i).ToString(Zahlenformat).PadLeft(14))
-                If UniqueConstituents.Length > 1
-                    For k = 1 to UniqueConstituents.Length - 1
-                        If k < UniqueConstituents.Length - 1
+                strwrite.Write((Reihen(j * UniqueConstituents.Length).YWerte(i) * KonFaktor).ToString(Zahlenformat).PadLeft(14))
+                If UniqueConstituents.Length > 1 Then
+                    For k = 1 To UniqueConstituents.Length - 1
+                        If k < UniqueConstituents.Length - 1 Then
                             strwrite.Write("   ")
-                            strwrite.Write(Reihen(j * k + 1).YWerte(i).ToString(Zahlenformat).PadLeft(10))
-                        ElseIf k = UniqueConstituents.Length - 1
+                            strwrite.Write((Reihen(j * k + 1).YWerte(i) * KonFaktor).ToString(Zahlenformat).PadLeft(10))
+                        ElseIf k = UniqueConstituents.Length - 1 Then
                             strwrite.Write("   ")
-                            strwrite.WriteLine(Reihen(j * UniqueConstituents.Length + 1).YWerte(i).ToString(Zahlenformat).PadLeft(10))
+                            strwrite.WriteLine((Reihen(j * UniqueConstituents.Length + 1).YWerte(i) * KonFaktor).ToString(Zahlenformat).PadLeft(10))
                         End If
                     Next
                 Else
-                    strwrite.WriteLine
+                    strwrite.WriteLine()
                 End If
             Next
-        next
-        
+        Next
+
         strwrite.Close()
 
     End Sub
@@ -412,82 +418,92 @@ Public Class SWMM_TXT
         End If
 
     End Function
-    
-    public Shared Function nEqualStrings (strArrayIn() As string) As Integer
 
-        Dim Names () As String
-        Dim i,j As Integer
-        Dim strExists as boolean
-        
-        ReDim preserve Names (0)
-        Names (0) = strArrayIn(0)
+    Public Shared Function nEqualStrings(ByVal strArrayIn() As String) As Integer
+
+        Dim Names() As String
+        Dim i, j As Integer
+        Dim strExists As Boolean
+
+        ReDim Preserve Names(0)
+        Names(0) = strArrayIn(0)
         nEqualStrings = 1
-        
-        For i = 0 to strArrayIn.Length - 1
+
+        For i = 0 To strArrayIn.Length - 1
             strExists = False
-            For j = 0 to Names.Length - 1
-                If strArrayIn(i) = Names(j) then
+            For j = 0 To Names.Length - 1
+                If strArrayIn(i) = Names(j) Then
                     strExists = True
-                    exit For
+                    Exit For
                 End If
-            next
-            If strExists = False
+            Next
+            If strExists = False Then
                 nEqualStrings = nEqualStrings + 1
-                ReDim Preserve Names (names.Length)
-                Names (names.Length - 1) = strArrayIn (i)
+                ReDim Preserve Names(Names.Length)
+                Names(Names.Length - 1) = strArrayIn(i)
             End If
         Next
-        
+
     End Function
 
-    public shared sub GetUniqueConstituents (byval AllConstIn() As  Constituent, ByRef ConstOut() As Constituent)
+    Public Shared Sub GetUniqueConstituents(ByVal AllConstIn() As Constituent, ByRef ConstOut() As Constituent)
 
-        Dim i,j As Integer
+        Dim i, j As Integer
         Dim ExistsOutArray As Boolean
-        
-        ConstOut(0).type = AllConstIn(0).Type
+
+        ConstOut(0).Type = AllConstIn(0).Type
         ConstOut(0).Unit = AllConstIn(0).Unit
-        
-        For i = 0 to AllConstIn.Length - 1
-            ExistsOutArray = False
-            For j = 0 to ConstOut.Length - 1
-                If AllConstIn(i).Type = ConstOut(j).Type then
-                    ExistsOutArray = True
-                    Exit For
-                End If
-            next
-            If ExistsOutArray = False
-                ReDim Preserve constout (constout.Length)
-                ConstOut(constout.Length-1).Type = allconstin(i).Type
-                ConstOut(constout.Length-1).unit = allconstin(i).Unit
-            End If
-        Next
-        
-    End sub
-        
-    public shared sub GetUniqueNodes (byval AllNodesIn() As  string, ByRef NodesOut() As string)
 
-        Dim i,j As Integer
-        Dim ExistsOutArray As Boolean
-        
-        nodesOut(0) = AllnodesIn(0)
-        
-        For i = 0 to AllnodesIn.Length - 1
+        For i = 0 To AllConstIn.Length - 1
             ExistsOutArray = False
-            For j = 0 to nodesOut.Length - 1
-                If AllnodesIn(i) = nodesOut(j) then
+            For j = 0 To ConstOut.Length - 1
+                If AllConstIn(i).Type = ConstOut(j).Type Then
                     ExistsOutArray = True
                     Exit For
                 End If
-            next
-            If ExistsOutArray = False
-                ReDim Preserve nodesout (nodesout.Length)
-                nodesOut(nodesout.Length-1) = allnodesin(i)
+            Next
+            If ExistsOutArray = False Then
+                ReDim Preserve ConstOut(ConstOut.Length)
+                ConstOut(ConstOut.Length - 1).Type = AllConstIn(i).Type
+                ConstOut(ConstOut.Length - 1).Unit = AllConstIn(i).Unit
             End If
         Next
-        
-    End sub
-        
+
+    End Sub
+
+    Public Shared Sub GetUniqueNodes(ByVal AllNodesIn() As String, ByRef NodesOut() As String)
+
+        Dim i, j As Integer
+        Dim ExistsOutArray As Boolean
+
+        NodesOut(0) = AllNodesIn(0)
+
+        For i = 0 To AllNodesIn.Length - 1
+            ExistsOutArray = False
+            For j = 0 To NodesOut.Length - 1
+                If AllNodesIn(i) = NodesOut(j) Then
+                    ExistsOutArray = True
+                    Exit For
+                End If
+            Next
+            If ExistsOutArray = False Then
+                ReDim Preserve NodesOut(NodesOut.Length)
+                NodesOut(NodesOut.Length - 1) = AllNodesIn(i)
+            End If
+        Next
+
+    End Sub
+
+    Public Shared Function FakConv(ByVal UnitIn As String) As Integer
+
+        Select Case UnitIn
+            Case "m3/s"
+                Return 1000
+            Case Else
+                Return 1
+        End Select
+    End Function
+
 #End Region 'Methoden
 
 End Class
