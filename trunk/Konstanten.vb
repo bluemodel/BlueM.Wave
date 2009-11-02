@@ -29,6 +29,7 @@ Module Konstanten
         REG_SMUSI = 6
         DAT_SWMM_MASS = 7
         DAT_SWMM_TIME = 8
+        TXT = 9
     End Enum
 
     ''' <summary>

@@ -21,6 +21,9 @@ Public Class ExportDiag
             Case Konstanten.Dateiformate.DAT_SWMM_TIME
                 Me.ListBox_Zeitreihen.SelectionMode = SelectionMode.One
 
+            Case Konstanten.Dateiformate.TXT
+                Me.ListBox_Zeitreihen.SelectionMode = SelectionMode.MultiExtended
+
             Case Else
                 Me.ListBox_Zeitreihen.SelectionMode = SelectionMode.MultiExtended
                 'Noch nicht implementiert

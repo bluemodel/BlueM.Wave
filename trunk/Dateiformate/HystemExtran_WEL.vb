@@ -115,6 +115,8 @@ Public Class HystemExtran_WEL
                     Me.Spalten(index).Name = Zeile.Substring((j * Me.Spaltenbreite) + SpaltenOffset, Me.Spaltenbreite)
                     Me.Spalten(index).Einheit = HExt_welEinheit
                     Me.Spalten(index).Index = index
+                    Me.Spalten(index).Objekt = trim(Me.Spalten(index).Name)
+                    Me.Spalten(index).Type = "FLOW"
                     index = index + 1
                 Next
             Next
@@ -159,6 +161,8 @@ Public Class HystemExtran_WEL
             'Alle ausgewählten Spalten durchlaufen
             For i = 0 To Me.SpaltenSel.Length - 1
                 Me.Zeitreihen(i).Einheit = Me.SpaltenSel(i).Einheit
+                Me.Zeitreihen(i).Objekt = Me.SpaltenSel(i).Objekt
+                Me.Zeitreihen(i).Type = Me.SpaltenSel(i).Type
             Next
         End If
 

@@ -38,6 +38,8 @@ Public MustInherit Class Dateiformat
         Public Name As String
         Public Einheit As String
         Public Index As Integer
+        Public Objekt As String
+        Public Type As String
         Public Overrides Function ToString() As String
             Return Me.Name
         End Function

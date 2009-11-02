@@ -8,6 +8,8 @@ Public Class Zeitreihe
     Private _title As String
     Private _nodes As SortedList(Of DateTime, Double)
     Private _Einheit As String
+    Private _Objekt As String
+    Private _Type As String
    
 #End Region 'Eigenschaften
 
@@ -25,6 +27,24 @@ Public Class Zeitreihe
         End Get
         Set(ByVal value As String)
             _title = value
+        End Set
+    End Property
+
+    Public Property Objekt() As String
+        Get
+            Return _Objekt
+        End Get
+        Set(ByVal value As String)
+            _Objekt = value
+        End Set
+    End Property
+
+Public Property Type() As String
+        Get
+            Return _Type
+        End Get
+        Set(ByVal value As String)
+            _Type = value
         End Set
     End Property
 
@@ -110,6 +130,8 @@ Public Class Zeitreihe
     Public Sub New()
         Me._title = "-"
         Me._Einheit = "-"
+        Me._Objekt = "-"
+        Me._Type = "-"
         Me._nodes = New SortedList(Of DateTime, Double)
     End Sub
 
@@ -120,6 +142,8 @@ Public Class Zeitreihe
     Public Sub New(ByVal title As String)
         Me._title = title
         Me._Einheit = "-"
+        Me._Objekt = "-"
+        Me._Type = "-"
         Me._nodes = New SortedList(Of DateTime, Double)
     End Sub
 
@@ -136,6 +160,8 @@ Public Class Zeitreihe
     Public Function Clone() As Zeitreihe
         Dim target As New Zeitreihe(Me.Title)
         target.Einheit = Me.Einheit
+        target.Objekt = Me.Objekt
+        target.Type = Me.Type
         target._nodes = New SortedList(Of DateTime, Double)(Me._nodes)
         Return target
     End Function
@@ -494,6 +520,8 @@ Public Class Zeitreihe
         'Neue Zeitreihe instanzieren
         cleanZRE = New Zeitreihe(Me.Title)
         cleanZRE.Einheit = Me.Einheit
+        cleanZRE.Objekt = Me.Objekt
+        cleanZRE.Type = Me.Type
 
         NaNCounter = 0
 
