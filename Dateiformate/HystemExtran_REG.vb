@@ -165,7 +165,7 @@ Public Class HystemExtran_REG
             j += 1
             Zeile = StrReadSync.ReadLine.ToString()
 
-            If Zeile.Substring(5) = " 0 09999 0 0 0E" Then Exit Do
+            If Zeile.Substring(19,1) = "E" Then Exit Do
 
             If (j > Me.nZeilenHeader And Zeile.Length > 0) Then
 
@@ -177,7 +177,7 @@ Public Class HystemExtran_REG
                 Stunde = Zeile.Substring(13, 2)
                 Minute = Zeile.Substring(15, 2)
                 Zeilendatum = New System.DateTime(Jahr, Monat, Tag, Stunde, Minute, 0, New System.Globalization.GregorianCalendar())
-
+                
                 'Datum und Wert zur Zeitreihe hinzufügen
                 '---------------------------------------
                 'alle bis auf den letzten Wert einlesen
