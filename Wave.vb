@@ -340,6 +340,17 @@ Public Class Wave
         End If
     End Sub
 
+    'Serie(n) konvertieren
+    '*********************
+    Private Sub ToolStripButton_Convert_Click(ByVal sender As Object, ByVal e As System.EventArgs) Handles ToolStripButton_Convert.Click
+
+    Me.OpenFileDialog1.Title = "Serie(n) importieren"
+        Me.OpenFileDialog1.Filter = FileFilter_Import
+        If (Me.OpenFileDialog1.ShowDialog() = Windows.Forms.DialogResult.OK) Then
+            Call Me.Convert_File(Me.OpenFileDialog1.FileName)
+        End If
+    End Sub
+
     'Serie eingeben
     '**************
     Private Sub Eingeben(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_EnterSeries.Click
@@ -385,7 +396,10 @@ Public Class Wave
     'Exportieren
     '***********
     Private Sub Exportieren(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_Export.Click
+        Call ExportierenOhnePara()
+    End Sub
 
+    Private Sub ExportierenOhnePara()
         Dim ExportDiag As New ExportDiag()
         Dim Reihe As Zeitreihe
         Dim MultiReihe() As Zeitreihe
@@ -872,6 +886,83 @@ Public Class Wave
 
     End Sub
 
+''' <summary>
+    ''' Zeitreihe(n) aus einer Datei importieren
+    ''' </summary>
+    ''' <param name="file">Pfad zur Datei</param>
+    Public Sub Convert_File(ByVal file As String)
+
+        Dim Datei As Dateiformat
+        Dim i As Integer
+        'Dim ok As Boolean
+
+        'Sonderfälle abfangen:
+        '---------------------
+        'Select Case Path.GetExtension(file).ToUpper()
+
+        '    Case Dateifactory.FileExtTEN
+        '        '.TEN-Datei
+        '        Call Me.Open_TEN(file)
+
+        '    Case Dateifactory.FileExtRVA
+        '        '.RVA-Datei
+        '        Call Me.Import_RVA(file)
+
+        '    Case Else
+
+                'Normalfall:
+                '-----------
+
+        Try
+            'Log
+            Call Log.AddLogEntry("Importiere Datei '" & file & "' ...")
+
+            'Datei-Instanz erzeugen
+            Datei = Dateifactory.getDateiInstanz(file)
+
+            'Alle Spalten auswählen
+            Call Datei.selectAllSpalten()
+
+            Cursor = Cursors.WaitCursor
+
+            'Datei einlesen
+            Call Datei.Read_File()
+
+            'Log
+            Call Log.AddLogEntry("Datei '" & file & "' erfolgreich importiert!")
+            Application.DoEvents()
+
+            'Datei abspeichern
+            Me.ImportedFiles.Add(Datei)
+
+            'Log
+            Call Log.AddLogEntry("Zeitreihen in Diagramm laden...")
+            Application.DoEvents()
+
+            'Alle eingelesenen Zeitreihen der Datei durchlaufen
+            For i = 0 To Datei.Zeitreihen.GetUpperBound(0)
+                'Serie importieren
+                Call Me.Import_Series(Datei.Zeitreihen(i), False)
+            Next
+
+            Me.ExportierenOhnePara()
+
+            'Log
+            Call Log.AddLogEntry("Zeitreihen erfolgreich in Diagramm geladen!")
+
+
+        Catch ex As Exception
+            MsgBox("Fehler beim Import:" & eol & ex.Message, MsgBoxStyle.Critical)
+            Call Log.AddLogEntry("Fehler beim Import: " & ex.Message)
+
+        Finally
+            Cursor = Cursors.Default
+        End Try
+
+        'End Select
+
+    End Sub
+
     Public Sub Select_ASC(ByVal Workdir As String)
 
         Dim FileName As String
@@ -953,11 +1044,13 @@ Public Class Wave
     ''' </summary>
     ''' <param name="zre">the time series</param>
     ''' <remarks>saves and then display the time series</remarks>
-    Public Sub Import_Series(ByVal zre As Zeitreihe)
+    Public Sub Import_Series(ByVal zre As Zeitreihe, Optional ByVal Display As Boolean = True)
         'Serie abspeichen
         Me.AddZeitreihe(zre)
-        'Serie anzeigen
-        Call Me.Display_Series(zre)
+        If Display Then
+            'Serie anzeigen
+            Call Me.Display_Series(zre)
+        End If
     End Sub
 
     ''' <summary>
@@ -1199,5 +1292,7 @@ Public Class Wave
     End Sub
 
 #End Region 'Funktionalität
+
+
 
 End Class

@@ -42,4 +42,21 @@ Public Class ExportDiag
             Me.DialogResult = Windows.Forms.DialogResult.None
         End If
     End Sub
+
+
+Private Sub Button_SelectAll_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button_SelectAll.Click
+
+    Dim i As Long
+
+    Select Case ComboBox_Format.SelectedItem
+        Case Konstanten.Dateiformate.TXT
+            For i = 0 To Me.ListBox_Zeitreihen.Items.Count - 1
+                Me.ListBox_Zeitreihen.SetSelected(i, True)
+            Next
+        Case Else
+            MsgBox("Bei diesem Format ist keine mehrfachauswahl möglich")
+    End Select
+
+End Sub
+
 End Class
