@@ -273,4 +273,15 @@ Partial Public Class ImportDiag
 
 #End Region 'Methoden
 
+
+Private Sub Select_All(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button_SelectAll.Click
+
+    Dim i As Long
+
+    For i = 0 To Me.ListBox_YSpalten.Items.Count - 1
+        Me.ListBox_YSpalten.SetSelected(i, True)
+    Next
+
+
+End Sub
 End Class
