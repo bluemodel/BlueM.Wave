@@ -1080,6 +1080,10 @@ Public Class Wave
                 Line2.CustomVertAxis = Me.MyAxes2(zre.Einheit)
         End Select
 
+        'Strichstärke etc.
+        Line1.LinePen.Width = 3
+        Line2.LinePen.Width = 3
+
         'Charts aktualisieren
         Call Me.UpdateCharts()
 
@@ -1258,11 +1262,15 @@ Public Class Wave
         'Legende
         Me.TChart1.Legend.CheckBoxes = True
 
-        'Markstips
-        Dim markstip As New Steema.TeeChart.Tools.MarksTip()
-        markstip.Style = Steema.TeeChart.Styles.MarksStyles.Value
-        Me.TChart1.Tools.Add(markstip)
+        Call PrepareMarktip()
 
+    End Sub
+
+    Private Sub PrepareMarktip()
+            'Markstips
+            Dim markstip As New Steema.TeeChart.Tools.MarksTip()
+            markstip.Style = Steema.TeeChart.Styles.MarksStyles.Value
+            Me.TChart1.Tools.Add(markstip)
     End Sub
 
 #End Region 'Funktionalität

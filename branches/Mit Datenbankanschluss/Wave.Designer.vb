@@ -37,6 +37,7 @@ Me.ToolStripButton_Speichern = New System.Windows.Forms.ToolStripButton
 Me.ToolStripButton_Export = New System.Windows.Forms.ToolStripButton
 Me.ToolStripButton_Import = New System.Windows.Forms.ToolStripButton
 Me.ToolStripButton_EnterSeries = New System.Windows.Forms.ToolStripButton
+Me.ToolStripButton_ImportFromDB = New System.Windows.Forms.ToolStripButton
 Me.ToolStripButton_Cut = New System.Windows.Forms.ToolStripButton
 Me.ToolStripButton_Analysis = New System.Windows.Forms.ToolStripButton
 Me.ToolStripButton_EditChart = New System.Windows.Forms.ToolStripButton
@@ -47,7 +48,6 @@ Me.ToolStripButton_ReRead = New System.Windows.Forms.ToolStripButton
 Me.ToolStripSplitButton_Help = New System.Windows.Forms.ToolStripSplitButton
 Me.HilfeToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem
 Me.AboutToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem
-Me.ToolStripButton_ImportFromDB = New System.Windows.Forms.ToolStripButton
 Me.TChart1 = New Steema.TeeChart.TChart
 Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog
 Me.DateTimePicker1 = New System.Windows.Forms.DateTimePicker
@@ -184,6 +184,16 @@ Me.ToolStripButton_EnterSeries.Name = "ToolStripButton_EnterSeries"
 Me.ToolStripButton_EnterSeries.Size = New System.Drawing.Size(23, 31)
 Me.ToolStripButton_EnterSeries.Text = "Zeitreihe eingeben"
 '
+'ToolStripButton_ImportFromDB
+'
+Me.ToolStripButton_ImportFromDB.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+Me.ToolStripButton_ImportFromDB.Image = Global.IHWB.Wave.My.Resources.Resources.database_refresh
+Me.ToolStripButton_ImportFromDB.ImageTransparentColor = System.Drawing.Color.Magenta
+Me.ToolStripButton_ImportFromDB.Name = "ToolStripButton_ImportFromDB"
+Me.ToolStripButton_ImportFromDB.Size = New System.Drawing.Size(23, 31)
+Me.ToolStripButton_ImportFromDB.Text = "Import DB"
+Me.ToolStripButton_ImportFromDB.ToolTipText = "Importieren aus der Ergebnisdatenbank vom BlueM.Analyser"
+'
 'ToolStripButton_Cut
 '
 Me.ToolStripButton_Cut.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
@@ -276,16 +286,6 @@ Me.AboutToolStripMenuItem.Name = "AboutToolStripMenuItem"
 Me.AboutToolStripMenuItem.Size = New System.Drawing.Size(114, 22)
 Me.AboutToolStripMenuItem.Text = "About"
 '
-'ToolStripButton_ImportFromDB
-'
-Me.ToolStripButton_ImportFromDB.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-Me.ToolStripButton_ImportFromDB.Image = Global.IHWB.Wave.My.Resources.Resources.database_refresh
-Me.ToolStripButton_ImportFromDB.ImageTransparentColor = System.Drawing.Color.Magenta
-Me.ToolStripButton_ImportFromDB.Name = "ToolStripButton_ImportFromDB"
-Me.ToolStripButton_ImportFromDB.Size = New System.Drawing.Size(23, 31)
-Me.ToolStripButton_ImportFromDB.Text = "Import DB"
-Me.ToolStripButton_ImportFromDB.ToolTipText = "Importieren aus der Ergebnisdatenbank vom BlueM.Analyser"
-'
 'TChart1
 '
 '
@@ -295,7 +295,7 @@ Me.TChart1.Aspect.ZOffset = 0
 Me.TChart1.Dock = System.Windows.Forms.DockStyle.Fill
 Me.TChart1.Location = New System.Drawing.Point(0, 0)
 Me.TChart1.Name = "TChart1"
-Me.TChart1.Size = New System.Drawing.Size(941, 435)
+Me.TChart1.Size = New System.Drawing.Size(941, 497)
 Me.TChart1.TabIndex = 0
 '
 'DateTimePicker1
@@ -325,7 +325,7 @@ Me.SplitContainer1.Panel1MinSize = 100
 Me.SplitContainer1.Panel2.Controls.Add(Me.TChart1)
 Me.SplitContainer1.Panel2MinSize = 100
 Me.SplitContainer1.Size = New System.Drawing.Size(945, 605)
-Me.SplitContainer1.SplitterDistance = 162
+Me.SplitContainer1.SplitterDistance = 100
 Me.SplitContainer1.TabIndex = 1
 '
 'TChart2
@@ -338,7 +338,7 @@ Me.TChart2.Cursor = System.Windows.Forms.Cursors.Default
 Me.TChart2.Dock = System.Windows.Forms.DockStyle.Fill
 Me.TChart2.Location = New System.Drawing.Point(0, 0)
 Me.TChart2.Name = "TChart2"
-Me.TChart2.Size = New System.Drawing.Size(941, 158)
+Me.TChart2.Size = New System.Drawing.Size(941, 96)
 Me.TChart2.TabIndex = 0
 '
 'Wave
