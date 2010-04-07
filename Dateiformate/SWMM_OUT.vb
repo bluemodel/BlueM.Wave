@@ -108,19 +108,28 @@ Public Class SWMM_OUT
         Me.Spalten(0).Einheit = "-"
         indexSpalten = 1
         For i = 0 To nSubcatch - 1
+            'Flows
             For j = 0 To nSubcatchVars - nPolluts - 1
                 index = indexSpalten + i * nSubcatchVars + j
                 Me.Spalten(index).Name = oSWMM.subcatchments(i) & " " & oSWMM.SUBCATCHVAR(j)
+                Me.Spalten(index).Objekt = oSWMM.subcatchments(i)
                 Me.Spalten(index).Einheit = Units(0, j, FlowUnits)
+                Me.Spalten(index).Type = "FLOW"
+                Me.Spalten(index).ObjType = "Subcatchment"
                 Me.Spalten(index).Index = index
                 SWMMBinaryFileIndex(index).iType = 0
                 SWMMBinaryFileIndex(index).iIndex = i
                 SWMMBinaryFileIndex(index).vIndex = j
             Next
+            'Pollutants
             For j = nSubcatchVars - nPolluts To nSubcatchVars - 1
                 index = indexSpalten + i * nSubcatchVars + j
                 Me.Spalten(index).Name = oSWMM.subcatchments(i) & " " & oSWMM.pollutants(j - nSubcatchVars + nPolluts)
+                Me.Spalten(index).Objekt = oSWMM.subcatchments(i)
                 Me.Spalten(index).Einheit = Units(0, j, FlowUnits)
+                'Type aus String (z.B. für "S101 CSB" wird "CSB" ausgelesen)
+                Me.Spalten(index).Type = oSWMM.pollutants(j - nSubcatchVars + nPolluts)
+                Me.Spalten(index).ObjType = "Subcatchment"
                 Me.Spalten(index).Index = index
                 SWMMBinaryFileIndex(index).iType = 0
                 SWMMBinaryFileIndex(index).iIndex = i
@@ -129,19 +138,28 @@ Public Class SWMM_OUT
         Next
         indexSpalten += nSubcatch * nSubcatchVars
         For i = 0 To nNodes - 1
+            'Flows
             For j = 0 To nNodesVars - nPolluts - 1
                 index = indexSpalten + i * nNodesVars + j
                 Me.Spalten(index).Name = oSWMM.nodes(i) & " " & oSWMM.NODEVAR(j)
+                Me.Spalten(index).Objekt = oSWMM.nodes(i)
                 Me.Spalten(index).Einheit = Units(1, j, FlowUnits)
+                Me.Spalten(index).Type = "FLOW"
+                Me.Spalten(index).ObjType = "Node"
                 Me.Spalten(index).Index = index
                 SWMMBinaryFileIndex(index).iType = 1
                 SWMMBinaryFileIndex(index).iIndex = i
                 SWMMBinaryFileIndex(index).vIndex = j
             Next
+            'Pollutants
             For j = nNodesVars - nPolluts To nNodesVars - 1
                 index = indexSpalten + i * nNodesVars + j
                 Me.Spalten(index).Name = oSWMM.nodes(i) & " " & oSWMM.pollutants(j - nNodesVars + nPolluts)
+                Me.Spalten(index).Objekt = oSWMM.nodes(i)
                 Me.Spalten(index).Einheit = Units(1, j, FlowUnits)
+                'Type aus String (z.B. für "S101 CSB" wird "CSB" ausgelesen)
+                Me.Spalten(index).Type = oSWMM.pollutants(j - nNodesVars + nPolluts)
+                Me.Spalten(index).ObjType = "Node"
                 Me.Spalten(index).Index = index
                 SWMMBinaryFileIndex(index).iType = 1
                 SWMMBinaryFileIndex(index).iIndex = i
@@ -150,19 +168,28 @@ Public Class SWMM_OUT
         Next
         indexSpalten += nNodes * nNodesVars
         For i = 0 To nLinks - 1
+            'Flows
             For j = 0 To nLinksVars - nPolluts - 1
                 index = indexSpalten + i * nLinksVars + j
                 Me.Spalten(index).Name = oSWMM.links(i) & " " & oSWMM.LINKVAR(j)
+                Me.Spalten(index).Objekt = oSWMM.links(i)
                 Me.Spalten(index).Einheit = Units(2, j, FlowUnits)
+                Me.Spalten(index).Type = "FLOW"
+                Me.Spalten(index).ObjType = "Link"
                 Me.Spalten(index).Index = index
                 SWMMBinaryFileIndex(index).iType = 2
                 SWMMBinaryFileIndex(index).iIndex = i
                 SWMMBinaryFileIndex(index).vIndex = j
             Next
+            'Pollutants
             For j = nLinksVars - nPolluts To nLinksVars - 1
                 index = indexSpalten + i * nLinksVars + j
                 Me.Spalten(index).Name = oSWMM.links(i) & " " & oSWMM.pollutants(j - nLinksVars + nPolluts)
+                Me.Spalten(index).Objekt = oSWMM.links(i)
                 Me.Spalten(index).Einheit = Units(2, j, FlowUnits)
+                'Type aus String (z.B. für "S101 CSB" wird "CSB" ausgelesen)
+                Me.Spalten(index).Type = oSWMM.pollutants(j - nLinksVars + nPolluts)
+                Me.Spalten(index).ObjType = "Link"
                 Me.Spalten(index).Index = index
                 SWMMBinaryFileIndex(index).iType = 2
                 SWMMBinaryFileIndex(index).iIndex = i
@@ -204,8 +231,11 @@ Public Class SWMM_OUT
             If (Me.UseEinheiten) Then
                 Me.Zeitreihen(i).Einheit = Me.SpaltenSel(i).Einheit
             End If
+            'Objektname und Typ (für SWMM-Txt-Export)
+            Me.Zeitreihen(i).Objekt = Me.SpaltenSel(i).Objekt
+            Me.Zeitreihen(i).Type = Me.SpaltenSel(i).Type
             For j = 0 To anzSpalten - 1
-                If Me.SpaltenSel(i).Name = Me.Spalten(j).Name Then
+                If (Me.SpaltenSel(i).Name = Me.Spalten(j).Name) And (Me.SpaltenSel(i).ObjType = Me.Spalten(j).ObjType) Then
                     index = j
                     For period = 0 To oSWMM.NPeriods - 1
                         oSWMM.GetSwmmDate(period, datum)
@@ -280,9 +310,12 @@ Public Class SWMM_OUT
         '                 "Stored Volume",//12 for volume of stored water (ft3 or m3),  
         '                 "Rate Evapo"};   //13 for evaporation rate (in/day or mm/day) 
 
+        'FlowUnits:
+        'CMS = 3
+        'LPS = 4
         Units = "-"
         Select Case FlowUnits
-            Case 3
+            Case 3    'CMS
                 Select Case iType
                     Case 0
                         Select Case vIndex
@@ -298,6 +331,8 @@ Public Class SWMM_OUT
                                 Units = "m³s­¹"
                             Case 5
                                 Units = "m"
+                            Case Else
+                                Units = "MGL"
                         End Select
                     Case 1
                         Select Case vIndex
@@ -313,6 +348,8 @@ Public Class SWMM_OUT
                                 Units = "m³s­¹"
                             Case 5
                                 Units = "m³s­¹"
+                            Case Else
+                                Units = "MGL"
                         End Select
                     Case 2
                         Select Case vIndex
@@ -326,6 +363,8 @@ Public Class SWMM_OUT
                                 Units = "-"
                             Case 4
                                 Units = "-"
+                            Case Else
+                                Units = "MGL"
                         End Select
                     Case 3
                         Select Case vIndex
@@ -359,7 +398,90 @@ Public Class SWMM_OUT
                                 Units = "mm/day"
                         End Select
                 End Select
-            Case Else
+            Case 4  'LPS
+                Select Case iType
+                    Case 0
+                        Select Case vIndex
+                            Case 0
+                                Units = "mm/hr"
+                            Case 1
+                                Units = "mm"
+                            Case 2
+                                Units = "mm/hr"
+                            Case 3
+                                Units = "LPS"
+                            Case 4
+                                Units = "LPS"
+                            Case 5
+                                Units = "m"
+                            Case Else
+                                Units = "MGL"
+                        End Select
+                    Case 1
+                        Select Case vIndex
+                            Case 0
+                                Units = "m"
+                            Case 1
+                                Units = "m"
+                            Case 2
+                                Units = "m³"
+                            Case 3
+                                Units = "LPS"
+                            Case 4
+                                Units = "LPS"
+                            Case 5
+                                Units = "LPS"
+                            Case Else
+                                Units = "MGL"
+                        End Select
+                    Case 2
+                        Select Case vIndex
+                            Case 0
+                                Units = "LPS"
+                            Case 1
+                                Units = "m"
+                            Case 2
+                                Units = "LPS"
+                            Case 3
+                                Units = "-"
+                            Case 4
+                                Units = "-"
+                            Case Else
+                                Units = "MGL"
+                        End Select
+                    Case 3
+                        Select Case vIndex
+                            Case 0
+                                Units = "C°"
+                            Case 1
+                                Units = "mm/hr"
+                            Case 2
+                                Units = "mm"
+                            Case 3
+                                Units = "mm/hr"
+                            Case 4
+                                Units = "LPS"
+                            Case 5
+                                Units = "LPS"
+                            Case 6
+                                Units = "LPS"
+                            Case 7
+                                Units = "LPS"
+                            Case 8
+                                Units = "LPS"
+                            Case 9
+                                Units = "LPS"
+                            Case 10
+                                Units = "LPS"
+                            Case 11
+                                Units = "LPS"
+                            Case 12
+                                Units = "m³"
+                            Case 13
+                                Units = "mm/day"
+                        End Select
+                    End Select
+                Case Else
                 Units = "-"
         End Select
         Return Units
