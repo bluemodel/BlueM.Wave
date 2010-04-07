@@ -35,11 +35,12 @@ Public MustInherit Class Dateiformat
     Private _nZeilen As Integer = 1
 
     Public Structure SpaltenInfo
-        Public Name As String
-        Public Einheit As String
+        Public Name As String     'Gesamte Bezeichnung der Reihe (z.B. "S101 FLOW")
+        Public Einheit As String  '"LPS", "CMS", "MG/L"
         Public Index As Integer
-        Public Objekt As String
-        Public Type As String
+        Public Objekt As String   'Bezeichnung des Objekts (z.B. "S101")
+        Public Type As String     '"FLOW" oder ein Stoffparameter (z.B. "CSB")
+        Public ObjType As String  '"Subcatchment", "Node" oder "Link"
         Public Overrides Function ToString() As String
             Return Me.Name
         End Function
