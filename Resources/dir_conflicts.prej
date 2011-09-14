@@ -1,4 +1,0 @@
-Trying to add new property 'bugtraq:url' with value 'http://130.83.196.154/bugzilla/show_bug.cgi?id=%BUGID%',
-but property already exists with value 'http://bugs.bluemodel.org/show_bug.cgi?id=%BUGID%'.
-Trying to change property 'bugtraq:url' from 'http://130.83.196.154/bugzilla/show_bug.cgi?id=%BUGID%' to 'http://bugs.bluemodel.org/show_bug.cgi?id=%BUGID%',
-but property already exists with value 'http://bugs.bluemodel.org/show_bug.cgi?id=%BUGID%'.
