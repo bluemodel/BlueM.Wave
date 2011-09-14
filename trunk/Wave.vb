@@ -320,9 +320,25 @@ Public Class Wave
 
     End Sub
 
+    'Dropdown für Öffnen Button
+    '**************************
+    Private Sub MenuDropDown_Oeffnen(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripSplitButton_Oeffnen.ButtonClick
+        Me.ToolStripSplitButton_Oeffnen.ShowDropDown()
+    End Sub
+
+    'Serie(n) importieren
+    '********************
+    Private Sub Importieren(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem_ZeitreihenImportieren.Click
+        Me.OpenFileDialog1.Title = "Serie(n) importieren"
+        Me.OpenFileDialog1.Filter = FileFilter_Import
+        If (Me.OpenFileDialog1.ShowDialog() = Windows.Forms.DialogResult.OK) Then
+            Call Me.Import_File(Me.OpenFileDialog1.FileName)
+        End If
+    End Sub
+
     'TEN-Datei öffnen
     '****************
-    Private Sub Öffnen(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_Öffnen.Click
+    Private Sub Öffnen(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem_Oeffnen.Click
         Me.OpenFileDialog1.Title = "TEN-Datei öffnen"
         Me.OpenFileDialog1.Filter = FileFilter_TEN
         If (Me.OpenFileDialog1.ShowDialog() = Windows.Forms.DialogResult.OK) Then
@@ -330,14 +346,22 @@ Public Class Wave
         End If
     End Sub
 
-    'Serie(n) importieren
-    '********************
-    Private Sub Importieren(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_Import.Click
-        Me.OpenFileDialog1.Title = "Serie(n) importieren"
-        Me.OpenFileDialog1.Filter = FileFilter_Import
-        If (Me.OpenFileDialog1.ShowDialog() = Windows.Forms.DialogResult.OK) Then
-            Call Me.Import_File(Me.OpenFileDialog1.FileName)
-        End If
+    'Dropdown für Speichern Button
+    '*****************************
+    Private Sub MenuDropDown_Speichern(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripSplitButton_Speichern.Click
+        Me.ToolStripSplitButton_Speichern.ShowDropDown()
+    End Sub
+
+    'Teechart Export
+    '***************
+    Private Sub Export_TChart(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem_Speichern.Click
+        Call Me.TChart1.Export.ShowExportDialog()
+    End Sub
+
+    'BlueM Export
+    '************
+    Private Sub Export_BlueM(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles BlueMFormatExportierenToolStripMenuItem.Click
+        Call ExportierenOhnePara()
     End Sub
 
     'Serie(n) konvertieren
@@ -353,7 +377,7 @@ Public Class Wave
 
     'Serie eingeben
     '**************
-    Private Sub Eingeben(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_EnterSeries.Click
+    Private Sub Eingeben(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem_ZeitreiheEingeben.Click
         Dim SeriesEditor As New SeriesEditorDialog()
         If (SeriesEditor.ShowDialog() = Windows.Forms.DialogResult.OK) Then
             Call Me.Import_Series(SeriesEditor.Zeitreihe)
@@ -385,18 +409,6 @@ Public Class Wave
     '**********
     Private Sub EditChart(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_EditChart.Click, TChart1.DoubleClick
         Call Steema.TeeChart.Editor.Show(Me.TChart1)
-    End Sub
-
-    'Speichern
-    '*********
-    Private Sub Speichern(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_Speichern.Click
-        Call Me.TChart1.Export.ShowExportDialog()
-    End Sub
-
-    'Exportieren
-    '***********
-    Private Sub Exportieren(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_Export.Click
-        Call ExportierenOhnePara()
     End Sub
 
     Private Sub ExportierenOhnePara()
@@ -629,7 +641,7 @@ Public Class Wave
     ''' <summary>
     ''' Löscht alle vorhandenen Serien und liest alle importierten Zeitreihen neu ein
     ''' </summary>
-    Private Sub ReRead_Files(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_ReRead.Click
+    Private Sub RefreshFromFile(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem_Refresh.Click
 
         Dim Datei As Dateiformat
         Dim Dateiliste As String
@@ -677,7 +689,7 @@ Public Class Wave
     ''' <summary>
     ''' Info Click
     ''' </summary>
-    Private Sub Info(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripSplitButton_Help.ButtonClick
+    Private Sub MenuDropdown_Hilfe(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripSplitButton_Help.ButtonClick
         'keine Funktionalität, nur Dropdown
         Me.ToolStripSplitButton_Help.ShowDropDown()
     End Sub
