@@ -260,9 +260,6 @@
     <None Include="Resources\TeeChart.dll" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\page_white_go.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\calculator.png" />
   </ItemGroup>
   <ItemGroup>
@@ -287,6 +284,7 @@
     <None Include="Resources\help.png" />
     <None Include="Resources\tick.png" />
     <None Include="Resources\chart_curve.png" />
+    <None Include="Resources\BlueM_icon.png" />
     <Content Include="Resources\chart_pie.png" />
     <Content Include="Resources\modelEAU.SWMM.DllAdapter.dll" />
     <Content Include="WAVE_RELEASE-NOTES.txt">
