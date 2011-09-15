@@ -150,6 +150,8 @@ Public Class Wave
 
         Me.TChart2.Clear()
         Call Wave.formatChart(Me.TChart2.Chart)
+        Me.TChart2.Panel.Brush.Color = Color.FromArgb(239,239,239)
+        Me.TChart2.Walls.Back.Color = Color.FromArgb(239, 239, 239)
         Me.TChart2.Header.Visible = False
 
         'Übersicht darf nicht gescrolled oder gezoomt werden
