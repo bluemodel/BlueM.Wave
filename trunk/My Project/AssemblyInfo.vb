@@ -10,14 +10,10 @@ Imports System.Runtime.InteropServices
 
 <Assembly: AssemblyTitle("Wave")> 
 <Assembly: AssemblyDescription("Wave ist Teil des BlueM Softwarepakets." & eol & eol _
-                               & "Wave ist ein Tool zum Einlesen, zur Analyse und zur flexiblen graphischen Darstellung von Zeitreihen." & eol & eol _
-                               & "Entwickler:" & eol _
-                               & "Felix Froehlich, Michael Bach, Christoph Hübner, Frank Reußner, Steffen Heusch, Dirk Muschalla" & eol & eol _
-                               & "Diese Software benutzt Silk Icons: http://www.famfamfam.com/lab/icons/silk/" & eol _
-                               & "Diese Software benutzt TeeChart: http://www.steema.com/products/teechart/")> 
+                               & "Wave ist ein Tool zum Einlesen, zur Analyse und zur flexiblen graphischen Darstellung von Zeitreihen.")> 
 <Assembly: AssemblyCompany("TU Darmstadt - ihwb")> 
 <Assembly: AssemblyProduct("Wave")> 
-<Assembly: AssemblyCopyright("Copyright © ihwb 2009")> 
+<Assembly: AssemblyCopyright("Copyright © ihwb 2011")> 
 <Assembly: AssemblyTrademark("")> 
 
 <Assembly: ComVisible(False)>
@@ -36,4 +32,4 @@ Imports System.Runtime.InteropServices
 ' übernehmen, indem Sie "*" eingeben:
 ' <Assembly: AssemblyVersion("1.0.*")> 
 
-<Assembly: AssemblyVersion("1.3.*")> 
+<Assembly: AssemblyVersion("1.4.*")> 

@@ -290,14 +290,14 @@ Partial Class Wave
         '
         Me.HilfeToolStripMenuItem.Name = "HilfeToolStripMenuItem"
         Me.HilfeToolStripMenuItem.Size = New System.Drawing.Size(176, 22)
-        Me.HilfeToolStripMenuItem.Text = "Hilfe"
+        Me.HilfeToolStripMenuItem.Text = "(Hilfe (wiki"
         '
         'AboutToolStripMenuItem
         '
         Me.AboutToolStripMenuItem.Image = Global.IHWB.Wave.My.Resources.Resources.BlueM_icon
         Me.AboutToolStripMenuItem.Name = "AboutToolStripMenuItem"
-        Me.AboutToolStripMenuItem.Size = New System.Drawing.Size(176, 22)
-        Me.AboutToolStripMenuItem.Text = "About BlueM.Wave"
+        Me.AboutToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.AboutToolStripMenuItem.Text = "About Wave"
         '
         'TChart1
         '
