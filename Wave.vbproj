@@ -2,7 +2,7 @@
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{BCD1BBE3-5AB2-4C3F-AC12-43EB977C6F6F}</ProjectGuid>
@@ -27,6 +27,7 @@
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
     <DebugType>full</DebugType>
     <PlatformTarget>x86</PlatformTarget>
+    <DocumentationFile>Wave.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <DefineTrace>true</DefineTrace>
@@ -36,6 +37,7 @@
     <DebugType>None</DebugType>
     <PlatformTarget>x86</PlatformTarget>
     <UseVSHostingProcess>false</UseVSHostingProcess>
+    <DocumentationFile>Wave.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
     <DebugSymbols>true</DebugSymbols>
@@ -45,6 +47,7 @@
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
     <DebugType>full</DebugType>
     <PlatformTarget>x64</PlatformTarget>
+    <DocumentationFile>Wave.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
     <DefineTrace>true</DefineTrace>
@@ -54,6 +57,7 @@
     <DebugType>None</DebugType>
     <PlatformTarget>x64</PlatformTarget>
     <UseVSHostingProcess>false</UseVSHostingProcess>
+    <DocumentationFile>Wave.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="modelEAU.SWMM.DllAdapter, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -289,6 +293,9 @@
     <None Include="Resources\tick.png" />
     <None Include="Resources\chart_curve.png" />
     <None Include="Resources\BlueM_icon.png" />
+    <Content Include="LICENSE.TXT">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Resources\chart_pie.png" />
     <Content Include="Resources\modelEAU.SWMM.DllAdapter.dll" />
     <Content Include="WAVE_RELEASE-NOTES.txt">
