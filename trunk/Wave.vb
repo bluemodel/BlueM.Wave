@@ -47,7 +47,8 @@ Public Class Wave
             "SIMBA-Dateien (*.smb)|*.smb|" & _
             "Hystem-Dateien (*.dat)|*.dat|" & _
             "DWD-Temperatur-Feuchte (*.dtl)|*.dtl|" & _
-            "SWMM-Dateien (*.out)|*.out"
+            "SWMM-Dateien (*.out)|*.out|" & _
+            "netCDF Daten (*.nc)|*.nc"
 
     'Chart-Zeugs
     Private WithEvents colorBand1 As Steema.TeeChart.Tools.ColorBand
@@ -833,6 +834,9 @@ Public Class Wave
                 '.RVA-Datei
                 Call Me.Import_RVA(file)
 
+            Case Dateifactory.FileExtnetCDF
+                '.netCDF Datei
+
             Case Else
 
                 'Normalfall:
@@ -1029,6 +1033,55 @@ Public Class Wave
             MsgBox("Fehler beim Import:" & eol & ex.Message, MsgBoxStyle.Critical)
             Call Log.AddLogEntry("... Fehler beim Import:" & eol & ex.Message)
         End Try
+
+    End Sub
+
+    ''' <summary>
+    ''' Eine netCDF-Datei importieren
+    ''' </summary>
+    ''' <param name="file">Pfad zur Datei</param>
+    ''' <remarks>Sonderfall, weil komplexes Dateiformat</remarks>
+    Private Sub Import_netCDF(ByVal file As String)
+
+        'Dim dlg As ImportFromNetCDF
+        'Dim ZR_netCDF As Zeitreihe_netCDF
+
+        'Try
+        '    'Log
+        '    Call Log.AddLogEntry("Importiere Datei '" & file & "' ...")
+
+        '    ZR_netCDF = New Zeitreihe_netCDF()
+
+        '    dlg = New ImportFromNetCDF
+        '    If (dlg.ShowDialog(Me) = DialogResult.OK) Then
+        '        'Importiere
+        '        'TODO
+        '    End If
+
+        '    'Log
+        '    Call Log.AddLogEntry("... Datei '" & file & "' erfolgreich importiert!")
+
+
+        '    ''Datei-Instanz erzeugen
+        '    'ZR_netCDF = Dateifactory.getDateiInstanz(file)
+
+        '    ''Einlesen
+        '    'Call RVADatei.Read_File()
+
+
+        '    ''Datei abspeichern
+        '    'Me.ImportedFiles.Add(RVADatei)
+
+        '    ''Chart vorbereiten
+        '    'Call Me.PrepareChart_RVA()
+
+        '    ''Serie zeichnen
+        '    'Call Me.Display_RVA(RVADatei.RVAValues, True)
+
+        'Catch ex As Exception
+        '    MsgBox("Fehler beim Import:" & eol & ex.Message, MsgBoxStyle.Critical)
+        '    Call Log.AddLogEntry("... Fehler beim Import:" & eol & ex.Message)
+        'End Try
 
     End Sub
 

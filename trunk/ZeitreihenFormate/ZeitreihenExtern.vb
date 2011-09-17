@@ -4,6 +4,7 @@
     public enum ZREQuellenTyp as integer
         ZRDatei = 0
         ZRDatabase = 1
+        ZRnetCDF = 2
     End Enum
 
 

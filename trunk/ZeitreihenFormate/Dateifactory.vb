@@ -18,6 +18,8 @@ Public Module Dateifactory
     Public Const FileExtOUT As String = ".OUT" 'SWMM binäre Ergebnisdatei
     Public Const FileExtTXT As String = ".TXT" 'SWMM Routingfiles
 
+    Public Const FileExtnetCDF As String = ".NC"
+
     ''' <summary>
     ''' Erzeugt eine zur Dateiendung passende Datei-Instanz
     ''' </summary>
