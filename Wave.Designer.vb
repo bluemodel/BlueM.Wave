@@ -192,15 +192,15 @@ Partial Class Wave
         '
         Me.ToolStripMenuItem_Speichern.Image = Global.IHWB.Wave.My.Resources.Resources.chart_pie
         Me.ToolStripMenuItem_Speichern.Name = "ToolStripMenuItem_Speichern"
-        Me.ToolStripMenuItem_Speichern.Size = New System.Drawing.Size(158, 22)
-        Me.ToolStripMenuItem_Speichern.Text = "TeeChart Export"
+        Me.ToolStripMenuItem_Speichern.Size = New System.Drawing.Size(197, 22)
+        Me.ToolStripMenuItem_Speichern.Text = "Diagramm exportieren"
         '
         'BlueMFormatExportierenToolStripMenuItem
         '
-        Me.BlueMFormatExportierenToolStripMenuItem.Image = Global.IHWB.Wave.My.Resources.Resources.BlueM_icon
+        Me.BlueMFormatExportierenToolStripMenuItem.Image = Global.IHWB.Wave.My.Resources.Resources.page_white_go
         Me.BlueMFormatExportierenToolStripMenuItem.Name = "BlueMFormatExportierenToolStripMenuItem"
-        Me.BlueMFormatExportierenToolStripMenuItem.Size = New System.Drawing.Size(158, 22)
-        Me.BlueMFormatExportierenToolStripMenuItem.Text = "BlueM Export"
+        Me.BlueMFormatExportierenToolStripMenuItem.Size = New System.Drawing.Size(197, 22)
+        Me.BlueMFormatExportierenToolStripMenuItem.Text = "Zeitreihe(n) exportieren"
         '
         'ToolStripSeparator4
         '
@@ -289,14 +289,14 @@ Partial Class Wave
         'HilfeToolStripMenuItem
         '
         Me.HilfeToolStripMenuItem.Name = "HilfeToolStripMenuItem"
-        Me.HilfeToolStripMenuItem.Size = New System.Drawing.Size(176, 22)
+        Me.HilfeToolStripMenuItem.Size = New System.Drawing.Size(139, 22)
         Me.HilfeToolStripMenuItem.Text = "(Hilfe (wiki"
         '
         'AboutToolStripMenuItem
         '
         Me.AboutToolStripMenuItem.Image = Global.IHWB.Wave.My.Resources.Resources.BlueM_icon
         Me.AboutToolStripMenuItem.Name = "AboutToolStripMenuItem"
-        Me.AboutToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.AboutToolStripMenuItem.Size = New System.Drawing.Size(139, 22)
         Me.AboutToolStripMenuItem.Text = "About Wave"
         '
         'TChart1
