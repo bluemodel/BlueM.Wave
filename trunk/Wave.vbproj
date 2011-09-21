@@ -318,6 +318,7 @@
     </Content>
     <Content Include="Resources\chart_pie.png" />
     <Content Include="Resources\modelEAU.SWMM.DllAdapter.dll" />
+    <None Include="Resources\page_white_go.png" />
     <Content Include="WAVE_RELEASE-NOTES.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
