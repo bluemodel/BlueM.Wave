@@ -68,7 +68,7 @@ Public Class Wave
     Private MyAxes1, MyAxes2 As Dictionary(Of String, Steema.TeeChart.Axis)
     Private WithEvents ChartListBox1 As Steema.TeeChart.ChartListBox
 
-    Private Const HelpURL As String = "http://130.83.196.154/BlueM/wiki/index.php/Wave"
+    Private Const HelpURL As String = "http://wiki.bluemodel.org/index.php/Wave"
 
     'Methoden
     '########
