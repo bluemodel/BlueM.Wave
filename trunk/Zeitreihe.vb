@@ -1,3 +1,28 @@
+'Copyright (c) 2011, ihwb, TU Darmstadt
+'All rights reserved.
+'
+'Released under the BSD-2-Clause License:
+'
+'Redistribution and use in source and binary forms, with or without modification, 
+'are permitted provided that the following conditions are met:
+'
+'* Redistributions of source code must retain the above copyright notice, this list 
+'  of conditions and the following disclaimer.
+'* Redistributions in binary form must reproduce the above copyright notice, this list 
+'  of conditions and the following disclaimer in the documentation and/or other materials 
+'  provided with the distribution.
+'
+'THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY 
+'EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES 
+'OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT 
+'SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, 
+'SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT 
+'OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) 
+'HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR 
+'TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, 
+'EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+'--------------------------------------------------------------------------------------------
+'
 Public Class Zeitreihe
 
 #Region "Eigenschaften"
@@ -10,7 +35,7 @@ Public Class Zeitreihe
     Private _Einheit As String
     Private _Objekt As String
     Private _Type As String
-   
+
 #End Region 'Eigenschaften
 
 #Region "Properties"
@@ -39,7 +64,7 @@ Public Class Zeitreihe
         End Set
     End Property
 
-Public Property Type() As String
+    Public Property Type() As String
         Get
             Return _Type
         End Get
@@ -100,33 +125,33 @@ Public Property Type() As String
     ''' <summary>
     ''' Anfangsdatum
     ''' </summary>
-   Public ReadOnly Property Anfangsdatum() As DateTime
-      Get
+    Public ReadOnly Property Anfangsdatum() As DateTime
+        Get
             Return Me._nodes.Keys(0)
-      End Get
+        End Get
 
-   End Property
+    End Property
 
     ''' <summary>
     ''' Enddatum
     ''' </summary>
-   Public ReadOnly Property Enddatum() As DateTime
-      Get
-         Return Me._nodes.Keys(Me._nodes.Count -1)
-      End Get
+    Public ReadOnly Property Enddatum() As DateTime
+        Get
+            Return Me._nodes.Keys(Me._nodes.Count - 1)
+        End Get
 
-   End Property
+    End Property
 
 #End Region 'Properties
 
 #Region "Methoden"
 
-   'Methoden
-   '########
+    'Methoden
+    '########
 
-   ''' <summary>
-   ''' Default Konstruktor
-   ''' </summary>
+    ''' <summary>
+    ''' Default Konstruktor
+    ''' </summary>
     Public Sub New()
         Me._title = "-"
         Me._Einheit = "-"
@@ -135,10 +160,10 @@ Public Property Type() As String
         Me._nodes = New SortedList(Of DateTime, Double)
     End Sub
 
-   ''' <summary>
-   ''' Konstruktor
-   ''' </summary>
-   ''' <param name="title">Titel der Zeitreihe</param>
+    ''' <summary>
+    ''' Konstruktor
+    ''' </summary>
+    ''' <param name="title">Titel der Zeitreihe</param>
     Public Sub New(ByVal title As String)
         Me._title = title
         Me._Einheit = "-"
@@ -147,16 +172,16 @@ Public Property Type() As String
         Me._nodes = New SortedList(Of DateTime, Double)
     End Sub
 
-   ''' <summary>
-   ''' Gibt den Zeitreihen-Titel zurück
-   ''' </summary>
-   Public Overrides Function ToString() As String
-      Return Me.Title
-   End Function
+    ''' <summary>
+    ''' Gibt den Zeitreihen-Titel zurück
+    ''' </summary>
+    Public Overrides Function ToString() As String
+        Return Me.Title
+    End Function
 
-   ''' <summary>
-   ''' Zeitreihe kopieren
-   ''' </summary>
+    ''' <summary>
+    ''' Zeitreihe kopieren
+    ''' </summary>
     Public Function Clone() As Zeitreihe
         Dim target As New Zeitreihe(Me.Title)
         target.Einheit = Me.Einheit
