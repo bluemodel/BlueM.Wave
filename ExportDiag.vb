@@ -1,3 +1,28 @@
+'Copyright (c) 2011, ihwb, TU Darmstadt
+'All rights reserved.
+'
+'Released under the BSD-2-Clause License:
+'
+'Redistribution and use in source and binary forms, with or without modification, 
+'are permitted provided that the following conditions are met:
+'
+'* Redistributions of source code must retain the above copyright notice, this list 
+'  of conditions and the following disclaimer.
+'* Redistributions in binary form must reproduce the above copyright notice, this list 
+'  of conditions and the following disclaimer in the documentation and/or other materials 
+'  provided with the distribution.
+'
+'THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY 
+'EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES 
+'OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT 
+'SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, 
+'SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT 
+'OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) 
+'HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR 
+'TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, 
+'EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+'--------------------------------------------------------------------------------------------
+'
 Public Class ExportDiag
 
     'Formatauswahl verändert
@@ -44,19 +69,19 @@ Public Class ExportDiag
     End Sub
 
 
-Private Sub Button_SelectAll_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button_SelectAll.Click
+    Private Sub Button_SelectAll_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button_SelectAll.Click
 
-    Dim i As Long
+        Dim i As Long
 
-    Select Case ComboBox_Format.SelectedItem
-        Case Konstanten.Dateiformate.TXT
-            For i = 0 To Me.ListBox_Zeitreihen.Items.Count - 1
-                Me.ListBox_Zeitreihen.SetSelected(i, True)
-            Next
-        Case Else
-            MsgBox("Bei diesem Format ist keine mehrfachauswahl möglich")
-    End Select
+        Select Case ComboBox_Format.SelectedItem
+            Case Konstanten.Dateiformate.TXT
+                For i = 0 To Me.ListBox_Zeitreihen.Items.Count - 1
+                    Me.ListBox_Zeitreihen.SetSelected(i, True)
+                Next
+            Case Else
+                MsgBox("Bei diesem Format ist keine mehrfachauswahl möglich")
+        End Select
 
-End Sub
+    End Sub
 
 End Class
