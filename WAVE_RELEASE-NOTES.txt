@@ -1,9 +1,9 @@
 ﻿===============================================================
 Wave Release Notes
 ===============================================================
-(c) TU Darmstadt - ihwb
-Website: http://ihwb.tu-darmstadt.de/bluem/
-===============================================================
+Version 1.4
+-----------
+Initial Release under the BSD-2 License, see LICENSE.txt for more information.
 
 Version 1.3
 -----------
