@@ -13,7 +13,7 @@ Imports System.Runtime.InteropServices
                                & "Wave ist ein Tool zum Einlesen, zur Analyse und zur flexiblen graphischen Darstellung von Zeitreihen.")> 
 <Assembly: AssemblyCompany("TU Darmstadt - ihwb")> 
 <Assembly: AssemblyProduct("Wave")> 
-<Assembly: AssemblyCopyright("Copyright © ihwb 2011")> 
+<Assembly: AssemblyCopyright("BSD-2 - Copyright © ihwb 2011")> 
 <Assembly: AssemblyTrademark("")> 
 
 <Assembly: ComVisible(False)>
