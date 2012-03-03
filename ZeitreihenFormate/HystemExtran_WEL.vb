@@ -246,12 +246,18 @@ Public Class HystemExtran_WEL
         StrRead.Close()
         FiStr.Close()
 
-        If (Zeile.Length = 40) and (left(Zeile,2) = "  ") and (Zeile.Substring(10,4)  = "    ") Then
-            'Es ist eine Extran-Regenreihe!
-            Return True
-        Else
+        Try
+            If (Zeile.Length = 40) And (Left(Zeile, 2) = "  ") And (Zeile.Substring(10, 4) = "    ") Then
+                'Es ist eine Extran-Regenreihe!
+                Return True
+            Else
+                Return False
+            End If
+
+        Catch ex As Exception
+            'höchstwahrscheinlich keine Extran-Regenreihe
             Return False
-        End If
+        End Try
 
     End Function
 #End Region 'Methoden
