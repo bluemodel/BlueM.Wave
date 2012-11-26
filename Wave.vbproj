@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{BCD1BBE3-5AB2-4C3F-AC12-43EB977C6F6F}</ProjectGuid>
     <OutputType>WinExe</OutputType>
@@ -197,6 +197,7 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="ZeitreihenFormate\DWD_T_L.vb" />
+    <Compile Include="ZeitreihenFormate\GISMO_WEL.vb" />
     <Compile Include="ZeitreihenFormate\HystemExtran_REG.vb" />
     <Compile Include="ZeitreihenFormate\HystemExtran_WEL.vb" />
     <Compile Include="ZeitreihenFormate\REG.vb" />
