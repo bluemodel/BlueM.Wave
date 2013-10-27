@@ -65,13 +65,13 @@ Public Module Dateifactory
         Select Case FileExt
 
             Case FileExtASC
-                If (GISMO_WEL.verifyFormat(file)) Then
-                    'GISMO-Wel-Datei im CSV-Format
-                    Datei = New GISMO_WEL(file, False)
+                Dim isSSV As Boolean
+                If (GISMO_WEL.verifyFormat(file, isSSV)) Then
+                    ' GISMO result file in WEL format (separator is " ")
+                    Datei = New GISMO_WEL(file, isSSV)
                 Else
                     Datei = New ASC(file)
                 End If
-
 
             Case FileExtDAT
                 Datei = New HystemExtran_REG(file)
@@ -108,13 +108,13 @@ Public Module Dateifactory
                 Datei = New ZRE(file)
 
             Case FileExtCSV
-                If (GISMO_WEL.verifyFormat(file)) Then
-                    'GISMO-Wel-Datei im CSV-Format
-                    Datei = New GISMO_WEL(file, True)
+                Dim isssv As Boolean
+                If (GISMO_WEL.verifyFormat(file, isssv)) Then
+                    ' GISMO result file in CSV format (separator is a ";")
+                    Datei = New GISMO_WEL(file, isssv)
                 Else
                     Datei = New CSV(file)
                 End If
-
 
             Case FileExtDTL
                 Datei = New DWD_T_L(file)
