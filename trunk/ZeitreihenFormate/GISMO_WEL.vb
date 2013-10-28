@@ -25,19 +25,24 @@ Public Class GISMO_WEL
 
         ' Presettings
         Me.Dezimaltrennzeichen = Me.punkt
-        ' which lines contain heading, units, first data line
-        Me.iZeileUeberschriften = 14
-        Me.iZeileEinheiten = 15
-        Me.iZeileDaten = 16 'should be 16 (if you look into the file), but the first data line contains a data bug, so this line is skipped
         Me.UseEinheiten = True
         If (IsSSV) Then
             ' is it a semiicolon separated file (SSV)? GISMO uses ";" to separate values if CSV mode is choosen
             Me.Zeichengetrennt = True
             Me.Trennzeichen = Me.semikolon
+
+            ' which lines contain heading, units, first data line
+            Me.iZeileUeberschriften = 14
+            Me.iZeileEinheiten = 15
+            Me.iZeileDaten = 16 'should be 16 (if you look into the file), but the first data line contains a data bug, so this line is skipped
         Else
             ' if not, the space " " is used as separator
             Me.Zeichengetrennt = False
             Me.Trennzeichen = leerzeichen
+            ' which lines contain heading, units, first data line
+            Me.iZeileUeberschriften = 15
+            Me.iZeileEinheiten = 16
+            Me.iZeileDaten = 17 'should be 16 (if you look into the file), but the first data line contains a data bug, so this line is skipped
         End If
 
     End Sub
@@ -92,6 +97,10 @@ Public Class GISMO_WEL
                 ' converge multiple spaces to one
                 ZeileSpalten = System.Text.RegularExpressions.Regex.Replace(ZeileSpalten, "\s{2,}", Me.Trennzeichen.Character)
                 ZeileEinheiten = System.Text.RegularExpressions.Regex.Replace(ZeileEinheiten, "\s{2,}", Me.Trennzeichen.Character)
+                ' data columns are separated by " "
+                ' first " " needs to be removed (otherwise empty column)
+                ZeileSpalten = ZeileSpalten.Substring(1, ZeileSpalten.Length - 1)
+                ZeileEinheiten = ZeileEinheiten.Substring(1, ZeileEinheiten.Length - 1)
                 ' split string at every " "
                 Namen = ZeileSpalten.Split(New Char() {Me.Trennzeichen.Character})
                 Einheiten = ZeileEinheiten.Split(New Char() {Me.Trennzeichen.Character})
@@ -186,6 +195,10 @@ Public Class GISMO_WEL
                     ' converge multiple spaces to one
                     Zeile = System.Text.RegularExpressions.Regex.Replace(Zeile, "\s{2,}", Me.Trennzeichen.Character)
 
+                    ' first empty space " " needs to be removed (otherwise data format is not understood)
+                    Zeile = Zeile.Substring(1, Zeile.Length - 1)
+
+
                     ' the date time columns need to be moved to one column
                     Werte_temp = Zeile.Split(New Char() {Me.Trennzeichen.Character})
                     ReDim Werte(Werte_temp.Length - 2)
@@ -241,20 +254,33 @@ Public Class GISMO_WEL
             ' it's in CSV format
             ' separator is a ";)
             IsSSV = True
-        ElseIf (Zeile.StartsWith("*WEL")) Then
+
+            ' read second line
+            Zeile = StrRead.ReadLine.ToString()
+            Zeile = Trim(Zeile)
+            ' check if it contains the word "GISMO"
+            If Zeile.Contains("GISMO") Then
+                Return True
+            Else
+                Return False
+            End If
+
+        ElseIf (Zeile.Contains("*WEL.ASC")) Then
             ' it's in WEL format
             IsSSV = False
+            ' read third line
+            Zeile = StrRead.ReadLine.ToString()
+            Zeile = StrRead.ReadLine.ToString()
+            Zeile = Trim(Zeile)
+            ' check if it contains the word "GISMO"
+            If Zeile.Contains("GISMO") Then
+                Return True
+            Else
+                Return False
+            End If
         End If
 
-        ' read second line
-        Zeile = StrRead.ReadLine.ToString()
-        Zeile = Trim(Zeile)
-        ' check if it contains the word "GISMO"
-        If Zeile.Contains("GISMO") Then
-            Return True
-        Else
-            Return False
-        End If
+
 
         ' close file
         StrRead.Close()
