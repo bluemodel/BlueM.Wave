@@ -26,9 +26,9 @@ Public Class GISMO_WEL
         ' Presettings
         Me.Dezimaltrennzeichen = Me.punkt
         ' which lines contain heading, units, first data line
-        Me.iZeileUeberschriften = 13
-        Me.iZeileEinheiten = 14
-        Me.iZeileDaten = 17 'should be 16 (if you look into the file), but the first data line contains a data bug, so this line is skipped
+        Me.iZeileUeberschriften = 14
+        Me.iZeileEinheiten = 15
+        Me.iZeileDaten = 16 'should be 16 (if you look into the file), but the first data line contains a data bug, so this line is skipped
         Me.UseEinheiten = True
         If (IsSSV) Then
             ' is it a semiicolon separated file (SSV)? GISMO uses ";" to separate values if CSV mode is choosen
@@ -154,12 +154,18 @@ Public Class GISMO_WEL
                 ' read data line
                 Zeile = StrReadSync.ReadLine.ToString()
 
+                ' obsolet since GISMO4.1
                 ' remove the "*" in the first column (if present, CSV format)
-                Zeile = Zeile.Replace("*", "")
+                ' Zeile = Zeile.Replace("*", "")
 
                 If (Me.Zeichengetrennt) Then
                     ' data columns are separated by ";"
+
+                    ' obsolet since GISMO4.1
                     ' first ";" needs to be removed (otherwise empty column)
+                    'Zeile = Zeile.Substring(1, Zeile.Length - 1)
+
+                    ' first empty space "" needs to be removed (otherwise data format is not understood)
                     Zeile = Zeile.Substring(1, Zeile.Length - 1)
 
                     ' split data line into columns
