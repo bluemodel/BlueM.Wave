@@ -1,12 +1,11 @@
 Imports System.IO
 
 ''' <summary>
-''' Class for the import of GIMSO result files (*.CSV,*.ASC)
+''' Class for the import of GIMSO time series (*.CSV,*.ASC)
 ''' </summary>
 Public Class GISMO_WEL
     Inherits Dateiformat
     Public Const Datumsformat As String = "dd.MM.yyyy HH:mm"
-
     ''' <summary>
     ''' Gibt an, ob beim Import des Dateiformats der Importdialog angezeigt werden soll
     ''' </summary>
@@ -26,23 +25,20 @@ Public Class GISMO_WEL
         ' Presettings
         Me.Dezimaltrennzeichen = Me.punkt
         Me.UseEinheiten = True
+
+        ' which lines contain heading, units, first data line
+        Me.iZeileUeberschriften = 15
+        Me.iZeileEinheiten = 16
+        Me.iZeileDaten = 17
+
         If (IsSSV) Then
             ' is it a semiicolon separated file (SSV)? GISMO uses ";" to separate values if CSV mode is choosen
             Me.Zeichengetrennt = True
             Me.Trennzeichen = Me.semikolon
-
-            ' which lines contain heading, units, first data line
-            Me.iZeileUeberschriften = 14
-            Me.iZeileEinheiten = 15
-            Me.iZeileDaten = 16 'should be 16 (if you look into the file), but the first data line contains a data bug, so this line is skipped
         Else
             ' if not, the space " " is used as separator
             Me.Zeichengetrennt = False
             Me.Trennzeichen = leerzeichen
-            ' which lines contain heading, units, first data line
-            Me.iZeileUeberschriften = 15
-            Me.iZeileEinheiten = 16
-            Me.iZeileDaten = 17 'should be 16 (if you look into the file), but the first data line contains a data bug, so this line is skipped
         End If
 
     End Sub
@@ -78,16 +74,12 @@ Public Class GISMO_WEL
             Dim Namen() As String
             Dim Einheiten() As String
 
-            ' remove the "*" in the first column (if present, CSV format)
-            ZeileSpalten = ZeileSpalten.Replace("*", "")
-            ZeileEinheiten = ZeileEinheiten.Replace("*", "")
-
+            ' first space needs to be removed
+            ZeileSpalten = ZeileSpalten.Substring(1, ZeileSpalten.Length - 1)
+            ZeileEinheiten = ZeileEinheiten.Substring(1, ZeileEinheiten.Length - 1)
 
             If (Me.Zeichengetrennt) Then
                 ' data columns are separated by ";"
-                ' first ";" needs to be removed (otherwise empty column)
-                ZeileSpalten = ZeileSpalten.Substring(1, ZeileSpalten.Length - 1)
-                ZeileEinheiten = ZeileEinheiten.Substring(1, ZeileEinheiten.Length - 1)
                 ' split string at every ";"
                 Namen = ZeileSpalten.Split(New Char() {Me.Trennzeichen.Character})
                 Einheiten = ZeileEinheiten.Split(New Char() {Me.Trennzeichen.Character})
@@ -98,9 +90,6 @@ Public Class GISMO_WEL
                 ZeileSpalten = System.Text.RegularExpressions.Regex.Replace(ZeileSpalten, "\s{2,}", Me.Trennzeichen.Character)
                 ZeileEinheiten = System.Text.RegularExpressions.Regex.Replace(ZeileEinheiten, "\s{2,}", Me.Trennzeichen.Character)
                 ' data columns are separated by " "
-                ' first " " needs to be removed (otherwise empty column)
-                ZeileSpalten = ZeileSpalten.Substring(1, ZeileSpalten.Length - 1)
-                ZeileEinheiten = ZeileEinheiten.Substring(1, ZeileEinheiten.Length - 1)
                 ' split string at every " "
                 Namen = ZeileSpalten.Split(New Char() {Me.Trennzeichen.Character})
                 Einheiten = ZeileEinheiten.Split(New Char() {Me.Trennzeichen.Character})
@@ -117,7 +106,7 @@ Public Class GISMO_WEL
 
         Catch ex As Exception
             ' catch errors
-            MsgBox("Konnte Datei nicht einlesen!" & eol & eol & "Fehler: " & ex.Message, MsgBoxStyle.Critical, "Fehler")
+            MsgBox("Could not read file!" & eol & eol & "Error: " & ex.Message, MsgBoxStyle.Critical, "Error")
         End Try
 
     End Sub
@@ -139,6 +128,7 @@ Public Class GISMO_WEL
 
             ' get number of selected colums (time series) to be read
             ReDim Me.Zeitreihen(Me.SpaltenSel.Length - 1)
+
             ' intialize a time series for every selected column (time series)
             For i = 0 To Me.SpaltenSel.Length - 1
                 Me.Zeitreihen(i) = New Zeitreihe(Me.SpaltenSel(i).Name)
@@ -151,31 +141,20 @@ Public Class GISMO_WEL
                 Next
             End If
 
-            ' read lines
-
             ' read over header lines
             For i = 0 To Me.nZeilenHeader - 1
                 StrReadSync.ReadLine()
             Next
 
-
+            ' read date lines
             Do
-                ' read data line
                 Zeile = StrReadSync.ReadLine.ToString()
 
-                ' obsolet since GISMO4.1
-                ' remove the "*" in the first column (if present, CSV format)
-                ' Zeile = Zeile.Replace("*", "")
+                ' first empty space "" needs to be removed (otherwise date time format is not understood)
+                Zeile = Zeile.Substring(1, Zeile.Length - 1)
 
                 If (Me.Zeichengetrennt) Then
                     ' data columns are separated by ";"
-
-                    ' obsolet since GISMO4.1
-                    ' first ";" needs to be removed (otherwise empty column)
-                    'Zeile = Zeile.Substring(1, Zeile.Length - 1)
-
-                    ' first empty space "" needs to be removed (otherwise data format is not understood)
-                    Zeile = Zeile.Substring(1, Zeile.Length - 1)
 
                     ' split data line into columns
                     Werte = Zeile.Split(New Char() {Me.Trennzeichen.Character})
@@ -185,6 +164,7 @@ Public Class GISMO_WEL
                     If (Not ok) Then
                         Throw New Exception("Kann das Datumsformat '" & Werte(Me.XSpalte) & "' nicht erkennen! " & eol & "Sollte in der Form '" & Datumsformat & "' vorliegen!")
                     End If
+
                     ' remaining columns are data, add to time series
                     For i = 0 To Me.SpaltenSel.Length - 1
                         Me.Zeitreihen(i).AddNode(datum, StringToDouble(Werte(Me.SpaltenSel(i).Index)))
@@ -194,10 +174,6 @@ Public Class GISMO_WEL
                     ' data columns are separated by spaces
                     ' converge multiple spaces to one
                     Zeile = System.Text.RegularExpressions.Regex.Replace(Zeile, "\s{2,}", Me.Trennzeichen.Character)
-
-                    ' first empty space " " needs to be removed (otherwise data format is not understood)
-                    Zeile = Zeile.Substring(1, Zeile.Length - 1)
-
 
                     ' the date time columns need to be moved to one column
                     Werte_temp = Zeile.Split(New Char() {Me.Trennzeichen.Character})
@@ -212,6 +188,7 @@ Public Class GISMO_WEL
                     If (Not ok) Then
                         Throw New Exception("Kann das Datumsformat '" & Werte(Me.XSpalte) & "' nicht erkennen! " & eol & "Sollte in der Form '" & Datumsformat & "' vorliegen!")
                     End If
+
                     ' remaining columns are data, add to time series
                     For i = 0 To Me.SpaltenSel.Length - 1
                         Me.Zeitreihen(i).AddNode(datum, StringToDouble(Werte(Me.SpaltenSel(i).Index)))
@@ -250,12 +227,13 @@ Public Class GISMO_WEL
         Zeile = StrRead.ReadLine.ToString()
         Zeile = Trim(Zeile)
 
-        If (Zeile.StartsWith("*CSV")) Then
+        If (Zeile.Contains("*WEL.CSV")) Then
             ' it's in CSV format
             ' separator is a ";)
             IsSSV = True
 
-            ' read second line
+            ' read third line
+            Zeile = StrRead.ReadLine.ToString()
             Zeile = StrRead.ReadLine.ToString()
             Zeile = Trim(Zeile)
             ' check if it contains the word "GISMO"
@@ -268,6 +246,7 @@ Public Class GISMO_WEL
         ElseIf (Zeile.Contains("*WEL.ASC")) Then
             ' it's in WEL format
             IsSSV = False
+
             ' read third line
             Zeile = StrRead.ReadLine.ToString()
             Zeile = StrRead.ReadLine.ToString()
@@ -278,9 +257,8 @@ Public Class GISMO_WEL
             Else
                 Return False
             End If
+
         End If
-
-
 
         ' close file
         StrRead.Close()
