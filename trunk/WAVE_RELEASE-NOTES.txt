@@ -1,6 +1,14 @@
 ﻿===============================================================
 Wave Release Notes
 ===============================================================
+Version 1.5 (beta)
+------------------
+NEW:
+* Import GISMO files
+* Import HYDRO-AS_2D files
+UPDATE:
+* Small improvements to layout and functionality
+
 Version 1.4
 -----------
 Initial Release under the BSD-2 License, see LICENSE.txt for more information.
