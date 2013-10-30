@@ -94,7 +94,7 @@ Public Module Dateifactory
                     'Hystem-Extran-Regenreihe
                     Datei = New HystemExtran_REG(file)
                 Else
-                    Throw New Exception("Es handelt es sich weder um eine SMUSI- noch um eine Hystem-Regendatei")
+                    Throw New Exception("Dateiformat nicht erkannt: Es handelt es sich weder um eine SMUSI- noch um eine Hystem-Regendatei")
                 End If
 
             Case FileExtRVA
@@ -104,7 +104,6 @@ Public Module Dateifactory
                 Datei = New SMB(file)
 
             Case FileExtWEL, FileExtKWL
-                'Datei = New WEL(file)
                 'Dateiformat prüfen:
                 If (HystemExtran_WEL.verifyFormat(file)) Then
                     'Hystem-Extran-Regenreihe
@@ -132,10 +131,18 @@ Public Module Dateifactory
                 Datei = New SWMM_OUT(file)
 
             Case FileExtTXT
+                'Dateiformat prüfen:
+                If (SWMM_TXT.verifyFormat(file)) Then
+                    'SWMM Datei
                     Datei = New SWMM_TXT(file)
+                Else
+                    'Textdateien können üblicherweise als CSV gelesen werden
+                    Datei = New CSV(file)
+                End If
 
             Case Else
-                Throw New Exception("Die Dateiendung '" & FileExt & "' ist nicht bekannt!")
+                'Wenn alle Stricke reissen, Import als CSV versuchen
+                Datei = New CSV(file)
 
         End Select
 
