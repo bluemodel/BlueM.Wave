@@ -290,7 +290,7 @@ Public Class HystemExtran_REG
     End Sub
 
     ''' <summary>
-    ''' Prüft, ob es sich um eine SMUSI-REG-Datei handelt
+    ''' Prüft, ob es sich um eine HystemExtran-REG-Datei handelt
     ''' </summary>
     ''' <param name="file">Pfad zur Datei</param>
     ''' <returns></returns>
