@@ -61,7 +61,7 @@ Public Module Dateifactory
         End If
 
         'Fallunterscheidung je nach Dateiendung
-        FileExt = System.IO.Path.GetExtension(file).ToUpper()
+        FileExt = Path.GetExtension(file).ToUpper()
         Select Case FileExt
 
             Case FileExtASC
@@ -74,7 +74,16 @@ Public Module Dateifactory
                 End If
 
             Case FileExtDAT
-                Datei = New HystemExtran_REG(file)
+                'Dateiformat prüfen:
+                If (HYDRO_AS_2D.verifyFormat(file)) Then
+                    'HYDRO-AS_2D Ergebnisdatei
+                    Datei = New HYDRO_AS_2D(file)
+                ElseIf (HystemExtran_REG.verifyFormat(file)) Then
+                    'Hystem-Extran Regenreihe
+                    Datei = New HystemExtran_REG(file)
+                Else
+                    Throw New Exception("Dateiformat nicht erkannt: Es handelt es sich weder um eine HYDRO-AS-2D noch um eine Hystem-Regendatei")
+                End If
 
             Case FileExtREG
                 'Dateiformat prüfen:
@@ -123,7 +132,7 @@ Public Module Dateifactory
                 Datei = New SWMM_OUT(file)
 
             Case FileExtTXT
-                Datei = New SWMM_TXT(file)
+                    Datei = New SWMM_TXT(file)
 
             Case Else
                 Throw New Exception("Die Dateiendung '" & FileExt & "' ist nicht bekannt!")
