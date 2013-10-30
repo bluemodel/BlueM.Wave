@@ -13,7 +13,7 @@ Imports System.Runtime.InteropServices
                                & "Wave ist ein Tool zum Einlesen, zur Analyse und zur flexiblen graphischen Darstellung von Zeitreihen.")> 
 <Assembly: AssemblyCompany("TU Darmstadt - ihwb")> 
 <Assembly: AssemblyProduct("Wave")> 
-<Assembly: AssemblyCopyright("BSD-2 - Copyright © ihwb 2011")> 
+<Assembly: AssemblyCopyright("BSD-2 - Copyright © ihwb 2013")> 
 <Assembly: AssemblyTrademark("")> 
 
 <Assembly: ComVisible(False)>
@@ -32,4 +32,4 @@ Imports System.Runtime.InteropServices
 ' übernehmen, indem Sie "*" eingeben:
 ' <Assembly: AssemblyVersion("1.0.*")> 
 
-<Assembly: AssemblyVersion("1.4.*")> 
+<Assembly: AssemblyVersion("1.5.*")> 
