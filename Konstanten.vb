@@ -55,6 +55,7 @@ Module Konstanten
         DAT_SWMM_MASS = 7
         DAT_SWMM_TIME = 8
         TXT = 9
+        DAT_HYDRO_AS = 10
     End Enum
 
     ''' <summary>
