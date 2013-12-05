@@ -50,6 +50,7 @@ Public Class GISMO_WEL
         Dim Zeile As String = ""
         Dim ZeileSpalten As String = ""
         Dim ZeileEinheiten As String = ""
+        Dim SeriesName As String = ""
 
         Try
             ' open file
@@ -57,8 +58,12 @@ Public Class GISMO_WEL
             Dim StrRead As StreamReader = New StreamReader(FiStr, System.Text.Encoding.GetEncoding("iso8859-1"))
             Dim StrReadSync = TextReader.Synchronized(StrRead)
 
-            ' fine line with data headers and units
-            For i = 1 To Math.Max(Me.iZeileDaten, Me.iZeileUeberschriften + 1)
+            ' get element name to add to time series name
+            Zeile = StrReadSync.ReadLine.ToString
+            SeriesName = Zeile.Substring(13, 16)
+
+            ' find line with data headers and units
+            For i = 2 To Math.Max(Me.iZeileDaten, Me.iZeileUeberschriften + 1)
                 Zeile = StrReadSync.ReadLine.ToString
                 If (i = Me.iZeileUeberschriften) Then ZeileSpalten = Zeile
                 If (i = Me.iZeileEinheiten) Then ZeileEinheiten = Zeile
@@ -99,7 +104,7 @@ Public Class GISMO_WEL
             ' put headers and units into the Me.Spalten-array (starts with index 0, --> [anzSpalten -1])
             ReDim Me.Spalten(anzSpalten - 1)
             For i = 0 To (anzSpalten - 1)
-                Me.Spalten(i).Name = Namen(i).Trim()
+                Me.Spalten(i).Name = Namen(i).Trim() & "_" & SeriesName.Trim
                 Me.Spalten(i).Index = i
                 Me.Spalten(i).Einheit = Einheiten(i).Trim()
             Next
