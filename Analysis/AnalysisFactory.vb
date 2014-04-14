@@ -37,6 +37,8 @@ Module AnalysisFactory
         GoodnessOfFit = 3
         Statistik = 4
         Gegenueberstellung = 5
+        Autokorrelation = 6
+        LineareRegression = 7
     End Enum
 
     ''' <summary>
@@ -65,6 +67,12 @@ Module AnalysisFactory
 
             Case AnalysisFunctions.Gegenueberstellung
                 oAnalysis = New Gegenueberstellung(zeitreihen)
+
+            Case AnalysisFunctions.Autokorrelation
+                oAnalysis = New Autokorrelation(zeitreihen)
+
+            Case AnalysisFunctions.LineareRegression
+                oAnalysis = New LineareRegression(zeitreihen)
 
             Case Else
                 Throw New Exception("Analysefunktion nicht gefunden!")
