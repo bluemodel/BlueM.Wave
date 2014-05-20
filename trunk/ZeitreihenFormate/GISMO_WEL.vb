@@ -104,7 +104,7 @@ Public Class GISMO_WEL
             ' put headers and units into the Me.Spalten-array (starts with index 0, --> [anzSpalten -1])
             ReDim Me.Spalten(anzSpalten - 1)
             For i = 0 To (anzSpalten - 1)
-                Me.Spalten(i).Name = Namen(i).Trim() & "_" & SeriesName.Trim
+                Me.Spalten(i).Name = SeriesName.Trim & "_" & Namen(i).Trim()
                 Me.Spalten(i).Index = i
                 Me.Spalten(i).Einheit = Einheiten(i).Trim()
             Next
