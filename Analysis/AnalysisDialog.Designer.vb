@@ -55,7 +55,7 @@ Partial Class AnalysisDialog
         '
         Me.Button_Cancel.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Button_Cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel
-        Me.Button_Cancel.Location = New System.Drawing.Point(42, 186)
+        Me.Button_Cancel.Location = New System.Drawing.Point(126, 469)
         Me.Button_Cancel.Name = "Button_Cancel"
         Me.Button_Cancel.Size = New System.Drawing.Size(75, 23)
         Me.Button_Cancel.TabIndex = 9
@@ -66,7 +66,7 @@ Partial Class AnalysisDialog
         '
         Me.Button_OK.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Button_OK.DialogResult = System.Windows.Forms.DialogResult.OK
-        Me.Button_OK.Location = New System.Drawing.Point(123, 186)
+        Me.Button_OK.Location = New System.Drawing.Point(207, 469)
         Me.Button_OK.Name = "Button_OK"
         Me.Button_OK.Size = New System.Drawing.Size(75, 23)
         Me.Button_OK.TabIndex = 7
@@ -79,7 +79,7 @@ Partial Class AnalysisDialog
         Me.ListBox_Zeitreihen.Location = New System.Drawing.Point(12, 62)
         Me.ListBox_Zeitreihen.Name = "ListBox_Zeitreihen"
         Me.ListBox_Zeitreihen.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended
-        Me.ListBox_Zeitreihen.Size = New System.Drawing.Size(186, 108)
+        Me.ListBox_Zeitreihen.Size = New System.Drawing.Size(272, 394)
         Me.ListBox_Zeitreihen.TabIndex = 6
         '
         'ComboBox_Funktion
@@ -88,14 +88,14 @@ Partial Class AnalysisDialog
         Me.ComboBox_Funktion.FormattingEnabled = True
         Me.ComboBox_Funktion.Location = New System.Drawing.Point(69, 12)
         Me.ComboBox_Funktion.Name = "ComboBox_Funktion"
-        Me.ComboBox_Funktion.Size = New System.Drawing.Size(129, 21)
+        Me.ComboBox_Funktion.Size = New System.Drawing.Size(213, 21)
         Me.ComboBox_Funktion.TabIndex = 10
         '
         'AnalysisDialog
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(210, 221)
+        Me.ClientSize = New System.Drawing.Size(294, 504)
         Me.Controls.Add(Me.ComboBox_Funktion)
         Me.Controls.Add(Me.Button_Cancel)
         Me.Controls.Add(Label_Analyse)
