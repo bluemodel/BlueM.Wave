@@ -6,6 +6,7 @@ Imports System.IO
 Public Class GISMO_WEL
     Inherits Dateiformat
     Public Const Datumsformat As String = "dd.MM.yyyy HH:mm"
+    Public Const Datumsformat2 As String = "yyyyMMdd HH:mm"
     ''' <summary>
     ''' Gibt an, ob beim Import des Dateiformats der Importdialog angezeigt werden soll
     ''' </summary>
@@ -94,6 +95,22 @@ Public Class GISMO_WEL
                 ' converge multiple spaces to one
                 ZeileSpalten = System.Text.RegularExpressions.Regex.Replace(ZeileSpalten, "\s{2,}", Me.Trennzeichen.Character)
                 ZeileEinheiten = System.Text.RegularExpressions.Regex.Replace(ZeileEinheiten, "\s{2,}", Me.Trennzeichen.Character)
+                ' remove leading and trailing spaces
+                ZeileSpalten = Trim(ZeileSpalten)
+                ZeileEinheiten = Trim(ZeileEinheiten)
+
+                ' special for GISMO Aussengebiet-result-files
+                ' wave only wants one column for datetime 
+                ' --> Replace "Datum Zeit" with "Datum-Zeit" in ZeileSpalten and "- -" with " - " in Zeile Einheiten
+                ' if it is there
+                Dim Replacepostion As Integer
+                Replacepostion = ZeileSpalten.IndexOf("Datum Zeit")
+                If Replacepostion <> -1 Then
+                    Mid(ZeileSpalten, Replacepostion + 1, 10) = "Datum_Zeit"
+                    Mid(ZeileEinheiten, Replacepostion + 1, 3) = " - "
+                    ZeileEinheiten = Trim(System.Text.RegularExpressions.Regex.Replace(ZeileEinheiten, "\s{2,}", Me.Trennzeichen.Character))
+                End If
+
                 ' data columns are separated by " "
                 ' split string at every " "
                 Namen = ZeileSpalten.Split(New Char() {Me.Trennzeichen.Character})
@@ -167,7 +184,10 @@ Public Class GISMO_WEL
                     ' first column ist date time, add date time to times series
                     ok = DateTime.TryParseExact(Werte(Me.XSpalte), Datumsformat, Konstanten.Zahlenformat, Globalization.DateTimeStyles.None, datum)
                     If (Not ok) Then
-                        Throw New Exception("Kann das Datumsformat '" & Werte(Me.XSpalte) & "' nicht erkennen! " & eol & "Sollte in der Form '" & Datumsformat & "' vorliegen!")
+                        ok = DateTime.TryParseExact(Werte(Me.XSpalte), Datumsformat2, Konstanten.Zahlenformat, Globalization.DateTimeStyles.None, datum)
+                        If Not ok Then
+                            Throw New Exception("Kann das Datumsformat '" & Werte(Me.XSpalte) & "' nicht erkennen! " & eol & "Sollte in der Form '" & Datumsformat & " oder " & Datumsformat2 & "' vorliegen!")
+                        End If
                     End If
 
                     ' remaining columns are data, add to time series
@@ -191,7 +211,10 @@ Public Class GISMO_WEL
                     ' first column (now) is date time, add to time series
                     ok = DateTime.TryParseExact(Werte(Me.XSpalte), Datumsformat, Konstanten.Zahlenformat, Globalization.DateTimeStyles.None, datum)
                     If (Not ok) Then
-                        Throw New Exception("Kann das Datumsformat '" & Werte(Me.XSpalte) & "' nicht erkennen! " & eol & "Sollte in der Form '" & Datumsformat & "' vorliegen!")
+                        ok = DateTime.TryParseExact(Werte(Me.XSpalte), Datumsformat2, Konstanten.Zahlenformat, Globalization.DateTimeStyles.None, datum)
+                        If Not ok Then
+                            Throw New Exception("Kann das Datumsformat '" & Werte(Me.XSpalte) & "' nicht erkennen! " & eol & "Sollte in der Form '" & Datumsformat & " oder " & Datumsformat2 & "' vorliegen!")
+                        End If
                     End If
 
                     ' remaining columns are data, add to time series
