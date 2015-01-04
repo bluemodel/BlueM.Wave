@@ -169,7 +169,7 @@ Public Class CSV
 
                     If (Werte.Length > 0 and Zeile.Trim.Length > 1) Then
                         'Erste Spalte: Datum_Zeit
-                        ok = DateTime.TryParseExact(Werte(Me.XSpalte), DatumsformatCSV, Konstanten.Zahlenformat, Globalization.DateTimeStyles.None, datum)
+                        ok = DateTime.TryParseExact(Werte(Me.XSpalte).Trim(), DatumsformatCSV, Konstanten.Zahlenformat, Globalization.DateTimeStyles.None, datum)
                         If (Not ok) Then
                             Throw New Exception("Kann das Datumsformat '" & Werte(Me.XSpalte) & "' nicht erkennen! " & eol & "Sollte in der Form '" & DatumsformatCSV & "' vorliegen!")
                         End If
