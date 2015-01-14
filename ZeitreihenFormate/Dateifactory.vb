@@ -66,9 +66,9 @@ Public Module Dateifactory
 
             Case FileExtASC
                 Dim isSSV As Boolean
-                If (GISMO_WEL.verifyFormat(file, isSSV)) Then
+                If (WEL_GISMO.verifyFormat(file, isSSV)) Then
                     ' GISMO result file in WEL format (separator is " ")
-                    Datei = New GISMO_WEL(file, isSSV)
+                    Datei = New WEL_GISMO(file, isSSV)
                 Else
                     Datei = New ASC(file)
                 End If
@@ -108,8 +108,10 @@ Public Module Dateifactory
                 If (HystemExtran_WEL.verifyFormat(file)) Then
                     'Hystem-Extran-Regenreihe
                     Datei = New HystemExtran_WEL(file)
-                Else
+                ElseIf (WEL.verifyFormat(file)) Then
                     Datei = New WEL(file)
+                Else
+                    Throw New Exception("Unknown file format! Plaes check.")
                 End If
 
             Case FileExtZRE
@@ -117,9 +119,9 @@ Public Module Dateifactory
 
             Case FileExtCSV
                 Dim isssv As Boolean
-                If (GISMO_WEL.verifyFormat(file, isssv)) Then
+                If (WEL_GISMO.verifyFormat(file, isssv)) Then
                     ' GISMO result file in CSV format (separator is a ";")
-                    Datei = New GISMO_WEL(file, isssv)
+                    Datei = New WEL_GISMO(file, isssv)
                 Else
                     Datei = New CSV(file)
                 End If
