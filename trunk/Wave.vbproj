@@ -197,7 +197,7 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="ZeitreihenFormate\DWD_T_L.vb" />
-    <Compile Include="ZeitreihenFormate\GISMO_WEL.vb" />
+    <Compile Include="ZeitreihenFormate\WEL_GISMO.vb" />
     <Compile Include="ZeitreihenFormate\HYDRO_AS-2D.vb" />
     <Compile Include="ZeitreihenFormate\HystemExtran_REG.vb" />
     <Compile Include="ZeitreihenFormate\HystemExtran_WEL.vb" />
