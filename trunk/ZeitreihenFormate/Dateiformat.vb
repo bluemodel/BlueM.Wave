@@ -49,11 +49,13 @@ Public MustInherit Class Dateiformat
     Private _zeichengetrennt As Boolean = True
     Private _trennzeichen As Zeichen = semikolon
     Private _dezimaltrennzeichen As Zeichen = punkt
+    Private _iLineInfo As Integer = 1
     Private _iZeileUeberschriften As Integer = 1
     Private _iZeileEinheiten As Integer = 2
     Private _iZeileDaten As Integer = 3
     Private _useEinheiten As Boolean = True
     Private _spaltenbreite As Integer = 16
+    Private _DateTimeLength As Integer = 17
     Private _XSpalte As Integer = 0
     Private _Spalten() As SpaltenInfo
     Private _spaltenSel() As SpaltenInfo
@@ -136,6 +138,18 @@ Public MustInherit Class Dateiformat
     End Property
 
     ''' <summary>
+    ''' Number of line with general information
+    ''' </summary>
+    Public Property iLineInfo() As Integer
+        Get
+            Return _iLineInfo
+        End Get
+        Set(ByVal value As Integer)
+            _iLineInfo = value
+        End Set
+    End Property
+
+    ''' <summary>
     ''' Nummer der Zeile mit den Spaltenüberschriften
     ''' </summary>
     Public Property iZeileUeberschriften() As Integer
@@ -144,6 +158,17 @@ Public MustInherit Class Dateiformat
         End Get
         Set(ByVal value As Integer)
             _iZeileUeberschriften = value
+        End Set
+    End Property
+    ''' <summary>
+    ''' Lenght of date time stamp
+    ''' </summary>
+    Public Property DateTimeLength() As Integer
+        Get
+            Return _DateTimeLength
+        End Get
+        Set(ByVal value As Integer)
+            _DateTimeLength = value
         End Set
     End Property
 

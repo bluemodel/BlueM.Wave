@@ -507,7 +507,7 @@ Public Class Wave
                     Case Dateiformate.REG_SMUSI
                         For Each item As Object In ExportDiag.ListBox_Zeitreihen.SelectedItems
                             Reihe = CType(item, Zeitreihe)
-                            Call SMUSI_REG.Write_File(Reihe, Me.SaveFileDialog1.FileName)
+                            Call REG_SMUSI.Write_File(Reihe, Me.SaveFileDialog1.FileName)
                         Next
                     Case Dateiformate.DAT_SWMM_MASS
                         For Each item As Object In ExportDiag.ListBox_Zeitreihen.SelectedItems

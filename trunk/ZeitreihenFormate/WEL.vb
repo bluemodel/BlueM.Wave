@@ -65,6 +65,7 @@ Public Class WEL
         SpaltenOffset = 1
         
         'Voreinstellungen
+        Me.iLineInfo = 1
         Me.iZeileUeberschriften = 2
         Me.UseEinheiten = True
         Me.iZeileEinheiten = 3
@@ -72,6 +73,7 @@ Public Class WEL
         Me.Zeichengetrennt = True
         Me.Trennzeichen = Me.semikolon
         Me.Dezimaltrennzeichen = Me.punkt
+        Me.DateTimeLength = 17
 
         Call Me.SpaltenAuslesen()
 
@@ -93,6 +95,7 @@ Public Class WEL
         Dim Zeile As String = ""
         Dim ZeileSpalten As String = ""
         Dim ZeileEinheiten As String = ""
+        Dim LineInfo As String = ""
 
         Try
             'Datei öffnen
@@ -103,9 +106,24 @@ Public Class WEL
             'Spaltenüberschriften auslesen
             For i = 1 To Me.iZeileDaten
                 Zeile = StrReadSync.ReadLine.ToString()
+                If (i = Me.iLineInfo) Then LineInfo = Zeile
                 If (i = Me.iZeileUeberschriften) Then ZeileSpalten = Zeile
                 If (i = Me.iZeileEinheiten) Then ZeileEinheiten = Zeile
             Next
+
+            'Are columns separted by ";" or should fixed format be used?
+            If ZeileSpalten.Contains(";") Then
+                Me.Zeichengetrennt = True
+            Else
+                Me.Zeichengetrennt = False
+            End If
+
+            'Is it a WEL or EFL_WEL file
+            If LineInfo.Contains("EFL-WEL") Then
+                Me.Spaltenbreite = 41
+            Else
+                'nothing to do, presets can be applied
+            End If
 
             StrReadSync.Close()
             StrRead.Close()
@@ -130,12 +148,19 @@ Public Class WEL
                 Next
             Else
                 'Spalten mit fester Breite
-                anzSpalten = Math.Ceiling(ZeileSpalten.Length / Me.Spaltenbreite)
+                anzSpalten = Math.Ceiling((ZeileSpalten.Length - Me.DateTimeLength) / Me.Spaltenbreite) + 1
                 ReDim Me.Spalten(anzSpalten - 1)
                 For i = 0 To anzSpalten - 1
-                    Me.Spalten(i).Name = ZeileSpalten.Substring((i * Me.Spaltenbreite) + SpaltenOffset, Math.Min(Me.Spaltenbreite, ZeileSpalten.Substring((i * Me.Spaltenbreite) + SpaltenOffset).Length)).Trim()
-                    Me.Spalten(i).Einheit = ZeileEinheiten.Substring((i * Me.Spaltenbreite) + SpaltenOffset, Math.Min(Me.Spaltenbreite, ZeileSpalten.Substring((i * Me.Spaltenbreite) + SpaltenOffset).Length)).Trim()
-                    Me.Spalten(i).Index = i
+                    If i = 0 Then
+                        'DateTime need to be considered especially as it can be shorter than the standard "Spaltenbreite"
+                        Me.Spalten(i).Name = ZeileSpalten.Substring(0, Me.DateTimeLength) '.Trim()
+                        Me.Spalten(i).Einheit = ZeileEinheiten.Substring(0, Me.DateTimeLength) '.Trim()
+                        Me.Spalten(i).Index = i
+                    Else
+                        Me.Spalten(i).Name = ZeileSpalten.Substring(Me.DateTimeLength + (i - 1) * Me.Spaltenbreite, Me.Spaltenbreite).Trim()
+                        Me.Spalten(i).Einheit = ZeileEinheiten.Substring(Me.DateTimeLength + (i - 1) * Me.Spaltenbreite, Me.Spaltenbreite).Trim()
+                        Me.Spalten(i).Index = i
+                    End If
                 Next
             End If
 
@@ -229,15 +254,15 @@ Public Class WEL
         Dim StrRead As StreamReader = New StreamReader(FiStr, System.Text.Encoding.GetEncoding("iso8859-1"))
         Dim Zeile As String = ""
 
-        '2 Zeilen einlesen
         Zeile = StrRead.ReadLine.ToString()
-        Zeile = Trim(zeile)
-        
         StrRead.Close()
         FiStr.Close()
 
-        If (Zeile.StartsWith("*WEL")) Then
-            'Es ist eine WEL-Reihe für BlueM
+        If (Zeile.StartsWith(" *WEL")) Then
+            'It's a BlueM WEL file
+            Return True
+        ElseIf (Zeile.StartsWith("*EFL-WEL")) Then
+            'It's a BlueM EFL WEL file
             Return True
         Else
             Return False

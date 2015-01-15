@@ -87,9 +87,9 @@ Public Module Dateifactory
 
             Case FileExtREG
                 'Dateiformat prüfen:
-                If (SMUSI_REG.verifyFormat(file)) Then
+                If (REG_SMUSI.verifyFormat(file)) Then
                     'SMUSI-Regenreihe
-                    Datei = New SMUSI_REG(file)
+                    Datei = New REG_SMUSI(file)
                 ElseIf (HystemExtran_REG.verifyFormat(file)) Then
                     'Hystem-Extran-Regenreihe
                     Datei = New HystemExtran_REG(file)
@@ -104,14 +104,14 @@ Public Module Dateifactory
                 Datei = New SMB(file)
 
             Case FileExtWEL, FileExtKWL
-                'Dateiformat prüfen:
-                If (HystemExtran_WEL.verifyFormat(file)) Then
-                    'Hystem-Extran-Regenreihe
-                    Datei = New HystemExtran_WEL(file)
-                ElseIf (WEL.verifyFormat(file)) Then
+                If (WEL.verifyFormat(file)) Then
+                    'BlueM WEL file
                     Datei = New WEL(file)
+                ElseIf (HystemExtran_WEL.verifyFormat(file)) Then
+                    'HYSTEM EXTRAN rain time series
+                    Datei = New HystemExtran_WEL(file)
                 Else
-                    Throw New Exception("Unknown file format! Plaes check.")
+                    Throw New Exception("Unknown file format! Please check!")
                 End If
 
             Case FileExtZRE
