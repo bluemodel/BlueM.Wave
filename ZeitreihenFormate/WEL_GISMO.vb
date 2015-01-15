@@ -1,7 +1,29 @@
+'---------------------------------------------------------------------
+'BlueM.Wave ist a tool for time series management and analysis
+'Copyright (C) 2015  BlueM Dev Team, http://bluemodel.org/
+
+'This file is part of BlueM.Wave
+
+'BlueM.Wave is free software: you can redistribute it and/or modify
+'it under the terms of the GNU General Public License as published by
+'the Free Software Foundation, either version 3 of the License, or
+'(at your option) any later version.
+
+'BlueM.Wave is distributed in the hope that it will be useful,
+'but WITHOUT ANY WARRANTY; without even the implied warranty of
+'MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+'GNU General Public License for more details.
+
+'You should have received a copy of the GNU General Public License
+'along with this program.  If not, see <http://www.gnu.org/licenses/>.
+'---------------------------------------------------------------------
+'
 Imports System.IO
 
 ''' <summary>
-''' Class for the import of GIMSO time series (*.CSV,*.ASC)
+''' Class to import of GIMSO result files (*.CSV,*.ASC)
+''' For information about GISMO refer to http://www.sydro.de/
+''' For file format info refer to http://wiki.bluemodel.org/index.php/Wave
 ''' </summary>
 Public Class WEL_GISMO
     Inherits Dateiformat
