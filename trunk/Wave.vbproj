@@ -211,6 +211,7 @@
     <Compile Include="ZeitreihenFormate\SWMM_TXT.vb" />
     <Compile Include="ZeitreihenFormate\WEL.vb" />
     <None Include="ZeitreihenFormate\ZeitreihenDatabase.vb" />
+    <Compile Include="ZeitreihenFormate\WEL_TALSIM.vb" />
     <Compile Include="ZeitreihenFormate\ZeitreihenDatei.vb" />
     <Compile Include="ZeitreihenFormate\ZeitreihenExtern.vb" />
     <Compile Include="ZeitreihenFormate\ZRE.vb" />
