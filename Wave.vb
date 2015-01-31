@@ -48,6 +48,7 @@ Public Class Wave
 
     'Dateifilter
     Private Const FileFilter_TEN As String = "TeeChart-Dateien (*.ten)|*.ten"
+    Private Const FileFilter_XML As String = "Theme-Dateien (*.xml)|*.xml"
     Private Const FileFilter_Import As String = _
             "Alle Dateien (*.*)|*.*|" & _
             "Text-Dateien (*.txt)|*.txt|" & _
@@ -213,44 +214,60 @@ Public Class Wave
 
         Dim Xmin, Xmax As DateTime
 
-        'Min- und Max-Datum bestimmen
-        Xmin = DateTime.MaxValue
-        Xmax = DateTime.MinValue
-        For Each zre As Zeitreihe In Me.Zeitreihen.Values
-            If (zre.Anfangsdatum < Xmin) Then Xmin = zre.Anfangsdatum
-            If (zre.Enddatum > Xmax) Then Xmax = zre.Enddatum
-        Next
+        If (Me.Zeitreihen.Count = 0) Then
+            'just refresh
+            Me.TChart1.Refresh()
+            Me.TChart2.Refresh()
 
-        'Übersicht neu skalieren
-        Me.TChart2.Axes.Bottom.Minimum = Xmin.ToOADate()
-        Me.TChart2.Axes.Bottom.Maximum = Xmax.ToOADate()
+        Else
+            'Update Axes and colorBand
 
-        'Wenn noch nicht gezoomed wurde, Gesamtzeitraum auswählen
-        If (Not Me.selectionMade) Then
-            colorBand1.Start = Me.TChart2.Axes.Bottom.Minimum
-            colorBand1.End = Me.TChart2.Axes.Bottom.Maximum
+            'Min- und Max-Datum bestimmen
+            Xmin = DateTime.MaxValue
+            Xmax = DateTime.MinValue
+            For Each zre As Zeitreihe In Me.Zeitreihen.Values
+                If (zre.Anfangsdatum < Xmin) Then Xmin = zre.Anfangsdatum
+                If (zre.Enddatum > Xmax) Then Xmax = zre.Enddatum
+            Next
+
+            'Übersicht neu skalieren
+            Me.TChart2.Axes.Bottom.Minimum = Xmin.ToOADate()
+            Me.TChart2.Axes.Bottom.Maximum = Xmax.ToOADate()
+
+            If (Not Me.selectionMade) Then
+                'Wenn noch nicht gezoomed wurde, Gesamtzeitraum auswählen
+                colorBand1.Start = Xmin.ToOADate()
+                colorBand1.End = Xmax.ToOADate()
+                Me.TChart1.Axes.Bottom.Minimum = Xmin.ToOADate()
+                Me.TChart1.Axes.Bottom.Maximum = Xmax.ToOADate()
+            Else
+                'Ansonsten Zoom auf Colorband übertragen
+                colorBand1.Start = Me.TChart1.Axes.Bottom.Minimum
+                colorBand1.End = Me.TChart1.Axes.Bottom.Maximum
+            End If
+
         End If
-
-        'Hauptdiagramm neu skalieren
-        Me.TChart1.Axes.Bottom.Minimum = colorBand1.Start
-        Me.TChart1.Axes.Bottom.Maximum = colorBand1.End
 
     End Sub
 
     'TChart1 Scrolled, Zoomed, ZoomUndone
     '************************************
     Private Sub TChart1_Scrolled(ByVal sender As Object, ByVal e As System.EventArgs) Handles TChart1.Scroll, TChart1.Zoomed, TChart1.UndoneZoom
-        Me.colorBand1.Start = Me.TChart1.Axes.Bottom.Minimum
-        Me.colorBand1.End = Me.TChart1.Axes.Bottom.Maximum
-        Me.selectionMade = True
+        If (Me.TChart1.Axes.Bottom.Minimum <> Me.TChart1.Axes.Bottom.Maximum) Then
+            Me.colorBand1.Start = Me.TChart1.Axes.Bottom.Minimum
+            Me.colorBand1.End = Me.TChart1.Axes.Bottom.Maximum
+            Me.selectionMade = True
+        End If
     End Sub
 
     'ColorBand Resized
     '*****************
     Private Sub TChart2_MouseUp(ByVal sender As System.Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles TChart2.MouseUp
-        Me.TChart1.Axes.Bottom.Minimum = Me.colorBand1.Start
-        Me.TChart1.Axes.Bottom.Maximum = Me.colorBand1.End
-        Me.selectionMade = True
+        If (Me.colorBand1.Start <> Me.colorBand1.End) Then
+            Me.TChart1.Axes.Bottom.Minimum = Me.colorBand1.Start
+            Me.TChart1.Axes.Bottom.Maximum = Me.colorBand1.End
+            Me.selectionMade = True
+        End If
     End Sub
 
     'TChart2 DoubleClick
@@ -311,7 +328,7 @@ Public Class Wave
 
     'Neu
     '***
-    Private Sub Neu(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_Neu.Click
+    Private Sub Neu_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_Neu.Click
 
         Dim res As MsgBoxResult
 
@@ -345,7 +362,7 @@ Public Class Wave
 
     'Serie(n) importieren
     '********************
-    Private Sub Importieren(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem_ZeitreihenImportieren.Click
+    Private Sub Importieren_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem_ZeitreihenImportieren.Click
         Me.OpenFileDialog1.Title = "Serie(n) importieren"
         Me.OpenFileDialog1.Filter = FileFilter_Import
         If (Me.OpenFileDialog1.ShowDialog() = Windows.Forms.DialogResult.OK) Then
@@ -353,13 +370,23 @@ Public Class Wave
         End If
     End Sub
 
-    'TEN-Datei öffnen
+    'TEN-Datei laden
     '****************
-    Private Sub Öffnen(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem_Oeffnen.Click
-        Me.OpenFileDialog1.Title = "TEN-Datei öffnen"
+    Private Sub TENLaden_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem_TENLaden.Click
+        Me.OpenFileDialog1.Title = "TEN-Datei laden"
         Me.OpenFileDialog1.Filter = FileFilter_TEN
         If (Me.OpenFileDialog1.ShowDialog() = Windows.Forms.DialogResult.OK) Then
-            Call Me.Open_TEN(Me.OpenFileDialog1.FileName)
+            Call Me.Load_TEN(Me.OpenFileDialog1.FileName)
+        End If
+    End Sub
+
+    'Theme laden
+    '***********
+    Private Sub ThemeLaden_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem_ThemeLaden.Click
+        Me.OpenFileDialog1.Title = "Theme laden"
+        Me.OpenFileDialog1.Filter = FileFilter_XML
+        If (Me.OpenFileDialog1.ShowDialog() = Windows.Forms.DialogResult.OK) Then
+            Call Me.Load_Theme(Me.OpenFileDialog1.FileName)
         End If
     End Sub
 
@@ -371,21 +398,21 @@ Public Class Wave
 
     'Teechart Export
     '***************
-    Private Sub Export_TChart(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem_Speichern.Click
+    Private Sub ExportDiagramm_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem_ExportDiagramm.Click
         Call Me.TChart1.Export.ShowExportDialog()
     End Sub
 
-    'BlueM Export
-    '************
-    Private Sub Export_BlueM(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles BlueMFormatExportierenToolStripMenuItem.Click
-        Call ExportierenOhnePara()
+    'Zeitreihen Export
+    '*****************
+    Private Sub ExportZeitreihe_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem_ExportZeitreihe.Click
+        Call ExportZeitreihe()
     End Sub
 
     'Serie(n) konvertieren
     '*********************
-    Private Sub ToolStripButton_Convert_Click(ByVal sender As Object, ByVal e As System.EventArgs) Handles ToolStripButton_Convert.Click
+    Private Sub Convert_Click(ByVal sender As Object, ByVal e As System.EventArgs) Handles ToolStripButton_Convert.Click
 
-    Me.OpenFileDialog1.Title = "Serie(n) importieren"
+        Me.OpenFileDialog1.Title = "Serie(n) importieren"
         Me.OpenFileDialog1.Filter = FileFilter_Import
         If (Me.OpenFileDialog1.ShowDialog() = Windows.Forms.DialogResult.OK) Then
             Call Me.Convert_File(Me.OpenFileDialog1.FileName)
@@ -394,7 +421,7 @@ Public Class Wave
 
     'Serie eingeben
     '**************
-    Private Sub Eingeben(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem_ZeitreiheEingeben.Click
+    Private Sub Eingeben_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem_ZeitreiheEingeben.Click
         Dim SeriesEditor As New SeriesEditorDialog()
         If (SeriesEditor.ShowDialog() = Windows.Forms.DialogResult.OK) Then
             Call Me.Import_Series(SeriesEditor.Zeitreihe)
@@ -403,7 +430,7 @@ Public Class Wave
 
     'Zeitreihe zuschneiden
     '*********************
-    Private Sub Zuschneiden(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_Cut.Click
+    Private Sub Zuschneiden_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_Cut.Click
 
         'Wenn keine Zeitreihen vorhanden, abbrechen!
         If (Me.Zeitreihen.Count < 1) Then
@@ -424,11 +451,15 @@ Public Class Wave
 
     'Edit Chart
     '**********
-    Private Sub EditChart(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_EditChart.Click, TChart1.DoubleClick
+    Private Sub EditChart_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_EditChart.Click, TChart1.DoubleClick
         Call Steema.TeeChart.Editor.Show(Me.TChart1)
     End Sub
 
-    Private Sub ExportierenOhnePara()
+    ''' <summary>
+    ''' Zeitreihe(n) exportieren
+    ''' </summary>
+    ''' <remarks></remarks>
+    Private Sub ExportZeitreihe()
         Dim ExportDiag As New ExportDiag()
         Dim Reihe As Zeitreihe
         Dim MultiReihe() As Zeitreihe
@@ -614,19 +645,19 @@ Public Class Wave
 
     'Drucken
     '*******
-    Private Sub Drucken(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_Drucken.Click
+    Private Sub Drucken_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_Drucken.Click
         Call Me.TChart1.Printer.Preview()
     End Sub
 
     'Kopieren (als PNG)
     '******************
-    Private Sub Kopieren(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_Kopieren.Click
+    Private Sub Kopieren_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_Kopieren.Click
         Call Me.TChart1.Export.Image.PNG.CopyToClipboard()
     End Sub
 
     'Log anzeigen
     '************
-    Private Sub ShowLog(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripStatusLabel_Log.Click
+    Private Sub ShowLog_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripStatusLabel_Log.Click
 
         'LogWindow anzeigen
         Call Me.myLogWindow.Show()
@@ -756,73 +787,165 @@ Public Class Wave
 
     End Sub
 
-    'TEN-Datei importieren
-    '*********************
-    Private Sub Open_TEN(ByVal FileName As String)
+    ''' <summary>
+    ''' Lädt eine native Teechart-Datei (*.TEN)
+    ''' </summary>
+    ''' <param name="FileName">Pfad zur TEN-Datei</param>
+    ''' <remarks></remarks>
+    Private Sub Load_TEN(ByVal FileName As String)
 
-        Dim res As DialogResult
+        Dim result As DialogResult
         Dim i As Integer
         Dim reihe As Zeitreihe
-
-        'Warnen, wenn bereits Serien vorhanden (Chart wird komplett überschrieben!)
-        '--------------------------------------------------------------------------
-        If (Me.TChart1.Series.Count() > 0) Then
-            res = MsgBox("Die vorhandenen Serien werden überschrieben!" & eol & "Fortfahren?", MsgBoxStyle.OkCancel)
-            If (Not res = Windows.Forms.DialogResult.OK) Then Exit Sub
-        End If
+        Dim XMin, XMax As Double
 
         Try
 
             'Log
-            Call Log.AddLogEntry("Öffne Datei '" & FileName & "' ...")
+            Call Log.AddLogEntry("Lade Datei '" & FileName & "' ...")
+
+            'Bereits vorhandene Reihen merken
+            Dim existingseries = New List(Of String)
+            For Each zretitle As String In Me.Zeitreihen.Keys
+                existingseries.Add(zretitle)
+            Next
+
+            'Zoom der X-Achse merken
+            XMin = Me.TChart1.Axes.Bottom.Minimum
+            XMax = Me.TChart1.Axes.Bottom.Maximum
+            If (XMin <> XMax) Then
+                Me.selectionMade = True
+            Else
+                Me.selectionMade = False
+            End If
 
             'TEN-Datei importieren
-            '---------------------
+            'Diagramme werden hiermit komplett ersetzt!
             Call TChart1.Import.Template.Load(FileName)
             Call TChart2.Import.Template.Load(FileName)
 
-            'Zeitreihen-Objekte aus TChart importieren
-            '-----------------------------------------
-            'Alte Zeitreihen löschen
-            Me.Zeitreihen.Clear()
+            'Übersichtsdiagramm wieder als solches formatieren
+            'TODO: als Funktion auslagern und auch bei Init_Charts() verwenden
+            Call Wave.formatChart(Me.TChart2.Chart)
+            Me.TChart2.Panel.Brush.Color = Color.FromArgb(239, 239, 239)
+            Me.TChart2.Walls.Back.Color = Color.FromArgb(239, 239, 239)
+            Me.TChart2.Header.Visible = False
+            Me.TChart2.Legend.Visible = False
+            Me.TChart2.Axes.Left.Title.Visible = False
+            Me.TChart2.Axes.Right.Title.Visible = False
+            For i = 0 To Me.TChart2.Axes.Custom.Count - 1
+                Me.TChart2.Axes.Custom(i).Title.Visible = False
+            Next
+            Me.TChart2.Axes.Bottom.Labels.DateTimeFormat = "dd.MM.yy"
+            Me.TChart2.Axes.Bottom.Labels.Angle = 0
+            Me.TChart2.Zoom.Allow = False
+            Me.TChart2.Panning.Allow = Steema.TeeChart.ScrollModes.None
 
-            'Alle Reihen durchlaufen
-            For Each series As Steema.TeeChart.Styles.Series In TChart1.Series
+            'Abfrage für Reihenimport
+            If (Me.TChart1.Series.Count() > 0) Then
+                result = MsgBox("Zeitreihen auch importieren?", MsgBoxStyle.YesNo)
 
-                'Nur Zeitreihen importieren!
-                If (series.GetHorizAxis.IsDateTime) Then
+                Select Case result
 
-                    reihe = New Zeitreihe(series.Title)
+                    Case Windows.Forms.DialogResult.Yes
+                        'Reihen aus TEN-Datei sollen importiert werden
 
-                    For i = 0 To series.Count - 1
-                        reihe.AddNode(Date.FromOADate(series.XValues(i)), series.YValues(i))
-                    Next
+                        'Alle Reihen durchlaufen
+                        For Each series As Steema.TeeChart.Styles.Series In TChart1.Series
 
-                    'Zeitreihe abspeichern
-                    Call Me.AddZeitreihe(reihe)
-                End If
+                            'Nur Zeitreihen behandeln
+                            If (series.GetHorizAxis.IsDateTime) Then
+
+                                'Zeitreihe aus dem importierten Diagramm nach intern übertragen
+                                Log.AddLogEntry("Importiere Zeitreihe '" & series.Title & "' aus TEN-Datei...")
+                                reihe = New Zeitreihe(series.Title)
+                                For i = 0 To series.Count - 1
+                                    reihe.AddNode(Date.FromOADate(series.XValues(i)), series.YValues(i))
+                                Next
+                                Call Me.AddZeitreihe(reihe)
+
+                            End If
+                        Next
+
+
+                    Case Windows.Forms.DialogResult.No
+                        'Reihen aus TEN-Datei sollen nicht importiert werden
+
+                        'Alle Reihen aus den Diagrammen löschen (wurden bei TEN-Import automatisch mit eingeladen)
+                        Me.TChart1.Series.RemoveAllSeries()
+                        Me.TChart2.Series.RemoveAllSeries()
+
+                End Select
+
+            End If
+
+            'Achsen neu aus Diagramm einlesen
+            Me.MyAxes1.Clear()
+            Me.MyAxes2.Clear()
+
+            'Linke Achse
+            Me.MyAxes1.Add(Me.TChart1.Chart.Axes.Left.TitleOrName, Me.TChart1.Chart.Axes.Left)
+            Me.MyAxes2.Add(Me.TChart2.Chart.Axes.Left.TitleOrName, Me.TChart2.Chart.Axes.Left)
+            'Rechte Achse
+            If (Me.TChart1.Chart.Axes.Right.Visible) Then
+                Me.MyAxes1.Add(Me.TChart1.Chart.Axes.Right.TitleOrName, Me.TChart1.Chart.Axes.Right)
+                Me.MyAxes2.Add(Me.TChart2.Chart.Axes.Right.TitleOrName, Me.TChart2.Chart.Axes.Right)
+            End If
+            'Custom Achsen
+            For i = 0 To Me.TChart1.Chart.Axes.Custom.Count - 1
+                Me.MyAxes1.Add(Me.TChart1.Chart.Axes.Custom(i).TitleOrName, Me.TChart1.Chart.Axes.Custom(i))
+                Me.MyAxes2.Add(Me.TChart2.Chart.Axes.Custom(i).TitleOrName, Me.TChart2.Chart.Axes.Custom(i))
             Next
 
+            'Die vor dem Laden bereits vorhandenen Zeitreihen wieder zu den Diagrammen hinzufügen (durch TEN-Import verloren)
+            For Each title As String In existingseries
+                Call Me.Display_Series(Me.Zeitreihen(title))
+            Next
+
+            'Vorherigen Zoom wiederherstellen
+            If (Me.selectionMade) Then
+                Me.TChart1.Axes.Bottom.Minimum = XMin
+                Me.TChart1.Axes.Bottom.Maximum = XMax
+            End If
+
+            'ColorBand neu einrichten (durch TEN-Import verloren)
+            Call Me.Init_ColorBand()
+
+            'Charts aktualisieren
+            Call Me.UpdateCharts()
+
             'Log
-            Call Log.AddLogEntry("... Datei '" & FileName & "' erfolgreich geöffnet!")
+            Call Log.AddLogEntry("... Datei '" & FileName & "' erfolgreich geladen!")
 
         Catch ex As Exception
-            MsgBox("Fehler beim Öffnen:" & eol & ex.Message, MsgBoxStyle.Critical)
-            Call Log.AddLogEntry("... Fehler beim Öffnen:" & eol & ex.Message)
+            MsgBox("Fehler beim Laden:" & eol & ex.Message, MsgBoxStyle.Critical)
+            Call Log.AddLogEntry("... Fehler beim Laden:" & eol & ex.Message)
         End Try
 
-        'Übersicht anpassen
-        '------------------
-        TChart2.Header.Visible = False
+    End Sub
 
-        'ColorBand neu einrichten (geht bei TEN-Import verloren)
-        '-------------------------------------------------------
-        Call Me.Init_ColorBand()
+    ''' <summary>
+    ''' Lädt ein TeeChart Theme (XML-Datei)
+    ''' </summary>
+    ''' <param name="FileName">Pfad zur XML-Datei</param>
+    ''' <remarks></remarks>
+    Private Sub Load_Theme(ByVal FileName As String)
 
-        'Charts aktualisieren
-        '--------------------
-        Me.selectionMade = False
-        Call Me.UpdateCharts()
+        Try
+
+            'Log
+            Call Log.AddLogEntry("Lade Theme '" & FileName & "' ...")
+
+            'Theme laden
+            Call TChart1.Import.Theme.Load(FileName)
+
+            'Log
+            Call Log.AddLogEntry("... Theme '" & FileName & "' erfolgreich geladen!")
+
+        Catch ex As Exception
+            MsgBox("Fehler beim Laden:" & eol & ex.Message, MsgBoxStyle.Critical)
+            Call Log.AddLogEntry("... Fehler beim Laden:" & eol & ex.Message)
+        End Try
 
     End Sub
 
@@ -842,7 +965,7 @@ Public Class Wave
 
             Case Dateifactory.FileExtTEN
                 '.TEN-Datei
-                Call Me.Open_TEN(file)
+                Call Me.Load_TEN(file)
 
             Case Dateifactory.FileExtRVA
                 '.RVA-Datei
@@ -918,7 +1041,7 @@ Public Class Wave
 
     End Sub
 
-''' <summary>
+    ''' <summary>
     ''' Zeitreihe(n) aus einer Datei importieren
     ''' </summary>
     ''' <param name="file">Pfad zur Datei</param>
@@ -942,8 +1065,8 @@ Public Class Wave
 
         '    Case Else
 
-                'Normalfall:
-                '-----------
+        'Normalfall:
+        '-----------
 
         Try
             'Log
@@ -977,7 +1100,7 @@ Public Class Wave
                 Call Me.Import_Series(Datei.Zeitreihen(i), False)
             Next
 
-            Me.ExportierenOhnePara()
+            Me.ExportZeitreihe()
 
             'Log
             Call Log.AddLogEntry("Zeitreihen erfolgreich in Diagramm geladen!")
@@ -1129,13 +1252,13 @@ Public Class Wave
         'Serie abspeichen
         Me.AddZeitreihe(zre)
         If Display Then
-            'Serie anzeigen
+            'Serie in Diagrammen anzeigen
             Call Me.Display_Series(zre)
         End If
     End Sub
 
     ''' <summary>
-    ''' Eine Zeitreihe im Diagramm anzeigen
+    ''' Eine Zeitreihe in den Diagrammen anzeigen
     ''' </summary>
     ''' <param name="zre">Die anzuzeigende Zeitreihe</param>
     Private Sub Display_Series(ByVal zre As Zeitreihe)
@@ -1145,7 +1268,7 @@ Public Class Wave
         'NaN und Infinity-Stützstellen entfernen
         zre = zre.getCleanZRE()
 
-        'Serie zu Hauptdiagramm und zu Übersichtsdiagramm hinzufügen
+        'Serie zu Diagramm hinzufügen
 
         'Linien instanzieren
         Dim Line1 As New Steema.TeeChart.Styles.Line(Me.TChart1.Chart)
@@ -1165,10 +1288,10 @@ Public Class Wave
             Line2.Add(node.Key, node.Value)
         Next
 
-        'Achsenzuordnung
+        'Y-Achsenzuordnung
         AxisNo = getAxisNo(zre.Einheit)
 
-        'Reihe der Achse zuordnen
+        'Reihe der Y-Achse zuordnen
         '(Unterscheidung zwischen Standard- und Custom-Achsen notwendig)
         Select Case AxisNo
             Case 1
@@ -1182,8 +1305,8 @@ Public Class Wave
             Case Else
                 'Custom Achse
                 Line1.VertAxis = Steema.TeeChart.Styles.VerticalAxis.Custom
-                Line1.CustomVertAxis = Me.MyAxes1(zre.Einheit)
                 Line2.VertAxis = Steema.TeeChart.Styles.VerticalAxis.Custom
+                Line1.CustomVertAxis = Me.MyAxes1(zre.Einheit)
                 Line2.CustomVertAxis = Me.MyAxes2(zre.Einheit)
         End Select
 
@@ -1337,6 +1460,9 @@ Public Class Wave
         chart.Legend.LegendStyle = Steema.TeeChart.LegendStyles.Series
         chart.Legend.FontSeriesColor = True
         chart.Legend.CheckBoxes = True
+
+        'Achsen
+        chart.Axes.Bottom.Automatic = True
 
     End Sub
 

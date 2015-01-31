@@ -4,9 +4,12 @@ Wave Release Notes
 Version 1.5 (beta)
 ------------------
 NEW:
-* Import GISMO files
-* Import HYDRO-AS_2D files
-UPDATE:
+* Support for importing GISMO files
+* Support for importing HYDRO-AS_2D files
+* Support for loading TeeChart themes (*.xml) 
+CHANGED:
+* Loading a TEN-file does not cause existing series to be deleted, 
+  the series contained in the TEN-file can be imported optionally
 * Small improvements to layout and functionality
 
 Version 1.4
