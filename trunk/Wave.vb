@@ -408,15 +408,15 @@ Public Class Wave
         Call ExportZeitreihe()
     End Sub
 
-    'Serie(n) konvertieren
-    '*********************
+    ''' <summary>
+    ''' Convert a file
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    ''' <remarks>Just a shortcut for importing and then exporting series</remarks>
     Private Sub Convert_Click(ByVal sender As Object, ByVal e As System.EventArgs) Handles ToolStripButton_Convert.Click
-
-        Me.OpenFileDialog1.Title = "Serie(n) importieren"
-        Me.OpenFileDialog1.Filter = FileFilter_Import
-        If (Me.OpenFileDialog1.ShowDialog() = Windows.Forms.DialogResult.OK) Then
-            Call Me.Convert_File(Me.OpenFileDialog1.FileName)
-        End If
+        Call Me.Importieren_Click(sender, e)
+        Call Me.ExportZeitreihe()
     End Sub
 
     'Serie eingeben
@@ -1038,83 +1038,6 @@ Public Class Wave
                 End Try
 
         End Select
-
-    End Sub
-
-    ''' <summary>
-    ''' Zeitreihe(n) aus einer Datei importieren
-    ''' </summary>
-    ''' <param name="file">Pfad zur Datei</param>
-    Public Sub Convert_File(ByVal file As String)
-
-        Dim Datei As Dateiformat
-        Dim i As Integer
-        'Dim ok As Boolean
-
-        'Sonderfälle abfangen:
-        '---------------------
-        'Select Case Path.GetExtension(file).ToUpper()
-
-        '    Case Dateifactory.FileExtTEN
-        '        '.TEN-Datei
-        '        Call Me.Open_TEN(file)
-
-        '    Case Dateifactory.FileExtRVA
-        '        '.RVA-Datei
-        '        Call Me.Import_RVA(file)
-
-        '    Case Else
-
-        'Normalfall:
-        '-----------
-
-        Try
-            'Log
-            Call Log.AddLogEntry("Importiere Datei '" & file & "' ...")
-
-            'Datei-Instanz erzeugen
-            Datei = Dateifactory.getDateiInstanz(file)
-
-            'Alle Spalten auswählen
-            Call Datei.selectAllSpalten()
-
-            Cursor = Cursors.WaitCursor
-
-            'Datei einlesen
-            Call Datei.Read_File()
-
-            'Log
-            Call Log.AddLogEntry("Datei '" & file & "' erfolgreich importiert!")
-            Application.DoEvents()
-
-            'Datei abspeichern
-            Me.ImportedFiles.Add(Datei)
-
-            'Log
-            Call Log.AddLogEntry("Zeitreihen in Diagramm laden...")
-            Application.DoEvents()
-
-            'Alle eingelesenen Zeitreihen der Datei durchlaufen
-            For i = 0 To Datei.Zeitreihen.GetUpperBound(0)
-                'Serie importieren
-                Call Me.Import_Series(Datei.Zeitreihen(i), False)
-            Next
-
-            Me.ExportZeitreihe()
-
-            'Log
-            Call Log.AddLogEntry("Zeitreihen erfolgreich in Diagramm geladen!")
-
-
-        Catch ex As Exception
-            MsgBox("Fehler beim Import:" & eol & ex.Message, MsgBoxStyle.Critical)
-            Call Log.AddLogEntry("Fehler beim Import: " & ex.Message)
-
-        Finally
-            Cursor = Cursors.Default
-        End Try
-
-        'End Select
 
     End Sub
 
