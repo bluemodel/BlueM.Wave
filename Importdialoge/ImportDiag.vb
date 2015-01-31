@@ -287,26 +287,41 @@ Partial Public Class ImportDiag
 
     End Sub
 
-    'Reihe in den YSpalten suchen
-    '****************************
-    Private Sub TextBox_YSpalte_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TextBox_Suche.TextChanged
+    ''' <summary>
+    ''' Do a case-insensitive search for matching list items and select them
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    ''' <remarks></remarks>
+    Private Sub TextBox_Suche_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TextBox_Suche.TextChanged
+
+        Dim search, itemname As String
 
         Me.ListBox_YSpalten.ClearSelected()
-        Dim index As Integer = Me.ListBox_YSpalten.FindString(Me.TextBox_Suche.Text)
-        If index <> -1 Then ListBox_YSpalten.SetSelected(index, True)
+
+        search = Me.TextBox_Suche.Text.ToLower()
+
+        If (search = "") Then Return
+
+        For i As Integer = 0 To Me.ListBox_YSpalten.Items.Count - 1
+            itemname = Me.ListBox_YSpalten.Items(i).ToString().ToLower()
+            If (itemname.Contains(search)) Then
+                Me.ListBox_YSpalten.SetSelected(i, True)
+            End If
+        Next
+
+    End Sub
+
+    Private Sub Select_All(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button_SelectAll.Click
+
+        Dim i As Long
+
+        For i = 0 To Me.ListBox_YSpalten.Items.Count - 1
+            Me.ListBox_YSpalten.SetSelected(i, True)
+        Next
+
     End Sub
 
 #End Region 'Methoden
 
-
-Private Sub Select_All(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button_SelectAll.Click
-
-    Dim i As Long
-
-    For i = 0 To Me.ListBox_YSpalten.Items.Count - 1
-        Me.ListBox_YSpalten.SetSelected(i, True)
-    Next
-
-
-End Sub
 End Class

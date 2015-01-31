@@ -39,13 +39,14 @@ Partial Class ImportDiag
         Me.Label_ZeileÜberschriften = New System.Windows.Forms.Label
         Me.ComboBox_Dezimaltrennzeichen = New System.Windows.Forms.ComboBox
         Me.GroupBox_Einstellungen = New System.Windows.Forms.GroupBox
+        Me.NumericUpDown_DatumsSpalte = New System.Windows.Forms.NumericUpDown
         Me.CheckBox_Einheiten = New System.Windows.Forms.CheckBox
         Me.TextBox_ZeileEinheiten = New System.Windows.Forms.NumericUpDown
         Me.TextBox_ZeileDaten = New System.Windows.Forms.NumericUpDown
         Me.Label_ZeileDaten = New System.Windows.Forms.Label
         Me.GroupBox_Vorschau = New System.Windows.Forms.GroupBox
+        Me.Label_Datei = New System.Windows.Forms.Label
         Me.Label_Spaltenauswahl = New System.Windows.Forms.Label
-        Me.NumericUpDown_DatumsSpalte = New System.Windows.Forms.NumericUpDown
         Me.TextBox_Suche = New System.Windows.Forms.TextBox
         Me.GroupBox_Dezimaltrennzeichen = New System.Windows.Forms.GroupBox
         Me.Label_Dezimaltrennzeichen = New System.Windows.Forms.Label
@@ -53,14 +54,13 @@ Partial Class ImportDiag
         Me.StatusImage = New System.Windows.Forms.ToolStripStatusLabel
         Me.Button_SelectAll = New System.Windows.Forms.Button
         Me.GroupBox_Auswahl = New System.Windows.Forms.GroupBox
-        Me.Label_Datei = New System.Windows.Forms.Label
         Me.GroupBox_Spaltenmodus.SuspendLayout()
         CType(Me.TextBox_ZeileÜberschriften, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.GroupBox_Einstellungen.SuspendLayout()
+        CType(Me.NumericUpDown_DatumsSpalte, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.TextBox_ZeileEinheiten, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.TextBox_ZeileDaten, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.GroupBox_Vorschau.SuspendLayout()
-        CType(Me.NumericUpDown_DatumsSpalte, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.GroupBox_Dezimaltrennzeichen.SuspendLayout()
         Me.StatusStrip1.SuspendLayout()
         Me.GroupBox_Auswahl.SuspendLayout()
@@ -248,6 +248,17 @@ Partial Class ImportDiag
         Me.GroupBox_Einstellungen.TabStop = False
         Me.GroupBox_Einstellungen.Text = "Einstellungen"
         '
+        'NumericUpDown_DatumsSpalte
+        '
+        Me.NumericUpDown_DatumsSpalte.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+                    Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.NumericUpDown_DatumsSpalte.Location = New System.Drawing.Point(485, 45)
+        Me.NumericUpDown_DatumsSpalte.Minimum = New Decimal(New Integer() {1, 0, 0, 0})
+        Me.NumericUpDown_DatumsSpalte.Name = "NumericUpDown_DatumsSpalte"
+        Me.NumericUpDown_DatumsSpalte.Size = New System.Drawing.Size(34, 20)
+        Me.NumericUpDown_DatumsSpalte.TabIndex = 25
+        Me.NumericUpDown_DatumsSpalte.Value = New Decimal(New Integer() {1, 0, 0, 0})
+        '
         'CheckBox_Einheiten
         '
         Me.CheckBox_Einheiten.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
@@ -307,6 +318,15 @@ Partial Class ImportDiag
         Me.GroupBox_Vorschau.TabStop = False
         Me.GroupBox_Vorschau.Text = "Dateivorschau"
         '
+        'Label_Datei
+        '
+        Me.Label_Datei.AutoSize = True
+        Me.Label_Datei.Location = New System.Drawing.Point(9, 21)
+        Me.Label_Datei.Name = "Label_Datei"
+        Me.Label_Datei.Size = New System.Drawing.Size(35, 13)
+        Me.Label_Datei.TabIndex = 17
+        Me.Label_Datei.Text = "Datei:"
+        '
         'Label_Spaltenauswahl
         '
         Me.Label_Spaltenauswahl.AutoSize = True
@@ -315,17 +335,6 @@ Partial Class ImportDiag
         Me.Label_Spaltenauswahl.Size = New System.Drawing.Size(101, 13)
         Me.Label_Spaltenauswahl.TabIndex = 26
         Me.Label_Spaltenauswahl.Text = "Verfügbare Spalten:"
-        '
-        'NumericUpDown_DatumsSpalte
-        '
-        Me.NumericUpDown_DatumsSpalte.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-                    Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.NumericUpDown_DatumsSpalte.Location = New System.Drawing.Point(485, 45)
-        Me.NumericUpDown_DatumsSpalte.Minimum = New Decimal(New Integer() {1, 0, 0, 0})
-        Me.NumericUpDown_DatumsSpalte.Name = "NumericUpDown_DatumsSpalte"
-        Me.NumericUpDown_DatumsSpalte.Size = New System.Drawing.Size(34, 20)
-        Me.NumericUpDown_DatumsSpalte.TabIndex = 25
-        Me.NumericUpDown_DatumsSpalte.Value = New Decimal(New Integer() {1, 0, 0, 0})
         '
         'TextBox_Suche
         '
@@ -397,15 +406,6 @@ Partial Class ImportDiag
         Me.GroupBox_Auswahl.TabStop = False
         Me.GroupBox_Auswahl.Text = "Reihenauswahl"
         '
-        'Label_Datei
-        '
-        Me.Label_Datei.AutoSize = True
-        Me.Label_Datei.Location = New System.Drawing.Point(9, 21)
-        Me.Label_Datei.Name = "Label_Datei"
-        Me.Label_Datei.Size = New System.Drawing.Size(35, 13)
-        Me.Label_Datei.TabIndex = 17
-        Me.Label_Datei.Text = "Datei:"
-        '
         'ImportDiag
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -433,11 +433,11 @@ Partial Class ImportDiag
         CType(Me.TextBox_ZeileÜberschriften, System.ComponentModel.ISupportInitialize).EndInit()
         Me.GroupBox_Einstellungen.ResumeLayout(False)
         Me.GroupBox_Einstellungen.PerformLayout()
+        CType(Me.NumericUpDown_DatumsSpalte, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.TextBox_ZeileEinheiten, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.TextBox_ZeileDaten, System.ComponentModel.ISupportInitialize).EndInit()
         Me.GroupBox_Vorschau.ResumeLayout(False)
         Me.GroupBox_Vorschau.PerformLayout()
-        CType(Me.NumericUpDown_DatumsSpalte, System.ComponentModel.ISupportInitialize).EndInit()
         Me.GroupBox_Dezimaltrennzeichen.ResumeLayout(False)
         Me.GroupBox_Dezimaltrennzeichen.PerformLayout()
         Me.StatusStrip1.ResumeLayout(False)
