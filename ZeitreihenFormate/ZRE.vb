@@ -127,7 +127,7 @@ Public Class ZRE
             Do
                 j += 1
                 Zeile = StrReadSync.ReadLine.ToString()
-                If (j > Me.nZeilenHeader And Zeile.Length > 0) Then
+                If (j > Me.nZeilenHeader And Zeile.Trim.Length > 0) Then
 
                     'Datum erkennen
                     '--------------
