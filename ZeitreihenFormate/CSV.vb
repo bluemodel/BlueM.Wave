@@ -113,7 +113,7 @@ Public Class CSV
             Next
 
         Catch ex As Exception
-            'MsgBox("Konnte Datei nicht einlesen!" & eol & eol & "Fehler: " & ex.Message, MsgBoxStyle.Critical, "Fehler")
+            MsgBox("Konnte Datei nicht einlesen!" & eol & eol & "Fehler: " & ex.Message, MsgBoxStyle.Critical, "Fehler")
         End Try
 
     End Sub
