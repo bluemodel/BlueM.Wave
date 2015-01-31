@@ -1041,23 +1041,6 @@ Public Class Wave
 
     End Sub
 
-    Public Sub Select_ASC(ByVal Workdir As String)
-
-        Dim FileName As String
-
-        OpenFileDialog1.Title = "ASC-Datei auswählen"
-        OpenFileDialog1.Filter = "SMUSI-Dateien (*.asc)|*.asc"
-        OpenFileDialog1.InitialDirectory = Workdir
-
-        If OpenFileDialog1.ShowDialog() = Windows.Forms.DialogResult.OK Then
-            FileName = OpenFileDialog1.FileName
-            If Not (FileName Is Nothing) Then
-                Call Me.Import_File(FileName)
-            End If
-        End If
-
-    End Sub
-
     ''' <summary>
     ''' Eine RVA-Datei importieren
     ''' </summary>
