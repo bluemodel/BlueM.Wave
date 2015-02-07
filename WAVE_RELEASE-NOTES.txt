@@ -10,6 +10,7 @@ NEW:
 CHANGED:
 * Loading a TEN-file does not cause existing series to be deleted, 
   the series contained in the TEN-file can be imported optionally
+* More options for cutting time series (cut all series at once and keep original series)
 * Small improvements to layout and functionality
 
 Version 1.4
