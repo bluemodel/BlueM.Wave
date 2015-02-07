@@ -283,7 +283,7 @@ Public Class Wave
     ''' Wird für jede gelöschte Serie ein Mal aufgerufen.
     ''' Funktioniert nur unter der Annahme, dass alle Serien unterschiedliche Titel haben.
     ''' </remarks>
-    Private Sub DeleteSeriesInternally(ByVal sender As Object, ByVal e As System.EventArgs) Handles ChartListBox1.RemovedSeries
+    Private Sub TChart1_SeriesRemoved(ByVal sender As Object, ByVal e As System.EventArgs) Handles ChartListBox1.RemovedSeries
 
         Dim found As Boolean
         Dim title As String
@@ -432,20 +432,73 @@ Public Class Wave
     '*********************
     Private Sub Zuschneiden_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_Cut.Click
 
+        Dim title As String
+        Dim titles As List(Of String)
+
         'Wenn keine Zeitreihen vorhanden, abbrechen!
         If (Me.Zeitreihen.Count < 1) Then
             MsgBox("Es sind keine Zeitreihen zum Zuschneiden verfügbar!", MsgBoxStyle.Exclamation)
             Exit Sub
         End If
 
-        'Dialog vorbereiten
+        'Dialog instanzieren
         Dim cutter As New CutDialog(Me.Zeitreihen)
 
         'Dialog anzeigen
         If (cutter.ShowDialog() = Windows.Forms.DialogResult.OK) Then
-            'Neue Reihe importieren
-            Me.Import_Series(cutter.zreCut)
+
+            If (cutter.CheckBox_keepUncutSeries.Checked = False) Then
+                'Alte Zeitreihe(n) löschen
+                If (cutter.ComboBox_ZeitreiheCut.SelectedItem.ToString = CutDialog.labelAlle) Then
+                    titles = New List(Of String)
+                    For Each title In Me.Zeitreihen.Keys
+                        titles.Add(title)
+                    Next
+                    For Each title In titles
+                        Call Me.DeleteZeitreihe(title)
+                    Next
+                Else
+                    title = cutter.ComboBox_ZeitreiheCut.SelectedItem.ToString
+                    Call Me.DeleteZeitreihe(title)
+                End If
+            End If
+
+            'Neue Reihe(n) importieren
+            For Each zre As Zeitreihe In cutter.zreCut.Values
+                Me.Import_Series(zre)
+            Next
+
         End If
+
+    End Sub
+
+    ''' <summary>
+    ''' Löscht eine Zeitreihe
+    ''' </summary>
+    ''' <param name="title">Titel der Zeitreihe</param>
+    ''' <remarks>Annahme, dass alle Zeitreihentitel eindeutig sind</remarks>
+    Private Sub DeleteZeitreihe(ByVal title As String)
+
+        'Aus Diagramm entfernen
+        For i As Integer = Me.TChart1.Series.Count - 1 To 0 Step -1
+            If (Me.TChart1.Series.Item(i).Title = title) Then
+                Me.TChart1.Series.RemoveAt(i)
+                Me.TChart1.Refresh()
+                Exit For
+            End If
+        Next
+
+        'Aus Übersicht entfernen
+        For i As Integer = Me.TChart2.Series.Count - 1 To 0 Step -1
+            If (Me.TChart2.Series.Item(i).Title = title) Then
+                Me.TChart2.Series.RemoveAt(i)
+                Me.TChart2.Refresh()
+                Exit For
+            End If
+        Next
+
+        'Intern entfernen
+        Me.Zeitreihen.Remove(title)
 
     End Sub
 

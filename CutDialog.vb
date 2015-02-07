@@ -35,10 +35,12 @@ Public Class CutDialog
     Private IsInitializing As Boolean
     Private colorBand1 As Steema.TeeChart.Tools.ColorBand
     Private Anfang, Ende As DateTime
-    Private zreOrig As Zeitreihe
+    Private zreOrig As Dictionary(Of String, Zeitreihe)
     Private serie_cut As Steema.TeeChart.Styles.Line
     Private serie_ref As Steema.TeeChart.Styles.Line
-    Public zreCut As Zeitreihe
+
+    Public zreCut As Dictionary(Of String, Zeitreihe)
+    Public Const labelAlle As String = "- ALLE -"
 
     'Konstruktor
     '***********
@@ -49,15 +51,25 @@ Public Class CutDialog
         ' This call is required by the Windows Form Designer.
         InitializeComponent()
 
-        Me.IsInitializing = False
-
         ' Add any initialization after the InitializeComponent() call.
 
-        'Zeitreihen zu Listboxen hinzufügen
-        For Each zre As Zeitreihe In zeitreihen.Values
+        Me.zreCut = New Dictionary(Of String, Zeitreihe)
+        Me.zreOrig = zeitreihen
+
+        'Comboboxen füllen
+        'Option zum Zuschneiden von allen Reihen
+        Me.ComboBox_ZeitreiheCut.Items.Add(labelAlle)
+        'Zeitreihen hinzufügen
+        For Each zre As Zeitreihe In Me.zreOrig.Values
             Me.ComboBox_ZeitreiheCut.Items.Add(zre)
             Me.ComboBox_ZeitreiheRef.Items.Add(zre)
         Next
+
+        'Diagramm formatieren
+        Me.TChart1.Zoom.Allow = False
+        Me.TChart1.Panning.Allow = Steema.TeeChart.ScrollModes.None
+
+        Me.IsInitializing = False
 
     End Sub
 
@@ -70,20 +82,47 @@ Public Class CutDialog
         End If
 
         Dim i As Integer
+        Dim zre As Zeitreihe
 
         'Ausgewählte Zeitreihe
-        Me.zreOrig = CType(Me.ComboBox_ZeitreiheCut.SelectedItem, Zeitreihe)
+        If (Me.ComboBox_ZeitreiheCut.SelectedItem.ToString = labelAlle) Then
 
-        Me.Anfang = Me.zreOrig.Anfangsdatum
-        Me.Ende = Me.zreOrig.Enddatum
+            'Anfangs- und Enddatum von allen Zeitreihen bestimmen
+            Me.Anfang = DateTime.MaxValue
+            Me.Ende = DateTime.MinValue
+            For Each zre In Me.zreOrig.Values
+                If (zre.Anfangsdatum < Me.Anfang) Then Me.Anfang = zre.Anfangsdatum
+                If (zre.Enddatum > Me.Ende) Then Me.Ende = zre.Enddatum
+            Next
 
-        'Zeitreihe in Chart anzeigen
-        Call Me.TChart1.Chart.Series.Clear()
-        serie_cut = New Steema.TeeChart.Styles.Line(Me.TChart1.Chart)
-        serie_cut.Title = Me.zreOrig.Title
-        For i = 0 To Me.zreOrig.Length - 1
-            serie_cut.Add(Me.zreOrig.XWerte(i), Me.zreOrig.YWerte(i))
-        Next
+            'Alle Zeitreihen in Chart anzeigen
+            Call Me.TChart1.Chart.Series.Clear()
+            For Each zre In Me.zreOrig.Values
+                Dim series As New Steema.TeeChart.Styles.Line()
+                For i = 0 To zre.Length - 1
+                    series.Add(zre.XWerte(i), zre.YWerte(i))
+                    series.Title = zre.Title
+                Next
+                Me.TChart1.Chart.Series.Add(series)
+            Next
+
+        Else
+
+            'Eine einzige Zeitreihe wurde ausgewählt
+            zre = CType(Me.ComboBox_ZeitreiheCut.SelectedItem, Zeitreihe)
+
+            Me.Anfang = zre.Anfangsdatum
+            Me.Ende = zre.Enddatum
+
+            'Zeitreihe in Chart anzeigen
+            Call Me.TChart1.Chart.Series.Clear()
+            serie_cut = New Steema.TeeChart.Styles.Line(Me.TChart1.Chart)
+            serie_cut.Title = zre.Title
+            For i = 0 To zre.Length - 1
+                serie_cut.Add(zre.XWerte(i), zre.YWerte(i))
+            Next
+
+        End If
 
         'ColorBand einrichten
         Call Me.TChart1.Tools.Clear()
@@ -192,49 +231,54 @@ Public Class CutDialog
         End If
 
         Dim i As Integer
-        Dim zreRef As Zeitreihe
+        Dim zre, zreRef As Zeitreihe
         Dim tmp_anfang, tmp_ende As DateTime
         Dim answer As MsgBoxResult
 
         zreRef = Me.ComboBox_ZeitreiheRef.SelectedItem
 
-        'Kontrolle ob Referenzreihe zu schneidende Zeitreihe abdeckt
-        If (zreRef.Enddatum < Me.zreOrig.Anfangsdatum Or zreRef.Anfangsdatum > Me.zreOrig.Enddatum) Then
-            MsgBox("Die beiden Zeitreihen decken keinen gemeinsamen Zeitraum ab!", MsgBoxStyle.Exclamation)
-            'Abbrechen
-            Exit Sub
-        End If
-
         tmp_anfang = zreRef.Anfangsdatum
         tmp_ende = zreRef.Enddatum
 
-       'Man kann nicht abschneiden, was nicht existiert
-        If (zreRef.Anfangsdatum < Me.zreOrig.Anfangsdatum) Then
-            answer = MsgBox("Das Anfangsdatum dieser Zeitreihe liegt vor dem Anfangsdatum der zu schneidenden Zeitreihe! " & eol & "Fortfahren?", MsgBoxStyle.OkCancel)
-            If (answer = MsgBoxResult.OK) Then
-                'Kleinstes mögliches Datum nehmen
-                tmp_anfang = Me.zreOrig.Anfangsdatum
-            Else
+        If (Me.ComboBox_ZeitreiheCut.SelectedItem <> labelAlle) Then
+
+            'Kontrolle ob Referenzreihe zu schneidende Zeitreihe abdeckt
+            zre = Me.ComboBox_ZeitreiheCut.SelectedItem
+            If (zreRef.Enddatum < zre.Anfangsdatum Or zreRef.Anfangsdatum > zre.Enddatum) Then
+                MsgBox("Die beiden Zeitreihen decken keinen gemeinsamen Zeitraum ab!", MsgBoxStyle.Exclamation)
                 'Abbrechen
                 Exit Sub
             End If
-        End If
-        If (zreRef.Enddatum > Me.zreOrig.Enddatum) Then
-            answer = MsgBox("Das Enddatum dieser Zeitreihe liegt hinter dem Enddatum der zu schneidenden Zeitreihe! " & eol & "Fortfahren?", MsgBoxStyle.OkCancel)
-            If (answer = MsgBoxResult.OK) Then
-                'Größtes mögliches Datum für Ende nehmen
-                tmp_ende = Me.zreOrig.Enddatum
-            Else
-                'Abbrechen
-                Exit Sub
+
+            'Man kann nicht abschneiden, was nicht existiert
+            If (zreRef.Anfangsdatum < zre.Anfangsdatum) Then
+                answer = MsgBox("Das Anfangsdatum dieser Zeitreihe liegt vor dem Anfangsdatum der zu schneidenden Zeitreihe! " & eol & "Fortfahren?", MsgBoxStyle.OkCancel)
+                If (answer = MsgBoxResult.Ok) Then
+                    'Kleinstes mögliches Datum nehmen
+                    tmp_anfang = zre.Anfangsdatum
+                Else
+                    'Abbrechen
+                    Exit Sub
+                End If
             End If
+            If (zreRef.Enddatum > zre.Enddatum) Then
+                answer = MsgBox("Das Enddatum dieser Zeitreihe liegt hinter dem Enddatum der zu schneidenden Zeitreihe! " & eol & "Fortfahren?", MsgBoxStyle.OkCancel)
+                If (answer = MsgBoxResult.Ok) Then
+                    'Größtes mögliches Datum für Ende nehmen
+                    tmp_ende = zre.Enddatum
+                Else
+                    'Abbrechen
+                    Exit Sub
+                End If
+            End If
+
         End If
 
-        'Anfang und Ende setzen
+        'Neuen Anfang und Ende setzen
         Me.Anfang = tmp_anfang
         Me.Ende = tmp_ende
 
-        'Serie anzeigen
+        'Referenzserie anzeigen
         Me.serie_ref = New Steema.TeeChart.Styles.Line(Me.TChart1.Chart)
         Me.serie_ref.Color = Color.Gray
         For i = 0 To zreRef.Length - 1
@@ -260,6 +304,9 @@ Public Class CutDialog
     '***********
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button_OK.Click
 
+        Dim newtitle As String
+        Dim zre As Zeitreihe
+
         'Prüfung
         If (Me.ComboBox_ZeitreiheCut.SelectedIndex = -1) Then
             MsgBox("Bitte zuerst eine zuzuschneidende Zeitreihe auswählen!", MsgBoxStyle.Exclamation)
@@ -273,9 +320,19 @@ Public Class CutDialog
             Exit Sub
         End If
 
-        'Zeitreihe zuschneiden
-        Me.zreCut = Me.zreOrig.Clone()
-        Call Me.zreCut.Cut(Me.Anfang, Me.Ende)
+        'Zeitreihe(n) zuschneiden
+        If (Me.ComboBox_ZeitreiheCut.SelectedItem.ToString = labelAlle) Then
+            For Each zre In Me.zreOrig.Values
+                newtitle = zre.Title & " (cut)"
+                Me.zreCut.Add(newtitle, zre.Clone())
+                Call Me.zreCut(newtitle).Cut(Me.Anfang, Me.Ende)
+            Next
+        Else
+            zre = Me.ComboBox_ZeitreiheCut.SelectedItem
+            newtitle = zre.Title & " (cut)"
+            Me.zreCut.Add(newtitle, zre.Clone())
+            Call Me.zreCut(newtitle).Cut(Me.Anfang, Me.Ende)
+        End If
 
         Me.DialogResult = System.Windows.Forms.DialogResult.OK
         Me.Close()
