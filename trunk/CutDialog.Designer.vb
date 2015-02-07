@@ -42,6 +42,7 @@ Partial Class CutDialog
         Me.TabPage_ZRE = New System.Windows.Forms.TabPage
         Me.ComboBox_ZeitreiheRef = New System.Windows.Forms.ComboBox
         Me.Button_Cancel = New System.Windows.Forms.Button
+        Me.CheckBox_keepUncutSeries = New System.Windows.Forms.CheckBox
         Label_Zeitreihe = New System.Windows.Forms.Label
         Label_Anfang = New System.Windows.Forms.Label
         Label_Ende = New System.Windows.Forms.Label
@@ -178,7 +179,7 @@ Partial Class CutDialog
         '
         '
         Me.TChart1.Aspect.View3D = False
-        Me.TChart1.Aspect.ZOffset = 0
+        '
         Me.TChart1.Cursor = System.Windows.Forms.Cursors.Default
         '
         '
@@ -278,12 +279,23 @@ Partial Class CutDialog
         Me.Button_Cancel.Text = "Abbrechen"
         Me.Button_Cancel.UseVisualStyleBackColor = True
         '
+        'CheckBox_keepUncutSeries
+        '
+        Me.CheckBox_keepUncutSeries.AutoSize = True
+        Me.CheckBox_keepUncutSeries.Location = New System.Drawing.Point(16, 385)
+        Me.CheckBox_keepUncutSeries.Name = "CheckBox_keepUncutSeries"
+        Me.CheckBox_keepUncutSeries.Size = New System.Drawing.Size(177, 17)
+        Me.CheckBox_keepUncutSeries.TabIndex = 17
+        Me.CheckBox_keepUncutSeries.Text = "Unbeschnitte Zeitreihe behalten"
+        Me.CheckBox_keepUncutSeries.UseVisualStyleBackColor = True
+        '
         'CutDialog
         '
         Me.AcceptButton = Me.Button_OK
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(494, 413)
+        Me.Controls.Add(Me.CheckBox_keepUncutSeries)
         Me.Controls.Add(Label_Zeitreihe)
         Me.Controls.Add(Me.ComboBox_ZeitreiheCut)
         Me.Controls.Add(Me.TChart1)
@@ -321,8 +333,9 @@ Partial Class CutDialog
     Private WithEvents DateTimePicker_Ende As System.Windows.Forms.DateTimePicker
     Private WithEvents DateTimePicker_AnfangZeit As System.Windows.Forms.DateTimePicker
     Private WithEvents DateTimePicker_EndeZeit As System.Windows.Forms.DateTimePicker
-    Private WithEvents ComboBox_ZeitreiheCut As System.Windows.Forms.ComboBox
     Private WithEvents ComboBox_ZeitreiheRef As System.Windows.Forms.ComboBox
     Private WithEvents Button_Cancel As System.Windows.Forms.Button
+    Friend WithEvents CheckBox_keepUncutSeries As System.Windows.Forms.CheckBox
+    Friend WithEvents ComboBox_ZeitreiheCut As System.Windows.Forms.ComboBox
 
 End Class
