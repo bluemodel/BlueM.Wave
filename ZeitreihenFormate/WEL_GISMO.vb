@@ -112,6 +112,10 @@ Public Class WEL_GISMO
                 Namen = ZeileSpalten.Split(New Char() {Me.Trennzeichen.Character})
                 Einheiten = ZeileEinheiten.Split(New Char() {Me.Trennzeichen.Character})
                 anzSpalten = Namen.Length
+                If Namen.Length <> Einheiten.Length Then
+                    MsgBox("Number of column names <> number of units!")
+                End If
+
             Else
                 ' data columns are separated by spaces
                 ' converge multiple spaces to one
@@ -138,6 +142,9 @@ Public Class WEL_GISMO
                 Namen = ZeileSpalten.Split(New Char() {Me.Trennzeichen.Character})
                 Einheiten = ZeileEinheiten.Split(New Char() {Me.Trennzeichen.Character})
                 anzSpalten = Namen.Length
+                If Namen.Length <> Einheiten.Length Then
+                    MsgBox("Number of column names <> number of units!")
+                End If
             End If
 
             ' put headers and units into the Me.Spalten-array (starts with index 0, --> [anzSpalten -1])
