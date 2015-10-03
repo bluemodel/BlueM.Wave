@@ -26,7 +26,7 @@
 ''' <summary>
 ''' Statistische Auswertung (Wahrscheinlichkeiten Unterschreitungswahrscheinlichkeiten)
 ''' </summary>
-''' <remarks>http://130.83.196.154/BlueM/wiki/index.php/Wave:Statistik</remarks>
+''' <remarks>http://wiki.bluemodel.org/index.php/Wave:Statistik</remarks>
 Public Class Statistik
     Inherits Analysis
 

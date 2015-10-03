@@ -26,7 +26,7 @@
 ''' <summary>
 ''' Gegenüberstellung/Vergleich zweier Zeitreihen
 ''' </summary>
-''' <remarks>http://130.83.196.154/BlueM/wiki/index.php/Wave:Gegenueberstellung</remarks>
+''' <remarks>http://wiki.bluemodel.org/index.php/Wave:Gegenueberstellung</remarks>
 Public Class Gegenueberstellung
     Inherits Analysis
 

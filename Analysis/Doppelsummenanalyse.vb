@@ -26,7 +26,7 @@
 ''' <summary>
 ''' Doppelsummenanalyse zweier Zeitreihen
 ''' </summary>
-''' <remarks>http://130.83.196.154/BlueM/wiki/index.php/Wave:Doppelsummenanalyse</remarks>
+''' <remarks>http://wiki.bluemodel.org/index.php/Wave:Doppelsummenanalyse</remarks>
 Public Class Doppelsummenanalyse
     Inherits Analysis
 

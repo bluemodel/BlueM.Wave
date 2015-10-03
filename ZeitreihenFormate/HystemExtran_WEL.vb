@@ -30,7 +30,7 @@ Imports System.IO
 ''' Bei WEL-Dateien in Hystem handelt es sich immer um Zuflussdaten
 ''' Format ist festgeschrieben im HystemExtran-Anwenderhandbuch
 ''' </summary>
-''' <remarks>Format siehe http://130.83.196.154/BlueM/wiki/index.php/WEL-Format</remarks>
+''' <remarks>Format siehe http://wiki.bluemodel.org/index.php/WEL-Format</remarks>
 Public Class HystemExtran_WEL
     Inherits Dateiformat
     

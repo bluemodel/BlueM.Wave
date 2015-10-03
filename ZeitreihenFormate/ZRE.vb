@@ -28,7 +28,7 @@ Imports System.IO
 ''' <summary>
 ''' Klasse für das ZRE-Dateiformat
 ''' </summary>
-''' <remarks>Format siehe http://130.83.196.154/BlueM/wiki/index.php/ZRE-Format</remarks>
+''' <remarks>Format siehe http://wiki.bluemodel.org/index.php/ZRE-Format</remarks>
 Public Class ZRE
     Inherits Dateiformat
 
