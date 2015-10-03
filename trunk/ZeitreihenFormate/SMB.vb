@@ -28,7 +28,7 @@ Imports System.IO
 ''' <summary>
 ''' Klasse für das Simba-Dateiformat (*.SMB)
 ''' </summary>
-''' <remarks>Format siehe http://130.83.196.154/BlueM/wiki/index.php/SMB-Format</remarks>
+''' <remarks>Format siehe http://wiki.bluemodel.org/index.php/SMB-Format</remarks>
 Public Class SMB
     Inherits Dateiformat
 

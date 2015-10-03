@@ -26,7 +26,7 @@
 ''' <summary>
 ''' Berechnet monatliche Statistiken
 ''' </summary>
-''' <remarks>http://130.83.196.154/BlueM/wiki/index.php/Wave:Monatsauswertung</remarks>
+''' <remarks>http://wiki.bluemodel.org/index.php/Wave:Monatsauswertung</remarks>
 Public Class Monatsauswertung
     Inherits Analysis
 

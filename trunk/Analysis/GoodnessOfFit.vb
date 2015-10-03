@@ -26,7 +26,7 @@
 ''' <summary>
 ''' Goodness Of Fit: Berechnet diverse Gütekriterien für die Anpassung
 ''' </summary>
-''' <remarks>http://130.83.196.154/BlueM/wiki/index.php/Wave:GoodnessOfFit</remarks>
+''' <remarks>http://wiki.bluemodel.org/index.php/Wave:GoodnessOfFit</remarks>
 Public Class GoodnessOfFit
     Inherits Analysis
 

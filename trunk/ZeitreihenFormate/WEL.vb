@@ -28,7 +28,7 @@ Imports System.IO
 ''' <summary>
 ''' Klasse für das WEL-Dateiformat
 ''' </summary>
-''' <remarks>Format siehe http://130.83.196.154/BlueM/wiki/index.php/WEL-Format</remarks>
+''' <remarks>Format siehe http://wiki.bluemodel.org/index.php/WEL-Format</remarks>
 Public Class WEL
     Inherits Dateiformat
 

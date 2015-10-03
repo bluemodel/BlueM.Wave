@@ -28,7 +28,7 @@ Imports System.IO
 ''' <summary>
 ''' Klasse für das REG-Dateiformat (Hystem-Extran-Regendaten)
 ''' </summary>
-''' <remarks>Format siehe http://130.83.196.154/BlueM/wiki/index.php/REG-Format</remarks>
+''' <remarks>Format siehe http://wiki.bluemodel.org/index.php/REG-Format</remarks>
 Public Class REG
     Inherits ZeitreihenDatei
 

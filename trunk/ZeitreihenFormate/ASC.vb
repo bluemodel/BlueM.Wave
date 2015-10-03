@@ -29,7 +29,7 @@ Imports System.Globalization
 ''' <summary>
 ''' Klasse für ASC-Dateiformat (SMUSI)
 ''' </summary>
-''' <remarks>Format siehe http://130.83.196.154/BlueM/wiki/index.php/ASC-Format</remarks>
+''' <remarks>Format siehe http://wiki.bluemodel.org/index.php/ASC-Format</remarks>
 Public Class ASC
     Inherits Dateiformat
 
