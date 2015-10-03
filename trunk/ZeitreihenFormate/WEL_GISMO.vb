@@ -27,8 +27,6 @@ Imports System.IO
 ''' </summary>
 Public Class WEL_GISMO
     Inherits Dateiformat
-    Public Const Datumsformat As String = "dd.MM.yyyy HH:mm"
-    Public Const Datumsformat2 As String = "yyyyMMdd HH:mm"
     ''' <summary>
     ''' Gibt an, ob beim Import des Dateiformats der Importdialog angezeigt werden soll
     ''' </summary>
@@ -46,6 +44,7 @@ Public Class WEL_GISMO
         MyBase.New(FileName)
 
         ' Presettings
+        Me.Datumsformat = Datumsformate("GISMO1")
         Me.Dezimaltrennzeichen = Me.punkt
         Me.UseEinheiten = True
 
@@ -213,11 +212,11 @@ Public Class WEL_GISMO
                     Werte = Zeile.Split(New Char() {Me.Trennzeichen.Character})
 
                     ' first column ist date time, add date time to times series
-                    ok = DateTime.TryParseExact(Werte(Me.XSpalte), Datumsformat, Konstanten.Zahlenformat, Globalization.DateTimeStyles.None, datum)
+                    ok = DateTime.TryParseExact(Werte(Me.XSpalte), Datumsformate("GISMO1"), Konstanten.Zahlenformat, Globalization.DateTimeStyles.None, datum)
                     If (Not ok) Then
-                        ok = DateTime.TryParseExact(Werte(Me.XSpalte), Datumsformat2, Konstanten.Zahlenformat, Globalization.DateTimeStyles.None, datum)
+                        ok = DateTime.TryParseExact(Werte(Me.XSpalte), Datumsformate("GISMO2"), Konstanten.Zahlenformat, Globalization.DateTimeStyles.None, datum)
                         If Not ok Then
-                            Throw New Exception("Kann das Datumsformat '" & Werte(Me.XSpalte) & "' nicht erkennen! " & eol & "Sollte in der Form '" & Datumsformat & " oder " & Datumsformat2 & "' vorliegen!")
+                            Throw New Exception("Kann das Datumsformat '" & Werte(Me.XSpalte) & "' nicht erkennen! " & eol & "Sollte in der Form '" & Datumsformate("GISMO1") & " oder " & Datumsformate("GISMO2") & "' vorliegen!")
                         End If
                     End If
 
@@ -240,11 +239,11 @@ Public Class WEL_GISMO
                     Werte(0) = Werte_temp(0) & " " & Werte_temp(1)
 
                     ' first column (now) is date time, add to time series
-                    ok = DateTime.TryParseExact(Werte(Me.XSpalte), Datumsformat, Konstanten.Zahlenformat, Globalization.DateTimeStyles.None, datum)
+                    ok = DateTime.TryParseExact(Werte(Me.XSpalte), Datumsformate("GISMO1"), Konstanten.Zahlenformat, Globalization.DateTimeStyles.None, datum)
                     If (Not ok) Then
-                        ok = DateTime.TryParseExact(Werte(Me.XSpalte), Datumsformat2, Konstanten.Zahlenformat, Globalization.DateTimeStyles.None, datum)
+                        ok = DateTime.TryParseExact(Werte(Me.XSpalte), Datumsformate("GISMO2"), Konstanten.Zahlenformat, Globalization.DateTimeStyles.None, datum)
                         If Not ok Then
-                            Throw New Exception("Kann das Datumsformat '" & Werte(Me.XSpalte) & "' nicht erkennen! " & eol & "Sollte in der Form '" & Datumsformat & " oder " & Datumsformat2 & "' vorliegen!")
+                            Throw New Exception("Kann das Datumsformat '" & Werte(Me.XSpalte) & "' nicht erkennen! " & eol & "Sollte in der Form '" & Datumsformate("GISMO1") & " oder " & Datumsformate("GISMO2") & "' vorliegen!")
                         End If
                     End If
 

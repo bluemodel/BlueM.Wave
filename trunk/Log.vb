@@ -85,7 +85,7 @@ Public Class Log
         End If
 
         'Meldung zu Text hinzufügen
-        Log.getInstance.myText &= "* " & DateTime.Now.ToString(Konstanten.Datumsformat) & ": " & msg & Konstanten.eol
+        Log.getInstance.myText &= "* " & DateTime.Now.ToString(Konstanten.Datumsformate("default")) & ": " & msg & Konstanten.eol
 
         RaiseEvent LogChanged()
 

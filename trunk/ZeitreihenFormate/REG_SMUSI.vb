@@ -32,7 +32,6 @@ Imports System.IO
 Public Class REG_SMUSI
     Inherits Dateiformat
 
-    Const DatumsformatSMUSI_REG As String = "dd MM yyyy   HH"
     Const WerteproZeile As Integer = 12
     Const LenWert As Integer = 5
     Const LenZeilenanfang As Integer = 20
@@ -73,6 +72,7 @@ Public Class REG_SMUSI
         MyBase.New(FileName)
 
         'Voreinstellungen
+        Me.Datumsformat = Datumsformate("SMUSI")
         Me.iZeileDaten = 4
         Me.UseEinheiten = True
 
@@ -170,6 +170,7 @@ Public Class REG_SMUSI
                     'Zeile mit Werten
                     '----------------
                     'Zeilendatum erkennen
+                    'TODO: Me.Datumsformat verwenden
                     Jahr = Zeile.Substring(11, 4)
                     Monat = Zeile.Substring(8, 2)
                     Tag = Zeile.Substring(5, 2)
@@ -278,7 +279,7 @@ Public Class REG_SMUSI
         n = iDatum   'Ausgabe beginnt bei ersten vollen Stunde in der Zeitreihe
         For iZeile = 0 To AnzahlZeilen - 1
             strwrite.Write("KONV ")
-            strwrite.Write(KontiReihe.XWerte(n).ToString(DatumsformatSMUSI_REG))
+            strwrite.Write(KontiReihe.XWerte(n).ToString(Datumsformate("SMUSI")))
             For j = 1 To WerteproZeile
                 IntWert = KontiReihe.YWerte(n) * 1000
                 Summe = Summe + IntWert

@@ -31,8 +31,6 @@ Imports System.IO
 Public Class CSV
     Inherits Dateiformat
 
-    Public Const DatumsformatCSV As String = "dd.MM.yyyy HH:mm"
-
     ''' <summary>
     ''' Gibt an, ob beim Import des Dateiformats der Importdialog angezeigt werden soll
     ''' </summary>
@@ -51,6 +49,9 @@ Public Class CSV
     '***********
     Public Sub New(ByVal FileName As String)
         MyBase.New(FileName)
+
+        'Voreinstellungen
+        Me.Datumsformat = Konstanten.Datumsformate("default")
     End Sub
 
     'Spalten auslesen
@@ -112,6 +113,8 @@ Public Class CSV
                 Me.Spalten(i).Einheit = Einheiten(i).Trim()
             Next
 
+            'TODO: gegebenes Datumsformat an dieser Stelle testen
+
         Catch ex As Exception
             MsgBox("Konnte Datei nicht einlesen!" & eol & eol & "Fehler: " & ex.Message, MsgBoxStyle.Critical, "Fehler")
         End Try
@@ -169,9 +172,9 @@ Public Class CSV
 
                     If (Werte.Length > 0 and Zeile.Trim.Length > 1) Then
                         'Erste Spalte: Datum_Zeit
-                        ok = DateTime.TryParseExact(Werte(Me.XSpalte).Trim(), DatumsformatCSV, Konstanten.Zahlenformat, Globalization.DateTimeStyles.None, datum)
+                        ok = DateTime.TryParseExact(Werte(Me.XSpalte).Trim(), Me.Datumsformat, Konstanten.Zahlenformat, Globalization.DateTimeStyles.None, datum)
                         If (Not ok) Then
-                            Throw New Exception("Kann das Datumsformat '" & Werte(Me.XSpalte) & "' nicht erkennen! " & eol & "Sollte in der Form '" & DatumsformatCSV & "' vorliegen!")
+                            Throw New Exception("Kann das Datum '" & Werte(Me.XSpalte) & "' mit dem gegebenen Datumsformat '" & Me.Datumsformat & "' nicht parsen! Bitte Datumsformat anpassen!")
                         End If
                         'Restliche Spalten: Werte
                         For i = 0 To Me.SpaltenSel.Length - 1

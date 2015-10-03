@@ -134,7 +134,7 @@ Public Class Gegenueberstellung
         '-----
         Me.mResultText = "Gegenüberstellung:" & eol _
                         & eol _
-                        & "Die Analyse basiert auf " & Me.ergebnisreihe.Length & " gemeinsamen Stützstellen zwischen " & Me.datume(0).ToString(Datumsformat) & " und " & Me.datume(Me.datume.Count - 1).ToString(Datumsformat) & eol _
+                        & "Die Analyse basiert auf " & Me.ergebnisreihe.Length & " gemeinsamen Stützstellen zwischen " & Me.datume(0).ToString(Datumsformate("default")) & " und " & Me.datume(Me.datume.Count - 1).ToString(Datumsformate("default")) & eol _
                         & eol
 
         'Diagramm:
@@ -166,7 +166,7 @@ Public Class Gegenueberstellung
         'Werte eintragen
         ende = (ergebnisreihe.Length / 2 - 2)
         For i = 0 To ende
-            gegenueberstellung_linie.Add(ergebnisreihe(i, 0), ergebnisreihe(i, 1), datume(i).ToString(Konstanten.Datumsformat))
+            gegenueberstellung_linie.Add(ergebnisreihe(i, 0), ergebnisreihe(i, 1), datume(i).ToString(Konstanten.Datumsformate("default")))
         Next
 
         'Markstips

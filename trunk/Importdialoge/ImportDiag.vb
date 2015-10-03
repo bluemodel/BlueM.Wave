@@ -37,7 +37,6 @@ Partial Public Class ImportDiag
 
     Private datei As Dateiformat
 
-
 #End Region
 
 #Region "Methoden"
@@ -77,6 +76,14 @@ Partial Public Class ImportDiag
         Me.ComboBox_Dezimaltrennzeichen.Items.Add(Me.datei.punkt)
         Me.ComboBox_Dezimaltrennzeichen.Items.Add(Me.datei.komma)
         Me.ComboBox_Dezimaltrennzeichen.EndUpdate()
+
+        'Combobox Datumsformat initialisieren
+        For Each datumsformat As String In Konstanten.Datumsformate.Values
+            If Not ComboBox_Datumsformat.Items.Contains(datumsformat) Then
+                Me.ComboBox_Datumsformat.Items.Add(datumsformat)
+            End If
+        Next
+        Me.ComboBox_Datumsformat.SelectedIndex = 0
 
         'Versuchen, die Spalten auszulesen (mit Standardeinstellungen)
         Call Me.datei.SpaltenAuslesen()
@@ -165,7 +172,8 @@ Partial Public Class ImportDiag
 
     'Benutzereingabe verarbeiten
     '***************************
-    Private Sub inputChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TextBox_Zeile‹berschriften.TextChanged, TextBox_ZeileEinheiten.TextChanged, TextBox_ZeileDaten.TextChanged, CheckBox_Einheiten.CheckedChanged, ComboBox_Dezimaltrennzeichen.SelectedIndexChanged, RadioButton_Zeichengetrennt.CheckedChanged, ComboBox_Trennzeichen.SelectedIndexChanged, TextBox_Spaltenbreite.TextChanged, NumericUpDown_DatumsSpalte.ValueChanged
+    Private Sub inputChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles _
+        TextBox_Zeile‹berschriften.TextChanged, TextBox_ZeileEinheiten.TextChanged, TextBox_ZeileDaten.TextChanged, CheckBox_Einheiten.CheckedChanged, ComboBox_Dezimaltrennzeichen.SelectedIndexChanged, RadioButton_Zeichengetrennt.CheckedChanged, ComboBox_Trennzeichen.SelectedIndexChanged, TextBox_Spaltenbreite.TextChanged, NumericUpDown_DatumsSpalte.ValueChanged, ComboBox_Datumsformat.SelectedIndexChanged, ComboBox_Datumsformat.LostFocus
 
         If (Me.IsInitializing = True) Then
             Exit Sub
@@ -195,6 +203,9 @@ Partial Public Class ImportDiag
                 If (Me.CheckBox_Einheiten.Checked) Then
                     Me.datei.iZeileEinheiten = Me.TextBox_ZeileEinheiten.Value
                 End If
+
+                'Datumsformat
+                Me.datei.Datumsformat = Me.ComboBox_Datumsformat.Text
 
                 'Dezimaltrennzeichen
                 Me.datei.Dezimaltrennzeichen = Me.ComboBox_Dezimaltrennzeichen.SelectedItem
@@ -268,6 +279,12 @@ Partial Public Class ImportDiag
 
         'Trennzeichen
         Me.ComboBox_Trennzeichen.SelectedItem = Me.datei.Trennzeichen
+
+        'Datumsformat
+        If Not ComboBox_Datumsformat.Items.Contains(Me.datei.Datumsformat) Then
+            Me.ComboBox_Datumsformat.Items.Add(Me.datei.Datumsformat)
+        End If
+        Me.ComboBox_Datumsformat.SelectedItem = Me.datei.Datumsformat
 
         'Spaltenbreite
         Me.TextBox_Spaltenbreite.Text = Me.datei.Spaltenbreite
