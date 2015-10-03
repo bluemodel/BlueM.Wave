@@ -37,8 +37,8 @@ Public MustInherit Class Dateiformat
     Public tab As Zeichen = New Zeichen(Chr(9))
 
 #Region "allgemeine Eigenschaften"
-    protected SpaltenOffset As Integer = 0          'Anzahl Zeichen bevor die erste Spalte anfängt (nur bei Spalten mit fester Breite)
-#end region
+    Protected SpaltenOffset As Integer = 0          'Anzahl Zeichen bevor die erste Spalte anfängt (nur bei Spalten mit fester Breite)
+#End Region
 
 #Region "Eigenschaften"
 
@@ -48,6 +48,7 @@ Public MustInherit Class Dateiformat
     Private _file As String
     Private _zeichengetrennt As Boolean = True
     Private _trennzeichen As Zeichen = semikolon
+    Private _datumsformat As String = Konstanten.Datumsformate("default")
     Private _dezimaltrennzeichen As Zeichen = punkt
     Private _iLineInfo As Integer = 1
     Private _iZeileUeberschriften As Integer = 1
@@ -122,6 +123,18 @@ Public MustInherit Class Dateiformat
         End Get
         Set(ByVal value As Zeichen)
             _trennzeichen = value
+        End Set
+    End Property
+
+    ''' <summary>
+    ''' Datumsformat
+    ''' </summary>
+    Public Property Datumsformat() As String
+        Get
+            Return _datumsformat
+        End Get
+        Set(ByVal value As String)
+            Me._datumsformat = value
         End Set
     End Property
 
@@ -245,7 +258,7 @@ Public MustInherit Class Dateiformat
     ''' <summary>
     ''' Array aller in der Datei vorhandenen Spalten
     ''' </summary>
-	''' <remarks>inklusive X-Spalte!</remarks>
+    ''' <remarks>inklusive X-Spalte!</remarks>
     Public Property Spalten() As SpaltenInfo()
         Get
             Return _Spalten
@@ -267,7 +280,7 @@ Public MustInherit Class Dateiformat
         End Set
     End Property
 
-''' <summary>
+    ''' <summary>
     ''' Anzahl der Zeilen pro Zeitstempel
     ''' </summary>
     Public Property nZeilen() As Integer

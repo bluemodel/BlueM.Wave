@@ -117,7 +117,7 @@ Public Class Doppelsummenanalyse
         '-----
         Me.mResultText = "Doppelsummenanalyse:" & eol _
                         & eol _
-                        & "Die Analyse basiert auf " & Me.summe1.Length & " gemeinsamen Stützstellen zwischen " & Me.datume(0).ToString(Datumsformat) & " und " & Me.datume(Me.datume.Count - 1).ToString(Datumsformat) & eol _
+                        & "Die Analyse basiert auf " & Me.summe1.Length & " gemeinsamen Stützstellen zwischen " & Me.datume(0).ToString(Datumsformate("default")) & " und " & Me.datume(Me.datume.Count - 1).ToString(Datumsformate("default")) & eol _
                         & eol
 
         'Diagramm:
@@ -153,7 +153,7 @@ Public Class Doppelsummenanalyse
 
         'Werte eintragen
         For i = 0 To summe1.Length - 1
-            doppelsumme.Add(summe1(i), summe2(i), datume(i).ToString(Konstanten.Datumsformat))
+            doppelsumme.Add(summe1(i), summe2(i), datume(i).ToString(Konstanten.Datumsformate("default")))
         Next
 
         gerade.Add(0, 0)

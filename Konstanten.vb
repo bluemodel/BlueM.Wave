@@ -30,8 +30,19 @@ Module Konstanten
     'Zeilenumbruch
     Public Const eol As String = Chr(13) & Chr(10)
 
-    'Datumsformat
-    Public Const Datumsformat As String = "dd.MM.yyyy HH:mm"
+    'Datumsformate
+    Public ReadOnly Property Datumsformate() As System.Collections.Generic.Dictionary(Of String, String)
+        Get
+            Dim dict As New System.Collections.Generic.Dictionary(Of String, String)
+            dict.Add("default", "dd.MM.yyyy HH:mm")
+            dict.Add("GISMO1", "dd.MM.yyyy HH:mm")
+            dict.Add("GISMO2", "yyyyMMdd HH:mm")
+            dict.Add("SMUSI", "dd MM yyyy   HH")
+            dict.Add("WEL", "dd.MM.yyyy HH:mm")
+            dict.Add("ZRE", "yyyyMMdd HH:mm")
+            Return dict
+        End Get
+    End Property
 
     'Zahlenformatanweisung
     Public ReadOnly Property Zahlenformat() As NumberFormatInfo

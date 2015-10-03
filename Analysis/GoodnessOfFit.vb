@@ -206,7 +206,7 @@ Public Class GoodnessOfFit
                          & "Gemessene Zeitreihe: " & Me.zre_gemessen.Title & eol _
                          & "Simulierte Zeitreihe: " & Me.zre_simuliert.Title & eol _
                          & eol _
-                         & "Die Analyse basiert auf " & Me.zre_gemessen.Length & " gemeinsamen Stützstellen zwischen " & Me.zre_gemessen.Anfangsdatum.ToString(Datumsformat) & " und " & Me.zre_gemessen.Enddatum.ToString(Datumsformat) & eol _
+                         & "Die Analyse basiert auf " & Me.zre_gemessen.Length & " gemeinsamen Stützstellen zwischen " & Me.zre_gemessen.Anfangsdatum.ToString(Datumsformate("default")) & " und " & Me.zre_gemessen.Enddatum.ToString(Datumsformate("default")) & eol _
                          & eol _
                          & shortText
 

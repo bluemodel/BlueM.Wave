@@ -199,7 +199,7 @@ Public Class Zeitreihe
     ''' <remarks>Das Datum der Stützstelle darf in der Zeireihe noch nicht vorhanden sein</remarks>
     Public Sub AddNode(ByVal datum As DateTime, ByVal wert As Double)
         If (Me.Nodes.ContainsKey(datum)) Then
-            Throw New Exception("Fehler: Die Zeitreihe enthält bereits eine Stützstelle am " & datum.ToString(Konstanten.Datumsformat) & "!")
+            Throw New Exception("Fehler: Die Zeitreihe enthält bereits eine Stützstelle am " & datum.ToString(Konstanten.Datumsformate("default")) & "!")
         End If
         Me._nodes.Add(datum, wert)
     End Sub

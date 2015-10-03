@@ -32,8 +32,6 @@ Imports System.IO
 Public Class ZRE
     Inherits Dateiformat
 
-    Const DatumsformatZRE As String = "yyyyMMdd HH:mm"
-
     ''' <summary>
     ''' Gibt an, ob beim Import des Dateiformats der Importdialog angezeigt werden soll
     ''' </summary>
@@ -55,6 +53,7 @@ Public Class ZRE
         MyBase.New(FileName)
 
         'Voreinstellungen
+        Me.Datumsformat = Datumsformate("ZRE")
         Me.iZeileDaten = 5
         Me.UseEinheiten = True
 
@@ -130,6 +129,7 @@ Public Class ZRE
                 If (j > Me.nZeilenHeader And Zeile.Trim.Length > 0) Then
 
                     'Datum erkennen
+                    'TODO: Me.Datumsformat verwenden
                     '--------------
                     Jahr = Zeile.Substring(0, 4)
                     Monat = Zeile.Substring(4, 2)
@@ -185,10 +185,10 @@ Public Class ZRE
         '3. Zeile: Parameter
         strwrite.WriteLine("0                      0.        0.        0.")
         '4. Zeile: Anfangs- und Enddatum
-        strwrite.WriteLine(Reihe.XWerte(0).ToString(DatumsformatZRE) & " " & Reihe.XWerte(Reihe.Length - 1).ToString(DatumsformatZRE))
+        strwrite.WriteLine(Reihe.XWerte(0).ToString(Datumsformate("ZRE")) & " " & Reihe.XWerte(Reihe.Length - 1).ToString(Datumsformate("ZRE")))
         'ab 5. Zeile: Werte
         For i = 0 To Reihe.Length - 1
-            strwrite.Write(Reihe.XWerte(i).ToString(DatumsformatZRE) & " " & Reihe.YWerte(i).ToString(Zahlenformat).PadLeft(14))
+            strwrite.Write(Reihe.XWerte(i).ToString(Datumsformate("ZRE")) & " " & Reihe.YWerte(i).ToString(Zahlenformat).PadLeft(14))
             If (i < Reihe.Length - 1) Then 'kein Zeilenumbruch nach der letzten Zeile!
                 strwrite.WriteLine()
             End If

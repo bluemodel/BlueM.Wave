@@ -54,6 +54,9 @@ Partial Class ImportDiag
         Me.StatusImage = New System.Windows.Forms.ToolStripStatusLabel
         Me.Button_SelectAll = New System.Windows.Forms.Button
         Me.GroupBox_Auswahl = New System.Windows.Forms.GroupBox
+        Me.GroupBox_Datumsformat = New System.Windows.Forms.GroupBox
+        Me.ComboBox_Datumsformat = New System.Windows.Forms.ComboBox
+        Me.Label_Datumsformat = New System.Windows.Forms.Label
         Me.GroupBox_Spaltenmodus.SuspendLayout()
         CType(Me.TextBox_ZeileÜberschriften, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.GroupBox_Einstellungen.SuspendLayout()
@@ -64,6 +67,7 @@ Partial Class ImportDiag
         Me.GroupBox_Dezimaltrennzeichen.SuspendLayout()
         Me.StatusStrip1.SuspendLayout()
         Me.GroupBox_Auswahl.SuspendLayout()
+        Me.GroupBox_Datumsformat.SuspendLayout()
         Me.SuspendLayout()
         '
         'TextBox_Vorschau
@@ -406,12 +410,45 @@ Partial Class ImportDiag
         Me.GroupBox_Auswahl.TabStop = False
         Me.GroupBox_Auswahl.Text = "Reihenauswahl"
         '
+        'GroupBox_Datumsformat
+        '
+        Me.GroupBox_Datumsformat.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.GroupBox_Datumsformat.Controls.Add(Me.ComboBox_Datumsformat)
+        Me.GroupBox_Datumsformat.Controls.Add(Me.Label_Datumsformat)
+        Me.GroupBox_Datumsformat.Location = New System.Drawing.Point(258, 12)
+        Me.GroupBox_Datumsformat.Name = "GroupBox_Datumsformat"
+        Me.GroupBox_Datumsformat.Size = New System.Drawing.Size(152, 84)
+        Me.GroupBox_Datumsformat.TabIndex = 32
+        Me.GroupBox_Datumsformat.TabStop = False
+        Me.GroupBox_Datumsformat.Text = "Datumsformat"
+        '
+        'ComboBox_Datumsformat
+        '
+        Me.ComboBox_Datumsformat.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.ComboBox_Datumsformat.FormattingEnabled = True
+        Me.ComboBox_Datumsformat.Location = New System.Drawing.Point(7, 53)
+        Me.ComboBox_Datumsformat.Name = "ComboBox_Datumsformat"
+        Me.ComboBox_Datumsformat.Size = New System.Drawing.Size(139, 21)
+        Me.ComboBox_Datumsformat.TabIndex = 1
+        '
+        'Label_Datumsformat
+        '
+        Me.Label_Datumsformat.AutoSize = True
+        Me.Label_Datumsformat.Location = New System.Drawing.Point(6, 26)
+        Me.Label_Datumsformat.Name = "Label_Datumsformat"
+        Me.Label_Datumsformat.Size = New System.Drawing.Size(75, 13)
+        Me.Label_Datumsformat.TabIndex = 0
+        Me.Label_Datumsformat.Text = "Datumsformat:"
+        '
         'ImportDiag
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.CancelButton = Me.Button_Cancel
         Me.ClientSize = New System.Drawing.Size(549, 462)
+        Me.Controls.Add(Me.GroupBox_Datumsformat)
         Me.Controls.Add(Me.GroupBox_Auswahl)
         Me.Controls.Add(Me.StatusStrip1)
         Me.Controls.Add(Me.GroupBox_Dezimaltrennzeichen)
@@ -444,6 +481,8 @@ Partial Class ImportDiag
         Me.StatusStrip1.PerformLayout()
         Me.GroupBox_Auswahl.ResumeLayout(False)
         Me.GroupBox_Auswahl.PerformLayout()
+        Me.GroupBox_Datumsformat.ResumeLayout(False)
+        Me.GroupBox_Datumsformat.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -479,4 +518,7 @@ Partial Class ImportDiag
     Friend WithEvents Button_SelectAll As System.Windows.Forms.Button
     Friend WithEvents GroupBox_Auswahl As System.Windows.Forms.GroupBox
     Friend WithEvents Label_Datei As System.Windows.Forms.Label
+    Friend WithEvents GroupBox_Datumsformat As System.Windows.Forms.GroupBox
+    Friend WithEvents ComboBox_Datumsformat As System.Windows.Forms.ComboBox
+    Friend WithEvents Label_Datumsformat As System.Windows.Forms.Label
 End Class

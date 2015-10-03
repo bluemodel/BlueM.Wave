@@ -72,6 +72,7 @@ Public Class WEL
         Me.iZeileDaten = 4
         Me.Zeichengetrennt = True
         Me.Trennzeichen = Me.semikolon
+        Me.Datumsformat = Konstanten.Datumsformate("WEL")
         Me.Dezimaltrennzeichen = Me.punkt
         Me.DateTimeLength = 17
 
@@ -217,6 +218,7 @@ Public Class WEL
                 '---------------
                 Werte = Zeile.Split(New Char() {Me.Trennzeichen.Character}, StringSplitOptions.RemoveEmptyEntries)
                 'Erste Spalte: Datum_Zeit
+                'TODO: Me.Datumsformat verwenden
                 datum = New System.DateTime(Werte(0).Substring(6, 4), Werte(0).Substring(3, 2), Werte(0).Substring(0, 2), Werte(0).Substring(11, 2), Werte(0).Substring(14, 2), 0, New System.Globalization.GregorianCalendar())
                 'Restliche Spalten: Werte
                 'Alle ausgewählten Spalten durchlaufen
@@ -227,6 +229,7 @@ Public Class WEL
                 'Spalten mit fester Breite
                 '-------------------------
                 'Erste Spalte: Datum_Zeit
+                'TODO: Me.Datumsformat verwenden
                 datum = New System.DateTime(Zeile.Substring(6 + SpaltenOffset, 4), Zeile.Substring(3 + SpaltenOffset, 2), Zeile.Substring(0 + SpaltenOffset, 2), Zeile.Substring(11 + SpaltenOffset, 2), Zeile.Substring(14 + SpaltenOffset, 2), 0, New System.Globalization.GregorianCalendar())
                 'Restliche Spalten: Werte
                 'Alle ausgewählten Spalten durchlaufen
