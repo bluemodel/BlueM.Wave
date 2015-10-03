@@ -266,13 +266,12 @@ Partial Public Class ImportDiag
         Me.TextBox_ZeileEinheiten.Text = Me.datei.iZeileEinheiten
 
         'Spaltenformat
-        Me.RadioButton_Zeichengetrennt.Checked = Me.datei.Zeichengetrennt
         If (Me.datei.Zeichengetrennt) Then
             Me.RadioButton_Zeichengetrennt.Checked = True
             Me.ComboBox_Trennzeichen.Enabled = True
             Me.TextBox_Spaltenbreite.Enabled = False
         Else
-            Me.RadioButton_Zeichengetrennt.Checked = False
+            Me.RadioButton_Spaltenbreite.Checked = True
             Me.ComboBox_Trennzeichen.Enabled = False
             Me.TextBox_Spaltenbreite.Enabled = True
         End If
