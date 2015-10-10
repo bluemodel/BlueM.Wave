@@ -55,7 +55,6 @@ Public Class Wave
             "CSV-Dateien (*.csv)|*.csv|" & _
             "ZRE-Dateien (*.zre)|*.zre|" & _
             "WEL-Dateien (*.wel, *.kwl)|*.wel;*.kwl|" & _
-            "RVA-Dateien (*.rva)|*.rva|" & _
             "SMUSI-Dateien (*.asc)|*.asc|" & _
             "SIMBA-Dateien (*.smb)|*.smb|" & _
             "Hystem-Dateien (*.dat)|*.dat|" & _
@@ -1020,10 +1019,6 @@ Public Class Wave
                 '.TEN-Datei
                 Call Me.Load_TEN(file)
 
-            Case Dateifactory.FileExtRVA
-                '.RVA-Datei
-                Call Me.Import_RVA(file)
-
             Case Dateifactory.FileExtnetCDF
                 '.netCDF Datei
 
@@ -1091,44 +1086,6 @@ Public Class Wave
                 End Try
 
         End Select
-
-    End Sub
-
-    ''' <summary>
-    ''' Eine RVA-Datei importieren
-    ''' </summary>
-    ''' <param name="file">Pfad zur Datei</param>
-    ''' <remarks>Sonderfall, weil keine Zeitreihen</remarks>
-    Private Sub Import_RVA(ByVal file As String)
-
-        Dim RVADatei As RVA
-
-        Try
-            'Log
-            Call Log.AddLogEntry("Importiere Datei '" & file & "' ...")
-
-            'Datei-Instanz erzeugen
-            RVADatei = Dateifactory.getDateiInstanz(file)
-
-            'Einlesen
-            Call RVADatei.Read_File()
-
-            'Log
-            Call Log.AddLogEntry("... Datei '" & file & "' erfolgreich importiert!")
-
-            'Datei abspeichern
-            Me.ImportedFiles.Add(RVADatei)
-
-            'Chart vorbereiten
-            Call Me.PrepareChart_RVA()
-
-            'Serie zeichnen
-            Call Me.Display_RVA(RVADatei.RVAValues, True)
-
-        Catch ex As Exception
-            MsgBox("Fehler beim Import:" & eol & ex.Message, MsgBoxStyle.Critical)
-            Call Log.AddLogEntry("... Fehler beim Import:" & eol & ex.Message)
-        End Try
 
     End Sub
 
@@ -1274,60 +1231,6 @@ Public Class Wave
 
     End Sub
 
-    'RVA-Ergebnis in Chart anzeigen
-    '******************************
-    Public Sub Display_RVA(ByVal RVAResult As RVA.Struct_RVAValues, Optional ByVal showAll As Boolean = False)
-
-        Dim i, j As Integer
-        Dim barLow, barMiddle, barHigh As Steema.TeeChart.Styles.Bar
-
-        'Chart formatieren
-        Call PrepareChart_RVA()
-
-        'Säulen (HA-Werte)
-        '-----------------
-        barMiddle = New Steema.TeeChart.Styles.Bar(Me.TChart1.Chart)
-        barMiddle.Marks.Visible = False
-        barMiddle.Title = "HA Middle"
-        If (RVAResult.Title <> "") Then barMiddle.Title &= " (" & RVAResult.Title & ")"
-
-        barLow = New Steema.TeeChart.Styles.Bar(Me.TChart1.Chart)
-        barLow.Marks.Visible = False
-        barLow.Title = "HA Low"
-        If (RVAResult.Title <> "") Then barLow.Title &= " (" & RVAResult.Title & ")"
-
-        barHigh = New Steema.TeeChart.Styles.Bar(Me.TChart1.Chart)
-        barHigh.Marks.Visible = False
-        barHigh.Title = "HA High"
-        If (RVAResult.Title <> "") Then barHigh.Title &= " (" & RVAResult.Title & ")"
-
-        'Werte eintragen
-        '---------------
-        With RVAResult
-
-            'Schleife über Parametergruppen
-            For i = 0 To .IHAParamGroups.GetUpperBound(0)
-                ''Gruppenname schreiben (Mit Wert 0)
-                'bar.Add(0, .IHAParamGroups(i).GName)
-                'Schleife über Parameter
-                For j = 0 To .IHAParamGroups(i).IHAParams.GetUpperBound(0)
-                    'Parameter eintragen
-                    barMiddle.Add(.IHAParamGroups(i).IHAParams(j).HAMiddle, .IHAParamGroups(i).IHAParams(j).PName)
-                    barLow.Add(.IHAParamGroups(i).IHAParams(j).HALow, .IHAParamGroups(i).IHAParams(j).PName)
-                    barHigh.Add(.IHAParamGroups(i).IHAParams(j).HAHigh, .IHAParamGroups(i).IHAParams(j).PName)
-                Next
-            Next
-
-        End With
-
-        'Wenn showAll = False dann nur HAMiddle-Serie anzeigen
-        If (Not showAll) Then
-            barLow.Active = False
-            barHigh.Active = False
-        End If
-
-    End Sub
-
     ''' <summary>
     ''' Gibt die Achsen-Nummer für eine bestimmte Einheit zurück
     ''' Wenn noch nicht vorhanden, wird eine neue Achse erstellt
@@ -1425,40 +1328,6 @@ Public Class Wave
 
     End Sub
 
-    'Chart für RVA-Anzeige formatieren
-    '*********************************
-    Public Sub PrepareChart_RVA()
-
-        'Übersicht ausschalten
-        Call Me.Übersicht_Toggle(False)
-
-        'Titel
-        Me.TChart1.Header.Text = "RVA Analysis"
-
-        'Achsen formatieren
-        Me.TChart1.Axes.Bottom.Automatic = True
-        Me.TChart1.Axes.Bottom.Labels.Angle = 90
-        Me.TChart1.Axes.Bottom.Title.Caption = "IHA Parameter"
-        Me.TChart1.Axes.Bottom.MinorTicks.Visible = False
-
-        Me.TChart1.Axes.Left.Automatic = False
-        Me.TChart1.Axes.Left.Minimum = -1.1
-        Me.TChart1.Axes.Left.Maximum = 2
-        Me.TChart1.Axes.Left.Labels.ValueFormat = "#,##0.0##"
-        Me.TChart1.Axes.Left.Title.Caption = "Hydrologic Alteration"
-
-        'Legende
-        Me.TChart1.Legend.CheckBoxes = True
-
-        'Markstips
-        Dim markstip As New Steema.TeeChart.Tools.MarksTip()
-        markstip.Style = Steema.TeeChart.Styles.MarksStyles.Value
-        Me.TChart1.Tools.Add(markstip)
-
-    End Sub
-
 #End Region 'Funktionalität
-
-
 
 End Class

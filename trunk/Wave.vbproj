@@ -202,7 +202,6 @@
     <Compile Include="ZeitreihenFormate\HystemExtran_REG.vb" />
     <Compile Include="ZeitreihenFormate\HystemExtran_WEL.vb" />
     <Compile Include="ZeitreihenFormate\REG.vb" />
-    <Compile Include="ZeitreihenFormate\RVA.vb" />
     <Compile Include="ZeitreihenFormate\SMB.vb" />
     <Compile Include="ZeitreihenFormate\REG_SMUSI.vb" />
     <Compile Include="ZeitreihenFormate\SWMM_DAT_MASS.vb" />
