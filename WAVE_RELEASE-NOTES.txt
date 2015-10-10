@@ -13,6 +13,8 @@ CHANGED:
   the series contained in the TEN-file can be imported optionally
 * More options for cutting time series (cut all series at once and keep original series)
 * Small improvements to layout and functionality
+REMOVED:
+* RVA files no longer supported
 
 Version 1.4
 -----------

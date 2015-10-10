@@ -33,7 +33,6 @@ Public Module Dateifactory
     Public Const FileExtCSV As String = ".CSV"
     Public Const FileExtREG As String = ".REG"
     Public Const FileExtDAT As String = ".DAT"
-    Public Const FileExtRVA As String = ".RVA"
     Public Const FileExtSMB As String = ".SMB"
     Public Const FileExtWEL As String = ".WEL"
     Public Const FileExtKWL As String = ".KWL"
@@ -96,9 +95,6 @@ Public Module Dateifactory
                 Else
                     Throw New Exception("Dateiformat nicht erkannt: Es handelt es sich weder um eine SMUSI- noch um eine Hystem-Regendatei")
                 End If
-
-            Case FileExtRVA
-                Datei = New RVA(file)
 
             Case FileExtSMB
                 Datei = New SMB(file)
