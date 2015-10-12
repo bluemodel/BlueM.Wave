@@ -36,6 +36,7 @@ Public Class REG_SMUSI
     Const LenWert As Integer = 5
     Const LenZeilenanfang As Integer = 20
     Const dt_min As Integer = 5
+    Dim nRowsHead As Integer
 
 #Region "Properties"
 
@@ -114,6 +115,13 @@ Public Class REG_SMUSI
             For i = 0 To Me.nZeilenHeader
                 Zeile = StrReadSync.ReadLine.ToString()
             Next
+
+            'Check if there are empty rows between the "nZeilenHeader" and the start of the actual data
+            While Zeile.Trim = ""
+                Zeile = StrReadSync.ReadLine.ToString()
+                nRowsHead = nZeilenHeader + 1
+            End While
+
             Me.Spalten(1).Name = Zeile.Substring(0, 4).Trim()
 
             'Einheit ist immer mm
@@ -160,7 +168,7 @@ Public Class REG_SMUSI
 
             'If Zeile.Substring(5) = " 0 09999 0 0 0E" Then Exit Do
 
-            If (j > Me.nZeilenHeader) Then
+            If (j > nRowsHead) Then
 
                 If (Zeile.Trim.Length < 1) Then
                     'Leere Zeile
