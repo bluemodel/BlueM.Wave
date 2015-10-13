@@ -117,9 +117,10 @@ Public Class REG_SMUSI
             Next
 
             'Check if there are empty rows between the "nZeilenHeader" and the start of the actual data
+            nRowsHead = Me.nZeilenHeader
             While Zeile.Trim = ""
                 Zeile = StrReadSync.ReadLine.ToString()
-                nRowsHead = nZeilenHeader + 1
+                nRowsHead = nRowsHead + 1
             End While
 
             Me.Spalten(1).Name = Zeile.Substring(0, 4).Trim()
@@ -165,8 +166,6 @@ Public Class REG_SMUSI
         Do
             j += 1
             Zeile = StrReadSync.ReadLine.ToString()
-
-            'If Zeile.Substring(5) = " 0 09999 0 0 0E" Then Exit Do
 
             If (j > nRowsHead) Then
 
