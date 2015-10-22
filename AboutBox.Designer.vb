@@ -139,10 +139,10 @@ Partial Class AboutBox
         Me.LinkLabel1.AutoSize = True
         Me.LinkLabel1.Location = New System.Drawing.Point(13, 259)
         Me.LinkLabel1.Name = "LinkLabel1"
-        Me.LinkLabel1.Size = New System.Drawing.Size(131, 13)
+        Me.LinkLabel1.Size = New System.Drawing.Size(136, 13)
         Me.LinkLabel1.TabIndex = 1
         Me.LinkLabel1.TabStop = True
-        Me.LinkLabel1.Text = "http://www.bluemodel.org"
+        Me.LinkLabel1.Text = "http://www.bluemodel.org/"
         '
         'TabControl1
         '
@@ -230,7 +230,7 @@ Partial Class AboutBox
         Me.Padding = New System.Windows.Forms.Padding(9)
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = "About Wave"
+        Me.Text = "About BlueM.Wave"
         CType(Me.LogoPictureBox, System.ComponentModel.ISupportInitialize).EndInit()
         Me.TabControl1.ResumeLayout(False)
         Me.TabPage1.ResumeLayout(False)

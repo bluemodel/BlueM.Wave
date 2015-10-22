@@ -8,12 +8,11 @@ Imports System.Runtime.InteropServices
 
 ' Die Werte der Assemblyattribute überprüfen
 
-<Assembly: AssemblyTitle("Wave")> 
-<Assembly: AssemblyDescription("Wave ist Teil des BlueM Softwarepakets." & eol & eol _
-                               & "Wave ist ein Tool zum Einlesen, zur Analyse und zur flexiblen graphischen Darstellung von Zeitreihen.")> 
-<Assembly: AssemblyCompany("TU Darmstadt - ihwb")> 
-<Assembly: AssemblyProduct("Wave")> 
-<Assembly: AssemblyCopyright("BSD-2 - Copyright © ihwb 2013")> 
+<Assembly: AssemblyTitle("BlueM.Wave")> 
+<Assembly: AssemblyDescription("BlueM.Wave is part of the BlueM software package." & eol & "BlueM.Wave is a tool for time series management and analysis.")> 
+<Assembly: AssemblyCompany("http://bluemodel.org/")> 
+<Assembly: AssemblyProduct("BlueM.Wave")> 
+<Assembly: AssemblyCopyright("© 2011 BlueM Dev Team && ihwb, TU Darmstadt")> 
 <Assembly: AssemblyTrademark("")> 
 
 <Assembly: ComVisible(False)>
