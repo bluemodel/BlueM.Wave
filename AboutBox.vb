@@ -51,12 +51,4 @@ Public NotInheritable Class AboutBox
     Private Sub LinkLabel1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles LinkLabel1.Click
         Process.Start(Me.LinkLabel1.Text)
     End Sub
-
-    Private Sub TextBox_License_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TextBox_License.TextChanged
-
-    End Sub
-
-    Private Sub TextBox_Description_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TextBox_Description.TextChanged
-
-    End Sub
 End Class
