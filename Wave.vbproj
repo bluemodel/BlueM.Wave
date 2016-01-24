@@ -295,6 +295,9 @@
     <None Include="Resources\tick.png" />
     <None Include="Resources\chart_curve.png" />
     <None Include="Resources\BlueM_icon.png" />
+    <Content Include="BlueM.Wave_Release-notes.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="LICENSE.TXT">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -302,9 +305,6 @@
     <Content Include="Resources\color_wheel.png" />
     <Content Include="Resources\modelEAU.SWMM.DllAdapter.dll" />
     <None Include="Resources\page_white_go.png" />
-    <Content Include="WAVE_RELEASE-NOTES.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <None Include="Resources\arrow_refresh.png" />
     <EmbeddedResource Include="Analysis\Gegenueberstellung_Dialog.resx">
       <DependentUpon>Gegenueberstellung_Dialog.vb</DependentUpon>
