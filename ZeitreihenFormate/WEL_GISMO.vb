@@ -151,6 +151,9 @@ Public Class WEL_GISMO
             For i = 0 To (anzSpalten - 1)
                 Me.Spalten(i).Name = SeriesName.Trim & "_" & Namen(i).Trim()
                 Me.Spalten(i).Index = i
+                If Einheiten(i).Trim = "cbm/s" Then
+                    Einheiten(i) = "m3/s"
+                End If
                 Me.Spalten(i).Einheit = Einheiten(i).Trim()
             Next
 
