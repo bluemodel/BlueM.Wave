@@ -1,4 +1,6 @@
-﻿'Copyright (c) 2011, ihwb, TU Darmstadt
+﻿'Copyright (c) BlueM Dev Group
+'Website: http://bluemodel.org
+'
 'All rights reserved.
 '
 'Released under the BSD-2-Clause License:
