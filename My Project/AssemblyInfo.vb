@@ -12,7 +12,7 @@ Imports System.Runtime.InteropServices
 <Assembly: AssemblyDescription("BlueM.Wave is part of the BlueM software package." & eol & "BlueM.Wave is a tool for time series management and analysis.")> 
 <Assembly: AssemblyCompany("BlueM Dev Group")> 
 <Assembly: AssemblyProduct("BlueM.Wave")> 
-<Assembly: AssemblyCopyright("© BlueM Dev Group")> 
+<Assembly: AssemblyCopyright("Copyright © BlueM Dev Group")> 
 <Assembly: AssemblyTrademark("")> 
 
 <Assembly: ComVisible(False)>
