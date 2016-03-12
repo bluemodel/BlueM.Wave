@@ -124,7 +124,8 @@
 Customize the application's assembly information in the Application pane of Project Designer.)</value>
   </data>
   <data name="TextBox_License.Text" xml:space="preserve">
-    <value>Copyright (c) 2011 BlueM Dev Team &amp; ihwb, TU Darmstadt
+    <value>Copyright (c) BlueM Dev Group
+
 All rights reserved.
 
 Released under the BSD-2-Clause License:
