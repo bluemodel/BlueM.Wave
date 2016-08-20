@@ -180,7 +180,7 @@ Public Class CutDialog
 
     'Anfangsdatum verändert
     '**********************
-    Private Sub DateTimePicker_Anfang_ValueChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles DateTimePicker_Anfang.ValueChanged, DateTimePicker_AnfangZeit.ValueChanged
+    Private Sub DateTimePicker_Anfang_ValueChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles DateTimePicker_Anfang.Leave, DateTimePicker_AnfangZeit.Leave
 
         If (Me.IsInitializing) Then
             Exit Sub
@@ -196,7 +196,7 @@ Public Class CutDialog
 
     'Enddatum verändert
     '******************
-    Private Sub DateTimePicker_Ende_ValueChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles DateTimePicker_Ende.ValueChanged, DateTimePicker_EndeZeit.ValueChanged
+    Private Sub DateTimePicker_Ende_ValueChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles DateTimePicker_Ende.Leave, DateTimePicker_EndeZeit.Leave
 
         If (Me.IsInitializing) Then
             Exit Sub
