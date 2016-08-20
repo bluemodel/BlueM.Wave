@@ -36,6 +36,7 @@ Public Module Dateifactory
     Public Const FileExtREG As String = ".REG"
     Public Const FileExtDAT As String = ".DAT"
     Public Const FileExtSMB As String = ".SMB"
+    Public Const FileExtUVF As String = ".UVF"
     Public Const FileExtWEL As String = ".WEL"
     Public Const FileExtKWL As String = ".KWL"
     Public Const FileExtZRE As String = ".ZRE"
@@ -100,6 +101,14 @@ Public Module Dateifactory
 
             Case FileExtSMB
                 Datei = New SMB(file)
+
+            Case FileExtUVF
+                If UVF.verifyFormat(file) Then
+                    Datei = New UVF(file)
+                Else
+                    Throw New Exception("UVF-Datei liegt nicht im erwarteten Format vor!")
+                End If
+
 
             Case FileExtWEL, FileExtKWL
                 If (WEL.verifyFormat(file)) Then
