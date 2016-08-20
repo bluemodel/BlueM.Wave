@@ -57,6 +57,7 @@ Public Class Wave
             "CSV-Dateien (*.csv)|*.csv|" & _
             "ZRE-Dateien (*.zre)|*.zre|" & _
             "WEL-Dateien (*.wel, *.kwl)|*.wel;*.kwl|" & _
+            "UVF-Dateien (*.uvf)|*.uvf|" & _
             "SMUSI-Dateien (*.asc)|*.asc|" & _
             "SIMBA-Dateien (*.smb)|*.smb|" & _
             "Hystem-Dateien (*.dat)|*.dat|" & _

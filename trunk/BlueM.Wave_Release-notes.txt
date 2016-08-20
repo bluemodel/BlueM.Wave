@@ -6,6 +6,7 @@ Version 1.5
 NEW:
 * Support for importing GISMO files
 * Support for importing HYDRO-AS_2D files
+* Support for importing UVF files
 * Support for loading TeeChart themes (*.xml) 
 * The date format can now be specified while importing time series (Bug 686)
 CHANGED:

@@ -40,6 +40,7 @@ Module Konstanten
             dict.Add("GISMO1", "dd.MM.yyyy HH:mm")
             dict.Add("GISMO2", "yyyyMMdd HH:mm")
             dict.Add("SMUSI", "dd MM yyyy   HH")
+            dict.Add("UVF", "yyyyMMddHHmm") 'eigentlich nur zweistellige Jahreszahl, aber das Jahrhundert wird beim Einlesen trotzdem bestimmt
             dict.Add("WEL", "dd.MM.yyyy HH:mm")
             dict.Add("ZRE", "yyyyMMdd HH:mm")
             Return dict
