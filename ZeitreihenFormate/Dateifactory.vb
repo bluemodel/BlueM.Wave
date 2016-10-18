@@ -44,6 +44,7 @@ Public Module Dateifactory
     Public Const FileExtDTL As String = ".DTL" 'DWD-Daten: Temperatur und Luftfeuchte
     Public Const FileExtOUT As String = ".OUT" 'SWMM binäre Ergebnisdatei
     Public Const FileExtTXT As String = ".TXT" 'SWMM Routingfiles
+    Public Const FileExtBIN As String = ".BIN" 'SYDRO Binärformat
 
     Public Const FileExtnetCDF As String = ".NC"
 
@@ -151,6 +152,9 @@ Public Module Dateifactory
                     'Textdateien können üblicherweise als CSV gelesen werden
                     Datei = New CSV(file)
                 End If
+
+            Case FileExtBIN
+                Datei = New BIN(file)
 
             Case Else
                 'Wenn alle Stricke reissen, Import als CSV versuchen

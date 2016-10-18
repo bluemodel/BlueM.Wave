@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{BCD1BBE3-5AB2-4C3F-AC12-43EB977C6F6F}</ProjectGuid>
     <OutputType>WinExe</OutputType>
@@ -18,6 +18,7 @@
     <OldToolsVersion>3.5</OldToolsVersion>
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <DebugSymbols>true</DebugSymbols>
@@ -64,7 +65,14 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Resources\modelEAU.SWMM.DllAdapter.dll</HintPath>
     </Reference>
+    <Reference Include="SydroZreNet, Version=2.0.0.1, Culture=neutral, PublicKeyToken=18f53cfa0aa5cfa4, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Resources\SydroZreNet.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
@@ -79,6 +87,7 @@
     <Import Include="System.Collections.Generic" />
     <Import Include="System.Drawing" />
     <Import Include="System.Diagnostics" />
+    <Import Include="System.Linq" />
     <Import Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
@@ -187,6 +196,7 @@
     <None Include="ZeitreihenFormate\BlueMOrbDataSet.vb">
       <DependentUpon>BlueMOrbDataSet.xsd</DependentUpon>
     </None>
+    <Compile Include="ZeitreihenFormate\BIN.vb" />
     <Compile Include="ZeitreihenFormate\CSV.vb" />
     <Compile Include="ZeitreihenFormate\Dateifactory.vb" />
     <Compile Include="ZeitreihenFormate\Dateiformat.vb" />
@@ -305,6 +315,9 @@
     <Content Include="Resources\chart_pie.png" />
     <Content Include="Resources\color_wheel.png" />
     <Content Include="Resources\modelEAU.SWMM.DllAdapter.dll" />
+    <Content Include="Resources\SydroZreI.dll" />
+    <Content Include="Resources\SydroZreNet.dll" />
+    <Content Include="Resources\SydroZreNet.xml" />
     <None Include="Resources\page_white_go.png" />
     <None Include="Resources\arrow_refresh.png" />
     <EmbeddedResource Include="Analysis\Gegenueberstellung_Dialog.resx">
@@ -352,4 +365,7 @@
   <Target Name="AfterBuild">
   </Target>
   -->
+  <PropertyGroup>
+    <PostBuildEvent>copy $(ProjectDir)Resources\SydroZreI.dll $(TargetDir)SydroZreI.dll</PostBuildEvent>
+  </PropertyGroup>
 </Project>

@@ -64,7 +64,8 @@ Public Class Wave
             "DWD-Temperatur-Feuchte (*.dtl)|*.dtl|" & _
             "SWMM-Dateien (*.out)|*.out|" & _
             "netCDF Daten (*.nc)|*.nc|" & _
-            "HYDRO_AS-2D Dateien (*.dat)|*.dat"
+            "HYDRO_AS-2D Dateien (*.dat)|*.dat|" & _
+            "SYDRO Binärformat (*.bin)|*.bin"
 
     'Chart-Zeugs
     Private WithEvents colorBand1 As Steema.TeeChart.Tools.ColorBand
