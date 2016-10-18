@@ -168,6 +168,7 @@ Public Class UVF
                     'Einheit einlesen
                     Me.Spalten(1).Einheit = Zeile.Substring(15, 15).Trim()
                     'DefArt oder Anfangsjahrhundert einlesen, falls vorhanden
+                    Me._jahrhundert = 0
                     If Zeile.Length > 30 Then
                         If Zeile.Substring(30, 1) = "I" Or _
                            Zeile.Substring(30, 1) = "K" Or _
@@ -217,9 +218,9 @@ Public Class UVF
     ''' <remarks></remarks>
     Public Overrides Sub Read_File()
 
-        Dim i As Integer
+        Dim i, year, year_prev As Integer
         Dim Zeile As String
-        Dim datumstring As String
+        Dim datumstring, datumstringExt As String
         Dim datum As DateTime
         Dim ok As Boolean
         Dim wert As Double
@@ -244,19 +245,22 @@ Public Class UVF
             Next
 
             'Daten
+            year_prev = Integer.Parse(Me._jahrhundert.ToString.Substring(2)) 'Aus Anfangsjahrhundert
             Do
                 Zeile = StrReadSync.ReadLine.ToString()
                 'Datum lesen
                 datumstring = Zeile.Substring(0, 10)
+                year = Integer.Parse(datumstring.Substring(0, 2))
                 'Jahrhundert bestimmen
-                If datumstring.StartsWith("00") Then
-                    'ab jetzt 2000
-                    Me._jahrhundert = 2000
+                If year - year_prev < 0 Then
+                    'neues Jahrhundert
+                    Me._jahrhundert += 100
                 End If
+                year_prev = year
                 'Jahrhundert voranstellen
-                datumstring = Me._jahrhundert.ToString.Substring(0, 2) & datumstring
+                datumstringExt = Me._jahrhundert.ToString.Substring(0, 2) & datumstring
                 'parse it
-                ok = DateTime.TryParseExact(datumstring, Me.Datumsformat, Konstanten.Zahlenformat, Globalization.DateTimeStyles.None, datum)
+                ok = DateTime.TryParseExact(datumstringExt, Me.Datumsformat, Konstanten.Zahlenformat, Globalization.DateTimeStyles.None, datum)
                 If (Not ok) Then
                     Throw New Exception("Kann das Datum '" & datumstring & "' mit dem gegebenen Datumsformat '" & Me.Datumsformat & "' nicht parsen! Bitte Datumsformat anpassen!")
                 End If
