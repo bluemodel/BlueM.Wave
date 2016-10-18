@@ -7,6 +7,7 @@ NEW:
 * Support for importing GISMO files
 * Support for importing HYDRO-AS_2D files
 * Support for importing UVF files
+* Support for importing SYDRO binary files (x86 version only)
 * Support for loading TeeChart themes (*.xml) 
 * The date format can now be specified while importing time series (Bug 686)
 CHANGED:
@@ -14,6 +15,7 @@ CHANGED:
   the series contained in the TEN-file can be imported optionally
 * More options for cutting time series (cut all series at once and keep original series)
 * Small improvements to layout and functionality
+* Switched to .NET Framework 3.5
 REMOVED:
 * RVA files no longer supported
 
