@@ -189,11 +189,15 @@ Public Class UVF
                 End If
                 If i = iZeileUeberschriften + 1 Then
                     'Ort und Lage einlesen
-                    Me._ort = Zeile.Substring(0, 15).Trim()
-                    Me._lage_X = Zeile.Substring(15, 10)
-                    Me._lage_Y = Zeile.Substring(25, 10)
-                    Me._lage_Z = Zeile.Substring(35)
-                    Exit Do
+                    Try
+                        Me._ort = Zeile.Substring(0, 15).Trim()
+                        Me._lage_X = Zeile.Substring(15, 10)
+                        Me._lage_Y = Zeile.Substring(25, 10)
+                        Me._lage_Z = Zeile.Substring(35)
+                        Exit Do
+                    Catch ex As Exception
+                        'do nothing
+                    End Try
                 End If
 
             Loop Until StrReadSync.Peek() = -1
