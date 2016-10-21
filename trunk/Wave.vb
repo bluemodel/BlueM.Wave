@@ -179,6 +179,7 @@ Public Class Wave
 
         'Hauptdiagramm darf nur horizontal gescrolled oder gezoomt werden
         Me.TChart1.Zoom.Direction = Steema.TeeChart.ZoomDirections.Horizontal
+        Me.TChart1.Zoom.History = True
         Me.TChart1.Panning.Allow = Steema.TeeChart.ScrollModes.Horizontal
 
         'Achsen
@@ -267,6 +268,8 @@ Public Class Wave
     '*****************
     Private Sub TChart2_MouseUp(ByVal sender As System.Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles TChart2.MouseUp
         If (Me.colorBand1.Start <> Me.colorBand1.End) Then
+            'TODO: Add the current zoom to the zoom history: Me.TChart1.Zoom.HistorySteps.Add(XXX)
+            'set new min/max values for the bottom axis of TChart1
             Me.TChart1.Axes.Bottom.Minimum = Me.colorBand1.Start
             Me.TChart1.Axes.Bottom.Maximum = Me.colorBand1.End
             Me.selectionMade = True
@@ -740,6 +743,108 @@ Public Class Wave
             Me.ToolStripButton_Übersicht.Checked = False
         End If
 
+    End Sub
+
+    ''' <summary>
+    ''' Zoom button clicked
+    ''' </summary>
+    Private Sub ToolStripButton_Zoom_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_Zoom.Click
+        If Me.ToolStripButton_Zoom.Checked Then
+            'enable zooming
+            Me.TChart1.Cursor = Cursors.Cross
+            Me.TChart1.Zoom.Allow = True
+            Me.TChart1.Zoom.Direction = Steema.TeeChart.ZoomDirections.Horizontal
+            Me.TChart1.Zoom.History = True 'number of steps is 8, don't know how to change that
+            Me.TChart1.Zoom.MouseButton = Windows.Forms.MouseButtons.Left
+            'uncheck the other buttons
+            Me.ToolStripButton_NormalMode.Checked = False
+            Me.ToolStripButton_Pan.Checked = False
+            'disable panning
+            Me.TChart1.Panning.Allow = False
+        Else
+            'revert to normal mode
+            Me.TChart1.Cursor = Cursors.Default
+            Me.TChart1.Zoom.Allow = True
+            Me.TChart1.Zoom.Direction = Steema.TeeChart.ZoomDirections.Horizontal
+            Me.TChart1.Zoom.MouseButton = Windows.Forms.MouseButtons.Left
+            Me.TChart1.Panning.Allow = Steema.TeeChart.ScrollModes.Horizontal
+            Me.TChart1.Panning.MouseButton = Windows.Forms.MouseButtons.Right
+        End If
+    End Sub
+
+    ''' <summary>
+    ''' Pan button clicked
+    ''' </summary>
+    Private Sub ToolStripButton_Pan_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_Pan.Click
+        If Me.ToolStripButton_Pan.Checked Then
+            'enable panning
+            Me.TChart1.Cursor = Cursors.SizeWE
+            Me.TChart1.Panning.Allow = Steema.TeeChart.ScrollModes.Horizontal
+            Me.TChart1.Panning.MouseButton = Windows.Forms.MouseButtons.Left
+            'uncheck the other buttons
+            Me.ToolStripButton_NormalMode.Checked = False
+            Me.ToolStripButton_Zoom.Checked = False
+            'disable zooming
+            Me.TChart1.Zoom.Allow = False
+        Else
+            'revert to normal mode
+            Me.TChart1.Cursor = Cursors.Default
+            Me.TChart1.Zoom.Allow = True
+            Me.TChart1.Zoom.Direction = Steema.TeeChart.ZoomDirections.Horizontal
+            Me.TChart1.Zoom.MouseButton = Windows.Forms.MouseButtons.Left
+            Me.TChart1.Panning.Allow = Steema.TeeChart.ScrollModes.Horizontal
+            Me.TChart1.Panning.MouseButton = Windows.Forms.MouseButtons.Right
+        End If
+    End Sub
+
+    ''' <summary>
+    ''' Normal mode button clicked
+    ''' </summary>
+    Private Sub ToolStripButton_Normal_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_NormalMode.Click
+        If Me.ToolStripButton_NormalMode.Checked Then
+            'revert to normal mode
+            Me.TChart1.Cursor = Cursors.Default
+            Me.TChart1.Zoom.Allow = True
+            Me.TChart1.Zoom.Direction = Steema.TeeChart.ZoomDirections.Horizontal
+            Me.TChart1.Zoom.MouseButton = Windows.Forms.MouseButtons.Left
+            Me.TChart1.Panning.Allow = Steema.TeeChart.ScrollModes.Horizontal
+            Me.TChart1.Panning.MouseButton = Windows.Forms.MouseButtons.Right
+            'uncheck the other buttons
+            Me.ToolStripButton_Zoom.Checked = False
+            Me.ToolStripButton_Pan.Checked = False
+        Else
+            If Not Me.ToolStripButton_Zoom.Checked And Not Me.ToolStripButton_Pan.Checked Then
+                'keep the button checked as no other mode is activated
+                Me.ToolStripButton_NormalMode.Checked = True
+            End If
+        End If
+    End Sub
+
+    ''' <summary>
+    ''' Zoom previous button clicked
+    ''' </summary>
+    Private Sub ToolStripButton_ZoomPrevious_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_ZoomPrevious.Click
+        Me.TChart1.Zoom.Undo()
+    End Sub
+
+    ''' <summary>
+    ''' Mouse down event on TChart1: in normal mode, change the cursor to indicate zooming / panning
+    ''' </summary>
+    Private Sub TChart1_MouseDown(ByVal sender As System.Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles TChart1.MouseDown
+        If Me.ToolStripButton_NormalMode.Checked Then
+            If e.Button = Windows.Forms.MouseButtons.Left Then
+                Me.TChart1.Cursor = Cursors.Cross
+            ElseIf e.Button = Windows.Forms.MouseButtons.Right Then
+                Me.TChart1.Cursor = Cursors.SizeWE
+            End If
+        End If
+    End Sub
+
+    ''' <summary>
+    ''' Mouse up event on TChart1: restore default cursor
+    ''' </summary>
+    Private Sub TChart1_MouseUp(ByVal sender As System.Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles TChart1.MouseUp
+        Me.TChart1.Cursor = Cursors.Default
     End Sub
 
     ''' <summary>

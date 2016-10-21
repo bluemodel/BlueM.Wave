@@ -315,9 +315,12 @@
     <Content Include="Resources\chart_pie.png" />
     <Content Include="Resources\color_wheel.png" />
     <Content Include="Resources\modelEAU.SWMM.DllAdapter.dll" />
+    <None Include="Resources\pan.png" />
     <Content Include="Resources\SydroZreI.dll" />
     <Content Include="Resources\SydroZreNet.dll" />
     <Content Include="Resources\SydroZreNet.xml" />
+    <None Include="Resources\zoom.png" />
+    <None Include="Resources\zoom_previous.png" />
     <None Include="Resources\page_white_go.png" />
     <None Include="Resources\arrow_refresh.png" />
     <EmbeddedResource Include="Analysis\Gegenueberstellung_Dialog.resx">
