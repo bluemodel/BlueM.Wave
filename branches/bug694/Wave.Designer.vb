@@ -49,6 +49,7 @@ Partial Class Wave
         Me.ToolStripButton_Convert = New System.Windows.Forms.ToolStripButton
         Me.ToolStripButton_EditChart = New System.Windows.Forms.ToolStripButton
         Me.ToolStripButton_Übersicht = New System.Windows.Forms.ToolStripButton
+        Me.ToolStripButton_NormalMode = New System.Windows.Forms.ToolStripButton
         Me.ToolStripButton_Zoom = New System.Windows.Forms.ToolStripButton
         Me.ToolStripButton_Pan = New System.Windows.Forms.ToolStripButton
         Me.ToolStripButton_ZoomPrevious = New System.Windows.Forms.ToolStripButton
@@ -60,8 +61,13 @@ Partial Class Wave
         Me.DateTimePicker1 = New System.Windows.Forms.DateTimePicker
         Me.SplitContainer1 = New System.Windows.Forms.SplitContainer
         Me.TChart2 = New Steema.TeeChart.TChart
+        Me.Panel_Navigation = New System.Windows.Forms.Panel
+        Me.NumericUpDown_NavMultiplier = New System.Windows.Forms.NumericUpDown
+        Me.ComboBox_NavStepsize = New System.Windows.Forms.ComboBox
+        Me.DateTimePicker_NavEnd = New System.Windows.Forms.DateTimePicker
+        Me.DateTimePicker_NavStart = New System.Windows.Forms.DateTimePicker
         Me.SaveFileDialog1 = New System.Windows.Forms.SaveFileDialog
-        Me.ToolStripButton_NormalMode = New System.Windows.Forms.ToolStripButton
+        Me.Panel_Tchart1 = New System.Windows.Forms.Panel
         ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator
         toolStripSeparator = New System.Windows.Forms.ToolStripSeparator
         ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator
@@ -75,6 +81,9 @@ Partial Class Wave
         Me.SplitContainer1.Panel1.SuspendLayout()
         Me.SplitContainer1.Panel2.SuspendLayout()
         Me.SplitContainer1.SuspendLayout()
+        Me.Panel_Navigation.SuspendLayout()
+        CType(Me.NumericUpDown_NavMultiplier, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.Panel_Tchart1.SuspendLayout()
         Me.SuspendLayout()
         '
         'ToolStripSeparator1
@@ -95,11 +104,11 @@ Partial Class Wave
         'StatusStrip1
         '
         StatusStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripStatusLabel_Log})
-        StatusStrip1.Location = New System.Drawing.Point(0, 638)
+        StatusStrip1.Location = New System.Drawing.Point(0, 639)
         StatusStrip1.Name = "StatusStrip1"
         StatusStrip1.RightToLeft = System.Windows.Forms.RightToLeft.No
         StatusStrip1.ShowItemToolTips = True
-        StatusStrip1.Size = New System.Drawing.Size(945, 22)
+        StatusStrip1.Size = New System.Drawing.Size(944, 22)
         StatusStrip1.SizingGrip = False
         StatusStrip1.TabIndex = 1
         StatusStrip1.Text = "StatusStrip1"
@@ -124,7 +133,7 @@ Partial Class Wave
         ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButton_Neu, Me.ToolStripSplitButton_Oeffnen, Me.ToolStripSplitButton_Speichern, ToolStripSeparator4, Me.ToolStripButton_Kopieren, Me.ToolStripButton_Drucken, ToolStripSeparator2, Me.ToolStripButton_Cut, Me.ToolStripButton_Analysis, Me.ToolStripButton_Convert, ToolStripSeparator1, Me.ToolStripButton_EditChart, Me.ToolStripButton_Übersicht, toolStripSeparator, Me.ToolStripButton_NormalMode, Me.ToolStripButton_Zoom, Me.ToolStripButton_Pan, Me.ToolStripButton_ZoomPrevious, Me.ToolStripSplitButton_Help})
         ToolStrip1.Location = New System.Drawing.Point(0, 0)
         ToolStrip1.Name = "ToolStrip1"
-        ToolStrip1.Size = New System.Drawing.Size(945, 34)
+        ToolStrip1.Size = New System.Drawing.Size(944, 34)
         ToolStrip1.TabIndex = 0
         ToolStrip1.Text = "ToolStrip1"
         '
@@ -287,6 +296,19 @@ Partial Class Wave
         Me.ToolStripButton_Übersicht.Size = New System.Drawing.Size(23, 31)
         Me.ToolStripButton_Übersicht.Text = "Übersicht an/aus"
         Me.ToolStripButton_Übersicht.ToolTipText = "Übersicht an/aus"
+        '
+        'ToolStripButton_NormalMode
+        '
+        Me.ToolStripButton_NormalMode.Checked = True
+        Me.ToolStripButton_NormalMode.CheckOnClick = True
+        Me.ToolStripButton_NormalMode.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.ToolStripButton_NormalMode.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.ToolStripButton_NormalMode.Image = CType(resources.GetObject("ToolStripButton_NormalMode.Image"), System.Drawing.Image)
+        Me.ToolStripButton_NormalMode.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ToolStripButton_NormalMode.Name = "ToolStripButton_NormalMode"
+        Me.ToolStripButton_NormalMode.Size = New System.Drawing.Size(23, 31)
+        Me.ToolStripButton_NormalMode.Text = "Normal mode"
+        Me.ToolStripButton_NormalMode.ToolTipText = "Normal mode (zoom with left mouse, pan with right mouse)"
         '
         'ToolStripButton_Zoom
         '
@@ -539,7 +561,7 @@ Partial Class Wave
         Me.TChart1.Panel.Bevel.ColorTwo = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer))
         Me.TChart1.Panel.Bevel.StringColorOne = "FFFFFFFF"
         Me.TChart1.Panel.Bevel.StringColorTwo = "FF808080"
-        Me.TChart1.Size = New System.Drawing.Size(941, 435)
+        Me.TChart1.Size = New System.Drawing.Size(940, 410)
         '
         '
         '
@@ -629,10 +651,10 @@ Partial Class Wave
         '
         'SplitContainer1.Panel2
         '
-        Me.SplitContainer1.Panel2.Controls.Add(Me.TChart1)
-        Me.SplitContainer1.Panel2MinSize = 100
-        Me.SplitContainer1.Size = New System.Drawing.Size(945, 605)
-        Me.SplitContainer1.SplitterDistance = 162
+        Me.SplitContainer1.Panel2.Controls.Add(Me.Panel_Tchart1)
+        Me.SplitContainer1.Panel2.Controls.Add(Me.Panel_Navigation)
+        Me.SplitContainer1.Size = New System.Drawing.Size(944, 606)
+        Me.SplitContainer1.SplitterDistance = 150
         Me.SplitContainer1.TabIndex = 1
         '
         'TChart2
@@ -832,7 +854,7 @@ Partial Class Wave
         Me.TChart2.Panel.Bevel.ColorTwo = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer))
         Me.TChart2.Panel.Bevel.StringColorOne = "FFFFFFFF"
         Me.TChart2.Panel.Bevel.StringColorTwo = "FF808080"
-        Me.TChart2.Size = New System.Drawing.Size(941, 158)
+        Me.TChart2.Size = New System.Drawing.Size(940, 146)
         '
         '
         '
@@ -898,18 +920,71 @@ Partial Class Wave
         Me.TChart2.Walls.Right.Bevel.StringColorOne = "FFFFFFFF"
         Me.TChart2.Walls.Right.Bevel.StringColorTwo = "FF808080"
         '
-        'ToolStripButton_NormalMode
+        'Panel_Navigation
         '
-        Me.ToolStripButton_NormalMode.Checked = True
-        Me.ToolStripButton_NormalMode.CheckOnClick = True
-        Me.ToolStripButton_NormalMode.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.ToolStripButton_NormalMode.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.ToolStripButton_NormalMode.Image = CType(resources.GetObject("ToolStripButton_NormalMode.Image"), System.Drawing.Image)
-        Me.ToolStripButton_NormalMode.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.ToolStripButton_NormalMode.Name = "ToolStripButton_NormalMode"
-        Me.ToolStripButton_NormalMode.Size = New System.Drawing.Size(23, 31)
-        Me.ToolStripButton_NormalMode.Text = "Normal mode"
-        Me.ToolStripButton_NormalMode.ToolTipText = "Normal mode (zoom with left mouse, pan with right mouse)"
+        Me.Panel_Navigation.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Panel_Navigation.Controls.Add(Me.NumericUpDown_NavMultiplier)
+        Me.Panel_Navigation.Controls.Add(Me.ComboBox_NavStepsize)
+        Me.Panel_Navigation.Controls.Add(Me.DateTimePicker_NavEnd)
+        Me.Panel_Navigation.Controls.Add(Me.DateTimePicker_NavStart)
+        Me.Panel_Navigation.Location = New System.Drawing.Point(0, 405)
+        Me.Panel_Navigation.Name = "Panel_Navigation"
+        Me.Panel_Navigation.Size = New System.Drawing.Size(940, 45)
+        Me.Panel_Navigation.TabIndex = 1
+        '
+        'NumericUpDown_NavMultiplier
+        '
+        Me.NumericUpDown_NavMultiplier.Anchor = System.Windows.Forms.AnchorStyles.Top
+        Me.NumericUpDown_NavMultiplier.Location = New System.Drawing.Point(407, 15)
+        Me.NumericUpDown_NavMultiplier.Minimum = New Decimal(New Integer() {1, 0, 0, 0})
+        Me.NumericUpDown_NavMultiplier.Name = "NumericUpDown_NavMultiplier"
+        Me.NumericUpDown_NavMultiplier.Size = New System.Drawing.Size(40, 20)
+        Me.NumericUpDown_NavMultiplier.TabIndex = 5
+        Me.NumericUpDown_NavMultiplier.Value = New Decimal(New Integer() {1, 0, 0, 0})
+        '
+        'ComboBox_NavStepsize
+        '
+        Me.ComboBox_NavStepsize.Anchor = System.Windows.Forms.AnchorStyles.Top
+        Me.ComboBox_NavStepsize.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.ComboBox_NavStepsize.FormattingEnabled = True
+        Me.ComboBox_NavStepsize.Items.AddRange(New Object() {"Centuries", "Decades", "Years", "Months", "Weeks", "Days", "Hours", "Minutes", "Seconds"})
+        Me.ComboBox_NavStepsize.Location = New System.Drawing.Point(453, 15)
+        Me.ComboBox_NavStepsize.Name = "ComboBox_NavStepsize"
+        Me.ComboBox_NavStepsize.Size = New System.Drawing.Size(81, 21)
+        Me.ComboBox_NavStepsize.TabIndex = 2
+        '
+        'DateTimePicker_NavEnd
+        '
+        Me.DateTimePicker_NavEnd.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.DateTimePicker_NavEnd.CustomFormat = "dd.MM.yyyy HH:mm"
+        Me.DateTimePicker_NavEnd.Format = System.Windows.Forms.DateTimePickerFormat.Custom
+        Me.DateTimePicker_NavEnd.Location = New System.Drawing.Point(820, 15)
+        Me.DateTimePicker_NavEnd.Name = "DateTimePicker_NavEnd"
+        Me.DateTimePicker_NavEnd.ShowUpDown = True
+        Me.DateTimePicker_NavEnd.Size = New System.Drawing.Size(110, 20)
+        Me.DateTimePicker_NavEnd.TabIndex = 1
+        '
+        'DateTimePicker_NavStart
+        '
+        Me.DateTimePicker_NavStart.CustomFormat = "dd.MM.yyyy HH:mm"
+        Me.DateTimePicker_NavStart.Format = System.Windows.Forms.DateTimePickerFormat.Custom
+        Me.DateTimePicker_NavStart.Location = New System.Drawing.Point(10, 15)
+        Me.DateTimePicker_NavStart.Name = "DateTimePicker_NavStart"
+        Me.DateTimePicker_NavStart.ShowUpDown = True
+        Me.DateTimePicker_NavStart.Size = New System.Drawing.Size(110, 20)
+        Me.DateTimePicker_NavStart.TabIndex = 0
+        '
+        'Panel_Tchart1
+        '
+        Me.Panel_Tchart1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+                    Or System.Windows.Forms.AnchorStyles.Left) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Panel_Tchart1.Controls.Add(Me.TChart1)
+        Me.Panel_Tchart1.Location = New System.Drawing.Point(0, 0)
+        Me.Panel_Tchart1.Name = "Panel_Tchart1"
+        Me.Panel_Tchart1.Size = New System.Drawing.Size(940, 410)
+        Me.Panel_Tchart1.TabIndex = 2
         '
         'Wave
         '
@@ -917,12 +992,13 @@ Partial Class Wave
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.SystemColors.Control
-        Me.ClientSize = New System.Drawing.Size(945, 660)
+        Me.ClientSize = New System.Drawing.Size(944, 661)
         Me.Controls.Add(ToolStrip1)
         Me.Controls.Add(Me.SplitContainer1)
         Me.Controls.Add(Me.DateTimePicker1)
         Me.Controls.Add(StatusStrip1)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
+        Me.MinimumSize = New System.Drawing.Size(410, 300)
         Me.Name = "Wave"
         Me.Text = "BlueM.Wave"
         StatusStrip1.ResumeLayout(False)
@@ -932,6 +1008,9 @@ Partial Class Wave
         Me.SplitContainer1.Panel1.ResumeLayout(False)
         Me.SplitContainer1.Panel2.ResumeLayout(False)
         Me.SplitContainer1.ResumeLayout(False)
+        Me.Panel_Navigation.ResumeLayout(False)
+        CType(Me.NumericUpDown_NavMultiplier, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.Panel_Tchart1.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -967,5 +1046,11 @@ Partial Class Wave
     Friend WithEvents ToolStripButton_Pan As System.Windows.Forms.ToolStripButton
     Friend WithEvents ToolStripButton_ZoomPrevious As System.Windows.Forms.ToolStripButton
     Friend WithEvents ToolStripButton_NormalMode As System.Windows.Forms.ToolStripButton
+    Friend WithEvents Panel_Navigation As System.Windows.Forms.Panel
+    Friend WithEvents ComboBox_NavStepsize As System.Windows.Forms.ComboBox
+    Friend WithEvents DateTimePicker_NavEnd As System.Windows.Forms.DateTimePicker
+    Friend WithEvents DateTimePicker_NavStart As System.Windows.Forms.DateTimePicker
+    Friend WithEvents NumericUpDown_NavMultiplier As System.Windows.Forms.NumericUpDown
+    Friend WithEvents Panel_Tchart1 As System.Windows.Forms.Panel
 
 End Class

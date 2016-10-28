@@ -36,6 +36,8 @@ Public Class Wave
     'Eigenschaften
     '#############
 
+    Private isInitializing As Boolean
+
     'Log-Fenster
     Private myLogWindow As LogWindow
 
@@ -86,6 +88,8 @@ Public Class Wave
 
         ' Dieser Aufruf ist für den Windows Form-Designer erforderlich.
         InitializeComponent()
+
+        Me.isInitializing = False
 
         'Kollektionen einrichten
         '-----------------------
@@ -250,6 +254,9 @@ Public Class Wave
                 colorBand1.End = Me.TChart1.Axes.Bottom.Maximum
             End If
 
+            'Update navigation
+            Call Me.updateNavigation()
+
         End If
 
     End Sub
@@ -261,6 +268,7 @@ Public Class Wave
             Me.colorBand1.Start = Me.TChart1.Axes.Bottom.Minimum
             Me.colorBand1.End = Me.TChart1.Axes.Bottom.Maximum
             Me.selectionMade = True
+            Call Me.updateNavigation()
         End If
     End Sub
 
@@ -273,6 +281,7 @@ Public Class Wave
             Me.TChart1.Axes.Bottom.Minimum = Me.colorBand1.Start
             Me.TChart1.Axes.Bottom.Maximum = Me.colorBand1.End
             Me.selectionMade = True
+            Call Me.updateNavigation()
         End If
     End Sub
 
@@ -846,6 +855,96 @@ Public Class Wave
     Private Sub TChart1_MouseUp(ByVal sender As System.Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles TChart1.MouseUp
         Me.TChart1.Cursor = Cursors.Default
     End Sub
+
+#Region "Navigation"
+
+    ''' <summary>
+    ''' Update the navigation pane
+    ''' </summary>
+    ''' <remarks></remarks>
+    Private Sub updateNavigation()
+        Dim xMin, xMax As DateTime
+        Dim range As TimeSpan
+
+        Me.isInitializing = True
+
+        'read dates from chart
+        xMin = Date.FromOADate(Me.TChart1.Axes.Bottom.Minimum)
+        xMax = Date.FromOADate(Me.TChart1.Axes.Bottom.Maximum)
+
+        'set DateTimePickers
+        Me.DateTimePicker_NavStart.Value = xMin
+        Me.DateTimePicker_NavEnd.Value = xMax
+
+        Me.isInitializing = False
+    End Sub
+
+    Private Sub navigationChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles DateTimePicker_NavStart.ValueChanged, DateTimePicker_NavEnd.ValueChanged
+        If Not Me.navigationValidate(New Object(), New System.ComponentModel.CancelEventArgs()) Then
+            Call Me.updateNavigation()
+        Else
+            Call Me.navigationValidated(New Object(), New System.EventArgs())
+        End If
+    End Sub
+
+    Private Function navigationValidate(ByVal sender As System.Object, ByVal e As System.ComponentModel.CancelEventArgs) As Boolean Handles DateTimePicker_NavStart.Validating, DateTimePicker_NavEnd.Validating
+        If Me.DateTimePicker_NavStart.Value > Me.DateTimePicker_NavEnd.Value Then
+            e.Cancel = True
+            Return False
+        End If
+        Return True
+    End Function
+
+    Private Sub navigationValidated(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles DateTimePicker_NavStart.Validated, DateTimePicker_NavEnd.Validated
+        If Not Me.isInitializing Then
+            Me.TChart1.Axes.Bottom.Minimum = Me.DateTimePicker_NavStart.Value.ToOADate()
+            Me.TChart1.Axes.Bottom.Maximum = Me.DateTimePicker_NavEnd.Value.ToOADate()
+            Call Me.TChart1_Scrolled(New Object(), New EventArgs())
+        End If
+    End Sub
+
+    Private Sub navigationRangeChanged() Handles ComboBox_NavStepsize.SelectedIndexChanged, NumericUpDown_NavMultiplier.ValueChanged
+
+        Dim factor As Integer
+        Dim xMin, xMax As DateTime
+        Dim range As TimeSpan
+
+        xMin = Date.FromOADate(Me.TChart1.Axes.Bottom.Minimum)
+
+        factor = Me.NumericUpDown_NavMultiplier.Value
+
+        Select Case ComboBox_NavStepsize.SelectedItem
+            Case "Centuries"
+                range = New TimeSpan(factor * 36500, 0, 0, 0)
+            Case "Decades"
+                range = New TimeSpan(factor * 3650, 0, 0, 0)
+            Case "Years"
+                range = New TimeSpan(factor * 365, 0, 0, 0)
+            Case "Months"
+                range = New TimeSpan(factor * 31, 0, 0, 0)
+            Case "Weeks"
+                range = New TimeSpan(factor * 7, 0, 0, 0)
+            Case "Days"
+                range = New TimeSpan(factor, 0, 0, 0)
+            Case "Hours"
+                range = New TimeSpan(factor, 0, 0)
+            Case "Minutes"
+                range = New TimeSpan(0, factor, 0)
+            Case "Seconds"
+                range = New TimeSpan(0, 0, factor)
+            Case Else
+                'do nothing
+                Exit Sub
+        End Select
+
+        xMax = xMin + range
+
+        Me.TChart1.Axes.Bottom.Maximum = xMax.ToOADate()
+        Call Me.TChart1_Scrolled(New Object(), New System.EventArgs())
+
+    End Sub
+
+#End Region
 
     ''' <summary>
     ''' Löscht alle vorhandenen Serien und liest alle importierten Zeitreihen neu ein
