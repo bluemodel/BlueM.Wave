@@ -36,6 +36,10 @@ Public Class Wave
     'Eigenschaften
     '#############
 
+    ''' <summary>
+    ''' Flag for preventing unintended feedback loops in the UI. Default is False, can be temporarily set to True.
+    ''' </summary>
+    ''' <remarks></remarks>
     Private isInitializing As Boolean
 
     'Log-Fenster
@@ -859,14 +863,14 @@ Public Class Wave
 #Region "Navigation"
 
     ''' <summary>
-    ''' Update the navigation pane
+    ''' Update the navigation DateTimePickers based on the current chart
     ''' </summary>
     ''' <remarks></remarks>
     Private Sub updateNavigation()
-        Dim xMin, xMax As DateTime
-        Dim range As TimeSpan
 
-        Me.isInitializing = True
+        Dim xMin, xMax As DateTime
+
+        Me.isInitializing = True 'need this to prevent a feedback loop
 
         'read dates from chart
         xMin = Date.FromOADate(Me.TChart1.Axes.Bottom.Minimum)
@@ -879,22 +883,43 @@ Public Class Wave
         Me.isInitializing = False
     End Sub
 
+    ''' <summary>
+    ''' Called when the value of one of the navigation DateTimePickers is changed. Ensures that validation is successful before continuing.
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    ''' <remarks></remarks>
     Private Sub navigationChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles DateTimePicker_NavStart.ValueChanged, DateTimePicker_NavEnd.ValueChanged
         If Not Me.navigationValidate(New Object(), New System.ComponentModel.CancelEventArgs()) Then
+            'reset navigation to correspond to chart
             Call Me.updateNavigation()
         Else
+            '
             Call Me.navigationValidated(New Object(), New System.EventArgs())
         End If
     End Sub
 
+    ''' <summary>
+    ''' Validates the navigation DateTimePickers. Checks that start is before end.
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    ''' <returns>True if validation is successful</returns>
+    ''' <remarks></remarks>
     Private Function navigationValidate(ByVal sender As System.Object, ByVal e As System.ComponentModel.CancelEventArgs) As Boolean Handles DateTimePicker_NavStart.Validating, DateTimePicker_NavEnd.Validating
-        If Me.DateTimePicker_NavStart.Value > Me.DateTimePicker_NavEnd.Value Then
+        If Me.DateTimePicker_NavStart.Value >= Me.DateTimePicker_NavEnd.Value Then
             e.Cancel = True
             Return False
         End If
         Return True
     End Function
 
+    ''' <summary>
+    ''' Is called upon successful validation of the navigation DateTimePickers. Updates the chart.
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    ''' <remarks></remarks>
     Private Sub navigationValidated(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles DateTimePicker_NavStart.Validated, DateTimePicker_NavEnd.Validated
         If Not Me.isInitializing Then
             Me.TChart1.Axes.Bottom.Minimum = Me.DateTimePicker_NavStart.Value.ToOADate()
@@ -903,17 +928,19 @@ Public Class Wave
         End If
     End Sub
 
-    Private Sub navigationRangeChanged() Handles ComboBox_NavStepsize.SelectedIndexChanged, NumericUpDown_NavMultiplier.ValueChanged
+    ''' <summary>
+    ''' The Display range has been changed - update the chart accordingly
+    ''' </summary>
+    ''' <remarks></remarks>
+    Private Sub displayRangeChanged() Handles ComboBox_DisplayRangeUnit.SelectedIndexChanged, NumericUpDown_DisplayRangeMultiplier.ValueChanged
 
         Dim factor As Integer
         Dim xMin, xMax As DateTime
         Dim range As TimeSpan
 
-        xMin = Date.FromOADate(Me.TChart1.Axes.Bottom.Minimum)
-
-        factor = Me.NumericUpDown_NavMultiplier.Value
-
-        Select Case ComboBox_NavStepsize.SelectedItem
+        'calculate display range
+        factor = Me.NumericUpDown_DisplayRangeMultiplier.Value
+        Select Case ComboBox_DisplayRangeUnit.SelectedItem
             Case "Centuries"
                 range = New TimeSpan(factor * 36500, 0, 0, 0)
             Case "Decades"
@@ -937,9 +964,103 @@ Public Class Wave
                 Exit Sub
         End Select
 
+        'Calculate new max value for x axis
+        xMin = Date.FromOADate(Me.TChart1.Axes.Bottom.Minimum)
         xMax = xMin + range
 
+        'Set new max value for x axis
         Me.TChart1.Axes.Bottom.Maximum = xMax.ToOADate()
+
+        'Update everything else
+        Call Me.TChart1_Scrolled(New Object(), New System.EventArgs())
+
+    End Sub
+
+    ''' <summary>
+    ''' Returns the navigation increment entered by the user as a TimeSpan
+    ''' </summary>
+    ''' <returns>TimeSpan</returns>
+    ''' <remarks></remarks>
+    Private Function getNavIncrement() As TimeSpan
+
+        Dim multiplier As Integer
+        Dim increment As TimeSpan
+
+        multiplier = Me.NumericUpDown_NavMultiplier.Value
+
+        Select Case Me.ComboBox_NavIncrement.SelectedItem
+            Case "Centuries"
+                increment = New TimeSpan(multiplier * 36500, 0, 0, 0)
+            Case "Decades"
+                increment = New TimeSpan(multiplier * 3650, 0, 0, 0)
+            Case "Years"
+                increment = New TimeSpan(multiplier * 365, 0, 0, 0)
+            Case "Months"
+                increment = New TimeSpan(multiplier * 31, 0, 0, 0)
+            Case "Weeks"
+                increment = New TimeSpan(multiplier * 7, 0, 0, 0)
+            Case "Days"
+                increment = New TimeSpan(multiplier, 0, 0, 0)
+            Case "Hours"
+                increment = New TimeSpan(multiplier, 0, 0)
+            Case "Minutes"
+                increment = New TimeSpan(0, multiplier, 0)
+            Case "Seconds"
+                increment = New TimeSpan(0, 0, multiplier)
+            Case Else
+                increment = New TimeSpan(0)
+        End Select
+        Return increment
+    End Function
+
+    ''' <summary>
+    ''' Navigate to the right
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    ''' <remarks></remarks>
+    Private Sub Button_NavRight_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button_NavRight.Click
+
+        Dim increment As TimeSpan
+        Dim xMinOld, xMinNew, xMaxOld, xMaxNew As DateTime
+
+        increment = Me.getNavIncrement()
+
+        xMinOld = Date.FromOADate(Me.TChart1.Axes.Bottom.Minimum)
+        xMaxOld = Date.FromOADate(Me.TChart1.Axes.Bottom.Maximum)
+
+        xMinNew = xMinOld + increment
+        xMaxNew = xMaxOld + increment
+
+        Me.TChart1.Axes.Bottom.Minimum = xMinNew.ToOADate()
+        Me.TChart1.Axes.Bottom.Maximum = xMaxNew.ToOADate()
+
+        Call Me.TChart1_Scrolled(New Object(), New System.EventArgs())
+
+    End Sub
+
+    ''' <summary>
+    ''' Navigate to the left
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    ''' <remarks></remarks>
+    Private Sub Button_NavLeft_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button_NavLeft.Click
+
+        Dim increment As TimeSpan
+        Dim xMinOld, xMinNew, xMaxOld, xMaxNew As DateTime
+
+        increment = Me.getNavIncrement()
+
+        xMinOld = Date.FromOADate(Me.TChart1.Axes.Bottom.Minimum)
+        xMaxOld = Date.FromOADate(Me.TChart1.Axes.Bottom.Maximum)
+
+        xMinNew = xMinOld - increment
+        xMaxNew = xMaxOld - increment
+
+        Me.TChart1.Axes.Bottom.Minimum = xMinNew.ToOADate()
+        Me.TChart1.Axes.Bottom.Maximum = xMaxNew.ToOADate()
+
         Call Me.TChart1_Scrolled(New Object(), New System.EventArgs())
 
     End Sub
