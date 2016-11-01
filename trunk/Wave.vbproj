@@ -314,6 +314,9 @@
     </Content>
     <Content Include="Resources\chart_pie.png" />
     <Content Include="Resources\color_wheel.png" />
+    <Content Include="Resources\libifcoremd.dll" />
+    <Content Include="Resources\libifportmd.dll" />
+    <Content Include="Resources\libmmd.dll" />
     <Content Include="Resources\modelEAU.SWMM.DllAdapter.dll" />
     <None Include="Resources\pan.png" />
     <Content Include="Resources\SydroZreI.dll" />
@@ -369,6 +372,9 @@
   </Target>
   -->
   <PropertyGroup>
-    <PostBuildEvent>copy $(ProjectDir)Resources\SydroZreI.dll $(TargetDir)SydroZreI.dll</PostBuildEvent>
+    <PostBuildEvent>copy $(ProjectDir)Resources\SydroZreI.dll $(TargetDir)SydroZreI.dll
+copy $(ProjectDir)Resources\libifcoremd.dll $(TargetDir)libifcoremd.dll
+copy $(ProjectDir)Resources\libifportmd.dll $(TargetDir)libifportmd.dll
+copy $(ProjectDir)Resources\libmmd.dll $(TargetDir)libmmd.dll</PostBuildEvent>
   </PropertyGroup>
 </Project>
