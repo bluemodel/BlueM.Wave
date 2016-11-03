@@ -301,7 +301,8 @@ Public Class Wave
             Me.colorBand1.Start = Me.TChart1.Axes.Bottom.Minimum
             Me.colorBand1.End = Me.TChart1.Axes.Bottom.Maximum
         Else
-            'TODO: Add the previous zoom to the zoom history: Me.TChart1.Zoom.HistorySteps.Add(XXX)
+            'save the current zoom snapshot
+            Call Me.saveZoomSnapshot()
             'set new min/max values for the bottom axis of the main chart
             Me.TChart1.Axes.Bottom.Minimum = Me.colorBand1.Start
             Me.TChart1.Axes.Bottom.Maximum = Me.colorBand1.End
@@ -361,6 +362,23 @@ Public Class Wave
             Next
         End If
 
+    End Sub
+
+    ''' <summary>
+    ''' Add the current zoom to the zoom history
+    ''' </summary>
+    Private Sub saveZoomSnapshot()
+        Dim snapshot As New Steema.TeeChart.ZoomSnapshot()
+        snapshot.AxesMinMax = New Double() {Me.TChart1.Axes.Left.Minimum, _
+                                            Me.TChart1.Axes.Left.Maximum, _
+                                            Me.TChart1.Axes.Top.Minimum, _
+                                            Me.TChart1.Axes.Top.Maximum, _
+                                            Me.TChart1.Axes.Right.Minimum, _
+                                            Me.TChart1.Axes.Right.Maximum, _
+                                            Me.TChart1.Axes.Bottom.Minimum, _
+                                            Me.TChart1.Axes.Bottom.Maximum}
+        Me.TChart1.Zoom.HistorySteps.Add(snapshot)
+        'TODO: perhaps remove some HistorySteps if there are too many?
     End Sub
 
 #End Region 'Chart behavior'
@@ -831,13 +849,30 @@ Public Class Wave
     ''' Zoom previous button clicked
     ''' </summary>
     Private Sub ToolStripButton_ZoomPrevious_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_ZoomPrevious.Click
-        Me.TChart1.Zoom.Undo()
+        'Me.TChart1.Zoom.Undo() 'This (sometimes) reverts to the full zoom without using history
+        If Me.TChart1.Zoom.HistorySteps.Count > 0 Then
+            Dim snapshot As Steema.TeeChart.ZoomSnapshot
+            snapshot = Me.TChart1.Zoom.HistorySteps.Last()
+            Me.TChart1.Axes.Bottom.Minimum = snapshot.AxesMinMax(6)
+            Me.TChart1.Axes.Bottom.Maximum = snapshot.AxesMinMax(7)
+            Me.TChart1.Zoom.HistorySteps.RemoveAt(Me.TChart1.Zoom.HistorySteps.Count - 1)
+            'Update everything
+            Call Me.updateColorband()
+            Call Me.updateNavigation()
+        Else
+            'no history present, reset the charts
+            Me.selectionMade = False
+            Call Me.UpdateCharts()
+        End If
     End Sub
 
     ''' <summary>
     ''' Zoom All button clicked
     ''' </summary>
     Private Sub ToolStripButton_ZoomAll_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_ZoomAll.Click
+        'save the current zoom snapshot
+        Call Me.saveZoomSnapshot()
+        'reset the charts
         Me.selectionMade = False
         Call Me.UpdateCharts()
     End Sub
@@ -990,6 +1025,8 @@ Public Class Wave
     ''' <remarks></remarks>
     Private Sub navigationValidated(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles DateTimePicker_NavStart.Validated, DateTimePicker_NavEnd.Validated
         If Not Me.isInitializing Then
+            'save the current zoom snapshot
+            Call Me.saveZoomSnapshot()
             'Adjust the display range of the main chart
             Me.TChart1.Axes.Bottom.Minimum = Me.DateTimePicker_NavStart.Value.ToOADate()
             Me.TChart1.Axes.Bottom.Maximum = Me.DateTimePicker_NavEnd.Value.ToOADate()
@@ -1037,6 +1074,9 @@ Public Class Wave
                 'do nothing and abort
                 Exit Sub
         End Select
+
+        'save the current zoom snapshot
+        Call Me.saveZoomSnapshot()
 
         'Set new max value for x axis
         Me.TChart1.Axes.Bottom.Maximum = xMax.ToOADate()
@@ -1104,7 +1144,7 @@ Public Class Wave
                 Exit Sub
         End Select
 
-        'reset the display range input fields
+        'fields do not correspond to the chart, therefore reset the fields
         Me.NumericUpDown_DisplayRangeMultiplier.Value = 1
         Me.ComboBox_DisplayRangeUnit.SelectedItem = ""
 
@@ -1160,9 +1200,11 @@ Public Class Wave
                 xMinNew = xMinOld.AddSeconds(multiplier)
                 xMaxNew = xMaxOld.AddSeconds(multiplier)
             Case Else
-                xMinNew = xMinOld
-                xMaxNew = xMaxOld
+                Exit Sub
         End Select
+
+        'save the current zoom snapshot
+        Call Me.saveZoomSnapshot()
 
         'update chart
         Me.TChart1.Axes.Bottom.Minimum = xMinNew.ToOADate()
@@ -1188,8 +1230,13 @@ Public Class Wave
             If e.Button = Windows.Forms.MouseButtons.Left Then
                 Me.TChart1.Cursor = Cursors.Cross
             ElseIf e.Button = Windows.Forms.MouseButtons.Right Then
+                'save current zoom snapshot before scrolling
+                Call Me.saveZoomSnapshot()
                 Me.TChart1.Cursor = Cursors.SizeWE
             End If
+        ElseIf Me.ToolStripButton_Pan.Checked Then
+            'save current zoom snapshot before scrolling
+            Call Me.saveZoomSnapshot()
         End If
     End Sub
 
