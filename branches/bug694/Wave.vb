@@ -191,6 +191,7 @@ Public Class Wave
         'Hauptdiagramm darf nur horizontal gescrolled oder gezoomt werden
         Me.TChart1.Zoom.Direction = Steema.TeeChart.ZoomDirections.Horizontal
         Me.TChart1.Zoom.History = True
+        Me.TChart1.Zoom.Animated = True
         Me.TChart1.Panning.Allow = Steema.TeeChart.ScrollModes.Horizontal
 
         'Achsen
