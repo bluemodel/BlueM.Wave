@@ -73,6 +73,7 @@ Partial Class Wave
         Me.DateTimePicker_NavEnd = New System.Windows.Forms.DateTimePicker
         Me.DateTimePicker_NavStart = New System.Windows.Forms.DateTimePicker
         Me.SaveFileDialog1 = New System.Windows.Forms.SaveFileDialog
+        Me.ToolStripButton_ZoomAll = New System.Windows.Forms.ToolStripButton
         ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator
         toolStripSeparator = New System.Windows.Forms.ToolStripSeparator
         ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator
@@ -136,7 +137,7 @@ Partial Class Wave
         '
         ToolStrip1.AutoSize = False
         ToolStrip1.BackColor = System.Drawing.SystemColors.Control
-        ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButton_Neu, Me.ToolStripSplitButton_Oeffnen, Me.ToolStripSplitButton_Speichern, ToolStripSeparator4, Me.ToolStripButton_Kopieren, Me.ToolStripButton_Drucken, ToolStripSeparator2, Me.ToolStripButton_Cut, Me.ToolStripButton_Analysis, Me.ToolStripButton_Convert, ToolStripSeparator1, Me.ToolStripButton_EditChart, Me.ToolStripButton_Übersicht, toolStripSeparator, Me.ToolStripButton_NormalMode, Me.ToolStripButton_Zoom, Me.ToolStripButton_Pan, Me.ToolStripButton_ZoomPrevious, Me.ToolStripSplitButton_Help})
+        ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButton_Neu, Me.ToolStripSplitButton_Oeffnen, Me.ToolStripSplitButton_Speichern, ToolStripSeparator4, Me.ToolStripButton_Kopieren, Me.ToolStripButton_Drucken, ToolStripSeparator2, Me.ToolStripButton_Cut, Me.ToolStripButton_Analysis, Me.ToolStripButton_Convert, ToolStripSeparator1, Me.ToolStripButton_EditChart, Me.ToolStripButton_Übersicht, toolStripSeparator, Me.ToolStripButton_NormalMode, Me.ToolStripButton_Zoom, Me.ToolStripButton_Pan, Me.ToolStripButton_ZoomPrevious, Me.ToolStripSplitButton_Help, Me.ToolStripButton_ZoomAll})
         ToolStrip1.Location = New System.Drawing.Point(0, 0)
         ToolStrip1.Name = "ToolStrip1"
         ToolStrip1.Size = New System.Drawing.Size(944, 34)
@@ -1055,6 +1056,15 @@ Partial Class Wave
         Me.DateTimePicker_NavStart.Size = New System.Drawing.Size(110, 20)
         Me.DateTimePicker_NavStart.TabIndex = 0
         '
+        'ToolStripButton_ZoomAll
+        '
+        Me.ToolStripButton_ZoomAll.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.ToolStripButton_ZoomAll.Image = CType(resources.GetObject("ToolStripButton_ZoomAll.Image"), System.Drawing.Image)
+        Me.ToolStripButton_ZoomAll.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ToolStripButton_ZoomAll.Name = "ToolStripButton_ZoomAll"
+        Me.ToolStripButton_ZoomAll.Size = New System.Drawing.Size(23, 31)
+        Me.ToolStripButton_ZoomAll.Text = "Zoom all"
+        '
         'Wave
         '
         Me.AllowDrop = True
@@ -1128,5 +1138,6 @@ Partial Class Wave
     Friend WithEvents Button_NavRight As System.Windows.Forms.Button
     Friend WithEvents Label_Navigate As System.Windows.Forms.Label
     Friend WithEvents Label_Display As System.Windows.Forms.Label
+    Friend WithEvents ToolStripButton_ZoomAll As System.Windows.Forms.ToolStripButton
 
 End Class

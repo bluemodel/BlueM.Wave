@@ -319,6 +319,7 @@
     <Content Include="Resources\SydroZreI.dll" />
     <Content Include="Resources\SydroZreNet.dll" />
     <Content Include="Resources\SydroZreNet.xml" />
+    <Content Include="Resources\zoom_world.png" />
     <None Include="Resources\zoom.png" />
     <None Include="Resources\zoom_previous.png" />
     <None Include="Resources\page_white_go.png" />

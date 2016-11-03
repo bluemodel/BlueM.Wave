@@ -859,6 +859,14 @@ Public Class Wave
     End Sub
 
     ''' <summary>
+    ''' Zoom All button clicked
+    ''' </summary>
+    Private Sub ToolStripButton_ZoomAll_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_ZoomAll.Click
+        Me.selectionMade = False
+        Call Me.UpdateCharts()
+    End Sub
+
+    ''' <summary>
     ''' Mouse down event on TChart1: in normal mode, change the cursor to indicate zooming / panning
     ''' </summary>
     Private Sub TChart1_MouseDown(ByVal sender As System.Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles TChart1.MouseDown
