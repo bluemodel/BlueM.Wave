@@ -57,23 +57,22 @@ Partial Class Wave
         Me.HilfeToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem
         Me.AboutToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem
         Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog
-        Me.DateTimePicker1 = New System.Windows.Forms.DateTimePicker
         Me.SplitContainer1 = New System.Windows.Forms.SplitContainer
         Me.TChart2 = New Steema.TeeChart.TChart
         Me.Panel1 = New System.Windows.Forms.Panel
+        Me.Label_Navigate = New System.Windows.Forms.Label
         Me.Button_NavRight = New System.Windows.Forms.Button
         Me.Button_NavLeft = New System.Windows.Forms.Button
         Me.NumericUpDown_NavMultiplier = New System.Windows.Forms.NumericUpDown
         Me.ComboBox_NavIncrement = New System.Windows.Forms.ComboBox
         Me.TChart1 = New Steema.TeeChart.TChart
         Me.Panel_Navigation = New System.Windows.Forms.Panel
+        Me.Label_Display = New System.Windows.Forms.Label
         Me.NumericUpDown_DisplayRangeMultiplier = New System.Windows.Forms.NumericUpDown
         Me.ComboBox_DisplayRangeUnit = New System.Windows.Forms.ComboBox
         Me.DateTimePicker_NavEnd = New System.Windows.Forms.DateTimePicker
         Me.DateTimePicker_NavStart = New System.Windows.Forms.DateTimePicker
         Me.SaveFileDialog1 = New System.Windows.Forms.SaveFileDialog
-        Me.Label_Display = New System.Windows.Forms.Label
-        Me.Label_Navigate = New System.Windows.Forms.Label
         ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator
         toolStripSeparator = New System.Windows.Forms.ToolStripSeparator
         ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator
@@ -371,13 +370,6 @@ Partial Class Wave
         Me.AboutToolStripMenuItem.Name = "AboutToolStripMenuItem"
         Me.AboutToolStripMenuItem.Size = New System.Drawing.Size(107, 22)
         Me.AboutToolStripMenuItem.Text = "About"
-        '
-        'DateTimePicker1
-        '
-        Me.DateTimePicker1.Location = New System.Drawing.Point(12, 64)
-        Me.DateTimePicker1.Name = "DateTimePicker1"
-        Me.DateTimePicker1.Size = New System.Drawing.Size(195, 20)
-        Me.DateTimePicker1.TabIndex = 2
         '
         'SplitContainer1
         '
@@ -680,6 +672,16 @@ Partial Class Wave
         Me.Panel1.Name = "Panel1"
         Me.Panel1.Size = New System.Drawing.Size(940, 50)
         Me.Panel1.TabIndex = 2
+        '
+        'Label_Navigate
+        '
+        Me.Label_Navigate.Anchor = System.Windows.Forms.AnchorStyles.Top
+        Me.Label_Navigate.AutoSize = True
+        Me.Label_Navigate.Location = New System.Drawing.Point(377, 12)
+        Me.Label_Navigate.Name = "Label_Navigate"
+        Me.Label_Navigate.Size = New System.Drawing.Size(53, 13)
+        Me.Label_Navigate.TabIndex = 6
+        Me.Label_Navigate.Text = "Navigate:"
         '
         'Button_NavRight
         '
@@ -1001,24 +1003,34 @@ Partial Class Wave
         Me.Panel_Navigation.Size = New System.Drawing.Size(940, 50)
         Me.Panel_Navigation.TabIndex = 1
         '
-        'NumericUpDown_RangeMultiplier
+        'Label_Display
+        '
+        Me.Label_Display.Anchor = System.Windows.Forms.AnchorStyles.Top
+        Me.Label_Display.AutoSize = True
+        Me.Label_Display.Location = New System.Drawing.Point(382, 18)
+        Me.Label_Display.Name = "Label_Display"
+        Me.Label_Display.Size = New System.Drawing.Size(44, 13)
+        Me.Label_Display.TabIndex = 6
+        Me.Label_Display.Text = "Display:"
+        '
+        'NumericUpDown_DisplayRangeMultiplier
         '
         Me.NumericUpDown_DisplayRangeMultiplier.Anchor = System.Windows.Forms.AnchorStyles.Top
         Me.NumericUpDown_DisplayRangeMultiplier.Location = New System.Drawing.Point(432, 15)
         Me.NumericUpDown_DisplayRangeMultiplier.Minimum = New Decimal(New Integer() {1, 0, 0, 0})
-        Me.NumericUpDown_DisplayRangeMultiplier.Name = "NumericUpDown_RangeMultiplier"
+        Me.NumericUpDown_DisplayRangeMultiplier.Name = "NumericUpDown_DisplayRangeMultiplier"
         Me.NumericUpDown_DisplayRangeMultiplier.Size = New System.Drawing.Size(40, 20)
         Me.NumericUpDown_DisplayRangeMultiplier.TabIndex = 5
         Me.NumericUpDown_DisplayRangeMultiplier.Value = New Decimal(New Integer() {1, 0, 0, 0})
         '
-        'ComboBox_RangeUnit
+        'ComboBox_DisplayRangeUnit
         '
         Me.ComboBox_DisplayRangeUnit.Anchor = System.Windows.Forms.AnchorStyles.Top
         Me.ComboBox_DisplayRangeUnit.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.ComboBox_DisplayRangeUnit.FormattingEnabled = True
         Me.ComboBox_DisplayRangeUnit.Items.AddRange(New Object() {"Centuries", "Decades", "Years", "Months", "Weeks", "Days", "Hours", "Minutes", "Seconds"})
         Me.ComboBox_DisplayRangeUnit.Location = New System.Drawing.Point(478, 15)
-        Me.ComboBox_DisplayRangeUnit.Name = "ComboBox_RangeUnit"
+        Me.ComboBox_DisplayRangeUnit.Name = "ComboBox_DisplayRangeUnit"
         Me.ComboBox_DisplayRangeUnit.Size = New System.Drawing.Size(81, 21)
         Me.ComboBox_DisplayRangeUnit.TabIndex = 2
         '
@@ -1043,26 +1055,6 @@ Partial Class Wave
         Me.DateTimePicker_NavStart.Size = New System.Drawing.Size(110, 20)
         Me.DateTimePicker_NavStart.TabIndex = 0
         '
-        'Label_Display
-        '
-        Me.Label_Display.Anchor = System.Windows.Forms.AnchorStyles.Top
-        Me.Label_Display.AutoSize = True
-        Me.Label_Display.Location = New System.Drawing.Point(382, 18)
-        Me.Label_Display.Name = "Label_Display"
-        Me.Label_Display.Size = New System.Drawing.Size(44, 13)
-        Me.Label_Display.TabIndex = 6
-        Me.Label_Display.Text = "Display:"
-        '
-        'Label_Navigate
-        '
-        Me.Label_Navigate.Anchor = System.Windows.Forms.AnchorStyles.Top
-        Me.Label_Navigate.AutoSize = True
-        Me.Label_Navigate.Location = New System.Drawing.Point(377, 12)
-        Me.Label_Navigate.Name = "Label_Navigate"
-        Me.Label_Navigate.Size = New System.Drawing.Size(53, 13)
-        Me.Label_Navigate.TabIndex = 6
-        Me.Label_Navigate.Text = "Navigate:"
-        '
         'Wave
         '
         Me.AllowDrop = True
@@ -1072,7 +1064,6 @@ Partial Class Wave
         Me.ClientSize = New System.Drawing.Size(944, 661)
         Me.Controls.Add(ToolStrip1)
         Me.Controls.Add(Me.SplitContainer1)
-        Me.Controls.Add(Me.DateTimePicker1)
         Me.Controls.Add(StatusStrip1)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.MinimumSize = New System.Drawing.Size(500, 410)
@@ -1096,7 +1087,6 @@ Partial Class Wave
 
     End Sub
     Friend WithEvents OpenFileDialog1 As System.Windows.Forms.OpenFileDialog
-    Friend WithEvents DateTimePicker1 As System.Windows.Forms.DateTimePicker
     Friend WithEvents SplitContainer1 As System.Windows.Forms.SplitContainer
     Friend WithEvents TChart2 As Steema.TeeChart.TChart
     Friend WithEvents ToolStripButton_Neu As System.Windows.Forms.ToolStripButton

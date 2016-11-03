@@ -894,7 +894,7 @@ Public Class Wave
     ''' <param name="e"></param>
     ''' <remarks></remarks>
     Private Sub navigationChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles DateTimePicker_NavStart.ValueChanged, DateTimePicker_NavEnd.ValueChanged
-        If Not Me.navigationValidate(New Object(), New System.ComponentModel.CancelEventArgs()) Then
+        If Not Me.navigationValidate(sender, New System.ComponentModel.CancelEventArgs()) Then
             'reset navigation to correspond to chart
             Call Me.updateNavigation()
         Else
@@ -912,8 +912,17 @@ Public Class Wave
     ''' <remarks></remarks>
     Private Function navigationValidate(ByVal sender As System.Object, ByVal e As System.ComponentModel.CancelEventArgs) As Boolean Handles DateTimePicker_NavStart.Validating, DateTimePicker_NavEnd.Validating
         If Me.DateTimePicker_NavStart.Value >= Me.DateTimePicker_NavEnd.Value Then
-            e.Cancel = True
-            Return False
+            If CType(sender, DateTimePicker).Name = "DateTimePicker_NavStart" Then
+                'if the start date was set to a value after the end date,
+                'move the end date using the currently displayed timespan
+                Dim displayrange As TimeSpan
+                displayrange = DateTime.FromOADate(Me.TChart1.Axes.Bottom.Maximum) - DateTime.FromOADate(Me.TChart1.Axes.Bottom.Minimum)
+                DateTimePicker_NavEnd.Value = DateTimePicker_NavStart.Value + displayrange
+            Else
+                'setting the end date to a value before the start date is not allowed
+                e.Cancel = True
+                Return False
+            End If
         End If
         Return True
     End Function
