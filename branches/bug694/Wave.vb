@@ -1003,26 +1003,45 @@ Public Class Wave
     Private Sub displayRangeChanged() Handles ComboBox_DisplayRangeUnit.SelectedIndexChanged, NumericUpDown_DisplayRangeMultiplier.ValueChanged
 
         Dim xMin, xMax As DateTime
-        Dim displayrange As TimeSpan
+        Dim multiplier As Integer
 
-        displayrange = Me.getDisplayRange()
+        'get min x axis from chart
+        xMin = Date.FromOADate(Me.TChart1.Axes.Bottom.Minimum)
 
-        If displayrange > TimeSpan.Zero Then
+        'Calculate new max value for x axis
+        multiplier = NumericUpDown_DisplayRangeMultiplier.Value
+        Select Case ComboBox_DisplayRangeUnit.SelectedItem
+            Case "Centuries"
+                xMax = xMin.AddYears(multiplier * 100)
+            Case "Decades"
+                xMax = xMin.AddYears(multiplier * 10)
+            Case "Years"
+                xMax = xMin.AddYears(multiplier)
+            Case "Months"
+                xMax = xMin.AddMonths(multiplier)
+            Case "Weeks"
+                xMax = xMin.AddDays(multiplier * 7)
+            Case "Days"
+                xMax = xMin.AddDays(multiplier)
+            Case "Hours"
+                xMax = xMin.AddHours(multiplier)
+            Case "Minutes"
+                xMax = xMin.AddMinutes(multiplier)
+            Case "Seconds"
+                xMax = xMin.AddSeconds(multiplier)
+            Case Else
+                'do nothing and abort
+                Exit Sub
+        End Select
 
-            'Calculate new max value for x axis
-            xMin = Date.FromOADate(Me.TChart1.Axes.Bottom.Minimum)
-            xMax = xMin + displayrange
+        'Set new max value for x axis
+        Me.TChart1.Axes.Bottom.Maximum = xMax.ToOADate()
 
-            'Set new max value for x axis
-            Me.TChart1.Axes.Bottom.Maximum = xMax.ToOADate()
+        'Update everything
+        Call Me.updateNavigation()
+        Call Me.updateColorband()
 
-            'Update everything
-            Call Me.updateNavigation()
-            Call Me.updateColorband()
-
-            Me.selectionMade = True
-
-        End If
+        Me.selectionMade = True
 
     End Sub
 
@@ -1032,146 +1051,120 @@ Public Class Wave
     ''' <remarks></remarks>
     Private Sub updateDisplayRange()
 
-        Dim displayrange, chartrange As TimeSpan
+        Dim xMin, xMax As DateTime
+        Dim multiplier As Integer
 
-        chartrange = Date.FromOADate(Me.TChart1.Axes.Bottom.Maximum) - Date.FromOADate(Me.TChart1.Axes.Bottom.Minimum)
+        xMin = Date.FromOADate(Me.TChart1.Axes.Bottom.Minimum)
+        xMax = Date.FromOADate(Me.TChart1.Axes.Bottom.Maximum)
 
         'check whether the selected display range corresponds to the chart
-        If Me.ComboBox_DisplayRangeUnit.SelectedItem <> "" Then
-            displayrange = Me.getDisplayRange()
-            If displayrange <> chartrange Then
-                'reset the display range input fields
-                Me.NumericUpDown_DisplayRangeMultiplier.Value = 1
-                Me.ComboBox_DisplayRangeUnit.SelectedItem = ""
-            End If
-        End If
+        multiplier = Me.NumericUpDown_DisplayRangeMultiplier.Value
+        Select Case ComboBox_DisplayRangeUnit.SelectedItem
+            Case "Centuries"
+                If xMin.AddYears(multiplier * 100) = xMax Then
+                    Exit Sub
+                End If
+            Case "Decades"
+                If xMin.AddYears(multiplier * 10) = xMax Then
+                    Exit Sub
+                End If
+            Case "Years"
+                If xMin.AddYears(multiplier) = xMax Then
+                    Exit Sub
+                End If
+            Case "Months"
+                If xMin.AddMonths(multiplier) = xMax Then
+                    Exit Sub
+                End If
+            Case "Weeks"
+                If xMin.AddDays(multiplier * 7) = xMax Then
+                    Exit Sub
+                End If
+            Case "Days"
+                If xMin.AddDays(multiplier) = xMax Then
+                    Exit Sub
+                End If
+            Case "Hours"
+                If xMin.AddHours(multiplier) = xMax Then
+                    Exit Sub
+                End If
+            Case "Minutes"
+                If xMin.AddMinutes(multiplier) = xMax Then
+                    Exit Sub
+                End If
+            Case "Seconds"
+                If xMin.AddSeconds(multiplier) = xMax Then
+                    Exit Sub
+                End If
+            Case Else
+                Exit Sub
+        End Select
+
+        'reset the display range input fields
+        Me.NumericUpDown_DisplayRangeMultiplier.Value = 1
+        Me.ComboBox_DisplayRangeUnit.SelectedItem = ""
 
     End Sub
 
     ''' <summary>
-    ''' Return the display range entered by the user as a TimeSpan
+    ''' Navigate to the left/right
     ''' </summary>
-    ''' <returns>TimeSpan</returns>
-    ''' <remarks>Returns Timespan.Zero if no selection was made</remarks>
-    Private Function getDisplayRange() As TimeSpan
-
-        Dim displayrange As TimeSpan
-        Dim multiplier As Integer
-
-        multiplier = NumericUpDown_DisplayRangeMultiplier.Value
-        Select Case ComboBox_DisplayRangeUnit.SelectedItem
-            Case "Centuries"
-                displayrange = New TimeSpan(multiplier * 36500, 0, 0, 0)
-            Case "Decades"
-                displayrange = New TimeSpan(multiplier * 3650, 0, 0, 0)
-            Case "Years"
-                displayrange = New TimeSpan(multiplier * 365, 0, 0, 0)
-            Case "Months"
-                displayrange = New TimeSpan(multiplier * 31, 0, 0, 0)
-            Case "Weeks"
-                displayrange = New TimeSpan(multiplier * 7, 0, 0, 0)
-            Case "Days"
-                displayrange = New TimeSpan(multiplier, 0, 0, 0)
-            Case "Hours"
-                displayrange = New TimeSpan(multiplier, 0, 0)
-            Case "Minutes"
-                displayrange = New TimeSpan(0, multiplier, 0)
-            Case "Seconds"
-                displayrange = New TimeSpan(0, 0, multiplier)
-            Case Else
-                displayrange = TimeSpan.Zero
-        End Select
-        Return displayrange
-    End Function
-
-    ''' <summary>
-    ''' Returns the navigation increment entered by the user as a TimeSpan
-    ''' </summary>
-    ''' <returns>TimeSpan</returns>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
     ''' <remarks></remarks>
-    Private Function getNavIncrement() As TimeSpan
+    Private Sub Button_NavLeftRight_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button_NavLeft.Click, Button_NavRight.Click
 
         Dim multiplier As Integer
-        Dim increment As TimeSpan
+        Dim xMinOld, xMinNew, xMaxOld, xMaxNew As DateTime
+
+        'get the previous min and max dates
+        xMinOld = Date.FromOADate(Me.TChart1.Axes.Bottom.Minimum)
+        xMaxOld = Date.FromOADate(Me.TChart1.Axes.Bottom.Maximum)
 
         multiplier = Me.NumericUpDown_NavMultiplier.Value
+        'when navigating to the left, negate the multiplier
+        If CType(sender, Button).Name = "Button_NavLeft" Then
+            multiplier *= -1
+        End If
 
         Select Case Me.ComboBox_NavIncrement.SelectedItem
             Case "Centuries"
-                increment = New TimeSpan(multiplier * 36500, 0, 0, 0)
+                xMinNew = xMinOld.AddYears(multiplier * 100)
+                xMaxNew = xMaxOld.AddYears(multiplier * 100)
             Case "Decades"
-                increment = New TimeSpan(multiplier * 3650, 0, 0, 0)
+                xMinNew = xMinOld.AddYears(multiplier * 10)
+                xMaxNew = xMaxOld.AddYears(multiplier * 10)
             Case "Years"
-                increment = New TimeSpan(multiplier * 365, 0, 0, 0)
+                xMinNew = xMinOld.AddYears(multiplier)
+                xMaxNew = xMaxOld.AddYears(multiplier)
             Case "Months"
-                increment = New TimeSpan(multiplier * 31, 0, 0, 0)
+                xMinNew = xMinOld.AddMonths(multiplier)
+                xMaxNew = xMaxOld.AddMonths(multiplier)
             Case "Weeks"
-                increment = New TimeSpan(multiplier * 7, 0, 0, 0)
+                xMinNew = xMinOld.AddDays(multiplier * 7)
+                xMaxNew = xMaxOld.AddDays(multiplier * 7)
             Case "Days"
-                increment = New TimeSpan(multiplier, 0, 0, 0)
+                xMinNew = xMinOld.AddDays(multiplier)
+                xMaxNew = xMaxOld.AddDays(multiplier)
             Case "Hours"
-                increment = New TimeSpan(multiplier, 0, 0)
+                xMinNew = xMinOld.AddHours(multiplier)
+                xMaxNew = xMaxOld.AddHours(multiplier)
             Case "Minutes"
-                increment = New TimeSpan(0, multiplier, 0)
+                xMinNew = xMinOld.AddMinutes(multiplier)
+                xMaxNew = xMaxOld.AddMinutes(multiplier)
             Case "Seconds"
-                increment = New TimeSpan(0, 0, multiplier)
+                xMinNew = xMinOld.AddSeconds(multiplier)
+                xMaxNew = xMaxOld.AddSeconds(multiplier)
             Case Else
-                increment = New TimeSpan(0)
+                xMinNew = xMinOld
+                xMaxNew = xMaxOld
         End Select
-        Return increment
-    End Function
 
-    ''' <summary>
-    ''' Navigate to the right
-    ''' </summary>
-    ''' <param name="sender"></param>
-    ''' <param name="e"></param>
-    ''' <remarks></remarks>
-    Private Sub Button_NavRight_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button_NavRight.Click
-
-        Dim increment As TimeSpan
-        Dim xMinOld, xMinNew, xMaxOld, xMaxNew As DateTime
-
-        increment = Me.getNavIncrement()
-
-        xMinOld = Date.FromOADate(Me.TChart1.Axes.Bottom.Minimum)
-        xMaxOld = Date.FromOADate(Me.TChart1.Axes.Bottom.Maximum)
-
-        xMinNew = xMinOld + increment
-        xMaxNew = xMaxOld + increment
-
+        'update chart
         Me.TChart1.Axes.Bottom.Minimum = xMinNew.ToOADate()
         Me.TChart1.Axes.Bottom.Maximum = xMaxNew.ToOADate()
 
-        Call Me.updateNavigation()
-        Call Me.updateColorband()
-
-        Me.selectionMade = True
-
-    End Sub
-
-    ''' <summary>
-    ''' Navigate to the left
-    ''' </summary>
-    ''' <param name="sender"></param>
-    ''' <param name="e"></param>
-    ''' <remarks></remarks>
-    Private Sub Button_NavLeft_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button_NavLeft.Click
-
-        Dim increment As TimeSpan
-        Dim xMinOld, xMinNew, xMaxOld, xMaxNew As DateTime
-
-        increment = Me.getNavIncrement()
-
-        xMinOld = Date.FromOADate(Me.TChart1.Axes.Bottom.Minimum)
-        xMaxOld = Date.FromOADate(Me.TChart1.Axes.Bottom.Maximum)
-
-        xMinNew = xMinOld - increment
-        xMaxNew = xMaxOld - increment
-
-        Me.TChart1.Axes.Bottom.Minimum = xMinNew.ToOADate()
-        Me.TChart1.Axes.Bottom.Maximum = xMaxNew.ToOADate()
-
+        'update everything else
         Call Me.updateNavigation()
         Call Me.updateColorband()
 
