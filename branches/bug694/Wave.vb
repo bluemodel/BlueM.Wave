@@ -116,6 +116,9 @@ Public Class Wave
         'Log (Singleton) Instanz holen
         Me.myLog = Log.getInstance()
 
+        'Navigation initialisieren
+        Me.ComboBox_NavIncrement.SelectedItem = "Days"
+
     End Sub
 
     'Form wird geladen
