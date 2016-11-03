@@ -880,10 +880,12 @@ Public Class Wave
     End Sub
 
     ''' <summary>
-    ''' Mouse up event on TChart1: restore default cursor
+    ''' Mouse up event on TChart1: in normal mode, restore default cursor
     ''' </summary>
     Private Sub TChart1_MouseUp(ByVal sender As System.Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles TChart1.MouseUp
-        Me.TChart1.Cursor = Cursors.Default
+        If Me.ToolStripButton_NormalMode.Checked Then
+            Me.TChart1.Cursor = Cursors.Default
+        End If
     End Sub
 
 #Region "Navigation"
