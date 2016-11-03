@@ -363,6 +363,8 @@ Public Class Wave
 
 #Region "UI"
 
+#Region "Toolbar"
+
     'Neu
     '***
     Private Sub Neu_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_Neu.Click
@@ -506,36 +508,6 @@ Public Class Wave
             Next
 
         End If
-
-    End Sub
-
-    ''' <summary>
-    ''' Löscht eine Zeitreihe
-    ''' </summary>
-    ''' <param name="title">Titel der Zeitreihe</param>
-    ''' <remarks>Annahme, dass alle Zeitreihentitel eindeutig sind</remarks>
-    Private Sub DeleteZeitreihe(ByVal title As String)
-
-        'Aus Diagramm entfernen
-        For i As Integer = Me.TChart1.Series.Count - 1 To 0 Step -1
-            If (Me.TChart1.Series.Item(i).Title = title) Then
-                Me.TChart1.Series.RemoveAt(i)
-                Me.TChart1.Refresh()
-                Exit For
-            End If
-        Next
-
-        'Aus Übersicht entfernen
-        For i As Integer = Me.TChart2.Series.Count - 1 To 0 Step -1
-            If (Me.TChart2.Series.Item(i).Title = title) Then
-                Me.TChart2.Series.RemoveAt(i)
-                Me.TChart2.Refresh()
-                Exit For
-            End If
-        Next
-
-        'Intern entfernen
-        Me.Zeitreihen.Remove(title)
 
     End Sub
 
@@ -867,26 +839,78 @@ Public Class Wave
     End Sub
 
     ''' <summary>
-    ''' Mouse down event on TChart1: in normal mode, change the cursor to indicate zooming / panning
+    ''' Löscht alle vorhandenen Serien und liest alle importierten Zeitreihen neu ein
     ''' </summary>
-    Private Sub TChart1_MouseDown(ByVal sender As System.Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles TChart1.MouseDown
-        If Me.ToolStripButton_NormalMode.Checked Then
-            If e.Button = Windows.Forms.MouseButtons.Left Then
-                Me.TChart1.Cursor = Cursors.Cross
-            ElseIf e.Button = Windows.Forms.MouseButtons.Right Then
-                Me.TChart1.Cursor = Cursors.SizeWE
-            End If
+    Private Sub RefreshFromFile(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem_Refresh.Click
+
+        Dim Datei As Dateiformat
+        Dim Dateiliste As String
+        Dim Answer As MsgBoxResult
+
+        'Wenn keine Dateien vorhanden, abbrechen
+        If (Me.ImportedFiles.Count = 0) Then
+            MsgBox("Es sind keine Dateien bekannt, die neu eingelesen werden könnten!", MsgBoxStyle.Information, "Dateien neu einlesen")
+            Exit Sub
         End If
+
+        'Dateiliste in Textform generieren
+        Dateiliste = ""
+        For Each Datei In Me.ImportedFiles
+            Dateiliste &= Datei.File & eol
+        Next
+
+        'Dialog anzeigen
+        Answer = MsgBox("Alle Serien löschen und folgende Dateien neu einlesen?" & eol & Dateiliste, MsgBoxStyle.OkCancel, "Dateien neu einlesen")
+
+        If (Answer = MsgBoxResult.Ok) Then
+
+            'Alle Serien löschen
+            Me.TChart1.Series.RemoveAllSeries()
+            Me.TChart2.Series.RemoveAllSeries()
+
+            'Collection zurücksetzen
+            Me.Zeitreihen.Clear()
+
+            'Alle Dateien durchlaufen
+            For Each Datei In Me.ImportedFiles
+                'Jede Datei neu einlesen
+                Call Datei.Read_File()
+                'Alle Zeitreihen der Datei durchlaufen
+                For Each zre As Zeitreihe In Datei.Zeitreihen
+                    'Jede Zeitreihe importieren
+                    Call Me.Import_Series(zre)
+                Next
+            Next
+
+        End If
+
     End Sub
 
     ''' <summary>
-    ''' Mouse up event on TChart1: in normal mode, restore default cursor
+    ''' Info Click
     ''' </summary>
-    Private Sub TChart1_MouseUp(ByVal sender As System.Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles TChart1.MouseUp
-        If Me.ToolStripButton_NormalMode.Checked Then
-            Me.TChart1.Cursor = Cursors.Default
-        End If
+    Private Sub MenuDropdown_Hilfe(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripSplitButton_Help.ButtonClick
+        'keine Funktionalität, nur Dropdown
+        Me.ToolStripSplitButton_Help.ShowDropDown()
     End Sub
+
+    ''' <summary>
+    ''' About Click
+    ''' </summary>
+    Private Sub About(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles AboutToolStripMenuItem.Click
+        Dim about As New AboutBox()
+        Call about.ShowDialog(Me)
+    End Sub
+
+    ''' <summary>
+    ''' Hilfe Click (URL zum Wiki)
+    ''' </summary>
+    ''' <remarks></remarks>
+    Private Sub Hilfe(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles HilfeToolStripMenuItem.Click
+        Process.Start(HelpURL)
+    End Sub
+
+#End Region 'Toolbar
 
 #Region "Navigation"
 
@@ -1155,79 +1179,33 @@ Public Class Wave
 
     End Sub
 
-#End Region
+#End Region 'Navigation
+
+#Region "Cursor"
 
     ''' <summary>
-    ''' Löscht alle vorhandenen Serien und liest alle importierten Zeitreihen neu ein
+    ''' Mouse down event on TChart1: in normal mode, change the cursor to indicate zooming / panning
     ''' </summary>
-    Private Sub RefreshFromFile(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem_Refresh.Click
-
-        Dim Datei As Dateiformat
-        Dim Dateiliste As String
-        Dim Answer As MsgBoxResult
-
-        'Wenn keine Dateien vorhanden, abbrechen
-        If (Me.ImportedFiles.Count = 0) Then
-            MsgBox("Es sind keine Dateien bekannt, die neu eingelesen werden könnten!", MsgBoxStyle.Information, "Dateien neu einlesen")
-            Exit Sub
+    Private Sub TChart1_MouseDown(ByVal sender As System.Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles TChart1.MouseDown
+        If Me.ToolStripButton_NormalMode.Checked Then
+            If e.Button = Windows.Forms.MouseButtons.Left Then
+                Me.TChart1.Cursor = Cursors.Cross
+            ElseIf e.Button = Windows.Forms.MouseButtons.Right Then
+                Me.TChart1.Cursor = Cursors.SizeWE
+            End If
         End If
+    End Sub
 
-        'Dateiliste in Textform generieren
-        Dateiliste = ""
-        For Each Datei In Me.ImportedFiles
-            Dateiliste &= Datei.File & eol
-        Next
-
-        'Dialog anzeigen
-        Answer = MsgBox("Alle Serien löschen und folgende Dateien neu einlesen?" & eol & Dateiliste, MsgBoxStyle.OkCancel, "Dateien neu einlesen")
-
-        If (Answer = MsgBoxResult.Ok) Then
-
-            'Alle Serien löschen
-            Me.TChart1.Series.RemoveAllSeries()
-            Me.TChart2.Series.RemoveAllSeries()
-
-            'Collection zurücksetzen
-            Me.Zeitreihen.Clear()
-
-            'Alle Dateien durchlaufen
-            For Each Datei In Me.ImportedFiles
-                'Jede Datei neu einlesen
-                Call Datei.Read_File()
-                'Alle Zeitreihen der Datei durchlaufen
-                For Each zre As Zeitreihe In Datei.Zeitreihen
-                    'Jede Zeitreihe importieren
-                    Call Me.Import_Series(zre)
-                Next
-            Next
-
+    ''' <summary>
+    ''' Mouse up event on TChart1: in normal mode, restore default cursor
+    ''' </summary>
+    Private Sub TChart1_MouseUp(ByVal sender As System.Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles TChart1.MouseUp
+        If Me.ToolStripButton_NormalMode.Checked Then
+            Me.TChart1.Cursor = Cursors.Default
         End If
-
     End Sub
 
-    ''' <summary>
-    ''' Info Click
-    ''' </summary>
-    Private Sub MenuDropdown_Hilfe(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripSplitButton_Help.ButtonClick
-        'keine Funktionalität, nur Dropdown
-        Me.ToolStripSplitButton_Help.ShowDropDown()
-    End Sub
-
-    ''' <summary>
-    ''' About Click
-    ''' </summary>
-    Private Sub About(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles AboutToolStripMenuItem.Click
-        Dim about As New AboutBox()
-        Call about.ShowDialog(Me)
-    End Sub
-
-    ''' <summary>
-    ''' Hilfe Click (URL zum Wiki)
-    ''' </summary>
-    ''' <remarks></remarks>
-    Private Sub Hilfe(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles HilfeToolStripMenuItem.Click
-        Process.Start(HelpURL)
-    End Sub
+#End Region 'Cursor
 
 #End Region 'UI
 
@@ -1647,6 +1625,36 @@ Public Class Wave
 
         'Charts aktualisieren
         Call Me.UpdateCharts()
+
+    End Sub
+
+    ''' <summary>
+    ''' Löscht eine Zeitreihe
+    ''' </summary>
+    ''' <param name="title">Titel der Zeitreihe</param>
+    ''' <remarks>Annahme, dass alle Zeitreihentitel eindeutig sind</remarks>
+    Private Sub DeleteZeitreihe(ByVal title As String)
+
+        'Aus Diagramm entfernen
+        For i As Integer = Me.TChart1.Series.Count - 1 To 0 Step -1
+            If (Me.TChart1.Series.Item(i).Title = title) Then
+                Me.TChart1.Series.RemoveAt(i)
+                Me.TChart1.Refresh()
+                Exit For
+            End If
+        Next
+
+        'Aus Übersicht entfernen
+        For i As Integer = Me.TChart2.Series.Count - 1 To 0 Step -1
+            If (Me.TChart2.Series.Item(i).Title = title) Then
+                Me.TChart2.Series.RemoveAt(i)
+                Me.TChart2.Refresh()
+                Exit For
+            End If
+        Next
+
+        'Intern entfernen
+        Me.Zeitreihen.Remove(title)
 
     End Sub
 
