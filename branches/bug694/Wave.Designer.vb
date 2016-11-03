@@ -52,6 +52,7 @@ Partial Class Wave
         Me.ToolStripButton_NormalMode = New System.Windows.Forms.ToolStripButton
         Me.ToolStripButton_Zoom = New System.Windows.Forms.ToolStripButton
         Me.ToolStripButton_Pan = New System.Windows.Forms.ToolStripButton
+        Me.ToolStripSeparator3 = New System.Windows.Forms.ToolStripSeparator
         Me.ToolStripButton_ZoomPrevious = New System.Windows.Forms.ToolStripButton
         Me.ToolStripSplitButton_Help = New System.Windows.Forms.ToolStripSplitButton
         Me.HilfeToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem
@@ -74,7 +75,6 @@ Partial Class Wave
         Me.DateTimePicker_NavEnd = New System.Windows.Forms.DateTimePicker
         Me.DateTimePicker_NavStart = New System.Windows.Forms.DateTimePicker
         Me.SaveFileDialog1 = New System.Windows.Forms.SaveFileDialog
-        Me.ToolStripSeparator3 = New System.Windows.Forms.ToolStripSeparator
         ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator
         toolStripSeparator = New System.Windows.Forms.ToolStripSeparator
         ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator
@@ -338,6 +338,11 @@ Partial Class Wave
         Me.ToolStripButton_Pan.Name = "ToolStripButton_Pan"
         Me.ToolStripButton_Pan.Size = New System.Drawing.Size(23, 31)
         Me.ToolStripButton_Pan.Text = "Pan"
+        '
+        'ToolStripSeparator3
+        '
+        Me.ToolStripSeparator3.Name = "ToolStripSeparator3"
+        Me.ToolStripSeparator3.Size = New System.Drawing.Size(6, 34)
         '
         'ToolStripButton_ZoomPrevious
         '
@@ -1065,11 +1070,6 @@ Partial Class Wave
         Me.DateTimePicker_NavStart.ShowUpDown = True
         Me.DateTimePicker_NavStart.Size = New System.Drawing.Size(110, 20)
         Me.DateTimePicker_NavStart.TabIndex = 0
-        '
-        'ToolStripSeparator3
-        '
-        Me.ToolStripSeparator3.Name = "ToolStripSeparator3"
-        Me.ToolStripSeparator3.Size = New System.Drawing.Size(6, 34)
         '
         'Wave
         '
