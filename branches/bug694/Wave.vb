@@ -906,12 +906,12 @@ Public Class Wave
     ''' <param name="e"></param>
     ''' <remarks></remarks>
     Private Sub navigationChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles DateTimePicker_NavStart.ValueChanged, DateTimePicker_NavEnd.ValueChanged
-        If Not Me.navigationValidate(sender, New System.ComponentModel.CancelEventArgs()) Then
+        If Not Me.navigationValidating(sender, New System.ComponentModel.CancelEventArgs()) Then
             'reset navigation to correspond to chart
             Call Me.updateNavigation()
         Else
-            '
-            Call Me.navigationValidated(New Object(), New System.EventArgs())
+            'validation was successful
+            Call Me.navigationValidated(sender, e)
         End If
     End Sub
 
@@ -922,7 +922,7 @@ Public Class Wave
     ''' <param name="e"></param>
     ''' <returns>True if validation is successful</returns>
     ''' <remarks></remarks>
-    Private Function navigationValidate(ByVal sender As System.Object, ByVal e As System.ComponentModel.CancelEventArgs) As Boolean Handles DateTimePicker_NavStart.Validating, DateTimePicker_NavEnd.Validating
+    Private Function navigationValidating(ByVal sender As System.Object, ByVal e As System.ComponentModel.CancelEventArgs) As Boolean Handles DateTimePicker_NavStart.Validating, DateTimePicker_NavEnd.Validating
         If Me.DateTimePicker_NavStart.Value >= Me.DateTimePicker_NavEnd.Value Then
             If CType(sender, DateTimePicker).Name = "DateTimePicker_NavStart" Then
                 'if the start date was set to a value after the end date,
