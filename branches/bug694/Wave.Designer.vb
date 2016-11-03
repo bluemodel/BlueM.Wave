@@ -1028,7 +1028,7 @@ Partial Class Wave
         Me.ComboBox_DisplayRangeUnit.Anchor = System.Windows.Forms.AnchorStyles.Top
         Me.ComboBox_DisplayRangeUnit.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.ComboBox_DisplayRangeUnit.FormattingEnabled = True
-        Me.ComboBox_DisplayRangeUnit.Items.AddRange(New Object() {"Centuries", "Decades", "Years", "Months", "Weeks", "Days", "Hours", "Minutes", "Seconds"})
+        Me.ComboBox_DisplayRangeUnit.Items.AddRange(New Object() {"", "Centuries", "Decades", "Years", "Months", "Weeks", "Days", "Hours", "Minutes", "Seconds"})
         Me.ComboBox_DisplayRangeUnit.Location = New System.Drawing.Point(478, 15)
         Me.ComboBox_DisplayRangeUnit.Name = "ComboBox_DisplayRangeUnit"
         Me.ComboBox_DisplayRangeUnit.Size = New System.Drawing.Size(81, 21)
