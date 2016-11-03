@@ -265,15 +265,27 @@ Public Class Wave
 
     End Sub
 
-    'TChart1 Scrolled, Zoomed, ZoomUndone
-    '************************************
-    Private Sub TChart1_Scrolled(ByVal sender As Object, ByVal e As System.EventArgs) Handles TChart1.Scroll, TChart1.Zoomed, TChart1.UndoneZoom
+    ''' <summary>
+    ''' Handles TChart1 events Scrolled, Zoomed, UndoneZoom
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    ''' <remarks></remarks>
+    Private Sub TChart1_ZoomChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles TChart1.Scroll, TChart1.Zoomed, TChart1.UndoneZoom
         If (Me.TChart1.Axes.Bottom.Minimum <> Me.TChart1.Axes.Bottom.Maximum) Then
-            Me.colorBand1.Start = Me.TChart1.Axes.Bottom.Minimum
-            Me.colorBand1.End = Me.TChart1.Axes.Bottom.Maximum
-            Me.selectionMade = True
+            Call Me.updateColorband()
             Call Me.updateNavigation()
+            Me.selectionMade = True
         End If
+    End Sub
+
+    ''' <summary>
+    ''' Updates the colorband to correspond to the currently displayed timespan of the main chart
+    ''' </summary>
+    ''' <remarks></remarks>
+    Private Sub updateColorband()
+        Me.colorBand1.Start = Me.TChart1.Axes.Bottom.Minimum
+        Me.colorBand1.End = Me.TChart1.Axes.Bottom.Maximum
     End Sub
 
     'ColorBand Resized
@@ -288,8 +300,8 @@ Public Class Wave
             'set new min/max values for the bottom axis of the main chart
             Me.TChart1.Axes.Bottom.Minimum = Me.colorBand1.Start
             Me.TChart1.Axes.Bottom.Maximum = Me.colorBand1.End
-            Me.selectionMade = True
             Call Me.updateNavigation()
+            Me.selectionMade = True
         End If
     End Sub
 
@@ -935,9 +947,12 @@ Public Class Wave
     ''' <remarks></remarks>
     Private Sub navigationValidated(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles DateTimePicker_NavStart.Validated, DateTimePicker_NavEnd.Validated
         If Not Me.isInitializing Then
+            'Adjust the display range of the main chart
             Me.TChart1.Axes.Bottom.Minimum = Me.DateTimePicker_NavStart.Value.ToOADate()
             Me.TChart1.Axes.Bottom.Maximum = Me.DateTimePicker_NavEnd.Value.ToOADate()
-            Call Me.TChart1_Scrolled(New Object(), New EventArgs())
+            'Update the colorband
+            Call Me.updateColorband()
+            Me.selectionMade = True
         End If
     End Sub
 
@@ -985,7 +1000,10 @@ Public Class Wave
         Me.TChart1.Axes.Bottom.Maximum = xMax.ToOADate()
 
         'Update everything else
-        Call Me.TChart1_Scrolled(New Object(), New System.EventArgs())
+        Call Me.updateNavigation()
+        Call Me.updateColorband()
+
+        Me.selectionMade = True
 
     End Sub
 
@@ -1048,7 +1066,10 @@ Public Class Wave
         Me.TChart1.Axes.Bottom.Minimum = xMinNew.ToOADate()
         Me.TChart1.Axes.Bottom.Maximum = xMaxNew.ToOADate()
 
-        Call Me.TChart1_Scrolled(New Object(), New System.EventArgs())
+        Call Me.updateNavigation()
+        Call Me.updateColorband()
+
+        Me.selectionMade = True
 
     End Sub
 
@@ -1074,7 +1095,10 @@ Public Class Wave
         Me.TChart1.Axes.Bottom.Minimum = xMinNew.ToOADate()
         Me.TChart1.Axes.Bottom.Maximum = xMaxNew.ToOADate()
 
-        Call Me.TChart1_Scrolled(New Object(), New System.EventArgs())
+        Call Me.updateNavigation()
+        Call Me.updateColorband()
+
+        Me.selectionMade = True
 
     End Sub
 
