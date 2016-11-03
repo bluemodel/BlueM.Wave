@@ -279,9 +279,13 @@ Public Class Wave
     'ColorBand Resized
     '*****************
     Private Sub TChart2_MouseUp(ByVal sender As System.Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles TChart2.MouseUp
-        If (Me.colorBand1.Start <> Me.colorBand1.End) Then
-            'TODO: Add the current zoom to the zoom history: Me.TChart1.Zoom.HistorySteps.Add(XXX)
-            'set new min/max values for the bottom axis of TChart1
+        If (Me.colorBand1.Start > Me.colorBand1.End) Then
+            'invalid selection - reset the colorband to the timespan of the main chart
+            Me.colorBand1.Start = Me.TChart1.Axes.Bottom.Minimum
+            Me.colorBand1.End = Me.TChart1.Axes.Bottom.Maximum
+        Else
+            'TODO: Add the previous zoom to the zoom history: Me.TChart1.Zoom.HistorySteps.Add(XXX)
+            'set new min/max values for the bottom axis of the main chart
             Me.TChart1.Axes.Bottom.Minimum = Me.colorBand1.Start
             Me.TChart1.Axes.Bottom.Maximum = Me.colorBand1.End
             Me.selectionMade = True
