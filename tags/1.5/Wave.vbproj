@@ -1,0 +1,380 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{BCD1BBE3-5AB2-4C3F-AC12-43EB977C6F6F}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <StartupObject>IHWB.Wave.My.MyApplication</StartupObject>
+    <RootNamespace>IHWB.Wave</RootNamespace>
+    <AssemblyName>Wave</AssemblyName>
+    <MyType>WindowsForms</MyType>
+    <ApplicationIcon>Resources\Wave.ico</ApplicationIcon>
+    <GenerateManifests>false</GenerateManifests>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <DocumentationFile>Wave.xml</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <DefineTrace>true</DefineTrace>
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <Optimize>true</Optimize>
+    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+    <DebugType>None</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <DocumentationFile>Wave.xml</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <DocumentationFile>Wave.xml</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
+    <DefineTrace>true</DefineTrace>
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <Optimize>true</Optimize>
+    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+    <DebugType>None</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <DocumentationFile>Wave.xml</DocumentationFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="modelEAU.SWMM.DllAdapter, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Resources\modelEAU.SWMM.DllAdapter.dll</HintPath>
+    </Reference>
+    <Reference Include="SydroZreNet, Version=2.0.0.1, Culture=neutral, PublicKeyToken=18f53cfa0aa5cfa4, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Resources\SydroZreNet.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="TeeChart, Version=4.1.2011.4192, Culture=neutral, PublicKeyToken=9c8126276c77bdb7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Import Include="Microsoft.VisualBasic" />
+    <Import Include="System" />
+    <Import Include="System.Collections" />
+    <Import Include="System.Collections.Generic" />
+    <Import Include="System.Drawing" />
+    <Import Include="System.Diagnostics" />
+    <Import Include="System.Linq" />
+    <Import Include="System.Windows.Forms" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AboutBox.Designer.vb">
+      <DependentUpon>AboutBox.vb</DependentUpon>
+    </Compile>
+    <Compile Include="AboutBox.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Analysis\Analysis.vb" />
+    <Compile Include="Analysis\AnalysisHelper.vb" />
+    <Compile Include="Analysis\Gegenueberstellung.vb" />
+    <Compile Include="Analysis\Gegenueberstellung_Dialog.Designer.vb">
+      <DependentUpon>Gegenueberstellung_Dialog.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Analysis\Gegenueberstellung_Dialog.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Analysis\GoodnessOfFit_Dialog.Designer.vb">
+      <DependentUpon>GoodnessOfFit_Dialog.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Analysis\GoodnessOfFit_Dialog.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Analysis\Statistik.vb" />
+    <Compile Include="Analysis\Doppelsummenanalyse.vb" />
+    <Compile Include="Analysis\Monatsauswertung.vb" />
+    <Compile Include="Analysis\AnalysisFactory.vb" />
+    <Compile Include="Analysis\AnalysisDialog.Designer.vb">
+      <DependentUpon>AnalysisDialog.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Analysis\AnalysisDialog.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Analysis\GoodnessOfFit.vb" />
+    <Compile Include="CutDialog.Designer.vb">
+      <DependentUpon>CutDialog.vb</DependentUpon>
+    </Compile>
+    <Compile Include="CutDialog.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Importdialoge\ImportDiag.Designer.vb">
+      <DependentUpon>ImportDiag.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Importdialoge\ImportDiag.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <None Include="Importdialoge\ImportFromDatabaseDialog.Designer.vb">
+      <DependentUpon>ImportFromDatabaseDialog.vb</DependentUpon>
+    </None>
+    <None Include="Importdialoge\ImportFromDatabaseDialog.vb" />
+    <Compile Include="Log.vb" />
+    <Compile Include="My Project\ApplicationEvents.vb" />
+    <Compile Include="My Project\Resources.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="SeriesEditorDialog.Designer.vb">
+      <DependentUpon>SeriesEditorDialog.vb</DependentUpon>
+    </Compile>
+    <Compile Include="SeriesEditorDialog.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ExportDiag.Designer.vb">
+      <DependentUpon>ExportDiag.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ExportDiag.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Konstanten.vb" />
+    <Compile Include="LogWindow.Designer.vb">
+      <DependentUpon>LogWindow.vb</DependentUpon>
+    </Compile>
+    <Compile Include="LogWindow.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="My Project\AssemblyInfo.vb" />
+    <Compile Include="My Project\Application.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Application.myapp</DependentUpon>
+    </Compile>
+    <Compile Include="My Project\Settings.Designer.vb">
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Include="Splashscreen\SplashScreen_Leitfaden.Designer.vb">
+      <DependentUpon>SplashScreen_Leitfaden.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Splashscreen\SplashScreen_Leitfaden.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Wave.Designer.vb">
+      <DependentUpon>Wave.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Wave.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Zeichen.vb" />
+    <Compile Include="Zeitreihe.vb" />
+    <Compile Include="ZeitreihenFormate\ASC.vb" />
+    <None Include="ZeitreihenFormate\BlueMOrbDataSet.Designer.vb">
+      <DependentUpon>BlueMOrbDataSet.vb</DependentUpon>
+    </None>
+    <None Include="ZeitreihenFormate\BlueMOrbDataSet.vb">
+      <DependentUpon>BlueMOrbDataSet.xsd</DependentUpon>
+    </None>
+    <Compile Include="ZeitreihenFormate\BIN.vb" />
+    <Compile Include="ZeitreihenFormate\CSV.vb" />
+    <Compile Include="ZeitreihenFormate\Dateifactory.vb" />
+    <Compile Include="ZeitreihenFormate\Dateiformat.vb" />
+    <Compile Include="ZeitreihenFormate\DWD_Stationswahl.Designer.vb">
+      <DependentUpon>DWD_Stationswahl.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ZeitreihenFormate\DWD_Stationswahl.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ZeitreihenFormate\DWD_T_L.vb" />
+    <Compile Include="ZeitreihenFormate\UVF.vb" />
+    <Compile Include="ZeitreihenFormate\WEL_GISMO.vb" />
+    <Compile Include="ZeitreihenFormate\HYDRO_AS-2D.vb" />
+    <Compile Include="ZeitreihenFormate\HystemExtran_REG.vb" />
+    <Compile Include="ZeitreihenFormate\HystemExtran_WEL.vb" />
+    <Compile Include="ZeitreihenFormate\REG.vb" />
+    <Compile Include="ZeitreihenFormate\SMB.vb" />
+    <Compile Include="ZeitreihenFormate\REG_SMUSI.vb" />
+    <Compile Include="ZeitreihenFormate\SWMM_DAT_MASS.vb" />
+    <Compile Include="ZeitreihenFormate\SWMM_DAT_TIME.vb" />
+    <Compile Include="ZeitreihenFormate\SWMM_OUT.vb" />
+    <Compile Include="ZeitreihenFormate\SWMM_TXT.vb" />
+    <Compile Include="ZeitreihenFormate\WEL.vb" />
+    <None Include="ZeitreihenFormate\ZeitreihenDatabase.vb" />
+    <Compile Include="ZeitreihenFormate\WEL_TALSIM.vb" />
+    <Compile Include="ZeitreihenFormate\ZeitreihenDatei.vb" />
+    <Compile Include="ZeitreihenFormate\ZeitreihenExtern.vb" />
+    <Compile Include="ZeitreihenFormate\ZRE.vb" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="My Project\Resources.resx">
+      <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
+      <CustomToolNamespace>My.Resources</CustomToolNamespace>
+      <SubType>Designer</SubType>
+      <LastGenOutput>Resources1.Designer.vb</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Wave.resx">
+      <DependentUpon>Wave.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="My Project\Application.myapp">
+      <Generator>MyApplicationCodeGenerator</Generator>
+      <LastGenOutput>Application.Designer.vb</LastGenOutput>
+    </None>
+    <None Include="My Project\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.vb</LastGenOutput>
+      <CustomToolNamespace>My</CustomToolNamespace>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="AboutBox.resx">
+      <DependentUpon>AboutBox.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Analysis\AnalysisDialog.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>AnalysisDialog.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CutDialog.resx">
+      <DependentUpon>CutDialog.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SeriesEditorDialog.resx">
+      <DependentUpon>SeriesEditorDialog.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ExportDiag.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>ExportDiag.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="LogWindow.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>LogWindow.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Wave.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\application_split.png" />
+    <None Include="Resources\TeeChart.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\calculator.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\chart_line_add.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\chart_line_edit.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\page_paste.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\cut.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\chart_curve_edit.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="Resources\BlueM.png" />
+    <None Include="Resources\error.png" />
+    <None Include="Resources\help.png" />
+    <None Include="Resources\tick.png" />
+    <None Include="Resources\chart_curve.png" />
+    <None Include="Resources\BlueM_icon.png" />
+    <Content Include="BlueM.Wave_Release-notes.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="LICENSE.TXT">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\chart_pie.png" />
+    <Content Include="Resources\color_wheel.png" />
+    <Content Include="Resources\libifcoremd.dll" />
+    <Content Include="Resources\libifportmd.dll" />
+    <Content Include="Resources\libmmd.dll" />
+    <Content Include="Resources\modelEAU.SWMM.DllAdapter.dll" />
+    <None Include="Resources\pan.png" />
+    <Content Include="Resources\SydroZreI.dll" />
+    <Content Include="Resources\SydroZreNet.dll" />
+    <Content Include="Resources\SydroZreNet.xml" />
+    <None Include="Resources\zoom.png" />
+    <None Include="Resources\zoom_previous.png" />
+    <None Include="Resources\page_white_go.png" />
+    <None Include="Resources\arrow_refresh.png" />
+    <EmbeddedResource Include="Analysis\Gegenueberstellung_Dialog.resx">
+      <DependentUpon>Gegenueberstellung_Dialog.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Analysis\GoodnessOfFit_Dialog.resx">
+      <DependentUpon>GoodnessOfFit_Dialog.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Importdialoge\ImportDiag.resx">
+      <DependentUpon>ImportDiag.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <None Include="Importdialoge\ImportFromDatabaseDialog.resx">
+      <DependentUpon>ImportFromDatabaseDialog.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </None>
+    <EmbeddedResource Include="My Project\licenses.licx" />
+    <EmbeddedResource Include="Resources\log.ico" />
+    <EmbeddedResource Include="Splashscreen\SplashScreen_Leitfaden.resx">
+      <DependentUpon>SplashScreen_Leitfaden.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ZeitreihenFormate\DWD_Stationswahl.resx">
+      <DependentUpon>DWD_Stationswahl.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <None Include="Resources\script.png" />
+    <None Include="ZeitreihenFormate\BlueMOrbDataSet.xsc">
+      <DependentUpon>BlueMOrbDataSet.xsd</DependentUpon>
+    </None>
+    <None Include="ZeitreihenFormate\BlueMOrbDataSet.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="ZeitreihenFormate\BlueMOrbDataSet.xss">
+      <DependentUpon>BlueMOrbDataSet.xsd</DependentUpon>
+    </None>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.VisualBasic.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <PropertyGroup>
+    <PostBuildEvent>copy $(ProjectDir)Resources\SydroZreI.dll $(TargetDir)SydroZreI.dll
+copy $(ProjectDir)Resources\libifcoremd.dll $(TargetDir)libifcoremd.dll
+copy $(ProjectDir)Resources\libifportmd.dll $(TargetDir)libifportmd.dll
+copy $(ProjectDir)Resources\libmmd.dll $(TargetDir)libmmd.dll</PostBuildEvent>
+  </PropertyGroup>
+</Project>
