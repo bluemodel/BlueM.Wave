@@ -314,14 +314,22 @@
     </Content>
     <Content Include="Resources\chart_pie.png" />
     <Content Include="Resources\color_wheel.png" />
+    <Content Include="Resources\controller.png" />
+    <Content Include="Resources\cursor.png" />
+    <EmbeddedResource Include="Resources\cursor_pan.cur" />
+    <EmbeddedResource Include="Resources\cursor_zoom.cur" />
+    <EmbeddedResource Include="Resources\cursor_pan_hold.cur" />
     <Content Include="Resources\libifcoremd.dll" />
     <Content Include="Resources\libifportmd.dll" />
     <Content Include="Resources\libmmd.dll" />
     <Content Include="Resources\modelEAU.SWMM.DllAdapter.dll" />
     <None Include="Resources\pan.png" />
+    <Content Include="Resources\navigate_back.png" />
+    <Content Include="Resources\navigate_forward.png" />
     <Content Include="Resources\SydroZreI.dll" />
     <Content Include="Resources\SydroZreNet.dll" />
     <Content Include="Resources\SydroZreNet.xml" />
+    <Content Include="Resources\zoom_world.png" />
     <None Include="Resources\zoom.png" />
     <None Include="Resources\zoom_previous.png" />
     <None Include="Resources\page_white_go.png" />

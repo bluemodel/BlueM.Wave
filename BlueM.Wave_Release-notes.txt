@@ -1,6 +1,16 @@
 ﻿===============================================================
 Wave Release Notes
 ===============================================================
+Version 1.6
+-----------
+NEW:
+* Significantly improved the possibilities for viewing and navigating time series:
+  - New toolbar buttons for zooming, panning, zoom undo and zoom all
+  - Start and end date for display can be set using date/time pickers
+  - Display range can be set to exact date/time ranges using a simple interface
+  - Buttons for navigating in time using a user-specified time increment
+  - All changes to the viewport are recorded in a history that can be undone
+
 Version 1.5
 -----------
 NEW:
