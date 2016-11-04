@@ -699,6 +699,7 @@ Public Class Wave
                     Dim Wave2 As New Wave()
                     Wave2.Text = "Analyse-Ergebnis"
                     Wave2.‹bersicht_Toggle(False)
+                    Wave2.navigationToggle(False)
                     Wave2.TChart1.Chart = oAnalysis.getResultChart()
                     Call Wave2.Show()
                 End If
@@ -759,7 +760,6 @@ Public Class Wave
     End Sub
 
     Private Sub ‹bersicht_Toggle(ByVal show‹bersicht As Boolean)
-
         If (show‹bersicht) Then
             Me.SplitContainer1.Panel1Collapsed = False
             Me.ToolStripButton_‹bersicht.Checked = True
@@ -767,7 +767,13 @@ Public Class Wave
             Me.SplitContainer1.Panel1Collapsed = True
             Me.ToolStripButton_‹bersicht.Checked = False
         End If
+    End Sub
 
+    ''' <summary>
+    ''' Show Navigation button clicked
+    ''' </summary>
+    Private Sub ShowNavigation_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_ShowNavigation.Click
+        Call Me.navigationToggle(Me.ToolStripButton_ShowNavigation.Checked)
     End Sub
 
     ''' <summary>
@@ -952,6 +958,22 @@ Public Class Wave
 #End Region 'Toolbar
 
 #Region "Navigation"
+
+    ''' <summary>
+    ''' Toggle visibility of the navigation
+    ''' </summary>
+    ''' <param name="showNavigation">if True, the navigation is shown, otherwise it is hidden</param>
+    Private Sub navigationToggle(ByVal showNavigation As Boolean)
+        If showNavigation Then
+            Me.TableLayoutPanel1.RowStyles(0).Height = 38
+            Me.TableLayoutPanel1.RowStyles(2).Height = 36
+            Me.ToolStripButton_ShowNavigation.Checked = True
+        Else
+            Me.TableLayoutPanel1.RowStyles(0).Height = 0
+            Me.TableLayoutPanel1.RowStyles(2).Height = 0
+            Me.ToolStripButton_ShowNavigation.Checked = False
+        End If
+    End Sub
 
     ''' <summary>
     ''' Update the navigation based on the currently displayed timespan of the main chart
@@ -1151,12 +1173,12 @@ Public Class Wave
     End Sub
 
     ''' <summary>
-    ''' Navigate to the left/right
+    ''' Navigate forward/back
     ''' </summary>
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
     ''' <remarks></remarks>
-    Private Sub Button_NavLeftRight_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button_NavLeft.Click, Button_NavRight.Click
+    Private Sub Button_NavForwardBack_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button_NavBack.Click, Button_NavForward.Click
 
         Dim multiplier As Integer
         Dim xMinOld, xMinNew, xMaxOld, xMaxNew As DateTime
@@ -1166,8 +1188,8 @@ Public Class Wave
         xMaxOld = Date.FromOADate(Me.TChart1.Axes.Bottom.Maximum)
 
         multiplier = Me.NumericUpDown_NavMultiplier.Value
-        'when navigating to the left, negate the multiplier
-        If CType(sender, Button).Name = "Button_NavLeft" Then
+        'when navigating backwards, negate the multiplier
+        If CType(sender, Button).Name = "Button_NavBack" Then
             multiplier *= -1
         End If
 

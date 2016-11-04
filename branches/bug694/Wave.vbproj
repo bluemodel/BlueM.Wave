@@ -314,8 +314,12 @@
     </Content>
     <Content Include="Resources\chart_pie.png" />
     <Content Include="Resources\color_wheel.png" />
+    <Content Include="Resources\controller.png" />
+    <Content Include="Resources\cursor.png" />
     <Content Include="Resources\modelEAU.SWMM.DllAdapter.dll" />
     <None Include="Resources\pan.png" />
+    <Content Include="Resources\navigate_back.png" />
+    <Content Include="Resources\navigate_forward.png" />
     <Content Include="Resources\SydroZreI.dll" />
     <Content Include="Resources\SydroZreNet.dll" />
     <Content Include="Resources\SydroZreNet.xml" />
