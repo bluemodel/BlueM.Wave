@@ -36,6 +36,12 @@ Public Class Wave
     'Eigenschaften
     '#############
 
+    ''' <summary>
+    ''' Flag for preventing unintended feedback loops in the UI. Default is False, can be temporarily set to True.
+    ''' </summary>
+    ''' <remarks></remarks>
+    Private isInitializing As Boolean
+
     'Log-Fenster
     Private myLogWindow As LogWindow
 
@@ -73,6 +79,11 @@ Public Class Wave
     Private MyAxes1, MyAxes2 As Dictionary(Of String, Steema.TeeChart.Axis)
     Private WithEvents ChartListBox1 As Steema.TeeChart.ChartListBox
 
+    'Cursors
+    Friend cursor_pan As Cursor
+    Friend cursor_pan_hold As Cursor
+    Friend cursor_zoom As Cursor
+
     Private Const HelpURL As String = "http://wiki.bluemodel.org/index.php/Wave"
 
     'Methoden
@@ -107,6 +118,14 @@ Public Class Wave
 
         'Log (Singleton) Instanz holen
         Me.myLog = Log.getInstance()
+
+        'Navigation initialisieren
+        Me.ComboBox_NavIncrement.SelectedItem = "Days"
+
+        'Instantiate cursors
+        Me.cursor_pan = New Cursor(Me.GetType(), "cursor_pan.cur")
+        Me.cursor_pan_hold = New Cursor(Me.GetType(), "cursor_pan_hold.cur")
+        Me.cursor_zoom = New Cursor(Me.GetType(), "cursor_zoom.cur")
 
     End Sub
 
@@ -168,7 +187,7 @@ Public Class Wave
 
         Me.TChart2.Clear()
         Call Wave.formatChart(Me.TChart2.Chart)
-        Me.TChart2.Panel.Brush.Color = Color.FromArgb(239,239,239)
+        Me.TChart2.Panel.Brush.Color = Color.FromArgb(239, 239, 239)
         Me.TChart2.Walls.Back.Color = Color.FromArgb(239, 239, 239)
         Me.TChart2.Header.Visible = False
         Me.TChart2.Legend.Visible = False
@@ -180,6 +199,7 @@ Public Class Wave
         'Hauptdiagramm darf nur horizontal gescrolled oder gezoomt werden
         Me.TChart1.Zoom.Direction = Steema.TeeChart.ZoomDirections.Horizontal
         Me.TChart1.Zoom.History = True
+        Me.TChart1.Zoom.Animated = True
         Me.TChart1.Panning.Allow = Steema.TeeChart.ScrollModes.Horizontal
 
         'Achsen
@@ -254,24 +274,45 @@ Public Class Wave
 
     End Sub
 
-    'TChart1 Scrolled, Zoomed, ZoomUndone
-    '************************************
-    Private Sub TChart1_Scrolled(ByVal sender As Object, ByVal e As System.EventArgs) Handles TChart1.Scroll, TChart1.Zoomed, TChart1.UndoneZoom
+    ''' <summary>
+    ''' Handles TChart1 events Scrolled, Zoomed, UndoneZoom
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    ''' <remarks></remarks>
+    Private Sub TChart1_ZoomChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles TChart1.Scroll, TChart1.Zoomed, TChart1.UndoneZoom
         If (Me.TChart1.Axes.Bottom.Minimum <> Me.TChart1.Axes.Bottom.Maximum) Then
-            Me.colorBand1.Start = Me.TChart1.Axes.Bottom.Minimum
-            Me.colorBand1.End = Me.TChart1.Axes.Bottom.Maximum
+            'Update everything
+            Call Me.updateColorband()
+            Call Me.updateNavigation()
             Me.selectionMade = True
         End If
+    End Sub
+
+    ''' <summary>
+    ''' Updates the colorband to correspond to the currently displayed timespan of the main chart
+    ''' </summary>
+    ''' <remarks></remarks>
+    Private Sub updateColorband()
+        Me.colorBand1.Start = Me.TChart1.Axes.Bottom.Minimum
+        Me.colorBand1.End = Me.TChart1.Axes.Bottom.Maximum
     End Sub
 
     'ColorBand Resized
     '*****************
     Private Sub TChart2_MouseUp(ByVal sender As System.Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles TChart2.MouseUp
-        If (Me.colorBand1.Start <> Me.colorBand1.End) Then
-            'TODO: Add the current zoom to the zoom history: Me.TChart1.Zoom.HistorySteps.Add(XXX)
-            'set new min/max values for the bottom axis of TChart1
+        If (Me.colorBand1.Start > Me.colorBand1.End) Then
+            'invalid selection - reset the colorband to the timespan of the main chart
+            Me.colorBand1.Start = Me.TChart1.Axes.Bottom.Minimum
+            Me.colorBand1.End = Me.TChart1.Axes.Bottom.Maximum
+        Else
+            'save the current zoom snapshot
+            Call Me.saveZoomSnapshot()
+            'set new min/max values for the bottom axis of the main chart
             Me.TChart1.Axes.Bottom.Minimum = Me.colorBand1.Start
             Me.TChart1.Axes.Bottom.Maximum = Me.colorBand1.End
+            'Update navigation
+            Call Me.updateNavigation()
             Me.selectionMade = True
         End If
     End Sub
@@ -328,9 +369,28 @@ Public Class Wave
 
     End Sub
 
+    ''' <summary>
+    ''' Add the current zoom to the zoom history
+    ''' </summary>
+    Private Sub saveZoomSnapshot()
+        Dim snapshot As New Steema.TeeChart.ZoomSnapshot()
+        snapshot.AxesMinMax = New Double() {Me.TChart1.Axes.Left.Minimum, _
+                                            Me.TChart1.Axes.Left.Maximum, _
+                                            Me.TChart1.Axes.Top.Minimum, _
+                                            Me.TChart1.Axes.Top.Maximum, _
+                                            Me.TChart1.Axes.Right.Minimum, _
+                                            Me.TChart1.Axes.Right.Maximum, _
+                                            Me.TChart1.Axes.Bottom.Minimum, _
+                                            Me.TChart1.Axes.Bottom.Maximum}
+        Me.TChart1.Zoom.HistorySteps.Add(snapshot)
+        'TODO: perhaps remove some HistorySteps if there are too many?
+    End Sub
+
 #End Region 'Chart behavior'
 
 #Region "UI"
+
+#Region "Toolbar"
 
     'Neu
     '***
@@ -475,36 +535,6 @@ Public Class Wave
             Next
 
         End If
-
-    End Sub
-
-    ''' <summary>
-    ''' Löscht eine Zeitreihe
-    ''' </summary>
-    ''' <param name="title">Titel der Zeitreihe</param>
-    ''' <remarks>Annahme, dass alle Zeitreihentitel eindeutig sind</remarks>
-    Private Sub DeleteZeitreihe(ByVal title As String)
-
-        'Aus Diagramm entfernen
-        For i As Integer = Me.TChart1.Series.Count - 1 To 0 Step -1
-            If (Me.TChart1.Series.Item(i).Title = title) Then
-                Me.TChart1.Series.RemoveAt(i)
-                Me.TChart1.Refresh()
-                Exit For
-            End If
-        Next
-
-        'Aus Übersicht entfernen
-        For i As Integer = Me.TChart2.Series.Count - 1 To 0 Step -1
-            If (Me.TChart2.Series.Item(i).Title = title) Then
-                Me.TChart2.Series.RemoveAt(i)
-                Me.TChart2.Refresh()
-                Exit For
-            End If
-        Next
-
-        'Intern entfernen
-        Me.Zeitreihen.Remove(title)
 
     End Sub
 
@@ -674,6 +704,7 @@ Public Class Wave
                     Dim Wave2 As New Wave()
                     Wave2.Text = "Analyse-Ergebnis"
                     Wave2.Übersicht_Toggle(False)
+                    Wave2.navigationToggle(False)
                     Wave2.TChart1.Chart = oAnalysis.getResultChart()
                     Call Wave2.Show()
                 End If
@@ -734,7 +765,6 @@ Public Class Wave
     End Sub
 
     Private Sub Übersicht_Toggle(ByVal showÜbersicht As Boolean)
-
         If (showÜbersicht) Then
             Me.SplitContainer1.Panel1Collapsed = False
             Me.ToolStripButton_Übersicht.Checked = True
@@ -742,7 +772,13 @@ Public Class Wave
             Me.SplitContainer1.Panel1Collapsed = True
             Me.ToolStripButton_Übersicht.Checked = False
         End If
+    End Sub
 
+    ''' <summary>
+    ''' Show Navigation button clicked
+    ''' </summary>
+    Private Sub ShowNavigation_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_ShowNavigation.Click
+        Call Me.navigationToggle(Me.ToolStripButton_ShowNavigation.Checked)
     End Sub
 
     ''' <summary>
@@ -751,7 +787,7 @@ Public Class Wave
     Private Sub ToolStripButton_Zoom_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_Zoom.Click
         If Me.ToolStripButton_Zoom.Checked Then
             'enable zooming
-            Me.TChart1.Cursor = Cursors.Cross
+            Me.TChart1.Cursor = Me.cursor_zoom
             Me.TChart1.Zoom.Allow = True
             Me.TChart1.Zoom.Direction = Steema.TeeChart.ZoomDirections.Horizontal
             Me.TChart1.Zoom.History = True 'number of steps is 8, don't know how to change that
@@ -778,7 +814,7 @@ Public Class Wave
     Private Sub ToolStripButton_Pan_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_Pan.Click
         If Me.ToolStripButton_Pan.Checked Then
             'enable panning
-            Me.TChart1.Cursor = Cursors.SizeWE
+            Me.TChart1.Cursor = Me.cursor_pan
             Me.TChart1.Panning.Allow = Steema.TeeChart.ScrollModes.Horizontal
             Me.TChart1.Panning.MouseButton = Windows.Forms.MouseButtons.Left
             'uncheck the other buttons
@@ -824,27 +860,32 @@ Public Class Wave
     ''' Zoom previous button clicked
     ''' </summary>
     Private Sub ToolStripButton_ZoomPrevious_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_ZoomPrevious.Click
-        Me.TChart1.Zoom.Undo()
-    End Sub
-
-    ''' <summary>
-    ''' Mouse down event on TChart1: in normal mode, change the cursor to indicate zooming / panning
-    ''' </summary>
-    Private Sub TChart1_MouseDown(ByVal sender As System.Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles TChart1.MouseDown
-        If Me.ToolStripButton_NormalMode.Checked Then
-            If e.Button = Windows.Forms.MouseButtons.Left Then
-                Me.TChart1.Cursor = Cursors.Cross
-            ElseIf e.Button = Windows.Forms.MouseButtons.Right Then
-                Me.TChart1.Cursor = Cursors.SizeWE
-            End If
+        'Me.TChart1.Zoom.Undo() 'This (sometimes) reverts to the full zoom without using history
+        If Me.TChart1.Zoom.HistorySteps.Count > 0 Then
+            Dim snapshot As Steema.TeeChart.ZoomSnapshot
+            snapshot = Me.TChart1.Zoom.HistorySteps.Last()
+            Me.TChart1.Axes.Bottom.Minimum = snapshot.AxesMinMax(6)
+            Me.TChart1.Axes.Bottom.Maximum = snapshot.AxesMinMax(7)
+            Me.TChart1.Zoom.HistorySteps.RemoveAt(Me.TChart1.Zoom.HistorySteps.Count - 1)
+            'Update everything
+            Call Me.updateColorband()
+            Call Me.updateNavigation()
+        Else
+            'no history present, reset the charts
+            Me.selectionMade = False
+            Call Me.UpdateCharts()
         End If
     End Sub
 
     ''' <summary>
-    ''' Mouse up event on TChart1: restore default cursor
+    ''' Zoom All button clicked
     ''' </summary>
-    Private Sub TChart1_MouseUp(ByVal sender As System.Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles TChart1.MouseUp
-        Me.TChart1.Cursor = Cursors.Default
+    Private Sub ToolStripButton_ZoomAll_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_ZoomAll.Click
+        'save the current zoom snapshot
+        Call Me.saveZoomSnapshot()
+        'reset the charts
+        Me.selectionMade = False
+        Call Me.UpdateCharts()
     End Sub
 
     ''' <summary>
@@ -918,6 +959,327 @@ Public Class Wave
     Private Sub Hilfe(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles HilfeToolStripMenuItem.Click
         Process.Start(HelpURL)
     End Sub
+
+#End Region 'Toolbar
+
+#Region "Navigation"
+
+    ''' <summary>
+    ''' Toggle visibility of the navigation
+    ''' </summary>
+    ''' <param name="showNavigation">if True, the navigation is shown, otherwise it is hidden</param>
+    Private Sub navigationToggle(ByVal showNavigation As Boolean)
+        If showNavigation Then
+            Me.TableLayoutPanel1.RowStyles(0).Height = 38
+            Me.TableLayoutPanel1.RowStyles(2).Height = 36
+            Me.ToolStripButton_ShowNavigation.Checked = True
+        Else
+            Me.TableLayoutPanel1.RowStyles(0).Height = 0
+            Me.TableLayoutPanel1.RowStyles(2).Height = 0
+            Me.ToolStripButton_ShowNavigation.Checked = False
+        End If
+    End Sub
+
+    ''' <summary>
+    ''' Update the navigation based on the currently displayed timespan of the main chart
+    ''' </summary>
+    ''' <remarks></remarks>
+    Private Sub updateNavigation()
+
+        Dim xMin, xMax As DateTime
+
+        Me.isInitializing = True 'need this to prevent a feedback loop
+
+        'read dates from chart
+        xMin = Date.FromOADate(Me.TChart1.Axes.Bottom.Minimum)
+        xMax = Date.FromOADate(Me.TChart1.Axes.Bottom.Maximum)
+
+        'set DateTimePickers
+        Me.DateTimePicker_NavStart.Value = xMin
+        Me.DateTimePicker_NavEnd.Value = xMax
+
+        'update the display range
+        Call Me.updateDisplayRange()
+
+        Me.isInitializing = False
+    End Sub
+
+    ''' <summary>
+    ''' Called when the value of one of the navigation DateTimePickers is changed. Ensures that validation is successful before continuing.
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    ''' <remarks></remarks>
+    Private Sub navigationChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles DateTimePicker_NavStart.ValueChanged, DateTimePicker_NavEnd.ValueChanged
+        If Not Me.navigationValidating(sender, New System.ComponentModel.CancelEventArgs()) Then
+            'reset navigation to correspond to chart
+            Call Me.updateNavigation()
+        Else
+            'validation was successful
+            Call Me.navigationValidated(sender, e)
+        End If
+    End Sub
+
+    ''' <summary>
+    ''' Validates the navigation DateTimePickers. Checks that start is before end.
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    ''' <returns>True if validation is successful</returns>
+    ''' <remarks></remarks>
+    Private Function navigationValidating(ByVal sender As System.Object, ByVal e As System.ComponentModel.CancelEventArgs) As Boolean Handles DateTimePicker_NavStart.Validating, DateTimePicker_NavEnd.Validating
+        If Me.DateTimePicker_NavStart.Value >= Me.DateTimePicker_NavEnd.Value Then
+            If CType(sender, DateTimePicker).Name = "DateTimePicker_NavStart" Then
+                'if the start date was set to a value after the end date,
+                'move the end date using the currently displayed timespan
+                Dim displayrange As TimeSpan
+                displayrange = DateTime.FromOADate(Me.TChart1.Axes.Bottom.Maximum) - DateTime.FromOADate(Me.TChart1.Axes.Bottom.Minimum)
+                DateTimePicker_NavEnd.Value = DateTimePicker_NavStart.Value + displayrange
+            Else
+                'setting the end date to a value before the start date is not allowed
+                e.Cancel = True
+                Return False
+            End If
+        End If
+        Return True
+    End Function
+
+    ''' <summary>
+    ''' Is called upon successful validation of the navigation DateTimePickers. Updates the chart.
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    ''' <remarks></remarks>
+    Private Sub navigationValidated(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles DateTimePicker_NavStart.Validated, DateTimePicker_NavEnd.Validated
+        If Not Me.isInitializing Then
+            'save the current zoom snapshot
+            Call Me.saveZoomSnapshot()
+            'Adjust the display range of the main chart
+            Me.TChart1.Axes.Bottom.Minimum = Me.DateTimePicker_NavStart.Value.ToOADate()
+            Me.TChart1.Axes.Bottom.Maximum = Me.DateTimePicker_NavEnd.Value.ToOADate()
+            'Update everything
+            Call Me.updateColorband()
+            Call Me.updateDisplayRange()
+            Me.selectionMade = True
+        End If
+    End Sub
+
+    ''' <summary>
+    ''' The Display range has been changed - update the chart accordingly
+    ''' </summary>
+    ''' <remarks></remarks>
+    Private Sub displayRangeChanged() Handles ComboBox_DisplayRangeUnit.SelectedIndexChanged, NumericUpDown_DisplayRangeMultiplier.ValueChanged
+
+        Dim xMin, xMax As DateTime
+        Dim multiplier As Integer
+
+        'get min x axis from chart
+        xMin = Date.FromOADate(Me.TChart1.Axes.Bottom.Minimum)
+
+        'Calculate new max value for x axis
+        multiplier = NumericUpDown_DisplayRangeMultiplier.Value
+        Select Case ComboBox_DisplayRangeUnit.SelectedItem
+            Case "Centuries"
+                xMax = xMin.AddYears(multiplier * 100)
+            Case "Decades"
+                xMax = xMin.AddYears(multiplier * 10)
+            Case "Years"
+                xMax = xMin.AddYears(multiplier)
+            Case "Months"
+                xMax = xMin.AddMonths(multiplier)
+            Case "Weeks"
+                xMax = xMin.AddDays(multiplier * 7)
+            Case "Days"
+                xMax = xMin.AddDays(multiplier)
+            Case "Hours"
+                xMax = xMin.AddHours(multiplier)
+            Case "Minutes"
+                xMax = xMin.AddMinutes(multiplier)
+            Case "Seconds"
+                xMax = xMin.AddSeconds(multiplier)
+            Case Else
+                'do nothing and abort
+                Exit Sub
+        End Select
+
+        'save the current zoom snapshot
+        Call Me.saveZoomSnapshot()
+
+        'Set new max value for x axis
+        Me.TChart1.Axes.Bottom.Maximum = xMax.ToOADate()
+
+        'Update everything
+        Call Me.updateNavigation()
+        Call Me.updateColorband()
+
+        Me.selectionMade = True
+
+    End Sub
+
+    ''' <summary>
+    ''' Update the display range input fields to correspond to the chart
+    ''' </summary>
+    ''' <remarks></remarks>
+    Private Sub updateDisplayRange()
+
+        Dim xMin, xMax As DateTime
+        Dim multiplier As Integer
+
+        xMin = Date.FromOADate(Me.TChart1.Axes.Bottom.Minimum)
+        xMax = Date.FromOADate(Me.TChart1.Axes.Bottom.Maximum)
+
+        'check whether the selected display range corresponds to the chart
+        multiplier = Me.NumericUpDown_DisplayRangeMultiplier.Value
+        Select Case ComboBox_DisplayRangeUnit.SelectedItem
+            Case "Centuries"
+                If xMin.AddYears(multiplier * 100) = xMax Then
+                    Exit Sub
+                End If
+            Case "Decades"
+                If xMin.AddYears(multiplier * 10) = xMax Then
+                    Exit Sub
+                End If
+            Case "Years"
+                If xMin.AddYears(multiplier) = xMax Then
+                    Exit Sub
+                End If
+            Case "Months"
+                If xMin.AddMonths(multiplier) = xMax Then
+                    Exit Sub
+                End If
+            Case "Weeks"
+                If xMin.AddDays(multiplier * 7) = xMax Then
+                    Exit Sub
+                End If
+            Case "Days"
+                If xMin.AddDays(multiplier) = xMax Then
+                    Exit Sub
+                End If
+            Case "Hours"
+                If xMin.AddHours(multiplier) = xMax Then
+                    Exit Sub
+                End If
+            Case "Minutes"
+                If xMin.AddMinutes(multiplier) = xMax Then
+                    Exit Sub
+                End If
+            Case "Seconds"
+                If xMin.AddSeconds(multiplier) = xMax Then
+                    Exit Sub
+                End If
+            Case Else
+                Exit Sub
+        End Select
+
+        'fields do not correspond to the chart, therefore reset the fields
+        Me.NumericUpDown_DisplayRangeMultiplier.Value = 1
+        Me.ComboBox_DisplayRangeUnit.SelectedItem = ""
+
+    End Sub
+
+    ''' <summary>
+    ''' Navigate forward/back
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    ''' <remarks></remarks>
+    Private Sub Button_NavForwardBack_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button_NavBack.Click, Button_NavForward.Click
+
+        Dim multiplier As Integer
+        Dim xMinOld, xMinNew, xMaxOld, xMaxNew As DateTime
+
+        'get the previous min and max dates
+        xMinOld = Date.FromOADate(Me.TChart1.Axes.Bottom.Minimum)
+        xMaxOld = Date.FromOADate(Me.TChart1.Axes.Bottom.Maximum)
+
+        multiplier = Me.NumericUpDown_NavMultiplier.Value
+        'when navigating backwards, negate the multiplier
+        If CType(sender, Button).Name = "Button_NavBack" Then
+            multiplier *= -1
+        End If
+
+        Select Case Me.ComboBox_NavIncrement.SelectedItem
+            Case "Centuries"
+                xMinNew = xMinOld.AddYears(multiplier * 100)
+                xMaxNew = xMaxOld.AddYears(multiplier * 100)
+            Case "Decades"
+                xMinNew = xMinOld.AddYears(multiplier * 10)
+                xMaxNew = xMaxOld.AddYears(multiplier * 10)
+            Case "Years"
+                xMinNew = xMinOld.AddYears(multiplier)
+                xMaxNew = xMaxOld.AddYears(multiplier)
+            Case "Months"
+                xMinNew = xMinOld.AddMonths(multiplier)
+                xMaxNew = xMaxOld.AddMonths(multiplier)
+            Case "Weeks"
+                xMinNew = xMinOld.AddDays(multiplier * 7)
+                xMaxNew = xMaxOld.AddDays(multiplier * 7)
+            Case "Days"
+                xMinNew = xMinOld.AddDays(multiplier)
+                xMaxNew = xMaxOld.AddDays(multiplier)
+            Case "Hours"
+                xMinNew = xMinOld.AddHours(multiplier)
+                xMaxNew = xMaxOld.AddHours(multiplier)
+            Case "Minutes"
+                xMinNew = xMinOld.AddMinutes(multiplier)
+                xMaxNew = xMaxOld.AddMinutes(multiplier)
+            Case "Seconds"
+                xMinNew = xMinOld.AddSeconds(multiplier)
+                xMaxNew = xMaxOld.AddSeconds(multiplier)
+            Case Else
+                Exit Sub
+        End Select
+
+        'save the current zoom snapshot
+        Call Me.saveZoomSnapshot()
+
+        'update chart
+        Me.TChart1.Axes.Bottom.Minimum = xMinNew.ToOADate()
+        Me.TChart1.Axes.Bottom.Maximum = xMaxNew.ToOADate()
+
+        'update everything else
+        Call Me.updateNavigation()
+        Call Me.updateColorband()
+
+        Me.selectionMade = True
+
+    End Sub
+
+#End Region 'Navigation
+
+#Region "Cursor"
+
+    ''' <summary>
+    ''' Mouse down event on TChart1: change cursor as needed and save zoom snapshot before panning
+    ''' </summary>
+    Private Sub TChart1_MouseDown(ByVal sender As System.Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles TChart1.MouseDown
+        If Me.ToolStripButton_NormalMode.Checked Then
+            If e.Button = Windows.Forms.MouseButtons.Left Then
+                Me.TChart1.Cursor = Me.cursor_zoom
+            ElseIf e.Button = Windows.Forms.MouseButtons.Right Then
+                'save current zoom snapshot before scrolling
+                Call Me.saveZoomSnapshot()
+                Me.TChart1.Cursor = Me.cursor_pan_hold
+            End If
+        ElseIf Me.ToolStripButton_Pan.Checked Then
+            'save current zoom snapshot before scrolling
+            Call Me.saveZoomSnapshot()
+            Me.TChart1.Cursor = Me.cursor_pan_hold
+        End If
+    End Sub
+
+    ''' <summary>
+    ''' Mouse up event on TChart1: change cursor as needed
+    ''' </summary>
+    Private Sub TChart1_MouseUp(ByVal sender As System.Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles TChart1.MouseUp
+        If Me.ToolStripButton_NormalMode.Checked Then
+            Me.TChart1.Cursor = Cursors.Default
+        ElseIf Me.ToolStripButton_Pan.Checked Then
+            Me.TChart1.Cursor = Me.cursor_pan
+        End If
+    End Sub
+
+#End Region 'Cursor
 
 #End Region 'UI
 
@@ -1337,6 +1699,36 @@ Public Class Wave
 
         'Charts aktualisieren
         Call Me.UpdateCharts()
+
+    End Sub
+
+    ''' <summary>
+    ''' Löscht eine Zeitreihe
+    ''' </summary>
+    ''' <param name="title">Titel der Zeitreihe</param>
+    ''' <remarks>Annahme, dass alle Zeitreihentitel eindeutig sind</remarks>
+    Private Sub DeleteZeitreihe(ByVal title As String)
+
+        'Aus Diagramm entfernen
+        For i As Integer = Me.TChart1.Series.Count - 1 To 0 Step -1
+            If (Me.TChart1.Series.Item(i).Title = title) Then
+                Me.TChart1.Series.RemoveAt(i)
+                Me.TChart1.Refresh()
+                Exit For
+            End If
+        Next
+
+        'Aus Übersicht entfernen
+        For i As Integer = Me.TChart2.Series.Count - 1 To 0 Step -1
+            If (Me.TChart2.Series.Item(i).Title = title) Then
+                Me.TChart2.Series.RemoveAt(i)
+                Me.TChart2.Refresh()
+                Exit For
+            End If
+        Next
+
+        'Intern entfernen
+        Me.Zeitreihen.Remove(title)
 
     End Sub
 
