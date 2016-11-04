@@ -79,6 +79,11 @@ Public Class Wave
     Private MyAxes1, MyAxes2 As Dictionary(Of String, Steema.TeeChart.Axis)
     Private WithEvents ChartListBox1 As Steema.TeeChart.ChartListBox
 
+    'Cursors
+    Friend cursor_pan As Cursor
+    Friend cursor_pan_hold As Cursor
+    Friend cursor_zoom As Cursor
+
     Private Const HelpURL As String = "http://wiki.bluemodel.org/index.php/Wave"
 
     'Methoden
@@ -118,6 +123,11 @@ Public Class Wave
 
         'Navigation initialisieren
         Me.ComboBox_NavIncrement.SelectedItem = "Days"
+
+        'Instantiate cursors
+        Me.cursor_pan = New Cursor(Me.GetType(), "cursor_pan.cur")
+        Me.cursor_pan_hold = New Cursor(Me.GetType(), "cursor_pan_hold.cur")
+        Me.cursor_zoom = New Cursor(Me.GetType(), "cursor_zoom.cur")
 
     End Sub
 
@@ -179,7 +189,7 @@ Public Class Wave
 
         Me.TChart2.Clear()
         Call Wave.formatChart(Me.TChart2.Chart)
-        Me.TChart2.Panel.Brush.Color = Color.FromArgb(239,239,239)
+        Me.TChart2.Panel.Brush.Color = Color.FromArgb(239, 239, 239)
         Me.TChart2.Walls.Back.Color = Color.FromArgb(239, 239, 239)
         Me.TChart2.Header.Visible = False
         Me.TChart2.Legend.Visible = False
@@ -782,7 +792,7 @@ Public Class Wave
     Private Sub ToolStripButton_Zoom_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_Zoom.Click
         If Me.ToolStripButton_Zoom.Checked Then
             'enable zooming
-            Me.TChart1.Cursor = Cursors.Cross
+            Me.TChart1.Cursor = Me.cursor_zoom
             Me.TChart1.Zoom.Allow = True
             Me.TChart1.Zoom.Direction = Steema.TeeChart.ZoomDirections.Horizontal
             Me.TChart1.Zoom.History = True 'number of steps is 8, don't know how to change that
@@ -809,7 +819,7 @@ Public Class Wave
     Private Sub ToolStripButton_Pan_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_Pan.Click
         If Me.ToolStripButton_Pan.Checked Then
             'enable panning
-            Me.TChart1.Cursor = Cursors.SizeWE
+            Me.TChart1.Cursor = Me.cursor_pan
             Me.TChart1.Panning.Allow = Steema.TeeChart.ScrollModes.Horizontal
             Me.TChart1.Panning.MouseButton = Windows.Forms.MouseButtons.Left
             'uncheck the other buttons
@@ -1245,29 +1255,32 @@ Public Class Wave
 #Region "Cursor"
 
     ''' <summary>
-    ''' Mouse down event on TChart1: in normal mode, change the cursor to indicate zooming / panning
+    ''' Mouse down event on TChart1: change cursor as needed and save zoom snapshot before panning
     ''' </summary>
     Private Sub TChart1_MouseDown(ByVal sender As System.Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles TChart1.MouseDown
         If Me.ToolStripButton_NormalMode.Checked Then
             If e.Button = Windows.Forms.MouseButtons.Left Then
-                Me.TChart1.Cursor = Cursors.Cross
+                Me.TChart1.Cursor = Me.cursor_zoom
             ElseIf e.Button = Windows.Forms.MouseButtons.Right Then
                 'save current zoom snapshot before scrolling
                 Call Me.saveZoomSnapshot()
-                Me.TChart1.Cursor = Cursors.SizeWE
+                Me.TChart1.Cursor = Me.cursor_pan_hold
             End If
         ElseIf Me.ToolStripButton_Pan.Checked Then
             'save current zoom snapshot before scrolling
             Call Me.saveZoomSnapshot()
+            Me.TChart1.Cursor = Me.cursor_pan_hold
         End If
     End Sub
 
     ''' <summary>
-    ''' Mouse up event on TChart1: in normal mode, restore default cursor
+    ''' Mouse up event on TChart1: change cursor as needed
     ''' </summary>
     Private Sub TChart1_MouseUp(ByVal sender As System.Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles TChart1.MouseUp
         If Me.ToolStripButton_NormalMode.Checked Then
             Me.TChart1.Cursor = Cursors.Default
+        ElseIf Me.ToolStripButton_Pan.Checked Then
+            Me.TChart1.Cursor = Me.cursor_pan
         End If
     End Sub
 
