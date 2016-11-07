@@ -379,7 +379,7 @@ Partial Class ImportDiag
         '
         'StatusImage
         '
-        Me.StatusImage.Image = Global.IHWB.Wave.My.Resources.Resources.tick
+        Me.StatusImage.Image = Global.BlueM.Wave.My.Resources.Resources.tick
         Me.StatusImage.Name = "StatusImage"
         Me.StatusImage.Size = New System.Drawing.Size(39, 17)
         Me.StatusImage.Text = "OK"

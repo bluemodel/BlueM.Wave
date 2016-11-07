@@ -74,7 +74,7 @@ Partial Class SeriesEditorDialog
         '
         'Button_Paste
         '
-        Me.Button_Paste.Image = Global.IHWB.Wave.My.Resources.Resources.page_paste
+        Me.Button_Paste.Image = Global.BlueM.Wave.My.Resources.Resources.page_paste
         Me.Button_Paste.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
         Me.Button_Paste.Location = New System.Drawing.Point(12, 66)
         Me.Button_Paste.Name = "Button_Paste"

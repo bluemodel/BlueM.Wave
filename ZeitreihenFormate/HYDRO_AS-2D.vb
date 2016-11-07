@@ -64,7 +64,7 @@ Public Class HYDRO_AS_2D
         Me.iZeileUeberschriften = 4
         Me.UseEinheiten = False
         Me.Zeichengetrennt = True
-        Me.Trennzeichen = New IHWB.Wave.Zeichen(" ")
+        Me.Trennzeichen = New BlueM.Wave.Zeichen(" ")
 
         'Einheiten anhand des Dateinamens festlegen
         Select Case Path.GetFileName(file).ToLower

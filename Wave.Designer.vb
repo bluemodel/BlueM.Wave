@@ -127,7 +127,7 @@ Partial Class Wave
         'ToolStripStatusLabel_Log
         '
         Me.ToolStripStatusLabel_Log.ActiveLinkColor = System.Drawing.SystemColors.ControlDarkDark
-        Me.ToolStripStatusLabel_Log.Image = Global.IHWB.Wave.My.Resources.Resources.script
+        Me.ToolStripStatusLabel_Log.Image = Global.BlueM.Wave.My.Resources.Resources.script
         Me.ToolStripStatusLabel_Log.IsLink = True
         Me.ToolStripStatusLabel_Log.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
         Me.ToolStripStatusLabel_Log.LinkColor = System.Drawing.SystemColors.ControlDarkDark
@@ -169,14 +169,14 @@ Partial Class Wave
         '
         'ToolStripMenuItem_ZeitreihenImportieren
         '
-        Me.ToolStripMenuItem_ZeitreihenImportieren.Image = Global.IHWB.Wave.My.Resources.Resources.chart_line_add
+        Me.ToolStripMenuItem_ZeitreihenImportieren.Image = Global.BlueM.Wave.My.Resources.Resources.chart_line_add
         Me.ToolStripMenuItem_ZeitreihenImportieren.Name = "ToolStripMenuItem_ZeitreihenImportieren"
         Me.ToolStripMenuItem_ZeitreihenImportieren.Size = New System.Drawing.Size(203, 22)
         Me.ToolStripMenuItem_ZeitreihenImportieren.Text = "Zeitreihe(n) importieren"
         '
         'ToolStripMenuItem_ZeitreiheEingeben
         '
-        Me.ToolStripMenuItem_ZeitreiheEingeben.Image = Global.IHWB.Wave.My.Resources.Resources.chart_line_edit
+        Me.ToolStripMenuItem_ZeitreiheEingeben.Image = Global.BlueM.Wave.My.Resources.Resources.chart_line_edit
         Me.ToolStripMenuItem_ZeitreiheEingeben.Name = "ToolStripMenuItem_ZeitreiheEingeben"
         Me.ToolStripMenuItem_ZeitreiheEingeben.Size = New System.Drawing.Size(203, 22)
         Me.ToolStripMenuItem_ZeitreiheEingeben.Text = "Zeitreihe eingeben"
@@ -188,7 +188,7 @@ Partial Class Wave
         '
         'ToolStripMenuItem_Refresh
         '
-        Me.ToolStripMenuItem_Refresh.Image = Global.IHWB.Wave.My.Resources.Resources.arrow_refresh
+        Me.ToolStripMenuItem_Refresh.Image = Global.BlueM.Wave.My.Resources.Resources.arrow_refresh
         Me.ToolStripMenuItem_Refresh.Name = "ToolStripMenuItem_Refresh"
         Me.ToolStripMenuItem_Refresh.Size = New System.Drawing.Size(203, 22)
         Me.ToolStripMenuItem_Refresh.Text = "Dateien neu einlesen"
@@ -200,14 +200,14 @@ Partial Class Wave
         '
         'ToolStripMenuItem_TENLaden
         '
-        Me.ToolStripMenuItem_TENLaden.Image = Global.IHWB.Wave.My.Resources.Resources.chart_curve
+        Me.ToolStripMenuItem_TENLaden.Image = Global.BlueM.Wave.My.Resources.Resources.chart_curve
         Me.ToolStripMenuItem_TENLaden.Name = "ToolStripMenuItem_TENLaden"
         Me.ToolStripMenuItem_TENLaden.Size = New System.Drawing.Size(203, 22)
         Me.ToolStripMenuItem_TENLaden.Text = "Diagramm laden (*.TEN)"
         '
         'ToolStripMenuItem_ThemeLaden
         '
-        Me.ToolStripMenuItem_ThemeLaden.Image = Global.IHWB.Wave.My.Resources.Resources.color_wheel
+        Me.ToolStripMenuItem_ThemeLaden.Image = Global.BlueM.Wave.My.Resources.Resources.color_wheel
         Me.ToolStripMenuItem_ThemeLaden.Name = "ToolStripMenuItem_ThemeLaden"
         Me.ToolStripMenuItem_ThemeLaden.Size = New System.Drawing.Size(203, 22)
         Me.ToolStripMenuItem_ThemeLaden.Text = "Theme laden (*.XML)"
@@ -224,14 +224,14 @@ Partial Class Wave
         '
         'ToolStripMenuItem_ExportDiagramm
         '
-        Me.ToolStripMenuItem_ExportDiagramm.Image = Global.IHWB.Wave.My.Resources.Resources.chart_pie
+        Me.ToolStripMenuItem_ExportDiagramm.Image = Global.BlueM.Wave.My.Resources.Resources.chart_pie
         Me.ToolStripMenuItem_ExportDiagramm.Name = "ToolStripMenuItem_ExportDiagramm"
         Me.ToolStripMenuItem_ExportDiagramm.Size = New System.Drawing.Size(197, 22)
         Me.ToolStripMenuItem_ExportDiagramm.Text = "Diagramm exportieren"
         '
         'ToolStripMenuItem_ExportZeitreihe
         '
-        Me.ToolStripMenuItem_ExportZeitreihe.Image = Global.IHWB.Wave.My.Resources.Resources.page_white_go
+        Me.ToolStripMenuItem_ExportZeitreihe.Image = Global.BlueM.Wave.My.Resources.Resources.page_white_go
         Me.ToolStripMenuItem_ExportZeitreihe.Name = "ToolStripMenuItem_ExportZeitreihe"
         Me.ToolStripMenuItem_ExportZeitreihe.Size = New System.Drawing.Size(197, 22)
         Me.ToolStripMenuItem_ExportZeitreihe.Text = "Zeitreihe(n) exportieren"
@@ -262,7 +262,7 @@ Partial Class Wave
         'ToolStripButton_Cut
         '
         Me.ToolStripButton_Cut.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.ToolStripButton_Cut.Image = Global.IHWB.Wave.My.Resources.Resources.cut
+        Me.ToolStripButton_Cut.Image = Global.BlueM.Wave.My.Resources.Resources.cut
         Me.ToolStripButton_Cut.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.ToolStripButton_Cut.Name = "ToolStripButton_Cut"
         Me.ToolStripButton_Cut.Size = New System.Drawing.Size(23, 31)
@@ -271,7 +271,7 @@ Partial Class Wave
         'ToolStripButton_Analysis
         '
         Me.ToolStripButton_Analysis.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.ToolStripButton_Analysis.Image = Global.IHWB.Wave.My.Resources.Resources.calculator
+        Me.ToolStripButton_Analysis.Image = Global.BlueM.Wave.My.Resources.Resources.calculator
         Me.ToolStripButton_Analysis.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.ToolStripButton_Analysis.Name = "ToolStripButton_Analysis"
         Me.ToolStripButton_Analysis.Size = New System.Drawing.Size(23, 31)
@@ -280,7 +280,7 @@ Partial Class Wave
         'ToolStripButton_Convert
         '
         Me.ToolStripButton_Convert.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.ToolStripButton_Convert.Image = Global.IHWB.Wave.My.Resources.Resources.script
+        Me.ToolStripButton_Convert.Image = Global.BlueM.Wave.My.Resources.Resources.script
         Me.ToolStripButton_Convert.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.ToolStripButton_Convert.Name = "ToolStripButton_Convert"
         Me.ToolStripButton_Convert.Size = New System.Drawing.Size(23, 31)
@@ -289,7 +289,7 @@ Partial Class Wave
         'ToolStripButton_EditChart
         '
         Me.ToolStripButton_EditChart.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.ToolStripButton_EditChart.Image = Global.IHWB.Wave.My.Resources.Resources.chart_curve_edit
+        Me.ToolStripButton_EditChart.Image = Global.BlueM.Wave.My.Resources.Resources.chart_curve_edit
         Me.ToolStripButton_EditChart.ImageTransparentColor = System.Drawing.SystemColors.Control
         Me.ToolStripButton_EditChart.Name = "ToolStripButton_EditChart"
         Me.ToolStripButton_EditChart.Size = New System.Drawing.Size(23, 31)
@@ -301,7 +301,7 @@ Partial Class Wave
         Me.ToolStripButton_Übersicht.CheckOnClick = True
         Me.ToolStripButton_Übersicht.CheckState = System.Windows.Forms.CheckState.Checked
         Me.ToolStripButton_Übersicht.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.ToolStripButton_Übersicht.Image = Global.IHWB.Wave.My.Resources.Resources.application_split
+        Me.ToolStripButton_Übersicht.Image = Global.BlueM.Wave.My.Resources.Resources.application_split
         Me.ToolStripButton_Übersicht.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.ToolStripButton_Übersicht.Name = "ToolStripButton_Übersicht"
         Me.ToolStripButton_Übersicht.Size = New System.Drawing.Size(23, 31)
@@ -337,7 +337,7 @@ Partial Class Wave
         '
         Me.ToolStripButton_Zoom.CheckOnClick = True
         Me.ToolStripButton_Zoom.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.ToolStripButton_Zoom.Image = Global.IHWB.Wave.My.Resources.Resources.zoom
+        Me.ToolStripButton_Zoom.Image = Global.BlueM.Wave.My.Resources.Resources.zoom
         Me.ToolStripButton_Zoom.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.ToolStripButton_Zoom.Name = "ToolStripButton_Zoom"
         Me.ToolStripButton_Zoom.Size = New System.Drawing.Size(23, 31)
@@ -348,7 +348,7 @@ Partial Class Wave
         '
         Me.ToolStripButton_Pan.CheckOnClick = True
         Me.ToolStripButton_Pan.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.ToolStripButton_Pan.Image = Global.IHWB.Wave.My.Resources.Resources.pan
+        Me.ToolStripButton_Pan.Image = Global.BlueM.Wave.My.Resources.Resources.pan
         Me.ToolStripButton_Pan.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.ToolStripButton_Pan.Name = "ToolStripButton_Pan"
         Me.ToolStripButton_Pan.Size = New System.Drawing.Size(23, 31)
@@ -362,7 +362,7 @@ Partial Class Wave
         'ToolStripButton_ZoomPrevious
         '
         Me.ToolStripButton_ZoomPrevious.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.ToolStripButton_ZoomPrevious.Image = Global.IHWB.Wave.My.Resources.Resources.zoom_previous
+        Me.ToolStripButton_ZoomPrevious.Image = Global.BlueM.Wave.My.Resources.Resources.zoom_previous
         Me.ToolStripButton_ZoomPrevious.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.ToolStripButton_ZoomPrevious.Name = "ToolStripButton_ZoomPrevious"
         Me.ToolStripButton_ZoomPrevious.Size = New System.Drawing.Size(23, 31)
@@ -373,7 +373,7 @@ Partial Class Wave
         Me.ToolStripSplitButton_Help.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right
         Me.ToolStripSplitButton_Help.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
         Me.ToolStripSplitButton_Help.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.HilfeToolStripMenuItem, Me.AboutToolStripMenuItem})
-        Me.ToolStripSplitButton_Help.Image = Global.IHWB.Wave.My.Resources.Resources.help
+        Me.ToolStripSplitButton_Help.Image = Global.BlueM.Wave.My.Resources.Resources.help
         Me.ToolStripSplitButton_Help.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.ToolStripSplitButton_Help.Name = "ToolStripSplitButton_Help"
         Me.ToolStripSplitButton_Help.RightToLeft = System.Windows.Forms.RightToLeft.Yes
@@ -388,7 +388,7 @@ Partial Class Wave
         '
         'AboutToolStripMenuItem
         '
-        Me.AboutToolStripMenuItem.Image = Global.IHWB.Wave.My.Resources.Resources.BlueM_icon
+        Me.AboutToolStripMenuItem.Image = Global.BlueM.Wave.My.Resources.Resources.BlueM_icon
         Me.AboutToolStripMenuItem.Name = "AboutToolStripMenuItem"
         Me.AboutToolStripMenuItem.Size = New System.Drawing.Size(107, 22)
         Me.AboutToolStripMenuItem.Text = "About"
