@@ -30,7 +30,7 @@ Imports System.IO
 ''' <summary>
 ''' Klasse für das SMUSI REG-Dateiformat (SMUSI-Regendateien)
 ''' </summary>
-''' <remarks>Format siehe http://130.83.196.220/bluem/wiki/index.php/SMUSI_REG-Format</remarks>
+''' <remarks>Format siehe http://wiki.bluemodel.org/index.php/SMUSI_REG-Format</remarks>
 Public Class REG_SMUSI
     Inherits Dateiformat
 
