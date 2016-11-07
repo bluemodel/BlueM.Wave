@@ -886,6 +886,8 @@ Public Class Wave
         'reset the charts
         Me.selectionMade = False
         Call Me.UpdateCharts()
+        'update the navigation
+        Call Me.updateNavigation()
     End Sub
 
     ''' <summary>
