@@ -30,7 +30,7 @@ Imports System.IO
 ''' <summary>
 ''' Klasse für das DWD-Temperatur- und Luftfeuchte-Dateiformat
 ''' </summary>
-''' <remarks>Format siehe http://130.83.196.220/bluem/wiki/index.php/DWD-T-L-Format</remarks>
+''' <remarks>Format siehe http://wiki.bluemodel.org/index.php/DWD-T-L-Format</remarks>
 Public Class DWD_T_L
     Inherits Dateiformat
 
