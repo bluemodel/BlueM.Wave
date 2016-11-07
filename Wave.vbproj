@@ -135,10 +135,6 @@
     <Compile Include="Importdialoge\ImportDiag.vb">
       <SubType>Form</SubType>
     </Compile>
-    <None Include="Importdialoge\ImportFromDatabaseDialog.Designer.vb">
-      <DependentUpon>ImportFromDatabaseDialog.vb</DependentUpon>
-    </None>
-    <None Include="Importdialoge\ImportFromDatabaseDialog.vb" />
     <Compile Include="Log.vb" />
     <Compile Include="My Project\ApplicationEvents.vb" />
     <Compile Include="My Project\Resources.Designer.vb">
@@ -175,12 +171,6 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <AutoGen>True</AutoGen>
     </Compile>
-    <Compile Include="Splashscreen\SplashScreen_Leitfaden.Designer.vb">
-      <DependentUpon>SplashScreen_Leitfaden.vb</DependentUpon>
-    </Compile>
-    <Compile Include="Splashscreen\SplashScreen_Leitfaden.vb">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="Wave.Designer.vb">
       <DependentUpon>Wave.vb</DependentUpon>
     </Compile>
@@ -190,12 +180,6 @@
     <Compile Include="Zeichen.vb" />
     <Compile Include="Zeitreihe.vb" />
     <Compile Include="ZeitreihenFormate\ASC.vb" />
-    <None Include="ZeitreihenFormate\BlueMOrbDataSet.Designer.vb">
-      <DependentUpon>BlueMOrbDataSet.vb</DependentUpon>
-    </None>
-    <None Include="ZeitreihenFormate\BlueMOrbDataSet.vb">
-      <DependentUpon>BlueMOrbDataSet.xsd</DependentUpon>
-    </None>
     <Compile Include="ZeitreihenFormate\BIN.vb" />
     <Compile Include="ZeitreihenFormate\CSV.vb" />
     <Compile Include="ZeitreihenFormate\Dateifactory.vb" />
@@ -212,7 +196,7 @@
     <Compile Include="ZeitreihenFormate\HYDRO_AS-2D.vb" />
     <Compile Include="ZeitreihenFormate\HystemExtran_REG.vb" />
     <Compile Include="ZeitreihenFormate\HystemExtran_WEL.vb" />
-    <Compile Include="ZeitreihenFormate\REG.vb" />
+    <None Include="ZeitreihenFormate\REG.vb" />
     <Compile Include="ZeitreihenFormate\SMB.vb" />
     <Compile Include="ZeitreihenFormate\REG_SMUSI.vb" />
     <Compile Include="ZeitreihenFormate\SWMM_DAT_MASS.vb" />
@@ -220,10 +204,7 @@
     <Compile Include="ZeitreihenFormate\SWMM_OUT.vb" />
     <Compile Include="ZeitreihenFormate\SWMM_TXT.vb" />
     <Compile Include="ZeitreihenFormate\WEL.vb" />
-    <None Include="ZeitreihenFormate\ZeitreihenDatabase.vb" />
     <Compile Include="ZeitreihenFormate\WEL_TALSIM.vb" />
-    <Compile Include="ZeitreihenFormate\ZeitreihenDatei.vb" />
-    <Compile Include="ZeitreihenFormate\ZeitreihenExtern.vb" />
     <Compile Include="ZeitreihenFormate\ZRE.vb" />
   </ItemGroup>
   <ItemGroup>
@@ -346,30 +327,13 @@
       <DependentUpon>ImportDiag.vb</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <None Include="Importdialoge\ImportFromDatabaseDialog.resx">
-      <DependentUpon>ImportFromDatabaseDialog.vb</DependentUpon>
-      <SubType>Designer</SubType>
-    </None>
     <EmbeddedResource Include="My Project\licenses.licx" />
     <EmbeddedResource Include="Resources\log.ico" />
-    <EmbeddedResource Include="Splashscreen\SplashScreen_Leitfaden.resx">
-      <DependentUpon>SplashScreen_Leitfaden.vb</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="ZeitreihenFormate\DWD_Stationswahl.resx">
       <DependentUpon>DWD_Stationswahl.vb</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <None Include="Resources\script.png" />
-    <None Include="ZeitreihenFormate\BlueMOrbDataSet.xsc">
-      <DependentUpon>BlueMOrbDataSet.xsd</DependentUpon>
-    </None>
-    <None Include="ZeitreihenFormate\BlueMOrbDataSet.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="ZeitreihenFormate\BlueMOrbDataSet.xss">
-      <DependentUpon>BlueMOrbDataSet.xsd</DependentUpon>
-    </None>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
