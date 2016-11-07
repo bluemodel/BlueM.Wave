@@ -231,12 +231,12 @@ Partial Public Class ImportDiag
                 Call Me.aktualisieren()
 
                 'Wenn alles glatt gelaufen ist:
-                Me.StatusImage.Image = Global.IHWB.Wave.My.Resources.Resources.tick
+                Me.StatusImage.Image = Global.BlueM.Wave.My.Resources.Resources.tick
                 Me.StatusImage.Text = "OK"
 
             Catch ex As Exception
                 'Bei Exception Status auf Fehler setzen
-                Me.StatusImage.Image = Global.IHWB.Wave.My.Resources.Resources.fehler
+                Me.StatusImage.Image = Global.BlueM.Wave.My.Resources.Resources.fehler
                 Me.StatusImage.Text = "Fehler"
             End Try
 

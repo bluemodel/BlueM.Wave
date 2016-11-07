@@ -54,7 +54,7 @@ Partial Class AboutBox
         '
         'LogoPictureBox
         '
-        Me.LogoPictureBox.Image = Global.IHWB.Wave.My.Resources.Resources.BlueM
+        Me.LogoPictureBox.Image = Global.BlueM.Wave.My.Resources.Resources.BlueM
         Me.LogoPictureBox.Location = New System.Drawing.Point(12, 12)
         Me.LogoPictureBox.Name = "LogoPictureBox"
         Me.LogoPictureBox.Size = New System.Drawing.Size(104, 104)
