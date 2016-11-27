@@ -178,7 +178,7 @@ Public Class GoodnessOfFit
 
         'Hydrologische Deviation
         '-----------------------
-        max_gemessen = zre_gemessen.getWert("MaxWert")
+        max_gemessen = zre_gemessen.Maximum
 
         zaehler = 0
         For i = 0 To n - 1

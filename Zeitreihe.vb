@@ -144,6 +144,86 @@ Public Class Zeitreihe
 
     End Property
 
+    ''' <summary>
+    ''' Returns the maximum value of the time series
+    ''' </summary>
+    Public ReadOnly Property Maximum() As Double
+        Get
+            Dim max As Double
+            max = Double.MinValue
+            For Each value As Double In Me.YWerte
+                If (value > max) Then
+                    max = value
+                End If
+            Next
+            Return max
+        End Get
+    End Property
+
+    ''' <summary>
+    ''' Returns the minimum value of the time series
+    ''' </summary>
+    Public ReadOnly Property Minimum() As Double
+        Get
+            Dim min As Double
+            min = Double.MaxValue
+            For Each value As Double In Me.YWerte
+                If (value < min) Then
+                    min = value
+                End If
+            Next
+            Return min
+        End Get
+    End Property
+
+    ''' <summary>
+    ''' Returns the average value of the time series
+    ''' </summary>
+    ''' <remarks>Simple average calculation without regard for time</remarks>
+    Public ReadOnly Property Average() As Double
+        Get
+            Dim avg As Double
+            avg = 0
+            For Each value As Double In Me.YWerte
+                avg += value
+            Next
+            avg = avg / Me.Length
+            Return avg
+        End Get
+    End Property
+
+    ''' <summary>
+    ''' Returns the first value of the time series
+    ''' </summary>
+    Public ReadOnly Property FirstValue() As Double
+        Get
+            Return Me.YWerte(0)
+        End Get
+    End Property
+
+    ''' <summary>
+    ''' Returns the last value of the time series
+    ''' </summary>
+    Public ReadOnly Property LastValue() As Double
+        Get
+            Return Me.YWerte(Me.Length - 1)
+        End Get
+    End Property
+
+    ''' <summary>
+    ''' Returns the sum of the time series' values
+    ''' </summary>
+    Public ReadOnly Property Sum() As Double
+        Get
+            Dim _sum As Double
+            _sum = 0.0
+            For Each value As Double In Me.YWerte
+                _sum += value
+            Next
+            Return _sum
+        End Get
+    End Property
+
 #End Region 'Properties
 
 #Region "Methoden"
@@ -296,53 +376,34 @@ Public Class Zeitreihe
     ''' </summary>
     ''' <param name="WertTyp">MaxWert, MinWert, Average, AnfWert, EndWert, Summe</param>
     ''' <returns>der berechnete Wert</returns>
+    ''' <remarks>Obsolete, kept for backwards compatibility with BlueM.Opt</remarks>
     Public Function getWert(ByVal WertTyp As String) As Double
-
         Dim Wert As Double
 
         Select Case WertTyp
 
             Case "MaxWert"
-                Wert = Double.MinValue
-                For Each value As Double In Me.YWerte
-                    If (value > Wert) Then
-                        Wert = value
-                    End If
-                Next
+                Wert = Me.Maximum
 
             Case "MinWert"
-                Wert = Double.MaxValue
-                For Each value As Double In Me.YWerte
-                    If (value < Wert) Then
-                        Wert = value
-                    End If
-                Next
+                Wert = Me.Minimum
 
             Case "Average"
-                Wert = 0
-                For Each value As Double In Me.YWerte
-                    Wert += value
-                Next
-                Wert = Wert / Me.Length
+                Wert = Me.Average
 
             Case "AnfWert"
-                Wert = Me.YWerte(0)
+                Wert = Me.FirstValue
 
             Case "EndWert"
-                Wert = Me.YWerte(Me.Length - 1)
+                Wert = Me.LastValue
 
             Case "Summe"
-                Wert = 0
-                For Each value As Double In Me.YWerte
-                    Wert += value
-                Next
+                Wert = Me.Sum
 
             Case Else
                 Throw New Exception("Der Werttyp '" & WertTyp & "' wird nicht unterstützt!")
 
         End Select
-
-        Return Wert
 
     End Function
 
