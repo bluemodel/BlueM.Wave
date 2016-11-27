@@ -464,7 +464,7 @@ Public Class Wave
 
     'Teechart Export
     '***************
-    Private Sub ExportDiagramm_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem_ExportChart.Click
+    Private Sub SaveChart_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem_SaveChart.Click
         Call Me.TChart1.Export.ShowExportDialog()
     End Sub
 

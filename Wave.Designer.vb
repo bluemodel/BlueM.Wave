@@ -40,7 +40,7 @@ Partial Class Wave
         Me.ToolStripMenuItem_LoadTEN = New System.Windows.Forms.ToolStripMenuItem
         Me.ToolStripMenuItem_LoadTheme = New System.Windows.Forms.ToolStripMenuItem
         Me.ToolStripSplitButton_Save = New System.Windows.Forms.ToolStripSplitButton
-        Me.ToolStripMenuItem_ExportChart = New System.Windows.Forms.ToolStripMenuItem
+        Me.ToolStripMenuItem_SaveChart = New System.Windows.Forms.ToolStripMenuItem
         Me.ToolStripMenuItem_ExportSeries = New System.Windows.Forms.ToolStripMenuItem
         Me.ToolStripButton_Copy = New System.Windows.Forms.ToolStripButton
         Me.ToolStripButton_Print = New System.Windows.Forms.ToolStripButton
@@ -171,69 +171,69 @@ Partial Class Wave
         '
         Me.ToolStripMenuItem_ImportSeries.Image = Global.BlueM.Wave.My.Resources.Resources.chart_line_add
         Me.ToolStripMenuItem_ImportSeries.Name = "ToolStripMenuItem_ImportSeries"
-        Me.ToolStripMenuItem_ImportSeries.Size = New System.Drawing.Size(188, 22)
+        Me.ToolStripMenuItem_ImportSeries.Size = New System.Drawing.Size(180, 22)
         Me.ToolStripMenuItem_ImportSeries.Text = "Import time series"
         '
         'ToolStripMenuItem_EnterSeries
         '
         Me.ToolStripMenuItem_EnterSeries.Image = Global.BlueM.Wave.My.Resources.Resources.chart_line_edit
         Me.ToolStripMenuItem_EnterSeries.Name = "ToolStripMenuItem_EnterSeries"
-        Me.ToolStripMenuItem_EnterSeries.Size = New System.Drawing.Size(188, 22)
+        Me.ToolStripMenuItem_EnterSeries.Size = New System.Drawing.Size(180, 22)
         Me.ToolStripMenuItem_EnterSeries.Text = "Enter time series"
         '
         'ToolStripSeparator5
         '
         ToolStripSeparator5.Name = "ToolStripSeparator5"
-        ToolStripSeparator5.Size = New System.Drawing.Size(185, 6)
+        ToolStripSeparator5.Size = New System.Drawing.Size(177, 6)
         '
         'ToolStripMenuItem_ReloadFromFiles
         '
         Me.ToolStripMenuItem_ReloadFromFiles.Image = Global.BlueM.Wave.My.Resources.Resources.arrow_refresh
         Me.ToolStripMenuItem_ReloadFromFiles.Name = "ToolStripMenuItem_ReloadFromFiles"
-        Me.ToolStripMenuItem_ReloadFromFiles.Size = New System.Drawing.Size(188, 22)
+        Me.ToolStripMenuItem_ReloadFromFiles.Size = New System.Drawing.Size(180, 22)
         Me.ToolStripMenuItem_ReloadFromFiles.Text = "Reload from files"
         '
         'ToolStripSeparator6
         '
         ToolStripSeparator6.Name = "ToolStripSeparator6"
-        ToolStripSeparator6.Size = New System.Drawing.Size(185, 6)
+        ToolStripSeparator6.Size = New System.Drawing.Size(177, 6)
         '
         'ToolStripMenuItem_LoadTEN
         '
         Me.ToolStripMenuItem_LoadTEN.Image = Global.BlueM.Wave.My.Resources.Resources.chart_curve
         Me.ToolStripMenuItem_LoadTEN.Name = "ToolStripMenuItem_LoadTEN"
-        Me.ToolStripMenuItem_LoadTEN.Size = New System.Drawing.Size(188, 22)
-        Me.ToolStripMenuItem_LoadTEN.Text = "Load diagram (*.TEN)"
+        Me.ToolStripMenuItem_LoadTEN.Size = New System.Drawing.Size(180, 22)
+        Me.ToolStripMenuItem_LoadTEN.Text = "Load chart (*.TEN)"
         '
         'ToolStripMenuItem_LoadTheme
         '
         Me.ToolStripMenuItem_LoadTheme.Image = Global.BlueM.Wave.My.Resources.Resources.color_wheel
         Me.ToolStripMenuItem_LoadTheme.Name = "ToolStripMenuItem_LoadTheme"
-        Me.ToolStripMenuItem_LoadTheme.Size = New System.Drawing.Size(188, 22)
+        Me.ToolStripMenuItem_LoadTheme.Size = New System.Drawing.Size(180, 22)
         Me.ToolStripMenuItem_LoadTheme.Text = "Load theme (*.XML)"
         '
         'ToolStripSplitButton_Save
         '
         Me.ToolStripSplitButton_Save.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.ToolStripSplitButton_Save.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripMenuItem_ExportChart, Me.ToolStripMenuItem_ExportSeries})
+        Me.ToolStripSplitButton_Save.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripMenuItem_SaveChart, Me.ToolStripMenuItem_ExportSeries})
         Me.ToolStripSplitButton_Save.Image = CType(resources.GetObject("ToolStripSplitButton_Save.Image"), System.Drawing.Image)
         Me.ToolStripSplitButton_Save.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.ToolStripSplitButton_Save.Name = "ToolStripSplitButton_Save"
         Me.ToolStripSplitButton_Save.Size = New System.Drawing.Size(32, 31)
         Me.ToolStripSplitButton_Save.Text = "&Save"
         '
-        'ToolStripMenuItem_ExportChart
+        'ToolStripMenuItem_SaveChart
         '
-        Me.ToolStripMenuItem_ExportChart.Image = Global.BlueM.Wave.My.Resources.Resources.chart_pie
-        Me.ToolStripMenuItem_ExportChart.Name = "ToolStripMenuItem_ExportChart"
-        Me.ToolStripMenuItem_ExportChart.Size = New System.Drawing.Size(178, 22)
-        Me.ToolStripMenuItem_ExportChart.Text = "Export chart (*.TEN)"
+        Me.ToolStripMenuItem_SaveChart.Image = Global.BlueM.Wave.My.Resources.Resources.chart_pie
+        Me.ToolStripMenuItem_SaveChart.Name = "ToolStripMenuItem_SaveChart"
+        Me.ToolStripMenuItem_SaveChart.Size = New System.Drawing.Size(169, 22)
+        Me.ToolStripMenuItem_SaveChart.Text = "Save chart (*.TEN)"
         '
         'ToolStripMenuItem_ExportSeries
         '
         Me.ToolStripMenuItem_ExportSeries.Image = Global.BlueM.Wave.My.Resources.Resources.page_white_go
         Me.ToolStripMenuItem_ExportSeries.Name = "ToolStripMenuItem_ExportSeries"
-        Me.ToolStripMenuItem_ExportSeries.Size = New System.Drawing.Size(178, 22)
+        Me.ToolStripMenuItem_ExportSeries.Size = New System.Drawing.Size(169, 22)
         Me.ToolStripMenuItem_ExportSeries.Text = "Export time series"
         '
         'ToolStripSeparator4
@@ -383,14 +383,14 @@ Partial Class Wave
         'HilfeToolStripMenuItem
         '
         Me.HilfeToolStripMenuItem.Name = "HilfeToolStripMenuItem"
-        Me.HilfeToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.HilfeToolStripMenuItem.Size = New System.Drawing.Size(131, 22)
         Me.HilfeToolStripMenuItem.Text = "Help (wiki)"
         '
         'AboutToolStripMenuItem
         '
         Me.AboutToolStripMenuItem.Image = Global.BlueM.Wave.My.Resources.Resources.BlueM_icon
         Me.AboutToolStripMenuItem.Name = "AboutToolStripMenuItem"
-        Me.AboutToolStripMenuItem.Size = New System.Drawing.Size(107, 22)
+        Me.AboutToolStripMenuItem.Size = New System.Drawing.Size(131, 22)
         Me.AboutToolStripMenuItem.Text = "About"
         '
         'ToolStripButton_ZoomAll
@@ -1151,7 +1151,7 @@ Partial Class Wave
     Friend WithEvents ToolStripButton_Convert As System.Windows.Forms.ToolStripButton
     Friend WithEvents ToolStripMenuItem_ImportSeries As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolStripMenuItem_LoadTEN As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents ToolStripMenuItem_ExportChart As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ToolStripMenuItem_SaveChart As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolStripMenuItem_ExportSeries As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolStripMenuItem_ReloadFromFiles As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolStripMenuItem_EnterSeries As System.Windows.Forms.ToolStripMenuItem
