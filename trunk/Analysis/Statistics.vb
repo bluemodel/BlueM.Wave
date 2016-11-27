@@ -116,11 +116,9 @@ Public Class Statistics
         min = Double.MaxValue
         max = Double.MinValue
         For Each zre As Zeitreihe In Me.mZeitreihen
-
             'Min und Max
-            min = Math.Min(min, zre.getWert("MinWert"))
-            max = Math.Max(max, zre.getWert("MaxWert"))
-
+            min = Math.Min(min, zre.Minimum)
+            max = Math.Max(max, zre.Maximum)
         Next
 
         'Klassenaufteilung
