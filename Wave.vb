@@ -55,23 +55,23 @@ Public Class Wave
     Private Zeitreihen As Dictionary(Of String, Zeitreihe)
 
     'Dateifilter
-    Private Const FileFilter_TEN As String = "TeeChart-Dateien (*.ten)|*.ten"
-    Private Const FileFilter_XML As String = "Theme-Dateien (*.xml)|*.xml"
+    Private Const FileFilter_TEN As String = "TeeChart files (*.ten)|*.ten"
+    Private Const FileFilter_XML As String = "Theme files (*.xml)|*.xml"
     Private Const FileFilter_Import As String = _
-            "Alle Dateien (*.*)|*.*|" & _
-            "Text-Dateien (*.txt)|*.txt|" & _
-            "CSV-Dateien (*.csv)|*.csv|" & _
-            "ZRE-Dateien (*.zre)|*.zre|" & _
-            "WEL-Dateien (*.wel, *.kwl)|*.wel;*.kwl|" & _
-            "UVF-Dateien (*.uvf)|*.uvf|" & _
-            "SMUSI-Dateien (*.asc)|*.asc|" & _
-            "SIMBA-Dateien (*.smb)|*.smb|" & _
-            "Hystem-Dateien (*.dat)|*.dat|" & _
+            "All files (*.*)|*.*|" & _
+            "Text files (*.txt)|*.txt|" & _
+            "CSV files (*.csv)|*.csv|" & _
+            "ZRE files (*.zre)|*.zre|" & _
+            "WEL files (*.wel, *.kwl)|*.wel;*.kwl|" & _
+            "UVF files (*.uvf)|*.uvf|" & _
+            "SMUSI files (*.asc)|*.asc|" & _
+            "SIMBA files (*.smb)|*.smb|" & _
+            "Hystem Extran files (*.dat)|*.dat|" & _
             "DWD-Temperatur-Feuchte (*.dtl)|*.dtl|" & _
-            "SWMM-Dateien (*.out)|*.out|" & _
-            "netCDF Daten (*.nc)|*.nc|" & _
-            "HYDRO_AS-2D Dateien (*.dat)|*.dat|" & _
-            "SYDRO Binärformat (*.bin)|*.bin"
+            "SWMM files (*.out)|*.out|" & _
+            "netCDF files (*.nc)|*.nc|" & _
+            "HYDRO_AS-2D files (*.dat)|*.dat|" & _
+            "SYDRO binary files (*.bin)|*.bin"
 
     'Chart-Zeugs
     Private WithEvents colorBand1 As Steema.TeeChart.Tools.ColorBand
@@ -394,14 +394,14 @@ Public Class Wave
 
     'Neu
     '***
-    Private Sub Neu_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_Neu.Click
+    Private Sub Neu_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_New.Click
 
         Dim res As MsgBoxResult
 
         'Warnen, wenn bereits Serien vorhanden
         '-------------------------------------
         If (Me.TChart1.Series.Count() > 0) Then
-            res = MsgBox("Alle vorhandenen Serien werden gelöscht!" & eol & "Fortfahren?", MsgBoxStyle.OkCancel)
+            res = MsgBox("All existing series will be deleted!" & eol & "Continue?", MsgBoxStyle.OkCancel)
             If (Not res = Windows.Forms.DialogResult.OK) Then Exit Sub
         End If
 
@@ -422,14 +422,14 @@ Public Class Wave
 
     'Dropdown für Öffnen Button
     '**************************
-    Private Sub MenuDropDown_Oeffnen(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripSplitButton_Oeffnen.ButtonClick
-        Me.ToolStripSplitButton_Oeffnen.ShowDropDown()
+    Private Sub MenuDropDown_Oeffnen(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripSplitButton_Open.ButtonClick
+        Me.ToolStripSplitButton_Open.ShowDropDown()
     End Sub
 
     'Serie(n) importieren
     '********************
-    Private Sub Importieren_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem_ZeitreihenImportieren.Click
-        Me.OpenFileDialog1.Title = "Serie(n) importieren"
+    Private Sub Importieren_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem_ImportSeries.Click
+        Me.OpenFileDialog1.Title = "Import time series"
         Me.OpenFileDialog1.Filter = FileFilter_Import
         If (Me.OpenFileDialog1.ShowDialog() = Windows.Forms.DialogResult.OK) Then
             Call Me.Import_File(Me.OpenFileDialog1.FileName)
@@ -438,8 +438,8 @@ Public Class Wave
 
     'TEN-Datei laden
     '****************
-    Private Sub TENLaden_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem_TENLaden.Click
-        Me.OpenFileDialog1.Title = "TEN-Datei laden"
+    Private Sub TENLaden_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem_LoadTEN.Click
+        Me.OpenFileDialog1.Title = "Load TEN file"
         Me.OpenFileDialog1.Filter = FileFilter_TEN
         If (Me.OpenFileDialog1.ShowDialog() = Windows.Forms.DialogResult.OK) Then
             Call Me.Load_TEN(Me.OpenFileDialog1.FileName)
@@ -448,8 +448,8 @@ Public Class Wave
 
     'Theme laden
     '***********
-    Private Sub ThemeLaden_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem_ThemeLaden.Click
-        Me.OpenFileDialog1.Title = "Theme laden"
+    Private Sub ThemeLaden_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem_LoadTheme.Click
+        Me.OpenFileDialog1.Title = "Load theme"
         Me.OpenFileDialog1.Filter = FileFilter_XML
         If (Me.OpenFileDialog1.ShowDialog() = Windows.Forms.DialogResult.OK) Then
             Call Me.Load_Theme(Me.OpenFileDialog1.FileName)
@@ -458,19 +458,19 @@ Public Class Wave
 
     'Dropdown für Speichern Button
     '*****************************
-    Private Sub MenuDropDown_Speichern(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripSplitButton_Speichern.Click
-        Me.ToolStripSplitButton_Speichern.ShowDropDown()
+    Private Sub MenuDropDown_Speichern(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripSplitButton_Save.Click
+        Me.ToolStripSplitButton_Save.ShowDropDown()
     End Sub
 
     'Teechart Export
     '***************
-    Private Sub ExportDiagramm_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem_ExportDiagramm.Click
+    Private Sub ExportDiagramm_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem_ExportChart.Click
         Call Me.TChart1.Export.ShowExportDialog()
     End Sub
 
     'Zeitreihen Export
     '*****************
-    Private Sub ExportZeitreihe_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem_ExportZeitreihe.Click
+    Private Sub ExportZeitreihe_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem_ExportSeries.Click
         Call ExportZeitreihe()
     End Sub
 
@@ -487,7 +487,7 @@ Public Class Wave
 
     'Serie eingeben
     '**************
-    Private Sub Eingeben_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem_ZeitreiheEingeben.Click
+    Private Sub Eingeben_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem_EnterSeries.Click
         Dim SeriesEditor As New SeriesEditorDialog()
         If (SeriesEditor.ShowDialog() = Windows.Forms.DialogResult.OK) Then
             Call Me.Import_Series(SeriesEditor.Zeitreihe)
@@ -503,7 +503,7 @@ Public Class Wave
 
         'Wenn keine Zeitreihen vorhanden, abbrechen!
         If (Me.Zeitreihen.Count < 1) Then
-            MsgBox("Es sind keine Zeitreihen zum Zuschneiden verfügbar!", MsgBoxStyle.Exclamation)
+            MsgBox("No time series available for cutting!", MsgBoxStyle.Exclamation, "Wave")
             Exit Sub
         End If
 
@@ -557,7 +557,7 @@ Public Class Wave
 
         'Wenn keine Zeitreihen vorhanden, abbrechen!
         If (Me.Zeitreihen.Count < 1) Then
-            MsgBox("Es sind keine Zeitreihen für den Export verfügbar!", MsgBoxStyle.Exclamation, "Wave")
+            MsgBox("No time series available for export!", MsgBoxStyle.Exclamation, "Wave")
             Exit Sub
         End If
 
@@ -567,7 +567,7 @@ Public Class Wave
         ExportDiag.ComboBox_Format.DataSource = System.Enum.GetValues(GetType(Konstanten.Dateiformate))
         'Zeitreihen in Listbox eintragen
         For Each Reihe In Me.Zeitreihen.Values
-            ExportDiag.ListBox_Zeitreihen.Items.Add(Reihe)
+            ExportDiag.ListBox_Series.Items.Add(Reihe)
         Next
 
         'Exportdialog anzeigen
@@ -576,36 +576,36 @@ Public Class Wave
 
             'Speichern-Dialog vorbereiten
             '----------------------------
-            Me.SaveFileDialog1.Title = "Speichern unter..."
+            Me.SaveFileDialog1.Title = "Save as..."
             Me.SaveFileDialog1.AddExtension = True
             Select Case ExportDiag.ComboBox_Format.SelectedItem
                 Case Dateiformate.ASC
                     Me.SaveFileDialog1.DefaultExt = "asc"
-                    Me.SaveFileDialog1.Filter = "ASC-Dateien (*.asc)|*.asc"
+                    Me.SaveFileDialog1.Filter = "ASC files (*.asc)|*.asc"
                 Case Dateiformate.CSV
                     Me.SaveFileDialog1.DefaultExt = "csv"
-                    Me.SaveFileDialog1.Filter = "CSV-Dateien (*.csv)|*.csv"
+                    Me.SaveFileDialog1.Filter = "CSV files (*.csv)|*.csv"
                 Case Dateiformate.WEL
                     Me.SaveFileDialog1.DefaultExt = "wel"
-                    Me.SaveFileDialog1.Filter = "WEL-Dateien (*.wel)|*.wel"
+                    Me.SaveFileDialog1.Filter = "WEL files (*.wel)|*.wel"
                 Case Dateiformate.ZRE
                     Me.SaveFileDialog1.DefaultExt = "zre"
-                    Me.SaveFileDialog1.Filter = "ZRE-Dateien (*.zre)|*.zre"
+                    Me.SaveFileDialog1.Filter = "ZRE files (*.zre)|*.zre"
                 Case Dateiformate.REG_HYSTEM
                     Me.SaveFileDialog1.DefaultExt = "reg"
-                    Me.SaveFileDialog1.Filter = "HYSTEM-REG-Dateien (*.reg)|*.reg"
+                    Me.SaveFileDialog1.Filter = "HYSTEM REG files (*.reg)|*.reg"
                 Case Dateiformate.REG_SMUSI
                     Me.SaveFileDialog1.DefaultExt = "reg"
-                    Me.SaveFileDialog1.Filter = "SMUSI-REG-Dateien (*.reg)|*.reg"
+                    Me.SaveFileDialog1.Filter = "SMUSI REG files (*.reg)|*.reg"
                 Case Dateiformate.DAT_SWMM_MASS, Dateiformate.DAT_SWMM_TIME
                     Me.SaveFileDialog1.DefaultExt = "dat"
-                    Me.SaveFileDialog1.Filter = "SWMM-DAT-Dateien (*.dat)|*.dat"
+                    Me.SaveFileDialog1.Filter = "SWMM DAT files (*.dat)|*.dat"
                 Case Dateiformate.TXT
                     Me.SaveFileDialog1.DefaultExt = "txt"
-                    Me.SaveFileDialog1.Filter = "SWMM-Interface-Dateien (*.txt)|*.txt"
+                    Me.SaveFileDialog1.Filter = "SWMM Interface files (*.txt)|*.txt"
 
             End Select
-            Me.SaveFileDialog1.Filter &= "|Alle Dateien (*.*)|*.*"
+            Me.SaveFileDialog1.Filter &= "|All files (*.*)|*.*"
             Me.SaveFileDialog1.FilterIndex = 1
 
             'Speichern-Dialog anzeigen
@@ -615,43 +615,43 @@ Public Class Wave
                 'Reihen exportieren
                 Select Case ExportDiag.ComboBox_Format.SelectedItem
                     Case Dateiformate.ZRE
-                        For Each item As Object In ExportDiag.ListBox_Zeitreihen.SelectedItems
+                        For Each item As Object In ExportDiag.ListBox_Series.SelectedItems
                             Reihe = CType(item, Zeitreihe)
                             Call ZRE.Write_File(Reihe, Me.SaveFileDialog1.FileName)
                         Next
                     Case Dateiformate.REG_HYSTEM
-                        For Each item As Object In ExportDiag.ListBox_Zeitreihen.SelectedItems
+                        For Each item As Object In ExportDiag.ListBox_Series.SelectedItems
                             Reihe = CType(item, Zeitreihe)
                             Call HystemExtran_REG.Write_File(Reihe, Me.SaveFileDialog1.FileName)
                         Next
                     Case Dateiformate.REG_SMUSI
-                        For Each item As Object In ExportDiag.ListBox_Zeitreihen.SelectedItems
+                        For Each item As Object In ExportDiag.ListBox_Series.SelectedItems
                             Reihe = CType(item, Zeitreihe)
                             Call REG_SMUSI.Write_File(Reihe, Me.SaveFileDialog1.FileName)
                         Next
                     Case Dateiformate.DAT_SWMM_MASS
-                        For Each item As Object In ExportDiag.ListBox_Zeitreihen.SelectedItems
+                        For Each item As Object In ExportDiag.ListBox_Series.SelectedItems
                             Reihe = CType(item, Zeitreihe)
                             Call SWMM_DAT_MASS.Write_File(Reihe, Me.SaveFileDialog1.FileName, 5) 'Zeitschritt ist noch nicht dynamisch definiert
                         Next
                     Case Dateiformate.DAT_SWMM_TIME
-                        For Each item As Object In ExportDiag.ListBox_Zeitreihen.SelectedItems
+                        For Each item As Object In ExportDiag.ListBox_Series.SelectedItems
                             Reihe = CType(item, Zeitreihe)
                             Call SWMM_DAT_TIME.Write_File(Reihe, Me.SaveFileDialog1.FileName, 5) 'Zeitschritt ist noch nicht dynamisch definiert
                         Next
                     Case Dateiformate.TXT
-                        ReDim MultiReihe(ExportDiag.ListBox_Zeitreihen.SelectedItems.Count - 1)
+                        ReDim MultiReihe(ExportDiag.ListBox_Series.SelectedItems.Count - 1)
                         iReihe = 0
-                        For Each item As Object In ExportDiag.ListBox_Zeitreihen.SelectedItems
+                        For Each item As Object In ExportDiag.ListBox_Series.SelectedItems
                             MultiReihe(iReihe) = CType(item, Zeitreihe)
                             iReihe = iReihe + 1
                         Next
                         Call SWMM_TXT.Write_File(MultiReihe, Me.SaveFileDialog1.FileName)
                     Case Else
-                        MsgBox("Noch nicht implementiert!", MsgBoxStyle.Exclamation, "Wave")
+                        MsgBox("Not yet implemented!", MsgBoxStyle.Exclamation, "Wave")
                 End Select
 
-                MsgBox("Zeitreihe erfolgreich exportiert!", MsgBoxStyle.Information, "Wave")
+                MsgBox("Time series exported successfully!", MsgBoxStyle.Information, "Wave")
             End If
         End If
     End Sub
@@ -662,7 +662,7 @@ Public Class Wave
 
         'Wenn keine Zeitreihen vorhanden, abbrechen!
         If (Me.Zeitreihen.Count < 1) Then
-            MsgBox("Es sind keine Zeitreihen für die Analyse verfügbar!", MsgBoxStyle.Exclamation, "Wave")
+            MsgBox("No time series available for analysis!", MsgBoxStyle.Exclamation, "Wave")
             Exit Sub
         End If
 
@@ -676,23 +676,23 @@ Public Class Wave
                 'Wait-Cursor
                 Me.Cursor = Cursors.WaitCursor
 
-                Call Log.AddLogEntry("Starte Analyse " & oAnalysisDialog.selectedAnalysisFunction.ToString() & " ...")
+                Call Log.AddLogEntry("Starting analysis " & oAnalysisDialog.selectedAnalysisFunction.ToString() & " ...")
 
                 'Analyse instanzieren
                 Dim oAnalysis As Analysis
                 oAnalysis = AnalysisFactory.CreateAnalysis(oAnalysisDialog.selectedAnalysisFunction, oAnalysisDialog.selectedZeitreihen)
 
-                Call Log.AddLogEntry("... Analyse ausführen ...")
+                Call Log.AddLogEntry("... executing analysis ...")
 
                 'Analyse ausführen
                 Call oAnalysis.ProcessAnalysis()
 
-                Call Log.AddLogEntry("... Analyseergebnis aufbereiten ...")
+                Call Log.AddLogEntry("... preparing analysis result ...")
 
                 'Ergebnisse aufbereiten
                 Call oAnalysis.PrepareResults()
 
-                Call Log.AddLogEntry("Analyse abgeschlossen")
+                Call Log.AddLogEntry("Analysis complete")
 
                 'Default-Cursor
                 Me.Cursor = Cursors.Default
@@ -702,7 +702,7 @@ Public Class Wave
                 'Ergebnisdiagramm anzeigen
                 If (oAnalysis.hasResultChart) Then
                     Dim Wave2 As New Wave()
-                    Wave2.Text = "Analyse-Ergebnis"
+                    Wave2.Text = "Analysis result"
                     Wave2.Übersicht_Toggle(False)
                     Wave2.navigationToggle(False)
                     Wave2.TChart1.Chart = oAnalysis.getResultChart()
@@ -724,9 +724,9 @@ Public Class Wave
             Catch ex As Exception
                 Me.Cursor = Cursors.Default
                 'Logeintrag
-                Call Log.AddLogEntry("Analyse fehlgeschlagen:" & eol & ex.Message)
+                Call Log.AddLogEntry("Analysis failed:" & eol & ex.Message)
                 'Alert
-                MsgBox("Analyse fehlgeschlagen:" & eol & ex.Message, MsgBoxStyle.Critical)
+                MsgBox("Analyse failed:" & eol & ex.Message, MsgBoxStyle.Critical)
             End Try
 
         End If
@@ -735,13 +735,13 @@ Public Class Wave
 
     'Drucken
     '*******
-    Private Sub Drucken_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_Drucken.Click
+    Private Sub Drucken_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_Print.Click
         Call Me.TChart1.Printer.Preview()
     End Sub
 
     'Kopieren (als PNG)
     '******************
-    Private Sub Kopieren_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_Kopieren.Click
+    Private Sub Kopieren_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_Copy.Click
         Call Me.TChart1.Export.Image.PNG.CopyToClipboard()
     End Sub
 
@@ -758,27 +758,27 @@ Public Class Wave
 
     'Übersicht an/aus
     '****************
-    Private Sub Übersicht_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_Übersicht.Click
+    Private Sub Übersicht_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_ToggleOverview.Click
 
-        Call Übersicht_Toggle(ToolStripButton_Übersicht.Checked)
+        Call Übersicht_Toggle(ToolStripButton_ToggleOverview.Checked)
 
     End Sub
 
     Private Sub Übersicht_Toggle(ByVal showÜbersicht As Boolean)
         If (showÜbersicht) Then
             Me.SplitContainer1.Panel1Collapsed = False
-            Me.ToolStripButton_Übersicht.Checked = True
+            Me.ToolStripButton_ToggleOverview.Checked = True
         Else
             Me.SplitContainer1.Panel1Collapsed = True
-            Me.ToolStripButton_Übersicht.Checked = False
+            Me.ToolStripButton_ToggleOverview.Checked = False
         End If
     End Sub
 
     ''' <summary>
     ''' Show Navigation button clicked
     ''' </summary>
-    Private Sub ShowNavigation_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_ShowNavigation.Click
-        Call Me.navigationToggle(Me.ToolStripButton_ShowNavigation.Checked)
+    Private Sub ShowNavigation_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_ToggleNavigation.Click
+        Call Me.navigationToggle(Me.ToolStripButton_ToggleNavigation.Checked)
     End Sub
 
     ''' <summary>
@@ -893,7 +893,7 @@ Public Class Wave
     ''' <summary>
     ''' Löscht alle vorhandenen Serien und liest alle importierten Zeitreihen neu ein
     ''' </summary>
-    Private Sub RefreshFromFile(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem_Refresh.Click
+    Private Sub RefreshFromFile(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem_ReloadFromFiles.Click
 
         Dim Datei As Dateiformat
         Dim Dateiliste As String
@@ -901,7 +901,7 @@ Public Class Wave
 
         'Wenn keine Dateien vorhanden, abbrechen
         If (Me.ImportedFiles.Count = 0) Then
-            MsgBox("Es sind keine Dateien bekannt, die neu eingelesen werden könnten!", MsgBoxStyle.Information, "Dateien neu einlesen")
+            MsgBox("There are no known files that could be reloaded!", MsgBoxStyle.Information, "Wave")
             Exit Sub
         End If
 
@@ -912,7 +912,7 @@ Public Class Wave
         Next
 
         'Dialog anzeigen
-        Answer = MsgBox("Alle Serien löschen und folgende Dateien neu einlesen?" & eol & Dateiliste, MsgBoxStyle.OkCancel, "Dateien neu einlesen")
+        Answer = MsgBox("Delete all series and reload from the following files?" & eol & Dateiliste, MsgBoxStyle.OkCancel, "Wave")
 
         If (Answer = MsgBoxResult.Ok) Then
 
@@ -974,11 +974,11 @@ Public Class Wave
         If showNavigation Then
             Me.TableLayoutPanel1.RowStyles(0).Height = 38
             Me.TableLayoutPanel1.RowStyles(2).Height = 36
-            Me.ToolStripButton_ShowNavigation.Checked = True
+            Me.ToolStripButton_ToggleNavigation.Checked = True
         Else
             Me.TableLayoutPanel1.RowStyles(0).Height = 0
             Me.TableLayoutPanel1.RowStyles(2).Height = 0
-            Me.ToolStripButton_ShowNavigation.Checked = False
+            Me.ToolStripButton_ToggleNavigation.Checked = False
         End If
     End Sub
 
@@ -1327,7 +1327,7 @@ Public Class Wave
         Try
 
             'Log
-            Call Log.AddLogEntry("Lade Datei '" & FileName & "' ...")
+            Call Log.AddLogEntry("Loading file '" & FileName & "' ...")
 
             'Bereits vorhandene Reihen merken
             Dim existingseries = New List(Of String)
@@ -1368,7 +1368,7 @@ Public Class Wave
 
             'Abfrage für Reihenimport
             If (Me.TChart1.Series.Count() > 0) Then
-                result = MsgBox("Zeitreihen auch importieren?", MsgBoxStyle.YesNo)
+                result = MsgBox("Also import time series?", MsgBoxStyle.YesNo)
 
                 Select Case result
 
@@ -1382,7 +1382,7 @@ Public Class Wave
                             If (series.GetHorizAxis.IsDateTime) Then
 
                                 'Zeitreihe aus dem importierten Diagramm nach intern übertragen
-                                Log.AddLogEntry("Importiere Zeitreihe '" & series.Title & "' aus TEN-Datei...")
+                                Log.AddLogEntry("Importing series '" & series.Title & "' from TEN file...")
                                 reihe = New Zeitreihe(series.Title)
                                 For i = 0 To series.Count - 1
                                     reihe.AddNode(Date.FromOADate(series.XValues(i)), series.YValues(i))
@@ -1440,11 +1440,11 @@ Public Class Wave
             Call Me.UpdateCharts()
 
             'Log
-            Call Log.AddLogEntry("... Datei '" & FileName & "' erfolgreich geladen!")
+            Call Log.AddLogEntry("TEN file '" & FileName & "' loaded successfully!")
 
         Catch ex As Exception
-            MsgBox("Fehler beim Laden:" & eol & ex.Message, MsgBoxStyle.Critical)
-            Call Log.AddLogEntry("... Fehler beim Laden:" & eol & ex.Message)
+            MsgBox("Error while loading:" & eol & ex.Message, MsgBoxStyle.Critical)
+            Call Log.AddLogEntry("Error while loading:" & eol & ex.Message)
         End Try
 
     End Sub
@@ -1459,17 +1459,17 @@ Public Class Wave
         Try
 
             'Log
-            Call Log.AddLogEntry("Lade Theme '" & FileName & "' ...")
+            Call Log.AddLogEntry("Loading theme '" & FileName & "' ...")
 
             'Theme laden
             Call TChart1.Import.Theme.Load(FileName)
 
             'Log
-            Call Log.AddLogEntry("... Theme '" & FileName & "' erfolgreich geladen!")
+            Call Log.AddLogEntry("Theme '" & FileName & "' loaded successfully!")
 
         Catch ex As Exception
-            MsgBox("Fehler beim Laden:" & eol & ex.Message, MsgBoxStyle.Critical)
-            Call Log.AddLogEntry("... Fehler beim Laden:" & eol & ex.Message)
+            MsgBox("Error while loading:" & eol & ex.Message, MsgBoxStyle.Critical)
+            Call Log.AddLogEntry("Error while loading:" & eol & ex.Message)
         End Try
 
     End Sub
@@ -1502,7 +1502,7 @@ Public Class Wave
 
                 Try
                     'Log
-                    Call Log.AddLogEntry("Importiere Datei '" & file & "' ...")
+                    Call Log.AddLogEntry("Importing file '" & file & "' ...")
 
                     'Datei-Instanz erzeugen
                     Datei = Dateifactory.getDateiInstanz(file)
@@ -1525,14 +1525,14 @@ Public Class Wave
                         Call Datei.Read_File()
 
                         'Log
-                        Call Log.AddLogEntry("Datei '" & file & "' erfolgreich importiert!")
+                        Call Log.AddLogEntry("File '" & file & "' imported successfully!")
                         Application.DoEvents()
 
                         'Datei abspeichern
                         Me.ImportedFiles.Add(Datei)
 
                         'Log
-                        Call Log.AddLogEntry("Zeitreihen in Diagramm laden...")
+                        Call Log.AddLogEntry("Loading series in chart...")
                         Application.DoEvents()
 
                         'Alle eingelesenen Zeitreihen der Datei durchlaufen
@@ -1542,17 +1542,17 @@ Public Class Wave
                         Next
 
                         'Log
-                        Call Log.AddLogEntry("Zeitreihen erfolgreich in Diagramm geladen!")
+                        Call Log.AddLogEntry("Successfully loaded series in chart!")
 
                     Else
                         'Import abgebrochen
-                        Log.AddLogEntry("Import abgebrochen!")
+                        Log.AddLogEntry("Import cancelled!")
 
                     End If
 
                 Catch ex As Exception
-                    MsgBox("Fehler beim Import:" & eol & ex.Message, MsgBoxStyle.Critical)
-                    Call Log.AddLogEntry("Fehler beim Import: " & ex.Message)
+                    MsgBox("Error during import:" & eol & ex.Message, MsgBoxStyle.Critical)
+                    Call Log.AddLogEntry("Error during import: " & ex.Message)
 
                 Finally
                     Cursor = Cursors.Default
@@ -1574,7 +1574,7 @@ Public Class Wave
 
         'Try
         '    'Log
-        '    Call Log.AddLogEntry("Importiere Datei '" & file & "' ...")
+        '    Call Log.AddLogEntry("Importing file '" & file & "' ...")
 
         '    ZR_netCDF = New Zeitreihe_netCDF()
 
@@ -1585,7 +1585,7 @@ Public Class Wave
         '    End If
 
         '    'Log
-        '    Call Log.AddLogEntry("... Datei '" & file & "' erfolgreich importiert!")
+        '    Call Log.AddLogEntry("File '" & file & "' imported successfully!")
 
 
         '    ''Datei-Instanz erzeugen
@@ -1605,14 +1605,14 @@ Public Class Wave
         '    'Call Me.Display_RVA(RVADatei.RVAValues, True)
 
         'Catch ex As Exception
-        '    MsgBox("Fehler beim Import:" & eol & ex.Message, MsgBoxStyle.Critical)
-        '    Call Log.AddLogEntry("... Fehler beim Import:" & eol & ex.Message)
+        '    MsgBox("Error during import:" & eol & ex.Message, MsgBoxStyle.Critical)
+        '    Call Log.AddLogEntry("Error during import:" & eol & ex.Message)
         'End Try
 
     End Sub
 
     ''' <summary>
-    ''' Zeigt den Importdialog an und liest im Anschluss die Datei mit den eingegebenen Einstellungn ein
+    ''' Zeigt den Importdialog an und liest im Anschluss die Datei mit den eingegebenen Einstellungen ein
     ''' </summary>
     ''' <param name="Datei">Instanz der Datei, die importiert werden soll</param>
     Private Function showImportDialog(ByRef Datei As Dateiformat) As Boolean

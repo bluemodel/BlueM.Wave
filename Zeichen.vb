@@ -56,7 +56,7 @@ Public Class Zeichen
 
         Select Case Character
             Case Chr(32)
-                output = "Leerzeichen"
+                output = "Space"
             Case Chr(9)
                 output = "Tab"
             Case Else

@@ -34,11 +34,11 @@ Module AnalysisFactory
     ''' Liste der Analysefunktionen
     ''' </summary>
     Public Enum AnalysisFunctions
-        Monatsauswertung = 1
-        Doppelsummenalyse = 2
+        MonthlyAnalysis = 1
+        DoubleSumCurve = 2
         GoodnessOfFit = 3
-        Statistik = 4
-        Gegenueberstellung = 5
+        StatisticalAnalysis = 4
+        Comparison = 5
     End Enum
 
     ''' <summary>
@@ -53,23 +53,23 @@ Module AnalysisFactory
 
         Select Case analysisfunction
 
-            Case AnalysisFunctions.Monatsauswertung
-                oAnalysis = New Monatsauswertung(zeitreihen)
+            Case AnalysisFunctions.MonthlyAnalysis
+                oAnalysis = New MonthlyAnalysis(zeitreihen)
 
-            Case AnalysisFunctions.Doppelsummenalyse
-                oAnalysis = New Doppelsummenanalyse(zeitreihen)
+            Case AnalysisFunctions.DoubleSumCurve
+                oAnalysis = New DoubleSumCurve(zeitreihen)
 
             Case AnalysisFunctions.GoodnessOfFit
                 oAnalysis = New GoodnessOfFit(zeitreihen)
 
-            Case AnalysisFunctions.Statistik
-                oAnalysis = New Statistik(zeitreihen)
+            Case AnalysisFunctions.StatisticalAnalysis
+                oAnalysis = New Statistics(zeitreihen)
 
-            Case AnalysisFunctions.Gegenueberstellung
-                oAnalysis = New Gegenueberstellung(zeitreihen)
+            Case AnalysisFunctions.Comparison
+                oAnalysis = New Comparison(zeitreihen)
 
             Case Else
-                Throw New Exception("Analysefunktion nicht gefunden!")
+                Throw New Exception("Analysis not found!")
 
         End Select
 

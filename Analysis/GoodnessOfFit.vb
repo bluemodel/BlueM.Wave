@@ -65,7 +65,7 @@ Public Class GoodnessOfFit
 
         'Prüfung: Anzahl erwarteter Zeitreihen ist 2
         If (zeitreihen.Count <> 2) Then
-            Throw New Exception("Für GoodnessOfFit-Analyse müssen genau 2 Zeitreihen ausgewählt werden!")
+            Throw New Exception("The Goodness of Fit analysis requires the selection of exactly 2 time series!")
         End If
 
     End Sub
@@ -196,30 +196,30 @@ Public Class GoodnessOfFit
 
         'Text:
         '-----
-        shortText = "Volumenfehler: m = " & Me.volumenfehler.ToString(formatstring) & " %" & eol _
-                     & "Summe der Fehlerquadrate: F² = " & Me.sum_fehlerquadrate.ToString(formatstring) & eol _
-                     & "Nash-Sutcliffe Effizienz: E = " & Me.nash_sutcliffe.ToString(formatstring) & eol _
-                     & "Korrelationskoeffizient: r = " & Me.korrelationskoeffizient.ToString(formatstring) & eol _
-                     & "Bestimmtheitsmaß: r² = " & Me.bestimmtheitsmass.ToString(formatstring) & eol _
-                     & "Hydrologische Deviation: DEV = " & Me.hydrodev.ToString(formatstring)
+        shortText = "Volume error: m = " & Me.volumenfehler.ToString(formatstring) & " %" & eol _
+                     & "Sum of squared errors: F² = " & Me.sum_fehlerquadrate.ToString(formatstring) & eol _
+                     & "Nash-Sutcliffe efficiency: E = " & Me.nash_sutcliffe.ToString(formatstring) & eol _
+                     & "Coefficient of correlation: r = " & Me.korrelationskoeffizient.ToString(formatstring) & eol _
+                     & "Coefficient of determination: r² = " & Me.bestimmtheitsmass.ToString(formatstring) & eol _
+                     & "Hydrologic deviation: DEV = " & Me.hydrodev.ToString(formatstring)
 
-        Me.mResultText = "Goodness of Fit Analyse:" & eol _
+        Me.mResultText = "Goodness of Fit analysis:" & eol _
                          & eol _
-                         & "Gemessene Zeitreihe: " & Me.zre_gemessen.Title & eol _
-                         & "Simulierte Zeitreihe: " & Me.zre_simuliert.Title & eol _
+                         & "Observed time series: " & Me.zre_gemessen.Title & eol _
+                         & "Simulated time series: " & Me.zre_simuliert.Title & eol _
                          & eol _
-                         & "Die Analyse basiert auf " & Me.zre_gemessen.Length & " gemeinsamen Stützstellen zwischen " & Me.zre_gemessen.Anfangsdatum.ToString(Datumsformate("default")) & " und " & Me.zre_gemessen.Enddatum.ToString(Datumsformate("default")) & eol _
+                         & "The analysis is based on " & Me.zre_gemessen.Length & " coincident data points between " & Me.zre_gemessen.Anfangsdatum.ToString(Datumsformate("default")) & " and " & Me.zre_gemessen.Enddatum.ToString(Datumsformate("default")) & eol _
                          & eol _
                          & shortText
 
         'Werte:
         '------
-        Me.mResultValues.Add("Volumenfehler", Me.volumenfehler)
-        Me.mResultValues.Add("Summe der Fehlerquadrate", Me.sum_fehlerquadrate)
-        Me.mResultValues.Add("Nash-Sutcliffe Effizienz", Me.nash_sutcliffe)
-        Me.mResultValues.Add("Korrelationskoeffizient", Me.korrelationskoeffizient)
-        Me.mResultValues.Add("Bestimmtheitsmaß", Me.bestimmtheitsmass)
-        Me.mResultValues.Add("Hydrologische Deviation", Me.hydrodev)
+        Me.mResultValues.Add("Volume error", Me.volumenfehler)
+        Me.mResultValues.Add("Sum of squared errors", Me.sum_fehlerquadrate)
+        Me.mResultValues.Add("Nash-Sutcliffe efficiency", Me.nash_sutcliffe)
+        Me.mResultValues.Add("Coefficient of correlation", Me.korrelationskoeffizient)
+        Me.mResultValues.Add("Coefficient of determination", Me.bestimmtheitsmass)
+        Me.mResultValues.Add("Hydrologic deviation", Me.hydrodev)
 
         'Diagramm:
         '---------
@@ -238,18 +238,18 @@ Public Class GoodnessOfFit
         Dim line_fehlerquadrate As New Steema.TeeChart.Styles.Line(Me.mResultChart)
 
         'linke Achse
-        Me.mResultChart.Axes.Left.Title.Caption = "Zeitreihenwerte"
+        Me.mResultChart.Axes.Left.Title.Caption = "Time series value"
 
         'rechte Achse
         line_fehlerquadrate.CustomVertAxis = Me.mResultChart.Axes.Right
-        Me.mResultChart.Axes.Right.Title.Caption = "Fehlerquadrate"
+        Me.mResultChart.Axes.Right.Title.Caption = "Squared error"
         Me.mResultChart.Axes.Right.Grid.Visible = False
         Me.mResultChart.Axes.Right.Inverted = True
 
         'Namen vergeben
         line_gemessen.Title = Me.zre_gemessen.Title
         line_simuliert.Title = Me.zre_simuliert.Title
-        line_fehlerquadrate.Title = "Fehlerquadrate"
+        line_fehlerquadrate.Title = "Squared error"
 
         'Reihen formatieren
         line_fehlerquadrate.Color = Color.LightGray

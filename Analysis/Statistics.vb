@@ -29,7 +29,7 @@
 ''' Statistische Auswertung (Wahrscheinlichkeiten Unterschreitungswahrscheinlichkeiten)
 ''' </summary>
 ''' <remarks>http://wiki.bluemodel.org/index.php/Wave:Statistik</remarks>
-Public Class Statistik
+Public Class Statistics
     Inherits Analysis
 
     Private Const AnzKlassen As Integer = 100
@@ -89,7 +89,7 @@ Public Class Statistik
             einheit = zeitreihen(1).Einheit
             For Each zre As Zeitreihe In zeitreihen
                 If (zre.Einheit <> einheit) Then
-                    Throw New Exception("Bitte nur Zeitreihen mit der gleichen Einheit auswählen!")
+                    Throw New Exception("Please select only series withe same unit!")
                 End If
             Next
         End If
@@ -194,10 +194,10 @@ Public Class Statistik
 
         'Ergebnistext
         '------------
-        Me.mResultText = "Statistik wurde berechnet:" & eol
-        Me.mResultText &= "Folgende Klassenaufteilung wurde verwendet:" & eol & eol
+        Me.mResultText = "Statistics have been calculated:" & eol
+        Me.mResultText &= "The following bins were used:" & eol & eol
         For i As Integer = 0 To AnzKlassen - 1
-            Me.mResultText &= "Klasse " & i + 1 & ": " & Me.klassen(i) & " - " & (Me.klassen(i) + Me.klassengrösse) & eol
+            Me.mResultText &= "Bin " & i + 1 & ": " & Me.klassen(i) & " - " & (Me.klassen(i) + Me.klassengrösse) & eol
         Next
         Me.mResultText &= eol
 
@@ -211,24 +211,24 @@ Public Class Statistik
         'Diagramm formatieren
         Me.mResultChart = New Steema.TeeChart.Chart()
         Call Wave.formatChart(Me.mResultChart)
-        Me.mResultChart.Header.Text = "Statistische Auswertung"
+        Me.mResultChart.Header.Text = "Statistical analysis"
 
         'Achsen
-        Me.mResultChart.Axes.Left.Title.Caption = "Wahrscheinlichkeit [%]"
+        Me.mResultChart.Axes.Left.Title.Caption = "Probability [%]"
         Me.mResultChart.Axes.Left.Automatic = False
         Me.mResultChart.Axes.Left.Minimum = 0
         Me.mResultChart.Axes.Left.AutomaticMaximum = True
         Me.mResultChart.Axes.Left.MaximumOffset = 2
 
         Me.mResultChart.Axes.Right.Visible = True
-        Me.mResultChart.Axes.Right.Title.Caption = "Unterschreitungswahrscheinlichkeit [%]"
+        Me.mResultChart.Axes.Right.Title.Caption = "Probability of subceedance [%]"
         Me.mResultChart.Axes.Right.Title.Angle = 90
         Me.mResultChart.Axes.Right.Automatic = False
         Me.mResultChart.Axes.Right.Minimum = 0
         Me.mResultChart.Axes.Right.Maximum = 100
 
         Me.mResultChart.Axes.Bottom.Labels.Style = Steema.TeeChart.AxisLabelStyle.Value
-        Me.mResultChart.Axes.Bottom.Title.Caption = "Wert [" & Me.mZeitreihen(0).Einheit & "]"
+        Me.mResultChart.Axes.Bottom.Title.Caption = "Value [" & Me.mZeitreihen(0).Einheit & "]"
 
         'Serien
         For Each erg As ErgebnisWerte In Me.Ergebnisse
@@ -238,7 +238,7 @@ Public Class Statistik
             serieP.Marks.Visible = False
 
             For i As Integer = 0 To AnzKlassen - 1
-                serieP.Add(Me.klassen(i) + Me.klassengrösse / 2, erg.wahrscheinlichkeiten(i), "Klasse " & (i + 1).ToString & ": " & erg.wahrscheinlichkeiten(i).ToString("F2") & "%")
+                serieP.Add(Me.klassen(i) + Me.klassengrösse / 2, erg.wahrscheinlichkeiten(i), "Bin " & (i + 1).ToString & ": " & erg.wahrscheinlichkeiten(i).ToString("F2") & "%")
             Next
 
             Dim seriePU As New Steema.TeeChart.Styles.Line(Me.mResultChart)
@@ -251,7 +251,7 @@ Public Class Statistik
             seriePU.Pointer.VertSize = 2
 
             For i As Integer = 0 To AnzKlassen - 1
-                seriePU.Add(Me.klassen(i) + Me.klassengrösse / 2, erg.PU(i), "Klasse " & (i + 1).ToString & ": " & erg.PU(i).ToString("F2") & "%")
+                seriePU.Add(Me.klassen(i) + Me.klassengrösse / 2, erg.PU(i), "Bin " & (i + 1).ToString & ": " & erg.PU(i).ToString("F2") & "%")
             Next
 
         Next

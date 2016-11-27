@@ -60,7 +60,7 @@ Public Class LogWindow
 
     End Sub
 
-    Private Sub ToolStripButton_New_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_New.Click
+    Private Sub ToolStripButton_New_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_Clear.Click
         Call Log.ClearLog()
     End Sub
 

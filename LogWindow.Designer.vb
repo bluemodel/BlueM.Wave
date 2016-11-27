@@ -24,7 +24,7 @@ Partial Class LogWindow
     Private Sub InitializeComponent()
         Dim ToolStrip1 As System.Windows.Forms.ToolStrip
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(LogWindow))
-        Me.ToolStripButton_New = New System.Windows.Forms.ToolStripButton
+        Me.ToolStripButton_Clear = New System.Windows.Forms.ToolStripButton
         Me.ToolStripButton_Save = New System.Windows.Forms.ToolStripButton
         Me.ToolStripButton_Copy = New System.Windows.Forms.ToolStripButton
         Me.TextBox_Log = New System.Windows.Forms.RichTextBox
@@ -35,22 +35,22 @@ Partial Class LogWindow
         '
         'ToolStrip1
         '
-        ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButton_New, Me.ToolStripButton_Save, Me.ToolStripButton_Copy})
+        ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButton_Clear, Me.ToolStripButton_Save, Me.ToolStripButton_Copy})
         ToolStrip1.Location = New System.Drawing.Point(0, 0)
         ToolStrip1.Name = "ToolStrip1"
         ToolStrip1.Size = New System.Drawing.Size(636, 25)
         ToolStrip1.TabIndex = 1
         ToolStrip1.Text = "ToolStrip1"
         '
-        'ToolStripButton_New
+        'ToolStripButton_Clear
         '
-        Me.ToolStripButton_New.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.ToolStripButton_New.Image = CType(resources.GetObject("ToolStripButton_New.Image"), System.Drawing.Image)
-        Me.ToolStripButton_New.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.ToolStripButton_New.Name = "ToolStripButton_New"
-        Me.ToolStripButton_New.Size = New System.Drawing.Size(23, 22)
-        Me.ToolStripButton_New.Text = "Log löschen"
-        Me.ToolStripButton_New.ToolTipText = "Log löschen"
+        Me.ToolStripButton_Clear.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.ToolStripButton_Clear.Image = CType(resources.GetObject("ToolStripButton_Clear.Image"), System.Drawing.Image)
+        Me.ToolStripButton_Clear.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ToolStripButton_Clear.Name = "ToolStripButton_Clear"
+        Me.ToolStripButton_Clear.Size = New System.Drawing.Size(23, 22)
+        Me.ToolStripButton_Clear.Text = "Clear log"
+        Me.ToolStripButton_Clear.ToolTipText = "Clear log"
         '
         'ToolStripButton_Save
         '
@@ -59,7 +59,7 @@ Partial Class LogWindow
         Me.ToolStripButton_Save.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.ToolStripButton_Save.Name = "ToolStripButton_Save"
         Me.ToolStripButton_Save.Size = New System.Drawing.Size(23, 22)
-        Me.ToolStripButton_Save.Text = "Speichern"
+        Me.ToolStripButton_Save.Text = "Save"
         '
         'ToolStripButton_Copy
         '
@@ -69,7 +69,7 @@ Partial Class LogWindow
         Me.ToolStripButton_Copy.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.ToolStripButton_Copy.Name = "ToolStripButton_Copy"
         Me.ToolStripButton_Copy.Size = New System.Drawing.Size(23, 22)
-        Me.ToolStripButton_Copy.Text = "Kopieren"
+        Me.ToolStripButton_Copy.Text = "Copy"
         '
         'TextBox_Log
         '
@@ -112,7 +112,7 @@ Partial Class LogWindow
 
     End Sub
     Private WithEvents TextBox_Log As System.Windows.Forms.RichTextBox
-    Private WithEvents ToolStripButton_New As System.Windows.Forms.ToolStripButton
+    Private WithEvents ToolStripButton_Clear As System.Windows.Forms.ToolStripButton
     Private WithEvents ToolStripButton_Save As System.Windows.Forms.ToolStripButton
     Private WithEvents ToolStripButton_Copy As System.Windows.Forms.ToolStripButton
     Private WithEvents SaveFileDialog1 As System.Windows.Forms.SaveFileDialog
