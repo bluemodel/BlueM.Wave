@@ -32,24 +32,24 @@ Partial Class Wave
         Dim ToolStripSeparator6 As System.Windows.Forms.ToolStripSeparator
         Dim ToolStripSeparator4 As System.Windows.Forms.ToolStripSeparator
         Me.ToolStripStatusLabel_Log = New System.Windows.Forms.ToolStripStatusLabel
-        Me.ToolStripButton_Neu = New System.Windows.Forms.ToolStripButton
-        Me.ToolStripSplitButton_Oeffnen = New System.Windows.Forms.ToolStripSplitButton
-        Me.ToolStripMenuItem_ZeitreihenImportieren = New System.Windows.Forms.ToolStripMenuItem
-        Me.ToolStripMenuItem_ZeitreiheEingeben = New System.Windows.Forms.ToolStripMenuItem
-        Me.ToolStripMenuItem_Refresh = New System.Windows.Forms.ToolStripMenuItem
-        Me.ToolStripMenuItem_TENLaden = New System.Windows.Forms.ToolStripMenuItem
-        Me.ToolStripMenuItem_ThemeLaden = New System.Windows.Forms.ToolStripMenuItem
-        Me.ToolStripSplitButton_Speichern = New System.Windows.Forms.ToolStripSplitButton
-        Me.ToolStripMenuItem_ExportDiagramm = New System.Windows.Forms.ToolStripMenuItem
-        Me.ToolStripMenuItem_ExportZeitreihe = New System.Windows.Forms.ToolStripMenuItem
-        Me.ToolStripButton_Kopieren = New System.Windows.Forms.ToolStripButton
-        Me.ToolStripButton_Drucken = New System.Windows.Forms.ToolStripButton
+        Me.ToolStripButton_New = New System.Windows.Forms.ToolStripButton
+        Me.ToolStripSplitButton_Open = New System.Windows.Forms.ToolStripSplitButton
+        Me.ToolStripMenuItem_ImportSeries = New System.Windows.Forms.ToolStripMenuItem
+        Me.ToolStripMenuItem_EnterSeries = New System.Windows.Forms.ToolStripMenuItem
+        Me.ToolStripMenuItem_ReloadFromFiles = New System.Windows.Forms.ToolStripMenuItem
+        Me.ToolStripMenuItem_LoadTEN = New System.Windows.Forms.ToolStripMenuItem
+        Me.ToolStripMenuItem_LoadTheme = New System.Windows.Forms.ToolStripMenuItem
+        Me.ToolStripSplitButton_Save = New System.Windows.Forms.ToolStripSplitButton
+        Me.ToolStripMenuItem_ExportChart = New System.Windows.Forms.ToolStripMenuItem
+        Me.ToolStripMenuItem_ExportSeries = New System.Windows.Forms.ToolStripMenuItem
+        Me.ToolStripButton_Copy = New System.Windows.Forms.ToolStripButton
+        Me.ToolStripButton_Print = New System.Windows.Forms.ToolStripButton
         Me.ToolStripButton_Cut = New System.Windows.Forms.ToolStripButton
         Me.ToolStripButton_Analysis = New System.Windows.Forms.ToolStripButton
         Me.ToolStripButton_Convert = New System.Windows.Forms.ToolStripButton
         Me.ToolStripButton_EditChart = New System.Windows.Forms.ToolStripButton
-        Me.ToolStripButton_Übersicht = New System.Windows.Forms.ToolStripButton
-        Me.ToolStripButton_ShowNavigation = New System.Windows.Forms.ToolStripButton
+        Me.ToolStripButton_ToggleOverview = New System.Windows.Forms.ToolStripButton
+        Me.ToolStripButton_ToggleNavigation = New System.Windows.Forms.ToolStripButton
         Me.ToolStripButton_NormalMode = New System.Windows.Forms.ToolStripButton
         Me.ToolStripButton_Zoom = New System.Windows.Forms.ToolStripButton
         Me.ToolStripButton_Pan = New System.Windows.Forms.ToolStripButton
@@ -141,123 +141,123 @@ Partial Class Wave
         '
         ToolStrip1.AutoSize = False
         ToolStrip1.BackColor = System.Drawing.SystemColors.Control
-        ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButton_Neu, Me.ToolStripSplitButton_Oeffnen, Me.ToolStripSplitButton_Speichern, ToolStripSeparator4, Me.ToolStripButton_Kopieren, Me.ToolStripButton_Drucken, ToolStripSeparator2, Me.ToolStripButton_Cut, Me.ToolStripButton_Analysis, Me.ToolStripButton_Convert, ToolStripSeparator1, Me.ToolStripButton_EditChart, Me.ToolStripButton_Übersicht, Me.ToolStripButton_ShowNavigation, toolStripSeparator, Me.ToolStripButton_NormalMode, Me.ToolStripButton_Zoom, Me.ToolStripButton_Pan, Me.ToolStripSeparator3, Me.ToolStripButton_ZoomPrevious, Me.ToolStripSplitButton_Help, Me.ToolStripButton_ZoomAll})
+        ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButton_New, Me.ToolStripSplitButton_Open, Me.ToolStripSplitButton_Save, ToolStripSeparator4, Me.ToolStripButton_Copy, Me.ToolStripButton_Print, ToolStripSeparator2, Me.ToolStripButton_Cut, Me.ToolStripButton_Analysis, Me.ToolStripButton_Convert, ToolStripSeparator1, Me.ToolStripButton_EditChart, Me.ToolStripButton_ToggleOverview, Me.ToolStripButton_ToggleNavigation, toolStripSeparator, Me.ToolStripButton_NormalMode, Me.ToolStripButton_Zoom, Me.ToolStripButton_Pan, Me.ToolStripSeparator3, Me.ToolStripButton_ZoomPrevious, Me.ToolStripSplitButton_Help, Me.ToolStripButton_ZoomAll})
         ToolStrip1.Location = New System.Drawing.Point(0, 0)
         ToolStrip1.Name = "ToolStrip1"
         ToolStrip1.Size = New System.Drawing.Size(944, 34)
         ToolStrip1.TabIndex = 0
         ToolStrip1.Text = "ToolStrip1"
         '
-        'ToolStripButton_Neu
+        'ToolStripButton_New
         '
-        Me.ToolStripButton_Neu.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.ToolStripButton_Neu.Image = CType(resources.GetObject("ToolStripButton_Neu.Image"), System.Drawing.Image)
-        Me.ToolStripButton_Neu.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.ToolStripButton_Neu.Name = "ToolStripButton_Neu"
-        Me.ToolStripButton_Neu.Size = New System.Drawing.Size(23, 31)
-        Me.ToolStripButton_Neu.Text = "&Neu"
+        Me.ToolStripButton_New.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.ToolStripButton_New.Image = CType(resources.GetObject("ToolStripButton_New.Image"), System.Drawing.Image)
+        Me.ToolStripButton_New.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ToolStripButton_New.Name = "ToolStripButton_New"
+        Me.ToolStripButton_New.Size = New System.Drawing.Size(23, 31)
+        Me.ToolStripButton_New.Text = "&New"
         '
-        'ToolStripSplitButton_Oeffnen
+        'ToolStripSplitButton_Open
         '
-        Me.ToolStripSplitButton_Oeffnen.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.ToolStripSplitButton_Oeffnen.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripMenuItem_ZeitreihenImportieren, Me.ToolStripMenuItem_ZeitreiheEingeben, ToolStripSeparator5, Me.ToolStripMenuItem_Refresh, ToolStripSeparator6, Me.ToolStripMenuItem_TENLaden, Me.ToolStripMenuItem_ThemeLaden})
-        Me.ToolStripSplitButton_Oeffnen.Image = CType(resources.GetObject("ToolStripSplitButton_Oeffnen.Image"), System.Drawing.Image)
-        Me.ToolStripSplitButton_Oeffnen.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.ToolStripSplitButton_Oeffnen.Name = "ToolStripSplitButton_Oeffnen"
-        Me.ToolStripSplitButton_Oeffnen.Size = New System.Drawing.Size(32, 31)
-        Me.ToolStripSplitButton_Oeffnen.Text = "Öffnen"
+        Me.ToolStripSplitButton_Open.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.ToolStripSplitButton_Open.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripMenuItem_ImportSeries, Me.ToolStripMenuItem_EnterSeries, ToolStripSeparator5, Me.ToolStripMenuItem_ReloadFromFiles, ToolStripSeparator6, Me.ToolStripMenuItem_LoadTEN, Me.ToolStripMenuItem_LoadTheme})
+        Me.ToolStripSplitButton_Open.Image = CType(resources.GetObject("ToolStripSplitButton_Open.Image"), System.Drawing.Image)
+        Me.ToolStripSplitButton_Open.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ToolStripSplitButton_Open.Name = "ToolStripSplitButton_Open"
+        Me.ToolStripSplitButton_Open.Size = New System.Drawing.Size(32, 31)
+        Me.ToolStripSplitButton_Open.Text = "Open"
         '
-        'ToolStripMenuItem_ZeitreihenImportieren
+        'ToolStripMenuItem_ImportSeries
         '
-        Me.ToolStripMenuItem_ZeitreihenImportieren.Image = Global.BlueM.Wave.My.Resources.Resources.chart_line_add
-        Me.ToolStripMenuItem_ZeitreihenImportieren.Name = "ToolStripMenuItem_ZeitreihenImportieren"
-        Me.ToolStripMenuItem_ZeitreihenImportieren.Size = New System.Drawing.Size(203, 22)
-        Me.ToolStripMenuItem_ZeitreihenImportieren.Text = "Zeitreihe(n) importieren"
+        Me.ToolStripMenuItem_ImportSeries.Image = Global.BlueM.Wave.My.Resources.Resources.chart_line_add
+        Me.ToolStripMenuItem_ImportSeries.Name = "ToolStripMenuItem_ImportSeries"
+        Me.ToolStripMenuItem_ImportSeries.Size = New System.Drawing.Size(188, 22)
+        Me.ToolStripMenuItem_ImportSeries.Text = "Import time series"
         '
-        'ToolStripMenuItem_ZeitreiheEingeben
+        'ToolStripMenuItem_EnterSeries
         '
-        Me.ToolStripMenuItem_ZeitreiheEingeben.Image = Global.BlueM.Wave.My.Resources.Resources.chart_line_edit
-        Me.ToolStripMenuItem_ZeitreiheEingeben.Name = "ToolStripMenuItem_ZeitreiheEingeben"
-        Me.ToolStripMenuItem_ZeitreiheEingeben.Size = New System.Drawing.Size(203, 22)
-        Me.ToolStripMenuItem_ZeitreiheEingeben.Text = "Zeitreihe eingeben"
+        Me.ToolStripMenuItem_EnterSeries.Image = Global.BlueM.Wave.My.Resources.Resources.chart_line_edit
+        Me.ToolStripMenuItem_EnterSeries.Name = "ToolStripMenuItem_EnterSeries"
+        Me.ToolStripMenuItem_EnterSeries.Size = New System.Drawing.Size(188, 22)
+        Me.ToolStripMenuItem_EnterSeries.Text = "Enter time series"
         '
         'ToolStripSeparator5
         '
         ToolStripSeparator5.Name = "ToolStripSeparator5"
-        ToolStripSeparator5.Size = New System.Drawing.Size(200, 6)
+        ToolStripSeparator5.Size = New System.Drawing.Size(185, 6)
         '
-        'ToolStripMenuItem_Refresh
+        'ToolStripMenuItem_ReloadFromFiles
         '
-        Me.ToolStripMenuItem_Refresh.Image = Global.BlueM.Wave.My.Resources.Resources.arrow_refresh
-        Me.ToolStripMenuItem_Refresh.Name = "ToolStripMenuItem_Refresh"
-        Me.ToolStripMenuItem_Refresh.Size = New System.Drawing.Size(203, 22)
-        Me.ToolStripMenuItem_Refresh.Text = "Dateien neu einlesen"
+        Me.ToolStripMenuItem_ReloadFromFiles.Image = Global.BlueM.Wave.My.Resources.Resources.arrow_refresh
+        Me.ToolStripMenuItem_ReloadFromFiles.Name = "ToolStripMenuItem_ReloadFromFiles"
+        Me.ToolStripMenuItem_ReloadFromFiles.Size = New System.Drawing.Size(188, 22)
+        Me.ToolStripMenuItem_ReloadFromFiles.Text = "Reload from files"
         '
         'ToolStripSeparator6
         '
         ToolStripSeparator6.Name = "ToolStripSeparator6"
-        ToolStripSeparator6.Size = New System.Drawing.Size(200, 6)
+        ToolStripSeparator6.Size = New System.Drawing.Size(185, 6)
         '
-        'ToolStripMenuItem_TENLaden
+        'ToolStripMenuItem_LoadTEN
         '
-        Me.ToolStripMenuItem_TENLaden.Image = Global.BlueM.Wave.My.Resources.Resources.chart_curve
-        Me.ToolStripMenuItem_TENLaden.Name = "ToolStripMenuItem_TENLaden"
-        Me.ToolStripMenuItem_TENLaden.Size = New System.Drawing.Size(203, 22)
-        Me.ToolStripMenuItem_TENLaden.Text = "Diagramm laden (*.TEN)"
+        Me.ToolStripMenuItem_LoadTEN.Image = Global.BlueM.Wave.My.Resources.Resources.chart_curve
+        Me.ToolStripMenuItem_LoadTEN.Name = "ToolStripMenuItem_LoadTEN"
+        Me.ToolStripMenuItem_LoadTEN.Size = New System.Drawing.Size(188, 22)
+        Me.ToolStripMenuItem_LoadTEN.Text = "Load diagram (*.TEN)"
         '
-        'ToolStripMenuItem_ThemeLaden
+        'ToolStripMenuItem_LoadTheme
         '
-        Me.ToolStripMenuItem_ThemeLaden.Image = Global.BlueM.Wave.My.Resources.Resources.color_wheel
-        Me.ToolStripMenuItem_ThemeLaden.Name = "ToolStripMenuItem_ThemeLaden"
-        Me.ToolStripMenuItem_ThemeLaden.Size = New System.Drawing.Size(203, 22)
-        Me.ToolStripMenuItem_ThemeLaden.Text = "Theme laden (*.XML)"
+        Me.ToolStripMenuItem_LoadTheme.Image = Global.BlueM.Wave.My.Resources.Resources.color_wheel
+        Me.ToolStripMenuItem_LoadTheme.Name = "ToolStripMenuItem_LoadTheme"
+        Me.ToolStripMenuItem_LoadTheme.Size = New System.Drawing.Size(188, 22)
+        Me.ToolStripMenuItem_LoadTheme.Text = "Load theme (*.XML)"
         '
-        'ToolStripSplitButton_Speichern
+        'ToolStripSplitButton_Save
         '
-        Me.ToolStripSplitButton_Speichern.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.ToolStripSplitButton_Speichern.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripMenuItem_ExportDiagramm, Me.ToolStripMenuItem_ExportZeitreihe})
-        Me.ToolStripSplitButton_Speichern.Image = CType(resources.GetObject("ToolStripSplitButton_Speichern.Image"), System.Drawing.Image)
-        Me.ToolStripSplitButton_Speichern.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.ToolStripSplitButton_Speichern.Name = "ToolStripSplitButton_Speichern"
-        Me.ToolStripSplitButton_Speichern.Size = New System.Drawing.Size(32, 31)
-        Me.ToolStripSplitButton_Speichern.Text = "&Speichern"
+        Me.ToolStripSplitButton_Save.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.ToolStripSplitButton_Save.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripMenuItem_ExportChart, Me.ToolStripMenuItem_ExportSeries})
+        Me.ToolStripSplitButton_Save.Image = CType(resources.GetObject("ToolStripSplitButton_Save.Image"), System.Drawing.Image)
+        Me.ToolStripSplitButton_Save.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ToolStripSplitButton_Save.Name = "ToolStripSplitButton_Save"
+        Me.ToolStripSplitButton_Save.Size = New System.Drawing.Size(32, 31)
+        Me.ToolStripSplitButton_Save.Text = "&Save"
         '
-        'ToolStripMenuItem_ExportDiagramm
+        'ToolStripMenuItem_ExportChart
         '
-        Me.ToolStripMenuItem_ExportDiagramm.Image = Global.BlueM.Wave.My.Resources.Resources.chart_pie
-        Me.ToolStripMenuItem_ExportDiagramm.Name = "ToolStripMenuItem_ExportDiagramm"
-        Me.ToolStripMenuItem_ExportDiagramm.Size = New System.Drawing.Size(197, 22)
-        Me.ToolStripMenuItem_ExportDiagramm.Text = "Diagramm exportieren"
+        Me.ToolStripMenuItem_ExportChart.Image = Global.BlueM.Wave.My.Resources.Resources.chart_pie
+        Me.ToolStripMenuItem_ExportChart.Name = "ToolStripMenuItem_ExportChart"
+        Me.ToolStripMenuItem_ExportChart.Size = New System.Drawing.Size(178, 22)
+        Me.ToolStripMenuItem_ExportChart.Text = "Export chart (*.TEN)"
         '
-        'ToolStripMenuItem_ExportZeitreihe
+        'ToolStripMenuItem_ExportSeries
         '
-        Me.ToolStripMenuItem_ExportZeitreihe.Image = Global.BlueM.Wave.My.Resources.Resources.page_white_go
-        Me.ToolStripMenuItem_ExportZeitreihe.Name = "ToolStripMenuItem_ExportZeitreihe"
-        Me.ToolStripMenuItem_ExportZeitreihe.Size = New System.Drawing.Size(197, 22)
-        Me.ToolStripMenuItem_ExportZeitreihe.Text = "Zeitreihe(n) exportieren"
+        Me.ToolStripMenuItem_ExportSeries.Image = Global.BlueM.Wave.My.Resources.Resources.page_white_go
+        Me.ToolStripMenuItem_ExportSeries.Name = "ToolStripMenuItem_ExportSeries"
+        Me.ToolStripMenuItem_ExportSeries.Size = New System.Drawing.Size(178, 22)
+        Me.ToolStripMenuItem_ExportSeries.Text = "Export time series"
         '
         'ToolStripSeparator4
         '
         ToolStripSeparator4.Name = "ToolStripSeparator4"
         ToolStripSeparator4.Size = New System.Drawing.Size(6, 34)
         '
-        'ToolStripButton_Kopieren
+        'ToolStripButton_Copy
         '
-        Me.ToolStripButton_Kopieren.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.ToolStripButton_Kopieren.Image = CType(resources.GetObject("ToolStripButton_Kopieren.Image"), System.Drawing.Image)
-        Me.ToolStripButton_Kopieren.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.ToolStripButton_Kopieren.Name = "ToolStripButton_Kopieren"
-        Me.ToolStripButton_Kopieren.Size = New System.Drawing.Size(23, 31)
-        Me.ToolStripButton_Kopieren.Text = "Diagramm in die Zwis&chenablage kopieren (PNG)"
+        Me.ToolStripButton_Copy.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.ToolStripButton_Copy.Image = CType(resources.GetObject("ToolStripButton_Copy.Image"), System.Drawing.Image)
+        Me.ToolStripButton_Copy.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ToolStripButton_Copy.Name = "ToolStripButton_Copy"
+        Me.ToolStripButton_Copy.Size = New System.Drawing.Size(23, 31)
+        Me.ToolStripButton_Copy.Text = "&Copy chart to clipboard (PNG)"
         '
-        'ToolStripButton_Drucken
+        'ToolStripButton_Print
         '
-        Me.ToolStripButton_Drucken.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.ToolStripButton_Drucken.Image = CType(resources.GetObject("ToolStripButton_Drucken.Image"), System.Drawing.Image)
-        Me.ToolStripButton_Drucken.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.ToolStripButton_Drucken.Name = "ToolStripButton_Drucken"
-        Me.ToolStripButton_Drucken.Size = New System.Drawing.Size(23, 31)
-        Me.ToolStripButton_Drucken.Text = "&Drucken"
+        Me.ToolStripButton_Print.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.ToolStripButton_Print.Image = CType(resources.GetObject("ToolStripButton_Print.Image"), System.Drawing.Image)
+        Me.ToolStripButton_Print.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ToolStripButton_Print.Name = "ToolStripButton_Print"
+        Me.ToolStripButton_Print.Size = New System.Drawing.Size(23, 31)
+        Me.ToolStripButton_Print.Text = "&Print"
         '
         'ToolStripButton_Cut
         '
@@ -266,7 +266,7 @@ Partial Class Wave
         Me.ToolStripButton_Cut.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.ToolStripButton_Cut.Name = "ToolStripButton_Cut"
         Me.ToolStripButton_Cut.Size = New System.Drawing.Size(23, 31)
-        Me.ToolStripButton_Cut.Text = "Zeitreihe zuschneiden"
+        Me.ToolStripButton_Cut.Text = "Cut time series"
         '
         'ToolStripButton_Analysis
         '
@@ -275,7 +275,7 @@ Partial Class Wave
         Me.ToolStripButton_Analysis.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.ToolStripButton_Analysis.Name = "ToolStripButton_Analysis"
         Me.ToolStripButton_Analysis.Size = New System.Drawing.Size(23, 31)
-        Me.ToolStripButton_Analysis.Text = "Zeitreihen analysieren"
+        Me.ToolStripButton_Analysis.Text = "Perform an analysis"
         '
         'ToolStripButton_Convert
         '
@@ -284,7 +284,7 @@ Partial Class Wave
         Me.ToolStripButton_Convert.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.ToolStripButton_Convert.Name = "ToolStripButton_Convert"
         Me.ToolStripButton_Convert.Size = New System.Drawing.Size(23, 31)
-        Me.ToolStripButton_Convert.Text = "Zeitreihenformate konvertieren"
+        Me.ToolStripButton_Convert.Text = "Convert time series format"
         '
         'ToolStripButton_EditChart
         '
@@ -293,32 +293,32 @@ Partial Class Wave
         Me.ToolStripButton_EditChart.ImageTransparentColor = System.Drawing.SystemColors.Control
         Me.ToolStripButton_EditChart.Name = "ToolStripButton_EditChart"
         Me.ToolStripButton_EditChart.Size = New System.Drawing.Size(23, 31)
-        Me.ToolStripButton_EditChart.Text = "Diagramm bearbeiten"
+        Me.ToolStripButton_EditChart.Text = "Edit chart"
         '
-        'ToolStripButton_Übersicht
+        'ToolStripButton_ToggleOverview
         '
-        Me.ToolStripButton_Übersicht.Checked = True
-        Me.ToolStripButton_Übersicht.CheckOnClick = True
-        Me.ToolStripButton_Übersicht.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.ToolStripButton_Übersicht.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.ToolStripButton_Übersicht.Image = Global.BlueM.Wave.My.Resources.Resources.application_split
-        Me.ToolStripButton_Übersicht.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.ToolStripButton_Übersicht.Name = "ToolStripButton_Übersicht"
-        Me.ToolStripButton_Übersicht.Size = New System.Drawing.Size(23, 31)
-        Me.ToolStripButton_Übersicht.Text = "Übersicht an/aus"
-        Me.ToolStripButton_Übersicht.ToolTipText = "Übersicht an/aus"
+        Me.ToolStripButton_ToggleOverview.Checked = True
+        Me.ToolStripButton_ToggleOverview.CheckOnClick = True
+        Me.ToolStripButton_ToggleOverview.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.ToolStripButton_ToggleOverview.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.ToolStripButton_ToggleOverview.Image = Global.BlueM.Wave.My.Resources.Resources.application_split
+        Me.ToolStripButton_ToggleOverview.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ToolStripButton_ToggleOverview.Name = "ToolStripButton_ToggleOverview"
+        Me.ToolStripButton_ToggleOverview.Size = New System.Drawing.Size(23, 31)
+        Me.ToolStripButton_ToggleOverview.Text = "Toggle overview"
+        Me.ToolStripButton_ToggleOverview.ToolTipText = "Toggle overview"
         '
-        'ToolStripButton_ShowNavigation
+        'ToolStripButton_ToggleNavigation
         '
-        Me.ToolStripButton_ShowNavigation.Checked = True
-        Me.ToolStripButton_ShowNavigation.CheckOnClick = True
-        Me.ToolStripButton_ShowNavigation.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.ToolStripButton_ShowNavigation.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.ToolStripButton_ShowNavigation.Image = CType(resources.GetObject("ToolStripButton_ShowNavigation.Image"), System.Drawing.Image)
-        Me.ToolStripButton_ShowNavigation.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.ToolStripButton_ShowNavigation.Name = "ToolStripButton_ShowNavigation"
-        Me.ToolStripButton_ShowNavigation.Size = New System.Drawing.Size(23, 31)
-        Me.ToolStripButton_ShowNavigation.Text = "Show navigation controls"
+        Me.ToolStripButton_ToggleNavigation.Checked = True
+        Me.ToolStripButton_ToggleNavigation.CheckOnClick = True
+        Me.ToolStripButton_ToggleNavigation.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.ToolStripButton_ToggleNavigation.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.ToolStripButton_ToggleNavigation.Image = CType(resources.GetObject("ToolStripButton_ToggleNavigation.Image"), System.Drawing.Image)
+        Me.ToolStripButton_ToggleNavigation.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ToolStripButton_ToggleNavigation.Name = "ToolStripButton_ToggleNavigation"
+        Me.ToolStripButton_ToggleNavigation.Size = New System.Drawing.Size(23, 31)
+        Me.ToolStripButton_ToggleNavigation.Text = "Toggle navigation controls"
         '
         'ToolStripButton_NormalMode
         '
@@ -383,8 +383,8 @@ Partial Class Wave
         'HilfeToolStripMenuItem
         '
         Me.HilfeToolStripMenuItem.Name = "HilfeToolStripMenuItem"
-        Me.HilfeToolStripMenuItem.Size = New System.Drawing.Size(107, 22)
-        Me.HilfeToolStripMenuItem.Text = "Help"
+        Me.HilfeToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.HilfeToolStripMenuItem.Text = "Help (wiki)"
         '
         'AboutToolStripMenuItem
         '
@@ -1134,13 +1134,13 @@ Partial Class Wave
     Friend WithEvents OpenFileDialog1 As System.Windows.Forms.OpenFileDialog
     Friend WithEvents SplitContainer1 As System.Windows.Forms.SplitContainer
     Friend WithEvents TChart2 As Steema.TeeChart.TChart
-    Friend WithEvents ToolStripButton_Neu As System.Windows.Forms.ToolStripButton
-    Friend WithEvents ToolStripSplitButton_Oeffnen As System.Windows.Forms.ToolStripSplitButton
-    Friend WithEvents ToolStripSplitButton_Speichern As System.Windows.Forms.ToolStripSplitButton
-    Friend WithEvents ToolStripButton_Drucken As System.Windows.Forms.ToolStripButton
-    Friend WithEvents ToolStripButton_Kopieren As System.Windows.Forms.ToolStripButton
+    Friend WithEvents ToolStripButton_New As System.Windows.Forms.ToolStripButton
+    Friend WithEvents ToolStripSplitButton_Open As System.Windows.Forms.ToolStripSplitButton
+    Friend WithEvents ToolStripSplitButton_Save As System.Windows.Forms.ToolStripSplitButton
+    Friend WithEvents ToolStripButton_Print As System.Windows.Forms.ToolStripButton
+    Friend WithEvents ToolStripButton_Copy As System.Windows.Forms.ToolStripButton
     Friend WithEvents ToolStripButton_EditChart As System.Windows.Forms.ToolStripButton
-    Friend WithEvents ToolStripButton_Übersicht As System.Windows.Forms.ToolStripButton
+    Friend WithEvents ToolStripButton_ToggleOverview As System.Windows.Forms.ToolStripButton
     Friend WithEvents SaveFileDialog1 As System.Windows.Forms.SaveFileDialog
     Friend WithEvents ToolStripButton_Analysis As System.Windows.Forms.ToolStripButton
     Friend WithEvents ToolStripStatusLabel_Log As System.Windows.Forms.ToolStripStatusLabel
@@ -1149,13 +1149,13 @@ Partial Class Wave
     Friend WithEvents HilfeToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents AboutToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolStripButton_Convert As System.Windows.Forms.ToolStripButton
-    Friend WithEvents ToolStripMenuItem_ZeitreihenImportieren As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents ToolStripMenuItem_TENLaden As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents ToolStripMenuItem_ExportDiagramm As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents ToolStripMenuItem_ExportZeitreihe As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents ToolStripMenuItem_Refresh As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents ToolStripMenuItem_ZeitreiheEingeben As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents ToolStripMenuItem_ThemeLaden As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ToolStripMenuItem_ImportSeries As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ToolStripMenuItem_LoadTEN As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ToolStripMenuItem_ExportChart As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ToolStripMenuItem_ExportSeries As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ToolStripMenuItem_ReloadFromFiles As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ToolStripMenuItem_EnterSeries As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ToolStripMenuItem_LoadTheme As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolStripButton_Zoom As System.Windows.Forms.ToolStripButton
     Friend WithEvents ToolStripButton_Pan As System.Windows.Forms.ToolStripButton
     Friend WithEvents ToolStripButton_ZoomPrevious As System.Windows.Forms.ToolStripButton
@@ -1176,6 +1176,6 @@ Partial Class Wave
     Friend WithEvents ToolStripButton_ZoomAll As System.Windows.Forms.ToolStripButton
     Friend WithEvents ToolStripSeparator3 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents TableLayoutPanel1 As System.Windows.Forms.TableLayoutPanel
-    Friend WithEvents ToolStripButton_ShowNavigation As System.Windows.Forms.ToolStripButton
+    Friend WithEvents ToolStripButton_ToggleNavigation As System.Windows.Forms.ToolStripButton
 
 End Class

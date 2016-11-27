@@ -34,9 +34,9 @@ Partial Class GoodnessOfFit_Dialog
         Me.Label1.AutoSize = True
         Me.Label1.Location = New System.Drawing.Point(13, 13)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(366, 13)
+        Me.Label1.Size = New System.Drawing.Size(219, 13)
         Me.Label1.TabIndex = 0
-        Me.Label1.Text = "Bitte angeben, welche Zeitreihe als die ""gemessene"" behandelt werden soll:"
+        Me.Label1.Text = "Select the series with the ""observed"" values:"
         '
         'RadioButton1
         '
@@ -64,7 +64,7 @@ Partial Class GoodnessOfFit_Dialog
         '
         Me.Button_OK.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Button_OK.DialogResult = System.Windows.Forms.DialogResult.OK
-        Me.Button_OK.Location = New System.Drawing.Point(309, 91)
+        Me.Button_OK.Location = New System.Drawing.Point(245, 91)
         Me.Button_OK.Name = "Button_OK"
         Me.Button_OK.Size = New System.Drawing.Size(75, 23)
         Me.Button_OK.TabIndex = 3
@@ -75,11 +75,11 @@ Partial Class GoodnessOfFit_Dialog
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(396, 126)
-        Me.Controls.Add(Me.Button_OK)
+        Me.ClientSize = New System.Drawing.Size(332, 126)
+        Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.RadioButton2)
         Me.Controls.Add(Me.RadioButton1)
-        Me.Controls.Add(Me.Label1)
+        Me.Controls.Add(Me.Button_OK)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.MaximizeBox = False
@@ -87,7 +87,7 @@ Partial Class GoodnessOfFit_Dialog
         Me.Name = "GoodnessOfFit_Dialog"
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = "Goodness Of Fit"
+        Me.Text = "Goodness of Fit"
         Me.ResumeLayout(False)
         Me.PerformLayout()
 

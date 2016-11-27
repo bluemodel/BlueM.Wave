@@ -198,10 +198,10 @@ Public Class Zeitreihe
     ''' </summary>
     ''' <param name="datum">Datum</param>
     ''' <param name="wert">Wert</param>
-    ''' <remarks>Das Datum der Stützstelle darf in der Zeireihe noch nicht vorhanden sein</remarks>
+    ''' <remarks>Das Datum der Stützstelle darf in der Zeitreihe noch nicht vorhanden sein</remarks>
     Public Sub AddNode(ByVal datum As DateTime, ByVal wert As Double)
         If (Me.Nodes.ContainsKey(datum)) Then
-            Throw New Exception("Fehler: Die Zeitreihe enthält bereits eine Stützstelle am " & datum.ToString(Konstanten.Datumsformate("default")) & "!")
+            Throw New Exception("Error: duplicate data point on " & datum.ToString(Konstanten.Datumsformate("default")) & "!")
         End If
         Me._nodes.Add(datum, wert)
     End Sub
@@ -272,7 +272,7 @@ Public Class Zeitreihe
             Call Me.Nodes.TrimExcess()
 
             'Log 
-            Call Log.AddLogEntry("Zeitreihe '" & Me.Title & "' von " & lengthOld.ToString() & " auf " & lengthNew.ToString() & " Stützstellen gekürzt.")
+            Call Log.AddLogEntry("Time series cut '" & Me.Title & "' from " & lengthOld.ToString() & " to " & lengthNew.ToString() & " data points.")
 
         End If
 
@@ -570,7 +570,7 @@ Public Class Zeitreihe
             Next
 
             'Log
-            Call Log.AddLogEntry(Me.Title & ": Es wurden " & NaNCounter.ToString() & " Stützstellen mit Wert NaN, Infinity oder -Infinity entfernt!")
+            Call Log.AddLogEntry(Me.Title & ": " & NaNCounter.ToString() & " data points with values of NaN, Infinity or -Infinity were removed!")
 
         Else
             'Alle Stützstellen kopieren

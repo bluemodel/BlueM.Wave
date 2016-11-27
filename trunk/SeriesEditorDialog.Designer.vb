@@ -30,8 +30,8 @@ Partial Class SeriesEditorDialog
         Me.Button_Paste = New System.Windows.Forms.Button
         Me.Button_OK = New System.Windows.Forms.Button
         Me.TextBox_Title = New System.Windows.Forms.TextBox
-        Me.Label_Einheit = New System.Windows.Forms.Label
-        Me.TextBox_Einheit = New System.Windows.Forms.TextBox
+        Me.Label_Unit = New System.Windows.Forms.Label
+        Me.TextBox_Unit = New System.Windows.Forms.TextBox
         Me.Label_Help = New System.Windows.Forms.Label
         Label_Title = New System.Windows.Forms.Label
         CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -44,7 +44,7 @@ Partial Class SeriesEditorDialog
         Label_Title.Name = "Label_Title"
         Label_Title.Size = New System.Drawing.Size(30, 13)
         Label_Title.TabIndex = 0
-        Label_Title.Text = "Titel:"
+        Label_Title.Text = "Title:"
         '
         'DataGridView1
         '
@@ -62,15 +62,15 @@ Partial Class SeriesEditorDialog
         '
         'ColumnDate
         '
-        Me.ColumnDate.HeaderText = "Datum"
+        Me.ColumnDate.HeaderText = "Date"
         Me.ColumnDate.Name = "ColumnDate"
-        Me.ColumnDate.Width = 61
+        Me.ColumnDate.Width = 55
         '
         'ColumnValue
         '
-        Me.ColumnValue.HeaderText = "Wert"
+        Me.ColumnValue.HeaderText = "Value"
         Me.ColumnValue.Name = "ColumnValue"
-        Me.ColumnValue.Width = 53
+        Me.ColumnValue.Width = 59
         '
         'Button_Paste
         '
@@ -80,7 +80,7 @@ Partial Class SeriesEditorDialog
         Me.Button_Paste.Name = "Button_Paste"
         Me.Button_Paste.Size = New System.Drawing.Size(75, 24)
         Me.Button_Paste.TabIndex = 4
-        Me.Button_Paste.Text = "Einfügen"
+        Me.Button_Paste.Text = "Paste"
         Me.Button_Paste.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         Me.Button_Paste.UseVisualStyleBackColor = True
         '
@@ -104,22 +104,22 @@ Partial Class SeriesEditorDialog
         Me.TextBox_Title.Size = New System.Drawing.Size(223, 20)
         Me.TextBox_Title.TabIndex = 1
         '
-        'Label_Einheit
+        'Label_Unit
         '
-        Me.Label_Einheit.AutoSize = True
-        Me.Label_Einheit.Location = New System.Drawing.Point(9, 43)
-        Me.Label_Einheit.Name = "Label_Einheit"
-        Me.Label_Einheit.Size = New System.Drawing.Size(42, 13)
-        Me.Label_Einheit.TabIndex = 2
-        Me.Label_Einheit.Text = "Einheit:"
+        Me.Label_Unit.AutoSize = True
+        Me.Label_Unit.Location = New System.Drawing.Point(9, 43)
+        Me.Label_Unit.Name = "Label_Unit"
+        Me.Label_Unit.Size = New System.Drawing.Size(29, 13)
+        Me.Label_Unit.TabIndex = 2
+        Me.Label_Unit.Text = "Unit:"
         '
-        'TextBox_Einheit
+        'TextBox_Unit
         '
-        Me.TextBox_Einheit.Location = New System.Drawing.Point(57, 40)
-        Me.TextBox_Einheit.Name = "TextBox_Einheit"
-        Me.TextBox_Einheit.Size = New System.Drawing.Size(100, 20)
-        Me.TextBox_Einheit.TabIndex = 3
-        Me.TextBox_Einheit.Text = "-"
+        Me.TextBox_Unit.Location = New System.Drawing.Point(57, 40)
+        Me.TextBox_Unit.Name = "TextBox_Unit"
+        Me.TextBox_Unit.Size = New System.Drawing.Size(100, 20)
+        Me.TextBox_Unit.TabIndex = 3
+        Me.TextBox_Unit.Text = "-"
         '
         'Label_Help
         '
@@ -128,28 +128,28 @@ Partial Class SeriesEditorDialog
         Me.Label_Help.Name = "Label_Help"
         Me.Label_Help.Size = New System.Drawing.Size(185, 26)
         Me.Label_Help.TabIndex = 5
-        Me.Label_Help.Text = "akzeptiert 2 benachbarte Spalten (Datum und Wert) aus Excel"
+        Me.Label_Help.Text = "accepts two adjacent columns (dates and values) from Excel"
         '
         'SeriesEditorDialog
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(291, 327)
-        Me.Controls.Add(Me.Label_Help)
-        Me.Controls.Add(Me.TextBox_Einheit)
-        Me.Controls.Add(Me.Label_Einheit)
-        Me.Controls.Add(Me.TextBox_Title)
         Me.Controls.Add(Label_Title)
-        Me.Controls.Add(Me.Button_OK)
+        Me.Controls.Add(Me.TextBox_Title)
+        Me.Controls.Add(Me.Label_Unit)
+        Me.Controls.Add(Me.TextBox_Unit)
         Me.Controls.Add(Me.Button_Paste)
+        Me.Controls.Add(Me.Label_Help)
         Me.Controls.Add(Me.DataGridView1)
+        Me.Controls.Add(Me.Button_OK)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.MaximizeBox = False
         Me.MinimizeBox = False
         Me.Name = "SeriesEditorDialog"
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = "Zeitreihe eingeben"
+        Me.Text = "Enter time series"
         CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
@@ -158,10 +158,10 @@ Partial Class SeriesEditorDialog
     Friend WithEvents ColumnDate As System.Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents ColumnValue As System.Windows.Forms.DataGridViewTextBoxColumn
     Private WithEvents Label_Help As System.Windows.Forms.Label
-    Private WithEvents TextBox_Einheit As System.Windows.Forms.TextBox
+    Private WithEvents TextBox_Unit As System.Windows.Forms.TextBox
     Private WithEvents DataGridView1 As System.Windows.Forms.DataGridView
     Private WithEvents Button_Paste As System.Windows.Forms.Button
     Private WithEvents Button_OK As System.Windows.Forms.Button
     Private WithEvents TextBox_Title As System.Windows.Forms.TextBox
-    Private WithEvents Label_Einheit As System.Windows.Forms.Label
+    Private WithEvents Label_Unit As System.Windows.Forms.Label
 End Class

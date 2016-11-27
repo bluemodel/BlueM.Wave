@@ -64,7 +64,7 @@ Public Class CutDialog
         'Zeitreihen hinzufügen
         For Each zre As Zeitreihe In Me.zreOrig.Values
             Me.ComboBox_ZeitreiheCut.Items.Add(zre)
-            Me.ComboBox_ZeitreiheRef.Items.Add(zre)
+            Me.ComboBox_RefSeries.Items.Add(zre)
         Next
 
         'Diagramm formatieren
@@ -139,21 +139,21 @@ Public Class CutDialog
         colorBand1.StartLinePen.Visible = False
 
         'Original Anfangs- und Enddatum anzeigen
-        Me.Label_Anfangsdatum.Text = Me.Anfang.ToString(Konstanten.Datumsformate("default"))
-        Me.Label_Enddatum.Text = Me.Ende.ToString(Konstanten.Datumsformate("default"))
+        Me.Label_StartDateTime.Text = Me.Anfang.ToString(Konstanten.Datumsformate("default"))
+        Me.Label_EndDateTime.Text = Me.Ende.ToString(Konstanten.Datumsformate("default"))
 
         Me.IsInitializing = True 'um eine Kettenreaktionen zu verhindern
 
         'DateTimePicker zurücksetzen
-        Me.DateTimePicker_Anfang.MinDate = DateTimePicker.MinimumDateTime
-        Me.DateTimePicker_Anfang.MaxDate = DateTimePicker.MaximumDateTime
+        Me.DateTimePicker_StartDate.MinDate = DateTimePicker.MinimumDateTime
+        Me.DateTimePicker_StartDate.MaxDate = DateTimePicker.MaximumDateTime
 
         'Min und Max setzen
-        Me.DateTimePicker_Anfang.MinDate = Me.Anfang.Date
-        Me.DateTimePicker_Anfang.MaxDate = Me.Ende.Date
+        Me.DateTimePicker_StartDate.MinDate = Me.Anfang.Date
+        Me.DateTimePicker_StartDate.MaxDate = Me.Ende.Date
 
-        Me.DateTimePicker_Ende.MinDate = Me.Anfang.Date
-        Me.DateTimePicker_Ende.MaxDate = Me.Ende.Date
+        Me.DateTimePicker_EndDate.MinDate = Me.Anfang.Date
+        Me.DateTimePicker_EndDate.MaxDate = Me.Ende.Date
 
         Me.IsInitializing = False
 
@@ -180,14 +180,14 @@ Public Class CutDialog
 
     'Anfangsdatum verändert
     '**********************
-    Private Sub DateTimePicker_Anfang_ValueChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles DateTimePicker_Anfang.Leave, DateTimePicker_AnfangZeit.Leave
+    Private Sub DateTimePicker_Anfang_ValueChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles DateTimePicker_StartDate.Leave, DateTimePicker_StartTime.Leave
 
         If (Me.IsInitializing) Then
             Exit Sub
         End If
 
-        Me.Anfang = Me.DateTimePicker_Anfang.Value.Date
-        Me.Anfang = Me.Anfang.Add(Me.DateTimePicker_AnfangZeit.Value.TimeOfDay)
+        Me.Anfang = Me.DateTimePicker_StartDate.Value.Date
+        Me.Anfang = Me.Anfang.Add(Me.DateTimePicker_StartTime.Value.TimeOfDay)
 
         Call Me.updateColorband()
         Call Me.updateDateTimePickers()
@@ -196,14 +196,14 @@ Public Class CutDialog
 
     'Enddatum verändert
     '******************
-    Private Sub DateTimePicker_Ende_ValueChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles DateTimePicker_Ende.Leave, DateTimePicker_EndeZeit.Leave
+    Private Sub DateTimePicker_Ende_ValueChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles DateTimePicker_EndDate.Leave, DateTimePicker_EndTime.Leave
 
         If (Me.IsInitializing) Then
             Exit Sub
         End If
 
-        Me.Ende = Me.DateTimePicker_Ende.Value.Date
-        Me.Ende = Me.Ende.Add(Me.DateTimePicker_EndeZeit.Value.TimeOfDay)
+        Me.Ende = Me.DateTimePicker_EndDate.Value.Date
+        Me.Ende = Me.Ende.Add(Me.DateTimePicker_EndTime.Value.TimeOfDay)
 
         Call Me.updateColorband()
 
@@ -215,10 +215,10 @@ Public Class CutDialog
 
         Me.IsInitializing = True 'um eine Kettenreaktion zu verhindern
 
-        Me.DateTimePicker_Anfang.Value = Me.Anfang.Date
-        Me.DateTimePicker_AnfangZeit.Value = Me.Anfang
-        Me.DateTimePicker_Ende.Value = Me.Ende.Date
-        Me.DateTimePicker_EndeZeit.Value = Me.Ende
+        Me.DateTimePicker_StartDate.Value = Me.Anfang.Date
+        Me.DateTimePicker_StartTime.Value = Me.Anfang
+        Me.DateTimePicker_EndDate.Value = Me.Ende.Date
+        Me.DateTimePicker_EndTime.Value = Me.Ende
 
         Me.IsInitializing = False
 
@@ -226,7 +226,7 @@ Public Class CutDialog
 
     'Referenz-Zeitreihe wurde ausgewählt 
     '***********************************
-    Private Sub ComboBox_ZeitreiheRef_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ComboBox_ZeitreiheRef.SelectedIndexChanged
+    Private Sub ComboBox_ZeitreiheRef_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ComboBox_RefSeries.SelectedIndexChanged
 
         If (Me.IsInitializing) Then
             Exit Sub
@@ -237,7 +237,7 @@ Public Class CutDialog
         Dim tmp_anfang, tmp_ende As DateTime
         Dim answer As MsgBoxResult
 
-        zreRef = Me.ComboBox_ZeitreiheRef.SelectedItem
+        zreRef = Me.ComboBox_RefSeries.SelectedItem
 
         tmp_anfang = zreRef.Anfangsdatum
         tmp_ende = zreRef.Enddatum

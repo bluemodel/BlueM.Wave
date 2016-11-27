@@ -29,7 +29,7 @@
 ''' Berechnet monatliche Statistiken
 ''' </summary>
 ''' <remarks>http://wiki.bluemodel.org/index.php/Wave:Monatsauswertung</remarks>
-Public Class Monatsauswertung
+Public Class MonthlyAnalysis
     Inherits Analysis
 
 #Region "Datenstrukturen"
@@ -109,36 +109,36 @@ Public Class Monatsauswertung
 
         'Prüfung: Genau 1 Zeitreihe erlaubt
         If (zeitreihen.Count <> 1) Then
-            Throw New Exception("Bei der Monatsauswertung muss genau 1 Zeitreihe ausgewählt werden!")
+            Throw New Exception("The Monthly analysis requires that extaly 1 time series is selected!")
         End If
 
         Dim i As Integer
 
         'Ergebnisstruktur instanzieren
         ReDim Me.mErgebnis.Monatswerte(11)
-        Me.mErgebnis.Monatswerte(0).monatsname = "Januar"
+        Me.mErgebnis.Monatswerte(0).monatsname = "January"
         Me.mErgebnis.Monatswerte(0).monatsindex = 3
-        Me.mErgebnis.Monatswerte(1).monatsname = "Februar"
+        Me.mErgebnis.Monatswerte(1).monatsname = "February"
         Me.mErgebnis.Monatswerte(1).monatsindex = 4
-        Me.mErgebnis.Monatswerte(2).monatsname = "März"
+        Me.mErgebnis.Monatswerte(2).monatsname = "March"
         Me.mErgebnis.Monatswerte(2).monatsindex = 5
         Me.mErgebnis.Monatswerte(3).monatsname = "April"
         Me.mErgebnis.Monatswerte(3).monatsindex = 6
-        Me.mErgebnis.Monatswerte(4).monatsname = "Mai"
+        Me.mErgebnis.Monatswerte(4).monatsname = "May"
         Me.mErgebnis.Monatswerte(4).monatsindex = 7
-        Me.mErgebnis.Monatswerte(5).monatsname = "Juni"
+        Me.mErgebnis.Monatswerte(5).monatsname = "June"
         Me.mErgebnis.Monatswerte(5).monatsindex = 8
-        Me.mErgebnis.Monatswerte(6).monatsname = "Juli"
+        Me.mErgebnis.Monatswerte(6).monatsname = "July"
         Me.mErgebnis.Monatswerte(6).monatsindex = 9
         Me.mErgebnis.Monatswerte(7).monatsname = "August"
         Me.mErgebnis.Monatswerte(7).monatsindex = 10
         Me.mErgebnis.Monatswerte(8).monatsname = "September"
         Me.mErgebnis.Monatswerte(8).monatsindex = 11
-        Me.mErgebnis.Monatswerte(9).monatsname = "Oktober"
+        Me.mErgebnis.Monatswerte(9).monatsname = "October"
         Me.mErgebnis.Monatswerte(9).monatsindex = 12
         Me.mErgebnis.Monatswerte(10).monatsname = "November"
         Me.mErgebnis.Monatswerte(10).monatsindex = 1
-        Me.mErgebnis.Monatswerte(11).monatsname = "Dezember"
+        Me.mErgebnis.Monatswerte(11).monatsname = "December"
         Me.mErgebnis.Monatswerte(11).monatsindex = 2
 
         For i = 0 To 11
@@ -192,7 +192,7 @@ Public Class Monatsauswertung
                         .median = .werte(((N + 1) / 2) - 1)
                     End If
                 Else
-                    MsgBox("Für den Monat " & .monatsname & " liegen keine Werte vor!", MsgBoxStyle.Exclamation)
+                    MsgBox("The series does not contain any data for the month of " & .monatsname & "!", MsgBoxStyle.Exclamation)
                 End If
 
             End With
@@ -215,7 +215,7 @@ Public Class Monatsauswertung
         '--------
         Me.mResultChart = New Steema.TeeChart.Chart()
         Call Wave.formatChart(Me.mResultChart)
-        Me.mResultChart.Header.Text = "Monatsauswertung (" & Me.mZeitreihen(0).Title & ")"
+        Me.mResultChart.Header.Text = "Monthly analysis (" & Me.mZeitreihen(0).Title & ")"
 
         'Achsen
         '------
@@ -240,7 +240,7 @@ Public Class Monatsauswertung
 
         'Standardabweichung
         stdabw = New Steema.TeeChart.Styles.Error(Me.mResultChart)
-        stdabw.Title = "Standardabweichung"
+        stdabw.Title = "Standard deviation"
         stdabw.Color = Color.Red
         stdabw.ErrorWidth = 50
         For i = 0 To 11
@@ -249,7 +249,7 @@ Public Class Monatsauswertung
 
         'Mittelwert
         mittelwert = New Steema.TeeChart.Styles.Line(Me.mResultChart)
-        mittelwert.Title = "Mittelwert"
+        mittelwert.Title = "Average"
         mittelwert.Color = Color.Blue
         mittelwert.LinePen.Width = 2
         For i = 0 To 11

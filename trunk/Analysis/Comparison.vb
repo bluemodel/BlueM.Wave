@@ -26,14 +26,16 @@
 '--------------------------------------------------------------------------------------------
 '
 ''' <summary>
-''' Doppelsummenanalyse zweier Zeitreihen
+''' Gegenüberstellung/Vergleich zweier Zeitreihen
 ''' </summary>
-''' <remarks>http://wiki.bluemodel.org/index.php/Wave:Doppelsummenanalyse</remarks>
-Public Class Doppelsummenanalyse
+''' <remarks>http://wiki.bluemodel.org/index.php/Wave:Gegenueberstellung</remarks>
+Public Class Comparison
     Inherits Analysis
 
-    Dim summe1(), summe2() As Double
     Dim datume As IList(Of DateTime)
+    Dim ergebnisreihe(,) As Double ' Ergebnis der Gegenueberstellung: y-Werte der Reihe(xnummer) werden x-Achsen-Werte, y-Werte der Reihe(ynummer) werden y-Achsen-Werte  
+    Dim xnummer As Integer ' Nummer mit der auf mZeitreihen(i) zugegriffen wird, xnummer = Zeitreihe soll auf x-Achse
+    Dim ynummer As Integer ' Nummer mit der auf mZeitreihen(i) zugegriffen wird, xnummer = Zeitreihe soll auf y-Achse
 
     ''' <summary>
     ''' Flag, der anzeigt, ob die Analysefunktion einen Ergebnistext erzeugt
@@ -72,7 +74,7 @@ Public Class Doppelsummenanalyse
 
         'Prüfung: genau 2 Zeitreihen erlaubt
         If (zeitreihen.Count <> 2) Then
-            Throw New Exception("Für die Doppelsummenanalyse müssen genau 2 Zeitreihen ausgewählt werden!")
+            Throw New Exception("The Comparison analysis requires the selection of exactly 2 time series!")
         End If
 
     End Sub
@@ -83,30 +85,45 @@ Public Class Doppelsummenanalyse
     Public Overrides Sub ProcessAnalysis()
 
         Dim i As Integer
-        Dim zre1, zre2 As Zeitreihe
+        Dim reihe1, reihe2 As Zeitreihe
         Dim values(,) As Double
 
-        zre1 = Me.mZeitreihen(0).getCleanZRE()
-        zre2 = Me.mZeitreihen(1).getCleanZRE()
+        ' Dialogaufruf zur Auswahl der x-Achse
+        Dim dialog As New Comparison_Dialog(Me.mZeitreihen(0).Title, Me.mZeitreihen(1).Title)
 
-        'nur gemeinsame Stützstellen nutzen
-        values = AnalysisHelper.getConcurrentValues(zre1, zre2)
+        If (dialog.ShowDialog() <> DialogResult.OK) Then
+            Throw New Exception("User abort")
+        End If
 
-        ReDim Me.summe1(values.GetUpperBound(0))
-        ReDim Me.summe2(values.GetUpperBound(0))
+        ' Zuweisen der x-Achse
+        Dim xachse As String
+        xachse = dialog.xAchse
+        If (xachse = Me.mZeitreihen(0).Title) Then
+            xnummer = 0
+            ynummer = 1
+        Else
+            xnummer = 1
+            ynummer = 0
+        End If
 
-        'Erster Wert
-        Me.summe1(0) = values(0, 0)
-        Me.summe2(0) = values(0, 1)
+        'Reihen säubern und zuweisen
+        reihe1 = Me.mZeitreihen(xnummer).getCleanZRE()
+        reihe2 = Me.mZeitreihen(ynummer).getCleanZRE()
 
-        'Weitere Werte kumulativ aufsummieren
-        For i = 1 To values.GetUpperBound(0)
-            Me.summe1(i) = values(i, 0) + summe1(i - 1)
-            Me.summe2(i) = values(i, 1) + summe2(i - 1)
+        'Nur gemeinsame Stützstellen nutzen
+        values = AnalysisHelper.getConcurrentValues(reihe1, reihe2)
+
+        ' Ergebnisreihe allokieren
+        ReDim Me.ergebnisreihe(values.GetUpperBound(0), 1)
+
+        ' x- und y-Werte der Ergebnisreihe zuweisen
+        For i = 0 To values.GetUpperBound(0)
+            ergebnisreihe(i, 0) = values(i, 0)
+            ergebnisreihe(i, 1) = values(i, 1)
         Next
 
         'Datume übernehmen (werden später für Punkte-Labels im Diagramm gebraucht)
-        datume = zre1.XWerte
+        datume = reihe1.XWerte
 
     End Sub
 
@@ -117,58 +134,50 @@ Public Class Doppelsummenanalyse
 
         'Text:
         '-----
-        Me.mResultText = "Doppelsummenanalyse:" & eol _
+        Me.mResultText = "Comparison:" & eol _
                         & eol _
-                        & "Die Analyse basiert auf " & Me.summe1.Length & " gemeinsamen Stützstellen zwischen " & Me.datume(0).ToString(Datumsformate("default")) & " und " & Me.datume(Me.datume.Count - 1).ToString(Datumsformate("default")) & eol _
+                        & "The analysis is based on " & Me.ergebnisreihe.Length & " coincident data points between " & Me.datume(0).ToString(Datumsformate("default")) & " and " & Me.datume(Me.datume.Count - 1).ToString(Datumsformate("default")) & eol _
                         & eol
 
         'Diagramm:
         '---------
-        Dim i As Integer
-        Dim doppelsumme, gerade As Steema.TeeChart.Styles.Line
+        Dim i, ende As Integer
+        Dim gegenueberstellung_linie As Steema.TeeChart.Styles.Line
 
         Me.mResultChart = New Steema.TeeChart.Chart()
         Call Wave.formatChart(Me.mResultChart)
-        Me.mResultChart.Header.Text = "Doppelsummenanalyse (" & Me.mZeitreihen(0).Title & " / " & Me.mZeitreihen(1).Title & ")"
+        Me.mResultChart.Header.Text = "Comparison (" & Me.mZeitreihen(xnummer).Title & " / " & Me.mZeitreihen(ynummer).Title & ")"
         Me.mResultChart.Legend.Visible = False
 
         'Achsen
         '------
-        Me.mResultChart.Axes.Bottom.Title.Caption = "Summe " & Me.mZeitreihen(0).Title
+        Me.mResultChart.Axes.Bottom.Title.Caption = Me.mZeitreihen(xnummer).Title & " [" & Me.mZeitreihen(xnummer).Einheit & "]"
         Me.mResultChart.Axes.Bottom.Labels.Style = Steema.TeeChart.AxisLabelStyle.Value
-        Me.mResultChart.Axes.Left.Title.Caption = "Summe " & Me.mZeitreihen(1).Title
+        Me.mResultChart.Axes.Left.Title.Caption = Me.mZeitreihen(ynummer).Title & " [" & Me.mZeitreihen(ynummer).Einheit & "]"
         Me.mResultChart.Axes.Left.Labels.Style = Steema.TeeChart.AxisLabelStyle.Value
 
         'Reihen
         '------
-        doppelsumme = New Steema.TeeChart.Styles.Line(Me.mResultChart)
-        doppelsumme.Title = "Doppelsumme " & Me.mZeitreihen(0).Title & " - " & Me.mZeitreihen(1).Title
-        doppelsumme.Pointer.Visible = True
-        doppelsumme.Pointer.Style = Steema.TeeChart.Styles.PointerStyles.Circle
-        doppelsumme.Pointer.HorizSize = 2
-        doppelsumme.Pointer.VertSize = 2
-
-        gerade = New Steema.TeeChart.Styles.Line(Me.mResultChart)
-        gerade.Title = "45° Gerade"
-        gerade.Color = Color.DarkGray
-        gerade.linepen.Style = Drawing2D.DashStyle.Dash
+        gegenueberstellung_linie = New Steema.TeeChart.Styles.Line(Me.mResultChart)
+        gegenueberstellung_linie.Title = "Comparison " & Me.mZeitreihen(xnummer).Title & " - " & Me.mZeitreihen(ynummer).Title
+        gegenueberstellung_linie.Pointer.Visible = True
+        gegenueberstellung_linie.Pointer.Style = Steema.TeeChart.Styles.PointerStyles.Circle
+        gegenueberstellung_linie.Pointer.HorizSize = 2
+        gegenueberstellung_linie.Pointer.VertSize = 2
 
         'Werte eintragen
-        For i = 0 To summe1.Length - 1
-            doppelsumme.Add(summe1(i), summe2(i), datume(i).ToString(Konstanten.Datumsformate("default")))
+        ende = (ergebnisreihe.Length / 2 - 2)
+        For i = 0 To ende
+            gegenueberstellung_linie.Add(ergebnisreihe(i, 0), ergebnisreihe(i, 1), datume(i).ToString(Konstanten.Datumsformate("default")))
         Next
-
-        gerade.Add(0, 0)
-        Dim maxwert As Double = Math.Min(Me.mResultChart.Axes.Bottom.MaxXValue, Me.mResultChart.Axes.Left.MaxYValue)
-        gerade.Add(maxwert, maxwert)
 
         'Markstips
         '---------
         Dim markstips As New Steema.TeeChart.Tools.MarksTip(Me.mResultChart)
         markstips.MouseAction = Steema.TeeChart.Tools.MarksTipMouseAction.Move
         markstips.Style = Steema.TeeChart.Styles.MarksStyles.Label
-        markstips.Series = doppelsumme
-        doppelsumme.Cursor = Cursors.Help
+        markstips.Series = gegenueberstellung_linie
+        gegenueberstellung_linie.Cursor = Cursors.Help
 
     End Sub
 

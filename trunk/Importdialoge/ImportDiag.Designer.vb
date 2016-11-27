@@ -23,77 +23,77 @@ Partial Class ImportDiag
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(ImportDiag))
-        Me.TextBox_Vorschau = New System.Windows.Forms.RichTextBox
-        Me.ComboBox_Trennzeichen = New System.Windows.Forms.ComboBox
+        Me.TextBox_Preview = New System.Windows.Forms.RichTextBox
+        Me.ComboBox_Separator = New System.Windows.Forms.ComboBox
         Me.Button_OK = New System.Windows.Forms.Button
         Me.Button_Cancel = New System.Windows.Forms.Button
-        Me.ListBox_YSpalten = New System.Windows.Forms.ListBox
-        Me.Label_Suche = New System.Windows.Forms.Label
-        Me.Label_XSpalte = New System.Windows.Forms.Label
-        Me.TextBox_XSpalte = New System.Windows.Forms.TextBox
-        Me.RadioButton_Spaltenbreite = New System.Windows.Forms.RadioButton
-        Me.RadioButton_Zeichengetrennt = New System.Windows.Forms.RadioButton
-        Me.GroupBox_Spaltenmodus = New System.Windows.Forms.GroupBox
-        Me.TextBox_Spaltenbreite = New System.Windows.Forms.TextBox
-        Me.TextBox_ZeileÜberschriften = New System.Windows.Forms.NumericUpDown
-        Me.Label_ZeileÜberschriften = New System.Windows.Forms.Label
-        Me.ComboBox_Dezimaltrennzeichen = New System.Windows.Forms.ComboBox
-        Me.GroupBox_Einstellungen = New System.Windows.Forms.GroupBox
-        Me.NumericUpDown_DatumsSpalte = New System.Windows.Forms.NumericUpDown
-        Me.CheckBox_Einheiten = New System.Windows.Forms.CheckBox
-        Me.TextBox_ZeileEinheiten = New System.Windows.Forms.NumericUpDown
-        Me.TextBox_ZeileDaten = New System.Windows.Forms.NumericUpDown
-        Me.Label_ZeileDaten = New System.Windows.Forms.Label
-        Me.GroupBox_Vorschau = New System.Windows.Forms.GroupBox
-        Me.Label_Datei = New System.Windows.Forms.Label
-        Me.Label_Spaltenauswahl = New System.Windows.Forms.Label
-        Me.TextBox_Suche = New System.Windows.Forms.TextBox
-        Me.GroupBox_Dezimaltrennzeichen = New System.Windows.Forms.GroupBox
-        Me.Label_Dezimaltrennzeichen = New System.Windows.Forms.Label
+        Me.ListBox_Series = New System.Windows.Forms.ListBox
+        Me.Label_Search = New System.Windows.Forms.Label
+        Me.Label_ColumnDateTime = New System.Windows.Forms.Label
+        Me.TextBox_ColumnDateTime = New System.Windows.Forms.TextBox
+        Me.RadioButton_FixedWidth = New System.Windows.Forms.RadioButton
+        Me.RadioButton_CharSeparated = New System.Windows.Forms.RadioButton
+        Me.GroupBox_Columns = New System.Windows.Forms.GroupBox
+        Me.TextBox_ColumnWidth = New System.Windows.Forms.TextBox
+        Me.NumericUpDown_LineTitles = New System.Windows.Forms.NumericUpDown
+        Me.Label_LineTitles = New System.Windows.Forms.Label
+        Me.ComboBox_DecimalMark = New System.Windows.Forms.ComboBox
+        Me.GroupBox_Settings = New System.Windows.Forms.GroupBox
+        Me.NumericUpDown_ColumnDateTime = New System.Windows.Forms.NumericUpDown
+        Me.CheckBox_Units = New System.Windows.Forms.CheckBox
+        Me.NumericUpDown_LineUnits = New System.Windows.Forms.NumericUpDown
+        Me.NumericUpDown_LineData = New System.Windows.Forms.NumericUpDown
+        Me.Label_LineData = New System.Windows.Forms.Label
+        Me.GroupBox_Preview = New System.Windows.Forms.GroupBox
+        Me.Label_File = New System.Windows.Forms.Label
+        Me.Label_Series = New System.Windows.Forms.Label
+        Me.TextBox_Search = New System.Windows.Forms.TextBox
+        Me.GroupBox_DecimalMark = New System.Windows.Forms.GroupBox
+        Me.Label_DecimalMark = New System.Windows.Forms.Label
         Me.StatusStrip1 = New System.Windows.Forms.StatusStrip
         Me.StatusImage = New System.Windows.Forms.ToolStripStatusLabel
         Me.Button_SelectAll = New System.Windows.Forms.Button
-        Me.GroupBox_Auswahl = New System.Windows.Forms.GroupBox
-        Me.GroupBox_Datumsformat = New System.Windows.Forms.GroupBox
-        Me.ComboBox_Datumsformat = New System.Windows.Forms.ComboBox
-        Me.Label_Datumsformat = New System.Windows.Forms.Label
-        Me.GroupBox_Spaltenmodus.SuspendLayout()
-        CType(Me.TextBox_ZeileÜberschriften, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.GroupBox_Einstellungen.SuspendLayout()
-        CType(Me.NumericUpDown_DatumsSpalte, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.TextBox_ZeileEinheiten, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.TextBox_ZeileDaten, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.GroupBox_Vorschau.SuspendLayout()
-        Me.GroupBox_Dezimaltrennzeichen.SuspendLayout()
+        Me.GroupBox_Selection = New System.Windows.Forms.GroupBox
+        Me.GroupBox_Dateformat = New System.Windows.Forms.GroupBox
+        Me.ComboBox_Dateformat = New System.Windows.Forms.ComboBox
+        Me.Label_Dateformat = New System.Windows.Forms.Label
+        Me.GroupBox_Columns.SuspendLayout()
+        CType(Me.NumericUpDown_LineTitles, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.GroupBox_Settings.SuspendLayout()
+        CType(Me.NumericUpDown_ColumnDateTime, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.NumericUpDown_LineUnits, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.NumericUpDown_LineData, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.GroupBox_Preview.SuspendLayout()
+        Me.GroupBox_DecimalMark.SuspendLayout()
         Me.StatusStrip1.SuspendLayout()
-        Me.GroupBox_Auswahl.SuspendLayout()
-        Me.GroupBox_Datumsformat.SuspendLayout()
+        Me.GroupBox_Selection.SuspendLayout()
+        Me.GroupBox_Dateformat.SuspendLayout()
         Me.SuspendLayout()
         '
-        'TextBox_Vorschau
+        'TextBox_Preview
         '
-        Me.TextBox_Vorschau.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+        Me.TextBox_Preview.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
                     Or System.Windows.Forms.AnchorStyles.Left) _
                     Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TextBox_Vorschau.BackColor = System.Drawing.Color.White
-        Me.TextBox_Vorschau.Font = New System.Drawing.Font("Courier New", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.TextBox_Vorschau.Location = New System.Drawing.Point(12, 43)
-        Me.TextBox_Vorschau.Name = "TextBox_Vorschau"
-        Me.TextBox_Vorschau.ReadOnly = True
-        Me.TextBox_Vorschau.Size = New System.Drawing.Size(353, 166)
-        Me.TextBox_Vorschau.TabIndex = 16
-        Me.TextBox_Vorschau.Text = ""
-        Me.TextBox_Vorschau.WordWrap = False
+        Me.TextBox_Preview.BackColor = System.Drawing.Color.White
+        Me.TextBox_Preview.Font = New System.Drawing.Font("Courier New", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.TextBox_Preview.Location = New System.Drawing.Point(12, 43)
+        Me.TextBox_Preview.Name = "TextBox_Preview"
+        Me.TextBox_Preview.ReadOnly = True
+        Me.TextBox_Preview.Size = New System.Drawing.Size(353, 166)
+        Me.TextBox_Preview.TabIndex = 16
+        Me.TextBox_Preview.Text = ""
+        Me.TextBox_Preview.WordWrap = False
         '
-        'ComboBox_Trennzeichen
+        'ComboBox_Separator
         '
-        Me.ComboBox_Trennzeichen.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.ComboBox_Trennzeichen.DropDownWidth = 100
-        Me.ComboBox_Trennzeichen.FormattingEnabled = True
-        Me.ComboBox_Trennzeichen.Location = New System.Drawing.Point(124, 18)
-        Me.ComboBox_Trennzeichen.Name = "ComboBox_Trennzeichen"
-        Me.ComboBox_Trennzeichen.Size = New System.Drawing.Size(97, 21)
-        Me.ComboBox_Trennzeichen.TabIndex = 13
+        Me.ComboBox_Separator.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.ComboBox_Separator.DropDownWidth = 100
+        Me.ComboBox_Separator.FormattingEnabled = True
+        Me.ComboBox_Separator.Location = New System.Drawing.Point(131, 18)
+        Me.ComboBox_Separator.Name = "ComboBox_Separator"
+        Me.ComboBox_Separator.Size = New System.Drawing.Size(90, 21)
+        Me.ComboBox_Separator.TabIndex = 13
         '
         'Button_OK
         '
@@ -114,259 +114,259 @@ Partial Class ImportDiag
         Me.Button_Cancel.Name = "Button_Cancel"
         Me.Button_Cancel.Size = New System.Drawing.Size(75, 23)
         Me.Button_Cancel.TabIndex = 10
-        Me.Button_Cancel.Text = "Abbrechen"
+        Me.Button_Cancel.Text = "Cancel"
         Me.Button_Cancel.UseVisualStyleBackColor = True
         '
-        'ListBox_YSpalten
+        'ListBox_Series
         '
-        Me.ListBox_YSpalten.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+        Me.ListBox_Series.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
                     Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.ListBox_YSpalten.FormattingEnabled = True
-        Me.ListBox_YSpalten.Location = New System.Drawing.Point(15, 64)
-        Me.ListBox_YSpalten.Name = "ListBox_YSpalten"
-        Me.ListBox_YSpalten.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended
-        Me.ListBox_YSpalten.Size = New System.Drawing.Size(121, 121)
-        Me.ListBox_YSpalten.TabIndex = 18
+        Me.ListBox_Series.FormattingEnabled = True
+        Me.ListBox_Series.Location = New System.Drawing.Point(15, 64)
+        Me.ListBox_Series.Name = "ListBox_Series"
+        Me.ListBox_Series.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended
+        Me.ListBox_Series.Size = New System.Drawing.Size(121, 121)
+        Me.ListBox_Series.TabIndex = 18
         '
-        'Label_Suche
+        'Label_Search
         '
-        Me.Label_Suche.AutoSize = True
-        Me.Label_Suche.Location = New System.Drawing.Point(12, 21)
-        Me.Label_Suche.Name = "Label_Suche"
-        Me.Label_Suche.Size = New System.Drawing.Size(41, 13)
-        Me.Label_Suche.TabIndex = 17
-        Me.Label_Suche.Text = "Suche:"
+        Me.Label_Search.AutoSize = True
+        Me.Label_Search.Location = New System.Drawing.Point(12, 21)
+        Me.Label_Search.Name = "Label_Search"
+        Me.Label_Search.Size = New System.Drawing.Size(44, 13)
+        Me.Label_Search.TabIndex = 17
+        Me.Label_Search.Text = "Search:"
         '
-        'Label_XSpalte
+        'Label_ColumnDateTime
         '
-        Me.Label_XSpalte.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+        Me.Label_ColumnDateTime.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
                     Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.Label_XSpalte.AutoSize = True
-        Me.Label_XSpalte.Location = New System.Drawing.Point(396, 25)
-        Me.Label_XSpalte.Name = "Label_XSpalte"
-        Me.Label_XSpalte.Size = New System.Drawing.Size(106, 13)
-        Me.Label_XSpalte.TabIndex = 17
-        Me.Label_XSpalte.Text = "X-Spalte (Zeitachse):"
+        Me.Label_ColumnDateTime.AutoSize = True
+        Me.Label_ColumnDateTime.Location = New System.Drawing.Point(396, 25)
+        Me.Label_ColumnDateTime.Name = "Label_ColumnDateTime"
+        Me.Label_ColumnDateTime.Size = New System.Drawing.Size(115, 13)
+        Me.Label_ColumnDateTime.TabIndex = 17
+        Me.Label_ColumnDateTime.Text = "Column with date/time:"
         '
-        'TextBox_XSpalte
+        'TextBox_ColumnDateTime
         '
-        Me.TextBox_XSpalte.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+        Me.TextBox_ColumnDateTime.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
                     Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.TextBox_XSpalte.Location = New System.Drawing.Point(399, 45)
-        Me.TextBox_XSpalte.Name = "TextBox_XSpalte"
-        Me.TextBox_XSpalte.ReadOnly = True
-        Me.TextBox_XSpalte.Size = New System.Drawing.Size(80, 20)
-        Me.TextBox_XSpalte.TabIndex = 19
+        Me.TextBox_ColumnDateTime.Location = New System.Drawing.Point(399, 45)
+        Me.TextBox_ColumnDateTime.Name = "TextBox_ColumnDateTime"
+        Me.TextBox_ColumnDateTime.ReadOnly = True
+        Me.TextBox_ColumnDateTime.Size = New System.Drawing.Size(80, 20)
+        Me.TextBox_ColumnDateTime.TabIndex = 19
         '
-        'RadioButton_Spaltenbreite
+        'RadioButton_FixedWidth
         '
-        Me.RadioButton_Spaltenbreite.AutoSize = True
-        Me.RadioButton_Spaltenbreite.Location = New System.Drawing.Point(15, 53)
-        Me.RadioButton_Spaltenbreite.Name = "RadioButton_Spaltenbreite"
-        Me.RadioButton_Spaltenbreite.Size = New System.Drawing.Size(78, 17)
-        Me.RadioButton_Spaltenbreite.TabIndex = 20
-        Me.RadioButton_Spaltenbreite.TabStop = True
-        Me.RadioButton_Spaltenbreite.Text = "feste Breite"
-        Me.RadioButton_Spaltenbreite.UseVisualStyleBackColor = True
+        Me.RadioButton_FixedWidth.AutoSize = True
+        Me.RadioButton_FixedWidth.Location = New System.Drawing.Point(15, 53)
+        Me.RadioButton_FixedWidth.Name = "RadioButton_FixedWidth"
+        Me.RadioButton_FixedWidth.Size = New System.Drawing.Size(78, 17)
+        Me.RadioButton_FixedWidth.TabIndex = 20
+        Me.RadioButton_FixedWidth.TabStop = True
+        Me.RadioButton_FixedWidth.Text = "Fixed width"
+        Me.RadioButton_FixedWidth.UseVisualStyleBackColor = True
         '
-        'RadioButton_Zeichengetrennt
+        'RadioButton_CharSeparated
         '
-        Me.RadioButton_Zeichengetrennt.AutoSize = True
-        Me.RadioButton_Zeichengetrennt.Location = New System.Drawing.Point(15, 19)
-        Me.RadioButton_Zeichengetrennt.Name = "RadioButton_Zeichengetrennt"
-        Me.RadioButton_Zeichengetrennt.Size = New System.Drawing.Size(101, 17)
-        Me.RadioButton_Zeichengetrennt.TabIndex = 21
-        Me.RadioButton_Zeichengetrennt.TabStop = True
-        Me.RadioButton_Zeichengetrennt.Text = "zeichengetrennt"
-        Me.RadioButton_Zeichengetrennt.UseVisualStyleBackColor = True
+        Me.RadioButton_CharSeparated.AutoSize = True
+        Me.RadioButton_CharSeparated.Location = New System.Drawing.Point(15, 19)
+        Me.RadioButton_CharSeparated.Name = "RadioButton_CharSeparated"
+        Me.RadioButton_CharSeparated.Size = New System.Drawing.Size(112, 17)
+        Me.RadioButton_CharSeparated.TabIndex = 21
+        Me.RadioButton_CharSeparated.TabStop = True
+        Me.RadioButton_CharSeparated.Text = "Separated by char"
+        Me.RadioButton_CharSeparated.UseVisualStyleBackColor = True
         '
-        'GroupBox_Spaltenmodus
+        'GroupBox_Columns
         '
-        Me.GroupBox_Spaltenmodus.Controls.Add(Me.TextBox_Spaltenbreite)
-        Me.GroupBox_Spaltenmodus.Controls.Add(Me.RadioButton_Zeichengetrennt)
-        Me.GroupBox_Spaltenmodus.Controls.Add(Me.ComboBox_Trennzeichen)
-        Me.GroupBox_Spaltenmodus.Controls.Add(Me.RadioButton_Spaltenbreite)
-        Me.GroupBox_Spaltenmodus.Location = New System.Drawing.Point(12, 12)
-        Me.GroupBox_Spaltenmodus.Name = "GroupBox_Spaltenmodus"
-        Me.GroupBox_Spaltenmodus.Size = New System.Drawing.Size(239, 84)
-        Me.GroupBox_Spaltenmodus.TabIndex = 22
-        Me.GroupBox_Spaltenmodus.TabStop = False
-        Me.GroupBox_Spaltenmodus.Text = "Spalten"
+        Me.GroupBox_Columns.Controls.Add(Me.RadioButton_CharSeparated)
+        Me.GroupBox_Columns.Controls.Add(Me.ComboBox_Separator)
+        Me.GroupBox_Columns.Controls.Add(Me.RadioButton_FixedWidth)
+        Me.GroupBox_Columns.Controls.Add(Me.TextBox_ColumnWidth)
+        Me.GroupBox_Columns.Location = New System.Drawing.Point(12, 12)
+        Me.GroupBox_Columns.Name = "GroupBox_Columns"
+        Me.GroupBox_Columns.Size = New System.Drawing.Size(239, 84)
+        Me.GroupBox_Columns.TabIndex = 22
+        Me.GroupBox_Columns.TabStop = False
+        Me.GroupBox_Columns.Text = "Columns"
         '
-        'TextBox_Spaltenbreite
+        'TextBox_ColumnWidth
         '
-        Me.TextBox_Spaltenbreite.Location = New System.Drawing.Point(124, 52)
-        Me.TextBox_Spaltenbreite.Name = "TextBox_Spaltenbreite"
-        Me.TextBox_Spaltenbreite.Size = New System.Drawing.Size(97, 20)
-        Me.TextBox_Spaltenbreite.TabIndex = 22
+        Me.TextBox_ColumnWidth.Location = New System.Drawing.Point(131, 52)
+        Me.TextBox_ColumnWidth.Name = "TextBox_ColumnWidth"
+        Me.TextBox_ColumnWidth.Size = New System.Drawing.Size(90, 20)
+        Me.TextBox_ColumnWidth.TabIndex = 22
         '
-        'TextBox_ZeileÜberschriften
+        'NumericUpDown_LineTitles
         '
-        Me.TextBox_ZeileÜberschriften.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+        Me.NumericUpDown_LineTitles.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
                     Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.TextBox_ZeileÜberschriften.Location = New System.Drawing.Point(15, 46)
-        Me.TextBox_ZeileÜberschriften.Minimum = New Decimal(New Integer() {1, 0, 0, 0})
-        Me.TextBox_ZeileÜberschriften.Name = "TextBox_ZeileÜberschriften"
-        Me.TextBox_ZeileÜberschriften.Size = New System.Drawing.Size(50, 20)
-        Me.TextBox_ZeileÜberschriften.TabIndex = 24
-        Me.TextBox_ZeileÜberschriften.Value = New Decimal(New Integer() {1, 0, 0, 0})
+        Me.NumericUpDown_LineTitles.Location = New System.Drawing.Point(15, 46)
+        Me.NumericUpDown_LineTitles.Minimum = New Decimal(New Integer() {1, 0, 0, 0})
+        Me.NumericUpDown_LineTitles.Name = "NumericUpDown_LineTitles"
+        Me.NumericUpDown_LineTitles.Size = New System.Drawing.Size(50, 20)
+        Me.NumericUpDown_LineTitles.TabIndex = 24
+        Me.NumericUpDown_LineTitles.Value = New Decimal(New Integer() {1, 0, 0, 0})
         '
-        'Label_ZeileÜberschriften
+        'Label_LineTitles
         '
-        Me.Label_ZeileÜberschriften.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+        Me.Label_LineTitles.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
                     Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.Label_ZeileÜberschriften.AutoSize = True
-        Me.Label_ZeileÜberschriften.Location = New System.Drawing.Point(12, 25)
-        Me.Label_ZeileÜberschriften.Name = "Label_ZeileÜberschriften"
-        Me.Label_ZeileÜberschriften.Size = New System.Drawing.Size(115, 13)
-        Me.Label_ZeileÜberschriften.TabIndex = 23
-        Me.Label_ZeileÜberschriften.Text = "Zeile mit Überschriften:"
+        Me.Label_LineTitles.AutoSize = True
+        Me.Label_LineTitles.Location = New System.Drawing.Point(12, 25)
+        Me.Label_LineTitles.Name = "Label_LineTitles"
+        Me.Label_LineTitles.Size = New System.Drawing.Size(76, 13)
+        Me.Label_LineTitles.TabIndex = 23
+        Me.Label_LineTitles.Text = "Line with titles:"
         '
-        'ComboBox_Dezimaltrennzeichen
+        'ComboBox_DecimalMark
         '
-        Me.ComboBox_Dezimaltrennzeichen.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.ComboBox_Dezimaltrennzeichen.DropDownWidth = 50
-        Me.ComboBox_Dezimaltrennzeichen.FormattingEnabled = True
-        Me.ComboBox_Dezimaltrennzeichen.Location = New System.Drawing.Point(9, 51)
-        Me.ComboBox_Dezimaltrennzeichen.Name = "ComboBox_Dezimaltrennzeichen"
-        Me.ComboBox_Dezimaltrennzeichen.Size = New System.Drawing.Size(50, 21)
-        Me.ComboBox_Dezimaltrennzeichen.TabIndex = 26
+        Me.ComboBox_DecimalMark.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.ComboBox_DecimalMark.DropDownWidth = 50
+        Me.ComboBox_DecimalMark.FormattingEnabled = True
+        Me.ComboBox_DecimalMark.Location = New System.Drawing.Point(9, 51)
+        Me.ComboBox_DecimalMark.Name = "ComboBox_DecimalMark"
+        Me.ComboBox_DecimalMark.Size = New System.Drawing.Size(50, 21)
+        Me.ComboBox_DecimalMark.TabIndex = 26
         '
-        'GroupBox_Einstellungen
+        'GroupBox_Settings
         '
-        Me.GroupBox_Einstellungen.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+        Me.GroupBox_Settings.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
                     Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.GroupBox_Einstellungen.Controls.Add(Me.NumericUpDown_DatumsSpalte)
-        Me.GroupBox_Einstellungen.Controls.Add(Me.CheckBox_Einheiten)
-        Me.GroupBox_Einstellungen.Controls.Add(Me.TextBox_ZeileEinheiten)
-        Me.GroupBox_Einstellungen.Controls.Add(Me.TextBox_ZeileDaten)
-        Me.GroupBox_Einstellungen.Controls.Add(Me.TextBox_ZeileÜberschriften)
-        Me.GroupBox_Einstellungen.Controls.Add(Me.TextBox_XSpalte)
-        Me.GroupBox_Einstellungen.Controls.Add(Me.Label_ZeileDaten)
-        Me.GroupBox_Einstellungen.Controls.Add(Me.Label_ZeileÜberschriften)
-        Me.GroupBox_Einstellungen.Controls.Add(Me.Label_XSpalte)
-        Me.GroupBox_Einstellungen.Location = New System.Drawing.Point(12, 102)
-        Me.GroupBox_Einstellungen.Name = "GroupBox_Einstellungen"
-        Me.GroupBox_Einstellungen.Size = New System.Drawing.Size(530, 79)
-        Me.GroupBox_Einstellungen.TabIndex = 27
-        Me.GroupBox_Einstellungen.TabStop = False
-        Me.GroupBox_Einstellungen.Text = "Einstellungen"
+        Me.GroupBox_Settings.Controls.Add(Me.Label_LineTitles)
+        Me.GroupBox_Settings.Controls.Add(Me.NumericUpDown_LineTitles)
+        Me.GroupBox_Settings.Controls.Add(Me.CheckBox_Units)
+        Me.GroupBox_Settings.Controls.Add(Me.NumericUpDown_LineUnits)
+        Me.GroupBox_Settings.Controls.Add(Me.Label_LineData)
+        Me.GroupBox_Settings.Controls.Add(Me.NumericUpDown_LineData)
+        Me.GroupBox_Settings.Controls.Add(Me.Label_ColumnDateTime)
+        Me.GroupBox_Settings.Controls.Add(Me.TextBox_ColumnDateTime)
+        Me.GroupBox_Settings.Controls.Add(Me.NumericUpDown_ColumnDateTime)
+        Me.GroupBox_Settings.Location = New System.Drawing.Point(12, 102)
+        Me.GroupBox_Settings.Name = "GroupBox_Settings"
+        Me.GroupBox_Settings.Size = New System.Drawing.Size(530, 79)
+        Me.GroupBox_Settings.TabIndex = 27
+        Me.GroupBox_Settings.TabStop = False
+        Me.GroupBox_Settings.Text = "Settings"
         '
-        'NumericUpDown_DatumsSpalte
+        'NumericUpDown_ColumnDateTime
         '
-        Me.NumericUpDown_DatumsSpalte.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+        Me.NumericUpDown_ColumnDateTime.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
                     Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.NumericUpDown_DatumsSpalte.Location = New System.Drawing.Point(485, 45)
-        Me.NumericUpDown_DatumsSpalte.Minimum = New Decimal(New Integer() {1, 0, 0, 0})
-        Me.NumericUpDown_DatumsSpalte.Name = "NumericUpDown_DatumsSpalte"
-        Me.NumericUpDown_DatumsSpalte.Size = New System.Drawing.Size(34, 20)
-        Me.NumericUpDown_DatumsSpalte.TabIndex = 25
-        Me.NumericUpDown_DatumsSpalte.Value = New Decimal(New Integer() {1, 0, 0, 0})
+        Me.NumericUpDown_ColumnDateTime.Location = New System.Drawing.Point(485, 45)
+        Me.NumericUpDown_ColumnDateTime.Minimum = New Decimal(New Integer() {1, 0, 0, 0})
+        Me.NumericUpDown_ColumnDateTime.Name = "NumericUpDown_ColumnDateTime"
+        Me.NumericUpDown_ColumnDateTime.Size = New System.Drawing.Size(34, 20)
+        Me.NumericUpDown_ColumnDateTime.TabIndex = 25
+        Me.NumericUpDown_ColumnDateTime.Value = New Decimal(New Integer() {1, 0, 0, 0})
         '
-        'CheckBox_Einheiten
+        'CheckBox_Units
         '
-        Me.CheckBox_Einheiten.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+        Me.CheckBox_Units.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
                     Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.CheckBox_Einheiten.AutoSize = True
-        Me.CheckBox_Einheiten.Location = New System.Drawing.Point(149, 24)
-        Me.CheckBox_Einheiten.Name = "CheckBox_Einheiten"
-        Me.CheckBox_Einheiten.Size = New System.Drawing.Size(115, 17)
-        Me.CheckBox_Einheiten.TabIndex = 25
-        Me.CheckBox_Einheiten.Text = "Zeile mit Einheiten:"
-        Me.CheckBox_Einheiten.UseVisualStyleBackColor = True
+        Me.CheckBox_Units.AutoSize = True
+        Me.CheckBox_Units.Location = New System.Drawing.Point(149, 24)
+        Me.CheckBox_Units.Name = "CheckBox_Units"
+        Me.CheckBox_Units.Size = New System.Drawing.Size(96, 17)
+        Me.CheckBox_Units.TabIndex = 25
+        Me.CheckBox_Units.Text = "Line with units:"
+        Me.CheckBox_Units.UseVisualStyleBackColor = True
         '
-        'TextBox_ZeileEinheiten
+        'NumericUpDown_LineUnits
         '
-        Me.TextBox_ZeileEinheiten.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+        Me.NumericUpDown_LineUnits.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
                     Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.TextBox_ZeileEinheiten.Location = New System.Drawing.Point(149, 46)
-        Me.TextBox_ZeileEinheiten.Minimum = New Decimal(New Integer() {1, 0, 0, 0})
-        Me.TextBox_ZeileEinheiten.Name = "TextBox_ZeileEinheiten"
-        Me.TextBox_ZeileEinheiten.Size = New System.Drawing.Size(50, 20)
-        Me.TextBox_ZeileEinheiten.TabIndex = 24
-        Me.TextBox_ZeileEinheiten.Value = New Decimal(New Integer() {1, 0, 0, 0})
+        Me.NumericUpDown_LineUnits.Location = New System.Drawing.Point(149, 46)
+        Me.NumericUpDown_LineUnits.Minimum = New Decimal(New Integer() {1, 0, 0, 0})
+        Me.NumericUpDown_LineUnits.Name = "NumericUpDown_LineUnits"
+        Me.NumericUpDown_LineUnits.Size = New System.Drawing.Size(50, 20)
+        Me.NumericUpDown_LineUnits.TabIndex = 24
+        Me.NumericUpDown_LineUnits.Value = New Decimal(New Integer() {1, 0, 0, 0})
         '
-        'TextBox_ZeileDaten
+        'NumericUpDown_LineData
         '
-        Me.TextBox_ZeileDaten.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+        Me.NumericUpDown_LineData.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
                     Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.TextBox_ZeileDaten.Location = New System.Drawing.Point(286, 46)
-        Me.TextBox_ZeileDaten.Minimum = New Decimal(New Integer() {1, 0, 0, 0})
-        Me.TextBox_ZeileDaten.Name = "TextBox_ZeileDaten"
-        Me.TextBox_ZeileDaten.Size = New System.Drawing.Size(50, 20)
-        Me.TextBox_ZeileDaten.TabIndex = 24
-        Me.TextBox_ZeileDaten.Value = New Decimal(New Integer() {1, 0, 0, 0})
+        Me.NumericUpDown_LineData.Location = New System.Drawing.Point(286, 46)
+        Me.NumericUpDown_LineData.Minimum = New Decimal(New Integer() {1, 0, 0, 0})
+        Me.NumericUpDown_LineData.Name = "NumericUpDown_LineData"
+        Me.NumericUpDown_LineData.Size = New System.Drawing.Size(50, 20)
+        Me.NumericUpDown_LineData.TabIndex = 24
+        Me.NumericUpDown_LineData.Value = New Decimal(New Integer() {1, 0, 0, 0})
         '
-        'Label_ZeileDaten
+        'Label_LineData
         '
-        Me.Label_ZeileDaten.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+        Me.Label_LineData.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
                     Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.Label_ZeileDaten.AutoSize = True
-        Me.Label_ZeileDaten.Location = New System.Drawing.Point(283, 25)
-        Me.Label_ZeileDaten.Name = "Label_ZeileDaten"
-        Me.Label_ZeileDaten.Size = New System.Drawing.Size(87, 13)
-        Me.Label_ZeileDaten.TabIndex = 23
-        Me.Label_ZeileDaten.Text = "Erste Datenzeile:"
+        Me.Label_LineData.AutoSize = True
+        Me.Label_LineData.Location = New System.Drawing.Point(283, 25)
+        Me.Label_LineData.Name = "Label_LineData"
+        Me.Label_LineData.Size = New System.Drawing.Size(72, 13)
+        Me.Label_LineData.TabIndex = 23
+        Me.Label_LineData.Text = "First data line:"
         '
-        'GroupBox_Vorschau
+        'GroupBox_Preview
         '
-        Me.GroupBox_Vorschau.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+        Me.GroupBox_Preview.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
                     Or System.Windows.Forms.AnchorStyles.Left) _
                     Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.GroupBox_Vorschau.Controls.Add(Me.Label_Datei)
-        Me.GroupBox_Vorschau.Controls.Add(Me.TextBox_Vorschau)
-        Me.GroupBox_Vorschau.Location = New System.Drawing.Point(171, 188)
-        Me.GroupBox_Vorschau.Name = "GroupBox_Vorschau"
-        Me.GroupBox_Vorschau.Size = New System.Drawing.Size(371, 220)
-        Me.GroupBox_Vorschau.TabIndex = 28
-        Me.GroupBox_Vorschau.TabStop = False
-        Me.GroupBox_Vorschau.Text = "Dateivorschau"
+        Me.GroupBox_Preview.Controls.Add(Me.Label_File)
+        Me.GroupBox_Preview.Controls.Add(Me.TextBox_Preview)
+        Me.GroupBox_Preview.Location = New System.Drawing.Point(171, 188)
+        Me.GroupBox_Preview.Name = "GroupBox_Preview"
+        Me.GroupBox_Preview.Size = New System.Drawing.Size(371, 220)
+        Me.GroupBox_Preview.TabIndex = 28
+        Me.GroupBox_Preview.TabStop = False
+        Me.GroupBox_Preview.Text = "File preview"
         '
-        'Label_Datei
+        'Label_File
         '
-        Me.Label_Datei.AutoSize = True
-        Me.Label_Datei.Location = New System.Drawing.Point(9, 21)
-        Me.Label_Datei.Name = "Label_Datei"
-        Me.Label_Datei.Size = New System.Drawing.Size(35, 13)
-        Me.Label_Datei.TabIndex = 17
-        Me.Label_Datei.Text = "Datei:"
+        Me.Label_File.AutoSize = True
+        Me.Label_File.Location = New System.Drawing.Point(9, 21)
+        Me.Label_File.Name = "Label_File"
+        Me.Label_File.Size = New System.Drawing.Size(26, 13)
+        Me.Label_File.TabIndex = 17
+        Me.Label_File.Text = "File:"
         '
-        'Label_Spaltenauswahl
+        'Label_Series
         '
-        Me.Label_Spaltenauswahl.AutoSize = True
-        Me.Label_Spaltenauswahl.Location = New System.Drawing.Point(12, 46)
-        Me.Label_Spaltenauswahl.Name = "Label_Spaltenauswahl"
-        Me.Label_Spaltenauswahl.Size = New System.Drawing.Size(101, 13)
-        Me.Label_Spaltenauswahl.TabIndex = 26
-        Me.Label_Spaltenauswahl.Text = "Verfügbare Spalten:"
+        Me.Label_Series.AutoSize = True
+        Me.Label_Series.Location = New System.Drawing.Point(12, 46)
+        Me.Label_Series.Name = "Label_Series"
+        Me.Label_Series.Size = New System.Drawing.Size(83, 13)
+        Me.Label_Series.TabIndex = 26
+        Me.Label_Series.Text = "Available series:"
         '
-        'TextBox_Suche
+        'TextBox_Search
         '
-        Me.TextBox_Suche.Location = New System.Drawing.Point(59, 18)
-        Me.TextBox_Suche.Name = "TextBox_Suche"
-        Me.TextBox_Suche.Size = New System.Drawing.Size(77, 20)
-        Me.TextBox_Suche.TabIndex = 23
+        Me.TextBox_Search.Location = New System.Drawing.Point(59, 18)
+        Me.TextBox_Search.Name = "TextBox_Search"
+        Me.TextBox_Search.Size = New System.Drawing.Size(77, 20)
+        Me.TextBox_Search.TabIndex = 23
         '
-        'GroupBox_Dezimaltrennzeichen
+        'GroupBox_DecimalMark
         '
-        Me.GroupBox_Dezimaltrennzeichen.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.GroupBox_Dezimaltrennzeichen.Controls.Add(Me.ComboBox_Dezimaltrennzeichen)
-        Me.GroupBox_Dezimaltrennzeichen.Controls.Add(Me.Label_Dezimaltrennzeichen)
-        Me.GroupBox_Dezimaltrennzeichen.Location = New System.Drawing.Point(416, 12)
-        Me.GroupBox_Dezimaltrennzeichen.Name = "GroupBox_Dezimaltrennzeichen"
-        Me.GroupBox_Dezimaltrennzeichen.Size = New System.Drawing.Size(126, 84)
-        Me.GroupBox_Dezimaltrennzeichen.TabIndex = 29
-        Me.GroupBox_Dezimaltrennzeichen.TabStop = False
-        Me.GroupBox_Dezimaltrennzeichen.Text = "Dezimaltrennzeichen"
+        Me.GroupBox_DecimalMark.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.GroupBox_DecimalMark.Controls.Add(Me.Label_DecimalMark)
+        Me.GroupBox_DecimalMark.Controls.Add(Me.ComboBox_DecimalMark)
+        Me.GroupBox_DecimalMark.Location = New System.Drawing.Point(416, 12)
+        Me.GroupBox_DecimalMark.Name = "GroupBox_DecimalMark"
+        Me.GroupBox_DecimalMark.Size = New System.Drawing.Size(126, 84)
+        Me.GroupBox_DecimalMark.TabIndex = 29
+        Me.GroupBox_DecimalMark.TabStop = False
+        Me.GroupBox_DecimalMark.Text = "Decimal mark"
         '
-        'Label_Dezimaltrennzeichen
+        'Label_DecimalMark
         '
-        Me.Label_Dezimaltrennzeichen.AutoSize = True
-        Me.Label_Dezimaltrennzeichen.Location = New System.Drawing.Point(6, 26)
-        Me.Label_Dezimaltrennzeichen.Name = "Label_Dezimaltrennzeichen"
-        Me.Label_Dezimaltrennzeichen.Size = New System.Drawing.Size(108, 13)
-        Me.Label_Dezimaltrennzeichen.TabIndex = 23
-        Me.Label_Dezimaltrennzeichen.Text = "Dezimaltrennzeichen:"
+        Me.Label_DecimalMark.AutoSize = True
+        Me.Label_DecimalMark.Location = New System.Drawing.Point(6, 26)
+        Me.Label_DecimalMark.Name = "Label_DecimalMark"
+        Me.Label_DecimalMark.Size = New System.Drawing.Size(74, 13)
+        Me.Label_DecimalMark.TabIndex = 23
+        Me.Label_DecimalMark.Text = "Decimal mark:"
         '
         'StatusStrip1
         '
@@ -391,56 +391,56 @@ Partial Class ImportDiag
         Me.Button_SelectAll.Name = "Button_SelectAll"
         Me.Button_SelectAll.Size = New System.Drawing.Size(88, 23)
         Me.Button_SelectAll.TabIndex = 27
-        Me.Button_SelectAll.Text = "Alle auswählen"
+        Me.Button_SelectAll.Text = "Select all"
         Me.Button_SelectAll.UseVisualStyleBackColor = True
         '
-        'GroupBox_Auswahl
+        'GroupBox_Selection
         '
-        Me.GroupBox_Auswahl.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+        Me.GroupBox_Selection.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
                     Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.GroupBox_Auswahl.Controls.Add(Me.Label_Spaltenauswahl)
-        Me.GroupBox_Auswahl.Controls.Add(Me.Button_SelectAll)
-        Me.GroupBox_Auswahl.Controls.Add(Me.TextBox_Suche)
-        Me.GroupBox_Auswahl.Controls.Add(Me.ListBox_YSpalten)
-        Me.GroupBox_Auswahl.Controls.Add(Me.Label_Suche)
-        Me.GroupBox_Auswahl.Location = New System.Drawing.Point(12, 188)
-        Me.GroupBox_Auswahl.Name = "GroupBox_Auswahl"
-        Me.GroupBox_Auswahl.Size = New System.Drawing.Size(153, 220)
-        Me.GroupBox_Auswahl.TabIndex = 31
-        Me.GroupBox_Auswahl.TabStop = False
-        Me.GroupBox_Auswahl.Text = "Reihenauswahl"
+        Me.GroupBox_Selection.Controls.Add(Me.Label_Search)
+        Me.GroupBox_Selection.Controls.Add(Me.TextBox_Search)
+        Me.GroupBox_Selection.Controls.Add(Me.Label_Series)
+        Me.GroupBox_Selection.Controls.Add(Me.ListBox_Series)
+        Me.GroupBox_Selection.Controls.Add(Me.Button_SelectAll)
+        Me.GroupBox_Selection.Location = New System.Drawing.Point(12, 188)
+        Me.GroupBox_Selection.Name = "GroupBox_Selection"
+        Me.GroupBox_Selection.Size = New System.Drawing.Size(153, 220)
+        Me.GroupBox_Selection.TabIndex = 31
+        Me.GroupBox_Selection.TabStop = False
+        Me.GroupBox_Selection.Text = "Series selection"
         '
-        'GroupBox_Datumsformat
+        'GroupBox_Dateformat
         '
-        Me.GroupBox_Datumsformat.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+        Me.GroupBox_Dateformat.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
                     Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.GroupBox_Datumsformat.Controls.Add(Me.ComboBox_Datumsformat)
-        Me.GroupBox_Datumsformat.Controls.Add(Me.Label_Datumsformat)
-        Me.GroupBox_Datumsformat.Location = New System.Drawing.Point(258, 12)
-        Me.GroupBox_Datumsformat.Name = "GroupBox_Datumsformat"
-        Me.GroupBox_Datumsformat.Size = New System.Drawing.Size(152, 84)
-        Me.GroupBox_Datumsformat.TabIndex = 32
-        Me.GroupBox_Datumsformat.TabStop = False
-        Me.GroupBox_Datumsformat.Text = "Datumsformat"
+        Me.GroupBox_Dateformat.Controls.Add(Me.Label_Dateformat)
+        Me.GroupBox_Dateformat.Controls.Add(Me.ComboBox_Dateformat)
+        Me.GroupBox_Dateformat.Location = New System.Drawing.Point(258, 12)
+        Me.GroupBox_Dateformat.Name = "GroupBox_Dateformat"
+        Me.GroupBox_Dateformat.Size = New System.Drawing.Size(152, 84)
+        Me.GroupBox_Dateformat.TabIndex = 32
+        Me.GroupBox_Dateformat.TabStop = False
+        Me.GroupBox_Dateformat.Text = "Date format"
         '
-        'ComboBox_Datumsformat
+        'ComboBox_Dateformat
         '
-        Me.ComboBox_Datumsformat.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+        Me.ComboBox_Dateformat.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
                     Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ComboBox_Datumsformat.FormattingEnabled = True
-        Me.ComboBox_Datumsformat.Location = New System.Drawing.Point(7, 53)
-        Me.ComboBox_Datumsformat.Name = "ComboBox_Datumsformat"
-        Me.ComboBox_Datumsformat.Size = New System.Drawing.Size(139, 21)
-        Me.ComboBox_Datumsformat.TabIndex = 1
+        Me.ComboBox_Dateformat.FormattingEnabled = True
+        Me.ComboBox_Dateformat.Location = New System.Drawing.Point(7, 53)
+        Me.ComboBox_Dateformat.Name = "ComboBox_Dateformat"
+        Me.ComboBox_Dateformat.Size = New System.Drawing.Size(139, 21)
+        Me.ComboBox_Dateformat.TabIndex = 1
         '
-        'Label_Datumsformat
+        'Label_Dateformat
         '
-        Me.Label_Datumsformat.AutoSize = True
-        Me.Label_Datumsformat.Location = New System.Drawing.Point(6, 26)
-        Me.Label_Datumsformat.Name = "Label_Datumsformat"
-        Me.Label_Datumsformat.Size = New System.Drawing.Size(75, 13)
-        Me.Label_Datumsformat.TabIndex = 0
-        Me.Label_Datumsformat.Text = "Datumsformat:"
+        Me.Label_Dateformat.AutoSize = True
+        Me.Label_Dateformat.Location = New System.Drawing.Point(6, 26)
+        Me.Label_Dateformat.Name = "Label_Dateformat"
+        Me.Label_Dateformat.Size = New System.Drawing.Size(65, 13)
+        Me.Label_Dateformat.TabIndex = 0
+        Me.Label_Dateformat.Text = "Date format:"
         '
         'ImportDiag
         '
@@ -448,15 +448,15 @@ Partial Class ImportDiag
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.CancelButton = Me.Button_Cancel
         Me.ClientSize = New System.Drawing.Size(549, 462)
-        Me.Controls.Add(Me.GroupBox_Datumsformat)
-        Me.Controls.Add(Me.GroupBox_Auswahl)
-        Me.Controls.Add(Me.StatusStrip1)
-        Me.Controls.Add(Me.GroupBox_Dezimaltrennzeichen)
-        Me.Controls.Add(Me.GroupBox_Vorschau)
-        Me.Controls.Add(Me.GroupBox_Einstellungen)
-        Me.Controls.Add(Me.GroupBox_Spaltenmodus)
+        Me.Controls.Add(Me.GroupBox_Columns)
+        Me.Controls.Add(Me.GroupBox_Dateformat)
+        Me.Controls.Add(Me.GroupBox_DecimalMark)
+        Me.Controls.Add(Me.GroupBox_Settings)
+        Me.Controls.Add(Me.GroupBox_Selection)
+        Me.Controls.Add(Me.GroupBox_Preview)
         Me.Controls.Add(Me.Button_OK)
         Me.Controls.Add(Me.Button_Cancel)
+        Me.Controls.Add(Me.StatusStrip1)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.MaximizeBox = False
         Me.MinimizeBox = False
@@ -464,61 +464,61 @@ Partial Class ImportDiag
         Me.Name = "ImportDiag"
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = "Datei importieren"
-        Me.GroupBox_Spaltenmodus.ResumeLayout(False)
-        Me.GroupBox_Spaltenmodus.PerformLayout()
-        CType(Me.TextBox_ZeileÜberschriften, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.GroupBox_Einstellungen.ResumeLayout(False)
-        Me.GroupBox_Einstellungen.PerformLayout()
-        CType(Me.NumericUpDown_DatumsSpalte, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.TextBox_ZeileEinheiten, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.TextBox_ZeileDaten, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.GroupBox_Vorschau.ResumeLayout(False)
-        Me.GroupBox_Vorschau.PerformLayout()
-        Me.GroupBox_Dezimaltrennzeichen.ResumeLayout(False)
-        Me.GroupBox_Dezimaltrennzeichen.PerformLayout()
+        Me.Text = "Import series from file"
+        Me.GroupBox_Columns.ResumeLayout(False)
+        Me.GroupBox_Columns.PerformLayout()
+        CType(Me.NumericUpDown_LineTitles, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.GroupBox_Settings.ResumeLayout(False)
+        Me.GroupBox_Settings.PerformLayout()
+        CType(Me.NumericUpDown_ColumnDateTime, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.NumericUpDown_LineUnits, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.NumericUpDown_LineData, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.GroupBox_Preview.ResumeLayout(False)
+        Me.GroupBox_Preview.PerformLayout()
+        Me.GroupBox_DecimalMark.ResumeLayout(False)
+        Me.GroupBox_DecimalMark.PerformLayout()
         Me.StatusStrip1.ResumeLayout(False)
         Me.StatusStrip1.PerformLayout()
-        Me.GroupBox_Auswahl.ResumeLayout(False)
-        Me.GroupBox_Auswahl.PerformLayout()
-        Me.GroupBox_Datumsformat.ResumeLayout(False)
-        Me.GroupBox_Datumsformat.PerformLayout()
+        Me.GroupBox_Selection.ResumeLayout(False)
+        Me.GroupBox_Selection.PerformLayout()
+        Me.GroupBox_Dateformat.ResumeLayout(False)
+        Me.GroupBox_Dateformat.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
     End Sub
-    Private WithEvents GroupBox_Einstellungen As System.Windows.Forms.GroupBox
-    Private WithEvents GroupBox_Spaltenmodus As System.Windows.Forms.GroupBox
+    Private WithEvents GroupBox_Settings As System.Windows.Forms.GroupBox
+    Private WithEvents GroupBox_Columns As System.Windows.Forms.GroupBox
     Private WithEvents Button_OK As System.Windows.Forms.Button
     Private WithEvents Button_Cancel As System.Windows.Forms.Button
-    Private WithEvents GroupBox_Vorschau As System.Windows.Forms.GroupBox
-    Private WithEvents GroupBox_Dezimaltrennzeichen As System.Windows.Forms.GroupBox
-    Private WithEvents TextBox_Vorschau As System.Windows.Forms.RichTextBox
-    Private WithEvents ComboBox_Trennzeichen As System.Windows.Forms.ComboBox
-    Private WithEvents ListBox_YSpalten As System.Windows.Forms.ListBox
-    Private WithEvents Label_Suche As System.Windows.Forms.Label
-    Private WithEvents Label_XSpalte As System.Windows.Forms.Label
-    Private WithEvents TextBox_XSpalte As System.Windows.Forms.TextBox
-    Private WithEvents RadioButton_Spaltenbreite As System.Windows.Forms.RadioButton
-    Private WithEvents RadioButton_Zeichengetrennt As System.Windows.Forms.RadioButton
-    Private WithEvents TextBox_Spaltenbreite As System.Windows.Forms.TextBox
-    Private WithEvents TextBox_ZeileÜberschriften As System.Windows.Forms.NumericUpDown
-    Private WithEvents Label_ZeileÜberschriften As System.Windows.Forms.Label
-    Private WithEvents ComboBox_Dezimaltrennzeichen As System.Windows.Forms.ComboBox
-    Private WithEvents TextBox_ZeileEinheiten As System.Windows.Forms.NumericUpDown
-    Private WithEvents TextBox_ZeileDaten As System.Windows.Forms.NumericUpDown
-    Private WithEvents Label_ZeileDaten As System.Windows.Forms.Label
-    Private WithEvents CheckBox_Einheiten As System.Windows.Forms.CheckBox
-    Private WithEvents Label_Dezimaltrennzeichen As System.Windows.Forms.Label
-    Private WithEvents TextBox_Suche As System.Windows.Forms.TextBox
-    Private WithEvents Label_Spaltenauswahl As System.Windows.Forms.Label
-    Private WithEvents NumericUpDown_DatumsSpalte As System.Windows.Forms.NumericUpDown
+    Private WithEvents GroupBox_Preview As System.Windows.Forms.GroupBox
+    Private WithEvents GroupBox_DecimalMark As System.Windows.Forms.GroupBox
+    Private WithEvents TextBox_Preview As System.Windows.Forms.RichTextBox
+    Private WithEvents ComboBox_Separator As System.Windows.Forms.ComboBox
+    Private WithEvents ListBox_Series As System.Windows.Forms.ListBox
+    Private WithEvents Label_Search As System.Windows.Forms.Label
+    Private WithEvents Label_ColumnDateTime As System.Windows.Forms.Label
+    Private WithEvents TextBox_ColumnDateTime As System.Windows.Forms.TextBox
+    Private WithEvents RadioButton_FixedWidth As System.Windows.Forms.RadioButton
+    Private WithEvents RadioButton_CharSeparated As System.Windows.Forms.RadioButton
+    Private WithEvents TextBox_ColumnWidth As System.Windows.Forms.TextBox
+    Private WithEvents NumericUpDown_LineTitles As System.Windows.Forms.NumericUpDown
+    Private WithEvents Label_LineTitles As System.Windows.Forms.Label
+    Private WithEvents ComboBox_DecimalMark As System.Windows.Forms.ComboBox
+    Private WithEvents NumericUpDown_LineUnits As System.Windows.Forms.NumericUpDown
+    Private WithEvents NumericUpDown_LineData As System.Windows.Forms.NumericUpDown
+    Private WithEvents Label_LineData As System.Windows.Forms.Label
+    Private WithEvents CheckBox_Units As System.Windows.Forms.CheckBox
+    Private WithEvents Label_DecimalMark As System.Windows.Forms.Label
+    Private WithEvents TextBox_Search As System.Windows.Forms.TextBox
+    Private WithEvents Label_Series As System.Windows.Forms.Label
+    Private WithEvents NumericUpDown_ColumnDateTime As System.Windows.Forms.NumericUpDown
     Friend WithEvents StatusStrip1 As System.Windows.Forms.StatusStrip
     Friend WithEvents StatusImage As System.Windows.Forms.ToolStripStatusLabel
     Friend WithEvents Button_SelectAll As System.Windows.Forms.Button
-    Friend WithEvents GroupBox_Auswahl As System.Windows.Forms.GroupBox
-    Friend WithEvents Label_Datei As System.Windows.Forms.Label
-    Friend WithEvents GroupBox_Datumsformat As System.Windows.Forms.GroupBox
-    Friend WithEvents ComboBox_Datumsformat As System.Windows.Forms.ComboBox
-    Friend WithEvents Label_Datumsformat As System.Windows.Forms.Label
+    Friend WithEvents GroupBox_Selection As System.Windows.Forms.GroupBox
+    Friend WithEvents Label_File As System.Windows.Forms.Label
+    Friend WithEvents GroupBox_Dateformat As System.Windows.Forms.GroupBox
+    Friend WithEvents ComboBox_Dateformat As System.Windows.Forms.ComboBox
+    Friend WithEvents Label_Dateformat As System.Windows.Forms.Label
 End Class

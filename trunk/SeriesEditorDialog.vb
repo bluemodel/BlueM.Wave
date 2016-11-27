@@ -45,8 +45,8 @@ Public Class SeriesEditorDialog
     '*******
     Private ReadOnly Property Einheit() As String
         Get
-            If (Not Me.TextBox_Einheit.Text.Trim() = "")
-                Return Me.TextBox_Einheit.Text
+            If (Not Me.TextBox_Unit.Text.Trim() = "") Then
+                Return Me.TextBox_Unit.Text
             Else
                 Return "-"
             End If

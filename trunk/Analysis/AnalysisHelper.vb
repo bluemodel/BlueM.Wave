@@ -86,7 +86,7 @@ Public Module AnalysisHelper
             If (found) Then Exit For
         Next
 
-        If (Not found) Then Throw New Exception("Es konnte keine gemeinsame Stützstelle gefunden werden!")
+        If (Not found) Then Throw New Exception("No coincident data points found!")
 
         'WEITERE gemeinsame Stützstellen finden
         Do Until (i > (zre1.Length - 1) Or j > (zre2.Length - 1))
