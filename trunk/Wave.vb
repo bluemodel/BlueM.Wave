@@ -1438,6 +1438,8 @@ Public Class Wave
 
             'Charts aktualisieren
             Call Me.UpdateCharts()
+            'Update navigation
+            Call Me.updateNavigation()
 
             'Log
             Call Log.AddLogEntry("TEN file '" & FileName & "' loaded successfully!")
@@ -1701,6 +1703,8 @@ Public Class Wave
 
         'Charts aktualisieren
         Call Me.UpdateCharts()
+        'Update navigation
+        Call Me.updateNavigation()
 
     End Sub
 
