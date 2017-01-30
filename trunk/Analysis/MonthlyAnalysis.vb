@@ -152,7 +152,8 @@ Public Class MonthlyAnalysis
     Public Overrides Sub ProcessAnalysis()
 
         Dim reihe As Zeitreihe
-        Dim i, j, N As Integer
+        Dim i, j As Integer
+        Dim N As Long
         Dim summe, summequadrate As Double
 
         reihe = Me.mZeitreihen.Item(0).getCleanZRE()
