@@ -25,6 +25,7 @@
 'EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 '--------------------------------------------------------------------------------------------
 '
+Imports MathNet.Numerics
 ''' <summary>
 ''' Gegenüberstellung/Vergleich zweier Zeitreihen
 ''' </summary>
@@ -51,7 +52,7 @@ Public Class Comparison
     ''' </summary>
     Public Overrides ReadOnly Property hasResultValues() As Boolean
         Get
-            Return False
+            Return True
         End Get
     End Property
 
@@ -86,7 +87,7 @@ Public Class Comparison
 
         Dim i As Integer
         Dim reihe1, reihe2 As Zeitreihe
-        Dim values(,) As Double
+        Dim values(,), xvalues(), yvalues() As Double
 
         ' Dialogaufruf zur Auswahl der x-Achse
         Dim dialog As New Comparison_Dialog(Me.mZeitreihen(0).Title, Me.mZeitreihen(1).Title)
@@ -115,15 +116,27 @@ Public Class Comparison
 
         ' Ergebnisreihe allokieren
         ReDim Me.ergebnisreihe(values.GetUpperBound(0), 1)
+        ReDim xvalues(values.GetUpperBound(0))
+        ReDim yvalues(values.GetUpperBound(0))
 
         ' x- und y-Werte der Ergebnisreihe zuweisen
         For i = 0 To values.GetUpperBound(0)
             ergebnisreihe(i, 0) = values(i, 0)
             ergebnisreihe(i, 1) = values(i, 1)
+            xvalues(i) = values(i, 0)
+            yvalues(i) = values(i, 1)
         Next
 
         'Datume übernehmen (werden später für Punkte-Labels im Diagramm gebraucht)
         datume = reihe1.XWerte
+
+        'Calculate linear regression
+        Dim p As Tuple(Of Double, Double)
+        p = Fit.Line(xvalues, yvalues)
+
+        'Store result values
+        Me.mResultValues.Add("alpha", p.Item1)
+        Me.mResultValues.Add("beta", p.Item2)
 
     End Sub
 
@@ -134,15 +147,12 @@ Public Class Comparison
 
         'Text:
         '-----
-        Me.mResultText = "Comparison:" & eol _
-                        & eol _
-                        & "The analysis is based on " & Me.ergebnisreihe.Length & " coincident data points between " & Me.datume(0).ToString(Datumsformate("default")) & " and " & Me.datume(Me.datume.Count - 1).ToString(Datumsformate("default")) & eol _
-                        & eol
+        Me.mResultText = "The analysis is based on " & Me.ergebnisreihe.Length & " coincident data points between " & Me.datume(0).ToString(Datumsformate("default")) & " and " & Me.datume(Me.datume.Count - 1).ToString(Datumsformate("default"))
 
         'Diagramm:
         '---------
         Dim i, ende As Integer
-        Dim gegenueberstellung_linie As Steema.TeeChart.Styles.Line
+        Dim gegenueberstellung_linie, regression_line As Steema.TeeChart.Styles.Line
 
         Me.mResultChart = New Steema.TeeChart.Chart()
         Call Wave.formatChart(Me.mResultChart)
@@ -165,10 +175,22 @@ Public Class Comparison
         gegenueberstellung_linie.Pointer.HorizSize = 2
         gegenueberstellung_linie.Pointer.VertSize = 2
 
-        'Werte eintragen
+        regression_line = New Steema.TeeChart.Styles.Line(Me.mResultChart)
+        regression_line.Title = "Regression line"
+        regression_line.LinePen.Width = 2
+        regression_line.LinePen.Color = Color.Red
+
+        'assign values to series
+        Dim alpha, beta, x, y As Double
+        alpha = Me.mResultValues("alpha")
+        beta = Me.mResultValues("beta")
+
         ende = (ergebnisreihe.Length / 2 - 2)
         For i = 0 To ende
-            gegenueberstellung_linie.Add(ergebnisreihe(i, 0), ergebnisreihe(i, 1), datume(i).ToString(Konstanten.Datumsformate("default")))
+            x = ergebnisreihe(i, 0)
+            y = ergebnisreihe(i, 1)
+            gegenueberstellung_linie.Add(x, y, datume(i).ToString(Konstanten.Datumsformate("default")))
+            regression_line.Add(x, beta * x + alpha)
         Next
 
         'Markstips
@@ -178,6 +200,13 @@ Public Class Comparison
         markstips.Style = Steema.TeeChart.Styles.MarksStyles.Label
         markstips.Series = gegenueberstellung_linie
         gegenueberstellung_linie.Cursor = Cursors.Help
+
+        'Annotation
+        '----------
+        Dim anno As New Steema.TeeChart.Tools.Annotation(Me.mResultChart)
+        anno.Position = Steema.TeeChart.Tools.AnnotationPositions.RightBottom
+        anno.Text = "Linear regression line: " & eol
+        anno.Text &= "y = " + Str(beta) + " * x + " + Str(alpha)
 
     End Sub
 
