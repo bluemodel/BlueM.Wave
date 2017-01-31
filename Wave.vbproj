@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{BCD1BBE3-5AB2-4C3F-AC12-43EB977C6F6F}</ProjectGuid>
     <OutputType>WinExe</OutputType>
@@ -63,11 +63,11 @@
   <ItemGroup>
     <Reference Include="modelEAU.SWMM.DllAdapter, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>Resources\modelEAU.SWMM.DllAdapter.dll</HintPath>
+      <HintPath>lib\modelEAU\modelEAU.SWMM.DllAdapter.dll</HintPath>
     </Reference>
     <Reference Include="SydroZreNet, Version=2.0.0.1, Culture=neutral, PublicKeyToken=18f53cfa0aa5cfa4, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>Resources\SydroZreNet.dll</HintPath>
+      <HintPath>lib\SydroZre\SydroZreNet.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
@@ -258,7 +258,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\application_split.png" />
-    <None Include="Resources\TeeChart.dll" />
+    <None Include="lib\TeeChart\TeeChart.dll" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\calculator.png" />
@@ -303,16 +303,16 @@
     <EmbeddedResource Include="Resources\cursor_pan.cur" />
     <EmbeddedResource Include="Resources\cursor_zoom.cur" />
     <EmbeddedResource Include="Resources\cursor_pan_hold.cur" />
-    <Content Include="Resources\libifcoremd.dll" />
-    <Content Include="Resources\libifportmd.dll" />
-    <Content Include="Resources\libmmd.dll" />
-    <Content Include="Resources\modelEAU.SWMM.DllAdapter.dll" />
+    <Content Include="lib\IntelFortran\libifcoremd.dll" />
+    <Content Include="lib\IntelFortran\libifportmd.dll" />
+    <Content Include="lib\IntelFortran\libmmd.dll" />
+    <Content Include="lib\modelEAU\modelEAU.SWMM.DllAdapter.dll" />
     <None Include="Resources\pan.png" />
     <Content Include="Resources\navigate_back.png" />
     <Content Include="Resources\navigate_forward.png" />
-    <Content Include="Resources\SydroZreI.dll" />
-    <Content Include="Resources\SydroZreNet.dll" />
-    <Content Include="Resources\SydroZreNet.xml" />
+    <Content Include="lib\SydroZre\SydroZreI.dll" />
+    <Content Include="lib\SydroZre\SydroZreNet.dll" />
+    <Content Include="lib\SydroZre\SydroZreNet.xml" />
     <Content Include="Resources\zoom_world.png" />
     <None Include="Resources\zoom.png" />
     <None Include="Resources\zoom_previous.png" />
@@ -343,9 +343,9 @@
   </Target>
   -->
   <PropertyGroup>
-    <PostBuildEvent>copy $(ProjectDir)Resources\SydroZreI.dll $(TargetDir)SydroZreI.dll
-copy $(ProjectDir)Resources\libifcoremd.dll $(TargetDir)libifcoremd.dll
-copy $(ProjectDir)Resources\libifportmd.dll $(TargetDir)libifportmd.dll
-copy $(ProjectDir)Resources\libmmd.dll $(TargetDir)libmmd.dll</PostBuildEvent>
+    <PostBuildEvent>copy $(ProjectDir)lib\SydroZre\SydroZreI.dll $(TargetDir)SydroZreI.dll
+copy $(ProjectDir)lib\IntelFortran\libifcoremd.dll $(TargetDir)libifcoremd.dll
+copy $(ProjectDir)lib\IntelFortran\libifportmd.dll $(TargetDir)libifportmd.dll
+copy $(ProjectDir)lib\IntelFortran\libmmd.dll $(TargetDir)libmmd.dll</PostBuildEvent>
   </PropertyGroup>
 </Project>
