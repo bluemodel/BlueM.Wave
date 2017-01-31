@@ -1,6 +1,12 @@
 ﻿===============================================================
-Wave Release Notes
+BlueM.Wave Release Notes
 ===============================================================
+Version 1.6.1
+-------------
+NEW:
+* The "Comparison" analysis function now fits a simple linear regression line to the data
+  (using the Math.NET Numerics library)
+
 Version 1.6
 -----------
 NEW:

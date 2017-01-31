@@ -715,9 +715,14 @@ Public Class Wave
                     Call Me.myLogWindow.BringToFront()
                 End If
 
-                'Ergebniswerte anzeigen
+                'Ergebniswerte in Log schreiben
                 If (oAnalysis.hasResultValues) Then
-                    'TODO: Ergebniswerte anzeigen?
+                    Call Log.AddLogEntry("Analysis results:")
+                    For Each kvp As KeyValuePair(Of String, Double) In oAnalysis.getResultValues
+                        Call Log.AddLogEntry(kvp.Key + ": " + Str(kvp.Value))
+                    Next
+                    Call Me.myLogWindow.Show()
+                    Call Me.myLogWindow.BringToFront()
                 End If
 
             Catch ex As Exception

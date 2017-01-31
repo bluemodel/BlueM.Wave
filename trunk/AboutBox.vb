@@ -53,4 +53,5 @@ Public NotInheritable Class AboutBox
     Private Sub LinkLabel1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles LinkLabel1.Click
         Process.Start(Me.LinkLabel1.Text)
     End Sub
+
 End Class
