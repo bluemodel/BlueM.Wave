@@ -36,6 +36,8 @@ Public Class GoodnessOfFit
     Private fehlerquadrate() As Double
     Private sum_fehlerquadrate As Double
     Private nash_sutcliffe As Double
+    Private volume_observed As Double
+    Private volume_simulated As Double
     Private volumenfehler As Double
     Private bestimmtheitsmass As Double
     Private korrelationskoeffizient As Double
@@ -78,8 +80,6 @@ Public Class GoodnessOfFit
         Dim sum_fehler As Double
         Dim avg_gemessen As Double
         Dim sum_qmittelwertabweichung As Double
-        Dim sum_simuliert As Double
-        Dim sum_gemessen As Double
         Dim kovar As Double
         Dim std_simuliert As Double
         Dim std_gemessen As Double
@@ -107,6 +107,18 @@ Public Class GoodnessOfFit
             Me.zre_simuliert = Me.mZeitreihen(0).getCleanZRE()
         End If
 
+        'Cut series
+        Me.zre_gemessen.Cut(Me.zre_simuliert)
+        Me.zre_simuliert.Cut(Me.zre_gemessen)
+
+        'Calculate volumes
+        volume_simulated = Me.zre_simuliert.Volume
+        volume_observed = Me.zre_gemessen.Volume
+
+        'Mittelwerte
+        avg_gemessen = Me.zre_gemessen.Average
+        avg_simuliert = Me.zre_simuliert.Average
+
         'Auf gemeinsame Stützstellen beschränken
         values = AnalysisHelper.getConcurrentValues(Me.zre_gemessen, Me.zre_simuliert)
 
@@ -121,26 +133,20 @@ Public Class GoodnessOfFit
         'Kennwerte berechnen
         ReDim Me.fehlerquadrate(values.GetUpperBound(0))
         ReDim fehler(values.GetUpperBound(0))
+
         sum_fehler = 0
         Me.sum_fehlerquadrate = 0
-        sum_gemessen = 0
-        sum_simuliert = 0
 
+        'Fehler
         For i = 0 To n - 1
             fehler(i) = values(i, 1) - values(i, 0) 'simuliert - gemessen
             sum_fehler += fehler(i)
-            sum_gemessen += values(i, 0)
-            sum_simuliert += values(i, 1)
             Me.fehlerquadrate(i) = fehler(i) ^ 2
             Me.sum_fehlerquadrate += Me.fehlerquadrate(i)
         Next
 
-        'Mittelwerte
-        avg_gemessen = sum_gemessen / n
-        avg_simuliert = sum_simuliert / n
-
         'Volumenfehler [%]
-        Me.volumenfehler = 100 * (sum_simuliert - sum_gemessen) / sum_gemessen
+        Me.volumenfehler = 100 * (volume_simulated - volume_observed) / volume_observed
 
         'Nash-Sutcliffe - Koeffizient
         '----------------------------
@@ -196,7 +202,9 @@ Public Class GoodnessOfFit
 
         'Text:
         '-----
-        shortText = "Volume error: m = " & Me.volumenfehler.ToString(formatstring) & " %" & eol _
+        shortText = "Volume observed: Vobs = " & Me.volume_observed.ToString(formatstring) & eol _
+                     & "Volume simulated: Vsim = " & Me.volume_simulated.ToString(formatstring) & eol _
+                     & "Volume error: m = " & Me.volumenfehler.ToString(formatstring) & " %" & eol _
                      & "Sum of squared errors: F² = " & Me.sum_fehlerquadrate.ToString(formatstring) & eol _
                      & "Nash-Sutcliffe efficiency: E = " & Me.nash_sutcliffe.ToString(formatstring) & eol _
                      & "Coefficient of correlation: r = " & Me.korrelationskoeffizient.ToString(formatstring) & eol _
@@ -209,12 +217,13 @@ Public Class GoodnessOfFit
                          & "Simulated time series: " & Me.zre_simuliert.Title & eol _
                          & eol _
                          & "The analysis is based on " & Me.zre_gemessen.Length & " coincident data points between " & Me.zre_gemessen.Anfangsdatum.ToString(Datumsformate("default")) & " and " & Me.zre_gemessen.Enddatum.ToString(Datumsformate("default")) & eol _
-                         & eol _
-                         & shortText
+                         & eol
 
         'Werte:
         '------
-        Me.mResultValues.Add("Volume error", Me.volumenfehler)
+        Me.mResultValues.Add("Volume observed", Me.volume_observed)
+        Me.mResultValues.Add("Volume simulated", Me.volume_simulated)
+        Me.mResultValues.Add("Volume error [%]", Me.volumenfehler)
         Me.mResultValues.Add("Sum of squared errors", Me.sum_fehlerquadrate)
         Me.mResultValues.Add("Nash-Sutcliffe efficiency", Me.nash_sutcliffe)
         Me.mResultValues.Add("Coefficient of correlation", Me.korrelationskoeffizient)

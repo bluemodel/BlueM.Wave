@@ -11,6 +11,8 @@ CHANGED:
 * Error values in time series such as e.g. -777 and -9999 are now imported and displayed as regular values.
   Previously, when importing from BIN and DWD-T-L format, these would be replaced with NaN.
   The new "Remove error values" function can be used to remove these error values, if desired.
+* Analysis GoodnessOfFit: Volume error is based on actual volume integrated over time 
+  if the time series unit ends with "/s"
 
 Version 1.6
 -----------
