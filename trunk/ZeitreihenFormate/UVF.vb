@@ -269,7 +269,7 @@ Public Class UVF
                     Throw New Exception("Kann das Datum '" & datumstring & "' mit dem gegebenen Datumsformat '" & Me.Datumsformat & "' nicht parsen! Bitte Datumsformat anpassen!")
                 End If
                 'Wert lesen
-                wert = Konstanten.StringToDouble(Zeile.Substring(11))
+                wert = Konstanten.StringToDouble(Zeile.Substring(10))
                 'Stützstelle abspeichern
                 Me.Zeitreihen(0).AddNode(datum, wert)
 
