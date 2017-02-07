@@ -190,7 +190,11 @@ Public Class UVF
                 If i = iZeileUeberschriften + 1 Then
                     'Ort und Lage einlesen
                     Try
-                        Me._ort = Zeile.Substring(0, 15).Trim()
+                        Me._ort = Zeile.Substring(0, Math.Min(Zeile.Length, 15)).Trim()
+                        If Me._ort <> "" Then
+                            'append Ort to series title
+                            Me.Spalten(1).Name &= " - " & Me._ort
+                        End If
                         Me._lage_X = Zeile.Substring(15, 10)
                         Me._lage_Y = Zeile.Substring(25, 10)
                         Me._lage_Z = Zeile.Substring(35)
