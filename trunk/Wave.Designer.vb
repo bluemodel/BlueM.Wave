@@ -77,6 +77,7 @@ Partial Class Wave
         Me.DateTimePicker_NavEnd = New System.Windows.Forms.DateTimePicker
         Me.DateTimePicker_NavStart = New System.Windows.Forms.DateTimePicker
         Me.SaveFileDialog1 = New System.Windows.Forms.SaveFileDialog
+        Me.ToolStripButton_RemoveErrorValues = New System.Windows.Forms.ToolStripButton
         ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator
         toolStripSeparator = New System.Windows.Forms.ToolStripSeparator
         ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator
@@ -141,7 +142,7 @@ Partial Class Wave
         '
         ToolStrip1.AutoSize = False
         ToolStrip1.BackColor = System.Drawing.SystemColors.Control
-        ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButton_New, Me.ToolStripSplitButton_Open, Me.ToolStripSplitButton_Save, ToolStripSeparator4, Me.ToolStripButton_Copy, Me.ToolStripButton_Print, ToolStripSeparator2, Me.ToolStripButton_Cut, Me.ToolStripButton_Analysis, Me.ToolStripButton_Convert, ToolStripSeparator1, Me.ToolStripButton_EditChart, Me.ToolStripButton_ToggleOverview, Me.ToolStripButton_ToggleNavigation, toolStripSeparator, Me.ToolStripButton_NormalMode, Me.ToolStripButton_Zoom, Me.ToolStripButton_Pan, Me.ToolStripSeparator3, Me.ToolStripButton_ZoomPrevious, Me.ToolStripSplitButton_Help, Me.ToolStripButton_ZoomAll})
+        ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButton_New, Me.ToolStripSplitButton_Open, Me.ToolStripSplitButton_Save, Me.ToolStripButton_Convert, ToolStripSeparator4, Me.ToolStripButton_Copy, Me.ToolStripButton_Print, ToolStripSeparator2, Me.ToolStripButton_Cut, Me.ToolStripButton_Analysis, Me.ToolStripButton_RemoveErrorValues, ToolStripSeparator1, Me.ToolStripButton_EditChart, Me.ToolStripButton_ToggleOverview, Me.ToolStripButton_ToggleNavigation, toolStripSeparator, Me.ToolStripButton_NormalMode, Me.ToolStripButton_Zoom, Me.ToolStripButton_Pan, Me.ToolStripSeparator3, Me.ToolStripButton_ZoomPrevious, Me.ToolStripSplitButton_Help, Me.ToolStripButton_ZoomAll})
         ToolStrip1.Location = New System.Drawing.Point(0, 0)
         ToolStrip1.Name = "ToolStrip1"
         ToolStrip1.Size = New System.Drawing.Size(944, 34)
@@ -1099,6 +1100,15 @@ Partial Class Wave
         Me.DateTimePicker_NavStart.Size = New System.Drawing.Size(110, 20)
         Me.DateTimePicker_NavStart.TabIndex = 0
         '
+        'ToolStripButton_RemoveErrorValues
+        '
+        Me.ToolStripButton_RemoveErrorValues.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.ToolStripButton_RemoveErrorValues.Image = CType(resources.GetObject("ToolStripButton_RemoveErrorValues.Image"), System.Drawing.Image)
+        Me.ToolStripButton_RemoveErrorValues.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ToolStripButton_RemoveErrorValues.Name = "ToolStripButton_RemoveErrorValues"
+        Me.ToolStripButton_RemoveErrorValues.Size = New System.Drawing.Size(23, 31)
+        Me.ToolStripButton_RemoveErrorValues.Text = "Remove error values"
+        '
         'Wave
         '
         Me.AllowDrop = True
@@ -1177,5 +1187,6 @@ Partial Class Wave
     Friend WithEvents ToolStripSeparator3 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents TableLayoutPanel1 As System.Windows.Forms.TableLayoutPanel
     Friend WithEvents ToolStripButton_ToggleNavigation As System.Windows.Forms.ToolStripButton
+    Friend WithEvents ToolStripButton_RemoveErrorValues As System.Windows.Forms.ToolStripButton
 
 End Class

@@ -596,49 +596,59 @@ Public Class Zeitreihe
     End Function
 
     ''' <summary>
-    ''' Erzeugt eine Kopie der Zeitreihe, in der alle Stützstellen mit Wert NaN oder Infinity entfernt wurden.
+    ''' Creates a copy of the time series from which all nodes with values of NaN or +-Infinity have been removed.
     ''' </summary>
-    ''' <returns>eine gesäuberte Zeitreihe</returns>
-    Public Function getCleanZRE() As Zeitreihe
+    ''' <param name="errorvalues">optional additional error values to ignore</param>
+    ''' <returns>the cleaned time series</returns>
+    ''' <remarks>a tolerance of 0.0001 is used to compare series values to errorvalues</remarks>
+    Public Function getCleanZRE(ByVal ParamArray errorvalues() As Double) As Zeitreihe
 
-        Dim NaNCounter As Integer
+        Const tolerance As Double = 0.0001
+        Dim isErrorvalue As Boolean
+        Dim errorCount As Integer
         Dim newnodes As SortedList(Of DateTime, Double)
         Dim cleanZRE As Zeitreihe
 
-        'Neue Zeitreihe instanzieren
+        'Instantiate a new series
         cleanZRE = New Zeitreihe(Me.Title)
         cleanZRE.Einheit = Me.Einheit
         cleanZRE.Objekt = Me.Objekt
         cleanZRE.Type = Me.Type
 
-        NaNCounter = 0
+        Log.AddLogEntry(String.Format("Removing error values from series {0}...", Me.Title))
 
-        If (Me.YWerte.Contains(Double.NaN) Or _
-            Me.YWerte.Contains(Double.NegativeInfinity) Or _
-            Me.YWerte.Contains(Double.PositiveInfinity)) Then
+        newnodes = New SortedList(Of DateTime, Double)()
+        errorCount = 0
 
-            newnodes = New SortedList(Of DateTime, Double)()
+        For Each node As KeyValuePair(Of DateTime, Double) In Me.Nodes
+            'Check if is error value
+            isErrorvalue = False
+            If (Double.IsNaN(node.Value) Or _
+                Double.IsInfinity(node.Value)) Then
+                isErrorvalue = True
+            Else
+                For Each errvalue As Double In errorvalues
+                    If Math.Abs(node.Value - errvalue) < tolerance Then
+                        isErrorvalue = True
+                        Exit For
+                    End If
+                Next
+            End If
 
-            For Each node As KeyValuePair(Of DateTime, Double) In Me.Nodes
-                If (Double.IsNaN(node.Value) Or _
-                    Double.IsInfinity(node.Value)) Then
-                    'Stützstelle überspringen und Zähler hochsetzen
-                    NaNCounter += 1
-                Else
-                    'Stützstelle kopieren
-                    newnodes.Add(node.Key, node.Value)
-                End If
-            Next
+            If isErrorvalue Then
+                'skip the node
+                errorCount += 1
+                Call Log.AddLogEntry(String.Format("Removing node at {0} with value {1}", node.Key, node.Value))
+            Else
+                'copy the node
+                newnodes.Add(node.Key, node.Value)
+            End If
+        Next
 
-            'Log
-            Call Log.AddLogEntry(Me.Title & ": " & NaNCounter.ToString() & " data points with values of NaN, Infinity or -Infinity were removed!")
+        'Log
+        Call Log.AddLogEntry(Me.Title & ": " & errorCount.ToString() & " nodes were removed!")
 
-        Else
-            'Alle Stützstellen kopieren
-            newnodes = New SortedList(Of DateTime, Double)(Me.Nodes)
-        End If
-
-        'Stützstellen zuweisen
+        'assign nodes to clean series
         cleanZRE._nodes = newnodes
 
         Return cleanZRE

@@ -115,12 +115,7 @@ Public Class BIN
 
             'Umwandeln in Zeitreihe
             For i = 0 To NCount - 1
-                'Fehlwerte -9999.999 durch NaN ersetzen
-                If Math.Abs(Y(i) + 9999.999) < 0.001 Then
-                    Me.Zeitreihen(0).AddNode(X(i), Double.NaN)
-                Else
-                    Me.Zeitreihen(0).AddNode(X(i), Y(i))
-                End If
+                Me.Zeitreihen(0).AddNode(X(i), Y(i))
             Next
 
             'Log 
