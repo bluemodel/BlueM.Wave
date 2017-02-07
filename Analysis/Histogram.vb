@@ -26,25 +26,25 @@
 '--------------------------------------------------------------------------------------------
 '
 ''' <summary>
-''' Statistische Auswertung (Wahrscheinlichkeiten Unterschreitungswahrscheinlichkeiten)
+''' Histogram and density estimation
 ''' </summary>
-''' <remarks>http://wiki.bluemodel.org/index.php/Wave:Statistik</remarks>
-Public Class Statistics
+''' <remarks>http://wiki.bluemodel.org/index.php/Wave:Histogram</remarks>
+Public Class Histogram
     Inherits Analysis
 
-    Private Const AnzKlassen As Integer = 100
-    Dim klassengrösse As Double
-    Dim klassen As Double()
+    Private Const n_bins As Integer = 100
+    Dim bin_size As Double
+    Dim bins As Double()
 
-    Private Structure ErgebnisWerte
-        Dim Titel As String
-        Dim häufigkeiten, summenhäufigkeiten As Integer()
-        Dim menge As Integer
-        Dim wahrscheinlichkeiten As Double()
-        Dim PU As Double()
+    Private Structure resultValues
+        Dim title As String
+        Dim frequency, cumfrequency As Integer()
+        Dim amount As Integer
+        Dim probability As Double()
+        Dim PU As Double() ' probability of subceedance (Unterschreitungswahrscheinlichkeit)
     End Structure
 
-    Private Ergebnisse As ErgebnisWerte()
+    Private results As resultValues()
 
     ''' <summary>
     ''' Flag, der anzeigt, ob die Analysefunktion einen Ergebnistext erzeugt
@@ -89,12 +89,12 @@ Public Class Statistics
             einheit = zeitreihen(1).Einheit
             For Each zre As Zeitreihe In zeitreihen
                 If (zre.Einheit <> einheit) Then
-                    Throw New Exception("Please select only series withe same unit!")
+                    Throw New Exception("Please select only series with the same unit!")
                 End If
             Next
         End If
 
-        ReDim Me.Ergebnisse(zeitreihen.Count - 1)
+        ReDim Me.results(zeitreihen.Count - 1)
 
     End Sub
 
@@ -106,13 +106,13 @@ Public Class Statistics
         Dim i, j, n As Integer
         Dim min, max As Double
 
-        'Zeitreihen säubern
+        'clean series
         For Each zre As Zeitreihe In Me.mZeitreihen
             zre = zre.getCleanZRE()
         Next
 
-        'Min und max aller Zeitreihen bestimmen
-        '--------------------------------------
+        'Determine min and max
+        '---------------------
         min = Double.MaxValue
         max = Double.MinValue
         For Each zre As Zeitreihe In Me.mZeitreihen
@@ -121,62 +121,62 @@ Public Class Statistics
             max = Math.Max(max, zre.Maximum)
         Next
 
-        'Klassenaufteilung
-        '-----------------
-        ReDim Me.klassen(AnzKlassen - 1)
-        Me.klassengrösse = (max - min) / (AnzKlassen)
-        For i = 0 To AnzKlassen - 1
-            Me.klassen(i) = min + i * Me.klassengrösse
+        'Construct bins
+        '--------------
+        ReDim Me.bins(n_bins - 1)
+        Me.bin_size = (max - min) / (n_bins)
+        For i = 0 To n_bins - 1
+            Me.bins(i) = min + i * Me.bin_size
         Next
 
-        'Zeitreihen analysieren
-        '----------------------
+        'Analyse series
+        '--------------
         n = 0
         For Each zre As Zeitreihe In Me.mZeitreihen
 
-            With Me.Ergebnisse(n)
+            With Me.results(n)
 
-                'Titel
-                .Titel = zre.Title
+                'title
+                .title = zre.Title
 
-                'Häufigkeiten bestimmen
-                '----------------------
-                ReDim .häufigkeiten(AnzKlassen - 1)
-                'Zeitreihe durchlaufen
+                'determine frequencies
+                '---------------------
+                ReDim .frequency(n_bins - 1)
+                'loop through series values
                 For i = 0 To zre.Length - 1
-                    'Klassen durchlaufen
-                    For j = 0 To AnzKlassen - 1
-                        If (zre.YWerte(i) >= Me.klassen(j) And zre.YWerte(i) < (Me.klassen(j) + Me.klassengrösse)) Then
-                            'Klasse gefunden: Häufigkeit hochzählen
-                            .häufigkeiten(j) += 1
+                    'loop over bins
+                    For j = 0 To n_bins - 1
+                        If (zre.YWerte(i) >= Me.bins(j) And zre.YWerte(i) < (Me.bins(j) + Me.bin_size)) Then
+                            'correct bin found, add to frequency
+                            .frequency(j) += 1
                             Exit For
                         End If
                     Next
                 Next
 
-                'Gesamtmenge bestimmen
-                .menge = 0
-                For i = 0 To AnzKlassen - 1
-                    .menge += .häufigkeiten(i)
+                'Total amount
+                .amount = 0
+                For i = 0 To n_bins - 1
+                    .amount += .frequency(i)
                 Next
 
-                'Wahrscheinlichkeiten
-                ReDim .wahrscheinlichkeiten(AnzKlassen - 1)
-                For i = 0 To AnzKlassen - 1
-                    .wahrscheinlichkeiten(i) = .häufigkeiten(i) / .menge * 100 '%
+                'Probability
+                ReDim .probability(n_bins - 1)
+                For i = 0 To n_bins - 1
+                    .probability(i) = .frequency(i) / .amount * 100 '%
                 Next
 
-                'Summenhäufigkeiten
-                ReDim .summenhäufigkeiten(AnzKlassen - 1)
-                .summenhäufigkeiten(0) = .häufigkeiten(0)
-                For i = 1 To AnzKlassen - 1
-                    .summenhäufigkeiten(i) = .summenhäufigkeiten(i - 1) + .häufigkeiten(i)
+                'Cumulative frequency
+                ReDim .cumfrequency(n_bins - 1)
+                .cumfrequency(0) = .frequency(0)
+                For i = 1 To n_bins - 1
+                    .cumfrequency(i) = .cumfrequency(i - 1) + .frequency(i)
                 Next
 
-                'Unterschreitungswahrscheinlichkeiten
-                ReDim .PU(AnzKlassen - 1)
-                For i = 0 To AnzKlassen - 1
-                    .PU(i) = .summenhäufigkeiten(i) / .menge * 100 '%
+                'Probability of subceedance
+                ReDim .PU(n_bins - 1)
+                For i = 0 To n_bins - 1
+                    .PU(i) = .cumfrequency(i) / .amount * 100 '%
                 Next
             End With
             n += 1
@@ -192,10 +192,10 @@ Public Class Statistics
 
         'Ergebnistext
         '------------
-        Me.mResultText = "Statistics have been calculated:" & eol
-        Me.mResultText &= "The following bins were used:" & eol & eol
-        For i As Integer = 0 To AnzKlassen - 1
-            Me.mResultText &= "Bin " & i + 1 & ": " & Me.klassen(i) & " - " & (Me.klassen(i) + Me.klassengrösse) & eol
+        Me.mResultText = "Histogram has been calculated:" & eol
+        Me.mResultText &= "The following bins were used:" & eol
+        For i As Integer = 0 To n_bins - 1
+            Me.mResultText &= "Bin " & i + 1 & ": " & Me.bins(i) & " - " & (Me.bins(i) + Me.bin_size) & eol
         Next
         Me.mResultText &= eol
 
@@ -209,7 +209,7 @@ Public Class Statistics
         'Diagramm formatieren
         Me.mResultChart = New Steema.TeeChart.Chart()
         Call Wave.formatChart(Me.mResultChart)
-        Me.mResultChart.Header.Text = "Statistical analysis"
+        Me.mResultChart.Header.Text = "Histogram"
 
         'Achsen
         Me.mResultChart.Axes.Left.Title.Caption = "Probability [%]"
@@ -229,27 +229,27 @@ Public Class Statistics
         Me.mResultChart.Axes.Bottom.Title.Caption = "Value [" & Me.mZeitreihen(0).Einheit & "]"
 
         'Serien
-        For Each erg As ErgebnisWerte In Me.Ergebnisse
+        For Each res As resultValues In Me.results
 
             Dim serieP As New Steema.TeeChart.Styles.Bar(Me.mResultChart)
-            serieP.Title = erg.Titel & " (P(x))"
+            serieP.Title = res.title & " (P(x))"
             serieP.Marks.Visible = False
 
-            For i As Integer = 0 To AnzKlassen - 1
-                serieP.Add(Me.klassen(i) + Me.klassengrösse / 2, erg.wahrscheinlichkeiten(i), "Bin " & (i + 1).ToString & ": " & erg.wahrscheinlichkeiten(i).ToString("F2") & "%")
+            For i As Integer = 0 To n_bins - 1
+                serieP.Add(Me.bins(i) + Me.bin_size / 2, res.probability(i), "Bin " & (i + 1).ToString & ": " & res.probability(i).ToString("F2") & "%")
             Next
 
             Dim seriePU As New Steema.TeeChart.Styles.Line(Me.mResultChart)
             seriePU.VertAxis = Steema.TeeChart.Styles.VerticalAxis.Right
-            seriePU.Title = erg.Titel & " (PU(x))"
+            seriePU.Title = res.title & " (PU(x))"
             seriePU.LinePen.Width = 2
             seriePU.Pointer.Visible = True
             seriePU.Pointer.Style = Steema.TeeChart.Styles.PointerStyles.Circle
             seriePU.Pointer.HorizSize = 2
             seriePU.Pointer.VertSize = 2
 
-            For i As Integer = 0 To AnzKlassen - 1
-                seriePU.Add(Me.klassen(i) + Me.klassengrösse / 2, erg.PU(i), "Bin " & (i + 1).ToString & ": " & erg.PU(i).ToString("F2") & "%")
+            For i As Integer = 0 To n_bins - 1
+                seriePU.Add(Me.bins(i) + Me.bin_size / 2, res.PU(i), "Bin " & (i + 1).ToString & ": " & res.PU(i).ToString("F2") & "%")
             Next
 
         Next

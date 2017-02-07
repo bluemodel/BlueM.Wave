@@ -117,6 +117,7 @@
     <Compile Include="Analysis\GoodnessOfFit_Dialog.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Analysis\Histogram.vb" />
     <Compile Include="Analysis\MonthlyAnalysis.vb" />
     <Compile Include="Analysis\AnalysisFactory.vb" />
     <Compile Include="Analysis\AnalysisDialog.Designer.vb">
@@ -126,7 +127,6 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Analysis\GoodnessOfFit.vb" />
-    <Compile Include="Analysis\Statistics.vb" />
     <Compile Include="CutDialog.Designer.vb">
       <DependentUpon>CutDialog.vb</DependentUpon>
     </Compile>
