@@ -224,6 +224,42 @@ Public Class Zeitreihe
         End Get
     End Property
 
+    ''' <summary>
+    ''' Returns the volume of the time series (values integrated over time)
+    ''' </summary>
+    ''' <value></value>
+    ''' <returns></returns>
+    ''' <remarks>If the unit is per second (ends with "/s"), values are integrated over time using a linear interpretation. 
+    ''' Otherwise, a simple summation is performed.</remarks>
+    Public ReadOnly Property Volume() As Double
+        Get
+            Dim v0, v1, vol As Double
+            Dim t0, t1 As DateTime
+            Dim dt As TimeSpan
+
+            vol = 0.0
+            If Me.Einheit.ToLower.EndsWith("/s") Then
+                t0 = Me.Anfangsdatum
+                v0 = Me.Nodes(t0)
+                For Each node As KeyValuePair(Of Date, Double) In Me.Nodes
+                    t1 = node.Key
+                    v1 = node.Value
+                    If t1 > t0 Then 'start at the second node
+                        dt = t1 - t0
+                        vol += (v0 + v1) / 2 * dt.TotalSeconds 'linear interpretation!
+                    End If
+                    t0 = t1
+                    v0 = v1
+                Next
+            Else
+                'simple sum
+                vol = Me.Sum
+            End If
+
+            Return vol
+        End Get
+    End Property
+
 #End Region 'Properties
 
 #Region "Methoden"
