@@ -752,10 +752,9 @@ Public Class Wave
         Dim dlgresult As DialogResult = dlg.ShowDialog()
 
         If dlgresult = Windows.Forms.DialogResult.OK Then
-            'add cleaned series to display and internal storage
+            'import cleaned series
             For Each zre As Zeitreihe In dlg.zreClean.Values
-                Me.Zeitreihen.Add(zre.Title, zre)
-                Call Display_Series(zre)
+                Me.Import_Series(zre, True)
             Next
         End If
     End Sub
