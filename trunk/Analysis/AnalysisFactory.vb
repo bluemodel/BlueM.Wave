@@ -37,7 +37,7 @@ Module AnalysisFactory
         MonthlyAnalysis = 1
         DoubleSumCurve = 2
         GoodnessOfFit = 3
-        StatisticalAnalysis = 4
+        Histogram = 4
         Comparison = 5
     End Enum
 
@@ -62,8 +62,8 @@ Module AnalysisFactory
             Case AnalysisFunctions.GoodnessOfFit
                 oAnalysis = New GoodnessOfFit(zeitreihen)
 
-            Case AnalysisFunctions.StatisticalAnalysis
-                oAnalysis = New Statistics(zeitreihen)
+            Case AnalysisFunctions.Histogram
+                oAnalysis = New Histogram(zeitreihen)
 
             Case AnalysisFunctions.Comparison
                 oAnalysis = New Comparison(zeitreihen)
