@@ -27,12 +27,11 @@
 '
 Imports System.Windows.Forms
 
+''' <summary>
+''' Dialog zum Zuschneiden einer Zeitreihe
+''' </summary>
+''' <remarks></remarks>
 Public Class CutDialog
-
-    ''' <summary>
-    ''' Dialog zum Zuschneiden einer Zeitreihe
-    ''' </summary>
-    ''' <remarks></remarks>
 
     Private IsInitializing As Boolean
     Private colorBand1 As Steema.TeeChart.Tools.ColorBand
@@ -42,7 +41,7 @@ Public Class CutDialog
     Private serie_ref As Steema.TeeChart.Styles.Line
 
     Public zreCut As Dictionary(Of String, Zeitreihe)
-    Public Const labelAlle As String = "- ALLE -"
+    Public Const labelAlle As String = "- ALL -"
 
     'Konstruktor
     '***********
@@ -242,7 +241,7 @@ Public Class CutDialog
         tmp_anfang = zreRef.Anfangsdatum
         tmp_ende = zreRef.Enddatum
 
-        If (Me.ComboBox_ZeitreiheCut.SelectedItem <> labelAlle) Then
+        If (Me.ComboBox_ZeitreiheCut.SelectedItem.ToString <> labelAlle) Then
 
             'Kontrolle ob Referenzreihe zu schneidende Zeitreihe abdeckt
             zre = Me.ComboBox_ZeitreiheCut.SelectedItem
