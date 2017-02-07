@@ -737,6 +737,29 @@ Public Class Wave
 
     End Sub
 
+    ''' <summary>
+    ''' Remove error values button clicked
+    ''' </summary>
+    ''' <remarks></remarks>
+    Private Sub ToolStripButton_RemoveErrorValues_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_RemoveErrorValues.Click
+        'Abort if no time series available!
+        If (Me.Zeitreihen.Count < 1) Then
+            MsgBox("No time series available!", MsgBoxStyle.Exclamation, "Wave")
+            Exit Sub
+        End If
+
+        Dim dlg As New RemoveErrorValuesDialog(Me.Zeitreihen)
+        Dim dlgresult As DialogResult = dlg.ShowDialog()
+
+        If dlgresult = Windows.Forms.DialogResult.OK Then
+            'add cleaned series to display and internal storage
+            For Each zre As Zeitreihe In dlg.zreClean.Values
+                Me.Zeitreihen.Add(zre.Title, zre)
+                Call Display_Series(zre)
+            Next
+        End If
+    End Sub
+
     'Drucken
     '*******
     Private Sub Drucken_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_Print.Click

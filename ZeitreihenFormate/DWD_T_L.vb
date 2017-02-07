@@ -205,23 +205,13 @@ Public Class DWD_T_L
                 '---------------------------------------
                 ' Es gibt 24 Temperaturwerte und 24 Luftfeuchtewerte, diese werden aber in unterschiedliche Zeitreihen abgelegt
                 For i = 0 To 23 
-                        Datum = Datum.AddMinutes(60)
+                    Datum = Datum.AddMinutes(60)
                         
-                        'Fehlerabfrage Temperatur
-                        If StringToDouble(Zeile.Substring(19 + (LenString_T+1) * i, LenString_T)) = -999
-                            Me.Zeitreihen(0).AddNode(Datum,Double.NaN)
-                        Else
-                            Me.Zeitreihen(0).AddNode(Datum, StringToDouble(Zeile.Substring(19 + (LenString_T+1) * i, LenString_T)) /10)
-                        End If
-                        
-                        'Fehlerabfrage Luftfeuche
-                        If StringToDouble(Zeile.Substring(139 + (LenString_L+1) * i, LenString_L)) = -99
-                            Me.Zeitreihen(1).AddNode(Datum,Double.NaN)
-                        Else
-                            Me.Zeitreihen(1).AddNode(Datum, StringToDouble(Zeile.Substring(139 + (LenString_L+1) * i, LenString_L)) )
-                        End If
-                        
-                        
+                    'Temperatur
+                    Me.Zeitreihen(0).AddNode(Datum, StringToDouble(Zeile.Substring(19 + (LenString_T + 1) * i, LenString_T)) / 10)
+
+                    'Luftfeuche
+                    Me.Zeitreihen(1).AddNode(Datum, StringToDouble(Zeile.Substring(139 + (LenString_L + 1) * i, LenString_L)))
 
                 Next
 
