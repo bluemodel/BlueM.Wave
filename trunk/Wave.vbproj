@@ -133,6 +133,12 @@
     <Compile Include="CutDialog.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="RenameSeriesDialog.Designer.vb">
+      <DependentUpon>RenameSeriesDialog.vb</DependentUpon>
+    </Compile>
+    <Compile Include="RenameSeriesDialog.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Importdialoge\ImportDiag.Designer.vb">
       <DependentUpon>ImportDiag.vb</DependentUpon>
     </Compile>
@@ -317,6 +323,9 @@
     <EmbeddedResource Include="RemoveErrorValuesDialog.resx">
       <DependentUpon>RemoveErrorValuesDialog.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="RenameSeriesDialog.resx">
+      <DependentUpon>RenameSeriesDialog.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\cursor_pan.cur" />
     <EmbeddedResource Include="Resources\cursor_zoom.cur" />
     <EmbeddedResource Include="Resources\cursor_pan_hold.cur" />
@@ -331,6 +340,7 @@
     <Content Include="lib\SydroZre\SydroZreI.dll" />
     <Content Include="lib\SydroZre\SydroZreNet.dll" />
     <Content Include="lib\SydroZre\SydroZreNet.xml" />
+    <Content Include="Resources\series_rename.png" />
     <Content Include="Resources\zoom_world.png" />
     <None Include="Resources\zoom.png" />
     <None Include="Resources\zoom_previous.png" />

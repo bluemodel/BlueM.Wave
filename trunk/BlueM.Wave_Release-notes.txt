@@ -7,6 +7,7 @@ NEW:
 * The "Comparison" analysis function now fits a simple linear regression line to the data
   (using the Math.NET Numerics library)
 * Added a button for removing user-specified error values from series
+* Added a button for renaming series
 CHANGED:
 * Error values in time series such as e.g. -777 and -9999 are now imported and displayed as regular values.
   Previously, when importing from BIN and DWD-T-L format, these would be replaced with NaN.

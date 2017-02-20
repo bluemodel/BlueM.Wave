@@ -493,6 +493,65 @@ Public Class Wave
         End If
     End Sub
 
+    ''' <summary>
+    ''' Rename series button clicked
+    ''' </summary>
+    ''' <remarks></remarks>
+    Private Sub Rename_Series_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_RenameSeries.Click
+
+        'abort if no series loaded
+        If (Me.Zeitreihen.Count < 1) Then
+            MsgBox("No time series available for renaming!", MsgBoxStyle.Exclamation, "Wave")
+            Exit Sub
+        End If
+
+        Dim zre As Zeitreihe
+        Dim zres As New Dictionary(Of String, Zeitreihe)
+        Dim titles As New List(Of String)
+        Dim title_old, title_new As String
+        Dim renameDlg As RenameSeriesDialog
+        Dim result As DialogResult
+
+        'get titles for the dialog
+        For Each title As String In Me.Zeitreihen.Keys
+            titles.Add(title)
+        Next
+        'show the dialog
+        renameDlg = New RenameSeriesDialog(titles)
+        result = renameDlg.ShowDialog()
+        'process results
+        If result = Windows.Forms.DialogResult.OK Then
+            'check for changes
+            For Each kvp As KeyValuePair(Of String, String) In renameDlg.titles
+                title_old = kvp.Key
+                title_new = kvp.Value
+                If title_new <> title_old Then
+                    'make a copy of the series with the new title
+                    zre = Me.Zeitreihen(title_old)
+                    zre.Title = title_new
+                    zres.Add(title_new, zre)
+                    'update title in charts
+                    For Each series As Steema.TeeChart.Styles.Series In Me.TChart1.Series
+                        If series.Title = title_old Then
+                            series.Title = title_new
+                        End If
+                    Next
+                    For Each series As Steema.TeeChart.Styles.Series In Me.TChart2.Series
+                        If series.Title = title_old Then
+                            series.Title = title_new
+                        End If
+                    Next
+                Else
+                    'keep the series with title unchanged
+                    zres.Add(title_old, Me.Zeitreihen(title_old))
+                End If
+            Next
+            'update zre dict
+            Me.Zeitreihen.Clear()
+            Me.Zeitreihen = zres
+        End If
+    End Sub
+
     'Zeitreihe zuschneiden
     '*********************
     Private Sub Zuschneiden_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_Cut.Click
