@@ -73,25 +73,31 @@ Module Konstanten
     End Enum
 
     ''' <summary>
-    ''' Wandelt einen String zu Double um
+    ''' Converts a string to a double
     ''' </summary>
-    ''' <param name="str">umzuwandelnder String</param>
-    ''' <returns>Double-Wert, gesetzt auf NaN falls Wert unlesbar. NaN und Infinity werden erkannt und übernommen</returns>
+    ''' <param name="str">string to be converted</param>
+    ''' <param name="format">optional NumberFormatInfo object to use for the conversion</param>
+    ''' <returns>Double value, set to NaN if the string was not parseable. NaN and +-Infinity in the input string are recognized and converted to the correspoing Double value.</returns>
     ''' <remarks></remarks>
-    Public Function StringToDouble(ByVal str As String) As Double
+    Public Function StringToDouble(ByVal str As String, Optional ByVal format As NumberFormatInfo = Nothing) As Double
 
-        Dim wert As Double
+        Dim value As Double
         Dim success As Boolean
 
-        success = Double.TryParse(str, NumberStyles.Any, Konstanten.Zahlenformat, wert)
-
-        If (Not success) Then
-            'Wert ist unlesbar
-            wert = Double.NaN
-            Call Log.AddLogEntry("Der Wert '" & str.Trim() & "' ist unlesbar und wurde durch NaN ersetzt!")
+        If format Is Nothing Then
+            'use default number format
+            format = Konstanten.Zahlenformat
         End If
 
-        Return wert
+        success = Double.TryParse(str, NumberStyles.Any, format, value)
+
+        If (Not success) Then
+            'string could not be parsed
+            value = Double.NaN
+            Call Log.AddLogEntry("The value '" & str.Trim() & "' was could not be parsed and was converted to NaN!")
+        End If
+
+        Return value
 
     End Function
 

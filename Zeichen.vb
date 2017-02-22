@@ -54,13 +54,19 @@ Public Class Zeichen
 
         Dim output As String
 
-        Select Case Character
+        Select Case Me.Character
             Case Chr(32)
-                output = "Space"
+                output = "space"
             Case Chr(9)
-                output = "Tab"
+                output = "tab"
+            Case Chr(46)
+                output = "point"
+            Case Chr(44)
+                output = "comma"
+            Case Chr(59)
+                output = "semicolon"
             Case Else
-                output = Convert.ToString(Character)
+                output = Convert.ToString(Me.Character)
         End Select
 
         Return output
