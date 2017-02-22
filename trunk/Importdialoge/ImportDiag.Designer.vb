@@ -39,11 +39,11 @@ Partial Class ImportDiag
         Me.Label_LineTitles = New System.Windows.Forms.Label
         Me.ComboBox_DecimalMark = New System.Windows.Forms.ComboBox
         Me.GroupBox_Settings = New System.Windows.Forms.GroupBox
-        Me.NumericUpDown_ColumnDateTime = New System.Windows.Forms.NumericUpDown
         Me.CheckBox_Units = New System.Windows.Forms.CheckBox
         Me.NumericUpDown_LineUnits = New System.Windows.Forms.NumericUpDown
-        Me.NumericUpDown_LineData = New System.Windows.Forms.NumericUpDown
         Me.Label_LineData = New System.Windows.Forms.Label
+        Me.NumericUpDown_LineData = New System.Windows.Forms.NumericUpDown
+        Me.NumericUpDown_ColumnDateTime = New System.Windows.Forms.NumericUpDown
         Me.GroupBox_Preview = New System.Windows.Forms.GroupBox
         Me.Label_File = New System.Windows.Forms.Label
         Me.Label_Series = New System.Windows.Forms.Label
@@ -55,14 +55,14 @@ Partial Class ImportDiag
         Me.Button_SelectAll = New System.Windows.Forms.Button
         Me.GroupBox_Selection = New System.Windows.Forms.GroupBox
         Me.GroupBox_Dateformat = New System.Windows.Forms.GroupBox
-        Me.ComboBox_Dateformat = New System.Windows.Forms.ComboBox
         Me.Label_Dateformat = New System.Windows.Forms.Label
+        Me.ComboBox_Dateformat = New System.Windows.Forms.ComboBox
         Me.GroupBox_Columns.SuspendLayout()
         CType(Me.NumericUpDown_LineTitles, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.GroupBox_Settings.SuspendLayout()
-        CType(Me.NumericUpDown_ColumnDateTime, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.NumericUpDown_LineUnits, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.NumericUpDown_LineData, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.NumericUpDown_ColumnDateTime, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.GroupBox_Preview.SuspendLayout()
         Me.GroupBox_DecimalMark.SuspendLayout()
         Me.StatusStrip1.SuspendLayout()
@@ -229,7 +229,7 @@ Partial Class ImportDiag
         Me.ComboBox_DecimalMark.FormattingEnabled = True
         Me.ComboBox_DecimalMark.Location = New System.Drawing.Point(9, 51)
         Me.ComboBox_DecimalMark.Name = "ComboBox_DecimalMark"
-        Me.ComboBox_DecimalMark.Size = New System.Drawing.Size(50, 21)
+        Me.ComboBox_DecimalMark.Size = New System.Drawing.Size(66, 21)
         Me.ComboBox_DecimalMark.TabIndex = 26
         '
         'GroupBox_Settings
@@ -251,17 +251,6 @@ Partial Class ImportDiag
         Me.GroupBox_Settings.TabIndex = 27
         Me.GroupBox_Settings.TabStop = False
         Me.GroupBox_Settings.Text = "Settings"
-        '
-        'NumericUpDown_ColumnDateTime
-        '
-        Me.NumericUpDown_ColumnDateTime.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-                    Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.NumericUpDown_ColumnDateTime.Location = New System.Drawing.Point(485, 45)
-        Me.NumericUpDown_ColumnDateTime.Minimum = New Decimal(New Integer() {1, 0, 0, 0})
-        Me.NumericUpDown_ColumnDateTime.Name = "NumericUpDown_ColumnDateTime"
-        Me.NumericUpDown_ColumnDateTime.Size = New System.Drawing.Size(34, 20)
-        Me.NumericUpDown_ColumnDateTime.TabIndex = 25
-        Me.NumericUpDown_ColumnDateTime.Value = New Decimal(New Integer() {1, 0, 0, 0})
         '
         'CheckBox_Units
         '
@@ -286,6 +275,17 @@ Partial Class ImportDiag
         Me.NumericUpDown_LineUnits.TabIndex = 24
         Me.NumericUpDown_LineUnits.Value = New Decimal(New Integer() {1, 0, 0, 0})
         '
+        'Label_LineData
+        '
+        Me.Label_LineData.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+                    Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.Label_LineData.AutoSize = True
+        Me.Label_LineData.Location = New System.Drawing.Point(283, 25)
+        Me.Label_LineData.Name = "Label_LineData"
+        Me.Label_LineData.Size = New System.Drawing.Size(72, 13)
+        Me.Label_LineData.TabIndex = 23
+        Me.Label_LineData.Text = "First data line:"
+        '
         'NumericUpDown_LineData
         '
         Me.NumericUpDown_LineData.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
@@ -297,16 +297,16 @@ Partial Class ImportDiag
         Me.NumericUpDown_LineData.TabIndex = 24
         Me.NumericUpDown_LineData.Value = New Decimal(New Integer() {1, 0, 0, 0})
         '
-        'Label_LineData
+        'NumericUpDown_ColumnDateTime
         '
-        Me.Label_LineData.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+        Me.NumericUpDown_ColumnDateTime.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
                     Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.Label_LineData.AutoSize = True
-        Me.Label_LineData.Location = New System.Drawing.Point(283, 25)
-        Me.Label_LineData.Name = "Label_LineData"
-        Me.Label_LineData.Size = New System.Drawing.Size(72, 13)
-        Me.Label_LineData.TabIndex = 23
-        Me.Label_LineData.Text = "First data line:"
+        Me.NumericUpDown_ColumnDateTime.Location = New System.Drawing.Point(485, 45)
+        Me.NumericUpDown_ColumnDateTime.Minimum = New Decimal(New Integer() {1, 0, 0, 0})
+        Me.NumericUpDown_ColumnDateTime.Name = "NumericUpDown_ColumnDateTime"
+        Me.NumericUpDown_ColumnDateTime.Size = New System.Drawing.Size(34, 20)
+        Me.NumericUpDown_ColumnDateTime.TabIndex = 25
+        Me.NumericUpDown_ColumnDateTime.Value = New Decimal(New Integer() {1, 0, 0, 0})
         '
         'GroupBox_Preview
         '
@@ -423,6 +423,15 @@ Partial Class ImportDiag
         Me.GroupBox_Dateformat.TabStop = False
         Me.GroupBox_Dateformat.Text = "Date format"
         '
+        'Label_Dateformat
+        '
+        Me.Label_Dateformat.AutoSize = True
+        Me.Label_Dateformat.Location = New System.Drawing.Point(6, 26)
+        Me.Label_Dateformat.Name = "Label_Dateformat"
+        Me.Label_Dateformat.Size = New System.Drawing.Size(65, 13)
+        Me.Label_Dateformat.TabIndex = 0
+        Me.Label_Dateformat.Text = "Date format:"
+        '
         'ComboBox_Dateformat
         '
         Me.ComboBox_Dateformat.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
@@ -432,15 +441,6 @@ Partial Class ImportDiag
         Me.ComboBox_Dateformat.Name = "ComboBox_Dateformat"
         Me.ComboBox_Dateformat.Size = New System.Drawing.Size(139, 21)
         Me.ComboBox_Dateformat.TabIndex = 1
-        '
-        'Label_Dateformat
-        '
-        Me.Label_Dateformat.AutoSize = True
-        Me.Label_Dateformat.Location = New System.Drawing.Point(6, 26)
-        Me.Label_Dateformat.Name = "Label_Dateformat"
-        Me.Label_Dateformat.Size = New System.Drawing.Size(65, 13)
-        Me.Label_Dateformat.TabIndex = 0
-        Me.Label_Dateformat.Text = "Date format:"
         '
         'ImportDiag
         '
@@ -470,9 +470,9 @@ Partial Class ImportDiag
         CType(Me.NumericUpDown_LineTitles, System.ComponentModel.ISupportInitialize).EndInit()
         Me.GroupBox_Settings.ResumeLayout(False)
         Me.GroupBox_Settings.PerformLayout()
-        CType(Me.NumericUpDown_ColumnDateTime, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.NumericUpDown_LineUnits, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.NumericUpDown_LineData, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.NumericUpDown_ColumnDateTime, System.ComponentModel.ISupportInitialize).EndInit()
         Me.GroupBox_Preview.ResumeLayout(False)
         Me.GroupBox_Preview.PerformLayout()
         Me.GroupBox_DecimalMark.ResumeLayout(False)

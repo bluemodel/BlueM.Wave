@@ -26,6 +26,7 @@
 '--------------------------------------------------------------------------------------------
 '
 Imports System.IO
+Imports System.Globalization
 
 ''' <summary>
 ''' Klasse für generisches Textformat
@@ -72,7 +73,7 @@ Public Class CSV
             Dim StrReadSync = TextReader.Synchronized(StrRead)
 
             'Spaltenüberschriften auslesen
-            For i = 1 To math.Max(Me.iZeileDaten,me.iZeileUeberschriften+1)
+            For i = 1 To Math.Max(Me.iZeileDaten, Me.iZeileUeberschriften + 1)
                 Zeile = StrReadSync.ReadLine.ToString
                 If (i = Me.iZeileUeberschriften) Then ZeileSpalten = Zeile
                 If (i = Me.iZeileEinheiten) Then ZeileEinheiten = Zeile
@@ -92,7 +93,7 @@ Public Class CSV
                 'Zeichengetrennt
                 Namen = ZeileSpalten.Split(New Char() {Me.Trennzeichen.Character})
                 Einheiten = ZeileEinheiten.Split(New Char() {Me.Trennzeichen.Character})
-                anzSpalten = Namen.Length 
+                anzSpalten = Namen.Length
             Else
                 'Spalten mit fester Breite
                 anzSpalten = Math.Ceiling(ZeileSpalten.Length / Me.Spaltenbreite)
@@ -111,14 +112,14 @@ Public Class CSV
                 Me.Spalten(i).Index = i
             Next
 
-            For i = 0 to Einheiten.Length -1
+            For i = 0 To Einheiten.Length - 1
                 Me.Spalten(i).Einheit = Einheiten(i).Trim()
             Next
 
             'TODO: gegebenes Datumsformat an dieser Stelle testen
 
         Catch ex As Exception
-            MsgBox("Konnte Datei nicht einlesen!" & eol & eol & "Fehler: " & ex.Message, MsgBoxStyle.Critical, "Fehler")
+            MsgBox("Unable to read file!" & eol & eol & "Error: " & ex.Message, MsgBoxStyle.Critical, "Error")
         End Try
 
     End Sub
@@ -130,6 +131,7 @@ Public Class CSV
         Dim i As Integer
         Dim Zeile As String
         Dim ok As Boolean
+        Dim numberformat As NumberFormatInfo
         Dim datum As DateTime
         Dim Werte() As String
 
@@ -154,6 +156,13 @@ Public Class CSV
                 Next
             End If
 
+            'Use default number format by default
+            numberformat = Konstanten.Zahlenformat.Clone()
+            If Me.Dezimaltrennzeichen.Character = Chr(44) Then
+                'change decimal separator to comma
+                numberformat.NumberDecimalSeparator = ","
+            End If
+
             'Einlesen
             '--------
 
@@ -172,15 +181,15 @@ Public Class CSV
                     '---------------
                     Werte = Zeile.Split(New Char() {Me.Trennzeichen.Character})
 
-                    If (Werte.Length > 0 and Zeile.Trim.Length > 1) Then
+                    If (Werte.Length > 0 And Zeile.Trim.Length > 1) Then
                         'Erste Spalte: Datum_Zeit
                         ok = DateTime.TryParseExact(Werte(Me.XSpalte).Trim(), Me.Datumsformat, Konstanten.Zahlenformat, Globalization.DateTimeStyles.None, datum)
                         If (Not ok) Then
-                            Throw New Exception("Kann das Datum '" & Werte(Me.XSpalte) & "' mit dem gegebenen Datumsformat '" & Me.Datumsformat & "' nicht parsen! Bitte Datumsformat anpassen!")
+                            Throw New Exception("Could not parse the date '" & Werte(Me.XSpalte) & "' using the given date format '" & Me.Datumsformat & "'! Please check the date format!")
                         End If
                         'Restliche Spalten: Werte
                         For i = 0 To Me.SpaltenSel.Length - 1
-                            Me.Zeitreihen(i).AddNode(datum, StringToDouble(Werte(Me.SpaltenSel(i).Index)))
+                            Me.Zeitreihen(i).AddNode(datum, StringToDouble(Werte(Me.SpaltenSel(i).Index), numberformat))
                         Next
                     End If
 
@@ -188,10 +197,13 @@ Public Class CSV
                     'Spalten mit fester Breite
                     '-------------------------
                     'Erste Spalte: Datum_Zeit
-                    datum = New System.DateTime(Zeile.Substring(Me.XSpalte + 6 + SpaltenOffset, 4), Zeile.Substring(Me.XSpalte + 3 + SpaltenOffset, 2), Zeile.Substring(Me.XSpalte + 0 + SpaltenOffset, 2), Zeile.Substring(Me.XSpalte + 11 + SpaltenOffset, 2), Zeile.Substring(Me.XSpalte + 14 + SpaltenOffset, 2), 0, New System.Globalization.GregorianCalendar())
+                    ok = DateTime.TryParseExact(Zeile.Substring(0, Me.Spaltenbreite), Me.Datumsformat, Konstanten.Zahlenformat, Globalization.DateTimeStyles.None, datum)
+                    If (Not ok) Then
+                        Throw New Exception("Could not parse the date '" & Zeile.Substring(0, Me.Spaltenbreite) & "' using the given date format '" & Me.Datumsformat & "'! Please check the date format!")
+                    End If
                     'Restliche Spalten: Werte
                     For i = 0 To Me.SpaltenSel.Length - 1
-                        Me.Zeitreihen(i).AddNode(datum, StringToDouble(Zeile.Substring(Me.SpaltenSel(i).Index * Me.Spaltenbreite + SpaltenOffset, Math.Min(Me.Spaltenbreite, Zeile.Substring(Me.SpaltenSel(i).Index * Me.Spaltenbreite + SpaltenOffset).Length))))
+                        Me.Zeitreihen(i).AddNode(datum, StringToDouble(Zeile.Substring(Me.SpaltenSel(i).Index * Me.Spaltenbreite + SpaltenOffset, Math.Min(Me.Spaltenbreite, Zeile.Substring(Me.SpaltenSel(i).Index * Me.Spaltenbreite + SpaltenOffset).Length)), numberformat))
                     Next
                 End If
 
@@ -202,7 +214,7 @@ Public Class CSV
             FiStr.Close()
 
         Catch ex As Exception
-            MsgBox("Konnte Datei nicht einlesen!" & eol & eol & "Fehler: " & ex.Message, MsgBoxStyle.Critical, "Fehler")
+            MsgBox("Unable to read file!" & eol & eol & "Error: " & ex.Message, MsgBoxStyle.Critical, "Error")
         End Try
 
     End Sub
