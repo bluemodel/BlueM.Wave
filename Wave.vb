@@ -419,12 +419,6 @@ Public Class Wave
 
     End Sub
 
-    'Dropdown für Öffnen Button
-    '**************************
-    Private Sub MenuDropDown_Oeffnen(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripSplitButton_Open.ButtonClick
-        Me.ToolStripSplitButton_Open.ShowDropDown()
-    End Sub
-
     'Serie(n) importieren
     '********************
     Private Sub Importieren_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem_ImportSeries.Click
@@ -453,12 +447,6 @@ Public Class Wave
         If (Me.OpenFileDialog1.ShowDialog() = Windows.Forms.DialogResult.OK) Then
             Call Me.Load_Theme(Me.OpenFileDialog1.FileName)
         End If
-    End Sub
-
-    'Dropdown für Speichern Button
-    '*****************************
-    Private Sub MenuDropDown_Speichern(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripSplitButton_Save.Click
-        Me.ToolStripSplitButton_Save.ShowDropDown()
     End Sub
 
     'Teechart Export
@@ -1021,14 +1009,6 @@ Public Class Wave
 
         End If
 
-    End Sub
-
-    ''' <summary>
-    ''' Info Click
-    ''' </summary>
-    Private Sub MenuDropdown_Hilfe(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripSplitButton_Help.ButtonClick
-        'keine Funktionalität, nur Dropdown
-        Me.ToolStripSplitButton_Help.ShowDropDown()
     End Sub
 
     ''' <summary>
