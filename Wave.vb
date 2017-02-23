@@ -461,17 +461,6 @@ Public Class Wave
         Call ExportZeitreihe()
     End Sub
 
-    ''' <summary>
-    ''' Convert a file
-    ''' </summary>
-    ''' <param name="sender"></param>
-    ''' <param name="e"></param>
-    ''' <remarks>Just a shortcut for importing and then exporting series</remarks>
-    Private Sub Convert_Click(ByVal sender As Object, ByVal e As System.EventArgs) Handles ToolStripButton_Convert.Click
-        Call Me.Importieren_Click(sender, e)
-        Call Me.ExportZeitreihe()
-    End Sub
-
     'Serie eingeben
     '**************
     Private Sub Eingeben_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem_EnterSeries.Click
@@ -599,7 +588,6 @@ Public Class Wave
         Dim Reihe As Zeitreihe
         Dim MultiReihe() As Zeitreihe
         Dim iReihe As Long
-
 
         'Wenn keine Zeitreihen vorhanden, abbrechen!
         If (Me.Zeitreihen.Count < 1) Then
