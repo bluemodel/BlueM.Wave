@@ -239,6 +239,7 @@ Public Class Zeitreihe
 
             vol = 0.0
             If Me.Einheit.ToLower.EndsWith("/s") Then
+                Log.AddLogEntry(Me.Title & ": calculating volume by integrating over time.")
                 t0 = Me.Anfangsdatum
                 v0 = Me.Nodes(t0)
                 For Each node As KeyValuePair(Of Date, Double) In Me.Nodes
@@ -253,6 +254,7 @@ Public Class Zeitreihe
                 Next
             Else
                 'simple sum
+                Log.AddLogEntry(Me.Title & ": calculating volume by simple summation.")
                 vol = Me.Sum
             End If
 
@@ -388,7 +390,7 @@ Public Class Zeitreihe
             Call Me.Nodes.TrimExcess()
 
             'Log 
-            Call Log.AddLogEntry("Time series cut '" & Me.Title & "' from " & lengthOld.ToString() & " to " & lengthNew.ToString() & " data points.")
+            Call Log.AddLogEntry(Me.Title & ": cut from " & lengthOld.ToString() & " to " & lengthNew.ToString() & " data points.")
 
         End If
 
