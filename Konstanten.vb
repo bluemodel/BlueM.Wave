@@ -70,6 +70,7 @@ Module Konstanten
         DAT_SWMM_TIME = 8
         TXT = 9
         DAT_HYDRO_AS = 10
+        UVF = 11
     End Enum
 
     ''' <summary>
