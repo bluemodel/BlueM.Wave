@@ -54,7 +54,7 @@ Public Class ExportDiag
             Case Else
                 Me.ListBox_Series.SelectionMode = SelectionMode.MultiExtended
                 'Noch nicht implementiert
-                MsgBox("Noch nicht implementiert!", MsgBoxStyle.Exclamation)
+                MsgBox("Not yet implemented!", MsgBoxStyle.Exclamation)
                 ComboBox_Format.SelectedItem = Konstanten.Dateiformate.ZRE
         End Select
 
@@ -65,7 +65,7 @@ Public Class ExportDiag
     Private Sub Button_OK_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button_OK.Click
         'Eingabekontrolle
         If (Me.ListBox_Series.SelectedItems.Count < 1) Then
-            MsgBox("Bitte mindestens eine Zeitreihe auswählen!", MsgBoxStyle.Exclamation)
+            MsgBox("Please select at least one series!", MsgBoxStyle.Exclamation)
             Me.DialogResult = Windows.Forms.DialogResult.None
         End If
     End Sub
@@ -76,12 +76,12 @@ Public Class ExportDiag
         Dim i As Long
 
         Select Case ComboBox_Format.SelectedItem
-            Case Konstanten.Dateiformate.TXT
+            Case Dateiformate.TXT, Dateiformate.CSV, Dateiformate.WEL
                 For i = 0 To Me.ListBox_Series.Items.Count - 1
                     Me.ListBox_Series.SetSelected(i, True)
                 Next
             Case Else
-                MsgBox("Bei diesem Format ist keine mehrfachauswahl möglich")
+                MsgBox("This format does not support multiple series per file!", MsgBoxStyle.Exclamation)
         End Select
 
     End Sub
