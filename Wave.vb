@@ -588,9 +588,7 @@ Public Class Wave
         Dim exportDlg As ExportDiag
         Dim dlgResult As DialogResult
         Dim filename As String
-        Dim Reihe As Zeitreihe
-        Dim MultiReihe() As Zeitreihe
-        Dim iReihe As Long
+        Dim zres As List(Of Zeitreihe)
 
         'Abort if no time series loaded
         If (Me.Zeitreihen.Count < 1) Then
@@ -605,6 +603,12 @@ Public Class Wave
         If dlgResult <> Windows.Forms.DialogResult.OK Then
             Exit Sub
         End If
+
+        'get selected series
+        zres = New List(Of Zeitreihe)
+        For Each item As Object In exportDlg.ListBox_Series.SelectedItems
+            zres.Add(CType(item, Zeitreihe))
+        Next
 
         'Prepare Save dialog
         Me.SaveFileDialog1.Title = "Save as..."
@@ -659,50 +663,25 @@ Public Class Wave
         Select Case exportDlg.ComboBox_Format.SelectedItem
 
             Case Dateiformate.ZRE
-                For Each item As Object In exportDlg.ListBox_Series.SelectedItems
-                    Reihe = CType(item, Zeitreihe)
-                    Call ZRE.Write_File(Reihe, Me.SaveFileDialog1.FileName)
-                Next
+                Call ZRE.Write_File(zres(0), filename)
 
             Case Dateiformate.REG_HYSTEM
-                For Each item As Object In exportDlg.ListBox_Series.SelectedItems
-                    Reihe = CType(item, Zeitreihe)
-                    Call HystemExtran_REG.Write_File(Reihe, Me.SaveFileDialog1.FileName)
-                Next
+                Call HystemExtran_REG.Write_File(zres(0), filename)
 
             Case Dateiformate.REG_SMUSI
-                For Each item As Object In exportDlg.ListBox_Series.SelectedItems
-                    Reihe = CType(item, Zeitreihe)
-                    Call REG_SMUSI.Write_File(Reihe, Me.SaveFileDialog1.FileName)
-                Next
+                Call REG_SMUSI.Write_File(zres(0), filename)
 
             Case Dateiformate.DAT_SWMM_MASS
-                For Each item As Object In exportDlg.ListBox_Series.SelectedItems
-                    Reihe = CType(item, Zeitreihe)
-                    Call SWMM_DAT_MASS.Write_File(Reihe, Me.SaveFileDialog1.FileName, 5) 'Zeitschritt ist noch nicht dynamisch definiert
-                Next
+                Call SWMM_DAT_MASS.Write_File(zres(0), filename, 5) 'TODO: Zeitschritt ist noch nicht dynamisch definiert
 
             Case Dateiformate.DAT_SWMM_TIME
-                For Each item As Object In exportDlg.ListBox_Series.SelectedItems
-                    Reihe = CType(item, Zeitreihe)
-                    Call SWMM_DAT_TIME.Write_File(Reihe, Me.SaveFileDialog1.FileName, 5) 'Zeitschritt ist noch nicht dynamisch definiert
-                Next
+                Call SWMM_DAT_TIME.Write_File(zres(0), filename, 5) 'TODO: Zeitschritt ist noch nicht dynamisch definiert
 
             Case Dateiformate.TXT_SWMM
-                ReDim MultiReihe(exportDlg.ListBox_Series.SelectedItems.Count - 1)
-                iReihe = 0
-                For Each item As Object In exportDlg.ListBox_Series.SelectedItems
-                    MultiReihe(iReihe) = CType(item, Zeitreihe)
-                    iReihe = iReihe + 1
-                Next
-                Call SWMM_TXT.Write_File(MultiReihe, Me.SaveFileDialog1.FileName)
+                Call SWMM_TXT.Write_File(zres, filename)
 
             Case Dateiformate.CSV
-                Dim zres As New List(Of Zeitreihe)
-                For Each item As Object In exportDlg.ListBox_Series.SelectedItems
-                    zres.Add(CType(item, Zeitreihe))
-                Next
-                Call CSV.Write_File(zres, Me.SaveFileDialog1.FileName)
+                Call CSV.Write_File(zres, filename)
 
             Case Else
                 MsgBox("Not yet implemented!", MsgBoxStyle.Exclamation, "Wave")
