@@ -66,13 +66,13 @@ Public Class ExportDiag
                  Dateiformate.REG_SMUSI, _
                  Dateiformate.DAT_SWMM_MASS, _
                  Dateiformate.DAT_SWMM_TIME
-                'Allow selection of multiple series
+                'Allow selection of a single series
                 Me.ListBox_Series.SelectionMode = SelectionMode.One
                 Me.Button_SelectAll.Enabled = False
 
             Case Dateiformate.TXT_SWMM, _
                  Dateiformate.CSV
-                'Allow selection of only one series
+                'Allow selection of multiple series
                 Me.ListBox_Series.SelectionMode = SelectionMode.MultiExtended
                 Me.Button_SelectAll.Enabled = True
 
