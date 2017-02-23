@@ -296,9 +296,9 @@ Public Class SWMM_TXT
     ''' <summary>
     ''' Exportiert eine Zeitreihe als TXT-Datei
     ''' </summary>
-    ''' <param name="Reihen">Die zu exportierende Zeitreihe</param>
+    ''' <param name="Reihen">Die zu exportierenden Zeitreihen</param>
     ''' <param name="File">Pfad zur anzulegenden Datei</param>
-    Public Shared Sub Write_File(ByVal Reihen As Zeitreihe(), ByVal File As String)
+    Public Shared Sub Write_File(ByRef Reihen As List(Of Zeitreihe), ByVal File As String)
 
         Dim strwrite As StreamWriter
         Dim i, j, k As Integer
@@ -339,8 +339,8 @@ Public Class SWMM_TXT
         strwrite.WriteLine(" - reporting time step in sec")
 
         'Erstmal alle Constituents (FLOW, COD,...) ermitteln, da diese im Textkopf angegeben werden müssen
-        ReDim AllConstituents(Reihen.Length - 1)
-        For i = 0 To Reihen.Length - 1
+        ReDim AllConstituents(Reihen.Count - 1)
+        For i = 0 To Reihen.Count - 1
             AllConstituents(i).Type = Reihen(i).Type
             AllConstituents(i).Unit = Reihen(i).Einheit
         Next
@@ -356,8 +356,8 @@ Public Class SWMM_TXT
         Next
 
         'Alle Zuflussknoten ermitteln, da diese im Textkopf angegeben werden müsen
-        ReDim AllNodes(Reihen.Length - 1)
-        For i = 0 To Reihen.Length - 1
+        ReDim AllNodes(Reihen.Count - 1)
+        For i = 0 To Reihen.Count - 1
             AllNodes(i) = Reihen(i).Objekt
         Next
         GetUniqueNodes(AllNodes, UniqueNodes)
