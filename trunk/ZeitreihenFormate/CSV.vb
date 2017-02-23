@@ -219,6 +219,75 @@ Public Class CSV
 
     End Sub
 
+    ''' <summary>
+    ''' Write one or multiple series to a CSV file
+    ''' </summary>
+    ''' <param name="zres">time series to write to file</param>
+    ''' <param name="file">path to the csv file</param>
+    ''' <remarks></remarks>
+    Public Shared Sub Write_File(ByRef zres As List(Of Zeitreihe), ByVal file As String)
+
+        Dim data As SortedDictionary(Of DateTime, Double())
+        Dim strwrite As StreamWriter
+        Dim t As DateTime
+        Dim i As Integer
+        Dim v As Double
+        Dim line As String
+
+        Const separator As String = ","
+        Const quote As String = """"
+
+        'merge series into one data structure
+        data = New SortedDictionary(Of DateTime, Double())
+        i = 0
+        For Each zre As Zeitreihe In zres
+            For Each node As KeyValuePair(Of DateTime, Double) In zre.Nodes
+                t = node.Key
+                v = node.Value
+                If Not data.Keys.Contains(t) Then
+                    ReDim data(t)(zres.Count - 1)
+                    'set all values to NaN (default double value is 0.)
+                    For j As Integer = 0 To zres.Count - 1
+                        data(t)(j) = Double.NaN
+                    Next
+                End If
+                data(t)(i) = v
+            Next
+            i += 1
+        Next
+
+        'write the file
+        strwrite = New StreamWriter(file, False, System.Text.Encoding.GetEncoding("iso8859-1"))
+
+        '1st line: headings
+        line = "datetime"
+        For Each zre As Zeitreihe In zres
+            line &= separator & quote & zre.Title & quote
+        Next
+        strwrite.WriteLine(line)
+        '2nd line: units
+        line = "-"
+        For Each zre As Zeitreihe In zres
+            line &= separator & quote & zre.Einheit & quote
+        Next
+        strwrite.WriteLine(line)
+        '3rd row onwards: data
+        For Each t In data.Keys
+            line = t.ToString(Datumsformate("default"))
+            For Each v In data(t)
+                If Double.IsNaN(v) Then
+                    line += separator 'leave empty
+                Else
+                    line += separator & v.ToString()
+                End If
+            Next
+            strwrite.WriteLine(line)
+        Next
+
+        strwrite.Close()
+
+    End Sub
+
 #End Region 'Methoden
 
 End Class

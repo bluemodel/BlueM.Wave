@@ -54,6 +54,9 @@ Partial Class ExportDiag
         '
         'ListBox_Series
         '
+        Me.ListBox_Series.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+                    Or System.Windows.Forms.AnchorStyles.Left) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.ListBox_Series.FormattingEnabled = True
         Me.ListBox_Series.Location = New System.Drawing.Point(12, 62)
         Me.ListBox_Series.Name = "ListBox_Series"
@@ -62,6 +65,7 @@ Partial Class ExportDiag
         '
         'Button_OK
         '
+        Me.Button_OK.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Button_OK.DialogResult = System.Windows.Forms.DialogResult.OK
         Me.Button_OK.Location = New System.Drawing.Point(25, 186)
         Me.Button_OK.Name = "Button_OK"
@@ -81,6 +85,7 @@ Partial Class ExportDiag
         '
         'Button_Cancel
         '
+        Me.Button_Cancel.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Button_Cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel
         Me.Button_Cancel.Location = New System.Drawing.Point(106, 186)
         Me.Button_Cancel.Name = "Button_Cancel"
@@ -91,6 +96,7 @@ Partial Class ExportDiag
         '
         'Button_SelectAll
         '
+        Me.Button_SelectAll.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Button_SelectAll.Location = New System.Drawing.Point(120, 36)
         Me.Button_SelectAll.Name = "Button_SelectAll"
         Me.Button_SelectAll.Size = New System.Drawing.Size(61, 23)

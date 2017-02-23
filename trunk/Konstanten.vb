@@ -68,7 +68,7 @@ Module Konstanten
         REG_SMUSI = 6
         DAT_SWMM_MASS = 7
         DAT_SWMM_TIME = 8
-        TXT = 9
+        TXT_SWMM = 9
         DAT_HYDRO_AS = 10
         UVF = 11
     End Enum

@@ -27,62 +27,90 @@
 '
 Public Class ExportDiag
 
-    'Formatauswahl verändert
-    '***********************
+    Public Sub New(ByRef zres As Dictionary(Of String, Zeitreihe))
+
+        ' This call is required by the Windows Form Designer.
+        InitializeComponent()
+
+        ' Add any initialization after the InitializeComponent() call.
+
+        'add formats to combobox
+        Me.ComboBox_Format.Items.Add(Dateiformate.CSV)
+        Me.ComboBox_Format.Items.Add(Dateiformate.ZRE)
+        Me.ComboBox_Format.Items.Add(Dateiformate.REG_HYSTEM)
+        Me.ComboBox_Format.Items.Add(Dateiformate.REG_SMUSI)
+        Me.ComboBox_Format.Items.Add(Dateiformate.DAT_SWMM_MASS)
+        Me.ComboBox_Format.Items.Add(Dateiformate.DAT_SWMM_TIME)
+        Me.ComboBox_Format.Items.Add(Dateiformate.TXT_SWMM)
+        Me.ComboBox_Format.SelectedIndex = 0
+
+        'Add series to listbox
+        For Each zre As Zeitreihe In zres.Values
+            Me.ListBox_Series.Items.Add(zre)
+        Next
+
+    End Sub
+
+    ''' <summary>
+    ''' Selected format changed
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    ''' <remarks></remarks>
     Private Sub ComboBox_Format_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ComboBox_Format.SelectedIndexChanged
 
         Select Case ComboBox_Format.SelectedItem
 
-            Case Konstanten.Dateiformate.ZRE
+            Case Dateiformate.ZRE, _
+                 Dateiformate.REG_HYSTEM, _
+                 Dateiformate.REG_SMUSI, _
+                 Dateiformate.DAT_SWMM_MASS, _
+                 Dateiformate.DAT_SWMM_TIME
+                'Allow selection of multiple series
                 Me.ListBox_Series.SelectionMode = SelectionMode.One
+                Me.Button_SelectAll.Enabled = False
 
-            Case Konstanten.Dateiformate.REG_HYSTEM
-                Me.ListBox_Series.SelectionMode = SelectionMode.One
-
-            Case Konstanten.Dateiformate.REG_SMUSI
-                Me.ListBox_Series.SelectionMode = SelectionMode.One
-
-            Case Konstanten.Dateiformate.DAT_SWMM_MASS
-                Me.ListBox_Series.SelectionMode = SelectionMode.One
-
-            Case Konstanten.Dateiformate.DAT_SWMM_TIME
-                Me.ListBox_Series.SelectionMode = SelectionMode.One
-
-            Case Konstanten.Dateiformate.TXT
+            Case Dateiformate.TXT_SWMM, _
+                 Dateiformate.CSV
+                'Allow selection of only one series
                 Me.ListBox_Series.SelectionMode = SelectionMode.MultiExtended
+                Me.Button_SelectAll.Enabled = True
 
             Case Else
-                Me.ListBox_Series.SelectionMode = SelectionMode.MultiExtended
-                'Noch nicht implementiert
+                'not yet implemented
                 MsgBox("Not yet implemented!", MsgBoxStyle.Exclamation)
-                ComboBox_Format.SelectedItem = Konstanten.Dateiformate.ZRE
+                ComboBox_Format.SelectedIndex = 0
         End Select
 
     End Sub
 
-    'OK-Button gedrückt
-    '******************
+    ''' <summary>
+    ''' OK button pressed
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    ''' <remarks></remarks>
     Private Sub Button_OK_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button_OK.Click
-        'Eingabekontrolle
+        'validate inputs
         If (Me.ListBox_Series.SelectedItems.Count < 1) Then
             MsgBox("Please select at least one series!", MsgBoxStyle.Exclamation)
-            Me.DialogResult = Windows.Forms.DialogResult.None
+            Exit Sub
         End If
+        Me.DialogResult = Windows.Forms.DialogResult.OK
     End Sub
 
-
+    ''' <summary>
+    ''' Button 'select all' pressed
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    ''' <remarks></remarks>
     Private Sub Button_SelectAll_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button_SelectAll.Click
 
         Dim i As Long
-
-        Select Case ComboBox_Format.SelectedItem
-            Case Dateiformate.TXT, Dateiformate.CSV, Dateiformate.WEL
-                For i = 0 To Me.ListBox_Series.Items.Count - 1
-                    Me.ListBox_Series.SetSelected(i, True)
-                Next
-            Case Else
-                MsgBox("This format does not support multiple series per file!", MsgBoxStyle.Exclamation)
-        End Select
+        For i = 0 To Me.ListBox_Series.Items.Count - 1
+            Me.ListBox_Series.SetSelected(i, True)
+        Next
 
     End Sub
 

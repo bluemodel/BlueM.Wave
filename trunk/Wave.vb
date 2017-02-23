@@ -584,113 +584,134 @@ Public Class Wave
     ''' </summary>
     ''' <remarks></remarks>
     Private Sub ExportZeitreihe()
-        Dim ExportDiag As New ExportDiag()
+
+        Dim exportDlg As ExportDiag
+        Dim dlgResult As DialogResult
+        Dim filename As String
         Dim Reihe As Zeitreihe
         Dim MultiReihe() As Zeitreihe
         Dim iReihe As Long
 
-        'Wenn keine Zeitreihen vorhanden, abbrechen!
+        'Abort if no time series loaded
         If (Me.Zeitreihen.Count < 1) Then
             MsgBox("No time series available for export!", MsgBoxStyle.Exclamation, "Wave")
             Exit Sub
         End If
 
-        'Exportdialog vorbereiten
-        '------------------------
-        'Liste der Formate
-        ExportDiag.ComboBox_Format.DataSource = System.Enum.GetValues(GetType(Konstanten.Dateiformate))
-        'Zeitreihen in Listbox eintragen
-        For Each Reihe In Me.Zeitreihen.Values
-            ExportDiag.ListBox_Series.Items.Add(Reihe)
-        Next
+        'Show Export dialog
+        exportDlg = New ExportDiag(Me.Zeitreihen)
+        dlgResult = exportDlg.ShowDialog()
 
-        'Exportdialog anzeigen
-        '---------------------
-        If (ExportDiag.ShowDialog() = Windows.Forms.DialogResult.OK) Then
-
-            'Speichern-Dialog vorbereiten
-            '----------------------------
-            Me.SaveFileDialog1.Title = "Save as..."
-            Me.SaveFileDialog1.AddExtension = True
-            Select Case ExportDiag.ComboBox_Format.SelectedItem
-                Case Dateiformate.ASC
-                    Me.SaveFileDialog1.DefaultExt = "asc"
-                    Me.SaveFileDialog1.Filter = "ASC files (*.asc)|*.asc"
-                Case Dateiformate.CSV
-                    Me.SaveFileDialog1.DefaultExt = "csv"
-                    Me.SaveFileDialog1.Filter = "CSV files (*.csv)|*.csv"
-                Case Dateiformate.WEL
-                    Me.SaveFileDialog1.DefaultExt = "wel"
-                    Me.SaveFileDialog1.Filter = "WEL files (*.wel)|*.wel"
-                Case Dateiformate.ZRE
-                    Me.SaveFileDialog1.DefaultExt = "zre"
-                    Me.SaveFileDialog1.Filter = "ZRE files (*.zre)|*.zre"
-                Case Dateiformate.REG_HYSTEM
-                    Me.SaveFileDialog1.DefaultExt = "reg"
-                    Me.SaveFileDialog1.Filter = "HYSTEM REG files (*.reg)|*.reg"
-                Case Dateiformate.REG_SMUSI
-                    Me.SaveFileDialog1.DefaultExt = "reg"
-                    Me.SaveFileDialog1.Filter = "SMUSI REG files (*.reg)|*.reg"
-                Case Dateiformate.DAT_SWMM_MASS, Dateiformate.DAT_SWMM_TIME
-                    Me.SaveFileDialog1.DefaultExt = "dat"
-                    Me.SaveFileDialog1.Filter = "SWMM DAT files (*.dat)|*.dat"
-                Case Dateiformate.TXT
-                    Me.SaveFileDialog1.DefaultExt = "txt"
-                    Me.SaveFileDialog1.Filter = "SWMM Interface files (*.txt)|*.txt"
-                Case Dateiformate.UVF
-                    Me.SaveFileDialog1.DefaultExt = "uvf"
-                    Me.SaveFileDialog1.Filter = "UVF files (*.uvf)|*.uvf"
-
-            End Select
-            Me.SaveFileDialog1.Filter &= "|All files (*.*)|*.*"
-            Me.SaveFileDialog1.FilterIndex = 1
-
-            'Speichern-Dialog anzeigen
-            '-------------------------
-            If (Me.SaveFileDialog1.ShowDialog() = Windows.Forms.DialogResult.OK) Then
-
-                'Reihen exportieren
-                Select Case ExportDiag.ComboBox_Format.SelectedItem
-                    Case Dateiformate.ZRE
-                        For Each item As Object In ExportDiag.ListBox_Series.SelectedItems
-                            Reihe = CType(item, Zeitreihe)
-                            Call ZRE.Write_File(Reihe, Me.SaveFileDialog1.FileName)
-                        Next
-                    Case Dateiformate.REG_HYSTEM
-                        For Each item As Object In ExportDiag.ListBox_Series.SelectedItems
-                            Reihe = CType(item, Zeitreihe)
-                            Call HystemExtran_REG.Write_File(Reihe, Me.SaveFileDialog1.FileName)
-                        Next
-                    Case Dateiformate.REG_SMUSI
-                        For Each item As Object In ExportDiag.ListBox_Series.SelectedItems
-                            Reihe = CType(item, Zeitreihe)
-                            Call REG_SMUSI.Write_File(Reihe, Me.SaveFileDialog1.FileName)
-                        Next
-                    Case Dateiformate.DAT_SWMM_MASS
-                        For Each item As Object In ExportDiag.ListBox_Series.SelectedItems
-                            Reihe = CType(item, Zeitreihe)
-                            Call SWMM_DAT_MASS.Write_File(Reihe, Me.SaveFileDialog1.FileName, 5) 'Zeitschritt ist noch nicht dynamisch definiert
-                        Next
-                    Case Dateiformate.DAT_SWMM_TIME
-                        For Each item As Object In ExportDiag.ListBox_Series.SelectedItems
-                            Reihe = CType(item, Zeitreihe)
-                            Call SWMM_DAT_TIME.Write_File(Reihe, Me.SaveFileDialog1.FileName, 5) 'Zeitschritt ist noch nicht dynamisch definiert
-                        Next
-                    Case Dateiformate.TXT
-                        ReDim MultiReihe(ExportDiag.ListBox_Series.SelectedItems.Count - 1)
-                        iReihe = 0
-                        For Each item As Object In ExportDiag.ListBox_Series.SelectedItems
-                            MultiReihe(iReihe) = CType(item, Zeitreihe)
-                            iReihe = iReihe + 1
-                        Next
-                        Call SWMM_TXT.Write_File(MultiReihe, Me.SaveFileDialog1.FileName)
-                    Case Else
-                        MsgBox("Not yet implemented!", MsgBoxStyle.Exclamation, "Wave")
-                End Select
-
-                MsgBox("Time series exported successfully!", MsgBoxStyle.Information, "Wave")
-            End If
+        If dlgResult <> Windows.Forms.DialogResult.OK Then
+            Exit Sub
         End If
+
+        'Prepare Save dialog
+        Me.SaveFileDialog1.Title = "Save as..."
+        Me.SaveFileDialog1.AddExtension = True
+        Me.SaveFileDialog1.OverwritePrompt = True
+        Select Case exportDlg.ComboBox_Format.SelectedItem
+            Case Dateiformate.ASC
+                Me.SaveFileDialog1.DefaultExt = "asc"
+                Me.SaveFileDialog1.Filter = "ASC files (*.asc)|*.asc"
+            Case Dateiformate.CSV
+                Me.SaveFileDialog1.DefaultExt = "csv"
+                Me.SaveFileDialog1.Filter = "CSV files (*.csv)|*.csv"
+            Case Dateiformate.WEL
+                Me.SaveFileDialog1.DefaultExt = "wel"
+                Me.SaveFileDialog1.Filter = "WEL files (*.wel)|*.wel"
+            Case Dateiformate.ZRE
+                Me.SaveFileDialog1.DefaultExt = "zre"
+                Me.SaveFileDialog1.Filter = "ZRE files (*.zre)|*.zre"
+            Case Dateiformate.REG_HYSTEM
+                Me.SaveFileDialog1.DefaultExt = "reg"
+                Me.SaveFileDialog1.Filter = "HYSTEM REG files (*.reg)|*.reg"
+            Case Dateiformate.REG_SMUSI
+                Me.SaveFileDialog1.DefaultExt = "reg"
+                Me.SaveFileDialog1.Filter = "SMUSI REG files (*.reg)|*.reg"
+            Case Dateiformate.DAT_SWMM_MASS, Dateiformate.DAT_SWMM_TIME
+                Me.SaveFileDialog1.DefaultExt = "dat"
+                Me.SaveFileDialog1.Filter = "SWMM DAT files (*.dat)|*.dat"
+            Case Dateiformate.TXT_SWMM
+                Me.SaveFileDialog1.DefaultExt = "txt"
+                Me.SaveFileDialog1.Filter = "SWMM Interface files (*.txt)|*.txt"
+            Case Dateiformate.UVF
+                Me.SaveFileDialog1.DefaultExt = "uvf"
+                Me.SaveFileDialog1.Filter = "UVF files (*.uvf)|*.uvf"
+        End Select
+        Me.SaveFileDialog1.Filter &= "|All files (*.*)|*.*"
+        Me.SaveFileDialog1.FilterIndex = 1
+
+        'Show Save dialog
+        dlgResult = Me.SaveFileDialog1.ShowDialog()
+        If dlgResult <> Windows.Forms.DialogResult.OK Then
+            Exit Sub
+        End If
+
+        filename = Me.SaveFileDialog1.FileName
+
+        'Export series
+        Log.AddLogEntry("Exporting time series to file " & Me.SaveFileDialog1.FileName & "...")
+
+        Me.Cursor = Cursors.WaitCursor
+        Application.DoEvents()
+
+        Select Case exportDlg.ComboBox_Format.SelectedItem
+
+            Case Dateiformate.ZRE
+                For Each item As Object In exportDlg.ListBox_Series.SelectedItems
+                    Reihe = CType(item, Zeitreihe)
+                    Call ZRE.Write_File(Reihe, Me.SaveFileDialog1.FileName)
+                Next
+
+            Case Dateiformate.REG_HYSTEM
+                For Each item As Object In exportDlg.ListBox_Series.SelectedItems
+                    Reihe = CType(item, Zeitreihe)
+                    Call HystemExtran_REG.Write_File(Reihe, Me.SaveFileDialog1.FileName)
+                Next
+
+            Case Dateiformate.REG_SMUSI
+                For Each item As Object In exportDlg.ListBox_Series.SelectedItems
+                    Reihe = CType(item, Zeitreihe)
+                    Call REG_SMUSI.Write_File(Reihe, Me.SaveFileDialog1.FileName)
+                Next
+
+            Case Dateiformate.DAT_SWMM_MASS
+                For Each item As Object In exportDlg.ListBox_Series.SelectedItems
+                    Reihe = CType(item, Zeitreihe)
+                    Call SWMM_DAT_MASS.Write_File(Reihe, Me.SaveFileDialog1.FileName, 5) 'Zeitschritt ist noch nicht dynamisch definiert
+                Next
+
+            Case Dateiformate.DAT_SWMM_TIME
+                For Each item As Object In exportDlg.ListBox_Series.SelectedItems
+                    Reihe = CType(item, Zeitreihe)
+                    Call SWMM_DAT_TIME.Write_File(Reihe, Me.SaveFileDialog1.FileName, 5) 'Zeitschritt ist noch nicht dynamisch definiert
+                Next
+
+            Case Dateiformate.TXT_SWMM
+                ReDim MultiReihe(exportDlg.ListBox_Series.SelectedItems.Count - 1)
+                iReihe = 0
+                For Each item As Object In exportDlg.ListBox_Series.SelectedItems
+                    MultiReihe(iReihe) = CType(item, Zeitreihe)
+                    iReihe = iReihe + 1
+                Next
+                Call SWMM_TXT.Write_File(MultiReihe, Me.SaveFileDialog1.FileName)
+
+            Case Dateiformate.CSV
+                Dim zres As New List(Of Zeitreihe)
+                For Each item As Object In exportDlg.ListBox_Series.SelectedItems
+                    zres.Add(CType(item, Zeitreihe))
+                Next
+                Call CSV.Write_File(zres, Me.SaveFileDialog1.FileName)
+
+            Case Else
+                MsgBox("Not yet implemented!", MsgBoxStyle.Exclamation, "Wave")
+        End Select
+
+        Me.Cursor = Cursors.Default
+
+        MsgBox("Time series exported successfully!", MsgBoxStyle.Information, "Wave")
+        Log.AddLogEntry("Time series exported successfully!")
     End Sub
 
     'Analysieren
