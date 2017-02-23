@@ -637,6 +637,9 @@ Public Class Wave
                 Case Dateiformate.TXT
                     Me.SaveFileDialog1.DefaultExt = "txt"
                     Me.SaveFileDialog1.Filter = "SWMM Interface files (*.txt)|*.txt"
+                Case Dateiformate.UVF
+                    Me.SaveFileDialog1.DefaultExt = "uvf"
+                    Me.SaveFileDialog1.Filter = "UVF files (*.uvf)|*.uvf"
 
             End Select
             Me.SaveFileDialog1.Filter &= "|All files (*.*)|*.*"
