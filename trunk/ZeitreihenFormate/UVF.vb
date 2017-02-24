@@ -100,7 +100,7 @@ Public Class UVF
                 Zeile = StrReadSync.ReadLine.ToString()
                 i += 1
                 If Zeile.StartsWith("$") Then Continue Do ' Kommentarzeile
-                If Zeile.ToLower.StartsWith("*z") Then      ' Hier fängt der Header an
+                If Zeile.ToLower.StartsWith("*z") Then    ' Hier fängt der Header an
                     headerFound = True
                     Exit Do
                 End If
@@ -112,13 +112,13 @@ Public Class UVF
             FiStr.Close()
 
             If Not headerFound Then
-                Throw New Exception("Die Datei enthält keine Header-Zeile, die mit '*Z' beginnt!")
+                Throw New Exception("The file does not contain a header line starting with '*Z'!")
             End If
 
             Return True
 
         Catch ex As Exception
-            MsgBox("Konnte Datei nicht einlesen!" & eol & eol & "Fehler: " & ex.Message, MsgBoxStyle.Critical, "Fehler")
+            MsgBox("Unable to read file!" & eol & eol & "Error: " & ex.Message, MsgBoxStyle.Critical, "Error")
             Return False
         End Try
 
@@ -137,7 +137,7 @@ Public Class UVF
         ReDim Me.Spalten(1) ' Jede UVF-Datei enthält nur eine Zeitreihe
 
         'X-Spalte konfigurieren
-        Me.Spalten(0).Name = "Zeit"
+        Me.Spalten(0).Name = "Time"
         Me.Spalten(0).Einheit = ""
         Me.Spalten(0).Index = 0
 
@@ -155,7 +155,7 @@ Public Class UVF
                 Zeile = StrReadSync.ReadLine.ToString()
                 i += 1
                 If Zeile.StartsWith("$") Then Continue Do ' Kommentarzeile
-                If Zeile.ToLower.StartsWith("*z") Then      ' Hier fängt der Header an
+                If Zeile.ToLower.StartsWith("*z") Then    ' Hier fängt der Header an
                     headerFound = True
                     iZeileUeberschriften = i + 1
                     iZeileEinheiten = i + 1
@@ -183,7 +183,7 @@ Public Class UVF
                     'Anfangsjahrhundert auf 1900 setzen, falls nicht angegeben
                     If Me._jahrhundert = 0 Then
                         Me._jahrhundert = 1900
-                        Log.AddLogEntry("UVF: Anfangsjahrhundert ist nicht angegeben, es wird 1900 angenommen.")
+                        Log.AddLogEntry("UVF: Starting century is not specified, assuming 1900.")
                     End If
                     Continue Do
                 End If
@@ -211,11 +211,11 @@ Public Class UVF
             FiStr.Close()
 
             If Not headerFound Then
-                Throw New Exception("Die Datei enthält keine Header-Zeile, die mit '*Z' beginnt!")
+                Throw New Exception("The file does not contain a header line starting with '*Z'!")
             End If
 
         Catch ex As Exception
-            MsgBox("Konnte Datei nicht einlesen!" & eol & eol & "Fehler: " & ex.Message, MsgBoxStyle.Critical, "Fehler")
+            MsgBox("Unable to read file!" & eol & eol & "Error: " & ex.Message, MsgBoxStyle.Critical, "Error")
         End Try
 
     End Sub
@@ -270,7 +270,7 @@ Public Class UVF
                 'parse it
                 ok = DateTime.TryParseExact(datumstringExt, Me.Datumsformat, Konstanten.Zahlenformat, Globalization.DateTimeStyles.None, datum)
                 If (Not ok) Then
-                    Throw New Exception("Kann das Datum '" & datumstring & "' mit dem gegebenen Datumsformat '" & Me.Datumsformat & "' nicht parsen! Bitte Datumsformat anpassen!")
+                    Throw New Exception("Unable to parse the date '" & datumstring & "' using the given date format '" & Me.Datumsformat & "'!")
                 End If
                 'Wert lesen
                 wert = Konstanten.StringToDouble(Zeile.Substring(10))
@@ -284,10 +284,9 @@ Public Class UVF
             FiStr.Close()
 
         Catch ex As Exception
-            MsgBox("Konnte Datei nicht einlesen!" & eol & eol & "Fehler: " & ex.Message, MsgBoxStyle.Critical, "Fehler")
+            MsgBox("Unable to read file!" & eol & eol & "Error: " & ex.Message, MsgBoxStyle.Critical, "Error")
         End Try
 
     End Sub
-
 
 End Class
