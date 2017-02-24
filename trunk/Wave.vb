@@ -67,7 +67,6 @@ Public Class Wave
             "SMUSI files (*.asc)|*.asc|" & _
             "SIMBA files (*.smb)|*.smb|" & _
             "Hystem Extran files (*.dat)|*.dat|" & _
-            "DWD-Temperatur-Feuchte (*.dtl)|*.dtl|" & _
             "SWMM files (*.out)|*.out|" & _
             "HYDRO_AS-2D files (*.dat)|*.dat|" & _
             "SYDRO binary files (*.bin)|*.bin"

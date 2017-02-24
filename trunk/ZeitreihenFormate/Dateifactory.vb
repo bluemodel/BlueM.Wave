@@ -41,7 +41,6 @@ Public Module Dateifactory
     Public Const FileExtKWL As String = ".KWL"
     Public Const FileExtZRE As String = ".ZRE"
     Public Const FileExtTEN As String = ".TEN"
-    Public Const FileExtDTL As String = ".DTL" 'DWD-Daten: Temperatur und Luftfeuchte
     Public Const FileExtOUT As String = ".OUT" 'SWMM binäre Ergebnisdatei
     Public Const FileExtTXT As String = ".TXT" 'SWMM Routingfiles
     Public Const FileExtBIN As String = ".BIN" 'SYDRO Binärformat
@@ -134,9 +133,6 @@ Public Module Dateifactory
                 Else
                     Datei = New CSV(file)
                 End If
-
-            Case FileExtDTL
-                Datei = New DWD_T_L(file)
 
             Case FileExtOUT
                 Datei = New SWMM_OUT(file)
