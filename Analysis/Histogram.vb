@@ -32,9 +32,9 @@
 Public Class Histogram
     Inherits Analysis
 
-    Private Const n_bins As Integer = 100
-    Dim bin_size As Double
-    Dim bins As Double()
+    Private n_breaks As Integer
+    Private n_bins As Integer
+    Private breaks As Double()
 
     Private Structure resultValues
         Dim title As String
@@ -83,8 +83,10 @@ Public Class Histogram
         Call MyBase.New(zeitreihen)
 
         Dim einheit As String
+        Dim histogramDlg As HistogramDialog
+        Dim dlgResult As DialogResult
 
-        'Prüfung: Zeitreihen müssen die gleiche Einheit besitzen
+        'Check: series have to use the same unit
         If (zeitreihen.Count > 1) Then
             einheit = zeitreihen(1).Einheit
             For Each zre As Zeitreihe In zeitreihen
@@ -96,6 +98,18 @@ Public Class Histogram
 
         ReDim Me.results(zeitreihen.Count - 1)
 
+        'Show HistogramDialog
+        histogramDlg = New HistogramDialog(Me.mZeitreihen)
+        dlgResult = histogramDlg.ShowDialog()
+        If dlgResult <> DialogResult.OK Then
+            Throw New Exception("Cancelled by user")
+        End If
+
+        'store parameters
+        Me.n_bins = histogramDlg.n_bins
+        Me.n_breaks = Me.n_bins + 1
+        Me.breaks = histogramDlg.breaks
+
     End Sub
 
     ''' <summary>
@@ -104,30 +118,6 @@ Public Class Histogram
     Public Overrides Sub ProcessAnalysis()
 
         Dim i, j, n As Integer
-        Dim min, max As Double
-
-        'clean series
-        For Each zre As Zeitreihe In Me.mZeitreihen
-            zre = zre.getCleanZRE()
-        Next
-
-        'Determine min and max
-        '---------------------
-        min = Double.MaxValue
-        max = Double.MinValue
-        For Each zre As Zeitreihe In Me.mZeitreihen
-            'Min und Max
-            min = Math.Min(min, zre.Minimum)
-            max = Math.Max(max, zre.Maximum)
-        Next
-
-        'Construct bins
-        '--------------
-        ReDim Me.bins(n_bins - 1)
-        Me.bin_size = (max - min) / (n_bins)
-        For i = 0 To n_bins - 1
-            Me.bins(i) = min + i * Me.bin_size
-        Next
 
         'Analyse series
         '--------------
@@ -144,38 +134,45 @@ Public Class Histogram
                 ReDim .frequency(n_bins - 1)
                 'loop through series values
                 For i = 0 To zre.Length - 1
-                    'loop over bins
-                    For j = 0 To n_bins - 1
-                        If (zre.YWerte(i) >= Me.bins(j) And zre.YWerte(i) < (Me.bins(j) + Me.bin_size)) Then
-                            'correct bin found, add to frequency
-                            .frequency(j) += 1
-                            Exit For
-                        End If
-                    Next
+                    Dim value As Double
+                    'assign to bin
+                    value = zre.YWerte(i)
+                    If value = Me.breaks(0) Then
+                        'add to first bin
+                        .frequency(0) += 1
+                    Else
+                        For j = 0 To n_breaks - 2
+                            If value > Me.breaks(j) And value <= Me.breaks(j + 1) Then
+                                'correct bin found, add to frequency
+                                .frequency(j) += 1
+                                Exit For
+                            End If
+                        Next
+                    End If
                 Next
 
                 'Total amount
                 .amount = 0
-                For i = 0 To n_bins - 1
+                For i = 0 To Me.n_bins - 1
                     .amount += .frequency(i)
                 Next
 
                 'Probability
-                ReDim .probability(n_bins - 1)
-                For i = 0 To n_bins - 1
+                ReDim .probability(Me.n_bins - 1)
+                For i = 0 To Me.n_bins - 1
                     .probability(i) = .frequency(i) / .amount * 100 '%
                 Next
 
                 'Cumulative frequency
-                ReDim .cumfrequency(n_bins - 1)
+                ReDim .cumfrequency(Me.n_bins - 1)
                 .cumfrequency(0) = .frequency(0)
-                For i = 1 To n_bins - 1
+                For i = 1 To Me.n_bins - 1
                     .cumfrequency(i) = .cumfrequency(i - 1) + .frequency(i)
                 Next
 
                 'Probability of subceedance
                 ReDim .PU(n_bins - 1)
-                For i = 0 To n_bins - 1
+                For i = 0 To Me.n_bins - 1
                     .PU(i) = .cumfrequency(i) / .amount * 100 '%
                 Next
             End With
@@ -192,12 +189,15 @@ Public Class Histogram
 
         'Ergebnistext
         '------------
-        Me.mResultText = "Histogram has been calculated:" & eol
-        Me.mResultText &= "The following bins were used:" & eol
-        For i As Integer = 0 To n_bins - 1
-            Me.mResultText &= "Bin " & i + 1 & ": " & Me.bins(i) & " - " & (Me.bins(i) + Me.bin_size) & eol
+        Me.mResultText = "Histogram has been calculated." & eol
+        Me.mResultText &= "Result data:" & eol
+        For Each result As resultValues In Me.results
+            Me.mResultText &= result.title & eol
+            Me.mResultText &= "from;to;frequency;probability" & eol
+            For i As Integer = 0 To Me.n_bins - 1
+                Me.mResultText &= Me.breaks(i) & ";" & Me.breaks(i + 1) & ";" & result.frequency(i) & ";" & result.probability(i) & eol
+            Next
         Next
-        Me.mResultText &= eol
 
         'Ergebniswerte
         '-------------
@@ -224,6 +224,7 @@ Public Class Histogram
         Me.mResultChart.Axes.Right.Automatic = False
         Me.mResultChart.Axes.Right.Minimum = 0
         Me.mResultChart.Axes.Right.Maximum = 100
+        Me.mResultChart.Axes.Right.Grid.Visible = False
 
         Me.mResultChart.Axes.Bottom.Labels.Style = Steema.TeeChart.AxisLabelStyle.Value
         Me.mResultChart.Axes.Bottom.Title.Caption = "Value [" & Me.mZeitreihen(0).Einheit & "]"
@@ -231,12 +232,12 @@ Public Class Histogram
         'Serien
         For Each res As resultValues In Me.results
 
-            Dim serieP As New Steema.TeeChart.Styles.Bar(Me.mResultChart)
+            Dim serieP As New Steema.TeeChart.Styles.Histogram(Me.mResultChart)
             serieP.Title = res.title & " (P(x))"
             serieP.Marks.Visible = False
 
             For i As Integer = 0 To n_bins - 1
-                serieP.Add(Me.bins(i) + Me.bin_size / 2, res.probability(i), "Bin " & (i + 1).ToString & ": " & res.probability(i).ToString("F2") & "%")
+                serieP.Add((Me.breaks(i) + Me.breaks(i + 1)) / 2, res.probability(i), res.probability(i).ToString("F2") & "%")
             Next
 
             Dim seriePU As New Steema.TeeChart.Styles.Line(Me.mResultChart)
@@ -248,8 +249,8 @@ Public Class Histogram
             seriePU.Pointer.HorizSize = 2
             seriePU.Pointer.VertSize = 2
 
-            For i As Integer = 0 To n_bins - 1
-                seriePU.Add(Me.bins(i) + Me.bin_size / 2, res.PU(i), "Bin " & (i + 1).ToString & ": " & res.PU(i).ToString("F2") & "%")
+            For i As Integer = 0 To Me.n_bins - 1
+                seriePU.Add((Me.breaks(i) + Me.breaks(i + 1)) / 2, res.PU(i), res.PU(i).ToString("F2") & "%")
             Next
 
         Next
