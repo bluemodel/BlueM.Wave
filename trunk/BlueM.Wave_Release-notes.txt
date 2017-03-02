@@ -6,6 +6,8 @@ Version 1.6.1
 NEW:
 * The "Comparison" analysis function now fits a simple linear regression line to the data
   (using the Math.NET Numerics library)
+* The "Histogram" analysis function now allows the user to specify the bins (Bug 397). 
+  Also, the histogram result data is now written to the log.
 * Added a button for removing user-specified error values from series
 * Added a button for renaming series
 * Added support for exporting series to CSV format
