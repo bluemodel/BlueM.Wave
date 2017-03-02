@@ -1,0 +1,66 @@
+﻿===============================================================
+Wave Release Notes
+===============================================================
+Version 1.6
+-----------
+NEW:
+* Significantly improved the possibilities for viewing and navigating time series:
+  - New toolbar buttons for zooming, panning, zoom undo and zoom all
+  - Start and end date for display can be set using date/time pickers
+  - Display range can be set to exact date/time ranges using a simple interface
+  - Buttons for navigating in time using a user-specified time increment
+  - All changes to the viewport are recorded in a history that can be undone
+
+Version 1.5
+-----------
+NEW:
+* Support for importing GISMO files
+* Support for importing HYDRO-AS_2D files
+* Support for importing UVF files
+* Support for importing SYDRO binary files (x86 version only)
+* Support for loading TeeChart themes (*.xml) 
+* The date format can now be specified while importing time series (Bug 686)
+CHANGED:
+* Loading a TEN-file does not cause existing series to be deleted, 
+  the series contained in the TEN-file can be imported optionally
+* More options for cutting time series (cut all series at once and keep original series)
+* Small improvements to layout and functionality
+* Switched to .NET Framework 3.5
+REMOVED:
+* RVA files no longer supported
+
+Version 1.4
+-----------
+Initial Release under the BSD-2 License, see LICENSE.txt for more information.
+
+Version 1.3
+-----------
+NEW:
+* Wave can now read time series from SWMM binary result files (*.OUT)
+FIXED:
+* Import of time series from TeeCharts native TEN files
+UPDATE:
+* Import of SMUSI REG files: Empty lines (dry weather periods) are improted correctly
+CHANGED:
+* Upgrade to TeeChart v4
+
+Version 1.2
+-----------
+UPDATE:
+* Internal storage of sampling points re-engineered
+NEW:
+* Analysis function Goodness of Fit with new indicators: Volume error, Correlation coefficient, Hydrologic deviation
+
+Version 1.1
+-----------
+NEW:
+* Analysis functions: Comparison, Double sum analysis, Goodness of Fit, Statistics
+* Import formats for SMB and REG files
+* Time series are assorted to different axes according to the time series units
+* ReRead Files": Deletes all times series in current instance of BlueM.Wave and reimports the time series from it's respective files again (Bug 388)
+FIXED:
+* Cutting time series
+
+Version 1.0
+-----------
+* Start of version control
