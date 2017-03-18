@@ -34,7 +34,7 @@ Module AnalysisFactory
     ''' Liste der Analysefunktionen
     ''' </summary>
     Public Enum AnalysisFunctions
-        MonthlyAnalysis = 1
+        MonthlyStatistics = 1
         DoubleSumCurve = 2
         GoodnessOfFit = 3
         Histogram = 4
@@ -53,8 +53,8 @@ Module AnalysisFactory
 
         Select Case analysisfunction
 
-            Case AnalysisFunctions.MonthlyAnalysis
-                oAnalysis = New MonthlyAnalysis(zeitreihen)
+            Case AnalysisFunctions.MonthlyStatistics
+                oAnalysis = New MonthlyStatistics(zeitreihen)
 
             Case AnalysisFunctions.DoubleSumCurve
                 oAnalysis = New DoubleSumCurve(zeitreihen)

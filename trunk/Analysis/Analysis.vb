@@ -60,17 +60,17 @@ Public MustInherit Class Analysis
 #Region "Properties"
 
     ''' <summary>
-    ''' Flag, der anzeigt, ob die Analysefunktion einen Ergebnistext erzeugt
+    ''' Flag indicating whether the analysis function has a result test
     ''' </summary>
     Public MustOverride ReadOnly Property hasResultText() As Boolean
 
     ''' <summary>
-    ''' Flag, der anzeigt, ob die Analysefunktion Ergebniswerte erzeugt
+    ''' Flag indicating whether the analysis function has result values
     ''' </summary>
     Public MustOverride ReadOnly Property hasResultValues() As Boolean
 
     ''' <summary>
-    ''' Flag, der anzeigt, ob die Analysefunktion ein Ergebnisdiagramm erzeugt
+    ''' Flag indicating whether the analysis function has a result diagram
     ''' </summary>
     Public MustOverride ReadOnly Property hasResultChart() As Boolean
 
