@@ -34,6 +34,7 @@ Public Class Zeitreihe
 
     Private _title As String
     Private _nodes As SortedList(Of DateTime, Double)
+    Private _nodesCleaned As SortedList(Of DateTime, Double)
     Private _Einheit As String
     Private _Objekt As String
     Private _Type As String
@@ -82,6 +83,18 @@ Public Class Zeitreihe
         Get
             Return _nodes
         End Get
+    End Property
+
+    ''' <summary>
+    ''' The series nodes, cleaned by omitting NaN and Infinity values
+    ''' </summary>
+    Private Property NodesCleaned() As SortedList(Of DateTime, Double)
+        Get
+            Return Me._nodesCleaned
+        End Get
+        Set(ByVal value As SortedList(Of DateTime, Double))
+            Me._nodesCleaned = value
+        End Set
     End Property
 
     ''' <summary>
@@ -273,11 +286,7 @@ Public Class Zeitreihe
     ''' Default Konstruktor
     ''' </summary>
     Public Sub New()
-        Me._title = "-"
-        Me._Einheit = "-"
-        Me._Objekt = "-"
-        Me._Type = "-"
-        Me._nodes = New SortedList(Of DateTime, Double)
+        Call Me.New("-")
     End Sub
 
     ''' <summary>
@@ -644,7 +653,6 @@ Public Class Zeitreihe
         Const tolerance As Double = 0.0001
         Dim isErrorvalue As Boolean
         Dim errorCount As Integer
-        Dim newnodes As SortedList(Of DateTime, Double)
         Dim cleanZRE As Zeitreihe
 
         'Instantiate a new series
@@ -653,41 +661,47 @@ Public Class Zeitreihe
         cleanZRE.Objekt = Me.Objekt
         cleanZRE.Type = Me.Type
 
-        Log.AddLogEntry(String.Format("Removing error values from series {0}...", Me.Title))
+        'only get the cleaned nodes once
+        If IsNothing(Me.NodesCleaned) Then
+            Log.AddLogEntry(String.Format("Removing error values from series {0}...", Me.Title))
 
-        newnodes = New SortedList(Of DateTime, Double)()
-        errorCount = 0
+            Me.NodesCleaned = New SortedList(Of DateTime, Double)
+            errorCount = 0
 
-        For Each node As KeyValuePair(Of DateTime, Double) In Me.Nodes
-            'Check if is error value
-            isErrorvalue = False
-            If (Double.IsNaN(node.Value) Or _
-                Double.IsInfinity(node.Value)) Then
-                isErrorvalue = True
-            Else
-                For Each errvalue As Double In errorvalues
-                    If Math.Abs(node.Value - errvalue) < tolerance Then
-                        isErrorvalue = True
-                        Exit For
-                    End If
-                Next
+            For Each node As KeyValuePair(Of DateTime, Double) In Me.Nodes
+                'Check if is error value
+                isErrorvalue = False
+                If (Double.IsNaN(node.Value) Or _
+                    Double.IsInfinity(node.Value)) Then
+                    isErrorvalue = True
+                Else
+                    For Each errvalue As Double In errorvalues
+                        If Math.Abs(node.Value - errvalue) < tolerance Then
+                            isErrorvalue = True
+                            Exit For
+                        End If
+                    Next
+                End If
+
+                If isErrorvalue Then
+                    'skip the node
+                    errorCount += 1
+                    Call Log.AddLogEntry(String.Format("Removing node at {0} with value {1}", node.Key, node.Value))
+                Else
+                    'copy the node
+                    NodesCleaned.Add(node.Key, node.Value)
+                End If
+            Next
+
+            'Log
+            If errorCount > 0 Then
+                Call Log.AddLogEntry(Me.Title & ": " & errorCount.ToString() & " nodes were removed!")
             End If
 
-            If isErrorvalue Then
-                'skip the node
-                errorCount += 1
-                Call Log.AddLogEntry(String.Format("Removing node at {0} with value {1}", node.Key, node.Value))
-            Else
-                'copy the node
-                newnodes.Add(node.Key, node.Value)
-            End If
-        Next
+        End If
 
-        'Log
-        Call Log.AddLogEntry(Me.Title & ": " & errorCount.ToString() & " nodes were removed!")
-
-        'assign nodes to clean series
-        cleanZRE._nodes = newnodes
+        'assign clean nodes to new series
+        cleanZRE._nodes = NodesCleaned
 
         Return cleanZRE
 
