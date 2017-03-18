@@ -41,7 +41,7 @@ Public Class MonthlyStatistics
     ''' <summary>
     ''' Structure for storing the statistic values of a month
     ''' </summary>
-    Private Structure month
+    Private Structure monthType
         Dim name As String
         Dim index As Integer
         Dim values As List(Of Double)
@@ -56,7 +56,7 @@ Public Class MonthlyStatistics
     ''' Structure for storing results
     ''' </summary>
     Private Structure resultType
-        Dim months() As month
+        Dim months() As monthType
     End Structure
 
 #End Region 'Data structures
@@ -77,7 +77,7 @@ Public Class MonthlyStatistics
     ''' </summary>
     Public Overrides ReadOnly Property hasResultText() As Boolean
         Get
-            Return False
+            Return True
         End Get
     End Property
 
@@ -213,6 +213,26 @@ Public Class MonthlyStatistics
     ''' <remarks></remarks>
     Public Overrides Sub PrepareResults()
 
+        'Result text
+        '------------
+        Me.mResultText = "Monthly statistics have been calculated." & eol
+        Me.mResultText &= "Result data:" & eol
+        'header line
+        Me.mResultText &= "Name;average;median;min;max;stddev" &eol
+
+        'data
+        For Each month As monthType In Me.result.months
+            Me.mResultText &= month.name & ";"
+            Me.mResultText &= month.average & ";"
+            Me.mResultText &= month.median & ";"
+            Me.mResultText &= month.min & ";"
+            Me.mResultText &= month.max & ";"
+            Me.mResultText &= month.stddev & eol
+
+        Next
+
+        'Result chart
+        '------------
         Dim i As Integer
         Dim mittelwert, median As Steema.TeeChart.Styles.Line
         Dim stdabw As Steema.TeeChart.Styles.Error
@@ -221,7 +241,7 @@ Public Class MonthlyStatistics
         'Diagram
         Me.mResultChart = New Steema.TeeChart.Chart()
         Call Wave.formatChart(Me.mResultChart)
-        Me.mResultChart.Header.Text = "Monthly analysis (" & Me.mZeitreihen(0).Title & ")"
+        Me.mResultChart.Header.Text = "Monthly statistics (" & Me.mZeitreihen(0).Title & ")"
 
         'Axes
         Me.mResultChart.Axes.Bottom.Labels.Style = Steema.TeeChart.AxisLabelStyle.Text
