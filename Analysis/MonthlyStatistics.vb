@@ -176,7 +176,7 @@ Public Class MonthlyStatistics
                 sumofsquares = 0
                 N = .values.Count
                 If (N > 0) Then
-                    'Summen berechnen
+                    'calculate sums
                     For j = 0 To N - 1
                         sum += .values(j)
                         sumofsquares += .values(j) ^ 2
