@@ -33,6 +33,15 @@ Imports System.IO
 ''' </summary>
 Public Class Wave
 
+    ''' <summary>
+    ''' The LogWindow shared among all Wave instances
+    ''' </summary>
+    ''' <remarks></remarks>
+    Private Shared MyLogWindow As LogWindow
+
+    'Log
+    Private WithEvents myLog As Log
+
     'Eigenschaften
     '#############
 
@@ -41,12 +50,6 @@ Public Class Wave
     ''' </summary>
     ''' <remarks></remarks>
     Private isInitializing As Boolean
-
-    'Log-Fenster
-    Private myLogWindow As LogWindow
-
-    'Log
-    Private WithEvents myLog As Log
 
     'Collection von importierten Dateien
     Private ImportedFiles As List(Of Dateiformat)
@@ -110,8 +113,8 @@ Public Class Wave
 
         'Logfenster nur beim ersten Mal instanzieren
         '-------------------------------------------
-        If (IsNothing(myLogWindow)) Then
-            myLogWindow = New LogWindow()
+        If (IsNothing(MyLogWindow)) Then
+            MyLogWindow = New LogWindow()
         End If
 
         'Log (Singleton) Instanz holen
@@ -414,7 +417,7 @@ Public Class Wave
 
         'Log zurücksetzen
         Call Log.ClearLog()
-        Call Me.myLogWindow.Hide()
+        Call Wave.MyLogWindow.Hide()
 
     End Sub
 
@@ -748,8 +751,8 @@ Public Class Wave
                 'Ergebnistext in Log schreiben und anzeigen
                 If (oAnalysis.hasResultText) Then
                     Call Log.AddLogEntry(oAnalysis.getResultText)
-                    Call Me.myLogWindow.Show()
-                    Call Me.myLogWindow.BringToFront()
+                    Call Wave.MyLogWindow.Show()
+                    Call Wave.MyLogWindow.BringToFront()
                 End If
 
                 'Ergebniswerte in Log schreiben
@@ -758,8 +761,8 @@ Public Class Wave
                     For Each kvp As KeyValuePair(Of String, Double) In oAnalysis.getResultValues
                         Call Log.AddLogEntry(kvp.Key + ": " + Str(kvp.Value))
                     Next
-                    Call Me.myLogWindow.Show()
-                    Call Me.myLogWindow.BringToFront()
+                    Call Wave.MyLogWindow.Show()
+                    Call Wave.MyLogWindow.BringToFront()
                 End If
 
             Catch ex As Exception
@@ -813,9 +816,9 @@ Public Class Wave
     Private Sub ShowLog_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripStatusLabel_Log.Click
 
         'LogWindow anzeigen
-        Call Me.myLogWindow.Show()
-        Me.myLogWindow.WindowState = FormWindowState.Normal
-        Call Me.myLogWindow.BringToFront()
+        Call Wave.MyLogWindow.Show()
+        Wave.MyLogWindow.WindowState = FormWindowState.Normal
+        Call Wave.MyLogWindow.BringToFront()
 
     End Sub
 
