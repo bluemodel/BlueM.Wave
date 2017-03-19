@@ -36,16 +36,16 @@ Public Class CutDialog
     Private IsInitializing As Boolean
     Private colorBand1 As Steema.TeeChart.Tools.ColorBand
     Private Anfang, Ende As DateTime
-    Private zreOrig As Dictionary(Of String, Zeitreihe)
+    Private zreOrig As Dictionary(Of String, TimeSeries)
     Private serie_cut As Steema.TeeChart.Styles.Line
     Private serie_ref As Steema.TeeChart.Styles.Line
 
-    Public zreCut As Dictionary(Of String, Zeitreihe)
+    Public zreCut As Dictionary(Of String, TimeSeries)
     Public Const labelAlle As String = "- ALL -"
 
     'Konstruktor
     '***********
-    Public Sub New(ByRef zeitreihen As Dictionary(Of String, Zeitreihe))
+    Public Sub New(ByRef zeitreihen As Dictionary(Of String, TimeSeries))
 
         Me.IsInitializing = True
 
@@ -54,14 +54,14 @@ Public Class CutDialog
 
         ' Add any initialization after the InitializeComponent() call.
 
-        Me.zreCut = New Dictionary(Of String, Zeitreihe)
+        Me.zreCut = New Dictionary(Of String, TimeSeries)
         Me.zreOrig = zeitreihen
 
         'Comboboxen füllen
         'Option zum Zuschneiden von allen Reihen
         Me.ComboBox_ZeitreiheCut.Items.Add(labelAlle)
         'Zeitreihen hinzufügen
-        For Each zre As Zeitreihe In Me.zreOrig.Values
+        For Each zre As TimeSeries In Me.zreOrig.Values
             Me.ComboBox_ZeitreiheCut.Items.Add(zre)
             Me.ComboBox_RefSeries.Items.Add(zre)
         Next
@@ -83,7 +83,7 @@ Public Class CutDialog
         End If
 
         Dim i As Integer
-        Dim zre As Zeitreihe
+        Dim zre As TimeSeries
 
         'Ausgewählte Zeitreihe
         If (Me.ComboBox_ZeitreiheCut.SelectedItem.ToString = labelAlle) Then
@@ -92,8 +92,8 @@ Public Class CutDialog
             Me.Anfang = DateTime.MaxValue
             Me.Ende = DateTime.MinValue
             For Each zre In Me.zreOrig.Values
-                If (zre.Anfangsdatum < Me.Anfang) Then Me.Anfang = zre.Anfangsdatum
-                If (zre.Enddatum > Me.Ende) Then Me.Ende = zre.Enddatum
+                If (zre.StartDate < Me.Anfang) Then Me.Anfang = zre.StartDate
+                If (zre.EndDate > Me.Ende) Then Me.Ende = zre.EndDate
             Next
 
             'Alle Zeitreihen in Chart anzeigen
@@ -101,7 +101,7 @@ Public Class CutDialog
             For Each zre In Me.zreOrig.Values
                 Dim series As New Steema.TeeChart.Styles.Line()
                 For i = 0 To zre.Length - 1
-                    series.Add(zre.XWerte(i), zre.YWerte(i))
+                    series.Add(zre.Dates(i), zre.Values(i))
                     series.Title = zre.Title
                 Next
                 Me.TChart1.Chart.Series.Add(series)
@@ -110,17 +110,17 @@ Public Class CutDialog
         Else
 
             'Eine einzige Zeitreihe wurde ausgewählt
-            zre = CType(Me.ComboBox_ZeitreiheCut.SelectedItem, Zeitreihe)
+            zre = CType(Me.ComboBox_ZeitreiheCut.SelectedItem, TimeSeries)
 
-            Me.Anfang = zre.Anfangsdatum
-            Me.Ende = zre.Enddatum
+            Me.Anfang = zre.StartDate
+            Me.Ende = zre.EndDate
 
             'Zeitreihe in Chart anzeigen
             Call Me.TChart1.Chart.Series.Clear()
             serie_cut = New Steema.TeeChart.Styles.Line(Me.TChart1.Chart)
             serie_cut.Title = zre.Title
             For i = 0 To zre.Length - 1
-                serie_cut.Add(zre.XWerte(i), zre.YWerte(i))
+                serie_cut.Add(zre.Dates(i), zre.Values(i))
             Next
 
         End If
@@ -232,41 +232,41 @@ Public Class CutDialog
         End If
 
         Dim i As Integer
-        Dim zre, zreRef As Zeitreihe
+        Dim zre, zreRef As TimeSeries
         Dim tmp_anfang, tmp_ende As DateTime
         Dim answer As MsgBoxResult
 
         zreRef = Me.ComboBox_RefSeries.SelectedItem
 
-        tmp_anfang = zreRef.Anfangsdatum
-        tmp_ende = zreRef.Enddatum
+        tmp_anfang = zreRef.StartDate
+        tmp_ende = zreRef.EndDate
 
         If (Me.ComboBox_ZeitreiheCut.SelectedItem.ToString <> labelAlle) Then
 
             'Kontrolle ob Referenzreihe zu schneidende Zeitreihe abdeckt
             zre = Me.ComboBox_ZeitreiheCut.SelectedItem
-            If (zreRef.Enddatum < zre.Anfangsdatum Or zreRef.Anfangsdatum > zre.Enddatum) Then
+            If (zreRef.EndDate < zre.StartDate Or zreRef.StartDate > zre.EndDate) Then
                 MsgBox("Die beiden Zeitreihen decken keinen gemeinsamen Zeitraum ab!", MsgBoxStyle.Exclamation)
                 'Abbrechen
                 Exit Sub
             End If
 
             'Man kann nicht abschneiden, was nicht existiert
-            If (zreRef.Anfangsdatum < zre.Anfangsdatum) Then
+            If (zreRef.StartDate < zre.StartDate) Then
                 answer = MsgBox("Das Anfangsdatum dieser Zeitreihe liegt vor dem Anfangsdatum der zu schneidenden Zeitreihe! " & eol & "Fortfahren?", MsgBoxStyle.OkCancel)
                 If (answer = MsgBoxResult.Ok) Then
                     'Kleinstes mögliches Datum nehmen
-                    tmp_anfang = zre.Anfangsdatum
+                    tmp_anfang = zre.StartDate
                 Else
                     'Abbrechen
                     Exit Sub
                 End If
             End If
-            If (zreRef.Enddatum > zre.Enddatum) Then
+            If (zreRef.EndDate > zre.EndDate) Then
                 answer = MsgBox("Das Enddatum dieser Zeitreihe liegt hinter dem Enddatum der zu schneidenden Zeitreihe! " & eol & "Fortfahren?", MsgBoxStyle.OkCancel)
                 If (answer = MsgBoxResult.Ok) Then
                     'Größtes mögliches Datum für Ende nehmen
-                    tmp_ende = zre.Enddatum
+                    tmp_ende = zre.EndDate
                 Else
                     'Abbrechen
                     Exit Sub
@@ -283,7 +283,7 @@ Public Class CutDialog
         Me.serie_ref = New Steema.TeeChart.Styles.Line(Me.TChart1.Chart)
         Me.serie_ref.Color = Color.Gray
         For i = 0 To zreRef.Length - 1
-            Me.serie_ref.Add(zreRef.XWerte(i), zreRef.YWerte(i))
+            Me.serie_ref.Add(zreRef.Dates(i), zreRef.Values(i))
         Next
 
         'Anzeige aktualisieren
@@ -306,7 +306,7 @@ Public Class CutDialog
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button_OK.Click
 
         Dim newtitle As String
-        Dim zre As Zeitreihe
+        Dim zre As TimeSeries
 
         'Prüfung
         If (Me.ComboBox_ZeitreiheCut.SelectedIndex = -1) Then

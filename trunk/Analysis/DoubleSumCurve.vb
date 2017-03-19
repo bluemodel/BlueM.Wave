@@ -66,7 +66,7 @@ Public Class DoubleSumCurve
     ''' Konstruktor
     ''' </summary>
     ''' <param name="zeitreihen">zu analysierende Zeitreihen</param>
-    Public Sub New(ByRef zeitreihen As List(Of Zeitreihe))
+    Public Sub New(ByRef zeitreihen As List(Of TimeSeries))
 
         Call MyBase.New(zeitreihen)
 
@@ -83,7 +83,7 @@ Public Class DoubleSumCurve
     Public Overrides Sub ProcessAnalysis()
 
         Dim i As Integer
-        Dim zre1, zre2 As Zeitreihe
+        Dim zre1, zre2 As TimeSeries
         Dim values(,) As Double
 
         zre1 = Me.mZeitreihen(0).getCleanZRE()
@@ -106,7 +106,7 @@ Public Class DoubleSumCurve
         Next
 
         'Datume übernehmen (werden später für Punkte-Labels im Diagramm gebraucht)
-        datume = zre1.XWerte
+        datume = zre1.Dates
 
     End Sub
 

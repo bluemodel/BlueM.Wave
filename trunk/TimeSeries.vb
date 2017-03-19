@@ -25,29 +25,23 @@
 'EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 '--------------------------------------------------------------------------------------------
 '
-Public Class Zeitreihe
+Public Class TimeSeries
 
-#Region "Eigenschaften"
-
-    'Eigenschaften
-    '#############
+#Region "Members"
 
     Private _title As String
     Private _nodes As SortedList(Of DateTime, Double)
     Private _nodesCleaned As SortedList(Of DateTime, Double)
-    Private _Einheit As String
+    Private _unit As String
     Private _Objekt As String
     Private _Type As String
 
-#End Region 'Eigenschaften
+#End Region 'Members
 
 #Region "Properties"
 
-    'Properties
-    '##########
-
     ''' <summary>
-    ''' Titel der Zeitreihe
+    ''' Title of the time series
     ''' </summary>
     Public Property Title() As String
         Get
@@ -77,7 +71,7 @@ Public Class Zeitreihe
     End Property
 
     ''' <summary>
-    ''' Die Stützstellen der Zeitreihe
+    ''' The time series' nodes
     ''' </summary>
     Public ReadOnly Property Nodes() As SortedList(Of DateTime, Double)
         Get
@@ -86,7 +80,7 @@ Public Class Zeitreihe
     End Property
 
     ''' <summary>
-    ''' The series nodes, cleaned by omitting NaN and Infinity values
+    ''' The time series' nodes, cleaned by omitting NaN and Infinity values
     ''' </summary>
     Private Property NodesCleaned() As SortedList(Of DateTime, Double)
         Get
@@ -98,25 +92,25 @@ Public Class Zeitreihe
     End Property
 
     ''' <summary>
-    ''' Die X-Werte der Zeitreihe als IList von DateTime
+    ''' The time series' dates
     ''' </summary>
-    Public ReadOnly Property XWerte() As IList(Of DateTime)
+    Public ReadOnly Property Dates() As IList(Of DateTime)
         Get
             Return Me._nodes.Keys
         End Get
     End Property
 
     ''' <summary>
-    ''' Die Y-Werte der Zeitreihe als IList von Double
+    ''' The time series ' values
     ''' </summary>
-    Public ReadOnly Property YWerte() As IList(Of Double)
+    Public ReadOnly Property Values() As IList(Of Double)
         Get
             Return Me._nodes.Values
         End Get
     End Property
 
     ''' <summary>
-    ''' Die Länge (Anzahl Stützstellen) der Zeitreihe
+    ''' The time series' length (number of nodes)
     ''' </summary>
     Public ReadOnly Property Length() As Integer
         Get
@@ -125,36 +119,34 @@ Public Class Zeitreihe
     End Property
 
     ''' <summary>
-    ''' Einheit der Zeitreihe
+    ''' The unit of the the time series' values
     ''' </summary>
-    Public Property Einheit() As String
+    Public Property Unit() As String
         Get
-            Return _Einheit
+            Return _unit
         End Get
         Set(ByVal value As String)
             If (value.Trim() = "") Then value = "-"
-            _Einheit = value
+            _unit = value
         End Set
     End Property
 
     ''' <summary>
-    ''' Anfangsdatum
+    ''' Returns the start date of the time series
     ''' </summary>
-    Public ReadOnly Property Anfangsdatum() As DateTime
+    Public ReadOnly Property StartDate() As DateTime
         Get
             Return Me._nodes.Keys(0)
         End Get
-
     End Property
 
     ''' <summary>
-    ''' Enddatum
+    ''' Returns the end date of the time series
     ''' </summary>
-    Public ReadOnly Property Enddatum() As DateTime
+    Public ReadOnly Property EndDate() As DateTime
         Get
             Return Me._nodes.Keys(Me._nodes.Count - 1)
         End Get
-
     End Property
 
     ''' <summary>
@@ -164,7 +156,7 @@ Public Class Zeitreihe
         Get
             Dim max As Double
             max = Double.MinValue
-            For Each value As Double In Me.YWerte
+            For Each value As Double In Me.Values
                 If (value > max) Then
                     max = value
                 End If
@@ -180,7 +172,7 @@ Public Class Zeitreihe
         Get
             Dim min As Double
             min = Double.MaxValue
-            For Each value As Double In Me.YWerte
+            For Each value As Double In Me.Values
                 If (value < min) Then
                     min = value
                 End If
@@ -197,7 +189,7 @@ Public Class Zeitreihe
         Get
             Dim avg As Double
             avg = 0
-            For Each value As Double In Me.YWerte
+            For Each value As Double In Me.Values
                 avg += value
             Next
             avg = avg / Me.Length
@@ -210,7 +202,7 @@ Public Class Zeitreihe
     ''' </summary>
     Public ReadOnly Property FirstValue() As Double
         Get
-            Return Me.YWerte(0)
+            Return Me.Values(0)
         End Get
     End Property
 
@@ -219,7 +211,7 @@ Public Class Zeitreihe
     ''' </summary>
     Public ReadOnly Property LastValue() As Double
         Get
-            Return Me.YWerte(Me.Length - 1)
+            Return Me.Values(Me.Length - 1)
         End Get
     End Property
 
@@ -230,7 +222,7 @@ Public Class Zeitreihe
         Get
             Dim _sum As Double
             _sum = 0.0
-            For Each value As Double In Me.YWerte
+            For Each value As Double In Me.Values
                 _sum += value
             Next
             Return _sum
@@ -251,9 +243,9 @@ Public Class Zeitreihe
             Dim dt As TimeSpan
 
             vol = 0.0
-            If Me.Einheit.ToLower.EndsWith("/s") Then
+            If Me.Unit.ToLower.EndsWith("/s") Then
                 Log.AddLogEntry(Me.Title & ": calculating volume by integrating over time.")
-                t0 = Me.Anfangsdatum
+                t0 = Me.StartDate
                 v0 = Me.Nodes(t0)
                 For Each node As KeyValuePair(Of Date, Double) In Me.Nodes
                     t1 = node.Key
@@ -277,43 +269,40 @@ Public Class Zeitreihe
 
 #End Region 'Properties
 
-#Region "Methoden"
-
-    'Methoden
-    '########
+#Region "Methods"
 
     ''' <summary>
-    ''' Default Konstruktor
+    ''' Default Constructor
     ''' </summary>
     Public Sub New()
         Call Me.New("-")
     End Sub
 
     ''' <summary>
-    ''' Konstruktor
+    ''' Constructor
     ''' </summary>
-    ''' <param name="title">Titel der Zeitreihe</param>
+    ''' <param name="title">Title of the times series</param>
     Public Sub New(ByVal title As String)
         Me._title = title
-        Me._Einheit = "-"
+        Me._unit = "-"
         Me._Objekt = "-"
         Me._Type = "-"
         Me._nodes = New SortedList(Of DateTime, Double)
     End Sub
 
     ''' <summary>
-    ''' Gibt den Zeitreihen-Titel zurück
+    ''' Returns the time series' title
     ''' </summary>
     Public Overrides Function ToString() As String
         Return Me.Title
     End Function
 
     ''' <summary>
-    ''' Zeitreihe kopieren
+    ''' Clones a time series
     ''' </summary>
-    Public Function Clone() As Zeitreihe
-        Dim target As New Zeitreihe(Me.Title)
-        target.Einheit = Me.Einheit
+    Public Function Clone() As TimeSeries
+        Dim target As New TimeSeries(Me.Title)
+        target.Unit = Me.Unit
         target.Objekt = Me.Objekt
         target.Type = Me.Type
         target._nodes = New SortedList(Of DateTime, Double)(Me._nodes)
@@ -321,72 +310,70 @@ Public Class Zeitreihe
     End Function
 
     ''' <summary>
-    ''' Fügt der Zeitreihe eine Stützstelle hinzu
+    ''' Adds a node to the time series
     ''' </summary>
-    ''' <param name="datum">Datum</param>
-    ''' <param name="wert">Wert</param>
-    ''' <remarks>Das Datum der Stützstelle darf in der Zeitreihe noch nicht vorhanden sein</remarks>
-    Public Sub AddNode(ByVal datum As DateTime, ByVal wert As Double)
-        If (Me.Nodes.ContainsKey(datum)) Then
-            Throw New Exception("Error: duplicate data point on " & datum.ToString(Konstanten.Datumsformate("default")) & "!")
+    ''' <param name="_date">Date</param>
+    ''' <param name="_value">Value</param>
+    ''' <remarks>Throws an exception if the given date already exists</remarks>
+    Public Sub AddNode(ByVal _date As DateTime, ByVal _value As Double)
+        If (Me.Nodes.ContainsKey(_date)) Then
+            Throw New Exception("Error: duplicate data point on " & _date.ToString(Konstanten.Datumsformate("default")) & "!")
         End If
-        Me._nodes.Add(datum, wert)
+        Me._nodes.Add(_date, _value)
     End Sub
 
     ''' <summary>
-    ''' Zeitreihe zuschneiden
+    ''' Cut a time series using start and end dates
     ''' </summary>
-    ''' <param name="anfang">Anfangsdatum</param>
-    ''' <param name="ende">Enddatum</param>
-    ''' <remarks>Wenn Anfangs- und/oder Enddatum nicht genau als Stützstellen vorliegen, wird an den nächstaußeren Stützstellen abgeschnitten</remarks>
-    Public Overloads Sub Cut(ByVal anfang As DateTime, ByVal ende As DateTime)
+    ''' <param name="_start">start date</param>
+    ''' <param name="_end">end date</param>
+    ''' <remarks>Removes all nodes before the start date and after the end date</remarks>
+    Public Overloads Sub Cut(ByVal _start As DateTime, ByVal _end As DateTime)
 
         Dim i, lengthOld, lengthNew As Integer
-        Dim iAnfang, iEnde As Integer
+        Dim iStart, iEnd As Integer
         Dim newNodes As SortedList(Of DateTime, Double)
 
-        If (Me.Anfangsdatum < anfang Or Me.Enddatum > ende) Then
+        If (Me.StartDate < _start Or Me.EndDate > _end) Then
 
             Me.Title &= " (cut)"
 
             lengthOld = Me.Length
 
-            'Anfang finden
-            iAnfang = Me._nodes.IndexOfKey(anfang)
+            'find the start
+            iStart = Me._nodes.IndexOfKey(_start)
 
-            If (iAnfang = -1) Then
-                'Anfang liegt nicht exakt als Stützstelle vor:
-                'davorliegende Stützstelle nehmen
+            If (iStart = -1) Then
+                'no node with the exact start date found
+                'use the closest node before the start instead
                 For i = 1 To Me.Length - 1
-                    If (Me.XWerte(i) > anfang) Then
-                        iAnfang = i - 1
-                        'neuer Anfang:
-                        anfang = Me.XWerte(i - 1)
+                    If (Me.Dates(i) > _start) Then
+                        'new start date
+                        _start = Me.Dates(i - 1)
                         Exit For
                     End If
                 Next
             End If
 
-            'Ende finden
-            iEnde = Me._nodes.IndexOfKey(ende)
+            'find the end
+            iEnd = Me._nodes.IndexOfKey(_end)
 
-            'Ende liegt nicht exakt als Stützstelle vor:
-            'dahinterliegende Stützstelle nehmen
-            If (iEnde = -1) Then
+            If (iEnd = -1) Then
+                'no node with the exact end date found
+                'use the closest node after the end instead
                 For i = Me.Length - 2 To 0 Step -1
-                    If (Me.XWerte(i) < ende) Then
-                        iEnde = i + 1
-                        'neues Ende:
-                        ende = Me.XWerte(i + 1)
+                    If (Me.Dates(i) < _end) Then
+                        'new end date
+                        _end = Me.Dates(i + 1)
                         Exit For
                     End If
                 Next
             End If
 
+            'copy nodes within start and end to a new list
             newNodes = New SortedList(Of DateTime, Double)
-
             For Each node As KeyValuePair(Of DateTime, Double) In Me.Nodes
-                If (node.Key >= anfang And node.Key <= ende) Then
+                If (node.Key >= _start And node.Key <= _end) Then
                     newNodes.Add(node.Key, node.Value)
                 End If
             Next
@@ -395,7 +382,7 @@ Public Class Zeitreihe
 
             Me._nodes = newNodes
 
-            'Überflüssige Kapazität entfernen
+            'trim excess capacity
             Call Me.Nodes.TrimExcess()
 
             'Log 
@@ -406,23 +393,23 @@ Public Class Zeitreihe
     End Sub
 
     ''' <summary>
-    ''' Schneidet die Zeitreihe auf den Zeitraum einer 2. Zeitreihe zu
+    ''' Cut the time series to the timespan of another time series
     ''' </summary>
-    ''' <param name="zre2">die 2. Zeitreihe</param>
+    ''' <param name="series2">the time series to whose timesan the time series should be cut</param>
     ''' <remarks></remarks>
-    Public Overloads Sub Cut(ByVal zre2 As Zeitreihe)
+    Public Overloads Sub Cut(ByVal series2 As TimeSeries)
 
-        If (Me.Anfangsdatum < zre2.Anfangsdatum Or Me.Enddatum > zre2.Enddatum) Then
-            Call Me.Cut(zre2.Anfangsdatum, zre2.Enddatum)
+        If (Me.StartDate < series2.StartDate Or Me.EndDate > series2.EndDate) Then
+            Call Me.Cut(series2.StartDate, series2.EndDate)
         End If
 
     End Sub
 
     ''' <summary>
-    ''' Einen Wert aus einer Zeitreihe berechnen
+    ''' Calculate a metric from the time series' values
     ''' </summary>
     ''' <param name="WertTyp">MaxWert, MinWert, Average, AnfWert, EndWert, Summe</param>
-    ''' <returns>der berechnete Wert</returns>
+    ''' <returns>the calculated metric</returns>
     ''' <remarks>Obsolete, kept for backwards compatibility with BlueM.Opt</remarks>
     Public Function getWert(ByVal WertTyp As String) As Double
         Dim Wert As Double
@@ -458,7 +445,7 @@ Public Class Zeitreihe
     ''' Erstellt eine neue äquidistante Zeitreihe, neue Stützstellen kriegen den Wert 0
     ''' </summary>
     ''' <param name="Soll_dT">Sollzeitschritt (in Minuten)</param>      
-    Public Function getKontiZRE(ByVal Soll_dT As Integer) As Zeitreihe
+    Public Function getKontiZRE(ByVal Soll_dT As Integer) As TimeSeries
 
         Dim i As Integer
         Dim intloop As Integer
@@ -466,29 +453,29 @@ Public Class Zeitreihe
         Dim AnzZusWerte As Integer
         Dim SumZusWerte As Long
 
-        Dim OutZR As New Zeitreihe("Konti_" & Me.Title)
-        OutZR.Einheit = Me.Einheit
+        Dim OutZR As New TimeSeries("Konti_" & Me.Title)
+        OutZR.Unit = Me.Unit
 
         SumZusWerte = 0
         For i = 0 To Me.Length - 2
 
             AnzZusWerte = 0
-            Ist_dT = DateDiff(DateInterval.Minute, Me.XWerte(i), Me.XWerte(i + 1))
+            Ist_dT = DateDiff(DateInterval.Minute, Me.Dates(i), Me.Dates(i + 1))
 
             If (Ist_dT - Soll_dT > 0) Then
                 AnzZusWerte = (Ist_dT / Soll_dT) - 1
                 SumZusWerte = SumZusWerte + AnzZusWerte
-                OutZR.AddNode(Me.XWerte(i), Me.YWerte(i))
+                OutZR.AddNode(Me.Dates(i), Me.Values(i))
                 For intloop = 1 To AnzZusWerte
-                    OutZR.AddNode(XWerte(i).AddMinutes(intloop * Soll_dT), 0.0)
+                    OutZR.AddNode(Dates(i).AddMinutes(intloop * Soll_dT), 0.0)
                 Next
             Else
-                OutZR.AddNode(Me.XWerte(i), Me.YWerte(i))
+                OutZR.AddNode(Me.Dates(i), Me.Values(i))
             End If
         Next
 
         'letzten Wert schreiben
-        OutZR.AddNode(Me.XWerte(i), Me.YWerte(i))
+        OutZR.AddNode(Me.Dates(i), Me.Values(i))
 
         Return OutZR
 
@@ -498,7 +485,7 @@ Public Class Zeitreihe
     ''' Erstellt eine neue äquidistante Zeitreihe, neue Stützstellen kriegen aus original Zeitreihe konvertierten Wert, geignet für Massenbezogenen Zeitreihen
     ''' </summary>
     ''' <param name="Soll_dT">Sollzeitschritt (in Minuten)</param>      
-    Public Function getKontiZRE2(ByVal Soll_dT As Integer) As Zeitreihe
+    Public Function getKontiZRE2(ByVal Soll_dT As Integer) As TimeSeries
 
         Dim i, j As Integer
         Dim intloop As Integer
@@ -507,29 +494,29 @@ Public Class Zeitreihe
         Dim newValue As Double
         Dim sumValues As Double
 
-        Dim TempZR As New Zeitreihe("Temp_" & Me.Title)
-        Dim OutZR As New Zeitreihe("Konti_" & Me.Title)
-        OutZR.Einheit = Me.Einheit
+        Dim TempZR As New TimeSeries("Temp_" & Me.Title)
+        Dim OutZR As New TimeSeries("Konti_" & Me.Title)
+        OutZR.Unit = Me.Unit
 
         'Zuerst wird eine Zeitreihe auf der Basis von Minutenwerten erstellt (kleinst mögliche Einheit)
         For i = 0 To Me.Length - 2
 
             NewNodes = 0
-            n_dT = DateDiff(DateInterval.Minute, Me.XWerte(i), Me.XWerte(i + 1))
+            n_dT = DateDiff(DateInterval.Minute, Me.Dates(i), Me.Dates(i + 1))
             NewNodes = n_dT
 
             If NewNodes > 1 Then
-                newValue = Me.YWerte(i) / NewNodes
-                TempZR.AddNode(Me.XWerte(i), newValue)
+                newValue = Me.Values(i) / NewNodes
+                TempZR.AddNode(Me.Dates(i), newValue)
                 For intloop = 1 To NewNodes - 1
-                    TempZR.AddNode(XWerte(i).AddMinutes(intloop), newValue)
+                    TempZR.AddNode(Dates(i).AddMinutes(intloop), newValue)
                 Next
             Else
-                TempZR.AddNode(Me.XWerte(i), Me.YWerte(i))
+                TempZR.AddNode(Me.Dates(i), Me.Values(i))
             End If
         Next
 
-        TempZR.AddNode(Me.XWerte(i), Me.YWerte(i))
+        TempZR.AddNode(Me.Dates(i), Me.Values(i))
 
 
         'Zeitreihe mit neuer Schrittweite wird generiert
@@ -544,9 +531,9 @@ Public Class Zeitreihe
             j = 0
             sumValues = 0
             For j = 0 To Soll_dT - 1
-                sumValues += TempZR.YWerte(i + j)
+                sumValues += TempZR.Values(i + j)
             Next
-            OutZR.AddNode(TempZR.XWerte(i), sumValues)
+            OutZR.AddNode(TempZR.Dates(i), sumValues)
             i += Soll_dT
         Loop
 
@@ -554,11 +541,11 @@ Public Class Zeitreihe
         If i Mod 5 <> 0 Then
             sumValues = 0
             For j = i To TempZR.Length - 1
-                sumValues += TempZR.YWerte(j)
+                sumValues += TempZR.Values(j)
             Next
 
             'letzten Wert schreiben
-            OutZR.AddNode(TempZR.XWerte(i), sumValues)
+            OutZR.AddNode(TempZR.Dates(i), sumValues)
 
         End If
 
@@ -571,7 +558,7 @@ Public Class Zeitreihe
     ''' Erstellt eine neue äquidistante Zeitreihe, neue Stützstellen kriegen aus original Zeitreihe konvertierten Wert, geignet für zeitabhängige Zeitreihen
     ''' </summary>
     ''' <param name="Soll_dT">Sollzeitschritt (in Minuten)</param>      
-    Public Function getKontiZRE3(ByVal Soll_dT As Integer) As Zeitreihe
+    Public Function getKontiZRE3(ByVal Soll_dT As Integer) As TimeSeries
 
         Dim i As Integer
         Dim intloop As Integer
@@ -579,29 +566,29 @@ Public Class Zeitreihe
         Dim NewNodes As Integer
         Dim newValue As Double
 
-        Dim TempZR As New Zeitreihe("Temp_" & Me.Title)
-        Dim OutZR As New Zeitreihe("Konti_" & Me.Title)
-        OutZR.Einheit = Me.Einheit
+        Dim TempZR As New TimeSeries("Temp_" & Me.Title)
+        Dim OutZR As New TimeSeries("Konti_" & Me.Title)
+        OutZR.Unit = Me.Unit
 
         'Zuerst wird eine Zeitreihe auf der Basis von Minutenwerten erstellt (kleinst mögliche Einheit)
         For i = 0 To Me.Length - 2
 
             NewNodes = 0
-            n_dT = DateDiff(DateInterval.Minute, Me.XWerte(i), Me.XWerte(i + 1))
+            n_dT = DateDiff(DateInterval.Minute, Me.Dates(i), Me.Dates(i + 1))
             NewNodes = n_dT
 
             If NewNodes > 1 Then
-                newValue = Me.YWerte(i)
-                TempZR.AddNode(Me.XWerte(i), newValue)
+                newValue = Me.Values(i)
+                TempZR.AddNode(Me.Dates(i), newValue)
                 For intloop = 1 To NewNodes - 1
-                    TempZR.AddNode(XWerte(i).AddMinutes(intloop), newValue)
+                    TempZR.AddNode(Dates(i).AddMinutes(intloop), newValue)
                 Next
             Else
-                TempZR.AddNode(Me.XWerte(i), Me.YWerte(i))
+                TempZR.AddNode(Me.Dates(i), Me.Values(i))
             End If
         Next
 
-        TempZR.AddNode(Me.XWerte(i), Me.YWerte(i))
+        TempZR.AddNode(Me.Dates(i), Me.Values(i))
 
 
         'Zeitreihe mit neuer Schrittweite wird generiert
@@ -621,7 +608,7 @@ Public Class Zeitreihe
             'newValue = sumValues / Soll_dT
             'OutZR.AddNode(TempZR.XWerte(i), newValue)
             'i += Soll_dT
-            OutZR.AddNode(TempZR.XWerte(i), TempZR.YWerte(i))
+            OutZR.AddNode(TempZR.Dates(i), TempZR.Values(i))
             i += Soll_dT
         Loop
 
@@ -634,7 +621,7 @@ Public Class Zeitreihe
             'newValue = sumValues / Soll_dT
             ''letzten Wert schreiben
             'OutZR.AddNode(TempZR.XWerte(i), sumValues)
-            OutZR.AddNode(TempZR.XWerte(i), TempZR.YWerte(i))
+            OutZR.AddNode(TempZR.Dates(i), TempZR.Values(i))
         End If
 
         Return OutZR
@@ -648,16 +635,16 @@ Public Class Zeitreihe
     ''' <param name="errorvalues">optional additional error values to ignore</param>
     ''' <returns>the cleaned time series</returns>
     ''' <remarks>a tolerance of 0.0001 is used to compare series values to errorvalues</remarks>
-    Public Function getCleanZRE(ByVal ParamArray errorvalues() As Double) As Zeitreihe
+    Public Function getCleanZRE(ByVal ParamArray errorvalues() As Double) As TimeSeries
 
         Const tolerance As Double = 0.0001
         Dim isErrorvalue As Boolean
         Dim errorCount As Integer
-        Dim cleanZRE As Zeitreihe
+        Dim cleanZRE As TimeSeries
 
         'Instantiate a new series
-        cleanZRE = New Zeitreihe(Me.Title)
-        cleanZRE.Einheit = Me.Einheit
+        cleanZRE = New TimeSeries(Me.Title)
+        cleanZRE.Unit = Me.Unit
         cleanZRE.Objekt = Me.Objekt
         cleanZRE.Type = Me.Type
 
@@ -707,6 +694,6 @@ Public Class Zeitreihe
 
     End Function
 
-#End Region 'Methoden
+#End Region 'Methods
 
 End Class

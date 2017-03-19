@@ -79,7 +79,7 @@ Public MustInherit Class Dateiformat
     ''' <summary>
     ''' Array der in der Datei enhaltenen Zeitreihen
     ''' </summary>
-    Public Zeitreihen() As Zeitreihe
+    Public Zeitreihen() As TimeSeries
 
     ''' <summary>
     ''' Der ImportDialog
@@ -320,7 +320,7 @@ Public MustInherit Class Dateiformat
     ''' <param name="title">Titel der zu holenden Zeitreihe</param>
     ''' <returns>Die Zeitreihe</returns>
     ''' <remarks>falls noch nicht eingelesen, wird dies nachgeholt. Schmeisst eine Exception, wenn die Zeitreihe nicht gefunden werden kann.</remarks>
-    Public ReadOnly Property getReihe(ByVal title As String) As Zeitreihe
+    Public ReadOnly Property getReihe(ByVal title As String) As TimeSeries
         Get
             'Wenn leerer Titel angegeben, dann erste Zeitreihe zurückgeben
             If (title.Length = 0) Then Return Me.getReihe(0)
@@ -357,7 +357,7 @@ Public MustInherit Class Dateiformat
     ''' <param name="index">0-basierter Index der Zeitreihe (0 => 1. Zeitreihenspalte)</param>
     ''' <returns>Die Zeitreihe</returns>
     ''' <remarks>falls noch nicht eingelesen, wird dies nachgeholt. Schmeisst eine Exception, wenn die Zeitreihe nicht gefunden werden kann.</remarks>
-    Public ReadOnly Property getReihe(ByVal index As Integer) As Zeitreihe
+    Public ReadOnly Property getReihe(ByVal index As Integer) As TimeSeries
         Get
             If (index <= Me.Zeitreihen.GetUpperBound(0)) Then
                 'Zeitreihe zurückgeben

@@ -236,8 +236,8 @@ Public Class UVF
         Try
             'Zeitreihe instanzieren
             ReDim Me.Zeitreihen(0)
-            Me.Zeitreihen(0) = New Zeitreihe(Me.Spalten(1).Name)
-            Me.Zeitreihen(0).Einheit = Me.Spalten(1).Einheit
+            Me.Zeitreihen(0) = New TimeSeries(Me.Spalten(1).Name)
+            Me.Zeitreihen(0).Unit = Me.Spalten(1).Einheit
 
             'Datei öffnen
             Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)

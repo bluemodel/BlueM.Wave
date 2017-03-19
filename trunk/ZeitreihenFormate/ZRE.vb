@@ -118,8 +118,8 @@ Public Class ZRE
 
         'Zeitreihe instanzieren (nur eine)
         ReDim Me.Zeitreihen(0)
-        Me.Zeitreihen(0) = New Zeitreihe(Me.SpaltenSel(0).Name)
-        Me.Zeitreihen(0).Einheit = Me.SpaltenSel(0).Einheit
+        Me.Zeitreihen(0) = New TimeSeries(Me.SpaltenSel(0).Name)
+        Me.Zeitreihen(0).Unit = Me.SpaltenSel(0).Einheit
 
         'Einlesen
         '--------
@@ -173,7 +173,7 @@ Public Class ZRE
     ''' </summary>
     ''' <param name="Reihe">Die zu exportierende Zeitreihe</param>
     ''' <param name="File">Pfad zur anzulegenden Datei</param>
-    Public Shared Sub Write_File(ByVal Reihe As Zeitreihe, ByVal File As String)
+    Public Shared Sub Write_File(ByVal Reihe As TimeSeries, ByVal File As String)
 
         Dim strwrite As StreamWriter
         Dim i As Integer
@@ -183,14 +183,14 @@ Public Class ZRE
         '1. Zeile
         strwrite.WriteLine("*ZRE")
         '2. Zeile: Titel und Einheit
-        strwrite.WriteLine(Reihe.Title.PadRight(15).Substring(0, 15) & Reihe.Einheit)
+        strwrite.WriteLine(Reihe.Title.PadRight(15).Substring(0, 15) & Reihe.Unit)
         '3. Zeile: Parameter
         strwrite.WriteLine("0                      0.        0.        0.")
         '4. Zeile: Anfangs- und Enddatum
-        strwrite.WriteLine(Reihe.XWerte(0).ToString(Datumsformate("ZRE")) & " " & Reihe.XWerte(Reihe.Length - 1).ToString(Datumsformate("ZRE")))
+        strwrite.WriteLine(Reihe.Dates(0).ToString(Datumsformate("ZRE")) & " " & Reihe.Dates(Reihe.Length - 1).ToString(Datumsformate("ZRE")))
         'ab 5. Zeile: Werte
         For i = 0 To Reihe.Length - 1
-            strwrite.Write(Reihe.XWerte(i).ToString(Datumsformate("ZRE")) & " " & Reihe.YWerte(i).ToString(Zahlenformat).PadLeft(14))
+            strwrite.Write(Reihe.Dates(i).ToString(Datumsformate("ZRE")) & " " & Reihe.Values(i).ToString(Zahlenformat).PadLeft(14))
             If (i < Reihe.Length - 1) Then 'kein Zeilenumbruch nach der letzten Zeile!
                 strwrite.WriteLine()
             End If

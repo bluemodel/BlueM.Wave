@@ -180,14 +180,14 @@ Public Class HystemExtran_WEL
 
         'Zeitreihen instanzieren
         For i = 0 To Me.SpaltenSel.Length - 1
-            Me.Zeitreihen(i) = New Zeitreihe(Me.SpaltenSel(i).Name)
+            Me.Zeitreihen(i) = New TimeSeries(Me.SpaltenSel(i).Name)
         Next
 
         'Einheiten?
         If (Me.UseEinheiten) Then
             'Alle ausgewählten Spalten durchlaufen
             For i = 0 To Me.SpaltenSel.Length - 1
-                Me.Zeitreihen(i).Einheit = Me.SpaltenSel(i).Einheit
+                Me.Zeitreihen(i).Unit = Me.SpaltenSel(i).Einheit
                 Me.Zeitreihen(i).Objekt = Me.SpaltenSel(i).Objekt
                 Me.Zeitreihen(i).Type = Me.SpaltenSel(i).Type
             Next

@@ -184,13 +184,13 @@ Public Class WEL_GISMO
 
             ' intialize a time series for every selected column (time series)
             For i = 0 To Me.SpaltenSel.Length - 1
-                Me.Zeitreihen(i) = New Zeitreihe(Me.SpaltenSel(i).Name)
+                Me.Zeitreihen(i) = New TimeSeries(Me.SpaltenSel(i).Name)
             Next
 
             ' assign units to time series (for all selected)
             If (Me.UseEinheiten) Then
                 For i = 0 To Me.SpaltenSel.Length - 1
-                    Me.Zeitreihen(i).Einheit = Me.SpaltenSel(i).Einheit
+                    Me.Zeitreihen(i).Unit = Me.SpaltenSel(i).Einheit
                 Next
             End If
 

@@ -33,11 +33,11 @@ Imports System.Windows.Forms
 ''' <remarks></remarks>
 Public Class RemoveErrorValuesDialog
 
-    Public zreOrig As Dictionary(Of String, Zeitreihe)
-    Public zreClean As Dictionary(Of String, Zeitreihe)
+    Public zreOrig As Dictionary(Of String, TimeSeries)
+    Public zreClean As Dictionary(Of String, TimeSeries)
     Public Const labelAlle As String = "- ALL -"
 
-    Public Sub New(ByRef zeitreihen As Dictionary(Of String, Zeitreihe))
+    Public Sub New(ByRef zeitreihen As Dictionary(Of String, TimeSeries))
 
         ' This call is required by the Windows Form Designer.
         InitializeComponent()
@@ -47,7 +47,7 @@ Public Class RemoveErrorValuesDialog
 
         'populate combobox
         Me.ComboBox_Series.Items.Add(labelAlle)
-        For Each zre As Zeitreihe In zeitreihen.Values
+        For Each zre As TimeSeries In zeitreihen.Values
             Me.ComboBox_Series.Items.Add(zre)
         Next
 
@@ -63,7 +63,7 @@ Public Class RemoveErrorValuesDialog
         End If
 
         Dim i As Integer
-        Dim zre, zre_clean As Zeitreihe
+        Dim zre, zre_clean As TimeSeries
         Dim errorstrings() As String
         Dim errorvalue, errorvalues() As Double
 
@@ -81,7 +81,7 @@ Public Class RemoveErrorValuesDialog
             End If
         Next
 
-        Me.zreClean = New Dictionary(Of String, Zeitreihe)
+        Me.zreClean = New Dictionary(Of String, TimeSeries)
 
         If Me.ComboBox_Series.SelectedItem.ToString = labelAlle Then
             'clean all series

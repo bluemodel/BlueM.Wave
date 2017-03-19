@@ -77,7 +77,7 @@ Public Class Histogram
     ''' Konstruktor
     ''' </summary>
     ''' <param name="zeitreihen">zu analysierende Zeitreihen</param>
-    Public Sub New(ByRef zeitreihen As List(Of Zeitreihe))
+    Public Sub New(ByRef zeitreihen As List(Of TimeSeries))
 
         'Konstruktor der Basisklasse aufrufen!
         Call MyBase.New(zeitreihen)
@@ -88,9 +88,9 @@ Public Class Histogram
 
         'Check: series have to use the same unit
         If (zeitreihen.Count > 1) Then
-            einheit = zeitreihen(1).Einheit
-            For Each zre As Zeitreihe In zeitreihen
-                If (zre.Einheit <> einheit) Then
+            einheit = zeitreihen(1).Unit
+            For Each zre As TimeSeries In zeitreihen
+                If (zre.Unit <> einheit) Then
                     Throw New Exception("Please select only series with the same unit!")
                 End If
             Next
@@ -122,7 +122,7 @@ Public Class Histogram
         'Analyse series
         '--------------
         n = 0
-        For Each zre As Zeitreihe In Me.mZeitreihen
+        For Each zre As TimeSeries In Me.mZeitreihen
 
             With Me.results(n)
 
@@ -136,7 +136,7 @@ Public Class Histogram
                 For i = 0 To zre.Length - 1
                     Dim value As Double
                     'assign to bin
-                    value = zre.YWerte(i)
+                    value = zre.Values(i)
                     If value = Me.breaks(0) Then
                         'add to first bin
                         .frequency(0) += 1
@@ -227,7 +227,7 @@ Public Class Histogram
         Me.mResultChart.Axes.Right.Grid.Visible = False
 
         Me.mResultChart.Axes.Bottom.Labels.Style = Steema.TeeChart.AxisLabelStyle.Value
-        Me.mResultChart.Axes.Bottom.Title.Caption = "Value [" & Me.mZeitreihen(0).Einheit & "]"
+        Me.mResultChart.Axes.Bottom.Title.Caption = "Value [" & Me.mZeitreihen(0).Unit & "]"
 
         'Serien
         For Each res As resultValues In Me.results

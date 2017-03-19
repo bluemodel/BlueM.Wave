@@ -107,7 +107,7 @@ Public Class MonthlyStatistics
     ''' Constructor
     ''' </summary>
     ''' <param name="series">list of series to analyse</param>
-    Public Sub New(ByRef series As List(Of Zeitreihe))
+    Public Sub New(ByRef series As List(Of TimeSeries))
 
         Call MyBase.New(series)
 
@@ -157,7 +157,7 @@ Public Class MonthlyStatistics
     ''' <remarks></remarks>
     Public Overrides Sub ProcessAnalysis()
 
-        Dim reihe As Zeitreihe
+        Dim reihe As TimeSeries
         Dim i, j As Integer
         Dim N As Long
         Dim sum, sumofsquares As Double
@@ -166,7 +166,7 @@ Public Class MonthlyStatistics
 
         'Sort values into months
         For i = 0 To reihe.Length - 1
-            Me.result.months(reihe.XWerte(i).Month() - 1).values.Add(reihe.YWerte(i))
+            Me.result.months(reihe.Dates(i).Month() - 1).values.Add(reihe.Values(i))
         Next
 
         'Analyse each month

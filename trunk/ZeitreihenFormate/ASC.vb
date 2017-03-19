@@ -150,13 +150,13 @@ Public Class ASC
 
         'Zeitreihen instanzieren
         For i = 0 To Me.SpaltenSel.Length - 1
-            Me.Zeitreihen(i) = New Zeitreihe(Me.SpaltenSel(i).Name)
+            Me.Zeitreihen(i) = New TimeSeries(Me.SpaltenSel(i).Name)
         Next
 
         'Einheiten?
         If (Me.UseEinheiten) Then
             For i = 0 To Me.SpaltenSel.Length - 1
-                Me.Zeitreihen(i).Einheit = Me.SpaltenSel(i).Einheit
+                Me.Zeitreihen(i).Unit = Me.SpaltenSel(i).Einheit
             Next
         End If
 
@@ -192,7 +192,7 @@ Public Class ASC
                 If (Ereignisende) Then
 
                     'Mit Stützstellen vom Wert 0 Lücke zwischen Ereignissen abschliessen
-                    datumLast = Me.Zeitreihen(0).Enddatum
+                    datumLast = Me.Zeitreihen(0).EndDate
                     If (datum.Subtract(datumLast) > dt) Then 'nur wenn Lücke größer als dt ist
 
                         For i = 0 To Me.SpaltenSel.Length - 1

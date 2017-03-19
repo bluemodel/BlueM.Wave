@@ -32,7 +32,7 @@
 Public Class GoodnessOfFit
     Inherits Analysis
 
-    Private zre_gemessen, zre_simuliert As Zeitreihe
+    Private zre_gemessen, zre_simuliert As TimeSeries
     Private fehlerquadrate() As Double
     Private sum_fehlerquadrate As Double
     Private nash_sutcliffe As Double
@@ -61,7 +61,7 @@ Public Class GoodnessOfFit
         End Get
     End Property
 
-    Public Sub New(ByRef zeitreihen As List(Of Zeitreihe))
+    Public Sub New(ByRef zeitreihen As List(Of TimeSeries))
 
         Call MyBase.New(zeitreihen)
 
@@ -216,7 +216,7 @@ Public Class GoodnessOfFit
                          & "Observed time series: " & Me.zre_gemessen.Title & eol _
                          & "Simulated time series: " & Me.zre_simuliert.Title & eol _
                          & eol _
-                         & "The analysis is based on " & Me.zre_gemessen.Length & " coincident data points between " & Me.zre_gemessen.Anfangsdatum.ToString(Datumsformate("default")) & " and " & Me.zre_gemessen.Enddatum.ToString(Datumsformate("default")) & eol _
+                         & "The analysis is based on " & Me.zre_gemessen.Length & " coincident data points between " & Me.zre_gemessen.StartDate.ToString(Datumsformate("default")) & " and " & Me.zre_gemessen.EndDate.ToString(Datumsformate("default")) & eol _
                          & eol
 
         'Werte:
@@ -270,13 +270,13 @@ Public Class GoodnessOfFit
 
         'Werte zu Serien hinzufügen
         For i = 0 To Me.zre_gemessen.Length - 1
-            line_gemessen.Add(Me.zre_gemessen.XWerte(i), Me.zre_gemessen.YWerte(i))
+            line_gemessen.Add(Me.zre_gemessen.Dates(i), Me.zre_gemessen.Values(i))
         Next
         For i = 0 To Me.zre_simuliert.Length - 1
-            line_simuliert.Add(Me.zre_simuliert.XWerte(i), Me.zre_simuliert.YWerte(i))
+            line_simuliert.Add(Me.zre_simuliert.Dates(i), Me.zre_simuliert.Values(i))
         Next
         For i = 0 To Me.zre_simuliert.Length - 1
-            line_fehlerquadrate.Add(Me.zre_simuliert.XWerte(i), Me.fehlerquadrate(i))
+            line_fehlerquadrate.Add(Me.zre_simuliert.Dates(i), Me.fehlerquadrate(i))
         Next
 
     End Sub

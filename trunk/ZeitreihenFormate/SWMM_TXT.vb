@@ -235,7 +235,7 @@ Public Class SWMM_TXT
 
         'Zeitreihen instanzieren
         For i = 0 To Me.SpaltenSel.Length - 1
-            Me.Zeitreihen(i) = New Zeitreihe(Me.SpaltenSel(i).Name)
+            Me.Zeitreihen(i) = New TimeSeries(Me.SpaltenSel(i).Name)
         Next
 
         'Einheiten?
@@ -248,7 +248,7 @@ Public Class SWMM_TXT
         ReDim AllNodes(Me.SpaltenSel.Length - 1)
         'Alle ausgewählten Spalten durchlaufen
         For i = 0 To Me.SpaltenSel.Length - 1
-            Me.Zeitreihen(i).Einheit = Me.SpaltenSel(i).Einheit
+            Me.Zeitreihen(i).Unit = Me.SpaltenSel(i).Einheit
             Me.Zeitreihen(i).Objekt = Me.SpaltenSel(i).Objekt
             AllConstituents(i) = Me.SpaltenSel(i).Type
             Me.Zeitreihen(i).Type = Me.SpaltenSel(i).Type
@@ -298,7 +298,7 @@ Public Class SWMM_TXT
     ''' </summary>
     ''' <param name="Reihen">Die zu exportierenden Zeitreihen</param>
     ''' <param name="File">Pfad zur anzulegenden Datei</param>
-    Public Shared Sub Write_File(ByRef Reihen As List(Of Zeitreihe), ByVal File As String)
+    Public Shared Sub Write_File(ByRef Reihen As List(Of TimeSeries), ByVal File As String)
 
         Dim strwrite As StreamWriter
         Dim i, j, k As Integer
@@ -327,7 +327,7 @@ Public Class SWMM_TXT
 
         Dim dt As Integer
         'Zeitintervall aus ersten und zweiten Zeitschritt der Reihe ermitteln
-        dt = DateDiff(DateInterval.Minute, Reihen(0).XWerte(0), Reihen(0).XWerte(1))
+        dt = DateDiff(DateInterval.Minute, Reihen(0).Dates(0), Reihen(0).Dates(1))
         dt = dt * 60
 
         '1. Zeile
@@ -342,7 +342,7 @@ Public Class SWMM_TXT
         ReDim AllConstituents(Reihen.Count - 1)
         For i = 0 To Reihen.Count - 1
             AllConstituents(i).Type = Reihen(i).Type
-            AllConstituents(i).Unit = Reihen(i).Einheit
+            AllConstituents(i).Unit = Reihen(i).Unit
         Next
         GetUniqueConstituents(AllConstituents, UniqueConstituents)
 
@@ -386,7 +386,7 @@ Public Class SWMM_TXT
         Next
 
         'SWMM-Reihen immer in l/s
-        KonFaktor = FakConv(Reihen(0).Einheit)
+        KonFaktor = FakConv(Reihen(0).Unit)
 
         'Zeitreihen rausschreiben
         'TO DO: Bei mehreren Constituents muss im Moment die richtige Reihenfolge vorab gegeben sein
@@ -396,17 +396,17 @@ Public Class SWMM_TXT
             For j = 0 To AnzOutNodes - 1
                 strwrite.Write(UniqueNodes(j).PadRight(12))
                 strwrite.Write("   ")
-                strwrite.Write(Reihen(j).XWerte(i).ToString(DatumsformatSWMM_TXT))
+                strwrite.Write(Reihen(j).Dates(i).ToString(DatumsformatSWMM_TXT))
                 strwrite.Write(" 00   ")
-                strwrite.Write((Reihen(j * UniqueConstituents.Length).YWerte(i) * KonFaktor).ToString(Zahlenformat).PadLeft(14))
+                strwrite.Write((Reihen(j * UniqueConstituents.Length).Values(i) * KonFaktor).ToString(Zahlenformat).PadLeft(14))
                 If UniqueConstituents.Length > 1 Then
                     For k = 1 To UniqueConstituents.Length - 1
                         If k < UniqueConstituents.Length - 1 Then
                             strwrite.Write("   ")
-                            strwrite.Write((Reihen(j * k + 1).YWerte(i) * KonFaktor).ToString(Zahlenformat).PadLeft(10))
+                            strwrite.Write((Reihen(j * k + 1).Values(i) * KonFaktor).ToString(Zahlenformat).PadLeft(10))
                         ElseIf k = UniqueConstituents.Length - 1 Then
                             strwrite.Write("   ")
-                            strwrite.WriteLine((Reihen(j * UniqueConstituents.Length + 1).YWerte(i) * KonFaktor).ToString(Zahlenformat).PadLeft(10))
+                            strwrite.WriteLine((Reihen(j * UniqueConstituents.Length + 1).Values(i) * KonFaktor).ToString(Zahlenformat).PadLeft(10))
                         End If
                     Next
                 Else
