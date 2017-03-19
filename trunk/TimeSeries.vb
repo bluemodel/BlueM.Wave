@@ -395,7 +395,7 @@ Public Class TimeSeries
     ''' <summary>
     ''' Cut the time series to the timespan of another time series
     ''' </summary>
-    ''' <param name="series2">the time series to whose timesan the time series should be cut</param>
+    ''' <param name="series2">the time series to whose timespan the time series should be cut</param>
     ''' <remarks></remarks>
     Public Overloads Sub Cut(ByVal series2 As TimeSeries)
 
