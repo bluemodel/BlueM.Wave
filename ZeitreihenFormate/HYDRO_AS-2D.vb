@@ -173,8 +173,8 @@ Public Class HYDRO_AS_2D
 
             'Zeitreihen instanzieren
             For i = 0 To Me.SpaltenSel.Length - 1
-                Me.Zeitreihen(i) = New Zeitreihe(Me.SpaltenSel(i).Name)
-                Me.Zeitreihen(i).Einheit = Me.SpaltenSel(i).Einheit
+                Me.Zeitreihen(i) = New TimeSeries(Me.SpaltenSel(i).Name)
+                Me.Zeitreihen(i).Unit = Me.SpaltenSel(i).Einheit
             Next
 
             'Datei öffnen

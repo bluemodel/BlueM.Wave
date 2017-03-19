@@ -124,8 +124,8 @@ Public Class SMB
 
         'Zeitreihe instanzieren
         ReDim Me.Zeitreihen(0) 'bei SMB gibt es nur eine Zeitreihe
-        Me.Zeitreihen(0) = New Zeitreihe(Me.SpaltenSel(0).Name)
-        Me.Zeitreihen(0).Einheit = Me.SpaltenSel(0).Einheit
+        Me.Zeitreihen(0) = New TimeSeries(Me.SpaltenSel(0).Name)
+        Me.Zeitreihen(0).Unit = Me.SpaltenSel(0).Einheit
 
         j = 1
 

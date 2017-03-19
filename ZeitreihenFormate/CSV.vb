@@ -146,13 +146,13 @@ Public Class CSV
 
             'Zeitreihen instanzieren
             For i = 0 To Me.SpaltenSel.Length - 1
-                Me.Zeitreihen(i) = New Zeitreihe(Me.SpaltenSel(i).Name)
+                Me.Zeitreihen(i) = New TimeSeries(Me.SpaltenSel(i).Name)
             Next
 
             'Einheiten übergeben
             If (Me.UseEinheiten) Then
                 For i = 0 To Me.SpaltenSel.Length - 1
-                    Me.Zeitreihen(i).Einheit = Me.SpaltenSel(i).Einheit
+                    Me.Zeitreihen(i).Unit = Me.SpaltenSel(i).Einheit
                 Next
             End If
 
@@ -225,7 +225,7 @@ Public Class CSV
     ''' <param name="zres">time series to write to file</param>
     ''' <param name="file">path to the csv file</param>
     ''' <remarks></remarks>
-    Public Shared Sub Write_File(ByRef zres As List(Of Zeitreihe), ByVal file As String)
+    Public Shared Sub Write_File(ByRef zres As List(Of TimeSeries), ByVal file As String)
 
         Dim data As SortedDictionary(Of DateTime, Double())
         Dim strwrite As StreamWriter
@@ -240,7 +240,7 @@ Public Class CSV
         'merge series into one data structure
         data = New SortedDictionary(Of DateTime, Double())
         i = 0
-        For Each zre As Zeitreihe In zres
+        For Each zre As TimeSeries In zres
             For Each node As KeyValuePair(Of DateTime, Double) In zre.Nodes
                 t = node.Key
                 v = node.Value
@@ -261,14 +261,14 @@ Public Class CSV
 
         '1st line: headings
         line = "datetime"
-        For Each zre As Zeitreihe In zres
+        For Each zre As TimeSeries In zres
             line &= separator & quote & zre.Title & quote
         Next
         strwrite.WriteLine(line)
         '2nd line: units
         line = "-"
-        For Each zre As Zeitreihe In zres
-            line &= separator & quote & zre.Einheit & quote
+        For Each zre As TimeSeries In zres
+            line &= separator & quote & zre.Unit & quote
         Next
         strwrite.WriteLine(line)
         '3rd row onwards: data

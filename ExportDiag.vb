@@ -27,7 +27,7 @@
 '
 Public Class ExportDiag
 
-    Public Sub New(ByRef zres As Dictionary(Of String, Zeitreihe))
+    Public Sub New(ByRef zres As Dictionary(Of String, TimeSeries))
 
         ' This call is required by the Windows Form Designer.
         InitializeComponent()
@@ -45,7 +45,7 @@ Public Class ExportDiag
         Me.ComboBox_Format.SelectedIndex = 0
 
         'Add series to listbox
-        For Each zre As Zeitreihe In zres.Values
+        For Each zre As TimeSeries In zres.Values
             Me.ListBox_Series.Items.Add(zre)
         Next
 

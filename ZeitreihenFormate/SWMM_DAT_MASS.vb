@@ -139,9 +139,9 @@ Public Class SWMM_DAT_MASS
     ''' <param name="Reihe">Die zu exportierende Zeitreihe</param>
     ''' <param name="File">Pfad zur anzulegenden Datei</param>
     ''' <param name="dt">Zeitschritt</param>
-    Public Shared Sub Write_File(ByVal Reihe As Zeitreihe, ByVal File As String, ByVal dt As Integer)
+    Public Shared Sub Write_File(ByVal Reihe As TimeSeries, ByVal File As String, ByVal dt As Integer)
 
-        Dim KontiReihe As Zeitreihe
+        Dim KontiReihe As TimeSeries
 
         'Äquidistante Zeitreihe erzeugen
         KontiReihe = Reihe.getKontiZRE2(dt)
@@ -152,8 +152,8 @@ Public Class SWMM_DAT_MASS
 
         n = 0   'n = Anzahl der Zeitreihenwerte
         For iZeile = 0 To KontiReihe.Length - 1
-            strwrite.Write(KontiReihe.XWerte(n).ToString(DatumsformatSWMMDAT) & " ")
-            strwrite.Write(KontiReihe.YWerte(n).ToString())
+            strwrite.Write(KontiReihe.Dates(n).ToString(DatumsformatSWMMDAT) & " ")
+            strwrite.Write(KontiReihe.Values(n).ToString())
             n = n + 1
             strwrite.WriteLine()
         Next

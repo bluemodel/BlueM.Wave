@@ -106,7 +106,7 @@ Partial Class RenameSeriesDialog
         '
         'ZeitreiheBindingSource
         '
-        Me.ZeitreiheBindingSource.DataSource = GetType(BlueM.Wave.Zeitreihe)
+        Me.ZeitreiheBindingSource.DataSource = GetType(BlueM.Wave.TimeSeries)
         '
         'RenameSeriesDialog
         '

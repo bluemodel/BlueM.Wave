@@ -55,7 +55,7 @@ Public Class Wave
     Private ImportedFiles As List(Of Dateiformat)
 
     'Interne Zeitreihen-Collection
-    Private Zeitreihen As Dictionary(Of String, Zeitreihe)
+    Private Zeitreihen As Dictionary(Of String, TimeSeries)
 
     'Dateifilter
     Private Const FileFilter_TEN As String = "TeeChart files (*.ten)|*.ten"
@@ -102,7 +102,7 @@ Public Class Wave
         'Kollektionen einrichten
         '-----------------------
         Me.ImportedFiles = New List(Of Dateiformat)()
-        Me.Zeitreihen = New Dictionary(Of String, Zeitreihe)()
+        Me.Zeitreihen = New Dictionary(Of String, TimeSeries)()
         Me.MyAxes1 = New Dictionary(Of String, Steema.TeeChart.Axis)
         Me.MyAxes2 = New Dictionary(Of String, Steema.TeeChart.Axis)
 
@@ -250,9 +250,9 @@ Public Class Wave
             'Min- und Max-Datum bestimmen
             Xmin = DateTime.MaxValue
             Xmax = DateTime.MinValue
-            For Each zre As Zeitreihe In Me.Zeitreihen.Values
-                If (zre.Anfangsdatum < Xmin) Then Xmin = zre.Anfangsdatum
-                If (zre.Enddatum > Xmax) Then Xmax = zre.Enddatum
+            For Each zre As TimeSeries In Me.Zeitreihen.Values
+                If (zre.StartDate < Xmin) Then Xmin = zre.StartDate
+                If (zre.EndDate > Xmax) Then Xmax = zre.EndDate
             Next
 
             'Übersicht neu skalieren
@@ -340,7 +340,7 @@ Public Class Wave
         title = ""
 
         'Alle internen Zeitreihen durchlaufen und prüfen, ob es sie noch gibt
-        For Each zre As Zeitreihe In Me.Zeitreihen.Values
+        For Each zre As TimeSeries In Me.Zeitreihen.Values
             found = False
             For Each s In Me.ChartListBox1.Items
                 If (s.Title = zre.Title) Then
@@ -484,8 +484,8 @@ Public Class Wave
             Exit Sub
         End If
 
-        Dim zre As Zeitreihe
-        Dim zres As New Dictionary(Of String, Zeitreihe)
+        Dim zre As TimeSeries
+        Dim zres As New Dictionary(Of String, TimeSeries)
         Dim titles As New List(Of String)
         Dim title_old, title_new As String
         Dim renameDlg As RenameSeriesDialog
@@ -567,7 +567,7 @@ Public Class Wave
             End If
 
             'Neue Reihe(n) importieren
-            For Each zre As Zeitreihe In cutter.zreCut.Values
+            For Each zre As TimeSeries In cutter.zreCut.Values
                 Me.Import_Series(zre)
             Next
 
@@ -590,7 +590,7 @@ Public Class Wave
         Dim exportDlg As ExportDiag
         Dim dlgResult As DialogResult
         Dim filename As String
-        Dim zres As List(Of Zeitreihe)
+        Dim zres As List(Of TimeSeries)
 
         'Abort if no time series loaded
         If (Me.Zeitreihen.Count < 1) Then
@@ -607,9 +607,9 @@ Public Class Wave
         End If
 
         'get selected series
-        zres = New List(Of Zeitreihe)
+        zres = New List(Of TimeSeries)
         For Each item As Object In exportDlg.ListBox_Series.SelectedItems
-            zres.Add(CType(item, Zeitreihe))
+            zres.Add(CType(item, TimeSeries))
         Next
 
         'Prepare Save dialog
@@ -793,7 +793,7 @@ Public Class Wave
 
         If dlgresult = Windows.Forms.DialogResult.OK Then
             'import cleaned series
-            For Each zre As Zeitreihe In dlg.zreClean.Values
+            For Each zre As TimeSeries In dlg.zreClean.Values
                 Me.Import_Series(zre, True)
             Next
         End If
@@ -994,7 +994,7 @@ Public Class Wave
                 'Jede Datei neu einlesen
                 Call Datei.Read_File()
                 'Alle Zeitreihen der Datei durchlaufen
-                For Each zre As Zeitreihe In Datei.Zeitreihen
+                For Each zre As TimeSeries In Datei.Zeitreihen
                     'Jede Zeitreihe importieren
                     Call Me.Import_Series(zre)
                 Next
@@ -1347,7 +1347,7 @@ Public Class Wave
 
     'Zeitreihe intern hinzufügen
     '***************************
-    Private Sub AddZeitreihe(ByRef zre As Zeitreihe)
+    Private Sub AddZeitreihe(ByRef zre As TimeSeries)
 
         Dim n As Integer = 1
 
@@ -1379,7 +1379,7 @@ Public Class Wave
 
         Dim result As DialogResult
         Dim i As Integer
-        Dim reihe As Zeitreihe
+        Dim reihe As TimeSeries
         Dim XMin, XMax As Double
 
         Try
@@ -1441,7 +1441,7 @@ Public Class Wave
 
                                 'Zeitreihe aus dem importierten Diagramm nach intern übertragen
                                 Log.AddLogEntry("Importing series '" & series.Title & "' from TEN file...")
-                                reihe = New Zeitreihe(series.Title)
+                                reihe = New TimeSeries(series.Title)
                                 For i = 0 To series.Count - 1
                                     reihe.AddNode(Date.FromOADate(series.XValues(i)), series.YValues(i))
                                 Next
@@ -1645,7 +1645,7 @@ Public Class Wave
     ''' </summary>
     ''' <param name="zre">the time series</param>
     ''' <remarks>saves and then display the time series</remarks>
-    Public Sub Import_Series(ByVal zre As Zeitreihe, Optional ByVal Display As Boolean = True)
+    Public Sub Import_Series(ByVal zre As TimeSeries, Optional ByVal Display As Boolean = True)
         'Serie abspeichen
         Me.AddZeitreihe(zre)
         If Display Then
@@ -1658,7 +1658,7 @@ Public Class Wave
     ''' Eine Zeitreihe in den Diagrammen anzeigen
     ''' </summary>
     ''' <param name="zre">Die anzuzeigende Zeitreihe</param>
-    Private Sub Display_Series(ByVal zre As Zeitreihe)
+    Private Sub Display_Series(ByVal zre As TimeSeries)
 
         Dim AxisNo As Integer
 
@@ -1686,7 +1686,7 @@ Public Class Wave
         Next
 
         'Y-Achsenzuordnung
-        AxisNo = getAxisNo(zre.Einheit)
+        AxisNo = getAxisNo(zre.Unit)
 
         'Reihe der Y-Achse zuordnen
         '(Unterscheidung zwischen Standard- und Custom-Achsen notwendig)
@@ -1703,8 +1703,8 @@ Public Class Wave
                 'Custom Achse
                 Line1.VertAxis = Steema.TeeChart.Styles.VerticalAxis.Custom
                 Line2.VertAxis = Steema.TeeChart.Styles.VerticalAxis.Custom
-                Line1.CustomVertAxis = Me.MyAxes1(zre.Einheit)
-                Line2.CustomVertAxis = Me.MyAxes2(zre.Einheit)
+                Line1.CustomVertAxis = Me.MyAxes1(zre.Unit)
+                Line2.CustomVertAxis = Me.MyAxes2(zre.Unit)
         End Select
 
         'Charts aktualisieren

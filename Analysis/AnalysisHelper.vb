@@ -36,10 +36,10 @@ Public Module AnalysisHelper
     ''' <param name="zre1">Erste Zeitreihe</param>
     ''' <param name="zre2">Zweite Zeitreihe</param>
     ''' <returns>Alle gemeinsamen Wertepaare als zweidimensionales Array, 1. Dimension: Stützstelle, 2. Dimension: Wertepaar</returns>
-    Public Function getConcurrentValues(ByRef zre1 As Zeitreihe, ByRef zre2 As Zeitreihe) As Double(,)
+    Public Function getConcurrentValues(ByRef zre1 As TimeSeries, ByRef zre2 As TimeSeries) As Double(,)
 
         Dim values(,) As Double
-        Dim zre1_temp, zre2_temp As Zeitreihe
+        Dim zre1_temp, zre2_temp As TimeSeries
         Dim i, j As Integer
         Dim found As Boolean
 
@@ -48,10 +48,10 @@ Public Module AnalysisHelper
         Call zre2.Cut(zre1)
 
         'Neue temporäre Zeitreihen instanzieren
-        zre1_temp = New Zeitreihe(zre1.Title)
-        zre1_temp.Einheit = zre1.Einheit
-        zre2_temp = New Zeitreihe(zre2.Title)
-        zre2_temp.Einheit = zre2.Einheit
+        zre1_temp = New TimeSeries(zre1.Title)
+        zre1_temp.Unit = zre1.Unit
+        zre2_temp = New TimeSeries(zre2.Title)
+        zre2_temp.Unit = zre2.Unit
 
         'ERSTE gemeinsame Stützstelle finden
         found = False
@@ -63,14 +63,14 @@ Public Module AnalysisHelper
             End If
 
             'Korrespondierenden Wert in zre2 suchen
-            Do Until (zre2.XWerte(j) > zre1.XWerte(i))
+            Do Until (zre2.Dates(j) > zre1.Dates(i))
 
-                If (zre2.XWerte(j) = zre1.XWerte(i)) Then
+                If (zre2.Dates(j) = zre1.Dates(i)) Then
                     'Übereinstimmung gefunden!
 
                     'Stützstellen kopieren
-                    zre1_temp.AddNode(zre1.XWerte(i), zre1.YWerte(i))
-                    zre2_temp.AddNode(zre2.XWerte(j), zre2.YWerte(j))
+                    zre1_temp.AddNode(zre1.Dates(i), zre1.Values(i))
+                    zre2_temp.AddNode(zre2.Dates(j), zre2.Values(j))
 
                     found = True
                 End If
@@ -95,14 +95,14 @@ Public Module AnalysisHelper
             i += 1
 
             'Korrespondierenden Wert in zre2 suchen
-            Do Until (zre2.XWerte(j) > zre1.XWerte(i))
+            Do Until (zre2.Dates(j) > zre1.Dates(i))
 
-                If (zre2.XWerte(j) = zre1.XWerte(i)) Then
+                If (zre2.Dates(j) = zre1.Dates(i)) Then
                     'Übereinstimmung gefunden!
 
                     'Stützstellen kopieren
-                    zre1_temp.AddNode(zre1.XWerte(i), zre1.YWerte(i))
-                    zre2_temp.AddNode(zre2.XWerte(j), zre2.YWerte(j))
+                    zre1_temp.AddNode(zre1.Dates(i), zre1.Values(i))
+                    zre2_temp.AddNode(zre2.Dates(j), zre2.Values(j))
                 End If
 
                 'zre2 eins weiter setzen
@@ -122,8 +122,8 @@ Public Module AnalysisHelper
         'Wertepaare in Array packen
         ReDim values(zre1.Length - 1, 1)
         For i = 0 To values.GetUpperBound(0)
-            values(i, 0) = zre1.YWerte(i)
-            values(i, 1) = zre2.YWerte(i)
+            values(i, 0) = zre1.Values(i)
+            values(i, 1) = zre2.Values(i)
         Next
 
         Return values

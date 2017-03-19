@@ -31,7 +31,7 @@
 Public Class SeriesEditorDialog
 
     Private IsInitializing As Boolean
-    Private mZeitreihe As Zeitreihe
+    Private mZeitreihe As TimeSeries
 
     'Titel
     '*****
@@ -55,7 +55,7 @@ Public Class SeriesEditorDialog
 
     'Zeitreihe
     '*********
-    Public ReadOnly Property Zeitreihe() As Zeitreihe
+    Public ReadOnly Property Zeitreihe() As TimeSeries
         Get
             Return Me.mZeitreihe
         End Get
@@ -235,10 +235,10 @@ Public Class SeriesEditorDialog
         End If
 
         'Zeitreihe instanzieren
-        Me.mZeitreihe = New Zeitreihe(Me.Title)
+        Me.mZeitreihe = New TimeSeries(Me.Title)
 
         'Einheit schreiben
-        Me.Zeitreihe.Einheit = Me.Einheit
+        Me.Zeitreihe.Unit = Me.Einheit
 
         For i = 0 To Me.DataGridView1.RowCount - 2 '(letzte Zeile nicht mitnehmen)
             datum = DateTime.Parse(Me.DataGridView1.Rows(i).Cells(0).Value)

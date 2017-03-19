@@ -97,8 +97,8 @@ Public Class BIN
 
             'Zeitreihe instanzieren (nur eine)
             ReDim Me.Zeitreihen(0)
-            Me.Zeitreihen(0) = New Zeitreihe(IO.Path.GetFileName(Me.File))
-            Me.Zeitreihen(0).Einheit = "-"
+            Me.Zeitreihen(0) = New TimeSeries(IO.Path.GetFileName(Me.File))
+            Me.Zeitreihen(0).Unit = "-"
 
             'Einlesen
             '--------

@@ -253,10 +253,10 @@ Public Class SWMM_OUT
         'ReDim index(anzahlZeitreihen)
         'Zeitreihen instanzieren
         For i = 0 To anzahlZeitreihen - 1
-            Me.Zeitreihen(i) = New Zeitreihe(Me.SpaltenSel(i).Name)
+            Me.Zeitreihen(i) = New TimeSeries(Me.SpaltenSel(i).Name)
             'Einheiten?
             If (Me.UseEinheiten) Then
-                Me.Zeitreihen(i).Einheit = Me.SpaltenSel(i).Einheit
+                Me.Zeitreihen(i).Unit = Me.SpaltenSel(i).Einheit
             End If
             'Objektname und Typ (für SWMM-Txt-Export)
             Me.Zeitreihen(i).Objekt = Me.SpaltenSel(i).Objekt
@@ -287,7 +287,7 @@ Public Class SWMM_OUT
         'Indexarray
         'ReDim index(anzahlZeitreihen)
         'Zeitreihen instanzieren
-        Me.Zeitreihen(i) = New Zeitreihe(series)
+        Me.Zeitreihen(i) = New TimeSeries(series)
         For j = 0 To anzSpalten - 1
             If Series = Me.Spalten(j).Name Then
                 index = j

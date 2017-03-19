@@ -157,8 +157,8 @@ Public Class REG_SMUSI
 
         'Zeitreihe instanzieren
         ReDim Me.Zeitreihen(0) 'bei REG gibt es nur eine Zeitreihe
-        Me.Zeitreihen(0) = New Zeitreihe(Me.SpaltenSel(0).Name)
-        Me.Zeitreihen(0).Einheit = Me.SpaltenSel(0).Einheit
+        Me.Zeitreihen(0) = New TimeSeries(Me.SpaltenSel(0).Name)
+        Me.Zeitreihen(0).Unit = Me.SpaltenSel(0).Einheit
 
         'Einlesen
         '--------
@@ -227,16 +227,16 @@ Public Class REG_SMUSI
     ''' </summary>
     ''' <param name="Reihe">Die zu exportierende Zeitreihe</param>
     ''' <param name="File">Pfad zur anzulegenden Datei</param>
-    Public Shared Sub Write_File(ByVal Reihe As Zeitreihe, ByVal File As String)
+    Public Shared Sub Write_File(ByVal Reihe As TimeSeries, ByVal File As String)
 
         Dim dt As Integer
-        Dim KontiReihe As Zeitreihe
+        Dim KontiReihe As TimeSeries
         Dim Spanne As TimeSpan
         Dim Divisor As Integer
         Dim hn_A_Mittel As Integer
 
         'Zeitintervall aus ersten und zweiten Zeitschritt der Reihe ermitteln
-        dt = DateDiff(DateInterval.Minute, Reihe.XWerte(0), Reihe.XWerte(1))
+        dt = DateDiff(DateInterval.Minute, Reihe.Dates(0), Reihe.Dates(1))
 
         'Äquidistante Zeitreihe erzeugen
         KontiReihe = Reihe.getKontiZRE(dt)
@@ -257,15 +257,15 @@ Public Class REG_SMUSI
         Dim Datum, ExportStartDatum, ExportEndDatum As DateTime
         Dim iDatum As Integer
         iDatum = 0
-        Datum = KontiReihe.Anfangsdatum
+        Datum = KontiReihe.StartDate
         Do While Datum.Minute > 0
             iDatum = iDatum + 1
-            Datum = KontiReihe.XWerte(iDatum)
+            Datum = KontiReihe.Dates(iDatum)
         Loop
         ExportStartDatum = Datum
 
         'ExportEndDatum
-        Datum = KontiReihe.Enddatum
+        Datum = KontiReihe.EndDate
         Dim Endstunde As Integer
         If Datum.Minute <> 55 Then
             Endstunde = Datum.Hour - 1
@@ -275,10 +275,10 @@ Public Class REG_SMUSI
         ExportEndDatum = New System.DateTime(Datum.Year, Datum.Month, Datum.Day, Endstunde, 55, 0, New System.Globalization.GregorianCalendar())
         Dim iDatumEnd As Integer
         iDatumEnd = KontiReihe.Length - 1
-        Datum = KontiReihe.Enddatum
+        Datum = KontiReihe.EndDate
         Do While Datum <> ExportEndDatum
             iDatumEnd = iDatumEnd - 1
-            Datum = KontiReihe.XWerte(iDatumEnd)
+            Datum = KontiReihe.Dates(iDatumEnd)
         Loop
 
         Dim AnzahlZeilen As Integer
@@ -288,9 +288,9 @@ Public Class REG_SMUSI
         n = iDatum   'Ausgabe beginnt bei ersten vollen Stunde in der Zeitreihe
         For iZeile = 0 To AnzahlZeilen - 1
             strwrite.Write("KONV ")
-            strwrite.Write(KontiReihe.XWerte(n).ToString(Datumsformate("SMUSI")))
+            strwrite.Write(KontiReihe.Dates(n).ToString(Datumsformate("SMUSI")))
             For j = 1 To WerteproZeile
-                IntWert = KontiReihe.YWerte(n) * 1000
+                IntWert = KontiReihe.Values(n) * 1000
                 Summe = Summe + IntWert
                 strwrite.Write(IntWert.ToString.PadLeft(5))
                 n = n + 1
@@ -305,7 +305,7 @@ Public Class REG_SMUSI
         Dim alles As String
 
         'Mittlere Jahresniederschlagshöhe berechnen
-        Spanne = KontiReihe.Enddatum - KontiReihe.Anfangsdatum
+        Spanne = KontiReihe.EndDate - KontiReihe.StartDate
         Divisor = Math.Max(Spanne.TotalDays / 365, 1)
         hn_A_Mittel = Summe / 1000 * 1 / Divisor
 

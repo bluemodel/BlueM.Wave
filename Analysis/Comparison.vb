@@ -69,7 +69,7 @@ Public Class Comparison
     ''' Konstruktor
     ''' </summary>
     ''' <param name="zeitreihen">zu analysierende Zeitreihen</param>
-    Public Sub New(ByRef zeitreihen As List(Of Zeitreihe))
+    Public Sub New(ByRef zeitreihen As List(Of TimeSeries))
 
         Call MyBase.New(zeitreihen)
 
@@ -86,7 +86,7 @@ Public Class Comparison
     Public Overrides Sub ProcessAnalysis()
 
         Dim i As Integer
-        Dim reihe1, reihe2 As Zeitreihe
+        Dim reihe1, reihe2 As TimeSeries
         Dim values(,), xvalues(), yvalues() As Double
 
         ' Dialogaufruf zur Auswahl der x-Achse
@@ -128,7 +128,7 @@ Public Class Comparison
         Next
 
         'Datume übernehmen (werden später für Punkte-Labels im Diagramm gebraucht)
-        datume = reihe1.XWerte
+        datume = reihe1.Dates
 
         'Calculate linear regression
         Dim p As Tuple(Of Double, Double)
@@ -161,9 +161,9 @@ Public Class Comparison
 
         'Achsen
         '------
-        Me.mResultChart.Axes.Bottom.Title.Caption = Me.mZeitreihen(xnummer).Title & " [" & Me.mZeitreihen(xnummer).Einheit & "]"
+        Me.mResultChart.Axes.Bottom.Title.Caption = Me.mZeitreihen(xnummer).Title & " [" & Me.mZeitreihen(xnummer).Unit & "]"
         Me.mResultChart.Axes.Bottom.Labels.Style = Steema.TeeChart.AxisLabelStyle.Value
-        Me.mResultChart.Axes.Left.Title.Caption = Me.mZeitreihen(ynummer).Title & " [" & Me.mZeitreihen(ynummer).Einheit & "]"
+        Me.mResultChart.Axes.Left.Title.Caption = Me.mZeitreihen(ynummer).Title & " [" & Me.mZeitreihen(ynummer).Unit & "]"
         Me.mResultChart.Axes.Left.Labels.Style = Steema.TeeChart.AxisLabelStyle.Value
 
         'Reihen

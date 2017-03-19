@@ -181,8 +181,8 @@ Public Class HystemExtran_REG
 
         'Zeitreihe instanzieren
         ReDim Me.Zeitreihen(0) 'bei REG gibt es nur eine Zeitreihe
-        Me.Zeitreihen(0) = New Zeitreihe(Me.SpaltenSel(0).Name)
-        Me.Zeitreihen(0).Einheit = Me.SpaltenSel(0).Einheit
+        Me.Zeitreihen(0) = New TimeSeries(Me.SpaltenSel(0).Name)
+        Me.Zeitreihen(0).Unit = Me.SpaltenSel(0).Einheit
 
         'Einlesen
         '--------
@@ -192,7 +192,7 @@ Public Class HystemExtran_REG
             j += 1
             Zeile = StrReadSync.ReadLine.ToString()
 
-            If Zeile.Substring(19,1) = "E" Then Exit Do
+            If Zeile.Substring(19, 1) = "E" Then Exit Do
 
             If (j > Me.nZeilenHeader And Zeile.Length > 0) Then
 
@@ -204,7 +204,7 @@ Public Class HystemExtran_REG
                 Stunde = Zeile.Substring(13, 2)
                 Minute = Zeile.Substring(15, 2)
                 Zeilendatum = New System.DateTime(Jahr, Monat, Tag, Stunde, Minute, 0, New System.Globalization.GregorianCalendar())
-                
+
                 'Datum und Wert zur Zeitreihe hinzufügen
                 '---------------------------------------
                 'alle bis auf den letzten Wert einlesen
@@ -228,13 +228,13 @@ Public Class HystemExtran_REG
     ''' </summary>
     ''' <param name="Reihe">Die zu exportierende Zeitreihe</param>
     ''' <param name="File">Pfad zur anzulegenden Datei</param>
-    Public Shared Sub Write_File(ByVal Reihe As Zeitreihe, ByVal File As String)
+    Public Shared Sub Write_File(ByVal Reihe As TimeSeries, ByVal File As String)
 
         Dim dt As Integer
-        Dim KontiReihe As Zeitreihe
+        Dim KontiReihe As TimeSeries
 
         'Zeitintervall aus ersten und zweiten Zeitschritt der Reihe ermitteln
-        dt = DateDiff(DateInterval.Minute, Reihe.XWerte(0), Reihe.XWerte(1))
+        dt = DateDiff(DateInterval.Minute, Reihe.Dates(0), Reihe.Dates(1))
 
         'Äquidistante Zeitreihe erzeugen
         KontiReihe = Reihe.getKontiZRE(dt)
@@ -256,9 +256,9 @@ Public Class HystemExtran_REG
         'Dimension der Zehnerprotenz
         strwrite.Write((iDim * (-1)).ToString.PadLeft(5))
         'Anfangsdatum
-        strwrite.Write(KontiReihe.Anfangsdatum.ToString(DatumsformatHystemExtran))
+        strwrite.Write(KontiReihe.StartDate.ToString(DatumsformatHystemExtran))
         'Enddatum
-        strwrite.Write(KontiReihe.Enddatum.ToString(DatumsformatHystemExtran))
+        strwrite.Write(KontiReihe.EndDate.ToString(DatumsformatHystemExtran))
         'Anzahl der Kommentarzeilen nach Zeile 2, wird = 3 gesetzt
         strwrite.Write("    3")
         'Art der Daten, N = Niederschlag, Q = Abfluss
@@ -278,9 +278,9 @@ Public Class HystemExtran_REG
         n = 0   'n = Anzahl der Zeitreihenwerte
         For iZeile = 0 To (KontiReihe.Length / WerteproZeile) - 1
             strwrite.Write("TUD  ")
-            strwrite.Write(KontiReihe.XWerte(n).ToString(DatumsformatHystemExtran) & " ")
+            strwrite.Write(KontiReihe.Dates(n).ToString(DatumsformatHystemExtran) & " ")
             For j = 1 To WerteproZeile
-                IntWert = KontiReihe.YWerte(n) * 10 ^ (iDim)
+                IntWert = KontiReihe.Values(n) * 10 ^ (iDim)
                 strwrite.Write(IntWert.ToString.PadLeft(5))
                 n = n + 1
             Next
