@@ -649,7 +649,8 @@ Public Class TimeSeries
         cleanZRE.Type = Me.Type
 
         'only get the cleaned nodes once
-        If IsNothing(Me.NodesCleaned) Then
+        'but if additional error values are provided, force a new clean
+        If IsNothing(Me.NodesCleaned) Or Not IsNothing(errorvalues) Then
             Log.AddLogEntry(String.Format("Removing error values from series {0}...", Me.Title))
 
             Me.NodesCleaned = New SortedList(Of DateTime, Double)
