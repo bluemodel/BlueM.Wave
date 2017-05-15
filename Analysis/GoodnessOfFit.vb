@@ -36,6 +36,7 @@ Public Class GoodnessOfFit
     Private fehlerquadrate() As Double
     Private sum_fehlerquadrate As Double
     Private nash_sutcliffe As Double
+    Private ln_nash_sutcliffe As Double
     Private volume_observed As Double
     Private volume_simulated As Double
     Private volumenfehler As Double
@@ -158,6 +159,23 @@ Public Class GoodnessOfFit
 
         Me.nash_sutcliffe = 1 - Me.sum_fehlerquadrate / sum_qmittelwertabweichung
 
+        'Logarithmic Nash-Sutcliffe coefficient
+        '--------------------------------------
+        'Formula: Reff,ln = 1 - (SUM[(ln(x_i)-ln(y_i))^2]) / (SUM[(ln(x_i)-ln(x_avg))^2])
+        'Reference: Merkblatt BWK M7, Okt. 2008
+        Dim ln_avg_gemessen As Double
+        Dim sum_ln_diff_squared As Double = 0.0
+        Dim sum_ln_diff_avg_squared As Double = 0.0
+
+        ln_avg_gemessen = Math.Log(avg_gemessen)
+
+        For i = 0 To n - 1
+            sum_ln_diff_squared += (Math.Log(values(i, 0)) - Math.Log(values(i, 1))) ^ 2
+            sum_ln_diff_avg_squared += (Math.Log(values(i, 0)) - ln_avg_gemessen) ^ 2
+        Next
+
+        Me.ln_nash_sutcliffe = 1 - sum_ln_diff_squared / sum_ln_diff_avg_squared
+
         'Korrelationskoeffizient
         '-----------------------
         'Formel: r = sxy / (sx * sy)
@@ -207,6 +225,7 @@ Public Class GoodnessOfFit
                      & "Volume error: m = " & Me.volumenfehler.ToString(formatstring) & " %" & eol _
                      & "Sum of squared errors: F² = " & Me.sum_fehlerquadrate.ToString(formatstring) & eol _
                      & "Nash-Sutcliffe efficiency: E = " & Me.nash_sutcliffe.ToString(formatstring) & eol _
+                     & "Logarithmic Nash-Sutcliffe efficiency: E,ln = " & Me.ln_nash_sutcliffe.ToString(formatstring) & eol _
                      & "Coefficient of correlation: r = " & Me.korrelationskoeffizient.ToString(formatstring) & eol _
                      & "Coefficient of determination: r² = " & Me.bestimmtheitsmass.ToString(formatstring) & eol _
                      & "Hydrologic deviation: DEV = " & Me.hydrodev.ToString(formatstring)
@@ -226,6 +245,7 @@ Public Class GoodnessOfFit
         Me.mResultValues.Add("Volume error [%]", Me.volumenfehler)
         Me.mResultValues.Add("Sum of squared errors", Me.sum_fehlerquadrate)
         Me.mResultValues.Add("Nash-Sutcliffe efficiency", Me.nash_sutcliffe)
+        Me.mResultValues.Add("Logarithmic Nash-Sutcliffe efficiency", Me.ln_nash_sutcliffe)
         Me.mResultValues.Add("Coefficient of correlation", Me.korrelationskoeffizient)
         Me.mResultValues.Add("Coefficient of determination", Me.bestimmtheitsmass)
         Me.mResultValues.Add("Hydrologic deviation", Me.hydrodev)
