@@ -27,6 +27,7 @@ Partial Class GoodnessOfFit_Dialog
         Me.RadioButton1 = New System.Windows.Forms.RadioButton
         Me.RadioButton2 = New System.Windows.Forms.RadioButton
         Me.Button_OK = New System.Windows.Forms.Button
+        Me.CheckBox_Annual = New System.Windows.Forms.CheckBox
         Me.SuspendLayout()
         '
         'Label1
@@ -71,11 +72,22 @@ Partial Class GoodnessOfFit_Dialog
         Me.Button_OK.Text = "OK"
         Me.Button_OK.UseVisualStyleBackColor = True
         '
+        'CheckBox_Annual
+        '
+        Me.CheckBox_Annual.AutoSize = True
+        Me.CheckBox_Annual.Location = New System.Drawing.Point(16, 95)
+        Me.CheckBox_Annual.Name = "CheckBox_Annual"
+        Me.CheckBox_Annual.Size = New System.Drawing.Size(160, 17)
+        Me.CheckBox_Annual.TabIndex = 4
+        Me.CheckBox_Annual.Text = "Calculate annual parameters"
+        Me.CheckBox_Annual.UseVisualStyleBackColor = True
+        '
         'GoodnessOfFit_Dialog
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(332, 126)
+        Me.Controls.Add(Me.CheckBox_Annual)
         Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.RadioButton2)
         Me.Controls.Add(Me.RadioButton1)
@@ -96,4 +108,5 @@ Partial Class GoodnessOfFit_Dialog
     Friend WithEvents RadioButton1 As System.Windows.Forms.RadioButton
     Friend WithEvents RadioButton2 As System.Windows.Forms.RadioButton
     Private WithEvents Button_OK As System.Windows.Forms.Button
+    Friend WithEvents CheckBox_Annual As System.Windows.Forms.CheckBox
 End Class
