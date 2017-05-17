@@ -239,7 +239,7 @@ Public Class GoodnessOfFit
             Me.zre_simuliert = Me.mZeitreihen(0).getCleanZRE()
         End If
 
-        'Cut series
+        'Cut series to a common timespan
         Me.zre_gemessen.Cut(Me.zre_simuliert)
         Me.zre_simuliert.Cut(Me.zre_gemessen)
 
@@ -247,36 +247,19 @@ Public Class GoodnessOfFit
         series_o.Add("Entire series", Me.zre_gemessen)
         series_s.Add("Entire series", Me.zre_simuliert)
 
-        'do yearly analysis?
+        'calculate annual GoF parameters?
         If dialog.CheckBox_Annual.Checked Then
-            'cut observed and simulated time series into separate series
-            Dim ts_o, ts_s As TimeSeries
-            Dim year, year_start, year_end As Integer
-            year_start = zre_gemessen.StartDate.Year
-            year_end = zre_gemessen.EndDate.Year
-            'first year (may be incomplete)
-            ts_o = Me.zre_gemessen.Clone()
-            ts_o.Cut(Me.zre_gemessen.StartDate, New DateTime(year_start, 12, 31, 23, 59, 59))
-            series_o.Add(year_start, ts_o)
-            ts_s = Me.zre_simuliert.Clone()
-            ts_s.Cut(Me.zre_simuliert.StartDate, New DateTime(year_start, 12, 31, 23, 59, 59))
-            series_s.Add(year_start, ts_s)
-            'following years
-            For year = year_start + 1 To year_end - 1
-                ts_o = Me.zre_gemessen.Clone()
-                ts_o.Cut(New DateTime(year, 1, 1, 0, 0, 0), New DateTime(year, 12, 31, 23, 59, 59))
-                series_o.Add(year, ts_o)
-                ts_s = Me.zre_simuliert.Clone()
-                ts_s.Cut(New DateTime(year, 1, 1, 0, 0, 0), New DateTime(year, 12, 31, 23, 59, 59))
-                series_s.Add(year, ts_s)
+            Dim splits As Dictionary(Of Integer, TimeSeries)
+            'split observed series and store them
+            splits = Me.zre_gemessen.SplitHydroYears()
+            For Each kvp As KeyValuePair(Of Integer, TimeSeries) In splits
+                series_o.Add(kvp.Key.ToString(), kvp.Value)
             Next
-            'last year (may be incomplete)
-            ts_o = Me.zre_gemessen.Clone()
-            ts_o.Cut(New DateTime(year_end, 1, 1, 0, 0, 0), Me.zre_gemessen.EndDate)
-            series_o.Add(year_end, ts_o)
-            ts_s = Me.zre_simuliert.Clone()
-            ts_s.Cut(New DateTime(year_end, 1, 1, 0, 0, 0), Me.zre_simuliert.EndDate)
-            series_s.Add(year_end, ts_s)
+            'split simulated series and store them
+            splits = Me.zre_simuliert.SplitHydroYears()
+            For Each kvp As KeyValuePair(Of Integer, TimeSeries) In splits
+                series_s.Add(kvp.Key.ToString(), kvp.Value)
+            Next
         End If
 
         'Calculate GoF parameters for all series

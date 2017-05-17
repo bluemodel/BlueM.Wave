@@ -14,7 +14,7 @@ NEW:
 * Added support for exporting series to CSV format
 * GoodnessOfFit (GoF) analysis function:
   * Added "Logarithmic Nash-Sutcliffe Efficiency" as a new GoF parameter
-  * The GoF parameters can now optionally be calculated on an annual basis
+  * The GoF parameters can now optionally be calculated for individual hydrological years
 CHANGED:
 * Error values in time series such as e.g. -777 and -9999 are now imported and displayed as regular values.
   Previously, when importing from BIN and DWD-T-L format, these would be replaced with NaN.

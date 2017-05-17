@@ -406,6 +406,42 @@ Public Class TimeSeries
     End Sub
 
     ''' <summary>
+    ''' Splits a time series into individual series for each hydrological years
+    ''' </summary>
+    ''' <returns>A dictionary of time series, the key represents the year</returns>
+    ''' <remarks>The start of the hydrological year is defined as November 1st</remarks>
+    Public Function SplitHydroYears() As Dictionary(Of Integer, TimeSeries)
+
+        Dim ts As TimeSeries
+        Dim year, year_start, year_end As Integer
+        Dim tsDict As New Dictionary(Of Integer, TimeSeries)
+
+        'determine first and last hydrological year
+        If Me.StartDate < New DateTime(Me.StartDate.Year, 11, 1) Then
+            year_start = Me.StartDate.Year - 1
+        Else
+            year_start = Me.StartDate.Year
+        End If
+
+        If Me.EndDate > New DateTime(Me.EndDate.Year, 11, 1) Then
+            year_end = Me.EndDate.Year
+        Else
+            year_end = Me.EndDate.Year - 1
+        End If
+
+        'cut the series
+        For year = year_start To year_end
+            ts = Me.Clone()
+            ts.Cut(New DateTime(year, 11, 1), New DateTime(year + 1, 10, 31, 23, 59, 59))
+            ts.Title &= " (" & year.ToString() & ")"
+            tsDict.Add(year, ts)
+        Next
+
+        Return tsDict
+
+    End Function
+
+    ''' <summary>
     ''' Calculate a metric from the time series' values
     ''' </summary>
     ''' <param name="WertTyp">MaxWert, MinWert, Average, AnfWert, EndWert, Summe</param>
