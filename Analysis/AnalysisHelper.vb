@@ -89,10 +89,8 @@ Public Module AnalysisHelper
         If (Not found) Then Throw New Exception("No coincident data points found!")
 
         'WEITERE gemeinsame Stützstellen finden
+        i += 1
         Do Until (i > (zre1.Length - 1) Or j > (zre2.Length - 1))
-
-            'zre1 eins weiter setzen
-            i += 1
 
             'Korrespondierenden Wert in zre2 suchen
             Do Until (zre2.Dates(j) > zre1.Dates(i))
@@ -113,6 +111,9 @@ Public Module AnalysisHelper
                     Exit Do
                 End If
             Loop
+
+            'zre1 eins weiter setzen
+            i += 1
         Loop
 
         'Temporäre Zeitreihen in Ursprungszeitreihen zurückkopieren
