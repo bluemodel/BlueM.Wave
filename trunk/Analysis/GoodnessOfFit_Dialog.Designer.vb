@@ -65,7 +65,7 @@ Partial Class GoodnessOfFit_Dialog
         '
         Me.Button_OK.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Button_OK.DialogResult = System.Windows.Forms.DialogResult.OK
-        Me.Button_OK.Location = New System.Drawing.Point(245, 91)
+        Me.Button_OK.Location = New System.Drawing.Point(245, 122)
         Me.Button_OK.Name = "Button_OK"
         Me.Button_OK.Size = New System.Drawing.Size(75, 23)
         Me.Button_OK.TabIndex = 3
@@ -77,16 +77,16 @@ Partial Class GoodnessOfFit_Dialog
         Me.CheckBox_Annual.AutoSize = True
         Me.CheckBox_Annual.Location = New System.Drawing.Point(16, 95)
         Me.CheckBox_Annual.Name = "CheckBox_Annual"
-        Me.CheckBox_Annual.Size = New System.Drawing.Size(160, 17)
+        Me.CheckBox_Annual.Size = New System.Drawing.Size(297, 17)
         Me.CheckBox_Annual.TabIndex = 4
-        Me.CheckBox_Annual.Text = "Calculate annual parameters"
+        Me.CheckBox_Annual.Text = "Calculate GoF parameters for individual hydrological years"
         Me.CheckBox_Annual.UseVisualStyleBackColor = True
         '
         'GoodnessOfFit_Dialog
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(332, 126)
+        Me.ClientSize = New System.Drawing.Size(332, 157)
         Me.Controls.Add(Me.CheckBox_Annual)
         Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.RadioButton2)
