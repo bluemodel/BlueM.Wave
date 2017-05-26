@@ -147,7 +147,7 @@ Public Class Comparison
 
         'Text:
         '-----
-        Me.mResultText = "The analysis is based on " & Me.ergebnisreihe.Length & " coincident data points between " & Me.datume(0).ToString(Datumsformate("default")) & " and " & Me.datume(Me.datume.Count - 1).ToString(Datumsformate("default"))
+        Me.mResultText = "The analysis is based on " & Me.ergebnisreihe.GetLength(0) & " coincident data points between " & Me.datume(0).ToString(Datumsformate("default")) & " and " & Me.datume(Me.datume.Count - 1).ToString(Datumsformate("default"))
 
         'Diagramm:
         '---------
