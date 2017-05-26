@@ -314,10 +314,12 @@ Public Class TimeSeries
     ''' </summary>
     ''' <param name="_date">Date</param>
     ''' <param name="_value">Value</param>
-    ''' <remarks>Throws an exception if the given date already exists</remarks>
+    ''' <remarks>If the given date already exists, the new node is discarded and a warning is written to the log</remarks>
     Public Sub AddNode(ByVal _date As DateTime, ByVal _value As Double)
         If (Me.Nodes.ContainsKey(_date)) Then
-            Throw New Exception("Error: duplicate data point on " & _date.ToString(Konstanten.Datumsformate("default")) & "!")
+            Log.AddLogEntry("WARNING: Duplicate data point at " & _date.ToString(Konstanten.Datumsformate("default")) & _
+                            ": Value of " & _value.ToString() & " will be discarded. Existing value: " & Me.Nodes(_date).ToString())
+            Exit Sub
         End If
         Me._nodes.Add(_date, _value)
     End Sub
