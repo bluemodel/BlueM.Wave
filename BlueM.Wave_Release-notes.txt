@@ -22,6 +22,8 @@ CHANGED:
 * Analysis GoodnessOfFit: Volume error is based on actual volume integrated over time 
   if the time series unit ends with "/s"
 * Removed support for the DWD-T-L format
+* If a time series contains duplicate nodes, the duplicate nodes are now simply discarded 
+  and a warning is written to the log instead of aborting the import
 FIXED:
 * The decimal mark selector in the import series dialog now actually works (Bug 351)
 
