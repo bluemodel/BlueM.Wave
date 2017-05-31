@@ -1232,8 +1232,8 @@ Public Class Wave
         End Select
 
         'fields do not correspond to the chart, therefore reset the fields
-        Me.NumericUpDown_DisplayRangeMultiplier.Value = 1
         Me.ComboBox_DisplayRangeUnit.SelectedItem = ""
+        Me.NumericUpDown_DisplayRangeMultiplier.Value = 1
 
     End Sub
 
