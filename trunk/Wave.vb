@@ -210,7 +210,7 @@ Public Class Wave
         Me.TChart1.Axes.Right.Title.Angle = 90
         Me.TChart2.Axes.Bottom.Automatic = False
 
-        'ChartListBox
+        'Assign ChartListBox to TChart1
         Me.ChartListBox1.Chart = Me.TChart1
 
         'ColorBand einrichten
@@ -334,10 +334,10 @@ Public Class Wave
     Private Sub TChart1_SeriesRemoved(ByVal sender As Object, ByVal e As System.EventArgs) Handles ChartListBox1.RemovedSeries
 
         Dim found As Boolean
-        Dim title As String
+        Dim title_removed As String
         Dim s As Steema.TeeChart.Styles.Series
 
-        title = ""
+        title_removed = ""
 
         'Alle internen Zeitreihen durchlaufen und prüfen, ob es sie noch gibt
         For Each zre As TimeSeries In Me.Zeitreihen.Values
@@ -349,18 +349,18 @@ Public Class Wave
                 End If
             Next
             If (Not found) Then
-                title = zre.Title 'diese Serie gibt es nicht mehr
+                title_removed = zre.Title 'diese Serie gibt es nicht mehr
                 Exit For
             End If
         Next
 
-        If (title <> "") Then
+        If (title_removed <> "") Then
             'Aus der internen Collection löschen
-            Me.Zeitreihen.Remove(title)
+            Me.Zeitreihen.Remove(title_removed)
 
             'Aus der Übersicht löschen
             For i As Integer = Me.TChart2.Series.Count - 1 To 0 Step -1
-                If (Me.TChart2.Series.Item(i).Title = title) Then
+                If (Me.TChart2.Series.Item(i).Title = title_removed) Then
                     Me.TChart2.Series.RemoveAt(i)
                     Me.TChart2.Refresh()
                     Exit For
