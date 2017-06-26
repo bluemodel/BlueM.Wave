@@ -43,6 +43,7 @@ Module Konstanten
             dict.Add("UVF", "yyyyMMddHHmm") 'eigentlich nur zweistellige Jahreszahl, aber das Jahrhundert wird beim Einlesen trotzdem bestimmt
             dict.Add("WEL", "dd.MM.yyyy HH:mm")
             dict.Add("ZRE", "yyyyMMdd HH:mm")
+            dict.Add("ZRXP", "yyyyMMddHHmmss")
             Return dict
         End Get
     End Property
@@ -71,6 +72,7 @@ Module Konstanten
         TXT_SWMM = 9
         DAT_HYDRO_AS = 10
         UVF = 11
+        ZRXP = 12
     End Enum
 
     ''' <summary>

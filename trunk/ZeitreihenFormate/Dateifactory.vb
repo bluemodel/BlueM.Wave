@@ -44,6 +44,7 @@ Public Module Dateifactory
     Public Const FileExtOUT As String = ".OUT" 'SWMM binäre Ergebnisdatei
     Public Const FileExtTXT As String = ".TXT" 'SWMM Routingfiles
     Public Const FileExtBIN As String = ".BIN" 'SYDRO Binärformat
+    Public Const FileExtZRXP As String = ".ZRX" 'ZRXP format
 
     ''' <summary>
     ''' Erzeugt eine zur Dateiendung passende Datei-Instanz
@@ -149,6 +150,9 @@ Public Module Dateifactory
 
             Case FileExtBIN
                 Datei = New BIN(file)
+
+            Case FileExtZRXP
+                Datei = New ZRXP(file)
 
             Case Else
                 'Wenn alle Stricke reissen, Import als CSV versuchen

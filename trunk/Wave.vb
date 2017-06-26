@@ -72,7 +72,8 @@ Public Class Wave
             "Hystem Extran files (*.dat)|*.dat|" & _
             "SWMM files (*.out)|*.out|" & _
             "HYDRO_AS-2D files (*.dat)|*.dat|" & _
-            "SYDRO binary files (*.bin)|*.bin"
+            "SYDRO binary files (*.bin)|*.bin|" & _
+            "ZRXP files (*.zrx)|*.zrx"
 
     'Chart-Zeugs
     Private WithEvents colorBand1 As Steema.TeeChart.Tools.ColorBand
