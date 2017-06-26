@@ -12,6 +12,7 @@ NEW:
 * Added a button for removing user-specified error values from series
 * Added a button for renaming series
 * Added support for exporting series to CSV format
+* Added support for importing files in the ZRXP format (*.zrx)
 * GoodnessOfFit (GoF) analysis function:
   * Added "Logarithmic Nash-Sutcliffe Efficiency" as a new GoF parameter
   * The GoF parameters can now optionally be calculated for individual hydrological years
