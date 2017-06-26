@@ -29,7 +29,7 @@ Imports System.IO
 Imports System.Globalization
 
 ''' <summary>
-''' Klasse für UF Dateiformat
+''' Klasse für UVF Dateiformat
 ''' Formatbeschreibung: http://aquaplan.de/public_papers/imex/sectionUVF.html
 ''' </summary>
 Public Class UVF
