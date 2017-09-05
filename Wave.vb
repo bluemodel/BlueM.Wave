@@ -1446,6 +1446,17 @@ Public Class Wave
                                 For i = 0 To series.Count - 1
                                     reihe.AddNode(Date.FromOADate(series.XValues(i)), series.YValues(i))
                                 Next
+                                'Get the series' unit from the axis title
+                                'TODO: the axis title might not be the actual unit
+                                Select Case series.VertAxis
+                                    Case Steema.TeeChart.Styles.VerticalAxis.Left
+                                        reihe.Unit = Me.TChart1.Axes.Left.Title.Text
+                                    Case Steema.TeeChart.Styles.VerticalAxis.Right
+                                        reihe.Unit = Me.TChart1.Axes.Right.Title.Text
+                                    Case Steema.TeeChart.Styles.VerticalAxis.Custom
+                                        reihe.Unit = series.CustomVertAxis.Title.Text
+                                End Select
+                                'Store the series
                                 Call Me.AddZeitreihe(reihe)
 
                             End If
