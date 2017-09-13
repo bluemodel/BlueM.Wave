@@ -39,6 +39,7 @@ Module AnalysisFactory
         GoodnessOfFit = 3
         Histogram = 4
         Comparison = 5
+        AnnualStatistics = 6
     End Enum
 
     ''' <summary>
@@ -67,6 +68,9 @@ Module AnalysisFactory
 
             Case AnalysisFunctions.Comparison
                 oAnalysis = New Comparison(zeitreihen)
+
+            Case AnalysisFunctions.AnnualStatistics
+                oAnalysis = New AnnualStatistics(zeitreihen)
 
             Case Else
                 Throw New Exception("Analysis not found!")
