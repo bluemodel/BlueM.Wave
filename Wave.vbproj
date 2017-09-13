@@ -133,6 +133,7 @@
     </Compile>
     <Compile Include="Analysis\GoodnessOfFit.vb" />
     <Compile Include="Analysis\MonthlyStatistics.vb" />
+    <Compile Include="Analysis\AnnualStatistics.vb" />
     <Compile Include="CutDialog.Designer.vb">
       <DependentUpon>CutDialog.vb</DependentUpon>
     </Compile>
