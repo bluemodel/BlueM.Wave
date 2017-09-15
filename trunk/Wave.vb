@@ -945,6 +945,67 @@ Public Class Wave
     End Sub
 
     ''' <summary>
+    ''' ZoomToSeriesDropDownButton dropdown is opening
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    ''' <remarks>creates the dropdown items from the currently loaded series</remarks>
+    Private Sub ToolStripDropDownButtonZoomToSeries_ButtonClick(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripDropDownButton_ZoomToSeries.DropDownOpening
+        Dim items As ToolStripItem()
+        Dim i As Integer
+
+        'clear existing items
+        Me.ToolStripDropDownButton_ZoomToSeries.DropDown.Items.Clear()
+        'create new items
+        ReDim items(Me.Zeitreihen.Count - 1)
+        i = 0
+        For Each title As String In Me.Zeitreihen.Keys
+            items(i) = New ToolStripMenuItem(title, Nothing, New EventHandler(AddressOf ZoomToSeries_Click))
+            i += 1
+        Next
+        'add items to dropdown
+        Me.ToolStripDropDownButton_ZoomToSeries.DropDown.Items.AddRange(items)
+    End Sub
+
+    ''' <summary>
+    ''' ZoomToSeries entry clicked
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    ''' <remarks></remarks>
+    Private Sub ZoomToSeries_Click(ByVal sender As Object, ByVal e As System.EventArgs)
+        Dim title As String
+        title = sender.ToString()
+        Call Me.ZoomToSeries(title)
+    End Sub
+
+    ''' <summary>
+    ''' Zoom to a time series
+    ''' </summary>
+    ''' <param name="title">Title of the time series</param>
+    ''' <remarks></remarks>
+    Private Sub ZoomToSeries(ByVal title As String)
+        Dim startdate, enddate As DateTime
+
+        If Me.Zeitreihen.ContainsKey(title) Then
+            startdate = Me.Zeitreihen(title).StartDate
+            enddate = Me.Zeitreihen(title).EndDate
+            'save the current zoom snapshot
+            Call Me.saveZoomSnapshot()
+            'zoom
+            Me.TChart1.Axes.Bottom.Minimum = startdate.ToOADate()
+            Me.TChart1.Axes.Bottom.Maximum = enddate.ToOADate()
+            'update navigation
+            Call Me.updateNavigation()
+            'update colorband
+            colorBand1.Start = Me.TChart1.Axes.Bottom.Minimum
+            colorBand1.End = Me.TChart1.Axes.Bottom.Maximum
+        Else
+            'Series not found! Do nothing?
+        End If
+    End Sub
+
+    ''' <summary>
     ''' Zoom All button clicked
     ''' </summary>
     Private Sub ToolStripButton_ZoomAll_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_ZoomAll.Click

@@ -13,6 +13,7 @@ NEW:
 * The analysis function MonthlyStatistics now writes the result data to the log
 * Added a button for removing user-specified error values from series
 * Added a button for renaming series
+* Added a dropdown button for zooming to a specific series
 * Added support for exporting series to CSV format
 * Added support for importing files in the ZRXP format (*.zrx)
 * GoodnessOfFit (GoF) analysis function:
