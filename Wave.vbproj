@@ -313,6 +313,7 @@
     <Content Include="LICENSE.TXT">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Resources\chart_magnify.png" />
     <Content Include="Resources\chart_pie.png" />
     <Content Include="Resources\color_wheel.png" />
     <Content Include="Resources\controller.png" />
