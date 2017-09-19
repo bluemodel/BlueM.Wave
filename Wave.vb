@@ -1572,6 +1572,9 @@ Public Class Wave
             'Update navigation
             Call Me.updateNavigation()
 
+            'Re-assign the chart to the chartlistbox (Bug 701)
+            Me.ChartListBox1.Chart = Me.TChart1
+
             'Log
             Call Log.AddLogEntry("TEN file '" & FileName & "' loaded successfully!")
 
