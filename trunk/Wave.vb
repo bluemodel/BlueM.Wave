@@ -1012,6 +1012,8 @@ Public Class Wave
             'update colorband
             colorBand1.Start = Me.TChart1.Axes.Bottom.Minimum
             colorBand1.End = Me.TChart1.Axes.Bottom.Maximum
+
+            Me.selectionMade = True
         Else
             'Series not found! Do nothing?
         End If
