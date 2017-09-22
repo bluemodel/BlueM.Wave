@@ -145,28 +145,40 @@ Public Class Wave
         Me.ToolStripStatusLabel_Log.Text = Log.LastMessage
     End Sub
 
-    'Drag & Drop von Dateien verarbeiten
-    '***********************************
+    ''' <summary>
+    ''' Process Drag and Drop of files
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    ''' <remarks></remarks>
     Private Sub Wave_DragDrop(ByVal sender As System.Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles MyBase.DragDrop
 
         If (e.Data.GetDataPresent(DataFormats.FileDrop)) Then
 
-            Dim dateien() As String
+            Dim files() As String
 
-            'Dateien einem Array zuweisen
-            dateien = e.Data.GetData(DataFormats.FileDrop)
+            'get array of file paths
+            files = e.Data.GetData(DataFormats.FileDrop)
 
-            'Die einzelnen Dateien importieren
-            For Each datei As String In dateien
-                Call Me.Import_File(datei)
-            Next
-
+            'Invoke the file import process asynchronously
+            Me.BeginInvoke(New ImportDelegate(AddressOf Import_Files), New Object() {files})
         End If
 
     End Sub
 
-    'Drag & Drop von Dateien zulassen
-    '********************************
+    ''' <summary>
+    ''' Used for processing drag and drop of files asynchronously
+    ''' </summary>
+    ''' <param name="files">array of file paths</param>
+    ''' <remarks></remarks>
+    Delegate Sub ImportDelegate(ByVal files() As String)
+
+    ''' <summary>
+    ''' Processes the Wave.DragEnter event. Sets DragEventArgs.Effect to Copy if the dragged object consist of files
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    ''' <remarks></remarks>
     Private Sub Wave_DragEnter(ByVal sender As System.Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles MyBase.DragEnter
         If (e.Data.GetDataPresent(DataFormats.FileDrop)) Then
             e.Effect = DragDropEffects.Copy
@@ -1608,6 +1620,17 @@ Public Class Wave
             Call Log.AddLogEntry("Error while loading:" & eol & ex.Message)
         End Try
 
+    End Sub
+
+    ''' <summary>
+    ''' Import series from multiple files
+    ''' </summary>
+    ''' <param name="files">array of file paths</param>
+    ''' <remarks></remarks>
+    Public Sub Import_Files(ByVal files() As String)
+        For Each file As String In files
+            Call Me.Import_File(file)
+        Next
     End Sub
 
     ''' <summary>
