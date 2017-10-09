@@ -113,17 +113,18 @@ Public Class AnnualStatistics
                          & eol
         'output results in CSV format
         Me.mResultText &= "Results:" & eol
-        Me.mResultText &= "Description;Start;End;Length;Min;Max;Volume" & eol
+        Me.mResultText &= "Description;Start;End;Length;Min;Max;Avg;Volume" & eol
         For Each kvp As KeyValuePair(Of String, struct_stat) In Me.stats
             stat = kvp.Value
-            ReDim values(6)
+            ReDim values(7)
             values(0) = kvp.Key
             values(1) = stat.startDate.ToString(Datumsformate("default"))
             values(2) = stat.endDate.ToString(Datumsformate("default"))
             values(3) = stat.len.ToString(formatstring)
             values(4) = stat.min.ToString(formatstring)
             values(5) = stat.max.ToString(formatstring)
-            values(6) = stat.vol.ToString(formatstring)
+            values(6) = stat.avg.ToString(formatstring)
+            values(7) = stat.vol.ToString(formatstring)
             Me.mResultText &= Join(values, ";") & eol
         Next
     End Sub
