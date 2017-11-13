@@ -143,6 +143,7 @@ Public Class Wave
     Private Sub LogChanged() Handles myLog.LogChanged
         'Status Info aktualisieren
         Me.ToolStripStatusLabel_Log.Text = Log.LastMessage
+        Call Application.DoEvents()
     End Sub
 
     ''' <summary>
@@ -1684,14 +1685,12 @@ Public Class Wave
 
                         'Log
                         Call Log.AddLogEntry("File '" & file & "' imported successfully!")
-                        Application.DoEvents()
 
                         'Datei abspeichern
                         Me.ImportedFiles.Add(Datei)
 
                         'Log
                         Call Log.AddLogEntry("Loading series in chart...")
-                        Application.DoEvents()
 
                         'Alle eingelesenen Zeitreihen der Datei durchlaufen
                         For i = 0 To Datei.Zeitreihen.GetUpperBound(0)
