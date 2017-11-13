@@ -46,6 +46,7 @@ Public Class LogWindow
     Private Sub LogChanged() Handles myLog.LogChanged
         'Textbox mit Logtext aktualisieren
         Me.TextBox_Log.Text = Log.Text
+        Call Application.DoEvents()
     End Sub
 
     'Form schlieﬂen
