@@ -73,7 +73,8 @@ Public Class Wave
             "SWMM files (*.out)|*.out|" & _
             "HYDRO_AS-2D files (*.dat)|*.dat|" & _
             "SYDRO binary files (*.bin)|*.bin|" & _
-            "ZRXP files (*.zrx)|*.zrx"
+            "ZRXP files (*.zrx)|*.zrx|" & _
+            "Wave project files (*wvp)|*.wvp"
 
     'Chart-Zeugs
     Private WithEvents colorBand1 As Steema.TeeChart.Tools.ColorBand
@@ -1448,6 +1449,114 @@ Public Class Wave
     End Sub
 
     ''' <summary>
+    ''' Load a Wave project file
+    ''' </summary>
+    ''' <param name="FileName">path to the Wave project file</param>
+    ''' <remarks></remarks>
+    Private Sub Load_WVP(ByVal FileName As String)
+
+        Dim fstr As FileStream
+        Dim strRead As StreamReader
+        Dim line As String
+        Dim name, title As String
+        Dim found As Boolean
+        Dim names As Dictionary(Of String, String)
+        Dim fileobj As Dateiformat
+        Dim n As Integer
+
+        '[filename1: [series1:title, series2:title, ...], ...]
+        Dim files As New Dictionary(Of String, Dictionary(Of String, String))
+
+        Log.AddLogEntry("Loading Wave project file " & FileName & " ...")
+
+        'Read project file
+        'file format:
+        '
+        'path\to\file1
+        ' series1
+        ' series2: "optional title"
+        'path\to\file2
+        ' series3
+        ' series4
+        '
+        fstr = New FileStream(FileName, FileMode.Open)
+        strRead = New StreamReader(fstr, True)
+        line = strRead.ReadLine()
+        While Not IsNothing(line)
+            If Not line.StartsWith(" ") Then
+                'File
+                files.Add(line, New Dictionary(Of String, String))
+            Else
+                'Series
+                If line.Contains(":") Then
+                    'Series with title
+                    name = line.Split(":")(0).Trim()
+                    title = line.Split(":")(1).Replace("""", "").Trim()
+                Else
+                    'Series
+                    name = line.Trim()
+                    title = ""
+                End If
+                'Add series to file
+                files.Last.Value.Add(name, title)
+            End If
+            line = strRead.ReadLine()
+        End While
+        strRead.Close()
+        fstr.Close()
+
+        'Loop over file list
+        For Each kvp As KeyValuePair(Of String, Dictionary(Of String, String)) In files
+            FileName = kvp.Key
+            names = kvp.Value
+
+            Log.AddLogEntry("Reading file " & FileName & " ...")
+
+            fileobj = Dateifactory.getDateiInstanz(FileName)
+
+            If names.Count = 0 Then
+                'read all series contained in the file
+                Call fileobj.selectAllSpalten()
+            Else
+                'Loop over series names
+                For Each name In names.Keys
+                    'Search for series in file
+                    found = False
+                    For Each spalte As Dateiformat.SpaltenInfo In fileobj.Spalten
+                        If spalte.Name = name Then
+                            'select the series for import
+                            n = fileobj.SpaltenSel.Length
+                            ReDim Preserve fileobj.SpaltenSel(n)
+                            fileobj.SpaltenSel(n) = spalte
+                            found = True
+                            Continue For
+                        End If
+                    Next
+                    If Not found Then
+                        'series not found in file
+                        Log.AddLogEntry("Series " & name & " not found in file!")
+                    End If
+                Next
+            End If
+
+            'read the file
+            fileobj.Read_File()
+
+            'import the series
+            Call Log.AddLogEntry("Loading series in chart...")
+            For Each zre As TimeSeries In fileobj.Zeitreihen
+                'change title if specified in the project file
+                If names(zre.Title) <> "" Then
+                    zre.Title = names(zre.Title)
+                End If
+                Call Me.Import_Series(zre)
+            Next
+        Next
+
+        Call Me.UpdateCharts()
+    End Sub
+
+    ''' <summary>
     ''' Lädt eine native Teechart-Datei (*.TEN)
     ''' </summary>
     ''' <param name="FileName">Pfad zur TEN-Datei</param>
@@ -1653,6 +1762,10 @@ Public Class Wave
             Case Dateifactory.FileExtTEN
                 '.TEN-Datei
                 Call Me.Load_TEN(file)
+
+            Case Dateifactory.FileExtWVP
+                'Wave project file
+                Call Me.Load_WVP(file)
 
             Case Else
 
