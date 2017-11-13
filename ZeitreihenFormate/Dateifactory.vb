@@ -45,6 +45,7 @@ Public Module Dateifactory
     Public Const FileExtTXT As String = ".TXT" 'SWMM Routingfiles
     Public Const FileExtBIN As String = ".BIN" 'SYDRO Binärformat
     Public Const FileExtZRXP As String = ".ZRX" 'ZRXP format
+    Public Const FileExtWVP As String = ".WVP" 'Wave project file
 
     ''' <summary>
     ''' Erzeugt eine zur Dateiendung passende Datei-Instanz

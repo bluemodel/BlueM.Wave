@@ -73,6 +73,7 @@ Module Konstanten
         DAT_HYDRO_AS = 10
         UVF = 11
         ZRXP = 12
+        WVP = 13
     End Enum
 
     ''' <summary>
