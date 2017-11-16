@@ -1451,109 +1451,129 @@ Public Class Wave
     ''' <summary>
     ''' Load a Wave project file
     ''' </summary>
-    ''' <param name="FileName">path to the Wave project file</param>
+    ''' <param name="file">Path to the Wave project file</param>
     ''' <remarks></remarks>
-    Private Sub Load_WVP(ByVal FileName As String)
+    Private Sub Load_WVP(ByVal file As String)
 
         Dim fstr As FileStream
         Dim strRead As StreamReader
-        Dim line As String
-        Dim name, title As String
+        Dim line, name, title As String
         Dim found As Boolean
         Dim names As Dictionary(Of String, String)
         Dim fileobj As Dateiformat
         Dim n As Integer
 
-        '[filename1: [series1:title, series2:title, ...], ...]
+        'files = {filename1:{series1:title1, series2:title2, ...}, ...}
         Dim files As New Dictionary(Of String, Dictionary(Of String, String))
 
-        Log.AddLogEntry("Loading Wave project file " & FileName & " ...")
+        Try
 
-        'Read project file
-        'file format:
-        '
-        'path\to\file1
-        ' series1
-        ' series2: "optional title"
-        'path\to\file2
-        ' series3
-        ' series4
-        '
-        fstr = New FileStream(FileName, FileMode.Open)
-        strRead = New StreamReader(fstr, True)
-        line = strRead.ReadLine()
-        While Not IsNothing(line)
-            If Not line.StartsWith(" ") Then
-                'File
-                files.Add(line, New Dictionary(Of String, String))
-            Else
-                'Series
-                If line.Contains(":") Then
-                    'Series with title
-                    name = line.Split(":")(0).Trim()
-                    title = line.Split(":")(1).Replace("""", "").Trim()
-                Else
-                    'Series
-                    name = line.Trim()
-                    title = ""
-                End If
-                'Add series to file
-                files.Last.Value.Add(name, title)
-            End If
+            Log.AddLogEntry("Loading Wave project file " & file & " ...")
+
+            'read project file
+
+            'file format (all whitespace is optional):
+            '
+            'file=path\to\file1
+            ' series=seriesname1
+            ' series=series2: "optional title"
+            'file=path\to\file2
+            ' series=series3
+            ' series=series4
+            '
+            fstr = New FileStream(file, FileMode.Open)
+            strRead = New StreamReader(fstr, True)
+
             line = strRead.ReadLine()
-        End While
-        strRead.Close()
-        fstr.Close()
+            While Not IsNothing(line)
 
-        'Loop over file list
-        For Each kvp As KeyValuePair(Of String, Dictionary(Of String, String)) In files
-            FileName = kvp.Key
-            names = kvp.Value
+                line = line.Trim()
 
-            Log.AddLogEntry("Reading file " & FileName & " ...")
+                If line.ToLower().StartsWith("file=") Then
+                    'file
+                    line = line.Split("=")(1).Trim()
+                    files.Add(line, New Dictionary(Of String, String))
 
-            fileobj = Dateifactory.getDateiInstanz(FileName)
+                ElseIf line.ToLower().StartsWith("series=") Then
+                    'series
+                    line = line.Split("=")(1).Trim()
+                    If line.Contains(":") Then
+                        'series with title
+                        name = line.Split(":")(0).Trim()
+                        title = line.Split(":")(1).Replace("""", "").Trim()
+                    Else
+                        'series without title
+                        name = line.Trim()
+                        title = ""
+                    End If
+                    'add series to file
+                    files.Last.Value.Add(name, title)
+                Else
+                    'ignore any other lines
+                End If
+                line = strRead.ReadLine()
+            End While
 
-            If names.Count = 0 Then
-                'read all series contained in the file
-                Call fileobj.selectAllSpalten()
-            Else
-                'Loop over series names
-                For Each name In names.Keys
-                    'Search for series in file
-                    found = False
-                    For Each spalte As Dateiformat.SpaltenInfo In fileobj.Spalten
-                        If spalte.Name = name Then
-                            'select the series for import
-                            n = fileobj.SpaltenSel.Length
-                            ReDim Preserve fileobj.SpaltenSel(n)
-                            fileobj.SpaltenSel(n) = spalte
-                            found = True
-                            Continue For
+            strRead.Close()
+            fstr.Close()
+
+            'loop over file list
+            For Each kvp As KeyValuePair(Of String, Dictionary(Of String, String)) In files
+                file = kvp.Key
+                names = kvp.Value
+
+                Log.AddLogEntry("Reading file " & file & " ...")
+
+                'get an instance of the file
+                fileobj = Dateifactory.getDateiInstanz(file)
+
+                'select series for importing
+                If names.Count = 0 Then
+                    'read all series contained in the file
+                    Call fileobj.selectAllSpalten()
+                Else
+                    'loop over series names
+                    For Each name In names.Keys
+                        'search for series in file
+                        found = False
+                        For Each spalte As Dateiformat.SpaltenInfo In fileobj.Spalten
+                            If spalte.Name = name Then
+                                'select the series for import
+                                n = fileobj.SpaltenSel.Length
+                                ReDim Preserve fileobj.SpaltenSel(n)
+                                fileobj.SpaltenSel(n) = spalte
+                                found = True
+                                Exit For
+                            End If
+                        Next
+                        If Not found Then
+                            'series not found in file
+                            Log.AddLogEntry("Series " & name & " not found in file!")
                         End If
                     Next
-                    If Not found Then
-                        'series not found in file
-                        Log.AddLogEntry("Series " & name & " not found in file!")
-                    End If
-                Next
-            End If
-
-            'read the file
-            fileobj.Read_File()
-
-            'import the series
-            Call Log.AddLogEntry("Loading series in chart...")
-            For Each zre As TimeSeries In fileobj.Zeitreihen
-                'change title if specified in the project file
-                If names(zre.Title) <> "" Then
-                    zre.Title = names(zre.Title)
                 End If
-                Call Me.Import_Series(zre)
-            Next
-        Next
 
-        Call Me.UpdateCharts()
+                'read the file
+                fileobj.Read_File()
+
+                'import the series
+                Call Log.AddLogEntry("Loading series in chart...")
+                For Each zre As TimeSeries In fileobj.Zeitreihen
+                    'change title if specified in the project file
+                    If names(zre.Title) <> "" Then
+                        zre.Title = names(zre.Title)
+                    End If
+                    Call Me.Import_Series(zre)
+                Next
+            Next
+
+            Call Me.UpdateCharts()
+
+        Catch ex As Exception
+            MsgBox("Error while loading project file:" & eol & ex.Message, MsgBoxStyle.Critical)
+            Call Log.AddLogEntry("Error while loading project file:" & eol & ex.Message)
+        End Try
+
     End Sub
 
     ''' <summary>
