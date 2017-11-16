@@ -1459,7 +1459,7 @@ Public Class Wave
         Dim strRead As StreamReader
         Dim line, file, path, name, title As String
         Dim found As Boolean
-        Dim names As Dictionary(Of String, String)
+        Dim series As Dictionary(Of String, String)
         Dim fileobj As Dateiformat
         Dim n As Integer
 
@@ -1524,7 +1524,7 @@ Public Class Wave
             'loop over file list
             For Each kvp As KeyValuePair(Of String, Dictionary(Of String, String)) In files
                 file = kvp.Key
-                names = kvp.Value
+                series = kvp.Value
 
                 Log.AddLogEntry("Reading file " & file & " ...")
 
@@ -1532,12 +1532,12 @@ Public Class Wave
                 fileobj = Dateifactory.getDateiInstanz(file)
 
                 'select series for importing
-                If names.Count = 0 Then
+                If series.Count = 0 Then
                     'read all series contained in the file
                     Call fileobj.selectAllSpalten()
                 Else
                     'loop over series names
-                    For Each name In names.Keys
+                    For Each name In series.Keys
                         'search for series in file
                         found = False
                         For Each spalte As Dateiformat.SpaltenInfo In fileobj.Spalten
@@ -1562,12 +1562,12 @@ Public Class Wave
 
                 'import the series
                 Call Log.AddLogEntry("Loading series in chart...")
-                For Each zre As TimeSeries In fileobj.Zeitreihen
+                For Each ts As TimeSeries In fileobj.Zeitreihen
                     'change title if specified in the project file
-                    If names(zre.Title) <> "" Then
-                        zre.Title = names(zre.Title)
+                    If series(ts.Title) <> "" Then
+                        ts.Title = series(ts.Title)
                     End If
-                    Call Me.Import_Series(zre)
+                    Call Me.Import_Series(ts)
                 Next
             Next
 
