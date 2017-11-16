@@ -1451,13 +1451,13 @@ Public Class Wave
     ''' <summary>
     ''' Load a Wave project file
     ''' </summary>
-    ''' <param name="file">Path to the Wave project file</param>
+    ''' <param name="projectfile">Path to the Wave project file</param>
     ''' <remarks></remarks>
-    Private Sub Load_WVP(ByVal file As String)
+    Private Sub Load_WVP(ByVal projectfile As String)
 
         Dim fstr As FileStream
         Dim strRead As StreamReader
-        Dim line, name, title As String
+        Dim line, file, path, name, title As String
         Dim found As Boolean
         Dim names As Dictionary(Of String, String)
         Dim fileobj As Dateiformat
@@ -1468,7 +1468,7 @@ Public Class Wave
 
         Try
 
-            Log.AddLogEntry("Loading Wave project file " & file & " ...")
+            Log.AddLogEntry("Loading Wave project file " & projectfile & " ...")
 
             'read project file
 
@@ -1481,7 +1481,7 @@ Public Class Wave
             ' series=series3
             ' series=series4
             '
-            fstr = New FileStream(file, FileMode.Open)
+            fstr = New FileStream(projectfile, FileMode.Open)
             strRead = New StreamReader(fstr, True)
 
             line = strRead.ReadLine()
@@ -1491,8 +1491,12 @@ Public Class Wave
 
                 If line.ToLower().StartsWith("file=") Then
                     'file
-                    line = line.Split("=")(1).Trim()
-                    files.Add(line, New Dictionary(Of String, String))
+                    path = line.Split("=")(1).Trim()
+                    If Not IO.Path.IsPathRooted(path) Then
+                        'it's a relative path: construct the full path relative to the project file
+                        path = IO.Path.GetFullPath(IO.Path.Combine(IO.Path.GetDirectoryName(projectfile), path))
+                    End If
+                    files.Add(path, New Dictionary(Of String, String))
 
                 ElseIf line.ToLower().StartsWith("series=") Then
                     'series
