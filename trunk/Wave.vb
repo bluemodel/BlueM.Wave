@@ -1462,7 +1462,6 @@ Public Class Wave
         Dim series As Dictionary(Of String, String)
         Dim seriesNotFound As List(Of String)
         Dim fileobj As FileFormatBase
-        Dim n As Integer
 
         'files = {filename1:{series1:title1, series2:title2, ...}, ...}
         Dim files As New Dictionary(Of String, Dictionary(Of String, String))
@@ -1542,12 +1541,10 @@ Public Class Wave
                     For Each name In series.Keys
                         'search for series in file
                         found = False
-                        For Each spalte As FileFormatBase.ColumnInfo In fileobj.Columns
-                            If spalte.Name = name Then
-                                'select the series for import
-                                n = fileobj.SelectedColumns.Length
-                                ReDim Preserve fileobj.SelectedColumns(n)
-                                fileobj.SelectedColumns(n) = spalte
+                        For Each column As FileFormatBase.ColumnInfo In fileobj.Columns
+                            If column.Name = name Then
+                                'select the column for import
+                                fileobj.selectColumn(column)
                                 found = True
                                 Exit For
                             End If
