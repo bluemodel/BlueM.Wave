@@ -63,6 +63,8 @@ Public Class WEL_GISMO
             Me.Trennzeichen = leerzeichen
         End If
 
+        Call Me.SpaltenAuslesen()
+
     End Sub
 
     ' get columns
