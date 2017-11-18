@@ -292,6 +292,9 @@ Public Class WEL
         ElseIf (Zeile.StartsWith("*EFL-WEL")) Then
             'It's a BlueM EFL WEL file
             Return True
+        ElseIf (Zeile.StartsWith("*WEL")) Then
+            'It's a TALSIM WEL file
+            Return True
         Else
             Return False
         End If

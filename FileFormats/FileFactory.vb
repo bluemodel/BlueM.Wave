@@ -112,11 +112,8 @@ Public Module FileFactory
 
             Case FileExtWEL, FileExtKWL
                 If (WEL.verifyFormat(file)) Then
-                    'BlueM WEL file
+                    'WEL file
                     Datei = New WEL(file)
-                ElseIf (WEL_TALSIM.verifyFormat(file)) Then
-                    'TASLIM WEL file
-                    Datei = New WEL_TALSIM(file)
                 ElseIf (HystemExtran_WEL.verifyFormat(file)) Then
                     'HYSTEM EXTRAN rain time series
                     Datei = New HystemExtran_WEL(file)

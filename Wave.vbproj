@@ -144,9 +144,6 @@
     </Compile>
     <Compile Include="FileFormats\FileFactory.vb" />
     <Compile Include="FileFormats\FileFormatBase.vb" />
-    <Compile Include="FileFormats\WEL_TALSIM.vb">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Helpers.vb" />
     <Compile Include="RenameSeriesDialog.Designer.vb">
       <DependentUpon>RenameSeriesDialog.vb</DependentUpon>
