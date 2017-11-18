@@ -109,7 +109,8 @@ Public Class ZRE
 
         Dim j As Integer
         Dim Zeile As String
-        Dim Stunde, Minute, Tag, Monat, Jahr As Integer
+        Dim timestamp As String
+        Dim ok As Boolean
         Dim Datum As DateTime
 
         Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
@@ -131,21 +132,11 @@ Public Class ZRE
                 If (j > Me.nLinesHeader And Zeile.Trim.Length > 0) Then
 
                     'Datum erkennen
-                    'TODO: Me.Datumsformat verwenden
-                    '--------------
-                    Jahr = Zeile.Substring(0, 4)
-                    Monat = Zeile.Substring(4, 2)
-                    Tag = Zeile.Substring(6, 2)
-                    Stunde = Zeile.Substring(9, 2)
-                    Minute = Zeile.Substring(12, 2)
-                    Datum = New System.DateTime(Jahr, Monat, Tag, 0, 0, 0, New System.Globalization.GregorianCalendar())
-                    ' Wenn Uhrzeit als 24:00 gegeben ist, wird der Tag um eins hochgezählt und die Zeit auf 00:00 gesetzt
-                    If (Stunde = 24) Then
-                        Stunde = 0
-                        Datum = Datum.AddDays(1)
+                    timestamp = Zeile.Substring(0, 14)
+                    ok = DateTime.TryParseExact(timestamp, Me.Dateformat, Helpers.DefaultNumberFormat, Globalization.DateTimeStyles.None, datum)
+                    If (Not ok) Then
+                        Throw New Exception("Unable to parse the timestamp '" & timestamp & "' using the given format '" & Me.Dateformat & "'!")
                     End If
-                    Datum = Datum.AddHours(Stunde)
-                    Datum = Datum.AddMinutes(Minute)
 
                     'Datum und Wert zur Zeitreihe hinzufügen
                     '---------------------------------------
