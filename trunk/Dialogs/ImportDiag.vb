@@ -107,10 +107,22 @@ Partial Public Class ImportDiag
 
         Const anzZeilen As Integer = 50 'maximal 50 Zeilen anzeigen
         Const anzSpalten As Integer = 3500 'maximal 3500 Spalten anzeigen (bei mehr wird immer umgebrochen!)
-        Dim line, text, FileExt As String
+        Dim line, text As String
 
         'Dateiname anzeigen
         Me.Label_File.Text &= " " & Path.GetFileName(Me.datei.File)
+
+        'Workaround for SWMM5 binary output files (*.OUT)
+        If IO.Path.GetExtension(Me.datei.file).ToUpper() = FileFactory.FileExtOUT Then
+            Me.TextBox_Preview.Text = Path.GetFileName(Me.datei.File) & " is a SWMM 5 binary output file." & eol & "Preview is not available!"
+            'Disable all other fields
+            Me.GroupBox_Dateformat.Enabled = False
+            Me.GroupBox_Columns.Enabled = False
+            Me.GroupBox_DecimalMark.Enabled = False
+            Me.GroupBox_Settings.Enabled = False
+
+            Exit Sub
+        End If
 
         'Vorschau anzeigen
         Dim fs As New FileStream(Me.datei.File, FileMode.Open, FileAccess.Read)
@@ -141,15 +153,6 @@ Partial Public Class ImportDiag
 
         StrRead.Close()
         fs.Close()
-
-        FileExt = System.IO.Path.GetExtension(Me.datei.File).ToUpper()
-        If FileExt = ".OUT" Then
-            Me.TextBox_Preview.Text = Path.GetFileName(Me.datei.File) & " is a" & vbCrLf & "binary file." & vbCrLf & "Preview is not available!"
-            Me.NumericUpDown_ColumnDateTime.Enabled = False
-            Me.GroupBox_Columns.Enabled = False
-            Me.GroupBox_DecimalMark.Enabled = False
-            Me.GroupBox_Settings.Enabled = False
-        End If
 
     End Sub
 

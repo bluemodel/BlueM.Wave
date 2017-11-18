@@ -430,9 +430,8 @@ Public Class SWMM_TXT
         Dim StrRead As StreamReader = New StreamReader(FiStr, System.Text.Encoding.GetEncoding("iso8859-1"))
         Dim Zeile As String = ""
 
-        '3 Zeilen einlesen
-        Zeile = StrRead.ReadLine.ToString()
-        Zeile = Trim(Zeile)
+        '1. Zeile einlesen
+        Zeile = StrRead.ReadLine.ToString().Trim()
 
         StrRead.Close()
         FiStr.Close()
