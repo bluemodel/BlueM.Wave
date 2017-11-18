@@ -60,21 +60,6 @@ Public Class Wave
     'Dateifilter
     Private Const FileFilter_TEN As String = "TeeChart files (*.ten)|*.ten"
     Private Const FileFilter_XML As String = "Theme files (*.xml)|*.xml"
-    Private Const FileFilter_Import As String = _
-            "All files (*.*)|*.*|" & _
-            "Text files (*.txt)|*.txt|" & _
-            "CSV files (*.csv)|*.csv|" & _
-            "ZRE files (*.zre)|*.zre|" & _
-            "WEL files (*.wel, *.kwl)|*.wel;*.kwl|" & _
-            "UVF files (*.uvf)|*.uvf|" & _
-            "SMUSI files (*.asc)|*.asc|" & _
-            "SIMBA files (*.smb)|*.smb|" & _
-            "Hystem Extran files (*.dat)|*.dat|" & _
-            "SWMM files (*.out)|*.out|" & _
-            "HYDRO_AS-2D files (*.dat)|*.dat|" & _
-            "SYDRO binary files (*.bin)|*.bin|" & _
-            "ZRXP files (*.zrx)|*.zrx|" & _
-            "Wave project files (*wvp)|*.wvp"
 
     'Chart-Zeugs
     Private WithEvents colorBand1 As Steema.TeeChart.Tools.ColorBand
@@ -440,7 +425,7 @@ Public Class Wave
     '********************
     Private Sub Importieren_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem_ImportSeries.Click
         Me.OpenFileDialog1.Title = "Import time series"
-        Me.OpenFileDialog1.Filter = FileFilter_Import
+        Me.OpenFileDialog1.Filter = FileFormatBase.FileFilter
         If (Me.OpenFileDialog1.ShowDialog() = Windows.Forms.DialogResult.OK) Then
             Call Me.Import_File(Me.OpenFileDialog1.FileName)
         End If
