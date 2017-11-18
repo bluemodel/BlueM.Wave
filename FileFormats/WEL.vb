@@ -204,7 +204,9 @@ Public Class WEL
         Dim iZeile, i As Integer
         Dim Zeile As String
         Dim Werte() As String
+        Dim timestamp As String
         Dim datum As DateTime
+        Dim ok As Boolean
 
         Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
         Dim StrRead As StreamReader = New StreamReader(FiStr, System.Text.Encoding.GetEncoding("iso8859-1"))
@@ -243,8 +245,11 @@ Public Class WEL
                 '---------------
                 Werte = Zeile.Split(New Char() {Me.Separator.ToChar}, StringSplitOptions.RemoveEmptyEntries)
                 'Erste Spalte: Datum_Zeit
-                'TODO: use Me.DateFormat
-                datum = New System.DateTime(Werte(0).Substring(6, 4), Werte(0).Substring(3, 2), Werte(0).Substring(0, 2), Werte(0).Substring(11, 2), Werte(0).Substring(14, 2), 0, New System.Globalization.GregorianCalendar())
+                timestamp = Werte(0).Trim()
+                ok = DateTime.TryParseExact(timestamp, Me.Dateformat, Helpers.DefaultNumberFormat, Globalization.DateTimeStyles.None, datum)
+                If (Not ok) Then
+                    Throw New Exception("Unable to parse the timestamp '" & timestamp & "' using the given format '" & Me.Dateformat & "'!")
+                End If
                 'Restliche Spalten: Werte
                 'Alle ausgewählten Spalten durchlaufen
                 For i = 0 To Me.SelectedColumns.Length - 1
@@ -254,8 +259,11 @@ Public Class WEL
                 'Spalten mit fester Breite
                 '-------------------------
                 'Erste Spalte: Datum_Zeit
-                'TODO: use Me.DateFormat
-                datum = New System.DateTime(Zeile.Substring(6 + SpaltenOffset, 4), Zeile.Substring(3 + SpaltenOffset, 2), Zeile.Substring(0 + SpaltenOffset, 2), Zeile.Substring(11 + SpaltenOffset, 2), Zeile.Substring(14 + SpaltenOffset, 2), 0, New System.Globalization.GregorianCalendar())
+                timestamp = Zeile.Substring(SpaltenOffset, Me.ColumnWidth).Trim()
+                ok = DateTime.TryParseExact(timestamp, Me.Dateformat, Helpers.DefaultNumberFormat, Globalization.DateTimeStyles.None, datum)
+                If (Not ok) Then
+                    Throw New Exception("Unable to parse the timestamp '" & timestamp & "' using the given format '" & Me.Dateformat & "'!")
+                End If
                 'Restliche Spalten: Werte
                 'Alle ausgewählten Spalten durchlaufen
                 For i = 0 To Me.SelectedColumns.Length - 1
