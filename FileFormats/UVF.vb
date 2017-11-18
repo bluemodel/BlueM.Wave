@@ -33,7 +33,7 @@ Imports System.Globalization
 ''' Formatbeschreibung: http://aquaplan.de/public_papers/imex/sectionUVF.html
 ''' </summary>
 Public Class UVF
-    Inherits Dateiformat
+    Inherits FileFormatBase
 
     ''' <summary>
     ''' Ob der Importdialog genutzt werden soll
@@ -65,14 +65,14 @@ Public Class UVF
         Call MyBase.New(file)
 
         'Voreinstellungen
-        Me.Datumsformat = Konstanten.Datumsformate("UVF")
-        Me.UseEinheiten = True
+        Me.Dateformat = Helpers.DateFormats("UVF")
+        Me.UseUnits = True
 
-        Call Me.SpaltenAuslesen()
+        Call Me.ReadColumns()
 
         If (ReadAllNow) Then
             'Direkt einlesen
-            Call Me.selectAllSpalten()
+            Call Me.selectAllColumns()
             Call Me.Read_File()
         End If
 
@@ -128,21 +128,21 @@ Public Class UVF
     ''' Liest die Metadaten der in der Datei enthaltenen Zeitreihe aus
     ''' </summary>
     ''' <remarks></remarks>
-    Public Overrides Sub SpaltenAuslesen()
+    Public Overrides Sub ReadColumns()
 
         Dim i As Integer
         Dim Zeile As String
         Dim headerFound As Boolean = False
 
-        ReDim Me.Spalten(1) ' Jede UVF-Datei enthält nur eine Zeitreihe
+        ReDim Me.Columns(1) ' Jede UVF-Datei enthält nur eine Zeitreihe
 
         'X-Spalte konfigurieren
-        Me.Spalten(0).Name = "Time"
-        Me.Spalten(0).Einheit = ""
-        Me.Spalten(0).Index = 0
+        Me.Columns(0).Name = "Time"
+        Me.Columns(0).Einheit = ""
+        Me.Columns(0).Index = 0
 
         'Y-Spalte konfigurieren
-        Me.Spalten(1).Index = 1
+        Me.Columns(1).Index = 1
 
         'Header einlesen
         Try
@@ -157,16 +157,16 @@ Public Class UVF
                 If Zeile.StartsWith("$") Then Continue Do ' Kommentarzeile
                 If Zeile.ToLower.StartsWith("*z") Then    ' Hier fängt der Header an
                     headerFound = True
-                    iZeileUeberschriften = i + 1
-                    iZeileEinheiten = i + 1
-                    iZeileDaten = i + 4
+                    iLineHeadings = i + 1
+                    iLineUnits = i + 1
+                    iLineData = i + 4
                     Continue Do
                 End If
-                If i = iZeileUeberschriften Then
+                If i = iLineHeadings Then
                     'Zeitreihenname einlesen
-                    Me.Spalten(1).Name = Zeile.Substring(0, 15).Trim()
+                    Me.Columns(1).Name = Zeile.Substring(0, 15).Trim()
                     'Einheit einlesen
-                    Me.Spalten(1).Einheit = Zeile.Substring(15, 15).Trim()
+                    Me.Columns(1).Einheit = Zeile.Substring(15, 15).Trim()
                     'DefArt oder Anfangsjahrhundert einlesen, falls vorhanden
                     Me._jahrhundert = 0
                     If Zeile.Length > 30 Then
@@ -187,13 +187,13 @@ Public Class UVF
                     End If
                     Continue Do
                 End If
-                If i = iZeileUeberschriften + 1 Then
+                If i = iLineHeadings + 1 Then
                     'Ort und Lage einlesen
                     Try
                         Me._ort = Zeile.Substring(0, Math.Min(Zeile.Length, 15)).Trim()
                         If Me._ort <> "" Then
                             'append Ort to series title
-                            Me.Spalten(1).Name &= " - " & Me._ort
+                            Me.Columns(1).Name &= " - " & Me._ort
                         End If
                         Me._lage_X = Zeile.Substring(15, 10)
                         Me._lage_Y = Zeile.Substring(25, 10)
@@ -235,9 +235,9 @@ Public Class UVF
 
         Try
             'Zeitreihe instanzieren
-            ReDim Me.Zeitreihen(0)
-            Me.Zeitreihen(0) = New TimeSeries(Me.Spalten(1).Name)
-            Me.Zeitreihen(0).Unit = Me.Spalten(1).Einheit
+            ReDim Me.TimeSeries(0)
+            Me.TimeSeries(0) = New TimeSeries(Me.Columns(1).Name)
+            Me.TimeSeries(0).Unit = Me.Columns(1).Einheit
 
             'Datei öffnen
             Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
@@ -248,7 +248,7 @@ Public Class UVF
             '--------
 
             'Header
-            For i = 0 To Me.nZeilenHeader - 1
+            For i = 0 To Me.nLinesHeader - 1
                 StrReadSync.ReadLine()
             Next
 
@@ -268,14 +268,14 @@ Public Class UVF
                 'Jahrhundert voranstellen
                 datumstringExt = Me._jahrhundert.ToString.Substring(0, 2) & datumstring
                 'parse it
-                ok = DateTime.TryParseExact(datumstringExt, Me.Datumsformat, Konstanten.Zahlenformat, Globalization.DateTimeStyles.None, datum)
+                ok = DateTime.TryParseExact(datumstringExt, Me.Dateformat, Helpers.DefaultNumberFormat, Globalization.DateTimeStyles.None, datum)
                 If (Not ok) Then
-                    Throw New Exception("Unable to parse the date '" & datumstring & "' using the given date format '" & Me.Datumsformat & "'!")
+                    Throw New Exception("Unable to parse the date '" & datumstring & "' using the given date format '" & Me.Dateformat & "'!")
                 End If
                 'Wert lesen
-                wert = Konstanten.StringToDouble(Zeile.Substring(10))
+                wert = Helpers.StringToDouble(Zeile.Substring(10))
                 'Stützstelle abspeichern
-                Me.Zeitreihen(0).AddNode(datum, wert)
+                Me.TimeSeries(0).AddNode(datum, wert)
 
             Loop Until StrReadSync.Peek() = -1
 

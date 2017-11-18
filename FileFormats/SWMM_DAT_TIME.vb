@@ -31,7 +31,7 @@ Imports System.IO
 ''' </summary>
 
 Public Class SWMM_DAT_TIME
-    Inherits Dateiformat
+    Inherits FileFormatBase
 
     Const DatumsformatSWMMDAT As String = "MM/dd/yyyy HH:mm"
     Const iDim As Integer = 3        'Dezimalfaktor wird erstmal global auf 3 gesetzt
@@ -79,14 +79,14 @@ Public Class SWMM_DAT_TIME
         MyBase.New(FileName)
 
         'Voreinstellungen
-        Me.iZeileDaten = 2
-        Me.UseEinheiten = False
+        Me.iLineData = 2
+        Me.UseUnits = False
 
-        Call Me.SpaltenAuslesen()
+        Call Me.ReadColumns()
 
         If (ReadAllNow) Then
             'Direkt einlesen
-            Call Me.selectAllSpalten()
+            Call Me.selectAllColumns()
             Call Me.Read_File()
         End If
 
@@ -94,7 +94,7 @@ Public Class SWMM_DAT_TIME
 
     'Spalten auslesen
     '****************
-    Public Overrides Sub SpaltenAuslesen()
+    Public Overrides Sub ReadColumns()
 
         Dim Zeile As String = ""
 
@@ -105,18 +105,18 @@ Public Class SWMM_DAT_TIME
             Dim StrReadSync = TextReader.Synchronized(StrRead)
 
             'Es gibt immer 2 Spalten!
-            ReDim Me.Spalten(1)
+            ReDim Me.Columns(1)
 
             '1. Spalte (X)
-            Me.Spalten(0).Name = "Datum_Zeit"
-            Me.Spalten(0).Index = 0
+            Me.Columns(0).Name = "Datum_Zeit"
+            Me.Columns(0).Index = 0
 
             '2. Spalte (Y)
-            Me.Spalten(1).Index = 1
+            Me.Columns(1).Index = 1
 
             'Reihentitel steht in 1. Zeile:
             Zeile = StrReadSync.ReadLine.ToString()
-            Me.Spalten(1).Name = Zeile.Trim()
+            Me.Columns(1).Name = Zeile.Trim()
 
             StrReadSync.close()
             StrRead.Close()

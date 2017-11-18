@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
-    <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{BCD1BBE3-5AB2-4C3F-AC12-43EB977C6F6F}</ProjectGuid>
     <OutputType>WinExe</OutputType>
@@ -134,12 +134,20 @@
     <Compile Include="Analysis\GoodnessOfFit.vb" />
     <Compile Include="Analysis\MonthlyStatistics.vb" />
     <Compile Include="Analysis\AnnualStatistics.vb" />
+    <Compile Include="Character.vb" />
+    <Compile Include="Constants.vb" />
     <Compile Include="CutDialog.Designer.vb">
       <DependentUpon>CutDialog.vb</DependentUpon>
     </Compile>
     <Compile Include="CutDialog.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="FileFormats\FileFactory.vb" />
+    <Compile Include="FileFormats\FileFormatBase.vb" />
+    <Compile Include="FileFormats\WEL_TALSIM.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Helpers.vb" />
     <Compile Include="RenameSeriesDialog.Designer.vb">
       <DependentUpon>RenameSeriesDialog.vb</DependentUpon>
     </Compile>
@@ -177,7 +185,6 @@
     <Compile Include="ExportDiag.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Konstanten.vb" />
     <Compile Include="LogWindow.Designer.vb">
       <DependentUpon>LogWindow.vb</DependentUpon>
     </Compile>
@@ -201,27 +208,23 @@
     <Compile Include="Wave.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Zeichen.vb" />
-    <Compile Include="ZeitreihenFormate\ASC.vb" />
-    <Compile Include="ZeitreihenFormate\BIN.vb" />
-    <Compile Include="ZeitreihenFormate\CSV.vb" />
-    <Compile Include="ZeitreihenFormate\Dateifactory.vb" />
-    <Compile Include="ZeitreihenFormate\Dateiformat.vb" />
-    <Compile Include="ZeitreihenFormate\UVF.vb" />
-    <Compile Include="ZeitreihenFormate\WEL_GISMO.vb" />
-    <Compile Include="ZeitreihenFormate\HYDRO_AS-2D.vb" />
-    <Compile Include="ZeitreihenFormate\HystemExtran_REG.vb" />
-    <Compile Include="ZeitreihenFormate\HystemExtran_WEL.vb" />
-    <Compile Include="ZeitreihenFormate\SMB.vb" />
-    <Compile Include="ZeitreihenFormate\REG_SMUSI.vb" />
-    <Compile Include="ZeitreihenFormate\SWMM_DAT_MASS.vb" />
-    <Compile Include="ZeitreihenFormate\SWMM_DAT_TIME.vb" />
-    <Compile Include="ZeitreihenFormate\SWMM_OUT.vb" />
-    <Compile Include="ZeitreihenFormate\SWMM_TXT.vb" />
-    <Compile Include="ZeitreihenFormate\WEL.vb" />
-    <Compile Include="ZeitreihenFormate\WEL_TALSIM.vb" />
-    <Compile Include="ZeitreihenFormate\ZRE.vb" />
-    <Compile Include="ZeitreihenFormate\ZRXP.vb" />
+    <Compile Include="FileFormats\ASC.vb" />
+    <Compile Include="FileFormats\BIN.vb" />
+    <Compile Include="FileFormats\CSV.vb" />
+    <Compile Include="FileFormats\UVF.vb" />
+    <Compile Include="FileFormats\WEL_GISMO.vb" />
+    <Compile Include="FileFormats\HYDRO_AS-2D.vb" />
+    <Compile Include="FileFormats\HystemExtran_REG.vb" />
+    <Compile Include="FileFormats\HystemExtran_WEL.vb" />
+    <Compile Include="FileFormats\SMB.vb" />
+    <Compile Include="FileFormats\REG_SMUSI.vb" />
+    <Compile Include="FileFormats\SWMM_DAT_MASS.vb" />
+    <Compile Include="FileFormats\SWMM_DAT_TIME.vb" />
+    <Compile Include="FileFormats\SWMM_OUT.vb" />
+    <Compile Include="FileFormats\SWMM_TXT.vb" />
+    <Compile Include="FileFormats\WEL.vb" />
+    <Compile Include="FileFormats\ZRE.vb" />
+    <Compile Include="FileFormats\ZRXP.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="My Project\Resources.resx">
@@ -324,12 +327,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Analysis\HistogramDialog.resx">
       <DependentUpon>HistogramDialog.vb</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="RemoveErrorValuesDialog.resx">
       <DependentUpon>RemoveErrorValuesDialog.vb</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="RenameSeriesDialog.resx">
       <DependentUpon>RenameSeriesDialog.vb</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\cursor_pan.cur" />
     <EmbeddedResource Include="Resources\cursor_zoom.cur" />

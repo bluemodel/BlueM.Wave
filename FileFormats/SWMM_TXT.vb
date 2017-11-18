@@ -33,7 +33,7 @@ Imports System.IO
 ''' </summary>
 ''' <remarks>Format siehe http://wiki.bluemodel.org/index.php/TXT-Format</remarks>
 Public Class SWMM_TXT
-    Inherits Dateiformat
+    Inherits FileFormatBase
     
 #Region "Eigenschaften"
 
@@ -97,16 +97,16 @@ Public Class SWMM_TXT
         SpaltenOffset = 0
 
         'Voreinstellungen
-        Me.iZeileUeberschriften = 2
-        Me.UseEinheiten = True
-        Me.Zeichengetrennt = False
-        Me.Dezimaltrennzeichen = Me.punkt
+        Me.iLineHeadings = 2
+        Me.UseUnits = True
+        Me.IsColumnSeparated = False
+        Me.DecimalSeparator = Constants.period
 
-        Call Me.SpaltenAuslesen()
+        Call Me.ReadColumns()
 
         If (ReadAllNow) Then
             'Datei komplett einlesen
-            Call Me.selectAllSpalten()
+            Call Me.selectAllColumns()
             Call Me.Read_File()
         End If
 
@@ -116,7 +116,7 @@ Public Class SWMM_TXT
     ''' <summary>
     ''' Spaltenköpfe auslesen
     ''' </summary>
-    Public Overrides Sub SpaltenAuslesen()
+    Public Overrides Sub ReadColumns()
 
         Dim i, j As Integer
         Dim Zeile As String = ""
@@ -138,7 +138,7 @@ Public Class SWMM_TXT
             For i = 1 To iZeileReportTimeStep
                 Zeile = StrReadSync.ReadLine.ToString()
             Next
-            strArray = Zeile.Split(New Char() {leerzeichen.Character}, StringSplitOptions.RemoveEmptyEntries)
+            strArray = Zeile.Split(New Char() {space.ToChar}, StringSplitOptions.RemoveEmptyEntries)
             Me.Zeitintervall = Convert.ToSingle(strArray(0))
 
             'Zeile mit der Anzahl der Constituents finden
@@ -146,14 +146,14 @@ Public Class SWMM_TXT
                 Zeile = StrReadSync.ReadLine.ToString()
             Next
             'Anzahl der Constituents zu einem Knoten
-            strArray = Zeile.Split(New Char() {leerzeichen.Character}, StringSplitOptions.RemoveEmptyEntries)
+            strArray = Zeile.Split(New Char() {space.ToChar}, StringSplitOptions.RemoveEmptyEntries)
             AnzConstituents = Convert.ToSingle(strArray(0))
 
             ReDim Constituents(AnzConstituents - 1)
             'Inflows und Einheit einlesen
             For i = 0 To AnzConstituents - 1
                 Zeile = StrReadSync.ReadLine.ToString()
-                strArray = Zeile.Split(New Char() {leerzeichen.Character}, StringSplitOptions.RemoveEmptyEntries)
+                strArray = Zeile.Split(New Char() {space.ToChar}, StringSplitOptions.RemoveEmptyEntries)
                 Constituents(i).Type = strArray(0)
                 Constituents(i).Unit = strArray(1)
                 Constituents(i).Index = i
@@ -162,9 +162,9 @@ Public Class SWMM_TXT
             'Anzahl der Zuflussknoten ermitteln
             'entspricht der Anzahl der Zeilen pro Zeitschritt
             Zeile = StrReadSync.ReadLine.ToString()
-            strArray = Zeile.Split(New Char() {leerzeichen.Character}, StringSplitOptions.RemoveEmptyEntries)
-            Me.nZeilen = Convert.ToSingle(strArray(0))
-            AnzNodes = Me.nZeilen
+            strArray = Zeile.Split(New Char() {space.ToChar}, StringSplitOptions.RemoveEmptyEntries)
+            Me.nLinesPerTimestamp = Convert.ToSingle(strArray(0))
+            AnzNodes = Me.nLinesPerTimestamp
             ReDim Nodes(AnzNodes - 1)
             For i = 0 To AnzNodes - 1
                 Zeile = StrReadSync.ReadLine.ToString()
@@ -175,26 +175,26 @@ Public Class SWMM_TXT
             'Anzahl der Zeitreihen (Spalten) ermitteln
             Dim anzSpalten As Integer
             anzSpalten = AnzConstituents * AnzNodes
-            ReDim Me.Spalten(anzSpalten)
+            ReDim Me.Columns(anzSpalten)
 
             'iZeileDaten kann erst jetzt gesetzt werden, wenn AnzZeilen_dT bekannt ist
-            Me.iZeileDaten = iZeileAnzConstituents + AnzConstituents + AnzNodes + 3
+            Me.iLineData = iZeileAnzConstituents + AnzConstituents + AnzNodes + 3
 
             'Index 0 für Datum belegen
-            Me.Spalten(0).Name = "Date"
-            Me.Spalten(0).Index = 0
-            Me.Spalten(0).Einheit = "-"
+            Me.Columns(0).Name = "Date"
+            Me.Columns(0).Index = 0
+            Me.Columns(0).Einheit = "-"
 
 
             'Spaltenköpfe (Zuflussknoten) und Indizes einlesen
             IDSpalte = 1
             For i = 0 To AnzNodes - 1
                 For j = 0 To AnzConstituents - 1
-                    Me.Spalten(IDSpalte).Name = Nodes(i).Bez & " " & Constituents(j).Type
-                    Me.Spalten(IDSpalte).Objekt = Nodes(i).Bez
-                    Me.Spalten(IDSpalte).Type = Constituents(j).Type
-                    Me.Spalten(IDSpalte).Einheit = Constituents(j).Unit
-                    Me.Spalten(IDSpalte).Index = IDSpalte
+                    Me.Columns(IDSpalte).Name = Nodes(i).Bez & " " & Constituents(j).Type
+                    Me.Columns(IDSpalte).Objekt = Nodes(i).Bez
+                    Me.Columns(IDSpalte).Type = Constituents(j).Type
+                    Me.Columns(IDSpalte).Einheit = Constituents(j).Unit
+                    Me.Columns(IDSpalte).Index = IDSpalte
                     IDSpalte = IDSpalte + 1
                 Next
             Next
@@ -231,28 +231,28 @@ Public Class SWMM_TXT
         Dim StrReadSync = TextReader.Synchronized(StrRead)
 
         'Anzahl Zeitreihen bestimmen
-        ReDim Me.Zeitreihen(Me.SpaltenSel.Length - 1)
+        ReDim Me.TimeSeries(Me.SelectedColumns.Length - 1)
 
         'Zeitreihen instanzieren
-        For i = 0 To Me.SpaltenSel.Length - 1
-            Me.Zeitreihen(i) = New TimeSeries(Me.SpaltenSel(i).Name)
+        For i = 0 To Me.SelectedColumns.Length - 1
+            Me.TimeSeries(i) = New TimeSeries(Me.SelectedColumns(i).Name)
         Next
 
         'Einheiten?
-        If (Me.UseEinheiten = False) Then
+        If (Me.UseUnits = False) Then
             MsgBox("Beim Einlesen eines SWMM-Interface-Files müssen immer die Einheiten gesetzt sein!")
             Exit Sub
         End If
 
-        ReDim AllConstituents(Me.SpaltenSel.Length - 1)
-        ReDim AllNodes(Me.SpaltenSel.Length - 1)
+        ReDim AllConstituents(Me.SelectedColumns.Length - 1)
+        ReDim AllNodes(Me.SelectedColumns.Length - 1)
         'Alle ausgewählten Spalten durchlaufen
-        For i = 0 To Me.SpaltenSel.Length - 1
-            Me.Zeitreihen(i).Unit = Me.SpaltenSel(i).Einheit
-            Me.Zeitreihen(i).Objekt = Me.SpaltenSel(i).Objekt
-            AllConstituents(i) = Me.SpaltenSel(i).Type
-            Me.Zeitreihen(i).Type = Me.SpaltenSel(i).Type
-            AllNodes(i) = Me.SpaltenSel(i).Objekt
+        For i = 0 To Me.SelectedColumns.Length - 1
+            Me.TimeSeries(i).Unit = Me.SelectedColumns(i).Einheit
+            Me.TimeSeries(i).Objekt = Me.SelectedColumns(i).Objekt
+            AllConstituents(i) = Me.SelectedColumns(i).Type
+            Me.TimeSeries(i).Type = Me.SelectedColumns(i).Type
+            AllNodes(i) = Me.SelectedColumns(i).Objekt
         Next
 
 
@@ -262,7 +262,7 @@ Public Class SWMM_TXT
         'AnzNodes = nEqualStrings(AllNodes)
         ReDim Werte(AnzConstituents * AnzNodes)
         'Header
-        For iZeile = 1 To Me.iZeileDaten - 1
+        For iZeile = 1 To Me.iLineData - 1
             Zeile = StrReadSync.ReadLine.ToString()
         Next
 
@@ -272,7 +272,7 @@ Public Class SWMM_TXT
             IDWerte = 1
             For i = 0 To AnzNodes - 1
                 Zeile = StrReadSync.ReadLine.ToString()
-                tmpArray = Zeile.Split(New Char() {leerzeichen.Character}, StringSplitOptions.RemoveEmptyEntries)
+                tmpArray = Zeile.Split(New Char() {space.ToChar}, StringSplitOptions.RemoveEmptyEntries)
                 If i = 0 Then
                     datum = New System.DateTime(tmpArray(1), tmpArray(2), tmpArray(3), tmpArray(4), tmpArray(5), tmpArray(6), 0, New System.Globalization.GregorianCalendar())
                 End If
@@ -281,8 +281,8 @@ Public Class SWMM_TXT
                     IDWerte = IDWerte + 1
                 Next
             Next
-            For i = 0 To Me.SpaltenSel.Length - 1
-                Me.Zeitreihen(i).AddNode(datum, StringToDouble(Werte(Me.SpaltenSel(i).Index)))
+            For i = 0 To Me.SelectedColumns.Length - 1
+                Me.TimeSeries(i).AddNode(datum, StringToDouble(Werte(Me.SelectedColumns(i).Index)))
             Next
 
         Loop Until StrReadSync.Peek() = -1
@@ -398,15 +398,15 @@ Public Class SWMM_TXT
                 strwrite.Write("   ")
                 strwrite.Write(Reihen(j).Dates(i).ToString(DatumsformatSWMM_TXT))
                 strwrite.Write(" 00   ")
-                strwrite.Write((Reihen(j * UniqueConstituents.Length).Values(i) * KonFaktor).ToString(Zahlenformat).PadLeft(14))
+                strwrite.Write((Reihen(j * UniqueConstituents.Length).Values(i) * KonFaktor).ToString(DefaultNumberFormat).PadLeft(14))
                 If UniqueConstituents.Length > 1 Then
                     For k = 1 To UniqueConstituents.Length - 1
                         If k < UniqueConstituents.Length - 1 Then
                             strwrite.Write("   ")
-                            strwrite.Write((Reihen(j * k + 1).Values(i) * KonFaktor).ToString(Zahlenformat).PadLeft(10))
+                            strwrite.Write((Reihen(j * k + 1).Values(i) * KonFaktor).ToString(DefaultNumberFormat).PadLeft(10))
                         ElseIf k = UniqueConstituents.Length - 1 Then
                             strwrite.Write("   ")
-                            strwrite.WriteLine((Reihen(j * UniqueConstituents.Length + 1).Values(i) * KonFaktor).ToString(Zahlenformat).PadLeft(10))
+                            strwrite.WriteLine((Reihen(j * UniqueConstituents.Length + 1).Values(i) * KonFaktor).ToString(DefaultNumberFormat).PadLeft(10))
                         End If
                     Next
                 Else

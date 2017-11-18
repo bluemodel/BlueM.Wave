@@ -1,32 +1,39 @@
-'---------------------------------------------------------------------
-'BlueM.Wave ist a tool for time series management and analysis
-'Copyright (C) 2015  BlueM Dev Team, http://bluemodel.org/
-
-'This file is part of BlueM.Wave
-
-'BlueM.Wave is free software: you can redistribute it and/or modify
-'it under the terms of the GNU General Public License as published by
-'the Free Software Foundation, either version 3 of the License, or
-'(at your option) any later version.
-
-'BlueM.Wave is distributed in the hope that it will be useful,
-'but WITHOUT ANY WARRANTY; without even the implied warranty of
-'MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-'GNU General Public License for more details.
-
-'You should have received a copy of the GNU General Public License
-'along with this program.  If not, see <http://www.gnu.org/licenses/>.
-'---------------------------------------------------------------------
+'Copyright (c) BlueM Dev Group
+'Website: http://bluemodel.org
+'
+'All rights reserved.
+'
+'Released under the BSD-2-Clause License:
+'
+'Redistribution and use in source and binary forms, with or without modification, 
+'are permitted provided that the following conditions are met:
+'
+'* Redistributions of source code must retain the above copyright notice, this list 
+'  of conditions and the following disclaimer.
+'* Redistributions in binary form must reproduce the above copyright notice, this list 
+'  of conditions and the following disclaimer in the documentation and/or other materials 
+'  provided with the distribution.
+'
+'THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY 
+'EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES 
+'OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT 
+'SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, 
+'SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT 
+'OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) 
+'HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR 
+'TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, 
+'EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+'--------------------------------------------------------------------------------------------
 '
 Imports System.IO
 
 ''' <summary>
-''' Class to import of GIMSO result files (*.CSV,*.ASC)
+''' Class for importing GISMO result files (*.CSV,*.ASC)
 ''' For information about GISMO refer to http://www.sydro.de/
-''' For file format info refer to http://wiki.bluemodel.org/index.php/Wave
+''' For file format info refer to http://wiki.bluemodel.org/index.php/WEL-Format_%28GISMO%29
 ''' </summary>
 Public Class WEL_GISMO
-    Inherits Dateiformat
+    Inherits FileFormatBase
     ''' <summary>
     ''' Gibt an, ob beim Import des Dateiformats der Importdialog angezeigt werden soll
     ''' </summary>
@@ -44,31 +51,31 @@ Public Class WEL_GISMO
         MyBase.New(FileName)
 
         ' Presettings
-        Me.Datumsformat = Datumsformate("GISMO1")
-        Me.Dezimaltrennzeichen = Me.punkt
-        Me.UseEinheiten = True
+        Me.Dateformat = DateFormats("GISMO1")
+        Me.DecimalSeparator = Constants.period
+        Me.UseUnits = True
 
         ' which lines contain heading, units, first data line
-        Me.iZeileUeberschriften = 15
-        Me.iZeileEinheiten = 16
-        Me.iZeileDaten = 17
+        Me.iLineHeadings = 15
+        Me.iLineUnits = 16
+        Me.iLineData = 17
 
         If (IsSSV) Then
             ' is it a semiicolon separated file (SSV)? GISMO uses ";" to separate values if CSV mode is choosen
-            Me.Zeichengetrennt = True
-            Me.Trennzeichen = Me.semikolon
+            Me.IsColumnSeparated = True
+            Me.Separator = Constants.semicolon
         Else
             ' if not, the space " " is used as separator
-            Me.Zeichengetrennt = False
-            Me.Trennzeichen = leerzeichen
+            Me.IsColumnSeparated = False
+            Me.Separator = space
         End If
 
-        Call Me.SpaltenAuslesen()
+        Call Me.ReadColumns()
 
     End Sub
 
     ' get columns
-    Public Overrides Sub SpaltenAuslesen()
+    Public Overrides Sub ReadColumns()
 
         Dim i As Integer
         Dim Zeile As String = ""
@@ -87,10 +94,10 @@ Public Class WEL_GISMO
             SeriesName = Zeile.Substring(13, 16)
 
             ' find line with data headers and units
-            For i = 2 To Math.Max(Me.iZeileDaten, Me.iZeileUeberschriften + 1)
+            For i = 2 To Math.Max(Me.iLineData, Me.iLineHeadings + 1)
                 Zeile = StrReadSync.ReadLine.ToString
-                If (i = Me.iZeileUeberschriften) Then ZeileSpalten = Zeile
-                If (i = Me.iZeileEinheiten) Then ZeileEinheiten = Zeile
+                If (i = Me.iLineHeadings) Then ZeileSpalten = Zeile
+                If (i = Me.iLineUnits) Then ZeileEinheiten = Zeile
             Next
 
             ' close file
@@ -107,11 +114,11 @@ Public Class WEL_GISMO
             ZeileSpalten = ZeileSpalten.Substring(1, ZeileSpalten.Length - 1)
             ZeileEinheiten = ZeileEinheiten.Substring(1, ZeileEinheiten.Length - 1)
 
-            If (Me.Zeichengetrennt) Then
+            If (Me.IsColumnSeparated) Then
                 ' data columns are separated by ";"
                 ' split string at every ";"
-                Namen = ZeileSpalten.Split(New Char() {Me.Trennzeichen.Character})
-                Einheiten = ZeileEinheiten.Split(New Char() {Me.Trennzeichen.Character})
+                Namen = ZeileSpalten.Split(New Char() {Me.Separator.ToChar})
+                Einheiten = ZeileEinheiten.Split(New Char() {Me.Separator.ToChar})
                 anzSpalten = Namen.Length
                 If Namen.Length <> Einheiten.Length Then
                     MsgBox("Number of column names <> number of units!")
@@ -120,8 +127,8 @@ Public Class WEL_GISMO
             Else
                 ' data columns are separated by spaces
                 ' converge multiple spaces to one
-                ZeileSpalten = System.Text.RegularExpressions.Regex.Replace(ZeileSpalten, "\s{2,}", Me.Trennzeichen.Character)
-                ZeileEinheiten = System.Text.RegularExpressions.Regex.Replace(ZeileEinheiten, "\s{2,}", Me.Trennzeichen.Character)
+                ZeileSpalten = System.Text.RegularExpressions.Regex.Replace(ZeileSpalten, "\s{2,}", Me.Separator.ToChar)
+                ZeileEinheiten = System.Text.RegularExpressions.Regex.Replace(ZeileEinheiten, "\s{2,}", Me.Separator.ToChar)
                 ' remove leading and trailing spaces
                 ZeileSpalten = Trim(ZeileSpalten)
                 ZeileEinheiten = Trim(ZeileEinheiten)
@@ -135,13 +142,13 @@ Public Class WEL_GISMO
                 If Replacepostion <> -1 Then
                     Mid(ZeileSpalten, Replacepostion + 1, 10) = "Datum_Zeit"
                     Mid(ZeileEinheiten, Replacepostion + 1, 3) = " - "
-                    ZeileEinheiten = Trim(System.Text.RegularExpressions.Regex.Replace(ZeileEinheiten, "\s{2,}", Me.Trennzeichen.Character))
+                    ZeileEinheiten = Trim(System.Text.RegularExpressions.Regex.Replace(ZeileEinheiten, "\s{2,}", Me.Separator.ToChar))
                 End If
 
                 ' data columns are separated by " "
                 ' split string at every " "
-                Namen = ZeileSpalten.Split(New Char() {Me.Trennzeichen.Character})
-                Einheiten = ZeileEinheiten.Split(New Char() {Me.Trennzeichen.Character})
+                Namen = ZeileSpalten.Split(New Char() {Me.Separator.ToChar})
+                Einheiten = ZeileEinheiten.Split(New Char() {Me.Separator.ToChar})
                 anzSpalten = Namen.Length
                 If Namen.Length <> Einheiten.Length Then
                     MsgBox("Number of column names <> number of units!")
@@ -149,14 +156,14 @@ Public Class WEL_GISMO
             End If
 
             ' put headers and units into the Me.Spalten-array (starts with index 0, --> [anzSpalten -1])
-            ReDim Me.Spalten(anzSpalten - 1)
+            ReDim Me.Columns(anzSpalten - 1)
             For i = 0 To (anzSpalten - 1)
-                Me.Spalten(i).Name = SeriesName.Trim & "_" & Namen(i).Trim()
-                Me.Spalten(i).Index = i
+                Me.Columns(i).Name = SeriesName.Trim & "_" & Namen(i).Trim()
+                Me.Columns(i).Index = i
                 If Einheiten(i).Trim = "cbm/s" Then
                     Einheiten(i) = "m3/s"
                 End If
-                Me.Spalten(i).Einheit = Einheiten(i).Trim()
+                Me.Columns(i).Einheit = Einheiten(i).Trim()
             Next
 
         Catch ex As Exception
@@ -182,22 +189,22 @@ Public Class WEL_GISMO
             Dim StrReadSync = TextReader.Synchronized(StrRead)
 
             ' get number of selected colums (time series) to be read
-            ReDim Me.Zeitreihen(Me.SpaltenSel.Length - 1)
+            ReDim Me.TimeSeries(Me.SelectedColumns.Length - 1)
 
             ' intialize a time series for every selected column (time series)
-            For i = 0 To Me.SpaltenSel.Length - 1
-                Me.Zeitreihen(i) = New TimeSeries(Me.SpaltenSel(i).Name)
+            For i = 0 To Me.SelectedColumns.Length - 1
+                Me.TimeSeries(i) = New TimeSeries(Me.SelectedColumns(i).Name)
             Next
 
             ' assign units to time series (for all selected)
-            If (Me.UseEinheiten) Then
-                For i = 0 To Me.SpaltenSel.Length - 1
-                    Me.Zeitreihen(i).Unit = Me.SpaltenSel(i).Einheit
+            If (Me.UseUnits) Then
+                For i = 0 To Me.SelectedColumns.Length - 1
+                    Me.TimeSeries(i).Unit = Me.SelectedColumns(i).Einheit
                 Next
             End If
 
             ' read over header lines
-            For i = 0 To Me.nZeilenHeader - 1
+            For i = 0 To Me.nLinesHeader - 1
                 StrReadSync.ReadLine()
             Next
 
@@ -210,33 +217,33 @@ Public Class WEL_GISMO
                 Zeile = Trim(Zeile)
 
 
-                If (Me.Zeichengetrennt) Then
+                If (Me.IsColumnSeparated) Then
                     ' data columns are separated by ";"
 
                     ' split data line into columns
-                    Werte = Zeile.Split(New Char() {Me.Trennzeichen.Character})
+                    Werte = Zeile.Split(New Char() {Me.Separator.ToChar})
 
                     ' first column ist date time, add date time to times series
-                    ok = DateTime.TryParseExact(Werte(Me.XSpalte), Datumsformate("GISMO1"), Konstanten.Zahlenformat, Globalization.DateTimeStyles.None, datum)
+                    ok = DateTime.TryParseExact(Werte(Me.DateTimeColumnIndex), DateFormats("GISMO1"), Helpers.DefaultNumberFormat, Globalization.DateTimeStyles.None, datum)
                     If (Not ok) Then
-                        ok = DateTime.TryParseExact(Werte(Me.XSpalte), Datumsformate("GISMO2"), Konstanten.Zahlenformat, Globalization.DateTimeStyles.None, datum)
+                        ok = DateTime.TryParseExact(Werte(Me.DateTimeColumnIndex), DateFormats("GISMO2"), Helpers.DefaultNumberFormat, Globalization.DateTimeStyles.None, datum)
                         If Not ok Then
-                            Throw New Exception("Kann das Datumsformat '" & Werte(Me.XSpalte) & "' nicht erkennen! " & eol & "Sollte in der Form '" & Datumsformate("GISMO1") & " oder " & Datumsformate("GISMO2") & "' vorliegen!")
+                            Throw New Exception("Kann das Datumsformat '" & Werte(Me.DateTimeColumnIndex) & "' nicht erkennen! " & eol & "Sollte in der Form '" & DateFormats("GISMO1") & " oder " & DateFormats("GISMO2") & "' vorliegen!")
                         End If
                     End If
 
                     ' remaining columns are data, add to time series
-                    For i = 0 To Me.SpaltenSel.Length - 1
-                        Me.Zeitreihen(i).AddNode(datum, StringToDouble(Werte(Me.SpaltenSel(i).Index)))
+                    For i = 0 To Me.SelectedColumns.Length - 1
+                        Me.TimeSeries(i).AddNode(datum, StringToDouble(Werte(Me.SelectedColumns(i).Index)))
                     Next
 
                 Else
                     ' data columns are separated by spaces
                     ' converge multiple spaces to one
-                    Zeile = System.Text.RegularExpressions.Regex.Replace(Zeile, "\s{2,}", Me.Trennzeichen.Character)
+                    Zeile = System.Text.RegularExpressions.Regex.Replace(Zeile, "\s{2,}", Me.Separator.ToChar)
 
                     ' the date time columns need to be moved to one column
-                    Werte_temp = Zeile.Split(New Char() {Me.Trennzeichen.Character})
+                    Werte_temp = Zeile.Split(New Char() {Me.Separator.ToChar})
                     ReDim Werte(Werte_temp.Length - 2)
                     For i = 0 To Werte.Length - 1
                         Werte(i) = Werte_temp(i + 1)
@@ -244,17 +251,17 @@ Public Class WEL_GISMO
                     Werte(0) = Werte_temp(0) & " " & Werte_temp(1)
 
                     ' first column (now) is date time, add to time series
-                    ok = DateTime.TryParseExact(Werte(Me.XSpalte), Datumsformate("GISMO1"), Konstanten.Zahlenformat, Globalization.DateTimeStyles.None, datum)
+                    ok = DateTime.TryParseExact(Werte(Me.DateTimeColumnIndex), DateFormats("GISMO1"), Helpers.DefaultNumberFormat, Globalization.DateTimeStyles.None, datum)
                     If (Not ok) Then
-                        ok = DateTime.TryParseExact(Werte(Me.XSpalte), Datumsformate("GISMO2"), Konstanten.Zahlenformat, Globalization.DateTimeStyles.None, datum)
+                        ok = DateTime.TryParseExact(Werte(Me.DateTimeColumnIndex), DateFormats("GISMO2"), Helpers.DefaultNumberFormat, Globalization.DateTimeStyles.None, datum)
                         If Not ok Then
-                            Throw New Exception("Kann das Datumsformat '" & Werte(Me.XSpalte) & "' nicht erkennen! " & eol & "Sollte in der Form '" & Datumsformate("GISMO1") & " oder " & Datumsformate("GISMO2") & "' vorliegen!")
+                            Throw New Exception("Kann das Datumsformat '" & Werte(Me.DateTimeColumnIndex) & "' nicht erkennen! " & eol & "Sollte in der Form '" & DateFormats("GISMO1") & " oder " & DateFormats("GISMO2") & "' vorliegen!")
                         End If
                     End If
 
                     ' remaining columns are data, add to time series
-                    For i = 0 To Me.SpaltenSel.Length - 1
-                        Me.Zeitreihen(i).AddNode(datum, StringToDouble(Werte(Me.SpaltenSel(i).Index)))
+                    For i = 0 To Me.SelectedColumns.Length - 1
+                        Me.TimeSeries(i).AddNode(datum, StringToDouble(Werte(Me.SelectedColumns(i).Index)))
                     Next
 
                 End If

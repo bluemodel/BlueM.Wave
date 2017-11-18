@@ -31,7 +31,7 @@ Imports System.IO
 ''' Klasse für Q_Strg.dat und Pegel.dat von HYDRO_AS-2D
 ''' </summary>
 Public Class HYDRO_AS_2D
-    Inherits Dateiformat
+    Inherits FileFormatBase
 
     ''' <summary>
     ''' Die Einheit der Zeitreihen
@@ -60,11 +60,11 @@ Public Class HYDRO_AS_2D
 
         Call MyBase.New(file)
 
-        Me.iZeileDaten = 9
-        Me.iZeileUeberschriften = 4
-        Me.UseEinheiten = False
-        Me.Zeichengetrennt = True
-        Me.Trennzeichen = New BlueM.Wave.Zeichen(" ")
+        Me.iLineData = 9
+        Me.iLineHeadings = 4
+        Me.UseUnits = False
+        Me.IsColumnSeparated = True
+        Me.Separator = New BlueM.Wave.Character(" ")
 
         'Einheiten anhand des Dateinamens festlegen
         Select Case Path.GetFileName(file).ToLower
@@ -76,7 +76,7 @@ Public Class HYDRO_AS_2D
                 Me._einheit = "-"
         End Select
 
-        Call Me.SpaltenAuslesen()
+        Call Me.ReadColumns()
 
     End Sub
 
@@ -103,7 +103,7 @@ Public Class HYDRO_AS_2D
     ''' Liest die Anzahl der Spalten und ihre Namen aus
     ''' </summary>
     ''' <remarks></remarks>
-    Public Overrides Sub SpaltenAuslesen()
+    Public Overrides Sub ReadColumns()
 
         Dim i As Integer
         Dim Zeile As String = ""
@@ -116,9 +116,9 @@ Public Class HYDRO_AS_2D
             Dim StrReadSync = TextReader.Synchronized(StrRead)
 
             'Zeile mit Spaltenüberschriften lesen
-            For i = 1 To Me.iZeileUeberschriften
+            For i = 1 To Me.iLineHeadings
                 Zeile = StrReadSync.ReadLine.ToString
-                If (i = Me.iZeileUeberschriften) Then ZeileSpalten = Zeile
+                If (i = Me.iLineHeadings) Then ZeileSpalten = Zeile
             Next
 
             StrReadSync.Close()
@@ -129,24 +129,24 @@ Public Class HYDRO_AS_2D
             Dim anzSpalten As Integer
             Dim Namen() As String
 
-            Namen = ZeileSpalten.Split(New Char() {Me.Trennzeichen.Character}, System.StringSplitOptions.RemoveEmptyEntries)
+            Namen = ZeileSpalten.Split(New Char() {Me.Separator.ToChar}, System.StringSplitOptions.RemoveEmptyEntries)
             anzSpalten = Namen.Length + 1 'X-Spalte künstlich dazuzählen, da ohne Namen
 
             'Spalten abspeichern
-            ReDim Me.Spalten(anzSpalten - 1)
+            ReDim Me.Columns(anzSpalten - 1)
 
             'X-Spalte
-            Me.Spalten(0).Name = "Zeit"
-            Me.Spalten(0).Einheit = "h"
-            Me.Spalten(0).Index = 0
+            Me.Columns(0).Name = "Zeit"
+            Me.Columns(0).Einheit = "h"
+            Me.Columns(0).Index = 0
 
-            Me.XSpalte = 0
+            Me.DateTimeColumnIndex = 0
 
             'Y-Spalten
             For i = 0 To Namen.Length - 1
-                Me.Spalten(i + 1).Name = Namen(i).Trim()
-                Me.Spalten(i + 1).Einheit = Me._einheit
-                Me.Spalten(i + 1).Index = i + 1
+                Me.Columns(i + 1).Name = Namen(i).Trim()
+                Me.Columns(i + 1).Einheit = Me._einheit
+                Me.Columns(i + 1).Index = i + 1
             Next
 
         Catch ex As Exception
@@ -169,12 +169,12 @@ Public Class HYDRO_AS_2D
 
         Try
             'Anzahl Zeitreihen bestimmen
-            ReDim Me.Zeitreihen(Me.SpaltenSel.Length - 1)
+            ReDim Me.TimeSeries(Me.SelectedColumns.Length - 1)
 
             'Zeitreihen instanzieren
-            For i = 0 To Me.SpaltenSel.Length - 1
-                Me.Zeitreihen(i) = New TimeSeries(Me.SpaltenSel(i).Name)
-                Me.Zeitreihen(i).Unit = Me.SpaltenSel(i).Einheit
+            For i = 0 To Me.SelectedColumns.Length - 1
+                Me.TimeSeries(i) = New TimeSeries(Me.SelectedColumns(i).Name)
+                Me.TimeSeries(i).Unit = Me.SelectedColumns(i).Einheit
             Next
 
             'Datei öffnen
@@ -186,18 +186,18 @@ Public Class HYDRO_AS_2D
             '--------
 
             'Header
-            For i = 0 To Me.nZeilenHeader - 1
+            For i = 0 To Me.nLinesHeader - 1
                 StrReadSync.ReadLine()
             Next
 
             'Daten
             Do
                 Zeile = StrReadSync.ReadLine.ToString()
-                Werte = Zeile.Split(New Char() {Me.Trennzeichen.Character}, System.StringSplitOptions.RemoveEmptyEntries)
+                Werte = Zeile.Split(New Char() {Me.Separator.ToChar}, System.StringSplitOptions.RemoveEmptyEntries)
                 'Simulationszeit [h] wird zu Datum nach 01.01.2000 00:00:00 konvertiert
                 datum = New DateTime(2000, 1, 1, 0, 0, 0) + New TimeSpan(0, 0, Werte(0) * 3600)
-                For j = 0 To Me.SpaltenSel.Length - 1
-                    Me.Zeitreihen(j).AddNode(datum, Konstanten.StringToDouble(Werte(Me.SpaltenSel(j).Index)))
+                For j = 0 To Me.SelectedColumns.Length - 1
+                    Me.TimeSeries(j).AddNode(datum, Helpers.StringToDouble(Werte(Me.SelectedColumns(j).Index)))
                 Next
 
             Loop Until StrReadSync.Peek() = -1

@@ -78,16 +78,16 @@ Public Class Log
     ''' <param name="msg">Eintrag</param>
     Public Shared Sub AddLogEntry(ByVal msg As String)
 
-        If (msg.Contains(Konstanten.eol)) Then
+        If (msg.Contains(Constants.eol)) Then
             'Wenn Eintrag mehrzeilig, dann formatieren
-            msg = Konstanten.eol & "  " & msg.Replace(Konstanten.eol, Konstanten.eol & "  ")
+            msg = Constants.eol & "  " & msg.Replace(Constants.eol, Constants.eol & "  ")
         Else
             'Ansonsten als Letzte Meldung speichern
             Log.getInstance.myLastMessage = msg
         End If
 
         'Meldung zu Text hinzufügen
-        Log.getInstance.myText &= "* " & DateTime.Now.ToString(Konstanten.Datumsformate("default")) & ": " & msg & Konstanten.eol
+        Log.getInstance.myText &= "* " & DateTime.Now.ToString(Helpers.DefaultDateFormat) & ": " & msg & Constants.eol
 
         RaiseEvent LogChanged()
 

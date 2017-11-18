@@ -280,7 +280,7 @@ Public Class GoodnessOfFit
         '-----
         'shortText is displayed in the diagram. Displays the GoF parameters for the entire series
         _gof = Me.GoFResults("Entire series")
-        shortText = "Entire series (" & _gof.startDate.ToString(Datumsformate("default")) & " - " & _gof.endDate.ToString(Datumsformate("default")) & "):" & eol
+        shortText = "Entire series (" & _gof.startDate.ToString(Helpers.DefaultDateFormat) & " - " & _gof.endDate.ToString(Helpers.DefaultDateFormat) & "):" & eol
         shortText &= "Volume observed: Vobs = " & _gof.volume_observed.ToString(formatstring) & eol _
                      & "Volume simulated: Vsim = " & _gof.volume_simulated.ToString(formatstring) & eol _
                      & "Volume error: m = " & _gof.volumenfehler.ToString(formatstring) & " %" & eol _
@@ -306,8 +306,8 @@ Public Class GoodnessOfFit
             Dim values() As String
             ReDim values(12)
             values(0) = GOFResult.Key
-            values(1) = _gof.startDate.ToString(Datumsformate("default"))
-            values(2) = _gof.endDate.ToString(Datumsformate("default"))
+            values(1) = _gof.startDate.ToString(Helpers.DefaultDateFormat)
+            values(2) = _gof.endDate.ToString(Helpers.DefaultDateFormat)
             values(3) = _gof.nValues.ToString()
             values(4) = _gof.volume_observed.ToString(formatstring)
             values(5) = _gof.volume_simulated.ToString(formatstring)

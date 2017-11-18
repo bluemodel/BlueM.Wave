@@ -34,7 +34,7 @@ Imports System.Globalization
 ''' <remarks>Format siehe http://wiki.bluemodel.org/index.php/ASC-Format</remarks>
 ''' 
 Public Class SWMM_OUT
-    Inherits Dateiformat
+    Inherits FileFormatBase
     Protected oSWMM As modelEAU.SWMM.DllAdapter.SWMM_iface
 
     Private anzSpalten As Integer
@@ -81,18 +81,18 @@ Public Class SWMM_OUT
         MyBase.New(FileName)
 
         'Voreinstellungen
-        Me.iZeileUeberschriften = 1
-        Me.UseEinheiten = True
-        Me.iZeileEinheiten = 0
-        Me.iZeileDaten = 0
-        Me.Zeichengetrennt = False
-        Me.Trennzeichen = Me.leerzeichen
-        Me.Dezimaltrennzeichen = Me.punkt
-        Me.XSpalte = 0
+        Me.iLineHeadings = 1
+        Me.UseUnits = True
+        Me.iLineUnits = 0
+        Me.iLineData = 0
+        Me.IsColumnSeparated = False
+        Me.Separator = Constants.space
+        Me.DecimalSeparator = Constants.period
+        Me.DateTimeColumnIndex = 0
 
         oSWMM = New modelEAU.SWMM.DllAdapter.SWMM_iface()
 
-        Call Me.SpaltenAuslesen()
+        Call Me.ReadColumns()
 
         If Series <> "" Then
             Read_File(Series)
@@ -102,7 +102,7 @@ Public Class SWMM_OUT
 
     'Spalten auslesen
     '****************
-    Public Overrides Sub SpaltenAuslesen()
+    Public Overrides Sub ReadColumns()
 
         Dim i, j, index As Integer
         Dim indexSpalten As Integer
@@ -127,23 +127,23 @@ Public Class SWMM_OUT
                    + nSysvars _
                    + 1
 
-        ReDim Me.Spalten(anzSpalten - 1)
+        ReDim Me.Columns(anzSpalten - 1)
         ReDim SWMMBinaryFileIndex(anzSpalten - 1)
 
-        Me.Spalten(0).Name = "Date"
-        Me.Spalten(0).Index = 0
-        Me.Spalten(0).Einheit = "-"
+        Me.Columns(0).Name = "Date"
+        Me.Columns(0).Index = 0
+        Me.Columns(0).Einheit = "-"
         indexSpalten = 1
         For i = 0 To nSubcatch - 1
             'Flows
             For j = 0 To nSubcatchVars - nPolluts - 1
                 index = indexSpalten + i * nSubcatchVars + j
-                Me.Spalten(index).Name = oSWMM.subcatchments(i) & " " & oSWMM.SUBCATCHVAR(j)
-                Me.Spalten(index).Objekt = oSWMM.subcatchments(i)
-                Me.Spalten(index).Einheit = Units(0, j, FlowUnits)
-                Me.Spalten(index).Type = "FLOW"
-                Me.Spalten(index).ObjType = "Subcatchment"
-                Me.Spalten(index).Index = index
+                Me.Columns(index).Name = oSWMM.subcatchments(i) & " " & oSWMM.SUBCATCHVAR(j)
+                Me.Columns(index).Objekt = oSWMM.subcatchments(i)
+                Me.Columns(index).Einheit = Units(0, j, FlowUnits)
+                Me.Columns(index).Type = "FLOW"
+                Me.Columns(index).ObjType = "Subcatchment"
+                Me.Columns(index).Index = index
                 SWMMBinaryFileIndex(index).iType = 0
                 SWMMBinaryFileIndex(index).iIndex = i
                 SWMMBinaryFileIndex(index).vIndex = j
@@ -151,13 +151,13 @@ Public Class SWMM_OUT
             'Pollutants
             For j = nSubcatchVars - nPolluts To nSubcatchVars - 1
                 index = indexSpalten + i * nSubcatchVars + j
-                Me.Spalten(index).Name = oSWMM.subcatchments(i) & " " & oSWMM.pollutants(j - nSubcatchVars + nPolluts)
-                Me.Spalten(index).Objekt = oSWMM.subcatchments(i)
-                Me.Spalten(index).Einheit = Units(0, j, FlowUnits)
+                Me.Columns(index).Name = oSWMM.subcatchments(i) & " " & oSWMM.pollutants(j - nSubcatchVars + nPolluts)
+                Me.Columns(index).Objekt = oSWMM.subcatchments(i)
+                Me.Columns(index).Einheit = Units(0, j, FlowUnits)
                 'Type aus String (z.B. für "S101 CSB" wird "CSB" ausgelesen)
-                Me.Spalten(index).Type = oSWMM.pollutants(j - nSubcatchVars + nPolluts)
-                Me.Spalten(index).ObjType = "Subcatchment"
-                Me.Spalten(index).Index = index
+                Me.Columns(index).Type = oSWMM.pollutants(j - nSubcatchVars + nPolluts)
+                Me.Columns(index).ObjType = "Subcatchment"
+                Me.Columns(index).Index = index
                 SWMMBinaryFileIndex(index).iType = 0
                 SWMMBinaryFileIndex(index).iIndex = i
                 SWMMBinaryFileIndex(index).vIndex = j
@@ -168,12 +168,12 @@ Public Class SWMM_OUT
             'Flows
             For j = 0 To nNodesVars - nPolluts - 1
                 index = indexSpalten + i * nNodesVars + j
-                Me.Spalten(index).Name = oSWMM.nodes(i) & " " & oSWMM.NODEVAR(j)
-                Me.Spalten(index).Objekt = oSWMM.nodes(i)
-                Me.Spalten(index).Einheit = Units(1, j, FlowUnits)
-                Me.Spalten(index).Type = "FLOW"
-                Me.Spalten(index).ObjType = "Node"
-                Me.Spalten(index).Index = index
+                Me.Columns(index).Name = oSWMM.nodes(i) & " " & oSWMM.NODEVAR(j)
+                Me.Columns(index).Objekt = oSWMM.nodes(i)
+                Me.Columns(index).Einheit = Units(1, j, FlowUnits)
+                Me.Columns(index).Type = "FLOW"
+                Me.Columns(index).ObjType = "Node"
+                Me.Columns(index).Index = index
                 SWMMBinaryFileIndex(index).iType = 1
                 SWMMBinaryFileIndex(index).iIndex = i
                 SWMMBinaryFileIndex(index).vIndex = j
@@ -181,13 +181,13 @@ Public Class SWMM_OUT
             'Pollutants
             For j = nNodesVars - nPolluts To nNodesVars - 1
                 index = indexSpalten + i * nNodesVars + j
-                Me.Spalten(index).Name = oSWMM.nodes(i) & " " & oSWMM.pollutants(j - nNodesVars + nPolluts)
-                Me.Spalten(index).Objekt = oSWMM.nodes(i)
-                Me.Spalten(index).Einheit = Units(1, j, FlowUnits)
+                Me.Columns(index).Name = oSWMM.nodes(i) & " " & oSWMM.pollutants(j - nNodesVars + nPolluts)
+                Me.Columns(index).Objekt = oSWMM.nodes(i)
+                Me.Columns(index).Einheit = Units(1, j, FlowUnits)
                 'Type aus String (z.B. für "S101 CSB" wird "CSB" ausgelesen)
-                Me.Spalten(index).Type = oSWMM.pollutants(j - nNodesVars + nPolluts)
-                Me.Spalten(index).ObjType = "Node"
-                Me.Spalten(index).Index = index
+                Me.Columns(index).Type = oSWMM.pollutants(j - nNodesVars + nPolluts)
+                Me.Columns(index).ObjType = "Node"
+                Me.Columns(index).Index = index
                 SWMMBinaryFileIndex(index).iType = 1
                 SWMMBinaryFileIndex(index).iIndex = i
                 SWMMBinaryFileIndex(index).vIndex = j
@@ -198,12 +198,12 @@ Public Class SWMM_OUT
             'Flows
             For j = 0 To nLinksVars - nPolluts - 1
                 index = indexSpalten + i * nLinksVars + j
-                Me.Spalten(index).Name = oSWMM.links(i) & " " & oSWMM.LINKVAR(j)
-                Me.Spalten(index).Objekt = oSWMM.links(i)
-                Me.Spalten(index).Einheit = Units(2, j, FlowUnits)
-                Me.Spalten(index).Type = "FLOW"
-                Me.Spalten(index).ObjType = "Link"
-                Me.Spalten(index).Index = index
+                Me.Columns(index).Name = oSWMM.links(i) & " " & oSWMM.LINKVAR(j)
+                Me.Columns(index).Objekt = oSWMM.links(i)
+                Me.Columns(index).Einheit = Units(2, j, FlowUnits)
+                Me.Columns(index).Type = "FLOW"
+                Me.Columns(index).ObjType = "Link"
+                Me.Columns(index).Index = index
                 SWMMBinaryFileIndex(index).iType = 2
                 SWMMBinaryFileIndex(index).iIndex = i
                 SWMMBinaryFileIndex(index).vIndex = j
@@ -211,13 +211,13 @@ Public Class SWMM_OUT
             'Pollutants
             For j = nLinksVars - nPolluts To nLinksVars - 1
                 index = indexSpalten + i * nLinksVars + j
-                Me.Spalten(index).Name = oSWMM.links(i) & " " & oSWMM.pollutants(j - nLinksVars + nPolluts)
-                Me.Spalten(index).Objekt = oSWMM.links(i)
-                Me.Spalten(index).Einheit = Units(2, j, FlowUnits)
+                Me.Columns(index).Name = oSWMM.links(i) & " " & oSWMM.pollutants(j - nLinksVars + nPolluts)
+                Me.Columns(index).Objekt = oSWMM.links(i)
+                Me.Columns(index).Einheit = Units(2, j, FlowUnits)
                 'Type aus String (z.B. für "S101 CSB" wird "CSB" ausgelesen)
-                Me.Spalten(index).Type = oSWMM.pollutants(j - nLinksVars + nPolluts)
-                Me.Spalten(index).ObjType = "Link"
-                Me.Spalten(index).Index = index
+                Me.Columns(index).Type = oSWMM.pollutants(j - nLinksVars + nPolluts)
+                Me.Columns(index).ObjType = "Link"
+                Me.Columns(index).Index = index
                 SWMMBinaryFileIndex(index).iType = 2
                 SWMMBinaryFileIndex(index).iIndex = i
                 SWMMBinaryFileIndex(index).vIndex = j
@@ -226,9 +226,9 @@ Public Class SWMM_OUT
         indexSpalten += nLinks * nLinksVars
         For i = 0 To nSysvars - 1
             index = indexSpalten + i
-            Me.Spalten(index).Name = oSWMM.SYSVAR(i)
-            Me.Spalten(index).Einheit = Units(3, j, FlowUnits)
-            Me.Spalten(index).Index = index
+            Me.Columns(index).Name = oSWMM.SYSVAR(i)
+            Me.Columns(index).Einheit = Units(3, j, FlowUnits)
+            Me.Columns(index).Index = index
             SWMMBinaryFileIndex(index).iType = 3
             SWMMBinaryFileIndex(index).iIndex = 0
             SWMMBinaryFileIndex(index).vIndex = i
@@ -247,27 +247,27 @@ Public Class SWMM_OUT
         Dim datum As Double
 
         'Anzahl Zeitreihen
-        anzahlZeitreihen = Me.SpaltenSel.Length
-        ReDim Me.Zeitreihen(anzahlZeitreihen - 1)
+        anzahlZeitreihen = Me.SelectedColumns.Length
+        ReDim Me.TimeSeries(anzahlZeitreihen - 1)
         'Indexarray
         'ReDim index(anzahlZeitreihen)
         'Zeitreihen instanzieren
         For i = 0 To anzahlZeitreihen - 1
-            Me.Zeitreihen(i) = New TimeSeries(Me.SpaltenSel(i).Name)
+            Me.TimeSeries(i) = New TimeSeries(Me.SelectedColumns(i).Name)
             'Einheiten?
-            If (Me.UseEinheiten) Then
-                Me.Zeitreihen(i).Unit = Me.SpaltenSel(i).Einheit
+            If (Me.UseUnits) Then
+                Me.TimeSeries(i).Unit = Me.SelectedColumns(i).Einheit
             End If
             'Objektname und Typ (für SWMM-Txt-Export)
-            Me.Zeitreihen(i).Objekt = Me.SpaltenSel(i).Objekt
-            Me.Zeitreihen(i).Type = Me.SpaltenSel(i).Type
+            Me.TimeSeries(i).Objekt = Me.SelectedColumns(i).Objekt
+            Me.TimeSeries(i).Type = Me.SelectedColumns(i).Type
             For j = 0 To anzSpalten - 1
-                If (Me.SpaltenSel(i).Name = Me.Spalten(j).Name) And (Me.SpaltenSel(i).ObjType = Me.Spalten(j).ObjType) Then
+                If (Me.SelectedColumns(i).Name = Me.Columns(j).Name) And (Me.SelectedColumns(i).ObjType = Me.Columns(j).ObjType) Then
                     index = j
                     For period = 0 To oSWMM.NPeriods - 1
                         oSWMM.GetSwmmDate(period, datum)
                         oSWMM.GetSwmmResult(SWMMBinaryFileIndex(index).iType, SWMMBinaryFileIndex(index).iIndex, SWMMBinaryFileIndex(index).vIndex, period, value)
-                        Me.Zeitreihen(i).AddNode(Date.FromOADate(datum), value)
+                        Me.TimeSeries(i).AddNode(Date.FromOADate(datum), value)
                     Next
                 End If
             Next
@@ -283,18 +283,18 @@ Public Class SWMM_OUT
 
         'Anzahl Zeitreihen
         anzahlZeitreihen = 1
-        ReDim Me.Zeitreihen(anzahlZeitreihen - 1)
+        ReDim Me.TimeSeries(anzahlZeitreihen - 1)
         'Indexarray
         'ReDim index(anzahlZeitreihen)
         'Zeitreihen instanzieren
-        Me.Zeitreihen(i) = New TimeSeries(series)
+        Me.TimeSeries(i) = New TimeSeries(series)
         For j = 0 To anzSpalten - 1
-            If Series = Me.Spalten(j).Name Then
+            If Series = Me.Columns(j).Name Then
                 index = j
                 For period = 0 To oSWMM.NPeriods - 1
                     oSWMM.GetSwmmDate(period, datum)
                     oSWMM.GetSwmmResult(SWMMBinaryFileIndex(index).iType, SWMMBinaryFileIndex(index).iIndex, SWMMBinaryFileIndex(index).vIndex, period, value)
-                    Me.Zeitreihen(i).AddNode(Date.FromOADate(datum), value)
+                    Me.TimeSeries(i).AddNode(Date.FromOADate(datum), value)
                 Next
             End If
         Next

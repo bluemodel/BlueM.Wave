@@ -32,7 +32,7 @@ Imports System.IO
 ''' </summary>
 ''' <remarks>Format siehe http://wiki.bluemodel.org/index.php/SMUSI_REG-Format</remarks>
 Public Class REG_SMUSI
-    Inherits Dateiformat
+    Inherits FileFormatBase
 
     Const WerteproZeile As Integer = 12
     Const LenWert As Integer = 5
@@ -75,15 +75,15 @@ Public Class REG_SMUSI
         MyBase.New(FileName)
 
         'Voreinstellungen
-        Me.Datumsformat = Datumsformate("SMUSI")
-        Me.iZeileDaten = 4
-        Me.UseEinheiten = True
+        Me.Dateformat = DateFormats("SMUSI")
+        Me.iLineData = 4
+        Me.UseUnits = True
 
-        Call Me.SpaltenAuslesen()
+        Call Me.ReadColumns()
 
         If (ReadAllNow) Then
             'Direkt einlesen
-            Call Me.selectAllSpalten()
+            Call Me.selectAllColumns()
             Call Me.Read_File()
         End If
 
@@ -91,7 +91,7 @@ Public Class REG_SMUSI
 
     'Spalten auslesen
     '****************
-    Public Overrides Sub SpaltenAuslesen()
+    Public Overrides Sub ReadColumns()
 
         Dim Zeile As String
         Dim i As Integer
@@ -103,32 +103,32 @@ Public Class REG_SMUSI
             Dim StrReadSync = TextReader.Synchronized(StrRead)
 
             'Es gibt immer 2 Spalten (Datum + Werte)!
-            ReDim Me.Spalten(1)
+            ReDim Me.Columns(1)
 
             '1. Spalte (X)
-            Me.Spalten(0).Name = "Datum_Zeit"
-            Me.Spalten(0).Index = 0
+            Me.Columns(0).Name = "Datum_Zeit"
+            Me.Columns(0).Index = 0
 
             '2. Spalte (Y)
-            Me.Spalten(1).Index = 1
+            Me.Columns(1).Index = 1
 
             'Reihentitel steht in 1. Spalte bei den Werten:
             Zeile = ""
-            For i = 0 To Me.nZeilenHeader
+            For i = 0 To Me.nLinesHeader
                 Zeile = StrReadSync.ReadLine.ToString()
             Next
 
             'Check if there are empty rows between the "nZeilenHeader" and the start of the actual data
-            nRowsHead = Me.nZeilenHeader
+            nRowsHead = Me.nLinesHeader
             While Zeile.Trim = ""
                 Zeile = StrReadSync.ReadLine.ToString()
                 nRowsHead = nRowsHead + 1
             End While
 
-            Me.Spalten(1).Name = Zeile.Substring(0, 4).Trim()
+            Me.Columns(1).Name = Zeile.Substring(0, 4).Trim()
 
             'Einheit ist immer mm
-            Me.Spalten(1).Einheit = "mm"
+            Me.Columns(1).Einheit = "mm"
 
             StrReadSync.close()
             StrRead.Close()
@@ -156,9 +156,9 @@ Public Class REG_SMUSI
         Dim StrReadSync = TextReader.Synchronized(StrRead)
 
         'Zeitreihe instanzieren
-        ReDim Me.Zeitreihen(0) 'bei REG gibt es nur eine Zeitreihe
-        Me.Zeitreihen(0) = New TimeSeries(Me.SpaltenSel(0).Name)
-        Me.Zeitreihen(0).Unit = Me.SpaltenSel(0).Einheit
+        ReDim Me.TimeSeries(0) 'bei REG gibt es nur eine Zeitreihe
+        Me.TimeSeries(0) = New TimeSeries(Me.SelectedColumns(0).Name)
+        Me.TimeSeries(0).Unit = Me.SelectedColumns(0).Einheit
 
         'Einlesen
         '--------
@@ -191,7 +191,7 @@ Public Class REG_SMUSI
                         'Bei vorheriger leeren Zeile: 0-Stelle 5 min nach letztem Datum einfügen
                         DatumTmp = DatumCurrent.Add(Me.Zeitintervall)
                         If (Not DatumTmp = DatumZeile) Then
-                            Me.Zeitreihen(0).AddNode(DatumTmp, 0)
+                            Me.TimeSeries(0).AddNode(DatumTmp, 0)
                         End If
                     End If
 
@@ -200,14 +200,14 @@ Public Class REG_SMUSI
                     For i = 0 To REG_SMUSI.WerteproZeile - 1
                         DatumCurrent = DatumZeile.AddMinutes(i * REG_SMUSI.dt_min)
                         Wert = StringToDouble(Zeile.Substring(LenZeilenanfang + LenWert * i, LenWert)) / 1000
-                        Me.Zeitreihen(0).AddNode(DatumCurrent, Wert)
+                        Me.TimeSeries(0).AddNode(DatumCurrent, Wert)
                     Next
 
                     If (leerzeile) Then
                         'Bei vorheriger leeren Zeile: 0-Stelle 5 min vor Zeilendatum einfügen
                         DatumTmp = DatumZeile.Subtract(Me.Zeitintervall)
-                        If (Not Zeitreihen(0).Nodes.ContainsKey(DatumTmp)) Then
-                            Me.Zeitreihen(0).AddNode(DatumTmp, 0)
+                        If (Not TimeSeries(0).Nodes.ContainsKey(DatumTmp)) Then
+                            Me.TimeSeries(0).AddNode(DatumTmp, 0)
                         End If
                     End If
 
@@ -288,7 +288,7 @@ Public Class REG_SMUSI
         n = iDatum   'Ausgabe beginnt bei ersten vollen Stunde in der Zeitreihe
         For iZeile = 0 To AnzahlZeilen - 1
             strwrite.Write("KONV ")
-            strwrite.Write(KontiReihe.Dates(n).ToString(Datumsformate("SMUSI")))
+            strwrite.Write(KontiReihe.Dates(n).ToString(DateFormats("SMUSI")))
             For j = 1 To WerteproZeile
                 IntWert = KontiReihe.Values(n) * 1000
                 Summe = Summe + IntWert

@@ -32,7 +32,7 @@ Imports System.IO
 ''' </summary>
 ''' <remarks>Format siehe http://wiki.bluemodel.org/index.php/SMB-Format</remarks>
 Public Class SMB
-    Inherits Dateiformat
+    Inherits FileFormatBase
 
     ''' <summary>
     ''' Gibt an, ob beim Import des Dateiformats der Importdialog angezeigt werden soll
@@ -56,14 +56,14 @@ Public Class SMB
         MyBase.New(FileName)
 
         'Voreinstellungen
-        Me.iZeileDaten = 2
-        Me.UseEinheiten = True
+        Me.iLineData = 2
+        Me.UseUnits = True
 
-        Call Me.SpaltenAuslesen()
+        Call Me.ReadColumns()
 
         If (ReadAllNow) Then
             'Direkt einlesen
-            Call Me.selectAllSpalten()
+            Call Me.selectAllColumns()
             Call Me.Read_File()
         End If
 
@@ -71,7 +71,7 @@ Public Class SMB
 
     'Spalten auslesen
     '****************
-    Public Overrides Sub SpaltenAuslesen()
+    Public Overrides Sub ReadColumns()
 
         Dim Zeile As String = ""
 
@@ -82,20 +82,20 @@ Public Class SMB
             Dim StrReadSync = TextReader.Synchronized(StrRead)
 
             'Es gibt immer 2 Spalten
-            ReDim Me.Spalten(1)
+            ReDim Me.Columns(1)
 
             '1. Spalte (X)
-            Me.Spalten(0).Name = "Datum_Zeit"
-            Me.Spalten(0).Index = 0
+            Me.Columns(0).Name = "Datum_Zeit"
+            Me.Columns(0).Index = 0
 
             '2. Spalte (Y)
 
             'Reihentitel steht in 1. Zeile:
             Zeile = StrReadSync.ReadLine.ToString()
-            Me.Spalten(1).Name = Zeile.Substring(15).Trim()
+            Me.Columns(1).Name = Zeile.Substring(15).Trim()
             'Annahme, dass SMB-Dateien Regenreihen sind, daher Einheit mm fest verdrahtet
-            Me.Spalten(1).Einheit = "mm"
-            Me.Spalten(1).Index = 1
+            Me.Columns(1).Einheit = "mm"
+            Me.Columns(1).Index = 1
 
             StrReadSync.close()
             StrRead.Close()
@@ -123,9 +123,9 @@ Public Class SMB
         Dim StrReadSync = TextReader.Synchronized(StrRead)
 
         'Zeitreihe instanzieren
-        ReDim Me.Zeitreihen(0) 'bei SMB gibt es nur eine Zeitreihe
-        Me.Zeitreihen(0) = New TimeSeries(Me.SpaltenSel(0).Name)
-        Me.Zeitreihen(0).Unit = Me.SpaltenSel(0).Einheit
+        ReDim Me.TimeSeries(0) 'bei SMB gibt es nur eine Zeitreihe
+        Me.TimeSeries(0) = New TimeSeries(Me.SelectedColumns(0).Name)
+        Me.TimeSeries(0).Unit = Me.SelectedColumns(0).Einheit
 
         j = 1
 
@@ -144,7 +144,7 @@ Public Class SMB
         Do
             Zeile = StrReadSync.ReadLine.ToString()
             j += 1
-            If (j > Me.nZeilenHeader And Zeile.Length > 0) Then
+            If (j > Me.nLinesHeader And Zeile.Length > 0) Then
 
                 'Datum erkennen
                 '--------------
@@ -160,7 +160,7 @@ Public Class SMB
 
                 'Datum und Wert zur Zeitreihe hinzufügen
                 '---------------------------------------
-                Me.Zeitreihen(0).AddNode(Datum, StringToDouble(Zeile.Substring(i + 2)))
+                Me.TimeSeries(0).AddNode(Datum, StringToDouble(Zeile.Substring(i + 2)))
 
             End If
         Loop Until StrReadSync.Peek() = -1
