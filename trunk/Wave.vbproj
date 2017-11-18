@@ -136,51 +136,51 @@
     <Compile Include="Analysis\AnnualStatistics.vb" />
     <Compile Include="Character.vb" />
     <Compile Include="Constants.vb" />
-    <Compile Include="CutDialog.Designer.vb">
+    <Compile Include="Dialogs\CutDialog.Designer.vb">
       <DependentUpon>CutDialog.vb</DependentUpon>
     </Compile>
-    <Compile Include="CutDialog.vb">
+    <Compile Include="Dialogs\CutDialog.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialogs\ExportDiag.Designer.vb">
+      <DependentUpon>ExportDiag.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\ExportDiag.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialogs\ImportDiag.Designer.vb">
+      <DependentUpon>ImportDiag.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\ImportDiag.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialogs\RemoveErrorValuesDialog.Designer.vb">
+      <DependentUpon>RemoveErrorValuesDialog.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\RemoveErrorValuesDialog.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialogs\RenameSeriesDialog.Designer.vb">
+      <DependentUpon>RenameSeriesDialog.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\RenameSeriesDialog.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialogs\SeriesEditorDialog.Designer.vb">
+      <DependentUpon>SeriesEditorDialog.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\SeriesEditorDialog.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="FileFormats\FileFactory.vb" />
     <Compile Include="FileFormats\FileFormatBase.vb" />
     <Compile Include="Helpers.vb" />
-    <Compile Include="RenameSeriesDialog.Designer.vb">
-      <DependentUpon>RenameSeriesDialog.vb</DependentUpon>
-    </Compile>
-    <Compile Include="RenameSeriesDialog.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Importdialoge\ImportDiag.Designer.vb">
-      <DependentUpon>ImportDiag.vb</DependentUpon>
-    </Compile>
-    <Compile Include="Importdialoge\ImportDiag.vb">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="Log.vb" />
     <Compile Include="My Project\ApplicationEvents.vb" />
     <Compile Include="My Project\Resources.Designer.vb">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-    <Compile Include="RemoveErrorValuesDialog.Designer.vb">
-      <DependentUpon>RemoveErrorValuesDialog.vb</DependentUpon>
-    </Compile>
-    <Compile Include="RemoveErrorValuesDialog.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="SeriesEditorDialog.Designer.vb">
-      <DependentUpon>SeriesEditorDialog.vb</DependentUpon>
-    </Compile>
-    <Compile Include="SeriesEditorDialog.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="ExportDiag.Designer.vb">
-      <DependentUpon>ExportDiag.vb</DependentUpon>
-    </Compile>
-    <Compile Include="ExportDiag.vb">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="LogWindow.Designer.vb">
       <DependentUpon>LogWindow.vb</DependentUpon>
@@ -255,18 +255,6 @@
       <SubType>Designer</SubType>
       <DependentUpon>AnalysisDialog.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="CutDialog.resx">
-      <DependentUpon>CutDialog.vb</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="SeriesEditorDialog.resx">
-      <DependentUpon>SeriesEditorDialog.vb</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ExportDiag.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>ExportDiag.vb</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="LogWindow.resx">
       <SubType>Designer</SubType>
       <DependentUpon>LogWindow.vb</DependentUpon>
@@ -326,12 +314,28 @@
       <DependentUpon>HistogramDialog.vb</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="RemoveErrorValuesDialog.resx">
+    <EmbeddedResource Include="Dialogs\CutDialog.resx">
+      <DependentUpon>CutDialog.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialogs\ExportDiag.resx">
+      <DependentUpon>ExportDiag.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialogs\ImportDiag.resx">
+      <DependentUpon>ImportDiag.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialogs\RemoveErrorValuesDialog.resx">
       <DependentUpon>RemoveErrorValuesDialog.vb</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="RenameSeriesDialog.resx">
+    <EmbeddedResource Include="Dialogs\RenameSeriesDialog.resx">
       <DependentUpon>RenameSeriesDialog.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialogs\SeriesEditorDialog.resx">
+      <DependentUpon>SeriesEditorDialog.vb</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\cursor_pan.cur" />
@@ -356,10 +360,6 @@
     <None Include="Resources\arrow_refresh.png" />
     <EmbeddedResource Include="Analysis\GoodnessOfFit_Dialog.resx">
       <DependentUpon>GoodnessOfFit_Dialog.vb</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Importdialoge\ImportDiag.resx">
-      <DependentUpon>ImportDiag.vb</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="My Project\licenses.licx" />
