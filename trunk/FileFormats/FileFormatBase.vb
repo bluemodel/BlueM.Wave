@@ -50,6 +50,26 @@ Public MustInherit Class FileFormatBase
         WVP = 13
     End Enum
 
+    ''' <summary>
+    ''' FileFilter for file dialogs
+    ''' </summary>
+    ''' <remarks></remarks>
+    Public Const FileFilter As String = _
+            "All files (*.*)|*.*|" & _
+            "Text files (*.txt)|*.txt|" & _
+            "CSV files (*.csv)|*.csv|" & _
+            "ZRE files (*.zre)|*.zre|" & _
+            "WEL files (*.wel, *.kwl)|*.wel;*.kwl|" & _
+            "UVF files (*.uvf)|*.uvf|" & _
+            "SMUSI files (*.asc)|*.asc|" & _
+            "SIMBA files (*.smb)|*.smb|" & _
+            "Hystem Extran files (*.dat)|*.dat|" & _
+            "SWMM files (*.out)|*.out|" & _
+            "HYDRO_AS-2D files (*.dat)|*.dat|" & _
+            "SYDRO binary files (*.bin)|*.bin|" & _
+            "ZRXP files (*.zrx)|*.zrx|" & _
+            "Wave project files (*wvp)|*.wvp"
+
 #Region "allgemeine Eigenschaften"
     Protected SpaltenOffset As Integer = 0          'Anzahl Zeichen bevor die erste Spalte anfängt (nur bei Spalten mit fester Breite)
 #End Region
