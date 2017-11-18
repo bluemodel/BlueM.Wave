@@ -1460,6 +1460,7 @@ Public Class Wave
         Dim line, file, path, name, title As String
         Dim found As Boolean
         Dim series As Dictionary(Of String, String)
+        Dim seriesNotFound As List(Of String)
         Dim fileobj As Dateiformat
         Dim n As Integer
 
@@ -1487,11 +1488,11 @@ Public Class Wave
             line = strRead.ReadLine()
             While Not IsNothing(line)
 
-                line = line.Trim()
+                line = line.Trim() 'get rid of whitespace at the beginning of lines
 
                 If line.ToLower().StartsWith("file=") Then
                     'file
-                    path = line.Split("=")(1).Trim()
+                    path = line.Split("=".ToCharArray(), 2)(1).Trim()
                     If Not IO.Path.IsPathRooted(path) Then
                         'it's a relative path: construct the full path relative to the project file
                         path = IO.Path.GetFullPath(IO.Path.Combine(IO.Path.GetDirectoryName(projectfile), path))
@@ -1500,11 +1501,11 @@ Public Class Wave
 
                 ElseIf line.ToLower().StartsWith("series=") Then
                     'series
-                    line = line.Split("=")(1).Trim()
+                    line = line.Split("=".ToCharArray(), 2)(1).Trim()
                     If line.Contains(":") Then
                         'series with title
-                        name = line.Split(":")(0).Trim()
-                        title = line.Split(":")(1).Replace("""", "").Trim()
+                        name = line.Split(":".ToCharArray(), 2)(0).Trim()
+                        title = line.Split(":".ToCharArray(), 2)(1).Replace("""", "").Trim()
                     Else
                         'series without title
                         name = line.Trim()
@@ -1537,6 +1538,7 @@ Public Class Wave
                     Call fileobj.selectAllSpalten()
                 Else
                     'loop over series names
+                    seriesNotFound = New List(Of String)
                     For Each name In series.Keys
                         'search for series in file
                         found = False
@@ -1553,8 +1555,19 @@ Public Class Wave
                         If Not found Then
                             'series not found in file
                             Log.AddLogEntry("Series " & name & " not found in file!")
+                            seriesNotFound.Add(name)
                         End If
                     Next
+                    'remove series that were not found from the dictionary
+                    For Each name In seriesNotFound
+                        series.Remove(name)
+                    Next
+                    'if no series remain to be imported, abort reading the file altogether
+                    If series.Count = 0
+                        Log.AddLogEntry("No series left to import, skipping file!")
+                        Continue For
+                    End If
+
                 End If
 
                 'read the file
@@ -1564,8 +1577,10 @@ Public Class Wave
                 Call Log.AddLogEntry("Loading series in chart...")
                 For Each ts As TimeSeries In fileobj.Zeitreihen
                     'change title if specified in the project file
-                    If series(ts.Title) <> "" Then
-                        ts.Title = series(ts.Title)
+                    If series.Count > 0 Then
+                        If series(ts.Title) <> "" Then
+                            ts.Title = series(ts.Title)
+                        End If
                     End If
                     Call Me.Import_Series(ts)
                 Next
