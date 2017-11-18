@@ -35,13 +35,13 @@ Public Class ExportDiag
         ' Add any initialization after the InitializeComponent() call.
 
         'add formats to combobox
-        Me.ComboBox_Format.Items.Add(Dateiformate.CSV)
-        Me.ComboBox_Format.Items.Add(Dateiformate.ZRE)
-        Me.ComboBox_Format.Items.Add(Dateiformate.REG_HYSTEM)
-        Me.ComboBox_Format.Items.Add(Dateiformate.REG_SMUSI)
-        Me.ComboBox_Format.Items.Add(Dateiformate.DAT_SWMM_MASS)
-        Me.ComboBox_Format.Items.Add(Dateiformate.DAT_SWMM_TIME)
-        Me.ComboBox_Format.Items.Add(Dateiformate.TXT_SWMM)
+        Me.ComboBox_Format.Items.Add(FileFormatBase.FileFormats.CSV)
+        Me.ComboBox_Format.Items.Add(FileFormatBase.FileFormats.ZRE)
+        Me.ComboBox_Format.Items.Add(FileFormatBase.FileFormats.REG_HYSTEM)
+        Me.ComboBox_Format.Items.Add(FileFormatBase.FileFormats.REG_SMUSI)
+        Me.ComboBox_Format.Items.Add(FileFormatBase.FileFormats.DAT_SWMM_MASS)
+        Me.ComboBox_Format.Items.Add(FileFormatBase.FileFormats.DAT_SWMM_TIME)
+        Me.ComboBox_Format.Items.Add(FileFormatBase.FileFormats.TXT_SWMM)
         Me.ComboBox_Format.SelectedIndex = 0
 
         'Add series to listbox
@@ -61,17 +61,17 @@ Public Class ExportDiag
 
         Select Case ComboBox_Format.SelectedItem
 
-            Case Dateiformate.ZRE, _
-                 Dateiformate.REG_HYSTEM, _
-                 Dateiformate.REG_SMUSI, _
-                 Dateiformate.DAT_SWMM_MASS, _
-                 Dateiformate.DAT_SWMM_TIME
+            Case FileFormatBase.FileFormats.ZRE, _
+                 FileFormatBase.FileFormats.REG_HYSTEM, _
+                 FileFormatBase.FileFormats.REG_SMUSI, _
+                 FileFormatBase.FileFormats.DAT_SWMM_MASS, _
+                 FileFormatBase.FileFormats.DAT_SWMM_TIME
                 'Allow selection of a single series
                 Me.ListBox_Series.SelectionMode = SelectionMode.One
                 Me.Button_SelectAll.Enabled = False
 
-            Case Dateiformate.TXT_SWMM, _
-                 Dateiformate.CSV
+            Case FileFormatBase.FileFormats.TXT_SWMM, _
+                 FileFormatBase.FileFormats.CSV
                 'Allow selection of multiple series
                 Me.ListBox_Series.SelectionMode = SelectionMode.MultiExtended
                 Me.Button_SelectAll.Enabled = True

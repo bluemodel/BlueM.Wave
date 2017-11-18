@@ -25,11 +25,39 @@
 'EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 '--------------------------------------------------------------------------------------------
 '
-Public Class Zeichen
+''' <summary>
+''' Helper Class for Characters
+''' </summary>
+''' <remarks></remarks>
+Public Class Character
 
     Private _char As Char
 
-    Public Property Character() As Char
+    ''' <summary>
+    ''' Constructor
+    ''' </summary>
+    ''' <param name="str">String to convert (only the first character is used)</param>
+    ''' <remarks></remarks>
+    Public Sub New(ByVal str As String)
+        ToChar = Convert.ToChar(str)
+    End Sub
+
+    ''' <summary>
+    ''' Constructor
+    ''' </summary>
+    ''' <param name="chr">Character</param>
+    ''' <remarks></remarks>
+    Public Sub New(ByVal chr As Char)
+        ToChar = chr
+    End Sub
+
+    ''' <summary>
+    ''' Returns a Char instance
+    ''' </summary>
+    ''' <value></value>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
+    Public Property ToChar() As Char
         Get
             Return _char
         End Get
@@ -38,23 +66,16 @@ Public Class Zeichen
         End Set
     End Property
 
-    'Konstruktoren
-    '*************
-    Public Sub New(ByVal str As String)
-        Character = Convert.ToChar(str)
-    End Sub
-
-    Public Sub New(ByVal chr As Char)
-        Character = chr
-    End Sub
-
-    'Zeichenausgabe als String
-    '*************************
-    Public Overrides Function tostring() As String
+    ''' <summary>
+    ''' Returns a plaintext string representation (e.g. "comma")
+    ''' </summary>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
+    Public Overrides Function ToString() As String
 
         Dim output As String
 
-        Select Case Me.Character
+        Select Case Me.ToChar
             Case Chr(32)
                 output = "space"
             Case Chr(9)
@@ -66,7 +87,7 @@ Public Class Zeichen
             Case Chr(59)
                 output = "semicolon"
             Case Else
-                output = Convert.ToString(Me.Character)
+                output = Convert.ToString(Me.ToChar)
         End Select
 
         Return output

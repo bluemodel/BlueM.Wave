@@ -52,7 +52,7 @@ Public Class Wave
     Private isInitializing As Boolean
 
     'Collection von importierten Dateien
-    Private ImportedFiles As List(Of Dateiformat)
+    Private ImportedFiles As List(Of FileFormatBase)
 
     'Interne Zeitreihen-Collection
     Private Zeitreihen As Dictionary(Of String, TimeSeries)
@@ -103,7 +103,7 @@ Public Class Wave
 
         'Kollektionen einrichten
         '-----------------------
-        Me.ImportedFiles = New List(Of Dateiformat)()
+        Me.ImportedFiles = New List(Of FileFormatBase)()
         Me.Zeitreihen = New Dictionary(Of String, TimeSeries)()
         Me.MyAxes1 = New Dictionary(Of String, Steema.TeeChart.Axis)
         Me.MyAxes2 = New Dictionary(Of String, Steema.TeeChart.Axis)
@@ -632,31 +632,31 @@ Public Class Wave
         Me.SaveFileDialog1.AddExtension = True
         Me.SaveFileDialog1.OverwritePrompt = True
         Select Case exportDlg.ComboBox_Format.SelectedItem
-            Case Dateiformate.ASC
+            Case FileFormatBase.FileFormats.ASC
                 Me.SaveFileDialog1.DefaultExt = "asc"
                 Me.SaveFileDialog1.Filter = "ASC files (*.asc)|*.asc"
-            Case Dateiformate.CSV
+            Case FileFormatBase.FileFormats.CSV
                 Me.SaveFileDialog1.DefaultExt = "csv"
                 Me.SaveFileDialog1.Filter = "CSV files (*.csv)|*.csv"
-            Case Dateiformate.WEL
+            Case FileFormatBase.FileFormats.WEL
                 Me.SaveFileDialog1.DefaultExt = "wel"
                 Me.SaveFileDialog1.Filter = "WEL files (*.wel)|*.wel"
-            Case Dateiformate.ZRE
+            Case FileFormatBase.FileFormats.ZRE
                 Me.SaveFileDialog1.DefaultExt = "zre"
                 Me.SaveFileDialog1.Filter = "ZRE files (*.zre)|*.zre"
-            Case Dateiformate.REG_HYSTEM
+            Case FileFormatBase.FileFormats.REG_HYSTEM
                 Me.SaveFileDialog1.DefaultExt = "reg"
                 Me.SaveFileDialog1.Filter = "HYSTEM REG files (*.reg)|*.reg"
-            Case Dateiformate.REG_SMUSI
+            Case FileFormatBase.FileFormats.REG_SMUSI
                 Me.SaveFileDialog1.DefaultExt = "reg"
                 Me.SaveFileDialog1.Filter = "SMUSI REG files (*.reg)|*.reg"
-            Case Dateiformate.DAT_SWMM_MASS, Dateiformate.DAT_SWMM_TIME
+            Case FileFormatBase.FileFormats.DAT_SWMM_MASS, FileFormatBase.FileFormats.DAT_SWMM_TIME
                 Me.SaveFileDialog1.DefaultExt = "dat"
                 Me.SaveFileDialog1.Filter = "SWMM DAT files (*.dat)|*.dat"
-            Case Dateiformate.TXT_SWMM
+            Case FileFormatBase.FileFormats.TXT_SWMM
                 Me.SaveFileDialog1.DefaultExt = "txt"
                 Me.SaveFileDialog1.Filter = "SWMM Interface files (*.txt)|*.txt"
-            Case Dateiformate.UVF
+            Case FileFormatBase.FileFormats.UVF
                 Me.SaveFileDialog1.DefaultExt = "uvf"
                 Me.SaveFileDialog1.Filter = "UVF files (*.uvf)|*.uvf"
         End Select
@@ -679,25 +679,25 @@ Public Class Wave
 
         Select Case exportDlg.ComboBox_Format.SelectedItem
 
-            Case Dateiformate.ZRE
+            Case FileFormatBase.FileFormats.ZRE
                 Call ZRE.Write_File(zres(0), filename)
 
-            Case Dateiformate.REG_HYSTEM
+            Case FileFormatBase.FileFormats.REG_HYSTEM
                 Call HystemExtran_REG.Write_File(zres(0), filename)
 
-            Case Dateiformate.REG_SMUSI
+            Case FileFormatBase.FileFormats.REG_SMUSI
                 Call REG_SMUSI.Write_File(zres(0), filename)
 
-            Case Dateiformate.DAT_SWMM_MASS
+            Case FileFormatBase.FileFormats.DAT_SWMM_MASS
                 Call SWMM_DAT_MASS.Write_File(zres(0), filename, 5) 'TODO: Zeitschritt ist noch nicht dynamisch definiert
 
-            Case Dateiformate.DAT_SWMM_TIME
+            Case FileFormatBase.FileFormats.DAT_SWMM_TIME
                 Call SWMM_DAT_TIME.Write_File(zres(0), filename, 5) 'TODO: Zeitschritt ist noch nicht dynamisch definiert
 
-            Case Dateiformate.TXT_SWMM
+            Case FileFormatBase.FileFormats.TXT_SWMM
                 Call SWMM_TXT.Write_File(zres, filename)
 
-            Case Dateiformate.CSV
+            Case FileFormatBase.FileFormats.CSV
                 Call CSV.Write_File(zres, filename)
 
             Case Else
@@ -1039,7 +1039,7 @@ Public Class Wave
     ''' </summary>
     Private Sub RefreshFromFile(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem_ReloadFromFiles.Click
 
-        Dim Datei As Dateiformat
+        Dim Datei As FileFormatBase
         Dim Dateiliste As String
         Dim Answer As MsgBoxResult
 
@@ -1072,7 +1072,7 @@ Public Class Wave
                 'Jede Datei neu einlesen
                 Call Datei.Read_File()
                 'Alle Zeitreihen der Datei durchlaufen
-                For Each zre As TimeSeries In Datei.Zeitreihen
+                For Each zre As TimeSeries In Datei.TimeSeries
                     'Jede Zeitreihe importieren
                     Call Me.Import_Series(zre)
                 Next
@@ -1461,7 +1461,7 @@ Public Class Wave
         Dim found As Boolean
         Dim series As Dictionary(Of String, String)
         Dim seriesNotFound As List(Of String)
-        Dim fileobj As Dateiformat
+        Dim fileobj As FileFormatBase
         Dim n As Integer
 
         'files = {filename1:{series1:title1, series2:title2, ...}, ...}
@@ -1530,24 +1530,24 @@ Public Class Wave
                 Log.AddLogEntry("Reading file " & file & " ...")
 
                 'get an instance of the file
-                fileobj = Dateifactory.getDateiInstanz(file)
+                fileobj = FileFactory.getDateiInstanz(file)
 
                 'select series for importing
                 If series.Count = 0 Then
                     'read all series contained in the file
-                    Call fileobj.selectAllSpalten()
+                    Call fileobj.selectAllColumns()
                 Else
                     'loop over series names
                     seriesNotFound = New List(Of String)
                     For Each name In series.Keys
                         'search for series in file
                         found = False
-                        For Each spalte As Dateiformat.SpaltenInfo In fileobj.Spalten
+                        For Each spalte As FileFormatBase.ColumnInfo In fileobj.Columns
                             If spalte.Name = name Then
                                 'select the series for import
-                                n = fileobj.SpaltenSel.Length
-                                ReDim Preserve fileobj.SpaltenSel(n)
-                                fileobj.SpaltenSel(n) = spalte
+                                n = fileobj.SelectedColumns.Length
+                                ReDim Preserve fileobj.SelectedColumns(n)
+                                fileobj.SelectedColumns(n) = spalte
                                 found = True
                                 Exit For
                             End If
@@ -1575,7 +1575,7 @@ Public Class Wave
 
                 'import the series
                 Call Log.AddLogEntry("Loading series in chart...")
-                For Each ts As TimeSeries In fileobj.Zeitreihen
+                For Each ts As TimeSeries In fileobj.TimeSeries
                     'change title if specified in the project file
                     If series.Count > 0 Then
                         If series(ts.Title) <> "" Then
@@ -1790,7 +1790,7 @@ Public Class Wave
     ''' <param name="file">Pfad zur Datei</param>
     Public Sub Import_File(ByVal file As String)
 
-        Dim Datei As Dateiformat
+        Dim Datei As FileFormatBase
         Dim i As Integer
         Dim ok As Boolean
 
@@ -1798,11 +1798,11 @@ Public Class Wave
         '---------------------
         Select Case Path.GetExtension(file).ToUpper()
 
-            Case Dateifactory.FileExtTEN
+            Case FileFactory.FileExtTEN
                 '.TEN-Datei
                 Call Me.Load_TEN(file)
 
-            Case Dateifactory.FileExtWVP
+            Case FileFactory.FileExtWVP
                 'Wave project file
                 Call Me.Load_WVP(file)
 
@@ -1816,7 +1816,7 @@ Public Class Wave
                     Call Log.AddLogEntry("Importing file '" & file & "' ...")
 
                     'Datei-Instanz erzeugen
-                    Datei = Dateifactory.getDateiInstanz(file)
+                    Datei = FileFactory.getDateiInstanz(file)
 
                     If (Datei.UseImportDialog) Then
                         'Falls Importdialog erforderlich, diesen anzeigen
@@ -1824,7 +1824,7 @@ Public Class Wave
                         Call Application.DoEvents()
                     Else
                         'Ansonsten alle Spalten auswählen
-                        Call Datei.selectAllSpalten()
+                        Call Datei.selectAllColumns()
                         ok = True
                     End If
 
@@ -1845,9 +1845,9 @@ Public Class Wave
                         Call Log.AddLogEntry("Loading series in chart...")
 
                         'Alle eingelesenen Zeitreihen der Datei durchlaufen
-                        For i = 0 To Datei.Zeitreihen.GetUpperBound(0)
+                        For i = 0 To Datei.TimeSeries.GetUpperBound(0)
                             'Serie importieren
-                            Call Me.Import_Series(Datei.Zeitreihen(i))
+                            Call Me.Import_Series(Datei.TimeSeries(i))
                         Next
 
                         'Log
@@ -1875,7 +1875,7 @@ Public Class Wave
     ''' Zeigt den Importdialog an und liest im Anschluss die Datei mit den eingegebenen Einstellungen ein
     ''' </summary>
     ''' <param name="Datei">Instanz der Datei, die importiert werden soll</param>
-    Private Function showImportDialog(ByRef Datei As Dateiformat) As Boolean
+    Private Function showImportDialog(ByRef Datei As FileFormatBase) As Boolean
 
         Datei.ImportDiag = New ImportDiag(Datei)
 

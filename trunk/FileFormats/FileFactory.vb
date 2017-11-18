@@ -29,7 +29,7 @@ Imports System.IO
 ''' <summary>
 ''' Factory zur Erzeugung von Datei-Instanzen
 ''' </summary>
-Public Module Dateifactory
+Public Module FileFactory
 
     Public Const FileExtASC As String = ".ASC"
     Public Const FileExtCSV As String = ".CSV"
@@ -52,9 +52,9 @@ Public Module Dateifactory
     ''' </summary>
     ''' <param name="file">Pfad zur Datei</param>
     ''' <returns>Eine Instanz der Datei</returns>
-    Public Function getDateiInstanz(ByVal file As String) As Dateiformat
+    Public Function getDateiInstanz(ByVal file As String) As FileFormatBase
 
-        Dim Datei As Dateiformat
+        Dim Datei As FileFormatBase
         Dim FileExt As String
 
         'Prüfen, ob die Datei existiert

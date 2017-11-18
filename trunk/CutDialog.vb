@@ -138,8 +138,8 @@ Public Class CutDialog
         colorBand1.StartLinePen.Visible = False
 
         'Original Anfangs- und Enddatum anzeigen
-        Me.Label_StartDateTime.Text = Me.Anfang.ToString(Konstanten.Datumsformate("default"))
-        Me.Label_EndDateTime.Text = Me.Ende.ToString(Konstanten.Datumsformate("default"))
+        Me.Label_StartDateTime.Text = Me.Anfang.ToString(Helpers.DefaultDateFormat)
+        Me.Label_EndDateTime.Text = Me.Ende.ToString(Helpers.DefaultDateFormat)
 
         Me.IsInitializing = True 'um eine Kettenreaktionen zu verhindern
 

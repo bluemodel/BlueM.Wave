@@ -33,7 +33,7 @@ Imports System.Globalization
 ''' Format description: https://www.kisters.de/fileadmin/user_upload/Wasser/Downloads/ZRXP3.0_DE.pdf
 ''' </summary>
 Public Class ZRXP
-    Inherits Dateiformat
+    Inherits FileFormatBase
 
     ''' <summary>
     ''' Specifies whether to use the file import dialog
@@ -60,8 +60,8 @@ Public Class ZRXP
         Call MyBase.New(file)
 
         'settings
-        Me.Datumsformat = Konstanten.Datumsformate("ZRXP")
-        Me.UseEinheiten = True
+        Me.Dateformat = Helpers.DateFormats("ZRXP")
+        Me.UseUnits = True
 
         'instantiate metadata
         Me.metadata = New Dictionary(Of String, String)
@@ -84,11 +84,11 @@ Public Class ZRXP
         Me.metadata.Add("RORPR", "")
         Me.metadata.Add("LAYOUT", "")
 
-        Call Me.SpaltenAuslesen()
+        Call Me.ReadColumns()
 
         If (ReadAllNow) Then
             'read immediately
-            Call Me.selectAllSpalten()
+            Call Me.selectAllColumns()
             Call Me.Read_File()
         End If
 
@@ -137,7 +137,7 @@ Public Class ZRXP
     ''' Reads the metadata from the file
     ''' </summary>
     ''' <remarks></remarks>
-    Public Overrides Sub SpaltenAuslesen()
+    Public Overrides Sub ReadColumns()
 
         Dim i As Integer
         Dim line, data(), keys(), value As String
@@ -178,7 +178,7 @@ Public Class ZRXP
                     Next
                 Else
                     'end of header reached
-                    Me.iZeileDaten = i
+                    Me.iLineData = i
                     Exit Do
                 End If
             Loop Until StrReadSync.Peek() = -1
@@ -188,15 +188,15 @@ Public Class ZRXP
             FiStr.Close()
 
             'Configure columns
-            ReDim Me.Spalten(1) ' Each ZRXP file contains only one time series
+            ReDim Me.Columns(1) ' Each ZRXP file contains only one time series
 
-            Me.Spalten(0).Index = 0
-            Me.Spalten(0).Name = "timestamp"
-            Me.Spalten(0).Einheit = ""
+            Me.Columns(0).Index = 0
+            Me.Columns(0).Name = "timestamp"
+            Me.Columns(0).Einheit = ""
 
-            Me.Spalten(1).Index = 1
-            Me.Spalten(1).Name = Me.metadata("SNAME") & "." & Me.metadata("CNAME")
-            Me.Spalten(1).Einheit = Me.metadata("CUNIT")
+            Me.Columns(1).Index = 1
+            Me.Columns(1).Name = Me.metadata("SNAME") & "." & Me.metadata("CNAME")
+            Me.Columns(1).Einheit = Me.metadata("CUNIT")
 
         Catch ex As Exception
             MsgBox("Unable to read file!" & eol & eol & "Error: " & ex.Message, MsgBoxStyle.Critical, "Error")
@@ -218,9 +218,9 @@ Public Class ZRXP
 
         Try
             'instantiate time series
-            ReDim Me.Zeitreihen(0)
-            Me.Zeitreihen(0) = New TimeSeries(Me.Spalten(1).Name)
-            Me.Zeitreihen(0).Unit = Me.Spalten(1).Einheit
+            ReDim Me.TimeSeries(0)
+            Me.TimeSeries(0) = New TimeSeries(Me.Columns(1).Name)
+            Me.TimeSeries(0).Unit = Me.Columns(1).Einheit
 
             'open file
             Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
@@ -238,14 +238,14 @@ Public Class ZRXP
                 parts = line.Split(New String() {" "}, StringSplitOptions.RemoveEmptyEntries)
                 'parse date
                 datestring = parts(0)
-                ok = DateTime.TryParseExact(datestring, Me.Datumsformat, Konstanten.Zahlenformat, Globalization.DateTimeStyles.None, timestamp)
+                ok = DateTime.TryParseExact(datestring, Me.Dateformat, Helpers.DefaultNumberFormat, Globalization.DateTimeStyles.None, timestamp)
                 If (Not ok) Then
-                    Throw New Exception("Unable to parse the date '" & datestring & "' using the expected date format '" & Me.Datumsformat & "'!")
+                    Throw New Exception("Unable to parse the date '" & datestring & "' using the expected date format '" & Me.Dateformat & "'!")
                 End If
                 'parse value
-                value = Konstanten.StringToDouble(parts(1))
+                value = Helpers.StringToDouble(parts(1))
                 'store node
-                Me.Zeitreihen(0).AddNode(timestamp, value)
+                Me.TimeSeries(0).AddNode(timestamp, value)
 
             Loop Until StrReadSync.Peek() = -1
 

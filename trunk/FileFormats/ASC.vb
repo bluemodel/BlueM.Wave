@@ -33,7 +33,7 @@ Imports System.Globalization
 ''' </summary>
 ''' <remarks>Format siehe http://wiki.bluemodel.org/index.php/ASC-Format</remarks>
 Public Class ASC
-    Inherits Dateiformat
+    Inherits FileFormatBase
 
     ''' <summary>
     ''' Gibt an, ob beim Import des Dateiformats der Importdialog angezeigt werden soll
@@ -56,20 +56,20 @@ Public Class ASC
         MyBase.New(FileName)
 
         'Voreinstellungen
-        Me.iZeileUeberschriften = 2
-        Me.UseEinheiten = True
-        Me.iZeileEinheiten = 3
-        Me.iZeileDaten = 4
-        Me.Zeichengetrennt = True
-        Me.Trennzeichen = Me.leerzeichen
-        Me.Dezimaltrennzeichen = Me.punkt
-        Me.XSpalte = 0
+        Me.iLineHeadings = 2
+        Me.UseUnits = True
+        Me.iLineUnits = 3
+        Me.iLineData = 4
+        Me.IsColumnSeparated = True
+        Me.Separator = Constants.space
+        Me.DecimalSeparator = Constants.period
+        Me.DateTimeColumnIndex = 0
 
-        Call Me.SpaltenAuslesen()
+        Call Me.ReadColumns()
 
         If (ReadAllNow) Then
             'Datei komplett einlesen
-            Call Me.selectAllSpalten()
+            Call Me.selectAllColumns()
             Call Me.Read_File()
         End If
 
@@ -77,7 +77,7 @@ Public Class ASC
 
     'Spalten auslesen
     '****************
-    Public Overrides Sub SpaltenAuslesen()
+    Public Overrides Sub ReadColumns()
 
         Dim i As Integer
         Dim Zeile As String = ""
@@ -90,10 +90,10 @@ Public Class ASC
         Dim StrReadSync As TextReader = TextReader.Synchronized(StrRead)
 
         'Spaltenüberschriften
-        For i = 1 To Me.iZeileDaten
+        For i = 1 To Me.iLineData
             Zeile = StrReadSync.ReadLine.ToString
-            If (i = Me.iZeileUeberschriften) Then ZeileSpalten = Zeile
-            If (i = Me.iZeileEinheiten) Then ZeileEinheiten = Zeile
+            If (i = Me.iLineHeadings) Then ZeileSpalten = Zeile
+            If (i = Me.iLineUnits) Then ZeileEinheiten = Zeile
         Next
         StrReadSync.Close()
         StrRead.Close()
@@ -105,8 +105,8 @@ Public Class ASC
         Dim Namen() As String
         Dim Einheiten() As String
 
-        Namen = ZeileSpalten.Split(New Char() {Me.Trennzeichen.Character}, StringSplitOptions.RemoveEmptyEntries)
-        Einheiten = ZeileEinheiten.Split(New Char() {Me.Trennzeichen.Character}, StringSplitOptions.RemoveEmptyEntries)
+        Namen = ZeileSpalten.Split(New Char() {Me.Separator.ToChar}, StringSplitOptions.RemoveEmptyEntries)
+        Einheiten = ZeileEinheiten.Split(New Char() {Me.Separator.ToChar}, StringSplitOptions.RemoveEmptyEntries)
 
         'Bei ASC hat die Datumsspalte (manchmal) keine Einheit
         If (Einheiten.Length = Namen.Length - 1) Then
@@ -119,11 +119,11 @@ Public Class ASC
 
         anzSpalten = Namen.Length
 
-        ReDim Me.Spalten(anzSpalten - 1)
+        ReDim Me.Columns(anzSpalten - 1)
         For i = 0 To anzSpalten - 1
-            Me.Spalten(i).Name = Namen(i).Trim()
-            Me.Spalten(i).Einheit = Einheiten(i).Trim()
-            Me.Spalten(i).Index = i
+            Me.Columns(i).Name = Namen(i).Trim()
+            Me.Columns(i).Einheit = Einheiten(i).Trim()
+            Me.Columns(i).Index = i
         Next
 
     End Sub
@@ -146,17 +146,17 @@ Public Class ASC
         dt = New TimeSpan(0, 5, 0)
 
         'Anzahl Zeitreihen
-        ReDim Me.Zeitreihen(Me.SpaltenSel.Length - 1)
+        ReDim Me.TimeSeries(Me.SelectedColumns.Length - 1)
 
         'Zeitreihen instanzieren
-        For i = 0 To Me.SpaltenSel.Length - 1
-            Me.Zeitreihen(i) = New TimeSeries(Me.SpaltenSel(i).Name)
+        For i = 0 To Me.SelectedColumns.Length - 1
+            Me.TimeSeries(i) = New TimeSeries(Me.SelectedColumns(i).Name)
         Next
 
         'Einheiten?
-        If (Me.UseEinheiten) Then
-            For i = 0 To Me.SpaltenSel.Length - 1
-                Me.Zeitreihen(i).Unit = Me.SpaltenSel(i).Einheit
+        If (Me.UseUnits) Then
+            For i = 0 To Me.SelectedColumns.Length - 1
+                Me.TimeSeries(i).Unit = Me.SelectedColumns(i).Einheit
             Next
         End If
 
@@ -164,7 +164,7 @@ Public Class ASC
         '--------
 
         'Header
-        For i = 1 To Me.nZeilenHeader + 1
+        For i = 1 To Me.nLinesHeader + 1
             StrReadSync.ReadLine()
         Next
 
@@ -178,7 +178,7 @@ Public Class ASC
             '* am Anfang ignorieren
             If (Zeile.StartsWith("*")) Then Zeile = Zeile.Substring(1)
 
-            Werte = Zeile.ToString.Split(New Char() {Me.Trennzeichen.Character}, StringSplitOptions.RemoveEmptyEntries)
+            Werte = Zeile.ToString.Split(New Char() {Me.Separator.ToChar}, StringSplitOptions.RemoveEmptyEntries)
 
             If Werte.Length > 0 Then
 
@@ -192,28 +192,28 @@ Public Class ASC
                 If (Ereignisende) Then
 
                     'Mit Stützstellen vom Wert 0 Lücke zwischen Ereignissen abschliessen
-                    datumLast = Me.Zeitreihen(0).EndDate
+                    datumLast = Me.TimeSeries(0).EndDate
                     If (datum.Subtract(datumLast) > dt) Then 'nur wenn Lücke größer als dt ist
 
-                        For i = 0 To Me.SpaltenSel.Length - 1
+                        For i = 0 To Me.SelectedColumns.Length - 1
                             'Eine Null nach dem letzten Datum
-                            Me.Zeitreihen(i).AddNode(datumLast.Add(dt), 0.0)
+                            Me.TimeSeries(i).AddNode(datumLast.Add(dt), 0.0)
                             If (datum.Subtract(dt) > datumLast.Add(dt)) Then 'nur wenn Lücke damit noch nicht geschlossen ist
                                 'Eine Null vor dem aktuellen Datum
-                                Me.Zeitreihen(i).AddNode(datum.Subtract(dt), 0.0)
+                                Me.TimeSeries(i).AddNode(datum.Subtract(dt), 0.0)
                             End If
                         Next
 
                         'Log
-                        Call Log.AddLogEntry("... Die Lücke zwischen " & datumLast.ToString(Konstanten.Datumsformate("default")) & " und " & datum.ToString(Konstanten.Datumsformate("default")) & " wurde mit 0-Werten abgeschlossen.")
+                        Call Log.AddLogEntry("... Die Lücke zwischen " & datumLast.ToString(Helpers.DefaultDateFormat) & " und " & datum.ToString(Helpers.DefaultDateFormat) & " wurde mit 0-Werten abgeschlossen.")
                     End If
                     Ereignisende = False 'zurücksetzen
 
                 End If
 
                 'eingelesene Stützstellen hinzufügen
-                For i = 0 To Me.SpaltenSel.Length - 1
-                    Me.Zeitreihen(i).AddNode(datum, StringToDouble(Werte(Me.SpaltenSel(i).Index + 1))) '+1 weil Datum auch ein Leerzeichen enthält
+                For i = 0 To Me.SelectedColumns.Length - 1
+                    Me.TimeSeries(i).AddNode(datum, StringToDouble(Werte(Me.SelectedColumns(i).Index + 1))) '+1 weil Datum auch ein Leerzeichen enthält
                 Next
 
             Else

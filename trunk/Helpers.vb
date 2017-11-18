@@ -1,4 +1,4 @@
-'Copyright (c) BlueM Dev Group
+﻿'Copyright (c) BlueM Dev Group
 'Website: http://bluemodel.org
 '
 'All rights reserved.
@@ -27,15 +27,42 @@
 '
 Imports System.Globalization
 
-Module Konstanten
+Module Helpers
 
-    'Zeilenumbruch
-    Public Const eol As String = Chr(13) & Chr(10)
-
-    'Datumsformate
-    Public ReadOnly Property Datumsformate() As System.Collections.Generic.Dictionary(Of String, String)
+    ''' <summary>
+    ''' Default NumberFormat
+    ''' </summary>
+    ''' <returns>NumberFormatInfo instance with decimal separator "." and no NumberGroupSeparator</returns>
+    ''' <remarks></remarks>
+    Public ReadOnly Property DefaultNumberFormat() As NumberFormatInfo
         Get
-            Dim dict As New System.Collections.Generic.Dictionary(Of String, String)
+            'NumberFormatInfo einrichten
+            DefaultNumberFormat = New NumberFormatInfo()
+            DefaultNumberFormat.NumberDecimalSeparator = "."
+            DefaultNumberFormat.NumberGroupSeparator = ""
+            DefaultNumberFormat.NumberGroupSizes = New Integer() {3}
+        End Get
+    End Property
+
+    ''' <summary>
+    ''' Default DateFormat
+    ''' </summary>
+    ''' <returns>DateFormats("default")</returns>
+    ''' <remarks>dd.MM.yyyy HH:mm</remarks>
+    Public ReadOnly Property DefaultDateFormat() As String
+        Get
+            Return DateFormats("default")
+        End Get
+    End Property
+
+    ''' <summary>
+    ''' Date formats
+    ''' </summary>
+    ''' <returns>Dictionary of available DateFormats</returns>
+    ''' <remarks></remarks>
+    Public ReadOnly Property DateFormats() As Dictionary(Of String, String)
+        Get
+            Dim dict As New Dictionary(Of String, String)
             dict.Add("default", "dd.MM.yyyy HH:mm")
             dict.Add("GISMO1", "dd.MM.yyyy HH:mm")
             dict.Add("GISMO2", "yyyyMMdd HH:mm")
@@ -48,39 +75,11 @@ Module Konstanten
         End Get
     End Property
 
-    'Zahlenformatanweisung
-    Public ReadOnly Property Zahlenformat() As NumberFormatInfo
-        Get
-            'NumberFormatInfo einrichten
-            Zahlenformat = New NumberFormatInfo()
-            Zahlenformat.NumberDecimalSeparator = "."
-            Zahlenformat.NumberGroupSeparator = ""
-            Zahlenformat.NumberGroupSizes = New Integer() {3}
-        End Get
-    End Property
-
-    'Zeitreihenformate
-    Public Enum Dateiformate As Integer
-        ZRE = 1
-        WEL = 2
-        CSV = 3
-        ASC = 4
-        REG_HYSTEM = 5
-        REG_SMUSI = 6
-        DAT_SWMM_MASS = 7
-        DAT_SWMM_TIME = 8
-        TXT_SWMM = 9
-        DAT_HYDRO_AS = 10
-        UVF = 11
-        ZRXP = 12
-        WVP = 13
-    End Enum
-
     ''' <summary>
     ''' Converts a string to a double
     ''' </summary>
     ''' <param name="str">string to be converted</param>
-    ''' <param name="format">optional NumberFormatInfo object to use for the conversion</param>
+    ''' <param name="format">optional NumberFormatInfo object to use for the conversion. If not provided, the DefaultNumberInfo is used.</param>
     ''' <returns>Double value, set to NaN if the string was not parseable. NaN and +-Infinity in the input string are recognized and converted to the correspoing Double value.</returns>
     ''' <remarks></remarks>
     Public Function StringToDouble(ByVal str As String, Optional ByVal format As NumberFormatInfo = Nothing) As Double
@@ -90,7 +89,7 @@ Module Konstanten
 
         If format Is Nothing Then
             'use default number format
-            format = Konstanten.Zahlenformat
+            format = DefaultNumberFormat
         End If
 
         success = Double.TryParse(str, NumberStyles.Any, format, value)
@@ -98,7 +97,7 @@ Module Konstanten
         If (Not success) Then
             'string could not be parsed
             value = Double.NaN
-            Call Log.AddLogEntry("The value '" & str.Trim() & "' was could not be parsed and was converted to NaN!")
+            Call Log.AddLogEntry("The value '" & str.Trim() & "' could not be parsed and was converted to NaN!")
         End If
 
         Return value

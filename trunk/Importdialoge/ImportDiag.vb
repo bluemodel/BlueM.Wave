@@ -37,7 +37,7 @@ Partial Public Class ImportDiag
 
     Private IsInitializing As Boolean
 
-    Private datei As Dateiformat
+    Private datei As FileFormatBase
 
 #End Region
 
@@ -48,7 +48,7 @@ Partial Public Class ImportDiag
 
     'Konstruktor
     '***********
-    Public Sub New(ByRef _dateiobjekt As Dateiformat)
+    Public Sub New(ByRef _dateiobjekt As FileFormatBase)
 
         Call MyBase.New()
 
@@ -66,21 +66,21 @@ Partial Public Class ImportDiag
 
         'Combobox Trennzeichen initialisieren
         Me.ComboBox_Separator.BeginUpdate()
-        Me.ComboBox_Separator.Items.Add(Me.datei.semikolon)
-        Me.ComboBox_Separator.Items.Add(Me.datei.komma)
-        Me.ComboBox_Separator.Items.Add(Me.datei.punkt)
-        Me.ComboBox_Separator.Items.Add(Me.datei.leerzeichen)
-        Me.ComboBox_Separator.Items.Add(Me.datei.tab)
+        Me.ComboBox_Separator.Items.Add(Constants.semicolon)
+        Me.ComboBox_Separator.Items.Add(Constants.comma)
+        Me.ComboBox_Separator.Items.Add(Constants.period)
+        Me.ComboBox_Separator.Items.Add(Constants.space)
+        Me.ComboBox_Separator.Items.Add(Constants.tab)
         Me.ComboBox_Separator.EndUpdate()
 
         'Combobox Dezimaltrennzeichen initialisieren
         Me.ComboBox_DecimalMark.BeginUpdate()
-        Me.ComboBox_DecimalMark.Items.Add(Me.datei.punkt)
-        Me.ComboBox_DecimalMark.Items.Add(Me.datei.komma)
+        Me.ComboBox_DecimalMark.Items.Add(Constants.period)
+        Me.ComboBox_DecimalMark.Items.Add(Constants.comma)
         Me.ComboBox_DecimalMark.EndUpdate()
 
         'Combobox Datumsformat initialisieren
-        For Each datumsformat As String In Konstanten.Datumsformate.Values
+        For Each datumsformat As String In Helpers.DateFormats.Values
             If Not ComboBox_Dateformat.Items.Contains(datumsformat) Then
                 Me.ComboBox_Dateformat.Items.Add(datumsformat)
             End If
@@ -88,7 +88,7 @@ Partial Public Class ImportDiag
         Me.ComboBox_Dateformat.SelectedIndex = 0
 
         'Versuchen, die Spalten auszulesen (mit Standardeinstellungen)
-        Call Me.datei.SpaltenAuslesen()
+        Call Me.datei.ReadColumns()
 
         'Anzeige aktualisieren
         Call Me.aktualisieren()
@@ -127,7 +127,7 @@ Partial Public Class ImportDiag
                 line = line.Substring(0, anzSpalten) & " ..."
             End If
 
-            text &= line & Konstanten.eol
+            text &= line & Constants.eol
 
             'gucken, ob Dateiende
             If (StrRead.Peek = -1) Then Exit For
@@ -164,9 +164,9 @@ Partial Public Class ImportDiag
             Me.DialogResult = Windows.Forms.DialogResult.None
             Exit Sub
         Else
-            ReDim Me.datei.SpaltenSel(Me.ListBox_Series.SelectedItems.Count - 1)
+            ReDim Me.datei.SelectedColumns(Me.ListBox_Series.SelectedItems.Count - 1)
             For i = 0 To Me.ListBox_Series.SelectedItems.Count - 1
-                Me.datei.SpaltenSel(i) = Me.ListBox_Series.SelectedItems(i)
+                Me.datei.SelectedColumns(i) = Me.ListBox_Series.SelectedItems(i)
             Next
         End If
 
@@ -197,35 +197,35 @@ Partial Public Class ImportDiag
                 Me.IsInitializing = False
 
                 'Zeilennummern
-                Me.datei.iZeileUeberschriften = Me.NumericUpDown_LineTitles.Value
-                Me.datei.iZeileDaten = Me.NumericUpDown_LineData.Value
+                Me.datei.iLineHeadings = Me.NumericUpDown_LineTitles.Value
+                Me.datei.iLineData = Me.NumericUpDown_LineData.Value
 
                 'Einheiten
-                Me.datei.UseEinheiten = Me.CheckBox_Units.Checked
+                Me.datei.UseUnits = Me.CheckBox_Units.Checked
                 If (Me.CheckBox_Units.Checked) Then
-                    Me.datei.iZeileEinheiten = Me.NumericUpDown_LineUnits.Value
+                    Me.datei.iLineUnits = Me.NumericUpDown_LineUnits.Value
                 End If
 
                 'Datumsformat
-                Me.datei.Datumsformat = Me.ComboBox_Dateformat.Text
+                Me.datei.Dateformat = Me.ComboBox_Dateformat.Text
 
                 'Dezimaltrennzeichen
-                Me.datei.Dezimaltrennzeichen = Me.ComboBox_DecimalMark.SelectedItem
+                Me.datei.DecimalSeparator = Me.ComboBox_DecimalMark.SelectedItem
 
                 'Spalteneinstellungen
                 If (Me.RadioButton_CharSeparated.Checked) Then
-                    Me.datei.Zeichengetrennt = True
-                    Me.datei.Trennzeichen = Me.ComboBox_Separator.SelectedItem
+                    Me.datei.IsColumnSeparated = True
+                    Me.datei.Separator = Me.ComboBox_Separator.SelectedItem
                 Else
-                    Me.datei.Zeichengetrennt = False
-                    Me.datei.Spaltenbreite = Convert.ToInt32(Me.TextBox_ColumnWidth.Text)
+                    Me.datei.IsColumnSeparated = False
+                    Me.datei.ColumnWidth = Convert.ToInt32(Me.TextBox_ColumnWidth.Text)
                 End If
 
                 'Datum
-                Me.datei.XSpalte = Me.NumericUpDown_ColumnDateTime.Value - 1 'Immer eins weniger wie du ! 
+                Me.datei.DateTimeColumnIndex = Me.NumericUpDown_ColumnDateTime.Value - 1 'Immer eins weniger wie du ! 
 
                 'Spalten neu auslesen
-                Call Me.datei.SpaltenAuslesen()
+                Call Me.datei.ReadColumns()
 
                 'Anzeige aktualisieren
                 Call Me.aktualisieren()
@@ -251,24 +251,24 @@ Partial Public Class ImportDiag
         Dim i As Integer
 
         'Dezimaltrennzeichen
-        Me.ComboBox_DecimalMark.SelectedItem = Me.datei.Dezimaltrennzeichen
+        Me.ComboBox_DecimalMark.SelectedItem = Me.datei.DecimalSeparator
 
         'Zeilennummern
-        Me.NumericUpDown_LineTitles.Text = Me.datei.iZeileUeberschriften
-        Me.NumericUpDown_LineData.Text = Me.datei.iZeileDaten
+        Me.NumericUpDown_LineTitles.Text = Me.datei.iLineHeadings
+        Me.NumericUpDown_LineData.Text = Me.datei.iLineData
 
         'Einheiten
-        If (Me.datei.UseEinheiten) Then
+        If (Me.datei.UseUnits) Then
             Me.CheckBox_Units.Checked = True
             Me.NumericUpDown_LineUnits.Enabled = True
         Else
             Me.CheckBox_Units.Checked = False
             Me.NumericUpDown_LineUnits.Enabled = False
         End If
-        Me.NumericUpDown_LineUnits.Text = Me.datei.iZeileEinheiten
+        Me.NumericUpDown_LineUnits.Text = Me.datei.iLineUnits
 
         'Spaltenformat
-        If (Me.datei.Zeichengetrennt) Then
+        If (Me.datei.IsColumnSeparated) Then
             Me.RadioButton_CharSeparated.Checked = True
             Me.ComboBox_Separator.Enabled = True
             Me.TextBox_ColumnWidth.Enabled = False
@@ -279,26 +279,26 @@ Partial Public Class ImportDiag
         End If
 
         'Trennzeichen
-        Me.ComboBox_Separator.SelectedItem = Me.datei.Trennzeichen
+        Me.ComboBox_Separator.SelectedItem = Me.datei.Separator
 
         'Datumsformat
-        If Not ComboBox_Dateformat.Items.Contains(Me.datei.Datumsformat) Then
-            Me.ComboBox_Dateformat.Items.Add(Me.datei.Datumsformat)
+        If Not ComboBox_Dateformat.Items.Contains(Me.datei.Dateformat) Then
+            Me.ComboBox_Dateformat.Items.Add(Me.datei.Dateformat)
         End If
-        Me.ComboBox_Dateformat.SelectedItem = Me.datei.Datumsformat
+        Me.ComboBox_Dateformat.SelectedItem = Me.datei.Dateformat
 
         'Spaltenbreite
-        Me.TextBox_ColumnWidth.Text = Me.datei.Spaltenbreite
+        Me.TextBox_ColumnWidth.Text = Me.datei.ColumnWidth
 
         'XSpalte
-        Me.TextBox_ColumnDateTime.Text = Me.datei.Spalten(Me.datei.XSpalte).Name
+        Me.TextBox_ColumnDateTime.Text = Me.datei.Columns(Me.datei.DateTimeColumnIndex).Name
 
         'YSpalten
         Me.ListBox_Series.Items.Clear()
         Call Me.ListBox_Series.BeginUpdate()
-        For i = 0 To datei.Spalten.Length - 1
-            If (i <> datei.XSpalte) Then
-                Me.ListBox_Series.Items.Add(datei.Spalten(i))
+        For i = 0 To datei.Columns.Length - 1
+            If (i <> datei.DateTimeColumnIndex) Then
+                Me.ListBox_Series.Items.Add(datei.Columns(i))
             End If
         Next
         Call Me.ListBox_Series.EndUpdate()

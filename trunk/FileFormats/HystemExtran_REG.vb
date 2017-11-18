@@ -32,7 +32,7 @@ Imports System.IO
 ''' </summary>
 ''' <remarks>Format siehe http://wiki.bluemodel.org/index.php/Hystem-Extran_REG-Format</remarks>
 Public Class HystemExtran_REG
-    Inherits Dateiformat
+    Inherits FileFormatBase
 
     Const DatumsformatHystemExtran As String = "ddMMyyyyHHmmss"
     Const LenString As Integer = 5   'Länge des Strings eines Wertes in der reg/dat-Datei
@@ -108,14 +108,14 @@ Public Class HystemExtran_REG
         MyBase.New(FileName)
 
         'Voreinstellungen
-        Me.iZeileDaten = 6
-        Me.UseEinheiten = True
+        Me.iLineData = 6
+        Me.UseUnits = True
 
-        Call Me.SpaltenAuslesen()
+        Call Me.ReadColumns()
 
         If (ReadAllNow) Then
             'Direkt einlesen
-            Call Me.selectAllSpalten()
+            Call Me.selectAllColumns()
             Call Me.Read_File()
         End If
 
@@ -123,7 +123,7 @@ Public Class HystemExtran_REG
 
     'Spalten auslesen
     '****************
-    Public Overrides Sub SpaltenAuslesen()
+    Public Overrides Sub ReadColumns()
 
         Dim Zeile As String = ""
 
@@ -134,22 +134,22 @@ Public Class HystemExtran_REG
             Dim StrReadSync = TextReader.Synchronized(StrRead)
 
             'Es gibt immer 2 Spalten!
-            ReDim Me.Spalten(1)
+            ReDim Me.Columns(1)
 
             '1. Spalte (X)
-            Me.Spalten(0).Name = "Datum_Zeit"
-            Me.Spalten(0).Index = 0
+            Me.Columns(0).Name = "Datum_Zeit"
+            Me.Columns(0).Index = 0
 
             '2. Spalte (Y)
-            Me.Spalten(1).Index = 1
+            Me.Columns(1).Index = 1
 
             'Reihentitel steht in 1. Zeile:
             Zeile = StrReadSync.ReadLine.ToString()
-            Me.Spalten(1).Name = Zeile.Substring(20, 30).Trim()
+            Me.Columns(1).Name = Zeile.Substring(20, 30).Trim()
 
             'Einheit steht in 2. Zeile:
             Zeile = StrReadSync.ReadLine.ToString()
-            Me.Spalten(1).Einheit = Zeile.Substring(68, 2)
+            Me.Columns(1).Einheit = Zeile.Substring(68, 2)
 
             Me.DezFaktor = Zeile.Substring(29, 1)
 
@@ -180,9 +180,9 @@ Public Class HystemExtran_REG
         Dim StrReadSync = TextReader.Synchronized(StrRead)
 
         'Zeitreihe instanzieren
-        ReDim Me.Zeitreihen(0) 'bei REG gibt es nur eine Zeitreihe
-        Me.Zeitreihen(0) = New TimeSeries(Me.SpaltenSel(0).Name)
-        Me.Zeitreihen(0).Unit = Me.SpaltenSel(0).Einheit
+        ReDim Me.TimeSeries(0) 'bei REG gibt es nur eine Zeitreihe
+        Me.TimeSeries(0) = New TimeSeries(Me.SelectedColumns(0).Name)
+        Me.TimeSeries(0).Unit = Me.SelectedColumns(0).Einheit
 
         'Einlesen
         '--------
@@ -194,7 +194,7 @@ Public Class HystemExtran_REG
 
             If Zeile.Substring(19, 1) = "E" Then Exit Do
 
-            If (j > Me.nZeilenHeader And Zeile.Length > 0) Then
+            If (j > Me.nLinesHeader And Zeile.Length > 0) Then
 
                 'Datum erkennen
                 '--------------
@@ -211,7 +211,7 @@ Public Class HystemExtran_REG
                 'beim letzten Wert besteht die Möglichkeit, dass nicht alle Zeichen belegt sind
                 For i = 0 To Me.WerteProZeile(Me.Zeitintervall) - 1
                     Datum = Zeilendatum.AddMinutes(i * Me.Zeitintervall)
-                    Me.Zeitreihen(0).AddNode(Datum, StringToDouble(Zeile.Substring(20 + LenString * i, LenString)) * 10 ^ (-DezFaktor))
+                    Me.TimeSeries(0).AddNode(Datum, StringToDouble(Zeile.Substring(20 + LenString * i, LenString)) * 10 ^ (-DezFaktor))
                 Next
 
             End If

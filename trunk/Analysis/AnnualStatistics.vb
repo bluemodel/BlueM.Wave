@@ -118,8 +118,8 @@ Public Class AnnualStatistics
             stat = kvp.Value
             ReDim values(7)
             values(0) = kvp.Key
-            values(1) = stat.startDate.ToString(Datumsformate("default"))
-            values(2) = stat.endDate.ToString(Datumsformate("default"))
+            values(1) = stat.startDate.ToString(Helpers.DefaultDateFormat)
+            values(2) = stat.endDate.ToString(Helpers.DefaultDateFormat)
             values(3) = stat.len.ToString(formatstring)
             values(4) = stat.min.ToString(formatstring)
             values(5) = stat.max.ToString(formatstring)

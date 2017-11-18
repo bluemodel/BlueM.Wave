@@ -32,7 +32,7 @@ Imports System.IO
 ''' </summary>
 ''' <remarks>Greift zurück auf SydroZreNet.dll, welche wiederum auf SydroZreI.dll zurückgreift</remarks>
 Public Class BIN
-    Inherits Dateiformat
+    Inherits FileFormatBase
 
     ''' <summary>
     ''' Gibt an, ob beim Import des Dateiformats der Importdialog angezeigt werden soll
@@ -55,15 +55,15 @@ Public Class BIN
         MyBase.New(FileName)
 
         'Voreinstellungen
-        Me.Datumsformat = Datumsformate("default") 'irrelevant weil binär
-        Me.iZeileDaten = 0
-        Me.UseEinheiten = False
+        Me.Dateformat = Helpers.DefaultDateFormat 'irrelevant weil binär
+        Me.iLineData = 0
+        Me.UseUnits = False
 
-        Call Me.SpaltenAuslesen()
+        Call Me.ReadColumns()
 
         If (ReadAllNow) Then
             'Direkt einlesen
-            Call Me.selectAllSpalten()
+            Call Me.selectAllColumns()
             Call Me.Read_File()
         End If
 
@@ -71,16 +71,16 @@ Public Class BIN
 
     'Spalten auslesen
     '****************
-    Public Overrides Sub SpaltenAuslesen()
+    Public Overrides Sub ReadColumns()
 
-        ReDim Me.Spalten(1)
+        ReDim Me.Columns(1)
 
-        Me.Spalten(0).Name = "Datetime"
+        Me.Columns(0).Name = "Datetime"
 
-        Me.Spalten(1).Name = "Values"
-        Me.Spalten(1).Einheit = "-"
+        Me.Columns(1).Name = "Values"
+        Me.Columns(1).Einheit = "-"
 
-        Me.XSpalte = 0
+        Me.DateTimeColumnIndex = 0
 
     End Sub
 
@@ -96,9 +96,9 @@ Public Class BIN
             Dim Y() As Single
 
             'Zeitreihe instanzieren (nur eine)
-            ReDim Me.Zeitreihen(0)
-            Me.Zeitreihen(0) = New TimeSeries(IO.Path.GetFileName(Me.File))
-            Me.Zeitreihen(0).Unit = "-"
+            ReDim Me.TimeSeries(0)
+            Me.TimeSeries(0) = New TimeSeries(IO.Path.GetFileName(Me.File))
+            Me.TimeSeries(0).Unit = "-"
 
             'Einlesen
             '--------
@@ -115,7 +115,7 @@ Public Class BIN
 
             'Umwandeln in Zeitreihe
             For i = 0 To NCount - 1
-                Me.Zeitreihen(0).AddNode(X(i), Y(i))
+                Me.TimeSeries(0).AddNode(X(i), Y(i))
             Next
 
             'Log 

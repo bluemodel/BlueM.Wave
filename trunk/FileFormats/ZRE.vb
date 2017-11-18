@@ -32,7 +32,7 @@ Imports System.IO
 ''' </summary>
 ''' <remarks>Format siehe http://wiki.bluemodel.org/index.php/ZRE-Format</remarks>
 Public Class ZRE
-    Inherits Dateiformat
+    Inherits FileFormatBase
 
     ''' <summary>
     ''' Gibt an, ob beim Import des Dateiformats der Importdialog angezeigt werden soll
@@ -55,15 +55,15 @@ Public Class ZRE
         MyBase.New(FileName)
 
         'Voreinstellungen
-        Me.Datumsformat = Datumsformate("ZRE")
-        Me.iZeileDaten = 5
-        Me.UseEinheiten = True
+        Me.Dateformat = DateFormats("ZRE")
+        Me.iLineData = 5
+        Me.UseUnits = True
 
-        Call Me.SpaltenAuslesen()
+        Call Me.ReadColumns()
 
         If (ReadAllNow) Then
             'Direkt einlesen
-            Call Me.selectAllSpalten()
+            Call Me.selectAllColumns()
             Call Me.Read_File()
         End If
 
@@ -71,7 +71,7 @@ Public Class ZRE
 
     'Spalten auslesen
     '****************
-    Public Overrides Sub SpaltenAuslesen()
+    Public Overrides Sub ReadColumns()
 
         Dim i As Integer
         Dim Zeile As String = ""
@@ -91,11 +91,11 @@ Public Class ZRE
             StrRead.Close()
             FiStr.Close()
 
-            ReDim Me.Spalten(1)
-            Me.Spalten(0).Name = "Datum_Zeit"
-            Me.Spalten(1).Name = Zeile.Substring(0, 15).Trim()
-            Me.Spalten(1).Einheit = Zeile.Substring(15).Trim()
-            Me.Spalten(1).Index = 1
+            ReDim Me.Columns(1)
+            Me.Columns(0).Name = "Datum_Zeit"
+            Me.Columns(1).Name = Zeile.Substring(0, 15).Trim()
+            Me.Columns(1).Einheit = Zeile.Substring(15).Trim()
+            Me.Columns(1).Index = 1
 
         Catch ex As Exception
             MsgBox("Konnte Datei nicht einlesen!" & eol & eol & "Fehler: " & ex.Message, MsgBoxStyle.Critical, "Fehler")
@@ -117,9 +117,9 @@ Public Class ZRE
         Dim StrReadSync = TextReader.Synchronized(StrRead)
 
         'Zeitreihe instanzieren (nur eine)
-        ReDim Me.Zeitreihen(0)
-        Me.Zeitreihen(0) = New TimeSeries(Me.SpaltenSel(0).Name)
-        Me.Zeitreihen(0).Unit = Me.SpaltenSel(0).Einheit
+        ReDim Me.TimeSeries(0)
+        Me.TimeSeries(0) = New TimeSeries(Me.SelectedColumns(0).Name)
+        Me.TimeSeries(0).Unit = Me.SelectedColumns(0).Einheit
 
         'Einlesen
         '--------
@@ -128,7 +128,7 @@ Public Class ZRE
             Do
                 j += 1
                 Zeile = StrReadSync.ReadLine.ToString()
-                If (j > Me.nZeilenHeader And Zeile.Trim.Length > 0) Then
+                If (j > Me.nLinesHeader And Zeile.Trim.Length > 0) Then
 
                     'Datum erkennen
                     'TODO: Me.Datumsformat verwenden
@@ -149,7 +149,7 @@ Public Class ZRE
 
                     'Datum und Wert zur Zeitreihe hinzufügen
                     '---------------------------------------
-                    Me.Zeitreihen(0).AddNode(Datum, StringToDouble(Zeile.Substring(15)))
+                    Me.TimeSeries(0).AddNode(Datum, StringToDouble(Zeile.Substring(15)))
 
                 End If
             Loop Until StrReadSync.Peek() = -1
@@ -187,10 +187,10 @@ Public Class ZRE
         '3. Zeile: Parameter
         strwrite.WriteLine("0                      0.        0.        0.")
         '4. Zeile: Anfangs- und Enddatum
-        strwrite.WriteLine(Reihe.Dates(0).ToString(Datumsformate("ZRE")) & " " & Reihe.Dates(Reihe.Length - 1).ToString(Datumsformate("ZRE")))
+        strwrite.WriteLine(Reihe.Dates(0).ToString(DateFormats("ZRE")) & " " & Reihe.Dates(Reihe.Length - 1).ToString(DateFormats("ZRE")))
         'ab 5. Zeile: Werte
         For i = 0 To Reihe.Length - 1
-            strwrite.Write(Reihe.Dates(i).ToString(Datumsformate("ZRE")) & " " & Reihe.Values(i).ToString(Zahlenformat).PadLeft(14))
+            strwrite.Write(Reihe.Dates(i).ToString(DateFormats("ZRE")) & " " & Reihe.Values(i).ToString(DefaultNumberFormat).PadLeft(14))
             If (i < Reihe.Length - 1) Then 'kein Zeilenumbruch nach der letzten Zeile!
                 strwrite.WriteLine()
             End If

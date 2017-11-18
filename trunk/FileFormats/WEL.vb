@@ -32,13 +32,12 @@ Imports System.IO
 ''' </summary>
 ''' <remarks>Format siehe http://wiki.bluemodel.org/index.php/WEL-Format</remarks>
 Public Class WEL
-    Inherits Dateiformat
+    Inherits FileFormatBase
 
 #Region "Eigenschaften"
 
-    'Eigenschaften
-    '#############
-
+    Private _iLineInfo As Integer = 1
+    Private _DateTimeLength As Integer = 17
 
 #End Region
 
@@ -51,6 +50,30 @@ Public Class WEL
         Get
             Return True
         End Get
+    End Property
+
+    ''' <summary>
+    ''' Number of the line containing general information
+    ''' </summary>
+    Public Property iLineInfo() As Integer
+        Get
+            Return _iLineInfo
+        End Get
+        Set(ByVal value As Integer)
+            _iLineInfo = value
+        End Set
+    End Property
+
+    ''' <summary>
+    ''' Length of date time stamp
+    ''' </summary>
+    Public Property DateTimeLength() As Integer
+        Get
+            Return _DateTimeLength
+        End Get
+        Set(ByVal value As Integer)
+            _DateTimeLength = value
+        End Set
     End Property
 
 #End Region 'Properties
@@ -68,21 +91,21 @@ Public Class WEL
         
         'Voreinstellungen
         Me.iLineInfo = 1
-        Me.iZeileUeberschriften = 2
-        Me.UseEinheiten = True
-        Me.iZeileEinheiten = 3
-        Me.iZeileDaten = 4
-        Me.Zeichengetrennt = True
-        Me.Trennzeichen = Me.semikolon
-        Me.Datumsformat = Konstanten.Datumsformate("WEL")
-        Me.Dezimaltrennzeichen = Me.punkt
+        Me.iLineHeadings = 2
+        Me.UseUnits = True
+        Me.iLineUnits = 3
+        Me.iLineData = 4
+        Me.IsColumnSeparated = True
+        Me.Separator = Constants.semicolon
+        Me.Dateformat = Helpers.DateFormats("WEL")
+        Me.DecimalSeparator = Constants.period
         Me.DateTimeLength = 17
 
-        Call Me.SpaltenAuslesen()
+        Call Me.ReadColumns()
 
         If (ReadAllNow) Then
             'Datei komplett einlesen
-            Call Me.selectAllSpalten()
+            Call Me.selectAllColumns()
             Call Me.Read_File()
         End If
 
@@ -92,7 +115,7 @@ Public Class WEL
     ''' <summary>
     ''' Spalten auslesen
     ''' </summary>
-    Public Overrides Sub SpaltenAuslesen()
+    Public Overrides Sub ReadColumns()
 
         Dim i As Integer
         Dim Zeile As String = ""
@@ -107,23 +130,23 @@ Public Class WEL
             Dim StrReadSync As TextReader = TextReader.Synchronized(StrRead)
 
             'Spaltenüberschriften auslesen
-            For i = 1 To Me.iZeileDaten
+            For i = 1 To Me.iLineData
                 Zeile = StrReadSync.ReadLine.ToString()
                 If (i = Me.iLineInfo) Then LineInfo = Zeile
-                If (i = Me.iZeileUeberschriften) Then ZeileSpalten = Zeile
-                If (i = Me.iZeileEinheiten) Then ZeileEinheiten = Zeile
+                If (i = Me.iLineHeadings) Then ZeileSpalten = Zeile
+                If (i = Me.iLineUnits) Then ZeileEinheiten = Zeile
             Next
 
             'Are columns separted by ";" or should fixed format be used?
             If ZeileSpalten.Contains(";") Then
-                Me.Zeichengetrennt = True
+                Me.IsColumnSeparated = True
             Else
-                Me.Zeichengetrennt = False
+                Me.IsColumnSeparated = False
             End If
 
             'Is it a WEL or EFL_WEL file
             If LineInfo.Contains("EFL-WEL") Then
-                Me.Spaltenbreite = 41
+                Me.ColumnWidth = 41
             Else
                 'nothing to do, presets can be applied
             End If
@@ -138,31 +161,31 @@ Public Class WEL
             Dim Namen() As String
             Dim Einheiten() As String
 
-            If (Me.Zeichengetrennt) Then
+            If (Me.IsColumnSeparated) Then
                 'Zeichengetrennt
-                Namen = ZeileSpalten.Split(New Char() {Me.Trennzeichen.Character}, StringSplitOptions.RemoveEmptyEntries)
-                Einheiten = ZeileEinheiten.Split(New Char() {Me.Trennzeichen.Character}, StringSplitOptions.RemoveEmptyEntries)
+                Namen = ZeileSpalten.Split(New Char() {Me.Separator.ToChar}, StringSplitOptions.RemoveEmptyEntries)
+                Einheiten = ZeileEinheiten.Split(New Char() {Me.Separator.ToChar}, StringSplitOptions.RemoveEmptyEntries)
                 anzSpalten = Namen.Length
-                ReDim Me.Spalten(anzSpalten - 1)
+                ReDim Me.Columns(anzSpalten - 1)
                 For i = 0 To anzSpalten - 1
-                    Me.Spalten(i).Name = Namen(i).Trim()
-                    Me.Spalten(i).Einheit = Einheiten(i).Trim()
-                    Me.Spalten(i).Index = i
+                    Me.Columns(i).Name = Namen(i).Trim()
+                    Me.Columns(i).Einheit = Einheiten(i).Trim()
+                    Me.Columns(i).Index = i
                 Next
             Else
                 'Spalten mit fester Breite
-                anzSpalten = Math.Ceiling((ZeileSpalten.Length - Me.DateTimeLength) / Me.Spaltenbreite) + 1
-                ReDim Me.Spalten(anzSpalten - 1)
+                anzSpalten = Math.Ceiling((ZeileSpalten.Length - Me.DateTimeLength) / Me.ColumnWidth) + 1
+                ReDim Me.Columns(anzSpalten - 1)
                 For i = 0 To anzSpalten - 1
                     If i = 0 Then
                         'DateTime need to be considered especially as it can be shorter than the standard "Spaltenbreite"
-                        Me.Spalten(i).Name = ZeileSpalten.Substring(0, Me.DateTimeLength) '.Trim()
-                        Me.Spalten(i).Einheit = ZeileEinheiten.Substring(0, Me.DateTimeLength) '.Trim()
-                        Me.Spalten(i).Index = i
+                        Me.Columns(i).Name = ZeileSpalten.Substring(0, Me.DateTimeLength) '.Trim()
+                        Me.Columns(i).Einheit = ZeileEinheiten.Substring(0, Me.DateTimeLength) '.Trim()
+                        Me.Columns(i).Index = i
                     Else
-                        Me.Spalten(i).Name = ZeileSpalten.Substring(Me.DateTimeLength + (i - 1) * Me.Spaltenbreite, Me.Spaltenbreite).Trim()
-                        Me.Spalten(i).Einheit = ZeileEinheiten.Substring(Me.DateTimeLength + (i - 1) * Me.Spaltenbreite, Me.Spaltenbreite).Trim()
-                        Me.Spalten(i).Index = i
+                        Me.Columns(i).Name = ZeileSpalten.Substring(Me.DateTimeLength + (i - 1) * Me.ColumnWidth, Me.ColumnWidth).Trim()
+                        Me.Columns(i).Einheit = ZeileEinheiten.Substring(Me.DateTimeLength + (i - 1) * Me.ColumnWidth, Me.ColumnWidth).Trim()
+                        Me.Columns(i).Index = i
                     End If
                 Next
             End If
@@ -188,18 +211,18 @@ Public Class WEL
         Dim StrReadSync = TextReader.Synchronized(StrRead)
 
         'Anzahl Zeitreihen bestimmen
-        ReDim Me.Zeitreihen(Me.SpaltenSel.Length - 1)
+        ReDim Me.TimeSeries(Me.SelectedColumns.Length - 1)
 
         'Zeitreihen instanzieren
-        For i = 0 To Me.SpaltenSel.Length - 1
-            Me.Zeitreihen(i) = New TimeSeries(Me.SpaltenSel(i).Name)
+        For i = 0 To Me.SelectedColumns.Length - 1
+            Me.TimeSeries(i) = New TimeSeries(Me.SelectedColumns(i).Name)
         Next
 
         'Einheiten?
-        If (Me.UseEinheiten) Then
+        If (Me.UseUnits) Then
             'Alle ausgewählten Spalten durchlaufen
-            For i = 0 To Me.SpaltenSel.Length - 1
-                Me.Zeitreihen(i).Unit = Me.SpaltenSel(i).Einheit
+            For i = 0 To Me.SelectedColumns.Length - 1
+                Me.TimeSeries(i).Unit = Me.SelectedColumns(i).Einheit
             Next
         End If
 
@@ -207,7 +230,7 @@ Public Class WEL
         '--------
 
         'Header
-        For iZeile = 1 To Me.nZeilenHeader
+        For iZeile = 1 To Me.nLinesHeader
             Zeile = StrReadSync.ReadLine.ToString()
         Next
 
@@ -215,28 +238,28 @@ Public Class WEL
         Do
             Zeile = StrReadSync.ReadLine.ToString()
 
-            If (Me.Zeichengetrennt) Then
+            If (Me.IsColumnSeparated) Then
                 'Zeichengetrennt
                 '---------------
-                Werte = Zeile.Split(New Char() {Me.Trennzeichen.Character}, StringSplitOptions.RemoveEmptyEntries)
+                Werte = Zeile.Split(New Char() {Me.Separator.ToChar}, StringSplitOptions.RemoveEmptyEntries)
                 'Erste Spalte: Datum_Zeit
-                'TODO: Me.Datumsformat verwenden
+                'TODO: use Me.DateFormat
                 datum = New System.DateTime(Werte(0).Substring(6, 4), Werte(0).Substring(3, 2), Werte(0).Substring(0, 2), Werte(0).Substring(11, 2), Werte(0).Substring(14, 2), 0, New System.Globalization.GregorianCalendar())
                 'Restliche Spalten: Werte
                 'Alle ausgewählten Spalten durchlaufen
-                For i = 0 To Me.SpaltenSel.Length - 1
-                    Me.Zeitreihen(i).AddNode(datum, StringToDouble(Werte(Me.SpaltenSel(i).Index)))
+                For i = 0 To Me.SelectedColumns.Length - 1
+                    Me.TimeSeries(i).AddNode(datum, StringToDouble(Werte(Me.SelectedColumns(i).Index)))
                 Next
             Else
                 'Spalten mit fester Breite
                 '-------------------------
                 'Erste Spalte: Datum_Zeit
-                'TODO: Me.Datumsformat verwenden
+                'TODO: use Me.DateFormat
                 datum = New System.DateTime(Zeile.Substring(6 + SpaltenOffset, 4), Zeile.Substring(3 + SpaltenOffset, 2), Zeile.Substring(0 + SpaltenOffset, 2), Zeile.Substring(11 + SpaltenOffset, 2), Zeile.Substring(14 + SpaltenOffset, 2), 0, New System.Globalization.GregorianCalendar())
                 'Restliche Spalten: Werte
                 'Alle ausgewählten Spalten durchlaufen
-                For i = 0 To Me.SpaltenSel.Length - 1
-                    Me.Zeitreihen(i).AddNode(datum, StringToDouble(Zeile.Substring((Me.SpaltenSel(i).Index * Me.Spaltenbreite) + SpaltenOffset, Math.Min(Me.Spaltenbreite, Zeile.Substring((Me.SpaltenSel(i).Index * Me.Spaltenbreite) + SpaltenOffset).Length))))
+                For i = 0 To Me.SelectedColumns.Length - 1
+                    Me.TimeSeries(i).AddNode(datum, StringToDouble(Zeile.Substring((Me.SelectedColumns(i).Index * Me.ColumnWidth) + SpaltenOffset, Math.Min(Me.ColumnWidth, Zeile.Substring((Me.SelectedColumns(i).Index * Me.ColumnWidth) + SpaltenOffset).Length))))
                 Next
             End If
 

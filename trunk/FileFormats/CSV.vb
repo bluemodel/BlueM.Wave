@@ -32,7 +32,7 @@ Imports System.Globalization
 ''' Klasse für generisches Textformat
 ''' </summary>
 Public Class CSV
-    Inherits Dateiformat
+    Inherits FileFormatBase
 
     ''' <summary>
     ''' Gibt an, ob beim Import des Dateiformats der Importdialog angezeigt werden soll
@@ -54,12 +54,12 @@ Public Class CSV
         MyBase.New(FileName)
 
         'Voreinstellungen
-        Me.Datumsformat = Konstanten.Datumsformate("default")
+        Me.Dateformat = Helpers.DefaultDateFormat
     End Sub
 
     'Spalten auslesen
     '****************
-    Public Overrides Sub SpaltenAuslesen()
+    Public Overrides Sub ReadColumns()
 
         Dim i As Integer
         Dim Zeile As String = ""
@@ -73,10 +73,10 @@ Public Class CSV
             Dim StrReadSync = TextReader.Synchronized(StrRead)
 
             'Spaltenüberschriften auslesen
-            For i = 1 To Math.Max(Me.iZeileDaten, Me.iZeileUeberschriften + 1)
+            For i = 1 To Math.Max(Me.iLineData, Me.iLineHeadings + 1)
                 Zeile = StrReadSync.ReadLine.ToString
-                If (i = Me.iZeileUeberschriften) Then ZeileSpalten = Zeile
-                If (i = Me.iZeileEinheiten) Then ZeileEinheiten = Zeile
+                If (i = Me.iLineHeadings) Then ZeileSpalten = Zeile
+                If (i = Me.iLineUnits) Then ZeileEinheiten = Zeile
             Next
 
             StrReadSync.Close()
@@ -89,31 +89,31 @@ Public Class CSV
             Dim Namen() As String
             Dim Einheiten() As String
 
-            If (Me.Zeichengetrennt) Then
+            If (Me.IsColumnSeparated) Then
                 'Zeichengetrennt
-                Namen = ZeileSpalten.Split(New Char() {Me.Trennzeichen.Character})
-                Einheiten = ZeileEinheiten.Split(New Char() {Me.Trennzeichen.Character})
+                Namen = ZeileSpalten.Split(New Char() {Me.Separator.ToChar})
+                Einheiten = ZeileEinheiten.Split(New Char() {Me.Separator.ToChar})
                 anzSpalten = Namen.Length
             Else
                 'Spalten mit fester Breite
-                anzSpalten = Math.Ceiling(ZeileSpalten.Length / Me.Spaltenbreite)
+                anzSpalten = Math.Ceiling(ZeileSpalten.Length / Me.ColumnWidth)
                 ReDim Namen(anzSpalten - 1)
                 ReDim Einheiten(anzSpalten - 1)
                 For i = 0 To anzSpalten - 1
-                    Namen(i) = ZeileSpalten.Substring(i * Me.Spaltenbreite, Math.Min(Me.Spaltenbreite, ZeileSpalten.Substring(i * Me.Spaltenbreite).Length))
-                    Einheiten(i) = ZeileEinheiten.Substring(i * Me.Spaltenbreite, Math.Min(Me.Spaltenbreite, ZeileSpalten.Substring(i * Me.Spaltenbreite).Length))
+                    Namen(i) = ZeileSpalten.Substring(i * Me.ColumnWidth, Math.Min(Me.ColumnWidth, ZeileSpalten.Substring(i * Me.ColumnWidth).Length))
+                    Einheiten(i) = ZeileEinheiten.Substring(i * Me.ColumnWidth, Math.Min(Me.ColumnWidth, ZeileSpalten.Substring(i * Me.ColumnWidth).Length))
                 Next
             End If
 
             'Spalten abspeichern
-            ReDim Me.Spalten(anzSpalten - 1)
+            ReDim Me.Columns(anzSpalten - 1)
             For i = 0 To Namen.Length - 1
-                Me.Spalten(i).Name = Namen(i).Trim()
-                Me.Spalten(i).Index = i
+                Me.Columns(i).Name = Namen(i).Trim()
+                Me.Columns(i).Index = i
             Next
 
             For i = 0 To Einheiten.Length - 1
-                Me.Spalten(i).Einheit = Einheiten(i).Trim()
+                Me.Columns(i).Einheit = Einheiten(i).Trim()
             Next
 
             'TODO: gegebenes Datumsformat an dieser Stelle testen
@@ -142,23 +142,23 @@ Public Class CSV
             Dim StrReadSync = TextReader.Synchronized(StrRead)
 
             'Anzahl Zeitreihen bestimmen
-            ReDim Me.Zeitreihen(Me.SpaltenSel.Length - 1)
+            ReDim Me.TimeSeries(Me.SelectedColumns.Length - 1)
 
             'Zeitreihen instanzieren
-            For i = 0 To Me.SpaltenSel.Length - 1
-                Me.Zeitreihen(i) = New TimeSeries(Me.SpaltenSel(i).Name)
+            For i = 0 To Me.SelectedColumns.Length - 1
+                Me.TimeSeries(i) = New TimeSeries(Me.SelectedColumns(i).Name)
             Next
 
             'Einheiten übergeben
-            If (Me.UseEinheiten) Then
-                For i = 0 To Me.SpaltenSel.Length - 1
-                    Me.Zeitreihen(i).Unit = Me.SpaltenSel(i).Einheit
+            If (Me.UseUnits) Then
+                For i = 0 To Me.SelectedColumns.Length - 1
+                    Me.TimeSeries(i).Unit = Me.SelectedColumns(i).Einheit
                 Next
             End If
 
             'Use default number format by default
-            numberformat = Konstanten.Zahlenformat.Clone()
-            If Me.Dezimaltrennzeichen.Character = Chr(44) Then
+            numberformat = Helpers.DefaultNumberFormat.Clone()
+            If Me.DecimalSeparator.ToChar = Chr(44) Then
                 'change decimal separator to comma
                 numberformat.NumberDecimalSeparator = ","
             End If
@@ -167,7 +167,7 @@ Public Class CSV
             '--------
 
             'Header
-            For i = 0 To Me.nZeilenHeader - 1
+            For i = 0 To Me.nLinesHeader - 1
                 StrReadSync.ReadLine()
             Next
 
@@ -175,21 +175,21 @@ Public Class CSV
             Do
                 Zeile = StrReadSync.ReadLine.ToString()
 
-                If (Me.Zeichengetrennt) Then
+                If (Me.IsColumnSeparated) Then
 
                     'Zeichengetrennt
                     '---------------
-                    Werte = Zeile.Split(New Char() {Me.Trennzeichen.Character})
+                    Werte = Zeile.Split(New Char() {Me.Separator.ToChar})
 
                     If (Werte.Length > 0 And Zeile.Trim.Length > 1) Then
                         'Erste Spalte: Datum_Zeit
-                        ok = DateTime.TryParseExact(Werte(Me.XSpalte).Trim(), Me.Datumsformat, Konstanten.Zahlenformat, Globalization.DateTimeStyles.None, datum)
+                        ok = DateTime.TryParseExact(Werte(Me.DateTimeColumnIndex).Trim(), Me.Dateformat, Helpers.DefaultNumberFormat, Globalization.DateTimeStyles.None, datum)
                         If (Not ok) Then
-                            Throw New Exception("Could not parse the date '" & Werte(Me.XSpalte) & "' using the given date format '" & Me.Datumsformat & "'! Please check the date format!")
+                            Throw New Exception("Could not parse the date '" & Werte(Me.DateTimeColumnIndex) & "' using the given date format '" & Me.Dateformat & "'! Please check the date format!")
                         End If
                         'Restliche Spalten: Werte
-                        For i = 0 To Me.SpaltenSel.Length - 1
-                            Me.Zeitreihen(i).AddNode(datum, StringToDouble(Werte(Me.SpaltenSel(i).Index), numberformat))
+                        For i = 0 To Me.SelectedColumns.Length - 1
+                            Me.TimeSeries(i).AddNode(datum, StringToDouble(Werte(Me.SelectedColumns(i).Index), numberformat))
                         Next
                     End If
 
@@ -197,13 +197,13 @@ Public Class CSV
                     'Spalten mit fester Breite
                     '-------------------------
                     'Erste Spalte: Datum_Zeit
-                    ok = DateTime.TryParseExact(Zeile.Substring(0, Me.Spaltenbreite), Me.Datumsformat, Konstanten.Zahlenformat, Globalization.DateTimeStyles.None, datum)
+                    ok = DateTime.TryParseExact(Zeile.Substring(0, Me.ColumnWidth), Me.Dateformat, Helpers.DefaultNumberFormat, Globalization.DateTimeStyles.None, datum)
                     If (Not ok) Then
-                        Throw New Exception("Could not parse the date '" & Zeile.Substring(0, Me.Spaltenbreite) & "' using the given date format '" & Me.Datumsformat & "'! Please check the date format!")
+                        Throw New Exception("Could not parse the date '" & Zeile.Substring(0, Me.ColumnWidth) & "' using the given date format '" & Me.Dateformat & "'! Please check the date format!")
                     End If
                     'Restliche Spalten: Werte
-                    For i = 0 To Me.SpaltenSel.Length - 1
-                        Me.Zeitreihen(i).AddNode(datum, StringToDouble(Zeile.Substring(Me.SpaltenSel(i).Index * Me.Spaltenbreite + SpaltenOffset, Math.Min(Me.Spaltenbreite, Zeile.Substring(Me.SpaltenSel(i).Index * Me.Spaltenbreite + SpaltenOffset).Length)), numberformat))
+                    For i = 0 To Me.SelectedColumns.Length - 1
+                        Me.TimeSeries(i).AddNode(datum, StringToDouble(Zeile.Substring(Me.SelectedColumns(i).Index * Me.ColumnWidth + SpaltenOffset, Math.Min(Me.ColumnWidth, Zeile.Substring(Me.SelectedColumns(i).Index * Me.ColumnWidth + SpaltenOffset).Length)), numberformat))
                     Next
                 End If
 
@@ -273,7 +273,7 @@ Public Class CSV
         strwrite.WriteLine(line)
         '3rd row onwards: data
         For Each t In data.Keys
-            line = t.ToString(Datumsformate("default"))
+            line = t.ToString(Helpers.DefaultDateFormat)
             For Each v In data(t)
                 If Double.IsNaN(v) Then
                     line += separator 'leave empty

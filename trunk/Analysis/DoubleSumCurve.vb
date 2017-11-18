@@ -119,7 +119,7 @@ Public Class DoubleSumCurve
         '-----
         Me.mResultText = "Double Sum Curve:" & eol _
                         & eol _
-                        & "The analysis is based on " & Me.summe1.Length & " coincident data points between " & Me.datume(0).ToString(Datumsformate("default")) & " and " & Me.datume(Me.datume.Count - 1).ToString(Datumsformate("default")) & eol _
+                        & "The analysis is based on " & Me.summe1.Length & " coincident data points between " & Me.datume(0).ToString(Helpers.DefaultDateFormat) & " and " & Me.datume(Me.datume.Count - 1).ToString(DefaultDateFormat) & eol _
                         & eol
 
         'Diagramm:
@@ -155,7 +155,7 @@ Public Class DoubleSumCurve
 
         'Werte eintragen
         For i = 0 To summe1.Length - 1
-            doppelsumme.Add(summe1(i), summe2(i), datume(i).ToString(Konstanten.Datumsformate("default")))
+            doppelsumme.Add(summe1(i), summe2(i), datume(i).ToString(Helpers.DefaultDateFormat))
         Next
 
         gerade.Add(0, 0)

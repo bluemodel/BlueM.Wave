@@ -147,7 +147,7 @@ Public Class Comparison
 
         'Text:
         '-----
-        Me.mResultText = "The analysis is based on " & Me.ergebnisreihe.GetLength(0) & " coincident data points between " & Me.datume(0).ToString(Datumsformate("default")) & " and " & Me.datume(Me.datume.Count - 1).ToString(Datumsformate("default"))
+        Me.mResultText = "The analysis is based on " & Me.ergebnisreihe.GetLength(0) & " coincident data points between " & Me.datume(0).ToString(Helpers.DefaultDateFormat) & " and " & Me.datume(Me.datume.Count - 1).ToString(Helpers.DefaultDateFormat)
 
         'Diagramm:
         '---------
@@ -189,7 +189,7 @@ Public Class Comparison
         For i = 0 To ende
             x = ergebnisreihe(i, 0)
             y = ergebnisreihe(i, 1)
-            gegenueberstellung_linie.Add(x, y, datume(i).ToString(Konstanten.Datumsformate("default")))
+            gegenueberstellung_linie.Add(x, y, datume(i).ToString(Helpers.DefaultDateFormat))
             regression_line.Add(x, beta * x + alpha)
         Next
 
