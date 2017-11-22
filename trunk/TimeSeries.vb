@@ -477,6 +477,8 @@ Public Class TimeSeries
 
         End Select
 
+        Return Wert
+
     End Function
 
     ''' <summary>
