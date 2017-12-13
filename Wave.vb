@@ -451,6 +451,51 @@ Public Class Wave
         End If
     End Sub
 
+    ''' <summary>
+    ''' SaveProjectFile button clicked
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    ''' <remarks></remarks>
+    Private Sub SaveProjectFile_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem_SaveProjectFile.Click
+
+        Dim dlgres As DialogResult
+        Dim projectfile As String
+
+        'Prepare SaveFileDialog
+        Me.SaveFileDialog1.Title = "Save project file"
+        Me.SaveFileDialog1.Filter = "Wave project files (*.wvp)|*wvp"
+        Me.SaveFileDialog1.DefaultExt = "wvp"
+        Me.SaveFileDialog1.OverwritePrompt = True
+
+        'Show dialog
+        dlgres = Me.SaveFileDialog1.ShowDialog()
+
+        If dlgres = Windows.Forms.DialogResult.OK Then
+
+            projectfile = Me.SaveFileDialog1.FileName
+
+            'write the project file
+            Dim fs As New FileStream(projectfile, FileMode.Create, FileAccess.Write)
+            Dim strwrite As New StreamWriter(fs, System.Text.Encoding.GetEncoding("iso8859-1"))
+
+            strwrite.WriteLine("# Wave project file")
+
+            For Each file As FileFormatBase In Me.ImportedFiles
+                'TODO: write relative paths?
+                strwrite.WriteLine("file=" & file.File)
+            Next
+
+            strwrite.Close()
+            fs.Close()
+
+            Log.AddLogEntry("Wave project file " & projectfile & " saved.")
+
+        End If
+
+
+    End Sub
+
     'Teechart Export
     '***************
     Private Sub SaveChart_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem_SaveChart.Click

@@ -40,6 +40,7 @@ Partial Class Wave
         Me.ToolStripMenuItem_LoadTEN = New System.Windows.Forms.ToolStripMenuItem
         Me.ToolStripMenuItem_LoadTheme = New System.Windows.Forms.ToolStripMenuItem
         Me.ToolStripDropDownButton_Save = New System.Windows.Forms.ToolStripDropDownButton
+        Me.ToolStripMenuItem_SaveProjectFile = New System.Windows.Forms.ToolStripMenuItem
         Me.ToolStripMenuItem_SaveChart = New System.Windows.Forms.ToolStripMenuItem
         Me.ToolStripMenuItem_ExportSeries = New System.Windows.Forms.ToolStripMenuItem
         Me.ToolStripButton_Copy = New System.Windows.Forms.ToolStripButton
@@ -217,12 +218,19 @@ Partial Class Wave
         'ToolStripDropDownButton_Save
         '
         Me.ToolStripDropDownButton_Save.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.ToolStripDropDownButton_Save.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripMenuItem_SaveChart, Me.ToolStripMenuItem_ExportSeries})
+        Me.ToolStripDropDownButton_Save.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripMenuItem_SaveProjectFile, Me.ToolStripMenuItem_SaveChart, Me.ToolStripMenuItem_ExportSeries})
         Me.ToolStripDropDownButton_Save.Image = CType(resources.GetObject("ToolStripDropDownButton_Save.Image"), System.Drawing.Image)
         Me.ToolStripDropDownButton_Save.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.ToolStripDropDownButton_Save.Name = "ToolStripDropDownButton_Save"
         Me.ToolStripDropDownButton_Save.Size = New System.Drawing.Size(29, 31)
         Me.ToolStripDropDownButton_Save.Text = "&Save"
+        '
+        'ToolStripMenuItem_SaveProjectFile
+        '
+        Me.ToolStripMenuItem_SaveProjectFile.Image = Global.BlueM.Wave.My.Resources.Resources.page_save
+        Me.ToolStripMenuItem_SaveProjectFile.Name = "ToolStripMenuItem_SaveProjectFile"
+        Me.ToolStripMenuItem_SaveProjectFile.Size = New System.Drawing.Size(166, 22)
+        Me.ToolStripMenuItem_SaveProjectFile.Text = "Save project file"
         '
         'ToolStripMenuItem_SaveChart
         '
@@ -1198,5 +1206,6 @@ Partial Class Wave
     Friend WithEvents ToolStripButton_RemoveErrorValues As System.Windows.Forms.ToolStripButton
     Friend WithEvents ToolStripButton_RenameSeries As System.Windows.Forms.ToolStripButton
     Friend WithEvents ToolStripDropDownButton_ZoomToSeries As System.Windows.Forms.ToolStripDropDownButton
+    Friend WithEvents ToolStripMenuItem_SaveProjectFile As System.Windows.Forms.ToolStripMenuItem
 
 End Class
