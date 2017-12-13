@@ -174,6 +174,30 @@ Public Class Wave
         End If
     End Sub
 
+    ''' <summary>
+    ''' Process KeyDown events
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    ''' <remarks></remarks>
+    Private Sub Wave_KeyDown(ByVal sender As System.Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles MyBase.KeyDown
+
+        If e.Control And e.KeyCode = Keys.V Then
+            'Ctrl+V pressed
+            If Clipboard.ContainsText(TextDataFormat.Text) Then
+
+                Dim clipboardtext As String
+                clipboardtext = Clipboard.GetText(TextDataFormat.Text)
+
+                If clipboardtext.Contains("SydroTyp=SydroErgZre") Then
+                    'it's a clipboard entry from TALSIM
+                    Call Me.loadFromClipboard_TALSIM(clipboardtext)
+                End If
+            End If
+        End If
+
+    End Sub
+
 #End Region 'Form behavior
 
 #Region "Chart behavior"
@@ -1594,7 +1618,7 @@ Public Class Wave
                         series.Remove(name)
                     Next
                     'if no series remain to be imported, abort reading the file altogether
-                    If series.Count = 0
+                    If series.Count = 0 Then
                         Log.AddLogEntry("No series left to import, skipping file!")
                         Continue For
                     End If
@@ -1902,6 +1926,113 @@ Public Class Wave
                 End Try
 
         End Select
+
+    End Sub
+
+    ''' <summary>
+    ''' Load a timeseries from a file using information from a TALSIM clipboard entry
+    ''' </summary>
+    ''' <param name="clipboardtext">text content of the clipboard</param>
+    ''' <remarks></remarks>
+    Private Sub loadFromClipboard_TALSIM(ByVal clipboardtext As String)
+
+        'Example:
+
+        '[SETTINGS]
+        'Count = 1
+        '[Zeitreihe1]
+        'SydroTyp=SydroErgZre
+        'ZRFormat=4
+        'ID=362
+        'Extension=.WEL
+        'Kennung=S000
+        'KennungLang={S000} {1AB, HYO} Ablauf_1
+        'Zustand=1AB
+        'Datei=D:\Talsim-NG\customers\WVER\projectData\felix\dataBase\Felix_data\00000362.WEL
+        'GeaendertAm=
+        'Modell=TALSIM
+        'Herkunft=simuliert
+        'Interpretation=2
+        'SimVariante=Test Langzeit/HWMerkmal_HWGK_v02
+        'Simulation=Test Langzeit
+        'Einheit=m3/s
+        'EndZeitreihe
+
+        'parse clipboard contents
+        Dim parts() As String
+        Dim zreblock As Boolean
+        Dim params As New Dictionary(Of String, String)
+
+        zreblock = False
+        For Each line As String In clipboardtext.Split(eol)
+            line = line.Trim()
+
+            If Not zreblock Then
+                If line.StartsWith("[Zeitreihe") Then
+                    zreblock = True
+                End If
+                Continue For
+            End If
+
+            If zreblock Then
+                If line.Contains("=") Then
+                    parts = line.Split("=")
+                    params.Add(parts(0), parts(1))
+                ElseIf line = "EndZeitreihe" Then
+                    Exit For
+                End If
+            End If
+
+        Next
+
+        'initiate loading of file
+        If params.ContainsKey("Datei") _
+        And params.ContainsKey("Kennung") _
+        And params.ContainsKey("Zustand") Then
+
+            Dim file, name As String
+            Dim dlgres As DialogResult
+
+            file = params("Datei")
+            name = params("Kennung").PadRight(4, " ") & "_" & params("Zustand")
+
+            'ask the user for confirmation
+            dlgres = MessageBox.Show("TALSIM clipboard content detected!" & eol & "Load series " & name & " from file " & file & "?", "Load from clipboard", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+            If Not dlgres = Windows.Forms.DialogResult.Yes Then
+                Exit Sub
+            End If
+
+            'check whether the wel file has already been unzipped
+            Dim filezip As String
+            filezip = file.Substring(0, file.Length - 4) & ".WLZIP"
+            If Not IO.File.Exists(file) And IO.File.Exists(filezip) Then
+                MessageBox.Show("The file " & filezip & " needs to be unzipped first!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                Exit Sub
+            End If
+
+            Log.AddLogEntry("Loading file " & file & " ...")
+
+            'read file
+            Dim fileobj As FileFormatBase
+            fileobj = FileFactory.getDateiInstanz(params("Datei"))
+            'select column
+            For Each col As FileFormatBase.ColumnInfo In fileobj.Columns
+                If col.Name = name Then
+                    fileobj.selectColumn(col)
+                    Exit For
+                End If
+            Next
+            'read series
+            fileobj.Read_File()
+            'import series
+            For Each ts As TimeSeries In fileobj.TimeSeries
+                Me.Import_Series(ts)
+            Next
+
+            'store information
+            Me.ImportedFiles.Add(fileobj)
+
+        End If
 
     End Sub
 
