@@ -2012,22 +2012,14 @@ Public Class Wave
 
             Log.AddLogEntry("Loading file " & file & " ...")
 
-            'read file
+            'read series from file
             Dim fileobj As FileFormatBase
+            Dim ts As TimeSeries
             fileobj = FileFactory.getDateiInstanz(params("Datei"))
-            'select column
-            For Each col As FileFormatBase.ColumnInfo In fileobj.Columns
-                If col.Name = name Then
-                    fileobj.selectColumn(col)
-                    Exit For
-                End If
-            Next
-            'read series
-            fileobj.Read_File()
+            ts = fileobj.getTimeSeries(name)
+
             'import series
-            For Each ts As TimeSeries In fileobj.TimeSeries
-                Me.Import_Series(ts)
-            Next
+            Call Me.Import_Series(ts)
 
             'store information
             Me.ImportedFiles.Add(fileobj)
