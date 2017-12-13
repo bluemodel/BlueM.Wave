@@ -482,8 +482,12 @@ Public Class Wave
             strwrite.WriteLine("# Wave project file")
 
             For Each file As FileFormatBase In Me.ImportedFiles
-                'TODO: write relative paths?
+                'TODO: write relative paths to the project file?
                 strwrite.WriteLine("file=" & file.File)
+                For Each series As FileFormatBase.ColumnInfo In file.SelectedColumns
+                    'TODO: if a series was renamed, write the new title to the project file
+                    strwrite.WriteLine("    series=" & series.Name)
+                Next
             Next
 
             strwrite.Close()
@@ -1611,6 +1615,9 @@ Public Class Wave
                     End If
                     Call Me.Import_Series(ts)
                 Next
+
+                'store file information
+                Me.ImportedFiles.Add(fileobj)
             Next
 
             Call Me.UpdateCharts()
