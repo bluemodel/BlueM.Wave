@@ -1137,6 +1137,7 @@ Partial Class Wave
         Me.Controls.Add(Me.SplitContainer1)
         Me.Controls.Add(StatusStrip1)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
+        Me.KeyPreview = True
         Me.MinimumSize = New System.Drawing.Size(500, 410)
         Me.Name = "Wave"
         Me.Text = "BlueM.Wave"

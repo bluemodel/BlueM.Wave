@@ -4,7 +4,8 @@ BlueM.Wave Release Notes
 Version 1.6.1
 -------------
 NEW:
-* Added support for loading Wave project files (*.wvp)
+* Added support for loading and saving Wave project files (*.wvp)
+* Added the ability to load TALSIM simulation results using the clipboard (by pressing Ctrl+V)
 * Added an "AnnualStatistics" analysis function which calculates statistics such as
   min, max, avg and volume of a time series for each hydrological year
 * The "Comparison" analysis function now fits a simple linear regression line to the data
