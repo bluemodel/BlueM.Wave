@@ -1542,6 +1542,8 @@ Public Class Wave
             fstr = New FileStream(projectfile, FileMode.Open)
             strRead = New StreamReader(fstr, True)
 
+            path = ""
+
             line = strRead.ReadLine()
             While Not IsNothing(line)
 
@@ -1554,7 +1556,9 @@ Public Class Wave
                         'it's a relative path: construct the full path relative to the project file
                         path = IO.Path.GetFullPath(IO.Path.Combine(IO.Path.GetDirectoryName(projectfile), path))
                     End If
-                    files.Add(path, New Dictionary(Of String, String))
+                    If Not files.ContainsKey(path) Then
+                        files.Add(path, New Dictionary(Of String, String))
+                    End If
 
                 ElseIf line.ToLower().StartsWith("series=") Then
                     'series
@@ -1569,10 +1573,18 @@ Public Class Wave
                         title = ""
                     End If
                     'add series to file
-                    files.Last.Value.Add(name, title)
-                Else
-                    'ignore any other lines
-                End If
+                    If files.ContainsKey(path) Then
+                        If Not files(path).ContainsKey(name) Then
+                            files(path).Add(name, title)
+                        Else
+                            Log.AddLogEntry("Series " & name & " is specified twice, the second mention will be ignored!")
+                        End If
+                    Else
+                        Log.AddLogEntry("Series " & name & " is not associated with a file and will be ignored!")
+                    End If
+                    Else
+                        'ignore any other lines
+                    End If
                 line = strRead.ReadLine()
             End While
 
