@@ -207,6 +207,13 @@ Namespace My.Resources
             End Get
         End Property
         
+        Friend ReadOnly Property table() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("table", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
         Friend ReadOnly Property tick() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("tick", resourceCulture)
