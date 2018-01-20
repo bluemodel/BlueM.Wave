@@ -4,13 +4,14 @@ BlueM.Wave Release Notes
 Version 1.6.1
 -------------
 NEW:
-* Added support for loading and saving Wave project files (*.wvp)
-* Added the ability to load TALSIM simulation results using the clipboard (by pressing Ctrl+V)
+* Added support for loading and saving Wave project files (*.wvp) (#705)
+* Added a button for displaying time series properties in a table view (#711)
+* Added the ability to load TALSIM simulation results using the clipboard (by pressing Ctrl+V) (#695)
 * Added an "AnnualStatistics" analysis function which calculates statistics such as
   min, max, avg and volume of a time series for each hydrological year
 * The "Comparison" analysis function now fits a simple linear regression line to the data
   (using the Math.NET Numerics library)
-* The analysis function Histogram now allows the user to specify the bins (Bug 397). 
+* The analysis function Histogram now allows the user to specify the bins (#397). 
   Also, the histogram result data is now written to the log.
 * The analysis function MonthlyStatistics now writes the result data to the log
 * Added a button for removing user-specified error values from series
@@ -31,7 +32,7 @@ CHANGED:
 * If a time series contains duplicate nodes, the duplicate nodes are now simply discarded 
   and a warning is written to the log instead of aborting the import
 FIXED:
-* The decimal mark selector in the import series dialog now actually works (Bug 351)
+* The decimal mark selector in the import series dialog now actually works (#351)
 
 Version 1.6
 -----------
@@ -51,7 +52,7 @@ NEW:
 * Support for importing UVF files
 * Support for importing SYDRO binary files (x86 version only)
 * Support for loading TeeChart themes (*.xml) 
-* The date format can now be specified while importing time series (Bug 686)
+* The date format can now be specified while importing time series (#686)
 CHANGED:
 * Loading a TEN-file does not cause existing series to be deleted, 
   the series contained in the TEN-file can be imported optionally

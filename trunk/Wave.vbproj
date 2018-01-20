@@ -172,6 +172,12 @@
     <Compile Include="Dialogs\SeriesEditorDialog.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Dialogs\PropertiesDialog.Designer.vb">
+      <DependentUpon>PropertiesDialog.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\PropertiesDialog.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="FileFormats\FileFactory.vb" />
     <Compile Include="FileFormats\FileFormatBase.vb" />
     <Compile Include="Helpers.vb" />
@@ -285,6 +291,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="My Project\DataSources\TimeSeries.datasource" />
     <None Include="Resources\BlueM.png" />
     <None Include="Resources\error.png" />
     <None Include="Resources\help.png" />
@@ -338,6 +345,9 @@
       <DependentUpon>SeriesEditorDialog.vb</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Dialogs\PropertiesDialog.resx">
+      <DependentUpon>PropertiesDialog.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\cursor_pan.cur" />
     <EmbeddedResource Include="Resources\cursor_zoom.cur" />
     <EmbeddedResource Include="Resources\cursor_pan_hold.cur" />
@@ -354,6 +364,7 @@
     <Content Include="lib\SydroZre\SydroZreNet.xml" />
     <None Include="Resources\page_save.png" />
     <Content Include="Resources\series_rename.png" />
+    <None Include="Resources\table.png" />
     <Content Include="Resources\zoom_world.png" />
     <None Include="Resources\zoom.png" />
     <None Include="Resources\zoom_previous.png" />

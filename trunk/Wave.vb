@@ -851,6 +851,15 @@ Public Class Wave
     End Sub
 
     ''' <summary>
+    ''' Properties button clicked
+    ''' </summary>
+    ''' <remarks></remarks>
+    Private Sub ToolStripButton_Properties_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_Properties.Click
+        Dim propDialog As New PropertiesDialog(Me.Zeitreihen)
+        propDialog.Show()
+    End Sub
+
+    ''' <summary>
     ''' Remove error values button clicked
     ''' </summary>
     ''' <remarks></remarks>
