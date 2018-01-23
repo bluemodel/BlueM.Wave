@@ -33,6 +33,8 @@ CHANGED:
   and a warning is written to the log instead of aborting the import
 FIXED:
 * The decimal mark selector in the import series dialog now actually works (#351)
+* Comparison analysis function: changed the result series to a point series because a line series automatically 
+  sorts itself by the x-values and thus connects the points in the wrong order (not time-based)
 
 Version 1.6
 -----------
