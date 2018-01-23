@@ -87,7 +87,6 @@ Public Class Comparison
 
         Dim i As Integer
         Dim reihe1, reihe2 As TimeSeries
-        Dim values(,), xvalues(), yvalues() As Double
 
         ' Dialogaufruf zur Auswahl der x-Achse
         Dim dialog As New Comparison_Dialog(Me.mZeitreihen(0).Title, Me.mZeitreihen(1).Title)
@@ -112,26 +111,23 @@ Public Class Comparison
         reihe2 = Me.mZeitreihen(ynummer).getCleanZRE()
 
         'Nur gemeinsame Stützstellen nutzen
-        values = AnalysisHelper.getConcurrentValues(reihe1, reihe2)
-
-        ' Ergebnisreihe allokieren
-        ReDim Me.ergebnisreihe(values.GetUpperBound(0), 1)
-        ReDim xvalues(values.GetUpperBound(0))
-        ReDim yvalues(values.GetUpperBound(0))
-
-        ' x- und y-Werte der Ergebnisreihe zuweisen
-        For i = 0 To values.GetUpperBound(0)
-            ergebnisreihe(i, 0) = values(i, 0)
-            ergebnisreihe(i, 1) = values(i, 1)
-            xvalues(i) = values(i, 0)
-            yvalues(i) = values(i, 1)
-        Next
+        Me.ergebnisreihe = AnalysisHelper.getConcurrentValues(reihe1, reihe2)
 
         'Datume übernehmen (werden später für Punkte-Labels im Diagramm gebraucht)
-        datume = reihe1.Dates
+        Me.datume = reihe1.Dates
 
         'Calculate linear regression
         Dim p As Tuple(Of Double, Double)
+        Dim xvalues(), yvalues() As Double
+
+        'store x and y values as separate arrays
+        ReDim xvalues(Me.ergebnisreihe.GetUpperBound(0))
+        ReDim yvalues(Me.ergebnisreihe.GetUpperBound(0))
+        For i = 0 To Me.ergebnisreihe.GetUpperBound(0)
+            xvalues(i) = Me.ergebnisreihe(i, 0)
+            yvalues(i) = Me.ergebnisreihe(i, 1)
+        Next
+
         p = Fit.Line(xvalues, yvalues)
 
         'Store result values
@@ -152,7 +148,8 @@ Public Class Comparison
         'Diagramm:
         '---------
         Dim i, ende As Integer
-        Dim gegenueberstellung_linie, regression_line As Steema.TeeChart.Styles.Line
+        Dim series_points As Steema.TeeChart.Styles.Points
+        Dim regression_line As Steema.TeeChart.Styles.Line
 
         Me.mResultChart = New Steema.TeeChart.Chart()
         Call Wave.formatChart(Me.mResultChart)
@@ -168,12 +165,12 @@ Public Class Comparison
 
         'Reihen
         '------
-        gegenueberstellung_linie = New Steema.TeeChart.Styles.Line(Me.mResultChart)
-        gegenueberstellung_linie.Title = "Comparison " & Me.mZeitreihen(xnummer).Title & " - " & Me.mZeitreihen(ynummer).Title
-        gegenueberstellung_linie.Pointer.Visible = True
-        gegenueberstellung_linie.Pointer.Style = Steema.TeeChart.Styles.PointerStyles.Circle
-        gegenueberstellung_linie.Pointer.HorizSize = 2
-        gegenueberstellung_linie.Pointer.VertSize = 2
+        series_points = New Steema.TeeChart.Styles.Points(Me.mResultChart)
+        series_points.Title = "Comparison " & Me.mZeitreihen(xnummer).Title & " - " & Me.mZeitreihen(ynummer).Title
+        series_points.Pointer.Visible = True
+        series_points.Pointer.Style = Steema.TeeChart.Styles.PointerStyles.Circle
+        series_points.Pointer.HorizSize = 2
+        series_points.Pointer.VertSize = 2
 
         regression_line = New Steema.TeeChart.Styles.Line(Me.mResultChart)
         regression_line.Title = "Regression line"
@@ -185,11 +182,11 @@ Public Class Comparison
         alpha = Me.mResultValues("alpha")
         beta = Me.mResultValues("beta")
 
-        ende = (ergebnisreihe.Length / 2 - 2)
+        ende = ergebnisreihe.GetUpperBound(0)
         For i = 0 To ende
             x = ergebnisreihe(i, 0)
             y = ergebnisreihe(i, 1)
-            gegenueberstellung_linie.Add(x, y, datume(i).ToString(Helpers.DefaultDateFormat))
+            series_points.Add(x, y, datume(i).ToString(Helpers.DefaultDateFormat))
             regression_line.Add(x, beta * x + alpha)
         Next
 
@@ -198,8 +195,8 @@ Public Class Comparison
         Dim markstips As New Steema.TeeChart.Tools.MarksTip(Me.mResultChart)
         markstips.MouseAction = Steema.TeeChart.Tools.MarksTipMouseAction.Move
         markstips.Style = Steema.TeeChart.Styles.MarksStyles.Label
-        markstips.Series = gegenueberstellung_linie
-        gegenueberstellung_linie.Cursor = Cursors.Help
+        markstips.Series = series_points
+        series_points.Cursor = Cursors.Help
 
         'Annotation
         '----------
