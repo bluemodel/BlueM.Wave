@@ -22,7 +22,6 @@ Partial Class RenameSeriesDialog
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-        Me.components = New System.ComponentModel.Container
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(RenameSeriesDialog))
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel
         Me.OK_Button = New System.Windows.Forms.Button
@@ -30,12 +29,8 @@ Partial Class RenameSeriesDialog
         Me.DataGridView_Series = New System.Windows.Forms.DataGridView
         Me.title_old = New System.Windows.Forms.DataGridViewTextBoxColumn
         Me.title_new = New System.Windows.Forms.DataGridViewTextBoxColumn
-        Me.WaveBindingSource = New System.Windows.Forms.BindingSource(Me.components)
-        Me.ZeitreiheBindingSource = New System.Windows.Forms.BindingSource(Me.components)
         Me.TableLayoutPanel1.SuspendLayout()
         CType(Me.DataGridView_Series, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.WaveBindingSource, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.ZeitreiheBindingSource, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'TableLayoutPanel1
@@ -100,14 +95,6 @@ Partial Class RenameSeriesDialog
         Me.title_new.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
         Me.title_new.Width = 150
         '
-        'WaveBindingSource
-        '
-        Me.WaveBindingSource.DataSource = GetType(BlueM.Wave.Wave)
-        '
-        'ZeitreiheBindingSource
-        '
-        Me.ZeitreiheBindingSource.DataSource = GetType(BlueM.Wave.TimeSeries)
-        '
         'RenameSeriesDialog
         '
         Me.AcceptButton = Me.OK_Button
@@ -127,8 +114,6 @@ Partial Class RenameSeriesDialog
         Me.Text = "Rename Series"
         Me.TableLayoutPanel1.ResumeLayout(False)
         CType(Me.DataGridView_Series, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.WaveBindingSource, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.ZeitreiheBindingSource, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub
@@ -136,8 +121,6 @@ Partial Class RenameSeriesDialog
     Friend WithEvents OK_Button As System.Windows.Forms.Button
     Friend WithEvents Cancel_Button As System.Windows.Forms.Button
     Friend WithEvents DataGridView_Series As System.Windows.Forms.DataGridView
-    Friend WithEvents WaveBindingSource As System.Windows.Forms.BindingSource
-    Friend WithEvents ZeitreiheBindingSource As System.Windows.Forms.BindingSource
     Friend WithEvents title_old As System.Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents title_new As System.Windows.Forms.DataGridViewTextBoxColumn
 
