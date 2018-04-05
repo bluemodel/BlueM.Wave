@@ -1,0 +1,102 @@
+﻿===============================================================
+BlueM.Wave Release Notes
+===============================================================
+Version 1.6.1
+-------------
+NEW:
+* Added support for loading and saving Wave project files (*.wvp) (#705)
+* Added a button for displaying time series properties in a table view (#711)
+* Added the ability to load TALSIM simulation results using the clipboard (by pressing Ctrl+V) (#695)
+* Added an "AnnualStatistics" analysis function which calculates statistics such as
+  min, max, avg and volume of a time series for each hydrological year
+* The "Comparison" analysis function now fits a simple linear regression line to the data
+  (using the Math.NET Numerics library)
+* The analysis function Histogram now allows the user to specify the bins (#397). 
+  Also, the histogram result data is now written to the log.
+* The analysis function MonthlyStatistics now writes the result data to the log
+* Added a button for removing user-specified error values from series
+* Added a button for renaming series
+* Added a dropdown button for zooming to a specific series
+* Added support for exporting series to CSV format (#318)
+* Added support for importing files in the ZRXP format (*.zrx)
+* GoodnessOfFit (GoF) analysis function:
+  * Added "Logarithmic Nash-Sutcliffe Efficiency" as a new GoF parameter
+  * The GoF parameters can now optionally be calculated for individual hydrological years
+* Added support for importing BW_TMP.DAT result files from HYDRO_AS-2D
+CHANGED:
+* Error values in time series such as e.g. -777 and -9999 are now imported and displayed as regular values.
+  Previously, when importing from BIN and DWD-T-L format, these would be replaced with NaN.
+  The new "Remove error values" function can be used to remove these error values, if desired. (#693)
+* Analysis GoodnessOfFit: Volume error is based on actual volume integrated over time 
+  if the time series unit ends with "/s"
+* Removed support for the DWD-T-L format
+* If a time series contains duplicate nodes, the duplicate nodes are now simply discarded 
+  and a warning is written to the log instead of aborting the import
+FIXED:
+* The decimal mark selector in the import series dialog now actually works (#351)
+* Comparison analysis function: changed the result series to a point series because a line series automatically 
+  sorts itself by the x-values and thus connects the points in the wrong order (not time-based)
+
+Version 1.6
+-----------
+NEW:
+* Significantly improved the possibilities for viewing and navigating time series:
+  - New toolbar buttons for zooming, panning, zoom undo and zoom all
+  - Start and end date for display can be set using date/time pickers
+  - Display range can be set to exact date/time ranges using a simple interface
+  - Buttons for navigating in time using a user-specified time increment
+  - All changes to the viewport are recorded in a history that can be undone
+
+Version 1.5
+-----------
+NEW:
+* Support for importing GISMO files
+* Support for importing HYDRO-AS_2D files
+* Support for importing UVF files
+* Support for importing SYDRO binary files (x86 version only)
+* Support for loading TeeChart themes (*.xml) 
+* The date format can now be specified while importing time series (#686)
+CHANGED:
+* Loading a TEN-file does not cause existing series to be deleted, 
+  the series contained in the TEN-file can be imported optionally
+* More options for cutting time series (cut all series at once and keep original series)
+* Small improvements to layout and functionality
+* Switched to .NET Framework 3.5
+REMOVED:
+* RVA files no longer supported
+
+Version 1.4
+-----------
+Initial Release under the BSD-2 License, see LICENSE.txt for more information.
+
+Version 1.3
+-----------
+NEW:
+* Wave can now read time series from SWMM binary result files (*.OUT)
+FIXED:
+* Import of time series from TeeCharts native TEN files
+UPDATE:
+* Import of SMUSI REG files: Empty lines (dry weather periods) are improted correctly
+CHANGED:
+* Upgrade to TeeChart v4
+
+Version 1.2
+-----------
+UPDATE:
+* Internal storage of sampling points re-engineered
+NEW:
+* Analysis function Goodness of Fit with new indicators: Volume error, Correlation coefficient, Hydrologic deviation
+
+Version 1.1
+-----------
+NEW:
+* Analysis functions: Comparison, Double sum analysis, Goodness of Fit, Statistics
+* Import formats for SMB and REG files
+* Time series are assorted to different axes according to the time series units
+* ReRead Files": Deletes all times series in current instance of BlueM.Wave and reimports the time series from it's respective files again (Bug 388)
+FIXED:
+* Cutting time series
+
+Version 1.0
+-----------
+* Start of version control
