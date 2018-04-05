@@ -28,7 +28,7 @@
 Imports System.IO
 
 ''' <summary>
-''' Klasse für Q_Strg.dat und Pegel.dat von HYDRO_AS-2D
+''' Klasse für Q_Strg.dat, Pegel.dat und BW_TMP.dat von HYDRO_AS-2D
 ''' </summary>
 Public Class HYDRO_AS_2D
     Inherits FileFormatBase
@@ -72,6 +72,8 @@ Public Class HYDRO_AS_2D
                 Me._einheit = "m³/s"
             Case "pegel.dat"
                 Me._einheit = "müNN"
+            Case "bw_tmp.dat"
+                Me._einheit = "m³/s"
             Case Else
                 Me._einheit = "-"
         End Select
@@ -85,13 +87,13 @@ Public Class HYDRO_AS_2D
     ''' </summary>
     ''' <param name="file">Pfad zur Datei</param>
     ''' <returns>Boolean</returns>
-    ''' <remarks>Prüfung erfolgt anhand des Dateinamens (Q_Strg.dat oder Pegel.dat)</remarks>
+    ''' <remarks>Prüfung erfolgt anhand des Dateinamens (Q_Strg.dat, Pegel.dat oder BW_TMP.dat)</remarks>
     Public Shared Function verifyFormat(ByVal file As String) As Boolean
 
         'TODO: Prüfung etwas robuster machen
 
         Dim filename As String = Path.GetFileName(file).ToLower()
-        If (filename = "q_strg.dat" Or filename = "pegel.dat") Then
+        If (filename = "q_strg.dat" Or filename = "pegel.dat" Or filename = "bw_tmp.dat") Then
             Return True
         Else
             Return False
@@ -115,39 +117,79 @@ Public Class HYDRO_AS_2D
             Dim StrRead As StreamReader = New StreamReader(FiStr, System.Text.Encoding.GetEncoding("iso8859-1"))
             Dim StrReadSync = TextReader.Synchronized(StrRead)
 
-            'Zeile mit Spaltenüberschriften lesen
-            For i = 1 To Me.iLineHeadings
-                Zeile = StrReadSync.ReadLine.ToString
-                If (i = Me.iLineHeadings) Then ZeileSpalten = Zeile
-            Next
+            Select Case Path.GetFileName(Me.File).ToLower()
+
+                Case "q_strg.dat", "pegel.dat"
+
+                    'Zeile mit Spaltenüberschriften lesen
+                    For i = 1 To Me.iLineHeadings
+                        Zeile = StrReadSync.ReadLine.ToString
+                        If (i = Me.iLineHeadings) Then ZeileSpalten = Zeile
+                    Next
+
+                    'Spaltennamen auslesen
+                    Dim anzSpalten As Integer
+                    Dim Namen() As String
+
+                    Namen = ZeileSpalten.Split(New Char() {Me.Separator.ToChar}, System.StringSplitOptions.RemoveEmptyEntries)
+                    anzSpalten = Namen.Length + 1 'X-Spalte künstlich dazuzählen, da ohne Namen
+
+                    'Spalten abspeichern
+                    ReDim Me.Columns(anzSpalten - 1)
+
+                    'X-Spalte
+                    Me.Columns(0).Name = "Zeit"
+                    Me.Columns(0).Einheit = "h"
+                    Me.Columns(0).Index = 0
+
+                    Me.DateTimeColumnIndex = 0
+
+                    'Y-Spalten
+                    For i = 0 To Namen.Length - 1
+                        Me.Columns(i + 1).Name = Namen(i).Trim()
+                        Me.Columns(i + 1).Einheit = Me._einheit
+                        Me.Columns(i + 1).Index = i + 1
+                    Next
+
+                Case "bw_tmp.dat"
+
+                    Dim parts As String()
+                    Dim names As New Collections.Generic.List(Of String)
+
+                    'Zur ersten Datenzeile springen
+                    For i = 1 To 4
+                        Zeile = StrReadSync.ReadLine.ToString
+                    Next
+
+                    'Zeitreihen-Namen sind Kombination aus Spalte IJBW_Seg-1 und IJBW_Seg-2
+                    Do
+                        parts = Zeile.Split(New Char() {" "}, StringSplitOptions.RemoveEmptyEntries)
+                        names.Add(parts(0) & "-" & parts(1))
+                        Zeile = StrReadSync.ReadLine.ToString
+                    Loop Until Zeile.StartsWith(" ---")
+
+                    'Zeitreihen-Namen abspeichern
+                    ReDim Me.Columns(names.Count) '1 mehr wegen X-Spalte
+
+                    'X-Spalte
+                    Me.Columns(0).Name = "Zeit"
+                    Me.Columns(0).Einheit = "s"
+                    Me.Columns(0).Index = 0
+
+                    Me.DateTimeColumnIndex = 0
+
+                    'Y-Spalten
+                    For i = 0 To names.Count - 1
+                        Me.Columns(i + 1).Name = names(i).Trim()
+                        Me.Columns(i + 1).Einheit = Me._einheit
+                        Me.Columns(i + 1).Index = i + 1 'hier irrelevant
+                    Next
+
+            End Select
 
             StrReadSync.Close()
             StrRead.Close()
             FiStr.Close()
-
-            'Spaltennamen auslesen
-            Dim anzSpalten As Integer
-            Dim Namen() As String
-
-            Namen = ZeileSpalten.Split(New Char() {Me.Separator.ToChar}, System.StringSplitOptions.RemoveEmptyEntries)
-            anzSpalten = Namen.Length + 1 'X-Spalte künstlich dazuzählen, da ohne Namen
-
-            'Spalten abspeichern
-            ReDim Me.Columns(anzSpalten - 1)
-
-            'X-Spalte
-            Me.Columns(0).Name = "Zeit"
-            Me.Columns(0).Einheit = "h"
-            Me.Columns(0).Index = 0
-
-            Me.DateTimeColumnIndex = 0
-
-            'Y-Spalten
-            For i = 0 To Namen.Length - 1
-                Me.Columns(i + 1).Name = Namen(i).Trim()
-                Me.Columns(i + 1).Einheit = Me._einheit
-                Me.Columns(i + 1).Index = i + 1
-            Next
 
         Catch ex As Exception
             MsgBox("Konnte Datei nicht einlesen!" & eol & eol & "Fehler: " & ex.Message, MsgBoxStyle.Critical, "Fehler")
@@ -185,22 +227,64 @@ Public Class HYDRO_AS_2D
             'Einlesen
             '--------
 
-            'Header
-            For i = 0 To Me.nLinesHeader - 1
-                StrReadSync.ReadLine()
-            Next
+            Select Path.GetFileName(Me.File).ToLower()
 
-            'Daten
-            Do
-                Zeile = StrReadSync.ReadLine.ToString()
-                Werte = Zeile.Split(New Char() {Me.Separator.ToChar}, System.StringSplitOptions.RemoveEmptyEntries)
-                'Simulationszeit [h] wird zu Datum nach 01.01.2000 00:00:00 konvertiert
-                datum = New DateTime(2000, 1, 1, 0, 0, 0) + New TimeSpan(0, 0, Werte(0) * 3600)
-                For j = 0 To Me.SelectedColumns.Length - 1
-                    Me.TimeSeries(j).AddNode(datum, Helpers.StringToDouble(Werte(Me.SelectedColumns(j).Index)))
-                Next
+                Case "q_strg.dat", "pegel.dat"
 
-            Loop Until StrReadSync.Peek() = -1
+                    'Header
+                    For i = 0 To Me.nLinesHeader - 1
+                        StrReadSync.ReadLine()
+                    Next
+
+                    'Daten
+                    Do
+                        Zeile = StrReadSync.ReadLine.ToString()
+                        Werte = Zeile.Split(New Char() {Me.Separator.ToChar}, System.StringSplitOptions.RemoveEmptyEntries)
+                        'Simulationszeit [h] wird zu Datum nach 01.01.2000 00:00:00 konvertiert
+                        datum = New DateTime(2000, 1, 1, 0, 0, 0) + New TimeSpan(0, 0, Werte(0) * 3600)
+                        For j = 0 To Me.SelectedColumns.Length - 1
+                            Me.TimeSeries(j).AddNode(datum, Helpers.StringToDouble(Werte(Me.SelectedColumns(j).Index)))
+                        Next
+
+                    Loop Until StrReadSync.Peek() = -1
+
+                Case "bw_tmp.dat"
+
+                    Dim zeit, value As Double
+                    Dim parts(), name As String
+                    Dim series As New Dictionary(Of String, Dictionary(Of DateTime, Double))
+
+                    Do
+                        Zeile = StrReadSync.ReadLine.ToString()
+                        'Headerzeilen
+                        If Zeile.StartsWith(" ---") Then Continue Do
+                        If Zeile.StartsWith("  Abflu") Then
+                            'Zeit lesen
+                            zeit = Convert.ToDouble(Zeile.Split(New Char() {"="}, StringSplitOptions.RemoveEmptyEntries)(1).Replace("[Sek]", "").Trim())
+                            'Simulationszeit [s] wird zu Datum nach 01.01.2000 00:00:00 konvertiert
+                            datum = New DateTime(2000, 1, 1, 0, 0, 0) + New TimeSpan(0, 0, zeit)
+                            Continue Do
+                        End If
+                        If Zeile.StartsWith("  IJBW_Seg-1") Then Continue Do
+                        'Datenzeilen (alle Daten unabhängig von Auswahl einlesen)
+                        parts = Zeile.Split(New Char() {" "}, StringSplitOptions.RemoveEmptyEntries)
+                        name = parts(0) & "-" & parts(1)
+                        value = Convert.ToDouble(parts(2))
+                        If Not series.ContainsKey(name) Then
+                            series.Add(name, New Dictionary(Of DateTime, Double))
+                        End If
+                        series(name).Add(datum, value)
+
+                    Loop Until StrReadSync.Peek() = -1
+
+                    'Nur ausgewählte Reihen abspeichern
+                    For i = 0 To Me.SelectedColumns.Length - 1
+                        For Each entry As KeyValuePair(Of DateTime, Double) In series(Me.SelectedColumns(i).Name)
+                            Me.TimeSeries(i).AddNode(entry.Key, entry.Value)
+                        Next
+                    Next
+
+            End Select
 
             StrReadSync.Close()
             StrRead.Close()
