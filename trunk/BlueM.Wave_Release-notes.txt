@@ -22,6 +22,7 @@ NEW:
 * GoodnessOfFit (GoF) analysis function:
   * Added "Logarithmic Nash-Sutcliffe Efficiency" as a new GoF parameter
   * The GoF parameters can now optionally be calculated for individual hydrological years
+* Added support for importing BW_TMP.DAT result files from HYDRO_AS-2D
 CHANGED:
 * Error values in time series such as e.g. -777 and -9999 are now imported and displayed as regular values.
   Previously, when importing from BIN and DWD-T-L format, these would be replaced with NaN.
