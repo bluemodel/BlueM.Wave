@@ -1,6 +1,14 @@
 ﻿===============================================================
 BlueM.Wave Release Notes
 ===============================================================
+Version 1.6.2
+-------------
+NEW:
+* The Open File menu now includes a list of recently used files (not stored across sessions)
+FIXED:
+* The Reload from Files command now respects the previously made series selection for each file
+* Imported files are no longer kept as file objects in memory (should lead to less memory usage)
+
 Version 1.6.1
 -------------
 NEW:

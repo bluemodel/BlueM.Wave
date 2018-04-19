@@ -39,6 +39,7 @@ Partial Class Wave
         Me.ToolStripMenuItem_ReloadFromFiles = New System.Windows.Forms.ToolStripMenuItem
         Me.ToolStripMenuItem_LoadTEN = New System.Windows.Forms.ToolStripMenuItem
         Me.ToolStripMenuItem_LoadTheme = New System.Windows.Forms.ToolStripMenuItem
+        Me.ToolStripMenuItem_RecentlyUsedFiles = New System.Windows.Forms.ToolStripMenuItem
         Me.ToolStripDropDownButton_Save = New System.Windows.Forms.ToolStripDropDownButton
         Me.ToolStripMenuItem_SaveProjectFile = New System.Windows.Forms.ToolStripMenuItem
         Me.ToolStripMenuItem_SaveChart = New System.Windows.Forms.ToolStripMenuItem
@@ -164,7 +165,7 @@ Partial Class Wave
         'ToolStripDropDownButton_Open
         '
         Me.ToolStripDropDownButton_Open.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.ToolStripDropDownButton_Open.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripMenuItem_ImportSeries, Me.ToolStripMenuItem_EnterSeries, ToolStripSeparator5, Me.ToolStripMenuItem_ReloadFromFiles, ToolStripSeparator6, Me.ToolStripMenuItem_LoadTEN, Me.ToolStripMenuItem_LoadTheme})
+        Me.ToolStripDropDownButton_Open.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripMenuItem_ImportSeries, Me.ToolStripMenuItem_EnterSeries, ToolStripSeparator6, Me.ToolStripMenuItem_LoadTEN, Me.ToolStripMenuItem_LoadTheme, ToolStripSeparator5, Me.ToolStripMenuItem_ReloadFromFiles, Me.ToolStripMenuItem_RecentlyUsedFiles})
         Me.ToolStripDropDownButton_Open.Image = CType(resources.GetObject("ToolStripDropDownButton_Open.Image"), System.Drawing.Image)
         Me.ToolStripDropDownButton_Open.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.ToolStripDropDownButton_Open.Name = "ToolStripDropDownButton_Open"
@@ -215,6 +216,12 @@ Partial Class Wave
         Me.ToolStripMenuItem_LoadTheme.Name = "ToolStripMenuItem_LoadTheme"
         Me.ToolStripMenuItem_LoadTheme.Size = New System.Drawing.Size(180, 22)
         Me.ToolStripMenuItem_LoadTheme.Text = "Load theme (*.XML)"
+        '
+        'ToolStripMenuItemRecentlyUsedFiles
+        '
+        Me.ToolStripMenuItem_RecentlyUsedFiles.Name = "ToolStripMenuItemRecentlyUsedFiles"
+        Me.ToolStripMenuItem_RecentlyUsedFiles.Size = New System.Drawing.Size(180, 22)
+        Me.ToolStripMenuItem_RecentlyUsedFiles.Text = "Recently used files"
         '
         'ToolStripDropDownButton_Save
         '
@@ -1220,5 +1227,6 @@ Partial Class Wave
     Friend WithEvents ToolStripDropDownButton_ZoomToSeries As System.Windows.Forms.ToolStripDropDownButton
     Friend WithEvents ToolStripMenuItem_SaveProjectFile As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolStripButton_Properties As System.Windows.Forms.ToolStripButton
+    Friend WithEvents ToolStripMenuItem_RecentlyUsedFiles As System.Windows.Forms.ToolStripMenuItem
 
 End Class
