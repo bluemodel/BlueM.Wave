@@ -291,6 +291,19 @@ Public MustInherit Class FileFormatBase
     End Property
 
     ''' <summary>
+    ''' List of series names selected for import
+    ''' </summary>
+    Public ReadOnly Property SelectedSeries() As List(Of String)
+        Get
+            Dim seriesList As New List(Of String)
+            For Each col As ColumnInfo In Me._selectedColumns
+                seriesList.Add(col.Name)
+            Next
+            Return seriesList
+        End Get
+    End Property
+
+    ''' <summary>
     ''' Number of lines per timestamp (default is 1)
     ''' </summary>
     Public Property nLinesPerTimestamp() As Integer
@@ -429,6 +442,26 @@ Public MustInherit Class FileFormatBase
         ReDim Preserve Me.SelectedColumns(n)
         Me.SelectedColumns(n) = column
     End Sub
+
+    ''' <summary>
+    ''' Select a series for import by name
+    ''' </summary>
+    ''' <param name="seriesName">name of the series</param>
+    ''' <returns>True if successful, False if series name was not found</returns>
+    ''' <remarks></remarks>
+    Public Function selectSeries(ByVal seriesName As String) As Boolean
+        'search for series in file
+        For Each column As FileFormatBase.ColumnInfo In Me.Columns
+            If column.Name = seriesName Then
+                'select the column for import
+                Call Me.selectColumn(column)
+                Return True
+            End If
+        Next
+        'series not found in file
+        Log.AddLogEntry("Series " & seriesName & " not found in file!")
+        Return False
+    End Function
 
     ''' <summary>
     ''' Reads the selected columns (see SelectedColumns) from the file and stores them as timeseries in the TimeSeries array

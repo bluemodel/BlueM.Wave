@@ -51,8 +51,8 @@ Public Class Wave
     ''' <remarks></remarks>
     Private isInitializing As Boolean
 
-    'Collection von importierten Dateien
-    Private ImportedFiles As List(Of FileFormatBase)
+    'Collection of imported files and the selected series of each file
+    Private ImportedFiles As Dictionary(Of String, List(Of String)) '{filename: [seriesName, ...], ...}
 
     'Interne Zeitreihen-Collection
     Private Zeitreihen As Dictionary(Of String, TimeSeries)
@@ -88,7 +88,7 @@ Public Class Wave
 
         'Kollektionen einrichten
         '-----------------------
-        Me.ImportedFiles = New List(Of FileFormatBase)()
+        Me.ImportedFiles = New Dictionary(Of String, List(Of String))()
         Me.Zeitreihen = New Dictionary(Of String, TimeSeries)()
         Me.MyAxes1 = New Dictionary(Of String, Steema.TeeChart.Axis)
         Me.MyAxes2 = New Dictionary(Of String, Steema.TeeChart.Axis)
@@ -130,6 +130,48 @@ Public Class Wave
         'Status Info aktualisieren
         Me.ToolStripStatusLabel_Log.Text = Log.LastMessage
         Call Application.DoEvents()
+    End Sub
+
+    ''' <summary>
+    ''' Stores information about an imported file and adds the filename to the recently used file menu
+    ''' </summary>
+    ''' <param name="fileObj"></param>
+    ''' <remarks></remarks>
+    Private Sub storeFileInfo(ByRef fileObj As FileFormatBase)
+
+        'store filename and selected series names
+        If Me.ImportedFiles.ContainsKey(fileObj.File) Then
+            Me.ImportedFiles(fileObj.File).AddRange(fileObj.SelectedSeries)
+        Else
+            Me.ImportedFiles.Add(fileObj.File, fileObj.SelectedSeries)
+        End If
+
+        'add filename to Recently Used Files menu
+        'remove if already present
+        Dim i As Integer = 0
+        For Each _item As ToolStripItem In Me.ToolStripMenuItem_RecentlyUsedFiles.DropDownItems
+            If _item.Text = fileObj.File Then
+                Me.ToolStripMenuItem_RecentlyUsedFiles.DropDownItems.RemoveAt(i)
+                Exit For
+            End If
+            i += 1
+        Next
+        'add to top of list
+        Dim item As New ToolStripMenuItem(fileObj.File)
+        Me.ToolStripMenuItem_RecentlyUsedFiles.DropDownItems.Insert(0, item)
+
+    End Sub
+
+    ''' <summary>
+    ''' Recently Used File menu item clicked
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    ''' <remarks></remarks>
+    Private Sub openRecentlyUsedFile(ByVal sender As Object, ByVal e As ToolStripItemClickedEventArgs) Handles ToolStripMenuItem_RecentlyUsedFiles.DropDownItemClicked
+        Dim filename As String
+        filename = e.ClickedItem.Text
+        Call Me.Import_File(filename)
     End Sub
 
     ''' <summary>
@@ -505,12 +547,12 @@ Public Class Wave
 
             strwrite.WriteLine("# Wave project file")
 
-            For Each file As FileFormatBase In Me.ImportedFiles
+            For Each filename As String In Me.ImportedFiles.Keys
                 'TODO: write relative paths to the project file?
-                strwrite.WriteLine("file=" & file.File)
-                For Each series As FileFormatBase.ColumnInfo In file.SelectedColumns
+                strwrite.WriteLine("file=" & filename)
+                For Each series As String In Me.ImportedFiles(filename)
                     'TODO: if a series was renamed, write the new title to the project file
-                    strwrite.WriteLine("    series=" & series.Name)
+                    strwrite.WriteLine("    series=" & series)
                 Next
             Next
 
@@ -1106,7 +1148,7 @@ Public Class Wave
     ''' </summary>
     Private Sub RefreshFromFile(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem_ReloadFromFiles.Click
 
-        Dim Datei As FileFormatBase
+        Dim fileObj As FileFormatBase
         Dim Dateiliste As String
         Dim Answer As MsgBoxResult
 
@@ -1118,8 +1160,8 @@ Public Class Wave
 
         'Dateiliste in Textform generieren
         Dateiliste = ""
-        For Each Datei In Me.ImportedFiles
-            Dateiliste &= Datei.File & eol
+        For Each filename As String In Me.ImportedFiles.Keys
+            Dateiliste &= filename & eol
         Next
 
         'Dialog anzeigen
@@ -1135,14 +1177,23 @@ Public Class Wave
             Me.Zeitreihen.Clear()
 
             'Alle Dateien durchlaufen
-            For Each Datei In Me.ImportedFiles
-                'Jede Datei neu einlesen
-                Call Datei.Read_File()
-                'Alle Zeitreihen der Datei durchlaufen
-                For Each zre As TimeSeries In Datei.TimeSeries
-                    'Jede Zeitreihe importieren
-                    Call Me.Import_Series(zre)
+            For Each filename As String In Me.ImportedFiles.Keys
+
+                Log.AddLogEntry("Reading file " & filename & " ...")
+
+                'get an instance of the file
+                fileObj = FileFactory.getDateiInstanz(filename)
+                'select series for importing
+                For Each series As String In Me.ImportedFiles(filename)
+                    fileObj.selectSeries(series)
                 Next
+                'load the file
+                Call fileObj.Read_File()
+                'import the series
+                For Each ts As TimeSeries In fileObj.TimeSeries
+                    Call Me.Import_Series(ts)
+                Next
+                Log.AddLogEntry("File '" & filename & "' imported successfully!")
             Next
 
         End If
@@ -1524,14 +1575,14 @@ Public Class Wave
 
         Dim fstr As FileStream
         Dim strRead As StreamReader
-        Dim line, file, path, name, title As String
+        Dim line, path, series, title As String
         Dim found As Boolean
-        Dim series As Dictionary(Of String, String)
+        Dim seriesList As Dictionary(Of String, String)
         Dim seriesNotFound As List(Of String)
         Dim fileobj As FileFormatBase
 
-        'files = {filename1:{series1:title1, series2:title2, ...}, ...}
-        Dim files As New Dictionary(Of String, Dictionary(Of String, String))
+        'fileDict = {filename1:{series1:title1, series2:title2, ...}, ...}
+        Dim fileDict As New Dictionary(Of String, Dictionary(Of String, String))
 
         Try
 
@@ -1565,8 +1616,8 @@ Public Class Wave
                         'it's a relative path: construct the full path relative to the project file
                         path = IO.Path.GetFullPath(IO.Path.Combine(IO.Path.GetDirectoryName(projectfile), path))
                     End If
-                    If Not files.ContainsKey(path) Then
-                        files.Add(path, New Dictionary(Of String, String))
+                    If Not fileDict.ContainsKey(path) Then
+                        fileDict.Add(path, New Dictionary(Of String, String))
                     End If
 
                 ElseIf line.ToLower().StartsWith("series=") Then
@@ -1574,26 +1625,26 @@ Public Class Wave
                     line = line.Split("=".ToCharArray(), 2)(1).Trim()
                     If line.Contains(":") Then
                         'series with title
-                        name = line.Split(":".ToCharArray(), 2)(0).Trim()
+                        series = line.Split(":".ToCharArray(), 2)(0).Trim()
                         title = line.Split(":".ToCharArray(), 2)(1).Replace("""", "").Trim()
                     Else
                         'series without title
-                        name = line.Trim()
+                        series = line.Trim()
                         title = ""
                     End If
                     'add series to file
-                    If files.ContainsKey(path) Then
-                        If Not files(path).ContainsKey(name) Then
-                            files(path).Add(name, title)
+                    If fileDict.ContainsKey(path) Then
+                        If Not fileDict(path).ContainsKey(series) Then
+                            fileDict(path).Add(series, title)
                         Else
-                            Log.AddLogEntry("Series " & name & " is specified twice, the second mention will be ignored!")
+                            Log.AddLogEntry("Series " & series & " is specified twice, the second mention will be ignored!")
                         End If
                     Else
-                        Log.AddLogEntry("Series " & name & " is not associated with a file and will be ignored!")
+                        Log.AddLogEntry("Series " & series & " is not associated with a file and will be ignored!")
                     End If
-                    Else
-                        'ignore any other lines
-                    End If
+                Else
+                    'ignore any other lines
+                End If
                 line = strRead.ReadLine()
             End While
 
@@ -1601,45 +1652,34 @@ Public Class Wave
             fstr.Close()
 
             'loop over file list
-            For Each kvp As KeyValuePair(Of String, Dictionary(Of String, String)) In files
-                file = kvp.Key
-                series = kvp.Value
+            For Each file As String In fileDict.Keys
 
                 Log.AddLogEntry("Reading file " & file & " ...")
 
                 'get an instance of the file
                 fileobj = FileFactory.getDateiInstanz(file)
 
+                seriesList = fileDict(file)
+
                 'select series for importing
-                If series.Count = 0 Then
+                If seriesList.Count = 0 Then
                     'read all series contained in the file
                     Call fileobj.selectAllColumns()
                 Else
                     'loop over series names
                     seriesNotFound = New List(Of String)
-                    For Each name In series.Keys
-                        'search for series in file
-                        found = False
-                        For Each column As FileFormatBase.ColumnInfo In fileobj.Columns
-                            If column.Name = name Then
-                                'select the column for import
-                                fileobj.selectColumn(column)
-                                found = True
-                                Exit For
-                            End If
-                        Next
+                    For Each series In seriesList.Keys
+                        found = fileobj.selectSeries(series)
                         If Not found Then
-                            'series not found in file
-                            Log.AddLogEntry("Series " & name & " not found in file!")
-                            seriesNotFound.Add(name)
+                            seriesNotFound.Add(series)
                         End If
                     Next
                     'remove series that were not found from the dictionary
-                    For Each name In seriesNotFound
-                        series.Remove(name)
+                    For Each series In seriesNotFound
+                        seriesList.Remove(series)
                     Next
                     'if no series remain to be imported, abort reading the file altogether
-                    If series.Count = 0 Then
+                    If seriesList.Count = 0 Then
                         Log.AddLogEntry("No series left to import, skipping file!")
                         Continue For
                     End If
@@ -1656,16 +1696,16 @@ Public Class Wave
                 Call Log.AddLogEntry("Loading series in chart...")
                 For Each ts As TimeSeries In fileobj.TimeSeries
                     'change title if specified in the project file
-                    If series.Count > 0 Then
-                        If series(ts.Title) <> "" Then
-                            ts.Title = series(ts.Title)
+                    If seriesList.Count > 0 Then
+                        If seriesList(ts.Title) <> "" Then
+                            ts.Title = seriesList(ts.Title)
                         End If
                     End If
                     Call Me.Import_Series(ts)
                 Next
 
                 'store file information
-                Me.ImportedFiles.Add(fileobj)
+                Call Me.storeFileInfo(fileobj)
             Next
 
             'Log
@@ -1924,7 +1964,7 @@ Public Class Wave
                         Call Log.AddLogEntry("File '" & file & "' imported successfully!")
 
                         'Datei abspeichern
-                        Me.ImportedFiles.Add(Datei)
+                        Call Me.storeFileInfo(Datei)
 
                         'Log
                         Call Log.AddLogEntry("Loading series in chart...")
@@ -2049,7 +2089,7 @@ Public Class Wave
             Call Me.Import_Series(ts)
 
             'store information
-            Me.ImportedFiles.Add(fileobj)
+            Call Me.storeFileInfo(fileobj)
 
         End If
 
