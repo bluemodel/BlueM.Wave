@@ -1649,6 +1649,9 @@ Public Class Wave
                 'read the file
                 fileobj.Read_File()
 
+                'Log
+                Call Log.AddLogEntry("File '" & file & "' imported successfully!")
+
                 'import the series
                 Call Log.AddLogEntry("Loading series in chart...")
                 For Each ts As TimeSeries In fileobj.TimeSeries
@@ -1664,6 +1667,9 @@ Public Class Wave
                 'store file information
                 Me.ImportedFiles.Add(fileobj)
             Next
+
+            'Log
+            Call Log.AddLogEntry("Project file '" & projectfile & "' loaded successfully!")
 
             Call Me.UpdateCharts()
 
