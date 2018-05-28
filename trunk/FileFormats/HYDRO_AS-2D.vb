@@ -252,7 +252,6 @@ Public Class HYDRO_AS_2D
 
                     Dim zeit, value As Double
                     Dim parts(), name As String
-                    Dim series As New Dictionary(Of String, Dictionary(Of DateTime, Double))
 
                     Do
                         Zeile = StrReadSync.ReadLine.ToString()
@@ -266,23 +265,21 @@ Public Class HYDRO_AS_2D
                             Continue Do
                         End If
                         If Zeile.StartsWith("  IJBW_Seg-1") Then Continue Do
-                        'Datenzeilen (alle Daten unabhängig von Auswahl einlesen)
+                        'Datenzeilen
                         parts = Zeile.Split(New Char() {" "}, StringSplitOptions.RemoveEmptyEntries)
                         name = parts(0) & "-" & parts(1)
                         value = Convert.ToDouble(parts(2))
-                        If Not series.ContainsKey(name) Then
-                            series.Add(name, New Dictionary(Of DateTime, Double))
+                        'nur ausgewählte Reihen abspeichern
+                        If Me.SelectedSeries.Contains(name) Then
+                            For i = 0 To Me.SelectedColumns.Length - 1
+                                If Me.SelectedColumns(i).Name = name Then
+                                    Me.TimeSeries(i).AddNode(datum, value)
+                                    Exit For
+                                End If
+                            Next
                         End If
-                        series(name).Add(datum, value)
 
                     Loop Until StrReadSync.Peek() = -1
-
-                    'Nur ausgewählte Reihen abspeichern
-                    For i = 0 To Me.SelectedColumns.Length - 1
-                        For Each entry As KeyValuePair(Of DateTime, Double) In series(Me.SelectedColumns(i).Name)
-                            Me.TimeSeries(i).AddNode(entry.Key, entry.Value)
-                        Next
-                    Next
 
             End Select
 
