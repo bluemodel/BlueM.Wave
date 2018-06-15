@@ -916,6 +916,92 @@ Public Class Wave
     End Sub
 
     ''' <summary>
+    ''' Change timestep button clicked
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    ''' <remarks></remarks>
+    Private Sub ToolStripButton_ChangeTimestep_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_ChangeTimestep.Click
+
+        'Abort if no time series available!
+        If (Me.Zeitreihen.Count < 1) Then
+            MsgBox("No time series available!", MsgBoxStyle.Exclamation, "Wave")
+            Exit Sub
+        End If
+
+        Try
+
+            Dim dlg As New ChangeTimestepDialog(Me.Zeitreihen)
+
+            'show the ChangeTimeStepDialog
+            If dlg.ShowDialog() = Windows.Forms.DialogResult.OK Then
+
+                Dim zre, zre_new As TimeSeries
+                Dim dates() As DateTime
+                Dim double_dates() As Double
+                Dim values() As Single
+                Dim interpretation As Sydro.SydroZre.Fortran.InterpretationEnum
+                Dim timesteptype As Sydro.SydroZre.Fortran.TimeStepTypeEnum
+                Dim timestepinterval, iResp, i As Integer
+                Dim startdate, enddate As DateTime
+                Dim file_tmp, msg As String
+
+                'read settings from dialog
+                zre = Me.Zeitreihen(dlg.ComboBox_Timeseries.SelectedItem)
+                interpretation = dlg.ComboBox_Interpretation.SelectedItem
+                timesteptype = dlg.ComboBox_TimestepType.SelectedItem
+                timestepinterval = dlg.NumericUpDown_TimestepInterval.Value
+                startdate = dlg.DateTimePicker_Start.Value
+                enddate = dlg.DateTimePicker_End.Value
+
+                'export time series to temporary bin file
+                file_tmp = Path.Combine(Path.GetTempPath, "tmp.bin")
+                BIN.Write_File(zre, file_tmp)
+
+                Using fortran As New Sydro.SydroZre.Fortran()
+
+                    ReDim double_dates(0)
+                    ReDim values(0)
+
+                    'call the Fortran routine to get new dates and values
+                    iResp = fortran.getZreDTConstValues(file_tmp, startdate, enddate, interpretation, timesteptype, timestepinterval, double_dates, values)
+                    msg = fortran.ErrorMsg
+
+                    'convert double_dates to dates
+                    dates = fortran.DoubleToDate(double_dates)
+
+                    If iResp <= 0 Then
+                        If iResp = -301 Then
+                            'err_wrongdimension: can be ignored
+                            Log.AddLogEntry("SydroZre error " & iResp & ": " & msg)
+                        Else
+                            Throw New Exception("SydroZre error " & iResp & ": " & msg)
+                        End If
+                    End If
+
+                End Using
+
+                'store as a new time series
+                zre_new = New TimeSeries(zre.Title & " (" & timestepinterval & " " & [Enum].GetName(GetType(Sydro.SydroZre.Fortran.TimeStepTypeEnum), timesteptype) & ")")
+                zre_new.Unit = zre.Unit
+                For i = 0 To dates.Length - 1
+                    zre_new.AddNode(dates(i), values(i))
+                Next
+
+                Call Me.Import_Series(zre_new)
+
+                Log.AddLogEntry("Time step changed successfully.")
+
+            End If
+
+        Catch ex As Exception
+            Log.AddLogEntry("Error while changing the timestep: " & ex.Message)
+            MsgBox("Error while changing the timestep: " & ex.Message, MsgBoxStyle.Critical)
+        End Try
+
+    End Sub
+
+    ''' <summary>
     ''' Remove error values button clicked
     ''' </summary>
     ''' <remarks></remarks>
