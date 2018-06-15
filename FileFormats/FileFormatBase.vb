@@ -48,6 +48,7 @@ Public MustInherit Class FileFormatBase
         UVF = 11
         ZRXP = 12
         WVP = 13
+        BIN = 14
     End Enum
 
     ''' <summary>

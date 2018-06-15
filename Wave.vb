@@ -735,6 +735,9 @@ Public Class Wave
             Case FileFormatBase.FileFormats.ASC
                 Me.SaveFileDialog1.DefaultExt = "asc"
                 Me.SaveFileDialog1.Filter = "ASC files (*.asc)|*.asc"
+            Case FileFormatBase.FileFormats.BIN
+                Me.SaveFileDialog1.DefaultExt = "bin"
+                Me.SaveFileDialog1.Filter = "SYDRO binary files (*.bin)|*.bin"
             Case FileFormatBase.FileFormats.CSV
                 Me.SaveFileDialog1.DefaultExt = "csv"
                 Me.SaveFileDialog1.Filter = "CSV files (*.csv)|*.csv"
@@ -777,37 +780,48 @@ Public Class Wave
         Me.Cursor = Cursors.WaitCursor
         Application.DoEvents()
 
-        Select Case exportDlg.ComboBox_Format.SelectedItem
+        Try
 
-            Case FileFormatBase.FileFormats.ZRE
-                Call ZRE.Write_File(zres(0), filename)
+            Select Case exportDlg.ComboBox_Format.SelectedItem
 
-            Case FileFormatBase.FileFormats.REG_HYSTEM
-                Call HystemExtran_REG.Write_File(zres(0), filename)
+                Case FileFormatBase.FileFormats.ZRE
+                    Call ZRE.Write_File(zres(0), filename)
 
-            Case FileFormatBase.FileFormats.REG_SMUSI
-                Call REG_SMUSI.Write_File(zres(0), filename)
+                Case FileFormatBase.FileFormats.REG_HYSTEM
+                    Call HystemExtran_REG.Write_File(zres(0), filename)
 
-            Case FileFormatBase.FileFormats.DAT_SWMM_MASS
-                Call SWMM_DAT_MASS.Write_File(zres(0), filename, 5) 'TODO: Zeitschritt ist noch nicht dynamisch definiert
+                Case FileFormatBase.FileFormats.REG_SMUSI
+                    Call REG_SMUSI.Write_File(zres(0), filename)
 
-            Case FileFormatBase.FileFormats.DAT_SWMM_TIME
-                Call SWMM_DAT_TIME.Write_File(zres(0), filename, 5) 'TODO: Zeitschritt ist noch nicht dynamisch definiert
+                Case FileFormatBase.FileFormats.DAT_SWMM_MASS
+                    Call SWMM_DAT_MASS.Write_File(zres(0), filename, 5) 'TODO: Zeitschritt ist noch nicht dynamisch definiert
 
-            Case FileFormatBase.FileFormats.TXT_SWMM
-                Call SWMM_TXT.Write_File(zres, filename)
+                Case FileFormatBase.FileFormats.DAT_SWMM_TIME
+                    Call SWMM_DAT_TIME.Write_File(zres(0), filename, 5) 'TODO: Zeitschritt ist noch nicht dynamisch definiert
 
-            Case FileFormatBase.FileFormats.CSV
-                Call CSV.Write_File(zres, filename)
+                Case FileFormatBase.FileFormats.TXT_SWMM
+                    Call SWMM_TXT.Write_File(zres, filename)
 
-            Case Else
-                MsgBox("Not yet implemented!", MsgBoxStyle.Exclamation, "Wave")
-        End Select
+                Case FileFormatBase.FileFormats.CSV
+                    Call CSV.Write_File(zres, filename)
 
-        Me.Cursor = Cursors.Default
+                Case FileFormatBase.FileFormats.BIN
+                    Call BIN.Write_File(zres(0), filename)
 
-        MsgBox("Time series exported successfully!", MsgBoxStyle.Information, "Wave")
-        Log.AddLogEntry("Time series exported successfully!")
+                Case Else
+                    MsgBox("Not yet implemented!", MsgBoxStyle.Exclamation, "Wave")
+            End Select
+
+            MsgBox("Time series exported successfully!", MsgBoxStyle.Information, "Wave")
+            Log.AddLogEntry("Time series exported successfully!")
+
+        Catch ex As Exception
+            Log.AddLogEntry("Error during export: " & ex.Message)
+            MsgBox("Error during export: " & ex.Message, MsgBoxStyle.Critical)
+        Finally
+            Me.Cursor = Cursors.Default
+        End Try
+
     End Sub
 
     'Analysieren
