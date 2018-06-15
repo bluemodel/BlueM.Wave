@@ -37,6 +37,7 @@ Public Class ExportDiag
         'add formats to combobox
         Me.ComboBox_Format.Items.Add(FileFormatBase.FileFormats.CSV)
         Me.ComboBox_Format.Items.Add(FileFormatBase.FileFormats.ZRE)
+        Me.ComboBox_Format.Items.Add(FileFormatBase.FileFormats.BIN)
         Me.ComboBox_Format.Items.Add(FileFormatBase.FileFormats.REG_HYSTEM)
         Me.ComboBox_Format.Items.Add(FileFormatBase.FileFormats.REG_SMUSI)
         Me.ComboBox_Format.Items.Add(FileFormatBase.FileFormats.DAT_SWMM_MASS)
@@ -65,7 +66,8 @@ Public Class ExportDiag
                  FileFormatBase.FileFormats.REG_HYSTEM, _
                  FileFormatBase.FileFormats.REG_SMUSI, _
                  FileFormatBase.FileFormats.DAT_SWMM_MASS, _
-                 FileFormatBase.FileFormats.DAT_SWMM_TIME
+                 FileFormatBase.FileFormats.DAT_SWMM_TIME, _
+                 FileFormatBase.FileFormats.BIN
                 'Allow selection of a single series
                 Me.ListBox_Series.SelectionMode = SelectionMode.One
                 Me.Button_SelectAll.Enabled = False

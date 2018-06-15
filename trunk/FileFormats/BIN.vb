@@ -129,6 +129,49 @@ Public Class BIN
 
     End Sub
 
+    ''' <summary>
+    ''' Write a time series to a BIN file
+    ''' </summary>
+    ''' <param name="zre">the timeseries to write</param>
+    ''' <param name="file">path to the file</param>
+    ''' <remarks></remarks>
+    Public Shared Sub Write_File(ByRef zre As TimeSeries, ByVal file As String)
+
+        Dim isOK As Boolean
+        Dim iResp As Integer
+        Dim msg As String
+        Dim dates() As Date
+        Dim values() As Single
+        Dim i As Integer
+
+        'convert timeseries nodes to arrays of dates and values
+        ReDim dates(zre.Length - 1)
+        ReDim values(zre.Length - 1)
+
+        i = 0
+        For Each kvp As KeyValuePair(Of DateTime, Double) In zre.Nodes
+            dates(i) = kvp.Key
+            values(i) = kvp.Value
+            i += 1
+        Next
+
+        'write values to file
+        Using fortran As New Sydro.SydroZre.Fortran()
+            isOK = fortran.setFileName(file)
+            iResp = fortran.setZreBinValues(file, False, fortran.DateToDouble(dates), values)
+            msg = fortran.ErrorMsg
+        End Using
+
+        If msg.Trim().Length > 0 Then
+            Log.AddLogEntry("SydroZre: " & msg)
+        End If
+
+        If iResp <> zre.Length Then
+            Throw New Exception("Number of values written to file (" & iResp & ") does not correspond to length of time series (" & zre.Length & ")!")
+        End If
+
+    End Sub
+
 #End Region 'Methoden
 
 End Class
