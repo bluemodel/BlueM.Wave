@@ -5,7 +5,8 @@ Version 1.6.2
 -------------
 NEW:
 * The Open File menu now includes a list of recently used files (not stored across sessions)
-* Added write support for the SYDRO binary format (BIN)
+* Added write support for the SYDRO binary format (BIN) (only in x86 version)
+* Added a button for changing the time step of a time series (#717) (only in x86 version)
 FIXED:
 * The Reload from Files command now respects the previously made series selection for each file
 * Imported files are no longer kept as file objects in memory (should lead to less memory usage)
