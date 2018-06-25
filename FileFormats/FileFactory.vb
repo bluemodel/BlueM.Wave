@@ -27,7 +27,7 @@
 '
 Imports System.IO
 ''' <summary>
-''' Factory zur Erzeugung von Datei-Instanzen
+''' Factory for creating FileFormat instances
 ''' </summary>
 Public Module FileFactory
 
@@ -41,124 +41,127 @@ Public Module FileFactory
     Public Const FileExtKWL As String = ".KWL"
     Public Const FileExtZRE As String = ".ZRE"
     Public Const FileExtTEN As String = ".TEN"
-    Public Const FileExtOUT As String = ".OUT" 'SWMM binäre Ergebnisdatei
-    Public Const FileExtTXT As String = ".TXT" 'SWMM Routingfiles
-    Public Const FileExtBIN As String = ".BIN" 'SYDRO Binärformat
+    Public Const FileExtOUT As String = ".OUT" 'SWMM binary result file
+    Public Const FileExtTXT As String = ".TXT" 'SWMM routing file
+    Public Const FileExtBIN As String = ".BIN" 'SYDRO binary format
     Public Const FileExtZRXP As String = ".ZRX" 'ZRXP format
     Public Const FileExtWVP As String = ".WVP" 'Wave project file
 
     ''' <summary>
-    ''' Erzeugt eine zur Dateiendung passende Datei-Instanz
+    ''' Creates a FileFormatBase-inherited instance based on the file extension
     ''' </summary>
-    ''' <param name="file">Pfad zur Datei</param>
-    ''' <returns>Eine Instanz der Datei</returns>
+    ''' <param name="file">path to the file</param>
+    ''' <returns>a FileFormatBase-inherited instance of the file</returns>
     Public Function getDateiInstanz(ByVal file As String) As FileFormatBase
 
-        Dim Datei As FileFormatBase
+        Dim FileInstance As FileFormatBase
         Dim FileExt As String
 
-        'Prüfen, ob die Datei existiert
+        'Check whether the file exists
         If (Not System.IO.File.Exists(file)) Then
-            Throw New Exception("Datei '" & file & "' nicht gefunden!")
+            Throw New Exception("ERROR: File '" & file & "' not found!")
         End If
 
-        'Fallunterscheidung je nach Dateiendung
+        'Depending on file extension
         FileExt = Path.GetExtension(file).ToUpper()
         Select Case FileExt
 
             Case FileExtASC
                 Dim isSSV As Boolean
                 If (WEL_GISMO.verifyFormat(file, isSSV)) Then
-                    ' GISMO result file in WEL format (separator is " ")
-                    Datei = New WEL_GISMO(file, isSSV)
+                    'GISMO result file in WEL format (separator is " ")
+                    FileInstance = New WEL_GISMO(file, isSSV)
                 Else
-                    Datei = New ASC(file)
+                    FileInstance = New ASC(file)
                 End If
 
             Case FileExtDAT
-                'Dateiformat prüfen:
+                'Check file format
                 If (HYDRO_AS_2D.verifyFormat(file)) Then
-                    'HYDRO-AS_2D Ergebnisdatei
-                    Datei = New HYDRO_AS_2D(file)
+                    'HYDRO-AS_2D result file
+                    FileInstance = New HYDRO_AS_2D(file)
                 ElseIf (HystemExtran_REG.verifyFormat(file)) Then
-                    'Hystem-Extran Regenreihe
-                    Datei = New HystemExtran_REG(file)
+                    'Hystem-Extran rainfall file
+                    FileInstance = New HystemExtran_REG(file)
                 Else
-                    Throw New Exception("Dateiformat nicht erkannt: Es handelt es sich weder um eine HYDRO-AS-2D noch um eine Hystem-Regendatei")
+                    Throw New Exception("ERROR: File format not recognized! The file is neither a HYDRO_AS-2D file nor a Hystem-Extran rainfall file!")
                 End If
 
             Case FileExtREG
-                'Dateiformat prüfen:
+                'Check file format
                 If (REG_SMUSI.verifyFormat(file)) Then
-                    'SMUSI-Regenreihe
-                    Datei = New REG_SMUSI(file)
+                    'SMUSI rainfall file
+                    FileInstance = New REG_SMUSI(file)
                 ElseIf (HystemExtran_REG.verifyFormat(file)) Then
-                    'Hystem-Extran-Regenreihe
-                    Datei = New HystemExtran_REG(file)
+                    'Hystem-Extran rainfall file
+                    FileInstance = New HystemExtran_REG(file)
                 Else
-                    Throw New Exception("Dateiformat nicht erkannt: Es handelt es sich weder um eine SMUSI- noch um eine Hystem-Regendatei")
+                    Throw New Exception("ERROR: File format not recognized! The file is neither a SMUSI nor a Hystem-Extran rainfall file!")
                 End If
 
             Case FileExtSMB
-                Datei = New SMB(file)
+                FileInstance = New SMB(file)
 
             Case FileExtUVF
+                'Check file format
                 If UVF.verifyFormat(file) Then
-                    Datei = New UVF(file)
+                    FileInstance = New UVF(file)
                 Else
-                    Throw New Exception("UVF-Datei liegt nicht im erwarteten Format vor!")
+                    Throw New Exception("ERROR: UVF file has an unexpected format!")
                 End If
 
 
             Case FileExtWEL, FileExtKWL
+                'Check file format
                 If (WEL.verifyFormat(file)) Then
                     'WEL file
-                    Datei = New WEL(file)
+                    FileInstance = New WEL(file)
                 ElseIf (HystemExtran_WEL.verifyFormat(file)) Then
-                    'HYSTEM EXTRAN rain time series
-                    Datei = New HystemExtran_WEL(file)
+                    'Hystem-Extran rainfall file
+                    FileInstance = New HystemExtran_WEL(file)
                 Else
-                    Throw New Exception("Unknown file format! Please check!")
+                    Throw New Exception("ERROR: Unknown file format! Please check!")
                 End If
 
             Case FileExtZRE
-                Datei = New ZRE(file)
+                FileInstance = New ZRE(file)
 
             Case FileExtCSV
+                'check file format
                 Dim isssv As Boolean
                 If (WEL_GISMO.verifyFormat(file, isssv)) Then
-                    ' GISMO result file in CSV format (separator is a ";")
-                    Datei = New WEL_GISMO(file, isssv)
+                    'GISMO result file in CSV format (separator is a ";")
+                    FileInstance = New WEL_GISMO(file, isssv)
                 Else
-                    Datei = New CSV(file)
+                    FileInstance = New CSV(file)
                 End If
 
             Case FileExtOUT
-                Datei = New SWMM_OUT(file)
+                FileInstance = New SWMM_OUT(file)
 
             Case FileExtTXT
-                'Dateiformat prüfen:
+                'Check file format
                 If (SWMM_TXT.verifyFormat(file)) Then
-                    'SWMM Datei
-                    Datei = New SWMM_TXT(file)
+                    'SWMM file
+                    FileInstance = New SWMM_TXT(file)
                 Else
-                    'Textdateien können üblicherweise als CSV gelesen werden
-                    Datei = New CSV(file)
+                    'Other text files can usually be read as CSV files
+                    FileInstance = New CSV(file)
                 End If
 
             Case FileExtBIN
-                Datei = New BIN(file)
+                FileInstance = New BIN(file)
 
             Case FileExtZRXP
-                Datei = New ZRXP(file)
+                FileInstance = New ZRXP(file)
 
             Case Else
-                'Wenn alle Stricke reissen, Import als CSV versuchen
-                Datei = New CSV(file)
+                'If all else fails, attempt to read as CSV
+                FileInstance = New CSV(file)
 
         End Select
 
-        Return Datei
+        Return FileInstance
 
     End Function
 
