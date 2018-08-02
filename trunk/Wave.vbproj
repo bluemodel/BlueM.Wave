@@ -186,6 +186,12 @@
     </Compile>
     <Compile Include="FileFormats\FileFactory.vb" />
     <Compile Include="FileFormats\FileFormatBase.vb" />
+    <Compile Include="FileFormats\HYDRO_AS-2D_Diag.Designer.vb">
+      <DependentUpon>HYDRO_AS-2D_Diag.vb</DependentUpon>
+    </Compile>
+    <Compile Include="FileFormats\HYDRO_AS-2D_Diag.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Helpers.vb" />
     <Compile Include="Log.vb" />
     <Compile Include="My Project\ApplicationEvents.vb" />
@@ -359,6 +365,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Dialogs\PropertiesDialog.resx">
       <DependentUpon>PropertiesDialog.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FileFormats\HYDRO_AS-2D_Diag.resx">
+      <DependentUpon>HYDRO_AS-2D_Diag.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\cursor_pan.cur" />
     <EmbeddedResource Include="Resources\cursor_zoom.cur" />

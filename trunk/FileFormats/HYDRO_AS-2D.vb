@@ -40,6 +40,12 @@ Public Class HYDRO_AS_2D
     Private _einheit As String
 
     ''' <summary>
+    ''' Referenzdatum für den Beginn der Simulation
+    ''' </summary>
+    ''' <remarks>default: 01.01.2000 00:00:00</remarks>
+    Public refDate As DateTime
+
+    ''' <summary>
     ''' Ob der Importdialog genutzt werden soll
     ''' </summary>
     ''' <value></value>
@@ -77,6 +83,9 @@ Public Class HYDRO_AS_2D
             Case Else
                 Me._einheit = "-"
         End Select
+
+        'Default Referenzdatum für den Beginn der Simulation
+        Me.refDate = New DateTime(2000, 1, 1, 0, 0, 0)
 
         Call Me.ReadColumns()
 
@@ -209,6 +218,12 @@ Public Class HYDRO_AS_2D
         Dim datum As DateTime
         Dim Werte() As String
 
+        'show dialog for setting the reference date
+        Dim dlg As New HYDRO_AS_2D_Diag()
+        dlg.ShowDialog()
+        'store refDate
+        Me.refDate = dlg.DateTimePicker_refDate.Value
+
         Try
             'Anzahl Zeitreihen bestimmen
             ReDim Me.TimeSeries(Me.SelectedColumns.Length - 1)
@@ -227,7 +242,7 @@ Public Class HYDRO_AS_2D
             'Einlesen
             '--------
 
-            Select Path.GetFileName(Me.File).ToLower()
+            Select Case Path.GetFileName(Me.File).ToLower()
 
                 Case "q_strg.dat", "pegel.dat"
 
@@ -240,8 +255,8 @@ Public Class HYDRO_AS_2D
                     Do
                         Zeile = StrReadSync.ReadLine.ToString()
                         Werte = Zeile.Split(New Char() {Me.Separator.ToChar}, System.StringSplitOptions.RemoveEmptyEntries)
-                        'Simulationszeit [h] wird zu Datum nach 01.01.2000 00:00:00 konvertiert
-                        datum = New DateTime(2000, 1, 1, 0, 0, 0) + New TimeSpan(0, 0, Werte(0) * 3600)
+                        'Simulationszeit [h] wird zu Datum nach dem Referenzdatum (default: 01.01.2000 00:00:00) konvertiert
+                        datum = Me.refDate + New TimeSpan(0, 0, Werte(0) * 3600)
                         For j = 0 To Me.SelectedColumns.Length - 1
                             Me.TimeSeries(j).AddNode(datum, Helpers.StringToDouble(Werte(Me.SelectedColumns(j).Index)))
                         Next
