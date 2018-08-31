@@ -400,6 +400,7 @@ Public MustInherit Class FileFormatBase
 
         'Initialize arrays
         ReDim Me.TimeSeries(-1)
+        ReDim Me.Columns(-1)
         ReDim Me.SelectedColumns(-1)
 
         'Store the filepath
@@ -460,7 +461,7 @@ Public MustInherit Class FileFormatBase
             End If
         Next
         'series not found in file
-        Log.AddLogEntry("Series " & seriesName & " not found in file!")
+        Log.AddLogEntry("ERROR: Series " & seriesName & " not found in file!")
         Return False
     End Function
 

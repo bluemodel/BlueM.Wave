@@ -1780,7 +1780,7 @@ Public Class Wave
                     Next
                     'if no series remain to be imported, abort reading the file altogether
                     If seriesList.Count = 0 Then
-                        Log.AddLogEntry("No series left to import, skipping file!")
+                        Log.AddLogEntry("ERROR: No series left to import, skipping file!")
                         Continue For
                     End If
 
