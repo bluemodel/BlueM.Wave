@@ -4,6 +4,7 @@ BlueM.Wave Release Notes
 Version 1.6.2
 -------------
 NEW:
+* Added a button and a dialog for merging time series (#719)
 * Added a dialog for specifying a reference date (beginning of simulation) when importing HYDRO_AS-2D files
 * The Open File menu now includes a list of recently used files (not stored across sessions)
 * Added write support for the SYDRO binary format (BIN) (only in x86 version)

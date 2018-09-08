@@ -690,6 +690,65 @@ Public Class Wave
 
     End Sub
 
+    ''' <summary>
+    ''' Merge time series button clicked
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    ''' <remarks></remarks>
+    Private Sub ToolStripButton_Merge_Click( ByVal sender As System.Object,  ByVal e As System.EventArgs) Handles ToolStripButton_Merge.Click
+
+        Dim dlg As MergeSeriesDialog
+        Dim dlgResult As DialogResult
+        Dim seriesList As List(Of String)
+        Dim seriesMerged, seriesToMerge As TimeSeries
+
+        'Abort if no series are loaded
+        If (Me.Zeitreihen.Count < 1) Then
+            MsgBox("No time series available for merging!", MsgBoxStyle.Exclamation)
+            Exit Sub
+        End If
+
+        Try
+
+            dlg = New MergeSeriesDialog(Me.Zeitreihen)
+            dlgResult = dlg.ShowDialog()
+
+            Me.Cursor = Cursors.WaitCursor
+
+            If dlgResult = Windows.Forms.DialogResult.OK Then
+
+                seriesList = dlg.selectedSeries
+
+                If seriesList.Count > 1 Then
+
+                    'Clone the series with the highest priority
+                    seriesMerged = Me.Zeitreihen(seriesList(0)).Clone
+
+                    'Append the remaining series in order
+                    For i As Integer = 1 To seriesList.Count - 1
+                        seriesToMerge = Me.Zeitreihen(seriesList(i))
+                        seriesMerged.Append(seriesToMerge)
+                        seriesMerged.Title &= "+" & seriesToMerge.Title
+                    Next
+
+                    Log.AddLogEntry("Series successfully merged!")
+
+                    Me.Import_Series(seriesMerged)
+
+                End If
+
+            End If
+
+        Catch ex As Exception
+            Log.AddLogEntry("Error during merge: " & ex.Message)
+            MsgBox("Error during merge: " & ex.Message, MsgBoxStyle.Critical)
+        Finally
+            Me.Cursor = Cursors.Default
+        End Try
+
+    End Sub
+
     'Edit Chart
     '**********
     Private Sub EditChart_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_EditChart.Click, TChart1.DoubleClick
