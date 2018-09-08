@@ -408,6 +408,35 @@ Public Class TimeSeries
     End Sub
 
     ''' <summary>
+    ''' Appends a time series
+    ''' </summary>
+    ''' <param name="series2">series to be appended</param>
+    ''' <remarks>in the case of an overlap between the two series, 
+    ''' the nodes of the appended series within the overlap are discarded</remarks>
+    Public Sub Append(ByVal series2 As TimeSeries)
+
+        Dim startDate, endDate As DateTime
+
+        If series2.EndDate <= Me.EndDate And series2.StartDate >= Me.StartDate Then
+            'series2 does not extend beyond this series, so nothing to do
+            Log.AddLogEntry("WARNING: Series '" & series2.Title & "' does not extend beyond series '" & Me.Title & "' so nothing can be appended!")
+            Return
+        End If
+
+        'make copies of start and end date because they update dynamically
+        startDate = Me.StartDate
+        endDate = Me.EndDate
+
+        'copy all nodes from series2 outside the range of this series
+        For Each node As KeyValuePair(Of DateTime, Double) In series2.Nodes
+            If node.Key < startDate Or node.Key > endDate Then
+                Me.AddNode(node.Key, node.Value)
+            End If
+        Next
+
+    End Sub
+
+    ''' <summary>
     ''' Splits a time series into individual series for each hydrological years
     ''' </summary>
     ''' <returns>A dictionary of time series, the key represents the year</returns>
