@@ -1734,7 +1734,7 @@ Public Class Wave
 
         Dim fstr As FileStream
         Dim strRead As StreamReader
-        Dim line, path, series, title As String
+        Dim line, parts(), path, series, title, value As String
         Dim found As Boolean
         Dim seriesList As Dictionary(Of String, String)
         Dim seriesNotFound As List(Of String)
@@ -1742,6 +1742,8 @@ Public Class Wave
 
         'fileDict = {filename1:{series1:title1, series2:title2, ...}, ...}
         Dim fileDict As New Dictionary(Of String, Dictionary(Of String, String))
+        'settingsDict = {filename1:{setting1:value1, setting2:value2, ...}, ...}
+        Dim settingsDict As New Dictionary(Of String, Dictionary(Of String, String))
 
         Try
 
@@ -1766,7 +1768,13 @@ Public Class Wave
             line = strRead.ReadLine()
             While Not IsNothing(line)
 
-                line = line.Trim() 'get rid of whitespace at the beginning of lines
+                line = line.Trim() 'get rid of whitespace
+
+                If line.StartsWith("#") Then
+                    'skip comments
+                    line = strRead.ReadLine()
+                    Continue While
+                End If
 
                 If line.ToLower().StartsWith("file=") Then
                     'file
@@ -1796,11 +1804,29 @@ Public Class Wave
                         If Not fileDict(path).ContainsKey(series) Then
                             fileDict(path).Add(series, title)
                         Else
-                            Log.AddLogEntry("Series " & series & " is specified twice, the second mention will be ignored!")
+                            Log.AddLogEntry("WARNING: Series " & series & " is specified twice, the second mention will be ignored!")
                         End If
                     Else
-                        Log.AddLogEntry("Series " & series & " is not associated with a file and will be ignored!")
+                        Log.AddLogEntry("WARNING: Series " & series & " is not associated with a file and will be ignored!")
                     End If
+
+                ElseIf line.Contains("=") Then
+                    'settings
+                    parts = line.Trim().Split("=".ToCharArray(), 2)
+                    'add setting to file
+                    If fileDict.ContainsKey(path) Then
+                        If Not settingsDict.ContainsKey(path) Then
+                            settingsDict.Add(path, New Dictionary(Of String, String))
+                        End If
+                        If Not settingsDict(path).ContainsKey(parts(0)) Then
+                            settingsDict(path).Add(parts(0), parts(1))
+                        Else
+                            Log.AddLogEntry("WARNING: Setting " & parts(0) & " is specified twice, the second mention will be ignored!")
+                        End If
+                    Else
+                        Log.AddLogEntry("WARNING: Setting " & parts(0) & " is not associated with a file and will be ignored!")
+                    End If
+
                 Else
                     'ignore any other lines
                 End If
@@ -1818,6 +1844,44 @@ Public Class Wave
                 'get an instance of the file
                 fileobj = FileFactory.getDateiInstanz(file)
 
+                'apply custom import settings
+                If settingsDict.ContainsKey(file) Then
+                    For Each setting As String In settingsDict(file).Keys
+                        value = settingsDict(file)(setting)
+                        Try
+                            Select Case setting.ToLower()
+                                Case "iscolumnseparated"
+                                    fileobj.IsColumnSeparated = If(value.ToLower() = "true", True, False)
+                                Case "separator"
+                                    fileobj.Separator = New Character(value)
+                                Case "dateformat"
+                                    fileobj.Dateformat = value
+                                Case "decimalseparator"
+                                    fileobj.DecimalSeparator = New Character(value)
+                                Case "ilineheadings"
+                                    fileobj.iLineHeadings = Convert.ToInt32(value)
+                                Case "ilineunits"
+                                    fileobj.iLineUnits = Convert.ToInt32(value)
+                                Case "ilinedata"
+                                    fileobj.iLineData = Convert.ToInt32(value)
+                                Case "useunits"
+                                    fileobj.UseUnits = If(value.ToLower() = "true", True, False)
+                                Case "columnwidth"
+                                    fileobj.ColumnWidth = Convert.ToInt32(value)
+                                Case "datetimecolumnindex"
+                                    fileobj.DateTimeColumnIndex = Convert.ToInt32(value)
+                                Case Else
+                                    Log.AddLogEntry("WARNING: Setting '" & setting & "' was not recognized and was ignored!")
+                            End Select
+                        Catch ex As Exception
+                            Log.AddLogEntry("WARNING: Setting '" & setting & "' with value '" & value & "' could not be parsed and was ignored!")
+                        End Try
+                    Next
+                    'reread columns with new settings
+                    fileobj.ReadColumns()
+                End If
+
+                'get the list of series to be imported
                 seriesList = fileDict(file)
 
                 'select series for importing
