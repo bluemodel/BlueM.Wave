@@ -52,9 +52,6 @@ Public Class CSV
     '***********
     Public Sub New(ByVal FileName As String)
         MyBase.New(FileName)
-
-        'Voreinstellungen
-        Me.Dateformat = Helpers.DefaultDateFormat
     End Sub
 
     'Spalten auslesen
