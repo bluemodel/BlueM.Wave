@@ -45,6 +45,18 @@ Public Class MergeSeriesDialog
         End Get
     End Property
 
+    ''' <summary>
+    ''' Returns the title of the merged series
+    ''' </summary>
+    ''' <value></value>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
+    Public ReadOnly Property mergedSeriesTitle() As String
+        Get
+            Return Me.TextBox_MergedSeriesTitle.Text.Trim()
+        End Get
+    End Property
+
     Public Sub New(ByRef series As Dictionary(Of String, TimeSeries))
 
         ' This call is required by the Windows Form Designer.
@@ -140,6 +152,16 @@ Public Class MergeSeriesDialog
     End Sub
 
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
+        'Check for valid inputs
+        If Me.selectedSeries.Count < 2 Then
+            MsgBox("Please select at least two series to merge!", MsgBoxStyle.Exclamation)
+            Return
+        End If
+        If Me.mergedSeriesTitle = "" Then
+            MsgBox("Please enter a title for the merged series!", MsgBoxStyle.Exclamation)
+            Me.TextBox_MergedSeriesTitle.Focus()
+            Return
+        End If
         Me.DialogResult = System.Windows.Forms.DialogResult.OK
         Me.Close()
     End Sub

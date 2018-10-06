@@ -702,6 +702,7 @@ Public Class Wave
         Dim dlgResult As DialogResult
         Dim seriesList As List(Of String)
         Dim seriesMerged, seriesToMerge As TimeSeries
+        Dim mergedSeriesTitle As String
 
         'Abort if no series are loaded
         If (Me.Zeitreihen.Count < 1) Then
@@ -719,24 +720,23 @@ Public Class Wave
             If dlgResult = Windows.Forms.DialogResult.OK Then
 
                 seriesList = dlg.selectedSeries
+                mergedSeriesTitle = dlg.mergedSeriesTitle
 
-                If seriesList.Count > 1 Then
+                'Clone the series with the highest priority
+                seriesMerged = Me.Zeitreihen(seriesList(0)).Clone
 
-                    'Clone the series with the highest priority
-                    seriesMerged = Me.Zeitreihen(seriesList(0)).Clone
+                'Append the remaining series in order
+                For i As Integer = 1 To seriesList.Count - 1
+                    seriesToMerge = Me.Zeitreihen(seriesList(i))
+                    seriesMerged.Append(seriesToMerge)
+                Next
 
-                    'Append the remaining series in order
-                    For i As Integer = 1 To seriesList.Count - 1
-                        seriesToMerge = Me.Zeitreihen(seriesList(i))
-                        seriesMerged.Append(seriesToMerge)
-                        seriesMerged.Title &= "+" & seriesToMerge.Title
-                    Next
+                'Assign title
+                seriesMerged.Title = mergedSeriesTitle
 
-                    Log.AddLogEntry("Series successfully merged!")
+                Log.AddLogEntry("Series successfully merged!")
 
-                    Me.Import_Series(seriesMerged)
-
-                End If
+                Me.Import_Series(seriesMerged)
 
             End If
 
