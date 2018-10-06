@@ -34,6 +34,8 @@ Partial Class MergeSeriesDialog
         Me.Label2 = New System.Windows.Forms.Label
         Me.SplitContainer1 = New System.Windows.Forms.SplitContainer
         Me.Button_SelectAll = New System.Windows.Forms.Button
+        Me.Label3 = New System.Windows.Forms.Label
+        Me.TextBox_MergedSeriesTitle = New System.Windows.Forms.TextBox
         Me.TableLayoutPanel1.SuspendLayout()
         Me.SplitContainer1.Panel1.SuspendLayout()
         Me.SplitContainer1.Panel2.SuspendLayout()
@@ -54,7 +56,7 @@ Partial Class MergeSeriesDialog
         Me.TableLayoutPanel1.RowCount = 1
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
         Me.TableLayoutPanel1.Size = New System.Drawing.Size(146, 29)
-        Me.TableLayoutPanel1.TabIndex = 0
+        Me.TableLayoutPanel1.TabIndex = 2
         '
         'OK_Button
         '
@@ -85,7 +87,7 @@ Partial Class MergeSeriesDialog
         Me.CheckedListBox_AvailableSeries.Location = New System.Drawing.Point(12, 26)
         Me.CheckedListBox_AvailableSeries.Name = "CheckedListBox_AvailableSeries"
         Me.CheckedListBox_AvailableSeries.Size = New System.Drawing.Size(214, 214)
-        Me.CheckedListBox_AvailableSeries.TabIndex = 1
+        Me.CheckedListBox_AvailableSeries.TabIndex = 0
         Me.CheckedListBox_AvailableSeries.ThreeDCheckBoxes = True
         '
         'ListBox_SelectedSeries
@@ -97,7 +99,7 @@ Partial Class MergeSeriesDialog
         Me.ListBox_SelectedSeries.Location = New System.Drawing.Point(6, 26)
         Me.ListBox_SelectedSeries.Name = "ListBox_SelectedSeries"
         Me.ListBox_SelectedSeries.Size = New System.Drawing.Size(183, 238)
-        Me.ListBox_SelectedSeries.TabIndex = 2
+        Me.ListBox_SelectedSeries.TabIndex = 0
         '
         'Button_Up
         '
@@ -106,7 +108,7 @@ Partial Class MergeSeriesDialog
         Me.Button_Up.Location = New System.Drawing.Point(195, 26)
         Me.Button_Up.Name = "Button_Up"
         Me.Button_Up.Size = New System.Drawing.Size(23, 23)
-        Me.Button_Up.TabIndex = 3
+        Me.Button_Up.TabIndex = 1
         Me.Button_Up.UseVisualStyleBackColor = True
         '
         'Button_Down
@@ -116,7 +118,7 @@ Partial Class MergeSeriesDialog
         Me.Button_Down.Location = New System.Drawing.Point(195, 56)
         Me.Button_Down.Name = "Button_Down"
         Me.Button_Down.Size = New System.Drawing.Size(23, 23)
-        Me.Button_Down.TabIndex = 4
+        Me.Button_Down.TabIndex = 2
         Me.Button_Down.UseVisualStyleBackColor = True
         '
         'Label1
@@ -162,7 +164,7 @@ Partial Class MergeSeriesDialog
         Me.SplitContainer1.Panel2MinSize = 100
         Me.SplitContainer1.Size = New System.Drawing.Size(460, 277)
         Me.SplitContainer1.SplitterDistance = 230
-        Me.SplitContainer1.TabIndex = 6
+        Me.SplitContainer1.TabIndex = 0
         '
         'Button_SelectAll
         '
@@ -170,9 +172,28 @@ Partial Class MergeSeriesDialog
         Me.Button_SelectAll.Location = New System.Drawing.Point(12, 247)
         Me.Button_SelectAll.Name = "Button_SelectAll"
         Me.Button_SelectAll.Size = New System.Drawing.Size(75, 23)
-        Me.Button_SelectAll.TabIndex = 7
+        Me.Button_SelectAll.TabIndex = 1
         Me.Button_SelectAll.Text = "Select all"
         Me.Button_SelectAll.UseVisualStyleBackColor = True
+        '
+        'Label3
+        '
+        Me.Label3.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.Label3.AutoSize = True
+        Me.Label3.Location = New System.Drawing.Point(10, 291)
+        Me.Label3.Name = "Label3"
+        Me.Label3.Size = New System.Drawing.Size(110, 13)
+        Me.Label3.TabIndex = 7
+        Me.Label3.Text = "Title of merged series:"
+        '
+        'TextBox_MergedSeriesTitle
+        '
+        Me.TextBox_MergedSeriesTitle.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.TextBox_MergedSeriesTitle.Location = New System.Drawing.Point(126, 288)
+        Me.TextBox_MergedSeriesTitle.Name = "TextBox_MergedSeriesTitle"
+        Me.TextBox_MergedSeriesTitle.Size = New System.Drawing.Size(177, 20)
+        Me.TextBox_MergedSeriesTitle.TabIndex = 1
         '
         'MergeSeriesDialog
         '
@@ -181,6 +202,8 @@ Partial Class MergeSeriesDialog
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.CancelButton = Me.Cancel_Button
         Me.ClientSize = New System.Drawing.Size(464, 321)
+        Me.Controls.Add(Me.TextBox_MergedSeriesTitle)
+        Me.Controls.Add(Me.Label3)
         Me.Controls.Add(Me.SplitContainer1)
         Me.Controls.Add(Me.TableLayoutPanel1)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
@@ -198,6 +221,7 @@ Partial Class MergeSeriesDialog
         Me.SplitContainer1.Panel2.PerformLayout()
         Me.SplitContainer1.ResumeLayout(False)
         Me.ResumeLayout(False)
+        Me.PerformLayout()
 
     End Sub
     Friend WithEvents TableLayoutPanel1 As System.Windows.Forms.TableLayoutPanel
@@ -211,5 +235,7 @@ Partial Class MergeSeriesDialog
     Friend WithEvents Label2 As System.Windows.Forms.Label
     Friend WithEvents SplitContainer1 As System.Windows.Forms.SplitContainer
     Friend WithEvents Button_SelectAll As System.Windows.Forms.Button
+    Friend WithEvents Label3 As System.Windows.Forms.Label
+    Friend WithEvents TextBox_MergedSeriesTitle As System.Windows.Forms.TextBox
 
 End Class
