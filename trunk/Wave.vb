@@ -432,6 +432,18 @@ Public Class Wave
                     Exit For
                 End If
             Next
+
+            'Aus der Liste der importierten Dateien löschen
+            For Each file As String In Me.ImportedFiles.Keys
+                If Me.ImportedFiles(file).Contains(title_removed) Then
+                    Me.ImportedFiles(file).Remove(title_removed)
+                    'Ganze Datei vergessen, falls es die einzige Serie war
+                    If Me.ImportedFiles(file).Count = 0 Then
+                        Me.ImportedFiles.Remove(file)
+                        Exit For
+                    End If
+                End If
+            Next
         End If
 
     End Sub
