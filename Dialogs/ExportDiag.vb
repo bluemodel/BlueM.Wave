@@ -60,6 +60,15 @@ Public Class ExportDiag
     ''' <remarks></remarks>
     Private Sub ComboBox_Format_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ComboBox_Format.SelectedIndexChanged
 
+        If Me.ComboBox_Format.SelectedItem = FileFormatBase.FileFormats.BIN Then
+            'BUG 704: Unable to export to BIN if running as 64bit
+            If Helpers.is64BitProcess() Then
+                MsgBox("Unable to load SydroZreNet.dll required for BIN export in a 64bit process, please use the x86-version of Wave.", MsgBoxStyle.Critical)
+                Me.ComboBox_Format.SelectedItem = FileFormatBase.FileFormats.CSV
+                Exit Sub
+            End If
+        End If
+
         Select Case ComboBox_Format.SelectedItem
 
             Case FileFormatBase.FileFormats.ZRE, _
@@ -93,6 +102,7 @@ Public Class ExportDiag
     ''' <param name="e"></param>
     ''' <remarks></remarks>
     Private Sub Button_OK_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button_OK.Click
+
         'validate inputs
         If (Me.ListBox_Series.SelectedItems.Count < 1) Then
             MsgBox("Please select at least one series!", MsgBoxStyle.Exclamation)

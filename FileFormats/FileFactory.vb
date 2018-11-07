@@ -150,6 +150,10 @@ Public Module FileFactory
                 End If
 
             Case FileExtBIN
+                'BUG 704: Abort if running as 64bit
+                If Helpers.is64BitProcess() Then
+                    Throw New Exception("Unable to load SydroZreNet.dll required for loading BIN files in a 64bit process, please use the x86-version of Wave.")
+                End If
                 FileInstance = New BIN(file)
 
             Case FileExtZRXP
