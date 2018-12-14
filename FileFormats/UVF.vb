@@ -289,4 +289,62 @@ Public Class UVF
 
     End Sub
 
+    ''' <summary>
+    ''' Exports a time series to a file in the UVF format
+    ''' </summary>
+    ''' <param name="ts">the time series to export</param>
+    ''' <param name="file">path to the file</param>
+    ''' <remarks></remarks>
+    Public Shared Sub Write_File(ByRef ts As TimeSeries, ByVal file As String)
+
+        'Format specification:
+        'http://aquaplan.de/public_papers/imex/sectionUVF.html
+
+        Dim strwrite As StreamWriter
+        Dim title, unit, century, timestamp, value As String
+        Dim i As Integer
+
+        strwrite = New StreamWriter(file, False, System.Text.Encoding.GetEncoding("iso8859-1"))
+
+        '1st line
+        strwrite.WriteLine("*Z")
+        '2nd line: title, unit and centuries
+        title = ts.Title
+        If title.Length > 15 Then
+            title = title.Substring(0, 15)
+        Else
+            title = title.PadRight(15)
+        End If
+        unit = ts.Unit
+        If unit.Length > 15 Then
+            unit = unit.Substring(0, 15)
+        Else
+            unit = unit.PadRight(15)
+        End If
+        If ts.StartDate < New DateTime(2000, 1, 1) Then
+            century = "1900"
+        Else
+            century = "2000"
+        End If
+        If ts.EndDate < New DateTime(2000, 1, 1) Then
+            century &= " 1900"
+        Else
+            century &= " 2000"
+        End If
+        strwrite.WriteLine(title & unit & century)
+        '3rd line: location
+        strwrite.WriteLine("undefined         0         0          0     ")
+        '4th line: start and end date (without the first two digits)
+        strwrite.WriteLine(ts.StartDate.ToString(DateFormats("UVF")).Substring(2) & ts.EndDate.ToString(DateFormats("UVF")).Substring(2))
+        'from 5th line onwards: values
+        For i = 0 To ts.Length - 1
+            timestamp = ts.Dates(i).ToString(DateFormats("UVF")).Substring(2) 'without the first two digits
+            'TODO: values < 1 have a leading zero and are technically one character too long!
+            value = String.Format("{0,9:g8}", ts.Values(i))
+            strwrite.WriteLine(timestamp & " " & value)
+        Next
+        strwrite.Close()
+
+    End Sub
+
 End Class
