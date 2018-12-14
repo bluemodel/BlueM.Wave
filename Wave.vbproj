@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{BCD1BBE3-5AB2-4C3F-AC12-43EB977C6F6F}</ProjectGuid>
     <OutputType>WinExe</OutputType>
@@ -110,6 +110,7 @@
     <Compile Include="Analysis\Comparison_Dialog.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Analysis\Cumulative.vb" />
     <Compile Include="Analysis\DoubleSumCurve.vb" />
     <Compile Include="Analysis\GoodnessOfFit_Dialog.Designer.vb">
       <DependentUpon>GoodnessOfFit_Dialog.vb</DependentUpon>

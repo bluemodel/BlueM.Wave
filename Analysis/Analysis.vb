@@ -55,6 +55,12 @@ Public MustInherit Class Analysis
     ''' <remarks>Optional</remarks>
     Protected mResultChart As Steema.TeeChart.Chart
 
+    ''' <summary>
+    ''' Result series
+    ''' </summary>
+    ''' <remarks>optional</remarks>
+    Protected mResultSeries As Dictionary(Of String, TimeSeries)
+
 #End Region 'Eigenschaften
 
 #Region "Properties"
@@ -73,6 +79,12 @@ Public MustInherit Class Analysis
     ''' Flag indicating whether the analysis function has a result diagram
     ''' </summary>
     Public MustOverride ReadOnly Property hasResultChart() As Boolean
+
+    ''' <summary>
+    ''' Flag indicating whether the analysis function has result series
+    ''' that should be added to the main diagram
+    ''' </summary>
+    Public MustOverride ReadOnly Property hasResultSeries() As Boolean
 
     ''' <summary>
     ''' Analyseergebnis in Form von Text
@@ -104,6 +116,16 @@ Public MustInherit Class Analysis
         End Get
     End Property
 
+    ''' <summary>
+    ''' Analysis result in the form of timeseries
+    ''' </summary>
+    ''' <remarks>Optional</remarks>
+    Public ReadOnly Property getResultSeries() As Dictionary(Of String, TimeSeries)
+        Get
+            Return Me.mResultSeries
+        End Get
+    End Property
+
 #End Region 'Properties
 
 #Region "Methoden"
@@ -119,6 +141,7 @@ Public MustInherit Class Analysis
 
         'Datenstrukturen initialisieren
         Me.mResultValues = New Dictionary(Of String, Double)
+        Me.mResultSeries = New Dictionary(Of String, TimeSeries)
     End Sub
 
     ''' <summary>

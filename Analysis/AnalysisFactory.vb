@@ -40,6 +40,7 @@ Module AnalysisFactory
         Histogram = 4
         Comparison = 5
         AnnualStatistics = 6
+        Cumulative = 7
     End Enum
 
     ''' <summary>
@@ -71,6 +72,9 @@ Module AnalysisFactory
 
             Case AnalysisFunctions.AnnualStatistics
                 oAnalysis = New AnnualStatistics(zeitreihen)
+
+            Case AnalysisFunctions.Cumulative
+                oAnalysis = New Cumulative(zeitreihen)
 
             Case Else
                 Throw New Exception("Analysis not found!")
