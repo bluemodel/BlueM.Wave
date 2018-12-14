@@ -43,6 +43,7 @@ Public Class ExportDiag
         Me.ComboBox_Format.Items.Add(FileFormatBase.FileFormats.DAT_SWMM_MASS)
         Me.ComboBox_Format.Items.Add(FileFormatBase.FileFormats.DAT_SWMM_TIME)
         Me.ComboBox_Format.Items.Add(FileFormatBase.FileFormats.TXT_SWMM)
+        Me.ComboBox_Format.Items.Add(FileFormatBase.FileFormats.UVF)
         Me.ComboBox_Format.SelectedIndex = 0
 
         'Add series to listbox
@@ -76,7 +77,8 @@ Public Class ExportDiag
                  FileFormatBase.FileFormats.REG_SMUSI, _
                  FileFormatBase.FileFormats.DAT_SWMM_MASS, _
                  FileFormatBase.FileFormats.DAT_SWMM_TIME, _
-                 FileFormatBase.FileFormats.BIN
+                 FileFormatBase.FileFormats.BIN, _
+                 FileFormatBase.FileFormats.UVF
                 'Allow selection of a single series
                 Me.ListBox_Series.SelectionMode = SelectionMode.One
                 Me.Button_SelectAll.Enabled = False

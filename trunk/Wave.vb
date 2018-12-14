@@ -879,6 +879,9 @@ Public Class Wave
                 Case FileFormatBase.FileFormats.BIN
                     Call BIN.Write_File(zres(0), filename)
 
+                Case FileFormatBase.FileFormats.UVF
+                    Call UVF.Write_File(zres(0), filename)
+
                 Case Else
                     MsgBox("Not yet implemented!", MsgBoxStyle.Exclamation, "Wave")
             End Select
