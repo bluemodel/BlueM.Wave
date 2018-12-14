@@ -69,6 +69,16 @@ Public Class GoodnessOfFit
         End Get
     End Property
 
+    ''' <summary>
+    ''' Flag indicating whether the analysis function has result series
+    ''' that should be added to the main diagram
+    ''' </summary>
+    Public Overrides ReadOnly Property hasResultSeries() As Boolean
+        Get
+            Return False
+        End Get
+    End Property
+
     Public Sub New(ByRef zeitreihen As List(Of TimeSeries))
 
         Call MyBase.New(zeitreihen)

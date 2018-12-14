@@ -74,6 +74,16 @@ Public Class Histogram
     End Property
 
     ''' <summary>
+    ''' Flag indicating whether the analysis function has result series
+    ''' that should be added to the main diagram
+    ''' </summary>
+    Public Overrides ReadOnly Property hasResultSeries() As Boolean
+        Get
+            Return False
+        End Get
+    End Property
+
+    ''' <summary>
     ''' Konstruktor
     ''' </summary>
     ''' <param name="zeitreihen">zu analysierende Zeitreihen</param>

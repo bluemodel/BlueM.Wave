@@ -968,6 +968,13 @@ Public Class Wave
                     Call Wave.MyLogWindow.BringToFront()
                 End If
 
+                'Display result series in main diagram
+                If oAnalysis.hasResultSeries Then
+                    For Each ts As TimeSeries In oAnalysis.getResultSeries.Values
+                        Call Me.Import_Series(ts, True)
+                    Next
+                End If
+
             Catch ex As Exception
                 Me.Cursor = Cursors.Default
                 'Logeintrag

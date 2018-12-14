@@ -62,6 +62,16 @@ Public Class AnnualStatistics
         End Get
     End Property
 
+    ''' <summary>
+    ''' Flag indicating whether the analysis function has result series
+    ''' that should be added to the main diagram
+    ''' </summary>
+    Public Overrides ReadOnly Property hasResultSeries() As Boolean
+        Get
+            Return False
+        End Get
+    End Property
+
     Public Sub New(ByRef series As List(Of TimeSeries))
         MyBase.New(series)
         'Check: expects exactly one series

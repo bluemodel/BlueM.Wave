@@ -4,6 +4,7 @@ BlueM.Wave Release Notes
 Version 1.6.2
 -------------
 NEW:
+* Added a new analysis function "Cumulative" which converts a time series to cumulative values
 * Added write support for the UVF format
 * Added the possibility of specifying custom import settings in Wave project files (*.wvp) (#720)
 * Added a button and a dialog for merging time series (#719)
