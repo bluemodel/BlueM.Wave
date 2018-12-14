@@ -103,11 +103,14 @@ Public Class Cumulative
 
         sum = 0.0
         For i = 0 To ts.Length - 1
-            'omit intermediate nodes where the cumulative value does not change
-            If ts.Values(i) <> 0.0 And i <> 0 And i <> ts.Length - 1 Then
-                sum += ts.Values(i)
-                ts_cum.AddNode(ts.Dates(i), sum)
+            If i <> 0 And i <> ts.Length - 1 Then
+                If ts.Values(i) = 0.0 And ts.Values(i + 1) = 0.0 Then
+                    'omit intermediate nodes where the cumulative value does not change
+                    Continue For
+                End If
             End If
+            sum += ts.Values(i)
+            ts_cum.AddNode(ts.Dates(i), sum)
         Next
 
         MyBase.mResultSeries.Add(ts_cum.Title, ts_cum)
