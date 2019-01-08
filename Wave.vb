@@ -224,20 +224,35 @@ Public Class Wave
     ''' <remarks></remarks>
     Private Sub Wave_KeyDown(ByVal sender As System.Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles MyBase.KeyDown
 
-        If e.Control And e.KeyCode = Keys.V Then
-            'Ctrl+V pressed
-            If Clipboard.ContainsText(TextDataFormat.Text) Then
+        Dim dlgres As DialogResult
 
-                Dim clipboardtext As String
-                clipboardtext = Clipboard.GetText(TextDataFormat.Text)
+        Try
+            If e.Control And e.KeyCode = Keys.V Then
+                'Ctrl+V pressed
+                If Clipboard.ContainsText(TextDataFormat.Text) Then
 
-                If clipboardtext.Contains("SydroTyp=SydroErgZre") Then
-                    'it's a clipboard entry from TALSIM
-                    Call Me.loadFromClipboard_TALSIM(clipboardtext)
+                    Dim clipboardtext As String
+                    clipboardtext = Clipboard.GetText(TextDataFormat.Text)
+
+                    If clipboardtext.Contains("SydroTyp=SydroErgZre") Or _
+                       clipboardtext.Contains("SydroTyp=SydroBinZre") Then
+                        'it's a clipboard entry from TALSIM!
+
+                        'ask the user for confirmation
+                        dlgres = MessageBox.Show("TALSIM clipboard content detected!" & eol & "Load series in Wave?", "Load from clipboard", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+                        If Not dlgres = Windows.Forms.DialogResult.Yes Then
+                            Exit Sub
+                        End If
+
+                        Call Me.loadFromClipboard_TALSIM(clipboardtext)
+                    End If
                 End If
             End If
-        End If
 
+        Catch ex As Exception
+            Log.AddLogEntry("Error: " & ex.Message)
+            MsgBox("Error: " & ex.Message, MsgBoxStyle.Critical)
+        End Try
     End Sub
 
 #End Region 'Form behavior
@@ -2180,7 +2195,7 @@ Public Class Wave
     ''' <remarks></remarks>
     Private Sub loadFromClipboard_TALSIM(ByVal clipboardtext As String)
 
-        'Example:
+        'Examples:
 
         '[SETTINGS]
         'Count = 1
@@ -2202,73 +2217,114 @@ Public Class Wave
         'Einheit=m3/s
         'EndZeitreihe
 
+        '[SETTINGS]
+        'Count=2
+        '[Zeitreihe1]
+        'SydroTyp=SydroBinZre
+        'ZRFormat=99
+        'ID=1041
+        'Extension=.BIN
+        'Kennung=Sce10, E038, C38 (TA_Tekeze TK 04B)
+        'KennungLang=Sce10, E038, C38 (TA_Tekeze TK 04B), m3/s
+        'Datei=C:\Talsim-NG\customers\Nile\projectData\hubert\dataBase\hubert_zre\00001041.BIN
+        'Einheit=m3/s
+        'Modell=TALSIM
+        'Interpretation=1
+        'EndZeitreihe
+        '[Zeitreihe2]
+        'SydroTyp=SydroBinZre
+        'ZRFormat=99
+        'ID=1042
+        'Extension=.BIN
+        'Kennung=Sce10, E039, C39 (TA_TK5)
+        'KennungLang=Sce10, E039, C39 (TA_TK5), m3/s
+        'Datei=C:\Talsim-NG\customers\Nile\projectData\hubert\dataBase\hubert_zre\00001042.BIN
+        'Einheit=m3/s
+        'Modell=TALSIM
+        'Interpretation=1
+        'EndZeitreihe
+
         'parse clipboard contents
+        Dim i_series As Integer
         Dim parts() As String
         Dim zreblock As Boolean
-        Dim params As New Dictionary(Of String, String)
+        Dim data As New List(Of Dictionary(Of String, String))
+        Dim file, name As String
+        Dim fileobj As FileFormatBase
+        Dim ts As TimeSeries
 
         zreblock = False
         For Each line As String In clipboardtext.Split(eol)
             line = line.Trim()
 
-            If Not zreblock Then
-                If line.StartsWith("[Zeitreihe") Then
-                    zreblock = True
-                End If
-                Continue For
+            If line.StartsWith("[Zeitreihe") Then
+                i_series = line.Substring(10, 1)
+                data.Add(New Dictionary(Of String, String))
+                zreblock = True
             End If
 
             If zreblock Then
                 If line.Contains("=") Then
                     parts = line.Split("=")
-                    params.Add(parts(0), parts(1))
+                    data(i_series - 1).Add(parts(0), parts(1))
                 ElseIf line = "EndZeitreihe" Then
-                    Exit For
+                    zreblock = False
+                    Continue For
                 End If
             End If
 
         Next
 
-        'initiate loading of file
-        If params.ContainsKey("Datei") _
-        And params.ContainsKey("Kennung") _
-        And params.ContainsKey("Zustand") Then
-
-            Dim file, name As String
-            Dim dlgres As DialogResult
+        'initiate loading of series
+        For Each params As Dictionary(Of String, String) In data
 
             file = params("Datei")
-            name = params("Kennung").PadRight(4, " ") & "_" & params("Zustand")
-
-            'ask the user for confirmation
-            dlgres = MessageBox.Show("TALSIM clipboard content detected!" & eol & "Load series " & name & " from file " & file & "?", "Load from clipboard", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
-            If Not dlgres = Windows.Forms.DialogResult.Yes Then
-                Exit Sub
-            End If
-
-            'check whether the wel file has already been unzipped
-            Dim filezip As String
-            filezip = file.Substring(0, file.Length - 4) & ".WLZIP"
-            If Not IO.File.Exists(file) And IO.File.Exists(filezip) Then
-                MessageBox.Show("The file " & filezip & " needs to be unzipped first!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-                Exit Sub
-            End If
 
             Log.AddLogEntry("Loading file " & file & " ...")
 
-            'read series from file
-            Dim fileobj As FileFormatBase
-            Dim ts As TimeSeries
-            fileobj = FileFactory.getDateiInstanz(params("Datei"))
-            ts = fileobj.getTimeSeries(name)
+            fileobj = FileFactory.getDateiInstanz(file)
 
-            'import series
-            Call Me.Import_Series(ts)
+            Select Case params("ZRFormat")
+                Case "4" 'WEL file
 
-            'store information
+                    'build series name
+                    name = params("Kennung").PadRight(4, " ") & "_" & params("Zustand")
+
+                    'check whether the wel file has already been unzipped
+                    Dim filezip As String
+                    filezip = file.Substring(0, file.Length - 4) & ".WLZIP"
+                    If Not IO.File.Exists(file) And IO.File.Exists(filezip) Then
+                        MessageBox.Show("The file " & filezip & " needs to be unzipped first!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                        Exit Sub
+                    End If
+
+                    'read series from file
+                    ts = fileobj.getTimeSeries(name)
+
+                    'import series
+                    Call Me.Import_Series(ts)
+
+                Case "99" 'BIN file
+
+                    name = params("Kennung")
+
+                    'read series from file
+                    fileobj.Read_File()
+                    ts = fileobj.TimeSeries(0)
+
+                    'add metadata
+                    ts.Title = name
+                    ts.Unit = params("Einheit")
+
+                    'import series
+                    Call Me.Import_Series(ts)
+
+            End Select
+
+            'store file information
             Call Me.storeFileInfo(fileobj)
 
-        End If
+        Next
 
     End Sub
 
