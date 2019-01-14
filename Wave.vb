@@ -243,13 +243,15 @@ Public Class Wave
                         If Not dlgres = Windows.Forms.DialogResult.Yes Then
                             Exit Sub
                         End If
-
+                        Me.Cursor = Cursors.WaitCursor
                         Call Me.loadFromClipboard_TALSIM(clipboardtext)
+                        Me.Cursor = Cursors.Default
                     End If
                 End If
             End If
 
         Catch ex As Exception
+            Me.Cursor = Cursors.Default
             Log.AddLogEntry("Error: " & ex.Message)
             MsgBox("Error: " & ex.Message, MsgBoxStyle.Critical)
         End Try
@@ -2280,23 +2282,38 @@ Public Class Wave
 
             file = params("Datei")
 
-            Log.AddLogEntry("Loading file " & file & " ...")
-
-            fileobj = FileFactory.getDateiInstanz(file)
-
             Select Case params("ZRFormat")
                 Case "4" 'WEL file
 
                     'build series name
                     name = params("Kennung").PadRight(4, " ") & "_" & params("Zustand")
 
-                    'check whether the wel file has already been unzipped
+                    'check whether the wel file is still zipped
                     Dim filezip As String
                     filezip = file.Substring(0, file.Length - 4) & ".WLZIP"
                     If Not IO.File.Exists(file) And IO.File.Exists(filezip) Then
-                        MessageBox.Show("The file " & filezip & " needs to be unzipped first!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-                        Exit Sub
+                        'unzip the WLZIP file first
+                        Log.AddLogEntry("Unzipping file " & filezip & " ...")
+                        Dim ze As Ionic.Zip.ZipEntry
+                        Dim filename, dir As String
+                        Dim fileFound As Boolean = False
+                        dir = IO.Path.GetDirectoryName(file)
+                        filename = IO.Path.GetFileName(file)
+                        For Each ze In Ionic.Zip.ZipFile.Read(filezip)
+                            If ze.FileName.ToLower() = filename.ToLower() Then
+                                fileFound = True
+                                ze.Extract(dir, Ionic.Zip.ExtractExistingFileAction.OverwriteSilently)
+                            End If
+                        Next
+                        If Not fileFound Then
+                            Log.AddLogEntry("ERROR: File " & filename & " not found in " & filezip & "!")
+                            Continue For
+                        End If
                     End If
+
+                    'read file
+                    Log.AddLogEntry("Loading file " & file & " ...")
+                    fileobj = FileFactory.getDateiInstanz(file)
 
                     'read series from file
                     ts = fileobj.getTimeSeries(name)
@@ -2304,9 +2321,16 @@ Public Class Wave
                     'import series
                     Call Me.Import_Series(ts)
 
+                    'store file information
+                    Call Me.storeFileInfo(fileobj)
+
                 Case "99" 'BIN file
 
                     name = params("Kennung")
+
+                    'read file
+                    Log.AddLogEntry("Loading file " & file & " ...")
+                    fileobj = FileFactory.getDateiInstanz(file)
 
                     'read series from file
                     fileobj.Read_File()
@@ -2319,10 +2343,10 @@ Public Class Wave
                     'import series
                     Call Me.Import_Series(ts)
 
-            End Select
+                    'store file information
+                    Call Me.storeFileInfo(fileobj)
 
-            'store file information
-            Call Me.storeFileInfo(fileobj)
+            End Select
 
         Next
 

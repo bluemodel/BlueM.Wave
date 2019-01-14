@@ -61,6 +61,7 @@
     <DocumentationFile>Wave.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Ionic.Zip, Version=1.9.1.8, Culture=neutral, PublicKeyToken=edbe51ad942a3f5c, processorArchitecture=MSIL" />
     <Reference Include="MathNet.Numerics, Version=3.17.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>lib\MathNet\MathNet.Numerics.dll</HintPath>
@@ -322,6 +323,9 @@
     <Content Include="BlueM.Wave_Release-notes.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="lib\Ionic.Zip\Ionic.Zip.dll" />
+    <Content Include="lib\Ionic.Zip\Ionic.Zip.xml" />
+    <Content Include="lib\Ionic.Zip\Ionic.Zip.license.txt" />
     <Content Include="lib\MathNet\MathNet.Numerics.dll" />
     <Content Include="lib\MathNet\MathNet.Numerics.license.txt" />
     <Content Include="lib\MathNet\MathNet.Numerics.pdb" />
@@ -429,6 +433,7 @@
 copy $(ProjectDir)lib\IntelFortran\libifcoremd.dll $(TargetDir)libifcoremd.dll
 copy $(ProjectDir)lib\IntelFortran\libifportmd.dll $(TargetDir)libifportmd.dll
 copy $(ProjectDir)lib\IntelFortran\libmmd.dll $(TargetDir)libmmd.dll
-copy $(ProjectDir)lib\MathNet\MathNet.Numerics.license.txt $(TargetDir)MathNet.Numerics.license.txt</PostBuildEvent>
+copy $(ProjectDir)lib\MathNet\MathNet.Numerics.license.txt $(TargetDir)MathNet.Numerics.license.txt
+copy $(ProjectDir)lib\Ionic.Zip\Ionic.Zip.license.txt $(TargetDir)Ionic.Zip.license.txt</PostBuildEvent>
   </PropertyGroup>
 </Project>
