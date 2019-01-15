@@ -96,24 +96,26 @@ Public Class Cumulative
         Dim sum As Double
         Dim ts, ts_cum As TimeSeries
 
-        ts = MyBase.mZeitreihen(0)
+        For Each ts In MyBase.mZeitreihen
 
-        ts_cum = New TimeSeries(ts.Title & " (cumulative)")
-        ts_cum.Unit = ts.Unit
+            ts_cum = New TimeSeries(ts.Title & " (cumulative)")
+            ts_cum.Unit = ts.Unit
 
-        sum = 0.0
-        For i = 0 To ts.Length - 1
-            If i <> 0 And i <> ts.Length - 1 Then
-                If ts.Values(i) = 0.0 And ts.Values(i + 1) = 0.0 Then
-                    'omit intermediate nodes where the cumulative value does not change
-                    Continue For
+            sum = 0.0
+            For i = 0 To ts.Length - 1
+                If i <> 0 And i <> ts.Length - 1 Then
+                    If ts.Values(i) = 0.0 And ts.Values(i + 1) = 0.0 Then
+                        'omit intermediate nodes where the cumulative value does not change
+                        Continue For
+                    End If
                 End If
-            End If
-            sum += ts.Values(i)
-            ts_cum.AddNode(ts.Dates(i), sum)
-        Next
+                sum += ts.Values(i)
+                ts_cum.AddNode(ts.Dates(i), sum)
+            Next
 
-        MyBase.mResultSeries.Add(ts_cum.Title, ts_cum)
+            MyBase.mResultSeries.Add(ts_cum.Title, ts_cum)
+
+        Next
 
     End Sub
 
