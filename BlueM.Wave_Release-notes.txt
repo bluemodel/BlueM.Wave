@@ -12,6 +12,9 @@ NEW:
 * The Open File menu now includes a list of recently used files (not stored across sessions)
 * Added write support for the SYDRO binary format (BIN) (only in x86 version)
 * Added a button for changing the time step of a time series (#717) (only in x86 version)
+* Added the ability to process more clipboard contents from TALSIM 
+  (including BIN files and multiple files/series at once) (#695)
+* Added the ability to extract WEL files from WLZIP files of the same name
 FIXED:
 * The Reload from Files command now respects the previously made series selection for each file
 * Imported files are no longer kept as file objects in memory (should lead to less memory usage)
