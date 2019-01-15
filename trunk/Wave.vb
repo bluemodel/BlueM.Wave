@@ -252,8 +252,8 @@ Public Class Wave
 
         Catch ex As Exception
             Me.Cursor = Cursors.Default
-            Log.AddLogEntry("Error: " & ex.Message)
-            MsgBox("Error: " & ex.Message, MsgBoxStyle.Critical)
+            Log.AddLogEntry("ERROR: " & ex.Message)
+            MsgBox("ERROR: " & ex.Message, MsgBoxStyle.Critical)
         End Try
     End Sub
 
@@ -591,7 +591,6 @@ Public Class Wave
             Log.AddLogEntry("Wave project file " & projectfile & " saved.")
 
         End If
-
 
     End Sub
 
@@ -1312,7 +1311,7 @@ Public Class Wave
                 Log.AddLogEntry("Reading file " & filename & " ...")
 
                 'get an instance of the file
-                fileObj = FileFactory.getDateiInstanz(filename)
+                fileObj = FileFactory.getFileInstance(filename)
                 'select series for importing
                 For Each series As String In Me.ImportedFiles(filename)
                     fileObj.selectSeries(series)
@@ -1813,7 +1812,7 @@ Public Class Wave
                 Log.AddLogEntry("Reading file " & file & " ...")
 
                 'get an instance of the file
-                fileobj = FileFactory.getDateiInstanz(file)
+                fileobj = FileFactory.getFileInstance(file)
 
                 'apply custom import settings
                 If settingsDict.ContainsKey(file) Then
@@ -1909,7 +1908,7 @@ Public Class Wave
 
         Catch ex As Exception
             MsgBox("Error while loading project file:" & eol & ex.Message, MsgBoxStyle.Critical)
-            Call Log.AddLogEntry("Error while loading project file:" & eol & ex.Message)
+            Call Log.AddLogEntry("ERROR: Error while loading project file:" & eol & ex.Message)
         End Try
 
     End Sub
@@ -2135,7 +2134,7 @@ Public Class Wave
                     Call Log.AddLogEntry("Importing file '" & file & "' ...")
 
                     'Datei-Instanz erzeugen
-                    Datei = FileFactory.getDateiInstanz(file)
+                    Datei = FileFactory.getFileInstance(file)
 
                     If (Datei.UseImportDialog) Then
                         'Falls Importdialog erforderlich, diesen anzeigen
@@ -2149,7 +2148,7 @@ Public Class Wave
 
                     If (ok) Then
 
-                        Cursor = Cursors.WaitCursor
+                        Me.Cursor = Cursors.WaitCursor
 
                         'Datei einlesen
                         Call Datei.Read_File()
@@ -2183,7 +2182,7 @@ Public Class Wave
                     Call Log.AddLogEntry("Error during import: " & ex.Message)
 
                 Finally
-                    Cursor = Cursors.Default
+                    Me.Cursor = Cursors.Default
                 End Try
 
         End Select
@@ -2288,32 +2287,9 @@ Public Class Wave
                     'build series name
                     name = params("Kennung").PadRight(4, " ") & "_" & params("Zustand")
 
-                    'check whether the wel file is still zipped
-                    Dim filezip As String
-                    filezip = file.Substring(0, file.Length - 4) & ".WLZIP"
-                    If Not IO.File.Exists(file) And IO.File.Exists(filezip) Then
-                        'unzip the WLZIP file first
-                        Log.AddLogEntry("Unzipping file " & filezip & " ...")
-                        Dim ze As Ionic.Zip.ZipEntry
-                        Dim filename, dir As String
-                        Dim fileFound As Boolean = False
-                        dir = IO.Path.GetDirectoryName(file)
-                        filename = IO.Path.GetFileName(file)
-                        For Each ze In Ionic.Zip.ZipFile.Read(filezip)
-                            If ze.FileName.ToLower() = filename.ToLower() Then
-                                fileFound = True
-                                ze.Extract(dir, Ionic.Zip.ExtractExistingFileAction.OverwriteSilently)
-                            End If
-                        Next
-                        If Not fileFound Then
-                            Log.AddLogEntry("ERROR: File " & filename & " not found in " & filezip & "!")
-                            Continue For
-                        End If
-                    End If
-
                     'read file
                     Log.AddLogEntry("Loading file " & file & " ...")
-                    fileobj = FileFactory.getDateiInstanz(file)
+                    fileobj = FileFactory.getFileInstance(file)
 
                     'read series from file
                     ts = fileobj.getTimeSeries(name)
@@ -2330,7 +2306,7 @@ Public Class Wave
 
                     'read file
                     Log.AddLogEntry("Loading file " & file & " ...")
-                    fileobj = FileFactory.getDateiInstanz(file)
+                    fileobj = FileFactory.getFileInstance(file)
 
                     'read series from file
                     fileobj.Read_File()

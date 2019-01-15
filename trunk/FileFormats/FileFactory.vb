@@ -48,22 +48,43 @@ Public Module FileFactory
     Public Const FileExtWVP As String = ".WVP" 'Wave project file
 
     ''' <summary>
+    ''' Obsolete: Only Maintained for backwards-compatibility
+    ''' Use getFileInstance() instead
+    ''' </summary>
+    Public Function getDateiInstanz(ByVal file As String) As FileFormatBase
+        Return getFileInstance(file)
+    End Function
+
+    ''' <summary>
     ''' Creates a FileFormatBase-inherited instance based on the file extension
     ''' </summary>
-    ''' <param name="file">path to the file</param>
-    ''' <returns>a FileFormatBase-inherited instance of the file</returns>
-    Public Function getDateiInstanz(ByVal file As String) As FileFormatBase
+    ''' <param name="file">Path to the file</param>
+    ''' <returns>A FileFormatBase-inherited instance of the file</returns>
+    ''' <remarks>
+    ''' Also checks whether the file exists and if the file format is as expected.
+    ''' If the file is a WEL file, this function also checks whether the file is contained
+    ''' within a WLZIP of the same name and if it is, extracts it.
+    ''' </remarks>
+    Public Function getFileInstance(ByVal file As String) As FileFormatBase
 
         Dim FileInstance As FileFormatBase
         Dim FileExt As String
 
+        FileExt = Path.GetExtension(file).ToUpper()
+
         'Check whether the file exists
         If (Not System.IO.File.Exists(file)) Then
-            Throw New Exception("ERROR: File '" & file & "' not found!")
+            If FileExt = FileExtWEL Then
+                'A WEL file may be zipped within a WLZIP file, so try extracting it from there
+                If Not WEL.extractFromWLZIP(file) Then
+                    Throw New Exception("ERROR: File '" & file & "' not found!")
+                End If
+            Else
+                Throw New Exception("ERROR: File '" & file & "' not found!")
+            End If
         End If
 
         'Depending on file extension
-        FileExt = Path.GetExtension(file).ToUpper()
         Select Case FileExt
 
             Case FileExtASC
@@ -120,7 +141,7 @@ Public Module FileFactory
                     'Hystem-Extran rainfall file
                     FileInstance = New HystemExtran_WEL(file)
                 Else
-                    Throw New Exception("ERROR: Unknown file format! Please check!")
+                    Throw New Exception("ERROR: WEL file has an unexpected format!")
                 End If
 
             Case FileExtZRE

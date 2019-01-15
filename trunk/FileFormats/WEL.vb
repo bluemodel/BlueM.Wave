@@ -280,17 +280,23 @@ Public Class WEL
     End Sub
 
     ''' <summary>
-    ''' Prüft, ob es sich um eine WEL-Datei für BlueM handelt
+    ''' Checks whether a file is in the WEL format
     ''' </summary>
-    ''' <param name="file">Pfad zur Datei</param>
-    ''' <returns></returns>
+    ''' <param name="file">path to the file to check</param>
+    ''' <returns>True if verification was successful</returns>
     Public Shared Function verifyFormat(ByVal file As String) As Boolean
 
-        Dim FiStr As FileStream = New FileStream(file, FileMode.Open, IO.FileAccess.Read)
-        Dim StrRead As StreamReader = New StreamReader(FiStr, System.Text.Encoding.GetEncoding("iso8859-1"))
-        Dim Zeile As String = ""
+        Dim FiStr As FileStream
+        Dim StrRead As StreamReader
+        Dim Zeile As String
 
+        'check the file format
+        FiStr = New FileStream(file, FileMode.Open, IO.FileAccess.Read)
+        StrRead = New StreamReader(FiStr, System.Text.Encoding.GetEncoding("iso8859-1"))
+
+        'read only the first line
         Zeile = StrRead.ReadLine.ToString()
+
         StrRead.Close()
         FiStr.Close()
 
@@ -303,6 +309,47 @@ Public Class WEL
         ElseIf (Zeile.StartsWith("*WEL")) Then
             'It's a TALSIM WEL file
             Return True
+        Else
+            Return False
+        End If
+
+    End Function
+
+    ''' <summary>
+    ''' Attempts to extract a specified WEL file from a WLZIP file of the same name
+    ''' </summary>
+    ''' <param name="file">path to WEL file</param>
+    ''' <returns>True if successful</returns>
+    ''' <remarks></remarks>
+    Public Shared Function extractFromWLZIP(ByVal file As String) As Boolean
+
+        Dim file_wlzip As String
+        Dim ze As Ionic.Zip.ZipEntry
+        Dim filename, dir As String
+        Dim fileFound As Boolean = False
+
+        file_wlzip = file.Substring(0, file.Length - 4) & ".WLZIP"
+
+        If IO.File.Exists(file_wlzip) Then
+
+            Log.AddLogEntry("Looking for file in " & file_wlzip & " ...")
+            dir = IO.Path.GetDirectoryName(file)
+            filename = IO.Path.GetFileName(file)
+
+            For Each ze In Ionic.Zip.ZipFile.Read(file_wlzip)
+                If ze.FileName.ToLower() = filename.ToLower() Then
+                    fileFound = True
+                    Log.AddLogEntry("Extracting " & file_wlzip & " ...")
+                    ze.Extract(dir, Ionic.Zip.ExtractExistingFileAction.OverwriteSilently)
+                    Return True
+                End If
+            Next
+
+            If Not fileFound Then
+                Log.AddLogEntry("WARNING: File " & filename & " not found in " & file_wlzip & "!")
+                Return False
+            End If
+
         Else
             Return False
         End If
