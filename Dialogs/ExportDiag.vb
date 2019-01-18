@@ -25,7 +25,7 @@
 'EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 '--------------------------------------------------------------------------------------------
 '
-Public Class ExportDiag
+Friend Class ExportDiag
 
     Public Sub New(ByRef zres As Dictionary(Of String, TimeSeries))
 

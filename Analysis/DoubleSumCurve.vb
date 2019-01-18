@@ -29,7 +29,7 @@
 ''' Doppelsummenanalyse zweier Zeitreihen
 ''' </summary>
 ''' <remarks>http://wiki.bluemodel.org/index.php/Wave:Doppelsummenanalyse</remarks>
-Public Class DoubleSumCurve
+Friend Class DoubleSumCurve
     Inherits Analysis
 
     Dim summe1(), summe2() As Double
@@ -161,7 +161,7 @@ Public Class DoubleSumCurve
         gerade = New Steema.TeeChart.Styles.Line(Me.mResultChart)
         gerade.Title = "45° line"
         gerade.Color = Color.DarkGray
-        gerade.linepen.Style = Drawing2D.DashStyle.Dash
+        gerade.LinePen.Style = Drawing2D.DashStyle.Dash
 
         'Werte eintragen
         For i = 0 To summe1.Length - 1

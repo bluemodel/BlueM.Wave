@@ -30,7 +30,7 @@ Imports MathNet.Numerics
 ''' Gegenüberstellung/Vergleich zweier Zeitreihen
 ''' </summary>
 ''' <remarks>http://wiki.bluemodel.org/index.php/Wave:Gegenueberstellung</remarks>
-Public Class Comparison
+Friend Class Comparison
     Inherits Analysis
 
     Dim datume As IList(Of DateTime)

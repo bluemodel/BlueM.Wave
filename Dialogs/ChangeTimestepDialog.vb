@@ -1,6 +1,6 @@
 ﻿Imports System.Windows.Forms
 
-Public Class ChangeTimestepDialog
+Friend Class ChangeTimestepDialog
 
     Private zres As Dictionary(Of String, TimeSeries)
     Private isInitializing As Boolean

@@ -29,7 +29,7 @@
 ''' Log
 ''' </summary>
 ''' <remarks>implementiert als Singleton-Klasse</remarks>
-Public Class Log
+Friend Class Log
 
     Private Shared myInstance As Log
     Private myLastMessage As String

@@ -29,7 +29,7 @@
 ''' Goodness Of Fit: Berechnet diverse Gütekriterien für die Anpassung
 ''' </summary>
 ''' <remarks>http://wiki.bluemodel.org/index.php/Wave:GoodnessOfFit</remarks>
-Public Class GoodnessOfFit
+Friend Class GoodnessOfFit
     Inherits Analysis
 
     Private zre_gemessen, zre_simuliert As TimeSeries

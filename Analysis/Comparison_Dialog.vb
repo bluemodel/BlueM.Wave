@@ -25,7 +25,7 @@
 'EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 '--------------------------------------------------------------------------------------------
 '
-Public Class Comparison_Dialog
+Friend Class Comparison_Dialog
 
     Public Sub New(ByVal name1 As String, ByVal name2 As String)
 

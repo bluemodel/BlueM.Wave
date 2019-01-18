@@ -28,7 +28,7 @@
 ''' <summary>
 ''' Fabrik zum Erzeugen von Analyse-Objekten
 ''' </summary>
-Module AnalysisFactory
+Friend Module AnalysisFactory
 
     ''' <summary>
     ''' Liste der Analysefunktionen

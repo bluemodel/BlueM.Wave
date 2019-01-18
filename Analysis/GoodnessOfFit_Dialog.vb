@@ -25,7 +25,7 @@
 'EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 '--------------------------------------------------------------------------------------------
 '
-Public Class GoodnessOfFit_Dialog
+Friend Class GoodnessOfFit_Dialog
 
     Public Sub New(ByVal zre1 As String, ByVal zre2 As String)
 

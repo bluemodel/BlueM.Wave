@@ -31,7 +31,7 @@ Imports System.Windows.Forms
 ''' Dialog zum Zuschneiden einer Zeitreihe
 ''' </summary>
 ''' <remarks></remarks>
-Public Class CutDialog
+Friend Class CutDialog
 
     Private IsInitializing As Boolean
     Private colorBand1 As Steema.TeeChart.Tools.ColorBand

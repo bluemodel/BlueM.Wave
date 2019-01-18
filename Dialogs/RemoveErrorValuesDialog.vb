@@ -31,7 +31,7 @@ Imports System.Windows.Forms
 ''' Dialog for removing user-specified error values from series
 ''' </summary>
 ''' <remarks></remarks>
-Public Class RemoveErrorValuesDialog
+Friend Class RemoveErrorValuesDialog
 
     Public zreOrig As Dictionary(Of String, TimeSeries)
     Public zreClean As Dictionary(Of String, TimeSeries)

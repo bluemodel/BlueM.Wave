@@ -27,7 +27,7 @@
 '
 Imports System.Windows.Forms
 
-Public Class LogWindow
+Friend Class LogWindow
 
 #Region "Form behavior"
 
