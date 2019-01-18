@@ -28,7 +28,7 @@
 ''' <summary>
 ''' Modul, das oft genutzte Analysefunktion zur Verfügung stellt
 ''' </summary>
-Public Module AnalysisHelper
+Friend Module AnalysisHelper
 
     ''' <summary>
     ''' Löscht aus zwei Zeitreihen alle nicht-gemeinsamen Stützstellen und gibt zusätzlich die gemeinsamen Wertepaare als Array zurück

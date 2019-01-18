@@ -28,7 +28,7 @@
 ''' <summary>
 ''' Basisklasse für Analysefunktionen
 ''' </summary>
-Public MustInherit Class Analysis
+Friend MustInherit Class Analysis
 
 #Region "Eigenschaften"
 

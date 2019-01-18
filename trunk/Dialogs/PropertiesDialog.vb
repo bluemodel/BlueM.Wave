@@ -1,6 +1,6 @@
 ﻿Imports System.Windows.Forms
 
-Public Class PropertiesDialog
+Friend Class PropertiesDialog
 
     Public Sub New(ByVal series As Dictionary(Of String, TimeSeries))
 

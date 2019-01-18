@@ -31,7 +31,7 @@ Imports System.Windows.Forms
 ''' Dialog for setting the break values for the histogram analysis
 ''' </summary>
 ''' <remarks></remarks>
-Public Class HistogramDialog
+Friend Class HistogramDialog
 
     Private min, max As Double
     Friend n_bins As Integer

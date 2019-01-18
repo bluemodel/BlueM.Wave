@@ -27,7 +27,7 @@
 '
 Imports System.Windows.Forms
 
-Public Class RenameSeriesDialog
+Friend Class RenameSeriesDialog
 
     Protected Friend titles As Dictionary(Of String, String)
 

@@ -28,7 +28,7 @@
 ''' <summary>
 ''' Cumulative analysis
 ''' </summary>
-Public Class Cumulative
+Friend Class Cumulative
     Inherits Analysis
 
 #Region "Properties"

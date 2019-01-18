@@ -33,7 +33,7 @@
 ''' Standard Deviation
 ''' </summary>
 ''' <remarks>http://wiki.bluemodel.org/index.php/Wave:MonthlyStatistics</remarks>
-Public Class MonthlyStatistics
+Friend Class MonthlyStatistics
     Inherits Analysis
 
 #Region "Data structures"
@@ -228,7 +228,7 @@ Public Class MonthlyStatistics
         Me.mResultText = "Monthly statistics have been calculated." & eol
         Me.mResultText &= "Result data:" & eol
         'header line
-        Me.mResultText &= "Name;average;median;min;max;stddev" &eol
+        Me.mResultText &= "Name;average;median;min;max;stddev" & eol
 
         'data
         For Each month As monthType In Me.result.months

@@ -34,7 +34,7 @@ Public MustInherit Class FileFormatBase
     ''' FileFormats
     ''' </summary>
     ''' <remarks></remarks>
-    Public Enum FileFormats As Integer
+    Friend Enum FileFormats As Integer
         ZRE = 1
         WEL = 2
         CSV = 3
@@ -55,7 +55,7 @@ Public MustInherit Class FileFormatBase
     ''' FileFilter for file dialogs
     ''' </summary>
     ''' <remarks></remarks>
-    Public Const FileFilter As String = _
+    Friend Const FileFilter As String = _
             "All files (*.*)|*.*|" & _
             "Text files (*.txt)|*.txt|" & _
             "CSV files (*.csv)|*.csv|" & _
@@ -116,7 +116,7 @@ Public MustInherit Class FileFormatBase
     ''' <summary>
     ''' Instance of the ImportDialog
     ''' </summary>
-    Public ImportDiag As ImportDiag
+    Friend ImportDiag As ImportDiag
 
 #End Region 'Eigenschaften
 

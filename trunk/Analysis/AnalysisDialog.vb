@@ -25,7 +25,7 @@
 'EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 '--------------------------------------------------------------------------------------------
 '
-Public Class AnalysisDialog
+Friend Class AnalysisDialog
 
     '*************************************************************
     'Dialog zur Auswahl von Zeitreihe(n) und einer Analysefunktion

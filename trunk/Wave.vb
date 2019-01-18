@@ -2527,7 +2527,7 @@ Public Class Wave
     ''' Führt Standardformatierung eines TCharts aus
     ''' </summary>
     ''' <param name="chart"></param>
-    Public Shared Sub formatChart(ByRef chart As Steema.TeeChart.Chart)
+    Friend Shared Sub formatChart(ByRef chart As Steema.TeeChart.Chart)
 
         chart.Aspect.View3D = False
         'chart.BackColor = Color.White

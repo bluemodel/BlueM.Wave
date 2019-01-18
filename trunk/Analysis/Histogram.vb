@@ -29,7 +29,7 @@
 ''' Histogram and density estimation
 ''' </summary>
 ''' <remarks>http://wiki.bluemodel.org/index.php/Wave:Histogram</remarks>
-Public Class Histogram
+Friend Class Histogram
     Inherits Analysis
 
     Private n_breaks As Integer

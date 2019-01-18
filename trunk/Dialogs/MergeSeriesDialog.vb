@@ -27,7 +27,7 @@
 '
 Imports System.Windows.Forms
 
-Public Class MergeSeriesDialog
+Friend Class MergeSeriesDialog
 
     ''' <summary>
     ''' Returns the list of selected series titles, ordered by priority (highest first)

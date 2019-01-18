@@ -29,7 +29,7 @@
 ''' Calculates annual statistics (min, max, avg, vol) based on hydrological years
 ''' </summary>
 ''' <remarks></remarks>
-Public Class AnnualStatistics
+Friend Class AnnualStatistics
     Inherits Analysis
 
     Public Structure struct_stat

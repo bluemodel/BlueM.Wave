@@ -27,7 +27,7 @@
 '
 Imports System.IO
 
-Partial Public Class ImportDiag
+Friend Class ImportDiag
     Inherits System.Windows.Forms.Form
 
 #Region "Eigenschaften"
@@ -113,7 +113,7 @@ Partial Public Class ImportDiag
         Me.Label_File.Text &= " " & Path.GetFileName(Me.datei.File)
 
         'Workaround for SWMM5 binary output files (*.OUT)
-        If IO.Path.GetExtension(Me.datei.file).ToUpper() = FileFactory.FileExtOUT Then
+        If IO.Path.GetExtension(Me.datei.File).ToUpper() = FileFactory.FileExtOUT Then
             Me.TextBox_Preview.Text = Path.GetFileName(Me.datei.File) & " is a SWMM 5 binary output file." & eol & "Preview is not available!"
             'Disable all other fields
             Me.GroupBox_Dateformat.Enabled = False

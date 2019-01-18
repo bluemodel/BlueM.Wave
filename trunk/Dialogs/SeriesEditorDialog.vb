@@ -28,7 +28,7 @@
 'Dialog zum Eingeben einer Zeitreihe
 '###################################
 
-Public Class SeriesEditorDialog
+Friend Class SeriesEditorDialog
 
     Private IsInitializing As Boolean
     Private mZeitreihe As TimeSeries

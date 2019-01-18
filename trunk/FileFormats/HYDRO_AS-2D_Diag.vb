@@ -1,6 +1,6 @@
 ﻿Imports System.Windows.Forms
 
-Public Class HYDRO_AS_2D_Diag
+Friend Class HYDRO_AS_2D_Diag
 
     Public Sub New()
 
