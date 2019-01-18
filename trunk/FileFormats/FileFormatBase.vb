@@ -341,6 +341,7 @@ Public MustInherit Class FileFormatBase
             For Each column As ColumnInfo In Me.Columns
                 If (column.Name = title) Then
                     'select the column for import
+                    ReDim Me.SelectedColumns(-1)
                     Me.selectColumn(column)
                     'read the file (again)
                     Call Me.Read_File()
@@ -371,6 +372,7 @@ Public MustInherit Class FileFormatBase
             For Each column As ColumnInfo In Me.Columns
                 If (column.Index <> Me.DateTimeColumnIndex And column.Index - 1 = index) Then
                     'select the column for import
+                    ReDim Me.SelectedColumns(-1)
                     Me.selectColumn(column)
                     'read the file (again)
                     Call Me.Read_File()
