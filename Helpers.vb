@@ -27,7 +27,7 @@
 '
 Imports System.Globalization
 
-Module Helpers
+Public Module Helpers
 
     ''' <summary>
     ''' Default NumberFormat
