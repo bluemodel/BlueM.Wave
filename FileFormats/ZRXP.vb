@@ -238,6 +238,10 @@ Public Class ZRXP
                 parts = line.Split(New String() {" "}, StringSplitOptions.RemoveEmptyEntries)
                 'parse date
                 datestring = parts(0)
+                If datestring.Length < 14 Then
+                    'fill missing values with 0
+                    datestring = datestring.PadRight(14, "0")
+                End If
                 ok = DateTime.TryParseExact(datestring, Me.Dateformat, Helpers.DefaultNumberFormat, Globalization.DateTimeStyles.None, timestamp)
                 If (Not ok) Then
                     Throw New Exception("Unable to parse the date '" & datestring & "' using the expected date format '" & Me.Dateformat & "'!")
