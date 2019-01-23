@@ -192,6 +192,12 @@
     <Compile Include="Dialogs\PropertiesDialog.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Dialogs\MetadataDialog.Designer.vb">
+      <DependentUpon>MetadataDialog.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\MetadataDialog.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="FileFormats\FileFactory.vb" />
     <Compile Include="FileFormats\FileFormatBase.vb" />
     <Compile Include="FileFormats\HYDRO_AS-2D_Diag.Designer.vb">
@@ -385,6 +391,9 @@
     <EmbeddedResource Include="Dialogs\PropertiesDialog.resx">
       <DependentUpon>PropertiesDialog.vb</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialogs\MetadataDialog.resx">
+      <DependentUpon>MetadataDialog.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FileFormats\HYDRO_AS-2D_Diag.resx">
       <DependentUpon>HYDRO_AS-2D_Diag.vb</DependentUpon>

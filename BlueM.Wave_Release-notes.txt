@@ -5,7 +5,9 @@ Version 1.6.2
 -------------
 NEW:
 * Added metadata handling for time series, metadata is displayed in the series properties dialog
-* Added reading of metadata for file formats UVF and ZRXP
+* Implemented reading of metadata for file formats UVF and ZRXP
+* Added a dialog for editing metadata
+* Implemented writing of metadata for file format UVF
 * Added a new analysis function "Cumulative" which converts a time series to cumulative values
 * Added write support for the UVF format
 * Added the possibility of specifying custom import settings in Wave project files (*.wvp) (#720)
@@ -21,7 +23,7 @@ FIXED:
 * The Reload from Files command now respects the previously made series selection for each file
 * Imported files are no longer kept as file objects in memory (should lead to less memory usage)
 * ZRXP format: the time part of the timestamp is now optional (00:00:00 assumed if missing)
-* UVF format: time series starting before 1900 are now read properly
+* UVF format: fixed reading and writing of time series starting before 1900
 
 Version 1.6.1
 -------------

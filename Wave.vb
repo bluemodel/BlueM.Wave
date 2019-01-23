@@ -814,6 +814,54 @@ Public Class Wave
             zres.Add(CType(item, TimeSeries))
         Next
 
+        'process metadata
+        'TODO: assumes a single timeseries is being exported
+        Dim keys As List(Of String)
+        Dim metadata_old As Dictionary(Of String, String)
+        Select Case exportDlg.ComboBox_Format.SelectedItem
+            Case FileFormatBase.FileFormats.UVF
+                keys = UVF.MetadataKeys
+            Case FileFormatBase.FileFormats.ZRXP
+                keys = ZRXP.MetadataKeys
+            Case Else
+                keys = FileFormatBase.MetadataKeys
+        End Select
+        If keys.Count > 0 Then
+            'create a copy of the existing metadata
+            metadata_old = New Dictionary(Of String, String)
+            For Each kvp As KeyValuePair(Of String, String) In zres(0).Metadata
+                metadata_old.Add(kvp.Key, kvp.Value)
+            Next
+            'assign new metadata keys to series
+            zres(0).Metadata.Clear()
+            For Each key As String In keys
+                If metadata_old.ContainsKey(key) Then
+                    'copy old metadata value with the same key
+                    zres(0).Metadata.Add(key, metadata_old(key))
+                Else
+                    'add a new key with an empty value
+                    zres(0).Metadata.Add(key, "")
+                End If
+            Next
+            'set default metadata
+            Select Case exportDlg.ComboBox_Format.SelectedItem
+                Case FileFormatBase.FileFormats.UVF
+                    UVF.setDefaultMetadata(zres(0))
+                Case FileFormatBase.FileFormats.ZRXP
+                    ZRXP.setDefaultMetadata(zres(0))
+                Case Else
+                    FileFormatBase.setDefaultMetadata(zres(0))
+            End Select
+            'show dialog for editing metadata
+            Dim dlg As New MetadataDialog(zres(0).Metadata)
+            dlgResult = dlg.ShowDialog()
+            If Not dlgResult = Windows.Forms.DialogResult.OK Then
+                Exit Sub
+            End If
+            'update metadata in series
+            zres(0).Metadata = dlg.Metadata
+        End If
+
         'Prepare Save dialog
         Me.SaveFileDialog1.Title = "Save as..."
         Me.SaveFileDialog1.AddExtension = True

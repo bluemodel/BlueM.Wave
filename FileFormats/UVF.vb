@@ -48,9 +48,6 @@ Public Class UVF
         End Get
     End Property
 
-    'metadata
-    Private metadata As Dictionary(Of String, String)
-
     ''' <summary>
     ''' Instanziert ein neues UVF Objekt
     ''' </summary>
@@ -65,13 +62,9 @@ Public Class UVF
         Me.UseUnits = True
 
         'instantiate metadata
-        Me.metadata = New Dictionary(Of String, String)
-        Me.metadata.Add("defArt", "")
-        Me.metadata.Add("century", "")
-        Me.metadata.Add("location", "")
-        Me.metadata.Add("coord_X", "")
-        Me.metadata.Add("coord_Y", "")
-        Me.metadata.Add("coord_Z", "")
+        For Each key As String In UVF.MetadataKeys
+            Me.Metadata.Add(key, "")
+        Next
 
         Call Me.ReadColumns()
 
@@ -139,16 +132,6 @@ Public Class UVF
         Dim Zeile As String
         Dim headerFound As Boolean = False
 
-        ReDim Me.Columns(1) ' Jede UVF-Datei enthält nur eine Zeitreihe
-
-        'X-Spalte konfigurieren
-        Me.Columns(0).Name = "Time"
-        Me.Columns(0).Einheit = ""
-        Me.Columns(0).Index = 0
-
-        'Y-Spalte konfigurieren
-        Me.Columns(1).Index = 1
-
         'Header einlesen
         Try
             'Datei öffnen
@@ -172,23 +155,23 @@ Public Class UVF
                 End If
                 If i = iLineHeadings Then
                     'Zeitreihenname einlesen
-                    Me.Columns(1).Name = Zeile.Substring(0, 15).Trim()
+                    Me.Metadata("name") = Zeile.Substring(0, 15).Trim()
                     'Einheit einlesen
-                    Me.Columns(1).Einheit = Zeile.Substring(15, 15).Trim()
+                    Me.Metadata("unit") = Zeile.Substring(15, 15).Trim()
                     'DefArt oder Anfangsjahrhundert einlesen, falls vorhanden
                     If Zeile.Length > 30 Then
                         If Zeile.Substring(30, 1) = "I" Or _
                            Zeile.Substring(30, 1) = "K" Or _
                            Zeile.Substring(30, 1) = "M" Then
-                            Me.metadata("defArt") = Zeile.Substring(30, 1)
+                            Me.Metadata("defArt") = Zeile.Substring(30, 1)
                         ElseIf Regex.IsMatch(Zeile.Substring(30, 4), "\d\d\d\d") Then
                             'Anfangsjahrhundert ist angegeben
-                            Me.metadata("century") = Zeile.Substring(30, 4)
+                            Me.Metadata("century") = Zeile.Substring(30, 4)
                         End If
                     End If
                     'Anfangsjahrhundert auf 1900 setzen, falls nicht angegeben
-                    If Me.metadata("century") = "" Then
-                        Me.metadata("century") = "1900"
+                    If Me.Metadata("century") = "" Then
+                        Me.Metadata("century") = "1900"
                         Log.AddLogEntry("UVF: Starting century is not specified, assuming 1900.")
                     End If
                     Continue Do
@@ -196,14 +179,10 @@ Public Class UVF
                 If i = iLineHeadings + 1 Then
                     'Ort und Lage einlesen
                     Try
-                        Me.metadata("location") = Zeile.Substring(0, Math.Min(Zeile.Length, 15)).Trim()
-                        If Me.metadata("location") <> "" Then
-                            'append location to series title
-                            Me.Columns(1).Name &= " - " & Me.metadata("location")
-                        End If
-                        Me.metadata("coord_X") = Zeile.Substring(15, 10).Trim()
-                        Me.metadata("coord_Y") = Zeile.Substring(25, 10).Trim()
-                        Me.metadata("coord_Z") = Zeile.Substring(35).Trim()
+                        Me.Metadata("location") = Zeile.Substring(0, Math.Min(Zeile.Length, 15)).Trim()
+                        Me.Metadata("coord_X") = Zeile.Substring(15, 10).Trim()
+                        Me.Metadata("coord_Y") = Zeile.Substring(25, 10).Trim()
+                        Me.Metadata("coord_Z") = Zeile.Substring(35).Trim()
                         Exit Do
                     Catch ex As Exception
                         'do nothing
@@ -215,6 +194,22 @@ Public Class UVF
             StrReadSync.Close()
             StrRead.Close()
             FiStr.Close()
+
+            ReDim Me.Columns(1) ' Jede UVF-Datei enthält nur eine Zeitreihe
+
+            'X-Spalte konfigurieren
+            Me.Columns(0).Name = "Time"
+            Me.Columns(0).Einheit = ""
+            Me.Columns(0).Index = 0
+
+            'Y-Spalte konfigurieren
+            Me.Columns(1).Index = 1
+            Me.Columns(1).Name = Me.Metadata("name")
+            If Me.Metadata("location") <> "" Then
+                'append location to series title
+                Me.Columns(1).Name &= " - " & Me.Metadata("location")
+            End If
+            Me.Columns(1).Einheit = Me.Metadata("unit")
 
             If Not headerFound Then
                 Throw New Exception("The file does not contain a header line starting with '*Z'!")
@@ -300,6 +295,44 @@ Public Class UVF
     End Sub
 
     ''' <summary>
+    ''' Returns a list of UVF-specific metadata keys
+    ''' </summary>
+    Public Overloads Shared ReadOnly Property MetadataKeys() As List(Of String)
+        Get
+            Dim keys As New List(Of String)
+            keys.Add("name")
+            keys.Add("unit")
+            keys.Add("defArt")
+            keys.Add("century")
+            keys.Add("location")
+            keys.Add("coord_X")
+            keys.Add("coord_Y")
+            keys.Add("coord_Z")
+            Return keys
+        End Get
+    End Property
+
+    ''' <summary>
+    ''' Sets default metadata values for a time series corresponding to the UVF file format
+    ''' </summary>
+    Public Overloads Shared Sub setDefaultMetadata(ByVal ts As TimeSeries)
+        'Make sure all required keys exist
+        For Each key As String In UVF.MetadataKeys
+            If Not ts.Metadata.ContainsKey(key) Then
+                ts.Metadata.Add(key, "")
+            End If
+        Next
+        'Set default values
+        If ts.Metadata("name") = "" Then ts.Metadata("name") = ts.Title
+        If ts.Metadata("unit") = "" Then ts.Metadata("unit") = ts.Unit
+        If ts.Metadata("century") = "" Then ts.Metadata("century") = Math.Floor(ts.StartDate.Year / 100) * 100
+        If ts.Metadata("location") = "" Then ts.Metadata("location") = "unknown"
+        If ts.Metadata("coord_X") = "" Then ts.Metadata("coord_X") = "0"
+        If ts.Metadata("coord_Y") = "" Then ts.Metadata("coord_Y") = "0"
+        If ts.Metadata("coord_Z") = "" Then ts.Metadata("coord_Z") = "0"
+    End Sub
+
+    ''' <summary>
     ''' Exports a time series to a file in the UVF format
     ''' </summary>
     ''' <param name="ts">the time series to export</param>
@@ -311,30 +344,26 @@ Public Class UVF
         'http://aquaplan.de/public_papers/imex/sectionUVF.html
 
         Dim strwrite As StreamWriter
-        Dim title, unit, century, timestamp, value As String
+        Dim name, unit, century, timestamp, value As String
         Dim i As Integer
+
+        'set default metadata
+        Call UVF.setDefaultMetadata(ts)
 
         strwrite = New StreamWriter(file, False, System.Text.Encoding.GetEncoding("iso8859-1"))
 
         '1st line
         strwrite.WriteLine("*Z")
-        '2nd line: title, unit and centuries
-        title = ts.Title
-        If title.Length > 15 Then
-            title = title.Substring(0, 15)
-        Else
-            title = title.PadRight(15)
-        End If
-        unit = ts.Unit
-        If unit.Length > 15 Then
-            unit = unit.Substring(0, 15)
-        Else
-            unit = unit.PadRight(15)
-        End If
+        '2nd line: name, unit and centuries
+        name = ts.Metadata("name").PadRight(15).Substring(0, 15)
+        unit = ts.Metadata("unit").PadRight(15).Substring(0, 15)
         century = Math.Floor(ts.StartDate.Year / 100) * 100 & " " & Math.Floor(ts.EndDate.Year / 100) * 100
-        strwrite.WriteLine(title & unit & century)
+        strwrite.WriteLine(name & unit & century)
         '3rd line: location
-        strwrite.WriteLine("undefined         0         0          0     ")
+        strwrite.WriteLine(ts.Metadata("location").PadRight(15).Substring(0, 15) & _
+                           ts.Metadata("coord_X").PadRight(10).Substring(0, 10) & _
+                           ts.Metadata("coord_Y").PadRight(10).Substring(0, 10) & _
+                           ts.Metadata("coord_Z").PadRight(10).Substring(0, 10))
         '4th line: start and end date (without the first two digits)
         strwrite.WriteLine(ts.StartDate.ToString(DateFormats("UVF")).Substring(2) & ts.EndDate.ToString(DateFormats("UVF")).Substring(2))
         'from 5th line onwards: values
