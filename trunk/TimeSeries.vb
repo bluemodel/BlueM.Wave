@@ -337,6 +337,9 @@ Public Class TimeSeries
         target.Objekt = Me.Objekt
         target.Type = Me.Type
         target._nodes = New SortedList(Of DateTime, Double)(Me._nodes)
+        For Each kvp As KeyValuePair(Of String, String) In Me.Metadata
+            target.Metadata.Add(kvp.Key, kvp.Value)
+        Next
         Return target
     End Function
 
