@@ -33,6 +33,7 @@ Public Class TimeSeries
     Private _nodes As SortedList(Of DateTime, Double)
     Private _nodesCleaned As SortedList(Of DateTime, Double)
     Private _unit As String
+    Private _metadata As Dictionary(Of String, String)
     Private _Objekt As String
     Private _Type As String
 
@@ -101,11 +102,40 @@ Public Class TimeSeries
     End Property
 
     ''' <summary>
-    ''' The time series ' values
+    ''' The time series' values
     ''' </summary>
     Public ReadOnly Property Values() As IList(Of Double)
         Get
             Return Me._nodes.Values
+        End Get
+    End Property
+
+    ''' <summary>
+    ''' The time series' metadata
+    ''' </summary>
+    Public Property Metadata() As Dictionary(Of String, String)
+        Get
+            Return Me._metadata
+        End Get
+        Set(ByVal value As Dictionary(Of String, String))
+            Me._metadata = value
+        End Set
+    End Property
+
+    ''' <summary>
+    ''' The time series' metadata formatted as a single string
+    ''' </summary>
+    ''' <remarks>Empty entries are omitted from the string</remarks>
+    Public ReadOnly Property MetadataText() As String
+        Get
+            Dim text As String = ""
+            For Each kvp As KeyValuePair(Of String, String) In Me._metadata
+                If kvp.Value <> "" Then
+                    'omit empty entries
+                    text &= kvp.Key & ": " & kvp.Value & ", "
+                End If
+            Next
+            Return text
         End Get
     End Property
 
@@ -288,6 +318,7 @@ Public Class TimeSeries
         Me._Objekt = "-"
         Me._Type = "-"
         Me._nodes = New SortedList(Of DateTime, Double)
+        Me._metadata = New Dictionary(Of String, String)
     End Sub
 
     ''' <summary>

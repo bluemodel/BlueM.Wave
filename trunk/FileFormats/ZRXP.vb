@@ -47,7 +47,7 @@ Public Class ZRXP
         End Get
     End Property
 
-    'ZRXP-specific metadata
+    'metadata
     Private metadata As Dictionary(Of String, String)
 
     ''' <summary>
@@ -221,6 +221,9 @@ Public Class ZRXP
             ReDim Me.TimeSeries(0)
             Me.TimeSeries(0) = New TimeSeries(Me.Columns(1).Name)
             Me.TimeSeries(0).Unit = Me.Columns(1).Einheit
+
+            'store metadata
+            Me.TimeSeries(0).Metadata = Me.metadata
 
             'open file
             Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
