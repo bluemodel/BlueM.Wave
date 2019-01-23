@@ -21,6 +21,7 @@ FIXED:
 * The Reload from Files command now respects the previously made series selection for each file
 * Imported files are no longer kept as file objects in memory (should lead to less memory usage)
 * ZRXP format: the time part of the timestamp is now optional (00:00:00 assumed if missing)
+* UVF format: time series starting before 1900 are now read properly
 
 Version 1.6.1
 -------------
