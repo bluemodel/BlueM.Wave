@@ -25,7 +25,9 @@ Partial Class PropertiesDialog
         Me.components = New System.ComponentModel.Container
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(PropertiesDialog))
         Me.DataGridView1 = New System.Windows.Forms.DataGridView
+        Me.TimeSeriesBindingSource = New System.Windows.Forms.BindingSource(Me.components)
         Me.TitleDataGridViewTextBoxColumn = New System.Windows.Forms.DataGridViewTextBoxColumn
+        Me.MetadataText = New System.Windows.Forms.DataGridViewTextBoxColumn
         Me.UnitDataGridViewTextBoxColumn = New System.Windows.Forms.DataGridViewTextBoxColumn
         Me.LengthDataGridViewTextBoxColumn = New System.Windows.Forms.DataGridViewTextBoxColumn
         Me.StartDateDataGridViewTextBoxColumn = New System.Windows.Forms.DataGridViewTextBoxColumn
@@ -37,7 +39,6 @@ Partial Class PropertiesDialog
         Me.LastValueDataGridViewTextBoxColumn = New System.Windows.Forms.DataGridViewTextBoxColumn
         Me.SumDataGridViewTextBoxColumn = New System.Windows.Forms.DataGridViewTextBoxColumn
         Me.VolumeDataGridViewTextBoxColumn = New System.Windows.Forms.DataGridViewTextBoxColumn
-        Me.TimeSeriesBindingSource = New System.Windows.Forms.BindingSource(Me.components)
         CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.TimeSeriesBindingSource, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
@@ -50,10 +51,9 @@ Partial Class PropertiesDialog
                     Or System.Windows.Forms.AnchorStyles.Left) _
                     Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.DataGridView1.AutoGenerateColumns = False
-        Me.DataGridView1.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells
         Me.DataGridView1.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.EnableAlwaysIncludeHeaderText
         Me.DataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.DataGridView1.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.TitleDataGridViewTextBoxColumn, Me.UnitDataGridViewTextBoxColumn, Me.LengthDataGridViewTextBoxColumn, Me.StartDateDataGridViewTextBoxColumn, Me.EndDateDataGridViewTextBoxColumn, Me.MinimumDataGridViewTextBoxColumn, Me.MaximumDataGridViewTextBoxColumn, Me.AverageDataGridViewTextBoxColumn, Me.FirstValueDataGridViewTextBoxColumn, Me.LastValueDataGridViewTextBoxColumn, Me.SumDataGridViewTextBoxColumn, Me.VolumeDataGridViewTextBoxColumn})
+        Me.DataGridView1.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.TitleDataGridViewTextBoxColumn, Me.MetadataText, Me.UnitDataGridViewTextBoxColumn, Me.LengthDataGridViewTextBoxColumn, Me.StartDateDataGridViewTextBoxColumn, Me.EndDateDataGridViewTextBoxColumn, Me.MinimumDataGridViewTextBoxColumn, Me.MaximumDataGridViewTextBoxColumn, Me.AverageDataGridViewTextBoxColumn, Me.FirstValueDataGridViewTextBoxColumn, Me.LastValueDataGridViewTextBoxColumn, Me.SumDataGridViewTextBoxColumn, Me.VolumeDataGridViewTextBoxColumn})
         Me.DataGridView1.DataSource = Me.TimeSeriesBindingSource
         Me.DataGridView1.Location = New System.Drawing.Point(13, 13)
         Me.DataGridView1.Name = "DataGridView1"
@@ -63,13 +63,27 @@ Partial Class PropertiesDialog
         Me.DataGridView1.Size = New System.Drawing.Size(439, 237)
         Me.DataGridView1.TabIndex = 1
         '
+        'TimeSeriesBindingSource
+        '
+        Me.TimeSeriesBindingSource.DataSource = GetType(BlueM.Wave.TimeSeries)
+        '
         'TitleDataGridViewTextBoxColumn
         '
+        Me.TitleDataGridViewTextBoxColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells
         Me.TitleDataGridViewTextBoxColumn.DataPropertyName = "Title"
+        Me.TitleDataGridViewTextBoxColumn.Frozen = True
         Me.TitleDataGridViewTextBoxColumn.HeaderText = "Title"
         Me.TitleDataGridViewTextBoxColumn.Name = "TitleDataGridViewTextBoxColumn"
         Me.TitleDataGridViewTextBoxColumn.ReadOnly = True
         Me.TitleDataGridViewTextBoxColumn.Width = 52
+        '
+        'MetadataText
+        '
+        Me.MetadataText.DataPropertyName = "MetadataText"
+        Me.MetadataText.HeaderText = "Metadata"
+        Me.MetadataText.Name = "MetadataText"
+        Me.MetadataText.ReadOnly = True
+        Me.MetadataText.Width = 77
         '
         'UnitDataGridViewTextBoxColumn
         '
@@ -159,10 +173,6 @@ Partial Class PropertiesDialog
         Me.VolumeDataGridViewTextBoxColumn.ReadOnly = True
         Me.VolumeDataGridViewTextBoxColumn.Width = 67
         '
-        'TimeSeriesBindingSource
-        '
-        Me.TimeSeriesBindingSource.DataSource = GetType(BlueM.Wave.TimeSeries)
-        '
         'PropertiesDialog
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -183,6 +193,7 @@ Partial Class PropertiesDialog
     Friend WithEvents DataGridView1 As System.Windows.Forms.DataGridView
     Friend WithEvents TimeSeriesBindingSource As System.Windows.Forms.BindingSource
     Friend WithEvents TitleDataGridViewTextBoxColumn As System.Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents MetadataText As System.Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents UnitDataGridViewTextBoxColumn As System.Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents LengthDataGridViewTextBoxColumn As System.Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents StartDateDataGridViewTextBoxColumn As System.Windows.Forms.DataGridViewTextBoxColumn

@@ -27,6 +27,7 @@
 '
 Imports System.IO
 Imports System.Globalization
+Imports System.Text.RegularExpressions
 
 ''' <summary>
 ''' Klasse für UVF Dateiformat
@@ -47,13 +48,8 @@ Public Class UVF
         End Get
     End Property
 
-    ' UVF-spezifische Metadaten
-    Private _defArt As String
-    Private _jahrhundert As Integer
-    Private _ort As String
-    Private _lage_X As Double
-    Private _lage_Y As Double
-    Private _lage_Z As Double
+    'metadata
+    Private metadata As Dictionary(Of String, String)
 
     ''' <summary>
     ''' Instanziert ein neues UVF Objekt
@@ -67,6 +63,15 @@ Public Class UVF
         'Voreinstellungen
         Me.Dateformat = Helpers.DateFormats("UVF")
         Me.UseUnits = True
+
+        'instantiate metadata
+        Me.metadata = New Dictionary(Of String, String)
+        Me.metadata.Add("defArt", "")
+        Me.metadata.Add("century", "")
+        Me.metadata.Add("location", "")
+        Me.metadata.Add("coord_X", "")
+        Me.metadata.Add("coord_Y", "")
+        Me.metadata.Add("coord_Z", "")
 
         Call Me.ReadColumns()
 
@@ -154,8 +159,11 @@ Public Class UVF
             Do
                 Zeile = StrReadSync.ReadLine.ToString()
                 i += 1
-                If Zeile.StartsWith("$") Then Continue Do ' Kommentarzeile
-                If Zeile.ToLower.StartsWith("*z") Then    ' Hier fängt der Header an
+                If Zeile.StartsWith("$") Then
+                    'Kommentarzeile
+                    'TODO: store comments as metadata
+                    Continue Do
+                ElseIf Zeile.ToLower.StartsWith("*z") Then    ' Hier fängt der Header an
                     headerFound = True
                     iLineHeadings = i + 1
                     iLineUnits = i + 1
@@ -168,21 +176,19 @@ Public Class UVF
                     'Einheit einlesen
                     Me.Columns(1).Einheit = Zeile.Substring(15, 15).Trim()
                     'DefArt oder Anfangsjahrhundert einlesen, falls vorhanden
-                    Me._jahrhundert = 0
                     If Zeile.Length > 30 Then
                         If Zeile.Substring(30, 1) = "I" Or _
                            Zeile.Substring(30, 1) = "K" Or _
                            Zeile.Substring(30, 1) = "M" Then
-                            Me._defArt = Zeile.Substring(30, 1)
-                        ElseIf Zeile.Substring(30, 4) = "1900" Or _
-                               Zeile.Substring(30, 4) = "2000" Then
+                            Me.metadata("defArt") = Zeile.Substring(30, 1)
+                        ElseIf Regex.IsMatch(Zeile.Substring(30, 4), "\d\d\d\d") Then
                             'Anfangsjahrhundert ist angegeben
-                            Me._jahrhundert = Zeile.Substring(30, 4)
+                            Me.metadata("century") = Zeile.Substring(30, 4)
                         End If
                     End If
                     'Anfangsjahrhundert auf 1900 setzen, falls nicht angegeben
-                    If Me._jahrhundert = 0 Then
-                        Me._jahrhundert = 1900
+                    If Me.metadata("century") = "" Then
+                        Me.metadata("century") = "1900"
                         Log.AddLogEntry("UVF: Starting century is not specified, assuming 1900.")
                     End If
                     Continue Do
@@ -190,14 +196,14 @@ Public Class UVF
                 If i = iLineHeadings + 1 Then
                     'Ort und Lage einlesen
                     Try
-                        Me._ort = Zeile.Substring(0, Math.Min(Zeile.Length, 15)).Trim()
-                        If Me._ort <> "" Then
-                            'append Ort to series title
-                            Me.Columns(1).Name &= " - " & Me._ort
+                        Me.metadata("location") = Zeile.Substring(0, Math.Min(Zeile.Length, 15)).Trim()
+                        If Me.metadata("location") <> "" Then
+                            'append location to series title
+                            Me.Columns(1).Name &= " - " & Me.metadata("location")
                         End If
-                        Me._lage_X = Zeile.Substring(15, 10)
-                        Me._lage_Y = Zeile.Substring(25, 10)
-                        Me._lage_Z = Zeile.Substring(35)
+                        Me.metadata("coord_X") = Zeile.Substring(15, 10).Trim()
+                        Me.metadata("coord_Y") = Zeile.Substring(25, 10).Trim()
+                        Me.metadata("coord_Z") = Zeile.Substring(35).Trim()
                         Exit Do
                     Catch ex As Exception
                         'do nothing
@@ -226,7 +232,7 @@ Public Class UVF
     ''' <remarks></remarks>
     Public Overrides Sub Read_File()
 
-        Dim i, year, year_prev As Integer
+        Dim i, year, year_prev, century As Integer
         Dim Zeile As String
         Dim datumstring, datumstringExt As String
         Dim datum As DateTime
@@ -238,6 +244,9 @@ Public Class UVF
             ReDim Me.TimeSeries(0)
             Me.TimeSeries(0) = New TimeSeries(Me.Columns(1).Name)
             Me.TimeSeries(0).Unit = Me.Columns(1).Einheit
+
+            'store metadata
+            Me.TimeSeries(0).Metadata = Me.metadata
 
             'Datei öffnen
             Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
@@ -253,7 +262,8 @@ Public Class UVF
             Next
 
             'Daten
-            year_prev = Integer.Parse(Me._jahrhundert.ToString.Substring(2)) 'Aus Anfangsjahrhundert
+            century = Integer.Parse(Me.metadata("century"))
+            year_prev = Integer.Parse(century.ToString().Substring(2)) 'Aus Anfangsjahrhundert
             Do
                 Zeile = StrReadSync.ReadLine.ToString()
                 'Datum lesen
@@ -262,11 +272,11 @@ Public Class UVF
                 'Jahrhundert bestimmen
                 If year - year_prev < 0 Then
                     'neues Jahrhundert
-                    Me._jahrhundert += 100
+                    century += 100
                 End If
                 year_prev = year
                 'Jahrhundert voranstellen
-                datumstringExt = Me._jahrhundert.ToString.Substring(0, 2) & datumstring
+                datumstringExt = century.ToString().Substring(0, 2) & datumstring
                 'parse it
                 ok = DateTime.TryParseExact(datumstringExt, Me.Dateformat, Helpers.DefaultNumberFormat, Globalization.DateTimeStyles.None, datum)
                 If (Not ok) Then
