@@ -47,9 +47,6 @@ Public Class ZRXP
         End Get
     End Property
 
-    'metadata
-    Private metadata As Dictionary(Of String, String)
-
     ''' <summary>
     ''' Instantiates a new ZRXP object
     ''' </summary>
@@ -64,25 +61,9 @@ Public Class ZRXP
         Me.UseUnits = True
 
         'instantiate metadata
-        Me.metadata = New Dictionary(Of String, String)
-        Me.metadata.Add("ZRXPVERSION", "")
-        Me.metadata.Add("ZRXPMODE", "")
-        Me.metadata.Add("ZRXPCREATOR", "")
-        Me.metadata.Add("TZ", "")
-        Me.metadata.Add("SANR", "")
-        Me.metadata.Add("SNAME", "")
-        Me.metadata.Add("SWATER", "")
-        Me.metadata.Add("CNR", "")
-        Me.metadata.Add("CNAME", "")
-        Me.metadata.Add("CTYPE", "")
-        Me.metadata.Add("CMW", "")
-        Me.metadata.Add("RTIMELVL", "")
-        Me.metadata.Add("CUNIT", "")
-        Me.metadata.Add("RINVAL", "")
-        Me.metadata.Add("RNR", "")
-        Me.metadata.Add("RTYPE", "")
-        Me.metadata.Add("RORPR", "")
-        Me.metadata.Add("LAYOUT", "")
+        For Each key As String In ZRXP.MetadataKeys
+            Me.Metadata.Add(key, "")
+        Next
 
         Call Me.ReadColumns()
 
@@ -172,7 +153,7 @@ Public Class ZRXP
                         For Each key As String In keys
                             If block.StartsWith(key) Then
                                 value = block.Substring(key.Length)
-                                Me.metadata(key) = value
+                                Me.Metadata(key) = value
                             End If
                         Next
                     Next
@@ -195,8 +176,8 @@ Public Class ZRXP
             Me.Columns(0).Einheit = ""
 
             Me.Columns(1).Index = 1
-            Me.Columns(1).Name = Me.metadata("SNAME") & "." & Me.metadata("CNAME")
-            Me.Columns(1).Einheit = Me.metadata("CUNIT")
+            Me.Columns(1).Name = Me.Metadata("SNAME") & "." & Me.Metadata("CNAME")
+            Me.Columns(1).Einheit = Me.Metadata("CUNIT")
 
         Catch ex As Exception
             MsgBox("Unable to read file!" & eol & eol & "Error: " & ex.Message, MsgBoxStyle.Critical, "Error")
@@ -264,6 +245,54 @@ Public Class ZRXP
             MsgBox("Error while parsing file!" & eol & eol & "Error: " & ex.Message, MsgBoxStyle.Critical, "Error")
         End Try
 
+    End Sub
+
+    ''' <summary>
+    ''' Returns a list of ZRXP-specific metadata keys
+    ''' </summary>
+    Public Overloads Shared ReadOnly Property MetadataKeys() As List(Of String)
+        Get
+            Dim keys As New List(Of String)
+            keys.Add("ZRXPVERSION")
+            keys.Add("ZRXPMODE")
+            keys.Add("ZRXPCREATOR")
+            keys.Add("TZ")
+            keys.Add("SANR")
+            keys.Add("SNAME")
+            keys.Add("SWATER")
+            keys.Add("CNR")
+            keys.Add("CNAME")
+            keys.Add("CTYPE")
+            keys.Add("CMW")
+            keys.Add("RTIMELVL")
+            keys.Add("CUNIT")
+            keys.Add("RINVAL")
+            keys.Add("RNR")
+            keys.Add("RTYPE")
+            keys.Add("RORPR")
+            keys.Add("LAYOUT")
+            Return keys
+        End Get
+    End Property
+
+    ''' <summary>
+    ''' Sets default metadata values for a time series corresponding to the ZRXP file format
+    ''' </summary>
+    Public Overloads Shared Sub setDefaultMetadata(ByVal ts As TimeSeries)
+        'Make sure all required keys exist
+        For Each key As String In ZRXP.MetadataKeys
+            If Not ts.Metadata.ContainsKey(key) Then
+                ts.Metadata.Add(key, "")
+            End If
+        Next
+        'Set default values
+        If ts.Metadata("ZRXPVERSION") = "" Then ts.Metadata("ZRXPVERSION") = "3014.03"
+        If ts.Metadata("ZRXPCREATOR") = "" Then ts.Metadata("ZRXPCREATOR") = "BlueM.Wave"
+        If ts.Metadata("SNAME") = "" Then ts.Metadata("SNAME") = ts.Title
+        If ts.Metadata("SANR") = "" Then ts.Metadata("SANR") = "0"
+        If ts.Metadata("CUNIT") = "" Then ts.Metadata("CUNIT") = ts.Unit
+        If ts.Metadata("RINVAL") = "" Then ts.Metadata("RINVAL") = "-777.0"
+        If ts.Metadata("LAYOUT") = "" Then ts.Metadata("LAYOUT") = "(timestamp,value)"
     End Sub
 
 End Class
