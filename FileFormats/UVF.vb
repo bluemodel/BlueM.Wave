@@ -331,16 +331,7 @@ Public Class UVF
         Else
             unit = unit.PadRight(15)
         End If
-        If ts.StartDate < New DateTime(2000, 1, 1) Then
-            century = "1900"
-        Else
-            century = "2000"
-        End If
-        If ts.EndDate < New DateTime(2000, 1, 1) Then
-            century &= " 1900"
-        Else
-            century &= " 2000"
-        End If
+        century = Math.Floor(ts.StartDate.Year / 100) * 100 & " " & Math.Floor(ts.EndDate.Year / 100) * 100
         strwrite.WriteLine(title & unit & century)
         '3rd line: location
         strwrite.WriteLine("undefined         0         0          0     ")
