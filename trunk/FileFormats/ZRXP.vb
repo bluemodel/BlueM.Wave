@@ -250,7 +250,9 @@ Public Class ZRXP
             StrRead.Close()
             FiStr.Close()
 
-            Log.AddLogEntry("The file contained " & errorcount & " error values (" & Me.Metadata("RINVAL") & "), which were converted to NaN!")
+            If errorcount > 0 Then
+                Log.AddLogEntry("The file contained " & errorcount & " error values (" & Me.Metadata("RINVAL") & "), which were converted to NaN!")
+            End If
 
         Catch ex As Exception
             MsgBox("Error while parsing file!" & eol & eol & "Error: " & ex.Message, MsgBoxStyle.Critical, "Error")
