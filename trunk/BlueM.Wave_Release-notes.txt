@@ -27,6 +27,8 @@ FIXED:
 * The Reload from Files command now respects the previously made series selection for each file
 * Imported files are no longer kept as file objects in memory (should lead to less memory usage)
 * ZRXP format: the time part of the timestamp is now optional (00:00:00 assumed if missing)
+* ZRXP format: values equal to the error value specified as "RINVAL" in the file header are 
+  converted to NaN during import
 * UVF format: fixed reading and writing of time series starting before 1900
 API-CHANGES:
 * The function TimeSeries.getCleanZRE() has been replaced with two separate functions:
