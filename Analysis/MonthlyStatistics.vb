@@ -172,7 +172,7 @@ Friend Class MonthlyStatistics
         Dim N As Long
         Dim sum, sumofsquares As Double
 
-        reihe = Me.mZeitreihen.Item(0).getCleanZRE()
+        reihe = Me.mZeitreihen.Item(0).removeNaNValues()
 
         'Sort values into months
         For i = 0 To reihe.Length - 1

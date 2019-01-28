@@ -144,6 +144,12 @@
     <Compile Include="Dialogs\ChangeTimestepDialog.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Dialogs\ConvertErrorValuesDialog.Designer.vb">
+      <DependentUpon>ConvertErrorValuesDialog.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\ConvertErrorValuesDialog.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Dialogs\CutDialog.Designer.vb">
       <DependentUpon>CutDialog.vb</DependentUpon>
     </Compile>
@@ -166,12 +172,6 @@
       <DependentUpon>MergeSeriesDialog.vb</DependentUpon>
     </Compile>
     <Compile Include="Dialogs\MergeSeriesDialog.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Dialogs\RemoveErrorValuesDialog.Designer.vb">
-      <DependentUpon>RemoveErrorValuesDialog.vb</DependentUpon>
-    </Compile>
-    <Compile Include="Dialogs\RemoveErrorValuesDialog.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Dialogs\RenameSeriesDialog.Designer.vb">
@@ -343,6 +343,7 @@
     <None Include="Resources\arrow_join_right.png" />
     <None Include="Resources\arrow_up.png" />
     <None Include="Resources\arrow_down.png" />
+    <None Include="Resources\chart_line_error.png" />
     <Content Include="Resources\chart_magnify.png" />
     <Content Include="Resources\chart_pie.png" />
     <Content Include="Resources\color_wheel.png" />
@@ -360,6 +361,9 @@
       <DependentUpon>ChangeTimestepDialog.vb</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Dialogs\ConvertErrorValuesDialog.resx">
+      <DependentUpon>ConvertErrorValuesDialog.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Dialogs\CutDialog.resx">
       <DependentUpon>CutDialog.vb</DependentUpon>
       <SubType>Designer</SubType>
@@ -374,10 +378,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Dialogs\MergeSeriesDialog.resx">
       <DependentUpon>MergeSeriesDialog.vb</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Dialogs\RemoveErrorValuesDialog.resx">
-      <DependentUpon>RemoveErrorValuesDialog.vb</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Dialogs\RenameSeriesDialog.resx">

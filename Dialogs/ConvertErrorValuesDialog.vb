@@ -28,13 +28,13 @@
 Imports System.Windows.Forms
 
 ''' <summary>
-''' Dialog for removing user-specified error values from series
+''' Dialog for converting user-specified error values in series to NaN
 ''' </summary>
 ''' <remarks></remarks>
-Friend Class RemoveErrorValuesDialog
+Friend Class ConvertErrorValuesDialog
 
-    Public zreOrig As Dictionary(Of String, TimeSeries)
-    Public zreClean As Dictionary(Of String, TimeSeries)
+    Public tsOriginal As Dictionary(Of String, TimeSeries)
+    Public tsConverted As Dictionary(Of String, TimeSeries)
     Public Const labelAlle As String = "- ALL -"
 
     Public Sub New(ByRef zeitreihen As Dictionary(Of String, TimeSeries))
@@ -43,7 +43,7 @@ Friend Class RemoveErrorValuesDialog
         InitializeComponent()
 
         ' Add any initialization after the InitializeComponent() call.
-        Me.zreOrig = zeitreihen
+        Me.tsOriginal = zeitreihen
 
         'populate combobox
         Me.ComboBox_Series.Items.Add(labelAlle)
@@ -63,7 +63,7 @@ Friend Class RemoveErrorValuesDialog
         End If
 
         Dim i As Integer
-        Dim zre, zre_clean As TimeSeries
+        Dim ts, ts_new As TimeSeries
         Dim errorstrings() As String
         Dim errorvalue, errorvalues() As Double
 
@@ -81,21 +81,21 @@ Friend Class RemoveErrorValuesDialog
             End If
         Next
 
-        Me.zreClean = New Dictionary(Of String, TimeSeries)
+        Me.tsConverted = New Dictionary(Of String, TimeSeries)
 
         If Me.ComboBox_Series.SelectedItem.ToString = labelAlle Then
             'clean all series
-            For Each zre In Me.zreOrig.Values
-                zre_clean = zre.getCleanZRE(errorvalues)
-                zre_clean.Title = zre_clean.Title & " (clean)"
-                Me.zreClean.Add(zre_clean.Title, zre_clean)
+            For Each ts In Me.tsOriginal.Values
+                ts_new = ts.convertErrorValues(errorvalues)
+                ts_new.Title = ts_new.Title & " (clean)"
+                Me.tsConverted.Add(ts_new.Title, ts_new)
             Next
         Else
             'clean only the selected series
-            zre = Me.ComboBox_Series.SelectedItem
-            zre_clean = zre.getCleanZRE(errorvalues)
-            zre_clean.Title = zre_clean.Title & " (clean)"
-            Me.zreClean.Add(zre_clean.Title, zre_clean)
+            ts = Me.ComboBox_Series.SelectedItem
+            ts_new = ts.convertErrorValues(errorvalues)
+            ts_new.Title = ts_new.Title & " (clean)"
+            Me.tsConverted.Add(ts_new.Title, ts_new)
         End If
 
         Me.DialogResult = System.Windows.Forms.DialogResult.OK
