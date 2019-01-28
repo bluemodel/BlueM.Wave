@@ -37,6 +37,12 @@ Public Class UVF
     Inherits FileFormatBase
 
     ''' <summary>
+    ''' Error value
+    ''' </summary>
+    ''' <remarks></remarks>
+    Public Const ErrorValue As Double = -777.0
+
+    ''' <summary>
     ''' Ob der Importdialog genutzt werden soll
     ''' </summary>
     ''' <value></value>
@@ -233,6 +239,7 @@ Public Class UVF
         Dim datum As DateTime
         Dim ok As Boolean
         Dim wert As Double
+        Dim errorcount As Integer
 
         Try
             'Zeitreihe instanzieren
@@ -257,8 +264,9 @@ Public Class UVF
             Next
 
             'Daten
-            century = Integer.Parse(Me.metadata("century"))
+            century = Integer.Parse(Me.Metadata("century"))
             year_prev = Integer.Parse(century.ToString().Substring(2)) 'Aus Anfangsjahrhundert
+            errorcount = 0
             Do
                 Zeile = StrReadSync.ReadLine.ToString()
                 'Datum lesen
@@ -279,6 +287,11 @@ Public Class UVF
                 End If
                 'Wert lesen
                 wert = Helpers.StringToDouble(Zeile.Substring(10))
+                If wert = UVF.ErrorValue Then
+                    'convert error value to NaN
+                    wert = Double.NaN
+                    errorcount += 1
+                End If
                 'Stützstelle abspeichern
                 Me.TimeSeries(0).AddNode(datum, wert)
 
@@ -287,6 +300,10 @@ Public Class UVF
             StrReadSync.Close()
             StrRead.Close()
             FiStr.Close()
+
+            If errorcount > 0 Then
+                Log.AddLogEntry("The file contained " & errorcount & " error values (" & UVF.ErrorValue & "), which were converted to NaN!")
+            End If
 
         Catch ex As Exception
             MsgBox("Unable to read file!" & eol & eol & "Error: " & ex.Message, MsgBoxStyle.Critical, "Error")
