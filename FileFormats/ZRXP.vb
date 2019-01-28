@@ -192,7 +192,8 @@ Public Class ZRXP
     Public Overrides Sub Read_File()
 
         Dim line, parts() As String
-        Dim datestring As String
+        Dim datestring, valuestring As String
+        Dim errorcount As Integer
         Dim timestamp As DateTime
         Dim ok As Boolean
         Dim value As Double
@@ -212,6 +213,7 @@ Public Class ZRXP
             Dim StrReadSync = TextReader.Synchronized(StrRead)
 
             'read file
+            errorcount = 0
             Do
                 line = StrReadSync.ReadLine.ToString()
                 'ignore lines starting with "#" and empty lines
@@ -231,7 +233,14 @@ Public Class ZRXP
                     Throw New Exception("Unable to parse the date '" & datestring & "' using the expected date format '" & Me.Dateformat & "'!")
                 End If
                 'parse value
-                value = Helpers.StringToDouble(parts(1))
+                valuestring = parts(1)
+                If valuestring = Me.Metadata("RINVAL") Then
+                    'convert error value to NaN
+                    value = Double.NaN
+                    errorcount += 1
+                Else
+                    value = Helpers.StringToDouble(valuestring)
+                End If
                 'store node
                 Me.TimeSeries(0).AddNode(timestamp, value)
 
@@ -240,6 +249,8 @@ Public Class ZRXP
             StrReadSync.Close()
             StrRead.Close()
             FiStr.Close()
+
+            Log.AddLogEntry("The file contained " & errorcount & " error values (" & Me.Metadata("RINVAL") & "), which were converted to NaN!")
 
         Catch ex As Exception
             MsgBox("Error while parsing file!" & eol & eol & "Error: " & ex.Message, MsgBoxStyle.Critical, "Error")
