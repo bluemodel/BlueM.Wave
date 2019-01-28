@@ -4,6 +4,7 @@ BlueM.Wave Release Notes
 Version 1.6.2
 -------------
 NEW:
+* Added a button for visualizing NaN values of the currently active series
 * Added metadata handling for time series, metadata is displayed in the series properties dialog
 * Implemented reading of metadata for file formats UVF and ZRXP
 * Added a dialog for editing metadata
@@ -19,11 +20,17 @@ NEW:
 * Added the ability to process more clipboard contents from TALSIM 
   (including BIN files and multiple files/series at once) (#695)
 * Added the ability to extract WEL files from WLZIP files of the same name
+CHANGED:
+* The "Remove error values" function has been changed to "Convert error values" and now converts 
+  user-specified error values to NaN
 FIXED:
 * The Reload from Files command now respects the previously made series selection for each file
 * Imported files are no longer kept as file objects in memory (should lead to less memory usage)
 * ZRXP format: the time part of the timestamp is now optional (00:00:00 assumed if missing)
 * UVF format: fixed reading and writing of time series starting before 1900
+API-CHANGES:
+* The function TimeSeries.getCleanZRE() has been replaced with two separate functions:
+  Timeseries.removeNaNValues() and Timeseries.convertErrorValues()
 
 Version 1.6.1
 -------------

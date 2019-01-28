@@ -50,7 +50,9 @@ Partial Class Wave
         Me.ToolStripButton_Cut = New System.Windows.Forms.ToolStripButton
         Me.ToolStripButton_Merge = New System.Windows.Forms.ToolStripButton
         Me.ToolStripButton_ChangeTimestep = New System.Windows.Forms.ToolStripButton
-        Me.ToolStripButton_RemoveErrorValues = New System.Windows.Forms.ToolStripButton
+        Me.ToolStripSeparator8 = New System.Windows.Forms.ToolStripSeparator
+        Me.ToolStripButton_ShowNaNValues = New System.Windows.Forms.ToolStripButton
+        Me.ToolStripButton_ConvertErrorValues = New System.Windows.Forms.ToolStripButton
         Me.ToolStripSeparator7 = New System.Windows.Forms.ToolStripSeparator
         Me.ToolStripButton_Analysis = New System.Windows.Forms.ToolStripButton
         Me.ToolStripButton_Properties = New System.Windows.Forms.ToolStripButton
@@ -149,7 +151,7 @@ Partial Class Wave
         '
         ToolStrip1.AutoSize = False
         ToolStrip1.BackColor = System.Drawing.SystemColors.Control
-        ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButton_New, Me.ToolStripDropDownButton_Open, Me.ToolStripDropDownButton_Save, ToolStripSeparator4, Me.ToolStripButton_Copy, Me.ToolStripButton_Print, ToolStripSeparator2, Me.ToolStripButton_RenameSeries, Me.ToolStripButton_Cut, Me.ToolStripButton_Merge, Me.ToolStripButton_ChangeTimestep, Me.ToolStripButton_RemoveErrorValues, Me.ToolStripSeparator7, Me.ToolStripButton_Analysis, Me.ToolStripButton_Properties, ToolStripSeparator1, Me.ToolStripButton_EditChart, Me.ToolStripButton_ToggleOverview, Me.ToolStripButton_ToggleNavigation, toolStripSeparator, Me.ToolStripButton_NormalMode, Me.ToolStripButton_Zoom, Me.ToolStripButton_Pan, Me.ToolStripSeparator3, Me.ToolStripButton_ZoomPrevious, Me.ToolStripDropDownButton_Help, Me.ToolStripDropDownButton_ZoomToSeries, Me.ToolStripButton_ZoomAll})
+        ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButton_New, Me.ToolStripDropDownButton_Open, Me.ToolStripDropDownButton_Save, ToolStripSeparator4, Me.ToolStripButton_Copy, Me.ToolStripButton_Print, ToolStripSeparator2, Me.ToolStripButton_RenameSeries, Me.ToolStripButton_Cut, Me.ToolStripButton_Merge, Me.ToolStripButton_ChangeTimestep, Me.ToolStripSeparator8, Me.ToolStripButton_ShowNaNValues, Me.ToolStripButton_ConvertErrorValues, Me.ToolStripSeparator7, Me.ToolStripButton_Analysis, Me.ToolStripButton_Properties, ToolStripSeparator1, Me.ToolStripButton_EditChart, Me.ToolStripButton_ToggleOverview, Me.ToolStripButton_ToggleNavigation, toolStripSeparator, Me.ToolStripButton_NormalMode, Me.ToolStripButton_Zoom, Me.ToolStripButton_Pan, Me.ToolStripSeparator3, Me.ToolStripButton_ZoomPrevious, Me.ToolStripDropDownButton_Help, Me.ToolStripDropDownButton_ZoomToSeries, Me.ToolStripButton_ZoomAll})
         ToolStrip1.Location = New System.Drawing.Point(0, 0)
         ToolStrip1.Name = "ToolStrip1"
         ToolStrip1.Size = New System.Drawing.Size(944, 34)
@@ -318,14 +320,29 @@ Partial Class Wave
         Me.ToolStripButton_ChangeTimestep.Size = New System.Drawing.Size(23, 31)
         Me.ToolStripButton_ChangeTimestep.Text = "Change timestep"
         '
-        'ToolStripButton_RemoveErrorValues
+        'ToolStripSeparator8
         '
-        Me.ToolStripButton_RemoveErrorValues.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.ToolStripButton_RemoveErrorValues.Image = CType(resources.GetObject("ToolStripButton_RemoveErrorValues.Image"), System.Drawing.Image)
-        Me.ToolStripButton_RemoveErrorValues.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.ToolStripButton_RemoveErrorValues.Name = "ToolStripButton_RemoveErrorValues"
-        Me.ToolStripButton_RemoveErrorValues.Size = New System.Drawing.Size(23, 31)
-        Me.ToolStripButton_RemoveErrorValues.Text = "Remove error values"
+        Me.ToolStripSeparator8.Name = "ToolStripSeparator8"
+        Me.ToolStripSeparator8.Size = New System.Drawing.Size(6, 34)
+        '
+        'ToolStripButton_ShowNaNValues
+        '
+        Me.ToolStripButton_ShowNaNValues.CheckOnClick = True
+        Me.ToolStripButton_ShowNaNValues.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.ToolStripButton_ShowNaNValues.Image = Global.BlueM.Wave.My.Resources.Resources.chart_line_error
+        Me.ToolStripButton_ShowNaNValues.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ToolStripButton_ShowNaNValues.Name = "ToolStripButton_ShowNaNValues"
+        Me.ToolStripButton_ShowNaNValues.Size = New System.Drawing.Size(23, 31)
+        Me.ToolStripButton_ShowNaNValues.Text = "Visualize NaN values for the currently active series"
+        '
+        'ToolStripButton_ConvertErrorValues
+        '
+        Me.ToolStripButton_ConvertErrorValues.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.ToolStripButton_ConvertErrorValues.Image = CType(resources.GetObject("ToolStripButton_ConvertErrorValues.Image"), System.Drawing.Image)
+        Me.ToolStripButton_ConvertErrorValues.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ToolStripButton_ConvertErrorValues.Name = "ToolStripButton_ConvertErrorValues"
+        Me.ToolStripButton_ConvertErrorValues.Size = New System.Drawing.Size(23, 31)
+        Me.ToolStripButton_ConvertErrorValues.Text = "Convert error values"
         '
         'ToolStripSeparator7
         '
@@ -1250,7 +1267,7 @@ Partial Class Wave
     Friend WithEvents ToolStripSeparator3 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents TableLayoutPanel1 As System.Windows.Forms.TableLayoutPanel
     Friend WithEvents ToolStripButton_ToggleNavigation As System.Windows.Forms.ToolStripButton
-    Friend WithEvents ToolStripButton_RemoveErrorValues As System.Windows.Forms.ToolStripButton
+    Friend WithEvents ToolStripButton_ConvertErrorValues As System.Windows.Forms.ToolStripButton
     Friend WithEvents ToolStripButton_RenameSeries As System.Windows.Forms.ToolStripButton
     Friend WithEvents ToolStripDropDownButton_ZoomToSeries As System.Windows.Forms.ToolStripDropDownButton
     Friend WithEvents ToolStripMenuItem_SaveProjectFile As System.Windows.Forms.ToolStripMenuItem
@@ -1259,5 +1276,7 @@ Partial Class Wave
     Friend WithEvents ToolStripButton_ChangeTimestep As System.Windows.Forms.ToolStripButton
     Friend WithEvents ToolStripSeparator7 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents ToolStripButton_Merge As System.Windows.Forms.ToolStripButton
+    Friend WithEvents ToolStripButton_ShowNaNValues As System.Windows.Forms.ToolStripButton
+    Friend WithEvents ToolStripSeparator8 As System.Windows.Forms.ToolStripSeparator
 
 End Class

@@ -117,8 +117,8 @@ Friend Class Comparison
         End If
 
         'Reihen säubern und zuweisen
-        reihe1 = Me.mZeitreihen(xnummer).getCleanZRE()
-        reihe2 = Me.mZeitreihen(ynummer).getCleanZRE()
+        reihe1 = Me.mZeitreihen(xnummer).removeNaNValues()
+        reihe2 = Me.mZeitreihen(ynummer).removeNaNValues()
 
         'Nur gemeinsame Stützstellen nutzen
         Me.ergebnisreihe = AnalysisHelper.getConcurrentValues(reihe1, reihe2)

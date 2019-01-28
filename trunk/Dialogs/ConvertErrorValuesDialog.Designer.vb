@@ -1,5 +1,5 @@
 ﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
-Partial Class RemoveErrorValuesDialog
+Partial Class ConvertErrorValuesDialog
     Inherits System.Windows.Forms.Form
 
     'Form overrides dispose to clean up the component list.
@@ -22,7 +22,7 @@ Partial Class RemoveErrorValuesDialog
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(RemoveErrorValuesDialog))
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(ConvertErrorValuesDialog))
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel
         Me.OK_Button = New System.Windows.Forms.Button
         Me.Cancel_Button = New System.Windows.Forms.Button
@@ -31,6 +31,7 @@ Partial Class RemoveErrorValuesDialog
         Me.TextBox_errorvalues = New System.Windows.Forms.TextBox
         Me.Label_ErrorValues = New System.Windows.Forms.Label
         Me.Label_note = New System.Windows.Forms.Label
+        Me.Label_Help = New System.Windows.Forms.Label
         Me.TableLayoutPanel1.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -112,13 +113,23 @@ Partial Class RemoveErrorValuesDialog
         Me.Label_note.TabIndex = 5
         Me.Label_note.Text = "(comma-separated)"
         '
-        'RemoveErrorValuesDialog
+        'Label_Help
+        '
+        Me.Label_Help.ForeColor = System.Drawing.SystemColors.ControlDarkDark
+        Me.Label_Help.Location = New System.Drawing.Point(13, 74)
+        Me.Label_Help.Name = "Label_Help"
+        Me.Label_Help.Size = New System.Drawing.Size(121, 32)
+        Me.Label_Help.TabIndex = 6
+        Me.Label_Help.Text = "Converts error values to NaN"
+        '
+        'ConvertErrorValuesDialog
         '
         Me.AcceptButton = Me.OK_Button
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.CancelButton = Me.Cancel_Button
         Me.ClientSize = New System.Drawing.Size(298, 112)
+        Me.Controls.Add(Me.Label_Help)
         Me.Controls.Add(Me.Label_note)
         Me.Controls.Add(Me.Label_ErrorValues)
         Me.Controls.Add(Me.TextBox_errorvalues)
@@ -129,10 +140,10 @@ Partial Class RemoveErrorValuesDialog
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.MaximizeBox = False
         Me.MinimizeBox = False
-        Me.Name = "RemoveErrorValuesDialog"
+        Me.Name = "ConvertErrorValuesDialog"
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = "Remove error values"
+        Me.Text = "Convert error values"
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()
@@ -146,5 +157,6 @@ Partial Class RemoveErrorValuesDialog
     Friend WithEvents TextBox_errorvalues As System.Windows.Forms.TextBox
     Friend WithEvents Label_ErrorValues As System.Windows.Forms.Label
     Friend WithEvents Label_note As System.Windows.Forms.Label
+    Friend WithEvents Label_Help As System.Windows.Forms.Label
 
 End Class

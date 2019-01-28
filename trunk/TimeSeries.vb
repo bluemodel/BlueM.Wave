@@ -81,10 +81,19 @@ Public Class TimeSeries
     End Property
 
     ''' <summary>
-    ''' The time series' nodes, cleaned by omitting NaN and Infinity values
+    ''' The time series' nodes without NaN and Infinity values
     ''' </summary>
-    Private Property NodesCleaned() As SortedList(Of DateTime, Double)
+    ''' <remarks>The cleaned nodes are cached and only created once per instance</remarks>
+    Public Property NodesClean() As SortedList(Of DateTime, Double)
         Get
+            If IsNothing(Me._nodesCleaned) Then
+                Me._nodesCleaned = New SortedList(Of DateTime, Double)
+                For Each node As KeyValuePair(Of DateTime, Double) In Me.Nodes
+                    If Not (Double.IsNaN(node.Value) Or Double.IsInfinity(node.Value)) Then
+                        Me._nodesCleaned.Add(node.Key, node.Value)
+                    End If
+                Next
+            End If
             Return Me._nodesCleaned
         End Get
         Set(ByVal value As SortedList(Of DateTime, Double))
@@ -733,68 +742,89 @@ Public Class TimeSeries
     End Function
 
     ''' <summary>
-    ''' Creates a copy of the time series from which all nodes with values of NaN or +-Infinity have been removed.
+    ''' Creates a copy of the time series in which all nodes with specified error values are converted to NaN
     ''' </summary>
-    ''' <param name="errorvalues">optional additional error values to ignore</param>
+    ''' <param name="errorvalues">array of error values to ignore</param>
     ''' <returns>the cleaned time series</returns>
     ''' <remarks>a tolerance of 0.0001 is used to compare series values to errorvalues</remarks>
-    Public Function getCleanZRE(ByVal ParamArray errorvalues() As Double) As TimeSeries
+    Public Function convertErrorValues(ByVal ParamArray errorvalues() As Double) As TimeSeries
 
         Const tolerance As Double = 0.0001
         Dim isErrorvalue As Boolean
         Dim errorCount As Integer
-        Dim cleanZRE As TimeSeries
+        Dim tsConverted As TimeSeries
 
         'Instantiate a new series
-        cleanZRE = New TimeSeries(Me.Title)
-        cleanZRE.Unit = Me.Unit
-        cleanZRE.Objekt = Me.Objekt
-        cleanZRE.Type = Me.Type
+        tsConverted = New TimeSeries(Me.Title)
 
-        'only get the cleaned nodes once
-        'but if additional error values are provided, force a new clean
-        If IsNothing(Me.NodesCleaned) Or Not IsNothing(errorvalues) Then
-            Log.AddLogEntry(String.Format("Removing error values from series {0}...", Me.Title))
+        'copy metadata
+        tsConverted.Unit = Me.Unit
+        tsConverted.Objekt = Me.Objekt
+        tsConverted.Type = Me.Type
+        tsConverted.Metadata = Me.Metadata
 
-            Me.NodesCleaned = New SortedList(Of DateTime, Double)
-            errorCount = 0
+        Log.AddLogEntry(String.Format("Converting error values from series {0}...", Me.Title))
 
-            For Each node As KeyValuePair(Of DateTime, Double) In Me.Nodes
-                'Check if is error value
-                isErrorvalue = False
-                If (Double.IsNaN(node.Value) Or _
-                    Double.IsInfinity(node.Value)) Then
+        errorCount = 0
+        For Each node As KeyValuePair(Of DateTime, Double) In Me.Nodes
+            'Check if is error value
+            isErrorvalue = False
+            For Each errvalue As Double In errorvalues
+                If Math.Abs(node.Value - errvalue) < tolerance Then
                     isErrorvalue = True
-                Else
-                    For Each errvalue As Double In errorvalues
-                        If Math.Abs(node.Value - errvalue) < tolerance Then
-                            isErrorvalue = True
-                            Exit For
-                        End If
-                    Next
-                End If
-
-                If isErrorvalue Then
-                    'skip the node
-                    errorCount += 1
-                    Call Log.AddLogEntry(String.Format("Removing node at {0} with value {1}", node.Key, node.Value))
-                Else
-                    'copy the node
-                    NodesCleaned.Add(node.Key, node.Value)
+                    Exit For
                 End If
             Next
-
-            'Log
-            If errorCount > 0 Then
-                Call Log.AddLogEntry(Me.Title & ": " & errorCount.ToString() & " nodes were removed!")
+            If isErrorvalue Then
+                'convert the node to NaN
+                tsConverted.AddNode(node.Key, Double.NaN)
+                errorCount += 1
+                Call Log.AddLogEntry(String.Format("Converting node at {0} with value {1} to NaN", node.Key, node.Value))
+            Else
+                'copy the node
+                tsConverted.AddNode(node.Key, node.Value)
             End If
+        Next
 
+        'Log
+        If errorCount > 0 Then
+            Call Log.AddLogEntry(Me.Title & ": " & errorCount.ToString() & " nodes were coverted to NaN!")
         End If
 
-        'assign clean nodes to new series
-        cleanZRE._nodes = NodesCleaned
+        Return tsConverted
 
-        Return cleanZRE
+    End Function
+
+    ''' <summary>
+    ''' Returns a copy of the time series without the nodes having NaN and Infinity values
+    ''' </summary>
+    ''' <returns>the cleaned time series</returns>
+    Public Function removeNaNValues() As TimeSeries
+
+        Dim nanCount As Integer
+        Dim tsCleaned As TimeSeries
+
+        Log.AddLogEntry(String.Format("Removing NaN values from series {0}...", Me.Title))
+
+        'Instantiate a new series
+        tsCleaned = New TimeSeries(Me.Title)
+
+        'copy metadata
+        tsCleaned.Unit = Me.Unit
+        tsCleaned.Objekt = Me.Objekt
+        tsCleaned.Type = Me.Type
+        tsCleaned.Metadata = Me.Metadata
+
+        'copy clean nodes
+        tsCleaned._nodes = Me.NodesClean
+
+        'Log
+        nanCount = Me.Length - tsCleaned.Length
+        If nanCount > 0 Then
+            Call Log.AddLogEntry(Me.Title & ": " & nanCount.ToString() & " nodes were removed!")
+        End If
+
+        Return tsCleaned
 
     End Function
 

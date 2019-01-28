@@ -96,8 +96,8 @@ Friend Class DoubleSumCurve
         Dim zre1, zre2 As TimeSeries
         Dim values(,) As Double
 
-        zre1 = Me.mZeitreihen(0).getCleanZRE()
-        zre2 = Me.mZeitreihen(1).getCleanZRE()
+        zre1 = Me.mZeitreihen(0).removeNaNValues()
+        zre2 = Me.mZeitreihen(1).removeNaNValues()
 
         'nur gemeinsame Stützstellen nutzen
         values = AnalysisHelper.getConcurrentValues(zre1, zre2)

@@ -242,11 +242,11 @@ Friend Class GoodnessOfFit
 
         'Zeitreihen zuweisen (und säubern)
         If (dialog.getNrGemesseneReihe = 1) Then
-            Me.zre_gemessen = Me.mZeitreihen(0).getCleanZRE()
-            Me.zre_simuliert = Me.mZeitreihen(1).getCleanZRE()
+            Me.zre_gemessen = Me.mZeitreihen(0).removeNaNValues()
+            Me.zre_simuliert = Me.mZeitreihen(1).removeNaNValues()
         Else
-            Me.zre_gemessen = Me.mZeitreihen(1).getCleanZRE()
-            Me.zre_simuliert = Me.mZeitreihen(0).getCleanZRE()
+            Me.zre_gemessen = Me.mZeitreihen(1).removeNaNValues()
+            Me.zre_simuliert = Me.mZeitreihen(0).removeNaNValues()
         End If
 
         'Cut series to a common timespan

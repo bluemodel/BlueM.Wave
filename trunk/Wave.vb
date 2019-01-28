@@ -1079,22 +1079,110 @@ Public Class Wave
     End Sub
 
     ''' <summary>
+    ''' Show NaN values button clicked
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    ''' <remarks></remarks>
+    Private Sub ToolStripButton_ShowNaNValues_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_ShowNaNValues.Click
+
+        Dim processSeries As Boolean
+        Dim bandStart, bandEnd As DateTime
+        Dim band As Steema.TeeChart.Tools.ColorBand
+        Dim isNaN, nanFound As Boolean
+
+        If ToolStripButton_ShowNaNValues.Checked Then
+            'Switch visualization of NaN values on
+            'Show color bands for NaN values in the currently active series
+            nanFound = False
+            For Each ts As TimeSeries In Me.Zeitreihen.Values
+                processSeries = False
+                'check if time series is currently active
+                For Each series As Steema.TeeChart.Styles.Series In Me.TChart1.Series
+                    If series.Title = ts.Title Then
+                        If series.Active Then
+                            'process this series
+                            processSeries = True
+                        End If
+                        Exit For
+                    End If
+                Next
+                If processSeries Then
+                    'find beginning and end of nan values
+                    isNaN = False
+                    For i As Integer = 0 To ts.Length - 1
+                        If Not isNaN Then
+                            If Double.IsNaN(ts.Values(i)) Then
+                                'beginning of nan values
+                                isNaN = True
+                                nanFound = True
+                                If i = 0 Then
+                                    bandStart = ts.Dates(i)
+                                Else
+                                    bandStart = ts.Dates(i - 1)
+                                End If
+                            End If
+                        Else
+                            If Not Double.IsNaN(ts.Values(i)) Or i = ts.Length - 1 Then
+                                'end of nan values
+                                bandEnd = ts.Dates(i)
+                                isNaN = False
+
+                                'add a color band
+                                band = New Steema.TeeChart.Tools.ColorBand()
+                                Me.TChart1.Tools.Add(band)
+                                band.Axis = Me.TChart1.Axes.Bottom
+                                band.Start = bandStart.ToOADate()
+                                band.End = bandEnd.ToOADate()
+                                band.Pen.Color = Color.Red
+                                band.Brush.Color = Color.Coral
+                                band.Brush.Transparency = 50
+                                band.ResizeEnd = False
+                                band.ResizeStart = False
+                                band.EndLinePen.Visible = False
+                                band.StartLinePen.Visible = False
+                            End If
+                        End If
+                    Next
+                End If
+            Next
+            If Not nanFound Then
+                MsgBox("No NaN values found in the currently active series!", MsgBoxStyle.Information)
+                Me.ToolStripButton_ShowNaNValues.Checked = False
+            End If
+        Else
+            'Switch visualization of NaN values off
+            'Remove all tools of type ColorBand from TChart1
+            'TODO: Any user-defined ColorBands unfortunately get removed as well!
+            Dim colorbands As New List(Of Steema.TeeChart.Tools.ColorBand)
+            For Each tool As Steema.TeeChart.Tools.Tool In Me.TChart1.Tools
+                If tool.GetType Is GetType(Steema.TeeChart.Tools.ColorBand) Then
+                    colorbands.Add(tool)
+                End If
+            Next
+            For Each colorband As Steema.TeeChart.Tools.ColorBand In colorbands
+                Me.TChart1.Tools.Remove(colorband)
+            Next
+        End If
+    End Sub
+
+    ''' <summary>
     ''' Remove error values button clicked
     ''' </summary>
     ''' <remarks></remarks>
-    Private Sub ToolStripButton_RemoveErrorValues_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_RemoveErrorValues.Click
+    Private Sub ToolStripButton_ConvertErrorValues_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_ConvertErrorValues.Click
         'Abort if no time series available!
         If (Me.Zeitreihen.Count < 1) Then
             MsgBox("No time series available!", MsgBoxStyle.Exclamation, "Wave")
             Exit Sub
         End If
 
-        Dim dlg As New RemoveErrorValuesDialog(Me.Zeitreihen)
+        Dim dlg As New ConvertErrorValuesDialog(Me.Zeitreihen)
         Dim dlgresult As DialogResult = dlg.ShowDialog()
 
         If dlgresult = Windows.Forms.DialogResult.OK Then
             'import cleaned series
-            For Each zre As TimeSeries In dlg.zreClean.Values
+            For Each zre As TimeSeries In dlg.tsConverted.Values
                 Me.Import_Series(zre, True)
             Next
         End If
@@ -2419,9 +2507,6 @@ Public Class Wave
 
         Dim AxisNo As Integer
 
-        'NaN und Infinity-Stützstellen entfernen
-        zre = zre.getCleanZRE()
-
         'Serie zu Diagramm hinzufügen
 
         'Linien instanzieren
@@ -2437,7 +2522,7 @@ Public Class Wave
         Line2.Title = zre.Title
 
         'Punkte zur Serie hinzufügen
-        For Each node As KeyValuePair(Of DateTime, Double) In zre.Nodes
+        For Each node As KeyValuePair(Of DateTime, Double) In zre.NodesClean
             Line1.Add(node.Key, node.Value)
             Line2.Add(node.Key, node.Value)
         Next
