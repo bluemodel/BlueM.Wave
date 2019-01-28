@@ -234,13 +234,13 @@ Public Class ZRXP
                 End If
                 'parse value
                 valuestring = parts(1)
-                If valuestring = Me.Metadata("RINVAL") Then
+                value = Helpers.StringToDouble(valuestring)
+                If value = Convert.ToDouble(Me.Metadata("RINVAL")) Then
                     'convert error value to NaN
                     value = Double.NaN
                     errorcount += 1
-                Else
-                    value = Helpers.StringToDouble(valuestring)
                 End If
+
                 'store node
                 Me.TimeSeries(0).AddNode(timestamp, value)
 
