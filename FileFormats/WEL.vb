@@ -320,7 +320,7 @@ Public Class WEL
     ''' </summary>
     ''' <param name="file">path to WEL file</param>
     ''' <returns>True if successful</returns>
-    ''' <remarks></remarks>
+    ''' <remarks>TALSIM specific</remarks>
     Public Shared Function extractFromWLZIP(ByVal file As String) As Boolean
 
         Dim file_wlzip As String
@@ -328,7 +328,11 @@ Public Class WEL
         Dim filename, dir As String
         Dim fileFound As Boolean = False
 
-        file_wlzip = file.Substring(0, file.Length - 4) & ".WLZIP"
+        If file.ToUpper().EndsWith(".KTR.WEL") Then
+            file_wlzip = file.Substring(0, file.Length - 8) & ".WLZIP"
+        Else
+            file_wlzip = file.Substring(0, file.Length - 4) & ".WLZIP"
+        End If
 
         If IO.File.Exists(file_wlzip) Then
 
@@ -339,7 +343,7 @@ Public Class WEL
             For Each ze In Ionic.Zip.ZipFile.Read(file_wlzip)
                 If ze.FileName.ToLower() = filename.ToLower() Then
                     fileFound = True
-                    Log.AddLogEntry("Extracting " & file_wlzip & " ...")
+                    Log.AddLogEntry("Extracting file from " & file_wlzip & " ...")
                     ze.Extract(dir, Ionic.Zip.ExtractExistingFileAction.OverwriteSilently)
                     Return True
                 End If
