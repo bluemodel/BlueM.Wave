@@ -2385,7 +2385,7 @@ Public Class Wave
         Dim i_series As Integer
         Dim parts() As String
         Dim zreblock As Boolean
-        Dim data As New List(Of Dictionary(Of String, String))
+        Dim data As New List(Of Dictionary(Of String, String)) '[{zreparams1},{zreparams2},...]
         Dim file, name As String
         Dim fileobj As FileFormatBase
         Dim ts As TimeSeries
@@ -2421,7 +2421,12 @@ Public Class Wave
                 Case "4" 'WEL file
 
                     'build series name
-                    name = params("Kennung").PadRight(4, " ") & "_" & params("Zustand")
+                    If params("Kennung") = "ZPG" Then
+                        'handle control groups
+                        name = "KGRP_" & params("Zustand")
+                    Else
+                        name = params("Kennung").PadRight(4, " ") & "_" & params("Zustand")
+                    End If
 
                     'read file
                     Log.AddLogEntry("Loading file " & file & " ...")
