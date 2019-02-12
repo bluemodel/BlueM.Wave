@@ -2382,6 +2382,7 @@ Public Class Wave
         'EndZeitreihe
 
         'parse clipboard contents
+        Dim m As Match
         Dim i_series As Integer
         Dim parts() As String
         Dim zreblock As Boolean
@@ -2394,8 +2395,9 @@ Public Class Wave
         For Each line As String In clipboardtext.Split(eol)
             line = line.Trim()
 
-            If line.StartsWith("[Zeitreihe") Then
-                i_series = line.Substring(10, 1)
+            m = Regex.Match(line, "\[Zeitreihe(\d+)\]")
+            If m.Success Then
+                i_series = m.Groups(1).Value
                 data.Add(New Dictionary(Of String, String))
                 zreblock = True
             End If
