@@ -1089,7 +1089,11 @@ Public Class Wave
         Dim processSeries As Boolean
         Dim bandStart, bandEnd As DateTime
         Dim band As Steema.TeeChart.Tools.ColorBand
+        Dim color As Drawing.Color
         Dim isNaN, nanFound As Boolean
+
+        'set default color
+        color = Color.Red
 
         If ToolStripButton_ShowNaNValues.Checked Then
             'Switch visualization of NaN values on
@@ -1103,6 +1107,7 @@ Public Class Wave
                         If series.Active Then
                             'process this series
                             processSeries = True
+                            color = series.Color
                         End If
                         Exit For
                     End If
@@ -1134,8 +1139,8 @@ Public Class Wave
                                 band.Axis = Me.TChart1.Axes.Bottom
                                 band.Start = bandStart.ToOADate()
                                 band.End = bandEnd.ToOADate()
-                                band.Pen.Color = Color.Red
-                                band.Brush.Color = Color.Coral
+                                band.Pen.Color = color
+                                band.Brush.Color = ControlPaint.Light(color)
                                 band.Brush.Transparency = 50
                                 band.ResizeEnd = False
                                 band.ResizeStart = False
