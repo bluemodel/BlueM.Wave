@@ -25,7 +25,7 @@ Friend Class ChangeTimestepDialog
         Me.ComboBox_Interpretation.Items.Add(Sydro.SydroZre.Fortran.InterpretationEnum.SummeProDt)
         Me.ComboBox_Interpretation.SelectedIndex = 0
 
-        Me.ComboBox_TimestepType.Items.Add(Sydro.SydroZre.Fortran.TimeStepTypeEnum.Year) 'BUG: TimeStepType Year does currently not work properly in SydoZreI.dll!
+        'Me.ComboBox_TimestepType.Items.Add(Sydro.SydroZre.Fortran.TimeStepTypeEnum.Year) 'BUG: TimeStepType Year does currently not work properly in SydoZreI.dll!
         Me.ComboBox_TimestepType.Items.Add(Sydro.SydroZre.Fortran.TimeStepTypeEnum.Month)
         Me.ComboBox_TimestepType.Items.Add(Sydro.SydroZre.Fortran.TimeStepTypeEnum.Week)
         Me.ComboBox_TimestepType.Items.Add(Sydro.SydroZre.Fortran.TimeStepTypeEnum.Day)
