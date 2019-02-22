@@ -35,6 +35,12 @@ Public Class BIN
     Inherits FileFormatBase
 
     ''' <summary>
+    ''' Error value
+    ''' </summary>
+    ''' <remarks></remarks>
+    Public Const ErrorValue As Double = -9999.999
+
+    ''' <summary>
     ''' Gibt an, ob beim Import des Dateiformats der Importdialog angezeigt werden soll
     ''' </summary>
     Public Overrides ReadOnly Property UseImportDialog() As Boolean
@@ -90,10 +96,12 @@ Public Class BIN
 
         Try
 
-            Dim NCount, i As Integer
+            Dim NCount, i, errorcount As Integer
             Dim msg As String
             Dim X() As DateTime
             Dim Y() As Single
+            Dim timestamp As DateTime
+            Dim value As Double
 
             'Zeitreihe instanzieren (nur eine)
             ReDim Me.TimeSeries(0)
@@ -110,16 +118,27 @@ Public Class BIN
             End Using
 
             If NCount < 0 Then
-                Throw New Exception("Fehler " & NCount & ": " & msg)
+                Throw New Exception("ERROR: " & NCount & ": " & msg)
             End If
 
             'Umwandeln in Zeitreihe
+            errorcount = 0
             For i = 0 To NCount - 1
-                Me.TimeSeries(0).AddNode(X(i), Y(i))
+                timestamp = X(i)
+                value = Y(i)
+                'convert error values to NaN
+                If Math.Abs(value - BIN.ErrorValue) < 0.0001 Then
+                    value = Double.NaN
+                    errorcount += 1
+                End If
+                Me.TimeSeries(0).AddNode(timestamp, value)
             Next
 
             'Log 
-            Call Log.AddLogEntry(NCount & " Stützstellen gelesen.")
+            Call Log.AddLogEntry("Read " & NCount & " nodes.")
+            If errorcount > 0 Then
+                Log.AddLogEntry("The file contained " & errorcount & " error values (" & BIN.ErrorValue & "), which were converted to NaN!")
+            End If
 
         Catch ex As Exception
             'Fehler weiterschmeissen
