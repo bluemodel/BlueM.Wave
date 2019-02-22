@@ -208,6 +208,7 @@
     </Compile>
     <Compile Include="Helpers.vb" />
     <Compile Include="Log.vb" />
+    <Compile Include="Metadata.vb" />
     <Compile Include="My Project\ApplicationEvents.vb" />
     <Compile Include="My Project\Resources.Designer.vb">
       <AutoGen>True</AutoGen>

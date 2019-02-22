@@ -814,10 +814,10 @@ Public Class Wave
             zres.Add(CType(item, TimeSeries))
         Next
 
-        'process metadata
-        'TODO: assumes a single timeseries is being exported
+        'process metadata according to file format
+        'TODO: assumes only a single timeseries is being exported!
         Dim keys As List(Of String)
-        Dim metadata_old As Dictionary(Of String, String)
+        Dim metadata_old As Metadata
         Select Case exportDlg.ComboBox_Format.SelectedItem
             Case FileFormatBase.FileFormats.UVF
                 keys = UVF.MetadataKeys
@@ -828,14 +828,12 @@ Public Class Wave
         End Select
         If keys.Count > 0 Then
             'create a copy of the existing metadata
-            metadata_old = New Dictionary(Of String, String)
-            For Each kvp As KeyValuePair(Of String, String) In zres(0).Metadata
-                metadata_old.Add(kvp.Key, kvp.Value)
-            Next
+            metadata_old = New Metadata()
+            metadata_old = zres(0).Metadata
             'assign new metadata keys to series
-            zres(0).Metadata.Clear()
+            zres(0).Metadata = New Metadata()
             For Each key As String In keys
-                If metadata_old.ContainsKey(key) Then
+                If metadata_old.Keys.Contains(key) Then
                     'copy old metadata value with the same key
                     zres(0).Metadata.Add(key, metadata_old(key))
                 Else
@@ -858,7 +856,7 @@ Public Class Wave
             If Not dlgResult = Windows.Forms.DialogResult.OK Then
                 Exit Sub
             End If
-            'update metadata in series
+            'update metadata of series
             zres(0).Metadata = dlg.Metadata
         End If
 

@@ -91,7 +91,7 @@ Public MustInherit Class FileFormatBase
     Private _columns() As ColumnInfo
     Private _selectedColumns() As ColumnInfo
     Private _nLinesperTimestamp As Integer = 1
-    Private _metadata As Dictionary(Of String, String)
+    Private _metadata As Metadata
 
     ''' <summary>
     ''' Contains information about a column in a file
@@ -115,7 +115,7 @@ Public MustInherit Class FileFormatBase
     ''' <value></value>
     ''' <returns></returns>
     ''' <remarks></remarks>
-    Public ReadOnly Property Metadata() As Dictionary(Of String, String)
+    Public ReadOnly Property FileMetadata() As Metadata
         Get
             Return Me._metadata
         End Get
@@ -427,7 +427,7 @@ Public MustInherit Class FileFormatBase
         ReDim Me.TimeSeries(-1)
         ReDim Me.Columns(-1)
         ReDim Me.SelectedColumns(-1)
-        Me._metadata = New Dictionary(Of String, String)
+        Me._metadata = New Metadata()
 
         'Store the filepath
         Me.File = FileName
@@ -497,15 +497,13 @@ Public MustInherit Class FileFormatBase
     Public MustOverride Sub Read_File()
 
     ''' <summary>
-    ''' Sets default metadata values for a time series corresponding to the file format
+    ''' Sets default metadata keys and values for a time series corresponding to the file format
     ''' </summary>
     ''' <remarks>Should be overloaded by inheriting classes that deal with metadata</remarks>
     Public Shared Sub setDefaultMetadata(ByVal ts As TimeSeries)
-        For Each key As String In FileFormatBase.MetadataKeys
-            If Not ts.Metadata.ContainsKey(key) Then
-                ts.Metadata.Add(key, "")
-            End If
-        Next
+        'add default keys
+        ts.Metadata.AddKeys(FileFormatBase.MetadataKeys)
+        'no default values to set
     End Sub
 
 #End Region 'Methods
