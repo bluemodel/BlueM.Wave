@@ -25,39 +25,24 @@
 'EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 '--------------------------------------------------------------------------------------------
 '
-Imports System.Windows.Forms
+''' <summary>
+''' Class representing time series metadata
+''' </summary>
+''' <remarks>Acts as a Dictionary(Of String, String)</remarks>
+Public Class Metadata
+    Inherits Dictionary(Of String, String)
 
-Friend Class MetadataDialog
-
-    Public Metadata As Metadata
-
-    Public Sub New(ByVal _metadata As Metadata)
-
-        ' This call is required by the Windows Form Designer.
-        InitializeComponent()
-
-        ' Add any initialization after the InitializeComponent() call.
-
-        'Display passed metadata in DataGridView
-        For Each kvp As KeyValuePair(Of String, String) In _metadata
-            Me.DataGridView1.Rows.Add(kvp.Key, kvp.Value)
+    ''' <summary>
+    ''' Adds a list of keys with empty values
+    ''' </summary>
+    ''' <param name="keys">A list of keys to add</param>
+    ''' <remarks>Values of keys that are already present are not overwritten</remarks>
+    Public Sub AddKeys(ByVal keys As List(Of String))
+        For Each key As String In keys
+            If Not Me.ContainsKey(key) Then
+                Me.Add(key, "")
+            End If
         Next
-
-    End Sub
-
-    Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
-        'Store metadata
-        Me.Metadata = New Metadata()
-        For Each row As DataGridViewRow In Me.DataGridView1.Rows
-            Me.Metadata.Add(row.Cells(0).Value, row.Cells(1).Value)
-        Next
-        Me.DialogResult = System.Windows.Forms.DialogResult.OK
-        Me.Close()
-    End Sub
-
-    Private Sub Cancel_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Cancel_Button.Click
-        Me.DialogResult = System.Windows.Forms.DialogResult.Cancel
-        Me.Close()
     End Sub
 
 End Class

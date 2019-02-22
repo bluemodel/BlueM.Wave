@@ -60,10 +60,8 @@ Public Class ZRXP
         Me.Dateformat = Helpers.DateFormats("ZRXP")
         Me.UseUnits = True
 
-        'instantiate metadata
-        For Each key As String In ZRXP.MetadataKeys
-            Me.Metadata.Add(key, "")
-        Next
+        'set default metadata keys
+        Me.FileMetadata.AddKeys(ZRXP.MetadataKeys)
 
         Call Me.ReadColumns()
 
@@ -124,8 +122,8 @@ Public Class ZRXP
         Dim line, data(), keys(), value As String
 
         'copy metadata keys to array
-        ReDim keys(Me.metadata.Count - 1)
-        Me.metadata.Keys.CopyTo(keys, 0)
+        ReDim keys(Me.FileMetadata.Keys.Count - 1)
+        Me.FileMetadata.Keys.CopyTo(keys, 0)
 
         'read header
         Try
@@ -153,7 +151,7 @@ Public Class ZRXP
                         For Each key As String In keys
                             If block.StartsWith(key) Then
                                 value = block.Substring(key.Length)
-                                Me.Metadata(key) = value
+                                Me.FileMetadata(key) = value
                             End If
                         Next
                     Next
@@ -176,8 +174,8 @@ Public Class ZRXP
             Me.Columns(0).Einheit = ""
 
             Me.Columns(1).Index = 1
-            Me.Columns(1).Name = Me.Metadata("SNAME") & "." & Me.Metadata("CNAME")
-            Me.Columns(1).Einheit = Me.Metadata("CUNIT")
+            Me.Columns(1).Name = Me.FileMetadata("SNAME") & "." & Me.FileMetadata("CNAME")
+            Me.Columns(1).Einheit = Me.FileMetadata("CUNIT")
 
         Catch ex As Exception
             MsgBox("Unable to read file!" & eol & eol & "Error: " & ex.Message, MsgBoxStyle.Critical, "Error")
@@ -205,7 +203,7 @@ Public Class ZRXP
             Me.TimeSeries(0).Unit = Me.Columns(1).Einheit
 
             'store metadata
-            Me.TimeSeries(0).Metadata = Me.metadata
+            Me.TimeSeries(0).Metadata = Me.FileMetadata
 
             'open file
             Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
@@ -235,7 +233,7 @@ Public Class ZRXP
                 'parse value
                 valuestring = parts(1)
                 value = Helpers.StringToDouble(valuestring)
-                If value = Convert.ToDouble(Me.Metadata("RINVAL")) Then
+                If value = Convert.ToDouble(Me.FileMetadata("RINVAL")) Then
                     'convert error value to NaN
                     value = Double.NaN
                     errorcount += 1
@@ -251,7 +249,7 @@ Public Class ZRXP
             FiStr.Close()
 
             If errorcount > 0 Then
-                Log.AddLogEntry("The file contained " & errorcount & " error values (" & Me.Metadata("RINVAL") & "), which were converted to NaN!")
+                Log.AddLogEntry("The file contained " & errorcount & " error values (" & Me.FileMetadata("RINVAL") & "), which were converted to NaN!")
             End If
 
         Catch ex As Exception
@@ -293,11 +291,7 @@ Public Class ZRXP
     ''' </summary>
     Public Overloads Shared Sub setDefaultMetadata(ByVal ts As TimeSeries)
         'Make sure all required keys exist
-        For Each key As String In ZRXP.MetadataKeys
-            If Not ts.Metadata.ContainsKey(key) Then
-                ts.Metadata.Add(key, "")
-            End If
-        Next
+        ts.Metadata.AddKeys(ZRXP.MetadataKeys)
         'Set default values
         If ts.Metadata("ZRXPVERSION") = "" Then ts.Metadata("ZRXPVERSION") = "3014.03"
         If ts.Metadata("ZRXPCREATOR") = "" Then ts.Metadata("ZRXPCREATOR") = "BlueM.Wave"

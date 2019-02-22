@@ -33,7 +33,7 @@ Public Class TimeSeries
     Private _nodes As SortedList(Of DateTime, Double)
     Private _nodesCleaned As SortedList(Of DateTime, Double)
     Private _unit As String
-    Private _metadata As Dictionary(Of String, String)
+    Private _metadata As Metadata
     Private _Objekt As String
     Private _Type As String
 
@@ -122,11 +122,11 @@ Public Class TimeSeries
     ''' <summary>
     ''' The time series' metadata
     ''' </summary>
-    Public Property Metadata() As Dictionary(Of String, String)
+    Public Property Metadata() As Metadata
         Get
             Return Me._metadata
         End Get
-        Set(ByVal value As Dictionary(Of String, String))
+        Set(ByVal value As Metadata)
             Me._metadata = value
         End Set
     End Property
@@ -322,12 +322,12 @@ Public Class TimeSeries
     ''' </summary>
     ''' <param name="title">Title of the times series</param>
     Public Sub New(ByVal title As String)
+        Me._metadata = New Metadata()
         Me._title = title
         Me._unit = "-"
         Me._Objekt = "-"
         Me._Type = "-"
         Me._nodes = New SortedList(Of DateTime, Double)
-        Me._metadata = New Dictionary(Of String, String)
     End Sub
 
     ''' <summary>
@@ -346,9 +346,7 @@ Public Class TimeSeries
         target.Objekt = Me.Objekt
         target.Type = Me.Type
         target._nodes = New SortedList(Of DateTime, Double)(Me._nodes)
-        For Each kvp As KeyValuePair(Of String, String) In Me.Metadata
-            target.Metadata.Add(kvp.Key, kvp.Value)
-        Next
+        target.Metadata = Me.Metadata
         Return target
     End Function
 

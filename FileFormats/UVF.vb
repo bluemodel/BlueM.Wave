@@ -67,10 +67,8 @@ Public Class UVF
         Me.Dateformat = Helpers.DateFormats("UVF")
         Me.UseUnits = True
 
-        'instantiate metadata
-        For Each key As String In UVF.MetadataKeys
-            Me.Metadata.Add(key, "")
-        Next
+        'set default metadata keys
+        Me.FileMetadata.AddKeys(UVF.MetadataKeys)
 
         Call Me.ReadColumns()
 
@@ -161,23 +159,23 @@ Public Class UVF
                 End If
                 If i = iLineHeadings Then
                     'Zeitreihenname einlesen
-                    Me.Metadata("name") = Zeile.Substring(0, 15).Trim()
+                    Me.FileMetadata("name") = Zeile.Substring(0, 15).Trim()
                     'Einheit einlesen
-                    Me.Metadata("unit") = Zeile.Substring(15, 15).Trim()
+                    Me.FileMetadata("unit") = Zeile.Substring(15, 15).Trim()
                     'DefArt oder Anfangsjahrhundert einlesen, falls vorhanden
                     If Zeile.Length > 30 Then
                         If Zeile.Substring(30, 1) = "I" Or _
                            Zeile.Substring(30, 1) = "K" Or _
                            Zeile.Substring(30, 1) = "M" Then
-                            Me.Metadata("defArt") = Zeile.Substring(30, 1)
+                            Me.FileMetadata("defArt") = Zeile.Substring(30, 1)
                         ElseIf Regex.IsMatch(Zeile.Substring(30, 4), "\d\d\d\d") Then
                             'Anfangsjahrhundert ist angegeben
-                            Me.Metadata("century") = Zeile.Substring(30, 4)
+                            Me.FileMetadata("century") = Zeile.Substring(30, 4)
                         End If
                     End If
                     'Anfangsjahrhundert auf 1900 setzen, falls nicht angegeben
-                    If Me.Metadata("century") = "" Then
-                        Me.Metadata("century") = "1900"
+                    If Me.FileMetadata("century") = "" Then
+                        Me.FileMetadata("century") = "1900"
                         Log.AddLogEntry("UVF: Starting century is not specified, assuming 1900.")
                     End If
                     Continue Do
@@ -185,10 +183,10 @@ Public Class UVF
                 If i = iLineHeadings + 1 Then
                     'Ort und Lage einlesen
                     Try
-                        Me.Metadata("location") = Zeile.Substring(0, Math.Min(Zeile.Length, 15)).Trim()
-                        Me.Metadata("coord_X") = Zeile.Substring(15, 10).Trim()
-                        Me.Metadata("coord_Y") = Zeile.Substring(25, 10).Trim()
-                        Me.Metadata("coord_Z") = Zeile.Substring(35).Trim()
+                        Me.FileMetadata("location") = Zeile.Substring(0, Math.Min(Zeile.Length, 15)).Trim()
+                        Me.FileMetadata("coord_X") = Zeile.Substring(15, 10).Trim()
+                        Me.FileMetadata("coord_Y") = Zeile.Substring(25, 10).Trim()
+                        Me.FileMetadata("coord_Z") = Zeile.Substring(35).Trim()
                         Exit Do
                     Catch ex As Exception
                         'do nothing
@@ -210,12 +208,12 @@ Public Class UVF
 
             'Y-Spalte konfigurieren
             Me.Columns(1).Index = 1
-            Me.Columns(1).Name = Me.Metadata("name")
-            If Me.Metadata("location") <> "" Then
+            Me.Columns(1).Name = Me.FileMetadata("name")
+            If Me.FileMetadata("location") <> "" Then
                 'append location to series title
-                Me.Columns(1).Name &= " - " & Me.Metadata("location")
+                Me.Columns(1).Name &= " - " & Me.FileMetadata("location")
             End If
-            Me.Columns(1).Einheit = Me.Metadata("unit")
+            Me.Columns(1).Einheit = Me.FileMetadata("unit")
 
             If Not headerFound Then
                 Throw New Exception("The file does not contain a header line starting with '*Z'!")
@@ -248,7 +246,7 @@ Public Class UVF
             Me.TimeSeries(0).Unit = Me.Columns(1).Einheit
 
             'store metadata
-            Me.TimeSeries(0).Metadata = Me.metadata
+            Me.TimeSeries(0).Metadata = Me.FileMetadata
 
             'Datei öffnen
             Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
@@ -264,7 +262,7 @@ Public Class UVF
             Next
 
             'Daten
-            century = Integer.Parse(Me.Metadata("century"))
+            century = Integer.Parse(Me.FileMetadata("century"))
             year_prev = Integer.Parse(century.ToString().Substring(2)) 'Aus Anfangsjahrhundert
             errorcount = 0
             Do
@@ -334,11 +332,7 @@ Public Class UVF
     ''' </summary>
     Public Overloads Shared Sub setDefaultMetadata(ByVal ts As TimeSeries)
         'Make sure all required keys exist
-        For Each key As String In UVF.MetadataKeys
-            If Not ts.Metadata.ContainsKey(key) Then
-                ts.Metadata.Add(key, "")
-            End If
-        Next
+        ts.Metadata.AddKeys(UVF.MetadataKeys)
         'Set default values
         If ts.Metadata("name") = "" Then ts.Metadata("name") = ts.Title
         If ts.Metadata("unit") = "" Then ts.Metadata("unit") = ts.Unit
