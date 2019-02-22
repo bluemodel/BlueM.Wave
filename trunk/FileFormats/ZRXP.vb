@@ -293,13 +293,70 @@ Public Class ZRXP
         'Make sure all required keys exist
         ts.Metadata.AddKeys(ZRXP.MetadataKeys)
         'Set default values
-        If ts.Metadata("ZRXPVERSION") = "" Then ts.Metadata("ZRXPVERSION") = "3014.03"
-        If ts.Metadata("ZRXPCREATOR") = "" Then ts.Metadata("ZRXPCREATOR") = "BlueM.Wave"
+        ts.Metadata("ZRXPVERSION") = "3014.03"
+        ts.Metadata("ZRXPCREATOR") = "BlueM.Wave"
+        ts.Metadata("LAYOUT") = "(timestamp,value)"
+        If ts.Metadata("ZRXPMODE") = "" Then ts.Metadata("ZRXPMODE") = "Standard"
+        If ts.Metadata("TZ") = "" Then ts.Metadata("TZ") = "CET"
         If ts.Metadata("SNAME") = "" Then ts.Metadata("SNAME") = ts.Title
         If ts.Metadata("SANR") = "" Then ts.Metadata("SANR") = "0"
         If ts.Metadata("CUNIT") = "" Then ts.Metadata("CUNIT") = ts.Unit
         If ts.Metadata("RINVAL") = "" Then ts.Metadata("RINVAL") = "-777.0"
-        If ts.Metadata("LAYOUT") = "" Then ts.Metadata("LAYOUT") = "(timestamp,value)"
     End Sub
 
+    ''' <summary>
+    ''' Exports a time series to a file in the ZRXP format
+    ''' </summary>
+    ''' <param name="ts">the time series to export</param>
+    ''' <param name="file">path to the file</param>
+    ''' <remarks></remarks>
+    Public Shared Sub Write_File(ByRef ts As TimeSeries, ByVal file As String)
+
+        Dim strwrite As StreamWriter
+
+        'ensure that all required metadata keys are present
+        ts.Metadata.AddKeys(ZRXP.MetadataKeys)
+
+        strwrite = New StreamWriter(file, False, System.Text.Encoding.GetEncoding("iso8859-1"))
+
+        '1st line: ZRXP version number, mode, creation tool and timezone
+        strwrite.WriteLine(String.Format("#ZRXPVERSION{0}|*|ZRXPMODE{1}|*|ZRXPCREATOR{2}|*|TZ{3}|*|", _
+                                         ts.Metadata("ZRXPVERSION"), ts.Metadata("ZRXPMODE"), ts.Metadata("ZRXPCREATOR"), ts.Metadata("TZ")))
+
+        'next lines: remaining metadata, omitting empty keywords, wrapped
+        Dim excludeKeys As New List(Of String)(New String() {"ZRXPVERSION", "ZRXPMODE", "ZRXPCREATOR", "TZ"})
+        Dim query As IEnumerable(Of KeyValuePair(Of String, String)) = ts.Metadata.Where(Function(kvp As KeyValuePair(Of String, String)) kvp.Value <> "" And Not excludeKeys.Contains(kvp.Key))
+        Dim text As String = ""
+        Dim line As String = "#"
+        Dim sep As String = "|*|"
+        Dim field As String
+        Dim maxlength As Integer = 85
+        Dim fields As New List(Of String)
+        For Each kvp As KeyValuePair(Of String, String) In query
+            field = kvp.Key & kvp.Value
+            If line.Length + field.Length + sep.Length > maxlength Then
+                'start a new line
+                text &= line & eol
+                line = "#"
+            End If
+            line &= field & sep
+        Next
+        text &= line
+        strwrite.WriteLine(text)
+
+        'data lines
+        Dim timestamp, value As String
+        For Each node As KeyValuePair(Of DateTime, Double) In ts.Nodes
+            timestamp = node.Key.ToString(Helpers.DateFormats("ZRXP"))
+            If Double.IsNaN(node.Value) Then
+                value = ts.Metadata("RINVAL")
+            Else
+                value = node.Value.ToString()
+            End If
+            strwrite.WriteLine(timestamp & " " & value)
+        Next
+
+        strwrite.Close()
+
+    End Sub
 End Class

@@ -808,57 +808,58 @@ Public Class Wave
             Exit Sub
         End If
 
-        'get selected series
+        'get copies of the selected series
         zres = New List(Of TimeSeries)
         For Each item As Object In exportDlg.ListBox_Series.SelectedItems
-            zres.Add(CType(item, TimeSeries))
+            zres.Add(CType(item, TimeSeries).Clone())
         Next
 
-        'process metadata according to file format
-        'TODO: assumes only a single timeseries is being exported!
+        'prepare metadata according to file format
         Dim keys As List(Of String)
         Dim metadata_old As Metadata
-        Select Case exportDlg.ComboBox_Format.SelectedItem
-            Case FileFormatBase.FileFormats.UVF
-                keys = UVF.MetadataKeys
-            Case FileFormatBase.FileFormats.ZRXP
-                keys = ZRXP.MetadataKeys
-            Case Else
-                keys = FileFormatBase.MetadataKeys
-        End Select
-        If keys.Count > 0 Then
-            'create a copy of the existing metadata
-            metadata_old = New Metadata()
-            metadata_old = zres(0).Metadata
-            'assign new metadata keys to series
-            zres(0).Metadata = New Metadata()
-            For Each key As String In keys
-                If metadata_old.Keys.Contains(key) Then
-                    'copy old metadata value with the same key
-                    zres(0).Metadata.Add(key, metadata_old(key))
-                Else
-                    'add a new key with an empty value
-                    zres(0).Metadata.Add(key, "")
-                End If
-            Next
-            'set default metadata
+        For Each ts As TimeSeries In zres
+            'get a list of metadata keys
             Select Case exportDlg.ComboBox_Format.SelectedItem
                 Case FileFormatBase.FileFormats.UVF
-                    UVF.setDefaultMetadata(zres(0))
+                    keys = UVF.MetadataKeys
                 Case FileFormatBase.FileFormats.ZRXP
-                    ZRXP.setDefaultMetadata(zres(0))
+                    keys = ZRXP.MetadataKeys
                 Case Else
-                    FileFormatBase.setDefaultMetadata(zres(0))
+                    keys = FileFormatBase.MetadataKeys 'empty list
             End Select
-            'show dialog for editing metadata
-            Dim dlg As New MetadataDialog(zres(0).Metadata)
-            dlgResult = dlg.ShowDialog()
-            If Not dlgResult = Windows.Forms.DialogResult.OK Then
-                Exit Sub
+            If keys.Count > 0 Then
+                'create a copy of the existing metadata
+                metadata_old = ts.Metadata
+                'create new metadata keys
+                ts.Metadata = New Metadata()
+                For Each key As String In keys
+                    If metadata_old.Keys.Contains(key) Then
+                        'copy old metadata value with the same key
+                        ts.Metadata.Add(key, metadata_old(key))
+                    Else
+                        'add a new key with an empty value
+                        ts.Metadata.Add(key, "")
+                    End If
+                Next
+                'set default metadata values
+                Select Case exportDlg.ComboBox_Format.SelectedItem
+                    Case FileFormatBase.FileFormats.UVF
+                        UVF.setDefaultMetadata(ts)
+                    Case FileFormatBase.FileFormats.ZRXP
+                        ZRXP.setDefaultMetadata(ts)
+                    Case Else
+                        FileFormatBase.setDefaultMetadata(ts)
+                End Select
+                'show dialog for editing metadata
+                Dim dlg As New MetadataDialog(ts.Metadata)
+                dlgResult = dlg.ShowDialog()
+                If Not dlgResult = Windows.Forms.DialogResult.OK Then
+                    Exit Sub
+                End If
+                'update metadata of series
+                ts.Metadata = dlg.Metadata
             End If
-            'update metadata of series
-            zres(0).Metadata = dlg.Metadata
-        End If
+        Next
 
         'Prepare Save dialog
         Me.SaveFileDialog1.Title = "Save as..."
@@ -895,6 +896,9 @@ Public Class Wave
             Case FileFormatBase.FileFormats.UVF
                 Me.SaveFileDialog1.DefaultExt = "uvf"
                 Me.SaveFileDialog1.Filter = "UVF files (*.uvf)|*.uvf"
+            Case FileFormatBase.FileFormats.ZRXP
+                Me.SaveFileDialog1.DefaultExt = "zrx"
+                Me.SaveFileDialog1.Filter = "ZRXP files (*.zrx)|*.zrx"
         End Select
         Me.SaveFileDialog1.Filter &= "|All files (*.*)|*.*"
         Me.SaveFileDialog1.FilterIndex = 1
@@ -943,6 +947,9 @@ Public Class Wave
 
                 Case FileFormatBase.FileFormats.UVF
                     Call UVF.Write_File(zres(0), filename)
+
+                Case FileFormatBase.FileFormats.ZRXP
+                    Call ZRXP.Write_File(zres(0), filename)
 
                 Case Else
                     MsgBox("Not yet implemented!", MsgBoxStyle.Exclamation, "Wave")

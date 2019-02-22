@@ -406,7 +406,7 @@ Public MustInherit Class FileFormatBase
     ''' <summary>
     ''' Returns a list of format-specific metadata keys
     ''' </summary>
-    ''' <remarks>Should be overridden by inheriting classes</remarks>
+    ''' <remarks>Is an empty list by default, should be overridden by inheriting classes</remarks>
     Public Shared ReadOnly Property MetadataKeys() As List(Of String)
         Get
             Return New List(Of String)

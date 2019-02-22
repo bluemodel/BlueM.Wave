@@ -334,9 +334,9 @@ Public Class UVF
         'Make sure all required keys exist
         ts.Metadata.AddKeys(UVF.MetadataKeys)
         'Set default values
+        ts.Metadata("century") = Math.Floor(ts.StartDate.Year / 100) * 100
         If ts.Metadata("name") = "" Then ts.Metadata("name") = ts.Title
         If ts.Metadata("unit") = "" Then ts.Metadata("unit") = ts.Unit
-        If ts.Metadata("century") = "" Then ts.Metadata("century") = Math.Floor(ts.StartDate.Year / 100) * 100
         If ts.Metadata("location") = "" Then ts.Metadata("location") = "unknown"
         If ts.Metadata("coord_X") = "" Then ts.Metadata("coord_X") = "0"
         If ts.Metadata("coord_Y") = "" Then ts.Metadata("coord_Y") = "0"
@@ -358,8 +358,8 @@ Public Class UVF
         Dim name, unit, century, timestamp, value As String
         Dim i As Integer
 
-        'set default metadata
-        Call UVF.setDefaultMetadata(ts)
+        'ensure that all required metadata keys are present
+        ts.Metadata.AddKeys(UVF.MetadataKeys)
 
         strwrite = New StreamWriter(file, False, System.Text.Encoding.GetEncoding("iso8859-1"))
 
