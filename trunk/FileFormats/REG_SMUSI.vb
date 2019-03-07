@@ -38,7 +38,6 @@ Public Class REG_SMUSI
     Const LenWert As Integer = 5
     Const LenZeilenanfang As Integer = 20
     Const dt_min As Integer = 5
-    Dim nRowsHead As Integer
 
 #Region "Properties"
 
@@ -93,7 +92,7 @@ Public Class REG_SMUSI
     '****************
     Public Overrides Sub ReadColumns()
 
-        Dim Zeile As String
+        Dim Zeile, title As String
         Dim i As Integer
 
         Try
@@ -112,20 +111,15 @@ Public Class REG_SMUSI
             '2. Spalte (Y)
             Me.Columns(1).Index = 1
 
-            'Reihentitel steht in 1. Spalte bei den Werten:
-            Zeile = ""
-            For i = 0 To Me.nLinesHeader
-                Zeile = StrReadSync.ReadLine.ToString()
-            Next
-
-            'Check if there are empty rows between the "nZeilenHeader" and the start of the actual data
-            nRowsHead = Me.nLinesHeader
-            While Zeile.Trim = ""
-                Zeile = StrReadSync.ReadLine.ToString()
-                nRowsHead = nRowsHead + 1
-            End While
-
-            Me.Columns(1).Name = Zeile.Substring(0, 4).Trim()
+            'Reihentitel aus 1. Zeile nehmen.
+            'Wenn Komma enthalten ist, nur den Teil vor dem Komma verwenden
+            Zeile = StrReadSync.ReadLine()
+            If Zeile.Contains(",") Then
+                title = Zeile.Split(",")(0)
+            Else
+                title = Zeile
+            End If
+            Me.Columns(1).Name = title
 
             'Einheit ist immer mm
             Me.Columns(1).Einheit = "mm"
@@ -169,7 +163,7 @@ Public Class REG_SMUSI
             j += 1
             Zeile = StrReadSync.ReadLine.ToString()
 
-            If (j > nRowsHead) Then
+            If (j > Me.nLinesHeader) Then
 
                 If (Zeile.Trim.Length < 1) Then
                     'Leere Zeile
