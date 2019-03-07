@@ -32,6 +32,7 @@ FIXED:
 * UVF format: fixed reading and writing of time series starting before 1900
 * UVF format: values equal to -777 are assumed to be error values and converted to NaN during import
 * BIN format: values equal to -9999.999 are recognized as error values and converted to NaN during import
+* Fixed export to SMUSI REG format. Time series must be equidistant with 5 minute time step.
 API-CHANGES:
 * The function TimeSeries.getCleanZRE() has been replaced with two separate functions:
   Timeseries.removeNaNValues() and Timeseries.convertErrorValues()
