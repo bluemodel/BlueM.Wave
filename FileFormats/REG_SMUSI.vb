@@ -227,101 +227,100 @@ Public Class REG_SMUSI
     ''' </summary>
     ''' <param name="Reihe">Die zu exportierende Zeitreihe</param>
     ''' <param name="File">Pfad zur anzulegenden Datei</param>
+    ''' <remarks>Zeitreihe muss äquidistant mit 5 min Zeitschritt vorliegen!</remarks>
     Public Shared Sub Write_File(ByVal Reihe As TimeSeries, ByVal File As String)
 
+        Dim t1, t2 As DateTime
         Dim dt As Integer
-        Dim KontiReihe As TimeSeries
-        Dim Spanne As TimeSpan
-        Dim Divisor As Integer
-        Dim hn_A_Mittel As Integer
-
-        'Zeitintervall aus ersten und zweiten Zeitschritt der Reihe ermitteln
-        dt = DateDiff(DateInterval.Minute, Reihe.Dates(0), Reihe.Dates(1))
-
-        'Äquidistante Zeitreihe erzeugen
-        KontiReihe = Reihe.getKontiZRE(dt)
-
-        Dim strwrite As StreamWriter
-        Dim iZeile, j, n As Integer
-        strwrite = New StreamWriter(File)
+        Dim j, n As Integer
+        Dim timestamp, export_start, export_end As DateTime
+        Dim iStart As Integer
         Dim IntWert As Long
         Dim Summe As Integer
+        Dim Spanne As TimeSpan
+        Dim nJahre As Integer
+        Dim hn_A_Mittel As Integer
+        Dim strwrite As StreamWriter
+        Dim FiStr As FileStream
+        Dim StrRead As StreamReader
+        Dim alles As String
 
-        Summe = 0 ' Jahresniederschlagshöhe
+        'Zeitreihe muss äquidistant mit 5 min Zeitschritt vorliegen!
+        t1 = Reihe.StartDate
+        For Each t2 In Reihe.Dates.Skip(1)
+            dt = (t2 - t1).Minutes
+            If dt <> 5 Then
+                Throw New Exception(String.Format("Unable to export to SMUSI REG format. " & _
+                                                  "Time series must be equidistant with a time step of 5 minutes." & eol & _
+                                                  "Timestep between {0} and {1} is not 5 minutes!", t1, t2))
+            End If
+            t1 = t2
+        Next
 
-        'Anfangsdatum und Enddatum der zu exporierenden Zeitreihe bestimmen
-        'Es müssen 12 Stundenwerte in der Zeitreihe vorliegen, sonst wird
-        'abgeschniten
+        'Anfangsdatum und Enddatum der zu exportierenden Zeitreihe bestimmen
 
         'ExportStartDatum
-        Dim Datum, ExportStartDatum, ExportEndDatum As DateTime
-        Dim iDatum As Integer
-        iDatum = 0
-        Datum = KontiReihe.StartDate
-        Do While Datum.Minute > 0
-            iDatum = iDatum + 1
-            Datum = KontiReihe.Dates(iDatum)
+        'Start muss zur vollen Stunde sein
+        iStart = 0
+        timestamp = Reihe.StartDate
+        Do While timestamp.Minute > 0
+            iStart = iStart + 1
+            timestamp = Reihe.Dates(iStart)
         Loop
-        ExportStartDatum = Datum
+        export_start = timestamp
 
         'ExportEndDatum
-        Datum = KontiReihe.EndDate
+        'Ende muss um XX:55 sein
+        timestamp = Reihe.EndDate
         Dim Endstunde As Integer
-        If Datum.Minute <> 55 Then
-            Endstunde = Datum.Hour - 1
+        If timestamp.Minute <> 55 Then
+            Endstunde = timestamp.Hour - 1
         Else
-            Endstunde = Datum.Hour
+            Endstunde = timestamp.Hour
         End If
-        ExportEndDatum = New System.DateTime(Datum.Year, Datum.Month, Datum.Day, Endstunde, 55, 0, New System.Globalization.GregorianCalendar())
-        Dim iDatumEnd As Integer
-        iDatumEnd = KontiReihe.Length - 1
-        Datum = KontiReihe.EndDate
-        Do While Datum <> ExportEndDatum
-            iDatumEnd = iDatumEnd - 1
-            Datum = KontiReihe.Dates(iDatumEnd)
-        Loop
+        export_end = New System.DateTime(timestamp.Year, timestamp.Month, timestamp.Day, Endstunde, 55, 0, New System.Globalization.GregorianCalendar())
 
-        Dim AnzahlZeilen As Integer
-        AnzahlZeilen = (iDatumEnd - iDatum) / WerteproZeile
+        'Zeitreihe zuschneiden
+        Reihe.Cut(export_start, export_end)
 
-        'Wertezeilen...
-        n = iDatum   'Ausgabe beginnt bei ersten vollen Stunde in der Zeitreihe
-        For iZeile = 0 To AnzahlZeilen - 1
-            strwrite.Write("KONV ")
-            strwrite.Write(KontiReihe.Dates(n).ToString(DateFormats("SMUSI")))
+        'Wertezeilen schreiben
+        strwrite = New StreamWriter(File)
+        Summe = 0 'Summe für die spätere Berechnung der Jahresniederschlagshöhe
+        n = 0
+        Do While n < Reihe.Length
+            strwrite.Write(Reihe.Title.Substring(0, 4) & " ")
+            strwrite.Write(Reihe.Dates(n).ToString(DateFormats("SMUSI")))
             For j = 1 To WerteproZeile
-                IntWert = KontiReihe.Values(n) * 1000
+                IntWert = Reihe.Values(n) * 1000
                 Summe = Summe + IntWert
                 strwrite.Write(IntWert.ToString.PadLeft(5))
                 n = n + 1
             Next
             strwrite.WriteLine()
-        Next
+        Loop
         strwrite.Close()
 
         'Header anpassen (Summe und Betrachungszeitraum)
-        Dim FiStr As FileStream = New FileStream(File, FileMode.Open, IO.FileAccess.Read)
-        Dim StrRead As StreamReader = New StreamReader(FiStr, System.Text.Encoding.GetEncoding("iso8859-1"))
-        Dim alles As String
+        FiStr = New FileStream(File, FileMode.Open, IO.FileAccess.Read)
+        StrRead = New StreamReader(FiStr, System.Text.Encoding.GetEncoding("iso8859-1"))
 
         'Mittlere Jahresniederschlagshöhe berechnen
-        Spanne = KontiReihe.EndDate - KontiReihe.StartDate
-        Divisor = Math.Max(Spanne.TotalDays / 365, 1)
-        hn_A_Mittel = Summe / 1000 * 1 / Divisor
+        Spanne = Reihe.EndDate - Reihe.StartDate
+        nJahre = Math.Max(Spanne.TotalDays / 365, 1)
+        hn_A_Mittel = Summe / 1000 * 1 / nJahre
 
         'Komplette Datei einlesen
         alles = StrRead.ReadToEnd()
         StrRead.Close()
         FiStr.Close()
 
+        'Header schreiben
         strwrite = New StreamWriter(File)
-        strwrite.WriteLine("KONVertierte REG-Reihe")
-        strwrite.Write("hN =")
-        strwrite.Write(hn_A_Mittel)
-        strwrite.Write(" mm/a")
-        strwrite.WriteLine()
+        strwrite.WriteLine(Reihe.Title)
+        strwrite.WriteLine(String.Format("hN = {0} mm/a", hn_A_Mittel))
         strwrite.WriteLine("================================================================================")
 
+        'Rest anhängen
         strwrite.Write(alles)
         strwrite.Close()
 
