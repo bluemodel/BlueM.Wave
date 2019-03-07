@@ -23,6 +23,8 @@ NEW:
 CHANGED:
 * The "Remove error values" function has been changed to "Convert error values" and now converts 
   user-specified error values to NaN
+* When importing time series from SMUSI REG format, the title is taken from the first line of the file, 
+  before any comma
 FIXED:
 * The Reload from Files command now respects the previously made series selection for each file
 * Imported files are no longer kept as file objects in memory (should lead to less memory usage)
