@@ -227,8 +227,7 @@ Public Class REG_SMUSI
         Dim t1, t2 As DateTime
         Dim dt As Integer
         Dim j, n As Integer
-        Dim timestamp, export_start, export_end As DateTime
-        Dim iStart As Integer
+        Dim export_start, export_end As DateTime
         Dim IntWert As Long
         Dim Summe As Integer
         Dim Spanne As TimeSpan
@@ -255,28 +254,20 @@ Public Class REG_SMUSI
 
         'ExportStartDatum
         'Start muss zur vollen Stunde sein
-        iStart = 0
-        timestamp = Reihe.StartDate
-        Do While timestamp.Minute > 0
-            iStart = iStart + 1
-            timestamp = Reihe.Dates(iStart)
-        Loop
-        export_start = timestamp
+        export_start = Reihe.StartDate
+        If export_start.Minute > 0 Then
+            export_start = export_start.AddMinutes(60 - export_start.Minute)
+        End If
 
         'ExportEndDatum
         'Ende muss um XX:55 sein
-        timestamp = Reihe.EndDate
-        Dim Endstunde As Integer
-        If timestamp.Minute <> 55 Then
-            Endstunde = timestamp.Hour - 1
-        Else
-            Endstunde = timestamp.Hour
+        export_end = Reihe.EndDate
+        If export_end.Minute > 55 Then
+            export_end = export_end.AddMinutes(55 - export_end.Minute)
+        ElseIf export_end.Minute < 55 Then
+            export_end = export_end.AddHours(-1)
+            export_end = export_end.AddMinutes(55 - export_end.Minute)
         End If
-        If Endstunde = -1 Then
-            timestamp = timestamp.AddDays(-1)
-            Endstunde = 23
-        End If
-        export_end = New System.DateTime(timestamp.Year, timestamp.Month, timestamp.Day, Endstunde, 55, 0, New System.Globalization.GregorianCalendar())
 
         'Zeitreihe zuschneiden
         Reihe.Cut(export_start, export_end)
