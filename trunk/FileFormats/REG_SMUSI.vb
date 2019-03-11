@@ -272,6 +272,10 @@ Public Class REG_SMUSI
         Else
             Endstunde = timestamp.Hour
         End If
+        If Endstunde = -1 Then
+            timestamp = timestamp.AddDays(-1)
+            Endstunde = 23
+        End If
         export_end = New System.DateTime(timestamp.Year, timestamp.Month, timestamp.Day, Endstunde, 55, 0, New System.Globalization.GregorianCalendar())
 
         'Zeitreihe zuschneiden
