@@ -8,6 +8,7 @@ NEW:
 * Added write support for UVF format
 * Added write support for SYDRO binary format (BIN) (only in x86 version)
 * Added a button for visualizing NaN values of the currently active series
+  This also causes the time periods consisting of NaN values to be written to the log
 * Added metadata handling for time series, metadata is displayed in the series properties dialog
 * Implemented reading and writing of metadata for file formats UVF and ZRXP
 * Added a dialog for editing metadata before export
@@ -38,6 +39,9 @@ FIXED:
 API-CHANGES:
 * The function TimeSeries.getCleanZRE() has been replaced with two separate functions:
   Timeseries.removeNaNValues() and Timeseries.convertErrorValues()
+KNOWN ISSUES:
+* When saving a chart to the native TEN format of TeeChart, any NaN values contained in the series are lost 
+  (i.e. the nodes with the NaN values are omitted from the series).
 
 Version 1.6.1
 -------------
