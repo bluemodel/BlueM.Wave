@@ -1092,7 +1092,7 @@ Public Class Wave
     Private Sub ToolStripButton_ShowNaNValues_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_ShowNaNValues.Click
 
         Dim processSeries As Boolean
-        Dim bandStart, bandEnd As DateTime
+        Dim nanStart, nanEnd, bandStart, bandEnd As DateTime
         Dim band As Steema.TeeChart.Tools.ColorBand
         Dim color As Drawing.Color
         Dim isNaN, nanFound As Boolean
@@ -1118,6 +1118,8 @@ Public Class Wave
                     End If
                 Next
                 If processSeries Then
+                    'log
+                    Log.AddLogEntry("Finding NaN values for series " & ts.Title & "...")
                     'find beginning and end of nan values
                     isNaN = False
                     For i As Integer = 0 To ts.Length - 1
@@ -1131,11 +1133,13 @@ Public Class Wave
                                 Else
                                     bandStart = ts.Dates(i - 1)
                                 End If
+                                nanStart = ts.Dates(i)
                             End If
                         Else
                             If Not Double.IsNaN(ts.Values(i)) Or i = ts.Length - 1 Then
                                 'end of nan values
                                 bandEnd = ts.Dates(i)
+                                nanEnd = ts.Dates(i - 1)
                                 isNaN = False
 
                                 'add a color band
@@ -1144,6 +1148,7 @@ Public Class Wave
                                 band.Axis = Me.TChart1.Axes.Bottom
                                 band.Start = bandStart.ToOADate()
                                 band.End = bandEnd.ToOADate()
+                                band.Pen.Visible = False
                                 band.Pen.Color = color
                                 band.Brush.Color = ControlPaint.Light(color)
                                 band.Brush.Transparency = 50
@@ -1151,6 +1156,9 @@ Public Class Wave
                                 band.ResizeStart = False
                                 band.EndLinePen.Visible = False
                                 band.StartLinePen.Visible = False
+
+                                'write to log
+                                Log.AddLogEntry(" Series contains NaN values from " & nanStart.ToString(Helpers.DateFormats("default")) & " to " & nanEnd.ToString(Helpers.DateFormats("default")))
                             End If
                         End If
                     Next
