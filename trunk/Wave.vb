@@ -1095,7 +1095,7 @@ Public Class Wave
         Dim nanStart, nanEnd, bandStart, bandEnd As DateTime
         Dim band As Steema.TeeChart.Tools.ColorBand
         Dim color As Drawing.Color
-        Dim isNaN, nanFound As Boolean
+        Dim isNaNPeriod, nanFound As Boolean
 
         'set default color
         color = Color.Red
@@ -1121,12 +1121,12 @@ Public Class Wave
                     'log
                     Log.AddLogEntry("Finding NaN values for series " & ts.Title & "...")
                     'find beginning and end of nan values
-                    isNaN = False
+                    isNaNPeriod = False
                     For i As Integer = 0 To ts.Length - 1
-                        If Not isNaN Then
+                        If Not isNaNPeriod Then
+                            'test for start of NaN values
                             If Double.IsNaN(ts.Values(i)) Then
-                                'beginning of nan values
-                                isNaN = True
+                                isNaNPeriod = True
                                 nanFound = True
                                 If i = 0 Then
                                     bandStart = ts.Dates(i)
@@ -1136,13 +1136,22 @@ Public Class Wave
                                 nanStart = ts.Dates(i)
                             End If
                         Else
-                            If Not Double.IsNaN(ts.Values(i)) Or i = ts.Length - 1 Then
-                                'end of nan values
+                            'test for end of NaN values
+                            If Not Double.IsNaN(ts.Values(i)) Then
                                 bandEnd = ts.Dates(i)
                                 nanEnd = ts.Dates(i - 1)
-                                isNaN = False
+                                isNaNPeriod = False
 
-                                'add a color band
+                            ElseIf i = ts.Length - 1 Then
+                                'force end if end of time series reached
+                                bandEnd = ts.Dates(i)
+                                nanEnd = ts.Dates(i)
+                                isNaNPeriod = False
+
+                            End If
+
+                            If Not isNaNPeriod Then
+                                'end of NaN period reached, add a color band
                                 band = New Steema.TeeChart.Tools.ColorBand()
                                 Me.TChart1.Tools.Add(band)
                                 band.Axis = Me.TChart1.Axes.Bottom
