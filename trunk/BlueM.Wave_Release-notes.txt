@@ -22,6 +22,8 @@ NEW:
   (including BIN files and multiple files/series at once) (#695)
 * Added the ability to extract WEL files from WLZIP files of the same name
 CHANGED:
+* The "Enter time series" dialog has been improved, unparseable values are now converted to NaN 
+  instead of causing an abort of the import.
 * The "Remove error values" function has been changed to "Convert error values" and now converts 
   user-specified error values to NaN
 * When importing time series from SMUSI REG format, the title is taken from the first line of the file, 

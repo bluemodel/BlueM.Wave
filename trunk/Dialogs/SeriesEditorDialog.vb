@@ -25,25 +25,34 @@
 'EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 '--------------------------------------------------------------------------------------------
 '
-'Dialog zum Eingeben einer Zeitreihe
-'###################################
-
+''' <summary>
+''' Dialog for entering a time series (or copy/paste from Excel)
+''' </summary>
+''' <remarks></remarks>
 Friend Class SeriesEditorDialog
 
     Private IsInitializing As Boolean
     Private mZeitreihe As TimeSeries
 
-    'Titel
-    '*****
-    Private ReadOnly Property Title() As String
+    ''' <summary>
+    ''' Series title as entered by the user
+    ''' </summary>
+    ''' <value></value>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
+    Private ReadOnly Property series_Title() As String
         Get
             Return Me.TextBox_Title.Text
         End Get
     End Property
 
-    'Einheit
-    '*******
-    Private ReadOnly Property Einheit() As String
+    ''' <summary>
+    ''' Series unit as entered by the user
+    ''' </summary>
+    ''' <value></value>
+    ''' <returns></returns>
+    ''' <remarks>Defaults to "-" if left empty</remarks>
+    Private ReadOnly Property series_Unit() As String
         Get
             If (Not Me.TextBox_Unit.Text.Trim() = "") Then
                 Return Me.TextBox_Unit.Text
@@ -53,16 +62,22 @@ Friend Class SeriesEditorDialog
         End Get
     End Property
 
-    'Zeitreihe
-    '*********
+    ''' <summary>
+    ''' The final timeseries object
+    ''' </summary>
+    ''' <value></value>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
     Public ReadOnly Property Zeitreihe() As TimeSeries
         Get
             Return Me.mZeitreihe
         End Get
     End Property
 
-    'Konstruktor
-    '***********
+    ''' <summary>
+    ''' Constructor
+    ''' </summary>
+    ''' <remarks></remarks>
     Public Sub New()
 
         Me.IsInitializing = True
@@ -75,8 +90,13 @@ Friend Class SeriesEditorDialog
 
     End Sub
 
-    'Werte aus Zwischenablage einfügen
-    '*********************************
+
+    ''' <summary>
+    ''' Processes a paste command
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    ''' <remarks></remarks>
     Private Sub Paste(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button_Paste.Click
 
         Dim CSVSeparator As String
@@ -91,9 +111,12 @@ Friend Class SeriesEditorDialog
 
         'Prüfen, ob ClipboardContents im CSV-Format vorliegen oder konvertiert werden können
         If (Not ClipboardContents.GetDataPresent(DataFormats.CommaSeparatedValue, True)) Then
-            MsgBox("Der Inhalt der Zwischenablage kann nicht verarbeitet werden!", MsgBoxStyle.Exclamation)
+            MsgBox("Unable to process the clipboard contents!", MsgBoxStyle.Exclamation)
             Exit Sub
         End If
+
+        Me.Cursor = Cursors.WaitCursor
+        Me.Enabled = False
 
         'ClipboardContents zu CSV konvertieren und in einen StreamReader packen
         Dim sr As New System.IO.StreamReader(CType(ClipboardContents.GetData(DataFormats.CommaSeparatedValue), System.IO.MemoryStream))
@@ -107,149 +130,124 @@ Friend Class SeriesEditorDialog
             End If
         Loop
 
+        Me.Cursor = Cursors.Default
+        Me.Enabled = True
+
     End Sub
 
-    'Alle Eingaben überprüfen
-    '************************
-    Private Function Prüfen() As Boolean
+    ''' <summary>
+    ''' Checks the entered dates for parseability and ascendingness
+    ''' </summary>
+    ''' <returns>Boolean success</returns>
+    ''' <remarks></remarks>
+    Private Function check_dates() As Boolean
 
         Dim str As String = ""
         Dim i As Integer
         Dim cell As DataGridViewCell
         Dim t0, t1 As DateTime
-        Dim d As Double
 
-        t0 = New DateTime(0)
+        Try
 
-        'Alle Einträge durchlaufen
-        For i = 0 To Me.DataGridView1.RowCount - 2 '(letzte Zeile nicht prüfen)
+            Me.Cursor = Cursors.WaitCursor
+            Me.Enabled = False
 
+            t0 = New DateTime(0)
 
-            'Spalte Datum
-            '------------
-            cell = Me.DataGridView1.Rows(i).Cells(0)
-            str = cell.Value
-            'Datumsformat prüfen
-            Try
-                t1 = DateTime.Parse(str)
-            Catch ex As Exception
-                MsgBox("Das Datum '" & str & "' kann nicht verarbeitet werden!", MsgBoxStyle.Critical)
-                cell.ErrorText = "Datumsformat nicht verarbeitbar!"
-                Return False
-            End Try
+            'Alle Einträge durchlaufen
+            For i = 0 To Me.DataGridView1.RowCount - 2 '(letzte Zeile nicht prüfen)
 
-            'Prüfen, ob Datum aufsteigend
-            If (t1 <= t0) Then
-                MsgBox("Das Datum ist bei '" & t1 & "' nicht aufsteigend!", MsgBoxStyle.Critical)
-                cell.ErrorText = "Datum nicht aufsteigend!"
-                Return False
-            End If
-            cell.ErrorText = String.Empty
-            t0 = t1
+                'Spalte Datum
+                '------------
+                cell = Me.DataGridView1.Rows(i).Cells(0)
+                str = cell.Value
+                'Datumsformat prüfen
+                Try
+                    t1 = DateTime.Parse(str)
+                Catch ex As Exception
+                    cell.ErrorText = "Date format not recognized!"
+                    Throw New Exception("The date '" & str & "' can not be parsed!")
+                End Try
 
-            'Spalte Wert
-            '-----------
-            cell = Me.DataGridView1.Rows(i).Cells(1)
-            str = cell.Value
-            'Wert prüfen
-            Try
-                d = Convert.ToDouble(str)
-            Catch ex As Exception
-                MsgBox("Der Wert '" & str & "' kann nicht verarbeitet werden!", MsgBoxStyle.Critical)
-                cell.ErrorText = "Wert nicht verarbeitbar!"
-                Return False
-            End Try
-            cell.ErrorText = String.Empty
+                'Prüfen, ob Datum aufsteigend
+                If (t1 <= t0) Then
+                    cell.ErrorText = "Date not ascending!"
+                    Throw New Exception("The date '" & t1 & "' is not ascending!")
+                End If
 
-        Next
+                cell.ErrorText = String.Empty
+                t0 = t1
+
+            Next
+
+        Catch ex As Exception
+
+            MsgBox(ex.Message, MsgBoxStyle.Exclamation)
+
+        Finally
+
+            Me.Cursor = Cursors.Default
+            Me.Enabled = True
+
+        End Try
 
         Return True
 
     End Function
 
-    'On the fly - Überprüfung
-    '************************
-    Private Sub DataGridView1_CellLeave(ByVal sender As System.Object, ByVal e As System.Windows.Forms.DataGridViewCellEventArgs) Handles DataGridView1.CellValueChanged
-
-        If (Me.IsInitializing) Then Exit Sub
-
-        Dim cell As DataGridViewCell
-        Dim str As String = ""
-        Dim d As Double
-        Dim t As DateTime
-
-        'letzte Zeile nicht prüfen
-        If (e.RowIndex < Me.DataGridView1.RowCount - 1) Then
-
-            cell = Me.DataGridView1.Rows(e.RowIndex).Cells(e.ColumnIndex)
-
-            If (e.ColumnIndex = 0) Then
-                'Datumsformat prüfen
-                '-------------------
-                str = cell.Value
-                Try
-                    t = DateTime.Parse(str)
-                    cell.ErrorText = String.Empty
-                Catch ex As Exception
-                    MsgBox("Das Datum '" & str & "' kann nicht verarbeitet werden!", MsgBoxStyle.Critical)
-                    cell.ErrorText = "Datumsformat nicht verarbeitbar!"
-                End Try
-
-            ElseIf (e.ColumnIndex = 1) Then
-                'Wertformat prüfen
-                '-----------------
-                str = cell.Value
-                Try
-                    d = Convert.ToDouble(str)
-                    cell.ErrorText = String.Empty
-                Catch ex As Exception
-                    MsgBox("Der Wert '" & str & "' kann nicht verarbeitet werden!", MsgBoxStyle.Critical)
-                    cell.ErrorText = "Wert nicht verarbeitbar!"
-                End Try
-            End If
-
-        End If
-
-    End Sub
-
-    'OK gedrückt
-    '***********
+    ''' <summary>
+    ''' OK button clicked. Checks all entries and creates the time series object. If successful, the dialog is closed.
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    ''' <remarks></remarks>
     Private Sub Button_OK_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button_OK.Click
 
         Dim i As Integer
-        Dim datum As DateTime
-        Dim wert As Double
+        Dim timestamp As DateTime
+        Dim value As Double
 
-        'Titel prüfen
+        'check the title
         If (Me.TextBox_Title.Text = String.Empty) Then
-            MsgBox("Bitte einen Titel eingeben!", MsgBoxStyle.Exclamation)
+            MsgBox("Please enter a title for the series!", MsgBoxStyle.Exclamation)
             Me.TextBox_Title.Focus()
             Me.DialogResult = DialogResult.None
             Exit Sub
         End If
 
-        'Eingabe prüfen
-        If (Not Me.Prüfen()) Then
+        'check the dates
+        If (Not Me.check_dates()) Then
             Me.DialogResult = DialogResult.None
             Exit Sub
         End If
 
-        'Zeitreihe instanzieren
-        Me.mZeitreihe = New TimeSeries(Me.Title)
+        'create a new time series object
+        Me.mZeitreihe = New TimeSeries(Me.series_Title)
 
-        'Einheit schreiben
-        Me.Zeitreihe.Unit = Me.Einheit
+        'store the unit
+        Me.mZeitreihe.Unit = Me.series_Unit
 
+        'add the nodes
+        Me.Cursor = Cursors.WaitCursor
+        Me.Enabled = False
         For i = 0 To Me.DataGridView1.RowCount - 2 '(letzte Zeile nicht mitnehmen)
-            datum = DateTime.Parse(Me.DataGridView1.Rows(i).Cells(0).Value)
-            wert = Convert.ToDouble(Me.DataGridView1.Rows(i).Cells(1).Value)
-            Me.mZeitreihe.AddNode(datum, wert)
+            timestamp = DateTime.Parse(Me.DataGridView1.Rows(i).Cells(0).Value)
+            value = Helpers.StringToDouble(Me.DataGridView1.Rows(i).Cells(1).Value)
+            Me.mZeitreihe.AddNode(timestamp, value)
         Next
+        Me.Cursor = Cursors.Default
+        Me.Enabled = True
 
         Me.Close()
 
     End Sub
 
+    ''' <summary>
+    ''' Handles Ctrl+V key event
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    ''' <remarks></remarks>
     Private Sub DataGridView1_KeyDown(ByVal sender As System.Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles DataGridView1.KeyDown
         If (e.Control And e.KeyCode = Keys.V) Then
             Call Me.Paste(sender, New EventArgs())
