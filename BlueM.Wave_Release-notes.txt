@@ -4,6 +4,7 @@ BlueM.Wave Release Notes
 Version 1.6.2
 -------------
 NEW:
+* Added read support for PRMS output files (annual and monthly summaries, as well as DPOUT)
 * Added write support for ZRXP format
 * Added write support for UVF format
 * Added write support for SYDRO binary format (BIN) (only in x86 version)

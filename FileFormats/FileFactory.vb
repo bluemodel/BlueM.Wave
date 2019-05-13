@@ -41,7 +41,7 @@ Public Module FileFactory
     Public Const FileExtKWL As String = ".KWL"
     Public Const FileExtZRE As String = ".ZRE"
     Public Const FileExtTEN As String = ".TEN"
-    Public Const FileExtOUT As String = ".OUT" 'SWMM binary result file
+    Public Const FileExtOUT As String = ".OUT" 'SWMM binary result file or PRMS out file
     Public Const FileExtTXT As String = ".TXT" 'SWMM routing file
     Public Const FileExtBIN As String = ".BIN" 'SYDRO binary format
     Public Const FileExtZRXP As String = ".ZRX" 'ZRXP format
@@ -158,7 +158,11 @@ Public Module FileFactory
                 End If
 
             Case FileExtOUT
-                FileInstance = New SWMM_OUT(file)
+                If PRMS.verifyFormat(file) Then
+                    FileInstance = New PRMS(file)
+                Else
+                    FileInstance = New SWMM_OUT(file)
+                End If
 
             Case FileExtTXT
                 'Check file format
