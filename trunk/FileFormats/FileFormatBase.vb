@@ -49,6 +49,7 @@ Public MustInherit Class FileFormatBase
         ZRXP = 12
         WVP = 13
         BIN = 14
+        PRMS_OUT = 15
     End Enum
 
     ''' <summary>
@@ -59,17 +60,18 @@ Public MustInherit Class FileFormatBase
             "All files (*.*)|*.*|" & _
             "Text files (*.txt)|*.txt|" & _
             "CSV files (*.csv)|*.csv|" & _
-            "ZRE files (*.zre)|*.zre|" & _
-            "WEL files (*.wel, *.kwl)|*.wel;*.kwl|" & _
-            "UVF files (*.uvf)|*.uvf|" & _
-            "SMUSI files (*.asc)|*.asc|" & _
-            "SIMBA files (*.smb)|*.smb|" & _
-            "Hystem Extran files (*.dat)|*.dat|" & _
-            "SWMM files (*.out)|*.out|" & _
             "HYDRO_AS-2D files (*.dat)|*.dat|" & _
+            "Hystem Extran files (*.dat)|*.dat|" & _
+            "PRMS output files (*.out)|*.out|" & _
+            "SIMBA files (*.smb)|*.smb|" & _
+            "SMUSI files (*.asc)|*.asc|" & _
+            "SWMM files (*.out)|*.out|" & _
             "SYDRO binary files (*.bin)|*.bin|" & _
-            "ZRXP files (*.zrx)|*.zrx|" & _
-            "Wave project files (*wvp)|*.wvp"
+            "UVF files (*.uvf)|*.uvf|" & _
+            "WEL files (*.wel, *.kwl)|*.wel;*.kwl|" & _
+            "Wave project files (*wvp)|*.wvp|" & _
+            "ZRE files (*.zre)|*.zre|" & _
+            "ZRXP files (*.zrx)|*.zrx"
 
 #Region "allgemeine Eigenschaften"
     Protected SpaltenOffset As Integer = 0          'Anzahl Zeichen bevor die erste Spalte anfängt (nur bei Spalten mit fester Breite)
