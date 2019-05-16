@@ -96,7 +96,7 @@ Public Class PRMS
             lines(2).Trim() = "MO   YEAR  O-PPT  N-PPT  INLOS    P-ET   A-ET   SMELT   GW-FL   RS-FL    SRO SIMRO[mm] OBSRO[mm] ERR*100" Then
             Me.FileFormat = FileType.monthly
             Me.iLineData = 3
-        ElseIf lines(1).Trim().StartsWith("Sim PRED DISCH    (m3/s)") Then
+        ElseIf lines(1).Trim().Contains("PRED DISCH    (m3/s)") Then
             Me.FileFormat = FileType.dpout
             Me.iLineData = 12
         Else
@@ -173,7 +173,7 @@ Public Class PRMS
                             Me.Columns(i).Einheit = "-"
                         Else
                             Dim m As Match
-                            m = Regex.Match(lines(i - 2).Trim(), "Sim (.+)\s+\((.+)\).+")
+                            m = Regex.Match(lines(i - 2).Trim(), ".{3} (.+)\s+\((.+)\).+")
                             Me.Columns(i).Name = m.Groups(1).Value.Trim()
                             Me.Columns(i).Einheit = m.Groups(2).Value.Trim()
                         End If
@@ -303,7 +303,7 @@ Public Class PRMS
             ElseIf lines(1).Trim() = "MONTHLY SUMMARY" And _
                 lines(2).Trim() = "MO   YEAR  O-PPT  N-PPT  INLOS    P-ET   A-ET   SMELT   GW-FL   RS-FL    SRO SIMRO[mm] OBSRO[mm] ERR*100" Then
                 Return True
-            ElseIf lines(1).Trim().StartsWith("Sim PRED DISCH    (m3/s)") Then
+            ElseIf lines(1).Trim().Contains("PRED DISCH    (m3/s)") Then
                 Return True
             End If
 
