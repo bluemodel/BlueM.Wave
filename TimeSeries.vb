@@ -191,7 +191,7 @@ Public Class TimeSeries
     ''' <summary>
     ''' Returns the maximum value of the time series
     ''' </summary>
-    Public ReadOnly Property Maximum() As Double
+    Public Overloads ReadOnly Property Maximum() As Double
         Get
             Dim max As Double
             max = Double.MinValue
@@ -205,15 +205,57 @@ Public Class TimeSeries
     End Property
 
     ''' <summary>
-    ''' Returns the minimum value of the time series
+    ''' Returns the maximum value of the time series within a defined time period
     ''' </summary>
-    Public ReadOnly Property Minimum() As Double
+    Public Overloads ReadOnly Property Maximum(ByVal startdate As DateTime, ByVal enddate As DateTime) As Double
+        Get
+            Dim max As Double
+            max = Double.MinValue
+            For Each kvp As KeyValuePair(Of DateTime, Double) In Me.NodesClean
+                If kvp.Key < startdate Then
+                    Continue For
+                ElseIf kvp.Key > enddate Then
+                    Exit For
+                End If
+                If (kvp.Value > max) Then
+                    max = kvp.Value
+                End If
+            Next
+            Return max
+        End Get
+    End Property
+
+    ''' <summary>
+    ''' Returns the minimum value of the time series within a defined time period
+    ''' </summary>
+    Public Overloads ReadOnly Property Minimum() As Double
         Get
             Dim min As Double
             min = Double.MaxValue
             For Each value As Double In Me.Values
                 If (value < min) Then
                     min = value
+                End If
+            Next
+            Return min
+        End Get
+    End Property
+
+    ''' <summary>
+    ''' Returns the minimum value of the time series within a defined time period
+    ''' </summary>
+    Public Overloads ReadOnly Property Minimum(ByVal startdate As DateTime, ByVal enddate As DateTime) As Double
+        Get
+            Dim min As Double
+            min = Double.MaxValue
+            For Each kvp As KeyValuePair(Of DateTime, Double) In Me.NodesClean
+                If kvp.Key < startdate Then
+                    Continue For
+                ElseIf kvp.Key > enddate Then
+                    Exit For
+                End If
+                If (kvp.Value < min) Then
+                    min = kvp.Value
                 End If
             Next
             Return min

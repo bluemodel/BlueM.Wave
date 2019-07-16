@@ -346,6 +346,7 @@
     <None Include="Resources\arrow_up.png" />
     <None Include="Resources\arrow_down.png" />
     <None Include="Resources\chart_line_error.png" />
+    <Content Include="Resources\arrow_up_down.png" />
     <Content Include="Resources\chart_magnify.png" />
     <Content Include="Resources\chart_pie.png" />
     <Content Include="Resources\color_wheel.png" />

@@ -4,6 +4,8 @@ BlueM.Wave Release Notes
 Version 1.6.2
 -------------
 NEW:
+* Added a button for auto-adjusting the Y-axes to the current viewport
+  (currently only works for left and right, but not custom axes)
 * Added read support for PRMS output files (annual and monthly summaries, as well as DPOUT)
 * Added write support for ZRXP format
 * Added write support for UVF format
@@ -36,7 +38,7 @@ FIXED:
 * ZRXP format: values equal to the error value specified as "RINVAL" in the file header are 
   converted to NaN during import
 * UVF format: fixed reading and writing of time series starting before 1900
-* UVF format: values equal to -777 are assumed to be error values and converted to NaN during import
+* UVF format: values equal to -777 are recognized as error values and converted to NaN during import
 * BIN format: values equal to -9999.999 are recognized as error values and converted to NaN during import
 * Fixed export to SMUSI REG format. Time series must be equidistant with 5 minute time step.
 API-CHANGES:
