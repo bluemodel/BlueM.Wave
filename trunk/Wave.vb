@@ -74,8 +74,21 @@ Public Class Wave
 
     Private Const HelpURL As String = "http://wiki.bluemodel.org/index.php/Wave"
 
-    'Methoden
-    '########
+#Region "Properties"
+
+    ''' <summary>
+    ''' Checks whether the option to auto-adjust the Y-axes to the current viewport is activated
+    ''' </summary>
+    ''' <value></value>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
+    Private ReadOnly Property AutoAdjustYAxes() As Boolean
+        Get
+            Return Me.ToolStripButton_AutoAdjustYAxes.Checked
+        End Get
+    End Property
+
+#End Region 'Properties
 
 #Region "Form behavior"
 
@@ -316,9 +329,11 @@ Public Class Wave
         colorBand1.StartLinePen.Visible = False
     End Sub
 
-    'Charts aktualisieren
-    '********************
-    Private Sub UpdateCharts()
+    ''' <summary>
+    ''' Updates the extent of the x-axes of the charts
+    ''' </summary>
+    ''' <remarks></remarks>
+    Private Sub UpdateChartExtents()
 
         Dim Xmin, Xmax As DateTime
 
@@ -328,7 +343,7 @@ Public Class Wave
             Me.TChart2.Refresh()
 
         Else
-            'Update Axes and colorBand
+            'Update X-Axis and colorBand
 
             'Min- und Max-Datum bestimmen
             Xmin = DateTime.MaxValue
@@ -366,9 +381,7 @@ Public Class Wave
     ''' <remarks></remarks>
     Private Sub TChart1_ZoomChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles TChart1.Scroll, TChart1.Zoomed, TChart1.UndoneZoom
         If (Me.TChart1.Axes.Bottom.Minimum <> Me.TChart1.Axes.Bottom.Maximum) Then
-            'Update everything
-            Call Me.updateColorband()
-            Call Me.updateNavigation()
+            Call Me.viewportChanged()
             Me.selectionMade = True
         End If
     End Sub
@@ -380,6 +393,80 @@ Public Class Wave
     Private Sub updateColorband()
         Me.colorBand1.Start = Me.TChart1.Axes.Bottom.Minimum
         Me.colorBand1.End = Me.TChart1.Axes.Bottom.Maximum
+    End Sub
+
+    ''' <summary>
+    ''' Updates the navigation, the overview, and if activated auto-adjusts the Y-axes
+    ''' to the currently displayed viewport
+    ''' </summary>
+    ''' <remarks></remarks>
+    Private Sub viewportChanged()
+
+        'Update navigation
+        Call Me.updateNavigation()
+
+        'Update overview
+        Call Me.updateColorband()
+
+        'Auto-adjust Y-axes to current viewport
+        If Me.AutoAdjustYAxes Then
+
+            Dim startdate, enddate As DateTime
+            Dim title As String
+            Dim series As TimeSeries
+            Dim seriesMin, seriesMax, Ymin, Ymax As Double
+            Dim axisType As Steema.TeeChart.Styles.VerticalAxis
+            Dim axis As Steema.TeeChart.Axis
+
+            'get start and end date of current viewport
+            startdate = DateTime.FromOADate(Me.TChart1.Axes.Bottom.Minimum)
+            enddate = DateTime.FromOADate(Me.TChart1.Axes.Bottom.Maximum)
+
+            'define axes to process
+            Dim axes As New Dictionary(Of Steema.TeeChart.Styles.VerticalAxis, Steema.TeeChart.Axis)
+            axes.Add(Steema.TeeChart.Styles.VerticalAxis.Left, Me.TChart1.Axes.Left)
+            axes.Add(Steema.TeeChart.Styles.VerticalAxis.Right, Me.TChart1.Axes.Right)
+            'TODO: auto-adjustment of custom axes
+
+            'loop over Y-axes
+            For Each kvp As KeyValuePair(Of Steema.TeeChart.Styles.VerticalAxis, Steema.TeeChart.Axis) In axes
+                axisType = kvp.Key
+                axis = kvp.Value
+
+                'loop over series
+                Ymin = Double.MaxValue
+                Ymax = Double.MinValue
+                For Each kvp_series As KeyValuePair(Of String, TimeSeries) In Me.Zeitreihen
+                    title = kvp_series.Key
+                    series = kvp_series.Value
+
+                    'only process active series on the current axis
+                    If Me.TChart1.Series.WithTitle(title).Active _
+                        And Me.TChart1.Series.WithTitle(title).VertAxis = axisType Then
+
+                        'get series min and max for current viewport
+                        seriesMin = series.Minimum(startdate, enddate)
+                        If seriesMin < Ymin Then
+                            Ymin = seriesMin
+                        End If
+                        seriesMax = series.Maximum(startdate, enddate)
+                        If seriesMax > Ymax Then
+                            Ymax = seriesMax
+                        End If
+                    End If
+                Next
+
+                'set new Y axis bounds
+                If Ymin < Double.MaxValue Then
+                    axis.AutomaticMinimum = False
+                    axis.Minimum = Ymin
+                End If
+                If Ymax > Double.MinValue Then
+                    axis.AutomaticMaximum = False
+                    axis.Maximum = Ymax
+                End If
+            Next
+        End If
     End Sub
 
     'ColorBand Resized
@@ -395,9 +482,8 @@ Public Class Wave
             'set new min/max values for the bottom axis of the main chart
             Me.TChart1.Axes.Bottom.Minimum = Me.colorBand1.Start
             Me.TChart1.Axes.Bottom.Maximum = Me.colorBand1.End
-            'Update navigation
-            Call Me.updateNavigation()
             Me.selectionMade = True
+            Call Me.viewportChanged()
         End If
     End Sub
 
@@ -724,7 +810,7 @@ Public Class Wave
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
     ''' <remarks></remarks>
-    Private Sub ToolStripButton_Merge_Click( ByVal sender As System.Object,  ByVal e As System.EventArgs) Handles ToolStripButton_Merge.Click
+    Private Sub ToolStripButton_Merge_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_Merge.Click
 
         Dim dlg As MergeSeriesDialog
         Dim dlgResult As DialogResult
@@ -1349,13 +1435,11 @@ Public Class Wave
             Me.TChart1.Axes.Bottom.Minimum = snapshot.AxesMinMax(6)
             Me.TChart1.Axes.Bottom.Maximum = snapshot.AxesMinMax(7)
             Me.TChart1.Zoom.HistorySteps.RemoveAt(Me.TChart1.Zoom.HistorySteps.Count - 1)
-            'Update everything
-            Call Me.updateColorband()
-            Call Me.updateNavigation()
+            Call Me.viewportChanged()
         Else
             'no history present, reset the charts
             Me.selectionMade = False
-            Call Me.UpdateCharts()
+            Call Me.UpdateChartExtents()
         End If
     End Sub
 
@@ -1410,13 +1494,8 @@ Public Class Wave
             'zoom
             Me.TChart1.Axes.Bottom.Minimum = startdate.ToOADate()
             Me.TChart1.Axes.Bottom.Maximum = enddate.ToOADate()
-            'update navigation
-            Call Me.updateNavigation()
-            'update colorband
-            colorBand1.Start = Me.TChart1.Axes.Bottom.Minimum
-            colorBand1.End = Me.TChart1.Axes.Bottom.Maximum
-
             Me.selectionMade = True
+            Call Me.viewportChanged()
         Else
             'Series not found! Do nothing?
         End If
@@ -1426,13 +1505,32 @@ Public Class Wave
     ''' Zoom All button clicked
     ''' </summary>
     Private Sub ToolStripButton_ZoomAll_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_ZoomAll.Click
+
         'save the current zoom snapshot
         Call Me.saveZoomSnapshot()
+
         'reset the charts
         Me.selectionMade = False
-        Call Me.UpdateCharts()
-        'update the navigation
-        Call Me.updateNavigation()
+        Call Me.UpdateChartExtents()
+
+        Call Me.viewportChanged()
+    End Sub
+
+    ''' <summary>
+    ''' Auto-adjust Y-axes to current viewport button clicked
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    ''' <remarks></remarks>
+    Private Sub ToolStripButton_AutoAdjustYAxis_CheckedChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles ToolStripButton_AutoAdjustYAxes.CheckedChanged
+        If Me.ToolStripButton_AutoAdjustYAxes.Checked Then
+            Call Me.viewportChanged()
+        Else
+            'Reset the Y axes to automatic
+            Me.TChart1.Axes.Left.Automatic = True
+            Me.TChart1.Axes.Right.Automatic = True
+            Me.TChart1.Refresh()
+        End If
     End Sub
 
     ''' <summary>
@@ -1605,9 +1703,7 @@ Public Class Wave
             'Adjust the display range of the main chart
             Me.TChart1.Axes.Bottom.Minimum = Me.DateTimePicker_NavStart.Value.ToOADate()
             Me.TChart1.Axes.Bottom.Maximum = Me.DateTimePicker_NavEnd.Value.ToOADate()
-            'Update everything
-            Call Me.updateColorband()
-            Call Me.updateDisplayRange()
+            Call Me.viewportChanged()
             Me.selectionMade = True
         End If
     End Sub
@@ -1656,9 +1752,7 @@ Public Class Wave
         'Set new max value for x axis
         Me.TChart1.Axes.Bottom.Maximum = xMax.ToOADate()
 
-        'Update everything
-        Call Me.updateNavigation()
-        Call Me.updateColorband()
+        Call Me.viewportChanged()
 
         Me.selectionMade = True
 
@@ -1785,9 +1879,7 @@ Public Class Wave
         Me.TChart1.Axes.Bottom.Minimum = xMinNew.ToOADate()
         Me.TChart1.Axes.Bottom.Maximum = xMaxNew.ToOADate()
 
-        'update everything else
-        Call Me.updateNavigation()
-        Call Me.updateColorband()
+        Call Me.viewportChanged()
 
         Me.selectionMade = True
 
@@ -2067,7 +2159,7 @@ Public Class Wave
             'Log
             Call Log.AddLogEntry("Project file '" & projectfile & "' loaded successfully!")
 
-            Call Me.UpdateCharts()
+            Call Me.UpdateChartExtents()
 
         Catch ex As Exception
             MsgBox("Error while loading project file:" & eol & ex.Message, MsgBoxStyle.Critical)
@@ -2212,9 +2304,9 @@ Public Class Wave
             Call Me.Init_ColorBand()
 
             'Charts aktualisieren
-            Call Me.UpdateCharts()
-            'Update navigation
-            Call Me.updateNavigation()
+            Call Me.UpdateChartExtents()
+
+            Call Me.viewportChanged()
 
             'Re-assign the chart to the chartlistbox (Bug 701)
             Me.ChartListBox1.Chart = Me.TChart1
@@ -2584,9 +2676,9 @@ Public Class Wave
         End Select
 
         'Charts aktualisieren
-        Call Me.UpdateCharts()
-        'Update navigation
-        Call Me.updateNavigation()
+        Call Me.UpdateChartExtents()
+
+        Call Me.viewportChanged()
 
     End Sub
 
