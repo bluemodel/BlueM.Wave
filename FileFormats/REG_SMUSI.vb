@@ -93,7 +93,6 @@ Public Class REG_SMUSI
     Public Overrides Sub ReadColumns()
 
         Dim Zeile, title As String
-        Dim i As Integer
 
         Try
             'Datei öffnen
