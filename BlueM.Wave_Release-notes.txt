@@ -4,6 +4,11 @@ BlueM.Wave Release Notes
 Version 1.6.2
 -------------
 NEW:
+* Added support for storing an "Interpretation" property for time series. 
+  Interpretation is currently only known for series read from WEL files and the TALSIM clipboard,
+  all other series have a default interpretation value of 99 (Undefined).
+  Series with interpretation 2 (BlockRight), 3 (BlockLeft) and 5 (CumulativePerTimestep) 
+  are displayed as (inverted) stairs in the chart, all others are displayed normally (linear interpolation between nodes).
 * Added a button for auto-adjusting the Y-axes to the current viewport
   (currently only works for left and right, but not custom axes)
 * Added read support for PRMS output files (annual and monthly summaries, as well as DPOUT)

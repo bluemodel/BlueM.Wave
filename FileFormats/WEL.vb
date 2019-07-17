@@ -218,6 +218,12 @@ Public Class WEL
         'Zeitreihen instanzieren
         For i = 0 To Me.SelectedColumns.Length - 1
             Me.TimeSeries(i) = New TimeSeries(Me.SelectedColumns(i).Name)
+            'Series in a WEL file are always interpreted as BlockRight, with the exception of volume
+            If Me.TimeSeries(i).Title.EndsWith("_VOL") Then
+                Me.TimeSeries(i).Interpretation = BlueM.Wave.TimeSeries.InterpretationType.Instantaneous
+            Else
+                Me.TimeSeries(i).Interpretation = BlueM.Wave.TimeSeries.InterpretationType.BlockRight
+            End If
         Next
 
         'Einheiten?

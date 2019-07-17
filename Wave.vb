@@ -2556,6 +2556,9 @@ Public Class Wave
                     'read series from file
                     ts = fileobj.getTimeSeries(name)
 
+                    'set interpretation
+                    ts.Interpretation = params("Interpretation")
+
                     'import series
                     Call Me.Import_Series(ts)
 
@@ -2577,6 +2580,9 @@ Public Class Wave
                     'add metadata
                     ts.Title = name
                     ts.Unit = params("Einheit")
+
+                    'set interpretation
+                    ts.Interpretation = params("Interpretation")
 
                     'import series
                     Call Me.Import_Series(ts)
@@ -2673,6 +2679,19 @@ Public Class Wave
                 Line2.VertAxis = Steema.TeeChart.Styles.VerticalAxis.Custom
                 Line1.CustomVertAxis = Me.MyAxes1(zre.Unit)
                 Line2.CustomVertAxis = Me.MyAxes2(zre.Unit)
+        End Select
+
+        'Interpretation
+        Select Case zre.Interpretation
+            Case TimeSeries.InterpretationType.BlockRight
+                Line1.Stairs = True
+                Line2.Stairs = True
+            Case TimeSeries.InterpretationType.BlockLeft
+            Case TimeSeries.InterpretationType.CumulativePerTimestep
+                Line1.Stairs = True
+                Line2.Stairs = True
+                Line1.InvertedStairs = True
+                Line2.InvertedStairs = True
         End Select
 
         'Charts aktualisieren
