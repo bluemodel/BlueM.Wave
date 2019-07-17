@@ -27,6 +27,19 @@
 '
 Public Class TimeSeries
 
+    ''' <summary>
+    ''' Interpretation types
+    ''' </summary>
+    ''' <remarks></remarks>
+    Public Enum InterpretationType As Integer
+        Instantaneous = 1
+        BlockRight = 2
+        BlockLeft = 3
+        Cumulative = 4
+        CumulativePerTimestep = 5
+        Undefined = 99
+    End Enum
+
 #Region "Members"
 
     Private _title As String
@@ -36,6 +49,7 @@ Public Class TimeSeries
     Private _metadata As Metadata
     Private _Objekt As String
     Private _Type As String
+    Private _Interpretation As InterpretationType
 
 #End Region 'Members
 
@@ -68,6 +82,18 @@ Public Class TimeSeries
         End Get
         Set(ByVal value As String)
             _Type = value
+        End Set
+    End Property
+
+    ''' <summary>
+    ''' The time series' interpretation
+    ''' </summary>
+    Public Property Interpretation() As InterpretationType
+        Get
+            Return Me._Interpretation
+        End Get
+        Set(ByVal value As InterpretationType)
+            Me._Interpretation = value
         End Set
     End Property
 
@@ -369,6 +395,7 @@ Public Class TimeSeries
         Me._unit = "-"
         Me._Objekt = "-"
         Me._Type = "-"
+        Me._Interpretation = InterpretationType.Undefined
         Me._nodes = New SortedList(Of DateTime, Double)
     End Sub
 
@@ -389,6 +416,7 @@ Public Class TimeSeries
         target.Type = Me.Type
         target._nodes = New SortedList(Of DateTime, Double)(Me._nodes)
         target.Metadata = Me.Metadata
+        target._Interpretation = Me.Interpretation
         Return target
     End Function
 
