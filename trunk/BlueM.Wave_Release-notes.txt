@@ -11,6 +11,7 @@ NEW:
   are displayed as (inverted) stairs in the chart, all others are displayed normally (linear interpolation between nodes).
 * Added a button for auto-adjusting the Y-axes to the current viewport
   (currently only works for left and right, but not custom axes)
+* Added support for reading Q_Strg.dat files in HYDRO_AS-2D version 5 format (previous versions still supported)
 * Added read support for PRMS output files (annual and monthly summaries, as well as DPOUT)
 * Added write support for ZRXP format
 * Added write support for UVF format

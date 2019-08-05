@@ -40,6 +40,12 @@ Public Class HYDRO_AS_2D
     Private _einheit As String
 
     ''' <summary>
+    ''' HYDRO_AS-2D Version 
+    ''' </summary>
+    ''' <remarks>is 2 by default, in version 5 the Q_Strg.dat format has changed</remarks>
+    Private _HYDROAS_version As Integer
+
+    ''' <summary>
     ''' Referenzdatum für den Beginn der Simulation
     ''' </summary>
     ''' <remarks>default: 01.01.2000 00:00:00</remarks>
@@ -66,6 +72,10 @@ Public Class HYDRO_AS_2D
 
         Call MyBase.New(file)
 
+        'assume HYDRO_AS-2D version 2 by default
+        Me._HYDROAS_version = 2
+
+        'default settings apply to HYDRO_AS-2D version 2 
         Me.iLineData = 9
         Me.iLineHeadings = 4
         Me.UseUnits = False
@@ -116,7 +126,7 @@ Public Class HYDRO_AS_2D
     ''' <remarks></remarks>
     Public Overrides Sub ReadColumns()
 
-        Dim i As Integer
+        Dim i, l As Integer
         Dim Zeile As String = ""
         Dim ZeileSpalten As String = ""
 
@@ -125,6 +135,23 @@ Public Class HYDRO_AS_2D
             Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
             Dim StrRead As StreamReader = New StreamReader(FiStr, System.Text.Encoding.GetEncoding("iso8859-1"))
             Dim StrReadSync = TextReader.Synchronized(StrRead)
+
+            'Determine HYDRO_AS-2D version for Q_Strg.dat
+            If Path.GetFileName(Me.File).ToLower() = "q_strg.dat" Then
+                'If the 5th line starts with "Name:", then it is HYDROAS-2D version 5 format
+                For i = 1 To 5
+                    Zeile = StrReadSync.ReadLine.ToString()
+                Next
+                If Zeile.Trim.StartsWith("Name:") Then
+                    Me._HYDROAS_version = 5
+                    'use names instead of node numbers as series titles
+                    Me.iLineHeadings = 5
+                End If
+                'return to beginning of file
+                FiStr.Seek(0, SeekOrigin.Begin)
+                StrRead = New StreamReader(FiStr, System.Text.Encoding.GetEncoding("iso8859-1"))
+                StrReadSync = TextReader.Synchronized(StrRead)
+            End If
 
             Select Case Path.GetFileName(Me.File).ToLower()
 
@@ -138,10 +165,25 @@ Public Class HYDRO_AS_2D
 
                     'Spaltennamen auslesen
                     Dim anzSpalten As Integer
-                    Dim Namen() As String
+                    Dim Namen(0) As String
 
-                    Namen = ZeileSpalten.Split(New Char() {Me.Separator.ToChar}, System.StringSplitOptions.RemoveEmptyEntries)
-                    anzSpalten = Namen.Length + 1 'X-Spalte künstlich dazuzählen, da ohne Namen
+                    Select Case Me._HYDROAS_version
+                        Case 2
+                            'space separated names
+                            Namen = ZeileSpalten.Split(New Char() {Me.Separator.ToChar}, System.StringSplitOptions.RemoveEmptyEntries)
+                            anzSpalten = Namen.Length + 1 'X-Spalte künstlich dazuzählen, da ohne Namen
+                        Case 5
+                            'names in columns of equal width
+                            ZeileSpalten = ZeileSpalten.Substring(14) 'start from column 14
+                            'split into equal lengths
+                            l = 13
+                            anzSpalten = ZeileSpalten.Length / l
+                            ReDim Namen(anzSpalten - 1)
+                            For i = 0 To anzSpalten - 1
+                                Namen(i) = ZeileSpalten.Substring(i * l, l).Trim()
+                            Next
+                            anzSpalten += 1 'X-Spalte künstlich dazuzählen, da ohne Namen
+                    End Select
 
                     'Spalten abspeichern
                     ReDim Me.Columns(anzSpalten - 1)
