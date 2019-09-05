@@ -774,7 +774,7 @@ Public Class Wave
         End If
 
         'Dialog instanzieren
-        Dim cutter As New CutDialog(Me.Zeitreihen)
+        Dim cutter As New CutDialog(Me.Zeitreihen, DateTime.FromOADate(Me.TChart1.Chart.Axes.Bottom.Minimum), DateTime.FromOADate(Me.TChart1.Chart.Axes.Bottom.Maximum))
 
         'Dialog anzeigen
         If (cutter.ShowDialog() = Windows.Forms.DialogResult.OK) Then

@@ -34,8 +34,6 @@ Partial Class CutDialog
         Me.DateTimePicker_EndDate = New System.Windows.Forms.DateTimePicker
         Me.Label_StartDateTime = New System.Windows.Forms.Label
         Me.Label_EndDateTime = New System.Windows.Forms.Label
-        Me.DateTimePicker_StartTime = New System.Windows.Forms.DateTimePicker
-        Me.DateTimePicker_EndTime = New System.Windows.Forms.DateTimePicker
         Me.TChart1 = New Steema.TeeChart.TChart
         Me.TabControl1 = New System.Windows.Forms.TabControl
         Me.TabPage_DateTime = New System.Windows.Forms.TabPage
@@ -74,7 +72,7 @@ Partial Class CutDialog
         'Label_End
         '
         Label_End.AutoSize = True
-        Label_End.Location = New System.Drawing.Point(294, 15)
+        Label_End.Location = New System.Drawing.Point(333, 15)
         Label_End.Name = "Label_End"
         Label_End.Size = New System.Drawing.Size(29, 13)
         Label_End.TabIndex = 7
@@ -117,20 +115,22 @@ Partial Class CutDialog
         '
         'DateTimePicker_StartDate
         '
-        Me.DateTimePicker_StartDate.CustomFormat = "dd.MM.yyyy"
+        Me.DateTimePicker_StartDate.CustomFormat = "dd.MM.yyyy HH:mm"
         Me.DateTimePicker_StartDate.Format = System.Windows.Forms.DateTimePickerFormat.Custom
         Me.DateTimePicker_StartDate.Location = New System.Drawing.Point(15, 31)
         Me.DateTimePicker_StartDate.Name = "DateTimePicker_StartDate"
-        Me.DateTimePicker_StartDate.Size = New System.Drawing.Size(82, 20)
+        Me.DateTimePicker_StartDate.ShowUpDown = True
+        Me.DateTimePicker_StartDate.Size = New System.Drawing.Size(110, 20)
         Me.DateTimePicker_StartDate.TabIndex = 5
         '
         'DateTimePicker_EndDate
         '
-        Me.DateTimePicker_EndDate.CustomFormat = "dd.MM.yyyy"
+        Me.DateTimePicker_EndDate.CustomFormat = "dd.MM.yyyy HH:mm"
         Me.DateTimePicker_EndDate.Format = System.Windows.Forms.DateTimePickerFormat.Custom
-        Me.DateTimePicker_EndDate.Location = New System.Drawing.Point(294, 31)
+        Me.DateTimePicker_EndDate.Location = New System.Drawing.Point(336, 31)
         Me.DateTimePicker_EndDate.Name = "DateTimePicker_EndDate"
-        Me.DateTimePicker_EndDate.Size = New System.Drawing.Size(82, 20)
+        Me.DateTimePicker_EndDate.ShowUpDown = True
+        Me.DateTimePicker_EndDate.Size = New System.Drawing.Size(110, 20)
         Me.DateTimePicker_EndDate.TabIndex = 9
         '
         'Label_StartDateTime
@@ -153,26 +153,6 @@ Partial Class CutDialog
         Me.Label_EndDateTime.TabIndex = 8
         Me.Label_EndDateTime.Text = "dd.MM.yyyy HH:mm"
         '
-        'DateTimePicker_StartTime
-        '
-        Me.DateTimePicker_StartTime.CustomFormat = "HH:mm"
-        Me.DateTimePicker_StartTime.Format = System.Windows.Forms.DateTimePickerFormat.Custom
-        Me.DateTimePicker_StartTime.Location = New System.Drawing.Point(103, 31)
-        Me.DateTimePicker_StartTime.Name = "DateTimePicker_StartTime"
-        Me.DateTimePicker_StartTime.ShowUpDown = True
-        Me.DateTimePicker_StartTime.Size = New System.Drawing.Size(64, 20)
-        Me.DateTimePicker_StartTime.TabIndex = 6
-        '
-        'DateTimePicker_EndTime
-        '
-        Me.DateTimePicker_EndTime.CustomFormat = "HH:mm"
-        Me.DateTimePicker_EndTime.Format = System.Windows.Forms.DateTimePickerFormat.Custom
-        Me.DateTimePicker_EndTime.Location = New System.Drawing.Point(382, 31)
-        Me.DateTimePicker_EndTime.Name = "DateTimePicker_EndTime"
-        Me.DateTimePicker_EndTime.ShowUpDown = True
-        Me.DateTimePicker_EndTime.Size = New System.Drawing.Size(64, 20)
-        Me.DateTimePicker_EndTime.TabIndex = 10
-        '
         'TChart1
         '
         '
@@ -191,6 +171,8 @@ Partial Class CutDialog
         '
         '
         '
+        Me.TChart1.Axes.Bottom.Labels.Bevel.ColorOne = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
+        Me.TChart1.Axes.Bottom.Labels.Bevel.ColorTwo = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer))
         Me.TChart1.Axes.Bottom.Labels.Bevel.StringColorOne = "FFFFFFFF"
         Me.TChart1.Axes.Bottom.Labels.Bevel.StringColorTwo = "FF808080"
         '
@@ -199,6 +181,8 @@ Partial Class CutDialog
         '
         '
         '
+        Me.TChart1.Axes.Bottom.Title.Bevel.ColorOne = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
+        Me.TChart1.Axes.Bottom.Title.Bevel.ColorTwo = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer))
         Me.TChart1.Axes.Bottom.Title.Bevel.StringColorOne = "FFFFFFFF"
         Me.TChart1.Axes.Bottom.Title.Bevel.StringColorTwo = "FF808080"
         '
@@ -210,6 +194,8 @@ Partial Class CutDialog
         '
         '
         '
+        Me.TChart1.Axes.Depth.Labels.Bevel.ColorOne = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
+        Me.TChart1.Axes.Depth.Labels.Bevel.ColorTwo = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer))
         Me.TChart1.Axes.Depth.Labels.Bevel.StringColorOne = "FFFFFFFF"
         Me.TChart1.Axes.Depth.Labels.Bevel.StringColorTwo = "FF808080"
         '
@@ -218,6 +204,8 @@ Partial Class CutDialog
         '
         '
         '
+        Me.TChart1.Axes.Depth.Title.Bevel.ColorOne = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
+        Me.TChart1.Axes.Depth.Title.Bevel.ColorTwo = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer))
         Me.TChart1.Axes.Depth.Title.Bevel.StringColorOne = "FFFFFFFF"
         Me.TChart1.Axes.Depth.Title.Bevel.StringColorTwo = "FF808080"
         '
@@ -229,6 +217,8 @@ Partial Class CutDialog
         '
         '
         '
+        Me.TChart1.Axes.DepthTop.Labels.Bevel.ColorOne = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
+        Me.TChart1.Axes.DepthTop.Labels.Bevel.ColorTwo = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer))
         Me.TChart1.Axes.DepthTop.Labels.Bevel.StringColorOne = "FFFFFFFF"
         Me.TChart1.Axes.DepthTop.Labels.Bevel.StringColorTwo = "FF808080"
         '
@@ -237,6 +227,8 @@ Partial Class CutDialog
         '
         '
         '
+        Me.TChart1.Axes.DepthTop.Title.Bevel.ColorOne = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
+        Me.TChart1.Axes.DepthTop.Title.Bevel.ColorTwo = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer))
         Me.TChart1.Axes.DepthTop.Title.Bevel.StringColorOne = "FFFFFFFF"
         Me.TChart1.Axes.DepthTop.Title.Bevel.StringColorTwo = "FF808080"
         '
@@ -248,6 +240,8 @@ Partial Class CutDialog
         '
         '
         '
+        Me.TChart1.Axes.Left.Labels.Bevel.ColorOne = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
+        Me.TChart1.Axes.Left.Labels.Bevel.ColorTwo = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer))
         Me.TChart1.Axes.Left.Labels.Bevel.StringColorOne = "FFFFFFFF"
         Me.TChart1.Axes.Left.Labels.Bevel.StringColorTwo = "FF808080"
         '
@@ -256,6 +250,8 @@ Partial Class CutDialog
         '
         '
         '
+        Me.TChart1.Axes.Left.Title.Bevel.ColorOne = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
+        Me.TChart1.Axes.Left.Title.Bevel.ColorTwo = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer))
         Me.TChart1.Axes.Left.Title.Bevel.StringColorOne = "FFFFFFFF"
         Me.TChart1.Axes.Left.Title.Bevel.StringColorTwo = "FF808080"
         '
@@ -267,6 +263,8 @@ Partial Class CutDialog
         '
         '
         '
+        Me.TChart1.Axes.Right.Labels.Bevel.ColorOne = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
+        Me.TChart1.Axes.Right.Labels.Bevel.ColorTwo = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer))
         Me.TChart1.Axes.Right.Labels.Bevel.StringColorOne = "FFFFFFFF"
         Me.TChart1.Axes.Right.Labels.Bevel.StringColorTwo = "FF808080"
         '
@@ -275,6 +273,8 @@ Partial Class CutDialog
         '
         '
         '
+        Me.TChart1.Axes.Right.Title.Bevel.ColorOne = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
+        Me.TChart1.Axes.Right.Title.Bevel.ColorTwo = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer))
         Me.TChart1.Axes.Right.Title.Bevel.StringColorOne = "FFFFFFFF"
         Me.TChart1.Axes.Right.Title.Bevel.StringColorTwo = "FF808080"
         '
@@ -286,6 +286,8 @@ Partial Class CutDialog
         '
         '
         '
+        Me.TChart1.Axes.Top.Labels.Bevel.ColorOne = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
+        Me.TChart1.Axes.Top.Labels.Bevel.ColorTwo = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer))
         Me.TChart1.Axes.Top.Labels.Bevel.StringColorOne = "FFFFFFFF"
         Me.TChart1.Axes.Top.Labels.Bevel.StringColorTwo = "FF808080"
         '
@@ -294,6 +296,8 @@ Partial Class CutDialog
         '
         '
         '
+        Me.TChart1.Axes.Top.Title.Bevel.ColorOne = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
+        Me.TChart1.Axes.Top.Title.Bevel.ColorTwo = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer))
         Me.TChart1.Axes.Top.Title.Bevel.StringColorOne = "FFFFFFFF"
         Me.TChart1.Axes.Top.Title.Bevel.StringColorTwo = "FF808080"
         Me.TChart1.Cursor = System.Windows.Forms.Cursors.Default
@@ -303,6 +307,8 @@ Partial Class CutDialog
         '
         '
         '
+        Me.TChart1.Footer.Bevel.ColorOne = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
+        Me.TChart1.Footer.Bevel.ColorTwo = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer))
         Me.TChart1.Footer.Bevel.StringColorOne = "FFFFFFFF"
         Me.TChart1.Footer.Bevel.StringColorTwo = "FF808080"
         '
@@ -311,6 +317,8 @@ Partial Class CutDialog
         '
         '
         '
+        Me.TChart1.Header.Bevel.ColorOne = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
+        Me.TChart1.Header.Bevel.ColorTwo = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer))
         Me.TChart1.Header.Bevel.StringColorOne = "FFFFFFFF"
         Me.TChart1.Header.Bevel.StringColorTwo = "FF808080"
         Me.TChart1.Header.Visible = False
@@ -320,6 +328,8 @@ Partial Class CutDialog
         '
         '
         '
+        Me.TChart1.Legend.Bevel.ColorOne = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
+        Me.TChart1.Legend.Bevel.ColorTwo = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer))
         Me.TChart1.Legend.Bevel.StringColorOne = "FFFFFFFF"
         Me.TChart1.Legend.Bevel.StringColorTwo = "FF808080"
         Me.TChart1.Legend.LegendStyle = Steema.TeeChart.LegendStyles.Series
@@ -329,6 +339,8 @@ Partial Class CutDialog
         '
         '
         '
+        Me.TChart1.Legend.Title.Bevel.ColorOne = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
+        Me.TChart1.Legend.Title.Bevel.ColorTwo = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer))
         Me.TChart1.Legend.Title.Bevel.StringColorOne = "FFFFFFFF"
         Me.TChart1.Legend.Title.Bevel.StringColorTwo = "FF808080"
         Me.TChart1.Legend.Visible = False
@@ -340,6 +352,8 @@ Partial Class CutDialog
         '
         '
         '
+        Me.TChart1.Panel.Bevel.ColorOne = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
+        Me.TChart1.Panel.Bevel.ColorTwo = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer))
         Me.TChart1.Panel.Bevel.StringColorOne = "FFFFFFFF"
         Me.TChart1.Panel.Bevel.StringColorTwo = "FF808080"
         Me.TChart1.Panel.MarginBottom = 3
@@ -355,6 +369,8 @@ Partial Class CutDialog
         '
         '
         '
+        Me.TChart1.SubFooter.Bevel.ColorOne = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
+        Me.TChart1.SubFooter.Bevel.ColorTwo = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer))
         Me.TChart1.SubFooter.Bevel.StringColorOne = "FFFFFFFF"
         Me.TChart1.SubFooter.Bevel.StringColorTwo = "FF808080"
         '
@@ -363,6 +379,8 @@ Partial Class CutDialog
         '
         '
         '
+        Me.TChart1.SubHeader.Bevel.ColorOne = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
+        Me.TChart1.SubHeader.Bevel.ColorTwo = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer))
         Me.TChart1.SubHeader.Bevel.StringColorOne = "FFFFFFFF"
         Me.TChart1.SubHeader.Bevel.StringColorTwo = "FF808080"
         Me.TChart1.TabIndex = 2
@@ -375,6 +393,8 @@ Partial Class CutDialog
         '
         '
         '
+        Me.TChart1.Walls.Back.Bevel.ColorOne = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
+        Me.TChart1.Walls.Back.Bevel.ColorTwo = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer))
         Me.TChart1.Walls.Back.Bevel.StringColorOne = "FFFFFFFF"
         Me.TChart1.Walls.Back.Bevel.StringColorTwo = "FF808080"
         '
@@ -391,6 +411,8 @@ Partial Class CutDialog
         '
         '
         '
+        Me.TChart1.Walls.Bottom.Bevel.ColorOne = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
+        Me.TChart1.Walls.Bottom.Bevel.ColorTwo = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer))
         Me.TChart1.Walls.Bottom.Bevel.StringColorOne = "FFFFFFFF"
         Me.TChart1.Walls.Bottom.Bevel.StringColorTwo = "FF808080"
         '
@@ -399,6 +421,8 @@ Partial Class CutDialog
         '
         '
         '
+        Me.TChart1.Walls.Left.Bevel.ColorOne = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
+        Me.TChart1.Walls.Left.Bevel.ColorTwo = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer))
         Me.TChart1.Walls.Left.Bevel.StringColorOne = "FFFFFFFF"
         Me.TChart1.Walls.Left.Bevel.StringColorTwo = "FF808080"
         '
@@ -407,6 +431,8 @@ Partial Class CutDialog
         '
         '
         '
+        Me.TChart1.Walls.Right.Bevel.ColorOne = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
+        Me.TChart1.Walls.Right.Bevel.ColorTwo = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer))
         Me.TChart1.Walls.Right.Bevel.StringColorOne = "FFFFFFFF"
         Me.TChart1.Walls.Right.Bevel.StringColorTwo = "FF808080"
         '
@@ -428,10 +454,8 @@ Partial Class CutDialog
         '
         Me.TabPage_DateTime.Controls.Add(Label_Start)
         Me.TabPage_DateTime.Controls.Add(Me.DateTimePicker_StartDate)
-        Me.TabPage_DateTime.Controls.Add(Me.DateTimePicker_StartTime)
         Me.TabPage_DateTime.Controls.Add(Label_End)
         Me.TabPage_DateTime.Controls.Add(Me.DateTimePicker_EndDate)
-        Me.TabPage_DateTime.Controls.Add(Me.DateTimePicker_EndTime)
         Me.TabPage_DateTime.Location = New System.Drawing.Point(4, 22)
         Me.TabPage_DateTime.Name = "TabPage_DateTime"
         Me.TabPage_DateTime.Padding = New System.Windows.Forms.Padding(3)
@@ -523,8 +547,6 @@ Partial Class CutDialog
     Private WithEvents TabPage_ZRE As System.Windows.Forms.TabPage
     Private WithEvents DateTimePicker_StartDate As System.Windows.Forms.DateTimePicker
     Private WithEvents DateTimePicker_EndDate As System.Windows.Forms.DateTimePicker
-    Private WithEvents DateTimePicker_StartTime As System.Windows.Forms.DateTimePicker
-    Private WithEvents DateTimePicker_EndTime As System.Windows.Forms.DateTimePicker
     Private WithEvents ComboBox_RefSeries As System.Windows.Forms.ComboBox
     Private WithEvents Button_Cancel As System.Windows.Forms.Button
     Friend WithEvents CheckBox_keepUncutSeries As System.Windows.Forms.CheckBox

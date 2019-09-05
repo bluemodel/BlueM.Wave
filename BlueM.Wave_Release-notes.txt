@@ -3,7 +3,9 @@ BlueM.Wave Release Notes
 ===============================================================
 Version 1.6.3
 -------------
-
+CHANGED:
+* Reworked the cut time series dialog. The initial start and end dates for the cut are now taken 
+  from the currently displayed time period of the main chart.
 
 Version 1.6.2
 -------------
