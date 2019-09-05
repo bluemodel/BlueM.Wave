@@ -139,19 +139,20 @@ Partial Class CutDialog
         Me.Label_StartDateTime.ForeColor = System.Drawing.SystemColors.ControlDarkDark
         Me.Label_StartDateTime.Location = New System.Drawing.Point(9, 232)
         Me.Label_StartDateTime.Name = "Label_StartDateTime"
-        Me.Label_StartDateTime.Size = New System.Drawing.Size(101, 13)
+        Me.Label_StartDateTime.Size = New System.Drawing.Size(124, 13)
         Me.Label_StartDateTime.TabIndex = 4
-        Me.Label_StartDateTime.Text = "dd.MM.yyyy HH:mm"
+        Me.Label_StartDateTime.Text = "Min: dd.MM.yyyy HH:mm"
         '
         'Label_EndDateTime
         '
-        Me.Label_EndDateTime.AutoSize = True
+        Me.Label_EndDateTime.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Label_EndDateTime.ForeColor = System.Drawing.SystemColors.ControlDarkDark
-        Me.Label_EndDateTime.Location = New System.Drawing.Point(381, 232)
+        Me.Label_EndDateTime.Location = New System.Drawing.Point(346, 232)
         Me.Label_EndDateTime.Name = "Label_EndDateTime"
-        Me.Label_EndDateTime.Size = New System.Drawing.Size(101, 13)
+        Me.Label_EndDateTime.Size = New System.Drawing.Size(136, 13)
         Me.Label_EndDateTime.TabIndex = 8
-        Me.Label_EndDateTime.Text = "dd.MM.yyyy HH:mm"
+        Me.Label_EndDateTime.Text = "Max: dd.MM.yyyy HH:mm"
+        Me.Label_EndDateTime.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
         'TChart1
         '
