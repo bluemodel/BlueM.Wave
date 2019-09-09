@@ -92,20 +92,17 @@ Friend Class CutDialog
         Dim zre As TimeSeries
         Dim earliestStart, latestEnd As DateTime
 
-        earliestStart = DateTime.MinValue
-        latestEnd = DateTime.MaxValue
+        earliestStart = DateTime.MaxValue
+        latestEnd = DateTime.MinValue
 
         'Ausgewählte Zeitreihe
         If (Me.ComboBox_ZeitreiheCut.SelectedItem.ToString = labelAlle) Then
 
             'Anfangs- und Enddatum von allen Zeitreihen bestimmen
             For Each zre In Me.zreOrig.Values
-                If (zre.StartDate > earliestStart) Then earliestStart = zre.StartDate
-                If (zre.EndDate < latestEnd) Then latestEnd = zre.EndDate
+                If (zre.StartDate < earliestStart) Then earliestStart = zre.StartDate
+                If (zre.EndDate > latestEnd) Then latestEnd = zre.EndDate
             Next
-
-            If (earliestStart > Me.cutStart) Then Me.cutStart = earliestStart
-            If (latestEnd < Me.cutEnd) Then Me.cutEnd = latestEnd
 
             'Alle Zeitreihen in Chart anzeigen
             Call Me.TChart1.Chart.Series.Clear()
@@ -125,9 +122,6 @@ Friend Class CutDialog
 
             earliestStart = zre.StartDate
             latestEnd = zre.EndDate
-
-            If (earliestStart > Me.cutStart) Then Me.cutStart = zre.StartDate
-            If (latestEnd < Me.cutEnd) Then Me.cutEnd = zre.EndDate
 
             'Zeitreihe in Chart anzeigen
             Call Me.TChart1.Chart.Series.Clear()
