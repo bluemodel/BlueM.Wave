@@ -233,7 +233,7 @@ Public Class ZRXP
                 'parse value
                 valuestring = parts(1)
                 value = Helpers.StringToDouble(valuestring)
-                If value = Convert.ToDouble(Me.FileMetadata("RINVAL")) Then
+                If value = Helpers.StringToDouble(Me.FileMetadata("RINVAL")) Then
                     'convert error value to NaN
                     value = Double.NaN
                     errorcount += 1

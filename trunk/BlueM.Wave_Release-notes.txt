@@ -6,6 +6,8 @@ Version 1.6.3
 CHANGED:
 * Reworked the cut time series dialog. The initial start and end dates for the cut are now taken 
   from the currently displayed time period of the main chart.
+FIXED:
+* Fixed unintended use of the system's locale settings when reading files in HYDRO_AS-2D and ZRXP format
 
 Version 1.6.2
 -------------
