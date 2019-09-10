@@ -298,7 +298,7 @@ Public Class HYDRO_AS_2D
                         Zeile = StrReadSync.ReadLine.ToString()
                         Werte = Zeile.Split(New Char() {Me.Separator.ToChar}, System.StringSplitOptions.RemoveEmptyEntries)
                         'Simulationszeit [h] wird zu Datum nach dem Referenzdatum (default: 01.01.2000 00:00:00) konvertiert
-                        datum = Me.refDate + New TimeSpan(0, 0, Werte(0) * 3600)
+                        datum = Me.refDate + New TimeSpan(0, 0, Helpers.StringToDouble(Werte(0)) * 3600)
                         For j = 0 To Me.SelectedColumns.Length - 1
                             Me.TimeSeries(j).AddNode(datum, Helpers.StringToDouble(Werte(Me.SelectedColumns(j).Index)))
                         Next
@@ -316,7 +316,7 @@ Public Class HYDRO_AS_2D
                         If Zeile.StartsWith(" ---") Then Continue Do
                         If Zeile.StartsWith("  Abflu") Then
                             'Zeit lesen
-                            zeit = Convert.ToDouble(Zeile.Split(New Char() {"="}, StringSplitOptions.RemoveEmptyEntries)(1).Replace("[Sek]", "").Trim())
+                            zeit = Helpers.StringToDouble(Zeile.Split(New Char() {"="}, StringSplitOptions.RemoveEmptyEntries)(1).Replace("[Sek]", "").Trim())
                             'Simulationszeit [s] wird zu Datum nach 01.01.2000 00:00:00 konvertiert
                             datum = Me.refDate + New TimeSpan(0, 0, zeit)
                             Continue Do
@@ -325,7 +325,7 @@ Public Class HYDRO_AS_2D
                         'Datenzeilen
                         parts = Zeile.Split(New Char() {" "}, StringSplitOptions.RemoveEmptyEntries)
                         name = parts(0) & "-" & parts(1)
-                        value = Convert.ToDouble(parts(2))
+                        value = Helpers.StringToDouble(parts(2))
                         'nur ausgewählte Reihen abspeichern
                         If Me.SelectedSeries.Contains(name) Then
                             For i = 0 To Me.SelectedColumns.Length - 1
