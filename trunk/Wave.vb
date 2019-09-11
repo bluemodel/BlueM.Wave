@@ -2653,6 +2653,11 @@ Public Class Wave
         Line1.Title = zre.Title
         Line2.Title = zre.Title
 
+        'Determine total number of NaN-values and write to log
+        If zre.Nodes.Count > zre.NodesClean.Count Then
+            Call Log.AddLogEntry(String.Format("Series '{0}' contains {1} NaN values!", zre.Title, zre.Nodes.Count - zre.NodesClean.Count))
+        End If
+
         'Punkte zur Serie hinzufügen
         For Each node As KeyValuePair(Of DateTime, Double) In zre.NodesClean
             Line1.Add(node.Key, node.Value)
