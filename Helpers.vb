@@ -97,7 +97,6 @@ Public Module Helpers
         If (Not success) Then
             'string could not be parsed
             value = Double.NaN
-            Call Log.AddLogEntry("The value '" & str.Trim() & "' could not be parsed and was converted to NaN!")
         End If
 
         Return value

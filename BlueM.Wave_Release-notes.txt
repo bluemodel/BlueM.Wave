@@ -6,6 +6,10 @@ Version 1.6.3
 CHANGED:
 * Reworked the cut time series dialog. The initial start and end dates for the cut are now taken 
   from the currently displayed time period of the main chart.
+* Unparseable values in time series files are no longer written to the log individually. Instead, 
+  the total number of NaN values of each time series is written to the log when they are displayed 
+  for the first time.
+  
 FIXED:
 * Fixed unintended use of the system's locale settings when reading files in HYDRO_AS-2D and ZRXP format
 
