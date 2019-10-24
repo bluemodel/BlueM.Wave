@@ -52,6 +52,7 @@ Public Class PRMS
         monthly = 1
         annual = 2
         dpout = 3
+        statvar = 4
     End Enum
 
     Private FileFormat As FileType
@@ -99,6 +100,12 @@ Public Class PRMS
         ElseIf lines(1).Trim().Contains("PRED DISCH    (m3/s)") Then
             Me.FileFormat = FileType.dpout
             Me.iLineData = 12
+        ElseIf Path.GetExtension(FileName).ToLower = ".dat" Then
+            Dim nSeries As Integer
+            If Integer.TryParse(lines(1).Trim(), nSeries) Then
+                Me.FileFormat = FileType.statvar
+                Me.iLineData = nSeries + 2
+            End If
         Else
             Throw New Exception("Unexpected file format for a PRMS OUT file!")
         End If
@@ -179,6 +186,43 @@ Public Class PRMS
                         End If
                     Next
                     Me.DateTimeColumnIndex = 0 ' technically 0, 1 and 2
+
+                Case FileType.statvar
+                    'first header line contains the number of series
+                    Integer.TryParse(lines(1), nSeries)
+                    parts = lines(Me.iLineData).Split(New Char() {" "}, StringSplitOptions.RemoveEmptyEntries)
+                    ReDim Me.Columns(parts.Count() - 1)
+                    For i = 0 To parts.Count() - 1
+                        Me.Columns(i) = New ColumnInfo()
+                        Me.Columns(i).Index = i
+                        If i = 0 Then
+                            Me.Columns(i).Name = "NUMBER"
+                            Me.Columns(i).Einheit = "-"
+                        ElseIf i = 1 Then
+                            Me.Columns(i).Name = "YEAR"
+                            Me.Columns(i).Einheit = "-"
+                        ElseIf i = 2 Then
+                            Me.Columns(i).Name = "MONTH"
+                            Me.Columns(i).Einheit = "-"
+                        ElseIf i = 3 Then
+                            Me.Columns(i).Name = "DAY"
+                            Me.Columns(i).Einheit = "-"
+                        ElseIf i = 4 Then
+                            Me.Columns(i).Name = "HOUR"
+                            Me.Columns(i).Einheit = "-"
+                        ElseIf i = 5 Then
+                            Me.Columns(i).Name = "MINUTES"
+                            Me.Columns(i).Einheit = "-"
+                        ElseIf i = 6 Then
+                            Me.Columns(i).Name = "SECONDS"
+                            Me.Columns(i).Einheit = "-"
+                        ElseIf i > 6 Then
+                        	'these are the data columns
+                            Me.Columns(i).Name = lines(i - 5).Trim()
+                            Me.Columns(i).Einheit = "-"
+                        End If
+                    Next
+                    Me.DateTimeColumnIndex = 0 ' technically 1 to 6
             End Select
 
             StrReadSync.Close()
@@ -216,6 +260,8 @@ Public Class PRMS
                     nDateCols = 2
                 Case FileType.dpout
                     nDateCols = 3
+                Case FileType.statvar
+                    nDateCols = 7 'technically only 5, the first column is a line number and the 7th one is always 0 (milliseconds?)
             End Select
 
             'Instantiate time series
@@ -246,6 +292,8 @@ Public Class PRMS
                         timestamp = New Date(parts(1), parts(0), 1)
                     Case FileType.dpout
                         timestamp = New Date(parts(0), parts(1), parts(2))
+                    Case FileType.statvar
+                        timestamp = New DateTime(parts(1), parts(2), parts(3), parts(4), parts(5), parts(6))
                 End Select
                 'Parse values and store nodes
                 For i = 0 To nSeries - 1
@@ -305,6 +353,12 @@ Public Class PRMS
                 Return True
             ElseIf lines(1).Trim().Contains("PRED DISCH    (m3/s)") Then
                 Return True
+            ElseIf Path.GetExtension(file).ToLower = ".dat" Then
+                'first line should contain only an integer
+                Dim nLinesHeader As Integer
+                If Integer.TryParse(lines(1).Trim(), nLinesHeader) Then
+                    Return True
+                End If
             End If
 
             Return False

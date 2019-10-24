@@ -308,12 +308,14 @@ Public Class HystemExtran_REG
         StrRead.Close()
         FiStr.Close()
 
-        If (Zeile.Substring(5, 8) = " 0 0   0") Then
-            'Es ist eine Hystem-Regenreihe!
-            Return True
-        Else
-            Return False
+        If Zeile.Length >= 8 Then
+            If (Zeile.Substring(5, 8) = " 0 0   0") Then
+                'Es ist eine Hystem-Regenreihe!
+                Return True
+            End If
         End If
+
+        Return False
 
     End Function
 

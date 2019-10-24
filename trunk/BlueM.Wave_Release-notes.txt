@@ -3,6 +3,8 @@ BlueM.Wave Release Notes
 ===============================================================
 Version 1.6.3
 -------------
+NEW
+* Added support for reading PRMS statistic variables result files (statvar.dat)
 CHANGED:
 * Reworked the cut time series dialog. The initial start and end dates for the cut are now taken 
   from the currently displayed time period of the main chart.
