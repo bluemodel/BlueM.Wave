@@ -104,6 +104,9 @@ Public Module FileFactory
                 ElseIf (HystemExtran_REG.verifyFormat(file)) Then
                     'Hystem-Extran rainfall file
                     FileInstance = New HystemExtran_REG(file)
+                ElseIf PRMS.verifyFormat(file) Then
+                    'PRMS result file
+                    FileInstance = New PRMS(file)
                 Else
                     Throw New Exception("ERROR: File format not recognized! The file is neither a HYDRO_AS-2D file nor a Hystem-Extran rainfall file!")
                 End If
