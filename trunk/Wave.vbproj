@@ -206,7 +206,7 @@
     <Compile Include="FileFormats\HYDRO_AS-2D_Diag.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FileFormats\PRMS_OUT.vb" />
+    <Compile Include="FileFormats\PRMS.vb" />
     <Compile Include="Helpers.vb" />
     <Compile Include="Log.vb" />
     <Compile Include="Metadata.vb" />

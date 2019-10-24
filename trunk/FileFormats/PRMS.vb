@@ -30,11 +30,14 @@ Imports System.Globalization
 Imports System.Text.RegularExpressions
 
 ''' <summary>
-''' Class for PRMS OUT file format
+''' Class for PRMS result files
 ''' </summary>
 ''' <remarks>
-''' Supports annual summary, monthly summary and DPOUT files
-''' Assumes that headers are fixed (files always contain the same variables)
+''' Supports annual summary, monthly summary and DPOUT files,
+''' for which we assume that the headers are fixed (files always contain the same variables),
+''' and Statistic variables result files (statvar.dat)
+''' 
+''' TODO: these file formats do not support series selection, i.e. all series are always read
 ''' </remarks>
 Public Class PRMS
     Inherits FileFormatBase
