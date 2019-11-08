@@ -112,9 +112,10 @@ Friend Class ImportDiag
         'Dateiname anzeigen
         Me.Label_File.Text &= " " & Path.GetFileName(Me.datei.File)
 
-        'Workaround for SWMM5 binary output files (*.OUT)
-        If IO.Path.GetExtension(Me.datei.File).ToUpper() = FileFactory.FileExtOUT Then
-            Me.TextBox_Preview.Text = Path.GetFileName(Me.datei.File) & " is a SWMM 5 binary output file." & eol & "Preview is not available!"
+        'Workaround for binary files (SWMM5 OUT and SYDRO SQLite)
+        If IO.Path.GetExtension(Me.datei.File).ToUpper() = FileFactory.FileExtOUT _
+            Or IO.Path.GetExtension(Me.datei.File).ToUpper() = FileFactory.FileExtSQLITE Then
+            Me.TextBox_Preview.Text = Path.GetFileName(Me.datei.File) & " is a binary file." & eol & "Preview is not available!"
             'Disable all other fields
             Me.GroupBox_Dateformat.Enabled = False
             Me.GroupBox_Columns.Enabled = False

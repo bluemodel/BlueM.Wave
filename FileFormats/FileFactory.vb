@@ -44,6 +44,7 @@ Public Module FileFactory
     Public Const FileExtOUT As String = ".OUT" 'SWMM binary result file or PRMS out file
     Public Const FileExtTXT As String = ".TXT" 'SWMM routing file
     Public Const FileExtBIN As String = ".BIN" 'SYDRO binary format
+    Public Const FileExtSQLITE As String = ".DB" 'SYDRO SQLite format
     Public Const FileExtZRXP As String = ".ZRX" 'ZRXP format
     Public Const FileExtWVP As String = ".WVP" 'Wave project file
 
@@ -183,6 +184,13 @@ Public Module FileFactory
                     Throw New Exception("Unable to load SydroZreNet.dll required for loading BIN files in a 64bit process, please use the x86-version of Wave.")
                 End If
                 FileInstance = New BIN(file)
+
+            Case FileExtSQLITE
+                'BUG 704: Abort if running as 64bit
+                If Helpers.is64BitProcess() Then
+                    Throw New Exception("Unable to load SydroSQLiteNet.dll required for loading SQLite files in a 64bit process, please use the x86-version of Wave.")
+                End If
+                FileInstance = New SQLite(file)
 
             Case FileExtZRXP
                 FileInstance = New ZRXP(file)
