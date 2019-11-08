@@ -67,6 +67,7 @@ Public MustInherit Class FileFormatBase
             "SMUSI files (*.asc)|*.asc|" & _
             "SWMM files (*.out)|*.out|" & _
             "SYDRO binary files (*.bin)|*.bin|" & _
+            "SYDRO SQLite files (*.db)|*.db|" & _
             "UVF files (*.uvf)|*.uvf|" & _
             "WEL files (*.wel, *.kwl)|*.wel;*.kwl|" & _
             "Wave project files (*wvp)|*.wvp|" & _

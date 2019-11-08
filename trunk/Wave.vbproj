@@ -62,6 +62,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Ionic.Zip, Version=1.9.1.8, Culture=neutral, PublicKeyToken=edbe51ad942a3f5c, processorArchitecture=MSIL" />
+    <Reference Include="log4net, Version=1.2.11.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL" />
     <Reference Include="MathNet.Numerics, Version=3.17.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>lib\MathNet\MathNet.Numerics.dll</HintPath>
@@ -69,6 +70,15 @@
     <Reference Include="modelEAU.SWMM.DllAdapter, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>lib\modelEAU\modelEAU.SWMM.DllAdapter.dll</HintPath>
+    </Reference>
+    <Reference Include="SydroCommon, Version=1.0.0.0, Culture=neutral, PublicKeyToken=50ff31c446cf94de, processorArchitecture=MSIL" />
+    <Reference Include="SydroDomain, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>lib\SydroZre\SydroDomain.dll</HintPath>
+    </Reference>
+    <Reference Include="SydroSQLiteNet, Version=1.0.7249.22329, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>lib\SydroZre\SydroSQLiteNet.dll</HintPath>
     </Reference>
     <Reference Include="SydroZreNet, Version=2.0.0.1, Culture=neutral, PublicKeyToken=18f53cfa0aa5cfa4, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
@@ -79,6 +89,7 @@
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
     <Reference Include="System.Data" />
+    <Reference Include="System.Data.SQLite, Version=1.0.111.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="TeeChart, Version=4.1.2011.4192, Culture=neutral, PublicKeyToken=9c8126276c77bdb7, processorArchitecture=MSIL">
@@ -207,6 +218,7 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="FileFormats\PRMS.vb" />
+    <Compile Include="FileFormats\SQLite.vb" />
     <Compile Include="Helpers.vb" />
     <Compile Include="Log.vb" />
     <Compile Include="Metadata.vb" />
@@ -319,6 +331,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="lib\SydroZre\sydrodomain.ini" />
     <None Include="lib\SydroZre\SydroZreNet.dll.config">
     </None>
     <None Include="My Project\DataSources\TimeSeries.datasource" />
@@ -338,6 +351,14 @@
     <Content Include="lib\MathNet\MathNet.Numerics.license.txt" />
     <Content Include="lib\MathNet\MathNet.Numerics.pdb" />
     <Content Include="lib\MathNet\MathNet.Numerics.xml" />
+    <Content Include="lib\SQLite\SQLite.Interop.dll">
+    </Content>
+    <Content Include="lib\SQLite\System.Data.SQLite.dll" />
+    <Content Include="lib\SydroZre\log4net.dll" />
+    <Content Include="lib\SydroZre\SydroCommon.dll" />
+    <Content Include="lib\SydroZre\SydroCommon.xml" />
+    <Content Include="lib\SydroZre\SydroDomain.dll" />
+    <Content Include="lib\SydroZre\SydroSQLiteNet.dll" />
     <Content Include="LICENSE.TXT">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -441,11 +462,13 @@
   </Target>
   -->
   <PropertyGroup>
-    <PostBuildEvent>copy $(ProjectDir)lib\SydroZre\SydroZreI.dll $(TargetDir)SydroZreI.dll
+    <PostBuildEvent>copy $(ProjectDir)lib\SydroZre\sydrodomain.ini $(TargetDir)sydrodomain.ini
+copy $(ProjectDir)lib\SydroZre\SydroZreI.dll $(TargetDir)SydroZreI.dll
 copy $(ProjectDir)lib\IntelFortran\libifcoremd.dll $(TargetDir)libifcoremd.dll
 copy $(ProjectDir)lib\IntelFortran\libifportmd.dll $(TargetDir)libifportmd.dll
 copy $(ProjectDir)lib\IntelFortran\libmmd.dll $(TargetDir)libmmd.dll
 copy $(ProjectDir)lib\MathNet\MathNet.Numerics.license.txt $(TargetDir)MathNet.Numerics.license.txt
-copy $(ProjectDir)lib\Ionic.Zip\Ionic.Zip.license.txt $(TargetDir)Ionic.Zip.license.txt</PostBuildEvent>
+copy $(ProjectDir)lib\Ionic.Zip\Ionic.Zip.license.txt $(TargetDir)Ionic.Zip.license.txt
+copy $(ProjectDir)lib\SQLite\SQLite.Interop.dll $(TargetDir)SQLite.Interop.dll</PostBuildEvent>
   </PropertyGroup>
 </Project>
