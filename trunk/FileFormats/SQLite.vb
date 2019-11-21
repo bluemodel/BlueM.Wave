@@ -225,6 +225,8 @@ Public Class SQLite
     ''' <remarks></remarks>
     Public Overrides Sub Read_File()
 
+        Dim ts As TimeSeries
+        Dim ts_list As List(Of TimeSeries)
         Dim sql As Sydro.SydroZre.SydroSQLNet
         Dim sydro_ts As Sydro.SydroZre.SydroTimeSeries
         Dim flag_id As Integer
@@ -237,8 +239,7 @@ Public Class SQLite
             Throw New Exception("Error while loading SQLite database: " & sql.ErrorMsg)
         End If
 
-        'instantiate time series
-        ReDim Me.TimeSeries(Me.SelectedColumns.Count - 1)
+        ts_list = New List(Of TimeSeries)
 
         Select Case Me.ts_class
             Case Sydro.SydroZre.SydroSQLNet.EnumTimeseriesClassFlags.Unknown
@@ -247,7 +248,6 @@ Public Class SQLite
             Case Sydro.SydroZre.SydroSQLNet.EnumTimeseriesClassFlags.DefaultFlag, _
                 Sydro.SydroZre.SydroSQLNet.EnumTimeseriesClassFlags.Flagged
                 'Loop over selected columns
-                Dim i As Integer = 0
                 For Each col As ColumnInfo In Me.SelectedColumns
                     flag_id = Me.flag_mapping(col.Index)
                     'retrieve time series from sqlite
@@ -257,17 +257,30 @@ Public Class SQLite
                     ReDim dateArr(0)
                     ReDim sngArr(0)
                     sydro_ts.TimeSeriesStringToArray(dateArr, sngArr)
+                    'check whether the series actually contains data
+                    If dateArr.Length = 0 Then
+                        MsgBox("Time series " & col.Name & " is empty!", MsgBoxStyle.Exclamation)
+                        Continue For
+                    End If
                     'store as new time series
-                    Me.TimeSeries(i) = New TimeSeries(col.Name)
-                    Me.TimeSeries(i).Unit = sydro_ts.Unit 'use unit from sydro_ts because colinfo doesn't have it
+                    ts = New TimeSeries(col.Name)
+                    ts.Unit = sydro_ts.Unit 'use unit from sydro_ts because colinfo doesn't have it
                     For j As Integer = 0 To dateArr.Count - 1
-                        Me.TimeSeries(i).AddNode(dateArr(j), sngArr(j))
+                        ts.AddNode(dateArr(j), sngArr(j))
                     Next
                     'store interpretation
-                    Me.TimeSeries(i).Interpretation = Me.interpretation
+                    ts.Interpretation = Me.interpretation
                     'copy FileMetadata to TimeSeriesMetadata
-                    Me.TimeSeries(i).Metadata = Me.FileMetadata
-                    i += 1
+                    ts.Metadata = Me.FileMetadata
+
+                    'temporarily store timeseries
+                    ts_list.Add(ts)
+                Next
+
+                'permanently store time series
+                ReDim Me.TimeSeries(ts_list.Count - 1)
+                For i As Integer = 0 To ts_list.Count - 1
+                    Me.TimeSeries(i) = ts_list(i)
                 Next
 
             Case Else
