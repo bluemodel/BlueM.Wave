@@ -5,6 +5,9 @@ Version 1.7.0
 -------------
 NEW
 * Added support for reading SYDRO SQLite time series files (*.db) (only in x86 version)
+FIXED:
+* Analysis function "Cumulative" now ignores NaN values in time series 
+  (before, the cumulative sum would become NaN as well)
 
 Version 1.6.3
 -------------
