@@ -109,10 +109,12 @@ Friend Class Cumulative
                         Continue For
                     End If
                 End If
-                If Not Double.IsNaN(ts.Values(i)) Then
-                    sum += ts.Values(i)
-                    ts_cum.AddNode(ts.Dates(i), sum)
+                If Double.IsNaN(ts.Values(i)) Then
+                    'omit NaN values
+                    Continue For
                 End If
+                sum += ts.Values(i)
+                ts_cum.AddNode(ts.Dates(i), sum)
             Next
 
             MyBase.mResultSeries.Add(ts_cum.Title, ts_cum)
