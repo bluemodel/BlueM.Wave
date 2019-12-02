@@ -145,11 +145,14 @@ Public Class SQLite
         'load sql file
         sql = New Sydro.SydroZre.SydroSQLNet(SQLite.customer, SQLite.user, Me.id, Me.path)
         If sql.HasError Then
-            Throw New Exception("Error while loading SQLite database: " & sql.ErrorMsg)
+            Throw New Exception("Error while reading SQLite database: " & sql.ErrorMsg)
         End If
 
         'read and parse attributes and store as FileMetadata
         ts_atts = sql.TimeSeriesAttributes()
+        If ts_atts.HasError Then
+            Throw New Exception("Error while reading time series attributes: " & ts_atts.ResultMsg)
+        End If
         att_string = ts_atts.KeyValueString
         att_pairs = att_string.Split(ts_atts.KeyValuePairsSplit)
         For Each att_pair As String In att_pairs
@@ -236,7 +239,7 @@ Public Class SQLite
         'load sql file
         sql = New Sydro.SydroZre.SydroSQLNet(SQLite.customer, SQLite.user, Me.id, Me.path)
         If sql.HasError Then
-            Throw New Exception("Error while loading SQLite database: " & sql.ErrorMsg)
+            Throw New Exception("Error while reading SQLite database: " & sql.ErrorMsg)
         End If
 
         ts_list = New List(Of TimeSeries)
