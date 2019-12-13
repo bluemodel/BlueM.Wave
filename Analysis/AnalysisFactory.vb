@@ -41,6 +41,7 @@ Friend Module AnalysisFactory
         Comparison = 5
         AnnualStatistics = 6
         Cumulative = 7
+        TimestepAnalysis = 8
     End Enum
 
     ''' <summary>
@@ -75,6 +76,9 @@ Friend Module AnalysisFactory
 
             Case AnalysisFunctions.Cumulative
                 oAnalysis = New Cumulative(zeitreihen)
+
+            Case AnalysisFunctions.TimestepAnalysis
+                oAnalysis = New TimeStepAnalysis(zeitreihen)
 
             Case Else
                 Throw New Exception("Analysis not found!")
