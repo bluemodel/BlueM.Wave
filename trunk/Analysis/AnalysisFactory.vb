@@ -34,14 +34,14 @@ Friend Module AnalysisFactory
     ''' Liste der Analysefunktionen
     ''' </summary>
     Public Enum AnalysisFunctions
-        MonthlyStatistics = 1
-        DoubleSumCurve = 2
-        GoodnessOfFit = 3
-        Histogram = 4
-        Comparison = 5
-        AnnualStatistics = 6
-        Cumulative = 7
-        TimestepAnalysis = 8
+        AnnualStatistics
+        Comparison
+        Cumulative
+        DoubleSumCurve
+        GoodnessOfFit
+        Histogram
+        MonthlyStatistics
+        TimestepAnalysis
     End Enum
 
     ''' <summary>
