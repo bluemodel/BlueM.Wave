@@ -34,7 +34,7 @@ Friend Class TimeStepAnalysis
     ''' <summary>
     ''' Time units
     ''' </summary>
-    Friend Enum TimeUnit As Short
+    Friend Enum TimeUnitEnum As Short
         Years = 1
         Months = 2
         Days = 3
@@ -46,7 +46,7 @@ Friend Class TimeStepAnalysis
     ''' <summary>
     ''' Selected time unit
     ''' </summary>
-    Private time_unit As TimeUnit
+    Private TimeUnit As TimeUnitEnum
 
 #Region "Properties"
 
@@ -92,7 +92,7 @@ Friend Class TimeStepAnalysis
     ''' </summary>
     Private ReadOnly Property TimeUnitName() As String
         Get
-            Return System.Enum.GetName(GetType(TimeUnit), Me.time_unit)
+            Return Me.TimeUnit.ToString("g")
         End Get
     End Property
 
@@ -115,7 +115,7 @@ Friend Class TimeStepAnalysis
             Throw New Exception("User abort")
         End If
 
-        Me.time_unit = dlg.ComboBox_TimestepType.SelectedItem
+        Me.TimeUnit = dlg.ComboBox_TimestepType.SelectedItem
 
     End Sub
 
@@ -149,17 +149,17 @@ Friend Class TimeStepAnalysis
                     'calculate dt
                     dt = timestamp - timestamp_prev
                     'convert to user-specified unit
-                    Select Case Me.time_unit
+                    Select Case Me.TimeUnit
                         'TODO: Implement conversion to Years and Months and activate corresponding options in TimestepAnalysisDialog
                         'Case TimeUnit.Years
                         'Case TimeUnit.Months
-                        Case TimeUnit.Days
+                        Case TimeUnitEnum.Days
                             dt_val = dt.TotalDays
-                        Case TimeUnit.Hours
+                        Case TimeUnitEnum.Hours
                             dt_val = dt.TotalHours
-                        Case TimeUnit.Minutes
+                        Case TimeUnitEnum.Minutes
                             dt_val = dt.TotalMinutes
-                        Case TimeUnit.Seconds
+                        Case TimeUnitEnum.Seconds
                             dt_val = dt.TotalSeconds
                         Case Else
                             Throw New Exception("Conversion of timestep to time unit " & Me.TimeUnitName & " is not yet implemented!")
