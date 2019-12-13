@@ -2691,8 +2691,8 @@ Public Class Wave
             Case TimeSeries.InterpretationType.BlockRight
                 Line1.Stairs = True
                 Line2.Stairs = True
-            Case TimeSeries.InterpretationType.BlockLeft
-            Case TimeSeries.InterpretationType.CumulativePerTimestep
+            Case TimeSeries.InterpretationType.BlockLeft, _
+                TimeSeries.InterpretationType.CumulativePerTimestep
                 Line1.Stairs = True
                 Line2.Stairs = True
                 Line1.InvertedStairs = True
