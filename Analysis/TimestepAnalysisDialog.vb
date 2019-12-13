@@ -12,11 +12,11 @@ Partial Friend Class TimestepAnalysisDialog
         Me.isInitializing = True
         'Me.ComboBox_TimestepType.Items.Add(TimeStepAnalysis.TimeUnit.Years)
         'Me.ComboBox_TimestepType.Items.Add(TimeStepAnalysis.TimeUnit.Months)
-        Me.ComboBox_TimestepType.Items.Add(TimeStepAnalysis.TimeUnit.Days)
-        Me.ComboBox_TimestepType.Items.Add(TimeStepAnalysis.TimeUnit.Hours)
-        Me.ComboBox_TimestepType.Items.Add(TimeStepAnalysis.TimeUnit.Minutes)
-        Me.ComboBox_TimestepType.Items.Add(TimeStepAnalysis.TimeUnit.Seconds)
-        Me.ComboBox_TimestepType.SelectedItem = TimeStepAnalysis.TimeUnit.Minutes
+        Me.ComboBox_TimestepType.Items.Add(TimeStepAnalysis.TimeUnitEnum.Days)
+        Me.ComboBox_TimestepType.Items.Add(TimeStepAnalysis.TimeUnitEnum.Hours)
+        Me.ComboBox_TimestepType.Items.Add(TimeStepAnalysis.TimeUnitEnum.Minutes)
+        Me.ComboBox_TimestepType.Items.Add(TimeStepAnalysis.TimeUnitEnum.Seconds)
+        Me.ComboBox_TimestepType.SelectedItem = TimeStepAnalysis.TimeUnitEnum.Minutes
         Me.isInitializing = False
 
     End Sub
