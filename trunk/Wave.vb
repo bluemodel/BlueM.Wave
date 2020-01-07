@@ -2902,6 +2902,17 @@ Public Class Wave
                 For i = 0 To dates.Length - 1
                     zre_new.AddNode(dates(i), values(i))
                 Next
+                'set output interpretation dependent on input interpretation 
+                Select Case interpretation
+                    Case Sydro.SydroZre.Fortran.InterpretationEnum.BlockRechts
+                        zre_new.Interpretation = TimeSeries.InterpretationType.BlockRight
+                    Case Sydro.SydroZre.Fortran.InterpretationEnum.BlockLinks
+                        zre_new.Interpretation = TimeSeries.InterpretationType.BlockLeft
+                    Case Sydro.SydroZre.Fortran.InterpretationEnum.SummeProDt
+                        zre_new.Interpretation = TimeSeries.InterpretationType.CumulativePerTimestep
+                    Case Sydro.SydroZre.Fortran.InterpretationEnum.LinearInterpolation
+                        zre_new.Interpretation = TimeSeries.InterpretationType.Instantaneous
+                End Select
 
                 Call Me.Import_Series(zre_new)
 

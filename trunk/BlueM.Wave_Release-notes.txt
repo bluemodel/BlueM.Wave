@@ -8,6 +8,7 @@ NEW
   each node of one or multiple time series and displays them as new time series
 FIXED:
 * Time series with interpretation BlockLeft were not being displayed as stairs
+* The output time series of the "Change timestep" function now have a defined interpretation
 
 Version 1.7.0
 -------------
