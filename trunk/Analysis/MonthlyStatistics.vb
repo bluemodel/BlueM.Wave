@@ -68,6 +68,12 @@ Friend Class MonthlyStatistics
     ''' </summary>
     Private result As resultType
 
+    ''' <summary>
+    ''' Flag indicating whether series values correspond to the previous month
+    ''' </summary>
+    ''' <remarks></remarks>
+    Private isPreviousMonth As Boolean
+
 #End Region 'Members
 
 #Region "Properties"
@@ -126,6 +132,15 @@ Friend Class MonthlyStatistics
             Throw New Exception("The Monthly analysis requires that exactly 1 time series is selected!")
         End If
 
+        Dim dlg As New MonthlyStatisticsDialog()
+        Dim dlg_result As DialogResult = dlg.ShowDialog()
+
+        If Not dlg_result = DialogResult.OK Then
+            Throw New Exception("User abort")
+        End If
+
+        Me.isPreviousMonth = (dlg.ComboBox_MonthType.SelectedItem = "previous month")
+
         Dim i As Integer
 
         'Initialize result structure
@@ -168,7 +183,7 @@ Friend Class MonthlyStatistics
     Public Overrides Sub ProcessAnalysis()
 
         Dim reihe As TimeSeries
-        Dim i, j As Integer
+        Dim i, j, month As Integer
         Dim N As Long
         Dim sum, sumofsquares As Double
 
@@ -176,7 +191,16 @@ Friend Class MonthlyStatistics
 
         'Sort values into months
         For i = 0 To reihe.Length - 1
-            Me.result.months(reihe.Dates(i).Month() - 1).values.Add(reihe.Values(i))
+            month = reihe.Dates(i).Month
+            'assign to previous month if necessary
+            If Me.isPreviousMonth Then
+                If (month - 1) >= 1 Then
+                    month = month - 1
+                Else
+                    month = 12
+                End If
+            End If
+            Me.result.months(month - 1).values.Add(reihe.Values(i))
         Next
 
         'Analyse each month
@@ -238,7 +262,6 @@ Friend Class MonthlyStatistics
             Me.mResultText &= month.min & ";"
             Me.mResultText &= month.max & ";"
             Me.mResultText &= month.stddev & eol
-
         Next
 
         'Result chart

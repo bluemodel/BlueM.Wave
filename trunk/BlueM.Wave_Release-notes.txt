@@ -6,6 +6,9 @@ Version 1.7.1
 NEW
 * Added a new analysis function "TimestepAnalysis" which computes the time difference between
   each node of one or multiple time series and displays them as new time series
+CHANGED:
+* The "Monthly Statistics" analysis function now asks the user whether the time series' values 
+  correspond to the current or previous month
 FIXED:
 * Time series with interpretation BlockLeft were not being displayed as stairs
 * The output time series of the "Change timestep" function now have a defined interpretation
