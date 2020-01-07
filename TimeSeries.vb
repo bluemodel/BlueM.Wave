@@ -827,6 +827,7 @@ Public Class TimeSeries
 
         'copy metadata
         tsConverted.Unit = Me.Unit
+        tsConverted.Interpretation = Me.Interpretation
         tsConverted.Objekt = Me.Objekt
         tsConverted.Type = Me.Type
         tsConverted.Metadata = Me.Metadata
@@ -879,6 +880,7 @@ Public Class TimeSeries
 
         'copy metadata
         tsCleaned.Unit = Me.Unit
+        tsCleaned.Interpretation = Me.Interpretation
         tsCleaned.Objekt = Me.Objekt
         tsCleaned.Type = Me.Type
         tsCleaned.Metadata = Me.Metadata
