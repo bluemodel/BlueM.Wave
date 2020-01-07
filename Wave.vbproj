@@ -122,6 +122,12 @@
     <Compile Include="Analysis\Comparison_Dialog.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Analysis\MonthlyStatisticsDialog.Designer.vb">
+      <DependentUpon>MonthlyStatisticsDialog.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Analysis\MonthlyStatisticsDialog.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Analysis\Cumulative.vb" />
     <Compile Include="Analysis\DoubleSumCurve.vb" />
     <Compile Include="Analysis\GoodnessOfFit_Dialog.Designer.vb">
@@ -382,6 +388,10 @@
     <Content Include="Resources\cursor.png" />
     <EmbeddedResource Include="Analysis\Comparison_Dialog.resx">
       <DependentUpon>Comparison_Dialog.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Analysis\MonthlyStatisticsDialog.resx">
+      <DependentUpon>MonthlyStatisticsDialog.vb</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Analysis\HistogramDialog.resx">
