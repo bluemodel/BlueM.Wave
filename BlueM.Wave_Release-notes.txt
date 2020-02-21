@@ -10,6 +10,7 @@ CHANGED:
 * The "Monthly Statistics" analysis function now asks the user whether the time series' values 
   correspond to the current or previous month
 FIXED:
+* Fixed not being able to open SQlite time series files from a network path
 * Time series with interpretation BlockLeft were not being displayed as stairs
 * The output time series of the "Change timestep" function now have a defined interpretation
 
