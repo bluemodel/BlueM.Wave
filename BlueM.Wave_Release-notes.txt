@@ -6,11 +6,12 @@ Version 1.7.1
 NEW
 * Added a new analysis function "TimestepAnalysis" which computes the time difference between
   each node of one or multiple time series and displays them as new time series
+* Added support for reading SYDRO SQLite time series files (*.db) of class ForecastTimeseries
 CHANGED:
 * The "Monthly Statistics" analysis function now asks the user whether the time series' values 
   correspond to the current or previous month
 FIXED:
-* Fixed not being able to open SQlite time series files from a network path
+* Fixed not being able to open SYDRO SQLite time series files from a network path
 * Time series with interpretation BlockLeft were not being displayed as stairs
 * The output time series of the "Change timestep" function now have a defined interpretation
 
