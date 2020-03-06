@@ -10,6 +10,7 @@ NEW
 CHANGED:
 * The "Monthly Statistics" analysis function now asks the user whether the time series' values 
   correspond to the current or previous month
+* UI: Import series dialog improved with adjustable size of available series display
 FIXED:
 * Fixed not being able to open SYDRO SQLite time series files from a network path
 * Time series with interpretation BlockLeft were not being displayed as stairs

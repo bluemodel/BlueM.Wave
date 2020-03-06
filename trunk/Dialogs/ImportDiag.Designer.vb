@@ -22,6 +22,7 @@ Partial Class ImportDiag
     'Das Bearbeiten mit dem Code-Editor ist nicht möglich.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
+        Dim SplitContainer1 As System.Windows.Forms.SplitContainer
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(ImportDiag))
         Me.TextBox_Preview = New System.Windows.Forms.RichTextBox
         Me.ComboBox_Separator = New System.Windows.Forms.ComboBox
@@ -57,6 +58,7 @@ Partial Class ImportDiag
         Me.GroupBox_Dateformat = New System.Windows.Forms.GroupBox
         Me.Label_Dateformat = New System.Windows.Forms.Label
         Me.ComboBox_Dateformat = New System.Windows.Forms.ComboBox
+        SplitContainer1 = New System.Windows.Forms.SplitContainer
         Me.GroupBox_Columns.SuspendLayout()
         CType(Me.NumericUpDown_LineTitles, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.GroupBox_Settings.SuspendLayout()
@@ -68,6 +70,9 @@ Partial Class ImportDiag
         Me.StatusStrip1.SuspendLayout()
         Me.GroupBox_Selection.SuspendLayout()
         Me.GroupBox_Dateformat.SuspendLayout()
+        SplitContainer1.Panel1.SuspendLayout()
+        SplitContainer1.Panel2.SuspendLayout()
+        SplitContainer1.SuspendLayout()
         Me.SuspendLayout()
         '
         'TextBox_Preview
@@ -80,8 +85,8 @@ Partial Class ImportDiag
         Me.TextBox_Preview.Location = New System.Drawing.Point(12, 43)
         Me.TextBox_Preview.Name = "TextBox_Preview"
         Me.TextBox_Preview.ReadOnly = True
-        Me.TextBox_Preview.Size = New System.Drawing.Size(353, 166)
-        Me.TextBox_Preview.TabIndex = 16
+        Me.TextBox_Preview.Size = New System.Drawing.Size(332, 166)
+        Me.TextBox_Preview.TabIndex = 1
         Me.TextBox_Preview.Text = ""
         Me.TextBox_Preview.WordWrap = False
         '
@@ -93,7 +98,7 @@ Partial Class ImportDiag
         Me.ComboBox_Separator.Location = New System.Drawing.Point(131, 18)
         Me.ComboBox_Separator.Name = "ComboBox_Separator"
         Me.ComboBox_Separator.Size = New System.Drawing.Size(90, 21)
-        Me.ComboBox_Separator.TabIndex = 13
+        Me.ComboBox_Separator.TabIndex = 1
         '
         'Button_OK
         '
@@ -102,7 +107,7 @@ Partial Class ImportDiag
         Me.Button_OK.Location = New System.Drawing.Point(386, 414)
         Me.Button_OK.Name = "Button_OK"
         Me.Button_OK.Size = New System.Drawing.Size(75, 23)
-        Me.Button_OK.TabIndex = 11
+        Me.Button_OK.TabIndex = 4
         Me.Button_OK.Text = "OK"
         Me.Button_OK.UseVisualStyleBackColor = True
         '
@@ -113,20 +118,21 @@ Partial Class ImportDiag
         Me.Button_Cancel.Location = New System.Drawing.Point(467, 414)
         Me.Button_Cancel.Name = "Button_Cancel"
         Me.Button_Cancel.Size = New System.Drawing.Size(75, 23)
-        Me.Button_Cancel.TabIndex = 10
+        Me.Button_Cancel.TabIndex = 5
         Me.Button_Cancel.Text = "Cancel"
         Me.Button_Cancel.UseVisualStyleBackColor = True
         '
         'ListBox_Series
         '
-        Me.ListBox_Series.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-                    Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.ListBox_Series.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+                    Or System.Windows.Forms.AnchorStyles.Left) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.ListBox_Series.FormattingEnabled = True
         Me.ListBox_Series.Location = New System.Drawing.Point(15, 64)
         Me.ListBox_Series.Name = "ListBox_Series"
         Me.ListBox_Series.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended
-        Me.ListBox_Series.Size = New System.Drawing.Size(121, 121)
-        Me.ListBox_Series.TabIndex = 18
+        Me.ListBox_Series.Size = New System.Drawing.Size(155, 121)
+        Me.ListBox_Series.TabIndex = 3
         '
         'Label_Search
         '
@@ -134,7 +140,7 @@ Partial Class ImportDiag
         Me.Label_Search.Location = New System.Drawing.Point(12, 21)
         Me.Label_Search.Name = "Label_Search"
         Me.Label_Search.Size = New System.Drawing.Size(44, 13)
-        Me.Label_Search.TabIndex = 17
+        Me.Label_Search.TabIndex = 0
         Me.Label_Search.Text = "Search:"
         '
         'Label_ColumnDateTime
@@ -145,7 +151,7 @@ Partial Class ImportDiag
         Me.Label_ColumnDateTime.Location = New System.Drawing.Point(396, 25)
         Me.Label_ColumnDateTime.Name = "Label_ColumnDateTime"
         Me.Label_ColumnDateTime.Size = New System.Drawing.Size(115, 13)
-        Me.Label_ColumnDateTime.TabIndex = 17
+        Me.Label_ColumnDateTime.TabIndex = 6
         Me.Label_ColumnDateTime.Text = "Column with date/time:"
         '
         'TextBox_ColumnDateTime
@@ -156,7 +162,7 @@ Partial Class ImportDiag
         Me.TextBox_ColumnDateTime.Name = "TextBox_ColumnDateTime"
         Me.TextBox_ColumnDateTime.ReadOnly = True
         Me.TextBox_ColumnDateTime.Size = New System.Drawing.Size(80, 20)
-        Me.TextBox_ColumnDateTime.TabIndex = 19
+        Me.TextBox_ColumnDateTime.TabIndex = 7
         '
         'RadioButton_FixedWidth
         '
@@ -164,7 +170,7 @@ Partial Class ImportDiag
         Me.RadioButton_FixedWidth.Location = New System.Drawing.Point(15, 53)
         Me.RadioButton_FixedWidth.Name = "RadioButton_FixedWidth"
         Me.RadioButton_FixedWidth.Size = New System.Drawing.Size(78, 17)
-        Me.RadioButton_FixedWidth.TabIndex = 20
+        Me.RadioButton_FixedWidth.TabIndex = 2
         Me.RadioButton_FixedWidth.TabStop = True
         Me.RadioButton_FixedWidth.Text = "Fixed width"
         Me.RadioButton_FixedWidth.UseVisualStyleBackColor = True
@@ -175,7 +181,7 @@ Partial Class ImportDiag
         Me.RadioButton_CharSeparated.Location = New System.Drawing.Point(15, 19)
         Me.RadioButton_CharSeparated.Name = "RadioButton_CharSeparated"
         Me.RadioButton_CharSeparated.Size = New System.Drawing.Size(112, 17)
-        Me.RadioButton_CharSeparated.TabIndex = 21
+        Me.RadioButton_CharSeparated.TabIndex = 0
         Me.RadioButton_CharSeparated.TabStop = True
         Me.RadioButton_CharSeparated.Text = "Separated by char"
         Me.RadioButton_CharSeparated.UseVisualStyleBackColor = True
@@ -189,7 +195,7 @@ Partial Class ImportDiag
         Me.GroupBox_Columns.Location = New System.Drawing.Point(12, 12)
         Me.GroupBox_Columns.Name = "GroupBox_Columns"
         Me.GroupBox_Columns.Size = New System.Drawing.Size(239, 84)
-        Me.GroupBox_Columns.TabIndex = 22
+        Me.GroupBox_Columns.TabIndex = 0
         Me.GroupBox_Columns.TabStop = False
         Me.GroupBox_Columns.Text = "Columns"
         '
@@ -198,7 +204,7 @@ Partial Class ImportDiag
         Me.TextBox_ColumnWidth.Location = New System.Drawing.Point(131, 52)
         Me.TextBox_ColumnWidth.Name = "TextBox_ColumnWidth"
         Me.TextBox_ColumnWidth.Size = New System.Drawing.Size(90, 20)
-        Me.TextBox_ColumnWidth.TabIndex = 22
+        Me.TextBox_ColumnWidth.TabIndex = 3
         '
         'NumericUpDown_LineTitles
         '
@@ -208,7 +214,7 @@ Partial Class ImportDiag
         Me.NumericUpDown_LineTitles.Minimum = New Decimal(New Integer() {1, 0, 0, 0})
         Me.NumericUpDown_LineTitles.Name = "NumericUpDown_LineTitles"
         Me.NumericUpDown_LineTitles.Size = New System.Drawing.Size(50, 20)
-        Me.NumericUpDown_LineTitles.TabIndex = 24
+        Me.NumericUpDown_LineTitles.TabIndex = 1
         Me.NumericUpDown_LineTitles.Value = New Decimal(New Integer() {1, 0, 0, 0})
         '
         'Label_LineTitles
@@ -219,7 +225,7 @@ Partial Class ImportDiag
         Me.Label_LineTitles.Location = New System.Drawing.Point(12, 25)
         Me.Label_LineTitles.Name = "Label_LineTitles"
         Me.Label_LineTitles.Size = New System.Drawing.Size(76, 13)
-        Me.Label_LineTitles.TabIndex = 23
+        Me.Label_LineTitles.TabIndex = 0
         Me.Label_LineTitles.Text = "Line with titles:"
         '
         'ComboBox_DecimalMark
@@ -230,7 +236,7 @@ Partial Class ImportDiag
         Me.ComboBox_DecimalMark.Location = New System.Drawing.Point(9, 51)
         Me.ComboBox_DecimalMark.Name = "ComboBox_DecimalMark"
         Me.ComboBox_DecimalMark.Size = New System.Drawing.Size(66, 21)
-        Me.ComboBox_DecimalMark.TabIndex = 26
+        Me.ComboBox_DecimalMark.TabIndex = 1
         '
         'GroupBox_Settings
         '
@@ -248,7 +254,7 @@ Partial Class ImportDiag
         Me.GroupBox_Settings.Location = New System.Drawing.Point(12, 102)
         Me.GroupBox_Settings.Name = "GroupBox_Settings"
         Me.GroupBox_Settings.Size = New System.Drawing.Size(530, 79)
-        Me.GroupBox_Settings.TabIndex = 27
+        Me.GroupBox_Settings.TabIndex = 3
         Me.GroupBox_Settings.TabStop = False
         Me.GroupBox_Settings.Text = "Settings"
         '
@@ -260,7 +266,7 @@ Partial Class ImportDiag
         Me.CheckBox_Units.Location = New System.Drawing.Point(149, 24)
         Me.CheckBox_Units.Name = "CheckBox_Units"
         Me.CheckBox_Units.Size = New System.Drawing.Size(96, 17)
-        Me.CheckBox_Units.TabIndex = 25
+        Me.CheckBox_Units.TabIndex = 2
         Me.CheckBox_Units.Text = "Line with units:"
         Me.CheckBox_Units.UseVisualStyleBackColor = True
         '
@@ -272,7 +278,7 @@ Partial Class ImportDiag
         Me.NumericUpDown_LineUnits.Minimum = New Decimal(New Integer() {1, 0, 0, 0})
         Me.NumericUpDown_LineUnits.Name = "NumericUpDown_LineUnits"
         Me.NumericUpDown_LineUnits.Size = New System.Drawing.Size(50, 20)
-        Me.NumericUpDown_LineUnits.TabIndex = 24
+        Me.NumericUpDown_LineUnits.TabIndex = 3
         Me.NumericUpDown_LineUnits.Value = New Decimal(New Integer() {1, 0, 0, 0})
         '
         'Label_LineData
@@ -283,7 +289,7 @@ Partial Class ImportDiag
         Me.Label_LineData.Location = New System.Drawing.Point(283, 25)
         Me.Label_LineData.Name = "Label_LineData"
         Me.Label_LineData.Size = New System.Drawing.Size(72, 13)
-        Me.Label_LineData.TabIndex = 23
+        Me.Label_LineData.TabIndex = 4
         Me.Label_LineData.Text = "First data line:"
         '
         'NumericUpDown_LineData
@@ -294,7 +300,7 @@ Partial Class ImportDiag
         Me.NumericUpDown_LineData.Minimum = New Decimal(New Integer() {1, 0, 0, 0})
         Me.NumericUpDown_LineData.Name = "NumericUpDown_LineData"
         Me.NumericUpDown_LineData.Size = New System.Drawing.Size(50, 20)
-        Me.NumericUpDown_LineData.TabIndex = 24
+        Me.NumericUpDown_LineData.TabIndex = 5
         Me.NumericUpDown_LineData.Value = New Decimal(New Integer() {1, 0, 0, 0})
         '
         'NumericUpDown_ColumnDateTime
@@ -305,7 +311,7 @@ Partial Class ImportDiag
         Me.NumericUpDown_ColumnDateTime.Minimum = New Decimal(New Integer() {1, 0, 0, 0})
         Me.NumericUpDown_ColumnDateTime.Name = "NumericUpDown_ColumnDateTime"
         Me.NumericUpDown_ColumnDateTime.Size = New System.Drawing.Size(34, 20)
-        Me.NumericUpDown_ColumnDateTime.TabIndex = 25
+        Me.NumericUpDown_ColumnDateTime.TabIndex = 8
         Me.NumericUpDown_ColumnDateTime.Value = New Decimal(New Integer() {1, 0, 0, 0})
         '
         'GroupBox_Preview
@@ -315,10 +321,11 @@ Partial Class ImportDiag
                     Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.GroupBox_Preview.Controls.Add(Me.Label_File)
         Me.GroupBox_Preview.Controls.Add(Me.TextBox_Preview)
-        Me.GroupBox_Preview.Location = New System.Drawing.Point(171, 188)
+        Me.GroupBox_Preview.Location = New System.Drawing.Point(0, 0)
+        Me.GroupBox_Preview.Margin = New System.Windows.Forms.Padding(0)
         Me.GroupBox_Preview.Name = "GroupBox_Preview"
-        Me.GroupBox_Preview.Size = New System.Drawing.Size(371, 220)
-        Me.GroupBox_Preview.TabIndex = 28
+        Me.GroupBox_Preview.Size = New System.Drawing.Size(350, 220)
+        Me.GroupBox_Preview.TabIndex = 0
         Me.GroupBox_Preview.TabStop = False
         Me.GroupBox_Preview.Text = "File preview"
         '
@@ -328,7 +335,7 @@ Partial Class ImportDiag
         Me.Label_File.Location = New System.Drawing.Point(9, 21)
         Me.Label_File.Name = "Label_File"
         Me.Label_File.Size = New System.Drawing.Size(26, 13)
-        Me.Label_File.TabIndex = 17
+        Me.Label_File.TabIndex = 0
         Me.Label_File.Text = "File:"
         '
         'Label_Series
@@ -337,15 +344,17 @@ Partial Class ImportDiag
         Me.Label_Series.Location = New System.Drawing.Point(12, 46)
         Me.Label_Series.Name = "Label_Series"
         Me.Label_Series.Size = New System.Drawing.Size(83, 13)
-        Me.Label_Series.TabIndex = 26
+        Me.Label_Series.TabIndex = 2
         Me.Label_Series.Text = "Available series:"
         '
         'TextBox_Search
         '
+        Me.TextBox_Search.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.TextBox_Search.Location = New System.Drawing.Point(59, 18)
         Me.TextBox_Search.Name = "TextBox_Search"
-        Me.TextBox_Search.Size = New System.Drawing.Size(77, 20)
-        Me.TextBox_Search.TabIndex = 23
+        Me.TextBox_Search.Size = New System.Drawing.Size(111, 20)
+        Me.TextBox_Search.TabIndex = 1
         '
         'GroupBox_DecimalMark
         '
@@ -355,7 +364,7 @@ Partial Class ImportDiag
         Me.GroupBox_DecimalMark.Location = New System.Drawing.Point(416, 12)
         Me.GroupBox_DecimalMark.Name = "GroupBox_DecimalMark"
         Me.GroupBox_DecimalMark.Size = New System.Drawing.Size(126, 84)
-        Me.GroupBox_DecimalMark.TabIndex = 29
+        Me.GroupBox_DecimalMark.TabIndex = 2
         Me.GroupBox_DecimalMark.TabStop = False
         Me.GroupBox_DecimalMark.Text = "Decimal mark"
         '
@@ -365,7 +374,7 @@ Partial Class ImportDiag
         Me.Label_DecimalMark.Location = New System.Drawing.Point(6, 26)
         Me.Label_DecimalMark.Name = "Label_DecimalMark"
         Me.Label_DecimalMark.Size = New System.Drawing.Size(74, 13)
-        Me.Label_DecimalMark.TabIndex = 23
+        Me.Label_DecimalMark.TabIndex = 0
         Me.Label_DecimalMark.Text = "Decimal mark:"
         '
         'StatusStrip1
@@ -374,7 +383,7 @@ Partial Class ImportDiag
         Me.StatusStrip1.Location = New System.Drawing.Point(0, 440)
         Me.StatusStrip1.Name = "StatusStrip1"
         Me.StatusStrip1.Size = New System.Drawing.Size(549, 22)
-        Me.StatusStrip1.TabIndex = 30
+        Me.StatusStrip1.TabIndex = 6
         Me.StatusStrip1.Text = "StatusStrip1"
         '
         'StatusImage
@@ -390,23 +399,25 @@ Partial Class ImportDiag
         Me.Button_SelectAll.Location = New System.Drawing.Point(15, 191)
         Me.Button_SelectAll.Name = "Button_SelectAll"
         Me.Button_SelectAll.Size = New System.Drawing.Size(88, 23)
-        Me.Button_SelectAll.TabIndex = 27
+        Me.Button_SelectAll.TabIndex = 4
         Me.Button_SelectAll.Text = "Select all"
         Me.Button_SelectAll.UseVisualStyleBackColor = True
         '
         'GroupBox_Selection
         '
-        Me.GroupBox_Selection.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-                    Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.GroupBox_Selection.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+                    Or System.Windows.Forms.AnchorStyles.Left) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.GroupBox_Selection.Controls.Add(Me.Label_Search)
         Me.GroupBox_Selection.Controls.Add(Me.TextBox_Search)
         Me.GroupBox_Selection.Controls.Add(Me.Label_Series)
         Me.GroupBox_Selection.Controls.Add(Me.ListBox_Series)
         Me.GroupBox_Selection.Controls.Add(Me.Button_SelectAll)
-        Me.GroupBox_Selection.Location = New System.Drawing.Point(12, 188)
+        Me.GroupBox_Selection.Location = New System.Drawing.Point(0, 0)
+        Me.GroupBox_Selection.Margin = New System.Windows.Forms.Padding(0)
         Me.GroupBox_Selection.Name = "GroupBox_Selection"
-        Me.GroupBox_Selection.Size = New System.Drawing.Size(153, 220)
-        Me.GroupBox_Selection.TabIndex = 31
+        Me.GroupBox_Selection.Size = New System.Drawing.Size(176, 220)
+        Me.GroupBox_Selection.TabIndex = 0
         Me.GroupBox_Selection.TabStop = False
         Me.GroupBox_Selection.Text = "Series selection"
         '
@@ -419,7 +430,7 @@ Partial Class ImportDiag
         Me.GroupBox_Dateformat.Location = New System.Drawing.Point(258, 12)
         Me.GroupBox_Dateformat.Name = "GroupBox_Dateformat"
         Me.GroupBox_Dateformat.Size = New System.Drawing.Size(152, 84)
-        Me.GroupBox_Dateformat.TabIndex = 32
+        Me.GroupBox_Dateformat.TabIndex = 1
         Me.GroupBox_Dateformat.TabStop = False
         Me.GroupBox_Dateformat.Text = "Date format"
         '
@@ -442,18 +453,37 @@ Partial Class ImportDiag
         Me.ComboBox_Dateformat.Size = New System.Drawing.Size(139, 21)
         Me.ComboBox_Dateformat.TabIndex = 1
         '
+        'SplitContainer1
+        '
+        SplitContainer1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+                    Or System.Windows.Forms.AnchorStyles.Left) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        SplitContainer1.Location = New System.Drawing.Point(12, 188)
+        SplitContainer1.Margin = New System.Windows.Forms.Padding(0)
+        SplitContainer1.Name = "SplitContainer1"
+        '
+        'SplitContainer1.Panel1
+        '
+        SplitContainer1.Panel1.Controls.Add(Me.GroupBox_Selection)
+        '
+        'SplitContainer1.Panel2
+        '
+        SplitContainer1.Panel2.Controls.Add(Me.GroupBox_Preview)
+        SplitContainer1.Size = New System.Drawing.Size(530, 220)
+        SplitContainer1.SplitterDistance = 176
+        SplitContainer1.TabIndex = 33
+        '
         'ImportDiag
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.CancelButton = Me.Button_Cancel
         Me.ClientSize = New System.Drawing.Size(549, 462)
+        Me.Controls.Add(SplitContainer1)
         Me.Controls.Add(Me.GroupBox_Columns)
         Me.Controls.Add(Me.GroupBox_Dateformat)
         Me.Controls.Add(Me.GroupBox_DecimalMark)
         Me.Controls.Add(Me.GroupBox_Settings)
-        Me.Controls.Add(Me.GroupBox_Selection)
-        Me.Controls.Add(Me.GroupBox_Preview)
         Me.Controls.Add(Me.Button_OK)
         Me.Controls.Add(Me.Button_Cancel)
         Me.Controls.Add(Me.StatusStrip1)
@@ -483,6 +513,9 @@ Partial Class ImportDiag
         Me.GroupBox_Selection.PerformLayout()
         Me.GroupBox_Dateformat.ResumeLayout(False)
         Me.GroupBox_Dateformat.PerformLayout()
+        SplitContainer1.Panel1.ResumeLayout(False)
+        SplitContainer1.Panel2.ResumeLayout(False)
+        SplitContainer1.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
