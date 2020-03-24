@@ -50,12 +50,7 @@ Friend Class ChangeTimestepDialog
         zre = Me.zres(Me.ComboBox_Timeseries.SelectedItem)
 
         'update the DateTimePickers
-        Me.DateTimePicker_Start.MinDate = zre.StartDate
-        Me.DateTimePicker_Start.MaxDate = zre.EndDate
         Me.DateTimePicker_Start.Value = zre.StartDate
-
-        Me.DateTimePicker_End.MinDate = zre.StartDate
-        Me.DateTimePicker_End.MaxDate = zre.EndDate
         Me.DateTimePicker_End.Value = zre.EndDate
 
     End Sub

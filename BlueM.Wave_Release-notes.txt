@@ -15,6 +15,7 @@ FIXED:
 * Fixed not being able to open SYDRO SQLite time series files from a network path
 * Time series with interpretation BlockLeft were not being displayed as stairs
 * The output time series of the "Change timestep" function now have a defined interpretation
+* Fixed exceptions occurring due to invalid min/max dates in the Change timestep dialog
 
 Version 1.7.0
 -------------
