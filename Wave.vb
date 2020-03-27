@@ -509,16 +509,16 @@ Public Class Wave
         title_removed = ""
 
         'Alle internen Zeitreihen durchlaufen und prüfen, ob es sie noch gibt
-        For Each zre As TimeSeries In Me.Zeitreihen.Values
+        For Each title As String In Me.Zeitreihen.Keys
             found = False
             For Each s In Me.ChartListBox1.Items
-                If (s.Title = zre.Title) Then
+                If (s.Title = title) Then
                     found = True 'diese Serie gibt es noch
                     Exit For
                 End If
             Next
             If (Not found) Then
-                title_removed = zre.Title 'diese Serie gibt es nicht mehr
+                title_removed = title 'diese Serie gibt es nicht mehr
                 Exit For
             End If
         Next
