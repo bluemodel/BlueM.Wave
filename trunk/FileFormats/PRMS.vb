@@ -47,7 +47,7 @@ Public Class PRMS
     ''' </summary>
     Public Overrides ReadOnly Property UseImportDialog() As Boolean
         Get
-            Return False
+            Return True
         End Get
     End Property
 
