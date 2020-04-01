@@ -102,12 +102,12 @@ Public Class SWMM_TXT
         Me.IsColumnSeparated = False
         Me.DecimalSeparator = Constants.period
 
-        Call Me.ReadColumns()
+        Call Me.readSeriesInfo()
 
         If (ReadAllNow) Then
             'Datei komplett einlesen
-            Call Me.selectAllColumns()
-            Call Me.Read_File()
+            Call Me.selectAllSeries()
+            Call Me.readFile()
         End If
 
 
@@ -116,7 +116,7 @@ Public Class SWMM_TXT
     ''' <summary>
     ''' Spaltenköpfe auslesen
     ''' </summary>
-    Public Overrides Sub ReadColumns()
+    Public Overrides Sub readSeriesInfo()
 
         Dim i, j As Integer
         Dim Zeile As String = ""
@@ -127,6 +127,9 @@ Public Class SWMM_TXT
         'dim AnzConstituents As Integer
         Dim Nodes() As Nodes
         Dim IDSpalte As Long
+        Dim sInfo As SeriesInfo
+
+        Me.SeriesList.Clear()
 
         Try
             'Datei öffnen
@@ -175,26 +178,21 @@ Public Class SWMM_TXT
             'Anzahl der Zeitreihen (Spalten) ermitteln
             Dim anzSpalten As Integer
             anzSpalten = AnzConstituents * AnzNodes
-            ReDim Me.Columns(anzSpalten)
 
             'iZeileDaten kann erst jetzt gesetzt werden, wenn AnzZeilen_dT bekannt ist
             Me.iLineData = iZeileAnzConstituents + AnzConstituents + AnzNodes + 3
-
-            'Index 0 für Datum belegen
-            Me.Columns(0).Name = "Date"
-            Me.Columns(0).Index = 0
-            Me.Columns(0).Einheit = "-"
-
 
             'Spaltenköpfe (Zuflussknoten) und Indizes einlesen
             IDSpalte = 1
             For i = 0 To AnzNodes - 1
                 For j = 0 To AnzConstituents - 1
-                    Me.Columns(IDSpalte).Name = Nodes(i).Bez & " " & Constituents(j).Type
-                    Me.Columns(IDSpalte).Objekt = Nodes(i).Bez
-                    Me.Columns(IDSpalte).Type = Constituents(j).Type
-                    Me.Columns(IDSpalte).Einheit = Constituents(j).Unit
-                    Me.Columns(IDSpalte).Index = IDSpalte
+                    sInfo = New SeriesInfo()
+                    sInfo.Name = Nodes(i).Bez & " " & Constituents(j).Type
+                    sInfo.Objekt = Nodes(i).Bez
+                    sInfo.Type = Constituents(j).Type
+                    sInfo.Unit = Constituents(j).Unit
+                    sInfo.Index = IDSpalte
+                    Me.SeriesList.Add(sInfo)
                     IDSpalte = IDSpalte + 1
                 Next
             Next
@@ -213,7 +211,7 @@ Public Class SWMM_TXT
     ''' <summary>
     ''' Zeitreihen einlesen
     ''' </summary>
-    Public Overrides Sub Read_File()
+    Public Overrides Sub readFile()
 
         Dim iZeile, i As Integer, j As Integer
         Dim Zeile As String
@@ -224,18 +222,16 @@ Public Class SWMM_TXT
         'Dim AnzConstituents As Integer
         Dim AllConstituents() As String
         Dim AllNodes() As String
-
+        Dim ts As TimeSeries
 
         Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
         Dim StrRead As StreamReader = New StreamReader(FiStr, System.Text.Encoding.GetEncoding("iso8859-1"))
         Dim StrReadSync = TextReader.Synchronized(StrRead)
 
-        'Anzahl Zeitreihen bestimmen
-        ReDim Me.TimeSeries(Me.SelectedColumns.Length - 1)
-
         'Zeitreihen instanzieren
-        For i = 0 To Me.SelectedColumns.Length - 1
-            Me.TimeSeries(i) = New TimeSeries(Me.SelectedColumns(i).Name)
+        For Each sInfo As SeriesInfo In Me.SelectedSeries
+            ts = New TimeSeries(sInfo.Name)
+            Me.TimeSeriesCollection.Add(ts.Title, ts)
         Next
 
         'Einheiten?
@@ -244,17 +240,18 @@ Public Class SWMM_TXT
             Exit Sub
         End If
 
-        ReDim AllConstituents(Me.SelectedColumns.Length - 1)
-        ReDim AllNodes(Me.SelectedColumns.Length - 1)
-        'Alle ausgewählten Spalten durchlaufen
-        For i = 0 To Me.SelectedColumns.Length - 1
-            Me.TimeSeries(i).Unit = Me.SelectedColumns(i).Einheit
-            Me.TimeSeries(i).Objekt = Me.SelectedColumns(i).Objekt
-            AllConstituents(i) = Me.SelectedColumns(i).Type
-            Me.TimeSeries(i).Type = Me.SelectedColumns(i).Type
-            AllNodes(i) = Me.SelectedColumns(i).Objekt
+        ReDim AllConstituents(Me.SelectedSeries.Count - 1)
+        ReDim AllNodes(Me.SelectedSeries.Count - 1)
+        'Alle ausgewählten Serien durchlaufen
+        i = 0
+        For Each sInfo As SeriesInfo In Me.SelectedSeries
+            Me.TimeSeriesCollection(sInfo.Name).Unit = sInfo.Unit
+            Me.TimeSeriesCollection(sInfo.Name).Objekt = sInfo.Objekt
+            AllConstituents(i) = sInfo.Type
+            Me.TimeSeriesCollection(sInfo.Name).Type = sInfo.Type
+            AllNodes(i) = sInfo.Objekt
+            i += 1
         Next
-
 
         'Einlesen
         '--------
@@ -281,8 +278,8 @@ Public Class SWMM_TXT
                     IDWerte = IDWerte + 1
                 Next
             Next
-            For i = 0 To Me.SelectedColumns.Length - 1
-                Me.TimeSeries(i).AddNode(datum, StringToDouble(Werte(Me.SelectedColumns(i).Index)))
+            For Each sInfo As SeriesInfo In Me.SelectedSeries
+                Me.TimeSeriesCollection(sInfo.Name).AddNode(datum, StringToDouble(Werte(sInfo.Index)))
             Next
 
         Loop Until StrReadSync.Peek() = -1

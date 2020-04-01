@@ -69,24 +69,27 @@ Public Class ASC
         Me.DecimalSeparator = Constants.period
         Me.DateTimeColumnIndex = 0
 
-        Call Me.ReadColumns()
+        Call Me.readSeriesInfo()
 
         If (ReadAllNow) Then
             'Datei komplett einlesen
-            Call Me.selectAllColumns()
-            Call Me.Read_File()
+            Call Me.selectAllSeries()
+            Call Me.readFile()
         End If
 
     End Sub
 
     'Spalten auslesen
     '****************
-    Public Overrides Sub ReadColumns()
+    Public Overrides Sub readSeriesInfo()
 
         Dim i As Integer
+        Dim sInfo As SeriesInfo
         Dim Zeile As String = ""
         Dim ZeileSpalten As String = ""
         Dim ZeileEinheiten As String = ""
+
+        Me.SeriesList.Clear()
 
         'Datei öffnen
         Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
@@ -123,22 +126,27 @@ Public Class ASC
 
         anzSpalten = Namen.Length
 
-        ReDim Me.Columns(anzSpalten - 1)
+        'store series info
         For i = 0 To anzSpalten - 1
-            Me.Columns(i).Name = Namen(i).Trim()
-            Me.Columns(i).Einheit = Einheiten(i).Trim()
-            Me.Columns(i).Index = i
+            If i <> Me.DateTimeColumnIndex Then
+                sInfo = New SeriesInfo()
+                sInfo.Index = i
+                sInfo.Name = Namen(i).Trim()
+                sInfo.Unit = Einheiten(i).Trim()
+                Me.SeriesList.Add(sInfo)
+            End If
         Next
 
     End Sub
 
     'ASC-Datei einlesen
     '******************
-    Public Overrides Sub Read_File()
+    Public Overrides Sub readFile()
 
         Dim i As Integer
         Dim Zeile As String
         Dim Werte() As String
+        Dim ts As TimeSeries
         Dim datum, datumLast As DateTime
         Dim Ereignisende As Boolean
         Dim dt As TimeSpan
@@ -149,20 +157,14 @@ Public Class ASC
 
         dt = New TimeSpan(0, 5, 0)
 
-        'Anzahl Zeitreihen
-        ReDim Me.TimeSeries(Me.SelectedColumns.Length - 1)
-
-        'Zeitreihen instanzieren
-        For i = 0 To Me.SelectedColumns.Length - 1
-            Me.TimeSeries(i) = New TimeSeries(Me.SelectedColumns(i).Name)
+        'Instantiate time series
+        For Each sInfo As SeriesInfo In Me.SelectedSeries
+            ts = New TimeSeries(sInfo.Name)
+            If Me.UseUnits Then
+                ts.Unit = sInfo.Unit
+            End If
+            Me.TimeSeriesCollection.Add(ts.Title, ts)
         Next
-
-        'Einheiten?
-        If (Me.UseUnits) Then
-            For i = 0 To Me.SelectedColumns.Length - 1
-                Me.TimeSeries(i).Unit = Me.SelectedColumns(i).Einheit
-            Next
-        End If
 
         'Einlesen
         '--------
@@ -196,15 +198,15 @@ Public Class ASC
                 If (Ereignisende) Then
 
                     'Mit Stützstellen vom Wert 0 Lücke zwischen Ereignissen abschliessen
-                    datumLast = Me.TimeSeries(0).EndDate
+                    datumLast = Me.TimeSeriesCollection.Values.Last().EndDate
                     If (datum.Subtract(datumLast) > dt) Then 'nur wenn Lücke größer als dt ist
 
-                        For i = 0 To Me.SelectedColumns.Length - 1
+                        For Each sInfo As SeriesInfo In Me.SelectedSeries
                             'Eine Null nach dem letzten Datum
-                            Me.TimeSeries(i).AddNode(datumLast.Add(dt), 0.0)
+                            Me.TimeSeriesCollection(sInfo.Name).AddNode(datumLast.Add(dt), 0.0)
                             If (datum.Subtract(dt) > datumLast.Add(dt)) Then 'nur wenn Lücke damit noch nicht geschlossen ist
                                 'Eine Null vor dem aktuellen Datum
-                                Me.TimeSeries(i).AddNode(datum.Subtract(dt), 0.0)
+                                Me.TimeSeriesCollection(sInfo.Name).AddNode(datum.Subtract(dt), 0.0)
                             End If
                         Next
 
@@ -216,8 +218,8 @@ Public Class ASC
                 End If
 
                 'eingelesene Stützstellen hinzufügen
-                For i = 0 To Me.SelectedColumns.Length - 1
-                    Me.TimeSeries(i).AddNode(datum, StringToDouble(Werte(Me.SelectedColumns(i).Index + 1))) '+1 weil Datum auch ein Leerzeichen enthält
+                For Each sInfo As SeriesInfo In Me.SelectedSeries
+                    Me.TimeSeriesCollection(sInfo.Name).AddNode(datum, StringToDouble(Werte(sInfo.Index + 1))) '+1 weil Datum auch ein Leerzeichen enthält
                 Next
 
             Else

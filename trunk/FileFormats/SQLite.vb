@@ -120,12 +120,12 @@ Public Class SQLite
 
         Me.flag_mapping = New Dictionary(Of Integer, Integer)
 
-        Call Me.ReadColumns()
+        Call Me.readSeriesInfo()
 
         If (ReadAllNow) Then
             'Direkt einlesen
-            Call Me.selectAllColumns()
-            Call Me.Read_File()
+            Call Me.selectAllSeries()
+            Call Me.readFile()
         End If
 
     End Sub
@@ -134,7 +134,7 @@ Public Class SQLite
     ''' Reads information about the time series stored in the file
     ''' </summary>
     ''' <remarks></remarks>
-    Public Overrides Sub ReadColumns()
+    Public Overrides Sub readSeriesInfo()
 
         Dim sql As Sydro.SydroZre.SydroSQLNet
         Dim ts_atts As Sydro.SydroZre.SydroTimeSeriesAttributes
@@ -142,6 +142,9 @@ Public Class SQLite
         Dim att_pairs() As String
         Dim key, value As String
         Dim ts_name As String
+        Dim sInfo As SeriesInfo
+
+        Me.SeriesList.Clear()
 
         'Determine time series ID from the filename
         If Not Integer.TryParse(IO.Path.GetFileNameWithoutExtension(Me.File), Me.id) Then
@@ -165,7 +168,7 @@ Public Class SQLite
             key = att_pair.Split(ts_atts.KeyValueSplit)(0)
             value = att_pair.Split(ts_atts.KeyValueSplit)(1)
             If Not Me.FileMetadata.ContainsKey(key) Then
-                'TODO: this is because ReadColumns() may be called multiple times
+                'TODO: this is because ReadSeriesInfo() may be called multiple times
                 Me.FileMetadata.Add(key, value)
             End If
         Next
@@ -185,13 +188,7 @@ Public Class SQLite
         'Determine TSClass
         Me.ts_class = Sydro.SydroZre.SydroSQLNet.TimeSeriesClass(SQLite.user, Me.id, Me.path)
 
-        'store a fictional datetime column
-        ReDim Me.Columns(0)
-        Me.Columns(0).Name = "Datetime"
-        Me.Columns(0).Index = 0
-        Me.DateTimeColumnIndex = 0
-
-        'read and store series as columns
+        'read and store series info
         Me.flag_mapping = New Dictionary(Of Integer, Integer)
         Select Case Me.ts_class
             Case Sydro.SydroZre.SydroSQLNet.EnumTimeseriesClassFlags.Unknown
@@ -199,9 +196,10 @@ Public Class SQLite
 
             Case Sydro.SydroZre.SydroSQLNet.EnumTimeseriesClassFlags.DefaultFlag
                 '"Normal" time series has only one series
-                ReDim Preserve Me.Columns(Me.Columns.Length)
-                Me.Columns(Me.Columns.Length - 1).Name = ts_name
-                Me.Columns(Me.Columns.Length - 1).Index = 1
+                sInfo = New SeriesInfo()
+                sInfo.Name = ts_name
+                sInfo.Index = 1
+                Me.SeriesList.Add(sInfo)
                 Me.flag_mapping.Add(1, 0)
 
             Case Sydro.SydroZre.SydroSQLNet.EnumTimeseriesClassFlags.Flagged, _
@@ -215,9 +213,10 @@ Public Class SQLite
                 For Each flag As String In flagstring.Split("#")
                     flag_id = flag.Split(",")(0)
                     flag_desc = flag.Split(",")(2)
-                    ReDim Preserve Me.Columns(index)
-                    Me.Columns(index).Name = ts_name & "/" & flag_id & ": " & flag_desc
-                    Me.Columns(index).Index = index
+                    sInfo = New SeriesInfo()
+                    sInfo.Name = ts_name & "/" & flag_id & ": " & flag_desc
+                    sInfo.Index = index
+                    Me.SeriesList.Add(sInfo)
                     Me.flag_mapping.Add(index, flag_id)
                     index += 1
                 Next
@@ -233,7 +232,7 @@ Public Class SQLite
     ''' Reads the time series from the file
     ''' </summary>
     ''' <remarks></remarks>
-    Public Overrides Sub Read_File()
+    Public Overrides Sub readFile()
 
         Dim ts As TimeSeries
         Dim ts_list As List(Of TimeSeries)
@@ -257,9 +256,9 @@ Public Class SQLite
 
             Case Sydro.SydroZre.SydroSQLNet.EnumTimeseriesClassFlags.DefaultFlag, _
                 Sydro.SydroZre.SydroSQLNet.EnumTimeseriesClassFlags.Flagged
-                'Loop over selected columns
-                For Each col As ColumnInfo In Me.SelectedColumns
-                    flag_id = Me.flag_mapping(col.Index)
+                'Loop over selected series
+                For Each sInfo As SeriesInfo In Me.SelectedSeries
+                    flag_id = Me.flag_mapping(sInfo.Index)
                     'retrieve time series from sqlite
                     sydro_ts = sql.TimeSeries(flag_id, New Date(0), New Date(0))
                     Log.AddLogEntry("SydroSQLiteNet: " & sydro_ts.ResultMsg)
@@ -269,11 +268,11 @@ Public Class SQLite
                     sydro_ts.TimeSeriesStringToArray(dateArr, sngArr)
                     'check whether the series actually contains data
                     If dateArr.Length = 0 Then
-                        MsgBox("Time series " & col.Name & " is empty!", MsgBoxStyle.Exclamation)
+                        MsgBox("Time series " & sInfo.Name & " is empty!", MsgBoxStyle.Exclamation)
                         Continue For
                     End If
                     'store as new time series
-                    ts = New TimeSeries(col.Name)
+                    ts = New TimeSeries(sInfo.Name)
                     ts.Unit = sydro_ts.Unit 'use unit from sydro_ts because colinfo doesn't have it
                     For j As Integer = 0 To dateArr.Count - 1
                         ts.AddNode(dateArr(j), sngArr(j))
@@ -283,14 +282,8 @@ Public Class SQLite
                     'copy FileMetadata to TimeSeriesMetadata
                     ts.Metadata = Me.FileMetadata
 
-                    'temporarily store timeseries
-                    ts_list.Add(ts)
-                Next
-
-                'permanently store time series
-                ReDim Me.TimeSeries(ts_list.Count - 1)
-                For i As Integer = 0 To ts_list.Count - 1
-                    Me.TimeSeries(i) = ts_list(i)
+                    'store timeseries
+                    Me.TimeSeriesCollection.Add(ts.Title, ts)
                 Next
 
             Case Sydro.SydroZre.SydroSQLNet.EnumTimeseriesClassFlags.Forecast
@@ -306,17 +299,17 @@ Public Class SQLite
                 'instantiate ForecastTimeseries
                 fc_ts = New Sydro.SydroZre.SydroSQLFCTimeSeries(SQLite.user, Me.id, Me.path)
                 'Loop over selected columns
-                For Each col As ColumnInfo In Me.SelectedColumns
+                For Each sInfo As SeriesInfo In Me.SelectedSeries
                     ReDim T0Arr(0)
                     ReDim dateArr(0)
                     ReDim fcLengthArr(0)
                     ReDim sngArr(0)
-                    flag_id = Me.flag_mapping(col.Index)
+                    flag_id = Me.flag_mapping(sInfo.Index)
                     'retrieve time series for flag from sqlite
                     fc_ts.getValues(flag_id, New Date(0), New Date(0), T0Arr, dateArr, fcLengthArr, sngArr)
                     'check whether the series actually contains data
                     If dateArr.Length = 0 Then
-                        MsgBox("Time series " & col.Name & " is empty!", MsgBoxStyle.Exclamation)
+                        MsgBox("Time series " & sInfo.Name & " is empty!", MsgBoxStyle.Exclamation)
                         Continue For
                     End If
                     'get list of distinct T0 values
@@ -324,7 +317,7 @@ Public Class SQLite
                     'create a dict to store different T0-series
                     ts_dict = New Dictionary(Of DateTime, TimeSeries)
                     For Each T0 As DateTime In T0_list
-                        ts = New TimeSeries(T0 & ": " & col.Name)
+                        ts = New TimeSeries(T0 & ": " & sInfo.Name)
                         'store unit
                         ts.Unit = unit
                         'store interpretation
@@ -339,20 +332,14 @@ Public Class SQLite
                         ts_dict(T0Arr(j)).AddNode(dateArr(j), sngArr(j))
                     Next
 
-                    'temporarily store timeseries
+                    'store timeseries
                     For Each ts In ts_dict.Values
-                        ts_list.Add(ts)
+                        Me.TimeSeriesCollection.Add(ts.Title, ts)
                     Next
                 Next
 
-                'permanently store time series
-                ReDim Me.TimeSeries(ts_list.Count - 1)
-                For i As Integer = 0 To ts_list.Count - 1
-                    Me.TimeSeries(i) = ts_list(i)
-                Next
-
             Case Else
-                    Throw New Exception("Time series of class " & ts_class & " are not yet supported!")
+                Throw New Exception("Time series of class " & ts_class & " are not yet supported!")
 
         End Select
 

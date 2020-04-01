@@ -113,16 +113,19 @@ Public Class PRMS
             Throw New Exception("Unexpected file format for a PRMS OUT file!")
         End If
 
-        Call Me.ReadColumns()
+        Call Me.readSeriesInfo()
 
     End Sub
 
-    Public Overrides Sub ReadColumns()
+    Public Overrides Sub readSeriesInfo()
 
-        Dim i, nSeries As Integer
+        Dim i As Integer
         Dim line As String
         Dim parts As String()
         Dim lines As Dictionary(Of Integer, String)
+        Dim sInfo As SeriesInfo
+
+        Me.SeriesList.Clear()
 
         Try
             'Open the file
@@ -143,87 +146,47 @@ Public Class PRMS
 
                 Case FileType.annual
                     parts = lines(2).Split(New String() {"  "}, StringSplitOptions.RemoveEmptyEntries)
-                    nSeries = parts.Count() - 1
-                    ReDim Me.Columns(parts.Count() - 1)
-                    For i = 0 To parts.Count() - 1
-                        Me.Columns(i) = New ColumnInfo()
-                        Me.Columns(i).Index = i
-                        Me.Columns(i).Name = parts(i).Trim()
-                        Me.Columns(i).Einheit = "-"
+                    For i = 1 To parts.Count() - 1 'first column is timestamp (year)
+                        sInfo = New SeriesInfo()
+                        sInfo.Index = i
+                        sInfo.Name = parts(i).Trim()
+                        sInfo.Unit = "-"
+                        Me.SeriesList.Add(sInfo)
                     Next
                     Me.DateTimeColumnIndex = 0
 
                 Case FileType.monthly
                     parts = lines(2).Split(New Char() {" "}, StringSplitOptions.RemoveEmptyEntries)
-                    nSeries = parts.Count() - 2
-                    ReDim Me.Columns(parts.Count() - 1)
-                    For i = 0 To parts.Count() - 1
-                        Me.Columns(i) = New ColumnInfo()
-                        Me.Columns(i).Index = i
-                        Me.Columns(i).Name = parts(i)
-                        Me.Columns(i).Einheit = "-"
+                    For i = 2 To parts.Count() - 1 'first two columns are timestamp (year and month)
+                        sInfo = New SeriesInfo()
+                        sInfo.Index = i
+                        sInfo.Name = parts(i).Trim()
+                        sInfo.Unit = "-"
+                        Me.SeriesList.Add(sInfo)
                     Next
                     Me.DateTimeColumnIndex = 0 'technically 0 and 1
 
                 Case FileType.dpout
-                    nSeries = 10
                     parts = lines(Me.iLineData).Split(New Char() {" "}, StringSplitOptions.RemoveEmptyEntries)
-                    ReDim Me.Columns(parts.Count() - 1)
-                    For i = 0 To parts.Count() - 1
-                        Me.Columns(i) = New ColumnInfo()
-                        Me.Columns(i).Index = i
-                        If i = 0 Then
-                            Me.Columns(i).Name = "YEAR"
-                            Me.Columns(i).Einheit = "-"
-                        ElseIf i = 1 Then
-                            Me.Columns(i).Name = "MONTH"
-                            Me.Columns(i).Einheit = "-"
-                        ElseIf i = 2 Then
-                            Me.Columns(i).Name = "DAY"
-                            Me.Columns(i).Einheit = "-"
-                        Else
-                            Dim m As Match
-                            m = Regex.Match(lines(i - 2).Trim(), ".{3} (.+)\s+\((.+)\).+")
-                            Me.Columns(i).Name = m.Groups(1).Value.Trim()
-                            Me.Columns(i).Einheit = m.Groups(2).Value.Trim()
-                        End If
+                    For i = 3 To parts.Count() - 1 'first 3 columns are timestamp
+                        Dim m As Match
+                        m = Regex.Match(lines(i - 2).Trim(), ".{3} (.+)\s+\((.+)\).+")
+                        sInfo = New SeriesInfo
+                        sInfo.Name = m.Groups(1).Value.Trim()
+                        sInfo.Unit = m.Groups(2).Value.Trim()
+                        sInfo.Index = i
+                        Me.SeriesList.Add(sInfo)
                     Next
                     Me.DateTimeColumnIndex = 0 ' technically 0, 1 and 2
 
                 Case FileType.statvar
-                    'first header line contains the number of series
-                    Integer.TryParse(lines(1), nSeries)
                     parts = lines(Me.iLineData).Split(New Char() {" "}, StringSplitOptions.RemoveEmptyEntries)
-                    ReDim Me.Columns(parts.Count() - 1)
-                    For i = 0 To parts.Count() - 1
-                        Me.Columns(i) = New ColumnInfo()
-                        Me.Columns(i).Index = i
-                        If i = 0 Then
-                            Me.Columns(i).Name = "NUMBER"
-                            Me.Columns(i).Einheit = "-"
-                        ElseIf i = 1 Then
-                            Me.Columns(i).Name = "YEAR"
-                            Me.Columns(i).Einheit = "-"
-                        ElseIf i = 2 Then
-                            Me.Columns(i).Name = "MONTH"
-                            Me.Columns(i).Einheit = "-"
-                        ElseIf i = 3 Then
-                            Me.Columns(i).Name = "DAY"
-                            Me.Columns(i).Einheit = "-"
-                        ElseIf i = 4 Then
-                            Me.Columns(i).Name = "HOUR"
-                            Me.Columns(i).Einheit = "-"
-                        ElseIf i = 5 Then
-                            Me.Columns(i).Name = "MINUTES"
-                            Me.Columns(i).Einheit = "-"
-                        ElseIf i = 6 Then
-                            Me.Columns(i).Name = "SECONDS"
-                            Me.Columns(i).Einheit = "-"
-                        ElseIf i > 6 Then
-                        	'these are the data columns
-                            Me.Columns(i).Name = lines(i - 5).Trim()
-                            Me.Columns(i).Einheit = "-"
-                        End If
+                    For i = 7 To parts.Count() - 1 'first 7 columns are number and timestamp
+                        sInfo = New SeriesInfo()
+                        sInfo.Name = lines(i - 5).Trim()
+                        sInfo.Unit = "-"
+                        sInfo.Index = i
+                        Me.SeriesList.Add(sInfo)
                     Next
                     Me.DateTimeColumnIndex = 0 ' technically 1 to 6
             End Select
@@ -242,13 +205,14 @@ Public Class PRMS
     ''' Reads the file
     ''' </summary>
     ''' <remarks></remarks>
-    Public Overrides Sub Read_File()
+    Public Overrides Sub readFile()
 
-        Dim i, nSeries, nDateCols As Integer
+        Dim i As Integer
         Dim line As String
         Dim parts() As String
         Dim value As Double
         Dim timestamp As DateTime
+        Dim ts As TimeSeries
 
         Try
 
@@ -256,24 +220,12 @@ Public Class PRMS
             Dim StrRead As StreamReader = New StreamReader(FiStr, System.Text.Encoding.GetEncoding("iso8859-1"))
             Dim StrReadSync = TextReader.Synchronized(StrRead)
 
-            Select Case Me.FileFormat
-                Case FileType.annual
-                    nDateCols = 1
-                Case FileType.monthly
-                    nDateCols = 2
-                Case FileType.dpout
-                    nDateCols = 3
-                Case FileType.statvar
-                    nDateCols = 7 'technically only 5, the first column is a line number and the 7th one is always 0 (milliseconds?)
-            End Select
-
             'Instantiate time series
-            nSeries = Me.Columns.Count() - nDateCols
-            ReDim Me.TimeSeries(nSeries - 1)
-            For i = 0 To nSeries - 1
-                Me.TimeSeries(i) = New TimeSeries()
-                Me.TimeSeries(i).Title = Me.Columns(i + nDateCols).Name
-                Me.TimeSeries(i).Unit = Me.Columns(i + nDateCols).Einheit
+            For Each sInfo As SeriesInfo In Me.SelectedSeries
+                ts = New TimeSeries()
+                ts.Title = sInfo.Name
+                ts.Unit = sInfo.Unit
+                Me.TimeSeriesCollection.Add(ts.Title, ts)
             Next
 
             'Skip header
@@ -299,9 +251,9 @@ Public Class PRMS
                         timestamp = New DateTime(parts(1), parts(2), parts(3), parts(4), parts(5), parts(6))
                 End Select
                 'Parse values and store nodes
-                For i = 0 To nSeries - 1
-                    value = Helpers.StringToDouble(parts(i + nDateCols))
-                    Me.TimeSeries(i).AddNode(timestamp, value)
+                For Each sInfo As SeriesInfo In Me.SelectedSeries
+                    value = Helpers.StringToDouble(parts(sInfo.Index))
+                    Me.TimeSeriesCollection(sInfo.Name).AddNode(timestamp, value)
                 Next
 
             Loop Until StrReadSync.Peek() = -1

@@ -101,27 +101,30 @@ Public Class WEL
         Me.DecimalSeparator = Constants.period
         Me.DateTimeLength = 17
 
-        Call Me.ReadColumns()
+        Call Me.readSeriesInfo()
 
         If (ReadAllNow) Then
             'Datei komplett einlesen
-            Call Me.selectAllColumns()
-            Call Me.Read_File()
+            Call Me.selectAllSeries()
+            Call Me.readFile()
         End If
 
-        
+
     End Sub
 
     ''' <summary>
     ''' Spalten auslesen
     ''' </summary>
-    Public Overrides Sub ReadColumns()
+    Public Overrides Sub readSeriesInfo()
 
         Dim i As Integer
         Dim Zeile As String = ""
         Dim ZeileSpalten As String = ""
         Dim ZeileEinheiten As String = ""
         Dim LineInfo As String = ""
+        Dim sInfo As SeriesInfo
+
+        Me.SeriesList.Clear()
 
         Try
             'Datei öffnen
@@ -166,27 +169,22 @@ Public Class WEL
                 Namen = ZeileSpalten.Split(New Char() {Me.Separator.ToChar}, StringSplitOptions.RemoveEmptyEntries)
                 Einheiten = ZeileEinheiten.Split(New Char() {Me.Separator.ToChar}, StringSplitOptions.RemoveEmptyEntries)
                 anzSpalten = Namen.Length
-                ReDim Me.Columns(anzSpalten - 1)
-                For i = 0 To anzSpalten - 1
-                    Me.Columns(i).Name = Namen(i).Trim()
-                    Me.Columns(i).Einheit = Einheiten(i).Trim()
-                    Me.Columns(i).Index = i
+                For i = 1 To anzSpalten - 1 'first column is timestamp
+                    sInfo = New SeriesInfo()
+                    sInfo.Name = Namen(i).Trim()
+                    sInfo.Unit = Einheiten(i).Trim()
+                    sInfo.Index = i
+                    Me.SeriesList.Add(sInfo)
                 Next
             Else
                 'Spalten mit fester Breite
                 anzSpalten = Math.Ceiling((ZeileSpalten.Length - Me.DateTimeLength) / Me.ColumnWidth) + 1
-                ReDim Me.Columns(anzSpalten - 1)
-                For i = 0 To anzSpalten - 1
-                    If i = 0 Then
-                        'DateTime need to be considered especially as it can be shorter than the standard "Spaltenbreite"
-                        Me.Columns(i).Name = ZeileSpalten.Substring(0, Me.DateTimeLength) '.Trim()
-                        Me.Columns(i).Einheit = ZeileEinheiten.Substring(0, Me.DateTimeLength) '.Trim()
-                        Me.Columns(i).Index = i
-                    Else
-                        Me.Columns(i).Name = ZeileSpalten.Substring(Me.DateTimeLength + (i - 1) * Me.ColumnWidth, Me.ColumnWidth).Trim()
-                        Me.Columns(i).Einheit = ZeileEinheiten.Substring(Me.DateTimeLength + (i - 1) * Me.ColumnWidth, Me.ColumnWidth).Trim()
-                        Me.Columns(i).Index = i
-                    End If
+                For i = 1 To anzSpalten - 1 'first column is timestamp
+                    sInfo = New SeriesInfo()
+                    sInfo.Name = ZeileSpalten.Substring(Me.DateTimeLength + (i - 1) * Me.ColumnWidth, Me.ColumnWidth).Trim()
+                    sInfo.Unit = ZeileEinheiten.Substring(Me.DateTimeLength + (i - 1) * Me.ColumnWidth, Me.ColumnWidth).Trim()
+                    sInfo.Index = i
+                    Me.SeriesList.Add(sInfo)
                 Next
             End If
 
@@ -199,40 +197,34 @@ Public Class WEL
     ''' <summary>
     ''' WEL-Datei einlesen
     ''' </summary>
-    Public Overrides Sub Read_File()
+    Public Overrides Sub readFile()
 
-        Dim iZeile, i As Integer
+        Dim iZeile As Integer
         Dim Zeile As String
         Dim Werte() As String
         Dim timestamp As String
         Dim datum As DateTime
         Dim ok As Boolean
+        Dim ts As TimeSeries
 
         Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
         Dim StrRead As StreamReader = New StreamReader(FiStr, System.Text.Encoding.GetEncoding("iso8859-1"))
         Dim StrReadSync = TextReader.Synchronized(StrRead)
 
-        'Anzahl Zeitreihen bestimmen
-        ReDim Me.TimeSeries(Me.SelectedColumns.Length - 1)
-
         'Zeitreihen instanzieren
-        For i = 0 To Me.SelectedColumns.Length - 1
-            Me.TimeSeries(i) = New TimeSeries(Me.SelectedColumns(i).Name)
-            'Series in a WEL file are always interpreted as BlockRight, with the exception of volume
-            If Me.TimeSeries(i).Title.EndsWith("_VOL") Then
-                Me.TimeSeries(i).Interpretation = BlueM.Wave.TimeSeries.InterpretationType.Instantaneous
-            Else
-                Me.TimeSeries(i).Interpretation = BlueM.Wave.TimeSeries.InterpretationType.BlockRight
+        For Each sInfo As SeriesInfo In Me.SelectedSeries
+            ts = New TimeSeries(sInfo.Name)
+            If Me.UseUnits Then
+                ts.Unit = sInfo.Unit
             End If
+            'Series in a WEL file are always interpreted as BlockRight, with the exception of volume
+            If ts.Title.EndsWith("_VOL") Then
+                ts.Interpretation = BlueM.Wave.TimeSeries.InterpretationType.Instantaneous
+            Else
+                ts.Interpretation = BlueM.Wave.TimeSeries.InterpretationType.BlockRight
+            End If
+            Me.TimeSeriesCollection.Add(ts.Title, ts)
         Next
-
-        'Einheiten?
-        If (Me.UseUnits) Then
-            'Alle ausgewählten Spalten durchlaufen
-            For i = 0 To Me.SelectedColumns.Length - 1
-                Me.TimeSeries(i).Unit = Me.SelectedColumns(i).Einheit
-            Next
-        End If
 
         'Einlesen
         '--------
@@ -257,9 +249,9 @@ Public Class WEL
                     Throw New Exception("Unable to parse the timestamp '" & timestamp & "' using the given format '" & Me.Dateformat & "'!")
                 End If
                 'Restliche Spalten: Werte
-                'Alle ausgewählten Spalten durchlaufen
-                For i = 0 To Me.SelectedColumns.Length - 1
-                    Me.TimeSeries(i).AddNode(datum, StringToDouble(Werte(Me.SelectedColumns(i).Index)))
+                'Alle ausgewählten Reihen durchlaufen
+                For Each sInfo As SeriesInfo In Me.SelectedSeries
+                    Me.TimeSeriesCollection(sInfo.Name).AddNode(datum, StringToDouble(Werte(sInfo.Index)))
                 Next
             Else
                 'Spalten mit fester Breite
@@ -271,9 +263,9 @@ Public Class WEL
                     Throw New Exception("Unable to parse the timestamp '" & timestamp & "' using the given format '" & Me.Dateformat & "'!")
                 End If
                 'Restliche Spalten: Werte
-                'Alle ausgewählten Spalten durchlaufen
-                For i = 0 To Me.SelectedColumns.Length - 1
-                    Me.TimeSeries(i).AddNode(datum, StringToDouble(Zeile.Substring((Me.SelectedColumns(i).Index * Me.ColumnWidth) + SpaltenOffset, Math.Min(Me.ColumnWidth, Zeile.Substring((Me.SelectedColumns(i).Index * Me.ColumnWidth) + SpaltenOffset).Length))))
+                'Alle ausgewählten Reihen durchlaufen
+                For Each sInfo As SeriesInfo In Me.SelectedSeries
+                    Me.TimeSeriesCollection(sInfo.Name).AddNode(datum, StringToDouble(Zeile.Substring((sInfo.Index * Me.ColumnWidth) + SpaltenOffset, Math.Min(Me.ColumnWidth, Zeile.Substring((sInfo.Index * Me.ColumnWidth) + SpaltenOffset).Length))))
                 Next
             End If
 

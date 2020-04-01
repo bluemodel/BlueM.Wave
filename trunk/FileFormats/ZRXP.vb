@@ -63,12 +63,12 @@ Public Class ZRXP
         'set default metadata keys
         Me.FileMetadata.AddKeys(ZRXP.MetadataKeys)
 
-        Call Me.ReadColumns()
+        Call Me.readSeriesInfo()
 
         If (ReadAllNow) Then
             'read immediately
-            Call Me.selectAllColumns()
-            Call Me.Read_File()
+            Call Me.selectAllSeries()
+            Call Me.readFile()
         End If
 
     End Sub
@@ -116,10 +116,13 @@ Public Class ZRXP
     ''' Reads the metadata from the file
     ''' </summary>
     ''' <remarks></remarks>
-    Public Overrides Sub ReadColumns()
+    Public Overrides Sub readSeriesInfo()
 
         Dim i As Integer
         Dim line, data(), keys(), value As String
+        Dim sInfo As SeriesInfo
+
+        Me.SeriesList.Clear()
 
         'copy metadata keys to array
         ReDim keys(Me.FileMetadata.Keys.Count - 1)
@@ -166,16 +169,11 @@ Public Class ZRXP
             StrRead.Close()
             FiStr.Close()
 
-            'Configure columns
-            ReDim Me.Columns(1) ' Each ZRXP file contains only one time series
-
-            Me.Columns(0).Index = 0
-            Me.Columns(0).Name = "timestamp"
-            Me.Columns(0).Einheit = ""
-
-            Me.Columns(1).Index = 1
-            Me.Columns(1).Name = Me.FileMetadata("SNAME") & "." & Me.FileMetadata("CNAME")
-            Me.Columns(1).Einheit = Me.FileMetadata("CUNIT")
+            'store series info
+            sInfo = New SeriesInfo
+            sInfo.Name = Me.FileMetadata("SNAME") & "." & Me.FileMetadata("CNAME")
+            sInfo.Unit = Me.FileMetadata("CUNIT")
+            Me.SeriesList.Add(sInfo)
 
         Catch ex As Exception
             MsgBox("Unable to read file!" & eol & eol & "Error: " & ex.Message, MsgBoxStyle.Critical, "Error")
@@ -187,7 +185,7 @@ Public Class ZRXP
     ''' reads the file
     ''' </summary>
     ''' <remarks></remarks>
-    Public Overrides Sub Read_File()
+    Public Overrides Sub readFile()
 
         Dim line, parts() As String
         Dim datestring, valuestring As String
@@ -195,15 +193,17 @@ Public Class ZRXP
         Dim timestamp As DateTime
         Dim ok As Boolean
         Dim value As Double
+        Dim sInfo As SeriesInfo
+        Dim ts As TimeSeries
 
         Try
             'instantiate time series
-            ReDim Me.TimeSeries(0)
-            Me.TimeSeries(0) = New TimeSeries(Me.Columns(1).Name)
-            Me.TimeSeries(0).Unit = Me.Columns(1).Einheit
+            sInfo = Me.SeriesList(0)
+            ts = New TimeSeries(sInfo.Name)
+            ts.Unit = sInfo.Unit
 
             'store metadata
-            Me.TimeSeries(0).Metadata = Me.FileMetadata
+            ts.Metadata = Me.FileMetadata
 
             'open file
             Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
@@ -240,7 +240,7 @@ Public Class ZRXP
                 End If
 
                 'store node
-                Me.TimeSeries(0).AddNode(timestamp, value)
+                ts.AddNode(timestamp, value)
 
             Loop Until StrReadSync.Peek() = -1
 
@@ -251,6 +251,9 @@ Public Class ZRXP
             If errorcount > 0 Then
                 Log.AddLogEntry("The file contained " & errorcount & " error values (" & Me.FileMetadata("RINVAL") & "), which were converted to NaN!")
             End If
+
+            'store time series
+            Me.TimeSeriesCollection.Add(ts.Title, ts)
 
         Catch ex As Exception
             MsgBox("Error while parsing file!" & eol & eol & "Error: " & ex.Message, MsgBoxStyle.Critical, "Error")

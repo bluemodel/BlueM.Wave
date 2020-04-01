@@ -222,16 +222,68 @@
     <Compile Include="Dialogs\MetadataDialog.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="FileFormats\ASC.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="FileFormats\BIN.vb">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="FileFormats\FileFactory.vb" />
     <Compile Include="FileFormats\FileFormatBase.vb" />
+    <Compile Include="FileFormats\HYDRO_AS-2D.vb">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="FileFormats\HYDRO_AS-2D_Diag.Designer.vb">
       <DependentUpon>HYDRO_AS-2D_Diag.vb</DependentUpon>
     </Compile>
     <Compile Include="FileFormats\HYDRO_AS-2D_Diag.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FileFormats\PRMS.vb" />
-    <Compile Include="FileFormats\SQLite.vb" />
+    <Compile Include="FileFormats\HystemExtran_REG.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="FileFormats\HystemExtran_WEL.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="FileFormats\PRMS.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="FileFormats\REG_SMUSI.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="FileFormats\SMB.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="FileFormats\SQLite.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="FileFormats\SWMM_DAT_MASS.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="FileFormats\SWMM_DAT_TIME.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="FileFormats\SWMM_OUT.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="FileFormats\SWMM_TXT.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="FileFormats\UVF.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="FileFormats\WEL.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="FileFormats\WEL_GISMO.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="FileFormats\ZRE.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="FileFormats\ZRXP.vb">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Helpers.vb" />
     <Compile Include="Log.vb" />
     <Compile Include="Metadata.vb" />
@@ -264,23 +316,7 @@
     <Compile Include="Wave.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FileFormats\ASC.vb" />
-    <Compile Include="FileFormats\BIN.vb" />
     <Compile Include="FileFormats\CSV.vb" />
-    <Compile Include="FileFormats\UVF.vb" />
-    <Compile Include="FileFormats\WEL_GISMO.vb" />
-    <Compile Include="FileFormats\HYDRO_AS-2D.vb" />
-    <Compile Include="FileFormats\HystemExtran_REG.vb" />
-    <Compile Include="FileFormats\HystemExtran_WEL.vb" />
-    <Compile Include="FileFormats\SMB.vb" />
-    <Compile Include="FileFormats\REG_SMUSI.vb" />
-    <Compile Include="FileFormats\SWMM_DAT_MASS.vb" />
-    <Compile Include="FileFormats\SWMM_DAT_TIME.vb" />
-    <Compile Include="FileFormats\SWMM_OUT.vb" />
-    <Compile Include="FileFormats\SWMM_TXT.vb" />
-    <Compile Include="FileFormats\WEL.vb" />
-    <Compile Include="FileFormats\ZRE.vb" />
-    <Compile Include="FileFormats\ZRXP.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="My Project\Resources.resx">

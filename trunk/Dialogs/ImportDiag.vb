@@ -88,7 +88,7 @@ Friend Class ImportDiag
         Me.ComboBox_Dateformat.SelectedIndex = 0
 
         'Versuchen, die Spalten auszulesen (mit Standardeinstellungen)
-        Call Me.datei.ReadColumns()
+        Call Me.datei.readSeriesInfo()
 
         'Anzeige aktualisieren
         Call Me.aktualisieren()
@@ -161,16 +161,14 @@ Friend Class ImportDiag
     '******************
     Private Sub Button_OK_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button_OK.Click
 
-        'Ausgewählte Spalten
-        Dim i As Integer
+        'Selected series
         If (Me.ListBox_Series.SelectedItems.Count < 1) Then
             MsgBox("Please select at least one series!", MsgBoxStyle.Exclamation, "Wave")
             Me.DialogResult = Windows.Forms.DialogResult.None
             Exit Sub
         Else
-            ReDim Me.datei.SelectedColumns(Me.ListBox_Series.SelectedItems.Count - 1)
-            For i = 0 To Me.ListBox_Series.SelectedItems.Count - 1
-                Me.datei.SelectedColumns(i) = Me.ListBox_Series.SelectedItems(i)
+            For Each sInfo As FileFormatBase.SeriesInfo In Me.ListBox_Series.SelectedItems
+                Me.datei.selectSeries(sInfo.Index)
             Next
         End If
 
@@ -229,7 +227,7 @@ Friend Class ImportDiag
                 Me.datei.DateTimeColumnIndex = Me.NumericUpDown_ColumnDateTime.Value - 1 'Immer eins weniger wie du ! 
 
                 'Spalten neu auslesen
-                Call Me.datei.ReadColumns()
+                Call Me.datei.readSeriesInfo()
 
                 'Anzeige aktualisieren
                 Call Me.aktualisieren()
@@ -251,8 +249,6 @@ Friend Class ImportDiag
     'Anzeige aktualisieren
     '*********************
     Private Sub aktualisieren()
-
-        Dim i As Integer
 
         'Dezimaltrennzeichen
         Me.ComboBox_DecimalMark.SelectedItem = Me.datei.DecimalSeparator
@@ -295,15 +291,13 @@ Friend Class ImportDiag
         Me.TextBox_ColumnWidth.Text = Me.datei.ColumnWidth
 
         'XSpalte
-        Me.TextBox_ColumnDateTime.Text = Me.datei.Columns(Me.datei.DateTimeColumnIndex).Name
+        Me.NumericUpDown_ColumnDateTime.Value = Me.datei.DateTimeColumnIndex + 1
 
         'YSpalten
         Me.ListBox_Series.Items.Clear()
         Call Me.ListBox_Series.BeginUpdate()
-        For i = 0 To datei.Columns.Length - 1
-            If (i <> datei.DateTimeColumnIndex) Then
-                Me.ListBox_Series.Items.Add(datei.Columns(i))
-            End If
+        For Each series As FileFormatBase.SeriesInfo In Me.datei.SeriesList
+            Me.ListBox_Series.Items.Add(series)
         Next
         Call Me.ListBox_Series.EndUpdate()
 

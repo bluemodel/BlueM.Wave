@@ -78,37 +78,30 @@ Public Class REG_SMUSI
         Me.iLineData = 4
         Me.UseUnits = True
 
-        Call Me.ReadColumns()
+        Call Me.readSeriesInfo()
 
         If (ReadAllNow) Then
             'Direkt einlesen
-            Call Me.selectAllColumns()
-            Call Me.Read_File()
+            Call Me.selectAllSeries()
+            Call Me.readFile()
         End If
 
     End Sub
 
     'Spalten auslesen
     '****************
-    Public Overrides Sub ReadColumns()
+    Public Overrides Sub readSeriesInfo()
 
         Dim Zeile, title As String
+        Dim sInfo As SeriesInfo
 
+        Me.SeriesList.Clear()
+        
         Try
             'Datei öffnen
             Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
             Dim StrRead As StreamReader = New StreamReader(FiStr, System.Text.Encoding.GetEncoding("iso8859-1"))
             Dim StrReadSync = TextReader.Synchronized(StrRead)
-
-            'Es gibt immer 2 Spalten (Datum + Werte)!
-            ReDim Me.Columns(1)
-
-            '1. Spalte (X)
-            Me.Columns(0).Name = "Datum_Zeit"
-            Me.Columns(0).Index = 0
-
-            '2. Spalte (Y)
-            Me.Columns(1).Index = 1
 
             'Reihentitel aus 1. Zeile nehmen.
             'Wenn Komma enthalten ist, nur den Teil vor dem Komma verwenden
@@ -118,10 +111,12 @@ Public Class REG_SMUSI
             Else
                 title = Zeile
             End If
-            Me.Columns(1).Name = title
 
-            'Einheit ist immer mm
-            Me.Columns(1).Einheit = "mm"
+            'store series info
+            sInfo = New SeriesInfo()
+            sInfo.Name = title
+            sInfo.Unit = "mm" 'Einheit ist immer mm
+            Me.SeriesList.Add(sInfo)
 
             StrReadSync.close()
             StrRead.Close()
@@ -135,7 +130,7 @@ Public Class REG_SMUSI
 
     'SMUSI_REG-Datei einlesen
     '******************
-    Public Overrides Sub Read_File()
+    Public Overrides Sub readFile()
 
         Dim i, j As Integer
         Dim leerzeile As Boolean
@@ -143,15 +138,17 @@ Public Class REG_SMUSI
         Dim Stunde, Minute, Tag, Monat, Jahr As Integer
         Dim DatumCurrent, DatumZeile, DatumTmp As DateTime
         Dim Wert As Double
+        Dim sInfo As SeriesInfo
+        Dim ts As TimeSeries
 
         Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
         Dim StrRead As StreamReader = New StreamReader(FiStr, System.Text.Encoding.GetEncoding("iso8859-1"))
         Dim StrReadSync = TextReader.Synchronized(StrRead)
 
-        'Zeitreihe instanzieren
-        ReDim Me.TimeSeries(0) 'bei REG gibt es nur eine Zeitreihe
-        Me.TimeSeries(0) = New TimeSeries(Me.SelectedColumns(0).Name)
-        Me.TimeSeries(0).Unit = Me.SelectedColumns(0).Einheit
+        'Zeitreihe instanzieren (bei REG gibt es nur eine Zeitreihe)
+        sInfo = Me.SeriesList(0)
+        ts = New TimeSeries(sInfo.Name)
+        ts.Unit = sInfo.Unit
 
         'Einlesen
         '--------
@@ -184,7 +181,7 @@ Public Class REG_SMUSI
                         'Bei vorheriger leeren Zeile: 0-Stelle 5 min nach letztem Datum einfügen
                         DatumTmp = DatumCurrent.Add(Me.Zeitintervall)
                         If (Not DatumTmp = DatumZeile) Then
-                            Me.TimeSeries(0).AddNode(DatumTmp, 0)
+                            ts.AddNode(DatumTmp, 0)
                         End If
                     End If
 
@@ -193,14 +190,14 @@ Public Class REG_SMUSI
                     For i = 0 To REG_SMUSI.WerteproZeile - 1
                         DatumCurrent = DatumZeile.AddMinutes(i * REG_SMUSI.dt_min)
                         Wert = StringToDouble(Zeile.Substring(LenZeilenanfang + LenWert * i, LenWert)) / 1000
-                        Me.TimeSeries(0).AddNode(DatumCurrent, Wert)
+                        ts.AddNode(DatumCurrent, Wert)
                     Next
 
                     If (leerzeile) Then
                         'Bei vorheriger leeren Zeile: 0-Stelle 5 min vor Zeilendatum einfügen
                         DatumTmp = DatumZeile.Subtract(Me.Zeitintervall)
-                        If (Not TimeSeries(0).Nodes.ContainsKey(DatumTmp)) Then
-                            Me.TimeSeries(0).AddNode(DatumTmp, 0)
+                        If (Not ts.Nodes.ContainsKey(DatumTmp)) Then
+                            ts.AddNode(DatumTmp, 0)
                         End If
                     End If
 
@@ -212,6 +209,9 @@ Public Class REG_SMUSI
         StrReadSync.close()
         StrRead.Close()
         FiStr.Close()
+
+        'store time series
+        Me.TimeSeriesCollection.Add(ts.Title, ts)
 
     End Sub
 

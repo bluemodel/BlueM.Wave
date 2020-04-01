@@ -111,21 +111,25 @@ Public Class HystemExtran_REG
         Me.iLineData = 6
         Me.UseUnits = True
 
-        Call Me.ReadColumns()
+        Call Me.readSeriesInfo()
 
         If (ReadAllNow) Then
             'Direkt einlesen
-            Call Me.selectAllColumns()
-            Call Me.Read_File()
+            Call Me.selectAllSeries()
+            Call Me.readFile()
         End If
 
     End Sub
 
     'Spalten auslesen
     '****************
-    Public Overrides Sub ReadColumns()
+    Public Overrides Sub readSeriesInfo()
 
         Dim Zeile As String = ""
+        Dim title As String
+        Dim sInfo As SeriesInfo
+
+        Me.SeriesList.Clear()
 
         Try
             'Datei öffnen
@@ -133,24 +137,22 @@ Public Class HystemExtran_REG
             Dim StrRead As StreamReader = New StreamReader(FiStr, System.Text.Encoding.GetEncoding("iso8859-1"))
             Dim StrReadSync = TextReader.Synchronized(StrRead)
 
-            'Es gibt immer 2 Spalten!
-            ReDim Me.Columns(1)
+            sInfo = New SeriesInfo()
 
-            '1. Spalte (X)
-            Me.Columns(0).Name = "Datum_Zeit"
-            Me.Columns(0).Index = 0
-
-            '2. Spalte (Y)
-            Me.Columns(1).Index = 1
-
-            'Reihentitel steht in 1. Zeile:
+            'Reihentitel steht in 1. Zeile, ist aber optional:
             Zeile = StrReadSync.ReadLine.ToString()
-            Me.Columns(1).Name = Zeile.Substring(20, 30).Trim()
+            title = Zeile.Substring(20, 30).Trim()
+            If title.Length = 0 Then title = Path.GetFileName(Me.File)
+            sInfo.Name = title
 
             'Einheit steht in 2. Zeile:
             Zeile = StrReadSync.ReadLine.ToString()
-            Me.Columns(1).Einheit = Zeile.Substring(68, 2)
+            sInfo.Unit = Zeile.Substring(68, 2)
 
+            'store series info
+            Me.SeriesList.Add(sInfo)
+
+            'read additional info
             Me.DezFaktor = Zeile.Substring(29, 1)
 
             'Zeitintervall auslesen
@@ -168,21 +170,23 @@ Public Class HystemExtran_REG
 
     'REG-Datei einlesen
     '******************
-    Public Overrides Sub Read_File()
+    Public Overrides Sub readFile()
 
         Dim i, j As Integer
         Dim Zeile As String
         Dim Stunde, Minute, Tag, Monat, Jahr As Integer
         Dim Datum, Zeilendatum As DateTime
+        Dim sInfo As SeriesInfo
+        Dim ts As TimeSeries
 
         Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
         Dim StrRead As StreamReader = New StreamReader(FiStr, System.Text.Encoding.GetEncoding("iso8859-1"))
         Dim StrReadSync = TextReader.Synchronized(StrRead)
 
-        'Zeitreihe instanzieren
-        ReDim Me.TimeSeries(0) 'bei REG gibt es nur eine Zeitreihe
-        Me.TimeSeries(0) = New TimeSeries(Me.SelectedColumns(0).Name)
-        Me.TimeSeries(0).Unit = Me.SelectedColumns(0).Einheit
+        'Zeitreihe instanzieren (nur eine)
+        sInfo = Me.SeriesList(0)
+        ts = New TimeSeries(sInfo.Name)
+        ts.Unit = sInfo.Unit
 
         'Einlesen
         '--------
@@ -211,7 +215,7 @@ Public Class HystemExtran_REG
                 'beim letzten Wert besteht die Möglichkeit, dass nicht alle Zeichen belegt sind
                 For i = 0 To Me.WerteProZeile(Me.Zeitintervall) - 1
                     Datum = Zeilendatum.AddMinutes(i * Me.Zeitintervall)
-                    Me.TimeSeries(0).AddNode(Datum, StringToDouble(Zeile.Substring(20 + LenString * i, LenString)) * 10 ^ (-DezFaktor))
+                    ts.AddNode(Datum, StringToDouble(Zeile.Substring(20 + LenString * i, LenString)) * 10 ^ (-DezFaktor))
                 Next
 
             End If
@@ -220,6 +224,9 @@ Public Class HystemExtran_REG
         StrReadSync.close()
         StrRead.Close()
         FiStr.Close()
+
+        'store time series
+        Me.TimeSeriesCollection.Add(ts.Title, ts)
 
     End Sub
 

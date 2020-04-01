@@ -52,7 +52,7 @@ Public Class Wave
     Private isInitializing As Boolean
 
     'Collection of imported files and the selected series of each file
-    Private ImportedFiles As Dictionary(Of String, List(Of String)) '{filename: [seriesName, ...], ...}
+    Private ImportedFiles As Dictionary(Of String, List(Of FileFormatBase.SeriesInfo)) '{filename: [seriesInfo, ...], ...}
 
     'Interne Zeitreihen-Collection
     Private Zeitreihen As Dictionary(Of String, TimeSeries)
@@ -101,7 +101,7 @@ Public Class Wave
 
         'Kollektionen einrichten
         '-----------------------
-        Me.ImportedFiles = New Dictionary(Of String, List(Of String))()
+        Me.ImportedFiles = New Dictionary(Of String, List(Of FileFormatBase.SeriesInfo))()
         Me.Zeitreihen = New Dictionary(Of String, TimeSeries)()
         Me.MyAxes1 = New Dictionary(Of String, Steema.TeeChart.Axis)
         Me.MyAxes2 = New Dictionary(Of String, Steema.TeeChart.Axis)
@@ -537,14 +537,17 @@ Public Class Wave
             Next
 
             'Aus der Liste der importierten Dateien löschen
-            For Each file As String In Me.ImportedFiles.Keys
-                If Me.ImportedFiles(file).Contains(title_removed) Then
-                    Me.ImportedFiles(file).Remove(title_removed)
-                    'Ganze Datei vergessen, falls es die einzige Serie war
-                    If Me.ImportedFiles(file).Count = 0 Then
-                        Me.ImportedFiles.Remove(file)
+            For Each kvp As KeyValuePair(Of String, List(Of FileFormatBase.SeriesInfo)) In Me.ImportedFiles
+                For Each sInfo As FileFormatBase.SeriesInfo In kvp.Value
+                    If sInfo.Name = title_removed Then
+                        Me.ImportedFiles(kvp.Key).Remove(sInfo)
                         Exit For
                     End If
+                Next
+                'Ganze Datei vergessen, falls es die einzige Serie war
+                If Me.ImportedFiles(kvp.Key).Count = 0 Then
+                    Me.ImportedFiles.Remove(kvp.Key)
+                    Exit For
                 End If
             Next
         End If
@@ -665,9 +668,9 @@ Public Class Wave
             For Each filename As String In Me.ImportedFiles.Keys
                 'TODO: write relative paths to the project file?
                 strwrite.WriteLine("file=" & filename)
-                For Each series As String In Me.ImportedFiles(filename)
+                For Each series As FileFormatBase.SeriesInfo In Me.ImportedFiles(filename)
                     'TODO: if a series was renamed, write the new title to the project file
-                    strwrite.WriteLine("    series=" & series)
+                    strwrite.WriteLine("    series=" & series.Name)
                 Next
             Next
 
@@ -1574,13 +1577,13 @@ Public Class Wave
                 'get an instance of the file
                 fileObj = FileFactory.getFileInstance(filename)
                 'select series for importing
-                For Each series As String In Me.ImportedFiles(filename)
-                    fileObj.selectSeries(series)
+                For Each sInfo As FileFormatBase.SeriesInfo In Me.ImportedFiles(filename)
+                    fileObj.selectSeries(sInfo.Index)
                 Next
                 'load the file
-                Call fileObj.Read_File()
+                Call fileObj.readFile()
                 'import the series
-                For Each ts As TimeSeries In fileObj.TimeSeries
+                For Each ts As TimeSeries In fileObj.TimeSeriesCollection.Values
                     Call Me.Import_Series(ts)
                 Next
                 Log.AddLogEntry("File '" & filename & "' imported successfully!")
@@ -2103,7 +2106,7 @@ Public Class Wave
                         End Try
                     Next
                     'reread columns with new settings
-                    fileobj.ReadColumns()
+                    fileobj.readSeriesInfo()
                 End If
 
                 'get the list of series to be imported
@@ -2112,7 +2115,7 @@ Public Class Wave
                 'select series for importing
                 If seriesList.Count = 0 Then
                     'read all series contained in the file
-                    Call fileobj.selectAllColumns()
+                    Call fileobj.selectAllSeries()
                 Else
                     'loop over series names
                     seriesNotFound = New List(Of String)
@@ -2135,14 +2138,14 @@ Public Class Wave
                 End If
 
                 'read the file
-                fileobj.Read_File()
+                fileobj.readFile()
 
                 'Log
                 Call Log.AddLogEntry("File '" & file & "' imported successfully!")
 
                 'import the series
                 Call Log.AddLogEntry("Loading series in chart...")
-                For Each ts As TimeSeries In fileobj.TimeSeries
+                For Each ts As TimeSeries In fileobj.TimeSeriesCollection.Values
                     'change title if specified in the project file
                     If seriesList.Count > 0 Then
                         If seriesList(ts.Title) <> "" Then
@@ -2364,7 +2367,6 @@ Public Class Wave
     Public Sub Import_File(ByVal file As String)
 
         Dim Datei As FileFormatBase
-        Dim i As Integer
         Dim ok As Boolean
 
         'Sonderfälle abfangen:
@@ -2397,7 +2399,7 @@ Public Class Wave
                         Call Application.DoEvents()
                     Else
                         'Ansonsten alle Spalten auswählen
-                        Call Datei.selectAllColumns()
+                        Call Datei.selectAllSeries()
                         ok = True
                     End If
 
@@ -2406,7 +2408,7 @@ Public Class Wave
                         Me.Cursor = Cursors.WaitCursor
 
                         'Datei einlesen
-                        Call Datei.Read_File()
+                        Call Datei.readFile()
 
                         'Log
                         Call Log.AddLogEntry("File '" & file & "' imported successfully!")
@@ -2417,10 +2419,9 @@ Public Class Wave
                         'Log
                         Call Log.AddLogEntry("Loading series in chart...")
 
-                        'Alle eingelesenen Zeitreihen der Datei durchlaufen
-                        For i = 0 To Datei.TimeSeries.GetUpperBound(0)
-                            'Serie importieren
-                            Call Me.Import_Series(Datei.TimeSeries(i))
+                        'Import all time series into the chart
+                        For Each ts As TimeSeries In Datei.TimeSeriesCollection.Values
+                            Call Me.Import_Series(ts)
                         Next
 
                         'Log
@@ -2574,8 +2575,8 @@ Public Class Wave
                     fileobj = FileFactory.getFileInstance(file)
 
                     'read series from file
-                    fileobj.Read_File()
-                    ts = fileobj.TimeSeries(0)
+                    fileobj.readFile()
+                    ts = fileobj.TimeSeriesCollection(0)
 
                     'add metadata
                     ts.Title = name

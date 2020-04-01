@@ -1,6 +1,18 @@
 ﻿===============================================================
 BlueM.Wave Release Notes
 ===============================================================
+Version 1.8.0
+-------------
+API-CHANGES:
+* The following changes have been made to public methods and properties of FileFormatBase (which are inherited by all file formats):
+ * Replaced TimeSeries (array) with TimeSeriesCollection (dictionary with titles as keys)
+ * Replaced structure ColumnInfo with SeriesInfo (with slightly different properties)
+ * Replaced Columns (array) with SeriesList (list of SeriesInfo objects)
+ * Replaced selectedColumns (array) with SelectedSeries (list of SeriesInfo objects)
+ * Renamed selectAllColumns() to selectAllSeries()
+ * Renamed Read_Columns() to readSeriesInfo()
+ * Renamed Read_File to readFile()
+
 Version 1.7.1
 -------------
 NEW

@@ -59,22 +59,25 @@ Public Class ZRE
         Me.iLineData = 5
         Me.UseUnits = True
 
-        Call Me.ReadColumns()
+        Call Me.readSeriesInfo()
 
         If (ReadAllNow) Then
             'Direkt einlesen
-            Call Me.selectAllColumns()
-            Call Me.Read_File()
+            Call Me.selectAllSeries()
+            Call Me.readFile()
         End If
 
     End Sub
 
     'Spalten auslesen
     '****************
-    Public Overrides Sub ReadColumns()
+    Public Overrides Sub readSeriesInfo()
 
         Dim i As Integer
         Dim Zeile As String = ""
+        Dim sInfo As SeriesInfo
+
+        Me.SeriesList.Clear()
 
         Try
             'Datei öffnen
@@ -91,11 +94,11 @@ Public Class ZRE
             StrRead.Close()
             FiStr.Close()
 
-            ReDim Me.Columns(1)
-            Me.Columns(0).Name = "Datum_Zeit"
-            Me.Columns(1).Name = Zeile.Substring(0, 15).Trim()
-            Me.Columns(1).Einheit = Zeile.Substring(15).Trim()
-            Me.Columns(1).Index = 1
+            'store series info
+            sInfo = New SeriesInfo
+            sInfo.Name = Zeile.Substring(0, 15).Trim()
+            sInfo.Unit = Zeile.Substring(15).Trim()
+            Me.SeriesList.Add(sInfo)
 
         Catch ex As Exception
             MsgBox("Konnte Datei nicht einlesen!" & eol & eol & "Fehler: " & ex.Message, MsgBoxStyle.Critical, "Fehler")
@@ -105,22 +108,24 @@ Public Class ZRE
 
     'ZRE-Datei einlesen
     '******************
-    Public Overrides Sub Read_File()
+    Public Overrides Sub readFile()
 
         Dim j As Integer
         Dim Zeile As String
         Dim timestamp As String
         Dim ok As Boolean
         Dim Datum As DateTime
+        Dim ts As TimeSeries
+        Dim sInfo As SeriesInfo
 
         Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
         Dim StrRead As StreamReader = New StreamReader(FiStr, System.Text.Encoding.GetEncoding("iso8859-1"))
         Dim StrReadSync = TextReader.Synchronized(StrRead)
 
         'Zeitreihe instanzieren (nur eine)
-        ReDim Me.TimeSeries(0)
-        Me.TimeSeries(0) = New TimeSeries(Me.SelectedColumns(0).Name)
-        Me.TimeSeries(0).Unit = Me.SelectedColumns(0).Einheit
+        sInfo = Me.SeriesList(0)
+        ts = New TimeSeries(sInfo.Name)
+        ts.Unit = sInfo.Unit
 
         'Einlesen
         '--------
@@ -140,10 +145,13 @@ Public Class ZRE
 
                     'Datum und Wert zur Zeitreihe hinzufügen
                     '---------------------------------------
-                    Me.TimeSeries(0).AddNode(Datum, StringToDouble(Zeile.Substring(15)))
+                    ts.AddNode(Datum, StringToDouble(Zeile.Substring(15)))
 
                 End If
             Loop Until StrReadSync.Peek() = -1
+
+            'store time series
+            Me.TimeSeriesCollection.Add(ts.Title, ts)
 
         Catch ex As Exception
             'Fehler weiterschmeissen

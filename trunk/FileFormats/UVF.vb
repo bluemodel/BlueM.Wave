@@ -70,12 +70,12 @@ Public Class UVF
         'set default metadata keys
         Me.FileMetadata.AddKeys(UVF.MetadataKeys)
 
-        Call Me.ReadColumns()
+        Call Me.readSeriesInfo()
 
         If (ReadAllNow) Then
             'Direkt einlesen
-            Call Me.selectAllColumns()
-            Call Me.Read_File()
+            Call Me.selectAllSeries()
+            Call Me.readFile()
         End If
 
     End Sub
@@ -130,11 +130,14 @@ Public Class UVF
     ''' Liest die Metadaten der in der Datei enthaltenen Zeitreihe aus
     ''' </summary>
     ''' <remarks></remarks>
-    Public Overrides Sub ReadColumns()
+    Public Overrides Sub readSeriesInfo()
 
         Dim i As Integer
         Dim Zeile As String
+        Dim sInfo As SeriesInfo
         Dim headerFound As Boolean = False
+
+        Me.SeriesList.Clear()
 
         'Header einlesen
         Try
@@ -199,21 +202,16 @@ Public Class UVF
             StrRead.Close()
             FiStr.Close()
 
-            ReDim Me.Columns(1) ' Jede UVF-Datei enthält nur eine Zeitreihe
+            'store series info
 
-            'X-Spalte konfigurieren
-            Me.Columns(0).Name = "Time"
-            Me.Columns(0).Einheit = ""
-            Me.Columns(0).Index = 0
-
-            'Y-Spalte konfigurieren
-            Me.Columns(1).Index = 1
-            Me.Columns(1).Name = Me.FileMetadata("name")
+            sInfo = New SeriesInfo()
+            sInfo.Name = Me.FileMetadata("name")
             If Me.FileMetadata("location") <> "" Then
                 'append location to series title
-                Me.Columns(1).Name &= " - " & Me.FileMetadata("location")
+                sInfo.Name &= " - " & Me.FileMetadata("location")
             End If
-            Me.Columns(1).Einheit = Me.FileMetadata("unit")
+            sInfo.Unit = Me.FileMetadata("unit")
+            Me.SeriesList.Add(sInfo)
 
             If Not headerFound Then
                 Throw New Exception("The file does not contain a header line starting with '*Z'!")
@@ -229,7 +227,7 @@ Public Class UVF
     ''' Liest die Datei ein
     ''' </summary>
     ''' <remarks></remarks>
-    Public Overrides Sub Read_File()
+    Public Overrides Sub readFile()
 
         Dim i, year, year_prev, century As Integer
         Dim Zeile As String
@@ -238,15 +236,17 @@ Public Class UVF
         Dim ok As Boolean
         Dim wert As Double
         Dim errorcount As Integer
+        Dim sInfo As SeriesInfo
+        Dim ts As TimeSeries
 
         Try
             'Zeitreihe instanzieren
-            ReDim Me.TimeSeries(0)
-            Me.TimeSeries(0) = New TimeSeries(Me.Columns(1).Name)
-            Me.TimeSeries(0).Unit = Me.Columns(1).Einheit
+            sInfo = Me.SeriesList(0)
+            ts = New TimeSeries(sInfo.Name)
+            ts.Unit = sInfo.Unit
 
             'store metadata
-            Me.TimeSeries(0).Metadata = Me.FileMetadata
+            ts.Metadata = Me.FileMetadata
 
             'Datei öffnen
             Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
@@ -291,7 +291,7 @@ Public Class UVF
                     errorcount += 1
                 End If
                 'Stützstelle abspeichern
-                Me.TimeSeries(0).AddNode(datum, wert)
+                ts.AddNode(datum, wert)
 
             Loop Until StrReadSync.Peek() = -1
 
@@ -302,6 +302,9 @@ Public Class UVF
             If errorcount > 0 Then
                 Log.AddLogEntry("The file contained " & errorcount & " error values (" & UVF.ErrorValue & "), which were converted to NaN!")
             End If
+
+            'store time series
+            Me.TimeSeriesCollection.Add(ts.Title, ts)
 
         Catch ex As Exception
             MsgBox("Unable to read file!" & eol & eol & "Error: " & ex.Message, MsgBoxStyle.Critical, "Error")
