@@ -91,22 +91,23 @@ Public MustInherit Class FileFormatBase
     Private _useUnits As Boolean = True
     Private _columnWidth As Integer = 16
     Private _dateTimeColumnIndex As Integer = 0
-    Private _columns() As ColumnInfo
-    Private _selectedColumns() As ColumnInfo
+    Private _seriesList As List(Of SeriesInfo)
+    Private _selectedSeries As List(Of SeriesInfo)
     Private _nLinesperTimestamp As Integer = 1
     Private _metadata As Metadata
 
     ''' <summary>
-    ''' Contains information about a column in a file
+    ''' Contains basic information about a series contained in a file
     ''' </summary>
-    ''' <remarks>Can represent either values or timestamps</remarks>
-    Public Structure ColumnInfo
-        Public Name As String     'Gesamte Bezeichnung der Reihe (z.B. "S101 FLOW")
-        Public Einheit As String  '"LPS", "CMS", "MG/L"
+    ''' <remarks></remarks>
+    Public Structure SeriesInfo
+        Public Name As String
+        Public Unit As String
         Public Index As Integer
-        Public Objekt As String   'Bezeichnung des Objekts (z.B. "S101")
-        Public Type As String     '"FLOW" oder ein Stoffparameter (z.B. "CSB")
-        Public ObjType As String  '"Subcatchment", "Node" oder "Link"
+        'TODO: The following properties are only needed by SWMM file formats
+        Public Objekt As String     'Bezeichnung des Objekts (z.B. "S101")
+        Public Type As String       '"FLOW" oder ein Stoffparameter (z.B. "CSB")
+        Public ObjType As String    '"Subcatchment", "Node" oder "Link"
         Public Overrides Function ToString() As String
             Return Me.Name
         End Function
@@ -125,9 +126,9 @@ Public MustInherit Class FileFormatBase
     End Property
 
     ''' <summary>
-    ''' Array stores the TimeSeries read from the file
+    ''' Dictionary stores the TimeSeries read from the file with the titles as key
     ''' </summary>
-    Public TimeSeries() As TimeSeries
+    Public TimeSeriesCollection As Dictionary(Of String, TimeSeries)
 
     ''' <summary>
     ''' Instance of the ImportDialog
@@ -283,40 +284,25 @@ Public MustInherit Class FileFormatBase
     End Property
 
     ''' <summary>
-    ''' Array of all columns contained in file
+    ''' List of all series contained in a file
     ''' </summary>
-    ''' <remarks>includes the datetime column!</remarks>
-    Public Property Columns() As ColumnInfo()
+    ''' <remarks></remarks>
+    Public Property SeriesList() As List(Of SeriesInfo)
         Get
-            Return _columns
+            Return _seriesList
         End Get
-        Set(ByVal value As ColumnInfo())
-            _columns = value
+        Set(ByVal value As List(Of SeriesInfo))
+            _seriesList = value
         End Set
     End Property
 
     ''' <summary>
-    ''' Array of columns selected for import
+    ''' List of series currently selected for import
     ''' </summary>
-    Public Property SelectedColumns() As ColumnInfo()
+    ''' <remarks></remarks>
+    Public ReadOnly Property SelectedSeries() As List(Of SeriesInfo)
         Get
-            Return _selectedColumns
-        End Get
-        Set(ByVal value As ColumnInfo())
-            _selectedColumns = value
-        End Set
-    End Property
-
-    ''' <summary>
-    ''' List of series names selected for import
-    ''' </summary>
-    Public ReadOnly Property SelectedSeries() As List(Of String)
-        Get
-            Dim seriesList As New List(Of String)
-            For Each col As ColumnInfo In Me._selectedColumns
-                seriesList.Add(col.Name)
-            Next
-            Return seriesList
+            Return _selectedSeries
         End Get
     End Property
 
@@ -345,59 +331,24 @@ Public MustInherit Class FileFormatBase
             If (title.Length = 0) Then Return Me.getTimeSeries(0)
 
             'Find the series using the given title
-            For i As Integer = 0 To Me.TimeSeries.GetUpperBound(0)
-                If (Me.TimeSeries(i).Title = title) Then
-                    'return the timeseries
-                    Return Me.TimeSeries(i)
-                End If
-            Next
-
-            'Timeseries was not found (perhaps not yet imported?)
-            'Check whether a column with the given title exists
-            For Each column As ColumnInfo In Me.Columns
-                If (column.Name = title) Then
-                    'select the column for import
-                    ReDim Me.SelectedColumns(-1)
-                    Me.selectColumn(column)
-                    'read the file (again)
-                    Call Me.Read_File()
-                    'return the timeseries
-                    Return Me.getTimeSeries(title)
-                End If
-            Next
-            'Timeseries does not exist in file
-            Throw New Exception("The timeseries '" & title & "' could not be found in the file '" & IO.Path.GetFileName(Me.File) & "'!")
-        End Get
-    End Property
-
-    ''' <summary>
-    ''' Get a timeseries from the file using its index
-    ''' </summary>
-    ''' <param name="index">0-based index of the timeseries (0: 1st timeseries column)</param>
-    ''' <returns>The timeseries</returns>
-    ''' <remarks>If the timeseries has not been imported yet, an import is initiated. 
-    ''' Throws an exception if the timeseries cannot be found in the file.</remarks>
-    Public ReadOnly Property getTimeSeries(ByVal index As Integer) As TimeSeries
-        Get
-            If (index <= Me.TimeSeries.GetUpperBound(0)) Then
-                'return the timeseries
-                Return Me.TimeSeries(index)
+            If Me.TimeSeriesCollection.ContainsKey(title) Then
+                Return Me.TimeSeriesCollection(title)
+            Else
+                'Timeseries was not found (perhaps not yet imported?)
+                'Check whether a column with the given title exists
+                For Each sInfo As SeriesInfo In Me.SeriesList
+                    If (sInfo.Name = title) Then
+                        'select the column for import
+                        Me.selectSeries(sInfo.Index)
+                        'read the file (again)
+                        Call Me.readFile()
+                        'return the timeseries
+                        Return Me.getTimeSeries(title)
+                    End If
+                Next
+                'Timeseries does not exist in file
+                Throw New Exception("The timeseries '" & title & "' could not be found in the file '" & IO.Path.GetFileName(Me.File) & "'!")
             End If
-
-            'Timeseries has not been imported yet
-            For Each column As ColumnInfo In Me.Columns
-                If (column.Index <> Me.DateTimeColumnIndex And column.Index - 1 = index) Then
-                    'select the column for import
-                    ReDim Me.SelectedColumns(-1)
-                    Me.selectColumn(column)
-                    'read the file (again)
-                    Call Me.Read_File()
-                    'return the timeseries
-                    Return Me.getTimeSeries(index)
-                End If
-            Next
-            'Timeseries does not exist in file
-            Throw New Exception("The timeseries '" & index.ToString() & "' could not be found in the file '" & IO.Path.GetFileName(Me.File) & "'!")
         End Get
     End Property
 
@@ -427,9 +378,9 @@ Public MustInherit Class FileFormatBase
     Public Sub New(ByVal FileName As String)
 
         'Initialize data structures
-        ReDim Me.TimeSeries(-1)
-        ReDim Me.Columns(-1)
-        ReDim Me.SelectedColumns(-1)
+        Me.TimeSeriesCollection = New Dictionary(Of String, TimeSeries)
+        Me._seriesList = New List(Of SeriesInfo)
+        Me._selectedSeries = New List(Of SeriesInfo)
         Me._metadata = New Metadata()
 
         'Store the filepath
@@ -438,41 +389,43 @@ Public MustInherit Class FileFormatBase
     End Sub
 
     ''' <summary>
-    ''' Reads information about the columns (series) contained in the file
+    ''' Reads information about the series contained in the file
     ''' </summary>
-    Public MustOverride Sub ReadColumns()
+    Public MustOverride Sub readSeriesInfo()
 
     ''' <summary>
-    ''' Select all available columns for import
+    ''' Select all available series for import
     ''' </summary>
-    ''' <remarks>The datetime column is not selected</remarks>
-    Public Sub selectAllColumns()
+    ''' <remarks></remarks>
+    Public Sub selectAllSeries()
 
-        Dim i, n As Integer
-
-        ReDim Me.SelectedColumns(Me.Columns.Length - 2) 'leave out the datetime column
-
-        n = 0
-        For i = 0 To Me.Columns.Length - 1
-            If (Me.Columns(i).Index <> Me.DateTimeColumnIndex) Then
-                Me.SelectedColumns(n) = Me.Columns(i)
-                n += 1
-            End If
+        Me.SelectedSeries.Clear()
+        For Each sInfo As SeriesInfo In Me.SeriesList
+            Me.SelectedSeries.Add(sInfo)
         Next
 
     End Sub
 
     ''' <summary>
-    ''' Select a column for import
+    ''' Select a series for import by column index
     ''' </summary>
-    ''' <param name="column">ColumnInfo object</param>
+    ''' <param name="colIndex">column index</param>
+    ''' <returns>True if successful, False if column index was not found</returns>
     ''' <remarks></remarks>
-    Public Sub selectColumn(ByVal column As ColumnInfo)
-        Dim n As Integer
-        n = Me.SelectedColumns.Length
-        ReDim Preserve Me.SelectedColumns(n)
-        Me.SelectedColumns(n) = column
-    End Sub
+    Public Function selectSeries(ByVal colIndex As Integer) As Boolean
+
+        Dim i As Integer = 0
+        For Each sInfo As SeriesInfo In Me.SeriesList
+            If sInfo.Index = colIndex Then
+                Me.SelectedSeries.Add(sInfo)
+                Return True
+            End If
+        Next
+        'series not found in file
+        Log.AddLogEntry("ERROR: Series with column index " & colIndex & " not found in file!")
+        Return False
+
+    End Function
 
     ''' <summary>
     ''' Select a series for import by name
@@ -481,23 +434,23 @@ Public MustInherit Class FileFormatBase
     ''' <returns>True if successful, False if series name was not found</returns>
     ''' <remarks></remarks>
     Public Function selectSeries(ByVal seriesName As String) As Boolean
-        'search for series in file
-        For Each column As FileFormatBase.ColumnInfo In Me.Columns
-            If column.Name = seriesName Then
-                'select the column for import
-                Call Me.selectColumn(column)
+
+        For Each sInfo As SeriesInfo In Me.SeriesList
+            If sInfo.Name = seriesName Then
+                Me.SelectedSeries.Add(sInfo)
                 Return True
             End If
         Next
         'series not found in file
         Log.AddLogEntry("ERROR: Series " & seriesName & " not found in file!")
         Return False
+
     End Function
 
     ''' <summary>
-    ''' Reads the selected columns (see SelectedColumns) from the file and stores them as timeseries in the TimeSeries array
+    ''' Reads the selected series (see SelectedSeries) from the file and stores them as timeseries in the TimeSeriesCollection
     ''' </summary>
-    Public MustOverride Sub Read_File()
+    Public MustOverride Sub readFile()
 
     ''' <summary>
     ''' Sets default metadata keys and values for a time series corresponding to the file format

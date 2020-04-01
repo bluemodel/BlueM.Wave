@@ -65,34 +65,33 @@ Public Class BIN
         Me.iLineData = 0
         Me.UseUnits = False
 
-        Call Me.ReadColumns()
+        Call Me.readSeriesInfo()
 
         If (ReadAllNow) Then
             'Direkt einlesen
-            Call Me.selectAllColumns()
-            Call Me.Read_File()
+            Call Me.selectAllSeries()
+            Call Me.readFile()
         End If
 
     End Sub
 
     'Spalten auslesen
     '****************
-    Public Overrides Sub ReadColumns()
+    Public Overrides Sub readSeriesInfo()
 
-        ReDim Me.Columns(1)
-
-        Me.Columns(0).Name = "Datetime"
-
-        Me.Columns(1).Name = "Values"
-        Me.Columns(1).Einheit = "-"
-
-        Me.DateTimeColumnIndex = 0
+        Dim sInfo As New SeriesInfo()
+        
+        Me.SeriesList.Clear()
+        
+        sInfo.Name = IO.Path.GetFileName(Me.File)
+        sInfo.Unit = "-"
+        Me.SeriesList.Add(sInfo)
 
     End Sub
 
     'BIN-Datei einlesen
     '******************
-    Public Overrides Sub Read_File()
+    Public Overrides Sub readFile()
 
         Try
 
@@ -102,11 +101,13 @@ Public Class BIN
             Dim Y() As Single
             Dim timestamp As DateTime
             Dim value As Double
+            Dim sInfo As SeriesInfo
+            Dim ts As TimeSeries
 
             'Zeitreihe instanzieren (nur eine)
-            ReDim Me.TimeSeries(0)
-            Me.TimeSeries(0) = New TimeSeries(IO.Path.GetFileName(Me.File))
-            Me.TimeSeries(0).Unit = "-"
+            sInfo = Me.SeriesList(0)
+            ts = New TimeSeries(sInfo.Name)
+            ts.Unit = sInfo.Unit
 
             'Einlesen
             '--------
@@ -131,7 +132,7 @@ Public Class BIN
                     value = Double.NaN
                     errorcount += 1
                 End If
-                Me.TimeSeries(0).AddNode(timestamp, value)
+                ts.AddNode(timestamp, value)
             Next
 
             'Log 
@@ -139,6 +140,9 @@ Public Class BIN
             If errorcount > 0 Then
                 Log.AddLogEntry("The file contained " & errorcount & " error values (" & BIN.ErrorValue & "), which were converted to NaN!")
             End If
+
+			'store time series
+            Me.TimeSeriesCollection.Add(ts.Title, ts)
 
         Catch ex As Exception
             'Fehler weiterschmeissen

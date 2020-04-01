@@ -77,12 +77,12 @@ Public Class HystemExtran_WEL
         Me.ColumnWidth = 10
         Me.DecimalSeparator = Constants.period
 
-        Call Me.ReadColumns()
+        Call Me.readSeriesInfo()
 
         If (ReadAllNow) Then
             'Datei komplett einlesen
-            Call Me.selectAllColumns()
-            Call Me.Read_File()
+            Call Me.selectAllSeries()
+            Call Me.readFile()
         End If
 
 
@@ -91,13 +91,16 @@ Public Class HystemExtran_WEL
     ''' <summary>
     ''' Spaltenköpfe auslesen
     ''' </summary>
-    Public Overrides Sub ReadColumns()
+    Public Overrides Sub readSeriesInfo()
 
         Dim i, j As Integer
         Dim Zeile As String = ""
         Dim ZeileSpalten As String = ""
         Dim ZeileEinheiten As String = ""
         Dim iZeileAnzSpalten As Integer = 4
+        Dim sInfo As SeriesInfo
+
+        Me.SeriesList.Clear()
 
         Try
             'Datei öffnen
@@ -114,13 +117,7 @@ Public Class HystemExtran_WEL
             'Anzahl der Zeitreihen auslesen
             Dim anzSpalten As Integer
             anzSpalten = Convert.ToSingle(Right(ZeileSpalten, 5))
-            ReDim Me.Columns(anzSpalten)
 
-            'Index 0 für Datum belegen
-            Me.Columns(0).Name = "Date"
-            Me.Columns(0).Index = 0
-            Me.Columns(0).Einheit = "-"
-            
             'Anzahl der Zeilen und Spalten pro Zeitschritt ermitteln
             Me.nLinesPerTimestamp = Math.Ceiling(anzSpalten / maxSpalten_dT)
             ReDim AnzSpalten_dT(Me.nLinesPerTimestamp - 1)
@@ -139,18 +136,20 @@ Public Class HystemExtran_WEL
             For i = 0 To Me.nLinesPerTimestamp - 1
                 Zeile = StrReadSync.ReadLine.ToString()
                 For j = 0 To AnzSpalten_dT(i) - 1
-                    Me.Columns(index).Name = Zeile.Substring((j * Me.ColumnWidth) + SpaltenOffset, Me.ColumnWidth)
-                    Me.Columns(index).Einheit = HExt_welEinheit
-                    Me.Columns(index).Index = index
-                    Me.Columns(index).Objekt = trim(Me.Columns(index).Name)
-                    Me.Columns(index).Type = "FLOW"
+                    sInfo = New SeriesInfo()
+                    sInfo.Name = Zeile.Substring((j * Me.ColumnWidth) + SpaltenOffset, Me.ColumnWidth)
+                    sInfo.Unit = HExt_welEinheit
+                    sInfo.Index = index
+                    sInfo.Objekt = Trim(sInfo.Name)
+                    sInfo.Type = "FLOW"
+                    Me.SeriesList.Add(sInfo)
                     index = index + 1
                 Next
             Next
 
             'iZeileDaten kann erst jetzt gesetzt werden, wenn AnzZeilen_dT bekannt ist
             Me.iLineData = iLineHeadings + Me.nLinesPerTimestamp
-            
+
             StrReadSync.Close()
             StrRead.Close()
             FiStr.Close()
@@ -164,34 +163,28 @@ Public Class HystemExtran_WEL
     ''' <summary>
     ''' Zeitreihen einlesen
     ''' </summary>
-    Public Overrides Sub Read_File()
+    Public Overrides Sub readFile()
 
         Dim iZeile, i As Integer
         Dim Zeile As String
         Dim WerteString As String
         Dim datum As DateTime
+        Dim ts As TimeSeries
 
         Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
         Dim StrRead As StreamReader = New StreamReader(FiStr, System.Text.Encoding.GetEncoding("iso8859-1"))
         Dim StrReadSync = TextReader.Synchronized(StrRead)
 
-        'Anzahl Zeitreihen bestimmen
-        ReDim Me.TimeSeries(Me.SelectedColumns.Length - 1)
-
         'Zeitreihen instanzieren
-        For i = 0 To Me.SelectedColumns.Length - 1
-            Me.TimeSeries(i) = New TimeSeries(Me.SelectedColumns(i).Name)
+        For Each sInfo As SeriesInfo In Me.SelectedSeries
+            ts = New TimeSeries(sInfo.Name)
+            If Me.UseUnits Then
+                ts.Unit = sInfo.Unit
+                ts.Objekt = sInfo.Objekt
+                ts.Type = sInfo.Type
+            End If
+            Me.TimeSeriesCollection.Add(ts.Title, ts)
         Next
-
-        'Einheiten?
-        If (Me.UseUnits) Then
-            'Alle ausgewählten Spalten durchlaufen
-            For i = 0 To Me.SelectedColumns.Length - 1
-                Me.TimeSeries(i).Unit = Me.SelectedColumns(i).Einheit
-                Me.TimeSeries(i).Objekt = Me.SelectedColumns(i).Objekt
-                Me.TimeSeries(i).Type = Me.SelectedColumns(i).Type
-            Next
-        End If
 
         'Einlesen
         '--------
@@ -204,7 +197,7 @@ Public Class HystemExtran_WEL
         'Daten
         Do
             Zeile = StrReadSync.ReadLine.ToString()
-            if zeile.Substring(0,5) = "*****" then
+            If zeile.Substring(0, 5) = "*****" Then
                 Exit Do
             End If
             'Erste Zeile: Datum_Zeit
@@ -216,10 +209,9 @@ Public Class HystemExtran_WEL
             For i = 0 To Me.nLinesPerTimestamp - 1
                 WerteString = WerteString + StrReadSync.ReadLine.ToString()
             Next
-            For i = 0 To Me.SelectedColumns.Length - 1
-                Me.TimeSeries(i).AddNode(datum, StringToDouble(WerteString.Substring(((Me.SelectedColumns(i).Index - 1) * me.ColumnWidth) + SpaltenOffset, Me.ColumnWidth)))
+            For Each sInfo As SeriesInfo In Me.SelectedSeries
+                Me.TimeSeriesCollection(sInfo.Name).AddNode(datum, StringToDouble(WerteString.Substring(((sInfo.Index - 1) * Me.ColumnWidth) + SpaltenOffset, Me.ColumnWidth)))
             Next
-
 
         Loop Until StrReadSync.Peek() = -1
 

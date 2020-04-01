@@ -56,12 +56,15 @@ Public Class CSV
 
     'Spalten auslesen
     '****************
-    Public Overrides Sub ReadColumns()
+    Public Overrides Sub readSeriesInfo()
 
         Dim i As Integer
+        Dim sInfo As SeriesInfo
         Dim Zeile As String = ""
         Dim ZeileSpalten As String = ""
         Dim ZeileEinheiten As String = ""
+
+        Me.SeriesList.Clear()
 
         Try
             'Datei öffnen
@@ -102,15 +105,15 @@ Public Class CSV
                 Next
             End If
 
-            'Spalten abspeichern
-            ReDim Me.Columns(anzSpalten - 1)
-            For i = 0 To Namen.Length - 1
-                Me.Columns(i).Name = Namen(i).Trim()
-                Me.Columns(i).Index = i
-            Next
-
-            For i = 0 To Einheiten.Length - 1
-                Me.Columns(i).Einheit = Einheiten(i).Trim()
+            'store series info
+            For i = 0 To anzSpalten - 1
+                If i <> Me.DateTimeColumnIndex Then
+                    sInfo = New SeriesInfo()
+                    sInfo.Index = i
+                    sInfo.Name = Namen(i)
+                    sInfo.Unit = Einheiten(i)
+                    Me.SeriesList.Add(sInfo)
+                End If
             Next
 
             'TODO: gegebenes Datumsformat an dieser Stelle testen
@@ -123,7 +126,7 @@ Public Class CSV
 
     'CSV-Datei einlesen
     '******************
-    Public Overrides Sub Read_File()
+    Public Overrides Sub readFile()
 
         Dim i As Integer
         Dim Zeile As String
@@ -131,6 +134,7 @@ Public Class CSV
         Dim numberformat As NumberFormatInfo
         Dim datum As DateTime
         Dim Werte() As String
+        Dim ts As TimeSeries
 
         Try
 
@@ -138,20 +142,14 @@ Public Class CSV
             Dim StrRead As StreamReader = New StreamReader(FiStr, System.Text.Encoding.GetEncoding("iso8859-1"))
             Dim StrReadSync = TextReader.Synchronized(StrRead)
 
-            'Anzahl Zeitreihen bestimmen
-            ReDim Me.TimeSeries(Me.SelectedColumns.Length - 1)
-
             'Zeitreihen instanzieren
-            For i = 0 To Me.SelectedColumns.Length - 1
-                Me.TimeSeries(i) = New TimeSeries(Me.SelectedColumns(i).Name)
+            For Each sInfo As SeriesInfo In Me.SelectedSeries
+                ts = New TimeSeries(sInfo.Name)
+                If Me.UseUnits Then
+                    ts.Unit = sInfo.Unit
+                End If
+                Me.TimeSeriesCollection.Add(ts.Title, ts)
             Next
-
-            'Einheiten übergeben
-            If (Me.UseUnits) Then
-                For i = 0 To Me.SelectedColumns.Length - 1
-                    Me.TimeSeries(i).Unit = Me.SelectedColumns(i).Einheit
-                Next
-            End If
 
             'Use default number format by default
             numberformat = Helpers.DefaultNumberFormat.Clone()
@@ -185,8 +183,8 @@ Public Class CSV
                             Throw New Exception("Could not parse the date '" & Werte(Me.DateTimeColumnIndex) & "' using the given date format '" & Me.Dateformat & "'! Please check the date format!")
                         End If
                         'Restliche Spalten: Werte
-                        For i = 0 To Me.SelectedColumns.Length - 1
-                            Me.TimeSeries(i).AddNode(datum, StringToDouble(Werte(Me.SelectedColumns(i).Index), numberformat))
+                        For Each sInfo As SeriesInfo In Me.SelectedSeries
+                            Me.TimeSeriesCollection(sInfo.Name).AddNode(datum, StringToDouble(Werte(sInfo.Index), numberformat))
                         Next
                     End If
 
@@ -199,8 +197,8 @@ Public Class CSV
                         Throw New Exception("Could not parse the date '" & Zeile.Substring(0, Me.ColumnWidth) & "' using the given date format '" & Me.Dateformat & "'! Please check the date format!")
                     End If
                     'Restliche Spalten: Werte
-                    For i = 0 To Me.SelectedColumns.Length - 1
-                        Me.TimeSeries(i).AddNode(datum, StringToDouble(Zeile.Substring(Me.SelectedColumns(i).Index * Me.ColumnWidth + SpaltenOffset, Math.Min(Me.ColumnWidth, Zeile.Substring(Me.SelectedColumns(i).Index * Me.ColumnWidth + SpaltenOffset).Length)), numberformat))
+                    For Each sInfo As SeriesInfo In Me.SelectedSeries
+                        Me.TimeSeriesCollection(sInfo.Name).AddNode(datum, StringToDouble(Zeile.Substring(sInfo.Index * Me.ColumnWidth + SpaltenOffset, Math.Min(Me.ColumnWidth, Zeile.Substring(sInfo.Index * Me.ColumnWidth + SpaltenOffset).Length)), numberformat))
                     Next
                 End If
 

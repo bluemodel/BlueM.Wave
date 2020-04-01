@@ -24,14 +24,19 @@ Partial Class ImportDiag
     Private Sub InitializeComponent()
         Dim SplitContainer1 As System.Windows.Forms.SplitContainer
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(ImportDiag))
+        Me.GroupBox_Selection = New System.Windows.Forms.GroupBox
+        Me.Label_Search = New System.Windows.Forms.Label
+        Me.TextBox_Search = New System.Windows.Forms.TextBox
+        Me.Label_Series = New System.Windows.Forms.Label
+        Me.ListBox_Series = New System.Windows.Forms.ListBox
+        Me.Button_SelectAll = New System.Windows.Forms.Button
+        Me.GroupBox_Preview = New System.Windows.Forms.GroupBox
+        Me.Label_File = New System.Windows.Forms.Label
         Me.TextBox_Preview = New System.Windows.Forms.RichTextBox
         Me.ComboBox_Separator = New System.Windows.Forms.ComboBox
         Me.Button_OK = New System.Windows.Forms.Button
         Me.Button_Cancel = New System.Windows.Forms.Button
-        Me.ListBox_Series = New System.Windows.Forms.ListBox
-        Me.Label_Search = New System.Windows.Forms.Label
         Me.Label_ColumnDateTime = New System.Windows.Forms.Label
-        Me.TextBox_ColumnDateTime = New System.Windows.Forms.TextBox
         Me.RadioButton_FixedWidth = New System.Windows.Forms.RadioButton
         Me.RadioButton_CharSeparated = New System.Windows.Forms.RadioButton
         Me.GroupBox_Columns = New System.Windows.Forms.GroupBox
@@ -45,35 +50,140 @@ Partial Class ImportDiag
         Me.Label_LineData = New System.Windows.Forms.Label
         Me.NumericUpDown_LineData = New System.Windows.Forms.NumericUpDown
         Me.NumericUpDown_ColumnDateTime = New System.Windows.Forms.NumericUpDown
-        Me.GroupBox_Preview = New System.Windows.Forms.GroupBox
-        Me.Label_File = New System.Windows.Forms.Label
-        Me.Label_Series = New System.Windows.Forms.Label
-        Me.TextBox_Search = New System.Windows.Forms.TextBox
         Me.GroupBox_DecimalMark = New System.Windows.Forms.GroupBox
         Me.Label_DecimalMark = New System.Windows.Forms.Label
         Me.StatusStrip1 = New System.Windows.Forms.StatusStrip
         Me.StatusImage = New System.Windows.Forms.ToolStripStatusLabel
-        Me.Button_SelectAll = New System.Windows.Forms.Button
-        Me.GroupBox_Selection = New System.Windows.Forms.GroupBox
         Me.GroupBox_Dateformat = New System.Windows.Forms.GroupBox
         Me.Label_Dateformat = New System.Windows.Forms.Label
         Me.ComboBox_Dateformat = New System.Windows.Forms.ComboBox
         SplitContainer1 = New System.Windows.Forms.SplitContainer
+        SplitContainer1.Panel1.SuspendLayout()
+        SplitContainer1.Panel2.SuspendLayout()
+        SplitContainer1.SuspendLayout()
+        Me.GroupBox_Selection.SuspendLayout()
+        Me.GroupBox_Preview.SuspendLayout()
         Me.GroupBox_Columns.SuspendLayout()
         CType(Me.NumericUpDown_LineTitles, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.GroupBox_Settings.SuspendLayout()
         CType(Me.NumericUpDown_LineUnits, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.NumericUpDown_LineData, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.NumericUpDown_ColumnDateTime, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.GroupBox_Preview.SuspendLayout()
         Me.GroupBox_DecimalMark.SuspendLayout()
         Me.StatusStrip1.SuspendLayout()
-        Me.GroupBox_Selection.SuspendLayout()
         Me.GroupBox_Dateformat.SuspendLayout()
-        SplitContainer1.Panel1.SuspendLayout()
-        SplitContainer1.Panel2.SuspendLayout()
-        SplitContainer1.SuspendLayout()
         Me.SuspendLayout()
+        '
+        'SplitContainer1
+        '
+        SplitContainer1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+                    Or System.Windows.Forms.AnchorStyles.Left) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        SplitContainer1.Location = New System.Drawing.Point(12, 188)
+        SplitContainer1.Margin = New System.Windows.Forms.Padding(0)
+        SplitContainer1.Name = "SplitContainer1"
+        '
+        'SplitContainer1.Panel1
+        '
+        SplitContainer1.Panel1.Controls.Add(Me.GroupBox_Selection)
+        '
+        'SplitContainer1.Panel2
+        '
+        SplitContainer1.Panel2.Controls.Add(Me.GroupBox_Preview)
+        SplitContainer1.Size = New System.Drawing.Size(530, 220)
+        SplitContainer1.SplitterDistance = 176
+        SplitContainer1.TabIndex = 33
+        '
+        'GroupBox_Selection
+        '
+        Me.GroupBox_Selection.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+                    Or System.Windows.Forms.AnchorStyles.Left) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.GroupBox_Selection.Controls.Add(Me.Label_Search)
+        Me.GroupBox_Selection.Controls.Add(Me.TextBox_Search)
+        Me.GroupBox_Selection.Controls.Add(Me.Label_Series)
+        Me.GroupBox_Selection.Controls.Add(Me.ListBox_Series)
+        Me.GroupBox_Selection.Controls.Add(Me.Button_SelectAll)
+        Me.GroupBox_Selection.Location = New System.Drawing.Point(0, 0)
+        Me.GroupBox_Selection.Margin = New System.Windows.Forms.Padding(0)
+        Me.GroupBox_Selection.Name = "GroupBox_Selection"
+        Me.GroupBox_Selection.Size = New System.Drawing.Size(176, 220)
+        Me.GroupBox_Selection.TabIndex = 0
+        Me.GroupBox_Selection.TabStop = False
+        Me.GroupBox_Selection.Text = "Series selection"
+        '
+        'Label_Search
+        '
+        Me.Label_Search.AutoSize = True
+        Me.Label_Search.Location = New System.Drawing.Point(12, 21)
+        Me.Label_Search.Name = "Label_Search"
+        Me.Label_Search.Size = New System.Drawing.Size(44, 13)
+        Me.Label_Search.TabIndex = 0
+        Me.Label_Search.Text = "Search:"
+        '
+        'TextBox_Search
+        '
+        Me.TextBox_Search.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.TextBox_Search.Location = New System.Drawing.Point(59, 18)
+        Me.TextBox_Search.Name = "TextBox_Search"
+        Me.TextBox_Search.Size = New System.Drawing.Size(111, 20)
+        Me.TextBox_Search.TabIndex = 1
+        '
+        'Label_Series
+        '
+        Me.Label_Series.AutoSize = True
+        Me.Label_Series.Location = New System.Drawing.Point(12, 46)
+        Me.Label_Series.Name = "Label_Series"
+        Me.Label_Series.Size = New System.Drawing.Size(83, 13)
+        Me.Label_Series.TabIndex = 2
+        Me.Label_Series.Text = "Available series:"
+        '
+        'ListBox_Series
+        '
+        Me.ListBox_Series.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+                    Or System.Windows.Forms.AnchorStyles.Left) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.ListBox_Series.FormattingEnabled = True
+        Me.ListBox_Series.Location = New System.Drawing.Point(15, 64)
+        Me.ListBox_Series.Name = "ListBox_Series"
+        Me.ListBox_Series.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended
+        Me.ListBox_Series.Size = New System.Drawing.Size(155, 121)
+        Me.ListBox_Series.TabIndex = 3
+        '
+        'Button_SelectAll
+        '
+        Me.Button_SelectAll.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.Button_SelectAll.Location = New System.Drawing.Point(15, 191)
+        Me.Button_SelectAll.Name = "Button_SelectAll"
+        Me.Button_SelectAll.Size = New System.Drawing.Size(88, 23)
+        Me.Button_SelectAll.TabIndex = 4
+        Me.Button_SelectAll.Text = "Select all"
+        Me.Button_SelectAll.UseVisualStyleBackColor = True
+        '
+        'GroupBox_Preview
+        '
+        Me.GroupBox_Preview.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+                    Or System.Windows.Forms.AnchorStyles.Left) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.GroupBox_Preview.Controls.Add(Me.Label_File)
+        Me.GroupBox_Preview.Controls.Add(Me.TextBox_Preview)
+        Me.GroupBox_Preview.Location = New System.Drawing.Point(0, 0)
+        Me.GroupBox_Preview.Margin = New System.Windows.Forms.Padding(0)
+        Me.GroupBox_Preview.Name = "GroupBox_Preview"
+        Me.GroupBox_Preview.Size = New System.Drawing.Size(350, 220)
+        Me.GroupBox_Preview.TabIndex = 0
+        Me.GroupBox_Preview.TabStop = False
+        Me.GroupBox_Preview.Text = "File preview"
+        '
+        'Label_File
+        '
+        Me.Label_File.AutoSize = True
+        Me.Label_File.Location = New System.Drawing.Point(9, 21)
+        Me.Label_File.Name = "Label_File"
+        Me.Label_File.Size = New System.Drawing.Size(26, 13)
+        Me.Label_File.TabIndex = 0
+        Me.Label_File.Text = "File:"
         '
         'TextBox_Preview
         '
@@ -122,47 +232,16 @@ Partial Class ImportDiag
         Me.Button_Cancel.Text = "Cancel"
         Me.Button_Cancel.UseVisualStyleBackColor = True
         '
-        'ListBox_Series
-        '
-        Me.ListBox_Series.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-                    Or System.Windows.Forms.AnchorStyles.Left) _
-                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ListBox_Series.FormattingEnabled = True
-        Me.ListBox_Series.Location = New System.Drawing.Point(15, 64)
-        Me.ListBox_Series.Name = "ListBox_Series"
-        Me.ListBox_Series.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended
-        Me.ListBox_Series.Size = New System.Drawing.Size(155, 121)
-        Me.ListBox_Series.TabIndex = 3
-        '
-        'Label_Search
-        '
-        Me.Label_Search.AutoSize = True
-        Me.Label_Search.Location = New System.Drawing.Point(12, 21)
-        Me.Label_Search.Name = "Label_Search"
-        Me.Label_Search.Size = New System.Drawing.Size(44, 13)
-        Me.Label_Search.TabIndex = 0
-        Me.Label_Search.Text = "Search:"
-        '
         'Label_ColumnDateTime
         '
         Me.Label_ColumnDateTime.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
                     Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.Label_ColumnDateTime.AutoSize = True
-        Me.Label_ColumnDateTime.Location = New System.Drawing.Point(396, 25)
+        Me.Label_ColumnDateTime.Location = New System.Drawing.Point(409, 24)
         Me.Label_ColumnDateTime.Name = "Label_ColumnDateTime"
         Me.Label_ColumnDateTime.Size = New System.Drawing.Size(115, 13)
         Me.Label_ColumnDateTime.TabIndex = 6
         Me.Label_ColumnDateTime.Text = "Column with date/time:"
-        '
-        'TextBox_ColumnDateTime
-        '
-        Me.TextBox_ColumnDateTime.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-                    Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.TextBox_ColumnDateTime.Location = New System.Drawing.Point(399, 45)
-        Me.TextBox_ColumnDateTime.Name = "TextBox_ColumnDateTime"
-        Me.TextBox_ColumnDateTime.ReadOnly = True
-        Me.TextBox_ColumnDateTime.Size = New System.Drawing.Size(80, 20)
-        Me.TextBox_ColumnDateTime.TabIndex = 7
         '
         'RadioButton_FixedWidth
         '
@@ -249,7 +328,6 @@ Partial Class ImportDiag
         Me.GroupBox_Settings.Controls.Add(Me.Label_LineData)
         Me.GroupBox_Settings.Controls.Add(Me.NumericUpDown_LineData)
         Me.GroupBox_Settings.Controls.Add(Me.Label_ColumnDateTime)
-        Me.GroupBox_Settings.Controls.Add(Me.TextBox_ColumnDateTime)
         Me.GroupBox_Settings.Controls.Add(Me.NumericUpDown_ColumnDateTime)
         Me.GroupBox_Settings.Location = New System.Drawing.Point(12, 102)
         Me.GroupBox_Settings.Name = "GroupBox_Settings"
@@ -307,54 +385,12 @@ Partial Class ImportDiag
         '
         Me.NumericUpDown_ColumnDateTime.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
                     Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.NumericUpDown_ColumnDateTime.Location = New System.Drawing.Point(485, 45)
+        Me.NumericUpDown_ColumnDateTime.Location = New System.Drawing.Point(474, 46)
         Me.NumericUpDown_ColumnDateTime.Minimum = New Decimal(New Integer() {1, 0, 0, 0})
         Me.NumericUpDown_ColumnDateTime.Name = "NumericUpDown_ColumnDateTime"
-        Me.NumericUpDown_ColumnDateTime.Size = New System.Drawing.Size(34, 20)
+        Me.NumericUpDown_ColumnDateTime.Size = New System.Drawing.Size(50, 20)
         Me.NumericUpDown_ColumnDateTime.TabIndex = 8
         Me.NumericUpDown_ColumnDateTime.Value = New Decimal(New Integer() {1, 0, 0, 0})
-        '
-        'GroupBox_Preview
-        '
-        Me.GroupBox_Preview.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-                    Or System.Windows.Forms.AnchorStyles.Left) _
-                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.GroupBox_Preview.Controls.Add(Me.Label_File)
-        Me.GroupBox_Preview.Controls.Add(Me.TextBox_Preview)
-        Me.GroupBox_Preview.Location = New System.Drawing.Point(0, 0)
-        Me.GroupBox_Preview.Margin = New System.Windows.Forms.Padding(0)
-        Me.GroupBox_Preview.Name = "GroupBox_Preview"
-        Me.GroupBox_Preview.Size = New System.Drawing.Size(350, 220)
-        Me.GroupBox_Preview.TabIndex = 0
-        Me.GroupBox_Preview.TabStop = False
-        Me.GroupBox_Preview.Text = "File preview"
-        '
-        'Label_File
-        '
-        Me.Label_File.AutoSize = True
-        Me.Label_File.Location = New System.Drawing.Point(9, 21)
-        Me.Label_File.Name = "Label_File"
-        Me.Label_File.Size = New System.Drawing.Size(26, 13)
-        Me.Label_File.TabIndex = 0
-        Me.Label_File.Text = "File:"
-        '
-        'Label_Series
-        '
-        Me.Label_Series.AutoSize = True
-        Me.Label_Series.Location = New System.Drawing.Point(12, 46)
-        Me.Label_Series.Name = "Label_Series"
-        Me.Label_Series.Size = New System.Drawing.Size(83, 13)
-        Me.Label_Series.TabIndex = 2
-        Me.Label_Series.Text = "Available series:"
-        '
-        'TextBox_Search
-        '
-        Me.TextBox_Search.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TextBox_Search.Location = New System.Drawing.Point(59, 18)
-        Me.TextBox_Search.Name = "TextBox_Search"
-        Me.TextBox_Search.Size = New System.Drawing.Size(111, 20)
-        Me.TextBox_Search.TabIndex = 1
         '
         'GroupBox_DecimalMark
         '
@@ -393,34 +429,6 @@ Partial Class ImportDiag
         Me.StatusImage.Size = New System.Drawing.Size(39, 17)
         Me.StatusImage.Text = "OK"
         '
-        'Button_SelectAll
-        '
-        Me.Button_SelectAll.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.Button_SelectAll.Location = New System.Drawing.Point(15, 191)
-        Me.Button_SelectAll.Name = "Button_SelectAll"
-        Me.Button_SelectAll.Size = New System.Drawing.Size(88, 23)
-        Me.Button_SelectAll.TabIndex = 4
-        Me.Button_SelectAll.Text = "Select all"
-        Me.Button_SelectAll.UseVisualStyleBackColor = True
-        '
-        'GroupBox_Selection
-        '
-        Me.GroupBox_Selection.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-                    Or System.Windows.Forms.AnchorStyles.Left) _
-                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.GroupBox_Selection.Controls.Add(Me.Label_Search)
-        Me.GroupBox_Selection.Controls.Add(Me.TextBox_Search)
-        Me.GroupBox_Selection.Controls.Add(Me.Label_Series)
-        Me.GroupBox_Selection.Controls.Add(Me.ListBox_Series)
-        Me.GroupBox_Selection.Controls.Add(Me.Button_SelectAll)
-        Me.GroupBox_Selection.Location = New System.Drawing.Point(0, 0)
-        Me.GroupBox_Selection.Margin = New System.Windows.Forms.Padding(0)
-        Me.GroupBox_Selection.Name = "GroupBox_Selection"
-        Me.GroupBox_Selection.Size = New System.Drawing.Size(176, 220)
-        Me.GroupBox_Selection.TabIndex = 0
-        Me.GroupBox_Selection.TabStop = False
-        Me.GroupBox_Selection.Text = "Series selection"
-        '
         'GroupBox_Dateformat
         '
         Me.GroupBox_Dateformat.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
@@ -453,26 +461,6 @@ Partial Class ImportDiag
         Me.ComboBox_Dateformat.Size = New System.Drawing.Size(139, 21)
         Me.ComboBox_Dateformat.TabIndex = 1
         '
-        'SplitContainer1
-        '
-        SplitContainer1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-                    Or System.Windows.Forms.AnchorStyles.Left) _
-                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        SplitContainer1.Location = New System.Drawing.Point(12, 188)
-        SplitContainer1.Margin = New System.Windows.Forms.Padding(0)
-        SplitContainer1.Name = "SplitContainer1"
-        '
-        'SplitContainer1.Panel1
-        '
-        SplitContainer1.Panel1.Controls.Add(Me.GroupBox_Selection)
-        '
-        'SplitContainer1.Panel2
-        '
-        SplitContainer1.Panel2.Controls.Add(Me.GroupBox_Preview)
-        SplitContainer1.Size = New System.Drawing.Size(530, 220)
-        SplitContainer1.SplitterDistance = 176
-        SplitContainer1.TabIndex = 33
-        '
         'ImportDiag
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -495,6 +483,13 @@ Partial Class ImportDiag
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
         Me.Text = "Import series from file"
+        SplitContainer1.Panel1.ResumeLayout(False)
+        SplitContainer1.Panel2.ResumeLayout(False)
+        SplitContainer1.ResumeLayout(False)
+        Me.GroupBox_Selection.ResumeLayout(False)
+        Me.GroupBox_Selection.PerformLayout()
+        Me.GroupBox_Preview.ResumeLayout(False)
+        Me.GroupBox_Preview.PerformLayout()
         Me.GroupBox_Columns.ResumeLayout(False)
         Me.GroupBox_Columns.PerformLayout()
         CType(Me.NumericUpDown_LineTitles, System.ComponentModel.ISupportInitialize).EndInit()
@@ -503,19 +498,12 @@ Partial Class ImportDiag
         CType(Me.NumericUpDown_LineUnits, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.NumericUpDown_LineData, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.NumericUpDown_ColumnDateTime, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.GroupBox_Preview.ResumeLayout(False)
-        Me.GroupBox_Preview.PerformLayout()
         Me.GroupBox_DecimalMark.ResumeLayout(False)
         Me.GroupBox_DecimalMark.PerformLayout()
         Me.StatusStrip1.ResumeLayout(False)
         Me.StatusStrip1.PerformLayout()
-        Me.GroupBox_Selection.ResumeLayout(False)
-        Me.GroupBox_Selection.PerformLayout()
         Me.GroupBox_Dateformat.ResumeLayout(False)
         Me.GroupBox_Dateformat.PerformLayout()
-        SplitContainer1.Panel1.ResumeLayout(False)
-        SplitContainer1.Panel2.ResumeLayout(False)
-        SplitContainer1.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -531,7 +519,6 @@ Partial Class ImportDiag
     Private WithEvents ListBox_Series As System.Windows.Forms.ListBox
     Private WithEvents Label_Search As System.Windows.Forms.Label
     Private WithEvents Label_ColumnDateTime As System.Windows.Forms.Label
-    Private WithEvents TextBox_ColumnDateTime As System.Windows.Forms.TextBox
     Private WithEvents RadioButton_FixedWidth As System.Windows.Forms.RadioButton
     Private WithEvents RadioButton_CharSeparated As System.Windows.Forms.RadioButton
     Private WithEvents TextBox_ColumnWidth As System.Windows.Forms.TextBox

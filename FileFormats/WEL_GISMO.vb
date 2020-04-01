@@ -70,18 +70,21 @@ Public Class WEL_GISMO
             Me.Separator = space
         End If
 
-        Call Me.ReadColumns()
+        Call Me.readSeriesInfo()
 
     End Sub
 
     ' get columns
-    Public Overrides Sub ReadColumns()
+    Public Overrides Sub readSeriesInfo()
 
         Dim i As Integer
         Dim Zeile As String = ""
         Dim ZeileSpalten As String = ""
         Dim ZeileEinheiten As String = ""
         Dim SeriesName As String = ""
+        Dim sInfo As SeriesInfo
+
+        Me.SeriesList.Clear()
 
         Try
             ' open file
@@ -156,14 +159,15 @@ Public Class WEL_GISMO
             End If
 
             ' put headers and units into the Me.Spalten-array (starts with index 0, --> [anzSpalten -1])
-            ReDim Me.Columns(anzSpalten - 1)
-            For i = 0 To (anzSpalten - 1)
-                Me.Columns(i).Name = SeriesName.Trim & "_" & Namen(i).Trim()
-                Me.Columns(i).Index = i
+            For i = 1 To (anzSpalten - 1) ' first column is timestamp
+                sInfo = New SeriesInfo()
+                sInfo.Name = SeriesName.Trim & "_" & Namen(i).Trim()
+                sInfo.Index = i
                 If Einheiten(i).Trim = "cbm/s" Then
                     Einheiten(i) = "m3/s"
                 End If
-                Me.Columns(i).Einheit = Einheiten(i).Trim()
+                sInfo.Unit = Einheiten(i).Trim()
+                Me.SeriesList.Add(sInfo)
             Next
 
         Catch ex As Exception
@@ -174,13 +178,14 @@ Public Class WEL_GISMO
     End Sub
 
     ' read file
-    Public Overrides Sub Read_File()
+    Public Overrides Sub readFile()
 
         Dim i As Integer
         Dim Zeile As String
         Dim ok As Boolean
         Dim datum As DateTime
         Dim Werte(), Werte_temp() As String
+        Dim ts As TimeSeries
 
         Try
             ' open file
@@ -188,20 +193,14 @@ Public Class WEL_GISMO
             Dim StrRead As StreamReader = New StreamReader(FiStr, System.Text.Encoding.GetEncoding("iso8859-1"))
             Dim StrReadSync = TextReader.Synchronized(StrRead)
 
-            ' get number of selected colums (time series) to be read
-            ReDim Me.TimeSeries(Me.SelectedColumns.Length - 1)
-
-            ' intialize a time series for every selected column (time series)
-            For i = 0 To Me.SelectedColumns.Length - 1
-                Me.TimeSeries(i) = New TimeSeries(Me.SelectedColumns(i).Name)
+            ' initialize a time series for every selected series
+            For Each sInfo As SeriesInfo In Me.SelectedSeries
+                ts = New TimeSeries(sInfo.Name)
+                If Me.UseUnits Then
+                    ts.Unit = sInfo.Unit
+                End If
+                Me.TimeSeriesCollection.Add(ts.Title, ts)
             Next
-
-            ' assign units to time series (for all selected)
-            If (Me.UseUnits) Then
-                For i = 0 To Me.SelectedColumns.Length - 1
-                    Me.TimeSeries(i).Unit = Me.SelectedColumns(i).Einheit
-                Next
-            End If
 
             ' read over header lines
             For i = 0 To Me.nLinesHeader - 1
@@ -233,8 +232,8 @@ Public Class WEL_GISMO
                     End If
 
                     ' remaining columns are data, add to time series
-                    For i = 0 To Me.SelectedColumns.Length - 1
-                        Me.TimeSeries(i).AddNode(datum, StringToDouble(Werte(Me.SelectedColumns(i).Index)))
+                    For Each sInfo As SeriesInfo In Me.SelectedSeries
+                        Me.TimeSeriesCollection(sInfo.Name).AddNode(datum, StringToDouble(Werte(sInfo.Index)))
                     Next
 
                 Else
@@ -260,8 +259,8 @@ Public Class WEL_GISMO
                     End If
 
                     ' remaining columns are data, add to time series
-                    For i = 0 To Me.SelectedColumns.Length - 1
-                        Me.TimeSeries(i).AddNode(datum, StringToDouble(Werte(Me.SelectedColumns(i).Index)))
+                    For Each sInfo As SeriesInfo In Me.SelectedSeries
+                        Me.TimeSeriesCollection(sInfo.Name).AddNode(datum, StringToDouble(Werte(sInfo.Index)))
                     Next
 
                 End If

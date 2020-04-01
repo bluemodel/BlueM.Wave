@@ -92,7 +92,7 @@ Public Class SWMM_OUT
 
         oSWMM = New modelEAU.SWMM.DllAdapter.SWMM_iface()
 
-        Call Me.ReadColumns()
+        Call Me.readSeriesInfo()
 
         If Series <> "" Then
             Read_File(Series)
@@ -102,11 +102,15 @@ Public Class SWMM_OUT
 
     'Spalten auslesen
     '****************
-    Public Overrides Sub ReadColumns()
+    Public Overrides Sub readSeriesInfo()
+
+        'TODO: Make sure that all series names are unique!
 
         Dim i, j, index As Integer
         Dim indexSpalten As Integer
+        Dim sInfo As SeriesInfo
 
+        Me.SeriesList.Clear()
 
         oSWMM.OpenSwmmOutFile(Me.File)
 
@@ -124,26 +128,23 @@ Public Class SWMM_OUT
         anzSpalten = nSubcatch * nSubcatchVars _
                    + nNodes * nNodesVars _
                    + nLinks * nLinksVars _
-                   + nSysvars _
-                   + 1
+                   + nSysvars
 
-        ReDim Me.Columns(anzSpalten - 1)
         ReDim SWMMBinaryFileIndex(anzSpalten - 1)
 
-        Me.Columns(0).Name = "Date"
-        Me.Columns(0).Index = 0
-        Me.Columns(0).Einheit = "-"
-        indexSpalten = 1
+        indexSpalten = 0
         For i = 0 To nSubcatch - 1
             'Flows
             For j = 0 To nSubcatchVars - nPolluts - 1
                 index = indexSpalten + i * nSubcatchVars + j
-                Me.Columns(index).Name = oSWMM.subcatchments(i) & " " & oSWMM.SUBCATCHVAR(j)
-                Me.Columns(index).Objekt = oSWMM.subcatchments(i)
-                Me.Columns(index).Einheit = Units(0, j, FlowUnits)
-                Me.Columns(index).Type = "FLOW"
-                Me.Columns(index).ObjType = "Subcatchment"
-                Me.Columns(index).Index = index
+                sInfo = New SeriesInfo()
+                sInfo.Name = oSWMM.subcatchments(i) & " " & oSWMM.SUBCATCHVAR(j)
+                sInfo.Objekt = oSWMM.subcatchments(i)
+                sInfo.Unit = Units(0, j, FlowUnits)
+                sInfo.Type = "FLOW"
+                sInfo.ObjType = "Subcatchment"
+                sInfo.Index = index
+                Me.SeriesList.Add(sInfo)
                 SWMMBinaryFileIndex(index).iType = 0
                 SWMMBinaryFileIndex(index).iIndex = i
                 SWMMBinaryFileIndex(index).vIndex = j
@@ -151,13 +152,15 @@ Public Class SWMM_OUT
             'Pollutants
             For j = nSubcatchVars - nPolluts To nSubcatchVars - 1
                 index = indexSpalten + i * nSubcatchVars + j
-                Me.Columns(index).Name = oSWMM.subcatchments(i) & " " & oSWMM.pollutants(j - nSubcatchVars + nPolluts)
-                Me.Columns(index).Objekt = oSWMM.subcatchments(i)
-                Me.Columns(index).Einheit = Units(0, j, FlowUnits)
+                sInfo = New SeriesInfo()
+                sInfo.Name = oSWMM.subcatchments(i) & " " & oSWMM.pollutants(j - nSubcatchVars + nPolluts)
+                sInfo.Objekt = oSWMM.subcatchments(i)
+                sInfo.Unit = Units(0, j, FlowUnits)
                 'Type aus String (z.B. für "S101 CSB" wird "CSB" ausgelesen)
-                Me.Columns(index).Type = oSWMM.pollutants(j - nSubcatchVars + nPolluts)
-                Me.Columns(index).ObjType = "Subcatchment"
-                Me.Columns(index).Index = index
+                sInfo.Type = oSWMM.pollutants(j - nSubcatchVars + nPolluts)
+                sInfo.ObjType = "Subcatchment"
+                sInfo.Index = index
+                Me.SeriesList.Add(sInfo)
                 SWMMBinaryFileIndex(index).iType = 0
                 SWMMBinaryFileIndex(index).iIndex = i
                 SWMMBinaryFileIndex(index).vIndex = j
@@ -168,12 +171,14 @@ Public Class SWMM_OUT
             'Flows
             For j = 0 To nNodesVars - nPolluts - 1
                 index = indexSpalten + i * nNodesVars + j
-                Me.Columns(index).Name = oSWMM.nodes(i) & " " & oSWMM.NODEVAR(j)
-                Me.Columns(index).Objekt = oSWMM.nodes(i)
-                Me.Columns(index).Einheit = Units(1, j, FlowUnits)
-                Me.Columns(index).Type = "FLOW"
-                Me.Columns(index).ObjType = "Node"
-                Me.Columns(index).Index = index
+                sInfo = New SeriesInfo()
+                sInfo.Name = oSWMM.nodes(i) & " " & oSWMM.NODEVAR(j)
+                sInfo.Objekt = oSWMM.nodes(i)
+                sInfo.Unit = Units(1, j, FlowUnits)
+                sInfo.Type = "FLOW"
+                sInfo.ObjType = "Node"
+                sInfo.Index = index
+                Me.SeriesList.Add(sInfo)
                 SWMMBinaryFileIndex(index).iType = 1
                 SWMMBinaryFileIndex(index).iIndex = i
                 SWMMBinaryFileIndex(index).vIndex = j
@@ -181,13 +186,15 @@ Public Class SWMM_OUT
             'Pollutants
             For j = nNodesVars - nPolluts To nNodesVars - 1
                 index = indexSpalten + i * nNodesVars + j
-                Me.Columns(index).Name = oSWMM.nodes(i) & " " & oSWMM.pollutants(j - nNodesVars + nPolluts)
-                Me.Columns(index).Objekt = oSWMM.nodes(i)
-                Me.Columns(index).Einheit = Units(1, j, FlowUnits)
+                sInfo = New SeriesInfo()
+                sInfo.Name = oSWMM.nodes(i) & " " & oSWMM.pollutants(j - nNodesVars + nPolluts)
+                sInfo.Objekt = oSWMM.nodes(i)
+                sInfo.Unit = Units(1, j, FlowUnits)
                 'Type aus String (z.B. für "S101 CSB" wird "CSB" ausgelesen)
-                Me.Columns(index).Type = oSWMM.pollutants(j - nNodesVars + nPolluts)
-                Me.Columns(index).ObjType = "Node"
-                Me.Columns(index).Index = index
+                sInfo.Type = oSWMM.pollutants(j - nNodesVars + nPolluts)
+                sInfo.ObjType = "Node"
+                sInfo.Index = index
+                Me.SeriesList.Add(sInfo)
                 SWMMBinaryFileIndex(index).iType = 1
                 SWMMBinaryFileIndex(index).iIndex = i
                 SWMMBinaryFileIndex(index).vIndex = j
@@ -198,12 +205,14 @@ Public Class SWMM_OUT
             'Flows
             For j = 0 To nLinksVars - nPolluts - 1
                 index = indexSpalten + i * nLinksVars + j
-                Me.Columns(index).Name = oSWMM.links(i) & " " & oSWMM.LINKVAR(j)
-                Me.Columns(index).Objekt = oSWMM.links(i)
-                Me.Columns(index).Einheit = Units(2, j, FlowUnits)
-                Me.Columns(index).Type = "FLOW"
-                Me.Columns(index).ObjType = "Link"
-                Me.Columns(index).Index = index
+                sInfo = New SeriesInfo()
+                sInfo.Name = oSWMM.links(i) & " " & oSWMM.LINKVAR(j)
+                sInfo.Objekt = oSWMM.links(i)
+                sInfo.Unit = Units(2, j, FlowUnits)
+                sInfo.Type = "FLOW"
+                sInfo.ObjType = "Link"
+                sInfo.Index = index
+                Me.SeriesList.Add(sInfo)
                 SWMMBinaryFileIndex(index).iType = 2
                 SWMMBinaryFileIndex(index).iIndex = i
                 SWMMBinaryFileIndex(index).vIndex = j
@@ -211,13 +220,15 @@ Public Class SWMM_OUT
             'Pollutants
             For j = nLinksVars - nPolluts To nLinksVars - 1
                 index = indexSpalten + i * nLinksVars + j
-                Me.Columns(index).Name = oSWMM.links(i) & " " & oSWMM.pollutants(j - nLinksVars + nPolluts)
-                Me.Columns(index).Objekt = oSWMM.links(i)
-                Me.Columns(index).Einheit = Units(2, j, FlowUnits)
+                sInfo = New SeriesInfo()
+                sInfo.Name = oSWMM.links(i) & " " & oSWMM.pollutants(j - nLinksVars + nPolluts)
+                sInfo.Objekt = oSWMM.links(i)
+                sInfo.Unit = Units(2, j, FlowUnits)
                 'Type aus String (z.B. für "S101 CSB" wird "CSB" ausgelesen)
-                Me.Columns(index).Type = oSWMM.pollutants(j - nLinksVars + nPolluts)
-                Me.Columns(index).ObjType = "Link"
-                Me.Columns(index).Index = index
+                sInfo.Type = oSWMM.pollutants(j - nLinksVars + nPolluts)
+                sInfo.ObjType = "Link"
+                sInfo.Index = index
+                Me.SeriesList.Add(sInfo)
                 SWMMBinaryFileIndex(index).iType = 2
                 SWMMBinaryFileIndex(index).iIndex = i
                 SWMMBinaryFileIndex(index).vIndex = j
@@ -226,9 +237,11 @@ Public Class SWMM_OUT
         indexSpalten += nLinks * nLinksVars
         For i = 0 To nSysvars - 1
             index = indexSpalten + i
-            Me.Columns(index).Name = oSWMM.SYSVAR(i)
-            Me.Columns(index).Einheit = Units(3, j, FlowUnits)
-            Me.Columns(index).Index = index
+            sInfo = New SeriesInfo()
+            sInfo.Name = oSWMM.SYSVAR(i)
+            sInfo.Unit = Units(3, j, FlowUnits)
+            sInfo.Index = index
+            Me.SeriesList.Add(sInfo)
             SWMMBinaryFileIndex(index).iType = 3
             SWMMBinaryFileIndex(index).iIndex = 0
             SWMMBinaryFileIndex(index).vIndex = i
@@ -239,65 +252,78 @@ Public Class SWMM_OUT
 #End Region
 
 
-    Public Overrides Sub Read_File()
-        Dim i, j, period As Integer
+    Public Overrides Sub readFile()
+        Dim j, period As Integer
         Dim value As Double
         Dim index As Integer
         Dim anzahlZeitreihen As Integer
         Dim datum As Double
+        Dim ts As TimeSeries
 
         'Anzahl Zeitreihen
-        anzahlZeitreihen = Me.SelectedColumns.Length
-        ReDim Me.TimeSeries(anzahlZeitreihen - 1)
+        anzahlZeitreihen = Me.SelectedSeries.Count
+
         'Indexarray
         'ReDim index(anzahlZeitreihen)
+
         'Zeitreihen instanzieren
-        For i = 0 To anzahlZeitreihen - 1
-            Me.TimeSeries(i) = New TimeSeries(Me.SelectedColumns(i).Name)
+        For Each sInfo As SeriesInfo In Me.SelectedSeries
+            ts = New TimeSeries(sInfo.Name)
             'Einheiten?
             If (Me.UseUnits) Then
-                Me.TimeSeries(i).Unit = Me.SelectedColumns(i).Einheit
+                ts.Unit = sInfo.Unit
             End If
             'Objektname und Typ (für SWMM-Txt-Export)
-            Me.TimeSeries(i).Objekt = Me.SelectedColumns(i).Objekt
-            Me.TimeSeries(i).Type = Me.SelectedColumns(i).Type
+            ts.Objekt = sInfo.Objekt
+            ts.Type = sInfo.Type
             For j = 0 To anzSpalten - 1
-                If (Me.SelectedColumns(i).Name = Me.Columns(j).Name) And (Me.SelectedColumns(i).ObjType = Me.Columns(j).ObjType) Then
+                If (sInfo.Name = Me.SeriesList(j).Name) And (sInfo.ObjType = Me.SeriesList(j).ObjType) Then
                     index = j
                     For period = 0 To oSWMM.NPeriods - 1
                         oSWMM.GetSwmmDate(period, datum)
                         oSWMM.GetSwmmResult(SWMMBinaryFileIndex(index).iType, SWMMBinaryFileIndex(index).iIndex, SWMMBinaryFileIndex(index).vIndex, period, value)
-                        Me.TimeSeries(i).AddNode(Date.FromOADate(datum), value)
+                        ts.AddNode(Date.FromOADate(datum), value)
                     Next
                 End If
             Next
+
+            'store time series
+            Me.TimeSeriesCollection.Add(ts.Title, ts)
         Next
+
     End Sub
 
+
     Private Overloads Sub Read_File(ByVal Series As String)
-        Dim i, j, period As Integer
+        Dim j, period As Integer
         Dim value As Double
         Dim index As Integer
         Dim anzahlZeitreihen As Integer
         Dim datum As Double
+        Dim ts As TimeSeries
 
         'Anzahl Zeitreihen
         anzahlZeitreihen = 1
-        ReDim Me.TimeSeries(anzahlZeitreihen - 1)
+
         'Indexarray
         'ReDim index(anzahlZeitreihen)
+
         'Zeitreihen instanzieren
-        Me.TimeSeries(i) = New TimeSeries(series)
+        ts = New TimeSeries(Series)
         For j = 0 To anzSpalten - 1
-            If Series = Me.Columns(j).Name Then
+            If Series = Me.SeriesList(j).Name Then
                 index = j
                 For period = 0 To oSWMM.NPeriods - 1
                     oSWMM.GetSwmmDate(period, datum)
                     oSWMM.GetSwmmResult(SWMMBinaryFileIndex(index).iType, SWMMBinaryFileIndex(index).iIndex, SWMMBinaryFileIndex(index).vIndex, period, value)
-                    Me.TimeSeries(i).AddNode(Date.FromOADate(datum), value)
+                    ts.AddNode(Date.FromOADate(datum), value)
                 Next
             End If
         Next
+
+        'store time series
+        Me.TimeSeriesCollection.Add(ts.Title, ts)
+
     End Sub
 
     Private Function Units(ByVal iType As Integer, ByVal vIndex As Integer, ByVal FlowUnits As Integer) As String

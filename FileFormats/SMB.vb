@@ -59,21 +59,24 @@ Public Class SMB
         Me.iLineData = 2
         Me.UseUnits = True
 
-        Call Me.ReadColumns()
+        Call Me.readSeriesInfo()
 
         If (ReadAllNow) Then
             'Direkt einlesen
-            Call Me.selectAllColumns()
-            Call Me.Read_File()
+            Call Me.selectAllSeries()
+            Call Me.readFile()
         End If
 
     End Sub
 
     'Spalten auslesen
     '****************
-    Public Overrides Sub ReadColumns()
+    Public Overrides Sub readSeriesInfo()
 
         Dim Zeile As String = ""
+        Dim sInfo As SeriesInfo
+
+        Me.SeriesList.Clear()
 
         Try
             'Datei öffnen
@@ -81,25 +84,20 @@ Public Class SMB
             Dim StrRead As StreamReader = New StreamReader(FiStr, System.Text.Encoding.GetEncoding("iso8859-1"))
             Dim StrReadSync = TextReader.Synchronized(StrRead)
 
-            'Es gibt immer 2 Spalten
-            ReDim Me.Columns(1)
-
-            '1. Spalte (X)
-            Me.Columns(0).Name = "Datum_Zeit"
-            Me.Columns(0).Index = 0
-
-            '2. Spalte (Y)
-
+            sInfo = New SeriesInfo()
+            
             'Reihentitel steht in 1. Zeile:
             Zeile = StrReadSync.ReadLine.ToString()
-            Me.Columns(1).Name = Zeile.Substring(15).Trim()
+            sInfo.Name = Zeile.Substring(15).Trim()
             'Annahme, dass SMB-Dateien Regenreihen sind, daher Einheit mm fest verdrahtet
-            Me.Columns(1).Einheit = "mm"
-            Me.Columns(1).Index = 1
+            sInfo.Unit = "mm"
 
             StrReadSync.close()
             StrRead.Close()
             FiStr.Close()
+
+            'store series info
+            Me.SeriesList.Add(sInfo)
 
         Catch ex As Exception
             MsgBox("Konnte Datei nicht einlesen!" & eol & eol & "Fehler: " & ex.Message, MsgBoxStyle.Critical, "Fehler")
@@ -109,7 +107,7 @@ Public Class SMB
 
     'SMB-Datei einlesen
     '******************
-    Public Overrides Sub Read_File()
+    Public Overrides Sub readFile()
 
         Dim i, j As Integer
         Dim Zeile As String
@@ -117,15 +115,17 @@ Public Class SMB
         Dim Datum As DateTime
         Dim Anfangsdatum As DateTime
         Dim tmpWert As String
+        Dim sInfo As SeriesInfo
+        Dim ts As TimeSeries
 
         Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
         Dim StrRead As StreamReader = New StreamReader(FiStr, System.Text.Encoding.GetEncoding("iso8859-1"))
         Dim StrReadSync = TextReader.Synchronized(StrRead)
 
-        'Zeitreihe instanzieren
-        ReDim Me.TimeSeries(0) 'bei SMB gibt es nur eine Zeitreihe
-        Me.TimeSeries(0) = New TimeSeries(Me.SelectedColumns(0).Name)
-        Me.TimeSeries(0).Unit = Me.SelectedColumns(0).Einheit
+        'Zeitreihe instanzieren (bei SMB gibt es nur eine Zeitreihe)
+        sInfo = Me.SeriesList(0)
+        ts = New TimeSeries(sInfo.Name)
+        ts.Unit = sInfo.Unit
 
         j = 1
 
@@ -160,7 +160,7 @@ Public Class SMB
 
                 'Datum und Wert zur Zeitreihe hinzufügen
                 '---------------------------------------
-                Me.TimeSeries(0).AddNode(Datum, StringToDouble(Zeile.Substring(i + 2)))
+                ts.AddNode(Datum, StringToDouble(Zeile.Substring(i + 2)))
 
             End If
         Loop Until StrReadSync.Peek() = -1
@@ -168,6 +168,9 @@ Public Class SMB
         StrReadSync.close()
         StrRead.Close()
         FiStr.Close()
+
+        'store time series
+        Me.TimeSeriesCollection.Add(ts.Title, ts)
 
     End Sub
 

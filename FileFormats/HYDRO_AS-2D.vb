@@ -81,6 +81,7 @@ Public Class HYDRO_AS_2D
         Me.UseUnits = False
         Me.IsColumnSeparated = True
         Me.Separator = New BlueM.Wave.Character(" ")
+        Me.DateTimeColumnIndex = 0
 
         'Einheiten anhand des Dateinamens festlegen
         Select Case Path.GetFileName(file).ToLower
@@ -97,7 +98,7 @@ Public Class HYDRO_AS_2D
         'Default Referenzdatum für den Beginn der Simulation
         Me.refDate = New DateTime(2000, 1, 1, 0, 0, 0)
 
-        Call Me.ReadColumns()
+        Call Me.readSeriesInfo()
 
     End Sub
 
@@ -124,12 +125,15 @@ Public Class HYDRO_AS_2D
     ''' Liest die Anzahl der Spalten und ihre Namen aus
     ''' </summary>
     ''' <remarks></remarks>
-    Public Overrides Sub ReadColumns()
+    Public Overrides Sub readSeriesInfo()
 
         Dim i, l As Integer
+        Dim sInfo As SeriesInfo
         Dim Zeile As String = ""
         Dim ZeileSpalten As String = ""
 
+        Me.SeriesList.Clear()
+        
         Try
             'Datei öffnen
             Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
@@ -185,21 +189,14 @@ Public Class HYDRO_AS_2D
                             anzSpalten += 1 'X-Spalte künstlich dazuzählen, da ohne Namen
                     End Select
 
-                    'Spalten abspeichern
-                    ReDim Me.Columns(anzSpalten - 1)
+                    'store series info
 
-                    'X-Spalte
-                    Me.Columns(0).Name = "Zeit"
-                    Me.Columns(0).Einheit = "h"
-                    Me.Columns(0).Index = 0
-
-                    Me.DateTimeColumnIndex = 0
-
-                    'Y-Spalten
                     For i = 0 To Namen.Length - 1
-                        Me.Columns(i + 1).Name = Namen(i).Trim()
-                        Me.Columns(i + 1).Einheit = Me._einheit
-                        Me.Columns(i + 1).Index = i + 1
+                        sInfo = New SeriesInfo
+                        sInfo.Name = Namen(i).Trim()
+                        sInfo.Unit = Me._einheit
+                        sInfo.Index = i + 1
+                        Me.SeriesList.Add(sInfo)
                     Next
 
                 Case "bw_tmp.dat"
@@ -219,21 +216,14 @@ Public Class HYDRO_AS_2D
                         Zeile = StrReadSync.ReadLine.ToString
                     Loop Until Zeile.StartsWith(" ---")
 
-                    'Zeitreihen-Namen abspeichern
-                    ReDim Me.Columns(names.Count) '1 mehr wegen X-Spalte
+                    'store series info
 
-                    'X-Spalte
-                    Me.Columns(0).Name = "Zeit"
-                    Me.Columns(0).Einheit = "s"
-                    Me.Columns(0).Index = 0
-
-                    Me.DateTimeColumnIndex = 0
-
-                    'Y-Spalten
                     For i = 0 To names.Count - 1
-                        Me.Columns(i + 1).Name = names(i).Trim()
-                        Me.Columns(i + 1).Einheit = Me._einheit
-                        Me.Columns(i + 1).Index = i + 1 'hier irrelevant
+                        sInfo = New SeriesInfo
+                        sInfo.Name = names(i).Trim()
+                        sInfo.Unit = Me._einheit
+                        sInfo.Index = i + 1 ' hier eigentlich irrelevant
+                        Me.SeriesList.Add(sInfo)
                     Next
 
             End Select
@@ -253,12 +243,13 @@ Public Class HYDRO_AS_2D
     ''' Liest die Datei ein
     ''' </summary>
     ''' <remarks></remarks>
-    Public Overrides Sub Read_File()
+    Public Overrides Sub readFile()
 
-        Dim i, j As Integer
+        Dim i As Integer
         Dim Zeile As String = ""
         Dim datum As DateTime
         Dim Werte() As String
+        Dim ts As TimeSeries
 
         'show dialog for setting the reference date
         Dim dlg As New HYDRO_AS_2D_Diag()
@@ -267,13 +258,11 @@ Public Class HYDRO_AS_2D
         Me.refDate = dlg.DateTimePicker_refDate.Value
 
         Try
-            'Anzahl Zeitreihen bestimmen
-            ReDim Me.TimeSeries(Me.SelectedColumns.Length - 1)
-
-            'Zeitreihen instanzieren
-            For i = 0 To Me.SelectedColumns.Length - 1
-                Me.TimeSeries(i) = New TimeSeries(Me.SelectedColumns(i).Name)
-                Me.TimeSeries(i).Unit = Me.SelectedColumns(i).Einheit
+            'Instantiate time series
+            For Each sInfo As SeriesInfo In Me.SelectedSeries
+                ts = New TimeSeries(sInfo.Name)
+                ts.Unit = sInfo.Unit
+                Me.TimeSeriesCollection.Add(ts.Title, ts)
             Next
 
             'Datei öffnen
@@ -299,8 +288,8 @@ Public Class HYDRO_AS_2D
                         Werte = Zeile.Split(New Char() {Me.Separator.ToChar}, System.StringSplitOptions.RemoveEmptyEntries)
                         'Simulationszeit [h] wird zu Datum nach dem Referenzdatum (default: 01.01.2000 00:00:00) konvertiert
                         datum = Me.refDate + New TimeSpan(0, 0, Helpers.StringToDouble(Werte(0)) * 3600)
-                        For j = 0 To Me.SelectedColumns.Length - 1
-                            Me.TimeSeries(j).AddNode(datum, Helpers.StringToDouble(Werte(Me.SelectedColumns(j).Index)))
+                        For Each sInfo As SeriesInfo In Me.SelectedSeries
+                            Me.TimeSeriesCollection(sInfo.Name).AddNode(datum, Helpers.StringToDouble(Werte(sInfo.Index)))
                         Next
 
                     Loop Until StrReadSync.Peek() = -1
@@ -327,14 +316,12 @@ Public Class HYDRO_AS_2D
                         name = parts(0) & "-" & parts(1)
                         value = Helpers.StringToDouble(parts(2))
                         'nur ausgewählte Reihen abspeichern
-                        If Me.SelectedSeries.Contains(name) Then
-                            For i = 0 To Me.SelectedColumns.Length - 1
-                                If Me.SelectedColumns(i).Name = name Then
-                                    Me.TimeSeries(i).AddNode(datum, value)
-                                    Exit For
-                                End If
-                            Next
-                        End If
+                        For Each sInfo As SeriesInfo In Me.SelectedSeries
+                            If sInfo.Name = name Then
+                                Me.TimeSeriesCollection(sInfo.Name).AddNode(datum, value)
+                                Exit For
+                            End If
+                        Next
 
                     Loop Until StrReadSync.Peek() = -1
 

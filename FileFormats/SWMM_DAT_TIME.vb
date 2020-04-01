@@ -82,21 +82,24 @@ Public Class SWMM_DAT_TIME
         Me.iLineData = 2
         Me.UseUnits = False
 
-        Call Me.ReadColumns()
+        Call Me.readSeriesInfo()
 
         If (ReadAllNow) Then
             'Direkt einlesen
-            Call Me.selectAllColumns()
-            Call Me.Read_File()
+            Call Me.selectAllSeries()
+            Call Me.readFile()
         End If
 
     End Sub
 
     'Spalten auslesen
     '****************
-    Public Overrides Sub ReadColumns()
+    Public Overrides Sub readSeriesInfo()
 
         Dim Zeile As String = ""
+        Dim sInfo As SeriesInfo
+
+        Me.SeriesList.Clear()
 
         Try
             'Datei öffnen
@@ -104,19 +107,13 @@ Public Class SWMM_DAT_TIME
             Dim StrRead As StreamReader = New StreamReader(FiStr, System.Text.Encoding.GetEncoding("iso8859-1"))
             Dim StrReadSync = TextReader.Synchronized(StrRead)
 
-            'Es gibt immer 2 Spalten!
-            ReDim Me.Columns(1)
-
-            '1. Spalte (X)
-            Me.Columns(0).Name = "Datum_Zeit"
-            Me.Columns(0).Index = 0
-
-            '2. Spalte (Y)
-            Me.Columns(1).Index = 1
-
             'Reihentitel steht in 1. Zeile:
             Zeile = StrReadSync.ReadLine.ToString()
-            Me.Columns(1).Name = Zeile.Trim()
+
+            'store series info
+            sInfo = New SeriesInfo()
+            sInfo.Name = Zeile.Trim()
+            Me.SeriesList.Add(sInfo)
 
             StrReadSync.close()
             StrRead.Close()
@@ -127,9 +124,10 @@ Public Class SWMM_DAT_TIME
         End Try
 
     End Sub
+
     'DAT-Datei einlesen
     '******************
-    Public Overrides Sub Read_File()
+    Public Overrides Sub readFile()
 
     End Sub
 
