@@ -113,8 +113,9 @@ Friend Class ImportDiag
         Me.Label_File.Text &= " " & Path.GetFileName(Me.datei.File)
 
         'Workaround for binary files (SWMM5 OUT and SYDRO SQLite)
-        If IO.Path.GetExtension(Me.datei.File).ToUpper() = FileFactory.FileExtOUT _
-            Or IO.Path.GetExtension(Me.datei.File).ToUpper() = FileFactory.FileExtSQLITE Then
+        If TypeOf Me.datei Is SWMM_OUT _
+            Or TypeOf Me.datei Is SQLite Then
+
             Me.TextBox_Preview.Text = Path.GetFileName(Me.datei.File) & " is a binary file." & eol & "Preview is not available!"
             'Disable all other fields
             Me.GroupBox_Dateformat.Enabled = False
