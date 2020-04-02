@@ -26,6 +26,7 @@
 '--------------------------------------------------------------------------------------------
 '
 Imports System.IO
+Imports System.Text.RegularExpressions
 
 Friend Class ImportDiag
     Inherits System.Windows.Forms.Form
@@ -38,6 +39,49 @@ Friend Class ImportDiag
     Private IsInitializing As Boolean
 
     Private datei As FileFormatBase
+
+#End Region
+
+#Region "Properties"
+
+    ''' <summary>
+    ''' Gets and sets the date format string in the corresponding combobox while escaping and unescaping any special characters.
+    ''' </summary>
+    ''' <value></value>
+    ''' <returns></returns>
+    ''' <remarks>
+    ''' see https://docs.microsoft.com/en-us/dotnet/standard/base-types/custom-date-and-time-format-strings
+    ''' </remarks>
+    Private Property DateFormat() As String
+        Get
+            Dim format As String
+            Dim m As MatchCollection
+            Dim specialchars As List(Of String)
+
+            format = Me.ComboBox_Dateformat.Text
+            'Escape any unescaped special characters
+            specialchars = New List(Of String)(New String() {"/", ":"})
+            For Each c As String In specialchars
+                m = Regex.Matches(format, "[^\\]" + c)
+                If m.Count > 0 Then
+                    format = format.Replace(c, "\" & c)
+                End If
+            Next
+            Return format
+        End Get
+        Set(ByVal datumsformat As String)
+            'unescape special characters
+            datumsformat = datumsformat.Replace("\", "")
+            'add to combobox
+            ComboBox_Dateformat.BeginUpdate()
+            If Not ComboBox_Dateformat.Items.Contains(datumsformat) Then
+                ComboBox_Dateformat.Items.Add(datumsformat)
+            End If
+            'select it
+            ComboBox_Dateformat.SelectedItem = datumsformat
+            ComboBox_Dateformat.EndUpdate()
+        End Set
+    End Property
 
 #End Region
 
@@ -79,11 +123,9 @@ Friend Class ImportDiag
         Me.ComboBox_DecimalMark.Items.Add(Constants.comma)
         Me.ComboBox_DecimalMark.EndUpdate()
 
-        'Combobox Datumsformat initialisieren
+        'Combobox Datumsformat füllen
         For Each datumsformat As String In Helpers.DateFormats.Values
-            If Not ComboBox_Dateformat.Items.Contains(datumsformat) Then
-                Me.ComboBox_Dateformat.Items.Add(datumsformat)
-            End If
+            Me.DateFormat = datumsformat
         Next
         Me.ComboBox_Dateformat.SelectedIndex = 0
 
@@ -210,7 +252,7 @@ Friend Class ImportDiag
                 End If
 
                 'Datumsformat
-                Me.datei.Dateformat = Me.ComboBox_Dateformat.Text
+                Me.datei.Dateformat = Me.DateFormat
 
                 'Dezimaltrennzeichen
                 Me.datei.DecimalSeparator = Me.ComboBox_DecimalMark.SelectedItem
@@ -283,10 +325,7 @@ Friend Class ImportDiag
         Me.ComboBox_Separator.SelectedItem = Me.datei.Separator
 
         'Datumsformat
-        If Not ComboBox_Dateformat.Items.Contains(Me.datei.Dateformat) Then
-            Me.ComboBox_Dateformat.Items.Add(Me.datei.Dateformat)
-        End If
-        Me.ComboBox_Dateformat.SelectedItem = Me.datei.Dateformat
+        Me.DateFormat = Me.datei.Dateformat
 
         'Spaltenbreite
         Me.TextBox_ColumnWidth.Text = Me.datei.ColumnWidth
@@ -337,6 +376,18 @@ Friend Class ImportDiag
             Me.ListBox_Series.SetSelected(i, True)
         Next
 
+    End Sub
+
+    Private Sub PictureBox_DateFormatHelp_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PictureBox_DateFormatHelp.Click
+        Process.Start("https://docs.microsoft.com/en-us/dotnet/standard/base-types/custom-date-and-time-format-strings")
+    End Sub
+
+    Private Sub PictureBox_DateFormatHelp_MouseHover(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PictureBox_DateFormatHelp.MouseHover
+        Cursor = Cursors.Hand
+    End Sub
+
+    Private Sub PictureBox_DateFormatHelp_MouseLeave(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PictureBox_DateFormatHelp.MouseLeave
+        Cursor = Cursors.Default
     End Sub
 
 #End Region 'Methoden
