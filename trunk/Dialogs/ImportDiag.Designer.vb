@@ -22,6 +22,7 @@ Partial Class ImportDiag
     'Das Bearbeiten mit dem Code-Editor ist nicht möglich.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
+        Me.components = New System.ComponentModel.Container
         Dim SplitContainer1 As System.Windows.Forms.SplitContainer
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(ImportDiag))
         Me.GroupBox_Selection = New System.Windows.Forms.GroupBox
@@ -55,8 +56,10 @@ Partial Class ImportDiag
         Me.StatusStrip1 = New System.Windows.Forms.StatusStrip
         Me.StatusImage = New System.Windows.Forms.ToolStripStatusLabel
         Me.GroupBox_Dateformat = New System.Windows.Forms.GroupBox
+        Me.PictureBox_DateFormatHelp = New System.Windows.Forms.PictureBox
         Me.Label_Dateformat = New System.Windows.Forms.Label
         Me.ComboBox_Dateformat = New System.Windows.Forms.ComboBox
+        Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
         SplitContainer1 = New System.Windows.Forms.SplitContainer
         SplitContainer1.Panel1.SuspendLayout()
         SplitContainer1.Panel2.SuspendLayout()
@@ -72,6 +75,7 @@ Partial Class ImportDiag
         Me.GroupBox_DecimalMark.SuspendLayout()
         Me.StatusStrip1.SuspendLayout()
         Me.GroupBox_Dateformat.SuspendLayout()
+        CType(Me.PictureBox_DateFormatHelp, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'SplitContainer1
@@ -433,6 +437,7 @@ Partial Class ImportDiag
         '
         Me.GroupBox_Dateformat.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
                     Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.GroupBox_Dateformat.Controls.Add(Me.PictureBox_DateFormatHelp)
         Me.GroupBox_Dateformat.Controls.Add(Me.Label_Dateformat)
         Me.GroupBox_Dateformat.Controls.Add(Me.ComboBox_Dateformat)
         Me.GroupBox_Dateformat.Location = New System.Drawing.Point(258, 12)
@@ -441,6 +446,17 @@ Partial Class ImportDiag
         Me.GroupBox_Dateformat.TabIndex = 1
         Me.GroupBox_Dateformat.TabStop = False
         Me.GroupBox_Dateformat.Text = "Date format"
+        '
+        'PictureBox_DateFormatHelp
+        '
+        Me.PictureBox_DateFormatHelp.Image = Global.BlueM.Wave.My.Resources.Resources.help
+        Me.PictureBox_DateFormatHelp.Location = New System.Drawing.Point(75, 25)
+        Me.PictureBox_DateFormatHelp.Name = "PictureBox_DateFormatHelp"
+        Me.PictureBox_DateFormatHelp.Size = New System.Drawing.Size(16, 16)
+        Me.PictureBox_DateFormatHelp.TabIndex = 3
+        Me.PictureBox_DateFormatHelp.TabStop = False
+        Me.ToolTip1.SetToolTip(Me.PictureBox_DateFormatHelp, "https://docs.microsoft.com/en-us/dotnet/standard/base-types/custom-date-and-time-" & _
+                "format-strings")
         '
         'Label_Dateformat
         '
@@ -504,6 +520,7 @@ Partial Class ImportDiag
         Me.StatusStrip1.PerformLayout()
         Me.GroupBox_Dateformat.ResumeLayout(False)
         Me.GroupBox_Dateformat.PerformLayout()
+        CType(Me.PictureBox_DateFormatHelp, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -541,4 +558,6 @@ Partial Class ImportDiag
     Friend WithEvents GroupBox_Dateformat As System.Windows.Forms.GroupBox
     Friend WithEvents ComboBox_Dateformat As System.Windows.Forms.ComboBox
     Friend WithEvents Label_Dateformat As System.Windows.Forms.Label
+    Friend WithEvents PictureBox_DateFormatHelp As System.Windows.Forms.PictureBox
+    Friend WithEvents ToolTip1 As System.Windows.Forms.ToolTip
 End Class

@@ -5,6 +5,8 @@ Version 1.8.0
 -------------
 CHANGED:
 * When loading PRMS files, the file import dialog is now displayed, allowing for the selection of time series
+FIXED:
+* Date formats entered in the import dialog are now properly escaped if they contain special characters such as "/" or ":"
 API-CHANGES:
 * The following changes have been made to public methods and properties of FileFormatBase (which are inherited by all file formats):
  * Replaced TimeSeries (array) with TimeSeriesCollection (dictionary with titles as keys)
