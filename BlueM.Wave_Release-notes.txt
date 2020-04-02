@@ -3,6 +3,8 @@ BlueM.Wave Release Notes
 ===============================================================
 Version 1.8.0
 -------------
+NEW:
+* Added a button for removing nodes with NaN values from the currently loaded time series
 CHANGED:
 * When loading PRMS files, the file import dialog is now displayed, allowing for the selection of time series
 FIXED:
