@@ -352,8 +352,8 @@ Public Class TimeSeries
             vol = 0.0
             If Me.Unit.ToLower.EndsWith("/s") Then
                 Log.AddLogEntry(Me.Title & ": calculating volume by integrating over time.")
-                t0 = Me.StartDate
-                v0 = Me.Nodes(t0)
+                t0 = Me.NodesClean.First().Key
+                v0 = Me.NodesClean.First().Value
                 For Each node As KeyValuePair(Of Date, Double) In Me.NodesClean
                     t1 = node.Key
                     v1 = node.Value
