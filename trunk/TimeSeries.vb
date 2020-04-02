@@ -221,7 +221,7 @@ Public Class TimeSeries
         Get
             Dim max As Double
             max = Double.MinValue
-            For Each value As Double In Me.Values
+            For Each value As Double In Me.NodesClean.Values
                 If (value > max) Then
                     max = value
                 End If
@@ -258,7 +258,7 @@ Public Class TimeSeries
         Get
             Dim min As Double
             min = Double.MaxValue
-            For Each value As Double In Me.Values
+            For Each value As Double In Me.NodesClean.Values
                 If (value < min) Then
                     min = value
                 End If
@@ -296,7 +296,7 @@ Public Class TimeSeries
         Get
             Dim avg As Double
             avg = 0
-            For Each value As Double In Me.Values
+            For Each value As Double In Me.NodesClean.Values
                 avg += value
             Next
             avg = avg / Me.Length
@@ -329,7 +329,7 @@ Public Class TimeSeries
         Get
             Dim _sum As Double
             _sum = 0.0
-            For Each value As Double In Me.Values
+            For Each value As Double In Me.NodesClean.Values
                 _sum += value
             Next
             Return _sum
@@ -354,7 +354,7 @@ Public Class TimeSeries
                 Log.AddLogEntry(Me.Title & ": calculating volume by integrating over time.")
                 t0 = Me.StartDate
                 v0 = Me.Nodes(t0)
-                For Each node As KeyValuePair(Of Date, Double) In Me.Nodes
+                For Each node As KeyValuePair(Of Date, Double) In Me.NodesClean
                     t1 = node.Key
                     v1 = node.Value
                     If t1 > t0 Then 'start at the second node
