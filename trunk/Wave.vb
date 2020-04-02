@@ -1283,7 +1283,7 @@ Public Class Wave
     End Sub
 
     ''' <summary>
-    ''' Remove error values button clicked
+    ''' Convert error values button clicked
     ''' </summary>
     ''' <remarks></remarks>
     Private Sub ToolStripButton_ConvertErrorValues_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_ConvertErrorValues.Click
@@ -1300,6 +1300,27 @@ Public Class Wave
             'import cleaned series
             For Each zre As TimeSeries In dlg.tsConverted.Values
                 Me.Import_Series(zre, True)
+            Next
+        End If
+    End Sub
+
+    ''' <summary>
+    ''' Remove error values button clicked
+    ''' </summary>
+    ''' <remarks></remarks>
+    Private Sub ToolStripButton_RemoveNaNValues_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_RemoveNaNValues.Click
+
+        Dim dlgResult As DialogResult
+        Dim keys As List(Of String)
+        Dim ts As TimeSeries
+
+        dlgResult = MsgBox("Delete all nodes with NaN values from all series?", MsgBoxStyle.OkCancel)
+        If dlgResult = Windows.Forms.DialogResult.OK Then
+            keys = Me.Zeitreihen.Keys.ToList()
+            For Each key As String In keys
+                ts = Me.Zeitreihen(key)
+                ts = ts.removeNaNValues()
+                Me.Zeitreihen(key) = ts
             Next
         End If
     End Sub

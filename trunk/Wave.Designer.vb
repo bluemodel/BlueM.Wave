@@ -53,10 +53,12 @@ Partial Class Wave
         Me.ToolStripSeparator8 = New System.Windows.Forms.ToolStripSeparator
         Me.ToolStripButton_ShowNaNValues = New System.Windows.Forms.ToolStripButton
         Me.ToolStripButton_ConvertErrorValues = New System.Windows.Forms.ToolStripButton
+        Me.ToolStripButton_RemoveNaNValues = New System.Windows.Forms.ToolStripButton
         Me.ToolStripSeparator7 = New System.Windows.Forms.ToolStripSeparator
         Me.ToolStripButton_Analysis = New System.Windows.Forms.ToolStripButton
         Me.ToolStripButton_Properties = New System.Windows.Forms.ToolStripButton
         Me.ToolStripButton_EditChart = New System.Windows.Forms.ToolStripButton
+        Me.ToolStripSeparator9 = New System.Windows.Forms.ToolStripSeparator
         Me.ToolStripButton_AutoAdjustYAxes = New System.Windows.Forms.ToolStripButton
         Me.ToolStripButton_ToggleOverview = New System.Windows.Forms.ToolStripButton
         Me.ToolStripButton_ToggleNavigation = New System.Windows.Forms.ToolStripButton
@@ -70,7 +72,6 @@ Partial Class Wave
         Me.AboutToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem
         Me.ToolStripDropDownButton_ZoomToSeries = New System.Windows.Forms.ToolStripDropDownButton
         Me.ToolStripButton_ZoomAll = New System.Windows.Forms.ToolStripButton
-        Me.ToolStripSeparator9 = New System.Windows.Forms.ToolStripSeparator
         Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog
         Me.SplitContainer1 = New System.Windows.Forms.SplitContainer
         Me.TChart2 = New Steema.TeeChart.TChart
@@ -153,7 +154,7 @@ Partial Class Wave
         '
         ToolStrip1.AutoSize = False
         ToolStrip1.BackColor = System.Drawing.SystemColors.Control
-        ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButton_New, Me.ToolStripDropDownButton_Open, Me.ToolStripDropDownButton_Save, ToolStripSeparator4, Me.ToolStripButton_Copy, Me.ToolStripButton_Print, ToolStripSeparator2, Me.ToolStripButton_RenameSeries, Me.ToolStripButton_Cut, Me.ToolStripButton_Merge, Me.ToolStripButton_ChangeTimestep, Me.ToolStripSeparator8, Me.ToolStripButton_ShowNaNValues, Me.ToolStripButton_ConvertErrorValues, Me.ToolStripSeparator7, Me.ToolStripButton_Analysis, Me.ToolStripButton_Properties, ToolStripSeparator1, Me.ToolStripButton_EditChart, Me.ToolStripSeparator9, Me.ToolStripButton_AutoAdjustYAxes, Me.ToolStripButton_ToggleOverview, Me.ToolStripButton_ToggleNavigation, toolStripSeparator, Me.ToolStripButton_NormalMode, Me.ToolStripButton_Zoom, Me.ToolStripButton_Pan, Me.ToolStripSeparator3, Me.ToolStripButton_ZoomPrevious, Me.ToolStripDropDownButton_Help, Me.ToolStripDropDownButton_ZoomToSeries, Me.ToolStripButton_ZoomAll})
+        ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButton_New, Me.ToolStripDropDownButton_Open, Me.ToolStripDropDownButton_Save, ToolStripSeparator4, Me.ToolStripButton_Copy, Me.ToolStripButton_Print, ToolStripSeparator2, Me.ToolStripButton_RenameSeries, Me.ToolStripButton_Cut, Me.ToolStripButton_Merge, Me.ToolStripButton_ChangeTimestep, Me.ToolStripSeparator8, Me.ToolStripButton_ShowNaNValues, Me.ToolStripButton_ConvertErrorValues, Me.ToolStripButton_RemoveNaNValues, Me.ToolStripSeparator7, Me.ToolStripButton_Analysis, Me.ToolStripButton_Properties, ToolStripSeparator1, Me.ToolStripButton_EditChart, Me.ToolStripSeparator9, Me.ToolStripButton_AutoAdjustYAxes, Me.ToolStripButton_ToggleOverview, Me.ToolStripButton_ToggleNavigation, toolStripSeparator, Me.ToolStripButton_NormalMode, Me.ToolStripButton_Zoom, Me.ToolStripButton_Pan, Me.ToolStripSeparator3, Me.ToolStripButton_ZoomPrevious, Me.ToolStripDropDownButton_Help, Me.ToolStripDropDownButton_ZoomToSeries, Me.ToolStripButton_ZoomAll})
         ToolStrip1.Location = New System.Drawing.Point(0, 0)
         ToolStrip1.Name = "ToolStrip1"
         ToolStrip1.Size = New System.Drawing.Size(944, 34)
@@ -340,11 +341,20 @@ Partial Class Wave
         'ToolStripButton_ConvertErrorValues
         '
         Me.ToolStripButton_ConvertErrorValues.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.ToolStripButton_ConvertErrorValues.Image = CType(resources.GetObject("ToolStripButton_ConvertErrorValues.Image"), System.Drawing.Image)
+        Me.ToolStripButton_ConvertErrorValues.Image = Global.BlueM.Wave.My.Resources.Resources.error_convert
         Me.ToolStripButton_ConvertErrorValues.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.ToolStripButton_ConvertErrorValues.Name = "ToolStripButton_ConvertErrorValues"
         Me.ToolStripButton_ConvertErrorValues.Size = New System.Drawing.Size(23, 31)
         Me.ToolStripButton_ConvertErrorValues.Text = "Convert error values"
+        '
+        'ToolStripButton_RemoveNaNValues
+        '
+        Me.ToolStripButton_RemoveNaNValues.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.ToolStripButton_RemoveNaNValues.Image = Global.BlueM.Wave.My.Resources.Resources.error_delete
+        Me.ToolStripButton_RemoveNaNValues.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ToolStripButton_RemoveNaNValues.Name = "ToolStripButton_RemoveNaNValues"
+        Me.ToolStripButton_RemoveNaNValues.Size = New System.Drawing.Size(23, 31)
+        Me.ToolStripButton_RemoveNaNValues.Text = "Remove nodes with NaN values"
         '
         'ToolStripSeparator7
         '
@@ -378,6 +388,11 @@ Partial Class Wave
         Me.ToolStripButton_EditChart.Name = "ToolStripButton_EditChart"
         Me.ToolStripButton_EditChart.Size = New System.Drawing.Size(23, 31)
         Me.ToolStripButton_EditChart.Text = "Edit chart"
+        '
+        'ToolStripSeparator9
+        '
+        Me.ToolStripSeparator9.Name = "ToolStripSeparator9"
+        Me.ToolStripSeparator9.Size = New System.Drawing.Size(6, 34)
         '
         'ToolStripButton_AutoAdjustYAxes
         '
@@ -503,11 +518,6 @@ Partial Class Wave
         Me.ToolStripButton_ZoomAll.Name = "ToolStripButton_ZoomAll"
         Me.ToolStripButton_ZoomAll.Size = New System.Drawing.Size(23, 31)
         Me.ToolStripButton_ZoomAll.Text = "Zoom all"
-        '
-        'ToolStripSeparator9
-        '
-        Me.ToolStripSeparator9.Name = "ToolStripSeparator9"
-        Me.ToolStripSeparator9.Size = New System.Drawing.Size(6, 34)
         '
         'SplitContainer1
         '
@@ -1297,5 +1307,6 @@ Partial Class Wave
     Friend WithEvents ToolStripSeparator8 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents ToolStripSeparator9 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents ToolStripButton_AutoAdjustYAxes As System.Windows.Forms.ToolStripButton
+    Friend WithEvents ToolStripButton_RemoveNaNValues As System.Windows.Forms.ToolStripButton
 
 End Class

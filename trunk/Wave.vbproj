@@ -488,6 +488,7 @@
     <Content Include="lib\IntelFortran\libmmd.dll" />
     <Content Include="lib\modelEAU\modelEAU.SWMM.DllAdapter.dll" />
     <None Include="Resources\pan.png" />
+    <Content Include="Resources\error_convert.png" />
     <Content Include="Resources\error_delete.png" />
     <Content Include="Resources\navigate_back.png" />
     <Content Include="Resources\navigate_forward.png" />
