@@ -333,13 +333,30 @@ Friend Class ImportDiag
         'XSpalte
         Me.NumericUpDown_ColumnDateTime.Value = Me.datei.DateTimeColumnIndex + 1
 
-        'YSpalten
+        'Available series
+        Dim sInfo As FileFormatBase.SeriesInfo
+        'remember currently selected series
+        Dim selectedSeries As New List(Of String)
+        For Each sInfo In Me.ListBox_Series.SelectedItems
+            selectedSeries.Add(sInfo.Name)
+        Next
+        'update list box
         Me.ListBox_Series.Items.Clear()
-        Call Me.ListBox_Series.BeginUpdate()
+        Me.ListBox_Series.BeginUpdate()
         For Each series As FileFormatBase.SeriesInfo In Me.datei.SeriesList
             Me.ListBox_Series.Items.Add(series)
         Next
-        Call Me.ListBox_Series.EndUpdate()
+        Me.ListBox_Series.EndUpdate()
+        'reselect any previously selected items
+        For Each sName As String In selectedSeries
+            For i As Integer = 0 To Me.ListBox_Series.Items.Count - 1
+                sInfo = Me.ListBox_Series.Items(i)
+                If sInfo.Name = sName Then
+                    Me.ListBox_Series.SetSelected(i, True)
+                    Continue For
+                End If
+            Next
+        Next
 
     End Sub
 
