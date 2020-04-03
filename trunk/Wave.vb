@@ -2879,7 +2879,7 @@ Public Class Wave
                 Dim values() As Single
                 Dim interpretation As Sydro.SydroZre.Fortran.InterpretationEnum
                 Dim timesteptype As Sydro.SydroZre.Fortran.TimeStepTypeEnum
-                Dim timestepinterval, iResp, i As Integer
+                Dim timestepinterval, nCount, i As Integer
                 Dim startdate, enddate As DateTime
                 Dim file_tmp, msg As String
 
@@ -2901,20 +2901,20 @@ Public Class Wave
                     ReDim values(0)
 
                     'call the Fortran routine to get new dates and values
-                    iResp = fortran.getZreDTConstValues(file_tmp, startdate, enddate, interpretation, timesteptype, timestepinterval, double_dates, values)
+                    nCount = fortran.getZreDTConstValues(file_tmp, startdate, enddate, interpretation, timesteptype, timestepinterval, double_dates, values)
                     msg = fortran.ErrorMsg
 
                     'convert double_dates to dates
                     dates = fortran.DoubleToDate(double_dates)
 
-                    If iResp <= 0 Then
-                        If iResp = -301 Then
-                            'err_wrongdimension: can be ignored
-                            Log.AddLogEntry("SydroZre error " & iResp & ": " & msg)
-                        Else
-                            Throw New Exception("SydroZre error " & iResp & ": " & msg)
-                        End If
+                    If nCount <= 0 Then
+                        Log.AddLogEntry("SydroZre error " & nCount & ": " & msg)
+                        Throw New Exception("SydroZre error " & nCount & ": " & msg)
                     End If
+
+                    'use nCount to cut off any invalid values
+                    ReDim Preserve dates(nCount - 1)
+                    ReDim Preserve values(nCount - 1)
 
                 End Using
 
