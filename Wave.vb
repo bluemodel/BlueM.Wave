@@ -2901,7 +2901,7 @@ Public Class Wave
                     ReDim values(0)
 
                     'call the Fortran routine to get new dates and values
-                    nCount = fortran.getZreDTConstValues(file_tmp, startdate, enddate, interpretation, timesteptype, timestepinterval, double_dates, values)
+                    nCount = fortran.getZreDTConstValues(file_tmp, startdate, enddate, interpretation, Sydro.SydroZre.Fortran.ErrorModeEnum.IgnoreErrors, timesteptype, timestepinterval, double_dates, values)
                     msg = fortran.ErrorMsg
 
                     'convert double_dates to dates

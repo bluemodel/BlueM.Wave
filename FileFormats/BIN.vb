@@ -174,7 +174,12 @@ Public Class BIN
         i = 0
         For Each kvp As KeyValuePair(Of DateTime, Double) In zre.Nodes
             dates(i) = kvp.Key
-            values(i) = kvp.Value
+            'convert NaN values to the BIN error value
+            If Double.IsNaN(kvp.Value) Then
+                values(i) = BIN.ErrorValue
+            Else
+                values(i) = kvp.Value
+            End If
             i += 1
         Next
 
