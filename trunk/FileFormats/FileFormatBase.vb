@@ -321,15 +321,12 @@ Public MustInherit Class FileFormatBase
     ''' <summary>
     ''' Get a timeseries from the file using its title
     ''' </summary>
-    ''' <param name="title">Title of the desired timeseries. Use an empty string for getting the first timeseries in the file.</param>
+    ''' <param name="title">Title of the desired timeseries.</param>
     ''' <returns>The timeseries</returns>
     ''' <remarks>If the timeseries has not been imported yet, an import is initiated. 
     ''' Throws an exception if the timeseries cannot be found in the file.</remarks>
     Public ReadOnly Property getTimeSeries(ByVal title As String) As TimeSeries
         Get
-            'If an empty title is given, return the first timeseries
-            If (title.Length = 0) Then Return Me.getTimeSeries(0)
-
             'Find the series using the given title
             If Me.TimeSeriesCollection.ContainsKey(title) Then
                 Return Me.TimeSeriesCollection(title)
