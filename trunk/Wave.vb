@@ -2597,7 +2597,7 @@ Public Class Wave
 
                     'read series from file
                     fileobj.readFile()
-                    ts = fileobj.TimeSeriesCollection(0)
+                    ts = fileobj.TimeSeriesCollection.Single().Value
 
                     'add metadata
                     ts.Title = name
