@@ -213,8 +213,8 @@ Public Class HYDRO_AS_2D
                     Do
                         parts = Zeile.Split(New Char() {" "}, StringSplitOptions.RemoveEmptyEntries)
                         names.Add(parts(0) & "-" & parts(1))
-                        Zeile = StrReadSync.ReadLine.ToString
-                    Loop Until Zeile.StartsWith(" ---")
+                        Zeile = StrReadSync.ReadLine.ToString().Trim()
+                    Loop Until Zeile.StartsWith("---")
 
                     'store series info
 
@@ -300,17 +300,18 @@ Public Class HYDRO_AS_2D
                     Dim parts(), name As String
 
                     Do
-                        Zeile = StrReadSync.ReadLine.ToString()
+                        Zeile = StrReadSync.ReadLine.ToString().Trim()
+                        If Zeile.Length = 0 Then Continue Do
                         'Headerzeilen
-                        If Zeile.StartsWith(" ---") Then Continue Do
-                        If Zeile.StartsWith("  Abflu") Then
+                        If Zeile.StartsWith("---") Then Continue Do
+                        If Zeile.StartsWith("Abflu") Then
                             'Zeit lesen
                             zeit = Helpers.StringToDouble(Zeile.Split(New Char() {"="}, StringSplitOptions.RemoveEmptyEntries)(1).Replace("[Sek]", "").Trim())
                             'Simulationszeit [s] wird zu Datum nach 01.01.2000 00:00:00 konvertiert
                             datum = Me.refDate + New TimeSpan(0, 0, zeit)
                             Continue Do
                         End If
-                        If Zeile.StartsWith("  IJBW_Seg-1") Then Continue Do
+                        If Zeile.StartsWith("IJBW_Seg-1") Then Continue Do
                         'Datenzeilen
                         parts = Zeile.Split(New Char() {" "}, StringSplitOptions.RemoveEmptyEntries)
                         name = parts(0) & "-" & parts(1)
