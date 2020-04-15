@@ -2912,10 +2912,6 @@ Public Class Wave
                         Throw New Exception("SydroZre error " & nCount & ": " & msg)
                     End If
 
-                    'use nCount to cut off any invalid values
-                    ReDim Preserve dates(nCount - 1)
-                    ReDim Preserve values(nCount - 1)
-
                 End Using
 
                 'store as a new time series
@@ -2933,7 +2929,8 @@ Public Class Wave
                     Case Sydro.SydroZre.Fortran.InterpretationEnum.SummeProDt
                         zre_new.Interpretation = TimeSeries.InterpretationType.CumulativePerTimestep
                     Case Sydro.SydroZre.Fortran.InterpretationEnum.LinearInterpolation
-                        zre_new.Interpretation = TimeSeries.InterpretationType.Instantaneous
+                        'TODO: change to LinearInterpolation once Sydro #50 is fixed
+                        zre_new.Interpretation = TimeSeries.InterpretationType.BlockRight
                 End Select
 
                 Call Me.Import_Series(zre_new)

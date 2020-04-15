@@ -8,6 +8,7 @@ NEW:
 CHANGED:
 * When loading PRMS files, the file import dialog is now displayed, allowing for the selection of time series
 FIXED:
+* Fixed the interpretation of the output of the ChangeTimestep function
 * When writing BIN files, NaN values are now properly converted to the error value -9999.999.
   This also fixes the change time step function not working for time series containing error values.
 * Date formats entered in the import dialog are now properly escaped if they contain special characters such as "/" or ":"
