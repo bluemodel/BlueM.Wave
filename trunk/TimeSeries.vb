@@ -110,7 +110,7 @@ Public Class TimeSeries
     ''' The time series' nodes without NaN and Infinity values
     ''' </summary>
     ''' <remarks>The cleaned nodes are cached and only created once per instance</remarks>
-    Public Property NodesClean() As SortedList(Of DateTime, Double)
+    Public ReadOnly Property NodesClean() As SortedList(Of DateTime, Double)
         Get
             If IsNothing(Me._nodesCleaned) Then
                 Me._nodesCleaned = New SortedList(Of DateTime, Double)
@@ -122,9 +122,6 @@ Public Class TimeSeries
             End If
             Return Me._nodesCleaned
         End Get
-        Set(ByVal value As SortedList(Of DateTime, Double))
-            Me._nodesCleaned = value
-        End Set
     End Property
 
     ''' <summary>
