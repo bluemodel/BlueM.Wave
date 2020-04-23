@@ -92,7 +92,9 @@ Public Class CSV
             If (Me.IsColumnSeparated) Then
                 'Zeichengetrennt
                 Namen = ZeileSpalten.Split(New Char() {Me.Separator.ToChar})
-                Einheiten = ZeileEinheiten.Split(New Char() {Me.Separator.ToChar})
+                If Me.UseUnits Then
+                    Einheiten = ZeileEinheiten.Split(New Char() {Me.Separator.ToChar})
+                End If
                 anzSpalten = Namen.Length
             Else
                 'Spalten mit fester Breite
@@ -101,7 +103,9 @@ Public Class CSV
                 ReDim Einheiten(anzSpalten - 1)
                 For i = 0 To anzSpalten - 1
                     Namen(i) = ZeileSpalten.Substring(i * Me.ColumnWidth, Math.Min(Me.ColumnWidth, ZeileSpalten.Substring(i * Me.ColumnWidth).Length))
-                    Einheiten(i) = ZeileEinheiten.Substring(i * Me.ColumnWidth, Math.Min(Me.ColumnWidth, ZeileSpalten.Substring(i * Me.ColumnWidth).Length))
+                    If Me.UseUnits Then
+                        Einheiten(i) = ZeileEinheiten.Substring(i * Me.ColumnWidth, Math.Min(Me.ColumnWidth, ZeileSpalten.Substring(i * Me.ColumnWidth).Length))
+                    End If
                 Next
             End If
 
@@ -111,7 +115,9 @@ Public Class CSV
                     sInfo = New SeriesInfo()
                     sInfo.Index = i
                     sInfo.Name = Namen(i)
-                    sInfo.Unit = Einheiten(i)
+                    If Me.UseUnits Then
+                        sInfo.Unit = Einheiten(i)
+                    End If
                     Me.SeriesList.Add(sInfo)
                 End If
             Next
