@@ -9,6 +9,7 @@ NEW:
 CHANGED:
 * When loading PRMS files, the file import dialog is now displayed, allowing for the selection of time series
 FIXED:
+* Added functionality to read and write SYDRO binary files natively, so this now also works in x64 versions.
 * Fixed the interpretation of the output of the ChangeTimestep function
 * When writing BIN files, NaN values are now properly converted to the error value -9999.999.
   This also fixes the change time step function not working for time series containing error values.
