@@ -176,14 +176,18 @@ Public Class BIN
     ''' <param name="file">path to the file</param>
     Public Shared Sub Write_File(ByRef ts As TimeSeries, ByVal file As String)
 
+        Dim header() As Int32
         Dim rdate As Double
         Dim value As Single
 
-        Using writer As New IO.BinaryWriter(IO.File.Create(file), Text.ASCIIEncoding.ASCII)
+        Using writer As New IO.BinaryWriter(IO.File.Create(file))
 
-            'write a header of 12 bytes
-            writer.Write(New Double)
-            writer.Write(New Single)
+            'write header
+            ReDim header(2)
+            header = {3319, 0, 0}
+            For Each entry As Int32 In header
+                writer.Write(entry)
+            Next
 
             'write values
             For Each node As KeyValuePair(Of DateTime, Double) In ts.Nodes
