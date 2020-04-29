@@ -30,15 +30,19 @@ Imports System.IO
 ''' <summary>
 ''' Klasse für das SYDRO Binärformat
 ''' </summary>
-''' <remarks>Greift zurück auf SydroZreNet.dll, welche wiederum auf SydroZreI.dll zurückgreift</remarks>
+''' <remarks></remarks>
 Public Class BIN
     Inherits FileFormatBase
 
     ''' <summary>
     ''' Error value
     ''' </summary>
-    ''' <remarks></remarks>
     Public Const ErrorValue As Double = -9999.999
+
+    ''' <summary>
+    ''' Reference date for real dates
+    ''' </summary>
+    Private Shared ReadOnly refdate As DateTime = New DateTime(1601, 1, 1)
 
     ''' <summary>
     ''' Gibt an, ob beim Import des Dateiformats der Importdialog angezeigt werden soll
@@ -51,11 +55,6 @@ Public Class BIN
 
 #Region "Methoden"
 
-    'Methoden
-    '########
-
-    'Konstruktor
-    '***********
     Public Sub New(ByVal FileName As String, Optional ByVal ReadAllNow As Boolean = False)
 
         MyBase.New(FileName)
@@ -75,128 +74,131 @@ Public Class BIN
 
     End Sub
 
-    'Spalten auslesen
-    '****************
+    ''' <summary>
+    ''' Reads series info
+    ''' </summary>
     Public Overrides Sub readSeriesInfo()
 
         Dim sInfo As New SeriesInfo()
-        
+
         Me.SeriesList.Clear()
-        
+
         sInfo.Name = IO.Path.GetFileName(Me.File)
         sInfo.Unit = "-"
         Me.SeriesList.Add(sInfo)
 
     End Sub
 
-    'BIN-Datei einlesen
-    '******************
+
+    ''' <summary>
+    ''' Reads the file
+    ''' </summary>
     Public Overrides Sub readFile()
+        Dim rdate As Double
+        Dim timestamp As DateTime
+        Dim value As Single
+        Dim errorcount As Integer
+        Dim sInfo As SeriesInfo
+        Dim ts As TimeSeries
 
-        Try
+        'Zeitreihe instanzieren (nur eine)
+        sInfo = Me.SeriesList(0)
+        ts = New TimeSeries(sInfo.Name)
+        ts.Unit = sInfo.Unit
 
-            Dim NCount, i, errorcount As Integer
-            Dim msg As String
-            Dim X() As DateTime
-            Dim Y() As Single
-            Dim timestamp As DateTime
-            Dim value As Double
-            Dim sInfo As SeriesInfo
-            Dim ts As TimeSeries
-
-            'Zeitreihe instanzieren (nur eine)
-            sInfo = Me.SeriesList(0)
-            ts = New TimeSeries(sInfo.Name)
-            ts.Unit = sInfo.Unit
-
-            'Einlesen
-            '--------
-            ReDim X(0)
-            ReDim Y(0)
-            Using fortran As New Sydro.SydroZre.Fortran()
-                NCount = fortran.getZreBinValues(Me.File, Nothing, Nothing, False, X, Y)
-                msg = fortran.ErrorMsg
-            End Using
-
-            If NCount < 0 Then
-                Throw New Exception("ERROR: " & NCount & ": " & msg)
-            End If
-
-            'Umwandeln in Zeitreihe
+        Using reader As New IO.BinaryReader(IO.File.OpenRead(File), Text.ASCIIEncoding.ASCII)
+            'skip header
+            reader.ReadBytes(12)
+            'read values
             errorcount = 0
-            For i = 0 To NCount - 1
-                timestamp = X(i)
-                value = Y(i)
+            Do
+                rdate = reader.ReadDouble()
+                value = reader.ReadSingle()
+
+                'convert real date to DateTime
+                timestamp = rDateToDate(rdate)
                 'convert error values to NaN
                 If Math.Abs(value - BIN.ErrorValue) < 0.0001 Then
                     value = Double.NaN
                     errorcount += 1
                 End If
+
                 ts.AddNode(timestamp, value)
-            Next
+            Loop Until reader.PeekChar < 0
+        End Using
 
-            'Log 
-            Call Log.AddLogEntry("Read " & NCount & " nodes.")
-            If errorcount > 0 Then
-                Log.AddLogEntry("The file contained " & errorcount & " error values (" & BIN.ErrorValue & "), which were converted to NaN!")
-            End If
+        'store time series
+        Me.TimeSeriesCollection.Add(ts.Title, ts)
 
-			'store time series
-            Me.TimeSeriesCollection.Add(ts.Title, ts)
-
-        Catch ex As Exception
-            'Fehler weiterschmeissen
-            Throw ex
-
-        End Try
+        'Log 
+        Call Log.AddLogEntry("Read " & ts.Length & " nodes.")
+        If errorcount > 0 Then
+            Log.AddLogEntry("The file contained " & errorcount & " error values (" & BIN.ErrorValue & "), which were converted to NaN!")
+        End If
 
     End Sub
 
     ''' <summary>
+    ''' Converts a real (double) date value to a DateTime object
+    ''' </summary>
+    ''' <param name="rDate">the real date to convert</param>
+    ''' <returns>DateTime object</returns>
+    ''' <remarks>
+    ''' Assumes the real date is number of hours since 01.01.1601
+    ''' Rounds to the nearest second
+    ''' </remarks>
+    Private Shared Function rDateToDate(ByVal rDate As Double) As DateTime
+        Dim timestamp As DateTime
+        Dim hours, minutes, seconds As Integer
+        hours = Math.Floor(rDate)
+        minutes = Math.Floor((rDate - hours) * 60.0)
+        seconds = Math.Round((rDate - hours - (minutes / 60.0)) * 3600.0, 0)
+        timestamp = refdate + New TimeSpan(days:=0, hours, minutes, seconds, milliseconds:=0)
+        Return timestamp
+    End Function
+
+    ''' <summary>
+    ''' Convert a DateTime object to a real (double) date value
+    ''' </summary>
+    ''' <param name="timestamp"></param>
+    ''' <returns>real (double) date</returns>
+    ''' <remarks>real (double date) is hours since 01.01.1601</remarks>
+    Private Shared Function dateToRDate(ByVal timestamp As DateTime) As Double
+        Dim rDate As Double
+        rDate = (timestamp - refdate).TotalHours
+        Return rDate
+    End Function
+
+    ''' <summary>
     ''' Write a time series to a BIN file
     ''' </summary>
-    ''' <param name="zre">the timeseries to write</param>
+    ''' <param name="ts">the timeseries to write</param>
     ''' <param name="file">path to the file</param>
-    ''' <remarks></remarks>
-    Public Shared Sub Write_File(ByRef zre As TimeSeries, ByVal file As String)
+    Public Shared Sub Write_File(ByRef ts As TimeSeries, ByVal file As String)
 
-        Dim isOK As Boolean
-        Dim iResp As Integer
-        Dim msg As String
-        Dim dates() As Date
-        Dim values() As Single
-        Dim i As Integer
+        Dim rdate As Double
+        Dim value As Single
 
-        'convert timeseries nodes to arrays of dates and values
-        ReDim dates(zre.Length - 1)
-        ReDim values(zre.Length - 1)
+        Using writer As New IO.BinaryWriter(IO.File.Create(file), Text.ASCIIEncoding.ASCII)
 
-        i = 0
-        For Each kvp As KeyValuePair(Of DateTime, Double) In zre.Nodes
-            dates(i) = kvp.Key
-            'convert NaN values to the BIN error value
-            If Double.IsNaN(kvp.Value) Then
-                values(i) = BIN.ErrorValue
-            Else
-                values(i) = kvp.Value
-            End If
-            i += 1
-        Next
+            'write a header of 12 bytes
+            writer.Write(New Double)
+            writer.Write(New Single)
 
-        'write values to file
-        Using fortran As New Sydro.SydroZre.Fortran()
-            isOK = fortran.setFileName(file)
-            iResp = fortran.setZreBinValues(file, False, fortran.DateToDouble(dates), values)
-            msg = fortran.ErrorMsg
+            'write values
+            For Each node As KeyValuePair(Of DateTime, Double) In ts.Nodes
+                'convert DateTime to rDate
+                rdate = dateToRDate(node.Key)
+                'convert error values
+                If Double.IsNaN(node.Value) Then
+                    value = BIN.ErrorValue
+                Else
+                    value = node.Value
+                End If
+                writer.Write(rdate)
+                writer.Write(value)
+            Next
         End Using
-
-        If msg.Trim().Length > 0 Then
-            Log.AddLogEntry("SydroZre: " & msg)
-        End If
-
-        If iResp <> zre.Length Then
-            Throw New Exception("Number of values written to file (" & iResp & ") does not correspond to length of time series (" & zre.Length & ")!")
-        End If
 
     End Sub
 
