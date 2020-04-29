@@ -273,7 +273,7 @@ Public Class SQLite
                     End If
                     'store as new time series
                     ts = New TimeSeries(sInfo.Name)
-                    ts.Unit = sydro_ts.Unit 'use unit from sydro_ts because colinfo doesn't have it
+                    ts.Unit = sydro_ts.Metadata.Unit 'use unit from sydro_ts because colinfo doesn't have it
                     For j As Integer = 0 To dateArr.Count - 1
                         ts.AddNode(dateArr(j), sngArr(j))
                     Next
@@ -289,34 +289,37 @@ Public Class SQLite
             Case Sydro.SydroZre.SydroSQLNet.EnumTimeseriesClassFlags.Forecast
                 Dim unit As String
                 Dim T0Arr As DateTime()
-                Dim fcLengthArr() As Short
+                Dim fcLengthArr(), flagArr() As Short
                 Dim fc_ts As Sydro.SydroZre.SydroSQLFCTimeSeries
-                Dim T0_list As IEnumerable(Of DateTime)
                 Dim ts_dict As Dictionary(Of DateTime, TimeSeries)
                 'get unit
                 sydro_ts = sql.TimeSeries(0, New Date(0), New Date(0))
-                unit = sydro_ts.Unit
+                unit = sydro_ts.Metadata.Unit
                 'instantiate ForecastTimeseries
                 fc_ts = New Sydro.SydroZre.SydroSQLFCTimeSeries(SQLite.user, Me.id, Me.path)
-                'Loop over selected columns
+                'Loop over selected series
                 For Each sInfo As SeriesInfo In Me.SelectedSeries
                     ReDim T0Arr(0)
                     ReDim dateArr(0)
                     ReDim fcLengthArr(0)
+                    ReDim flagArr(0)
                     ReDim sngArr(0)
+
                     flag_id = Me.flag_mapping(sInfo.Index)
-                    'retrieve time series for flag from sqlite
-                    fc_ts.getValues(flag_id, New Date(0), New Date(0), T0Arr, dateArr, fcLengthArr, sngArr)
-                    'check whether the series actually contains data
-                    If dateArr.Length = 0 Then
-                        MsgBox("Time series " & sInfo.Name & " is empty!", MsgBoxStyle.Exclamation)
-                        Continue For
-                    End If
-                    'get list of distinct T0 values
-                    T0_list = T0Arr.Distinct()
-                    'create a dict to store different T0-series
+                    'get T0 dates
+                    Dim ts_T0 As Sydro.SydroZre.SydroTimeSeries
+                    ts_T0 = fc_ts.getTimeSeriesFCDates(flag_id)
+                    ts_T0.TimeSeriesStringToArray(T0Arr, sngArr)
+                    'create a dict to store individual time series for each T0
                     ts_dict = New Dictionary(Of DateTime, TimeSeries)
-                    For Each T0 As DateTime In T0_list
+                    For Each T0 As DateTime In T0Arr
+                        'retrieve time series for flag from sqlite
+                        fc_ts.getValues(flag_id, T0, New Date(0), New Date(0), T0Arr, dateArr, fcLengthArr, sngArr, flagArr)
+                        'check whether the series actually contains data
+                        If dateArr.Length = 0 Then
+                            MsgBox("Time series " & sInfo.Name & " is empty!", MsgBoxStyle.Exclamation)
+                            Continue For
+                        End If
                         ts = New TimeSeries(T0 & ": " & sInfo.Name)
                         'store unit
                         ts.Unit = unit
@@ -324,12 +327,12 @@ Public Class SQLite
                         ts.Interpretation = Me.interpretation
                         'copy FileMetadata to TimeSeriesMetadata
                         ts.Metadata = Me.FileMetadata
+                        'store values
+                        For j As Integer = 0 To dateArr.Count - 1
+                            ts.AddNode(dateArr(j), sngArr(j))
+                        Next
 
                         ts_dict.Add(T0, ts)
-                    Next
-                    'store values in different T0-series
-                    For j As Integer = 0 To dateArr.Count - 1
-                        ts_dict(T0Arr(j)).AddNode(dateArr(j), sngArr(j))
                     Next
 
                     'store timeseries

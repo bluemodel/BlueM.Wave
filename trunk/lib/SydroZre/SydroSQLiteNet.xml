@@ -1,0 +1,771 @@
+﻿<?xml version="1.0"?>
+<doc>
+<assembly>
+<name>
+SydroSQLiteNet
+</name>
+</assembly>
+<members>
+<member name="T:Sydro.My.Resources.Resources">
+<summary>
+  A strongly-typed resource class, for looking up localized strings, etc.
+</summary>
+</member>
+<member name="P:Sydro.My.Resources.Resources.ResourceManager">
+<summary>
+  Returns the cached ResourceManager instance used by this class.
+</summary>
+</member>
+<member name="P:Sydro.My.Resources.Resources.Culture">
+<summary>
+  Overrides the current thread's CurrentUICulture property for all
+  resource lookups using this strongly typed resource class.
+</summary>
+</member>
+<member name="T:Sydro.SydroZre.SQLiteBase">
+ <summary>
+ Sydro API to access SQLite database to consume time series
+ Wraps around a Sqlite database to provide core functionality,
+ such as, create, open, close database etc...
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="M:Sydro.SydroZre.SQLiteBase.#ctor(System.String,System.Boolean,System.Boolean)">
+ <summary>
+ Class Constructor
+ </summary>
+</member>
+<member name="P:Sydro.SydroZre.SQLiteBase.DBFileNamePath">
+ <summary>
+ Gets the name And path of the SQLite file
+ </summary>
+</member>
+<member name="P:Sydro.SydroZre.SQLiteBase.EnforceForeignKeys">
+ <summary>
+ Gets whether Foreign Keys are:
+ - Enforced in the SQLite database file
+   (wrong values will result in exception on update Or insert) Or
+ - Not enforced
+   (wrong values are ignored by SQLite).
+ </summary>
+</member>
+<member name="P:Sydro.SydroZre.SQLiteBase.MutliThreadAccess">
+ <summary>
+ Gets whether the SQLite database file can be accessed from within multiple
+ threads And/Or connections Or Not.
+ </summary>
+</member>
+<member name="P:Sydro.SydroZre.SQLiteBase.DBFileName">
+ <summary>
+ Gets the Name of the SQLite file
+ </summary>
+</member>
+<member name="P:Sydro.SydroZre.SQLiteBase.DBFilePath">
+ <summary>
+ Gets the Path of the SQLite file
+ </summary>
+</member>
+<member name="P:Sydro.SydroZre.SQLiteBase.Exception">
+ <summary>
+ Gets extended information on exceptions that might have
+ occurred to reach the current status.
+ </summary>
+</member>
+<member name="P:Sydro.SydroZre.SQLiteBase.Status">
+ <summary>
+ Gets a textual description of the current SQLite database status.
+ </summary>
+</member>
+<member name="P:Sydro.SydroZre.SQLiteBase.ExtendendStatus">
+ <summary>
+ Gets/sets additional error/state information (if any).
+ </summary>
+</member>
+<member name="P:Sydro.SydroZre.SQLiteBase.Connection">
+ <summary>
+ Gets a connection object that can be uses
+ to interact with an existing And open SQLite database.
+ </summary>
+</member>
+<member name="P:Sydro.SydroZre.SQLiteBase.ConnectionState">
+ <summary>
+ Gets whether the database connection Is currently established (open), Or Not (false).
+ </summary>
+</member>
+<member name="M:Sydro.SydroZre.SQLiteBase.OpenConnection(System.Boolean)">
+ <summary>
+ Opens a connection to a SQLite database if there Is none already open.
+ 
+ The previously existing database Is deleted if <paramref name="overwriteFile"/>
+ Is true.
+ </summary>
+ <param name="overwriteFile"></param>
+</member>
+<member name="M:Sydro.SydroZre.SQLiteBase.CloseConnection">
+ <summary>
+ Closes any open connections to the SQLite database.
+ </summary>
+</member>
+<member name="M:Sydro.SydroZre.SQLiteBase.UserVersion">
+ <summary>
+ Gets the current user version of the currently
+ opened database (Or throws an exception if database was unavailable).
+ </summary>
+ <returns></returns>
+</member>
+<member name="M:Sydro.SydroZre.SQLiteBase.UserVersionIncrease">
+ <summary>
+ Method increases the current user version of the currently
+ opened database (Or throw an exception if database was unavailable).
+ </summary>
+ <returns></returns>
+</member>
+<member name="M:Sydro.SydroZre.SQLiteBase.JournalMode">
+ <summary>
+ Gets the current journal mode of the currently
+ opened database (Or throws an exception if database was unavailable).
+ </summary>
+ <returns></returns>
+</member>
+<member name="M:Sydro.SydroZre.SQLiteBase.JournalMode(Sydro.SydroZre.JournalMode)">
+ <summary>
+ Method sets the journal mode of the currently
+ opened database (Or throws an exception if database was unavailable).
+ </summary>
+</member>
+<member name="M:Sydro.SydroZre.SQLiteBase.GetJournalMode">
+ <summary>
+ Determines the journal model of the SQLite database - this Is
+ required to at conneciton/database open time.
+ </summary>
+ <returns></returns>
+</member>
+<member name="T:Sydro.SydroZre.JournalMode">
+ <summary>
+ Models the Pragma Journal_Mode enumeration
+ - (<see cref="!:SQLiteDatabase.JournalMode(JournalMode)"/> And <see cref="!:SQLiteDatabase.JournalMode"/>).
+ 
+ See details described below And:
+ https//sqlite.org/pragma.html#pragma_journal_mode
+ https://sqlite.org/wal.html
+ </summary>
+</member>
+<member name="F:Sydro.SydroZre.JournalMode.DELETE">
+ <summary>
+ The DELETE journaling mode Is the normal behavior. In the DELETE mode, the rollback journal Is
+ deleted at the conclusion of each transaction. Indeed, the delete operation Is the action that
+ causes the transaction to commit. (See the document titled Atomic Commit In SQLite for
+ additional detail.)
+ </summary>
+</member>
+<member name="F:Sydro.SydroZre.JournalMode.TRUNCATE">
+ <summary>
+ The TRUNCATE journaling mode commits transactions by truncating the rollback journal
+ to zero-length instead of deleting it. On many systems, truncating a file Is much faster
+ than deleting the file since the containing directory does Not need to be changed.
+ </summary>
+</member>
+<member name="F:Sydro.SydroZre.JournalMode.PERSIST">
+ <summary>
+ The PERSIST journaling mode prevents the rollback journal from being deleted at the end
+ of each transaction. Instead, the header of the journal Is overwritten with zeros. This
+ will prevent other database connections from rolling the journal back. The PERSIST journaling
+ mode Is useful as an optimization on platforms where deleting Or truncating a file Is much
+ more expensive than overwriting the first block of a file with zeros. See also: PRAGMA
+ journal_size_limit And SQLITE_DEFAULT_JOURNAL_SIZE_LIMIT.
+ </summary>
+</member>
+<member name="F:Sydro.SydroZre.JournalMode.MEMORY">
+ <summary>
+ The MEMORY journaling mode stores the rollback journal in volatile RAM. This saves disk I/O
+ but at the expense of database safety And integrity. If the application using SQLite crashes
+ in the middle of a transaction when the MEMORY journaling mode Is set, then the database file
+ will very likely go corrupt.
+ </summary>
+</member>
+<member name="F:Sydro.SydroZre.JournalMode.WAL">
+ <summary>
+ Indicates the WAL Journal Mode
+ WAL mode Is persisted as documented here: https://sqlite.org/wal.html
+ </summary>
+</member>
+<member name="F:Sydro.SydroZre.JournalMode.OFF">
+ <summary>
+ The OFF journaling mode disables the rollback journal completely. No rollback journal Is ever
+ created And hence there Is never a rollback journal to delete. The OFF journaling mode disables
+ the atomic commit And rollback capabilities of SQLite. The ROLLBACK command no longer works; it
+ behaves in an undefined way. Applications must avoid using the ROLLBACK command when the journal
+ mode Is OFF. If the application crashes in the middle of a transaction when the OFF journaling
+ mode Is set, then the database file will very likely go corrupt.
+ </summary>
+</member>
+<member name="T:Sydro.SydroZre.ISQLBaseTimeSeries">
+ <summary>
+ Sydro SQL Interface. Must be implemented by all Sydro SQL Time Series Classes
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="T:Sydro.SydroZre.SydroSQLBaseTimeSeries">
+ <summary>
+ Sydro SQLite Base Class for Time Series access.
+ Provides all basic routines and constants, enumerations etc.
+ Must be inherited by all SydroSQLite TimeSeries Classes
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="M:Sydro.SydroZre.SydroSQLBaseTimeSeries.#ctor(System.String,System.String,System.Int32,System.String)">
+ <summary>
+ Opens a database to check metadata, no access to timeseries values
+ </summary>
+ <param name="sUser">Who is calling</param>
+ <param name="ID">ID of the time series, is used to generate the filename with SYDRO name convention</param>
+ <param name="sPath">The path using Talsim-NG standards with clientname</param>
+ <remarks></remarks>
+</member>
+<member name="M:Sydro.SydroZre.SydroSQLBaseTimeSeries.#ctor(System.Int16,System.String,System.Int32,System.String)">
+ <summary>
+ Creates a new Sydro SQLite base API object
+ A new SQLite database is either created or opened based on the ID and the path
+ </summary>
+ <param name="sUser">Who is calling</param>
+ <param name="ID">ID of the time series, is used to generate the filename with SYDRO name convention</param>
+ <param name="sPath">The path using Talsim-NG standards with clientname</param>
+ <remarks></remarks>
+</member>
+<member name="M:Sydro.SydroZre.SydroSQLBaseTimeSeries.#ctor(System.Int16,System.String,System.Int32,System.String,System.Boolean)">
+ <summary>
+ Creates a new Sydro SQLite base API object
+ A new SQLite database is either created or opened based on the ID and the path
+ </summary>
+ <param name="sUser">Who is calling</param>
+ <param name="ID">ID of the time series, is used to generate the filename with SYDRO name convention</param>
+ <param name="sPath">The path using Talsim-NG standards with clientname</param>
+ <remarks></remarks>
+</member>
+<member name="M:Sydro.SydroZre.SydroSQLBaseTimeSeries.#ctor(System.Int16,System.String,System.Int32,System.String,System.Boolean,System.Double)">
+ <summary>
+ Creates a new Sydro SQLite base API object
+ A new SQLite database is either created or opened based on the ID and the path
+ </summary>
+ <param name="sUser">Who is calling</param>
+ <param name="ID">ID of the time series, is used to generate the filename with SYDRO name convention</param>
+ <param name="sPath">The path using Talsim-NG standards with clientname</param>
+ <param name="dbleErrorValue">Definitoin of error values in the time series</param>
+ <remarks></remarks>
+</member>
+<member name="M:Sydro.SydroZre.SydroSQLBaseTimeSeries.Initialize">
+ <summary>
+ Setup of the strings required to setup a database with all fieldnames, indices.
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="M:Sydro.SydroZre.SydroSQLBaseTimeSeries.fillDictionaryFieldNames">
+ <summary>
+ Fills the dictionary only with editable fields 
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="M:Sydro.SydroZre.SydroSQLBaseTimeSeries.InitializeDatabase(System.Boolean)">
+ <summary>
+ Creates a new timeseries if it doesn't exist or opens an existing one.
+ </summary>
+ <returns>returns true if successful or false if unsuccessful</returns>
+ <remarks></remarks>
+</member>
+<member name="M:Sydro.SydroZre.SydroSQLBaseTimeSeries.InitializeDatabase(System.String,System.String,System.String,System.Boolean)">
+ <summary>
+ Creates a new timeseries (a new database) or opens en existing one 
+ </summary>
+ <param name="sUser">who is calling</param>
+ <param name="sFileName">the filename with extension, e.g. *.db</param>
+ <param name="sPath">the path to the timeseries</param>
+ <returns>returns true if successful or false if unsuccessful</returns>
+ <remarks></remarks>
+</member>
+<member name="M:Sydro.SydroZre.SydroSQLBaseTimeSeries.newDatabase">
+ <summary>
+ Creates new sqlite.db with the tables and indexes.
+ Does not create the time series table. This is specific to each time series type and must be performed by the specific class.
+ </summary>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Sydro.SydroZre.SydroSQLBaseTimeSeries.inserDefaults">
+ <summary>
+ Inserts default entries into the tables ValueFlags. 
+ </summary>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Sydro.SydroZre.SydroSQLBaseTimeSeries.updateMetadata(System.String)">
+ <summary>
+ Updates properties in the Metadata table
+ </summary>
+ <param name="sKeyValuePairs">one or more key-value pairs separted by REST standard AND character, e.g. Shortname=Water level Lake Victoria</param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Sydro.SydroZre.SydroSQLBaseTimeSeries.refreshMetadata(System.String,System.String,System.String,System.String)">
+ <summary>
+ Updates properties in the Metadata table
+ </summary>
+ <param name="sUser">Who is calling</param>
+ <param name="sPath">the path to the timeseries</param>
+ <param name="sFileName">the filename with extension, e.g. *.db</param>
+ <param name="sKeyValuePairs">one or more key-value pairs separted by REST standard AND character, e.g. Shortname=Water level Lake Victoria</param>
+ <returns>returns true if successful or false if unsuccessful</returns>
+ <remarks></remarks>
+</member>
+<member name="M:Sydro.SydroZre.SydroSQLBaseTimeSeries.RecordCount(System.String)">
+ <summary>
+ Returns the number of records in the timeseries
+ </summary>
+ <param name="sCriteria">valid SQL criteria like 'rdate > 1990-01-01 00:00'</param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Sydro.SydroZre.SydroSQLBaseTimeSeries.RecordCount(System.String,System.String,System.String)">
+ <summary>
+ gets the number of records in the timeseries
+ </summary>
+ <param name="sFileName">Name of the database</param>
+ <param name="sPath">Path to the database</param>
+ <param name="sCriteria">valid SQL criteria like rdate > 1990-01-01 00:00</param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Sydro.SydroZre.SydroSQLBaseTimeSeries.FirstLastDate(System.DateTime@,System.DateTime@)">
+ <summary>
+ Provides the first and the last date of the timeseries
+ </summary>
+ <param name="dFirst">First date in the timeseries</param>
+ <param name="dLast">Last date in the timeseries</param>
+ <returns>Integer 1 = true, less than 0 = error</returns>
+ <remarks></remarks>
+</member>
+<member name="M:Sydro.SydroZre.SydroSQLBaseTimeSeries.getRecords(System.String,System.String[],System.Object[]@)">
+ <summary>
+ Uses the SQL statement in qry to retrieve values of a timeseries.
+ </summary>
+ <param name="qry">A valid SQL statement.</param>
+ <param name="fields">Array of field names. Number must be equal to the number of arrays passed to the function.</param>
+ <param name="arr">Arrays to be filled with values. Number of field names must be equal to the number of arrays.</param>
+ <returns>Number of values retrieved.</returns>
+ <remarks></remarks>
+</member>
+<member name="M:Sydro.SydroZre.SydroSQLBaseTimeSeries.ApproximateDateCriteria(System.DateTime,System.Boolean,Microsoft.VisualBasic.DateInterval,System.Double)">
+ <summary>
+ Gets the SQL search criteria string around a given date.
+ </summary>
+ <param name="dDate">The date used to build the SQL statement.</param>
+ <param name="bFirstEndOfMonth">Sets first day of date.month and first day of next month as search criteria. This parameter has priority if set to true.</param>
+ <param name="Interval">Interval to set a timespan around dDate. Is evaluated only if bFirstEndOfMonth is false.</param>
+ <param name="Number">Number to determine the timespan around dDate using Interval. Is evaluated only if bFirstEndOfMonth is false.</param>
+ <returns>SQL statement to be used in a WHERE clause.</returns>
+ <remarks></remarks>
+</member>
+<member name="M:Sydro.SydroZre.SydroSQLBaseTimeSeries.findFirstLastDate(System.DateTime[]@,System.Int32@,System.Int32@)">
+ <summary>
+ return first and last count assuming the list of dates is sorted in ascending order
+ </summary>
+ <param name="dDates"></param>
+ <param name="ifirst"></param>
+ <param name="ilast"></param>
+ <remarks></remarks>
+</member>
+<member name="T:Sydro.SydroZre.SydroSQLTimeSeries">
+ <summary>
+ Sydro SQLite API for Time Series access.
+ Provides all base routines and constants, enumerations etc.
+ Must be inherited by all SydroSQLite TimeSeries Classes
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="M:Sydro.SydroZre.SydroSQLTimeSeries.#ctor(System.String,System.Int32,System.String)">
+ <summary>
+ Creates a new Sydro SQLite base API object
+ A new SQLite database is either created or opened based on the ID and the path
+ </summary>
+ <param name="sUser">Who is calling</param>
+ <param name="ID">ID of the time series, is used to generate the filename with SYDRO name convention</param>
+ <param name="sPath">The path using Talsim-NG standards with clientname</param>
+ <remarks></remarks>
+</member>
+<member name="M:Sydro.SydroZre.SydroSQLTimeSeries.#ctor(System.String,System.Int32,System.String,System.Boolean)">
+ <summary>
+ Creates a new Sydro SQLite base API object
+ A new SQLite database is either created or opened based on the ID and the path
+ </summary>
+ <param name="sUser">Who is calling</param>
+ <param name="ID">ID of the time series, is used to generate the filename with SYDRO name convention</param>
+ <param name="sPath">The path using Talsim-NG standards with clientname</param>
+ <remarks></remarks>
+</member>
+<member name="M:Sydro.SydroZre.SydroSQLTimeSeries.#ctor(System.String,System.Int32,System.String,System.Boolean,System.Double)">
+ <summary>
+ Creates a new Sydro SQLite base API object
+ A new SQLite database is either created or opened based on the ID and the path
+ </summary>
+ <param name="sUser">Who is calling</param>
+ <param name="ID">ID of the time series, is used to generate the filename with SYDRO name convention</param>
+ <param name="sPath">The path using Talsim-NG standards with clientname</param>
+ <param name="dbleErrorValue">Definition of error values in the time series</param>
+ <remarks></remarks>
+</member>
+<member name="M:Sydro.SydroZre.SydroSQLTimeSeries.getTimeSeries(System.String)">
+ <summary>
+ Gets entries of a timeseries matching the valid SQL criteria.
+ </summary>
+ <param name="sCriteria">SQL valid syntax string for a WHERE clause. Dates must be provided as 'yyyy-MM-dd hh:mm' format</param>
+ <returns>Return a SydroTimeSeries object.</returns>
+ <remarks></remarks>
+</member>
+<member name="M:Sydro.SydroZre.SydroSQLTimeSeries.getTimeSeries(System.Int16,System.DateTime,System.DateTime)">
+ <summary>
+ Retrieves time series values and converts them to time series class.
+ </summary>
+ <param name="attribFlag">Flag to identify special values, default is zero (0).</param>
+ <param name="StartDate">Specifies the start date from which values are retrieved, nothing for all values.</param>
+ <param name="Enddate">Specifies the last date up to which values are retrieved, nothing for all values.</param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Sydro.SydroZre.SydroSQLTimeSeries.setTimeSeries(Sydro.SydroZre.SydroTimeSeries)">
+ <summary>
+ Sets time series values through the SydroTimeSeries object. All necessary SydroTimeSeries properties must be set for the respective time series type.
+ The property TimeSeriesString contains the string representation of the time series values.
+ </summary>
+ <param name="ts">SydroTimeSeries object</param>
+ <returns>True if the time series values could be inserted or updated, false if not.</returns>
+ <remarks></remarks>
+</member>
+<member name="M:Sydro.SydroZre.SydroSQLTimeSeries.getValues(System.DateTime,System.DateTime,System.DateTime[]@,System.Single[]@)">
+ <summary>
+ Gets values from the timeseries for the specified dates. If dates are nothing the whole timeseries is retrieved.
+ The function returns the number of records.
+ </summary>
+ <param name="StartDate">data are retrieved as of this date</param>
+ <param name="Enddate">data are retrieved up to this date</param>
+ <param name="dDates">return dates</param>
+ <param name="snglValues">return values</param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Sydro.SydroZre.SydroSQLTimeSeries.getValues(System.DateTime,System.DateTime,System.Int16,System.DateTime[]@,System.Single[]@)">
+ <summary>
+ Gets values from the timeseries for the specified dates. If dates are nothing the whole timeseries is retrieved.
+ The function returns the number of records.
+ </summary>
+ <param name="StartDate">data are retrieved as of this date</param>
+ <param name="Enddate">data are retrieved up to this date</param>
+ <param name="dDates">return dates</param>
+ <param name="snglValues">return values</param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Sydro.SydroZre.SydroSQLTimeSeries.getValues(System.String,System.String,System.DateTime,System.DateTime,System.DateTime[]@,System.Single[]@)">
+ <summary>
+ Retrieves values from the timeseries for the specified dates. If dates are nothing the whole timeseries is retrieved.
+ The function returns the number of records.
+ </summary>
+ <param name="sFileName">Filename of the database</param>
+ <param name="sPath">Path to the database</param>
+ <param name="StartDate">data are retrieved as of this date</param>
+ <param name="Enddate">data are retrieved up to this date</param>
+ <param name="dDates">return dates</param>
+ <param name="snglValues">return values</param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Sydro.SydroZre.SydroSQLTimeSeries.setValues(System.Boolean,System.DateTime[]@,System.Single[]@)">
+ <summary>
+ Writes new zero-based dates/values into an existing timeseries. Old values are deleted if within the new dates.
+ Dates must be sorted in ascending order!
+ </summary>
+ <param name="dDates">array of dates</param>
+ <param name="snglValues">array of values</param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="T:Sydro.SydroZre.SydroSQLFCTimeSeries">
+ <summary>
+ Sydro API to access a SQLite time series with value flags.
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="M:Sydro.SydroZre.SydroSQLFCTimeSeries.getTimeSeriesFCDates(System.Int16)">
+ <summary>
+ Gets all T0 entries.
+ </summary>
+ <param name="attribFlag">AttribFlag specified the data to be retrieved. With -1 all values are returned.</param>
+ <returns>Return a SydroTimeSeries object.</returns>
+ <remarks></remarks>
+</member>
+<member name="M:Sydro.SydroZre.SydroSQLFCTimeSeries.getTimeSeries(System.String)">
+ <summary>
+ Gets entries of a timeseries matching the valid SQL criteria.
+ </summary>
+ <param name="sCriteria">SQL valid syntax string for a WHERE clause. Dates </param>
+ <returns>Return a SydroTimeSeries object.</returns>
+ <remarks></remarks>
+</member>
+<member name="M:Sydro.SydroZre.SydroSQLFCTimeSeries.getTimeSeries(System.Int16,System.DateTime,System.DateTime)">
+ <summary>
+ Retrieves time series values and converts them to time series class.
+ </summary>
+ <param name="attribFlag">Flag to identify special values, default is zero (0).</param>
+ <param name="StartDate">Specifies the start date from which values are retrieved, nothing for all values.</param>
+ <param name="Enddate">Specifies the last date up to which values are retrieved, nothing for all values.</param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Sydro.SydroZre.SydroSQLFCTimeSeries.getTimeSeries(System.Int16,System.DateTime,System.DateTime,System.DateTime)">
+ <summary>
+ Retrieves time series values and converts them to time series class.
+ </summary>
+ <param name="attribFlag">Flag to identify special values, default is zero (0).</param>
+ <param name="StartDate">Specifies the start date from which values are retrieved, nothing for all values.</param>
+ <param name="Enddate">Specifies the last date up to which values are retrieved, nothing for all values.</param>
+ <param name="T0">Set forecast date. This is necessary to obtain only the time series for a particiluar forecast date.</param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Sydro.SydroZre.SydroSQLFCTimeSeries.setTimeSeries(Sydro.SydroZre.SydroTimeSeries)">
+ <summary>
+ Sets time series values through the SydroTimeSeries object. All necessary SydroTimeSeries properties must be set for the respective time series type.
+ The property TimeSeriesString contains the string representation of the time series values.
+ </summary>
+ <param name="ts">SydroTimeSeries object</param>
+ <returns>True if the time series values could be inserted or updated, false if not.</returns>
+ <remarks></remarks>
+</member>
+<member name="M:Sydro.SydroZre.SydroSQLFCTimeSeries.getValues(System.Int16,System.DateTime,System.DateTime,System.DateTime,System.DateTime[]@,System.DateTime[]@,System.Int16[]@,System.Single[]@,System.Int16[]@)">
+ <summary>
+ gets values from the timeseries for the specified dates. If dates are nothing the whole timeseries is retrieved
+ The function returns the number of records.
+ </summary>
+ <param name="attribFlag">Attribute Flag to identify specific values, default = 0</param>
+ <param name="StartDate"></param>
+ <param name="Enddate"></param>
+ <param name="dDatesT0">return dates when the forecast was made</param>
+ <param name="dDatesT1">return dates of forecast</param>
+ <param name="fcLength">return length of forecast in the time unit of the forecast</param>
+ <param name="snglValues">return values</param>
+ <param name="flags">return short values as flags</param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Sydro.SydroZre.SydroSQLFCTimeSeries.getValues(System.String,System.String,System.Int16,System.DateTime,System.DateTime,System.DateTime,System.DateTime[]@,System.DateTime[]@,System.Int16[]@,System.Single[]@,System.Int16[]@)">
+ <summary>
+ gets values from the timeseries for the specified dates. If dates are nothing the whole timeseries is retrieved
+ The function returns the number of records.
+ </summary>
+ <param name="sFileName">Filename of the database</param>
+ <param name="sPath">Path to the database</param>
+ <param name="attribFlag">Attribute Flag to identify specific values, default = 0</param>
+ <param name="StartDate"></param>
+ <param name="Enddate"></param>
+ <param name="dDatesT0">return dates when the forecast was made</param>
+ <param name="dDatesT1">return dates of forecast</param>
+ <param name="fcLength">return length of forecast in the time unit of the forecast</param>
+ <param name="snglValues">return values</param>
+ <param name="flags">return short values as flags</param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Sydro.SydroZre.SydroSQLFCTimeSeries.setValues(System.Boolean,System.Int16,System.DateTime[]@,System.DateTime[]@,System.Int16[]@,System.Single[]@)">
+ <summary>
+ writes new zero-based dates/values into an existing timeseries. Old values are deleted if within the new dates.
+ Dates must be sorted in ascending order!
+ </summary>
+ <param name="attribFlag">Attribute Flag to identify specific values, default = 0</param>
+ <param name="dDatesT0">dates when the forecast was made</param>
+ <param name="dDatesT1">dates of forecast</param>
+ <param name="fcLength">length of forecast in the time unit of the forecast</param>
+ <param name="snglValues">array of forecasted values</param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="T:Sydro.SydroZre.SydroSQLFlaggedTimeSeries">
+ <summary>
+ Sydro API to access a SQLite time series with value flags.
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="M:Sydro.SydroZre.SydroSQLFlaggedTimeSeries.getTimeSeries(System.String)">
+ <summary>
+ Gets entries of a timeseries matching the valid SQL criteria.
+ </summary>
+ <param name="sCriteria">SQL valid syntax string for a WHERE clause. Dates </param>
+ <returns>Return a SydroTimeSeries object.</returns>
+ <remarks></remarks>
+</member>
+<member name="M:Sydro.SydroZre.SydroSQLFlaggedTimeSeries.getTimeSeries(System.Int16,System.DateTime,System.DateTime)">
+ <summary>
+ Retrieves time series values and converts them to time series class.
+ </summary>
+ <param name="attribFlag">Flag to identify special values, default is zero (0).</param>
+ <param name="StartDate">Specifies the start date from which values are retrieved, nothing for all values.</param>
+ <param name="Enddate">Specifies the last date up to which values are retrieved, nothing for all values.</param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Sydro.SydroZre.SydroSQLFlaggedTimeSeries.setTimeSeries(Sydro.SydroZre.SydroTimeSeries)">
+ <summary>
+ Sets time series values through the SydroTimeSeries object. All necessary SydroTimeSeries properties must be set for the respective time series type.
+ The property TimeSeriesString contains the string representation of the time series values.
+ </summary>
+ <param name="ts">SydroTimeSeries object</param>
+ <returns>True if the time series values could be inserted or updated, false if not.</returns>
+ <remarks></remarks>
+</member>
+<member name="M:Sydro.SydroZre.SydroSQLFlaggedTimeSeries.getValues(System.Int16,System.DateTime,System.DateTime,System.DateTime[]@,System.Single[]@)">
+ <summary>
+ gets values from the timeseries for the specified dates. If dates are nothing the whole timeseries is retrieved
+ The function returns the number of records.
+ </summary>
+ <param name="attribFlag">Attribute to retrieve records</param>
+ <param name="StartDate"></param>
+ <param name="Enddate"></param>
+ <param name="dDates">return dates</param>
+ <param name="snglValues">return values</param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Sydro.SydroZre.SydroSQLFlaggedTimeSeries.getValues(System.String,System.String,System.Int16,System.DateTime,System.DateTime,System.DateTime[]@,System.Single[]@)">
+ <summary>
+ gets values from the timeseries for the specified dates. If dates are nothing the whole timeseries is retrieved
+ The function returns the number of records.
+ </summary>
+ <param name="sFileName">Filename of the database</param>
+ <param name="sPath">Path to the database</param>
+ <param name="attribFlag">Attribute to retrieve records</param>
+ <param name="StartDate"></param>
+ <param name="Enddate"></param>
+ <param name="dDates">return dates</param>
+ <param name="snglValues">return values</param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Sydro.SydroZre.SydroSQLFlaggedTimeSeries.setValues(System.Boolean,System.Int16@,System.DateTime[]@,System.Single[]@)">
+ <summary>
+ Writes new zero-based dates/values/flags into an existing timeseries. Old values are deleted if within the new dates.
+ Dates must be sorted in ascending order!
+ </summary>
+ <param name="attribFlag">Attribute Flag to identify specific values</param>
+ <param name="dDates">array of dates</param>
+ <param name="snglValues">array of values</param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="T:Sydro.SydroZre.SydroSQLNet">
+ <summary>
+ Sydro SQLite common class for time series access.
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="M:Sydro.SydroZre.SydroSQLNet.#ctor(System.String,System.String,System.Int32,System.String)">
+ <summary>
+ Used to open an existing or to create a new time series database.
+ </summary>
+ <param name="sUser">Who is calling</param>
+ <param name="ID">ID of the time series (also filename)</param>
+ <param name="sPath">Path to the time series database file</param>
+ <remarks></remarks>
+</member>
+<member name="M:Sydro.SydroZre.SydroSQLNet.TimeSeries(System.String)">
+ <summary>
+ Gets and sets time series attributes and entries. 
+ Use the Separator property to split Date, Values, etc., use the DateValuePairSeparator property to split timeseries entries."
+ </summary>
+ <param name="Criteria">SQL syntax defining criteria for selecting time series entries. Run getTimeSeriesFieldNames first to see the list of valid fieldnames. If Criteria is empty the whole time series will be returned.</param>
+ <returns>Returns the SydroTimeSeries object in which the TimeSeriesString property contains the time series.</returns>
+ <remarks></remarks>
+</member>
+<member name="M:Sydro.SydroZre.SydroSQLNet.TimeSeries(System.Int16,System.DateTime,System.DateTime,System.DateTime)">
+ <summary>
+ Gets and sets time series customized by using attribFlag, StartDate and EndDate. 
+ The TimeSeriesString property contains the time series entries.
+ Use the Separator property to split Date, Values, etc., use the DateValuePairSeparator property to split timeseries entries."
+ </summary>
+ <param name="attribFlag">Set attribflag to -1 to obtain all values, set attribFlag >=0 returns only matching entries.</param>
+ <param name="StartDate">Set StartDate to nothing to obtain from the beginning, otherwise set StartDate to a valid date.</param>
+ <param name="Enddate">Set EndDate to nothing to obtain up to the end, otherwise set EndDate to a valid date.</param>
+ <param name="T0">Set forecast date as optional parameter. This is necessary to obtain only the time series for a particiluar forecast date</param>
+ <returns>Returns the SydroTimeSeries object in which the TimeSeriesString property contains the time series.</returns>
+ <remarks></remarks>
+</member>
+<member name="M:Sydro.SydroZre.SydroSQLNet.TimeSeries(Sydro.SydroZre.SydroTimeSeries)">
+ <summary>
+ Sets time series values through the SydroTimeSeries object. All necessary SydroTimeSeries properties must be set for the respective time series type.
+ The property TimeSeriesString contains the string representation of the time series values.
+ </summary>
+ <param name="ts">SydroTimeSeries object</param>
+ <returns>True if the time series values could be inserted or updated, false if not.</returns>
+ <remarks></remarks>
+</member>
+<member name="M:Sydro.SydroZre.SydroSQLNet.TimeSeriesValues(System.String)">
+ <summary>
+ Gets and sets time series attributes and entries. 
+ Use the Separator property to split Date, Values, etc., use the DateValuePairSeparator property to split timeseries entries."
+ </summary>
+ <param name="Criteria">SQL syntax defining criteria for selecting time series entries. Run getTimeSeriesFieldNames first to see the list of valid fieldnames. If Criteria is empty the whole time series will be returned.</param>
+ <returns>Returns the SydroTimeSeries object in which the TimeSeriesString property contains the time series.</returns>
+ <remarks></remarks>
+</member>
+<member name="M:Sydro.SydroZre.SydroSQLNet.TimeSeriesForecastDatesArray(System.Int16)">
+ <summary>
+ Return an array of Forcast Dates T0 of a Forecast timeseries.
+ </summary>
+ <param name="attribFlag">The flag that is used to select the array of forecast dates T0.</param>
+ <returns>Array or dates</returns>
+ <remarks></remarks>
+</member>
+<member name="M:Sydro.SydroZre.SydroSQLNet.TimeSeriesForecastDates(System.Int16)">
+ <summary>
+ Gets all forecast dates of a forecast time series. Each pair consists of the forecast date and the forecast length  
+ Use the Separator property to split Date, Values, etc., use the DateValuePairSeparator property to split timeseries entries."
+ </summary>
+ <returns>Returns the SydroTimeSeriesValues object with date/value pairs.</returns>
+ <remarks></remarks>
+</member>
+<member name="M:Sydro.SydroZre.SydroSQLNet.TimeSeriesDeleteEntries(System.Int16,System.DateTime,System.DateTime)">
+ <summary>
+ Gets and sets time series customized by using attribFlag, StartDate and EndDate. 
+ The TimeSeriesString property contains the time series entries.
+ Use the Separator property to split Date, Values, etc., use the DateValuePairSeparator property to split timeseries entries."
+ </summary>
+ <param name="attribFlag">Set attribflag to -1 to obtain all values, set attribFlag >=0 returns only matching entries.</param>
+ <param name="StartDate">Set StartDate to nothing to obtain from the beginning, otherwise set StartDate to a valid date.</param>
+ <param name="Enddate">Set EndDate to nothing to obtain up to the end, otherwise set EndDate to a valid date.</param>
+ <returns>Returns the SydroTimeSeries object in which the TimeSeriesString property contains the time series.</returns>
+ <remarks></remarks>
+</member>
+<member name="M:Sydro.SydroZre.SydroSQLNet.TimeSeriesAttributes">
+ <summary>
+ Gets and sets time series attributes. 
+ The KeyValueString property contains the key/value pairs.
+ Use the KeyValueSeparator property to split Key and values, use the KeyaluePairSeparator to split key/value pairs."
+ </summary>
+ <returns>Returns the SydroTimeSeriesAttributes object in which the KeyValueString property contains the attributes of the time series.</returns>
+ <remarks></remarks>
+</member>
+<member name="M:Sydro.SydroZre.SydroSQLNet.TimeSeriesAttributes(Sydro.SydroZre.SydroTimeSeriesAttributes)">
+ <summary>
+ Sets time series attributes through the SydroTimeSeriesAttribute object. 
+ </summary>
+ <param name="ts">SydroTimeSeriesAttributes object</param>
+ <returns>True if the time series attributes could be updated, false if not.</returns>
+ <remarks></remarks>
+</member>
+<member name="M:Sydro.SydroZre.SydroSQLNet.TimeSeriesAttributes(System.String)">
+ <summary>
+ Sets time series values through the SydroTimeSeries object. All necessary SydroTimeSeries properties must be set for the respective time series type.
+ The property TimeSeriesString contains the string representation of the time series values.
+ </summary>
+ <param name="keyvaluepairs">The list of key/value pairs representing the time series attributes to be set.</param>
+ <returns>True if the time series attributes could be updated, false if not.</returns>
+ <remarks></remarks>
+</member>
+</members>
+</doc>
