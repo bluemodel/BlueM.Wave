@@ -6,87 +6,99 @@ SydroCommon
 </name>
 </assembly>
 <members>
-<member name="M:Sydro.Common.Threads.CThread.#ctor(System.String)">
-	<summary>
- To create a new thread use propoerty as shown here: .Thread = New System.Threading.Thread(AddressOf {ProcedureName})
- </summary>
-	<param name="sName">The name of the Thread.</param>
-	<remarks></remarks>
-</member><member name="P:Sydro.Common.Helpers.CHelpers.DefaultNumberFormat">
-	<summary>
+<member name="T:Sydro.My.Resources.Resources">
+<summary>
+  A strongly-typed resource class, for looking up localized strings, etc.
+</summary>
+</member>
+<member name="P:Sydro.My.Resources.Resources.ResourceManager">
+<summary>
+  Returns the cached ResourceManager instance used by this class.
+</summary>
+</member>
+<member name="P:Sydro.My.Resources.Resources.Culture">
+<summary>
+  Overrides the current thread's CurrentUICulture property for all
+  resource lookups using this strongly typed resource class.
+</summary>
+</member>
+<member name="P:Sydro.Common.Helpers.CHelpers.DefaultNumberFormat">
+ <summary>
  Default NumberFormat
  </summary>
-	<returns>NumberFormatInfo instance with decimal separator "." and no NumberGroupSeparator</returns>
-	<remarks></remarks>
-</member><member name="P:Sydro.Common.Helpers.CHelpers.DefaultDateTimeFormat">
-	<summary>
+ <returns>NumberFormatInfo instance with decimal separator "." and no NumberGroupSeparator</returns>
+ <remarks></remarks>
+</member>
+<member name="P:Sydro.Common.Helpers.CHelpers.DefaultDateTimeFormat">
+ <summary>
  Default DateFormat
  </summary>
-	<returns>DateFormatInfo instance with dateformat "yyyy-MM-dd HH:mm:ss"</returns>
-	<remarks></remarks>
-</member><member name="P:Sydro.Common.Helpers.CHelpers.DefaultDateFormat">
-	<summary>
+ <returns>DateFormatInfo instance with dateformat "yyyy-MM-dd HH:mm:ss"</returns>
+ <remarks></remarks>
+</member>
+<member name="P:Sydro.Common.Helpers.CHelpers.DefaultDateFormat">
+ <summary>
  Default DateFormat
  </summary>
-	<returns>DateFormats("default")</returns>
-	<remarks>dd.MM.yyyy HH:mm</remarks>
-</member><member name="P:Sydro.Common.Helpers.CHelpers.DateFormats">
-	<summary>
+ <returns>DateFormats("default")</returns>
+ <remarks>dd.MM.yyyy HH:mm</remarks>
+</member>
+<member name="P:Sydro.Common.Helpers.CHelpers.DateFormats">
+ <summary>
  Date formats
  </summary>
-	<returns>Dictionary of available DateFormats</returns>
-	<remarks></remarks>
-</member><member name="M:Sydro.Common.Helpers.CHelpers.StringToDate(System.String,System.Globalization.DateTimeFormatInfo,System.Boolean@)">
-	<summary>
+ <returns>Dictionary of available DateFormats</returns>
+ <remarks></remarks>
+</member>
+<member name="M:Sydro.Common.Helpers.CHelpers.StringToDate(System.String,System.Globalization.DateTimeFormatInfo,System.Boolean@)">
+ <summary>
  Converts a string to datetime
  </summary>
-	<param name="str">string to be converted</param>
-	<param name="format">optional DateTimeFormatInfo object to use for the conversion. If not provided, the DefaultDateTimeInfo is used.</param>
-	<returns>Date value, set to 'yyyy-MM-dd HH:mm:ss' in first try and to 'New Date(0)' in a second try with success=false if the string was not parseable.</returns>
-	<remarks></remarks>
-</member><member name="M:Sydro.Common.Helpers.CHelpers.StringToDouble(System.String,System.Globalization.NumberFormatInfo,System.Boolean@)">
-	<summary>
+ <param name="str">string to be converted</param>
+ <param name="format">optional DateTimeFormatInfo object to use for the conversion. If not provided, the DefaultDateTimeInfo is used.</param>
+ <returns>Date value, set to 'yyyy-MM-dd HH:mm:ss' in first try and to 'New Date(0)' in a second try with success=false if the string was not parseable.</returns>
+ <remarks></remarks>
+</member>
+<member name="M:Sydro.Common.Helpers.CHelpers.StringToDouble(System.String,System.Globalization.NumberFormatInfo,System.Boolean@)">
+ <summary>
  Converts a string to a double
  </summary>
-	<param name="str">string to be converted</param>
-	<param name="format">optional NumberFormatInfo object to use for the conversion. If not provided, the DefaultNumberInfo is used.</param>
-	<returns>Double value, set to NaN if the string was not parseable. NaN and +-Infinity in the input string are recognized and converted to the correspoing Double value.</returns>
-	<remarks></remarks>
-</member><member name="M:Sydro.Common.Helpers.CHelpers.StringToSingle(System.String,System.Globalization.NumberFormatInfo,System.Boolean@)">
-	<summary>
+ <param name="str">string to be converted</param>
+ <param name="format">optional NumberFormatInfo object to use for the conversion. If not provided, the DefaultNumberInfo is used.</param>
+ <returns>Double value, set to NaN if the string was not parseable. NaN and +-Infinity in the input string are recognized and converted to the correspoing Double value.</returns>
+ <remarks></remarks>
+</member>
+<member name="M:Sydro.Common.Helpers.CHelpers.StringToSingle(System.String,System.Globalization.NumberFormatInfo,System.Boolean@)">
+ <summary>
  Converts a string to a single
  </summary>
-	<param name="str">string to be converted</param>
-	<param name="format">optional NumberFormatInfo object to use for the conversion. If not provided, the DefaultNumberInfo is used.</param>
-	<returns>Double value, set to NaN if the string was not parseable. NaN and +-Infinity in the input string are recognized and converted to the correspoing Double value.</returns>
-	<remarks></remarks>
-</member><member name="M:Sydro.Common.Helpers.CHelpers.is64BitProcess">
-	<summary>
+ <param name="str">string to be converted</param>
+ <param name="format">optional NumberFormatInfo object to use for the conversion. If not provided, the DefaultNumberInfo is used.</param>
+ <returns>Double value, set to NaN if the string was not parseable. NaN and +-Infinity in the input string are recognized and converted to the correspoing Double value.</returns>
+ <remarks></remarks>
+</member>
+<member name="M:Sydro.Common.Helpers.CHelpers.is64BitProcess">
+ <summary>
  Determines whether Wave is running as a 64bit process
  </summary>
-	<returns>True if 64bit</returns>
-	<remarks></remarks>
-</member><member name="M:Sydro.Common.KeyGenerator.CKeyGenerator.GetUniqueKeySystematic(System.Int16@,System.Int32[]@,Sydro.Common.KeyGenerator.CKeyGenerator.LowerUpperCase)">
-	<summary>
+ <returns>True if 64bit</returns>
+ <remarks></remarks>
+</member>
+<member name="M:Sydro.Common.KeyGenerator.CKeyGenerator.GetUniqueKeySystematic(System.Int16@,System.Int32[]@,Sydro.Common.KeyGenerator.CKeyGenerator.LowerUpperCase)">
+ <summary>
  dimension of array idx() determines the size(=length) of the key. The function adds the indices to get the next unused key.
  </summary>
-	<param name="idx">array which determines the length of the key and the current position</param>
-	<param name="typeOfCase">lower, upper case or both</param>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="P:Sydro.My.Resources.Resources.ResourceManager">
-	<summary>
-  Gibt die zwischengespeicherte ResourceManager-Instanz zurück, die von dieser Klasse verwendet wird.
-</summary>
-</member><member name="P:Sydro.My.Resources.Resources.Culture">
-	<summary>
-  Überschreibt die CurrentUICulture-Eigenschaft des aktuellen Threads für alle
-  Ressourcenzuordnungen, die diese stark typisierte Ressourcenklasse verwenden.
-</summary>
-</member><member name="T:Sydro.My.Resources.Resources">
-	<summary>
-  Eine stark typisierte Ressourcenklasse zum Suchen von lokalisierten Zeichenfolgen usw.
-</summary>
+ <param name="idx">array which determines the length of the key and the current position</param>
+ <param name="typeOfCase">lower, upper case or both</param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Sydro.Common.Threads.CThread.#ctor(System.String)">
+ <summary>
+ To create a new thread use propoerty as shown here: .Thread = New System.Threading.Thread(AddressOf {ProcedureName})
+ </summary>
+ <param name="sName">The name of the Thread.</param>
+ <remarks></remarks>
 </member>
 </members>
 </doc>
