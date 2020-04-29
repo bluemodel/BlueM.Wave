@@ -2904,13 +2904,13 @@ Public Class Wave
                     nCount = fortran.getZreDTConstValues(file_tmp, startdate, enddate, interpretation, Sydro.SydroZre.Fortran.ErrorModeEnum.IgnoreErrors, timesteptype, timestepinterval, double_dates, values)
                     msg = fortran.ErrorMsg
 
-                    'convert double_dates to dates
-                    dates = fortran.DoubleToDate(double_dates)
-
                     If nCount <= 0 Then
                         Log.AddLogEntry("SydroZre error " & nCount & ": " & msg)
                         Throw New Exception("SydroZre error " & nCount & ": " & msg)
                     End If
+
+                    'convert double_dates to dates
+                    dates = fortran.DoubleToDate(double_dates)
 
                 End Using
 
