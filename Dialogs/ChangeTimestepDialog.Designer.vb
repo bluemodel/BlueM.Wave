@@ -23,20 +23,18 @@ Partial Class ChangeTimestepDialog
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(ChangeTimestepDialog))
-        Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel
-        Me.OK_Button = New System.Windows.Forms.Button
-        Me.Cancel_Button = New System.Windows.Forms.Button
-        Me.ComboBox_Timeseries = New System.Windows.Forms.ComboBox
-        Me.Label1 = New System.Windows.Forms.Label
-        Me.Label2 = New System.Windows.Forms.Label
-        Me.ComboBox_Interpretation = New System.Windows.Forms.ComboBox
-        Me.Label3 = New System.Windows.Forms.Label
-        Me.ComboBox_TimestepType = New System.Windows.Forms.ComboBox
-        Me.NumericUpDown_TimestepInterval = New System.Windows.Forms.NumericUpDown
-        Me.DateTimePicker_Start = New System.Windows.Forms.DateTimePicker
-        Me.Label4 = New System.Windows.Forms.Label
-        Me.DateTimePicker_End = New System.Windows.Forms.DateTimePicker
-        Me.Label5 = New System.Windows.Forms.Label
+        Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
+        Me.OK_Button = New System.Windows.Forms.Button()
+        Me.Cancel_Button = New System.Windows.Forms.Button()
+        Me.ComboBox_Timeseries = New System.Windows.Forms.ComboBox()
+        Me.Label1 = New System.Windows.Forms.Label()
+        Me.Label2 = New System.Windows.Forms.Label()
+        Me.ComboBox_Interpretation = New System.Windows.Forms.ComboBox()
+        Me.Label3 = New System.Windows.Forms.Label()
+        Me.ComboBox_TimestepType = New System.Windows.Forms.ComboBox()
+        Me.NumericUpDown_TimestepInterval = New System.Windows.Forms.NumericUpDown()
+        Me.DateTimePicker_Start = New System.Windows.Forms.DateTimePicker()
+        Me.Label4 = New System.Windows.Forms.Label()
         Me.TableLayoutPanel1.SuspendLayout()
         CType(Me.NumericUpDown_TimestepInterval, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
@@ -78,7 +76,7 @@ Partial Class ChangeTimestepDialog
         'ComboBox_Timeseries
         '
         Me.ComboBox_Timeseries.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.ComboBox_Timeseries.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.ComboBox_Timeseries.FormattingEnabled = True
         Me.ComboBox_Timeseries.Location = New System.Drawing.Point(108, 12)
@@ -107,7 +105,7 @@ Partial Class ChangeTimestepDialog
         'ComboBox_Interpretation
         '
         Me.ComboBox_Interpretation.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.ComboBox_Interpretation.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.ComboBox_Interpretation.FormattingEnabled = True
         Me.ComboBox_Interpretation.Location = New System.Drawing.Point(108, 39)
@@ -137,7 +135,7 @@ Partial Class ChangeTimestepDialog
         'NumericUpDown_TimestepInterval
         '
         Me.NumericUpDown_TimestepInterval.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.NumericUpDown_TimestepInterval.Location = New System.Drawing.Point(108, 66)
         Me.NumericUpDown_TimestepInterval.Minimum = New Decimal(New Integer() {1, 0, 0, 0})
         Me.NumericUpDown_TimestepInterval.Name = "NumericUpDown_TimestepInterval"
@@ -163,26 +161,6 @@ Partial Class ChangeTimestepDialog
         Me.Label4.TabIndex = 11
         Me.Label4.Text = "Start:"
         '
-        'DateTimePicker_End
-        '
-        Me.DateTimePicker_End.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.DateTimePicker_End.CustomFormat = "dd.MM.yyyy HH:mm"
-        Me.DateTimePicker_End.Format = System.Windows.Forms.DateTimePickerFormat.Custom
-        Me.DateTimePicker_End.Location = New System.Drawing.Point(268, 93)
-        Me.DateTimePicker_End.Name = "DateTimePicker_End"
-        Me.DateTimePicker_End.Size = New System.Drawing.Size(121, 20)
-        Me.DateTimePicker_End.TabIndex = 10
-        '
-        'Label5
-        '
-        Me.Label5.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Label5.AutoSize = True
-        Me.Label5.Location = New System.Drawing.Point(235, 96)
-        Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(29, 13)
-        Me.Label5.TabIndex = 11
-        Me.Label5.Text = "End:"
-        '
         'ChangeTimestepDialog
         '
         Me.AcceptButton = Me.OK_Button
@@ -190,9 +168,7 @@ Partial Class ChangeTimestepDialog
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.CancelButton = Me.Cancel_Button
         Me.ClientSize = New System.Drawing.Size(404, 162)
-        Me.Controls.Add(Me.Label5)
         Me.Controls.Add(Me.Label4)
-        Me.Controls.Add(Me.DateTimePicker_End)
         Me.Controls.Add(Me.DateTimePicker_Start)
         Me.Controls.Add(Me.NumericUpDown_TimestepInterval)
         Me.Controls.Add(Me.ComboBox_TimestepType)
@@ -228,7 +204,5 @@ Partial Class ChangeTimestepDialog
     Friend WithEvents NumericUpDown_TimestepInterval As System.Windows.Forms.NumericUpDown
     Friend WithEvents DateTimePicker_Start As System.Windows.Forms.DateTimePicker
     Friend WithEvents Label4 As System.Windows.Forms.Label
-    Friend WithEvents DateTimePicker_End As System.Windows.Forms.DateTimePicker
-    Friend WithEvents Label5 As System.Windows.Forms.Label
 
 End Class

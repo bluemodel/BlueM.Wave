@@ -81,7 +81,7 @@ Public Class SQLite
     ''' <summary>
     ''' Time series interpretation
     ''' </summary>
-    Private interpretation As TimeSeries.InterpretationType
+    Private interpretation As TimeSeries.InterpretationEnum
 
     ''' <summary>
     ''' Time series class (e.g. DefaultFlag, FlaggedTimeSeries, etc.)
@@ -179,7 +179,7 @@ Public Class SQLite
             ts_name = Me.id
         End If
         'store the interpretation
-        'TODO: this only works because TimeSeries.InterpretationType uses the same values as sydrodomain!
+        'TODO: this only works because TimeSeries.InterpretationEnum currently uses the same values as sydrodomain!
         Me.interpretation = Me.FileMetadata(ts_atts.MetaInterpretationField)
         'store the unit
         'TODO: We can only get the UnitId from the attributes

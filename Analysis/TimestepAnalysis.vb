@@ -135,7 +135,7 @@ Friend Class TimeStepAnalysis
             'create a new result time series
             result_ts = New TimeSeries(ts.Title & " (dt " & Me.TimeUnitName & ")")
             result_ts.Unit = Me.TimeUnitName
-            result_ts.Interpretation = TimeSeries.InterpretationType.BlockLeft
+            result_ts.Interpretation = TimeSeries.InterpretationEnum.BlockLeft
 
             'Loop over timestamps
             For i As Integer = 0 To ts.Length - 1
