@@ -2710,11 +2710,11 @@ Public Class Wave
 
         'Interpretation
         Select Case zre.Interpretation
-            Case TimeSeries.InterpretationType.BlockRight
+            Case TimeSeries.InterpretationEnum.BlockRight
                 Line1.Stairs = True
                 Line2.Stairs = True
-            Case TimeSeries.InterpretationType.BlockLeft, _
-                TimeSeries.InterpretationType.CumulativePerTimestep
+            Case TimeSeries.InterpretationEnum.BlockLeft,
+                TimeSeries.InterpretationEnum.CumulativePerTimestep
                 Line1.Stairs = True
                 Line2.Stairs = True
                 Line1.InvertedStairs = True
@@ -2858,7 +2858,6 @@ Public Class Wave
     ''' <summary>
     ''' Starts the workflow for changing the time step of a series
     ''' </summary>
-    ''' <remarks>requires SydroZre</remarks>
     Private Sub ChangeTimeStep()
 
         'Abort if no time series available!
@@ -2874,14 +2873,10 @@ Public Class Wave
             If dlg.ShowDialog() = Windows.Forms.DialogResult.OK Then
 
                 Dim zre, zre_new As TimeSeries
-                Dim dates() As DateTime
-                Dim double_dates() As Double
-                Dim values() As Single
-                Dim interpretation As Sydro.SydroZre.Fortran.InterpretationEnum
-                Dim timesteptype As Sydro.SydroZre.Fortran.TimeStepTypeEnum
-                Dim timestepinterval, nCount, i As Integer
-                Dim startdate, enddate As DateTime
-                Dim file_tmp, msg As String
+                Dim interpretation As TimeSeries.InterpretationEnum
+                Dim timesteptype As TimeSeries.TimeStepTypeEnum
+                Dim timestepinterval As Integer
+                Dim startdate As DateTime
 
                 'read settings from dialog
                 zre = Me.Zeitreihen(dlg.ComboBox_Timeseries.SelectedItem)
@@ -2889,49 +2884,10 @@ Public Class Wave
                 timesteptype = dlg.ComboBox_TimestepType.SelectedItem
                 timestepinterval = dlg.NumericUpDown_TimestepInterval.Value
                 startdate = dlg.DateTimePicker_Start.Value
-                enddate = dlg.DateTimePicker_End.Value
 
-                'export time series to temporary bin file
-                file_tmp = Path.Combine(Path.GetTempPath, "tmp.bin")
-                BIN.Write_File(zre, file_tmp)
+                zre.Interpretation = interpretation 'TODO: this permanently changes the time series' interpretation and may be unexpected
 
-                Using fortran As New Sydro.SydroZre.Fortran()
-
-                    ReDim double_dates(0)
-                    ReDim values(0)
-
-                    'call the Fortran routine to get new dates and values
-                    nCount = fortran.getZreDTConstValues(file_tmp, startdate, enddate, interpretation, Sydro.SydroZre.Fortran.ErrorModeEnum.IgnoreErrors, timesteptype, timestepinterval, double_dates, values)
-                    msg = fortran.ErrorMsg
-
-                    If nCount <= 0 Then
-                        Log.AddLogEntry("SydroZre error " & nCount & ": " & msg)
-                        Throw New Exception("SydroZre error " & nCount & ": " & msg)
-                    End If
-
-                    'convert double_dates to dates
-                    dates = fortran.DoubleToDate(double_dates)
-
-                End Using
-
-                'store as a new time series
-                zre_new = New TimeSeries(zre.Title & " (" & timestepinterval & " " & [Enum].GetName(GetType(Sydro.SydroZre.Fortran.TimeStepTypeEnum), timesteptype) & ")")
-                zre_new.Unit = zre.Unit
-                For i = 0 To dates.Length - 1
-                    zre_new.AddNode(dates(i), values(i))
-                Next
-                'set output interpretation dependent on input interpretation 
-                Select Case interpretation
-                    Case Sydro.SydroZre.Fortran.InterpretationEnum.BlockRechts
-                        zre_new.Interpretation = TimeSeries.InterpretationType.BlockRight
-                    Case Sydro.SydroZre.Fortran.InterpretationEnum.BlockLinks
-                        zre_new.Interpretation = TimeSeries.InterpretationType.BlockLeft
-                    Case Sydro.SydroZre.Fortran.InterpretationEnum.SummeProDt
-                        zre_new.Interpretation = TimeSeries.InterpretationType.CumulativePerTimestep
-                    Case Sydro.SydroZre.Fortran.InterpretationEnum.LinearInterpolation
-                        'TODO: change to LinearInterpolation once Sydro #50 is fixed
-                        zre_new.Interpretation = TimeSeries.InterpretationType.BlockRight
-                End Select
+                zre_new = zre.ChangeTimestep(timesteptype, timestepinterval, startdate)
 
                 Call Me.Import_Series(zre_new)
 

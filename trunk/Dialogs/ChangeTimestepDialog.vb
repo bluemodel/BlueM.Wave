@@ -18,21 +18,21 @@ Friend Class ChangeTimestepDialog
         Next
         Me.ComboBox_Timeseries.SelectedIndex = 0
 
-        Me.ComboBox_Interpretation.Items.Add(Sydro.SydroZre.Fortran.InterpretationEnum.LinearInterpolation)
-        Me.ComboBox_Interpretation.Items.Add(Sydro.SydroZre.Fortran.InterpretationEnum.BlockLinks)
-        Me.ComboBox_Interpretation.Items.Add(Sydro.SydroZre.Fortran.InterpretationEnum.BlockRechts)
-        Me.ComboBox_Interpretation.Items.Add(Sydro.SydroZre.Fortran.InterpretationEnum.Summenlinie)
-        Me.ComboBox_Interpretation.Items.Add(Sydro.SydroZre.Fortran.InterpretationEnum.SummeProDt)
+        Me.ComboBox_Interpretation.Items.Add(TimeSeries.InterpretationEnum.Instantaneous)
+        Me.ComboBox_Interpretation.Items.Add(TimeSeries.InterpretationEnum.BlockLeft)
+        Me.ComboBox_Interpretation.Items.Add(TimeSeries.InterpretationEnum.BlockRight)
+        Me.ComboBox_Interpretation.Items.Add(TimeSeries.InterpretationEnum.Cumulative)
+        Me.ComboBox_Interpretation.Items.Add(TimeSeries.InterpretationEnum.CumulativePerTimestep)
         Me.ComboBox_Interpretation.SelectedIndex = 0
 
-        'Me.ComboBox_TimestepType.Items.Add(Sydro.SydroZre.Fortran.TimeStepTypeEnum.Year) 'TODO: Add TimeStepType Year once Sydro #15 is fixed
-        Me.ComboBox_TimestepType.Items.Add(Sydro.SydroZre.Fortran.TimeStepTypeEnum.Month)
-        Me.ComboBox_TimestepType.Items.Add(Sydro.SydroZre.Fortran.TimeStepTypeEnum.Week)
-        Me.ComboBox_TimestepType.Items.Add(Sydro.SydroZre.Fortran.TimeStepTypeEnum.Day)
-        Me.ComboBox_TimestepType.Items.Add(Sydro.SydroZre.Fortran.TimeStepTypeEnum.Hour)
-        Me.ComboBox_TimestepType.Items.Add(Sydro.SydroZre.Fortran.TimeStepTypeEnum.Minute)
-        Me.ComboBox_TimestepType.Items.Add(Sydro.SydroZre.Fortran.TimeStepTypeEnum.Second)
-        Me.ComboBox_TimestepType.SelectedIndex = 0
+        Me.ComboBox_TimestepType.Items.Add(TimeSeries.TimeStepTypeEnum.Year)
+        Me.ComboBox_TimestepType.Items.Add(TimeSeries.TimeStepTypeEnum.Month)
+        Me.ComboBox_TimestepType.Items.Add(TimeSeries.TimeStepTypeEnum.Week)
+        Me.ComboBox_TimestepType.Items.Add(TimeSeries.TimeStepTypeEnum.Day)
+        Me.ComboBox_TimestepType.Items.Add(TimeSeries.TimeStepTypeEnum.Hour)
+        Me.ComboBox_TimestepType.Items.Add(TimeSeries.TimeStepTypeEnum.Minute)
+        Me.ComboBox_TimestepType.Items.Add(TimeSeries.TimeStepTypeEnum.Second)
+        Me.ComboBox_TimestepType.SelectedIndex = 3
         Me.isInitializing = False
 
     End Sub
@@ -49,9 +49,8 @@ Friend Class ChangeTimestepDialog
         Dim zre As TimeSeries
         zre = Me.zres(Me.ComboBox_Timeseries.SelectedItem)
 
-        'update the DateTimePickers
+        'update the DateTimePicker
         Me.DateTimePicker_Start.Value = zre.StartDate
-        Me.DateTimePicker_End.Value = zre.EndDate
 
     End Sub
 

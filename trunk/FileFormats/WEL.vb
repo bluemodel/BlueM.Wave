@@ -219,9 +219,9 @@ Public Class WEL
             End If
             'Series in a WEL file are always interpreted as BlockRight, with the exception of volume
             If ts.Title.EndsWith("_VOL") Then
-                ts.Interpretation = BlueM.Wave.TimeSeries.InterpretationType.Instantaneous
+                ts.Interpretation = BlueM.Wave.TimeSeries.InterpretationEnum.Instantaneous
             Else
-                ts.Interpretation = BlueM.Wave.TimeSeries.InterpretationType.BlockRight
+                ts.Interpretation = BlueM.Wave.TimeSeries.InterpretationEnum.BlockRight
             End If
             Me.TimeSeriesCollection.Add(ts.Title, ts)
         Next
