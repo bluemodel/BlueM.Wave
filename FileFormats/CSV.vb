@@ -279,7 +279,7 @@ Public Class CSV
                 If Double.IsNaN(v) Then
                     line += separator 'leave empty
                 Else
-                    line += separator & v.ToString()
+                    line += separator & v.ToString(Helpers.DefaultNumberFormat)
                 End If
             Next
             strwrite.WriteLine(line)

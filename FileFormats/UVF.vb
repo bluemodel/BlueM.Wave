@@ -384,7 +384,7 @@ Public Class UVF
         For i = 0 To ts.Length - 1
             timestamp = ts.Dates(i).ToString(DateFormats("UVF")).Substring(2) 'without the first two digits
             'TODO: values < 1 have a leading zero and are technically one character too long!
-            value = String.Format("{0,9:g8}", ts.Values(i))
+            value = String.Format(Helpers.DefaultNumberFormat, "{0,9:g8}", ts.Values(i))
             strwrite.WriteLine(timestamp & " " & value)
         Next
         strwrite.Close()

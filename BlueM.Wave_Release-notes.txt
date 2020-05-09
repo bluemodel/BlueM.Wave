@@ -9,6 +9,7 @@ NEW:
 CHANGED:
 * When loading PRMS files, the file import dialog is now displayed, allowing for the selection of time series
 FIXED:
+* Fixed unintended use of the system's locale settings when exporting files in formats CSV, UVF, ZRXP, SWMM_DAT_MASS and SWMM_DAT_TIME
 * The Change Timestep function is now implemented natively
 * Added functionality to read and write SYDRO binary files natively
 * Fixed the interpretation of the output of the ChangeTimestep function
