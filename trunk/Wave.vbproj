@@ -485,16 +485,12 @@
     <EmbeddedResource Include="Resources\cursor_pan.cur" />
     <EmbeddedResource Include="Resources\cursor_zoom.cur" />
     <EmbeddedResource Include="Resources\cursor_pan_hold.cur" />
-    <Content Include="lib\IntelFortran\libifcoremd.dll" />
-    <Content Include="lib\IntelFortran\libifportmd.dll" />
-    <Content Include="lib\IntelFortran\libmmd.dll" />
     <Content Include="lib\modelEAU\modelEAU.SWMM.DllAdapter.dll" />
     <None Include="Resources\pan.png" />
     <Content Include="Resources\error_convert.png" />
     <Content Include="Resources\error_delete.png" />
     <Content Include="Resources\navigate_back.png" />
     <Content Include="Resources\navigate_forward.png" />
-    <Content Include="lib\SydroZre\SydroZreI.dll" />
     <Content Include="lib\SydroZre\SydroZreNet.dll" />
     <Content Include="lib\SydroZre\SydroZreNet.xml" />
     <None Include="Resources\page_save.png" />
@@ -522,10 +518,6 @@
   -->
   <PropertyGroup>
     <PostBuildEvent>copy $(ProjectDir)lib\SydroZre\sydrodomain.ini $(TargetDir)sydrodomain.ini
-copy $(ProjectDir)lib\SydroZre\SydroZreI.dll $(TargetDir)SydroZreI.dll
-copy $(ProjectDir)lib\IntelFortran\libifcoremd.dll $(TargetDir)libifcoremd.dll
-copy $(ProjectDir)lib\IntelFortran\libifportmd.dll $(TargetDir)libifportmd.dll
-copy $(ProjectDir)lib\IntelFortran\libmmd.dll $(TargetDir)libmmd.dll
 copy $(ProjectDir)lib\MathNet\MathNet.Numerics.license.txt $(TargetDir)MathNet.Numerics.license.txt
 copy $(ProjectDir)lib\Ionic.Zip\Ionic.Zip.license.txt $(TargetDir)Ionic.Zip.license.txt
 copy $(ProjectDir)lib\SQLite\SQLite.Interop.dll $(TargetDir)SQLite.Interop.dll</PostBuildEvent>
