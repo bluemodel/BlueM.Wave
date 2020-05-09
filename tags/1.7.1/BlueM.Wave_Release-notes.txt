@@ -1,0 +1,192 @@
+﻿===============================================================
+BlueM.Wave Release Notes
+===============================================================
+Version 1.7.1
+-------------
+NEW
+* Added a new analysis function "TimestepAnalysis" which computes the time difference between
+  each node of one or multiple time series and displays them as new time series
+* Added support for reading SYDRO SQLite time series files (*.db) of class ForecastTimeseries
+CHANGED:
+* The "Monthly Statistics" analysis function now asks the user whether the time series' values 
+  correspond to the current or previous month
+* UI: Import series dialog improved with adjustable size of available series display
+FIXED:
+* Fixed not being able to open SYDRO SQLite time series files from a network path
+* Time series with interpretation BlockLeft were not being displayed as stairs
+* The output time series of the "Change timestep" function now have a defined interpretation
+* Fixed exceptions occurring due to invalid min/max dates in the Change timestep dialog
+
+Version 1.7.0
+-------------
+NEW
+* Added support for reading SYDRO SQLite time series files (*.db) (only in x86 version)
+FIXED:
+* Analysis function "Cumulative" now ignores NaN values in time series 
+  (before, the cumulative sum would become NaN as well)
+
+Version 1.6.3
+-------------
+NEW
+* Added support for reading PRMS statistic variables result files (statvar.dat)
+CHANGED:
+* Reworked the cut time series dialog. The initial start and end dates for the cut are now taken 
+  from the currently displayed time period of the main chart.
+* Unparseable values in time series files are no longer written to the log individually. Instead, 
+  the total number of NaN values of each time series is written to the log when they are displayed 
+  for the first time.
+FIXED:
+* Fixed unintended use of the system's locale settings when reading files in HYDRO_AS-2D and ZRXP format
+
+Version 1.6.2
+-------------
+NEW:
+* Added support for storing an "Interpretation" property for time series. 
+  Interpretation is currently only known for series read from WEL files and the TALSIM clipboard,
+  all other series have a default interpretation value of 99 (Undefined).
+  Series with interpretation 2 (BlockRight), 3 (BlockLeft) and 5 (CumulativePerTimestep) 
+  are displayed as (inverted) stairs in the chart, all others are displayed normally (linear interpolation between nodes).
+* Added a button for auto-adjusting the Y-axes to the current viewport
+  (currently only works for left and right, but not custom axes)
+* Added support for reading Q_Strg.dat files in HYDRO_AS-2D version 5 format (previous versions still supported)
+* Added read support for PRMS output files (annual and monthly summaries, as well as DPOUT)
+* Added write support for ZRXP format
+* Added write support for UVF format
+* Added write support for SYDRO binary format (BIN) (only in x86 version)
+* Added a button for visualizing NaN values of the currently active series
+  This also causes the time periods consisting of NaN values to be written to the log
+* Added metadata handling for time series, metadata is displayed in the series properties dialog
+* Implemented reading and writing of metadata for file formats UVF and ZRXP
+* Added a dialog for editing metadata before export
+* Added a new analysis function "Cumulative" which converts a time series to cumulative values
+* Added the possibility of specifying custom import settings in Wave project files (*.wvp) (#720)
+* Added a button and a dialog for merging time series (#719)
+* Added a dialog for specifying a reference date (beginning of simulation) when importing HYDRO_AS-2D files
+* The Open File menu now includes a list of recently used files (not stored across sessions)
+* Added a button for changing the time step of a time series (#717) (only in x86 version)
+* Added the ability to process more clipboard contents from TALSIM 
+  (including BIN files and multiple files/series at once) (#695)
+* Added the ability to extract WEL files from WLZIP files of the same name
+CHANGED:
+* The "Enter time series" dialog has been improved, unparseable values are now converted to NaN 
+  instead of causing an abort of the import.
+* The "Remove error values" function has been changed to "Convert error values" and now converts 
+  user-specified error values to NaN
+* When importing time series from SMUSI REG format, the title is taken from the first line of the file, 
+  before any comma
+FIXED:
+* The Reload from Files command now respects the previously made series selection for each file
+* Imported files are no longer kept as file objects in memory (should lead to less memory usage)
+* ZRXP format: the time part of the timestamp is now optional (00:00:00 assumed if missing)
+* ZRXP format: values equal to the error value specified as "RINVAL" in the file header are 
+  converted to NaN during import
+* UVF format: fixed reading and writing of time series starting before 1900
+* UVF format: values equal to -777 are recognized as error values and converted to NaN during import
+* BIN format: values equal to -9999.999 are recognized as error values and converted to NaN during import
+* Fixed export to SMUSI REG format. Time series must be equidistant with 5 minute time step.
+API-CHANGES:
+* The function TimeSeries.getCleanZRE() has been replaced with two separate functions:
+  Timeseries.removeNaNValues() and Timeseries.convertErrorValues()
+KNOWN ISSUES:
+* When saving a chart to the native TEN format of TeeChart, any NaN values contained in the series are lost 
+  (i.e. the nodes with the NaN values are omitted from the series).
+
+Version 1.6.1
+-------------
+NEW:
+* Added support for loading and saving Wave project files (*.wvp) (#705)
+* Added a button for displaying time series properties in a table view (#711)
+* Added the ability to load TALSIM simulation results using the clipboard (by pressing Ctrl+V) (#695)
+* Added an "AnnualStatistics" analysis function which calculates statistics such as
+  min, max, avg and volume of a time series for each hydrological year
+* The "Comparison" analysis function now fits a simple linear regression line to the data
+  (using the Math.NET Numerics library)
+* The analysis function Histogram now allows the user to specify the bins (#397). 
+  Also, the histogram result data is now written to the log.
+* The analysis function MonthlyStatistics now writes the result data to the log
+* Added a button for removing user-specified error values from series
+* Added a button for renaming series
+* Added a dropdown button for zooming to a specific series
+* Added support for exporting series to CSV format (#318)
+* Added support for importing files in the ZRXP format (*.zrx)
+* GoodnessOfFit (GoF) analysis function:
+  * Added "Logarithmic Nash-Sutcliffe Efficiency" as a new GoF parameter
+  * The GoF parameters can now optionally be calculated for individual hydrological years
+* Added support for importing BW_TMP.DAT result files from HYDRO_AS-2D
+CHANGED:
+* Error values in time series such as e.g. -777 and -9999 are now imported and displayed as regular values.
+  Previously, when importing from BIN and DWD-T-L format, these would be replaced with NaN.
+  The new "Remove error values" function can be used to remove these error values, if desired. (#693)
+* Analysis GoodnessOfFit: Volume error is based on actual volume integrated over time 
+  if the time series unit ends with "/s"
+* Removed support for the DWD-T-L format
+* If a time series contains duplicate nodes, the duplicate nodes are now simply discarded 
+  and a warning is written to the log instead of aborting the import
+FIXED:
+* The decimal mark selector in the import series dialog now actually works (#351)
+* Comparison analysis function: changed the result series to a point series because a line series automatically 
+  sorts itself by the x-values and thus connects the points in the wrong order (not time-based)
+
+Version 1.6
+-----------
+NEW:
+* Significantly improved the possibilities for viewing and navigating time series:
+  - New toolbar buttons for zooming, panning, zoom undo and zoom all
+  - Start and end date for display can be set using date/time pickers
+  - Display range can be set to exact date/time ranges using a simple interface
+  - Buttons for navigating in time using a user-specified time increment
+  - All changes to the viewport are recorded in a history that can be undone
+
+Version 1.5
+-----------
+NEW:
+* Support for importing GISMO files
+* Support for importing HYDRO-AS_2D files
+* Support for importing UVF files
+* Support for importing SYDRO binary files (x86 version only)
+* Support for loading TeeChart themes (*.xml) 
+* The date format can now be specified while importing time series (#686)
+CHANGED:
+* Loading a TEN-file does not cause existing series to be deleted, 
+  the series contained in the TEN-file can be imported optionally
+* More options for cutting time series (cut all series at once and keep original series)
+* Small improvements to layout and functionality
+* Switched to .NET Framework 3.5
+REMOVED:
+* RVA files no longer supported
+
+Version 1.4
+-----------
+Initial Release under the BSD-2 License, see LICENSE.txt for more information.
+
+Version 1.3
+-----------
+NEW:
+* Wave can now read time series from SWMM binary result files (*.OUT)
+FIXED:
+* Import of time series from TeeCharts native TEN files
+UPDATE:
+* Import of SMUSI REG files: Empty lines (dry weather periods) are improted correctly
+CHANGED:
+* Upgrade to TeeChart v4
+
+Version 1.2
+-----------
+UPDATE:
+* Internal storage of sampling points re-engineered
+NEW:
+* Analysis function Goodness of Fit with new indicators: Volume error, Correlation coefficient, Hydrologic deviation
+
+Version 1.1
+-----------
+NEW:
+* Analysis functions: Comparison, Double sum analysis, Goodness of Fit, Statistics
+* Import formats for SMB and REG files
+* Time series are assorted to different axes according to the time series units
+* ReRead Files": Deletes all times series in current instance of BlueM.Wave and reimports the time series from it's respective files again (Bug 388)
+FIXED:
+* Cutting time series
+
+Version 1.0
+-----------
+* Start of version control
