@@ -151,7 +151,7 @@ Public Class SWMM_DAT_TIME
         n = 0   'n = Anzahl der Zeitreihenwerte
         For iZeile = 0 To KontiReihe.Length - 1
             strwrite.Write(KontiReihe.Dates(n).ToString(DatumsformatSWMMDAT) & " ")
-            strwrite.Write(KontiReihe.Values(n).ToString())
+            strwrite.Write(KontiReihe.Values(n).ToString(Helpers.DefaultNumberFormat))
             n = n + 1
             strwrite.WriteLine()
         Next

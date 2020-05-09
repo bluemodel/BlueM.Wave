@@ -354,7 +354,7 @@ Public Class ZRXP
             If Double.IsNaN(node.Value) Then
                 value = ts.Metadata("RINVAL")
             Else
-                value = node.Value.ToString()
+                value = node.Value.ToString(Helpers.DefaultNumberFormat)
             End If
             strwrite.WriteLine(timestamp & " " & value)
         Next
