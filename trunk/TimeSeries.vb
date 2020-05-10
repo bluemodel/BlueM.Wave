@@ -602,18 +602,21 @@ Public Class TimeSeries
     ''' Time steps that are not fully within the time series are not included in the result time series
     ''' TODO:
     '''     Support more interpretations
-    '''     Allow for reducing the timestep size
     '''     Allow handling NaN values
     ''' </remarks>
     ''' <returns>The new time series</returns>
     Public Function ChangeTimestep(timesteptype As TimeStepTypeEnum, timestepinterval As Integer, startdate As DateTime) As TimeSeries
 
-        Dim i, i_start, n As Integer
+        Dim i, n As Integer
         Dim dt_new, dt_old, dt_part As TimeSpan
         Dim ts As TimeSeries
         Dim t_start, t_end As DateTime
-        Dim value, value_intp, volume As Double
-        Dim keep_going As Boolean
+        Dim value, value_intp, value_intp2, volume As Double
+        Dim timestep_full, node_processed As Boolean
+
+        If Me.Interpretation <> InterpretationEnum.Instantaneous Then
+            Throw New NotImplementedException(String.Format("Changing the timestep of a time series with interpretation {0} is currently not implemented!", [Enum].GetName(GetType(InterpretationEnum), Me.Interpretation)))
+        End If
 
         'create a new timeseries
         ts = New TimeSeries(Me.Title)
@@ -621,14 +624,10 @@ Public Class TimeSeries
         ts.Metadata = Me.Metadata
         ts.Title &= " (" & timestepinterval & " " & [Enum].GetName(GetType(TimeStepTypeEnum), timesteptype) & ")"
 
-        keep_going = True
+        'find first timestep that is fully within the time series
         t_start = startdate
-        i_start = 1
-
-        'Loop over new timesteps
-        Do While keep_going
-
-            'calculate end of current timestep
+        Do While True
+            'calculate end of timestep
             t_end = t_start
             For n = 0 To timestepinterval - 1
                 Select Case timesteptype
@@ -650,81 +649,106 @@ Public Class TimeSeries
                         Throw New Exception("TimeStepType " & timesteptype & " not implemented!")
                 End Select
             Next
-
-            dt_new = t_end - t_start
-
-            Select Case Me.Interpretation
-
-                Case InterpretationEnum.Instantaneous
-
-                    'skip timesteps in the beginning that are not fully within the time series
-                    If t_start < Me.StartDate Then
-                        t_start = t_end
-                        Continue Do
-                    End If
-
-                    'abort once a time step is not fully within the time series anymore
-                    If t_end > Me.EndDate Then
-                        Exit Do
-                    End If
-
-                    'find relevant nodes and compute value
-                    volume = 0.0
-                    For i = i_start To Me.Length - 1
-
-                        dt_old = Me.Dates(i) - Me.Dates(i - 1)
-
-                        If dt_new < dt_old Then
-                            Throw New NotImplementedException("Reducing the size of the timestep is not implemented!")
-                        End If
-
-                        If Me.Dates(i) < t_start Then
-                            'skip nodes before t_start
-                            Continue For
-
-                        ElseIf Me.Dates(i - 1) < t_start And Me.Dates(i) > t_start Then
-                            'add partial volume after t_start
-                            dt_part = Me.Dates(i) - t_start
-                            value_intp = (Me.Values(i) - Me.Values(i - 1)) / dt_old.TotalSeconds * dt_part.TotalSeconds + Me.Values(i - 1)
-                            volume += (value_intp + Me.Values(i)) / 2 * dt_part.TotalSeconds
-
-                        ElseIf Me.Dates(i - 1) >= t_start And Me.Dates(i) <= t_end Then
-                            'add whole volume
-                            volume += (Me.Values(i - 1) + Me.Values(i)) / 2 * dt_old.TotalSeconds
-
-                        ElseIf Me.Dates(i - 1) < t_end And Me.Dates(i) > t_end Then
-                            'add partial volume before t_end
-                            dt_part = t_end - Me.Dates(i - 1)
-                            value_intp = (Me.Values(i) - Me.Values(i - 1)) / dt_old.TotalSeconds * dt_part.TotalSeconds + Me.Values(i - 1)
-                            volume += (Me.Values(i - 1) + value_intp) / 2 * dt_part.TotalSeconds
-
-                        End If
-
-                        If Me.Dates(i) = t_end Then
-                            'advance to next timestep
-                            i_start = i + 1
-                            Exit For
-                        ElseIf Me.Dates(i) > t_end Then
-                            'advance to next timestep but repeat the current node 
-                            'because it has only been processed partially
-                            i_start = i
-                            Exit For
-                        End If
-                    Next
-                    'convert volume to value
-                    value = volume / dt_new.TotalSeconds
-
-                Case Else
-                    Throw New NotImplementedException(String.Format("Changing the timestep of a time series with interpretation {0} is currently not implemented!", [Enum].GetName(GetType(InterpretationEnum), Me.Interpretation)))
-
-            End Select
-
-            'add new node
-            ts.AddNode(t_start, value)
-
-            'advance to next timestep
-            t_start = t_end
+            If t_start >= Me.StartDate Then
+                Exit Do
+            Else
+                'advance timestep
+                t_start = t_end
+            End If
         Loop
+
+        volume = 0.0
+        timestep_full = False
+
+        'Loop over nodes
+        For i = 0 To Me.Length - 2
+
+            If Dates(i + 1) <= t_start Then
+                'skip nodes entirely before the start
+                Continue For
+            Else
+
+                'abort once a time step is not fully within the time series anymore
+                If t_end > Me.EndDate Then
+                    Exit For
+                End If
+
+                dt_old = Me.Dates(i + 1) - Me.Dates(i)
+
+                node_processed = False
+                Do Until node_processed
+
+                    dt_new = t_end - t_start
+
+                    If Me.Dates(i) >= t_start Then
+                        If Me.Dates(i + 1) >= t_end Then
+                            'add partial volume before t_end
+                            dt_part = t_end - Me.Dates(i)
+                            value_intp = (Me.Values(i + 1) - Me.Values(i)) / dt_old.TotalSeconds * dt_part.TotalSeconds + Me.Values(i)
+                            volume += (Me.Values(i) + value_intp) / 2 * dt_part.TotalSeconds
+
+                            timestep_full = True
+                        Else
+                            'add whole volume
+                            volume += (Me.Values(i) + Me.Values(i + 1)) / 2 * dt_old.TotalSeconds
+
+                        End If
+                    Else
+                        If Me.Dates(i + 1) >= t_end Then
+                            'add partial volume between t_start and t_end
+                            dt_part = t_start - Me.Dates(i)
+                            value_intp = (Me.Values(i + 1) - Me.Values(i)) / dt_old.TotalSeconds * dt_part.TotalSeconds + Me.Values(i)
+                            dt_part = t_end - Me.Dates(i)
+                            value_intp2 = (Me.Values(i + 1) - Me.Values(i)) / dt_old.TotalSeconds * dt_part.TotalSeconds + Me.Values(i)
+                            volume += (value_intp + value_intp2) / 2 * dt_new.TotalSeconds
+
+                            timestep_full = True
+                        Else
+                            'add partial volume after t_start
+                            dt_part = Me.Dates(i + 1) - t_start
+                            value_intp = (Me.Values(i + 1) - Me.Values(i)) / dt_old.TotalSeconds * dt_part.TotalSeconds + Me.Values(i)
+                            volume += (Me.Values(i) + value_intp) / 2 * dt_part.TotalSeconds
+
+                        End If
+                    End If
+
+                    If Me.Dates(i + 1) <= t_end Then
+                        node_processed = True
+                    End If
+
+                    If timestep_full Then
+                        'store new value
+                        value = volume / dt_new.TotalSeconds
+                        ts.AddNode(t_start, value)
+                        volume = 0.0
+                        'advance to next timestep
+                        t_start = t_end
+                        For n = 0 To timestepinterval - 1
+                            Select Case timesteptype
+                                Case TimeStepTypeEnum.Second
+                                    t_end += TimeSpan.FromSeconds(1)
+                                Case TimeStepTypeEnum.Minute
+                                    t_end += TimeSpan.FromMinutes(1)
+                                Case TimeStepTypeEnum.Hour
+                                    t_end += TimeSpan.FromHours(1)
+                                Case TimeStepTypeEnum.Day
+                                    t_end += TimeSpan.FromDays(1)
+                                Case TimeStepTypeEnum.Week
+                                    t_end += TimeSpan.FromDays(7)
+                                Case TimeStepTypeEnum.Month
+                                    t_end += TimeSpan.FromDays(DateTime.DaysInMonth(t_end.Year, t_end.Month))
+                                Case TimeStepTypeEnum.Year
+                                    t_end = New Date(t_end.Year + 1, t_end.Month, t_end.Day, t_end.Hour, t_end.Minute, t_end.Second)
+                                Case Else
+                                    Throw New Exception("TimeStepType " & timesteptype & " not implemented!")
+                            End Select
+                        Next
+                        timestep_full = False
+                    End If
+                Loop
+            End If
+
+        Next
 
         ts.Interpretation = InterpretationEnum.BlockRight
 
