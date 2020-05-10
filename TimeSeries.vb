@@ -684,7 +684,7 @@ Public Class TimeSeries
                         If Me.Dates(i + 1) >= t_end Then
                             'add partial volume before t_end
                             dt_part = t_end - Me.Dates(i)
-                            value_intp = (Me.Values(i + 1) - Me.Values(i)) / dt_old.TotalSeconds * dt_part.TotalSeconds + Me.Values(i)
+                            value_intp = TimeSeries.InterpolateValue(Me.Dates(i), Me.Values(i), Me.Dates(i + 1), Me.Values(i + 1), t_end, Me.Interpretation)
                             volume += (Me.Values(i) + value_intp) / 2 * dt_part.TotalSeconds
 
                             timestep_full = True
@@ -696,17 +696,15 @@ Public Class TimeSeries
                     Else
                         If Me.Dates(i + 1) >= t_end Then
                             'add partial volume between t_start and t_end
-                            dt_part = t_start - Me.Dates(i)
-                            value_intp = (Me.Values(i + 1) - Me.Values(i)) / dt_old.TotalSeconds * dt_part.TotalSeconds + Me.Values(i)
-                            dt_part = t_end - Me.Dates(i)
-                            value_intp2 = (Me.Values(i + 1) - Me.Values(i)) / dt_old.TotalSeconds * dt_part.TotalSeconds + Me.Values(i)
+                            value_intp = TimeSeries.InterpolateValue(Me.Dates(i), Me.Values(i), Me.Dates(i + 1), Me.Values(i + 1), t_start, Me.Interpretation)
+                            value_intp2 = TimeSeries.InterpolateValue(Me.Dates(i), Me.Values(i), Me.Dates(i + 1), Me.Values(i + 1), t_end, Me.Interpretation)
                             volume += (value_intp + value_intp2) / 2 * dt_new.TotalSeconds
 
                             timestep_full = True
                         Else
                             'add partial volume after t_start
                             dt_part = Me.Dates(i + 1) - t_start
-                            value_intp = (Me.Values(i + 1) - Me.Values(i)) / dt_old.TotalSeconds * dt_part.TotalSeconds + Me.Values(i)
+                            value_intp = TimeSeries.InterpolateValue(Me.Dates(i), Me.Values(i), Me.Dates(i + 1), Me.Values(i + 1), t_start, Me.Interpretation)
                             volume += (Me.Values(i) + value_intp) / 2 * dt_part.TotalSeconds
 
                         End If
@@ -753,6 +751,39 @@ Public Class TimeSeries
         ts.Interpretation = InterpretationEnum.BlockRight
 
         Return ts
+
+    End Function
+
+    ''' <summary>
+    ''' Interpolates a value between two nodes while respecting the interpretation
+    ''' </summary>
+    ''' <param name="t1">First timestamp</param>
+    ''' <param name="v1">First value</param>
+    ''' <param name="t2">Second timestamp</param>
+    ''' <param name="v2">Second value</param>
+    ''' <param name="t">Timestamp at which to interpolate</param>
+    ''' <param name="interpretation">Interpretation to use</param>
+    ''' <returns>The interpolated value</returns>
+    Public Shared Function InterpolateValue(t1 As DateTime, v1 As Double, t2 As DateTime, v2 As Double, t As DateTime, interpretation As InterpretationEnum) As Double
+
+        Dim dt_total, dt_part As TimeSpan
+        Dim value As Double
+
+        If t < t1 Or t > t2 Then
+            Throw New Exception("Timestamp to interpolate is not within range!")
+        End If
+
+        dt_total = t2 - t1
+        dt_part = t - t1
+
+        Select Case interpretation
+            Case InterpretationEnum.Instantaneous
+                value = (v2 - v1) / dt_total.TotalSeconds * dt_part.TotalSeconds + v1
+            Case Else
+                Throw New NotImplementedException(String.Format("Interpolation between nodes with interpretation {0} is currently not implemented!", [Enum].GetName(GetType(InterpretationEnum), interpretation)))
+        End Select
+
+        Return value
 
     End Function
 
