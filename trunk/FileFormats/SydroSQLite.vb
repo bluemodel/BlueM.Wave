@@ -222,7 +222,7 @@ Public Class SydroSQLite
                 connStringBuilder.ReadOnly = True
                 connStringBuilder.DateTimeFormat = Data.SQLite.SQLiteDateFormats.Default
                 connString = connStringBuilder.ConnectionString
-                Me._connection = New Data.SQLite.SQLiteConnection(connString)
+                Me._connection = New Data.SQLite.SQLiteConnection(connString, parseViaFramework:=True)
             End If
             Return Me._connection
         End Get
