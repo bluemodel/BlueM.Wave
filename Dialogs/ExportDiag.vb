@@ -62,30 +62,21 @@ Friend Class ExportDiag
     ''' <remarks></remarks>
     Private Sub ComboBox_Format_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ComboBox_Format.SelectedIndexChanged
 
-        If Me.ComboBox_Format.SelectedItem = FileFormatBase.FileFormats.BIN Then
-            'BUG 704: Unable to export to BIN if running as 64bit
-            If Helpers.is64BitProcess() Then
-                MsgBox("Unable to load SydroZreNet.dll required for BIN export in a 64bit process, please use the x86-version of Wave.", MsgBoxStyle.Critical)
-                Me.ComboBox_Format.SelectedItem = FileFormatBase.FileFormats.CSV
-                Exit Sub
-            End If
-        End If
-
         Select Case ComboBox_Format.SelectedItem
 
-            Case FileFormatBase.FileFormats.ZRE, _
-                 FileFormatBase.FileFormats.REG_HYSTEM, _
-                 FileFormatBase.FileFormats.REG_SMUSI, _
-                 FileFormatBase.FileFormats.DAT_SWMM_MASS, _
-                 FileFormatBase.FileFormats.DAT_SWMM_TIME, _
-                 FileFormatBase.FileFormats.BIN, _
-                 FileFormatBase.FileFormats.UVF, _
+            Case FileFormatBase.FileFormats.ZRE,
+                 FileFormatBase.FileFormats.REG_HYSTEM,
+                 FileFormatBase.FileFormats.REG_SMUSI,
+                 FileFormatBase.FileFormats.DAT_SWMM_MASS,
+                 FileFormatBase.FileFormats.DAT_SWMM_TIME,
+                 FileFormatBase.FileFormats.BIN,
+                 FileFormatBase.FileFormats.UVF,
                  FileFormatBase.FileFormats.ZRXP
                 'Allow selection of a single series
                 Me.ListBox_Series.SelectionMode = SelectionMode.One
                 Me.Button_SelectAll.Enabled = False
 
-            Case FileFormatBase.FileFormats.TXT_SWMM, _
+            Case FileFormatBase.FileFormats.TXT_SWMM,
                  FileFormatBase.FileFormats.CSV
                 'Allow selection of multiple series
                 Me.ListBox_Series.SelectionMode = SelectionMode.MultiExtended
