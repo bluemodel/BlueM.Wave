@@ -349,8 +349,10 @@ Public Class Wave
             Xmin = DateTime.MaxValue
             Xmax = DateTime.MinValue
             For Each zre As TimeSeries In Me.Zeitreihen.Values
-                If (zre.StartDate < Xmin) Then Xmin = zre.StartDate
-                If (zre.EndDate > Xmax) Then Xmax = zre.EndDate
+                If zre.Length > 0 Then
+                    If (zre.StartDate < Xmin) Then Xmin = zre.StartDate
+                    If (zre.EndDate > Xmax) Then Xmax = zre.EndDate
+                End If
             Next
 
             'Übersicht neu skalieren
