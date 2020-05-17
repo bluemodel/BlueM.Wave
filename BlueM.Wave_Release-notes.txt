@@ -8,8 +8,9 @@ NEW:
 * Added a button for removing nodes with NaN values from the currently loaded time series
 CHANGED:
 * The Change Timestep function is now implemented natively
-* When loading PRMS files, the file import dialog is now displayed, allowing for the selection of time series
+* Reading SYDRO SQLite time series files is now implemented natively
 * Reading and writing SYDRO binary files is now implemented natively
+* When loading PRMS files, the file import dialog is now displayed, allowing for the selection of time series
 FIXED:
 * Fixed unintended use of the system's locale settings when exporting files in formats CSV, UVF, ZRXP, SWMM_DAT_MASS and SWMM_DAT_TIME
 * Fixed the interpretation of the output of the ChangeTimestep function

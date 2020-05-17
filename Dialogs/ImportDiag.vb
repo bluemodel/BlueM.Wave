@@ -156,7 +156,7 @@ Friend Class ImportDiag
 
         'Workaround for binary files (SWMM5 OUT and SYDRO SQLite)
         If TypeOf Me.datei Is SWMM_OUT _
-            Or TypeOf Me.datei Is SQLite Then
+            Or TypeOf Me.datei Is SydroSQLite Then
 
             Me.TextBox_Preview.Text = Path.GetFileName(Me.datei.File) & " is a binary file." & eol & "Preview is not available!"
             'Disable all other fields
