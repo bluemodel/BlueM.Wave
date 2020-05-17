@@ -182,11 +182,7 @@ Public Module FileFactory
                 FileInstance = New BIN(file)
 
             Case FileExtSQLITE
-                'BUG 704: Abort if running as 64bit
-                If Helpers.is64BitProcess() Then
-                    Throw New Exception("Unable to load SydroSQLiteNet.dll required for loading SQLite files in a 64bit process, please use the x86-version of Wave.")
-                End If
-                FileInstance = New SQLite(file)
+                FileInstance = New SydroSQLite(file)
 
             Case FileExtZRXP
                 FileInstance = New ZRXP(file)
