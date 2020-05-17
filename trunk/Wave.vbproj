@@ -307,7 +307,6 @@
     <Compile Include="FileFormats\CSV.vb" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="My Project\licenses.licx" />
     <EmbeddedResource Include="My Project\Resources.resx">
       <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
       <CustomToolNamespace>My.Resources</CustomToolNamespace>
@@ -320,6 +319,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <None Include="lib\SQLite\System.Data.SQLite.dll.config" />
     <None Include="My Project\Application.myapp">
       <Generator>MyApplicationCodeGenerator</Generator>
       <LastGenOutput>Application.Designer.vb</LastGenOutput>
@@ -386,9 +386,9 @@
     <Content Include="lib\MathNet\MathNet.Numerics.license.txt" />
     <Content Include="lib\MathNet\MathNet.Numerics.pdb" />
     <Content Include="lib\MathNet\MathNet.Numerics.xml" />
-    <Content Include="lib\SQLite\SQLite.Interop.dll">
-    </Content>
     <Content Include="lib\SQLite\System.Data.SQLite.dll" />
+    <Content Include="lib\SQLite\x64\SQLite.Interop.dll" />
+    <Content Include="lib\SQLite\x86\SQLite.Interop.dll" />
     <Content Include="LICENSE.TXT">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -496,6 +496,7 @@
   <PropertyGroup>
     <PostBuildEvent>copy $(ProjectDir)lib\MathNet\MathNet.Numerics.license.txt $(TargetDir)MathNet.Numerics.license.txt
 copy $(ProjectDir)lib\Ionic.Zip\Ionic.Zip.license.txt $(TargetDir)Ionic.Zip.license.txt
-copy $(ProjectDir)lib\SQLite\SQLite.Interop.dll $(TargetDir)SQLite.Interop.dll</PostBuildEvent>
+xcopy $(ProjectDir)lib\SQLite\x86 $(TargetDir)x86 /i
+xcopy $(ProjectDir)lib\SQLite\x64 $(TargetDir)x64 /i</PostBuildEvent>
   </PropertyGroup>
 </Project>
