@@ -1162,12 +1162,6 @@ Public Class Wave
     ''' <remarks></remarks>
     Private Sub ToolStripButton_ChangeTimestep_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_ChangeTimestep.Click
 
-        'BUG 704: Abort if running as 64bit
-        If Helpers.is64BitProcess() Then
-            MsgBox("Unable to load SydroZreNet.dll required for changing the timestep in a 64bit process, please use the x86-version of Wave.", MsgBoxStyle.Critical)
-            Exit Sub
-        End If
-
         Call Me.ChangeTimeStep()
 
     End Sub
