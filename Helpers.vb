@@ -59,7 +59,7 @@ Public Module Helpers
     ''' Date formats
     ''' </summary>
     ''' <returns>Dictionary of available DateFormats</returns>
-    ''' <remarks></remarks>
+    ''' <remarks>see https://docs.microsoft.com/en-us/dotnet/standard/base-types/custom-date-and-time-format-strings </remarks>
     Public ReadOnly Property DateFormats() As Dictionary(Of String, String)
         Get
             Dim dict As New Dictionary(Of String, String)
@@ -67,6 +67,7 @@ Public Module Helpers
             dict.Add("GISMO1", "dd.MM.yyyy HH:mm")
             dict.Add("GISMO2", "yyyyMMdd HH:mm")
             dict.Add("SMUSI", "dd MM yyyy   HH")
+            dict.Add("SWMM", "MM/dd/yyyy HH:mm:ss")
             dict.Add("UVF", "yyyyMMddHHmm") 'eigentlich nur zweistellige Jahreszahl, aber das Jahrhundert wird beim Einlesen trotzdem bestimmt
             dict.Add("WEL", "dd.MM.yyyy HH:mm")
             dict.Add("ZRE", "yyyyMMdd HH:mm")
