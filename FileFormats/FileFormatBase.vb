@@ -56,22 +56,22 @@ Public MustInherit Class FileFormatBase
     ''' FileFilter for file dialogs
     ''' </summary>
     ''' <remarks></remarks>
-    Friend Const FileFilter As String = _
-            "All files (*.*)|*.*|" & _
-            "Text files (*.txt)|*.txt|" & _
-            "CSV files (*.csv)|*.csv|" & _
-            "HYDRO_AS-2D files (*.dat)|*.dat|" & _
-            "Hystem Extran files (*.dat)|*.dat|" & _
-            "PRMS output files (*.out)|*.out|" & _
-            "SIMBA files (*.smb)|*.smb|" & _
-            "SMUSI files (*.asc)|*.asc|" & _
-            "SWMM files (*.out)|*.out|" & _
-            "SYDRO binary files (*.bin)|*.bin|" & _
-            "SYDRO SQLite files (*.db)|*.db|" & _
-            "UVF files (*.uvf)|*.uvf|" & _
-            "WEL files (*.wel, *.kwl)|*.wel;*.kwl|" & _
-            "Wave project files (*wvp)|*.wvp|" & _
-            "ZRE files (*.zre)|*.zre|" & _
+    Friend Const FileFilter As String =
+            "All files (*.*)|*.*|" &
+            "Text files (*.txt)|*.txt|" &
+            "CSV files (*.csv)|*.csv|" &
+            "HYDRO_AS-2D files (*.dat)|*.dat|" &
+            "Hystem Extran files (*.dat)|*.dat|" &
+            "PRMS output files (*.out)|*.out|" &
+            "SIMBA files (*.smb)|*.smb|" &
+            "SMUSI files (*.asc)|*.asc|" &
+            "SWMM files (*.txt, *.out)|*.txt;*.out|" &
+            "SYDRO binary files (*.bin)|*.bin|" &
+            "SYDRO SQLite files (*.db)|*.db|" &
+            "UVF files (*.uvf)|*.uvf|" &
+            "WEL files (*.wel, *.kwl)|*.wel;*.kwl|" &
+            "Wave project files (*wvp)|*.wvp|" &
+            "ZRE files (*.zre)|*.zre|" &
             "ZRXP files (*.zrx)|*.zrx"
 
 #Region "allgemeine Eigenschaften"
