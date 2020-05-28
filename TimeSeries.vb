@@ -650,23 +650,18 @@ Public Class TimeSeries
 
         'Find first node of the timeseries to begin with
         For i = 0 To Me.Length - 1
-            Select Case Me.Interpretation
-                Case InterpretationEnum.Instantaneous,
-                     InterpretationEnum.BlockRight
-
-                    If Me.Dates(i) >= t_start Then
-                        i_start = i
-                        Exit For
-                    End If
-                Case InterpretationEnum.BlockLeft,
+            If Me.Dates(i) >= t_start Then
+                Select Case Me.Interpretation
+                    Case InterpretationEnum.BlockLeft,
                      InterpretationEnum.Cumulative,
                      InterpretationEnum.CumulativePerTimestep
-
-                    If Me.Dates(i) >= t_end Then
-                        i_start = i - 1
-                        Exit For
-                    End If
-            End Select
+                        i_start = i
+                    Case InterpretationEnum.Instantaneous,
+                     InterpretationEnum.BlockRight
+                        i_start = Math.Max(i - 1, 0)
+                End Select
+                Exit For
+            End If
         Next
 
         volume = 0.0
