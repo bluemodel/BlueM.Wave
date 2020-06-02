@@ -1180,7 +1180,7 @@ Public Class Wave
         Dim nanStart, nanEnd, bandStart, bandEnd As DateTime
         Dim band As Steema.TeeChart.Tools.ColorBand
         Dim color As Drawing.Color
-        Dim isNaNPeriod, nanFound As Boolean
+        Dim isNaNPeriod, nanFound, nanFoundInSeries As Boolean
 
         'set default color
         color = Color.Red
@@ -1206,12 +1206,14 @@ Public Class Wave
                     'log
                     Log.AddLogEntry("Finding NaN values for series " & ts.Title & "...")
                     'find beginning and end of nan values
+                    nanFoundInSeries = False
                     isNaNPeriod = False
                     For i As Integer = 0 To ts.Length - 1
                         If Not isNaNPeriod Then
                             'test for start of NaN values
                             If Double.IsNaN(ts.Values(i)) Then
                                 isNaNPeriod = True
+                                nanFoundInSeries = True
                                 nanFound = True
                                 If i = 0 Then
                                     bandStart = ts.Dates(i)
@@ -1256,6 +1258,9 @@ Public Class Wave
                             End If
                         End If
                     Next
+                    If Not nanFoundInSeries Then
+                        Log.AddLogEntry(" Series does not contain any NaN values")
+                    End If
                 End If
             Next
             If Not nanFound Then
