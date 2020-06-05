@@ -1631,6 +1631,21 @@ Public Class Wave
         Process.Start(HelpURL)
     End Sub
 
+    ''' <summary>
+    ''' Release Notes click
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    Private Sub ToolStripMenuItem_ReleaseNotes_Click(sender As Object, e As EventArgs) Handles ToolStripMenuItem_ReleaseNotes.Click
+        Dim filepath As String
+        filepath = IO.Path.Combine(Application.StartupPath, "BlueM.Wave_Release-notes.txt")
+        Try
+            System.Diagnostics.Process.Start(filepath)
+        Catch ex As Exception
+            MsgBox(ex.Message, MsgBoxStyle.Critical)
+        End Try
+    End Sub
+
 #End Region 'Toolbar
 
 #Region "Navigation"

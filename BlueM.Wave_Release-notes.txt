@@ -4,6 +4,7 @@ BlueM.Wave Release Notes
 Version 1.8.0
 -------------
 NEW:
+* Added a menu item for opening the release notes
 * Added support for reading BW_TMP.DAT files in HYDRO_AS-2D version 5 format (previous versions still supported)
 * Added a button for removing nodes with NaN values from the currently loaded time series
 CHANGED:
