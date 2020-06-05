@@ -45,40 +45,68 @@ Friend Module AnalysisFactory
     End Enum
 
     ''' <summary>
+    ''' Returns a text description of the analysis function
+    ''' </summary>
+    ''' <param name="analysisfunction"></param>
+    ''' <returns></returns>
+    Public Function getAnalysisDescription(analysisfunction As AnalysisFunctions) As String
+        Select Case analysisfunction
+            Case AnalysisFunctions.AnnualStatistics
+                Return AnnualStatistics.Description
+            Case AnalysisFunctions.Comparison
+                Return Comparison.Description
+            Case AnalysisFunctions.Cumulative
+                Return Cumulative.Description
+            Case AnalysisFunctions.DoubleSumCurve
+                Return DoubleSumCurve.Description
+            Case AnalysisFunctions.GoodnessOfFit
+                Return GoodnessOfFit.Description
+            Case AnalysisFunctions.Histogram
+                Return Histogram.Description
+            Case AnalysisFunctions.MonthlyStatistics
+                Return MonthlyStatistics.Description
+            Case AnalysisFunctions.TimestepAnalysis
+                Return TimeStepAnalysis.Description
+            Case Else
+                Return "Description not found"
+        End Select
+    End Function
+
+    ''' <summary>
     ''' Fabrikmethode zur Erzeugung eines Analyse-Objekts
     ''' </summary>
     ''' <param name="analysisfunction">Typ des zu erzeugenden Analyse-Objekts</param>
-    ''' <param name="zeitreihen">Collection von zu analysierenden Zeitreihen</param>
+    ''' <param name="seriesList">Collection von zu analysierenden Zeitreihen</param>
     ''' <returns>Das Analyse-Objekt</returns>
-    Public Function CreateAnalysis(ByVal analysisfunction As AnalysisFunctions, ByVal zeitreihen As List(Of TimeSeries)) As Analysis
+    Public Function CreateAnalysis(ByVal analysisfunction As AnalysisFunctions, ByVal seriesList As List(Of TimeSeries)) As Analysis
 
         Dim oAnalysis As Analysis
 
         Select Case analysisfunction
 
             Case AnalysisFunctions.MonthlyStatistics
-                oAnalysis = New MonthlyStatistics(zeitreihen)
+                oAnalysis = New MonthlyStatistics(seriesList)
 
             Case AnalysisFunctions.DoubleSumCurve
-                oAnalysis = New DoubleSumCurve(zeitreihen)
+                oAnalysis = New DoubleSumCurve(seriesList)
 
             Case AnalysisFunctions.GoodnessOfFit
-                oAnalysis = New GoodnessOfFit(zeitreihen)
+                oAnalysis = New GoodnessOfFit(seriesList)
 
             Case AnalysisFunctions.Histogram
-                oAnalysis = New Histogram(zeitreihen)
+                oAnalysis = New Histogram(seriesList)
 
             Case AnalysisFunctions.Comparison
-                oAnalysis = New Comparison(zeitreihen)
+                oAnalysis = New Comparison(seriesList)
 
             Case AnalysisFunctions.AnnualStatistics
-                oAnalysis = New AnnualStatistics(zeitreihen)
+                oAnalysis = New AnnualStatistics(seriesList)
 
             Case AnalysisFunctions.Cumulative
-                oAnalysis = New Cumulative(zeitreihen)
+                oAnalysis = New Cumulative(seriesList)
 
             Case AnalysisFunctions.TimestepAnalysis
-                oAnalysis = New TimeStepAnalysis(zeitreihen)
+                oAnalysis = New TimeStepAnalysis(seriesList)
 
             Case Else
                 Throw New Exception("Analysis not found!")

@@ -66,6 +66,14 @@ Friend MustInherit Class Analysis
 #Region "Properties"
 
     ''' <summary>
+    ''' Returns a text description of the analysis function
+    ''' Should be overloaded by inheriting analysis functions
+    ''' </summary>
+    Public Shared Function Description() As String
+        Return "No description found"
+    End Function
+
+    ''' <summary>
     ''' Flag indicating whether the analysis function has a result test
     ''' </summary>
     Public MustOverride ReadOnly Property hasResultText() As Boolean
@@ -153,6 +161,7 @@ Friend MustInherit Class Analysis
     ''' Ergebnisse aufbereiten
     ''' </summary>
     Public MustOverride Sub PrepareResults()
+
 
 #End Region 'Methoden
 

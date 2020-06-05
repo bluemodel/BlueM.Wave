@@ -27,16 +27,20 @@
 '
 Imports MathNet.Numerics
 ''' <summary>
-''' Gegenüberstellung/Vergleich zweier Zeitreihen
+''' Plots the concurrent values of two time series against each other and least-squares fits a line to the resulting points
 ''' </summary>
 ''' <remarks>http://wiki.bluemodel.org/index.php/Wave:Gegenueberstellung</remarks>
 Friend Class Comparison
     Inherits Analysis
 
-    Dim datume As IList(Of DateTime)
-    Dim ergebnisreihe(,) As Double ' Ergebnis der Gegenueberstellung: y-Werte der Reihe(xnummer) werden x-Achsen-Werte, y-Werte der Reihe(ynummer) werden y-Achsen-Werte  
-    Dim xnummer As Integer ' Nummer mit der auf mZeitreihen(i) zugegriffen wird, xnummer = Zeitreihe soll auf x-Achse
-    Dim ynummer As Integer ' Nummer mit der auf mZeitreihen(i) zugegriffen wird, xnummer = Zeitreihe soll auf y-Achse
+    Private datume As IList(Of DateTime)
+    Private ergebnisreihe(,) As Double ' Ergebnis der Gegenueberstellung: y-Werte der Reihe(xnummer) werden x-Achsen-Werte, y-Werte der Reihe(ynummer) werden y-Achsen-Werte  
+    Private xnummer As Integer ' Nummer mit der auf mZeitreihen(i) zugegriffen wird, xnummer = Zeitreihe soll auf x-Achse
+    Private ynummer As Integer ' Nummer mit der auf mZeitreihen(i) zugegriffen wird, xnummer = Zeitreihe soll auf y-Achse
+
+    Public Overloads Shared Function Description() As String
+        Return "Plots the concurrent values of two time series against each other and least-squares fits a line to the resulting points."
+    End Function
 
     ''' <summary>
     ''' Flag, der anzeigt, ob die Analysefunktion einen Ergebnistext erzeugt
