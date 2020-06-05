@@ -44,6 +44,10 @@ Friend Class AnnualStatistics
 
     Private stats As Dictionary(Of String, struct_stat)
 
+    Public Overloads Shared Function Description() As String
+        Return "Calculates annual statistics (min, max, avg, vol) based on hydrological years starting on November 1st."
+    End Function
+
     Public Overrides ReadOnly Property hasResultChart() As Boolean
         Get
             Return False

@@ -1082,7 +1082,7 @@ Public Class Wave
 
                 'Analyse instanzieren
                 Dim oAnalysis As Analysis
-                oAnalysis = AnalysisFactory.CreateAnalysis(oAnalysisDialog.selectedAnalysisFunction, oAnalysisDialog.selectedZeitreihen)
+                oAnalysis = AnalysisFactory.CreateAnalysis(oAnalysisDialog.selectedAnalysisFunction, oAnalysisDialog.selectedTimeseries)
 
                 Call Log.AddLogEntry("... executing analysis ...")
 

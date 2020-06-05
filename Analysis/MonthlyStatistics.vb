@@ -78,6 +78,11 @@ Friend Class MonthlyStatistics
 
 #Region "Properties"
 
+    Public Overloads Shared Function Description() As String
+        Return "Calculates the following statistical values for each month of the year: average, median, minimum, maximum, standard deviation " &
+            "and displays them in a chart."
+    End Function
+
     ''' <summary>
     ''' Flag indicating whether the analysis function has a result text
     ''' </summary>

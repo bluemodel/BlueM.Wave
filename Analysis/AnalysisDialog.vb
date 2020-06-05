@@ -25,50 +25,78 @@
 'EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 '--------------------------------------------------------------------------------------------
 '
+''' <summary>
+''' Dialog for selecting an analysis function and time series
+''' </summary>
 Friend Class AnalysisDialog
 
-    '*************************************************************
-    'Dialog zur Auswahl von Zeitreihe(n) und einer Analysefunktion
-    '*************************************************************
-
-    'Konstruktor
-    '***********
-    Public Sub New(ByVal zeitreihen As Dictionary(Of String, TimeSeries))
+    Public Sub New(ByVal seriesDict As Dictionary(Of String, TimeSeries))
 
         Call InitializeComponent()
 
-        'Liste der Analysefunktionen
+        'Populate combobox with analysis functions
         Me.ComboBox_Analysis.DataSource = System.Enum.GetValues(GetType(AnalysisFactory.AnalysisFunctions))
 
-        'Zeitreihen in Listbox eintragen
-        For Each zre As TimeSeries In zeitreihen.Values
-            Me.ListBox_Series.Items.Add(zre)
+        'Populate listbox with time series
+        For Each series As TimeSeries In seriesDict.Values
+            Me.ListBox_Series.Items.Add(series)
         Next
 
     End Sub
 
-    'Ausgewählte Analysefunktion
-    '***************************
+    ''' <summary>
+    ''' Selected analysis function
+    ''' </summary>
+    ''' <returns></returns>
     Friend ReadOnly Property selectedAnalysisFunction() As AnalysisFactory.AnalysisFunctions
         Get
             Return Me.ComboBox_Analysis.SelectedItem
         End Get
     End Property
 
-    'Ausgewählte Zeitreihen
-    '**********************
-    Friend ReadOnly Property selectedZeitreihen() As List(Of TimeSeries)
+    ''' <summary>
+    ''' List of selected time series
+    ''' </summary>
+    ''' <returns></returns>
+    Friend ReadOnly Property selectedTimeseries() As List(Of TimeSeries)
         Get
-            Dim zeitreihen As New List(Of TimeSeries)()
+            Dim seriesList As New List(Of TimeSeries)()
             For Each item As Object In Me.ListBox_Series.SelectedItems
-                zeitreihen.Add(CType(item, TimeSeries))
+                seriesList.Add(CType(item, TimeSeries))
             Next
-            Return zeitreihen
+            Return seriesList
         End Get
     End Property
 
-    'OK-Button gedrückt
-    '******************
+    ''' <summary>
+    ''' Selected analysis function changed
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    Private Sub ComboBox_Analysis_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox_Analysis.SelectedIndexChanged
+        Dim url As String
+        'update the description and wiki link
+        Me.Label_AnalaysisDescription.Text = AnalysisFactory.getAnalysisDescription(Me.selectedAnalysisFunction)
+        url = "http://wiki.bluemodel.org/index.php/Wave:" & Me.selectedAnalysisFunction.ToString("g")
+        Me.LinkLabel_Helplink.Text = url
+        Me.LinkLabel_Helplink.Links.Clear()
+        Me.LinkLabel_Helplink.Links.Add(0, Me.LinkLabel_Helplink.Text.Length, url)
+    End Sub
+
+    ''' <summary>
+    ''' Link clicked
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    Private Sub LinkLabel_Helplink_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel_Helplink.LinkClicked
+        System.Diagnostics.Process.Start(e.Link.LinkData)
+    End Sub
+
+    ''' <summary>
+    ''' OK button pressed
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
     Private Sub Button_OK_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button_OK.Click
         'Eingabekontrolle
         If (Me.ListBox_Series.SelectedItems.Count < 1) Then
@@ -77,8 +105,4 @@ Friend Class AnalysisDialog
         End If
     End Sub
 
-
-    Private Sub AnalysisDialog_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
-
-    End Sub
 End Class

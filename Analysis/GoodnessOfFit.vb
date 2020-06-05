@@ -36,6 +36,10 @@ Friend Class GoodnessOfFit
 
     Private GoFResults As Dictionary(Of String, GoF)
 
+    Public Overloads Shared Function Description() As String
+        Return "Calculates multiple goodness of fit criteria for two time series. Only coincident data points where both values are not NaN are considered."
+    End Function
+
     Private Structure GoF
         Public startDate As DateTime
         Public endDate As DateTime

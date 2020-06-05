@@ -26,14 +26,18 @@
 '--------------------------------------------------------------------------------------------
 '
 ''' <summary>
-''' Doppelsummenanalyse zweier Zeitreihen
+''' Plots the cumulative coincident values of two time series against each other and adds a 45° line to the resulting plot
 ''' </summary>
 ''' <remarks>http://wiki.bluemodel.org/index.php/Wave:Doppelsummenanalyse</remarks>
 Friend Class DoubleSumCurve
     Inherits Analysis
 
-    Dim summe1(), summe2() As Double
-    Dim datume As IList(Of DateTime)
+    Private summe1(), summe2() As Double
+    Private datume As IList(Of DateTime)
+
+    Public Overloads Shared Function Description() As String
+        Return "Plots the cumulative coincident values of two time series against each other and adds a 45° line to the resulting plot."
+    End Function
 
     ''' <summary>
     ''' Flag, der anzeigt, ob die Analysefunktion einen Ergebnistext erzeugt
