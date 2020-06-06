@@ -34,8 +34,8 @@ Friend Class PropertiesDialog
     ''' <summary>
     ''' Is raised when a property is changed by the user
     ''' </summary>
-    ''' <param name="index">Index of the time series whose properties were changed</param>
-    Friend Event PropertyChanged(index As Integer)
+    ''' <param name="id">Id of the time series whose properties were changed</param>
+    Friend Event PropertyChanged(id As Integer)
 
     Public Sub New(ByRef seriesList As List(Of TimeSeries))
 
@@ -57,12 +57,12 @@ Friend Class PropertiesDialog
     End Sub
 
     ''' <summary>
-    ''' Commit edits as soon as they occur
+    ''' Commit edits as soon as they occur, but only if they occur in the Interpretation column
     ''' </summary>
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
     Private Sub DataGridView1_CurrentCellDirtyStateChanged(sender As Object, e As EventArgs) Handles DataGridView1.CurrentCellDirtyStateChanged
-        If DataGridView1.IsCurrentCellDirty Then
+        If DataGridView1.IsCurrentCellDirty And DataGridView1.CurrentCell.OwningColumn.Name = "Interpretation" Then
             DataGridView1.CommitEdit(DataGridViewDataErrorContexts.Commit)
         End If
     End Sub
@@ -78,21 +78,21 @@ Friend Class PropertiesDialog
             Exit Sub
         End If
 
-        Dim titleColumnIndex As Integer
-        Dim ts_title As String
+        Dim idColumnIndex As Integer
+        Dim id As Integer
 
-        'determine column index of "Title" column
+        'determine column index of "Id" column
         For Each column As DataGridViewColumn In Me.DataGridView1.Columns
-            If column.Name = "Title" Then
-                titleColumnIndex = column.Index
+            If column.Name = "Id" Then
+                idColumnIndex = column.Index
                 Exit For
             End If
         Next
 
-        'get title of changed series from Datagridview
-        ts_title = DataGridView1.Rows(e.RowIndex).Cells(titleColumnIndex).Value
+        'get id of changed series from Datagridview
+        id = DataGridView1.Rows(e.RowIndex).Cells(idColumnIndex).Value
 
-        RaiseEvent PropertyChanged(ts_title)
+        RaiseEvent PropertyChanged(id)
 
     End Sub
 End Class

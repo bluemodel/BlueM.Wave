@@ -46,7 +46,6 @@ Partial Class Wave
         Me.ToolStripMenuItem_ExportSeries = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripButton_Copy = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripButton_Print = New System.Windows.Forms.ToolStripButton()
-        Me.ToolStripButton_RenameSeries = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripButton_Cut = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripButton_Merge = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripSeparator8 = New System.Windows.Forms.ToolStripSeparator()
@@ -154,7 +153,7 @@ Partial Class Wave
         '
         ToolStrip1.AutoSize = False
         ToolStrip1.BackColor = System.Drawing.SystemColors.Control
-        ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButton_New, Me.ToolStripDropDownButton_Open, Me.ToolStripDropDownButton_Save, ToolStripSeparator4, Me.ToolStripButton_Copy, Me.ToolStripButton_Print, ToolStripSeparator2, Me.ToolStripButton_RenameSeries, Me.ToolStripButton_Cut, Me.ToolStripButton_Merge, Me.ToolStripSeparator8, Me.ToolStripButton_ShowNaNValues, Me.ToolStripButton_ConvertErrorValues, Me.ToolStripButton_RemoveNaNValues, Me.ToolStripSeparator7, Me.ToolStripButton_Analysis, Me.ToolStripButton_Properties, ToolStripSeparator1, Me.ToolStripButton_EditChart, Me.ToolStripSeparator9, Me.ToolStripButton_AutoAdjustYAxes, Me.ToolStripButton_ToggleOverview, Me.ToolStripButton_ToggleNavigation, toolStripSeparator, Me.ToolStripButton_NormalMode, Me.ToolStripButton_Zoom, Me.ToolStripButton_Pan, Me.ToolStripSeparator3, Me.ToolStripButton_ZoomPrevious, Me.ToolStripDropDownButton_Help, Me.ToolStripDropDownButton_ZoomToSeries, Me.ToolStripButton_ZoomAll})
+        ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButton_New, Me.ToolStripDropDownButton_Open, Me.ToolStripDropDownButton_Save, ToolStripSeparator4, Me.ToolStripButton_Copy, Me.ToolStripButton_Print, ToolStripSeparator2, Me.ToolStripButton_Cut, Me.ToolStripButton_Merge, Me.ToolStripSeparator8, Me.ToolStripButton_ShowNaNValues, Me.ToolStripButton_ConvertErrorValues, Me.ToolStripButton_RemoveNaNValues, Me.ToolStripSeparator7, Me.ToolStripButton_Analysis, Me.ToolStripButton_Properties, ToolStripSeparator1, Me.ToolStripButton_EditChart, Me.ToolStripSeparator9, Me.ToolStripButton_AutoAdjustYAxes, Me.ToolStripButton_ToggleOverview, Me.ToolStripButton_ToggleNavigation, toolStripSeparator, Me.ToolStripButton_NormalMode, Me.ToolStripButton_Zoom, Me.ToolStripButton_Pan, Me.ToolStripSeparator3, Me.ToolStripButton_ZoomPrevious, Me.ToolStripDropDownButton_Help, Me.ToolStripDropDownButton_ZoomToSeries, Me.ToolStripButton_ZoomAll})
         ToolStrip1.Location = New System.Drawing.Point(0, 0)
         ToolStrip1.Name = "ToolStrip1"
         ToolStrip1.Size = New System.Drawing.Size(944, 34)
@@ -284,16 +283,6 @@ Partial Class Wave
         Me.ToolStripButton_Print.Name = "ToolStripButton_Print"
         Me.ToolStripButton_Print.Size = New System.Drawing.Size(23, 31)
         Me.ToolStripButton_Print.Text = "&Print"
-        '
-        'ToolStripButton_RenameSeries
-        '
-        Me.ToolStripButton_RenameSeries.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.ToolStripButton_RenameSeries.Image = CType(resources.GetObject("ToolStripButton_RenameSeries.Image"), System.Drawing.Image)
-        Me.ToolStripButton_RenameSeries.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.ToolStripButton_RenameSeries.Name = "ToolStripButton_RenameSeries"
-        Me.ToolStripButton_RenameSeries.Size = New System.Drawing.Size(23, 31)
-        Me.ToolStripButton_RenameSeries.Text = "Rename Series"
-        Me.ToolStripButton_RenameSeries.ToolTipText = "Rename time series"
         '
         'ToolStripButton_Cut
         '
@@ -1292,7 +1281,6 @@ Partial Class Wave
     Friend WithEvents TableLayoutPanel1 As System.Windows.Forms.TableLayoutPanel
     Friend WithEvents ToolStripButton_ToggleNavigation As System.Windows.Forms.ToolStripButton
     Friend WithEvents ToolStripButton_ConvertErrorValues As System.Windows.Forms.ToolStripButton
-    Friend WithEvents ToolStripButton_RenameSeries As System.Windows.Forms.ToolStripButton
     Friend WithEvents ToolStripDropDownButton_ZoomToSeries As System.Windows.Forms.ToolStripDropDownButton
     Friend WithEvents ToolStripMenuItem_SaveProjectFile As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolStripButton_Properties As System.Windows.Forms.ToolStripButton

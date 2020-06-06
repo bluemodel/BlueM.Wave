@@ -504,37 +504,35 @@ Public Class Wave
     ''' </remarks>
     Private Sub TChart1_SeriesRemoved(ByVal sender As Object, ByVal e As System.EventArgs) Handles ChartListBox1.RemovedSeries
 
-        Dim found As Boolean
         Dim title As String
         Dim id_removed As Integer
         Dim s As Steema.TeeChart.Styles.Series
+        Dim ids_remaining As New List(Of Integer)
+
+        'collect ids of series currently still in the chart
+        For Each s In Me.ChartListBox1.Items
+            ids_remaining.Add(s.Tag)
+        Next
 
         id_removed = -1
-        title = ""
 
-        'Alle internen Zeitreihen durchlaufen und prüfen, ob es sie noch gibt
-        For Each ts As TimeSeries In Me.TimeSeriesDict.Values
-            title = ts.Title
-            found = False
-            For Each s In Me.ChartListBox1.Items
-                If (s.Title = title) Then
-                    found = True 'diese Serie gibt es noch
-                    Exit For
-                End If
-            Next
-            If (Not found) Then
-                id_removed = ts.Id 'diese Serie gibt es nicht mehr
-                Exit For
+        'find the time series id missing in the chart
+        For Each id As Integer In Me.TimeSeriesDict.Keys
+            If Not ids_remaining.Contains(id) Then
+                id_removed = id
             End If
         Next
 
         If id_removed <> -1 Then
-            'Aus der internen Collection löschen
+
+            title = Me.TimeSeriesDict(id_removed).Title
+
+            'remove from internal dictionary
             Me.TimeSeriesDict.Remove(id_removed)
 
-            'Aus der Übersicht löschen
+            'remove from overview chart
             For i As Integer = Me.TChart2.Series.Count - 1 To 0 Step -1
-                If (Me.TChart2.Series.Item(i).Title = title) Then
+                If (Me.TChart2.Series.Item(i).Tag = id_removed) Then
                     Me.TChart2.Series.RemoveAt(i)
                     Me.TChart2.Refresh()
                     Exit For
@@ -579,14 +577,16 @@ Public Class Wave
     ''' <summary>
     ''' Handles time series properties changed in the PropertiesDialog
     ''' </summary>
-    ''' <param name="index">Index of the time series whose properties have changed</param>
-    ''' <remarks>Handles changed interpretation</remarks>
-    Private Sub TimeSeriesPropertiesChanged(index As Integer) Handles propDialog.PropertyChanged
+    ''' <param name="id">Id of the time series whose properties have changed</param>
+    ''' <remarks>Handles changed interpretation and title</remarks>
+    Private Sub TimeSeriesPropertiesChanged(id As Integer) Handles propDialog.PropertyChanged
 
+        'find series in chart
         For Each series As Steema.TeeChart.Styles.Line In Me.TChart1.Series
-            If series.Title = Me.TimeSeriesDict(index).Title Then
+            If series.Tag = id Then
+
                 'set line display according to interpretation
-                Select Case Me.TimeSeriesDict(index).Interpretation
+                Select Case Me.TimeSeriesDict(id).Interpretation
                     Case TimeSeries.InterpretationEnum.Instantaneous,
                          TimeSeries.InterpretationEnum.Undefined
                         series.Stairs = False
@@ -599,6 +599,10 @@ Public Class Wave
                         series.Stairs = True
                         series.InvertedStairs = True
                 End Select
+
+                'update title in chart
+                series.Title = Me.TimeSeriesDict(id).Title
+
                 Exit For
             End If
         Next
@@ -735,57 +739,6 @@ Public Class Wave
         Dim SeriesEditor As New SeriesEditorDialog()
         If (SeriesEditor.ShowDialog() = Windows.Forms.DialogResult.OK) Then
             Call Me.Import_Series(SeriesEditor.Zeitreihe)
-        End If
-    End Sub
-
-    ''' <summary>
-    ''' Rename series button clicked
-    ''' </summary>
-    ''' <remarks></remarks>
-    Private Sub Rename_Series_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_RenameSeries.Click
-
-        'abort if no series loaded
-        If (Me.TimeSeriesDict.Count < 1) Then
-            MsgBox("No time series available for renaming!", MsgBoxStyle.Exclamation, "Wave")
-            Exit Sub
-        End If
-
-        Dim id As Integer
-        Dim titles As New List(Of String)
-        Dim title_old, title_new As String
-        Dim renameDlg As RenameSeriesDialog
-        Dim result As DialogResult
-
-        'get titles for the dialog
-        For Each ts As TimeSeries In Me.TimeSeriesDict.Values
-            titles.Add(ts.Title)
-        Next
-        'show the dialog
-        renameDlg = New RenameSeriesDialog(Me.TimeSeriesDict.Values.ToList)
-        result = renameDlg.ShowDialog()
-        'process results
-        If result = Windows.Forms.DialogResult.OK Then
-            'check for changes
-            For Each kvp As KeyValuePair(Of Integer, String) In renameDlg.titles_new
-                id = kvp.Key
-                title_old = Me.TimeSeriesDict(id).Title
-                title_new = kvp.Value
-                If title_new <> title_old Then
-                    'update title
-                    Me.TimeSeriesDict(id).Title = title_new
-                    'update title in charts
-                    For Each series As Steema.TeeChart.Styles.Series In Me.TChart1.Series
-                        If series.Title = title_old Then
-                            series.Title = title_new
-                        End If
-                    Next
-                    For Each series As Steema.TeeChart.Styles.Series In Me.TChart2.Series
-                        If series.Title = title_old Then
-                            series.Title = title_new
-                        End If
-                    Next
-                End If
-            Next
         End If
     End Sub
 
@@ -2320,9 +2273,18 @@ Public Class Wave
                                     Case Steema.TeeChart.Styles.VerticalAxis.Custom
                                         reihe.Unit = series.CustomVertAxis.Title.Text
                                 End Select
-                                'Store the series
+                                'Store the series internally
                                 Call Me.AddZeitreihe(reihe)
 
+                                'Store the time series id in the Tag property
+                                series.Tag = reihe.Id
+                                'Store id as Tag in Chart2 as well
+                                For Each series2 As Steema.TeeChart.Styles.Series In TChart2.Series
+                                    If series2.Title = series.Title Then
+                                        series2.Tag = reihe.Id
+                                        Exit For
+                                    End If
+                                Next
                             End If
                         Next
 
@@ -2713,6 +2675,10 @@ Public Class Wave
         'X-Werte als Zeitdaten einstellen
         Line1.XValues.DateTime = True
         Line2.XValues.DateTime = True
+
+        'Store id as Tag property
+        Line1.Tag = zre.Id
+        Line2.Tag = zre.Id
 
         'Namen vergeben
         Line1.Title = zre.Title
