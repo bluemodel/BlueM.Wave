@@ -188,12 +188,6 @@
     <Compile Include="Dialogs\MergeSeriesDialog.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Dialogs\RenameSeriesDialog.Designer.vb">
-      <DependentUpon>RenameSeriesDialog.vb</DependentUpon>
-    </Compile>
-    <Compile Include="Dialogs\RenameSeriesDialog.vb">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="Dialogs\SeriesEditorDialog.Designer.vb">
       <DependentUpon>SeriesEditorDialog.vb</DependentUpon>
     </Compile>
@@ -442,10 +436,6 @@
       <DependentUpon>MergeSeriesDialog.vb</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Dialogs\RenameSeriesDialog.resx">
-      <DependentUpon>RenameSeriesDialog.vb</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="Dialogs\SeriesEditorDialog.resx">
       <DependentUpon>SeriesEditorDialog.vb</DependentUpon>
       <SubType>Designer</SubType>
@@ -471,7 +461,6 @@
     <Content Include="Resources\navigate_back.png" />
     <Content Include="Resources\navigate_forward.png" />
     <None Include="Resources\page_save.png" />
-    <Content Include="Resources\series_rename.png" />
     <None Include="Resources\table.png" />
     <Content Include="Resources\zoom_world.png" />
     <None Include="Resources\zoom.png" />
