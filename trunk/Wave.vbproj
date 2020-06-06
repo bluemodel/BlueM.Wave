@@ -102,8 +102,15 @@
     <Compile Include="AboutBox.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Analysis\ChangeTimestep.vb" />
     <Compile Include="Analysis\Analysis.vb" />
     <Compile Include="Analysis\AnalysisHelper.vb" />
+    <Compile Include="Analysis\ChangeTimestepDialog.Designer.vb">
+      <DependentUpon>ChangeTimestepDialog.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Analysis\ChangeTimestepDialog.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Analysis\Comparison.vb" />
     <Compile Include="Analysis\Comparison_Dialog.Designer.vb">
       <DependentUpon>Comparison_Dialog.vb</DependentUpon>
@@ -151,12 +158,6 @@
     </Compile>
     <Compile Include="Character.vb" />
     <Compile Include="Constants.vb" />
-    <Compile Include="Dialogs\ChangeTimestepDialog.Designer.vb">
-      <DependentUpon>ChangeTimestepDialog.vb</DependentUpon>
-    </Compile>
-    <Compile Include="Dialogs\ChangeTimestepDialog.vb">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="Dialogs\ConvertErrorValuesDialog.Designer.vb">
       <DependentUpon>ConvertErrorValuesDialog.vb</DependentUpon>
     </Compile>
@@ -307,6 +308,10 @@
     <Compile Include="FileFormats\CSV.vb" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Analysis\ChangeTimestepDialog.resx">
+      <DependentUpon>ChangeTimestepDialog.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="My Project\licenses.licx" />
     <EmbeddedResource Include="My Project\Resources.resx">
       <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
       <CustomToolNamespace>My.Resources</CustomToolNamespace>
@@ -392,7 +397,6 @@
     <Content Include="LICENSE.TXT">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <None Include="Resources\chart_bar_edit.png" />
     <None Include="Resources\arrow_join_right.png" />
     <None Include="Resources\arrow_up.png" />
     <None Include="Resources\arrow_down.png" />
@@ -417,10 +421,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Analysis\TimestepAnalysisDialog.resx">
       <DependentUpon>TimestepAnalysisDialog.vb</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Dialogs\ChangeTimestepDialog.resx">
-      <DependentUpon>ChangeTimestepDialog.vb</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Dialogs\ConvertErrorValuesDialog.resx">

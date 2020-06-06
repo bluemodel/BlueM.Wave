@@ -26,8 +26,6 @@ Partial Class ChangeTimestepDialog
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
         Me.OK_Button = New System.Windows.Forms.Button()
         Me.Cancel_Button = New System.Windows.Forms.Button()
-        Me.ComboBox_Timeseries = New System.Windows.Forms.ComboBox()
-        Me.Label1 = New System.Windows.Forms.Label()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.ComboBox_Interpretation = New System.Windows.Forms.ComboBox()
         Me.Label3 = New System.Windows.Forms.Label()
@@ -47,7 +45,7 @@ Partial Class ChangeTimestepDialog
         Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
         Me.TableLayoutPanel1.Controls.Add(Me.OK_Button, 0, 0)
         Me.TableLayoutPanel1.Controls.Add(Me.Cancel_Button, 1, 0)
-        Me.TableLayoutPanel1.Location = New System.Drawing.Point(246, 121)
+        Me.TableLayoutPanel1.Location = New System.Drawing.Point(246, 90)
         Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
         Me.TableLayoutPanel1.RowCount = 1
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
@@ -73,30 +71,10 @@ Partial Class ChangeTimestepDialog
         Me.Cancel_Button.TabIndex = 1
         Me.Cancel_Button.Text = "Cancel"
         '
-        'ComboBox_Timeseries
-        '
-        Me.ComboBox_Timeseries.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ComboBox_Timeseries.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.ComboBox_Timeseries.FormattingEnabled = True
-        Me.ComboBox_Timeseries.Location = New System.Drawing.Point(108, 12)
-        Me.ComboBox_Timeseries.Name = "ComboBox_Timeseries"
-        Me.ComboBox_Timeseries.Size = New System.Drawing.Size(281, 21)
-        Me.ComboBox_Timeseries.TabIndex = 2
-        '
-        'Label1
-        '
-        Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(12, 15)
-        Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(63, 13)
-        Me.Label1.TabIndex = 3
-        Me.Label1.Text = "Time series:"
-        '
         'Label2
         '
         Me.Label2.AutoSize = True
-        Me.Label2.Location = New System.Drawing.Point(12, 42)
+        Me.Label2.Location = New System.Drawing.Point(12, 9)
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(72, 13)
         Me.Label2.TabIndex = 4
@@ -108,15 +86,15 @@ Partial Class ChangeTimestepDialog
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.ComboBox_Interpretation.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.ComboBox_Interpretation.FormattingEnabled = True
-        Me.ComboBox_Interpretation.Location = New System.Drawing.Point(108, 39)
+        Me.ComboBox_Interpretation.Location = New System.Drawing.Point(108, 6)
         Me.ComboBox_Interpretation.Name = "ComboBox_Interpretation"
-        Me.ComboBox_Interpretation.Size = New System.Drawing.Size(281, 21)
+        Me.ComboBox_Interpretation.Size = New System.Drawing.Size(284, 21)
         Me.ComboBox_Interpretation.TabIndex = 5
         '
         'Label3
         '
         Me.Label3.AutoSize = True
-        Me.Label3.Location = New System.Drawing.Point(12, 68)
+        Me.Label3.Location = New System.Drawing.Point(12, 35)
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(90, 13)
         Me.Label3.TabIndex = 6
@@ -124,19 +102,18 @@ Partial Class ChangeTimestepDialog
         '
         'ComboBox_TimestepType
         '
-        Me.ComboBox_TimestepType.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.ComboBox_TimestepType.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.ComboBox_TimestepType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.ComboBox_TimestepType.FormattingEnabled = True
-        Me.ComboBox_TimestepType.Location = New System.Drawing.Point(168, 66)
+        Me.ComboBox_TimestepType.Location = New System.Drawing.Point(168, 33)
         Me.ComboBox_TimestepType.Name = "ComboBox_TimestepType"
-        Me.ComboBox_TimestepType.Size = New System.Drawing.Size(221, 21)
+        Me.ComboBox_TimestepType.Size = New System.Drawing.Size(224, 21)
         Me.ComboBox_TimestepType.TabIndex = 8
         '
         'NumericUpDown_TimestepInterval
         '
-        Me.NumericUpDown_TimestepInterval.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.NumericUpDown_TimestepInterval.Location = New System.Drawing.Point(108, 66)
+        Me.NumericUpDown_TimestepInterval.Location = New System.Drawing.Point(108, 33)
         Me.NumericUpDown_TimestepInterval.Minimum = New Decimal(New Integer() {1, 0, 0, 0})
         Me.NumericUpDown_TimestepInterval.Name = "NumericUpDown_TimestepInterval"
         Me.NumericUpDown_TimestepInterval.Size = New System.Drawing.Size(54, 20)
@@ -147,7 +124,7 @@ Partial Class ChangeTimestepDialog
         '
         Me.DateTimePicker_Start.CustomFormat = "dd.MM.yyyy HH:mm"
         Me.DateTimePicker_Start.Format = System.Windows.Forms.DateTimePickerFormat.Custom
-        Me.DateTimePicker_Start.Location = New System.Drawing.Point(108, 93)
+        Me.DateTimePicker_Start.Location = New System.Drawing.Point(108, 60)
         Me.DateTimePicker_Start.Name = "DateTimePicker_Start"
         Me.DateTimePicker_Start.Size = New System.Drawing.Size(121, 20)
         Me.DateTimePicker_Start.TabIndex = 10
@@ -155,7 +132,7 @@ Partial Class ChangeTimestepDialog
         'Label4
         '
         Me.Label4.AutoSize = True
-        Me.Label4.Location = New System.Drawing.Point(12, 96)
+        Me.Label4.Location = New System.Drawing.Point(12, 63)
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(32, 13)
         Me.Label4.TabIndex = 11
@@ -167,7 +144,7 @@ Partial Class ChangeTimestepDialog
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.CancelButton = Me.Cancel_Button
-        Me.ClientSize = New System.Drawing.Size(404, 162)
+        Me.ClientSize = New System.Drawing.Size(404, 131)
         Me.Controls.Add(Me.Label4)
         Me.Controls.Add(Me.DateTimePicker_Start)
         Me.Controls.Add(Me.NumericUpDown_TimestepInterval)
@@ -175,13 +152,11 @@ Partial Class ChangeTimestepDialog
         Me.Controls.Add(Me.Label3)
         Me.Controls.Add(Me.ComboBox_Interpretation)
         Me.Controls.Add(Me.Label2)
-        Me.Controls.Add(Me.Label1)
-        Me.Controls.Add(Me.ComboBox_Timeseries)
         Me.Controls.Add(Me.TableLayoutPanel1)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.MaximizeBox = False
         Me.MinimizeBox = False
-        Me.MinimumSize = New System.Drawing.Size(420, 200)
+        Me.MinimumSize = New System.Drawing.Size(420, 170)
         Me.Name = "ChangeTimestepDialog"
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
@@ -195,8 +170,6 @@ Partial Class ChangeTimestepDialog
     Friend WithEvents TableLayoutPanel1 As System.Windows.Forms.TableLayoutPanel
     Friend WithEvents OK_Button As System.Windows.Forms.Button
     Friend WithEvents Cancel_Button As System.Windows.Forms.Button
-    Friend WithEvents ComboBox_Timeseries As System.Windows.Forms.ComboBox
-    Friend WithEvents Label1 As System.Windows.Forms.Label
     Friend WithEvents Label2 As System.Windows.Forms.Label
     Friend WithEvents ComboBox_Interpretation As System.Windows.Forms.ComboBox
     Friend WithEvents Label3 As System.Windows.Forms.Label

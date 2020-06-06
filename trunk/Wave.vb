@@ -1157,18 +1157,6 @@ Public Class Wave
     End Sub
 
     ''' <summary>
-    ''' Change timestep button clicked
-    ''' </summary>
-    ''' <param name="sender"></param>
-    ''' <param name="e"></param>
-    ''' <remarks></remarks>
-    Private Sub ToolStripButton_ChangeTimestep_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_ChangeTimestep.Click
-
-        Call Me.ChangeTimeStep()
-
-    End Sub
-
-    ''' <summary>
     ''' Show NaN values button clicked
     ''' </summary>
     ''' <param name="sender"></param>
@@ -2868,53 +2856,6 @@ Public Class Wave
 
         'Achsen
         chart.Axes.Bottom.Automatic = True
-
-    End Sub
-
-    ''' <summary>
-    ''' Starts the workflow for changing the time step of a series
-    ''' </summary>
-    Private Sub ChangeTimeStep()
-
-        'Abort if no time series available!
-        If (Me.Zeitreihen.Count < 1) Then
-            MsgBox("No time series available!", MsgBoxStyle.Exclamation, "Wave")
-            Exit Sub
-        End If
-
-        Try
-            Dim dlg As New ChangeTimestepDialog(Me.Zeitreihen)
-
-            'show the ChangeTimeStepDialog
-            If dlg.ShowDialog() = Windows.Forms.DialogResult.OK Then
-
-                Dim zre, zre_new As TimeSeries
-                Dim interpretation As TimeSeries.InterpretationEnum
-                Dim timesteptype As TimeSeries.TimeStepTypeEnum
-                Dim timestepinterval As Integer
-                Dim startdate As DateTime
-
-                'read settings from dialog
-                zre = Me.Zeitreihen(dlg.ComboBox_Timeseries.SelectedItem)
-                interpretation = dlg.ComboBox_Interpretation.SelectedItem
-                timesteptype = dlg.ComboBox_TimestepType.SelectedItem
-                timestepinterval = dlg.NumericUpDown_TimestepInterval.Value
-                startdate = dlg.DateTimePicker_Start.Value
-
-                zre.Interpretation = interpretation 'TODO: this permanently changes the time series' interpretation and may be unexpected
-
-                zre_new = zre.ChangeTimestep(timesteptype, timestepinterval, startdate)
-
-                Call Me.Import_Series(zre_new)
-
-                Log.AddLogEntry("Time step changed successfully.")
-
-            End If
-
-        Catch ex As Exception
-            Log.AddLogEntry("Error while changing the timestep: " & ex.Message)
-            MsgBox("Error while changing the timestep: " & ex.Message, MsgBoxStyle.Critical)
-        End Try
 
     End Sub
 
