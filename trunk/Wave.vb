@@ -42,6 +42,8 @@ Public Class Wave
     'Log
     Private WithEvents myLog As Log
 
+    Private WithEvents propDialog As PropertiesDialog
+
     'Eigenschaften
     '#############
 
@@ -571,6 +573,34 @@ Public Class Wave
                                             Me.TChart1.Axes.Bottom.Maximum}
         Me.TChart1.Zoom.HistorySteps.Add(snapshot)
         'TODO: perhaps remove some HistorySteps if there are too many?
+    End Sub
+
+    ''' <summary>
+    ''' Handles time series properties changed in the PropertiesDialog
+    ''' </summary>
+    ''' <param name="ts_title">Title of the time series whose properties have changed</param>
+    ''' <remarks>Handles changed interpretation</remarks>
+    Private Sub TimeSeriesPropertiesChanged(ts_title As String) Handles propDialog.PropertyChanged
+
+        For Each series As Steema.TeeChart.Styles.Line In Me.TChart1.Series
+            If series.Title = ts_title Then
+                'set line display according to interpretation
+                Select Case Me.Zeitreihen(ts_title).Interpretation
+                    Case TimeSeries.InterpretationEnum.Instantaneous,
+                         TimeSeries.InterpretationEnum.Undefined
+                        series.Stairs = False
+                        series.InvertedStairs = False
+                    Case TimeSeries.InterpretationEnum.BlockRight
+                        series.Stairs = True
+                        series.InvertedStairs = False
+                    Case TimeSeries.InterpretationEnum.BlockLeft,
+                         TimeSeries.InterpretationEnum.CumulativePerTimestep
+                        series.Stairs = True
+                        series.InvertedStairs = True
+                End Select
+            End If
+        Next
+
     End Sub
 
 #End Region 'Chart behavior'
@@ -1152,7 +1182,7 @@ Public Class Wave
     ''' </summary>
     ''' <remarks></remarks>
     Private Sub ToolStripButton_Properties_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_Properties.Click
-        Dim propDialog As New PropertiesDialog(Me.Zeitreihen)
+        Me.propDialog = New PropertiesDialog(Me.Zeitreihen)
         propDialog.Show()
     End Sub
 
