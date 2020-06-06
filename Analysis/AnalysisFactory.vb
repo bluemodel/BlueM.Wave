@@ -35,6 +35,7 @@ Friend Module AnalysisFactory
     ''' </summary>
     Public Enum AnalysisFunctions
         AnnualStatistics
+        ChangeTimestep
         Comparison
         Cumulative
         DoubleSumCurve
@@ -53,6 +54,8 @@ Friend Module AnalysisFactory
         Select Case analysisfunction
             Case AnalysisFunctions.AnnualStatistics
                 Return AnnualStatistics.Description
+            Case AnalysisFunctions.ChangeTimestep
+                Return ChangeTimestep.Description
             Case AnalysisFunctions.Comparison
                 Return Comparison.Description
             Case AnalysisFunctions.Cumulative
@@ -84,8 +87,17 @@ Friend Module AnalysisFactory
 
         Select Case analysisfunction
 
-            Case AnalysisFunctions.MonthlyStatistics
-                oAnalysis = New MonthlyStatistics(seriesList)
+            Case AnalysisFunctions.AnnualStatistics
+                oAnalysis = New AnnualStatistics(seriesList)
+
+            Case AnalysisFunctions.ChangeTimestep
+                oAnalysis = New ChangeTimestep(seriesList)
+
+            Case AnalysisFunctions.Comparison
+                oAnalysis = New Comparison(seriesList)
+
+            Case AnalysisFunctions.Cumulative
+                oAnalysis = New Cumulative(seriesList)
 
             Case AnalysisFunctions.DoubleSumCurve
                 oAnalysis = New DoubleSumCurve(seriesList)
@@ -96,14 +108,8 @@ Friend Module AnalysisFactory
             Case AnalysisFunctions.Histogram
                 oAnalysis = New Histogram(seriesList)
 
-            Case AnalysisFunctions.Comparison
-                oAnalysis = New Comparison(seriesList)
-
-            Case AnalysisFunctions.AnnualStatistics
-                oAnalysis = New AnnualStatistics(seriesList)
-
-            Case AnalysisFunctions.Cumulative
-                oAnalysis = New Cumulative(seriesList)
+            Case AnalysisFunctions.MonthlyStatistics
+                oAnalysis = New MonthlyStatistics(seriesList)
 
             Case AnalysisFunctions.TimestepAnalysis
                 oAnalysis = New TimeStepAnalysis(seriesList)
