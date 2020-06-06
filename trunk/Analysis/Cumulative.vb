@@ -104,6 +104,7 @@ Friend Class Cumulative
 
             ts_cum = New TimeSeries(ts.Title & " (cumulative)")
             ts_cum.Unit = ts.Unit
+            ts_cum.Interpretation = TimeSeries.InterpretationEnum.Cumulative
 
             sum = 0.0
             For i = 0 To ts.Length - 1
