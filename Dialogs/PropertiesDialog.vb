@@ -29,18 +29,70 @@ Imports System.Windows.Forms
 
 Friend Class PropertiesDialog
 
-    Public Sub New(ByVal series As Dictionary(Of String, TimeSeries))
+    Private isInitializing As Boolean
+
+    ''' <summary>
+    ''' Is raised when a property is changed by the user
+    ''' </summary>
+    ''' <param name="ts_title">Title of the time series whose properties were changed</param>
+    Friend Event PropertyChanged(ts_title As String)
+
+    Public Sub New(ByRef series As Dictionary(Of String, TimeSeries))
 
         ' This call is required by the Windows Form Designer.
         InitializeComponent()
-
         ' Add any initialization after the InitializeComponent() call.
 
-        'Update the BindingSource of the DataGridview
+        Me.isInitializing = True
+
+        Me.Interpretation.DataSource = System.Enum.GetValues(GetType(TimeSeries.InterpretationEnum))
+
+        'add the time series to the binding source
         Me.TimeSeriesBindingSource.Clear()
-        For Each kvp As KeyValuePair(Of String, TimeSeries) In series
-            Me.TimeSeriesBindingSource.Add(kvp.Value)
+        For Each ts As TimeSeries In series.Values
+            Me.TimeSeriesBindingSource.Add(ts)
         Next
+
+        Me.isInitializing = False
     End Sub
 
+    ''' <summary>
+    ''' Commit edits as soon as they occur
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    Private Sub DataGridView1_CurrentCellDirtyStateChanged(sender As Object, e As EventArgs) Handles DataGridView1.CurrentCellDirtyStateChanged
+        If DataGridView1.IsCurrentCellDirty Then
+            DataGridView1.CommitEdit(DataGridViewDataErrorContexts.Commit)
+        End If
+    End Sub
+
+    ''' <summary>
+    ''' Handles changed cell values
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    Private Sub DataGridView1_CellValueChanged(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridView1.CellValueChanged
+
+        If Me.isInitializing Or e.RowIndex = -1 Then
+            Exit Sub
+        End If
+
+        Dim titleColumnIndex As Integer
+        Dim ts_title As String
+
+        'determine column index of "Title" column
+        For Each column As DataGridViewColumn In Me.DataGridView1.Columns
+            If column.Name = "Title" Then
+                titleColumnIndex = column.Index
+                Exit For
+            End If
+        Next
+
+        'get title of changed series from Datagridview
+        ts_title = DataGridView1.Rows(e.RowIndex).Cells(titleColumnIndex).Value
+
+        RaiseEvent PropertyChanged(ts_title)
+
+    End Sub
 End Class
