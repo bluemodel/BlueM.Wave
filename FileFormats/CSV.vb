@@ -154,7 +154,7 @@ Public Class CSV
                 If Me.UseUnits Then
                     ts.Unit = sInfo.Unit
                 End If
-                Me.TimeSeriesCollection.Add(ts.Title, ts)
+                Me.TimeSeriesList.Add(ts)
             Next
 
             'Use default number format by default
@@ -190,7 +190,7 @@ Public Class CSV
                         End If
                         'Restliche Spalten: Werte
                         For Each sInfo As SeriesInfo In Me.SelectedSeries
-                            Me.TimeSeriesCollection(sInfo.Name).AddNode(datum, StringToDouble(Werte(sInfo.Index), numberformat))
+                            Me.TimeSeriesList(sInfo.Name).AddNode(datum, StringToDouble(Werte(sInfo.Index), numberformat))
                         Next
                     End If
 
@@ -204,7 +204,7 @@ Public Class CSV
                     End If
                     'Restliche Spalten: Werte
                     For Each sInfo As SeriesInfo In Me.SelectedSeries
-                        Me.TimeSeriesCollection(sInfo.Name).AddNode(datum, StringToDouble(Zeile.Substring(sInfo.Index * Me.ColumnWidth + SpaltenOffset, Math.Min(Me.ColumnWidth, Zeile.Substring(sInfo.Index * Me.ColumnWidth + SpaltenOffset).Length)), numberformat))
+                        Me.TimeSeriesList(sInfo.Name).AddNode(datum, StringToDouble(Zeile.Substring(sInfo.Index * Me.ColumnWidth + SpaltenOffset, Math.Min(Me.ColumnWidth, Zeile.Substring(sInfo.Index * Me.ColumnWidth + SpaltenOffset).Length)), numberformat))
                     Next
                 End If
 

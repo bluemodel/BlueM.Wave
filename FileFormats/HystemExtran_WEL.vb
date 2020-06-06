@@ -183,7 +183,7 @@ Public Class HystemExtran_WEL
                 ts.Objekt = sInfo.Objekt
                 ts.Type = sInfo.Type
             End If
-            Me.TimeSeriesCollection.Add(ts.Title, ts)
+            Me.TimeSeriesList.Add(ts)
         Next
 
         'Einlesen
@@ -197,7 +197,7 @@ Public Class HystemExtran_WEL
         'Daten
         Do
             Zeile = StrReadSync.ReadLine.ToString()
-            If zeile.Substring(0, 5) = "*****" Then
+            If Zeile.Substring(0, 5) = "*****" Then
                 Exit Do
             End If
             'Erste Zeile: Datum_Zeit
@@ -210,7 +210,7 @@ Public Class HystemExtran_WEL
                 WerteString = WerteString + StrReadSync.ReadLine.ToString()
             Next
             For Each sInfo As SeriesInfo In Me.SelectedSeries
-                Me.TimeSeriesCollection(sInfo.Name).AddNode(datum, StringToDouble(WerteString.Substring(((sInfo.Index - 1) * Me.ColumnWidth) + SpaltenOffset, Me.ColumnWidth)))
+                Me.TimeSeriesList(sInfo.Name).AddNode(datum, StringToDouble(WerteString.Substring(((sInfo.Index - 1) * Me.ColumnWidth) + SpaltenOffset, Me.ColumnWidth)))
             Next
 
         Loop Until StrReadSync.Peek() = -1

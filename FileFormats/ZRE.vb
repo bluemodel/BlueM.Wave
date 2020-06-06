@@ -151,7 +151,7 @@ Public Class ZRE
             Loop Until StrReadSync.Peek() = -1
 
             'store time series
-            Me.TimeSeriesCollection.Add(ts.Title, ts)
+            Me.TimeSeriesList.Add(ts)
 
         Catch ex As Exception
             'Fehler weiterschmeissen

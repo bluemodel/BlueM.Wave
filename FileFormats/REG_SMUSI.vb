@@ -211,7 +211,7 @@ Public Class REG_SMUSI
         FiStr.Close()
 
         'store time series
-        Me.TimeSeriesCollection.Add(ts.Title, ts)
+        Me.TimeSeriesList.Add(ts)
 
     End Sub
 

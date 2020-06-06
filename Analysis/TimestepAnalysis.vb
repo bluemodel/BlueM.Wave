@@ -174,7 +174,7 @@ Friend Class TimeStepAnalysis
                 timestamp_prev = timestamp
             Next
             'save result time series
-            Me.mResultSeries.Add(result_ts.Title, result_ts)
+            Me.mResultSeries.Add(result_ts)
         Next
 
     End Sub

@@ -34,10 +34,10 @@ Friend Class PropertiesDialog
     ''' <summary>
     ''' Is raised when a property is changed by the user
     ''' </summary>
-    ''' <param name="ts_title">Title of the time series whose properties were changed</param>
-    Friend Event PropertyChanged(ts_title As String)
+    ''' <param name="index">Index of the time series whose properties were changed</param>
+    Friend Event PropertyChanged(index As Integer)
 
-    Public Sub New(ByRef series As Dictionary(Of String, TimeSeries))
+    Public Sub New(ByRef seriesList As List(Of TimeSeries))
 
         ' This call is required by the Windows Form Designer.
         InitializeComponent()
@@ -49,7 +49,7 @@ Friend Class PropertiesDialog
 
         'add the time series to the binding source
         Me.TimeSeriesBindingSource.Clear()
-        For Each ts As TimeSeries In series.Values
+        For Each ts As TimeSeries In seriesList
             Me.TimeSeriesBindingSource.Add(ts)
         Next
 

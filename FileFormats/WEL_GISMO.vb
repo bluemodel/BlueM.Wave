@@ -199,7 +199,7 @@ Public Class WEL_GISMO
                 If Me.UseUnits Then
                     ts.Unit = sInfo.Unit
                 End If
-                Me.TimeSeriesCollection.Add(ts.Title, ts)
+                Me.TimeSeriesList.Add(ts)
             Next
 
             ' read over header lines
@@ -233,7 +233,7 @@ Public Class WEL_GISMO
 
                     ' remaining columns are data, add to time series
                     For Each sInfo As SeriesInfo In Me.SelectedSeries
-                        Me.TimeSeriesCollection(sInfo.Name).AddNode(datum, StringToDouble(Werte(sInfo.Index)))
+                        Me.TimeSeriesList(sInfo.Name).AddNode(datum, StringToDouble(Werte(sInfo.Index)))
                     Next
 
                 Else
@@ -260,7 +260,7 @@ Public Class WEL_GISMO
 
                     ' remaining columns are data, add to time series
                     For Each sInfo As SeriesInfo In Me.SelectedSeries
-                        Me.TimeSeriesCollection(sInfo.Name).AddNode(datum, StringToDouble(Werte(sInfo.Index)))
+                        Me.TimeSeriesList(sInfo.Name).AddNode(datum, StringToDouble(Werte(sInfo.Index)))
                     Next
 
                 End If

@@ -253,7 +253,7 @@ Public Class ZRXP
             End If
 
             'store time series
-            Me.TimeSeriesCollection.Add(ts.Title, ts)
+            Me.TimeSeriesList.Add(ts)
 
         Catch ex As Exception
             MsgBox("Error while parsing file!" & eol & eol & "Error: " & ex.Message, MsgBoxStyle.Critical, "Error")

@@ -128,7 +128,7 @@ Public Class BIN
         End Using
 
         'store time series
-        Me.TimeSeriesCollection.Add(ts.Title, ts)
+        Me.TimeSeriesList.Add(ts)
 
         'Log 
         Call Log.AddLogEntry("Read " & ts.Length & " nodes.")

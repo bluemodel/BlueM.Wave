@@ -122,7 +122,7 @@ Friend Class Cumulative
                 ts_cum.AddNode(ts.Dates(i), sum)
             Next
 
-            MyBase.mResultSeries.Add(ts_cum.Title, ts_cum)
+            MyBase.mResultSeries.Add(ts_cum)
 
         Next
 

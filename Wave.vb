@@ -57,7 +57,7 @@ Public Class Wave
     Private ImportedFiles As Dictionary(Of String, List(Of FileFormatBase.SeriesInfo)) '{filename: [seriesInfo, ...], ...}
 
     'Interne Zeitreihen-Collection
-    Private Zeitreihen As Dictionary(Of String, TimeSeries)
+    Private TimeSeriesDict As Dictionary(Of Integer, TimeSeries)
 
     'Dateifilter
     Private Const FileFilter_TEN As String = "TeeChart files (*.ten)|*.ten"
@@ -104,7 +104,7 @@ Public Class Wave
         'Kollektionen einrichten
         '-----------------------
         Me.ImportedFiles = New Dictionary(Of String, List(Of FileFormatBase.SeriesInfo))()
-        Me.Zeitreihen = New Dictionary(Of String, TimeSeries)()
+        Me.TimeSeriesDict = New Dictionary(Of Integer, TimeSeries)()
         Me.MyAxes1 = New Dictionary(Of String, Steema.TeeChart.Axis)
         Me.MyAxes2 = New Dictionary(Of String, Steema.TeeChart.Axis)
 
@@ -249,7 +249,7 @@ Public Class Wave
                     Dim clipboardtext As String
                     clipboardtext = Clipboard.GetText(TextDataFormat.Text)
 
-                    If clipboardtext.Contains("SydroTyp=SydroErgZre") Or _
+                    If clipboardtext.Contains("SydroTyp=SydroErgZre") Or
                        clipboardtext.Contains("SydroTyp=SydroBinZre") Then
                         'it's a clipboard entry from TALSIM!
 
@@ -339,7 +339,7 @@ Public Class Wave
 
         Dim Xmin, Xmax As DateTime
 
-        If (Me.Zeitreihen.Count = 0) Then
+        If (Me.TimeSeriesDict.Count = 0) Then
             'just refresh
             Me.TChart1.Refresh()
             Me.TChart2.Refresh()
@@ -350,7 +350,7 @@ Public Class Wave
             'Min- und Max-Datum bestimmen
             Xmin = DateTime.MaxValue
             Xmax = DateTime.MinValue
-            For Each zre As TimeSeries In Me.Zeitreihen.Values
+            For Each zre As TimeSeries In Me.TimeSeriesDict.Values
                 If zre.Length > 0 Then
                     If (zre.StartDate < Xmin) Then Xmin = zre.StartDate
                     If (zre.EndDate > Xmax) Then Xmax = zre.EndDate
@@ -417,7 +417,6 @@ Public Class Wave
 
             Dim startdate, enddate As DateTime
             Dim title As String
-            Dim series As TimeSeries
             Dim seriesMin, seriesMax, Ymin, Ymax As Double
             Dim axisType As Steema.TeeChart.Styles.VerticalAxis
             Dim axis As Steema.TeeChart.Axis
@@ -440,20 +439,19 @@ Public Class Wave
                 'loop over series
                 Ymin = Double.MaxValue
                 Ymax = Double.MinValue
-                For Each kvp_series As KeyValuePair(Of String, TimeSeries) In Me.Zeitreihen
-                    title = kvp_series.Key
-                    series = kvp_series.Value
+                For Each ts As TimeSeries In Me.TimeSeriesDict.Values
+                    title = ts.Title
 
                     'only process active series on the current axis
                     If Me.TChart1.Series.WithTitle(title).Active _
                         And Me.TChart1.Series.WithTitle(title).VertAxis = axisType Then
 
                         'get series min and max for current viewport
-                        seriesMin = series.Minimum(startdate, enddate)
+                        seriesMin = ts.Minimum(startdate, enddate)
                         If seriesMin < Ymin Then
                             Ymin = seriesMin
                         End If
-                        seriesMax = series.Maximum(startdate, enddate)
+                        seriesMax = ts.Maximum(startdate, enddate)
                         If seriesMax > Ymax Then
                             Ymax = seriesMax
                         End If
@@ -507,13 +505,16 @@ Public Class Wave
     Private Sub TChart1_SeriesRemoved(ByVal sender As Object, ByVal e As System.EventArgs) Handles ChartListBox1.RemovedSeries
 
         Dim found As Boolean
-        Dim title_removed As String
+        Dim title As String
+        Dim id_removed As Integer
         Dim s As Steema.TeeChart.Styles.Series
 
-        title_removed = ""
+        id_removed = -1
+        title = ""
 
         'Alle internen Zeitreihen durchlaufen und prüfen, ob es sie noch gibt
-        For Each title As String In Me.Zeitreihen.Keys
+        For Each ts As TimeSeries In Me.TimeSeriesDict.Values
+            title = ts.Title
             found = False
             For Each s In Me.ChartListBox1.Items
                 If (s.Title = title) Then
@@ -522,18 +523,18 @@ Public Class Wave
                 End If
             Next
             If (Not found) Then
-                title_removed = title 'diese Serie gibt es nicht mehr
+                id_removed = ts.Id 'diese Serie gibt es nicht mehr
                 Exit For
             End If
         Next
 
-        If (title_removed <> "") Then
+        If id_removed <> -1 Then
             'Aus der internen Collection löschen
-            Me.Zeitreihen.Remove(title_removed)
+            Me.TimeSeriesDict.Remove(id_removed)
 
             'Aus der Übersicht löschen
             For i As Integer = Me.TChart2.Series.Count - 1 To 0 Step -1
-                If (Me.TChart2.Series.Item(i).Title = title_removed) Then
+                If (Me.TChart2.Series.Item(i).Title = title) Then
                     Me.TChart2.Series.RemoveAt(i)
                     Me.TChart2.Refresh()
                     Exit For
@@ -543,7 +544,7 @@ Public Class Wave
             'Aus der Liste der importierten Dateien löschen
             For Each kvp As KeyValuePair(Of String, List(Of FileFormatBase.SeriesInfo)) In Me.ImportedFiles
                 For Each sInfo As FileFormatBase.SeriesInfo In kvp.Value
-                    If sInfo.Name = title_removed Then
+                    If sInfo.Name = title Then
                         Me.ImportedFiles(kvp.Key).Remove(sInfo)
                         Exit For
                     End If
@@ -554,8 +555,8 @@ Public Class Wave
                     Exit For
                 End If
             Next
-        End If
 
+        End If
     End Sub
 
     ''' <summary>
@@ -563,13 +564,13 @@ Public Class Wave
     ''' </summary>
     Private Sub saveZoomSnapshot()
         Dim snapshot As New Steema.TeeChart.ZoomSnapshot()
-        snapshot.AxesMinMax = New Double() {Me.TChart1.Axes.Left.Minimum, _
-                                            Me.TChart1.Axes.Left.Maximum, _
-                                            Me.TChart1.Axes.Top.Minimum, _
-                                            Me.TChart1.Axes.Top.Maximum, _
-                                            Me.TChart1.Axes.Right.Minimum, _
-                                            Me.TChart1.Axes.Right.Maximum, _
-                                            Me.TChart1.Axes.Bottom.Minimum, _
+        snapshot.AxesMinMax = New Double() {Me.TChart1.Axes.Left.Minimum,
+                                            Me.TChart1.Axes.Left.Maximum,
+                                            Me.TChart1.Axes.Top.Minimum,
+                                            Me.TChart1.Axes.Top.Maximum,
+                                            Me.TChart1.Axes.Right.Minimum,
+                                            Me.TChart1.Axes.Right.Maximum,
+                                            Me.TChart1.Axes.Bottom.Minimum,
                                             Me.TChart1.Axes.Bottom.Maximum}
         Me.TChart1.Zoom.HistorySteps.Add(snapshot)
         'TODO: perhaps remove some HistorySteps if there are too many?
@@ -578,14 +579,14 @@ Public Class Wave
     ''' <summary>
     ''' Handles time series properties changed in the PropertiesDialog
     ''' </summary>
-    ''' <param name="ts_title">Title of the time series whose properties have changed</param>
+    ''' <param name="index">Index of the time series whose properties have changed</param>
     ''' <remarks>Handles changed interpretation</remarks>
-    Private Sub TimeSeriesPropertiesChanged(ts_title As String) Handles propDialog.PropertyChanged
+    Private Sub TimeSeriesPropertiesChanged(index As Integer) Handles propDialog.PropertyChanged
 
         For Each series As Steema.TeeChart.Styles.Line In Me.TChart1.Series
-            If series.Title = ts_title Then
+            If series.Title = Me.TimeSeriesDict(index).Title Then
                 'set line display according to interpretation
-                Select Case Me.Zeitreihen(ts_title).Interpretation
+                Select Case Me.TimeSeriesDict(index).Interpretation
                     Case TimeSeries.InterpretationEnum.Instantaneous,
                          TimeSeries.InterpretationEnum.Undefined
                         series.Stairs = False
@@ -598,6 +599,7 @@ Public Class Wave
                         series.Stairs = True
                         series.InvertedStairs = True
                 End Select
+                Exit For
             End If
         Next
 
@@ -627,7 +629,7 @@ Public Class Wave
 
         'Collections zurücksetzen
         Me.ImportedFiles.Clear()
-        Me.Zeitreihen.Clear()
+        Me.TimeSeriesDict.Clear()
         Me.MyAxes1.Clear()
         Me.MyAxes2.Clear()
 
@@ -743,36 +745,34 @@ Public Class Wave
     Private Sub Rename_Series_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_RenameSeries.Click
 
         'abort if no series loaded
-        If (Me.Zeitreihen.Count < 1) Then
+        If (Me.TimeSeriesDict.Count < 1) Then
             MsgBox("No time series available for renaming!", MsgBoxStyle.Exclamation, "Wave")
             Exit Sub
         End If
 
-        Dim zre As TimeSeries
-        Dim zres As New Dictionary(Of String, TimeSeries)
+        Dim id As Integer
         Dim titles As New List(Of String)
         Dim title_old, title_new As String
         Dim renameDlg As RenameSeriesDialog
         Dim result As DialogResult
 
         'get titles for the dialog
-        For Each title As String In Me.Zeitreihen.Keys
-            titles.Add(title)
+        For Each ts As TimeSeries In Me.TimeSeriesDict.Values
+            titles.Add(ts.Title)
         Next
         'show the dialog
-        renameDlg = New RenameSeriesDialog(titles)
+        renameDlg = New RenameSeriesDialog(Me.TimeSeriesDict.Values.ToList)
         result = renameDlg.ShowDialog()
         'process results
         If result = Windows.Forms.DialogResult.OK Then
             'check for changes
-            For Each kvp As KeyValuePair(Of String, String) In renameDlg.titles
-                title_old = kvp.Key
+            For Each kvp As KeyValuePair(Of Integer, String) In renameDlg.titles_new
+                id = kvp.Key
+                title_old = Me.TimeSeriesDict(id).Title
                 title_new = kvp.Value
                 If title_new <> title_old Then
-                    'make a copy of the series with the new title
-                    zre = Me.Zeitreihen(title_old)
-                    zre.Title = title_new
-                    zres.Add(title_new, zre)
+                    'update title
+                    Me.TimeSeriesDict(id).Title = title_new
                     'update title in charts
                     For Each series As Steema.TeeChart.Styles.Series In Me.TChart1.Series
                         If series.Title = title_old Then
@@ -784,14 +784,8 @@ Public Class Wave
                             series.Title = title_new
                         End If
                     Next
-                Else
-                    'keep the series with title unchanged
-                    zres.Add(title_old, Me.Zeitreihen(title_old))
                 End If
             Next
-            'update zre dict
-            Me.Zeitreihen.Clear()
-            Me.Zeitreihen = zres
         End If
     End Sub
 
@@ -799,17 +793,17 @@ Public Class Wave
     '*********************
     Private Sub Zuschneiden_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_Cut.Click
 
-        Dim title As String
-        Dim titles As List(Of String)
+        Dim id As String
+        Dim ids As List(Of Integer)
 
         'Wenn keine Zeitreihen vorhanden, abbrechen!
-        If (Me.Zeitreihen.Count < 1) Then
+        If (Me.TimeSeriesDict.Count < 1) Then
             MsgBox("No time series available for cutting!", MsgBoxStyle.Exclamation, "Wave")
             Exit Sub
         End If
 
         'Dialog instanzieren
-        Dim cutter As New CutDialog(Me.Zeitreihen, DateTime.FromOADate(Me.TChart1.Chart.Axes.Bottom.Minimum), DateTime.FromOADate(Me.TChart1.Chart.Axes.Bottom.Maximum))
+        Dim cutter As New CutDialog(Me.TimeSeriesDict.Values.ToList, DateTime.FromOADate(Me.TChart1.Chart.Axes.Bottom.Minimum), DateTime.FromOADate(Me.TChart1.Chart.Axes.Bottom.Maximum))
 
         'Dialog anzeigen
         If (cutter.ShowDialog() = Windows.Forms.DialogResult.OK) Then
@@ -817,21 +811,21 @@ Public Class Wave
             If (cutter.CheckBox_keepUncutSeries.Checked = False) Then
                 'Alte Zeitreihe(n) löschen
                 If (cutter.ComboBox_ZeitreiheCut.SelectedItem.ToString = CutDialog.labelAlle) Then
-                    titles = New List(Of String)
-                    For Each title In Me.Zeitreihen.Keys
-                        titles.Add(title)
+                    ids = New List(Of Integer)
+                    For Each id In Me.TimeSeriesDict.Keys
+                        ids.Add(id)
                     Next
-                    For Each title In titles
-                        Call Me.DeleteZeitreihe(title)
+                    For Each id In ids
+                        Call Me.DeleteZeitreihe(id)
                     Next
                 Else
-                    title = cutter.ComboBox_ZeitreiheCut.SelectedItem.ToString
-                    Call Me.DeleteZeitreihe(title)
+                    id = CType(cutter.ComboBox_ZeitreiheCut.SelectedItem, TimeSeries).Id
+                    Call Me.DeleteZeitreihe(id)
                 End If
             End If
 
             'Neue Reihe(n) importieren
-            For Each zre As TimeSeries In cutter.zreCut.Values
+            For Each zre As TimeSeries In cutter.zreCut
                 Me.Import_Series(zre)
             Next
 
@@ -849,34 +843,34 @@ Public Class Wave
 
         Dim dlg As MergeSeriesDialog
         Dim dlgResult As DialogResult
-        Dim seriesList As List(Of String)
+        Dim ids As List(Of Integer)
         Dim seriesMerged, seriesToMerge As TimeSeries
         Dim mergedSeriesTitle As String
 
         'Abort if no series are loaded
-        If (Me.Zeitreihen.Count < 1) Then
+        If (Me.TimeSeriesDict.Count < 1) Then
             MsgBox("No time series available for merging!", MsgBoxStyle.Exclamation)
             Exit Sub
         End If
 
         Try
 
-            dlg = New MergeSeriesDialog(Me.Zeitreihen)
+            dlg = New MergeSeriesDialog(Me.TimeSeriesDict.Values.ToList)
             dlgResult = dlg.ShowDialog()
 
             Me.Cursor = Cursors.WaitCursor
 
             If dlgResult = Windows.Forms.DialogResult.OK Then
 
-                seriesList = dlg.selectedSeries
+                ids = dlg.selectedSeries
                 mergedSeriesTitle = dlg.mergedSeriesTitle
 
                 'Clone the series with the highest priority
-                seriesMerged = Me.Zeitreihen(seriesList(0)).Clone
+                seriesMerged = Me.TimeSeriesDict(ids(0)).Clone
 
                 'Append the remaining series in order
-                For i As Integer = 1 To seriesList.Count - 1
-                    seriesToMerge = Me.Zeitreihen(seriesList(i))
+                For i As Integer = 1 To ids.Count - 1
+                    seriesToMerge = Me.TimeSeriesDict(ids(i))
                     seriesMerged.Append(seriesToMerge)
                 Next
 
@@ -916,13 +910,13 @@ Public Class Wave
         Dim zres As List(Of TimeSeries)
 
         'Abort if no time series loaded
-        If (Me.Zeitreihen.Count < 1) Then
+        If (Me.TimeSeriesDict.Count < 1) Then
             MsgBox("No time series available for export!", MsgBoxStyle.Exclamation, "Wave")
             Exit Sub
         End If
 
         'Show Export dialog
-        exportDlg = New ExportDiag(Me.Zeitreihen)
+        exportDlg = New ExportDiag(Me.TimeSeriesDict)
         dlgResult = exportDlg.ShowDialog()
 
         If dlgResult <> Windows.Forms.DialogResult.OK Then
@@ -931,8 +925,8 @@ Public Class Wave
 
         'get copies of the selected series
         zres = New List(Of TimeSeries)
-        For Each item As Object In exportDlg.ListBox_Series.SelectedItems
-            zres.Add(CType(item, TimeSeries).Clone())
+        For Each ts As TimeSeries In exportDlg.ListBox_Series.SelectedItems
+            zres.Add(ts.Clone())
         Next
 
         'prepare metadata according to file format
@@ -1093,12 +1087,12 @@ Public Class Wave
     Private Sub Analyse(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_Analysis.Click
 
         'Wenn keine Zeitreihen vorhanden, abbrechen!
-        If (Me.Zeitreihen.Count < 1) Then
+        If (Me.TimeSeriesDict.Count < 1) Then
             MsgBox("No time series available for analysis!", MsgBoxStyle.Exclamation, "Wave")
             Exit Sub
         End If
 
-        Dim oAnalysisDialog As New AnalysisDialog(Me.Zeitreihen)
+        Dim oAnalysisDialog As New AnalysisDialog(Me.TimeSeriesDict.Values.ToList)
 
         'Analysisdialog anzeigen
         '-----------------------
@@ -1160,7 +1154,7 @@ Public Class Wave
 
                 'Display result series in main diagram
                 If oAnalysis.hasResultSeries Then
-                    For Each ts As TimeSeries In oAnalysis.getResultSeries.Values
+                    For Each ts As TimeSeries In oAnalysis.getResultSeries
                         Call Me.Import_Series(ts, True)
                     Next
                 End If
@@ -1182,7 +1176,7 @@ Public Class Wave
     ''' </summary>
     ''' <remarks></remarks>
     Private Sub ToolStripButton_Properties_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_Properties.Click
-        Me.propDialog = New PropertiesDialog(Me.Zeitreihen)
+        Me.propDialog = New PropertiesDialog(Me.TimeSeriesDict.Values.ToList)
         propDialog.Show()
     End Sub
 
@@ -1207,7 +1201,7 @@ Public Class Wave
             'Switch visualization of NaN values on
             'Show color bands for NaN values in the currently active series
             nanFound = False
-            For Each ts As TimeSeries In Me.Zeitreihen.Values
+            For Each ts As TimeSeries In Me.TimeSeriesDict.Values
                 processSeries = False
                 'check if time series is currently active
                 For Each series As Steema.TeeChart.Styles.Series In Me.TChart1.Series
@@ -1307,17 +1301,17 @@ Public Class Wave
     ''' <remarks></remarks>
     Private Sub ToolStripButton_ConvertErrorValues_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_ConvertErrorValues.Click
         'Abort if no time series available!
-        If (Me.Zeitreihen.Count < 1) Then
+        If (Me.TimeSeriesDict.Count < 1) Then
             MsgBox("No time series available!", MsgBoxStyle.Exclamation, "Wave")
             Exit Sub
         End If
 
-        Dim dlg As New ConvertErrorValuesDialog(Me.Zeitreihen)
+        Dim dlg As New ConvertErrorValuesDialog(Me.TimeSeriesDict.Values.ToList)
         Dim dlgresult As DialogResult = dlg.ShowDialog()
 
         If dlgresult = Windows.Forms.DialogResult.OK Then
             'import cleaned series
-            For Each zre As TimeSeries In dlg.tsConverted.Values
+            For Each zre As TimeSeries In dlg.tsConverted
                 Me.Import_Series(zre, True)
             Next
         End If
@@ -1330,16 +1324,16 @@ Public Class Wave
     Private Sub ToolStripButton_RemoveNaNValues_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_RemoveNaNValues.Click
 
         Dim dlgResult As DialogResult
-        Dim keys As List(Of String)
+        Dim keys As List(Of Integer)
         Dim ts As TimeSeries
 
         dlgResult = MsgBox("Delete all nodes with NaN values from all series?", MsgBoxStyle.OkCancel)
         If dlgResult = Windows.Forms.DialogResult.OK Then
-            keys = Me.Zeitreihen.Keys.ToList()
-            For Each key As String In keys
-                ts = Me.Zeitreihen(key)
+            keys = Me.TimeSeriesDict.Keys.ToList()
+            For Each key As Integer In keys
+                ts = Me.TimeSeriesDict(key)
                 ts = ts.removeNaNValues()
-                Me.Zeitreihen(key) = ts
+                Me.TimeSeriesDict(key) = ts
             Next
         End If
     End Sub
@@ -1493,16 +1487,18 @@ Public Class Wave
     ''' <param name="e"></param>
     ''' <remarks>creates the dropdown items from the currently loaded series</remarks>
     Private Sub ToolStripDropDownButtonZoomToSeries_ButtonClick(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripDropDownButton_ZoomToSeries.DropDownOpening
+
         Dim items As ToolStripItem()
         Dim i As Integer
 
         'clear existing items
         Me.ToolStripDropDownButton_ZoomToSeries.DropDown.Items.Clear()
         'create new items
-        ReDim items(Me.Zeitreihen.Count - 1)
+        ReDim items(Me.TimeSeriesDict.Count - 1)
         i = 0
-        For Each title As String In Me.Zeitreihen.Keys
-            items(i) = New ToolStripMenuItem(title, Nothing, New EventHandler(AddressOf ZoomToSeries_Click))
+        For Each ts As TimeSeries In Me.TimeSeriesDict.Values
+            'store the time series Id in the Name property
+            items(i) = New ToolStripMenuItem(ts.Title, Nothing, New EventHandler(AddressOf ZoomToSeries_Click), ts.Id.ToString())
             i += 1
         Next
         'add items to dropdown
@@ -1516,22 +1512,24 @@ Public Class Wave
     ''' <param name="e"></param>
     ''' <remarks></remarks>
     Private Sub ZoomToSeries_Click(ByVal sender As Object, ByVal e As System.EventArgs)
-        Dim title As String
-        title = sender.ToString()
-        Call Me.ZoomToSeries(title)
+        Dim id As Integer
+        'try to parse the time series Id from ToolstripMenuItem.Name
+        If Integer.TryParse(CType(sender, ToolStripMenuItem).Name, id) Then
+            Call Me.ZoomToSeries(id)
+        End If
     End Sub
 
     ''' <summary>
     ''' Zoom to a time series
     ''' </summary>
-    ''' <param name="title">Title of the time series</param>
+    ''' <param name="id">ID of the time series</param>
     ''' <remarks></remarks>
-    Private Sub ZoomToSeries(ByVal title As String)
+    Private Sub ZoomToSeries(ByVal id As Integer)
         Dim startdate, enddate As DateTime
 
-        If Me.Zeitreihen.ContainsKey(title) Then
-            startdate = Me.Zeitreihen(title).StartDate
-            enddate = Me.Zeitreihen(title).EndDate
+        If Me.TimeSeriesDict.ContainsKey(id) Then
+            startdate = Me.TimeSeriesDict(id).StartDate
+            enddate = Me.TimeSeriesDict(id).EndDate
             'save the current zoom snapshot
             Call Me.saveZoomSnapshot()
             'zoom
@@ -1607,7 +1605,7 @@ Public Class Wave
             Me.TChart2.Series.RemoveAllSeries()
 
             'Collection zurücksetzen
-            Me.Zeitreihen.Clear()
+            Me.TimeSeriesDict.Clear()
 
             'Alle Dateien durchlaufen
             For Each filename As String In Me.ImportedFiles.Keys
@@ -1623,7 +1621,7 @@ Public Class Wave
                 'load the file
                 Call fileObj.readFile()
                 'import the series
-                For Each ts As TimeSeries In fileObj.TimeSeriesCollection.Values
+                For Each ts As TimeSeries In fileObj.TimeSeriesList
                     Call Me.Import_Series(ts)
                 Next
                 Log.AddLogEntry("File '" & filename & "' imported successfully!")
@@ -1987,24 +1985,35 @@ Public Class Wave
     '***************************
     Private Sub AddZeitreihe(ByRef zre As TimeSeries)
 
+        Dim duplicateFound As Boolean
+        Dim pattern As String = "(?<name>.*)\s\(\d+\)$"
+        Dim match As Match
         Dim n As Integer = 1
 
         'Umbenennen, falls Titel schon vergeben
         'Format: "Titel (n)"
-        Do While (Me.Zeitreihen.ContainsKey(zre.Title))
+        Do While True
+            duplicateFound = False
+            For Each ts As TimeSeries In Me.TimeSeriesDict.Values
+                If zre.Title = ts.Title Then
+                    duplicateFound = True
+                End If
+            Next
 
-            Dim pattern As String = "(?<name>.*)\s\(\d+\)$"
-            Dim match As Match = Regex.Match(zre.Title, pattern)
-
-            If (match.Success) Then
-                n += 1
-                zre.Title = Regex.Replace(zre.Title, pattern, "${name} (" & n.ToString() & ")")
+            If duplicateFound Then
+                match = Regex.Match(zre.Title, pattern)
+                If (match.Success) Then
+                    n += 1
+                    zre.Title = Regex.Replace(zre.Title, pattern, "${name} (" & n.ToString() & ")")
+                Else
+                    zre.Title &= " (1)"
+                End If
             Else
-                zre.Title &= " (1)"
+                Exit Do
             End If
         Loop
 
-        Me.Zeitreihen.Add(zre.Title, zre)
+        Me.TimeSeriesDict.Add(zre.Id, zre)
 
     End Sub
 
@@ -2200,7 +2209,7 @@ Public Class Wave
 
                 'import the series
                 Call Log.AddLogEntry("Loading series in chart...")
-                For Each ts As TimeSeries In fileobj.TimeSeriesCollection.Values
+                For Each ts As TimeSeries In fileobj.TimeSeriesList
                     'change title if specified in the project file
                     If seriesList.Count > 0 Then
                         If seriesList(ts.Title) <> "" Then
@@ -2244,9 +2253,9 @@ Public Class Wave
             Call Log.AddLogEntry("Loading file '" & FileName & "' ...")
 
             'Bereits vorhandene Reihen merken
-            Dim existingseries = New List(Of String)
-            For Each zretitle As String In Me.Zeitreihen.Keys
-                existingseries.Add(zretitle)
+            Dim existingIds = New List(Of Integer)
+            For Each id As Integer In Me.TimeSeriesDict.Keys
+                existingIds.Add(id)
             Next
 
             'Zoom der X-Achse merken
@@ -2348,8 +2357,8 @@ Public Class Wave
             Next
 
             'Die vor dem Laden bereits vorhandenen Zeitreihen wieder zu den Diagrammen hinzufügen (durch TEN-Import verloren)
-            For Each title As String In existingseries
-                Call Me.Display_Series(Me.Zeitreihen(title))
+            For Each id As Integer In existingIds
+                Call Me.Display_Series(Me.TimeSeriesDict(id))
             Next
 
             'Vorherigen Zoom wiederherstellen
@@ -2475,7 +2484,7 @@ Public Class Wave
                         Call Log.AddLogEntry("Loading series in chart...")
 
                         'Import all time series into the chart
-                        For Each ts As TimeSeries In Datei.TimeSeriesCollection.Values
+                        For Each ts As TimeSeries In Datei.TimeSeriesList
                             Call Me.Import_Series(ts)
                         Next
 
@@ -2631,7 +2640,7 @@ Public Class Wave
 
                     'read series from file
                     fileobj.readFile()
-                    ts = fileobj.TimeSeriesCollection.Single().Value
+                    ts = fileobj.TimeSeriesList.Single()
 
                     'add metadata
                     ts.Title = name
@@ -2765,13 +2774,13 @@ Public Class Wave
     ''' <summary>
     ''' Löscht eine Zeitreihe
     ''' </summary>
-    ''' <param name="title">Titel der Zeitreihe</param>
+    ''' <param name="id">Id der Zeitreihe</param>
     ''' <remarks>Annahme, dass alle Zeitreihentitel eindeutig sind</remarks>
-    Private Sub DeleteZeitreihe(ByVal title As String)
+    Private Sub DeleteZeitreihe(ByVal id As Integer)
 
         'Aus Diagramm entfernen
         For i As Integer = Me.TChart1.Series.Count - 1 To 0 Step -1
-            If (Me.TChart1.Series.Item(i).Title = title) Then
+            If (Me.TChart1.Series.Item(i).Title = Me.TimeSeriesDict(id).Title) Then
                 Me.TChart1.Series.RemoveAt(i)
                 Me.TChart1.Refresh()
                 Exit For
@@ -2780,7 +2789,7 @@ Public Class Wave
 
         'Aus Übersicht entfernen
         For i As Integer = Me.TChart2.Series.Count - 1 To 0 Step -1
-            If (Me.TChart2.Series.Item(i).Title = title) Then
+            If (Me.TChart2.Series.Item(i).Title = Me.TimeSeriesDict(id).Title) Then
                 Me.TChart2.Series.RemoveAt(i)
                 Me.TChart2.Refresh()
                 Exit For
@@ -2788,7 +2797,7 @@ Public Class Wave
         Next
 
         'Intern entfernen
-        Me.Zeitreihen.Remove(title)
+        Me.TimeSeriesDict.Remove(id)
 
     End Sub
 

@@ -384,7 +384,7 @@ Public Class SydroSQLite
                 datareader.Close()
 
                 'store timeseries
-                Me.TimeSeriesCollection.Add(ts.Title, ts)
+                Me.TimeSeriesList.Add(ts)
 
             Case TimeseriesClassEnum.Flagged
 
@@ -417,7 +417,7 @@ Public Class SydroSQLite
                     datareader.Close()
 
                     'store timeseries
-                    Me.TimeSeriesCollection.Add(ts.Title, ts)
+                    Me.TimeSeriesList.Add(ts)
                 Next
 
             Case TimeseriesClassEnum.Forecast
@@ -478,7 +478,7 @@ Public Class SydroSQLite
                         datareader.Close()
 
                         'store time series
-                        Me.TimeSeriesCollection.Add(ts.Title, ts)
+                        Me.TimeSeriesList.Add(ts)
                     Next
 
                 Next

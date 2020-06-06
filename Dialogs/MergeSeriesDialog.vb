@@ -30,18 +30,18 @@ Imports System.Windows.Forms
 Friend Class MergeSeriesDialog
 
     ''' <summary>
-    ''' Returns the list of selected series titles, ordered by priority (highest first)
+    ''' Returns the list of selected series IDs, ordered by priority (highest first)
     ''' </summary>
     ''' <value></value>
     ''' <returns></returns>
     ''' <remarks></remarks>
-    Public ReadOnly Property selectedSeries() As List(Of String)
+    Public ReadOnly Property selectedSeries() As List(Of Integer)
         Get
-            Dim titles As New List(Of String)
-            For Each title As String In Me.ListBox_SelectedSeries.Items
-                titles.Add(title)
+            Dim ids As New List(Of Integer)
+            For Each ts As TimeSeries In Me.ListBox_SelectedSeries.Items
+                ids.Add(ts.Id)
             Next
-            Return titles
+            Return ids
         End Get
     End Property
 
@@ -57,7 +57,7 @@ Friend Class MergeSeriesDialog
         End Get
     End Property
 
-    Public Sub New(ByRef series As Dictionary(Of String, TimeSeries))
+    Public Sub New(ByRef series As List(Of TimeSeries))
 
         ' This call is required by the Windows Form Designer.
         InitializeComponent()
@@ -65,8 +65,8 @@ Friend Class MergeSeriesDialog
         ' Add any initialization after the InitializeComponent() call.
 
         'populate list of available series
-        For Each title As String In series.Keys
-            Me.CheckedListBox_AvailableSeries.Items.Add(title)
+        For Each ts As TimeSeries In series
+            Me.CheckedListBox_AvailableSeries.Items.Add(ts)
         Next
 
     End Sub
@@ -79,16 +79,16 @@ Friend Class MergeSeriesDialog
     ''' <remarks></remarks>
     Private Sub SeriesSelection_Changed(ByVal sender As System.Object, ByVal e As System.Windows.Forms.ItemCheckEventArgs) Handles CheckedListBox_AvailableSeries.ItemCheck
 
-        Dim title As String
+        Dim ts As TimeSeries
 
-        title = Me.CheckedListBox_AvailableSeries.Items(e.Index)
+        ts = Me.CheckedListBox_AvailableSeries.Items(e.Index)
 
         If e.NewValue = CheckState.Checked Then
             'Add series to priorities list box
-            Me.ListBox_SelectedSeries.Items.Add(title)
+            Me.ListBox_SelectedSeries.Items.Add(ts)
         Else
             'Remove series from priorities list box
-            Me.ListBox_SelectedSeries.Items.Remove(title)
+            Me.ListBox_SelectedSeries.Items.Remove(ts)
         End If
 
     End Sub
@@ -102,14 +102,14 @@ Friend Class MergeSeriesDialog
     Private Sub Button_Up_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button_Up.Click
 
         Dim index As Integer
-        Dim title As String
+        Dim ts As TimeSeries
 
         index = Me.ListBox_SelectedSeries.SelectedIndex
-        title = Me.ListBox_SelectedSeries.SelectedItem
+        ts = Me.ListBox_SelectedSeries.SelectedItem
 
         If index <> -1 And index > 0 Then
             Me.ListBox_SelectedSeries.Items.RemoveAt(index)
-            Me.ListBox_SelectedSeries.Items.Insert(index - 1, title)
+            Me.ListBox_SelectedSeries.Items.Insert(index - 1, ts)
 
             Me.ListBox_SelectedSeries.SetSelected(index - 1, True)
         End If
@@ -125,14 +125,14 @@ Friend Class MergeSeriesDialog
     Private Sub Button_Down_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button_Down.Click
 
         Dim index As Integer
-        Dim title As String
+        Dim ts As TimeSeries
 
         index = Me.ListBox_SelectedSeries.SelectedIndex
-        title = Me.ListBox_SelectedSeries.SelectedItem
+        ts = Me.ListBox_SelectedSeries.SelectedItem
 
         If index <> -1 And index < Me.ListBox_SelectedSeries.Items.Count - 1 Then
             Me.ListBox_SelectedSeries.Items.RemoveAt(index)
-            Me.ListBox_SelectedSeries.Items.Insert(index + 1, title)
+            Me.ListBox_SelectedSeries.Items.Insert(index + 1, ts)
 
             Me.ListBox_SelectedSeries.SetSelected(index + 1, True)
         End If
