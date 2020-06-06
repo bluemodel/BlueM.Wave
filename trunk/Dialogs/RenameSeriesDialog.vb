@@ -29,34 +29,35 @@ Imports System.Windows.Forms
 
 Friend Class RenameSeriesDialog
 
-    Protected Friend titles As Dictionary(Of String, String)
+    Protected Friend titles_new As Dictionary(Of Integer, String)
 
-    Public Sub New(ByVal _titles As List(Of String))
+    Public Sub New(ByRef series As List(Of TimeSeries))
 
         ' This call is required by the Windows Form Designer.
         InitializeComponent()
 
         ' Add any initialization after the InitializeComponent() call.
-        For Each title As String In _titles
-            Me.DataGridView_Series.Rows.Add(title, title)
+        For Each ts As TimeSeries In series
+            Me.DataGridView_Series.Rows.Add(ts.Id, ts.Title, ts.Title)
         Next
     End Sub
 
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
-        Me.titles = New Dictionary(Of String, String)
-        Dim title_old, title_new As String
-        Dim titles_new As New List(Of String)
-        'get old and new titles from DataGridView
+
+        Dim id As Integer
+        Dim title_new As String
+
+        'check that all new titles are unique
+        Me.titles_new = New Dictionary(Of Integer, String)
         For Each row As DataGridViewRow In Me.DataGridView_Series.Rows
-            title_old = row.Cells("title_old").Value
+            id = row.Cells("ID").Value
             title_new = row.Cells("title_new").Value
             'check for uniqueness
-            If titles_new.Contains(title_new) Then
+            If titles_new.ContainsValue(title_new) Then
                 MsgBox("The title '" & title_new & "' is not unique! Please enter unique titles!", MsgBoxStyle.Exclamation, "Wave")
                 Exit Sub
             End If
-            titles_new.Add(title_new)
-            Me.titles.Add(title_old, title_new)
+            Me.titles_new.Add(id, title_new)
         Next
         Me.DialogResult = System.Windows.Forms.DialogResult.OK
     End Sub

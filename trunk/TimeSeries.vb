@@ -54,6 +54,7 @@ Public Class TimeSeries
 
 #Region "Members"
 
+    Private _id As Integer
     Private _title As String
     Private _nodes As SortedList(Of DateTime, Double)
     Private _nodesCleaned As SortedList(Of DateTime, Double)
@@ -66,6 +67,16 @@ Public Class TimeSeries
 #End Region 'Members
 
 #Region "Properties"
+
+    ''' <summary>
+    ''' Unique Id
+    ''' </summary>
+    ''' <returns></returns>
+    Public ReadOnly Property Id() As Integer
+        Get
+            Return Me._id
+        End Get
+    End Property
 
     ''' <summary>
     ''' Title of the time series
@@ -399,6 +410,7 @@ Public Class TimeSeries
     ''' </summary>
     ''' <param name="title">Title of the times series</param>
     Public Sub New(ByVal title As String)
+        Me._id = TimeSeries.getUniqueID()
         Me._metadata = New Metadata()
         Me._title = title
         Me._unit = "-"
@@ -765,108 +777,6 @@ Public Class TimeSeries
     End Function
 
     ''' <summary>
-    ''' Returns a new DateTime offset from the given base DateTime by the specified interval
-    ''' </summary>
-    ''' <param name="t">Base DateTime from which to offset</param>
-    ''' <param name="timesteptype">The type of interval to offset</param>
-    ''' <param name="timestepinterval">The number of intervals to offset (can be negative in order to subract)</param>
-    ''' <returns>The offset DateTime</returns>
-    Public Shared Function AddTimeInterval(t As DateTime, timesteptype As TimeStepTypeEnum, timestepinterval As Integer) As DateTime
-
-        Dim n As Integer
-
-        If timestepinterval > 0 Then
-            'add time interval
-            For n = 0 To timestepinterval - 1
-                Select Case timesteptype
-                    Case TimeStepTypeEnum.Second
-                        t += TimeSpan.FromSeconds(1)
-                    Case TimeStepTypeEnum.Minute
-                        t += TimeSpan.FromMinutes(1)
-                    Case TimeStepTypeEnum.Hour
-                        t += TimeSpan.FromHours(1)
-                    Case TimeStepTypeEnum.Day
-                        t += TimeSpan.FromDays(1)
-                    Case TimeStepTypeEnum.Week
-                        t += TimeSpan.FromDays(7)
-                    Case TimeStepTypeEnum.Month
-                        t += TimeSpan.FromDays(DateTime.DaysInMonth(t.Year, t.Month))
-                    Case TimeStepTypeEnum.Year
-                        t = New Date(t.Year + 1, t.Month, t.Day, t.Hour, t.Minute, t.Second)
-                    Case Else
-                        Throw New NotImplementedException("TimeStepType " & timesteptype & " not implemented!")
-                End Select
-            Next
-        Else
-            'subtract time interval
-            For n = 0 To Math.Abs(timestepinterval) - 1
-                Select Case timesteptype
-                    Case TimeStepTypeEnum.Second
-                        t -= TimeSpan.FromSeconds(1)
-                    Case TimeStepTypeEnum.Minute
-                        t -= TimeSpan.FromMinutes(1)
-                    Case TimeStepTypeEnum.Hour
-                        t -= TimeSpan.FromHours(1)
-                    Case TimeStepTypeEnum.Day
-                        t -= TimeSpan.FromDays(1)
-                    Case TimeStepTypeEnum.Week
-                        t -= TimeSpan.FromDays(7)
-                    Case TimeStepTypeEnum.Month
-                        t -= TimeSpan.FromDays(DateTime.DaysInMonth(t.Year, t.Month - 1))
-                    Case TimeStepTypeEnum.Year
-                        t = New Date(t.Year - 1, t.Month, t.Day, t.Hour, t.Minute, t.Second)
-                    Case Else
-                        Throw New NotImplementedException("TimeStepType " & timesteptype & " not implemented!")
-                End Select
-            Next
-        End If
-
-        Return t
-
-    End Function
-
-    ''' <summary>
-    ''' Interpolates a value between two nodes while respecting the interpretation
-    ''' </summary>
-    ''' <param name="t1">First timestamp</param>
-    ''' <param name="v1">First value</param>
-    ''' <param name="t2">Second timestamp</param>
-    ''' <param name="v2">Second value</param>
-    ''' <param name="t">Timestamp at which to interpolate</param>
-    ''' <param name="interpretation">Interpretation to use</param>
-    ''' <returns>The interpolated value</returns>
-    Public Shared Function InterpolateValue(t1 As DateTime, v1 As Double, t2 As DateTime, v2 As Double, t As DateTime, interpretation As InterpretationEnum) As Double
-
-        Dim dt_total, dt_part As TimeSpan
-        Dim value As Double
-
-        If t < t1 Or t > t2 Then
-            Throw New Exception("Timestamp to interpolate is not within range!")
-        End If
-
-        dt_total = t2 - t1
-        dt_part = t - t1
-
-        Select Case interpretation
-            Case InterpretationEnum.Instantaneous
-                value = (v2 - v1) / dt_total.TotalSeconds * dt_part.TotalSeconds + v1
-            Case InterpretationEnum.BlockRight
-                value = v1
-            Case InterpretationEnum.BlockLeft
-                value = v2
-            Case InterpretationEnum.Cumulative
-                value = (v2 - v1) / dt_total.TotalSeconds * dt_part.TotalSeconds + v1
-            Case InterpretationEnum.CumulativePerTimestep
-                value = v2 / dt_total.TotalSeconds * dt_part.TotalSeconds
-            Case Else
-                Throw New NotImplementedException(String.Format("Interpolation between nodes with interpretation {0} is currently not implemented!", [Enum].GetName(GetType(InterpretationEnum), interpretation)))
-        End Select
-
-        Return value
-
-    End Function
-
-    ''' <summary>
     ''' Calculate a metric from the time series' values
     ''' </summary>
     ''' <param name="WertTyp">MaxWert, MinWert, Average, AnfWert, EndWert, Summe</param>
@@ -1182,5 +1092,127 @@ Public Class TimeSeries
     End Function
 
 #End Region 'Methods
+
+#Region "Shared Members"
+
+    ''' <summary>
+    ''' Shared global ID which is incremented for each new Timeseries instance
+    ''' </summary>
+    Private Shared _globalId As Integer = 0
+
+    ''' <summary>
+    ''' Returns a new unique ID
+    ''' </summary>
+    ''' <returns></returns>
+    Public Shared ReadOnly Property getUniqueID As Integer
+        Get
+            TimeSeries._globalId += 1
+            Return TimeSeries._globalId
+        End Get
+    End Property
+
+    ''' <summary>
+    ''' Returns a new DateTime offset from the given base DateTime by the specified interval
+    ''' </summary>
+    ''' <param name="t">Base DateTime from which to offset</param>
+    ''' <param name="timesteptype">The type of interval to offset</param>
+    ''' <param name="timestepinterval">The number of intervals to offset (can be negative in order to subract)</param>
+    ''' <returns>The offset DateTime</returns>
+    Public Shared Function AddTimeInterval(t As DateTime, timesteptype As TimeStepTypeEnum, timestepinterval As Integer) As DateTime
+
+        Dim n As Integer
+
+        If timestepinterval > 0 Then
+            'add time interval
+            For n = 0 To timestepinterval - 1
+                Select Case timesteptype
+                    Case TimeStepTypeEnum.Second
+                        t += TimeSpan.FromSeconds(1)
+                    Case TimeStepTypeEnum.Minute
+                        t += TimeSpan.FromMinutes(1)
+                    Case TimeStepTypeEnum.Hour
+                        t += TimeSpan.FromHours(1)
+                    Case TimeStepTypeEnum.Day
+                        t += TimeSpan.FromDays(1)
+                    Case TimeStepTypeEnum.Week
+                        t += TimeSpan.FromDays(7)
+                    Case TimeStepTypeEnum.Month
+                        t += TimeSpan.FromDays(DateTime.DaysInMonth(t.Year, t.Month))
+                    Case TimeStepTypeEnum.Year
+                        t = New Date(t.Year + 1, t.Month, t.Day, t.Hour, t.Minute, t.Second)
+                    Case Else
+                        Throw New NotImplementedException("TimeStepType " & timesteptype & " not implemented!")
+                End Select
+            Next
+        Else
+            'subtract time interval
+            For n = 0 To Math.Abs(timestepinterval) - 1
+                Select Case timesteptype
+                    Case TimeStepTypeEnum.Second
+                        t -= TimeSpan.FromSeconds(1)
+                    Case TimeStepTypeEnum.Minute
+                        t -= TimeSpan.FromMinutes(1)
+                    Case TimeStepTypeEnum.Hour
+                        t -= TimeSpan.FromHours(1)
+                    Case TimeStepTypeEnum.Day
+                        t -= TimeSpan.FromDays(1)
+                    Case TimeStepTypeEnum.Week
+                        t -= TimeSpan.FromDays(7)
+                    Case TimeStepTypeEnum.Month
+                        t -= TimeSpan.FromDays(DateTime.DaysInMonth(t.Year, t.Month - 1))
+                    Case TimeStepTypeEnum.Year
+                        t = New Date(t.Year - 1, t.Month, t.Day, t.Hour, t.Minute, t.Second)
+                    Case Else
+                        Throw New NotImplementedException("TimeStepType " & timesteptype & " not implemented!")
+                End Select
+            Next
+        End If
+
+        Return t
+
+    End Function
+
+    ''' <summary>
+    ''' Interpolates a value between two nodes while respecting the interpretation
+    ''' </summary>
+    ''' <param name="t1">First timestamp</param>
+    ''' <param name="v1">First value</param>
+    ''' <param name="t2">Second timestamp</param>
+    ''' <param name="v2">Second value</param>
+    ''' <param name="t">Timestamp at which to interpolate</param>
+    ''' <param name="interpretation">Interpretation to use</param>
+    ''' <returns>The interpolated value</returns>
+    Public Shared Function InterpolateValue(t1 As DateTime, v1 As Double, t2 As DateTime, v2 As Double, t As DateTime, interpretation As InterpretationEnum) As Double
+
+        Dim dt_total, dt_part As TimeSpan
+        Dim value As Double
+
+        If t < t1 Or t > t2 Then
+            Throw New Exception("Timestamp to interpolate is not within range!")
+        End If
+
+        dt_total = t2 - t1
+        dt_part = t - t1
+
+        Select Case interpretation
+            Case InterpretationEnum.Instantaneous
+                value = (v2 - v1) / dt_total.TotalSeconds * dt_part.TotalSeconds + v1
+            Case InterpretationEnum.BlockRight
+                value = v1
+            Case InterpretationEnum.BlockLeft
+                value = v2
+            Case InterpretationEnum.Cumulative
+                value = (v2 - v1) / dt_total.TotalSeconds * dt_part.TotalSeconds + v1
+            Case InterpretationEnum.CumulativePerTimestep
+                value = v2 / dt_total.TotalSeconds * dt_part.TotalSeconds
+            Case Else
+                Throw New NotImplementedException(String.Format("Interpolation between nodes with interpretation {0} is currently not implemented!", [Enum].GetName(GetType(InterpretationEnum), interpretation)))
+        End Select
+
+        Return value
+
+    End Function
+
+#End Region
 
 End Class

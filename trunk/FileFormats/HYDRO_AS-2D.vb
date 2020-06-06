@@ -262,7 +262,7 @@ Public Class HYDRO_AS_2D
             For Each sInfo As SeriesInfo In Me.SelectedSeries
                 ts = New TimeSeries(sInfo.Name)
                 ts.Unit = sInfo.Unit
-                Me.TimeSeriesCollection.Add(ts.Title, ts)
+                Me.TimeSeriesList.Add(ts)
             Next
 
             'Datei öffnen
@@ -289,7 +289,7 @@ Public Class HYDRO_AS_2D
                         'Simulationszeit [h] wird zu Datum nach dem Referenzdatum (default: 01.01.2000 00:00:00) konvertiert
                         datum = Me.refDate + New TimeSpan(0, 0, Helpers.StringToDouble(Werte(0)) * 3600)
                         For Each sInfo As SeriesInfo In Me.SelectedSeries
-                            Me.TimeSeriesCollection(sInfo.Name).AddNode(datum, Helpers.StringToDouble(Werte(sInfo.Index)))
+                            Me.TimeSeriesList(sInfo.Name).AddNode(datum, Helpers.StringToDouble(Werte(sInfo.Index)))
                         Next
 
                     Loop Until StrReadSync.Peek() = -1
@@ -319,7 +319,7 @@ Public Class HYDRO_AS_2D
                         'nur ausgewählte Reihen abspeichern
                         For Each sInfo As SeriesInfo In Me.SelectedSeries
                             If sInfo.Name = name Then
-                                Me.TimeSeriesCollection(sInfo.Name).AddNode(datum, value)
+                                Me.TimeSeriesList(sInfo.Name).AddNode(datum, value)
                                 Exit For
                             End If
                         Next

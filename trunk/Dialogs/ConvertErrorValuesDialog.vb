@@ -33,22 +33,22 @@ Imports System.Windows.Forms
 ''' <remarks></remarks>
 Friend Class ConvertErrorValuesDialog
 
-    Public tsOriginal As Dictionary(Of String, TimeSeries)
-    Public tsConverted As Dictionary(Of String, TimeSeries)
+    Public tsOriginal As List(Of TimeSeries)
+    Public tsConverted As List(Of TimeSeries)
     Public Const labelAlle As String = "- ALL -"
 
-    Public Sub New(ByRef zeitreihen As Dictionary(Of String, TimeSeries))
+    Public Sub New(ByRef seriesList As List(Of TimeSeries))
 
         ' This call is required by the Windows Form Designer.
         InitializeComponent()
 
         ' Add any initialization after the InitializeComponent() call.
-        Me.tsOriginal = zeitreihen
+        Me.tsOriginal = seriesList
 
         'populate combobox
         Me.ComboBox_Series.Items.Add(labelAlle)
-        For Each zre As TimeSeries In zeitreihen.Values
-            Me.ComboBox_Series.Items.Add(zre)
+        For Each ts As TimeSeries In seriesList
+            Me.ComboBox_Series.Items.Add(ts)
         Next
 
         Me.ComboBox_Series.SelectedIndex = 0
@@ -81,21 +81,21 @@ Friend Class ConvertErrorValuesDialog
             End If
         Next
 
-        Me.tsConverted = New Dictionary(Of String, TimeSeries)
+        Me.tsConverted = New List(Of TimeSeries)
 
         If Me.ComboBox_Series.SelectedItem.ToString = labelAlle Then
             'clean all series
-            For Each ts In Me.tsOriginal.Values
+            For Each ts In Me.tsOriginal
                 ts_new = ts.convertErrorValues(errorvalues)
                 ts_new.Title = ts_new.Title & " (clean)"
-                Me.tsConverted.Add(ts_new.Title, ts_new)
+                Me.tsConverted.Add(ts_new)
             Next
         Else
             'clean only the selected series
             ts = Me.ComboBox_Series.SelectedItem
             ts_new = ts.convertErrorValues(errorvalues)
             ts_new.Title = ts_new.Title & " (clean)"
-            Me.tsConverted.Add(ts_new.Title, ts_new)
+            Me.tsConverted.Add(ts_new)
         End If
 
         Me.DialogResult = System.Windows.Forms.DialogResult.OK

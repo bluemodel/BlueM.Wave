@@ -23,12 +23,13 @@ Partial Class RenameSeriesDialog
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(RenameSeriesDialog))
-        Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel
-        Me.OK_Button = New System.Windows.Forms.Button
-        Me.Cancel_Button = New System.Windows.Forms.Button
-        Me.DataGridView_Series = New System.Windows.Forms.DataGridView
-        Me.title_old = New System.Windows.Forms.DataGridViewTextBoxColumn
-        Me.title_new = New System.Windows.Forms.DataGridViewTextBoxColumn
+        Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
+        Me.OK_Button = New System.Windows.Forms.Button()
+        Me.Cancel_Button = New System.Windows.Forms.Button()
+        Me.DataGridView_Series = New System.Windows.Forms.DataGridView()
+        Me.ID = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.title_old = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.title_new = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.TableLayoutPanel1.SuspendLayout()
         CType(Me.DataGridView_Series, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
@@ -72,14 +73,21 @@ Partial Class RenameSeriesDialog
         Me.DataGridView_Series.AllowUserToAddRows = False
         Me.DataGridView_Series.AllowUserToDeleteRows = False
         Me.DataGridView_Series.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-                    Or System.Windows.Forms.AnchorStyles.Left) _
-                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.DataGridView_Series.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.DataGridView_Series.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.title_old, Me.title_new})
+        Me.DataGridView_Series.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.ID, Me.title_old, Me.title_new})
         Me.DataGridView_Series.Location = New System.Drawing.Point(13, 13)
         Me.DataGridView_Series.Name = "DataGridView_Series"
         Me.DataGridView_Series.Size = New System.Drawing.Size(344, 150)
         Me.DataGridView_Series.TabIndex = 1
+        '
+        'ID
+        '
+        Me.ID.HeaderText = "ID"
+        Me.ID.Name = "ID"
+        Me.ID.ReadOnly = True
+        Me.ID.Visible = False
         '
         'title_old
         '
@@ -121,7 +129,7 @@ Partial Class RenameSeriesDialog
     Friend WithEvents OK_Button As System.Windows.Forms.Button
     Friend WithEvents Cancel_Button As System.Windows.Forms.Button
     Friend WithEvents DataGridView_Series As System.Windows.Forms.DataGridView
-    Friend WithEvents title_old As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents title_new As System.Windows.Forms.DataGridViewTextBoxColumn
-
+    Friend WithEvents ID As DataGridViewTextBoxColumn
+    Friend WithEvents title_old As DataGridViewTextBoxColumn
+    Friend WithEvents title_new As DataGridViewTextBoxColumn
 End Class

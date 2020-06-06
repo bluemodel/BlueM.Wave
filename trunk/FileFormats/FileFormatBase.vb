@@ -126,9 +126,9 @@ Public MustInherit Class FileFormatBase
     End Property
 
     ''' <summary>
-    ''' Dictionary stores the TimeSeries read from the file with the titles as key
+    ''' List stores the TimeSeries read from the file
     ''' </summary>
-    Public TimeSeriesCollection As Dictionary(Of String, TimeSeries)
+    Public TimeSeriesList As List(Of TimeSeries)
 
     ''' <summary>
     ''' Instance of the ImportDialog
@@ -327,10 +327,15 @@ Public MustInherit Class FileFormatBase
     ''' Throws an exception if the timeseries cannot be found in the file.</remarks>
     Public ReadOnly Property getTimeSeries(ByVal title As String) As TimeSeries
         Get
+            Dim found As Boolean = False
             'Find the series using the given title
-            If Me.TimeSeriesCollection.ContainsKey(title) Then
-                Return Me.TimeSeriesCollection(title)
-            Else
+            For Each ts As TimeSeries In Me.TimeSeriesList
+                If title = ts.Title Then
+                    Return ts
+                    found = True
+                End If
+            Next
+            If Not found Then
                 'Timeseries was not found (perhaps not yet imported?)
                 'Check whether a column with the given title exists
                 For Each sInfo As SeriesInfo In Me.SeriesList
@@ -343,9 +348,9 @@ Public MustInherit Class FileFormatBase
                         Return Me.getTimeSeries(title)
                     End If
                 Next
-                'Timeseries does not exist in file
-                Throw New Exception("The timeseries '" & title & "' could not be found in the file '" & IO.Path.GetFileName(Me.File) & "'!")
             End If
+            'Timeseries not found in file
+            Throw New Exception("The timeseries '" & title & "' could not be found in the file '" & IO.Path.GetFileName(Me.File) & "'!")
         End Get
     End Property
 
@@ -375,7 +380,7 @@ Public MustInherit Class FileFormatBase
     Public Sub New(ByVal FileName As String)
 
         'Initialize data structures
-        Me.TimeSeriesCollection = New Dictionary(Of String, TimeSeries)
+        Me.TimeSeriesList = New List(Of TimeSeries)
         Me._seriesList = New List(Of SeriesInfo)
         Me._selectedSeries = New List(Of SeriesInfo)
         Me._metadata = New Metadata()

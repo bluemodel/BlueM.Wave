@@ -30,7 +30,7 @@
 ''' </summary>
 Friend Class AnalysisDialog
 
-    Public Sub New(ByVal seriesDict As Dictionary(Of String, TimeSeries))
+    Public Sub New(ByVal seriesList As List(Of TimeSeries))
 
         Call InitializeComponent()
 
@@ -38,7 +38,7 @@ Friend Class AnalysisDialog
         Me.ComboBox_Analysis.DataSource = System.Enum.GetValues(GetType(AnalysisFactory.AnalysisFunctions))
 
         'Populate listbox with time series
-        For Each series As TimeSeries In seriesDict.Values
+        For Each series As TimeSeries In seriesList
             Me.ListBox_Series.Items.Add(series)
         Next
 

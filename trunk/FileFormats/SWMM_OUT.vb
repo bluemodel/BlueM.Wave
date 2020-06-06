@@ -288,7 +288,7 @@ Public Class SWMM_OUT
             Next
 
             'store time series
-            Me.TimeSeriesCollection.Add(ts.Title, ts)
+            Me.TimeSeriesList.Add(ts)
         Next
 
     End Sub
@@ -322,7 +322,7 @@ Public Class SWMM_OUT
         Next
 
         'store time series
-        Me.TimeSeriesCollection.Add(ts.Title, ts)
+        Me.TimeSeriesList.Add(ts)
 
     End Sub
 

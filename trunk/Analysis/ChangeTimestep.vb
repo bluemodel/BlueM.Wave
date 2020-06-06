@@ -124,7 +124,7 @@ Friend Class ChangeTimestep
             ts_new = ts.ChangeTimestep(timesteptype, timestepinterval, startdate)
 
             'Store result series
-            Me.mResultSeries.Add(ts_new.Title, ts_new)
+            Me.mResultSeries.Add(ts_new)
 
         End If
 

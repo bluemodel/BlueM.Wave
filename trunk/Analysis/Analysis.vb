@@ -59,7 +59,7 @@ Friend MustInherit Class Analysis
     ''' Result series
     ''' </summary>
     ''' <remarks>optional</remarks>
-    Protected mResultSeries As Dictionary(Of String, TimeSeries)
+    Protected mResultSeries As List(Of TimeSeries)
 
 #End Region 'Eigenschaften
 
@@ -128,7 +128,7 @@ Friend MustInherit Class Analysis
     ''' Analysis result in the form of timeseries
     ''' </summary>
     ''' <remarks>Optional</remarks>
-    Public ReadOnly Property getResultSeries() As Dictionary(Of String, TimeSeries)
+    Public ReadOnly Property getResultSeries() As List(Of TimeSeries)
         Get
             Return Me.mResultSeries
         End Get
@@ -149,7 +149,7 @@ Friend MustInherit Class Analysis
 
         'Datenstrukturen initialisieren
         Me.mResultValues = New Dictionary(Of String, Double)
-        Me.mResultSeries = New Dictionary(Of String, TimeSeries)
+        Me.mResultSeries = New List(Of TimeSeries)
     End Sub
 
     ''' <summary>

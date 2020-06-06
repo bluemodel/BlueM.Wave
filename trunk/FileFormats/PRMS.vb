@@ -225,7 +225,7 @@ Public Class PRMS
                 ts = New TimeSeries()
                 ts.Title = sInfo.Name
                 ts.Unit = sInfo.Unit
-                Me.TimeSeriesCollection.Add(ts.Title, ts)
+                Me.TimeSeriesList.Add(ts)
             Next
 
             'Skip header
@@ -253,7 +253,7 @@ Public Class PRMS
                 'Parse values and store nodes
                 For Each sInfo As SeriesInfo In Me.SelectedSeries
                     value = Helpers.StringToDouble(parts(sInfo.Index))
-                    Me.TimeSeriesCollection(sInfo.Name).AddNode(timestamp, value)
+                    Me.TimeSeriesList(sInfo.Name).AddNode(timestamp, value)
                 Next
 
             Loop Until StrReadSync.Peek() = -1

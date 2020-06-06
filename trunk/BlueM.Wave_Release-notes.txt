@@ -25,9 +25,10 @@ FIXED:
 * Time series statistics Minimum, Maximum, Average, Sum and Volume (shown in the properties dialog) 
   are now calculated by ignoring NaN values. (Before, any NaN values would lead to undefined values)
 API-CHANGES:
+* TimeSeries instances now each have a unique Id within the session
 * New method TimeSeries.ChangeTimestep()
 * The following changes have been made to public methods and properties of FileFormatBase (which are inherited by all file formats):
- * Replaced TimeSeries (array) with TimeSeriesCollection (dictionary with titles as keys)
+ * Replaced TimeSeries (array) with TimeSeriesList (list)
  * Replaced structure ColumnInfo with SeriesInfo (with slightly different properties)
  * Replaced Columns (array) with SeriesList (list of SeriesInfo objects)
  * Replaced selectedColumns (array) with SelectedSeries (list of SeriesInfo objects)

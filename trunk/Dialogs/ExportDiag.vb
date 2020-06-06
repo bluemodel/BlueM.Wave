@@ -27,7 +27,7 @@
 '
 Friend Class ExportDiag
 
-    Public Sub New(ByRef zres As Dictionary(Of String, TimeSeries))
+    Public Sub New(ByRef zres As Dictionary(Of Integer, TimeSeries))
 
         ' This call is required by the Windows Form Designer.
         InitializeComponent()

@@ -36,16 +36,16 @@ Friend Class CutDialog
     Private IsInitializing As Boolean
     Private colorBand1 As Steema.TeeChart.Tools.ColorBand
     Private cutStart, cutEnd As DateTime
-    Private zreOrig As Dictionary(Of String, TimeSeries)
+    Private zreOrig As List(Of TimeSeries)
     Private serie_cut As Steema.TeeChart.Styles.Line
     Private serie_ref As Steema.TeeChart.Styles.Line
 
-    Public zreCut As Dictionary(Of String, TimeSeries)
+    Public zreCut As List(Of TimeSeries)
     Public Const labelAlle As String = "- ALL -"
 
     'Konstruktor
     '***********
-    Public Sub New(ByRef zeitreihen As Dictionary(Of String, TimeSeries), ByVal initialStart As DateTime, ByVal initialEnd As DateTime)
+    Public Sub New(ByRef zeitreihen As List(Of TimeSeries), ByVal initialStart As DateTime, ByVal initialEnd As DateTime)
 
         Me.IsInitializing = True
 
@@ -54,7 +54,7 @@ Friend Class CutDialog
 
         ' Add any initialization after the InitializeComponent() call.
 
-        Me.zreCut = New Dictionary(Of String, TimeSeries)
+        Me.zreCut = New List(Of TimeSeries)
         Me.zreOrig = zeitreihen
 
         Me.cutStart = initialStart
@@ -64,7 +64,7 @@ Friend Class CutDialog
         'Option zum Zuschneiden von allen Reihen
         Me.ComboBox_ZeitreiheCut.Items.Add(labelAlle)
         'Zeitreihen hinzufügen
-        For Each zre As TimeSeries In Me.zreOrig.Values
+        For Each zre As TimeSeries In Me.zreOrig
             Me.ComboBox_ZeitreiheCut.Items.Add(zre)
             Me.ComboBox_RefSeries.Items.Add(zre)
         Next
@@ -99,14 +99,14 @@ Friend Class CutDialog
         If (Me.ComboBox_ZeitreiheCut.SelectedItem.ToString = labelAlle) Then
 
             'Anfangs- und Enddatum von allen Zeitreihen bestimmen
-            For Each zre In Me.zreOrig.Values
+            For Each zre In Me.zreOrig
                 If (zre.StartDate < earliestStart) Then earliestStart = zre.StartDate
                 If (zre.EndDate > latestEnd) Then latestEnd = zre.EndDate
             Next
 
             'Alle Zeitreihen in Chart anzeigen
             Call Me.TChart1.Chart.Series.Clear()
-            For Each zre In Me.zreOrig.Values
+            For Each zre In Me.zreOrig
                 Dim series As New Steema.TeeChart.Styles.Line()
                 For i = 0 To zre.Length - 1
                     series.Add(zre.Dates(i), zre.Values(i))
@@ -301,8 +301,7 @@ Friend Class CutDialog
     '***********
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button_OK.Click
 
-        Dim newtitle As String
-        Dim zre As TimeSeries
+        Dim zre, ts_cut As TimeSeries
 
         'Prüfung
         If (Me.ComboBox_ZeitreiheCut.SelectedIndex = -1) Then
@@ -319,16 +318,18 @@ Friend Class CutDialog
 
         'Zeitreihe(n) zuschneiden
         If (Me.ComboBox_ZeitreiheCut.SelectedItem.ToString = labelAlle) Then
-            For Each zre In Me.zreOrig.Values
-                newtitle = zre.Title & " (cut)"
-                Me.zreCut.Add(newtitle, zre.Clone())
-                Call Me.zreCut(newtitle).Cut(Me.cutStart, Me.cutEnd)
+            For Each zre In Me.zreOrig
+                ts_cut = zre.Clone()
+                ts_cut.Title = zre.Title & " (cut)"
+                Call ts_cut.Cut(Me.cutStart, Me.cutEnd)
+                Me.zreCut.Add(ts_cut)
             Next
         Else
             zre = Me.ComboBox_ZeitreiheCut.SelectedItem
-            newtitle = zre.Title & " (cut)"
-            Me.zreCut.Add(newtitle, zre.Clone())
-            Call Me.zreCut(newtitle).Cut(Me.cutStart, Me.cutEnd)
+            ts_cut = zre.Clone()
+            ts_cut.Title = zre.Title & " (cut)"
+            Call ts_cut.Cut(Me.cutStart, Me.cutEnd)
+            Me.zreCut.Add(ts_cut)
         End If
 
         Me.DialogResult = System.Windows.Forms.DialogResult.OK
