@@ -343,13 +343,10 @@ Public Class SydroSQLite
     Public Overrides Sub readFile()
 
         Dim ts As TimeSeries
-        Dim ts_list As List(Of TimeSeries)
         Dim sInfo As SeriesInfo
         Dim flag_id As Integer
         Dim timestamp As DateTime
         Dim value As Double
-
-        ts_list = New List(Of TimeSeries)
 
         connection.Open()
         Dim command As Data.SQLite.SQLiteCommand
