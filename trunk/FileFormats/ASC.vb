@@ -163,7 +163,7 @@ Public Class ASC
             If Me.UseUnits Then
                 ts.Unit = sInfo.Unit
             End If
-            Me.TimeSeriesList.Add(ts)
+            Me.FileTimeSeries.Add(sInfo.Index, ts)
         Next
 
         'Einlesen
@@ -198,15 +198,15 @@ Public Class ASC
                 If (Ereignisende) Then
 
                     'Mit Stützstellen vom Wert 0 Lücke zwischen Ereignissen abschliessen
-                    datumLast = Me.TimeSeriesList.Last().EndDate
+                    datumLast = Me.FileTimeSeries.First.Value.EndDate
                     If (datum.Subtract(datumLast) > dt) Then 'nur wenn Lücke größer als dt ist
 
                         For Each sInfo As SeriesInfo In Me.SelectedSeries
                             'Eine Null nach dem letzten Datum
-                            Me.TimeSeriesList(sInfo.Name).AddNode(datumLast.Add(dt), 0.0)
+                            Me.FileTimeSeries(sInfo.Index).AddNode(datumLast.Add(dt), 0.0)
                             If (datum.Subtract(dt) > datumLast.Add(dt)) Then 'nur wenn Lücke damit noch nicht geschlossen ist
                                 'Eine Null vor dem aktuellen Datum
-                                Me.TimeSeriesList(sInfo.Name).AddNode(datum.Subtract(dt), 0.0)
+                                Me.FileTimeSeries(sInfo.Index).AddNode(datum.Subtract(dt), 0.0)
                             End If
                         Next
 
@@ -219,7 +219,7 @@ Public Class ASC
 
                 'eingelesene Stützstellen hinzufügen
                 For Each sInfo As SeriesInfo In Me.SelectedSeries
-                    Me.TimeSeriesList(sInfo.Name).AddNode(datum, StringToDouble(Werte(sInfo.Index + 1))) '+1 weil Datum auch ein Leerzeichen enthält
+                    Me.FileTimeSeries(sInfo.Index).AddNode(datum, StringToDouble(Werte(sInfo.Index + 1))) '+1 weil Datum auch ein Leerzeichen enthält
                 Next
 
             Else

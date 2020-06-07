@@ -76,7 +76,7 @@ Public Class SWMM_OUT
 
     'Konstruktor
     '***********
-    Public Sub New(ByVal FileName As String, Optional ByVal Series As String = "")
+    Public Sub New(ByVal FileName As String, Optional ByVal ReadAllNow As Boolean = False)
 
         MyBase.New(FileName)
 
@@ -94,8 +94,9 @@ Public Class SWMM_OUT
 
         Call Me.readSeriesInfo()
 
-        If Series <> "" Then
-            Read_File(Series)
+        If ReadAllNow Then
+            Me.selectAllSeries()
+            Me.readFile()
         End If
 
     End Sub
@@ -288,43 +289,11 @@ Public Class SWMM_OUT
             Next
 
             'store time series
-            Me.TimeSeriesList.Add(ts)
+            Me.FileTimeSeries.Add(sInfo.Index, ts)
         Next
 
     End Sub
 
-
-    Private Overloads Sub Read_File(ByVal Series As String)
-        Dim j, period As Integer
-        Dim value As Double
-        Dim index As Integer
-        Dim anzahlZeitreihen As Integer
-        Dim datum As Double
-        Dim ts As TimeSeries
-
-        'Anzahl Zeitreihen
-        anzahlZeitreihen = 1
-
-        'Indexarray
-        'ReDim index(anzahlZeitreihen)
-
-        'Zeitreihen instanzieren
-        ts = New TimeSeries(Series)
-        For j = 0 To anzSpalten - 1
-            If Series = Me.SeriesList(j).Name Then
-                index = j
-                For period = 0 To oSWMM.NPeriods - 1
-                    oSWMM.GetSwmmDate(period, datum)
-                    oSWMM.GetSwmmResult(SWMMBinaryFileIndex(index).iType, SWMMBinaryFileIndex(index).iIndex, SWMMBinaryFileIndex(index).vIndex, period, value)
-                    ts.AddNode(Date.FromOADate(datum), value)
-                Next
-            End If
-        Next
-
-        'store time series
-        Me.TimeSeriesList.Add(ts)
-
-    End Sub
 
     Private Function Units(ByVal iType As Integer, ByVal vIndex As Integer, ByVal FlowUnits As Integer) As String
         '_SUBCATCHVAR (iType = 0)
@@ -533,8 +502,8 @@ Public Class SWMM_OUT
                             Case 13
                                 Units = "mm/day"
                         End Select
-                    End Select
-                Case Else
+                End Select
+            Case Else
                 Units = "-"
         End Select
         Return Units

@@ -85,6 +85,7 @@ Public Class BIN
 
         sInfo.Name = IO.Path.GetFileName(Me.File)
         sInfo.Unit = "-"
+        sInfo.Index = 0
         Me.SeriesList.Add(sInfo)
 
     End Sub
@@ -128,7 +129,7 @@ Public Class BIN
         End Using
 
         'store time series
-        Me.TimeSeriesList.Add(ts)
+        Me.FileTimeSeries.Add(sInfo.Index, ts)
 
         'Log 
         Call Log.AddLogEntry("Read " & ts.Length & " nodes.")

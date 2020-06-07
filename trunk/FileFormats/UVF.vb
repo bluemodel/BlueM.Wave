@@ -211,6 +211,7 @@ Public Class UVF
                 sInfo.Name &= " - " & Me.FileMetadata("location")
             End If
             sInfo.Unit = Me.FileMetadata("unit")
+            sInfo.Index = 0
             Me.SeriesList.Add(sInfo)
 
             If Not headerFound Then
@@ -304,7 +305,7 @@ Public Class UVF
             End If
 
             'store time series
-            Me.TimeSeriesList.Add(ts)
+            Me.FileTimeSeries.Add(sInfo.Index, ts)
 
         Catch ex As Exception
             MsgBox("Unable to read file!" & eol & eol & "Error: " & ex.Message, MsgBoxStyle.Critical, "Error")

@@ -126,9 +126,10 @@ Public MustInherit Class FileFormatBase
     End Property
 
     ''' <summary>
-    ''' List stores the TimeSeries read from the file
+    ''' Stores the TimeSeries read from the file
+    ''' The key corresponds to seriesInfo.index
     ''' </summary>
-    Public TimeSeriesList As List(Of TimeSeries)
+    Public FileTimeSeries As Dictionary(Of Integer, TimeSeries)
 
     ''' <summary>
     ''' Instance of the ImportDialog
@@ -329,7 +330,7 @@ Public MustInherit Class FileFormatBase
         Get
             Dim found As Boolean = False
             'Find the series using the given title
-            For Each ts As TimeSeries In Me.TimeSeriesList
+            For Each ts As TimeSeries In Me.FileTimeSeries.Values
                 If title = ts.Title Then
                     Return ts
                     found = True
@@ -377,10 +378,11 @@ Public MustInherit Class FileFormatBase
     ''' Constructor
     ''' </summary>
     ''' <param name="FileName">Path to the file to be imported</param>
-    Public Sub New(ByVal FileName As String)
+    ''' <param name="ReadAllNow">If True, select all series and read the file immediately</param>
+    Public Sub New(ByVal FileName As String, Optional ByVal ReadAllNow As Boolean = False)
 
         'Initialize data structures
-        Me.TimeSeriesList = New List(Of TimeSeries)
+        Me.FileTimeSeries = New Dictionary(Of Integer, TimeSeries)
         Me._seriesList = New List(Of SeriesInfo)
         Me._selectedSeries = New List(Of SeriesInfo)
         Me._metadata = New Metadata()

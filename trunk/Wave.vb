@@ -1574,7 +1574,7 @@ Public Class Wave
                 'load the file
                 Call fileObj.readFile()
                 'import the series
-                For Each ts As TimeSeries In fileObj.TimeSeriesList
+                For Each ts As TimeSeries In fileObj.FileTimeSeries.Values
                     Call Me.Import_Series(ts)
                 Next
                 Log.AddLogEntry("File '" & filename & "' imported successfully!")
@@ -2162,7 +2162,7 @@ Public Class Wave
 
                 'import the series
                 Call Log.AddLogEntry("Loading series in chart...")
-                For Each ts As TimeSeries In fileobj.TimeSeriesList
+                For Each ts As TimeSeries In fileobj.FileTimeSeries.Values
                     'change title if specified in the project file
                     If seriesList.Count > 0 Then
                         If seriesList(ts.Title) <> "" Then
@@ -2446,7 +2446,7 @@ Public Class Wave
                         Call Log.AddLogEntry("Loading series in chart...")
 
                         'Import all time series into the chart
-                        For Each ts As TimeSeries In Datei.TimeSeriesList
+                        For Each ts As TimeSeries In Datei.FileTimeSeries.Values
                             Call Me.Import_Series(ts)
                         Next
 
@@ -2602,7 +2602,7 @@ Public Class Wave
 
                     'read series from file
                     fileobj.readFile()
-                    ts = fileobj.TimeSeriesList.Single()
+                    ts = fileobj.FileTimeSeries.First.Value
 
                     'add metadata
                     ts.Title = name

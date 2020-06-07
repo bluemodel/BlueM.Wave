@@ -173,6 +173,7 @@ Public Class ZRXP
             sInfo = New SeriesInfo
             sInfo.Name = Me.FileMetadata("SNAME") & "." & Me.FileMetadata("CNAME")
             sInfo.Unit = Me.FileMetadata("CUNIT")
+            sInfo.Index = 0
             Me.SeriesList.Add(sInfo)
 
         Catch ex As Exception
@@ -253,7 +254,7 @@ Public Class ZRXP
             End If
 
             'store time series
-            Me.TimeSeriesList.Add(ts)
+            Me.FileTimeSeries.Add(sInfo.Index, ts)
 
         Catch ex As Exception
             MsgBox("Error while parsing file!" & eol & eol & "Error: " & ex.Message, MsgBoxStyle.Critical, "Error")
