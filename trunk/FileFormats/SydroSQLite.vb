@@ -75,8 +75,14 @@ Public Class SydroSQLite
     ''' <summary>
     ''' Mapping of SeriesInfo.Index to Flag
     ''' </summary>
-    ''' <remarks></remarks>
+    ''' <remarks>Used for FlaggedTimeseries</remarks>
     Private flag_mapping As Dictionary(Of Integer, Integer)
+
+    ''' <summary>
+    ''' Mapping of SeriesInfo.Index to Flag and T0
+    ''' </summary>
+    ''' <remarks>Used for FCTimeseries</remarks>
+    Private flag_T0_mapping As Dictionary(Of Integer, MathNet.Numerics.Tuple(Of Integer, DateTime))
 
     ''' <summary>
     ''' Converts a unit id to its corresponding name
@@ -191,6 +197,7 @@ Public Class SydroSQLite
         Me.UseUnits = True
 
         Me.flag_mapping = New Dictionary(Of Integer, Integer)
+        Me.flag_T0_mapping = New Dictionary(Of Integer, MathNet.Numerics.Tuple(Of Integer, DateTime))
 
         Call Me.readSeriesInfo()
 
@@ -294,12 +301,10 @@ Public Class SydroSQLite
             flags.Add(dataReader.GetInt32(0), dataReader.GetString(2))
         Loop
 
-        'disconnect db
-        Me.connection.Close()
-
         'read and store series info
         Me.SeriesList.Clear()
         Me.flag_mapping = New Dictionary(Of Integer, Integer)
+        Me.flag_T0_mapping = New Dictionary(Of Integer, MathNet.Numerics.Tuple(Of Integer, DateTime))
         Select Case Me.ts_class
             Case TimeseriesClassEnum.Unknown
                 Throw New Exception("Time series class is unknown!")
@@ -312,9 +317,8 @@ Public Class SydroSQLite
                 Me.SeriesList.Add(sInfo)
                 Me.flag_mapping.Add(0, 0)
 
-            Case TimeseriesClassEnum.Flagged,
-                TimeseriesClassEnum.Forecast
-                'Read flags and add them as individual series
+            Case TimeseriesClassEnum.Flagged
+                'Add each flag as an individual series
                 Dim flag_id As Integer
                 Dim flag_desc As String
                 Dim index As Integer = 0
@@ -329,9 +333,44 @@ Public Class SydroSQLite
                     index += 1
                 Next
 
+            Case TimeseriesClassEnum.Forecast
+                'Read flag and T0 combinations and add them as individual series
+                Dim flag_id As Integer
+                Dim flag_desc As String
+                Dim index As Integer = 0
+                Dim T0_list As List(Of DateTime)
+
+                For Each flag As KeyValuePair(Of Integer, String) In flags
+                    flag_id = flag.Key
+                    flag_desc = flag.Value
+                    'get T0-dates from db
+                    T0_list = New List(Of DateTime)
+                    command = New Data.SQLite.SQLiteCommand(Me.connection)
+                    command.CommandText = "SELECT DISTINCT(rDate) FROM TimeseriesValues WHERE attribFlag = @flag ORDER BY rDate;"
+                    command.Parameters.Add("@flag", Data.DbType.Int32)
+                    command.Parameters("@flag").Value = flag_id
+                    command.Prepare()
+                    dataReader = command.ExecuteReader()
+                    Do While dataReader.Read()
+                        T0_list.Add(dataReader.GetDateTime(0))
+                    Loop
+                    dataReader.Close()
+                    For Each T0 As DateTime In T0_list
+                        sInfo = New SeriesInfo()
+                        sInfo.Name = ts_name & "/" & flag_id & ": " & flag_desc & " - " & T0.ToString(Helpers.DefaultDateFormat)
+                        sInfo.Index = index
+                        Me.SeriesList.Add(sInfo)
+                        Me.flag_T0_mapping.Add(index, New MathNet.Numerics.Tuple(Of Integer, DateTime)(flag_id, T0))
+                        index += 1
+                    Next
+                Next
+
             Case Else
                 Throw New Exception("Time series of class " & ts_class & " are not yet supported!")
         End Select
+
+        'disconnect db
+        Me.connection.Close()
 
     End Sub
 
@@ -419,7 +458,6 @@ Public Class SydroSQLite
 
             Case TimeseriesClassEnum.Forecast
 
-                Dim T0_list As List(Of DateTime)
                 Dim T0 As DateTime
 
                 'Loop over selected series
@@ -430,53 +468,37 @@ Public Class SydroSQLite
                     ts.Interpretation = Me.interpretation
                     ts.Metadata = Me.FileMetadata
 
-                    'get T0-dates from db
-                    T0_list = New List(Of DateTime)
+                    ts = New TimeSeries(sInfo.Name)
+                    ts.Unit = Me.unit
+                    ts.Interpretation = Me.interpretation
+                    ts.Metadata = Me.FileMetadata
+
+                    'retrieve time series from db
+                    flag_id = Me.flag_T0_mapping(sInfo.Index).Item1
+                    T0 = Me.flag_T0_mapping(sInfo.Index).Item2
+
                     command = New Data.SQLite.SQLiteCommand(Me.connection)
-                    command.CommandText = "SELECT DISTINCT(rDate) FROM TimeseriesValues WHERE attribFlag = @flag ORDER BY rDate;"
+                    command.CommandText = "SELECT T1, rValue FROM TimeseriesValues WHERE (attribFlag = @flag AND rDate = @T0) ORDER BY T1;"
                     command.Parameters.Add("@flag", Data.DbType.Int32)
+                    command.Parameters.Add("@T0", Data.DbType.DateTime2)
                     command.Parameters("@flag").Value = flag_id
+                    command.Parameters("@T0").Value = T0.ToString(Me.Dateformat) 'string conversion should theoretically not be necessary here
                     command.Prepare()
 
                     datareader = command.ExecuteReader()
                     Do While datareader.Read()
-                        T0_list.Add(datareader.GetDateTime(0))
+                        timestamp = datareader.GetDateTime(0)
+                        If datareader.IsDBNull(1) Then
+                            value = Double.NaN
+                        Else
+                            value = datareader.GetDouble(1)
+                        End If
+                        ts.AddNode(timestamp, value)
                     Loop
                     datareader.Close()
 
-                    'loop over T0 dates
-                    For Each T0 In T0_list
-
-                        ts = New TimeSeries(T0 & ": " & sInfo.Name)
-                        ts.Unit = Me.unit
-                        ts.Interpretation = Me.interpretation
-                        ts.Metadata = Me.FileMetadata
-
-                        'retrieve time series from db
-                        flag_id = Me.flag_mapping(sInfo.Index)
-                        command = New Data.SQLite.SQLiteCommand(Me.connection)
-                        command.CommandText = "SELECT T1, rValue FROM TimeseriesValues WHERE (attribFlag = @flag AND rDate = @T0) ORDER BY T1;"
-                        command.Parameters.Add("@flag", Data.DbType.Int32)
-                        command.Parameters.Add("@T0", Data.DbType.DateTime2)
-                        command.Parameters("@flag").Value = flag_id
-                        command.Parameters("@T0").Value = T0.ToString(Me.Dateformat) 'string conversion should theoretically not be necessary here
-                        command.Prepare()
-
-                        datareader = command.ExecuteReader()
-                        Do While datareader.Read()
-                            timestamp = datareader.GetDateTime(0)
-                            If datareader.IsDBNull(1) Then
-                                value = Double.NaN
-                            Else
-                                value = datareader.GetDouble(1)
-                            End If
-                            ts.AddNode(timestamp, value)
-                        Loop
-                        datareader.Close()
-
-                        'store time series
-                        Me.FileTimeSeries.Add(sInfo.Index, ts) 'TODO: create proper sInfo objects for each T0 during readSeriesInfo
-                    Next
+                    'store time series
+                    Me.FileTimeSeries.Add(sInfo.Index, ts)
 
                 Next
 
