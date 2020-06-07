@@ -98,6 +98,7 @@ Public Class ZRE
             sInfo = New SeriesInfo
             sInfo.Name = Zeile.Substring(0, 15).Trim()
             sInfo.Unit = Zeile.Substring(15).Trim()
+            sInfo.Index = 0
             Me.SeriesList.Add(sInfo)
 
         Catch ex As Exception
@@ -151,7 +152,7 @@ Public Class ZRE
             Loop Until StrReadSync.Peek() = -1
 
             'store time series
-            Me.TimeSeriesList.Add(ts)
+            Me.FileTimeSeries.Add(sInfo.Index, ts)
 
         Catch ex As Exception
             'Fehler weiterschmeissen

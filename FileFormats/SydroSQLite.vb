@@ -308,16 +308,16 @@ Public Class SydroSQLite
                 '"Normal" time series has only one series
                 sInfo = New SeriesInfo()
                 sInfo.Name = ts_name
-                sInfo.Index = 1
+                sInfo.Index = 0
                 Me.SeriesList.Add(sInfo)
-                Me.flag_mapping.Add(1, 0)
+                Me.flag_mapping.Add(0, 0)
 
             Case TimeseriesClassEnum.Flagged,
                 TimeseriesClassEnum.Forecast
                 'Read flags and add them as individual series
                 Dim flag_id As Integer
                 Dim flag_desc As String
-                Dim index As Integer = 1
+                Dim index As Integer = 0
                 For Each flag As KeyValuePair(Of Integer, String) In flags
                     flag_id = flag.Key
                     flag_desc = flag.Value
@@ -381,7 +381,7 @@ Public Class SydroSQLite
                 datareader.Close()
 
                 'store timeseries
-                Me.TimeSeriesList.Add(ts)
+                Me.FileTimeSeries.Add(sInfo.Index, ts)
 
             Case TimeseriesClassEnum.Flagged
 
@@ -414,7 +414,7 @@ Public Class SydroSQLite
                     datareader.Close()
 
                     'store timeseries
-                    Me.TimeSeriesList.Add(ts)
+                    Me.FileTimeSeries.Add(sInfo.Index, ts)
                 Next
 
             Case TimeseriesClassEnum.Forecast
@@ -475,7 +475,7 @@ Public Class SydroSQLite
                         datareader.Close()
 
                         'store time series
-                        Me.TimeSeriesList.Add(ts)
+                        Me.FileTimeSeries.Add(sInfo.Index, ts) 'TODO: create proper sInfo objects for each T0 during readSeriesInfo
                     Next
 
                 Next

@@ -138,6 +138,7 @@ Public Class HystemExtran_REG
             Dim StrReadSync = TextReader.Synchronized(StrRead)
 
             sInfo = New SeriesInfo()
+            sInfo.Index = 0
 
             'Reihentitel steht in 1. Zeile, ist aber optional:
             Zeile = StrReadSync.ReadLine.ToString()
@@ -226,7 +227,7 @@ Public Class HystemExtran_REG
         FiStr.Close()
 
         'store time series
-        Me.TimeSeriesList.Add(ts)
+        Me.FileTimeSeries.Add(sInfo.Index, ts)
 
     End Sub
 

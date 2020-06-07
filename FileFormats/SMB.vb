@@ -91,6 +91,7 @@ Public Class SMB
             sInfo.Name = Zeile.Substring(15).Trim()
             'Annahme, dass SMB-Dateien Regenreihen sind, daher Einheit mm fest verdrahtet
             sInfo.Unit = "mm"
+            sInfo.Index = 0
 
             StrReadSync.close()
             StrRead.Close()
@@ -170,7 +171,7 @@ Public Class SMB
         FiStr.Close()
 
         'store time series
-        Me.TimeSeriesList.Add(ts)
+        Me.FileTimeSeries.Add(sInfo.Index, ts)
 
     End Sub
 

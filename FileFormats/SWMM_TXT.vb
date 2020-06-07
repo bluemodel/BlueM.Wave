@@ -231,7 +231,7 @@ Public Class SWMM_TXT
         'Zeitreihen instanzieren
         For Each sInfo As SeriesInfo In Me.SelectedSeries
             ts = New TimeSeries(sInfo.Name)
-            Me.TimeSeriesList.Add(ts)
+            Me.FileTimeSeries.Add(sInfo.Index, ts)
         Next
 
         'Einheiten?
@@ -245,10 +245,10 @@ Public Class SWMM_TXT
         'Alle ausgewählten Serien durchlaufen
         i = 0
         For Each sInfo As SeriesInfo In Me.SelectedSeries
-            Me.TimeSeriesList(sInfo.Name).Unit = sInfo.Unit
-            Me.TimeSeriesList(sInfo.Name).Objekt = sInfo.Objekt
+            Me.FileTimeSeries(sInfo.Index).Unit = sInfo.Unit
+            Me.FileTimeSeries(sInfo.Index).Objekt = sInfo.Objekt
             AllConstituents(i) = sInfo.Type
-            Me.TimeSeriesList(sInfo.Name).Type = sInfo.Type
+            Me.FileTimeSeries(sInfo.Index).Type = sInfo.Type
             AllNodes(i) = sInfo.Objekt
             i += 1
         Next
@@ -279,7 +279,7 @@ Public Class SWMM_TXT
                 Next
             Next
             For Each sInfo As SeriesInfo In Me.SelectedSeries
-                Me.TimeSeriesList(sInfo.Name).AddNode(datum, StringToDouble(Werte(sInfo.Index)))
+                Me.FileTimeSeries(sInfo.Index).AddNode(datum, StringToDouble(Werte(sInfo.Index)))
             Next
 
         Loop Until StrReadSync.Peek() = -1

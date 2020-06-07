@@ -137,7 +137,7 @@ Public Class HystemExtran_WEL
                 Zeile = StrReadSync.ReadLine.ToString()
                 For j = 0 To AnzSpalten_dT(i) - 1
                     sInfo = New SeriesInfo()
-                    sInfo.Name = Zeile.Substring((j * Me.ColumnWidth) + SpaltenOffset, Me.ColumnWidth)
+                    sInfo.Name = Zeile.Substring((j * Me.ColumnWidth) + SpaltenOffset, Me.ColumnWidth).Trim()
                     sInfo.Unit = HExt_welEinheit
                     sInfo.Index = index
                     sInfo.Objekt = Trim(sInfo.Name)
@@ -183,7 +183,7 @@ Public Class HystemExtran_WEL
                 ts.Objekt = sInfo.Objekt
                 ts.Type = sInfo.Type
             End If
-            Me.TimeSeriesList.Add(ts)
+            Me.FileTimeSeries.Add(sInfo.Index, ts)
         Next
 
         'Einlesen
@@ -210,7 +210,7 @@ Public Class HystemExtran_WEL
                 WerteString = WerteString + StrReadSync.ReadLine.ToString()
             Next
             For Each sInfo As SeriesInfo In Me.SelectedSeries
-                Me.TimeSeriesList(sInfo.Name).AddNode(datum, StringToDouble(WerteString.Substring(((sInfo.Index - 1) * Me.ColumnWidth) + SpaltenOffset, Me.ColumnWidth)))
+                Me.FileTimeSeries(sInfo.Index).AddNode(datum, StringToDouble(WerteString.Substring(((sInfo.Index - 1) * Me.ColumnWidth) + SpaltenOffset, Me.ColumnWidth)))
             Next
 
         Loop Until StrReadSync.Peek() = -1

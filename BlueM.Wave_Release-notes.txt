@@ -29,7 +29,7 @@ API-CHANGES:
 * TimeSeries instances now each have a unique Id within the session
 * New method TimeSeries.ChangeTimestep()
 * The following changes have been made to public methods and properties of FileFormatBase (which are inherited by all file formats):
- * Replaced TimeSeries (array) with TimeSeriesList (list)
+ * Replaced TimeSeries (array) with FileTimeSeries (dictionary)
  * Replaced structure ColumnInfo with SeriesInfo (with slightly different properties)
  * Replaced Columns (array) with SeriesList (list of SeriesInfo objects)
  * Replaced selectedColumns (array) with SelectedSeries (list of SeriesInfo objects)

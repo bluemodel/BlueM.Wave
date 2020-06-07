@@ -116,6 +116,7 @@ Public Class REG_SMUSI
             sInfo = New SeriesInfo()
             sInfo.Name = title
             sInfo.Unit = "mm" 'Einheit ist immer mm
+            sInfo.Index = 0
             Me.SeriesList.Add(sInfo)
 
             StrReadSync.close()
@@ -211,7 +212,7 @@ Public Class REG_SMUSI
         FiStr.Close()
 
         'store time series
-        Me.TimeSeriesList.Add(ts)
+        Me.FileTimeSeries.Add(sInfo.Index, ts)
 
     End Sub
 

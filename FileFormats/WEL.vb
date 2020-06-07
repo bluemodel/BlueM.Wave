@@ -223,7 +223,7 @@ Public Class WEL
             Else
                 ts.Interpretation = BlueM.Wave.TimeSeries.InterpretationEnum.BlockRight
             End If
-            Me.TimeSeriesList.Add(ts)
+            Me.FileTimeSeries.Add(sInfo.Index, ts)
         Next
 
         'Einlesen
@@ -251,7 +251,7 @@ Public Class WEL
                 'Restliche Spalten: Werte
                 'Alle ausgewählten Reihen durchlaufen
                 For Each sInfo As SeriesInfo In Me.SelectedSeries
-                    Me.TimeSeriesList(sInfo.Name).AddNode(datum, StringToDouble(Werte(sInfo.Index)))
+                    Me.FileTimeSeries(sInfo.Index).AddNode(datum, StringToDouble(Werte(sInfo.Index)))
                 Next
             Else
                 'Spalten mit fester Breite
@@ -265,7 +265,7 @@ Public Class WEL
                 'Restliche Spalten: Werte
                 'Alle ausgewählten Reihen durchlaufen
                 For Each sInfo As SeriesInfo In Me.SelectedSeries
-                    Me.TimeSeriesList(sInfo.Name).AddNode(datum, StringToDouble(Zeile.Substring((sInfo.Index * Me.ColumnWidth) + SpaltenOffset, Math.Min(Me.ColumnWidth, Zeile.Substring((sInfo.Index * Me.ColumnWidth) + SpaltenOffset).Length))))
+                    Me.FileTimeSeries(sInfo.Index).AddNode(datum, StringToDouble(Zeile.Substring((sInfo.Index * Me.ColumnWidth) + SpaltenOffset, Math.Min(Me.ColumnWidth, Zeile.Substring((sInfo.Index * Me.ColumnWidth) + SpaltenOffset).Length))))
                 Next
             End If
 
