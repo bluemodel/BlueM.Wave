@@ -29,8 +29,8 @@ Partial Class PropertiesDialog
         Me.Id = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.TitleDataGridViewTextBoxColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Interpretation = New System.Windows.Forms.DataGridViewComboBoxColumn()
-        Me.MetadataText = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.UnitDataGridViewTextBoxColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.MetadataText = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.LengthDataGridViewTextBoxColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.StartDateDataGridViewTextBoxColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.EndDateDataGridViewTextBoxColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
@@ -56,7 +56,7 @@ Partial Class PropertiesDialog
         Me.DataGridView1.CausesValidation = False
         Me.DataGridView1.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.EnableAlwaysIncludeHeaderText
         Me.DataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.DataGridView1.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.Id, Me.TitleDataGridViewTextBoxColumn, Me.Interpretation, Me.MetadataText, Me.UnitDataGridViewTextBoxColumn, Me.LengthDataGridViewTextBoxColumn, Me.StartDateDataGridViewTextBoxColumn, Me.EndDateDataGridViewTextBoxColumn, Me.MinimumDataGridViewTextBoxColumn, Me.MaximumDataGridViewTextBoxColumn, Me.AverageDataGridViewTextBoxColumn, Me.FirstValueDataGridViewTextBoxColumn, Me.LastValueDataGridViewTextBoxColumn, Me.SumDataGridViewTextBoxColumn, Me.VolumeDataGridViewTextBoxColumn})
+        Me.DataGridView1.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.Id, Me.TitleDataGridViewTextBoxColumn, Me.Interpretation, Me.UnitDataGridViewTextBoxColumn, Me.MetadataText, Me.LengthDataGridViewTextBoxColumn, Me.StartDateDataGridViewTextBoxColumn, Me.EndDateDataGridViewTextBoxColumn, Me.MinimumDataGridViewTextBoxColumn, Me.MaximumDataGridViewTextBoxColumn, Me.AverageDataGridViewTextBoxColumn, Me.FirstValueDataGridViewTextBoxColumn, Me.LastValueDataGridViewTextBoxColumn, Me.SumDataGridViewTextBoxColumn, Me.VolumeDataGridViewTextBoxColumn})
         Me.DataGridView1.DataSource = Me.TimeSeriesBindingSource
         Me.DataGridView1.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter
         Me.DataGridView1.Location = New System.Drawing.Point(13, 13)
@@ -96,6 +96,13 @@ Partial Class PropertiesDialog
         Me.Interpretation.Resizable = System.Windows.Forms.DataGridViewTriState.[True]
         Me.Interpretation.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic
         '
+        'UnitDataGridViewTextBoxColumn
+        '
+        Me.UnitDataGridViewTextBoxColumn.DataPropertyName = "Unit"
+        Me.UnitDataGridViewTextBoxColumn.HeaderText = "Unit"
+        Me.UnitDataGridViewTextBoxColumn.Name = "UnitDataGridViewTextBoxColumn"
+        Me.UnitDataGridViewTextBoxColumn.Width = 51
+        '
         'MetadataText
         '
         Me.MetadataText.DataPropertyName = "MetadataText"
@@ -103,14 +110,6 @@ Partial Class PropertiesDialog
         Me.MetadataText.Name = "MetadataText"
         Me.MetadataText.ReadOnly = True
         Me.MetadataText.Width = 77
-        '
-        'UnitDataGridViewTextBoxColumn
-        '
-        Me.UnitDataGridViewTextBoxColumn.DataPropertyName = "Unit"
-        Me.UnitDataGridViewTextBoxColumn.HeaderText = "Unit"
-        Me.UnitDataGridViewTextBoxColumn.Name = "UnitDataGridViewTextBoxColumn"
-        Me.UnitDataGridViewTextBoxColumn.ReadOnly = True
-        Me.UnitDataGridViewTextBoxColumn.Width = 51
         '
         'LengthDataGridViewTextBoxColumn
         '
@@ -214,8 +213,8 @@ Partial Class PropertiesDialog
     Friend WithEvents Id As DataGridViewTextBoxColumn
     Friend WithEvents TitleDataGridViewTextBoxColumn As DataGridViewTextBoxColumn
     Friend WithEvents Interpretation As DataGridViewComboBoxColumn
-    Friend WithEvents MetadataText As DataGridViewTextBoxColumn
     Friend WithEvents UnitDataGridViewTextBoxColumn As DataGridViewTextBoxColumn
+    Friend WithEvents MetadataText As DataGridViewTextBoxColumn
     Friend WithEvents LengthDataGridViewTextBoxColumn As DataGridViewTextBoxColumn
     Friend WithEvents StartDateDataGridViewTextBoxColumn As DataGridViewTextBoxColumn
     Friend WithEvents EndDateDataGridViewTextBoxColumn As DataGridViewTextBoxColumn
