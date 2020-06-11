@@ -36,8 +36,6 @@ Imports System.Text.RegularExpressions
 ''' Supports annual summary, monthly summary and DPOUT files,
 ''' for which we assume that the headers are fixed (files always contain the same variables),
 ''' and Statistic variables result files (statvar.dat)
-''' 
-''' TODO: these file formats do not support series selection, i.e. all series are always read
 ''' </remarks>
 Public Class PRMS
     Inherits FileFormatBase
