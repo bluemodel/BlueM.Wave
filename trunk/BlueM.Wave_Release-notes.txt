@@ -4,13 +4,14 @@ BlueM.Wave Release Notes
 Version 1.8.0
 -------------
 NEW:
+* Added a button and dialog for managing axes
 * The title, interpretation and unit of time series are now editable in the Properties dialog
 * Added a menu item for opening the release notes
 * Added support for reading BW_TMP.DAT files in HYDRO_AS-2D version 5 format (previous versions still supported)
 * Added a button for removing nodes with NaN values from the currently loaded time series
 CHANGED:
 * The Rename Series button and dialog have been removed, series titles can now be changed in the Properties dialog
-* The Change Timestep function has been converted to an analysis function
+* The Change Timestep button has been removed, a corresponding function is now located in the analysis dialog
 * The analysis selection dialog now displays a description of the selected analysis function and a link to the wiki
 * The Change Timestep function is now implemented natively
 * Reading SYDRO SQLite time series files is now implemented natively

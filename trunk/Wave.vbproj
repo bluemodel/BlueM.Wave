@@ -156,9 +156,15 @@
     <Compile Include="Analysis\TimestepAnalysisDialog.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Axis.vb" />
     <Compile Include="Character.vb" />
+    <Compile Include="AxisWrapper.vb" />
     <Compile Include="Constants.vb" />
+    <Compile Include="Dialogs\AxisDialog.Designer.vb">
+      <DependentUpon>AxisDialog.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\AxisDialog.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Dialogs\ConvertErrorValuesDialog.Designer.vb">
       <DependentUpon>ConvertErrorValuesDialog.vb</DependentUpon>
     </Compile>
@@ -306,6 +312,9 @@
     <EmbeddedResource Include="Analysis\ChangeTimestepDialog.resx">
       <DependentUpon>ChangeTimestepDialog.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Dialogs\AxisDialog.resx">
+      <DependentUpon>AxisDialog.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="My Project\licenses.licx" />
     <EmbeddedResource Include="My Project\Resources.resx">
       <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
@@ -324,6 +333,7 @@
       <Generator>MyApplicationCodeGenerator</Generator>
       <LastGenOutput>Application.Designer.vb</LastGenOutput>
     </None>
+    <None Include="My Project\DataSources\AxisWrapper.datasource" />
     <None Include="My Project\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.vb</LastGenOutput>
@@ -463,6 +473,7 @@
     <Content Include="Resources\navigate_forward.png" />
     <None Include="Resources\page_save.png" />
     <None Include="Resources\table.png" />
+    <None Include="Resources\shape_align_bottom.png" />
     <Content Include="Resources\zoom_world.png" />
     <None Include="Resources\zoom.png" />
     <None Include="Resources\zoom_previous.png" />
