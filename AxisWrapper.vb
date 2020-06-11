@@ -28,62 +28,64 @@
 Imports System.Text.RegularExpressions
 
 ''' <summary>
-''' Class for axis instances
+''' Wrapper around a Steema.TeeChart.Axis instance
+''' exposing selected properties
 ''' </summary>
-Friend Class Axis
+Public Class AxisWrapper
 
-    Private _number As Integer
-    Private _title As String
-    Private _unit As String
-
-    Public TAxis As Steema.TeeChart.Axis
+    Private _name As String
+    Private _TAxis As Steema.TeeChart.Axis
 
     ''' <summary>
-    ''' Axis number
-    ''' 1: Left Axis
-    ''' 2: Right Axis
-    ''' >= 3: Custom Axis
+    ''' Constructor
     ''' </summary>
-    Public Property Number As Integer
+    ''' <param name="_name">One of "Left", "Right", "Custom 0", etc.</param>
+    ''' <param name="_axis">The axis instance to wrap around</param>
+    Public Sub New(ByVal _name As String, ByRef _axis As Steema.TeeChart.Axis)
+        Me._name = _name
+        Me._TAxis = _axis
+    End Sub
+
+    ''' <summary>
+    ''' Axis Name, e.g. "Left", "Right", "Custom 0", etc.
+    ''' </summary>
+    Public ReadOnly Property Name As String
         Get
-            Return _number
+            Return Me._name
         End Get
-        Set(value As Integer)
-            _number = value
-        End Set
     End Property
 
     ''' <summary>
-    ''' Axis display title
+    ''' Axis Title as displayed in the chart
     ''' </summary>
     ''' <returns></returns>
     Public Property Title As String
         Get
-            Return _title
+            Return Me._TAxis.Title.Text
         End Get
         Set(value As String)
-            _title = value
+            Me._TAxis.Title.Text = value
         End Set
     End Property
 
     ''' <summary>
-    ''' Axis unit
+    ''' Axis Unit, internally stored in the Tag property
     ''' </summary>
     ''' <returns></returns>
     Public Property Unit As String
         Get
-            Return _unit
+            Return Me._TAxis.Tag
         End Get
         Set(value As String)
-            _unit = value
+            Me._TAxis.Tag = value
         End Set
     End Property
 
     ''' <summary>
     ''' Attempts to extract a unit enclosed in square or round brackets from a text
     ''' </summary>
-    ''' <param name="text"></param>
-    ''' <returns>The detected unit or if unsuccessful the original text</returns>
+    ''' <param name="text">Text from which to extract the unit</param>
+    ''' <returns>The extracted unit or if unsuccessful the original text</returns>
     Public Shared Function parseUnit(ByVal text As String) As String
 
         Dim m As Match
@@ -99,4 +101,5 @@ Friend Class Axis
         Return unit
 
     End Function
+
 End Class

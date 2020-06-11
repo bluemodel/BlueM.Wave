@@ -41,8 +41,8 @@ Public Class Wave
 
     'Log
     Private WithEvents myLog As Log
-
     Private WithEvents propDialog As PropertiesDialog
+    Private WithEvents axisDialog As AxisDialog
 
     'Eigenschaften
     '#############
@@ -66,7 +66,6 @@ Public Class Wave
     'Chart-Zeugs
     Private WithEvents colorBand1 As Steema.TeeChart.Tools.ColorBand
     Private selectionMade As Boolean 'Flag zeigt an, ob bereits ein Auswahlbereich ausgewählt wurde
-    Friend MyAxes1, MyAxes2 As List(Of Axis)
     Private WithEvents ChartListBox1 As Steema.TeeChart.ChartListBox
 
     'Cursors
@@ -105,8 +104,6 @@ Public Class Wave
         '-----------------------
         Me.ImportedFiles = New Dictionary(Of String, List(Of FileFormatBase.SeriesInfo))()
         Me.TimeSeriesDict = New Dictionary(Of Integer, TimeSeries)()
-        Me.MyAxes1 = New List(Of Axis)
-        Me.MyAxes2 = New List(Of Axis)
 
         'Charts einrichten
         '-----------------
@@ -500,7 +497,6 @@ Public Class Wave
     ''' </summary>
     ''' <remarks>
     ''' Wird für jede gelöschte Serie ein Mal aufgerufen.
-    ''' Funktioniert nur unter der Annahme, dass alle Serien unterschiedliche Titel haben.
     ''' </remarks>
     Private Sub TChart1_SeriesRemoved(ByVal sender As Object, ByVal e As System.EventArgs) Handles ChartListBox1.RemovedSeries
 
@@ -604,23 +600,37 @@ Public Class Wave
                 series.Title = Me.TimeSeriesDict(id).Title
 
                 'assign to axis according to unit
-                Dim axis_ As Axis
-                axis_ = getAxis(Me.TimeSeriesDict(id).Unit)
-                Select Case axis_.Number
-                    Case 1
-                        'Linke Achse
-                        series.VertAxis = Steema.TeeChart.Styles.VerticalAxis.Left
-                    Case 2
-                        'Rechte Achse
-                        series.VertAxis = Steema.TeeChart.Styles.VerticalAxis.Right
-                    Case Else
-                        'Custom Achse
-                        series.VertAxis = Steema.TeeChart.Styles.VerticalAxis.Custom
-                        series.CustomVertAxis = axis_.TAxis
-                End Select
+                assignSeriesToAxis(series, Me.TimeSeriesDict(id).Unit)
 
                 'TODO: apply the same changes in the overview chart
                 Exit For
+            End If
+        Next
+
+    End Sub
+
+    ''' <summary>
+    ''' Handles axis unit changed in the AxisDialog
+    ''' </summary>
+    ''' <remarks>Reassigns all series to their appropriate axis</remarks>
+    Private Sub AxisUnitChanged() Handles axisDialog.AxisUnitChanged
+
+        For Each series As Steema.TeeChart.Styles.Series In Me.TChart1.Series
+            assignSeriesToAxis(series, Me.TimeSeriesDict(series.Tag).Unit)
+        Next
+
+        'deactivate unused custom axes
+        Dim unitUsed As Boolean
+        For Each axis As Steema.TeeChart.Axis In Me.TChart1.Axes.Custom
+            unitUsed = False
+            For Each ts As TimeSeries In Me.TimeSeriesDict.Values
+                If ts.Unit = axis.Tag Then
+                    unitUsed = True
+                    Exit For
+                End If
+            Next
+            If Not unitUsed Then
+                axis.Visible = False
             End If
         Next
 
@@ -651,8 +661,6 @@ Public Class Wave
         'Collections zurücksetzen
         Me.ImportedFiles.Clear()
         Me.TimeSeriesDict.Clear()
-        Me.MyAxes1.Clear()
-        Me.MyAxes2.Clear()
 
         'Log zurücksetzen
         Call Log.ClearLog()
@@ -866,6 +874,25 @@ Public Class Wave
     '**********
     Private Sub EditChart_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_EditChart.Click, TChart1.DoubleClick
         Call Steema.TeeChart.Editor.Show(Me.TChart1)
+    End Sub
+
+    ''' <summary>
+    ''' Show AxisDialog
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    Private Sub ToolStripButton_AxisDialog_Click(sender As Object, e As EventArgs) Handles ToolStripButton_AxisDialog.Click
+
+        'Wrap Left, Right and Custom axes
+        Dim axisList As New List(Of AxisWrapper)
+        axisList.Add(New AxisWrapper("Left", Me.TChart1.Axes.Left))
+        axisList.Add(New AxisWrapper("Right", Me.TChart1.Axes.Right))
+        For i As Integer = 0 To Me.TChart1.Axes.Custom.Count - 1
+            axisList.Add(New AxisWrapper("Custom " & i, Me.TChart1.Axes.Custom(i)))
+        Next
+
+        Me.axisDialog = New AxisDialog(axisList)
+        Me.axisDialog.Show()
     End Sub
 
     ''' <summary>
@@ -2216,7 +2243,6 @@ Public Class Wave
         Dim i As Integer
         Dim reihe As TimeSeries
         Dim XMin, XMax As Double
-        Dim axis_ As Axis
 
         Try
 
@@ -2291,7 +2317,7 @@ Public Class Wave
                                     Case Steema.TeeChart.Styles.VerticalAxis.Custom
                                         axistitle = series.CustomVertAxis.Title.Text
                                 End Select
-                                reihe.Unit = Axis.parseUnit(axistitle)
+                                reihe.Unit = AxisWrapper.parseUnit(axistitle)
                                 'Store the series internally
                                 Call Me.AddZeitreihe(reihe)
 
@@ -2304,6 +2330,7 @@ Public Class Wave
                                         Exit For
                                     End If
                                 Next
+
                             End If
                         Next
 
@@ -2319,37 +2346,11 @@ Public Class Wave
 
             End If
 
-            'Achsen neu aus Diagramm einlesen
-            Me.MyAxes1.Clear()
-            Me.MyAxes2.Clear()
-
-            'Linke Achse
-            axis_ = New Axis()
-            axis_.Number = 1
-            axis_.Title = Me.TChart1.Chart.Axes.Left.TitleOrName
-            axis_.Unit = Axis.parseUnit(axis_.Title)
-            axis_.TAxis = Me.TChart1.Chart.Axes.Left
-            Me.MyAxes1.Add(axis_)
-            Me.MyAxes2.Add(axis_)
-            'Rechte Achse
-            If (Me.TChart1.Chart.Axes.Right.Visible) Then
-                axis_ = New Axis()
-                axis_.Number = 2
-                axis_.Title = Me.TChart1.Chart.Axes.Right.TitleOrName
-                axis_.Unit = Axis.parseUnit(axis_.Title)
-                axis_.TAxis = Me.TChart1.Chart.Axes.Right
-                Me.MyAxes1.Add(axis_)
-                Me.MyAxes2.Add(axis_)
-            End If
-            'Custom Achsen
-            For i = 0 To Me.TChart1.Chart.Axes.Custom.Count - 1
-                axis_ = New Axis()
-                axis_.Number = 3 + i
-                axis_.Title = Me.TChart1.Chart.Axes.Custom(i).TitleOrName
-                axis_.Unit = Axis.parseUnit(axis_.Title)
-                axis_.TAxis = Me.TChart1.Chart.Axes.Custom(i)
-                Me.MyAxes1.Add(axis_)
-                Me.MyAxes2.Add(axis_)
+            'extract units from axis titles and store as tags
+            Me.TChart1.Axes.Left.Tag = AxisWrapper.parseUnit(Me.TChart1.Axes.Left.TitleOrName)
+            Me.TChart1.Axes.Right.Tag = AxisWrapper.parseUnit(Me.TChart1.Axes.Right.TitleOrName)
+            For Each axis As Steema.TeeChart.Axis In Me.TChart1.Axes.Custom
+                axis.Tag = AxisWrapper.parseUnit(axis.TitleOrName)
             Next
 
             'Die vor dem Laden bereits vorhandenen Zeitreihen wieder zu den Diagrammen hinzufügen (durch TEN-Import verloren)
@@ -2698,8 +2699,6 @@ Public Class Wave
     ''' <param name="zre">Die anzuzeigende Zeitreihe</param>
     Private Sub Display_Series(ByVal zre As TimeSeries)
 
-        Dim axis_ As Axis
-
         'Serie zu Diagramm hinzufügen
 
         'Linien instanzieren
@@ -2730,26 +2729,7 @@ Public Class Wave
         Next
 
         'Y-Achsenzuordnung
-        axis_ = getAxis(zre.Unit)
-
-        'Reihe der Y-Achse zuordnen
-        '(Unterscheidung zwischen Standard- und Custom-Achsen notwendig)
-        Select Case axis_.Number
-            Case 1
-                'Linke Achse
-                Line1.VertAxis = Steema.TeeChart.Styles.VerticalAxis.Left
-                Line2.VertAxis = Steema.TeeChart.Styles.VerticalAxis.Left
-            Case 2
-                'Rechte Achse
-                Line1.VertAxis = Steema.TeeChart.Styles.VerticalAxis.Right
-                Line2.VertAxis = Steema.TeeChart.Styles.VerticalAxis.Right
-            Case Else
-                'Custom Achse
-                Line1.VertAxis = Steema.TeeChart.Styles.VerticalAxis.Custom
-                Line2.VertAxis = Steema.TeeChart.Styles.VerticalAxis.Custom
-                Line1.CustomVertAxis = axis_.TAxis
-                Line2.CustomVertAxis = axis_.TAxis
-        End Select
+        assignSeriesToAxis(Line1, zre.Unit)
 
         'Interpretation
         Select Case zre.Interpretation
@@ -2802,87 +2782,69 @@ Public Class Wave
     End Sub
 
     ''' <summary>
-    ''' Returns the axis for a given unit
+    ''' Assigns a series to the appropriate axis depending on its unit
     ''' If no axis exists for the given unit, a new axis is created
     ''' </summary>
     ''' <param name="unit">The unit</param>
-    ''' <returns></returns>
-    Private Function getAxis(ByVal unit As String) As Axis
+    Private Sub assignSeriesToAxis(ByRef series As Steema.TeeChart.Styles.Series, ByVal unit As String)
 
-        Dim number_ As Integer
-        Dim axis_ As Axis
+        If IsNothing(Me.TChart1.Axes.Left.Tag) Then
+            'use left axis for the first time
+            Me.TChart1.Axes.Left.Title.Text = unit
+            Me.TChart1.Axes.Left.Tag = unit
+            Me.TChart1.Axes.Left.Visible = True
+            Me.TChart1.Axes.Left.Automatic = True
+            series.VertAxis = Steema.TeeChart.Styles.VerticalAxis.Left
 
-        For Each axis_ In Me.MyAxes1
-            If axis_.Unit = unit Then
-                Return axis_
-            End If
-        Next
+        ElseIf Me.TChart1.Axes.Left.Tag = unit Then
+            'reuse left axis
+            series.VertAxis = Steema.TeeChart.Styles.VerticalAxis.Left
 
-        'create a new axis
-        number_ = Me.MyAxes1.Count + 1
+        ElseIf IsNothing(Me.TChart1.Axes.Right.Tag) Then
+            'use right axis for the first time
+            Me.TChart1.Axes.Right.Title.Text = unit
+            Me.TChart1.Axes.Right.Tag = unit
+            Me.TChart1.Axes.Right.Visible = True
+            Me.TChart1.Axes.Right.Automatic = True
+            series.VertAxis = Steema.TeeChart.Styles.VerticalAxis.Right
 
-        Select Case number_
-
-            Case 1
-                'First axis on the left
-                Me.TChart1.Chart.Axes.Left.Title.Caption = unit
-                Me.TChart1.Chart.Axes.Left.Automatic = True
-                axis_ = New Axis()
-                axis_.Number = number_
-                axis_.Unit = unit
-                axis_.Title = unit
-                axis_.TAxis = Me.TChart1.Chart.Axes.Left
-                Me.MyAxes1.Add(axis_)
-                Me.MyAxes2.Add(axis_)
-
-            Case 2
-                'Second axis on the right
-                Me.TChart1.Chart.Axes.Right.Title.Caption = unit
-                Me.TChart1.Chart.Axes.Right.Automatic = True
-                axis_ = New Axis()
-                axis_.Number = number_
-                axis_.Unit = unit
-                axis_.Title = unit
-                axis_.TAxis = Me.TChart1.Chart.Axes.Right
-                Me.MyAxes1.Add(axis_)
-                Me.MyAxes2.Add(axis_)
-
-            Case Else
-                'Create custom axes from axis number 3 onwards
-                Dim customaxis1, customaxis2 As Steema.TeeChart.Axis
-                customaxis1 = Steema.TeeChart.Axes.CreateNewAxis(Me.TChart1.Chart)
-                customaxis2 = Steema.TeeChart.Axes.CreateNewAxis(Me.TChart2.Chart)
-                customaxis1.Visible = True
-                customaxis2.Visible = True
+        ElseIf Me.TChart1.Axes.Right.Tag = unit Then
+            'reuse right axis
+            series.VertAxis = Steema.TeeChart.Styles.VerticalAxis.Right
+        Else
+            'check for reusable custom axes
+            Dim axisFound As Boolean = False
+            For Each axis As Steema.TeeChart.Axis In Me.TChart1.Axes.Custom
+                If axis.Tag = unit Then
+                    series.VertAxis = Steema.TeeChart.Styles.VerticalAxis.Custom
+                    series.CustomVertAxis = axis
+                    axisFound = True
+                    Exit For
+                End If
+            Next
+            If Not axisFound Then
+                'create a new custom axis
+                Dim axis As Steema.TeeChart.Axis
+                Dim number As Integer = Me.TChart1.Axes.Custom.Count + 1
+                axis = Steema.TeeChart.Axes.CreateNewAxis(Me.TChart1.Chart)
+                axis.Title.Text = unit
+                axis.Title.Angle = 90
+                axis.Tag = unit
+                axis.Visible = True
+                axis.Automatic = True
                 'Place every second axis on the right
-                If ((number_) Mod 2 = 0) Then
-                    customaxis1.OtherSide = True
-                    customaxis2.OtherSide = True
+                If number Mod 2 = 0 Then
+                    axis.OtherSide = True
                 End If
                 'Calculate position
-                customaxis1.RelativePosition = Math.Ceiling((number_ - 2) / 2) * 8
-                customaxis2.RelativePosition = Math.Ceiling((number_ - 2) / 2) * 8
+                axis.RelativePosition = Math.Ceiling((number) / 2) * 8
+                'assign series to new axis
+                series.VertAxis = Steema.TeeChart.Styles.VerticalAxis.Custom
+                series.CustomVertAxis = axis
+            End If
+        End If
 
-                customaxis1.Automatic = True
-                customaxis2.Automatic = True
-
-                customaxis1.Title.Caption = unit
-                customaxis1.Title.Angle = 90
-
-                axis_ = New Axis()
-                axis_.Number = number_
-                axis_.Unit = unit
-                axis_.Title = unit
-                axis_.TAxis = customaxis1
-
-                Me.MyAxes1.Add(axis_)
-                Me.MyAxes2.Add(axis_)
-
-        End Select
-
-        Return axis_
-
-    End Function
+    End Sub
 
     ''' <summary>
     ''' Führt Standardformatierung eines TCharts aus
