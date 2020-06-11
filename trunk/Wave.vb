@@ -66,7 +66,7 @@ Public Class Wave
     'Chart-Zeugs
     Private WithEvents colorBand1 As Steema.TeeChart.Tools.ColorBand
     Private selectionMade As Boolean 'Flag zeigt an, ob bereits ein Auswahlbereich ausgewählt wurde
-    Private MyAxes1, MyAxes2 As Dictionary(Of String, Steema.TeeChart.Axis)
+    Friend MyAxes1, MyAxes2 As List(Of Axis)
     Private WithEvents ChartListBox1 As Steema.TeeChart.ChartListBox
 
     'Cursors
@@ -105,8 +105,8 @@ Public Class Wave
         '-----------------------
         Me.ImportedFiles = New Dictionary(Of String, List(Of FileFormatBase.SeriesInfo))()
         Me.TimeSeriesDict = New Dictionary(Of Integer, TimeSeries)()
-        Me.MyAxes1 = New Dictionary(Of String, Steema.TeeChart.Axis)
-        Me.MyAxes2 = New Dictionary(Of String, Steema.TeeChart.Axis)
+        Me.MyAxes1 = New List(Of Axis)
+        Me.MyAxes2 = New List(Of Axis)
 
         'Charts einrichten
         '-----------------
@@ -578,7 +578,7 @@ Public Class Wave
     ''' Handles time series properties changed in the PropertiesDialog
     ''' </summary>
     ''' <param name="id">Id of the time series whose properties have changed</param>
-    ''' <remarks>Handles changed interpretation and title</remarks>
+    ''' <remarks>Handles changed interpretation, title and unit</remarks>
     Private Sub TimeSeriesPropertiesChanged(id As Integer) Handles propDialog.PropertyChanged
 
         'find series in chart
@@ -603,6 +603,23 @@ Public Class Wave
                 'update title in chart
                 series.Title = Me.TimeSeriesDict(id).Title
 
+                'assign to axis according to unit
+                Dim axis_ As Axis
+                axis_ = getAxis(Me.TimeSeriesDict(id).Unit)
+                Select Case axis_.Number
+                    Case 1
+                        'Linke Achse
+                        series.VertAxis = Steema.TeeChart.Styles.VerticalAxis.Left
+                    Case 2
+                        'Rechte Achse
+                        series.VertAxis = Steema.TeeChart.Styles.VerticalAxis.Right
+                    Case Else
+                        'Custom Achse
+                        series.VertAxis = Steema.TeeChart.Styles.VerticalAxis.Custom
+                        series.CustomVertAxis = axis_.TAxis
+                End Select
+
+                'TODO: apply the same changes in the overview chart
                 Exit For
             End If
         Next
@@ -2199,6 +2216,7 @@ Public Class Wave
         Dim i As Integer
         Dim reihe As TimeSeries
         Dim XMin, XMax As Double
+        Dim axis_ As Axis
 
         Try
 
@@ -2264,15 +2282,16 @@ Public Class Wave
                                     reihe.AddNode(Date.FromOADate(series.XValues(i)), series.YValues(i))
                                 Next
                                 'Get the series' unit from the axis title
-                                'TODO: the axis title might not be the actual unit
+                                Dim axistitle As String = ""
                                 Select Case series.VertAxis
                                     Case Steema.TeeChart.Styles.VerticalAxis.Left
-                                        reihe.Unit = Me.TChart1.Axes.Left.Title.Text
+                                        axistitle = Me.TChart1.Axes.Left.Title.Text
                                     Case Steema.TeeChart.Styles.VerticalAxis.Right
-                                        reihe.Unit = Me.TChart1.Axes.Right.Title.Text
+                                        axistitle = Me.TChart1.Axes.Right.Title.Text
                                     Case Steema.TeeChart.Styles.VerticalAxis.Custom
-                                        reihe.Unit = series.CustomVertAxis.Title.Text
+                                        axistitle = series.CustomVertAxis.Title.Text
                                 End Select
+                                reihe.Unit = Axis.parseUnit(axistitle)
                                 'Store the series internally
                                 Call Me.AddZeitreihe(reihe)
 
@@ -2305,17 +2324,32 @@ Public Class Wave
             Me.MyAxes2.Clear()
 
             'Linke Achse
-            Me.MyAxes1.Add(Me.TChart1.Chart.Axes.Left.TitleOrName, Me.TChart1.Chart.Axes.Left)
-            Me.MyAxes2.Add(Me.TChart2.Chart.Axes.Left.TitleOrName, Me.TChart2.Chart.Axes.Left)
+            axis_ = New Axis()
+            axis_.Number = 1
+            axis_.Title = Me.TChart1.Chart.Axes.Left.TitleOrName
+            axis_.Unit = Axis.parseUnit(axis_.Title)
+            axis_.TAxis = Me.TChart1.Chart.Axes.Left
+            Me.MyAxes1.Add(axis_)
+            Me.MyAxes2.Add(axis_)
             'Rechte Achse
             If (Me.TChart1.Chart.Axes.Right.Visible) Then
-                Me.MyAxes1.Add(Me.TChart1.Chart.Axes.Right.TitleOrName, Me.TChart1.Chart.Axes.Right)
-                Me.MyAxes2.Add(Me.TChart2.Chart.Axes.Right.TitleOrName, Me.TChart2.Chart.Axes.Right)
+                axis_ = New Axis()
+                axis_.Number = 2
+                axis_.Title = Me.TChart1.Chart.Axes.Right.TitleOrName
+                axis_.Unit = Axis.parseUnit(axis_.Title)
+                axis_.TAxis = Me.TChart1.Chart.Axes.Right
+                Me.MyAxes1.Add(axis_)
+                Me.MyAxes2.Add(axis_)
             End If
             'Custom Achsen
             For i = 0 To Me.TChart1.Chart.Axes.Custom.Count - 1
-                Me.MyAxes1.Add(Me.TChart1.Chart.Axes.Custom(i).TitleOrName, Me.TChart1.Chart.Axes.Custom(i))
-                Me.MyAxes2.Add(Me.TChart2.Chart.Axes.Custom(i).TitleOrName, Me.TChart2.Chart.Axes.Custom(i))
+                axis_ = New Axis()
+                axis_.Number = 3 + i
+                axis_.Title = Me.TChart1.Chart.Axes.Custom(i).TitleOrName
+                axis_.Unit = Axis.parseUnit(axis_.Title)
+                axis_.TAxis = Me.TChart1.Chart.Axes.Custom(i)
+                Me.MyAxes1.Add(axis_)
+                Me.MyAxes2.Add(axis_)
             Next
 
             'Die vor dem Laden bereits vorhandenen Zeitreihen wieder zu den Diagrammen hinzufügen (durch TEN-Import verloren)
@@ -2664,7 +2698,7 @@ Public Class Wave
     ''' <param name="zre">Die anzuzeigende Zeitreihe</param>
     Private Sub Display_Series(ByVal zre As TimeSeries)
 
-        Dim AxisNo As Integer
+        Dim axis_ As Axis
 
         'Serie zu Diagramm hinzufügen
 
@@ -2696,11 +2730,11 @@ Public Class Wave
         Next
 
         'Y-Achsenzuordnung
-        AxisNo = getAxisNo(zre.Unit)
+        axis_ = getAxis(zre.Unit)
 
         'Reihe der Y-Achse zuordnen
         '(Unterscheidung zwischen Standard- und Custom-Achsen notwendig)
-        Select Case AxisNo
+        Select Case axis_.Number
             Case 1
                 'Linke Achse
                 Line1.VertAxis = Steema.TeeChart.Styles.VerticalAxis.Left
@@ -2713,8 +2747,8 @@ Public Class Wave
                 'Custom Achse
                 Line1.VertAxis = Steema.TeeChart.Styles.VerticalAxis.Custom
                 Line2.VertAxis = Steema.TeeChart.Styles.VerticalAxis.Custom
-                Line1.CustomVertAxis = Me.MyAxes1(zre.Unit)
-                Line2.CustomVertAxis = Me.MyAxes2(zre.Unit)
+                Line1.CustomVertAxis = axis_.TAxis
+                Line2.CustomVertAxis = axis_.TAxis
         End Select
 
         'Interpretation
@@ -2768,72 +2802,85 @@ Public Class Wave
     End Sub
 
     ''' <summary>
-    ''' Gibt die Achsen-Nummer für eine bestimmte Einheit zurück
-    ''' Wenn noch nicht vorhanden, wird eine neue Achse erstellt
+    ''' Returns the axis for a given unit
+    ''' If no axis exists for the given unit, a new axis is created
     ''' </summary>
-    ''' <param name="einheit">Die Einheit</param>
-    ''' <returns>Der 1-basierte Index der zu verwendenden Achse in der MyAxes-Dictionary</returns>
-    Private Function getAxisNo(ByVal einheit As String) As Integer
+    ''' <param name="unit">The unit</param>
+    ''' <returns></returns>
+    Private Function getAxis(ByVal unit As String) As Axis
 
-        Dim AxisNo As Integer
+        Dim number_ As Integer
+        Dim axis_ As Axis
 
-        If (Me.MyAxes1.ContainsKey(einheit)) Then
+        For Each axis_ In Me.MyAxes1
+            If axis_.Unit = unit Then
+                Return axis_
+            End If
+        Next
 
-            'Nummer der vorhandenen, zu verwendenden Achse bestimmen
-            AxisNo = 0
-            For Each usedunit As String In Me.MyAxes1.Keys
-                AxisNo += 1
-                If (usedunit = einheit) Then
-                    Exit For
+        'create a new axis
+        number_ = Me.MyAxes1.Count + 1
+
+        Select Case number_
+
+            Case 1
+                'First axis on the left
+                Me.TChart1.Chart.Axes.Left.Title.Caption = unit
+                Me.TChart1.Chart.Axes.Left.Automatic = True
+                axis_ = New Axis()
+                axis_.Number = number_
+                axis_.Unit = unit
+                axis_.Title = unit
+                axis_.TAxis = Me.TChart1.Chart.Axes.Left
+                Me.MyAxes1.Add(axis_)
+                Me.MyAxes2.Add(axis_)
+
+            Case 2
+                'Second axis on the right
+                Me.TChart1.Chart.Axes.Right.Title.Caption = unit
+                Me.TChart1.Chart.Axes.Right.Automatic = True
+                axis_ = New Axis()
+                axis_.Number = number_
+                axis_.Unit = unit
+                axis_.Title = unit
+                axis_.TAxis = Me.TChart1.Chart.Axes.Right
+                Me.MyAxes1.Add(axis_)
+                Me.MyAxes2.Add(axis_)
+
+            Case Else
+                'Create custom axes from axis number 3 onwards
+                Dim customaxis1, customaxis2 As Steema.TeeChart.Axis
+                customaxis1 = Steema.TeeChart.Axes.CreateNewAxis(Me.TChart1.Chart)
+                customaxis2 = Steema.TeeChart.Axes.CreateNewAxis(Me.TChart2.Chart)
+                customaxis1.Visible = True
+                customaxis2.Visible = True
+                'Place every second axis on the right
+                If ((number_) Mod 2 = 0) Then
+                    customaxis1.OtherSide = True
+                    customaxis2.OtherSide = True
                 End If
-            Next
+                'Calculate position
+                customaxis1.RelativePosition = Math.Ceiling((number_ - 2) / 2) * 8
+                customaxis2.RelativePosition = Math.Ceiling((number_ - 2) / 2) * 8
 
-        Else
+                customaxis1.Automatic = True
+                customaxis2.Automatic = True
 
-            'Neue Einheit => neue Achse
-            AxisNo = Me.MyAxes1.Count + 1
+                customaxis1.Title.Caption = unit
+                customaxis1.Title.Angle = 90
 
-            Select Case AxisNo
+                axis_ = New Axis()
+                axis_.Number = number_
+                axis_.Unit = unit
+                axis_.Title = unit
+                axis_.TAxis = customaxis1
 
-                Case 1
-                    'Erste Einheit links
-                    Me.TChart1.Chart.Axes.Left.Title.Caption = einheit
-                    Me.MyAxes1.Add(einheit, Me.TChart1.Chart.Axes.Left)
-                    Me.MyAxes2.Add(einheit, Me.TChart2.Chart.Axes.Left)
+                Me.MyAxes1.Add(axis_)
+                Me.MyAxes2.Add(axis_)
 
-                Case 2
-                    'Zweite Einheit rechts
-                    Me.TChart1.Chart.Axes.Right.Title.Caption = einheit
-                    Me.MyAxes1.Add(einheit, Me.TChart1.Chart.Axes.Right)
-                    Me.MyAxes2.Add(einheit, Me.TChart2.Chart.Axes.Right)
+        End Select
 
-                Case Else
-                    'Ab der dritten Einheit Custom Achsen erstellen
-                    Dim customaxis1, customaxis2 As Steema.TeeChart.Axis
-                    customaxis1 = Steema.TeeChart.Axes.CreateNewAxis(Me.TChart1.Chart)
-                    customaxis2 = Steema.TeeChart.Axes.CreateNewAxis(Me.TChart2.Chart)
-                    customaxis1.Visible = True
-                    customaxis2.Visible = True
-                    'Jede zweite Achse rechts anzeigen
-                    If ((AxisNo) Mod 2 = 0) Then
-                        customaxis1.OtherSide = True
-                        customaxis2.OtherSide = True
-                    End If
-                    'Abstand berechnen
-                    customaxis1.RelativePosition = Math.Ceiling((AxisNo - 2) / 2) * 8
-                    customaxis2.RelativePosition = Math.Ceiling((AxisNo - 2) / 2) * 8
-
-                    customaxis1.Title.Caption = einheit
-                    customaxis1.Title.Angle = 90
-
-                    Me.MyAxes1.Add(einheit, customaxis1)
-                    Me.MyAxes2.Add(einheit, customaxis2)
-
-            End Select
-
-        End If
-
-        Return AxisNo
+        Return axis_
 
     End Function
 
