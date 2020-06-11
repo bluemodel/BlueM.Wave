@@ -320,6 +320,26 @@ Public MustInherit Class FileFormatBase
     End Property
 
     ''' <summary>
+    ''' Get a timeseries from the file using its index
+    ''' </summary>
+    ''' <param name="index">Index of the desired timeseries within the file</param>
+    ''' <returns>The timeseries</returns>
+    ''' <remarks>If the timeseries has not been imported yet, an import is initiated. 
+    ''' Throws an exception if the timeseries cannot be found in the file.</remarks>
+    Public ReadOnly Property getTimeSeries(Optional ByVal index As Integer = 0) As TimeSeries
+        Get
+            If Me.FileTimeSeries.ContainsKey(index) Then
+                Return Me.FileTimeSeries(index)
+            Else
+                Me.selectSeries(index)
+                Me.readFile()
+                Return Me.FileTimeSeries(index)
+            End If
+        End Get
+    End Property
+
+
+    ''' <summary>
     ''' Get a timeseries from the file using its title
     ''' </summary>
     ''' <param name="title">Title of the desired timeseries.</param>
