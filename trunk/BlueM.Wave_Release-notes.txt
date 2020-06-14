@@ -6,8 +6,7 @@ Version 1.8.0
 NEW:
 * Added support for different file encodings:
   * Default encoding for reading and writing files is taken from the operating system (usually ISO-8859-1)
-  * File encoding is autodetected from byte order marks when the Import dialog is shown
-  * The encoding to use for reading can be set in the Import dialog
+  * File encoding can be autodetected from byte order marks or manually set in the Import dialog
 * Added a button and dialog for managing axes
 * The title, interpretation and unit of time series are now editable in the Properties dialog
 * Added a menu item for opening the release notes
