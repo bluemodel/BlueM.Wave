@@ -118,10 +118,10 @@ Friend Class ImportDiag
         Me.ComboBox_Separator.EndUpdate()
 
         'Combobox Dezimaltrennzeichen initialisieren
-        Me.ComboBox_DecimalMark.BeginUpdate()
-        Me.ComboBox_DecimalMark.Items.Add(Constants.period)
-        Me.ComboBox_DecimalMark.Items.Add(Constants.comma)
-        Me.ComboBox_DecimalMark.EndUpdate()
+        Me.ComboBox_DecimalSeparator.BeginUpdate()
+        Me.ComboBox_DecimalSeparator.Items.Add(Constants.period)
+        Me.ComboBox_DecimalSeparator.Items.Add(Constants.comma)
+        Me.ComboBox_DecimalSeparator.EndUpdate()
 
         'Combobox Datumsformat füllen
         For Each datumsformat As String In Helpers.DateFormats.Values
@@ -220,7 +220,7 @@ Friend Class ImportDiag
     'Benutzereingabe verarbeiten
     '***************************
     Private Sub inputChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles _
-        NumericUpDown_LineTitles.TextChanged, NumericUpDown_LineUnits.TextChanged, NumericUpDown_LineData.TextChanged, CheckBox_Units.CheckedChanged, ComboBox_DecimalMark.SelectedIndexChanged, RadioButton_CharSeparated.CheckedChanged, ComboBox_Separator.SelectedIndexChanged, TextBox_ColumnWidth.TextChanged, NumericUpDown_ColumnDateTime.ValueChanged, ComboBox_Dateformat.SelectedIndexChanged, ComboBox_Dateformat.LostFocus
+        NumericUpDown_LineTitles.TextChanged, NumericUpDown_LineUnits.TextChanged, NumericUpDown_LineData.TextChanged, CheckBox_Units.CheckedChanged, ComboBox_DecimalSeparator.SelectedIndexChanged, RadioButton_CharSeparated.CheckedChanged, ComboBox_Separator.SelectedIndexChanged, TextBox_ColumnWidth.TextChanged, NumericUpDown_ColumnDateTime.ValueChanged, ComboBox_Dateformat.SelectedIndexChanged, ComboBox_Dateformat.LostFocus
 
         If (Me.IsInitializing = True) Then
             Exit Sub
@@ -255,7 +255,7 @@ Friend Class ImportDiag
                 Me.datei.Dateformat = Me.DateFormat
 
                 'Dezimaltrennzeichen
-                Me.datei.DecimalSeparator = Me.ComboBox_DecimalMark.SelectedItem
+                Me.datei.DecimalSeparator = Me.ComboBox_DecimalSeparator.SelectedItem
 
                 'Spalteneinstellungen
                 If (Me.RadioButton_CharSeparated.Checked) Then
@@ -294,7 +294,7 @@ Friend Class ImportDiag
     Private Sub aktualisieren()
 
         'Dezimaltrennzeichen
-        Me.ComboBox_DecimalMark.SelectedItem = Me.datei.DecimalSeparator
+        Me.ComboBox_DecimalSeparator.SelectedItem = Me.datei.DecimalSeparator
 
         'Zeilennummern
         Me.NumericUpDown_LineTitles.Text = Me.datei.iLineHeadings
