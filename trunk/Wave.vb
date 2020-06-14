@@ -896,6 +896,7 @@ Public Class Wave
     Private Sub ToolStripButton_AxisDialog_Click(sender As Object, e As EventArgs) Handles ToolStripButton_AxisDialog.Click
         Call Me.updateAxisDialog()
         Me.axisDialog.Show()
+        Me.axisDialog.BringToFront()
     End Sub
 
     ''' <summary>
@@ -1193,6 +1194,7 @@ Public Class Wave
     Private Sub ToolStripButton_Properties_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_Properties.Click
         propDialog.Update(Me.TimeSeriesDict.Values.ToList)
         propDialog.Show()
+        propDialog.BringToFront()
     End Sub
 
     ''' <summary>
