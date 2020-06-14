@@ -39,7 +39,7 @@ Public Class Wave
     ''' <remarks></remarks>
     Private Shared MyLogWindow As LogWindow
 
-    'Log
+    'Dialogs
     Private WithEvents myLog As Log
     Private WithEvents propDialog As PropertiesDialog
     Private WithEvents axisDialog As AxisDialog
@@ -110,10 +110,12 @@ Public Class Wave
         Me.ChartListBox1 = New Steema.TeeChart.ChartListBox()
         Call Me.Init_Charts()
 
-        'Logfenster nur beim ersten Mal instanzieren
-        '-------------------------------------------
-        If (IsNothing(MyLogWindow)) Then
+        'instantiate windows and dialogs
+        If IsNothing(MyLogWindow) Then
             MyLogWindow = New LogWindow()
+        End If
+        If IsNothing(propDialog) Then
+            propDialog = New PropertiesDialog()
         End If
 
         'Log (Singleton) Instanz holen
@@ -551,6 +553,9 @@ Public Class Wave
             Next
 
         End If
+
+        'Update PropertiesDialog
+        Me.propDialog.Update(Me.TimeSeriesDict.Values.ToList)
     End Sub
 
     ''' <summary>
@@ -1173,7 +1178,7 @@ Public Class Wave
     ''' </summary>
     ''' <remarks></remarks>
     Private Sub ToolStripButton_Properties_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_Properties.Click
-        Me.propDialog = New PropertiesDialog(Me.TimeSeriesDict.Values.ToList)
+        propDialog.Update(Me.TimeSeriesDict.Values.ToList)
         propDialog.Show()
     End Sub
 
@@ -2012,6 +2017,8 @@ Public Class Wave
 
         Me.TimeSeriesDict.Add(zre.Id, zre)
 
+        'Update PropertiesDialog
+        Me.propDialog.Update(Me.TimeSeriesDict.Values.ToList)
     End Sub
 
     ''' <summary>

@@ -29,31 +29,25 @@ Imports System.Windows.Forms
 
 Friend Class PropertiesDialog
 
-    Private isInitializing As Boolean
-
     ''' <summary>
     ''' Is raised when a property is changed by the user
     ''' </summary>
     ''' <param name="id">Id of the time series whose properties were changed</param>
     Friend Event PropertyChanged(id As Integer)
 
-    Public Sub New(ByRef seriesList As List(Of TimeSeries))
-
+    Public Sub New()
         ' This call is required by the Windows Form Designer.
         InitializeComponent()
         ' Add any initialization after the InitializeComponent() call.
-
-        Me.isInitializing = True
-
         Me.Interpretation.DataSource = System.Enum.GetValues(GetType(TimeSeries.InterpretationEnum))
+    End Sub
 
-        'add the time series to the binding source
-        Me.TimeSeriesBindingSource.Clear()
-        For Each ts As TimeSeries In seriesList
-            Me.TimeSeriesBindingSource.Add(ts)
-        Next
-
-        Me.isInitializing = False
+    ''' <summary>
+    ''' Updates the form with a new List of TimeSeries
+    ''' </summary>
+    ''' <param name="seriesList">the new List of TimeSeries</param>
+    Public Overloads Sub Update(ByRef seriesList As List(Of TimeSeries))
+        Me.TimeSeriesBindingSource.DataSource = seriesList
     End Sub
 
     ''' <summary>
@@ -74,7 +68,7 @@ Friend Class PropertiesDialog
     ''' <param name="e"></param>
     Private Sub DataGridView1_CellValueChanged(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridView1.CellValueChanged
 
-        If Me.isInitializing Or e.RowIndex = -1 Then
+        If e.RowIndex = -1 Then
             Exit Sub
         End If
 
@@ -94,5 +88,11 @@ Friend Class PropertiesDialog
 
         RaiseEvent PropertyChanged(id)
 
+    End Sub
+
+    Private Sub PropertiesDialog_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
+        'prevent the form from closing and hide it instead
+        e.Cancel = True
+        Call Me.Hide()
     End Sub
 End Class
