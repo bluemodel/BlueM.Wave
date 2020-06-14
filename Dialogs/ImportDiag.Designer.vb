@@ -1,9 +1,9 @@
-<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
 Partial Class ImportDiag
     Inherits System.Windows.Forms.Form
 
     'Das Formular überschreibt den Löschvorgang, um die Komponentenliste zu bereinigen.
-    <System.Diagnostics.DebuggerNonUserCode()> _
+    <System.Diagnostics.DebuggerNonUserCode()>
     Protected Overrides Sub Dispose(ByVal disposing As Boolean)
         Try
             If disposing AndAlso components IsNot Nothing Then
@@ -20,47 +20,47 @@ Partial Class ImportDiag
     'Hinweis: Die folgende Prozedur ist für den Windows Form-Designer erforderlich.
     'Das Bearbeiten ist mit dem Windows Form-Designer möglich.  
     'Das Bearbeiten mit dem Code-Editor ist nicht möglich.
-    <System.Diagnostics.DebuggerStepThrough()> _
+    <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
-        Me.components = New System.ComponentModel.Container
+        Me.components = New System.ComponentModel.Container()
         Dim SplitContainer1 As System.Windows.Forms.SplitContainer
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(ImportDiag))
-        Me.GroupBox_Selection = New System.Windows.Forms.GroupBox
-        Me.Label_Search = New System.Windows.Forms.Label
-        Me.TextBox_Search = New System.Windows.Forms.TextBox
-        Me.Label_Series = New System.Windows.Forms.Label
-        Me.ListBox_Series = New System.Windows.Forms.ListBox
-        Me.Button_SelectAll = New System.Windows.Forms.Button
-        Me.GroupBox_Preview = New System.Windows.Forms.GroupBox
-        Me.Label_File = New System.Windows.Forms.Label
-        Me.TextBox_Preview = New System.Windows.Forms.RichTextBox
-        Me.ComboBox_Separator = New System.Windows.Forms.ComboBox
-        Me.Button_OK = New System.Windows.Forms.Button
-        Me.Button_Cancel = New System.Windows.Forms.Button
-        Me.Label_ColumnDateTime = New System.Windows.Forms.Label
-        Me.RadioButton_FixedWidth = New System.Windows.Forms.RadioButton
-        Me.RadioButton_CharSeparated = New System.Windows.Forms.RadioButton
-        Me.GroupBox_Columns = New System.Windows.Forms.GroupBox
-        Me.TextBox_ColumnWidth = New System.Windows.Forms.TextBox
-        Me.NumericUpDown_LineTitles = New System.Windows.Forms.NumericUpDown
-        Me.Label_LineTitles = New System.Windows.Forms.Label
-        Me.ComboBox_DecimalMark = New System.Windows.Forms.ComboBox
-        Me.GroupBox_Settings = New System.Windows.Forms.GroupBox
-        Me.CheckBox_Units = New System.Windows.Forms.CheckBox
-        Me.NumericUpDown_LineUnits = New System.Windows.Forms.NumericUpDown
-        Me.Label_LineData = New System.Windows.Forms.Label
-        Me.NumericUpDown_LineData = New System.Windows.Forms.NumericUpDown
-        Me.NumericUpDown_ColumnDateTime = New System.Windows.Forms.NumericUpDown
-        Me.GroupBox_DecimalMark = New System.Windows.Forms.GroupBox
-        Me.Label_DecimalMark = New System.Windows.Forms.Label
-        Me.StatusStrip1 = New System.Windows.Forms.StatusStrip
-        Me.StatusImage = New System.Windows.Forms.ToolStripStatusLabel
-        Me.GroupBox_Dateformat = New System.Windows.Forms.GroupBox
-        Me.PictureBox_DateFormatHelp = New System.Windows.Forms.PictureBox
-        Me.Label_Dateformat = New System.Windows.Forms.Label
-        Me.ComboBox_Dateformat = New System.Windows.Forms.ComboBox
+        Me.GroupBox_Selection = New System.Windows.Forms.GroupBox()
+        Me.Label_Search = New System.Windows.Forms.Label()
+        Me.TextBox_Search = New System.Windows.Forms.TextBox()
+        Me.Label_Series = New System.Windows.Forms.Label()
+        Me.ListBox_Series = New System.Windows.Forms.ListBox()
+        Me.Button_SelectAll = New System.Windows.Forms.Button()
+        Me.GroupBox_Preview = New System.Windows.Forms.GroupBox()
+        Me.Label_File = New System.Windows.Forms.Label()
+        Me.TextBox_Preview = New System.Windows.Forms.RichTextBox()
+        Me.ComboBox_Separator = New System.Windows.Forms.ComboBox()
+        Me.Button_OK = New System.Windows.Forms.Button()
+        Me.Button_Cancel = New System.Windows.Forms.Button()
+        Me.Label_ColumnDateTime = New System.Windows.Forms.Label()
+        Me.RadioButton_FixedWidth = New System.Windows.Forms.RadioButton()
+        Me.RadioButton_CharSeparated = New System.Windows.Forms.RadioButton()
+        Me.GroupBox_Columns = New System.Windows.Forms.GroupBox()
+        Me.TextBox_ColumnWidth = New System.Windows.Forms.TextBox()
+        Me.NumericUpDown_LineTitles = New System.Windows.Forms.NumericUpDown()
+        Me.Label_LineTitles = New System.Windows.Forms.Label()
+        Me.ComboBox_DecimalSeparator = New System.Windows.Forms.ComboBox()
+        Me.GroupBox_Settings = New System.Windows.Forms.GroupBox()
+        Me.CheckBox_Units = New System.Windows.Forms.CheckBox()
+        Me.NumericUpDown_LineUnits = New System.Windows.Forms.NumericUpDown()
+        Me.Label_LineData = New System.Windows.Forms.Label()
+        Me.NumericUpDown_LineData = New System.Windows.Forms.NumericUpDown()
+        Me.NumericUpDown_ColumnDateTime = New System.Windows.Forms.NumericUpDown()
+        Me.GroupBox_DecimalMark = New System.Windows.Forms.GroupBox()
+        Me.Label_DecimalMark = New System.Windows.Forms.Label()
+        Me.StatusStrip1 = New System.Windows.Forms.StatusStrip()
+        Me.StatusImage = New System.Windows.Forms.ToolStripStatusLabel()
+        Me.GroupBox_Dateformat = New System.Windows.Forms.GroupBox()
+        Me.PictureBox_DateFormatHelp = New System.Windows.Forms.PictureBox()
+        Me.Label_Dateformat = New System.Windows.Forms.Label()
+        Me.ComboBox_Dateformat = New System.Windows.Forms.ComboBox()
         Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
-        SplitContainer1 = New System.Windows.Forms.SplitContainer
+        SplitContainer1 = New System.Windows.Forms.SplitContainer()
         SplitContainer1.Panel1.SuspendLayout()
         SplitContainer1.Panel2.SuspendLayout()
         SplitContainer1.SuspendLayout()
@@ -81,8 +81,8 @@ Partial Class ImportDiag
         'SplitContainer1
         '
         SplitContainer1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-                    Or System.Windows.Forms.AnchorStyles.Left) _
-                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         SplitContainer1.Location = New System.Drawing.Point(12, 188)
         SplitContainer1.Margin = New System.Windows.Forms.Padding(0)
         SplitContainer1.Name = "SplitContainer1"
@@ -101,8 +101,8 @@ Partial Class ImportDiag
         'GroupBox_Selection
         '
         Me.GroupBox_Selection.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-                    Or System.Windows.Forms.AnchorStyles.Left) _
-                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.GroupBox_Selection.Controls.Add(Me.Label_Search)
         Me.GroupBox_Selection.Controls.Add(Me.TextBox_Search)
         Me.GroupBox_Selection.Controls.Add(Me.Label_Series)
@@ -128,7 +128,7 @@ Partial Class ImportDiag
         'TextBox_Search
         '
         Me.TextBox_Search.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.TextBox_Search.Location = New System.Drawing.Point(59, 18)
         Me.TextBox_Search.Name = "TextBox_Search"
         Me.TextBox_Search.Size = New System.Drawing.Size(111, 20)
@@ -146,8 +146,8 @@ Partial Class ImportDiag
         'ListBox_Series
         '
         Me.ListBox_Series.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-                    Or System.Windows.Forms.AnchorStyles.Left) _
-                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.ListBox_Series.FormattingEnabled = True
         Me.ListBox_Series.Location = New System.Drawing.Point(15, 64)
         Me.ListBox_Series.Name = "ListBox_Series"
@@ -168,8 +168,8 @@ Partial Class ImportDiag
         'GroupBox_Preview
         '
         Me.GroupBox_Preview.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-                    Or System.Windows.Forms.AnchorStyles.Left) _
-                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.GroupBox_Preview.Controls.Add(Me.Label_File)
         Me.GroupBox_Preview.Controls.Add(Me.TextBox_Preview)
         Me.GroupBox_Preview.Location = New System.Drawing.Point(0, 0)
@@ -192,8 +192,8 @@ Partial Class ImportDiag
         'TextBox_Preview
         '
         Me.TextBox_Preview.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-                    Or System.Windows.Forms.AnchorStyles.Left) _
-                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.TextBox_Preview.BackColor = System.Drawing.Color.White
         Me.TextBox_Preview.Font = New System.Drawing.Font("Courier New", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.TextBox_Preview.Location = New System.Drawing.Point(12, 43)
@@ -239,7 +239,7 @@ Partial Class ImportDiag
         'Label_ColumnDateTime
         '
         Me.Label_ColumnDateTime.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-                    Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+            Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.Label_ColumnDateTime.AutoSize = True
         Me.Label_ColumnDateTime.Location = New System.Drawing.Point(409, 24)
         Me.Label_ColumnDateTime.Name = "Label_ColumnDateTime"
@@ -292,7 +292,7 @@ Partial Class ImportDiag
         'NumericUpDown_LineTitles
         '
         Me.NumericUpDown_LineTitles.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-                    Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+            Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.NumericUpDown_LineTitles.Location = New System.Drawing.Point(15, 46)
         Me.NumericUpDown_LineTitles.Minimum = New Decimal(New Integer() {1, 0, 0, 0})
         Me.NumericUpDown_LineTitles.Name = "NumericUpDown_LineTitles"
@@ -303,7 +303,7 @@ Partial Class ImportDiag
         'Label_LineTitles
         '
         Me.Label_LineTitles.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-                    Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+            Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.Label_LineTitles.AutoSize = True
         Me.Label_LineTitles.Location = New System.Drawing.Point(12, 25)
         Me.Label_LineTitles.Name = "Label_LineTitles"
@@ -311,20 +311,20 @@ Partial Class ImportDiag
         Me.Label_LineTitles.TabIndex = 0
         Me.Label_LineTitles.Text = "Line with titles:"
         '
-        'ComboBox_DecimalMark
+        'ComboBox_DecimalSeparator
         '
-        Me.ComboBox_DecimalMark.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.ComboBox_DecimalMark.DropDownWidth = 50
-        Me.ComboBox_DecimalMark.FormattingEnabled = True
-        Me.ComboBox_DecimalMark.Location = New System.Drawing.Point(9, 51)
-        Me.ComboBox_DecimalMark.Name = "ComboBox_DecimalMark"
-        Me.ComboBox_DecimalMark.Size = New System.Drawing.Size(66, 21)
-        Me.ComboBox_DecimalMark.TabIndex = 1
+        Me.ComboBox_DecimalSeparator.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.ComboBox_DecimalSeparator.DropDownWidth = 50
+        Me.ComboBox_DecimalSeparator.FormattingEnabled = True
+        Me.ComboBox_DecimalSeparator.Location = New System.Drawing.Point(9, 51)
+        Me.ComboBox_DecimalSeparator.Name = "ComboBox_DecimalSeparator"
+        Me.ComboBox_DecimalSeparator.Size = New System.Drawing.Size(66, 21)
+        Me.ComboBox_DecimalSeparator.TabIndex = 1
         '
         'GroupBox_Settings
         '
         Me.GroupBox_Settings.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.GroupBox_Settings.Controls.Add(Me.Label_LineTitles)
         Me.GroupBox_Settings.Controls.Add(Me.NumericUpDown_LineTitles)
         Me.GroupBox_Settings.Controls.Add(Me.CheckBox_Units)
@@ -343,7 +343,7 @@ Partial Class ImportDiag
         'CheckBox_Units
         '
         Me.CheckBox_Units.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-                    Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+            Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.CheckBox_Units.AutoSize = True
         Me.CheckBox_Units.Location = New System.Drawing.Point(149, 24)
         Me.CheckBox_Units.Name = "CheckBox_Units"
@@ -355,7 +355,7 @@ Partial Class ImportDiag
         'NumericUpDown_LineUnits
         '
         Me.NumericUpDown_LineUnits.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-                    Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+            Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.NumericUpDown_LineUnits.Location = New System.Drawing.Point(149, 46)
         Me.NumericUpDown_LineUnits.Minimum = New Decimal(New Integer() {1, 0, 0, 0})
         Me.NumericUpDown_LineUnits.Name = "NumericUpDown_LineUnits"
@@ -366,7 +366,7 @@ Partial Class ImportDiag
         'Label_LineData
         '
         Me.Label_LineData.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-                    Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+            Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.Label_LineData.AutoSize = True
         Me.Label_LineData.Location = New System.Drawing.Point(283, 25)
         Me.Label_LineData.Name = "Label_LineData"
@@ -377,7 +377,7 @@ Partial Class ImportDiag
         'NumericUpDown_LineData
         '
         Me.NumericUpDown_LineData.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-                    Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+            Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.NumericUpDown_LineData.Location = New System.Drawing.Point(286, 46)
         Me.NumericUpDown_LineData.Minimum = New Decimal(New Integer() {1, 0, 0, 0})
         Me.NumericUpDown_LineData.Name = "NumericUpDown_LineData"
@@ -388,7 +388,7 @@ Partial Class ImportDiag
         'NumericUpDown_ColumnDateTime
         '
         Me.NumericUpDown_ColumnDateTime.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-                    Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+            Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.NumericUpDown_ColumnDateTime.Location = New System.Drawing.Point(474, 46)
         Me.NumericUpDown_ColumnDateTime.Minimum = New Decimal(New Integer() {1, 0, 0, 0})
         Me.NumericUpDown_ColumnDateTime.Name = "NumericUpDown_ColumnDateTime"
@@ -400,22 +400,22 @@ Partial Class ImportDiag
         '
         Me.GroupBox_DecimalMark.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.GroupBox_DecimalMark.Controls.Add(Me.Label_DecimalMark)
-        Me.GroupBox_DecimalMark.Controls.Add(Me.ComboBox_DecimalMark)
+        Me.GroupBox_DecimalMark.Controls.Add(Me.ComboBox_DecimalSeparator)
         Me.GroupBox_DecimalMark.Location = New System.Drawing.Point(416, 12)
         Me.GroupBox_DecimalMark.Name = "GroupBox_DecimalMark"
         Me.GroupBox_DecimalMark.Size = New System.Drawing.Size(126, 84)
         Me.GroupBox_DecimalMark.TabIndex = 2
         Me.GroupBox_DecimalMark.TabStop = False
-        Me.GroupBox_DecimalMark.Text = "Decimal mark"
+        Me.GroupBox_DecimalMark.Text = "Decimal separator"
         '
         'Label_DecimalMark
         '
         Me.Label_DecimalMark.AutoSize = True
         Me.Label_DecimalMark.Location = New System.Drawing.Point(6, 26)
         Me.Label_DecimalMark.Name = "Label_DecimalMark"
-        Me.Label_DecimalMark.Size = New System.Drawing.Size(74, 13)
+        Me.Label_DecimalMark.Size = New System.Drawing.Size(95, 13)
         Me.Label_DecimalMark.TabIndex = 0
-        Me.Label_DecimalMark.Text = "Decimal mark:"
+        Me.Label_DecimalMark.Text = "Decimal separator:"
         '
         'StatusStrip1
         '
@@ -436,7 +436,7 @@ Partial Class ImportDiag
         'GroupBox_Dateformat
         '
         Me.GroupBox_Dateformat.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.GroupBox_Dateformat.Controls.Add(Me.PictureBox_DateFormatHelp)
         Me.GroupBox_Dateformat.Controls.Add(Me.Label_Dateformat)
         Me.GroupBox_Dateformat.Controls.Add(Me.ComboBox_Dateformat)
@@ -455,8 +455,8 @@ Partial Class ImportDiag
         Me.PictureBox_DateFormatHelp.Size = New System.Drawing.Size(16, 16)
         Me.PictureBox_DateFormatHelp.TabIndex = 3
         Me.PictureBox_DateFormatHelp.TabStop = False
-        Me.ToolTip1.SetToolTip(Me.PictureBox_DateFormatHelp, "https://docs.microsoft.com/en-us/dotnet/standard/base-types/custom-date-and-time-" & _
-                "format-strings")
+        Me.ToolTip1.SetToolTip(Me.PictureBox_DateFormatHelp, "https://docs.microsoft.com/en-us/dotnet/standard/base-types/custom-date-and-time-" &
+        "format-strings")
         '
         'Label_Dateformat
         '
@@ -470,7 +470,7 @@ Partial Class ImportDiag
         'ComboBox_Dateformat
         '
         Me.ComboBox_Dateformat.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.ComboBox_Dateformat.FormattingEnabled = True
         Me.ComboBox_Dateformat.Location = New System.Drawing.Point(7, 53)
         Me.ComboBox_Dateformat.Name = "ComboBox_Dateformat"
@@ -541,7 +541,7 @@ Partial Class ImportDiag
     Private WithEvents TextBox_ColumnWidth As System.Windows.Forms.TextBox
     Private WithEvents NumericUpDown_LineTitles As System.Windows.Forms.NumericUpDown
     Private WithEvents Label_LineTitles As System.Windows.Forms.Label
-    Private WithEvents ComboBox_DecimalMark As System.Windows.Forms.ComboBox
+    Private WithEvents ComboBox_DecimalSeparator As System.Windows.Forms.ComboBox
     Private WithEvents NumericUpDown_LineUnits As System.Windows.Forms.NumericUpDown
     Private WithEvents NumericUpDown_LineData As System.Windows.Forms.NumericUpDown
     Private WithEvents Label_LineData As System.Windows.Forms.Label
