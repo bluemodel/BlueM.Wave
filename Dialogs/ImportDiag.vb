@@ -146,15 +146,9 @@ Friend Class ImportDiag
         Me.ComboBox_Encoding.DataSource = System.Text.Encoding.GetEncodings()
         Me.ComboBox_Encoding.DisplayMember = "Name"
         Me.ComboBox_Encoding.ValueMember = "CodePage"
-
-        'Autodetect file encoding and set that as initial selection
-        Dim strreader As New StreamReader(Me.datei.File, detectEncodingFromByteOrderMarks:=True)
-        strreader.ReadLine()
-        Me.ComboBox_Encoding.SelectedValue = strreader.CurrentEncoding.CodePage
-        strreader.Close()
+        Me.ComboBox_Encoding.SelectedValue = Me.datei.Encoding.CodePage
 
         'Versuchen, die Spalten auszulesen (mit Standardeinstellungen)
-        Me.datei.Encoding = Me.selectedEncoding
         Call Me.datei.readSeriesInfo()
 
         'Anzeige aktualisieren
@@ -447,6 +441,22 @@ Friend Class ImportDiag
 
     Private Sub PictureBox_DateFormatHelp_MouseLeave(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PictureBox_DateFormatHelp.MouseLeave
         Cursor = Cursors.Default
+    End Sub
+
+    ''' <summary>
+    ''' Autodetect encoding from byte order marks
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    Private Sub Button_EncodingAutodetect_Click(sender As Object, e As EventArgs) Handles Button_EncodingAutodetect.Click
+        Dim enc As Text.Encoding
+        'Autodetect file encoding
+        Dim strreader As New StreamReader(Me.datei.File, detectEncodingFromByteOrderMarks:=True)
+        strreader.ReadLine()
+        enc = strreader.CurrentEncoding
+        strreader.Close()
+        'set detected encoding
+        Me.ComboBox_Encoding.SelectedValue = enc.CodePage
     End Sub
 
 #End Region 'Methoden
