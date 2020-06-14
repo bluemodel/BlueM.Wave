@@ -102,6 +102,12 @@
     <Compile Include="AboutBox.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Analysis\AnalysisChart.Designer.vb">
+      <DependentUpon>AnalysisChart.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Analysis\AnalysisChart.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Analysis\ChangeTimestep.vb" />
     <Compile Include="Analysis\Analysis.vb" />
     <Compile Include="Analysis\AnalysisHelper.vb" />
@@ -309,6 +315,9 @@
     <Compile Include="FileFormats\CSV.vb" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Analysis\AnalysisChart.resx">
+      <DependentUpon>AnalysisChart.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Analysis\ChangeTimestepDialog.resx">
       <DependentUpon>ChangeTimestepDialog.vb</DependentUpon>
     </EmbeddedResource>

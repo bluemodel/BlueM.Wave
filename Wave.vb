@@ -1143,12 +1143,10 @@ Public Class Wave
                 '--------------------
                 'Ergebnisdiagramm anzeigen
                 If (oAnalysis.hasResultChart) Then
-                    Dim Wave2 As New Wave()
-                    Wave2.Text = "Analysis result"
-                    Wave2.Übersicht_Toggle(False)
-                    Wave2.navigationToggle(False)
-                    Wave2.TChart1.Chart = oAnalysis.getResultChart()
-                    Call Wave2.Show()
+                    Dim resultChart As New AnalysisChart()
+                    resultChart.Text &= " - " & oAnalysisDialog.selectedAnalysisFunction.ToString()
+                    resultChart.TChart1.Chart = oAnalysis.getResultChart()
+                    Call resultChart.Show()
                 End If
 
                 'Ergebnistext in Log schreiben und anzeigen
