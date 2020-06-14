@@ -25,11 +25,11 @@ Partial Class AxisDialog
         Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(AxisDialog))
         Me.DataGridView1 = New System.Windows.Forms.DataGridView()
-        Me.AxisWrapperBindingSource = New System.Windows.Forms.BindingSource(Me.components)
-        Me.DataGridViewTextBoxColumn1 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.NameColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.TitleColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.UnitColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.AxisWrapperBindingSource = New System.Windows.Forms.BindingSource(Me.components)
+        Me.DataGridViewTextBoxColumn1 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.AxisWrapperBindingSource, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
@@ -38,6 +38,7 @@ Partial Class AxisDialog
         '
         Me.DataGridView1.AllowUserToAddRows = False
         Me.DataGridView1.AllowUserToDeleteRows = False
+        Me.DataGridView1.AllowUserToResizeRows = False
         Me.DataGridView1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
@@ -51,17 +52,6 @@ Partial Class AxisDialog
         Me.DataGridView1.Name = "DataGridView1"
         Me.DataGridView1.Size = New System.Drawing.Size(405, 199)
         Me.DataGridView1.TabIndex = 3
-        '
-        'AxisWrapperBindingSource
-        '
-        Me.AxisWrapperBindingSource.DataSource = GetType(BlueM.Wave.AxisWrapper)
-        '
-        'DataGridViewTextBoxColumn1
-        '
-        Me.DataGridViewTextBoxColumn1.DataPropertyName = "Tag"
-        Me.DataGridViewTextBoxColumn1.HeaderText = "Tag"
-        Me.DataGridViewTextBoxColumn1.Name = "DataGridViewTextBoxColumn1"
-        Me.DataGridViewTextBoxColumn1.Width = 51
         '
         'NameColumn
         '
@@ -84,6 +74,17 @@ Partial Class AxisDialog
         Me.UnitColumn.HeaderText = "Unit"
         Me.UnitColumn.Name = "UnitColumn"
         Me.UnitColumn.Width = 51
+        '
+        'AxisWrapperBindingSource
+        '
+        Me.AxisWrapperBindingSource.DataSource = GetType(BlueM.Wave.AxisWrapper)
+        '
+        'DataGridViewTextBoxColumn1
+        '
+        Me.DataGridViewTextBoxColumn1.DataPropertyName = "Tag"
+        Me.DataGridViewTextBoxColumn1.HeaderText = "Tag"
+        Me.DataGridViewTextBoxColumn1.Name = "DataGridViewTextBoxColumn1"
+        Me.DataGridViewTextBoxColumn1.Width = 51
         '
         'AxisDialog
         '
