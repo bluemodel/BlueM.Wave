@@ -2864,6 +2864,9 @@ Public Class Wave
                 'assign series to new axis
                 series.VertAxis = Steema.TeeChart.Styles.VerticalAxis.Custom
                 series.CustomVertAxis = axis
+
+                'update axis dialog
+                Call Me.updateAxisDialog()
             End If
         End If
 
