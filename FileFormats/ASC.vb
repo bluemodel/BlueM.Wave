@@ -93,7 +93,7 @@ Public Class ASC
 
         'Datei öffnen
         Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
-        Dim StrRead As StreamReader = New StreamReader(FiStr, System.Text.Encoding.GetEncoding("iso8859-1"))
+        Dim StrRead As StreamReader = New StreamReader(FiStr, Me.Encoding)
         Dim StrReadSync As TextReader = TextReader.Synchronized(StrRead)
 
         'Spaltenüberschriften
@@ -152,7 +152,7 @@ Public Class ASC
         Dim dt As TimeSpan
 
         Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
-        Dim StrRead As StreamReader = New StreamReader(FiStr, System.Text.Encoding.GetEncoding("iso8859-1"))
+        Dim StrRead As StreamReader = New StreamReader(FiStr, Me.Encoding)
         Dim StrReadSync = TextReader.Synchronized(StrRead)
 
         dt = New TimeSpan(0, 5, 0)

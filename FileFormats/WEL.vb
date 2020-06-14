@@ -129,7 +129,7 @@ Public Class WEL
         Try
             'Datei öffnen
             Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
-            Dim StrRead As StreamReader = New StreamReader(FiStr, System.Text.Encoding.GetEncoding("iso8859-1"))
+            Dim StrRead As StreamReader = New StreamReader(FiStr, Me.Encoding)
             Dim StrReadSync As TextReader = TextReader.Synchronized(StrRead)
 
             'Spaltenüberschriften auslesen
@@ -208,7 +208,7 @@ Public Class WEL
         Dim ts As TimeSeries
 
         Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
-        Dim StrRead As StreamReader = New StreamReader(FiStr, System.Text.Encoding.GetEncoding("iso8859-1"))
+        Dim StrRead As StreamReader = New StreamReader(FiStr, Me.Encoding)
         Dim StrReadSync = TextReader.Synchronized(StrRead)
 
         'Zeitreihen instanzieren
@@ -290,7 +290,7 @@ Public Class WEL
 
         'check the file format
         FiStr = New FileStream(file, FileMode.Open, IO.FileAccess.Read)
-        StrRead = New StreamReader(FiStr, System.Text.Encoding.GetEncoding("iso8859-1"))
+        StrRead = New StreamReader(FiStr, detectEncodingFromByteOrderMarks:=True)
 
         'read only the first line
         Zeile = StrRead.ReadLine.ToString()

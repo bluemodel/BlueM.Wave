@@ -87,7 +87,7 @@ Public Class ZRXP
         Try
             'open file
             Dim FiStr As FileStream = New FileStream(file, FileMode.Open, IO.FileAccess.Read)
-            Dim StrRead As StreamReader = New StreamReader(FiStr, System.Text.Encoding.GetEncoding("iso8859-1"))
+            Dim StrRead As StreamReader = New StreamReader(FiStr, detectEncodingFromByteOrderMarks:=True)
             Dim StrReadSync = TextReader.Synchronized(StrRead)
 
             line = StrReadSync.ReadLine.ToString()
@@ -132,7 +132,7 @@ Public Class ZRXP
         Try
             'open file
             Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
-            Dim StrRead As StreamReader = New StreamReader(FiStr, System.Text.Encoding.GetEncoding("iso8859-1"))
+            Dim StrRead As StreamReader = New StreamReader(FiStr, Me.Encoding)
             Dim StrReadSync = TextReader.Synchronized(StrRead)
 
             i = 0
@@ -208,7 +208,7 @@ Public Class ZRXP
 
             'open file
             Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
-            Dim StrRead As StreamReader = New StreamReader(FiStr, System.Text.Encoding.GetEncoding("iso8859-1"))
+            Dim StrRead As StreamReader = New StreamReader(FiStr, Me.Encoding)
             Dim StrReadSync = TextReader.Synchronized(StrRead)
 
             'read file
@@ -321,7 +321,7 @@ Public Class ZRXP
         'ensure that all required metadata keys are present
         ts.Metadata.AddKeys(ZRXP.MetadataKeys)
 
-        strwrite = New StreamWriter(file, False, System.Text.Encoding.GetEncoding("iso8859-1"))
+        strwrite = New StreamWriter(file, False, Helpers.DefaultEncoding)
 
         '1st line: ZRXP version number, mode, creation tool and timezone
         strwrite.WriteLine(String.Format("#ZRXPVERSION{0}|*|ZRXPMODE{1}|*|ZRXPCREATOR{2}|*|TZ{3}|*|", _

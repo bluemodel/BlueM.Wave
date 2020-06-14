@@ -134,7 +134,7 @@ Public Class HystemExtran_REG
         Try
             'Datei öffnen
             Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
-            Dim StrRead As StreamReader = New StreamReader(FiStr, System.Text.Encoding.GetEncoding("iso8859-1"))
+            Dim StrRead As StreamReader = New StreamReader(FiStr, Me.Encoding)
             Dim StrReadSync = TextReader.Synchronized(StrRead)
 
             sInfo = New SeriesInfo()
@@ -181,7 +181,7 @@ Public Class HystemExtran_REG
         Dim ts As TimeSeries
 
         Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
-        Dim StrRead As StreamReader = New StreamReader(FiStr, System.Text.Encoding.GetEncoding("iso8859-1"))
+        Dim StrRead As StreamReader = New StreamReader(FiStr, Me.Encoding)
         Dim StrReadSync = TextReader.Synchronized(StrRead)
 
         'Zeitreihe instanzieren (nur eine)
@@ -307,7 +307,7 @@ Public Class HystemExtran_REG
     Public Shared Function verifyFormat(ByVal file As String) As Boolean
 
         Dim FiStr As FileStream = New FileStream(file, FileMode.Open, IO.FileAccess.Read)
-        Dim StrRead As StreamReader = New StreamReader(FiStr, System.Text.Encoding.GetEncoding("iso8859-1"))
+        Dim StrRead As StreamReader = New StreamReader(FiStr, detectEncodingFromByteOrderMarks:=True)
         Dim Zeile As String = ""
 
         '1 Zeile einlesen

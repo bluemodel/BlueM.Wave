@@ -4,6 +4,10 @@ BlueM.Wave Release Notes
 Version 1.8.0
 -------------
 NEW:
+* Added support for different file encodings:
+  * Default encoding for reading and writing files is taken from the operating system (usually ISO-8859-1)
+  * File encoding is autodetected from byte order marks when the Import dialog is shown
+  * The encoding to use for reading can be set in the Import dialog
 * Added a button and dialog for managing axes
 * The title, interpretation and unit of time series are now editable in the Properties dialog
 * Added a menu item for opening the release notes
@@ -32,13 +36,13 @@ API-CHANGES:
 * TimeSeries instances now each have a unique Id within the session
 * New method TimeSeries.ChangeTimestep()
 * The following changes have been made to public methods and properties of FileFormatBase (which are inherited by all file formats):
- * Replaced TimeSeries (array) with FileTimeSeries (dictionary)
- * Replaced structure ColumnInfo with SeriesInfo (with slightly different properties)
- * Replaced Columns (array) with SeriesList (list of SeriesInfo objects)
- * Replaced selectedColumns (array) with SelectedSeries (list of SeriesInfo objects)
- * Renamed selectAllColumns() to selectAllSeries()
- * Renamed Read_Columns() to readSeriesInfo()
- * Renamed Read_File to readFile()
+  * Replaced TimeSeries (array) with FileTimeSeries (dictionary)
+  * Replaced structure ColumnInfo with SeriesInfo (with slightly different properties)
+  * Replaced Columns (array) with SeriesList (list of SeriesInfo objects)
+  * Replaced selectedColumns (array) with SelectedSeries (list of SeriesInfo objects)
+  * Renamed selectAllColumns() to selectAllSeries()
+  * Renamed Read_Columns() to readSeriesInfo()
+  * Renamed Read_File to readFile()
 
 Version 1.7.1
 -------------

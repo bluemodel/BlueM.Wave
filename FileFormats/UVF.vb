@@ -95,7 +95,7 @@ Public Class UVF
         Try
             'Datei öffnen
             Dim FiStr As FileStream = New FileStream(file, FileMode.Open, IO.FileAccess.Read)
-            Dim StrRead As StreamReader = New StreamReader(FiStr, System.Text.Encoding.GetEncoding("iso8859-1"))
+            Dim StrRead As StreamReader = New StreamReader(FiStr, detectEncodingFromByteOrderMarks:=True)
             Dim StrReadSync = TextReader.Synchronized(StrRead)
 
             Do
@@ -143,7 +143,7 @@ Public Class UVF
         Try
             'Datei öffnen
             Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
-            Dim StrRead As StreamReader = New StreamReader(FiStr, System.Text.Encoding.GetEncoding("iso8859-1"))
+            Dim StrRead As StreamReader = New StreamReader(FiStr, Me.Encoding)
             Dim StrReadSync = TextReader.Synchronized(StrRead)
 
             Do
@@ -251,7 +251,7 @@ Public Class UVF
 
             'Datei öffnen
             Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
-            Dim StrRead As StreamReader = New StreamReader(FiStr, System.Text.Encoding.GetEncoding("iso8859-1"))
+            Dim StrRead As StreamReader = New StreamReader(FiStr, Me.Encoding)
             Dim StrReadSync = TextReader.Synchronized(StrRead)
 
             'Einlesen
@@ -365,7 +365,7 @@ Public Class UVF
         'ensure that all required metadata keys are present
         ts.Metadata.AddKeys(UVF.MetadataKeys)
 
-        strwrite = New StreamWriter(file, False, System.Text.Encoding.GetEncoding("iso8859-1"))
+        strwrite = New StreamWriter(file, False, Helpers.DefaultEncoding)
 
         '1st line
         strwrite.WriteLine("*Z")

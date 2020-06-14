@@ -60,6 +60,8 @@ Partial Class ImportDiag
         Me.Label_Dateformat = New System.Windows.Forms.Label()
         Me.ComboBox_Dateformat = New System.Windows.Forms.ComboBox()
         Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
+        Me.ComboBox_Encoding = New System.Windows.Forms.ComboBox()
+        Me.Label1 = New System.Windows.Forms.Label()
         SplitContainer1 = New System.Windows.Forms.SplitContainer()
         SplitContainer1.Panel1.SuspendLayout()
         SplitContainer1.Panel2.SuspendLayout()
@@ -170,7 +172,9 @@ Partial Class ImportDiag
         Me.GroupBox_Preview.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.GroupBox_Preview.Controls.Add(Me.ComboBox_Encoding)
         Me.GroupBox_Preview.Controls.Add(Me.Label_File)
+        Me.GroupBox_Preview.Controls.Add(Me.Label1)
         Me.GroupBox_Preview.Controls.Add(Me.TextBox_Preview)
         Me.GroupBox_Preview.Location = New System.Drawing.Point(0, 0)
         Me.GroupBox_Preview.Margin = New System.Windows.Forms.Padding(0)
@@ -199,7 +203,7 @@ Partial Class ImportDiag
         Me.TextBox_Preview.Location = New System.Drawing.Point(12, 43)
         Me.TextBox_Preview.Name = "TextBox_Preview"
         Me.TextBox_Preview.ReadOnly = True
-        Me.TextBox_Preview.Size = New System.Drawing.Size(332, 166)
+        Me.TextBox_Preview.Size = New System.Drawing.Size(332, 142)
         Me.TextBox_Preview.TabIndex = 1
         Me.TextBox_Preview.Text = ""
         Me.TextBox_Preview.WordWrap = False
@@ -477,6 +481,27 @@ Partial Class ImportDiag
         Me.ComboBox_Dateformat.Size = New System.Drawing.Size(139, 21)
         Me.ComboBox_Dateformat.TabIndex = 1
         '
+        'ComboBox_Encoding
+        '
+        Me.ComboBox_Encoding.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.ComboBox_Encoding.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.ComboBox_Encoding.FormattingEnabled = True
+        Me.ComboBox_Encoding.Location = New System.Drawing.Point(70, 193)
+        Me.ComboBox_Encoding.Name = "ComboBox_Encoding"
+        Me.ComboBox_Encoding.Size = New System.Drawing.Size(126, 21)
+        Me.ComboBox_Encoding.TabIndex = 2
+        '
+        'Label1
+        '
+        Me.Label1.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.Label1.AutoSize = True
+        Me.Label1.Location = New System.Drawing.Point(9, 196)
+        Me.Label1.Name = "Label1"
+        Me.Label1.Size = New System.Drawing.Size(55, 13)
+        Me.Label1.TabIndex = 1
+        Me.Label1.Text = "Encoding:"
+        '
         'ImportDiag
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -560,4 +585,6 @@ Partial Class ImportDiag
     Friend WithEvents Label_Dateformat As System.Windows.Forms.Label
     Friend WithEvents PictureBox_DateFormatHelp As System.Windows.Forms.PictureBox
     Friend WithEvents ToolTip1 As System.Windows.Forms.ToolTip
+    Friend WithEvents ComboBox_Encoding As ComboBox
+    Friend WithEvents Label1 As Label
 End Class

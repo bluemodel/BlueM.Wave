@@ -137,7 +137,7 @@ Public Class HYDRO_AS_2D
         Try
             'Datei öffnen
             Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
-            Dim StrRead As StreamReader = New StreamReader(FiStr, System.Text.Encoding.GetEncoding("iso8859-1"))
+            Dim StrRead As StreamReader = New StreamReader(FiStr, Me.Encoding)
             Dim StrReadSync = TextReader.Synchronized(StrRead)
 
             'Determine HYDRO_AS-2D version for Q_Strg.dat
@@ -153,7 +153,7 @@ Public Class HYDRO_AS_2D
                 End If
                 'return to beginning of file
                 FiStr.Seek(0, SeekOrigin.Begin)
-                StrRead = New StreamReader(FiStr, System.Text.Encoding.GetEncoding("iso8859-1"))
+                StrRead = New StreamReader(FiStr, Me.Encoding)
                 StrReadSync = TextReader.Synchronized(StrRead)
             End If
 
@@ -267,7 +267,7 @@ Public Class HYDRO_AS_2D
 
             'Datei öffnen
             Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
-            Dim StrRead As StreamReader = New StreamReader(FiStr, System.Text.Encoding.GetEncoding("iso8859-1"))
+            Dim StrRead As StreamReader = New StreamReader(FiStr, Me.Encoding)
             Dim StrReadSync = TextReader.Synchronized(StrRead)
 
             'Einlesen

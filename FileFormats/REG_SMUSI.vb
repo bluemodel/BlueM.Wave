@@ -100,7 +100,7 @@ Public Class REG_SMUSI
         Try
             'Datei öffnen
             Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
-            Dim StrRead As StreamReader = New StreamReader(FiStr, System.Text.Encoding.GetEncoding("iso8859-1"))
+            Dim StrRead As StreamReader = New StreamReader(FiStr, Me.Encoding)
             Dim StrReadSync = TextReader.Synchronized(StrRead)
 
             'Reihentitel aus 1. Zeile nehmen.
@@ -143,7 +143,7 @@ Public Class REG_SMUSI
         Dim ts As TimeSeries
 
         Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
-        Dim StrRead As StreamReader = New StreamReader(FiStr, System.Text.Encoding.GetEncoding("iso8859-1"))
+        Dim StrRead As StreamReader = New StreamReader(FiStr, Me.Encoding)
         Dim StrReadSync = TextReader.Synchronized(StrRead)
 
         'Zeitreihe instanzieren (bei REG gibt es nur eine Zeitreihe)
@@ -273,7 +273,7 @@ Public Class REG_SMUSI
         Reihe.Cut(export_start, export_end)
 
         'Wertezeilen schreiben
-        strwrite = New StreamWriter(File)
+        strwrite = New StreamWriter(File, append:=False, Helpers.DefaultEncoding)
         Summe = 0 'Summe für die spätere Berechnung der Jahresniederschlagshöhe
         n = 0
         Do While n < Reihe.Length
@@ -291,7 +291,7 @@ Public Class REG_SMUSI
 
         'Header anpassen (Summe und Betrachungszeitraum)
         FiStr = New FileStream(File, FileMode.Open, IO.FileAccess.Read)
-        StrRead = New StreamReader(FiStr, System.Text.Encoding.GetEncoding("iso8859-1"))
+        StrRead = New StreamReader(FiStr, Helpers.DefaultEncoding)
 
         'Mittlere Jahresniederschlagshöhe berechnen
         Spanne = Reihe.EndDate - Reihe.StartDate
@@ -323,7 +323,7 @@ Public Class REG_SMUSI
     Public Shared Function verifyFormat(ByVal file As String) As Boolean
 
         Dim FiStr As FileStream = New FileStream(file, FileMode.Open, IO.FileAccess.Read)
-        Dim StrRead As StreamReader = New StreamReader(FiStr, System.Text.Encoding.GetEncoding("iso8859-1"))
+        Dim StrRead As StreamReader = New StreamReader(FiStr, detectEncodingFromByteOrderMarks:=True)
         Dim Zeile As String = ""
 
         '2 Zeilen einlesen

@@ -83,6 +83,19 @@ Friend Class ImportDiag
         End Set
     End Property
 
+    ''' <summary>
+    ''' Gets and sets the selected Encoding
+    ''' </summary>
+    ''' <returns></returns>
+    Private Property selectedEncoding As System.Text.Encoding
+        Get
+            Return CType(Me.ComboBox_Encoding.SelectedItem, System.Text.EncodingInfo).GetEncoding()
+        End Get
+        Set(value As System.Text.Encoding)
+            Me.ComboBox_Encoding.SelectedValue = value.CodePage
+        End Set
+    End Property
+
 #End Region
 
 #Region "Methoden"
@@ -129,7 +142,19 @@ Friend Class ImportDiag
         Next
         Me.ComboBox_Dateformat.SelectedIndex = 0
 
+        'Combobox encoding
+        Me.ComboBox_Encoding.DataSource = System.Text.Encoding.GetEncodings()
+        Me.ComboBox_Encoding.DisplayMember = "Name"
+        Me.ComboBox_Encoding.ValueMember = "CodePage"
+
+        'Autodetect file encoding and set that as initial selection
+        Dim strreader As New StreamReader(Me.datei.File, detectEncodingFromByteOrderMarks:=True)
+        strreader.ReadLine()
+        Me.ComboBox_Encoding.SelectedValue = strreader.CurrentEncoding.CodePage
+        strreader.Close()
+
         'Versuchen, die Spalten auszulesen (mit Standardeinstellungen)
+        Me.datei.Encoding = Me.selectedEncoding
         Call Me.datei.readSeriesInfo()
 
         'Anzeige aktualisieren
@@ -152,7 +177,7 @@ Friend Class ImportDiag
         Dim line, text As String
 
         'Dateiname anzeigen
-        Me.Label_File.Text &= " " & Path.GetFileName(Me.datei.File)
+        Me.Label_File.Text = "File: " & Path.GetFileName(Me.datei.File)
 
         'Workaround for binary files (SWMM5 OUT and SYDRO SQLite)
         If TypeOf Me.datei Is SWMM_OUT _
@@ -170,7 +195,7 @@ Friend Class ImportDiag
 
         'Vorschau anzeigen
         Dim fs As New FileStream(Me.datei.File, FileMode.Open, FileAccess.Read)
-        Dim StrRead As New StreamReader(fs, System.Text.Encoding.GetEncoding("iso8859-1"))
+        Dim StrRead As New StreamReader(fs, Me.selectedEncoding)
 
         text = ""
 
@@ -220,7 +245,18 @@ Friend Class ImportDiag
     'Benutzereingabe verarbeiten
     '***************************
     Private Sub inputChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles _
-        NumericUpDown_LineTitles.TextChanged, NumericUpDown_LineUnits.TextChanged, NumericUpDown_LineData.TextChanged, CheckBox_Units.CheckedChanged, ComboBox_DecimalSeparator.SelectedIndexChanged, RadioButton_CharSeparated.CheckedChanged, ComboBox_Separator.SelectedIndexChanged, TextBox_ColumnWidth.TextChanged, NumericUpDown_ColumnDateTime.ValueChanged, ComboBox_Dateformat.SelectedIndexChanged, ComboBox_Dateformat.LostFocus
+        NumericUpDown_LineTitles.TextChanged,
+        NumericUpDown_LineUnits.TextChanged,
+        NumericUpDown_LineData.TextChanged,
+        CheckBox_Units.CheckedChanged,
+        ComboBox_DecimalSeparator.SelectedIndexChanged,
+        RadioButton_CharSeparated.CheckedChanged,
+        ComboBox_Separator.SelectedIndexChanged,
+        TextBox_ColumnWidth.TextChanged,
+        NumericUpDown_ColumnDateTime.ValueChanged,
+        ComboBox_Dateformat.SelectedIndexChanged,
+        ComboBox_Dateformat.LostFocus,
+        ComboBox_Encoding.SelectedIndexChanged
 
         If (Me.IsInitializing = True) Then
             Exit Sub
@@ -268,6 +304,9 @@ Friend Class ImportDiag
 
                 'Datum
                 Me.datei.DateTimeColumnIndex = Me.NumericUpDown_ColumnDateTime.Value - 1 'Immer eins weniger wie du ! 
+
+                'Encoding
+                Me.datei.Encoding = Me.selectedEncoding
 
                 'Spalten neu auslesen
                 Call Me.datei.readSeriesInfo()
@@ -357,6 +396,9 @@ Friend Class ImportDiag
                 End If
             Next
         Next
+
+        'refresh preview
+        Call Me.VorschauAnzeigen()
 
     End Sub
 
