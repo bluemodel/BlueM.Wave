@@ -117,6 +117,9 @@ Public Class Wave
         If IsNothing(propDialog) Then
             propDialog = New PropertiesDialog()
         End If
+        If IsNothing(axisDialog) Then
+            axisDialog = New AxisDialog()
+        End If
 
         'Log (Singleton) Instanz holen
         Me.myLog = Log.getInstance()
@@ -671,6 +674,10 @@ Public Class Wave
         Call Log.ClearLog()
         Call Wave.MyLogWindow.Hide()
 
+        'Update dialogs
+        Call Me.updateAxisDialog()
+        Call propDialog.Update(Me.TimeSeriesDict.Values.ToList)
+
     End Sub
 
     'Serie(n) importieren
@@ -882,12 +889,19 @@ Public Class Wave
     End Sub
 
     ''' <summary>
-    ''' Show AxisDialog
+    ''' Show AxisDialog button clicked
     ''' </summary>
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
     Private Sub ToolStripButton_AxisDialog_Click(sender As Object, e As EventArgs) Handles ToolStripButton_AxisDialog.Click
+        Call Me.updateAxisDialog()
+        Me.axisDialog.Show()
+    End Sub
 
+    ''' <summary>
+    ''' Update AxisDialog
+    ''' </summary>
+    Private Sub updateAxisDialog()
         'Wrap Left, Right and Custom axes
         Dim axisList As New List(Of AxisWrapper)
         axisList.Add(New AxisWrapper("Left", Me.TChart1.Axes.Left))
@@ -896,8 +910,7 @@ Public Class Wave
             axisList.Add(New AxisWrapper("Custom " & i, Me.TChart1.Axes.Custom(i)))
         Next
 
-        Me.axisDialog = New AxisDialog(axisList)
-        Me.axisDialog.Show()
+        Me.axisDialog.Update(axisList)
     End Sub
 
     ''' <summary>
@@ -2390,6 +2403,8 @@ Public Class Wave
             Call Log.AddLogEntry("Error while loading:" & eol & ex.Message)
         End Try
 
+        'Update AxisDialog
+        Call Me.updateAxisDialog()
     End Sub
 
     ''' <summary>
@@ -2756,6 +2771,7 @@ Public Class Wave
 
         Call Me.viewportChanged()
 
+        Call Me.updateAxisDialog()
     End Sub
 
     ''' <summary>

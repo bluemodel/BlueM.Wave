@@ -29,28 +29,13 @@ Imports System.Windows.Forms
 
 Public Class AxisDialog
 
-    Private isInitializing As Boolean
-
     ''' <summary>
     ''' Is raised when an axis unit is changed by the user
     ''' </summary>
     Friend Event AxisUnitChanged()
 
-    Public Sub New(ByRef axisList As List(Of AxisWrapper))
-
-        ' This call is required by the Windows Form Designer.
-        InitializeComponent()
-        ' Add any initialization after the InitializeComponent() call.
-
-        Me.isInitializing = True
-
-        'add the time series to the binding source
-        Me.AxisWrapperBindingSource.Clear()
-        For Each axis_ As AxisWrapper In axisList
-            Me.AxisWrapperBindingSource.Add(axis_)
-        Next
-
-        Me.isInitializing = False
+    Public Overloads Sub Update(ByRef axisList As List(Of AxisWrapper))
+        Me.AxisWrapperBindingSource.DataSource = axisList
     End Sub
 
     ''' <summary>
@@ -60,7 +45,7 @@ Public Class AxisDialog
     ''' <param name="e"></param>
     Private Sub DataGridView1_CellValueChanged(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridView1.CellValueChanged
 
-        If Me.isInitializing Or e.RowIndex = -1 Then
+        If e.RowIndex = -1 Then
             Exit Sub
         End If
 
@@ -70,4 +55,9 @@ Public Class AxisDialog
 
     End Sub
 
+    Private Sub PropertiesDialog_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
+        'prevent the form from closing and hide it instead
+        e.Cancel = True
+        Call Me.Hide()
+    End Sub
 End Class
