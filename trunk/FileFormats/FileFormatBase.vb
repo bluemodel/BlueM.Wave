@@ -95,6 +95,7 @@ Public MustInherit Class FileFormatBase
     Private _selectedSeries As List(Of SeriesInfo)
     Private _nLinesperTimestamp As Integer = 1
     Private _metadata As Metadata
+    Private _encoding As Text.Encoding
 
     ''' <summary>
     ''' Contains basic information about a series contained in a file
@@ -112,6 +113,20 @@ Public MustInherit Class FileFormatBase
             Return Me.Name
         End Function
     End Structure
+
+    ''' <summary>
+    ''' Encoding to use for reading the file
+    ''' </summary>
+    ''' <remarks>Defaults to the system default (usually ISO-8859-1)</remarks>
+    ''' <returns></returns>
+    Public Property Encoding As Text.Encoding
+        Get
+            Return Me._encoding
+        End Get
+        Set(value As Text.Encoding)
+            Me._encoding = value
+        End Set
+    End Property
 
     ''' <summary>
     ''' File metadata
@@ -409,6 +424,9 @@ Public MustInherit Class FileFormatBase
 
         'Store the filepath
         Me.File = FileName
+
+        'set default properties
+        Me.Encoding = Helpers.DefaultEncoding
 
     End Sub
 

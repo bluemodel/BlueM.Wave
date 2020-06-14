@@ -134,7 +134,7 @@ Public Class SWMM_TXT
         Try
             'Datei öffnen
             Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
-            Dim StrRead As StreamReader = New StreamReader(FiStr, System.Text.Encoding.GetEncoding("iso8859-1"))
+            Dim StrRead As StreamReader = New StreamReader(FiStr, Me.Encoding)
             Dim StrReadSync As TextReader = TextReader.Synchronized(StrRead)
 
             'Zeile mit Reporting Time Step finden
@@ -225,7 +225,7 @@ Public Class SWMM_TXT
         Dim ts As TimeSeries
 
         Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
-        Dim StrRead As StreamReader = New StreamReader(FiStr, System.Text.Encoding.GetEncoding("iso8859-1"))
+        Dim StrRead As StreamReader = New StreamReader(FiStr, Me.Encoding)
         Dim StrReadSync = TextReader.Synchronized(StrRead)
 
         'Zeitreihen instanzieren
@@ -320,7 +320,7 @@ Public Class SWMM_TXT
         'S101          2001 6   10  0   0   0          0.000
 
 
-        strwrite = New StreamWriter(File, False, System.Text.Encoding.GetEncoding("iso8859-1"))
+        strwrite = New StreamWriter(File, False, Helpers.DefaultEncoding)
 
         Dim dt As Integer
         'Zeitintervall aus ersten und zweiten Zeitschritt der Reihe ermitteln
@@ -424,7 +424,7 @@ Public Class SWMM_TXT
     Public Shared Function verifyFormat(ByVal file As String) As Boolean
 
         Dim FiStr As FileStream = New FileStream(file, FileMode.Open, IO.FileAccess.Read)
-        Dim StrRead As StreamReader = New StreamReader(FiStr, System.Text.Encoding.GetEncoding("iso8859-1"))
+        Dim StrRead As StreamReader = New StreamReader(FiStr, detectEncodingFromByteOrderMarks:=True)
         Dim Zeile As String = ""
 
         '1. Zeile einlesen

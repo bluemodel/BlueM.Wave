@@ -56,6 +56,15 @@ Public Module Helpers
     End Property
 
     ''' <summary>
+    ''' Default Encoding (as set by the operating system, usually ISO-8859-1)
+    ''' </summary>
+    Public ReadOnly Property DefaultEncoding As Text.Encoding
+        Get
+            Return Text.Encoding.Default
+        End Get
+    End Property
+
+    ''' <summary>
     ''' Date formats
     ''' </summary>
     ''' <returns>Dictionary of available DateFormats</returns>

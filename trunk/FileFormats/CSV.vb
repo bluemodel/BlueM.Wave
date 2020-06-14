@@ -69,7 +69,7 @@ Public Class CSV
         Try
             'Datei öffnen
             Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
-            Dim StrRead As StreamReader = New StreamReader(FiStr, System.Text.Encoding.GetEncoding("iso8859-1"))
+            Dim StrRead As StreamReader = New StreamReader(FiStr, Me.Encoding)
             Dim StrReadSync = TextReader.Synchronized(StrRead)
 
             'Spaltenüberschriften auslesen
@@ -145,7 +145,7 @@ Public Class CSV
         Try
 
             Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
-            Dim StrRead As StreamReader = New StreamReader(FiStr, System.Text.Encoding.GetEncoding("iso8859-1"))
+            Dim StrRead As StreamReader = New StreamReader(FiStr, Me.Encoding)
             Dim StrReadSync = TextReader.Synchronized(StrRead)
 
             'Zeitreihen instanzieren
@@ -258,7 +258,7 @@ Public Class CSV
         Next
 
         'write the file
-        strwrite = New StreamWriter(file, False, System.Text.Encoding.GetEncoding("iso8859-1"))
+        strwrite = New StreamWriter(file, False, Helpers.DefaultEncoding)
 
         '1st line: headings
         line = "datetime"

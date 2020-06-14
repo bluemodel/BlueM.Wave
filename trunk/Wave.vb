@@ -736,7 +736,7 @@ Public Class Wave
 
             'write the project file
             Dim fs As New FileStream(projectfile, FileMode.Create, FileAccess.Write)
-            Dim strwrite As New StreamWriter(fs, System.Text.Encoding.GetEncoding("iso8859-1"))
+            Dim strwrite As New StreamWriter(fs, Helpers.DefaultEncoding)
 
             strwrite.WriteLine("# Wave project file")
 
@@ -2070,7 +2070,7 @@ Public Class Wave
             ' series=series4
             '
             fstr = New FileStream(projectfile, FileMode.Open)
-            strRead = New StreamReader(fstr, True)
+            strRead = New StreamReader(fstr, detectEncodingFromByteOrderMarks:=True)
 
             path = ""
 

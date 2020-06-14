@@ -75,7 +75,7 @@ Public Class PRMS
 
         'Open the file to determine the file format
         Dim FiStr As FileStream = New FileStream(File, FileMode.Open, IO.FileAccess.Read)
-        Dim StrRead As StreamReader = New StreamReader(FiStr, System.Text.Encoding.GetEncoding("iso8859-1"))
+        Dim StrRead As StreamReader = New StreamReader(FiStr, Me.Encoding)
         Dim StrReadSync = TextReader.Synchronized(StrRead)
 
         i = 0
@@ -128,7 +128,7 @@ Public Class PRMS
         Try
             'Open the file
             Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
-            Dim StrRead As StreamReader = New StreamReader(FiStr, System.Text.Encoding.GetEncoding("iso8859-1"))
+            Dim StrRead As StreamReader = New StreamReader(FiStr, Me.Encoding)
             Dim StrReadSync = TextReader.Synchronized(StrRead)
 
             lines = New Dictionary(Of Integer, String)
@@ -215,7 +215,7 @@ Public Class PRMS
         Try
 
             Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
-            Dim StrRead As StreamReader = New StreamReader(FiStr, System.Text.Encoding.GetEncoding("iso8859-1"))
+            Dim StrRead As StreamReader = New StreamReader(FiStr, Me.Encoding)
             Dim StrReadSync = TextReader.Synchronized(StrRead)
 
             'Instantiate time series
@@ -283,7 +283,7 @@ Public Class PRMS
         Try
             'Open the file
             Dim FiStr As FileStream = New FileStream(file, FileMode.Open, IO.FileAccess.Read)
-            Dim StrRead As StreamReader = New StreamReader(FiStr, System.Text.Encoding.GetEncoding("iso8859-1"))
+            Dim StrRead As StreamReader = New StreamReader(FiStr, detectEncodingFromByteOrderMarks:=True)
             Dim StrReadSync = TextReader.Synchronized(StrRead)
 
             i = 0

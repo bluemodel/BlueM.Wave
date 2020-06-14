@@ -82,7 +82,7 @@ Public Class ZRE
         Try
             'Datei öffnen
             Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
-            Dim StrRead As StreamReader = New StreamReader(FiStr, System.Text.Encoding.GetEncoding("iso8859-1"))
+            Dim StrRead As StreamReader = New StreamReader(FiStr, Me.Encoding)
             Dim StrReadSync = TextReader.Synchronized(StrRead)
 
             'Reihentitel steht in 2. Zeile:
@@ -120,7 +120,7 @@ Public Class ZRE
         Dim sInfo As SeriesInfo
 
         Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
-        Dim StrRead As StreamReader = New StreamReader(FiStr, System.Text.Encoding.GetEncoding("iso8859-1"))
+        Dim StrRead As StreamReader = New StreamReader(FiStr, Me.Encoding)
         Dim StrReadSync = TextReader.Synchronized(StrRead)
 
         'Zeitreihe instanzieren (nur eine)
@@ -178,7 +178,7 @@ Public Class ZRE
         Dim strwrite As StreamWriter
         Dim i As Integer
 
-        strwrite = New StreamWriter(File, False, System.Text.Encoding.GetEncoding("iso8859-1"))
+        strwrite = New StreamWriter(File, False, Helpers.DefaultEncoding)
 
         '1. Zeile
         strwrite.WriteLine("*ZRE")
