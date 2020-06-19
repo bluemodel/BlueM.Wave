@@ -2770,8 +2770,6 @@ Public Class Wave
         Call Me.UpdateChartExtents()
 
         Call Me.viewportChanged()
-
-        Call Me.updateAxisDialog()
     End Sub
 
     ''' <summary>
@@ -2870,6 +2868,23 @@ Public Class Wave
             End If
         End If
 
+    End Sub
+
+    ''' <summary>
+    ''' Handles axis deleted in the AxisDialog
+    ''' </summary>
+    ''' <param name="axisname"></param>
+    Private Sub axisDeleted(ByVal axisname As String) Handles axisDialog.AxisDeleted
+        Dim axisnumber As Integer
+        Dim m As Match = Regex.Match(axisname, "Custom (\d+)")
+        If m.Success Then
+            axisnumber = Integer.Parse(m.Groups(1).Value)
+            'Delete axis from chart
+            Me.TChart1.Axes.Custom(axisnumber).Dispose()
+            Me.TChart1.Refresh()
+            'update axis dialog
+            Call Me.updateAxisDialog()
+        End If
     End Sub
 
     ''' <summary>

@@ -34,6 +34,12 @@ Public Class AxisDialog
     ''' </summary>
     Friend Event AxisUnitChanged()
 
+    ''' <summary>
+    ''' Is raised when an axis is deleted by the user
+    ''' </summary>
+    ''' <param name="axisname"></param>
+    Friend Event AxisDeleted(ByVal axisname As String)
+
     Public Overloads Sub Update(ByRef axisList As List(Of AxisWrapper))
         Me.AxisWrapperBindingSource.DataSource = axisList
     End Sub
@@ -55,9 +61,34 @@ Public Class AxisDialog
 
     End Sub
 
+    ''' <summary>
+    ''' Handles user trying to delete a row
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    Private Sub DataGridView1_UserDeletingRow(sender As Object, e As DataGridViewRowCancelEventArgs) Handles DataGridView1.UserDeletingRow
+
+        Dim axisname As String
+
+        'cancel row deletion because datagridview will be refreshed from outside
+        'otherwise, two rows end up being deleted
+        e.Cancel = True
+
+        axisname = CType(e.Row.DataBoundItem, AxisWrapper).Name
+        If axisname = "Left" Or axisname = "Right" Then
+            MsgBox("Left and Right axes cannot be deleted.", MsgBoxStyle.Information)
+            Return
+        Else
+            If MsgBox("Delete axis " & axisname & "?", MsgBoxStyle.OkCancel) = MsgBoxResult.Ok Then
+                RaiseEvent AxisDeleted(axisname)
+            End If
+        End If
+    End Sub
+
     Private Sub PropertiesDialog_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
         'prevent the form from closing and hide it instead
         e.Cancel = True
         Call Me.Hide()
     End Sub
+
 End Class
