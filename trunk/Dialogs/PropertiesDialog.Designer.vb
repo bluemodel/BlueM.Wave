@@ -26,10 +26,10 @@ Partial Class PropertiesDialog
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(PropertiesDialog))
         Me.DataGridView1 = New System.Windows.Forms.DataGridView()
         Me.Id = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.Interpretation = New System.Windows.Forms.DataGridViewComboBoxColumn()
-        Me.MetadataText = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.TitleDataGridViewTextBoxColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Interpretation = New System.Windows.Forms.DataGridViewComboBoxColumn()
         Me.UnitDataGridViewTextBoxColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.MetadataText = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.LengthDataGridViewTextBoxColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.StartDateDataGridViewTextBoxColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.EndDateDataGridViewTextBoxColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
@@ -48,7 +48,6 @@ Partial Class PropertiesDialog
         'DataGridView1
         '
         Me.DataGridView1.AllowUserToAddRows = False
-        Me.DataGridView1.AllowUserToDeleteRows = False
         Me.DataGridView1.AllowUserToResizeRows = False
         Me.DataGridView1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left) _
@@ -76,23 +75,6 @@ Partial Class PropertiesDialog
         Me.Id.Visible = False
         Me.Id.Width = 41
         '
-        'Interpretation
-        '
-        Me.Interpretation.DataPropertyName = "Interpretation"
-        Me.Interpretation.HeaderText = "Interpretation"
-        Me.Interpretation.Name = "Interpretation"
-        Me.Interpretation.Resizable = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.Interpretation.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic
-        Me.Interpretation.Width = 94
-        '
-        'MetadataText
-        '
-        Me.MetadataText.DataPropertyName = "MetadataText"
-        Me.MetadataText.HeaderText = "Metadata"
-        Me.MetadataText.Name = "MetadataText"
-        Me.MetadataText.ReadOnly = True
-        Me.MetadataText.Width = 77
-        '
         'TitleDataGridViewTextBoxColumn
         '
         Me.TitleDataGridViewTextBoxColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells
@@ -102,12 +84,29 @@ Partial Class PropertiesDialog
         Me.TitleDataGridViewTextBoxColumn.Name = "TitleDataGridViewTextBoxColumn"
         Me.TitleDataGridViewTextBoxColumn.Width = 52
         '
+        'Interpretation
+        '
+        Me.Interpretation.DataPropertyName = "Interpretation"
+        Me.Interpretation.HeaderText = "Interpretation"
+        Me.Interpretation.Name = "Interpretation"
+        Me.Interpretation.Resizable = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.Interpretation.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic
+        Me.Interpretation.Width = 94
+        '
         'UnitDataGridViewTextBoxColumn
         '
         Me.UnitDataGridViewTextBoxColumn.DataPropertyName = "Unit"
         Me.UnitDataGridViewTextBoxColumn.HeaderText = "Unit"
         Me.UnitDataGridViewTextBoxColumn.Name = "UnitDataGridViewTextBoxColumn"
         Me.UnitDataGridViewTextBoxColumn.Width = 51
+        '
+        'MetadataText
+        '
+        Me.MetadataText.DataPropertyName = "MetadataText"
+        Me.MetadataText.HeaderText = "Metadata"
+        Me.MetadataText.Name = "MetadataText"
+        Me.MetadataText.ReadOnly = True
+        Me.MetadataText.Width = 77
         '
         'LengthDataGridViewTextBoxColumn
         '

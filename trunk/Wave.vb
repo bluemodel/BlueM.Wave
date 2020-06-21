@@ -806,11 +806,11 @@ Public Class Wave
                         ids.Add(id)
                     Next
                     For Each id In ids
-                        Call Me.DeleteZeitreihe(id)
+                        Call Me.DeleteTimeSeries(id)
                     Next
                 Else
                     id = CType(cutter.ComboBox_ZeitreiheCut.SelectedItem, TimeSeries).Id
-                    Call Me.DeleteZeitreihe(id)
+                    Call Me.DeleteTimeSeries(id)
                 End If
             End If
 
@@ -2773,32 +2773,34 @@ Public Class Wave
     End Sub
 
     ''' <summary>
-    ''' Löscht eine Zeitreihe
+    ''' Delete a TimeSeries
     ''' </summary>
-    ''' <param name="id">Id der Zeitreihe</param>
-    ''' <remarks>Annahme, dass alle Zeitreihentitel eindeutig sind</remarks>
-    Private Sub DeleteZeitreihe(ByVal id As Integer)
+    ''' <param name="id">TimeSeries Id</param>
+    Private Sub DeleteTimeSeries(ByVal id As Integer) Handles propDialog.SeriesDeleted
 
-        'Aus Diagramm entfernen
+        'Remove from main diagram
         For i As Integer = Me.TChart1.Series.Count - 1 To 0 Step -1
-            If (Me.TChart1.Series.Item(i).Title = Me.TimeSeriesDict(id).Title) Then
+            If (Me.TChart1.Series.Item(i).Tag = id) Then
                 Me.TChart1.Series.RemoveAt(i)
                 Me.TChart1.Refresh()
                 Exit For
             End If
         Next
 
-        'Aus Übersicht entfernen
+        'Remove from overview chart
         For i As Integer = Me.TChart2.Series.Count - 1 To 0 Step -1
-            If (Me.TChart2.Series.Item(i).Title = Me.TimeSeriesDict(id).Title) Then
+            If (Me.TChart2.Series.Item(i).Tag = id) Then
                 Me.TChart2.Series.RemoveAt(i)
                 Me.TChart2.Refresh()
                 Exit For
             End If
         Next
 
-        'Intern entfernen
+        'Delete internally
         Me.TimeSeriesDict.Remove(id)
+
+        'Update PropertiesDialog
+        Me.propDialog.Update(Me.TimeSeriesDict.Values.ToList)
 
     End Sub
 
