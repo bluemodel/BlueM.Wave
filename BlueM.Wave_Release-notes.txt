@@ -9,6 +9,7 @@ NEW:
   * File encoding can be autodetected from byte order marks or manually set in the Import dialog
 * Added a button and dialog for managing axes
 * The title, interpretation and unit of time series are now editable in the Properties dialog
+* Series can now be deleted in the Properties dialog
 * Added a menu item for opening the release notes
 * Added support for reading BW_TMP.DAT files in HYDRO_AS-2D version 5 format (previous versions still supported)
 * Added a button for removing nodes with NaN values from the currently loaded time series

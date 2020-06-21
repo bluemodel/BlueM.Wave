@@ -35,6 +35,12 @@ Friend Class PropertiesDialog
     ''' <param name="id">Id of the time series whose properties were changed</param>
     Friend Event PropertyChanged(id As Integer)
 
+    ''' <summary>
+    ''' Is raised when the user deletes a row/series
+    ''' </summary>
+    ''' <param name="id">Id of the time series that was deleted</param>
+    Friend Event SeriesDeleted(id As Integer)
+
     Public Sub New()
         ' This call is required by the Windows Form Designer.
         InitializeComponent()
@@ -90,9 +96,26 @@ Friend Class PropertiesDialog
 
     End Sub
 
+    ''' <summary>
+    ''' Handles the user deleting a row/series
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    Private Sub DataGridView1_UserDeletingRow(sender As Object, e As DataGridViewRowCancelEventArgs) Handles DataGridView1.UserDeletingRow
+        Dim title As String = CType(e.Row.DataBoundItem, TimeSeries).Title
+        Dim id As Integer = CType(e.Row.DataBoundItem, TimeSeries).Id
+        If MsgBox("Delete series " & title & "?", MsgBoxStyle.OkCancel) = MsgBoxResult.Ok Then
+            RaiseEvent SeriesDeleted(id)
+        End If
+        'cancel row deletion because datagridview will be refreshed from outside
+        'otherwise, two rows end up being deleted
+        e.Cancel = True
+    End Sub
+
     Private Sub PropertiesDialog_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
         'prevent the form from closing and hide it instead
         e.Cancel = True
         Call Me.Hide()
     End Sub
+
 End Class
