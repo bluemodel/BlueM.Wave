@@ -231,8 +231,8 @@ Friend Class GoodnessOfFit
     Public Overrides Sub ProcessAnalysis()
 
         Dim diagresult As DialogResult
-        Dim series_o As New Dictionary(Of Integer, TimeSeries)
-        Dim series_s As New Dictionary(Of Integer, TimeSeries)
+        Dim series_o As New Dictionary(Of String, TimeSeries)
+        Dim series_s As New Dictionary(Of String, TimeSeries)
 
         'Preprocessing
         '=============
