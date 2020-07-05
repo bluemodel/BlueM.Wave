@@ -58,7 +58,6 @@ Partial Class PropertiesDialog
         Me.DataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.DataGridView1.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.Id, Me.TitleDataGridViewTextBoxColumn, Me.Interpretation, Me.UnitDataGridViewTextBoxColumn, Me.MetadataText, Me.LengthDataGridViewTextBoxColumn, Me.StartDateDataGridViewTextBoxColumn, Me.EndDateDataGridViewTextBoxColumn, Me.MinimumDataGridViewTextBoxColumn, Me.MaximumDataGridViewTextBoxColumn, Me.AverageDataGridViewTextBoxColumn, Me.FirstValueDataGridViewTextBoxColumn, Me.LastValueDataGridViewTextBoxColumn, Me.SumDataGridViewTextBoxColumn, Me.VolumeDataGridViewTextBoxColumn})
         Me.DataGridView1.DataSource = Me.TimeSeriesBindingSource
-        Me.DataGridView1.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter
         Me.DataGridView1.Location = New System.Drawing.Point(13, 12)
         Me.DataGridView1.Name = "DataGridView1"
         Me.DataGridView1.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders
