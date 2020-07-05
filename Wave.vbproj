@@ -505,7 +505,6 @@
   <PropertyGroup>
     <PostBuildEvent>copy $(ProjectDir)lib\MathNet\MathNet.Numerics.license.txt $(TargetDir)MathNet.Numerics.license.txt
 copy $(ProjectDir)lib\Ionic.Zip\Ionic.Zip.license.txt $(TargetDir)Ionic.Zip.license.txt
-xcopy $(ProjectDir)lib\SQLite\x86 $(TargetDir)x86 /i /y
-xcopy $(ProjectDir)lib\SQLite\x64 $(TargetDir)x64 /i /y</PostBuildEvent>
+copy $(ProjectDir)lib\SQLite\$(PlatformName)\SQLite.Interop.dll $(TargetDir)SQLite.Interop.dll</PostBuildEvent>
   </PropertyGroup>
 </Project>
