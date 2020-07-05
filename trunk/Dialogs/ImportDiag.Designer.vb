@@ -188,7 +188,7 @@ Partial Class ImportDiag
         '
         'Button_EncodingAutodetect
         '
-        Me.Button_EncodingAutodetect.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Button_EncodingAutodetect.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.Button_EncodingAutodetect.Location = New System.Drawing.Point(194, 191)
         Me.Button_EncodingAutodetect.Name = "Button_EncodingAutodetect"
         Me.Button_EncodingAutodetect.Size = New System.Drawing.Size(75, 23)
@@ -198,8 +198,7 @@ Partial Class ImportDiag
         '
         'ComboBox_Encoding
         '
-        Me.ComboBox_Encoding.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.ComboBox_Encoding.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.ComboBox_Encoding.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.ComboBox_Encoding.FormattingEnabled = True
         Me.ComboBox_Encoding.Location = New System.Drawing.Point(70, 192)
