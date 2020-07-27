@@ -37,6 +37,7 @@ Public Class HystemExtran_REG
     Const DatumsformatHystemExtran As String = "ddMMyyyyHHmmss"
     Const LenString As Integer = 5   'Länge des Strings eines Wertes in der reg/dat-Datei
     Const iDim As Integer = 3        'Dezimalfaktor wird erstmal global auf 3 gesetzt
+    Const fehlWert As String = "-9999" 'Fehlwert / Ausfall
 
 #Region "Eigenschaften"
 
@@ -174,9 +175,11 @@ Public Class HystemExtran_REG
     Public Overrides Sub readFile()
 
         Dim i, j As Integer
-        Dim Zeile As String
+        Dim Zeile, wertString As String
+        Dim kennzeichnung As String
         Dim Stunde, Minute, Tag, Monat, Jahr As Integer
         Dim Datum, Zeilendatum As DateTime
+        Dim wert As Double
         Dim sInfo As SeriesInfo
         Dim ts As TimeSeries
 
@@ -201,6 +204,9 @@ Public Class HystemExtran_REG
 
             If (j > Me.nLinesHeader And Zeile.Length > 0) Then
 
+                'Kennzeichnung lesen
+                kennzeichnung = Zeile.Substring(19, 1)
+
                 'Datum erkennen
                 '--------------
                 Jahr = Zeile.Substring(9, 4)
@@ -212,12 +218,43 @@ Public Class HystemExtran_REG
 
                 'Datum und Wert zur Zeitreihe hinzufügen
                 '---------------------------------------
-                'alle bis auf den letzten Wert einlesen
-                'beim letzten Wert besteht die Möglichkeit, dass nicht alle Zeichen belegt sind
-                For i = 0 To Me.WerteProZeile(Me.Zeitintervall) - 1
-                    Datum = Zeilendatum.AddMinutes(i * Me.Zeitintervall)
-                    ts.AddNode(Datum, StringToDouble(Zeile.Substring(20 + LenString * i, LenString)) * 10 ^ (-DezFaktor))
-                Next
+                Select Case kennzeichnung
+                    Case " ", "S" 'normale Datenzeile oder Datenzeile mit Ausfällen
+                        'alle bis auf den letzten Wert einlesen
+                        'beim letzten Wert besteht die Möglichkeit, dass nicht alle Zeichen belegt sind
+                        For i = 0 To Me.WerteProZeile(Me.Zeitintervall) - 1
+                            Datum = Zeilendatum.AddMinutes(i * Me.Zeitintervall)
+                            wertString = Zeile.Substring(20 + LenString * i, LenString)
+                            If wertString = fehlWert Then
+                                wert = Double.NaN
+                            Else
+                                wert = StringToDouble(wertString) * 10 ^ (-DezFaktor)
+                            End If
+                            ts.AddNode(Datum, wert)
+                        Next
+                    Case "K" 'Konstantsatz
+                        ' nur ein Wert für die gesamte Zeile
+                        wertString = Zeile.Substring(20)
+                        If wertString = fehlWert Then
+                            wert = Double.NaN
+                        Else
+                            wert = StringToDouble(wertString) * 10 ^ (-DezFaktor)
+                        End If
+                        For i = 0 To Me.WerteProZeile(Me.Zeitintervall) - 1
+                            Datum = Zeilendatum.AddMinutes(i * Me.Zeitintervall)
+                            ts.AddNode(Datum, wert)
+                        Next
+                    Case "A" 'Ausfallsatz, keine Daten
+                        wert = Double.NaN
+                        For i = 0 To Me.WerteProZeile(Me.Zeitintervall) - 1
+                            Datum = Zeilendatum.AddMinutes(i * Me.Zeitintervall)
+                            ts.AddNode(Datum, wert)
+                        Next
+                    Case "N" 'Nullsatz, keine Daten
+                        Continue Do
+                    Case Else
+                        Log.AddLogEntry(String.Format("Unrecognized character {0} in line {1} column 20!", kennzeichnung, j))
+                End Select
 
             End If
         Loop Until StrReadSync.Peek() = -1

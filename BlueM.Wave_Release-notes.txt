@@ -23,6 +23,9 @@ CHANGED:
 * Reading and writing SYDRO binary files is now implemented natively
 * When loading PRMS files, the file import dialog is now displayed, allowing for the selection of time series
 FIXED:
+* HYSTEM-EXTRAN-REG-Format: 
+  * Recognize different line types as defined by the character in column 20, 
+  * Recognize -9999 as error values
 * The Properties dialog now auto-updates when series are added or removed
 * Updated SWMM.DllAdapter, now supports the new interface of SWMM OUT files
 * Fixed unintended use of the system's locale settings when exporting files in formats CSV, UVF, ZRXP, SWMM_DAT_MASS and SWMM_DAT_TIME
