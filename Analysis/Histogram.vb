@@ -265,7 +265,7 @@ Friend Class Histogram
             seriePU.Pointer.VertSize = 2
 
             For i As Integer = 0 To Me.n_bins - 1
-                seriePU.Add((Me.breaks(i) + Me.breaks(i + 1)) / 2, res.PU(i), res.PU(i).ToString("F2") & "%")
+                seriePU.Add(Me.breaks(i + 1), res.PU(i), res.PU(i).ToString("F2") & "%")
             Next
 
         Next
