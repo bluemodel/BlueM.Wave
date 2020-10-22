@@ -89,6 +89,9 @@ Public Class CSV
             Dim Namen() As String
             Dim Einheiten() As String
 
+            ReDim Namen(0)
+            ReDim Einheiten(0)
+
             If (Me.IsColumnSeparated) Then
                 'Zeichengetrennt
                 Namen = ZeileSpalten.Split(New Char() {Me.Separator.ToChar})
