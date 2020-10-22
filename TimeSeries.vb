@@ -519,6 +519,9 @@ Public Class TimeSeries
             'trim excess capacity
             Call Me.Nodes.TrimExcess()
 
+            'invalidate NodesCleaned
+            Me._nodesCleaned = Nothing
+
             'Log 
             Call Log.AddLogEntry(Me.Title & ": cut from " & lengthOld.ToString() & " to " & lengthNew.ToString() & " data points.")
 
