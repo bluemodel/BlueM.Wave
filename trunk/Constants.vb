@@ -33,5 +33,9 @@ Module Constants
     Public period As Character = New Character(".")
     Public space As Character = New Character(" ")
     Public tab As Character = New Character(Chr(9))
+    'minimum OADate
+    Public minOADate As New DateTime(100, 1, 1)
+    'maxmimum OADate is supposed to be 9999/12/31 23:59:59 but using that date causes OverflowExceptions from within TeeChart
+    Public maxOADate As New DateTime(9000, 12, 31, 23, 59, 59)
 
 End Module

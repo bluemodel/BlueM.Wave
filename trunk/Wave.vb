@@ -1712,6 +1712,10 @@ Public Class Wave
         xMax = Date.FromOADate(Me.TChart1.Axes.Bottom.Maximum)
 
         'set DateTimePickers
+        If xMin < DateTimePicker.MinimumDateTime Then xMin = DateTimePicker.MinimumDateTime
+        If xMin > DateTimePicker.MaximumDateTime Then xMin = DateTimePicker.MaximumDateTime
+        If xMax < DateTimePicker.MinimumDateTime Then xMax = DateTimePicker.MinimumDateTime
+        If xMax > DateTimePicker.MaximumDateTime Then xMax = DateTimePicker.MaximumDateTime
         Me.DateTimePicker_NavStart.Value = xMin
         Me.DateTimePicker_NavEnd.Value = xMax
 
@@ -2707,8 +2711,20 @@ Public Class Wave
     ''' <param name="zre">the time series</param>
     ''' <remarks>saves and then display the time series</remarks>
     Public Sub Import_Series(ByVal zre As TimeSeries, Optional ByVal Display As Boolean = True)
+
+        'Cut timeseries if necessary
+        If zre.StartDate < Constants.minOADate Then
+            Log.AddLogEntry(String.Format("WARNING: Unable to display timeseries before {0}, cutting!", Constants.minOADate))
+            zre.Cut(Constants.minOADate, zre.EndDate)
+        End If
+        If zre.EndDate > Constants.maxOADate Then
+            Log.AddLogEntry(String.Format("WARNING: Unable to display timeseries after {0}, cutting!", Constants.maxOADate))
+            zre.Cut(zre.StartDate, Constants.maxOADate)
+        End If
+
         'Serie abspeichen
         Me.AddZeitreihe(zre)
+
         If Display Then
             'Serie in Diagrammen anzeigen
             Call Me.Display_Series(zre)
@@ -2744,10 +2760,14 @@ Public Class Wave
             Call Log.AddLogEntry(String.Format("Series '{0}' contains {1} NaN values!", zre.Title, zre.Nodes.Count - zre.NodesClean.Count))
         End If
 
-        'Punkte zur Serie hinzufügen
+        'Stützstellen zur Serie hinzufügen
         For Each node As KeyValuePair(Of DateTime, Double) In zre.NodesClean
-            Line1.Add(node.Key, node.Value)
-            Line2.Add(node.Key, node.Value)
+            Try
+                Line1.Add(node.Key, node.Value)
+                Line2.Add(node.Key, node.Value)
+            Catch ex As OverflowException
+                Log.AddLogEntry(String.Format("ERROR: Unable to display date {0} in chart!", node.Key))
+            End Try
         Next
 
         'Y-Achsenzuordnung
