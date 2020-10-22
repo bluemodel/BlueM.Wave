@@ -6,6 +6,7 @@ Version 1.8.2
 FIXED:
   * Fixed crashes with very small or large dates in time series
     Timeseries are now cut upon import to minimum 01.01.0100 and maximum 31.12.9900
+  * Fixed error when importing CSV files without units
 KNOWN ISSUES:
   * DateTimePickers have a minimum date of 01.01.1753 and a maximum date of 31.12.9998
     and will display these even if timeseries / the view extends beyond that range
