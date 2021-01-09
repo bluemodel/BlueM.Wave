@@ -678,6 +678,9 @@ Public Class Wave
         Call Me.updateAxisDialog()
         Call propDialog.Update(Me.TimeSeriesDict.Values.ToList)
 
+        'Update window title
+        Me.Text = "BlueM.Wave"
+
     End Sub
 
     'Serie(n) importieren
@@ -2247,6 +2250,9 @@ Public Class Wave
             'Log
             Call Log.AddLogEntry("Project file '" & projectfile & "' loaded successfully!")
 
+            'Update window title
+            Me.Text = "BlueM.Wave - " & projectfile
+
             Call Me.UpdateChartExtents()
 
         Catch ex As Exception
@@ -2358,6 +2364,8 @@ Public Class Wave
                             End If
                         Next
 
+                        'Update window title
+                        Me.Text = "BlueM.Wave - " & FileName
 
                     Case Windows.Forms.DialogResult.No
                         'Reihen aus TEN-Datei sollen nicht importiert werden
@@ -2513,6 +2521,9 @@ Public Class Wave
 
                         'Log
                         Call Log.AddLogEntry("Successfully loaded series in chart!")
+
+                        'Update window title
+                        Me.Text = "BlueM.Wave - " & file
 
                     Else
                         'Import abgebrochen
