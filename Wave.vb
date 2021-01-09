@@ -241,37 +241,10 @@ Public Class Wave
     ''' <remarks></remarks>
     Private Sub Wave_KeyDown(ByVal sender As System.Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles MyBase.KeyDown
 
-        Dim dlgres As DialogResult
-
-        Try
-            If e.Control And e.KeyCode = Keys.V Then
-                'Ctrl+V pressed
-                If Clipboard.ContainsText(TextDataFormat.Text) Then
-
-                    Dim clipboardtext As String
-                    clipboardtext = Clipboard.GetText(TextDataFormat.Text)
-
-                    If clipboardtext.Contains("SydroTyp=SydroErgZre") Or
-                       clipboardtext.Contains("SydroTyp=SydroBinZre") Then
-                        'it's a clipboard entry from TALSIM!
-
-                        'ask the user for confirmation
-                        dlgres = MessageBox.Show("TALSIM clipboard content detected!" & eol & "Load series in Wave?", "Load from clipboard", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
-                        If Not dlgres = Windows.Forms.DialogResult.Yes Then
-                            Exit Sub
-                        End If
-                        Me.Cursor = Cursors.WaitCursor
-                        Call Me.loadFromClipboard_TALSIM(clipboardtext)
-                        Me.Cursor = Cursors.Default
-                    End If
-                End If
-            End If
-
-        Catch ex As Exception
-            Me.Cursor = Cursors.Default
-            Log.AddLogEntry("ERROR: " & ex.Message)
-            MsgBox("ERROR: " & ex.Message, MsgBoxStyle.Critical)
-        End Try
+        If e.Control And e.KeyCode = Keys.V Then
+            'Ctrl+V pressed
+            Call Me.Import_Clipboard()
+        End If
     End Sub
 
 #End Region 'Form behavior
@@ -701,6 +674,10 @@ Public Class Wave
         If (Me.OpenFileDialog1.ShowDialog() = Windows.Forms.DialogResult.OK) Then
             Call Me.Load_TEN(Me.OpenFileDialog1.FileName)
         End If
+    End Sub
+
+    Private Sub PasteFromClipboardCtrlVToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles PasteFromClipboardCtrlVToolStripMenuItem.Click
+        Call Me.Import_Clipboard()
     End Sub
 
     'Theme laden
@@ -2540,6 +2517,58 @@ Public Class Wave
                 End Try
 
         End Select
+
+    End Sub
+
+    ''' <summary>
+    ''' Attempts import of clipboard content
+    ''' Detects TALSIM clipboard content or plain text
+    ''' </summary>
+    Private Sub Import_Clipboard()
+
+        Dim dlgres As DialogResult
+
+        Try
+            'Check data format
+            If Clipboard.ContainsText(TextDataFormat.Text) Then
+
+                Dim clipboardtext As String
+                clipboardtext = Clipboard.GetText(TextDataFormat.Text)
+
+                If clipboardtext.Contains("SydroTyp=SydroErgZre") Or
+                   clipboardtext.Contains("SydroTyp=SydroBinZre") Then
+                    'it's a clipboard entry from TALSIM!
+
+                    'ask the user for confirmation
+                    dlgres = MessageBox.Show("TALSIM clipboard content detected!" & eol & "Load series in Wave?", "Load from clipboard", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+                    If Not dlgres = Windows.Forms.DialogResult.Yes Then
+                        Exit Sub
+                    End If
+                    Me.Cursor = Cursors.WaitCursor
+                    Call Me.loadFromClipboard_TALSIM(clipboardtext)
+                    Me.Cursor = Cursors.Default
+                Else
+                    'ask the user whether to attempt plain text import
+                    dlgres = MessageBox.Show("Attempt to load clipboard text content in Wave as CSV data?", "Load from clipboard", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+                    If Not dlgres = Windows.Forms.DialogResult.Yes Then
+                        Exit Sub
+                    End If
+                    'save as temp text file and then load file
+                    Dim tmpfile As String = IO.Path.GetTempFileName()
+                    Using writer As New StreamWriter(tmpfile, False, Helpers.DefaultEncoding)
+                        writer.Write(clipboardtext)
+                    End Using
+                    Call Me.Import_File(tmpfile)
+                End If
+            Else
+                MessageBox.Show("No usable clipboard content detected!", "Load from clipboard", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            End If
+
+        Catch ex As Exception
+            Me.Cursor = Cursors.Default
+            Log.AddLogEntry("ERROR: " & ex.Message)
+            MsgBox("ERROR: " & ex.Message, MsgBoxStyle.Critical)
+        End Try
 
     End Sub
 
