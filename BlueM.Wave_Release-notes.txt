@@ -6,6 +6,8 @@ Version 1.8.3
 NEW:
 * Most recently loaded file is now displayed in main window title
 * Any clipboard text content can now be imported as CSV (press Ctrl+V or use menu item)
+CHANGED:
+* Tab characters are now represented with a visual representation in the file preview of the file import dialog
 
 Version 1.8.2
 -------------

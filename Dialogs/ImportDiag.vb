@@ -202,6 +202,9 @@ Friend Class ImportDiag
                 line = line.Substring(0, anzSpalten) & " ..."
             End If
 
+            'replace tab characters with a visual representation
+            line = line.Replace(vbTab, " » ")
+
             text &= line & Constants.eol
 
             'gucken, ob Dateiende
