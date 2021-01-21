@@ -65,6 +65,33 @@ Public Module Helpers
     End Property
 
     ''' <summary>
+    ''' Returns the number format as set by the operating system
+    ''' </summary>
+    Public ReadOnly Property CurrentNumberFormat() As NumberFormatInfo
+        Get
+            Return Globalization.CultureInfo.CurrentCulture.NumberFormat
+        End Get
+    End Property
+
+    ''' <summary>
+    ''' Returns the date format as set by the operating system
+    ''' </summary>
+    Public ReadOnly Property CurrentDateFormat As DateTimeFormatInfo
+        Get
+            Return Globalization.CultureInfo.CurrentCulture.DateTimeFormat
+        End Get
+    End Property
+
+    ''' <summary>
+    ''' Returns the list separator as set by the operating system (e.g. "," or ";")
+    ''' </summary>
+    Public ReadOnly Property CurrentListSeparator As String
+        Get
+            Return Globalization.CultureInfo.CurrentCulture.TextInfo.ListSeparator
+        End Get
+    End Property
+
+    ''' <summary>
     ''' Date formats
     ''' </summary>
     ''' <returns>Dictionary of available DateFormats</returns>

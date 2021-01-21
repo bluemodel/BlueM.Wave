@@ -1,6 +1,12 @@
 ﻿===============================================================
 BlueM.Wave Release Notes
 ===============================================================
+Version 1.8.4
+-------------
+CHANGED:
+* When reading CSV files, remove any quotes around titles and units
+* When writing CSV files, the date time format, number format and the list separator are now taken from the current Windows region settings
+
 Version 1.8.3
 -------------
 NEW:
