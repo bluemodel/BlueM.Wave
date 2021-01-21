@@ -52,6 +52,10 @@ Public Class CSV
     '***********
     Public Sub New(ByVal FileName As String)
         MyBase.New(FileName)
+        'TODO: use operating system defaults for initial settings, requires refactoring of import dialog
+        'Me.Dateformat = Helpers.CurrentDateFormat.ShortDatePattern & " " & Helpers.CurrentDateFormat.LongTimePattern
+        'Me.Separator = New Character(Helpers.CurrentListSeparator)
+        'Me.DecimalSeparator = New Character(Helpers.CurrentNumberFormat.NumberDecimalSeparator)
     End Sub
 
     'Spalten auslesen
@@ -105,12 +109,25 @@ Public Class CSV
                 ReDim Namen(anzSpalten - 1)
                 ReDim Einheiten(anzSpalten - 1)
                 For i = 0 To anzSpalten - 1
-                    Namen(i) = ZeileSpalten.Substring(i * Me.ColumnWidth, Math.Min(Me.ColumnWidth, ZeileSpalten.Substring(i * Me.ColumnWidth).Length))
+                    Namen(i) = ZeileSpalten.Substring(i * Me.ColumnWidth, Math.Min(Me.ColumnWidth, ZeileSpalten.Substring(i * Me.ColumnWidth).Length)).Trim()
                     If Me.UseUnits Then
-                        Einheiten(i) = ZeileEinheiten.Substring(i * Me.ColumnWidth, Math.Min(Me.ColumnWidth, ZeileSpalten.Substring(i * Me.ColumnWidth).Length))
+                        Einheiten(i) = ZeileEinheiten.Substring(i * Me.ColumnWidth, Math.Min(Me.ColumnWidth, ZeileSpalten.Substring(i * Me.ColumnWidth).Length)).Trim()
                     End If
                 Next
             End If
+
+            'remove quotes around names and units
+            For i = 0 To anzSpalten - 1
+                Console.WriteLine("""")
+                If Namen(i).StartsWith("""") And Namen(i).EndsWith("""") Then
+                    Namen(i) = Namen(i).Replace("""", "")
+                End If
+                If Me.UseUnits Then
+                    If Einheiten(i).StartsWith("""") And Einheiten(i).EndsWith("""") Then
+                        Einheiten(i) = Einheiten(i).Replace("""", "")
+                    End If
+                End If
+            Next
 
             'store series info
             For i = 0 To anzSpalten - 1
@@ -238,7 +255,7 @@ Public Class CSV
         Dim v As Double
         Dim line As String
 
-        Const separator As String = ","
+        Dim separator As String = Helpers.CurrentListSeparator
         Const quote As String = """"
 
         'merge series into one data structure
@@ -277,12 +294,12 @@ Public Class CSV
         strwrite.WriteLine(line)
         '3rd row onwards: data
         For Each t In data.Keys
-            line = t.ToString(Helpers.DefaultDateFormat)
+            line = t.ToString(Helpers.CurrentDateFormat)
             For Each v In data(t)
                 If Double.IsNaN(v) Then
-                    line += separator 'leave empty
+                    line &= separator 'leave empty
                 Else
-                    line += separator & v.ToString(Helpers.DefaultNumberFormat)
+                    line &= separator & v.ToString(Helpers.CurrentNumberFormat)
                 End If
             Next
             strwrite.WriteLine(line)
