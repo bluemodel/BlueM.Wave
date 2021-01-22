@@ -245,8 +245,12 @@ Public Class CSV
     ''' </summary>
     ''' <param name="zres">time series to write to file</param>
     ''' <param name="file">path to the csv file</param>
+    ''' <param name="cInfo">
+    '''     optional CulturInfo object for setting the date time format, number format and the list separator.
+    '''     if not set, these settings are taken from CurrentCulture
+    ''' </param>
     ''' <remarks></remarks>
-    Public Shared Sub Write_File(ByRef zres As List(Of TimeSeries), ByVal file As String)
+    Public Shared Sub Write_File(ByRef zres As List(Of TimeSeries), ByVal file As String, Optional cInfo As CultureInfo = Nothing)
 
         Dim data As SortedDictionary(Of DateTime, Double())
         Dim strwrite As StreamWriter
@@ -255,7 +259,19 @@ Public Class CSV
         Dim v As Double
         Dim line As String
 
-        Dim separator As String = Helpers.CurrentListSeparator
+        Dim separator As String
+        Dim dateFormat As DateTimeFormatInfo
+        Dim numberFormat As NumberFormatInfo
+
+        'If no culturInfo is given, use current culture
+        If IsNothing(cInfo) Then
+            cInfo = Globalization.CultureInfo.CurrentCulture
+        End If
+
+        separator = cInfo.TextInfo.ListSeparator
+        dateFormat = cInfo.DateTimeFormat
+        numberFormat = cInfo.NumberFormat
+
         Const quote As String = """"
 
         'merge series into one data structure
@@ -294,12 +310,12 @@ Public Class CSV
         strwrite.WriteLine(line)
         '3rd row onwards: data
         For Each t In data.Keys
-            line = t.ToString(Helpers.CurrentDateFormat)
+            line = t.ToString(dateFormat)
             For Each v In data(t)
                 If Double.IsNaN(v) Then
                     line &= separator 'leave empty
                 Else
-                    line &= separator & v.ToString(Helpers.CurrentNumberFormat)
+                    line &= separator & v.ToString(numberFormat)
                 End If
             Next
             strwrite.WriteLine(line)
