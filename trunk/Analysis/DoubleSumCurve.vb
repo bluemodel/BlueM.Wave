@@ -119,7 +119,7 @@ Friend Class DoubleSumCurve
             Me.summe2(i) = values(i, 1) + summe2(i - 1)
         Next
 
-        'Datume übernehmen (werden später für Punkte-Labels im Diagramm gebraucht)
+        'Datume übernehmen
         datume = zre1.Dates
 
     End Sub
@@ -131,14 +131,10 @@ Friend Class DoubleSumCurve
 
         'Text:
         '-----
-        Me.mResultText = "Double Sum Curve:" & eol _
-                        & eol _
-                        & "The analysis is based on " & Me.summe1.Length & " coincident data points between " & Me.datume(0).ToString(Helpers.DefaultDateFormat) & " and " & Me.datume(Me.datume.Count - 1).ToString(DefaultDateFormat) & eol _
-                        & eol
+        Me.mResultText = "The analysis is based on " & Me.summe1.Length & " coincident data points between " & Me.datume(0).ToString(Helpers.DefaultDateFormat) & " and " & Me.datume(Me.datume.Count - 1).ToString(DefaultDateFormat)
 
         'Diagramm:
         '---------
-        Dim i As Integer
         Dim doppelsumme, gerade As Steema.TeeChart.Styles.Line
 
         Me.mResultChart = New Steema.TeeChart.Chart()
@@ -168,21 +164,11 @@ Friend Class DoubleSumCurve
         gerade.LinePen.Style = Drawing2D.DashStyle.Dash
 
         'Werte eintragen
-        For i = 0 To summe1.Length - 1
-            doppelsumme.Add(summe1(i), summe2(i), datume(i).ToString(Helpers.DefaultDateFormat))
-        Next
+        doppelsumme.Add(summe1, summe2)
 
         gerade.Add(0, 0)
         Dim maxwert As Double = Math.Min(Me.mResultChart.Axes.Bottom.MaxXValue, Me.mResultChart.Axes.Left.MaxYValue)
         gerade.Add(maxwert, maxwert)
-
-        'Markstips
-        '---------
-        Dim markstips As New Steema.TeeChart.Tools.MarksTip(Me.mResultChart)
-        markstips.MouseAction = Steema.TeeChart.Tools.MarksTipMouseAction.Move
-        markstips.Style = Steema.TeeChart.Styles.MarksStyles.Label
-        markstips.Series = doppelsumme
-        doppelsumme.Cursor = Cursors.Help
 
     End Sub
 

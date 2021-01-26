@@ -127,7 +127,7 @@ Friend Class Comparison
         'Nur gemeinsame Stützstellen nutzen
         Me.ergebnisreihe = AnalysisHelper.getConcurrentValues(reihe1, reihe2)
 
-        'Datume übernehmen (werden später für Punkte-Labels im Diagramm gebraucht)
+        'Datume übernehmen
         Me.datume = reihe1.Dates
 
         'Calculate linear regression
@@ -161,7 +161,7 @@ Friend Class Comparison
 
         'Diagramm:
         '---------
-        Dim i, ende As Integer
+        Dim i, length As Integer
         Dim series_points As Steema.TeeChart.Styles.Points
         Dim regression_line As Steema.TeeChart.Styles.Line
 
@@ -191,26 +191,37 @@ Friend Class Comparison
         regression_line.LinePen.Width = 2
         regression_line.LinePen.Color = Color.Red
 
-        'assign values to series
-        Dim alpha, beta, x, y As Double
-        alpha = Me.mResultValues("alpha")
-        beta = Me.mResultValues("beta")
+        'Plot points
+        '-----------
+        Dim x, y, x_min, x_max As Double
+        Dim x_values, y_values As Double()
 
-        ende = ergebnisreihe.GetUpperBound(0)
-        For i = 0 To ende
+        x_min = Double.MaxValue
+        x_max = Double.MinValue
+
+        length = Me.ergebnisreihe.GetUpperBound(0) - 1
+        ReDim x_values(length - 1)
+        ReDim y_values(length - 1)
+
+        'assign values to x and y arrays (faster)
+        For i = 0 To length - 1
             x = ergebnisreihe(i, 0)
             y = ergebnisreihe(i, 1)
-            series_points.Add(x, y, datume(i).ToString(Helpers.DefaultDateFormat))
-            regression_line.Add(x, beta * x + alpha)
+            x_values(i) = x
+            y_values(i) = y
+            If x < x_min Then x_min = x
+            If x > x_max Then x_max = x
         Next
 
-        'Markstips
-        '---------
-        Dim markstips As New Steema.TeeChart.Tools.MarksTip(Me.mResultChart)
-        markstips.MouseAction = Steema.TeeChart.Tools.MarksTipMouseAction.Move
-        markstips.Style = Steema.TeeChart.Styles.MarksStyles.Label
-        markstips.Series = series_points
-        series_points.Cursor = Cursors.Help
+        series_points.Add(x_values, y_values)
+
+        'Plot regression line
+        '--------------------
+        Dim alpha, beta As Double
+        alpha = Me.mResultValues("alpha")
+        beta = Me.mResultValues("beta")
+        regression_line.Add(x_min, beta * x_min + alpha)
+        regression_line.Add(x_max, beta * x_max + alpha)
 
         'Annotation
         '----------
