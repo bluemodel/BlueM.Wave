@@ -1,6 +1,13 @@
 ﻿===============================================================
 BlueM.Wave Release Notes
 ===============================================================
+Version 1.8.6
+-------------
+CHANGED:
+* Analysis functions Comparison and DoubleSumCurve: the result diagrams no longer contain tooltips of the points' timestamps
+FIXED:
+* Analysis functions Comparison and DoubleSumCurve: significantly increased the creation speed of the result diagrams
+
 Version 1.8.5
 -------------
 API-CHANGES:
