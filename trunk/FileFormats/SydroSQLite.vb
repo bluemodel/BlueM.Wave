@@ -403,6 +403,7 @@ Public Class SydroSQLite
                 ts.Unit = Me.unit
                 ts.Interpretation = Me.interpretation
                 ts.Metadata = Me.FileMetadata
+                ts.DataSource = New KeyValuePair(Of String, String)(Me.File, sInfo.Name)
 
                 'retrieve time series from db
                 command = New Data.SQLite.SQLiteCommand(Me.connection)
@@ -431,6 +432,7 @@ Public Class SydroSQLite
                     ts.Unit = Me.unit
                     ts.Interpretation = Me.interpretation
                     ts.Metadata = Me.FileMetadata
+                    ts.DataSource = New KeyValuePair(Of String, String)(Me.File, sInfo.Name)
 
                     'retrieve time series from db
                     flag_id = Me.flag_mapping(sInfo.Index)
@@ -467,11 +469,7 @@ Public Class SydroSQLite
                     ts.Unit = Me.unit
                     ts.Interpretation = Me.interpretation
                     ts.Metadata = Me.FileMetadata
-
-                    ts = New TimeSeries(sInfo.Name)
-                    ts.Unit = Me.unit
-                    ts.Interpretation = Me.interpretation
-                    ts.Metadata = Me.FileMetadata
+                    ts.DataSource = New KeyValuePair(Of String, String)(Me.File, sInfo.Name)
 
                     'retrieve time series from db
                     flag_id = Me.flag_T0_mapping(sInfo.Index).Item1

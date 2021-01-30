@@ -25,12 +25,13 @@ Partial Class PropertiesDialog
         Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(PropertiesDialog))
         Me.DataGridView1 = New System.Windows.Forms.DataGridView()
+        Me.TimeSeriesBindingSource = New System.Windows.Forms.BindingSource(Me.components)
         Me.Id = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.TitleDataGridViewTextBoxColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Interpretation = New System.Windows.Forms.DataGridViewComboBoxColumn()
         Me.UnitDataGridViewTextBoxColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.MetadataText = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.TimeSeriesBindingSource = New System.Windows.Forms.BindingSource(Me.components)
+        Me.DataSource = New System.Windows.Forms.DataGridViewTextBoxColumn()
         CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.TimeSeriesBindingSource, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
@@ -46,7 +47,7 @@ Partial Class PropertiesDialog
         Me.DataGridView1.CausesValidation = False
         Me.DataGridView1.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.EnableAlwaysIncludeHeaderText
         Me.DataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.DataGridView1.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.Id, Me.TitleDataGridViewTextBoxColumn, Me.Interpretation, Me.UnitDataGridViewTextBoxColumn, Me.MetadataText})
+        Me.DataGridView1.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.Id, Me.TitleDataGridViewTextBoxColumn, Me.Interpretation, Me.UnitDataGridViewTextBoxColumn, Me.MetadataText, Me.DataSource})
         Me.DataGridView1.DataSource = Me.TimeSeriesBindingSource
         Me.DataGridView1.Location = New System.Drawing.Point(13, 12)
         Me.DataGridView1.Name = "DataGridView1"
@@ -54,12 +55,17 @@ Partial Class PropertiesDialog
         Me.DataGridView1.Size = New System.Drawing.Size(439, 238)
         Me.DataGridView1.TabIndex = 1
         '
+        'TimeSeriesBindingSource
+        '
+        Me.TimeSeriesBindingSource.DataSource = GetType(BlueM.Wave.TimeSeries)
+        '
         'Id
         '
         Me.Id.DataPropertyName = "Id"
         Me.Id.Frozen = True
         Me.Id.HeaderText = "Id"
         Me.Id.Name = "Id"
+        Me.Id.ReadOnly = True
         Me.Id.Visible = False
         Me.Id.Width = 41
         '
@@ -75,6 +81,7 @@ Partial Class PropertiesDialog
         'Interpretation
         '
         Me.Interpretation.DataPropertyName = "Interpretation"
+        Me.Interpretation.Frozen = True
         Me.Interpretation.HeaderText = "Interpretation"
         Me.Interpretation.Name = "Interpretation"
         Me.Interpretation.Resizable = System.Windows.Forms.DataGridViewTriState.[True]
@@ -84,6 +91,7 @@ Partial Class PropertiesDialog
         'UnitDataGridViewTextBoxColumn
         '
         Me.UnitDataGridViewTextBoxColumn.DataPropertyName = "Unit"
+        Me.UnitDataGridViewTextBoxColumn.Frozen = True
         Me.UnitDataGridViewTextBoxColumn.HeaderText = "Unit"
         Me.UnitDataGridViewTextBoxColumn.Name = "UnitDataGridViewTextBoxColumn"
         Me.UnitDataGridViewTextBoxColumn.Width = 51
@@ -91,13 +99,21 @@ Partial Class PropertiesDialog
         'MetadataText
         '
         Me.MetadataText.DataPropertyName = "MetadataText"
+        Me.MetadataText.Frozen = True
         Me.MetadataText.HeaderText = "Metadata"
         Me.MetadataText.Name = "MetadataText"
+        Me.MetadataText.ReadOnly = True
         Me.MetadataText.Width = 77
         '
-        'TimeSeriesBindingSource
+        'DataSource
         '
-        Me.TimeSeriesBindingSource.DataSource = GetType(BlueM.Wave.TimeSeries)
+        Me.DataSource.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells
+        Me.DataSource.DataPropertyName = "DataSource"
+        Me.DataSource.Frozen = True
+        Me.DataSource.HeaderText = "DataSource"
+        Me.DataSource.Name = "DataSource"
+        Me.DataSource.ReadOnly = True
+        Me.DataSource.Width = 89
         '
         'PropertiesDialog
         '
@@ -123,4 +139,5 @@ Partial Class PropertiesDialog
     Friend WithEvents Interpretation As DataGridViewComboBoxColumn
     Friend WithEvents UnitDataGridViewTextBoxColumn As DataGridViewTextBoxColumn
     Friend WithEvents MetadataText As DataGridViewTextBoxColumn
+    Friend WithEvents DataSource As DataGridViewTextBoxColumn
 End Class

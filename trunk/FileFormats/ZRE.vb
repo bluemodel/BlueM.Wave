@@ -127,6 +127,7 @@ Public Class ZRE
         sInfo = Me.SeriesList(0)
         ts = New TimeSeries(sInfo.Name)
         ts.Unit = sInfo.Unit
+        ts.DataSource = New KeyValuePair(Of String, String)(Me.File, sInfo.Name)
 
         'Einlesen
         '--------

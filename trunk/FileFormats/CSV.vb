@@ -56,6 +56,7 @@ Public Class CSV
         'Me.Dateformat = Helpers.CurrentDateFormat.ShortDatePattern & " " & Helpers.CurrentDateFormat.LongTimePattern
         'Me.Separator = New Character(Helpers.CurrentListSeparator)
         'Me.DecimalSeparator = New Character(Helpers.CurrentNumberFormat.NumberDecimalSeparator)
+        Call Me.readSeriesInfo()
     End Sub
 
     'Spalten auslesen
@@ -174,6 +175,7 @@ Public Class CSV
                 If Me.UseUnits Then
                     ts.Unit = sInfo.Unit
                 End If
+                ts.DataSource = New KeyValuePair(Of String, String)(Me.File, sInfo.Name)
                 Me.FileTimeSeries.Add(sInfo.Index, ts)
             Next
 

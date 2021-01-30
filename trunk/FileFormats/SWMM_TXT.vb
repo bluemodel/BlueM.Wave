@@ -231,6 +231,7 @@ Public Class SWMM_TXT
         'Zeitreihen instanzieren
         For Each sInfo As SeriesInfo In Me.SelectedSeries
             ts = New TimeSeries(sInfo.Name)
+            ts.DataSource = New KeyValuePair(Of String, String)(Me.File, sInfo.Name)
             Me.FileTimeSeries.Add(sInfo.Index, ts)
         Next
 

@@ -54,9 +54,6 @@ Public Class Wave
     ''' <remarks></remarks>
     Private isInitializing As Boolean
 
-    'Collection of imported files and the selected series of each file
-    Private ImportedFiles As Dictionary(Of String, List(Of FileFormatBase.SeriesInfo)) '{filename: [seriesInfo, ...], ...}
-
     'Interne Zeitreihen-Collection
     Private TimeSeriesDict As Dictionary(Of Integer, TimeSeries)
 
@@ -103,7 +100,6 @@ Public Class Wave
 
         'Kollektionen einrichten
         '-----------------------
-        Me.ImportedFiles = New Dictionary(Of String, List(Of FileFormatBase.SeriesInfo))()
         Me.TimeSeriesDict = New Dictionary(Of Integer, TimeSeries)()
 
         'Charts einrichten
@@ -151,36 +147,6 @@ Public Class Wave
         'Status Info aktualisieren
         Me.ToolStripStatusLabel_Log.Text = Log.LastMessage
         Call Application.DoEvents()
-    End Sub
-
-    ''' <summary>
-    ''' Stores information about an imported file and adds the filename to the recently used file menu
-    ''' </summary>
-    ''' <param name="fileObj"></param>
-    ''' <remarks></remarks>
-    Private Sub storeFileInfo(ByRef fileObj As FileFormatBase)
-
-        'store filename and selected series names
-        If Me.ImportedFiles.ContainsKey(fileObj.File) Then
-            Me.ImportedFiles(fileObj.File).AddRange(fileObj.SelectedSeries)
-        Else
-            Me.ImportedFiles.Add(fileObj.File, fileObj.SelectedSeries)
-        End If
-
-        'add filename to Recently Used Files menu
-        'remove if already present
-        Dim i As Integer = 0
-        For Each _item As ToolStripItem In Me.ToolStripMenuItem_RecentlyUsedFiles.DropDownItems
-            If _item.Text = fileObj.File Then
-                Me.ToolStripMenuItem_RecentlyUsedFiles.DropDownItems.RemoveAt(i)
-                Exit For
-            End If
-            i += 1
-        Next
-        'add to top of list
-        Dim item As New ToolStripMenuItem(fileObj.File)
-        Me.ToolStripMenuItem_RecentlyUsedFiles.DropDownItems.Insert(0, item)
-
     End Sub
 
     ''' <summary>
@@ -517,21 +483,6 @@ Public Class Wave
                 End If
             Next
 
-            'Aus der Liste der importierten Dateien löschen
-            For Each kvp As KeyValuePair(Of String, List(Of FileFormatBase.SeriesInfo)) In Me.ImportedFiles
-                For Each sInfo As FileFormatBase.SeriesInfo In kvp.Value
-                    If sInfo.Name = title Then
-                        Me.ImportedFiles(kvp.Key).Remove(sInfo)
-                        Exit For
-                    End If
-                Next
-                'Ganze Datei vergessen, falls es die einzige Serie war
-                If Me.ImportedFiles(kvp.Key).Count = 0 Then
-                    Me.ImportedFiles.Remove(kvp.Key)
-                    Exit For
-                End If
-            Next
-
         End If
 
         'Update dialogs
@@ -648,7 +599,6 @@ Public Class Wave
         Call Me.Init_Charts()
 
         'Collections zurücksetzen
-        Me.ImportedFiles.Clear()
         Me.TimeSeriesDict.Clear()
 
         'Log zurücksetzen
@@ -723,18 +673,30 @@ Public Class Wave
 
             projectfile = Me.SaveFileDialog1.FileName
 
+            'collect datasources
+            Dim datasources As New Dictionary(Of String, List(Of String)) '{file: [title, ...], ...}
+            Dim file, title As String
+            For Each ts As TimeSeries In Me.TimeSeriesDict.Values
+                file = ts.DataSource.Key
+                title = ts.DataSource.Value
+                If Not datasources.ContainsKey(file) Then
+                    datasources.Add(file, New List(Of String))
+                End If
+                datasources(file).Add(title)
+            Next
+
             'write the project file
             Dim fs As New FileStream(projectfile, FileMode.Create, FileAccess.Write)
             Dim strwrite As New StreamWriter(fs, Helpers.DefaultEncoding)
 
             strwrite.WriteLine("# Wave project file")
 
-            For Each filename As String In Me.ImportedFiles.Keys
+            For Each file In datasources.Keys
                 'TODO: write relative paths to the project file?
-                strwrite.WriteLine("file=" & filename)
-                For Each series As FileFormatBase.SeriesInfo In Me.ImportedFiles(filename)
+                strwrite.WriteLine("file=" & file)
+                For Each title In datasources(file)
                     'TODO: if a series was renamed, write the new title to the project file
-                    strwrite.WriteLine("    series=" & series.Name)
+                    strwrite.WriteLine("    series=" & title)
                 Next
             Next
 
@@ -1594,52 +1556,82 @@ Public Class Wave
     ''' </summary>
     Private Sub RefreshFromFile(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem_ReloadFromFiles.Click
 
+        'TODO: keep time series that cannot be reloaded from file!
+
         Dim fileObj As FileFormatBase
-        Dim Dateiliste As String
+        Dim fileList As String
         Dim Answer As MsgBoxResult
 
+        'collect datasources
+        Dim datasources As New Dictionary(Of String, List(Of String)) '{file: [title, ...], ...}
+        Dim file, title As String
+        For Each ts As TimeSeries In Me.TimeSeriesDict.Values
+            file = ts.DataSource.Key
+            title = ts.DataSource.Value
+            If Not datasources.ContainsKey(file) Then
+                datasources.Add(file, New List(Of String))
+            End If
+            datasources(file).Add(title)
+        Next
+
         'Wenn keine Dateien vorhanden, abbrechen
-        If (Me.ImportedFiles.Count = 0) Then
+        If (datasources.Count = 0) Then
             MsgBox("There are no known files that could be reloaded!", MsgBoxStyle.Information, "Wave")
             Exit Sub
         End If
 
         'Dateiliste in Textform generieren
-        Dateiliste = ""
-        For Each filename As String In Me.ImportedFiles.Keys
-            Dateiliste &= filename & eol
+        fileList = ""
+        For Each file In datasources.Keys
+            fileList &= file & eol
         Next
 
         'Dialog anzeigen
-        Answer = MsgBox("Delete all series and reload from the following files?" & eol & Dateiliste, MsgBoxStyle.OkCancel, "Wave")
+        Answer = MsgBox("Delete all series and reload from the following files?" & eol & eol & fileList, MsgBoxStyle.OkCancel, "Wave")
 
         If (Answer = MsgBoxResult.Ok) Then
+
+            Log.AddLogEntry("Reloading all series from their original datasources...")
 
             'Alle Serien löschen
             Me.TChart1.Series.RemoveAllSeries()
             Me.TChart2.Series.RemoveAllSeries()
+            Me.TChart1.Refresh()
+            Me.TChart2.Refresh()
 
             'Collection zurücksetzen
             Me.TimeSeriesDict.Clear()
 
             'Alle Dateien durchlaufen
-            For Each filename As String In Me.ImportedFiles.Keys
+            Dim success As Boolean
+            For Each file In datasources.Keys
 
-                Log.AddLogEntry("Reading file " & filename & " ...")
+                Log.AddLogEntry("Reading file " & file & " ...")
 
-                'get an instance of the file
-                fileObj = FileFactory.getFileInstance(filename)
-                'select series for importing
-                For Each sInfo As FileFormatBase.SeriesInfo In Me.ImportedFiles(filename)
-                    fileObj.selectSeries(sInfo.Index)
-                Next
-                'load the file
-                Call fileObj.readFile()
-                'import the series
-                For Each ts As TimeSeries In fileObj.FileTimeSeries.Values
-                    Call Me.Import_Series(ts)
-                Next
-                Log.AddLogEntry("File '" & filename & "' imported successfully!")
+                success = True
+
+                If IO.Path.GetExtension(file).ToUpper() = FileFactory.FileExtTEN Then
+                    'TODO: this currently loads all series from the TEN, instead of only the currently loaded ones
+                    Call Load_TEN(file)
+                Else
+                    'get an instance of the file
+                    fileObj = FileFactory.getFileInstance(file)
+                    'select series for importing
+                    For Each title In datasources(file)
+                        success = success And fileObj.selectSeries(title)
+                    Next
+                    'load the file
+                    Call fileObj.readFile()
+                    'import the series
+                    For Each ts As TimeSeries In fileObj.FileTimeSeries.Values
+                        Call Me.Import_Series(ts)
+                    Next
+                End If
+                If success Then
+                    Log.AddLogEntry("File '" & file & "' imported successfully!")
+                Else
+                    Log.AddLogEntry("Error while importing file '" & file & "'!")
+                End If
             Next
 
         End If
@@ -2034,6 +2026,20 @@ Public Class Wave
 
         Me.TimeSeriesDict.Add(zre.Id, zre)
 
+        'add datasource filename to Recently Used Files menu
+        'remove if already present
+        Dim i As Integer = 0
+        For Each _item As ToolStripItem In Me.ToolStripMenuItem_RecentlyUsedFiles.DropDownItems
+            If _item.Text = zre.DataSource.Key Then
+                Me.ToolStripMenuItem_RecentlyUsedFiles.DropDownItems.RemoveAt(i)
+                Exit For
+            End If
+            i += 1
+        Next
+        'add to top of list
+        Dim item As New ToolStripMenuItem(zre.DataSource.Key)
+        Me.ToolStripMenuItem_RecentlyUsedFiles.DropDownItems.Insert(0, item)
+
         'Update dialogs
         Me.propDialog.Update(Me.TimeSeriesDict.Values.ToList)
         Me.statDialog.Update(Me.TimeSeriesDict.Values.ToList)
@@ -2240,9 +2246,6 @@ Public Class Wave
                     End If
                     Call Me.Import_Series(ts)
                 Next
-
-                'store file information
-                Call Me.storeFileInfo(fileobj)
             Next
 
             'Log
@@ -2346,8 +2349,15 @@ Public Class Wave
                                         axistitle = series.CustomVertAxis.Title.Text
                                 End Select
                                 reihe.Unit = AxisWrapper.parseUnit(axistitle)
+
+                                'Save datasource
+                                reihe.DataSource = New KeyValuePair(Of String, String)(FileName, series.Title)
+
                                 'Store the series internally
                                 Call Me.AddZeitreihe(reihe)
+
+                                'update the title in case it was changed during storage
+                                series.Title = reihe.Title
 
                                 'Store the time series id in the Tag property
                                 series.Tag = reihe.Id
@@ -2507,7 +2517,7 @@ Public Class Wave
                         Call Log.AddLogEntry("File '" & file & "' imported successfully!")
 
                         'Datei abspeichern
-                        Call Me.storeFileInfo(Datei)
+                        'Call Me.storeFileInfo(Datei)
 
                         'Log
                         Call Log.AddLogEntry("Loading series in chart...")
@@ -2711,9 +2721,6 @@ Public Class Wave
                     'import series
                     Call Me.Import_Series(ts)
 
-                    'store file information
-                    Call Me.storeFileInfo(fileobj)
-
                 Case "99" 'BIN file
 
                     name = params("Kennung")
@@ -2735,9 +2742,6 @@ Public Class Wave
 
                     'import series
                     Call Me.Import_Series(ts)
-
-                    'store file information
-                    Call Me.storeFileInfo(fileobj)
 
             End Select
 

@@ -223,6 +223,7 @@ Public Class WEL
             Else
                 ts.Interpretation = BlueM.Wave.TimeSeries.InterpretationEnum.BlockRight
             End If
+            ts.DataSource = New KeyValuePair(Of String, String)(Me.File, sInfo.Name)
             Me.FileTimeSeries.Add(sInfo.Index, ts)
         Next
 

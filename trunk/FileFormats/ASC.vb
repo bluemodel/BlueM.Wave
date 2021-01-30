@@ -163,6 +163,7 @@ Public Class ASC
             If Me.UseUnits Then
                 ts.Unit = sInfo.Unit
             End If
+            ts.DataSource = New KeyValuePair(Of String, String)(Me.File, sInfo.Name)
             Me.FileTimeSeries.Add(sInfo.Index, ts)
         Next
 
