@@ -80,7 +80,7 @@ Friend Class AnnualStatistics
         MyBase.New(series)
         'Check: expects exactly one series
         If (series.Count <> 1) Then
-            Throw New Exception("The Statistics analysis requires the selection of exactly 1 time series!")
+            Throw New Exception("The Annual Statistics analysis requires the selection of exactly 1 time series!")
         End If
         stats = New Dictionary(Of String, struct_stat)
     End Sub
@@ -121,7 +121,7 @@ Friend Class AnnualStatistics
 
         Const formatstring As String = "F4"
 
-        Me.mResultText = "Statistics analysis:" & eol _
+        Me.mResultText = "Annual statistics:" & eol _
                          & eol _
                          & "Time series: " & Me.mZeitreihen(0).Title & eol _
                          & eol
