@@ -74,9 +74,11 @@ Partial Class Wave
         Me.ToolStripDropDownButton_Help = New System.Windows.Forms.ToolStripDropDownButton()
         Me.HilfeToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripMenuItem_ReleaseNotes = New System.Windows.Forms.ToolStripMenuItem()
+        Me.CheckForUpdateToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.AboutToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripDropDownButton_ZoomToSeries = New System.Windows.Forms.ToolStripDropDownButton()
         Me.ToolStripButton_ZoomAll = New System.Windows.Forms.ToolStripButton()
+        Me.ToolStripButton_UpdateNotification = New System.Windows.Forms.ToolStripButton()
         Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog()
         Me.SplitContainer1 = New System.Windows.Forms.SplitContainer()
         Me.TChart2 = New Steema.TeeChart.TChart()
@@ -105,6 +107,7 @@ Partial Class Wave
         ToolStripSeparator4 = New System.Windows.Forms.ToolStripSeparator()
         StatusStrip1.SuspendLayout()
         ToolStrip1.SuspendLayout()
+        CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SplitContainer1.Panel1.SuspendLayout()
         Me.SplitContainer1.Panel2.SuspendLayout()
         Me.SplitContainer1.SuspendLayout()
@@ -180,7 +183,7 @@ Partial Class Wave
         '
         ToolStrip1.AutoSize = False
         ToolStrip1.BackColor = System.Drawing.SystemColors.Control
-        ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButton_New, Me.ToolStripDropDownButton_Open, Me.ToolStripDropDownButton_Save, ToolStripSeparator4, Me.ToolStripButton_Copy, Me.ToolStripButton_Print, ToolStripSeparator2, Me.ToolStripButton_Cut, Me.ToolStripButton_Merge, Me.ToolStripSeparator8, Me.ToolStripButton_ShowNaNValues, Me.ToolStripButton_ConvertErrorValues, Me.ToolStripButton_RemoveNaNValues, Me.ToolStripSeparator7, Me.ToolStripButton_Analysis, ToolStripSeparator1, Me.ToolStripButton_EditChart, Me.ToolStripButton_AxisDialog, Me.ToolStripSeparator9, Me.ToolStripButton_Properties, Me.ToolStripButton_Statistics, Me.ToolStripSeparator10, Me.ToolStripButton_AutoAdjustYAxes, Me.ToolStripButton_ToggleOverview, Me.ToolStripButton_ToggleNavigation, toolStripSeparator, Me.ToolStripButton_NormalMode, Me.ToolStripButton_Zoom, Me.ToolStripButton_Pan, Me.ToolStripSeparator3, Me.ToolStripButton_ZoomPrevious, Me.ToolStripDropDownButton_Help, Me.ToolStripDropDownButton_ZoomToSeries, Me.ToolStripButton_ZoomAll})
+        ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButton_New, Me.ToolStripDropDownButton_Open, Me.ToolStripDropDownButton_Save, ToolStripSeparator4, Me.ToolStripButton_Copy, Me.ToolStripButton_Print, ToolStripSeparator2, Me.ToolStripButton_Cut, Me.ToolStripButton_Merge, Me.ToolStripSeparator8, Me.ToolStripButton_ShowNaNValues, Me.ToolStripButton_ConvertErrorValues, Me.ToolStripButton_RemoveNaNValues, Me.ToolStripSeparator7, Me.ToolStripButton_Analysis, ToolStripSeparator1, Me.ToolStripButton_EditChart, Me.ToolStripButton_AxisDialog, Me.ToolStripSeparator9, Me.ToolStripButton_Properties, Me.ToolStripButton_Statistics, Me.ToolStripSeparator10, Me.ToolStripButton_AutoAdjustYAxes, Me.ToolStripButton_ToggleOverview, Me.ToolStripButton_ToggleNavigation, toolStripSeparator, Me.ToolStripButton_NormalMode, Me.ToolStripButton_Zoom, Me.ToolStripButton_Pan, Me.ToolStripSeparator3, Me.ToolStripButton_ZoomPrevious, Me.ToolStripDropDownButton_Help, Me.ToolStripDropDownButton_ZoomToSeries, Me.ToolStripButton_ZoomAll, Me.ToolStripButton_UpdateNotification})
         ToolStrip1.Location = New System.Drawing.Point(0, 0)
         ToolStrip1.Name = "ToolStrip1"
         ToolStrip1.Size = New System.Drawing.Size(944, 34)
@@ -519,7 +522,7 @@ Partial Class Wave
         '
         Me.ToolStripDropDownButton_Help.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right
         Me.ToolStripDropDownButton_Help.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.ToolStripDropDownButton_Help.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.HilfeToolStripMenuItem, Me.ToolStripMenuItem_ReleaseNotes, Me.AboutToolStripMenuItem})
+        Me.ToolStripDropDownButton_Help.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.HilfeToolStripMenuItem, Me.ToolStripMenuItem_ReleaseNotes, Me.CheckForUpdateToolStripMenuItem, Me.AboutToolStripMenuItem})
         Me.ToolStripDropDownButton_Help.Image = Global.BlueM.Wave.My.Resources.Resources.help
         Me.ToolStripDropDownButton_Help.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.ToolStripDropDownButton_Help.Name = "ToolStripDropDownButton_Help"
@@ -529,20 +532,26 @@ Partial Class Wave
         'HilfeToolStripMenuItem
         '
         Me.HilfeToolStripMenuItem.Name = "HilfeToolStripMenuItem"
-        Me.HilfeToolStripMenuItem.Size = New System.Drawing.Size(145, 22)
-        Me.HilfeToolStripMenuItem.Text = "Help (wiki)"
+        Me.HilfeToolStripMenuItem.Size = New System.Drawing.Size(165, 22)
+        Me.HilfeToolStripMenuItem.Text = "Help"
         '
         'ToolStripMenuItem_ReleaseNotes
         '
         Me.ToolStripMenuItem_ReleaseNotes.Name = "ToolStripMenuItem_ReleaseNotes"
-        Me.ToolStripMenuItem_ReleaseNotes.Size = New System.Drawing.Size(145, 22)
+        Me.ToolStripMenuItem_ReleaseNotes.Size = New System.Drawing.Size(165, 22)
         Me.ToolStripMenuItem_ReleaseNotes.Text = "Release notes"
+        '
+        'CheckForUpdateToolStripMenuItem
+        '
+        Me.CheckForUpdateToolStripMenuItem.Name = "CheckForUpdateToolStripMenuItem"
+        Me.CheckForUpdateToolStripMenuItem.Size = New System.Drawing.Size(165, 22)
+        Me.CheckForUpdateToolStripMenuItem.Text = "Check for update"
         '
         'AboutToolStripMenuItem
         '
         Me.AboutToolStripMenuItem.Image = Global.BlueM.Wave.My.Resources.Resources.BlueM_icon
         Me.AboutToolStripMenuItem.Name = "AboutToolStripMenuItem"
-        Me.AboutToolStripMenuItem.Size = New System.Drawing.Size(145, 22)
+        Me.AboutToolStripMenuItem.Size = New System.Drawing.Size(165, 22)
         Me.AboutToolStripMenuItem.Text = "About"
         '
         'ToolStripDropDownButton_ZoomToSeries
@@ -562,6 +571,16 @@ Partial Class Wave
         Me.ToolStripButton_ZoomAll.Name = "ToolStripButton_ZoomAll"
         Me.ToolStripButton_ZoomAll.Size = New System.Drawing.Size(23, 31)
         Me.ToolStripButton_ZoomAll.Text = "Zoom all"
+        '
+        'ToolStripButton_UpdateNotification
+        '
+        Me.ToolStripButton_UpdateNotification.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right
+        Me.ToolStripButton_UpdateNotification.Image = Global.BlueM.Wave.My.Resources.Resources.application_get
+        Me.ToolStripButton_UpdateNotification.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ToolStripButton_UpdateNotification.Name = "ToolStripButton_UpdateNotification"
+        Me.ToolStripButton_UpdateNotification.Size = New System.Drawing.Size(117, 31)
+        Me.ToolStripButton_UpdateNotification.Text = "Update available!"
+        Me.ToolStripButton_UpdateNotification.Visible = False
         '
         'SplitContainer1
         '
@@ -1281,6 +1300,7 @@ Partial Class Wave
         ToolStrip1.PerformLayout()
         Me.SplitContainer1.Panel1.ResumeLayout(False)
         Me.SplitContainer1.Panel2.ResumeLayout(False)
+        CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.SplitContainer1.ResumeLayout(False)
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.PanelNavigation.ResumeLayout(False)
@@ -1357,4 +1377,6 @@ Partial Class Wave
     Friend WithEvents ToolStripSeparator10 As ToolStripSeparator
     Friend WithEvents ToolStripStatusLabel_Errors As ToolStripStatusLabel
     Friend WithEvents ToolStripStatusLabel_Warnings As ToolStripStatusLabel
+    Friend WithEvents ToolStripButton_UpdateNotification As ToolStripButton
+    Friend WithEvents CheckForUpdateToolStripMenuItem As ToolStripMenuItem
 End Class

@@ -69,7 +69,9 @@ Public Class Wave
     Friend cursor_pan_hold As Cursor
     Friend cursor_zoom As Cursor
 
-    Private Const HelpURL As String = "http://wiki.bluemodel.org/index.php/Wave"
+    Private Const urlHelp As String = "http://wiki.bluemodel.org/index.php/Wave"
+    Private Const urlUpdateCheck As String = "https://downloads.bluemodel.org/BlueM.Wave/.version-latest"
+    Private Const urlDownload As String = "https://downloads.bluemodel.org/?dir=BlueM.Wave"
 
 #Region "Properties"
 
@@ -130,9 +132,44 @@ Public Class Wave
 
     'Form wird geladen
     '*****************
-    Private Sub Wave_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
-        'nix zu tun
+    Private Async Sub Wave_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
+        'Check for update
+        Try
+            Dim updateAvailable As Boolean
+            updateAvailable = Await CheckForUpdate()
+            If updateAvailable Then
+                Me.ToolStripButton_UpdateNotification.Visible = True
+            End If
+        Catch ax As Exception
+            'do nothing if check for update fails at startup
+        End Try
     End Sub
+
+    ''' <summary>
+    ''' Checks for a newer version on the server
+    ''' </summary>
+    ''' <returns>True if a newer version is available</returns>
+    Private Async Function CheckForUpdate() As Threading.Tasks.Task(Of Boolean)
+
+        'get current version (only consider major, minor and build numbers, omitting the auto-generated revision number)
+        Dim currentVersion As New Version(String.Format("{0}.{1}.{2}",
+                                                        My.Application.Info.Version.Major,
+                                                        My.Application.Info.Version.Minor,
+                                                        My.Application.Info.Version.Build))
+
+        'retrieve latest version number from server
+        Dim client As New Net.Http.HttpClient()
+        Dim s As String = Await client.GetStringAsync(urlUpdateCheck)
+        Dim latestVersion As New Version(s)
+
+        'compare versions
+        If currentVersion < latestVersion Then
+            Return True
+        Else
+            Return False
+        End If
+
+    End Function
 
     ''' <summary>
     ''' Wenn sich der Log verändert hat, Statustext aktualisieren
@@ -1662,6 +1699,29 @@ Public Class Wave
     End Sub
 
     ''' <summary>
+    ''' Check for update menu item or update notification button clicked
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    Private Async Sub CheckForUpdateToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles CheckForUpdateToolStripMenuItem.Click, ToolStripButton_UpdateNotification.Click
+        Try
+            Dim updateAvailable As Boolean = Await CheckForUpdate()
+            If updateAvailable Then
+                Me.ToolStripButton_UpdateNotification.Visible = True
+                Dim resp As MsgBoxResult = MsgBox("A new version is available!" & eol & "Click OK to go to downloads.bluemodel.org to get it.", MsgBoxStyle.OkCancel)
+                If resp = MsgBoxResult.Ok Then
+                    Process.Start(urlDownload)
+                End If
+            Else
+                Me.ToolStripButton_UpdateNotification.Visible = False
+                MsgBox("You are already up to date!", MsgBoxStyle.Information)
+            End If
+        Catch ex As Exception
+            MsgBox("Error while checking for update:" & eol & ex.Message, MsgBoxStyle.Critical)
+        End Try
+    End Sub
+
+    ''' <summary>
     ''' About Click
     ''' </summary>
     Private Sub About(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles AboutToolStripMenuItem.Click
@@ -1674,7 +1734,7 @@ Public Class Wave
     ''' </summary>
     ''' <remarks></remarks>
     Private Sub Hilfe(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles HilfeToolStripMenuItem.Click
-        Process.Start(HelpURL)
+        Process.Start(urlHelp)
     End Sub
 
     ''' <summary>
