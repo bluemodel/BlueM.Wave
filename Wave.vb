@@ -161,6 +161,7 @@ Public Class Wave
         Dim client As New Net.Http.HttpClient()
         Dim s As String = Await client.GetStringAsync(urlUpdateCheck)
         Dim latestVersion As New Version(s)
+        Log.AddLogEntry(Log.levels.debug, "CheckUpdate: Latest version on server: " & latestVersion.ToString())
 
         'compare versions
         If currentVersion < latestVersion Then

@@ -384,6 +384,7 @@ Public Class TimeSeries
             Dim dt As TimeSpan
 
             If Me.Unit.ToLower.EndsWith("/s") Then
+                Log.AddLogEntry(Log.levels.debug, "Calculating volume by integrating over time for series " & Me.Title)
                 t0 = Me.NodesClean.First().Key
                 v0 = Me.NodesClean.First().Value
                 vol = 0.0
