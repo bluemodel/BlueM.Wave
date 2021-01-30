@@ -53,6 +53,15 @@ Namespace My
                 Return defaultInstance
             End Get
         End Property
+        
+        <Global.System.Configuration.ApplicationScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("info")>  _
+        Public ReadOnly Property loggingLevel() As String
+            Get
+                Return CType(Me("loggingLevel"),String)
+            End Get
+        End Property
     End Class
 End Namespace
 

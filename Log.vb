@@ -35,7 +35,7 @@ Friend Class Log
     Private Shared logWindow As LogWindow
 
     ''' <summary>
-    ''' Logging level
+    ''' Logging level, value set here may be overwritten by application settings
     ''' </summary>
     Friend Shared level As levels = levels.info
 
@@ -55,7 +55,14 @@ Friend Class Log
     Public Shared Event LogMsgAdded(level As Log.levels, msg As String)
 
     Private Sub New()
-        'nix
+        'attempt to reading loggingLevel from application settings
+        Try
+            Log.level = [Enum].Parse(GetType(levels), My.Settings.loggingLevel)
+        Catch ex As Exception
+            'set default logging level to info
+            Log.AddLogEntry(levels.debug, "Unable to read loggingLevel from application settings, setting to default value 'info'")
+            Log.level = levels.info
+        End Try
     End Sub
 
     ''' <summary>
