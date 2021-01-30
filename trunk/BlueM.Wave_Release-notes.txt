@@ -3,10 +3,12 @@ BlueM.Wave Release Notes
 ===============================================================
 Version 1.9.0
 -------------
-CHANGED:
-* Time series properties and statistics are now two separate dialogs
 NEW:
 * Every loaded time series now stores information about its original datasource, which is displayed in the properties dialog
+CHANGED:
+* Time series properties and statistics are now two separate dialogs
+* The Volume property of a time series is now only computed for time series with units ending with "/s", otherwise returning NaN
+  Before, time series with units not ending with "/s" would have the Sum property displayed as Volume.
 API-CHANGES:
 * New property TimeSeries.DataSource of type KeyValuePair(String fileName, String seriesName). 
   Is used by Wave for displaying the datasource in the properties dialog, filling the MRU files menu item and reloading time series from files.
