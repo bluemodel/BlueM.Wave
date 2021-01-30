@@ -35,6 +35,11 @@ Friend Class Log
     Private Shared logWindow As LogWindow
 
     ''' <summary>
+    ''' Logging level
+    ''' </summary>
+    Friend Shared level As levels = levels.info
+
+    ''' <summary>
     ''' Log levels
     ''' </summary>
     Public Enum levels As Short
@@ -45,7 +50,7 @@ Friend Class Log
     End Enum
 
     ''' <summary>
-    ''' Wird ausgelöst, wenn sich der Log Text verändert hat
+    ''' Is triggered after a log message was added
     ''' </summary>
     Public Shared Event LogMsgAdded(level As Log.levels, msg As String)
 
@@ -68,19 +73,22 @@ Friend Class Log
     End Function
 
     ''' <summary>
-    ''' Einen Log-Eintrag hinzufügen
+    ''' Adds a log entry
     ''' </summary>
-    ''' <param name="msg">Eintrag</param>
+    ''' <param name="level">log level</param>
+    ''' <param name="msg">message</param>
     Public Shared Sub AddLogEntry(ByVal level As levels, ByVal msg As String)
 
-        If (msg.Contains(Constants.eol)) Then
-            'Wenn Eintrag mehrzeilig, dann formatieren
-            msg = Constants.eol & "  " & msg.Replace(Constants.eol, Constants.eol & "  ")
+        If level >= Log.level Then
+            If (msg.Contains(Constants.eol)) Then
+                'Wenn Eintrag mehrzeilig, dann formatieren
+                msg = Constants.eol & "  " & msg.Replace(Constants.eol, Constants.eol & "  ")
+            End If
+
+            Log.logWindow.AddLogEntry(level, msg)
+
+            RaiseEvent LogMsgAdded(level, msg)
         End If
-
-        Log.logWindow.AddLogEntry(level, msg)
-
-        RaiseEvent LogMsgAdded(level, msg)
 
     End Sub
 
