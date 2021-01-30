@@ -1,6 +1,11 @@
 ﻿===============================================================
 BlueM.Wave Release Notes
 ===============================================================
+Version 1.9.0
+-------------
+CHANGED:
+* Time series properties and statistics are now two separate dialogs
+
 Version 1.8.6
 -------------
 CHANGED:
