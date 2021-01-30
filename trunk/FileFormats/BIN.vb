@@ -133,9 +133,9 @@ Public Class BIN
         Me.FileTimeSeries.Add(sInfo.Index, ts)
 
         'Log 
-        Call Log.AddLogEntry("Read " & ts.Length & " nodes.")
+        Call Log.AddLogEntry(Log.levels.info, "Read " & ts.Length & " nodes.")
         If errorcount > 0 Then
-            Log.AddLogEntry("The file contained " & errorcount & " error values (" & BIN.ErrorValue & "), which were converted to NaN!")
+            Log.AddLogEntry(Log.levels.warning, "The file contained " & errorcount & " error values (" & BIN.ErrorValue & "), which were converted to NaN!")
         End If
 
     End Sub

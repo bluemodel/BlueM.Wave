@@ -251,7 +251,7 @@ Public Class ZRXP
             FiStr.Close()
 
             If errorcount > 0 Then
-                Log.AddLogEntry("The file contained " & errorcount & " error values (" & Me.FileMetadata("RINVAL") & "), which were converted to NaN!")
+                Log.AddLogEntry(Log.levels.warning, "The file contained " & errorcount & " error values (" & Me.FileMetadata("RINVAL") & "), which were converted to NaN!")
             End If
 
             'store time series

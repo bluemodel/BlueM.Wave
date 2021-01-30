@@ -335,21 +335,21 @@ Public Class WEL
 
         If IO.File.Exists(file_wlzip) Then
 
-            Log.AddLogEntry("Looking for file in " & file_wlzip & " ...")
+            Log.AddLogEntry(Log.levels.info, "Looking for file in " & file_wlzip & " ...")
             dir = IO.Path.GetDirectoryName(file)
             filename = IO.Path.GetFileName(file)
 
             For Each ze In Ionic.Zip.ZipFile.Read(file_wlzip)
                 If ze.FileName.ToLower() = filename.ToLower() Then
                     fileFound = True
-                    Log.AddLogEntry("Extracting file from " & file_wlzip & " ...")
+                    Log.AddLogEntry(Log.levels.info, "Extracting file from " & file_wlzip & " ...")
                     ze.Extract(dir, Ionic.Zip.ExtractExistingFileAction.OverwriteSilently)
                     Return True
                 End If
             Next
 
             If Not fileFound Then
-                Log.AddLogEntry("WARNING: File " & filename & " not found in " & file_wlzip & "!")
+                Log.AddLogEntry(Log.levels.error, "File " & filename & " not found in " & file_wlzip & "!")
                 Return False
             End If
 

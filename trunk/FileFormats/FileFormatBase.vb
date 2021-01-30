@@ -464,7 +464,7 @@ Public MustInherit Class FileFormatBase
             End If
         Next
         'series not found in file
-        Log.AddLogEntry("ERROR: Series with column index " & colIndex & " not found in file!")
+        Log.AddLogEntry(Log.levels.error, "Series with column index " & colIndex & " not found in file!")
         Return False
 
     End Function
@@ -484,7 +484,7 @@ Public MustInherit Class FileFormatBase
             End If
         Next
         'series not found in file
-        Log.AddLogEntry("ERROR: Series " & seriesName & " not found in file!")
+        Log.AddLogEntry(Log.levels.error, "Series " & seriesName & " not found in file!")
         Return False
 
     End Function

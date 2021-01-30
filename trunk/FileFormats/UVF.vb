@@ -179,7 +179,7 @@ Public Class UVF
                     'Anfangsjahrhundert auf 1900 setzen, falls nicht angegeben
                     If Me.FileMetadata("century") = "" Then
                         Me.FileMetadata("century") = "1900"
-                        Log.AddLogEntry("UVF: Starting century is not specified, assuming 1900.")
+                        Log.AddLogEntry(Log.levels.warning, "Starting century is not specified in file header, assuming 1900.")
                     End If
                     Continue Do
                 End If
@@ -302,7 +302,7 @@ Public Class UVF
             FiStr.Close()
 
             If errorcount > 0 Then
-                Log.AddLogEntry("The file contained " & errorcount & " error values (" & UVF.ErrorValue & "), which were converted to NaN!")
+                Log.AddLogEntry(Log.levels.warning, "The file contained " & errorcount & " error values (" & UVF.ErrorValue & "), which were converted to NaN!")
             End If
 
             'store time series
