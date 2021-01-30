@@ -63,6 +63,7 @@ Public Class TimeSeries
     Private _Objekt As String
     Private _Type As String
     Private _Interpretation As InterpretationEnum
+    Private _DataSource As KeyValuePair(Of String, String)
 
 #End Region 'Members
 
@@ -213,6 +214,19 @@ Public Class TimeSeries
         Set(ByVal value As String)
             If (value.Trim() = "") Then value = "-"
             _unit = value
+        End Set
+    End Property
+
+    ''' <summary>
+    ''' The original datasource of the time series consisting of file path and title
+    ''' </summary>
+    ''' <returns></returns>
+    Public Property DataSource As KeyValuePair(Of String, String)
+        Get
+            Return _DataSource
+        End Get
+        Set(value As KeyValuePair(Of String, String))
+            _DataSource = value
         End Set
     End Property
 
@@ -417,6 +431,7 @@ Public Class TimeSeries
         Me._Objekt = "-"
         Me._Type = "-"
         Me._Interpretation = InterpretationEnum.Undefined
+        Me._DataSource = New KeyValuePair(Of String, String)("", "")
         Me._nodes = New SortedList(Of DateTime, Double)
     End Sub
 
