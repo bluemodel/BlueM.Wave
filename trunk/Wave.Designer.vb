@@ -31,6 +31,8 @@ Partial Class Wave
         Dim ToolStripSeparator6 As System.Windows.Forms.ToolStripSeparator
         Dim ToolStripSeparator5 As System.Windows.Forms.ToolStripSeparator
         Dim ToolStripSeparator4 As System.Windows.Forms.ToolStripSeparator
+        Me.ToolStripStatusLabel_Errors = New System.Windows.Forms.ToolStripStatusLabel()
+        Me.ToolStripStatusLabel_Warnings = New System.Windows.Forms.ToolStripStatusLabel()
         Me.ToolStripStatusLabel_Log = New System.Windows.Forms.ToolStripStatusLabel()
         Me.ToolStripButton_New = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripDropDownButton_Open = New System.Windows.Forms.ToolStripDropDownButton()
@@ -130,7 +132,7 @@ Partial Class Wave
         '
         'StatusStrip1
         '
-        StatusStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripStatusLabel_Log})
+        StatusStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripStatusLabel_Errors, Me.ToolStripStatusLabel_Warnings, Me.ToolStripStatusLabel_Log})
         StatusStrip1.Location = New System.Drawing.Point(0, 639)
         StatusStrip1.Name = "StatusStrip1"
         StatusStrip1.RightToLeft = System.Windows.Forms.RightToLeft.No
@@ -140,18 +142,38 @@ Partial Class Wave
         StatusStrip1.TabIndex = 1
         StatusStrip1.Text = "StatusStrip1"
         '
+        'ToolStripStatusLabel_Errors
+        '
+        Me.ToolStripStatusLabel_Errors.Image = Global.BlueM.Wave.My.Resources.Resources.cancel_inactive
+        Me.ToolStripStatusLabel_Errors.IsLink = True
+        Me.ToolStripStatusLabel_Errors.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
+        Me.ToolStripStatusLabel_Errors.LinkColor = System.Drawing.SystemColors.ControlDarkDark
+        Me.ToolStripStatusLabel_Errors.Name = "ToolStripStatusLabel_Errors"
+        Me.ToolStripStatusLabel_Errors.Size = New System.Drawing.Size(29, 17)
+        Me.ToolStripStatusLabel_Errors.Text = "0"
+        Me.ToolStripStatusLabel_Errors.ToolTipText = "Errors"
+        '
+        'ToolStripStatusLabel_Warnings
+        '
+        Me.ToolStripStatusLabel_Warnings.Image = Global.BlueM.Wave.My.Resources.Resources.warning_inactive
+        Me.ToolStripStatusLabel_Warnings.IsLink = True
+        Me.ToolStripStatusLabel_Warnings.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
+        Me.ToolStripStatusLabel_Warnings.LinkColor = System.Drawing.SystemColors.ControlDarkDark
+        Me.ToolStripStatusLabel_Warnings.Name = "ToolStripStatusLabel_Warnings"
+        Me.ToolStripStatusLabel_Warnings.Size = New System.Drawing.Size(29, 17)
+        Me.ToolStripStatusLabel_Warnings.Text = "0"
+        Me.ToolStripStatusLabel_Warnings.ToolTipText = "Warnings"
+        '
         'ToolStripStatusLabel_Log
         '
         Me.ToolStripStatusLabel_Log.ActiveLinkColor = System.Drawing.SystemColors.ControlDarkDark
-        Me.ToolStripStatusLabel_Log.Image = Global.BlueM.Wave.My.Resources.Resources.script
         Me.ToolStripStatusLabel_Log.IsLink = True
         Me.ToolStripStatusLabel_Log.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
         Me.ToolStripStatusLabel_Log.LinkColor = System.Drawing.SystemColors.ControlDarkDark
         Me.ToolStripStatusLabel_Log.Margin = New System.Windows.Forms.Padding(3, 3, 0, 2)
         Me.ToolStripStatusLabel_Log.Name = "ToolStripStatusLabel_Log"
-        Me.ToolStripStatusLabel_Log.Size = New System.Drawing.Size(64, 17)
-        Me.ToolStripStatusLabel_Log.Text = "TestText"
-        Me.ToolStripStatusLabel_Log.ToolTipText = "Log anzeigen"
+        Me.ToolStripStatusLabel_Log.Size = New System.Drawing.Size(0, 17)
+        Me.ToolStripStatusLabel_Log.ToolTipText = "Show log"
         Me.ToolStripStatusLabel_Log.VisitedLinkColor = System.Drawing.SystemColors.ControlDarkDark
         '
         'ToolStrip1
@@ -1333,4 +1355,6 @@ Partial Class Wave
     Friend WithEvents PasteFromClipboardCtrlVToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents ToolStripButton_Statistics As ToolStripButton
     Friend WithEvents ToolStripSeparator10 As ToolStripSeparator
+    Friend WithEvents ToolStripStatusLabel_Errors As ToolStripStatusLabel
+    Friend WithEvents ToolStripStatusLabel_Warnings As ToolStripStatusLabel
 End Class

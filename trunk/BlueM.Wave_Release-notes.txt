@@ -6,6 +6,7 @@ Version 1.9.0
 NEW:
 * Every loaded time series now stores information about its original datasource, which is displayed in the properties dialog
 * Log messages are now categorized and colored to make warnings and errors more prominent #730
+* Added error and warning counters to the status bar
 CHANGED:
 * Time series properties and statistics are now two separate dialogs
 * The Volume property of a time series is now only computed for time series with units ending with "/s", otherwise returning NaN.

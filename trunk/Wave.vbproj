@@ -425,6 +425,8 @@
     <None Include="Resources\arrow_down.png" />
     <None Include="Resources\chart_line_error.png" />
     <Content Include="Resources\arrow_up_down.png" />
+    <Content Include="Resources\cancel.png" />
+    <None Include="Resources\cancel_inactive.png" />
     <Content Include="Resources\chart_magnify.png" />
     <Content Include="Resources\chart_pie.png" />
     <Content Include="Resources\color_wheel.png" />
@@ -487,6 +489,7 @@
     <None Include="Resources\pan.png" />
     <Content Include="Resources\error_convert.png" />
     <Content Include="Resources\error_delete.png" />
+    <None Include="Resources\error_inactive.png" />
     <Content Include="Resources\navigate_back.png" />
     <Content Include="Resources\navigate_forward.png" />
     <None Include="Resources\page_save.png" />
