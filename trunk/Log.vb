@@ -60,7 +60,6 @@ Friend Class Log
             Log.level = [Enum].Parse(GetType(levels), My.Settings.loggingLevel)
         Catch ex As Exception
             'set default logging level to info
-            Log.AddLogEntry(levels.debug, "Unable to read loggingLevel from application settings, setting to default value 'info'")
             Log.level = levels.info
         End Try
     End Sub
