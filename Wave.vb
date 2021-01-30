@@ -69,7 +69,7 @@ Public Class Wave
     Friend cursor_pan_hold As Cursor
     Friend cursor_zoom As Cursor
 
-    Private Const urlHelp As String = "http://wiki.bluemodel.org/index.php/Wave"
+    Private Const urlHelp As String = "https://wiki.bluemodel.org/index.php/Wave"
     Private Const urlUpdateCheck As String = "https://downloads.bluemodel.org/BlueM.Wave/.version-latest"
     Private Const urlDownload As String = "https://downloads.bluemodel.org/?dir=BlueM.Wave"
 
