@@ -376,18 +376,17 @@ Public Class TimeSeries
     ''' <value></value>
     ''' <returns></returns>
     ''' <remarks>If the unit is per second (ends with "/s"), values are integrated over time using a linear interpretation. 
-    ''' Otherwise, a simple summation is performed.</remarks>
+    ''' Otherwise, NaN is returned.</remarks>
     Public ReadOnly Property Volume() As Double
         Get
             Dim v0, v1, vol As Double
             Dim t0, t1 As DateTime
             Dim dt As TimeSpan
 
-            vol = 0.0
             If Me.Unit.ToLower.EndsWith("/s") Then
-                Log.AddLogEntry(Me.Title & ": calculating volume by integrating over time.")
                 t0 = Me.NodesClean.First().Key
                 v0 = Me.NodesClean.First().Value
+                vol = 0.0
                 For Each node As KeyValuePair(Of Date, Double) In Me.NodesClean
                     t1 = node.Key
                     v1 = node.Value
@@ -399,9 +398,7 @@ Public Class TimeSeries
                     v0 = v1
                 Next
             Else
-                'simple sum
-                Log.AddLogEntry(Me.Title & ": calculating volume by simple summation.")
-                vol = Me.Sum
+                vol = Double.NaN
             End If
 
             Return vol
