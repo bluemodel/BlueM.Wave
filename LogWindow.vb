@@ -35,6 +35,7 @@ Friend Class LogWindow
         InitializeComponent()
 
         ' Add any initialization after the InitializeComponent() call.
+        Me.AddLogEntry(Log.levels.info, "Logging level is set to " & Log.level.ToString())
     End Sub
 
     Friend Sub AddLogEntry(level As Log.levels, msg As String)
