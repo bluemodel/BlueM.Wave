@@ -11,6 +11,8 @@ CHANGED:
 * Time series properties and statistics are now two separate dialogs
 * The Volume property of a time series is now only computed for time series with units ending with "/s", otherwise returning NaN.
   Before, the Sum property was used as a fallback for Volume.
+FIXED:
+* Fixed some errors that could occur when the chart contains series that are not of type line
 API-CHANGES:
 * New property TimeSeries.DataSource of type KeyValuePair(String fileName, String seriesName). 
   Is used by Wave for displaying the datasource in the properties dialog, filling the MRU files menu item and for reloading time series from files.

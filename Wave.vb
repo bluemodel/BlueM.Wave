@@ -536,23 +536,25 @@ Public Class Wave
     Private Sub TimeSeriesPropertiesChanged(id As Integer) Handles propDialog.PropertyChanged
 
         'find series in chart
-        For Each series As Steema.TeeChart.Styles.Line In Me.TChart1.Series
+        For Each series As Steema.TeeChart.Styles.Series In Me.TChart1.Series
             If series.Tag = id Then
-
                 'set line display according to interpretation
-                Select Case Me.TimeSeriesDict(id).Interpretation
-                    Case TimeSeries.InterpretationEnum.Instantaneous,
-                         TimeSeries.InterpretationEnum.Undefined
-                        series.Stairs = False
-                        series.InvertedStairs = False
-                    Case TimeSeries.InterpretationEnum.BlockRight
-                        series.Stairs = True
-                        series.InvertedStairs = False
-                    Case TimeSeries.InterpretationEnum.BlockLeft,
-                         TimeSeries.InterpretationEnum.CumulativePerTimestep
-                        series.Stairs = True
-                        series.InvertedStairs = True
-                End Select
+                If TypeOf series Is Steema.TeeChart.Styles.Line Then
+                    Dim seriesline As Steema.TeeChart.Styles.Line = series
+                    Select Case Me.TimeSeriesDict(id).Interpretation
+                        Case TimeSeries.InterpretationEnum.Instantaneous,
+                             TimeSeries.InterpretationEnum.Undefined
+                            seriesline.Stairs = False
+                            seriesline.InvertedStairs = False
+                        Case TimeSeries.InterpretationEnum.BlockRight
+                            seriesline.Stairs = True
+                            seriesline.InvertedStairs = False
+                        Case TimeSeries.InterpretationEnum.BlockLeft,
+                             TimeSeries.InterpretationEnum.CumulativePerTimestep
+                            seriesline.Stairs = True
+                            seriesline.InvertedStairs = True
+                    End Select
+                End If
 
                 'update title in chart
                 series.Title = Me.TimeSeriesDict(id).Title
