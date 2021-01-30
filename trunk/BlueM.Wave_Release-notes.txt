@@ -4,12 +4,13 @@ BlueM.Wave Release Notes
 Version 1.9.0
 -------------
 NEW:
+* Time series properties and statistics are now two separate dialogs
 * Every loaded time series now stores information about its original datasource, which is displayed in the properties dialog
-* Log messages are now categorized and colored to make warnings and errors more prominent #730
+* Log messages are now categorized in levels and colored to make warnings and errors more prominent #730
+* The logging level can be set in Wave.exe.config by setting loggingLevel to either debug, info, warning or error (default is info)
 * Added error and warning counters to the status bar
 * Added an update notification and a check for update help menu item
 CHANGED:
-* Time series properties and statistics are now two separate dialogs
 * The Volume property of a time series is now only computed for time series with units ending with "/s", otherwise returning NaN.
   Before, the Sum property was used as a fallback for Volume.
 * Updated to .NET Framework 4.8
