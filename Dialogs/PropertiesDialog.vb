@@ -54,6 +54,7 @@ Friend Class PropertiesDialog
     ''' <param name="seriesList">the new List of TimeSeries</param>
     Public Overloads Sub Update(ByRef seriesList As List(Of TimeSeries))
         Me.TimeSeriesBindingSource.DataSource = seriesList
+        MyBase.Update()
     End Sub
 
     ''' <summary>

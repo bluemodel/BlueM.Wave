@@ -30,16 +30,6 @@ Partial Class PropertiesDialog
         Me.Interpretation = New System.Windows.Forms.DataGridViewComboBoxColumn()
         Me.UnitDataGridViewTextBoxColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.MetadataText = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.LengthDataGridViewTextBoxColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.StartDateDataGridViewTextBoxColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.EndDateDataGridViewTextBoxColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.MinimumDataGridViewTextBoxColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.MaximumDataGridViewTextBoxColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.AverageDataGridViewTextBoxColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.FirstValueDataGridViewTextBoxColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.LastValueDataGridViewTextBoxColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.SumDataGridViewTextBoxColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.VolumeDataGridViewTextBoxColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.TimeSeriesBindingSource = New System.Windows.Forms.BindingSource(Me.components)
         CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.TimeSeriesBindingSource, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -56,7 +46,7 @@ Partial Class PropertiesDialog
         Me.DataGridView1.CausesValidation = False
         Me.DataGridView1.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.EnableAlwaysIncludeHeaderText
         Me.DataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.DataGridView1.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.Id, Me.TitleDataGridViewTextBoxColumn, Me.Interpretation, Me.UnitDataGridViewTextBoxColumn, Me.MetadataText, Me.LengthDataGridViewTextBoxColumn, Me.StartDateDataGridViewTextBoxColumn, Me.EndDateDataGridViewTextBoxColumn, Me.MinimumDataGridViewTextBoxColumn, Me.MaximumDataGridViewTextBoxColumn, Me.AverageDataGridViewTextBoxColumn, Me.FirstValueDataGridViewTextBoxColumn, Me.LastValueDataGridViewTextBoxColumn, Me.SumDataGridViewTextBoxColumn, Me.VolumeDataGridViewTextBoxColumn})
+        Me.DataGridView1.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.Id, Me.TitleDataGridViewTextBoxColumn, Me.Interpretation, Me.UnitDataGridViewTextBoxColumn, Me.MetadataText})
         Me.DataGridView1.DataSource = Me.TimeSeriesBindingSource
         Me.DataGridView1.Location = New System.Drawing.Point(13, 12)
         Me.DataGridView1.Name = "DataGridView1"
@@ -70,7 +60,6 @@ Partial Class PropertiesDialog
         Me.Id.Frozen = True
         Me.Id.HeaderText = "Id"
         Me.Id.Name = "Id"
-        Me.Id.ReadOnly = True
         Me.Id.Visible = False
         Me.Id.Width = 41
         '
@@ -104,88 +93,7 @@ Partial Class PropertiesDialog
         Me.MetadataText.DataPropertyName = "MetadataText"
         Me.MetadataText.HeaderText = "Metadata"
         Me.MetadataText.Name = "MetadataText"
-        Me.MetadataText.ReadOnly = True
         Me.MetadataText.Width = 77
-        '
-        'LengthDataGridViewTextBoxColumn
-        '
-        Me.LengthDataGridViewTextBoxColumn.DataPropertyName = "Length"
-        Me.LengthDataGridViewTextBoxColumn.HeaderText = "Length"
-        Me.LengthDataGridViewTextBoxColumn.Name = "LengthDataGridViewTextBoxColumn"
-        Me.LengthDataGridViewTextBoxColumn.ReadOnly = True
-        Me.LengthDataGridViewTextBoxColumn.Width = 65
-        '
-        'StartDateDataGridViewTextBoxColumn
-        '
-        Me.StartDateDataGridViewTextBoxColumn.DataPropertyName = "StartDate"
-        Me.StartDateDataGridViewTextBoxColumn.HeaderText = "StartDate"
-        Me.StartDateDataGridViewTextBoxColumn.Name = "StartDateDataGridViewTextBoxColumn"
-        Me.StartDateDataGridViewTextBoxColumn.ReadOnly = True
-        Me.StartDateDataGridViewTextBoxColumn.Width = 77
-        '
-        'EndDateDataGridViewTextBoxColumn
-        '
-        Me.EndDateDataGridViewTextBoxColumn.DataPropertyName = "EndDate"
-        Me.EndDateDataGridViewTextBoxColumn.HeaderText = "EndDate"
-        Me.EndDateDataGridViewTextBoxColumn.Name = "EndDateDataGridViewTextBoxColumn"
-        Me.EndDateDataGridViewTextBoxColumn.ReadOnly = True
-        Me.EndDateDataGridViewTextBoxColumn.Width = 74
-        '
-        'MinimumDataGridViewTextBoxColumn
-        '
-        Me.MinimumDataGridViewTextBoxColumn.DataPropertyName = "Minimum"
-        Me.MinimumDataGridViewTextBoxColumn.HeaderText = "Minimum"
-        Me.MinimumDataGridViewTextBoxColumn.Name = "MinimumDataGridViewTextBoxColumn"
-        Me.MinimumDataGridViewTextBoxColumn.ReadOnly = True
-        Me.MinimumDataGridViewTextBoxColumn.Width = 73
-        '
-        'MaximumDataGridViewTextBoxColumn
-        '
-        Me.MaximumDataGridViewTextBoxColumn.DataPropertyName = "Maximum"
-        Me.MaximumDataGridViewTextBoxColumn.HeaderText = "Maximum"
-        Me.MaximumDataGridViewTextBoxColumn.Name = "MaximumDataGridViewTextBoxColumn"
-        Me.MaximumDataGridViewTextBoxColumn.ReadOnly = True
-        Me.MaximumDataGridViewTextBoxColumn.Width = 76
-        '
-        'AverageDataGridViewTextBoxColumn
-        '
-        Me.AverageDataGridViewTextBoxColumn.DataPropertyName = "Average"
-        Me.AverageDataGridViewTextBoxColumn.HeaderText = "Average"
-        Me.AverageDataGridViewTextBoxColumn.Name = "AverageDataGridViewTextBoxColumn"
-        Me.AverageDataGridViewTextBoxColumn.ReadOnly = True
-        Me.AverageDataGridViewTextBoxColumn.Width = 72
-        '
-        'FirstValueDataGridViewTextBoxColumn
-        '
-        Me.FirstValueDataGridViewTextBoxColumn.DataPropertyName = "FirstValue"
-        Me.FirstValueDataGridViewTextBoxColumn.HeaderText = "FirstValue"
-        Me.FirstValueDataGridViewTextBoxColumn.Name = "FirstValueDataGridViewTextBoxColumn"
-        Me.FirstValueDataGridViewTextBoxColumn.ReadOnly = True
-        Me.FirstValueDataGridViewTextBoxColumn.Width = 78
-        '
-        'LastValueDataGridViewTextBoxColumn
-        '
-        Me.LastValueDataGridViewTextBoxColumn.DataPropertyName = "LastValue"
-        Me.LastValueDataGridViewTextBoxColumn.HeaderText = "LastValue"
-        Me.LastValueDataGridViewTextBoxColumn.Name = "LastValueDataGridViewTextBoxColumn"
-        Me.LastValueDataGridViewTextBoxColumn.ReadOnly = True
-        Me.LastValueDataGridViewTextBoxColumn.Width = 79
-        '
-        'SumDataGridViewTextBoxColumn
-        '
-        Me.SumDataGridViewTextBoxColumn.DataPropertyName = "Sum"
-        Me.SumDataGridViewTextBoxColumn.HeaderText = "Sum"
-        Me.SumDataGridViewTextBoxColumn.Name = "SumDataGridViewTextBoxColumn"
-        Me.SumDataGridViewTextBoxColumn.ReadOnly = True
-        Me.SumDataGridViewTextBoxColumn.Width = 53
-        '
-        'VolumeDataGridViewTextBoxColumn
-        '
-        Me.VolumeDataGridViewTextBoxColumn.DataPropertyName = "Volume"
-        Me.VolumeDataGridViewTextBoxColumn.HeaderText = "Volume"
-        Me.VolumeDataGridViewTextBoxColumn.Name = "VolumeDataGridViewTextBoxColumn"
-        Me.VolumeDataGridViewTextBoxColumn.ReadOnly = True
-        Me.VolumeDataGridViewTextBoxColumn.Width = 67
         '
         'TimeSeriesBindingSource
         '
@@ -215,14 +123,4 @@ Partial Class PropertiesDialog
     Friend WithEvents Interpretation As DataGridViewComboBoxColumn
     Friend WithEvents UnitDataGridViewTextBoxColumn As DataGridViewTextBoxColumn
     Friend WithEvents MetadataText As DataGridViewTextBoxColumn
-    Friend WithEvents LengthDataGridViewTextBoxColumn As DataGridViewTextBoxColumn
-    Friend WithEvents StartDateDataGridViewTextBoxColumn As DataGridViewTextBoxColumn
-    Friend WithEvents EndDateDataGridViewTextBoxColumn As DataGridViewTextBoxColumn
-    Friend WithEvents MinimumDataGridViewTextBoxColumn As DataGridViewTextBoxColumn
-    Friend WithEvents MaximumDataGridViewTextBoxColumn As DataGridViewTextBoxColumn
-    Friend WithEvents AverageDataGridViewTextBoxColumn As DataGridViewTextBoxColumn
-    Friend WithEvents FirstValueDataGridViewTextBoxColumn As DataGridViewTextBoxColumn
-    Friend WithEvents LastValueDataGridViewTextBoxColumn As DataGridViewTextBoxColumn
-    Friend WithEvents SumDataGridViewTextBoxColumn As DataGridViewTextBoxColumn
-    Friend WithEvents VolumeDataGridViewTextBoxColumn As DataGridViewTextBoxColumn
 End Class

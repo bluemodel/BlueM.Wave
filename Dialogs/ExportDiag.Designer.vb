@@ -25,13 +25,13 @@ Partial Class ExportDiag
         Dim Label_Format As System.Windows.Forms.Label
         Dim Label_Series As System.Windows.Forms.Label
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(ExportDiag))
-        Me.ListBox_Series = New System.Windows.Forms.ListBox
-        Me.Button_OK = New System.Windows.Forms.Button
-        Me.ComboBox_Format = New System.Windows.Forms.ComboBox
-        Me.Button_Cancel = New System.Windows.Forms.Button
-        Me.Button_SelectAll = New System.Windows.Forms.Button
-        Label_Format = New System.Windows.Forms.Label
-        Label_Series = New System.Windows.Forms.Label
+        Me.ListBox_Series = New System.Windows.Forms.ListBox()
+        Me.Button_OK = New System.Windows.Forms.Button()
+        Me.ComboBox_Format = New System.Windows.Forms.ComboBox()
+        Me.Button_Cancel = New System.Windows.Forms.Button()
+        Me.Button_SelectAll = New System.Windows.Forms.Button()
+        Label_Format = New System.Windows.Forms.Label()
+        Label_Series = New System.Windows.Forms.Label()
         Me.SuspendLayout()
         '
         'Label_Format
@@ -55,19 +55,19 @@ Partial Class ExportDiag
         'ListBox_Series
         '
         Me.ListBox_Series.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-                    Or System.Windows.Forms.AnchorStyles.Left) _
-                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.ListBox_Series.FormattingEnabled = True
         Me.ListBox_Series.Location = New System.Drawing.Point(12, 62)
         Me.ListBox_Series.Name = "ListBox_Series"
-        Me.ListBox_Series.Size = New System.Drawing.Size(169, 108)
+        Me.ListBox_Series.Size = New System.Drawing.Size(170, 108)
         Me.ListBox_Series.TabIndex = 0
         '
         'Button_OK
         '
         Me.Button_OK.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Button_OK.DialogResult = System.Windows.Forms.DialogResult.OK
-        Me.Button_OK.Location = New System.Drawing.Point(25, 186)
+        Me.Button_OK.Location = New System.Drawing.Point(26, 186)
         Me.Button_OK.Name = "Button_OK"
         Me.Button_OK.Size = New System.Drawing.Size(75, 23)
         Me.Button_OK.TabIndex = 1
@@ -87,7 +87,7 @@ Partial Class ExportDiag
         '
         Me.Button_Cancel.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Button_Cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel
-        Me.Button_Cancel.Location = New System.Drawing.Point(106, 186)
+        Me.Button_Cancel.Location = New System.Drawing.Point(107, 186)
         Me.Button_Cancel.Name = "Button_Cancel"
         Me.Button_Cancel.Size = New System.Drawing.Size(75, 23)
         Me.Button_Cancel.TabIndex = 5
@@ -97,7 +97,7 @@ Partial Class ExportDiag
         'Button_SelectAll
         '
         Me.Button_SelectAll.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Button_SelectAll.Location = New System.Drawing.Point(120, 36)
+        Me.Button_SelectAll.Location = New System.Drawing.Point(121, 36)
         Me.Button_SelectAll.Name = "Button_SelectAll"
         Me.Button_SelectAll.Size = New System.Drawing.Size(61, 23)
         Me.Button_SelectAll.TabIndex = 5
@@ -108,7 +108,7 @@ Partial Class ExportDiag
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(193, 221)
+        Me.ClientSize = New System.Drawing.Size(194, 221)
         Me.Controls.Add(Label_Format)
         Me.Controls.Add(Me.ComboBox_Format)
         Me.Controls.Add(Label_Series)
@@ -119,6 +119,7 @@ Partial Class ExportDiag
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.MaximizeBox = False
         Me.MinimizeBox = False
+        Me.MinimumSize = New System.Drawing.Size(210, 260)
         Me.Name = "ExportDiag"
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
