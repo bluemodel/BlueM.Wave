@@ -56,9 +56,11 @@ Partial Class Wave
         Me.ToolStripSeparator7 = New System.Windows.Forms.ToolStripSeparator()
         Me.ToolStripButton_Analysis = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripButton_EditChart = New System.Windows.Forms.ToolStripButton()
-        Me.ToolStripButton_Properties = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripButton_AxisDialog = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripSeparator9 = New System.Windows.Forms.ToolStripSeparator()
+        Me.ToolStripButton_Properties = New System.Windows.Forms.ToolStripButton()
+        Me.ToolStripButton_Statistics = New System.Windows.Forms.ToolStripButton()
+        Me.ToolStripSeparator10 = New System.Windows.Forms.ToolStripSeparator()
         Me.ToolStripButton_AutoAdjustYAxes = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripButton_ToggleOverview = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripButton_ToggleNavigation = New System.Windows.Forms.ToolStripButton()
@@ -91,8 +93,6 @@ Partial Class Wave
         Me.DateTimePicker_NavEnd = New System.Windows.Forms.DateTimePicker()
         Me.DateTimePicker_NavStart = New System.Windows.Forms.DateTimePicker()
         Me.SaveFileDialog1 = New System.Windows.Forms.SaveFileDialog()
-        Me.ToolStripButton_Statistics = New System.Windows.Forms.ToolStripButton()
-        Me.ToolStripSeparator10 = New System.Windows.Forms.ToolStripSeparator()
         ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
         toolStripSeparator = New System.Windows.Forms.ToolStripSeparator()
         ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
@@ -149,7 +149,8 @@ Partial Class Wave
         Me.ToolStripStatusLabel_Log.LinkColor = System.Drawing.SystemColors.ControlDarkDark
         Me.ToolStripStatusLabel_Log.Margin = New System.Windows.Forms.Padding(3, 3, 0, 2)
         Me.ToolStripStatusLabel_Log.Name = "ToolStripStatusLabel_Log"
-        Me.ToolStripStatusLabel_Log.Size = New System.Drawing.Size(16, 17)
+        Me.ToolStripStatusLabel_Log.Size = New System.Drawing.Size(64, 17)
+        Me.ToolStripStatusLabel_Log.Text = "TestText"
         Me.ToolStripStatusLabel_Log.ToolTipText = "Log anzeigen"
         Me.ToolStripStatusLabel_Log.VisitedLinkColor = System.Drawing.SystemColors.ControlDarkDark
         '
@@ -370,16 +371,6 @@ Partial Class Wave
         Me.ToolStripButton_EditChart.Size = New System.Drawing.Size(23, 31)
         Me.ToolStripButton_EditChart.Text = "Edit chart"
         '
-        'ToolStripButton_Properties
-        '
-        Me.ToolStripButton_Properties.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.ToolStripButton_Properties.Image = Global.BlueM.Wave.My.Resources.Resources.table_edit
-        Me.ToolStripButton_Properties.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.ToolStripButton_Properties.Name = "ToolStripButton_Properties"
-        Me.ToolStripButton_Properties.Size = New System.Drawing.Size(23, 31)
-        Me.ToolStripButton_Properties.Text = "Properties"
-        Me.ToolStripButton_Properties.ToolTipText = "Show time series properties"
-        '
         'ToolStripButton_AxisDialog
         '
         Me.ToolStripButton_AxisDialog.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
@@ -394,6 +385,30 @@ Partial Class Wave
         '
         Me.ToolStripSeparator9.Name = "ToolStripSeparator9"
         Me.ToolStripSeparator9.Size = New System.Drawing.Size(6, 34)
+        '
+        'ToolStripButton_Properties
+        '
+        Me.ToolStripButton_Properties.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.ToolStripButton_Properties.Image = Global.BlueM.Wave.My.Resources.Resources.table_edit
+        Me.ToolStripButton_Properties.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ToolStripButton_Properties.Name = "ToolStripButton_Properties"
+        Me.ToolStripButton_Properties.Size = New System.Drawing.Size(23, 31)
+        Me.ToolStripButton_Properties.Text = "Properties"
+        Me.ToolStripButton_Properties.ToolTipText = "Show time series properties"
+        '
+        'ToolStripButton_Statistics
+        '
+        Me.ToolStripButton_Statistics.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.ToolStripButton_Statistics.Image = Global.BlueM.Wave.My.Resources.Resources.table_gear
+        Me.ToolStripButton_Statistics.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ToolStripButton_Statistics.Name = "ToolStripButton_Statistics"
+        Me.ToolStripButton_Statistics.Size = New System.Drawing.Size(23, 31)
+        Me.ToolStripButton_Statistics.Text = "Show time series statistics"
+        '
+        'ToolStripSeparator10
+        '
+        Me.ToolStripSeparator10.Name = "ToolStripSeparator10"
+        Me.ToolStripSeparator10.Size = New System.Drawing.Size(6, 34)
         '
         'ToolStripButton_AutoAdjustYAxes
         '
@@ -1222,20 +1237,6 @@ Partial Class Wave
         Me.DateTimePicker_NavStart.ShowUpDown = True
         Me.DateTimePicker_NavStart.Size = New System.Drawing.Size(110, 20)
         Me.DateTimePicker_NavStart.TabIndex = 0
-        '
-        'ToolStripButton_Statistics
-        '
-        Me.ToolStripButton_Statistics.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.ToolStripButton_Statistics.Image = Global.BlueM.Wave.My.Resources.Resources.table_gear
-        Me.ToolStripButton_Statistics.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.ToolStripButton_Statistics.Name = "ToolStripButton_Statistics"
-        Me.ToolStripButton_Statistics.Size = New System.Drawing.Size(23, 31)
-        Me.ToolStripButton_Statistics.Text = "Show time series statistics"
-        '
-        'ToolStripSeparator10
-        '
-        Me.ToolStripSeparator10.Name = "ToolStripSeparator10"
-        Me.ToolStripSeparator10.Size = New System.Drawing.Size(6, 34)
         '
         'Wave
         '

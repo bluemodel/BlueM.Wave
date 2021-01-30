@@ -29,23 +29,67 @@ Imports System.Windows.Forms
 
 Friend Class LogWindow
 
-#Region "Form behavior"
-
-    Private WithEvents myLog As Log
-
     Public Sub New()
 
         ' This call is required by the Windows Form Designer.
         InitializeComponent()
 
         ' Add any initialization after the InitializeComponent() call.
-        Me.myLog = Log.getInstance()
-
     End Sub
 
-    Private Sub LogChanged() Handles myLog.LogChanged
-        'Textbox mit Logtext aktualisieren
-        Me.TextBox_Log.Text = Log.Text
+    Friend Sub AddLogEntry(level As Log.levels, msg As String)
+
+        Dim start, length As Integer
+
+        start = Me.TextBox_Log.TextLength
+
+        'format log entry
+        msg = String.Format("* {0} {1}: {2}", DateTime.Now.ToString(Helpers.DefaultDateFormat), level.ToString.ToUpper(), msg) & eol
+
+        length = msg.Length
+
+        'append text
+        Me.TextBox_Log.AppendText(msg)
+
+        'select new entry
+        Me.TextBox_Log.Select(start, length)
+
+        Dim currentFont As Font = Me.TextBox_Log.Font
+
+        Dim boldFont As New Font(
+            currentFont.FontFamily,
+            currentFont.Size,
+            FontStyle.Bold)
+
+        'apply formatting
+        Select Case level
+            Case Log.levels.debug
+                Me.TextBox_Log.SelectionColor = Color.DarkGreen
+                Me.TextBox_Log.SelectionFont = boldFont
+            Case Log.levels.warning
+                Me.TextBox_Log.SelectionColor = Color.DarkOrange
+                Me.TextBox_Log.SelectionFont = boldFont
+            Case Log.levels.error
+                Me.TextBox_Log.SelectionColor = Color.Red
+                Me.TextBox_Log.SelectionFont = boldFont
+            Case Else
+                Me.TextBox_Log.SelectionColor = Color.Black
+                Me.TextBox_Log.SelectionFont = currentFont
+        End Select
+
+        'unselect and reset formatting
+        Me.TextBox_Log.Select(Me.TextBox_Log.Text.Length, 0)
+        Me.TextBox_Log.SelectionColor = Color.Black
+        Me.TextBox_Log.SelectionFont = currentFont
+
+        'scroll to end
+        Me.TextBox_Log.ScrollToCaret()
+
+        Call Application.DoEvents()
+    End Sub
+
+    Friend Sub ClearLog()
+        Me.TextBox_Log.Text = ""
         Call Application.DoEvents()
     End Sub
 
@@ -70,7 +114,5 @@ Friend Class LogWindow
             Me.TextBox_Log.SaveFile(Me.SaveFileDialog1.FileName, RichTextBoxStreamType.PlainText)
         End If
     End Sub
-
-#End Region 'Form behavior
 
 End Class

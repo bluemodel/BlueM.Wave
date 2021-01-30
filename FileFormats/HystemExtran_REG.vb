@@ -254,7 +254,7 @@ Public Class HystemExtran_REG
                     Case "N" 'Nullsatz, keine Daten
                         Continue Do
                     Case Else
-                        Log.AddLogEntry(String.Format("Unrecognized character {0} in line {1} column 20!", kennzeichnung, j))
+                        Log.AddLogEntry(Log.levels.warning, String.Format("Unrecognized character {0} in line {1} column 20!", kennzeichnung, j))
                 End Select
 
             End If

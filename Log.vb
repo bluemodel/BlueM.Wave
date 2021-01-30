@@ -32,31 +32,22 @@
 Friend Class Log
 
     Private Shared myInstance As Log
-    Private myLastMessage As String
-    Private myText As String
+    Private Shared logWindow As LogWindow
+
+    ''' <summary>
+    ''' Log levels
+    ''' </summary>
+    Public Enum levels As Short
+        debug
+        info
+        warning
+        [error]
+    End Enum
 
     ''' <summary>
     ''' Wird ausgelöst, wenn sich der Log Text verändert hat
     ''' </summary>
-    Public Shared Event LogChanged()
-
-    ''' <summary>
-    ''' Der Log Text
-    ''' </summary>
-    Public Shared ReadOnly Property Text() As String
-        Get
-            Return Log.getInstance.myText
-        End Get
-    End Property
-
-    ''' <summary>
-    ''' Die letzte Meldung im Log
-    ''' </summary>
-    Public Shared ReadOnly Property LastMessage() As String
-        Get
-            Return Log.getInstance.myLastMessage
-        End Get
-    End Property
+    Public Shared Event LogMsgAdded(level As Log.levels, msg As String)
 
     Private Sub New()
         'nix
@@ -68,6 +59,10 @@ Friend Class Log
     Public Shared Function getInstance() As Log
         If (IsNothing(myInstance)) Then
             myInstance = New Log()
+            'instantiate log window
+            If IsNothing(logWindow) Then
+                logWindow = New LogWindow()
+            End If
         End If
         Return myInstance
     End Function
@@ -76,20 +71,16 @@ Friend Class Log
     ''' Einen Log-Eintrag hinzufügen
     ''' </summary>
     ''' <param name="msg">Eintrag</param>
-    Public Shared Sub AddLogEntry(ByVal msg As String)
+    Public Shared Sub AddLogEntry(ByVal level As levels, ByVal msg As String)
 
         If (msg.Contains(Constants.eol)) Then
             'Wenn Eintrag mehrzeilig, dann formatieren
             msg = Constants.eol & "  " & msg.Replace(Constants.eol, Constants.eol & "  ")
-        Else
-            'Ansonsten als Letzte Meldung speichern
-            Log.getInstance.myLastMessage = msg
         End If
 
-        'Meldung zu Text hinzufügen
-        Log.getInstance.myText &= "* " & DateTime.Now.ToString(Helpers.DefaultDateFormat) & ": " & msg & Constants.eol
+        Log.logWindow.AddLogEntry(level, msg)
 
-        RaiseEvent LogChanged()
+        RaiseEvent LogMsgAdded(level, msg)
 
     End Sub
 
@@ -97,12 +88,19 @@ Friend Class Log
     ''' Log zurücksetzen (allen Text löschen)
     ''' </summary>
     Public Shared Sub ClearLog()
-
-        Log.getInstance.myText = ""
-        Log.getInstance.myLastMessage = ""
-
-        RaiseEvent LogChanged()
-
+        Log.logWindow.ClearLog()
+        RaiseEvent LogMsgAdded(Log.levels.info, "")
     End Sub
+
+    Public Shared Sub HideLogWindow()
+        Log.logWindow.Hide()
+    End Sub
+
+    Public Shared Sub ShowLogWindow()
+        Log.logWindow.Show()
+        Log.logWindow.WindowState = FormWindowState.Normal
+        Log.logWindow.BringToFront()
+    End Sub
+
 
 End Class

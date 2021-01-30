@@ -176,7 +176,7 @@ Public Class SydroSQLite
         If units.ContainsKey(unitId) Then
             Return units(unitId)
         Else
-            Log.AddLogEntry("WARNING: Unrecognized UnitID " & unitId)
+            Log.AddLogEntry(Log.levels.warning, "Unrecognized UnitID " & unitId)
             Return "-"
         End If
     End Function

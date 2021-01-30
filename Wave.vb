@@ -34,13 +34,11 @@ Imports System.IO
 Public Class Wave
 
     ''' <summary>
-    ''' The LogWindow shared among all Wave instances
+    ''' The Log instance shared among all Wave instances
     ''' </summary>
-    ''' <remarks></remarks>
-    Private Shared MyLogWindow As LogWindow
+    Private WithEvents logInstance As Log
 
     'Dialogs
-    Private WithEvents myLog As Log
     Private WithEvents propDialog As PropertiesDialog
     Private WithEvents statDialog As StatisticsDialog
     Private WithEvents axisDialog As AxisDialog
@@ -107,10 +105,6 @@ Public Class Wave
         Me.ChartListBox1 = New Steema.TeeChart.ChartListBox()
         Call Me.Init_Charts()
 
-        'instantiate windows and dialogs
-        If IsNothing(MyLogWindow) Then
-            MyLogWindow = New LogWindow()
-        End If
         If IsNothing(propDialog) Then
             propDialog = New PropertiesDialog()
         End If
@@ -122,7 +116,7 @@ Public Class Wave
         End If
 
         'Log (Singleton) Instanz holen
-        Me.myLog = Log.getInstance()
+        Me.logInstance = Log.getInstance()
 
         'Navigation initialisieren
         Me.ComboBox_NavIncrement.SelectedItem = "Days"
@@ -143,9 +137,28 @@ Public Class Wave
     ''' <summary>
     ''' Wenn sich der Log verändert hat, Statustext aktualisieren
     ''' </summary>
-    Private Sub LogChanged() Handles myLog.LogChanged
-        'Status Info aktualisieren
-        Me.ToolStripStatusLabel_Log.Text = Log.LastMessage
+    Private Sub updateStatusLabel(level As Log.levels, msg As String) Handles logInstance.LogMsgAdded
+        'remove any linebreak at the beginning
+        If msg.StartsWith(eol) Then
+            msg = msg.Substring(eol.Length)
+        End If
+        'if it is a multiline message use only the first line
+        If msg.Contains(eol) Then
+            msg = msg.Substring(0, msg.IndexOf(eol))
+        End If
+        'set text
+        Me.ToolStripStatusLabel_Log.Text = msg.Trim()
+        'set color according to level
+        Select Case level
+            Case Log.levels.debug
+                Me.ToolStripStatusLabel_Log.LinkColor = Color.DarkGreen
+            Case Log.levels.warning
+                Me.ToolStripStatusLabel_Log.LinkColor = Color.DarkOrange
+            Case Log.levels.error
+                Me.ToolStripStatusLabel_Log.LinkColor = Color.Red
+            Case Else
+                Me.ToolStripStatusLabel_Log.LinkColor = SystemColors.ControlDarkDark
+        End Select
         Call Application.DoEvents()
     End Sub
 
@@ -603,7 +616,7 @@ Public Class Wave
 
         'Log zurücksetzen
         Call Log.ClearLog()
-        Call Wave.MyLogWindow.Hide()
+        Call Log.HideLogWindow()
 
         'Update dialogs
         Call Me.updateAxisDialog()
@@ -703,7 +716,7 @@ Public Class Wave
             strwrite.Close()
             fs.Close()
 
-            Log.AddLogEntry("Wave project file " & projectfile & " saved.")
+            Log.AddLogEntry(Log.levels.info, "Wave project file " & projectfile & " saved.")
 
         End If
 
@@ -818,14 +831,14 @@ Public Class Wave
                 'Assign title
                 seriesMerged.Title = mergedSeriesTitle
 
-                Log.AddLogEntry("Series successfully merged!")
+                Log.AddLogEntry(Log.levels.info, "Series successfully merged!")
 
                 Me.Import_Series(seriesMerged)
 
             End If
 
         Catch ex As Exception
-            Log.AddLogEntry("Error during merge: " & ex.Message)
+            Log.AddLogEntry(Log.levels.error, "Error during merge: " & ex.Message)
             MsgBox("Error during merge: " & ex.Message, MsgBoxStyle.Critical)
         Finally
             Me.Cursor = Cursors.Default
@@ -994,7 +1007,7 @@ Public Class Wave
         filename = Me.SaveFileDialog1.FileName
 
         'Export series
-        Log.AddLogEntry("Exporting time series to file " & Me.SaveFileDialog1.FileName & "...")
+        Log.AddLogEntry(Log.levels.info, "Exporting time series to file " & Me.SaveFileDialog1.FileName & "...")
 
         Me.Cursor = Cursors.WaitCursor
         Application.DoEvents()
@@ -1038,10 +1051,10 @@ Public Class Wave
             End Select
 
             MsgBox("Time series exported successfully!", MsgBoxStyle.Information, "Wave")
-            Log.AddLogEntry("Time series exported successfully!")
+            Log.AddLogEntry(Log.levels.info, "Time series exported successfully!")
 
         Catch ex As Exception
-            Log.AddLogEntry("Error during export: " & ex.Message)
+            Log.AddLogEntry(Log.levels.error, "Error during export: " & ex.Message)
             MsgBox("Error during export: " & ex.Message, MsgBoxStyle.Critical)
         Finally
             Me.Cursor = Cursors.Default
@@ -1069,23 +1082,23 @@ Public Class Wave
                 'Wait-Cursor
                 Me.Cursor = Cursors.WaitCursor
 
-                Call Log.AddLogEntry("Starting analysis " & oAnalysisDialog.selectedAnalysisFunction.ToString() & " ...")
+                Call Log.AddLogEntry(Log.levels.info, "Starting analysis " & oAnalysisDialog.selectedAnalysisFunction.ToString() & " ...")
 
                 'Analyse instanzieren
                 Dim oAnalysis As Analysis
                 oAnalysis = AnalysisFactory.CreateAnalysis(oAnalysisDialog.selectedAnalysisFunction, oAnalysisDialog.selectedTimeseries)
 
-                Call Log.AddLogEntry("... executing analysis ...")
+                Call Log.AddLogEntry(Log.levels.info, "... executing analysis ...")
 
                 'Analyse ausführen
                 Call oAnalysis.ProcessAnalysis()
 
-                Call Log.AddLogEntry("... preparing analysis result ...")
+                Call Log.AddLogEntry(Log.levels.info, "... preparing analysis result ...")
 
                 'Ergebnisse aufbereiten
                 Call oAnalysis.PrepareResults()
 
-                Call Log.AddLogEntry("Analysis complete")
+                Call Log.AddLogEntry(Log.levels.info, "Analysis complete")
 
                 'Default-Cursor
                 Me.Cursor = Cursors.Default
@@ -1102,19 +1115,17 @@ Public Class Wave
 
                 'Ergebnistext in Log schreiben und anzeigen
                 If (oAnalysis.hasResultText) Then
-                    Call Log.AddLogEntry(oAnalysis.getResultText)
-                    Call Wave.MyLogWindow.Show()
-                    Call Wave.MyLogWindow.BringToFront()
+                    Call Log.AddLogEntry(Log.levels.info, oAnalysis.getResultText)
+                    Call Log.ShowLogWindow()
                 End If
 
                 'Ergebniswerte in Log schreiben
                 If (oAnalysis.hasResultValues) Then
-                    Call Log.AddLogEntry("Analysis results:")
+                    Call Log.AddLogEntry(Log.levels.info, "Analysis results:")
                     For Each kvp As KeyValuePair(Of String, Double) In oAnalysis.getResultValues
-                        Call Log.AddLogEntry(kvp.Key + ": " + Str(kvp.Value))
+                        Call Log.AddLogEntry(Log.levels.info, kvp.Key + ": " + Str(kvp.Value))
                     Next
-                    Call Wave.MyLogWindow.Show()
-                    Call Wave.MyLogWindow.BringToFront()
+                    Call Log.ShowLogWindow()
                 End If
 
                 'Display result series in main diagram
@@ -1127,7 +1138,7 @@ Public Class Wave
             Catch ex As Exception
                 Me.Cursor = Cursors.Default
                 'Logeintrag
-                Call Log.AddLogEntry("Analysis failed:" & eol & ex.Message)
+                Call Log.AddLogEntry(Log.levels.error, "Analysis failed:" & eol & ex.Message)
                 'Alert
                 MsgBox("Analysis failed:" & eol & ex.Message, MsgBoxStyle.Critical)
             End Try
@@ -1193,7 +1204,7 @@ Public Class Wave
                 Next
                 If processSeries Then
                     'log
-                    Log.AddLogEntry("Finding NaN values for series " & ts.Title & "...")
+                    Log.AddLogEntry(Log.levels.info, "Finding NaN values for series " & ts.Title & "...")
                     'find beginning and end of nan values
                     nanFoundInSeries = False
                     isNaNPeriod = False
@@ -1243,12 +1254,12 @@ Public Class Wave
                                 band.StartLinePen.Visible = False
 
                                 'write to log
-                                Log.AddLogEntry(" Series contains NaN values from " & nanStart.ToString(Helpers.DateFormats("default")) & " to " & nanEnd.ToString(Helpers.DateFormats("default")))
+                                Log.AddLogEntry(Log.levels.info, "Series contains NaN values from " & nanStart.ToString(Helpers.DateFormats("default")) & " to " & nanEnd.ToString(Helpers.DateFormats("default")))
                             End If
                         End If
                     Next
                     If Not nanFoundInSeries Then
-                        Log.AddLogEntry(" Series does not contain any NaN values")
+                        Log.AddLogEntry(Log.levels.info, "Series does not contain any NaN values")
                     End If
                 End If
             Next
@@ -1330,12 +1341,8 @@ Public Class Wave
     'Log anzeigen
     '************
     Private Sub ShowLog_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripStatusLabel_Log.Click
-
         'LogWindow anzeigen
-        Call Wave.MyLogWindow.Show()
-        Wave.MyLogWindow.WindowState = FormWindowState.Normal
-        Call Wave.MyLogWindow.BringToFront()
-
+        Call Log.ShowLogWindow()
     End Sub
 
     'Übersicht an/aus
@@ -1591,7 +1598,7 @@ Public Class Wave
 
         If (Answer = MsgBoxResult.Ok) Then
 
-            Log.AddLogEntry("Reloading all series from their original datasources...")
+            Log.AddLogEntry(Log.levels.info, "Reloading all series from their original datasources...")
 
             'Alle Serien löschen
             Me.TChart1.Series.RemoveAllSeries()
@@ -1606,7 +1613,7 @@ Public Class Wave
             Dim success As Boolean
             For Each file In datasources.Keys
 
-                Log.AddLogEntry("Reading file " & file & " ...")
+                Log.AddLogEntry(Log.levels.info, "Reading file " & file & " ...")
 
                 success = True
 
@@ -1628,9 +1635,9 @@ Public Class Wave
                     Next
                 End If
                 If success Then
-                    Log.AddLogEntry("File '" & file & "' imported successfully!")
+                    Log.AddLogEntry(Log.levels.info, "File '" & file & "' imported successfully!")
                 Else
-                    Log.AddLogEntry("Error while importing file '" & file & "'!")
+                    Log.AddLogEntry(Log.levels.error, "Error while importing file '" & file & "'!")
                 End If
             Next
 
@@ -2067,7 +2074,7 @@ Public Class Wave
 
         Try
 
-            Log.AddLogEntry("Loading Wave project file " & projectfile & " ...")
+            Log.AddLogEntry(Log.levels.info, "Loading Wave project file " & projectfile & " ...")
 
             'read project file
 
@@ -2124,10 +2131,10 @@ Public Class Wave
                         If Not fileDict(path).ContainsKey(series) Then
                             fileDict(path).Add(series, title)
                         Else
-                            Log.AddLogEntry("WARNING: Series " & series & " is specified twice, the second mention will be ignored!")
+                            Log.AddLogEntry(Log.levels.warning, "Series " & series & " is specified twice, the second mention will be ignored!")
                         End If
                     Else
-                        Log.AddLogEntry("WARNING: Series " & series & " is not associated with a file and will be ignored!")
+                        Log.AddLogEntry(Log.levels.warning, "Series " & series & " is not associated with a file and will be ignored!")
                     End If
 
                 ElseIf line.Contains("=") Then
@@ -2141,10 +2148,10 @@ Public Class Wave
                         If Not settingsDict(path).ContainsKey(parts(0)) Then
                             settingsDict(path).Add(parts(0), parts(1))
                         Else
-                            Log.AddLogEntry("WARNING: Setting " & parts(0) & " is specified twice, the second mention will be ignored!")
+                            Log.AddLogEntry(Log.levels.warning, "Setting " & parts(0) & " is specified twice, the second mention will be ignored!")
                         End If
                     Else
-                        Log.AddLogEntry("WARNING: Setting " & parts(0) & " is not associated with a file and will be ignored!")
+                        Log.AddLogEntry(Log.levels.warning, "Setting " & parts(0) & " is not associated with a file and will be ignored!")
                     End If
 
                 Else
@@ -2159,7 +2166,7 @@ Public Class Wave
             'loop over file list
             For Each file As String In fileDict.Keys
 
-                Log.AddLogEntry("Reading file " & file & " ...")
+                Log.AddLogEntry(Log.levels.info, "Reading file " & file & " ...")
 
                 'get an instance of the file
                 fileobj = FileFactory.getFileInstance(file)
@@ -2191,10 +2198,10 @@ Public Class Wave
                                 Case "datetimecolumnindex"
                                     fileobj.DateTimeColumnIndex = Convert.ToInt32(value)
                                 Case Else
-                                    Log.AddLogEntry("WARNING: Setting '" & setting & "' was not recognized and was ignored!")
+                                    Log.AddLogEntry(Log.levels.warning, "Setting '" & setting & "' was not recognized and was ignored!")
                             End Select
                         Catch ex As Exception
-                            Log.AddLogEntry("WARNING: Setting '" & setting & "' with value '" & value & "' could not be parsed and was ignored!")
+                            Log.AddLogEntry(Log.levels.warning, "Setting '" & setting & "' with value '" & value & "' could not be parsed and was ignored!")
                         End Try
                     Next
                     'reread columns with new settings
@@ -2223,7 +2230,7 @@ Public Class Wave
                     Next
                     'if no series remain to be imported, abort reading the file altogether
                     If seriesList.Count = 0 Then
-                        Log.AddLogEntry("ERROR: No series left to import, skipping file!")
+                        Log.AddLogEntry(Log.levels.error, "No series left to import, skipping file!")
                         Continue For
                     End If
 
@@ -2233,10 +2240,10 @@ Public Class Wave
                 fileobj.readFile()
 
                 'Log
-                Call Log.AddLogEntry("File '" & file & "' imported successfully!")
+                Call Log.AddLogEntry(Log.levels.info, "File '" & file & "' imported successfully!")
 
                 'import the series
-                Call Log.AddLogEntry("Loading series in chart...")
+                Call Log.AddLogEntry(Log.levels.info, "Loading series in chart...")
                 For Each ts As TimeSeries In fileobj.FileTimeSeries.Values
                     'change title if specified in the project file
                     If seriesList.Count > 0 Then
@@ -2249,7 +2256,7 @@ Public Class Wave
             Next
 
             'Log
-            Call Log.AddLogEntry("Project file '" & projectfile & "' loaded successfully!")
+            Call Log.AddLogEntry(Log.levels.info, "Project file '" & projectfile & "' loaded successfully!")
 
             'Update window title
             Me.Text = "BlueM.Wave - " & projectfile
@@ -2258,7 +2265,7 @@ Public Class Wave
 
         Catch ex As Exception
             MsgBox("Error while loading project file:" & eol & ex.Message, MsgBoxStyle.Critical)
-            Call Log.AddLogEntry("ERROR: Error while loading project file:" & eol & ex.Message)
+            Call Log.AddLogEntry(Log.levels.error, "Error while loading project file:" & eol & ex.Message)
         End Try
 
     End Sub
@@ -2278,7 +2285,7 @@ Public Class Wave
         Try
 
             'Log
-            Call Log.AddLogEntry("Loading file '" & FileName & "' ...")
+            Call Log.AddLogEntry(Log.levels.info, "Loading file '" & FileName & "' ...")
 
             'Bereits vorhandene Reihen merken
             Dim existingIds = New List(Of Integer)
@@ -2333,7 +2340,7 @@ Public Class Wave
                             If (series.GetHorizAxis.IsDateTime) Then
 
                                 'Zeitreihe aus dem importierten Diagramm nach intern übertragen
-                                Log.AddLogEntry("Importing series '" & series.Title & "' from TEN file...")
+                                Log.AddLogEntry(Log.levels.info, "Importing series '" & series.Title & "' from TEN file...")
                                 reihe = New TimeSeries(series.Title)
                                 For i = 0 To series.Count - 1
                                     reihe.AddNode(Date.FromOADate(series.XValues(i)), series.YValues(i))
@@ -2416,11 +2423,11 @@ Public Class Wave
             Me.ChartListBox1.Chart = Me.TChart1
 
             'Log
-            Call Log.AddLogEntry("TEN file '" & FileName & "' loaded successfully!")
+            Call Log.AddLogEntry(Log.levels.info, "TEN file '" & FileName & "' loaded successfully!")
 
         Catch ex As Exception
             MsgBox("Error while loading:" & eol & ex.Message, MsgBoxStyle.Critical)
-            Call Log.AddLogEntry("Error while loading:" & eol & ex.Message)
+            Call Log.AddLogEntry(Log.levels.error, "Error while loading:" & eol & ex.Message)
         End Try
 
         'Update AxisDialog
@@ -2437,17 +2444,17 @@ Public Class Wave
         Try
 
             'Log
-            Call Log.AddLogEntry("Loading theme '" & FileName & "' ...")
+            Call Log.AddLogEntry(Log.levels.info, "Loading theme '" & FileName & "' ...")
 
             'Theme laden
             Call TChart1.Import.Theme.Load(FileName)
 
             'Log
-            Call Log.AddLogEntry("Theme '" & FileName & "' loaded successfully!")
+            Call Log.AddLogEntry(Log.levels.info, "Theme '" & FileName & "' loaded successfully!")
 
         Catch ex As Exception
             MsgBox("Error while loading:" & eol & ex.Message, MsgBoxStyle.Critical)
-            Call Log.AddLogEntry("Error while loading:" & eol & ex.Message)
+            Call Log.AddLogEntry(Log.levels.error, "Error while loading:" & eol & ex.Message)
         End Try
 
     End Sub
@@ -2491,7 +2498,7 @@ Public Class Wave
 
                 Try
                     'Log
-                    Call Log.AddLogEntry("Importing file '" & file & "' ...")
+                    Call Log.AddLogEntry(Log.levels.info, "Importing file '" & file & "' ...")
 
                     'Datei-Instanz erzeugen
                     Datei = FileFactory.getFileInstance(file)
@@ -2514,13 +2521,13 @@ Public Class Wave
                         Call Datei.readFile()
 
                         'Log
-                        Call Log.AddLogEntry("File '" & file & "' imported successfully!")
+                        Call Log.AddLogEntry(Log.levels.info, "File '" & file & "' imported successfully!")
 
                         'Datei abspeichern
                         'Call Me.storeFileInfo(Datei)
 
                         'Log
-                        Call Log.AddLogEntry("Loading series in chart...")
+                        Call Log.AddLogEntry(Log.levels.info, "Loading series in chart...")
 
                         'Import all time series into the chart
                         For Each ts As TimeSeries In Datei.FileTimeSeries.Values
@@ -2528,20 +2535,20 @@ Public Class Wave
                         Next
 
                         'Log
-                        Call Log.AddLogEntry("Successfully loaded series in chart!")
+                        Call Log.AddLogEntry(Log.levels.info, "Successfully loaded series in chart!")
 
                         'Update window title
                         Me.Text = "BlueM.Wave - " & file
 
                     Else
                         'Import abgebrochen
-                        Log.AddLogEntry("Import cancelled!")
+                        Log.AddLogEntry(Log.levels.error, "Import cancelled!")
 
                     End If
 
                 Catch ex As Exception
                     MsgBox("Error during import:" & eol & ex.Message, MsgBoxStyle.Critical)
-                    Call Log.AddLogEntry("Error during import: " & ex.Message)
+                    Call Log.AddLogEntry(Log.levels.error, "Error during import: " & ex.Message)
 
                 Finally
                     Me.Cursor = Cursors.Default
@@ -2597,7 +2604,7 @@ Public Class Wave
 
         Catch ex As Exception
             Me.Cursor = Cursors.Default
-            Log.AddLogEntry("ERROR: " & ex.Message)
+            Log.AddLogEntry(Log.levels.error, ex.Message)
             MsgBox("ERROR: " & ex.Message, MsgBoxStyle.Critical)
         End Try
 
@@ -2709,7 +2716,7 @@ Public Class Wave
                     End If
 
                     'read file
-                    Log.AddLogEntry("Loading file " & file & " ...")
+                    Log.AddLogEntry(Log.levels.info, "Loading file " & file & " ...")
                     fileobj = FileFactory.getFileInstance(file)
 
                     'read series from file
@@ -2726,7 +2733,7 @@ Public Class Wave
                     name = params("Kennung")
 
                     'read file
-                    Log.AddLogEntry("Loading file " & file & " ...")
+                    Log.AddLogEntry(Log.levels.info, "Loading file " & file & " ...")
                     fileobj = FileFactory.getFileInstance(file)
 
                     'read series from file
@@ -2779,11 +2786,11 @@ Public Class Wave
 
         'Cut timeseries if necessary
         If zre.StartDate < Constants.minOADate Then
-            Log.AddLogEntry(String.Format("WARNING: Unable to display timeseries before {0}, cutting!", Constants.minOADate))
+            Log.AddLogEntry(Log.levels.warning, String.Format("Unable to display timeseries before {0}, cutting!", Constants.minOADate))
             zre.Cut(Constants.minOADate, zre.EndDate)
         End If
         If zre.EndDate > Constants.maxOADate Then
-            Log.AddLogEntry(String.Format("WARNING: Unable to display timeseries after {0}, cutting!", Constants.maxOADate))
+            Log.AddLogEntry(Log.levels.warning, String.Format("Unable to display timeseries after {0}, cutting!", Constants.maxOADate))
             zre.Cut(zre.StartDate, Constants.maxOADate)
         End If
 
@@ -2822,7 +2829,7 @@ Public Class Wave
 
         'Determine total number of NaN-values and write to log
         If zre.Nodes.Count > zre.NodesClean.Count Then
-            Call Log.AddLogEntry(String.Format("Series '{0}' contains {1} NaN values!", zre.Title, zre.Nodes.Count - zre.NodesClean.Count))
+            Call Log.AddLogEntry(Log.levels.warning, String.Format("Series '{0}' contains {1} NaN values!", zre.Title, zre.Nodes.Count - zre.NodesClean.Count))
         End If
 
         'Stützstellen zur Serie hinzufügen
@@ -2831,7 +2838,7 @@ Public Class Wave
                 Line1.Add(node.Key, node.Value)
                 Line2.Add(node.Key, node.Value)
             Catch ex As OverflowException
-                Log.AddLogEntry(String.Format("ERROR: Unable to display date {0} in chart!", node.Key))
+                Log.AddLogEntry(Log.levels.error, String.Format("Unable to display date {0} in chart!", node.Key))
             End Try
         Next
 
