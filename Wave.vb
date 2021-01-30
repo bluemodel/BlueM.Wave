@@ -159,6 +159,14 @@ Public Class Wave
             Case Else
                 Me.ToolStripStatusLabel_Log.LinkColor = SystemColors.ControlDarkDark
         End Select
+        'Update counters
+        If level = Log.levels.warning Then
+            Me.ToolStripStatusLabel_Warnings.Text = Int(Me.ToolStripStatusLabel_Warnings.Text) + 1
+            Me.ToolStripStatusLabel_Warnings.Image = My.Resources.warning
+        ElseIf level = Log.levels.error Then
+            Me.ToolStripStatusLabel_Errors.Text = Int(Me.ToolStripStatusLabel_Errors.Text) + 1
+            Me.ToolStripStatusLabel_Errors.Image = My.Resources.cancel
+        End If
         Call Application.DoEvents()
     End Sub
 
@@ -617,6 +625,12 @@ Public Class Wave
         'Log zurücksetzen
         Call Log.ClearLog()
         Call Log.HideLogWindow()
+
+        'Reset counters
+        Me.ToolStripStatusLabel_Errors.Text = 0
+        Me.ToolStripStatusLabel_Warnings.Text = 0
+        Me.ToolStripStatusLabel_Errors.Image = My.Resources.cancel_inactive
+        Me.ToolStripStatusLabel_Warnings.Image = My.Resources.warning_inactive
 
         'Update dialogs
         Call Me.updateAxisDialog()
@@ -1340,7 +1354,7 @@ Public Class Wave
 
     'Log anzeigen
     '************
-    Private Sub ShowLog_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripStatusLabel_Log.Click
+    Private Sub ShowLog_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripStatusLabel_Log.Click, ToolStripStatusLabel_Errors.Click, ToolStripStatusLabel_Warnings.Click
         'LogWindow anzeigen
         Call Log.ShowLogWindow()
     End Sub

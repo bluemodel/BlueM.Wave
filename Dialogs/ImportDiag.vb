@@ -317,7 +317,7 @@ Friend Class ImportDiag
 
             Catch ex As Exception
                 'Bei Exception Status auf Fehler setzen
-                Me.StatusImage.Image = Global.BlueM.Wave.My.Resources.Resources.fehler
+                Me.StatusImage.Image = Global.BlueM.Wave.My.Resources.Resources.warning
                 Me.StatusImage.Text = "Error"
             End Try
 
