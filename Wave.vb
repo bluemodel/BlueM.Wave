@@ -72,7 +72,6 @@ Public Class Wave
 
     'Cursors
     Friend cursor_pan As Cursor
-    Friend cursor_pan_hold As Cursor
     Friend cursor_zoom As Cursor
 
     Private Const urlHelp As String = "https://wiki.bluemodel.org/index.php/Wave"
@@ -128,7 +127,6 @@ Public Class Wave
 
         'Instantiate cursors
         Me.cursor_pan = New Cursor(Me.GetType(), "cursor_pan.cur")
-        Me.cursor_pan_hold = New Cursor(Me.GetType(), "cursor_pan_hold.cur")
         Me.cursor_zoom = New Cursor(Me.GetType(), "cursor_zoom.cur")
 
     End Sub
@@ -1490,65 +1488,6 @@ Public Class Wave
     End Sub
 
     ''' <summary>
-    ''' Zoom button clicked
-    ''' </summary>
-    Private Sub ToolStripButton_Zoom_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_Zoom.Click
-        If Me.ToolStripButton_Zoom.Checked Then
-            'change to zoom cursor
-            Me.TChart1.Cursor = Me.cursor_zoom
-            'uncheck the other buttons
-            Me.ToolStripButton_NormalMode.Checked = False
-            Me.ToolStripButton_Pan.Checked = False
-            'disable panning
-            Me.TChart1.Panning.Allow = False
-        Else
-            'revert to normal mode
-            Me.ToolStripButton_NormalMode.Checked = True
-            ToolStripButton_Normal_Click(sender, e)
-        End If
-    End Sub
-
-    ''' <summary>
-    ''' Pan button clicked
-    ''' </summary>
-    Private Sub ToolStripButton_Pan_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_Pan.Click
-        If Me.ToolStripButton_Pan.Checked Then
-            'change to pan cursor
-            Me.TChart1.Cursor = Me.cursor_pan
-            'allow panning with left mouse-button
-            Me.TChart1.Panning.Allow = Steema.TeeChart.ScrollModes.Horizontal
-            Me.TChart1.Panning.MouseButton = Windows.Forms.MouseButtons.Left
-            'uncheck the other buttons
-            Me.ToolStripButton_NormalMode.Checked = False
-            Me.ToolStripButton_Zoom.Checked = False
-        Else
-            'revert to normal mode
-            Me.ToolStripButton_NormalMode.Checked = True
-            ToolStripButton_Normal_Click(sender, e)
-        End If
-    End Sub
-
-    ''' <summary>
-    ''' Normal mode button clicked
-    ''' </summary>
-    Private Sub ToolStripButton_Normal_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_NormalMode.Click
-        If Not Me.ToolStripButton_Zoom.Checked And Not Me.ToolStripButton_Pan.Checked Then
-            'keep the button checked as no other mode is activated
-            Me.ToolStripButton_NormalMode.Checked = True
-        End If
-        If Me.ToolStripButton_NormalMode.Checked Then
-            'change cursor to default
-            Me.TChart1.Cursor = Cursors.Default
-            'allow panning with right mouse-button
-            Me.TChart1.Panning.Allow = Steema.TeeChart.ScrollModes.Horizontal
-            Me.TChart1.Panning.MouseButton = Windows.Forms.MouseButtons.Right
-            'uncheck the other buttons
-            Me.ToolStripButton_Zoom.Checked = False
-            Me.ToolStripButton_Pan.Checked = False
-        End If
-    End Sub
-
-    ''' <summary>
     ''' Zoom previous button clicked
     ''' </summary>
     Private Sub ToolStripButton_ZoomPrevious_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_ZoomPrevious.Click
@@ -2095,9 +2034,7 @@ Public Class Wave
     ''' </summary>
     Private Sub TChart1_MouseDown(ByVal sender As System.Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles TChart1.MouseDown
 
-        If (Me.ToolStripButton_NormalMode.Checked And
-            e.Button = Windows.Forms.MouseButtons.Left) Or
-            Me.ToolStripButton_Zoom.Checked Then
+        If e.Button = Windows.Forms.MouseButtons.Left Then
             'start zoom process
             If Me.TChart1.Series.Count > 0 Then
 
@@ -2123,12 +2060,10 @@ Public Class Wave
                 Log.AddLogEntry(Log.levels.debug, "Zoom start at " & Date.FromOADate(startValue))
             End If
 
-        ElseIf (Me.ToolStripButton_NormalMode.Checked And
-            e.Button = MouseButtons.Right) Or
-            Me.ToolStripButton_Pan.Checked Then
+        ElseIf e.Button = MouseButtons.Right Then
             'start pan process
             Call Me.saveZoomSnapshot()
-            Me.TChart1.Cursor = Me.cursor_pan_hold
+            Me.TChart1.Cursor = Me.cursor_pan
         End If
 
     End Sub
@@ -2180,11 +2115,7 @@ Public Class Wave
                 Call Me.viewportChanged()
             End If
         End If
-        If Me.ToolStripButton_NormalMode.Checked Then
-            Me.TChart1.Cursor = Cursors.Default
-        ElseIf Me.ToolStripButton_Pan.Checked Then
-            Me.TChart1.Cursor = Me.cursor_pan
-        End If
+        Me.TChart1.Cursor = Cursors.Default
     End Sub
 
 #End Region 'Cursor
