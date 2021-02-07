@@ -481,7 +481,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\cursor_pan.cur" />
     <EmbeddedResource Include="Resources\cursor_zoom.cur" />
-    <EmbeddedResource Include="Resources\cursor_pan_hold.cur" />
     <Content Include="lib\modelEAU\modelEAU.SWMM.DllAdapter.dll" />
     <None Include="Resources\pan.png" />
     <Content Include="Resources\error_convert.png" />

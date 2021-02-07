@@ -65,10 +65,6 @@ Partial Class Wave
         Me.ToolStripButton_AutoAdjustYAxes = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripButton_ToggleOverview = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripButton_ToggleNavigation = New System.Windows.Forms.ToolStripButton()
-        Me.ToolStripButton_NormalMode = New System.Windows.Forms.ToolStripButton()
-        Me.ToolStripButton_Zoom = New System.Windows.Forms.ToolStripButton()
-        Me.ToolStripButton_Pan = New System.Windows.Forms.ToolStripButton()
-        Me.ToolStripSeparator3 = New System.Windows.Forms.ToolStripSeparator()
         Me.ToolStripButton_ZoomPrevious = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripDropDownButton_Help = New System.Windows.Forms.ToolStripDropDownButton()
         Me.HilfeToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -182,7 +178,7 @@ Partial Class Wave
         '
         ToolStrip1.AutoSize = False
         ToolStrip1.BackColor = System.Drawing.SystemColors.Control
-        ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButton_New, Me.ToolStripDropDownButton_Open, Me.ToolStripDropDownButton_Save, ToolStripSeparator4, Me.ToolStripButton_Copy, Me.ToolStripButton_Print, ToolStripSeparator2, Me.ToolStripButton_Cut, Me.ToolStripButton_Merge, Me.ToolStripSeparator8, Me.ToolStripButton_ShowNaNValues, Me.ToolStripButton_ConvertErrorValues, Me.ToolStripButton_RemoveNaNValues, Me.ToolStripSeparator7, Me.ToolStripButton_Analysis, ToolStripSeparator1, Me.ToolStripButton_EditChart, Me.ToolStripButton_AxisDialog, Me.ToolStripSeparator9, Me.ToolStripButton_Properties, Me.ToolStripSeparator10, Me.ToolStripButton_AutoAdjustYAxes, Me.ToolStripButton_ToggleOverview, Me.ToolStripButton_ToggleNavigation, toolStripSeparator, Me.ToolStripButton_NormalMode, Me.ToolStripButton_Zoom, Me.ToolStripButton_Pan, Me.ToolStripSeparator3, Me.ToolStripButton_ZoomPrevious, Me.ToolStripDropDownButton_Help, Me.ToolStripDropDownButton_ZoomToSeries, Me.ToolStripButton_ZoomAll, Me.ToolStripButton_UpdateNotification})
+        ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButton_New, Me.ToolStripDropDownButton_Open, Me.ToolStripDropDownButton_Save, ToolStripSeparator4, Me.ToolStripButton_Copy, Me.ToolStripButton_Print, ToolStripSeparator2, Me.ToolStripButton_Cut, Me.ToolStripButton_Merge, Me.ToolStripSeparator8, Me.ToolStripButton_ShowNaNValues, Me.ToolStripButton_ConvertErrorValues, Me.ToolStripButton_RemoveNaNValues, Me.ToolStripSeparator7, Me.ToolStripButton_Analysis, ToolStripSeparator1, Me.ToolStripButton_EditChart, Me.ToolStripButton_AxisDialog, Me.ToolStripSeparator9, Me.ToolStripButton_Properties, Me.ToolStripSeparator10, Me.ToolStripButton_AutoAdjustYAxes, Me.ToolStripButton_ToggleOverview, Me.ToolStripButton_ToggleNavigation, toolStripSeparator, Me.ToolStripButton_ZoomPrevious, Me.ToolStripDropDownButton_Help, Me.ToolStripDropDownButton_ZoomToSeries, Me.ToolStripButton_ZoomAll, Me.ToolStripButton_UpdateNotification})
         ToolStrip1.Location = New System.Drawing.Point(0, 0)
         ToolStrip1.Name = "ToolStrip1"
         ToolStrip1.Size = New System.Drawing.Size(944, 34)
@@ -460,45 +456,6 @@ Partial Class Wave
         Me.ToolStripButton_ToggleNavigation.Size = New System.Drawing.Size(23, 31)
         Me.ToolStripButton_ToggleNavigation.Text = "Toggle navigation controls"
         '
-        'ToolStripButton_NormalMode
-        '
-        Me.ToolStripButton_NormalMode.Checked = True
-        Me.ToolStripButton_NormalMode.CheckOnClick = True
-        Me.ToolStripButton_NormalMode.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.ToolStripButton_NormalMode.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.ToolStripButton_NormalMode.Image = CType(resources.GetObject("ToolStripButton_NormalMode.Image"), System.Drawing.Image)
-        Me.ToolStripButton_NormalMode.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.ToolStripButton_NormalMode.Name = "ToolStripButton_NormalMode"
-        Me.ToolStripButton_NormalMode.Size = New System.Drawing.Size(23, 31)
-        Me.ToolStripButton_NormalMode.Text = "Normal mode"
-        Me.ToolStripButton_NormalMode.ToolTipText = "Normal mode (zoom with left mouse, pan with right mouse)"
-        '
-        'ToolStripButton_Zoom
-        '
-        Me.ToolStripButton_Zoom.CheckOnClick = True
-        Me.ToolStripButton_Zoom.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.ToolStripButton_Zoom.Image = Global.BlueM.Wave.My.Resources.Resources.zoom
-        Me.ToolStripButton_Zoom.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.ToolStripButton_Zoom.Name = "ToolStripButton_Zoom"
-        Me.ToolStripButton_Zoom.Size = New System.Drawing.Size(23, 31)
-        Me.ToolStripButton_Zoom.Text = "Zoom"
-        Me.ToolStripButton_Zoom.ToolTipText = "Zoom"
-        '
-        'ToolStripButton_Pan
-        '
-        Me.ToolStripButton_Pan.CheckOnClick = True
-        Me.ToolStripButton_Pan.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.ToolStripButton_Pan.Image = Global.BlueM.Wave.My.Resources.Resources.pan
-        Me.ToolStripButton_Pan.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.ToolStripButton_Pan.Name = "ToolStripButton_Pan"
-        Me.ToolStripButton_Pan.Size = New System.Drawing.Size(23, 31)
-        Me.ToolStripButton_Pan.Text = "Pan"
-        '
-        'ToolStripSeparator3
-        '
-        Me.ToolStripSeparator3.Name = "ToolStripSeparator3"
-        Me.ToolStripSeparator3.Size = New System.Drawing.Size(6, 34)
-        '
         'ToolStripButton_ZoomPrevious
         '
         Me.ToolStripButton_ZoomPrevious.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
@@ -507,6 +464,7 @@ Partial Class Wave
         Me.ToolStripButton_ZoomPrevious.Name = "ToolStripButton_ZoomPrevious"
         Me.ToolStripButton_ZoomPrevious.Size = New System.Drawing.Size(23, 31)
         Me.ToolStripButton_ZoomPrevious.Text = "Zoom previous"
+        Me.ToolStripButton_ZoomPrevious.ToolTipText = "Zoom to previous extent"
         '
         'ToolStripDropDownButton_Help
         '
@@ -1327,10 +1285,7 @@ Partial Class Wave
     Friend WithEvents ToolStripMenuItem_ReloadFromFiles As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolStripMenuItem_EnterSeries As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolStripMenuItem_LoadTheme As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents ToolStripButton_Zoom As System.Windows.Forms.ToolStripButton
-    Friend WithEvents ToolStripButton_Pan As System.Windows.Forms.ToolStripButton
     Friend WithEvents ToolStripButton_ZoomPrevious As System.Windows.Forms.ToolStripButton
-    Friend WithEvents ToolStripButton_NormalMode As System.Windows.Forms.ToolStripButton
     Friend WithEvents Panel_DisplayRange As System.Windows.Forms.Panel
     Friend WithEvents NumericUpDown_DisplayRangeMultiplier As System.Windows.Forms.NumericUpDown
     Friend WithEvents ComboBox_DisplayRangeUnit As System.Windows.Forms.ComboBox
@@ -1345,7 +1300,6 @@ Partial Class Wave
     Friend WithEvents Label_Navigate As System.Windows.Forms.Label
     Friend WithEvents Label_Display As System.Windows.Forms.Label
     Friend WithEvents ToolStripButton_ZoomAll As System.Windows.Forms.ToolStripButton
-    Friend WithEvents ToolStripSeparator3 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents TableLayoutPanel1 As System.Windows.Forms.TableLayoutPanel
     Friend WithEvents ToolStripButton_ToggleNavigation As System.Windows.Forms.ToolStripButton
     Friend WithEvents ToolStripButton_ConvertErrorValues As System.Windows.Forms.ToolStripButton
