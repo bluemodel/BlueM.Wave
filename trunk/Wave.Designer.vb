@@ -482,7 +482,7 @@ Partial Class Wave
         Me.ToolStripButton_Zoom.Name = "ToolStripButton_Zoom"
         Me.ToolStripButton_Zoom.Size = New System.Drawing.Size(23, 31)
         Me.ToolStripButton_Zoom.Text = "Zoom"
-        Me.ToolStripButton_Zoom.ToolTipText = "Zoom (drag right to zoom, drag left to unzoom)"
+        Me.ToolStripButton_Zoom.ToolTipText = "Zoom"
         '
         'ToolStripButton_Pan
         '

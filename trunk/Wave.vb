@@ -59,10 +59,14 @@ Public Class Wave
     Private Const FileFilter_XML As String = "Theme files (*.xml)|*.xml"
 
     'Chart-Zeugs
-    Private WithEvents colorBand1 As Steema.TeeChart.Tools.ColorBand
     Private selectionMade As Boolean 'Flag zeigt an, ob bereits ein Auswahlbereich ausgewählt wurde
     Private WithEvents ChartListBox1 As Steema.TeeChart.ChartListBox
 
+    Private colorBandZoom As Steema.TeeChart.Tools.ColorBand
+    Private ChartMouseZoomDragging As Boolean = False
+    Private ChartMouseDragStartX As Double
+
+    Private colorBandOverview As Steema.TeeChart.Tools.ColorBand
     Private OverviewChartMouseDragging As Boolean = False
     Private OverviewChartMouseDragStartX As Double
 
@@ -298,7 +302,9 @@ Public Class Wave
         Me.TChart2.Zoom.Allow = False
         Me.TChart2.Panning.Allow = Steema.TeeChart.ScrollModes.None
 
-        'Hauptdiagramm darf nur horizontal gescrolled oder gezoomt werden
+        'Hauptdiagramm darf nur horizontal gescrolled und nicht gezoomt werden
+        'Zoom ist selbst implementiert
+        Me.TChart1.Zoom.Allow = False
         Me.TChart1.Zoom.Direction = Steema.TeeChart.ZoomDirections.Horizontal
         Me.TChart1.Zoom.History = True
         Me.TChart1.Zoom.Animated = True
@@ -316,22 +322,36 @@ Public Class Wave
 
         'ColorBand einrichten
         Me.selectionMade = False
-        Call Me.Init_ColorBand()
+        Call Me.Init_ColorBands()
 
     End Sub
 
-    'ColorBand einrichten
-    '********************
-    Private Sub Init_ColorBand()
-        colorBand1 = New Steema.TeeChart.Tools.ColorBand()
-        Me.TChart2.Tools.Add(colorBand1)
-        colorBand1.Axis = Me.TChart2.Axes.Bottom
-        colorBand1.Brush.Color = Color.Coral
-        colorBand1.Brush.Transparency = 50
-        colorBand1.ResizeEnd = False
-        colorBand1.ResizeStart = False
-        colorBand1.EndLinePen.Visible = False
-        colorBand1.StartLinePen.Visible = False
+    ''' <summary>
+    ''' Initialize color bands
+    ''' </summary>
+    Private Sub Init_ColorBands()
+
+        colorBandOverview = New Steema.TeeChart.Tools.ColorBand()
+        Me.TChart2.Tools.Add(colorBandOverview)
+        colorBandOverview.Axis = Me.TChart2.Axes.Bottom
+        colorBandOverview.Brush.Color = Color.Coral
+        colorBandOverview.Brush.Transparency = 50
+        colorBandOverview.ResizeEnd = False
+        colorBandOverview.ResizeStart = False
+        colorBandOverview.EndLinePen.Visible = False
+        colorBandOverview.StartLinePen.Visible = False
+
+        colorBandZoom = New Steema.TeeChart.Tools.ColorBand()
+        Me.TChart1.Tools.Add(colorBandZoom)
+        colorBandZoom.Axis = Me.TChart1.Axes.Bottom
+        colorBandZoom.Color = Color.Black
+        colorBandZoom.Pen.Color = Color.Black
+        colorBandZoom.Pen.Style = Drawing2D.DashStyle.Dash
+        colorBandZoom.Brush.Visible = False
+        colorBandZoom.ResizeEnd = False
+        colorBandZoom.ResizeStart = False
+        colorBandZoom.EndLinePen.Visible = True
+        colorBandZoom.StartLinePen.Visible = True
     End Sub
 
     ''' <summary>
@@ -366,14 +386,14 @@ Public Class Wave
 
             If (Not Me.selectionMade) Then
                 'Wenn noch nicht gezoomed wurde, Gesamtzeitraum auswählen
-                colorBand1.Start = Xmin.ToOADate()
-                colorBand1.End = Xmax.ToOADate()
+                colorBandOverview.Start = Xmin.ToOADate()
+                colorBandOverview.End = Xmax.ToOADate()
                 Me.TChart1.Axes.Bottom.Minimum = Xmin.ToOADate()
                 Me.TChart1.Axes.Bottom.Maximum = Xmax.ToOADate()
             Else
                 'Ansonsten Zoom auf Colorband übertragen
-                colorBand1.Start = Me.TChart1.Axes.Bottom.Minimum
-                colorBand1.End = Me.TChart1.Axes.Bottom.Maximum
+                colorBandOverview.Start = Me.TChart1.Axes.Bottom.Minimum
+                colorBandOverview.End = Me.TChart1.Axes.Bottom.Maximum
             End If
 
         End If
@@ -397,9 +417,9 @@ Public Class Wave
     ''' Updates the colorband to correspond to the currently displayed timespan of the main chart
     ''' </summary>
     ''' <remarks></remarks>
-    Private Sub updateColorband()
-        Me.colorBand1.Start = Me.TChart1.Axes.Bottom.Minimum
-        Me.colorBand1.End = Me.TChart1.Axes.Bottom.Maximum
+    Private Sub updateOverviewZoomExtent()
+        Me.colorBandOverview.Start = Me.TChart1.Axes.Bottom.Minimum
+        Me.colorBandOverview.End = Me.TChart1.Axes.Bottom.Maximum
     End Sub
 
     ''' <summary>
@@ -413,7 +433,7 @@ Public Class Wave
         Call Me.updateNavigation()
 
         'Update overview
-        Call Me.updateColorband()
+        Call Me.updateOverviewZoomExtent()
 
         'Auto-adjust Y-axes to current viewport
         If Me.AutoAdjustYAxes Then
@@ -486,15 +506,15 @@ Public Class Wave
             'start zoom process
             Dim startValue As Double
 
-            Me.Cursor = cursor_zoom
+            Me.TChart2.Cursor = cursor_zoom
 
             Me.OverviewChartMouseDragging = True
             Me.OverviewChartMouseDragStartX = e.X
 
             startValue = Me.TChart2.Series(0).XScreenToValue(Me.OverviewChartMouseDragStartX)
 
-            Me.colorBand1.Start = startValue
-            Me.colorBand1.End = startValue
+            Me.colorBandOverview.Start = startValue
+            Me.colorBandOverview.End = startValue
 
             Log.AddLogEntry(Log.levels.debug, "Zoom start at " & Date.FromOADate(startValue))
         End If
@@ -509,8 +529,7 @@ Public Class Wave
     Private Sub OverviewChart_MouseMove(sender As Object, e As MouseEventArgs) Handles TChart2.MouseMove
         If Me.OverviewChartMouseDragging Then
             'animate the colorband
-            Me.Cursor = cursor_zoom
-            Me.colorBand1.End = TChart2.Series(0).XScreenToValue(e.X)
+            Me.colorBandOverview.End = TChart2.Series(0).XScreenToValue(e.X)
         End If
     End Sub
 
@@ -521,7 +540,7 @@ Public Class Wave
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
     Private Sub OverviewChart_MouseUp(ByVal sender As System.Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles TChart2.MouseUp
-        Me.Cursor = Cursors.Default
+        Me.TChart2.Cursor = Cursors.Default
         If Me.OverviewChartMouseDragging Then
             'complete the zoom process
             Me.OverviewChartMouseDragging = False
@@ -538,15 +557,15 @@ Public Class Wave
                 Log.AddLogEntry(Log.levels.debug, "Zoom end at " & Date.FromOADate(endValue))
 
                 'adhust colorband
-                Me.colorBand1.Start = startValue
-                Me.colorBand1.End = endValue
+                Me.colorBandOverview.Start = startValue
+                Me.colorBandOverview.End = endValue
 
                 'save the current zoom snapshot
                 Call Me.saveZoomSnapshot()
 
                 'set the new viewport on the main chart
-                Me.TChart1.Axes.Bottom.Minimum = Me.colorBand1.Start
-                Me.TChart1.Axes.Bottom.Maximum = Me.colorBand1.End
+                Me.TChart1.Axes.Bottom.Minimum = Me.colorBandOverview.Start
+                Me.TChart1.Axes.Bottom.Maximum = Me.colorBandOverview.End
                 Me.selectionMade = True
                 Call Me.viewportChanged()
             End If
@@ -623,6 +642,7 @@ Public Class Wave
                                             Me.TChart1.Axes.Bottom.Minimum,
                                             Me.TChart1.Axes.Bottom.Maximum}
         Me.TChart1.Zoom.HistorySteps.Add(snapshot)
+        Log.AddLogEntry(Log.levels.debug, String.Format("Saved zoom snapshot {0}, {1}", Date.FromOADate(Me.TChart1.Axes.Bottom.Minimum), Date.FromOADate(Me.TChart1.Axes.Bottom.Maximum)))
         'TODO: perhaps remove some HistorySteps if there are too many?
     End Sub
 
@@ -1474,12 +1494,8 @@ Public Class Wave
     ''' </summary>
     Private Sub ToolStripButton_Zoom_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_Zoom.Click
         If Me.ToolStripButton_Zoom.Checked Then
-            'enable zooming
+            'change to zoom cursor
             Me.TChart1.Cursor = Me.cursor_zoom
-            Me.TChart1.Zoom.Allow = True
-            Me.TChart1.Zoom.Direction = Steema.TeeChart.ZoomDirections.Horizontal
-            Me.TChart1.Zoom.History = True 'number of steps is 8, don't know how to change that
-            Me.TChart1.Zoom.MouseButton = Windows.Forms.MouseButtons.Left
             'uncheck the other buttons
             Me.ToolStripButton_NormalMode.Checked = False
             Me.ToolStripButton_Pan.Checked = False
@@ -1487,12 +1503,8 @@ Public Class Wave
             Me.TChart1.Panning.Allow = False
         Else
             'revert to normal mode
-            Me.TChart1.Cursor = Cursors.Default
-            Me.TChart1.Zoom.Allow = True
-            Me.TChart1.Zoom.Direction = Steema.TeeChart.ZoomDirections.Horizontal
-            Me.TChart1.Zoom.MouseButton = Windows.Forms.MouseButtons.Left
-            Me.TChart1.Panning.Allow = Steema.TeeChart.ScrollModes.Horizontal
-            Me.TChart1.Panning.MouseButton = Windows.Forms.MouseButtons.Right
+            Me.ToolStripButton_NormalMode.Checked = True
+            ToolStripButton_Normal_Click(sender, e)
         End If
     End Sub
 
@@ -1501,23 +1513,18 @@ Public Class Wave
     ''' </summary>
     Private Sub ToolStripButton_Pan_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_Pan.Click
         If Me.ToolStripButton_Pan.Checked Then
-            'enable panning
+            'change to pan cursor
             Me.TChart1.Cursor = Me.cursor_pan
+            'allow panning with left mouse-button
             Me.TChart1.Panning.Allow = Steema.TeeChart.ScrollModes.Horizontal
             Me.TChart1.Panning.MouseButton = Windows.Forms.MouseButtons.Left
             'uncheck the other buttons
             Me.ToolStripButton_NormalMode.Checked = False
             Me.ToolStripButton_Zoom.Checked = False
-            'disable zooming
-            Me.TChart1.Zoom.Allow = False
         Else
             'revert to normal mode
-            Me.TChart1.Cursor = Cursors.Default
-            Me.TChart1.Zoom.Allow = True
-            Me.TChart1.Zoom.Direction = Steema.TeeChart.ZoomDirections.Horizontal
-            Me.TChart1.Zoom.MouseButton = Windows.Forms.MouseButtons.Left
-            Me.TChart1.Panning.Allow = Steema.TeeChart.ScrollModes.Horizontal
-            Me.TChart1.Panning.MouseButton = Windows.Forms.MouseButtons.Right
+            Me.ToolStripButton_NormalMode.Checked = True
+            ToolStripButton_Normal_Click(sender, e)
         End If
     End Sub
 
@@ -1525,22 +1532,19 @@ Public Class Wave
     ''' Normal mode button clicked
     ''' </summary>
     Private Sub ToolStripButton_Normal_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_NormalMode.Click
+        If Not Me.ToolStripButton_Zoom.Checked And Not Me.ToolStripButton_Pan.Checked Then
+            'keep the button checked as no other mode is activated
+            Me.ToolStripButton_NormalMode.Checked = True
+        End If
         If Me.ToolStripButton_NormalMode.Checked Then
-            'revert to normal mode
+            'change cursor to default
             Me.TChart1.Cursor = Cursors.Default
-            Me.TChart1.Zoom.Allow = True
-            Me.TChart1.Zoom.Direction = Steema.TeeChart.ZoomDirections.Horizontal
-            Me.TChart1.Zoom.MouseButton = Windows.Forms.MouseButtons.Left
+            'allow panning with right mouse-button
             Me.TChart1.Panning.Allow = Steema.TeeChart.ScrollModes.Horizontal
             Me.TChart1.Panning.MouseButton = Windows.Forms.MouseButtons.Right
             'uncheck the other buttons
             Me.ToolStripButton_Zoom.Checked = False
             Me.ToolStripButton_Pan.Checked = False
-        Else
-            If Not Me.ToolStripButton_Zoom.Checked And Not Me.ToolStripButton_Pan.Checked Then
-                'keep the button checked as no other mode is activated
-                Me.ToolStripButton_NormalMode.Checked = True
-            End If
         End If
     End Sub
 
@@ -2086,28 +2090,96 @@ Public Class Wave
 #Region "Cursor"
 
     ''' <summary>
-    ''' Mouse down event on TChart1: change cursor as needed and save zoom snapshot before panning
+    ''' Handles main chart MouseDown event
+    ''' Start a zooming or panning process, save zoom snapshot
     ''' </summary>
     Private Sub TChart1_MouseDown(ByVal sender As System.Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles TChart1.MouseDown
-        If Me.ToolStripButton_NormalMode.Checked Then
-            If e.Button = Windows.Forms.MouseButtons.Left Then
+
+        If (Me.ToolStripButton_NormalMode.Checked And
+            e.Button = Windows.Forms.MouseButtons.Left) Or
+            Me.ToolStripButton_Zoom.Checked Then
+            'start zoom process
+            If Me.TChart1.Series.Count > 0 Then
+
+                Dim startValue As Double
+                startValue = Me.TChart1.Series(0).XScreenToValue(e.X)
+
+                If startValue < Me.TChart1.Axes.Bottom.Minimum Or
+                    startValue > Me.TChart1.Axes.Bottom.Maximum Then
+                    'click outside of chart, don't start zoom process
+                    Exit Sub
+                End If
+
                 Me.TChart1.Cursor = Me.cursor_zoom
-            ElseIf e.Button = Windows.Forms.MouseButtons.Right Then
-                'save current zoom snapshot before scrolling
                 Call Me.saveZoomSnapshot()
-                Me.TChart1.Cursor = Me.cursor_pan_hold
+
+                Me.ChartMouseZoomDragging = True
+                Me.ChartMouseDragStartX = e.X
+
+                Me.colorBandZoom.Active = True
+                Me.colorBandZoom.Start = startValue
+                Me.colorBandZoom.End = startValue
+
+                Log.AddLogEntry(Log.levels.debug, "Zoom start at " & Date.FromOADate(startValue))
             End If
-        ElseIf Me.ToolStripButton_Pan.Checked Then
-            'save current zoom snapshot before scrolling
+
+        ElseIf (Me.ToolStripButton_NormalMode.Checked And
+            e.Button = MouseButtons.Right) Or
+            Me.ToolStripButton_Pan.Checked Then
+            'start pan process
             Call Me.saveZoomSnapshot()
             Me.TChart1.Cursor = Me.cursor_pan_hold
+        End If
+
+    End Sub
+
+    ''' <summary>
+    ''' Handles main chart MouseMove event
+    ''' Animates any started zoom
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    Private Sub TChart1_MouseMove(ByVal sender As System.Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles TChart1.MouseMove
+        If Me.ChartMouseZoomDragging Then
+            Dim endValue As Double
+            endValue = TChart1.Series(0).XScreenToValue(e.X)
+            Me.colorBandZoom.End = endValue
         End If
     End Sub
 
     ''' <summary>
-    ''' Mouse up event on TChart1: change cursor as needed
+    ''' Handles main chart MouseUp event
+    ''' Complete any started zoom process, update cursor
     ''' </summary>
     Private Sub TChart1_MouseUp(ByVal sender As System.Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles TChart1.MouseUp
+        If Me.ChartMouseZoomDragging Then
+            'complete the zoom process
+            Me.ChartMouseZoomDragging = False
+            'determine start and end of zoom
+            If e.X <> Me.ChartMouseDragStartX Then
+                Dim startValue, endValue As Double
+                If e.X > Me.ChartMouseDragStartX Then
+                    startValue = TChart1.Series(0).XScreenToValue(Me.ChartMouseDragStartX)
+                    endValue = TChart1.Series(0).XScreenToValue(e.X)
+                Else
+                    startValue = TChart1.Series(0).XScreenToValue(e.X)
+                    endValue = TChart1.Series(0).XScreenToValue(Me.ChartMouseDragStartX)
+                End If
+                Log.AddLogEntry(Log.levels.debug, "Zoom end at " & Date.FromOADate(endValue))
+
+                'adjust colorband
+                Me.colorBandZoom.Active = False
+
+                'save the current zoom snapshot
+                Call Me.saveZoomSnapshot()
+
+                'set the new viewport 
+                Me.TChart1.Axes.Bottom.Minimum = startValue
+                Me.TChart1.Axes.Bottom.Maximum = endValue
+                Me.selectionMade = True
+                Call Me.viewportChanged()
+            End If
+        End If
         If Me.ToolStripButton_NormalMode.Checked Then
             Me.TChart1.Cursor = Cursors.Default
         ElseIf Me.ToolStripButton_Pan.Checked Then
@@ -2541,7 +2613,7 @@ Public Class Wave
             End If
 
             'ColorBand neu einrichten (durch TEN-Import verloren)
-            Call Me.Init_ColorBand()
+            Call Me.Init_ColorBands()
 
             'Charts aktualisieren
             Call Me.UpdateChartExtents()
