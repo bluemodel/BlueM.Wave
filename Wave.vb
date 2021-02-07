@@ -2869,7 +2869,7 @@ Public Class Wave
 
         'Linien instanzieren
         Dim Line1 As New Steema.TeeChart.Styles.Line(Me.TChart1.Chart)
-        Dim Line2 As New Steema.TeeChart.Styles.Line(Me.TChart2.Chart)
+        Dim Line2 As New Steema.TeeChart.Styles.FastLine(Me.TChart2.Chart)
 
         'X-Werte als Zeitdaten einstellen
         Line1.XValues.DateTime = True
@@ -2889,6 +2889,8 @@ Public Class Wave
         End If
 
         'Stützstellen zur Serie hinzufügen
+        Line1.BeginUpdate()
+        Line2.BeginUpdate()
         For Each node As KeyValuePair(Of DateTime, Double) In zre.NodesClean
             Try
                 Line1.Add(node.Key, node.Value)
@@ -2897,6 +2899,8 @@ Public Class Wave
                 Log.AddLogEntry(Log.levels.error, String.Format("Unable to display date {0} in chart!", node.Key))
             End Try
         Next
+        Line1.EndUpdate()
+        Line2.EndUpdate()
 
         'Y-Achsenzuordnung
         assignSeriesToAxis(Line1, zre.Unit)
