@@ -9,6 +9,7 @@ CHANGED:
   * Added a button for showing/hiding statistics
   * Changed the background color of editable columns
   * The dropdown button for changing the interpretation now only appears for the currently active cell
+* Automatically added axes now have their grid visibility switched off by default 
 
 Version 1.9.0
 -------------

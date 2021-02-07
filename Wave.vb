@@ -2977,6 +2977,7 @@ Public Class Wave
             Me.TChart1.Axes.Right.Tag = unit
             Me.TChart1.Axes.Right.Visible = True
             Me.TChart1.Axes.Right.Automatic = True
+            Me.TChart1.Axes.Right.Grid.Visible = False
             series.VertAxis = Steema.TeeChart.Styles.VerticalAxis.Right
 
         ElseIf Me.TChart1.Axes.Right.Tag = unit Then
@@ -3003,6 +3004,7 @@ Public Class Wave
                 axis.Tag = unit
                 axis.Visible = True
                 axis.Automatic = True
+                axis.Grid.Visible = False
                 'Place every second axis on the right
                 If number Mod 2 = 0 Then
                     axis.OtherSide = True
