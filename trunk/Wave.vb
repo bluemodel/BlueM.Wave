@@ -2379,6 +2379,10 @@ Public Class Wave
             Me.TChart2.Axes.Bottom.Labels.Angle = 0
             Me.TChart2.Zoom.Allow = False
             Me.TChart2.Panning.Allow = Steema.TeeChart.ScrollModes.None
+            'change type of series to FastLine
+            For i = 0 To Me.TChart2.Series.Count - 1
+                Steema.TeeChart.Styles.Series.ChangeType(Me.TChart2.Series(i), GetType(Steema.TeeChart.Styles.FastLine))
+            Next
 
             'Abfrage für Reihenimport
             If (Me.TChart1.Series.Count() > 0) Then
