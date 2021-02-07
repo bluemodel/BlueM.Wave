@@ -225,12 +225,6 @@
     <Compile Include="Dialogs\MetadataDialog.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Dialogs\StatisticsDialog.Designer.vb">
-      <DependentUpon>StatisticsDialog.vb</DependentUpon>
-    </Compile>
-    <Compile Include="Dialogs\StatisticsDialog.vb">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="FileFormats\ASC.vb">
       <SubType>Code</SubType>
     </Compile>
@@ -335,9 +329,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Dialogs\AxisDialog.resx">
       <DependentUpon>AxisDialog.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Dialogs\StatisticsDialog.resx">
-      <DependentUpon>StatisticsDialog.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="My Project\Resources.resx">
       <Generator>VbMyResourcesResXFileCodeGenerator</Generator>

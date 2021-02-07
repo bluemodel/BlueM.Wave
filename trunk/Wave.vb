@@ -40,7 +40,6 @@ Public Class Wave
 
     'Dialogs
     Private WithEvents propDialog As PropertiesDialog
-    Private WithEvents statDialog As StatisticsDialog
     Private WithEvents axisDialog As AxisDialog
 
     'Eigenschaften
@@ -109,9 +108,6 @@ Public Class Wave
 
         If IsNothing(propDialog) Then
             propDialog = New PropertiesDialog()
-        End If
-        If IsNothing(statDialog) Then
-            statDialog = New StatisticsDialog()
         End If
         If IsNothing(axisDialog) Then
             axisDialog = New AxisDialog()
@@ -546,7 +542,6 @@ Public Class Wave
 
         'Update dialogs
         Me.propDialog.Update(Me.TimeSeriesDict.Values.ToList)
-        Me.statDialog.Update(Me.TimeSeriesDict.Values.ToList)
     End Sub
 
     ''' <summary>
@@ -604,9 +599,6 @@ Public Class Wave
                 Exit For
             End If
         Next
-
-        'Update stats dialog
-        Me.statDialog.Update(Me.TimeSeriesDict.Values.ToList)
 
     End Sub
 
@@ -675,7 +667,6 @@ Public Class Wave
         'Update dialogs
         Call Me.updateAxisDialog()
         Call propDialog.Update(Me.TimeSeriesDict.Values.ToList)
-        Call statDialog.Update(Me.TimeSeriesDict.Values.ToList)
 
         'Update window title
         Me.Text = "BlueM.Wave"
@@ -1209,17 +1200,6 @@ Public Class Wave
         propDialog.Update(Me.TimeSeriesDict.Values.ToList)
         propDialog.Show()
         propDialog.BringToFront()
-    End Sub
-
-    ''' <summary>
-    ''' Statistics button clicked
-    ''' </summary>
-    ''' <param name="sender"></param>
-    ''' <param name="e"></param>
-    Private Sub ToolStripButton_Statistics_Click(sender As Object, e As EventArgs) Handles ToolStripButton_Statistics.Click
-        statDialog.Update(Me.TimeSeriesDict.Values.ToList)
-        statDialog.Show()
-        statDialog.BringToFront()
     End Sub
 
     ''' <summary>
@@ -2126,7 +2106,6 @@ Public Class Wave
 
         'Update dialogs
         Me.propDialog.Update(Me.TimeSeriesDict.Values.ToList)
-        Me.statDialog.Update(Me.TimeSeriesDict.Values.ToList)
     End Sub
 
     ''' <summary>
@@ -2970,7 +2949,6 @@ Public Class Wave
 
         'Update dialogs
         Me.propDialog.Update(Me.TimeSeriesDict.Values.ToList)
-        Me.statDialog.Update(Me.TimeSeriesDict.Values.ToList)
 
     End Sub
 

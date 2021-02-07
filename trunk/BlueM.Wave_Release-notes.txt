@@ -1,10 +1,15 @@
 ﻿===============================================================
 BlueM.Wave Release Notes
 ===============================================================
+Version 1.9.1
+-------------
+CHANGED:
+* Removed the Time Series Statistics dialog. Instead, the Time Series Properties dialog now has a button for showing/hiding statistics.
+
 Version 1.9.0
 -------------
 NEW:
-* Time series properties and statistics are now two separate dialogs
+* Time Series Properties and Statistics are now two separate dialogs
 * Every loaded time series now stores information about its original datasource, which is displayed in the properties dialog
 * Log messages are now categorized in levels and colored to make warnings and errors more prominent #730
 * The logging level can be set in Wave.exe.config by setting loggingLevel to either debug, info, warning or error (default is info)
