@@ -63,6 +63,9 @@ Public Class Wave
     Private selectionMade As Boolean 'Flag zeigt an, ob bereits ein Auswahlbereich ausgewählt wurde
     Private WithEvents ChartListBox1 As Steema.TeeChart.ChartListBox
 
+    Private OverviewChartMouseDragging As Boolean = False
+    Private OverviewChartMouseDragStartX As Double
+
     'Cursors
     Friend cursor_pan As Cursor
     Friend cursor_pan_hold As Cursor
@@ -325,8 +328,8 @@ Public Class Wave
         colorBand1.Axis = Me.TChart2.Axes.Bottom
         colorBand1.Brush.Color = Color.Coral
         colorBand1.Brush.Transparency = 50
-        colorBand1.ResizeEnd = True
-        colorBand1.ResizeStart = True
+        colorBand1.ResizeEnd = False
+        colorBand1.ResizeStart = False
         colorBand1.EndLinePen.Visible = False
         colorBand1.StartLinePen.Visible = False
     End Sub
@@ -471,23 +474,85 @@ Public Class Wave
         End If
     End Sub
 
-    'ColorBand Resized
-    '*****************
-    Private Sub TChart2_MouseUp(ByVal sender As System.Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles TChart2.MouseUp
-        If (Me.colorBand1.Start > Me.colorBand1.End) Then
-            'invalid selection - reset the colorband to the timespan of the main chart
-            Me.colorBand1.Start = Me.TChart1.Axes.Bottom.Minimum
-            Me.colorBand1.End = Me.TChart1.Axes.Bottom.Maximum
-        Else
-            'save the current zoom snapshot
-            Call Me.saveZoomSnapshot()
-            'set new min/max values for the bottom axis of the main chart
-            Me.TChart1.Axes.Bottom.Minimum = Me.colorBand1.Start
-            Me.TChart1.Axes.Bottom.Maximum = Me.colorBand1.End
-            Me.selectionMade = True
-            Call Me.viewportChanged()
+    ''' <summary>
+    ''' Handles OverviewChart MouseDown event
+    ''' Starts the zoom process
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    Private Sub OverviewChart_MouseDown(sender As Object, e As MouseEventArgs) Handles TChart2.MouseDown
+        If Me.TChart2.Series.Count > 0 Then
+
+            'start zoom process
+            Dim startValue As Double
+
+            Me.Cursor = cursor_zoom
+
+            Me.OverviewChartMouseDragging = True
+            Me.OverviewChartMouseDragStartX = e.X
+
+            startValue = Me.TChart2.Series(0).XScreenToValue(Me.OverviewChartMouseDragStartX)
+
+            Me.colorBand1.Start = startValue
+            Me.colorBand1.End = startValue
+
+            Log.AddLogEntry(Log.levels.debug, "Zoom start at " & Date.FromOADate(startValue))
         End If
     End Sub
+
+    ''' <summary>
+    ''' Handles OverviewChart MouseMove event
+    ''' Animates any started zoom process
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    Private Sub OverviewChart_MouseMove(sender As Object, e As MouseEventArgs) Handles TChart2.MouseMove
+        If Me.OverviewChartMouseDragging Then
+            'animate the colorband
+            Me.Cursor = cursor_zoom
+            Me.colorBand1.End = TChart2.Series(0).XScreenToValue(e.X)
+        End If
+    End Sub
+
+    ''' <summary>
+    ''' Handles OverviewChart MouseUp event
+    ''' Completes any started zoom process
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    Private Sub OverviewChart_MouseUp(ByVal sender As System.Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles TChart2.MouseUp
+        Me.Cursor = Cursors.Default
+        If Me.OverviewChartMouseDragging Then
+            'complete the zoom process
+            Me.OverviewChartMouseDragging = False
+            'determine start and end of zoom
+            If e.X <> Me.OverviewChartMouseDragStartX Then
+                Dim startValue, endValue As Double
+                If e.X > Me.OverviewChartMouseDragStartX Then
+                    startValue = TChart2.Series(0).XScreenToValue(Me.OverviewChartMouseDragStartX)
+                    endValue = TChart2.Series(0).XScreenToValue(e.X)
+                Else
+                    startValue = TChart2.Series(0).XScreenToValue(e.X)
+                    endValue = TChart2.Series(0).XScreenToValue(Me.OverviewChartMouseDragStartX)
+                End If
+                Log.AddLogEntry(Log.levels.debug, "Zoom end at " & Date.FromOADate(endValue))
+
+                'adhust colorband
+                Me.colorBand1.Start = startValue
+                Me.colorBand1.End = endValue
+
+                'save the current zoom snapshot
+                Call Me.saveZoomSnapshot()
+
+                'set the new viewport on the main chart
+                Me.TChart1.Axes.Bottom.Minimum = Me.colorBand1.Start
+                Me.TChart1.Axes.Bottom.Maximum = Me.colorBand1.End
+                Me.selectionMade = True
+                Call Me.viewportChanged()
+            End If
+        End If
+    End Sub
+
 
     'TChart2 DoubleClick
     '*******************
