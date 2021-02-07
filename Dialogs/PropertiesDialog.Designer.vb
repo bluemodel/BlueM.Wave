@@ -23,12 +23,18 @@ Partial Class PropertiesDialog
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
+        Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle3 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(PropertiesDialog))
         Me.DataGridView1 = New System.Windows.Forms.DataGridView()
         Me.ToolStrip1 = New System.Windows.Forms.ToolStrip()
         Me.ToolStripButton_showStatistics = New System.Windows.Forms.ToolStripButton()
+        Me.TimeSeriesBindingSource = New System.Windows.Forms.BindingSource(Me.components)
         Me.Id = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.TitleDataGridViewTextBoxColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Interpretation = New System.Windows.Forms.DataGridViewComboBoxColumn()
+        Me.UnitDataGridViewTextBoxColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.MetadataText = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.DataSource = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Length = New System.Windows.Forms.DataGridViewTextBoxColumn()
@@ -41,9 +47,6 @@ Partial Class PropertiesDialog
         Me.Maximum = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Sum = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Volume = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.TitleDataGridViewTextBoxColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.UnitDataGridViewTextBoxColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.TimeSeriesBindingSource = New System.Windows.Forms.BindingSource(Me.components)
         CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.ToolStrip1.SuspendLayout()
         CType(Me.TimeSeriesBindingSource, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -88,6 +91,10 @@ Partial Class PropertiesDialog
         Me.ToolStripButton_showStatistics.Text = "Show statistics"
         Me.ToolStripButton_showStatistics.ToolTipText = "Show statistics"
         '
+        'TimeSeriesBindingSource
+        '
+        Me.TimeSeriesBindingSource.DataSource = GetType(BlueM.Wave.TimeSeries)
+        '
         'Id
         '
         Me.Id.DataPropertyName = "Id"
@@ -98,14 +105,37 @@ Partial Class PropertiesDialog
         Me.Id.Visible = False
         Me.Id.Width = 41
         '
+        'TitleDataGridViewTextBoxColumn
+        '
+        Me.TitleDataGridViewTextBoxColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells
+        Me.TitleDataGridViewTextBoxColumn.DataPropertyName = "Title"
+        DataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
+        Me.TitleDataGridViewTextBoxColumn.DefaultCellStyle = DataGridViewCellStyle1
+        Me.TitleDataGridViewTextBoxColumn.Frozen = True
+        Me.TitleDataGridViewTextBoxColumn.HeaderText = "Title"
+        Me.TitleDataGridViewTextBoxColumn.Name = "TitleDataGridViewTextBoxColumn"
+        Me.TitleDataGridViewTextBoxColumn.Width = 52
+        '
         'Interpretation
         '
         Me.Interpretation.DataPropertyName = "Interpretation"
+        DataGridViewCellStyle2.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
+        Me.Interpretation.DefaultCellStyle = DataGridViewCellStyle2
+        Me.Interpretation.DisplayStyleForCurrentCellOnly = True
         Me.Interpretation.HeaderText = "Interpretation"
         Me.Interpretation.Name = "Interpretation"
         Me.Interpretation.Resizable = System.Windows.Forms.DataGridViewTriState.[True]
         Me.Interpretation.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic
         Me.Interpretation.Width = 94
+        '
+        'UnitDataGridViewTextBoxColumn
+        '
+        Me.UnitDataGridViewTextBoxColumn.DataPropertyName = "Unit"
+        DataGridViewCellStyle3.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
+        Me.UnitDataGridViewTextBoxColumn.DefaultCellStyle = DataGridViewCellStyle3
+        Me.UnitDataGridViewTextBoxColumn.HeaderText = "Unit"
+        Me.UnitDataGridViewTextBoxColumn.Name = "UnitDataGridViewTextBoxColumn"
+        Me.UnitDataGridViewTextBoxColumn.Width = 51
         '
         'MetadataText
         '
@@ -200,26 +230,6 @@ Partial Class PropertiesDialog
         Me.Volume.Name = "Volume"
         Me.Volume.ReadOnly = True
         Me.Volume.Visible = False
-        '
-        'TitleDataGridViewTextBoxColumn
-        '
-        Me.TitleDataGridViewTextBoxColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells
-        Me.TitleDataGridViewTextBoxColumn.DataPropertyName = "Title"
-        Me.TitleDataGridViewTextBoxColumn.Frozen = True
-        Me.TitleDataGridViewTextBoxColumn.HeaderText = "Title"
-        Me.TitleDataGridViewTextBoxColumn.Name = "TitleDataGridViewTextBoxColumn"
-        Me.TitleDataGridViewTextBoxColumn.Width = 52
-        '
-        'UnitDataGridViewTextBoxColumn
-        '
-        Me.UnitDataGridViewTextBoxColumn.DataPropertyName = "Unit"
-        Me.UnitDataGridViewTextBoxColumn.HeaderText = "Unit"
-        Me.UnitDataGridViewTextBoxColumn.Name = "UnitDataGridViewTextBoxColumn"
-        Me.UnitDataGridViewTextBoxColumn.Width = 51
-        '
-        'TimeSeriesBindingSource
-        '
-        Me.TimeSeriesBindingSource.DataSource = GetType(BlueM.Wave.TimeSeries)
         '
         'PropertiesDialog
         '
