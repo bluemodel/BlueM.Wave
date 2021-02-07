@@ -4,6 +4,7 @@ BlueM.Wave Release Notes
 Version 1.9.1
 -------------
 CHANGED:
+* Improved the speed of displaying lines in the overview chart
 * Removed the Time Series Statistics dialog.
 * Changes to the Time Series Properties dialog:
   * Added a button for showing/hiding statistics
