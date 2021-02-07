@@ -58,6 +58,29 @@ Friend Class PropertiesDialog
     End Sub
 
     ''' <summary>
+    ''' Handles the Show statistics button being pressed
+    ''' Shows/hides the columns with statistics
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    Private Sub showStatisticis_Click(sender As Object, e As EventArgs) Handles ToolStripButton_showStatistics.Click
+        Dim colindex As Integer = 6 'index of the first column with statistics
+        If ToolStripButton_showStatistics.Checked Then
+            For Each col As DataGridViewColumn In DataGridView1.Columns()
+                If col.Index >= colindex Then
+                    col.Visible = True
+                End If
+            Next
+        Else
+            For Each col As DataGridViewColumn In DataGridView1.Columns()
+                If col.Index >= colindex Then
+                    col.Visible = False
+                End If
+            Next
+        End If
+    End Sub
+
+    ''' <summary>
     ''' Commit edits as soon as they occur, but only if they occur in the Interpretation column
     ''' </summary>
     ''' <param name="sender"></param>

@@ -25,14 +25,27 @@ Partial Class PropertiesDialog
         Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(PropertiesDialog))
         Me.DataGridView1 = New System.Windows.Forms.DataGridView()
-        Me.TimeSeriesBindingSource = New System.Windows.Forms.BindingSource(Me.components)
+        Me.ToolStrip1 = New System.Windows.Forms.ToolStrip()
+        Me.ToolStripButton_showStatistics = New System.Windows.Forms.ToolStripButton()
         Me.Id = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.TitleDataGridViewTextBoxColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Interpretation = New System.Windows.Forms.DataGridViewComboBoxColumn()
-        Me.UnitDataGridViewTextBoxColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.MetadataText = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.DataSource = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Length = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.StartDate = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.EndDate = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Average = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.FirstValue = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.LastValue = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Minimum = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Maximum = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Sum = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Volume = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.TitleDataGridViewTextBoxColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.UnitDataGridViewTextBoxColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.TimeSeriesBindingSource = New System.Windows.Forms.BindingSource(Me.components)
         CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.ToolStrip1.SuspendLayout()
         CType(Me.TimeSeriesBindingSource, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
@@ -47,17 +60,33 @@ Partial Class PropertiesDialog
         Me.DataGridView1.CausesValidation = False
         Me.DataGridView1.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.EnableAlwaysIncludeHeaderText
         Me.DataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.DataGridView1.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.Id, Me.TitleDataGridViewTextBoxColumn, Me.Interpretation, Me.UnitDataGridViewTextBoxColumn, Me.MetadataText, Me.DataSource})
+        Me.DataGridView1.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.Id, Me.TitleDataGridViewTextBoxColumn, Me.Interpretation, Me.UnitDataGridViewTextBoxColumn, Me.MetadataText, Me.DataSource, Me.Length, Me.StartDate, Me.EndDate, Me.Average, Me.FirstValue, Me.LastValue, Me.Minimum, Me.Maximum, Me.Sum, Me.Volume})
         Me.DataGridView1.DataSource = Me.TimeSeriesBindingSource
-        Me.DataGridView1.Location = New System.Drawing.Point(13, 12)
+        Me.DataGridView1.Location = New System.Drawing.Point(13, 28)
         Me.DataGridView1.Name = "DataGridView1"
         Me.DataGridView1.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders
-        Me.DataGridView1.Size = New System.Drawing.Size(439, 238)
+        Me.DataGridView1.Size = New System.Drawing.Size(439, 222)
         Me.DataGridView1.TabIndex = 1
         '
-        'TimeSeriesBindingSource
+        'ToolStrip1
         '
-        Me.TimeSeriesBindingSource.DataSource = GetType(BlueM.Wave.TimeSeries)
+        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButton_showStatistics})
+        Me.ToolStrip1.Location = New System.Drawing.Point(0, 0)
+        Me.ToolStrip1.Name = "ToolStrip1"
+        Me.ToolStrip1.Size = New System.Drawing.Size(464, 25)
+        Me.ToolStrip1.TabIndex = 2
+        Me.ToolStrip1.Text = "ToolStrip1"
+        '
+        'ToolStripButton_showStatistics
+        '
+        Me.ToolStripButton_showStatistics.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right
+        Me.ToolStripButton_showStatistics.CheckOnClick = True
+        Me.ToolStripButton_showStatistics.Image = Global.BlueM.Wave.My.Resources.Resources.table_gear
+        Me.ToolStripButton_showStatistics.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ToolStripButton_showStatistics.Name = "ToolStripButton_showStatistics"
+        Me.ToolStripButton_showStatistics.Size = New System.Drawing.Size(104, 22)
+        Me.ToolStripButton_showStatistics.Text = "Show statistics"
+        Me.ToolStripButton_showStatistics.ToolTipText = "Show statistics"
         '
         'Id
         '
@@ -69,6 +98,109 @@ Partial Class PropertiesDialog
         Me.Id.Visible = False
         Me.Id.Width = 41
         '
+        'Interpretation
+        '
+        Me.Interpretation.DataPropertyName = "Interpretation"
+        Me.Interpretation.HeaderText = "Interpretation"
+        Me.Interpretation.Name = "Interpretation"
+        Me.Interpretation.Resizable = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.Interpretation.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic
+        Me.Interpretation.Width = 94
+        '
+        'MetadataText
+        '
+        Me.MetadataText.DataPropertyName = "MetadataText"
+        Me.MetadataText.HeaderText = "Metadata"
+        Me.MetadataText.Name = "MetadataText"
+        Me.MetadataText.ReadOnly = True
+        '
+        'DataSource
+        '
+        Me.DataSource.DataPropertyName = "DataSource"
+        Me.DataSource.HeaderText = "DataSource"
+        Me.DataSource.Name = "DataSource"
+        Me.DataSource.ReadOnly = True
+        '
+        'Length
+        '
+        Me.Length.DataPropertyName = "Length"
+        Me.Length.HeaderText = "Length"
+        Me.Length.Name = "Length"
+        Me.Length.ReadOnly = True
+        Me.Length.Visible = False
+        '
+        'StartDate
+        '
+        Me.StartDate.DataPropertyName = "StartDate"
+        Me.StartDate.HeaderText = "StartDate"
+        Me.StartDate.Name = "StartDate"
+        Me.StartDate.ReadOnly = True
+        Me.StartDate.Visible = False
+        '
+        'EndDate
+        '
+        Me.EndDate.DataPropertyName = "EndDate"
+        Me.EndDate.HeaderText = "EndDate"
+        Me.EndDate.Name = "EndDate"
+        Me.EndDate.ReadOnly = True
+        Me.EndDate.Visible = False
+        '
+        'Average
+        '
+        Me.Average.DataPropertyName = "Average"
+        Me.Average.HeaderText = "Average"
+        Me.Average.Name = "Average"
+        Me.Average.ReadOnly = True
+        Me.Average.Visible = False
+        '
+        'FirstValue
+        '
+        Me.FirstValue.DataPropertyName = "FirstValue"
+        Me.FirstValue.HeaderText = "FirstValue"
+        Me.FirstValue.Name = "FirstValue"
+        Me.FirstValue.ReadOnly = True
+        Me.FirstValue.Visible = False
+        '
+        'LastValue
+        '
+        Me.LastValue.DataPropertyName = "LastValue"
+        Me.LastValue.HeaderText = "LastValue"
+        Me.LastValue.Name = "LastValue"
+        Me.LastValue.ReadOnly = True
+        Me.LastValue.Visible = False
+        '
+        'Minimum
+        '
+        Me.Minimum.DataPropertyName = "Minimum"
+        Me.Minimum.HeaderText = "Minimum"
+        Me.Minimum.Name = "Minimum"
+        Me.Minimum.ReadOnly = True
+        Me.Minimum.Visible = False
+        '
+        'Maximum
+        '
+        Me.Maximum.DataPropertyName = "Maximum"
+        Me.Maximum.HeaderText = "Maximum"
+        Me.Maximum.Name = "Maximum"
+        Me.Maximum.ReadOnly = True
+        Me.Maximum.Visible = False
+        '
+        'Sum
+        '
+        Me.Sum.DataPropertyName = "Sum"
+        Me.Sum.HeaderText = "Sum"
+        Me.Sum.Name = "Sum"
+        Me.Sum.ReadOnly = True
+        Me.Sum.Visible = False
+        '
+        'Volume
+        '
+        Me.Volume.DataPropertyName = "Volume"
+        Me.Volume.HeaderText = "Volume"
+        Me.Volume.Name = "Volume"
+        Me.Volume.ReadOnly = True
+        Me.Volume.Visible = False
+        '
         'TitleDataGridViewTextBoxColumn
         '
         Me.TitleDataGridViewTextBoxColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells
@@ -78,48 +210,23 @@ Partial Class PropertiesDialog
         Me.TitleDataGridViewTextBoxColumn.Name = "TitleDataGridViewTextBoxColumn"
         Me.TitleDataGridViewTextBoxColumn.Width = 52
         '
-        'Interpretation
-        '
-        Me.Interpretation.DataPropertyName = "Interpretation"
-        Me.Interpretation.Frozen = True
-        Me.Interpretation.HeaderText = "Interpretation"
-        Me.Interpretation.Name = "Interpretation"
-        Me.Interpretation.Resizable = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.Interpretation.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic
-        Me.Interpretation.Width = 94
-        '
         'UnitDataGridViewTextBoxColumn
         '
         Me.UnitDataGridViewTextBoxColumn.DataPropertyName = "Unit"
-        Me.UnitDataGridViewTextBoxColumn.Frozen = True
         Me.UnitDataGridViewTextBoxColumn.HeaderText = "Unit"
         Me.UnitDataGridViewTextBoxColumn.Name = "UnitDataGridViewTextBoxColumn"
         Me.UnitDataGridViewTextBoxColumn.Width = 51
         '
-        'MetadataText
+        'TimeSeriesBindingSource
         '
-        Me.MetadataText.DataPropertyName = "MetadataText"
-        Me.MetadataText.Frozen = True
-        Me.MetadataText.HeaderText = "Metadata"
-        Me.MetadataText.Name = "MetadataText"
-        Me.MetadataText.ReadOnly = True
-        Me.MetadataText.Width = 77
-        '
-        'DataSource
-        '
-        Me.DataSource.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells
-        Me.DataSource.DataPropertyName = "DataSource"
-        Me.DataSource.Frozen = True
-        Me.DataSource.HeaderText = "DataSource"
-        Me.DataSource.Name = "DataSource"
-        Me.DataSource.ReadOnly = True
-        Me.DataSource.Width = 89
+        Me.TimeSeriesBindingSource.DataSource = GetType(BlueM.Wave.TimeSeries)
         '
         'PropertiesDialog
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(464, 262)
+        Me.Controls.Add(Me.ToolStrip1)
         Me.Controls.Add(Me.DataGridView1)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.MaximizeBox = False
@@ -128,16 +235,31 @@ Partial Class PropertiesDialog
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
         Me.Text = "Time Series Properties"
         CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.ToolStrip1.ResumeLayout(False)
+        Me.ToolStrip1.PerformLayout()
         CType(Me.TimeSeriesBindingSource, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
+        Me.PerformLayout()
 
     End Sub
     Friend WithEvents DataGridView1 As System.Windows.Forms.DataGridView
     Friend WithEvents TimeSeriesBindingSource As System.Windows.Forms.BindingSource
+    Friend WithEvents ToolStrip1 As ToolStrip
+    Friend WithEvents ToolStripButton_showStatistics As ToolStripButton
     Friend WithEvents Id As DataGridViewTextBoxColumn
     Friend WithEvents TitleDataGridViewTextBoxColumn As DataGridViewTextBoxColumn
     Friend WithEvents Interpretation As DataGridViewComboBoxColumn
     Friend WithEvents UnitDataGridViewTextBoxColumn As DataGridViewTextBoxColumn
     Friend WithEvents MetadataText As DataGridViewTextBoxColumn
     Friend WithEvents DataSource As DataGridViewTextBoxColumn
+    Friend WithEvents Length As DataGridViewTextBoxColumn
+    Friend WithEvents StartDate As DataGridViewTextBoxColumn
+    Friend WithEvents EndDate As DataGridViewTextBoxColumn
+    Friend WithEvents Average As DataGridViewTextBoxColumn
+    Friend WithEvents FirstValue As DataGridViewTextBoxColumn
+    Friend WithEvents LastValue As DataGridViewTextBoxColumn
+    Friend WithEvents Minimum As DataGridViewTextBoxColumn
+    Friend WithEvents Maximum As DataGridViewTextBoxColumn
+    Friend WithEvents Sum As DataGridViewTextBoxColumn
+    Friend WithEvents Volume As DataGridViewTextBoxColumn
 End Class
