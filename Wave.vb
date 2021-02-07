@@ -2405,6 +2405,10 @@ Public Class Wave
                                 For i = 0 To series.Count - 1
                                     reihe.AddNode(Date.FromOADate(series.XValues(i)), series.YValues(i))
                                 Next
+                                'Determine total number of NaN-values and write to log
+                                If reihe.Nodes.Count > reihe.NodesClean.Count Then
+                                    Log.AddLogEntry(Log.levels.warning, String.Format("Series '{0}' contains {1} NaN values!", reihe.Title, reihe.Nodes.Count - reihe.NodesClean.Count))
+                                End If
                                 'Get the series' unit from the axis title
                                 Dim axistitle As String = ""
                                 Select Case series.VertAxis
@@ -2875,6 +2879,10 @@ Public Class Wave
         Dim Line1 As New Steema.TeeChart.Styles.Line(Me.TChart1.Chart)
         Dim Line2 As New Steema.TeeChart.Styles.FastLine(Me.TChart2.Chart)
 
+        'Do not paint NaN values
+        Line1.TreatNulls = Steema.TeeChart.Styles.TreatNullsStyle.DoNotPaint
+        Line2.TreatNulls = Steema.TeeChart.Styles.TreatNullsStyle.DoNotPaint
+
         'X-Werte als Zeitdaten einstellen
         Line1.XValues.DateTime = True
         Line2.XValues.DateTime = True
@@ -2887,24 +2895,31 @@ Public Class Wave
         Line1.Title = zre.Title
         Line2.Title = zre.Title
 
-        'Determine total number of NaN-values and write to log
-        If zre.Nodes.Count > zre.NodesClean.Count Then
-            Call Log.AddLogEntry(Log.levels.warning, String.Format("Series '{0}' contains {1} NaN values!", zre.Title, zre.Nodes.Count - zre.NodesClean.Count))
-        End If
-
         'Stützstellen zur Serie hinzufügen
         Line1.BeginUpdate()
         Line2.BeginUpdate()
-        For Each node As KeyValuePair(Of DateTime, Double) In zre.NodesClean
+        Dim i As Integer = 0
+        For Each node As KeyValuePair(Of DateTime, Double) In zre.Nodes
             Try
                 Line1.Add(node.Key, node.Value)
                 Line2.Add(node.Key, node.Value)
             Catch ex As OverflowException
                 Log.AddLogEntry(Log.levels.error, String.Format("Unable to display date {0} in chart!", node.Key))
             End Try
+            'Set NaN values to Null
+            If Double.IsNaN(node.Value) Then
+                Line1.SetNull(i)
+                Line2.SetNull(i)
+            End If
+            i += 1
         Next
         Line1.EndUpdate()
         Line2.EndUpdate()
+
+        'Determine total number of NaN-values and write to log
+        If zre.Nodes.Count > zre.NodesClean.Count Then
+            Log.AddLogEntry(Log.levels.warning, String.Format("Series '{0}' contains {1} NaN values!", zre.Title, zre.Nodes.Count - zre.NodesClean.Count))
+        End If
 
         'Y-Achsenzuordnung
         assignSeriesToAxis(Line1, zre.Unit)
