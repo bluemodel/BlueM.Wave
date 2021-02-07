@@ -7,10 +7,10 @@ CHANGED:
 * NaN values:
   * NaN values are now displayed as gaps in the chart
   * NaN values are now saved and loaded in TEN files #725
-* Zoom behavior:
-  * Changed the zoom process in both the overview and main charts to a simple click and drag operation which works in both directions
-  * Clicking and dragging to the left in the main chart no longer zooms to the previous extent, but instead performs a normal zoom
-  * Removed the buttons for changing the pan/zoom mode. Panning is now only possible by right-clicking.
+* Zoom/pan behavior:
+  * Changed the zoom/pan behavior in both the overview and main chart to zoom with left click, pan with right-click
+  * Clicking and dragging towards the left in the main chart no longer zooms to the previous extent, but instead performs a normal zoom
+  * Removed the buttons for changing the pan/zoom mode
 * Improved the speed of displaying lines in the overview chart
 * Removed the Time Series Statistics dialog
 * Changes to the Time Series Properties dialog:
