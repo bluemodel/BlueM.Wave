@@ -6,8 +6,9 @@ Version 1.9.1
 CHANGED:
 * NaN values are now displayed as gaps in the chart
 * NaN values are now saved and loaded in TEN files #725
+* Changed the zoom process in the overview chart to a simple click and drag operation
 * Improved the speed of displaying lines in the overview chart
-* Removed the Time Series Statistics dialog.
+* Removed the Time Series Statistics dialog
 * Changes to the Time Series Properties dialog:
   * Added a button for showing/hiding statistics
   * Changed the background color of editable columns
