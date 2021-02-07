@@ -4,7 +4,11 @@ BlueM.Wave Release Notes
 Version 1.9.1
 -------------
 CHANGED:
-* Removed the Time Series Statistics dialog. Instead, the Time Series Properties dialog now has a button for showing/hiding statistics.
+* Removed the Time Series Statistics dialog.
+* Changes to the Time Series Properties dialog:
+  * Added a button for showing/hiding statistics
+  * Changed the background color of editable columns
+  * The dropdown button for changing the interpretation now only appears for the currently active cell
 
 Version 1.9.0
 -------------
