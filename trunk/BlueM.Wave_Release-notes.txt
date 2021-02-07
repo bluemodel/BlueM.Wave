@@ -4,6 +4,8 @@ BlueM.Wave Release Notes
 Version 1.9.1
 -------------
 CHANGED:
+* NaN values are now displayed as gaps in the chart
+* NaN values are now saved and loaded in TEN files #725
 * Improved the speed of displaying lines in the overview chart
 * Removed the Time Series Statistics dialog.
 * Changes to the Time Series Properties dialog:
