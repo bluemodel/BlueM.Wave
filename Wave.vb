@@ -69,7 +69,7 @@ Public Class Wave
     Private colorBandOverview As Steema.TeeChart.Tools.ColorBand
     Private OverviewChartMouseDragging As Boolean = False
     Private OverviewChartMouseDragStartX As Double
-    Private OverviewChartMouseDraggingOffset As Double
+    Private OverviewChartMouseDragOffset As Double
 
     'Cursors
     Friend cursor_pan As Cursor
@@ -527,8 +527,7 @@ Public Class Wave
 
                 Me.OverviewChartMouseDragging = True
                 Me.OverviewChartMouseDragStartX = e.X
-
-                Me.OverviewChartMouseDraggingOffset = e.X - TChart2.Series(0).ValuePointToScreenPoint(Me.colorBandOverview.Start, 0).X
+                Me.OverviewChartMouseDragOffset = e.X - TChart2.Series(0).ValuePointToScreenPoint(Me.colorBandOverview.Start, 0).X
 
             End If
         End If
@@ -548,7 +547,7 @@ Public Class Wave
             ElseIf e.Button = MouseButtons.Right Then
                 'move the whole color band while maintaining its width
                 Dim width As Double = Me.colorBandOverview.End - Me.colorBandOverview.Start
-                Me.colorBandOverview.Start = TChart2.Series(0).XScreenToValue(e.X - Me.OverviewChartMouseDraggingOffset)
+                Me.colorBandOverview.Start = TChart2.Series(0).XScreenToValue(e.X - Me.OverviewChartMouseDragOffset)
                 Me.colorBandOverview.End = Me.colorBandOverview.Start + width
             End If
         End If
