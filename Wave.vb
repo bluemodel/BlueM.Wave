@@ -2585,8 +2585,15 @@ Public Class Wave
                 Me.TChart1.Axes.Bottom.Maximum = XMax
             End If
 
-            'ColorBand neu einrichten (durch TEN-Import verloren)
+            'ColorBands neu einrichten (durch TEN-Import verloren)
             Call Me.Init_ColorBands()
+
+            'Reset zoom and pan settings
+            Me.TChart1.Zoom.Allow = False
+            Me.TChart1.Panning.Allow = Steema.TeeChart.ScrollModes.Horizontal
+            Me.TChart1.Panning.MouseButton = MouseButtons.Right
+            Me.TChart2.Zoom.Allow = False
+            Me.TChart2.Panning.Allow = Steema.TeeChart.ScrollModes.None
 
             'Charts aktualisieren
             Call Me.UpdateChartExtents()
