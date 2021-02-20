@@ -1,6 +1,11 @@
 ﻿===============================================================
 BlueM.Wave Release Notes
 ===============================================================
+Version 1.9.2
+-------------
+FIXED:
+* Fixed inconsistent zoom behavior when loading a TEN file saved with versions before 1.9.1
+
 Version 1.9.1
 -------------
 CHANGED:
