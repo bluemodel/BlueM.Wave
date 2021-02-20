@@ -480,6 +480,7 @@ Partial Class Wave
         'ToolStripButton_ZoomPrevious
         '
         Me.ToolStripButton_ZoomPrevious.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.ToolStripButton_ZoomPrevious.Enabled = False
         Me.ToolStripButton_ZoomPrevious.Image = Global.BlueM.Wave.My.Resources.Resources.zoom_previous
         Me.ToolStripButton_ZoomPrevious.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.ToolStripButton_ZoomPrevious.Name = "ToolStripButton_ZoomPrevious"
@@ -526,6 +527,7 @@ Partial Class Wave
         'ToolStripButton_ZoomNext
         '
         Me.ToolStripButton_ZoomNext.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.ToolStripButton_ZoomNext.Enabled = False
         Me.ToolStripButton_ZoomNext.Image = CType(resources.GetObject("ToolStripButton_ZoomNext.Image"), System.Drawing.Image)
         Me.ToolStripButton_ZoomNext.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.ToolStripButton_ZoomNext.Name = "ToolStripButton_ZoomNext"
