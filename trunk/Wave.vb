@@ -2885,6 +2885,8 @@ Public Class Wave
                         writer.Write(clipboardtext)
                     End Using
                     Call Me.Import_File(tmpfile)
+                    'delete temp file after import
+                    IO.File.Delete(tmpfile)
                 End If
             Else
                 MessageBox.Show("No usable clipboard content detected!", "Load from clipboard", MessageBoxButtons.OK, MessageBoxIcon.Error)
