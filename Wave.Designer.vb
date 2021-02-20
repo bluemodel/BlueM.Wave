@@ -73,6 +73,7 @@ Partial Class Wave
         Me.ToolStripMenuItem_ReleaseNotes = New System.Windows.Forms.ToolStripMenuItem()
         Me.CheckForUpdateToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.AboutToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripButton_ZoomNext = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripDropDownButton_ZoomToSeries = New System.Windows.Forms.ToolStripDropDownButton()
         Me.ToolStripButton_ZoomAll = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripButton_UpdateNotification = New System.Windows.Forms.ToolStripButton()
@@ -94,7 +95,6 @@ Partial Class Wave
         Me.DateTimePicker_NavEnd = New System.Windows.Forms.DateTimePicker()
         Me.DateTimePicker_NavStart = New System.Windows.Forms.DateTimePicker()
         Me.SaveFileDialog1 = New System.Windows.Forms.SaveFileDialog()
-        Me.ToolStripButton_ZoomNext = New System.Windows.Forms.ToolStripButton()
         ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
         toolStripSeparator = New System.Windows.Forms.ToolStripSeparator()
         ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
@@ -523,6 +523,16 @@ Partial Class Wave
         Me.AboutToolStripMenuItem.Size = New System.Drawing.Size(165, 22)
         Me.AboutToolStripMenuItem.Text = "About"
         '
+        'ToolStripButton_ZoomNext
+        '
+        Me.ToolStripButton_ZoomNext.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.ToolStripButton_ZoomNext.Image = CType(resources.GetObject("ToolStripButton_ZoomNext.Image"), System.Drawing.Image)
+        Me.ToolStripButton_ZoomNext.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ToolStripButton_ZoomNext.Name = "ToolStripButton_ZoomNext"
+        Me.ToolStripButton_ZoomNext.Size = New System.Drawing.Size(23, 31)
+        Me.ToolStripButton_ZoomNext.Text = "Zoom next"
+        Me.ToolStripButton_ZoomNext.ToolTipText = "Zoom to next extent"
+        '
         'ToolStripDropDownButton_ZoomToSeries
         '
         Me.ToolStripDropDownButton_ZoomToSeries.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
@@ -540,6 +550,7 @@ Partial Class Wave
         Me.ToolStripButton_ZoomAll.Name = "ToolStripButton_ZoomAll"
         Me.ToolStripButton_ZoomAll.Size = New System.Drawing.Size(23, 31)
         Me.ToolStripButton_ZoomAll.Text = "Zoom all"
+        Me.ToolStripButton_ZoomAll.ToolTipText = "Zoom to full extent"
         '
         'ToolStripButton_UpdateNotification
         '
@@ -1247,15 +1258,6 @@ Partial Class Wave
         Me.DateTimePicker_NavStart.ShowUpDown = True
         Me.DateTimePicker_NavStart.Size = New System.Drawing.Size(110, 20)
         Me.DateTimePicker_NavStart.TabIndex = 0
-        '
-        'ToolStripButton_ZoomNext
-        '
-        Me.ToolStripButton_ZoomNext.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.ToolStripButton_ZoomNext.Image = Global.BlueM.Wave.My.Resources.Resources.zoom_next
-        Me.ToolStripButton_ZoomNext.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.ToolStripButton_ZoomNext.Name = "ToolStripButton_ZoomNext"
-        Me.ToolStripButton_ZoomNext.Size = New System.Drawing.Size(23, 31)
-        Me.ToolStripButton_ZoomNext.Text = "Zoom next"
         '
         'Wave
         '

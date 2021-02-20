@@ -235,6 +235,24 @@
         MUGz2QSLxfJDXNoPXq/3NvmhzqxW6yWZ9dJoNJbFpX+AYX4B/x7VguGNL7sAAAAASUVORK5CYII=
 </value>
   </data>
+  <data name="ToolStripButton_ZoomNext.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
+        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAK9SURBVDhPjZBdSFNhGMcH3Vh0ERHVRYFIF8e6KFM8IZpF
+        NeZQZ7alU7c5bK40EdGkj5lL5ykmerTMOYXOcp3pXDhMDD+m5dQt3XYmRQkRzS1oxYhq86aLw9PmjoxQ
+        qh+8N+/7/J7/8z6sDRyGEtQ1IDZTA5KAc1BKOwwSepEQBey9BWZ71wWUKdsat0Ekc5NSv0svphy6IoWT
+        ECIL2nzE3stX2LUCal5T4LfieTKm/E8iyVG5GHN5gonUapBPeUPVbl/o6rL3Z85r748EawcPm8Pz/DOt
+        3M2TuAxicyTZ6QkilDd4JXxuuH3Besq3Vuf2hmrCjYrdnu/xs+08avou18xoMSiDJODQFSqWPwXzw/L1
+        qByqjcjsa0ZIkhMQnujsdAtXMYXlBBgthnNAQju1QiScVLmRuvGF01UkFDWNAiLsgfFGNjKjzqYZLcYS
+        KaYjC3N7g/KMGhLSap5AamU/HJc9AsFtM3SaHMCrN8F+Dg7TWNbmBjaiOGDv5itcvjUOWqWH7hEKuoZd
+        62KH0QF1nRZQ99uBXUFCHNoCjBbDpuGbbV0CKrKoJBmxLlfjk1CpHody7DlI74yCvHkMmrVWSBfrgHVI
+        8YtRo1jxXHT+Yb7/ZTsPSxT1QcfQErQZXoVTbXCPWICKcJOmHitwLpNw8GgtDFenCxk1xgt1rsyK8/wJ
+        fA0cyL4Pe9k47DrZCmmlBCg1s8C+pAckswk+zreBpZkHI2XoPkaNMYNx0UkV1zzRkhWILMui4tDbU5Rw
+        RvoYjpxqgC9v9fB1hYT3U0owSTNow1ZNNhF/M7At/hbMtheCZwEH/xsdrNofwGKfFLBzyIdn5ck7mMq/
+        87QiXWRRnYeVsQZ4N9YIc50XwSRP+TYkOLyTKfk3RlmqiCxJhgklBwal6GdSmLyHefp/jGUndvcWHlMR
+        ksy46A2L9Rv845g5/lj4FgAAAABJRU5ErkJggg==
+</value>
+  </data>
   <data name="ToolStripButton_ZoomAll.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
@@ -256,12 +274,6 @@
         25iC8wXPdvCp1kI+tSp/locg/gWbSFuRUqfdRgAAAABJRU5ErkJggg==
 </value>
   </data>
-  <metadata name="ToolStripSeparator6.GenerateMember" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>False</value>
-  </metadata>
-  <metadata name="ToolStripSeparator5.GenerateMember" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>False</value>
-  </metadata>
   <metadata name="OpenFileDialog1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>6, 3</value>
   </metadata>
