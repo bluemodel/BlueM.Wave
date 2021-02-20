@@ -51,7 +51,9 @@ Public Class Wave
     ''' <remarks></remarks>
     Private isInitializing As Boolean
 
-    'Interne Zeitreihen-Collection
+    ''' <summary>
+    ''' Internal collection of time series {id: TimeSeries, ...}
+    ''' </summary>
     Private TimeSeriesDict As Dictionary(Of Integer, TimeSeries)
 
     'Dateifilter
@@ -62,13 +64,25 @@ Public Class Wave
     Private selectionMade As Boolean 'Flag zeigt an, ob bereits ein Auswahlbereich ausgewählt wurde
     Private WithEvents ChartListBox1 As Steema.TeeChart.ChartListBox
 
+    'ColorBand that is shown while zooming in main chart
     Private colorBandZoom As Steema.TeeChart.Tools.ColorBand
+    'State and variables for zoom in main chart
     Private ChartMouseZoomDragging As Boolean = False
     Private ChartMouseDragStartX As Double
+
+    ''' <summary>
+    ''' History of view extents [(xmin, xmax), ...]
+    ''' </summary>
     Private ZoomHistory As List(Of Tuple(Of Double, Double))
+
+    ''' <summary>
+    ''' Index of current view extent in zoom history (may not be saved yet)
+    ''' </summary>
     Private ZoomHistoryIndex As Integer
 
+    'ColorBand representing current view extent of main chart in OverviewChart
     Private colorBandOverview As Steema.TeeChart.Tools.ColorBand
+    'State and variables for zoom/pan in OverviewChart
     Private OverviewChartMouseDragging As Boolean = False
     Private OverviewChartMouseDragStartX As Double
     Private OverviewChartMouseDragOffset As Double
@@ -149,7 +163,7 @@ Public Class Wave
             If updateAvailable Then
                 Me.ToolStripButton_UpdateNotification.Visible = True
             End If
-        Catch ax As Exception
+        Catch ex As Exception
             'do nothing if check for update fails at startup
         End Try
     End Sub
