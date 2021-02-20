@@ -694,6 +694,9 @@ Public Class Wave
         End If
         ZoomHistoryIndex += 1
 
+        Me.ToolStripButton_ZoomPrevious.Enabled = (ZoomHistoryIndex - 1 < ZoomHistory.Count And ZoomHistoryIndex > 0)
+        Me.ToolStripButton_ZoomNext.Enabled = (ZoomHistoryIndex + 1 < ZoomHistory.Count)
+
     End Sub
 
     ''' <summary>
@@ -789,6 +792,8 @@ Public Class Wave
         'Reset Zoom history
         Me.ZoomHistory.Clear()
         Me.ZoomHistoryIndex = 0
+        Me.ToolStripButton_ZoomPrevious.Enabled = False
+        Me.ToolStripButton_ZoomNext.Enabled = False
 
         'Collections zurücksetzen
         Me.TimeSeriesDict.Clear()
@@ -1495,6 +1500,7 @@ Public Class Wave
                 ts = Me.TimeSeriesDict(key)
                 ts = ts.removeNaNValues()
                 Me.TimeSeriesDict(key) = ts
+                'TODO: remove NaN values from series in chart
             Next
         End If
     End Sub
@@ -1606,6 +1612,9 @@ Public Class Wave
             Log.AddLogEntry(Log.levels.debug, "No zoom history before index " & ZoomHistoryIndex & " available!")
         End If
 
+        Me.ToolStripButton_ZoomPrevious.Enabled = (ZoomHistoryIndex - 1 < ZoomHistory.Count And ZoomHistoryIndex > 0)
+        Me.ToolStripButton_ZoomNext.Enabled = (ZoomHistoryIndex + 1 < ZoomHistory.Count)
+
     End Sub
 
     ''' <summary>
@@ -1625,6 +1634,9 @@ Public Class Wave
         Else
             Log.AddLogEntry(Log.levels.debug, "No zoom history after index " & ZoomHistoryIndex & " available!")
         End If
+
+        Me.ToolStripButton_ZoomPrevious.Enabled = (ZoomHistoryIndex - 1 < ZoomHistory.Count And ZoomHistoryIndex > 0)
+        Me.ToolStripButton_ZoomNext.Enabled = (ZoomHistoryIndex + 1 < ZoomHistory.Count)
 
     End Sub
 
