@@ -163,7 +163,10 @@ Public Class Wave
         Dim client As New Net.Http.HttpClient()
         Dim s As String = Await client.GetStringAsync(urlUpdateCheck)
         Dim latestVersion As New Version(s)
+#If Not DEBUG Then
+        'TODO: Logging is not thread-safe and causes an exception in debug mode!
         Log.AddLogEntry(Log.levels.debug, "CheckUpdate: Latest version on server: " & latestVersion.ToString())
+#End If
 
         'compare versions
         If currentVersion < latestVersion Then
