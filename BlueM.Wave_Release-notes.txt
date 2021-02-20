@@ -6,6 +6,8 @@ Version 1.9.2
 NEW:
 * Added buttons for zooming in and out a fixed amount
 * Added a button for zooming to the next extent in the zoom history
+CHANGED:
+* Delete temporary files created when importing clipboard data after import is complete
 FIXED:
 * Fixed inconsistent zoom behavior when loading a TEN file saved with versions before 1.9.1
 * Fixed zoom rectangle in main chart not showing after visualizing and then hiding NaN values
