@@ -25,6 +25,10 @@
 'EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 '--------------------------------------------------------------------------------------------
 '
+''' <summary>
+''' Form to display an analysis result chart
+''' TODO: unlike the main chart, this chart uses the inbuilt TeeChart zoom and pan behaviour, which may be unexpected for users
+''' </summary>
 Public Class AnalysisChart
 
     ''' <summary>
@@ -44,4 +48,5 @@ Public Class AnalysisChart
     Private Sub ToolStripButton_EditChart_Click(sender As Object, e As EventArgs) Handles ToolStripButton_EditChart.Click, TChart1.DoubleClick
         TChart1.ShowEditor()
     End Sub
+
 End Class
