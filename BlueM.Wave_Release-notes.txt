@@ -5,6 +5,7 @@ Version 1.9.2
 -------------
 FIXED:
 * Fixed inconsistent zoom behavior when loading a TEN file saved with versions before 1.9.1
+* Fixed zoom rectangle in main chart not showing after visualizing and then hiding NaN values
 
 Version 1.9.1
 -------------

@@ -2098,6 +2098,7 @@ Public Class Wave
                 Me.ChartMouseZoomDragging = True
                 Me.ChartMouseDragStartX = e.X
 
+                Me.colorBandZoom.Chart = Me.TChart1.Chart
                 Me.colorBandZoom.Active = True
                 Me.colorBandZoom.Start = startValue
                 Me.colorBandZoom.End = startValue
