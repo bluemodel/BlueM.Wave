@@ -494,6 +494,7 @@
     <Content Include="Resources\table_edit.png" />
     <Content Include="Resources\table_gear.png" />
     <None Include="Resources\zoom_in.png" />
+    <None Include="Resources\zoom_next.png" />
     <None Include="Resources\zoom_out.png" />
     <Content Include="Resources\zoom_world.png" />
     <None Include="Resources\zoom.png" />

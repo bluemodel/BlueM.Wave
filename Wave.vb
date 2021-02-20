@@ -65,6 +65,8 @@ Public Class Wave
     Private colorBandZoom As Steema.TeeChart.Tools.ColorBand
     Private ChartMouseZoomDragging As Boolean = False
     Private ChartMouseDragStartX As Double
+    Private ZoomHistory As List(Of Tuple(Of Double, Double))
+    Private ZoomHistoryIndex As Integer
 
     Private colorBandOverview As Steema.TeeChart.Tools.ColorBand
     Private OverviewChartMouseDragging As Boolean = False
@@ -113,12 +115,17 @@ Public Class Wave
         Me.ChartListBox1 = New Steema.TeeChart.ChartListBox()
         Call Me.Init_Charts()
 
+        'Dialogs
         If IsNothing(propDialog) Then
             propDialog = New PropertiesDialog()
         End If
         If IsNothing(axisDialog) Then
             axisDialog = New AxisDialog()
         End If
+
+        'Zoom history
+        Me.ZoomHistory = New List(Of Tuple(Of Double, Double))
+        Me.ZoomHistoryIndex = 0
 
         'Log (Singleton) Instanz holen
         Me.logInstance = Log.getInstance()
@@ -308,7 +315,7 @@ Public Class Wave
         'Zoom ist selbst implementiert
         Me.TChart1.Zoom.Allow = False
         Me.TChart1.Zoom.Direction = Steema.TeeChart.ZoomDirections.Horizontal
-        Me.TChart1.Zoom.History = True
+        Me.TChart1.Zoom.History = False
         Me.TChart1.Zoom.Animated = True
         Me.TChart1.Panning.Allow = Steema.TeeChart.ScrollModes.Horizontal
 
@@ -672,21 +679,21 @@ Public Class Wave
     End Sub
 
     ''' <summary>
-    ''' Add the current zoom to the zoom history
+    ''' Add the current zoom extent to the zoom history
     ''' </summary>
     Private Sub saveZoomSnapshot()
-        Dim snapshot As New Steema.TeeChart.ZoomSnapshot()
-        snapshot.AxesMinMax = New Double() {Me.TChart1.Axes.Left.Minimum,
-                                            Me.TChart1.Axes.Left.Maximum,
-                                            Me.TChart1.Axes.Top.Minimum,
-                                            Me.TChart1.Axes.Top.Maximum,
-                                            Me.TChart1.Axes.Right.Minimum,
-                                            Me.TChart1.Axes.Right.Maximum,
-                                            Me.TChart1.Axes.Bottom.Minimum,
-                                            Me.TChart1.Axes.Bottom.Maximum}
-        Me.TChart1.Zoom.HistorySteps.Add(snapshot)
-        Log.AddLogEntry(Log.levels.debug, String.Format("Saved zoom snapshot {0}, {1}", Date.FromOADate(Me.TChart1.Axes.Bottom.Minimum), Date.FromOADate(Me.TChart1.Axes.Bottom.Maximum)))
-        'TODO: perhaps remove some HistorySteps if there are too many?
+
+        If ZoomHistoryIndex < (ZoomHistory.Count - 1) Then
+            'if we are branching off from an old index, just remove the zoom history after the current index
+            ZoomHistory.RemoveRange(ZoomHistoryIndex + 1, ZoomHistory.Count - (ZoomHistoryIndex + 1))
+            Log.AddLogEntry(Log.levels.debug, String.Format("Removed zoom history after index " & ZoomHistoryIndex))
+        Else
+            'add new snapshot
+            ZoomHistory.Add(New Tuple(Of Double, Double)(Me.TChart1.Axes.Bottom.Minimum, Me.TChart1.Axes.Bottom.Maximum))
+            Log.AddLogEntry(Log.levels.debug, String.Format("Saved zoom snapshot {0}: {1}, {2}", ZoomHistoryIndex, Date.FromOADate(Me.TChart1.Axes.Bottom.Minimum), Date.FromOADate(Me.TChart1.Axes.Bottom.Maximum)))
+        End If
+        ZoomHistoryIndex += 1
+
     End Sub
 
     ''' <summary>
@@ -778,6 +785,10 @@ Public Class Wave
 
         'Charts zurücksetzen
         Call Me.Init_Charts()
+
+        'Reset Zoom history
+        Me.ZoomHistory.Clear()
+        Me.ZoomHistoryIndex = 0
 
         'Collections zurücksetzen
         Me.TimeSeriesDict.Clear()
@@ -1578,19 +1589,43 @@ Public Class Wave
     ''' Zoom previous button clicked
     ''' </summary>
     Private Sub ToolStripButton_ZoomPrevious_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_ZoomPrevious.Click
-        'Me.TChart1.Zoom.Undo() 'This (sometimes) reverts to the full zoom without using history
-        If Me.TChart1.Zoom.HistorySteps.Count > 0 Then
-            Dim snapshot As Steema.TeeChart.ZoomSnapshot
-            snapshot = Me.TChart1.Zoom.HistorySteps.Last()
-            Me.TChart1.Axes.Bottom.Minimum = snapshot.AxesMinMax(6)
-            Me.TChart1.Axes.Bottom.Maximum = snapshot.AxesMinMax(7)
-            Me.TChart1.Zoom.HistorySteps.RemoveAt(Me.TChart1.Zoom.HistorySteps.Count - 1)
+
+        If ZoomHistoryIndex >= 1 And Me.ZoomHistory.Count >= (ZoomHistoryIndex - 1) Then
+            Dim prevIndex As Integer = ZoomHistoryIndex - 1
+            If ZoomHistoryIndex >= ZoomHistory.Count Then
+                'save the current zoom snapshot first
+                Call Me.saveZoomSnapshot()
+            End If
+            Dim extent As Tuple(Of Double, Double) = ZoomHistory(prevIndex)
+            Me.TChart1.Axes.Bottom.Minimum = extent.Item1
+            Me.TChart1.Axes.Bottom.Maximum = extent.Item2
+            ZoomHistoryIndex = prevIndex
             Call Me.viewportChanged()
+            Log.AddLogEntry(Log.levels.debug, "Zoomed to history index " & prevIndex)
         Else
-            'no history present, reset the charts
-            Me.selectionMade = False
-            Call Me.UpdateChartExtents()
+            Log.AddLogEntry(Log.levels.debug, "No zoom history before index " & ZoomHistoryIndex & " available!")
         End If
+
+    End Sub
+
+    ''' <summary>
+    ''' Zoom next button clicked
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    Private Sub ToolStripButton_ZoomNext_Click(sender As Object, e As EventArgs) Handles ToolStripButton_ZoomNext.Click
+
+        If Me.ZoomHistory.Count > (ZoomHistoryIndex + 1) Then
+            Dim extent As Tuple(Of Double, Double) = ZoomHistory(ZoomHistoryIndex + 1)
+            Me.TChart1.Axes.Bottom.Minimum = extent.Item1
+            Me.TChart1.Axes.Bottom.Maximum = extent.Item2
+            ZoomHistoryIndex += 1
+            Call Me.viewportChanged()
+            Log.AddLogEntry(Log.levels.debug, "Zoomed to history index " & ZoomHistoryIndex)
+        Else
+            Log.AddLogEntry(Log.levels.debug, "No zoom history after index " & ZoomHistoryIndex & " available!")
+        End If
+
     End Sub
 
     ''' <summary>
