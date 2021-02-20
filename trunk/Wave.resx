@@ -223,16 +223,16 @@
   <data name="ToolStripButton_ToggleNavigation.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
-        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAIoSURBVDhPnVNNi1JRGL6raB8UtGrZJgja9itatWjRUm0h
+        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAInSURBVDhPnVNNi1JRGL6raB8UtGrZJgja9itatWjRUm0h
         +D0LU0EdP9JE8asECU3GjTqipc44NxeCggi6k5pSMB389l4djUnfznu4EkSQ0wPP4r7nfZ7zvOecy4RC
-        IafP53vK/C+CweB9t9t95nA4Hgil68NmsymMRmNNp9PdFkrXAxHeIDxVq9VnGo3mFtYqlcohMd3q9fpt
-        oVBYZ7NZNpFIPKaCv6FUKr2QyWQXTqfzM8uy5Vwud0kAyOknFr4dpyASiayj0eiBIPmNRqORr9frP8mu
-        63K5DMPhEHieh4sxB+f5Enx99JBycFIAknQbCATeCVIqftXpdOhOLz8cUCHHcdAfzeH50RaevQcovTmG
-        vs8Ls8GA9hWLRbDb7YfUgHwsUTSbzajBjtPpFL4PZtDuz2E+n8NisaBEc+w1mUwbkuYJHuAWDf4U79hu
-        t4GkpNGRk8mEpmy1WkAO/AuTTCY36LoT7AzG4zHk83nIZDJAetDg0mq16tEEx1itVqBQKIAJh8N8r9ej
-        sVCIcUejEVSrVUin0xCPx4EIgVzpRxxZq9WyWMdNpVIpMLFY7ARPHoVogGLyMrsqlYoTiURAyCmVyjSZ
-        +Q4akAQ35XL5qUQiGYvF4tcMuVsNOuJNoAE6+/1+Hpv3AhnhHrlXvlarQbfbheVyCS6XayMs7wev1/s2
-        lUoBeUzQbDbBbDb/EJb2g8fjuUt+qHOLxXJFZr0yGAxlYekfYJhfOG/VlF6ixIgAAAAASUVORK5CYII=
+        IafP53vK/C+CweB9t9t95nA4Hgil68NmsymMRmNNp9PdFkrXAxHeIDxVq9VnGo3mFtYqlcqhXq/fkvq2
+        UCiss9ksm0gkHlPB31AqlV7IZLILp9P5mWXZci6XuyQA5PQTC9+OUxCJRNbRaPRAkPxGo9HI1+v1n2TX
+        dblchuFwCDzPw8WYg/N8Cb4+ekg5OCkAJgoEAu8EKRW/6nQ6dKeXHw6okOM46I/m8PxoC8/eA5TeHEPf
+        54XZYED7isUi2O32Q2pAPpYoms1m1GDH6XQK3wczaPfnMJ/PYbFYUKI59ppMpg1J8wQPcIsGf4p3bLfb
+        QFLS6MjJZEJTtlotIAf+hUkmkxt03Ql2BuPxGPL5PGQyGSA9aHBptVr1aIJjrFYrUCgUwITDYb7X69FY
+        KMS4o9EIqtUqpNNpiMfjQIRA3slHHFmr1bJYx02lUikwsVjsBE8ehWiAYvIyuyqVihOJREDIKZXKNJn5
+        DhqQBDflcvmpRCIZi8Xi1wy5Ww064k2gATr7/X4em/cCGeEeuVe+VqtBt9uF5XIJLpdrIyzvB6/X+zaV
+        SgF5TNBsNsFsNv8QlvaDx+O5S36oc4vFckVmvTIYDGVh6R9gmF8IutWF93aPCAAAAABJRU5ErkJggg==
 </value>
   </data>
   <data name="ToolStripButton_ZoomAll.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
@@ -256,6 +256,12 @@
         25iC8wXPdvCp1kI+tSp/locg/gWbSFuRUqfdRgAAAABJRU5ErkJggg==
 </value>
   </data>
+  <metadata name="ToolStripSeparator6.GenerateMember" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>False</value>
+  </metadata>
+  <metadata name="ToolStripSeparator5.GenerateMember" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>False</value>
+  </metadata>
   <metadata name="OpenFileDialog1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>6, 3</value>
   </metadata>

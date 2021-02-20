@@ -1533,6 +1533,48 @@ Public Class Wave
     End Sub
 
     ''' <summary>
+    ''' Zoom in button clicked
+    ''' decrease current zoom extent by 25%
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    Private Sub ToolStripButton_ZoomIn_Click(sender As Object, e As EventArgs) Handles ToolStripButton_ZoomIn.Click
+
+        'save the current zoom snapshot
+        Call Me.saveZoomSnapshot()
+
+        'zoom
+        Dim displayRange As Double = Me.TChart1.Axes.Bottom.Maximum - Me.TChart1.Axes.Bottom.Minimum
+        Me.TChart1.Axes.Bottom.Minimum = Me.TChart1.Axes.Bottom.Minimum + displayRange * 0.125
+        Me.TChart1.Axes.Bottom.Maximum = Me.TChart1.Axes.Bottom.Maximum - displayRange * 0.125
+
+        Me.selectionMade = True
+        Call Me.viewportChanged()
+
+    End Sub
+
+    ''' <summary>
+    ''' Zoom out button clicked
+    ''' increase current zoom extent by 25%
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    Private Sub ToolStripButton_ZoomOut_Click(sender As Object, e As EventArgs) Handles ToolStripButton_ZoomOut.Click
+
+        'save the current zoom snapshot
+        Call Me.saveZoomSnapshot()
+
+        'zoom
+        Dim displayRange As Double = Me.TChart1.Axes.Bottom.Maximum - Me.TChart1.Axes.Bottom.Minimum
+        Me.TChart1.Axes.Bottom.Minimum = Me.TChart1.Axes.Bottom.Minimum - displayRange * 0.125
+        Me.TChart1.Axes.Bottom.Maximum = Me.TChart1.Axes.Bottom.Maximum + displayRange * 0.125
+
+        Me.selectionMade = True
+        Call Me.viewportChanged()
+
+    End Sub
+
+    ''' <summary>
     ''' Zoom previous button clicked
     ''' </summary>
     Private Sub ToolStripButton_ZoomPrevious_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_ZoomPrevious.Click

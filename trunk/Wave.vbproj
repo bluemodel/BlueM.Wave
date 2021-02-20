@@ -493,6 +493,8 @@
     <None Include="Resources\shape_align_bottom.png" />
     <Content Include="Resources\table_edit.png" />
     <Content Include="Resources\table_gear.png" />
+    <None Include="Resources\zoom_in.png" />
+    <None Include="Resources\zoom_out.png" />
     <Content Include="Resources\zoom_world.png" />
     <None Include="Resources\zoom.png" />
     <None Include="Resources\zoom_previous.png" />
