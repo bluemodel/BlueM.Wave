@@ -2,33 +2,34 @@
 Imports System.Reflection
 Imports System.Runtime.InteropServices
 
-' Allgemeine Informationen über eine Assembly werden über die folgenden 
-' Attribute gesteuert. Ändern Sie diese Attributwerte, um die Informationen zu ändern,
-' die mit einer Assembly verknüpft sind.
+' General Information about an assembly is controlled through the following
+' set of attributes. Change these attribute values to modify the information
+' associated with an assembly.
 
-' Die Werte der Assemblyattribute überprüfen
+' Review the values of the assembly attributes
 
 <Assembly: AssemblyTitle("BlueM.Wave")> 
 <Assembly: AssemblyDescription("BlueM.Wave is part of the BlueM software package." & eol & "BlueM.Wave is a tool for time series management and analysis.")> 
 <Assembly: AssemblyCompany("BlueM Dev Group")> 
 <Assembly: AssemblyProduct("BlueM.Wave")> 
 <Assembly: AssemblyCopyright("Copyright © BlueM Dev Group")> 
-<Assembly: AssemblyTrademark("")> 
+<Assembly: AssemblyTrademark("")>
 
 <Assembly: ComVisible(False)>
 
-'Die folgende GUID bestimmt die ID der Typbibliothek, wenn dieses Projekt für COM verfügbar gemacht wird
-<Assembly: Guid("0ae12c4c-39a4-4dec-bb58-5d5105bf446e")>
+'The following GUID is for the ID of the typelib if this project is exposed to COM
+<Assembly: Guid("18368865-a5e9-4df5-8a95-b904312aa7bf")>
 
-' Versionsinformationen für eine Assembly bestehen aus den folgenden vier Werten:
+' Version information for an assembly consists of the following four values:
 '
-'      Hauptversion
-'      Nebenversion 
-'      Buildnummer
+'      Major Version
+'      Minor Version
+'      Build Number
 '      Revision
 '
-' Sie können alle Werte angeben oder die standardmäßigen Build- und Revisionsnummern 
-' übernehmen, indem Sie "*" eingeben:
-' <Assembly: AssemblyVersion("1.0.*")> 
+' You can specify all the values or you can default the Build and Revision Numbers
+' by using the '*' as shown below:
+' <Assembly: AssemblyVersion("1.0.*")>
 
 <Assembly: AssemblyVersion("1.9.2.*")>
+'<Assembly: AssemblyFileVersion("1.9.2.*")>
