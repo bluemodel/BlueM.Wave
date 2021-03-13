@@ -235,7 +235,7 @@ Public Class TimeSeries
     ''' </summary>
     Public ReadOnly Property StartDate() As DateTime
         Get
-            Return Me._nodes.Keys(0)
+            Return Me.Dates.First()
         End Get
     End Property
 
@@ -244,7 +244,7 @@ Public Class TimeSeries
     ''' </summary>
     Public ReadOnly Property EndDate() As DateTime
         Get
-            Return Me._nodes.Keys(Me._nodes.Count - 1)
+            Return Me.Dates.Last()
         End Get
     End Property
 
@@ -286,7 +286,7 @@ Public Class TimeSeries
     End Property
 
     ''' <summary>
-    ''' Returns the minimum value of the time series within a defined time period
+    ''' Returns the minimum value of the time series
     ''' </summary>
     Public Overloads ReadOnly Property Minimum() As Double
         Get
@@ -343,7 +343,7 @@ Public Class TimeSeries
     ''' </summary>
     Public ReadOnly Property FirstValue() As Double
         Get
-            Return Me.Values(0)
+            Return Me.Values.First()
         End Get
     End Property
 
@@ -352,7 +352,7 @@ Public Class TimeSeries
     ''' </summary>
     Public ReadOnly Property LastValue() As Double
         Get
-            Return Me.Values(Me.Length - 1)
+            Return Me.Values.Last()
         End Get
     End Property
 
