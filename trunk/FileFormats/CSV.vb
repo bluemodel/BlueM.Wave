@@ -119,7 +119,6 @@ Public Class CSV
 
             'remove quotes around names and units
             For i = 0 To anzSpalten - 1
-                Console.WriteLine("""")
                 If Namen(i).StartsWith("""") And Namen(i).EndsWith("""") Then
                     Namen(i) = Namen(i).Replace("""", "")
                 End If
