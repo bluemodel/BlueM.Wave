@@ -1,6 +1,11 @@
 ﻿===============================================================
 BlueM.Wave Release Notes
 ===============================================================
+Version 1.9.3
+-------------
+FIXED:
+* API: fixed error when calling FileFormatBase.getTimeSeries() more than once
+
 Version 1.9.2
 -------------
 NEW:

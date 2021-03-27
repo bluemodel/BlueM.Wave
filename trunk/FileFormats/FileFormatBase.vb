@@ -347,7 +347,9 @@ Public MustInherit Class FileFormatBase
                 Return Me.FileTimeSeries(index)
             Else
                 Me.selectSeries(index)
-                Me.readFile()
+                'read the file (again)
+                Me.FileTimeSeries.Clear()
+                Call Me.readFile()
                 Return Me.FileTimeSeries(index)
             End If
         End Get
@@ -376,12 +378,8 @@ Public MustInherit Class FileFormatBase
                 'Check whether a column with the given title exists
                 For Each sInfo As SeriesInfo In Me.SeriesList
                     If (sInfo.Name = title) Then
-                        'select the column for import
-                        Me.selectSeries(sInfo.Index)
-                        'read the file (again)
-                        Call Me.readFile()
-                        'return the timeseries
-                        Return Me.getTimeSeries(title)
+                        'get the timeseries by its index
+                        Return Me.getTimeSeries(sInfo.Index)
                     End If
                 Next
             End If
