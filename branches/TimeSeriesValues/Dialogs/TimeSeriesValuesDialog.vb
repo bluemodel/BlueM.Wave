@@ -39,7 +39,7 @@ Friend Class TimeSeriesValuesDialog
             NumericUpDown_StartRecord.Value = value + 1
         End Set
     End Property
-    Private Const numDisplayedRows As Integer = 100
+    Private Const maxRows As Integer = 100
 
     Public Sub New()
 
@@ -127,16 +127,16 @@ Friend Class TimeSeriesValuesDialog
     Private Sub populateRows()
 
         Dim rows() As DataGridViewRow
-        Dim j, length As Integer
+        Dim j, numRows As Integer
         Dim table As DataTable = Me.dataset.Tables("data")
 
-        length = Math.Min(numDisplayedRows, table.Rows.Count - startIndex)
+        numRows = Math.Min(maxRows, table.Rows.Count - startIndex)
 
         'Add new rows to datagridview
         Me.DataGridView1.SuspendLayout()
         Me.DataGridView1.Rows.Clear()
-        ReDim rows(length - 1)
-        For i As Integer = 0 To length - 1
+        ReDim rows(numRows - 1)
+        For i As Integer = 0 To numRows - 1
             j = startIndex + i
             rows(i) = New DataGridViewRow()
             rows(i).CreateCells(DataGridView1, table.Rows(j).ItemArray)
@@ -145,7 +145,7 @@ Friend Class TimeSeriesValuesDialog
         Me.DataGridView1.ResumeLayout()
 
         'Update label
-        Me.Label_DisplayCount.Text = String.Format("Displaying records {0} to {1} of {2}", startIndex + 1, startIndex + length, table.Rows.Count)
+        Me.Label_DisplayCount.Text = String.Format("Displaying records {0} to {1} of {2}", startIndex + 1, startIndex + numRows, table.Rows.Count)
 
     End Sub
 
@@ -155,17 +155,17 @@ Friend Class TimeSeriesValuesDialog
     End Sub
 
     Private Sub Button_previous_Click(sender As Object, e As EventArgs) Handles Button_previous.Click, Button_first.Click
-        startIndex = Math.Max(0, startIndex - numDisplayedRows)
+        startIndex = Math.Max(0, startIndex - maxRows)
         populateRows()
     End Sub
 
     Private Sub Button_next_Click(sender As Object, e As EventArgs) Handles Button_next.Click
-        startIndex = Math.Min(Me.dataset.Tables("data").Rows.Count - 1, startIndex + numDisplayedRows)
+        startIndex = Math.Min(Me.dataset.Tables("data").Rows.Count - 1, startIndex + maxRows)
         populateRows()
     End Sub
 
     Private Sub Button_last_Click(sender As Object, e As EventArgs) Handles Button_last.Click
-        startIndex = Math.Max(0, Me.dataset.Tables("data").Rows.Count - numDisplayedRows)
+        startIndex = Math.Max(0, Me.dataset.Tables("data").Rows.Count - maxRows)
         populateRows()
     End Sub
 
