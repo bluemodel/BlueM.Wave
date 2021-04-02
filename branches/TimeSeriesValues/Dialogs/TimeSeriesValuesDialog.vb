@@ -114,10 +114,14 @@ Friend Class TimeSeriesValuesDialog
         'set max startIndex
         NumericUpDown_StartRecord.Maximum = table.Rows.Count
 
-        'load first rows
-        startIndex = 0
-        populateRows()
+    End Sub
 
+    Private Sub TimeSeriesValuesDialog_VisibleChanged(sender As Object, e As EventArgs) Handles MyBase.VisibleChanged
+        If Me.Visible() Then
+            'load first rows
+            startIndex = 0
+            populateRows()
+        End If
     End Sub
 
     Private Sub populateRows()
