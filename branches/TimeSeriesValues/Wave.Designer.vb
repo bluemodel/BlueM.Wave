@@ -61,6 +61,7 @@ Partial Class Wave
         Me.ToolStripButton_AxisDialog = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripSeparator9 = New System.Windows.Forms.ToolStripSeparator()
         Me.ToolStripButton_Properties = New System.Windows.Forms.ToolStripButton()
+        Me.ToolStripButton_TimeseriesValues = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripSeparator10 = New System.Windows.Forms.ToolStripSeparator()
         Me.ToolStripButton_AutoAdjustYAxes = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripButton_ToggleOverview = New System.Windows.Forms.ToolStripButton()
@@ -95,7 +96,6 @@ Partial Class Wave
         Me.DateTimePicker_NavEnd = New System.Windows.Forms.DateTimePicker()
         Me.DateTimePicker_NavStart = New System.Windows.Forms.DateTimePicker()
         Me.SaveFileDialog1 = New System.Windows.Forms.SaveFileDialog()
-        Me.ToolStripButton_TimeseriesValues = New System.Windows.Forms.ToolStripButton()
         ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
         toolStripSeparator = New System.Windows.Forms.ToolStripSeparator()
         ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
@@ -280,21 +280,21 @@ Partial Class Wave
         '
         Me.ToolStripMenuItem_SaveProjectFile.Image = Global.BlueM.Wave.My.Resources.Resources.page_save
         Me.ToolStripMenuItem_SaveProjectFile.Name = "ToolStripMenuItem_SaveProjectFile"
-        Me.ToolStripMenuItem_SaveProjectFile.Size = New System.Drawing.Size(180, 22)
+        Me.ToolStripMenuItem_SaveProjectFile.Size = New System.Drawing.Size(167, 22)
         Me.ToolStripMenuItem_SaveProjectFile.Text = "Save project file"
         '
         'ToolStripMenuItem_SaveChart
         '
         Me.ToolStripMenuItem_SaveChart.Image = Global.BlueM.Wave.My.Resources.Resources.chart_pie
         Me.ToolStripMenuItem_SaveChart.Name = "ToolStripMenuItem_SaveChart"
-        Me.ToolStripMenuItem_SaveChart.Size = New System.Drawing.Size(180, 22)
+        Me.ToolStripMenuItem_SaveChart.Size = New System.Drawing.Size(167, 22)
         Me.ToolStripMenuItem_SaveChart.Text = "Save chart"
         '
         'ToolStripMenuItem_ExportSeries
         '
         Me.ToolStripMenuItem_ExportSeries.Image = Global.BlueM.Wave.My.Resources.Resources.page_white_go
         Me.ToolStripMenuItem_ExportSeries.Name = "ToolStripMenuItem_ExportSeries"
-        Me.ToolStripMenuItem_ExportSeries.Size = New System.Drawing.Size(180, 22)
+        Me.ToolStripMenuItem_ExportSeries.Size = New System.Drawing.Size(167, 22)
         Me.ToolStripMenuItem_ExportSeries.Text = "Export time series"
         '
         'ToolStripSeparator4
@@ -419,6 +419,16 @@ Partial Class Wave
         Me.ToolStripButton_Properties.Size = New System.Drawing.Size(23, 31)
         Me.ToolStripButton_Properties.Text = "Properties"
         Me.ToolStripButton_Properties.ToolTipText = "Show time series properties"
+        '
+        'ToolStripButton_TimeseriesValues
+        '
+        Me.ToolStripButton_TimeseriesValues.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.ToolStripButton_TimeseriesValues.Image = Global.BlueM.Wave.My.Resources.Resources.table
+        Me.ToolStripButton_TimeseriesValues.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ToolStripButton_TimeseriesValues.Name = "ToolStripButton_TimeseriesValues"
+        Me.ToolStripButton_TimeseriesValues.Size = New System.Drawing.Size(23, 31)
+        Me.ToolStripButton_TimeseriesValues.Text = "Values"
+        Me.ToolStripButton_TimeseriesValues.ToolTipText = "Show time series values"
         '
         'ToolStripSeparator10
         '
@@ -1261,15 +1271,6 @@ Partial Class Wave
         Me.DateTimePicker_NavStart.ShowUpDown = True
         Me.DateTimePicker_NavStart.Size = New System.Drawing.Size(110, 20)
         Me.DateTimePicker_NavStart.TabIndex = 0
-        '
-        'ToolStripButton_TimeseriesValues
-        '
-        Me.ToolStripButton_TimeseriesValues.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.ToolStripButton_TimeseriesValues.Image = Global.BlueM.Wave.My.Resources.Resources.table
-        Me.ToolStripButton_TimeseriesValues.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.ToolStripButton_TimeseriesValues.Name = "ToolStripButton_TimeseriesValues"
-        Me.ToolStripButton_TimeseriesValues.Size = New System.Drawing.Size(23, 31)
-        Me.ToolStripButton_TimeseriesValues.Text = "Timeseries values"
         '
         'Wave
         '
