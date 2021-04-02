@@ -76,11 +76,13 @@ Friend Class TimeSeriesValuesDialog
         Next
 
         'collect unique timestamps
-        Dim timestamps As New HashSet(Of DateTime)
+        Dim unique_timestamps As New HashSet(Of DateTime)
         For Each ts As TimeSeries In seriesList
-            timestamps.UnionWith(New HashSet(Of DateTime)(ts.Dates))
+            unique_timestamps.UnionWith(New HashSet(Of DateTime)(ts.Dates))
         Next
-        'TODO: sort timestamps
+        'sort timestamps
+        Dim timestamps As List(Of DateTime) = unique_timestamps.ToList()
+        timestamps.Sort()
 
         'add a row for each timestamp
         table.BeginLoadData()
