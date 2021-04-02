@@ -88,7 +88,7 @@ Partial Class TimeSeriesValuesDialog
         Me.Button_next.Name = "Button_next"
         Me.Button_next.Size = New System.Drawing.Size(22, 22)
         Me.Button_next.TabIndex = 4
-        Me.ToolTip1.SetToolTip(Me.Button_next, "next")
+        Me.ToolTip1.SetToolTip(Me.Button_next, "next 100 records")
         Me.Button_next.UseVisualStyleBackColor = True
         '
         'Button_previous
@@ -99,7 +99,7 @@ Partial Class TimeSeriesValuesDialog
         Me.Button_previous.Name = "Button_previous"
         Me.Button_previous.Size = New System.Drawing.Size(22, 22)
         Me.Button_previous.TabIndex = 4
-        Me.ToolTip1.SetToolTip(Me.Button_previous, "previous")
+        Me.ToolTip1.SetToolTip(Me.Button_previous, "previous 100 records")
         Me.Button_previous.UseVisualStyleBackColor = True
         '
         'NumericUpDown_StartRecord
@@ -121,7 +121,7 @@ Partial Class TimeSeriesValuesDialog
         Me.Button_first.Name = "Button_first"
         Me.Button_first.Size = New System.Drawing.Size(22, 22)
         Me.Button_first.TabIndex = 4
-        Me.ToolTip1.SetToolTip(Me.Button_first, "first")
+        Me.ToolTip1.SetToolTip(Me.Button_first, "first records")
         Me.Button_first.UseVisualStyleBackColor = True
         '
         'Button_last
@@ -132,7 +132,7 @@ Partial Class TimeSeriesValuesDialog
         Me.Button_last.Name = "Button_last"
         Me.Button_last.Size = New System.Drawing.Size(22, 22)
         Me.Button_last.TabIndex = 4
-        Me.ToolTip1.SetToolTip(Me.Button_last, "last")
+        Me.ToolTip1.SetToolTip(Me.Button_last, "last records")
         Me.Button_last.UseVisualStyleBackColor = True
         '
         'TimeSeriesValuesDialog
