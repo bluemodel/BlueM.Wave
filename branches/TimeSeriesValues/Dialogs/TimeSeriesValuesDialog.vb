@@ -107,8 +107,14 @@ Friend Class TimeSeriesValuesDialog
         'Reset DatagridView
         Me.DataGridView1.Rows.Clear()
         Me.DataGridView1.Columns.Clear()
+        Dim colindex As Integer = 0
         For Each col As DataColumn In table.Columns
             Me.DataGridView1.Columns.Add(col.ColumnName, col.ColumnName)
+            If colindex = 0 Then
+                'freeze timestamp column
+                Me.DataGridView1.Columns(colindex).Frozen = True
+            End If
+            colindex += 1
         Next
 
         'set max startIndex
