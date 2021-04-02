@@ -150,7 +150,7 @@ Partial Class TimeSeriesValuesDialog
         Me.Controls.Add(Me.DataGridView1)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.MaximizeBox = False
-        Me.MinimumSize = New System.Drawing.Size(300, 200)
+        Me.MinimumSize = New System.Drawing.Size(380, 200)
         Me.Name = "TimeSeriesValuesDialog"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
         Me.Text = "Time Series Values"
