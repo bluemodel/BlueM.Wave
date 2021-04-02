@@ -142,6 +142,7 @@ Friend Class TimeSeriesValuesDialog
             rows(i).CreateCells(DataGridView1, table.Rows(j).ItemArray)
         Next
         Me.DataGridView1.Rows.AddRange(rows)
+        Me.DataGridView1.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.DisplayedCells)
         Me.DataGridView1.ResumeLayout()
 
         'Update label
