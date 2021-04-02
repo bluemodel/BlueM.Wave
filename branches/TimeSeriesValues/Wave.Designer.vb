@@ -95,6 +95,7 @@ Partial Class Wave
         Me.DateTimePicker_NavEnd = New System.Windows.Forms.DateTimePicker()
         Me.DateTimePicker_NavStart = New System.Windows.Forms.DateTimePicker()
         Me.SaveFileDialog1 = New System.Windows.Forms.SaveFileDialog()
+        Me.ToolStripButton_TimeseriesValues = New System.Windows.Forms.ToolStripButton()
         ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
         toolStripSeparator = New System.Windows.Forms.ToolStripSeparator()
         ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
@@ -181,7 +182,7 @@ Partial Class Wave
         '
         ToolStrip1.AutoSize = False
         ToolStrip1.BackColor = System.Drawing.SystemColors.Control
-        ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButton_New, Me.ToolStripDropDownButton_Open, Me.ToolStripDropDownButton_Save, ToolStripSeparator4, Me.ToolStripButton_Copy, Me.ToolStripButton_Print, ToolStripSeparator2, Me.ToolStripButton_Cut, Me.ToolStripButton_Merge, Me.ToolStripSeparator8, Me.ToolStripButton_ShowNaNValues, Me.ToolStripButton_ConvertErrorValues, Me.ToolStripButton_RemoveNaNValues, Me.ToolStripSeparator7, Me.ToolStripButton_Analysis, ToolStripSeparator1, Me.ToolStripButton_EditChart, Me.ToolStripButton_AxisDialog, Me.ToolStripSeparator9, Me.ToolStripButton_Properties, Me.ToolStripSeparator10, Me.ToolStripButton_AutoAdjustYAxes, Me.ToolStripButton_ToggleOverview, Me.ToolStripButton_ToggleNavigation, toolStripSeparator, Me.ToolStripButton_ZoomIn, Me.ToolStripButton_ZoomOut, Me.ToolStripButton_ZoomPrevious, Me.ToolStripDropDownButton_Help, Me.ToolStripButton_ZoomNext, Me.ToolStripDropDownButton_ZoomToSeries, Me.ToolStripButton_ZoomAll, Me.ToolStripButton_UpdateNotification})
+        ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButton_New, Me.ToolStripDropDownButton_Open, Me.ToolStripDropDownButton_Save, ToolStripSeparator4, Me.ToolStripButton_Copy, Me.ToolStripButton_Print, ToolStripSeparator2, Me.ToolStripButton_Cut, Me.ToolStripButton_Merge, Me.ToolStripSeparator8, Me.ToolStripButton_ShowNaNValues, Me.ToolStripButton_ConvertErrorValues, Me.ToolStripButton_RemoveNaNValues, Me.ToolStripSeparator7, Me.ToolStripButton_Analysis, ToolStripSeparator1, Me.ToolStripButton_EditChart, Me.ToolStripButton_AxisDialog, Me.ToolStripSeparator9, Me.ToolStripButton_Properties, Me.ToolStripButton_TimeseriesValues, Me.ToolStripSeparator10, Me.ToolStripButton_AutoAdjustYAxes, Me.ToolStripButton_ToggleOverview, Me.ToolStripButton_ToggleNavigation, toolStripSeparator, Me.ToolStripButton_ZoomIn, Me.ToolStripButton_ZoomOut, Me.ToolStripButton_ZoomPrevious, Me.ToolStripDropDownButton_Help, Me.ToolStripButton_ZoomNext, Me.ToolStripDropDownButton_ZoomToSeries, Me.ToolStripButton_ZoomAll, Me.ToolStripButton_UpdateNotification})
         ToolStrip1.Location = New System.Drawing.Point(0, 0)
         ToolStrip1.Name = "ToolStrip1"
         ToolStrip1.Size = New System.Drawing.Size(944, 34)
@@ -279,21 +280,21 @@ Partial Class Wave
         '
         Me.ToolStripMenuItem_SaveProjectFile.Image = Global.BlueM.Wave.My.Resources.Resources.page_save
         Me.ToolStripMenuItem_SaveProjectFile.Name = "ToolStripMenuItem_SaveProjectFile"
-        Me.ToolStripMenuItem_SaveProjectFile.Size = New System.Drawing.Size(167, 22)
+        Me.ToolStripMenuItem_SaveProjectFile.Size = New System.Drawing.Size(180, 22)
         Me.ToolStripMenuItem_SaveProjectFile.Text = "Save project file"
         '
         'ToolStripMenuItem_SaveChart
         '
         Me.ToolStripMenuItem_SaveChart.Image = Global.BlueM.Wave.My.Resources.Resources.chart_pie
         Me.ToolStripMenuItem_SaveChart.Name = "ToolStripMenuItem_SaveChart"
-        Me.ToolStripMenuItem_SaveChart.Size = New System.Drawing.Size(167, 22)
+        Me.ToolStripMenuItem_SaveChart.Size = New System.Drawing.Size(180, 22)
         Me.ToolStripMenuItem_SaveChart.Text = "Save chart"
         '
         'ToolStripMenuItem_ExportSeries
         '
         Me.ToolStripMenuItem_ExportSeries.Image = Global.BlueM.Wave.My.Resources.Resources.page_white_go
         Me.ToolStripMenuItem_ExportSeries.Name = "ToolStripMenuItem_ExportSeries"
-        Me.ToolStripMenuItem_ExportSeries.Size = New System.Drawing.Size(167, 22)
+        Me.ToolStripMenuItem_ExportSeries.Size = New System.Drawing.Size(180, 22)
         Me.ToolStripMenuItem_ExportSeries.Text = "Export time series"
         '
         'ToolStripSeparator4
@@ -1261,6 +1262,15 @@ Partial Class Wave
         Me.DateTimePicker_NavStart.Size = New System.Drawing.Size(110, 20)
         Me.DateTimePicker_NavStart.TabIndex = 0
         '
+        'ToolStripButton_TimeseriesValues
+        '
+        Me.ToolStripButton_TimeseriesValues.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.ToolStripButton_TimeseriesValues.Image = Global.BlueM.Wave.My.Resources.Resources.table
+        Me.ToolStripButton_TimeseriesValues.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ToolStripButton_TimeseriesValues.Name = "ToolStripButton_TimeseriesValues"
+        Me.ToolStripButton_TimeseriesValues.Size = New System.Drawing.Size(23, 31)
+        Me.ToolStripButton_TimeseriesValues.Text = "Timeseries values"
+        '
         'Wave
         '
         Me.AllowDrop = True
@@ -1359,4 +1369,5 @@ Partial Class Wave
     Friend WithEvents ToolStripButton_ZoomIn As ToolStripButton
     Friend WithEvents ToolStripButton_ZoomOut As ToolStripButton
     Friend WithEvents ToolStripButton_ZoomNext As ToolStripButton
+    Friend WithEvents ToolStripButton_TimeseriesValues As ToolStripButton
 End Class

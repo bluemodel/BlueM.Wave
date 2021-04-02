@@ -41,6 +41,7 @@ Public Class Wave
     'Dialogs
     Private WithEvents propDialog As PropertiesDialog
     Private WithEvents axisDialog As AxisDialog
+    Private WithEvents valuesDialog As TimeSeriesValuesDialog
 
     'Eigenschaften
     '#############
@@ -135,6 +136,9 @@ Public Class Wave
         End If
         If IsNothing(axisDialog) Then
             axisDialog = New AxisDialog()
+        End If
+        If IsNothing(valuesDialog) Then
+            valuesDialog = New TimeSeriesValuesDialog()
         End If
 
         'Zoom history
@@ -690,6 +694,7 @@ Public Class Wave
 
         'Update dialogs
         Me.propDialog.Update(Me.TimeSeriesDict.Values.ToList)
+        Me.valuesDialog.Update(Me.TimeSeriesDict.Values.ToList)
     End Sub
 
     ''' <summary>
@@ -751,6 +756,9 @@ Public Class Wave
                 Exit For
             End If
         Next
+
+        'update dialogs
+        Me.valuesDialog.Update(Me.TimeSeriesDict.Values.ToList)
 
     End Sub
 
@@ -825,6 +833,7 @@ Public Class Wave
         'Update dialogs
         Call Me.updateAxisDialog()
         Call propDialog.Update(Me.TimeSeriesDict.Values.ToList)
+        Call valuesDialog.Update(Me.TimeSeriesDict.Values.ToList)
 
         'Update window title
         Me.Text = "BlueM.Wave"
@@ -1358,6 +1367,14 @@ Public Class Wave
         propDialog.Update(Me.TimeSeriesDict.Values.ToList)
         propDialog.Show()
         propDialog.BringToFront()
+    End Sub
+
+    ''' <summary>
+    ''' Timeseries Values button clicked
+    ''' </summary>
+    Private Sub ToolStripButton_TimeseriesValues_Click(sender As Object, e As EventArgs) Handles ToolStripButton_TimeseriesValues.Click
+        valuesDialog.Show()
+        valuesDialog.BringToFront()
     End Sub
 
     ''' <summary>
@@ -2323,6 +2340,7 @@ Public Class Wave
 
         'Update dialogs
         Me.propDialog.Update(Me.TimeSeriesDict.Values.ToList)
+        Me.valuesDialog.Update(Me.TimeSeriesDict.Values.ToList)
     End Sub
 
     ''' <summary>
@@ -3198,6 +3216,7 @@ Public Class Wave
 
         'Update dialogs
         Me.propDialog.Update(Me.TimeSeriesDict.Values.ToList)
+        Me.valuesDialog.Update(Me.TimeSeriesDict.Values.ToList)
 
     End Sub
 
