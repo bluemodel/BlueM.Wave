@@ -942,7 +942,7 @@ Public Class Wave
 
     'Zeitreihen Export
     '*****************
-    Private Sub ExportZeitreihe_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem_ExportSeries.Click
+    Private Sub ExportZeitreihe_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem_ExportSeries.Click, valuesDialog.Button_ExportValues_Clicked
         Call ExportZeitreihe()
     End Sub
 

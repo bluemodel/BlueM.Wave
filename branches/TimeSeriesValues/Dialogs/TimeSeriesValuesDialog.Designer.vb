@@ -27,6 +27,7 @@ Partial Class TimeSeriesValuesDialog
         Me.DataGridView1 = New System.Windows.Forms.DataGridView()
         Me.TimeseriesValuesBindingSource = New System.Windows.Forms.BindingSource(Me.components)
         Me.ToolStrip1 = New System.Windows.Forms.ToolStrip()
+        Me.ToolStripButton_ExportValues = New System.Windows.Forms.ToolStripButton()
         Me.Label_DisplayCount = New System.Windows.Forms.Label()
         Me.Button_next = New System.Windows.Forms.Button()
         Me.Button_previous = New System.Windows.Forms.Button()
@@ -36,6 +37,7 @@ Partial Class TimeSeriesValuesDialog
         Me.Button_last = New System.Windows.Forms.Button()
         CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.TimeseriesValuesBindingSource, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.ToolStrip1.SuspendLayout()
         CType(Me.NumericUpDown_StartRecord, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
@@ -64,11 +66,21 @@ Partial Class TimeSeriesValuesDialog
         '
         'ToolStrip1
         '
+        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButton_ExportValues})
         Me.ToolStrip1.Location = New System.Drawing.Point(0, 0)
         Me.ToolStrip1.Name = "ToolStrip1"
         Me.ToolStrip1.Size = New System.Drawing.Size(464, 25)
         Me.ToolStrip1.TabIndex = 2
         Me.ToolStrip1.Text = "ToolStrip1"
+        '
+        'ToolStripButton_ExportValues
+        '
+        Me.ToolStripButton_ExportValues.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.ToolStripButton_ExportValues.Image = Global.BlueM.Wave.My.Resources.Resources.table_save
+        Me.ToolStripButton_ExportValues.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ToolStripButton_ExportValues.Name = "ToolStripButton_ExportValues"
+        Me.ToolStripButton_ExportValues.Size = New System.Drawing.Size(23, 22)
+        Me.ToolStripButton_ExportValues.Text = "Export values"
         '
         'Label_DisplayCount
         '
@@ -156,6 +168,8 @@ Partial Class TimeSeriesValuesDialog
         Me.Text = "Time Series Values"
         CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.TimeseriesValuesBindingSource, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.ToolStrip1.ResumeLayout(False)
+        Me.ToolStrip1.PerformLayout()
         CType(Me.NumericUpDown_StartRecord, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
@@ -172,4 +186,5 @@ Partial Class TimeSeriesValuesDialog
     Friend WithEvents ToolTip1 As ToolTip
     Friend WithEvents Button_first As Button
     Friend WithEvents Button_last As Button
+    Friend WithEvents ToolStripButton_ExportValues As ToolStripButton
 End Class

@@ -41,6 +41,8 @@ Friend Class TimeSeriesValuesDialog
     End Property
     Private Const maxRows As Integer = 100
 
+    Public Event Button_ExportValues_Clicked(sender As Object, e As EventArgs)
+
     Public Sub New()
 
         Me.isInitializing = True
@@ -78,6 +80,7 @@ Friend Class TimeSeriesValuesDialog
         For Each ts As TimeSeries In seriesList
             timestamps.UnionWith(New HashSet(Of DateTime)(ts.Dates))
         Next
+        'TODO: sort timestamps
 
         'add a row for each timestamp
         table.BeginLoadData()
@@ -188,4 +191,7 @@ Friend Class TimeSeriesValuesDialog
         Call Me.Hide()
     End Sub
 
+    Private Sub ToolStripButton_ExportValues_Click(sender As Object, e As EventArgs) Handles ToolStripButton_ExportValues.Click
+        RaiseEvent Button_ExportValues_Clicked(sender, e)
+    End Sub
 End Class
