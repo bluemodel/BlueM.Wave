@@ -459,6 +459,7 @@
     <Content Include="Resources\table.png" />
     <Content Include="Resources\table_edit.png" />
     <Content Include="Resources\table_gear.png" />
+    <Content Include="Resources\table_save.png" />
     <Content Include="Resources\tick.png" />
     <Content Include="Resources\wave.ico" />
     <Content Include="Resources\zoom.png" />
