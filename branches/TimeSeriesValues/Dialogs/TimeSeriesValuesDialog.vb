@@ -138,6 +138,10 @@ Friend Class TimeSeriesValuesDialog
         'set first date as initial value for DateTimePicker
         DateTimePicker_JumpDate.Value = timestamps.First
 
+        If Me.Visible Then
+            populateRows()
+        End If
+
     End Sub
 
     ''' <summary>
