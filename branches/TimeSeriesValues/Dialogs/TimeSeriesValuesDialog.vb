@@ -31,6 +31,11 @@ Friend Class TimeSeriesValuesDialog
 
     Private isInitializing As Boolean
     Private dataset As DataSet
+
+    ''' <summary>
+    ''' The starting index of records to display in the datagridview
+    ''' </summary>
+    ''' <returns></returns>
     Private Property startIndex As Integer
         Get
             Return NumericUpDown_StartRecord.Value - 1
@@ -39,6 +44,10 @@ Friend Class TimeSeriesValuesDialog
             NumericUpDown_StartRecord.Value = value + 1
         End Set
     End Property
+
+    ''' <summary>
+    ''' The maximum number of rows to display in the datagridview at a time
+    ''' </summary>
     Private Const maxRows As Integer = 100
 
     Public Event Button_ExportValues_Clicked(sender As Object, e As EventArgs)
@@ -131,6 +140,11 @@ Friend Class TimeSeriesValuesDialog
 
     End Sub
 
+    ''' <summary>
+    ''' Loads records when the form becomes visible
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
     Private Sub TimeSeriesValuesDialog_VisibleChanged(sender As Object, e As EventArgs) Handles MyBase.VisibleChanged
         If Me.Visible() Then
             'load first rows
@@ -139,6 +153,9 @@ Friend Class TimeSeriesValuesDialog
         End If
     End Sub
 
+    ''' <summary>
+    ''' Populates the datagridview with data starting from the currently set startIndex
+    ''' </summary>
     Private Sub populateRows()
 
         Dim rows() As DataGridViewRow
@@ -167,44 +184,70 @@ Friend Class TimeSeriesValuesDialog
 
     End Sub
 
+    ''' <summary>
+    ''' Shows the first page of data
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
     Private Sub Button_first_Click(sender As Object, e As EventArgs) Handles Button_first.Click
         startIndex = 0
         populateRows()
     End Sub
 
+    ''' <summary>
+    ''' Shows the previous page of data
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
     Private Sub Button_previous_Click(sender As Object, e As EventArgs) Handles Button_previous.Click, Button_first.Click
         startIndex = Math.Max(0, startIndex - maxRows)
         populateRows()
     End Sub
 
+    ''' <summary>
+    ''' Shows the next page of data
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
     Private Sub Button_next_Click(sender As Object, e As EventArgs) Handles Button_next.Click
         startIndex = Math.Min(Me.dataset.Tables("data").Rows.Count - 1, startIndex + maxRows)
         populateRows()
     End Sub
 
+    ''' <summary>
+    ''' Shows the last page of data
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
     Private Sub Button_last_Click(sender As Object, e As EventArgs) Handles Button_last.Click
         startIndex = Math.Max(0, Me.dataset.Tables("data").Rows.Count - maxRows)
         populateRows()
     End Sub
 
+    ''' <summary>
+    ''' Updates the datagridview after the starting index for showing data was changed
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
     Private Sub NumericUpDown_StartIndex_ValueChanged(sender As Object, e As EventArgs) Handles NumericUpDown_StartRecord.ValueChanged
         If Not Me.isInitializing Then
             populateRows()
         End If
     End Sub
 
-    Private Sub TimeSeriesValuesDialog_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
-        'prevent the form from closing and hide it instead
-        e.Cancel = True
-        Call Me.Hide()
-    End Sub
-
     Private Sub ToolStripButton_ExportValues_Click(sender As Object, e As EventArgs) Handles ToolStripButton_ExportValues.Click
         RaiseEvent Button_ExportValues_Clicked(sender, e)
     End Sub
 
+    ''' <summary>
+    ''' Handles selection of datagridview changed
+    ''' If showing markers is activated, selected rows are shown as markers in the main chart
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
     Private Sub DataGridView1_SelectionChanged(sender As Object, e As EventArgs) Handles DataGridView1.SelectionChanged
         If ToolStripButton_showMarkers.Checked Then
+            'collect timestamps of currently selected rows
             Dim selectedRows As DataGridViewSelectedRowCollection = DataGridView1.SelectedRows()
             Dim timestamps As New List(Of DateTime)
             For Each row As DataGridViewRow In selectedRows
@@ -214,8 +257,16 @@ Friend Class TimeSeriesValuesDialog
         End If
     End Sub
 
+    ''' <summary>
+    ''' Handles showMarkers button activated/deactivated
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
     Private Sub ToolStripButton_showMarkers_CheckedChanged(sender As Object, e As EventArgs) Handles ToolStripButton_showMarkers.CheckedChanged
-        If Not ToolStripButton_showMarkers.Checked Then
+        If ToolStripButton_showMarkers.Checked Then
+            'show markers for current selection
+            DataGridView1_SelectionChanged(sender, e)
+        Else
             'clear any existing markers
             Dim timestamps As New List(Of DateTime)
             RaiseEvent SelectedRowsChanged(timestamps)
@@ -248,4 +299,11 @@ Friend Class TimeSeriesValuesDialog
         'populate datagridview
         populateRows()
     End Sub
+
+    Private Sub TimeSeriesValuesDialog_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
+        'prevent the form from closing and hide it instead
+        e.Cancel = True
+        Call Me.Hide()
+    End Sub
+
 End Class
