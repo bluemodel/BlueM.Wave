@@ -38,10 +38,13 @@ Friend Class TimeSeriesValuesDialog
     ''' <returns></returns>
     Private Property startIndex As Integer
         Get
-            Return NumericUpDown_StartRecord.Value - 1
+            Return Math.Max(NumericUpDown_StartRecord.Value - 1, 0)
         End Get
         Set(value As Integer)
-            NumericUpDown_StartRecord.Value = value + 1
+            value += 1 'convert from index to record number
+            value = Math.Min(value, NumericUpDown_StartRecord.Maximum)
+            value = Math.Max(value, NumericUpDown_StartRecord.Minimum)
+            NumericUpDown_StartRecord.Value = value
         End Set
     End Property
 
@@ -136,7 +139,9 @@ Friend Class TimeSeriesValuesDialog
         NumericUpDown_StartRecord.Maximum = table.Rows.Count
 
         'set first date as initial value for DateTimePicker
-        DateTimePicker_JumpDate.Value = timestamps.First
+        If timestamps.Count > 0 Then
+            DateTimePicker_JumpDate.Value = timestamps.First
+        End If
 
         If Me.Visible Then
             populateRows()
@@ -150,7 +155,7 @@ Friend Class TimeSeriesValuesDialog
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
     Private Sub TimeSeriesValuesDialog_VisibleChanged(sender As Object, e As EventArgs) Handles MyBase.VisibleChanged
-        If Me.Visible() Then
+        If Me.Visible Then
             'load first rows
             startIndex = 0
             populateRows()
@@ -163,7 +168,7 @@ Friend Class TimeSeriesValuesDialog
     Private Sub populateRows()
 
         Dim rows() As DataGridViewRow
-        Dim j, numRows As Integer
+        Dim recordIndex, numRows As Integer
         Dim table As DataTable = Me.dataset.Tables("data")
 
         numRows = Math.Min(maxRows, table.Rows.Count - startIndex)
@@ -174,9 +179,10 @@ Friend Class TimeSeriesValuesDialog
         If numRows > 0 Then
             ReDim rows(numRows - 1)
             For i As Integer = 0 To numRows - 1
-                j = startIndex + i
+                recordIndex = startIndex + i
                 rows(i) = New DataGridViewRow()
-                rows(i).CreateCells(DataGridView1, table.Rows(j).ItemArray)
+                rows(i).CreateCells(DataGridView1, table.Rows(recordIndex).ItemArray)
+                rows(i).HeaderCell.Value = (recordIndex + 1).ToString()
             Next
             Me.DataGridView1.Rows.AddRange(rows)
         End If
@@ -184,7 +190,13 @@ Friend Class TimeSeriesValuesDialog
         Me.DataGridView1.ResumeLayout()
 
         'Update label
-        Me.Label_DisplayCount.Text = String.Format("Displaying records {0} to {1} of {2}", startIndex + 1, startIndex + numRows, table.Rows.Count)
+        Dim startRecord As Integer
+        If table.Rows.Count = 0 Then
+            startRecord = 0
+        Else
+            startRecord = startIndex + 1
+        End If
+        Me.Label_DisplayCount.Text = String.Format("Displaying records {0} to {1} of {2}", startRecord, startRecord + numRows, table.Rows.Count)
 
     End Sub
 
