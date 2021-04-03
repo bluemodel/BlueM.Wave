@@ -26,7 +26,6 @@ Partial Class TimeSeriesValuesDialog
         Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(TimeSeriesValuesDialog))
         Me.DataGridView1 = New System.Windows.Forms.DataGridView()
-        Me.TimeseriesValuesBindingSource = New System.Windows.Forms.BindingSource(Me.components)
         Me.ToolStrip1 = New System.Windows.Forms.ToolStrip()
         Me.ToolStripButton_ExportValues = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripButton_showMarkers = New System.Windows.Forms.ToolStripButton()
@@ -40,7 +39,6 @@ Partial Class TimeSeriesValuesDialog
         Me.DateTimePicker_JumpDate = New System.Windows.Forms.DateTimePicker()
         Me.Label1 = New System.Windows.Forms.Label()
         CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.TimeseriesValuesBindingSource, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.ToolStrip1.SuspendLayout()
         CType(Me.NumericUpDown_StartRecord, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
@@ -70,10 +68,6 @@ Partial Class TimeSeriesValuesDialog
         Me.DataGridView1.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders
         Me.DataGridView1.Size = New System.Drawing.Size(359, 369)
         Me.DataGridView1.TabIndex = 3
-        '
-        'TimeseriesValuesBindingSource
-        '
-        Me.TimeseriesValuesBindingSource.DataSource = GetType(System.Data.DataTable)
         '
         'ToolStrip1
         '
@@ -208,7 +202,6 @@ Partial Class TimeSeriesValuesDialog
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
         Me.Text = "Time Series Values"
         CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.TimeseriesValuesBindingSource, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ToolStrip1.ResumeLayout(False)
         Me.ToolStrip1.PerformLayout()
         CType(Me.NumericUpDown_StartRecord, System.ComponentModel.ISupportInitialize).EndInit()
@@ -218,7 +211,6 @@ Partial Class TimeSeriesValuesDialog
     End Sub
     Friend WithEvents DataGridView1 As System.Windows.Forms.DataGridView
     Friend WithEvents ToolStrip1 As ToolStrip
-    Friend WithEvents TimeseriesValuesBindingSource As BindingSource
     Friend WithEvents TimestampDataGridViewTextBoxColumn As DataGridViewTextBoxColumn
     Friend WithEvents Label_DisplayCount As Label
     Friend WithEvents Button_next As Button
