@@ -126,6 +126,9 @@ Friend Class TimeSeriesValuesDialog
         'set max startIndex
         NumericUpDown_StartRecord.Maximum = table.Rows.Count
 
+        'set first date as initial value for DateTimePicker
+        DateTimePicker_JumpDate.Value = timestamps.First
+
     End Sub
 
     Private Sub TimeSeriesValuesDialog_VisibleChanged(sender As Object, e As EventArgs) Handles MyBase.VisibleChanged
@@ -147,13 +150,15 @@ Friend Class TimeSeriesValuesDialog
         'Add new rows to datagridview
         Me.DataGridView1.SuspendLayout()
         Me.DataGridView1.Rows.Clear()
-        ReDim rows(numRows - 1)
-        For i As Integer = 0 To numRows - 1
-            j = startIndex + i
-            rows(i) = New DataGridViewRow()
-            rows(i).CreateCells(DataGridView1, table.Rows(j).ItemArray)
-        Next
-        Me.DataGridView1.Rows.AddRange(rows)
+        If numRows > 0 Then
+            ReDim rows(numRows - 1)
+            For i As Integer = 0 To numRows - 1
+                j = startIndex + i
+                rows(i) = New DataGridViewRow()
+                rows(i).CreateCells(DataGridView1, table.Rows(j).ItemArray)
+            Next
+            Me.DataGridView1.Rows.AddRange(rows)
+        End If
         Me.DataGridView1.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.DisplayedCells)
         Me.DataGridView1.ResumeLayout()
 
@@ -215,5 +220,32 @@ Friend Class TimeSeriesValuesDialog
             Dim timestamps As New List(Of DateTime)
             RaiseEvent SelectedRowsChanged(timestamps)
         End If
+    End Sub
+
+    ''' <summary>
+    ''' Handles DateTimePicker_JumpDate value changed
+    ''' Searches for the selected date in the dataset and sets that as the start record for the datagridview display
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    Private Sub DateTimePicker_JumpDate_ValueChanged(sender As Object, e As EventArgs) Handles DateTimePicker_JumpDate.ValueChanged
+        Dim selectedDate As DateTime = DateTimePicker_JumpDate.Value
+        Dim table As DataTable = Me.dataset.Tables("data")
+        'use last record as default (will be used if the selected date is later than the last date of dataset)
+        startIndex = table.Rows.Count - 1
+        'search for selected date in dataset and set startIndex accordingly
+        Dim rowIndex As Integer = 0
+        For Each row As DataRow In table.Rows
+            If row.ItemArray(0) = selectedDate Then
+                startIndex = rowIndex
+                Exit For
+            ElseIf row.ItemArray(0) > selectedDate Then
+                startIndex = rowIndex - 1
+                Exit For
+            End If
+            rowIndex += 1
+        Next
+        'populate datagridview
+        populateRows()
     End Sub
 End Class
