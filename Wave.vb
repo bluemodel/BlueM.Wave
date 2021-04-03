@@ -409,15 +409,12 @@ Public Class Wave
 
             If (Not Me.selectionMade) Then
                 'Wenn noch nicht gezoomed wurde, Gesamtzeitraum auswählen
-                colorBandOverview.Start = Xmin.ToOADate()
-                colorBandOverview.End = Xmax.ToOADate()
                 Me.TChart1.Axes.Bottom.Minimum = Xmin.ToOADate()
                 Me.TChart1.Axes.Bottom.Maximum = Xmax.ToOADate()
-            Else
-                'Ansonsten Zoom auf Colorband übertragen
-                colorBandOverview.Start = Me.TChart1.Axes.Bottom.Minimum
-                colorBandOverview.End = Me.TChart1.Axes.Bottom.Maximum
             End If
+            'Extent auf Colorband übertragen
+            colorBandOverview.Start = Me.TChart1.Axes.Bottom.Minimum
+            colorBandOverview.End = Me.TChart1.Axes.Bottom.Maximum
 
         End If
 
