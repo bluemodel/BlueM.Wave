@@ -1076,6 +1076,87 @@ Public Class Wave
     End Sub
 
     ''' <summary>
+    ''' Shows markers at the given timestamps in the chart
+    ''' </summary>
+    ''' <param name="timestamps">List of timestamps for which to show markers</param>
+    Private Sub showMarkers(timestamps As List(Of DateTime)) Handles valuesDialog.SelectedRowsChanged
+
+        'Remove any existing marker series
+        For i As Integer = Me.TChart1.Series.Count - 1 To 0 Step -1
+            Try
+                If CType(Me.TChart1.Series(i).Tag, String) = "_markers" Then
+                    Me.TChart1.Series.RemoveAt(i)
+                End If
+            Catch ex As Exception
+                Log.AddLogEntry(Log.levels.debug, ex.Message)
+            End Try
+        Next
+        Me.TChart1.Refresh()
+
+        'loop over timeseries
+        For Each kvp As KeyValuePair(Of Integer, TimeSeries) In Me.TimeSeriesDict
+            Dim ts_id As Integer = kvp.Key
+            Dim ts As TimeSeries = kvp.Value
+
+            'ensure that the timeseries contains a non-NaN node at the given timestamp
+            Dim showMarkers As Boolean = False
+            For Each t As DateTime In timestamps
+                If ts.NodesClean.ContainsKey(t) Then
+                    showMarkers = True
+                    Exit For
+                End If
+            Next
+
+            If showMarkers Then
+                'find corresponding chart series for determining color and vertical axis
+                For Each series As Steema.TeeChart.Styles.Series In Me.TChart1.Series
+                    Try
+                        If CType(series.Tag, Integer) = ts_id Then
+                            If Not series.Active Then
+                                'do not display markers for inactive series
+                                Continue For
+                            End If
+                            'create a new point series for markers
+                            Dim markers As New Steema.TeeChart.Styles.Points(Me.TChart1.Chart)
+                            markers.ShowInLegend = False
+                            markers.Title = ts.Title & " (selection)"
+                            markers.Tag = "_markers"
+                            markers.VertAxis = series.VertAxis
+                            If series.VertAxis = Steema.TeeChart.Styles.VerticalAxis.Custom Then
+                                markers.CustomVertAxis = series.CustomVertAxis
+                            End If
+                            markers.Pointer.Style = Steema.TeeChart.Styles.PointerStyles.Circle
+                            markers.Pointer.Brush.Visible = False
+                            markers.Color = series.Color
+                            markers.Pointer.Color = series.Color
+                            markers.Pointer.Pen.Color = series.Color
+                            markers.Pointer.Pen.Width = 2
+                            markers.Marks.Visible = True
+                            markers.Marks.Style = Steema.TeeChart.Styles.MarksStyles.Value
+                            markers.Marks.OnTop = True
+                            markers.Marks.Callout.Visible = True
+                            markers.Marks.FontSeriesColor = True
+                            markers.Marks.Arrow.Visible = False
+                            markers.Marks.Callout.Visible = False
+                            markers.Marks.Callout.InflateMargins = False
+                            markers.Marks.ArrowLength = 5
+                            'add data points
+                            For Each t As DateTime In timestamps
+                                If ts.NodesClean.ContainsKey(t) Then
+                                    markers.Add(t, ts.Nodes(t))
+                                End If
+                            Next
+                            Exit For
+                        End If
+                    Catch ex As Exception
+                        Log.AddLogEntry(Log.levels.debug, ex.Message)
+                    End Try
+                Next
+            End If
+        Next
+    End Sub
+
+    ''' <summary>
     ''' Update AxisDialog
     ''' </summary>
     Private Sub updateAxisDialog()

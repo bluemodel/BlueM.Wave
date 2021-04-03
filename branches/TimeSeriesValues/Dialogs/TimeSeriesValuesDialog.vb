@@ -42,6 +42,7 @@ Friend Class TimeSeriesValuesDialog
     Private Const maxRows As Integer = 100
 
     Public Event Button_ExportValues_Clicked(sender As Object, e As EventArgs)
+    Public Event SelectedRowsChanged(timestamps As List(Of DateTime))
 
     Public Sub New()
 
@@ -195,5 +196,14 @@ Friend Class TimeSeriesValuesDialog
 
     Private Sub ToolStripButton_ExportValues_Click(sender As Object, e As EventArgs) Handles ToolStripButton_ExportValues.Click
         RaiseEvent Button_ExportValues_Clicked(sender, e)
+    End Sub
+
+    Private Sub DataGridView1_SelectionChanged(sender As Object, e As EventArgs) Handles DataGridView1.SelectionChanged
+        Dim selectedRows As DataGridViewSelectedRowCollection = DataGridView1.SelectedRows()
+        Dim timestamps As New List(Of DateTime)
+        For Each row As DataGridViewRow In selectedRows
+            timestamps.Add(row.Cells(0).Value)
+        Next
+        RaiseEvent SelectedRowsChanged(timestamps)
     End Sub
 End Class

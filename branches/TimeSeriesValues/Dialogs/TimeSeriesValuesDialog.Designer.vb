@@ -55,7 +55,6 @@ Partial Class TimeSeriesValuesDialog
         Me.DataGridView1.Location = New System.Drawing.Point(13, 28)
         Me.DataGridView1.Name = "DataGridView1"
         Me.DataGridView1.ReadOnly = True
-        Me.DataGridView1.RowHeadersVisible = False
         Me.DataGridView1.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders
         Me.DataGridView1.Size = New System.Drawing.Size(439, 195)
         Me.DataGridView1.TabIndex = 1
