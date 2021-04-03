@@ -35,6 +35,7 @@ Partial Class TimeSeriesValuesDialog
         Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
         Me.Button_first = New System.Windows.Forms.Button()
         Me.Button_last = New System.Windows.Forms.Button()
+        Me.ToolStripButton_showMarkers = New System.Windows.Forms.ToolStripButton()
         CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.TimeseriesValuesBindingSource, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.ToolStrip1.SuspendLayout()
@@ -65,7 +66,7 @@ Partial Class TimeSeriesValuesDialog
         '
         'ToolStrip1
         '
-        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButton_ExportValues})
+        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButton_ExportValues, Me.ToolStripButton_showMarkers})
         Me.ToolStrip1.Location = New System.Drawing.Point(0, 0)
         Me.ToolStrip1.Name = "ToolStrip1"
         Me.ToolStrip1.Size = New System.Drawing.Size(464, 25)
@@ -146,6 +147,16 @@ Partial Class TimeSeriesValuesDialog
         Me.ToolTip1.SetToolTip(Me.Button_last, "last records")
         Me.Button_last.UseVisualStyleBackColor = True
         '
+        'ToolStripButton_showMarkers
+        '
+        Me.ToolStripButton_showMarkers.CheckOnClick = True
+        Me.ToolStripButton_showMarkers.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.ToolStripButton_showMarkers.Image = Global.BlueM.Wave.My.Resources.Resources.text_list_numbers
+        Me.ToolStripButton_showMarkers.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ToolStripButton_showMarkers.Name = "ToolStripButton_showMarkers"
+        Me.ToolStripButton_showMarkers.Size = New System.Drawing.Size(23, 22)
+        Me.ToolStripButton_showMarkers.Text = "Show markers for selected rows in chart"
+        '
         'TimeSeriesValuesDialog
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -186,4 +197,5 @@ Partial Class TimeSeriesValuesDialog
     Friend WithEvents Button_first As Button
     Friend WithEvents Button_last As Button
     Friend WithEvents ToolStripButton_ExportValues As ToolStripButton
+    Friend WithEvents ToolStripButton_showMarkers As ToolStripButton
 End Class

@@ -199,11 +199,21 @@ Friend Class TimeSeriesValuesDialog
     End Sub
 
     Private Sub DataGridView1_SelectionChanged(sender As Object, e As EventArgs) Handles DataGridView1.SelectionChanged
-        Dim selectedRows As DataGridViewSelectedRowCollection = DataGridView1.SelectedRows()
-        Dim timestamps As New List(Of DateTime)
-        For Each row As DataGridViewRow In selectedRows
-            timestamps.Add(row.Cells(0).Value)
-        Next
-        RaiseEvent SelectedRowsChanged(timestamps)
+        If ToolStripButton_showMarkers.Checked Then
+            Dim selectedRows As DataGridViewSelectedRowCollection = DataGridView1.SelectedRows()
+            Dim timestamps As New List(Of DateTime)
+            For Each row As DataGridViewRow In selectedRows
+                timestamps.Add(row.Cells(0).Value)
+            Next
+            RaiseEvent SelectedRowsChanged(timestamps)
+        End If
+    End Sub
+
+    Private Sub ToolStripButton_showMarkers_CheckedChanged(sender As Object, e As EventArgs) Handles ToolStripButton_showMarkers.CheckedChanged
+        If Not ToolStripButton_showMarkers.Checked Then
+            'clear any existing markers
+            Dim timestamps As New List(Of DateTime)
+            RaiseEvent SelectedRowsChanged(timestamps)
+        End If
     End Sub
 End Class
