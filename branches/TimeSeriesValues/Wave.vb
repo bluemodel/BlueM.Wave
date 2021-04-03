@@ -1093,67 +1093,63 @@ Public Class Wave
         Next
         Me.TChart1.Refresh()
 
-        'loop over timeseries
-        For Each kvp As KeyValuePair(Of Integer, TimeSeries) In Me.TimeSeriesDict
-            Dim ts_id As Integer = kvp.Key
-            Dim ts As TimeSeries = kvp.Value
+        If timestamps.Count = 0 Then
+            Exit Sub
+        End If
 
-            'ensure that the timeseries contains a non-NaN node at the given timestamp
-            Dim showMarkers As Boolean = False
-            For Each t As DateTime In timestamps
-                If ts.NodesClean.ContainsKey(t) Then
-                    showMarkers = True
-                    Exit For
+        'loop over series
+        For i As Integer = 0 To Me.TChart1.Series.Count - 1
+            Try
+                Dim series As Steema.TeeChart.Styles.Series = Me.TChart1.Series(i)
+                If Not series.Active Then
+                    'do not display markers for inactive series
+                    Continue For
                 End If
-            Next
-
-            If showMarkers Then
-                'find corresponding chart series for determining color and vertical axis
-                For Each series As Steema.TeeChart.Styles.Series In Me.TChart1.Series
-                    Try
-                        If CType(series.Tag, Integer) = ts_id Then
-                            If Not series.Active Then
-                                'do not display markers for inactive series
-                                Continue For
-                            End If
-                            'create a new point series for markers
-                            Dim markers As New Steema.TeeChart.Styles.Points(Me.TChart1.Chart)
-                            markers.ShowInLegend = False
-                            markers.Title = ts.Title & " (selection)"
-                            markers.Tag = "_markers"
-                            markers.VertAxis = series.VertAxis
-                            If series.VertAxis = Steema.TeeChart.Styles.VerticalAxis.Custom Then
-                                markers.CustomVertAxis = series.CustomVertAxis
-                            End If
-                            markers.Pointer.Style = Steema.TeeChart.Styles.PointerStyles.Circle
-                            markers.Pointer.Brush.Visible = False
-                            markers.Color = series.Color
-                            markers.Pointer.Color = series.Color
-                            markers.Pointer.Pen.Color = series.Color
-                            markers.Pointer.Pen.Width = 2
-                            markers.Marks.Visible = True
-                            markers.Marks.Style = Steema.TeeChart.Styles.MarksStyles.Value
-                            markers.Marks.OnTop = True
-                            markers.Marks.Callout.Visible = True
-                            markers.Marks.FontSeriesColor = True
-                            markers.Marks.Arrow.Visible = False
-                            markers.Marks.Callout.Visible = False
-                            markers.Marks.Callout.InflateMargins = False
-                            markers.Marks.ArrowLength = 5
-                            'add data points
-                            For Each t As DateTime In timestamps
-                                If ts.NodesClean.ContainsKey(t) Then
-                                    markers.Add(t, ts.Nodes(t))
-                                End If
-                            Next
-                            Exit For
+                'collect all non-NaN values to display as markers
+                Dim markerValues As New Dictionary(Of DateTime, Double)
+                For Each t As DateTime In timestamps
+                    Dim index As Integer = series.XValues.IndexOf(t.ToOADate)
+                    If index <> -1 Then
+                        If Not series.IsNull(index) Then
+                            markerValues.Add(t, series.YValues(index))
                         End If
-                    Catch ex As Exception
-                        Log.AddLogEntry(Log.levels.debug, ex.Message)
-                    End Try
+                    End If
                 Next
-            End If
+                If markerValues.Count > 0 Then
+                    'create a new point series for markers
+                    Dim markers As New Steema.TeeChart.Styles.Points(Me.TChart1.Chart)
+                    markers.ShowInLegend = False
+                    markers.Title = series.Title & " (selection)"
+                    markers.Tag = "_markers"
+                    markers.VertAxis = series.VertAxis
+                    If series.VertAxis = Steema.TeeChart.Styles.VerticalAxis.Custom Then
+                        markers.CustomVertAxis = series.CustomVertAxis
+                    End If
+                    markers.Pointer.Style = Steema.TeeChart.Styles.PointerStyles.Circle
+                    markers.Pointer.Brush.Visible = False
+                    markers.Color = series.Color
+                    markers.Pointer.Color = series.Color
+                    markers.Pointer.Pen.Color = series.Color
+                    markers.Pointer.Pen.Width = 2
+                    markers.Marks.Visible = True
+                    markers.Marks.Style = Steema.TeeChart.Styles.MarksStyles.Value
+                    markers.Marks.OnTop = True
+                    markers.Marks.Callout.Visible = True
+                    markers.Marks.FontSeriesColor = True
+                    markers.Marks.Arrow.Visible = False
+                    markers.Marks.Callout.Visible = False
+                    markers.Marks.Callout.InflateMargins = False
+                    markers.Marks.ArrowLength = 5
+                    'add data points
+                    For Each t As DateTime In markerValues.Keys
+                        markers.Add(t, markerValues(t))
+                    Next
+                End If
+            Catch ex As Exception
+                Log.AddLogEntry(Log.levels.debug, ex.Message)
+            End Try
         Next
+
     End Sub
 
     ''' <summary>
