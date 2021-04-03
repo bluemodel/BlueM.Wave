@@ -60,7 +60,7 @@ Partial Class TimeSeriesValuesDialog
         Me.DataGridView1.ReadOnly = True
         Me.DataGridView1.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders
         Me.DataGridView1.Size = New System.Drawing.Size(359, 369)
-        Me.DataGridView1.TabIndex = 1
+        Me.DataGridView1.TabIndex = 3
         '
         'TimeseriesValuesBindingSource
         '
@@ -72,7 +72,7 @@ Partial Class TimeSeriesValuesDialog
         Me.ToolStrip1.Location = New System.Drawing.Point(0, 0)
         Me.ToolStrip1.Name = "ToolStrip1"
         Me.ToolStrip1.Size = New System.Drawing.Size(384, 25)
-        Me.ToolStrip1.TabIndex = 2
+        Me.ToolStrip1.TabIndex = 0
         Me.ToolStrip1.Text = "ToolStrip1"
         '
         'ToolStripButton_ExportValues
@@ -101,7 +101,7 @@ Partial Class TimeSeriesValuesDialog
         Me.Label_DisplayCount.Location = New System.Drawing.Point(10, 432)
         Me.Label_DisplayCount.Name = "Label_DisplayCount"
         Me.Label_DisplayCount.Size = New System.Drawing.Size(125, 13)
-        Me.Label_DisplayCount.TabIndex = 3
+        Me.Label_DisplayCount.TabIndex = 4
         Me.Label_DisplayCount.Text = "Displaying X of Y records"
         '
         'Button_next
@@ -111,7 +111,7 @@ Partial Class TimeSeriesValuesDialog
         Me.Button_next.Location = New System.Drawing.Point(328, 427)
         Me.Button_next.Name = "Button_next"
         Me.Button_next.Size = New System.Drawing.Size(22, 22)
-        Me.Button_next.TabIndex = 4
+        Me.Button_next.TabIndex = 8
         Me.ToolTip1.SetToolTip(Me.Button_next, "next 100 records")
         Me.Button_next.UseVisualStyleBackColor = True
         '
@@ -122,7 +122,7 @@ Partial Class TimeSeriesValuesDialog
         Me.Button_previous.Location = New System.Drawing.Point(227, 427)
         Me.Button_previous.Name = "Button_previous"
         Me.Button_previous.Size = New System.Drawing.Size(22, 22)
-        Me.Button_previous.TabIndex = 4
+        Me.Button_previous.TabIndex = 6
         Me.ToolTip1.SetToolTip(Me.Button_previous, "previous 100 records")
         Me.Button_previous.UseVisualStyleBackColor = True
         '
@@ -133,7 +133,7 @@ Partial Class TimeSeriesValuesDialog
         Me.NumericUpDown_StartRecord.Minimum = New Decimal(New Integer() {1, 0, 0, 0})
         Me.NumericUpDown_StartRecord.Name = "NumericUpDown_StartRecord"
         Me.NumericUpDown_StartRecord.Size = New System.Drawing.Size(77, 20)
-        Me.NumericUpDown_StartRecord.TabIndex = 5
+        Me.NumericUpDown_StartRecord.TabIndex = 7
         Me.ToolTip1.SetToolTip(Me.NumericUpDown_StartRecord, "start record")
         Me.NumericUpDown_StartRecord.Value = New Decimal(New Integer() {1, 0, 0, 0})
         '
@@ -144,7 +144,7 @@ Partial Class TimeSeriesValuesDialog
         Me.Button_first.Location = New System.Drawing.Point(205, 427)
         Me.Button_first.Name = "Button_first"
         Me.Button_first.Size = New System.Drawing.Size(22, 22)
-        Me.Button_first.TabIndex = 4
+        Me.Button_first.TabIndex = 5
         Me.ToolTip1.SetToolTip(Me.Button_first, "first records")
         Me.Button_first.UseVisualStyleBackColor = True
         '
@@ -155,7 +155,7 @@ Partial Class TimeSeriesValuesDialog
         Me.Button_last.Location = New System.Drawing.Point(350, 427)
         Me.Button_last.Name = "Button_last"
         Me.Button_last.Size = New System.Drawing.Size(22, 22)
-        Me.Button_last.TabIndex = 4
+        Me.Button_last.TabIndex = 9
         Me.ToolTip1.SetToolTip(Me.Button_last, "last records")
         Me.Button_last.UseVisualStyleBackColor = True
         '
@@ -166,7 +166,7 @@ Partial Class TimeSeriesValuesDialog
         Me.DateTimePicker_JumpDate.Location = New System.Drawing.Point(62, 27)
         Me.DateTimePicker_JumpDate.Name = "DateTimePicker_JumpDate"
         Me.DateTimePicker_JumpDate.Size = New System.Drawing.Size(122, 20)
-        Me.DateTimePicker_JumpDate.TabIndex = 6
+        Me.DateTimePicker_JumpDate.TabIndex = 2
         '
         'Label1
         '
@@ -174,7 +174,7 @@ Partial Class TimeSeriesValuesDialog
         Me.Label1.Location = New System.Drawing.Point(12, 29)
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(44, 13)
-        Me.Label1.TabIndex = 7
+        Me.Label1.TabIndex = 1
         Me.Label1.Text = "Jump to"
         '
         'TimeSeriesValuesDialog
