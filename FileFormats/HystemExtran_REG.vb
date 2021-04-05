@@ -45,7 +45,6 @@ Public Class HystemExtran_REG
     '#############
 
     Private _Zeitintervall As Integer
-    Private _WerteProZeile As Integer
     Private _DezFaktor As Integer
 
 #End Region
@@ -61,7 +60,7 @@ Public Class HystemExtran_REG
         End Get
     End Property
 
-    Public Property Zeitintervall() As Integer
+    Private Property Zeitintervall() As Integer
         Get
             Return _Zeitintervall
         End Get
@@ -70,7 +69,7 @@ Public Class HystemExtran_REG
         End Set
     End Property
 
-    Public Property DezFaktor() As Integer
+    Private Property DezFaktor() As Integer
         Get
             Return _DezFaktor
         End Get
@@ -79,7 +78,7 @@ Public Class HystemExtran_REG
         End Set
     End Property
 
-    Public Property WerteProZeile(ByVal dt As Integer) As Integer
+    Private Shared ReadOnly Property WerteProZeile(ByVal dt As Integer) As Integer
         Get
             Select Case dt  'siehe KN-Anwenderhandbuch S.384
                 Case 1, 5, 10, 15, 20, 30, 60, 120
@@ -88,11 +87,10 @@ Public Class HystemExtran_REG
                     Return 10
                 Case 720
                     Return 2
+                Case Else
+                    Return 0 'this should never occur
             End Select
         End Get
-        Set(ByVal value As Integer)
-            _WerteProZeile = value
-        End Set
     End Property
 
 #End Region
@@ -126,7 +124,7 @@ Public Class HystemExtran_REG
     '****************
     Public Overrides Sub readSeriesInfo()
 
-        Dim Zeile As String = ""
+        Dim Zeile As String
         Dim title As String
         Dim sInfo As SeriesInfo
 
@@ -223,7 +221,7 @@ Public Class HystemExtran_REG
                     Case " ", "S" 'normale Datenzeile oder Datenzeile mit Ausfällen
                         'alle bis auf den letzten Wert einlesen
                         'beim letzten Wert besteht die Möglichkeit, dass nicht alle Zeichen belegt sind
-                        For i = 0 To Me.WerteProZeile(Me.Zeitintervall) - 1
+                        For i = 0 To HystemExtran_REG.WerteProZeile(Me.Zeitintervall) - 1
                             Datum = Zeilendatum.AddMinutes(i * Me.Zeitintervall)
                             wertString = Zeile.Substring(20 + LenString * i, LenString)
                             If wertString = fehlWert Then
@@ -241,13 +239,13 @@ Public Class HystemExtran_REG
                         Else
                             wert = StringToDouble(wertString) * 10 ^ (-DezFaktor)
                         End If
-                        For i = 0 To Me.WerteProZeile(Me.Zeitintervall) - 1
+                        For i = 0 To HystemExtran_REG.WerteProZeile(Me.Zeitintervall) - 1
                             Datum = Zeilendatum.AddMinutes(i * Me.Zeitintervall)
                             ts.AddNode(Datum, wert)
                         Next
                     Case "A" 'Ausfallsatz, keine Daten
                         wert = Double.NaN
-                        For i = 0 To Me.WerteProZeile(Me.Zeitintervall) - 1
+                        For i = 0 To HystemExtran_REG.WerteProZeile(Me.Zeitintervall) - 1
                             Datum = Zeilendatum.AddMinutes(i * Me.Zeitintervall)
                             ts.AddNode(Datum, wert)
                         Next
