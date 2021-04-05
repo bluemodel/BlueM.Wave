@@ -325,7 +325,8 @@ Public Class WEL
         Dim file_wlzip As String
         Dim ze As Ionic.Zip.ZipEntry
         Dim filename, dir As String
-        Dim fileFound As Boolean = False
+        Dim zipEntryFound As Boolean = False
+        Dim success As Boolean = False
 
         If file.ToUpper().EndsWith(".KTR.WEL") Then
             file_wlzip = file.Substring(0, file.Length - 8) & ".WLZIP"
@@ -341,21 +342,20 @@ Public Class WEL
 
             For Each ze In Ionic.Zip.ZipFile.Read(file_wlzip)
                 If ze.FileName.ToLower() = filename.ToLower() Then
-                    fileFound = True
+                    zipEntryFound = True
                     Log.AddLogEntry(Log.levels.info, "Extracting file from " & file_wlzip & " ...")
                     ze.Extract(dir, Ionic.Zip.ExtractExistingFileAction.OverwriteSilently)
-                    Return True
+                    success = True
                 End If
             Next
 
-            If Not fileFound Then
+            If Not zipEntryFound Then
                 Log.AddLogEntry(Log.levels.error, "File " & filename & " not found in " & file_wlzip & "!")
-                Return False
             End If
 
-        Else
-            Return False
         End If
+
+        Return success
 
     End Function
 
