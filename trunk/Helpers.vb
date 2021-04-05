@@ -140,25 +140,4 @@ Public Module Helpers
 
     End Function
 
-    ''' <summary>
-    ''' Determines whether Wave is running as a 64bit process
-    ''' </summary>
-    ''' <returns>True if 64bit</returns>
-    ''' <remarks></remarks>
-    Public Function is64BitProcess() As Boolean
-
-        'once we upgrade to .NET Framework 4, we can use the following:
-        'Return Environment.Is64BitProcess()
-
-        'source: https://stackoverflow.com/a/397695
-        If (IntPtr.Size = 8) Then
-            '64 bit process
-            Return True
-        ElseIf (IntPtr.Size = 4) Then
-            '32 bit process
-            Return False
-        End If
-
-    End Function
-
 End Module
