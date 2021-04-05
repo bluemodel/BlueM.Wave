@@ -1097,7 +1097,7 @@ Public Class Wave
             Exit Sub
         End If
 
-        'loop over series
+        'loop over series and create a marker series for each
         For i As Integer = 0 To Me.TChart1.Series.Count - 1
             Try
                 Dim series As Steema.TeeChart.Styles.Series = Me.TChart1.Series(i)
