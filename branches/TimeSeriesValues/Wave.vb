@@ -1133,7 +1133,7 @@ Public Class Wave
                     markers.Pointer.Pen.Width = 2
                     markers.Marks.Visible = True
                     markers.Marks.Style = Steema.TeeChart.Styles.MarksStyles.Value
-                    markers.Marks.OnTop = True
+                    'markers.Marks.OnTop = True 'causes crash when markers are panned out of view on the left
                     markers.Marks.Callout.Visible = True
                     markers.Marks.FontSeriesColor = True
                     markers.Marks.Arrow.Visible = False
