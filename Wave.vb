@@ -2387,24 +2387,40 @@ Public Class Wave
                 ElseIf line.ToLower().StartsWith("series=") Then
                     'series
                     line = line.Split("=".ToCharArray(), 2)(1).Trim()
-                    If line.Contains(":") Then
-                        'series with title
-                        series = line.Split(":".ToCharArray(), 2)(0).Trim()
-                        title = line.Split(":".ToCharArray(), 2)(1).Replace("""", "").Trim()
+                    'series name may be enclosed in quotes and be followed by an optional title, which may also be enclosed in quotes
+                    'examples:
+                    'series
+                    'series:title
+                    '"se:ries":title
+                    '"se:ries":"title"
+                    Dim pattern As String
+                    If line.StartsWith("""") Then
+                        'series name is enclosed in quotes
+                        pattern = "^""([^""]+)""(:(.+))?$"
                     Else
-                        'series without title
-                        series = line.Trim()
-                        title = ""
+                        'no quotes around series name
+                        pattern = "^([^:]+)(:(.+))?$"
                     End If
-                    'add series to file
-                    If fileDict.ContainsKey(path) Then
-                        If Not fileDict(path).ContainsKey(series) Then
-                            fileDict(path).Add(series, title)
+                    Dim m As Match = Regex.Match(line, pattern)
+                    If m.Success Then
+                        series = m.Groups(1).Value.Trim()
+                        If m.Groups(2).Success Then
+                            title = m.Groups(3).Value.Replace("""", "").Trim() 'remove quotes around title here
                         Else
-                            Log.AddLogEntry(Log.levels.warning, "Series " & series & " is specified twice, the second mention will be ignored!")
+                            title = ""
+                        End If
+                        'add series to file
+                        If fileDict.ContainsKey(path) Then
+                            If Not fileDict(path).ContainsKey(series) Then
+                                fileDict(path).Add(series, title)
+                            Else
+                                Log.AddLogEntry(Log.levels.warning, "Series " & series & " is specified twice, the second mention will be ignored!")
+                            End If
+                        Else
+                            Log.AddLogEntry(Log.levels.warning, "Series " & series & " is not associated with a file and will be ignored!")
                         End If
                     Else
-                        Log.AddLogEntry(Log.levels.warning, "Series " & series & " is not associated with a file and will be ignored!")
+                        Log.AddLogEntry(Log.levels.warning, "Unable to parse series definition 'series=" & line & "', this series will be ignored!")
                     End If
 
                 ElseIf line.Contains("=") Then

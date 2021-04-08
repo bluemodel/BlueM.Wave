@@ -4,6 +4,7 @@ BlueM.Wave Release Notes
 Version 1.9.3
 -------------
 FIXED:
+* Wave project files (WVP): allow specification of "tab" as separator and use of quotes for series names containing ":"
 * API: fixed error when calling FileFormatBase.getTimeSeries() more than once
 
 Version 1.9.2
