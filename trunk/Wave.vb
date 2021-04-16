@@ -174,11 +174,13 @@ Public Class Wave
     ''' <returns>True if a newer version is available</returns>
     Private Async Function CheckForUpdate() As Threading.Tasks.Task(Of Boolean)
 
+
         'get current version (only consider major, minor and build numbers, omitting the auto-generated revision number)
+        Dim v As Version = Reflection.Assembly.GetExecutingAssembly.GetName().Version()
         Dim currentVersion As New Version(String.Format("{0}.{1}.{2}",
-                                                        My.Application.Info.Version.Major,
-                                                        My.Application.Info.Version.Minor,
-                                                        My.Application.Info.Version.Build))
+                                                        v.Major,
+                                                        v.Minor,
+                                                        v.Build))
 
         'retrieve latest version number from server
         Dim client As New Net.Http.HttpClient()
