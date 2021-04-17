@@ -304,6 +304,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="TimeSeries.vb" />
+    <Compile Include="TimeSeriesDataSource.vb" />
     <Compile Include="Wave.Designer.vb">
       <DependentUpon>Wave.vb</DependentUpon>
     </Compile>

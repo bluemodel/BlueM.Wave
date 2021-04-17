@@ -169,6 +169,7 @@ Friend Class Calculator
             'Store result series
             ts_result.Title = title
             ts_result.Unit = unit
+            ts_result.DataSource = New TimeSeriesDataSource(TimeSeriesDataSource.OriginEnum.AnalysisResult)
             Me.mResultSeries.Add(ts_result)
 
         End If

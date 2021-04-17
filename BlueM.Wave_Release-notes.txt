@@ -7,6 +7,7 @@ NEW:
 * Added a "Calculator" analysis function for performing mathematical operations on time series #722
 FIXED:
 * Fixed wrong update notification and wrong information in the about box when Wave is executed from another application
+* Improved handling and display of time series datasource information
 
 Version 1.9.3
 -------------

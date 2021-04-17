@@ -63,7 +63,7 @@ Public Class TimeSeries
     Private _Objekt As String
     Private _Type As String
     Private _Interpretation As InterpretationEnum
-    Private _DataSource As KeyValuePair(Of String, String)
+    Private _DataSource As TimeSeriesDataSource
 
 #End Region 'Members
 
@@ -218,14 +218,14 @@ Public Class TimeSeries
     End Property
 
     ''' <summary>
-    ''' The original datasource of the time series consisting of file path and title
+    ''' The original datasource of the time series
     ''' </summary>
     ''' <returns></returns>
-    Public Property DataSource As KeyValuePair(Of String, String)
+    Public Property DataSource As TimeSeriesDataSource
         Get
             Return _DataSource
         End Get
-        Set(value As KeyValuePair(Of String, String))
+        Set(value As TimeSeriesDataSource)
             _DataSource = value
         End Set
     End Property
@@ -420,7 +420,7 @@ Public Class TimeSeries
     ''' <summary>
     ''' Constructor
     ''' </summary>
-    ''' <param name="title">Title of the times series</param>
+    ''' <param name="title">Title of the time series</param>
     Public Sub New(ByVal title As String)
         Me._id = TimeSeries.getUniqueID()
         Me._metadata = New Metadata()
@@ -429,7 +429,7 @@ Public Class TimeSeries
         Me._Objekt = "-"
         Me._Type = "-"
         Me._Interpretation = InterpretationEnum.Undefined
-        Me._DataSource = New KeyValuePair(Of String, String)("", "")
+        Me.DataSource = New TimeSeriesDataSource(TimeSeriesDataSource.OriginEnum.Undefined)
         Me._nodes = New SortedList(Of DateTime, Double)
     End Sub
 
