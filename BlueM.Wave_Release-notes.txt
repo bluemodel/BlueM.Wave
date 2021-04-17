@@ -8,6 +8,7 @@ NEW:
 FIXED:
 * Fixed wrong update notification and wrong information in the about box when Wave is executed from another application
 * Improved handling and display of time series datasource information
+* Fixed detection of a single NaN value at the end of a time series when visualizing NaN values
 
 Version 1.9.3
 -------------
