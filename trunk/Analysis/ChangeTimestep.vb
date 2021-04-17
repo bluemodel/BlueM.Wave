@@ -124,6 +124,7 @@ Friend Class ChangeTimestep
             ts_new = ts.ChangeTimestep(timesteptype, timestepinterval, startdate)
 
             'Store result series
+            ts_new.DataSource = New TimeSeriesDataSource(TimeSeriesDataSource.OriginEnum.AnalysisResult)
             Me.mResultSeries.Add(ts_new)
 
         End If

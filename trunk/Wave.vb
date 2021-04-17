@@ -892,12 +892,16 @@ Public Class Wave
             Dim datasources As New Dictionary(Of String, List(Of String)) '{file: [title, ...], ...}
             Dim file, title As String
             For Each ts As TimeSeries In Me.TimeSeriesDict.Values
-                file = ts.DataSource.Key
-                title = ts.DataSource.Value
-                If Not datasources.ContainsKey(file) Then
-                    datasources.Add(file, New List(Of String))
+                If ts.DataSource.Origin = TimeSeriesDataSource.OriginEnum.FileImport Then
+                    file = ts.DataSource.FilePath
+                    title = ts.DataSource.Title
+                    If Not datasources.ContainsKey(file) Then
+                        datasources.Add(file, New List(Of String))
+                    End If
+                    datasources(file).Add(title)
+                Else
+                    Log.AddLogEntry(Log.levels.warning, String.Format("Series '{0}' does not originate from a file import and could not be saved to the project file!", ts.Title))
                 End If
-                datasources(file).Add(title)
             Next
 
             'write the project file
@@ -1754,20 +1758,21 @@ Public Class Wave
 
         'TODO: keep time series that cannot be reloaded from file!
 
-        Dim fileObj As FileFormatBase
-        Dim fileList As String
-        Dim Answer As MsgBoxResult
-
         'collect datasources
         Dim datasources As New Dictionary(Of String, List(Of String)) '{file: [title, ...], ...}
+        Dim seriesNotFromFiles As New List(Of String)
         Dim file, title As String
         For Each ts As TimeSeries In Me.TimeSeriesDict.Values
-            file = ts.DataSource.Key
-            title = ts.DataSource.Value
-            If Not datasources.ContainsKey(file) Then
-                datasources.Add(file, New List(Of String))
+            If ts.DataSource.Origin = TimeSeriesDataSource.OriginEnum.FileImport Then
+                file = ts.DataSource.FilePath
+                title = ts.DataSource.Title
+                If Not datasources.ContainsKey(file) Then
+                    datasources.Add(file, New List(Of String))
+                End If
+                datasources(file).Add(title)
+            Else
+                seriesNotFromFiles.Add(ts.Title)
             End If
-            datasources(file).Add(title)
         Next
 
         'Wenn keine Dateien vorhanden, abbrechen
@@ -1776,16 +1781,23 @@ Public Class Wave
             Exit Sub
         End If
 
-        'Dateiliste in Textform generieren
-        fileList = ""
-        For Each file In datasources.Keys
-            fileList &= file & eol
+
+        'Compose message
+        Dim msg As String = ""
+        If seriesNotFromFiles.Count > 0 Then
+            msg &= "The following series do not originate from a file import and will be lost!" & eol
+            For Each s As String In seriesNotFromFiles
+                msg &= "* " & s & eol
+            Next
+            msg &= eol
+        End If
+        msg &= "Delete all series and reload from the following files?" & eol
+        For Each s As String In datasources.Keys
+            msg &= "* " & s & eol
         Next
 
-        'Dialog anzeigen
-        Answer = MsgBox("Delete all series and reload from the following files?" & eol & eol & fileList, MsgBoxStyle.OkCancel, "Wave")
-
-        If (Answer = MsgBoxResult.Ok) Then
+        'Ask for user confirmation
+        If MsgBox(msg, MsgBoxStyle.OkCancel) = MsgBoxResult.Ok Then
 
             Log.AddLogEntry(Log.levels.info, "Reloading all series from their original datasources...")
 
@@ -1811,7 +1823,7 @@ Public Class Wave
                     Call Load_TEN(file)
                 Else
                     'get an instance of the file
-                    fileObj = FileFactory.getFileInstance(file)
+                    Dim fileObj As FileFormatBase = FileFactory.getFileInstance(file)
                     'select series for importing
                     For Each title In datasources(file)
                         success = success And fileObj.selectSeries(title)
@@ -2307,18 +2319,20 @@ Public Class Wave
         Me.TimeSeriesDict.Add(zre.Id, zre)
 
         'add datasource filename to Recently Used Files menu
-        'remove if already present
-        Dim i As Integer = 0
-        For Each _item As ToolStripItem In Me.ToolStripMenuItem_RecentlyUsedFiles.DropDownItems
-            If _item.Text = zre.DataSource.Key Then
-                Me.ToolStripMenuItem_RecentlyUsedFiles.DropDownItems.RemoveAt(i)
-                Exit For
-            End If
-            i += 1
-        Next
-        'add to top of list
-        Dim item As New ToolStripMenuItem(zre.DataSource.Key)
-        Me.ToolStripMenuItem_RecentlyUsedFiles.DropDownItems.Insert(0, item)
+        If zre.DataSource.Origin = TimeSeriesDataSource.OriginEnum.FileImport Then
+            'remove if already present
+            Dim i As Integer = 0
+            For Each _item As ToolStripItem In Me.ToolStripMenuItem_RecentlyUsedFiles.DropDownItems
+                If _item.Text = zre.DataSource.FilePath Then
+                    Me.ToolStripMenuItem_RecentlyUsedFiles.DropDownItems.RemoveAt(i)
+                    Exit For
+                End If
+                i += 1
+            Next
+            'add to top of list
+            Dim item As New ToolStripMenuItem(zre.DataSource.FilePath)
+            Me.ToolStripMenuItem_RecentlyUsedFiles.DropDownItems.Insert(0, item)
+        End If
 
         'Update dialogs
         Me.propDialog.Update(Me.TimeSeriesDict.Values.ToList)
@@ -2654,7 +2668,7 @@ Public Class Wave
                                 reihe.Unit = AxisWrapper.parseUnit(axistitle)
 
                                 'Save datasource
-                                reihe.DataSource = New KeyValuePair(Of String, String)(FileName, series.Title)
+                                reihe.DataSource = New TimeSeriesDataSource(FileName, series.Title)
 
                                 'Store the series internally
                                 Call Me.AddZeitreihe(reihe)
@@ -2825,9 +2839,6 @@ Public Class Wave
 
                         'Log
                         Call Log.AddLogEntry(Log.levels.info, "File '" & file & "' imported successfully!")
-
-                        'Datei abspeichern
-                        'Call Me.storeFileInfo(Datei)
 
                         'Log
                         Call Log.AddLogEntry(Log.levels.info, "Loading series in chart...")

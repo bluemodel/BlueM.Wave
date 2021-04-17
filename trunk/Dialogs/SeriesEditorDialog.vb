@@ -223,6 +223,7 @@ Friend Class SeriesEditorDialog
 
         'create a new time series object
         Me.mZeitreihe = New TimeSeries(Me.series_Title)
+        Me.mZeitreihe.DataSource = New TimeSeriesDataSource(TimeSeriesDataSource.OriginEnum.ManuallyEntered)
 
         'store the unit
         Me.mZeitreihe.Unit = Me.series_Unit

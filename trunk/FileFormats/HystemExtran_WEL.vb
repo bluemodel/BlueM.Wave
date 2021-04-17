@@ -183,7 +183,7 @@ Public Class HystemExtran_WEL
                 ts.Objekt = sInfo.Objekt
                 ts.Type = sInfo.Type
             End If
-            ts.DataSource = New KeyValuePair(Of String, String)(Me.File, sInfo.Name)
+            ts.DataSource = New TimeSeriesDataSource(Me.File, sInfo.Name)
             Me.FileTimeSeries.Add(sInfo.Index, ts)
         Next
 

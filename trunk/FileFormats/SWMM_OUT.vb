@@ -274,7 +274,7 @@ Public Class SWMM_OUT
             If (Me.UseUnits) Then
                 ts.Unit = sInfo.Unit
             End If
-            ts.DataSource = New KeyValuePair(Of String, String)(Me.File, sInfo.Name)
+            ts.DataSource = New TimeSeriesDataSource(Me.File, sInfo.Name)
             'Objektname und Typ (für SWMM-Txt-Export)
             ts.Objekt = sInfo.Objekt
             ts.Type = sInfo.Type
