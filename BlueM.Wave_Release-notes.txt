@@ -5,6 +5,8 @@ Version 1.9.4
 -------------
 NEW:
 * Added a "Calculator" analysis function for performing mathematical operations on time series #722
+CHANGED:
+* Vertical axes now have a maximum offset of 5 by default
 FIXED:
 * Fixed wrong update notification and wrong information in the about box when Wave is executed from another application
 * Improved handling and display of time series datasource information
