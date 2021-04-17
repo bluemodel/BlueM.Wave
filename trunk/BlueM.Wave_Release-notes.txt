@@ -3,6 +3,8 @@ BlueM.Wave Release Notes
 ===============================================================
 Version 1.9.4
 -------------
+NEW:
+* Added a "Calculator" analysis function for performing mathematical operations on time series #722
 FIXED:
 * Fixed wrong update notification and wrong information in the about box when Wave is executed from another application
 
