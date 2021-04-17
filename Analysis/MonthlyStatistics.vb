@@ -1,5 +1,5 @@
 'Copyright (c) BlueM Dev Group
-'Website: http://bluemodel.org
+'Website: https://bluemodel.org
 '
 'All rights reserved.
 '
@@ -32,7 +32,7 @@
 ''' Minimum / Maximum
 ''' Standard Deviation
 ''' </summary>
-''' <remarks>http://wiki.bluemodel.org/index.php/Wave:MonthlyStatistics</remarks>
+''' <remarks>https://wiki.bluemodel.org/index.php/Wave:MonthlyStatistics</remarks>
 Friend Class MonthlyStatistics
     Inherits Analysis
 

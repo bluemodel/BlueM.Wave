@@ -1,5 +1,5 @@
 ﻿'Copyright (c) BlueM Dev Group
-'Website: http://bluemodel.org
+'Website: https://bluemodel.org
 '
 'All rights reserved.
 '
@@ -31,7 +31,7 @@ Imports System.Globalization
 ''' <summary>
 ''' Klasse für SWMM out-Dateiformat (Binärer SWMM Ergebnisfile)
 ''' </summary>
-''' <remarks>Format siehe http://wiki.bluemodel.org/index.php/ASC-Format</remarks>
+''' <remarks>Format siehe https://wiki.bluemodel.org/index.php/ASC-Format</remarks>
 ''' 
 Public Class SWMM_OUT
     Inherits FileFormatBase

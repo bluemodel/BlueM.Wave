@@ -1,5 +1,5 @@
 'Copyright (c) BlueM Dev Group
-'Website: http://bluemodel.org
+'Website: https://bluemodel.org
 '
 'All rights reserved.
 '
@@ -31,7 +31,7 @@ Imports System.IO
 ''' Klasse für das TXT-Dateiformat von SWMM5
 ''' Format ist festgeschrieben im SWMM-Anwenderhandbuch
 ''' </summary>
-''' <remarks>Format siehe http://wiki.bluemodel.org/index.php/TXT-Format</remarks>
+''' <remarks>Format siehe https://wiki.bluemodel.org/index.php/TXT-Format</remarks>
 Public Class SWMM_TXT
     Inherits FileFormatBase
     

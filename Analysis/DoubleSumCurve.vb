@@ -1,5 +1,5 @@
 ﻿'Copyright (c) BlueM Dev Group
-'Website: http://bluemodel.org
+'Website: https://bluemodel.org
 '
 'All rights reserved.
 '
@@ -28,7 +28,7 @@
 ''' <summary>
 ''' Plots the cumulative coincident values of two time series against each other and adds a 45° line to the resulting plot
 ''' </summary>
-''' <remarks>http://wiki.bluemodel.org/index.php/Wave:Doppelsummenanalyse</remarks>
+''' <remarks>https://wiki.bluemodel.org/index.php/Wave:Doppelsummenanalyse</remarks>
 Friend Class DoubleSumCurve
     Inherits Analysis
 

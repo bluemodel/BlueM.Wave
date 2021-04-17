@@ -1,5 +1,5 @@
 'Copyright (c) BlueM Dev Group
-'Website: http://bluemodel.org
+'Website: https://bluemodel.org
 '
 'All rights reserved.
 '
@@ -30,7 +30,7 @@ Imports System.IO
 ''' <summary>
 ''' Class for importing GISMO result files (*.CSV,*.ASC)
 ''' For information about GISMO refer to http://www.sydro.de/
-''' For file format info refer to http://wiki.bluemodel.org/index.php/WEL-Format_%28GISMO%29
+''' For file format info refer to https://wiki.bluemodel.org/index.php/WEL-Format_%28GISMO%29
 ''' </summary>
 Public Class WEL_GISMO
     Inherits FileFormatBase

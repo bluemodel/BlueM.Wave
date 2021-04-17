@@ -1,5 +1,5 @@
 'Copyright (c) BlueM Dev Group
-'Website: http://bluemodel.org
+'Website: https://bluemodel.org
 '
 'All rights reserved.
 '
@@ -30,7 +30,7 @@ Imports System.IO
 ''' <summary>
 ''' Klasse für das Simba-Dateiformat (*.SMB)
 ''' </summary>
-''' <remarks>Format siehe http://wiki.bluemodel.org/index.php/SMB-Format</remarks>
+''' <remarks>Format siehe https://wiki.bluemodel.org/index.php/SMB-Format</remarks>
 Public Class SMB
     Inherits FileFormatBase
 
