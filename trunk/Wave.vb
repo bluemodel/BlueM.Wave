@@ -1416,8 +1416,13 @@ Public Class Wave
                                     bandStart = ts.Dates(i - 1)
                                 End If
                                 nanStart = ts.Dates(i)
+
+                                If i < ts.Length - 1 Then
+                                    Continue For
+                                End If
                             End If
-                        Else
+                        End If
+                        If isNaNPeriod Then
                             'test for end of NaN values
                             If Not Double.IsNaN(ts.Values(i)) Then
                                 bandEnd = ts.Dates(i)
