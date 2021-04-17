@@ -1,5 +1,5 @@
 ﻿'Copyright (c) BlueM Dev Group
-'Website: http://bluemodel.org
+'Website: https://bluemodel.org
 '
 'All rights reserved.
 '
@@ -29,7 +29,7 @@ Imports MathNet.Numerics
 ''' <summary>
 ''' Plots the concurrent values of two time series against each other and least-squares fits a line to the resulting points
 ''' </summary>
-''' <remarks>http://wiki.bluemodel.org/index.php/Wave:Gegenueberstellung</remarks>
+''' <remarks>https://wiki.bluemodel.org/index.php/Wave:Gegenueberstellung</remarks>
 Friend Class Comparison
     Inherits Analysis
 

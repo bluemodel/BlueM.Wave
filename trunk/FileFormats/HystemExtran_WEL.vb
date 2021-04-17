@@ -1,5 +1,5 @@
 'Copyright (c) BlueM Dev Group
-'Website: http://bluemodel.org
+'Website: https://bluemodel.org
 '
 'All rights reserved.
 '
@@ -32,7 +32,7 @@ Imports System.IO
 ''' Bei WEL-Dateien in Hystem handelt es sich immer um Zuflussdaten
 ''' Format ist festgeschrieben im HystemExtran-Anwenderhandbuch
 ''' </summary>
-''' <remarks>Format siehe http://wiki.bluemodel.org/index.php/WEL-Format</remarks>
+''' <remarks>Format siehe https://wiki.bluemodel.org/index.php/WEL-Format</remarks>
 Public Class HystemExtran_WEL
     Inherits FileFormatBase
     

@@ -1,5 +1,5 @@
 ﻿'Copyright (c) BlueM Dev Group
-'Website: http://bluemodel.org
+'Website: https://bluemodel.org
 '
 'All rights reserved.
 '
@@ -30,7 +30,7 @@ Imports System.IO
 ''' <summary>
 ''' Klasse für das SMUSI REG-Dateiformat (SMUSI-Regendateien)
 ''' </summary>
-''' <remarks>Format siehe http://wiki.bluemodel.org/index.php/SMUSI_REG-Format</remarks>
+''' <remarks>Format siehe https://wiki.bluemodel.org/index.php/SMUSI_REG-Format</remarks>
 Public Class REG_SMUSI
     Inherits FileFormatBase
 

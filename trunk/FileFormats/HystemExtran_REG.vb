@@ -1,5 +1,5 @@
 'Copyright (c) BlueM Dev Group
-'Website: http://bluemodel.org
+'Website: https://bluemodel.org
 '
 'All rights reserved.
 '
@@ -30,7 +30,7 @@ Imports System.IO
 ''' <summary>
 ''' Klasse für das Hystem-Extran REG-Dateiformat
 ''' </summary>
-''' <remarks>Format siehe http://wiki.bluemodel.org/index.php/Hystem-Extran_REG-Format</remarks>
+''' <remarks>Format siehe https://wiki.bluemodel.org/index.php/Hystem-Extran_REG-Format</remarks>
 Public Class HystemExtran_REG
     Inherits FileFormatBase
 
