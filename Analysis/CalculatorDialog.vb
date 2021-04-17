@@ -106,12 +106,18 @@ Friend Class CalculatorDialog
         Try
             'Test formula parsing
             Dim parser As New MathParserNet.Parser()
+            'register custom functions
+            parser.RegisterCustomDoubleFunction("MAX", AddressOf Calculator.Max)
+            parser.RegisterCustomDoubleFunction("MIN", AddressOf Calculator.Min)
             'create dummy variables
             For Each tsVariable As CalculatorVariable In Me.ListBox_Variables.Items
                 parser.AddVariable(tsVariable.varName, 1.0)
             Next
             'evaluate formula
             Dim result As Double = parser.SimplifyDouble(Me.TextBox_Formula.Text)
+            'clean up
+            parser.RemoveAllVariables()
+            parser.UnregisterAllCustomFunctions()
         Catch ex As Exception
             MsgBox("Error while parsing formula: " & eol & ex.Message, MsgBoxStyle.Critical)
             Return

@@ -131,7 +131,11 @@ Friend Class Calculator
             Dim title As String = dlg.TextBox_Title.Text
             Dim unit As String = dlg.ComboBox_Unit.Text
 
+            'initialize parser and add custom functions
             Dim parser As New MathParserNet.Parser()
+            parser.RegisterCustomDoubleFunction("MAX", AddressOf Calculator.Max)
+            parser.RegisterCustomDoubleFunction("MIN", AddressOf Calculator.Min)
+
             Dim value As Double
             Dim ts_result As New TimeSeries()
 
@@ -159,6 +163,9 @@ Friend Class Calculator
                 parser.RemoveAllVariables()
             Next
 
+            'clean up
+            parser.UnregisterAllCustomFunctions()
+
             'Store result series
             ts_result.Title = title
             ts_result.Unit = unit
@@ -183,5 +190,17 @@ Friend Class Calculator
     End Sub
 
 #End Region 'Methods
+
+#Region "Custom functions"
+
+    Friend Shared Function Max(val1 As Double, val2 As Double)
+        Return Math.Max(val1, val2)
+    End Function
+
+    Friend Shared Function Min(val1 As Double, val2 As Double)
+        Return Math.Min(val1, val2)
+    End Function
+
+#End Region 'Custom functions
 
 End Class
