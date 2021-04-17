@@ -1458,6 +1458,7 @@ Public Class Wave
                                 band.ResizeStart = False
                                 band.EndLinePen.Visible = False
                                 band.StartLinePen.Visible = False
+                                band.Tag = "NaN"
 
                                 'write to log
                                 Log.AddLogEntry(Log.levels.info, "Series contains NaN values from " & nanStart.ToString(Helpers.DateFormats("default")) & " to " & nanEnd.ToString(Helpers.DateFormats("default")))
@@ -1475,16 +1476,15 @@ Public Class Wave
             End If
         Else
             'Switch visualization of NaN values off
-            'Remove all tools of type ColorBand from TChart1
-            'TODO: Any user-defined ColorBands unfortunately get removed as well!
-            Dim colorbands As New List(Of Steema.TeeChart.Tools.ColorBand)
+            'Remove all tools of type ColorBand with Tag "NaN" from TChart1
+            Dim nanbands As New List(Of Steema.TeeChart.Tools.ColorBand)
             For Each tool As Steema.TeeChart.Tools.Tool In Me.TChart1.Tools
-                If tool.GetType Is GetType(Steema.TeeChart.Tools.ColorBand) Then
-                    colorbands.Add(tool)
+                If tool.GetType Is GetType(Steema.TeeChart.Tools.ColorBand) And tool.Tag = "NaN" Then
+                    nanbands.Add(tool)
                 End If
             Next
-            For Each colorband As Steema.TeeChart.Tools.ColorBand In colorbands
-                Me.TChart1.Tools.Remove(colorband)
+            For Each nanband As Steema.TeeChart.Tools.ColorBand In nanbands
+                Me.TChart1.Tools.Remove(nanband)
             Next
         End If
     End Sub

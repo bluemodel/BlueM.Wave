@@ -12,6 +12,7 @@ FIXED:
 * Improved handling and display of time series datasource information
 * Fixed detection of a single NaN value at the end of a time series when visualizing NaN values
 * When auto-adjustment of Y-axes to current view is switched on, custom vertical axes are now also auto-adjusted
+* Switching the visualization of NaN values off no longer removes user-defined color bands
 
 Version 1.9.3
 -------------
