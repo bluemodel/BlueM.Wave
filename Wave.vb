@@ -1518,17 +1518,30 @@ Public Class Wave
     Private Sub ToolStripButton_RemoveNaNValues_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_RemoveNaNValues.Click
 
         Dim dlgResult As DialogResult
-        Dim keys As List(Of Integer)
+        Dim ids As List(Of Integer)
         Dim ts As TimeSeries
 
         dlgResult = MsgBox("Delete all nodes with NaN values from all series?", MsgBoxStyle.OkCancel)
         If dlgResult = Windows.Forms.DialogResult.OK Then
-            keys = Me.TimeSeriesDict.Keys.ToList()
-            For Each key As Integer In keys
-                ts = Me.TimeSeriesDict(key)
+            ids = Me.TimeSeriesDict.Keys.ToList()
+            'loop over time series
+            For Each id As Integer In ids
+                'remove NaN values
+                ts = Me.TimeSeriesDict(id)
                 ts = ts.removeNaNValues()
-                Me.TimeSeriesDict(key) = ts
-                'TODO: remove NaN values from series in chart
+                Me.TimeSeriesDict(id) = ts
+                'replace values of series in chart
+                For Each series As Steema.TeeChart.Styles.Series In Me.TChart1.Series
+                    If series.Tag = id Then
+                        series.BeginUpdate()
+                        series.Clear()
+                        For Each kvp As KeyValuePair(Of DateTime, Double) In ts.Nodes
+                            series.Add(kvp.Key, kvp.Value)
+                        Next
+                        series.EndUpdate()
+                        Exit For
+                    End If
+                Next
             Next
         End If
     End Sub
