@@ -471,15 +471,17 @@ Public Class Wave
             enddate = DateTime.FromOADate(Me.TChart1.Axes.Bottom.Maximum)
 
             'define axes to process
-            Dim axes As New Dictionary(Of Steema.TeeChart.Styles.VerticalAxis, Steema.TeeChart.Axis)
-            axes.Add(Steema.TeeChart.Styles.VerticalAxis.Left, Me.TChart1.Axes.Left)
-            axes.Add(Steema.TeeChart.Styles.VerticalAxis.Right, Me.TChart1.Axes.Right)
-            'TODO: auto-adjustment of custom axes
+            Dim axes As New List(Of Tuple(Of Steema.TeeChart.Styles.VerticalAxis, Steema.TeeChart.Axis))
+            axes.Add(New Tuple(Of Steema.TeeChart.Styles.VerticalAxis, Steema.TeeChart.Axis)(Steema.TeeChart.Styles.VerticalAxis.Left, Me.TChart1.Axes.Left))
+            axes.Add(New Tuple(Of Steema.TeeChart.Styles.VerticalAxis, Steema.TeeChart.Axis)(Steema.TeeChart.Styles.VerticalAxis.Right, Me.TChart1.Axes.Right))
+            For Each axis In Me.TChart1.Axes.Custom
+                axes.Add(New Tuple(Of Steema.TeeChart.Styles.VerticalAxis, Steema.TeeChart.Axis)(Steema.TeeChart.Styles.VerticalAxis.Custom, axis))
+            Next
 
             'loop over Y-axes
-            For Each kvp As KeyValuePair(Of Steema.TeeChart.Styles.VerticalAxis, Steema.TeeChart.Axis) In axes
-                axisType = kvp.Key
-                axis = kvp.Value
+            For Each t As Tuple(Of Steema.TeeChart.Styles.VerticalAxis, Steema.TeeChart.Axis) In axes
+                axisType = t.Item1
+                axis = t.Item2
 
                 'loop over series
                 Ymin = Double.MaxValue
@@ -488,8 +490,12 @@ Public Class Wave
                     title = ts.Title
 
                     'only process active series on the current axis
-                    If Me.TChart1.Series.WithTitle(title).Active _
-                        And Me.TChart1.Series.WithTitle(title).VertAxis = axisType Then
+                    If Me.TChart1.Series.WithTitle(title).Active And Me.TChart1.Series.WithTitle(title).VertAxis = axisType Then
+
+                        If axisType = Steema.TeeChart.Styles.VerticalAxis.Custom And ts.Unit <> axis.Tag Then
+                            'series is on a different custom axis, skip it
+                            Continue For
+                        End If
 
                         'get series min and max for current viewport
                         seriesMin = ts.Minimum(startdate, enddate)
@@ -1752,6 +1758,9 @@ Public Class Wave
             'Reset the Y axes to automatic
             Me.TChart1.Axes.Left.Automatic = True
             Me.TChart1.Axes.Right.Automatic = True
+            For Each axis As Steema.TeeChart.Axis In Me.TChart1.Axes.Custom
+                axis.Automatic = True
+            Next
             Me.TChart1.Refresh()
         End If
     End Sub
