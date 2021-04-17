@@ -3245,6 +3245,7 @@ Public Class Wave
             Me.TChart1.Axes.Left.Tag = unit
             Me.TChart1.Axes.Left.Visible = True
             Me.TChart1.Axes.Left.Automatic = True
+            Me.TChart1.Axes.Left.MaximumOffset = 5
             series.VertAxis = Steema.TeeChart.Styles.VerticalAxis.Left
 
         ElseIf Me.TChart1.Axes.Left.Tag = unit Then
@@ -3257,6 +3258,7 @@ Public Class Wave
             Me.TChart1.Axes.Right.Tag = unit
             Me.TChart1.Axes.Right.Visible = True
             Me.TChart1.Axes.Right.Automatic = True
+            Me.TChart1.Axes.Right.MaximumOffset = 5
             Me.TChart1.Axes.Right.Grid.Visible = False
             series.VertAxis = Steema.TeeChart.Styles.VerticalAxis.Right
 
@@ -3284,6 +3286,7 @@ Public Class Wave
                 axis.Tag = unit
                 axis.Visible = True
                 axis.Automatic = True
+                axis.MaximumOffset = 5
                 axis.Grid.Visible = False
                 'Place every second axis on the right
                 If number Mod 2 = 0 Then
