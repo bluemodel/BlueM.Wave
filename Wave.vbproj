@@ -149,6 +149,7 @@
     <Compile Include="Analysis\ChangeTimestepDialog.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Analysis\CalculatorVariable.vb" />
     <Compile Include="Analysis\Comparison.vb" />
     <Compile Include="Analysis\Comparison_Dialog.Designer.vb">
       <DependentUpon>Comparison_Dialog.vb</DependentUpon>

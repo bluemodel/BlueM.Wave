@@ -29,7 +29,7 @@ Imports System.Windows.Forms
 
 Friend Class CalculatorDialog
 
-    Public Sub New(tsVariables As Dictionary(Of String, TimeSeries))
+    Public Sub New(tsVariables As List(Of CalculatorVariable))
 
         ' This call is required by the designer.
         InitializeComponent()
@@ -37,14 +37,16 @@ Friend Class CalculatorDialog
         ' Add any initialization after the InitializeComponent() call.
 
         'Add variables to listbox
-        For Each tsvar As KeyValuePair(Of String, TimeSeries) In tsVariables
+        For Each tsvar As CalculatorVariable In tsVariables
             Me.ListBox_Variables.Items.Add(tsvar)
         Next
 
-        'Add units to combobox
-        For Each tsvar As KeyValuePair(Of String, TimeSeries) In tsVariables
-            Me.ComboBox_Unit.Items.Add(tsvar.Value.Unit)
+        'Add unique units to combobox
+        Dim units As New HashSet(Of String)
+        For Each tsvar As CalculatorVariable In tsVariables
+            units.Add(tsvar.ts.Unit)
         Next
+        Me.ComboBox_Unit.Items.AddRange(units.ToArray())
         Me.ComboBox_Unit.SelectedIndex = 0
     End Sub
 
@@ -56,7 +58,7 @@ Friend Class CalculatorDialog
     ''' <param name="e"></param>
     Private Sub ListBox_Variables_DoubleClick(sender As Object, e As EventArgs) Handles ListBox_Variables.DoubleClick
 
-        Dim varName As String = CType(Me.ListBox_Variables.SelectedItem, KeyValuePair(Of String, TimeSeries)).Key
+        Dim varName As String = CType(Me.ListBox_Variables.SelectedItem, CalculatorVariable).varName
 
         Dim originalFormula As String = Me.TextBox_Formula.Text
         Dim newFormula As String
@@ -105,8 +107,8 @@ Friend Class CalculatorDialog
             'Test formula parsing
             Dim parser As New MathParserNet.Parser()
             'create dummy variables
-            For Each tsVariable As KeyValuePair(Of String, TimeSeries) In Me.ListBox_Variables.Items
-                parser.AddVariable(tsVariable.Key, 1.0)
+            For Each tsVariable As CalculatorVariable In Me.ListBox_Variables.Items
+                parser.AddVariable(tsVariable.varName, 1.0)
             Next
             'evaluate formula
             Dim result As Double = parser.SimplifyDouble(Me.TextBox_Formula.Text)

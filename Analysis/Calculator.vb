@@ -84,9 +84,9 @@ Friend Class Calculator
     Private expression As String
 
     ''' <summary>
-    ''' Dictionary of variable names and associated time series
+    ''' List of variables
     ''' </summary>
-    Private tsVariables As Dictionary(Of String, TimeSeries)
+    Private tsVariables As List(Of CalculatorVariable)
 
 #End Region 'Properties
 
@@ -106,12 +106,12 @@ Friend Class Calculator
         End If
 
         'assign variable names to time series and store as dictionary
-        Me.tsVariables = New Dictionary(Of String, TimeSeries)
+        Me.tsVariables = New List(Of CalculatorVariable)
         Dim varNames As New List(Of String) From
             {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"}
         Dim i As Integer = 0
         For Each ts As TimeSeries In Me.mZeitreihen
-            tsVariables.Add(varNames(i), ts)
+            tsVariables.Add(New CalculatorVariable(varNames(i), ts))
             i += 1
         Next
 
@@ -144,17 +144,16 @@ Friend Class Calculator
             'loop over timestamps
             For Each t As DateTime In timestamps
                 'create variables for this timestamp
-                For Each tsVariable As KeyValuePair(Of String, TimeSeries) In tsVariables
-                    Dim ts As TimeSeries = tsVariable.Value
+                For Each tsVariable As CalculatorVariable In tsVariables
                     value = Double.NaN
-                    If ts.Dates.Contains(t) Then
-                        value = ts.Nodes(t)
+                    If tsVariable.ts.Dates.Contains(t) Then
+                        value = tsVariable.ts.Nodes(t)
                     End If
-                    parser.AddVariable(tsVariable.Key, value)
+                    parser.AddVariable(tsVariable.varName, value)
                 Next
                 'evaluate formula
                 value = parser.SimplifyDouble(Me.expression)
-                'store node in result series
+                'store as new node in result series
                 ts_result.AddNode(t, value)
                 'remove variables
                 parser.RemoveAllVariables()
@@ -176,8 +175,8 @@ Friend Class Calculator
         Me.mResultText = "Calculator analysis:" & eol
         Me.mResultText &= "Formula: " & Me.expression & eol
         Me.mResultText &= "Variables: " & eol
-        For Each tsvariable As KeyValuePair(Of String, TimeSeries) In Me.tsVariables
-            Me.mResultText &= tsvariable.Key & ": " & tsvariable.Value.Title & eol
+        For Each tsvariable As CalculatorVariable In Me.tsVariables
+            Me.mResultText &= tsvariable.varName & ": " & tsvariable.ts.Title & eol
         Next
         Me.mResultText &= "Result series: " & Me.mResultSeries.First.Title
 
