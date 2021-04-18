@@ -921,6 +921,10 @@ Public Class Wave
                 strwrite.WriteLine("file=" & file)
                 For Each title In datasources(file)
                     'TODO: if a series was renamed, write the new title to the project file
+                    If title.Contains(":") Then
+                        'enclose titles containing ":" in quotes
+                        title = """" & title & """"
+                    End If
                     strwrite.WriteLine("    series=" & title)
                 Next
             Next

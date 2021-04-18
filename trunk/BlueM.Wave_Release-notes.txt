@@ -14,6 +14,7 @@ FIXED:
 * When auto-adjustment of Y-axes to current view is switched on, custom vertical axes are now also auto-adjusted
 * Switching the visualization of NaN values off no longer removes user-defined color bands
 * Removing NaN values from series now also updates the series displayed in the chart
+* Series titles containing ":" are now correctly enclosed in quotes when saving WVP files
 
 Version 1.9.3
 -------------
