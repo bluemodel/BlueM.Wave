@@ -3,6 +3,8 @@ BlueM.Wave Release Notes
 ===============================================================
 Version 1.9.5
 -------------
+CHANGED:
+* Zooming by dragging the mouse in the main chart now requires at least 5 horizontal pixels in order to cause a zoom
 FIXED:
 * Fixed wording in Histogram analysis (non-exceedance instead of subceedance)
 

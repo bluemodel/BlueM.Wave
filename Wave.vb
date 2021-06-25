@@ -2281,8 +2281,9 @@ Public Class Wave
         If Me.ChartMouseZoomDragging Then
             'complete the zoom process
             Me.ChartMouseZoomDragging = False
-            'determine start and end of zoom
-            If e.X <> Me.ChartMouseDragStartX Then
+            'only zoom if at least 5 pixels difference to start of drag operation
+            If Math.Abs(e.X - Me.ChartMouseDragStartX) > 5 Then
+                'determine start and end dates of zoom
                 Dim startValue, endValue As Double
                 If e.X > Me.ChartMouseDragStartX Then
                     startValue = TChart1.Series(0).XScreenToValue(Me.ChartMouseDragStartX)
@@ -2293,9 +2294,6 @@ Public Class Wave
                 End If
                 Log.AddLogEntry(Log.levels.debug, "Zoom end at " & Date.FromOADate(endValue))
 
-                'adjust colorband
-                Me.colorBandZoom.Active = False
-
                 'save the current zoom snapshot
                 Call Me.saveZoomSnapshot()
 
@@ -2305,6 +2303,8 @@ Public Class Wave
                 Me.selectionMade = True
                 Call Me.viewportChanged()
             End If
+            'hide colorband
+            Me.colorBandZoom.Active = False
         End If
         Me.TChart1.Cursor = Cursors.Default
     End Sub
