@@ -41,7 +41,7 @@ Friend Class Histogram
         Dim frequency, cumfrequency As Integer()
         Dim amount As Integer
         Dim probability As Double()
-        Dim PU As Double() ' probability of subceedance (Unterschreitungswahrscheinlichkeit)
+        Dim PU As Double() ' probability of non-exceedance
     End Structure
 
     Private results As resultValues()
@@ -185,7 +185,7 @@ Friend Class Histogram
                     .cumfrequency(i) = .cumfrequency(i - 1) + .frequency(i)
                 Next
 
-                'Probability of subceedance
+                'Probability of non-exceedance
                 ReDim .PU(n_bins - 1)
                 For i = 0 To Me.n_bins - 1
                     .PU(i) = .cumfrequency(i) / .amount * 100 '%
@@ -234,7 +234,7 @@ Friend Class Histogram
         Me.mResultChart.Axes.Left.MaximumOffset = 2
 
         Me.mResultChart.Axes.Right.Visible = True
-        Me.mResultChart.Axes.Right.Title.Caption = "Probability of subceedance [%]"
+        Me.mResultChart.Axes.Right.Title.Caption = "Probability of non-exceedance [%]"
         Me.mResultChart.Axes.Right.Title.Angle = 90
         Me.mResultChart.Axes.Right.Automatic = False
         Me.mResultChart.Axes.Right.Minimum = 0
