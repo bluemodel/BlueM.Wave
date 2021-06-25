@@ -1,6 +1,11 @@
 ﻿===============================================================
 BlueM.Wave Release Notes
 ===============================================================
+Version 1.9.5
+-------------
+FIXED:
+* Fixed wording in Histogram analysis (non-exceedance instead of subceedance)
+
 Version 1.9.4
 -------------
 NEW:
