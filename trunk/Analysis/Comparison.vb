@@ -36,10 +36,10 @@ Friend Class Comparison
     Private datume As IList(Of DateTime)
     Private ergebnisreihe(,) As Double ' Ergebnis der Gegenueberstellung: y-Werte der Reihe(xnummer) werden x-Achsen-Werte, y-Werte der Reihe(ynummer) werden y-Achsen-Werte  
     Private xnummer As Integer ' Nummer mit der auf mZeitreihen(i) zugegriffen wird, xnummer = Zeitreihe soll auf x-Achse
-    Private ynummer As Integer ' Nummer mit der auf mZeitreihen(i) zugegriffen wird, xnummer = Zeitreihe soll auf y-Achse
+    Private ynummer As Integer ' Nummer mit der auf mZeitreihen(i) zugegriffen wird, ynummer = Zeitreihe soll auf y-Achse
 
     Public Overloads Shared Function Description() As String
-        Return "Plots the concurrent values of two time series against each other and least-squares fits a line to the resulting points."
+        Return "Plots the concurrent values of two time series against each other, least-squares fits a line to the resulting points and caluclates the linear correlation coefficient."
     End Function
 
     ''' <summary>
@@ -130,11 +130,8 @@ Friend Class Comparison
         'Datume übernehmen
         Me.datume = reihe1.Dates
 
-        'Calculate linear regression
-        Dim p As Tuple(Of Double, Double)
-        Dim xvalues(), yvalues() As Double
-
         'store x and y values as separate arrays
+        Dim xvalues(), yvalues() As Double
         ReDim xvalues(Me.ergebnisreihe.GetUpperBound(0))
         ReDim yvalues(Me.ergebnisreihe.GetUpperBound(0))
         For i = 0 To Me.ergebnisreihe.GetUpperBound(0)
@@ -142,11 +139,18 @@ Friend Class Comparison
             yvalues(i) = Me.ergebnisreihe(i, 1)
         Next
 
+        'Calculate linear regression
+        Dim p As Tuple(Of Double, Double)
         p = Fit.Line(xvalues, yvalues)
 
+        'Calculate correlation coefficient
+        Dim r As Double
+        r = MathNet.Numerics.GoodnessOfFit.R(yvalues, xvalues)
+
         'Store result values
-        Me.mResultValues.Add("alpha", p.Item1)
-        Me.mResultValues.Add("beta", p.Item2)
+        Me.mResultValues.Add("Linear regression intercept", p.Item1)
+        Me.mResultValues.Add("Linear regression slope", p.Item2)
+        Me.mResultValues.Add("Correlation coefficient", r)
 
     End Sub
 
@@ -217,18 +221,19 @@ Friend Class Comparison
 
         'Plot regression line
         '--------------------
-        Dim alpha, beta As Double
-        alpha = Me.mResultValues("alpha")
-        beta = Me.mResultValues("beta")
-        regression_line.Add(x_min, beta * x_min + alpha)
-        regression_line.Add(x_max, beta * x_max + alpha)
+        Dim intercept, slope As Double
+        intercept = Me.mResultValues("Linear regression intercept")
+        slope = Me.mResultValues("Linear regression slope")
+        regression_line.Add(x_min, slope * x_min + intercept)
+        regression_line.Add(x_max, slope * x_max + intercept)
 
         'Annotation
         '----------
         Dim anno As New Steema.TeeChart.Tools.Annotation(Me.mResultChart)
         anno.Position = Steema.TeeChart.Tools.AnnotationPositions.RightBottom
-        anno.Text = "Linear regression line: " & eol
-        anno.Text &= "y = " + Str(beta) + " * x + " + Str(alpha)
+        anno.Text = "Correlation coefficient: " & Str(Me.mResultValues("Correlation coefficient")) & eol
+        anno.Text &= "Linear regression line: " & eol
+        anno.Text &= "y = " + Str(slope) + " * x + " + Str(intercept)
 
     End Sub
 

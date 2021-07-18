@@ -3,6 +3,8 @@ BlueM.Wave Release Notes
 ===============================================================
 Version 1.9.5
 -------------
+NEW:
+* Analysis function "Comparison" now also calculates the linear correlation coefficient
 CHANGED:
 * Zooming by dragging the mouse in the main chart now requires at least 5 horizontal pixels in order to cause a zoom
 FIXED:
