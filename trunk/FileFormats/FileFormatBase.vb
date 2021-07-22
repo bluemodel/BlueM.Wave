@@ -72,7 +72,7 @@ Public MustInherit Class FileFormatBase
             "WEL files (*.wel, *.kwl)|*.wel;*.kwl|" &
             "Wave project files (*wvp)|*.wvp|" &
             "ZRE files (*.zre)|*.zre|" &
-            "ZRXP files (*.zrx)|*.zrx"
+            "ZRXP files (*.zrx, *.zrxp)|*.zrx;*.zrxp"
 
 #Region "allgemeine Eigenschaften"
     Protected SpaltenOffset As Integer = 0          'Anzahl Zeichen bevor die erste Spalte anfängt (nur bei Spalten mit fester Breite)
