@@ -302,7 +302,10 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="StrictTimeSeriesCollection.vb" />
     <Compile Include="TimeSeries.vb" />
+    <Compile Include="TimeSeriesCollection.vb" />
+    <Compile Include="TimeSeriesCollectionBase.vb" />
     <Compile Include="TimeSeriesDataSource.vb" />
     <Compile Include="Wave.Designer.vb">
       <DependentUpon>Wave.vb</DependentUpon>
