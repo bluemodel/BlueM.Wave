@@ -450,6 +450,7 @@
     <Content Include="Resources\chart_magnify.png" />
     <Content Include="Resources\chart_pie.png" />
     <Content Include="Resources\color_wheel.png" />
+    <Content Include="Resources\comments.png" />
     <Content Include="Resources\controller.png" />
     <Content Include="Resources\control_end.png" />
     <Content Include="Resources\control_fastforward.png" />
@@ -478,7 +479,6 @@
     <Content Include="Resources\table_edit.png" />
     <Content Include="Resources\table_gear.png" />
     <Content Include="Resources\table_save.png" />
-    <Content Include="Resources\text_list_numbers.png" />
     <Content Include="Resources\tick.png" />
     <Content Include="Resources\wave.ico" />
     <Content Include="Resources\zoom.png" />

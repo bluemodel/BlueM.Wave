@@ -91,7 +91,7 @@ Partial Class TimeSeriesValuesDialog
         '
         Me.ToolStripButton_showMarkers.CheckOnClick = True
         Me.ToolStripButton_showMarkers.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.ToolStripButton_showMarkers.Image = Global.BlueM.Wave.My.Resources.Resources.text_list_numbers
+        Me.ToolStripButton_showMarkers.Image = Global.BlueM.Wave.My.Resources.Resources.comments
         Me.ToolStripButton_showMarkers.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.ToolStripButton_showMarkers.Name = "ToolStripButton_showMarkers"
         Me.ToolStripButton_showMarkers.Size = New System.Drawing.Size(23, 22)

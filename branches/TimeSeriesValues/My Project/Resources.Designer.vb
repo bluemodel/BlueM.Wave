@@ -263,6 +263,16 @@ Namespace My.Resources
         '''<summary>
         '''  Looks up a localized resource of type System.Drawing.Bitmap.
         '''</summary>
+        Friend ReadOnly Property comments() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("comments", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized resource of type System.Drawing.Bitmap.
+        '''</summary>
         Friend ReadOnly Property control_end() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("control_end", resourceCulture)
@@ -496,16 +506,6 @@ Namespace My.Resources
         Friend ReadOnly Property table_save() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("table_save", resourceCulture)
-                Return CType(obj,System.Drawing.Bitmap)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  Looks up a localized resource of type System.Drawing.Bitmap.
-        '''</summary>
-        Friend ReadOnly Property text_list_numbers() As System.Drawing.Bitmap
-            Get
-                Dim obj As Object = ResourceManager.GetObject("text_list_numbers", resourceCulture)
                 Return CType(obj,System.Drawing.Bitmap)
             End Get
         End Property
