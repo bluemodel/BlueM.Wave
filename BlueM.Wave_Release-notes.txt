@@ -1,10 +1,17 @@
 ﻿===============================================================
 BlueM.Wave Release Notes
 ===============================================================
+Version 1.9.7
+-------------
+CHANGED:
+* Analysis function "GoodnessOfFit": volumes, volume error and average values are now calculated based on only the timestamps common to both timeseries
+API-CHANGES:
+* New method Timeseries.Synchronize() for synchronizing two timeseries by only keeping the common timestamps
+
 Version 1.9.6
 -------------
 FIXED:
-* Prevent errors when trying to add log messages without a LogWindow
+* Prevent errors when trying to add log messages without a log window
 
 Version 1.9.5
 -------------
