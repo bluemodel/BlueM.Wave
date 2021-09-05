@@ -1,5 +1,5 @@
 'Copyright (c) BlueM Dev Group
-'Website: http://bluemodel.org
+'Website: https://bluemodel.org
 '
 'All rights reserved.
 '
@@ -35,6 +35,7 @@ Friend Module AnalysisFactory
     ''' </summary>
     Public Enum AnalysisFunctions
         AnnualStatistics
+        Calculator
         ChangeTimestep
         Comparison
         Cumulative
@@ -54,6 +55,8 @@ Friend Module AnalysisFactory
         Select Case analysisfunction
             Case AnalysisFunctions.AnnualStatistics
                 Return AnnualStatistics.Description
+            Case AnalysisFunctions.Calculator
+                Return Calculator.Description
             Case AnalysisFunctions.ChangeTimestep
                 Return ChangeTimestep.Description
             Case AnalysisFunctions.Comparison
@@ -89,6 +92,9 @@ Friend Module AnalysisFactory
 
             Case AnalysisFunctions.AnnualStatistics
                 oAnalysis = New AnnualStatistics(seriesList)
+
+            Case AnalysisFunctions.Calculator
+                oAnalysis = New Calculator(seriesList)
 
             Case AnalysisFunctions.ChangeTimestep
                 oAnalysis = New ChangeTimestep(seriesList)

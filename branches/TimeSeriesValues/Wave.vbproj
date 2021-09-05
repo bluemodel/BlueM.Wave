@@ -81,6 +81,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>lib\MathNet\MathNet.Numerics.dll</HintPath>
     </Reference>
+    <Reference Include="MathParserNet, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>lib\MathParserNet\MathParserNet.dll</HintPath>
+    </Reference>
     <Reference Include="modelEAU.SWMM.DllAdapter, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>lib\modelEAU\modelEAU.SWMM.DllAdapter.dll</HintPath>
@@ -95,6 +99,7 @@
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Core" />
     <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml.Linq" />
     <Reference Include="TeeChart, Version=4.1.2011.4192, Culture=neutral, PublicKeyToken=9c8126276c77bdb7, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>lib\TeeChart\TeeChart.dll</HintPath>
@@ -134,8 +139,8 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Analysis\AnalysisFactory.vb" />
-    <Compile Include="Analysis\AnalysisHelper.vb" />
     <Compile Include="Analysis\AnnualStatistics.vb" />
+    <Compile Include="Analysis\Calculator.vb" />
     <Compile Include="Analysis\ChangeTimestep.vb" />
     <Compile Include="Analysis\ChangeTimestepDialog.Designer.vb">
       <DependentUpon>ChangeTimestepDialog.vb</DependentUpon>
@@ -143,6 +148,7 @@
     <Compile Include="Analysis\ChangeTimestepDialog.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Analysis\CalculatorVariable.vb" />
     <Compile Include="Analysis\Comparison.vb" />
     <Compile Include="Analysis\Comparison_Dialog.Designer.vb">
       <DependentUpon>Comparison_Dialog.vb</DependentUpon>
@@ -199,6 +205,12 @@
       <DependentUpon>CutDialog.vb</DependentUpon>
     </Compile>
     <Compile Include="Dialogs\CutDialog.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Analysis\CalculatorDialog.Designer.vb">
+      <DependentUpon>CalculatorDialog.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Analysis\CalculatorDialog.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Dialogs\ExportDiag.Designer.vb">
@@ -297,6 +309,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="TimeSeries.vb" />
+    <Compile Include="TimeSeriesDataSource.vb" />
     <Compile Include="Wave.Designer.vb">
       <DependentUpon>Wave.vb</DependentUpon>
     </Compile>
@@ -340,6 +353,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Dialogs\CutDialog.resx">
       <DependentUpon>CutDialog.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Analysis\CalculatorDialog.resx">
+      <DependentUpon>CalculatorDialog.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Dialogs\ExportDiag.resx">
       <DependentUpon>ExportDiag.vb</DependentUpon>
@@ -404,6 +420,8 @@
     <Content Include="lib\MathNet\MathNet.Numerics.license.txt" />
     <Content Include="lib\MathNet\MathNet.Numerics.pdb" />
     <Content Include="lib\MathNet\MathNet.Numerics.xml" />
+    <Content Include="lib\MathParserNet\MathParserNet.dll" />
+    <Content Include="lib\MathParserNet\MathParserNet.license.html" />
     <Content Include="lib\modelEAU\modelEAU.SWMM.DllAdapter.dll" />
     <Content Include="lib\SQLite\System.Data.SQLite.dll" />
     <Content Include="lib\SQLite\x64\SQLite.Interop.dll" />
@@ -473,6 +491,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <PropertyGroup>
     <PostBuildEvent>copy $(ProjectDir)lib\MathNet\MathNet.Numerics.license.txt $(TargetDir)MathNet.Numerics.license.txt
+copy $(ProjectDir)lib\MathParserNet\MathParserNet.license.html $(TargetDir)MathParserNet.license.html
 copy $(ProjectDir)lib\Ionic.Zip\Ionic.Zip.license.txt $(TargetDir)Ionic.Zip.license.txt
 copy $(ProjectDir)lib\SQLite\$(PlatformName)\SQLite.Interop.dll $(TargetDir)SQLite.Interop.dll</PostBuildEvent>
   </PropertyGroup>

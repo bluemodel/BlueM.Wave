@@ -1,5 +1,5 @@
 'Copyright (c) BlueM Dev Group
-'Website: http://bluemodel.org
+'Website: https://bluemodel.org
 '
 'All rights reserved.
 '
@@ -32,7 +32,7 @@ Imports System.Globalization
 ''' Klasse für ASC-Dateiformat (SMUSI)
 ''' </summary>
 ''' <remarks>
-''' Format siehe http://wiki.bluemodel.org/index.php/ASC-Format
+''' Format siehe https://wiki.bluemodel.org/index.php/ASC-Format
 ''' Kann nur das ASC-Format von SMUSI-Versionen vor v4.0 einlesen.
 ''' TODO: Das ASC-Format ab SMUSI 4.0 sollte erkannt und zumindest eine entsprechende Meldung ausgegeben werden
 ''' </remarks>
@@ -163,7 +163,7 @@ Public Class ASC
             If Me.UseUnits Then
                 ts.Unit = sInfo.Unit
             End If
-            ts.DataSource = New KeyValuePair(Of String, String)(Me.File, sInfo.Name)
+            ts.DataSource = New TimeSeriesDataSource(Me.File, sInfo.Name)
             Me.FileTimeSeries.Add(sInfo.Index, ts)
         Next
 

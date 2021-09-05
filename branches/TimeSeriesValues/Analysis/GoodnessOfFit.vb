@@ -1,5 +1,5 @@
 ﻿'Copyright (c) BlueM Dev Group
-'Website: http://bluemodel.org
+'Website: https://bluemodel.org
 '
 'All rights reserved.
 '
@@ -28,11 +28,11 @@
 ''' <summary>
 ''' Goodness Of Fit: Berechnet diverse Gütekriterien für die Anpassung
 ''' </summary>
-''' <remarks>http://wiki.bluemodel.org/index.php/Wave:GoodnessOfFit</remarks>
+''' <remarks>https://wiki.bluemodel.org/index.php/Wave:GoodnessOfFit</remarks>
 Friend Class GoodnessOfFit
     Inherits Analysis
 
-    Private zre_gemessen, zre_simuliert As TimeSeries
+    Dim ts_obs, ts_sim As TimeSeries
 
     Private GoFResults As Dictionary(Of String, GoF)
 
@@ -44,14 +44,14 @@ Friend Class GoodnessOfFit
         Public startDate As DateTime
         Public endDate As DateTime
         Public nValues As Long
-        Public sum_fehlerquadrate As Double
+        Public sum_squarederrors As Double
         Public nash_sutcliffe As Double
         Public ln_nash_sutcliffe As Double
         Public volume_observed As Double
         Public volume_simulated As Double
-        Public volumenfehler As Double
-        Public bestimmtheitsmass As Double
-        Public korrelationskoeffizient As Double
+        Public volumeerror As Double
+        Public coeff_determination As Double
+        Public coeff_correlation As Double
         Public hydrodev As Double
     End Structure
 
@@ -103,75 +103,66 @@ Friend Class GoodnessOfFit
     ''' <param name="ts_o">timeseries with observed values</param>
     ''' <param name="ts_s">timeseries with simulated values</param>
     ''' <returns>GoF parameters</returns>
-    ''' <remarks>the time series must already be cut to the same timespan</remarks>
-    Private Function calculateGOF(ByVal ts_o As TimeSeries, ByVal ts_s As TimeSeries) As GoF
+    ''' <remarks></remarks>
+    Private Shared Function calculateGOF(ByVal ts_o As TimeSeries, ByVal ts_s As TimeSeries) As GoF
 
-        Dim i, n As Integer
-        Dim values(,) As Double
-        Dim fehler() As Double
-        Dim fehlerquadrate() As Double
-        Dim sum_fehler As Double
-        Dim avg_gemessen As Double
-        Dim sum_qmittelwertabweichung As Double
+        Dim i As Integer
+        Dim errors() As Double
+        Dim squarederrors() As Double
+        Dim sum_errors As Double
+        Dim avg_obs As Double
+        Dim sum_squarederrordeviation As Double
         Dim kovar As Double
-        Dim std_simuliert As Double
-        Dim std_gemessen As Double
-        Dim avg_simuliert As Double
-        Dim max_gemessen As Double
+        Dim std_sim As Double
+        Dim std_obs As Double
+        Dim avg_sim As Double
         Dim zaehler As Double
 
-        Dim _gof As New GoF()
+        Dim gof As New GoF()
 
-        'Calculate volumes
-        _gof.volume_simulated = ts_s.Volume
-        _gof.volume_observed = ts_o.Volume
+        'synchronize
+        TimeSeries.Synchronize(ts_o, ts_s)
 
-        'Mittelwerte
-        avg_gemessen = ts_o.Average
-        avg_simuliert = ts_s.Average
+        'metadata
+        gof.startDate = ts_o.StartDate
+        gof.endDate = ts_o.EndDate
+        gof.nValues = ts_o.Length
 
-        'Auf gemeinsame Stützstellen beschränken
-        values = AnalysisHelper.getConcurrentValues(ts_o, ts_s)
+        'volumes
+        gof.volume_observed = ts_o.Volume
+        gof.volume_simulated = ts_s.Volume
 
-        'Berechnungen
-        'values(i, 0) -> gemessen
-        'values(i, 1) -> simuliert
-        '=========================
+        'averages
+        avg_obs = ts_o.Average
+        avg_sim = ts_s.Average
 
-        _gof.startDate = ts_o.StartDate
-        _gof.endDate = ts_o.EndDate
-        _gof.nValues = ts_o.Length
+        'GoF parameters
+        ReDim squarederrors(gof.nValues - 1)
+        ReDim errors(gof.nValues - 1)
 
-        'Anzahl Werte
-        n = values.GetLength(0)
+        sum_errors = 0
+        gof.sum_squarederrors = 0
 
-        'Kennwerte berechnen
-        ReDim fehlerquadrate(values.GetUpperBound(0))
-        ReDim fehler(values.GetUpperBound(0))
-
-        sum_fehler = 0
-        _gof.sum_fehlerquadrate = 0
-
-        'Fehler
-        For i = 0 To n - 1
-            fehler(i) = values(i, 1) - values(i, 0) 'simuliert - gemessen
-            sum_fehler += fehler(i)
-            fehlerquadrate(i) = fehler(i) ^ 2
-            _gof.sum_fehlerquadrate += fehlerquadrate(i)
+        'error & squared error
+        For i = 0 To gof.nValues - 1
+            errors(i) = ts_s.Values(i) - ts_o.Values(i)
+            sum_errors += errors(i)
+            squarederrors(i) = errors(i) ^ 2
+            gof.sum_squarederrors += squarederrors(i)
         Next
 
-        'Volumenfehler [%]
-        _gof.volumenfehler = 100 * (_gof.volume_simulated - _gof.volume_observed) / _gof.volume_observed
+        'volume error [%]
+        gof.volumeerror = 100 * (gof.volume_simulated - gof.volume_observed) / gof.volume_observed
 
         'Nash-Sutcliffe - Koeffizient
         '----------------------------
         'quadratische Abweichung der gemessenen Werte vom Mittelwert
-        sum_qmittelwertabweichung = 0
-        For i = 0 To n - 1
-            sum_qmittelwertabweichung += (values(i, 0) - avg_gemessen) ^ 2
+        sum_squarederrordeviation = 0
+        For i = 0 To gof.nValues - 1
+            sum_squarederrordeviation += (ts_o.Values(i) - avg_obs) ^ 2
         Next
 
-        _gof.nash_sutcliffe = 1 - _gof.sum_fehlerquadrate / sum_qmittelwertabweichung
+        gof.nash_sutcliffe = 1 - gof.sum_squarederrors / sum_squarederrordeviation
 
         'Logarithmic Nash-Sutcliffe coefficient
         '--------------------------------------
@@ -181,14 +172,14 @@ Friend Class GoodnessOfFit
         Dim sum_ln_diff_squared As Double = 0.0
         Dim sum_ln_diff_avg_squared As Double = 0.0
 
-        ln_avg_gemessen = Math.Log(avg_gemessen)
+        ln_avg_gemessen = Math.Log(avg_obs)
 
-        For i = 0 To n - 1
-            sum_ln_diff_squared += (Math.Log(values(i, 0)) - Math.Log(values(i, 1))) ^ 2
-            sum_ln_diff_avg_squared += (Math.Log(values(i, 0)) - ln_avg_gemessen) ^ 2
+        For i = 0 To gof.nValues - 1
+            sum_ln_diff_squared += (Math.Log(ts_o.Values(i)) - Math.Log(ts_s.Values(i))) ^ 2
+            sum_ln_diff_avg_squared += (Math.Log(ts_o.Values(i)) - ln_avg_gemessen) ^ 2
         Next
 
-        _gof.ln_nash_sutcliffe = 1 - sum_ln_diff_squared / sum_ln_diff_avg_squared
+        gof.ln_nash_sutcliffe = 1 - sum_ln_diff_squared / sum_ln_diff_avg_squared
 
         'Korrelationskoeffizient
         '-----------------------
@@ -196,35 +187,33 @@ Friend Class GoodnessOfFit
         'Standardabweichung: sx = SQRT[ 1 / (n-1) * SUMME[(x_i - x_avg)^2] ]
         'Kovarianz: kovar = sxy = 1 / (n-1) * SUMME[(x_i - x_avg) * (y_i - y_avg)]
         kovar = 0
-        std_simuliert = 0
-        std_gemessen = 0
+        std_sim = 0
+        std_obs = 0
 
-        For i = 0 To n - 1
-            kovar += (values(i, 1) - avg_simuliert) * (values(i, 0) - avg_gemessen)
-            std_simuliert += (values(i, 1) - avg_simuliert) ^ 2
-            std_gemessen += (values(i, 0) - avg_gemessen) ^ 2
+        For i = 0 To gof.nValues - 1
+            kovar += (ts_s.Values(i) - avg_sim) * (ts_o.Values(i) - avg_obs)
+            std_sim += (ts_s.Values(i) - avg_sim) ^ 2
+            std_obs += (ts_o.Values(i) - avg_obs) ^ 2
         Next
 
-        std_simuliert = Math.Sqrt(1 / (n - 1) * std_simuliert)
-        std_gemessen = Math.Sqrt(1 / (n - 1) * std_gemessen)
-        kovar = 1 / (n - 1) * kovar
+        std_sim = Math.Sqrt(1 / (gof.nValues - 1) * std_sim)
+        std_obs = Math.Sqrt(1 / (gof.nValues - 1) * std_obs)
+        kovar = 1 / (gof.nValues - 1) * kovar
 
         'Korrelationskoeffizient
-        _gof.korrelationskoeffizient = kovar / (std_simuliert * std_gemessen)
+        gof.coeff_correlation = kovar / (std_sim * std_obs)
         'Bestimmtheitsmaß
-        _gof.bestimmtheitsmass = _gof.korrelationskoeffizient ^ 2
+        gof.coeff_determination = gof.coeff_correlation ^ 2
 
         'Hydrologische Deviation
         '-----------------------
-        max_gemessen = zre_gemessen.Maximum
-
         zaehler = 0
-        For i = 0 To n - 1
-            zaehler += Math.Abs(values(i, 0) - values(i, 1)) * values(i, 0)
+        For i = 0 To gof.nValues - 1
+            zaehler += Math.Abs(ts_o.Values(i) - ts_s.Values(i)) * ts_o.Values(i)
         Next
-        _gof.hydrodev = 200 * zaehler / (n * max_gemessen ^ 2)
+        gof.hydrodev = 200 * zaehler / (gof.nValues * ts_o.Maximum ^ 2)
 
-        Return _gof
+        Return gof
 
     End Function
 
@@ -244,41 +233,44 @@ Friend Class GoodnessOfFit
             Throw New Exception("User abort")
         End If
 
-        'Zeitreihen zuweisen (und säubern)
+        'assign time series
         If (dialog.getNrGemesseneReihe = 1) Then
-            Me.zre_gemessen = Me.mZeitreihen(0).removeNaNValues()
-            Me.zre_simuliert = Me.mZeitreihen(1).removeNaNValues()
+            Me.ts_obs = Me.mZeitreihen(0)
+            Me.ts_sim = Me.mZeitreihen(1)
         Else
-            Me.zre_gemessen = Me.mZeitreihen(1).removeNaNValues()
-            Me.zre_simuliert = Me.mZeitreihen(0).removeNaNValues()
+            Me.ts_obs = Me.mZeitreihen(1)
+            Me.ts_sim = Me.mZeitreihen(0)
         End If
 
-        'Cut series to a common timespan
-        Me.zre_gemessen.Cut(Me.zre_simuliert)
-        Me.zre_simuliert.Cut(Me.zre_gemessen)
+        'remove NaN values
+        Me.ts_obs = Me.ts_obs.removeNaNValues()
+        Me.ts_sim = Me.ts_sim.removeNaNValues()
+
+        'synchronize
+        TimeSeries.Synchronize(Me.ts_obs, Me.ts_sim)
 
         'use entire series by default
-        series_o.Add("Entire series", Me.zre_gemessen)
-        series_s.Add("Entire series", Me.zre_simuliert)
+        series_o.Add("Entire series", ts_obs)
+        series_s.Add("Entire series", ts_sim)
 
         'calculate annual GoF parameters?
         If dialog.CheckBox_Annual.Checked Then
             Dim splits As Dictionary(Of Integer, TimeSeries)
             'split observed series and store them
-            splits = Me.zre_gemessen.SplitHydroYears()
+            splits = ts_obs.SplitHydroYears()
             For Each kvp As KeyValuePair(Of Integer, TimeSeries) In splits
                 series_o.Add(kvp.Key.ToString(), kvp.Value)
             Next
             'split simulated series and store them
-            splits = Me.zre_simuliert.SplitHydroYears()
+            splits = ts_sim.SplitHydroYears()
             For Each kvp As KeyValuePair(Of Integer, TimeSeries) In splits
                 series_s.Add(kvp.Key.ToString(), kvp.Value)
             Next
         End If
 
-        'Calculate GoF parameters for all series
+        'Calculate GoF parameters for each series
         For Each key As String In series_o.Keys
-            Me.GoFResults.Add(key, Me.calculateGOF(series_o(key), series_s(key)))
+            Me.GoFResults.Add(key, GoodnessOfFit.calculateGOF(series_o(key), series_s(key)))
         Next
 
     End Sub
@@ -297,19 +289,19 @@ Friend Class GoodnessOfFit
         shortText = "Entire series (" & _gof.startDate.ToString(Helpers.DefaultDateFormat) & " - " & _gof.endDate.ToString(Helpers.DefaultDateFormat) & "):" & eol
         shortText &= "Volume observed: Vobs = " & _gof.volume_observed.ToString(formatstring) & eol _
                      & "Volume simulated: Vsim = " & _gof.volume_simulated.ToString(formatstring) & eol _
-                     & "Volume error: m = " & _gof.volumenfehler.ToString(formatstring) & " %" & eol _
-                     & "Sum of squared errors: F² = " & _gof.sum_fehlerquadrate.ToString(formatstring) & eol _
+                     & "Volume error: m = " & _gof.volumeerror.ToString(formatstring) & " %" & eol _
+                     & "Sum of squared errors: F² = " & _gof.sum_squarederrors.ToString(formatstring) & eol _
                      & "Nash-Sutcliffe efficiency: E = " & _gof.nash_sutcliffe.ToString(formatstring) & eol _
                      & "Logarithmic Nash-Sutcliffe efficiency: E,ln = " & _gof.ln_nash_sutcliffe.ToString(formatstring) & eol _
-                     & "Coefficient of correlation: r = " & _gof.korrelationskoeffizient.ToString(formatstring) & eol _
-                     & "Coefficient of determination: r² = " & _gof.bestimmtheitsmass.ToString(formatstring) & eol _
+                     & "Coefficient of correlation: r = " & _gof.coeff_correlation.ToString(formatstring) & eol _
+                     & "Coefficient of determination: r² = " & _gof.coeff_determination.ToString(formatstring) & eol _
                      & "Hydrologic deviation: DEV = " & _gof.hydrodev.ToString(formatstring)
 
         'mResultText is written to the log. Contains all results.
         Me.mResultText = "Goodness of Fit analysis:" & eol _
                          & eol _
-                         & "Observed time series: " & Me.zre_gemessen.Title & eol _
-                         & "Simulated time series: " & Me.zre_simuliert.Title & eol _
+                         & "Observed time series: " & Me.ts_obs.Title & eol _
+                         & "Simulated time series: " & Me.ts_sim.Title & eol _
                          & eol
         'output results in CSV format
         Me.mResultText &= "Results:" & eol
@@ -325,12 +317,12 @@ Friend Class GoodnessOfFit
             values(3) = _gof.nValues.ToString()
             values(4) = _gof.volume_observed.ToString(formatstring)
             values(5) = _gof.volume_simulated.ToString(formatstring)
-            values(6) = _gof.volumenfehler.ToString(formatstring) & "%"
-            values(7) = _gof.sum_fehlerquadrate.ToString(formatstring)
+            values(6) = _gof.volumeerror.ToString(formatstring) & "%"
+            values(7) = _gof.sum_squarederrors.ToString(formatstring)
             values(8) = _gof.nash_sutcliffe.ToString(formatstring)
             values(9) = _gof.ln_nash_sutcliffe.ToString(formatstring)
-            values(10) = _gof.korrelationskoeffizient.ToString(formatstring)
-            values(11) = _gof.bestimmtheitsmass.ToString(formatstring)
+            values(10) = _gof.coeff_correlation.ToString(formatstring)
+            values(11) = _gof.coeff_determination.ToString(formatstring)
             values(12) = _gof.hydrodev.ToString(formatstring)
             Me.mResultText &= Join(values, ";") & eol
         Next
@@ -361,8 +353,8 @@ Friend Class GoodnessOfFit
         Me.mResultChart.Axes.Right.Inverted = True
 
         'Namen vergeben
-        line_gemessen.Title = Me.zre_gemessen.Title
-        line_simuliert.Title = Me.zre_simuliert.Title
+        line_gemessen.Title = Me.ts_obs.Title
+        line_simuliert.Title = Me.ts_sim.Title
         line_fehlerquadrate.Title = "Squared error"
 
         'Reihen formatieren
@@ -374,16 +366,14 @@ Friend Class GoodnessOfFit
         line_fehlerquadrate.XValues.DateTime = True
 
         'Werte zu Serien hinzufügen
-        For i = 0 To Me.zre_gemessen.Length - 1
-            line_gemessen.Add(Me.zre_gemessen.Dates(i), Me.zre_gemessen.Values(i))
+        For i = 0 To Me.ts_obs.Length - 1
+            line_gemessen.Add(Me.ts_obs.Dates(i), Me.ts_obs.Values(i))
         Next
-        For i = 0 To Me.zre_simuliert.Length - 1
-            line_simuliert.Add(Me.zre_simuliert.Dates(i), Me.zre_simuliert.Values(i))
+        For i = 0 To Me.ts_sim.Length - 1
+            line_simuliert.Add(Me.ts_sim.Dates(i), Me.ts_sim.Values(i))
         Next
-        Dim cvalues(,) As Double
-        cvalues = AnalysisHelper.getConcurrentValues(Me.zre_gemessen, Me.zre_simuliert)
-        For i = 0 To cvalues.GetUpperBound(0) - 1
-            line_fehlerquadrate.Add(Me.zre_simuliert.Dates(i), (cvalues(i, 1) - cvalues(i, 0)) ^ 2)
+        For i = 0 To Me.ts_obs.Length - 1
+            line_fehlerquadrate.Add(Me.ts_obs.Dates(i), (Me.ts_sim.Values(i) - Me.ts_obs.Values(i)) ^ 2)
         Next
 
     End Sub

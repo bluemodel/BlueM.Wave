@@ -1,5 +1,5 @@
 ﻿'Copyright (c) BlueM Dev Group
-'Website: http://bluemodel.org
+'Website: https://bluemodel.org
 '
 'All rights reserved.
 '
@@ -41,12 +41,13 @@ Public Module FileFactory
     Public Const FileExtKWL As String = ".KWL"
     Public Const FileExtZRE As String = ".ZRE"
     Public Const FileExtTEN As String = ".TEN"
-    Public Const FileExtOUT As String = ".OUT" 'SWMM binary result file or PRMS out file
-    Public Const FileExtTXT As String = ".TXT" 'SWMM routing file
-    Public Const FileExtBIN As String = ".BIN" 'SYDRO binary format
+    Public Const FileExtOUT As String = ".OUT"   'SWMM binary result file or PRMS out file
+    Public Const FileExtTXT As String = ".TXT"   'SWMM routing file
+    Public Const FileExtBIN As String = ".BIN"   'SYDRO binary format
     Public Const FileExtSQLITE As String = ".DB" 'SYDRO SQLite format
-    Public Const FileExtZRXP As String = ".ZRX" 'ZRXP format
-    Public Const FileExtWVP As String = ".WVP" 'Wave project file
+    Public Const FileExtZRX As String = ".ZRX"   'ZRXP format
+    Public Const FileExtZRXP As String = ".ZRXP" 'ZRXP format
+    Public Const FileExtWVP As String = ".WVP"   'Wave project file
 
     ''' <summary>
     ''' Obsolete: Only Maintained for backwards-compatibility
@@ -184,7 +185,7 @@ Public Module FileFactory
             Case FileExtSQLITE
                 FileInstance = New SydroSQLite(file)
 
-            Case FileExtZRXP
+            Case FileExtZRX, FileExtZRXP
                 FileInstance = New ZRXP(file)
 
             Case Else

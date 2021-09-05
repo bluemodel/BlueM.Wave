@@ -1,5 +1,5 @@
 'Copyright (c) BlueM Dev Group
-'Website: http://bluemodel.org
+'Website: https://bluemodel.org
 '
 'All rights reserved.
 '
@@ -140,6 +140,7 @@ Friend Class TimeStepAnalysis
             result_ts = New TimeSeries(ts.Title & " (dt " & Me.TimeUnitName & ")")
             result_ts.Unit = Me.TimeUnitName
             result_ts.Interpretation = TimeSeries.InterpretationEnum.BlockLeft
+            result_ts.DataSource = New TimeSeriesDataSource(TimeSeriesDataSource.OriginEnum.AnalysisResult)
 
             'Loop over timestamps
             For i As Integer = 0 To ts.Length - 1

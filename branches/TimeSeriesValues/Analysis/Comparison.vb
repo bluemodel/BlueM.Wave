@@ -1,5 +1,5 @@
 ﻿'Copyright (c) BlueM Dev Group
-'Website: http://bluemodel.org
+'Website: https://bluemodel.org
 '
 'All rights reserved.
 '
@@ -27,19 +27,16 @@
 '
 Imports MathNet.Numerics
 ''' <summary>
-''' Plots the concurrent values of two time series against each other and least-squares fits a line to the resulting points
+''' Plots the coincident values of two time series against each other, least-squares fits a line to the resulting points and calculates the linear correlation coefficient.
 ''' </summary>
-''' <remarks>http://wiki.bluemodel.org/index.php/Wave:Gegenueberstellung</remarks>
+''' <remarks>https://wiki.bluemodel.org/index.php/Wave:Gegenueberstellung</remarks>
 Friend Class Comparison
     Inherits Analysis
 
-    Private datume As IList(Of DateTime)
-    Private ergebnisreihe(,) As Double ' Ergebnis der Gegenueberstellung: y-Werte der Reihe(xnummer) werden x-Achsen-Werte, y-Werte der Reihe(ynummer) werden y-Achsen-Werte  
-    Private xnummer As Integer ' Nummer mit der auf mZeitreihen(i) zugegriffen wird, xnummer = Zeitreihe soll auf x-Achse
-    Private ynummer As Integer ' Nummer mit der auf mZeitreihen(i) zugegriffen wird, xnummer = Zeitreihe soll auf y-Achse
+    Private ts_x, ts_y As TimeSeries
 
     Public Overloads Shared Function Description() As String
-        Return "Plots the concurrent values of two time series against each other and least-squares fits a line to the resulting points."
+        Return "Plots the coincident values of two time series against each other, least-squares fits a line to the resulting points and calculates the linear correlation coefficient."
     End Function
 
     ''' <summary>
@@ -99,9 +96,6 @@ Friend Class Comparison
     ''' </summary>
     Public Overrides Sub ProcessAnalysis()
 
-        Dim i As Integer
-        Dim reihe1, reihe2 As TimeSeries
-
         ' Dialogaufruf zur Auswahl der x-Achse
         Dim dialog As New Comparison_Dialog(Me.mZeitreihen(0).Title, Me.mZeitreihen(1).Title)
 
@@ -113,40 +107,37 @@ Friend Class Comparison
         Dim xachse As String
         xachse = dialog.xAchse
         If (xachse = Me.mZeitreihen(0).Title) Then
-            xnummer = 0
-            ynummer = 1
+            Me.ts_x = Me.mZeitreihen(0)
+            Me.ts_y = Me.mZeitreihen(1)
         Else
-            xnummer = 1
-            ynummer = 0
+            Me.ts_x = Me.mZeitreihen(1)
+            Me.ts_y = Me.mZeitreihen(0)
         End If
 
-        'Reihen säubern und zuweisen
-        reihe1 = Me.mZeitreihen(xnummer).removeNaNValues()
-        reihe2 = Me.mZeitreihen(ynummer).removeNaNValues()
+        'Remove NaN values
+        Me.ts_x = Me.ts_x.removeNaNValues()
+        Me.ts_y = Me.ts_y.removeNaNValues()
 
-        'Nur gemeinsame Stützstellen nutzen
-        Me.ergebnisreihe = AnalysisHelper.getConcurrentValues(reihe1, reihe2)
+        'Synchronize
+        TimeSeries.Synchronize(Me.ts_x, Me.ts_y)
 
-        'Datume übernehmen
-        Me.datume = reihe1.Dates
+        Dim x_values As Double()
+        Dim y_values As Double()
+        x_values = Me.ts_x.Values.ToArray()
+        y_values = Me.ts_y.Values.ToArray()
 
         'Calculate linear regression
         Dim p As Tuple(Of Double, Double)
-        Dim xvalues(), yvalues() As Double
+        p = Fit.Line(x_values, y_values)
 
-        'store x and y values as separate arrays
-        ReDim xvalues(Me.ergebnisreihe.GetUpperBound(0))
-        ReDim yvalues(Me.ergebnisreihe.GetUpperBound(0))
-        For i = 0 To Me.ergebnisreihe.GetUpperBound(0)
-            xvalues(i) = Me.ergebnisreihe(i, 0)
-            yvalues(i) = Me.ergebnisreihe(i, 1)
-        Next
-
-        p = Fit.Line(xvalues, yvalues)
+        'Calculate correlation coefficient
+        Dim r As Double
+        r = MathNet.Numerics.GoodnessOfFit.R(y_values, x_values)
 
         'Store result values
-        Me.mResultValues.Add("alpha", p.Item1)
-        Me.mResultValues.Add("beta", p.Item2)
+        Me.mResultValues.Add("Linear regression intercept", p.Item1)
+        Me.mResultValues.Add("Linear regression slope", p.Item2)
+        Me.mResultValues.Add("Correlation coefficient", r)
 
     End Sub
 
@@ -155,32 +146,38 @@ Friend Class Comparison
     ''' </summary>
     Public Overrides Sub PrepareResults()
 
+        Dim x_values As Double() = Me.ts_x.Values.ToArray()
+        Dim y_values As Double() = Me.ts_y.Values.ToArray()
+        Dim x_title As String = Me.ts_x.Title
+        Dim y_title As String = Me.ts_y.Title
+        Dim x_unit As String = Me.ts_x.Unit
+        Dim y_unit As String = Me.ts_y.Unit
+
         'Text:
         '-----
-        Me.mResultText = "The analysis is based on " & Me.ergebnisreihe.GetLength(0) & " coincident data points between " & Me.datume(0).ToString(Helpers.DefaultDateFormat) & " and " & Me.datume(Me.datume.Count - 1).ToString(Helpers.DefaultDateFormat)
+        Me.mResultText = "The analysis is based on " & Me.ts_x.Length & " coincident data points between " & Me.ts_x.StartDate.ToString(Helpers.DefaultDateFormat) & " and " & Me.ts_x.EndDate.ToString(Helpers.DefaultDateFormat)
 
         'Diagramm:
         '---------
-        Dim i, length As Integer
         Dim series_points As Steema.TeeChart.Styles.Points
         Dim regression_line As Steema.TeeChart.Styles.Line
 
         Me.mResultChart = New Steema.TeeChart.Chart()
         Call Wave.formatChart(Me.mResultChart)
-        Me.mResultChart.Header.Text = "Comparison (" & Me.mZeitreihen(xnummer).Title & " / " & Me.mZeitreihen(ynummer).Title & ")"
+        Me.mResultChart.Header.Text = "Comparison (" & x_title & " / " & y_title & ")"
         Me.mResultChart.Legend.Visible = False
 
         'Achsen
         '------
-        Me.mResultChart.Axes.Bottom.Title.Caption = Me.mZeitreihen(xnummer).Title & " [" & Me.mZeitreihen(xnummer).Unit & "]"
+        Me.mResultChart.Axes.Bottom.Title.Caption = x_title & " [" & x_unit & "]"
         Me.mResultChart.Axes.Bottom.Labels.Style = Steema.TeeChart.AxisLabelStyle.Value
-        Me.mResultChart.Axes.Left.Title.Caption = Me.mZeitreihen(ynummer).Title & " [" & Me.mZeitreihen(ynummer).Unit & "]"
+        Me.mResultChart.Axes.Left.Title.Caption = y_title & " [" & y_unit & "]"
         Me.mResultChart.Axes.Left.Labels.Style = Steema.TeeChart.AxisLabelStyle.Value
 
         'Reihen
         '------
         series_points = New Steema.TeeChart.Styles.Points(Me.mResultChart)
-        series_points.Title = "Comparison " & Me.mZeitreihen(xnummer).Title & " - " & Me.mZeitreihen(ynummer).Title
+        series_points.Title = "Comparison " & x_title & " - " & y_title
         series_points.Pointer.Visible = True
         series_points.Pointer.Style = Steema.TeeChart.Styles.PointerStyles.Circle
         series_points.Pointer.HorizSize = 2
@@ -193,42 +190,26 @@ Friend Class Comparison
 
         'Plot points
         '-----------
-        Dim x, y, x_min, x_max As Double
-        Dim x_values, y_values As Double()
-
-        x_min = Double.MaxValue
-        x_max = Double.MinValue
-
-        length = Me.ergebnisreihe.GetUpperBound(0) - 1
-        ReDim x_values(length - 1)
-        ReDim y_values(length - 1)
-
-        'assign values to x and y arrays (faster)
-        For i = 0 To length - 1
-            x = ergebnisreihe(i, 0)
-            y = ergebnisreihe(i, 1)
-            x_values(i) = x
-            y_values(i) = y
-            If x < x_min Then x_min = x
-            If x > x_max Then x_max = x
-        Next
-
         series_points.Add(x_values, y_values)
 
         'Plot regression line
         '--------------------
-        Dim alpha, beta As Double
-        alpha = Me.mResultValues("alpha")
-        beta = Me.mResultValues("beta")
-        regression_line.Add(x_min, beta * x_min + alpha)
-        regression_line.Add(x_max, beta * x_max + alpha)
+        Dim intercept, slope As Double
+        Dim x_min, x_max As Double
+        x_min = x_values.Min()
+        x_max = x_values.Max()
+        intercept = Me.mResultValues("Linear regression intercept")
+        slope = Me.mResultValues("Linear regression slope")
+        regression_line.Add(x_min, slope * x_min + intercept)
+        regression_line.Add(x_max, slope * x_max + intercept)
 
         'Annotation
         '----------
         Dim anno As New Steema.TeeChart.Tools.Annotation(Me.mResultChart)
         anno.Position = Steema.TeeChart.Tools.AnnotationPositions.RightBottom
-        anno.Text = "Linear regression line: " & eol
-        anno.Text &= "y = " + Str(beta) + " * x + " + Str(alpha)
+        anno.Text = "Correlation coefficient: " & Str(Me.mResultValues("Correlation coefficient")) & eol
+        anno.Text &= "Linear regression line: " & eol
+        anno.Text &= "y = " + Str(slope) + " * x + " + Str(intercept)
 
     End Sub
 

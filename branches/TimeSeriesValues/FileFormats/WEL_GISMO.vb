@@ -1,5 +1,5 @@
 'Copyright (c) BlueM Dev Group
-'Website: http://bluemodel.org
+'Website: https://bluemodel.org
 '
 'All rights reserved.
 '
@@ -30,7 +30,7 @@ Imports System.IO
 ''' <summary>
 ''' Class for importing GISMO result files (*.CSV,*.ASC)
 ''' For information about GISMO refer to http://www.sydro.de/
-''' For file format info refer to http://wiki.bluemodel.org/index.php/WEL-Format_%28GISMO%29
+''' For file format info refer to https://wiki.bluemodel.org/index.php/WEL-Format_%28GISMO%29
 ''' </summary>
 Public Class WEL_GISMO
     Inherits FileFormatBase
@@ -199,7 +199,7 @@ Public Class WEL_GISMO
                 If Me.UseUnits Then
                     ts.Unit = sInfo.Unit
                 End If
-                ts.DataSource = New KeyValuePair(Of String, String)(Me.File, sInfo.Name)
+                ts.DataSource = New TimeSeriesDataSource(Me.File, sInfo.Name)
                 Me.FileTimeSeries.Add(sInfo.Index, ts)
             Next
 
@@ -285,8 +285,11 @@ Public Class WEL_GISMO
     ''' Checks, if the file is a GISMO result file (either *.CSV or *.ASC)
     ''' </summary>
     ''' <param name="file">file path</param>
-    ''' <returns></returns>
+    ''' <param name="IsSSV">Boolean indicates wther the file is semicolon-separated</param>
+    ''' <returns>True if the file is a GISMO result file</returns>
     Public Shared Function verifyFormat(ByVal file As String, Optional ByRef IsSSV As Boolean = False) As Boolean
+
+        Dim isGISMO As Boolean = False
 
         ' open file
         Dim FiStr As FileStream = New FileStream(file, FileMode.Open, IO.FileAccess.Read)
@@ -308,9 +311,7 @@ Public Class WEL_GISMO
             Zeile = Trim(Zeile)
             ' check if it contains the word "GISMO"
             If Zeile.Contains("GISMO") Then
-                Return True
-            Else
-                Return False
+                isGISMO = True
             End If
 
         ElseIf (Zeile.Contains("*WEL.ASC")) Then
@@ -323,9 +324,7 @@ Public Class WEL_GISMO
             Zeile = Trim(Zeile)
             ' check if it contains the word "GISMO"
             If Zeile.Contains("GISMO") Then
-                Return True
-            Else
-                Return False
+                isGISMO = True
             End If
 
         End If
@@ -333,6 +332,8 @@ Public Class WEL_GISMO
         ' close file
         StrRead.Close()
         FiStr.Close()
+
+        Return isGISMO
 
     End Function
 

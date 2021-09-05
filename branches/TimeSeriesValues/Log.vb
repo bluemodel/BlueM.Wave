@@ -1,5 +1,5 @@
 ﻿'Copyright (c) BlueM Dev Group
-'Website: http://bluemodel.org
+'Website: https://bluemodel.org
 '
 'All rights reserved.
 '
@@ -91,9 +91,10 @@ Friend Class Log
                 msg = Constants.eol & "  " & msg.Replace(Constants.eol, Constants.eol & "  ")
             End If
 
-            Log.logWindow.AddLogEntry(level, msg)
-
-            RaiseEvent LogMsgAdded(level, msg)
+            If Not IsNothing(logWindow) Then
+                Log.logWindow.AddLogEntry(level, msg)
+                RaiseEvent LogMsgAdded(level, msg)
+            End If
         End If
 
     End Sub

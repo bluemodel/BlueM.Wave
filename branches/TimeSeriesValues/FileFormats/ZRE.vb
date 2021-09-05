@@ -1,5 +1,5 @@
 'Copyright (c) BlueM Dev Group
-'Website: http://bluemodel.org
+'Website: https://bluemodel.org
 '
 'All rights reserved.
 '
@@ -30,7 +30,7 @@ Imports System.IO
 ''' <summary>
 ''' Klasse für das ZRE-Dateiformat
 ''' </summary>
-''' <remarks>Format siehe http://wiki.bluemodel.org/index.php/ZRE-Format</remarks>
+''' <remarks>Format siehe https://wiki.bluemodel.org/index.php/ZRE-Format</remarks>
 Public Class ZRE
     Inherits FileFormatBase
 
@@ -127,7 +127,7 @@ Public Class ZRE
         sInfo = Me.SeriesList(0)
         ts = New TimeSeries(sInfo.Name)
         ts.Unit = sInfo.Unit
-        ts.DataSource = New KeyValuePair(Of String, String)(Me.File, sInfo.Name)
+        ts.DataSource = New TimeSeriesDataSource(Me.File, sInfo.Name)
 
         'Einlesen
         '--------

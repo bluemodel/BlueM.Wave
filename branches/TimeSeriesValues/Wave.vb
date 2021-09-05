@@ -1,5 +1,5 @@
 'Copyright (c) BlueM Dev Group
-'Website: http://bluemodel.org
+'Website: https://bluemodel.org
 '
 'All rights reserved.
 '
@@ -178,11 +178,13 @@ Public Class Wave
     ''' <returns>True if a newer version is available</returns>
     Private Async Function CheckForUpdate() As Threading.Tasks.Task(Of Boolean)
 
+
         'get current version (only consider major, minor and build numbers, omitting the auto-generated revision number)
+        Dim v As Version = Reflection.Assembly.GetExecutingAssembly.GetName().Version()
         Dim currentVersion As New Version(String.Format("{0}.{1}.{2}",
-                                                        My.Application.Info.Version.Major,
-                                                        My.Application.Info.Version.Minor,
-                                                        My.Application.Info.Version.Build))
+                                                        v.Major,
+                                                        v.Minor,
+                                                        v.Build))
 
         'retrieve latest version number from server
         Dim client As New Net.Http.HttpClient()
@@ -413,15 +415,12 @@ Public Class Wave
 
             If (Not Me.selectionMade) Then
                 'Wenn noch nicht gezoomed wurde, Gesamtzeitraum auswählen
-                colorBandOverview.Start = Xmin.ToOADate()
-                colorBandOverview.End = Xmax.ToOADate()
                 Me.TChart1.Axes.Bottom.Minimum = Xmin.ToOADate()
                 Me.TChart1.Axes.Bottom.Maximum = Xmax.ToOADate()
-            Else
-                'Ansonsten Zoom auf Colorband übertragen
-                colorBandOverview.Start = Me.TChart1.Axes.Bottom.Minimum
-                colorBandOverview.End = Me.TChart1.Axes.Bottom.Maximum
             End If
+            'Extent auf Colorband übertragen
+            colorBandOverview.Start = Me.TChart1.Axes.Bottom.Minimum
+            colorBandOverview.End = Me.TChart1.Axes.Bottom.Maximum
 
         End If
 
@@ -476,15 +475,17 @@ Public Class Wave
             enddate = DateTime.FromOADate(Me.TChart1.Axes.Bottom.Maximum)
 
             'define axes to process
-            Dim axes As New Dictionary(Of Steema.TeeChart.Styles.VerticalAxis, Steema.TeeChart.Axis)
-            axes.Add(Steema.TeeChart.Styles.VerticalAxis.Left, Me.TChart1.Axes.Left)
-            axes.Add(Steema.TeeChart.Styles.VerticalAxis.Right, Me.TChart1.Axes.Right)
-            'TODO: auto-adjustment of custom axes
+            Dim axes As New List(Of Tuple(Of Steema.TeeChart.Styles.VerticalAxis, Steema.TeeChart.Axis))
+            axes.Add(New Tuple(Of Steema.TeeChart.Styles.VerticalAxis, Steema.TeeChart.Axis)(Steema.TeeChart.Styles.VerticalAxis.Left, Me.TChart1.Axes.Left))
+            axes.Add(New Tuple(Of Steema.TeeChart.Styles.VerticalAxis, Steema.TeeChart.Axis)(Steema.TeeChart.Styles.VerticalAxis.Right, Me.TChart1.Axes.Right))
+            For Each axis In Me.TChart1.Axes.Custom
+                axes.Add(New Tuple(Of Steema.TeeChart.Styles.VerticalAxis, Steema.TeeChart.Axis)(Steema.TeeChart.Styles.VerticalAxis.Custom, axis))
+            Next
 
             'loop over Y-axes
-            For Each kvp As KeyValuePair(Of Steema.TeeChart.Styles.VerticalAxis, Steema.TeeChart.Axis) In axes
-                axisType = kvp.Key
-                axis = kvp.Value
+            For Each t As Tuple(Of Steema.TeeChart.Styles.VerticalAxis, Steema.TeeChart.Axis) In axes
+                axisType = t.Item1
+                axis = t.Item2
 
                 'loop over series
                 Ymin = Double.MaxValue
@@ -493,8 +494,12 @@ Public Class Wave
                     title = ts.Title
 
                     'only process active series on the current axis
-                    If Me.TChart1.Series.WithTitle(title).Active _
-                        And Me.TChart1.Series.WithTitle(title).VertAxis = axisType Then
+                    If Me.TChart1.Series.WithTitle(title).Active And Me.TChart1.Series.WithTitle(title).VertAxis = axisType Then
+
+                        If axisType = Steema.TeeChart.Styles.VerticalAxis.Custom And ts.Unit <> axis.Tag Then
+                            'series is on a different custom axis, skip it
+                            Continue For
+                        End If
 
                         'get series min and max for current viewport
                         seriesMin = ts.Minimum(startdate, enddate)
@@ -902,12 +907,16 @@ Public Class Wave
             Dim datasources As New Dictionary(Of String, List(Of String)) '{file: [title, ...], ...}
             Dim file, title As String
             For Each ts As TimeSeries In Me.TimeSeriesDict.Values
-                file = ts.DataSource.Key
-                title = ts.DataSource.Value
-                If Not datasources.ContainsKey(file) Then
-                    datasources.Add(file, New List(Of String))
+                If ts.DataSource.Origin = TimeSeriesDataSource.OriginEnum.FileImport Then
+                    file = ts.DataSource.FilePath
+                    title = ts.DataSource.Title
+                    If Not datasources.ContainsKey(file) Then
+                        datasources.Add(file, New List(Of String))
+                    End If
+                    datasources(file).Add(title)
+                Else
+                    Log.AddLogEntry(Log.levels.warning, String.Format("Series '{0}' does not originate from a file import and could not be saved to the project file!", ts.Title))
                 End If
-                datasources(file).Add(title)
             Next
 
             'write the project file
@@ -921,6 +930,10 @@ Public Class Wave
                 strwrite.WriteLine("file=" & file)
                 For Each title In datasources(file)
                     'TODO: if a series was renamed, write the new title to the project file
+                    If title.Contains(":") Then
+                        'enclose titles containing ":" in quotes
+                        title = """" & title & """"
+                    End If
                     strwrite.WriteLine("    series=" & title)
                 Next
             Next
@@ -1507,8 +1520,13 @@ Public Class Wave
                                     bandStart = ts.Dates(i - 1)
                                 End If
                                 nanStart = ts.Dates(i)
+
+                                If i < ts.Length - 1 Then
+                                    Continue For
+                                End If
                             End If
-                        Else
+                        End If
+                        If isNaNPeriod Then
                             'test for end of NaN values
                             If Not Double.IsNaN(ts.Values(i)) Then
                                 bandEnd = ts.Dates(i)
@@ -1538,6 +1556,7 @@ Public Class Wave
                                 band.ResizeStart = False
                                 band.EndLinePen.Visible = False
                                 band.StartLinePen.Visible = False
+                                band.Tag = "NaN"
 
                                 'write to log
                                 Log.AddLogEntry(Log.levels.info, "Series contains NaN values from " & nanStart.ToString(Helpers.DateFormats("default")) & " to " & nanEnd.ToString(Helpers.DateFormats("default")))
@@ -1555,16 +1574,15 @@ Public Class Wave
             End If
         Else
             'Switch visualization of NaN values off
-            'Remove all tools of type ColorBand from TChart1
-            'TODO: Any user-defined ColorBands unfortunately get removed as well!
-            Dim colorbands As New List(Of Steema.TeeChart.Tools.ColorBand)
+            'Remove all tools of type ColorBand with Tag "NaN" from TChart1
+            Dim nanbands As New List(Of Steema.TeeChart.Tools.ColorBand)
             For Each tool As Steema.TeeChart.Tools.Tool In Me.TChart1.Tools
-                If tool.GetType Is GetType(Steema.TeeChart.Tools.ColorBand) Then
-                    colorbands.Add(tool)
+                If tool.GetType Is GetType(Steema.TeeChart.Tools.ColorBand) And tool.Tag = "NaN" Then
+                    nanbands.Add(tool)
                 End If
             Next
-            For Each colorband As Steema.TeeChart.Tools.ColorBand In colorbands
-                Me.TChart1.Tools.Remove(colorband)
+            For Each nanband As Steema.TeeChart.Tools.ColorBand In nanbands
+                Me.TChart1.Tools.Remove(nanband)
             Next
         End If
     End Sub
@@ -1598,17 +1616,30 @@ Public Class Wave
     Private Sub ToolStripButton_RemoveNaNValues_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_RemoveNaNValues.Click
 
         Dim dlgResult As DialogResult
-        Dim keys As List(Of Integer)
+        Dim ids As List(Of Integer)
         Dim ts As TimeSeries
 
         dlgResult = MsgBox("Delete all nodes with NaN values from all series?", MsgBoxStyle.OkCancel)
         If dlgResult = Windows.Forms.DialogResult.OK Then
-            keys = Me.TimeSeriesDict.Keys.ToList()
-            For Each key As Integer In keys
-                ts = Me.TimeSeriesDict(key)
+            ids = Me.TimeSeriesDict.Keys.ToList()
+            'loop over time series
+            For Each id As Integer In ids
+                'remove NaN values
+                ts = Me.TimeSeriesDict(id)
                 ts = ts.removeNaNValues()
-                Me.TimeSeriesDict(key) = ts
-                'TODO: remove NaN values from series in chart
+                Me.TimeSeriesDict(id) = ts
+                'replace values of series in chart
+                For Each series As Steema.TeeChart.Styles.Series In Me.TChart1.Series
+                    If series.Tag = id Then
+                        series.BeginUpdate()
+                        series.Clear()
+                        For Each kvp As KeyValuePair(Of DateTime, Double) In ts.Nodes
+                            series.Add(kvp.Key, kvp.Value)
+                        Next
+                        series.EndUpdate()
+                        Exit For
+                    End If
+                Next
             Next
         End If
     End Sub
@@ -1838,6 +1869,9 @@ Public Class Wave
             'Reset the Y axes to automatic
             Me.TChart1.Axes.Left.Automatic = True
             Me.TChart1.Axes.Right.Automatic = True
+            For Each axis As Steema.TeeChart.Axis In Me.TChart1.Axes.Custom
+                axis.Automatic = True
+            Next
             Me.TChart1.Refresh()
         End If
     End Sub
@@ -1849,20 +1883,21 @@ Public Class Wave
 
         'TODO: keep time series that cannot be reloaded from file!
 
-        Dim fileObj As FileFormatBase
-        Dim fileList As String
-        Dim Answer As MsgBoxResult
-
         'collect datasources
         Dim datasources As New Dictionary(Of String, List(Of String)) '{file: [title, ...], ...}
+        Dim seriesNotFromFiles As New List(Of String)
         Dim file, title As String
         For Each ts As TimeSeries In Me.TimeSeriesDict.Values
-            file = ts.DataSource.Key
-            title = ts.DataSource.Value
-            If Not datasources.ContainsKey(file) Then
-                datasources.Add(file, New List(Of String))
+            If ts.DataSource.Origin = TimeSeriesDataSource.OriginEnum.FileImport Then
+                file = ts.DataSource.FilePath
+                title = ts.DataSource.Title
+                If Not datasources.ContainsKey(file) Then
+                    datasources.Add(file, New List(Of String))
+                End If
+                datasources(file).Add(title)
+            Else
+                seriesNotFromFiles.Add(ts.Title)
             End If
-            datasources(file).Add(title)
         Next
 
         'Wenn keine Dateien vorhanden, abbrechen
@@ -1871,16 +1906,23 @@ Public Class Wave
             Exit Sub
         End If
 
-        'Dateiliste in Textform generieren
-        fileList = ""
-        For Each file In datasources.Keys
-            fileList &= file & eol
+
+        'Compose message
+        Dim msg As String = ""
+        If seriesNotFromFiles.Count > 0 Then
+            msg &= "The following series do not originate from a file import and will be lost!" & eol
+            For Each s As String In seriesNotFromFiles
+                msg &= "* " & s & eol
+            Next
+            msg &= eol
+        End If
+        msg &= "Delete all series and reload from the following files?" & eol
+        For Each s As String In datasources.Keys
+            msg &= "* " & s & eol
         Next
 
-        'Dialog anzeigen
-        Answer = MsgBox("Delete all series and reload from the following files?" & eol & eol & fileList, MsgBoxStyle.OkCancel, "Wave")
-
-        If (Answer = MsgBoxResult.Ok) Then
+        'Ask for user confirmation
+        If MsgBox(msg, MsgBoxStyle.OkCancel) = MsgBoxResult.Ok Then
 
             Log.AddLogEntry(Log.levels.info, "Reloading all series from their original datasources...")
 
@@ -1906,7 +1948,7 @@ Public Class Wave
                     Call Load_TEN(file)
                 Else
                     'get an instance of the file
-                    fileObj = FileFactory.getFileInstance(file)
+                    Dim fileObj As FileFormatBase = FileFactory.getFileInstance(file)
                     'select series for importing
                     For Each title In datasources(file)
                         success = success And fileObj.selectSeries(title)
@@ -2333,8 +2375,9 @@ Public Class Wave
         If Me.ChartMouseZoomDragging Then
             'complete the zoom process
             Me.ChartMouseZoomDragging = False
-            'determine start and end of zoom
-            If e.X <> Me.ChartMouseDragStartX Then
+            'only zoom if at least 5 pixels difference to start of drag operation
+            If Math.Abs(e.X - Me.ChartMouseDragStartX) > 5 Then
+                'determine start and end dates of zoom
                 Dim startValue, endValue As Double
                 If e.X > Me.ChartMouseDragStartX Then
                     startValue = TChart1.Series(0).XScreenToValue(Me.ChartMouseDragStartX)
@@ -2345,9 +2388,6 @@ Public Class Wave
                 End If
                 Log.AddLogEntry(Log.levels.debug, "Zoom end at " & Date.FromOADate(endValue))
 
-                'adjust colorband
-                Me.colorBandZoom.Active = False
-
                 'save the current zoom snapshot
                 Call Me.saveZoomSnapshot()
 
@@ -2357,6 +2397,8 @@ Public Class Wave
                 Me.selectionMade = True
                 Call Me.viewportChanged()
             End If
+            'hide colorband
+            Me.colorBandZoom.Active = False
         End If
         Me.TChart1.Cursor = Cursors.Default
     End Sub
@@ -2402,18 +2444,20 @@ Public Class Wave
         Me.TimeSeriesDict.Add(zre.Id, zre)
 
         'add datasource filename to Recently Used Files menu
-        'remove if already present
-        Dim i As Integer = 0
-        For Each _item As ToolStripItem In Me.ToolStripMenuItem_RecentlyUsedFiles.DropDownItems
-            If _item.Text = zre.DataSource.Key Then
-                Me.ToolStripMenuItem_RecentlyUsedFiles.DropDownItems.RemoveAt(i)
-                Exit For
-            End If
-            i += 1
-        Next
-        'add to top of list
-        Dim item As New ToolStripMenuItem(zre.DataSource.Key)
-        Me.ToolStripMenuItem_RecentlyUsedFiles.DropDownItems.Insert(0, item)
+        If zre.DataSource.Origin = TimeSeriesDataSource.OriginEnum.FileImport Then
+            'remove if already present
+            Dim i As Integer = 0
+            For Each _item As ToolStripItem In Me.ToolStripMenuItem_RecentlyUsedFiles.DropDownItems
+                If _item.Text = zre.DataSource.FilePath Then
+                    Me.ToolStripMenuItem_RecentlyUsedFiles.DropDownItems.RemoveAt(i)
+                    Exit For
+                End If
+                i += 1
+            Next
+            'add to top of list
+            Dim item As New ToolStripMenuItem(zre.DataSource.FilePath)
+            Me.ToolStripMenuItem_RecentlyUsedFiles.DropDownItems.Insert(0, item)
+        End If
 
         'Update dialogs
         Me.propDialog.Update(Me.TimeSeriesDict.Values.ToList)
@@ -2485,24 +2529,40 @@ Public Class Wave
                 ElseIf line.ToLower().StartsWith("series=") Then
                     'series
                     line = line.Split("=".ToCharArray(), 2)(1).Trim()
-                    If line.Contains(":") Then
-                        'series with title
-                        series = line.Split(":".ToCharArray(), 2)(0).Trim()
-                        title = line.Split(":".ToCharArray(), 2)(1).Replace("""", "").Trim()
+                    'series name may be enclosed in quotes and be followed by an optional title, which may also be enclosed in quotes
+                    'examples:
+                    'series
+                    'series:title
+                    '"se:ries":title
+                    '"se:ries":"title"
+                    Dim pattern As String
+                    If line.StartsWith("""") Then
+                        'series name is enclosed in quotes
+                        pattern = "^""([^""]+)""(:(.+))?$"
                     Else
-                        'series without title
-                        series = line.Trim()
-                        title = ""
+                        'no quotes around series name
+                        pattern = "^([^:]+)(:(.+))?$"
                     End If
-                    'add series to file
-                    If fileDict.ContainsKey(path) Then
-                        If Not fileDict(path).ContainsKey(series) Then
-                            fileDict(path).Add(series, title)
+                    Dim m As Match = Regex.Match(line, pattern)
+                    If m.Success Then
+                        series = m.Groups(1).Value.Trim()
+                        If m.Groups(2).Success Then
+                            title = m.Groups(3).Value.Replace("""", "").Trim() 'remove quotes around title here
                         Else
-                            Log.AddLogEntry(Log.levels.warning, "Series " & series & " is specified twice, the second mention will be ignored!")
+                            title = ""
+                        End If
+                        'add series to file
+                        If fileDict.ContainsKey(path) Then
+                            If Not fileDict(path).ContainsKey(series) Then
+                                fileDict(path).Add(series, title)
+                            Else
+                                Log.AddLogEntry(Log.levels.warning, "Series " & series & " is specified twice, the second mention will be ignored!")
+                            End If
+                        Else
+                            Log.AddLogEntry(Log.levels.warning, "Series " & series & " is not associated with a file and will be ignored!")
                         End If
                     Else
-                        Log.AddLogEntry(Log.levels.warning, "Series " & series & " is not associated with a file and will be ignored!")
+                        Log.AddLogEntry(Log.levels.warning, "Unable to parse series definition 'series=" & line & "', this series will be ignored!")
                     End If
 
                 ElseIf line.Contains("=") Then
@@ -2734,7 +2794,7 @@ Public Class Wave
                                 reihe.Unit = AxisWrapper.parseUnit(axistitle)
 
                                 'Save datasource
-                                reihe.DataSource = New KeyValuePair(Of String, String)(FileName, series.Title)
+                                reihe.DataSource = New TimeSeriesDataSource(FileName, series.Title)
 
                                 'Store the series internally
                                 Call Me.AddZeitreihe(reihe)
@@ -2905,9 +2965,6 @@ Public Class Wave
 
                         'Log
                         Call Log.AddLogEntry(Log.levels.info, "File '" & file & "' imported successfully!")
-
-                        'Datei abspeichern
-                        'Call Me.storeFileInfo(Datei)
 
                         'Log
                         Call Log.AddLogEntry(Log.levels.info, "Loading series in chart...")
@@ -3310,6 +3367,7 @@ Public Class Wave
             Me.TChart1.Axes.Left.Tag = unit
             Me.TChart1.Axes.Left.Visible = True
             Me.TChart1.Axes.Left.Automatic = True
+            Me.TChart1.Axes.Left.MaximumOffset = 5
             series.VertAxis = Steema.TeeChart.Styles.VerticalAxis.Left
 
         ElseIf Me.TChart1.Axes.Left.Tag = unit Then
@@ -3322,6 +3380,7 @@ Public Class Wave
             Me.TChart1.Axes.Right.Tag = unit
             Me.TChart1.Axes.Right.Visible = True
             Me.TChart1.Axes.Right.Automatic = True
+            Me.TChart1.Axes.Right.MaximumOffset = 5
             Me.TChart1.Axes.Right.Grid.Visible = False
             series.VertAxis = Steema.TeeChart.Styles.VerticalAxis.Right
 
@@ -3349,6 +3408,7 @@ Public Class Wave
                 axis.Tag = unit
                 axis.Visible = True
                 axis.Automatic = True
+                axis.MaximumOffset = 5
                 axis.Grid.Visible = False
                 'Place every second axis on the right
                 If number Mod 2 = 0 Then

@@ -24,25 +24,46 @@
 'TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, 
 'EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 '--------------------------------------------------------------------------------------------
-'
 ''' <summary>
-''' Class representing time series metadata
+''' A variable representing a time series that can be used in a mathematical expression for the Calculate analysis function
 ''' </summary>
-''' <remarks>Acts as a Dictionary(Of String, String)</remarks>
-Public Class Metadata
-    Inherits Dictionary(Of String, String)
+Friend Class CalculatorVariable
+
+    Private _varName As String
+    Private _ts As TimeSeries
 
     ''' <summary>
-    ''' Adds a list of keys with empty values
+    ''' The variable name
     ''' </summary>
-    ''' <param name="keys">A list of keys to add</param>
-    ''' <remarks>Values of keys that are already present are not overwritten</remarks>
-    Public Sub AddKeys(ByVal keys As List(Of String))
-        For Each key As String In keys
-            If Not Me.ContainsKey(key) Then
-                Me.Add(key, "")
-            End If
-        Next
+    Public ReadOnly Property varName As String
+        Get
+            Return _varName
+        End Get
+    End Property
+
+    ''' <summary>
+    ''' The time series associated with the variable
+    ''' </summary>
+    Public ReadOnly Property ts As TimeSeries
+        Get
+            Return _ts
+        End Get
+    End Property
+
+    ''' <summary>
+    ''' Constructor
+    ''' </summary>
+    ''' <param name="varName">the variable name</param>
+    ''' <param name="ts">the time series</param>
+    Public Sub New(varName As String, ts As TimeSeries)
+        _varName = varName
+        _ts = ts
     End Sub
 
+    ''' <summary>
+    ''' Returns a string representation of the variable consisting of variable name and time series title
+    ''' </summary>
+    Public Overrides Function ToString() As String
+        Return String.Format("{0}: {1}", varName, ts.Title)
+    End Function
 End Class

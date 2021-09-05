@@ -1,5 +1,5 @@
 'Copyright (c) BlueM Dev Group
-'Website: http://bluemodel.org
+'Website: https://bluemodel.org
 '
 'All rights reserved.
 '
@@ -36,10 +36,25 @@ Public Class Character
     ''' <summary>
     ''' Constructor
     ''' </summary>
-    ''' <param name="str">String to convert (only the first character is used)</param>
+    ''' <param name="str">String to convert (only the first character is used)
+    ''' Special strings such as " ", "space", "tab", "point", "comma" and "semicolon" are also possible
+    ''' </param>
     ''' <remarks></remarks>
     Public Sub New(ByVal str As String)
-        ToChar = Convert.ToChar(str)
+        Select Case str.Trim().ToLower()
+            Case "", "space"
+                _char = Chr(32)
+            Case "tab"
+                _char = Chr(9)
+            Case "point"
+                _char = Chr(46)
+            Case "comma"
+                _char = Chr(44)
+            Case "semicolon"
+                _char = Chr(59)
+            Case Else
+                _char = Convert.ToChar(str)
+        End Select
     End Sub
 
     ''' <summary>

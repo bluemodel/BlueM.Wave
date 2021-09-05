@@ -1,5 +1,5 @@
 'Copyright (c) BlueM Dev Group
-'Website: http://bluemodel.org
+'Website: https://bluemodel.org
 '
 'All rights reserved.
 '
@@ -223,7 +223,7 @@ Public Class PRMS
                 ts = New TimeSeries()
                 ts.Title = sInfo.Name
                 ts.Unit = sInfo.Unit
-                ts.DataSource = New KeyValuePair(Of String, String)(Me.File, sInfo.Name)
+                ts.DataSource = New TimeSeriesDataSource(Me.File, sInfo.Name)
                 Me.FileTimeSeries.Add(sInfo.Index, ts)
             Next
 

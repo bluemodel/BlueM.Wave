@@ -1,5 +1,5 @@
 'Copyright (c) BlueM Dev Group
-'Website: http://bluemodel.org
+'Website: https://bluemodel.org
 '
 'All rights reserved.
 '
@@ -63,7 +63,7 @@ Public Class TimeSeries
     Private _Objekt As String
     Private _Type As String
     Private _Interpretation As InterpretationEnum
-    Private _DataSource As KeyValuePair(Of String, String)
+    Private _DataSource As TimeSeriesDataSource
 
 #End Region 'Members
 
@@ -218,14 +218,14 @@ Public Class TimeSeries
     End Property
 
     ''' <summary>
-    ''' The original datasource of the time series consisting of file path and title
+    ''' The original datasource of the time series
     ''' </summary>
     ''' <returns></returns>
-    Public Property DataSource As KeyValuePair(Of String, String)
+    Public Property DataSource As TimeSeriesDataSource
         Get
             Return _DataSource
         End Get
-        Set(value As KeyValuePair(Of String, String))
+        Set(value As TimeSeriesDataSource)
             _DataSource = value
         End Set
     End Property
@@ -420,7 +420,7 @@ Public Class TimeSeries
     ''' <summary>
     ''' Constructor
     ''' </summary>
-    ''' <param name="title">Title of the times series</param>
+    ''' <param name="title">Title of the time series</param>
     Public Sub New(ByVal title As String)
         Me._id = TimeSeries.getUniqueID()
         Me._metadata = New Metadata()
@@ -429,7 +429,7 @@ Public Class TimeSeries
         Me._Objekt = "-"
         Me._Type = "-"
         Me._Interpretation = InterpretationEnum.Undefined
-        Me._DataSource = New KeyValuePair(Of String, String)("", "")
+        Me.DataSource = New TimeSeriesDataSource(TimeSeriesDataSource.OriginEnum.Undefined)
         Me._nodes = New SortedList(Of DateTime, Double)
     End Sub
 
@@ -1228,6 +1228,54 @@ Public Class TimeSeries
         Return value
 
     End Function
+
+    ''' <summary>
+    ''' Synchronizes two timeseries in-place by only keeping the common timestamnps
+    ''' </summary>
+    ''' <param name="ts1">First timeseries</param>
+    ''' <param name="ts2">Second timeseries</param>
+    Public Shared Sub Synchronize(ByRef ts1 As TimeSeries, ByRef ts2 As TimeSeries)
+
+        Dim t_common, t_diff As HashSet(Of DateTime)
+
+        t_diff = ts1.Dates.ToHashSet()
+        t_diff.SymmetricExceptWith(ts2.Dates)
+
+        If t_diff.Count = 0 Then
+            'nothing to do
+            Exit Sub
+        End If
+
+        t_common = ts1.Dates.ToHashSet()
+        t_common.Intersect(ts2.Dates)
+
+        'switch depending on whether there are more common or more different nodes
+        If t_diff.Count < t_common.Count Then
+            'remove the different nodes
+            For Each t As DateTime In t_diff
+                If ts1.Dates.Contains(t) Then
+                    ts1.Nodes.Remove(t)
+                End If
+                If ts2.Dates.Contains(t) Then
+                    ts2.Nodes.Remove(t)
+                End If
+            Next
+        Else
+            'clear all nodes and re-add only the common nodes
+            Dim ts1_nodes As SortedList(Of DateTime, Double) = ts1.Nodes
+            Dim ts2_nodes As SortedList(Of DateTime, Double) = ts2.Nodes
+            ts1.Nodes.Clear()
+            ts2.Nodes.Clear()
+            For Each t As DateTime In t_common
+                ts1.AddNode(t, ts1_nodes(t))
+                ts2.AddNode(t, ts2_nodes(t))
+            Next
+        End If
+
+        ts1._nodesCleaned = Nothing
+        ts2._nodesCleaned = Nothing
+
+    End Sub
 
 #End Region
 

@@ -1,9 +1,47 @@
 ﻿===============================================================
 BlueM.Wave Release Notes
 ===============================================================
+Version 1.9.7
+-------------
+CHANGED:
+* Analysis function "GoodnessOfFit": volumes, volume error and average values are now calculated based on only the timestamps common to both timeseries
+API-CHANGES:
+* New method Timeseries.Synchronize() for synchronizing two timeseries by only keeping the common timestamps
+
+Version 1.9.6
+-------------
+FIXED:
+* Prevent errors when trying to add log messages without a log window
+
+Version 1.9.5
+-------------
+NEW:
+* Analysis function "Comparison" now also calculates the linear correlation coefficient
+* Added the file extension ".ZRXP" (in addition to ".ZRX") for recognizing the ZRXP file format
+CHANGED:
+* Zooming by dragging the mouse in the main chart now requires at least 5 horizontal pixels in order to cause a zoom
+FIXED:
+* Fixed wording in Histogram analysis (non-exceedance instead of subceedance)
+
+Version 1.9.4
+-------------
+NEW:
+* Added a "Calculator" analysis function for performing mathematical operations on time series #722
+CHANGED:
+* Vertical axes now have a maximum offset of 5 by default
+FIXED:
+* Fixed wrong update notification and wrong information in the about box when Wave is executed from another application
+* Improved handling and display of time series datasource information
+* Fixed detection of a single NaN value at the end of a time series when visualizing NaN values
+* When auto-adjustment of Y-axes to current view is switched on, custom vertical axes are now also auto-adjusted
+* Switching the visualization of NaN values off no longer removes user-defined color bands
+* Removing NaN values from series now also updates the series displayed in the chart
+* Series titles containing ":" are now correctly enclosed in quotes when saving WVP files
+
 Version 1.9.3
 -------------
 FIXED:
+* Wave project files (WVP): allow specification of "tab" as separator and use of quotes for series names containing ":"
 * API: fixed error when calling FileFormatBase.getTimeSeries() more than once
 
 Version 1.9.2

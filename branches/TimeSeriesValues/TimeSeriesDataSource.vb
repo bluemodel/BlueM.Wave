@@ -25,81 +25,86 @@
 'EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 '--------------------------------------------------------------------------------------------
 '
-Imports System.Text.RegularExpressions
-
 ''' <summary>
-''' Wrapper around a Steema.TeeChart.Axis instance
-''' exposing selected properties
+''' Stores information about the datasource of a time series
 ''' </summary>
-Public Class AxisWrapper
-
-    Private _name As String
-    Private _TAxis As Steema.TeeChart.Axis
+Public Class TimeSeriesDataSource
 
     ''' <summary>
-    ''' Constructor
+    ''' Origin types
     ''' </summary>
-    ''' <param name="_name">One of "Left", "Right", "Custom 0", etc.</param>
-    ''' <param name="_axis">The axis instance to wrap around</param>
-    Public Sub New(ByVal _name As String, ByRef _axis As Steema.TeeChart.Axis)
-        Me._name = _name
-        Me._TAxis = _axis
+    Public Enum OriginEnum
+        FileImport
+        AnalysisResult
+        ManuallyEntered
+        Undefined
+    End Enum
+
+    Private _origin As OriginEnum
+    Private _filepath As String
+    Private _title As String
+
+    ''' <summary>
+    ''' Creates a new TimeSeriesDataSource instance with origin type FileImport
+    ''' </summary>
+    ''' <param name="filepath">path to the file from which the series was imported</param>
+    ''' <param name="title">title of the series in the file</param>
+    Public Sub New(filepath As String, title As String)
+        _origin = OriginEnum.FileImport
+        _filepath = filepath
+        _title = title
     End Sub
 
     ''' <summary>
-    ''' Axis Name, e.g. "Left", "Right", "Custom 0", etc.
+    ''' Creates a new TimeSeriesDataSource instance of a specific origin type (used for origins other than FileImport)
     ''' </summary>
-    Public ReadOnly Property Name As String
-        Get
-            Return Me._name
-        End Get
-    End Property
+    ''' <param name="origin">The origin type</param>
+    Public Sub New(origin As OriginEnum)
+        _origin = origin
+        _filepath = ""
+        _title = ""
+    End Sub
 
     ''' <summary>
-    ''' Axis Title as displayed in the chart
+    ''' The origin type of the time series
     ''' </summary>
     ''' <returns></returns>
-    Public Property Title As String
+    Public ReadOnly Property Origin As OriginEnum
         Get
-            Return Me._TAxis.Title.Text
+            Return _origin
         End Get
-        Set(value As String)
-            Me._TAxis.Title.Text = value
-        End Set
     End Property
 
     ''' <summary>
-    ''' Axis Unit, internally stored in the Tag property
+    ''' The path to the file from which the series was imported
     ''' </summary>
     ''' <returns></returns>
-    Public Property Unit As String
+    Public ReadOnly Property FilePath As String
         Get
-            Return Me._TAxis.Tag
+            Return _filepath
         End Get
-        Set(value As String)
-            Me._TAxis.Tag = value
-        End Set
     End Property
 
     ''' <summary>
-    ''' Attempts to extract a unit enclosed in square or round brackets from a text
+    ''' The title of the series in the file from which it was imported
     ''' </summary>
-    ''' <param name="text">Text from which to extract the unit</param>
-    ''' <returns>The extracted unit or if unsuccessful the original text</returns>
-    Public Shared Function parseUnit(ByVal text As String) As String
+    ''' <returns></returns>
+    Public ReadOnly Property Title As String
+        Get
+            Return _title
+        End Get
+    End Property
 
-        Dim m As Match
-        Dim unit As String
-
-        m = Regex.Match(text, ".*[\[\(](.+?)[\]\)].*")
-        If m.Success Then
-            unit = m.Groups(1).Value
-        Else
-            unit = text
-        End If
-
-        Return unit
-
+    ''' <summary>
+    ''' Returns a custom string representation of the datasource
+    ''' </summary>
+    ''' <returns></returns>
+    Public Overrides Function ToString() As String
+        Select Case _origin
+            Case OriginEnum.FileImport
+                Return String.Format("File: ""{0}"", Title: ""{1}""", _filepath, _title)
+            Case Else
+                Return [Enum].GetName(GetType(OriginEnum), _origin)
+        End Select
     End Function
-
 End Class
