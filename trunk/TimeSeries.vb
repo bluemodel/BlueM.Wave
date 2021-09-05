@@ -1229,6 +1229,54 @@ Public Class TimeSeries
 
     End Function
 
+    ''' <summary>
+    ''' Synchronizes two timeseries in-place by only keeping the common timestamnps
+    ''' </summary>
+    ''' <param name="ts1">First timeseries</param>
+    ''' <param name="ts2">Second timeseries</param>
+    Public Shared Sub Synchronize(ByRef ts1 As TimeSeries, ByRef ts2 As TimeSeries)
+
+        Dim t_common, t_diff As HashSet(Of DateTime)
+
+        t_diff = ts1.Dates.ToHashSet()
+        t_diff.SymmetricExceptWith(ts2.Dates)
+
+        If t_diff.Count = 0 Then
+            'nothing to do
+            Exit Sub
+        End If
+
+        t_common = ts1.Dates.ToHashSet()
+        t_common.Intersect(ts2.Dates)
+
+        'switch depending on whether there are more common or more different nodes
+        If t_diff.Count < t_common.Count Then
+            'remove the different nodes
+            For Each t As DateTime In t_diff
+                If ts1.Dates.Contains(t) Then
+                    ts1.Nodes.Remove(t)
+                End If
+                If ts2.Dates.Contains(t) Then
+                    ts2.Nodes.Remove(t)
+                End If
+            Next
+        Else
+            'clear all nodes and re-add only the common nodes
+            Dim ts1_nodes As SortedList(Of DateTime, Double) = ts1.Nodes
+            Dim ts2_nodes As SortedList(Of DateTime, Double) = ts2.Nodes
+            ts1.Nodes.Clear()
+            ts2.Nodes.Clear()
+            For Each t As DateTime In t_common
+                ts1.AddNode(t, ts1_nodes(t))
+                ts2.AddNode(t, ts2_nodes(t))
+            Next
+        End If
+
+        ts1._nodesCleaned = Nothing
+        ts2._nodesCleaned = Nothing
+
+    End Sub
+
 #End Region
 
 End Class

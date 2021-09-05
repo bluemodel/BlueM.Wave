@@ -139,7 +139,6 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Analysis\AnalysisFactory.vb" />
-    <Compile Include="Analysis\AnalysisHelper.vb" />
     <Compile Include="Analysis\AnnualStatistics.vb" />
     <Compile Include="Analysis\Calculator.vb" />
     <Compile Include="Analysis\ChangeTimestep.vb" />

@@ -32,8 +32,8 @@
 Friend Class DoubleSumCurve
     Inherits Analysis
 
+    Private ts_1, ts_2 As TimeSeries
     Private summe1(), summe2() As Double
-    Private datume As IList(Of DateTime)
 
     Public Overloads Shared Function Description() As String
         Return "Plots the cumulative coincident values of two time series against each other and adds a 45° line to the resulting plot."
@@ -96,31 +96,28 @@ Friend Class DoubleSumCurve
     ''' </summary>
     Public Overrides Sub ProcessAnalysis()
 
-        Dim i As Integer
-        Dim zre1, zre2 As TimeSeries
-        Dim values(,) As Double
+        Dim i, n As Integer
 
-        zre1 = Me.mZeitreihen(0).removeNaNValues()
-        zre2 = Me.mZeitreihen(1).removeNaNValues()
+        'assign timeseries and remove NaN values
+        Me.ts_1 = Me.mZeitreihen(0).removeNaNValues()
+        Me.ts_2 = Me.mZeitreihen(1).removeNaNValues()
 
-        'nur gemeinsame Stützstellen nutzen
-        values = AnalysisHelper.getConcurrentValues(zre1, zre2)
+        'synchronize
+        TimeSeries.Synchronize(Me.ts_1, Me.ts_2)
 
-        ReDim Me.summe1(values.GetUpperBound(0))
-        ReDim Me.summe2(values.GetUpperBound(0))
+        n = Me.ts_1.Length
+
+        ReDim Me.summe1(n - 1)
+        ReDim Me.summe2(n - 1)
 
         'Erster Wert
-        Me.summe1(0) = values(0, 0)
-        Me.summe2(0) = values(0, 1)
-
+        Me.summe1(0) = Me.ts_1.FirstValue
+        Me.summe2(0) = Me.ts_2.FirstValue
         'Weitere Werte kumulativ aufsummieren
-        For i = 1 To values.GetUpperBound(0)
-            Me.summe1(i) = values(i, 0) + summe1(i - 1)
-            Me.summe2(i) = values(i, 1) + summe2(i - 1)
+        For i = 1 To n - 1
+            Me.summe1(i) = Me.summe1(i - 1) + Me.ts_1.Values(i)
+            Me.summe2(i) = Me.summe2(i - 1) + Me.ts_2.Values(i)
         Next
-
-        'Datume übernehmen
-        datume = zre1.Dates
 
     End Sub
 
@@ -131,7 +128,7 @@ Friend Class DoubleSumCurve
 
         'Text:
         '-----
-        Me.mResultText = "The analysis is based on " & Me.summe1.Length & " coincident data points between " & Me.datume(0).ToString(Helpers.DefaultDateFormat) & " and " & Me.datume(Me.datume.Count - 1).ToString(DefaultDateFormat)
+        Me.mResultText = "The analysis is based on " & Me.summe1.Length & " coincident data points between " & Me.ts_1.StartDate.ToString(Helpers.DefaultDateFormat) & " and " & Me.ts_1.EndDate.ToString(DefaultDateFormat)
 
         'Diagramm:
         '---------
@@ -139,20 +136,20 @@ Friend Class DoubleSumCurve
 
         Me.mResultChart = New Steema.TeeChart.Chart()
         Call Wave.formatChart(Me.mResultChart)
-        Me.mResultChart.Header.Text = "Double Sum Curve (" & Me.mZeitreihen(0).Title & " / " & Me.mZeitreihen(1).Title & ")"
+        Me.mResultChart.Header.Text = "Double Sum Curve (" & Me.ts_1.Title & " / " & Me.ts_2.Title & ")"
         Me.mResultChart.Legend.Visible = False
 
         'Achsen
         '------
-        Me.mResultChart.Axes.Bottom.Title.Caption = "Sum " & Me.mZeitreihen(0).Title
+        Me.mResultChart.Axes.Bottom.Title.Caption = "Sum " & Me.ts_1.Title
         Me.mResultChart.Axes.Bottom.Labels.Style = Steema.TeeChart.AxisLabelStyle.Value
-        Me.mResultChart.Axes.Left.Title.Caption = "Sum " & Me.mZeitreihen(1).Title
+        Me.mResultChart.Axes.Left.Title.Caption = "Sum " & Me.ts_2.Title
         Me.mResultChart.Axes.Left.Labels.Style = Steema.TeeChart.AxisLabelStyle.Value
 
         'Reihen
         '------
         doppelsumme = New Steema.TeeChart.Styles.Line(Me.mResultChart)
-        doppelsumme.Title = "Double Sum Curve " & Me.mZeitreihen(0).Title & " - " & Me.mZeitreihen(1).Title
+        doppelsumme.Title = "Double Sum Curve " & Me.ts_1.Title & " - " & Me.ts_2.Title
         doppelsumme.Pointer.Visible = True
         doppelsumme.Pointer.Style = Steema.TeeChart.Styles.PointerStyles.Circle
         doppelsumme.Pointer.HorizSize = 2
