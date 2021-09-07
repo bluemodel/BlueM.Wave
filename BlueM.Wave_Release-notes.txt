@@ -1,6 +1,12 @@
 ﻿===============================================================
 BlueM.Wave Release Notes
 ===============================================================
+Version 1.10.0
+--------------
+NEW:
+* Time Series Values: a new window for displaying time series values as a table (experimental)
+  * optionally displays markers in main chart for currently selected rows in table
+
 Version 1.9.7
 -------------
 CHANGED:
