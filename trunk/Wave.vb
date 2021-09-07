@@ -41,6 +41,7 @@ Public Class Wave
     'Dialogs
     Private WithEvents propDialog As PropertiesDialog
     Private WithEvents axisDialog As AxisDialog
+    Private WithEvents valuesDialog As TimeSeriesValuesDialog
 
     'Eigenschaften
     '#############
@@ -135,6 +136,9 @@ Public Class Wave
         End If
         If IsNothing(axisDialog) Then
             axisDialog = New AxisDialog()
+        End If
+        If IsNothing(valuesDialog) Then
+            valuesDialog = New TimeSeriesValuesDialog()
         End If
 
         'Zoom history
@@ -695,6 +699,7 @@ Public Class Wave
 
         'Update dialogs
         Me.propDialog.Update(Me.TimeSeriesDict.Values.ToList)
+        Me.valuesDialog.Update(Me.TimeSeriesDict.Values.ToList)
     End Sub
 
     ''' <summary>
@@ -756,6 +761,9 @@ Public Class Wave
                 Exit For
             End If
         Next
+
+        'update dialogs
+        Me.valuesDialog.Update(Me.TimeSeriesDict.Values.ToList)
 
     End Sub
 
@@ -830,6 +838,7 @@ Public Class Wave
         'Update dialogs
         Call Me.updateAxisDialog()
         Call propDialog.Update(Me.TimeSeriesDict.Values.ToList)
+        Call valuesDialog.Update(Me.TimeSeriesDict.Values.ToList)
 
         'Update window title
         Me.Text = "BlueM.Wave"
@@ -946,7 +955,7 @@ Public Class Wave
 
     'Zeitreihen Export
     '*****************
-    Private Sub ExportZeitreihe_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem_ExportSeries.Click
+    Private Sub ExportZeitreihe_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem_ExportSeries.Click, valuesDialog.Button_ExportValues_Clicked
         Call ExportZeitreihe()
     End Sub
 
@@ -1077,6 +1086,83 @@ Public Class Wave
         Call Me.updateAxisDialog()
         Me.axisDialog.Show()
         Me.axisDialog.BringToFront()
+    End Sub
+
+    ''' <summary>
+    ''' Shows markers at the given timestamps in the chart
+    ''' </summary>
+    ''' <param name="timestamps">List of timestamps for which to show markers</param>
+    Private Sub showMarkers(timestamps As List(Of DateTime)) Handles valuesDialog.SelectedRowsChanged
+
+        'Remove any existing marker series
+        For i As Integer = Me.TChart1.Series.Count - 1 To 0 Step -1
+            Try
+                If CType(Me.TChart1.Series(i).Tag, String) = "_markers" Then
+                    Me.TChart1.Series.RemoveAt(i)
+                End If
+            Catch ex As Exception
+                Log.AddLogEntry(Log.levels.debug, ex.Message)
+            End Try
+        Next
+        Me.TChart1.Refresh()
+
+        If timestamps.Count = 0 Then
+            Exit Sub
+        End If
+
+        'loop over series and create a marker series for each
+        For i As Integer = 0 To Me.TChart1.Series.Count - 1
+            Try
+                Dim series As Steema.TeeChart.Styles.Series = Me.TChart1.Series(i)
+                If Not series.Active Then
+                    'do not display markers for inactive series
+                    Continue For
+                End If
+                'collect all non-NaN values to display as markers
+                Dim markerValues As New Dictionary(Of DateTime, Double)
+                For Each t As DateTime In timestamps
+                    Dim index As Integer = series.XValues.IndexOf(t.ToOADate)
+                    If index <> -1 Then
+                        If Not series.IsNull(index) Then
+                            markerValues.Add(t, series.YValues(index))
+                        End If
+                    End If
+                Next
+                If markerValues.Count > 0 Then
+                    'create a new point series for markers
+                    Dim markers As New Steema.TeeChart.Styles.Points(Me.TChart1.Chart)
+                    markers.ShowInLegend = False
+                    markers.Title = series.Title & " (selection)"
+                    markers.Tag = "_markers"
+                    markers.VertAxis = series.VertAxis
+                    If series.VertAxis = Steema.TeeChart.Styles.VerticalAxis.Custom Then
+                        markers.CustomVertAxis = series.CustomVertAxis
+                    End If
+                    markers.Pointer.Style = Steema.TeeChart.Styles.PointerStyles.Circle
+                    markers.Pointer.Brush.Visible = False
+                    markers.Color = series.Color
+                    markers.Pointer.Color = series.Color
+                    markers.Pointer.Pen.Color = series.Color
+                    markers.Pointer.Pen.Width = 2
+                    markers.Marks.Visible = True
+                    markers.Marks.Style = Steema.TeeChart.Styles.MarksStyles.Value
+                    'markers.Marks.OnTop = True 'causes crash when markers are panned out of view on the left
+                    markers.Marks.Callout.Visible = True
+                    markers.Marks.FontSeriesColor = True
+                    markers.Marks.Arrow.Visible = False
+                    markers.Marks.Callout.Visible = False
+                    markers.Marks.Callout.InflateMargins = False
+                    markers.Marks.ArrowLength = 5
+                    'add data points
+                    For Each t As DateTime In markerValues.Keys
+                        markers.Add(t, markerValues(t))
+                    Next
+                End If
+            Catch ex As Exception
+                Log.AddLogEntry(Log.levels.debug, ex.Message)
+            End Try
+        Next
+
     End Sub
 
     ''' <summary>
@@ -1371,6 +1457,14 @@ Public Class Wave
         propDialog.Update(Me.TimeSeriesDict.Values.ToList)
         propDialog.Show()
         propDialog.BringToFront()
+    End Sub
+
+    ''' <summary>
+    ''' Timeseries Values button clicked
+    ''' </summary>
+    Private Sub ToolStripButton_TimeseriesValues_Click(sender As Object, e As EventArgs) Handles ToolStripButton_TimeseriesValues.Click
+        valuesDialog.Show()
+        valuesDialog.BringToFront()
     End Sub
 
     ''' <summary>
@@ -2367,6 +2461,7 @@ Public Class Wave
 
         'Update dialogs
         Me.propDialog.Update(Me.TimeSeriesDict.Values.ToList)
+        Me.valuesDialog.Update(Me.TimeSeriesDict.Values.ToList)
     End Sub
 
     ''' <summary>
@@ -3255,6 +3350,7 @@ Public Class Wave
 
         'Update dialogs
         Me.propDialog.Update(Me.TimeSeriesDict.Values.ToList)
+        Me.valuesDialog.Update(Me.TimeSeriesDict.Values.ToList)
 
     End Sub
 
