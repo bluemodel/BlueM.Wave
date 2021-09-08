@@ -106,6 +106,7 @@ Friend Class ChangeTimestep
         Dim timesteptype As TimeSeries.TimeStepTypeEnum
         Dim timestepinterval As Integer
         Dim startdate As DateTime
+        Dim ignoreNaN As Boolean
 
         ts = Me.mZeitreihen(0).Clone()
 
@@ -118,6 +119,12 @@ Friend Class ChangeTimestep
             timesteptype = dlg.ComboBox_TimestepType.SelectedItem
             timestepinterval = dlg.NumericUpDown_TimestepInterval.Value
             startdate = dlg.DateTimePicker_Start.Value
+            ignoreNaN = dlg.CheckBox_IgnoreNaN.Checked
+
+            'if ignoreNaN is set, remove all NaN values from time series
+            If ignoreNaN = True Then
+                ts = ts.removeNaNValues()
+            End If
 
             'change timestep
             ts.Interpretation = interpretation

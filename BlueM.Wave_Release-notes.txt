@@ -1,6 +1,11 @@
 ﻿===============================================================
 BlueM.Wave Release Notes
 ===============================================================
+Version 1.10.1
+--------------
+NEW:
+* Analysis function "ChangeTimestep": added an option for ignoring NaN values
+
 Version 1.10.0
 --------------
 NEW:

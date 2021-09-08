@@ -33,6 +33,8 @@ Partial Class ChangeTimestepDialog
         Me.NumericUpDown_TimestepInterval = New System.Windows.Forms.NumericUpDown()
         Me.DateTimePicker_Start = New System.Windows.Forms.DateTimePicker()
         Me.Label4 = New System.Windows.Forms.Label()
+        Me.CheckBox_IgnoreNaN = New System.Windows.Forms.CheckBox()
+        Me.Label_IgnoreNaN = New System.Windows.Forms.Label()
         Me.TableLayoutPanel1.SuspendLayout()
         CType(Me.NumericUpDown_TimestepInterval, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
@@ -77,7 +79,7 @@ Partial Class ChangeTimestepDialog
         Me.Label2.Location = New System.Drawing.Point(12, 9)
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(72, 13)
-        Me.Label2.TabIndex = 4
+        Me.Label2.TabIndex = 0
         Me.Label2.Text = "Interpretation:"
         '
         'ComboBox_Interpretation
@@ -89,7 +91,7 @@ Partial Class ChangeTimestepDialog
         Me.ComboBox_Interpretation.Location = New System.Drawing.Point(108, 6)
         Me.ComboBox_Interpretation.Name = "ComboBox_Interpretation"
         Me.ComboBox_Interpretation.Size = New System.Drawing.Size(284, 21)
-        Me.ComboBox_Interpretation.TabIndex = 5
+        Me.ComboBox_Interpretation.TabIndex = 1
         '
         'Label3
         '
@@ -97,7 +99,7 @@ Partial Class ChangeTimestepDialog
         Me.Label3.Location = New System.Drawing.Point(12, 35)
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(90, 13)
-        Me.Label3.TabIndex = 6
+        Me.Label3.TabIndex = 2
         Me.Label3.Text = "Timestep interval:"
         '
         'ComboBox_TimestepType
@@ -109,7 +111,7 @@ Partial Class ChangeTimestepDialog
         Me.ComboBox_TimestepType.Location = New System.Drawing.Point(168, 33)
         Me.ComboBox_TimestepType.Name = "ComboBox_TimestepType"
         Me.ComboBox_TimestepType.Size = New System.Drawing.Size(224, 21)
-        Me.ComboBox_TimestepType.TabIndex = 8
+        Me.ComboBox_TimestepType.TabIndex = 4
         '
         'NumericUpDown_TimestepInterval
         '
@@ -117,7 +119,7 @@ Partial Class ChangeTimestepDialog
         Me.NumericUpDown_TimestepInterval.Minimum = New Decimal(New Integer() {1, 0, 0, 0})
         Me.NumericUpDown_TimestepInterval.Name = "NumericUpDown_TimestepInterval"
         Me.NumericUpDown_TimestepInterval.Size = New System.Drawing.Size(54, 20)
-        Me.NumericUpDown_TimestepInterval.TabIndex = 9
+        Me.NumericUpDown_TimestepInterval.TabIndex = 3
         Me.NumericUpDown_TimestepInterval.Value = New Decimal(New Integer() {1, 0, 0, 0})
         '
         'DateTimePicker_Start
@@ -127,7 +129,7 @@ Partial Class ChangeTimestepDialog
         Me.DateTimePicker_Start.Location = New System.Drawing.Point(108, 60)
         Me.DateTimePicker_Start.Name = "DateTimePicker_Start"
         Me.DateTimePicker_Start.Size = New System.Drawing.Size(121, 20)
-        Me.DateTimePicker_Start.TabIndex = 10
+        Me.DateTimePicker_Start.TabIndex = 6
         '
         'Label4
         '
@@ -135,8 +137,26 @@ Partial Class ChangeTimestepDialog
         Me.Label4.Location = New System.Drawing.Point(12, 63)
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(32, 13)
-        Me.Label4.TabIndex = 11
+        Me.Label4.TabIndex = 5
         Me.Label4.Text = "Start:"
+        '
+        'CheckBox_IgnoreNaN
+        '
+        Me.CheckBox_IgnoreNaN.AutoSize = True
+        Me.CheckBox_IgnoreNaN.Location = New System.Drawing.Point(108, 87)
+        Me.CheckBox_IgnoreNaN.Name = "CheckBox_IgnoreNaN"
+        Me.CheckBox_IgnoreNaN.Size = New System.Drawing.Size(15, 14)
+        Me.CheckBox_IgnoreNaN.TabIndex = 8
+        Me.CheckBox_IgnoreNaN.UseVisualStyleBackColor = True
+        '
+        'Label_IgnoreNaN
+        '
+        Me.Label_IgnoreNaN.AutoSize = True
+        Me.Label_IgnoreNaN.Location = New System.Drawing.Point(12, 88)
+        Me.Label_IgnoreNaN.Name = "Label_IgnoreNaN"
+        Me.Label_IgnoreNaN.Size = New System.Drawing.Size(65, 13)
+        Me.Label_IgnoreNaN.TabIndex = 7
+        Me.Label_IgnoreNaN.Text = "Ignore NaN:"
         '
         'ChangeTimestepDialog
         '
@@ -145,6 +165,8 @@ Partial Class ChangeTimestepDialog
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.CancelButton = Me.Cancel_Button
         Me.ClientSize = New System.Drawing.Size(404, 131)
+        Me.Controls.Add(Me.Label_IgnoreNaN)
+        Me.Controls.Add(Me.CheckBox_IgnoreNaN)
         Me.Controls.Add(Me.Label4)
         Me.Controls.Add(Me.DateTimePicker_Start)
         Me.Controls.Add(Me.NumericUpDown_TimestepInterval)
@@ -177,5 +199,6 @@ Partial Class ChangeTimestepDialog
     Friend WithEvents NumericUpDown_TimestepInterval As System.Windows.Forms.NumericUpDown
     Friend WithEvents DateTimePicker_Start As System.Windows.Forms.DateTimePicker
     Friend WithEvents Label4 As System.Windows.Forms.Label
-
+    Friend WithEvents CheckBox_IgnoreNaN As CheckBox
+    Friend WithEvents Label_IgnoreNaN As Label
 End Class
