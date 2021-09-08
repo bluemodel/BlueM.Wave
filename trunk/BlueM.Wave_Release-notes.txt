@@ -5,6 +5,8 @@ Version 1.10.1
 --------------
 NEW:
 * Analysis function "ChangeTimestep": added an option for ignoring NaN values
+FIXED:
+* Prevent OverflowException when displaying time series beginning with NaN values as a step function in the overview chart #748
 
 Version 1.10.0
 --------------

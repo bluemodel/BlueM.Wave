@@ -3258,6 +3258,8 @@ Public Class Wave
         Dim Line2 As New Steema.TeeChart.Styles.FastLine(Me.TChart2.Chart)
 
         'Do not paint NaN values
+        Line1.TreatNaNAsNull = True
+        Line2.TreatNaNAsNull = True
         Line1.TreatNulls = Steema.TeeChart.Styles.TreatNullsStyle.DoNotPaint
         Line2.TreatNulls = Steema.TeeChart.Styles.TreatNullsStyle.DoNotPaint
 
@@ -3274,24 +3276,28 @@ Public Class Wave
         Line2.Title = zre.Title
 
         'Stützstellen zur Serie hinzufügen
+        'Main chart
         Line1.BeginUpdate()
-        Line2.BeginUpdate()
-        Dim i As Integer = 0
-        For Each node As KeyValuePair(Of DateTime, Double) In zre.Nodes
-            Try
-                Line1.Add(node.Key, node.Value)
-                Line2.Add(node.Key, node.Value)
-            Catch ex As OverflowException
-                Log.AddLogEntry(Log.levels.error, String.Format("Unable to display date {0} in chart!", node.Key))
-            End Try
-            'Set NaN values to Null
-            If Double.IsNaN(node.Value) Then
-                Line1.SetNull(i)
-                Line2.SetNull(i)
-            End If
-            i += 1
-        Next
+        Line1.Add(zre.Dates.ToArray(), zre.Values.ToArray())
         Line1.EndUpdate()
+
+        'Overview chart
+        Line2.BeginUpdate()
+        If Double.IsNaN(zre.FirstValue) Then
+            'BUG 748: TeeChart throws an OverflowException when attemtping to display a FastLine that begins with a NaN value as a step function!
+            'To avoid this we generally do not add NaN values at the beginning of the time series to the FastLine
+            Dim isNaN As Boolean = True
+            For Each node As KeyValuePair(Of DateTime, Double) In zre.Nodes
+                If isNaN Then
+                    isNaN = isNaN And Double.IsNaN(node.Value)
+                End If
+                If Not isNaN Then
+                    Line2.Add(node.Key, node.Value)
+                End If
+            Next
+        Else
+            Line2.Add(zre.Dates.ToArray(), zre.Values.ToArray())
+        End If
         Line2.EndUpdate()
 
         'Determine total number of NaN-values and write to log
