@@ -8,6 +8,7 @@ NEW:
 FIXED:
 * Prevent OverflowException when displaying time series beginning with a NaN value as a step function in the overview chart #748
 * Prevent DateTimePicker in TimeSeriesValues window from attempting to display a date outside of the supported range
+* Fix counter display in TimeSeriesValues window
 * Ensure that nodes outside of the supported date range are properly removed when importing a series and improve logging thereof
 
 Version 1.10.0
