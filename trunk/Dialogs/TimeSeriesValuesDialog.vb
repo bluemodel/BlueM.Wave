@@ -140,7 +140,10 @@ Friend Class TimeSeriesValuesDialog
 
         'set first date as initial value for DateTimePicker
         If timestamps.Count > 0 Then
-            DateTimePicker_JumpDate.Value = timestamps.First
+            Dim firstDate As DateTime = timestamps.First
+            If firstDate < DateTimePicker.MinimumDateTime Then firstDate = DateTimePicker.MinimumDateTime
+            If firstDate > DateTimePicker.MaximumDateTime Then firstDate = DateTimePicker.MaximumDateTime
+            DateTimePicker_JumpDate.Value = firstDate
         End If
 
         If Me.Visible Then
