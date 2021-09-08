@@ -3226,14 +3226,31 @@ Public Class Wave
     ''' <remarks>saves and then display the time series</remarks>
     Public Sub Import_Series(ByVal zre As TimeSeries, Optional ByVal Display As Boolean = True)
 
-        'Cut timeseries if necessary
+        'Remove nodes if necessary
         If zre.StartDate < Constants.minOADate Then
-            Log.AddLogEntry(Log.levels.warning, String.Format("Unable to display timeseries before {0}, cutting!", Constants.minOADate))
-            zre.Cut(Constants.minOADate, zre.EndDate)
+            Log.AddLogEntry(Log.levels.warning, $"Unable to display timeseries before {Constants.minOADate}, removing nodes...")
+            Dim dates As List(Of DateTime) = zre.Dates.ToList()
+            For Each t As DateTime In dates
+                If t < Constants.minOADate Then
+                    zre.Nodes.Remove(t)
+                    Log.AddLogEntry(Log.levels.warning, $"Removed node at {t.ToString(Helpers.DefaultDateFormat)}!")
+                Else
+                    Exit For
+                End If
+            Next
         End If
         If zre.EndDate > Constants.maxOADate Then
-            Log.AddLogEntry(Log.levels.warning, String.Format("Unable to display timeseries after {0}, cutting!", Constants.maxOADate))
-            zre.Cut(zre.StartDate, Constants.maxOADate)
+            Log.AddLogEntry(Log.levels.warning, $"Unable to display timeseries after {Constants.maxOADate}, removing nodes...")
+            Dim dates As List(Of DateTime) = zre.Dates.ToList()
+            dates.Reverse()
+            For Each t As DateTime In dates
+                If t > Constants.maxOADate Then
+                    zre.Nodes.Remove(t)
+                    Log.AddLogEntry(Log.levels.warning, $"Removed node at {t.ToString(Helpers.DefaultDateFormat)}!")
+                Else
+                    Exit For
+                End If
+            Next
         End If
 
         'Serie abspeichen
