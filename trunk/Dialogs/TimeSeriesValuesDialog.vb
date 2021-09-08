@@ -199,7 +199,7 @@ Friend Class TimeSeriesValuesDialog
         Else
             startRecord = startIndex + 1
         End If
-        Me.Label_DisplayCount.Text = String.Format("Displaying records {0} to {1} of {2}", startRecord, startRecord + numRows, table.Rows.Count)
+        Me.Label_DisplayCount.Text = $"Displaying records {startRecord} to {startRecord + numRows - 1} of {table.Rows.Count}"
 
     End Sub
 
