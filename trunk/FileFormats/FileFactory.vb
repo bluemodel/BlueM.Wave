@@ -35,6 +35,7 @@ Public Module FileFactory
     Public Const FileExtCSV As String = ".CSV"
     Public Const FileExtREG As String = ".REG"
     Public Const FileExtDAT As String = ".DAT"
+    Public Const FileExtDFS0 As String = ".DFS0" 'DHI MIKE Dfs0 file format
     Public Const FileExtSMB As String = ".SMB"
     Public Const FileExtUVF As String = ".UVF"
     Public Const FileExtWEL As String = ".WEL"
@@ -112,6 +113,9 @@ Public Module FileFactory
                 Else
                     Throw New Exception("ERROR: File format not recognized! The file is neither a HYDRO_AS-2D file nor a Hystem-Extran rainfall file!")
                 End If
+
+            Case FileExtDFS0
+                FileInstance = New DFS0(file)
 
             Case FileExtREG
                 'Check file format

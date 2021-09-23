@@ -256,6 +256,7 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="FileFormats\ASC.vb" />
+    <Compile Include="FileFormats\DFS0.vb" />
     <Compile Include="FileFormats\BIN.vb" />
     <Compile Include="FileFormats\CSV.vb" />
     <Compile Include="FileFormats\FileFactory.vb" />
@@ -413,6 +414,7 @@
     <Content Include="BlueM.Wave_Release-notes.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="lib\DHI.DFS\DHI.DFS.license.txt" />
     <Content Include="lib\Ionic.Zip\Ionic.Zip.dll" />
     <Content Include="lib\Ionic.Zip\Ionic.Zip.license.txt" />
     <Content Include="lib\Ionic.Zip\Ionic.Zip.xml" />
@@ -488,11 +490,17 @@
     <Content Include="Resources\zoom_previous.png" />
     <Content Include="Resources\zoom_world.png" />
   </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="DHI.DFS">
+      <Version>19.1.1</Version>
+    </PackageReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <PropertyGroup>
     <PostBuildEvent>copy $(ProjectDir)lib\MathNet\MathNet.Numerics.license.txt $(TargetDir)MathNet.Numerics.license.txt
 copy $(ProjectDir)lib\MathParserNet\MathParserNet.license.html $(TargetDir)MathParserNet.license.html
 copy $(ProjectDir)lib\Ionic.Zip\Ionic.Zip.license.txt $(TargetDir)Ionic.Zip.license.txt
+copy $(ProjectDir)lib\DHI.DFS\DHI.DFS.license.txt $(TargetDir)DHI.DFS.license.txt
 copy $(ProjectDir)lib\SQLite\$(PlatformName)\SQLite.Interop.dll $(TargetDir)SQLite.Interop.dll</PostBuildEvent>
   </PropertyGroup>
 </Project>

@@ -1,6 +1,11 @@
 ﻿===============================================================
 BlueM.Wave Release Notes
 ===============================================================
+Version 1.10.2
+--------------
+NEW:
+* Added support for reading the DHI MIKE Dfs0 file format
+
 Version 1.10.1
 --------------
 NEW:
