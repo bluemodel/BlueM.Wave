@@ -35,7 +35,7 @@ Partial Class ImportDiag
         Me.Button_EncodingAutodetect = New System.Windows.Forms.Button()
         Me.ComboBox_Encoding = New System.Windows.Forms.ComboBox()
         Me.Label_File = New System.Windows.Forms.Label()
-        Me.Label1 = New System.Windows.Forms.Label()
+        Me.Label_Encoding = New System.Windows.Forms.Label()
         Me.TextBox_Preview = New System.Windows.Forms.RichTextBox()
         Me.ComboBox_Separator = New System.Windows.Forms.ComboBox()
         Me.Button_OK = New System.Windows.Forms.Button()
@@ -64,6 +64,7 @@ Partial Class ImportDiag
         Me.ComboBox_Dateformat = New System.Windows.Forms.ComboBox()
         Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
         SplitContainer1 = New System.Windows.Forms.SplitContainer()
+        CType(SplitContainer1, System.ComponentModel.ISupportInitialize).BeginInit()
         SplitContainer1.Panel1.SuspendLayout()
         SplitContainer1.Panel2.SuspendLayout()
         SplitContainer1.SuspendLayout()
@@ -176,7 +177,7 @@ Partial Class ImportDiag
         Me.GroupBox_Preview.Controls.Add(Me.Button_EncodingAutodetect)
         Me.GroupBox_Preview.Controls.Add(Me.ComboBox_Encoding)
         Me.GroupBox_Preview.Controls.Add(Me.Label_File)
-        Me.GroupBox_Preview.Controls.Add(Me.Label1)
+        Me.GroupBox_Preview.Controls.Add(Me.Label_Encoding)
         Me.GroupBox_Preview.Controls.Add(Me.TextBox_Preview)
         Me.GroupBox_Preview.Location = New System.Drawing.Point(0, 0)
         Me.GroupBox_Preview.Margin = New System.Windows.Forms.Padding(0)
@@ -215,15 +216,15 @@ Partial Class ImportDiag
         Me.Label_File.TabIndex = 0
         Me.Label_File.Text = "File:"
         '
-        'Label1
+        'Label_Encoding
         '
-        Me.Label1.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(9, 196)
-        Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(55, 13)
-        Me.Label1.TabIndex = 1
-        Me.Label1.Text = "Encoding:"
+        Me.Label_Encoding.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.Label_Encoding.AutoSize = True
+        Me.Label_Encoding.Location = New System.Drawing.Point(9, 196)
+        Me.Label_Encoding.Name = "Label_Encoding"
+        Me.Label_Encoding.Size = New System.Drawing.Size(55, 13)
+        Me.Label_Encoding.TabIndex = 1
+        Me.Label_Encoding.Text = "Encoding:"
         '
         'TextBox_Preview
         '
@@ -537,6 +538,7 @@ Partial Class ImportDiag
         Me.Text = "Import series from file"
         SplitContainer1.Panel1.ResumeLayout(False)
         SplitContainer1.Panel2.ResumeLayout(False)
+        CType(SplitContainer1, System.ComponentModel.ISupportInitialize).EndInit()
         SplitContainer1.ResumeLayout(False)
         Me.GroupBox_Selection.ResumeLayout(False)
         Me.GroupBox_Selection.PerformLayout()
@@ -597,6 +599,6 @@ Partial Class ImportDiag
     Friend WithEvents PictureBox_DateFormatHelp As System.Windows.Forms.PictureBox
     Friend WithEvents ToolTip1 As System.Windows.Forms.ToolTip
     Friend WithEvents ComboBox_Encoding As ComboBox
-    Friend WithEvents Label1 As Label
+    Friend WithEvents Label_Encoding As Label
     Friend WithEvents Button_EncodingAutodetect As Button
 End Class

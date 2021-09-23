@@ -50,6 +50,7 @@ Public MustInherit Class FileFormatBase
         WVP = 13
         BIN = 14
         PRMS_OUT = 15
+        DFS0 = 16
     End Enum
 
     ''' <summary>
@@ -60,6 +61,7 @@ Public MustInherit Class FileFormatBase
             "All files (*.*)|*.*|" &
             "Text files (*.txt)|*.txt|" &
             "CSV files (*.csv)|*.csv|" &
+            "DHI MIKE Dfs0 files (*.dfs0)|*.dfs0|" &
             "HYDRO_AS-2D files (*.dat)|*.dat|" &
             "Hystem Extran files (*.dat)|*.dat|" &
             "PRMS output files (*.out)|*.out|" &

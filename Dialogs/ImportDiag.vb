@@ -173,9 +173,10 @@ Friend Class ImportDiag
         'Dateiname anzeigen
         Me.Label_File.Text = "File: " & Path.GetFileName(Me.datei.File)
 
-        'Workaround for binary files (SWMM5 OUT and SYDRO SQLite)
+        'Workaround for binary file formats
         If TypeOf Me.datei Is SWMM_OUT _
-            Or TypeOf Me.datei Is SydroSQLite Then
+            Or TypeOf Me.datei Is SydroSQLite _
+            Or TypeOf Me.datei Is DFS0 Then
 
             Me.TextBox_Preview.Text = Path.GetFileName(Me.datei.File) & " is a binary file." & eol & "Preview is not available!"
             'Disable all other fields
@@ -183,6 +184,9 @@ Friend Class ImportDiag
             Me.GroupBox_Columns.Enabled = False
             Me.GroupBox_DecimalMark.Enabled = False
             Me.GroupBox_Settings.Enabled = False
+            Me.Label_Encoding.Enabled = False
+            Me.ComboBox_Encoding.Enabled = False
+            Me.Button_EncodingAutodetect.Enabled = False
 
             Exit Sub
         End If
