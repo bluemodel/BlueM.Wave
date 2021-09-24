@@ -56,7 +56,7 @@ Friend Class Log
     Public Shared Event LogMsgAdded(level As Log.levels, msg As String)
 
     Private Sub New()
-        'attempt to reading loggingLevel from application settings
+        'attempt to read loggingLevel from application settings
         Try
             Log.level = [Enum].Parse(GetType(levels), My.Settings.loggingLevel)
         Catch ex As Exception
@@ -106,6 +106,7 @@ Friend Class Log
     ''' Log zurücksetzen (allen Text löschen)
     ''' </summary>
     Public Shared Sub ClearLog()
+        Log.logMessages.Clear()
         Log.logWindow.ClearLog()
         RaiseEvent LogMsgAdded(Log.levels.info, "")
     End Sub
