@@ -1556,7 +1556,7 @@ Public Class Wave
                                 band.Tag = "NaN"
 
                                 'write to log
-                                Log.AddLogEntry(Log.levels.info, $"Series contains NaN values from {nanStart.ToString(Helpers.DateFormats("default"))} to {nanEnd.ToString(Helpers.DateFormats("default"))}")
+                                Log.AddLogEntry(Log.levels.info, $"Series contains NaN values from {nanStart.ToString(Helpers.DefaultDateFormat)} to {nanEnd.ToString(Helpers.DefaultDateFormat)}")
                             End If
                         End If
                     Next
