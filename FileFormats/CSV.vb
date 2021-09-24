@@ -244,20 +244,18 @@ Public Class CSV
     ''' <summary>
     ''' Write one or multiple series to a CSV file
     ''' </summary>
-    ''' <param name="zres">time series to write to file</param>
+    ''' <param name="tsList">time series to write to file</param>
     ''' <param name="file">path to the csv file</param>
     ''' <param name="cInfo">
-    '''     optional CulturInfo object for setting the date time format, number format and the list separator.
+    '''     optional CultureInfo object for setting the date time format, number format and the list separator.
     '''     if not set, these settings are taken from CurrentCulture
     ''' </param>
     ''' <remarks></remarks>
-    Public Shared Sub Write_File(ByRef zres As List(Of TimeSeries), ByVal file As String, Optional cInfo As CultureInfo = Nothing)
+    Public Shared Sub Write_File(ByRef tsList As List(Of TimeSeries), ByVal file As String, Optional cInfo As CultureInfo = Nothing)
 
-        Dim data As SortedDictionary(Of DateTime, Double())
         Dim strwrite As StreamWriter
         Dim t As DateTime
-        Dim i As Integer
-        Dim v As Double
+        Dim value As String
         Dim line As String
 
         Dim separator As String
@@ -275,49 +273,44 @@ Public Class CSV
 
         Const quote As String = """"
 
-        'merge series into one data structure
-        data = New SortedDictionary(Of DateTime, Double())
-        i = 0
-        For Each zre As TimeSeries In zres
-            For Each node As KeyValuePair(Of DateTime, Double) In zre.Nodes
-                t = node.Key
-                v = node.Value
-                If Not data.Keys.Contains(t) Then
-                    ReDim data(t)(zres.Count - 1)
-                    'set all values to NaN (default double value is 0.)
-                    For j As Integer = 0 To zres.Count - 1
-                        data(t)(j) = Double.NaN
-                    Next
-                End If
-                data(t)(i) = v
-            Next
-            i += 1
+        'collect unique timestamps
+        Dim unique_timestamps As New HashSet(Of DateTime)
+        For Each ts As TimeSeries In tsList
+            unique_timestamps.UnionWith(New HashSet(Of DateTime)(ts.Dates))
         Next
+        'sort timestamps
+        Dim timestamps As List(Of DateTime) = unique_timestamps.ToList()
+        timestamps.Sort()
 
         'write the file
         strwrite = New StreamWriter(file, False, Helpers.DefaultEncoding)
 
-        '1st line: headings
+        '1st line: titles
         line = "datetime"
-        For Each zre As TimeSeries In zres
+        For Each zre As TimeSeries In tsList
             line &= separator & quote & zre.Title & quote
         Next
         strwrite.WriteLine(line)
         '2nd line: units
         line = "-"
-        For Each zre As TimeSeries In zres
+        For Each zre As TimeSeries In tsList
             line &= separator & quote & zre.Unit & quote
         Next
         strwrite.WriteLine(line)
         '3rd row onwards: data
-        For Each t In data.Keys
+        For Each t In timestamps
             line = t.ToString(dateFormat)
-            For Each v In data(t)
-                If Double.IsNaN(v) Then
-                    line &= separator 'leave empty
+            For Each ts As TimeSeries In tsList
+                If ts.Dates.Contains(t) Then
+                    If Double.IsNaN(ts.Nodes(t)) Then
+                        value = "NaN"
+                    Else
+                        value = ts.Nodes(t).ToString(numberFormat)
+                    End If
                 Else
-                    line &= separator & v.ToString(numberFormat)
+                    value = "" 'empty value
                 End If
+                line &= separator & value
             Next
             strwrite.WriteLine(line)
         Next
