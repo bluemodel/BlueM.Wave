@@ -64,6 +64,6 @@ Friend Class CalculatorVariable
     ''' Returns a string representation of the variable consisting of variable name and time series title
     ''' </summary>
     Public Overrides Function ToString() As String
-        Return String.Format("{0}: {1}", varName, ts.Title)
+        Return $"{varName}: {ts.Title}"
     End Function
 End Class

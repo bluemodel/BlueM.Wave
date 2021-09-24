@@ -386,7 +386,7 @@ Public MustInherit Class FileFormatBase
                 Next
             End If
             'Timeseries not found in file
-            Throw New Exception("The timeseries '" & title & "' could not be found in the file '" & IO.Path.GetFileName(Me.File) & "'!")
+            Throw New Exception($"The timeseries '{title}' could not be found in the file '{IO.Path.GetFileName(Me.File)}'!")
         End Get
     End Property
 
@@ -464,7 +464,7 @@ Public MustInherit Class FileFormatBase
             End If
         Next
         'series not found in file
-        Log.AddLogEntry(Log.levels.error, "Series with column index " & colIndex & " not found in file!")
+        Log.AddLogEntry(Log.levels.error, $"Series with column index {colIndex} not found in file!")
         Return False
 
     End Function
@@ -484,7 +484,7 @@ Public MustInherit Class FileFormatBase
             End If
         Next
         'series not found in file
-        Log.AddLogEntry(Log.levels.error, "Series " & seriesName & " not found in file!")
+        Log.AddLogEntry(Log.levels.error, $"Series {seriesName} not found in file!")
         Return False
 
     End Function

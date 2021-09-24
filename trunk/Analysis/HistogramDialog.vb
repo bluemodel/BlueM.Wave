@@ -55,7 +55,7 @@ Friend Class HistogramDialog
             Me.min = Math.Min(Me.min, zre.removeNaNValues().Minimum)
             Me.max = Math.Max(Me.max, zre.removeNaNValues().Maximum)
         Next
-        Me.Label_minmax.Text = String.Format("Value range: {0:F} - {1:F}", min, max)
+        Me.Label_minmax.Text = $"Value range: {min:F} - {max:F}"
 
         'set default number of breaks
         Me.n_bins = 10
@@ -169,13 +169,13 @@ Friend Class HistogramDialog
 
         'check if max is covered
         If Me.breaks(n_breaks - 1) < Me.max Then
-            MsgBox("The last break is smaller than the maximum value!" & eol & "Please add a break greater than or equal to the maximum value of " & Me.max.ToString("F"), MsgBoxStyle.Exclamation, "Wave")
+            MsgBox($"The last break is smaller than the maximum value!{eol}Please add a break greater than or equal to the maximum value of {Me.max.ToString("F")}", MsgBoxStyle.Exclamation, "Wave")
             Exit Sub
         End If
 
         'check that first break is not less than min
         If Me.DataGridView_breaks.Rows(0).Cells(1).Value < Me.min Then
-            MsgBox("The first break is smaller than the minimum value!" & eol & "Please enter only breaks that are greater than the minimum value of " & Me.min.ToString("F"), MsgBoxStyle.Exclamation, "Wave")
+            MsgBox($"The first break is smaller than the minimum value!{eol}Please enter only breaks that are greater than the minimum value of {Me.min.ToString("F")}", MsgBoxStyle.Exclamation, "Wave")
             Exit Sub
         End If
 

@@ -102,7 +102,7 @@ Public Class ZRE
             Me.SeriesList.Add(sInfo)
 
         Catch ex As Exception
-            MsgBox("Konnte Datei nicht einlesen!" & eol & eol & "Fehler: " & ex.Message, MsgBoxStyle.Critical, "Fehler")
+            MsgBox($"Unable to read file!{eol}{eol}Error: {ex.Message}", MsgBoxStyle.Critical, "Error")
         End Try
 
     End Sub
@@ -142,7 +142,7 @@ Public Class ZRE
                     timestamp = Zeile.Substring(0, 14)
                     ok = DateTime.TryParseExact(timestamp, Me.Dateformat, Helpers.DefaultNumberFormat, Globalization.DateTimeStyles.None, datum)
                     If (Not ok) Then
-                        Throw New Exception("Unable to parse the timestamp '" & timestamp & "' using the given format '" & Me.Dateformat & "'!")
+                        Throw New Exception($"Unable to parse the timestamp '{timestamp}' using the expected format '{Me.Dateformat}'!")
                     End If
 
                     'Datum und Wert zur Zeitreihe hinzufügen

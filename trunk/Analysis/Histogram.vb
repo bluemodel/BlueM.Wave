@@ -210,7 +210,7 @@ Friend Class Histogram
             Me.mResultText &= result.title & eol
             Me.mResultText &= "from;to;frequency;probability" & eol
             For i As Integer = 0 To Me.n_bins - 1
-                Me.mResultText &= Me.breaks(i) & ";" & Me.breaks(i + 1) & ";" & result.frequency(i) & ";" & result.probability(i) & eol
+                Me.mResultText &= $"{Me.breaks(i)};{Me.breaks(i + 1)};{result.frequency(i)};{result.probability(i)}{eol}"
             Next
         Next
 
@@ -242,13 +242,13 @@ Friend Class Histogram
         Me.mResultChart.Axes.Right.Grid.Visible = False
 
         Me.mResultChart.Axes.Bottom.Labels.Style = Steema.TeeChart.AxisLabelStyle.Value
-        Me.mResultChart.Axes.Bottom.Title.Caption = "Value [" & Me.mZeitreihen(0).Unit & "]"
+        Me.mResultChart.Axes.Bottom.Title.Caption = $"Value [{Me.mZeitreihen(0).Unit}]"
 
         'Serien
         For Each res As resultValues In Me.results
 
             Dim serieP As New Steema.TeeChart.Styles.Histogram(Me.mResultChart)
-            serieP.Title = res.title & " (P(x))"
+            serieP.Title = $"{res.title} (P(x))"
             serieP.Marks.Visible = False
 
             For i As Integer = 0 To n_bins - 1
@@ -257,7 +257,7 @@ Friend Class Histogram
 
             Dim seriePU As New Steema.TeeChart.Styles.Line(Me.mResultChart)
             seriePU.VertAxis = Steema.TeeChart.Styles.VerticalAxis.Right
-            seriePU.Title = res.title & " (PU(x))"
+            seriePU.Title = $"{res.title} (PU(x))"
             seriePU.LinePen.Width = 2
             seriePU.Pointer.Visible = True
             seriePU.Pointer.Style = Steema.TeeChart.Styles.PointerStyles.Circle

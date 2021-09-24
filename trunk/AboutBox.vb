@@ -38,12 +38,12 @@ Friend NotInheritable Class AboutBox
         Else
             ApplicationTitle = System.IO.Path.GetFileNameWithoutExtension(info.AssemblyName)
         End If
-        Me.Text = String.Format("About {0}", ApplicationTitle)
+        Me.Text = $"About {ApplicationTitle}"
         ' Initialize all of the text displayed on the About Box.
         ' TODO: Customize the application's assembly information in the "Application" pane of the project 
         '    properties dialog (under the "Project" menu).
         Me.LabelProductName.Text = info.ProductName
-        Me.LabelVersion.Text = String.Format("Version {0}", info.Version.ToString)
+        Me.LabelVersion.Text = $"Version {info.Version}"
         Me.LabelCopyright.Text = info.Copyright
         Me.LabelCompanyName.Text = info.CompanyName
         Me.TextBox_Description.Text = info.Description

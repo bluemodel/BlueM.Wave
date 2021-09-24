@@ -102,7 +102,7 @@ Friend Class Cumulative
 
         For Each ts In MyBase.mZeitreihen
 
-            ts_cum = New TimeSeries(ts.Title & " (cumulative)")
+            ts_cum = New TimeSeries($"{ts.Title} (cumulative)")
             ts_cum.Unit = ts.Unit
             ts_cum.Interpretation = TimeSeries.InterpretationEnum.Cumulative
             ts_cum.DataSource = New TimeSeriesDataSource(TimeSeriesDataSource.OriginEnum.AnalysisResult)

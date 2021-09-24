@@ -212,7 +212,7 @@ Public Class ASC
                         Next
 
                         'Log
-                        Call Log.AddLogEntry(Log.levels.info, "Die Lücke zwischen " & datumLast.ToString(Helpers.DefaultDateFormat) & " und " & datum.ToString(Helpers.DefaultDateFormat) & " wurde mit 0-Werten abgeschlossen.")
+                        Call Log.AddLogEntry(Log.levels.info, $"Die Lücke zwischen {datumLast.ToString(Helpers.DefaultDateFormat)} und {datum.ToString(Helpers.DefaultDateFormat)} wurde mit 0-Werten abgeschlossen.")
                     End If
                     Ereignisende = False 'zurücksetzen
 

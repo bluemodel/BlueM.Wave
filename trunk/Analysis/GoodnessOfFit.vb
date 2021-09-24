@@ -298,11 +298,9 @@ Friend Class GoodnessOfFit
                      & "Hydrologic deviation: DEV = " & _gof.hydrodev.ToString(formatstring)
 
         'mResultText is written to the log. Contains all results.
-        Me.mResultText = "Goodness of Fit analysis:" & eol _
-                         & eol _
-                         & "Observed time series: " & Me.ts_obs.Title & eol _
-                         & "Simulated time series: " & Me.ts_sim.Title & eol _
-                         & eol
+        Me.mResultText = "Goodness of Fit analysis:" & eol & eol &
+                         $"Observed time series: {Me.ts_obs.Title}" & eol &
+                         $"Simulated time series: {Me.ts_sim.Title}" & eol & eol
         'output results in CSV format
         Me.mResultText &= "Results:" & eol
         Me.mResultText &= "Description;Start;End;Length;Volume observed;Volume simulated;Volume error [%];Sum of squared errors;Nash-Sutcliffe efficiency;Logarithmic Nash-Sutcliffe efficiency;Coefficient of correlation;Coefficient of determination;Hydrologic deviation" & eol

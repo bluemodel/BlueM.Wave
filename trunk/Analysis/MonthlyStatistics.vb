@@ -238,7 +238,7 @@ Friend Class MonthlyStatistics
                         .median = .values(((N + 1) / 2) - 1)
                     End If
                 Else
-                    MsgBox("The series does not contain any data for the month of " & .name & "!", MsgBoxStyle.Information)
+                    MsgBox($"The series does not contain any data for the month of {.name}!", MsgBoxStyle.Information)
                 End If
 
             End With
@@ -279,7 +279,7 @@ Friend Class MonthlyStatistics
         'Diagram
         Me.mResultChart = New Steema.TeeChart.Chart()
         Call Wave.formatChart(Me.mResultChart)
-        Me.mResultChart.Header.Text = "Monthly statistics (" & Me.mZeitreihen(0).Title & ")"
+        Me.mResultChart.Header.Text = $"Monthly statistics ({Me.mZeitreihen(0).Title})"
 
         'Axes
         Me.mResultChart.Axes.Bottom.Labels.Style = Steema.TeeChart.AxisLabelStyle.Text

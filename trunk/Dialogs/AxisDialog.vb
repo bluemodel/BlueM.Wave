@@ -79,7 +79,7 @@ Public Class AxisDialog
             MsgBox("Left and Right axes cannot be deleted.", MsgBoxStyle.Information)
             Return
         Else
-            If MsgBox("Delete axis " & axisname & "?", MsgBoxStyle.OkCancel) = MsgBoxResult.Ok Then
+            If MsgBox($"Delete axis {axisname}?", MsgBoxStyle.OkCancel) = MsgBoxResult.Ok Then
                 RaiseEvent AxisDeleted(axisname)
             End If
         End If

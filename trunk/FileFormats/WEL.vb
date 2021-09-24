@@ -189,7 +189,7 @@ Public Class WEL
             End If
 
         Catch ex As Exception
-            MsgBox("Konnte die Datei '" & Path.GetFileName(Me.File) & "' nicht einlesen!" & eol & eol & "Fehler: " & ex.Message, MsgBoxStyle.Critical, "Fehler")
+            MsgBox($"Unable to read file!{eol}{eol}Error: {ex.Message}", MsgBoxStyle.Critical, "Error")
         End Try
 
     End Sub
@@ -247,7 +247,7 @@ Public Class WEL
                 timestamp = Werte(0).Trim()
                 ok = DateTime.TryParseExact(timestamp, Me.Dateformat, Helpers.DefaultNumberFormat, Globalization.DateTimeStyles.None, datum)
                 If (Not ok) Then
-                    Throw New Exception("Unable to parse the timestamp '" & timestamp & "' using the given format '" & Me.Dateformat & "'!")
+                    Throw New Exception($"Unable to parse the timestamp '{timestamp}' using the given format '{Me.Dateformat}'!")
                 End If
                 'Restliche Spalten: Werte
                 'Alle ausgewählten Reihen durchlaufen
@@ -261,7 +261,7 @@ Public Class WEL
                 timestamp = Zeile.Substring(SpaltenOffset, Me.ColumnWidth).Trim()
                 ok = DateTime.TryParseExact(timestamp, Me.Dateformat, Helpers.DefaultNumberFormat, Globalization.DateTimeStyles.None, datum)
                 If (Not ok) Then
-                    Throw New Exception("Unable to parse the timestamp '" & timestamp & "' using the given format '" & Me.Dateformat & "'!")
+                    Throw New Exception($"Unable to parse the timestamp '{timestamp}' using the given format '{Me.Dateformat}'!")
                 End If
                 'Restliche Spalten: Werte
                 'Alle ausgewählten Reihen durchlaufen
@@ -336,21 +336,21 @@ Public Class WEL
 
         If IO.File.Exists(file_wlzip) Then
 
-            Log.AddLogEntry(Log.levels.info, "Looking for file in " & file_wlzip & " ...")
+            Log.AddLogEntry(Log.levels.info, $"Looking for file in {file_wlzip} ...")
             dir = IO.Path.GetDirectoryName(file)
             filename = IO.Path.GetFileName(file)
 
             For Each ze In Ionic.Zip.ZipFile.Read(file_wlzip)
                 If ze.FileName.ToLower() = filename.ToLower() Then
                     zipEntryFound = True
-                    Log.AddLogEntry(Log.levels.info, "Extracting file from " & file_wlzip & " ...")
+                    Log.AddLogEntry(Log.levels.info, $"Extracting file from {file_wlzip} ...")
                     ze.Extract(dir, Ionic.Zip.ExtractExistingFileAction.OverwriteSilently)
                     success = True
                 End If
             Next
 
             If Not zipEntryFound Then
-                Log.AddLogEntry(Log.levels.error, "File " & filename & " not found in " & file_wlzip & "!")
+                Log.AddLogEntry(Log.levels.error, $"File {filename} not found in {file_wlzip}!")
             End If
 
         End If

@@ -181,10 +181,7 @@ Public Class Wave
 
         'get current version (only consider major, minor and build numbers, omitting the auto-generated revision number)
         Dim v As Version = Reflection.Assembly.GetExecutingAssembly.GetName().Version()
-        Dim currentVersion As New Version(String.Format("{0}.{1}.{2}",
-                                                        v.Major,
-                                                        v.Minor,
-                                                        v.Build))
+        Dim currentVersion As New Version($"{v.Major}.{v.Minor}.{v.Build}")
 
         'retrieve latest version number from server
         Dim client As New Net.Http.HttpClient()
@@ -710,11 +707,11 @@ Public Class Wave
         If ZoomHistoryIndex < (ZoomHistory.Count - 1) Then
             'if we are branching off from an old index, just remove the zoom history after the current index
             ZoomHistory.RemoveRange(ZoomHistoryIndex + 1, ZoomHistory.Count - (ZoomHistoryIndex + 1))
-            Log.AddLogEntry(Log.levels.debug, String.Format("Removed zoom history after index " & ZoomHistoryIndex))
+            Log.AddLogEntry(Log.levels.debug, $"Removed zoom history after index {ZoomHistoryIndex}")
         Else
             'add new snapshot
             ZoomHistory.Add(New Tuple(Of Double, Double)(Me.TChart1.Axes.Bottom.Minimum, Me.TChart1.Axes.Bottom.Maximum))
-            Log.AddLogEntry(Log.levels.debug, String.Format("Saved zoom snapshot {0}: {1}, {2}", ZoomHistoryIndex, Date.FromOADate(Me.TChart1.Axes.Bottom.Minimum), Date.FromOADate(Me.TChart1.Axes.Bottom.Maximum)))
+            Log.AddLogEntry(Log.levels.debug, $"Saved zoom snapshot {ZoomHistoryIndex}: {Date.FromOADate(Me.TChart1.Axes.Bottom.Minimum)}, {Date.FromOADate(Me.TChart1.Axes.Bottom.Maximum)}")
         End If
         ZoomHistoryIndex += 1
 
@@ -809,7 +806,7 @@ Public Class Wave
         'Warnen, wenn bereits Serien vorhanden
         '-------------------------------------
         If (Me.TChart1.Series.Count() > 0) Then
-            res = MsgBox("All existing series will be deleted!" & eol & "Continue?", MsgBoxStyle.OkCancel)
+            res = MsgBox($"All existing series will be deleted!{eol}Continue?", MsgBoxStyle.OkCancel)
             If (Not res = Windows.Forms.DialogResult.OK) Then Exit Sub
         End If
 
@@ -915,7 +912,7 @@ Public Class Wave
                     End If
                     datasources(file).Add(title)
                 Else
-                    Log.AddLogEntry(Log.levels.warning, String.Format("Series '{0}' does not originate from a file import and could not be saved to the project file!", ts.Title))
+                    Log.AddLogEntry(Log.levels.warning, $"Series '{ts.Title}' does not originate from a file import and could not be saved to the project file!")
                 End If
             Next
 
@@ -932,7 +929,7 @@ Public Class Wave
                     'TODO: if a series was renamed, write the new title to the project file
                     If title.Contains(":") Then
                         'enclose titles containing ":" in quotes
-                        title = """" & title & """"
+                        title = $"""{title}"""
                     End If
                     strwrite.WriteLine("    series=" & title)
                 Next
@@ -941,7 +938,7 @@ Public Class Wave
             strwrite.Close()
             fs.Close()
 
-            Log.AddLogEntry(Log.levels.info, "Wave project file " & projectfile & " saved.")
+            Log.AddLogEntry(Log.levels.info, $"Wave project file {projectfile} saved.")
 
         End If
 
@@ -1132,7 +1129,7 @@ Public Class Wave
                     'create a new point series for markers
                     Dim markers As New Steema.TeeChart.Styles.Points(Me.TChart1.Chart)
                     markers.ShowInLegend = False
-                    markers.Title = series.Title & " (selection)"
+                    markers.Title = $"{series.Title} (selection)"
                     markers.Tag = "_markers"
                     markers.VertAxis = series.VertAxis
                     If series.VertAxis = Steema.TeeChart.Styles.VerticalAxis.Custom Then
@@ -1309,7 +1306,7 @@ Public Class Wave
         filename = Me.SaveFileDialog1.FileName
 
         'Export series
-        Log.AddLogEntry(Log.levels.info, "Exporting time series to file " & Me.SaveFileDialog1.FileName & "...")
+        Log.AddLogEntry(Log.levels.info, $"Exporting time series to file {Me.SaveFileDialog1.FileName}...")
 
         Me.Cursor = Cursors.WaitCursor
         Application.DoEvents()
@@ -1384,7 +1381,7 @@ Public Class Wave
                 'Wait-Cursor
                 Me.Cursor = Cursors.WaitCursor
 
-                Call Log.AddLogEntry(Log.levels.info, "Starting analysis " & oAnalysisDialog.selectedAnalysisFunction.ToString() & " ...")
+                Call Log.AddLogEntry(Log.levels.info, $"Starting analysis {oAnalysisDialog.selectedAnalysisFunction.ToString()} ...")
 
                 'Analyse instanzieren
                 Dim oAnalysis As Analysis
@@ -1503,7 +1500,7 @@ Public Class Wave
                 Next
                 If processSeries Then
                     'log
-                    Log.AddLogEntry(Log.levels.info, "Finding NaN values for series " & ts.Title & "...")
+                    Log.AddLogEntry(Log.levels.info, $"Finding NaN values for series {ts.Title}...")
                     'find beginning and end of nan values
                     nanFoundInSeries = False
                     isNaNPeriod = False
@@ -1559,7 +1556,7 @@ Public Class Wave
                                 band.Tag = "NaN"
 
                                 'write to log
-                                Log.AddLogEntry(Log.levels.info, "Series contains NaN values from " & nanStart.ToString(Helpers.DateFormats("default")) & " to " & nanEnd.ToString(Helpers.DateFormats("default")))
+                                Log.AddLogEntry(Log.levels.info, $"Series contains NaN values from {nanStart.ToString(Helpers.DateFormats("default"))} to {nanEnd.ToString(Helpers.DateFormats("default"))}")
                             End If
                         End If
                     Next
@@ -1748,7 +1745,7 @@ Public Class Wave
             Call Me.viewportChanged()
             Log.AddLogEntry(Log.levels.debug, "Zoomed to history index " & prevIndex)
         Else
-            Log.AddLogEntry(Log.levels.debug, "No zoom history before index " & ZoomHistoryIndex & " available!")
+            Log.AddLogEntry(Log.levels.debug, $"No zoom history before index {ZoomHistoryIndex} available!")
         End If
 
         Me.ToolStripButton_ZoomPrevious.Enabled = (ZoomHistoryIndex - 1 < ZoomHistory.Count And ZoomHistoryIndex > 0)
@@ -1771,7 +1768,7 @@ Public Class Wave
             Call Me.viewportChanged()
             Log.AddLogEntry(Log.levels.debug, "Zoomed to history index " & ZoomHistoryIndex)
         Else
-            Log.AddLogEntry(Log.levels.debug, "No zoom history after index " & ZoomHistoryIndex & " available!")
+            Log.AddLogEntry(Log.levels.debug, $"No zoom history after index {ZoomHistoryIndex} available!")
         End If
 
         Me.ToolStripButton_ZoomPrevious.Enabled = (ZoomHistoryIndex - 1 < ZoomHistory.Count And ZoomHistoryIndex > 0)
@@ -1939,7 +1936,7 @@ Public Class Wave
             Dim success As Boolean
             For Each file In datasources.Keys
 
-                Log.AddLogEntry(Log.levels.info, "Reading file " & file & " ...")
+                Log.AddLogEntry(Log.levels.info, $"Reading file {file} ...")
 
                 success = True
 
@@ -1961,9 +1958,9 @@ Public Class Wave
                     Next
                 End If
                 If success Then
-                    Log.AddLogEntry(Log.levels.info, "File '" & file & "' imported successfully!")
+                    Log.AddLogEntry(Log.levels.info, $"File '{file}' imported successfully!")
                 Else
-                    Log.AddLogEntry(Log.levels.error, "Error while importing file '" & file & "'!")
+                    Log.AddLogEntry(Log.levels.error, $"Error while importing file '{file}'!")
                 End If
             Next
 
@@ -1981,7 +1978,7 @@ Public Class Wave
             Dim updateAvailable As Boolean = Await CheckForUpdate()
             If updateAvailable Then
                 Me.ToolStripButton_UpdateNotification.Visible = True
-                Dim resp As MsgBoxResult = MsgBox("A new version is available!" & eol & "Click OK to go to downloads.bluemodel.org to get it.", MsgBoxStyle.OkCancel)
+                Dim resp As MsgBoxResult = MsgBox($"A new version is available!{eol}Click OK to go to downloads.bluemodel.org to get it.", MsgBoxStyle.OkCancel)
                 If resp = MsgBoxResult.Ok Then
                     Process.Start(urlDownload)
                 End If
@@ -2432,7 +2429,7 @@ Public Class Wave
                 match = Regex.Match(zre.Title, pattern)
                 If (match.Success) Then
                     n += 1
-                    zre.Title = Regex.Replace(zre.Title, pattern, "${name} (" & n.ToString() & ")")
+                    zre.Title = Regex.Replace(zre.Title, pattern, $"${name} ({n.ToString()})")
                 Else
                     zre.Title &= " (1)"
                 End If
@@ -2476,7 +2473,7 @@ Public Class Wave
 
             Me.Cursor = Cursors.WaitCursor
 
-            Call Log.AddLogEntry(Log.levels.info, "Loading Wave project file '" & projectfile & "'...")
+            Call Log.AddLogEntry(Log.levels.info, $"Loading Wave project file '{projectfile}'...")
 
             Dim wvp As New WVP(projectfile)
             tsList = wvp.Process()
@@ -2490,7 +2487,7 @@ Public Class Wave
             Next
 
             'Log
-            Call Log.AddLogEntry(Log.levels.info, "Project file '" & projectfile & "' loaded successfully!")
+            Call Log.AddLogEntry(Log.levels.info, $"Project file '{projectfile}' loaded successfully!")
 
             'Update window title
             Me.Text = "BlueM.Wave - " & projectfile
@@ -2521,7 +2518,7 @@ Public Class Wave
         Try
 
             'Log
-            Call Log.AddLogEntry(Log.levels.info, "Loading file '" & FileName & "' ...")
+            Call Log.AddLogEntry(Log.levels.info, $"Loading file '{FileName}' ...")
 
             'Bereits vorhandene Reihen merken
             Dim existingIds = New List(Of Integer)
@@ -2580,14 +2577,14 @@ Public Class Wave
                             If (series.GetHorizAxis.IsDateTime) Then
 
                                 'Zeitreihe aus dem importierten Diagramm nach intern übertragen
-                                Log.AddLogEntry(Log.levels.info, "Importing series '" & series.Title & "' from TEN file...")
+                                Log.AddLogEntry(Log.levels.info, $"Importing series '{series.Title}' from TEN file...")
                                 reihe = New TimeSeries(series.Title)
                                 For i = 0 To series.Count - 1
                                     reihe.AddNode(Date.FromOADate(series.XValues(i)), series.YValues(i))
                                 Next
                                 'Determine total number of NaN-values and write to log
                                 If reihe.Nodes.Count > reihe.NodesClean.Count Then
-                                    Log.AddLogEntry(Log.levels.warning, String.Format("Series '{0}' contains {1} NaN values!", reihe.Title, reihe.Nodes.Count - reihe.NodesClean.Count))
+                                    Log.AddLogEntry(Log.levels.warning, $"Series '{reihe.Title}' contains {reihe.Nodes.Count - reihe.NodesClean.Count} NaN values!")
                                 End If
                                 'Get the series' unit from the axis title
                                 Dim axistitle As String = ""
@@ -2674,7 +2671,7 @@ Public Class Wave
             Me.ChartListBox1.Chart = Me.TChart1
 
             'Log
-            Call Log.AddLogEntry(Log.levels.info, "TEN file '" & FileName & "' loaded successfully!")
+            Call Log.AddLogEntry(Log.levels.info, $"TEN file '{FileName}' loaded successfully!")
 
         Catch ex As Exception
             MsgBox("Error while loading:" & eol & ex.Message, MsgBoxStyle.Critical)
@@ -2695,13 +2692,13 @@ Public Class Wave
         Try
 
             'Log
-            Call Log.AddLogEntry(Log.levels.info, "Loading theme '" & FileName & "' ...")
+            Call Log.AddLogEntry(Log.levels.info, $"Loading theme '{FileName}' ...")
 
             'Theme laden
             Call TChart1.Import.Theme.Load(FileName)
 
             'Log
-            Call Log.AddLogEntry(Log.levels.info, "Theme '" & FileName & "' loaded successfully!")
+            Call Log.AddLogEntry(Log.levels.info, $"Theme '{FileName}' loaded successfully!")
 
         Catch ex As Exception
             MsgBox("Error while loading:" & eol & ex.Message, MsgBoxStyle.Critical)
@@ -2749,7 +2746,7 @@ Public Class Wave
 
                 Try
                     'Log
-                    Call Log.AddLogEntry(Log.levels.info, "Importing file '" & file & "' ...")
+                    Call Log.AddLogEntry(Log.levels.info, $"Importing file '{file}' ...")
 
                     'Datei-Instanz erzeugen
                     Datei = FileFactory.getFileInstance(file)
@@ -2772,7 +2769,7 @@ Public Class Wave
                         Call Datei.readFile()
 
                         'Log
-                        Call Log.AddLogEntry(Log.levels.info, "File '" & file & "' imported successfully!")
+                        Call Log.AddLogEntry(Log.levels.info, $"File '{file}' imported successfully!")
 
                         'Log
                         Call Log.AddLogEntry(Log.levels.info, "Loading series in chart...")
@@ -2826,7 +2823,7 @@ Public Class Wave
                     'it's a clipboard entry from TALSIM!
 
                     'ask the user for confirmation
-                    dlgres = MessageBox.Show("TALSIM clipboard content detected!" & eol & "Load series in Wave?", "Load from clipboard", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+                    dlgres = MessageBox.Show($"TALSIM clipboard content detected!{eol}Load series in Wave?", "Load from clipboard", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
                     If Not dlgres = Windows.Forms.DialogResult.Yes Then
                         Exit Sub
                     End If
@@ -2966,7 +2963,7 @@ Public Class Wave
                     End If
 
                     'read file
-                    Log.AddLogEntry(Log.levels.info, "Loading file " & file & " ...")
+                    Log.AddLogEntry(Log.levels.info, $"Loading file {file} ...")
                     fileobj = FileFactory.getFileInstance(file)
 
                     'read series from file
@@ -2983,7 +2980,7 @@ Public Class Wave
                     name = params("Kennung")
 
                     'read file
-                    Log.AddLogEntry(Log.levels.info, "Loading file " & file & " ...")
+                    Log.AddLogEntry(Log.levels.info, $"Loading file {file} ...")
                     fileobj = FileFactory.getFileInstance(file)
 
                     'read series from file
@@ -3127,7 +3124,7 @@ Public Class Wave
 
         'Determine total number of NaN-values and write to log
         If zre.Nodes.Count > zre.NodesClean.Count Then
-            Log.AddLogEntry(Log.levels.warning, String.Format("Series '{0}' contains {1} NaN values!", zre.Title, zre.Nodes.Count - zre.NodesClean.Count))
+            Log.AddLogEntry(Log.levels.warning, $"Series '{zre.Title}' contains {zre.Nodes.Count - zre.NodesClean.Count} NaN values!")
         End If
 
         'Y-Achsenzuordnung

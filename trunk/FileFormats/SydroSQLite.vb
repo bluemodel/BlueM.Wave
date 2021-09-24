@@ -326,7 +326,7 @@ Public Class SydroSQLite
                     flag_id = flag.Key
                     flag_desc = flag.Value
                     sInfo = New SeriesInfo()
-                    sInfo.Name = ts_name & "/" & flag_id & ": " & flag_desc
+                    sInfo.Name = $"{ts_name}/{flag_id}: {flag_desc}"
                     sInfo.Index = index
                     Me.SeriesList.Add(sInfo)
                     Me.flag_mapping.Add(index, flag_id)
@@ -357,7 +357,7 @@ Public Class SydroSQLite
                     dataReader.Close()
                     For Each T0 As DateTime In T0_list
                         sInfo = New SeriesInfo()
-                        sInfo.Name = ts_name & "/" & flag_id & ": " & flag_desc & " - " & T0.ToString(Helpers.DefaultDateFormat)
+                        sInfo.Name = $"{ts_name}/{flag_id}: {flag_desc} - {T0.ToString(Helpers.DefaultDateFormat)}"
                         sInfo.Index = index
                         Me.SeriesList.Add(sInfo)
                         Me.flag_T0_mapping.Add(index, New MathNet.Numerics.Tuple(Of Integer, DateTime)(flag_id, T0))
@@ -366,7 +366,7 @@ Public Class SydroSQLite
                 Next
 
             Case Else
-                Throw New Exception("Time series of class " & ts_class & " are not yet supported!")
+                Throw New Exception($"Time series of class {ts_class} are not yet supported!")
         End Select
 
         'disconnect db
@@ -501,7 +501,7 @@ Public Class SydroSQLite
                 Next
 
             Case Else
-                Throw New Exception("Time series of class " & ts_class & " are not yet supported!")
+                Throw New Exception($"Time series of class {ts_class} are not yet supported!")
 
         End Select
 

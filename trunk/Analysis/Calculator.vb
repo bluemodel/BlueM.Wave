@@ -181,12 +181,12 @@ Friend Class Calculator
     ''' </summary>
     Public Overrides Sub PrepareResults()
         Me.mResultText = "Calculator analysis:" & eol
-        Me.mResultText &= "Formula: " & Me.expression & eol
+        Me.mResultText &= $"Formula: {Me.expression}" & eol
         Me.mResultText &= "Variables: " & eol
         For Each tsvariable As CalculatorVariable In Me.tsVariables
-            Me.mResultText &= tsvariable.varName & ": " & tsvariable.ts.Title & eol
+            Me.mResultText &= $"{tsvariable.varName}: {tsvariable.ts.Title}" & eol
         Next
-        Me.mResultText &= "Result series: " & Me.mResultSeries.First.Title
+        Me.mResultText &= $"Result series: {Me.mResultSeries.First.Title}"
 
     End Sub
 

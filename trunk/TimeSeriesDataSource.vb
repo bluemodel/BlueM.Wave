@@ -102,7 +102,7 @@ Public Class TimeSeriesDataSource
     Public Overrides Function ToString() As String
         Select Case _origin
             Case OriginEnum.FileImport
-                Return String.Format("File: ""{0}"", Title: ""{1}""", _filepath, _title)
+                Return $"File: ""{_filepath}"", Title: ""{_title}"""
             Case Else
                 Return [Enum].GetName(GetType(OriginEnum), _origin)
         End Select

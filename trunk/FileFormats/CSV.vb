@@ -145,7 +145,7 @@ Public Class CSV
             'TODO: gegebenes Datumsformat an dieser Stelle testen
 
         Catch ex As Exception
-            MsgBox("Unable to read file!" & eol & eol & "Error: " & ex.Message, MsgBoxStyle.Critical, "Error")
+            MsgBox($"Unable to read file!{eol}{eol}Error: {ex.Message}", MsgBoxStyle.Critical, "Error")
         End Try
 
     End Sub
@@ -207,7 +207,7 @@ Public Class CSV
                         'Erste Spalte: Datum_Zeit
                         ok = DateTime.TryParseExact(Werte(Me.DateTimeColumnIndex).Trim(), Me.Dateformat, Helpers.DefaultNumberFormat, Globalization.DateTimeStyles.None, datum)
                         If (Not ok) Then
-                            Throw New Exception("Could not parse the date '" & Werte(Me.DateTimeColumnIndex) & "' using the given date format '" & Me.Dateformat & "'! Please check the date format!")
+                            Throw New Exception($"Could Not parse the date '{Werte(Me.DateTimeColumnIndex)}' using the given date format '{Me.Dateformat}'! Please check the date format!")
                         End If
                         'Restliche Spalten: Werte
                         For Each sInfo As SeriesInfo In Me.SelectedSeries
@@ -221,7 +221,7 @@ Public Class CSV
                     'Erste Spalte: Datum_Zeit
                     ok = DateTime.TryParseExact(Zeile.Substring(0, Me.ColumnWidth), Me.Dateformat, Helpers.DefaultNumberFormat, Globalization.DateTimeStyles.None, datum)
                     If (Not ok) Then
-                        Throw New Exception("Could not parse the date '" & Zeile.Substring(0, Me.ColumnWidth) & "' using the given date format '" & Me.Dateformat & "'! Please check the date format!")
+                        Throw New Exception($"Could Not parse the date '{Zeile.Substring(0, Me.ColumnWidth)}' using the given date format '{Me.Dateformat}'! Please check the date format!")
                     End If
                     'Restliche Spalten: Werte
                     For Each sInfo As SeriesInfo In Me.SelectedSeries
@@ -236,7 +236,7 @@ Public Class CSV
             FiStr.Close()
 
         Catch ex As Exception
-            MsgBox("Unable to read file!" & eol & eol & "Error: " & ex.Message, MsgBoxStyle.Critical, "Error")
+            MsgBox($"Unable to read file!{eol}{eol}Error: {ex.Message}", MsgBoxStyle.Critical, "Error")
         End Try
 
     End Sub

@@ -188,7 +188,7 @@ Public Class TimeSeries
             For Each kvp As KeyValuePair(Of String, String) In Me._metadata
                 If kvp.Value <> "" Then
                     'omit empty entries
-                    text &= kvp.Key & ": " & kvp.Value & ", "
+                    text &= $"{kvp.Key}: {kvp.Value}, "
                 End If
             Next
             Return text
@@ -462,8 +462,7 @@ Public Class TimeSeries
     ''' <remarks>If the given date already exists, the new node is discarded and a warning is written to the log</remarks>
     Public Sub AddNode(ByVal _date As DateTime, ByVal _value As Double)
         If (Me.Nodes.ContainsKey(_date)) Then
-            Log.AddLogEntry(Log.levels.warning, "Duplicate data point at " & _date.ToString(Helpers.DefaultDateFormat) &
-                            ": Value of " & _value.ToString() & " will be discarded. Existing value: " & Me.Nodes(_date).ToString())
+            Log.AddLogEntry(Log.levels.warning, $"Duplicate data point at {_date.ToString(Helpers.DefaultDateFormat)}: Value of {_value.ToString(Helpers.DefaultNumberFormat)} will be discarded. Existing value: {Me.Nodes(_date).ToString(Helpers.DefaultNumberFormat)}")
             Exit Sub
         End If
         Me._nodes.Add(_date, _value)
@@ -536,7 +535,7 @@ Public Class TimeSeries
             Me._nodesCleaned = Nothing
 
             'Log 
-            Call Log.AddLogEntry(Log.levels.info, Me.Title & ": cut from " & lengthOld.ToString() & " to " & lengthNew.ToString() & " data points.")
+            Call Log.AddLogEntry(Log.levels.info, $"{Me.Title}: cut from {lengthOld} to {lengthNew} data points.")
 
         End If
 
@@ -567,7 +566,7 @@ Public Class TimeSeries
 
         If series2.EndDate <= Me.EndDate And series2.StartDate >= Me.StartDate Then
             'series2 does not extend beyond this series, so nothing to do
-            Log.AddLogEntry(Log.levels.warning, "Series '" & series2.Title & "' does not extend beyond series '" & Me.Title & "' so nothing can be appended!")
+            Log.AddLogEntry(Log.levels.warning, $"Series '{series2.Title}' does not extend beyond series '{Me.Title}' so nothing can be appended!")
             Return
         End If
 
@@ -612,7 +611,7 @@ Public Class TimeSeries
         For year = year_start To year_end
             ts = Me.Clone()
             ts.Cut(New DateTime(year - 1, 11, 1), New DateTime(year, 10, 31, 23, 59, 59))
-            ts.Title &= " (" & year.ToString() & ")"
+            ts.Title &= $" ({year.ToString()})"
             tsDict.Add(year, ts)
         Next
 
@@ -652,7 +651,7 @@ Public Class TimeSeries
                  InterpretationEnum.CumulativePerTimestep
                 'everything OK
             Case Else
-                Throw New NotImplementedException(String.Format("Changing the timestep of a time series with interpretation {0} is currently not implemented!", [Enum].GetName(GetType(InterpretationEnum), Me.Interpretation)))
+                Throw New NotImplementedException($"Changing the timestep of a time series with interpretation {[Enum].GetName(GetType(InterpretationEnum), Me.Interpretation)} is currently not implemented!")
         End Select
 
         'create a new timeseries
@@ -660,7 +659,7 @@ Public Class TimeSeries
         ts.Unit = Me.Unit
         ts.Interpretation = Me.Interpretation
         ts.Metadata = Me.Metadata
-        ts.Title &= " (" & timestepinterval & " " & [Enum].GetName(GetType(TimeStepTypeEnum), timesteptype) & ")"
+        ts.Title &= $" ({timestepinterval} {[Enum].GetName(GetType(TimeStepTypeEnum), timesteptype)})"
 
         'find first timestep that is fully within the time series
         t_start = startdate
@@ -822,7 +821,7 @@ Public Class TimeSeries
                 Wert = Me.Sum
 
             Case Else
-                Throw New Exception("Der Werttyp '" & WertTyp & "' wird nicht unterstützt!")
+                Throw New Exception($"Der Werttyp '{WertTyp}' wird nicht unterstützt!")
 
         End Select
 
@@ -1041,7 +1040,7 @@ Public Class TimeSeries
         tsConverted.Type = Me.Type
         tsConverted.Metadata = Me.Metadata
 
-        Log.AddLogEntry(Log.levels.info, String.Format("Converting error values from series {0}...", Me.Title))
+        Log.AddLogEntry(Log.levels.info, $"Converting error values from series {Me.Title}...")
 
         errorCount = 0
         For Each node As KeyValuePair(Of DateTime, Double) In Me.Nodes
@@ -1057,7 +1056,7 @@ Public Class TimeSeries
                 'convert the node to NaN
                 tsConverted.AddNode(node.Key, Double.NaN)
                 errorCount += 1
-                Call Log.AddLogEntry(Log.levels.info, String.Format("Converting node at {0} with value {1} to NaN", node.Key, node.Value))
+                Call Log.AddLogEntry(Log.levels.info, $"Converting node at {node.Key} with value {node.Value} to NaN")
             Else
                 'copy the node
                 tsConverted.AddNode(node.Key, node.Value)
@@ -1066,7 +1065,7 @@ Public Class TimeSeries
 
         'Log
         If errorCount > 0 Then
-            Call Log.AddLogEntry(Log.levels.info, Me.Title & ": " & errorCount.ToString() & " nodes were coverted to NaN!")
+            Call Log.AddLogEntry(Log.levels.info, $"{Me.Title}: {errorCount} nodes were coverted to NaN!")
         End If
 
         Return tsConverted
@@ -1082,7 +1081,7 @@ Public Class TimeSeries
         Dim nanCount As Integer
         Dim tsCleaned As TimeSeries
 
-        Log.AddLogEntry(Log.levels.info, String.Format("Removing NaN values from series {0}...", Me.Title))
+        Log.AddLogEntry(Log.levels.info, $"Removing NaN values from series {Me.Title}...")
 
         'Instantiate a new series
         tsCleaned = New TimeSeries(Me.Title)
@@ -1100,7 +1099,7 @@ Public Class TimeSeries
         'Log
         nanCount = Me.Length - tsCleaned.Length
         If nanCount > 0 Then
-            Call Log.AddLogEntry(Log.levels.info, Me.Title & ": " & nanCount.ToString() & " nodes were removed!")
+            Call Log.AddLogEntry(Log.levels.info, $"{Me.Title}: {nanCount} nodes were removed!")
         End If
 
         Return tsCleaned
@@ -1157,7 +1156,7 @@ Public Class TimeSeries
                     Case TimeStepTypeEnum.Year
                         t = New Date(t.Year + 1, t.Month, t.Day, t.Hour, t.Minute, t.Second)
                     Case Else
-                        Throw New NotImplementedException("TimeStepType " & timesteptype & " not implemented!")
+                        Throw New NotImplementedException($"TimeStepType {timesteptype} not implemented!")
                 End Select
             Next
         Else
@@ -1179,7 +1178,7 @@ Public Class TimeSeries
                     Case TimeStepTypeEnum.Year
                         t = New Date(t.Year - 1, t.Month, t.Day, t.Hour, t.Minute, t.Second)
                     Case Else
-                        Throw New NotImplementedException("TimeStepType " & timesteptype & " not implemented!")
+                        Throw New NotImplementedException($"TimeStepType {timesteptype} not implemented!")
                 End Select
             Next
         End If
@@ -1222,7 +1221,7 @@ Public Class TimeSeries
             Case InterpretationEnum.CumulativePerTimestep
                 value = v2 / dt_total.TotalSeconds * dt_part.TotalSeconds
             Case Else
-                Throw New NotImplementedException(String.Format("Interpolation between nodes with interpretation {0} is currently not implemented!", [Enum].GetName(GetType(InterpretationEnum), interpretation)))
+                Throw New NotImplementedException($"Interpolation between nodes with interpretation {[Enum].GetName(GetType(InterpretationEnum), interpretation)} is currently not implemented!")
         End Select
 
         Return value
