@@ -120,7 +120,7 @@ Public Class UVF
             Return True
 
         Catch ex As Exception
-            MsgBox($"Unable to read file!{eol}{eol}Error: {ex.Message}", MsgBoxStyle.Critical, "Error")
+            MsgBox($"Unable to read file!{eol}{eol}Error: {ex.Message}", MsgBoxStyle.Critical)
             Return False
         End Try
 
@@ -219,7 +219,7 @@ Public Class UVF
             End If
 
         Catch ex As Exception
-            MsgBox($"Unable to read file!{eol}{eol}Error: {ex.Message}", MsgBoxStyle.Critical, "Error")
+            MsgBox($"Unable to read file!{eol}{eol}Error: {ex.Message}", MsgBoxStyle.Critical)
         End Try
 
     End Sub
@@ -309,7 +309,7 @@ Public Class UVF
             Me.FileTimeSeries.Add(sInfo.Index, ts)
 
         Catch ex As Exception
-            MsgBox($"Unable to read file!{eol}{eol}Error: {ex.Message}", MsgBoxStyle.Critical, "Error")
+            MsgBox($"Unable to read file!{eol}{eol}Error: {ex.Message}", MsgBoxStyle.Critical)
         End Try
 
     End Sub

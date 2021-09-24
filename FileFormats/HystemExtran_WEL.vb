@@ -155,7 +155,7 @@ Public Class HystemExtran_WEL
             FiStr.Close()
 
         Catch ex As Exception
-            MsgBox($"Unable to read file!{eol}{eol}Error: {ex.Message}", MsgBoxStyle.Critical, "Error")
+            MsgBox($"Unable to read file!{eol}{eol}Error: {ex.Message}", MsgBoxStyle.Critical)
         End Try
 
     End Sub

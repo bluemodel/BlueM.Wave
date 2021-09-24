@@ -172,7 +172,7 @@ Public Class WEL_GISMO
 
         Catch ex As Exception
             ' catch errors
-            MsgBox($"Unable to read file!{eol}{eol}Error: {ex.Message}", MsgBoxStyle.Critical, "Error")
+            MsgBox($"Unable to read file!{eol}{eol}Error: {ex.Message}", MsgBoxStyle.Critical)
         End Try
 
     End Sub
@@ -275,7 +275,7 @@ Public Class WEL_GISMO
 
         Catch ex As Exception
             'catch errors
-            MsgBox($"Unable to read file!{eol}{eol}Error: {ex.Message}", MsgBoxStyle.Critical, "Error")
+            MsgBox($"Unable to read file!{eol}{eol}Error: {ex.Message}", MsgBoxStyle.Critical)
         End Try
 
     End Sub

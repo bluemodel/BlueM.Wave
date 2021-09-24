@@ -189,7 +189,7 @@ Public Class WEL
             End If
 
         Catch ex As Exception
-            MsgBox($"Unable to read file!{eol}{eol}Error: {ex.Message}", MsgBoxStyle.Critical, "Error")
+            MsgBox($"Unable to read file!{eol}{eol}Error: {ex.Message}", MsgBoxStyle.Critical)
         End Try
 
     End Sub

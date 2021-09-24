@@ -974,7 +974,7 @@ Public Class Wave
 
         'Wenn keine Zeitreihen vorhanden, abbrechen!
         If (Me.TimeSeriesDict.Count < 1) Then
-            MsgBox("No time series available for cutting!", MsgBoxStyle.Exclamation, "Wave")
+            MsgBox("No time series available for cutting!", MsgBoxStyle.Exclamation)
             Exit Sub
         End If
 
@@ -1190,7 +1190,7 @@ Public Class Wave
 
         'Abort if no time series loaded
         If (Me.TimeSeriesDict.Count < 1) Then
-            MsgBox("No time series available for export!", MsgBoxStyle.Exclamation, "Wave")
+            MsgBox("No time series available for export!", MsgBoxStyle.Exclamation)
             Exit Sub
         End If
 
@@ -1346,10 +1346,10 @@ Public Class Wave
                     Call ZRXP.Write_File(zres(0), filename)
 
                 Case Else
-                    MsgBox("Not yet implemented!", MsgBoxStyle.Exclamation, "Wave")
+                    MsgBox("Not yet implemented!", MsgBoxStyle.Exclamation)
             End Select
 
-            MsgBox("Time series exported successfully!", MsgBoxStyle.Information, "Wave")
+            MsgBox("Time series exported successfully!", MsgBoxStyle.Information)
             Log.AddLogEntry(Log.levels.info, "Time series exported successfully!")
 
         Catch ex As Exception
@@ -1367,7 +1367,7 @@ Public Class Wave
 
         'Wenn keine Zeitreihen vorhanden, abbrechen!
         If (Me.TimeSeriesDict.Count < 1) Then
-            MsgBox("No time series available for analysis!", MsgBoxStyle.Exclamation, "Wave")
+            MsgBox("No time series available for analysis!", MsgBoxStyle.Exclamation)
             Exit Sub
         End If
 
@@ -1591,7 +1591,7 @@ Public Class Wave
     Private Sub ToolStripButton_ConvertErrorValues_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_ConvertErrorValues.Click
         'Abort if no time series available!
         If (Me.TimeSeriesDict.Count < 1) Then
-            MsgBox("No time series available!", MsgBoxStyle.Exclamation, "Wave")
+            MsgBox("No time series available!", MsgBoxStyle.Exclamation)
             Exit Sub
         End If
 
@@ -1899,7 +1899,7 @@ Public Class Wave
 
         'Wenn keine Dateien vorhanden, abbrechen
         If (datasources.Count = 0) Then
-            MsgBox("There are no known files that could be reloaded!", MsgBoxStyle.Information, "Wave")
+            MsgBox("There are no known files that could be reloaded!", MsgBoxStyle.Information)
             Exit Sub
         End If
 

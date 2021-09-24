@@ -145,7 +145,7 @@ Public Class CSV
             'TODO: gegebenes Datumsformat an dieser Stelle testen
 
         Catch ex As Exception
-            MsgBox($"Unable to read file!{eol}{eol}Error: {ex.Message}", MsgBoxStyle.Critical, "Error")
+            MsgBox($"Unable to read file!{eol}{eol}Error: {ex.Message}", MsgBoxStyle.Critical)
         End Try
 
     End Sub
@@ -236,7 +236,7 @@ Public Class CSV
             FiStr.Close()
 
         Catch ex As Exception
-            MsgBox($"Unable to read file!{eol}{eol}Error: {ex.Message}", MsgBoxStyle.Critical, "Error")
+            MsgBox($"Unable to read file!{eol}{eol}Error: {ex.Message}", MsgBoxStyle.Critical)
         End Try
 
     End Sub

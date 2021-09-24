@@ -101,7 +101,7 @@ Public Class SMB
             Me.SeriesList.Add(sInfo)
 
         Catch ex As Exception
-            MsgBox($"Unable to read file!{eol}{eol}Error: {ex.Message}", MsgBoxStyle.Critical, "Error")
+            MsgBox($"Unable to read file!{eol}{eol}Error: {ex.Message}", MsgBoxStyle.Critical)
         End Try
 
     End Sub
