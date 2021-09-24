@@ -24,12 +24,12 @@ Partial Class LogWindow
     Private Sub InitializeComponent()
         Dim ToolStrip1 As System.Windows.Forms.ToolStrip
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(LogWindow))
-        Me.ToolStripButton_Clear = New System.Windows.Forms.ToolStripButton
-        Me.ToolStripButton_Save = New System.Windows.Forms.ToolStripButton
-        Me.ToolStripButton_Copy = New System.Windows.Forms.ToolStripButton
-        Me.TextBox_Log = New System.Windows.Forms.RichTextBox
-        Me.SaveFileDialog1 = New System.Windows.Forms.SaveFileDialog
-        ToolStrip1 = New System.Windows.Forms.ToolStrip
+        Me.ToolStripButton_Clear = New System.Windows.Forms.ToolStripButton()
+        Me.ToolStripButton_Save = New System.Windows.Forms.ToolStripButton()
+        Me.ToolStripButton_Copy = New System.Windows.Forms.ToolStripButton()
+        Me.TextBox_Log = New System.Windows.Forms.RichTextBox()
+        Me.SaveFileDialog1 = New System.Windows.Forms.SaveFileDialog()
+        ToolStrip1 = New System.Windows.Forms.ToolStrip()
         ToolStrip1.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -38,7 +38,7 @@ Partial Class LogWindow
         ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButton_Clear, Me.ToolStripButton_Save, Me.ToolStripButton_Copy})
         ToolStrip1.Location = New System.Drawing.Point(0, 0)
         ToolStrip1.Name = "ToolStrip1"
-        ToolStrip1.Size = New System.Drawing.Size(636, 25)
+        ToolStrip1.Size = New System.Drawing.Size(964, 25)
         ToolStrip1.TabIndex = 1
         ToolStrip1.Text = "ToolStrip1"
         '
@@ -74,14 +74,14 @@ Partial Class LogWindow
         'TextBox_Log
         '
         Me.TextBox_Log.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-                    Or System.Windows.Forms.AnchorStyles.Left) _
-                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.TextBox_Log.BackColor = System.Drawing.Color.White
         Me.TextBox_Log.Font = New System.Drawing.Font("Courier New", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.TextBox_Log.Location = New System.Drawing.Point(10, 30)
         Me.TextBox_Log.Name = "TextBox_Log"
         Me.TextBox_Log.ReadOnly = True
-        Me.TextBox_Log.Size = New System.Drawing.Size(614, 142)
+        Me.TextBox_Log.Size = New System.Drawing.Size(942, 451)
         Me.TextBox_Log.TabIndex = 0
         Me.TextBox_Log.Text = ""
         Me.TextBox_Log.WordWrap = False
@@ -97,11 +97,12 @@ Partial Class LogWindow
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(636, 182)
+        Me.ClientSize = New System.Drawing.Size(964, 491)
         Me.Controls.Add(ToolStrip1)
         Me.Controls.Add(Me.TextBox_Log)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.MaximizeBox = False
+        Me.MinimumSize = New System.Drawing.Size(460, 380)
         Me.Name = "LogWindow"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
         Me.Text = "WaveLog"
