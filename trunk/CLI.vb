@@ -120,7 +120,7 @@ Public Class CLI
 
                             Case FileExtWVP
                                 Dim wvp As New WVP(file_in)
-                                Dim wvpSeries As List(Of TimeSeries) = wvp.LoadSeries()
+                                Dim wvpSeries As List(Of TimeSeries) = wvp.Process()
                                 ConsoleOutputLog()
                                 ConsoleAddLog(Log.levels.info, $"Imported {wvpSeries.Count} time series")
                                 tsList.AddRange(wvpSeries)

@@ -169,10 +169,10 @@ Public Class WVP
     End Sub
 
     ''' <summary>
-    ''' Loads all timeseries from all files specified in the project file
+    ''' Reads all timeseries from all files as specified in the project file
     ''' </summary>
-    ''' <returns></returns>
-    Public Function LoadSeries() As List(Of TimeSeries)
+    ''' <returns>the list of time series</returns>
+    Public Function Process() As List(Of TimeSeries)
 
         Dim found As Boolean
         Dim value As String
