@@ -33,6 +33,7 @@ Friend Class Log
 
     Private Shared myInstance As Log
     Private Shared logWindow As LogWindow
+    Public Shared logMessages As List(Of KeyValuePair(Of levels, String))
 
     ''' <summary>
     ''' Logging level, value set here may be overwritten by application settings
@@ -62,6 +63,7 @@ Friend Class Log
             'set default logging level to info
             Log.level = levels.info
         End Try
+        Log.logMessages = New List(Of KeyValuePair(Of levels, String))
     End Sub
 
     ''' <summary>
@@ -86,6 +88,7 @@ Friend Class Log
     Public Shared Sub AddLogEntry(ByVal level As levels, ByVal msg As String)
 
         If level >= Log.level Then
+            Log.logMessages.Add(New KeyValuePair(Of levels, String)(level, msg))
             If (msg.Contains(Constants.eol)) Then
                 'Wenn Eintrag mehrzeilig, dann formatieren
                 msg = Constants.eol & "  " & msg.Replace(Constants.eol, Constants.eol & "  ")
