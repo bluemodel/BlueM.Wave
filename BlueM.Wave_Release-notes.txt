@@ -1,6 +1,12 @@
 ﻿===============================================================
 BlueM.Wave Release Notes
 ===============================================================
+Version 1.10.3
+--------------
+NEW:
+* Added a commandline interface with commands for importing and converting to CSV
+  Documentation: https://wiki.bluemodel.org/index.php/Wave:CLI
+
 Version 1.10.2
 --------------
 NEW:

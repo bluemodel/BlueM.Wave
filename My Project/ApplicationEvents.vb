@@ -10,16 +10,14 @@
         Private Sub MyApplication_Startup(ByVal sender As Object, ByVal e As Microsoft.VisualBasic.ApplicationServices.StartupEventArgs) _
             Handles Me.Startup
 
-            'Übergabeparameter verarbeiten
-            '-----------------------------
-            For Each param As String In e.CommandLine
-
-                'Dateien öffnen
-                If (IO.File.Exists(param)) Then
-                    Call Wave.Import_File(param)
+            If e.CommandLine.Count > 0 Then
+                'run the CLI
+                Dim showWave As Boolean = CLI.Run(e.CommandLine.ToList)
+                If Not showWave Then
+                    e.Cancel = True
                 End If
+            End If
 
-            Next
         End Sub
 
     End Class

@@ -36,7 +36,7 @@ Public Class Wave
     ''' <summary>
     ''' The Log instance shared among all Wave instances
     ''' </summary>
-    Private WithEvents logInstance As Log
+    Friend WithEvents logInstance As Log
 
     'Dialogs
     Private WithEvents propDialog As PropertiesDialog
@@ -55,7 +55,7 @@ Public Class Wave
     ''' <summary>
     ''' Internal collection of time series {id: TimeSeries, ...}
     ''' </summary>
-    Private TimeSeriesDict As Dictionary(Of Integer, TimeSeries)
+    Friend TimeSeriesDict As Dictionary(Of Integer, TimeSeries)
 
     'Dateifilter
     Private Const FileFilter_TEN As String = "TeeChart files (*.ten)|*.ten"
