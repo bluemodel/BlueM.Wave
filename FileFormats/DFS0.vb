@@ -112,6 +112,11 @@ Public Class DFS0
     ''' </summary>
     Public Overrides Sub readFile()
 
+        'dictionary for temporarily storing datatypes 
+        Dim DataTypes As New Dictionary(Of Integer, DfsSimpleType)
+        'dictionary for temporarily storing DeleteValues (to be converted to NaN)
+        Dim DeleteValues As New Dictionary(Of DfsSimpleType, Object)
+
         'Instantiate Timeseries
         Dim ts As TimeSeries
         For Each sInfo As SeriesInfo In Me.SelectedSeries
@@ -130,12 +135,20 @@ Public Class DFS0
             dynamicItemInfo = dfs0File.ItemInfo(sInfo.Index)
             Me.FileTimeSeries(sInfo.Index).Interpretation = DataValueTypeToInterpretation(dynamicItemInfo.ValueType)
             Me.FileTimeSeries(sInfo.Index).Metadata.Add("Quantity", dynamicItemInfo.Quantity.ItemDescription)
+            DataTypes.Add(sInfo.Index, dynamicItemInfo.DataType)
         Next
 
         'Header information is contained in the IDfsFileInfo
         Dim FileInfo As IDfsFileInfo = dfs0File.FileInfo
         Dim timeAxis As IDfsTemporalAxis = FileInfo.TimeAxis
         Dim steps As Integer = timeAxis.NumberOfTimeSteps
+
+        'collect DeleteValues
+        DeleteValues.Add(DfsSimpleType.Double, FileInfo.DeleteValueDouble)
+        DeleteValues.Add(DfsSimpleType.Float, FileInfo.DeleteValueFloat)
+        DeleteValues.Add(DfsSimpleType.Int, FileInfo.DeleteValueInt)
+        DeleteValues.Add(DfsSimpleType.UInt, FileInfo.DeleteValueUnsignedInt)
+        DeleteValues.Add(DfsSimpleType.Byte, FileInfo.DeleteValueByte)
 
         'This iterates through all timesteps and selected items in the file
         'For performance reasons it is important to iterate over time steps first and items second.
@@ -146,7 +159,11 @@ Public Class DFS0
             For Each sInfo As SeriesInfo In Me.SelectedSeries
                 data = dfs0File.ReadItemTimeStep(sInfo.Index + 1, t_index) 'expects itemNumber (itemIndex + 1)!
                 datum = data.TimeAsDateTime(timeAxis)
-                value = data.Data(0)
+                If DeleteValues.ContainsKey(DataTypes(sInfo.Index)) AndAlso data.Data(0) = DeleteValues(DataTypes(sInfo.Index)) Then
+                    value = Double.NaN
+                Else
+                    value = Convert.ToDouble(data.Data(0))
+                End If
                 Me.FileTimeSeries(sInfo.Index).AddNode(datum, value)
             Next
         Next
