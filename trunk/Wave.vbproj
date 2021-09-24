@@ -257,6 +257,7 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="FileFormats\ASC.vb" />
+    <Compile Include="FileFormats\WVP.vb" />
     <Compile Include="FileFormats\DFS0.vb" />
     <Compile Include="FileFormats\BIN.vb" />
     <Compile Include="FileFormats\CSV.vb" />

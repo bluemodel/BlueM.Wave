@@ -2471,216 +2471,22 @@ Public Class Wave
     ''' <remarks></remarks>
     Private Sub Load_WVP(ByVal projectfile As String)
 
-        Dim fstr As FileStream
-        Dim strRead As StreamReader
-        Dim line, parts(), path, series, title, value As String
-        Dim found As Boolean
-        Dim seriesList As Dictionary(Of String, String)
-        Dim seriesNotFound As List(Of String)
-        Dim fileobj As FileFormatBase
-
-        'fileDict = {filename1:{series1:title1, series2:title2, ...}, ...}
-        Dim fileDict As New Dictionary(Of String, Dictionary(Of String, String))
-        'settingsDict = {filename1:{setting1:value1, setting2:value2, ...}, ...}
-        Dim settingsDict As New Dictionary(Of String, Dictionary(Of String, String))
-
         Try
+            Dim tsList As List(Of TimeSeries)
 
-            Log.AddLogEntry(Log.levels.info, "Loading Wave project file " & projectfile & " ...")
+            Me.Cursor = Cursors.WaitCursor
 
-            'read project file
+            Call Log.AddLogEntry(Log.levels.info, "Loading Wave project file '" & projectfile & "'...")
 
-            'file format (all whitespace is optional):
-            '
-            'file=path\to\file1
-            ' series=seriesname1
-            ' series=series2: "optional title"
-            'file=path\to\file2
-            ' series=series3
-            ' series=series4
-            '
-            fstr = New FileStream(projectfile, FileMode.Open)
-            strRead = New StreamReader(fstr, detectEncodingFromByteOrderMarks:=True)
+            Dim wvp As New WVP(projectfile)
+            tsList = wvp.LoadSeries()
 
-            path = ""
+            Call Log.AddLogEntry(Log.levels.info, $"Imported {tsList.Count} timeseries")
 
-            line = strRead.ReadLine()
-            While Not IsNothing(line)
-
-                line = line.Trim() 'get rid of whitespace
-
-                If line.StartsWith("#") Then
-                    'skip comments
-                    line = strRead.ReadLine()
-                    Continue While
-                End If
-
-                If line.ToLower().StartsWith("file=") Then
-                    'file
-                    path = line.Split("=".ToCharArray(), 2)(1).Trim()
-                    If Not IO.Path.IsPathRooted(path) Then
-                        'it's a relative path: construct the full path relative to the project file
-                        path = IO.Path.GetFullPath(IO.Path.Combine(IO.Path.GetDirectoryName(projectfile), path))
-                    End If
-                    If Not fileDict.ContainsKey(path) Then
-                        fileDict.Add(path, New Dictionary(Of String, String))
-                    End If
-
-                ElseIf line.ToLower().StartsWith("series=") Then
-                    'series
-                    line = line.Split("=".ToCharArray(), 2)(1).Trim()
-                    'series name may be enclosed in quotes and be followed by an optional title, which may also be enclosed in quotes
-                    'examples:
-                    'series
-                    'series:title
-                    '"se:ries":title
-                    '"se:ries":"title"
-                    Dim pattern As String
-                    If line.StartsWith("""") Then
-                        'series name is enclosed in quotes
-                        pattern = "^""([^""]+)""(:(.+))?$"
-                    Else
-                        'no quotes around series name
-                        pattern = "^([^:]+)(:(.+))?$"
-                    End If
-                    Dim m As Match = Regex.Match(line, pattern)
-                    If m.Success Then
-                        series = m.Groups(1).Value.Trim()
-                        If m.Groups(2).Success Then
-                            title = m.Groups(3).Value.Replace("""", "").Trim() 'remove quotes around title here
-                        Else
-                            title = ""
-                        End If
-                        'add series to file
-                        If fileDict.ContainsKey(path) Then
-                            If Not fileDict(path).ContainsKey(series) Then
-                                fileDict(path).Add(series, title)
-                            Else
-                                Log.AddLogEntry(Log.levels.warning, "Series " & series & " is specified twice, the second mention will be ignored!")
-                            End If
-                        Else
-                            Log.AddLogEntry(Log.levels.warning, "Series " & series & " is not associated with a file and will be ignored!")
-                        End If
-                    Else
-                        Log.AddLogEntry(Log.levels.warning, "Unable to parse series definition 'series=" & line & "', this series will be ignored!")
-                    End If
-
-                ElseIf line.Contains("=") Then
-                    'settings
-                    parts = line.Trim().Split("=".ToCharArray(), 2)
-                    'add setting to file
-                    If fileDict.ContainsKey(path) Then
-                        If Not settingsDict.ContainsKey(path) Then
-                            settingsDict.Add(path, New Dictionary(Of String, String))
-                        End If
-                        If Not settingsDict(path).ContainsKey(parts(0)) Then
-                            settingsDict(path).Add(parts(0), parts(1))
-                        Else
-                            Log.AddLogEntry(Log.levels.warning, "Setting " & parts(0) & " is specified twice, the second mention will be ignored!")
-                        End If
-                    Else
-                        Log.AddLogEntry(Log.levels.warning, "Setting " & parts(0) & " is not associated with a file and will be ignored!")
-                    End If
-
-                Else
-                    'ignore any other lines
-                End If
-                line = strRead.ReadLine()
-            End While
-
-            strRead.Close()
-            fstr.Close()
-
-            'loop over file list
-            For Each file As String In fileDict.Keys
-
-                Log.AddLogEntry(Log.levels.info, "Reading file " & file & " ...")
-
-                'get an instance of the file
-                fileobj = FileFactory.getFileInstance(file)
-
-                'apply custom import settings
-                If settingsDict.ContainsKey(file) Then
-                    For Each setting As String In settingsDict(file).Keys
-                        value = settingsDict(file)(setting)
-                        Try
-                            Select Case setting.ToLower()
-                                Case "iscolumnseparated"
-                                    fileobj.IsColumnSeparated = If(value.ToLower() = "true", True, False)
-                                Case "separator"
-                                    fileobj.Separator = New Character(value)
-                                Case "dateformat"
-                                    fileobj.Dateformat = value
-                                Case "decimalseparator"
-                                    fileobj.DecimalSeparator = New Character(value)
-                                Case "ilineheadings"
-                                    fileobj.iLineHeadings = Convert.ToInt32(value)
-                                Case "ilineunits"
-                                    fileobj.iLineUnits = Convert.ToInt32(value)
-                                Case "ilinedata"
-                                    fileobj.iLineData = Convert.ToInt32(value)
-                                Case "useunits"
-                                    fileobj.UseUnits = If(value.ToLower() = "true", True, False)
-                                Case "columnwidth"
-                                    fileobj.ColumnWidth = Convert.ToInt32(value)
-                                Case "datetimecolumnindex"
-                                    fileobj.DateTimeColumnIndex = Convert.ToInt32(value)
-                                Case Else
-                                    Log.AddLogEntry(Log.levels.warning, "Setting '" & setting & "' was not recognized and was ignored!")
-                            End Select
-                        Catch ex As Exception
-                            Log.AddLogEntry(Log.levels.warning, "Setting '" & setting & "' with value '" & value & "' could not be parsed and was ignored!")
-                        End Try
-                    Next
-                    'reread columns with new settings
-                    fileobj.readSeriesInfo()
-                End If
-
-                'get the list of series to be imported
-                seriesList = fileDict(file)
-
-                'select series for importing
-                If seriesList.Count = 0 Then
-                    'read all series contained in the file
-                    Call fileobj.selectAllSeries()
-                Else
-                    'loop over series names
-                    seriesNotFound = New List(Of String)
-                    For Each series In seriesList.Keys
-                        found = fileobj.selectSeries(series)
-                        If Not found Then
-                            seriesNotFound.Add(series)
-                        End If
-                    Next
-                    'remove series that were not found from the dictionary
-                    For Each series In seriesNotFound
-                        seriesList.Remove(series)
-                    Next
-                    'if no series remain to be imported, abort reading the file altogether
-                    If seriesList.Count = 0 Then
-                        Log.AddLogEntry(Log.levels.error, "No series left to import, skipping file!")
-                        Continue For
-                    End If
-
-                End If
-
-                'read the file
-                fileobj.readFile()
-
-                'Log
-                Call Log.AddLogEntry(Log.levels.info, "File '" & file & "' imported successfully!")
-
-                'import the series
-                Call Log.AddLogEntry(Log.levels.info, "Loading series in chart...")
-                For Each ts As TimeSeries In fileobj.FileTimeSeries.Values
-                    'change title if specified in the project file
-                    If seriesList.Count > 0 Then
-                        If seriesList(ts.Title) <> "" Then
-                            ts.Title = seriesList(ts.Title)
-                        End If
-                    End If
-                    Call Me.Import_Series(ts)
-                Next
+            'import the series
+            Call Log.AddLogEntry(Log.levels.info, "Loading series in chart...")
+            For Each ts As TimeSeries In tsList
+                Call Me.Import_Series(ts)
             Next
 
             'Log
@@ -2694,6 +2500,8 @@ Public Class Wave
         Catch ex As Exception
             MsgBox("Error while loading project file:" & eol & ex.Message, MsgBoxStyle.Critical)
             Call Log.AddLogEntry(Log.levels.error, "Error while loading project file:" & eol & ex.Message)
+        Finally
+            Me.Cursor = Cursors.Default
         End Try
 
     End Sub
@@ -2914,9 +2722,9 @@ Public Class Wave
     End Sub
 
     ''' <summary>
-    ''' Zeitreihe(n) aus einer Datei importieren
+    ''' Import a file
     ''' </summary>
-    ''' <param name="file">Pfad zur Datei</param>
+    ''' <param name="file">file path</param>
     Public Sub Import_File(ByVal file As String)
 
         Dim Datei As FileFormatBase
