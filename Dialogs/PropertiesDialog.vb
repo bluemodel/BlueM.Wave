@@ -128,7 +128,7 @@ Friend Class PropertiesDialog
     Private Sub DataGridView1_UserDeletingRow(sender As Object, e As DataGridViewRowCancelEventArgs) Handles DataGridView1.UserDeletingRow
         Dim title As String = CType(e.Row.DataBoundItem, TimeSeries).Title
         Dim id As Integer = CType(e.Row.DataBoundItem, TimeSeries).Id
-        If MsgBox("Delete series " & title & "?", MsgBoxStyle.OkCancel) = MsgBoxResult.Ok Then
+        If MsgBox($"Delete series {title}?", MsgBoxStyle.OkCancel) = MsgBoxResult.Ok Then
             RaiseEvent SeriesDeleted(id)
         End If
         'cancel row deletion because datagridview will be refreshed from outside

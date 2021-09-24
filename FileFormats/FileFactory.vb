@@ -80,10 +80,10 @@ Public Module FileFactory
             If FileExt = FileExtWEL Then
                 'A WEL file may be zipped within a WLZIP file, so try extracting it from there
                 If Not WEL.extractFromWLZIP(file) Then
-                    Throw New Exception("ERROR: File '" & file & "' not found!")
+                    Throw New Exception($"ERROR: File '{file}' not found!")
                 End If
             Else
-                Throw New Exception("ERROR: File '" & file & "' not found!")
+                Throw New Exception($"ERROR: File '{file}' not found!")
             End If
         End If
 

@@ -120,7 +120,7 @@ Public Class SWMM_DAT_MASS
             FiStr.Close()
 
         Catch ex As Exception
-            MsgBox("Konnte Datei nicht einlesen!" & eol & eol & "Fehler: " & ex.Message, MsgBoxStyle.Critical, "Fehler")
+            MsgBox($"Unable to read file!{eol}{eol}Error: {ex.Message}", MsgBoxStyle.Critical, "Error")
         End Try
 
     End Sub

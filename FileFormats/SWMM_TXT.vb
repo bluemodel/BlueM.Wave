@@ -187,7 +187,7 @@ Public Class SWMM_TXT
             For i = 0 To AnzNodes - 1
                 For j = 0 To AnzConstituents - 1
                     sInfo = New SeriesInfo()
-                    sInfo.Name = Nodes(i).Bez & " " & Constituents(j).Type
+                    sInfo.Name = $"{Nodes(i).Bez} {Constituents(j).Type}"
                     sInfo.Objekt = Nodes(i).Bez
                     sInfo.Type = Constituents(j).Type
                     sInfo.Unit = Constituents(j).Unit
@@ -203,7 +203,7 @@ Public Class SWMM_TXT
             FiStr.Close()
 
         Catch ex As Exception
-            MsgBox("Konnte die Datei '" & Path.GetFileName(Me.File) & "' nicht einlesen!" & eol & eol & "Fehler: " & ex.Message, MsgBoxStyle.Critical, "Fehler")
+            MsgBox($"Unable to read file!{eol}{eol}Error: {ex.Message}", MsgBoxStyle.Critical, "Error")
         End Try
 
     End Sub

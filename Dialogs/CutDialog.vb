@@ -245,7 +245,7 @@ Friend Class CutDialog
 
             'Man kann nicht abschneiden, was nicht existiert
             If (zreRef.StartDate < zre.StartDate) Then
-                answer = MsgBox("The start date of this time series is earlier than the start of the time series that you want to cut. Nothing will be cut from the start." & eol & "Continue?", MsgBoxStyle.OkCancel)
+                answer = MsgBox($"The start date of this time series is earlier than the start of the time series that you want to cut. Nothing will be cut from the start.{eol}Continue?", MsgBoxStyle.OkCancel)
                 If (answer = MsgBoxResult.Ok) Then
                     'Kleinstes mögliches Datum nehmen
                     tmp_anfang = zre.StartDate
@@ -255,7 +255,7 @@ Friend Class CutDialog
                 End If
             End If
             If (zreRef.EndDate > zre.EndDate) Then
-                answer = MsgBox("The end date of this time series is later than the end of the time series that you want to cut. Nothing will be cut from the end. " & eol & "Continue?", MsgBoxStyle.OkCancel)
+                answer = MsgBox($"The end date of this time series is later than the end of the time series that you want to cut. Nothing will be cut from the end. {eol}Continue?", MsgBoxStyle.OkCancel)
                 If (answer = MsgBoxResult.Ok) Then
                     'Größtes mögliches Datum für Ende nehmen
                     tmp_ende = zre.EndDate
@@ -320,14 +320,14 @@ Friend Class CutDialog
         If (Me.ComboBox_ZeitreiheCut.SelectedItem.ToString = labelAlle) Then
             For Each zre In Me.zreOrig
                 ts_cut = zre.Clone()
-                ts_cut.Title = zre.Title & " (cut)"
+                ts_cut.Title = $"{zre.Title} (cut)"
                 Call ts_cut.Cut(Me.cutStart, Me.cutEnd)
                 Me.zreCut.Add(ts_cut)
             Next
         Else
             zre = Me.ComboBox_ZeitreiheCut.SelectedItem
             ts_cut = zre.Clone()
-            ts_cut.Title = zre.Title & " (cut)"
+            ts_cut.Title = $"{zre.Title} (cut)"
             Call ts_cut.Cut(Me.cutStart, Me.cutEnd)
             Me.zreCut.Add(ts_cut)
         End If

@@ -69,17 +69,17 @@ Friend Class CalculatorDialog
         Select Case oldCursorPos
             Case 0
                 'add variable to beginning
-                newFormula = varName & " " & originalFormula
+                newFormula = $"{varName} {originalFormula}"
                 newCursorPos = 2
 
             Case Me.TextBox_Formula.Text.Length - 1
                 'add variable to end
-                newFormula = originalFormula & " " & varName
+                newFormula = $"{originalFormula} {varName}"
                 newCursorPos = newFormula.Length - 1
 
             Case Else
                 'add variable inbetween
-                newFormula = originalFormula.Substring(0, oldCursorPos) & " " & varName & " " & originalFormula.Substring(oldCursorPos)
+                newFormula = $"{originalFormula.Substring(0, oldCursorPos)} {varName} {originalFormula.Substring(oldCursorPos)}"
                 newCursorPos = oldCursorPos + 3
 
         End Select

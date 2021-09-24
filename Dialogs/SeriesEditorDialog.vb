@@ -166,13 +166,13 @@ Friend Class SeriesEditorDialog
                     t1 = DateTime.Parse(str)
                 Catch ex As Exception
                     cell.ErrorText = "Date format not recognized!"
-                    Throw New Exception("The date '" & str & "' can not be parsed!")
+                    Throw New Exception($"The date '{str}' can not be parsed!")
                 End Try
 
                 'Prüfen, ob Datum aufsteigend
                 If (t1 <= t0) Then
                     cell.ErrorText = "Date not ascending!"
-                    Throw New Exception("The date '" & t1 & "' is not ascending!")
+                    Throw New Exception($"The date '{t1}' is not ascending!")
                 End If
 
                 cell.ErrorText = String.Empty

@@ -45,7 +45,7 @@ Friend Class LogWindow
         start = Me.TextBox_Log.TextLength
 
         'format log entry
-        msg = String.Format("* {0} {1}: {2}", DateTime.Now.ToString(Helpers.DefaultDateFormat), level.ToString.ToUpper(), msg) & eol
+        msg = $"* {DateTime.Now.ToString(Helpers.DefaultDateFormat)} {level.ToString.ToUpper()}: {msg}" & eol
 
         length = msg.Length
 

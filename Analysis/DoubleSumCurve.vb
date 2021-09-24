@@ -128,7 +128,7 @@ Friend Class DoubleSumCurve
 
         'Text:
         '-----
-        Me.mResultText = "The analysis is based on " & Me.summe1.Length & " coincident data points between " & Me.ts_1.StartDate.ToString(Helpers.DefaultDateFormat) & " and " & Me.ts_1.EndDate.ToString(DefaultDateFormat)
+        Me.mResultText = $"The analysis is based on {Me.summe1.Length} coincident data points between {Me.ts_1.StartDate.ToString(Helpers.DefaultDateFormat)} and {Me.ts_1.EndDate.ToString(DefaultDateFormat)}"
 
         'Diagramm:
         '---------
@@ -136,20 +136,20 @@ Friend Class DoubleSumCurve
 
         Me.mResultChart = New Steema.TeeChart.Chart()
         Call Wave.formatChart(Me.mResultChart)
-        Me.mResultChart.Header.Text = "Double Sum Curve (" & Me.ts_1.Title & " / " & Me.ts_2.Title & ")"
+        Me.mResultChart.Header.Text = $"Double Sum Curve ({Me.ts_1.Title} / {Me.ts_2.Title})"
         Me.mResultChart.Legend.Visible = False
 
         'Achsen
         '------
-        Me.mResultChart.Axes.Bottom.Title.Caption = "Sum " & Me.ts_1.Title
+        Me.mResultChart.Axes.Bottom.Title.Caption = $"Sum {Me.ts_1.Title}"
         Me.mResultChart.Axes.Bottom.Labels.Style = Steema.TeeChart.AxisLabelStyle.Value
-        Me.mResultChart.Axes.Left.Title.Caption = "Sum " & Me.ts_2.Title
+        Me.mResultChart.Axes.Left.Title.Caption = $"Sum {Me.ts_2.Title}"
         Me.mResultChart.Axes.Left.Labels.Style = Steema.TeeChart.AxisLabelStyle.Value
 
         'Reihen
         '------
         doppelsumme = New Steema.TeeChart.Styles.Line(Me.mResultChart)
-        doppelsumme.Title = "Double Sum Curve " & Me.ts_1.Title & " - " & Me.ts_2.Title
+        doppelsumme.Title = $"Double Sum Curve {Me.ts_1.Title} - {Me.ts_2.Title}"
         doppelsumme.Pointer.Visible = True
         doppelsumme.Pointer.Style = Steema.TeeChart.Styles.PointerStyles.Circle
         doppelsumme.Pointer.HorizSize = 2

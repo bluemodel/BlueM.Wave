@@ -137,7 +137,7 @@ Friend Class TimeStepAnalysis
         For Each ts As TimeSeries In MyBase.mZeitreihen
 
             'create a new result time series
-            result_ts = New TimeSeries(ts.Title & " (dt " & Me.TimeUnitName & ")")
+            result_ts = New TimeSeries($"{ts.Title} (dt {Me.TimeUnitName})")
             result_ts.Unit = Me.TimeUnitName
             result_ts.Interpretation = TimeSeries.InterpretationEnum.BlockLeft
             result_ts.DataSource = New TimeSeriesDataSource(TimeSeriesDataSource.OriginEnum.AnalysisResult)
@@ -167,7 +167,7 @@ Friend Class TimeStepAnalysis
                         Case TimeUnitEnum.Seconds
                             dt_val = dt.TotalSeconds
                         Case Else
-                            Throw New Exception("Conversion of timestep to time unit " & Me.TimeUnitName & " is not yet implemented!")
+                            Throw New Exception($"Conversion of timestep to time unit {Me.TimeUnitName} is not yet implemented!")
                     End Select
                     'store dt value as new node in result series
                     result_ts.AddNode(timestamp, dt_val)

@@ -73,7 +73,7 @@ Friend Class ConvertErrorValuesDialog
         i = 0
         For Each str As String In errorstrings
             If Not Double.TryParse(str, errorvalue) Then
-                MsgBox(String.Format("Could not parse the value '{0}'!", str), MsgBoxStyle.Exclamation, "Wave")
+                MsgBox($"Could not parse the value '{str}'!", MsgBoxStyle.Exclamation, "Wave")
                 Exit Sub
             Else
                 errorvalues(i) = errorvalue
@@ -87,14 +87,14 @@ Friend Class ConvertErrorValuesDialog
             'clean all series
             For Each ts In Me.tsOriginal
                 ts_new = ts.convertErrorValues(errorvalues)
-                ts_new.Title = ts_new.Title & " (clean)"
+                ts_new.Title &= " (clean)"
                 Me.tsConverted.Add(ts_new)
             Next
         Else
             'clean only the selected series
             ts = Me.ComboBox_Series.SelectedItem
             ts_new = ts.convertErrorValues(errorvalues)
-            ts_new.Title = ts_new.Title & " (clean)"
+            ts_new.Title &= " (clean)"
             Me.tsConverted.Add(ts_new)
         End If
 

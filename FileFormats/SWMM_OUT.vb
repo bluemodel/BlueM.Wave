@@ -139,7 +139,7 @@ Public Class SWMM_OUT
             For j = 0 To nSubcatchVars - nPolluts - 1
                 index = indexSpalten + i * nSubcatchVars + j
                 sInfo = New SeriesInfo()
-                sInfo.Name = oSWMM.subcatchments(i) & " " & oSWMM.SUBCATCHVAR(j)
+                sInfo.Name = $"{oSWMM.subcatchments(i)} {oSWMM.SUBCATCHVAR(j)}"
                 sInfo.Objekt = oSWMM.subcatchments(i)
                 sInfo.Unit = Units(0, j, FlowUnits)
                 sInfo.Type = "FLOW"
@@ -154,7 +154,7 @@ Public Class SWMM_OUT
             For j = nSubcatchVars - nPolluts To nSubcatchVars - 1
                 index = indexSpalten + i * nSubcatchVars + j
                 sInfo = New SeriesInfo()
-                sInfo.Name = oSWMM.subcatchments(i) & " " & oSWMM.pollutants(j - nSubcatchVars + nPolluts)
+                sInfo.Name = $"{oSWMM.subcatchments(i)} {oSWMM.pollutants(j - nSubcatchVars + nPolluts)}"
                 sInfo.Objekt = oSWMM.subcatchments(i)
                 sInfo.Unit = Units(0, j, FlowUnits)
                 'Type aus String (z.B. für "S101 CSB" wird "CSB" ausgelesen)
@@ -173,7 +173,7 @@ Public Class SWMM_OUT
             For j = 0 To nNodesVars - nPolluts - 1
                 index = indexSpalten + i * nNodesVars + j
                 sInfo = New SeriesInfo()
-                sInfo.Name = oSWMM.nodes(i) & " " & oSWMM.NODEVAR(j)
+                sInfo.Name = $"{oSWMM.nodes(i)} {oSWMM.NODEVAR(j)}"
                 sInfo.Objekt = oSWMM.nodes(i)
                 sInfo.Unit = Units(1, j, FlowUnits)
                 sInfo.Type = "FLOW"
@@ -188,7 +188,7 @@ Public Class SWMM_OUT
             For j = nNodesVars - nPolluts To nNodesVars - 1
                 index = indexSpalten + i * nNodesVars + j
                 sInfo = New SeriesInfo()
-                sInfo.Name = oSWMM.nodes(i) & " " & oSWMM.pollutants(j - nNodesVars + nPolluts)
+                sInfo.Name = $"{oSWMM.nodes(i)} {oSWMM.pollutants(j - nNodesVars + nPolluts)}"
                 sInfo.Objekt = oSWMM.nodes(i)
                 sInfo.Unit = Units(1, j, FlowUnits)
                 'Type aus String (z.B. für "S101 CSB" wird "CSB" ausgelesen)
@@ -207,7 +207,7 @@ Public Class SWMM_OUT
             For j = 0 To nLinksVars - nPolluts - 1
                 index = indexSpalten + i * nLinksVars + j
                 sInfo = New SeriesInfo()
-                sInfo.Name = oSWMM.links(i) & " " & oSWMM.LINKVAR(j)
+                sInfo.Name = $"{oSWMM.links(i)} {oSWMM.LINKVAR(j)}"
                 sInfo.Objekt = oSWMM.links(i)
                 sInfo.Unit = Units(2, j, FlowUnits)
                 sInfo.Type = "FLOW"
@@ -222,7 +222,7 @@ Public Class SWMM_OUT
             For j = nLinksVars - nPolluts To nLinksVars - 1
                 index = indexSpalten + i * nLinksVars + j
                 sInfo = New SeriesInfo()
-                sInfo.Name = oSWMM.links(i) & " " & oSWMM.pollutants(j - nLinksVars + nPolluts)
+                sInfo.Name = $"{oSWMM.links(i)} {oSWMM.pollutants(j - nLinksVars + nPolluts)}"
                 sInfo.Objekt = oSWMM.links(i)
                 sInfo.Unit = Units(2, j, FlowUnits)
                 'Type aus String (z.B. für "S101 CSB" wird "CSB" ausgelesen)

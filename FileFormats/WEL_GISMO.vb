@@ -161,7 +161,7 @@ Public Class WEL_GISMO
             ' put headers and units into the Me.Spalten-array (starts with index 0, --> [anzSpalten -1])
             For i = 1 To (anzSpalten - 1) ' first column is timestamp
                 sInfo = New SeriesInfo()
-                sInfo.Name = SeriesName.Trim & "_" & Namen(i).Trim()
+                sInfo.Name = $"{SeriesName.Trim}_{Namen(i).Trim()}"
                 sInfo.Index = i
                 If Einheiten(i).Trim = "cbm/s" Then
                     Einheiten(i) = "m3/s"
@@ -172,7 +172,7 @@ Public Class WEL_GISMO
 
         Catch ex As Exception
             ' catch errors
-            MsgBox("Could not read file!" & eol & eol & "Error: " & ex.Message, MsgBoxStyle.Critical, "Error")
+            MsgBox($"Unable to read file!{eol}{eol}Error: {ex.Message}", MsgBoxStyle.Critical, "Error")
         End Try
 
     End Sub
@@ -228,7 +228,7 @@ Public Class WEL_GISMO
                     If (Not ok) Then
                         ok = DateTime.TryParseExact(Werte(Me.DateTimeColumnIndex), DateFormats("GISMO2"), Helpers.DefaultNumberFormat, Globalization.DateTimeStyles.None, datum)
                         If Not ok Then
-                            Throw New Exception("Kann das Datumsformat '" & Werte(Me.DateTimeColumnIndex) & "' nicht erkennen! " & eol & "Sollte in der Form '" & DateFormats("GISMO1") & " oder " & DateFormats("GISMO2") & "' vorliegen!")
+                            Throw New Exception($"Kann das Datumsformat '{Werte(Me.DateTimeColumnIndex)}' nicht erkennen!{eol}Sollte in der Form '{DateFormats("GISMO1")} oder {DateFormats("GISMO2")}' vorliegen!")
                         End If
                     End If
 
@@ -255,7 +255,7 @@ Public Class WEL_GISMO
                     If (Not ok) Then
                         ok = DateTime.TryParseExact(Werte(Me.DateTimeColumnIndex), DateFormats("GISMO2"), Helpers.DefaultNumberFormat, Globalization.DateTimeStyles.None, datum)
                         If Not ok Then
-                            Throw New Exception("Kann das Datumsformat '" & Werte(Me.DateTimeColumnIndex) & "' nicht erkennen! " & eol & "Sollte in der Form '" & DateFormats("GISMO1") & " oder " & DateFormats("GISMO2") & "' vorliegen!")
+                            Throw New Exception($"Kann das Datumsformat '{Werte(Me.DateTimeColumnIndex)}' nicht erkennen! {eol}Sollte in der Form '{DateFormats("GISMO1")} oder {DateFormats("GISMO2")}' vorliegen!")
                         End If
                     End If
 
@@ -275,7 +275,7 @@ Public Class WEL_GISMO
 
         Catch ex As Exception
             'catch errors
-            MsgBox("Konnte Datei nicht einlesen!" & eol & eol & "Fehler: " & ex.Message, MsgBoxStyle.Critical, "Fehler")
+            MsgBox($"Unable to read file!{eol}{eol}Error: {ex.Message}", MsgBoxStyle.Critical, "Error")
         End Try
 
     End Sub

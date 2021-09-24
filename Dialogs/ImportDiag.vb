@@ -178,7 +178,7 @@ Friend Class ImportDiag
             Or TypeOf Me.datei Is SydroSQLite _
             Or TypeOf Me.datei Is DFS0 Then
 
-            Me.TextBox_Preview.Text = Path.GetFileName(Me.datei.File) & " is a binary file." & eol & "Preview is not available!"
+            Me.TextBox_Preview.Text = $"{Path.GetFileName(Me.datei.File)} is a binary file.{eol}Preview is not available!"
             'Disable all other fields
             Me.GroupBox_Dateformat.Enabled = False
             Me.GroupBox_Columns.Enabled = False

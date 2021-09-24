@@ -106,7 +106,7 @@ Public Class ZRXP
             Return isZRXP
 
         Catch ex As Exception
-            MsgBox("Unable to read file!" & eol & eol & "Error: " & ex.Message, MsgBoxStyle.Critical, "Error")
+            MsgBox($"Unable to read file!{eol}{eol}Error: {ex.Message}", MsgBoxStyle.Critical, "Error")
             Return False
         End Try
 
@@ -171,13 +171,13 @@ Public Class ZRXP
 
             'store series info
             sInfo = New SeriesInfo
-            sInfo.Name = Me.FileMetadata("SNAME") & "." & Me.FileMetadata("CNAME")
+            sInfo.Name = $"{Me.FileMetadata("SNAME")}.{Me.FileMetadata("CNAME")}"
             sInfo.Unit = Me.FileMetadata("CUNIT")
             sInfo.Index = 0
             Me.SeriesList.Add(sInfo)
 
         Catch ex As Exception
-            MsgBox("Unable to read file!" & eol & eol & "Error: " & ex.Message, MsgBoxStyle.Critical, "Error")
+            MsgBox($"Unable to read file!{eol}{eol}Error: {ex.Message}", MsgBoxStyle.Critical, "Error")
         End Try
 
     End Sub
@@ -230,7 +230,7 @@ Public Class ZRXP
                 End If
                 ok = DateTime.TryParseExact(datestring, Me.Dateformat, Helpers.DefaultNumberFormat, Globalization.DateTimeStyles.None, timestamp)
                 If (Not ok) Then
-                    Throw New Exception("Unable to parse the date '" & datestring & "' using the expected date format '" & Me.Dateformat & "'!")
+                    Throw New Exception($"Unable to parse the date '{datestring}' using the expected date format '{Me.Dateformat}'!")
                 End If
                 'parse value
                 valuestring = parts(1)
@@ -251,14 +251,14 @@ Public Class ZRXP
             FiStr.Close()
 
             If errorcount > 0 Then
-                Log.AddLogEntry(Log.levels.warning, "The file contained " & errorcount & " error values (" & Me.FileMetadata("RINVAL") & "), which were converted to NaN!")
+                Log.AddLogEntry(Log.levels.warning, $"The file contained {errorcount} error values ({Me.FileMetadata("RINVAL")}), which were converted to NaN!")
             End If
 
             'store time series
             Me.FileTimeSeries.Add(sInfo.Index, ts)
 
         Catch ex As Exception
-            MsgBox("Error while parsing file!" & eol & eol & "Error: " & ex.Message, MsgBoxStyle.Critical, "Error")
+            MsgBox($"Unable to read file!{eol}{eol}Error: {ex.Message}", MsgBoxStyle.Critical, "Error")
         End Try
 
     End Sub
@@ -325,8 +325,7 @@ Public Class ZRXP
         strwrite = New StreamWriter(file, False, Helpers.DefaultEncoding)
 
         '1st line: ZRXP version number, mode, creation tool and timezone
-        strwrite.WriteLine(String.Format("#ZRXPVERSION{0}|*|ZRXPMODE{1}|*|ZRXPCREATOR{2}|*|TZ{3}|*|", _
-                                         ts.Metadata("ZRXPVERSION"), ts.Metadata("ZRXPMODE"), ts.Metadata("ZRXPCREATOR"), ts.Metadata("TZ")))
+        strwrite.WriteLine($"#ZRXPVERSION{ts.Metadata("ZRXPVERSION")}|*|ZRXPMODE{ts.Metadata("ZRXPMODE")}|*|ZRXPCREATOR{ts.Metadata("ZRXPCREATOR")}|*|TZ{ts.Metadata("TZ")}|*|")
 
         'next lines: remaining metadata, omitting empty keywords, wrapped
         Dim excludeKeys As New List(Of String)(New String() {"ZRXPVERSION", "ZRXPMODE", "ZRXPCREATOR", "TZ"})

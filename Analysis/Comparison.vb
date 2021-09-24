@@ -155,7 +155,7 @@ Friend Class Comparison
 
         'Text:
         '-----
-        Me.mResultText = "The analysis is based on " & Me.ts_x.Length & " coincident data points between " & Me.ts_x.StartDate.ToString(Helpers.DefaultDateFormat) & " and " & Me.ts_x.EndDate.ToString(Helpers.DefaultDateFormat)
+        Me.mResultText = $"The analysis is based on {Me.ts_x.Length} coincident data points between {Me.ts_x.StartDate.ToString(Helpers.DefaultDateFormat)} and {Me.ts_x.EndDate.ToString(Helpers.DefaultDateFormat)}"
 
         'Diagramm:
         '---------
@@ -164,20 +164,20 @@ Friend Class Comparison
 
         Me.mResultChart = New Steema.TeeChart.Chart()
         Call Wave.formatChart(Me.mResultChart)
-        Me.mResultChart.Header.Text = "Comparison (" & x_title & " / " & y_title & ")"
+        Me.mResultChart.Header.Text = $"Comparison ({x_title} / {y_title})"
         Me.mResultChart.Legend.Visible = False
 
         'Achsen
         '------
-        Me.mResultChart.Axes.Bottom.Title.Caption = x_title & " [" & x_unit & "]"
+        Me.mResultChart.Axes.Bottom.Title.Caption = $"{x_title}  [{x_unit}]"
         Me.mResultChart.Axes.Bottom.Labels.Style = Steema.TeeChart.AxisLabelStyle.Value
-        Me.mResultChart.Axes.Left.Title.Caption = y_title & " [" & y_unit & "]"
+        Me.mResultChart.Axes.Left.Title.Caption = $"{y_title}  [{y_unit}]"
         Me.mResultChart.Axes.Left.Labels.Style = Steema.TeeChart.AxisLabelStyle.Value
 
         'Reihen
         '------
         series_points = New Steema.TeeChart.Styles.Points(Me.mResultChart)
-        series_points.Title = "Comparison " & x_title & " - " & y_title
+        series_points.Title = $"Comparison {x_title} - {y_title}"
         series_points.Pointer.Visible = True
         series_points.Pointer.Style = Steema.TeeChart.Styles.PointerStyles.Circle
         series_points.Pointer.HorizSize = 2
@@ -207,9 +207,9 @@ Friend Class Comparison
         '----------
         Dim anno As New Steema.TeeChart.Tools.Annotation(Me.mResultChart)
         anno.Position = Steema.TeeChart.Tools.AnnotationPositions.RightBottom
-        anno.Text = "Correlation coefficient: " & Str(Me.mResultValues("Correlation coefficient")) & eol
+        anno.Text = $"Correlation coefficient: {Me.mResultValues("Correlation coefficient").ToString(DefaultNumberFormat)}" & eol
         anno.Text &= "Linear regression line: " & eol
-        anno.Text &= "y = " + Str(slope) + " * x + " + Str(intercept)
+        anno.Text &= $"y = {slope.ToString(DefaultNumberFormat)} * x + {intercept.ToString(DefaultNumberFormat)}"
 
     End Sub
 

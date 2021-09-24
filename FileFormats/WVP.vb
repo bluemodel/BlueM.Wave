@@ -61,7 +61,7 @@ Public Class WVP
         Dim strRead As IO.StreamReader
         Dim line, parts(), file, series, title As String
 
-        Log.AddLogEntry(Log.levels.info, "Parsing Wave project file " & projectfile & " ...")
+        Log.AddLogEntry(Log.levels.info, $"Parsing Wave project file {projectfile} ...")
 
         'read project file
 
@@ -131,13 +131,13 @@ Public Class WVP
                         If Not fileDict(file).ContainsKey(series) Then
                             fileDict(file).Add(series, title)
                         Else
-                            Log.AddLogEntry(Log.levels.warning, "Series " & series & " is specified twice, the second mention will be ignored!")
+                            Log.AddLogEntry(Log.levels.warning, $"Series {series} is specified twice, the second mention will be ignored!")
                         End If
                     Else
-                        Log.AddLogEntry(Log.levels.warning, "Series " & series & " is not associated with a file and will be ignored!")
+                        Log.AddLogEntry(Log.levels.warning, $"Series {series} is not associated with a file and will be ignored!")
                     End If
                 Else
-                    Log.AddLogEntry(Log.levels.warning, "Unable to parse series definition 'series=" & line & "', this series will be ignored!")
+                    Log.AddLogEntry(Log.levels.warning, $"Unable to parse series definition 'series={line}', this series will be ignored!")
                 End If
 
             ElseIf line.Contains("=") Then
@@ -151,10 +151,10 @@ Public Class WVP
                     If Not settingsDict(file).ContainsKey(parts(0)) Then
                         settingsDict(file).Add(parts(0), parts(1))
                     Else
-                        Log.AddLogEntry(Log.levels.warning, "Setting " & parts(0) & " is specified twice, the second mention will be ignored!")
+                        Log.AddLogEntry(Log.levels.warning, $"Setting {parts(0)} is specified twice, the second mention will be ignored!")
                     End If
                 Else
-                    Log.AddLogEntry(Log.levels.warning, "Setting " & parts(0) & " is not associated with a file and will be ignored!")
+                    Log.AddLogEntry(Log.levels.warning, $"Setting {parts(0)} is not associated with a file and will be ignored!")
                 End If
 
             Else
@@ -185,7 +185,7 @@ Public Class WVP
         'loop over file list
         For Each file As String In fileDict.Keys
 
-            Log.AddLogEntry(Log.levels.info, "Reading file " & file & " ...")
+            Log.AddLogEntry(Log.levels.info, $"Reading file {file} ...")
 
             'get an instance of the file
             fileInstance = FileFactory.getFileInstance(file)
@@ -217,10 +217,10 @@ Public Class WVP
                             Case "datetimecolumnindex"
                                 fileInstance.DateTimeColumnIndex = Convert.ToInt32(value)
                             Case Else
-                                Log.AddLogEntry(Log.levels.warning, "Setting '" & setting & "' was not recognized and was ignored!")
+                                Log.AddLogEntry(Log.levels.warning, $"Setting '{setting}' was not recognized and was ignored!")
                         End Select
                     Catch ex As Exception
-                        Log.AddLogEntry(Log.levels.warning, "Setting '" & setting & "' with value '" & value & "' could not be parsed and was ignored!")
+                        Log.AddLogEntry(Log.levels.warning, $"Setting '{setting}' with value '{value}' could not be parsed and was ignored!")
                     End Try
                 Next
                 'reread columns with new settings
@@ -259,7 +259,7 @@ Public Class WVP
             fileInstance.readFile()
 
             'Log
-            Call Log.AddLogEntry(Log.levels.info, "File '" & file & "' imported successfully!")
+            Call Log.AddLogEntry(Log.levels.info, $"File '{file}' imported successfully!")
 
             'store the series
             For Each ts As TimeSeries In fileInstance.FileTimeSeries.Values

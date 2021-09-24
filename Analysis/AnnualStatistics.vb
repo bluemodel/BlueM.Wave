@@ -121,10 +121,8 @@ Friend Class AnnualStatistics
 
         Const formatstring As String = "F4"
 
-        Me.mResultText = "Annual statistics:" & eol _
-                         & eol _
-                         & "Time series: " & Me.mZeitreihen(0).Title & eol _
-                         & eol
+        Me.mResultText = "Annual statistics:" & eol & eol &
+                         $"Time series: {Me.mZeitreihen(0).Title}" & eol & eol
         'output results in CSV format
         Me.mResultText &= "Results:" & eol
         Me.mResultText &= "Description;Start;End;Length;Min;Max;Avg;Volume" & eol

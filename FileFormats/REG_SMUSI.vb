@@ -124,7 +124,7 @@ Public Class REG_SMUSI
             FiStr.Close()
 
         Catch ex As Exception
-            MsgBox("Konnte Datei nicht einlesen!" & eol & eol & "Fehler: " & ex.Message, MsgBoxStyle.Critical, "Fehler")
+            MsgBox($"Unable to read file!{eol}{eol}Error: {ex.Message}", MsgBoxStyle.Critical, "Error")
         End Try
 
     End Sub
@@ -244,9 +244,9 @@ Public Class REG_SMUSI
         For Each t2 In Reihe.Dates.Skip(1)
             dt = (t2 - t1).Minutes
             If dt <> 5 Then
-                Throw New Exception(String.Format("Unable to export to SMUSI REG format. " & _
-                                                  "Time series must be equidistant with a time step of 5 minutes." & eol & _
-                                                  "Timestep between {0} and {1} is not 5 minutes!", t1, t2))
+                Throw New Exception($"Unable to export to SMUSI REG format!" & eol &
+                                    $"Time series must be equidistant with a time step of 5 minutes." & eol &
+                                    $"Timestep between {t1} and {t2} is not 5 minutes!")
             End If
             t1 = t2
         Next
@@ -307,7 +307,7 @@ Public Class REG_SMUSI
         'Header schreiben
         strwrite = New StreamWriter(File)
         strwrite.WriteLine(Reihe.Title)
-        strwrite.WriteLine(String.Format("hN = {0} mm/a", hn_A_Mittel))
+        strwrite.WriteLine($"hN = {hn_A_Mittel} mm/a")
         strwrite.WriteLine("================================================================================")
 
         'Rest anhängen

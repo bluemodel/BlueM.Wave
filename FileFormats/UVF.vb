@@ -120,7 +120,7 @@ Public Class UVF
             Return True
 
         Catch ex As Exception
-            MsgBox("Unable to read file!" & eol & eol & "Error: " & ex.Message, MsgBoxStyle.Critical, "Error")
+            MsgBox($"Unable to read file!{eol}{eol}Error: {ex.Message}", MsgBoxStyle.Critical, "Error")
             Return False
         End Try
 
@@ -167,8 +167,8 @@ Public Class UVF
                     Me.FileMetadata("unit") = Zeile.Substring(15, 15).Trim()
                     'DefArt oder Anfangsjahrhundert einlesen, falls vorhanden
                     If Zeile.Length > 30 Then
-                        If Zeile.Substring(30, 1) = "I" Or _
-                           Zeile.Substring(30, 1) = "K" Or _
+                        If Zeile.Substring(30, 1) = "I" Or
+                           Zeile.Substring(30, 1) = "K" Or
                            Zeile.Substring(30, 1) = "M" Then
                             Me.FileMetadata("defArt") = Zeile.Substring(30, 1)
                         ElseIf Regex.IsMatch(Zeile.Substring(30, 4), "\d\d\d\d") Then
@@ -219,7 +219,7 @@ Public Class UVF
             End If
 
         Catch ex As Exception
-            MsgBox("Unable to read file!" & eol & eol & "Error: " & ex.Message, MsgBoxStyle.Critical, "Error")
+            MsgBox($"Unable to read file!{eol}{eol}Error: {ex.Message}", MsgBoxStyle.Critical, "Error")
         End Try
 
     End Sub
@@ -283,7 +283,7 @@ Public Class UVF
                 'parse it
                 ok = DateTime.TryParseExact(datumstringExt, Me.Dateformat, Helpers.DefaultNumberFormat, Globalization.DateTimeStyles.None, datum)
                 If (Not ok) Then
-                    Throw New Exception("Unable to parse the date '" & datumstring & "' using the given date format '" & Me.Dateformat & "'!")
+                    Throw New Exception($"Unable to parse the date '{datumstring}' using the given date format '{Me.Dateformat}'!")
                 End If
                 'Wert lesen
                 wert = Helpers.StringToDouble(Zeile.Substring(10))
@@ -302,14 +302,14 @@ Public Class UVF
             FiStr.Close()
 
             If errorcount > 0 Then
-                Log.AddLogEntry(Log.levels.warning, "The file contained " & errorcount & " error values (" & UVF.ErrorValue & "), which were converted to NaN!")
+                Log.AddLogEntry(Log.levels.warning, $"The file contained {errorcount} error values ({UVF.ErrorValue}), which were converted to NaN!")
             End If
 
             'store time series
             Me.FileTimeSeries.Add(sInfo.Index, ts)
 
         Catch ex As Exception
-            MsgBox("Unable to read file!" & eol & eol & "Error: " & ex.Message, MsgBoxStyle.Critical, "Error")
+            MsgBox($"Unable to read file!{eol}{eol}Error: {ex.Message}", MsgBoxStyle.Critical, "Error")
         End Try
 
     End Sub
@@ -376,9 +376,9 @@ Public Class UVF
         century = Math.Floor(ts.StartDate.Year / 100) * 100 & " " & Math.Floor(ts.EndDate.Year / 100) * 100
         strwrite.WriteLine(name & unit & century)
         '3rd line: location
-        strwrite.WriteLine(ts.Metadata("location").PadRight(15).Substring(0, 15) & _
-                           ts.Metadata("coord_X").PadRight(10).Substring(0, 10) & _
-                           ts.Metadata("coord_Y").PadRight(10).Substring(0, 10) & _
+        strwrite.WriteLine(ts.Metadata("location").PadRight(15).Substring(0, 15) &
+                           ts.Metadata("coord_X").PadRight(10).Substring(0, 10) &
+                           ts.Metadata("coord_Y").PadRight(10).Substring(0, 10) &
                            ts.Metadata("coord_Z").PadRight(10).Substring(0, 10))
         '4th line: start and end date (without the first two digits)
         strwrite.WriteLine(ts.StartDate.ToString(DateFormats("UVF")).Substring(2) & ts.EndDate.ToString(DateFormats("UVF")).Substring(2))
@@ -387,7 +387,7 @@ Public Class UVF
             timestamp = ts.Dates(i).ToString(DateFormats("UVF")).Substring(2) 'without the first two digits
             'TODO: values < 1 have a leading zero and are technically one character too long!
             value = String.Format(Helpers.DefaultNumberFormat, "{0,9:g8}", ts.Values(i))
-            strwrite.WriteLine(timestamp & " " & value)
+            strwrite.WriteLine($"{timestamp} {value}")
         Next
         strwrite.Close()
 

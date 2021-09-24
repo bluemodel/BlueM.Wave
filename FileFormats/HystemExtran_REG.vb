@@ -163,7 +163,7 @@ Public Class HystemExtran_REG
             FiStr.Close()
 
         Catch ex As Exception
-            MsgBox("Konnte Datei nicht einlesen!" & eol & eol & "Fehler: " & ex.Message, MsgBoxStyle.Critical, "Fehler")
+            MsgBox($"Unable to read file!{eol}{eol}Error: {ex.Message}", MsgBoxStyle.Critical, "Error")
         End Try
 
     End Sub
@@ -252,7 +252,7 @@ Public Class HystemExtran_REG
                     Case "N" 'Nullsatz, keine Daten
                         Continue Do
                     Case Else
-                        Log.AddLogEntry(Log.levels.warning, String.Format("Unrecognized character {0} in line {1} column 20!", kennzeichnung, j))
+                        Log.AddLogEntry(Log.levels.warning, $"Unrecognized character {kennzeichnung} in line {j} column 20!")
                 End Select
 
             End If

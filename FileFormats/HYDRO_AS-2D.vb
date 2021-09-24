@@ -212,7 +212,7 @@ Public Class HYDRO_AS_2D
                     'Zeitreihen-Namen sind Kombination aus Spalte IJBW_Seg-1 und IJBW_Seg-2
                     Do
                         parts = Zeile.Split(New Char() {" "}, StringSplitOptions.RemoveEmptyEntries)
-                        names.Add(parts(0) & "-" & parts(1))
+                        names.Add($"{parts(0)}-{parts(1)}")
                         Zeile = StrReadSync.ReadLine.ToString().Trim()
                     Loop Until Zeile.StartsWith("---")
 
@@ -233,7 +233,7 @@ Public Class HYDRO_AS_2D
             FiStr.Close()
 
         Catch ex As Exception
-            MsgBox("Konnte Datei nicht einlesen!" & eol & eol & "Fehler: " & ex.Message, MsgBoxStyle.Critical, "Fehler")
+            MsgBox($"Unable to read file!{eol}{eol}Error: {ex.Message}", MsgBoxStyle.Critical, "Error")
         End Try
 
 
@@ -315,7 +315,7 @@ Public Class HYDRO_AS_2D
                         If Zeile.StartsWith("IJBW_Seg-1") Then Continue Do
                         'Datenzeilen
                         parts = Zeile.Split(New Char() {" "}, StringSplitOptions.RemoveEmptyEntries)
-                        name = parts(0) & "-" & parts(1)
+                        name = $"{parts(0)}-{parts(1)}"
                         value = Helpers.StringToDouble(parts(2))
                         'nur ausgewählte Reihen abspeichern
                         For Each sInfo As SeriesInfo In Me.SelectedSeries
@@ -334,7 +334,7 @@ Public Class HYDRO_AS_2D
             FiStr.Close()
 
         Catch ex As Exception
-            MsgBox("Konnte Datei nicht einlesen!" & eol & eol & "Fehler: " & ex.Message, MsgBoxStyle.Critical, "Fehler")
+            MsgBox($"Unable to read file!{eol}{eol}Error: {ex.Message}", MsgBoxStyle.Critical, "Error")
         End Try
 
     End Sub
