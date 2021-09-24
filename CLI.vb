@@ -106,7 +106,7 @@ Public Class CLI
                     Dim file_out As String = fileargs.Last
 
                     'Import
-                    ConsoleAddLog(BlueM.Wave.Log.levels.info, $"Importing {fileargs.Count} file(s)...")
+                    ConsoleAddLog(BlueM.Wave.Log.levels.info, $"Importing {files_in.Count} file(s)...")
 
                     Dim tsList As New List(Of TimeSeries)
 
