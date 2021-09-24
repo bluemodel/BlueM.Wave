@@ -3010,7 +3010,7 @@ Public Class Wave
     ''' Zeigt den Importdialog an und liest im Anschluss die Datei mit den eingegebenen Einstellungen ein
     ''' </summary>
     ''' <param name="Datei">Instanz der Datei, die importiert werden soll</param>
-    Private Function showImportDialog(ByRef Datei As FileFormatBase) As Boolean
+    Friend Function showImportDialog(ByRef Datei As FileFormatBase) As Boolean
 
         Datei.ImportDiag = New ImportDiag(Datei)
 

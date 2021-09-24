@@ -69,24 +69,32 @@ Public Class CLI
 
                 Case "-import"
 
-                    If args.Count < 2 Then
+                    Dim fileargs As List(Of String) = args.Skip(1).ToList
+
+                    If fileargs.Count < 1 Then
                         Throw New Exception("Too few arguments for -import!")
                     End If
 
                     showWave = True
 
                     'Import
-                    ConsoleAddLog(BlueM.Wave.Log.levels.info, $"Attempting to import {args.Count - 1} files...")
-                    For i As Integer = 1 To args.Count - 1
-                        Call Wave.Import_File(args(i))
+                    ConsoleAddLog(BlueM.Wave.Log.levels.info, $"Starting import of {fileargs.Count} files...")
+                    For Each file_in As String In fileargs
+                        Call Wave.Import_File(file_in)
                         ConsoleOutputLog()
                     Next
 
                 Case "-convert"
 
-                    'TODO: add an "interactive" option for using the import dialog?
+                    Dim fileargs As List(Of String) = args.Skip(1).ToList
 
-                    If args.Count < 3 Then
+                    Dim interactive As Boolean = False
+                    If args(1).ToLower = "-i" Then
+                        interactive = True
+                        fileargs = fileargs.Skip(1).ToList
+                    End If
+
+                    If fileargs.Count < 2 Then
                         Throw New Exception("Too few arguments for -convert!")
                     End If
 
@@ -94,12 +102,11 @@ Public Class CLI
 
                     ConsoleAddLog(BlueM.Wave.Log.levels.info, $"Starting conversion to CSV ...")
 
-                    Dim n_files_in As Integer = args.Count - 2
-                    Dim files_in As List(Of String) = args.Skip(1).Take(n_files_in).ToList()
-                    Dim file_out As String = args.Last
+                    Dim files_in As List(Of String) = fileargs.Take(fileargs.Count - 1).ToList
+                    Dim file_out As String = fileargs.Last
 
                     'Import
-                    ConsoleAddLog(BlueM.Wave.Log.levels.info, $"Importing {n_files_in} file(s)...")
+                    ConsoleAddLog(BlueM.Wave.Log.levels.info, $"Importing {fileargs.Count} file(s)...")
 
                     Dim tsList As New List(Of TimeSeries)
 
@@ -120,7 +127,16 @@ Public Class CLI
 
                             Case Else
                                 fileInstance = FileFactory.getFileInstance(file_in)
-                                fileInstance.selectAllSeries()
+                                Dim isOK As Boolean
+                                If interactive And fileInstance.UseImportDialog Then
+                                    isOK = Wave.showImportDialog(fileInstance)
+                                    If Not isOK Then
+                                        ConsoleAddLog(Log.levels.warning, $"Import of file {file_in} cancelled by user, skipping this file!")
+                                        Continue For
+                                    End If
+                                Else
+                                    fileInstance.selectAllSeries()
+                                End If
                                 fileInstance.readFile()
                                 ConsoleOutputLog()
                                 ConsoleAddLog(Log.levels.info, $"Imported {fileInstance.FileTimeSeries.Count} time series")
@@ -183,8 +199,10 @@ Public Class CLI
         ConsoleOutput("-import file1[, file2[, ...]]")
         ConsoleOutput("Import one or multiple files and then show Wave")
         ConsoleOutput("")
-        ConsoleOutput("-convert file1[, file2[, ...]] file_out")
+        ConsoleOutput("-convert [-i] file1[, file2[, ...]] file_out")
         ConsoleOutput("Import one or multiple files and export them as CSV to file_out, without showing Wave")
+        ConsoleOutput("The option -i (interactive) will show the Import File Dialog for files containing multiple time series.")
+        ConsoleOutput("Without the option -i (non-interactive), no dialog will be shown and all series from all files will be imported.")
         ConsoleOutput("")
         ConsoleOutput("See https://wiki.bluemodel.org/index.php/Wave:CLI for more details")
     End Sub
