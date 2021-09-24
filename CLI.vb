@@ -172,7 +172,7 @@ Public Class CLI
         For i As Integer = iLogMsg To BlueM.Wave.Log.logMessages.Count - 1
             ConsoleAddLog(BlueM.Wave.Log.logMessages(i).Key, BlueM.Wave.Log.logMessages(i).Value)
         Next
-        iLogMsg = BlueM.Wave.Log.logMessages.Count - 1
+        iLogMsg = BlueM.Wave.Log.logMessages.Count
     End Sub
 
     ''' <summary>
