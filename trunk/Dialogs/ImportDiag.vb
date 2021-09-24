@@ -232,7 +232,7 @@ Friend Class ImportDiag
 
         'Selected series
         If (Me.ListBox_Series.SelectedItems.Count < 1) Then
-            MsgBox("Please select at least one series!", MsgBoxStyle.Exclamation, "Wave")
+            MsgBox("Please select at least one series!", MsgBoxStyle.Exclamation)
             Me.DialogResult = Windows.Forms.DialogResult.None
             Exit Sub
         Else

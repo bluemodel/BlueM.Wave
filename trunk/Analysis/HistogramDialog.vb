@@ -169,13 +169,13 @@ Friend Class HistogramDialog
 
         'check if max is covered
         If Me.breaks(n_breaks - 1) < Me.max Then
-            MsgBox($"The last break is smaller than the maximum value!{eol}Please add a break greater than or equal to the maximum value of {Me.max.ToString("F")}", MsgBoxStyle.Exclamation, "Wave")
+            MsgBox($"The last break is smaller than the maximum value!{eol}Please add a break greater than or equal to the maximum value of {Me.max.ToString("F")}", MsgBoxStyle.Exclamation)
             Exit Sub
         End If
 
         'check that first break is not less than min
         If Me.DataGridView_breaks.Rows(0).Cells(1).Value < Me.min Then
-            MsgBox($"The first break is smaller than the minimum value!{eol}Please enter only breaks that are greater than the minimum value of {Me.min.ToString("F")}", MsgBoxStyle.Exclamation, "Wave")
+            MsgBox($"The first break is smaller than the minimum value!{eol}Please enter only breaks that are greater than the minimum value of {Me.min.ToString("F")}", MsgBoxStyle.Exclamation)
             Exit Sub
         End If
 
@@ -236,7 +236,7 @@ Friend Class HistogramDialog
     'End Sub
 
     Private Sub DataGridView_bins_DataError(ByVal sender As System.Object, ByVal e As System.Windows.Forms.DataGridViewDataErrorEventArgs) Handles DataGridView_breaks.DataError
-        MsgBox("The entered value is not valid!", MsgBoxStyle.Critical, "Wave")
+        MsgBox("The entered value is not valid!", MsgBoxStyle.Critical)
     End Sub
 
 #End Region 'Events
