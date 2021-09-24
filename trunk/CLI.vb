@@ -84,6 +84,8 @@ Public Class CLI
 
                 Case "-convert"
 
+                    'TODO: add an "interactive" option for using the import dialog?
+
                     If args.Count < 3 Then
                         Throw New Exception("Too few arguments for -convert!")
                     End If
@@ -97,17 +99,39 @@ Public Class CLI
                     Dim file_out As String = args.Last
 
                     'Import
-                    'TODO: Import_File() also adds imported time series to the chart, which we technically do not need here.
-                    'But this method is currently the only one that also supports WVP files, which we want to support here.
                     ConsoleAddLog(BlueM.Wave.Log.levels.info, $"Importing {n_files_in} file(s)...")
 
+                    Dim tsList As New List(Of TimeSeries)
+
+                    Dim fileInstance As FileFormatBase
                     For Each file_in As String In files_in
-                        Wave.Import_File(file_in)
-                        ConsoleOutputLog()
+                        ConsoleAddLog(BlueM.Wave.Log.levels.info, $"Importing file {file_in}...")
+                        Select Case IO.Path.GetExtension(file_in).ToUpper
+
+                            Case FileExtTEN
+                                Throw New NotImplementedException("TEN files are currently not supported in the CLI!")
+
+                            Case FileExtWVP
+                                Dim wvp As New WVP(file_in)
+                                Dim wvpSeries As List(Of TimeSeries) = wvp.LoadSeries()
+                                ConsoleOutputLog()
+                                ConsoleAddLog(Log.levels.info, $"Imported {wvpSeries.Count} time series")
+                                tsList.AddRange(wvpSeries)
+
+                            Case Else
+                                fileInstance = FileFactory.getFileInstance(file_in)
+                                fileInstance.selectAllSeries()
+                                fileInstance.readFile()
+                                ConsoleOutputLog()
+                                ConsoleAddLog(Log.levels.info, $"Imported {fileInstance.FileTimeSeries.Count} time series")
+                                For Each ts As TimeSeries In fileInstance.FileTimeSeries.Values
+                                    tsList.Add(ts)
+                                Next
+                        End Select
+                        'Wave.Import_File(file_in, display:=False)
                     Next
 
                     'Export
-                    Dim tsList As List(Of TimeSeries) = Wave.TimeSeriesDict.Values.ToList
                     If tsList.Count = 0 Then
                         Throw New Exception("No time series to export!")
                     End If
