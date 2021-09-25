@@ -2583,8 +2583,8 @@ Public Class Wave
                                     reihe.AddNode(Date.FromOADate(series.XValues(i)), series.YValues(i))
                                 Next
                                 'Determine total number of NaN-values and write to log
-                                If reihe.Nodes.Count > reihe.NodesClean.Count Then
-                                    Log.AddLogEntry(Log.levels.warning, $"Series '{reihe.Title}' contains {reihe.Nodes.Count - reihe.NodesClean.Count} NaN values!")
+                                If reihe.NaNCount > 0 Then
+                                    Log.AddLogEntry(Log.levels.warning, $"Series '{reihe.Title}' contains {reihe.NaNCount} NaN values!")
                                 End If
                                 'Get the series' unit from the axis title
                                 Dim axistitle As String = ""
@@ -3123,8 +3123,8 @@ Public Class Wave
         Line2.EndUpdate()
 
         'Determine total number of NaN-values and write to log
-        If zre.Nodes.Count > zre.NodesClean.Count Then
-            Log.AddLogEntry(Log.levels.warning, $"Series '{zre.Title}' contains {zre.Nodes.Count - zre.NodesClean.Count} NaN values!")
+        If zre.NaNCount > 0 Then
+            Log.AddLogEntry(Log.levels.warning, $"Series '{zre.Title}' contains {zre.NaNCount} NaN values!")
         End If
 
         'Y-Achsenzuordnung
