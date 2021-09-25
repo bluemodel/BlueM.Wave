@@ -12,7 +12,8 @@ CHANGED:
   * When exporting multiple time series with timestamps not common to all series, non-existant nodes are exported as empty entries
   * Performance improvements 
 API-CHANGES:
-* New public class WVP for reading time series from files as specified in a Wave project file
+* New public class WVP for parsing and processing Wave project files (*.wvp)
+* New property TimeSeries.NaNCount
 * Removed obsolete TimeSeries methods getKontiZRE, getKontiZRE2 and getKontiZRE3 from public API #717
 
 Version 1.10.2

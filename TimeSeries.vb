@@ -205,6 +205,15 @@ Public Class TimeSeries
     End Property
 
     ''' <summary>
+    ''' The number of NaN nodes
+    ''' </summary>
+    Public ReadOnly Property NaNCount As Integer
+        Get
+            Return Me.Nodes.Count - Me.NodesClean.Count
+        End Get
+    End Property
+
+    ''' <summary>
     ''' The unit of the the time series' values
     ''' </summary>
     Public Property Unit() As String
