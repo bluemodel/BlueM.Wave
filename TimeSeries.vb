@@ -833,7 +833,7 @@ Public Class TimeSeries
     ''' Erstellt eine neue äquidistante Zeitreihe, neue Stützstellen kriegen den Wert 0
     ''' </summary>
     ''' <param name="Soll_dT">Sollzeitschritt (in Minuten)</param>      
-    Public Function getKontiZRE(ByVal Soll_dT As Integer) As TimeSeries
+    Friend Function getKontiZRE(ByVal Soll_dT As Integer) As TimeSeries
 
         Dim i As Integer
         Dim intloop As Integer
@@ -873,7 +873,7 @@ Public Class TimeSeries
     ''' Erstellt eine neue äquidistante Zeitreihe, neue Stützstellen kriegen aus original Zeitreihe konvertierten Wert, geignet für Massenbezogenen Zeitreihen
     ''' </summary>
     ''' <param name="Soll_dT">Sollzeitschritt (in Minuten)</param>      
-    Public Function getKontiZRE2(ByVal Soll_dT As Integer) As TimeSeries
+    Friend Function getKontiZRE2(ByVal Soll_dT As Integer) As TimeSeries
 
         Dim i, j As Integer
         Dim intloop As Integer
@@ -946,7 +946,7 @@ Public Class TimeSeries
     ''' Erstellt eine neue äquidistante Zeitreihe, neue Stützstellen kriegen aus original Zeitreihe konvertierten Wert, geignet für zeitabhängige Zeitreihen
     ''' </summary>
     ''' <param name="Soll_dT">Sollzeitschritt (in Minuten)</param>      
-    Public Function getKontiZRE3(ByVal Soll_dT As Integer) As TimeSeries
+    Friend Function getKontiZRE3(ByVal Soll_dT As Integer) As TimeSeries
 
         Dim i As Integer
         Dim intloop As Integer

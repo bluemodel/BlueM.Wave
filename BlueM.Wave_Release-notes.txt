@@ -5,7 +5,7 @@ Version 1.10.3
 --------------
 NEW:
 * Added a commandline interface with commands for importing and converting time series files to CSV
-  Documentation: https://wiki.bluemodel.org/index.php/Wave:CLI
+  See documentation: https://wiki.bluemodel.org/index.php/Wave:CLI
 CHANGED:
 * Export to CSV:
   * NaN values are now exported as "NaN"
@@ -13,6 +13,7 @@ CHANGED:
   * Performance improvements 
 API-CHANGES:
 * New public class WVP for reading time series from files as specified in a Wave project file
+* Removed obsolete TimeSeries methods getKontiZRE, getKontiZRE2 and getKontiZRE3 from public API #717
 
 Version 1.10.2
 --------------
