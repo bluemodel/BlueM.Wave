@@ -72,7 +72,7 @@ Public Class CLI
                     Dim fileargs As List(Of String) = args.Skip(1).ToList
 
                     If fileargs.Count < 1 Then
-                        Throw New Exception("Too few arguments for -import!")
+                        Throw New ArgumentException("Too few arguments for -import!")
                     End If
 
                     showWave = True
@@ -95,7 +95,7 @@ Public Class CLI
                     End If
 
                     If fileargs.Count < 2 Then
-                        Throw New Exception("Too few arguments for -convert!")
+                        Throw New ArgumentException("Too few arguments for -convert!")
                     End If
 
                     showWave = False
@@ -144,7 +144,6 @@ Public Class CLI
                                     tsList.Add(ts)
                                 Next
                         End Select
-                        'Wave.Import_File(file_in, display:=False)
                     Next
 
                     'Export
@@ -170,10 +169,13 @@ Public Class CLI
                 Case Else
 
                     showWave = False
-                    ConsoleAddLog(BlueM.Wave.Log.levels.error, "Unknown command!")
-                    ConsoleOutputHelp()
+                    Throw New ArgumentException("Unknown command!")
 
             End Select
+
+        Catch e As ArgumentException
+            ConsoleAddLog(BlueM.Wave.Log.levels.error, e.Message)
+            ConsoleOutputHelp()
 
         Catch e As Exception
             ConsoleAddLog(BlueM.Wave.Log.levels.error, e.Message)
