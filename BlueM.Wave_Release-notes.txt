@@ -4,7 +4,7 @@ BlueM.Wave Release Notes
 Version 1.10.3
 --------------
 NEW:
-* Added a commandline interface with commands for importing and converting time series files to CSV
+* Added a command-line interface (CLI) with commands for importing and converting time series files to CSV
   See documentation: https://wiki.bluemodel.org/index.php/Wave:CLI
 CHANGED:
 * Export to CSV:
