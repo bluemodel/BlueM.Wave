@@ -303,26 +303,25 @@ Friend Class GoodnessOfFit
                          $"Simulated time series: {Me.ts_sim.Title}" & eol & eol
         'output results in CSV format
         Me.mResultText &= "Results:" & eol
-        Me.mResultText &= "Description;Start;End;Length;Volume observed;Volume simulated;Volume error [%];Sum of squared errors;Nash-Sutcliffe efficiency;Logarithmic Nash-Sutcliffe efficiency;Coefficient of correlation;Coefficient of determination;Hydrologic deviation" & eol
-        Me.mResultText &= "desc;t0;t1;n;Vobs;Vsim;m;F²;E;E,ln;r;r²;DEV" & eol
+        Me.mResultText &= String.Join(Helpers.CurrentListSeparator, "Description", "Start", "End", "Length", "Volume observed", "Volume simulated", "Volume error [%]", "Sum of squared errors", "Nash-Sutcliffe efficiency", "Logarithmic Nash-Sutcliffe efficiency", "Coefficient of correlation", "Coefficient of determination", "Hydrologic deviation") & eol
+        Me.mResultText &= String.Join(Helpers.CurrentListSeparator, "desc", "t0", "t1", "n", "Vobs", "Vsim", "m", "F²", "E", "E,ln", "r", "r²", "DEV") & eol
         For Each GOFResult As KeyValuePair(Of String, GoF) In Me.GoFResults
-            _gof = GOFResult.Value
-            Dim values() As String
-            ReDim values(12)
-            values(0) = GOFResult.Key
-            values(1) = _gof.startDate.ToString(Helpers.DefaultDateFormat)
-            values(2) = _gof.endDate.ToString(Helpers.DefaultDateFormat)
-            values(3) = _gof.nValues.ToString()
-            values(4) = _gof.volume_observed.ToString(formatstring)
-            values(5) = _gof.volume_simulated.ToString(formatstring)
-            values(6) = _gof.volumeerror.ToString(formatstring) & "%"
-            values(7) = _gof.sum_squarederrors.ToString(formatstring)
-            values(8) = _gof.nash_sutcliffe.ToString(formatstring)
-            values(9) = _gof.ln_nash_sutcliffe.ToString(formatstring)
-            values(10) = _gof.coeff_correlation.ToString(formatstring)
-            values(11) = _gof.coeff_determination.ToString(formatstring)
-            values(12) = _gof.hydrodev.ToString(formatstring)
-            Me.mResultText &= Join(values, ";") & eol
+            With GOFResult.Value
+                Me.mResultText &= String.Join(Helpers.CurrentListSeparator,
+                    GOFResult.Key,
+                    .startDate.ToString(Helpers.DefaultDateFormat),
+                    .endDate.ToString(Helpers.DefaultDateFormat),
+                    .nValues.ToString(),
+                    .volume_observed.ToString(formatstring),
+                    .volume_simulated.ToString(formatstring),
+                    .volumeerror.ToString(formatstring) & "%",
+                    .sum_squarederrors.ToString(formatstring),
+                    .nash_sutcliffe.ToString(formatstring),
+                    .ln_nash_sutcliffe.ToString(formatstring),
+                    .coeff_correlation.ToString(formatstring),
+                    .coeff_determination.ToString(formatstring),
+                    .hydrodev.ToString(formatstring)) & eol
+            End With
         Next
 
         'Diagramm:

@@ -204,13 +204,18 @@ Friend Class Histogram
 
         'Ergebnistext
         '------------
+        Const formatstring As String = "F4"
         Me.mResultText = "Histogram has been calculated." & eol
         Me.mResultText &= "Result data:" & eol
         For Each result As resultValues In Me.results
             Me.mResultText &= result.title & eol
-            Me.mResultText &= "from;to;frequency;probability" & eol
+            Me.mResultText &= String.Join(Helpers.CurrentListSeparator, "from", "to", "frequency", "probability") & eol
             For i As Integer = 0 To Me.n_bins - 1
-                Me.mResultText &= $"{Me.breaks(i)};{Me.breaks(i + 1)};{result.frequency(i)};{result.probability(i)}{eol}"
+                Me.mResultText &= String.Join(Helpers.CurrentListSeparator,
+                    Me.breaks(i).ToString(formatstring),
+                    Me.breaks(i + 1).ToString(formatstring),
+                    result.frequency(i),
+                    result.probability(i).ToString(formatstring)) & eol
             Next
         Next
 

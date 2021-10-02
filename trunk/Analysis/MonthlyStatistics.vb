@@ -232,6 +232,7 @@ Friend Class MonthlyStatistics
 
         'Result text
         '------------
+        Const formatstring As String = "F4"
         Me.mResultText = "Monthly statistics have been calculated." & eol
         Me.mResultText &= "Result data:" & eol
         'header line
@@ -244,11 +245,11 @@ Friend Class MonthlyStatistics
                     monthData.month.number,
                     monthData.month.name,
                     monthData.values.Count,
-                    monthData.average,
-                    monthData.median,
-                    monthData.min,
-                    monthData.max,
-                    monthData.stddev) & eol
+                    monthData.average.ToString(formatstring),
+                    monthData.median.ToString(formatstring),
+                    monthData.min.ToString(formatstring),
+                    monthData.max.ToString(formatstring),
+                    monthData.stddev.ToString(formatstring)) & eol
             Else
                 Me.mResultText &= String.Join(Helpers.CurrentListSeparator,
                     monthData.month.number,
