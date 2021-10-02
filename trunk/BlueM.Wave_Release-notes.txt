@@ -9,6 +9,9 @@ CHANGED:
   * added an option for selecting the start month for the chart
   * added more columns to the result output in the log
   * result output in the log is now "NaN" instead of 0 for months with no values
+* Analysis function "GoodnessOfFit":
+  * added an option for selecting the start month for the hydrological year
+  * the "Description" of hydrological years in the result output now corresponds to the calendar year in which the hydrological year starts
 FIXED:
 * Fixed TimeSeries properties Min, Max and Volume for series consisting only of NaN values
 API-CHANGES:
