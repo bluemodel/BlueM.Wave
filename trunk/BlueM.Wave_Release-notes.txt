@@ -13,6 +13,7 @@ FIXED:
 * Fixed TimeSeries properties Min, Max and Volume for series consisting only of NaN values
 API-CHANGES:
 * Class TimeSeries: new overloaded properties Nodes and NodesClean for retrieving nodes within a defined time period
+* TimeSeries.SplitHydroYears() now has an optional parameter for specifiying the start month of the hydrological year (default: November)
 
 Version 1.10.3
 --------------
