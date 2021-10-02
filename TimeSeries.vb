@@ -505,7 +505,11 @@ Public Class TimeSeries
     ''' </summary>
     ''' <param name="_start">start date</param>
     ''' <param name="_end">end date</param>
-    ''' <remarks>Removes all nodes before the start date and after the end date</remarks>
+    ''' <remarks>
+    ''' Removes all nodes before the start date and after the end date.
+    ''' If there is no node with the exact start date, the closest node before the start date is also kept.
+    ''' If there is no node with the exact end date, the closest node after the end date is also kept.
+    ''' </remarks>
     Public Overloads Sub Cut(ByVal _start As DateTime, ByVal _end As DateTime)
 
         Dim i, lengthOld, lengthNew As Integer
@@ -616,34 +620,40 @@ Public Class TimeSeries
     End Sub
 
     ''' <summary>
-    ''' Splits a time series into individual series for each hydrological years
+    ''' Splits a time series into individual series for each hydrological year
     ''' </summary>
-    ''' <returns>A dictionary of time series, the key represents the year</returns>
-    ''' <remarks>The start of the hydrological year is defined as November 1st of the previous year</remarks>
-    Public Function SplitHydroYears() As Dictionary(Of Integer, TimeSeries)
+    ''' <param name="startMonth">the month with which the hydrological year starts. Default = 11 (November)</param>
+    ''' <returns>A dictionary of time series, the key represents the calendar year in which each hydrological year starts</returns>
+    ''' <remarks></remarks>
+    Public Function SplitHydroYears(Optional ByVal startMonth As Integer = 11) As Dictionary(Of Integer, TimeSeries)
 
         Dim ts As TimeSeries
         Dim year, year_start, year_end As Integer
         Dim tsDict As New Dictionary(Of Integer, TimeSeries)
 
+        If startMonth < 1 Or startMonth > 12 Then
+            Throw New ArgumentException("startMonth must be an integer representing the month between 1 and 12")
+        End If
+
         'determine first and last hydrological year
-        If Me.StartDate < New DateTime(Me.StartDate.Year, 11, 1) Then
+        If Me.StartDate < New DateTime(Me.StartDate.Year, startMonth, 1) Then
             year_start = Me.StartDate.Year
         Else
             year_start = Me.StartDate.Year + 1
         End If
 
-        If Me.EndDate > New DateTime(Me.EndDate.Year, 11, 1) Then
-            year_end = Me.EndDate.Year + 1
-        Else
+        If Me.EndDate > New DateTime(Me.EndDate.Year, startMonth, 1) Then
             year_end = Me.EndDate.Year
+        Else
+            year_end = Me.EndDate.Year - 1
         End If
 
         'cut the series
         For year = year_start To year_end
             ts = Me.Clone()
-            ts.Cut(New DateTime(year - 1, 11, 1), New DateTime(year, 10, 31, 23, 59, 59))
-            ts.Title &= $" ({year.ToString()})"
+            'TODO: Cut keeps the last node after the end date, which we do not really want here
+            ts.Cut(New DateTime(year, startMonth, 1), New DateTime(year + 1, startMonth, 1) - New TimeSpan(0, 0, 1))
+            ts.Title &= $" ({year})"
             tsDict.Add(year, ts)
         Next
 
