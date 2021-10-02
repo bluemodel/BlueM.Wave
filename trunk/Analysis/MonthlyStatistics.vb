@@ -39,25 +39,19 @@ Friend Class MonthlyStatistics
 #Region "Data structures"
 
     ''' <summary>
-    ''' Structure for storing the statistic values of a month
+    ''' Class for storing the statistic values of a month
     ''' </summary>
-    Private Structure monthType
-        Dim name As String
-        Dim index As Integer
-        Dim values As List(Of Double)
-        Dim average As Double
-        Dim stddev As Double
-        Dim min As Double
-        Dim max As Double
-        Dim median As Double
-    End Structure
+    Private Class MonthData
+        Public month As Month
+        Public index As Integer
+        Public values As List(Of Double)
+        Public average As Double
+        Public stddev As Double
+        Public min As Double
+        Public max As Double
+        Public median As Double
+    End Class
 
-    ''' <summary>
-    ''' Structure for storing results
-    ''' </summary>
-    Private Structure resultType
-        Dim months() As monthType
-    End Structure
 
 #End Region 'Data structures
 
@@ -66,7 +60,7 @@ Friend Class MonthlyStatistics
     ''' <summary>
     ''' Result of the analysis
     ''' </summary>
-    Private result As resultType
+    Private result As Dictionary(Of Integer, MonthData)
 
     ''' <summary>
     ''' Flag indicating whether series values correspond to the previous month
@@ -145,38 +139,21 @@ Friend Class MonthlyStatistics
         End If
 
         Me.isPreviousMonth = (dlg.ComboBox_MonthType.SelectedItem = "previous month")
+        Dim startMonth As Integer = CType(dlg.ComboBox_startMonth.SelectedItem, Month).number
 
-        Dim i As Integer
-
-        'Initialize result structure
-        ReDim Me.result.months(11)
-        Me.result.months(0).name = "January"
-        Me.result.months(0).index = 3
-        Me.result.months(1).name = "February"
-        Me.result.months(1).index = 4
-        Me.result.months(2).name = "March"
-        Me.result.months(2).index = 5
-        Me.result.months(3).name = "April"
-        Me.result.months(3).index = 6
-        Me.result.months(4).name = "May"
-        Me.result.months(4).index = 7
-        Me.result.months(5).name = "June"
-        Me.result.months(5).index = 8
-        Me.result.months(6).name = "July"
-        Me.result.months(6).index = 9
-        Me.result.months(7).name = "August"
-        Me.result.months(7).index = 10
-        Me.result.months(8).name = "September"
-        Me.result.months(8).index = 11
-        Me.result.months(9).name = "October"
-        Me.result.months(9).index = 12
-        Me.result.months(10).name = "November"
-        Me.result.months(10).index = 1
-        Me.result.months(11).name = "December"
-        Me.result.months(11).index = 2
-
-        For i = 0 To 11
-            Me.result.months(i).values = New List(Of Double)
+        'Initialize result data structure
+        Me.result = New Dictionary(Of Integer, MonthData)
+        For Each month As Month In Helpers.CalendarMonths
+            Me.result.Add(month.number, New MonthData() With {
+                .month = month,
+                .values = New List(Of Double)
+                })
+            'set index according to selected start month
+            If month.number >= startMonth Then
+                Me.result(month.number).index = month.number - startMonth
+            Else
+                Me.result(month.number).index = month.number - startMonth + 12
+            End If
         Next
 
     End Sub
@@ -205,12 +182,12 @@ Friend Class MonthlyStatistics
                     month = 12
                 End If
             End If
-            Me.result.months(month - 1).values.Add(reihe.Values(i))
+            Me.result(month).values.Add(reihe.Values(i))
         Next
 
         'Analyse each month
-        For i = 0 To 11
-            With Me.result.months(i)
+        For i = 1 To 12
+            With Me.result(i)
                 sum = 0
                 sumofsquares = 0
                 N = .values.Count
@@ -238,7 +215,8 @@ Friend Class MonthlyStatistics
                         .median = .values(((N + 1) / 2) - 1)
                     End If
                 Else
-                    MsgBox($"The series does not contain any data for the month of {.name}!", MsgBoxStyle.Information)
+                    Log.AddLogEntry(Log.levels.warning, $"The series does not contain any data for the month of { .month}!")
+                    'TODO: ideally we would set all result values to Double.NaN here but this inexplicably causes the result chart to crash!
                 End If
 
             End With
@@ -257,16 +235,31 @@ Friend Class MonthlyStatistics
         Me.mResultText = "Monthly statistics have been calculated." & eol
         Me.mResultText &= "Result data:" & eol
         'header line
-        Me.mResultText &= "Name;average;median;min;max;stddev" & eol
+        Me.mResultText &= String.Join(Helpers.CurrentListSeparator, "Month", "Name", "ValueCount", "Average", "Median", "Min", "Max", "Stddev") & eol
 
         'data
-        For Each month As monthType In Me.result.months
-            Me.mResultText &= month.name & ";"
-            Me.mResultText &= month.average & ";"
-            Me.mResultText &= month.median & ";"
-            Me.mResultText &= month.min & ";"
-            Me.mResultText &= month.max & ";"
-            Me.mResultText &= month.stddev & eol
+        For Each monthData As MonthData In Me.result.Values
+            If monthData.values.Count > 0 Then
+                Me.mResultText &= String.Join(Helpers.CurrentListSeparator,
+                    monthData.month.number,
+                    monthData.month.name,
+                    monthData.values.Count,
+                    monthData.average,
+                    monthData.median,
+                    monthData.min,
+                    monthData.max,
+                    monthData.stddev) & eol
+            Else
+                Me.mResultText &= String.Join(Helpers.CurrentListSeparator,
+                    monthData.month.number,
+                    monthData.month.name,
+                    monthData.values.Count,
+                    Double.NaN,
+                    Double.NaN,
+                    Double.NaN,
+                    Double.NaN,
+                    Double.NaN) & eol
+            End If
         Next
 
         'Result chart
@@ -285,45 +278,55 @@ Friend Class MonthlyStatistics
         Me.mResultChart.Axes.Bottom.Labels.Style = Steema.TeeChart.AxisLabelStyle.Text
         Me.mResultChart.Axes.Bottom.Labels.Angle = 90
         Me.mResultChart.Axes.Bottom.MinorTickCount = 0
+        Me.mResultChart.Axes.Left.Title.Text = Me.mZeitreihen(0).Unit
 
         'Series
 
         'MinMax
         minmax = New Steema.TeeChart.Styles.HighLow(Me.mResultChart)
+        minmax.DefaultNullValue = Double.NaN
         minmax.Title = "Min / Max"
         minmax.Color = Color.DarkGray
         minmax.Pen.Color = Color.DarkGray
         minmax.HighBrush.Visible = True
         minmax.HighBrush.Color = Color.LightGray
         minmax.HighBrush.Transparency = 50
-        For i = 0 To 11
-            minmax.Add(Me.result.months(i).index, Me.result.months(i).max, Me.result.months(i).min, Me.result.months(i).name)
+        For i = 1 To 12
+            minmax.Add(Me.result(i).index, Me.result(i).max, Me.result(i).min, Me.result(i).month.name)
         Next
 
         'Standard deviation
         stdabw = New Steema.TeeChart.Styles.Error(Me.mResultChart)
+        stdabw.DefaultNullValue = Double.NaN
         stdabw.Title = "Standard deviation"
         stdabw.Color = Color.Red
         stdabw.ErrorWidth = 50
-        For i = 0 To 11
-            stdabw.Add(Me.result.months(i).index, Me.result.months(i).average, Me.result.months(i).stddev, Me.result.months(i).name)
+        For i = 1 To 12
+            'Skip months with no or NaN data
+            If Me.result(i).values.Count > 0 And Not Double.IsNaN(Me.result(i).stddev) Then
+                stdabw.Add(Me.result(i).index, Me.result(i).average, Me.result(i).stddev, Me.result(i).month.name)
+            End If
         Next
 
         'Average
         mittelwert = New Steema.TeeChart.Styles.Line(Me.mResultChart)
+        mittelwert.TreatNaNAsNull = True
+        mittelwert.TreatNulls = Steema.TeeChart.Styles.TreatNullsStyle.DoNotPaint
         mittelwert.Title = "Average"
         mittelwert.Color = Color.Blue
         mittelwert.LinePen.Width = 2
-        For i = 0 To 11
-            mittelwert.Add(Me.result.months(i).index, Me.result.months(i).average, Me.result.months(i).name)
+        For i = 1 To 12
+            mittelwert.Add(Me.result(i).index, Me.result(i).average, Me.result(i).month.name)
         Next
 
         'Median
         median = New Steema.TeeChart.Styles.Line(Me.mResultChart)
+        median.TreatNaNAsNull = True
+        median.TreatNulls = Steema.TeeChart.Styles.TreatNullsStyle.DoNotPaint
         median.Title = "Median"
         median.Color = Color.Green
-        For i = 0 To 11
-            median.Add(Me.result.months(i).index, Me.result.months(i).median, Me.result.months(i).name)
+        For i = 1 To 12
+            median.Add(Me.result(i).index, Me.result(i).median, Me.result(i).month.name)
         Next
 
     End Sub
