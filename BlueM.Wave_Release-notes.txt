@@ -9,6 +9,10 @@ CHANGED:
   * added an option for selecting the start month for the chart
   * added more columns to the result output in the log
   * result output in the log is now "NaN" instead of 0 for months with no values
+FIXED:
+* Fixed TimeSeries properties Min, Max and Volume for series consisting only of NaN values
+API-CHANGES:
+* Class TimeSeries: new overloaded properties Nodes and NodesClean for retrieving nodes within a defined time period
 
 Version 1.10.3
 --------------
