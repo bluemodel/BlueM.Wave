@@ -36,6 +36,11 @@ Friend Class GoodnessOfFit_Dialog
         Me.RadioButton1.Text = zre1
         Me.RadioButton2.Text = zre2
 
+        Me.ComboBox_startMonth.BeginUpdate()
+        Me.ComboBox_startMonth.Items.AddRange(Helpers.CalendarMonths.ToArray)
+        Me.ComboBox_startMonth.EndUpdate()
+
+        Me.ComboBox_startMonth.SelectedIndex = 10 'November
     End Sub
 
     Public Function getNrGemesseneReihe() As Integer
@@ -48,5 +53,13 @@ Friend Class GoodnessOfFit_Dialog
 
     End Function
 
-
+    Private Sub CheckBox_Annual_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox_Annual.CheckedChanged
+        If CheckBox_Annual.Checked Then
+            Me.Label_startMonth.Enabled = True
+            Me.ComboBox_startMonth.Enabled = True
+        Else
+            Me.Label_startMonth.Enabled = False
+            Me.ComboBox_startMonth.Enabled = False
+        End If
+    End Sub
 End Class

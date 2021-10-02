@@ -255,14 +255,15 @@ Friend Class GoodnessOfFit
 
         'calculate annual GoF parameters?
         If dialog.CheckBox_Annual.Checked Then
+            Dim startMonth As Integer = CType(dialog.ComboBox_startMonth.SelectedItem, Month).number
             Dim splits As Dictionary(Of Integer, TimeSeries)
             'split observed series and store them
-            splits = ts_obs.SplitHydroYears()
+            splits = ts_obs.SplitHydroYears(startMonth)
             For Each kvp As KeyValuePair(Of Integer, TimeSeries) In splits
                 series_o.Add(kvp.Key.ToString(), kvp.Value)
             Next
             'split simulated series and store them
-            splits = ts_sim.SplitHydroYears()
+            splits = ts_sim.SplitHydroYears(startMonth)
             For Each kvp As KeyValuePair(Of Integer, TimeSeries) In splits
                 series_s.Add(kvp.Key.ToString(), kvp.Value)
             Next
