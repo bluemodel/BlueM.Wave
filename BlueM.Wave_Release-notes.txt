@@ -4,9 +4,10 @@ BlueM.Wave Release Notes
 Version 1.10.4
 --------------
 CHANGED:
+* All analysis function now use the OS list separator for result output in the log
 * Analysis function "MonthlyStatistics": 
   * added an option for selecting the start month for the chart
-  * improved result output in the log (more columns, use OS setting for separator)
+  * added more columns to the result output in the log
   * result output in the log is now "NaN" instead of 0 for months with no values
 
 Version 1.10.3

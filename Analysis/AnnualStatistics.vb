@@ -117,7 +117,6 @@ Friend Class AnnualStatistics
 
     Public Overrides Sub PrepareResults()
         Dim stat As struct_stat
-        Dim values() As String
 
         Const formatstring As String = "F4"
 
@@ -125,19 +124,18 @@ Friend Class AnnualStatistics
                          $"Time series: {Me.mZeitreihen(0).Title}" & eol & eol
         'output results in CSV format
         Me.mResultText &= "Results:" & eol
-        Me.mResultText &= "Description;Start;End;Length;Min;Max;Avg;Volume" & eol
+        Me.mResultText &= String.Join(Helpers.CurrentListSeparator, "Description", "Start", "End", "Length", "Min", "Max", "Avg", "Volume") & eol
         For Each kvp As KeyValuePair(Of String, struct_stat) In Me.stats
             stat = kvp.Value
-            ReDim values(7)
-            values(0) = kvp.Key
-            values(1) = stat.startDate.ToString(Helpers.DefaultDateFormat)
-            values(2) = stat.endDate.ToString(Helpers.DefaultDateFormat)
-            values(3) = stat.len.ToString(formatstring)
-            values(4) = stat.min.ToString(formatstring)
-            values(5) = stat.max.ToString(formatstring)
-            values(6) = stat.avg.ToString(formatstring)
-            values(7) = stat.vol.ToString(formatstring)
-            Me.mResultText &= Join(values, ";") & eol
+            Me.mResultText &= String.Join(Helpers.CurrentListSeparator,
+                kvp.Key,
+                stat.startDate.ToString(Helpers.DefaultDateFormat),
+                stat.endDate.ToString(Helpers.DefaultDateFormat),
+                stat.len.ToString(),
+                stat.min.ToString(formatstring),
+                stat.max.ToString(formatstring),
+                stat.avg.ToString(formatstring),
+                stat.vol.ToString(formatstring)) & eol
         Next
     End Sub
 
