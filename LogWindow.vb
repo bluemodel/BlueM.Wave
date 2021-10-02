@@ -83,10 +83,6 @@ Friend Class LogWindow
         Me.TextBox_Log.SelectionColor = Color.Black
         Me.TextBox_Log.SelectionFont = currentFont
 
-        'scroll to end
-        Me.TextBox_Log.SelectionStart = Me.TextBox_Log.Text.Length
-        Me.TextBox_Log.ScrollToCaret()
-
         Call Application.DoEvents()
     End Sub
 
