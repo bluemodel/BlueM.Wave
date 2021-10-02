@@ -12,6 +12,8 @@ CHANGED:
 * Analysis function "GoodnessOfFit":
   * added an option for selecting the start month for the hydrological year
   * the "Description" of hydrological years in the result output now corresponds to the calendar year in which the hydrological year starts
+* Analysis function "AnnualStatistics":
+  * added an option for selecting the start month for the hydrological year
 FIXED:
 * Fixed TimeSeries properties Min, Max and Volume for series consisting only of NaN values
 API-CHANGES:

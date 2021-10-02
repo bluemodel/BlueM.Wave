@@ -45,7 +45,7 @@ Friend Class AnnualStatistics
     Private stats As Dictionary(Of String, struct_stat)
 
     Public Overloads Shared Function Description() As String
-        Return "Calculates annual statistics (min, max, avg, vol) based on hydrological years starting on November 1st."
+        Return "Calculates annual statistics (min, max, avg, vol) based on hydrological years."
     End Function
 
     Public Overrides ReadOnly Property hasResultChart() As Boolean
@@ -102,11 +102,19 @@ Friend Class AnnualStatistics
         Dim year As Integer
         Dim series As TimeSeries
 
+        Dim dialog As New AnnualStatistics_Dialog()
+        Dim dialogResult As DialogResult = dialog.ShowDialog()
+        If dialogResult <> DialogResult.OK Then
+            Throw New Exception("User abort!")
+        End If
+
+        Dim startMonth As Integer = CType(dialog.ComboBox_startMonth.SelectedItem, Month).number
+
         'stats for entire series
         Me.stats.Add("Entire series", calculateStats(Me.mZeitreihen(0)))
 
         'stats for hydrological years
-        hyoseries = Me.mZeitreihen(0).SplitHydroYears()
+        hyoseries = Me.mZeitreihen(0).SplitHydroYears(startMonth)
         For Each kvp As KeyValuePair(Of Integer, TimeSeries) In hyoseries
             year = kvp.Key
             series = kvp.Value

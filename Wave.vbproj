@@ -159,6 +159,12 @@
     <Compile Include="Analysis\Cumulative.vb" />
     <Compile Include="Analysis\DoubleSumCurve.vb" />
     <Compile Include="Analysis\GoodnessOfFit.vb" />
+    <Compile Include="Analysis\AnnualStatistics_Dialog.Designer.vb">
+      <DependentUpon>AnnualStatistics_Dialog.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Analysis\AnnualStatistics_Dialog.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Analysis\GoodnessOfFit_Dialog.Designer.vb">
       <DependentUpon>GoodnessOfFit_Dialog.vb</DependentUpon>
     </Compile>
@@ -335,6 +341,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Analysis\Comparison_Dialog.resx">
       <DependentUpon>Comparison_Dialog.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Analysis\AnnualStatistics_Dialog.resx">
+      <DependentUpon>AnnualStatistics_Dialog.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Analysis\GoodnessOfFit_Dialog.resx">
       <DependentUpon>GoodnessOfFit_Dialog.vb</DependentUpon>
