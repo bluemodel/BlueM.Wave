@@ -45,15 +45,15 @@ Public Class SWMM_TXT
     Private AnzNodes As Integer
     Private _Zeitintervall As Integer
     Private _noConstituents As Integer
-    
 
-    Structure Constituent
+
+    Public Structure Constituent
         Dim Type As String
         Dim Unit As String
         Dim Index As Integer
     End Structure
 
-    Structure Nodes
+    Private Structure Nodes
         Dim Bez As String
         Dim Index As Integer
     End Structure

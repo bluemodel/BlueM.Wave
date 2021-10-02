@@ -48,7 +48,7 @@ Public Class SWMM_OUT
     Private nSysvars As Integer
     Private FlowUnits As Integer
 
-    Structure SWMM_Binary_file_Definition
+    Private Structure SWMM_Binary_file_Definition
         'iType = type of object whose value is being sought
         '(0 = subcatchment, 1 = node, 2 = link, 3 = system)
         'iIndex = index of item being sought (starting from 0)
@@ -57,7 +57,7 @@ Public Class SWMM_OUT
         Dim iIndex As Integer
         Dim vIndex As Integer
     End Structure
-    Dim SWMMBinaryFileIndex() As SWMM_Binary_file_Definition
+    Private SWMMBinaryFileIndex() As SWMM_Binary_file_Definition
 
 
     ''' <summary>

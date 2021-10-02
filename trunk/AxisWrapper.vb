@@ -31,7 +31,7 @@ Imports System.Text.RegularExpressions
 ''' Wrapper around a Steema.TeeChart.Axis instance
 ''' exposing selected properties
 ''' </summary>
-Public Class AxisWrapper
+Friend Class AxisWrapper
 
     Private _name As String
     Private _TAxis As Steema.TeeChart.Axis

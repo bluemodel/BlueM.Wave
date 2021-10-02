@@ -275,7 +275,7 @@ Public Class Wave
     ''' </summary>
     ''' <param name="files">array of file paths</param>
     ''' <remarks></remarks>
-    Delegate Sub ImportDelegate(ByVal files() As String)
+    Private Delegate Sub ImportDelegate(ByVal files() As String)
 
     ''' <summary>
     ''' Processes the Wave.DragEnter event. Sets DragEventArgs.Effect to Copy if the dragged object consist of files
