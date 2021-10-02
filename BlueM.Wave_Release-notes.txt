@@ -1,6 +1,14 @@
 ﻿===============================================================
 BlueM.Wave Release Notes
 ===============================================================
+Version 1.10.4
+--------------
+CHANGED:
+* Analysis function "MonthlyStatistics": 
+  * added an option for selecting the start month for the chart
+  * improved result output in the log (more columns, use OS setting for separator)
+  * result output in the log is now "NaN" instead of 0 for months with no values
+
 Version 1.10.3
 --------------
 NEW:
