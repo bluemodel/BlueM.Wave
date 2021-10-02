@@ -27,7 +27,7 @@
 '
 Imports System.Windows.Forms
 
-Public Class AxisDialog
+Friend Class AxisDialog
 
     ''' <summary>
     ''' Is raised when an axis unit is changed by the user

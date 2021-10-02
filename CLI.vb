@@ -28,7 +28,7 @@
 ''' <summary>
 ''' Wave commandline interface
 ''' </summary>
-Public Class CLI
+Friend Class CLI
 
     Declare Function AttachConsole Lib "kernel32.dll" (ByVal dwProcessId As Int32) As Boolean
     Declare Function AllocConsole Lib "kernel32.dll" () As Boolean
