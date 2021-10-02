@@ -124,9 +124,36 @@ Public Class TimeSeries
     ''' <summary>
     ''' The time series' nodes
     ''' </summary>
-    Public ReadOnly Property Nodes() As SortedList(Of DateTime, Double)
+    Public Overloads ReadOnly Property Nodes() As SortedList(Of DateTime, Double)
         Get
             Return _nodes
+        End Get
+    End Property
+
+    ''' <summary>
+    ''' Returns the value at timestamp t
+    ''' </summary>
+    Public Overloads ReadOnly Property Nodes(t As DateTime) As Double
+        Get
+            Return _nodes(t)
+        End Get
+    End Property
+
+    ''' <summary>
+    ''' The time series' nodes within a defined time period (inclusively)
+    ''' </summary>
+    Public Overloads ReadOnly Property Nodes(startdate As DateTime, enddate As DateTime) As SortedList(Of DateTime, Double)
+        Get
+            Dim nodelist As New SortedList(Of DateTime, Double)
+            For Each node As KeyValuePair(Of DateTime, Double) In Me.Nodes
+                If node.Key < startdate Then
+                    Continue For
+                ElseIf node.Key > enddate Then
+                    Exit For
+                End If
+                nodelist.Add(node.Key, node.Value)
+            Next
+            Return nodelist
         End Get
     End Property
 
@@ -134,7 +161,7 @@ Public Class TimeSeries
     ''' The time series' nodes without NaN and Infinity values
     ''' </summary>
     ''' <remarks>The cleaned nodes are cached and only created once per instance</remarks>
-    Public ReadOnly Property NodesClean() As SortedList(Of DateTime, Double)
+    Public Overloads ReadOnly Property NodesClean() As SortedList(Of DateTime, Double)
         Get
             If IsNothing(Me._nodesCleaned) Then
                 Me._nodesCleaned = New SortedList(Of DateTime, Double)
@@ -145,6 +172,24 @@ Public Class TimeSeries
                 Next
             End If
             Return Me._nodesCleaned
+        End Get
+    End Property
+
+    ''' <summary>
+    ''' The time series' nodes without NaN and Infinity values within a defined time period (inclusively)
+    ''' </summary>
+    Public Overloads ReadOnly Property NodesClean(startdate As DateTime, enddate As DateTime) As SortedList(Of DateTime, Double)
+        Get
+            Dim nodelist As New SortedList(Of DateTime, Double)
+            For Each node As KeyValuePair(Of DateTime, Double) In Me.NodesClean
+                If node.Key < startdate Then
+                    Continue For
+                ElseIf node.Key > enddate Then
+                    Exit For
+                End If
+                nodelist.Add(node.Key, node.Value)
+            Next
+            Return nodelist
         End Get
     End Property
 
@@ -262,35 +307,24 @@ Public Class TimeSeries
     ''' </summary>
     Public Overloads ReadOnly Property Maximum() As Double
         Get
-            Dim max As Double
-            max = Double.MinValue
-            For Each value As Double In Me.NodesClean.Values
-                If (value > max) Then
-                    max = value
-                End If
-            Next
-            Return max
+            If Me.NodesClean.Count > 0 Then
+                Return Me.NodesClean().Values.Max
+            Else
+                Return Double.NaN
+            End If
         End Get
     End Property
 
     ''' <summary>
-    ''' Returns the maximum value of the time series within a defined time period
+    ''' Returns the maximum value of the time series within a defined time period (inclusively)
     ''' </summary>
     Public Overloads ReadOnly Property Maximum(ByVal startdate As DateTime, ByVal enddate As DateTime) As Double
         Get
-            Dim max As Double
-            max = Double.MinValue
-            For Each kvp As KeyValuePair(Of DateTime, Double) In Me.NodesClean
-                If kvp.Key < startdate Then
-                    Continue For
-                ElseIf kvp.Key > enddate Then
-                    Exit For
-                End If
-                If (kvp.Value > max) Then
-                    max = kvp.Value
-                End If
-            Next
-            Return max
+            If Me.NodesClean(startdate, enddate).Count > 0 Then
+                Return Me.NodesClean(startdate, enddate).Values.Max
+            Else
+                Return Double.NaN
+            End If
         End Get
     End Property
 
@@ -299,35 +333,24 @@ Public Class TimeSeries
     ''' </summary>
     Public Overloads ReadOnly Property Minimum() As Double
         Get
-            Dim min As Double
-            min = Double.MaxValue
-            For Each value As Double In Me.NodesClean.Values
-                If (value < min) Then
-                    min = value
-                End If
-            Next
-            Return min
+            If Me.NodesClean.Count > 0 Then
+                Return Me.NodesClean().Values.Min
+            Else
+                Return Double.NaN
+            End If
         End Get
     End Property
 
     ''' <summary>
-    ''' Returns the minimum value of the time series within a defined time period
+    ''' Returns the minimum value of the time series within a defined time period (inclusively)
     ''' </summary>
     Public Overloads ReadOnly Property Minimum(ByVal startdate As DateTime, ByVal enddate As DateTime) As Double
         Get
-            Dim min As Double
-            min = Double.MaxValue
-            For Each kvp As KeyValuePair(Of DateTime, Double) In Me.NodesClean
-                If kvp.Key < startdate Then
-                    Continue For
-                ElseIf kvp.Key > enddate Then
-                    Exit For
-                End If
-                If (kvp.Value < min) Then
-                    min = kvp.Value
-                End If
-            Next
-            Return min
+            If Me.NodesClean(startdate, enddate).Count > 0 Then
+                Return Me.NodesClean(startdate, enddate).Values.Min
+            Else
+                Return Double.NaN
+            End If
         End Get
     End Property
 
@@ -392,7 +415,7 @@ Public Class TimeSeries
             Dim t0, t1 As DateTime
             Dim dt As TimeSpan
 
-            If Me.Unit.ToLower.EndsWith("/s") Then
+            If Me.Unit.ToLower.EndsWith("/s") And Me.NodesClean.Count > 0 Then
                 Log.AddLogEntry(Log.levels.debug, "Calculating volume by integrating over time for series " & Me.Title)
                 t0 = Me.NodesClean.First().Key
                 v0 = Me.NodesClean.First().Value
