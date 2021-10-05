@@ -55,7 +55,7 @@ Friend Class Log
     ''' </summary>
     Public Shared Event LogMsgAdded(level As Log.levels, msg As String)
 
-    Private Sub New()
+    Shared Sub New()
         'attempt to read loggingLevel from application settings
         Try
             Log.level = [Enum].Parse(GetType(levels), My.Settings.loggingLevel)
