@@ -16,6 +16,7 @@ CHANGED:
   * added an option for selecting the start month for the hydrological year
 FIXED:
 * Fixed TimeSeries properties Min, Max and Volume for series consisting only of NaN values
+* Fixed an uncaught exception when attempting to add a log message without a Wave window instance
 API-CHANGES:
 * Class TimeSeries: new overloaded properties Nodes and NodesClean for retrieving nodes within a defined time period
 * TimeSeries.SplitHydroYears() now has an optional parameter for specifiying the start month of the hydrological year (default: November)
