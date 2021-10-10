@@ -1,6 +1,11 @@
 ﻿===============================================================
 BlueM.Wave Release Notes
 ===============================================================
+Version 1.10.5
+--------------
+FIXED:
+* Improved performance when importing series with dates before 01.01.0100 and after 31.12.9000 #749
+
 Version 1.10.4
 --------------
 CHANGED:
@@ -49,7 +54,7 @@ FIXED:
 * Prevent OverflowException when displaying time series beginning with a NaN value as a step function in the overview chart #748
 * Prevent DateTimePicker in TimeSeriesValues window from attempting to display a date outside of the supported range
 * Fix counter display in TimeSeriesValues window
-* Ensure that nodes outside of the supported date range are properly removed when importing a series and improve logging thereof
+* Ensure that nodes outside of the supported date range are properly removed when importing a series and improve logging thereof #749
 
 Version 1.10.0
 --------------
@@ -178,12 +183,12 @@ CHANGED:
 Version 1.8.2
 -------------
 FIXED:
-  * Fixed crashes with very small or large dates in time series
+  * Fixed crashes with very small or large dates in time series #749
     Timeseries are now cut upon import to minimum 01.01.0100 and maximum 31.12.9900
   * Fixed error when importing CSV files without units
 KNOWN ISSUES:
   * DateTimePickers have a minimum date of 01.01.1753 and a maximum date of 31.12.9998
-    and will display these even if timeseries / the view extends beyond that range
+    and will display these even if timeseries / the view extends beyond that range #749
 
 Version 1.8.1
 -------------
