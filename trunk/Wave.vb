@@ -396,15 +396,25 @@ Public Class Wave
         Else
             'Update X-Axis and colorBand
 
-            'Min- und Max-Datum bestimmen
-            Xmin = DateTime.MaxValue
-            Xmax = DateTime.MinValue
+            'Determine maximum extent of chart
+            Dim startdates As New List(Of DateTime)
+            Dim enddates As New List(Of DateTime)
             For Each zre As TimeSeries In Me.TimeSeriesDict.Values
                 If zre.Length > 0 Then
-                    If (zre.StartDate < Xmin) Then Xmin = zre.StartDate
-                    If (zre.EndDate > Xmax) Then Xmax = zre.EndDate
+                    startdates.Add(zre.StartDate)
+                    enddates.Add(zre.EndDate)
                 End If
             Next
+            Xmin = startdates.Min()
+            Xmax = enddates.Max()
+
+            'BUG 749: respect min and max displayable dates
+            If Xmax > Constants.maxOADate Then
+                Xmax = Constants.maxOADate
+            End If
+            If Xmin < Constants.minOADate Then
+                Xmin = Constants.minOADate
+            End If
 
             'Übersicht neu skalieren
             Me.TChart2.Axes.Bottom.Minimum = Xmin.ToOADate()
@@ -3031,38 +3041,6 @@ Public Class Wave
     ''' <remarks>saves and then display the time series</remarks>
     Public Sub Import_Series(ByVal zre As TimeSeries, Optional ByVal Display As Boolean = True)
 
-        'BUG 749: Remove nodes if necessary
-        If zre.StartDate < Constants.minOADate Then
-            Log.AddLogEntry(Log.levels.warning, $"Unable to display timeseries before {Constants.minOADate.ToString(Helpers.DefaultDateFormat)}, removing nodes...")
-            Dim t_too_early = New List(Of DateTime)
-            For Each t As DateTime In zre.Dates
-                If t < Constants.minOADate Then
-                    t_too_early.Add(t)
-                Else
-                    Exit For
-                End If
-            Next
-            For Each t As DateTime In t_too_early
-                zre.Nodes.Remove(t)
-            Next
-            Log.AddLogEntry(Log.levels.warning, $"Removed {t_too_early.Count} nodes between {t_too_early.First().ToString(Helpers.DefaultDateFormat)} and {t_too_early.Last().ToString(Helpers.DefaultDateFormat)}!")
-        End If
-        If zre.EndDate > Constants.maxOADate Then
-            Log.AddLogEntry(Log.levels.warning, $"Unable to display timeseries after {Constants.maxOADate.ToString(Helpers.DefaultDateFormat)}, removing nodes...")
-            Dim t_too_late As New List(Of DateTime)
-            For Each t As DateTime In zre.Dates.Reverse()
-                If t > Constants.maxOADate Then
-                    t_too_late.Add(t)
-                Else
-                    Exit For
-                End If
-            Next
-            For Each t As DateTime In t_too_late
-                zre.Nodes.Remove(t)
-            Next
-            Log.AddLogEntry(Log.levels.warning, $"Removed {t_too_late.Count} nodes between {t_too_late.Last().ToString(Helpers.DefaultDateFormat)} and {t_too_late.First().ToString(Helpers.DefaultDateFormat)}!")
-        End If
-
         'Serie abspeichen
         Me.AddZeitreihe(zre)
 
@@ -3077,6 +3055,38 @@ Public Class Wave
     ''' </summary>
     ''' <param name="zre">Die anzuzeigende Zeitreihe</param>
     Private Sub Display_Series(ByVal zre As TimeSeries)
+
+        'BUG 749: Remove nodes if necessary
+        If zre.StartDate < Constants.minOADate Then
+            zre = zre.Clone()
+            Dim t_too_early = New List(Of DateTime)
+            For Each t As DateTime In zre.Dates
+                If t < Constants.minOADate Then
+                    t_too_early.Add(t)
+                Else
+                    Exit For
+                End If
+            Next
+            For Each t As DateTime In t_too_early
+                zre.Nodes.Remove(t)
+            Next
+            Log.AddLogEntry(Log.levels.warning, $"Unable to display {t_too_early.Count} nodes between {t_too_early.First().ToString(Helpers.DefaultDateFormat)} and {t_too_early.Last().ToString(Helpers.DefaultDateFormat)}!")
+        End If
+        If zre.EndDate > Constants.maxOADate Then
+            zre = zre.Clone()
+            Dim t_too_late As New List(Of DateTime)
+            For Each t As DateTime In zre.Dates.Reverse()
+                If t > Constants.maxOADate Then
+                    t_too_late.Add(t)
+                Else
+                    Exit For
+                End If
+            Next
+            For Each t As DateTime In t_too_late
+                zre.Nodes.Remove(t)
+            Next
+            Log.AddLogEntry(Log.levels.warning, $"Unable to display {t_too_late.Count} nodes between {t_too_late.Last().ToString(Helpers.DefaultDateFormat)} and {t_too_late.First().ToString(Helpers.DefaultDateFormat)}!")
+        End If
 
         'Serie zu Diagramm hinzufügen
 
