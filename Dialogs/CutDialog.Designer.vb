@@ -165,7 +165,7 @@ Partial Class CutDialog
         Me.MaskedTextBox_cutEnd.Name = "MaskedTextBox_cutEnd"
         Me.MaskedTextBox_cutEnd.Size = New System.Drawing.Size(100, 20)
         Me.MaskedTextBox_cutEnd.TabIndex = 3
-        Me.MaskedTextBox_cutEnd.ValidatingType = GetType(Date)
+        Me.MaskedTextBox_cutEnd.ValidatingType = GetType(DateTime)
         '
         'MaskedTextBox_cutStart
         '
@@ -175,7 +175,7 @@ Partial Class CutDialog
         Me.MaskedTextBox_cutStart.Name = "MaskedTextBox_cutStart"
         Me.MaskedTextBox_cutStart.Size = New System.Drawing.Size(100, 20)
         Me.MaskedTextBox_cutStart.TabIndex = 1
-        Me.MaskedTextBox_cutStart.ValidatingType = GetType(Date)
+        Me.MaskedTextBox_cutStart.ValidatingType = GetType(DateTime)
         '
         'TabPage_ZRE
         '

@@ -130,7 +130,7 @@ Partial Class ChangeTimestepDialog
         Me.MaskedTextBox_Start.Name = "MaskedTextBox_Start"
         Me.MaskedTextBox_Start.Size = New System.Drawing.Size(100, 20)
         Me.MaskedTextBox_Start.TabIndex = 6
-        Me.MaskedTextBox_Start.ValidatingType = GetType(Date)
+        Me.MaskedTextBox_Start.ValidatingType = GetType(DateTime)
         '
         'Label4
         '

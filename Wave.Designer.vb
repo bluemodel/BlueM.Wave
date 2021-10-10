@@ -1260,6 +1260,7 @@ Partial Class Wave
         Me.MaskedTextBox_NavEnd.Name = "MaskedTextBox_NavEnd"
         Me.MaskedTextBox_NavEnd.Size = New System.Drawing.Size(100, 20)
         Me.MaskedTextBox_NavEnd.TabIndex = 1
+        Me.MaskedTextBox_NavEnd.ValidatingType = GetType(DateTime)
         '
         'MaskedTextBox_NavStart
         '
@@ -1269,7 +1270,7 @@ Partial Class Wave
         Me.MaskedTextBox_NavStart.Name = "MaskedTextBox_NavStart"
         Me.MaskedTextBox_NavStart.Size = New System.Drawing.Size(100, 20)
         Me.MaskedTextBox_NavStart.TabIndex = 0
-        Me.MaskedTextBox_NavStart.ValidatingType = GetType(Date)
+        Me.MaskedTextBox_NavStart.ValidatingType = GetType(DateTime)
         '
         'Wave
         '
