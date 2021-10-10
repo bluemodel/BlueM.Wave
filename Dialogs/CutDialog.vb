@@ -28,17 +28,14 @@
 Imports System.Windows.Forms
 
 ''' <summary>
-''' Dialog zum Zuschneiden einer Zeitreihe
+''' Dialog for cutting time series
 ''' </summary>
 ''' <remarks></remarks>
 Friend Class CutDialog
 
     Private IsInitializing As Boolean
-    Private colorBand1 As Steema.TeeChart.Tools.ColorBand
     Private cutStart, cutEnd As DateTime
     Private zreOrig As List(Of TimeSeries)
-    Private serie_cut As Steema.TeeChart.Styles.Line
-    Private serie_ref As Steema.TeeChart.Styles.Line
 
     Public zreCut As List(Of TimeSeries)
     Public Const labelAlle As String = "- ALL -"
@@ -60,6 +57,12 @@ Friend Class CutDialog
         Me.cutStart = initialStart
         Me.cutEnd = initialEnd
 
+        'set CurrentCulture for MaskedTextBoxes
+        Me.MaskedTextBox_cutStart.Culture = Globalization.CultureInfo.CurrentCulture
+        Me.MaskedTextBox_cutStart.FormatProvider = Globalization.CultureInfo.CurrentCulture
+        Me.MaskedTextBox_cutEnd.Culture = Globalization.CultureInfo.CurrentCulture
+        Me.MaskedTextBox_cutEnd.FormatProvider = Globalization.CultureInfo.CurrentCulture
+
         'Comboboxen füllen
         'Option zum Zuschneiden von allen Reihen
         Me.ComboBox_ZeitreiheCut.Items.Add(labelAlle)
@@ -69,12 +72,8 @@ Friend Class CutDialog
             Me.ComboBox_RefSeries.Items.Add(zre)
         Next
 
-        'Diagramm formatieren
-        Me.TChart1.Zoom.Allow = False
-        Me.TChart1.Panning.Allow = Steema.TeeChart.ScrollModes.None
-
-        'Update DateTimePickers
-        Call Me.updateDateTimePickers()
+        'Update MaskedTextboxes
+        Call Me.updateMaskedTextBoxes()
 
         Me.IsInitializing = False
 
@@ -88,7 +87,6 @@ Friend Class CutDialog
             Exit Sub
         End If
 
-        Dim i As Integer
         Dim zre As TimeSeries
         Dim earliestStart, latestEnd As DateTime
 
@@ -104,17 +102,6 @@ Friend Class CutDialog
                 If (zre.EndDate > latestEnd) Then latestEnd = zre.EndDate
             Next
 
-            'Alle Zeitreihen in Chart anzeigen
-            Call Me.TChart1.Chart.Series.Clear()
-            For Each zre In Me.zreOrig
-                Dim series As New Steema.TeeChart.Styles.Line()
-                For i = 0 To zre.Length - 1
-                    series.Add(zre.Dates(i), zre.Values(i))
-                    series.Title = zre.Title
-                Next
-                Me.TChart1.Chart.Series.Add(series)
-            Next
-
         Else
 
             'Eine einzige Zeitreihe wurde ausgewählt
@@ -123,27 +110,7 @@ Friend Class CutDialog
             earliestStart = zre.StartDate
             latestEnd = zre.EndDate
 
-            'Zeitreihe in Chart anzeigen
-            Call Me.TChart1.Chart.Series.Clear()
-            serie_cut = New Steema.TeeChart.Styles.Line(Me.TChart1.Chart)
-            serie_cut.Title = zre.Title
-            For i = 0 To zre.Length - 1
-                serie_cut.Add(zre.Dates(i), zre.Values(i))
-            Next
-
         End If
-
-        'ColorBand einrichten
-        Call Me.TChart1.Tools.Clear()
-        Me.colorBand1 = New Steema.TeeChart.Tools.ColorBand()
-        Me.TChart1.Tools.Add(colorBand1)
-        colorBand1.Axis = Me.TChart1.Axes.Bottom
-        colorBand1.Brush.Color = Color.Coral
-        colorBand1.Brush.Transparency = 50
-        colorBand1.ResizeEnd = True
-        colorBand1.ResizeStart = True
-        colorBand1.EndLinePen.Visible = False
-        colorBand1.StartLinePen.Visible = False
 
         Me.IsInitializing = True 'um eine Kettenreaktionen zu verhindern
 
@@ -154,76 +121,64 @@ Friend Class CutDialog
         Me.IsInitializing = False
 
         'Anzeige aktualisieren
-        Call Me.updateColorband()
-        Call Me.updateDateTimePickers()
+        Call Me.updateMaskedTextBoxes()
 
     End Sub
 
-    Private Sub TChart1_DoubleClick(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TChart1.DoubleClick
-        Call Me.TChart1.ShowEditor()
-    End Sub
-
-    'ColorBand verändert
-    '*******************
-    Private Sub TChart1_MouseUp(ByVal sender As System.Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles TChart1.MouseUp
-
-        Me.cutStart = DateTime.FromOADate(Me.colorBand1.Start)
-        Me.cutEnd = DateTime.FromOADate(Me.colorBand1.End)
-
-        Call Me.updateDateTimePickers()
-
-    End Sub
-
-    'Anfangsdatum verändert
-    '**********************
-    Private Sub DateTimePicker_Anfang_ValueChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles DateTimePicker_StartDate.Leave
+    ''' <summary>
+    ''' Handles cut start date changed in form
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    Private Sub MaskedTextBox_cutStart_Leave(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MaskedTextBox_cutStart.Leave
 
         If (Me.IsInitializing) Then
             Exit Sub
         End If
 
-        Me.cutStart = Me.DateTimePicker_StartDate.Value
-
-        Call Me.updateColorband()
-
+        Me.cutStart = Me.MaskedTextBox_cutStart.Text
     End Sub
 
-    'Enddatum verändert
-    '******************
-    Private Sub DateTimePicker_Ende_ValueChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles DateTimePicker_EndDate.Leave
+    ''' <summary>
+    ''' Handles cut end date changed in form
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    Private Sub MaskedTextBox_cutEnd_Leave(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MaskedTextBox_cutEnd.Leave
 
         If (Me.IsInitializing) Then
             Exit Sub
         End If
 
-        Me.cutEnd = Me.DateTimePicker_EndDate.Value
-
-        Call Me.updateColorband()
+        Me.cutEnd = Me.MaskedTextBox_cutEnd.Text
 
     End Sub
 
-    'DateTimePicker aktualisieren
-    '****************************
-    Private Sub updateDateTimePickers()
+    ''' <summary>
+    ''' Updates the MaskedTextBoxes displaying the currently set cut start and end dates
+    ''' </summary>
+    Private Sub updateMaskedTextBoxes()
 
         Me.IsInitializing = True 'um eine Kettenreaktion zu verhindern
 
-        Me.DateTimePicker_StartDate.Value = Me.cutStart
-        Me.DateTimePicker_EndDate.Value = Me.cutEnd
+        Me.MaskedTextBox_cutStart.Text = Me.cutStart
+        Me.MaskedTextBox_cutEnd.Text = Me.cutEnd
 
         Me.IsInitializing = False
 
     End Sub
 
-    'Referenz-Zeitreihe wurde ausgewählt 
-    '***********************************
+    ''' <summary>
+    ''' Handles selection of a reference time series for cutting
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
     Private Sub ComboBox_ZeitreiheRef_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ComboBox_RefSeries.SelectedIndexChanged
 
         If (Me.IsInitializing) Then
             Exit Sub
         End If
 
-        Dim i As Integer
         Dim zre, zreRef As TimeSeries
         Dim tmp_anfang, tmp_ende As DateTime
         Dim answer As MsgBoxResult
@@ -271,29 +226,8 @@ Friend Class CutDialog
         Me.cutStart = tmp_anfang
         Me.cutEnd = tmp_ende
 
-        'Referenzserie anzeigen
-        Me.serie_ref = New Steema.TeeChart.Styles.Line(Me.TChart1.Chart)
-        Me.serie_ref.Color = Color.Gray
-        For i = 0 To zreRef.Length - 1
-            Me.serie_ref.Add(zreRef.Dates(i), zreRef.Values(i))
-        Next
-
         'Anzeige aktualisieren
-        Call Me.updateColorband()
-        Call Me.updateDateTimePickers()
-
-    End Sub
-
-    'Colorband aktualisieren
-    '***********************
-    Private Sub updateColorband()
-
-        If Me.ComboBox_ZeitreiheCut.SelectedIndex = -1 Then
-            Exit Sub
-        End If
-
-        Me.colorBand1.Start = Me.cutStart.ToOADate()
-        Me.colorBand1.End = Me.cutEnd.ToOADate()
+        Call Me.updateMaskedTextBoxes()
 
     End Sub
 
