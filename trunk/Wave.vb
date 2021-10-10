@@ -158,9 +158,6 @@ Public Class Wave
         Me.MaskedTextBox_NavStart.FormatProvider = Globalization.CultureInfo.CurrentCulture
         Me.MaskedTextBox_NavEnd.Culture = Globalization.CultureInfo.CurrentCulture
         Me.MaskedTextBox_NavEnd.FormatProvider = Globalization.CultureInfo.CurrentCulture
-        'set validation type
-        Me.MaskedTextBox_NavStart.ValidatingType = GetType(DateTime)
-        Me.MaskedTextBox_NavEnd.ValidatingType = GetType(DateTime)
         'set current date as initial values
         Me.MaskedTextBox_NavStart.Text = DateTime.Now
         Me.MaskedTextBox_NavEnd.Text = DateTime.Now
@@ -2116,7 +2113,7 @@ Public Class Wave
     ''' </summary>
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
-    Private Sub navigationValidationCompleted(ByVal sender As System.Object, ByVal e As TypeValidationEventArgs) Handles MaskedTextBox_NavStart.TypeValidationCompleted, MaskedTextBox_NavEnd.TypeValidationCompleted
+    Private Sub navigationTypeValidationCompleted(ByVal sender As System.Object, ByVal e As TypeValidationEventArgs) Handles MaskedTextBox_NavStart.TypeValidationCompleted, MaskedTextBox_NavEnd.TypeValidationCompleted
         If Not e.IsValidInput Then
             e.Cancel = True
             CType(sender, MaskedTextBox).ForeColor = Color.Red
