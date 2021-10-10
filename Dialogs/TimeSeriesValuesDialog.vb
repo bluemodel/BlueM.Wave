@@ -142,7 +142,7 @@ Friend Class TimeSeriesValuesDialog
         'set max startIndex
         NumericUpDown_StartRecord.Maximum = table.Rows.Count
 
-        'set first date as initial value for DateTimePicker
+        'set first date as initial value for jump date
         If timestamps.Count > 0 Then
             Dim firstDate As DateTime = timestamps.First
             MaskedTextBox_JumpDate.Text = firstDate.ToString()
