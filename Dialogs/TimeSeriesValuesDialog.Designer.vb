@@ -36,8 +36,9 @@ Partial Class TimeSeriesValuesDialog
         Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
         Me.Button_first = New System.Windows.Forms.Button()
         Me.Button_last = New System.Windows.Forms.Button()
-        Me.DateTimePicker_JumpDate = New System.Windows.Forms.DateTimePicker()
-        Me.Label1 = New System.Windows.Forms.Label()
+        Me.MaskedTextBox_JumpDate = New System.Windows.Forms.MaskedTextBox()
+        Me.Button_Jump = New System.Windows.Forms.Button()
+        Me.Label_JumpTo = New System.Windows.Forms.Label()
         CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.ToolStrip1.SuspendLayout()
         CType(Me.NumericUpDown_StartRecord, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -162,31 +163,43 @@ Partial Class TimeSeriesValuesDialog
         Me.ToolTip1.SetToolTip(Me.Button_last, "last records")
         Me.Button_last.UseVisualStyleBackColor = True
         '
-        'DateTimePicker_JumpDate
+        'MaskedTextBox_JumpDate
         '
-        Me.DateTimePicker_JumpDate.CustomFormat = "dd.MM.yyyy HH:mm"
-        Me.DateTimePicker_JumpDate.Format = System.Windows.Forms.DateTimePickerFormat.Custom
-        Me.DateTimePicker_JumpDate.Location = New System.Drawing.Point(62, 27)
-        Me.DateTimePicker_JumpDate.Name = "DateTimePicker_JumpDate"
-        Me.DateTimePicker_JumpDate.Size = New System.Drawing.Size(122, 20)
-        Me.DateTimePicker_JumpDate.TabIndex = 2
+        Me.MaskedTextBox_JumpDate.Culture = New System.Globalization.CultureInfo("")
+        Me.MaskedTextBox_JumpDate.Location = New System.Drawing.Point(65, 27)
+        Me.MaskedTextBox_JumpDate.Mask = "00/00/0000 00:00"
+        Me.MaskedTextBox_JumpDate.Name = "MaskedTextBox_JumpDate"
+        Me.MaskedTextBox_JumpDate.Size = New System.Drawing.Size(100, 20)
+        Me.MaskedTextBox_JumpDate.TabIndex = 2
+        Me.MaskedTextBox_JumpDate.ValidatingType = GetType(DateTime)
         '
-        'Label1
+        'Button_Jump
         '
-        Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(12, 29)
-        Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(44, 13)
-        Me.Label1.TabIndex = 1
-        Me.Label1.Text = "Jump to"
+        Me.Button_Jump.Location = New System.Drawing.Point(171, 25)
+        Me.Button_Jump.Name = "Button_Jump"
+        Me.Button_Jump.Size = New System.Drawing.Size(75, 23)
+        Me.Button_Jump.TabIndex = 10
+        Me.Button_Jump.Text = "Jump"
+        Me.Button_Jump.UseVisualStyleBackColor = True
+        '
+        'Label_JumpTo
+        '
+        Me.Label_JumpTo.AutoSize = True
+        Me.Label_JumpTo.Location = New System.Drawing.Point(12, 30)
+        Me.Label_JumpTo.Name = "Label_JumpTo"
+        Me.Label_JumpTo.Size = New System.Drawing.Size(47, 13)
+        Me.Label_JumpTo.TabIndex = 11
+        Me.Label_JumpTo.Text = "Jump to:"
         '
         'TimeSeriesValuesDialog
         '
+        Me.AcceptButton = Me.Button_Jump
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(384, 461)
-        Me.Controls.Add(Me.Label1)
-        Me.Controls.Add(Me.DateTimePicker_JumpDate)
+        Me.Controls.Add(Me.Label_JumpTo)
+        Me.Controls.Add(Me.Button_Jump)
+        Me.Controls.Add(Me.MaskedTextBox_JumpDate)
         Me.Controls.Add(Me.NumericUpDown_StartRecord)
         Me.Controls.Add(Me.Button_first)
         Me.Controls.Add(Me.Button_previous)
@@ -221,6 +234,7 @@ Partial Class TimeSeriesValuesDialog
     Friend WithEvents Button_last As Button
     Friend WithEvents ToolStripButton_ExportValues As ToolStripButton
     Friend WithEvents ToolStripButton_showMarkers As ToolStripButton
-    Friend WithEvents DateTimePicker_JumpDate As DateTimePicker
-    Friend WithEvents Label1 As Label
+    Friend WithEvents MaskedTextBox_JumpDate As MaskedTextBox
+    Friend WithEvents Button_Jump As Button
+    Friend WithEvents Label_JumpTo As Label
 End Class

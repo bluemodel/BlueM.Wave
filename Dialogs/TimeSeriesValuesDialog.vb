@@ -68,6 +68,10 @@ Friend Class TimeSeriesValuesDialog
         Dim table As New DataTable("data")
         Me.dataset.Tables.Add(table)
 
+        'set CurrentCulture for MaskedTextBoxes
+        Me.MaskedTextBox_JumpDate.Culture = Globalization.CultureInfo.CurrentCulture
+        Me.MaskedTextBox_JumpDate.FormatProvider = Globalization.CultureInfo.CurrentCulture
+
         'Adjust the column widths based on the displayed values.
         Me.DataGridView1.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.DisplayedCells)
 
@@ -141,9 +145,7 @@ Friend Class TimeSeriesValuesDialog
         'set first date as initial value for DateTimePicker
         If timestamps.Count > 0 Then
             Dim firstDate As DateTime = timestamps.First
-            If firstDate < DateTimePicker.MinimumDateTime Then firstDate = DateTimePicker.MinimumDateTime
-            If firstDate > DateTimePicker.MaximumDateTime Then firstDate = DateTimePicker.MaximumDateTime
-            DateTimePicker_JumpDate.Value = firstDate
+            MaskedTextBox_JumpDate.Text = firstDate.ToString()
         End If
 
         If Me.Visible Then
@@ -293,13 +295,40 @@ Friend Class TimeSeriesValuesDialog
     End Sub
 
     ''' <summary>
-    ''' Handles DateTimePicker_JumpDate value changed
+    ''' Handles KeyDown in jump date textbox
+    ''' Resets the color
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    Private Sub MaskedTextBox_JumpDate_KeyDown(ByVal sender As System.Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles MaskedTextBox_JumpDate.KeyDown
+        CType(sender, MaskedTextBox).ForeColor = DefaultForeColor
+        'If e.KeyCode = Keys.Escape Then
+        '    'set original date
+        'End If
+    End Sub
+
+    ''' <summary>
+    ''' Handles TypeValidationCompleted of jump date textbox
+    ''' Checks whether input is valid DateTime
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    Private Sub MaskedTextBox_JumpDate_TypeValidationCompleted(ByVal sender As System.Object, ByVal e As TypeValidationEventArgs) Handles MaskedTextBox_JumpDate.TypeValidationCompleted
+        If Not e.IsValidInput Then
+            e.Cancel = True
+            CType(sender, MaskedTextBox).ForeColor = Color.Red
+        End If
+    End Sub
+
+    ''' <summary>
+    ''' Handles jump date value changed
     ''' Searches for the selected date in the dataset and sets that as the start record for the datagridview display
     ''' </summary>
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
-    Private Sub DateTimePicker_JumpDate_ValueChanged(sender As Object, e As EventArgs) Handles DateTimePicker_JumpDate.ValueChanged
-        Dim selectedDate As DateTime = DateTimePicker_JumpDate.Value
+    Private Sub MaskedTextBox_JumpDate_ValueChanged(sender As Object, e As EventArgs) Handles MaskedTextBox_JumpDate.Validated
+        Me.Cursor = Cursors.WaitCursor
+        Dim selectedDate As DateTime = CType(Me.MaskedTextBox_JumpDate.Text, DateTime)
         Dim table As DataTable = Me.dataset.Tables("data")
         'use last record as default (will be used if the selected date is later than the last date of dataset)
         startIndex = table.Rows.Count - 1
@@ -317,6 +346,7 @@ Friend Class TimeSeriesValuesDialog
         Next
         'populate datagridview
         populateRows()
+        Me.Cursor = Cursors.Default
     End Sub
 
     Private Sub TimeSeriesValuesDialog_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
