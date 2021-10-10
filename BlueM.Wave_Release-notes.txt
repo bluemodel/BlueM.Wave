@@ -3,13 +3,15 @@ BlueM.Wave Release Notes
 ===============================================================
 Version 1.10.5
 --------------
+This version fixes a number of issues regarding dates before 01.01.0100 and after 31.12.9000 (#749)
 CHANGED:
 * Time series with dates before 01.01.0100 and after 31.12.9000 are now only cut for display purposes, 
-  all nodes are now still available for analysis, export and are shown in the properties and time series values dialogs #749
-* Cut dialog: removed preview chart and allow specifying start and end dates between 01.01.0001 and 31.12.9999 #749
+  all nodes are now still available for analysis, export and are shown in the properties and time series values dialogs
+* Replaced DateTimePickers with MaskedTextBoxes for date time input and display
+* Cut dialog: removed preview chart
 FIXED:
-* Improved performance when importing series with dates before 01.01.0100 and after 31.12.9000 #749
-* Analysis function "AnnualStatistics": fixed an error occurring with series ending in the year 9999 #749
+* Improved performance when importing series with dates before 01.01.0100 and after 31.12.9000
+* Analysis function "AnnualStatistics": fixed an error occurring with series ending in the year 9999
 
 Version 1.10.4
 --------------

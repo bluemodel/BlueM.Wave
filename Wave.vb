@@ -118,6 +118,8 @@ Public Class Wave
     '***********
     Public Sub New()
 
+        Me.isInitializing = True
+
         ' Dieser Aufruf ist für den Windows Form-Designer erforderlich.
         InitializeComponent()
 
@@ -151,9 +153,23 @@ Public Class Wave
         'Navigation initialisieren
         Me.ComboBox_NavIncrement.SelectedItem = "Days"
 
+        'set CurrentCulture for MaskedTextBoxes
+        Me.MaskedTextBox_NavStart.Culture = Globalization.CultureInfo.CurrentCulture
+        Me.MaskedTextBox_NavStart.FormatProvider = Globalization.CultureInfo.CurrentCulture
+        Me.MaskedTextBox_NavEnd.Culture = Globalization.CultureInfo.CurrentCulture
+        Me.MaskedTextBox_NavEnd.FormatProvider = Globalization.CultureInfo.CurrentCulture
+        'set validation type
+        Me.MaskedTextBox_NavStart.ValidatingType = GetType(DateTime)
+        Me.MaskedTextBox_NavEnd.ValidatingType = GetType(DateTime)
+        'set current date as initial values
+        Me.MaskedTextBox_NavStart.Text = DateTime.Now
+        Me.MaskedTextBox_NavEnd.Text = DateTime.Now
+
         'Instantiate cursors
         Me.cursor_pan = New Cursor(Me.GetType(), "cursor_pan.cur")
         Me.cursor_zoom = New Cursor(Me.GetType(), "cursor_zoom.cur")
+
+        Me.isInitializing = False
 
     End Sub
 
@@ -2063,16 +2079,16 @@ Public Class Wave
         Me.isInitializing = True 'need this to prevent a feedback loop
 
         'read dates from chart
-        xMin = Date.FromOADate(Me.TChart1.Axes.Bottom.Minimum)
-        xMax = Date.FromOADate(Me.TChart1.Axes.Bottom.Maximum)
+        xMin = DateTime.FromOADate(Me.TChart1.Axes.Bottom.Minimum)
+        xMax = DateTime.FromOADate(Me.TChart1.Axes.Bottom.Maximum)
 
-        'set DateTimePickers
-        If xMin < DateTimePicker.MinimumDateTime Then xMin = DateTimePicker.MinimumDateTime
-        If xMin > DateTimePicker.MaximumDateTime Then xMin = DateTimePicker.MaximumDateTime
-        If xMax < DateTimePicker.MinimumDateTime Then xMax = DateTimePicker.MinimumDateTime
-        If xMax > DateTimePicker.MaximumDateTime Then xMax = DateTimePicker.MaximumDateTime
-        Me.DateTimePicker_NavStart.Value = xMin
-        Me.DateTimePicker_NavEnd.Value = xMax
+        'set MaskedTextBoxes
+        Me.MaskedTextBox_NavStart.Text = xMin.ToString()
+        Me.MaskedTextBox_NavEnd.Text = xMax.ToString()
+
+        'reset color in case of previous error
+        Me.MaskedTextBox_NavStart.ForeColor = DefaultForeColor
+        Me.MaskedTextBox_NavEnd.ForeColor = DefaultForeColor
 
         'update the display range
         Call Me.updateDisplayRange()
@@ -2081,58 +2097,59 @@ Public Class Wave
     End Sub
 
     ''' <summary>
-    ''' Called when the value of one of the navigation DateTimePickers is changed. Ensures that validation is successful before continuing.
+    ''' Handles KeyDown in navigation textboxes
+    ''' Resets the color and, if Escape is pressed, resets the value
     ''' </summary>
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
-    ''' <remarks></remarks>
-    Private Sub navigationChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles DateTimePicker_NavStart.ValueChanged, DateTimePicker_NavEnd.ValueChanged
-        If Not Me.navigationValidating(sender, New System.ComponentModel.CancelEventArgs()) Then
+    Private Sub navigationKeyDown(ByVal sender As System.Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles MaskedTextBox_NavStart.KeyDown, MaskedTextBox_NavEnd.KeyDown
+        CType(sender, MaskedTextBox).ForeColor = DefaultForeColor
+        If e.KeyCode = Keys.Escape Then
             'reset navigation to correspond to chart
             Call Me.updateNavigation()
-        Else
-            'validation was successful
-            Call Me.navigationValidated(sender, e)
         End If
     End Sub
 
     ''' <summary>
-    ''' Validates the navigation DateTimePickers. Checks that start is before end.
+    ''' Handles ValidationCompleted of navigation textboxes.
+    ''' Checks whether input is valid DateTime and whether end date is after start date
     ''' </summary>
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
-    ''' <returns>True if validation is successful</returns>
-    ''' <remarks></remarks>
-    Private Function navigationValidating(ByVal sender As System.Object, ByVal e As System.ComponentModel.CancelEventArgs) As Boolean Handles DateTimePicker_NavStart.Validating, DateTimePicker_NavEnd.Validating
-        If Me.DateTimePicker_NavStart.Value >= Me.DateTimePicker_NavEnd.Value Then
-            If CType(sender, DateTimePicker).Name = "DateTimePicker_NavStart" Then
-                'if the start date was set to a value after the end date,
-                'move the end date using the currently displayed timespan
-                Dim displayrange As TimeSpan
-                displayrange = DateTime.FromOADate(Me.TChart1.Axes.Bottom.Maximum) - DateTime.FromOADate(Me.TChart1.Axes.Bottom.Minimum)
-                DateTimePicker_NavEnd.Value = DateTimePicker_NavStart.Value + displayrange
-            Else
-                'setting the end date to a value before the start date is not allowed
-                e.Cancel = True
-                Return False
+    Private Sub navigationValidationCompleted(ByVal sender As System.Object, ByVal e As TypeValidationEventArgs) Handles MaskedTextBox_NavStart.TypeValidationCompleted, MaskedTextBox_NavEnd.TypeValidationCompleted
+        If Not e.IsValidInput Then
+            e.Cancel = True
+            CType(sender, MaskedTextBox).ForeColor = Color.Red
+        Else
+            If CType(Me.MaskedTextBox_NavStart.Text(), DateTime) >= CType(Me.MaskedTextBox_NavEnd.Text(), DateTime) Then
+                If CType(sender, MaskedTextBox).Name = "MaskedTextBox_NavStart" Then
+                    'if the start date was set to a value after the end date,
+                    'move the end date using the currently displayed timespan
+                    Dim displayrange As TimeSpan
+                    displayrange = DateTime.FromOADate(Me.TChart1.Axes.Bottom.Maximum) - DateTime.FromOADate(Me.TChart1.Axes.Bottom.Minimum)
+                    MaskedTextBox_NavEnd.Text = CType(MaskedTextBox_NavStart.Text(), DateTime) + displayrange
+                Else
+                    'setting the end date to a value before the start date is not allowed
+                    e.Cancel = True
+                    CType(sender, MaskedTextBox).ForeColor = Color.Red
+                End If
             End If
         End If
-        Return True
-    End Function
+    End Sub
 
     ''' <summary>
-    ''' Is called upon successful validation of the navigation DateTimePickers. Updates the chart.
+    ''' Handles successful validation of the navigation text boxes. Updates the chart accordingly.
     ''' </summary>
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
     ''' <remarks></remarks>
-    Private Sub navigationValidated(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles DateTimePicker_NavStart.Validated, DateTimePicker_NavEnd.Validated
+    Private Sub navigationValidated(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MaskedTextBox_NavStart.Validated, MaskedTextBox_NavEnd.Validated
         If Not Me.isInitializing Then
             'save the current zoom snapshot
             Call Me.saveZoomSnapshot()
             'Adjust the display range of the main chart
-            Me.TChart1.Axes.Bottom.Minimum = Me.DateTimePicker_NavStart.Value.ToOADate()
-            Me.TChart1.Axes.Bottom.Maximum = Me.DateTimePicker_NavEnd.Value.ToOADate()
+            Me.TChart1.Axes.Bottom.Minimum = CType(Me.MaskedTextBox_NavStart.Text(), DateTime).ToOADate()
+            Me.TChart1.Axes.Bottom.Maximum = CType(Me.MaskedTextBox_NavEnd.Text(), DateTime).ToOADate()
             Call Me.viewportChanged()
             Me.selectionMade = True
         End If
