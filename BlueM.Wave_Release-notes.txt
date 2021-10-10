@@ -3,6 +3,9 @@ BlueM.Wave Release Notes
 ===============================================================
 Version 1.10.5
 --------------
+CHANGED:
+* Time series with dates before 01.01.0100 and after 31.12.9000 are now only cut for display purposes, 
+  all nodes are now still available for analysis, export and are shown in the properties and time series values dialogs #749
 FIXED:
 * Improved performance when importing series with dates before 01.01.0100 and after 31.12.9000 #749
 
