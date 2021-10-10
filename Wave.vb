@@ -574,7 +574,7 @@ Public Class Wave
                 Me.colorBandOverview.Start = startValue
                 Me.colorBandOverview.End = startValue
 
-                Log.AddLogEntry(Log.levels.debug, "Zoom start at " & Date.FromOADate(startValue))
+                Log.AddLogEntry(Log.levels.debug, "Zoom start at " & DateTime.FromOADate(startValue))
 
             ElseIf e.Button = MouseButtons.Right Then
                 'start panning process
@@ -636,7 +636,7 @@ Public Class Wave
                         startValue = TChart2.Series(0).XScreenToValue(e.X)
                         endValue = TChart2.Series(0).XScreenToValue(Me.OverviewChartMouseDragStartX)
                     End If
-                    Log.AddLogEntry(Log.levels.debug, "Zoom end at " & Date.FromOADate(endValue))
+                    Log.AddLogEntry(Log.levels.debug, "Zoom end at " & DateTime.FromOADate(endValue))
 
                     'adjust colorband
                     Me.colorBandOverview.Start = startValue
@@ -737,7 +737,7 @@ Public Class Wave
         Else
             'add new snapshot
             ZoomHistory.Add(New Tuple(Of Double, Double)(Me.TChart1.Axes.Bottom.Minimum, Me.TChart1.Axes.Bottom.Maximum))
-            Log.AddLogEntry(Log.levels.debug, $"Saved zoom snapshot {ZoomHistoryIndex}: {Date.FromOADate(Me.TChart1.Axes.Bottom.Minimum)}, {Date.FromOADate(Me.TChart1.Axes.Bottom.Maximum)}")
+            Log.AddLogEntry(Log.levels.debug, $"Saved zoom snapshot {ZoomHistoryIndex}: {DateTime.FromOADate(Me.TChart1.Axes.Bottom.Minimum)}, {DateTime.FromOADate(Me.TChart1.Axes.Bottom.Maximum)}")
         End If
         ZoomHistoryIndex += 1
 
@@ -2165,7 +2165,7 @@ Public Class Wave
         Dim multiplier As Integer
 
         'get min x axis from chart
-        xMin = Date.FromOADate(Me.TChart1.Axes.Bottom.Minimum)
+        xMin = DateTime.FromOADate(Me.TChart1.Axes.Bottom.Minimum)
 
         'Calculate new max value for x axis
         multiplier = NumericUpDown_DisplayRangeMultiplier.Value
@@ -2214,8 +2214,8 @@ Public Class Wave
         Dim xMin, xMax As DateTime
         Dim multiplier As Integer
 
-        xMin = Date.FromOADate(Me.TChart1.Axes.Bottom.Minimum)
-        xMax = Date.FromOADate(Me.TChart1.Axes.Bottom.Maximum)
+        xMin = DateTime.FromOADate(Me.TChart1.Axes.Bottom.Minimum)
+        xMax = DateTime.FromOADate(Me.TChart1.Axes.Bottom.Maximum)
 
         'check whether the selected display range corresponds to the chart
         multiplier = Me.NumericUpDown_DisplayRangeMultiplier.Value
@@ -2278,8 +2278,8 @@ Public Class Wave
         Dim xMinOld, xMinNew, xMaxOld, xMaxNew As DateTime
 
         'get the previous min and max dates
-        xMinOld = Date.FromOADate(Me.TChart1.Axes.Bottom.Minimum)
-        xMaxOld = Date.FromOADate(Me.TChart1.Axes.Bottom.Maximum)
+        xMinOld = DateTime.FromOADate(Me.TChart1.Axes.Bottom.Minimum)
+        xMaxOld = DateTime.FromOADate(Me.TChart1.Axes.Bottom.Maximum)
 
         multiplier = Me.NumericUpDown_NavMultiplier.Value
         'when navigating backwards, negate the multiplier
@@ -2366,7 +2366,7 @@ Public Class Wave
                 Me.colorBandZoom.Start = startValue
                 Me.colorBandZoom.End = startValue
 
-                Log.AddLogEntry(Log.levels.debug, "Zoom start at " & Date.FromOADate(startValue))
+                Log.AddLogEntry(Log.levels.debug, "Zoom start at " & DateTime.FromOADate(startValue))
             End If
 
         ElseIf e.Button = MouseButtons.Right Then
@@ -2410,7 +2410,7 @@ Public Class Wave
                     startValue = TChart1.Series(0).XScreenToValue(e.X)
                     endValue = TChart1.Series(0).XScreenToValue(Me.ChartMouseDragStartX)
                 End If
-                Log.AddLogEntry(Log.levels.debug, "Zoom end at " & Date.FromOADate(endValue))
+                Log.AddLogEntry(Log.levels.debug, "Zoom end at " & DateTime.FromOADate(endValue))
 
                 'save the current zoom snapshot
                 Call Me.saveZoomSnapshot()
@@ -2607,7 +2607,7 @@ Public Class Wave
                                 Log.AddLogEntry(Log.levels.info, $"Importing series '{series.Title}' from TEN file...")
                                 reihe = New TimeSeries(series.Title)
                                 For i = 0 To series.Count - 1
-                                    reihe.AddNode(Date.FromOADate(series.XValues(i)), series.YValues(i))
+                                    reihe.AddNode(DateTime.FromOADate(series.XValues(i)), series.YValues(i))
                                 Next
                                 'Determine total number of NaN-values and write to log
                                 If reihe.NaNCount > 0 Then
