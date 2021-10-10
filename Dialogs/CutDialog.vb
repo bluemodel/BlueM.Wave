@@ -126,6 +126,29 @@ Friend Class CutDialog
     End Sub
 
     ''' <summary>
+    ''' Handles KeyDown in start and end date textboxes
+    ''' Resets the color
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    Private Sub MaskedTextBoxKeyDown(ByVal sender As System.Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles MaskedTextBox_cutStart.KeyDown, MaskedTextBox_cutEnd.KeyDown
+        CType(sender, MaskedTextBox).ForeColor = DefaultForeColor
+    End Sub
+
+    ''' <summary>
+    ''' Handles ValidationCompleted of start and end dates
+    ''' Checks whether input is valid DateTime
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    Private Sub MaskedTextBoxValidationCompleted(ByVal sender As System.Object, ByVal e As TypeValidationEventArgs) Handles MaskedTextBox_cutStart.TypeValidationCompleted, MaskedTextBox_cutEnd.TypeValidationCompleted
+        If Not e.IsValidInput Then
+            e.Cancel = True
+            CType(sender, MaskedTextBox).ForeColor = Color.Red
+        End If
+    End Sub
+
+    ''' <summary>
     ''' Handles cut start date changed in form
     ''' </summary>
     ''' <param name="sender"></param>
