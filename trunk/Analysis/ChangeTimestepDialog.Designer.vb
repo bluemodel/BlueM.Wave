@@ -122,12 +122,12 @@ Partial Class ChangeTimestepDialog
         Me.NumericUpDown_TimestepInterval.TabIndex = 3
         Me.NumericUpDown_TimestepInterval.Value = New Decimal(New Integer() {1, 0, 0, 0})
         '
-        'DateTimePicker_Start
+        'MaskedTextBox_Start
         '
         Me.MaskedTextBox_Start.Culture = New System.Globalization.CultureInfo("")
         Me.MaskedTextBox_Start.Location = New System.Drawing.Point(108, 60)
         Me.MaskedTextBox_Start.Mask = "00/00/0000 00:00"
-        Me.MaskedTextBox_Start.Name = "DateTimePicker_Start"
+        Me.MaskedTextBox_Start.Name = "MaskedTextBox_Start"
         Me.MaskedTextBox_Start.Size = New System.Drawing.Size(100, 20)
         Me.MaskedTextBox_Start.TabIndex = 6
         Me.MaskedTextBox_Start.ValidatingType = GetType(Date)
