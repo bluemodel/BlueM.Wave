@@ -652,7 +652,15 @@ Public Class TimeSeries
         For year = year_start To year_end
             ts = Me.Clone()
             'TODO: Cut keeps the last node after the end date, which we do not really want here
-            ts.Cut(New DateTime(year, startMonth, 1), New DateTime(year + 1, startMonth, 1) - New TimeSpan(0, 0, 1))
+            Dim t_start, t_end As DateTime
+            t_start = New DateTime(year, startMonth, 1)
+            'Do not go beyond the year 9999
+            If year < 9999 Then
+                t_end = New DateTime(year + 1, startMonth, 1) - New TimeSpan(0, 0, 1)
+            Else
+                t_end = Me.EndDate
+            End If
+            ts.Cut(t_start, t_end)
             ts.Title &= $" ({year})"
             tsDict.Add(year, ts)
         Next
