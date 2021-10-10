@@ -3031,31 +3031,36 @@ Public Class Wave
     ''' <remarks>saves and then display the time series</remarks>
     Public Sub Import_Series(ByVal zre As TimeSeries, Optional ByVal Display As Boolean = True)
 
-        'Remove nodes if necessary
+        'BUG 749: Remove nodes if necessary
         If zre.StartDate < Constants.minOADate Then
-            Log.AddLogEntry(Log.levels.warning, $"Unable to display timeseries before {Constants.minOADate}, removing nodes...")
-            Dim dates As List(Of DateTime) = zre.Dates.ToList()
-            For Each t As DateTime In dates
+            Log.AddLogEntry(Log.levels.warning, $"Unable to display timeseries before {Constants.minOADate.ToString(Helpers.DefaultDateFormat)}, removing nodes...")
+            Dim t_too_early = New List(Of DateTime)
+            For Each t As DateTime In zre.Dates
                 If t < Constants.minOADate Then
-                    zre.Nodes.Remove(t)
-                    Log.AddLogEntry(Log.levels.warning, $"Removed node at {t.ToString(Helpers.DefaultDateFormat)}!")
+                    t_too_early.Add(t)
                 Else
                     Exit For
                 End If
             Next
+            For Each t As DateTime In t_too_early
+                zre.Nodes.Remove(t)
+            Next
+            Log.AddLogEntry(Log.levels.warning, $"Removed {t_too_early.Count} nodes between {t_too_early.First().ToString(Helpers.DefaultDateFormat)} and {t_too_early.Last().ToString(Helpers.DefaultDateFormat)}!")
         End If
         If zre.EndDate > Constants.maxOADate Then
-            Log.AddLogEntry(Log.levels.warning, $"Unable to display timeseries after {Constants.maxOADate}, removing nodes...")
-            Dim dates As List(Of DateTime) = zre.Dates.ToList()
-            dates.Reverse()
-            For Each t As DateTime In dates
+            Log.AddLogEntry(Log.levels.warning, $"Unable to display timeseries after {Constants.maxOADate.ToString(Helpers.DefaultDateFormat)}, removing nodes...")
+            Dim t_too_late As New List(Of DateTime)
+            For Each t As DateTime In zre.Dates.Reverse()
                 If t > Constants.maxOADate Then
-                    zre.Nodes.Remove(t)
-                    Log.AddLogEntry(Log.levels.warning, $"Removed node at {t.ToString(Helpers.DefaultDateFormat)}!")
+                    t_too_late.Add(t)
                 Else
                     Exit For
                 End If
             Next
+            For Each t As DateTime In t_too_late
+                zre.Nodes.Remove(t)
+            Next
+            Log.AddLogEntry(Log.levels.warning, $"Removed {t_too_late.Count} nodes between {t_too_late.Last().ToString(Helpers.DefaultDateFormat)} and {t_too_late.First().ToString(Helpers.DefaultDateFormat)}!")
         End If
 
         'Serie abspeichen
