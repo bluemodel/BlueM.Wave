@@ -31,7 +31,7 @@ Partial Class ChangeTimestepDialog
         Me.Label3 = New System.Windows.Forms.Label()
         Me.ComboBox_TimestepType = New System.Windows.Forms.ComboBox()
         Me.NumericUpDown_TimestepInterval = New System.Windows.Forms.NumericUpDown()
-        Me.DateTimePicker_Start = New System.Windows.Forms.DateTimePicker()
+        Me.MaskedTextBox_Start = New System.Windows.Forms.MaskedTextBox()
         Me.Label4 = New System.Windows.Forms.Label()
         Me.CheckBox_IgnoreNaN = New System.Windows.Forms.CheckBox()
         Me.Label_IgnoreNaN = New System.Windows.Forms.Label()
@@ -124,12 +124,13 @@ Partial Class ChangeTimestepDialog
         '
         'DateTimePicker_Start
         '
-        Me.DateTimePicker_Start.CustomFormat = "dd.MM.yyyy HH:mm"
-        Me.DateTimePicker_Start.Format = System.Windows.Forms.DateTimePickerFormat.Custom
-        Me.DateTimePicker_Start.Location = New System.Drawing.Point(108, 60)
-        Me.DateTimePicker_Start.Name = "DateTimePicker_Start"
-        Me.DateTimePicker_Start.Size = New System.Drawing.Size(121, 20)
-        Me.DateTimePicker_Start.TabIndex = 6
+        Me.MaskedTextBox_Start.Culture = New System.Globalization.CultureInfo("")
+        Me.MaskedTextBox_Start.Location = New System.Drawing.Point(108, 60)
+        Me.MaskedTextBox_Start.Mask = "00/00/0000 00:00"
+        Me.MaskedTextBox_Start.Name = "DateTimePicker_Start"
+        Me.MaskedTextBox_Start.Size = New System.Drawing.Size(100, 20)
+        Me.MaskedTextBox_Start.TabIndex = 6
+        Me.MaskedTextBox_Start.ValidatingType = GetType(Date)
         '
         'Label4
         '
@@ -168,7 +169,7 @@ Partial Class ChangeTimestepDialog
         Me.Controls.Add(Me.Label_IgnoreNaN)
         Me.Controls.Add(Me.CheckBox_IgnoreNaN)
         Me.Controls.Add(Me.Label4)
-        Me.Controls.Add(Me.DateTimePicker_Start)
+        Me.Controls.Add(Me.MaskedTextBox_Start)
         Me.Controls.Add(Me.NumericUpDown_TimestepInterval)
         Me.Controls.Add(Me.ComboBox_TimestepType)
         Me.Controls.Add(Me.Label3)
@@ -197,7 +198,7 @@ Partial Class ChangeTimestepDialog
     Friend WithEvents Label3 As System.Windows.Forms.Label
     Friend WithEvents ComboBox_TimestepType As System.Windows.Forms.ComboBox
     Friend WithEvents NumericUpDown_TimestepInterval As System.Windows.Forms.NumericUpDown
-    Friend WithEvents DateTimePicker_Start As System.Windows.Forms.DateTimePicker
+    Friend WithEvents MaskedTextBox_Start As System.Windows.Forms.MaskedTextBox
     Friend WithEvents Label4 As System.Windows.Forms.Label
     Friend WithEvents CheckBox_IgnoreNaN As CheckBox
     Friend WithEvents Label_IgnoreNaN As Label
