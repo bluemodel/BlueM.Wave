@@ -67,9 +67,11 @@ Public Class Wave
 
     'ColorBand that is shown while zooming in main chart
     Private colorBandZoom As Steema.TeeChart.Tools.ColorBand
-    'State and variables for zoom in main chart
+    'State and variables for zoom and pan in main chart
     Private ChartMouseZoomDragging As Boolean = False
     Private ChartMouseDragStartX As Double
+    Private ChartMousePanning As Boolean = False
+    Private ChartMousePanDisplayRange As Double
 
     ''' <summary>
     ''' History of view extents [(xmin, xmax), ...]
@@ -108,6 +110,38 @@ Public Class Wave
         Get
             Return Me.ToolStripButton_AutoAdjustYAxes.Checked
         End Get
+    End Property
+
+    Private Property ChartMinX As DateTime
+        Get
+            Try
+                Return DateTime.FromOADate(Me.TChart1.Axes.Bottom.Minimum)
+            Catch ex As ArgumentException
+                Return Constants.minOADate
+            End Try
+        End Get
+        Set(value As DateTime)
+            If value < Constants.minOADate Then
+                value = Constants.minOADate
+            End If
+            Me.TChart1.Axes.Bottom.Minimum = value.ToOADate()
+        End Set
+    End Property
+
+    Private Property ChartMaxX As DateTime
+        Get
+            Try
+                Return DateTime.FromOADate(Me.TChart1.Axes.Bottom.Maximum)
+            Catch ex As ArgumentException
+                Return Constants.maxOADate
+            End Try
+        End Get
+        Set(value As DateTime)
+            If value > Constants.maxOADate Then
+                value = Constants.maxOADate
+            End If
+            Me.TChart1.Axes.Bottom.Maximum = value.ToOADate()
+        End Set
     End Property
 
 #End Region 'Properties
@@ -435,12 +469,12 @@ Public Class Wave
 
             If (Not Me.selectionMade) Then
                 'Wenn noch nicht gezoomed wurde, Gesamtzeitraum auswählen
-                Me.TChart1.Axes.Bottom.Minimum = Xmin.ToOADate()
-                Me.TChart1.Axes.Bottom.Maximum = Xmax.ToOADate()
+                Me.ChartMinX = Xmin
+                Me.ChartMaxX = Xmax
             End If
             'Extent auf Colorband übertragen
-            colorBandOverview.Start = Me.TChart1.Axes.Bottom.Minimum
-            colorBandOverview.End = Me.TChart1.Axes.Bottom.Maximum
+            colorBandOverview.Start = Me.ChartMinX.ToOADate()
+            colorBandOverview.End = Me.ChartMaxX.ToOADate()
 
         End If
 
@@ -453,7 +487,7 @@ Public Class Wave
     ''' <param name="e"></param>
     ''' <remarks></remarks>
     Private Sub TChart1_ZoomChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles TChart1.Scroll, TChart1.Zoomed, TChart1.UndoneZoom
-        If (Me.TChart1.Axes.Bottom.Minimum <> Me.TChart1.Axes.Bottom.Maximum) Then
+        If (Me.ChartMinX <> Me.ChartMaxX) Then
             Call Me.viewportChanged()
             Me.selectionMade = True
         End If
@@ -464,8 +498,8 @@ Public Class Wave
     ''' </summary>
     ''' <remarks></remarks>
     Private Sub updateOverviewZoomExtent()
-        Me.colorBandOverview.Start = Me.TChart1.Axes.Bottom.Minimum
-        Me.colorBandOverview.End = Me.TChart1.Axes.Bottom.Maximum
+        Me.colorBandOverview.Start = Me.ChartMinX.ToOADate()
+        Me.colorBandOverview.End = Me.ChartMaxX.ToOADate()
     End Sub
 
     ''' <summary>
@@ -491,8 +525,8 @@ Public Class Wave
             Dim axis As Steema.TeeChart.Axis
 
             'get start and end date of current viewport
-            startdate = DateTime.FromOADate(Me.TChart1.Axes.Bottom.Minimum)
-            enddate = DateTime.FromOADate(Me.TChart1.Axes.Bottom.Maximum)
+            startdate = Me.ChartMinX
+            enddate = Me.ChartMaxX
 
             'define axes to process
             Dim axes As New List(Of Tuple(Of Steema.TeeChart.Styles.VerticalAxis, Steema.TeeChart.Axis))
@@ -643,8 +677,8 @@ Public Class Wave
                     Call Me.saveZoomSnapshot()
 
                     'set the new viewport on the main chart
-                    Me.TChart1.Axes.Bottom.Minimum = Me.colorBandOverview.Start
-                    Me.TChart1.Axes.Bottom.Maximum = Me.colorBandOverview.End
+                    Me.ChartMinX = DateTime.FromOADate(Me.colorBandOverview.Start)
+                    Me.ChartMaxX = DateTime.FromOADate(Me.colorBandOverview.End)
 
                     Me.selectionMade = True
                     Call Me.viewportChanged()
@@ -657,8 +691,8 @@ Public Class Wave
                 Call Me.saveZoomSnapshot()
 
                 'set the new viewport on the main chart
-                Me.TChart1.Axes.Bottom.Minimum = Me.colorBandOverview.Start
-                Me.TChart1.Axes.Bottom.Maximum = Me.colorBandOverview.End
+                Me.ChartMinX = DateTime.FromOADate(Me.colorBandOverview.Start)
+                Me.ChartMaxX = DateTime.FromOADate(Me.colorBandOverview.End)
 
                 Me.selectionMade = True
                 Call Me.viewportChanged()
@@ -733,8 +767,8 @@ Public Class Wave
             Log.AddLogEntry(Log.levels.debug, $"Removed zoom history after index {ZoomHistoryIndex}")
         Else
             'add new snapshot
-            ZoomHistory.Add(New Tuple(Of Double, Double)(Me.TChart1.Axes.Bottom.Minimum, Me.TChart1.Axes.Bottom.Maximum))
-            Log.AddLogEntry(Log.levels.debug, $"Saved zoom snapshot {ZoomHistoryIndex}: {DateTime.FromOADate(Me.TChart1.Axes.Bottom.Minimum)}, {DateTime.FromOADate(Me.TChart1.Axes.Bottom.Maximum)}")
+            ZoomHistory.Add(New Tuple(Of Double, Double)(Me.ChartMinX.ToOADate(), Me.ChartMaxX.ToOADate()))
+            Log.AddLogEntry(Log.levels.debug, $"Saved zoom snapshot {ZoomHistoryIndex}: {Me.ChartMinX}, {Me.ChartMaxX}")
         End If
         ZoomHistoryIndex += 1
 
@@ -1720,9 +1754,9 @@ Public Class Wave
         Call Me.saveZoomSnapshot()
 
         'zoom
-        Dim displayRange As Double = Me.TChart1.Axes.Bottom.Maximum - Me.TChart1.Axes.Bottom.Minimum
-        Me.TChart1.Axes.Bottom.Minimum = Me.TChart1.Axes.Bottom.Minimum + displayRange * 0.125
-        Me.TChart1.Axes.Bottom.Maximum = Me.TChart1.Axes.Bottom.Maximum - displayRange * 0.125
+        Dim displayRange As TimeSpan = Me.ChartMaxX - Me.ChartMinX
+        Me.ChartMinX = Me.ChartMinX + New TimeSpan(0, 0, seconds:=displayRange.TotalSeconds * 0.125)
+        Me.ChartMaxX = Me.ChartMaxX - New TimeSpan(0, 0, seconds:=displayRange.TotalSeconds * 0.125)
 
         Me.selectionMade = True
         Call Me.viewportChanged()
@@ -1741,9 +1775,9 @@ Public Class Wave
         Call Me.saveZoomSnapshot()
 
         'zoom
-        Dim displayRange As Double = Me.TChart1.Axes.Bottom.Maximum - Me.TChart1.Axes.Bottom.Minimum
-        Me.TChart1.Axes.Bottom.Minimum = Me.TChart1.Axes.Bottom.Minimum - displayRange * 0.125
-        Me.TChart1.Axes.Bottom.Maximum = Me.TChart1.Axes.Bottom.Maximum + displayRange * 0.125
+        Dim displayRange As TimeSpan = Me.ChartMaxX - Me.ChartMinX
+        Me.ChartMinX = Me.ChartMinX - New TimeSpan(0, 0, seconds:=displayRange.TotalSeconds * 0.125)
+        Me.ChartMaxX = Me.ChartMaxX + New TimeSpan(0, 0, seconds:=displayRange.TotalSeconds * 0.125)
 
         Me.selectionMade = True
         Call Me.viewportChanged()
@@ -1762,8 +1796,8 @@ Public Class Wave
                 Call Me.saveZoomSnapshot()
             End If
             Dim extent As Tuple(Of Double, Double) = ZoomHistory(prevIndex)
-            Me.TChart1.Axes.Bottom.Minimum = extent.Item1
-            Me.TChart1.Axes.Bottom.Maximum = extent.Item2
+            Me.ChartMinX = DateTime.FromOADate(extent.Item1)
+            Me.ChartMaxX = DateTime.FromOADate(extent.Item2)
             ZoomHistoryIndex = prevIndex
             Call Me.viewportChanged()
             Log.AddLogEntry(Log.levels.debug, "Zoomed to history index " & prevIndex)
@@ -1785,8 +1819,8 @@ Public Class Wave
 
         If Me.ZoomHistory.Count > (ZoomHistoryIndex + 1) Then
             Dim extent As Tuple(Of Double, Double) = ZoomHistory(ZoomHistoryIndex + 1)
-            Me.TChart1.Axes.Bottom.Minimum = extent.Item1
-            Me.TChart1.Axes.Bottom.Maximum = extent.Item2
+            Me.ChartMinX = DateTime.FromOADate(extent.Item1)
+            Me.ChartMaxX = DateTime.FromOADate(extent.Item2)
             ZoomHistoryIndex += 1
             Call Me.viewportChanged()
             Log.AddLogEntry(Log.levels.debug, "Zoomed to history index " & ZoomHistoryIndex)
@@ -1852,8 +1886,8 @@ Public Class Wave
             'save the current zoom snapshot
             Call Me.saveZoomSnapshot()
             'zoom
-            Me.TChart1.Axes.Bottom.Minimum = startdate.ToOADate()
-            Me.TChart1.Axes.Bottom.Maximum = enddate.ToOADate()
+            Me.ChartMinX = startdate
+            Me.ChartMaxX = enddate
             Me.selectionMade = True
             Call Me.viewportChanged()
         Else
@@ -2076,8 +2110,8 @@ Public Class Wave
         Me.isInitializing = True 'need this to prevent a feedback loop
 
         'read dates from chart
-        xMin = DateTime.FromOADate(Me.TChart1.Axes.Bottom.Minimum)
-        xMax = DateTime.FromOADate(Me.TChart1.Axes.Bottom.Maximum)
+        xMin = Me.ChartMinX
+        xMax = Me.ChartMaxX
 
         'set MaskedTextBoxes
         Me.MaskedTextBox_NavStart.Text = xMin.ToString()
@@ -2123,7 +2157,7 @@ Public Class Wave
                     'if the start date was set to a value after the end date,
                     'move the end date using the currently displayed timespan
                     Dim displayrange As TimeSpan
-                    displayrange = DateTime.FromOADate(Me.TChart1.Axes.Bottom.Maximum) - DateTime.FromOADate(Me.TChart1.Axes.Bottom.Minimum)
+                    displayrange = Me.ChartMaxX - Me.ChartMinX
                     MaskedTextBox_NavEnd.Text = CType(MaskedTextBox_NavStart.Text(), DateTime) + displayrange
                 Else
                     'setting the end date to a value before the start date is not allowed
@@ -2145,8 +2179,8 @@ Public Class Wave
             'save the current zoom snapshot
             Call Me.saveZoomSnapshot()
             'Adjust the display range of the main chart
-            Me.TChart1.Axes.Bottom.Minimum = CType(Me.MaskedTextBox_NavStart.Text(), DateTime).ToOADate()
-            Me.TChart1.Axes.Bottom.Maximum = CType(Me.MaskedTextBox_NavEnd.Text(), DateTime).ToOADate()
+            Me.ChartMinX = CType(Me.MaskedTextBox_NavStart.Text(), DateTime)
+            Me.ChartMaxX = CType(Me.MaskedTextBox_NavEnd.Text(), DateTime)
             Call Me.viewportChanged()
             Me.selectionMade = True
         End If
@@ -2162,7 +2196,7 @@ Public Class Wave
         Dim multiplier As Integer
 
         'get min x axis from chart
-        xMin = DateTime.FromOADate(Me.TChart1.Axes.Bottom.Minimum)
+        xMin = Me.ChartMinX
 
         'Calculate new max value for x axis
         multiplier = NumericUpDown_DisplayRangeMultiplier.Value
@@ -2194,7 +2228,7 @@ Public Class Wave
         Call Me.saveZoomSnapshot()
 
         'Set new max value for x axis
-        Me.TChart1.Axes.Bottom.Maximum = xMax.ToOADate()
+        Me.ChartMaxX = xMax
 
         Call Me.viewportChanged()
 
@@ -2211,8 +2245,8 @@ Public Class Wave
         Dim xMin, xMax As DateTime
         Dim multiplier As Integer
 
-        xMin = DateTime.FromOADate(Me.TChart1.Axes.Bottom.Minimum)
-        xMax = DateTime.FromOADate(Me.TChart1.Axes.Bottom.Maximum)
+        xMin = Me.ChartMinX
+        xMax = Me.ChartMaxX
 
         'check whether the selected display range corresponds to the chart
         multiplier = Me.NumericUpDown_DisplayRangeMultiplier.Value
@@ -2275,8 +2309,8 @@ Public Class Wave
         Dim xMinOld, xMinNew, xMaxOld, xMaxNew As DateTime
 
         'get the previous min and max dates
-        xMinOld = DateTime.FromOADate(Me.TChart1.Axes.Bottom.Minimum)
-        xMaxOld = DateTime.FromOADate(Me.TChart1.Axes.Bottom.Maximum)
+        xMinOld = Me.ChartMinX
+        xMaxOld = Me.ChartMaxX
 
         multiplier = Me.NumericUpDown_NavMultiplier.Value
         'when navigating backwards, negate the multiplier
@@ -2320,8 +2354,8 @@ Public Class Wave
         Call Me.saveZoomSnapshot()
 
         'update chart
-        Me.TChart1.Axes.Bottom.Minimum = xMinNew.ToOADate()
-        Me.TChart1.Axes.Bottom.Maximum = xMaxNew.ToOADate()
+        Me.ChartMinX = xMinNew
+        Me.ChartMaxX = xMaxNew
 
         Call Me.viewportChanged()
 
@@ -2346,8 +2380,8 @@ Public Class Wave
                 Dim startValue As Double
                 startValue = Me.TChart1.Series(0).XScreenToValue(e.X)
 
-                If startValue < Me.TChart1.Axes.Bottom.Minimum Or
-                    startValue > Me.TChart1.Axes.Bottom.Maximum Then
+                If startValue < Me.ChartMinX.ToOADate() Or
+                    startValue > Me.ChartMaxX.ToOADate() Then
                     'click outside of chart, don't start zoom process
                     Exit Sub
                 End If
@@ -2368,6 +2402,8 @@ Public Class Wave
 
         ElseIf e.Button = MouseButtons.Right Then
             'start pan process
+            Me.ChartMousePanning = True
+            Me.ChartMousePanDisplayRange = TChart1.Axes.Bottom.Maximum - TChart1.Axes.Bottom.Minimum
             Call Me.saveZoomSnapshot()
             Me.TChart1.Cursor = Me.cursor_pan
         End If
@@ -2376,7 +2412,7 @@ Public Class Wave
 
     ''' <summary>
     ''' Handles main chart MouseMove event
-    ''' Animates any started zoom
+    ''' Animates any started zoom or pan process
     ''' </summary>
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
@@ -2385,12 +2421,23 @@ Public Class Wave
             Dim endValue As Double
             endValue = TChart1.Series(0).XScreenToValue(e.X)
             Me.colorBandZoom.End = endValue
+        ElseIf Me.ChartMousePanning Then
+        	'TODO: implement panning process ourselves and deactivate builtin TeeChart panning
+            If TChart1.Axes.Bottom.Minimum <= Constants.minOADate.ToOADate() Then
+                'prevent panning beyond minOADate
+                TChart1.Axes.Bottom.Minimum = Constants.minOADate.ToOADate()
+                TChart1.Axes.Bottom.Maximum = Constants.minOADate.ToOADate() + Me.ChartMousePanDisplayRange
+            ElseIf TChart1.Axes.Bottom.Minimum >= Constants.minOADate.ToOADate() Then
+                'prevent panning beyond maxOADate
+                TChart1.Axes.Bottom.Maximum = Constants.maxOADate.ToOADate()
+                TChart1.Axes.Bottom.Minimum = Constants.maxOADate.ToOADate() - Me.ChartMousePanDisplayRange
+            End If
         End If
     End Sub
 
     ''' <summary>
     ''' Handles main chart MouseUp event
-    ''' Complete any started zoom process, update cursor
+    ''' Complete any started zoom or pan process, update cursor
     ''' </summary>
     Private Sub TChart1_MouseUp(ByVal sender As System.Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles TChart1.MouseUp
         If Me.ChartMouseZoomDragging Then
@@ -2413,13 +2460,16 @@ Public Class Wave
                 Call Me.saveZoomSnapshot()
 
                 'set the new viewport 
-                Me.TChart1.Axes.Bottom.Minimum = startValue
-                Me.TChart1.Axes.Bottom.Maximum = endValue
+                Me.ChartMinX = DateTime.FromOADate(startValue)
+                Me.ChartMaxX = DateTime.FromOADate(endValue)
                 Me.selectionMade = True
                 Call Me.viewportChanged()
             End If
             'hide colorband
             Me.colorBandZoom.Active = False
+        ElseIf Me.ChartMousePanning Then
+            'complete the pan process
+            Me.ChartMousePanning = False
         End If
         Me.TChart1.Cursor = Cursors.Default
     End Sub
@@ -2453,7 +2503,7 @@ Public Class Wave
                 match = Regex.Match(zre.Title, pattern)
                 If (match.Success) Then
                     n += 1
-                    zre.Title = Regex.Replace(zre.Title, pattern, $"${name} ({n.ToString()})")
+                    zre.Title = Regex.Replace(zre.Title, pattern, $"${Name} ({n.ToString()})")
                 Else
                     zre.Title &= " (1)"
                 End If
@@ -2537,7 +2587,7 @@ Public Class Wave
         Dim result As DialogResult
         Dim i As Integer
         Dim reihe As TimeSeries
-        Dim XMin, XMax As Double
+        Dim XMin, XMax As DateTime
 
         Try
 
@@ -2551,8 +2601,8 @@ Public Class Wave
             Next
 
             'Zoom der X-Achse merken
-            XMin = Me.TChart1.Axes.Bottom.Minimum
-            XMax = Me.TChart1.Axes.Bottom.Maximum
+            XMin = Me.ChartMinX
+            XMax = Me.ChartMaxX
             If (XMin <> XMax) Then
                 Me.selectionMade = True
             Else
@@ -2672,8 +2722,8 @@ Public Class Wave
 
             'Vorherigen Zoom wiederherstellen
             If (Me.selectionMade) Then
-                Me.TChart1.Axes.Bottom.Minimum = XMin
-                Me.TChart1.Axes.Bottom.Maximum = XMax
+                Me.ChartMinX = XMin
+                Me.ChartMaxX = XMax
             End If
 
             'ColorBands neu einrichten (durch TEN-Import verloren)
