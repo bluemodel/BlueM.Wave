@@ -16,7 +16,7 @@ FIXED:
 * Improved performance when importing series with dates before 01.01.0100 and after 31.12.9000
 * Analysis function "AnnualStatistics": fixed an error occurring with series ending in the year 9999
 KNOWN ISSUES:
-* Analysis Function "ChangeTimestep": Error when the last timestep would end in year > 9999
+* Analysis Function "ChangeTimestep": Error when the last new timestep ends in year > 9999
 * Scrolling the chart beyond 01.01.0100 or 31.12.9000 causes Wave to crash
 
 Version 1.10.4
