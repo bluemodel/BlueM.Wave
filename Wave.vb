@@ -371,17 +371,15 @@ Public Class Wave
         Me.TChart2.Header.Visible = False
         Me.TChart2.Legend.Visible = False
 
-        'Übersicht darf nicht gescrolled oder gezoomt werden
-        Me.TChart2.Zoom.Allow = False
-        Me.TChart2.Panning.Allow = Steema.TeeChart.ScrollModes.None
-
-        'Hauptdiagramm darf nur horizontal gescrolled und nicht gezoomt werden
-        'Zoom ist selbst implementiert
+        'Disable TeeChart builtin zooming and panning functionality
         Me.TChart1.Zoom.Allow = False
         Me.TChart1.Zoom.Direction = Steema.TeeChart.ZoomDirections.Horizontal
         Me.TChart1.Zoom.History = False
         Me.TChart1.Zoom.Animated = True
-        Me.TChart1.Panning.Allow = Steema.TeeChart.ScrollModes.Horizontal
+        Me.TChart1.Panning.Allow = Steema.TeeChart.ScrollModes.None
+
+        Me.TChart2.Zoom.Allow = False
+        Me.TChart2.Panning.Allow = Steema.TeeChart.ScrollModes.None
 
         'Achsen
         Me.TChart1.Axes.Bottom.Automatic = False
@@ -588,7 +586,6 @@ Public Class Wave
     ''' <param name="e"></param>
     Private Sub OverviewChart_MouseDown(sender As Object, e As MouseEventArgs) Handles TChart2.MouseDown
 
-        Dim startValue As Double
 
         If Me.TChart2.Series.Count > 0 Then
 
@@ -600,12 +597,18 @@ Public Class Wave
                 Me.OverviewChartMouseDragging = True
                 Me.OverviewChartMouseDragStartX = e.X
 
-                startValue = Me.TChart2.Series(0).XScreenToValue(Me.OverviewChartMouseDragStartX)
+                'set start and end value of colorband to mouse position
+                Dim xMouse As Double
+                xMouse = Me.TChart2.Series(0).XScreenToValue(Me.OverviewChartMouseDragStartX)
 
-                Me.colorBandOverview.Start = startValue
-                Me.colorBandOverview.End = startValue
+                'BUG 749: prevent zoom starting beyond displayable date range
+                xMouse = Math.Max(xMouse, Constants.minOADate.ToOADate)
+                xMouse = Math.Min(xMouse, Constants.maxOADate.ToOADate)
 
-                Log.AddLogEntry(Log.levels.debug, "Zoom start at " & DateTime.FromOADate(startValue))
+                Me.colorBandOverview.Start = xMouse
+                Me.colorBandOverview.End = xMouse
+
+                Log.AddLogEntry(Log.levels.debug, "Zoom start at " & DateTime.FromOADate(xMouse))
 
             ElseIf e.Button = MouseButtons.Right Then
                 'start panning process
@@ -629,13 +632,35 @@ Public Class Wave
     Private Sub OverviewChart_MouseMove(sender As Object, e As MouseEventArgs) Handles TChart2.MouseMove
         If Me.OverviewChartMouseDragging Then
             If e.Button = MouseButtons.Left Then
-                'move the end of the colorband
-                Me.colorBandOverview.End = TChart2.Series(0).XScreenToValue(e.X)
+                'move the end of the colorband to the mouse pointer
+                Dim xMouse As Double = TChart2.Series(0).XScreenToValue(e.X)
+
+                'BUG 749: restrict to displayable date range
+                xMouse = Math.Max(xMouse, Constants.minOADate.ToOADate)
+                xMouse = Math.Min(xMouse, Constants.maxOADate.ToOADate)
+
+                Me.colorBandOverview.End = xMouse
+
             ElseIf e.Button = MouseButtons.Right Then
                 'move the whole color band while maintaining its width
                 Dim width As Double = Me.colorBandOverview.End - Me.colorBandOverview.Start
-                Me.colorBandOverview.Start = TChart2.Series(0).XScreenToValue(e.X - Me.OverviewChartMouseDragOffset)
-                Me.colorBandOverview.End = Me.colorBandOverview.Start + width
+
+                Dim startValue, endValue As Double
+                startValue = TChart2.Series(0).XScreenToValue(e.X - Me.OverviewChartMouseDragOffset)
+                endValue = startValue + width
+
+                'BUG 749: restrict to displayable date range
+                If startValue < Constants.minOADate.ToOADate Then
+                    startValue = Constants.minOADate.ToOADate
+                    endValue = startValue + width
+                End If
+                If endValue > Constants.maxOADate.ToOADate Then
+                    endValue = Constants.maxOADate.ToOADate
+                    startValue = endValue - width
+                End If
+
+                Me.colorBandOverview.Start = startValue
+                Me.colorBandOverview.End = endValue
             End If
         End If
     End Sub
@@ -659,6 +684,7 @@ Public Class Wave
 
                 'determine start and end of zoom
                 If e.X <> Me.OverviewChartMouseDragStartX Then
+                    'set start and end depending on zoom direction
                     Dim startValue, endValue As Double
                     If e.X > Me.OverviewChartMouseDragStartX Then
                         startValue = TChart2.Series(0).XScreenToValue(Me.OverviewChartMouseDragStartX)
@@ -667,6 +693,10 @@ Public Class Wave
                         startValue = TChart2.Series(0).XScreenToValue(e.X)
                         endValue = TChart2.Series(0).XScreenToValue(Me.OverviewChartMouseDragStartX)
                     End If
+                    'BUG 749: restrict to displayable date range
+                    startValue = Math.Max(startValue, Constants.minOADate.ToOADate)
+                    endValue = Math.Min(endValue, Constants.maxOADate.ToOADate)
+
                     Log.AddLogEntry(Log.levels.debug, "Zoom end at " & DateTime.FromOADate(endValue))
 
                     'adjust colorband
@@ -2403,6 +2433,7 @@ Public Class Wave
         ElseIf e.Button = MouseButtons.Right Then
             'start pan process
             Me.ChartMousePanning = True
+            Me.ChartMouseDragStartX = e.X
             Me.ChartMousePanDisplayRange = TChart1.Axes.Bottom.Maximum - TChart1.Axes.Bottom.Minimum
             Call Me.saveZoomSnapshot()
             Me.TChart1.Cursor = Me.cursor_pan
@@ -2417,21 +2448,33 @@ Public Class Wave
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
     Private Sub TChart1_MouseMove(ByVal sender As System.Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles TChart1.MouseMove
+
         If Me.ChartMouseZoomDragging Then
             Dim endValue As Double
             endValue = TChart1.Series(0).XScreenToValue(e.X)
             Me.colorBandZoom.End = endValue
+
         ElseIf Me.ChartMousePanning Then
-        	'TODO: implement panning process ourselves and deactivate builtin TeeChart panning
-            If TChart1.Axes.Bottom.Minimum <= Constants.minOADate.ToOADate() Then
-                'prevent panning beyond minOADate
-                TChart1.Axes.Bottom.Minimum = Constants.minOADate.ToOADate()
-                TChart1.Axes.Bottom.Maximum = Constants.minOADate.ToOADate() + Me.ChartMousePanDisplayRange
-            ElseIf TChart1.Axes.Bottom.Minimum >= Constants.minOADate.ToOADate() Then
-                'prevent panning beyond maxOADate
-                TChart1.Axes.Bottom.Maximum = Constants.maxOADate.ToOADate()
-                TChart1.Axes.Bottom.Minimum = Constants.maxOADate.ToOADate() - Me.ChartMousePanDisplayRange
+            Dim xMin, xMax As Double
+            Dim panDistance As Double = TChart1.Series(0).XScreenToValue(Me.ChartMouseDragStartX) - TChart1.Series(0).XScreenToValue(e.X)
+            xMin = TChart1.Axes.Bottom.Minimum + panDistance
+            xMax = TChart1.Axes.Bottom.Maximum + panDistance
+            'BUG 749: prevent panning beyond displayable range
+            If xMin < Constants.minOADate.ToOADate() Then
+                xMin = Constants.minOADate.ToOADate()
+                xMax = xMin + Me.ChartMousePanDisplayRange
             End If
+            If xMax > Constants.maxOADate.ToOADate() Then
+                xMax = Constants.maxOADate.ToOADate()
+                xMin = xMax - Me.ChartMousePanDisplayRange
+            End If
+            'set the new viewport 
+            Me.ChartMinX = DateTime.FromOADate(xMin)
+            Me.ChartMaxX = DateTime.FromOADate(xMax)
+            Me.selectionMade = True
+            Call Me.viewportChanged()
+            'update drag start point
+            Me.ChartMouseDragStartX = e.X
         End If
     End Sub
 
@@ -2446,12 +2489,17 @@ Public Class Wave
             'only zoom if at least 5 pixels difference to start of drag operation
             If Math.Abs(e.X - Me.ChartMouseDragStartX) > 5 Then
                 'determine start and end dates of zoom
-                Dim startValue, endValue As Double
+                Dim mouseValue, startValue, endValue As Double
+                'BUG 749: prevent zooming beyond the displayable date range
+                mouseValue = TChart1.Series(0).XScreenToValue(e.X)
+                mouseValue = Math.Max(mouseValue, Constants.minOADate.ToOADate)
+                mouseValue = Math.Min(mouseValue, Constants.maxOADate.ToOADate)
+                'set start and end depending on zoom direction
                 If e.X > Me.ChartMouseDragStartX Then
                     startValue = TChart1.Series(0).XScreenToValue(Me.ChartMouseDragStartX)
-                    endValue = TChart1.Series(0).XScreenToValue(e.X)
+                    endValue = mouseValue
                 Else
-                    startValue = TChart1.Series(0).XScreenToValue(e.X)
+                    startValue = mouseValue
                     endValue = TChart1.Series(0).XScreenToValue(Me.ChartMouseDragStartX)
                 End If
                 Log.AddLogEntry(Log.levels.debug, "Zoom end at " & DateTime.FromOADate(endValue))

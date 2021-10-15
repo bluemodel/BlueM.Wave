@@ -4,7 +4,7 @@ BlueM.Wave Release Notes
 Version 1.10.6
 --------------
 This version fixes a number of issues in order to support the full date range from 01.01.0001 to 31.12.9999 (#749)
-The chart display will still only show dates between 01.01.0100 and 31.12.9000, but all internal processing, 
+The chart display can still only show dates between 01.01.0100 and 31.12.9000, but all internal processing, 
 including import, analyses and export functions now uses the full range of dates.
 CHANGED:
 * Time series with dates before 01.01.0100 and after 31.12.9000 are now only cut for display purposes, 
@@ -17,7 +17,6 @@ FIXED:
 * Analysis function "AnnualStatistics": fixed an error occurring with series ending in the year 9999
 KNOWN ISSUES:
 * Analysis Function "ChangeTimestep": Error when the last new timestep ends in year > 9999
-* Scrolling the chart beyond 01.01.0100 or 31.12.9000 causes Wave to crash
 
 Version 1.10.5
 --------------
