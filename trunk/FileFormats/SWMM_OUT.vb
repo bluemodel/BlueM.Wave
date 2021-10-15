@@ -284,7 +284,7 @@ Public Class SWMM_OUT
                     For period = 0 To oSWMM.NPeriods - 1
                         oSWMM.GetSwmmDate(period, datum)
                         oSWMM.GetSwmmResult(SWMMBinaryFileIndex(index).iType, SWMMBinaryFileIndex(index).iIndex, SWMMBinaryFileIndex(index).vIndex, period, value)
-                        ts.AddNode(Date.FromOADate(datum), value)
+                        ts.AddNode(DateTime.FromOADate(datum), value)
                     Next
                 End If
             Next
