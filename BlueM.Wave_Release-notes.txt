@@ -1,6 +1,13 @@
 ﻿===============================================================
 BlueM.Wave Release Notes
 ===============================================================
+Version 1.10.5
+--------------
+NEW:
+* CLI: Added a new optional argument "-of" for specifiying the output format for conversions. 
+  Currently supported output formats are CSV (default) and BIN.
+  See documentation: https://wiki.bluemodel.org/index.php/Wave:CLI
+
 Version 1.10.4
 --------------
 CHANGED:
