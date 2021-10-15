@@ -118,7 +118,7 @@ Friend Class ChangeTimestep
             interpretation = dlg.ComboBox_Interpretation.SelectedItem
             timesteptype = dlg.ComboBox_TimestepType.SelectedItem
             timestepinterval = dlg.NumericUpDown_TimestepInterval.Value
-            startdate = CType(dlg.MaskedTextBox_Start.ValidateText(), DateTime)
+            startdate = dlg.DateTimePicker_Start.Value
             ignoreNaN = dlg.CheckBox_IgnoreNaN.Checked
 
             'if ignoreNaN is set, remove all NaN values from time series

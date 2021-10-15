@@ -53,38 +53,10 @@ Friend Class ChangeTimestepDialog
         Me.ComboBox_TimestepType.Items.Add(TimeSeries.TimeStepTypeEnum.Minute)
         Me.ComboBox_TimestepType.Items.Add(TimeSeries.TimeStepTypeEnum.Second)
         Me.ComboBox_TimestepType.SelectedIndex = 3
-
-        'set CurrentCulture for MaskedTextBoxes
-        Me.MaskedTextBox_Start.Culture = Globalization.CultureInfo.CurrentCulture
-        Me.MaskedTextBox_Start.FormatProvider = Globalization.CultureInfo.CurrentCulture
-
-        'set the initial start date
-        Me.MaskedTextBox_Start.Text = ts.StartDate.ToString()
-
         Me.isInitializing = False
-    End Sub
 
-    ''' <summary>
-    ''' Handles KeyDown in start date textbox
-    ''' Resets the color
-    ''' </summary>
-    ''' <param name="sender"></param>
-    ''' <param name="e"></param>
-    Private Sub MaskedTextBoxStartKeyDown(ByVal sender As System.Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles MaskedTextBox_Start.KeyDown
-        CType(sender, MaskedTextBox).ForeColor = DefaultForeColor
-    End Sub
-
-    ''' <summary>
-    ''' Handles ValidationCompleted of start date textbox
-    ''' Checks whether input is valid DateTime
-    ''' </summary>
-    ''' <param name="sender"></param>
-    ''' <param name="e"></param>
-    Private Sub MaskedTextBoxStartValidationCompleted(ByVal sender As System.Object, ByVal e As TypeValidationEventArgs) Handles MaskedTextBox_Start.TypeValidationCompleted
-        If Not e.IsValidInput Then
-            e.Cancel = True
-            CType(sender, MaskedTextBox).ForeColor = Color.Red
-        End If
+        'update the DateTimePicker
+        Me.DateTimePicker_Start.Value = ts.StartDate
     End Sub
 
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click

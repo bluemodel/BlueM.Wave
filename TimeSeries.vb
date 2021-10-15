@@ -652,15 +652,7 @@ Public Class TimeSeries
         For year = year_start To year_end
             ts = Me.Clone()
             'TODO: Cut keeps the last node after the end date, which we do not really want here
-            Dim t_start, t_end As DateTime
-            t_start = New DateTime(year, startMonth, 1)
-            'Do not go beyond the year 9999
-            If year < 9999 Then
-                t_end = New DateTime(year + 1, startMonth, 1) - New TimeSpan(0, 0, 1)
-            Else
-                t_end = Me.EndDate
-            End If
-            ts.Cut(t_start, t_end)
+            ts.Cut(New DateTime(year, startMonth, 1), New DateTime(year + 1, startMonth, 1) - New TimeSpan(0, 0, 1))
             ts.Title &= $" ({year})"
             tsDict.Add(year, ts)
         Next
@@ -1184,8 +1176,6 @@ Public Class TimeSeries
     ''' <param name="timestepinterval">The number of intervals to offset (can be negative in order to subract)</param>
     ''' <returns>The offset DateTime</returns>
     Public Shared Function AddTimeInterval(t As DateTime, timesteptype As TimeStepTypeEnum, timestepinterval As Integer) As DateTime
-
-        'TODO: handle not going above DateTime.MaxValue #749
 
         Dim n As Integer
 

@@ -93,8 +93,8 @@ Partial Class Wave
         Me.Label_Display = New System.Windows.Forms.Label()
         Me.NumericUpDown_DisplayRangeMultiplier = New System.Windows.Forms.NumericUpDown()
         Me.ComboBox_DisplayRangeUnit = New System.Windows.Forms.ComboBox()
-        Me.MaskedTextBox_NavEnd = New System.Windows.Forms.MaskedTextBox()
-        Me.MaskedTextBox_NavStart = New System.Windows.Forms.MaskedTextBox()
+        Me.DateTimePicker_NavEnd = New System.Windows.Forms.DateTimePicker()
+        Me.DateTimePicker_NavStart = New System.Windows.Forms.DateTimePicker()
         Me.SaveFileDialog1 = New System.Windows.Forms.SaveFileDialog()
         ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
         toolStripSeparator = New System.Windows.Forms.ToolStripSeparator()
@@ -1211,8 +1211,8 @@ Partial Class Wave
         Me.Panel_DisplayRange.Controls.Add(Me.Label_Display)
         Me.Panel_DisplayRange.Controls.Add(Me.NumericUpDown_DisplayRangeMultiplier)
         Me.Panel_DisplayRange.Controls.Add(Me.ComboBox_DisplayRangeUnit)
-        Me.Panel_DisplayRange.Controls.Add(Me.MaskedTextBox_NavEnd)
-        Me.Panel_DisplayRange.Controls.Add(Me.MaskedTextBox_NavStart)
+        Me.Panel_DisplayRange.Controls.Add(Me.DateTimePicker_NavEnd)
+        Me.Panel_DisplayRange.Controls.Add(Me.DateTimePicker_NavStart)
         Me.Panel_DisplayRange.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Panel_DisplayRange.Location = New System.Drawing.Point(1, 411)
         Me.Panel_DisplayRange.Margin = New System.Windows.Forms.Padding(0)
@@ -1251,26 +1251,26 @@ Partial Class Wave
         Me.ComboBox_DisplayRangeUnit.Size = New System.Drawing.Size(81, 21)
         Me.ComboBox_DisplayRangeUnit.TabIndex = 2
         '
-        'MaskedTextBox_NavEnd
+        'DateTimePicker_NavEnd
         '
-        Me.MaskedTextBox_NavEnd.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.MaskedTextBox_NavEnd.Culture = New System.Globalization.CultureInfo("")
-        Me.MaskedTextBox_NavEnd.Location = New System.Drawing.Point(829, 8)
-        Me.MaskedTextBox_NavEnd.Mask = "00/00/0000 00:00"
-        Me.MaskedTextBox_NavEnd.Name = "MaskedTextBox_NavEnd"
-        Me.MaskedTextBox_NavEnd.Size = New System.Drawing.Size(100, 20)
-        Me.MaskedTextBox_NavEnd.TabIndex = 1
-        Me.MaskedTextBox_NavEnd.ValidatingType = GetType(DateTime)
+        Me.DateTimePicker_NavEnd.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.DateTimePicker_NavEnd.CustomFormat = "dd.MM.yyyy HH:mm"
+        Me.DateTimePicker_NavEnd.Format = System.Windows.Forms.DateTimePickerFormat.Custom
+        Me.DateTimePicker_NavEnd.Location = New System.Drawing.Point(819, 8)
+        Me.DateTimePicker_NavEnd.Name = "DateTimePicker_NavEnd"
+        Me.DateTimePicker_NavEnd.ShowUpDown = True
+        Me.DateTimePicker_NavEnd.Size = New System.Drawing.Size(110, 20)
+        Me.DateTimePicker_NavEnd.TabIndex = 1
         '
-        'MaskedTextBox_NavStart
+        'DateTimePicker_NavStart
         '
-        Me.MaskedTextBox_NavStart.Culture = New System.Globalization.CultureInfo("")
-        Me.MaskedTextBox_NavStart.Location = New System.Drawing.Point(8, 8)
-        Me.MaskedTextBox_NavStart.Mask = "00/00/0000 00:00"
-        Me.MaskedTextBox_NavStart.Name = "MaskedTextBox_NavStart"
-        Me.MaskedTextBox_NavStart.Size = New System.Drawing.Size(100, 20)
-        Me.MaskedTextBox_NavStart.TabIndex = 0
-        Me.MaskedTextBox_NavStart.ValidatingType = GetType(DateTime)
+        Me.DateTimePicker_NavStart.CustomFormat = "dd.MM.yyyy HH:mm"
+        Me.DateTimePicker_NavStart.Format = System.Windows.Forms.DateTimePickerFormat.Custom
+        Me.DateTimePicker_NavStart.Location = New System.Drawing.Point(8, 8)
+        Me.DateTimePicker_NavStart.Name = "DateTimePicker_NavStart"
+        Me.DateTimePicker_NavStart.ShowUpDown = True
+        Me.DateTimePicker_NavStart.Size = New System.Drawing.Size(110, 20)
+        Me.DateTimePicker_NavStart.TabIndex = 0
         '
         'Wave
         '
@@ -1334,8 +1334,8 @@ Partial Class Wave
     Friend WithEvents Panel_DisplayRange As System.Windows.Forms.Panel
     Friend WithEvents NumericUpDown_DisplayRangeMultiplier As System.Windows.Forms.NumericUpDown
     Friend WithEvents ComboBox_DisplayRangeUnit As System.Windows.Forms.ComboBox
-    Friend WithEvents MaskedTextBox_NavEnd As System.Windows.Forms.MaskedTextBox
-    Friend WithEvents MaskedTextBox_NavStart As System.Windows.Forms.MaskedTextBox
+    Friend WithEvents DateTimePicker_NavEnd As System.Windows.Forms.DateTimePicker
+    Friend WithEvents DateTimePicker_NavStart As System.Windows.Forms.DateTimePicker
     Friend WithEvents TChart1 As Steema.TeeChart.TChart
     Friend WithEvents PanelNavigation As System.Windows.Forms.Panel
     Friend WithEvents NumericUpDown_NavMultiplier As System.Windows.Forms.NumericUpDown
