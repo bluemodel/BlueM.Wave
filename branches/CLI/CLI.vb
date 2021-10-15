@@ -86,13 +86,35 @@ Friend Class CLI
 
                 Case "-convert"
 
-                    Dim fileargs As List(Of String) = args.Skip(1).ToList
-
+                    'default options
                     Dim interactive As Boolean = False
-                    If args(1).ToLower = "-i" Then
-                        interactive = True
-                        fileargs = fileargs.Skip(1).ToList
-                    End If
+                    Dim outputformat As FileFormatBase.FileFormats = FileFormatBase.FileFormats.CSV
+
+                    'parse options from commandline
+                    Dim i As Integer = 1
+                    Dim n_option_args As Integer = 0
+                    Do While i < args.Count
+                        If args(i).ToLower() = "-i" Then
+                            'interactive mode
+                            interactive = True
+                            n_option_args += 1
+                        ElseIf args(i).ToLower = "-of" Then
+                            'parse outputformat
+                            i += 1
+                            Select Case args(i).ToUpper()
+                                Case "CSV"
+                                    outputformat = FileFormatBase.FileFormats.CSV
+                                Case "BIN"
+                                    outputformat = FileFormatBase.FileFormats.BIN
+                                Case Else
+                                    Throw New ArgumentException($"Unrecognized output format option -of {args(i)}!")
+                            End Select
+                            n_option_args += 2
+                        End If
+                        i += 1
+                    Loop
+
+                    Dim fileargs As List(Of String) = args.Skip(1 + n_option_args).ToList
 
                     If fileargs.Count < 2 Then
                         Throw New ArgumentException("Too few arguments for -convert!")
@@ -103,7 +125,7 @@ Friend Class CLI
                     ConsoleAddLog(BlueM.Wave.Log.levels.info, $"Starting conversion to CSV ...")
 
                     Dim files_in As List(Of String) = fileargs.Take(fileargs.Count - 1).ToList
-                    Dim file_out As String = fileargs.Last
+                    Dim path_out As String = fileargs.Last
 
                     'Import
                     ConsoleAddLog(BlueM.Wave.Log.levels.info, $"Importing {files_in.Count} file(s)...")
@@ -151,15 +173,32 @@ Friend Class CLI
                         Throw New Exception("No time series to export!")
                     End If
 
-                    ConsoleAddLog(BlueM.Wave.Log.levels.info, $"Exporting as CSV to {file_out}...")
-                    If IO.File.Exists(file_out) Then
-                        ConsoleAddLog(Log.levels.warning, "Overwriting existing file!")
-                    End If
+                    ConsoleAddLog(BlueM.Wave.Log.levels.info, $"Exporting to {path_out}...")
 
-                    CSV.Write_File(tsList, file_out)
+                    Select Case outputformat
+                        Case FileFormatBase.FileFormats.CSV
+                            If IO.File.Exists(path_out) Then
+                                ConsoleAddLog(BlueM.Wave.Log.levels.warning, "Overwriting existing file!")
+                            End If
+                            CSV.Write_File(tsList, path_out)
+                        Case FileFormatBase.FileFormats.BIN
+                            'treat output path as a directory and export individual files, using the title as filename
+                            IO.Directory.CreateDirectory(path_out)
+                            Dim filename, filepath As String
+                            Dim regex As New Text.RegularExpressions.Regex($"[{String.Join("", IO.Path.GetInvalidFileNameChars)}]")
+                            For Each ts As TimeSeries In tsList
+                                filename = regex.Replace(ts.Title, "_") & FileExtBIN
+                                filepath = IO.Path.Combine(path_out, filename)
+                                ConsoleAddLog(BlueM.Wave.Log.levels.info, $"Exporting to {filepath}...")
+                                If IO.File.Exists(filepath) Then
+                                    ConsoleAddLog(Log.levels.warning, "Overwriting existing file!")
+                                End If
+                                BIN.Write_File(ts, filepath)
+                            Next
+                    End Select
                     ConsoleOutputLog()
+                    ConsoleAddLog(BlueM.Wave.Log.levels.info, "Finished conversion!")
 
-                    ConsoleAddLog(BlueM.Wave.Log.levels.info, "Finished conversion to CSV!")
 
                 Case "-help"
 
