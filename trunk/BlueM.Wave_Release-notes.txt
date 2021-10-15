@@ -1,7 +1,7 @@
 ﻿===============================================================
 BlueM.Wave Release Notes
 ===============================================================
-Version 1.10.5
+Version 1.10.6
 --------------
 This version fixes a number of issues in order to support the full date range from 01.01.0001 to 31.12.9999 (#749)
 The chart display will still only show dates between 01.01.0100 and 31.12.9000, but all internal processing, 
@@ -18,6 +18,13 @@ FIXED:
 KNOWN ISSUES:
 * Analysis Function "ChangeTimestep": Error when the last new timestep ends in year > 9999
 * Scrolling the chart beyond 01.01.0100 or 31.12.9000 causes Wave to crash
+
+Version 1.10.5
+--------------
+NEW:
+* CLI: Added a new optional argument "-of" for specifiying the output format for conversions. 
+  Currently supported output formats are CSV (default) and BIN.
+  See documentation: https://wiki.bluemodel.org/index.php/Wave:CLI
 
 Version 1.10.4
 --------------
