@@ -185,9 +185,10 @@ Friend Class CLI
                             'treat output path as a directory and export individual files, using the title as filename
                             IO.Directory.CreateDirectory(path_out)
                             Dim filename, filepath As String
-                            Dim regex As New Text.RegularExpressions.Regex($"[{String.Join("", IO.Path.GetInvalidFileNameChars)}]")
+                            Dim invalidFileNameCharsPattern As String = $"[{Text.RegularExpressions.Regex.Escape(String.Join("", IO.Path.GetInvalidFileNameChars))}]"
                             For Each ts As TimeSeries In tsList
-                                filename = regex.Replace(ts.Title, "_") & FileExtBIN
+                                'generate file name from cleaned title
+                                filename = Text.RegularExpressions.Regex.Replace(ts.Title, invalidFileNameCharsPattern, "_") & FileExtBIN
                                 filepath = IO.Path.Combine(path_out, filename)
                                 ConsoleAddLog(BlueM.Wave.Log.levels.info, $"Exporting to {filepath}...")
                                 If IO.File.Exists(filepath) Then
