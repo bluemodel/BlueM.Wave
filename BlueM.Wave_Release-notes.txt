@@ -3,13 +3,10 @@ BlueM.Wave Release Notes
 ===============================================================
 Version 1.10.6
 --------------
-This version fixes a number of issues in order to support the full date range from 01.01.0001 to 31.12.9999 (#749)
-The chart display can still only show dates between 01.01.0100 and 31.12.9000, but all internal processing, 
-including import, analyses and export functions now uses the full range of dates.
+This version fixes a number of issues in order to be able to support the full date range between 01.01.0001 and 31.12.9999 (#749)
 CHANGED:
-* Time series with dates before 01.01.0100 and after 31.12.9000 are now only cut for display purposes, 
-  all nodes are now still available for analysis, export and are shown in the properties and time series values dialogs
-* Panning and zooming is restricted to the displayable date range
+* Import, analysis and export functions can now use the full date range between 01.01.0001 and 31.12.9999
+* Chart display, panning and zooming is restricted to the displayable date range between 01.01.0100 and 31.12.9000
 * Replaced DateTimePickers with MaskedTextBoxes for date time input and display
 * Cut dialog: removed preview chart
 FIXED:
