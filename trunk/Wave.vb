@@ -372,13 +372,12 @@ Public Class Wave
         Me.TChart2.Legend.Visible = False
 
         'Disable TeeChart builtin zooming and panning functionality
-        Me.TChart1.Zoom.Allow = False
-        Me.TChart1.Zoom.Direction = Steema.TeeChart.ZoomDirections.Horizontal
+        Me.TChart1.Zoom.Direction = Steema.TeeChart.ZoomDirections.None
         Me.TChart1.Zoom.History = False
         Me.TChart1.Zoom.Animated = True
         Me.TChart1.Panning.Allow = Steema.TeeChart.ScrollModes.None
 
-        Me.TChart2.Zoom.Allow = False
+        Me.TChart2.Zoom.Direction = Steema.TeeChart.ZoomDirections.None
         Me.TChart2.Panning.Allow = Steema.TeeChart.ScrollModes.None
 
         'Achsen
@@ -1221,7 +1220,7 @@ Public Class Wave
                 If markerValues.Count > 0 Then
                     'create a new point series for markers
                     Dim markers As New Steema.TeeChart.Styles.Points(Me.TChart1.Chart)
-                    markers.ShowInLegend = False
+                    markers.Legend.Visible = False
                     markers.Title = $"{series.Title} (selection)"
                     markers.Tag = "_markers"
                     markers.VertAxis = series.VertAxis
@@ -2784,10 +2783,10 @@ Public Class Wave
             Call Me.Init_ColorBands()
 
             'Reset zoom and pan settings
-            Me.TChart1.Zoom.Allow = False
-            Me.TChart1.Panning.Allow = Steema.TeeChart.ScrollModes.Horizontal
+            Me.TChart1.Zoom.Direction = Steema.TeeChart.ZoomDirections.None
+            Me.TChart1.Panning.Allow = Steema.TeeChart.ScrollModes.None
             Me.TChart1.Panning.MouseButton = MouseButtons.Right
-            Me.TChart2.Zoom.Allow = False
+            Me.TChart2.Zoom.Direction = Steema.TeeChart.ZoomDirections.None
             Me.TChart2.Panning.Allow = Steema.TeeChart.ScrollModes.None
 
             'Charts aktualisieren
