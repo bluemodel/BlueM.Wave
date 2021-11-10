@@ -386,7 +386,13 @@ Public Class Wave
         Me.TChart1.Axes.Bottom.Labels.Angle = 90
         Me.TChart1.Axes.Bottom.Labels.DateTimeFormat = "dd.MM.yy HH:mm"
         Me.TChart1.Axes.Right.Title.Angle = 90
+
+        Me.TChart2.Axes.Left.Labels.Font.Color = Color.FromArgb(100, 100, 100)
+        Me.TChart2.Axes.Left.Labels.Font.Size = 8
+        Me.TChart2.Axes.Bottom.Labels.Font.Color = Color.FromArgb(100, 100, 100)
+        Me.TChart2.Axes.Bottom.Labels.Font.Size = 8
         Me.TChart2.Axes.Bottom.Automatic = False
+        Me.TChart2.Axes.Bottom.Labels.DateTimeFormat = "dd.MM.yyyy"
 
         'Assign ChartListBox to TChart1
         Me.ChartListBox1.Chart = Me.TChart1
@@ -3336,7 +3342,6 @@ Public Class Wave
             Me.TChart1.Axes.Right.Visible = True
             Me.TChart1.Axes.Right.Automatic = True
             Me.TChart1.Axes.Right.MaximumOffset = 5
-            Me.TChart1.Axes.Right.Grid.Visible = False
             series.VertAxis = Steema.TeeChart.Styles.VerticalAxis.Right
 
         ElseIf Me.TChart1.Axes.Right.Tag = unit Then
@@ -3357,13 +3362,19 @@ Public Class Wave
                 'create a new custom axis
                 Dim axis As Steema.TeeChart.Axis
                 Dim number As Integer = Me.TChart1.Axes.Custom.Count + 1
-                axis = Steema.TeeChart.Axes.CreateNewAxis(Me.TChart1.Chart)
+                axis = New Steema.TeeChart.Axis(Me.TChart1.Chart)
+                Me.TChart1.Axes.Custom.Add(axis)
+                axis.Labels.Font.Color = Color.Black
+                axis.Labels.Font.Size = 10
+                axis.Title.Font.Color = Color.Black
+                axis.Title.Font.Size = 10
                 axis.Title.Text = unit
                 axis.Title.Angle = 90
                 axis.Tag = unit
                 axis.Visible = True
                 axis.Automatic = True
                 axis.MaximumOffset = 5
+                axis.AxisPen.Visible = True
                 axis.Grid.Visible = False
                 'Place every second axis on the right
                 If number Mod 2 = 0 Then
@@ -3422,7 +3433,30 @@ Public Class Wave
         chart.Legend.CheckBoxes = True
 
         'Achsen
+        chart.Axes.DrawBehind = False
+
+        chart.Axes.Left.Title.Font.Color = Color.Black
+        chart.Axes.Left.Title.Font.Size = 10
+        chart.Axes.Left.Labels.Font.Color = Color.Black
+        chart.Axes.Left.Labels.Font.Size = 10
+        chart.Axes.Left.AxisPen.Visible = True
+        chart.Axes.Left.Grid.Visible = True
+        chart.Axes.Left.Grid.Style = Drawing2D.DashStyle.Dash
+
+        chart.Axes.Right.Title.Font.Color = Color.Black
+        chart.Axes.Right.Title.Font.Size = 10
+        chart.Axes.Right.Labels.Font.Color = Color.Black
+        chart.Axes.Right.Labels.Font.Size = 10
+        chart.Axes.Right.AxisPen.Visible = True
+        chart.Axes.Right.Grid.Visible = False
+        chart.Axes.Right.Grid.Style = Drawing2D.DashStyle.Dash
+
+        chart.Axes.Bottom.Labels.Font.Color = Color.Black
+        chart.Axes.Bottom.Labels.Font.Size = 10
         chart.Axes.Bottom.Automatic = True
+        chart.Axes.Bottom.AxisPen.Visible = True
+        chart.Axes.Bottom.Grid.Visible = True
+        chart.Axes.Bottom.Grid.Style = Drawing2D.DashStyle.Dash
 
     End Sub
 
