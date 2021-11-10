@@ -1,6 +1,11 @@
 ﻿===============================================================
 BlueM.Wave Release Notes
 ===============================================================
+Version 1.11.0
+--------------
+CHANGED:
+* Upgraded to TeeChart Pro version 4.2021.11.2
+
 Version 1.10.6
 --------------
 This version fixes a number of issues in order to be able to support the full date range between 01.01.0001 and 31.12.9999 (#749)
