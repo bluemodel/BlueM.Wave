@@ -100,10 +100,6 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml.Linq" />
-    <Reference Include="TeeChart, Version=4.1.2011.4192, Culture=neutral, PublicKeyToken=9c8126276c77bdb7, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>lib\TeeChart\TeeChart.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Import Include="Microsoft.VisualBasic" />
@@ -443,6 +439,7 @@
     <Content Include="LICENSE.TXT">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <EmbeddedResource Include="My Project\TeeChart.licenses" />
     <Content Include="Resources\application_get.png" />
     <Content Include="Resources\application_split.png" />
     <Content Include="Resources\arrow_down.png" />
@@ -504,6 +501,9 @@
   <ItemGroup>
     <PackageReference Include="DHI.DFS">
       <Version>19.1.1</Version>
+    </PackageReference>
+    <PackageReference Include="Steema.TeeChart.NET">
+      <Version>4.2021.11.2</Version>
     </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
