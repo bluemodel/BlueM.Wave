@@ -3429,6 +3429,8 @@ Public Class Wave
         chart.Walls.Back.Color = Color.White
 
         'Header
+        chart.Header.Font.Color = Color.Black
+        chart.Header.Font.Size = 12
         chart.Header.Text = ""
 
         'Legende
@@ -3455,6 +3457,8 @@ Public Class Wave
         chart.Axes.Right.Grid.Visible = False
         chart.Axes.Right.Grid.Style = Drawing2D.DashStyle.Dash
 
+        chart.Axes.Bottom.Title.Font.Color = Color.Black
+        chart.Axes.Bottom.Title.Font.Size = 10
         chart.Axes.Bottom.Labels.Font.Color = Color.Black
         chart.Axes.Bottom.Labels.Font.Size = 10
         chart.Axes.Bottom.Automatic = True
