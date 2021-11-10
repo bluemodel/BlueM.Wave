@@ -2674,15 +2674,20 @@ Public Class Wave
             Me.TChart2.Walls.Back.Color = Color.FromArgb(239, 239, 239)
             Me.TChart2.Header.Visible = False
             Me.TChart2.Legend.Visible = False
+            Me.TChart2.Axes.Left.Labels.Font.Color = Color.FromArgb(100, 100, 100)
+            Me.TChart2.Axes.Left.Labels.Font.Size = 8
+            Me.TChart2.Axes.Bottom.Labels.Font.Color = Color.FromArgb(100, 100, 100)
+            Me.TChart2.Axes.Bottom.Labels.Font.Size = 8
+            Me.TChart2.Axes.Bottom.Automatic = False
+            Me.TChart2.Axes.Bottom.Labels.DateTimeFormat = "dd.MM.yyyy"
+            Me.TChart2.Axes.Bottom.Labels.Angle = 0
+
+            'Hide axis titles
             Me.TChart2.Axes.Left.Title.Visible = False
             Me.TChart2.Axes.Right.Title.Visible = False
             For i = 0 To Me.TChart2.Axes.Custom.Count - 1
                 Me.TChart2.Axes.Custom(i).Title.Visible = False
             Next
-            Me.TChart2.Axes.Bottom.Labels.DateTimeFormat = "dd.MM.yy"
-            Me.TChart2.Axes.Bottom.Labels.Angle = 0
-            Me.TChart2.Zoom.Allow = False
-            Me.TChart2.Panning.Allow = Steema.TeeChart.ScrollModes.None
             'change type of series to FastLine
             For i = 0 To Me.TChart2.Series.Count - 1
                 Steema.TeeChart.Styles.Series.ChangeType(Me.TChart2.Series(i), GetType(Steema.TeeChart.Styles.FastLine))
