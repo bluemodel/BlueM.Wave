@@ -5,6 +5,7 @@ Version 1.11.0
 --------------
 CHANGED:
 * Upgraded to TeeChart Pro version 4.2021.11.2
+* Switched from Ionic.Zip to DotNetZip
 
 Version 1.10.6
 --------------
