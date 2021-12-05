@@ -435,7 +435,6 @@
     <Content Include="lib\SQLite\System.Data.SQLite.dll" />
     <Content Include="lib\SQLite\x64\SQLite.Interop.dll" />
     <Content Include="lib\SQLite\x86\SQLite.Interop.dll" />
-    <Content Include="lib\TeeChart\TeeChart.dll" />
     <Content Include="LICENSE.TXT">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
