@@ -141,6 +141,84 @@ Public Module Helpers
     End Function
 
     ''' <summary>
+    ''' Returns a specified color palette
+    ''' </summary>
+    ''' <param name="name">Available color palettes are "Material", "Distinct", "Color Wheel" and "Random". Defaults to "Material".</param>
+    ''' <returns>A color palette</returns>
+    Public Function getColorPalette(Optional name As String = "Material")
+        Dim colorPalette As Color()
+        Select Case name
+            Case "Material"
+                'Material Design Palette
+                'https://hexcolor.co/material-design-colors
+                colorPalette = {
+                    Color.FromArgb(3, 169, 244),
+                    Color.FromArgb(244, 67, 54),
+                    Color.FromArgb(156, 39, 176),
+                    Color.FromArgb(63, 81, 181),
+                    Color.FromArgb(0, 188, 212),
+                    Color.FromArgb(0, 150, 136),
+                    Color.FromArgb(76, 175, 80),
+                    Color.FromArgb(205, 220, 57),
+                    Color.FromArgb(255, 235, 59),
+                    Color.FromArgb(255, 152, 0),
+                    Color.FromArgb(121, 85, 72),
+                    Color.FromArgb(158, 158, 158),
+                    Color.FromArgb(96, 125, 139),
+                    Color.FromArgb(0, 0, 0),
+                    Color.FromArgb(62, 69, 81)
+                }
+            Case "Distinct"
+                '20 Simple, Distinct Colors
+                'https://sashamaps.net/docs/resources/20-colors/
+                colorPalette = {
+                    Color.FromArgb(230, 25, 75),
+                    Color.FromArgb(60, 180, 75),
+                    Color.FromArgb(0, 130, 200),
+                    Color.FromArgb(245, 130, 48),
+                    Color.FromArgb(145, 30, 180),
+                    Color.FromArgb(70, 240, 240),
+                    Color.FromArgb(240, 50, 230),
+                    Color.FromArgb(0, 128, 128),
+                    Color.FromArgb(170, 110, 40),
+                    Color.FromArgb(128, 0, 0),
+                    Color.FromArgb(128, 128, 0),
+                    Color.FromArgb(0, 0, 128),
+                    Color.FromArgb(128, 128, 128)
+                }
+            Case "Color Wheel"
+                '12 Color Wheel
+                'http://www.changingminds.org/explanations/perception/visual/12-wheel.htm
+                colorPalette = {
+                    Color.FromArgb(255, 0, 0),
+                    Color.FromArgb(0, 0, 255),
+                    Color.FromArgb(0, 255, 0),
+                    Color.FromArgb(255, 0, 255),
+                    Color.FromArgb(0, 255, 255),
+                    Color.FromArgb(255, 255, 0),
+                    Color.FromArgb(255, 127, 10),
+                    Color.FromArgb(255, 0, 127),
+                    Color.FromArgb(127, 0, 255),
+                    Color.FromArgb(127, 0, 255),
+                    Color.FromArgb(0, 127, 255),
+                    Color.FromArgb(0, 255, 127),
+                    Color.FromArgb(127, 255, 0),
+                    Color.FromArgb(255, 127, 10)
+                }
+            Case "Random"
+                Dim nColors As Integer = 20
+                ReDim colorPalette(nColors - 1)
+                Dim random As New Random()
+                For i As Integer = 0 To nColors - 1
+                    colorPalette(i) = Color.FromArgb(random.Next(256), random.Next(256), random.Next(256))
+                Next
+            Case Else
+                colorPalette = getColorPalette()
+        End Select
+        Return colorPalette
+    End Function
+
+    ''' <summary>
     ''' Returns a list of calendar months from January to December
     ''' </summary>
     ''' <returns></returns>

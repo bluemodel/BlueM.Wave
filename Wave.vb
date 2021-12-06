@@ -958,16 +958,6 @@ Public Class Wave
         Call Me.Import_Clipboard()
     End Sub
 
-    'Theme laden
-    '***********
-    Private Sub ThemeLaden_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem_LoadTheme.Click
-        Me.OpenFileDialog1.Title = "Load theme"
-        Me.OpenFileDialog1.Filter = FileFilter_XML
-        If (Me.OpenFileDialog1.ShowDialog() = Windows.Forms.DialogResult.OK) Then
-            Call Me.Load_Theme(Me.OpenFileDialog1.FileName)
-        End If
-    End Sub
-
     ''' <summary>
     ''' SaveProjectFile button clicked
     ''' </summary>
@@ -1164,6 +1154,16 @@ Public Class Wave
     '**********
     Private Sub EditChart_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_EditChart.Click, TChart1.DoubleClick
         Call Steema.TeeChart.Editor.Show(Me.TChart1)
+    End Sub
+
+    ''' <summary>
+    ''' Color palette menu item clicked
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    Private Sub ToolStripMenuItemColorPalette_Click(sender As Object, e As EventArgs) Handles ToolStripMenuItem_ColorPaletteMaterial.Click, ToolStripMenuItem_ColorPaletteDistinct.Click, ToolStripMenuItem_ColorPaletteWheel.Click, ToolStripMenuItem_ColorPaletteRandom.Click
+        Dim colorPaletteName As String = CType(sender, ToolStripMenuItem).Text
+        setChartColorPalette(Helpers.getColorPalette(colorPaletteName))
     End Sub
 
     ''' <summary>
@@ -2815,31 +2815,6 @@ Public Class Wave
     End Sub
 
     ''' <summary>
-    ''' Lädt ein TeeChart Theme (XML-Datei)
-    ''' </summary>
-    ''' <param name="FileName">Pfad zur XML-Datei</param>
-    ''' <remarks></remarks>
-    Private Sub Load_Theme(ByVal FileName As String)
-
-        Try
-
-            'Log
-            Call Log.AddLogEntry(Log.levels.info, $"Loading theme '{FileName}' ...")
-
-            'Theme laden
-            Call TChart1.Import.Theme.Load(FileName)
-
-            'Log
-            Call Log.AddLogEntry(Log.levels.info, $"Theme '{FileName}' loaded successfully!")
-
-        Catch ex As Exception
-            MsgBox("Error while loading:" & eol & ex.Message, MsgBoxStyle.Critical)
-            Call Log.AddLogEntry(Log.levels.error, "Error while loading:" & eol & ex.Message)
-        End Try
-
-    End Sub
-
-    ''' <summary>
     ''' Import series from multiple files
     ''' </summary>
     ''' <param name="files">array of file paths</param>
@@ -3234,6 +3209,10 @@ Public Class Wave
         Line1.Title = zre.Title
         Line2.Title = zre.Title
 
+        'Set line width to 2
+        Line1.LinePen.Width = 2
+        Line2.LinePen.Width = 2
+
         'Stützstellen zur Serie hinzufügen
         'Main chart
         Line1.BeginUpdate()
@@ -3420,6 +3399,9 @@ Public Class Wave
     ''' <param name="chart"></param>
     Friend Shared Sub formatChart(ByRef chart As Steema.TeeChart.Chart)
 
+        'set default color palette
+        chart.ColorPalette = Helpers.getColorPalette()
+
         chart.Aspect.View3D = False
         'chart.BackColor = Color.White
         chart.Panel.Gradient.Visible = False
@@ -3466,6 +3448,35 @@ Public Class Wave
         chart.Axes.Bottom.Grid.Visible = True
         chart.Axes.Bottom.Grid.Style = Drawing2D.DashStyle.Dash
 
+    End Sub
+
+    ''' <summary>
+    ''' Sets a color palette in the charts and changes the colors of any existing series accordingly
+    ''' </summary>
+    ''' <param name="colorPalette">The color palette to apply</param>
+    Private Sub setChartColorPalette(colorPalette As Color())
+
+        'set colorpalette in charts
+        Me.TChart1.Chart.ColorPalette = colorPalette
+        Me.TChart2.Chart.ColorPalette = colorPalette
+
+        'change colors of existing series
+        Dim counter As Integer = 0
+        For Each series As Steema.TeeChart.Styles.Series In Me.TChart1.Series
+            If counter >= colorPalette.Length Then
+                'loop color palette
+                counter = 0
+            End If
+            series.Color = colorPalette(counter)
+            'apply same color to series in overview chart
+            For Each series2 As Steema.TeeChart.Styles.Series In Me.TChart2.Series
+                If series2.Tag = series.Tag Then
+                    series2.Color = colorPalette(counter)
+                    Exit For
+                End If
+            Next
+            counter += 1
+        Next
     End Sub
 
 #End Region 'Funktionalität

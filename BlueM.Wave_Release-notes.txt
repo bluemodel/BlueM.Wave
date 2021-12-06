@@ -3,9 +3,14 @@ BlueM.Wave Release Notes
 ===============================================================
 Version 1.11.0
 --------------
+NEW:
+* Added a button for selecting a color palette
 CHANGED:
+* Default line width of series is now 2
 * Upgraded to TeeChart Pro version 4.2021.11.2
 * Switched from Ionic.Zip to DotNetZip
+REMOVED:
+* Removed "Load Theme" menu option
 
 Version 1.10.6
 --------------
