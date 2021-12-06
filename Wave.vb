@@ -3347,8 +3347,10 @@ Public Class Wave
                 Dim number As Integer = Me.TChart1.Axes.Custom.Count + 1
                 axis = New Steema.TeeChart.Axis(Me.TChart1.Chart)
                 Me.TChart1.Axes.Custom.Add(axis)
+                axis.Labels.Font.Name = "GenericSansSerif"
                 axis.Labels.Font.Color = Color.Black
                 axis.Labels.Font.Size = 10
+                axis.Title.Font.Name = "GenericSansSerif"
                 axis.Title.Font.Color = Color.Black
                 axis.Title.Font.Size = 10
                 axis.Title.Text = unit
@@ -3411,11 +3413,14 @@ Public Class Wave
         chart.Walls.Back.Color = Color.White
 
         'Header
+        chart.Header.Font.Name = "GenericSansSerif"
         chart.Header.Font.Color = Color.Black
         chart.Header.Font.Size = 12
         chart.Header.Text = ""
 
         'Legende
+        chart.Legend.Font.Name = "GenericSansSerif"
+        chart.Legend.Font.Size = 10
         chart.Legend.LegendStyle = Steema.TeeChart.LegendStyles.Series
         chart.Legend.FontSeriesColor = True
         chart.Legend.CheckBoxes = True
@@ -3423,28 +3428,44 @@ Public Class Wave
         'Achsen
         chart.Axes.DrawBehind = False
 
+        chart.Axes.Left.Title.Font.Name = "GenericSansSerif"
         chart.Axes.Left.Title.Font.Color = Color.Black
         chart.Axes.Left.Title.Font.Size = 10
+
+        chart.Axes.Left.Labels.Font.Name = "GenericSansSerif"
         chart.Axes.Left.Labels.Font.Color = Color.Black
         chart.Axes.Left.Labels.Font.Size = 10
+
         chart.Axes.Left.AxisPen.Visible = True
+
         chart.Axes.Left.Grid.Visible = True
         chart.Axes.Left.Grid.Style = Drawing2D.DashStyle.Dash
 
+        chart.Axes.Right.Title.Font.Name = "GenericSansSerif"
         chart.Axes.Right.Title.Font.Color = Color.Black
         chart.Axes.Right.Title.Font.Size = 10
+
+        chart.Axes.Right.Labels.Font.Name = "GenericSansSerif"
         chart.Axes.Right.Labels.Font.Color = Color.Black
         chart.Axes.Right.Labels.Font.Size = 10
+
         chart.Axes.Right.AxisPen.Visible = True
+
         chart.Axes.Right.Grid.Visible = False
         chart.Axes.Right.Grid.Style = Drawing2D.DashStyle.Dash
 
+        chart.Axes.Bottom.Title.Font.Name = "GenericSansSerif"
         chart.Axes.Bottom.Title.Font.Color = Color.Black
         chart.Axes.Bottom.Title.Font.Size = 10
+
+        chart.Axes.Bottom.Labels.Font.Name = "GenericSansSerif"
         chart.Axes.Bottom.Labels.Font.Color = Color.Black
         chart.Axes.Bottom.Labels.Font.Size = 10
+
         chart.Axes.Bottom.Automatic = True
+
         chart.Axes.Bottom.AxisPen.Visible = True
+
         chart.Axes.Bottom.Grid.Visible = True
         chart.Axes.Bottom.Grid.Style = Drawing2D.DashStyle.Dash
 
