@@ -47,6 +47,7 @@ Friend Class GoodnessOfFit
         Public sum_squarederrors As Double
         Public nash_sutcliffe As Double
         Public ln_nash_sutcliffe As Double
+        Public kge As Double
         Public volume_observed As Double
         Public volume_simulated As Double
         Public volumeerror As Double
@@ -205,6 +206,13 @@ Friend Class GoodnessOfFit
         'Bestimmtheitsmaß
         gof.coeff_determination = gof.coeff_correlation ^ 2
 
+        'Kling-Gupta Efficiency
+        'https://permetrics.readthedocs.io/pages/regression/KGE.html
+        '----------------------
+        Dim biasratio As Double = avg_sim / avg_obs
+        Dim variabilityratio As Double = (std_sim / avg_sim) / (std_obs / avg_obs)
+        gof.kge = 1 - Math.Sqrt((gof.coeff_correlation - 1) ^ 2 + (biasratio - 1) ^ 2 + (variabilityratio - 1) ^ 2)
+
         'Hydrologische Deviation
         '-----------------------
         zaehler = 0
@@ -294,6 +302,7 @@ Friend Class GoodnessOfFit
                      & "Sum of squared errors: F² = " & _gof.sum_squarederrors.ToString(formatstring) & eol _
                      & "Nash-Sutcliffe efficiency: E = " & _gof.nash_sutcliffe.ToString(formatstring) & eol _
                      & "Logarithmic Nash-Sutcliffe efficiency: E,ln = " & _gof.ln_nash_sutcliffe.ToString(formatstring) & eol _
+                     & "Kling-Gupta efficiency: KGE = " & _gof.kge.ToString(formatstring) & eol _
                      & "Coefficient of correlation: r = " & _gof.coeff_correlation.ToString(formatstring) & eol _
                      & "Coefficient of determination: r² = " & _gof.coeff_determination.ToString(formatstring) & eol _
                      & "Hydrologic deviation: DEV = " & _gof.hydrodev.ToString(formatstring)
@@ -305,7 +314,7 @@ Friend Class GoodnessOfFit
         'output results in CSV format
         Me.mResultText &= "Results:" & eol
         Me.mResultText &= String.Join(Helpers.CurrentListSeparator, "Description", "Start", "End", "Length", "Volume observed", "Volume simulated", "Volume error [%]", "Sum of squared errors", "Nash-Sutcliffe efficiency", "Logarithmic Nash-Sutcliffe efficiency", "Coefficient of correlation", "Coefficient of determination", "Hydrologic deviation") & eol
-        Me.mResultText &= String.Join(Helpers.CurrentListSeparator, "desc", "t0", "t1", "n", "Vobs", "Vsim", "m", "F²", "E", "E,ln", "r", "r²", "DEV") & eol
+        Me.mResultText &= String.Join(Helpers.CurrentListSeparator, "desc", "t0", "t1", "n", "Vobs", "Vsim", "m", "F²", "E", "E,ln", "KGE", "r", "r²", "DEV") & eol
         For Each GOFResult As KeyValuePair(Of String, GoF) In Me.GoFResults
             With GOFResult.Value
                 Me.mResultText &= String.Join(Helpers.CurrentListSeparator,
@@ -319,6 +328,7 @@ Friend Class GoodnessOfFit
                     .sum_squarederrors.ToString(formatstring),
                     .nash_sutcliffe.ToString(formatstring),
                     .ln_nash_sutcliffe.ToString(formatstring),
+                    .kge.ToString(formatstring),
                     .coeff_correlation.ToString(formatstring),
                     .coeff_determination.ToString(formatstring),
                     .hydrodev.ToString(formatstring)) & eol
