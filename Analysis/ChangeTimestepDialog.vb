@@ -29,15 +29,11 @@ Imports System.Windows.Forms
 
 Friend Class ChangeTimestepDialog
 
-    Private isInitializing As Boolean
-
     Public Sub New(ByRef ts As TimeSeries)
 
         Call InitializeComponent()
 
         'fill comboboxes
-        Me.isInitializing = True
-
         Me.ComboBox_Interpretation.Items.Add(TimeSeries.InterpretationEnum.Instantaneous)
         Me.ComboBox_Interpretation.Items.Add(TimeSeries.InterpretationEnum.BlockRight)
         Me.ComboBox_Interpretation.Items.Add(TimeSeries.InterpretationEnum.BlockLeft)
@@ -71,8 +67,6 @@ Friend Class ChangeTimestepDialog
 
         'set the initial start date
         Me.MaskedTextBox_Start.Text = ts.StartDate.ToString()
-
-        Me.isInitializing = False
     End Sub
 
     ''' <summary>
