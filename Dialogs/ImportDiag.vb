@@ -433,28 +433,40 @@ Friend Class ImportDiag
 
         Dim search, itemname As String
 
-        Me.ListBox_Series.ClearSelected()
-
         search = Me.TextBox_Search.Text.ToLower()
 
         If (search = "") Then Return
 
+        Me.IsInitializing = True
+        Me.ListBox_Series.BeginUpdate()
+        Me.ListBox_Series.ClearSelected()
         For i As Integer = 0 To Me.ListBox_Series.Items.Count - 1
             itemname = Me.ListBox_Series.Items(i).ToString().ToLower()
             If (itemname.Contains(search)) Then
                 Me.ListBox_Series.SetSelected(i, True)
             End If
         Next
+        Me.ListBox_Series.EndUpdate()
+        Me.IsInitializing = False
+        Call ListBox_Series_SelectedIndexChanged(ListBox_Series, New EventArgs())
 
     End Sub
 
-    Private Sub Select_All(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button_SelectAll.Click
+    ''' <summary>
+    ''' Handles Select all button clicked by selecting all series
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    Private Sub Select_All(ByVal sender As Object, ByVal e As EventArgs) Handles Button_SelectAll.Click
 
-        Dim i As Long
-
-        For i = 0 To Me.ListBox_Series.Items.Count - 1
+        Me.IsInitializing = True
+        Me.ListBox_Series.BeginUpdate()
+        For i As Integer = 0 To Me.ListBox_Series.Items.Count - 1
             Me.ListBox_Series.SetSelected(i, True)
         Next
+        Me.ListBox_Series.EndUpdate()
+        Me.IsInitializing = False
+        Call ListBox_Series_SelectedIndexChanged(ListBox_Series, New EventArgs())
 
     End Sub
 
@@ -492,7 +504,9 @@ Friend Class ImportDiag
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
     Private Sub ListBox_Series_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ListBox_Series.SelectedIndexChanged
-        Me.Label_Selected.Text = $"{ListBox_Series.SelectedIndices.Count} selected"
+        If Not Me.IsInitializing Then
+            Me.Label_Selected.Text = $"{ListBox_Series.SelectedIndices.Count} selected"
+        End If
     End Sub
 
     Private Sub ImportDiag_FormClosed(sender As Object, e As FormClosedEventArgs) Handles MyBase.FormClosed
