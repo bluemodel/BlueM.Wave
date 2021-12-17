@@ -1476,7 +1476,7 @@ Public Class Wave
                 'Wait-Cursor
                 Me.Cursor = Cursors.WaitCursor
 
-                Call Log.AddLogEntry(Log.levels.info, $"Starting analysis {oAnalysisDialog.selectedAnalysisFunction.ToString()} ...")
+                Call Log.AddLogEntry(Log.levels.info, $"Starting analysis {oAnalysisDialog.selectedAnalysisFunction} ...")
 
                 'Analyse instanzieren
                 Dim oAnalysis As Analysis
@@ -2559,7 +2559,7 @@ Public Class Wave
                 match = Regex.Match(zre.Title, pattern)
                 If (match.Success) Then
                     n += 1
-                    zre.Title = Regex.Replace(zre.Title, pattern, $"${Name} ({n.ToString()})")
+                    zre.Title = Regex.Replace(zre.Title, pattern, $"${Name} ({n})")
                 Else
                     zre.Title &= " (1)"
                 End If
