@@ -516,6 +516,7 @@ Partial Class ImportDiag
         '
         'ImportDiag
         '
+        Me.AcceptButton = Me.Button_OK
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.CancelButton = Me.Button_Cancel
