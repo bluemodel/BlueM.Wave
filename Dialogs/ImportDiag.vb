@@ -39,6 +39,7 @@ Friend Class ImportDiag
     Private IsInitializing As Boolean
 
     Private datei As FileFormatBase
+    Private WithEvents inputTimer As Timers.Timer
 
 #End Region
 
@@ -114,6 +115,11 @@ Friend Class ImportDiag
         Call InitializeComponent()
 
         Me.datei = _dateiobjekt
+
+        'initialize input delay timer
+        Me.inputTimer = New Timers.Timer(1000)
+        Me.inputTimer.SynchronizingObject = Me
+        Me.inputTimer.AutoReset = False
 
     End Sub
 
@@ -404,12 +410,25 @@ Friend Class ImportDiag
     End Sub
 
     ''' <summary>
+    ''' Handles text changed in the search text box by resetting the input timer
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    Private Sub TextBox_Search_TextChanged(sender As Object, e As EventArgs) Handles TextBox_Search.TextChanged
+
+        'reset the input timer
+        Me.inputTimer.Stop()
+        Me.inputTimer.Start()
+
+    End Sub
+
+    ''' <summary>
     ''' Do a case-insensitive search for matching list items and select them
     ''' </summary>
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
     ''' <remarks></remarks>
-    Private Sub TextBox_Suche_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TextBox_Search.TextChanged
+    Private Sub searchSeries(sender As Object, e As Timers.ElapsedEventArgs) Handles inputTimer.Elapsed
 
         Dim search, itemname As String
 
@@ -464,6 +483,10 @@ Friend Class ImportDiag
         strreader.Close()
         'set detected encoding
         Me.ComboBox_Encoding.SelectedValue = enc.CodePage
+    End Sub
+
+    Private Sub ImportDiag_FormClosed(sender As Object, e As FormClosedEventArgs) Handles MyBase.FormClosed
+        Me.inputTimer.Dispose()
     End Sub
 
 #End Region 'Methoden

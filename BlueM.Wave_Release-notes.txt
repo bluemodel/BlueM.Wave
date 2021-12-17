@@ -5,10 +5,11 @@ Version 1.11.0
 --------------
 NEW:
 * Added a button for selecting a color palette
-* Analysis function GoodnessOfFit: added Kling-Gupta efficiency parameter
+* Analysis function GoodnessOfFit: added Kling-Gupta efficiency parameter #52
 * Analysis function ChangeTimestep: the initial setting for the interpretation is now taken from the timeseries' properties
 CHANGED:
 * Default line width of series is now 2
+* File import dialog: there is now a small delay (1s) between user input and the start of the search
 * Upgraded to TeeChart Pro version 4.2021.11.2
 * Switched from Ionic.Zip to DotNetZip
 FIXED:
