@@ -39,11 +39,22 @@ Friend Class ChangeTimestepDialog
         Me.isInitializing = True
 
         Me.ComboBox_Interpretation.Items.Add(TimeSeries.InterpretationEnum.Instantaneous)
-        Me.ComboBox_Interpretation.Items.Add(TimeSeries.InterpretationEnum.BlockLeft)
         Me.ComboBox_Interpretation.Items.Add(TimeSeries.InterpretationEnum.BlockRight)
+        Me.ComboBox_Interpretation.Items.Add(TimeSeries.InterpretationEnum.BlockLeft)
         Me.ComboBox_Interpretation.Items.Add(TimeSeries.InterpretationEnum.Cumulative)
         Me.ComboBox_Interpretation.Items.Add(TimeSeries.InterpretationEnum.CumulativePerTimestep)
-        Me.ComboBox_Interpretation.SelectedIndex = 0
+
+        'set initial selection to the timeseries' interpretation
+        Select Case ts.Interpretation
+            Case TimeSeries.InterpretationEnum.Instantaneous,
+                 TimeSeries.InterpretationEnum.BlockRight,
+                 TimeSeries.InterpretationEnum.BlockLeft,
+                 TimeSeries.InterpretationEnum.Cumulative,
+                 TimeSeries.InterpretationEnum.CumulativePerTimestep
+                Me.ComboBox_Interpretation.SelectedItem = ts.Interpretation
+            Case Else
+                Me.ComboBox_Interpretation.SelectedItem = TimeSeries.InterpretationEnum.Instantaneous
+        End Select
 
         Me.ComboBox_TimestepType.Items.Add(TimeSeries.TimeStepTypeEnum.Year)
         Me.ComboBox_TimestepType.Items.Add(TimeSeries.TimeStepTypeEnum.Month)
