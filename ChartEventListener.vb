@@ -31,9 +31,11 @@ Friend Class ChartEventListener
     Implements Steema.TeeChart.ITeeEventListener
 
     Private chart As Steema.TeeChart.Chart
+    Private tsDict As Dictionary(Of Integer, TimeSeries)
 
-    Public Sub New(chart As Steema.TeeChart.Chart)
+    Public Sub New(chart As Steema.TeeChart.Chart, ByRef tsDict As Dictionary(Of Integer, TimeSeries))
         Me.chart = chart
+        Me.tsDict = tsDict
     End Sub
 
     ''' <summary>
@@ -43,26 +45,33 @@ Friend Class ChartEventListener
     Public Sub TeeEvent(e As Steema.TeeChart.TeeEvent) Implements Steema.TeeChart.ITeeEventListener.TeeEvent
         Try
             If TypeOf e Is Steema.TeeChart.Styles.SeriesEvent Then
-                If CType(e, Steema.TeeChart.Styles.SeriesEvent).Event = Steema.TeeChart.Styles.SeriesEventStyle.ChangeActive Then
-                    'series visibility has been changed. check whether custom axes should be made invisible
+                Dim seriesEvent As Steema.TeeChart.Styles.SeriesEvent = CType(e, Steema.TeeChart.Styles.SeriesEvent)
+                Select Case seriesEvent.Event
+                    Case Steema.TeeChart.Styles.SeriesEventStyle.ChangeActive
+                        'series visibility has been changed. check whether custom axes should be made invisible
 
-                    'collect units of all active series
-                    Dim activeUnits As New HashSet(Of String)
-                    For Each series As Steema.TeeChart.Styles.Series In Me.chart.Series
-                        If series.Active Then
-                            activeUnits.Add(series.GetVertAxis.Tag)
-                        End If
-                    Next
-                    'set visibility of custom axes accordingly
-                    For Each axis As Steema.TeeChart.Axis In chart.Axes.Custom
-                        If activeUnits.Contains(axis.Tag) Then
-                            axis.Visible = True
-                        Else
-                            axis.Visible = False
-                        End If
-                    Next
+                        'collect units of all active series
+                        Dim activeUnits As New HashSet(Of String)
+                        For Each series As Steema.TeeChart.Styles.Series In Me.chart.Series
+                            If series.Active Then
+                                activeUnits.Add(series.GetVertAxis.Tag)
+                            End If
+                        Next
+                        'set visibility of custom axes accordingly
+                        For Each axis As Steema.TeeChart.Axis In chart.Axes.Custom
+                            If activeUnits.Contains(axis.Tag) Then
+                                axis.Visible = True
+                            Else
+                                axis.Visible = False
+                            End If
+                        Next
 
-                End If
+                    Case Steema.TeeChart.Styles.SeriesEventStyle.ChangeTitle
+                        'series title changed, update title in time series dictionary
+                        If Me.tsDict.ContainsKey(seriesEvent.Series.Tag) Then
+                            Me.tsDict(seriesEvent.Series.Tag).Title = seriesEvent.Series.Title
+                        End If
+                End Select
             End If
         Catch ex As Exception
             Log.AddLogEntry(Log.levels.debug, ex.Message)

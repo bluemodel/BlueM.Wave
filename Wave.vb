@@ -365,7 +365,7 @@ Public Class Wave
         Call Wave.formatChart(Me.TChart1.Chart)
 
         'add chart event listener
-        Me.TChart1.Chart.Listeners.Add(New ChartEventListener(Me.TChart1.Chart))
+        Me.TChart1.Chart.Listeners.Add(New ChartEventListener(Me.TChart1.Chart, Me.TimeSeriesDict))
 
         Me.TChart2.Clear()
         Call Wave.formatChart(Me.TChart2.Chart)

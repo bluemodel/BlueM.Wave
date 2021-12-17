@@ -13,6 +13,7 @@ CHANGED:
 * Switched from Ionic.Zip to DotNetZip
 FIXED:
 * Custom axes now become invisible automatically when not used by any active series #69
+* Changing the title of a series in the TeeChart Editor no longer causes a desync with the internally stored time series #12
 REMOVED:
 * Removed "Load Theme" menu option
 
