@@ -3388,7 +3388,7 @@ Public Class Wave
         If m.Success Then
             axisnumber = Integer.Parse(m.Groups(1).Value)
             'Delete axis from chart
-            Me.TChart1.Axes.Custom(axisnumber).Dispose()
+            Me.TChart1.Axes.Custom.RemoveAt(axisnumber)
             Me.TChart1.Refresh()
             'update axis dialog
             Call Me.updateAxisDialog()
