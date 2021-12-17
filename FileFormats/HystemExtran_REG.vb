@@ -64,7 +64,7 @@ Public Class HystemExtran_REG
         Get
             Return _Zeitintervall
         End Get
-        Set(ByVal value As Integer)
+        Set(value As Integer)
             _Zeitintervall = value
         End Set
     End Property
@@ -73,12 +73,12 @@ Public Class HystemExtran_REG
         Get
             Return _DezFaktor
         End Get
-        Set(ByVal value As Integer)
+        Set(value As Integer)
             _DezFaktor = value
         End Set
     End Property
 
-    Private Shared ReadOnly Property WerteProZeile(ByVal dt As Integer) As Integer
+    Private Shared ReadOnly Property WerteProZeile(dt As Integer) As Integer
         Get
             Select Case dt  'siehe KN-Anwenderhandbuch S.384
                 Case 1, 5, 10, 15, 20, 30, 60, 120
@@ -102,7 +102,7 @@ Public Class HystemExtran_REG
 
     'Konstruktor
     '***********
-    Public Sub New(ByVal FileName As String, Optional ByVal ReadAllNow As Boolean = False)
+    Public Sub New(FileName As String, Optional ReadAllNow As Boolean = False)
 
         MyBase.New(FileName)
 
@@ -272,7 +272,7 @@ Public Class HystemExtran_REG
     ''' </summary>
     ''' <param name="Reihe">Die zu exportierende Zeitreihe</param>
     ''' <param name="File">Pfad zur anzulegenden Datei</param>
-    Public Shared Sub Write_File(ByVal Reihe As TimeSeries, ByVal File As String)
+    Public Shared Sub Write_File(Reihe As TimeSeries, File As String)
 
         Dim dt As Integer
         Dim KontiReihe As TimeSeries
@@ -340,7 +340,7 @@ Public Class HystemExtran_REG
     ''' </summary>
     ''' <param name="file">Pfad zur Datei</param>
     ''' <returns></returns>
-    Public Shared Function verifyFormat(ByVal file As String) As Boolean
+    Public Shared Function verifyFormat(file As String) As Boolean
 
         Dim FiStr As FileStream = New FileStream(file, FileMode.Open, IO.FileAccess.Read)
         Dim StrRead As StreamReader = New StreamReader(FiStr, detectEncodingFromByteOrderMarks:=True)

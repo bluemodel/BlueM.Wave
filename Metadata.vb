@@ -37,7 +37,7 @@ Public Class Metadata
     ''' </summary>
     ''' <param name="keys">A list of keys to add</param>
     ''' <remarks>Values of keys that are already present are not overwritten</remarks>
-    Public Sub AddKeys(ByVal keys As List(Of String))
+    Public Sub AddKeys(keys As List(Of String))
         For Each key As String In keys
             If Not Me.ContainsKey(key) Then
                 Me.Add(key, "")

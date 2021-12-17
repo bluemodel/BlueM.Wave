@@ -84,7 +84,7 @@ Friend Module AnalysisFactory
     ''' <param name="analysisfunction">Typ des zu erzeugenden Analyse-Objekts</param>
     ''' <param name="seriesList">Collection von zu analysierenden Zeitreihen</param>
     ''' <returns>Das Analyse-Objekt</returns>
-    Public Function CreateAnalysis(ByVal analysisfunction As AnalysisFunctions, ByVal seriesList As List(Of TimeSeries)) As Analysis
+    Public Function CreateAnalysis(analysisfunction As AnalysisFunctions, seriesList As List(Of TimeSeries)) As Analysis
 
         Dim oAnalysis As Analysis
 

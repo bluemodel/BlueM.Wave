@@ -81,7 +81,7 @@ Friend Class ChangeTimestepDialog
     ''' </summary>
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
-    Private Sub MaskedTextBoxStartKeyDown(ByVal sender As System.Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles MaskedTextBox_Start.KeyDown
+    Private Sub MaskedTextBoxStartKeyDown(sender As System.Object, e As System.Windows.Forms.KeyEventArgs) Handles MaskedTextBox_Start.KeyDown
         CType(sender, MaskedTextBox).ForeColor = DefaultForeColor
     End Sub
 
@@ -91,19 +91,19 @@ Friend Class ChangeTimestepDialog
     ''' </summary>
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
-    Private Sub MaskedTextBoxStartValidationCompleted(ByVal sender As System.Object, ByVal e As TypeValidationEventArgs) Handles MaskedTextBox_Start.TypeValidationCompleted
+    Private Sub MaskedTextBoxStartValidationCompleted(sender As System.Object, e As TypeValidationEventArgs) Handles MaskedTextBox_Start.TypeValidationCompleted
         If Not e.IsValidInput Then
             e.Cancel = True
             CType(sender, MaskedTextBox).ForeColor = Color.Red
         End If
     End Sub
 
-    Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
+    Private Sub OK_Button_Click(sender As System.Object, e As System.EventArgs) Handles OK_Button.Click
         Me.DialogResult = System.Windows.Forms.DialogResult.OK
         Me.Close()
     End Sub
 
-    Private Sub Cancel_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Cancel_Button.Click
+    Private Sub Cancel_Button_Click(sender As System.Object, e As System.EventArgs) Handles Cancel_Button.Click
         Me.DialogResult = System.Windows.Forms.DialogResult.Cancel
         Me.Close()
     End Sub

@@ -60,7 +60,7 @@ Public Class SWMM_DAT_TIME
         Get
             Return _Zeitintervall
         End Get
-        Set(ByVal value As Integer)
+        Set(value As Integer)
             _Zeitintervall = value
         End Set
     End Property
@@ -74,7 +74,7 @@ Public Class SWMM_DAT_TIME
 
     'Konstruktor
     '***********
-    Public Sub New(ByVal FileName As String, Optional ByVal ReadAllNow As Boolean = False)
+    Public Sub New(FileName As String, Optional ReadAllNow As Boolean = False)
 
         MyBase.New(FileName)
 
@@ -137,7 +137,7 @@ Public Class SWMM_DAT_TIME
     ''' <param name="Reihe">Die zu exportierende Zeitreihe</param>
     ''' <param name="File">Pfad zur anzulegenden Datei</param>
     ''' <param name="dt">Zeitschritt</param>
-    Public Shared Sub Write_File(ByVal Reihe As TimeSeries, ByVal File As String, ByVal dt As Integer)
+    Public Shared Sub Write_File(Reihe As TimeSeries, File As String, dt As Integer)
 
         Dim KontiReihe As TimeSeries
 

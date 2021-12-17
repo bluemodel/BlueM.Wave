@@ -41,7 +41,7 @@ Friend Class AxisWrapper
     ''' </summary>
     ''' <param name="_name">One of "Left", "Right", "Custom 0", etc.</param>
     ''' <param name="_axis">The axis instance to wrap around</param>
-    Public Sub New(ByVal _name As String, ByRef _axis As Steema.TeeChart.Axis)
+    Public Sub New(_name As String, ByRef _axis As Steema.TeeChart.Axis)
         Me._name = _name
         Me._TAxis = _axis
     End Sub
@@ -86,7 +86,7 @@ Friend Class AxisWrapper
     ''' </summary>
     ''' <param name="text">Text from which to extract the unit</param>
     ''' <returns>The extracted unit or if unsuccessful the original text</returns>
-    Public Shared Function parseUnit(ByVal text As String) As String
+    Public Shared Function parseUnit(text As String) As String
 
         Dim m As Match
         Dim unit As String

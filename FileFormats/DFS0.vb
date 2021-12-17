@@ -51,7 +51,7 @@ Public Class DFS0
         End Get
     End Property
 
-    Public Sub New(ByVal FileName As String, Optional ByVal ReadAllNow As Boolean = False)
+    Public Sub New(FileName As String, Optional ReadAllNow As Boolean = False)
 
         MyBase.New(FileName)
 

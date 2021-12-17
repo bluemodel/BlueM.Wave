@@ -119,7 +119,7 @@ Public Module Helpers
     ''' <param name="format">optional NumberFormatInfo object to use for the conversion. If not provided, the DefaultNumberInfo is used.</param>
     ''' <returns>Double value, set to NaN if the string was not parseable. NaN and +-Infinity in the input string are recognized and converted to the correspoing Double value.</returns>
     ''' <remarks></remarks>
-    Public Function StringToDouble(ByVal str As String, Optional ByVal format As NumberFormatInfo = Nothing) As Double
+    Public Function StringToDouble(str As String, Optional format As NumberFormatInfo = Nothing) As Double
 
         Dim value As Double
         Dim success As Boolean

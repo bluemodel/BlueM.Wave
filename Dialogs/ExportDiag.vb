@@ -60,7 +60,7 @@ Friend Class ExportDiag
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
     ''' <remarks></remarks>
-    Private Sub ComboBox_Format_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ComboBox_Format.SelectedIndexChanged
+    Private Sub ComboBox_Format_SelectedIndexChanged(sender As System.Object, e As System.EventArgs) Handles ComboBox_Format.SelectedIndexChanged
 
         Select Case ComboBox_Format.SelectedItem
 
@@ -96,7 +96,7 @@ Friend Class ExportDiag
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
     ''' <remarks></remarks>
-    Private Sub Button_OK_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button_OK.Click
+    Private Sub Button_OK_Click(sender As System.Object, e As System.EventArgs) Handles Button_OK.Click
 
         'validate inputs
         If (Me.ListBox_Series.SelectedItems.Count < 1) Then
@@ -112,7 +112,7 @@ Friend Class ExportDiag
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
     ''' <remarks></remarks>
-    Private Sub Button_SelectAll_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button_SelectAll.Click
+    Private Sub Button_SelectAll_Click(sender As System.Object, e As System.EventArgs) Handles Button_SelectAll.Click
 
         Dim i As Long
         For i = 0 To Me.ListBox_Series.Items.Count - 1

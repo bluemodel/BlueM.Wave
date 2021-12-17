@@ -40,7 +40,7 @@ Public Class Character
     ''' Special strings such as " ", "space", "tab", "point", "comma" and "semicolon" are also possible
     ''' </param>
     ''' <remarks></remarks>
-    Public Sub New(ByVal str As String)
+    Public Sub New(str As String)
         Select Case str.Trim().ToLower()
             Case "", "space"
                 _char = Chr(32)
@@ -62,7 +62,7 @@ Public Class Character
     ''' </summary>
     ''' <param name="chr">Character</param>
     ''' <remarks></remarks>
-    Public Sub New(ByVal chr As Char)
+    Public Sub New(chr As Char)
         ToChar = chr
     End Sub
 
@@ -76,7 +76,7 @@ Public Class Character
         Get
             Return _char
         End Get
-        Set(ByVal value As Char)
+        Set(value As Char)
             _char = value
         End Set
     End Property

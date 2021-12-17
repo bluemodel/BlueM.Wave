@@ -300,7 +300,7 @@ Friend Class TimeSeriesValuesDialog
     ''' </summary>
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
-    Private Sub MaskedTextBox_JumpDate_KeyDown(ByVal sender As System.Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles MaskedTextBox_JumpDate.KeyDown
+    Private Sub MaskedTextBox_JumpDate_KeyDown(sender As System.Object, e As System.Windows.Forms.KeyEventArgs) Handles MaskedTextBox_JumpDate.KeyDown
         CType(sender, MaskedTextBox).ForeColor = DefaultForeColor
         'If e.KeyCode = Keys.Escape Then
         '    'set original date
@@ -313,7 +313,7 @@ Friend Class TimeSeriesValuesDialog
     ''' </summary>
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
-    Private Sub MaskedTextBox_JumpDate_TypeValidationCompleted(ByVal sender As System.Object, ByVal e As TypeValidationEventArgs) Handles MaskedTextBox_JumpDate.TypeValidationCompleted
+    Private Sub MaskedTextBox_JumpDate_TypeValidationCompleted(sender As System.Object, e As TypeValidationEventArgs) Handles MaskedTextBox_JumpDate.TypeValidationCompleted
         If Not e.IsValidInput Then
             e.Cancel = True
             CType(sender, MaskedTextBox).ForeColor = Color.Red

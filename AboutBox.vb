@@ -27,7 +27,7 @@
 '
 Friend NotInheritable Class AboutBox
 
-    Private Sub AboutBox_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
+    Private Sub AboutBox_Load(sender As System.Object, e As System.EventArgs) Handles MyBase.Load
 
         'get AssemblyInfo from the executing assembly rather than from My.Application because the latter may be an application other than Wave
         Dim info As ApplicationServices.AssemblyInfo = New ApplicationServices.AssemblyInfo(Reflection.Assembly.GetExecutingAssembly)
@@ -49,11 +49,11 @@ Friend NotInheritable Class AboutBox
         Me.TextBox_Description.Text = info.Description
     End Sub
 
-    Private Sub OKButton_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
+    Private Sub OKButton_Click(sender As System.Object, e As System.EventArgs)
         Me.Close()
     End Sub
 
-    Private Sub LinkLabel1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles LinkLabel1.Click
+    Private Sub LinkLabel1_Click(sender As System.Object, e As System.EventArgs) Handles LinkLabel1.Click
         Process.Start(Me.LinkLabel1.Text)
     End Sub
 

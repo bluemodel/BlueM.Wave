@@ -51,7 +51,7 @@ Public Class SMB
 
     'Konstruktor
     '***********
-    Public Sub New(ByVal FileName As String, Optional ByVal ReadAllNow As Boolean = False)
+    Public Sub New(FileName As String, Optional ReadAllNow As Boolean = False)
 
         MyBase.New(FileName)
 

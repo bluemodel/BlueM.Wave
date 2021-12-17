@@ -59,7 +59,7 @@ Public Class WEL
         Get
             Return _iLineInfo
         End Get
-        Set(ByVal value As Integer)
+        Set(value As Integer)
             _iLineInfo = value
         End Set
     End Property
@@ -71,7 +71,7 @@ Public Class WEL
         Get
             Return _DateTimeLength
         End Get
-        Set(ByVal value As Integer)
+        Set(value As Integer)
             _DateTimeLength = value
         End Set
     End Property
@@ -83,7 +83,7 @@ Public Class WEL
     ''' <summary>
     ''' Konstruktor
     ''' </summary>
-    Public Sub New(ByVal FileName As String, Optional ByVal ReadAllNow As Boolean = False)
+    Public Sub New(FileName As String, Optional ReadAllNow As Boolean = False)
 
         MyBase.New(FileName)
 
@@ -283,7 +283,7 @@ Public Class WEL
     ''' </summary>
     ''' <param name="file">path to the file to check</param>
     ''' <returns>True if verification was successful</returns>
-    Public Shared Function verifyFormat(ByVal file As String) As Boolean
+    Public Shared Function verifyFormat(file As String) As Boolean
 
         Dim FiStr As FileStream
         Dim StrRead As StreamReader
@@ -320,7 +320,7 @@ Public Class WEL
     ''' <param name="file">path to WEL file</param>
     ''' <returns>True if successful</returns>
     ''' <remarks>TALSIM specific</remarks>
-    Public Shared Function extractFromWLZIP(ByVal file As String) As Boolean
+    Public Shared Function extractFromWLZIP(file As String) As Boolean
 
         Dim file_wlzip As String
         Dim ze As Ionic.Zip.ZipEntry

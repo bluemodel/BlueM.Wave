@@ -41,7 +41,7 @@ Public Class WVP
     'settingsDict = {filename1:{setting1:value1, setting2:value2, ...}, ...}
     Private settingsDict As Dictionary(Of String, Dictionary(Of String, String))
 
-    Public Sub New(ByVal file As String)
+    Public Sub New(file As String)
 
         Me.projectfile = file
 

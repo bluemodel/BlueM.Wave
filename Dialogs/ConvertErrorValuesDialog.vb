@@ -55,7 +55,7 @@ Friend Class ConvertErrorValuesDialog
 
     End Sub
 
-    Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
+    Private Sub OK_Button_Click(sender As System.Object, e As System.EventArgs) Handles OK_Button.Click
         'Abort if no series is selected
         If Me.ComboBox_Series.SelectedIndex = -1 Then
             MsgBox("Please select a series!", MsgBoxStyle.Exclamation)
@@ -103,7 +103,7 @@ Friend Class ConvertErrorValuesDialog
 
     End Sub
 
-    Private Sub Cancel_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Cancel_Button.Click
+    Private Sub Cancel_Button_Click(sender As System.Object, e As System.EventArgs) Handles Cancel_Button.Click
         Me.DialogResult = System.Windows.Forms.DialogResult.Cancel
         Me.Close()
     End Sub

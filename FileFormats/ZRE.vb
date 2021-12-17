@@ -50,7 +50,7 @@ Public Class ZRE
 
     'Konstruktor
     '***********
-    Public Sub New(ByVal FileName As String, Optional ByVal ReadAllNow As Boolean = False)
+    Public Sub New(FileName As String, Optional ReadAllNow As Boolean = False)
 
         MyBase.New(FileName)
 
@@ -174,7 +174,7 @@ Public Class ZRE
     ''' </summary>
     ''' <param name="Reihe">Die zu exportierende Zeitreihe</param>
     ''' <param name="File">Pfad zur anzulegenden Datei</param>
-    Public Shared Sub Write_File(ByVal Reihe As TimeSeries, ByVal File As String)
+    Public Shared Sub Write_File(Reihe As TimeSeries, File As String)
 
         Dim strwrite As StreamWriter
         Dim i As Integer

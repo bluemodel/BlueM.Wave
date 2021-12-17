@@ -77,7 +77,7 @@ Friend Class MergeSeriesDialog
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
     ''' <remarks></remarks>
-    Private Sub SeriesSelection_Changed(ByVal sender As System.Object, ByVal e As System.Windows.Forms.ItemCheckEventArgs) Handles CheckedListBox_AvailableSeries.ItemCheck
+    Private Sub SeriesSelection_Changed(sender As System.Object, e As System.Windows.Forms.ItemCheckEventArgs) Handles CheckedListBox_AvailableSeries.ItemCheck
 
         Dim ts As TimeSeries
 
@@ -99,7 +99,7 @@ Friend Class MergeSeriesDialog
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
     ''' <remarks></remarks>
-    Private Sub Button_Up_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button_Up.Click
+    Private Sub Button_Up_Click(sender As System.Object, e As System.EventArgs) Handles Button_Up.Click
 
         Dim index As Integer
         Dim ts As TimeSeries
@@ -122,7 +122,7 @@ Friend Class MergeSeriesDialog
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
     ''' <remarks></remarks>
-    Private Sub Button_Down_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button_Down.Click
+    Private Sub Button_Down_Click(sender As System.Object, e As System.EventArgs) Handles Button_Down.Click
 
         Dim index As Integer
         Dim ts As TimeSeries
@@ -145,13 +145,13 @@ Friend Class MergeSeriesDialog
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
     ''' <remarks></remarks>
-    Private Sub Button_SelectAll_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button_SelectAll.Click
+    Private Sub Button_SelectAll_Click(sender As System.Object, e As System.EventArgs) Handles Button_SelectAll.Click
         For i As Integer = 0 To Me.CheckedListBox_AvailableSeries.Items.Count - 1
             Me.CheckedListBox_AvailableSeries.SetItemChecked(i, True)
         Next
     End Sub
 
-    Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
+    Private Sub OK_Button_Click(sender As System.Object, e As System.EventArgs) Handles OK_Button.Click
         'Check for valid inputs
         If Me.selectedSeries.Count < 2 Then
             MsgBox("Please select at least two series to merge!", MsgBoxStyle.Exclamation)
@@ -166,7 +166,7 @@ Friend Class MergeSeriesDialog
         Me.Close()
     End Sub
 
-    Private Sub Cancel_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Cancel_Button.Click
+    Private Sub Cancel_Button_Click(sender As System.Object, e As System.EventArgs) Handles Cancel_Button.Click
         Me.DialogResult = System.Windows.Forms.DialogResult.Cancel
         Me.Close()
     End Sub

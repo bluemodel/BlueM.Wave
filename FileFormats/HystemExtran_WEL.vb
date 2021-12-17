@@ -64,7 +64,7 @@ Public Class HystemExtran_WEL
     ''' <summary>
     ''' Konstruktor
     ''' </summary>
-    Public Sub New(ByVal FileName As String, Optional ByVal ReadAllNow As Boolean = False)
+    Public Sub New(FileName As String, Optional ReadAllNow As Boolean = False)
 
         MyBase.New(FileName)
 
@@ -227,7 +227,7 @@ Public Class HystemExtran_WEL
     ''' </summary>
     ''' <param name="file">Pfad zur Datei</param>
     ''' <returns></returns>
-    Public Shared Function verifyFormat(ByVal file As String) As Boolean
+    Public Shared Function verifyFormat(file As String) As Boolean
 
         Dim FiStr As FileStream = New FileStream(file, FileMode.Open, IO.FileAccess.Read)
         Dim StrRead As StreamReader = New StreamReader(FiStr, detectEncodingFromByteOrderMarks:=True)

@@ -50,7 +50,7 @@ Public Class CSV
 
     'Konstruktor
     '***********
-    Public Sub New(ByVal FileName As String)
+    Public Sub New(FileName As String)
         MyBase.New(FileName)
         'TODO: use operating system defaults for initial settings, requires refactoring of import dialog
         'Me.Dateformat = Helpers.CurrentDateFormat.ShortDatePattern & " " & Helpers.CurrentDateFormat.LongTimePattern
@@ -251,7 +251,7 @@ Public Class CSV
     '''     if not set, these settings are taken from CurrentCulture
     ''' </param>
     ''' <remarks></remarks>
-    Public Shared Sub Write_File(ByRef tsList As List(Of TimeSeries), ByVal file As String, Optional cInfo As CultureInfo = Nothing)
+    Public Shared Sub Write_File(ByRef tsList As List(Of TimeSeries), file As String, Optional cInfo As CultureInfo = Nothing)
 
         Dim strwrite As StreamWriter
         Dim t As DateTime

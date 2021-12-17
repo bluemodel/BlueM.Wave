@@ -65,7 +65,7 @@ Public Class PRMS
     ''' </summary>
     ''' <param name="FileName"></param>
     ''' <remarks></remarks>
-    Public Sub New(ByVal FileName As String)
+    Public Sub New(FileName As String)
 
         MyBase.New(FileName)
 
@@ -274,7 +274,7 @@ Public Class PRMS
     ''' <param name="file"></param>
     ''' <returns></returns>
     ''' <remarks>Assumes that headers are fixed (always the same variables)</remarks>
-    Public Shared Function verifyFormat(ByVal file As String) As Boolean
+    Public Shared Function verifyFormat(file As String) As Boolean
 
         Dim i As Integer
         Dim line As String

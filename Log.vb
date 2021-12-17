@@ -85,7 +85,7 @@ Friend Class Log
     ''' </summary>
     ''' <param name="level">log level</param>
     ''' <param name="msg">message</param>
-    Public Shared Sub AddLogEntry(ByVal level As levels, ByVal msg As String)
+    Public Shared Sub AddLogEntry(level As levels, msg As String)
 
         If level >= Log.level Then
             Log.logMessages.Add(New KeyValuePair(Of levels, String)(level, msg))

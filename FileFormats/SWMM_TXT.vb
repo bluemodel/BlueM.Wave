@@ -62,7 +62,7 @@ Public Class SWMM_TXT
         Get
             Return _Zeitintervall
         End Get
-        Set(ByVal value As Integer)
+        Set(value As Integer)
             _Zeitintervall = value
         End Set
     End Property
@@ -90,7 +90,7 @@ Public Class SWMM_TXT
     ''' <summary>
     ''' Konstruktor
     ''' </summary>
-    Public Sub New(ByVal FileName As String, Optional ByVal ReadAllNow As Boolean = False)
+    Public Sub New(FileName As String, Optional ReadAllNow As Boolean = False)
 
         MyBase.New(FileName)
 
@@ -296,7 +296,7 @@ Public Class SWMM_TXT
     ''' </summary>
     ''' <param name="Reihen">Die zu exportierenden Zeitreihen</param>
     ''' <param name="File">Pfad zur anzulegenden Datei</param>
-    Public Shared Sub Write_File(ByRef Reihen As List(Of TimeSeries), ByVal File As String)
+    Public Shared Sub Write_File(ByRef Reihen As List(Of TimeSeries), File As String)
 
         Dim strwrite As StreamWriter
         Dim i, j, k As Integer
@@ -422,7 +422,7 @@ Public Class SWMM_TXT
     ''' </summary>
     ''' <param name="file">Pfad zur Datei</param>
     ''' <returns></returns>
-    Public Shared Function verifyFormat(ByVal file As String) As Boolean
+    Public Shared Function verifyFormat(file As String) As Boolean
 
         Dim FiStr As FileStream = New FileStream(file, FileMode.Open, IO.FileAccess.Read)
         Dim StrRead As StreamReader = New StreamReader(FiStr, detectEncodingFromByteOrderMarks:=True)
@@ -443,7 +443,7 @@ Public Class SWMM_TXT
 
     End Function
 
-    Public Shared Function nEqualStrings(ByVal strArrayIn() As String) As Integer
+    Public Shared Function nEqualStrings(strArrayIn() As String) As Integer
 
         Dim Names() As String
         Dim i, j As Integer
@@ -470,7 +470,7 @@ Public Class SWMM_TXT
 
     End Function
 
-    Public Shared Sub GetUniqueConstituents(ByVal AllConstIn() As Constituent, ByRef ConstOut() As Constituent)
+    Public Shared Sub GetUniqueConstituents(AllConstIn() As Constituent, ByRef ConstOut() As Constituent)
 
         Dim i, j As Integer
         Dim ExistsOutArray As Boolean
@@ -495,7 +495,7 @@ Public Class SWMM_TXT
 
     End Sub
 
-    Public Shared Sub GetUniqueNodes(ByVal AllNodesIn() As String, ByRef NodesOut() As String)
+    Public Shared Sub GetUniqueNodes(AllNodesIn() As String, ByRef NodesOut() As String)
 
         Dim i, j As Integer
         Dim ExistsOutArray As Boolean
@@ -518,7 +518,7 @@ Public Class SWMM_TXT
 
     End Sub
 
-    Public Shared Function FakConv(ByVal UnitIn As String) As Integer
+    Public Shared Function FakConv(UnitIn As String) As Integer
 
         Select Case UnitIn
             Case "m3/s"

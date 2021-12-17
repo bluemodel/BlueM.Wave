@@ -76,7 +76,7 @@ Public Class SWMM_OUT
 
     'Konstruktor
     '***********
-    Public Sub New(ByVal FileName As String, Optional ByVal ReadAllNow As Boolean = False)
+    Public Sub New(FileName As String, Optional ReadAllNow As Boolean = False)
 
         MyBase.New(FileName)
 
@@ -296,7 +296,7 @@ Public Class SWMM_OUT
     End Sub
 
 
-    Private Function Units(ByVal iType As Integer, ByVal vIndex As Integer, ByVal FlowUnits As Integer) As String
+    Private Function Units(iType As Integer, vIndex As Integer, FlowUnits As Integer) As String
         '_SUBCATCHVAR (iType = 0)
         '                {"Rainfall",     //0 for rainfall (in/hr or mm/hr)
         '                 "Snow Depth",   //1 for snow depth (in or mm)

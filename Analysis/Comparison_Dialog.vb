@@ -27,7 +27,7 @@
 '
 Friend Class Comparison_Dialog
 
-    Public Sub New(ByVal name1 As String, ByVal name2 As String)
+    Public Sub New(name1 As String, name2 As String)
 
         ' This call is required by the Windows Form Designer.
         InitializeComponent()

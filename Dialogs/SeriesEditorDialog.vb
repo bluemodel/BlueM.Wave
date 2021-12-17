@@ -97,7 +97,7 @@ Friend Class SeriesEditorDialog
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
     ''' <remarks></remarks>
-    Private Sub Paste(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button_Paste.Click
+    Private Sub Paste(sender As System.Object, e As System.EventArgs) Handles Button_Paste.Click
 
         Dim CSVSeparator As String
         Dim ClipboardContents As IDataObject
@@ -201,7 +201,7 @@ Friend Class SeriesEditorDialog
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
     ''' <remarks></remarks>
-    Private Sub Button_OK_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button_OK.Click
+    Private Sub Button_OK_Click(sender As System.Object, e As System.EventArgs) Handles Button_OK.Click
 
         Dim i As Integer
         Dim timestamp As DateTime
@@ -249,7 +249,7 @@ Friend Class SeriesEditorDialog
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
     ''' <remarks></remarks>
-    Private Sub DataGridView1_KeyDown(ByVal sender As System.Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles DataGridView1.KeyDown
+    Private Sub DataGridView1_KeyDown(sender As System.Object, e As System.Windows.Forms.KeyEventArgs) Handles DataGridView1.KeyDown
         If (e.Control And e.KeyCode = Keys.V) Then
             Call Me.Paste(sender, New EventArgs())
         End If

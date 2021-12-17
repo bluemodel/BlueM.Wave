@@ -55,7 +55,7 @@ Public Class BIN
 
 #Region "Methoden"
 
-    Public Sub New(ByVal FileName As String, Optional ByVal ReadAllNow As Boolean = False)
+    Public Sub New(FileName As String, Optional ReadAllNow As Boolean = False)
 
         MyBase.New(FileName)
 
@@ -149,7 +149,7 @@ Public Class BIN
     ''' Assumes the real date is number of hours since 01.01.1601
     ''' Rounds to the nearest second
     ''' </remarks>
-    Private Shared Function rDateToDate(ByVal rDate As Double) As DateTime
+    Private Shared Function rDateToDate(rDate As Double) As DateTime
         Dim timestamp As DateTime
         Dim hours, minutes, seconds As Integer
         hours = Math.Floor(rDate)
@@ -165,7 +165,7 @@ Public Class BIN
     ''' <param name="timestamp"></param>
     ''' <returns>real (double) date</returns>
     ''' <remarks>real (double date) is hours since 01.01.1601</remarks>
-    Private Shared Function dateToRDate(ByVal timestamp As DateTime) As Double
+    Private Shared Function dateToRDate(timestamp As DateTime) As Double
         Dim rDate As Double
         rDate = (timestamp - refdate).TotalHours
         Return rDate
@@ -176,7 +176,7 @@ Public Class BIN
     ''' </summary>
     ''' <param name="ts">the timeseries to write</param>
     ''' <param name="file">path to the file</param>
-    Public Shared Sub Write_File(ByRef ts As TimeSeries, ByVal file As String)
+    Public Shared Sub Write_File(ByRef ts As TimeSeries, file As String)
 
         Dim header() As Int32
         Dim rdate As Double

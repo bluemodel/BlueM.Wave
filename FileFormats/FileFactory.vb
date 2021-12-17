@@ -54,7 +54,7 @@ Public Module FileFactory
     ''' Obsolete: Only Maintained for backwards-compatibility
     ''' Use getFileInstance() instead
     ''' </summary>
-    Public Function getDateiInstanz(ByVal file As String) As FileFormatBase
+    Public Function getDateiInstanz(file As String) As FileFormatBase
         Return getFileInstance(file)
     End Function
 
@@ -68,7 +68,7 @@ Public Module FileFactory
     ''' If the file is a WEL file, this function also checks whether the file is contained
     ''' within a WLZIP of the same name and if it is, extracts it.
     ''' </remarks>
-    Public Function getFileInstance(ByVal file As String) As FileFormatBase
+    Public Function getFileInstance(file As String) As FileFormatBase
 
         Dim FileInstance As FileFormatBase
         Dim FileExt As String

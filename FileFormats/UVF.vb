@@ -59,7 +59,7 @@ Public Class UVF
     ''' </summary>
     ''' <param name="file">Pfad zur Datei</param>
     ''' <remarks></remarks>
-    Public Sub New(ByVal file As String, Optional ByVal ReadAllNow As Boolean = False)
+    Public Sub New(file As String, Optional ReadAllNow As Boolean = False)
 
         Call MyBase.New(file)
 
@@ -86,7 +86,7 @@ Public Class UVF
     ''' <param name="file">Pfad zur Datei</param>
     ''' <returns>Boolean</returns>
     ''' <remarks>Prüfung erfolgt anhand der Zeile *Z</remarks>
-    Public Shared Function verifyFormat(ByVal file As String) As Boolean
+    Public Shared Function verifyFormat(file As String) As Boolean
 
         Dim i As Integer
         Dim Zeile As String
@@ -335,7 +335,7 @@ Public Class UVF
     ''' <summary>
     ''' Sets default metadata values for a time series corresponding to the UVF file format
     ''' </summary>
-    Public Overloads Shared Sub setDefaultMetadata(ByVal ts As TimeSeries)
+    Public Overloads Shared Sub setDefaultMetadata(ts As TimeSeries)
         'Make sure all required keys exist
         ts.Metadata.AddKeys(UVF.MetadataKeys)
         'Set default values
@@ -354,7 +354,7 @@ Public Class UVF
     ''' <param name="ts">the time series to export</param>
     ''' <param name="file">path to the file</param>
     ''' <remarks></remarks>
-    Public Shared Sub Write_File(ByRef ts As TimeSeries, ByVal file As String)
+    Public Shared Sub Write_File(ByRef ts As TimeSeries, file As String)
 
         'Format specification:
         'http://aquaplan.de/public_papers/imex/sectionUVF.html

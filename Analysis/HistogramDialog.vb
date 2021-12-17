@@ -115,7 +115,7 @@ Friend Class HistogramDialog
     ''' paste breaks from clipboard
     ''' </summary>
     ''' <remarks></remarks>
-    Private Sub Paste_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button_paste.Click
+    Private Sub Paste_Click(sender As System.Object, e As System.EventArgs) Handles Button_paste.Click
 
         Dim ClipboardContents As IDataObject
         Dim text, lines(), line As String
@@ -154,7 +154,7 @@ Friend Class HistogramDialog
     ''' OK button clicked
     ''' </summary>
     ''' <remarks></remarks>
-    Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
+    Private Sub OK_Button_Click(sender As System.Object, e As System.EventArgs) Handles OK_Button.Click
 
         Dim n_breaks As Integer
 
@@ -187,14 +187,14 @@ Friend Class HistogramDialog
     ''' Cancel button clicked
     ''' </summary>
     ''' <remarks></remarks>
-    Private Sub Cancel_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Cancel_Button.Click
+    Private Sub Cancel_Button_Click(sender As System.Object, e As System.EventArgs) Handles Cancel_Button.Click
         Me.DialogResult = System.Windows.Forms.DialogResult.Cancel
         Me.Close()
     End Sub
 
 #Region "Events"
 
-    Private Sub Button_calcBreaks_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button_recalculate.Click
+    Private Sub Button_calcBreaks_Click(sender As System.Object, e As System.EventArgs) Handles Button_recalculate.Click
         Me.n_bins = Me.NumericUpDown_n_bins.Value
         Call Me.recalculateBreaks()
     End Sub
@@ -202,7 +202,7 @@ Friend Class HistogramDialog
     ''' <summary>
     ''' Occurs when the value of a cell changes
     ''' </summary>
-    Private Sub DataGridView_bins_CellValueChanged(ByVal sender As System.Object, ByVal e As System.Windows.Forms.DataGridViewCellEventArgs) Handles DataGridView_breaks.CellValueChanged
+    Private Sub DataGridView_bins_CellValueChanged(sender As System.Object, e As System.Windows.Forms.DataGridViewCellEventArgs) Handles DataGridView_breaks.CellValueChanged
         If e.RowIndex = -1 Then
             'occurs during initialization
             Exit Sub
@@ -214,12 +214,12 @@ Friend Class HistogramDialog
         Call Me.sortBreaks()
     End Sub
 
-    Private Sub DataGridView_bins_UserAddedRow(ByVal sender As System.Object, ByVal e As System.Windows.Forms.DataGridViewRowEventArgs) Handles DataGridView_breaks.UserAddedRow
+    Private Sub DataGridView_bins_UserAddedRow(sender As System.Object, e As System.Windows.Forms.DataGridViewRowEventArgs) Handles DataGridView_breaks.UserAddedRow
         'update NumericUpDown_nBins
         Me.NumericUpDown_n_bins.Value = Me.DataGridView_breaks.Rows.Count - 1
     End Sub
 
-    Private Sub DataGridView_bins_UserDeletedRow(ByVal sender As System.Object, ByVal e As System.Windows.Forms.DataGridViewRowEventArgs) Handles DataGridView_breaks.UserDeletedRow
+    Private Sub DataGridView_bins_UserDeletedRow(sender As System.Object, e As System.Windows.Forms.DataGridViewRowEventArgs) Handles DataGridView_breaks.UserDeletedRow
         'update NumericUpDown_nBins
         Me.NumericUpDown_n_bins.Value = Math.Max(Me.DataGridView_breaks.Rows.Count - 1, 0)
     End Sub
@@ -228,14 +228,14 @@ Friend Class HistogramDialog
     '''' Occurs when a cell loses input focus, enabling content validation
     '''' </summary>
     '''' <remarks></remarks>
-    'Private Sub DataGridView_bins_CellValidating(ByVal sender As System.Object, ByVal e As System.Windows.Forms.DataGridViewCellValidatingEventArgs) Handles DataGridView_breaks.CellValidating
+    'Private Sub DataGridView_bins_CellValidating(sender As System.Object, e As System.Windows.Forms.DataGridViewCellValidatingEventArgs) Handles DataGridView_breaks.CellValidating
     '    If String.IsNullOrEmpty(e.FormattedValue.ToString()) Then
     '        Me.DataGridView_breaks.Rows(e.RowIndex).ErrorText = "Value must not be empty"
     '        e.Cancel = True
     '    End If
     'End Sub
 
-    Private Sub DataGridView_bins_DataError(ByVal sender As System.Object, ByVal e As System.Windows.Forms.DataGridViewDataErrorEventArgs) Handles DataGridView_breaks.DataError
+    Private Sub DataGridView_bins_DataError(sender As System.Object, e As System.Windows.Forms.DataGridViewDataErrorEventArgs) Handles DataGridView_breaks.DataError
         MsgBox("The entered value is not valid!", MsgBoxStyle.Critical)
     End Sub
 

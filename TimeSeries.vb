@@ -86,7 +86,7 @@ Public Class TimeSeries
         Get
             Return _title
         End Get
-        Set(ByVal value As String)
+        Set(value As String)
             _title = value
         End Set
     End Property
@@ -95,7 +95,7 @@ Public Class TimeSeries
         Get
             Return _Objekt
         End Get
-        Set(ByVal value As String)
+        Set(value As String)
             _Objekt = value
         End Set
     End Property
@@ -104,7 +104,7 @@ Public Class TimeSeries
         Get
             Return _Type
         End Get
-        Set(ByVal value As String)
+        Set(value As String)
             _Type = value
         End Set
     End Property
@@ -116,7 +116,7 @@ Public Class TimeSeries
         Get
             Return Me._Interpretation
         End Get
-        Set(ByVal value As InterpretationEnum)
+        Set(value As InterpretationEnum)
             Me._Interpretation = value
         End Set
     End Property
@@ -218,7 +218,7 @@ Public Class TimeSeries
         Get
             Return Me._metadata
         End Get
-        Set(ByVal value As Metadata)
+        Set(value As Metadata)
             Me._metadata = value
         End Set
     End Property
@@ -265,7 +265,7 @@ Public Class TimeSeries
         Get
             Return _unit
         End Get
-        Set(ByVal value As String)
+        Set(value As String)
             If (value.Trim() = "") Then value = "-"
             _unit = value
         End Set
@@ -318,7 +318,7 @@ Public Class TimeSeries
     ''' <summary>
     ''' Returns the maximum value of the time series within a defined time period (inclusively)
     ''' </summary>
-    Public Overloads ReadOnly Property Maximum(ByVal startdate As DateTime, ByVal enddate As DateTime) As Double
+    Public Overloads ReadOnly Property Maximum(startdate As DateTime, enddate As DateTime) As Double
         Get
             If Me.NodesClean(startdate, enddate).Count > 0 Then
                 Return Me.NodesClean(startdate, enddate).Values.Max
@@ -344,7 +344,7 @@ Public Class TimeSeries
     ''' <summary>
     ''' Returns the minimum value of the time series within a defined time period (inclusively)
     ''' </summary>
-    Public Overloads ReadOnly Property Minimum(ByVal startdate As DateTime, ByVal enddate As DateTime) As Double
+    Public Overloads ReadOnly Property Minimum(startdate As DateTime, enddate As DateTime) As Double
         Get
             If Me.NodesClean(startdate, enddate).Count > 0 Then
                 Return Me.NodesClean(startdate, enddate).Values.Min
@@ -453,7 +453,7 @@ Public Class TimeSeries
     ''' Constructor
     ''' </summary>
     ''' <param name="title">Title of the time series</param>
-    Public Sub New(ByVal title As String)
+    Public Sub New(title As String)
         Me._id = TimeSeries.getUniqueID()
         Me._metadata = New Metadata()
         Me._title = title
@@ -492,7 +492,7 @@ Public Class TimeSeries
     ''' <param name="_date">Date</param>
     ''' <param name="_value">Value</param>
     ''' <remarks>If the given date already exists, the new node is discarded and a warning is written to the log</remarks>
-    Public Sub AddNode(ByVal _date As DateTime, ByVal _value As Double)
+    Public Sub AddNode(_date As DateTime, _value As Double)
         If (Me.Nodes.ContainsKey(_date)) Then
             Log.AddLogEntry(Log.levels.warning, $"Duplicate data point at {_date.ToString(Helpers.DefaultDateFormat)}: Value of {_value.ToString(Helpers.DefaultNumberFormat)} will be discarded. Existing value: {Me.Nodes(_date).ToString(Helpers.DefaultNumberFormat)}")
             Exit Sub
@@ -510,7 +510,7 @@ Public Class TimeSeries
     ''' If there is no node with the exact start date, the closest node before the start date is also kept.
     ''' If there is no node with the exact end date, the closest node after the end date is also kept.
     ''' </remarks>
-    Public Overloads Sub Cut(ByVal _start As DateTime, ByVal _end As DateTime)
+    Public Overloads Sub Cut(_start As DateTime, _end As DateTime)
 
         Dim i, lengthOld, lengthNew As Integer
         Dim iStart, iEnd As Integer
@@ -582,7 +582,7 @@ Public Class TimeSeries
     ''' </summary>
     ''' <param name="series2">the time series to whose timespan the time series should be cut</param>
     ''' <remarks></remarks>
-    Public Overloads Sub Cut(ByVal series2 As TimeSeries)
+    Public Overloads Sub Cut(series2 As TimeSeries)
 
         If (Me.StartDate < series2.StartDate Or Me.EndDate > series2.EndDate) Then
             Call Me.Cut(series2.StartDate, series2.EndDate)
@@ -596,7 +596,7 @@ Public Class TimeSeries
     ''' <param name="series2">series to be appended</param>
     ''' <remarks>in the case of an overlap between the two series, 
     ''' the nodes of the appended series within the overlap are discarded</remarks>
-    Public Sub Append(ByVal series2 As TimeSeries)
+    Public Sub Append(series2 As TimeSeries)
 
         Dim startDate, endDate As DateTime
 
@@ -625,7 +625,7 @@ Public Class TimeSeries
     ''' <param name="startMonth">the month with which the hydrological year starts. Default = 11 (November)</param>
     ''' <returns>A dictionary of time series, the key represents the calendar year in which each hydrological year starts</returns>
     ''' <remarks></remarks>
-    Public Function SplitHydroYears(Optional ByVal startMonth As Integer = 11) As Dictionary(Of Integer, TimeSeries)
+    Public Function SplitHydroYears(Optional startMonth As Integer = 11) As Dictionary(Of Integer, TimeSeries)
 
         Dim ts As TimeSeries
         Dim year, year_start, year_end As Integer
@@ -847,7 +847,7 @@ Public Class TimeSeries
     ''' <param name="WertTyp">MaxWert, MinWert, Average, AnfWert, EndWert, Summe</param>
     ''' <returns>the calculated metric</returns>
     ''' <remarks>Obsolete, kept for backwards compatibility with BlueM.Opt</remarks>
-    Public Function getWert(ByVal WertTyp As String) As Double
+    Public Function getWert(WertTyp As String) As Double
         Dim Wert As Double
 
         Select Case WertTyp
@@ -883,7 +883,7 @@ Public Class TimeSeries
     ''' Erstellt eine neue äquidistante Zeitreihe, neue Stützstellen kriegen den Wert 0
     ''' </summary>
     ''' <param name="Soll_dT">Sollzeitschritt (in Minuten)</param>      
-    Friend Function getKontiZRE(ByVal Soll_dT As Integer) As TimeSeries
+    Friend Function getKontiZRE(Soll_dT As Integer) As TimeSeries
 
         Dim i As Integer
         Dim intloop As Integer
@@ -923,7 +923,7 @@ Public Class TimeSeries
     ''' Erstellt eine neue äquidistante Zeitreihe, neue Stützstellen kriegen aus original Zeitreihe konvertierten Wert, geignet für Massenbezogenen Zeitreihen
     ''' </summary>
     ''' <param name="Soll_dT">Sollzeitschritt (in Minuten)</param>      
-    Friend Function getKontiZRE2(ByVal Soll_dT As Integer) As TimeSeries
+    Friend Function getKontiZRE2(Soll_dT As Integer) As TimeSeries
 
         Dim i, j As Integer
         Dim intloop As Integer
@@ -996,7 +996,7 @@ Public Class TimeSeries
     ''' Erstellt eine neue äquidistante Zeitreihe, neue Stützstellen kriegen aus original Zeitreihe konvertierten Wert, geignet für zeitabhängige Zeitreihen
     ''' </summary>
     ''' <param name="Soll_dT">Sollzeitschritt (in Minuten)</param>      
-    Friend Function getKontiZRE3(ByVal Soll_dT As Integer) As TimeSeries
+    Friend Function getKontiZRE3(Soll_dT As Integer) As TimeSeries
 
         Dim i As Integer
         Dim intloop As Integer
@@ -1073,7 +1073,7 @@ Public Class TimeSeries
     ''' <param name="errorvalues">array of error values to ignore</param>
     ''' <returns>the cleaned time series</returns>
     ''' <remarks>a tolerance of 0.0001 is used to compare series values to errorvalues</remarks>
-    Public Function convertErrorValues(ByVal ParamArray errorvalues() As Double) As TimeSeries
+    Public Function convertErrorValues(ParamArray errorvalues() As Double) As TimeSeries
 
         Const tolerance As Double = 0.0001
         Dim isErrorvalue As Boolean

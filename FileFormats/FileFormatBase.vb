@@ -164,7 +164,7 @@ Public MustInherit Class FileFormatBase
         Get
             Return _file
         End Get
-        Set(ByVal value As String)
+        Set(value As String)
             _file = value
         End Set
     End Property
@@ -176,7 +176,7 @@ Public MustInherit Class FileFormatBase
         Get
             Return _isColumnSeparated
         End Get
-        Set(ByVal value As Boolean)
+        Set(value As Boolean)
             _isColumnSeparated = value
         End Set
     End Property
@@ -188,7 +188,7 @@ Public MustInherit Class FileFormatBase
         Get
             Return _trennzeichen
         End Get
-        Set(ByVal value As Character)
+        Set(value As Character)
             _trennzeichen = value
         End Set
     End Property
@@ -200,7 +200,7 @@ Public MustInherit Class FileFormatBase
         Get
             Return _dateFormat
         End Get
-        Set(ByVal value As String)
+        Set(value As String)
             Me._dateFormat = value
         End Set
     End Property
@@ -212,7 +212,7 @@ Public MustInherit Class FileFormatBase
         Get
             Return _decimalSeparator
         End Get
-        Set(ByVal value As Character)
+        Set(value As Character)
             _decimalSeparator = value
         End Set
     End Property
@@ -224,7 +224,7 @@ Public MustInherit Class FileFormatBase
         Get
             Return _iLineHeadings
         End Get
-        Set(ByVal value As Integer)
+        Set(value As Integer)
             _iLineHeadings = value
         End Set
     End Property
@@ -236,7 +236,7 @@ Public MustInherit Class FileFormatBase
         Get
             Return _iLineUnits
         End Get
-        Set(ByVal value As Integer)
+        Set(value As Integer)
             _iLineUnits = value
         End Set
     End Property
@@ -248,7 +248,7 @@ Public MustInherit Class FileFormatBase
         Get
             Return _iLineData
         End Get
-        Set(ByVal value As Integer)
+        Set(value As Integer)
             _iLineData = value
         End Set
     End Property
@@ -271,7 +271,7 @@ Public MustInherit Class FileFormatBase
         Get
             Return _useUnits
         End Get
-        Set(ByVal value As Boolean)
+        Set(value As Boolean)
             _useUnits = value
         End Set
     End Property
@@ -284,7 +284,7 @@ Public MustInherit Class FileFormatBase
         Get
             Return _columnWidth
         End Get
-        Set(ByVal value As Integer)
+        Set(value As Integer)
             _columnWidth = value
         End Set
     End Property
@@ -296,7 +296,7 @@ Public MustInherit Class FileFormatBase
         Get
             Return _dateTimeColumnIndex
         End Get
-        Set(ByVal value As Integer)
+        Set(value As Integer)
             _dateTimeColumnIndex = value
         End Set
     End Property
@@ -309,7 +309,7 @@ Public MustInherit Class FileFormatBase
         Get
             Return _seriesList
         End Get
-        Set(ByVal value As List(Of SeriesInfo))
+        Set(value As List(Of SeriesInfo))
             _seriesList = value
         End Set
     End Property
@@ -331,7 +331,7 @@ Public MustInherit Class FileFormatBase
         Get
             Return _nLinesperTimestamp
         End Get
-        Set(ByVal value As Integer)
+        Set(value As Integer)
             _nLinesperTimestamp = value
         End Set
     End Property
@@ -343,7 +343,7 @@ Public MustInherit Class FileFormatBase
     ''' <returns>The timeseries</returns>
     ''' <remarks>If the timeseries has not been imported yet, an import is initiated. 
     ''' Throws an exception if the timeseries cannot be found in the file.</remarks>
-    Public ReadOnly Property getTimeSeries(Optional ByVal index As Integer = 0) As TimeSeries
+    Public ReadOnly Property getTimeSeries(Optional index As Integer = 0) As TimeSeries
         Get
             If Me.FileTimeSeries.ContainsKey(index) Then
                 Return Me.FileTimeSeries(index)
@@ -365,7 +365,7 @@ Public MustInherit Class FileFormatBase
     ''' <returns>The timeseries</returns>
     ''' <remarks>If the timeseries has not been imported yet, an import is initiated. 
     ''' Throws an exception if the timeseries cannot be found in the file.</remarks>
-    Public ReadOnly Property getTimeSeries(ByVal title As String) As TimeSeries
+    Public ReadOnly Property getTimeSeries(title As String) As TimeSeries
         Get
             Dim found As Boolean = False
             'Find the series using the given title
@@ -414,7 +414,7 @@ Public MustInherit Class FileFormatBase
     ''' </summary>
     ''' <param name="FileName">Path to the file to be imported</param>
     ''' <param name="ReadAllNow">If True, select all series and read the file immediately</param>
-    Public Sub New(ByVal FileName As String, Optional ByVal ReadAllNow As Boolean = False)
+    Public Sub New(FileName As String, Optional ReadAllNow As Boolean = False)
 
         'Initialize data structures
         Me.FileTimeSeries = New Dictionary(Of Integer, TimeSeries)
@@ -454,7 +454,7 @@ Public MustInherit Class FileFormatBase
     ''' <param name="colIndex">column index</param>
     ''' <returns>True if successful, False if column index was not found</returns>
     ''' <remarks></remarks>
-    Public Function selectSeries(ByVal colIndex As Integer) As Boolean
+    Public Function selectSeries(colIndex As Integer) As Boolean
 
         Dim i As Integer = 0
         For Each sInfo As SeriesInfo In Me.SeriesList
@@ -475,7 +475,7 @@ Public MustInherit Class FileFormatBase
     ''' <param name="seriesName">name of the series</param>
     ''' <returns>True if successful, False if series name was not found</returns>
     ''' <remarks></remarks>
-    Public Function selectSeries(ByVal seriesName As String) As Boolean
+    Public Function selectSeries(seriesName As String) As Boolean
 
         For Each sInfo As SeriesInfo In Me.SeriesList
             If sInfo.Name = seriesName Then
@@ -498,7 +498,7 @@ Public MustInherit Class FileFormatBase
     ''' Sets default metadata keys and values for a time series corresponding to the file format
     ''' </summary>
     ''' <remarks>Should be overloaded by inheriting classes that deal with metadata</remarks>
-    Public Shared Sub setDefaultMetadata(ByVal ts As TimeSeries)
+    Public Shared Sub setDefaultMetadata(ts As TimeSeries)
         'add default keys
         ts.Metadata.AddKeys(FileFormatBase.MetadataKeys)
         'no default values to set

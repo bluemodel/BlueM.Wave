@@ -38,7 +38,7 @@ Friend Class AxisDialog
     ''' Is raised when an axis is deleted by the user
     ''' </summary>
     ''' <param name="axisname"></param>
-    Friend Event AxisDeleted(ByVal axisname As String)
+    Friend Event AxisDeleted(axisname As String)
 
     Public Overloads Sub Update(ByRef axisList As List(Of AxisWrapper))
         Me.AxisWrapperBindingSource.DataSource = axisList

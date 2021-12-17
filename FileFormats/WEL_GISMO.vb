@@ -46,7 +46,7 @@ Public Class WEL_GISMO
 #Region "Methods"
 
     ' Constructor
-    Public Sub New(ByVal FileName As String, ByVal IsSSV As Boolean)
+    Public Sub New(FileName As String, IsSSV As Boolean)
 
         MyBase.New(FileName)
 
@@ -287,7 +287,7 @@ Public Class WEL_GISMO
     ''' <param name="file">file path</param>
     ''' <param name="IsSSV">Boolean indicates wther the file is semicolon-separated</param>
     ''' <returns>True if the file is a GISMO result file</returns>
-    Public Shared Function verifyFormat(ByVal file As String, Optional ByRef IsSSV As Boolean = False) As Boolean
+    Public Shared Function verifyFormat(file As String, Optional ByRef IsSSV As Boolean = False) As Boolean
 
         Dim isGISMO As Boolean = False
 

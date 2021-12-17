@@ -68,7 +68,7 @@ Public Class HYDRO_AS_2D
     ''' </summary>
     ''' <param name="file">Pfad zur Datei</param>
     ''' <remarks></remarks>
-    Public Sub New(ByVal file As String)
+    Public Sub New(file As String)
 
         Call MyBase.New(file)
 
@@ -108,7 +108,7 @@ Public Class HYDRO_AS_2D
     ''' <param name="file">Pfad zur Datei</param>
     ''' <returns>Boolean</returns>
     ''' <remarks>Prüfung erfolgt anhand des Dateinamens (Q_Strg.dat, Pegel.dat oder BW_TMP.dat)</remarks>
-    Public Shared Function verifyFormat(ByVal file As String) As Boolean
+    Public Shared Function verifyFormat(file As String) As Boolean
 
         'TODO: Prüfung etwas robuster machen
 

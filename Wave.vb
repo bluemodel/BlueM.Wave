@@ -206,7 +206,7 @@ Public Class Wave
 
     'Form wird geladen
     '*****************
-    Private Async Sub Wave_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
+    Private Async Sub Wave_Load(sender As System.Object, e As System.EventArgs) Handles MyBase.Load
         'Check for update
         Try
             Dim updateAvailable As Boolean
@@ -290,7 +290,7 @@ Public Class Wave
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
     ''' <remarks></remarks>
-    Private Sub openRecentlyUsedFile(ByVal sender As Object, ByVal e As ToolStripItemClickedEventArgs) Handles ToolStripMenuItem_RecentlyUsedFiles.DropDownItemClicked
+    Private Sub openRecentlyUsedFile(sender As Object, e As ToolStripItemClickedEventArgs) Handles ToolStripMenuItem_RecentlyUsedFiles.DropDownItemClicked
         Dim filename As String
         filename = e.ClickedItem.Text
         Call Me.Import_File(filename)
@@ -302,7 +302,7 @@ Public Class Wave
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
     ''' <remarks></remarks>
-    Private Sub Wave_DragDrop(ByVal sender As System.Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles MyBase.DragDrop
+    Private Sub Wave_DragDrop(sender As System.Object, e As System.Windows.Forms.DragEventArgs) Handles MyBase.DragDrop
 
         If (e.Data.GetDataPresent(DataFormats.FileDrop)) Then
 
@@ -322,7 +322,7 @@ Public Class Wave
     ''' </summary>
     ''' <param name="files">array of file paths</param>
     ''' <remarks></remarks>
-    Private Delegate Sub ImportDelegate(ByVal files() As String)
+    Private Delegate Sub ImportDelegate(files() As String)
 
     ''' <summary>
     ''' Processes the Wave.DragEnter event. Sets DragEventArgs.Effect to Copy if the dragged object consist of files
@@ -330,7 +330,7 @@ Public Class Wave
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
     ''' <remarks></remarks>
-    Private Sub Wave_DragEnter(ByVal sender As System.Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles MyBase.DragEnter
+    Private Sub Wave_DragEnter(sender As System.Object, e As System.Windows.Forms.DragEventArgs) Handles MyBase.DragEnter
         If (e.Data.GetDataPresent(DataFormats.FileDrop)) Then
             e.Effect = DragDropEffects.Copy
         Else
@@ -344,7 +344,7 @@ Public Class Wave
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
     ''' <remarks></remarks>
-    Private Sub Wave_KeyDown(ByVal sender As System.Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles MyBase.KeyDown
+    Private Sub Wave_KeyDown(sender As System.Object, e As System.Windows.Forms.KeyEventArgs) Handles MyBase.KeyDown
 
         If e.Control And e.KeyCode = Keys.V Then
             'Ctrl+V pressed
@@ -492,7 +492,7 @@ Public Class Wave
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
     ''' <remarks></remarks>
-    Private Sub TChart1_ZoomChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles TChart1.Scroll, TChart1.Zoomed, TChart1.UndoneZoom
+    Private Sub TChart1_ZoomChanged(sender As Object, e As System.EventArgs) Handles TChart1.Scroll, TChart1.Zoomed, TChart1.UndoneZoom
         If (Me.ChartMinX <> Me.ChartMaxX) Then
             Call Me.viewportChanged()
             Me.selectionMade = True
@@ -679,7 +679,7 @@ Public Class Wave
     ''' </summary>
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
-    Private Sub OverviewChart_MouseUp(ByVal sender As System.Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles TChart2.MouseUp
+    Private Sub OverviewChart_MouseUp(sender As System.Object, e As System.Windows.Forms.MouseEventArgs) Handles TChart2.MouseUp
 
         Me.TChart2.Cursor = Cursors.Default
 
@@ -740,7 +740,7 @@ Public Class Wave
 
     'TChart2 DoubleClick
     '*******************
-    Private Sub TChart2_DoubleClick(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TChart2.DoubleClick
+    Private Sub TChart2_DoubleClick(sender As System.Object, e As System.EventArgs) Handles TChart2.DoubleClick
         Call Steema.TeeChart.Editor.Show(Me.TChart2)
     End Sub
 
@@ -750,7 +750,7 @@ Public Class Wave
     ''' <remarks>
     ''' Wird für jede gelöschte Serie ein Mal aufgerufen.
     ''' </remarks>
-    Private Sub TChart1_SeriesRemoved(ByVal sender As Object, ByVal e As System.EventArgs) Handles ChartListBox1.RemovedSeries
+    Private Sub TChart1_SeriesRemoved(sender As Object, e As System.EventArgs) Handles ChartListBox1.RemovedSeries
 
         Dim title As String
         Dim id_removed As Integer
@@ -894,7 +894,7 @@ Public Class Wave
 
     'Neu
     '***
-    Private Sub Neu_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_New.Click
+    Private Sub Neu_Click(sender As System.Object, e As System.EventArgs) Handles ToolStripButton_New.Click
 
         Dim res As MsgBoxResult
 
@@ -939,7 +939,7 @@ Public Class Wave
 
     'Serie(n) importieren
     '********************
-    Private Sub Importieren_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem_ImportSeries.Click
+    Private Sub Importieren_Click(sender As System.Object, e As System.EventArgs) Handles ToolStripMenuItem_ImportSeries.Click
         Me.OpenFileDialog1.Title = "Import time series"
         Me.OpenFileDialog1.Filter = FileFormatBase.FileFilter
         If (Me.OpenFileDialog1.ShowDialog() = Windows.Forms.DialogResult.OK) Then
@@ -949,7 +949,7 @@ Public Class Wave
 
     'TEN-Datei laden
     '****************
-    Private Sub TENLaden_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem_LoadTEN.Click
+    Private Sub TENLaden_Click(sender As System.Object, e As System.EventArgs) Handles ToolStripMenuItem_LoadTEN.Click
         Me.OpenFileDialog1.Title = "Load TEN file"
         Me.OpenFileDialog1.Filter = FileFilter_TEN
         If (Me.OpenFileDialog1.ShowDialog() = Windows.Forms.DialogResult.OK) Then
@@ -967,7 +967,7 @@ Public Class Wave
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
     ''' <remarks></remarks>
-    Private Sub SaveProjectFile_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem_SaveProjectFile.Click
+    Private Sub SaveProjectFile_Click(sender As System.Object, e As System.EventArgs) Handles ToolStripMenuItem_SaveProjectFile.Click
 
         Dim dlgres As DialogResult
         Dim projectfile As String
@@ -1031,19 +1031,19 @@ Public Class Wave
 
     'Teechart Export
     '***************
-    Private Sub SaveChart_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem_SaveChart.Click
+    Private Sub SaveChart_Click(sender As System.Object, e As System.EventArgs) Handles ToolStripMenuItem_SaveChart.Click
         Call Me.TChart1.Export.ShowExportDialog()
     End Sub
 
     'Zeitreihen Export
     '*****************
-    Private Sub ExportZeitreihe_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem_ExportSeries.Click, valuesDialog.Button_ExportValues_Clicked
+    Private Sub ExportZeitreihe_Click(sender As System.Object, e As System.EventArgs) Handles ToolStripMenuItem_ExportSeries.Click, valuesDialog.Button_ExportValues_Clicked
         Call ExportZeitreihe()
     End Sub
 
     'Serie eingeben
     '**************
-    Private Sub Eingeben_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem_EnterSeries.Click
+    Private Sub Eingeben_Click(sender As System.Object, e As System.EventArgs) Handles ToolStripMenuItem_EnterSeries.Click
         Dim SeriesEditor As New SeriesEditorDialog()
         If (SeriesEditor.ShowDialog() = Windows.Forms.DialogResult.OK) Then
             Call Me.Import_Series(SeriesEditor.Zeitreihe)
@@ -1052,7 +1052,7 @@ Public Class Wave
 
     'Zeitreihe zuschneiden
     '*********************
-    Private Sub Zuschneiden_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_Cut.Click
+    Private Sub Zuschneiden_Click(sender As System.Object, e As System.EventArgs) Handles ToolStripButton_Cut.Click
 
         Dim id As String
         Dim ids As List(Of Integer)
@@ -1100,7 +1100,7 @@ Public Class Wave
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
     ''' <remarks></remarks>
-    Private Sub ToolStripButton_Merge_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_Merge.Click
+    Private Sub ToolStripButton_Merge_Click(sender As System.Object, e As System.EventArgs) Handles ToolStripButton_Merge.Click
 
         Dim dlg As MergeSeriesDialog
         Dim dlgResult As DialogResult
@@ -1155,7 +1155,7 @@ Public Class Wave
 
     'Edit Chart
     '**********
-    Private Sub EditChart_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_EditChart.Click, TChart1.DoubleClick
+    Private Sub EditChart_Click(sender As System.Object, e As System.EventArgs) Handles ToolStripButton_EditChart.Click, TChart1.DoubleClick
         Call Steema.TeeChart.Editor.Show(Me.TChart1)
     End Sub
 
@@ -1458,7 +1458,7 @@ Public Class Wave
 
     'Analysieren
     '***********
-    Private Sub Analyse(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_Analysis.Click
+    Private Sub Analyse(sender As System.Object, e As System.EventArgs) Handles ToolStripButton_Analysis.Click
 
         'Wenn keine Zeitreihen vorhanden, abbrechen!
         If (Me.TimeSeriesDict.Count < 1) Then
@@ -1545,7 +1545,7 @@ Public Class Wave
     ''' Properties button clicked
     ''' </summary>
     ''' <remarks></remarks>
-    Private Sub ToolStripButton_Properties_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_Properties.Click
+    Private Sub ToolStripButton_Properties_Click(sender As System.Object, e As System.EventArgs) Handles ToolStripButton_Properties.Click
         propDialog.Update(Me.TimeSeriesDict.Values.ToList)
         propDialog.Show()
         propDialog.BringToFront()
@@ -1565,7 +1565,7 @@ Public Class Wave
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
     ''' <remarks></remarks>
-    Private Sub ToolStripButton_ShowNaNValues_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_ShowNaNValues.Click
+    Private Sub ToolStripButton_ShowNaNValues_Click(sender As System.Object, e As System.EventArgs) Handles ToolStripButton_ShowNaNValues.Click
 
         Dim processSeries As Boolean
         Dim nanStart, nanEnd, bandStart, bandEnd As DateTime
@@ -1683,7 +1683,7 @@ Public Class Wave
     ''' Convert error values button clicked
     ''' </summary>
     ''' <remarks></remarks>
-    Private Sub ToolStripButton_ConvertErrorValues_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_ConvertErrorValues.Click
+    Private Sub ToolStripButton_ConvertErrorValues_Click(sender As System.Object, e As System.EventArgs) Handles ToolStripButton_ConvertErrorValues.Click
         'Abort if no time series available!
         If (Me.TimeSeriesDict.Count < 1) Then
             MsgBox("No time series available!", MsgBoxStyle.Exclamation)
@@ -1705,7 +1705,7 @@ Public Class Wave
     ''' Remove error values button clicked
     ''' </summary>
     ''' <remarks></remarks>
-    Private Sub ToolStripButton_RemoveNaNValues_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_RemoveNaNValues.Click
+    Private Sub ToolStripButton_RemoveNaNValues_Click(sender As System.Object, e As System.EventArgs) Handles ToolStripButton_RemoveNaNValues.Click
 
         Dim dlgResult As DialogResult
         Dim ids As List(Of Integer)
@@ -1738,32 +1738,32 @@ Public Class Wave
 
     'Drucken
     '*******
-    Private Sub Drucken_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_Print.Click
+    Private Sub Drucken_Click(sender As System.Object, e As System.EventArgs) Handles ToolStripButton_Print.Click
         Call Me.TChart1.Printer.Preview()
     End Sub
 
     'Kopieren (als PNG)
     '******************
-    Private Sub Kopieren_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_Copy.Click
+    Private Sub Kopieren_Click(sender As System.Object, e As System.EventArgs) Handles ToolStripButton_Copy.Click
         Call Me.TChart1.Export.Image.PNG.CopyToClipboard()
     End Sub
 
     'Log anzeigen
     '************
-    Private Sub ShowLog_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripStatusLabel_Log.Click, ToolStripStatusLabel_Errors.Click, ToolStripStatusLabel_Warnings.Click
+    Private Sub ShowLog_Click(sender As System.Object, e As System.EventArgs) Handles ToolStripStatusLabel_Log.Click, ToolStripStatusLabel_Errors.Click, ToolStripStatusLabel_Warnings.Click
         'LogWindow anzeigen
         Call Log.ShowLogWindow()
     End Sub
 
     'Übersicht an/aus
     '****************
-    Private Sub Übersicht_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_ToggleOverview.Click
+    Private Sub Übersicht_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles ToolStripButton_ToggleOverview.Click
 
         Call Übersicht_Toggle(ToolStripButton_ToggleOverview.Checked)
 
     End Sub
 
-    Private Sub Übersicht_Toggle(ByVal showÜbersicht As Boolean)
+    Private Sub Übersicht_Toggle(showÜbersicht As Boolean)
         If (showÜbersicht) Then
             Me.SplitContainer1.Panel1Collapsed = False
             Me.ToolStripButton_ToggleOverview.Checked = True
@@ -1776,7 +1776,7 @@ Public Class Wave
     ''' <summary>
     ''' Show Navigation button clicked
     ''' </summary>
-    Private Sub ShowNavigation_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_ToggleNavigation.Click
+    Private Sub ShowNavigation_Click(sender As System.Object, e As System.EventArgs) Handles ToolStripButton_ToggleNavigation.Click
         Call Me.navigationToggle(Me.ToolStripButton_ToggleNavigation.Checked)
     End Sub
 
@@ -1825,7 +1825,7 @@ Public Class Wave
     ''' <summary>
     ''' Zoom previous button clicked
     ''' </summary>
-    Private Sub ToolStripButton_ZoomPrevious_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_ZoomPrevious.Click
+    Private Sub ToolStripButton_ZoomPrevious_Click(sender As System.Object, e As System.EventArgs) Handles ToolStripButton_ZoomPrevious.Click
 
         If ZoomHistoryIndex >= 1 And Me.ZoomHistory.Count >= (ZoomHistoryIndex - 1) Then
             Dim prevIndex As Integer = ZoomHistoryIndex - 1
@@ -1877,7 +1877,7 @@ Public Class Wave
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
     ''' <remarks>creates the dropdown items from the currently loaded series</remarks>
-    Private Sub ToolStripDropDownButtonZoomToSeries_ButtonClick(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripDropDownButton_ZoomToSeries.DropDownOpening
+    Private Sub ToolStripDropDownButtonZoomToSeries_ButtonClick(sender As System.Object, e As System.EventArgs) Handles ToolStripDropDownButton_ZoomToSeries.DropDownOpening
 
         Dim items As ToolStripItem()
         Dim i As Integer
@@ -1902,7 +1902,7 @@ Public Class Wave
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
     ''' <remarks></remarks>
-    Private Sub ZoomToSeries_Click(ByVal sender As Object, ByVal e As System.EventArgs)
+    Private Sub ZoomToSeries_Click(sender As Object, e As System.EventArgs)
         Dim id As Integer
         'try to parse the time series Id from ToolstripMenuItem.Name
         If Integer.TryParse(CType(sender, ToolStripMenuItem).Name, id) Then
@@ -1915,7 +1915,7 @@ Public Class Wave
     ''' </summary>
     ''' <param name="id">ID of the time series</param>
     ''' <remarks></remarks>
-    Private Sub ZoomToSeries(ByVal id As Integer)
+    Private Sub ZoomToSeries(id As Integer)
         Dim startdate, enddate As DateTime
 
         If Me.TimeSeriesDict.ContainsKey(id) Then
@@ -1936,7 +1936,7 @@ Public Class Wave
     ''' <summary>
     ''' Zoom All button clicked
     ''' </summary>
-    Private Sub ToolStripButton_ZoomAll_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_ZoomAll.Click
+    Private Sub ToolStripButton_ZoomAll_Click(sender As System.Object, e As System.EventArgs) Handles ToolStripButton_ZoomAll.Click
 
         'save the current zoom snapshot
         Call Me.saveZoomSnapshot()
@@ -1954,7 +1954,7 @@ Public Class Wave
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
     ''' <remarks></remarks>
-    Private Sub ToolStripButton_AutoAdjustYAxis_CheckedChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles ToolStripButton_AutoAdjustYAxes.CheckedChanged
+    Private Sub ToolStripButton_AutoAdjustYAxis_CheckedChanged(sender As Object, e As System.EventArgs) Handles ToolStripButton_AutoAdjustYAxes.CheckedChanged
         If Me.ToolStripButton_AutoAdjustYAxes.Checked Then
             Call Me.viewportChanged()
         Else
@@ -1971,7 +1971,7 @@ Public Class Wave
     ''' <summary>
     ''' Löscht alle vorhandenen Serien und liest alle importierten Zeitreihen neu ein
     ''' </summary>
-    Private Sub RefreshFromFile(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem_ReloadFromFiles.Click
+    Private Sub RefreshFromFile(sender As System.Object, e As System.EventArgs) Handles ToolStripMenuItem_ReloadFromFiles.Click
 
         'TODO: keep time series that cannot be reloaded from file!
 
@@ -2089,7 +2089,7 @@ Public Class Wave
     ''' <summary>
     ''' About Click
     ''' </summary>
-    Private Sub About(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles AboutToolStripMenuItem.Click
+    Private Sub About(sender As System.Object, e As System.EventArgs) Handles AboutToolStripMenuItem.Click
         Dim about As New AboutBox()
         Call about.ShowDialog(Me)
     End Sub
@@ -2098,7 +2098,7 @@ Public Class Wave
     ''' Hilfe Click (URL zum Wiki)
     ''' </summary>
     ''' <remarks></remarks>
-    Private Sub Hilfe(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles HilfeToolStripMenuItem.Click
+    Private Sub Hilfe(sender As System.Object, e As System.EventArgs) Handles HilfeToolStripMenuItem.Click
         Process.Start(urlHelp)
     End Sub
 
@@ -2125,7 +2125,7 @@ Public Class Wave
     ''' Toggle visibility of the navigation
     ''' </summary>
     ''' <param name="showNavigation">if True, the navigation is shown, otherwise it is hidden</param>
-    Private Sub navigationToggle(ByVal showNavigation As Boolean)
+    Private Sub navigationToggle(showNavigation As Boolean)
         If showNavigation Then
             Me.TableLayoutPanel1.RowStyles(0).Height = 38
             Me.TableLayoutPanel1.RowStyles(2).Height = 36
@@ -2171,7 +2171,7 @@ Public Class Wave
     ''' </summary>
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
-    Private Sub navigationKeyDown(ByVal sender As System.Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles MaskedTextBox_NavStart.KeyDown, MaskedTextBox_NavEnd.KeyDown
+    Private Sub navigationKeyDown(sender As System.Object, e As System.Windows.Forms.KeyEventArgs) Handles MaskedTextBox_NavStart.KeyDown, MaskedTextBox_NavEnd.KeyDown
         CType(sender, MaskedTextBox).ForeColor = DefaultForeColor
         If e.KeyCode = Keys.Escape Then
             'reset navigation to correspond to chart
@@ -2185,7 +2185,7 @@ Public Class Wave
     ''' </summary>
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
-    Private Sub navigationTypeValidationCompleted(ByVal sender As System.Object, ByVal e As TypeValidationEventArgs) Handles MaskedTextBox_NavStart.TypeValidationCompleted, MaskedTextBox_NavEnd.TypeValidationCompleted
+    Private Sub navigationTypeValidationCompleted(sender As System.Object, e As TypeValidationEventArgs) Handles MaskedTextBox_NavStart.TypeValidationCompleted, MaskedTextBox_NavEnd.TypeValidationCompleted
         If Not e.IsValidInput Then
             e.Cancel = True
             CType(sender, MaskedTextBox).ForeColor = Color.Red
@@ -2212,7 +2212,7 @@ Public Class Wave
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
     ''' <remarks></remarks>
-    Private Sub navigationValidated(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MaskedTextBox_NavStart.Validated, MaskedTextBox_NavEnd.Validated
+    Private Sub navigationValidated(sender As System.Object, e As System.EventArgs) Handles MaskedTextBox_NavStart.Validated, MaskedTextBox_NavEnd.Validated
         If Not Me.isInitializing Then
             'save the current zoom snapshot
             Call Me.saveZoomSnapshot()
@@ -2341,7 +2341,7 @@ Public Class Wave
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
     ''' <remarks></remarks>
-    Private Sub Button_NavForwardBack_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button_NavBack.Click, Button_NavForward.Click
+    Private Sub Button_NavForwardBack_Click(sender As System.Object, e As System.EventArgs) Handles Button_NavBack.Click, Button_NavForward.Click
 
         Dim multiplier As Integer
         Dim xMinOld, xMinNew, xMaxOld, xMaxNew As DateTime
@@ -2409,7 +2409,7 @@ Public Class Wave
     ''' Handles main chart MouseDown event
     ''' Start a zooming or panning process, save zoom snapshot
     ''' </summary>
-    Private Sub TChart1_MouseDown(ByVal sender As System.Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles TChart1.MouseDown
+    Private Sub TChart1_MouseDown(sender As System.Object, e As System.Windows.Forms.MouseEventArgs) Handles TChart1.MouseDown
 
         If e.Button = Windows.Forms.MouseButtons.Left Then
             'start zoom process
@@ -2455,7 +2455,7 @@ Public Class Wave
     ''' </summary>
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
-    Private Sub TChart1_MouseMove(ByVal sender As System.Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles TChart1.MouseMove
+    Private Sub TChart1_MouseMove(sender As System.Object, e As System.Windows.Forms.MouseEventArgs) Handles TChart1.MouseMove
 
         If Me.ChartMouseZoomDragging Then
             Dim endValue As Double
@@ -2490,7 +2490,7 @@ Public Class Wave
     ''' Handles main chart MouseUp event
     ''' Complete any started zoom or pan process, update cursor
     ''' </summary>
-    Private Sub TChart1_MouseUp(ByVal sender As System.Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles TChart1.MouseUp
+    Private Sub TChart1_MouseUp(sender As System.Object, e As System.Windows.Forms.MouseEventArgs) Handles TChart1.MouseUp
         If Me.ChartMouseZoomDragging Then
             'complete the zoom process
             Me.ChartMouseZoomDragging = False
@@ -2596,7 +2596,7 @@ Public Class Wave
     ''' </summary>
     ''' <param name="projectfile">Path to the Wave project file</param>
     ''' <remarks></remarks>
-    Private Sub Load_WVP(ByVal projectfile As String)
+    Private Sub Load_WVP(projectfile As String)
 
         Try
             Dim tsList As List(Of TimeSeries)
@@ -2638,7 +2638,7 @@ Public Class Wave
     ''' </summary>
     ''' <param name="FileName">Pfad zur TEN-Datei</param>
     ''' <remarks></remarks>
-    Private Sub Load_TEN(ByVal FileName As String)
+    Private Sub Load_TEN(FileName As String)
 
         Dim result As DialogResult
         Dim i As Integer
@@ -2822,7 +2822,7 @@ Public Class Wave
     ''' </summary>
     ''' <param name="files">array of file paths</param>
     ''' <remarks></remarks>
-    Public Sub Import_Files(ByVal files() As String)
+    Public Sub Import_Files(files() As String)
         For Each file As String In files
             Call Me.Import_File(file)
         Next
@@ -2832,7 +2832,7 @@ Public Class Wave
     ''' Import a file
     ''' </summary>
     ''' <param name="file">file path</param>
-    Public Sub Import_File(ByVal file As String)
+    Public Sub Import_File(file As String)
 
         Dim Datei As FileFormatBase
         Dim ok As Boolean
@@ -2972,7 +2972,7 @@ Public Class Wave
     ''' </summary>
     ''' <param name="clipboardtext">text content of the clipboard</param>
     ''' <remarks></remarks>
-    Private Sub loadFromClipboard_TALSIM(ByVal clipboardtext As String)
+    Private Sub loadFromClipboard_TALSIM(clipboardtext As String)
 
         'Examples:
 
@@ -3139,7 +3139,7 @@ Public Class Wave
     ''' </summary>
     ''' <param name="zre">the time series</param>
     ''' <remarks>saves and then display the time series</remarks>
-    Public Sub Import_Series(ByVal zre As TimeSeries, Optional ByVal Display As Boolean = True)
+    Public Sub Import_Series(zre As TimeSeries, Optional Display As Boolean = True)
 
         'Serie abspeichen
         Me.AddZeitreihe(zre)
@@ -3154,7 +3154,7 @@ Public Class Wave
     ''' Eine Zeitreihe in den Diagrammen anzeigen
     ''' </summary>
     ''' <param name="zre">Die anzuzeigende Zeitreihe</param>
-    Private Sub Display_Series(ByVal zre As TimeSeries)
+    Private Sub Display_Series(zre As TimeSeries)
 
         'BUG 749: Remove nodes if necessary
         If zre.StartDate < Constants.minOADate Then
@@ -3272,7 +3272,7 @@ Public Class Wave
     ''' Delete a TimeSeries
     ''' </summary>
     ''' <param name="id">TimeSeries Id</param>
-    Private Sub DeleteTimeSeries(ByVal id As Integer) Handles propDialog.SeriesDeleted
+    Private Sub DeleteTimeSeries(id As Integer) Handles propDialog.SeriesDeleted
 
         'Remove from main diagram
         For i As Integer = Me.TChart1.Series.Count - 1 To 0 Step -1
@@ -3306,7 +3306,7 @@ Public Class Wave
     ''' If no axis exists for the given unit, a new axis is created
     ''' </summary>
     ''' <param name="unit">The unit</param>
-    Private Sub assignSeriesToAxis(ByRef series As Steema.TeeChart.Styles.Series, ByVal unit As String)
+    Private Sub assignSeriesToAxis(ByRef series As Steema.TeeChart.Styles.Series, unit As String)
 
         If IsNothing(Me.TChart1.Axes.Left.Tag) Then
             'use left axis for the first time
@@ -3385,7 +3385,7 @@ Public Class Wave
     ''' Handles axis deleted in the AxisDialog
     ''' </summary>
     ''' <param name="axisname"></param>
-    Private Sub axisDeleted(ByVal axisname As String) Handles axisDialog.AxisDeleted
+    Private Sub axisDeleted(axisname As String) Handles axisDialog.AxisDeleted
         Dim axisnumber As Integer
         Dim m As Match = Regex.Match(axisname, "Custom (\d+)")
         If m.Success Then

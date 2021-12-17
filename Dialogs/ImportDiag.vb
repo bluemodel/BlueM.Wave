@@ -70,7 +70,7 @@ Friend Class ImportDiag
             Next
             Return format
         End Get
-        Set(ByVal datumsformat As String)
+        Set(datumsformat As String)
             'unescape special characters
             datumsformat = datumsformat.Replace("\", "")
             'add to combobox
@@ -125,7 +125,7 @@ Friend Class ImportDiag
 
     'Form laden
     '**********
-    Private Sub Form_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
+    Private Sub Form_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
         'Combobox Trennzeichen initialisieren
         Me.ComboBox_Separator.BeginUpdate()
@@ -234,7 +234,7 @@ Friend Class ImportDiag
 
     'OK Button gedrückt
     '******************
-    Private Sub Button_OK_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button_OK.Click
+    Private Sub Button_OK_Click(sender As Object, e As EventArgs) Handles Button_OK.Click
 
         'Selected series
         If (Me.ListBox_Series.SelectedItems.Count < 1) Then
@@ -251,7 +251,7 @@ Friend Class ImportDiag
 
     'Benutzereingabe verarbeiten
     '***************************
-    Private Sub inputChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles _
+    Private Sub inputChanged(sender As Object, e As EventArgs) Handles _
         NumericUpDown_LineTitles.TextChanged,
         NumericUpDown_LineUnits.TextChanged,
         NumericUpDown_LineData.TextChanged,
@@ -457,7 +457,7 @@ Friend Class ImportDiag
     ''' </summary>
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
-    Private Sub Select_All(ByVal sender As Object, ByVal e As EventArgs) Handles Button_SelectAll.Click
+    Private Sub Select_All(sender As Object, e As EventArgs) Handles Button_SelectAll.Click
 
         Me.IsInitializing = True
         Me.ListBox_Series.BeginUpdate()
@@ -470,15 +470,15 @@ Friend Class ImportDiag
 
     End Sub
 
-    Private Sub PictureBox_DateFormatHelp_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PictureBox_DateFormatHelp.Click
+    Private Sub PictureBox_DateFormatHelp_Click(sender As Object, e As EventArgs) Handles PictureBox_DateFormatHelp.Click
         Process.Start("https://docs.microsoft.com/en-us/dotnet/standard/base-types/custom-date-and-time-format-strings")
     End Sub
 
-    Private Sub PictureBox_DateFormatHelp_MouseHover(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PictureBox_DateFormatHelp.MouseHover
+    Private Sub PictureBox_DateFormatHelp_MouseHover(sender As Object, e As EventArgs) Handles PictureBox_DateFormatHelp.MouseHover
         Cursor = Cursors.Hand
     End Sub
 
-    Private Sub PictureBox_DateFormatHelp_MouseLeave(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PictureBox_DateFormatHelp.MouseLeave
+    Private Sub PictureBox_DateFormatHelp_MouseLeave(sender As Object, e As EventArgs) Handles PictureBox_DateFormatHelp.MouseLeave
         Cursor = Cursors.Default
     End Sub
 

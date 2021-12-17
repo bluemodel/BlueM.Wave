@@ -105,7 +105,7 @@ Friend Class GoodnessOfFit
     ''' <param name="ts_s">timeseries with simulated values</param>
     ''' <returns>GoF parameters</returns>
     ''' <remarks></remarks>
-    Private Shared Function calculateGOF(ByVal ts_o As TimeSeries, ByVal ts_s As TimeSeries) As GoF
+    Private Shared Function calculateGOF(ts_o As TimeSeries, ts_s As TimeSeries) As GoF
 
         Dim i As Integer
         Dim errors() As Double

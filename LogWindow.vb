@@ -93,7 +93,7 @@ Friend Class LogWindow
 
     'Form schließen
     '**************
-    Private Sub LogWindow_FormClosing(ByVal sender As System.Object, ByVal e As System.Windows.Forms.FormClosingEventArgs) Handles MyBase.FormClosing
+    Private Sub LogWindow_FormClosing(sender As System.Object, e As System.Windows.Forms.FormClosingEventArgs) Handles MyBase.FormClosing
 
         'verhindern, dass das Formular komplett gelöscht wird
         e.Cancel = True
@@ -103,11 +103,11 @@ Friend Class LogWindow
 
     End Sub
 
-    Private Sub ToolStripButton_New_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_Clear.Click
+    Private Sub ToolStripButton_New_Click(sender As System.Object, e As System.EventArgs) Handles ToolStripButton_Clear.Click
         Call Log.ClearLog()
     End Sub
 
-    Private Sub ToolStripButton_Save_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_Save.Click
+    Private Sub ToolStripButton_Save_Click(sender As System.Object, e As System.EventArgs) Handles ToolStripButton_Save.Click
         If (Me.SaveFileDialog1.ShowDialog = Windows.Forms.DialogResult.OK) Then
             Me.TextBox_Log.SaveFile(Me.SaveFileDialog1.FileName, RichTextBoxStreamType.PlainText)
         End If

@@ -52,7 +52,7 @@ Public Class ZRXP
     ''' </summary>
     ''' <param name="file">path to the file</param>
     ''' <remarks></remarks>
-    Public Sub New(ByVal file As String, Optional ByVal ReadAllNow As Boolean = False)
+    Public Sub New(file As String, Optional ReadAllNow As Boolean = False)
 
         Call MyBase.New(file)
 
@@ -79,7 +79,7 @@ Public Class ZRXP
     ''' <param name="file">path to file</param>
     ''' <returns>Boolean</returns>
     ''' <remarks>Checks whether the first or second line starts with the string "#ZRXP"</remarks>
-    Public Shared Function verifyFormat(ByVal file As String) As Boolean
+    Public Shared Function verifyFormat(file As String) As Boolean
 
         Dim line As String
         Dim isZRXP As Boolean = False
@@ -294,7 +294,7 @@ Public Class ZRXP
     ''' <summary>
     ''' Sets default metadata values for a time series corresponding to the ZRXP file format
     ''' </summary>
-    Public Overloads Shared Sub setDefaultMetadata(ByVal ts As TimeSeries)
+    Public Overloads Shared Sub setDefaultMetadata(ts As TimeSeries)
         'Make sure all required keys exist
         ts.Metadata.AddKeys(ZRXP.MetadataKeys)
         'Set default values
@@ -315,7 +315,7 @@ Public Class ZRXP
     ''' <param name="ts">the time series to export</param>
     ''' <param name="file">path to the file</param>
     ''' <remarks></remarks>
-    Public Shared Sub Write_File(ByRef ts As TimeSeries, ByVal file As String)
+    Public Shared Sub Write_File(ByRef ts As TimeSeries, file As String)
 
         Dim strwrite As StreamWriter
 

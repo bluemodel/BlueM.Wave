@@ -27,7 +27,7 @@
 '
 Friend Class GoodnessOfFit_Dialog
 
-    Public Sub New(ByVal zre1 As String, ByVal zre2 As String)
+    Public Sub New(zre1 As String, zre2 As String)
 
         ' This call is required by the Windows Form Designer.
         InitializeComponent()

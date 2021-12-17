@@ -42,7 +42,7 @@ Friend Class CutDialog
 
     'Konstruktor
     '***********
-    Public Sub New(ByRef zeitreihen As List(Of TimeSeries), ByVal initialStart As DateTime, ByVal initialEnd As DateTime)
+    Public Sub New(ByRef zeitreihen As List(Of TimeSeries), initialStart As DateTime, initialEnd As DateTime)
 
         Me.IsInitializing = True
 
@@ -81,7 +81,7 @@ Friend Class CutDialog
 
     'Zuzuschneidende Zeitreihe wurde ausgewählt
     '******************************************
-    Private Sub ComboBox_ZeitreiheCut_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ComboBox_ZeitreiheCut.SelectedIndexChanged
+    Private Sub ComboBox_ZeitreiheCut_SelectedIndexChanged(sender As System.Object, e As System.EventArgs) Handles ComboBox_ZeitreiheCut.SelectedIndexChanged
 
         If (Me.IsInitializing) Then
             Exit Sub
@@ -131,7 +131,7 @@ Friend Class CutDialog
     ''' </summary>
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
-    Private Sub MaskedTextBoxKeyDown(ByVal sender As System.Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles MaskedTextBox_cutStart.KeyDown, MaskedTextBox_cutEnd.KeyDown
+    Private Sub MaskedTextBoxKeyDown(sender As System.Object, e As System.Windows.Forms.KeyEventArgs) Handles MaskedTextBox_cutStart.KeyDown, MaskedTextBox_cutEnd.KeyDown
         CType(sender, MaskedTextBox).ForeColor = DefaultForeColor
     End Sub
 
@@ -141,7 +141,7 @@ Friend Class CutDialog
     ''' </summary>
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
-    Private Sub MaskedTextBoxValidationCompleted(ByVal sender As System.Object, ByVal e As TypeValidationEventArgs) Handles MaskedTextBox_cutStart.TypeValidationCompleted, MaskedTextBox_cutEnd.TypeValidationCompleted
+    Private Sub MaskedTextBoxValidationCompleted(sender As System.Object, e As TypeValidationEventArgs) Handles MaskedTextBox_cutStart.TypeValidationCompleted, MaskedTextBox_cutEnd.TypeValidationCompleted
         If Not e.IsValidInput Then
             e.Cancel = True
             CType(sender, MaskedTextBox).ForeColor = Color.Red
@@ -153,7 +153,7 @@ Friend Class CutDialog
     ''' </summary>
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
-    Private Sub MaskedTextBox_cutStart_Leave(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MaskedTextBox_cutStart.Leave
+    Private Sub MaskedTextBox_cutStart_Leave(sender As System.Object, e As System.EventArgs) Handles MaskedTextBox_cutStart.Leave
 
         If (Me.IsInitializing) Then
             Exit Sub
@@ -167,7 +167,7 @@ Friend Class CutDialog
     ''' </summary>
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
-    Private Sub MaskedTextBox_cutEnd_Leave(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MaskedTextBox_cutEnd.Leave
+    Private Sub MaskedTextBox_cutEnd_Leave(sender As System.Object, e As System.EventArgs) Handles MaskedTextBox_cutEnd.Leave
 
         If (Me.IsInitializing) Then
             Exit Sub
@@ -196,7 +196,7 @@ Friend Class CutDialog
     ''' </summary>
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
-    Private Sub ComboBox_ZeitreiheRef_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ComboBox_RefSeries.SelectedIndexChanged
+    Private Sub ComboBox_ZeitreiheRef_SelectedIndexChanged(sender As System.Object, e As System.EventArgs) Handles ComboBox_RefSeries.SelectedIndexChanged
 
         If (Me.IsInitializing) Then
             Exit Sub
@@ -256,7 +256,7 @@ Friend Class CutDialog
 
     'OK gedrückt
     '***********
-    Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button_OK.Click
+    Private Sub OK_Button_Click(sender As System.Object, e As System.EventArgs) Handles Button_OK.Click
 
         Dim zre, ts_cut As TimeSeries
 
@@ -294,7 +294,7 @@ Friend Class CutDialog
 
     End Sub
 
-    Private Sub Button_Cancel_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button_Cancel.Click
+    Private Sub Button_Cancel_Click(sender As System.Object, e As System.EventArgs) Handles Button_Cancel.Click
         Call Me.Close()
     End Sub
 
