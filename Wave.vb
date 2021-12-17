@@ -251,7 +251,7 @@ Public Class Wave
     ''' <summary>
     ''' Wenn sich der Log verändert hat, Statustext aktualisieren
     ''' </summary>
-    Private Sub updateStatusLabel(level As Log.levels, msg As String) Handles logInstance.LogMsgAdded
+    Private Sub UpdateStatusLabel(level As Log.levels, msg As String) Handles logInstance.LogMsgAdded
         'remove any linebreak at the beginning
         If msg.StartsWith(eol) Then
             msg = msg.Substring(eol.Length)
@@ -362,13 +362,13 @@ Public Class Wave
 
         'Charts zurücksetzen
         Me.TChart1.Clear()
-        Call Wave.formatChart(Me.TChart1.Chart)
+        Call Wave.FormatChart(Me.TChart1.Chart)
 
         'add chart event listener
         Me.TChart1.Chart.Listeners.Add(New ChartEventListener(Me.TChart1.Chart, Me.TimeSeriesDict))
 
         Me.TChart2.Clear()
-        Call Wave.formatChart(Me.TChart2.Chart)
+        Call Wave.FormatChart(Me.TChart2.Chart)
         Me.TChart2.Panel.Brush.Color = Color.FromArgb(239, 239, 239)
         Me.TChart2.Walls.Back.Color = Color.FromArgb(239, 239, 239)
         Me.TChart2.Header.Visible = False
@@ -494,7 +494,7 @@ Public Class Wave
     ''' <remarks></remarks>
     Private Sub TChart1_ZoomChanged(sender As Object, e As System.EventArgs) Handles TChart1.Scroll, TChart1.Zoomed, TChart1.UndoneZoom
         If (Me.ChartMinX <> Me.ChartMaxX) Then
-            Call Me.viewportChanged()
+            Call Me.ViewportChanged()
             Me.selectionMade = True
         End If
     End Sub
@@ -503,7 +503,7 @@ Public Class Wave
     ''' Updates the colorband to correspond to the currently displayed timespan of the main chart
     ''' </summary>
     ''' <remarks></remarks>
-    Private Sub updateOverviewZoomExtent()
+    Private Sub UpdateOverviewZoomExtent()
         Me.colorBandOverview.Start = Me.ChartMinX.ToOADate()
         Me.colorBandOverview.End = Me.ChartMaxX.ToOADate()
     End Sub
@@ -513,13 +513,13 @@ Public Class Wave
     ''' to the currently displayed viewport
     ''' </summary>
     ''' <remarks></remarks>
-    Private Sub viewportChanged()
+    Private Sub ViewportChanged()
 
         'Update navigation
-        Call Me.updateNavigation()
+        Call Me.UpdateNavigation()
 
         'Update overview
-        Call Me.updateOverviewZoomExtent()
+        Call Me.UpdateOverviewZoomExtent()
 
         'Auto-adjust Y-axes to current viewport
         If Me.AutoAdjustYAxes Then
@@ -712,28 +712,28 @@ Public Class Wave
                     Me.colorBandOverview.End = endValue
 
                     'save the current zoom snapshot
-                    Call Me.saveZoomSnapshot()
+                    Call Me.SaveZoomSnapshot()
 
                     'set the new viewport on the main chart
                     Me.ChartMinX = DateTime.FromOADate(Me.colorBandOverview.Start)
                     Me.ChartMaxX = DateTime.FromOADate(Me.colorBandOverview.End)
 
                     Me.selectionMade = True
-                    Call Me.viewportChanged()
+                    Call Me.ViewportChanged()
                 End If
 
             ElseIf e.Button = MouseButtons.Right Then
                 'complete the pan process
 
                 'save the current zoom snapshot
-                Call Me.saveZoomSnapshot()
+                Call Me.SaveZoomSnapshot()
 
                 'set the new viewport on the main chart
                 Me.ChartMinX = DateTime.FromOADate(Me.colorBandOverview.Start)
                 Me.ChartMaxX = DateTime.FromOADate(Me.colorBandOverview.End)
 
                 Me.selectionMade = True
-                Call Me.viewportChanged()
+                Call Me.ViewportChanged()
             End If
         End If
     End Sub
@@ -797,7 +797,7 @@ Public Class Wave
     ''' <summary>
     ''' Add the current zoom extent to the zoom history
     ''' </summary>
-    Private Sub saveZoomSnapshot()
+    Private Sub SaveZoomSnapshot()
 
         If ZoomHistoryIndex < (ZoomHistory.Count - 1) Then
             'if we are branching off from an old index, just remove the zoom history after the current index
@@ -928,7 +928,7 @@ Public Class Wave
         Me.ToolStripStatusLabel_Warnings.Image = My.Resources.warning_inactive
 
         'Update dialogs
-        Call Me.updateAxisDialog()
+        Call Me.UpdateAxisDialog()
         Call propDialog.Update(Me.TimeSeriesDict.Values.ToList)
         Call valuesDialog.Update(Me.TimeSeriesDict.Values.ToList)
 
@@ -1166,7 +1166,7 @@ Public Class Wave
     ''' <param name="e"></param>
     Private Sub ToolStripMenuItemColorPalette_Click(sender As Object, e As EventArgs) Handles ToolStripMenuItem_ColorPaletteMaterial.Click, ToolStripMenuItem_ColorPaletteDistinct.Click, ToolStripMenuItem_ColorPaletteWheel.Click, ToolStripMenuItem_ColorPaletteRandom.Click
         Dim colorPaletteName As String = CType(sender, ToolStripMenuItem).Text
-        setChartColorPalette(Helpers.getColorPalette(colorPaletteName))
+        SetChartColorPalette(Helpers.getColorPalette(colorPaletteName))
     End Sub
 
     ''' <summary>
@@ -1175,7 +1175,7 @@ Public Class Wave
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
     Private Sub ToolStripButton_AxisDialog_Click(sender As Object, e As EventArgs) Handles ToolStripButton_AxisDialog.Click
-        Call Me.updateAxisDialog()
+        Call Me.UpdateAxisDialog()
         Me.axisDialog.Show()
         Me.axisDialog.BringToFront()
     End Sub
@@ -1260,7 +1260,7 @@ Public Class Wave
     ''' <summary>
     ''' Update AxisDialog
     ''' </summary>
-    Private Sub updateAxisDialog()
+    Private Sub UpdateAxisDialog()
         'Wrap Left, Right and Custom axes
         Dim axisList As New List(Of AxisWrapper)
         axisList.Add(New AxisWrapper("Left", Me.TChart1.Axes.Left))
@@ -1757,14 +1757,18 @@ Public Class Wave
 
     'Übersicht an/aus
     '****************
-    Private Sub Übersicht_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles ToolStripButton_ToggleOverview.Click
+    Private Sub ToolStripButton_ToggleOverview_Clicked(sender As System.Object, e As System.EventArgs) Handles ToolStripButton_ToggleOverview.Click
 
-        Call Übersicht_Toggle(ToolStripButton_ToggleOverview.Checked)
+        Call ToggleOverviewPanel(ToolStripButton_ToggleOverview.Checked)
 
     End Sub
 
-    Private Sub Übersicht_Toggle(showÜbersicht As Boolean)
-        If (showÜbersicht) Then
+    ''' <summary>
+    ''' Toggles the overview panel's visibility
+    ''' </summary>
+    ''' <param name="show"></param>
+    Private Sub ToggleOverviewPanel(show As Boolean)
+        If (show) Then
             Me.SplitContainer1.Panel1Collapsed = False
             Me.ToolStripButton_ToggleOverview.Checked = True
         Else
@@ -1777,7 +1781,7 @@ Public Class Wave
     ''' Show Navigation button clicked
     ''' </summary>
     Private Sub ShowNavigation_Click(sender As System.Object, e As System.EventArgs) Handles ToolStripButton_ToggleNavigation.Click
-        Call Me.navigationToggle(Me.ToolStripButton_ToggleNavigation.Checked)
+        Call Me.ToggleNavigation(Me.ToolStripButton_ToggleNavigation.Checked)
     End Sub
 
     ''' <summary>
@@ -1789,7 +1793,7 @@ Public Class Wave
     Private Sub ToolStripButton_ZoomIn_Click(sender As Object, e As EventArgs) Handles ToolStripButton_ZoomIn.Click
 
         'save the current zoom snapshot
-        Call Me.saveZoomSnapshot()
+        Call Me.SaveZoomSnapshot()
 
         'zoom
         Dim displayRange As TimeSpan = Me.ChartMaxX - Me.ChartMinX
@@ -1797,7 +1801,7 @@ Public Class Wave
         Me.ChartMaxX = Me.ChartMaxX - New TimeSpan(0, 0, seconds:=displayRange.TotalSeconds * 0.125)
 
         Me.selectionMade = True
-        Call Me.viewportChanged()
+        Call Me.ViewportChanged()
 
     End Sub
 
@@ -1810,7 +1814,7 @@ Public Class Wave
     Private Sub ToolStripButton_ZoomOut_Click(sender As Object, e As EventArgs) Handles ToolStripButton_ZoomOut.Click
 
         'save the current zoom snapshot
-        Call Me.saveZoomSnapshot()
+        Call Me.SaveZoomSnapshot()
 
         'zoom
         Dim displayRange As TimeSpan = Me.ChartMaxX - Me.ChartMinX
@@ -1818,7 +1822,7 @@ Public Class Wave
         Me.ChartMaxX = Me.ChartMaxX + New TimeSpan(0, 0, seconds:=displayRange.TotalSeconds * 0.125)
 
         Me.selectionMade = True
-        Call Me.viewportChanged()
+        Call Me.ViewportChanged()
 
     End Sub
 
@@ -1831,13 +1835,13 @@ Public Class Wave
             Dim prevIndex As Integer = ZoomHistoryIndex - 1
             If ZoomHistoryIndex >= ZoomHistory.Count Then
                 'save the current zoom snapshot first
-                Call Me.saveZoomSnapshot()
+                Call Me.SaveZoomSnapshot()
             End If
             Dim extent As Tuple(Of Double, Double) = ZoomHistory(prevIndex)
             Me.ChartMinX = DateTime.FromOADate(extent.Item1)
             Me.ChartMaxX = DateTime.FromOADate(extent.Item2)
             ZoomHistoryIndex = prevIndex
-            Call Me.viewportChanged()
+            Call Me.ViewportChanged()
             Log.AddLogEntry(Log.levels.debug, "Zoomed to history index " & prevIndex)
         Else
             Log.AddLogEntry(Log.levels.debug, $"No zoom history before index {ZoomHistoryIndex} available!")
@@ -1860,7 +1864,7 @@ Public Class Wave
             Me.ChartMinX = DateTime.FromOADate(extent.Item1)
             Me.ChartMaxX = DateTime.FromOADate(extent.Item2)
             ZoomHistoryIndex += 1
-            Call Me.viewportChanged()
+            Call Me.ViewportChanged()
             Log.AddLogEntry(Log.levels.debug, "Zoomed to history index " & ZoomHistoryIndex)
         Else
             Log.AddLogEntry(Log.levels.debug, $"No zoom history after index {ZoomHistoryIndex} available!")
@@ -1922,12 +1926,12 @@ Public Class Wave
             startdate = Me.TimeSeriesDict(id).StartDate
             enddate = Me.TimeSeriesDict(id).EndDate
             'save the current zoom snapshot
-            Call Me.saveZoomSnapshot()
+            Call Me.SaveZoomSnapshot()
             'zoom
             Me.ChartMinX = startdate
             Me.ChartMaxX = enddate
             Me.selectionMade = True
-            Call Me.viewportChanged()
+            Call Me.ViewportChanged()
         Else
             'Series not found! Do nothing?
         End If
@@ -1939,13 +1943,13 @@ Public Class Wave
     Private Sub ToolStripButton_ZoomAll_Click(sender As System.Object, e As System.EventArgs) Handles ToolStripButton_ZoomAll.Click
 
         'save the current zoom snapshot
-        Call Me.saveZoomSnapshot()
+        Call Me.SaveZoomSnapshot()
 
         'reset the charts
         Me.selectionMade = False
         Call Me.UpdateChartExtents()
 
-        Call Me.viewportChanged()
+        Call Me.ViewportChanged()
     End Sub
 
     ''' <summary>
@@ -1956,7 +1960,7 @@ Public Class Wave
     ''' <remarks></remarks>
     Private Sub ToolStripButton_AutoAdjustYAxis_CheckedChanged(sender As Object, e As System.EventArgs) Handles ToolStripButton_AutoAdjustYAxes.CheckedChanged
         If Me.ToolStripButton_AutoAdjustYAxes.Checked Then
-            Call Me.viewportChanged()
+            Call Me.ViewportChanged()
         Else
             'Reset the Y axes to automatic
             Me.TChart1.Axes.Left.Automatic = True
@@ -2124,9 +2128,9 @@ Public Class Wave
     ''' <summary>
     ''' Toggle visibility of the navigation
     ''' </summary>
-    ''' <param name="showNavigation">if True, the navigation is shown, otherwise it is hidden</param>
-    Private Sub navigationToggle(showNavigation As Boolean)
-        If showNavigation Then
+    ''' <param name="show">if True, the navigation is shown, otherwise it is hidden</param>
+    Private Sub ToggleNavigation(show As Boolean)
+        If show Then
             Me.TableLayoutPanel1.RowStyles(0).Height = 38
             Me.TableLayoutPanel1.RowStyles(2).Height = 36
             Me.ToolStripButton_ToggleNavigation.Checked = True
@@ -2141,7 +2145,7 @@ Public Class Wave
     ''' Update the navigation based on the currently displayed timespan of the main chart
     ''' </summary>
     ''' <remarks></remarks>
-    Private Sub updateNavigation()
+    Private Sub UpdateNavigation()
 
         Dim xMin, xMax As DateTime
 
@@ -2160,7 +2164,7 @@ Public Class Wave
         Me.MaskedTextBox_NavEnd.ForeColor = DefaultForeColor
 
         'update the display range
-        Call Me.updateDisplayRange()
+        Call Me.UpdateDisplayRange()
 
         Me.isInitializing = False
     End Sub
@@ -2175,7 +2179,7 @@ Public Class Wave
         CType(sender, MaskedTextBox).ForeColor = DefaultForeColor
         If e.KeyCode = Keys.Escape Then
             'reset navigation to correspond to chart
-            Call Me.updateNavigation()
+            Call Me.UpdateNavigation()
         End If
     End Sub
 
@@ -2215,11 +2219,11 @@ Public Class Wave
     Private Sub navigationValidated(sender As System.Object, e As System.EventArgs) Handles MaskedTextBox_NavStart.Validated, MaskedTextBox_NavEnd.Validated
         If Not Me.isInitializing Then
             'save the current zoom snapshot
-            Call Me.saveZoomSnapshot()
+            Call Me.SaveZoomSnapshot()
             'Adjust the display range of the main chart
             Me.ChartMinX = CType(Me.MaskedTextBox_NavStart.Text(), DateTime)
             Me.ChartMaxX = CType(Me.MaskedTextBox_NavEnd.Text(), DateTime)
-            Call Me.viewportChanged()
+            Call Me.ViewportChanged()
             Me.selectionMade = True
         End If
     End Sub
@@ -2263,12 +2267,12 @@ Public Class Wave
         End Select
 
         'save the current zoom snapshot
-        Call Me.saveZoomSnapshot()
+        Call Me.SaveZoomSnapshot()
 
         'Set new max value for x axis
         Me.ChartMaxX = xMax
 
-        Call Me.viewportChanged()
+        Call Me.ViewportChanged()
 
         Me.selectionMade = True
 
@@ -2278,7 +2282,7 @@ Public Class Wave
     ''' Update the display range input fields to correspond to the chart
     ''' </summary>
     ''' <remarks></remarks>
-    Private Sub updateDisplayRange()
+    Private Sub UpdateDisplayRange()
 
         Dim xMin, xMax As DateTime
         Dim multiplier As Integer
@@ -2389,13 +2393,13 @@ Public Class Wave
         End Select
 
         'save the current zoom snapshot
-        Call Me.saveZoomSnapshot()
+        Call Me.SaveZoomSnapshot()
 
         'update chart
         Me.ChartMinX = xMinNew
         Me.ChartMaxX = xMaxNew
 
-        Call Me.viewportChanged()
+        Call Me.ViewportChanged()
 
         Me.selectionMade = True
 
@@ -2425,7 +2429,7 @@ Public Class Wave
                 End If
 
                 Me.TChart1.Cursor = Me.cursor_zoom
-                Call Me.saveZoomSnapshot()
+                Call Me.SaveZoomSnapshot()
 
                 Me.ChartMouseZoomDragging = True
                 Me.ChartMouseDragStartX = e.X
@@ -2443,7 +2447,7 @@ Public Class Wave
             Me.ChartMousePanning = True
             Me.ChartMouseDragStartX = e.X
             Me.ChartMousePanDisplayRange = TChart1.Axes.Bottom.Maximum - TChart1.Axes.Bottom.Minimum
-            Call Me.saveZoomSnapshot()
+            Call Me.SaveZoomSnapshot()
             Me.TChart1.Cursor = Me.cursor_pan
         End If
 
@@ -2480,7 +2484,7 @@ Public Class Wave
             Me.ChartMinX = DateTime.FromOADate(xMin)
             Me.ChartMaxX = DateTime.FromOADate(xMax)
             Me.selectionMade = True
-            Call Me.viewportChanged()
+            Call Me.ViewportChanged()
             'update drag start point
             Me.ChartMouseDragStartX = e.X
         End If
@@ -2513,13 +2517,13 @@ Public Class Wave
                 Log.AddLogEntry(Log.levels.debug, "Zoom end at " & DateTime.FromOADate(endValue))
 
                 'save the current zoom snapshot
-                Call Me.saveZoomSnapshot()
+                Call Me.SaveZoomSnapshot()
 
                 'set the new viewport 
                 Me.ChartMinX = DateTime.FromOADate(startValue)
                 Me.ChartMaxX = DateTime.FromOADate(endValue)
                 Me.selectionMade = True
-                Call Me.viewportChanged()
+                Call Me.ViewportChanged()
             End If
             'hide colorband
             Me.colorBandZoom.Active = False
@@ -2536,9 +2540,13 @@ Public Class Wave
 
 #Region "Funktionalität"
 
-    'Zeitreihe intern hinzufügen
-    '***************************
-    Private Sub AddZeitreihe(ByRef zre As TimeSeries)
+    ''' <summary>
+    ''' Adds a time series to the internal storage
+    ''' Renames the title if it is not unique
+    ''' Also adds the datasource to the MRU file list if the time series has a file datasource
+    ''' </summary>
+    ''' <param name="timeseries"></param>
+    Private Sub StoreTimeseries(ByRef timeseries As TimeSeries)
 
         Dim duplicateFound As Boolean
         Dim pattern As String = "(?<name>.*)\s\(\d+\)$"
@@ -2550,39 +2558,39 @@ Public Class Wave
         Do While True
             duplicateFound = False
             For Each ts As TimeSeries In Me.TimeSeriesDict.Values
-                If zre.Title = ts.Title Then
+                If timeseries.Title = ts.Title Then
                     duplicateFound = True
                 End If
             Next
 
             If duplicateFound Then
-                match = Regex.Match(zre.Title, pattern)
+                match = Regex.Match(timeseries.Title, pattern)
                 If (match.Success) Then
                     n += 1
-                    zre.Title = Regex.Replace(zre.Title, pattern, $"${Name} ({n})")
+                    timeseries.Title = Regex.Replace(timeseries.Title, pattern, $"${Name} ({n})")
                 Else
-                    zre.Title &= " (1)"
+                    timeseries.Title &= " (1)"
                 End If
             Else
                 Exit Do
             End If
         Loop
 
-        Me.TimeSeriesDict.Add(zre.Id, zre)
+        Me.TimeSeriesDict.Add(timeseries.Id, timeseries)
 
         'add datasource filename to Recently Used Files menu
-        If zre.DataSource.Origin = TimeSeriesDataSource.OriginEnum.FileImport Then
+        If timeseries.DataSource.Origin = TimeSeriesDataSource.OriginEnum.FileImport Then
             'remove if already present
             Dim i As Integer = 0
             For Each _item As ToolStripItem In Me.ToolStripMenuItem_RecentlyUsedFiles.DropDownItems
-                If _item.Text = zre.DataSource.FilePath Then
+                If _item.Text = timeseries.DataSource.FilePath Then
                     Me.ToolStripMenuItem_RecentlyUsedFiles.DropDownItems.RemoveAt(i)
                     Exit For
                 End If
                 i += 1
             Next
             'add to top of list
-            Dim item As New ToolStripMenuItem(zre.DataSource.FilePath)
+            Dim item As New ToolStripMenuItem(timeseries.DataSource.FilePath)
             Me.ToolStripMenuItem_RecentlyUsedFiles.DropDownItems.Insert(0, item)
         End If
 
@@ -2672,7 +2680,7 @@ Public Class Wave
 
             'Übersichtsdiagramm wieder als solches formatieren
             'TODO: als Funktion auslagern und auch bei Init_Charts() verwenden
-            Call Wave.formatChart(Me.TChart2.Chart)
+            Call Wave.FormatChart(Me.TChart2.Chart)
             Me.TChart2.Panel.Brush.Color = Color.FromArgb(239, 239, 239)
             Me.TChart2.Walls.Back.Color = Color.FromArgb(239, 239, 239)
             Me.TChart2.Header.Visible = False
@@ -2737,7 +2745,7 @@ Public Class Wave
                                 reihe.DataSource = New TimeSeriesDataSource(FileName, series.Title)
 
                                 'Store the series internally
-                                Call Me.AddZeitreihe(reihe)
+                                Call Me.StoreTimeseries(reihe)
 
                                 'update the title in case it was changed during storage
                                 series.Title = reihe.Title
@@ -2800,7 +2808,7 @@ Public Class Wave
             'Charts aktualisieren
             Call Me.UpdateChartExtents()
 
-            Call Me.viewportChanged()
+            Call Me.ViewportChanged()
 
             'Re-assign the chart to the chartlistbox (Bug 701)
             Me.ChartListBox1.Chart = Me.TChart1
@@ -2814,7 +2822,7 @@ Public Class Wave
         End Try
 
         'Update AxisDialog
-        Call Me.updateAxisDialog()
+        Call Me.UpdateAxisDialog()
     End Sub
 
     ''' <summary>
@@ -2863,7 +2871,7 @@ Public Class Wave
 
                     If (Datei.UseImportDialog) Then
                         'Falls Importdialog erforderlich, diesen anzeigen
-                        ok = Me.showImportDialog(Datei)
+                        ok = Me.ShowImportDialog(Datei)
                         Call Application.DoEvents()
                     Else
                         'Ansonsten alle Spalten auswählen
@@ -2938,7 +2946,7 @@ Public Class Wave
                         Exit Sub
                     End If
                     Me.Cursor = Cursors.WaitCursor
-                    Call Me.loadFromClipboard_TALSIM(clipboardtext)
+                    Call Me.LoadFromClipboard_TALSIM(clipboardtext)
                     Me.Cursor = Cursors.Default
                 Else
                     'ask the user whether to attempt plain text import
@@ -2972,7 +2980,7 @@ Public Class Wave
     ''' </summary>
     ''' <param name="clipboardtext">text content of the clipboard</param>
     ''' <remarks></remarks>
-    Private Sub loadFromClipboard_TALSIM(clipboardtext As String)
+    Private Sub LoadFromClipboard_TALSIM(clipboardtext As String)
 
         'Examples:
 
@@ -3117,7 +3125,7 @@ Public Class Wave
     ''' Zeigt den Importdialog an und liest im Anschluss die Datei mit den eingegebenen Einstellungen ein
     ''' </summary>
     ''' <param name="Datei">Instanz der Datei, die importiert werden soll</param>
-    Friend Function showImportDialog(ByRef Datei As FileFormatBase) As Boolean
+    Friend Function ShowImportDialog(ByRef Datei As FileFormatBase) As Boolean
 
         Datei.ImportDiag = New ImportDiag(Datei)
 
@@ -3142,7 +3150,7 @@ Public Class Wave
     Public Sub Import_Series(zre As TimeSeries, Optional Display As Boolean = True)
 
         'Serie abspeichen
-        Me.AddZeitreihe(zre)
+        Me.StoreTimeseries(zre)
 
         If Display Then
             'Serie in Diagrammen anzeigen
@@ -3265,7 +3273,7 @@ Public Class Wave
         'Charts aktualisieren
         Call Me.UpdateChartExtents()
 
-        Call Me.viewportChanged()
+        Call Me.ViewportChanged()
     End Sub
 
     ''' <summary>
@@ -3375,7 +3383,7 @@ Public Class Wave
                 series.CustomVertAxis = axis
 
                 'update axis dialog
-                Call Me.updateAxisDialog()
+                Call Me.UpdateAxisDialog()
             End If
         End If
 
@@ -3394,7 +3402,7 @@ Public Class Wave
             Me.TChart1.Axes.Custom.RemoveAt(axisnumber)
             Me.TChart1.Refresh()
             'update axis dialog
-            Call Me.updateAxisDialog()
+            Call Me.UpdateAxisDialog()
         End If
     End Sub
 
@@ -3402,7 +3410,7 @@ Public Class Wave
     ''' Führt Standardformatierung eines TCharts aus
     ''' </summary>
     ''' <param name="chart"></param>
-    Friend Shared Sub formatChart(ByRef chart As Steema.TeeChart.Chart)
+    Friend Shared Sub FormatChart(ByRef chart As Steema.TeeChart.Chart)
 
         'set default color palette
         chart.ColorPalette = Helpers.getColorPalette()
@@ -3478,7 +3486,7 @@ Public Class Wave
     ''' Sets a color palette in the charts and changes the colors of any existing series accordingly
     ''' </summary>
     ''' <param name="colorPalette">The color palette to apply</param>
-    Private Sub setChartColorPalette(colorPalette As Color())
+    Private Sub SetChartColorPalette(colorPalette As Color())
 
         'set colorpalette in charts
         Me.TChart1.Chart.ColorPalette = colorPalette

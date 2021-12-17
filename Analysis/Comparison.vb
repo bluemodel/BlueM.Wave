@@ -163,7 +163,7 @@ Friend Class Comparison
         Dim regression_line As Steema.TeeChart.Styles.Line
 
         Me.mResultChart = New Steema.TeeChart.Chart()
-        Call Wave.formatChart(Me.mResultChart)
+        Call Wave.FormatChart(Me.mResultChart)
         Me.mResultChart.Header.Text = $"Comparison ({x_title} / {y_title})"
         Me.mResultChart.Legend.Visible = False
 

@@ -151,7 +151,7 @@ Friend Class CLI
                                 fileInstance = FileFactory.getFileInstance(file_in)
                                 Dim isOK As Boolean
                                 If interactive And fileInstance.UseImportDialog Then
-                                    isOK = Wave.showImportDialog(fileInstance)
+                                    isOK = Wave.ShowImportDialog(fileInstance)
                                     If Not isOK Then
                                         ConsoleAddLog(Log.levels.warning, $"Import of file {file_in} cancelled by user, skipping this file!")
                                         Continue For
