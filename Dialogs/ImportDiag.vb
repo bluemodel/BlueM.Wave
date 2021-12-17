@@ -381,6 +381,7 @@ Friend Class ImportDiag
 
         'Available series
         Dim sInfo As FileFormatBase.SeriesInfo
+        Me.Label_Series.Text = $"Available series ({Me.datei.SeriesList.Count}):"
         'remember currently selected series
         Dim selectedSeries As New List(Of String)
         For Each sInfo In Me.ListBox_Series.SelectedItems
@@ -389,8 +390,8 @@ Friend Class ImportDiag
         'update list box
         Me.ListBox_Series.Items.Clear()
         Me.ListBox_Series.BeginUpdate()
-        For Each series As FileFormatBase.SeriesInfo In Me.datei.SeriesList
-            Me.ListBox_Series.Items.Add(series)
+        For Each sInfo In Me.datei.SeriesList
+            Me.ListBox_Series.Items.Add(sInfo)
         Next
         Me.ListBox_Series.EndUpdate()
         'reselect any previously selected items
@@ -483,6 +484,15 @@ Friend Class ImportDiag
         strreader.Close()
         'set detected encoding
         Me.ComboBox_Encoding.SelectedValue = enc.CodePage
+    End Sub
+
+    ''' <summary>
+    ''' Handles selected series changed by updating the displayed number of selected series
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    Private Sub ListBox_Series_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ListBox_Series.SelectedIndexChanged
+        Me.Label_Selected.Text = $"{ListBox_Series.SelectedIndices.Count} selected"
     End Sub
 
     Private Sub ImportDiag_FormClosed(sender As Object, e As FormClosedEventArgs) Handles MyBase.FormClosed

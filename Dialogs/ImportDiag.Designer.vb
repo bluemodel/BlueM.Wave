@@ -63,6 +63,7 @@ Partial Class ImportDiag
         Me.Label_Dateformat = New System.Windows.Forms.Label()
         Me.ComboBox_Dateformat = New System.Windows.Forms.ComboBox()
         Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
+        Me.Label_Selected = New System.Windows.Forms.Label()
         SplitContainer1 = New System.Windows.Forms.SplitContainer()
         CType(SplitContainer1, System.ComponentModel.ISupportInitialize).BeginInit()
         SplitContainer1.Panel1.SuspendLayout()
@@ -107,6 +108,7 @@ Partial Class ImportDiag
         Me.GroupBox_Selection.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.GroupBox_Selection.Controls.Add(Me.Label_Selected)
         Me.GroupBox_Selection.Controls.Add(Me.Label_Search)
         Me.GroupBox_Selection.Controls.Add(Me.TextBox_Search)
         Me.GroupBox_Selection.Controls.Add(Me.Label_Series)
@@ -164,7 +166,7 @@ Partial Class ImportDiag
         Me.Button_SelectAll.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.Button_SelectAll.Location = New System.Drawing.Point(15, 191)
         Me.Button_SelectAll.Name = "Button_SelectAll"
-        Me.Button_SelectAll.Size = New System.Drawing.Size(88, 23)
+        Me.Button_SelectAll.Size = New System.Drawing.Size(73, 23)
         Me.Button_SelectAll.TabIndex = 4
         Me.Button_SelectAll.Text = "Select all"
         Me.Button_SelectAll.UseVisualStyleBackColor = True
@@ -514,6 +516,16 @@ Partial Class ImportDiag
         Me.ComboBox_Dateformat.Size = New System.Drawing.Size(139, 21)
         Me.ComboBox_Dateformat.TabIndex = 1
         '
+        'Label_Selected
+        '
+        Me.Label_Selected.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Label_Selected.Location = New System.Drawing.Point(95, 196)
+        Me.Label_Selected.Name = "Label_Selected"
+        Me.Label_Selected.Size = New System.Drawing.Size(75, 13)
+        Me.Label_Selected.TabIndex = 34
+        Me.Label_Selected.Text = "0 selected"
+        Me.Label_Selected.TextAlign = System.Drawing.ContentAlignment.TopRight
+        '
         'ImportDiag
         '
         Me.AcceptButton = Me.Button_OK
@@ -602,4 +614,5 @@ Partial Class ImportDiag
     Friend WithEvents ComboBox_Encoding As ComboBox
     Friend WithEvents Label_Encoding As Label
     Friend WithEvents Button_EncodingAutodetect As Button
+    Friend WithEvents Label_Selected As Label
 End Class
