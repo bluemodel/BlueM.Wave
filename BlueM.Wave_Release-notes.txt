@@ -11,6 +11,8 @@ CHANGED:
 * Default line width of series is now 2
 * Upgraded to TeeChart Pro version 4.2021.11.2
 * Switched from Ionic.Zip to DotNetZip
+FIXED:
+* Custom axes now become invisible automatically when not used by any active series #69
 REMOVED:
 * Removed "Load Theme" menu option
 
