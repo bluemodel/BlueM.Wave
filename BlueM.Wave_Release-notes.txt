@@ -12,6 +12,7 @@ CHANGED:
 * File import dialog: 
   * There is now a small delay (1s) between user input and the start of the search
   * The number of available and currently selected series is now displayed
+* CSV format: extra spaces around titles and units are now removed during import
 * Upgraded to TeeChart Pro version 4.2021.11.2
 * Switched from Ionic.Zip to DotNetZip
 FIXED:

@@ -117,12 +117,14 @@ Public Class CSV
                 Next
             End If
 
-            'remove quotes around names and units
+            'remove extra spaces and quotes around names and units
             For i = 0 To anzSpalten - 1
+                Namen(i) = Namen(i).Trim()
                 If Namen(i).StartsWith("""") And Namen(i).EndsWith("""") Then
                     Namen(i) = Namen(i).Replace("""", "")
                 End If
                 If Me.UseUnits Then
+                    Einheiten(i) = Einheiten(i).Trim()
                     If Einheiten(i).StartsWith("""") And Einheiten(i).EndsWith("""") Then
                         Einheiten(i) = Einheiten(i).Replace("""", "")
                     End If
