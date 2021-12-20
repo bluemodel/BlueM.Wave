@@ -17,6 +17,7 @@ CHANGED:
 FIXED:
 * Custom axes now become invisible automatically when not used by any active series #69
 * Changing the title of a series in the TeeChart Editor no longer causes a desync with the internally stored time series #12
+* Regression: Fixed automatic renaming of duplicate time series titles
 REMOVED:
 * Removed "Load Theme" menu option
 

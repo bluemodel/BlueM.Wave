@@ -2567,7 +2567,7 @@ Public Class Wave
                 match = Regex.Match(timeseries.Title, pattern)
                 If (match.Success) Then
                     n += 1
-                    timeseries.Title = Regex.Replace(timeseries.Title, pattern, $"${Name} ({n})")
+                    timeseries.Title = Regex.Replace(timeseries.Title, pattern, $"${{name}} ({n})")
                 Else
                     timeseries.Title &= " (1)"
                 End If
