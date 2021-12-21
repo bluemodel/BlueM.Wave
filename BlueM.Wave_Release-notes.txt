@@ -23,9 +23,11 @@ FIXED:
 REMOVED:
 * Removed "Load Theme" menu option
 
+NOTE: Due to a migration to a different issue tracking system, issue numbers have changed. Old numbers are denoted by BUG, new numbers by #
+
 Version 1.10.6
 --------------
-This version fixes a number of issues in order to be able to support the full date range between 01.01.0001 and 31.12.9999 (#749)
+This version fixes a number of issues in order to be able to support the full date range between 01.01.0001 and 31.12.9999 (BUG 749)
 CHANGED:
 * Import, analysis and export functions can now use the full date range between 01.01.0001 and 31.12.9999
 * Chart display, panning and zooming is restricted to the displayable date range between 01.01.0100 and 31.12.9000
@@ -77,7 +79,7 @@ CHANGED:
 API-CHANGES:
 * New public class WVP for parsing and processing Wave project files (*.wvp)
 * New property TimeSeries.NaNCount
-* Removed obsolete TimeSeries methods getKontiZRE, getKontiZRE2 and getKontiZRE3 from public API #717
+* Removed obsolete TimeSeries methods getKontiZRE, getKontiZRE2 and getKontiZRE3 from public API (BUG 717)
 
 Version 1.10.2
 --------------
@@ -89,10 +91,10 @@ Version 1.10.1
 NEW:
 * Analysis function "ChangeTimestep": added an option for ignoring NaN values
 FIXED:
-* Prevent OverflowException when displaying time series beginning with a NaN value as a step function in the overview chart #748
+* Prevent OverflowException when displaying time series beginning with a NaN value as a step function in the overview chart (BUG 748)
 * Prevent DateTimePicker in TimeSeriesValues window from attempting to display a date outside of the supported range
 * Fix counter display in TimeSeriesValues window
-* Ensure that nodes outside of the supported date range are properly removed when importing a series and improve logging thereof #749
+* Ensure that nodes outside of the supported date range are properly removed when importing a series and improve logging thereof (BUG 749)
 
 Version 1.10.0
 --------------
@@ -125,7 +127,7 @@ FIXED:
 Version 1.9.4
 -------------
 NEW:
-* Added a "Calculator" analysis function for performing mathematical operations on time series #722
+* Added a "Calculator" analysis function for performing mathematical operations on time series (BUG 722)
 CHANGED:
 * Vertical axes now have a maximum offset of 5 by default
 FIXED:
@@ -160,7 +162,7 @@ Version 1.9.1
 CHANGED:
 * NaN values:
   * NaN values are now displayed as gaps in the chart
-  * NaN values are now saved and loaded in TEN files #725
+  * NaN values are now saved and loaded in TEN files (BUG 725)
 * Zoom/pan behavior:
   * Changed the zoom/pan behavior in both the overview and main chart to zoom with left click, pan with right-click
   * Clicking and dragging towards the left in the main chart no longer zooms to the previous extent, but instead performs a normal zoom
@@ -178,7 +180,7 @@ Version 1.9.0
 NEW:
 * Time Series Properties and Statistics are now two separate dialogs
 * Every loaded time series now stores information about its original datasource, which is displayed in the properties dialog
-* Log messages are now categorized in levels and colored to make warnings and errors more prominent #730
+* Log messages are now categorized in levels and colored to make warnings and errors more prominent (BUG 730)
 * The logging level can be set in Wave.exe.config by setting loggingLevel to either debug, info, warning or error (default is info)
 * Added error and warning counters to the status bar
 * Added an update notification and a check for update help menu item
@@ -221,12 +223,12 @@ CHANGED:
 Version 1.8.2
 -------------
 FIXED:
-  * Fixed crashes with very small or large dates in time series #749
+  * Fixed crashes with very small or large dates in time series (BUG 749)
     Timeseries are now cut upon import to minimum 01.01.0100 and maximum 31.12.9900
   * Fixed error when importing CSV files without units
 KNOWN ISSUES:
   * DateTimePickers have a minimum date of 01.01.1753 and a maximum date of 31.12.9998
-    and will display these even if timeseries / the view extends beyond that range #749
+    and will display these even if timeseries / the view extends beyond that range (BUG 749)
 
 Version 1.8.1
 -------------
@@ -338,13 +340,13 @@ NEW:
 * Implemented reading and writing of metadata for file formats UVF and ZRXP
 * Added a dialog for editing metadata before export
 * Added a new analysis function "Cumulative" which converts a time series to cumulative values
-* Added the possibility of specifying custom import settings in Wave project files (*.wvp) (#720)
-* Added a button and a dialog for merging time series (#719)
+* Added the possibility of specifying custom import settings in Wave project files (*.wvp) (BUG 720)
+* Added a button and a dialog for merging time series (BUG 719)
 * Added a dialog for specifying a reference date (beginning of simulation) when importing HYDRO_AS-2D files
 * The Open File menu now includes a list of recently used files (not stored across sessions)
-* Added a button for changing the time step of a time series (#717) (only in x86 version)
+* Added a button for changing the time step of a time series (BUG 717) (only in x86 version)
 * Added the ability to process more clipboard contents from TALSIM 
-  (including BIN files and multiple files/series at once) (#695)
+  (including BIN files and multiple files/series at once) (BUG 695)
 * Added the ability to extract WEL files from WLZIP files of the same name
 CHANGED:
 * The "Enter time series" dialog has been improved, unparseable values are now converted to NaN 
@@ -373,20 +375,20 @@ KNOWN ISSUES:
 Version 1.6.1
 -------------
 NEW:
-* Added support for loading and saving Wave project files (*.wvp) (#705)
-* Added a button for displaying time series properties in a table view (#711)
-* Added the ability to load TALSIM simulation results using the clipboard (by pressing Ctrl+V) (#695)
+* Added support for loading and saving Wave project files (*.wvp) (BUG 705)
+* Added a button for displaying time series properties in a table view (BUG 711)
+* Added the ability to load TALSIM simulation results using the clipboard (by pressing Ctrl+V) (BUG 695)
 * Added an "AnnualStatistics" analysis function which calculates statistics such as
   min, max, avg and volume of a time series for each hydrological year
 * The "Comparison" analysis function now fits a simple linear regression line to the data
   (using the Math.NET Numerics library)
-* The analysis function Histogram now allows the user to specify the bins (#397). 
+* The analysis function Histogram now allows the user to specify the bins (BUG 397). 
   Also, the histogram result data is now written to the log.
 * The analysis function MonthlyStatistics now writes the result data to the log
 * Added a button for removing user-specified error values from series
 * Added a button for renaming series
 * Added a dropdown button for zooming to a specific series
-* Added support for exporting series to CSV format (#318)
+* Added support for exporting series to CSV format (BUG 318)
 * Added support for importing files in the ZRXP format (*.zrx)
 * GoodnessOfFit (GoF) analysis function:
   * Added "Logarithmic Nash-Sutcliffe Efficiency" as a new GoF parameter
@@ -395,14 +397,14 @@ NEW:
 CHANGED:
 * Error values in time series such as e.g. -777 and -9999 are now imported and displayed as regular values.
   Previously, when importing from BIN and DWD-T-L format, these would be replaced with NaN.
-  The new "Remove error values" function can be used to remove these error values, if desired. (#693)
+  The new "Remove error values" function can be used to remove these error values, if desired. (BUG 693)
 * Analysis GoodnessOfFit: Volume error is based on actual volume integrated over time 
   if the time series unit ends with "/s"
 * Removed support for the DWD-T-L format
 * If a time series contains duplicate nodes, the duplicate nodes are now simply discarded 
   and a warning is written to the log instead of aborting the import
 FIXED:
-* The decimal mark selector in the import series dialog now actually works (#351)
+* The decimal mark selector in the import series dialog now actually works (BUG 351)
 * Comparison analysis function: changed the result series to a point series because a line series automatically 
   sorts itself by the x-values and thus connects the points in the wrong order (not time-based)
 
@@ -424,7 +426,7 @@ NEW:
 * Support for importing UVF files
 * Support for importing SYDRO binary files (x86 version only)
 * Support for loading TeeChart themes (*.xml) 
-* The date format can now be specified while importing time series (#686)
+* The date format can now be specified while importing time series (BUG 686)
 CHANGED:
 * Loading a TEN-file does not cause existing series to be deleted, 
   the series contained in the TEN-file can be imported optionally

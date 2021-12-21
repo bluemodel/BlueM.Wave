@@ -1185,7 +1185,7 @@ Public Class TimeSeries
     ''' <returns>The offset DateTime</returns>
     Public Shared Function AddTimeInterval(t As DateTime, timesteptype As TimeStepTypeEnum, timestepinterval As Integer) As DateTime
 
-        'TODO: handle not going above DateTime.MaxValue #749
+        'TODO: handle not going above DateTime.MaxValue #68
 
         Dim n As Integer
 

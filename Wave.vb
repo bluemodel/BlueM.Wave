@@ -461,7 +461,7 @@ Public Class Wave
             Xmin = startdates.Min()
             Xmax = enddates.Max()
 
-            'BUG 749: respect min and max displayable dates
+            'respect min and max displayable dates (#68)
             If Xmax > Constants.maxOADate Then
                 Xmax = Constants.maxOADate
             End If
@@ -609,7 +609,7 @@ Public Class Wave
                 Dim xMouse As Double
                 xMouse = Me.TChart2.Series(0).XScreenToValue(Me.OverviewChartMouseDragStartX)
 
-                'BUG 749: prevent zoom starting beyond displayable date range
+                'prevent zoom starting beyond displayable date range (#68)
                 xMouse = Math.Max(xMouse, Constants.minOADate.ToOADate)
                 xMouse = Math.Min(xMouse, Constants.maxOADate.ToOADate)
 
@@ -643,7 +643,7 @@ Public Class Wave
                 'move the end of the colorband to the mouse pointer
                 Dim xMouse As Double = TChart2.Series(0).XScreenToValue(e.X)
 
-                'BUG 749: restrict to displayable date range
+                'restrict to displayable date range (#68)
                 xMouse = Math.Max(xMouse, Constants.minOADate.ToOADate)
                 xMouse = Math.Min(xMouse, Constants.maxOADate.ToOADate)
 
@@ -657,7 +657,7 @@ Public Class Wave
                 startValue = TChart2.Series(0).XScreenToValue(e.X - Me.OverviewChartMouseDragOffset)
                 endValue = startValue + width
 
-                'BUG 749: restrict to displayable date range
+                'restrict to displayable date range (#68)
                 If startValue < Constants.minOADate.ToOADate Then
                     startValue = Constants.minOADate.ToOADate
                     endValue = startValue + width
@@ -701,7 +701,7 @@ Public Class Wave
                         startValue = TChart2.Series(0).XScreenToValue(e.X)
                         endValue = TChart2.Series(0).XScreenToValue(Me.OverviewChartMouseDragStartX)
                     End If
-                    'BUG 749: restrict to displayable date range
+                    'restrict to displayable date range (#68)
                     startValue = Math.Max(startValue, Constants.minOADate.ToOADate)
                     endValue = Math.Min(endValue, Constants.maxOADate.ToOADate)
 
@@ -2471,7 +2471,7 @@ Public Class Wave
             Dim panDistance As Double = TChart1.Series(0).XScreenToValue(Me.ChartMouseDragStartX) - TChart1.Series(0).XScreenToValue(e.X)
             xMin = TChart1.Axes.Bottom.Minimum + panDistance
             xMax = TChart1.Axes.Bottom.Maximum + panDistance
-            'BUG 749: prevent panning beyond displayable range
+            'prevent panning beyond displayable range (#68)
             If xMin < Constants.minOADate.ToOADate() Then
                 xMin = Constants.minOADate.ToOADate()
                 xMax = xMin + Me.ChartMousePanDisplayRange
@@ -2502,7 +2502,7 @@ Public Class Wave
             If Math.Abs(e.X - Me.ChartMouseDragStartX) > 5 Then
                 'determine start and end dates of zoom
                 Dim mouseValue, startValue, endValue As Double
-                'BUG 749: prevent zooming beyond the displayable date range
+                'prevent zooming beyond the displayable date range (#68)
                 mouseValue = TChart1.Series(0).XScreenToValue(e.X)
                 mouseValue = Math.Max(mouseValue, Constants.minOADate.ToOADate)
                 mouseValue = Math.Min(mouseValue, Constants.maxOADate.ToOADate)
@@ -2810,7 +2810,7 @@ Public Class Wave
 
             Call Me.ViewportChanged()
 
-            'Re-assign the chart to the chartlistbox (Bug 701)
+            'Re-assign the chart to the chartlistbox (#41)
             Me.ChartListBox1.Chart = Me.TChart1
 
             'Log
@@ -3164,7 +3164,7 @@ Public Class Wave
     ''' <param name="zre">Die anzuzeigende Zeitreihe</param>
     Private Sub Display_Series(zre As TimeSeries)
 
-        'BUG 749: Remove nodes if necessary
+        'Remove nodes if necessary (#68)
         If zre.StartDate < Constants.minOADate Then
             zre = zre.Clone()
             Dim t_too_early = New List(Of DateTime)
@@ -3233,8 +3233,8 @@ Public Class Wave
         'Overview chart
         Line2.BeginUpdate()
         If Double.IsNaN(zre.FirstValue) Then
-            'BUG 748: TeeChart throws an OverflowException when attemtping to display a FastLine that begins with a NaN value as a step function!
-            'To avoid this we generally do not add NaN values at the beginning of the time series to the FastLine
+            'TeeChart throws an OverflowException when attemtping to display a FastLine that begins with a NaN value as a step function!
+            'To avoid this we generally do not add NaN values at the beginning of the time series to the FastLine (#67)
             Dim isNaN As Boolean = True
             For Each node As KeyValuePair(Of DateTime, Double) In zre.Nodes
                 If isNaN Then
