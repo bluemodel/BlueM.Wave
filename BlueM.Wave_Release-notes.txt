@@ -7,6 +7,7 @@ NEW:
 * Added a button for selecting a color palette
 * Analysis function GoodnessOfFit: added Kling-Gupta efficiency parameter #52
 * Analysis function ChangeTimestep: the initial setting for the interpretation is now taken from the timeseries' properties
+* Added support for importing SWMM5 LID report files #61
 CHANGED:
 * Default line width of series is now 2
 * File import dialog: 

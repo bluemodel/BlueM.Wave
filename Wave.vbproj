@@ -256,6 +256,8 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="FileFormats\ASC.vb" />
+    <Compile Include="FileFormats\SWMM_INTERFACE.vb" />
+    <Compile Include="FileFormats\SWMM_LID_REPORT.vb" />
     <Compile Include="FileFormats\WVP.vb" />
     <Compile Include="FileFormats\DFS0.vb" />
     <Compile Include="FileFormats\BIN.vb" />
@@ -277,7 +279,6 @@
     <Compile Include="FileFormats\SWMM_DAT_MASS.vb" />
     <Compile Include="FileFormats\SWMM_DAT_TIME.vb" />
     <Compile Include="FileFormats\SWMM_OUT.vb" />
-    <Compile Include="FileFormats\SWMM_TXT.vb" />
     <Compile Include="FileFormats\SydroSQLite.vb" />
     <Compile Include="FileFormats\UVF.vb" />
     <Compile Include="FileFormats\WEL.vb" />

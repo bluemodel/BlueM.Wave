@@ -1379,7 +1379,7 @@ Public Class Wave
             Case FileFormatBase.FileFormats.DAT_SWMM_MASS, FileFormatBase.FileFormats.DAT_SWMM_TIME
                 Me.SaveFileDialog1.DefaultExt = "dat"
                 Me.SaveFileDialog1.Filter = "SWMM DAT files (*.dat)|*.dat"
-            Case FileFormatBase.FileFormats.TXT_SWMM
+            Case FileFormatBase.FileFormats.SWMM_INTERFACE
                 Me.SaveFileDialog1.DefaultExt = "txt"
                 Me.SaveFileDialog1.Filter = "SWMM Interface files (*.txt)|*.txt"
             Case FileFormatBase.FileFormats.UVF
@@ -1425,8 +1425,8 @@ Public Class Wave
                 Case FileFormatBase.FileFormats.DAT_SWMM_TIME
                     Call SWMM_DAT_TIME.Write_File(zres(0), filename, 5) 'TODO: Zeitschritt ist noch nicht dynamisch definiert
 
-                Case FileFormatBase.FileFormats.TXT_SWMM
-                    Call SWMM_TXT.Write_File(zres, filename)
+                Case FileFormatBase.FileFormats.SWMM_INTERFACE
+                    Call SWMM_INTERFACE.Write_File(zres, filename)
 
                 Case FileFormatBase.FileFormats.CSV
                     Call CSV.Write_File(zres, filename)

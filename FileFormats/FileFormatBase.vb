@@ -43,7 +43,7 @@ Public MustInherit Class FileFormatBase
         REG_SMUSI = 6
         DAT_SWMM_MASS = 7
         DAT_SWMM_TIME = 8
-        TXT_SWMM = 9
+        SWMM_INTERFACE = 9
         DAT_HYDRO_AS = 10
         UVF = 11
         ZRXP = 12
@@ -51,6 +51,7 @@ Public MustInherit Class FileFormatBase
         BIN = 14
         PRMS_OUT = 15
         DFS0 = 16
+        SWMM_LID_REPORT = 17
     End Enum
 
     ''' <summary>
@@ -61,18 +62,18 @@ Public MustInherit Class FileFormatBase
             "All files (*.*)|*.*|" &
             "Text files (*.txt)|*.txt|" &
             "CSV files (*.csv)|*.csv|" &
-            "DHI MIKE Dfs0 files (*.dfs0)|*.dfs0|" &
-            "HYDRO_AS-2D files (*.dat)|*.dat|" &
-            "Hystem Extran files (*.dat)|*.dat|" &
-            "PRMS output files (*.out)|*.out|" &
+            "DHI MIKE DFS0 files (*.dfs0)|*.dfs0|" &
+            "HYDRO_AS-2D result files (*.dat)|*.dat|" &
+            "Hystem-Extran files (*.dat, *.reg)|*.dat;*.reg|" &
+            "PRMS result files (*.dat, *.out)|*.dat;*.out|" &
             "SIMBA files (*.smb)|*.smb|" &
-            "SMUSI files (*.asc)|*.asc|" &
+            "SMUSI files (*.asc. *.reg)|*.asc;*.reg|" &
             "SWMM files (*.txt, *.out)|*.txt;*.out|" &
             "SYDRO binary files (*.bin)|*.bin|" &
             "SYDRO SQLite files (*.db)|*.db|" &
             "UVF files (*.uvf)|*.uvf|" &
             "WEL files (*.wel, *.kwl)|*.wel;*.kwl|" &
-            "Wave project files (*wvp)|*.wvp|" &
+            "Wave project files (*.wvp)|*.wvp|" &
             "ZRE files (*.zre)|*.zre|" &
             "ZRXP files (*.zrx, *.zrxp)|*.zrx;*.zrxp"
 

@@ -43,7 +43,7 @@ Public Module FileFactory
     Public Const FileExtZRE As String = ".ZRE"
     Public Const FileExtTEN As String = ".TEN"
     Public Const FileExtOUT As String = ".OUT"   'SWMM binary result file or PRMS out file
-    Public Const FileExtTXT As String = ".TXT"   'SWMM routing file
+    Public Const FileExtTXT As String = ".TXT"   'SWMM interface routing file, SWMM LID report file or generic text file 
     Public Const FileExtBIN As String = ".BIN"   'SYDRO binary format
     Public Const FileExtSQLITE As String = ".DB" 'SYDRO SQLite format
     Public Const FileExtZRX As String = ".ZRX"   'ZRXP format
@@ -175,9 +175,12 @@ Public Module FileFactory
 
             Case FileExtTXT
                 'Check file format
-                If (SWMM_TXT.verifyFormat(file)) Then
-                    'SWMM file
-                    FileInstance = New SWMM_TXT(file)
+                If SWMM_LID_REPORT.verifyFormat(file) Then
+                    'SWMM LID report file
+                    FileInstance = New SWMM_LID_REPORT(file)
+                ElseIf SWMM_INTERFACE.verifyFormat(file) Then
+                    'SWMM routing interface file
+                    FileInstance = New SWMM_INTERFACE(file)
                 Else
                     'Other text files can usually be read as CSV files
                     FileInstance = New CSV(file)

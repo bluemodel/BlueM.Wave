@@ -42,7 +42,7 @@ Friend Class ExportDiag
         Me.ComboBox_Format.Items.Add(FileFormatBase.FileFormats.REG_SMUSI)
         Me.ComboBox_Format.Items.Add(FileFormatBase.FileFormats.DAT_SWMM_MASS)
         Me.ComboBox_Format.Items.Add(FileFormatBase.FileFormats.DAT_SWMM_TIME)
-        Me.ComboBox_Format.Items.Add(FileFormatBase.FileFormats.TXT_SWMM)
+        Me.ComboBox_Format.Items.Add(FileFormatBase.FileFormats.SWMM_INTERFACE)
         Me.ComboBox_Format.Items.Add(FileFormatBase.FileFormats.UVF)
         Me.ComboBox_Format.Items.Add(FileFormatBase.FileFormats.ZRXP)
         Me.ComboBox_Format.SelectedIndex = 0
@@ -76,7 +76,7 @@ Friend Class ExportDiag
                 Me.ListBox_Series.SelectionMode = SelectionMode.One
                 Me.Button_SelectAll.Enabled = False
 
-            Case FileFormatBase.FileFormats.TXT_SWMM,
+            Case FileFormatBase.FileFormats.SWMM_INTERFACE,
                  FileFormatBase.FileFormats.CSV
                 'Allow selection of multiple series
                 Me.ListBox_Series.SelectionMode = SelectionMode.MultiExtended
