@@ -31,7 +31,7 @@ Imports System.Globalization
 ''' <summary>
 ''' Klasse für SWMM out-Dateiformat (Binärer SWMM Ergebnisfile)
 ''' </summary>
-''' <remarks>Format siehe https://wiki.bluemodel.org/index.php/ASC-Format</remarks>
+''' <remarks>Format siehe https://wiki.bluemodel.org/index.php/SWMM_file_formats </remarks>
 ''' 
 Public Class SWMM_OUT
     Inherits FileFormatBase
