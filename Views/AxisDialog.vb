@@ -26,8 +26,14 @@
 '--------------------------------------------------------------------------------------------
 '
 Imports System.Windows.Forms
-
 Friend Class AxisDialog
+    Implements IView
+
+    Private _controller As Controller 'AxisController
+
+    Public Sub SetController(controller As Controller) Implements IView.SetController
+        _controller = controller
+    End Sub
 
     ''' <summary>
     ''' Is raised when an axis unit is changed by the user
@@ -91,4 +97,7 @@ Friend Class AxisDialog
         Call Me.Hide()
     End Sub
 
+    Private Sub IView_Close() Implements IView.Close
+        Throw New NotImplementedException()
+    End Sub
 End Class

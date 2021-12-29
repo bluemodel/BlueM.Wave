@@ -241,36 +241,79 @@ Public Module Helpers
     End Function
 
     ''' <summary>
-    ''' Class representing a calendar month
+    ''' Führt Standardformatierung eines TCharts aus
     ''' </summary>
-    Public Class Month
-        ''' <summary>
-        ''' Number of the month (1 to 12)
-        ''' </summary>
-        Public number As Integer
-        ''' <summary>
-        ''' Name of the month
-        ''' </summary>
-        Public name As String
-        ''' <summary>
-        ''' Constructor
-        ''' </summary>
-        ''' <param name="number">Number of the month (1 to 12)</param>
-        ''' <param name="name">Name of the month</param>
-        Public Sub New(number As Integer, name As String)
-            If number < 1 Or number > 12 Then
-                Throw New ArgumentOutOfRangeException("Month number must be between 1 and 12!")
-            End If
-            Me.number = number
-            Me.name = name
-        End Sub
-        ''' <summary>
-        ''' Returns the name of the month
-        ''' </summary>
-        ''' <returns></returns>
-        Public Overrides Function ToString() As String
-            Return Me.name
-        End Function
-    End Class
+    ''' <param name="chart"></param>
+    Friend Sub FormatChart(ByRef chart As Steema.TeeChart.Chart)
+
+        'set default color palette
+        chart.ColorPalette = Helpers.getColorPalette()
+
+        chart.Aspect.View3D = False
+        'chart.BackColor = Color.White
+        chart.Panel.Gradient.Visible = False
+        chart.Panel.Brush.Color = Color.White
+        chart.Walls.Back.Transparent = False
+        chart.Walls.Back.Gradient.Visible = False
+        chart.Walls.Back.Color = Color.White
+
+        'Header
+        chart.Header.Font.Name = "GenericSansSerif"
+        chart.Header.Font.Color = Color.Black
+        chart.Header.Font.Size = 12
+        chart.Header.Text = ""
+
+        'Legende
+        chart.Legend.Font.Name = "GenericSansSerif"
+        chart.Legend.Font.Size = 10
+        chart.Legend.LegendStyle = Steema.TeeChart.LegendStyles.Series
+        chart.Legend.FontSeriesColor = True
+        chart.Legend.CheckBoxes = True
+
+        'Achsen
+        chart.Axes.DrawBehind = False
+
+        chart.Axes.Left.Title.Font.Name = "GenericSansSerif"
+        chart.Axes.Left.Title.Font.Color = Color.Black
+        chart.Axes.Left.Title.Font.Size = 10
+
+        chart.Axes.Left.Labels.Font.Name = "GenericSansSerif"
+        chart.Axes.Left.Labels.Font.Color = Color.Black
+        chart.Axes.Left.Labels.Font.Size = 10
+
+        chart.Axes.Left.AxisPen.Visible = True
+
+        chart.Axes.Left.Grid.Visible = True
+        chart.Axes.Left.Grid.Style = Drawing2D.DashStyle.Dash
+
+        chart.Axes.Right.Title.Font.Name = "GenericSansSerif"
+        chart.Axes.Right.Title.Font.Color = Color.Black
+        chart.Axes.Right.Title.Font.Size = 10
+
+        chart.Axes.Right.Labels.Font.Name = "GenericSansSerif"
+        chart.Axes.Right.Labels.Font.Color = Color.Black
+        chart.Axes.Right.Labels.Font.Size = 10
+
+        chart.Axes.Right.AxisPen.Visible = True
+
+        chart.Axes.Right.Grid.Visible = False
+        chart.Axes.Right.Grid.Style = Drawing2D.DashStyle.Dash
+
+        chart.Axes.Bottom.Title.Font.Name = "GenericSansSerif"
+        chart.Axes.Bottom.Title.Font.Color = Color.Black
+        chart.Axes.Bottom.Title.Font.Size = 10
+
+        chart.Axes.Bottom.Labels.Font.Name = "GenericSansSerif"
+        chart.Axes.Bottom.Labels.Font.Color = Color.Black
+        chart.Axes.Bottom.Labels.Font.Size = 10
+
+        chart.Axes.Bottom.Automatic = True
+
+        chart.Axes.Bottom.AxisPen.Visible = True
+
+        chart.Axes.Bottom.Grid.Visible = True
+        chart.Axes.Bottom.Grid.Style = Drawing2D.DashStyle.Dash
+
+    End Sub
 
 End Module

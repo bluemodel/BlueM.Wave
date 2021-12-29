@@ -26,14 +26,20 @@
 '--------------------------------------------------------------------------------------------
 '
 Imports System.Windows.Forms
-
 Friend Class PropertiesDialog
+    Implements IView
+
+    Private _controller As PropertiesController 'IController
+
+    Public Sub SetController(controller As Controller) Implements IView.SetController
+        _controller = controller
+    End Sub
 
     ''' <summary>
     ''' Is raised when a property is changed by the user
     ''' </summary>
     ''' <param name="id">Id of the time series whose properties were changed</param>
-    Friend Event PropertyChanged(id As Integer)
+    Friend Event SeriesPropertyChanged(id As Integer)
 
     ''' <summary>
     ''' Is raised when the user deletes a row/series
@@ -116,7 +122,7 @@ Friend Class PropertiesDialog
         'get id of changed series from Datagridview
         id = DataGridView1.Rows(e.RowIndex).Cells(idColumnIndex).Value
 
-        RaiseEvent PropertyChanged(id)
+        RaiseEvent SeriesPropertyChanged(id)
 
     End Sub
 
@@ -142,4 +148,7 @@ Friend Class PropertiesDialog
         Call Me.Hide()
     End Sub
 
+    Private Sub IView_Close() Implements IView.Close
+        Throw New NotImplementedException()
+    End Sub
 End Class

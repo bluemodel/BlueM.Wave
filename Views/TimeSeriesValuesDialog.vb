@@ -26,11 +26,17 @@
 '--------------------------------------------------------------------------------------------
 '
 Imports System.Windows.Forms
-
 Friend Class TimeSeriesValuesDialog
+    Implements IView
 
     Private isInitializing As Boolean
     Private dataset As DataSet
+
+    Private _controller As Controller 'ValuesController
+
+    Public Sub SetController(controller As Controller) Implements IView.SetController
+        _controller = controller
+    End Sub
 
     ''' <summary>
     ''' The starting index of records to display in the datagridview
@@ -355,4 +361,7 @@ Friend Class TimeSeriesValuesDialog
         Call Me.Hide()
     End Sub
 
+    Private Sub IView_Close() Implements IView.Close
+        Throw New NotImplementedException()
+    End Sub
 End Class

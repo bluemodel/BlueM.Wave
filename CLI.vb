@@ -48,7 +48,7 @@ Friend Class CLI
         If Not AttachConsole(-1) Then AllocConsole()
 
         'Initialise the central log instance
-        Wave.logInstance = BlueM.Wave.Log.getInstance()
+        'FIXME: Wave.logInstance = BlueM.Wave.Log.getInstance()
 
     End Sub
 
@@ -80,7 +80,7 @@ Friend Class CLI
                     'Import
                     ConsoleAddLog(BlueM.Wave.Log.levels.info, $"Starting import of {fileargs.Count} files...")
                     For Each file_in As String In fileargs
-                        Call Wave.Import_File(file_in)
+                        'FIXME: Call Wave.Import_File(file_in)
                         ConsoleOutputLog()
                     Next
 
@@ -151,7 +151,7 @@ Friend Class CLI
                                 fileInstance = FileFactory.getFileInstance(file_in)
                                 Dim isOK As Boolean
                                 If interactive And fileInstance.UseImportDialog Then
-                                    isOK = Wave.ShowImportDialog(fileInstance)
+                                    'FIXME: isOK = Wave.ShowImportDialog(fileInstance)
                                     If Not isOK Then
                                         ConsoleAddLog(Log.levels.warning, $"Import of file {file_in} cancelled by user, skipping this file!")
                                         Continue For

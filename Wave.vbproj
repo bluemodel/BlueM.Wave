@@ -6,11 +6,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{CE4132A2-2E2F-4F54-B66D-1BAA928D499E}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <StartupObject>BlueM.Wave.My.MyApplication</StartupObject>
+    <StartupObject>Sub Main</StartupObject>
     <RootNamespace>BlueM.Wave</RootNamespace>
     <AssemblyName>Wave</AssemblyName>
     <FileAlignment>512</FileAlignment>
-    <MyType>WindowsForms</MyType>
+    <MyType>Empty</MyType>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>false</Deterministic>
@@ -184,17 +184,16 @@
     <Compile Include="Analysis\TimestepAnalysisDialog.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="App.vb" />
     <Compile Include="AxisWrapper.vb" />
-    <Compile Include="Character.vb" />
-    <Compile Include="ChartEventListener.vb" />
+    <Compile Include="Classes\Character.vb" />
+    <Compile Include="Classes\Month.vb" />
+    <Compile Include="Classes\TimeSeries.vb" />
+    <Compile Include="Classes\TimeSeriesDataSource.vb" />
     <Compile Include="CLI.vb" />
     <Compile Include="Constants.vb" />
-    <Compile Include="Dialogs\AxisDialog.Designer.vb">
-      <DependentUpon>AxisDialog.vb</DependentUpon>
-    </Compile>
-    <Compile Include="Dialogs\AxisDialog.vb">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Controllers\PropertiesController.vb" />
+    <Compile Include="Controllers\WaveController.vb" />
     <Compile Include="Dialogs\ConvertErrorValuesDialog.Designer.vb">
       <DependentUpon>ConvertErrorValuesDialog.vb</DependentUpon>
     </Compile>
@@ -249,12 +248,6 @@
     <Compile Include="Dialogs\SeriesEditorDialog.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Dialogs\TimeSeriesValuesDialog.Designer.vb">
-      <DependentUpon>TimeSeriesValuesDialog.vb</DependentUpon>
-    </Compile>
-    <Compile Include="Dialogs\TimeSeriesValuesDialog.vb">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="FileFormats\ASC.vb" />
     <Compile Include="FileFormats\SWMM_INTERFACE.vb" />
     <Compile Include="FileFormats\SWMM_LID_REPORT.vb" />
@@ -286,6 +279,8 @@
     <Compile Include="FileFormats\ZRE.vb" />
     <Compile Include="FileFormats\ZRXP.vb" />
     <Compile Include="Helpers.vb" />
+    <Compile Include="Controller.vb" />
+    <Compile Include="IView.vb" />
     <Compile Include="Log.vb" />
     <Compile Include="LogWindow.Designer.vb">
       <DependentUpon>LogWindow.vb</DependentUpon>
@@ -311,14 +306,25 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="TimeSeries.vb" />
-    <Compile Include="TimeSeriesDataSource.vb" />
-    <Compile Include="Wave.Designer.vb">
-      <DependentUpon>Wave.vb</DependentUpon>
+    <Compile Include="Views\AxisDialog.Designer.vb">
+      <DependentUpon>AxisDialog.vb</DependentUpon>
     </Compile>
-    <Compile Include="Wave.vb">
+    <Compile Include="Views\AxisDialog.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Views\MainWindow.Designer.vb">
+      <DependentUpon>MainWindow.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MainWindow.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\TimeSeriesValuesDialog.Designer.vb">
+      <DependentUpon>TimeSeriesValuesDialog.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Views\TimeSeriesValuesDialog.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Wave.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="AboutBox.resx">
@@ -352,9 +358,6 @@
     <EmbeddedResource Include="Analysis\TimestepAnalysisDialog.resx">
       <DependentUpon>TimestepAnalysisDialog.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Dialogs\AxisDialog.resx">
-      <DependentUpon>AxisDialog.vb</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Dialogs\ConvertErrorValuesDialog.resx">
       <DependentUpon>ConvertErrorValuesDialog.vb</DependentUpon>
     </EmbeddedResource>
@@ -382,9 +385,6 @@
     <EmbeddedResource Include="Dialogs\SeriesEditorDialog.resx">
       <DependentUpon>SeriesEditorDialog.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Dialogs\TimeSeriesValuesDialog.resx">
-      <DependentUpon>TimeSeriesValuesDialog.vb</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="FileFormats\HYDRO_AS-2D_Diag.resx">
       <DependentUpon>HYDRO_AS-2D_Diag.vb</DependentUpon>
     </EmbeddedResource>
@@ -397,8 +397,14 @@
       <CustomToolNamespace>My.Resources</CustomToolNamespace>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Wave.resx">
-      <DependentUpon>Wave.vb</DependentUpon>
+    <EmbeddedResource Include="Views\AxisDialog.resx">
+      <DependentUpon>AxisDialog.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\MainWindow.resx">
+      <DependentUpon>MainWindow.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\TimeSeriesValuesDialog.resx">
+      <DependentUpon>TimeSeriesValuesDialog.vb</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
