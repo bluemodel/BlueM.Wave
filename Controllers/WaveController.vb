@@ -743,7 +743,7 @@ Friend Class WaveController
 
             Try
                 'Wait-Cursor
-                'FIXME: Me.Cursor = Cursors.WaitCursor
+                View.Cursor = Cursors.WaitCursor
 
                 Call Log.AddLogEntry(Log.levels.info, $"Starting analysis {oAnalysisDialog.selectedAnalysisFunction} ...")
 
@@ -764,7 +764,7 @@ Friend Class WaveController
                 Call Log.AddLogEntry(Log.levels.info, "Analysis complete")
 
                 'Default-Cursor
-                'FIXME: Me.Cursor = Cursors.Default
+                View.Cursor = Cursors.Default
 
                 'Ergebnisse anzeigen:
                 '--------------------
@@ -799,7 +799,7 @@ Friend Class WaveController
                 End If
 
             Catch ex As Exception
-                'FIXME: Me.Cursor = Cursors.Default
+                View.Cursor = Cursors.Default
                 'Logeintrag
                 Call Log.AddLogEntry(Log.levels.error, "Analysis failed:" & eol & ex.Message)
                 'Alert
@@ -1462,7 +1462,7 @@ Friend Class WaveController
             If e.Button = MouseButtons.Left Then
                 'start zoom process
 
-                'FIXME: Me.TChart2.Cursor = cursor_zoom
+                View.TChart2.Cursor = View.cursor_zoom
 
                 Me.OverviewChartMouseDragging = True
                 Me.OverviewChartMouseDragStartX = e.X
@@ -1483,7 +1483,7 @@ Friend Class WaveController
             ElseIf e.Button = MouseButtons.Right Then
                 'start panning process
 
-                'FIXME: Me.TChart2.Cursor = cursor_pan
+                View.TChart2.Cursor = View.cursor_pan
 
                 Me.OverviewChartMouseDragging = True
                 Me.OverviewChartMouseDragStartX = e.X
@@ -1545,7 +1545,7 @@ Friend Class WaveController
     ''' <param name="e"></param>
     Private Sub OverviewChart_MouseUp(sender As System.Object, e As System.Windows.Forms.MouseEventArgs)
 
-        'FIXME: Me.TChart2.Cursor = Cursors.Default
+        View.TChart2.Cursor = Cursors.Default
 
         If Me.OverviewChartMouseDragging Then
 
@@ -1859,16 +1859,18 @@ Friend Class WaveController
     End Sub
 
     ''' <summary>
-    ''' Eine Zeitreihe in den Diagrammen anzeigen
+    ''' Handles a new series being added to the model
+    ''' Adds the series to the charts
+    ''' Also adds the datasource to the MRU file list if the time series has a file datasource
     ''' </summary>
-    ''' <param name="zre">Die anzuzeigende Zeitreihe</param>
-    Private Sub SeriesAdded(zre As TimeSeries)
+    ''' <param name="ts">Die anzuzeigende Zeitreihe</param>
+    Private Sub SeriesAdded(ts As TimeSeries)
 
         'Remove nodes if necessary (#68)
-        If zre.StartDate < Constants.minOADate Then
-            zre = zre.Clone()
+        If ts.StartDate < Constants.minOADate Then
+            ts = ts.Clone()
             Dim t_too_early = New List(Of DateTime)
-            For Each t As DateTime In zre.Dates
+            For Each t As DateTime In ts.Dates
                 If t < Constants.minOADate Then
                     t_too_early.Add(t)
                 Else
@@ -1876,14 +1878,14 @@ Friend Class WaveController
                 End If
             Next
             For Each t As DateTime In t_too_early
-                zre.Nodes.Remove(t)
+                ts.Nodes.Remove(t)
             Next
             Log.AddLogEntry(Log.levels.warning, $"Unable to display {t_too_early.Count} nodes between {t_too_early.First().ToString(Helpers.DefaultDateFormat)} and {t_too_early.Last().ToString(Helpers.DefaultDateFormat)}!")
         End If
-        If zre.EndDate > Constants.maxOADate Then
-            zre = zre.Clone()
+        If ts.EndDate > Constants.maxOADate Then
+            ts = ts.Clone()
             Dim t_too_late As New List(Of DateTime)
-            For Each t As DateTime In zre.Dates.Reverse()
+            For Each t As DateTime In ts.Dates.Reverse()
                 If t > Constants.maxOADate Then
                     t_too_late.Add(t)
                 Else
@@ -1891,7 +1893,7 @@ Friend Class WaveController
                 End If
             Next
             For Each t As DateTime In t_too_late
-                zre.Nodes.Remove(t)
+                ts.Nodes.Remove(t)
             Next
             Log.AddLogEntry(Log.levels.warning, $"Unable to display {t_too_late.Count} nodes between {t_too_late.Last().ToString(Helpers.DefaultDateFormat)} and {t_too_late.First().ToString(Helpers.DefaultDateFormat)}!")
         End If
@@ -1913,12 +1915,12 @@ Friend Class WaveController
         Line2.XValues.DateTime = True
 
         'Store id as Tag property
-        Line1.Tag = zre.Id
-        Line2.Tag = zre.Id
+        Line1.Tag = ts.Id
+        Line2.Tag = ts.Id
 
         'Namen vergeben
-        Line1.Title = zre.Title
-        Line2.Title = zre.Title
+        Line1.Title = ts.Title
+        Line2.Title = ts.Title
 
         'Set line width to 2
         Line1.LinePen.Width = 2
@@ -1927,16 +1929,16 @@ Friend Class WaveController
         'Stützstellen zur Serie hinzufügen
         'Main chart
         Line1.BeginUpdate()
-        Line1.Add(zre.Dates.ToArray(), zre.Values.ToArray())
+        Line1.Add(ts.Dates.ToArray(), ts.Values.ToArray())
         Line1.EndUpdate()
 
         'Overview chart
         Line2.BeginUpdate()
-        If Double.IsNaN(zre.FirstValue) Then
+        If Double.IsNaN(ts.FirstValue) Then
             'TeeChart throws an OverflowException when attemtping to display a FastLine that begins with a NaN value as a step function!
             'To avoid this we generally do not add NaN values at the beginning of the time series to the FastLine (#67)
             Dim isNaN As Boolean = True
-            For Each node As KeyValuePair(Of DateTime, Double) In zre.Nodes
+            For Each node As KeyValuePair(Of DateTime, Double) In ts.Nodes
                 If isNaN Then
                     isNaN = isNaN And Double.IsNaN(node.Value)
                 End If
@@ -1945,20 +1947,20 @@ Friend Class WaveController
                 End If
             Next
         Else
-            Line2.Add(zre.Dates.ToArray(), zre.Values.ToArray())
+            Line2.Add(ts.Dates.ToArray(), ts.Values.ToArray())
         End If
         Line2.EndUpdate()
 
         'Determine total number of NaN-values and write to log
-        If zre.NaNCount > 0 Then
-            Log.AddLogEntry(Log.levels.warning, $"Series '{zre.Title}' contains {zre.NaNCount} NaN values!")
+        If ts.NaNCount > 0 Then
+            Log.AddLogEntry(Log.levels.warning, $"Series '{ts.Title}' contains {ts.NaNCount} NaN values!")
         End If
 
         'Y-Achsenzuordnung
-        assignSeriesToAxis(Line1, zre.Unit)
+        assignSeriesToAxis(Line1, ts.Unit)
 
         'Interpretation
-        Select Case zre.Interpretation
+        Select Case ts.Interpretation
             Case TimeSeries.InterpretationEnum.BlockRight
                 Line1.Stairs = True
                 Line2.Stairs = True
@@ -1976,18 +1978,18 @@ Friend Class WaveController
         Call Me.ViewportChanged()
 
         'add datasource filename to Recently Used Files menu
-        If zre.DataSource.Origin = TimeSeriesDataSource.OriginEnum.FileImport Then
+        If ts.DataSource.Origin = TimeSeriesDataSource.OriginEnum.FileImport Then
             'remove if already present
             Dim i As Integer = 0
             For Each _item As ToolStripItem In View.ToolStripMenuItem_RecentlyUsedFiles.DropDownItems
-                If _item.Text = zre.DataSource.FilePath Then
+                If _item.Text = ts.DataSource.FilePath Then
                     View.ToolStripMenuItem_RecentlyUsedFiles.DropDownItems.RemoveAt(i)
                     Exit For
                 End If
                 i += 1
             Next
             'add to top of list
-            Dim item As New ToolStripMenuItem(zre.DataSource.FilePath)
+            Dim item As New ToolStripMenuItem(ts.DataSource.FilePath)
             View.ToolStripMenuItem_RecentlyUsedFiles.DropDownItems.Insert(0, item)
         End If
 

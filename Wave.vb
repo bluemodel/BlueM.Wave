@@ -598,7 +598,6 @@ Public Class Wave
 
     ''' <summary>
     ''' Import a time series
-    ''' Saves and then displays the time series
     ''' </summary>
     ''' <param name="ts">the time series</param>
     Public Sub Import_Series(ts As TimeSeries)
@@ -606,11 +605,6 @@ Public Class Wave
         'Store the time series
         Me.AddTimeSeries(ts)
 
-        'Raise event
-        RaiseEvent SeriesAdded(ts)
-
-        'Serie in Diagrammen anzeigen
-        'FIXME: Call Me.Display_Series(zre)
     End Sub
 
     Friend Sub SaveProjectFile(projectfile)
@@ -853,9 +847,6 @@ Public Class Wave
 
         RaiseEvent SeriesRemoved(id)
 
-        'FIXME: 'Update dialogs
-        'Me.valuesDialog.Update(Me.TimeSeriesDict.Values.ToList)
-
     End Sub
 
     Friend Sub RemoveAllTimeSeries()
@@ -888,7 +879,7 @@ Public Class Wave
     ''' <summary>
     ''' Adds a time series to the internal storage
     ''' Renames the title if it is not unique
-    ''' Also adds the datasource to the MRU file list if the time series has a file datasource
+    ''' Raises the SeriesAdded event
     ''' </summary>
     ''' <param name="timeseries"></param>
     Private Sub AddTimeSeries(ByRef timeseries As TimeSeries)
@@ -923,9 +914,9 @@ Public Class Wave
 
         Me.TimeSeriesDict.Add(timeseries.Id, timeseries)
 
-        'FIXME: 'Update dialogs
-        'Me.propDialog.Update(Me.TimeSeriesDict.Values.ToList)
-        'Me.valuesDialog.Update(Me.TimeSeriesDict.Values.ToList)
+        'Raise event
+        RaiseEvent SeriesAdded(timeseries)
+
     End Sub
 
     ''' <summary>
