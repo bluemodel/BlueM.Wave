@@ -74,8 +74,15 @@ Friend Class WaveController
         AddHandler Me.View.ToolStripButton_Merge.Click, AddressOf Merge_Click
         AddHandler Me.View.ToolStripButton_Analysis.Click, AddressOf Analysis_Click
         AddHandler Me.View.ToolStripButton_AxisDialog.Click, AddressOf AxisDialog_Click
+        AddHandler Me.View.ToolStripButton_EditChart.Click, AddressOf EditChart_Click
+        AddHandler Me.View.ToolStripMenuItem_ColorPaletteMaterial.Click, AddressOf ColorPalette_Click
+        AddHandler Me.View.ToolStripMenuItem_ColorPaletteDistinct.Click, AddressOf ColorPalette_Click
+        AddHandler Me.View.ToolStripMenuItem_ColorPaletteWheel.Click, AddressOf ColorPalette_Click
+        AddHandler Me.View.ToolStripMenuItem_ColorPaletteRandom.Click, AddressOf ColorPalette_Click
         AddHandler Me.View.ToolStripButton_Properties.Click, AddressOf Properties_Click
         AddHandler Me.View.ToolStripButton_TimeseriesValues.Click, AddressOf TimeseriesValues_Click
+        AddHandler Me.View.ToolStripButton_ToggleOverview.Click, AddressOf ToggleOverview_Clicked
+        AddHandler Me.View.ToolStripButton_ToggleNavigation.Click, AddressOf ToggleNavigation_Click
         AddHandler Me.View.ToolStripButton_ShowNaNValues.Click, AddressOf ShowNaNValues_Click
         AddHandler Me.View.ToolStripButton_ConvertErrorValues.Click, AddressOf ConvertErrorValues_Click
         AddHandler Me.View.ToolStripButton_RemoveNaNValues.Click, AddressOf RemoveNaNValues_Click
@@ -99,6 +106,7 @@ Friend Class WaveController
         AddHandler Me.View.TChart1.MouseDown, AddressOf TChart1_MouseDown
         AddHandler Me.View.TChart1.MouseMove, AddressOf TChart1_MouseMove
         AddHandler Me.View.TChart1.MouseUp, AddressOf TChart1_MouseUp
+        AddHandler Me.View.TChart1.DoubleClick, AddressOf EditChart_Click
 
         AddHandler Me.View.TChart2.MouseDown, AddressOf OverviewChart_MouseDown
         AddHandler Me.View.TChart2.MouseMove, AddressOf OverviewChart_MouseMove
@@ -454,6 +462,24 @@ Friend Class WaveController
     End Sub
 
     ''' <summary>
+    ''' Edit Chart button clicked
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    Private Sub EditChart_Click(sender As System.Object, e As System.EventArgs)
+        Call Steema.TeeChart.Editor.Show(View.TChart1)
+    End Sub
+
+    ''' <summary>
+    ''' Color palette menu item clicked
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    Private Sub ColorPalette_Click(sender As Object, e As EventArgs)
+        Dim colorPaletteName As String = CType(sender, ToolStripMenuItem).Text
+        SetChartColorPalette(Helpers.getColorPalette(colorPaletteName))
+    End Sub
+    ''' <summary>
     ''' Show AxisDialog button clicked
     ''' </summary>
     ''' <param name="sender"></param>
@@ -479,6 +505,36 @@ Friend Class WaveController
         'AppManager.Instance.Load(Of ValuesController)(_model)
         'FIXME: valuesDialog.Show()
         'FIXME: valuesDialog.BringToFront()
+    End Sub
+
+    ''' <summary>
+    ''' Toggle overview button clicked
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    Private Sub ToggleOverview_Clicked(sender As System.Object, e As System.EventArgs)
+        If View.ToolStripButton_ToggleOverview.Checked Then
+            View.SplitContainer1.Panel1Collapsed = False
+            View.ToolStripButton_ToggleOverview.Checked = True
+        Else
+            View.SplitContainer1.Panel1Collapsed = True
+            View.ToolStripButton_ToggleOverview.Checked = False
+        End If
+    End Sub
+
+    ''' <summary>
+    ''' Show Navigation button clicked
+    ''' </summary>
+    Private Sub ToggleNavigation_Click(sender As System.Object, e As System.EventArgs)
+        If View.ToolStripButton_ToggleNavigation.Checked Then
+            View.TableLayoutPanel1.RowStyles(0).Height = 38
+            View.TableLayoutPanel1.RowStyles(2).Height = 36
+            View.ToolStripButton_ToggleNavigation.Checked = True
+        Else
+            View.TableLayoutPanel1.RowStyles(0).Height = 0
+            View.TableLayoutPanel1.RowStyles(2).Height = 0
+            View.ToolStripButton_ToggleNavigation.Checked = False
+        End If
     End Sub
 
     ''' <summary>
@@ -2290,6 +2346,35 @@ Friend Class WaveController
         Else
             e.Effect = DragDropEffects.None
         End If
+    End Sub
+
+    ''' <summary>
+    ''' Sets a color palette in the charts and changes the colors of any existing series accordingly
+    ''' </summary>
+    ''' <param name="colorPalette">The color palette to apply</param>
+    Private Sub SetChartColorPalette(colorPalette As Color())
+
+        'set colorpalette in charts
+        View.TChart1.Chart.ColorPalette = colorPalette
+        View.TChart2.Chart.ColorPalette = colorPalette
+
+        'change colors of existing series
+        Dim counter As Integer = 0
+        For Each series As Steema.TeeChart.Styles.Series In View.TChart1.Series
+            If counter >= colorPalette.Length Then
+                'loop color palette
+                counter = 0
+            End If
+            series.Color = colorPalette(counter)
+            'apply same color to series in overview chart
+            For Each series2 As Steema.TeeChart.Styles.Series In View.TChart2.Series
+                If series2.Tag = series.Tag Then
+                    series2.Color = colorPalette(counter)
+                    Exit For
+                End If
+            Next
+            counter += 1
+        Next
     End Sub
 
 End Class
