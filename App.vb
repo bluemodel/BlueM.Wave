@@ -20,10 +20,11 @@
         'Application.Run(New Wave())
 
         _wave = New Wave()
+        _waveController = New WaveController(New MainWindow(), _wave)
 
         If Environment.GetCommandLineArgs().Count > 1 Then
             'run the CLI
-            Dim showWave As Boolean = CLI.Run(Environment.GetCommandLineArgs().Skip(1).ToList)
+            Dim showWave As Boolean = CLI.Run(Environment.GetCommandLineArgs().Skip(1).ToList, _wave)
             If Not showWave Then
                 Exit Sub
             End If
@@ -33,7 +34,6 @@
             _valuesDialog = New TimeSeriesValuesDialog()
         End If
 
-        _waveController = New WaveController(New MainWindow(), _wave)
         _waveController.ShowView()
     End Sub
 
