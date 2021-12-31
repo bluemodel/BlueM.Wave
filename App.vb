@@ -39,7 +39,7 @@
     End Sub
 
     Public Sub showValuesDialog()
-        If IsNothing(_propController) Then
+        If IsNothing(_valuesController) Then
             _valuesController = New ValuesController(New TimeSeriesValuesDialog(), _wave)
         End If
         _valuesController.ShowView()

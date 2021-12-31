@@ -14,6 +14,7 @@
 
         'view events
         AddHandler Me.View.SeriesPropertyChanged, AddressOf SeriesPropertiesViewChanged
+        AddHandler Me.View.SeriesDeleted, AddressOf SeriesDeleted
 
         'model events
         AddHandler _model.SeriesAdded, AddressOf UpdateView
@@ -42,6 +43,10 @@
     ''' <remarks>Handles changed interpretation, title and unit</remarks>
     Private Sub SeriesPropertiesViewChanged(id As Integer)
         _model.SeriesPropertiesChangedHandler(id)
+    End Sub
+
+    Private Sub SeriesDeleted(id As Integer)
+        _model.RemoveTimeSeries(id)
     End Sub
 
 End Class
