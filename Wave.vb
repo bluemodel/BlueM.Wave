@@ -45,7 +45,16 @@ Public Class Wave
     ''' <param name="id"></param>
     Friend Event SeriesPropertiesChanged(id As Integer)
 
+    ''' <summary>
+    ''' Is raised when a time series is removed
+    ''' </summary>
+    ''' <param name="id"></param>
     Friend Event SeriesRemoved(id As Integer)
+
+    ''' <summary>
+    ''' Is raised when all time series are removed
+    ''' </summary>
+    Friend Event SeriesCleared()
 
     ''' <summary>
     ''' Internal collection of time series {id: TimeSeries, ...}
@@ -53,7 +62,7 @@ Public Class Wave
     Public TimeSeriesDict As Dictionary(Of Integer, TimeSeries)
 
     ''' <summary>
-    ''' The Log instance shared among all Wave instances
+    ''' FIXME: The Log instance shared among all Wave instances
     ''' </summary>
     Friend WithEvents logInstance As Log
 
@@ -594,7 +603,7 @@ Public Class Wave
     Public Sub Import_Series(ts As TimeSeries)
 
         'Store the time series
-        Me.StoreTimeseries(ts)
+        Me.AddTimeSeries(ts)
 
         'Raise event
         RaiseEvent SeriesAdded(ts)
@@ -836,7 +845,7 @@ Public Class Wave
     ''' Delete a TimeSeries
     ''' </summary>
     ''' <param name="id">TimeSeries Id</param>
-    Friend Sub DeleteTimeSeries(id As Integer)
+    Friend Sub RemoveTimeSeries(id As Integer)
 
         'Delete internally
         Me.TimeSeriesDict.Remove(id)
@@ -846,6 +855,12 @@ Public Class Wave
         'FIXME: 'Update dialogs
         'Me.valuesDialog.Update(Me.TimeSeriesDict.Values.ToList)
 
+    End Sub
+
+    Friend Sub RemoveAllTimeSeries()
+        Me.TimeSeriesDict.Clear()
+
+        RaiseEvent SeriesCleared()
     End Sub
 
     ''' <summary>
@@ -875,7 +890,7 @@ Public Class Wave
     ''' Also adds the datasource to the MRU file list if the time series has a file datasource
     ''' </summary>
     ''' <param name="timeseries"></param>
-    Private Sub StoreTimeseries(ByRef timeseries As TimeSeries)
+    Private Sub AddTimeSeries(ByRef timeseries As TimeSeries)
 
         Dim duplicateFound As Boolean
         Dim pattern As String = "(?<name>.*)\s\(\d+\)$"

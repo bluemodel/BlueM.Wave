@@ -3,8 +3,6 @@
 
     Implements Steema.TeeChart.ITeeEventListener
 
-    'FIXME: Private WithEvents _propDialog As PropertiesDialog
-
     Private Overloads ReadOnly Property View As MainWindow
         Get
             Return _view
@@ -46,8 +44,6 @@
         Call MyBase.New(view, model)
 
         Me.View.SetController(Me)
-
-        'FIXME: _propDialog = New PropertiesDialog()
 
         'Zoom history
         Me.ZoomHistory = New List(Of Tuple(Of Double, Double))
@@ -124,18 +120,19 @@
         'add chart event listener
         Me.View.TChart1.Chart.Listeners.Add(Me)
 
-        'properties dialog events
-        'FIXME: AddHandler _propDialog.PropertyChanged, AddressOf SeriesPropertiesChanged
-        'FIXME: AddHandler _propDialog.SeriesDeleted, AddressOf SeriesRemoved
-
         'model events
         AddHandler _model.SeriesAdded, AddressOf SeriesAdded
         AddHandler _model.SeriesPropertiesChanged, AddressOf SeriesPropertiesChanged
         AddHandler _model.SeriesRemoved, AddressOf SeriesRemoved
+        AddHandler _model.SeriesCleared, AddressOf SeriesCleared
 
         'Log events
-        'FIXME: AddHandler Log.LogMsgAdded, AddressOf Me.View.LogMsgAdded
+        AddHandler Log.LogMsgAdded, AddressOf LogMsgAdded
 
+    End Sub
+
+    Private Sub SeriesCleared()
+        'nothing to do
     End Sub
 
     '''' <summary>
@@ -199,7 +196,7 @@
                         Dim id As Integer = seriesEvent.Series.Tag
                         If _model.TimeSeriesDict.ContainsKey(id) Then
                             'FIXME: this causes a feedback loop and deletes two series!
-                            _model.DeleteTimeSeries(id)
+                            _model.RemoveTimeSeries(id)
                         End If
 
                 End Select
@@ -233,8 +230,8 @@
         View.ToolStripButton_ZoomPrevious.Enabled = False
         View.ToolStripButton_ZoomNext.Enabled = False
 
-        'Collections zurücksetzen
-        _model.TimeSeriesDict.Clear()
+        'remove time series from model
+        _model.RemoveAllTimeSeries()
 
         'Log zurücksetzen
         Call Log.ClearLog()
@@ -368,11 +365,11 @@
                         ids.Add(id)
                     Next
                     For Each id In ids
-                        Call _model.DeleteTimeSeries(id)
+                        Call _model.RemoveTimeSeries(id)
                     Next
                 Else
                     id = CType(cutter.ComboBox_ZeitreiheCut.SelectedItem, TimeSeries).Id
-                    Call _model.DeleteTimeSeries(id)
+                    Call _model.RemoveTimeSeries(id)
                 End If
             End If
 

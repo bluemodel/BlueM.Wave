@@ -19,6 +19,7 @@
         AddHandler _model.SeriesAdded, AddressOf UpdateView
         AddHandler _model.SeriesPropertiesChanged, AddressOf UpdateView
         AddHandler _model.SeriesRemoved, AddressOf UpdateView
+        AddHandler _model.SeriesCleared, AddressOf UpdateView
     End Sub
 
     Public Overrides Sub ShowView()
