@@ -45,9 +45,6 @@ Friend Class MainWindow
     ''' <remarks></remarks>
     Friend isInitializing As Boolean
 
-    'Dateifilter
-    Private Const FileFilter_XML As String = "Theme files (*.xml)|*.xml"
-
     'ColorBand that is shown while zooming in main chart
     Friend colorBandZoom As Steema.TeeChart.Tools.ColorBand
 
@@ -159,48 +156,6 @@ Friend Class MainWindow
     Private Sub ToolStripMenuItemColorPalette_Click(sender As Object, e As EventArgs) Handles ToolStripMenuItem_ColorPaletteMaterial.Click, ToolStripMenuItem_ColorPaletteDistinct.Click, ToolStripMenuItem_ColorPaletteWheel.Click, ToolStripMenuItem_ColorPaletteRandom.Click
         Dim colorPaletteName As String = CType(sender, ToolStripMenuItem).Text
         SetChartColorPalette(Helpers.getColorPalette(colorPaletteName))
-    End Sub
-
-    ''' <summary>
-    ''' Process Drag and Drop of files
-    ''' </summary>
-    ''' <param name="sender"></param>
-    ''' <param name="e"></param>
-    ''' <remarks></remarks>
-    Private Sub Wave_DragDrop(sender As System.Object, e As System.Windows.Forms.DragEventArgs) Handles MyBase.DragDrop
-
-        If (e.Data.GetDataPresent(DataFormats.FileDrop)) Then
-
-            Dim files() As String
-
-            'get array of file paths
-            files = e.Data.GetData(DataFormats.FileDrop)
-
-            'Invoke the file import process asynchronously
-            'FIXME: Me.BeginInvoke(New ImportDelegate(AddressOf Import_Files), New Object() {files})
-        End If
-
-    End Sub
-
-    ''' <summary>
-    ''' Used for processing drag and drop of files asynchronously
-    ''' </summary>
-    ''' <param name="files">array of file paths</param>
-    ''' <remarks></remarks>
-    Private Delegate Sub ImportDelegate(files() As String)
-
-    ''' <summary>
-    ''' Processes the Wave.DragEnter event. Sets DragEventArgs.Effect to Copy if the dragged object consist of files
-    ''' </summary>
-    ''' <param name="sender"></param>
-    ''' <param name="e"></param>
-    ''' <remarks></remarks>
-    Private Sub Wave_DragEnter(sender As System.Object, e As System.Windows.Forms.DragEventArgs) Handles MyBase.DragEnter
-        If (e.Data.GetDataPresent(DataFormats.FileDrop)) Then
-            e.Effect = DragDropEffects.Copy
-        Else
-            e.Effect = DragDropEffects.None
-        End If
     End Sub
 
 #End Region 'Form behavior

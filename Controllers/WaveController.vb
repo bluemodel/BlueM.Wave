@@ -105,6 +105,10 @@ Friend Class WaveController
         AddHandler Me.View.TChart2.MouseUp, AddressOf OverviewChart_MouseUp
         AddHandler Me.View.TChart2.DoubleClick, AddressOf TChart2_DoubleClick
 
+        'drag drop events
+        AddHandler Me.View.DragEnter, AddressOf Wave_DragEnter
+        AddHandler Me.View.DragDrop, AddressOf Wave_DragDrop
+
         'navigation events
         AddHandler Me.View.MaskedTextBox_NavStart.KeyDown, AddressOf navigationKeyDown
         AddHandler Me.View.MaskedTextBox_NavEnd.KeyDown, AddressOf navigationKeyDown
@@ -2244,6 +2248,48 @@ Friend Class WaveController
         Next
 
         _axisDialog.Update(axisList)
+    End Sub
+
+    ''' <summary>
+    ''' Process Drag and Drop of files
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    ''' <remarks></remarks>
+    Private Sub Wave_DragDrop(sender As System.Object, e As System.Windows.Forms.DragEventArgs)
+
+        If (e.Data.GetDataPresent(DataFormats.FileDrop)) Then
+
+            Dim files() As String
+
+            'get array of file paths
+            files = e.Data.GetData(DataFormats.FileDrop)
+
+            'Invoke the file import process asynchronously
+            View.BeginInvoke(New ImportDelegate(AddressOf _model.Import_Files), New String()() {files})
+        End If
+
+    End Sub
+
+    ''' <summary>
+    ''' Used for processing drag and drop of files asynchronously
+    ''' </summary>
+    ''' <param name="files">array of file paths</param>
+    ''' <remarks></remarks>
+    Private Delegate Sub ImportDelegate(files() As String)
+
+    ''' <summary>
+    ''' Processes the Wave.DragEnter event. Sets DragEventArgs.Effect to Copy if the dragged object consists of files
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    ''' <remarks></remarks>
+    Private Sub Wave_DragEnter(sender As System.Object, e As System.Windows.Forms.DragEventArgs)
+        If (e.Data.GetDataPresent(DataFormats.FileDrop)) Then
+            e.Effect = DragDropEffects.Copy
+        Else
+            e.Effect = DragDropEffects.None
+        End If
     End Sub
 
 End Class
