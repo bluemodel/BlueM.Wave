@@ -61,11 +61,6 @@ Public Class Wave
     ''' </summary>
     Public TimeSeriesDict As Dictionary(Of Integer, TimeSeries)
 
-    ''' <summary>
-    ''' FIXME: The Log instance shared among all Wave instances
-    ''' </summary>
-    Friend WithEvents logInstance As Log
-
     Public Sub New()
         'Kollektionen einrichten
         '-----------------------

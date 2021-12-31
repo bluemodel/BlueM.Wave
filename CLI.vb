@@ -47,9 +47,6 @@ Friend Class CLI
         'Attach to parent console
         If Not AttachConsole(-1) Then AllocConsole()
 
-        'Initialise the central log instance
-        'FIXME: Wave.logInstance = BlueM.Wave.Log.getInstance()
-
     End Sub
 
     ''' <summary>
