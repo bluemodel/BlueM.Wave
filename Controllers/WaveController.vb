@@ -57,6 +57,8 @@ Friend Class WaveController
 
         'Subscribe to view events
 
+        AddHandler Me.View.Load, AddressOf View_Load
+
         'toolbar buttons
         AddHandler Me.View.ToolStripButton_New.Click, AddressOf New_Click
         AddHandler Me.View.ToolStripButton_Copy.Click, AddressOf Copy_Click
@@ -158,23 +160,22 @@ Friend Class WaveController
         'nothing to do
     End Sub
 
-    '''' <summary>
-    '''' View is loading
-    '''' FIXME: Checks for update
-    '''' TODO: should this be done in the model?
-    '''' </summary>
-    'Private Async Sub Wave_Load(sender As System.Object, e As System.EventArgs) Handles View.Load
-    '    'Check for update
-    '    Try
-    '        Dim updateAvailable As Boolean
-    '        updateAvailable = Await _model.CheckForUpdate()
-    '        If updateAvailable Then
-    '            View.ToolStripButton_UpdateNotification.Visible = True
-    '        End If
-    '    Catch ex As Exception
-    '        'do nothing if check for update fails at startup
-    '    End Try
-    'End Sub
+    ''' <summary>
+    ''' View is loading
+    ''' Checks for update and displays a notification
+    ''' </summary>
+    Private Async Sub View_Load(sender As System.Object, e As System.EventArgs)
+        'Check for update
+        Try
+            Dim updateAvailable As Boolean
+            updateAvailable = Await _model.CheckForUpdate()
+            If updateAvailable Then
+                View.ToolStripButton_UpdateNotification.Visible = True
+            End If
+        Catch ex As Exception
+            'do nothing if check for update fails at startup
+        End Try
+    End Sub
 
     ''' <summary>
     ''' Handles TeeChart Events
