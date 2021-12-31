@@ -40,7 +40,6 @@ Public Class Wave
 
     ''' <summary>
     ''' Is raised when a time series has its properties changed
-    ''' FIXME: this should probably be an event of the Timeseries itself?
     ''' </summary>
     ''' <param name="id"></param>
     Friend Event SeriesPropertiesChanged(id As Integer)
@@ -199,8 +198,6 @@ Public Class Wave
 
             'Update window title
             'FIXME: Me.Text = "BlueM.Wave - " & projectfile
-
-            'FIXME: Call Me.UpdateChartExtents()
 
         Catch ex As Exception
             MsgBox("Error while loading project file:" & eol & ex.Message, MsgBoxStyle.Critical)
