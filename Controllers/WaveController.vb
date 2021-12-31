@@ -147,6 +147,7 @@ Friend Class WaveController
         AddHandler _model.SeriesPropertiesChanged, AddressOf SeriesPropertiesChanged
         AddHandler _model.SeriesRemoved, AddressOf SeriesRemoved
         AddHandler _model.SeriesCleared, AddressOf SeriesCleared
+        AddHandler _model.HighlightTimestamps, AddressOf showMarkers
 
         'Log events
         AddHandler Log.LogMsgAdded, AddressOf LogMsgAdded
@@ -502,9 +503,7 @@ Friend Class WaveController
     ''' Timeseries Values button clicked
     ''' </summary>
     Private Sub TimeseriesValues_Click(sender As Object, e As EventArgs)
-        'AppManager.Instance.Load(Of ValuesController)(_model)
-        'FIXME: valuesDialog.Show()
-        'FIXME: valuesDialog.BringToFront()
+        App.showValuesDialog()
     End Sub
 
     ''' <summary>
@@ -2078,7 +2077,7 @@ Friend Class WaveController
     ''' Shows markers at the given timestamps in the chart
     ''' </summary>
     ''' <param name="timestamps">List of timestamps for which to show markers</param>
-    Private Sub showMarkers(timestamps As List(Of DateTime)) 'FIXME: Handles valuesDialog.SelectedRowsChanged
+    Private Sub showMarkers(timestamps As List(Of DateTime))
 
         'Remove any existing marker series
         For i As Integer = View.TChart1.Series.Count - 1 To 0 Step -1

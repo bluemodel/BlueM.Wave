@@ -6,9 +6,7 @@
     'Controllers
     Private _waveController As Controller
     Private _propController As Controller
-
-    'Dialogs
-    Private _valuesDialog As TimeSeriesValuesDialog
+    Private _valuesController As Controller
 
     <STAThread()>
     Public Sub Main()
@@ -30,10 +28,6 @@
             End If
         End If
 
-        If IsNothing(_valuesDialog) Then
-            _valuesDialog = New TimeSeriesValuesDialog()
-        End If
-
         _waveController.ShowView()
     End Sub
 
@@ -42,6 +36,13 @@
             _propController = New PropertiesController(New PropertiesDialog(), _wave)
         End If
         _propController.ShowView()
+    End Sub
+
+    Public Sub showValuesDialog()
+        If IsNothing(_propController) Then
+            _valuesController = New ValuesController(New TimeSeriesValuesDialog(), _wave)
+        End If
+        _valuesController.ShowView()
     End Sub
 
 End Module

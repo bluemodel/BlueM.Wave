@@ -32,7 +32,7 @@ Friend Class TimeSeriesValuesDialog
     Private isInitializing As Boolean
     Private dataset As DataSet
 
-    Private _controller As Controller 'ValuesController
+    Private _controller As ValuesController
 
     Public Sub SetController(controller As Controller) Implements IView.SetController
         _controller = controller
@@ -59,7 +59,6 @@ Friend Class TimeSeriesValuesDialog
     ''' </summary>
     Private Const maxRows As Integer = 100
 
-    Public Event Button_ExportValues_Clicked(sender As Object, e As EventArgs)
     Public Event SelectedRowsChanged(timestamps As List(Of DateTime))
 
     Public Sub New()
@@ -262,10 +261,6 @@ Friend Class TimeSeriesValuesDialog
         End If
     End Sub
 
-    Private Sub ToolStripButton_ExportValues_Click(sender As Object, e As EventArgs) Handles ToolStripButton_ExportValues.Click
-        RaiseEvent Button_ExportValues_Clicked(sender, e)
-    End Sub
-
     ''' <summary>
     ''' Handles selection of datagridview changed
     ''' If showing markers is activated, selected rows are shown as markers in the main chart
@@ -332,7 +327,7 @@ Friend Class TimeSeriesValuesDialog
     ''' </summary>
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
-    Private Sub MaskedTextBox_JumpDate_ValueChanged(sender As Object, e As EventArgs) Handles MaskedTextBox_JumpDate.Validated
+    Private Sub MaskedTextBox_JumpDate_ValueChanged(sender As Object, e As EventArgs) Handles MaskedTextBox_JumpDate.Validated, Button_Jump.Click
         Me.Cursor = Cursors.WaitCursor
         Dim selectedDate As DateTime = CType(Me.MaskedTextBox_JumpDate.Text, DateTime)
         Dim table As DataTable = Me.dataset.Tables("data")

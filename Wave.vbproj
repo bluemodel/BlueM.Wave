@@ -193,6 +193,7 @@
     <Compile Include="CLI.vb" />
     <Compile Include="Constants.vb" />
     <Compile Include="Controllers\PropertiesController.vb" />
+    <Compile Include="Controllers\ValuesController.vb" />
     <Compile Include="Controllers\WaveController.vb" />
     <Compile Include="Dialogs\AxisDialog.Designer.vb">
       <DependentUpon>AxisDialog.vb</DependentUpon>

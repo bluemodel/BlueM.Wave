@@ -57,6 +57,12 @@ Public Class Wave
     Friend Event SeriesCleared()
 
     ''' <summary>
+    ''' Is raised when timestamps should be highlighted
+    ''' </summary>
+    ''' <param name="timestamps"></param>
+    Friend Event HighlightTimestamps(timestamps As List(Of DateTime))
+
+    ''' <summary>
     ''' Internal collection of time series {id: TimeSeries, ...}
     ''' </summary>
     Public TimeSeriesDict As Dictionary(Of Integer, TimeSeries)
@@ -950,6 +956,11 @@ Public Class Wave
         End If
 
     End Function
+
+    Friend Sub HighlightTimestampsHandler(timestamps As List(Of DateTime))
+        RaiseEvent HighlightTimestamps(timestamps)
+    End Sub
+
 
     Friend Sub SeriesPropertiesChangedHandler(id As Integer)
         RaiseEvent SeriesPropertiesChanged(id)
