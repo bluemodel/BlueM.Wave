@@ -2228,8 +2228,11 @@ Friend Class WaveController
         'Remove series from main chart
         'FIXME: the event may have originated from the chartlistbox, in which case the series is going to be removed by TChart, removing it here causes a second removal!
         For i As Integer = View.TChart1.Series.Count - 1 To 0 Step -1
-            'FIXME: some series may be marker series without an id!
-            If (View.TChart1.Series.Item(i).Tag = id) Then
+            If CType(View.TChart1.Series.Item(i).Tag, String) = "_markers" Then
+                'TODO: marker series belonging to the removed series should be removed as well, skip for now
+                Continue For
+            End If
+            If View.TChart1.Series.Item(i).Tag = id Then
                 View.TChart1.Series.RemoveAt(i)
                 View.TChart1.Refresh()
                 Exit For
@@ -2245,8 +2248,6 @@ Friend Class WaveController
             End If
         Next
 
-        'update properties dialog
-        'FIXME: _propDialog.Update(_model.TimeSeriesDict.Values.ToList)
     End Sub
 
     ''' <summary>
