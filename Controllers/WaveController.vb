@@ -1,4 +1,6 @@
-﻿Friend Class WaveController
+﻿Imports System.Text.RegularExpressions
+
+Friend Class WaveController
     Inherits Controller
 
     Implements Steema.TeeChart.ITeeEventListener
@@ -39,15 +41,19 @@
     Private OverviewChartMouseDragStartX As Double
     Private OverviewChartMouseDragOffset As Double
 
+    Private WithEvents _axisDialog As AxisDialog
+
     Public Sub New(view As IView, ByRef model As Wave)
 
         Call MyBase.New(view, model)
 
         Me.View.SetController(Me)
 
-        'Zoom history
+        'Initialize zoom history
         Me.ZoomHistory = New List(Of Tuple(Of Double, Double))
         Me.ZoomHistoryIndex = 0
+
+        _axisDialog = New AxisDialog()
 
         'Subscribe to view events
 
@@ -116,6 +122,10 @@
         AddHandler Me.View.ToolStripStatusLabel_Log.Click, AddressOf ShowLog_Click
         AddHandler Me.View.ToolStripStatusLabel_Errors.Click, AddressOf ShowLog_Click
         AddHandler Me.View.ToolStripStatusLabel_Warnings.Click, AddressOf ShowLog_Click
+
+        'axis dialog events
+        AddHandler _axisDialog.AxisDeleted, AddressOf axisDeleted
+        AddHandler _axisDialog.AxisUnitChanged, AddressOf AxisUnitChanged
 
         'add chart event listener
         Me.View.TChart1.Chart.Listeners.Add(Me)
@@ -243,10 +253,8 @@
         View.ToolStripStatusLabel_Errors.Image = My.Resources.cancel_inactive
         View.ToolStripStatusLabel_Warnings.Image = My.Resources.warning_inactive
 
-        'Update dialogs
-        'FIXME: Call Me.UpdateAxisDialog()
-        'FIXME: Call propDialog.Update(Me.TimeSeriesDict.Values.ToList)
-        'FIXME: Call valuesDialog.Update(Me.TimeSeriesDict.Values.ToList)
+        'Update axis dialog
+        Me.UpdateAxisDialog()
 
         Me.selectionMade = False
 
@@ -447,10 +455,9 @@
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
     Private Sub AxisDialog_Click(sender As Object, e As EventArgs)
-        'AppManager.Instance.Load(Of AxisController)(_model)
-        'FIXME: Call Me.UpdateAxisDialog()
-        'FIXME: Me.axisDialog.Show()
-        'FIXME: Me.axisDialog.BringToFront()
+        Call UpdateAxisDialog()
+        _axisDialog.Show()
+        _axisDialog.BringToFront()
     End Sub
 
     ''' <summary>
@@ -2001,7 +2008,7 @@
                 series.CustomVertAxis = axis
 
                 'update axis dialog
-                'FIXME: Call Me.UpdateAxisDialog()
+                Call Me.UpdateAxisDialog()
             End If
         End If
 
@@ -2178,6 +2185,65 @@
 
         'update properties dialog
         'FIXME: _propDialog.Update(_model.TimeSeriesDict.Values.ToList)
+    End Sub
+
+    ''' <summary>
+    ''' Handles axis deleted in the AxisDialog
+    ''' </summary>
+    ''' <param name="axisname"></param>
+    Private Sub axisDeleted(axisname As String)
+        Dim axisnumber As Integer
+        Dim m As Match = Regex.Match(axisname, "Custom (\d+)")
+        If m.Success Then
+            axisnumber = Integer.Parse(m.Groups(1).Value)
+            'Delete axis from chart
+            View.TChart1.Axes.Custom.RemoveAt(axisnumber)
+            View.TChart1.Refresh()
+            'update axis dialog
+            Call Me.UpdateAxisDialog()
+        End If
+    End Sub
+
+    ''' <summary>
+    ''' Handles axis unit changed in the AxisDialog
+    ''' </summary>
+    ''' <remarks>Reassigns all series to their appropriate axis</remarks>
+    Private Sub AxisUnitChanged()
+
+        For Each series As Steema.TeeChart.Styles.Series In View.TChart1.Series
+            assignSeriesToAxis(series, _model.TimeSeriesDict(series.Tag).Unit)
+        Next
+
+        'deactivate unused custom axes
+        Dim unitUsed As Boolean
+        For Each axis As Steema.TeeChart.Axis In View.TChart1.Axes.Custom
+            unitUsed = False
+            For Each ts As TimeSeries In _model.TimeSeriesDict.Values
+                If ts.Unit = axis.Tag Then
+                    unitUsed = True
+                    Exit For
+                End If
+            Next
+            If Not unitUsed Then
+                axis.Visible = False
+            End If
+        Next
+
+    End Sub
+
+    ''' <summary>
+    ''' Update AxisDialog
+    ''' </summary>
+    Private Sub UpdateAxisDialog()
+        'Wrap Left, Right and Custom axes
+        Dim axisList As New List(Of AxisWrapper)
+        axisList.Add(New AxisWrapper("Left", View.TChart1.Axes.Left))
+        axisList.Add(New AxisWrapper("Right", View.TChart1.Axes.Right))
+        For i As Integer = 0 To View.TChart1.Axes.Custom.Count - 1
+            axisList.Add(New AxisWrapper("Custom " & i, View.TChart1.Axes.Custom(i)))
+        Next
+
+        _axisDialog.Update(axisList)
     End Sub
 
 End Class

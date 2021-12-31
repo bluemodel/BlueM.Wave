@@ -194,6 +194,12 @@
     <Compile Include="Constants.vb" />
     <Compile Include="Controllers\PropertiesController.vb" />
     <Compile Include="Controllers\WaveController.vb" />
+    <Compile Include="Dialogs\AxisDialog.Designer.vb">
+      <DependentUpon>AxisDialog.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\AxisDialog.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Dialogs\ConvertErrorValuesDialog.Designer.vb">
       <DependentUpon>ConvertErrorValuesDialog.vb</DependentUpon>
     </Compile>
@@ -306,12 +312,6 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="Views\AxisDialog.Designer.vb">
-      <DependentUpon>AxisDialog.vb</DependentUpon>
-    </Compile>
-    <Compile Include="Views\AxisDialog.vb">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="Views\MainWindow.Designer.vb">
       <DependentUpon>MainWindow.vb</DependentUpon>
     </Compile>
@@ -358,6 +358,9 @@
     <EmbeddedResource Include="Analysis\TimestepAnalysisDialog.resx">
       <DependentUpon>TimestepAnalysisDialog.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Dialogs\AxisDialog.resx">
+      <DependentUpon>AxisDialog.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Dialogs\ConvertErrorValuesDialog.resx">
       <DependentUpon>ConvertErrorValuesDialog.vb</DependentUpon>
     </EmbeddedResource>
@@ -396,9 +399,6 @@
       <LastGenOutput>Resources.Designer.vb</LastGenOutput>
       <CustomToolNamespace>My.Resources</CustomToolNamespace>
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Views\AxisDialog.resx">
-      <DependentUpon>AxisDialog.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\MainWindow.resx">
       <DependentUpon>MainWindow.vb</DependentUpon>
