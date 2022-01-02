@@ -31,16 +31,16 @@
         _waveController.ShowView()
     End Sub
 
-    Public Sub showPropDialog()
+    Public Sub showPropertiesWindow()
         If IsNothing(_propController) Then
-            _propController = New PropertiesController(New PropertiesDialog(), _wave)
+            _propController = New PropertiesController(New PropertiesWindow(), _wave)
         End If
         _propController.ShowView()
     End Sub
 
-    Public Sub showValuesDialog()
+    Public Sub showValuesWindow()
         If IsNothing(_valuesController) Then
-            _valuesController = New ValuesController(New TimeSeriesValuesDialog(), _wave)
+            _valuesController = New ValuesController(New ValuesWindow(), _wave)
         End If
         _valuesController.ShowView()
     End Sub

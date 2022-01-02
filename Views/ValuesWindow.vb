@@ -26,7 +26,7 @@
 '--------------------------------------------------------------------------------------------
 '
 Imports System.Windows.Forms
-Friend Class TimeSeriesValuesDialog
+Friend Class ValuesWindow
     Implements IView
 
     Private isInitializing As Boolean

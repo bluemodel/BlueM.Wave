@@ -1,7 +1,7 @@
 ﻿Friend Class PropertiesController
     Inherits Controller
 
-    Private Overloads ReadOnly Property View As PropertiesDialog
+    Private Overloads ReadOnly Property View As PropertiesWindow
         Get
             Return _view
         End Get
@@ -25,7 +25,7 @@
 
     Public Overrides Sub ShowView()
         If IsNothing(_view) Then
-            _view = New PropertiesDialog()
+            _view = New PropertiesWindow()
         End If
         View.Update(_model.TimeSeriesDict.Values.ToList)
         View.Show()

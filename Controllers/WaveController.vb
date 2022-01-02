@@ -502,14 +502,14 @@ Friend Class WaveController
     ''' </summary>
     ''' <remarks></remarks>
     Private Sub Properties_Click(sender As System.Object, e As System.EventArgs)
-        App.showPropDialog()
+        App.showPropertiesWindow()
     End Sub
 
     ''' <summary>
     ''' Timeseries Values button clicked
     ''' </summary>
     Private Sub TimeseriesValues_Click(sender As Object, e As EventArgs)
-        App.showValuesDialog()
+        App.showValuesWindow()
     End Sub
 
     ''' <summary>

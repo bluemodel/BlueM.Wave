@@ -243,12 +243,6 @@
     <Compile Include="Dialogs\MetadataDialog.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Dialogs\PropertiesDialog.Designer.vb">
-      <DependentUpon>PropertiesDialog.vb</DependentUpon>
-    </Compile>
-    <Compile Include="Dialogs\PropertiesDialog.vb">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="Dialogs\SeriesEditorDialog.Designer.vb">
       <DependentUpon>SeriesEditorDialog.vb</DependentUpon>
     </Compile>
@@ -318,10 +312,16 @@
     <Compile Include="Views\MainWindow.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Views\TimeSeriesValuesDialog.Designer.vb">
-      <DependentUpon>TimeSeriesValuesDialog.vb</DependentUpon>
+    <Compile Include="Views\PropertiesWindow.Designer.vb">
+      <DependentUpon>PropertiesWindow.vb</DependentUpon>
     </Compile>
-    <Compile Include="Views\TimeSeriesValuesDialog.vb">
+    <Compile Include="Views\PropertiesWindow.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\ValuesWindow.Designer.vb">
+      <DependentUpon>ValuesWindow.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ValuesWindow.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Wave.vb" />
@@ -382,9 +382,6 @@
     <EmbeddedResource Include="Dialogs\MetadataDialog.resx">
       <DependentUpon>MetadataDialog.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Dialogs\PropertiesDialog.resx">
-      <DependentUpon>PropertiesDialog.vb</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Dialogs\SeriesEditorDialog.resx">
       <DependentUpon>SeriesEditorDialog.vb</DependentUpon>
     </EmbeddedResource>
@@ -403,8 +400,11 @@
     <EmbeddedResource Include="Views\MainWindow.resx">
       <DependentUpon>MainWindow.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Views\TimeSeriesValuesDialog.resx">
-      <DependentUpon>TimeSeriesValuesDialog.vb</DependentUpon>
+    <EmbeddedResource Include="Views\PropertiesWindow.resx">
+      <DependentUpon>PropertiesWindow.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\ValuesWindow.resx">
+      <DependentUpon>ValuesWindow.vb</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

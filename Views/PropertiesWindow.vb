@@ -26,7 +26,7 @@
 '--------------------------------------------------------------------------------------------
 '
 Imports System.Windows.Forms
-Friend Class PropertiesDialog
+Friend Class PropertiesWindow
     Implements IView
 
     Private _controller As PropertiesController 'IController
