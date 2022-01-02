@@ -181,6 +181,8 @@ Friend Class ValuesWindow
         Dim recordIndex, numRows As Integer
         Dim table As DataTable = Me.dataset.Tables("data")
 
+        Me.Cursor = Cursors.WaitCursor
+
         numRows = Math.Min(maxRows, table.Rows.Count - startIndex)
 
         'Add new rows to datagridview
@@ -208,6 +210,8 @@ Friend Class ValuesWindow
         End If
         Me.Label_DisplayCount.Text = $"Displaying records {startRecord} to {startRecord + numRows - 1} of {table.Rows.Count}"
 
+        Me.Cursor = Cursors.Default
+
     End Sub
 
     ''' <summary>
@@ -217,7 +221,6 @@ Friend Class ValuesWindow
     ''' <param name="e"></param>
     Private Sub Button_first_Click(sender As Object, e As EventArgs) Handles Button_first.Click
         startIndex = 0
-        populateRows()
     End Sub
 
     ''' <summary>
@@ -227,7 +230,6 @@ Friend Class ValuesWindow
     ''' <param name="e"></param>
     Private Sub Button_previous_Click(sender As Object, e As EventArgs) Handles Button_previous.Click, Button_first.Click
         startIndex = Math.Max(0, startIndex - maxRows)
-        populateRows()
     End Sub
 
     ''' <summary>
@@ -237,7 +239,6 @@ Friend Class ValuesWindow
     ''' <param name="e"></param>
     Private Sub Button_next_Click(sender As Object, e As EventArgs) Handles Button_next.Click
         startIndex = Math.Min(Me.dataset.Tables("data").Rows.Count - 1, startIndex + maxRows)
-        populateRows()
     End Sub
 
     ''' <summary>
@@ -247,7 +248,6 @@ Friend Class ValuesWindow
     ''' <param name="e"></param>
     Private Sub Button_last_Click(sender As Object, e As EventArgs) Handles Button_last.Click
         startIndex = Math.Max(0, Me.dataset.Tables("data").Rows.Count - maxRows)
-        populateRows()
     End Sub
 
     ''' <summary>
@@ -351,6 +351,8 @@ Friend Class ValuesWindow
     End Sub
 
     Private Sub TimeSeriesValuesDialog_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
+        'stop highlighting
+        RaiseEvent SelectedRowsChanged(New List(Of DateTime))
         'prevent the form from closing and hide it instead
         e.Cancel = True
         Call Me.Hide()
