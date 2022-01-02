@@ -18,7 +18,6 @@
         'Application.Run(New Wave())
 
         _wave = New Wave()
-        _waveController = New WaveController(New MainWindow(), _wave)
 
         If Environment.GetCommandLineArgs().Count > 1 Then
             'run the CLI
@@ -28,6 +27,14 @@
             End If
         End If
 
+        showMainWindow(_wave)
+
+    End Sub
+
+    Public Sub showMainWindow(model As Wave)
+        If IsNothing(_waveController) Then
+            _waveController = New WaveController(New MainWindow(), model)
+        End If
         _waveController.ShowView()
     End Sub
 

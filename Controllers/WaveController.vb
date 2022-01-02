@@ -154,8 +154,18 @@ Friend Class WaveController
         AddHandler _model.TENFileLoading, AddressOf Load_TEN
         AddHandler _model.IsBusyChanged, AddressOf ShowBusy
 
+        'add any already existing time series
+        For Each ts As TimeSeries In _model.TimeSeriesDict.Values
+            Call SeriesAdded(ts)
+        Next
+
         'Log events
         AddHandler Log.LogMsgAdded, AddressOf LogMsgAdded
+
+        'add any already existing log messages
+        For Each msg As KeyValuePair(Of levels, String) In Log.logMessages
+            Call LogMsgAdded(msg.Key, msg.Value)
+        Next
 
     End Sub
 

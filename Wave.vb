@@ -780,4 +780,11 @@ Public Class Wave
         RaiseEvent SeriesPropertiesChanged(id)
     End Sub
 
+    ''' <summary>
+    ''' Displays the main window
+    ''' </summary>
+    Public Sub Show()
+        App.showMainWindow(Me)
+    End Sub
+
 End Class
