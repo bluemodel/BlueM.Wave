@@ -145,6 +145,7 @@ Friend Class WaveController
         Me.View.TChart1.Chart.Listeners.Add(Me)
 
         'model events
+        AddHandler _model.FileImported, AddressOf FileImported
         AddHandler _model.SeriesAdded, AddressOf SeriesAdded
         AddHandler _model.SeriesPropertiesChanged, AddressOf SeriesPropertiesChanged
         AddHandler _model.SeriesRemoved, AddressOf SeriesRemoved
@@ -1982,22 +1983,29 @@ Friend Class WaveController
 
         Call Me.ViewportChanged()
 
-        'add datasource filename to Recently Used Files menu
-        If ts.DataSource.Origin = TimeSeriesDataSource.OriginEnum.FileImport Then
-            'remove if already present
-            Dim i As Integer = 0
-            For Each _item As ToolStripItem In View.ToolStripMenuItem_RecentlyUsedFiles.DropDownItems
-                If _item.Text = ts.DataSource.FilePath Then
-                    View.ToolStripMenuItem_RecentlyUsedFiles.DropDownItems.RemoveAt(i)
-                    Exit For
-                End If
-                i += 1
-            Next
-            'add to top of list
-            Dim item As New ToolStripMenuItem(ts.DataSource.FilePath)
-            View.ToolStripMenuItem_RecentlyUsedFiles.DropDownItems.Insert(0, item)
-        End If
+    End Sub
 
+    ''' <summary>
+    ''' Handles file imported in the model event
+    ''' </summary>
+    ''' <param name="file"></param>
+    Private Sub FileImported(file As String)
+        'add filename to Recently Used Files menu
+        'remove if already present
+        Dim i As Integer = 0
+        For Each _item As ToolStripItem In View.ToolStripMenuItem_RecentlyUsedFiles.DropDownItems
+            If _item.Text = file Then
+                View.ToolStripMenuItem_RecentlyUsedFiles.DropDownItems.RemoveAt(i)
+                Exit For
+            End If
+            i += 1
+        Next
+        'add to top of list
+        Dim item As New ToolStripMenuItem(file)
+        View.ToolStripMenuItem_RecentlyUsedFiles.DropDownItems.Insert(0, item)
+
+        'add filename to window title
+        View.Text = $"BlueM.Wave - {file}"
     End Sub
 
     ''' <summary>
@@ -2556,6 +2564,8 @@ Friend Class WaveController
 
             'Log
             Call Log.AddLogEntry(Log.levels.info, $"TEN file '{FileName}' loaded successfully!")
+
+            Call FileImported(FileName)
 
         Catch ex As Exception
             MsgBox("Error while loading:" & eol & ex.Message, MsgBoxStyle.Critical)

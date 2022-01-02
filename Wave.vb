@@ -62,6 +62,12 @@ Public Class Wave
     Friend Event HighlightTimestamps(timestamps As List(Of DateTime))
 
     ''' <summary>
+    ''' Is raised after a file was imported
+    ''' </summary>
+    ''' <param name="file"></param>
+    Friend Event FileImported(file As String)
+
+    ''' <summary>
     ''' Is raised when a TEN file is being loaded
     ''' </summary>
     ''' <param name="file"></param>
@@ -160,13 +166,11 @@ Public Class Wave
                         'Log
                         Call Log.AddLogEntry(Log.levels.info, "Successfully loaded series in chart!")
 
-                        'Update window title
-                        'FIXME: Me.Text = "BlueM.Wave - " & file
+                        RaiseEvent FileImported(file)
 
                     Else
                         'Import abgebrochen
                         Log.AddLogEntry(Log.levels.error, "Import cancelled!")
-
                     End If
 
                 Catch ex As Exception
@@ -206,8 +210,7 @@ Public Class Wave
             'Log
             Call Log.AddLogEntry(Log.levels.info, $"Project file '{projectfile}' loaded successfully!")
 
-            'Update window title
-            'FIXME: Me.Text = "BlueM.Wave - " & projectfile
+            RaiseEvent FileImported(projectfile)
 
         Catch ex As Exception
             MsgBox("Error while loading project file:" & eol & ex.Message, MsgBoxStyle.Critical)
