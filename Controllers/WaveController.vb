@@ -151,6 +151,7 @@ Friend Class WaveController
         AddHandler _model.SeriesCleared, AddressOf SeriesCleared
         AddHandler _model.HighlightTimestamps, AddressOf showMarkers
         AddHandler _model.TENFileLoading, AddressOf Load_TEN
+        AddHandler _model.IsBusyChanged, AddressOf ShowBusy
 
         'Log events
         AddHandler Log.LogMsgAdded, AddressOf LogMsgAdded
@@ -2558,6 +2559,14 @@ Friend Class WaveController
             Call Log.AddLogEntry(Log.levels.error, "Error while loading:" & eol & ex.Message)
         End Try
 
+    End Sub
+
+    Private Sub ShowBusy(isBusy As Boolean)
+        If isBusy Then
+            View.Cursor = Cursors.WaitCursor
+        Else
+            View.Cursor = Cursors.Default
+        End If
     End Sub
 
 End Class

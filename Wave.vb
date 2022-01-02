@@ -68,6 +68,12 @@ Public Class Wave
     Friend Event TENFileLoading(file As String)
 
     ''' <summary>
+    ''' Is raised when the busy state of the model changes
+    ''' </summary>
+    ''' <param name="isBusy"></param>
+    Friend Event IsBusyChanged(isBusy As Boolean)
+
+    ''' <summary>
     ''' Internal collection of time series {id: TimeSeries, ...}
     ''' </summary>
     Public TimeSeriesDict As Dictionary(Of Integer, TimeSeries)
@@ -97,6 +103,8 @@ Public Class Wave
 
         Dim Datei As FileFormatBase
         Dim ok As Boolean
+
+        RaiseEvent IsBusyChanged(True)
 
         'Sonderfälle abfangen:
         '---------------------
@@ -135,8 +143,6 @@ Public Class Wave
 
                     If (ok) Then
 
-                        'FIXME: Me.Cursor = Cursors.WaitCursor
-
                         'Datei einlesen
                         Call Datei.readFile()
 
@@ -166,12 +172,11 @@ Public Class Wave
                 Catch ex As Exception
                     MsgBox("Error during import:" & eol & ex.Message, MsgBoxStyle.Critical)
                     Call Log.AddLogEntry(Log.levels.error, "Error during import: " & ex.Message)
-
-                Finally
-                    'FIXME: Me.Cursor = Cursors.Default
                 End Try
 
         End Select
+
+        RaiseEvent IsBusyChanged(False)
 
     End Sub
 
@@ -184,8 +189,6 @@ Public Class Wave
 
         Try
             Dim tsList As List(Of TimeSeries)
-
-            'FIXME: Me.Cursor = Cursors.WaitCursor
 
             Call Log.AddLogEntry(Log.levels.info, $"Loading Wave project file '{projectfile}'...")
 
@@ -209,8 +212,6 @@ Public Class Wave
         Catch ex As Exception
             MsgBox("Error while loading project file:" & eol & ex.Message, MsgBoxStyle.Critical)
             Call Log.AddLogEntry(Log.levels.error, "Error while loading project file:" & eol & ex.Message)
-        Finally
-            'FIXME: Me.Cursor = Cursors.Default
         End Try
 
     End Sub
@@ -222,6 +223,8 @@ Public Class Wave
     Friend Sub Import_Clipboard()
 
         Dim dlgres As DialogResult
+
+        RaiseEvent IsBusyChanged(True)
 
         Try
             'Check data format
@@ -239,9 +242,7 @@ Public Class Wave
                     If Not dlgres = Windows.Forms.DialogResult.Yes Then
                         Exit Sub
                     End If
-                    'FIXME: Me.Cursor = Cursors.WaitCursor
                     Call Me.LoadFromClipboard_TALSIM(clipboardtext)
-                    'FIXME: Me.Cursor = Cursors.Default
                 Else
                     'ask the user whether to attempt plain text import
                     dlgres = MessageBox.Show("Attempt to load clipboard text content in Wave as CSV data?", "Load from clipboard", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
@@ -262,10 +263,11 @@ Public Class Wave
             End If
 
         Catch ex As Exception
-            'FIXME: Me.Cursor = Cursors.Default
             Log.AddLogEntry(Log.levels.error, ex.Message)
             MsgBox("ERROR: " & ex.Message, MsgBoxStyle.Critical)
         End Try
+
+        RaiseEvent IsBusyChanged(False)
 
     End Sub
 
@@ -602,8 +604,7 @@ Public Class Wave
         'Export series
         Log.AddLogEntry(Log.levels.info, $"Exporting time series to file {SaveFileDialog1.FileName}...")
 
-        'FIXME: Me.Cursor = Cursors.WaitCursor
-        Application.DoEvents()
+        RaiseEvent IsBusyChanged(True)
 
         Try
 
@@ -649,9 +650,9 @@ Public Class Wave
         Catch ex As Exception
             Log.AddLogEntry(Log.levels.error, "Error during export: " & ex.Message)
             MsgBox("Error during export: " & ex.Message, MsgBoxStyle.Critical)
-        Finally
-            'FIXME: Me.Cursor = Cursors.Default
         End Try
+
+        RaiseEvent IsBusyChanged(False)
 
     End Sub
 
