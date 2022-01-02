@@ -2488,9 +2488,11 @@ Friend Class WaveController
                                 'Save datasource
                                 reihe.DataSource = New TimeSeriesDataSource(FileName, series.Title)
 
-                                'Store the series internally without raising events
-                                'TODO: this does not check for duplicate titles!
-                                Call _model.TimeSeriesDict.Add(reihe.Id, reihe)
+                                'Add the series to the model while temporarily disabling event handling
+                                RemoveHandler _model.SeriesAdded, AddressOf SeriesAdded
+                                Call _model.Import_Series(reihe)
+                                series.Title = reihe.Title 'update possibly changed title
+                                AddHandler _model.SeriesAdded, AddressOf SeriesAdded
 
                                 'Store the time series id in the Tag property
                                 series.Tag = reihe.Id
