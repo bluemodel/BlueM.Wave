@@ -2184,12 +2184,11 @@ Friend Class WaveController
                     markers.Marks.Visible = True
                     markers.Marks.Style = Steema.TeeChart.Styles.MarksStyles.Value
                     'markers.Marks.OnTop = True 'causes crash when markers are panned out of view on the left
-                    markers.Marks.Callout.Visible = True
+                    markers.Marks.Callout.Visible = False
                     markers.Marks.FontSeriesColor = True
                     markers.Marks.Arrow.Visible = False
-                    markers.Marks.Callout.Visible = False
-                    markers.Marks.Callout.InflateMargins = False
                     markers.Marks.ArrowLength = 5
+                    markers.Marks.Pen.Color = series.Color
                     'add data points
                     For Each t As DateTime In markerValues.Keys
                         markers.Add(t, markerValues(t))
