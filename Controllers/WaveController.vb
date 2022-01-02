@@ -221,8 +221,10 @@ Friend Class WaveController
                         'series removed, delete series from model
                         Dim id As Integer = seriesEvent.Series.Tag
                         If _model.TimeSeriesDict.ContainsKey(id) Then
-                            'FIXME: this causes a feedback loop and deletes two series!
+                            'temporarily disable event handling to prevent multiple deletions
+                            RemoveHandler _model.SeriesRemoved, AddressOf SeriesRemoved
                             _model.RemoveTimeSeries(id)
+                            RemoveHandler _model.SeriesRemoved, AddressOf SeriesRemoved
                         End If
 
                 End Select
@@ -2229,7 +2231,6 @@ Friend Class WaveController
     Private Sub SeriesRemoved(id As Integer)
 
         'Remove series from main chart
-        'FIXME: the event may have originated from the chartlistbox, in which case the series is going to be removed by TChart, removing it here causes a second removal!
         For i As Integer = View.TChart1.Series.Count - 1 To 0 Step -1
             If CType(View.TChart1.Series.Item(i).Tag, String) = "_markers" Then
                 'TODO: marker series belonging to the removed series should be removed as well, skip for now
