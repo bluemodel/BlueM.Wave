@@ -179,7 +179,7 @@ Friend Class MainWindow
     ''' <summary>
     ''' Initialize color bands
     ''' </summary>
-    Private Sub Init_ColorBands()
+    Friend Sub Init_ColorBands()
 
         colorBandOverview = New Steema.TeeChart.Tools.ColorBand()
         Me.TChart2.Tools.Add(colorBandOverview)

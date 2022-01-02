@@ -62,6 +62,12 @@ Public Class Wave
     Friend Event HighlightTimestamps(timestamps As List(Of DateTime))
 
     ''' <summary>
+    ''' Is raised when a TEN file is being loaded
+    ''' </summary>
+    ''' <param name="file"></param>
+    Friend Event TENFileLoading(file As String)
+
+    ''' <summary>
     ''' Internal collection of time series {id: TimeSeries, ...}
     ''' </summary>
     Public TimeSeriesDict As Dictionary(Of Integer, TimeSeries)
@@ -98,7 +104,8 @@ Public Class Wave
 
             Case FileFactory.FileExtTEN
                 '.TEN-Datei
-                Call Me.Load_TEN(file)
+                'has to be loaded by the controller/view
+                RaiseEvent TENFileLoading(file)
 
             Case FileFactory.FileExtWVP
                 'Wave project file
@@ -206,191 +213,6 @@ Public Class Wave
             'FIXME: Me.Cursor = Cursors.Default
         End Try
 
-    End Sub
-
-    ''' <summary>
-    ''' Lädt eine native Teechart-Datei (*.TEN)
-    ''' </summary>
-    ''' <param name="FileName">Pfad zur TEN-Datei</param>
-    ''' <remarks></remarks>
-    Friend Sub Load_TEN(FileName As String)
-
-        'FIXME: Load_TEN()
-        'Dim result As DialogResult
-        'Dim i As Integer
-        'Dim reihe As TimeSeries
-        'Dim XMin, XMax As DateTime
-
-        'Try
-
-        '    'Log
-        '    Call Log.AddLogEntry(Log.levels.info, $"Loading file '{FileName}' ...")
-
-        '    'Bereits vorhandene Reihen merken
-        '    Dim existingIds = New List(Of Integer)
-        '    For Each id As Integer In Me.TimeSeriesDict.Keys
-        '        existingIds.Add(id)
-        '    Next
-
-        '    'Zoom der X-Achse merken
-        '    XMin = Me.ChartMinX
-        '    XMax = Me.ChartMaxX
-        '    If (XMin <> XMax) Then
-        '        Me.selectionMade = True
-        '    Else
-        '        Me.selectionMade = False
-        '    End If
-
-        '    'TEN-Datei importieren
-        '    'Diagramme werden hiermit komplett ersetzt!
-        '    Call TChart1.Import.Template.Load(FileName)
-        '    Call TChart2.Import.Template.Load(FileName)
-
-        '    'Übersichtsdiagramm wieder als solches formatieren
-        '    'TODO: als Funktion auslagern und auch bei Init_Charts() verwenden
-        '    Call WaveView.FormatChart(Me.TChart2.Chart)
-        '    Me.TChart2.Panel.Brush.Color = Color.FromArgb(239, 239, 239)
-        '    Me.TChart2.Walls.Back.Color = Color.FromArgb(239, 239, 239)
-        '    Me.TChart2.Header.Visible = False
-        '    Me.TChart2.Legend.Visible = False
-        '    Me.TChart2.Axes.Left.Labels.Font.Color = Color.FromArgb(100, 100, 100)
-        '    Me.TChart2.Axes.Left.Labels.Font.Size = 8
-        '    Me.TChart2.Axes.Bottom.Labels.Font.Color = Color.FromArgb(100, 100, 100)
-        '    Me.TChart2.Axes.Bottom.Labels.Font.Size = 8
-        '    Me.TChart2.Axes.Bottom.Automatic = False
-        '    Me.TChart2.Axes.Bottom.Labels.DateTimeFormat = "dd.MM.yyyy"
-        '    Me.TChart2.Axes.Bottom.Labels.Angle = 0
-
-        '    'Hide axis titles
-        '    Me.TChart2.Axes.Left.Title.Visible = False
-        '    Me.TChart2.Axes.Right.Title.Visible = False
-        '    For i = 0 To Me.TChart2.Axes.Custom.Count - 1
-        '        Me.TChart2.Axes.Custom(i).Title.Visible = False
-        '    Next
-        '    'change type of series to FastLine
-        '    For i = 0 To Me.TChart2.Series.Count - 1
-        '        Steema.TeeChart.Styles.Series.ChangeType(Me.TChart2.Series(i), GetType(Steema.TeeChart.Styles.FastLine))
-        '    Next
-
-        '    'Abfrage für Reihenimport
-        '    If (Me.TChart1.Series.Count() > 0) Then
-        '        result = MsgBox("Also import time series?", MsgBoxStyle.YesNo)
-
-        '        Select Case result
-
-        '            Case Windows.Forms.DialogResult.Yes
-        '                'Reihen aus TEN-Datei sollen importiert werden
-
-        '                'Alle Reihen durchlaufen
-        '                For Each series As Steema.TeeChart.Styles.Series In TChart1.Series
-
-        '                    'Nur Zeitreihen behandeln
-        '                    If (series.GetHorizAxis.IsDateTime) Then
-
-        '                        'Zeitreihe aus dem importierten Diagramm nach intern übertragen
-        '                        Log.AddLogEntry(Log.levels.info, $"Importing series '{series.Title}' from TEN file...")
-        '                        reihe = New TimeSeries(series.Title)
-        '                        For i = 0 To series.Count - 1
-        '                            reihe.AddNode(DateTime.FromOADate(series.XValues(i)), series.YValues(i))
-        '                        Next
-        '                        'Determine total number of NaN-values and write to log
-        '                        If reihe.NaNCount > 0 Then
-        '                            Log.AddLogEntry(Log.levels.warning, $"Series '{reihe.Title}' contains {reihe.NaNCount} NaN values!")
-        '                        End If
-        '                        'Get the series' unit from the axis title
-        '                        Dim axistitle As String = ""
-        '                        Select Case series.VertAxis
-        '                            Case Steema.TeeChart.Styles.VerticalAxis.Left
-        '                                axistitle = Me.TChart1.Axes.Left.Title.Text
-        '                            Case Steema.TeeChart.Styles.VerticalAxis.Right
-        '                                axistitle = Me.TChart1.Axes.Right.Title.Text
-        '                            Case Steema.TeeChart.Styles.VerticalAxis.Custom
-        '                                axistitle = series.CustomVertAxis.Title.Text
-        '                        End Select
-        '                        reihe.Unit = AxisWrapper.parseUnit(axistitle)
-
-        '                        'Save datasource
-        '                        reihe.DataSource = New TimeSeriesDataSource(FileName, series.Title)
-
-        '                        'Store the series internally
-        '                        Call Me.StoreTimeseries(reihe)
-
-        '                        'update the title in case it was changed during storage
-        '                        series.Title = reihe.Title
-
-        '                        'Store the time series id in the Tag property
-        '                        series.Tag = reihe.Id
-        '                        'Store id as Tag in Chart2 as well
-        '                        For Each series2 As Steema.TeeChart.Styles.Series In TChart2.Series
-        '                            If series2.Title = series.Title Then
-        '                                series2.Tag = reihe.Id
-        '                                Exit For
-        '                            End If
-        '                        Next
-
-        '                    End If
-        '                Next
-
-        '                'Update window title
-        '                Me.Text = "BlueM.Wave - " & FileName
-
-        '            Case Windows.Forms.DialogResult.No
-        '                'Reihen aus TEN-Datei sollen nicht importiert werden
-
-        '                'Alle Reihen aus den Diagrammen löschen (wurden bei TEN-Import automatisch mit eingeladen)
-        '                Me.TChart1.Series.RemoveAllSeries()
-        '                Me.TChart2.Series.RemoveAllSeries()
-
-        '        End Select
-
-        '    End If
-
-        '    'extract units from axis titles and store as tags
-        '    Me.TChart1.Axes.Left.Tag = AxisWrapper.parseUnit(Me.TChart1.Axes.Left.TitleOrName)
-        '    Me.TChart1.Axes.Right.Tag = AxisWrapper.parseUnit(Me.TChart1.Axes.Right.TitleOrName)
-        '    For Each axis As Steema.TeeChart.Axis In Me.TChart1.Axes.Custom
-        '        axis.Tag = AxisWrapper.parseUnit(axis.TitleOrName)
-        '    Next
-
-        '    'Die vor dem Laden bereits vorhandenen Zeitreihen wieder zu den Diagrammen hinzufügen (durch TEN-Import verloren)
-        '    For Each id As Integer In existingIds
-        '        Call Me.Display_Series(Me.TimeSeriesDict(id))
-        '    Next
-
-        '    'Vorherigen Zoom wiederherstellen
-        '    If (Me.selectionMade) Then
-        '        Me.ChartMinX = XMin
-        '        Me.ChartMaxX = XMax
-        '    End If
-
-        '    'ColorBands neu einrichten (durch TEN-Import verloren)
-        '    Call Me.Init_ColorBands()
-
-        '    'Reset zoom and pan settings
-        '    Me.TChart1.Zoom.Direction = Steema.TeeChart.ZoomDirections.None
-        '    Me.TChart1.Panning.Allow = Steema.TeeChart.ScrollModes.None
-        '    Me.TChart1.Panning.MouseButton = MouseButtons.Right
-        '    Me.TChart2.Zoom.Direction = Steema.TeeChart.ZoomDirections.None
-        '    Me.TChart2.Panning.Allow = Steema.TeeChart.ScrollModes.None
-
-        '    'Charts aktualisieren
-        '    Call Me.UpdateChartExtents()
-
-        '    Call Me.ViewportChanged()
-
-        '    'Re-assign the chart to the chartlistbox (#41)
-        '    Me.ChartListBox1.Chart = Me.TChart1
-
-        '    'Log
-        '    Call Log.AddLogEntry(Log.levels.info, $"TEN file '{FileName}' loaded successfully!")
-
-        'Catch ex As Exception
-        '    MsgBox("Error while loading:" & eol & ex.Message, MsgBoxStyle.Critical)
-        '    Call Log.AddLogEntry(Log.levels.error, "Error while loading:" & eol & ex.Message)
-        'End Try
-
-        ''Update AxisDialog
-        'Call Me.UpdateAxisDialog()
     End Sub
 
     ''' <summary>
