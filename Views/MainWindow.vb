@@ -204,8 +204,8 @@ Friend Class MainWindow
         colorBandZoom.StartLinePen.Visible = True
     End Sub
 
-    Private Sub IView_Close() Implements IView.Close
-        'FIXME: Throw New NotImplementedException()
+    Private Overloads Sub Close() Implements IView.Close
+        Throw New NotImplementedException()
     End Sub
 
 End Class

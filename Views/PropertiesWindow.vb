@@ -29,7 +29,7 @@ Imports System.Windows.Forms
 Friend Class PropertiesWindow
     Implements IView
 
-    Private _controller As PropertiesController 'IController
+    Private _controller As PropertiesController
 
     Public Sub SetController(controller As Controller) Implements IView.SetController
         _controller = controller
@@ -148,7 +148,7 @@ Friend Class PropertiesWindow
         Call Me.Hide()
     End Sub
 
-    Private Sub IView_Close() Implements IView.Close
+    Private Overloads Sub Close() Implements IView.Close
         Throw New NotImplementedException()
     End Sub
 End Class

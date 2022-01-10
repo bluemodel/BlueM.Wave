@@ -358,7 +358,7 @@ Friend Class ValuesWindow
         Call Me.Hide()
     End Sub
 
-    Private Sub IView_Close() Implements IView.Close
+    Private Overloads Sub Close() Implements IView.Close
         Throw New NotImplementedException()
     End Sub
 End Class
