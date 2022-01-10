@@ -26,11 +26,17 @@
 '--------------------------------------------------------------------------------------------
 '
 Imports System.Windows.Forms
-
-Friend Class TimeSeriesValuesDialog
+Friend Class ValuesWindow
+    Implements IView
 
     Private isInitializing As Boolean
     Private dataset As DataSet
+
+    Private _controller As ValuesController
+
+    Public Sub SetController(controller As Controller) Implements IView.SetController
+        _controller = controller
+    End Sub
 
     ''' <summary>
     ''' The starting index of records to display in the datagridview
@@ -53,7 +59,6 @@ Friend Class TimeSeriesValuesDialog
     ''' </summary>
     Private Const maxRows As Integer = 100
 
-    Public Event Button_ExportValues_Clicked(sender As Object, e As EventArgs)
     Public Event SelectedRowsChanged(timestamps As List(Of DateTime))
 
     Public Sub New()
@@ -176,6 +181,8 @@ Friend Class TimeSeriesValuesDialog
         Dim recordIndex, numRows As Integer
         Dim table As DataTable = Me.dataset.Tables("data")
 
+        Me.Cursor = Cursors.WaitCursor
+
         numRows = Math.Min(maxRows, table.Rows.Count - startIndex)
 
         'Add new rows to datagridview
@@ -203,6 +210,8 @@ Friend Class TimeSeriesValuesDialog
         End If
         Me.Label_DisplayCount.Text = $"Displaying records {startRecord} to {startRecord + numRows - 1} of {table.Rows.Count}"
 
+        Me.Cursor = Cursors.Default
+
     End Sub
 
     ''' <summary>
@@ -212,7 +221,6 @@ Friend Class TimeSeriesValuesDialog
     ''' <param name="e"></param>
     Private Sub Button_first_Click(sender As Object, e As EventArgs) Handles Button_first.Click
         startIndex = 0
-        populateRows()
     End Sub
 
     ''' <summary>
@@ -222,7 +230,6 @@ Friend Class TimeSeriesValuesDialog
     ''' <param name="e"></param>
     Private Sub Button_previous_Click(sender As Object, e As EventArgs) Handles Button_previous.Click, Button_first.Click
         startIndex = Math.Max(0, startIndex - maxRows)
-        populateRows()
     End Sub
 
     ''' <summary>
@@ -232,7 +239,6 @@ Friend Class TimeSeriesValuesDialog
     ''' <param name="e"></param>
     Private Sub Button_next_Click(sender As Object, e As EventArgs) Handles Button_next.Click
         startIndex = Math.Min(Me.dataset.Tables("data").Rows.Count - 1, startIndex + maxRows)
-        populateRows()
     End Sub
 
     ''' <summary>
@@ -242,7 +248,6 @@ Friend Class TimeSeriesValuesDialog
     ''' <param name="e"></param>
     Private Sub Button_last_Click(sender As Object, e As EventArgs) Handles Button_last.Click
         startIndex = Math.Max(0, Me.dataset.Tables("data").Rows.Count - maxRows)
-        populateRows()
     End Sub
 
     ''' <summary>
@@ -254,10 +259,6 @@ Friend Class TimeSeriesValuesDialog
         If Not Me.isInitializing Then
             populateRows()
         End If
-    End Sub
-
-    Private Sub ToolStripButton_ExportValues_Click(sender As Object, e As EventArgs) Handles ToolStripButton_ExportValues.Click
-        RaiseEvent Button_ExportValues_Clicked(sender, e)
     End Sub
 
     ''' <summary>
@@ -326,7 +327,7 @@ Friend Class TimeSeriesValuesDialog
     ''' </summary>
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
-    Private Sub MaskedTextBox_JumpDate_ValueChanged(sender As Object, e As EventArgs) Handles MaskedTextBox_JumpDate.Validated
+    Private Sub MaskedTextBox_JumpDate_ValueChanged(sender As Object, e As EventArgs) Handles MaskedTextBox_JumpDate.Validated, Button_Jump.Click
         Me.Cursor = Cursors.WaitCursor
         Dim selectedDate As DateTime = CType(Me.MaskedTextBox_JumpDate.Text, DateTime)
         Dim table As DataTable = Me.dataset.Tables("data")
@@ -350,9 +351,14 @@ Friend Class TimeSeriesValuesDialog
     End Sub
 
     Private Sub TimeSeriesValuesDialog_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
+        'stop highlighting
+        RaiseEvent SelectedRowsChanged(New List(Of DateTime))
         'prevent the form from closing and hide it instead
         e.Cancel = True
         Call Me.Hide()
     End Sub
 
+    Private Overloads Sub Close() Implements IView.Close
+        Throw New NotImplementedException()
+    End Sub
 End Class

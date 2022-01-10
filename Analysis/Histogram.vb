@@ -228,7 +228,7 @@ Friend Class Histogram
 
         'Diagramm formatieren
         Me.mResultChart = New Steema.TeeChart.Chart()
-        Call Wave.FormatChart(Me.mResultChart)
+        Call Helpers.FormatChart(Me.mResultChart)
         Me.mResultChart.Header.Text = "Histogram"
 
         'Achsen

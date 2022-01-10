@@ -1,5 +1,5 @@
 <Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
-Partial Class Wave
+Partial Class MainWindow
     Inherits System.Windows.Forms.Form
 
     'Das Formular überschreibt den Löschvorgang, um die Komponentenliste zu bereinigen.
@@ -27,7 +27,7 @@ Partial Class Wave
         Dim ToolStripSeparator2 As System.Windows.Forms.ToolStripSeparator
         Dim StatusStrip1 As System.Windows.Forms.StatusStrip
         Dim ToolStrip1 As System.Windows.Forms.ToolStrip
-        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Wave))
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(MainWindow))
         Dim ToolStripSeparator6 As System.Windows.Forms.ToolStripSeparator
         Dim ToolStripSeparator5 As System.Windows.Forms.ToolStripSeparator
         Dim ToolStripSeparator4 As System.Windows.Forms.ToolStripSeparator
@@ -39,7 +39,7 @@ Partial Class Wave
         Me.ToolStripDropDownButton_Open = New System.Windows.Forms.ToolStripDropDownButton()
         Me.ToolStripMenuItem_ImportSeries = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripMenuItem_EnterSeries = New System.Windows.Forms.ToolStripMenuItem()
-        Me.PasteFromClipboardCtrlVToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripMenuItem_PasteFromClipboard = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripMenuItem_LoadTEN = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripMenuItem_ReloadFromFiles = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripMenuItem_RecentlyUsedFiles = New System.Windows.Forms.ToolStripMenuItem()
@@ -75,10 +75,10 @@ Partial Class Wave
         Me.ToolStripButton_ZoomOut = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripButton_ZoomPrevious = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripDropDownButton_Help = New System.Windows.Forms.ToolStripDropDownButton()
-        Me.HilfeToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripMenuItem_Help = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripMenuItem_ReleaseNotes = New System.Windows.Forms.ToolStripMenuItem()
-        Me.CheckForUpdateToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.AboutToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripMenuItem_CheckForUpdate = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripMenuItem_About = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripButton_ZoomNext = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripDropDownButton_ZoomToSeries = New System.Windows.Forms.ToolStripDropDownButton()
         Me.ToolStripButton_ZoomAll = New System.Windows.Forms.ToolStripButton()
@@ -207,7 +207,7 @@ Partial Class Wave
         'ToolStripDropDownButton_Open
         '
         Me.ToolStripDropDownButton_Open.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.ToolStripDropDownButton_Open.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripMenuItem_ImportSeries, Me.ToolStripMenuItem_EnterSeries, Me.PasteFromClipboardCtrlVToolStripMenuItem, ToolStripSeparator6, Me.ToolStripMenuItem_LoadTEN, ToolStripSeparator5, Me.ToolStripMenuItem_ReloadFromFiles, Me.ToolStripMenuItem_RecentlyUsedFiles})
+        Me.ToolStripDropDownButton_Open.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripMenuItem_ImportSeries, Me.ToolStripMenuItem_EnterSeries, Me.ToolStripMenuItem_PasteFromClipboard, ToolStripSeparator6, Me.ToolStripMenuItem_LoadTEN, ToolStripSeparator5, Me.ToolStripMenuItem_ReloadFromFiles, Me.ToolStripMenuItem_RecentlyUsedFiles})
         Me.ToolStripDropDownButton_Open.Image = CType(resources.GetObject("ToolStripDropDownButton_Open.Image"), System.Drawing.Image)
         Me.ToolStripDropDownButton_Open.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.ToolStripDropDownButton_Open.Name = "ToolStripDropDownButton_Open"
@@ -230,10 +230,10 @@ Partial Class Wave
         '
         'PasteFromClipboardCtrlVToolStripMenuItem
         '
-        Me.PasteFromClipboardCtrlVToolStripMenuItem.Image = Global.BlueM.Wave.My.Resources.Resources.page_paste
-        Me.PasteFromClipboardCtrlVToolStripMenuItem.Name = "PasteFromClipboardCtrlVToolStripMenuItem"
-        Me.PasteFromClipboardCtrlVToolStripMenuItem.Size = New System.Drawing.Size(231, 22)
-        Me.PasteFromClipboardCtrlVToolStripMenuItem.Text = "Paste from Clipboard (Ctrl+V)"
+        Me.ToolStripMenuItem_PasteFromClipboard.Image = Global.BlueM.Wave.My.Resources.Resources.page_paste
+        Me.ToolStripMenuItem_PasteFromClipboard.Name = "PasteFromClipboardCtrlVToolStripMenuItem"
+        Me.ToolStripMenuItem_PasteFromClipboard.Size = New System.Drawing.Size(231, 22)
+        Me.ToolStripMenuItem_PasteFromClipboard.Text = "Paste from Clipboard (Ctrl+V)"
         '
         'ToolStripSeparator6
         '
@@ -536,7 +536,7 @@ Partial Class Wave
         '
         Me.ToolStripDropDownButton_Help.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right
         Me.ToolStripDropDownButton_Help.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.ToolStripDropDownButton_Help.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.HilfeToolStripMenuItem, Me.ToolStripMenuItem_ReleaseNotes, Me.CheckForUpdateToolStripMenuItem, Me.AboutToolStripMenuItem})
+        Me.ToolStripDropDownButton_Help.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripMenuItem_Help, Me.ToolStripMenuItem_ReleaseNotes, Me.ToolStripMenuItem_CheckForUpdate, Me.ToolStripMenuItem_About})
         Me.ToolStripDropDownButton_Help.Image = Global.BlueM.Wave.My.Resources.Resources.help
         Me.ToolStripDropDownButton_Help.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.ToolStripDropDownButton_Help.Name = "ToolStripDropDownButton_Help"
@@ -545,9 +545,9 @@ Partial Class Wave
         '
         'HilfeToolStripMenuItem
         '
-        Me.HilfeToolStripMenuItem.Name = "HilfeToolStripMenuItem"
-        Me.HilfeToolStripMenuItem.Size = New System.Drawing.Size(165, 22)
-        Me.HilfeToolStripMenuItem.Text = "Help"
+        Me.ToolStripMenuItem_Help.Name = "HilfeToolStripMenuItem"
+        Me.ToolStripMenuItem_Help.Size = New System.Drawing.Size(165, 22)
+        Me.ToolStripMenuItem_Help.Text = "Help"
         '
         'ToolStripMenuItem_ReleaseNotes
         '
@@ -557,16 +557,16 @@ Partial Class Wave
         '
         'CheckForUpdateToolStripMenuItem
         '
-        Me.CheckForUpdateToolStripMenuItem.Name = "CheckForUpdateToolStripMenuItem"
-        Me.CheckForUpdateToolStripMenuItem.Size = New System.Drawing.Size(165, 22)
-        Me.CheckForUpdateToolStripMenuItem.Text = "Check for update"
+        Me.ToolStripMenuItem_CheckForUpdate.Name = "CheckForUpdateToolStripMenuItem"
+        Me.ToolStripMenuItem_CheckForUpdate.Size = New System.Drawing.Size(165, 22)
+        Me.ToolStripMenuItem_CheckForUpdate.Text = "Check for update"
         '
         'AboutToolStripMenuItem
         '
-        Me.AboutToolStripMenuItem.Image = Global.BlueM.Wave.My.Resources.Resources.BlueM_icon
-        Me.AboutToolStripMenuItem.Name = "AboutToolStripMenuItem"
-        Me.AboutToolStripMenuItem.Size = New System.Drawing.Size(165, 22)
-        Me.AboutToolStripMenuItem.Text = "About"
+        Me.ToolStripMenuItem_About.Image = Global.BlueM.Wave.My.Resources.Resources.BlueM_icon
+        Me.ToolStripMenuItem_About.Name = "AboutToolStripMenuItem"
+        Me.ToolStripMenuItem_About.Size = New System.Drawing.Size(165, 22)
+        Me.ToolStripMenuItem_About.Text = "About"
         '
         'ToolStripButton_ZoomNext
         '
@@ -3212,6 +3212,11 @@ Partial Class Wave
         Me.PerformLayout()
 
     End Sub
+
+    Protected Overrides Sub Finalize()
+        MyBase.Finalize()
+    End Sub
+
     Friend WithEvents OpenFileDialog1 As System.Windows.Forms.OpenFileDialog
     Friend WithEvents SplitContainer1 As System.Windows.Forms.SplitContainer
     Friend WithEvents TChart2 As Steema.TeeChart.TChart
@@ -3227,8 +3232,8 @@ Partial Class Wave
     Friend WithEvents ToolStripStatusLabel_Log As System.Windows.Forms.ToolStripStatusLabel
     Friend WithEvents ToolStripButton_Cut As System.Windows.Forms.ToolStripButton
     Friend WithEvents ToolStripDropDownButton_Help As System.Windows.Forms.ToolStripDropDownButton
-    Friend WithEvents HilfeToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents AboutToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ToolStripMenuItem_Help As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ToolStripMenuItem_About As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolStripMenuItem_ImportSeries As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolStripMenuItem_LoadTEN As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolStripMenuItem_SaveChart As System.Windows.Forms.ToolStripMenuItem
@@ -3266,12 +3271,12 @@ Partial Class Wave
     Friend WithEvents ToolStripButton_RemoveNaNValues As System.Windows.Forms.ToolStripButton
     Friend WithEvents ToolStripMenuItem_ReleaseNotes As ToolStripMenuItem
     Friend WithEvents ToolStripButton_AxisDialog As ToolStripButton
-    Friend WithEvents PasteFromClipboardCtrlVToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents ToolStripMenuItem_PasteFromClipboard As ToolStripMenuItem
     Friend WithEvents ToolStripSeparator10 As ToolStripSeparator
     Friend WithEvents ToolStripStatusLabel_Errors As ToolStripStatusLabel
     Friend WithEvents ToolStripStatusLabel_Warnings As ToolStripStatusLabel
     Friend WithEvents ToolStripButton_UpdateNotification As ToolStripButton
-    Friend WithEvents CheckForUpdateToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents ToolStripMenuItem_CheckForUpdate As ToolStripMenuItem
     Friend WithEvents ToolStripButton_ZoomIn As ToolStripButton
     Friend WithEvents ToolStripButton_ZoomOut As ToolStripButton
     Friend WithEvents ToolStripButton_ZoomNext As ToolStripButton

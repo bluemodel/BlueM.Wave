@@ -338,7 +338,7 @@ Friend Class GoodnessOfFit
         'Diagramm:
         '---------
         Me.mResultChart = New Steema.TeeChart.Chart()
-        Call Wave.FormatChart(Me.mResultChart)
+        Call Helpers.FormatChart(Me.mResultChart)
         Me.mResultChart.Header.Text = "Goodness of Fit"
 
         'Text in Diagramm einfügen

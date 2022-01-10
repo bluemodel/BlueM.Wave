@@ -28,17 +28,16 @@
 ''' <summary>
 ''' Log
 ''' </summary>
-''' <remarks>implementiert als Singleton-Klasse</remarks>
-Friend Class Log
+Public Module Log
 
-    Private Shared myInstance As Log
-    Private Shared logWindow As LogWindow
-    Public Shared logMessages As List(Of KeyValuePair(Of levels, String))
+    Private logWindow As LogWindow
+
+    Public logMessages As List(Of KeyValuePair(Of levels, String))
 
     ''' <summary>
     ''' Logging level, value set here may be overwritten by application settings
     ''' </summary>
-    Friend Shared level As levels = levels.info
+    Friend level As levels = levels.info
 
     ''' <summary>
     ''' Log levels
@@ -53,9 +52,9 @@ Friend Class Log
     ''' <summary>
     ''' Is triggered after a log message was added
     ''' </summary>
-    Public Shared Event LogMsgAdded(level As Log.levels, msg As String)
+    Public Event LogMsgAdded(level As Log.levels, msg As String)
 
-    Shared Sub New()
+    Sub New()
         'attempt to read loggingLevel from application settings
         Try
             Log.level = [Enum].Parse(GetType(levels), My.Settings.loggingLevel)
@@ -67,25 +66,11 @@ Friend Class Log
     End Sub
 
     ''' <summary>
-    ''' Gibt die (einzige) Instanz des Logs zurück
-    ''' </summary>
-    Public Shared Function getInstance() As Log
-        If (IsNothing(myInstance)) Then
-            myInstance = New Log()
-            'instantiate log window
-            If IsNothing(logWindow) Then
-                logWindow = New LogWindow()
-            End If
-        End If
-        Return myInstance
-    End Function
-
-    ''' <summary>
     ''' Adds a log entry
     ''' </summary>
     ''' <param name="level">log level</param>
     ''' <param name="msg">message</param>
-    Public Shared Sub AddLogEntry(level As levels, msg As String)
+    Public Sub AddLogEntry(level As levels, msg As String)
 
         If level >= Log.level Then
             Log.logMessages.Add(New KeyValuePair(Of levels, String)(level, msg))
@@ -96,8 +81,9 @@ Friend Class Log
 
             If Not IsNothing(logWindow) Then
                 Log.logWindow.AddLogEntry(level, msg)
-                RaiseEvent LogMsgAdded(level, msg)
             End If
+
+            RaiseEvent LogMsgAdded(level, msg)
         End If
 
     End Sub
@@ -105,21 +91,35 @@ Friend Class Log
     ''' <summary>
     ''' Log zurücksetzen (allen Text löschen)
     ''' </summary>
-    Public Shared Sub ClearLog()
+    Public Sub ClearLog()
+
         Log.logMessages.Clear()
-        Log.logWindow.ClearLog()
+
+        If Not IsNothing(Log.logWindow) Then
+            Log.logWindow.ClearLog()
+        End If
+
         RaiseEvent LogMsgAdded(Log.levels.info, "")
     End Sub
 
-    Public Shared Sub HideLogWindow()
-        Log.logWindow.Hide()
+    Public Sub HideLogWindow()
+        If Not IsNothing(Log.logWindow) Then
+            Log.logWindow.Hide()
+        End If
     End Sub
 
-    Public Shared Sub ShowLogWindow()
-        Log.logWindow.Show()
-        Log.logWindow.WindowState = FormWindowState.Normal
-        Log.logWindow.BringToFront()
+    Public Sub ShowLogWindow()
+
+        If IsNothing(logWindow) Then
+            logWindow = New LogWindow()
+            'if this is the first time the window is shown, add any already existing messages
+            For Each msg As KeyValuePair(Of levels, String) In logMessages
+                logWindow.AddLogEntry(msg.Key, msg.Value)
+            Next
+        End If
+        logWindow.Show()
+        logWindow.WindowState = FormWindowState.Normal
+        logWindow.BringToFront()
     End Sub
 
-
-End Class
+End Module

@@ -26,7 +26,6 @@
 '--------------------------------------------------------------------------------------------
 '
 Imports System.Windows.Forms
-
 Friend Class AxisDialog
 
     ''' <summary>
