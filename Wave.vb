@@ -568,6 +568,9 @@ Public Class Wave
             Case FileFormatBase.FileFormats.CSV
                 SaveFileDialog1.DefaultExt = "csv"
                 SaveFileDialog1.Filter = "CSV files (*.csv)|*.csv"
+            Case FileFormatBase.FileFormats.DFS0
+                SaveFileDialog1.DefaultExt = "dfs0"
+                SaveFileDialog1.Filter = "DFS0 files (*.dfs0)|*.dfs0"
             Case FileFormatBase.FileFormats.WEL
                 SaveFileDialog1.DefaultExt = "wel"
                 SaveFileDialog1.Filter = "WEL files (*.wel)|*.wel"
@@ -613,8 +616,14 @@ Public Class Wave
 
             Select Case exportDlg.ComboBox_Format.SelectedItem
 
-                Case FileFormatBase.FileFormats.ZRE
-                    Call ZRE.Write_File(zres(0), filename)
+                Case FileFormatBase.FileFormats.BIN
+                    Call BIN.Write_File(zres(0), filename)
+
+                Case FileFormatBase.FileFormats.CSV
+                    Call CSV.Write_File(zres, filename)
+
+                Case FileFormatBase.FileFormats.DFS0
+                    Call DFS0.Write_File(zres, filename)
 
                 Case FileFormatBase.FileFormats.REG_HYSTEM
                     Call HystemExtran_REG.Write_File(zres(0), filename)
@@ -631,14 +640,11 @@ Public Class Wave
                 Case FileFormatBase.FileFormats.SWMM_INTERFACE
                     Call SWMM_INTERFACE.Write_File(zres, filename)
 
-                Case FileFormatBase.FileFormats.CSV
-                    Call CSV.Write_File(zres, filename)
-
-                Case FileFormatBase.FileFormats.BIN
-                    Call BIN.Write_File(zres(0), filename)
-
                 Case FileFormatBase.FileFormats.UVF
                     Call UVF.Write_File(zres(0), filename)
+
+                Case FileFormatBase.FileFormats.ZRE
+                    Call ZRE.Write_File(zres(0), filename)
 
                 Case FileFormatBase.FileFormats.ZRXP
                     Call ZRXP.Write_File(zres(0), filename)

@@ -105,6 +105,7 @@ Friend Class CLI
                                 Case "BIN"
                                     outputformat = FileFormatBase.FileFormats.BIN
                                 Case Else
+                                    'TODO: support DFS0 format #73
                                     Throw New ArgumentException($"Unrecognized output format option -of {args(i)}!")
                             End Select
                             n_option_args += 2

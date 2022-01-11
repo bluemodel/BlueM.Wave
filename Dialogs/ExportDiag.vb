@@ -36,14 +36,15 @@ Friend Class ExportDiag
 
         'add formats to combobox
         Me.ComboBox_Format.Items.Add(FileFormatBase.FileFormats.CSV)
-        Me.ComboBox_Format.Items.Add(FileFormatBase.FileFormats.ZRE)
         Me.ComboBox_Format.Items.Add(FileFormatBase.FileFormats.BIN)
+        Me.ComboBox_Format.Items.Add(FileFormatBase.FileFormats.DFS0)
         Me.ComboBox_Format.Items.Add(FileFormatBase.FileFormats.REG_HYSTEM)
         Me.ComboBox_Format.Items.Add(FileFormatBase.FileFormats.REG_SMUSI)
         Me.ComboBox_Format.Items.Add(FileFormatBase.FileFormats.DAT_SWMM_MASS)
         Me.ComboBox_Format.Items.Add(FileFormatBase.FileFormats.DAT_SWMM_TIME)
         Me.ComboBox_Format.Items.Add(FileFormatBase.FileFormats.SWMM_INTERFACE)
         Me.ComboBox_Format.Items.Add(FileFormatBase.FileFormats.UVF)
+        Me.ComboBox_Format.Items.Add(FileFormatBase.FileFormats.ZRE)
         Me.ComboBox_Format.Items.Add(FileFormatBase.FileFormats.ZRXP)
         Me.ComboBox_Format.SelectedIndex = 0
 
@@ -77,7 +78,8 @@ Friend Class ExportDiag
                 Me.Button_SelectAll.Enabled = False
 
             Case FileFormatBase.FileFormats.SWMM_INTERFACE,
-                 FileFormatBase.FileFormats.CSV
+                 FileFormatBase.FileFormats.CSV,
+                 FileFormatBase.FileFormats.DFS0
                 'Allow selection of multiple series
                 Me.ListBox_Series.SelectionMode = SelectionMode.MultiExtended
                 Me.Button_SelectAll.Enabled = True
