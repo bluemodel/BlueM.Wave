@@ -246,6 +246,12 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="FileFormats\ASC.vb" />
+    <Compile Include="FileFormats\DFS0_ExportDialog.Designer.vb">
+      <DependentUpon>DFS0_ExportDialog.vb</DependentUpon>
+    </Compile>
+    <Compile Include="FileFormats\DFS0_ExportDialog.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="FileFormats\SWMM_INTERFACE.vb" />
     <Compile Include="FileFormats\SWMM_LID_REPORT.vb" />
     <Compile Include="FileFormats\WVP.vb" />
@@ -380,6 +386,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Dialogs\SeriesEditorDialog.resx">
       <DependentUpon>SeriesEditorDialog.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FileFormats\DFS0_ExportDialog.resx">
+      <DependentUpon>DFS0_ExportDialog.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FileFormats\HYDRO_AS-2D_Diag.resx">
       <DependentUpon>HYDRO_AS-2D_Diag.vb</DependentUpon>

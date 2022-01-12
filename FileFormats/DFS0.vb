@@ -35,6 +35,7 @@ Imports DHI.Generic.MikeZero.DFS
 ''' Docs:
 ''' * https://docs.mikepoweredbydhi.com/core_libraries/dfs/dfs_api/
 ''' * https://docs.mikepoweredbydhi.com/core_libraries/dfs/dfs-file-formats/#dfs0-file
+''' * https://docs.mikepoweredbydhi.com/SDK_UserGuide/#eum-quantity
 ''' 
 ''' Code is loosely based on the following examples: https://github.com/DHI/MIKECore-Examples/blob/master/Examples/CSharp/ExamplesDfs0.cs
 ''' </summary>
@@ -134,7 +135,10 @@ Public Class DFS0
         For Each sInfo As SeriesInfo In Me.SelectedSeries
             dynamicItemInfo = dfs0File.ItemInfo(sInfo.Index)
             Me.FileTimeSeries(sInfo.Index).Interpretation = DataValueTypeToInterpretation(dynamicItemInfo.ValueType)
-            Me.FileTimeSeries(sInfo.Index).Metadata.Add("Quantity", dynamicItemInfo.Quantity.ItemDescription)
+            Me.FileTimeSeries(sInfo.Index).Metadata.Add("eumItem", [Enum].GetName(GetType(eumItem), dynamicItemInfo.Quantity.Item))
+            Me.FileTimeSeries(sInfo.Index).Metadata.Add("eumItemDescription", dynamicItemInfo.Quantity.ItemDescription)
+            Me.FileTimeSeries(sInfo.Index).Metadata.Add("eumUnit", [Enum].GetName(GetType(eumUnit), dynamicItemInfo.Quantity.Unit))
+            Me.FileTimeSeries(sInfo.Index).Metadata.Add("eumUnitAbbreviation", dynamicItemInfo.Quantity.UnitAbbreviation)
             DataTypes.Add(sInfo.Index, dynamicItemInfo.DataType)
         Next
 
@@ -240,11 +244,11 @@ Public Class DFS0
                 eumUnit = eumUnit.eumUmillimeterPerHour
             Case "mm/d", "mm/day"
                 eumUnit = eumUnit.eumUmillimeterPerDay
-            Case "mm/m", "mm/month"
+            Case "mm/m", "mm/month", "mm/mth"
                 eumUnit = eumUnit.eumUmillimeterPerMonth
-            Case "mm/y", "mm/year"
+            Case "mm/y", "mm/year", "mm/yr"
                 eumUnit = eumUnit.eumUmillimeterPerYear
-            Case "°c", "degree celsius", "degree c"
+            Case "°c", "degree celsius", "degree c", "deg c"
                 eumUnit = eumUnit.eumUdegreeCelsius
             Case "()"
                 eumUnit = eumUnit.eumUOnePerOne
@@ -252,7 +256,7 @@ Public Class DFS0
                 eumUnit = eumUnit.eumUPerCent
             Case "m³", "m3", "cbm"
                 eumUnit = eumUnit.eumUm3
-            Case "mm³", "mm3", "million m³", "million m3"
+            Case "mm³", "mm3", "million m³", "million m3", "10^6m^3"
                 eumUnit = eumUnit.eumUTenTo6m3
             Case "m²", "m2", "sqm"
                 eumUnit = eumUnit.eumUm2
@@ -263,7 +267,7 @@ Public Class DFS0
             Case "liter/sec/km^2", "l/s/km^2"
                 eumUnit = eumUnit.eumUliterPerSecPerKm2
             Case Else
-                Log.AddLogEntry(levels.warning, $"Unable to convert unit {unit} to a DHI EUM unit. Setting the unit to undefined.")
+                Log.AddLogEntry(levels.debug, $"Unable to convert unit '{unit}' to a DHI EUM unit. Using undefined.")
                 eumUnit = eumUnit.eumUUnitUndefined
         End Select
         Return eumUnit
@@ -272,11 +276,20 @@ Public Class DFS0
 
     ''' <summary>
     ''' Writes one or more timeseries to a DFS0 file
+    ''' Displays a dialog for setting EUM Item and Unit
     ''' </summary>
     ''' <param name="tsList">list of TimeSeries</param>
     ''' <param name="path">path to file</param>
     ''' <remarks></remarks>
     Public Shared Sub Write_File(ByRef tsList As List(Of TimeSeries), path As String)
+
+        'show DFS0 export dialog in order to allow the user to specify EUM Items and Units
+        Dim dlg As New DFS0_ExportDialog(tsList)
+        Dim dlgresult As DialogResult = dlg.ShowDialog()
+        If dlgresult <> DialogResult.OK Then
+            Throw New Exception("Export to DFS0 cancelled by user!")
+        End If
+        Dim quantities As Dictionary(Of Integer, eumQuantity) = dlg.Quantities
 
         'collect timestamps from all time series
         Dim timestampSet As New HashSet(Of DateTime)
@@ -301,7 +314,7 @@ Public Class DFS0
                 If tsList(j).Nodes.ContainsKey(t) Then
                     values(i, j) = tsList(j).Nodes(t)
                 Else
-                    'fill non-existant nodes with NaN
+                    'fill non-existent nodes with NaN
                     values(i, j) = Double.NaN
                 End If
             Next
@@ -321,8 +334,7 @@ Public Class DFS0
         'set up items
         For Each ts As TimeSeries In tsList
             Dim item As DFS.DfsDynamicItemBuilder = builder.CreateDynamicItemBuilder()
-            'TODO: item type can not be automatically derived and is always set to undefined
-            item.Set(ts.Title, eumQuantity.Create(eumItem.eumIItemUndefined, DFS0.UnitToEUMUnit(ts.Unit)), DFS.DfsSimpleType.Double)
+            item.Set(ts.Title, quantities(ts.Id), DFS.DfsSimpleType.Double)
             item.SetValueType(InterpretationToDataValueType(ts.Interpretation))
             item.SetAxis(factory.CreateAxisEqD0())
             builder.AddDynamicItem(item.GetDynamicItemInfo())
