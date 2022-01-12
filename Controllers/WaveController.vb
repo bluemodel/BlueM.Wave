@@ -390,7 +390,7 @@ Friend Class WaveController
     'Zeitreihen Export
     '*****************
     Private Sub ExportZeitreihe_Click(sender As System.Object, e As System.EventArgs)
-        Call _model.ExportZeitreihe()
+        Call _model.ExportTimeseries()
     End Sub
 
     'Serie eingeben

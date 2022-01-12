@@ -476,10 +476,10 @@ Public Class Wave
     End Sub
 
     ''' <summary>
-    ''' Zeitreihe(n) exportieren
+    ''' Initiates timeseries export
     ''' </summary>
     ''' <remarks></remarks>
-    Friend Sub ExportZeitreihe()
+    Friend Sub ExportTimeseries()
 
         Dim exportDlg As ExportDiag
         Dim dlgResult As DialogResult
