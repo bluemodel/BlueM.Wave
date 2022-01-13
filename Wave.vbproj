@@ -107,12 +107,6 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AboutBox.Designer.vb">
-      <DependentUpon>AboutBox.vb</DependentUpon>
-    </Compile>
-    <Compile Include="AboutBox.vb">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="Analysis\Analysis.vb" />
     <Compile Include="Analysis\AnalysisChart.Designer.vb">
       <DependentUpon>AnalysisChart.vb</DependentUpon>
@@ -181,16 +175,24 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="App.vb" />
-    <Compile Include="AxisWrapper.vb" />
+    <Compile Include="Classes\AxisWrapper.vb" />
     <Compile Include="Classes\Character.vb" />
+    <Compile Include="Classes\Metadata.vb" />
     <Compile Include="Classes\Month.vb" />
     <Compile Include="Classes\TimeSeries.vb" />
     <Compile Include="Classes\TimeSeriesDataSource.vb" />
     <Compile Include="CLI.vb" />
     <Compile Include="Constants.vb" />
+    <Compile Include="Controllers\Controller.vb" />
     <Compile Include="Controllers\PropertiesController.vb" />
     <Compile Include="Controllers\ValuesController.vb" />
     <Compile Include="Controllers\WaveController.vb" />
+    <Compile Include="Dialogs\AboutBox.Designer.vb">
+      <DependentUpon>AboutBox.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\AboutBox.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Dialogs\AxisDialog.Designer.vb">
       <DependentUpon>AxisDialog.vb</DependentUpon>
     </Compile>
@@ -225,6 +227,12 @@
       <DependentUpon>ImportDiag.vb</DependentUpon>
     </Compile>
     <Compile Include="Dialogs\ImportDiag.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialogs\LogWindow.Designer.vb">
+      <DependentUpon>LogWindow.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\LogWindow.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Dialogs\MergeSeriesDialog.Designer.vb">
@@ -282,16 +290,7 @@
     <Compile Include="FileFormats\ZRE.vb" />
     <Compile Include="FileFormats\ZRXP.vb" />
     <Compile Include="Helpers.vb" />
-    <Compile Include="Controller.vb" />
-    <Compile Include="IView.vb" />
     <Compile Include="Log.vb" />
-    <Compile Include="LogWindow.Designer.vb">
-      <DependentUpon>LogWindow.vb</DependentUpon>
-    </Compile>
-    <Compile Include="LogWindow.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Metadata.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
@@ -308,6 +307,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="Views\IView.vb" />
     <Compile Include="Views\MainWindow.Designer.vb">
       <DependentUpon>MainWindow.vb</DependentUpon>
     </Compile>
@@ -329,10 +329,6 @@
     <Compile Include="Wave.vb" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="AboutBox.resx">
-      <DependentUpon>AboutBox.vb</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="Analysis\AnalysisChart.resx">
       <DependentUpon>AnalysisChart.vb</DependentUpon>
     </EmbeddedResource>
@@ -360,6 +356,9 @@
     <EmbeddedResource Include="Analysis\TimestepAnalysisDialog.resx">
       <DependentUpon>TimestepAnalysisDialog.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Dialogs\AboutBox.resx">
+      <DependentUpon>AboutBox.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Dialogs\AxisDialog.resx">
       <DependentUpon>AxisDialog.vb</DependentUpon>
     </EmbeddedResource>
@@ -378,6 +377,9 @@
     <EmbeddedResource Include="Dialogs\ImportDiag.resx">
       <DependentUpon>ImportDiag.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Dialogs\LogWindow.resx">
+      <DependentUpon>LogWindow.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Dialogs\MergeSeriesDialog.resx">
       <DependentUpon>MergeSeriesDialog.vb</DependentUpon>
     </EmbeddedResource>
@@ -392,9 +394,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FileFormats\HYDRO_AS-2D_Diag.resx">
       <DependentUpon>HYDRO_AS-2D_Diag.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="LogWindow.resx">
-      <DependentUpon>LogWindow.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="My Project\Resources.resx">
       <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
