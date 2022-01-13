@@ -122,6 +122,8 @@ Friend Class WaveController
         AddHandler Me.View.ToolStripButton_ZoomNext.Click, AddressOf ZoomNext_Click
         AddHandler Me.View.ToolStripButton_ZoomAll.Click, AddressOf ZoomAll_Click
         AddHandler Me.View.ToolStripDropDownButton_ZoomToSeries.DropDownOpening, AddressOf ZoomToSeries_DropDown
+        AddHandler Me.View.ToolStripMenuItem_ActivateAllSeries.Click, AddressOf ActivateAllSeries_Click
+        AddHandler Me.View.ToolStripMenuItem_DeactivateAllSeries.Click, AddressOf DeactivateAllSeries_Click
         AddHandler Me.View.ToolStripMenuItem_Help.Click, AddressOf Help_Click
         AddHandler Me.View.ToolStripMenuItem_CheckForUpdate.Click, AddressOf CheckForUpdate_Click
         AddHandler Me.View.ToolStripButton_UpdateNotification.Click, AddressOf CheckForUpdate_Click
@@ -1122,6 +1124,28 @@ Friend Class WaveController
 
         End If
 
+    End Sub
+
+    ''' <summary>
+    ''' Activate all series button clicked
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    Private Sub ActivateAllSeries_Click(sender As Object, e As EventArgs)
+        For Each series As Steema.TeeChart.Styles.Series In View.TChart1.Series
+            series.Active = True
+        Next
+    End Sub
+
+    ''' <summary>
+    ''' Deactivate all series button clicked
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    Private Sub DeactivateAllSeries_Click(sender As Object, e As EventArgs)
+        For Each series As Steema.TeeChart.Styles.Series In View.TChart1.Series
+            series.Active = False
+        Next
     End Sub
 
     ''' <summary>

@@ -402,6 +402,7 @@
       <CustomToolNamespace>My.Resources</CustomToolNamespace>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="My Project\TeeChart.licenses" />
     <EmbeddedResource Include="Views\MainWindow.resx">
       <DependentUpon>MainWindow.vb</DependentUpon>
     </EmbeddedResource>
@@ -445,7 +446,9 @@
     <Content Include="LICENSE.TXT">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <EmbeddedResource Include="My Project\TeeChart.licenses" />
+    <None Include="Resources\accept.png" />
+    <None Include="Resources\accept_grayscale.png" />
+    <None Include="Resources\accept_split.png" />
     <Content Include="Resources\application_get.png" />
     <Content Include="Resources\application_split.png" />
     <Content Include="Resources\arrow_down.png" />

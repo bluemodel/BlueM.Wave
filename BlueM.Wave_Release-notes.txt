@@ -5,6 +5,7 @@ Version 1.12.0
 --------------
 NEW:
 * Added the ability to export to DFS0 format #73
+* Added buttons for activating / deactivating all series at once #72
 CHANGED:
 * Internal code restructuring to MVC architecture #75
 * Upgraded to Math.NET Numerics v4.15.0 from NuGet #74
