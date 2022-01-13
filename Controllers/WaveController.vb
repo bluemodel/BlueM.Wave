@@ -1174,7 +1174,7 @@ Friend Class WaveController
     ''' </summary>
     Private Sub About_Click(sender As System.Object, e As System.EventArgs)
         Dim about As New AboutBox()
-        Call about.ShowDialog(Me)
+        Call about.ShowDialog(Me.View)
     End Sub
 
     ''' <summary>
