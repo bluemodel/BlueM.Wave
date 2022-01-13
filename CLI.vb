@@ -104,8 +104,9 @@ Friend Class CLI
                                     outputformat = FileFormatBase.FileFormats.CSV
                                 Case "BIN"
                                     outputformat = FileFormatBase.FileFormats.BIN
+                                Case "DFS0"
+                                    outputformat = FileFormatBase.FileFormats.DFS0
                                 Case Else
-                                    'TODO: support DFS0 format #73
                                     Throw New ArgumentException($"Unrecognized output format option -of {args(i)}!")
                             End Select
                             n_option_args += 2
@@ -178,6 +179,11 @@ Friend Class CLI
                                 Log.AddLogEntry(BlueM.Wave.Log.levels.warning, "Overwriting existing file!")
                             End If
                             CSV.Write_File(tsList, path_out)
+                        Case FileFormatBase.FileFormats.DFS0
+                            If IO.File.Exists(path_out) Then
+                                Log.AddLogEntry(BlueM.Wave.Log.levels.warning, "Overwriting existing file!")
+                            End If
+                            DFS0.Write_File(tsList, path_out)
                         Case FileFormatBase.FileFormats.BIN
                             'treat output path as a directory and export individual files, using the title as filename
                             IO.Directory.CreateDirectory(path_out)
@@ -241,7 +247,7 @@ Friend Class CLI
         ConsoleOutput("Import one or multiple files and export them to path_out, without showing Wave")
         ConsoleOutput("Options:")
         ConsoleOutput("   -i: interactive mode: will show the Import File Dialog for files containing multiple time series.")
-        ConsoleOutput("   -of <format>: specifies the output format (BIN or CSV). Default is CSV.")
+        ConsoleOutput("   -of <format>: specifies the output format (BIN, CSV or DFS0). Default is CSV.")
         ConsoleOutput("")
         ConsoleOutput("See https://wiki.bluemodel.org/index.php/Wave:CLI for more details")
     End Sub
