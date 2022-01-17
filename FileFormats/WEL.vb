@@ -26,6 +26,7 @@
 '--------------------------------------------------------------------------------------------
 '
 Imports System.IO
+Imports System.Text.RegularExpressions
 
 ''' <summary>
 ''' Klasse für das WEL-Dateiformat
@@ -328,31 +329,31 @@ Public Class WEL
         Dim zipEntryFound As Boolean = False
         Dim success As Boolean = False
 
-        If file.ToUpper().EndsWith(".KTR.WEL") Then
-            file_wlzip = file.Substring(0, file.Length - 8) & ".WLZIP"
-        Else
-            file_wlzip = file.Substring(0, file.Length - 4) & ".WLZIP"
-        End If
+        'determine WLZIP filename for files ending with .WEL, .KTR.WEL, .BOF.WEL or .CWR.WEL
+        Dim m As Match = Regex.Match(file, "^(.+?)(\.[a-z]{3})?\.WEL$", RegexOptions.IgnoreCase)
+        If m.Success Then
+            file_wlzip = $"{m.Groups(1)}.WLZIP"
 
-        If IO.File.Exists(file_wlzip) Then
+            If IO.File.Exists(file_wlzip) Then
 
-            Log.AddLogEntry(Log.levels.info, $"Looking for file in {file_wlzip} ...")
-            dir = IO.Path.GetDirectoryName(file)
-            filename = IO.Path.GetFileName(file)
+                Log.AddLogEntry(Log.levels.info, $"Looking for file in {file_wlzip} ...")
+                dir = IO.Path.GetDirectoryName(file)
+                filename = IO.Path.GetFileName(file)
 
-            For Each ze In Ionic.Zip.ZipFile.Read(file_wlzip)
-                If ze.FileName.ToLower() = filename.ToLower() Then
-                    zipEntryFound = True
-                    Log.AddLogEntry(Log.levels.info, $"Extracting file from {file_wlzip} ...")
-                    ze.Extract(dir, Ionic.Zip.ExtractExistingFileAction.OverwriteSilently)
-                    success = True
+                For Each ze In Ionic.Zip.ZipFile.Read(file_wlzip)
+                    If ze.FileName.ToLower() = filename.ToLower() Then
+                        zipEntryFound = True
+                        Log.AddLogEntry(Log.levels.info, $"Extracting file from {file_wlzip} ...")
+                        ze.Extract(dir, Ionic.Zip.ExtractExistingFileAction.OverwriteSilently)
+                        success = True
+                    End If
+                Next
+
+                If Not zipEntryFound Then
+                    Log.AddLogEntry(Log.levels.error, $"File {filename} not found in {file_wlzip}!")
                 End If
-            Next
 
-            If Not zipEntryFound Then
-                Log.AddLogEntry(Log.levels.error, $"File {filename} not found in {file_wlzip}!")
             End If
-
         End If
 
         Return success
