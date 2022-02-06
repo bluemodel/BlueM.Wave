@@ -2,6 +2,11 @@
 BlueM.Wave Release Notes
 ===============================================================
 
+Version 1.12.2
+--------------
+FIXED: 
+* Analysis functions: fixed error when snychronizing two time series with more different than common timestamps
+
 Version 1.12.1
 --------------
 FIXED:

@@ -1297,12 +1297,11 @@ Public Class TimeSeries
             Exit Sub
         End If
 
-        t_common = ts1.Dates.ToHashSet()
-        t_common.Intersect(ts2.Dates)
+        t_common = ts1.Dates.Intersect(ts2.Dates).ToHashSet()
 
-        'switch depending on whether there are more common or more different nodes
+        'switch depending on whether there are more common or more different timestamps
         If t_diff.Count < t_common.Count Then
-            'remove the different nodes
+            'remove the different timestamps from the node lists
             For Each t As DateTime In t_diff
                 If ts1.Dates.Contains(t) Then
                     ts1.Nodes.Remove(t)
@@ -1312,15 +1311,15 @@ Public Class TimeSeries
                 End If
             Next
         Else
-            'clear all nodes and re-add only the common nodes
-            Dim ts1_nodes As SortedList(Of DateTime, Double) = ts1.Nodes
-            Dim ts2_nodes As SortedList(Of DateTime, Double) = ts2.Nodes
-            ts1.Nodes.Clear()
-            ts2.Nodes.Clear()
+            'create new node lists with only the common timestamps
+            Dim ts1_nodes As New SortedList(Of DateTime, Double)()
+            Dim ts2_nodes As New SortedList(Of DateTime, Double)()
             For Each t As DateTime In t_common
-                ts1.AddNode(t, ts1_nodes(t))
-                ts2.AddNode(t, ts2_nodes(t))
+                ts1_nodes.Add(t, ts1.Nodes(t))
+                ts2_nodes.Add(t, ts2.Nodes(t))
             Next
+            ts1._nodes = ts1_nodes
+            ts2._nodes = ts2_nodes
         End If
 
         ts1._nodesCleaned = Nothing
