@@ -673,7 +673,7 @@ Friend Class WaveController
                                 band.Tag = "NaN"
 
                                 'write to log
-                                Log.AddLogEntry(Log.levels.info, $"Series contains NaN values from {nanStart.ToString(Helpers.DefaultDateFormat)} to {nanEnd.ToString(Helpers.DefaultDateFormat)}")
+                                Log.AddLogEntry(Log.levels.info, $"Series contains NaN values from {nanStart.ToString(Helpers.CurrentDateFormat)} to {nanEnd.ToString(Helpers.CurrentDateFormat)}")
                             End If
                         End If
                     Next
@@ -1947,7 +1947,7 @@ Friend Class WaveController
             For Each t As DateTime In t_too_early
                 ts.Nodes.Remove(t)
             Next
-            Log.AddLogEntry(Log.levels.warning, $"Unable to display {t_too_early.Count} nodes between {t_too_early.First().ToString(Helpers.DefaultDateFormat)} and {t_too_early.Last().ToString(Helpers.DefaultDateFormat)}!")
+            Log.AddLogEntry(Log.levels.warning, $"Unable to display {t_too_early.Count} nodes between {t_too_early.First().ToString(Helpers.CurrentDateFormat)} and {t_too_early.Last().ToString(Helpers.CurrentDateFormat)}!")
         End If
         If ts.EndDate > Constants.maxOADate Then
             ts = ts.Clone()
@@ -1962,7 +1962,7 @@ Friend Class WaveController
             For Each t As DateTime In t_too_late
                 ts.Nodes.Remove(t)
             Next
-            Log.AddLogEntry(Log.levels.warning, $"Unable to display {t_too_late.Count} nodes between {t_too_late.Last().ToString(Helpers.DefaultDateFormat)} and {t_too_late.First().ToString(Helpers.DefaultDateFormat)}!")
+            Log.AddLogEntry(Log.levels.warning, $"Unable to display {t_too_late.Count} nodes between {t_too_late.Last().ToString(Helpers.CurrentDateFormat)} and {t_too_late.First().ToString(Helpers.CurrentDateFormat)}!")
         End If
 
         'Serie zu Diagramm hinzufügen
@@ -2502,7 +2502,7 @@ Friend Class WaveController
             View.TChart2.Axes.Bottom.Labels.Font.Color = Color.FromArgb(100, 100, 100)
             View.TChart2.Axes.Bottom.Labels.Font.Size = 8
             View.TChart2.Axes.Bottom.Automatic = False
-            View.TChart2.Axes.Bottom.Labels.DateTimeFormat = "dd.MM.yyyy"
+            View.TChart2.Axes.Bottom.Labels.DateTimeFormat = Globalization.CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern 'date only without time
             View.TChart2.Axes.Bottom.Labels.Angle = 0
 
             'Hide axis titles

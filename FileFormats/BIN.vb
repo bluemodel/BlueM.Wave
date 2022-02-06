@@ -60,7 +60,7 @@ Public Class BIN
         MyBase.New(FileName)
 
         'Voreinstellungen
-        Me.Dateformat = Helpers.DefaultDateFormat 'irrelevant weil binär
+        Me.Dateformat = Helpers.CurrentDateFormat 'irrelevant weil binär
         Me.iLineData = 0
         Me.UseUnits = False
 

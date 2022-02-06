@@ -40,7 +40,7 @@ Partial Class HYDRO_AS_2D_Diag
         '
         'DateTimePicker_refDate
         '
-        Me.DateTimePicker_refDate.CustomFormat = "dd.MM.yyyy HH:mm"
+        Me.DateTimePicker_refDate.CustomFormat = Helpers.CurrentDateFormat
         Me.DateTimePicker_refDate.Format = System.Windows.Forms.DateTimePickerFormat.Custom
         Me.DateTimePicker_refDate.Location = New System.Drawing.Point(201, 12)
         Me.DateTimePicker_refDate.Name = "DateTimePicker_refDate"

@@ -295,7 +295,7 @@ Friend Class GoodnessOfFit
         '-----
         'shortText is displayed in the diagram. Displays the GoF parameters for the entire series
         _gof = Me.GoFResults("Entire series")
-        shortText = "Entire series (" & _gof.startDate.ToString(Helpers.DefaultDateFormat) & " - " & _gof.endDate.ToString(Helpers.DefaultDateFormat) & "):" & eol
+        shortText = "Entire series (" & _gof.startDate.ToString(Helpers.CurrentDateFormat) & " - " & _gof.endDate.ToString(Helpers.CurrentDateFormat) & "):" & eol
         shortText &= "Volume observed: Vobs = " & _gof.volume_observed.ToString(formatstring) & eol _
                      & "Volume simulated: Vsim = " & _gof.volume_simulated.ToString(formatstring) & eol _
                      & "Volume error: m = " & _gof.volumeerror.ToString(formatstring) & " %" & eol _
@@ -319,8 +319,8 @@ Friend Class GoodnessOfFit
             With GOFResult.Value
                 Me.mResultText &= String.Join(Helpers.CurrentListSeparator,
                     GOFResult.Key,
-                    .startDate.ToString(Helpers.DefaultDateFormat),
-                    .endDate.ToString(Helpers.DefaultDateFormat),
+                    .startDate.ToString(Helpers.CurrentDateFormat),
+                    .endDate.ToString(Helpers.CurrentDateFormat),
                     .nValues.ToString(),
                     .volume_observed.ToString(formatstring),
                     .volume_simulated.ToString(formatstring),

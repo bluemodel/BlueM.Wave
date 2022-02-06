@@ -357,7 +357,7 @@ Public Class SydroSQLite
                     dataReader.Close()
                     For Each T0 As DateTime In T0_list
                         sInfo = New SeriesInfo()
-                        sInfo.Name = $"{ts_name}/{flag_id}: {flag_desc} - {T0.ToString(Helpers.DefaultDateFormat)}"
+                        sInfo.Name = $"{ts_name}/{flag_id}: {flag_desc} - {T0.ToString(Helpers.CurrentDateFormat)}"
                         sInfo.Index = index
                         Me.SeriesList.Add(sInfo)
                         Me.flag_T0_mapping.Add(index, New Tuple(Of Integer, DateTime)(flag_id, T0))

@@ -66,7 +66,7 @@ Friend Class ChangeTimestepDialog
         Me.MaskedTextBox_Start.FormatProvider = Globalization.CultureInfo.CurrentCulture
 
         'set the initial start date
-        Me.MaskedTextBox_Start.Text = ts.StartDate.ToString()
+        Me.MaskedTextBox_Start.Text = ts.StartDate
     End Sub
 
     ''' <summary>

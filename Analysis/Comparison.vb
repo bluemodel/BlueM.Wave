@@ -155,7 +155,7 @@ Friend Class Comparison
 
         'Text:
         '-----
-        Me.mResultText = $"The analysis is based on {Me.ts_x.Length} coincident data points between {Me.ts_x.StartDate.ToString(Helpers.DefaultDateFormat)} and {Me.ts_x.EndDate.ToString(Helpers.DefaultDateFormat)}"
+        Me.mResultText = $"The analysis is based on {Me.ts_x.Length} coincident data points between {Me.ts_x.StartDate.ToString(Helpers.CurrentDateFormat)} and {Me.ts_x.EndDate.ToString(Helpers.CurrentDateFormat)}"
 
         'Diagramm:
         '---------

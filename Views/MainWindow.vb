@@ -121,6 +121,7 @@ Friend Class MainWindow
         Me.MaskedTextBox_NavStart.FormatProvider = Globalization.CultureInfo.CurrentCulture
         Me.MaskedTextBox_NavEnd.Culture = Globalization.CultureInfo.CurrentCulture
         Me.MaskedTextBox_NavEnd.FormatProvider = Globalization.CultureInfo.CurrentCulture
+
         'set current date as initial values
         Me.MaskedTextBox_NavStart.Text = DateTime.Now
         Me.MaskedTextBox_NavEnd.Text = DateTime.Now
@@ -161,7 +162,7 @@ Friend Class MainWindow
         'Achsen
         Me.TChart1.Axes.Bottom.Automatic = False
         Me.TChart1.Axes.Bottom.Labels.Angle = 90
-        Me.TChart1.Axes.Bottom.Labels.DateTimeFormat = "dd.MM.yy HH:mm"
+        Me.TChart1.Axes.Bottom.Labels.DateTimeFormat = Helpers.CurrentDateFormat
         Me.TChart1.Axes.Right.Title.Angle = 90
 
         Me.TChart2.Axes.Left.Labels.Font.Color = Color.FromArgb(100, 100, 100)
@@ -169,7 +170,7 @@ Friend Class MainWindow
         Me.TChart2.Axes.Bottom.Labels.Font.Color = Color.FromArgb(100, 100, 100)
         Me.TChart2.Axes.Bottom.Labels.Font.Size = 8
         Me.TChart2.Axes.Bottom.Automatic = False
-        Me.TChart2.Axes.Bottom.Labels.DateTimeFormat = "dd.MM.yyyy"
+        Me.TChart2.Axes.Bottom.Labels.DateTimeFormat = Globalization.CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern 'date only without time
 
         'ColorBand einrichten
         Call Me.Init_ColorBands()

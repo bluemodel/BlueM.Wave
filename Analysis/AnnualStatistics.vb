@@ -137,8 +137,8 @@ Friend Class AnnualStatistics
             stat = kvp.Value
             Me.mResultText &= String.Join(Helpers.CurrentListSeparator,
                 kvp.Key,
-                stat.startDate.ToString(Helpers.DefaultDateFormat),
-                stat.endDate.ToString(Helpers.DefaultDateFormat),
+                stat.startDate.ToString(Helpers.CurrentDateFormat),
+                stat.endDate.ToString(Helpers.CurrentDateFormat),
                 stat.len.ToString(),
                 stat.min.ToString(formatstring),
                 stat.max.ToString(formatstring),

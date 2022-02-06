@@ -73,7 +73,7 @@ Friend Class ValuesWindow
         Dim table As New DataTable("data")
         Me.dataset.Tables.Add(table)
 
-        'set CurrentCulture for MaskedTextBoxes
+        'set CurrentCulture for MaskedTextBox
         Me.MaskedTextBox_JumpDate.Culture = Globalization.CultureInfo.CurrentCulture
         Me.MaskedTextBox_JumpDate.FormatProvider = Globalization.CultureInfo.CurrentCulture
 

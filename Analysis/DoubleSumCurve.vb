@@ -128,7 +128,7 @@ Friend Class DoubleSumCurve
 
         'Text:
         '-----
-        Me.mResultText = $"The analysis is based on {Me.summe1.Length} coincident data points between {Me.ts_1.StartDate.ToString(Helpers.DefaultDateFormat)} and {Me.ts_1.EndDate.ToString(DefaultDateFormat)}"
+        Me.mResultText = $"The analysis is based on {Me.summe1.Length} coincident data points between {Me.ts_1.StartDate.ToString(Helpers.CurrentDateFormat)} and {Me.ts_1.EndDate.ToString(Helpers.CurrentDateFormat)}"
 
         'Diagramm:
         '---------

@@ -126,7 +126,6 @@ Partial Class ChangeTimestepDialog
         '
         Me.MaskedTextBox_Start.Culture = New System.Globalization.CultureInfo("")
         Me.MaskedTextBox_Start.Location = New System.Drawing.Point(108, 60)
-        Me.MaskedTextBox_Start.Mask = "00/00/0000 00:00"
         Me.MaskedTextBox_Start.Name = "MaskedTextBox_Start"
         Me.MaskedTextBox_Start.Size = New System.Drawing.Size(100, 20)
         Me.MaskedTextBox_Start.TabIndex = 6

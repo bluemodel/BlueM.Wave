@@ -161,7 +161,6 @@ Partial Class CutDialog
         '
         Me.MaskedTextBox_cutEnd.Culture = New System.Globalization.CultureInfo("")
         Me.MaskedTextBox_cutEnd.Location = New System.Drawing.Point(336, 31)
-        Me.MaskedTextBox_cutEnd.Mask = "00/00/0000 00:00"
         Me.MaskedTextBox_cutEnd.Name = "MaskedTextBox_cutEnd"
         Me.MaskedTextBox_cutEnd.Size = New System.Drawing.Size(100, 20)
         Me.MaskedTextBox_cutEnd.TabIndex = 3
@@ -171,7 +170,6 @@ Partial Class CutDialog
         '
         Me.MaskedTextBox_cutStart.Culture = New System.Globalization.CultureInfo("")
         Me.MaskedTextBox_cutStart.Location = New System.Drawing.Point(7, 31)
-        Me.MaskedTextBox_cutStart.Mask = "00/00/0000 00:00"
         Me.MaskedTextBox_cutStart.Name = "MaskedTextBox_cutStart"
         Me.MaskedTextBox_cutStart.Size = New System.Drawing.Size(100, 20)
         Me.MaskedTextBox_cutStart.TabIndex = 1

@@ -6,6 +6,7 @@ Version 1.12.2
 --------------
 FIXED: 
 * Analysis functions: fixed error when snychronizing two time series with more different than common timestamps
+* The date time format used for displaying and entering dates and times now more consistently follows the user's Windows settings
 
 Version 1.12.1
 --------------

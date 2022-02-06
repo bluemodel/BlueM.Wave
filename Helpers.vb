@@ -45,17 +45,6 @@ Public Module Helpers
     End Property
 
     ''' <summary>
-    ''' Default DateFormat
-    ''' </summary>
-    ''' <returns>DateFormats("default")</returns>
-    ''' <remarks>dd.MM.yyyy HH:mm</remarks>
-    Public ReadOnly Property DefaultDateFormat() As String
-        Get
-            Return DateFormats("default")
-        End Get
-    End Property
-
-    ''' <summary>
     ''' Default Encoding (as set by the operating system, usually ISO-8859-1)
     ''' </summary>
     Public ReadOnly Property DefaultEncoding As Text.Encoding
@@ -74,11 +63,12 @@ Public Module Helpers
     End Property
 
     ''' <summary>
-    ''' Returns the date format as set by the operating system
+    ''' Returns the current date time format as set by the operating system
     ''' </summary>
-    Public ReadOnly Property CurrentDateFormat As DateTimeFormatInfo
+    Public ReadOnly Property CurrentDateFormat As String
         Get
-            Return Globalization.CultureInfo.CurrentCulture.DateTimeFormat
+            Dim format As DateTimeFormatInfo = Globalization.CultureInfo.CurrentCulture.DateTimeFormat
+            Return format.ShortDatePattern & " " & format.ShortTimePattern
         End Get
     End Property
 
@@ -99,6 +89,7 @@ Public Module Helpers
     Public ReadOnly Property DateFormats() As Dictionary(Of String, String)
         Get
             Dim dict As New Dictionary(Of String, String)
+            dict.Add("current", Helpers.CurrentDateFormat)
             dict.Add("default", "dd.MM.yyyy HH:mm")
             dict.Add("GISMO1", "dd.MM.yyyy HH:mm")
             dict.Add("GISMO2", "yyyyMMdd HH:mm")

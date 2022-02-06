@@ -167,7 +167,6 @@ Partial Class ValuesWindow
         '
         Me.MaskedTextBox_JumpDate.Culture = New System.Globalization.CultureInfo("")
         Me.MaskedTextBox_JumpDate.Location = New System.Drawing.Point(65, 27)
-        Me.MaskedTextBox_JumpDate.Mask = "00/00/0000 00:00"
         Me.MaskedTextBox_JumpDate.Name = "MaskedTextBox_JumpDate"
         Me.MaskedTextBox_JumpDate.Size = New System.Drawing.Size(100, 20)
         Me.MaskedTextBox_JumpDate.TabIndex = 2

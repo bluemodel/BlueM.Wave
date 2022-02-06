@@ -86,7 +86,7 @@ Public MustInherit Class FileFormatBase
     Private _file As String
     Private _isColumnSeparated As Boolean = True
     Private _trennzeichen As Character = semicolon
-    Private _dateFormat As String = Helpers.DefaultDateFormat
+    Private _dateFormat As String = Helpers.CurrentDateFormat
     Private _decimalSeparator As Character = period
     Private _iLineHeadings As Integer = 1
     Private _iLineUnits As Integer = 2
@@ -195,7 +195,7 @@ Public MustInherit Class FileFormatBase
     End Property
 
     ''' <summary>
-    ''' Date format (default is Helpers.DefaultDateFormat)
+    ''' Date format (default is Helpers.CurrentDateFormat)
     ''' </summary>
     Public Property Dateformat() As String
         Get

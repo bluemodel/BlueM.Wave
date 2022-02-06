@@ -494,7 +494,7 @@ Public Class TimeSeries
     ''' <remarks>If the given date already exists, the new node is discarded and a warning is written to the log</remarks>
     Public Sub AddNode(_date As DateTime, _value As Double)
         If (Me.Nodes.ContainsKey(_date)) Then
-            Log.AddLogEntry(Log.levels.warning, $"Duplicate data point at {_date.ToString(Helpers.DefaultDateFormat)}: Value of {_value.ToString(Helpers.DefaultNumberFormat)} will be discarded. Existing value: {Me.Nodes(_date).ToString(Helpers.DefaultNumberFormat)}")
+            Log.AddLogEntry(Log.levels.warning, $"Duplicate data point at {_date.ToString(Helpers.CurrentDateFormat)}: Value of {_value.ToString(Helpers.DefaultNumberFormat)} will be discarded. Existing value: {Me.Nodes(_date).ToString(Helpers.DefaultNumberFormat)}")
             Exit Sub
         End If
         Me._nodes.Add(_date, _value)

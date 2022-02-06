@@ -115,8 +115,8 @@ Friend Class CutDialog
         Me.IsInitializing = True 'um eine Kettenreaktionen zu verhindern
 
         'Min und Max setzen
-        Me.Label_StartDateTime.Text = "Min: " & earliestStart.ToString(Helpers.DefaultDateFormat)
-        Me.Label_EndDateTime.Text = "Max: " & latestEnd.ToString(Helpers.DefaultDateFormat)
+        Me.Label_StartDateTime.Text = "Min: " & earliestStart.ToString(Helpers.CurrentDateFormat)
+        Me.Label_EndDateTime.Text = "Max: " & latestEnd.ToString(Helpers.CurrentDateFormat)
 
         Me.IsInitializing = False
 
@@ -153,7 +153,7 @@ Friend Class CutDialog
     ''' </summary>
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
-    Private Sub MaskedTextBox_cutStart_Leave(sender As System.Object, e As System.EventArgs) Handles MaskedTextBox_cutStart.Leave
+    Private Sub MaskedTextBox_cutStart_Validated(sender As System.Object, e As System.EventArgs) Handles MaskedTextBox_cutStart.Validated
 
         If (Me.IsInitializing) Then
             Exit Sub
@@ -167,7 +167,7 @@ Friend Class CutDialog
     ''' </summary>
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
-    Private Sub MaskedTextBox_cutEnd_Leave(sender As System.Object, e As System.EventArgs) Handles MaskedTextBox_cutEnd.Leave
+    Private Sub MaskedTextBox_cutEnd_Validated(sender As System.Object, e As System.EventArgs) Handles MaskedTextBox_cutEnd.Validated
 
         If (Me.IsInitializing) Then
             Exit Sub

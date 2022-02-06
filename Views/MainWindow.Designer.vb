@@ -3194,21 +3194,19 @@ Partial Class MainWindow
         Me.MaskedTextBox_NavEnd.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.MaskedTextBox_NavEnd.Culture = New System.Globalization.CultureInfo("")
         Me.MaskedTextBox_NavEnd.Location = New System.Drawing.Point(829, 8)
-        Me.MaskedTextBox_NavEnd.Mask = "00/00/0000 00:00"
         Me.MaskedTextBox_NavEnd.Name = "MaskedTextBox_NavEnd"
         Me.MaskedTextBox_NavEnd.Size = New System.Drawing.Size(100, 20)
         Me.MaskedTextBox_NavEnd.TabIndex = 1
-        Me.MaskedTextBox_NavEnd.ValidatingType = GetType(Date)
+        Me.MaskedTextBox_NavEnd.ValidatingType = GetType(DateTime)
         '
         'MaskedTextBox_NavStart
         '
         Me.MaskedTextBox_NavStart.Culture = New System.Globalization.CultureInfo("")
         Me.MaskedTextBox_NavStart.Location = New System.Drawing.Point(8, 8)
-        Me.MaskedTextBox_NavStart.Mask = "00/00/0000 00:00"
         Me.MaskedTextBox_NavStart.Name = "MaskedTextBox_NavStart"
         Me.MaskedTextBox_NavStart.Size = New System.Drawing.Size(100, 20)
         Me.MaskedTextBox_NavStart.TabIndex = 0
-        Me.MaskedTextBox_NavStart.ValidatingType = GetType(Date)
+        Me.MaskedTextBox_NavStart.ValidatingType = GetType(DateTime)
         '
         'MainWindow
         '
