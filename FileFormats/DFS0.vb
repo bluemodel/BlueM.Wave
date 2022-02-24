@@ -159,16 +159,24 @@ Public Class DFS0
         Dim data As DFS.IDfsItemData
         Dim datum As DateTime
         Dim value As Double
+
+        'create a sorted list of item indices in order to significantly improve performance
+        Dim itemIndices As New List(Of Integer)
+        For Each sInfo As SeriesInfo In Me.SelectedSeries
+            itemIndices.Add(sInfo.Index)
+        Next
+        itemIndices.Sort()
+
         For t_index As Integer = 0 To steps - 1
-            For Each sInfo As SeriesInfo In Me.SelectedSeries
-                data = dfs0File.ReadItemTimeStep(sInfo.Index + 1, t_index) 'expects itemNumber (itemIndex + 1)!
+            For Each itemIndex As Integer In itemIndices
+                data = dfs0File.ReadItemTimeStep(itemIndex + 1, t_index) 'expects itemNumber (itemIndex + 1)!
                 datum = data.TimeAsDateTime(timeAxis)
-                If DeleteValues.ContainsKey(DataTypes(sInfo.Index)) AndAlso data.Data(0) = DeleteValues(DataTypes(sInfo.Index)) Then
+                If DeleteValues.ContainsKey(DataTypes(itemIndex)) AndAlso data.Data(0) = DeleteValues(DataTypes(itemIndex)) Then
                     value = Double.NaN
                 Else
                     value = Convert.ToDouble(data.Data(0))
                 End If
-                Me.FileTimeSeries(sInfo.Index).AddNode(datum, value)
+                Me.FileTimeSeries(itemIndex).AddNode(datum, value)
             Next
         Next
 
