@@ -1,4 +1,6 @@
-﻿'Copyright (c) 2011, ihwb, TU Darmstadt
+﻿'Copyright (c) BlueM Dev Group
+'Website: https://bluemodel.org
+'
 'All rights reserved.
 '
 'Released under the BSD-2-Clause License:
@@ -22,7 +24,7 @@
 'TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, 
 'EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 '--------------------------------------------------------------------------------------------
-
+'
 ''' <summary>
 ''' Autokorrelation analysiert Zeitreihen auf Periodizität
 ''' </summary>
@@ -160,49 +162,49 @@ Friend Class Autokorrelation
 
             'Deklarieren und Initialisieren der Berechnungsvariablen
             Dim n As Integer = 0        'Anzahl der Werte
-                Dim sum_ein As Double = 0   'Wertesumme der Eingangszeitreihe
-                Dim sum_lag As Double = 0   'Wertesumme der Lagzeitreihe
-                Dim avg_ein As Double = 0   'Mittelwert der Eingangszeitreihe
-                Dim avg_lag As Double = 0   'Mittelwert der Lagzeitreihe
-                Dim std_ein As Double = 0   'Standardabweichung der Einganszeitreihe
-                Dim std_lag As Double = 0   'Standardabweichung der Lagzeitreihe
-                Dim kovar As Double = 0     'Kovarianz
-                Dim ra As Double = 0        'Autokorrelationskoeffizient
+            Dim sum_ein As Double = 0   'Wertesumme der Eingangszeitreihe
+            Dim sum_lag As Double = 0   'Wertesumme der Lagzeitreihe
+            Dim avg_ein As Double = 0   'Mittelwert der Eingangszeitreihe
+            Dim avg_lag As Double = 0   'Mittelwert der Lagzeitreihe
+            Dim std_ein As Double = 0   'Standardabweichung der Einganszeitreihe
+            Dim std_lag As Double = 0   'Standardabweichung der Lagzeitreihe
+            Dim kovar As Double = 0     'Kovarianz
+            Dim ra As Double = 0        'Autokorrelationskoeffizient
 
-                'Anzahl der Werte
-                n = values.GetLength(0)
+            'Anzahl der Werte
+            n = values.GetLength(0)
 
-                'Summen der Werte
-                For i = 0 To n - 1
-                    sum_ein += values(i, 0)
-                    sum_lag += values(i, 1)
-                Next
-
-                'Mittelwerte
-                avg_ein = sum_ein / n
-                avg_lag = sum_ein / n
-
-                'Standarabweichungen und Kovarianz
-                For i = 0 To n - 1
-                    std_ein += (values(i, 1) - avg_ein) ^ 2
-                    std_lag += (values(i, 0) - avg_lag) ^ 2
-                    kovar += (values(i, 1) - avg_ein) * (values(i, 0) - avg_lag)
-                Next
-
-                std_ein = Math.Sqrt(1 / (n - 1) * std_ein)
-                std_lag = Math.Sqrt(1 / (n - 1) * std_lag)
-                kovar = 1 / (n - 1) * kovar
-
-                'Autokorrelationskoeffizient berechnen und in Liste speichern
-                ra = kovar / (std_ein * std_lag)
-                raList.Add(ra)
-
-                'ProgressBar erhöhen
-                progress_dialog.ProgressBar1.Value += 1
+            'Summen der Werte
+            For i = 0 To n - 1
+                sum_ein += values(i, 0)
+                sum_lag += values(i, 1)
             Next
 
-            'Bestimmung der Scheitelpunkte
-            For i As Integer = 2 To raList.Count - 1
+            'Mittelwerte
+            avg_ein = sum_ein / n
+            avg_lag = sum_ein / n
+
+            'Standarabweichungen und Kovarianz
+            For i = 0 To n - 1
+                std_ein += (values(i, 1) - avg_ein) ^ 2
+                std_lag += (values(i, 0) - avg_lag) ^ 2
+                kovar += (values(i, 1) - avg_ein) * (values(i, 0) - avg_lag)
+            Next
+
+            std_ein = Math.Sqrt(1 / (n - 1) * std_ein)
+            std_lag = Math.Sqrt(1 / (n - 1) * std_lag)
+            kovar = 1 / (n - 1) * kovar
+
+            'Autokorrelationskoeffizient berechnen und in Liste speichern
+            ra = kovar / (std_ein * std_lag)
+            raList.Add(ra)
+
+            'ProgressBar erhöhen
+            progress_dialog.ProgressBar1.Value += 1
+        Next
+
+        'Bestimmung der Scheitelpunkte
+        For i As Integer = 2 To raList.Count - 1
             If raList.Item(i - 1) > raList.Item(i - 2) And raList.Item(i - 1) > raList.Item(i) And raList.Item(i - 1) > 0 Then
                 raMaxlist.Add(raList.Item(i - 1))
                 periodeList.Add((i - 1) * groesseLags)
