@@ -28,11 +28,11 @@
 ''' </summary>
 ''' <remarks>http://130.83.196.154/BlueM/wiki/index.php/Wave:Autokorrelation</remarks>
 
-Public Class Autokorrelation
+Friend Class Autokorrelation
     Inherits Analysis
 
-    Private zeitreiheEin As Zeitreihe   'Eingangszeitreihe
-    Private zeitreiheLag As Zeitreihe   'Lagzeitreihe
+    Private zeitreiheEin As TimeSeries  'Eingangszeitreihe
+    Private zeitreiheLag As TimeSeries  'Lagzeitreihe
     Private groesseLags As Integer      'Größe der Lags
     Private anzahlLags As Integer       'Anzahl der Lags
     Private values(,) As Double         'Array für gemeinsame Werte der Zeitreihen
@@ -69,10 +69,20 @@ Public Class Autokorrelation
     End Property
 
     ''' <summary>
+    ''' Flag indicating whether the analysis function has result series
+    ''' that should be added to the main diagram
+    ''' </summary>
+    Public Overrides ReadOnly Property hasResultSeries() As Boolean
+        Get
+            Return False
+        End Get
+    End Property
+
+    ''' <summary>
     ''' Konstruktor
     ''' </summary>
     ''' <param name="zeitreihen">zu analysierende Zeitreihen</param>
-    Public Sub New(ByRef zeitreihen As List(Of Zeitreihe))
+    Public Sub New(ByRef zeitreihen As List(Of TimeSeries))
 
         'Konstruktor der Basisklasse aufrufen!
         Call MyBase.New(zeitreihen)
@@ -100,7 +110,7 @@ Public Class Autokorrelation
         Me.anzahlLags = dialog.anzahlLagsErmitteln
 
         'Maximal zulässige Verschiebung
-        Me.zeitreiheEin = Me.mZeitreihen(0).getCleanZRE()
+        Me.zeitreiheEin = Me.mZeitreihen(0).removeNaNValues()
         Dim maxlag As Integer = Me.zeitreiheEin.Length / groesseLags - 1
         If groesseLags * anzahlLags > Me.zeitreiheEin.Length Then
             Throw New Exception("Die ausgewählte Zeitreihe ist zu kurz oder die größte Zeitverschiebung ist zu lang! Bitte wählen sie bei derzeit ausgewählter Größe der Zeitverschiebungen eine Anzahl von maximal " & maxlag & " Verschiebungen!")
@@ -126,17 +136,22 @@ Public Class Autokorrelation
             verschiebung = j * groesseLags
 
             'Eingangszeitreihe säubern und leere Lagzeitreihe erstellen
-            Me.zeitreiheEin = Me.mZeitreihen(0).getCleanZRE()
-            Me.zeitreiheLag = New Zeitreihe
+            Me.zeitreiheEin = Me.mZeitreihen(0).removeNaNValues()
+            Me.zeitreiheLag = New TimeSeries()
 
             'Schleife zum Verschieben der Eingangszeitreihe und Speichern als Lagzeitreihe
             Dim i As Integer
             For i = verschiebung To zeitreiheEin.Length - 1
-                Me.zeitreiheLag.AddNode(Me.zeitreiheEin.XWerte(i), Me.zeitreiheEin.YWerte(i - verschiebung))
+                Me.zeitreiheLag.AddNode(Me.zeitreiheEin.Dates(i), Me.zeitreiheEin.Values(i - verschiebung))
             Next
 
             'Nur gemeinsamme Stützstellen verwenden
-            values = AnalysisHelper.getConcurrentValues(Me.zeitreiheEin, Me.zeitreiheLag)
+            TimeSeries.Synchronize(Me.zeitreiheEin, Me.zeitreiheLag)
+            ReDim values(Me.zeitreiheEin.Length - 1, 1)
+            For i = 0 To Me.zeitreiheEin.Length - 1
+                values(i, 0) = Me.zeitreiheEin.Values(i)
+                values(i, 1) = Me.zeitreiheLag.Values(i)
+            Next
 
             'Berechnungen
             'values(i, 0) -> eingang
@@ -145,49 +160,49 @@ Public Class Autokorrelation
 
             'Deklarieren und Initialisieren der Berechnungsvariablen
             Dim n As Integer = 0        'Anzahl der Werte
-            Dim sum_ein As Double = 0   'Wertesumme der Eingangszeitreihe
-            Dim sum_lag As Double = 0   'Wertesumme der Lagzeitreihe
-            Dim avg_ein As Double = 0   'Mittelwert der Eingangszeitreihe
-            Dim avg_lag As Double = 0   'Mittelwert der Lagzeitreihe
-            Dim std_ein As Double = 0   'Standardabweichung der Einganszeitreihe
-            Dim std_lag As Double = 0   'Standardabweichung der Lagzeitreihe
-            Dim kovar As Double = 0     'Kovarianz
-            Dim ra As Double = 0        'Autokorrelationskoeffizient
+                Dim sum_ein As Double = 0   'Wertesumme der Eingangszeitreihe
+                Dim sum_lag As Double = 0   'Wertesumme der Lagzeitreihe
+                Dim avg_ein As Double = 0   'Mittelwert der Eingangszeitreihe
+                Dim avg_lag As Double = 0   'Mittelwert der Lagzeitreihe
+                Dim std_ein As Double = 0   'Standardabweichung der Einganszeitreihe
+                Dim std_lag As Double = 0   'Standardabweichung der Lagzeitreihe
+                Dim kovar As Double = 0     'Kovarianz
+                Dim ra As Double = 0        'Autokorrelationskoeffizient
 
-            'Anzahl der Werte
-            n = values.GetLength(0)
+                'Anzahl der Werte
+                n = values.GetLength(0)
 
-            'Summen der Werte
-            For i = 0 To n - 1
-                sum_ein += values(i, 0)
-                sum_lag += values(i, 1)
+                'Summen der Werte
+                For i = 0 To n - 1
+                    sum_ein += values(i, 0)
+                    sum_lag += values(i, 1)
+                Next
+
+                'Mittelwerte
+                avg_ein = sum_ein / n
+                avg_lag = sum_ein / n
+
+                'Standarabweichungen und Kovarianz
+                For i = 0 To n - 1
+                    std_ein += (values(i, 1) - avg_ein) ^ 2
+                    std_lag += (values(i, 0) - avg_lag) ^ 2
+                    kovar += (values(i, 1) - avg_ein) * (values(i, 0) - avg_lag)
+                Next
+
+                std_ein = Math.Sqrt(1 / (n - 1) * std_ein)
+                std_lag = Math.Sqrt(1 / (n - 1) * std_lag)
+                kovar = 1 / (n - 1) * kovar
+
+                'Autokorrelationskoeffizient berechnen und in Liste speichern
+                ra = kovar / (std_ein * std_lag)
+                raList.Add(ra)
+
+                'ProgressBar erhöhen
+                progress_dialog.ProgressBar1.Value += 1
             Next
 
-            'Mittelwerte
-            avg_ein = sum_ein / n
-            avg_lag = sum_ein / n
-
-            'Standarabweichungen und Kovarianz
-            For i = 0 To n - 1
-                std_ein += (values(i, 1) - avg_ein) ^ 2
-                std_lag += (values(i, 0) - avg_lag) ^ 2
-                kovar += (values(i, 1) - avg_ein) * (values(i, 0) - avg_lag)
-            Next
-
-            std_ein = Math.Sqrt(1 / (n - 1) * std_ein)
-            std_lag = Math.Sqrt(1 / (n - 1) * std_lag)
-            kovar = 1 / (n - 1) * kovar
-
-            'Autokorrelationskoeffizient berechnen und in Liste speichern
-            ra = kovar / (std_ein * std_lag)
-            raList.Add(ra)
-
-            'ProgressBar erhöhen
-            progress_dialog.ProgressBar1.Value += 1
-        Next
-
-        'Bestimmung der Scheitelpunkte
-        For i As Integer = 2 To raList.Count - 1
+            'Bestimmung der Scheitelpunkte
+            For i As Integer = 2 To raList.Count - 1
             If raList.Item(i - 1) > raList.Item(i - 2) And raList.Item(i - 1) > raList.Item(i) And raList.Item(i - 1) > 0 Then
                 raMaxlist.Add(raList.Item(i - 1))
                 periodeList.Add((i - 1) * groesseLags)
@@ -230,7 +245,7 @@ Public Class Autokorrelation
 
         'Ergebnisdiagramm
         Me.mResultChart = New Steema.TeeChart.Chart()
-        Call Wave.formatChart(Me.mResultChart)
+        Call Helpers.FormatChart(Me.mResultChart)
         Me.mResultChart.Header.Text = "Autokorrelation von " & zeitreiheEin.Title
 
         'X-Achse

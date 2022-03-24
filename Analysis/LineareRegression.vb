@@ -28,19 +28,19 @@
 ''' </summary>
 ''' <remarks>http://130.83.196.154/BlueM/wiki/index.php/Wave:LineareRegression</remarks>
 
-Public Class LineareRegression
+Friend Class LineareRegression
     Inherits Analysis
 
-    Private zeitreiheKomplett As Zeitreihe  'vollständige Zeitreihe
-    Private zeitreiheKomplett2 As Zeitreihe 'vollständige Zeitreihe Kopie
-    Private zeitreiheLuecken As Zeitreihe   'lückenhafte Zeitreihe
-    Private zeitreiheLuecken2 As Zeitreihe  'lückenhafte Zeitreihe ohne Null-Werte
-    Private values(,) As Double             'Array der gemeinsamen Stützstellen
-    Private a, b As Double                  'Regressionskoeffizienten
-    Private r As Double                     'Korrelationskoeffizient
-    Private zaehler As Integer = 0          'Zähler für gefüllte Lücken
-    Private neueDatume As List(Of Date)     'Liste der neuen Datume
-    Private neueWerte As List(Of Double)    'Liste der neuen Werte
+    Private zeitreiheKomplett As TimeSeries  'vollständige Zeitreihe
+    Private zeitreiheKomplett2 As TimeSeries 'vollständige Zeitreihe Kopie
+    Private zeitreiheLuecken As TimeSeries   'lückenhafte Zeitreihe
+    Private zeitreiheLuecken2 As TimeSeries  'lückenhafte Zeitreihe ohne Null-Werte
+    Private values(,) As Double              'Array der gemeinsamen Stützstellen
+    Private a, b As Double                   'Regressionskoeffizienten
+    Private r As Double                      'Korrelationskoeffizient
+    Private zaehler As Integer = 0           'Zähler für gefüllte Lücken
+    Private neueDatume As List(Of Date)      'Liste der neuen Datume
+    Private neueWerte As List(Of Double)     'Liste der neuen Werte
 
     ''' <summary>
     ''' Flag, der anzeigt, ob die Analysefunktion einen Ergebnistext erzeugt
@@ -70,10 +70,20 @@ Public Class LineareRegression
     End Property
 
     ''' <summary>
+    ''' Flag indicating whether the analysis function has result series
+    ''' that should be added to the main diagram
+    ''' </summary>
+    Public Overrides ReadOnly Property hasResultSeries() As Boolean
+        Get
+            Return False
+        End Get
+    End Property
+
+    ''' <summary>
     ''' Konstruktor
     ''' </summary>
     ''' <param name="zeitreihen">zu analysierende Zeitreihen</param>
-    Public Sub New(ByRef zeitreihen As List(Of Zeitreihe))
+    Public Sub New(ByRef zeitreihen As List(Of TimeSeries))
 
         'Konstruktor der Basisklasse aufrufen!
         Call MyBase.New(zeitreihen)
@@ -84,7 +94,7 @@ Public Class LineareRegression
         End If
 
         'Prüfung: Zeitreihen müssen die gleiche Einheit besitzen
-        If (zeitreihen(0).Einheit <> zeitreihen(1).Einheit) Then
+        If (zeitreihen(0).Unit <> zeitreihen(1).Unit) Then
             Throw New Exception("Bitte nur Zeitreihen mit der gleichen Einheit auswählen!")
         End If
 
@@ -103,25 +113,30 @@ Public Class LineareRegression
 
         'Zeitreihen zuweisen (und säubern)
         If (dialog.getNrLueckenhafteReihe = 1) Then
-            Me.zeitreiheLuecken = Me.mZeitreihen(0).getCleanZRE()
-            Me.zeitreiheKomplett = Me.mZeitreihen(1).getCleanZRE()
-            Me.zeitreiheKomplett2 = Me.mZeitreihen(1).getCleanZRE()
+            Me.zeitreiheLuecken = Me.mZeitreihen(0).removeNaNValues()
+            Me.zeitreiheKomplett = Me.mZeitreihen(1).removeNaNValues()
+            Me.zeitreiheKomplett2 = Me.mZeitreihen(1).removeNaNValues()
         Else
-            Me.zeitreiheLuecken = Me.mZeitreihen(1).getCleanZRE()
-            Me.zeitreiheKomplett = Me.mZeitreihen(0).getCleanZRE()
-            Me.zeitreiheKomplett2 = Me.mZeitreihen(0).getCleanZRE()
+            Me.zeitreiheLuecken = Me.mZeitreihen(1).removeNaNValues()
+            Me.zeitreiheKomplett = Me.mZeitreihen(0).removeNaNValues()
+            Me.zeitreiheKomplett2 = Me.mZeitreihen(0).removeNaNValues()
         End If
 
         'Schleife zum Überspringen der Nullwerte und speichern in neuer Zeitreihe
-        Me.zeitreiheLuecken2 = New Zeitreihe
+        Me.zeitreiheLuecken2 = New TimeSeries()
         For i As Integer = 0 To zeitreiheLuecken.Length - 1
-            If Me.zeitreiheLuecken.YWerte(i) <> 0 Then
-                Me.zeitreiheLuecken2.AddNode(Me.zeitreiheLuecken.XWerte(i), Me.zeitreiheLuecken.YWerte(i))
+            If Me.zeitreiheLuecken.Values(i) <> 0 Then
+                Me.zeitreiheLuecken2.AddNode(Me.zeitreiheLuecken.Dates(i), Me.zeitreiheLuecken.Values(i))
             End If
         Next
 
         'Auf gemeinsame Stützstellen beschränken
-        values = AnalysisHelper.getConcurrentValues(Me.zeitreiheLuecken2, Me.zeitreiheKomplett)
+        TimeSeries.Synchronize(Me.zeitreiheLuecken2, Me.zeitreiheKomplett)
+        ReDim values(Me.zeitreiheLuecken2.Length - 1, 1)
+        For i = 0 To Me.zeitreiheLuecken2.Length - 1
+            values(i, 0) = Me.zeitreiheLuecken2.Values(i)
+            values(i, 1) = Me.zeitreiheKomplett.Values(i)
+        Next
 
         'Berechnungen
         'values(i, 0) -> luecke
@@ -176,16 +191,16 @@ Public Class LineareRegression
 
         'Fehlende Werte berechnen und auffüllen
         For i As Integer = 0 To Me.zeitreiheKomplett2.Length - 1
-            If (zeitreiheLuecken2.Nodes.ContainsKey(zeitreiheKomplett2.XWerte(i))) Then
+            If (zeitreiheLuecken2.Nodes.ContainsKey(zeitreiheKomplett2.Dates(i))) Then
                 'vorhandene Stützstellen bleiben erhalten --> nichts passiert
             Else
                 'Werte als neue Stützstellen in Zeitreihe eintragen
                 'yi = a + b * xi
-                Me.zeitreiheLuecken2.AddNode(Me.zeitreiheKomplett2.XWerte(i), a + b * Me.zeitreiheKomplett2.YWerte(i))
+                Me.zeitreiheLuecken2.AddNode(Me.zeitreiheKomplett2.Dates(i), a + b * Me.zeitreiheKomplett2.Values(i))
 
                 'Wertepaare speichern für Textausgabe
-                neueDatume.Add(Me.zeitreiheKomplett2.XWerte(i))
-                neueWerte.Add(a + b * Me.zeitreiheKomplett2.YWerte(i))
+                neueDatume.Add(Me.zeitreiheKomplett2.Dates(i))
+                neueWerte.Add(a + b * Me.zeitreiheKomplett2.Values(i))
 
                 'Zähler der gefüllten Lücken erhöhen
                 zaehler += 1
@@ -213,10 +228,10 @@ Public Class LineareRegression
 
         'Ergebnisdiagramm
         Me.mResultChart = New Steema.TeeChart.Chart()
-        Call Wave.formatChart(Me.mResultChart)
+        Call Helpers.FormatChart(Me.mResultChart)
 
         'Y-Achse
-        Me.mResultChart.Axes.Left.Title.Caption = zeitreiheKomplett.Einheit
+        Me.mResultChart.Axes.Left.Title.Caption = zeitreiheKomplett.Unit
 
         'Text in Diagramm einfügen
         Dim annot As New Steema.TeeChart.Tools.Annotation(Me.mResultChart)
@@ -233,15 +248,15 @@ Public Class LineareRegression
 
         'Linien befüllen
         For i As Integer = 0 To Me.zeitreiheKomplett2.Length - 1
-            line_komplett.Add(Me.zeitreiheKomplett2.XWerte(i), Me.zeitreiheKomplett2.YWerte(i))
+            line_komplett.Add(Me.zeitreiheKomplett2.Dates(i), Me.zeitreiheKomplett2.Values(i))
         Next
 
         For i As Integer = 0 To Me.zeitreiheLuecken.Length - 1
-            line_luecken.Add(Me.zeitreiheLuecken.XWerte(i), Me.zeitreiheLuecken.YWerte(i))
+            line_luecken.Add(Me.zeitreiheLuecken.Dates(i), Me.zeitreiheLuecken.Values(i))
         Next
 
         For i As Integer = 0 To Me.zeitreiheLuecken2.Length - 1
-            line_gefuellt.Add(Me.zeitreiheLuecken2.XWerte(i), Me.zeitreiheLuecken2.YWerte(i))
+            line_gefuellt.Add(Me.zeitreiheLuecken2.Dates(i), Me.zeitreiheLuecken2.Values(i))
         Next
 
     End Sub
