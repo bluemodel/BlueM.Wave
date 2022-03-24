@@ -122,7 +122,7 @@ Friend Class CLI
 
                     showWave = False
 
-                    Log.AddLogEntry(BlueM.Wave.Log.levels.info, $"Starting conversion to CSV ...")
+                    Log.AddLogEntry(BlueM.Wave.Log.levels.info, $"Starting conversion ...")
 
                     Dim files_in As List(Of String) = fileargs.Take(fileargs.Count - 1).ToList
                     Dim path_out As String = fileargs.Last
