@@ -25,7 +25,7 @@
 'EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 '--------------------------------------------------------------------------------------------
 '
-Public Class Autokorrelation_Dialog
+Public Class Autocorrelation_Dialog
 
     Public ReadOnly Property groesseLagsErmitteln()
         Get

@@ -122,11 +122,11 @@
     </Compile>
     <Compile Include="Analysis\AnalysisFactory.vb" />
     <Compile Include="Analysis\AnnualStatistics.vb" />
-    <Compile Include="Analysis\Autokorrelation.vb" />
-    <Compile Include="Analysis\Autokorrelation_Dialog.Designer.vb">
-      <DependentUpon>Autokorrelation_Dialog.vb</DependentUpon>
+    <Compile Include="Analysis\Autocorrelation.vb" />
+    <Compile Include="Analysis\Autocorrelation_Dialog.Designer.vb">
+      <DependentUpon>Autocorrelation_Dialog.vb</DependentUpon>
     </Compile>
-    <Compile Include="Analysis\Autokorrelation_Dialog.vb">
+    <Compile Include="Analysis\Autocorrelation_Dialog.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Analysis\Calculator.vb" />
@@ -167,11 +167,11 @@
     <Compile Include="Analysis\HistogramDialog.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Analysis\LineareRegression.vb" />
-    <Compile Include="Analysis\LineareRegression_Dialog.Designer.vb">
-      <DependentUpon>LineareRegression_Dialog.vb</DependentUpon>
+    <Compile Include="Analysis\LinearRegression.vb" />
+    <Compile Include="Analysis\LinearRegression_Dialog.Designer.vb">
+      <DependentUpon>LinearRegression_Dialog.vb</DependentUpon>
     </Compile>
-    <Compile Include="Analysis\LineareRegression_Dialog.vb">
+    <Compile Include="Analysis\LinearRegression_Dialog.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Analysis\Progress_Dialog.Designer.vb">
@@ -355,8 +355,8 @@
     <EmbeddedResource Include="Analysis\AnalysisDialog.resx">
       <DependentUpon>AnalysisDialog.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Analysis\Autokorrelation_Dialog.resx">
-      <DependentUpon>Autokorrelation_Dialog.vb</DependentUpon>
+    <EmbeddedResource Include="Analysis\Autocorrelation_Dialog.resx">
+      <DependentUpon>Autocorrelation_Dialog.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Analysis\ChangeTimestepDialog.resx">
       <DependentUpon>ChangeTimestepDialog.vb</DependentUpon>
@@ -373,8 +373,8 @@
     <EmbeddedResource Include="Analysis\HistogramDialog.resx">
       <DependentUpon>HistogramDialog.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Analysis\LineareRegression_Dialog.resx">
-      <DependentUpon>LineareRegression_Dialog.vb</DependentUpon>
+    <EmbeddedResource Include="Analysis\LinearRegression_Dialog.resx">
+      <DependentUpon>LinearRegression_Dialog.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Analysis\MonthlyStatisticsDialog.resx">
       <DependentUpon>MonthlyStatisticsDialog.vb</DependentUpon>

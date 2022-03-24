@@ -30,7 +30,7 @@
 ''' </summary>
 ''' <remarks>http://130.83.196.154/BlueM/wiki/index.php/Wave:LineareRegression</remarks>
 
-Friend Class LineareRegression
+Friend Class LinearRegression
     Inherits Analysis
 
     Private zeitreiheKomplett As TimeSeries  'vollständige Zeitreihe
@@ -108,7 +108,7 @@ Friend Class LineareRegression
     Public Overrides Sub ProcessAnalysis()
 
         'Auswahl-Dialog öffnen
-        Dim dialog As New LineareRegression_Dialog(Me.mZeitreihen(0).Title, Me.mZeitreihen(1).Title)
+        Dim dialog As New LinearRegression_Dialog(Me.mZeitreihen(0).Title, Me.mZeitreihen(1).Title)
         If (dialog.ShowDialog() <> DialogResult.OK) Then
             Throw New Exception("User abort")
         End If

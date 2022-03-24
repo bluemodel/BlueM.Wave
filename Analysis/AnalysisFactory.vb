@@ -96,7 +96,7 @@ Friend Module AnalysisFactory
                 oAnalysis = New AnnualStatistics(seriesList)
 
             Case AnalysisFunctions.Autocorrelation
-                oAnalysis = New Autokorrelation(seriesList)
+                oAnalysis = New Autocorrelation(seriesList)
 
             Case AnalysisFunctions.Calculator
                 oAnalysis = New Calculator(seriesList)
@@ -120,7 +120,7 @@ Friend Module AnalysisFactory
                 oAnalysis = New Histogram(seriesList)
 
             Case AnalysisFunctions.LinearRegression
-                oAnalysis = New LineareRegression(seriesList)
+                oAnalysis = New LinearRegression(seriesList)
 
             Case AnalysisFunctions.MonthlyStatistics
                 oAnalysis = New MonthlyStatistics(seriesList)

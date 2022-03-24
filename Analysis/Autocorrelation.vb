@@ -30,7 +30,7 @@
 ''' </summary>
 ''' <remarks>http://130.83.196.154/BlueM/wiki/index.php/Wave:Autokorrelation</remarks>
 
-Friend Class Autokorrelation
+Friend Class Autocorrelation
     Inherits Analysis
 
     Private zeitreiheEin As TimeSeries  'Eingangszeitreihe
@@ -102,7 +102,7 @@ Friend Class Autokorrelation
     Public Overrides Sub ProcessAnalysis()
 
         'Parameter-Dialog anzeigen
-        Dim dialog As New Autokorrelation_Dialog()
+        Dim dialog As New Autocorrelation_Dialog()
         If (dialog.ShowDialog() <> DialogResult.OK) Then
             Throw New Exception("User abort")
         End If
