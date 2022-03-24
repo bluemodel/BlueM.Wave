@@ -1,4 +1,6 @@
-'Copyright (c) 2011, ihwb, TU Darmstadt
+'Copyright (c) BlueM Dev Group
+'Website: https://bluemodel.org
+'
 'All rights reserved.
 '
 'Released under the BSD-2-Clause License:
@@ -26,14 +28,14 @@
 ''' <summary>
 ''' Basisklasse für Analysefunktionen
 ''' </summary>
-Public MustInherit Class Analysis
+Friend MustInherit Class Analysis
 
 #Region "Eigenschaften"
 
     ''' <summary>
     ''' Die zu analysierenden Zeitreihen
     ''' </summary>
-    Protected mZeitreihen As List(Of Zeitreihe)
+    Protected mZeitreihen As List(Of TimeSeries)
 
     ''' <summary>
     ''' Ergebnistext
@@ -53,24 +55,44 @@ Public MustInherit Class Analysis
     ''' <remarks>Optional</remarks>
     Protected mResultChart As Steema.TeeChart.Chart
 
+    ''' <summary>
+    ''' Result series
+    ''' </summary>
+    ''' <remarks>optional</remarks>
+    Protected mResultSeries As List(Of TimeSeries)
+
 #End Region 'Eigenschaften
 
 #Region "Properties"
 
     ''' <summary>
-    ''' Flag, der anzeigt, ob die Analysefunktion einen Ergebnistext erzeugt
+    ''' Returns a text description of the analysis function
+    ''' Should be overloaded by inheriting analysis functions
+    ''' </summary>
+    Public Shared Function Description() As String
+        Return "No description found"
+    End Function
+
+    ''' <summary>
+    ''' Flag indicating whether the analysis function has a result test
     ''' </summary>
     Public MustOverride ReadOnly Property hasResultText() As Boolean
 
     ''' <summary>
-    ''' Flag, der anzeigt, ob die Analysefunktion Ergebniswerte erzeugt
+    ''' Flag indicating whether the analysis function has result values
     ''' </summary>
     Public MustOverride ReadOnly Property hasResultValues() As Boolean
 
     ''' <summary>
-    ''' Flag, der anzeigt, ob die Analysefunktion ein Ergebnisdiagramm erzeugt
+    ''' Flag indicating whether the analysis function has a result diagram
     ''' </summary>
     Public MustOverride ReadOnly Property hasResultChart() As Boolean
+
+    ''' <summary>
+    ''' Flag indicating whether the analysis function has result series
+    ''' that should be added to the main diagram
+    ''' </summary>
+    Public MustOverride ReadOnly Property hasResultSeries() As Boolean
 
     ''' <summary>
     ''' Analyseergebnis in Form von Text
@@ -102,6 +124,16 @@ Public MustInherit Class Analysis
         End Get
     End Property
 
+    ''' <summary>
+    ''' Analysis result in the form of timeseries
+    ''' </summary>
+    ''' <remarks>Optional</remarks>
+    Public ReadOnly Property getResultSeries() As List(Of TimeSeries)
+        Get
+            Return Me.mResultSeries
+        End Get
+    End Property
+
 #End Region 'Properties
 
 #Region "Methoden"
@@ -110,13 +142,14 @@ Public MustInherit Class Analysis
     ''' Konstruktor
     ''' </summary>
     ''' <param name="zeitreihen">Collection von Zeitreihen</param>
-    Public Sub New(ByRef zeitreihen As List(Of Zeitreihe))
+    Public Sub New(ByRef zeitreihen As List(Of TimeSeries))
 
         'Zeitreihen 
         Me.mZeitreihen = zeitreihen
 
         'Datenstrukturen initialisieren
         Me.mResultValues = New Dictionary(Of String, Double)
+        Me.mResultSeries = New List(Of TimeSeries)
     End Sub
 
     ''' <summary>
@@ -128,6 +161,7 @@ Public MustInherit Class Analysis
     ''' Ergebnisse aufbereiten
     ''' </summary>
     Public MustOverride Sub PrepareResults()
+
 
 #End Region 'Methoden
 

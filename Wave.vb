@@ -1,4 +1,6 @@
-'Copyright (c) 2011, ihwb, TU Darmstadt
+'Copyright (c) BlueM Dev Group
+'Website: https://bluemodel.org
+'
 'All rights reserved.
 '
 'Released under the BSD-2-Clause License:
@@ -24,832 +26,104 @@
 '--------------------------------------------------------------------------------------------
 '
 Imports System.Text.RegularExpressions
-Imports System.IO
 
 ''' <summary>
-''' Hauptformular
+''' Wave Model
 ''' </summary>
 Public Class Wave
 
-    'Eigenschaften
-    '#############
+    ''' <summary>
+    ''' Is raised when a new time series has been added
+    ''' </summary>
+    ''' <param name="ts"></param>
+    Friend Event SeriesAdded(ts As TimeSeries)
 
-    'Log-Fenster
-    Private myLogWindow As LogWindow
+    ''' <summary>
+    ''' Is raised when a time series has its properties changed
+    ''' </summary>
+    ''' <param name="id"></param>
+    Friend Event SeriesPropertiesChanged(id As Integer)
 
-    'Log
-    Private WithEvents myLog As Log
+    ''' <summary>
+    ''' Is raised when a time series is removed
+    ''' </summary>
+    ''' <param name="id"></param>
+    Friend Event SeriesRemoved(id As Integer)
 
-    'Collection von importierten Dateien
-    Private ImportedFiles As List(Of Dateiformat)
+    ''' <summary>
+    ''' Is raised when all time series are removed
+    ''' </summary>
+    Friend Event SeriesCleared()
 
-    'Interne Zeitreihen-Collection
-    Private Zeitreihen As Dictionary(Of String, Zeitreihe)
+    ''' <summary>
+    ''' Is raised when timestamps should be highlighted
+    ''' </summary>
+    ''' <param name="timestamps"></param>
+    Friend Event HighlightTimestamps(timestamps As List(Of DateTime))
 
-    'Dateifilter
-    Private Const FileFilter_TEN As String = "TeeChart-Dateien (*.ten)|*.ten"
-    Private Const FileFilter_Import As String = _
-            "Alle Dateien (*.*)|*.*|" & _
-            "Text-Dateien (*.txt)|*.txt|" & _
-            "CSV-Dateien (*.csv)|*.csv|" & _
-            "ZRE-Dateien (*.zre)|*.zre|" & _
-            "WEL-Dateien (*.wel, *.kwl)|*.wel;*.kwl|" & _
-            "RVA-Dateien (*.rva)|*.rva|" & _
-            "SMUSI-Dateien (*.asc)|*.asc|" & _
-            "SIMBA-Dateien (*.smb)|*.smb|" & _
-            "Hystem-Dateien (*.dat)|*.dat|" & _
-            "DWD-Temperatur-Feuchte (*.dtl)|*.dtl|" & _
-            "SWMM-Dateien (*.out)|*.out|" & _
-            "netCDF Daten (*.nc)|*.nc|" & _
-            "HYDRO_AS-2D Dateien (*.dat)|*.dat"
+    ''' <summary>
+    ''' Is raised after a file was imported
+    ''' </summary>
+    ''' <param name="file"></param>
+    Friend Event FileImported(file As String)
 
-    'Chart-Zeugs
-    Private WithEvents colorBand1 As Steema.TeeChart.Tools.ColorBand
-    Private selectionMade As Boolean 'Flag zeigt an, ob bereits ein Auswahlbereich ausgewählt wurde
-    Private MyAxes1, MyAxes2 As Dictionary(Of String, Steema.TeeChart.Axis)
-    Private WithEvents ChartListBox1 As Steema.TeeChart.ChartListBox
+    ''' <summary>
+    ''' Is raised when a TEN file is being loaded
+    ''' </summary>
+    ''' <param name="file"></param>
+    Friend Event TENFileLoading(file As String)
 
-    Private Const HelpURL As String = "http://wiki.bluemodel.org/index.php/Wave"
+    ''' <summary>
+    ''' Is raised when the busy state of the model changes
+    ''' </summary>
+    ''' <param name="isBusy"></param>
+    Friend Event IsBusyChanged(isBusy As Boolean)
 
-    'Methoden
-    '########
+    ''' <summary>
+    ''' Internal collection of time series {id: TimeSeries, ...}
+    ''' </summary>
+    Public TimeSeriesDict As Dictionary(Of Integer, TimeSeries)
 
-#Region "Form behavior"
-
-    'Konstruktor
-    '***********
     Public Sub New()
-
-        ' Dieser Aufruf ist für den Windows Form-Designer erforderlich.
-        InitializeComponent()
-
         'Kollektionen einrichten
         '-----------------------
-        Me.ImportedFiles = New List(Of Dateiformat)()
-        Me.Zeitreihen = New Dictionary(Of String, Zeitreihe)()
-        Me.MyAxes1 = New Dictionary(Of String, Steema.TeeChart.Axis)
-        Me.MyAxes2 = New Dictionary(Of String, Steema.TeeChart.Axis)
-
-        'Charts einrichten
-        '-----------------
-        Me.ChartListBox1 = New Steema.TeeChart.ChartListBox()
-        Call Me.Init_Charts()
-
-        'Logfenster nur beim ersten Mal instanzieren
-        '-------------------------------------------
-        If (IsNothing(myLogWindow)) Then
-            myLogWindow = New LogWindow()
-        End If
-
-        'Log (Singleton) Instanz holen
-        Me.myLog = Log.getInstance()
-
-    End Sub
-
-    'Form wird geladen
-    '*****************
-    Private Sub Wave_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
-        'nix zu tun
+        Me.TimeSeriesDict = New Dictionary(Of Integer, TimeSeries)()
     End Sub
 
     ''' <summary>
-    ''' Wenn sich der Log verändert hat, Statustext aktualisieren
+    ''' Import series from multiple files
     ''' </summary>
-    Private Sub LogChanged() Handles myLog.LogChanged
-        'Status Info aktualisieren
-        Me.ToolStripStatusLabel_Log.Text = Log.LastMessage
-    End Sub
-
-    'Drag & Drop von Dateien verarbeiten
-    '***********************************
-    Private Sub Wave_DragDrop(ByVal sender As System.Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles MyBase.DragDrop
-
-        If (e.Data.GetDataPresent(DataFormats.FileDrop)) Then
-
-            Dim dateien() As String
-
-            'Dateien einem Array zuweisen
-            dateien = e.Data.GetData(DataFormats.FileDrop)
-
-            'Die einzelnen Dateien importieren
-            For Each datei As String In dateien
-                Call Me.Import_File(datei)
-            Next
-
-        End If
-
-    End Sub
-
-    'Drag & Drop von Dateien zulassen
-    '********************************
-    Private Sub Wave_DragEnter(ByVal sender As System.Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles MyBase.DragEnter
-        If (e.Data.GetDataPresent(DataFormats.FileDrop)) Then
-            e.Effect = DragDropEffects.Copy
-        Else
-            e.Effect = DragDropEffects.None
-        End If
-    End Sub
-
-#End Region 'Form behavior
-
-#Region "Chart behavior"
-
-    'Charts neu einrichten
-    '*********************
-    Private Sub Init_Charts()
-
-        'Charts zurücksetzen
-        Me.TChart1.Clear()
-        Call Wave.formatChart(Me.TChart1.Chart)
-
-        Me.TChart2.Clear()
-        Call Wave.formatChart(Me.TChart2.Chart)
-        Me.TChart2.Panel.Brush.Color = Color.FromArgb(239,239,239)
-        Me.TChart2.Walls.Back.Color = Color.FromArgb(239, 239, 239)
-        Me.TChart2.Header.Visible = False
-        Me.TChart2.Legend.Visible = False
-
-        'Übersicht darf nicht gescrolled oder gezoomt werden
-        Me.TChart2.Zoom.Allow = False
-        Me.TChart2.Panning.Allow = Steema.TeeChart.ScrollModes.None
-
-        'Hauptdiagramm darf nur horizontal gescrolled oder gezoomt werden
-        Me.TChart1.Zoom.Direction = Steema.TeeChart.ZoomDirections.Horizontal
-        Me.TChart1.Panning.Allow = Steema.TeeChart.ScrollModes.Horizontal
-
-        'Achsen
-        Me.TChart1.Axes.Bottom.Automatic = False
-        Me.TChart1.Axes.Bottom.Labels.Angle = 90
-        Me.TChart1.Axes.Bottom.Labels.DateTimeFormat = "dd.MM.yy HH:mm"
-        Me.TChart1.Axes.Right.Title.Angle = 90
-        Me.TChart2.Axes.Bottom.Automatic = False
-
-        'ChartListBox
-        Me.ChartListBox1.Chart = Me.TChart1
-
-        'ColorBand einrichten
-        Me.selectionMade = False
-        Call Me.Init_ColorBand()
-
-    End Sub
-
-    'ColorBand einrichten
-    '********************
-    Private Sub Init_ColorBand()
-        colorBand1 = New Steema.TeeChart.Tools.ColorBand()
-        Me.TChart2.Tools.Add(colorBand1)
-        colorBand1.Axis = Me.TChart2.Axes.Bottom
-        colorBand1.Brush.Color = Color.Coral
-        colorBand1.Brush.Transparency = 50
-        colorBand1.ResizeEnd = True
-        colorBand1.ResizeStart = True
-        colorBand1.EndLinePen.Visible = False
-        colorBand1.StartLinePen.Visible = False
-    End Sub
-
-    'Charts aktualisieren
-    '********************
-    Private Sub UpdateCharts()
-
-        Dim Xmin, Xmax As DateTime
-
-        'Min- und Max-Datum bestimmen
-        Xmin = DateTime.MaxValue
-        Xmax = DateTime.MinValue
-        For Each zre As Zeitreihe In Me.Zeitreihen.Values
-            If (zre.Anfangsdatum < Xmin) Then Xmin = zre.Anfangsdatum
-            If (zre.Enddatum > Xmax) Then Xmax = zre.Enddatum
-        Next
-
-        'Übersicht neu skalieren
-        Me.TChart2.Axes.Bottom.Minimum = Xmin.ToOADate()
-        Me.TChart2.Axes.Bottom.Maximum = Xmax.ToOADate()
-
-        'Wenn noch nicht gezoomed wurde, Gesamtzeitraum auswählen
-        If (Not Me.selectionMade) Then
-            colorBand1.Start = Me.TChart2.Axes.Bottom.Minimum
-            colorBand1.End = Me.TChart2.Axes.Bottom.Maximum
-        End If
-
-        'Hauptdiagramm neu skalieren
-        Me.TChart1.Axes.Bottom.Minimum = colorBand1.Start
-        Me.TChart1.Axes.Bottom.Maximum = colorBand1.End
-
-    End Sub
-
-    'TChart1 Scrolled, Zoomed, ZoomUndone
-    '************************************
-    Private Sub TChart1_Scrolled(ByVal sender As Object, ByVal e As System.EventArgs) Handles TChart1.Scroll, TChart1.Zoomed, TChart1.UndoneZoom
-        Me.colorBand1.Start = Me.TChart1.Axes.Bottom.Minimum
-        Me.colorBand1.End = Me.TChart1.Axes.Bottom.Maximum
-        Me.selectionMade = True
-    End Sub
-
-    'ColorBand Resized
-    '*****************
-    Private Sub TChart2_MouseUp(ByVal sender As System.Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles TChart2.MouseUp
-        Me.TChart1.Axes.Bottom.Minimum = Me.colorBand1.Start
-        Me.TChart1.Axes.Bottom.Maximum = Me.colorBand1.End
-        Me.selectionMade = True
-    End Sub
-
-    'TChart2 DoubleClick
-    '*******************
-    Private Sub TChart2_DoubleClick(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TChart2.DoubleClick
-        Call Steema.TeeChart.Editor.Show(Me.TChart2)
-    End Sub
-
-    ''' <summary>
-    ''' Eine im TeeChart-Editor gelöschte Serie intern löschen
-    ''' </summary>
-    ''' <remarks>
-    ''' Wird für jede gelöschte Serie ein Mal aufgerufen.
-    ''' Funktioniert nur unter der Annahme, dass alle Serien unterschiedliche Titel haben.
-    ''' </remarks>
-    Private Sub DeleteSeriesInternally(ByVal sender As Object, ByVal e As System.EventArgs) Handles ChartListBox1.RemovedSeries
-
-        Dim found As Boolean
-        Dim title As String
-        Dim s As Steema.TeeChart.Styles.Series
-
-        title = ""
-
-        'Alle internen Zeitreihen durchlaufen und prüfen, ob es sie noch gibt
-        For Each zre As Zeitreihe In Me.Zeitreihen.Values
-            found = False
-            For Each s In Me.ChartListBox1.Items
-                If (s.Title = zre.Title) Then
-                    found = True 'diese Serie gibt es noch
-                    Exit For
-                End If
-            Next
-            If (Not found) Then
-                title = zre.Title 'diese Serie gibt es nicht mehr
-                Exit For
-            End If
-        Next
-
-        If (title <> "") Then
-            'Aus der internen Collection löschen
-            Me.Zeitreihen.Remove(title)
-
-            'Aus der Übersicht löschen
-            For i As Integer = Me.TChart2.Series.Count - 1 To 0 Step -1
-                If (Me.TChart2.Series.Item(i).Title = title) Then
-                    Me.TChart2.Series.RemoveAt(i)
-                    Me.TChart2.Refresh()
-                    Exit For
-                End If
-            Next
-        End If
-
-    End Sub
-
-#End Region 'Chart behavior'
-
-#Region "UI"
-
-    'Neu
-    '***
-    Private Sub Neu(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_Neu.Click
-
-        Dim res As MsgBoxResult
-
-        'Warnen, wenn bereits Serien vorhanden
-        '-------------------------------------
-        If (Me.TChart1.Series.Count() > 0) Then
-            res = MsgBox("Alle vorhandenen Serien werden gelöscht!" & eol & "Fortfahren?", MsgBoxStyle.OkCancel)
-            If (Not res = Windows.Forms.DialogResult.OK) Then Exit Sub
-        End If
-
-        'Charts zurücksetzen
-        Call Me.Init_Charts()
-
-        'Collections zurücksetzen
-        Me.ImportedFiles.Clear()
-        Me.Zeitreihen.Clear()
-        Me.MyAxes1.Clear()
-        Me.MyAxes2.Clear()
-
-        'Log zurücksetzen
-        Call Log.ClearLog()
-        Call Me.myLogWindow.Hide()
-
-    End Sub
-
-    'Dropdown für Öffnen Button
-    '**************************
-    Private Sub MenuDropDown_Oeffnen(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripSplitButton_Oeffnen.ButtonClick
-        Me.ToolStripSplitButton_Oeffnen.ShowDropDown()
-    End Sub
-
-    'Serie(n) importieren
-    '********************
-    Private Sub Importieren(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem_ZeitreihenImportieren.Click
-        Me.OpenFileDialog1.Title = "Serie(n) importieren"
-        Me.OpenFileDialog1.Filter = FileFilter_Import
-        If (Me.OpenFileDialog1.ShowDialog() = Windows.Forms.DialogResult.OK) Then
-            Call Me.Import_File(Me.OpenFileDialog1.FileName)
-        End If
-    End Sub
-
-    'TEN-Datei öffnen
-    '****************
-    Private Sub Öffnen(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem_Oeffnen.Click
-        Me.OpenFileDialog1.Title = "TEN-Datei öffnen"
-        Me.OpenFileDialog1.Filter = FileFilter_TEN
-        If (Me.OpenFileDialog1.ShowDialog() = Windows.Forms.DialogResult.OK) Then
-            Call Me.Open_TEN(Me.OpenFileDialog1.FileName)
-        End If
-    End Sub
-
-    'Dropdown für Speichern Button
-    '*****************************
-    Private Sub MenuDropDown_Speichern(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripSplitButton_Speichern.Click
-        Me.ToolStripSplitButton_Speichern.ShowDropDown()
-    End Sub
-
-    'Teechart Export
-    '***************
-    Private Sub Export_TChart(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem_Speichern.Click
-        Call Me.TChart1.Export.ShowExportDialog()
-    End Sub
-
-    'BlueM Export
-    '************
-    Private Sub Export_BlueM(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles BlueMFormatExportierenToolStripMenuItem.Click
-        Call ExportierenOhnePara()
-    End Sub
-
-    'Serie(n) konvertieren
-    '*********************
-    Private Sub ToolStripButton_Convert_Click(ByVal sender As Object, ByVal e As System.EventArgs) Handles ToolStripButton_Convert.Click
-
-    Me.OpenFileDialog1.Title = "Serie(n) importieren"
-        Me.OpenFileDialog1.Filter = FileFilter_Import
-        If (Me.OpenFileDialog1.ShowDialog() = Windows.Forms.DialogResult.OK) Then
-            Call Me.Convert_File(Me.OpenFileDialog1.FileName)
-        End If
-    End Sub
-
-    'Serie eingeben
-    '**************
-    Private Sub Eingeben(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem_ZeitreiheEingeben.Click
-        Dim SeriesEditor As New SeriesEditorDialog()
-        If (SeriesEditor.ShowDialog() = Windows.Forms.DialogResult.OK) Then
-            Call Me.Import_Series(SeriesEditor.Zeitreihe)
-        End If
-    End Sub
-
-    'Zeitreihe zuschneiden
-    '*********************
-    Private Sub Zuschneiden(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_Cut.Click
-
-        'Wenn keine Zeitreihen vorhanden, abbrechen!
-        If (Me.Zeitreihen.Count < 1) Then
-            MsgBox("Es sind keine Zeitreihen zum Zuschneiden verfügbar!", MsgBoxStyle.Exclamation)
-            Exit Sub
-        End If
-
-        'Dialog vorbereiten
-        Dim cutter As New CutDialog(Me.Zeitreihen)
-
-        'Dialog anzeigen
-        If (cutter.ShowDialog() = Windows.Forms.DialogResult.OK) Then
-            'Neue Reihe importieren
-            Me.Import_Series(cutter.zreCut)
-        End If
-
-    End Sub
-
-    'Edit Chart
-    '**********
-    Private Sub EditChart(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_EditChart.Click, TChart1.DoubleClick
-        Call Steema.TeeChart.Editor.Show(Me.TChart1)
-    End Sub
-
-    Private Sub ExportierenOhnePara()
-        Dim ExportDiag As New ExportDiag()
-        Dim Reihe As Zeitreihe
-        Dim MultiReihe() As Zeitreihe
-        Dim iReihe As Long
-
-
-        'Wenn keine Zeitreihen vorhanden, abbrechen!
-        If (Me.Zeitreihen.Count < 1) Then
-            MsgBox("Es sind keine Zeitreihen für den Export verfügbar!", MsgBoxStyle.Exclamation, "Wave")
-            Exit Sub
-        End If
-
-        'Exportdialog vorbereiten
-        '------------------------
-        'Liste der Formate
-        ExportDiag.ComboBox_Format.DataSource = System.Enum.GetValues(GetType(Konstanten.Dateiformate))
-        'Zeitreihen in Listbox eintragen
-        For Each Reihe In Me.Zeitreihen.Values
-            ExportDiag.ListBox_Zeitreihen.Items.Add(Reihe)
-        Next
-
-        'Exportdialog anzeigen
-        '---------------------
-        If (ExportDiag.ShowDialog() = Windows.Forms.DialogResult.OK) Then
-
-            'Speichern-Dialog vorbereiten
-            '----------------------------
-            Me.SaveFileDialog1.Title = "Speichern unter..."
-            Me.SaveFileDialog1.AddExtension = True
-            Select Case ExportDiag.ComboBox_Format.SelectedItem
-                Case Dateiformate.ASC
-                    Me.SaveFileDialog1.DefaultExt = "asc"
-                    Me.SaveFileDialog1.Filter = "ASC-Dateien (*.asc)|*.asc"
-                Case Dateiformate.CSV
-                    Me.SaveFileDialog1.DefaultExt = "csv"
-                    Me.SaveFileDialog1.Filter = "CSV-Dateien (*.csv)|*.csv"
-                Case Dateiformate.WEL
-                    Me.SaveFileDialog1.DefaultExt = "wel"
-                    Me.SaveFileDialog1.Filter = "WEL-Dateien (*.wel)|*.wel"
-                Case Dateiformate.ZRE
-                    Me.SaveFileDialog1.DefaultExt = "zre"
-                    Me.SaveFileDialog1.Filter = "ZRE-Dateien (*.zre)|*.zre"
-                Case Dateiformate.REG_HYSTEM
-                    Me.SaveFileDialog1.DefaultExt = "reg"
-                    Me.SaveFileDialog1.Filter = "HYSTEM-REG-Dateien (*.reg)|*.reg"
-                Case Dateiformate.REG_SMUSI
-                    Me.SaveFileDialog1.DefaultExt = "reg"
-                    Me.SaveFileDialog1.Filter = "SMUSI-REG-Dateien (*.reg)|*.reg"
-                Case Dateiformate.DAT_SWMM_MASS, Dateiformate.DAT_SWMM_TIME
-                    Me.SaveFileDialog1.DefaultExt = "dat"
-                    Me.SaveFileDialog1.Filter = "SWMM-DAT-Dateien (*.dat)|*.dat"
-                Case Dateiformate.TXT
-                    Me.SaveFileDialog1.DefaultExt = "txt"
-                    Me.SaveFileDialog1.Filter = "SWMM-Interface-Dateien (*.txt)|*.txt"
-
-            End Select
-            Me.SaveFileDialog1.Filter &= "|Alle Dateien (*.*)|*.*"
-            Me.SaveFileDialog1.FilterIndex = 1
-
-            'Speichern-Dialog anzeigen
-            '-------------------------
-            If (Me.SaveFileDialog1.ShowDialog() = Windows.Forms.DialogResult.OK) Then
-
-                'Reihen exportieren
-                Select Case ExportDiag.ComboBox_Format.SelectedItem
-                    Case Dateiformate.ZRE
-                        For Each item As Object In ExportDiag.ListBox_Zeitreihen.SelectedItems
-                            Reihe = CType(item, Zeitreihe)
-                            Call ZRE.Write_File(Reihe, Me.SaveFileDialog1.FileName)
-                        Next
-                    Case Dateiformate.REG_HYSTEM
-                        For Each item As Object In ExportDiag.ListBox_Zeitreihen.SelectedItems
-                            Reihe = CType(item, Zeitreihe)
-                            Call HystemExtran_REG.Write_File(Reihe, Me.SaveFileDialog1.FileName)
-                        Next
-                    Case Dateiformate.REG_SMUSI
-                        For Each item As Object In ExportDiag.ListBox_Zeitreihen.SelectedItems
-                            Reihe = CType(item, Zeitreihe)
-                            Call SMUSI_REG.Write_File(Reihe, Me.SaveFileDialog1.FileName)
-                        Next
-                    Case Dateiformate.DAT_SWMM_MASS
-                        For Each item As Object In ExportDiag.ListBox_Zeitreihen.SelectedItems
-                            Reihe = CType(item, Zeitreihe)
-                            Call SWMM_DAT_MASS.Write_File(Reihe, Me.SaveFileDialog1.FileName, 5) 'Zeitschritt ist noch nicht dynamisch definiert
-                        Next
-                    Case Dateiformate.DAT_SWMM_TIME
-                        For Each item As Object In ExportDiag.ListBox_Zeitreihen.SelectedItems
-                            Reihe = CType(item, Zeitreihe)
-                            Call SWMM_DAT_TIME.Write_File(Reihe, Me.SaveFileDialog1.FileName, 5) 'Zeitschritt ist noch nicht dynamisch definiert
-                        Next
-                    Case Dateiformate.TXT
-                        ReDim MultiReihe(ExportDiag.ListBox_Zeitreihen.SelectedItems.Count - 1)
-                        iReihe = 0
-                        For Each item As Object In ExportDiag.ListBox_Zeitreihen.SelectedItems
-                            MultiReihe(iReihe) = CType(item, Zeitreihe)
-                            iReihe = iReihe + 1
-                        Next
-                        Call SWMM_TXT.Write_File(MultiReihe, Me.SaveFileDialog1.FileName)
-                    Case Else
-                        MsgBox("Noch nicht implementiert!", MsgBoxStyle.Exclamation, "Wave")
-                End Select
-
-                MsgBox("Zeitreihe erfolgreich exportiert!", MsgBoxStyle.Information, "Wave")
-            End If
-        End If
-    End Sub
-
-    'Analysieren
-    '***********
-    Private Sub Analyse(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_Analysis.Click
-
-        'Wenn keine Zeitreihen vorhanden, abbrechen!
-        If (Me.Zeitreihen.Count < 1) Then
-            MsgBox("Es sind keine Zeitreihen für die Analyse verfügbar!", MsgBoxStyle.Exclamation, "Wave")
-            Exit Sub
-        End If
-
-        Dim oAnalysisDialog As New AnalysisDialog(Me.Zeitreihen)
-
-        'Analysisdialog anzeigen
-        '-----------------------
-        If (oAnalysisDialog.ShowDialog() = Windows.Forms.DialogResult.OK) Then
-
-            Try
-                'Wait-Cursor
-                Me.Cursor = Cursors.WaitCursor
-
-                Call Log.AddLogEntry("Starte Analyse " & oAnalysisDialog.selectedAnalysisFunction.ToString() & " ...")
-
-                'Analyse instanzieren
-                Dim oAnalysis As Analysis
-                oAnalysis = AnalysisFactory.CreateAnalysis(oAnalysisDialog.selectedAnalysisFunction, oAnalysisDialog.selectedZeitreihen)
-
-                Call Log.AddLogEntry("... Analyse ausführen ...")
-
-                'Analyse ausführen
-                Call oAnalysis.ProcessAnalysis()
-
-                Call Log.AddLogEntry("... Analyseergebnis aufbereiten ...")
-
-                'Ergebnisse aufbereiten
-                Call oAnalysis.PrepareResults()
-
-                Call Log.AddLogEntry("Analyse abgeschlossen")
-
-                'Default-Cursor
-                Me.Cursor = Cursors.Default
-
-                'Ergebnisse anzeigen:
-                '--------------------
-                'Ergebnisdiagramm anzeigen
-                If (oAnalysis.hasResultChart) Then
-                    Dim Wave2 As New Wave()
-                    Wave2.Text = "Analyse-Ergebnis"
-                    Wave2.Übersicht_Toggle(False)
-                    Wave2.TChart1.Chart = oAnalysis.getResultChart()
-                    Call Wave2.Show()
-                End If
-
-                'Ergebnistext in Log schreiben und anzeigen
-                If (oAnalysis.hasResultText) Then
-                    Call Log.AddLogEntry(oAnalysis.getResultText)
-                    Call Me.myLogWindow.Show()
-                    Call Me.myLogWindow.BringToFront()
-                End If
-
-                'Ergebniswerte anzeigen
-                If (oAnalysis.hasResultValues) Then
-                    'TODO: Ergebniswerte anzeigen?
-                End If
-
-            Catch ex As Exception
-                Me.Cursor = Cursors.Default
-                'Logeintrag
-                Call Log.AddLogEntry("Analyse fehlgeschlagen:" & eol & ex.Message)
-                'Alert
-                MsgBox("Analyse fehlgeschlagen:" & eol & ex.Message, MsgBoxStyle.Critical)
-            End Try
-
-        End If
-
-    End Sub
-
-    'Drucken
-    '*******
-    Private Sub Drucken(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_Drucken.Click
-        Call Me.TChart1.Printer.Preview()
-    End Sub
-
-    'Kopieren (als PNG)
-    '******************
-    Private Sub Kopieren(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_Kopieren.Click
-        Call Me.TChart1.Export.Image.PNG.CopyToClipboard()
-    End Sub
-
-    'Log anzeigen
-    '************
-    Private Sub ShowLog(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripStatusLabel_Log.Click
-
-        'LogWindow anzeigen
-        Call Me.myLogWindow.Show()
-        Me.myLogWindow.WindowState = FormWindowState.Normal
-        Call Me.myLogWindow.BringToFront()
-
-    End Sub
-
-    'Übersicht an/aus
-    '****************
-    Private Sub Übersicht_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton_Übersicht.Click
-
-        Call Übersicht_Toggle(ToolStripButton_Übersicht.Checked)
-
-    End Sub
-
-    Private Sub Übersicht_Toggle(ByVal showÜbersicht As Boolean)
-
-        If (showÜbersicht) Then
-            Me.SplitContainer1.Panel1Collapsed = False
-            Me.ToolStripButton_Übersicht.Checked = True
-        Else
-            Me.SplitContainer1.Panel1Collapsed = True
-            Me.ToolStripButton_Übersicht.Checked = False
-        End If
-
-    End Sub
-
-    ''' <summary>
-    ''' Löscht alle vorhandenen Serien und liest alle importierten Zeitreihen neu ein
-    ''' </summary>
-    Private Sub RefreshFromFile(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem_Refresh.Click
-
-        Dim Datei As Dateiformat
-        Dim Dateiliste As String
-        Dim Answer As MsgBoxResult
-
-        'Wenn keine Dateien vorhanden, abbrechen
-        If (Me.ImportedFiles.Count = 0) Then
-            MsgBox("Es sind keine Dateien bekannt, die neu eingelesen werden könnten!", MsgBoxStyle.Information, "Dateien neu einlesen")
-            Exit Sub
-        End If
-
-        'Dateiliste in Textform generieren
-        Dateiliste = ""
-        For Each Datei In Me.ImportedFiles
-            Dateiliste &= Datei.File & eol
-        Next
-
-        'Dialog anzeigen
-        Answer = MsgBox("Alle Serien löschen und folgende Dateien neu einlesen?" & eol & Dateiliste, MsgBoxStyle.OkCancel, "Dateien neu einlesen")
-
-        If (Answer = MsgBoxResult.Ok) Then
-
-            'Alle Serien löschen
-            Me.TChart1.Series.RemoveAllSeries()
-            Me.TChart2.Series.RemoveAllSeries()
-
-            'Collection zurücksetzen
-            Me.Zeitreihen.Clear()
-
-            'Alle Dateien durchlaufen
-            For Each Datei In Me.ImportedFiles
-                'Jede Datei neu einlesen
-                Call Datei.Read_File()
-                'Alle Zeitreihen der Datei durchlaufen
-                For Each zre As Zeitreihe In Datei.Zeitreihen
-                    'Jede Zeitreihe importieren
-                    Call Me.Import_Series(zre)
-                Next
-            Next
-
-        End If
-
-    End Sub
-
-    ''' <summary>
-    ''' Info Click
-    ''' </summary>
-    Private Sub MenuDropdown_Hilfe(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripSplitButton_Help.ButtonClick
-        'keine Funktionalität, nur Dropdown
-        Me.ToolStripSplitButton_Help.ShowDropDown()
-    End Sub
-
-    ''' <summary>
-    ''' About Click
-    ''' </summary>
-    Private Sub About(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles AboutToolStripMenuItem.Click
-        Dim about As New AboutBox()
-        Call about.ShowDialog(Me)
-    End Sub
-
-    ''' <summary>
-    ''' Hilfe Click (URL zum Wiki)
-    ''' </summary>
+    ''' <param name="files">array of file paths</param>
     ''' <remarks></remarks>
-    Private Sub Hilfe(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles HilfeToolStripMenuItem.Click
-        Process.Start(HelpURL)
-    End Sub
-
-#End Region 'UI
-
-#Region "Funktionalität"
-
-    'Zeitreihe intern hinzufügen
-    '***************************
-    Private Sub AddZeitreihe(ByRef zre As Zeitreihe)
-
-        Dim n As Integer = 1
-
-        'Umbenennen, falls Titel schon vergeben
-        'Format: "Titel (n)"
-        Do While (Me.Zeitreihen.ContainsKey(zre.Title))
-
-            Dim pattern As String = "(?<name>.*)\s\(\d+\)$"
-            Dim match As Match = Regex.Match(zre.Title, pattern)
-
-            If (match.Success) Then
-                n += 1
-                zre.Title = Regex.Replace(zre.Title, pattern, "${name} (" & n.ToString() & ")")
-            Else
-                zre.Title &= " (1)"
-            End If
-        Loop
-
-        Me.Zeitreihen.Add(zre.Title, zre)
-
-    End Sub
-
-    'TEN-Datei importieren
-    '*********************
-    Private Sub Open_TEN(ByVal FileName As String)
-
-        Dim res As DialogResult
-        Dim i As Integer
-        Dim reihe As Zeitreihe
-
-        'Warnen, wenn bereits Serien vorhanden (Chart wird komplett überschrieben!)
-        '--------------------------------------------------------------------------
-        If (Me.TChart1.Series.Count() > 0) Then
-            res = MsgBox("Die vorhandenen Serien werden überschrieben!" & eol & "Fortfahren?", MsgBoxStyle.OkCancel)
-            If (Not res = Windows.Forms.DialogResult.OK) Then Exit Sub
-        End If
-
-        Try
-
-            'Log
-            Call Log.AddLogEntry("Öffne Datei '" & FileName & "' ...")
-
-            'TEN-Datei importieren
-            '---------------------
-            Call TChart1.Import.Template.Load(FileName)
-            Call TChart2.Import.Template.Load(FileName)
-
-            'Zeitreihen-Objekte aus TChart importieren
-            '-----------------------------------------
-            'Alte Zeitreihen löschen
-            Me.Zeitreihen.Clear()
-
-            'Alle Reihen durchlaufen
-            For Each series As Steema.TeeChart.Styles.Series In TChart1.Series
-
-                'Nur Zeitreihen importieren!
-                If (series.GetHorizAxis.IsDateTime) Then
-
-                    reihe = New Zeitreihe(series.Title)
-
-                    For i = 0 To series.Count - 1
-                        reihe.AddNode(Date.FromOADate(series.XValues(i)), series.YValues(i))
-                    Next
-
-                    'Zeitreihe abspeichern
-                    Call Me.AddZeitreihe(reihe)
-                End If
-            Next
-
-            'Log
-            Call Log.AddLogEntry("... Datei '" & FileName & "' erfolgreich geöffnet!")
-
-        Catch ex As Exception
-            MsgBox("Fehler beim Öffnen:" & eol & ex.Message, MsgBoxStyle.Critical)
-            Call Log.AddLogEntry("... Fehler beim Öffnen:" & eol & ex.Message)
-        End Try
-
-        'Übersicht anpassen
-        '------------------
-        TChart2.Header.Visible = False
-
-        'ColorBand neu einrichten (geht bei TEN-Import verloren)
-        '-------------------------------------------------------
-        Call Me.Init_ColorBand()
-
-        'Charts aktualisieren
-        '--------------------
-        Me.selectionMade = False
-        Call Me.UpdateCharts()
-
+    Public Sub Import_Files(files() As String)
+        For Each file As String In files
+            Call Me.Import_File(file)
+        Next
     End Sub
 
     ''' <summary>
-    ''' Zeitreihe(n) aus einer Datei importieren
+    ''' Import a file
     ''' </summary>
-    ''' <param name="file">Pfad zur Datei</param>
-    Public Sub Import_File(ByVal file As String)
+    ''' <param name="file">file path</param>
+    Public Sub Import_File(file As String)
 
-        Dim Datei As Dateiformat
-        Dim i As Integer
+        Dim Datei As FileFormatBase
         Dim ok As Boolean
+
+        RaiseEvent IsBusyChanged(True)
 
         'Sonderfälle abfangen:
         '---------------------
-        Select Case Path.GetExtension(file).ToUpper()
+        Select Case IO.Path.GetExtension(file).ToUpper()
 
-            Case Dateifactory.FileExtTEN
+            Case FileFactory.FileExtTEN
                 '.TEN-Datei
-                Call Me.Open_TEN(file)
+                'has to be loaded by the controller/view
+                RaiseEvent TENFileLoading(file)
 
-            Case Dateifactory.FileExtRVA
-                '.RVA-Datei
-                Call Me.Import_RVA(file)
-
-            Case Dateifactory.FileExtnetCDF
-                '.netCDF Datei
+            Case FileFactory.FileExtWVP
+                'Wave project file
+                Call Me.Load_WVP(file)
 
             Case Else
 
@@ -858,259 +132,570 @@ Public Class Wave
 
                 Try
                     'Log
-                    Call Log.AddLogEntry("Importiere Datei '" & file & "' ...")
+                    Call Log.AddLogEntry(Log.levels.info, $"Importing file '{file}' ...")
 
                     'Datei-Instanz erzeugen
-                    Datei = Dateifactory.getDateiInstanz(file)
+                    Datei = FileFactory.getFileInstance(file)
 
                     If (Datei.UseImportDialog) Then
                         'Falls Importdialog erforderlich, diesen anzeigen
-                        ok = Me.showImportDialog(Datei)
+                        ok = Me.ShowImportDialog(Datei)
                         Call Application.DoEvents()
                     Else
                         'Ansonsten alle Spalten auswählen
-                        Call Datei.selectAllSpalten()
+                        Call Datei.selectAllSeries()
                         ok = True
                     End If
 
                     If (ok) Then
 
-                        Cursor = Cursors.WaitCursor
-
                         'Datei einlesen
-                        Call Datei.Read_File()
+                        Call Datei.readFile()
 
                         'Log
-                        Call Log.AddLogEntry("Datei '" & file & "' erfolgreich importiert!")
-                        Application.DoEvents()
-
-                        'Datei abspeichern
-                        Me.ImportedFiles.Add(Datei)
+                        Call Log.AddLogEntry(Log.levels.info, $"File '{file}' imported successfully!")
 
                         'Log
-                        Call Log.AddLogEntry("Zeitreihen in Diagramm laden...")
-                        Application.DoEvents()
+                        Call Log.AddLogEntry(Log.levels.info, "Loading series in chart...")
 
-                        'Alle eingelesenen Zeitreihen der Datei durchlaufen
-                        For i = 0 To Datei.Zeitreihen.GetUpperBound(0)
-                            'Serie importieren
-                            Call Me.Import_Series(Datei.Zeitreihen(i))
+                        'Import all time series into the chart
+                        For Each ts As TimeSeries In Datei.FileTimeSeries.Values
+                            Call Me.Import_Series(ts)
                         Next
 
                         'Log
-                        Call Log.AddLogEntry("Zeitreihen erfolgreich in Diagramm geladen!")
+                        Call Log.AddLogEntry(Log.levels.info, "Successfully loaded series in chart!")
+
+                        RaiseEvent FileImported(file)
 
                     Else
                         'Import abgebrochen
-                        Log.AddLogEntry("Import abgebrochen!")
-
+                        Log.AddLogEntry(Log.levels.error, "Import cancelled!")
                     End If
 
                 Catch ex As Exception
-                    MsgBox("Fehler beim Import:" & eol & ex.Message, MsgBoxStyle.Critical)
-                    Call Log.AddLogEntry("Fehler beim Import: " & ex.Message)
-
-                Finally
-                    Cursor = Cursors.Default
+                    MsgBox("Error during import:" & eol & ex.Message, MsgBoxStyle.Critical)
+                    Call Log.AddLogEntry(Log.levels.error, "Error during import: " & ex.Message)
                 End Try
 
         End Select
 
+        RaiseEvent IsBusyChanged(False)
+
     End Sub
 
-''' <summary>
-    ''' Zeitreihe(n) aus einer Datei importieren
+    ''' <summary>
+    ''' Load a Wave project file
     ''' </summary>
-    ''' <param name="file">Pfad zur Datei</param>
-    Public Sub Convert_File(ByVal file As String)
-
-        Dim Datei As Dateiformat
-        Dim i As Integer
-        'Dim ok As Boolean
-
-        'Sonderfälle abfangen:
-        '---------------------
-        'Select Case Path.GetExtension(file).ToUpper()
-
-        '    Case Dateifactory.FileExtTEN
-        '        '.TEN-Datei
-        '        Call Me.Open_TEN(file)
-
-        '    Case Dateifactory.FileExtRVA
-        '        '.RVA-Datei
-        '        Call Me.Import_RVA(file)
-
-        '    Case Else
-
-                'Normalfall:
-                '-----------
+    ''' <param name="projectfile">Path to the Wave project file</param>
+    ''' <remarks></remarks>
+    Private Sub Load_WVP(projectfile As String)
 
         Try
-            'Log
-            Call Log.AddLogEntry("Importiere Datei '" & file & "' ...")
+            Dim tsList As List(Of TimeSeries)
 
-            'Datei-Instanz erzeugen
-            Datei = Dateifactory.getDateiInstanz(file)
+            Call Log.AddLogEntry(Log.levels.info, $"Loading Wave project file '{projectfile}'...")
 
-            'Alle Spalten auswählen
-            Call Datei.selectAllSpalten()
+            Dim wvp As New WVP(projectfile)
+            tsList = wvp.Process()
 
-            Cursor = Cursors.WaitCursor
+            Call Log.AddLogEntry(Log.levels.info, $"Imported {tsList.Count} timeseries")
 
-            'Datei einlesen
-            Call Datei.Read_File()
-
-            'Log
-            Call Log.AddLogEntry("Datei '" & file & "' erfolgreich importiert!")
-            Application.DoEvents()
-
-            'Datei abspeichern
-            Me.ImportedFiles.Add(Datei)
-
-            'Log
-            Call Log.AddLogEntry("Zeitreihen in Diagramm laden...")
-            Application.DoEvents()
-
-            'Alle eingelesenen Zeitreihen der Datei durchlaufen
-            For i = 0 To Datei.Zeitreihen.GetUpperBound(0)
-                'Serie importieren
-                Call Me.Import_Series(Datei.Zeitreihen(i), False)
+            'import the series
+            Call Log.AddLogEntry(Log.levels.info, "Loading series in chart...")
+            For Each ts As TimeSeries In tsList
+                Call Me.Import_Series(ts)
             Next
 
-            Me.ExportierenOhnePara()
-
             'Log
-            Call Log.AddLogEntry("Zeitreihen erfolgreich in Diagramm geladen!")
+            Call Log.AddLogEntry(Log.levels.info, $"Project file '{projectfile}' loaded successfully!")
 
+            RaiseEvent FileImported(projectfile)
 
         Catch ex As Exception
-            MsgBox("Fehler beim Import:" & eol & ex.Message, MsgBoxStyle.Critical)
-            Call Log.AddLogEntry("Fehler beim Import: " & ex.Message)
-
-        Finally
-            Cursor = Cursors.Default
+            MsgBox("Error while loading project file:" & eol & ex.Message, MsgBoxStyle.Critical)
+            Call Log.AddLogEntry(Log.levels.error, "Error while loading project file:" & eol & ex.Message)
         End Try
-
-        'End Select
-
-    End Sub
-
-    Public Sub Select_ASC(ByVal Workdir As String)
-
-        Dim FileName As String
-
-        OpenFileDialog1.Title = "ASC-Datei auswählen"
-        OpenFileDialog1.Filter = "SMUSI-Dateien (*.asc)|*.asc"
-        OpenFileDialog1.InitialDirectory = Workdir
-
-        If OpenFileDialog1.ShowDialog() = Windows.Forms.DialogResult.OK Then
-            FileName = OpenFileDialog1.FileName
-            If Not (FileName Is Nothing) Then
-                Call Me.Import_File(FileName)
-            End If
-        End If
 
     End Sub
 
     ''' <summary>
-    ''' Eine RVA-Datei importieren
+    ''' Attempts import of clipboard content
+    ''' Detects TALSIM clipboard content or plain text
     ''' </summary>
-    ''' <param name="file">Pfad zur Datei</param>
-    ''' <remarks>Sonderfall, weil keine Zeitreihen</remarks>
-    Private Sub Import_RVA(ByVal file As String)
+    Friend Sub Import_Clipboard()
 
-        Dim RVADatei As RVA
+        Dim dlgres As DialogResult
+
+        RaiseEvent IsBusyChanged(True)
 
         Try
-            'Log
-            Call Log.AddLogEntry("Importiere Datei '" & file & "' ...")
+            'Check data format
+            If Clipboard.ContainsText(TextDataFormat.Text) Then
 
-            'Datei-Instanz erzeugen
-            RVADatei = Dateifactory.getDateiInstanz(file)
+                Dim clipboardtext As String
+                clipboardtext = Clipboard.GetText(TextDataFormat.Text)
 
-            'Einlesen
-            Call RVADatei.Read_File()
+                If clipboardtext.Contains("SydroTyp=SydroErgZre") Or
+                   clipboardtext.Contains("SydroTyp=SydroBinZre") Then
+                    'it's a clipboard entry from TALSIM!
 
-            'Log
-            Call Log.AddLogEntry("... Datei '" & file & "' erfolgreich importiert!")
-
-            'Datei abspeichern
-            Me.ImportedFiles.Add(RVADatei)
-
-            'Chart vorbereiten
-            Call Me.PrepareChart_RVA()
-
-            'Serie zeichnen
-            Call Me.Display_RVA(RVADatei.RVAValues, True)
+                    'ask the user for confirmation
+                    dlgres = MessageBox.Show($"TALSIM clipboard content detected!{eol}Load series in Wave?", "Load from clipboard", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+                    If Not dlgres = Windows.Forms.DialogResult.Yes Then
+                        Exit Sub
+                    End If
+                    Call Me.LoadFromClipboard_TALSIM(clipboardtext)
+                Else
+                    'ask the user whether to attempt plain text import
+                    dlgres = MessageBox.Show("Attempt to load clipboard text content in Wave as CSV data?", "Load from clipboard", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+                    If Not dlgres = Windows.Forms.DialogResult.Yes Then
+                        Exit Sub
+                    End If
+                    'save as temp text file and then load file
+                    Dim tmpfile As String = IO.Path.GetTempFileName()
+                    Using writer As New IO.StreamWriter(tmpfile, False, Helpers.DefaultEncoding)
+                        writer.Write(clipboardtext)
+                    End Using
+                    Call Me.Import_File(tmpfile)
+                    'delete temp file after import
+                    IO.File.Delete(tmpfile)
+                End If
+            Else
+                MessageBox.Show("No usable clipboard content detected!", "Load from clipboard", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            End If
 
         Catch ex As Exception
-            MsgBox("Fehler beim Import:" & eol & ex.Message, MsgBoxStyle.Critical)
-            Call Log.AddLogEntry("... Fehler beim Import:" & eol & ex.Message)
+            Log.AddLogEntry(Log.levels.error, ex.Message)
+            MsgBox("ERROR: " & ex.Message, MsgBoxStyle.Critical)
         End Try
 
+        RaiseEvent IsBusyChanged(False)
+
     End Sub
 
     ''' <summary>
-    ''' Eine netCDF-Datei importieren
+    ''' Load a timeseries from a file using information from a TALSIM clipboard entry
     ''' </summary>
-    ''' <param name="file">Pfad zur Datei</param>
-    ''' <remarks>Sonderfall, weil komplexes Dateiformat</remarks>
-    Private Sub Import_netCDF(ByVal file As String)
+    ''' <param name="clipboardtext">text content of the clipboard</param>
+    ''' <remarks></remarks>
+    Private Sub LoadFromClipboard_TALSIM(clipboardtext As String)
 
-        'Dim dlg As ImportFromNetCDF
-        'Dim ZR_netCDF As Zeitreihe_netCDF
+        'Examples:
 
-        'Try
-        '    'Log
-        '    Call Log.AddLogEntry("Importiere Datei '" & file & "' ...")
+        '[SETTINGS]
+        'Count = 1
+        '[Zeitreihe1]
+        'SydroTyp=SydroErgZre
+        'ZRFormat=4
+        'ID=362
+        'Extension=.WEL
+        'Kennung=S000
+        'KennungLang={S000} {1AB, HYO} Ablauf_1
+        'Zustand=1AB
+        'Datei=D:\Talsim-NG\customers\WVER\projectData\felix\dataBase\Felix_data\00000362.WEL
+        'GeaendertAm=
+        'Modell=TALSIM
+        'Herkunft=simuliert
+        'Interpretation=2
+        'SimVariante=Test Langzeit/HWMerkmal_HWGK_v02
+        'Simulation=Test Langzeit
+        'Einheit=m3/s
+        'EndZeitreihe
 
-        '    ZR_netCDF = New Zeitreihe_netCDF()
+        '[SETTINGS]
+        'Count=2
+        '[Zeitreihe1]
+        'SydroTyp=SydroBinZre
+        'ZRFormat=99
+        'ID=1041
+        'Extension=.BIN
+        'Kennung=Sce10, E038, C38 (TA_Tekeze TK 04B)
+        'KennungLang=Sce10, E038, C38 (TA_Tekeze TK 04B), m3/s
+        'Datei=C:\Talsim-NG\customers\Nile\projectData\hubert\dataBase\hubert_zre\00001041.BIN
+        'Einheit=m3/s
+        'Modell=TALSIM
+        'Interpretation=1
+        'EndZeitreihe
+        '[Zeitreihe2]
+        'SydroTyp=SydroBinZre
+        'ZRFormat=99
+        'ID=1042
+        'Extension=.BIN
+        'Kennung=Sce10, E039, C39 (TA_TK5)
+        'KennungLang=Sce10, E039, C39 (TA_TK5), m3/s
+        'Datei=C:\Talsim-NG\customers\Nile\projectData\hubert\dataBase\hubert_zre\00001042.BIN
+        'Einheit=m3/s
+        'Modell=TALSIM
+        'Interpretation=1
+        'EndZeitreihe
 
-        '    dlg = New ImportFromNetCDF
-        '    If (dlg.ShowDialog(Me) = DialogResult.OK) Then
-        '        'Importiere
-        '        'TODO
-        '    End If
+        'parse clipboard contents
+        Dim m As Match
+        Dim i_series As Integer
+        Dim parts() As String
+        Dim zreblock As Boolean
+        Dim data As New List(Of Dictionary(Of String, String)) '[{zreparams1},{zreparams2},...]
+        Dim file, name As String
+        Dim fileobj As FileFormatBase
+        Dim ts As TimeSeries
 
-        '    'Log
-        '    Call Log.AddLogEntry("... Datei '" & file & "' erfolgreich importiert!")
+        zreblock = False
+        For Each line As String In clipboardtext.Split(eol)
+            line = line.Trim()
 
+            m = Regex.Match(line, "\[Zeitreihe(\d+)\]")
+            If m.Success Then
+                i_series = m.Groups(1).Value
+                data.Add(New Dictionary(Of String, String))
+                zreblock = True
+            End If
 
-        '    ''Datei-Instanz erzeugen
-        '    'ZR_netCDF = Dateifactory.getDateiInstanz(file)
+            If zreblock Then
+                If line.Contains("=") Then
+                    parts = line.Split("=")
+                    data(i_series - 1).Add(parts(0), parts(1))
+                ElseIf line = "EndZeitreihe" Then
+                    zreblock = False
+                    Continue For
+                End If
+            End If
 
-        '    ''Einlesen
-        '    'Call RVADatei.Read_File()
+        Next
 
+        'initiate loading of series
+        For Each params As Dictionary(Of String, String) In data
 
-        '    ''Datei abspeichern
-        '    'Me.ImportedFiles.Add(RVADatei)
+            file = params("Datei")
 
-        '    ''Chart vorbereiten
-        '    'Call Me.PrepareChart_RVA()
+            Select Case params("ZRFormat")
+                Case "4" 'WEL file
 
-        '    ''Serie zeichnen
-        '    'Call Me.Display_RVA(RVADatei.RVAValues, True)
+                    'build series name
+                    If params("Kennung") = "ZPG" Then
+                        'handle control groups
+                        name = "KGRP_" & params("Zustand")
+                    Else
+                        name = params("Kennung").PadRight(4, " ") & "_" & params("Zustand")
+                    End If
 
-        'Catch ex As Exception
-        '    MsgBox("Fehler beim Import:" & eol & ex.Message, MsgBoxStyle.Critical)
-        '    Call Log.AddLogEntry("... Fehler beim Import:" & eol & ex.Message)
-        'End Try
+                    'read file
+                    Log.AddLogEntry(Log.levels.info, $"Loading file {file} ...")
+                    fileobj = FileFactory.getFileInstance(file)
+
+                    'read series from file
+                    ts = fileobj.getTimeSeries(name)
+
+                    'set interpretation
+                    ts.Interpretation = params("Interpretation")
+
+                    'import series
+                    Call Me.Import_Series(ts)
+
+                Case "99" 'BIN file
+
+                    name = params("Kennung")
+
+                    'read file
+                    Log.AddLogEntry(Log.levels.info, $"Loading file {file} ...")
+                    fileobj = FileFactory.getFileInstance(file)
+
+                    'read series from file
+                    fileobj.readFile()
+                    ts = fileobj.FileTimeSeries.First.Value
+
+                    'add metadata
+                    ts.Title = name
+                    ts.Unit = params("Einheit")
+
+                    'set interpretation
+                    ts.Interpretation = params("Interpretation")
+
+                    'import series
+                    Call Me.Import_Series(ts)
+
+            End Select
+
+        Next
 
     End Sub
 
     ''' <summary>
-    ''' Zeigt den Importdialog an und liest im Anschluss die Datei mit den eingegebenen Einstellungn ein
+    ''' Import a time series
+    ''' </summary>
+    ''' <param name="ts">the time series</param>
+    Public Sub Import_Series(ts As TimeSeries)
+
+        'Store the time series
+        Me.AddTimeSeries(ts)
+
+    End Sub
+
+    Friend Sub SaveProjectFile(projectfile)
+
+        'collect datasources
+        Dim datasources As New Dictionary(Of String, List(Of String)) '{file: [title, ...], ...}
+        Dim file, title As String
+        For Each ts As TimeSeries In Me.TimeSeriesDict.Values
+            If ts.DataSource.Origin = TimeSeriesDataSource.OriginEnum.FileImport Then
+                file = ts.DataSource.FilePath
+                title = ts.DataSource.Title
+                If Not datasources.ContainsKey(file) Then
+                    datasources.Add(file, New List(Of String))
+                End If
+                datasources(file).Add(title)
+            Else
+                Log.AddLogEntry(Log.levels.warning, $"Series '{ts.Title}' does not originate from a file import and could not be saved to the project file!")
+            End If
+        Next
+
+        'write the project file
+        Dim fs As New IO.FileStream(projectfile, IO.FileMode.Create, IO.FileAccess.Write)
+        Dim strwrite As New IO.StreamWriter(fs, Helpers.DefaultEncoding)
+
+        strwrite.WriteLine("# Wave project file")
+
+        For Each file In datasources.Keys
+            'TODO: write relative paths to the project file?
+            strwrite.WriteLine("file=" & file)
+            For Each title In datasources(file)
+                'TODO: if a series was renamed, write the new title to the project file
+                If title.Contains(":") Then
+                    'enclose titles containing ":" in quotes
+                    title = $"""{title}"""
+                End If
+                strwrite.WriteLine("    series=" & title)
+            Next
+        Next
+
+        strwrite.Close()
+        fs.Close()
+
+        Log.AddLogEntry(Log.levels.info, $"Wave project file {projectfile} saved.")
+
+    End Sub
+
+    ''' <summary>
+    ''' Initiates timeseries export
+    ''' </summary>
+    ''' <remarks></remarks>
+    Friend Sub ExportTimeseries()
+
+        Dim exportDlg As ExportDiag
+        Dim dlgResult As DialogResult
+        Dim filename As String
+        Dim zres As List(Of TimeSeries)
+
+        'Abort if no time series loaded
+        If (Me.TimeSeriesDict.Count < 1) Then
+            MsgBox("No time series available for export!", MsgBoxStyle.Exclamation)
+            Exit Sub
+        End If
+
+        'Show Export dialog
+        exportDlg = New ExportDiag(Me.TimeSeriesDict)
+        dlgResult = exportDlg.ShowDialog()
+
+        If dlgResult <> Windows.Forms.DialogResult.OK Then
+            Exit Sub
+        End If
+
+        'get copies of the selected series
+        zres = New List(Of TimeSeries)
+        For Each ts As TimeSeries In exportDlg.ListBox_Series.SelectedItems
+            zres.Add(ts.Clone())
+        Next
+
+        'prepare metadata according to file format
+        Dim keys As List(Of String)
+        Dim metadata_old As Metadata
+        For Each ts As TimeSeries In zres
+            'get a list of metadata keys
+            Select Case exportDlg.ComboBox_Format.SelectedItem
+                Case FileFormatBase.FileFormats.UVF
+                    keys = UVF.MetadataKeys
+                Case FileFormatBase.FileFormats.ZRXP
+                    keys = ZRXP.MetadataKeys
+                Case Else
+                    keys = FileFormatBase.MetadataKeys 'empty list
+            End Select
+            If keys.Count > 0 Then
+                'create a copy of the existing metadata
+                metadata_old = ts.Metadata
+                'create new metadata keys
+                ts.Metadata = New Metadata()
+                For Each key As String In keys
+                    If metadata_old.Keys.Contains(key) Then
+                        'copy old metadata value with the same key
+                        ts.Metadata.Add(key, metadata_old(key))
+                    Else
+                        'add a new key with an empty value
+                        ts.Metadata.Add(key, "")
+                    End If
+                Next
+                'set default metadata values
+                Select Case exportDlg.ComboBox_Format.SelectedItem
+                    Case FileFormatBase.FileFormats.UVF
+                        UVF.setDefaultMetadata(ts)
+                    Case FileFormatBase.FileFormats.ZRXP
+                        ZRXP.setDefaultMetadata(ts)
+                    Case Else
+                        FileFormatBase.setDefaultMetadata(ts)
+                End Select
+                'show dialog for editing metadata
+                Dim dlg As New MetadataDialog(ts.Metadata)
+                dlgResult = dlg.ShowDialog()
+                If Not dlgResult = Windows.Forms.DialogResult.OK Then
+                    Exit Sub
+                End If
+                'update metadata of series
+                ts.Metadata = dlg.Metadata
+            End If
+        Next
+
+        'Prepare Save dialog
+        Dim SaveFileDialog1 As New SaveFileDialog()
+        SaveFileDialog1.Title = "Save as..."
+        SaveFileDialog1.AddExtension = True
+        SaveFileDialog1.OverwritePrompt = True
+        Select Case exportDlg.ComboBox_Format.SelectedItem
+            Case FileFormatBase.FileFormats.ASC
+                SaveFileDialog1.DefaultExt = "asc"
+                SaveFileDialog1.Filter = "ASC files (*.asc)|*.asc"
+            Case FileFormatBase.FileFormats.BIN
+                SaveFileDialog1.DefaultExt = "bin"
+                SaveFileDialog1.Filter = "SYDRO binary files (*.bin)|*.bin"
+            Case FileFormatBase.FileFormats.CSV
+                SaveFileDialog1.DefaultExt = "csv"
+                SaveFileDialog1.Filter = "CSV files (*.csv)|*.csv"
+            Case FileFormatBase.FileFormats.DFS0
+                SaveFileDialog1.DefaultExt = "dfs0"
+                SaveFileDialog1.Filter = "DFS0 files (*.dfs0)|*.dfs0"
+            Case FileFormatBase.FileFormats.WEL
+                SaveFileDialog1.DefaultExt = "wel"
+                SaveFileDialog1.Filter = "WEL files (*.wel)|*.wel"
+            Case FileFormatBase.FileFormats.ZRE
+                SaveFileDialog1.DefaultExt = "zre"
+                SaveFileDialog1.Filter = "ZRE files (*.zre)|*.zre"
+            Case FileFormatBase.FileFormats.REG_HYSTEM
+                SaveFileDialog1.DefaultExt = "reg"
+                SaveFileDialog1.Filter = "HYSTEM REG files (*.reg)|*.reg"
+            Case FileFormatBase.FileFormats.REG_SMUSI
+                SaveFileDialog1.DefaultExt = "reg"
+                SaveFileDialog1.Filter = "SMUSI REG files (*.reg)|*.reg"
+            Case FileFormatBase.FileFormats.DAT_SWMM_MASS, FileFormatBase.FileFormats.DAT_SWMM_TIME
+                SaveFileDialog1.DefaultExt = "dat"
+                SaveFileDialog1.Filter = "SWMM DAT files (*.dat)|*.dat"
+            Case FileFormatBase.FileFormats.SWMM_INTERFACE
+                SaveFileDialog1.DefaultExt = "txt"
+                SaveFileDialog1.Filter = "SWMM Interface files (*.txt)|*.txt"
+            Case FileFormatBase.FileFormats.UVF
+                SaveFileDialog1.DefaultExt = "uvf"
+                SaveFileDialog1.Filter = "UVF files (*.uvf)|*.uvf"
+            Case FileFormatBase.FileFormats.ZRXP
+                SaveFileDialog1.DefaultExt = "zrx"
+                SaveFileDialog1.Filter = "ZRXP files (*.zrx)|*.zrx"
+        End Select
+        SaveFileDialog1.Filter &= "|All files (*.*)|*.*"
+        SaveFileDialog1.FilterIndex = 1
+
+        'Show Save dialog
+        dlgResult = SaveFileDialog1.ShowDialog()
+        If dlgResult <> Windows.Forms.DialogResult.OK Then
+            Exit Sub
+        End If
+
+        filename = SaveFileDialog1.FileName
+
+        'Export series
+        Log.AddLogEntry(Log.levels.info, $"Exporting time series to file {SaveFileDialog1.FileName}...")
+
+        RaiseEvent IsBusyChanged(True)
+
+        Try
+
+            Select Case exportDlg.ComboBox_Format.SelectedItem
+
+                Case FileFormatBase.FileFormats.BIN
+                    Call BIN.Write_File(zres(0), filename)
+
+                Case FileFormatBase.FileFormats.CSV
+                    Call CSV.Write_File(zres, filename)
+
+                Case FileFormatBase.FileFormats.DFS0
+                    Call DFS0.Write_File(zres, filename)
+
+                Case FileFormatBase.FileFormats.REG_HYSTEM
+                    Call HystemExtran_REG.Write_File(zres(0), filename)
+
+                Case FileFormatBase.FileFormats.REG_SMUSI
+                    Call REG_SMUSI.Write_File(zres(0), filename)
+
+                Case FileFormatBase.FileFormats.DAT_SWMM_MASS
+                    Call SWMM_DAT_MASS.Write_File(zres(0), filename, 5) 'TODO: Zeitschritt ist noch nicht dynamisch definiert
+
+                Case FileFormatBase.FileFormats.DAT_SWMM_TIME
+                    Call SWMM_DAT_TIME.Write_File(zres(0), filename, 5) 'TODO: Zeitschritt ist noch nicht dynamisch definiert
+
+                Case FileFormatBase.FileFormats.SWMM_INTERFACE
+                    Call SWMM_INTERFACE.Write_File(zres, filename)
+
+                Case FileFormatBase.FileFormats.UVF
+                    Call UVF.Write_File(zres(0), filename)
+
+                Case FileFormatBase.FileFormats.ZRE
+                    Call ZRE.Write_File(zres(0), filename)
+
+                Case FileFormatBase.FileFormats.ZRXP
+                    Call ZRXP.Write_File(zres(0), filename)
+
+                Case Else
+                    MsgBox("Not yet implemented!", MsgBoxStyle.Exclamation)
+            End Select
+
+            MsgBox("Time series exported successfully!", MsgBoxStyle.Information)
+            Log.AddLogEntry(Log.levels.info, "Time series exported successfully!")
+
+        Catch ex As Exception
+            Log.AddLogEntry(Log.levels.error, "Error during export: " & ex.Message)
+            MsgBox("Error during export: " & ex.Message, MsgBoxStyle.Critical)
+        End Try
+
+        RaiseEvent IsBusyChanged(False)
+
+    End Sub
+
+    ''' <summary>
+    ''' Delete a TimeSeries
+    ''' </summary>
+    ''' <param name="id">TimeSeries Id</param>
+    Friend Sub RemoveTimeSeries(id As Integer)
+
+        'Delete internally
+        Me.TimeSeriesDict.Remove(id)
+
+        RaiseEvent SeriesRemoved(id)
+
+    End Sub
+
+    Friend Sub RemoveAllTimeSeries()
+        Me.TimeSeriesDict.Clear()
+
+        RaiseEvent SeriesCleared()
+    End Sub
+
+    ''' <summary>
+    ''' Zeigt den Importdialog an und liest im Anschluss die Datei mit den eingegebenen Einstellungen ein
     ''' </summary>
     ''' <param name="Datei">Instanz der Datei, die importiert werden soll</param>
-    Private Function showImportDialog(ByRef Datei As Dateiformat) As Boolean
+    Friend Function ShowImportDialog(ByRef Datei As FileFormatBase) As Boolean
 
         Datei.ImportDiag = New ImportDiag(Datei)
 
         Dim DiagResult As DialogResult
 
         'Dialog anzeigen
-        DiagResult = Datei.ImportDiag.ShowDialog(Me)
+        DiagResult = Datei.ImportDiag.ShowDialog()
 
         If (DiagResult = Windows.Forms.DialogResult.OK) Then
             Return True
@@ -1121,259 +706,91 @@ Public Class Wave
     End Function
 
     ''' <summary>
-    ''' Import a time series
+    ''' Adds a time series to the internal storage
+    ''' Renames the title if it is not unique
+    ''' Raises the SeriesAdded event
     ''' </summary>
-    ''' <param name="zre">the time series</param>
-    ''' <remarks>saves and then display the time series</remarks>
-    Public Sub Import_Series(ByVal zre As Zeitreihe, Optional ByVal Display As Boolean = True)
-        'Serie abspeichen
-        Me.AddZeitreihe(zre)
-        If Display Then
-            'Serie anzeigen
-            Call Me.Display_Series(zre)
-        End If
-    End Sub
+    ''' <param name="timeseries"></param>
+    Private Sub AddTimeSeries(ByRef timeseries As TimeSeries)
 
-    ''' <summary>
-    ''' Eine Zeitreihe im Diagramm anzeigen
-    ''' </summary>
-    ''' <param name="zre">Die anzuzeigende Zeitreihe</param>
-    Private Sub Display_Series(ByVal zre As Zeitreihe)
+        Dim duplicateFound As Boolean
+        Dim pattern As String = "(?<name>.*)\s\(\d+\)$"
+        Dim match As Match
+        Dim n As Integer = 1
 
-        Dim AxisNo As Integer
-
-        'NaN und Infinity-Stützstellen entfernen
-        zre = zre.getCleanZRE()
-
-        'Serie zu Hauptdiagramm und zu Übersichtsdiagramm hinzufügen
-
-        'Linien instanzieren
-        Dim Line1 As New Steema.TeeChart.Styles.Line(Me.TChart1.Chart)
-        Dim Line2 As New Steema.TeeChart.Styles.Line(Me.TChart2.Chart)
-
-        'X-Werte als Zeitdaten einstellen
-        Line1.XValues.DateTime = True
-        Line2.XValues.DateTime = True
-
-        'Namen vergeben
-        Line1.Title = zre.Title
-        Line2.Title = zre.Title
-
-        'Punkte zur Serie hinzufügen
-        For Each node As KeyValuePair(Of DateTime, Double) In zre.Nodes
-            Line1.Add(node.Key, node.Value)
-            Line2.Add(node.Key, node.Value)
-        Next
-
-        'Achsenzuordnung
-        AxisNo = getAxisNo(zre.Einheit)
-
-        'Reihe der Achse zuordnen
-        '(Unterscheidung zwischen Standard- und Custom-Achsen notwendig)
-        Select Case AxisNo
-            Case 1
-                'Linke Achse
-                Line1.VertAxis = Steema.TeeChart.Styles.VerticalAxis.Left
-                Line2.VertAxis = Steema.TeeChart.Styles.VerticalAxis.Left
-            Case 2
-                'Rechte Achse
-                Line1.VertAxis = Steema.TeeChart.Styles.VerticalAxis.Right
-                Line2.VertAxis = Steema.TeeChart.Styles.VerticalAxis.Right
-            Case Else
-                'Custom Achse
-                Line1.VertAxis = Steema.TeeChart.Styles.VerticalAxis.Custom
-                Line1.CustomVertAxis = Me.MyAxes1(zre.Einheit)
-                Line2.VertAxis = Steema.TeeChart.Styles.VerticalAxis.Custom
-                Line2.CustomVertAxis = Me.MyAxes2(zre.Einheit)
-        End Select
-
-        'Charts aktualisieren
-        Call Me.UpdateCharts()
-
-    End Sub
-
-    'RVA-Ergebnis in Chart anzeigen
-    '******************************
-    Public Sub Display_RVA(ByVal RVAResult As RVA.Struct_RVAValues, Optional ByVal showAll As Boolean = False)
-
-        Dim i, j As Integer
-        Dim barLow, barMiddle, barHigh As Steema.TeeChart.Styles.Bar
-
-        'Chart formatieren
-        Call PrepareChart_RVA()
-
-        'Säulen (HA-Werte)
-        '-----------------
-        barMiddle = New Steema.TeeChart.Styles.Bar(Me.TChart1.Chart)
-        barMiddle.Marks.Visible = False
-        barMiddle.Title = "HA Middle"
-        If (RVAResult.Title <> "") Then barMiddle.Title &= " (" & RVAResult.Title & ")"
-
-        barLow = New Steema.TeeChart.Styles.Bar(Me.TChart1.Chart)
-        barLow.Marks.Visible = False
-        barLow.Title = "HA Low"
-        If (RVAResult.Title <> "") Then barLow.Title &= " (" & RVAResult.Title & ")"
-
-        barHigh = New Steema.TeeChart.Styles.Bar(Me.TChart1.Chart)
-        barHigh.Marks.Visible = False
-        barHigh.Title = "HA High"
-        If (RVAResult.Title <> "") Then barHigh.Title &= " (" & RVAResult.Title & ")"
-
-        'Werte eintragen
-        '---------------
-        With RVAResult
-
-            'Schleife über Parametergruppen
-            For i = 0 To .IHAParamGroups.GetUpperBound(0)
-                ''Gruppenname schreiben (Mit Wert 0)
-                'bar.Add(0, .IHAParamGroups(i).GName)
-                'Schleife über Parameter
-                For j = 0 To .IHAParamGroups(i).IHAParams.GetUpperBound(0)
-                    'Parameter eintragen
-                    barMiddle.Add(.IHAParamGroups(i).IHAParams(j).HAMiddle, .IHAParamGroups(i).IHAParams(j).PName)
-                    barLow.Add(.IHAParamGroups(i).IHAParams(j).HALow, .IHAParamGroups(i).IHAParams(j).PName)
-                    barHigh.Add(.IHAParamGroups(i).IHAParams(j).HAHigh, .IHAParamGroups(i).IHAParams(j).PName)
-                Next
-            Next
-
-        End With
-
-        'Wenn showAll = False dann nur HAMiddle-Serie anzeigen
-        If (Not showAll) Then
-            barLow.Active = False
-            barHigh.Active = False
-        End If
-
-    End Sub
-
-    ''' <summary>
-    ''' Gibt die Achsen-Nummer für eine bestimmte Einheit zurück
-    ''' Wenn noch nicht vorhanden, wird eine neue Achse erstellt
-    ''' </summary>
-    ''' <param name="einheit">Die Einheit</param>
-    ''' <returns>Der 1-basierte Index der zu verwendenden Achse in der MyAxes-Dictionary</returns>
-    Private Function getAxisNo(ByVal einheit As String) As Integer
-
-        Dim AxisNo As Integer
-
-        If (Me.MyAxes1.ContainsKey(einheit)) Then
-
-            'Nummer der vorhandenen, zu verwendenden Achse bestimmen
-            AxisNo = 0
-            For Each usedunit As String In Me.MyAxes1.Keys
-                AxisNo += 1
-                If (usedunit = einheit) Then
-                    Exit For
+        'Umbenennen, falls Titel schon vergeben
+        'Format: "Titel (n)"
+        Do While True
+            duplicateFound = False
+            For Each ts As TimeSeries In Me.TimeSeriesDict.Values
+                If timeseries.Title = ts.Title Then
+                    duplicateFound = True
                 End If
             Next
 
+            If duplicateFound Then
+                match = Regex.Match(timeseries.Title, pattern)
+                If (match.Success) Then
+                    n += 1
+                    timeseries.Title = Regex.Replace(timeseries.Title, pattern, $"${{name}} ({n})")
+                Else
+                    timeseries.Title &= " (1)"
+                End If
+            Else
+                Exit Do
+            End If
+        Loop
+
+        Me.TimeSeriesDict.Add(timeseries.Id, timeseries)
+
+        'Raise event
+        RaiseEvent SeriesAdded(timeseries)
+
+    End Sub
+
+    ''' <summary>
+    ''' Checks for a newer version on the server
+    ''' </summary>
+    ''' <returns>True if a newer version is available</returns>
+    Friend Async Function CheckForUpdate() As Threading.Tasks.Task(Of Boolean)
+
+
+        'get current version (only consider major, minor and build numbers, omitting the auto-generated revision number)
+        Dim v As Version = Reflection.Assembly.GetExecutingAssembly.GetName().Version()
+        Dim currentVersion As New Version($"{v.Major}.{v.Minor}.{v.Build}")
+
+        'retrieve latest version number from server
+        Dim client As New Net.Http.HttpClient()
+        Dim s As String = Await client.GetStringAsync(urlUpdateCheck)
+        Dim latestVersion As New Version(s)
+#If Not DEBUG Then
+        'TODO: Logging is not thread-safe and causes an exception in debug mode!
+        Log.AddLogEntry(Log.levels.debug, "CheckUpdate: Latest version on server: " & latestVersion.ToString())
+#End If
+
+        'compare versions
+        If currentVersion < latestVersion Then
+            Return True
         Else
-
-            'Neue Einheit => neue Achse
-            AxisNo = Me.MyAxes1.Count + 1
-
-            Select Case AxisNo
-
-                Case 1
-                    'Erste Einheit links
-                    Me.TChart1.Chart.Axes.Left.Title.Caption = einheit
-                    Me.MyAxes1.Add(einheit, Me.TChart1.Chart.Axes.Left)
-                    Me.MyAxes2.Add(einheit, Me.TChart2.Chart.Axes.Left)
-
-                Case 2
-                    'Zweite Einheit rechts
-                    Me.TChart1.Chart.Axes.Right.Title.Caption = einheit
-                    Me.MyAxes1.Add(einheit, Me.TChart1.Chart.Axes.Right)
-                    Me.MyAxes2.Add(einheit, Me.TChart2.Chart.Axes.Right)
-
-                Case Else
-                    'Ab der dritten Einheit Custom Achsen erstellen
-                    Dim customaxis1, customaxis2 As Steema.TeeChart.Axis
-                    customaxis1 = Steema.TeeChart.Axes.CreateNewAxis(Me.TChart1.Chart)
-                    customaxis2 = Steema.TeeChart.Axes.CreateNewAxis(Me.TChart2.Chart)
-                    customaxis1.Visible = True
-                    customaxis2.Visible = True
-                    'Jede zweite Achse rechts anzeigen
-                    If ((AxisNo) Mod 2 = 0) Then
-                        customaxis1.OtherSide = True
-                        customaxis2.OtherSide = True
-                    End If
-                    'Abstand berechnen
-                    customaxis1.RelativePosition = Math.Ceiling((AxisNo - 2) / 2) * 8
-                    customaxis2.RelativePosition = Math.Ceiling((AxisNo - 2) / 2) * 8
-
-                    customaxis1.Title.Caption = einheit
-                    customaxis1.Title.Angle = 90
-
-                    Me.MyAxes1.Add(einheit, customaxis1)
-                    Me.MyAxes2.Add(einheit, customaxis2)
-
-            End Select
-
+            Return False
         End If
-
-        Return AxisNo
 
     End Function
 
+    Friend Sub HighlightTimestampsHandler(timestamps As List(Of DateTime))
+        RaiseEvent HighlightTimestamps(timestamps)
+    End Sub
+
+
+    Friend Sub SeriesPropertiesChangedHandler(id As Integer)
+        RaiseEvent SeriesPropertiesChanged(id)
+    End Sub
+
     ''' <summary>
-    ''' Führt Standardformatierung eines TCharts aus
+    ''' Displays the main window
     ''' </summary>
-    ''' <param name="chart"></param>
-    Public Shared Sub formatChart(ByRef chart As Steema.TeeChart.Chart)
-
-        chart.Aspect.View3D = False
-        'chart.BackColor = Color.White
-        chart.Panel.Gradient.Visible = False
-        chart.Panel.Brush.Color = Color.White
-        chart.Walls.Back.Transparent = False
-        chart.Walls.Back.Gradient.Visible = False
-        chart.Walls.Back.Color = Color.White
-
-        'Header
-        chart.Header.Text = ""
-
-        'Legende
-        chart.Legend.LegendStyle = Steema.TeeChart.LegendStyles.Series
-        chart.Legend.FontSeriesColor = True
-        chart.Legend.CheckBoxes = True
-
+    Public Sub Show()
+        App.showMainWindow(Me)
     End Sub
-
-    'Chart für RVA-Anzeige formatieren
-    '*********************************
-    Public Sub PrepareChart_RVA()
-
-        'Übersicht ausschalten
-        Call Me.Übersicht_Toggle(False)
-
-        'Titel
-        Me.TChart1.Header.Text = "RVA Analysis"
-
-        'Achsen formatieren
-        Me.TChart1.Axes.Bottom.Automatic = True
-        Me.TChart1.Axes.Bottom.Labels.Angle = 90
-        Me.TChart1.Axes.Bottom.Title.Caption = "IHA Parameter"
-        Me.TChart1.Axes.Bottom.MinorTicks.Visible = False
-
-        Me.TChart1.Axes.Left.Automatic = False
-        Me.TChart1.Axes.Left.Minimum = -1.1
-        Me.TChart1.Axes.Left.Maximum = 2
-        Me.TChart1.Axes.Left.Labels.ValueFormat = "#,##0.0##"
-        Me.TChart1.Axes.Left.Title.Caption = "Hydrologic Alteration"
-
-        'Legende
-        Me.TChart1.Legend.CheckBoxes = True
-
-        'Markstips
-        Dim markstip As New Steema.TeeChart.Tools.MarksTip()
-        markstip.Style = Steema.TeeChart.Styles.MarksStyles.Value
-        Me.TChart1.Tools.Add(markstip)
-
-    End Sub
-
-#End Region 'Funktionalität
-
-
 
 End Class

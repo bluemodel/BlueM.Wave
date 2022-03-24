@@ -1,4 +1,6 @@
-﻿'Copyright (c) 2011, ihwb, TU Darmstadt
+﻿'Copyright (c) BlueM Dev Group
+'Website: https://bluemodel.org
+'
 'All rights reserved.
 '
 'Released under the BSD-2-Clause License:
@@ -23,9 +25,9 @@
 'EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 '--------------------------------------------------------------------------------------------
 '
-Public Class GoodnessOfFit_Dialog
+Friend Class GoodnessOfFit_Dialog
 
-    Public Sub New(ByVal zre1 As String, ByVal zre2 As String)
+    Public Sub New(zre1 As String, zre2 As String)
 
         ' This call is required by the Windows Form Designer.
         InitializeComponent()
@@ -34,6 +36,11 @@ Public Class GoodnessOfFit_Dialog
         Me.RadioButton1.Text = zre1
         Me.RadioButton2.Text = zre2
 
+        Me.ComboBox_startMonth.BeginUpdate()
+        Me.ComboBox_startMonth.Items.AddRange(Helpers.CalendarMonths.ToArray)
+        Me.ComboBox_startMonth.EndUpdate()
+
+        Me.ComboBox_startMonth.SelectedIndex = 10 'November
     End Sub
 
     Public Function getNrGemesseneReihe() As Integer
@@ -46,5 +53,13 @@ Public Class GoodnessOfFit_Dialog
 
     End Function
 
-
+    Private Sub CheckBox_Annual_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox_Annual.CheckedChanged
+        If CheckBox_Annual.Checked Then
+            Me.Label_startMonth.Enabled = True
+            Me.ComboBox_startMonth.Enabled = True
+        Else
+            Me.Label_startMonth.Enabled = False
+            Me.ComboBox_startMonth.Enabled = False
+        End If
+    End Sub
 End Class

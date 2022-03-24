@@ -1,4 +1,6 @@
-Copyright (c) 2011, ihwb, TU Darmstadt
+Copyright (c) BlueM Dev Group
+Website: https://www.bluemodel.org
+
 All rights reserved.
 
 Released under the BSD-2-Clause License:
@@ -9,3 +11,14 @@ Redistribution and use in source and binary forms, with or without modification,
 * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
 
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+---------
+
+This software includes the following third party software components: 
+* Silk Icons: http://www.famfamfam.com/lab/icons/silk/
+* TeeChart: http://www.steema.com/products/teechart/
+* Math Parser .NET: https://www.codeproject.com/articles/274093/math-parser-net
+* Math.NET Numerics: https://numerics.mathdotnet.com/
+* Ionic.Zip: https://github.com/DinoChiesa/DotNetZip
+* DHI.DFS: https://www.nuget.org/packages/DHI.DFS/
+Some of these software components have their own license. Please see the relevant *.license.txt files.

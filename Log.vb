@@ -1,4 +1,6 @@
-﻿'Copyright (c) 2011, ihwb, TU Darmstadt
+﻿'Copyright (c) BlueM Dev Group
+'Website: https://bluemodel.org
+'
 'All rights reserved.
 '
 'Released under the BSD-2-Clause License:
@@ -26,81 +28,98 @@
 ''' <summary>
 ''' Log
 ''' </summary>
-''' <remarks>implementiert als Singleton-Klasse</remarks>
-Public Class Log
+Public Module Log
 
-    Private Shared myInstance As Log
-    Private myLastMessage As String
-    Private myText As String
+    Private logWindow As LogWindow
 
-    ''' <summary>
-    ''' Wird ausgelöst, wenn sich der Log Text verändert hat
-    ''' </summary>
-    Public Shared Event LogChanged()
+    Public logMessages As List(Of KeyValuePair(Of levels, String))
 
     ''' <summary>
-    ''' Der Log Text
+    ''' Logging level, value set here may be overwritten by application settings
     ''' </summary>
-    Public Shared ReadOnly Property Text() As String
-        Get
-            Return Log.getInstance.myText
-        End Get
-    End Property
+    Friend level As levels = levels.info
 
     ''' <summary>
-    ''' Die letzte Meldung im Log
+    ''' Log levels
     ''' </summary>
-    Public Shared ReadOnly Property LastMessage() As String
-        Get
-            Return Log.getInstance.myLastMessage
-        End Get
-    End Property
+    Public Enum levels As Short
+        debug
+        info
+        warning
+        [error]
+    End Enum
 
-    Private Sub New()
-        'nix
+    ''' <summary>
+    ''' Is triggered after a log message was added
+    ''' </summary>
+    Public Event LogMsgAdded(level As Log.levels, msg As String)
+
+    Sub New()
+        'attempt to read loggingLevel from application settings
+        Try
+            Log.level = [Enum].Parse(GetType(levels), My.Settings.loggingLevel)
+        Catch ex As Exception
+            'set default logging level to info
+            Log.level = levels.info
+        End Try
+        Log.logMessages = New List(Of KeyValuePair(Of levels, String))
     End Sub
 
     ''' <summary>
-    ''' Gibt die (einzige) Instanz des Logs zurück
+    ''' Adds a log entry
     ''' </summary>
-    Public Shared Function getInstance() As Log
-        If (IsNothing(myInstance)) Then
-            myInstance = New Log()
+    ''' <param name="level">log level</param>
+    ''' <param name="msg">message</param>
+    Public Sub AddLogEntry(level As levels, msg As String)
+
+        If level >= Log.level Then
+            Log.logMessages.Add(New KeyValuePair(Of levels, String)(level, msg))
+            If (msg.Contains(Constants.eol)) Then
+                'Wenn Eintrag mehrzeilig, dann formatieren
+                msg = Constants.eol & "  " & msg.Replace(Constants.eol, Constants.eol & "  ")
+            End If
+
+            If Not IsNothing(logWindow) Then
+                Log.logWindow.AddLogEntry(level, msg)
+            End If
+
+            RaiseEvent LogMsgAdded(level, msg)
         End If
-        Return myInstance
-    End Function
-
-    ''' <summary>
-    ''' Einen Log-Eintrag hinzufügen
-    ''' </summary>
-    ''' <param name="msg">Eintrag</param>
-    Public Shared Sub AddLogEntry(ByVal msg As String)
-
-        If (msg.Contains(Konstanten.eol)) Then
-            'Wenn Eintrag mehrzeilig, dann formatieren
-            msg = Konstanten.eol & "  " & msg.Replace(Konstanten.eol, Konstanten.eol & "  ")
-        Else
-            'Ansonsten als Letzte Meldung speichern
-            Log.getInstance.myLastMessage = msg
-        End If
-
-        'Meldung zu Text hinzufügen
-        Log.getInstance.myText &= "* " & DateTime.Now.ToString(Konstanten.Datumsformat) & ": " & msg & Konstanten.eol
-
-        RaiseEvent LogChanged()
 
     End Sub
 
     ''' <summary>
     ''' Log zurücksetzen (allen Text löschen)
     ''' </summary>
-    Public Shared Sub ClearLog()
+    Public Sub ClearLog()
 
-        Log.getInstance.myText = ""
-        Log.getInstance.myLastMessage = ""
+        Log.logMessages.Clear()
 
-        RaiseEvent LogChanged()
+        If Not IsNothing(Log.logWindow) Then
+            Log.logWindow.ClearLog()
+        End If
 
+        RaiseEvent LogMsgAdded(Log.levels.info, "")
     End Sub
 
-End Class
+    Public Sub HideLogWindow()
+        If Not IsNothing(Log.logWindow) Then
+            Log.logWindow.Hide()
+        End If
+    End Sub
+
+    Public Sub ShowLogWindow()
+
+        If IsNothing(logWindow) Then
+            logWindow = New LogWindow()
+            'if this is the first time the window is shown, add any already existing messages
+            For Each msg As KeyValuePair(Of levels, String) In logMessages
+                logWindow.AddLogEntry(msg.Key, msg.Value)
+            Next
+        End If
+        logWindow.Show()
+        logWindow.WindowState = FormWindowState.Normal
+        logWindow.BringToFront()
+    End Sub
+
+End Module
