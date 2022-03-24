@@ -264,7 +264,7 @@ Public Class CSV
         Dim dateFormat As DateTimeFormatInfo
         Dim numberFormat As NumberFormatInfo
 
-        'If no culturInfo is given, use current culture
+        'If no cultureInfo is given, use current culture
         If IsNothing(cInfo) Then
             cInfo = Globalization.CultureInfo.CurrentCulture
         End If
