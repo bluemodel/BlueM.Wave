@@ -26,9 +26,9 @@
 '--------------------------------------------------------------------------------------------
 '
 ''' <summary>
-''' Lineare Regression füllt Lücken einer Zeitreihe in Abhängigkeit einer anderen Zeitreihe 
+''' Fills gaps in one time series by applying a linear regression relationship with a second time series.
 ''' </summary>
-''' <remarks>http://130.83.196.154/BlueM/wiki/index.php/Wave:LineareRegression</remarks>
+''' <remarks>https://wiki.bluemodel.org/index.php/Wave:LinearRegression</remarks>
 
 Friend Class LinearRegression
     Inherits Analysis
@@ -43,6 +43,10 @@ Friend Class LinearRegression
     Private zaehler As Integer = 0           'Zähler für gefüllte Lücken
     Private neueDatume As List(Of Date)      'Liste der neuen Datume
     Private neueWerte As List(Of Double)     'Liste der neuen Werte
+
+    Public Overloads Shared Function Description() As String
+        Return "Fills gaps in one time series by applying a linear regression relationship with a second time series."
+    End Function
 
     ''' <summary>
     ''' Flag, der anzeigt, ob die Analysefunktion einen Ergebnistext erzeugt
@@ -92,12 +96,12 @@ Friend Class LinearRegression
 
         'Prüfung: Anzahl erwarteter Zeitreihen
         If (zeitreihen.Count <> 2) Then
-            Throw New Exception("Für eine lineare Regression müssen genau 2 Zeitreihen ausgewählt werden!")
+            Throw New Exception("The LinearRegression analysis requires the selection of exactly 2 time series!")
         End If
 
         'Prüfung: Zeitreihen müssen die gleiche Einheit besitzen
         If (zeitreihen(0).Unit <> zeitreihen(1).Unit) Then
-            Throw New Exception("Bitte nur Zeitreihen mit der gleichen Einheit auswählen!")
+            Throw New Exception("Please select only time series with the same unit!")
         End If
 
     End Sub
@@ -193,7 +197,10 @@ Friend Class LinearRegression
 
         'Fehlermeldung bei zu niedriger Korrelation
         If (r < 0.7) Then
-            Throw New Exception("Der Korrelationskoeffizient ist zu klein! (r < 0,7)" & eol & "Es besteht kein kausaler Zusammenhang zwischen den ausgewählten Zeitreihen! Eine Auffüllung der Lücken ist nicht möglich!")
+            Throw New Exception(
+                "The correlation coefficient is too small! (r < 0.7)" & eol &
+                "There is no linear relationship between the two selected time series!" & eol &
+                "Filling gaps using linear regression is not possible!")
         End If
 
         'Listen instanzieren für neue Wertepaare
@@ -232,10 +239,15 @@ Friend Class LinearRegression
         Next
 
         'Ergebnistext
-        Me.mResultText = "Die Zeitreihe '" & Me.zeitreiheLuecken.Title & "' wurde um " & Me.zaehler & " Werte vervollständigt." & eol & "Bezugslinie: yi = " & Me.a & " + " & Me.b & " * xi" & eol & "Korrelationskoeffizient: r = " & Me.r & eol & "aufgefüllte Wertepaare:" & eol & neueWerteText
+        Me.mResultText =
+            $"{Me.zaehler} gaps were filled in time series '{Me.zeitreiheLuecken.Title}'." & eol &
+            $"Linear regression line: yi = {Me.a} + {Me.b} * xi" & eol &
+            $"Correlation coefficient: r = {Me.r}" & eol &
+            $"Filled nodes:" & eol &
+            neueWerteText
 
         'Ergebniswerte:
-        Me.mResultValues.Add("Korrelationskoeffizient", Me.r)
+        Me.mResultValues.Add("Correlation coefficient", Me.r)
 
         'Result series
         Me.mResultSeries = New List(Of TimeSeries) From {Me.zeitreiheLuecken2}

@@ -71,6 +71,8 @@ Friend Module AnalysisFactory
                 Return GoodnessOfFit.Description
             Case AnalysisFunctions.Histogram
                 Return Histogram.Description
+            Case AnalysisFunctions.LinearRegression
+                Return LinearRegression.Description
             Case AnalysisFunctions.MonthlyStatistics
                 Return MonthlyStatistics.Description
             Case AnalysisFunctions.TimestepAnalysis
