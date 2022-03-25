@@ -67,7 +67,7 @@ Friend Class LinearRegression
     ''' </summary>
     Public Overrides ReadOnly Property hasResultChart() As Boolean
         Get
-            Return True
+            Return False
         End Get
     End Property
 
@@ -77,7 +77,7 @@ Friend Class LinearRegression
     ''' </summary>
     Public Overrides ReadOnly Property hasResultSeries() As Boolean
         Get
-            Return False
+            Return True
         End Get
     End Property
 
@@ -124,8 +124,15 @@ Friend Class LinearRegression
             Me.zeitreiheKomplett2 = Me.mZeitreihen(0).removeNaNValues()
         End If
 
-        'Schleife zum Überspringen der Nullwerte und speichern in neuer Zeitreihe
-        Me.zeitreiheLuecken2 = New TimeSeries()
+        'Create a copy of the time series with gaps
+        Me.zeitreiheLuecken2 = New TimeSeries With {
+            .Title = Me.zeitreiheLuecken.Title & " (filled)",
+            .Unit = Me.zeitreiheLuecken.Unit,
+            .Interpretation = Me.zeitreiheLuecken.Interpretation,
+            .Metadata = Me.zeitreiheLuecken.Metadata,
+            .DataSource = New TimeSeriesDataSource(TimeSeriesDataSource.OriginEnum.AnalysisResult)
+        }
+        'Copy non-zero nodes
         For i As Integer = 0 To zeitreiheLuecken.Length - 1
             If Me.zeitreiheLuecken.Values(i) <> 0 Then
                 Me.zeitreiheLuecken2.AddNode(Me.zeitreiheLuecken.Dates(i), Me.zeitreiheLuecken.Values(i))
@@ -230,38 +237,8 @@ Friend Class LinearRegression
         'Ergebniswerte:
         Me.mResultValues.Add("Korrelationskoeffizient", Me.r)
 
-        'Ergebnisdiagramm
-        Me.mResultChart = New Steema.TeeChart.Chart()
-        Call Helpers.FormatChart(Me.mResultChart)
-
-        'Y-Achse
-        Me.mResultChart.Axes.Left.Title.Caption = zeitreiheKomplett.Unit
-
-        'Text in Diagramm einfügen
-        Dim annot As New Steema.TeeChart.Tools.Annotation(Me.mResultChart)
-        annot.Position = Steema.TeeChart.Tools.AnnotationPositions.RightBottom
-        annot.Text = "Bezugslinie: yi = " & Me.a & " + " & Me.b & " * xi" & eol & "Korrelationskoeffizient: r = " & Me.r
-
-        'Linien instanzieren und bennenen
-        Dim line_komplett As New Steema.TeeChart.Styles.Line(Me.mResultChart)
-        Dim line_luecken As New Steema.TeeChart.Styles.Line(Me.mResultChart)
-        Dim line_gefuellt As New Steema.TeeChart.Styles.Line(Me.mResultChart)
-        line_komplett.Title = zeitreiheKomplett2.Title & " (Bezugsreihe)"
-        line_luecken.Title = zeitreiheLuecken.Title & " (Lücken)"
-        line_gefuellt.Title = zeitreiheLuecken.Title & " (aufgefüllt)"
-
-        'Linien befüllen
-        For i As Integer = 0 To Me.zeitreiheKomplett2.Length - 1
-            line_komplett.Add(Me.zeitreiheKomplett2.Dates(i), Me.zeitreiheKomplett2.Values(i))
-        Next
-
-        For i As Integer = 0 To Me.zeitreiheLuecken.Length - 1
-            line_luecken.Add(Me.zeitreiheLuecken.Dates(i), Me.zeitreiheLuecken.Values(i))
-        Next
-
-        For i As Integer = 0 To Me.zeitreiheLuecken2.Length - 1
-            line_gefuellt.Add(Me.zeitreiheLuecken2.Dates(i), Me.zeitreiheLuecken2.Values(i))
-        Next
+        'Result series
+        Me.mResultSeries = New List(Of TimeSeries) From {Me.zeitreiheLuecken2}
 
     End Sub
 End Class
