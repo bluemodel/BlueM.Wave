@@ -132,12 +132,14 @@ Friend Class LinearRegression
             End If
         Next
 
-        'Auf gemeinsame Stützstellen beschränken
-        TimeSeries.Synchronize(Me.zeitreiheLuecken2, Me.zeitreiheKomplett)
-        ReDim values(Me.zeitreiheLuecken2.Length - 1, 1)
-        For i = 0 To Me.zeitreiheLuecken2.Length - 1
-            values(i, 0) = Me.zeitreiheLuecken2.Values(i)
-            values(i, 1) = Me.zeitreiheKomplett.Values(i)
+        'Gemeinsame Stützstellen bestimmen
+        Dim ts_gaps As TimeSeries = Me.zeitreiheLuecken2.Clone()
+        Dim ts_ref As TimeSeries = Me.zeitreiheKomplett.Clone()
+        TimeSeries.Synchronize(ts_gaps, ts_ref)
+        ReDim values(ts_gaps.Length - 1, 1)
+        For i = 0 To ts_gaps.Length - 1
+            values(i, 0) = ts_gaps.Values(i)
+            values(i, 1) = ts_ref.Values(i)
         Next
 
         'Berechnungen
