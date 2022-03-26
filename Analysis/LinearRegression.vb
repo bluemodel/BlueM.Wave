@@ -33,14 +33,12 @@
 Friend Class LinearRegression
     Inherits Analysis
 
-    Private ts_ref As TimeSeries             'reference time series
-    Private ts_gaps As TimeSeries            'time series with gaps
-    Private ts_filled As TimeSeries          'filled time series
-    Private a, b As Double                   'regression coefficients
-    Private r As Double                      'correlation coefficient
-    Private n_gaps As Integer = 0            'counter for filled gaps
-    Private neueDatume As List(Of Date)      'list of new dates
-    Private neueWerte As List(Of Double)     'list of new values
+    Private ts_ref As TimeSeries                                  'reference time series
+    Private ts_gaps As TimeSeries                                 'time series with gaps
+    Private ts_filled As TimeSeries                               'filled time series
+    Private a, b As Double                                        'regression coefficients
+    Private r As Double                                           'correlation coefficient
+    Private filled_nodes As SortedDictionary(Of DateTime, Double) 'filled nodes
 
     Public Overloads Shared Function Description() As String
         Return "Fills gaps (NaN values and missing timestamps) in one time series by applying a linear regression relationship with a second time series."
@@ -139,7 +137,7 @@ Friend Class LinearRegression
         'Calculate correlation coefficient
         r = MathNet.Numerics.GoodnessOfFit.R(y_values, x_values)
 
-        'Fehlermeldung bei zu niedriger Korrelation
+        'Emit warning if correlation coefficient is low
         If (r < 0.7) Then
             Log.AddLogEntry(levels.warning,
                 "The correlation coefficient is smaller than 0.7!" & eol &
@@ -153,10 +151,6 @@ Friend Class LinearRegression
         a = p.Item1
         b = p.Item2
 
-        'Listen instanzieren für neue Wertepaare
-        neueDatume = New List(Of DateTime)
-        neueWerte = New List(Of Double)
-
         'Copy all non-NaN nodes to a new time series
         Me.ts_filled = Me.ts_gaps.removeNaNValues()
         Me.ts_filled.Title = Me.ts_gaps.Title & " (filled)"
@@ -167,21 +161,16 @@ Friend Class LinearRegression
         t_missing = ts_ref.Dates.ToHashSet()
         t_missing.ExceptWith(ts_filled.Dates.ToHashSet())
 
-        'Loop over missing timestamps
+        'Loop over missing timestamps and calculate new values
+        filled_nodes = New SortedDictionary(Of DateTime, Double)
         For Each t As DateTime In t_missing
 
             'calculate new value using regression equation y = a + b * x
             Dim v As Double = a + b * ts_ref.Nodes(t)
 
-            'Wertepaare speichern für Textausgabe
-            neueDatume.Add(t)
-            neueWerte.Add(v)
-
             'add new node
-            ts_filled.AddNode(t, a + b * ts_ref.Nodes(t))
-
-            'Zähler der gefüllten Lücken erhöhen
-            n_gaps += 1
+            filled_nodes.Add(t, v)
+            ts_filled.AddNode(t, v)
 
         Next
 
@@ -192,19 +181,19 @@ Friend Class LinearRegression
     ''' </summary>
     Public Overrides Sub PrepareResults()
 
-        'Aufgefüllte Werte als Text
-        Dim neueWerteText As String = ""
-        For i As Integer = 0 To neueDatume.Count - 1
-            neueWerteText &= neueDatume(i) & ":   " & neueWerte(i) & eol
-        Next
-
         'Ergebnistext
         Me.mResultText =
-            $"{Me.n_gaps} gaps were filled in time series '{Me.ts_gaps.Title}'." & eol &
-            $"Linear regression line: yi = {Me.a} + {Me.b} * xi" & eol &
-            $"Correlation coefficient: r = {Me.r}" & eol &
-            $"Filled nodes:" & eol &
-            neueWerteText
+            $"{Me.filled_nodes.Count} gaps were filled in time series '{Me.ts_gaps.Title}'." & eol &
+            $"Linear regression line: y = {Me.a} + {Me.b} * x" & eol &
+            $"Correlation coefficient: r = {Me.r}"
+        If Me.filled_nodes.Count > 0 Then
+            Me.mResultText &= eol &
+                $"Filled gaps:"
+            For Each node As KeyValuePair(Of DateTime, Double) In Me.filled_nodes
+                Me.mResultText &= $"{eol}{node.Key}{vbTab}{node.Value}"
+            Next
+
+        End If
 
         'Ergebniswerte:
         Me.mResultValues.Add("Correlation coefficient", Me.r)
