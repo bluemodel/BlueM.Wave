@@ -379,6 +379,9 @@
     <EmbeddedResource Include="Analysis\MonthlyStatisticsDialog.resx">
       <DependentUpon>MonthlyStatisticsDialog.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Analysis\Progress_Dialog.resx">
+      <DependentUpon>Progress_Dialog.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Analysis\TimestepAnalysisDialog.resx">
       <DependentUpon>TimestepAnalysisDialog.vb</DependentUpon>
     </EmbeddedResource>

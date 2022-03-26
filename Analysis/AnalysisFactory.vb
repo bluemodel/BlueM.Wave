@@ -57,6 +57,8 @@ Friend Module AnalysisFactory
         Select Case analysisfunction
             Case AnalysisFunctions.AnnualStatistics
                 Return AnnualStatistics.Description
+            Case AnalysisFunctions.Autocorrelation
+                Return Autocorrelation.Description
             Case AnalysisFunctions.Calculator
                 Return Calculator.Description
             Case AnalysisFunctions.ChangeTimestep

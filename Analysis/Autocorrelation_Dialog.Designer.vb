@@ -23,16 +23,16 @@ Partial Class Autocorrelation_Dialog
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Autocorrelation_Dialog))
-        Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel
-        Me.Cancel_Button = New System.Windows.Forms.Button
-        Me.OK_Button = New System.Windows.Forms.Button
-        Me.spnAnzahlLag = New System.Windows.Forms.NumericUpDown
-        Me.spnGroesseLag = New System.Windows.Forms.NumericUpDown
-        Me.Label3 = New System.Windows.Forms.Label
-        Me.Label2 = New System.Windows.Forms.Label
-        Me.Label1 = New System.Windows.Forms.Label
-        Me.Label4 = New System.Windows.Forms.Label
-        Me.Label6 = New System.Windows.Forms.Label
+        Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
+        Me.Cancel_Button = New System.Windows.Forms.Button()
+        Me.OK_Button = New System.Windows.Forms.Button()
+        Me.spnAnzahlLag = New System.Windows.Forms.NumericUpDown()
+        Me.spnGroesseLag = New System.Windows.Forms.NumericUpDown()
+        Me.Label3 = New System.Windows.Forms.Label()
+        Me.Label2 = New System.Windows.Forms.Label()
+        Me.Label1 = New System.Windows.Forms.Label()
+        Me.Label4 = New System.Windows.Forms.Label()
+        Me.Label6 = New System.Windows.Forms.Label()
         Me.TableLayoutPanel1.SuspendLayout()
         CType(Me.spnAnzahlLag, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.spnGroesseLag, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -61,7 +61,7 @@ Partial Class Autocorrelation_Dialog
         Me.Cancel_Button.Name = "Cancel_Button"
         Me.Cancel_Button.Size = New System.Drawing.Size(67, 23)
         Me.Cancel_Button.TabIndex = 1
-        Me.Cancel_Button.Text = "Abbrechen"
+        Me.Cancel_Button.Text = "Cancel"
         '
         'OK_Button
         '
@@ -97,27 +97,27 @@ Partial Class Autocorrelation_Dialog
         Me.Label3.AutoSize = True
         Me.Label3.Location = New System.Drawing.Point(12, 9)
         Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(301, 13)
+        Me.Label3.Size = New System.Drawing.Size(67, 13)
         Me.Label3.TabIndex = 7
-        Me.Label3.Text = "Bitte wählen Sie die Parameter der Zeitverschiebungen (Lags)!"
+        Me.Label3.Text = "Lag settings:"
         '
         'Label2
         '
         Me.Label2.AutoSize = True
         Me.Label2.Location = New System.Drawing.Point(27, 62)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(134, 13)
+        Me.Label2.Size = New System.Drawing.Size(106, 13)
         Me.Label2.TabIndex = 6
-        Me.Label2.Text = "Anzahl der Lags (1 - 2000):"
+        Me.Label2.Text = "Lag count (1 - 2000):"
         '
         'Label1
         '
         Me.Label1.AutoSize = True
         Me.Label1.Location = New System.Drawing.Point(27, 37)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(136, 13)
+        Me.Label1.Size = New System.Drawing.Size(132, 13)
         Me.Label1.TabIndex = 5
-        Me.Label1.Text = "Größe der Lags (1 - 10 ZE):"
+        Me.Label1.Text = "Lag size (1 - 10 time units):"
         '
         'Label4
         '
@@ -126,8 +126,7 @@ Partial Class Autocorrelation_Dialog
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(299, 39)
         Me.Label4.TabIndex = 10
-        Me.Label4.Text = "Je größer die Anzahl der Zeitschverschiebungen ist, desto länger dauert der Berec" & _
-            "hnungsprozess."
+        Me.Label4.Text = "More lags take longer to compute."
         '
         'Label6
         '
@@ -136,10 +135,9 @@ Partial Class Autocorrelation_Dialog
         Me.Label6.Name = "Label6"
         Me.Label6.Size = New System.Drawing.Size(296, 38)
         Me.Label6.TabIndex = 12
-        Me.Label6.Text = "HINWEIS: Die ausgewählte Zeitreihe sollte keinen Trend aufweisen oder davor trend" & _
-            "bereinigt worden sein."
+        Me.Label6.Text = "NOTE: The time series should not contain a trend"
         '
-        'Autokorrelation_Dialog
+        'Autocorrelation_Dialog
         '
         Me.AcceptButton = Me.OK_Button
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -158,10 +156,10 @@ Partial Class Autocorrelation_Dialog
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.MaximizeBox = False
         Me.MinimizeBox = False
-        Me.Name = "Autokorrelation_Dialog"
+        Me.Name = "Autocorrelation_Dialog"
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = "Autokorrelation"
+        Me.Text = "Autocorrelation"
         Me.TableLayoutPanel1.ResumeLayout(False)
         CType(Me.spnAnzahlLag, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.spnGroesseLag, System.ComponentModel.ISupportInitialize).EndInit()

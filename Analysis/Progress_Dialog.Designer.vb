@@ -22,7 +22,7 @@ Partial Class Progress_Dialog
     'Das Bearbeiten mit dem Code-Editor ist nicht möglich.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-        Me.ProgressBar1 = New System.Windows.Forms.ProgressBar
+        Me.ProgressBar1 = New System.Windows.Forms.ProgressBar()
         Me.SuspendLayout()
         '
         'ProgressBar1
@@ -44,7 +44,7 @@ Partial Class Progress_Dialog
         Me.Name = "Progress_Dialog"
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
-        Me.Text = "Berechnung läuft..."
+        Me.Text = "Calculating..."
         Me.ResumeLayout(False)
 
     End Sub

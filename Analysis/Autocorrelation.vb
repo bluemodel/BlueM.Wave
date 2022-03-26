@@ -26,9 +26,9 @@
 '--------------------------------------------------------------------------------------------
 '
 ''' <summary>
-''' Autokorrelation analysiert Zeitreihen auf Periodizität
+''' Autocorrelation for analyzing time series periodicity
 ''' </summary>
-''' <remarks>http://130.83.196.154/BlueM/wiki/index.php/Wave:Autokorrelation</remarks>
+''' <remarks>https://wiki.bluemodel.org/index.php/Wave:Autocorrelation</remarks>
 
 Friend Class Autocorrelation
     Inherits Analysis
@@ -42,6 +42,10 @@ Friend Class Autocorrelation
     Private raMaxlist As List(Of Double)    'Liste für maximale Autokorrelationskoeffizienten
     Private periodeList As List(Of Double)  'Liste für Perioden
     Private periode_avg As Double           'Durchschinttliche Periode
+
+    Public Overloads Shared Function Description() As String
+        Return "Autocorrelation analysis for analyzing time series periodicity"
+    End Function
 
     ''' <summary>
     ''' Flag, der anzeigt, ob die Analysefunktion einen Ergebnistext erzeugt
@@ -91,7 +95,7 @@ Friend Class Autocorrelation
 
         'Prüfung: Anzahl erwarteter Zeitreihen
         If (zeitreihen.Count <> 1) Then
-            Throw New Exception("Für eine Autokorrelation muss genau 1 Zeitreihen ausgewählt werden!")
+            Throw New Exception("The Autocorrelation analysis requires the selection of exactly 1 time series!")
         End If
 
     End Sub
@@ -115,7 +119,9 @@ Friend Class Autocorrelation
         Me.zeitreiheEin = Me.mZeitreihen(0).Clone()
         Dim maxlag As Integer = Me.zeitreiheEin.Length / groesseLags - 1
         If groesseLags * anzahlLags > Me.zeitreiheEin.Length Then
-            Throw New Exception("Die ausgewählte Zeitreihe ist zu kurz oder die größte Zeitverschiebung ist zu lang! Bitte wählen sie bei derzeit ausgewählter Größe der Zeitverschiebungen eine Anzahl von maximal " & maxlag & " Verschiebungen!")
+            Throw New Exception(
+                $"The selected time series is too short or the largest lag is too long!" &
+                $"Please select at most {maxlag} lags with the currently set time difference!")
         End If
 
         'ProgressBar Dialog anzeigen und Progressbar initialisieren
@@ -201,47 +207,51 @@ Friend Class Autocorrelation
         Dim i As Integer
         Dim raAuswertung As String = ""
         For i = 0 To anzahlLags
-            raAuswertung &= "Lag " & i * groesseLags & ": ra = " & raList.Item(i) & eol
+            raAuswertung &= $"Lag {i * groesseLags}: ra = {raList.Item(i)}" & eol
         Next
 
         'Scheitelpunkte der Korrelationskoeffizienten als Ausgabetext
         Dim raMaxAuswertung As String = ""
         For i = 0 To raMaxlist.Count - 1
-            raMaxAuswertung &= "Lag " & periodeList.Item(i) & ": " & raMaxlist.Item(i) & eol
+            raMaxAuswertung &= $"Lag {periodeList.Item(i)}: {raMaxlist.Item(i)}" & eol
         Next
 
         'Ergebnistext
-        Me.mResultText = "Die ausgewählte Zeitreihe wurde " & anzahlLags & " mal um je " & groesseLags & " Zeiteinheiten verschoben." & eol & raAuswertung & eol & "Bei einer vermuteten Periode = " & periode_avg & eol & raMaxAuswertung
+        Me.mResultText =
+            $"The selected time series was offset {anzahlLags} times by {groesseLags} time units." & eol &
+            raAuswertung & eol &
+            $"Assumed periodicity: {periode_avg}" & eol &
+            raMaxAuswertung
 
         'Ergebnisdiagramm
         Me.mResultChart = New Steema.TeeChart.Chart()
         Call Helpers.FormatChart(Me.mResultChart)
-        Me.mResultChart.Header.Text = "Autokorrelation von " & zeitreiheEin.Title
+        Me.mResultChart.Header.Text = "Autocorrelation for " & zeitreiheEin.Title
 
         'X-Achse
         Me.mResultChart.Axes.Bottom.Labels.Style = Steema.TeeChart.AxisLabelStyle.Value
-        Me.mResultChart.Axes.Bottom.Title.Caption = "Zeitverschiebung (Lag)"
+        Me.mResultChart.Axes.Bottom.Title.Caption = "Time offset (Lag)"
 
         'Y-Achse
-        Me.mResultChart.Axes.Left.Title.Caption = "Autokorrelationskoeffizient (-1 < ra < 1)"
+        Me.mResultChart.Axes.Left.Title.Caption = "Autocorrelation coefficient (-1 < ra < 1)"
         Me.mResultChart.Axes.Left.Automatic = False
         Me.mResultChart.Axes.Left.Minimum = -1
         Me.mResultChart.Axes.Left.Maximum = 1
 
         'Linie instanzieren und benennen
         Dim line_ra As New Steema.TeeChart.Styles.Bar(Me.mResultChart)
-        line_ra.Title = "Autokorrelogramm"
+        line_ra.Title = "Autocorrelogram"
         Dim line_raMax As New Steema.TeeChart.Styles.Points(Me.mResultChart)
-        line_raMax.Title = "Scheitelpunkte (vermutet)"
+        line_raMax.Title = "Peaks (guessed)"
 
         'Linie befüllen
         For i = 0 To Me.anzahlLags
-            Dim mark As String = "Lag " & i * groesseLags & ", ra = " & raList.Item(i)
+            Dim mark As String = $"Lag {i * groesseLags}, ra = {raList.Item(i)}"
             line_ra.Add(i * groesseLags, raList.Item(i), mark)
         Next
 
         For i = 0 To Me.periodeList.Count - 1
-            Dim mark As String = "Lag " & periodeList.Item(i) & ", ra = " & raMaxlist.Item(i)
+            Dim mark As String = $"Lag {periodeList.Item(i)}, ra = {raMaxlist.Item(i)}"
             line_raMax.Add(periodeList.Item(i), raMaxlist.Item(i), mark)
         Next
 
@@ -254,7 +264,9 @@ Friend Class Autocorrelation
 
         'Textfeld in Diagramm einfügen und Position bestimmen
         Dim annot As New Steema.TeeChart.Tools.Annotation(Me.mResultChart)
-        annot.Text = "Die ausgewählte Zeitreihe wurde " & anzahlLags & " mal um je " & groesseLags & " Zeiteinheiten verschoben." & eol & "Bei einer vermuteten Periode von p = " & periode_avg
+        annot.Text =
+            $"Time series was offset {anzahlLags} times by {groesseLags} time units." & eol &
+            $"Assumed periodicity: {periode_avg}"
         annot.Position = Steema.TeeChart.Tools.AnnotationPositions.RightTop
 
     End Sub
