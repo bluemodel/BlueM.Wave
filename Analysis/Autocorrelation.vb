@@ -34,10 +34,8 @@ Friend Class Autocorrelation
     Inherits Analysis
 
     Private ts_in As TimeSeries             'Eingangszeitreihe
-    Private ts_lag As TimeSeries            'Lagzeitreihe
     Private lagSize As Integer              'Größe der Lags
     Private lagCount As Integer             'Anzahl der Lags
-    Private values(,) As Double             'Array für gemeinsame Werte der Zeitreihen
     Private raList As List(Of Double)       'Liste für Autokorrelationskoeffizienten
     Private raMaxlist As List(Of Double)    'Liste für maximale Autokorrelationskoeffizienten
     Private periodeList As List(Of Double)  'Liste für Perioden
@@ -116,8 +114,9 @@ Friend Class Autocorrelation
         Me.lagSize = dialog.groesseLagsErmitteln
         Me.lagCount = dialog.anzahlLagsErmitteln
 
-        'Maximal zulässige Verschiebung
         Me.ts_in = Me.mZeitreihen(0).Clone()
+
+        'Maximal zulässige Verschiebung
         Dim maxlag As Integer = Me.ts_in.Length / lagSize - 1
         If lagSize * lagCount > Me.ts_in.Length Then
             Throw New Exception(
@@ -139,42 +138,26 @@ Friend Class Autocorrelation
         dtList = New List(Of TimeSpan)
 
         'Berechnungsschleife über mehrere Verschiebungen
+        Dim values As New List(Of Double)(Me.ts_in.Values)
+
         For j As Integer = 0 To lagCount
 
             'Verschiebung berechnen
             Dim offset As Integer
             offset = j * lagSize
 
+            Dim x_values, y_values As Double()
+
+            y_values = values.Skip(offset).ToArray
+            x_values = values.Take(y_values.Length).ToArray()
+
             'calculate dt
             If j > 1 Then
                 dtList.Add(Me.ts_in.Dates(offset) - Me.ts_in.Dates((j - 1) * lagSize))
             End If
 
-            'offset the input time series to produce the lag time series
-            Dim i As Integer
-            Me.ts_lag = New TimeSeries(Me.ts_in.Title & $" (lag {offset})")
-            For i = offset To ts_in.Length - 1
-                Me.ts_lag.AddNode(Me.ts_in.Dates(i), Me.ts_in.Values(i - offset))
-            Next
-
-            'Calculate correlation
-            Dim ra As Double        'Autokorrelationskoeffizient
-            Dim ts_x, ts_y As TimeSeries
-
-            'Remove NaN values
-            ts_x = Me.ts_in.removeNaNValues()
-            ts_y = Me.ts_lag.removeNaNValues()
-
-            'Synchronize
-            TimeSeries.Synchronize(ts_x, ts_y)
-
-            'convert to value array
-            Dim x_values As Double()
-            Dim y_values As Double()
-            x_values = ts_x.Values.ToArray()
-            y_values = ts_y.Values.ToArray()
-
             'Calculate correlation coefficient and store in list
+            Dim ra As Double
             ra = MathNet.Numerics.GoodnessOfFit.R(y_values, x_values)
             raList.Add(ra)
 
