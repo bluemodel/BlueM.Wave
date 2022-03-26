@@ -33,19 +33,17 @@
 Friend Class LinearRegression
     Inherits Analysis
 
-    Private zeitreiheKomplett As TimeSeries  'vollständige Zeitreihe
-    Private zeitreiheKomplett2 As TimeSeries 'vollständige Zeitreihe Kopie
-    Private zeitreiheLuecken As TimeSeries   'lückenhafte Zeitreihe
-    Private zeitreiheLuecken2 As TimeSeries  'lückenhafte Zeitreihe ohne Null-Werte
-    Private values(,) As Double              'Array der gemeinsamen Stützstellen
-    Private a, b As Double                   'Regressionskoeffizienten
-    Private r As Double                      'Korrelationskoeffizient
-    Private zaehler As Integer = 0           'Zähler für gefüllte Lücken
-    Private neueDatume As List(Of Date)      'Liste der neuen Datume
-    Private neueWerte As List(Of Double)     'Liste der neuen Werte
+    Private ts_ref As TimeSeries             'reference time series
+    Private ts_gaps As TimeSeries            'time series with gaps
+    Private ts_filled As TimeSeries          'filled time series
+    Private a, b As Double                   'regression coefficients
+    Private r As Double                      'correlation coefficient
+    Private n_gaps As Integer = 0            'counter for filled gaps
+    Private neueDatume As List(Of Date)      'list of new dates
+    Private neueWerte As List(Of Double)     'list of new values
 
     Public Overloads Shared Function Description() As String
-        Return "Fills gaps in one time series by applying a linear regression relationship with a second time series."
+        Return "Fills gaps (NaN values and missing timestamps) in one time series by applying a linear regression relationship with a second time series."
     End Function
 
     ''' <summary>
@@ -117,83 +115,34 @@ Friend Class LinearRegression
             Throw New Exception("User abort")
         End If
 
-        'Zeitreihen zuweisen (und säubern)
+        'Zeitreihen zuweisen
         If (dialog.getNrLueckenhafteReihe = 1) Then
-            Me.zeitreiheLuecken = Me.mZeitreihen(0).removeNaNValues()
-            Me.zeitreiheKomplett = Me.mZeitreihen(1).removeNaNValues()
-            Me.zeitreiheKomplett2 = Me.mZeitreihen(1).removeNaNValues()
+            Me.ts_gaps = Me.mZeitreihen(0)
+            Me.ts_ref = Me.mZeitreihen(1)
         Else
-            Me.zeitreiheLuecken = Me.mZeitreihen(1).removeNaNValues()
-            Me.zeitreiheKomplett = Me.mZeitreihen(0).removeNaNValues()
-            Me.zeitreiheKomplett2 = Me.mZeitreihen(0).removeNaNValues()
+            Me.ts_gaps = Me.mZeitreihen(1)
+            Me.ts_ref = Me.mZeitreihen(0)
         End If
 
-        'Create a copy of the time series with gaps
-        Me.zeitreiheLuecken2 = New TimeSeries With {
-            .Title = Me.zeitreiheLuecken.Title & " (filled)",
-            .Unit = Me.zeitreiheLuecken.Unit,
-            .Interpretation = Me.zeitreiheLuecken.Interpretation,
-            .Metadata = Me.zeitreiheLuecken.Metadata,
-            .DataSource = New TimeSeriesDataSource(TimeSeriesDataSource.OriginEnum.AnalysisResult)
-        }
-        'Copy non-zero nodes
-        For i As Integer = 0 To zeitreiheLuecken.Length - 1
-            If Me.zeitreiheLuecken.Values(i) <> 0 Then
-                Me.zeitreiheLuecken2.AddNode(Me.zeitreiheLuecken.Dates(i), Me.zeitreiheLuecken.Values(i))
-            End If
-        Next
+        'Calculate correlation and linear regression
+        Dim ts_x As TimeSeries = Me.ts_ref.Clone()
+        Dim ts_y As TimeSeries = Me.ts_gaps.Clone()
 
-        'Gemeinsame Stützstellen bestimmen
-        Dim ts_gaps As TimeSeries = Me.zeitreiheLuecken2.Clone()
-        Dim ts_ref As TimeSeries = Me.zeitreiheKomplett.Clone()
-        TimeSeries.Synchronize(ts_gaps, ts_ref)
-        ReDim values(ts_gaps.Length - 1, 1)
-        For i = 0 To ts_gaps.Length - 1
-            values(i, 0) = ts_gaps.Values(i)
-            values(i, 1) = ts_ref.Values(i)
-        Next
+        'Remove NaN values
+        ts_x = ts_x.removeNaNValues()
+        ts_y = ts_y.removeNaNValues()
 
-        'Berechnungen
-        'values(i, 0) -> luecke
-        'values(i, 1) -> komplett
-        '===========================
+        'Synchronize
+        TimeSeries.Synchronize(ts_x, ts_y)
 
-        Dim n As Integer                'Anzahl Werte
-        Dim sum_lue, sum_kom As Double  'Summen der Werte
-        Dim avg_lue, avg_kom As Double  'Mittelwerte
-        Dim std_lue, std_kom As Double  'Standardabweichungen
-        Dim kovar As Double             'Kovarianz
+        'convert to value array
+        Dim x_values As Double()
+        Dim y_values As Double()
+        x_values = ts_x.Values.ToArray()
+        y_values = ts_y.Values.ToArray()
 
-        'Anzahl der Werte
-        n = values.GetLength(0)
-
-        'Summen der Werte
-        For i As Integer = 0 To n - 1
-            sum_lue += values(i, 0)
-            sum_kom += values(i, 1)
-        Next
-
-        'Mittelwerte
-        avg_lue = sum_lue / n
-        avg_kom = sum_kom / n
-
-        'Standarabweichungen und Kovarianz
-        For i As Integer = 0 To n - 1
-            std_lue += (values(i, 1) - avg_lue) ^ 2
-            std_kom += (values(i, 0) - avg_kom) ^ 2
-            kovar += (values(i, 1) - avg_lue) * (values(i, 0) - avg_kom)
-        Next
-
-        std_lue = Math.Sqrt(1 / (n - 1) * std_lue)
-        std_kom = Math.Sqrt(1 / (n - 1) * std_kom)
-        kovar = 1 / (n - 1) * kovar
-
-        'Regressionskoeffizienten
-        b = kovar / (std_kom ^ 2)
-        a = avg_lue - b * avg_kom
-
-        'Korrelationskoeffizient
-        r = kovar / (std_lue * std_kom)
+        'Calculate correlation coefficient
+        r = MathNet.Numerics.GoodnessOfFit.R(y_values, x_values)
 
         'Fehlermeldung bei zu niedriger Korrelation
         If (r < 0.7) Then
@@ -203,26 +152,42 @@ Friend Class LinearRegression
                 "Filling gaps using linear regression is not possible!")
         End If
 
+        'Calculate linear regression
+        Dim p As Tuple(Of Double, Double)
+        p = MathNet.Numerics.Fit.Line(x_values, y_values)
+        a = p.Item1
+        b = p.Item2
+
         'Listen instanzieren für neue Wertepaare
-        neueDatume = New List(Of Date)
+        neueDatume = New List(Of DateTime)
         neueWerte = New List(Of Double)
 
-        'Fehlende Werte berechnen und auffüllen
-        For i As Integer = 0 To Me.zeitreiheKomplett2.Length - 1
-            If (zeitreiheLuecken2.Nodes.ContainsKey(zeitreiheKomplett2.Dates(i))) Then
-                'vorhandene Stützstellen bleiben erhalten --> nichts passiert
-            Else
-                'Werte als neue Stützstellen in Zeitreihe eintragen
-                'yi = a + b * xi
-                Me.zeitreiheLuecken2.AddNode(Me.zeitreiheKomplett2.Dates(i), a + b * Me.zeitreiheKomplett2.Values(i))
+        'Copy all non-NaN nodes to a new time series
+        Me.ts_filled = Me.ts_gaps.removeNaNValues()
+        Me.ts_filled.Title = Me.ts_gaps.Title & " (filled)"
+        Me.ts_filled.DataSource = New TimeSeriesDataSource(TimeSeriesDataSource.OriginEnum.AnalysisResult)
 
-                'Wertepaare speichern für Textausgabe
-                neueDatume.Add(Me.zeitreiheKomplett2.Dates(i))
-                neueWerte.Add(a + b * Me.zeitreiheKomplett2.Values(i))
+        'Find nodes present in ts_ref but not contained in ts_filled
+        Dim t_missing As HashSet(Of DateTime)
+        t_missing = ts_ref.Dates.ToHashSet()
+        t_missing.ExceptWith(ts_filled.Dates.ToHashSet())
 
-                'Zähler der gefüllten Lücken erhöhen
-                zaehler += 1
-            End If
+        'Loop over missing timestamps
+        For Each t As DateTime In t_missing
+
+            'calculate new value using regression equation y = a + b * x
+            Dim v As Double = a + b * ts_ref.Nodes(t)
+
+            'Wertepaare speichern für Textausgabe
+            neueDatume.Add(t)
+            neueWerte.Add(v)
+
+            'add new node
+            ts_filled.AddNode(t, a + b * ts_ref.Nodes(t))
+
+            'Zähler der gefüllten Lücken erhöhen
+            n_gaps += 1
+
         Next
 
     End Sub
@@ -240,7 +205,7 @@ Friend Class LinearRegression
 
         'Ergebnistext
         Me.mResultText =
-            $"{Me.zaehler} gaps were filled in time series '{Me.zeitreiheLuecken.Title}'." & eol &
+            $"{Me.n_gaps} gaps were filled in time series '{Me.ts_gaps.Title}'." & eol &
             $"Linear regression line: yi = {Me.a} + {Me.b} * xi" & eol &
             $"Correlation coefficient: r = {Me.r}" & eol &
             $"Filled nodes:" & eol &
@@ -250,7 +215,7 @@ Friend Class LinearRegression
         Me.mResultValues.Add("Correlation coefficient", Me.r)
 
         'Result series
-        Me.mResultSeries = New List(Of TimeSeries) From {Me.zeitreiheLuecken2}
+        Me.mResultSeries = New List(Of TimeSeries) From {Me.ts_filled}
 
     End Sub
 End Class
