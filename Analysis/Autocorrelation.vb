@@ -112,7 +112,7 @@ Friend Class Autocorrelation
         Me.anzahlLags = dialog.anzahlLagsErmitteln
 
         'Maximal zulässige Verschiebung
-        Me.zeitreiheEin = Me.mZeitreihen(0).removeNaNValues()
+        Me.zeitreiheEin = Me.mZeitreihen(0).Clone()
         Dim maxlag As Integer = Me.zeitreiheEin.Length / groesseLags - 1
         If groesseLags * anzahlLags > Me.zeitreiheEin.Length Then
             Throw New Exception("Die ausgewählte Zeitreihe ist zu kurz oder die größte Zeitverschiebung ist zu lang! Bitte wählen sie bei derzeit ausgewählter Größe der Zeitverschiebungen eine Anzahl von maximal " & maxlag & " Verschiebungen!")
@@ -137,9 +137,8 @@ Friend Class Autocorrelation
             Dim verschiebung As Integer
             verschiebung = j * groesseLags
 
-            'Eingangszeitreihe säubern und leere Lagzeitreihe erstellen
-            Me.zeitreiheEin = Me.mZeitreihen(0).removeNaNValues()
-            Me.zeitreiheLag = New TimeSeries()
+            'Leere Lagzeitreihe erstellen
+            Me.zeitreiheLag = New TimeSeries(Me.zeitreiheEin.Title & $" (lag {verschiebung})")
 
             'Schleife zum Verschieben der Eingangszeitreihe und Speichern als Lagzeitreihe
             Dim i As Integer
@@ -147,56 +146,25 @@ Friend Class Autocorrelation
                 Me.zeitreiheLag.AddNode(Me.zeitreiheEin.Dates(i), Me.zeitreiheEin.Values(i - verschiebung))
             Next
 
-            'Nur gemeinsamme Stützstellen verwenden
-            TimeSeries.Synchronize(Me.zeitreiheEin, Me.zeitreiheLag)
-            ReDim values(Me.zeitreiheEin.Length - 1, 1)
-            For i = 0 To Me.zeitreiheEin.Length - 1
-                values(i, 0) = Me.zeitreiheEin.Values(i)
-                values(i, 1) = Me.zeitreiheLag.Values(i)
-            Next
+            'Calculate correlation
+            Dim ra As Double        'Autokorrelationskoeffizient
+            Dim ts_x, ts_y As TimeSeries
 
-            'Berechnungen
-            'values(i, 0) -> eingang
-            'values(i, 1) -> verschoben
-            '=============================
+            'Remove NaN values
+            ts_x = Me.zeitreiheEin.removeNaNValues()
+            ts_y = Me.zeitreiheLag.removeNaNValues()
 
-            'Deklarieren und Initialisieren der Berechnungsvariablen
-            Dim n As Integer = 0        'Anzahl der Werte
-            Dim sum_ein As Double = 0   'Wertesumme der Eingangszeitreihe
-            Dim sum_lag As Double = 0   'Wertesumme der Lagzeitreihe
-            Dim avg_ein As Double = 0   'Mittelwert der Eingangszeitreihe
-            Dim avg_lag As Double = 0   'Mittelwert der Lagzeitreihe
-            Dim std_ein As Double = 0   'Standardabweichung der Einganszeitreihe
-            Dim std_lag As Double = 0   'Standardabweichung der Lagzeitreihe
-            Dim kovar As Double = 0     'Kovarianz
-            Dim ra As Double = 0        'Autokorrelationskoeffizient
+            'Synchronize
+            TimeSeries.Synchronize(ts_x, ts_y)
 
-            'Anzahl der Werte
-            n = values.GetLength(0)
+            'convert to value array
+            Dim x_values As Double()
+            Dim y_values As Double()
+            x_values = ts_x.Values.ToArray()
+            y_values = ts_y.Values.ToArray()
 
-            'Summen der Werte
-            For i = 0 To n - 1
-                sum_ein += values(i, 0)
-                sum_lag += values(i, 1)
-            Next
-
-            'Mittelwerte
-            avg_ein = sum_ein / n
-            avg_lag = sum_ein / n
-
-            'Standarabweichungen und Kovarianz
-            For i = 0 To n - 1
-                std_ein += (values(i, 1) - avg_ein) ^ 2
-                std_lag += (values(i, 0) - avg_lag) ^ 2
-                kovar += (values(i, 1) - avg_ein) * (values(i, 0) - avg_lag)
-            Next
-
-            std_ein = Math.Sqrt(1 / (n - 1) * std_ein)
-            std_lag = Math.Sqrt(1 / (n - 1) * std_lag)
-            kovar = 1 / (n - 1) * kovar
-
-            'Autokorrelationskoeffizient berechnen und in Liste speichern
-            ra = kovar / (std_ein * std_lag)
+            'Calculate correlation coefficient and store in list
+            ra = MathNet.Numerics.GoodnessOfFit.R(y_values, x_values)
             raList.Add(ra)
 
             'ProgressBar erhöhen
