@@ -97,11 +97,6 @@ Friend Class LinearRegression
             Throw New Exception("The LinearRegression analysis requires the selection of exactly 2 time series!")
         End If
 
-        'Prüfung: Zeitreihen müssen die gleiche Einheit besitzen
-        If (zeitreihen(0).Unit <> zeitreihen(1).Unit) Then
-            Throw New Exception("Please select only time series with the same unit!")
-        End If
-
     End Sub
 
     ''' <summary>
@@ -146,10 +141,10 @@ Friend Class LinearRegression
 
         'Fehlermeldung bei zu niedriger Korrelation
         If (r < 0.7) Then
-            Throw New Exception(
-                "The correlation coefficient is too small! (r < 0.7)" & eol &
-                "There is no linear relationship between the two selected time series!" & eol &
-                "Filling gaps using linear regression is not possible!")
+            Log.AddLogEntry(levels.warning,
+                "The correlation coefficient is smaller than 0.7!" & eol &
+                "There is no good linear relationship between the two selected time series!" & eol &
+                "Filling gaps using linear regression is not recommended!")
         End If
 
         'Calculate linear regression
