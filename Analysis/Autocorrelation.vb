@@ -104,25 +104,17 @@ Friend Class Autocorrelation
     ''' </summary>
     Public Overrides Sub ProcessAnalysis()
 
+        Me.ts_in = Me.mZeitreihen(0).Clone()
+
         'Parameter-Dialog anzeigen
-        Dim dialog As New Autocorrelation_Dialog()
+        Dim dialog As New Autocorrelation_Dialog(Me.ts_in)
         If (dialog.ShowDialog() <> DialogResult.OK) Then
             Throw New Exception("User abort")
         End If
 
         'Parameter der Lags aus Dialog abfragen
-        Me.lagSize = dialog.groesseLagsErmitteln
-        Me.lagCount = dialog.anzahlLagsErmitteln
-
-        Me.ts_in = Me.mZeitreihen(0).Clone()
-
-        'Maximal zulässige Verschiebung
-        Dim maxlag As Integer = Me.ts_in.Length / lagSize - 1
-        If lagSize * lagCount > Me.ts_in.Length Then
-            Throw New Exception(
-                $"The selected time series is too short or the largest lag is too long! " &
-                $"Please select at most {maxlag} offsets with the currently set number of time steps!")
-        End If
+        Me.lagSize = dialog.lagSize
+        Me.lagCount = dialog.lagCount
 
         'Announce progress start
         MyBase.AnalysisProgressStart(lagCount)

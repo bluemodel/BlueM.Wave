@@ -27,21 +27,43 @@
 '
 Public Class Autocorrelation_Dialog
 
-    Public ReadOnly Property groesseLagsErmitteln()
+    Private timeseries As TimeSeries
+
+    Public ReadOnly Property lagSize()
         Get
             'Größe der Lags auslesen
             Return Me.spnGroesseLag.Value
         End Get
     End Property
 
-    Public ReadOnly Property anzahlLagsErmitteln()
+    Public ReadOnly Property lagCount()
         Get
             'Anzahl der Lags auslesen
             Return Me.spnAnzahlLag.Value()
         End Get
     End Property
 
+    Public Sub New(ts As TimeSeries)
+
+        ' This call is required by the designer.
+        InitializeComponent()
+
+        ' Add any initialization after the InitializeComponent() call.
+        Me.timeseries = ts
+
+    End Sub
+
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
+
+        'Check max possible lag
+        Dim maxlag As Integer = Me.timeseries.Length / lagSize - 1
+        If lagSize * lagCount > Me.timeseries.Length Then
+            MsgBox(
+                $"The selected time series is too short or the largest lag is too long! " &
+                $"Please select at most {maxlag} offsets with the currently set number of time steps!", MsgBoxStyle.Exclamation)
+            Return
+        End If
+
         Me.DialogResult = System.Windows.Forms.DialogResult.OK
         Me.Close()
     End Sub
