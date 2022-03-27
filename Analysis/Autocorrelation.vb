@@ -120,16 +120,12 @@ Friend Class Autocorrelation
         Dim maxlag As Integer = Me.ts_in.Length / lagSize - 1
         If lagSize * lagCount > Me.ts_in.Length Then
             Throw New Exception(
-                $"The selected time series is too short or the largest lag is too long!" &
+                $"The selected time series is too short or the largest lag is too long! " &
                 $"Please select at most {maxlag} offsets with the currently set number of time steps!")
         End If
 
-        'ProgressBar Dialog anzeigen und Progressbar initialisieren
-        Dim progress_dialog As New Progress_Dialog
-        progress_dialog.Show()
-        progress_dialog.ProgressBar1.Value = 0
-        progress_dialog.ProgressBar1.Minimum = 0
-        progress_dialog.ProgressBar1.Maximum = lagCount + 1
+        'Announce progress start
+        MyBase.AnalysisProgressStart(lagCount)
 
         'Instanzieren einer neuen Liste für Autokorrelationskoeffizienten
         raList = New List(Of Double)
@@ -161,8 +157,8 @@ Friend Class Autocorrelation
             ra = MathNet.Numerics.GoodnessOfFit.R(y_values, x_values)
             raList.Add(ra)
 
-            'ProgressBar erhöhen
-            progress_dialog.ProgressBar1.Value += 1
+            'Announce progress
+            MyBase.AnalysisProgressUpdate(j)
         Next
 
         If dtList.Max <> dtList.Min Then
@@ -186,8 +182,6 @@ Friend Class Autocorrelation
         Next
         periode_avg = y / z
 
-        'ProgressBar Dialog schließen
-        progress_dialog.Close()
     End Sub
 
     ''' <summary>
@@ -261,6 +255,8 @@ Friend Class Autocorrelation
             $"Assumed periodicity: {periode_avg}"
         annot.Position = Steema.TeeChart.Tools.AnnotationPositions.RightTop
 
+        'Announce finish
+        MyBase.AnalysisProgressFinish()
     End Sub
 
 End Class

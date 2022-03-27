@@ -191,6 +191,8 @@ Friend Class WaveController
         'Log events
         AddHandler Log.LogMsgAdded, AddressOf LogMsgAdded
 
+        'Handlers for events from Analyses are added dynamically
+
         'add any already existing log messages
         For Each msg As KeyValuePair(Of levels, String) In Log.logMessages
             Call LogMsgAdded(msg.Key, msg.Value)
@@ -796,6 +798,11 @@ Friend Class WaveController
                 Dim oAnalysis As Analysis
                 oAnalysis = AnalysisFactory.CreateAnalysis(oAnalysisDialog.selectedAnalysisFunction, oAnalysisDialog.selectedTimeseries)
 
+                'Add handlers for progress events
+                AddHandler oAnalysis.AnalysisStarted, AddressOf ProgressReset
+                AddHandler oAnalysis.AnalysisUpdated, AddressOf ProgressUpdate
+                AddHandler oAnalysis.AnalysisFinished, AddressOf ProgressFinish
+
                 Call Log.AddLogEntry(Log.levels.info, "... executing analysis ...")
 
                 'Analyse ausführen
@@ -807,9 +814,6 @@ Friend Class WaveController
                 Call oAnalysis.PrepareResults()
 
                 Call Log.AddLogEntry(Log.levels.info, "Analysis complete")
-
-                'Default-Cursor
-                View.Cursor = Cursors.Default
 
                 'Ergebnisse anzeigen:
                 '--------------------
@@ -844,11 +848,15 @@ Friend Class WaveController
                 End If
 
             Catch ex As Exception
-                View.Cursor = Cursors.Default
                 'Logeintrag
                 Call Log.AddLogEntry(Log.levels.error, "Analysis failed:" & eol & ex.Message)
                 'Alert
                 MsgBox("Analysis failed:" & eol & ex.Message, MsgBoxStyle.Critical)
+
+            Finally
+                View.Cursor = Cursors.Default
+
+                ProgressFinish()
             End Try
 
         End If
@@ -2450,6 +2458,32 @@ Friend Class WaveController
             Next
             counter += 1
         Next
+    End Sub
+
+    ''' <summary>
+    ''' Resets the progress bar to start
+    ''' </summary>
+    ''' <param name="n_steps">Number of total steps expected</param>
+    Private Sub ProgressReset(n_steps As Integer)
+        View.ProgressBar1.Value = 0
+        View.ProgressBar1.Maximum = n_steps
+        View.ProgressBar1.Enabled = True
+    End Sub
+
+    ''' <summary>
+    ''' Updates the progress bar
+    ''' </summary>
+    ''' <param name="value">Value to set the progress bar to</param>
+    Private Sub ProgressUpdate(value As Integer)
+        View.ProgressBar1.Value = Math.Min(value, View.ProgressBar1.Maximum)
+    End Sub
+
+    ''' <summary>
+    ''' Sets the progress bar to finished
+    ''' </summary>
+    Private Sub ProgressFinish()
+        View.ProgressBar1.Value = 0
+        View.ProgressBar1.Enabled = False
     End Sub
 
     ''' <summary>

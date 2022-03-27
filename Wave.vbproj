@@ -174,12 +174,6 @@
     <Compile Include="Analysis\LinearRegression_Dialog.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Analysis\Progress_Dialog.Designer.vb">
-      <DependentUpon>Progress_Dialog.vb</DependentUpon>
-    </Compile>
-    <Compile Include="Analysis\Progress_Dialog.vb">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="Analysis\MonthlyStatistics.vb" />
     <Compile Include="Analysis\MonthlyStatisticsDialog.Designer.vb">
       <DependentUpon>MonthlyStatisticsDialog.vb</DependentUpon>
@@ -378,9 +372,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Analysis\MonthlyStatisticsDialog.resx">
       <DependentUpon>MonthlyStatisticsDialog.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Analysis\Progress_Dialog.resx">
-      <DependentUpon>Progress_Dialog.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Analysis\TimestepAnalysisDialog.resx">
       <DependentUpon>TimestepAnalysisDialog.vb</DependentUpon>

@@ -5,7 +5,8 @@ BlueM.Wave Release Notes
 Version 1.13.0
 --------------
 NEW:
-* Added analysis functions Autocorrelation and LinearRegression
+* Added new analysis functions Autocorrelation and LinearRegression
+* Added a progress bar in the status bar for lengthy processes (currently only used for Autocorrelation analysis)
 
 Version 1.12.2
 --------------

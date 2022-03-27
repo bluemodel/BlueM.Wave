@@ -105,6 +105,7 @@ Partial Class MainWindow
         Me.MaskedTextBox_NavEnd = New System.Windows.Forms.MaskedTextBox()
         Me.MaskedTextBox_NavStart = New System.Windows.Forms.MaskedTextBox()
         Me.SaveFileDialog1 = New System.Windows.Forms.SaveFileDialog()
+        Me.ProgressBar1 = New System.Windows.Forms.ProgressBar()
         ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
         toolStripSeparator = New System.Windows.Forms.ToolStripSeparator()
         ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
@@ -635,14 +636,14 @@ Partial Class MainWindow
         '
         Me.ToolStripMenuItem_ActivateAllSeries.Image = Global.BlueM.Wave.My.Resources.Resources.accept
         Me.ToolStripMenuItem_ActivateAllSeries.Name = "ToolStripMenuItem_ActivateAllSeries"
-        Me.ToolStripMenuItem_ActivateAllSeries.Size = New System.Drawing.Size(180, 22)
+        Me.ToolStripMenuItem_ActivateAllSeries.Size = New System.Drawing.Size(176, 22)
         Me.ToolStripMenuItem_ActivateAllSeries.Text = "Activate all series"
         '
         'ToolStripMenuItem_DeactivateAllSeries
         '
         Me.ToolStripMenuItem_DeactivateAllSeries.Image = Global.BlueM.Wave.My.Resources.Resources.accept_grayscale
         Me.ToolStripMenuItem_DeactivateAllSeries.Name = "ToolStripMenuItem_DeactivateAllSeries"
-        Me.ToolStripMenuItem_DeactivateAllSeries.Size = New System.Drawing.Size(180, 22)
+        Me.ToolStripMenuItem_DeactivateAllSeries.Size = New System.Drawing.Size(176, 22)
         Me.ToolStripMenuItem_DeactivateAllSeries.Text = "Deactivate all series"
         '
         'SplitContainer1
@@ -664,7 +665,7 @@ Partial Class MainWindow
         '
         Me.SplitContainer1.Panel2.Controls.Add(Me.TableLayoutPanel1)
         Me.SplitContainer1.Size = New System.Drawing.Size(944, 606)
-        Me.SplitContainer1.SplitterDistance = 150
+        Me.SplitContainer1.SplitterDistance = 140
         Me.SplitContainer1.TabIndex = 1
         '
         'TChart2
@@ -1609,7 +1610,7 @@ Partial Class MainWindow
         Me.TChart2.Panel.Shadow.Brush.Color = System.Drawing.Color.DarkGray
         Me.TChart2.Panel.Shadow.Brush.Solid = True
         Me.TChart2.Panel.Shadow.Brush.Visible = True
-        Me.TChart2.Size = New System.Drawing.Size(940, 146)
+        Me.TChart2.Size = New System.Drawing.Size(940, 136)
         '
         '
         '
@@ -1880,7 +1881,7 @@ Partial Class MainWindow
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 38.0!))
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 36.0!))
-        Me.TableLayoutPanel1.Size = New System.Drawing.Size(940, 448)
+        Me.TableLayoutPanel1.Size = New System.Drawing.Size(940, 458)
         Me.TableLayoutPanel1.TabIndex = 3
         '
         'PanelNavigation
@@ -2889,7 +2890,7 @@ Partial Class MainWindow
         Me.TChart1.Panel.Shadow.Brush.Color = System.Drawing.Color.DarkGray
         Me.TChart1.Panel.Shadow.Brush.Solid = True
         Me.TChart1.Panel.Shadow.Brush.Visible = True
-        Me.TChart1.Size = New System.Drawing.Size(938, 370)
+        Me.TChart1.Size = New System.Drawing.Size(938, 380)
         '
         '
         '
@@ -3152,7 +3153,7 @@ Partial Class MainWindow
         Me.Panel_DisplayRange.Controls.Add(Me.MaskedTextBox_NavEnd)
         Me.Panel_DisplayRange.Controls.Add(Me.MaskedTextBox_NavStart)
         Me.Panel_DisplayRange.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Panel_DisplayRange.Location = New System.Drawing.Point(1, 411)
+        Me.Panel_DisplayRange.Location = New System.Drawing.Point(1, 421)
         Me.Panel_DisplayRange.Margin = New System.Windows.Forms.Padding(0)
         Me.Panel_DisplayRange.Name = "Panel_DisplayRange"
         Me.Panel_DisplayRange.Size = New System.Drawing.Size(938, 36)
@@ -3197,7 +3198,7 @@ Partial Class MainWindow
         Me.MaskedTextBox_NavEnd.Name = "MaskedTextBox_NavEnd"
         Me.MaskedTextBox_NavEnd.Size = New System.Drawing.Size(100, 20)
         Me.MaskedTextBox_NavEnd.TabIndex = 1
-        Me.MaskedTextBox_NavEnd.ValidatingType = GetType(DateTime)
+        Me.MaskedTextBox_NavEnd.ValidatingType = GetType(Date)
         '
         'MaskedTextBox_NavStart
         '
@@ -3206,7 +3207,17 @@ Partial Class MainWindow
         Me.MaskedTextBox_NavStart.Name = "MaskedTextBox_NavStart"
         Me.MaskedTextBox_NavStart.Size = New System.Drawing.Size(100, 20)
         Me.MaskedTextBox_NavStart.TabIndex = 0
-        Me.MaskedTextBox_NavStart.ValidatingType = GetType(DateTime)
+        Me.MaskedTextBox_NavStart.ValidatingType = GetType(Date)
+        '
+        'ProgressBar1
+        '
+        Me.ProgressBar1.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.ProgressBar1.Enabled = False
+        Me.ProgressBar1.Location = New System.Drawing.Point(832, 641)
+        Me.ProgressBar1.Name = "ProgressBar1"
+        Me.ProgressBar1.Size = New System.Drawing.Size(108, 16)
+        Me.ProgressBar1.Step = 1
+        Me.ProgressBar1.TabIndex = 2
         '
         'MainWindow
         '
@@ -3215,6 +3226,7 @@ Partial Class MainWindow
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.SystemColors.Control
         Me.ClientSize = New System.Drawing.Size(944, 661)
+        Me.Controls.Add(Me.ProgressBar1)
         Me.Controls.Add(ToolStrip1)
         Me.Controls.Add(Me.SplitContainer1)
         Me.Controls.Add(StatusStrip1)
@@ -3320,4 +3332,5 @@ Partial Class MainWindow
     Friend WithEvents ToolStripDropDownButton_ActivateAllSeries As ToolStripDropDownButton
     Friend WithEvents ToolStripMenuItem_ActivateAllSeries As ToolStripMenuItem
     Friend WithEvents ToolStripMenuItem_DeactivateAllSeries As ToolStripMenuItem
+    Friend WithEvents ProgressBar1 As ProgressBar
 End Class
