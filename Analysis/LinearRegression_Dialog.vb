@@ -25,7 +25,7 @@
 'EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 '--------------------------------------------------------------------------------------------
 '
-Public Class LinearRegression_Dialog
+Friend Class LinearRegression_Dialog
 
     Public Sub New(ByVal zeitreihe1 As String, ByVal zeitreihe2 As String)
         'This call is required by the Windows Form Designer.

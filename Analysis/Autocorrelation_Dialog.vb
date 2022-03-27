@@ -25,7 +25,7 @@
 'EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 '--------------------------------------------------------------------------------------------
 '
-Public Class Autocorrelation_Dialog
+Friend Class Autocorrelation_Dialog
 
     Private timeseries As TimeSeries
 
