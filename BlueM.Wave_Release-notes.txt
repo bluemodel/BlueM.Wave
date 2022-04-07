@@ -6,6 +6,7 @@ Version 1.12.3
 --------------
 FIXED:
 * Fixed analyses inadvertently changing the original time series
+* Analysis function GoodnessOfFit: fixed CSV formatted output in log
 
 Version 1.12.2
 --------------

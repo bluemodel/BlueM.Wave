@@ -313,8 +313,14 @@ Friend Class GoodnessOfFit
                          $"Simulated time series: {Me.ts_sim.Title}" & eol & eol
         'output results in CSV format
         Me.mResultText &= "Results:" & eol
-        Me.mResultText &= String.Join(Helpers.CurrentListSeparator, "Description", "Start", "End", "Length", "Volume observed", "Volume simulated", "Volume error [%]", "Sum of squared errors", "Nash-Sutcliffe efficiency", "Logarithmic Nash-Sutcliffe efficiency", "Coefficient of correlation", "Coefficient of determination", "Hydrologic deviation") & eol
-        Me.mResultText &= String.Join(Helpers.CurrentListSeparator, "desc", "t0", "t1", "n", "Vobs", "Vsim", "m", "F²", "E", "E,ln", "KGE", "r", "r²", "DEV") & eol
+        Dim headerItems1 = New List(Of String) From {
+            "Description", "Start", "End", "Length", "Volume observed", "Volume simulated", "Volume error [%]", "Sum of squared errors", "Nash-Sutcliffe efficiency", "Logarithmic Nash-Sutcliffe efficiency", "Kling-Gupta efficiency", "Coefficient of correlation", "Coefficient of determination", "Hydrologic deviation"
+        }
+        Dim headerItems2 = New List(Of String) From {
+            "desc", "t0", "t1", "n", "Vobs", "Vsim", "m", "F²", "E", "E,ln", "KGE", "r", "r²", "DEV"
+        }
+        Me.mResultText &= String.Join(Helpers.CurrentListSeparator, headerItems1.Select(Function(s) $"""{s}""")) & eol
+        Me.mResultText &= String.Join(Helpers.CurrentListSeparator, headerItems2.Select(Function(s) $"""{s}""")) & eol
         For Each GOFResult As KeyValuePair(Of String, GoF) In Me.GoFResults
             With GOFResult.Value
                 Me.mResultText &= String.Join(Helpers.CurrentListSeparator,
