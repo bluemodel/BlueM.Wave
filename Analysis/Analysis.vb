@@ -142,7 +142,7 @@ Friend MustInherit Class Analysis
     ''' Konstruktor
     ''' </summary>
     ''' <param name="zeitreihen">Collection von Zeitreihen</param>
-    Public Sub New(ByRef zeitreihen As List(Of TimeSeries))
+    Public Sub New(zeitreihen As List(Of TimeSeries))
 
         'Zeitreihen 
         Me.mZeitreihen = zeitreihen
