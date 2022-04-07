@@ -30,6 +30,25 @@
 ''' </summary>
 Friend MustInherit Class Analysis
 
+#Region "Events"
+
+    ''' <summary>
+    ''' Is raised when a lengthy process starts
+    ''' </summary>
+    Friend Event AnalysisStarted(n_steps As Integer)
+
+    ''' <summary>
+    ''' Is raised when a lengthy process updates its status
+    ''' </summary>
+    Friend Event AnalysisUpdated(value As Integer)
+
+    ''' <summary>
+    ''' Is raised when a lengthy process finishes
+    ''' </summary>
+    Friend Event AnalysisFinished()
+
+#End Region
+
 #Region "Eigenschaften"
 
     ''' <summary>
@@ -161,6 +180,30 @@ Friend MustInherit Class Analysis
     ''' Ergebnisse aufbereiten
     ''' </summary>
     Public MustOverride Sub PrepareResults()
+
+    ''' <summary>
+    ''' Starts a lengthy analysis process
+    ''' </summary>
+    ''' <param name="n_steps">Number of expected steps</param>
+    Protected Sub AnalysisProgressStart(n_steps As Integer)
+        RaiseEvent AnalysisStarted(n_steps)
+    End Sub
+
+    ''' <summary>
+    ''' Updates a lengthy analysis process
+    ''' </summary>
+    ''' <param name="value">Progress value</param>
+    Protected Sub AnalysisProgressUpdate(value As Integer)
+        RaiseEvent AnalysisUpdated(value)
+    End Sub
+
+    ''' <summary>
+    ''' Finishes a lengthy analysis process
+    ''' </summary>
+    Protected Sub AnalysisProgressFinish()
+        RaiseEvent AnalysisFinished()
+    End Sub
+
 
 
 #End Region 'Methoden

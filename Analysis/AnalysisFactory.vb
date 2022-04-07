@@ -35,6 +35,7 @@ Friend Module AnalysisFactory
     ''' </summary>
     Public Enum AnalysisFunctions
         AnnualStatistics
+        Autocorrelation
         Calculator
         ChangeTimestep
         Comparison
@@ -42,6 +43,7 @@ Friend Module AnalysisFactory
         DoubleSumCurve
         GoodnessOfFit
         Histogram
+        LinearRegression
         MonthlyStatistics
         TimestepAnalysis
     End Enum
@@ -55,6 +57,8 @@ Friend Module AnalysisFactory
         Select Case analysisfunction
             Case AnalysisFunctions.AnnualStatistics
                 Return AnnualStatistics.Description
+            Case AnalysisFunctions.Autocorrelation
+                Return Autocorrelation.Description
             Case AnalysisFunctions.Calculator
                 Return Calculator.Description
             Case AnalysisFunctions.ChangeTimestep
@@ -69,6 +73,8 @@ Friend Module AnalysisFactory
                 Return GoodnessOfFit.Description
             Case AnalysisFunctions.Histogram
                 Return Histogram.Description
+            Case AnalysisFunctions.LinearRegression
+                Return LinearRegression.Description
             Case AnalysisFunctions.MonthlyStatistics
                 Return MonthlyStatistics.Description
             Case AnalysisFunctions.TimestepAnalysis
@@ -93,6 +99,9 @@ Friend Module AnalysisFactory
             Case AnalysisFunctions.AnnualStatistics
                 oAnalysis = New AnnualStatistics(seriesList)
 
+            Case AnalysisFunctions.Autocorrelation
+                oAnalysis = New Autocorrelation(seriesList)
+
             Case AnalysisFunctions.Calculator
                 oAnalysis = New Calculator(seriesList)
 
@@ -113,6 +122,9 @@ Friend Module AnalysisFactory
 
             Case AnalysisFunctions.Histogram
                 oAnalysis = New Histogram(seriesList)
+
+            Case AnalysisFunctions.LinearRegression
+                oAnalysis = New LinearRegression(seriesList)
 
             Case AnalysisFunctions.MonthlyStatistics
                 oAnalysis = New MonthlyStatistics(seriesList)

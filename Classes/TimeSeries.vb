@@ -1144,7 +1144,7 @@ Public Class TimeSeries
         tsCleaned.Metadata = Me.Metadata
 
         'copy clean nodes
-        tsCleaned._nodes = Me.NodesClean
+        tsCleaned._nodes = New SortedList(Of DateTime, Double)(Me.NodesClean)
 
         'Log
         nanCount = Me.Length - tsCleaned.Length
