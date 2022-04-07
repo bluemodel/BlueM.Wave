@@ -81,52 +81,51 @@ Friend Module AnalysisFactory
     ''' Factory method for creating an analysis instance
     ''' </summary>
     ''' <param name="analysisfunction">the type of analysis instance to create</param>
-    ''' <param name="seriesList">list of input TimeSeries</param>
     ''' <returns>the analysis instance</returns>
-    Public Function CreateAnalysis(analysisfunction As AnalysisFunctions, seriesList As List(Of TimeSeries)) As Analysis
+    Public Function CreateAnalysis(analysisfunction As AnalysisFunctions) As Analysis
 
         Dim oAnalysis As Analysis
 
         Select Case analysisfunction
 
             Case AnalysisFunctions.AnnualStatistics
-                oAnalysis = New AnnualStatistics(seriesList)
+                oAnalysis = New AnnualStatistics()
 
             Case AnalysisFunctions.Autocorrelation
-                oAnalysis = New Autocorrelation(seriesList)
+                oAnalysis = New Autocorrelation()
 
             Case AnalysisFunctions.Calculator
-                oAnalysis = New Calculator(seriesList)
+                oAnalysis = New Calculator()
 
             Case AnalysisFunctions.ChangeTimestep
-                oAnalysis = New ChangeTimestep(seriesList)
+                oAnalysis = New ChangeTimestep()
 
             Case AnalysisFunctions.Comparison
-                oAnalysis = New Comparison(seriesList)
+                oAnalysis = New Comparison()
 
             Case AnalysisFunctions.Cumulative
-                oAnalysis = New Cumulative(seriesList)
+                oAnalysis = New Cumulative()
 
             Case AnalysisFunctions.DoubleSumCurve
-                oAnalysis = New DoubleSumCurve(seriesList)
+                oAnalysis = New DoubleSumCurve()
 
             Case AnalysisFunctions.GoodnessOfFit
-                oAnalysis = New GoodnessOfFit(seriesList)
+                oAnalysis = New GoodnessOfFit()
 
             Case AnalysisFunctions.Histogram
-                oAnalysis = New Histogram(seriesList)
+                oAnalysis = New Histogram()
 
             Case AnalysisFunctions.LinearRegression
-                oAnalysis = New LinearRegression(seriesList)
+                oAnalysis = New LinearRegression()
 
             Case AnalysisFunctions.MonthlyStatistics
-                oAnalysis = New MonthlyStatistics(seriesList)
+                oAnalysis = New MonthlyStatistics()
 
             Case AnalysisFunctions.TimestepAnalysis
-                oAnalysis = New TimeStepAnalysis(seriesList)
+                oAnalysis = New TimeStepAnalysis()
 
             'Case AnalysisFunctions.TestAnalysis             'EDIT THIS
-            '    oAnalysis = New TestAnalysis(seriesList)    'EDIT THIS
+            '    oAnalysis = New TestAnalysis()              'EDIT THIS
 
             Case Else
                 Throw New Exception("Analysis not found!")

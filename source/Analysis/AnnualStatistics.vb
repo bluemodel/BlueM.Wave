@@ -35,6 +35,24 @@ Friend Class AnnualStatistics
     Private stats As Dictionary(Of String, struct_stat)
     Private generateBoundingBoxes As Boolean
 
+    Private ReadOnly Property paramInputTimeseries As TimeSeries
+        Get
+            Return MyBase.parameters(0).Value
+        End Get
+    End Property
+
+    Private ReadOnly Property paramStartOfHydrologicalYear As Integer
+        Get
+            Return MyBase.parameters(1).Value
+        End Get
+    End Property
+
+    Private ReadOnly Property paramGenerateBoundingBoxes As Boolean
+        Get
+            Return MyBase.parameters(2).Value
+        End Get
+    End Property
+
     Public Overloads Shared Function Description() As String
         Return "Calculates annual statistics (min, max, avg, vol) based on hydrological years."
     End Function
@@ -73,12 +91,17 @@ Friend Class AnnualStatistics
         End Get
     End Property
 
-    Public Sub New(ByRef series As List(Of TimeSeries))
-        MyBase.New(series)
-        'Check: expects exactly one series
-        If (series.Count <> 1) Then
-            Throw New Exception("The Annual Statistics analysis requires the selection of exactly 1 time series!")
-        End If
+    Public Sub New()
+        MyBase.New()
+        MyBase.parameters.Add(
+            New AnalysisParameter("Input time series", AnalysisParameter.ParameterTypeEnum.Timeseries, AnalysisParameter.ParameterAmountEnum.Single)
+        )
+        MyBase.parameters.Add(
+            New AnalysisParameter("Start of hydrological year", AnalysisParameter.ParameterTypeEnum.Integer, AnalysisParameter.ParameterAmountEnum.Single, def:=11, min:=1, max:=12)
+        )
+        MyBase.parameters.Add(
+            New AnalysisParameter("Generate annual bounding boxes (max, avg, min)", AnalysisParameter.ParameterTypeEnum.Boolean, AnalysisParameter.ParameterAmountEnum.Single, def:=False)
+        )
         stats = New Dictionary(Of String, struct_stat)
     End Sub
 
@@ -109,10 +132,10 @@ Friend Class AnnualStatistics
         Me.generateBoundingBoxes = dialog.CheckBox_boundingbox.Checked
 
         'stats for entire series
-        Me.stats.Add("Entire series", calculateStats(Me.InputTimeSeries(0)))
+        Me.stats.Add("Entire series", calculateStats(Me.paramInputTimeseries))
 
         'stats for hydrological years
-        hyoseries = Me.InputTimeSeries(0).SplitHydroYears(startMonth)
+        hyoseries = Me.paramInputTimeseries.SplitHydroYears(Me.paramStartOfHydrologicalYear)
         For Each kvp As KeyValuePair(Of Integer, TimeSeries) In hyoseries
             year = kvp.Key
             series = kvp.Value
@@ -124,7 +147,7 @@ Friend Class AnnualStatistics
     Public Overrides Sub PrepareResults()
 
         'result table
-        Me.ResultTable = New DataTable($"Annual statistics: {Me.InputTimeSeries(0).Title}")
+        Me.ResultTable = New DataTable($"Annual statistics: {Me.paramInputTimeseries.Title}")
 
         Me.ResultTable.Columns.Add("Period", GetType(String))
         Me.ResultTable.Columns.Add("Start", GetType(DateTime))

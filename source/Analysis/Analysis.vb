@@ -42,9 +42,9 @@ Friend MustInherit Class Analysis
 #Region "Eigenschaften"
 
     ''' <summary>
-    ''' List of input TimeSeries for analysis
+    ''' List of analysis parameters
     ''' </summary>
-    Protected InputTimeSeries As List(Of TimeSeries)
+    Friend parameters As List(Of AnalysisParameter)
 
     ''' <summary>
     ''' Result text
@@ -177,13 +177,10 @@ Friend MustInherit Class Analysis
     ''' <summary>
     ''' Constructor
     ''' </summary>
-    ''' <param name="inputseries">List of input TimeSeries</param>
-    Public Sub New(inputseries As List(Of TimeSeries))
-
-        'Zeitreihen 
-        Me.InputTimeSeries = inputseries
+    Public Sub New()
 
         'Datenstrukturen initialisieren
+        Me.parameters = New List(Of AnalysisParameter)
         Me.ResultValues = New Dictionary(Of String, Double)
         Me.ResultSeries = New List(Of TimeSeries)
     End Sub
