@@ -230,7 +230,19 @@ Public Class ZRXP
                 End If
                 ok = DateTime.TryParseExact(datestring, Me.Dateformat, Helpers.DefaultNumberFormat, Globalization.DateTimeStyles.None, timestamp)
                 If (Not ok) Then
-                    Throw New Exception($"Unable to parse the date '{datestring}' using the expected date format '{Me.Dateformat}'!")
+                    'WORKAROUND: check whether the hour is 24 and if so, parse manually
+                    If datestring.Substring(8, 2) = "24" Then
+                        Dim year As Integer = Integer.Parse(datestring.Substring(0, 4))
+                        Dim month As Integer = Integer.Parse(datestring.Substring(4, 2))
+                        Dim day As Integer = Integer.Parse(datestring.Substring(6, 2))
+                        Dim hour As Integer = Integer.Parse(datestring.Substring(8, 2))
+                        Dim minute As Integer = Integer.Parse(datestring.Substring(10, 2))
+                        Dim second As Integer = Integer.Parse(datestring.Substring(12, 2))
+                        timestamp = New DateTime(year, month, day, 0, minute, second) + New TimeSpan(days:=1, 0, 0, 0)
+                        Log.AddLogEntry(levels.debug, $"Non-standard timestamp '{datestring}' parsed manually to {timestamp:G}")
+                    Else
+                        Throw New Exception($"Unable to parse the date '{datestring}' using the expected date format '{Me.Dateformat}'!")
+                    End If
                 End If
                 'parse value
                 valuestring = parts(1)

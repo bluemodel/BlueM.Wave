@@ -2,6 +2,11 @@
 BlueM.Wave Release Notes
 ===============================================================
 
+Version 1.13.1
+--------------
+NEW:
+* Added a workaround for reading non-standard timestamps with an hour of 24 in ZRXP files
+
 Version 1.13.0
 --------------
 NEW:
