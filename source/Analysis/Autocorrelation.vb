@@ -82,17 +82,18 @@ Friend Class Autocorrelation
     ''' <summary>
     ''' Konstruktor
     ''' </summary>
-    ''' <param name="zeitreihen">zu analysierende Zeitreihen</param>
-    Public Sub New(ByRef zeitreihen As List(Of TimeSeries))
-
-        'Konstruktor der Basisklasse aufrufen!
-        Call MyBase.New(zeitreihen)
-
-        'Prüfung: Anzahl erwarteter Zeitreihen
-        If (zeitreihen.Count <> 1) Then
-            Throw New Exception("The Autocorrelation analysis requires the selection of exactly 1 time series!")
-        End If
-
+    Public Sub New()
+        MyBase.New()
+        'define input parameters
+        MyBase.parameters.Add("timeseries",
+            New AnalysisParameter("Input time series", AnalysisParameter.ParameterTypeEnum.Timeseries, AnalysisParameter.ParameterAmountEnum.Single)
+        )
+        MyBase.parameters.Add("lagSize",
+            New AnalysisParameter("Number of time steps", AnalysisParameter.ParameterTypeEnum.Integer, AnalysisParameter.ParameterAmountEnum.Single, def:=5, min:=1, max:=10)
+        )
+        MyBase.parameters.Add("numberOfOffsets",
+            New AnalysisParameter("Number of offsets", AnalysisParameter.ParameterTypeEnum.Integer, AnalysisParameter.ParameterAmountEnum.Single, def:=300, min:=1, max:=2000)
+        )
     End Sub
 
     ''' <summary>
@@ -100,17 +101,18 @@ Friend Class Autocorrelation
     ''' </summary>
     Public Overrides Sub ProcessAnalysis()
 
-        Me.ts_in = Me.InputTimeSeries(0)
+        'get input parameters
+        Me.ts_in = MyBase.parameters("timeseries").Value
+        Me.lagSize = MyBase.parameters("lagSize").Value
+        Me.lagCount = MyBase.parameters("numberOfOffsets").Value
 
-        'Parameter-Dialog anzeigen
-        Dim dialog As New Autocorrelation_Dialog(Me.ts_in)
-        If (dialog.ShowDialog() <> DialogResult.OK) Then
-            Throw New Exception("User abort")
+        'Check max possible lag
+        Dim maxlag As Integer = Me.ts_in.Length / Me.lagSize - 1
+        If Me.lagSize * Me.lagCount > Me.ts_in.Length Then
+            Throw New Exception(
+                $"The selected time series is too short or the largest lag is too long! " &
+                $"Please select at most {maxlag} offsets with the currently set number of time steps!")
         End If
-
-        'Parameter der Lags aus Dialog abfragen
-        Me.lagSize = dialog.lagSize
-        Me.lagCount = dialog.lagCount
 
         'Announce progress start
         MyBase.AnalysisProgressStart(lagCount)
