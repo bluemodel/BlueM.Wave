@@ -179,6 +179,8 @@ Partial Class AnalysisDialog
         'Button_Execute
         '
         Me.Button_Execute.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Button_Execute.DialogResult = System.Windows.Forms.DialogResult.OK
+        Me.Button_Execute.Enabled = False
         Me.Button_Execute.Location = New System.Drawing.Point(600, 308)
         Me.Button_Execute.Name = "Button_Execute"
         Me.Button_Execute.Size = New System.Drawing.Size(75, 23)

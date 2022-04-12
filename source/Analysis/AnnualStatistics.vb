@@ -32,26 +32,10 @@ Friend Class AnnualStatistics
         Public vol As Double
     End Structure
 
+    Private timeseries As TimeSeries
+    Private startOfHydrologicalYear As Integer
     Private stats As Dictionary(Of String, struct_stat)
     Private generateBoundingBoxes As Boolean
-
-    Private ReadOnly Property paramInputTimeseries As TimeSeries
-        Get
-            Return MyBase.parameters(0).Value
-        End Get
-    End Property
-
-    Private ReadOnly Property paramStartOfHydrologicalYear As Integer
-        Get
-            Return MyBase.parameters(1).Value
-        End Get
-    End Property
-
-    Private ReadOnly Property paramGenerateBoundingBoxes As Boolean
-        Get
-            Return MyBase.parameters(2).Value
-        End Get
-    End Property
 
     Public Overloads Shared Function Description() As String
         Return "Calculates annual statistics (min, max, avg, vol) based on hydrological years."
@@ -93,15 +77,16 @@ Friend Class AnnualStatistics
 
     Public Sub New()
         MyBase.New()
-        MyBase.parameters.Add(
+        MyBase.parameters.Add("timeseries",
             New AnalysisParameter("Input time series", AnalysisParameter.ParameterTypeEnum.Timeseries, AnalysisParameter.ParameterAmountEnum.Single)
         )
-        MyBase.parameters.Add(
+        MyBase.parameters.Add("startOfHydrologicalYear",
             New AnalysisParameter("Start of hydrological year", AnalysisParameter.ParameterTypeEnum.Integer, AnalysisParameter.ParameterAmountEnum.Single, def:=11, min:=1, max:=12)
         )
-        MyBase.parameters.Add(
+        MyBase.parameters.Add("generateBoundingBoxes",
             New AnalysisParameter("Generate annual bounding boxes (max, avg, min)", AnalysisParameter.ParameterTypeEnum.Boolean, AnalysisParameter.ParameterAmountEnum.Single, def:=False)
         )
+        'initialize data structures
         stats = New Dictionary(Of String, struct_stat)
     End Sub
 
@@ -120,26 +105,22 @@ Friend Class AnnualStatistics
     Public Overrides Sub ProcessAnalysis()
         Dim hyoseries As Dictionary(Of Integer, TimeSeries)
         Dim year As Integer
-        Dim series As TimeSeries
+        Dim ts As TimeSeries
 
-        Dim dialog As New AnnualStatistics_Dialog()
-        Dim dialogResult As DialogResult = dialog.ShowDialog()
-        If dialogResult <> DialogResult.OK Then
-            Throw New Exception("User abort!")
-        End If
-
-        Dim startMonth As Integer = CType(dialog.ComboBox_startMonth.SelectedItem, Month).number
-        Me.generateBoundingBoxes = dialog.CheckBox_boundingbox.Checked
+        'get input parameters
+        Me.timeseries = MyBase.parameters("timeseries").Value
+        Me.startOfHydrologicalYear = MyBase.parameters("startOfHydrologicalYear").Value
+		Me.generateBoundingBoxes = MyBase.parameters("generateBoundingBoxes").Value
 
         'stats for entire series
-        Me.stats.Add("Entire series", calculateStats(Me.paramInputTimeseries))
+        Me.stats.Add("Entire series", calculateStats(Me.timeseries))
 
         'stats for hydrological years
-        hyoseries = Me.paramInputTimeseries.SplitHydroYears(Me.paramStartOfHydrologicalYear)
+        hyoseries = Me.timeseries.SplitHydroYears(Me.startOfHydrologicalYear)
         For Each kvp As KeyValuePair(Of Integer, TimeSeries) In hyoseries
             year = kvp.Key
-            series = kvp.Value
-            Me.stats.Add(year.ToString, calculateStats(series))
+            ts = kvp.Value
+            Me.stats.Add(year.ToString, calculateStats(ts))
         Next
     End Sub
 
@@ -147,7 +128,7 @@ Friend Class AnnualStatistics
     Public Overrides Sub PrepareResults()
 
         'result table
-        Me.ResultTable = New DataTable($"Annual statistics: {Me.paramInputTimeseries.Title}")
+        Me.ResultTable = New DataTable($"Annual statistics: {Me.timeseries.Title}")
 
         Me.ResultTable.Columns.Add("Period", GetType(String))
         Me.ResultTable.Columns.Add("Start", GetType(DateTime))

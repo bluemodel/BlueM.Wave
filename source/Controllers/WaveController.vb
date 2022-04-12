@@ -818,8 +818,7 @@ Friend Class WaveController
                 Call Log.AddLogEntry(Log.levels.info, $"Starting analysis {oAnalysisDialog.selectedAnalysisFunction} ...")
 
                 'Analyse instanzieren
-                Dim oAnalysis As Analysis
-                oAnalysis = AnalysisFactory.CreateAnalysis(oAnalysisDialog.selectedAnalysisFunction, oAnalysisDialog.selectedTimeseries)
+                Dim oAnalysis As Analysis = oAnalysisDialog.analysis
 
                 'Add handlers for progress events
                 AddHandler oAnalysis.AnalysisStarted, AddressOf ProgressReset

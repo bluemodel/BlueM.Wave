@@ -44,7 +44,7 @@ Friend MustInherit Class Analysis
     ''' <summary>
     ''' List of analysis parameters
     ''' </summary>
-    Friend parameters As List(Of AnalysisParameter)
+    Friend parameters As Dictionary(Of String, AnalysisParameter)
 
     ''' <summary>
     ''' Result text
@@ -180,7 +180,7 @@ Friend MustInherit Class Analysis
     Public Sub New()
 
         'Datenstrukturen initialisieren
-        Me.parameters = New List(Of AnalysisParameter)
+        Me.parameters = New Dictionary(Of String, AnalysisParameter)
         Me.ResultValues = New Dictionary(Of String, Double)
         Me.ResultSeries = New List(Of TimeSeries)
     End Sub

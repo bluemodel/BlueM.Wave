@@ -20,7 +20,7 @@
 ''' </summary>
 Friend Class AnalysisDialog
 
-    Private analysis As Analysis
+    Friend analysis As Analysis
     Private isInitializing As Boolean
     Private seriesList As List(Of TimeSeries)
 
@@ -32,7 +32,9 @@ Friend Class AnalysisDialog
 
         'Populate combobox with analysis functions
         Me.ListBox_AnalysisFunctions.DataSource = System.Enum.GetValues(GetType(AnalysisFactory.AnalysisFunctions))
+        Me.ListBox_AnalysisFunctions.SelectedIndex = -1
 
+        'store list of time series
         Me.seriesList = seriesList
 
         Me.isInitializing = False
@@ -77,7 +79,7 @@ Friend Class AnalysisDialog
         Me.TableLayoutPanel1.RowCount = analysis.parameters.Count
         Me.TableLayoutPanel1.Visible = True
         Dim row As Integer = 0
-        For Each param As AnalysisParameter In analysis.parameters
+        For Each param As AnalysisParameter In analysis.parameters.Values
 
             'label
             Dim label As New Label()
@@ -161,7 +163,4 @@ Friend Class AnalysisDialog
         End If
     End Sub
 
-    Private Sub Button_Execute_Click(sender As Object, e As EventArgs) Handles Button_Execute.Click
-        Me.analysis.ProcessAnalysis()
-    End Sub
 End Class
