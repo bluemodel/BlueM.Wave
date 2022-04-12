@@ -23,9 +23,11 @@ Friend Class Cumulative
 
 #Region "Properties"
 
-    Public Overloads Shared Function Description() As String
-        Return "For each selected time series, calculates a new time series that consists of the cumulative values of the original series. NaN values are ignored."
-    End Function
+    Public Overrides ReadOnly Property Description As String
+        Get
+            Return "For each selected time series, calculates a new time series that consists of the cumulative values of the original series. NaN values are ignored."
+        End Get
+    End Property
 
     ''' <summary>
     ''' Flag indicating whether the analysis function has a result test

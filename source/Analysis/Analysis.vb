@@ -87,11 +87,8 @@ Friend MustInherit Class Analysis
 
     ''' <summary>
     ''' Returns a text description of the analysis function
-    ''' Should be overloaded by inheriting analysis functions
     ''' </summary>
-    Public Shared Function Description() As String
-        Return "No description found"
-    End Function
+    Public MustOverride ReadOnly Property Description() As String
 
     ''' <summary>
     ''' Flag indicating whether the analysis function has a result text

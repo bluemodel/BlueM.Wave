@@ -39,45 +39,6 @@ Friend Module AnalysisFactory
         'TestAnalysis    'EDIT THIS
     End Enum
 
-    ''' <summary>
-    ''' Returns a text description of the analysis function
-    ''' </summary>
-    ''' <param name="analysisfunction"></param>
-    ''' <returns></returns>
-    Public Function getAnalysisDescription(analysisfunction As AnalysisFunctions) As String
-        Select Case analysisfunction
-            Case AnalysisFunctions.AnnualStatistics
-                Return AnnualStatistics.Description
-            Case AnalysisFunctions.Autocorrelation
-                Return Autocorrelation.Description
-            Case AnalysisFunctions.Calculator
-                Return Calculator.Description
-            Case AnalysisFunctions.ChangeTimestep
-                Return ChangeTimestep.Description
-            Case AnalysisFunctions.Comparison
-                Return Comparison.Description
-            Case AnalysisFunctions.Cumulative
-                Return Cumulative.Description
-            Case AnalysisFunctions.DoubleSumCurve
-                Return DoubleSumCurve.Description
-            Case AnalysisFunctions.GoodnessOfFit
-                Return GoodnessOfFit.Description
-            Case AnalysisFunctions.Histogram
-                Return Histogram.Description
-            Case AnalysisFunctions.LinearRegression
-                Return LinearRegression.Description
-            Case AnalysisFunctions.MonthlyStatistics
-                Return MonthlyStatistics.Description
-            Case AnalysisFunctions.TimestepAnalysis
-                Return TimeStepAnalysis.Description
-            'Case AnalysisFunctions.TestAnalysis    'EDIT THIS
-            '    Return TestAnalysis.Description    'EDIT THIS
-            Case Else
-                Return "Description not found"
-        End Select
-    End Function
-
-    ''' <summary>
     ''' Factory method for creating an analysis instance
     ''' </summary>
     ''' <param name="analysisfunction">the type of analysis instance to create</param>

@@ -25,9 +25,11 @@ Friend Class Comparison
 
     Private ts_x, ts_y As TimeSeries
 
-    Public Overloads Shared Function Description() As String
-        Return "Plots the coincident values of two time series against each other, least-squares fits a line to the resulting points and calculates the linear correlation coefficient."
-    End Function
+    Public Overrides ReadOnly Property Description As String
+        Get
+            Return "Plots the coincident values of two time series against each other, least-squares fits a line to the resulting points and calculates the linear correlation coefficient."
+        End Get
+    End Property
 
     ''' <summary>
     ''' Flag, der anzeigt, ob die Analysefunktion einen Ergebnistext erzeugt

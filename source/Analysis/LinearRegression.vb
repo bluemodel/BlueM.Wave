@@ -30,9 +30,11 @@ Friend Class LinearRegression
     Private r As Double                                           'correlation coefficient
     Private filled_nodes As SortedDictionary(Of DateTime, Double) 'filled nodes
 
-    Public Overloads Shared Function Description() As String
-        Return "Fills gaps (NaN values and missing timestamps) in one time series by applying a linear regression relationship with a second time series."
-    End Function
+    Public Overrides ReadOnly Property Description As String
+        Get
+            Return "Fills gaps (NaN values and missing timestamps) in one time series by applying a linear regression relationship with a second time series."
+        End Get
+    End Property
 
     ''' <summary>
     ''' Flag, der anzeigt, ob die Analysefunktion einen Ergebnistext erzeugt

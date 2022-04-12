@@ -25,9 +25,11 @@ Friend Class DoubleSumCurve
     Private ts_1, ts_2 As TimeSeries
     Private summe1(), summe2() As Double
 
-    Public Overloads Shared Function Description() As String
-        Return "Plots the cumulative coincident values of two time series against each other and adds a 45° line to the resulting plot."
-    End Function
+    Public Overrides ReadOnly Property Description As String
+        Get
+            Return "Plots the cumulative coincident values of two time series against each other and adds a 45° line to the resulting plot."
+        End Get
+    End Property
 
     ''' <summary>
     ''' Flag, der anzeigt, ob die Analysefunktion einen Ergebnistext erzeugt

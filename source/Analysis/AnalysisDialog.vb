@@ -67,7 +67,7 @@ Friend Class AnalysisDialog
 
         Dim url As String
         'update the description and wiki link
-        Me.Label_AnalaysisDescription.Text = AnalysisFactory.getAnalysisDescription(Me.selectedAnalysisFunction)
+        Me.Label_AnalaysisDescription.Text = Me.analysis.Description
         url = "https://wiki.bluemodel.org/index.php/Wave:" & Me.selectedAnalysisFunction.ToString("g")
         Me.LinkLabel_Helplink.Text = url
         Me.LinkLabel_Helplink.Links.Clear()

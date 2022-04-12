@@ -32,9 +32,11 @@ Friend Class Autocorrelation
     Private dtList As List(Of TimeSpan)     'list of time step differences
     Private periode_avg As Double           'Durchschinttliche Periode
 
-    Public Overloads Shared Function Description() As String
-        Return "Autocorrelation analysis for analyzing time series periodicity"
-    End Function
+    Public Overrides ReadOnly Property Description() As String
+        Get
+            Return "Autocorrelation analysis for analyzing time series periodicity"
+        End Get
+    End Property
 
     ''' <summary>
     ''' Flag, der anzeigt, ob die Analysefunktion einen Ergebnistext erzeugt
