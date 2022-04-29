@@ -2491,7 +2491,6 @@ Friend Class WaveController
     ''' Unlike other filetypes, this file type has to be loaded by the controller
     ''' </summary>
     ''' <param name="FileName">Path to TEN file</param>
-    ''' <remarks></remarks>
     Private Sub Load_TEN(FileName As String)
 
         Dim result As DialogResult
@@ -2545,9 +2544,13 @@ Friend Class WaveController
             For i = 0 To View.TChart2.Axes.Custom.Count - 1
                 View.TChart2.Axes.Custom(i).Title.Visible = False
             Next
-            'change type of series to FastLine
+            'change type of series to FastLine and activate
+            Dim title As String
             For i = 0 To View.TChart2.Series.Count - 1
+                title = View.TChart2.Series(i).Title 'remember title in order to reassign it after conversion
                 Steema.TeeChart.Styles.Series.ChangeType(View.TChart2.Series(i), GetType(Steema.TeeChart.Styles.FastLine))
+                View.TChart2.Series(i).Title = title
+                View.TChart2.Series(i).Active = True
             Next
 
             'Abfrage für Reihenimport
@@ -2559,11 +2562,13 @@ Friend Class WaveController
                     Case Windows.Forms.DialogResult.Yes
                         'Reihen aus TEN-Datei sollen importiert werden
 
+                        Dim nSeries As Integer = 0
+
                         'Alle Reihen durchlaufen
                         For Each series As Steema.TeeChart.Styles.Series In View.TChart1.Series
 
                             'Nur Zeitreihen behandeln
-                            If (series.GetHorizAxis.IsDateTime) Then
+                            If (series.XValues.DateTime) Then
 
                                 'Zeitreihe aus dem importierten Diagramm nach intern übertragen
                                 Log.AddLogEntry(Log.levels.info, $"Importing series '{series.Title}' from TEN file...")
@@ -2606,8 +2611,12 @@ Friend Class WaveController
                                     End If
                                 Next
 
+                                nSeries += 1
+
                             End If
                         Next
+
+                        Log.AddLogEntry(levels.info, $"Imported {nSeries} time series from TEN file.")
 
                         'Update window title
                         View.Text = "BlueM.Wave - " & FileName
