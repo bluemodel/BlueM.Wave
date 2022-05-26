@@ -5,7 +5,10 @@ BlueM.Wave Release Notes
 Version 1.13.3
 --------------
 NEW: 
+* Analysis function ChangeTimestep: added support for input interpretation BlockLeft #46
 * Added a test project for unit testing
+FIXED:
+* Analysis function ChangeTimestep: fixed some cases of wrong results #46
 
 Version 1.13.2
 --------------

@@ -679,7 +679,7 @@ Public Class TimeSeries
     ''' Time steps that are not fully within the time series are not included in the result time series.
     ''' Time steps within which at least one node contain NaN values also get the value NaN.
     ''' Interpretation of output time series is kept except for Instantaneous, where output is BlockRight
-    '''     because keeping the interpretation would require a time step 0.5 * dt to the left and right of the output timestamps
+    '''     because keeping the interpretation would require considering a time interval 0.5 * dt to the left and right of the output timestamps
     '''     which causes issues with timestep intervals of type Month.
     ''' TODO:
     '''     Support more interpretations
@@ -689,14 +689,15 @@ Public Class TimeSeries
     Public Function ChangeTimestep(timesteptype As TimeStepTypeEnum, timestepinterval As Integer, startdate As DateTime) As TimeSeries
 
         Dim i, i_start As Integer
-        Dim dt_new, dt_old, dt_part As TimeSpan
+        Dim dt As TimeSpan
         Dim ts As TimeSeries
         Dim t, t_start, t_end As DateTime
-        Dim value, value_intp, value_intp2, volume, sum As Double
+        Dim value, value_intp, value_intp2, volume, cumval As Double
         Dim timestep_full, node_processed As Boolean
 
         Select Case Me.Interpretation
             Case InterpretationEnum.Instantaneous,
+                 InterpretationEnum.BlockLeft,
                  InterpretationEnum.BlockRight,
                  InterpretationEnum.CumulativePerTimestep
                 'everything OK
@@ -709,9 +710,14 @@ Public Class TimeSeries
         ts.Unit = Me.Unit
         ts.Interpretation = Me.Interpretation
         ts.Metadata = Me.Metadata
-        ts.Title &= $" ({timestepinterval} {[Enum].GetName(GetType(TimeStepTypeEnum), timesteptype)})"
+        'append timestep description to title
+        Dim timesteptypeString As String = [Enum].GetName(GetType(TimeStepTypeEnum), timesteptype)
+        If timestepinterval > 1 Then
+            timesteptypeString &= "s"
+        End If
+        ts.Title &= $" ({timestepinterval} {timesteptypeString})"
 
-        'find first timestep that is fully within the time series
+        'find first timestep that is fully within the old time series
         t_start = startdate
         Do While True
 
@@ -742,7 +748,7 @@ Public Class TimeSeries
         Next
 
         volume = 0.0
-        sum = 0.0
+        cumval = 0.0
         timestep_full = False
 
         'Loop over nodes
@@ -753,26 +759,19 @@ Public Class TimeSeries
                 Exit For
             End If
 
-            dt_old = Me.Dates(i + 1) - Me.Dates(i)
-
             node_processed = False
             Do Until node_processed
 
-                dt_new = t_end - t_start
-
                 If Me.Dates(i) >= t_start Then
-                    If Me.Dates(i + 1) >= t_end Then
-                        'add partial value before t_end
-                        dt_part = t_end - Me.Dates(i)
+                    If Me.Dates(i + 1) > t_end Then
+                        'add partial value between Me.Dates(i) and t_end
                         value_intp = TimeSeries.InterpolateValue(Me.Dates(i), Me.Values(i), Me.Dates(i + 1), Me.Values(i + 1), t_end, Me.Interpretation)
-                        volume += (Me.Values(i) + value_intp) / 2 * dt_part.TotalSeconds
-                        sum += value_intp
-
-                        timestep_full = True
+                        volume += TimeSeries.IntegrateVolume(Me.Dates(i), Me.Values(i), t_end, value_intp, Me.Interpretation)
+                        cumval += value_intp
                     Else
                         'add whole value
-                        volume += (Me.Values(i) + Me.Values(i + 1)) / 2 * dt_old.TotalSeconds
-                        sum += Me.Values(i + 1)
+                        volume += TimeSeries.IntegrateVolume(Me.Dates(i), Me.Values(i), Me.Dates(i + 1), Me.Values(i + 1), Me.Interpretation)
+                        cumval += Me.Values(i + 1)
 
                     End If
                 Else
@@ -780,17 +779,13 @@ Public Class TimeSeries
                         'add partial value between t_start and t_end
                         value_intp = TimeSeries.InterpolateValue(Me.Dates(i), Me.Values(i), Me.Dates(i + 1), Me.Values(i + 1), t_start, Me.Interpretation)
                         value_intp2 = TimeSeries.InterpolateValue(Me.Dates(i), Me.Values(i), Me.Dates(i + 1), Me.Values(i + 1), t_end, Me.Interpretation)
-                        volume += (value_intp + value_intp2) / 2 * dt_new.TotalSeconds
-                        sum += value_intp2 - value_intp
-
-                        timestep_full = True
+                        volume += TimeSeries.IntegrateVolume(t_start, value_intp, t_end, value_intp2, Me.Interpretation)
+                        cumval += value_intp2 - value_intp
                     Else
-                        'add partial value after t_start
-                        dt_part = Me.Dates(i + 1) - t_start
+                        'add partial value between t_start and Me.Dates(i + 1)
                         value_intp = TimeSeries.InterpolateValue(Me.Dates(i), Me.Values(i), Me.Dates(i + 1), Me.Values(i + 1), t_start, Me.Interpretation)
-                        volume += (Me.Values(i) + value_intp) / 2 * dt_part.TotalSeconds
-                        sum += value_intp
-
+                        volume += TimeSeries.IntegrateVolume(t_start, value_intp, Me.Dates(i + 1), Me.Values(i + 1), Me.Interpretation)
+                        cumval += Me.Values(i + 1) - value_intp
                     End If
                 End If
 
@@ -798,16 +793,21 @@ Public Class TimeSeries
                     node_processed = True
                 End If
 
+                If Me.Dates(i + 1) >= t_end Then
+                    timestep_full = True
+                End If
+
                 If timestep_full Then
                     'set final value depending on interpretation
+                    dt = t_end - t_start
                     Select Case Me.Interpretation
                         Case InterpretationEnum.Instantaneous,
+                             InterpretationEnum.BlockLeft,
                              InterpretationEnum.BlockRight
-                            value = volume / dt_new.TotalSeconds
+                            value = volume / dt.TotalSeconds
                         Case InterpretationEnum.CumulativePerTimestep
-                            value = sum
-                        Case InterpretationEnum.BlockLeft,
-                             InterpretationEnum.Cumulative
+                            value = cumval
+                        Case InterpretationEnum.Cumulative
                             'TODO
                     End Select
                     'set timestamp depending on interpretation
@@ -822,7 +822,7 @@ Public Class TimeSeries
                     End Select
                     ts.AddNode(t, value)
                     volume = 0.0
-                    sum = 0.0
+                    cumval = 0.0
                     'advance to next timestep
                     t_start = t_end
                     t_end = TimeSeries.AddTimeInterval(t_start, timesteptype, timestepinterval)
@@ -834,6 +834,8 @@ Public Class TimeSeries
 
         'exception, see method remarks
         If Me.Interpretation = InterpretationEnum.Instantaneous Then
+            Log.AddLogEntry(levels.warning, $"Interpretation of output time series {ts.Title} is BlockRight! " &
+                            "Output with interpretation Instantaneous is not yet implemented!")
             ts.Interpretation = InterpretationEnum.BlockRight
         End If
 
@@ -1278,6 +1280,33 @@ Public Class TimeSeries
 
         Return value
 
+    End Function
+
+    ''' <summary>
+    ''' Integrates the volume between two nodes while respecting the interpretation
+    ''' Assumes a unit in /s
+    ''' </summary>
+    ''' <param name="t1">First timestamp</param>
+    ''' <param name="v1">First value</param>
+    ''' <param name="t2">Second timestamp</param>
+    ''' <param name="v2">Second value</param>
+    ''' <param name="interpretation">Interpretation to use</param>
+    ''' <returns>The volume</returns>
+    Public Shared Function IntegrateVolume(t1 As DateTime, v1 As Double, t2 As DateTime, v2 As Double, interpretation As InterpretationEnum) As Double
+        Dim volume As Double
+        Dim dt As TimeSpan = t2 - t1
+        Select Case interpretation
+            Case InterpretationEnum.Instantaneous
+                volume = (v1 + v2) / 2 * dt.TotalSeconds
+            Case InterpretationEnum.BlockRight
+                volume = v1 * dt.TotalSeconds
+            Case InterpretationEnum.BlockLeft,
+                 InterpretationEnum.CumulativePerTimestep
+                volume = v2 * dt.TotalSeconds
+            Case Else
+                Throw New NotImplementedException($"Integration between nodes with interpretation {[Enum].GetName(GetType(InterpretationEnum), interpretation)} is currently not implemented!")
+        End Select
+        Return volume
     End Function
 
     ''' <summary>
