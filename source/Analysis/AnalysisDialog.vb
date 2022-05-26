@@ -93,15 +93,29 @@ Friend Class AnalysisDialog
             Select Case param.ParameterType
 
                 Case AnalysisParameter.ParameterTypeEnum.Timeseries
-                    Dim combobox As New ComboBox()
-                    combobox.DropDownStyle = ComboBoxStyle.DropDownList
-                    For Each ts As TimeSeries In Me.seriesList
-                        combobox.Items.Add(ts)
-                    Next
-                    combobox.SelectedIndex = 0
-                    param.Value = combobox.SelectedItem
-                    combobox.DataBindings.Add(New Binding("SelectedItem", param, "Value"))
-                    control = combobox
+                    Select Case param.ParameterAmount
+                        Case AnalysisParameter.ParameterAmountEnum.Single
+                            Dim combobox As New ComboBox()
+                            combobox.DropDownStyle = ComboBoxStyle.DropDownList
+                            For Each ts As TimeSeries In Me.seriesList
+                                combobox.Items.Add(ts)
+                            Next
+                            combobox.SelectedIndex = 0
+                            param.Value = combobox.SelectedItem
+                            combobox.DataBindings.Add(New Binding("SelectedItem", param, "Value"))
+                            control = combobox
+
+                        Case AnalysisParameter.ParameterAmountEnum.Multiple
+                            Dim listbox As New ListBox()
+                            listbox.SelectionMode = SelectionMode.MultiExtended
+                            For Each ts As TimeSeries In Me.seriesList
+                                listbox.Items.Add(ts)
+                            Next
+                            listbox.SelectedIndex = -1
+                            param.Value = listbox.SelectedItems
+                            listbox.DataBindings.Add(New Binding("SelectedItems", param, "Value"))
+                            control = listbox
+                    End Select
 
                 Case AnalysisParameter.ParameterTypeEnum.Integer
                     Dim numericupdown As New NumericUpDown()
