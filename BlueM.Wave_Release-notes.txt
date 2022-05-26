@@ -2,6 +2,11 @@
 BlueM.Wave Release Notes
 ===============================================================
 
+Version 1.13.3
+--------------
+NEW: 
+* Added a test project for unit testing
+
 Version 1.13.2
 --------------
 FIXED:
