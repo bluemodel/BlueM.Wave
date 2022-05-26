@@ -1,0 +1,39 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31829.152
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Wave", "Wave.vbproj", "{CE4132A2-2E2F-4F54-B66D-1BAA928D499E}"
+EndProject
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Wave.Tests", "Tests\Wave.Tests\Wave.Tests.vbproj", "{B18292DE-3745-4B16-ADBF-2DA8A1E3C51E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CE4132A2-2E2F-4F54-B66D-1BAA928D499E}.Debug|x64.ActiveCfg = Debug|x64
+		{CE4132A2-2E2F-4F54-B66D-1BAA928D499E}.Debug|x64.Build.0 = Debug|x64
+		{CE4132A2-2E2F-4F54-B66D-1BAA928D499E}.Debug|x86.ActiveCfg = Debug|x86
+		{CE4132A2-2E2F-4F54-B66D-1BAA928D499E}.Debug|x86.Build.0 = Debug|x86
+		{CE4132A2-2E2F-4F54-B66D-1BAA928D499E}.Release|x64.ActiveCfg = Release|x64
+		{CE4132A2-2E2F-4F54-B66D-1BAA928D499E}.Release|x64.Build.0 = Release|x64
+		{CE4132A2-2E2F-4F54-B66D-1BAA928D499E}.Release|x86.ActiveCfg = Release|x86
+		{CE4132A2-2E2F-4F54-B66D-1BAA928D499E}.Release|x86.Build.0 = Release|x86
+		{B18292DE-3745-4B16-ADBF-2DA8A1E3C51E}.Debug|x64.ActiveCfg = Debug|x64
+		{B18292DE-3745-4B16-ADBF-2DA8A1E3C51E}.Debug|x64.Build.0 = Debug|x64
+		{B18292DE-3745-4B16-ADBF-2DA8A1E3C51E}.Debug|x86.ActiveCfg = Debug|x86
+		{B18292DE-3745-4B16-ADBF-2DA8A1E3C51E}.Debug|x86.Build.0 = Debug|x86
+		{B18292DE-3745-4B16-ADBF-2DA8A1E3C51E}.Release|x64.ActiveCfg = Release|x64
+		{B18292DE-3745-4B16-ADBF-2DA8A1E3C51E}.Release|x86.ActiveCfg = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {AE181845-C47A-402A-8453-19D2CAEE7723}
+	EndGlobalSection
+EndGlobal
