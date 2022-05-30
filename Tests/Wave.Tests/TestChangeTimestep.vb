@@ -56,6 +56,28 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
     End Sub
 
     ''' <summary>
+    ''' Change timestep from 15min to 1h, input interpretation BlockLeft, output interpretation BlockRight
+    ''' </summary>
+    <TestMethod()> Public Sub TestChangeTimestep_15min_1h_BlockLeft_to_BlockRight()
+
+        Dim ts, ts_new As TimeSeries
+
+        ts = getTestTimeSeries_15min()
+        ts.Interpretation = TimeSeries.InterpretationEnum.BlockLeft
+
+        ts_new = ts.ChangeTimestep(TimeSeries.TimeStepTypeEnum.Hour, 1, ts.StartDate, outputInterpretation:=TimeSeries.InterpretationEnum.BlockRight)
+
+        Assert.AreEqual(TimeSeries.InterpretationEnum.BlockRight, ts_new.Interpretation)
+        Assert.AreEqual(3, ts_new.Length)
+        Assert.AreEqual(New DateTime(2000, 1, 1, 0, 0, 0), ts_new.StartDate)
+        Assert.AreEqual(3.5, ts_new.Nodes(New DateTime(2000, 1, 1, 0, 0, 0)))
+        Assert.AreEqual(2.75, ts_new.Nodes(New DateTime(2000, 1, 1, 1, 0, 0)))
+        Assert.AreEqual(3.5, ts_new.Nodes(New DateTime(2000, 1, 1, 2, 0, 0)))
+        Assert.AreEqual(New DateTime(2000, 1, 1, 2, 0, 0), ts_new.EndDate)
+
+    End Sub
+
+    ''' <summary>
     ''' Change timestep from 15min to 1h, interpretation CumulativePerTimestep
     ''' </summary>
     <TestMethod()> Public Sub TestChangeTimestep_15min_1h_CumulativePerTimestep()
