@@ -34,22 +34,34 @@ Friend Class ChangeTimestepDialog
         Call InitializeComponent()
 
         'fill comboboxes
-        Me.ComboBox_Interpretation.Items.Add(TimeSeries.InterpretationEnum.Instantaneous)
-        Me.ComboBox_Interpretation.Items.Add(TimeSeries.InterpretationEnum.BlockRight)
-        Me.ComboBox_Interpretation.Items.Add(TimeSeries.InterpretationEnum.BlockLeft)
-        Me.ComboBox_Interpretation.Items.Add(TimeSeries.InterpretationEnum.Cumulative)
-        Me.ComboBox_Interpretation.Items.Add(TimeSeries.InterpretationEnum.CumulativePerTimestep)
+        Me.ComboBox_InputInterpretation.Items.Add(TimeSeries.InterpretationEnum.Instantaneous)
+        Me.ComboBox_InputInterpretation.Items.Add(TimeSeries.InterpretationEnum.BlockRight)
+        Me.ComboBox_InputInterpretation.Items.Add(TimeSeries.InterpretationEnum.BlockLeft)
+        Me.ComboBox_InputInterpretation.Items.Add(TimeSeries.InterpretationEnum.Cumulative)
+        Me.ComboBox_InputInterpretation.Items.Add(TimeSeries.InterpretationEnum.CumulativePerTimestep)
 
-        'set initial selection to the timeseries' interpretation
+        'Me.ComboBox_OutputInterpretation.Items.Add(TimeSeries.InterpretationEnum.Instantaneous) 'not supported
+        Me.ComboBox_OutputInterpretation.Items.Add(TimeSeries.InterpretationEnum.BlockRight)
+        Me.ComboBox_OutputInterpretation.Items.Add(TimeSeries.InterpretationEnum.BlockLeft)
+        Me.ComboBox_OutputInterpretation.Items.Add(TimeSeries.InterpretationEnum.Cumulative)
+        Me.ComboBox_OutputInterpretation.Items.Add(TimeSeries.InterpretationEnum.CumulativePerTimestep)
+
+        'set initial selection according to the timeseries' interpretation
         Select Case ts.Interpretation
-            Case TimeSeries.InterpretationEnum.Instantaneous,
-                 TimeSeries.InterpretationEnum.BlockRight,
+            Case TimeSeries.InterpretationEnum.BlockRight,
                  TimeSeries.InterpretationEnum.BlockLeft,
                  TimeSeries.InterpretationEnum.Cumulative,
                  TimeSeries.InterpretationEnum.CumulativePerTimestep
-                Me.ComboBox_Interpretation.SelectedItem = ts.Interpretation
+                Me.ComboBox_InputInterpretation.SelectedItem = ts.Interpretation
+                Me.ComboBox_OutputInterpretation.SelectedItem = ts.Interpretation
+            Case TimeSeries.InterpretationEnum.Instantaneous
+                'if input is instantaneous, suggest BlockRight as output
+                Me.ComboBox_InputInterpretation.SelectedItem = ts.Interpretation
+                Me.ComboBox_OutputInterpretation.SelectedItem = TimeSeries.InterpretationEnum.BlockRight
             Case Else
-                Me.ComboBox_Interpretation.SelectedItem = TimeSeries.InterpretationEnum.Instantaneous
+                'if input is undefined, suggest BlockRight for both input and output
+                Me.ComboBox_InputInterpretation.SelectedItem = TimeSeries.InterpretationEnum.BlockRight
+                Me.ComboBox_OutputInterpretation.SelectedItem = TimeSeries.InterpretationEnum.BlockRight
         End Select
 
         Me.ComboBox_TimestepType.Items.Add(TimeSeries.TimeStepTypeEnum.Year)

@@ -4,8 +4,10 @@ BlueM.Wave Release Notes
 
 Version 1.13.4
 --------------
+NEW:
+* Analysis function ChangeTimestep: added the possibility to specify the desired output interpretation #46
 API-CHANGES:
-* TimeSeries.ChangeTimestep now has an additional optional parameter for the output interpretation
+* TimeSeries.ChangeTimestep now has an additional optional parameter for the output interpretation #46
 
 Version 1.13.3
 --------------

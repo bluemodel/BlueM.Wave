@@ -102,7 +102,7 @@ Friend Class ChangeTimestep
     Public Overrides Sub ProcessAnalysis()
 
         Dim ts, ts_new As TimeSeries
-        Dim interpretation As TimeSeries.InterpretationEnum
+        Dim inputInterpretation, outputInterpretation As TimeSeries.InterpretationEnum
         Dim timesteptype As TimeSeries.TimeStepTypeEnum
         Dim timestepinterval As Integer
         Dim startdate As DateTime
@@ -115,7 +115,8 @@ Friend Class ChangeTimestep
         If dlg.ShowDialog() = Windows.Forms.DialogResult.OK Then
 
             'read settings from dialog
-            interpretation = dlg.ComboBox_Interpretation.SelectedItem
+            inputInterpretation = dlg.ComboBox_InputInterpretation.SelectedItem
+            outputInterpretation = dlg.ComboBox_OutputInterpretation.SelectedItem
             timesteptype = dlg.ComboBox_TimestepType.SelectedItem
             timestepinterval = dlg.NumericUpDown_TimestepInterval.Value
             startdate = CType(dlg.MaskedTextBox_Start.ValidateText(), DateTime)
@@ -127,8 +128,8 @@ Friend Class ChangeTimestep
             End If
 
             'change timestep
-            ts.Interpretation = interpretation
-            ts_new = ts.ChangeTimestep(timesteptype, timestepinterval, startdate)
+            ts.Interpretation = inputInterpretation
+            ts_new = ts.ChangeTimestep(timesteptype, timestepinterval, startdate, outputInterpretation)
 
             'Store result series
             ts_new.DataSource = New TimeSeriesDataSource(TimeSeriesDataSource.OriginEnum.AnalysisResult)
