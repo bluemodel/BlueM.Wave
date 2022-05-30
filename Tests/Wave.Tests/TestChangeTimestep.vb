@@ -45,6 +45,7 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
 
         ts_new = ts.ChangeTimestep(TimeSeries.TimeStepTypeEnum.Hour, 1, ts.StartDate)
 
+        Assert.AreEqual(TimeSeries.InterpretationEnum.BlockLeft, ts_new.Interpretation)
         Assert.AreEqual(3, ts_new.Length)
         Assert.AreEqual(New DateTime(2000, 1, 1, 1, 0, 0), ts_new.StartDate)
         Assert.AreEqual(3.5, ts_new.Nodes(New DateTime(2000, 1, 1, 1, 0, 0)))
@@ -66,6 +67,7 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
 
         ts_new = ts.ChangeTimestep(TimeSeries.TimeStepTypeEnum.Hour, 1, ts.StartDate)
 
+        Assert.AreEqual(TimeSeries.InterpretationEnum.CumulativePerTimestep, ts_new.Interpretation)
         Assert.AreEqual(3, ts_new.Length)
         Assert.AreEqual(New DateTime(2000, 1, 1, 1, 0, 0), ts_new.StartDate)
         Assert.AreEqual(14.0, ts_new.Nodes(New DateTime(2000, 1, 1, 1, 0, 0)))
@@ -87,6 +89,7 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
 
         ts_new = ts.ChangeTimestep(TimeSeries.TimeStepTypeEnum.Hour, 1, ts.StartDate)
 
+        Assert.AreEqual(TimeSeries.InterpretationEnum.BlockRight, ts_new.Interpretation)
         Assert.AreEqual(3, ts_new.Length)
         Assert.AreEqual(New DateTime(2000, 1, 1, 0, 0, 0), ts_new.StartDate)
         Assert.AreEqual(2.25, ts_new.Nodes(New DateTime(2000, 1, 1, 0, 0, 0)))
@@ -97,7 +100,7 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
     End Sub
 
     ''' <summary>
-    ''' Change timestep from 15min to 1h, interpretation Instantaneous
+    ''' Change timestep from 15min to 1h, input interpretation Instantaneous, output interpretation BlockRight
     ''' </summary>
     <TestMethod()> Public Sub TestChangeTimestep_15min_1h_Instantaneous()
 
@@ -106,9 +109,8 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
         ts = getTestTimeSeries_15min()
         ts.Interpretation = TimeSeries.InterpretationEnum.Instantaneous
 
-        ts_new = ts.ChangeTimestep(TimeSeries.TimeStepTypeEnum.Hour, 1, ts.StartDate)
+        ts_new = ts.ChangeTimestep(TimeSeries.TimeStepTypeEnum.Hour, 1, ts.StartDate, outputInterpretation:=TimeSeries.InterpretationEnum.BlockRight)
 
-        'Instantaneous time series are output as BlockRight #46
         Assert.AreEqual(TimeSeries.InterpretationEnum.BlockRight, ts_new.Interpretation)
         Assert.AreEqual(3, ts_new.Length)
         Assert.AreEqual(New DateTime(2000, 1, 1, 0, 0, 0), ts_new.StartDate)
@@ -131,6 +133,7 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
 
         ts_new = ts.ChangeTimestep(TimeSeries.TimeStepTypeEnum.Minute, 10, ts.StartDate)
 
+        Assert.AreEqual(TimeSeries.InterpretationEnum.BlockLeft, ts_new.Interpretation)
         Assert.AreEqual(19, ts_new.Length)
         Assert.AreEqual(New DateTime(2000, 1, 1, 0, 10, 0), ts_new.StartDate)
         Dim expected_values As New List(Of Double) From {
@@ -173,6 +176,7 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
 
         ts_new = ts.ChangeTimestep(TimeSeries.TimeStepTypeEnum.Minute, 10, ts.StartDate)
 
+        Assert.AreEqual(TimeSeries.InterpretationEnum.CumulativePerTimestep, ts_new.Interpretation)
         Assert.AreEqual(19, ts_new.Length)
         Assert.AreEqual(New DateTime(2000, 1, 1, 0, 10, 0), ts_new.StartDate)
         Dim expected_values As New List(Of Double) From {
@@ -215,6 +219,7 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
 
         ts_new = ts.ChangeTimestep(TimeSeries.TimeStepTypeEnum.Minute, 10, ts.StartDate)
 
+        Assert.AreEqual(TimeSeries.InterpretationEnum.BlockRight, ts_new.Interpretation)
         Assert.AreEqual(19, ts_new.Length)
         Assert.AreEqual(New DateTime(2000, 1, 1, 0, 0, 0), ts_new.StartDate)
         Dim expected_values As New List(Of Double) From {
@@ -246,7 +251,7 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
     End Sub
 
     ''' <summary>
-    ''' Change timestep from 15min to 10min, interpretation Instantaneous
+    ''' Change timestep from 15min to 10min, input interpretation Instantaneous, output interpretation BlockRight
     ''' </summary>
     <TestMethod()> Public Sub TestChangeTimestep_15min_10min_Instantaneous()
 
@@ -255,9 +260,8 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
         ts = getTestTimeSeries_15min()
         ts.Interpretation = TimeSeries.InterpretationEnum.Instantaneous
 
-        ts_new = ts.ChangeTimestep(TimeSeries.TimeStepTypeEnum.Minute, 10, ts.StartDate)
+        ts_new = ts.ChangeTimestep(TimeSeries.TimeStepTypeEnum.Minute, 10, ts.StartDate, outputInterpretation:=TimeSeries.InterpretationEnum.BlockRight)
 
-        'Instantaneous time series are output as BlockRight #46
         Assert.AreEqual(TimeSeries.InterpretationEnum.BlockRight, ts_new.Interpretation)
         Assert.AreEqual(19, ts_new.Length)
         Assert.AreEqual(New DateTime(2000, 1, 1, 0, 0, 0), ts_new.StartDate)
@@ -302,6 +306,7 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
         Dim startdate As DateTime = New DateTime(ts.StartDate.Year, ts.StartDate.Month, 1)
         ts_new = ts.ChangeTimestep(TimeSeries.TimeStepTypeEnum.Month, 1, startdate)
 
+        Assert.AreEqual(TimeSeries.InterpretationEnum.BlockRight, ts_new.Interpretation)
         Assert.AreEqual(50, ts_new.Length)
         Assert.AreEqual(New DateTime(2012, 3, 1), ts_new.StartDate)
         Assert.AreEqual(New DateTime(2016, 4, 1), ts_new.EndDate)

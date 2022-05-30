@@ -675,18 +675,24 @@ Public Class TimeSeries
     ''' <param name="timesteptype">The type of timestep interval</param>
     ''' <param name="timestepinterval">The number of intervals that make up each timestep</param>
     ''' <param name="startdate">Start date for the new time series</param>
+    ''' <param name="outputInterpretation">Optional interpretation to use for the output timeseries. 
+    ''' If not defined, the original interpretation is preserved, if possible</param>
     ''' <remarks>
+    ''' Output interpretation Instantaneous is not implemented,
+    ''' because it would require considering a time interval 0.5 * dt to the left and right of the output timestamps
+    ''' which causes issues with timestep intervals of type Month (and also headaches).
     ''' Time steps that are not fully within the time series are not included in the result time series.
     ''' Time steps within which at least one node contain NaN values also get the value NaN.
-    ''' Interpretation of output time series is kept except for Instantaneous, where output is BlockRight
-    '''     because keeping the interpretation would require considering a time interval 0.5 * dt to the left and right of the output timestamps
-    '''     which causes issues with timestep intervals of type Month.
+    ''' 
     ''' TODO:
     '''     Support more interpretations
     '''     Allow handling NaN values (e.g. as 0)?
     ''' </remarks>
     ''' <returns>The new time series</returns>
-    Public Function ChangeTimestep(timesteptype As TimeStepTypeEnum, timestepinterval As Integer, startdate As DateTime) As TimeSeries
+    Public Function ChangeTimestep(timesteptype As TimeStepTypeEnum,
+                                   timestepinterval As Integer,
+                                   startdate As DateTime,
+                                   Optional outputInterpretation As TimeSeries.InterpretationEnum = InterpretationEnum.Undefined) As TimeSeries
 
         Dim i, i_start As Integer
         Dim dt As TimeSpan
@@ -695,6 +701,7 @@ Public Class TimeSeries
         Dim value, value_intp, value_intp2, volume, cumval As Double
         Dim timestep_full, node_processed As Boolean
 
+        'check input interpretation
         Select Case Me.Interpretation
             Case InterpretationEnum.Instantaneous,
                  InterpretationEnum.BlockLeft,
@@ -705,10 +712,25 @@ Public Class TimeSeries
                 Throw New NotImplementedException($"Changing the timestep of a time series with interpretation {[Enum].GetName(GetType(InterpretationEnum), Me.Interpretation)} is currently not implemented!")
         End Select
 
+        'set output interpretation to input interpretation if undefined
+        If outputInterpretation = InterpretationEnum.Undefined Then
+            outputInterpretation = Me.Interpretation
+        End If
+
+        'check output interpretation
+        Select Case outputInterpretation
+            Case InterpretationEnum.BlockLeft,
+                 InterpretationEnum.BlockRight,
+                 InterpretationEnum.CumulativePerTimestep
+                'everything OK
+            Case Else
+                Throw New NotImplementedException($"Changing the timestep of a time series to an output interpretation {[Enum].GetName(GetType(InterpretationEnum), outputInterpretation)} is currently not implemented!")
+        End Select
+
         'create a new timeseries
         ts = New TimeSeries(Me.Title)
         ts.Unit = Me.Unit
-        ts.Interpretation = Me.Interpretation
+        ts.Interpretation = outputInterpretation
         ts.Metadata = Me.Metadata
         'append timestep description to title
         Dim timesteptypeString As String = [Enum].GetName(GetType(TimeStepTypeEnum), timesteptype)
@@ -800,7 +822,7 @@ Public Class TimeSeries
                 If timestep_full Then
                     'set final value depending on interpretation
                     dt = t_end - t_start
-                    Select Case Me.Interpretation
+                    Select Case outputInterpretation
                         Case InterpretationEnum.Instantaneous,
                              InterpretationEnum.BlockLeft,
                              InterpretationEnum.BlockRight
@@ -811,7 +833,7 @@ Public Class TimeSeries
                             'TODO
                     End Select
                     'set timestamp depending on interpretation
-                    Select Case Me.Interpretation
+                    Select Case outputInterpretation
                         Case InterpretationEnum.Instantaneous,
                              InterpretationEnum.BlockRight
                             t = t_start
@@ -831,13 +853,6 @@ Public Class TimeSeries
             Loop
 
         Next
-
-        'exception, see method remarks
-        If Me.Interpretation = InterpretationEnum.Instantaneous Then
-            Log.AddLogEntry(levels.warning, $"Interpretation of output time series {ts.Title} is BlockRight! " &
-                            "Output with interpretation Instantaneous is not yet implemented!")
-            ts.Interpretation = InterpretationEnum.BlockRight
-        End If
 
         Return ts
 
