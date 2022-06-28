@@ -134,7 +134,7 @@ Public Class WEL
             Dim StrReadSync As TextReader = TextReader.Synchronized(StrRead)
 
             'Spaltenüberschriften auslesen
-            For i = 1 To Me.iLineData
+            For i = 1 To Me.iLineUnits
                 Zeile = StrReadSync.ReadLine.ToString()
                 If (i = Me.iLineInfo) Then LineInfo = Zeile
                 If (i = Me.iLineHeadings) Then ZeileSpalten = Zeile

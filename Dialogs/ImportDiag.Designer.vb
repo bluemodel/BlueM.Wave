@@ -26,6 +26,7 @@ Partial Class ImportDiag
         Dim SplitContainer1 As System.Windows.Forms.SplitContainer
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(ImportDiag))
         Me.GroupBox_Selection = New System.Windows.Forms.GroupBox()
+        Me.Label_Selected = New System.Windows.Forms.Label()
         Me.Label_Search = New System.Windows.Forms.Label()
         Me.TextBox_Search = New System.Windows.Forms.TextBox()
         Me.Label_Series = New System.Windows.Forms.Label()
@@ -63,7 +64,6 @@ Partial Class ImportDiag
         Me.Label_Dateformat = New System.Windows.Forms.Label()
         Me.ComboBox_Dateformat = New System.Windows.Forms.ComboBox()
         Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
-        Me.Label_Selected = New System.Windows.Forms.Label()
         SplitContainer1 = New System.Windows.Forms.SplitContainer()
         CType(SplitContainer1, System.ComponentModel.ISupportInitialize).BeginInit()
         SplitContainer1.Panel1.SuspendLayout()
@@ -121,6 +121,16 @@ Partial Class ImportDiag
         Me.GroupBox_Selection.TabIndex = 0
         Me.GroupBox_Selection.TabStop = False
         Me.GroupBox_Selection.Text = "Series selection"
+        '
+        'Label_Selected
+        '
+        Me.Label_Selected.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Label_Selected.Location = New System.Drawing.Point(95, 196)
+        Me.Label_Selected.Name = "Label_Selected"
+        Me.Label_Selected.Size = New System.Drawing.Size(75, 13)
+        Me.Label_Selected.TabIndex = 34
+        Me.Label_Selected.Text = "0 selected"
+        Me.Label_Selected.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
         'Label_Search
         '
@@ -418,9 +428,10 @@ Partial Class ImportDiag
         Me.NumericUpDown_LineData.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.NumericUpDown_LineData.Location = New System.Drawing.Point(286, 46)
+        Me.NumericUpDown_LineData.Maximum = New Decimal(New Integer() {100000, 0, 0, 0})
         Me.NumericUpDown_LineData.Minimum = New Decimal(New Integer() {1, 0, 0, 0})
         Me.NumericUpDown_LineData.Name = "NumericUpDown_LineData"
-        Me.NumericUpDown_LineData.Size = New System.Drawing.Size(50, 20)
+        Me.NumericUpDown_LineData.Size = New System.Drawing.Size(60, 20)
         Me.NumericUpDown_LineData.TabIndex = 5
         Me.NumericUpDown_LineData.Value = New Decimal(New Integer() {1, 0, 0, 0})
         '
@@ -515,16 +526,6 @@ Partial Class ImportDiag
         Me.ComboBox_Dateformat.Name = "ComboBox_Dateformat"
         Me.ComboBox_Dateformat.Size = New System.Drawing.Size(139, 21)
         Me.ComboBox_Dateformat.TabIndex = 1
-        '
-        'Label_Selected
-        '
-        Me.Label_Selected.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Label_Selected.Location = New System.Drawing.Point(95, 196)
-        Me.Label_Selected.Name = "Label_Selected"
-        Me.Label_Selected.Size = New System.Drawing.Size(75, 13)
-        Me.Label_Selected.TabIndex = 34
-        Me.Label_Selected.Text = "0 selected"
-        Me.Label_Selected.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
         'ImportDiag
         '
