@@ -516,6 +516,10 @@ Public Class TimeSeries
         Dim iStart, iEnd As Integer
         Dim newNodes As SortedList(Of DateTime, Double)
 
+        If _start >= _end Then
+            Throw New ArgumentException("Unable to cut time series: start date is on or after end date!")
+        End If
+
         If (Me.StartDate < _start Or Me.EndDate > _end) Then
 
             Me.Title &= " (cut)"
