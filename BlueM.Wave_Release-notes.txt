@@ -4,6 +4,8 @@ BlueM.Wave Release Notes
 
 Version 1.13.6
 --------------
+FIXED: 
+* Fixed duplicate "(cut)" in series titles after cutting a time series
 API-CHANGES:
 * Attempting to call `Timeseries.Cut()` with a start date on or after the end date now throws an ArgumentException
 

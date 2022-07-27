@@ -277,14 +277,12 @@ Friend Class CutDialog
         If (Me.ComboBox_ZeitreiheCut.SelectedItem.ToString = labelAlle) Then
             For Each zre In Me.zreOrig
                 ts_cut = zre.Clone()
-                ts_cut.Title = $"{zre.Title} (cut)"
                 Call ts_cut.Cut(Me.cutStart, Me.cutEnd)
                 Me.zreCut.Add(ts_cut)
             Next
         Else
             zre = Me.ComboBox_ZeitreiheCut.SelectedItem
             ts_cut = zre.Clone()
-            ts_cut.Title = $"{zre.Title} (cut)"
             Call ts_cut.Cut(Me.cutStart, Me.cutEnd)
             Me.zreCut.Add(ts_cut)
         End If
