@@ -329,8 +329,8 @@ Public Class WEL
         Dim zipEntryFound As Boolean = False
         Dim success As Boolean = False
 
-        'determine WLZIP filename for files ending with .WEL, .KTR.WEL, .BOF.WEL or .CWR.WEL
-        Dim m As Match = Regex.Match(file, "^(.+?)(\.[a-z]{3})?\.WEL$", RegexOptions.IgnoreCase)
+        'determine WLZIP filename for files ending with .WEL (may also be e.g. .KTR.WEL, .CHLO.WEL, etc.)
+        Dim m As Match = Regex.Match(file, "^(.+?)(\.[a-z]+)?\.WEL$", RegexOptions.IgnoreCase)
         If m.Success Then
             file_wlzip = $"{m.Groups(1)}.WLZIP"
 
