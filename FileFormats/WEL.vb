@@ -80,7 +80,7 @@ Public Class WEL
 #End Region 'Properties
 
 #Region "Methoden"
-    
+
     ''' <summary>
     ''' Konstruktor
     ''' </summary>
@@ -89,7 +89,7 @@ Public Class WEL
         MyBase.New(FileName)
 
         SpaltenOffset = 1
-        
+
         'Voreinstellungen
         Me.iLineInfo = 1
         Me.iLineHeadings = 2
