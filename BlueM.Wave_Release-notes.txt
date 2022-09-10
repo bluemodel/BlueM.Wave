@@ -9,6 +9,7 @@ FIXED:
 * Fixed detection of files with endings such as .CHLO.WEL within WLZIP files (TALSIM clipboard)
 * Fixed duplicate "(cut)" in series titles after cutting a time series
 CHANGED:
+* Upgraded to DHI.DFS v20.1.0
 * Upgraded to TeeChart Pro 4.2022.8.23
 API-CHANGES:
 * Attempting to call `Timeseries.Cut()` with a start date on or after the end date now throws an ArgumentException
