@@ -168,7 +168,7 @@ Public Class CSV
 
             Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
             Dim StrRead As StreamReader = New StreamReader(FiStr, Me.Encoding)
-            Dim StrReadSync = TextReader.Synchronized(StrRead)
+            Dim StrReadSync As TextReader = TextReader.Synchronized(StrRead)
 
             'Zeitreihen instanzieren
             For Each sInfo As SeriesInfo In Me.SelectedSeries
@@ -239,6 +239,7 @@ Public Class CSV
 
         Catch ex As Exception
             MsgBox($"Unable to read file!{eol}{eol}Error: {ex.Message}", MsgBoxStyle.Critical)
+            Me.FileTimeSeries.Clear()
         End Try
 
     End Sub
