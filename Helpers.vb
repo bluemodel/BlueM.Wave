@@ -99,6 +99,7 @@ Public Module Helpers
             dict.Add("WEL", "dd.MM.yyyy HH:mm")
             dict.Add("ZRE", "yyyyMMdd HH:mm")
             dict.Add("ZRXP", "yyyyMMddHHmmss")
+            dict.Add("ISO", "yyyy-MM-dd HH:mm:ss")
             Return dict
         End Get
     End Property
