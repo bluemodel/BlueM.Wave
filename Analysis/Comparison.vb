@@ -127,7 +127,7 @@ Friend Class Comparison
         y_values = Me.ts_y.Values.ToArray()
 
         'Calculate linear regression
-        Dim p As Tuple(Of Double, Double)
+        Dim p As (A As Double, B As Double)
         p = Fit.Line(x_values, y_values)
 
         'Calculate correlation coefficient
@@ -135,8 +135,8 @@ Friend Class Comparison
         r = MathNet.Numerics.GoodnessOfFit.R(y_values, x_values)
 
         'Store result values
-        Me.mResultValues.Add("Linear regression intercept", p.Item1)
-        Me.mResultValues.Add("Linear regression slope", p.Item2)
+        Me.mResultValues.Add("Linear regression intercept", p.A)
+        Me.mResultValues.Add("Linear regression slope", p.B)
         Me.mResultValues.Add("Correlation coefficient", r)
 
     End Sub

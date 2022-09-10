@@ -146,10 +146,10 @@ Friend Class LinearRegression
         End If
 
         'Calculate linear regression
-        Dim p As Tuple(Of Double, Double)
+        Dim p As (A As Double, B As Double)
         p = MathNet.Numerics.Fit.Line(x_values, y_values)
-        a = p.Item1
-        b = p.Item2
+        a = p.A
+        b = p.B
 
         'Copy all non-NaN nodes to a new time series
         Me.ts_filled = Me.ts_gaps.removeNaNValues()
