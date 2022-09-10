@@ -50,7 +50,7 @@ Friend Class WaveController
     ''' <summary>
     ''' History of view extents [(xmin, xmax), ...]
     ''' </summary>
-    Private ZoomHistory As List(Of Tuple(Of Double, Double))
+    Private ZoomHistory As List(Of (xmin As Double, xmax As Double))
 
     ''' <summary>
     ''' Index of current view extent in zoom history (may not be saved yet)
@@ -77,7 +77,7 @@ Friend Class WaveController
         Me.View.SetController(Me)
 
         'Initialize zoom history
-        Me.ZoomHistory = New List(Of Tuple(Of Double, Double))
+        Me.ZoomHistory = New List(Of (xmin As Double, xmax As Double))
         Me.ZoomHistoryIndex = 0
 
         _axisDialog = New AxisDialog()
@@ -912,9 +912,9 @@ Friend Class WaveController
                 'save the current zoom snapshot first
                 Call Me.SaveZoomSnapshot()
             End If
-            Dim extent As Tuple(Of Double, Double) = ZoomHistory(prevIndex)
-            View.ChartMinX = DateTime.FromOADate(extent.Item1)
-            View.ChartMaxX = DateTime.FromOADate(extent.Item2)
+            Dim extent As (xmin As Double, xmax As Double) = ZoomHistory(prevIndex)
+            View.ChartMinX = DateTime.FromOADate(extent.xmin)
+            View.ChartMaxX = DateTime.FromOADate(extent.xmax)
             ZoomHistoryIndex = prevIndex
             Call Me.ViewportChanged()
             Log.AddLogEntry(Log.levels.debug, "Zoomed to history index " & prevIndex)
@@ -933,9 +933,9 @@ Friend Class WaveController
     Private Sub ZoomNext_Click(sender As Object, e As EventArgs)
 
         If Me.ZoomHistory.Count > (ZoomHistoryIndex + 1) Then
-            Dim extent As Tuple(Of Double, Double) = ZoomHistory(ZoomHistoryIndex + 1)
-            View.ChartMinX = DateTime.FromOADate(extent.Item1)
-            View.ChartMaxX = DateTime.FromOADate(extent.Item2)
+            Dim extent As (xmin As Double, xmax As Double) = ZoomHistory(ZoomHistoryIndex + 1)
+            View.ChartMinX = DateTime.FromOADate(extent.xmin)
+            View.ChartMaxX = DateTime.FromOADate(extent.xmax)
             ZoomHistoryIndex += 1
             Call Me.ViewportChanged()
             Log.AddLogEntry(Log.levels.debug, "Zoomed to history index " & ZoomHistoryIndex)
@@ -1694,7 +1694,7 @@ Friend Class WaveController
             Log.AddLogEntry(Log.levels.debug, $"Removed zoom history after index {ZoomHistoryIndex}")
         Else
             'add new snapshot
-            ZoomHistory.Add(New Tuple(Of Double, Double)(View.ChartMinX.ToOADate(), View.ChartMaxX.ToOADate()))
+            ZoomHistory.Add((View.ChartMinX.ToOADate(), View.ChartMaxX.ToOADate()))
             Log.AddLogEntry(Log.levels.debug, $"Saved zoom snapshot {ZoomHistoryIndex}: {View.ChartMinX}, {View.ChartMaxX}")
         End If
         ZoomHistoryIndex += 1
@@ -1732,17 +1732,17 @@ Friend Class WaveController
             enddate = View.ChartMaxX
 
             'define axes to process
-            Dim axes As New List(Of Tuple(Of Steema.TeeChart.Styles.VerticalAxis, Steema.TeeChart.Axis))
-            axes.Add(New Tuple(Of Steema.TeeChart.Styles.VerticalAxis, Steema.TeeChart.Axis)(Steema.TeeChart.Styles.VerticalAxis.Left, View.TChart1.Axes.Left))
-            axes.Add(New Tuple(Of Steema.TeeChart.Styles.VerticalAxis, Steema.TeeChart.Axis)(Steema.TeeChart.Styles.VerticalAxis.Right, View.TChart1.Axes.Right))
+            Dim axes As New List(Of (axisType As Steema.TeeChart.Styles.VerticalAxis, axis As Steema.TeeChart.Axis))
+            axes.Add((Steema.TeeChart.Styles.VerticalAxis.Left, View.TChart1.Axes.Left))
+            axes.Add((Steema.TeeChart.Styles.VerticalAxis.Right, View.TChart1.Axes.Right))
             For Each axis In View.TChart1.Axes.Custom
-                axes.Add(New Tuple(Of Steema.TeeChart.Styles.VerticalAxis, Steema.TeeChart.Axis)(Steema.TeeChart.Styles.VerticalAxis.Custom, axis))
+                axes.Add((Steema.TeeChart.Styles.VerticalAxis.Custom, axis))
             Next
 
             'loop over Y-axes
-            For Each t As Tuple(Of Steema.TeeChart.Styles.VerticalAxis, Steema.TeeChart.Axis) In axes
-                axisType = t.Item1
-                axis = t.Item2
+            For Each t As (axisType As Steema.TeeChart.Styles.VerticalAxis, axis As Steema.TeeChart.Axis) In axes
+                axisType = t.axisType
+                axis = t.axis
 
                 'loop over series
                 Ymin = Double.MaxValue

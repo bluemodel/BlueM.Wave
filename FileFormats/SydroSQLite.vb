@@ -82,7 +82,7 @@ Public Class SydroSQLite
     ''' Mapping of SeriesInfo.Index to Flag and T0
     ''' </summary>
     ''' <remarks>Used for FCTimeseries</remarks>
-    Private flag_T0_mapping As Dictionary(Of Integer, Tuple(Of Integer, DateTime))
+    Private flag_T0_mapping As Dictionary(Of Integer, (flag_id As Integer, T0 As DateTime))
 
     ''' <summary>
     ''' Converts a unit id to its corresponding name
@@ -197,7 +197,7 @@ Public Class SydroSQLite
         Me.UseUnits = True
 
         Me.flag_mapping = New Dictionary(Of Integer, Integer)
-        Me.flag_T0_mapping = New Dictionary(Of Integer, Tuple(Of Integer, DateTime))
+        Me.flag_T0_mapping = New Dictionary(Of Integer, (flag_id As Integer, T0 As DateTime))
 
         Call Me.readSeriesInfo()
 
@@ -304,7 +304,7 @@ Public Class SydroSQLite
         'read and store series info
         Me.SeriesList.Clear()
         Me.flag_mapping = New Dictionary(Of Integer, Integer)
-        Me.flag_T0_mapping = New Dictionary(Of Integer, Tuple(Of Integer, DateTime))
+        Me.flag_T0_mapping = New Dictionary(Of Integer, (flag_id As Integer, T0 As DateTime))
         Select Case Me.ts_class
             Case TimeseriesClassEnum.Unknown
                 Throw New Exception("Time series class is unknown!")
@@ -360,7 +360,7 @@ Public Class SydroSQLite
                         sInfo.Name = $"{ts_name}/{flag_id}: {flag_desc} - {T0.ToString(Helpers.CurrentDateFormat)}"
                         sInfo.Index = index
                         Me.SeriesList.Add(sInfo)
-                        Me.flag_T0_mapping.Add(index, New Tuple(Of Integer, DateTime)(flag_id, T0))
+                        Me.flag_T0_mapping.Add(index, (flag_id, T0))
                         index += 1
                     Next
                 Next
@@ -472,8 +472,8 @@ Public Class SydroSQLite
                     ts.DataSource = New TimeSeriesDataSource(Me.File, sInfo.Name)
 
                     'retrieve time series from db
-                    flag_id = Me.flag_T0_mapping(sInfo.Index).Item1
-                    T0 = Me.flag_T0_mapping(sInfo.Index).Item2
+                    flag_id = Me.flag_T0_mapping(sInfo.Index).flag_id
+                    T0 = Me.flag_T0_mapping(sInfo.Index).T0
 
                     command = New Data.SQLite.SQLiteCommand(Me.connection)
                     command.CommandText = "SELECT T1, rValue FROM TimeseriesValues WHERE (attribFlag = @flag AND rDate = @T0) ORDER BY T1;"
