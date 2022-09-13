@@ -12,6 +12,7 @@ FIXED:
 * Fixed detection of files with endings such as .CHLO.WEL within WLZIP files (TALSIM clipboard)
 * Fixed duplicate "(cut)" in series titles after cutting a time series
 CHANGED:
+* Added more information about detected or assumed file formats to the log
 * Upgraded MathNet.Numerics to v5.0.0
 * Upgraded DHI.DFS to v20.1.0
 * Upgraded TeeChart Pro to 4.2022.8.23

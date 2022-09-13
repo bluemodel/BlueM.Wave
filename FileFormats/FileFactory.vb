@@ -95,8 +95,11 @@ Public Module FileFactory
                 Dim isSSV As Boolean
                 If (WEL_GISMO.verifyFormat(file, isSSV)) Then
                     'GISMO result file in WEL format (separator is " ")
+                    Log.AddLogEntry(levels.info, $"Detected GISMO result format for file {IO.Path.GetFileName(file)}.")
                     FileInstance = New WEL_GISMO(file, isSSV)
                 Else
+                    'Assume SMUSI ASC format
+                    Log.AddLogEntry(levels.info, $"Assuming SMUSI ASC format for file {IO.Path.GetFileName(file)}.")
                     FileInstance = New ASC(file)
                 End If
 
@@ -104,15 +107,18 @@ Public Module FileFactory
                 'Check file format
                 If (HYDRO_AS_2D.verifyFormat(file)) Then
                     'HYDRO-AS_2D result file
+                    Log.AddLogEntry(levels.info, $"Detected HYDRO_AS-2D result format for file {IO.Path.GetFileName(file)}.")
                     FileInstance = New HYDRO_AS_2D(file)
                 ElseIf (HystemExtran_REG.verifyFormat(file)) Then
                     'Hystem-Extran rainfall file
+                    Log.AddLogEntry(levels.info, $"Detected Hystem-Extran rainfall format for file {IO.Path.GetFileName(file)}.")
                     FileInstance = New HystemExtran_REG(file)
                 ElseIf PRMS.verifyFormat(file) Then
                     'PRMS result file
+                    Log.AddLogEntry(levels.info, $"Detected PRMS result format for file {IO.Path.GetFileName(file)}.")
                     FileInstance = New PRMS(file)
                 Else
-                    Throw New Exception("ERROR: File format not recognized! The file is neither a HYDRO_AS-2D file nor a Hystem-Extran rainfall file!")
+                    Throw New Exception($"File {IO.Path.GetFileName(file)} has an unknown format!")
                 End If
 
             Case FileExtDFS0
@@ -122,33 +128,35 @@ Public Module FileFactory
                 'Check file format
                 If (REG_SMUSI.verifyFormat(file)) Then
                     'SMUSI rainfall file
+                    Log.AddLogEntry(levels.info, $"Detected SMUSI rainfall format for file {IO.Path.GetFileName(file)}.")
                     FileInstance = New REG_SMUSI(file)
                 ElseIf (HystemExtran_REG.verifyFormat(file)) Then
                     'Hystem-Extran rainfall file
+                    Log.AddLogEntry(levels.info, $"Detected Hystem-Extran rainfall format for file {IO.Path.GetFileName(file)}.")
                     FileInstance = New HystemExtran_REG(file)
                 Else
-                    Throw New Exception("ERROR: File format not recognized! The file is neither a SMUSI nor a Hystem-Extran rainfall file!")
+                    Throw New Exception($"File {IO.Path.GetFileName(file)} has an unknown format!")
                 End If
 
             Case FileExtSMB
                 FileInstance = New SMB(file)
 
             Case FileExtUVF
-                'Check file format
-                If UVF.verifyFormat(file) Then
-                    FileInstance = New UVF(file)
-                Else
-                    Throw New Exception("ERROR: UVF file has an unexpected format!")
+                'UVF format
+                If Not UVF.verifyFormat(file) Then
+                    Throw New Exception($"File {IO.Path.GetFileName(file)} has an unexpected format!")
                 End If
-
+                FileInstance = New UVF(file)
 
             Case FileExtWEL, FileExtKWL
                 'Check file format
                 If (WEL.verifyFormat(file)) Then
                     'WEL file
+                    Log.AddLogEntry(levels.info, $"Detected BlueM/Talsim WEL format for file {IO.Path.GetFileName(file)}.")
                     FileInstance = New WEL(file)
                 ElseIf (HystemExtran_WEL.verifyFormat(file)) Then
                     'Hystem-Extran rainfall file
+                    Log.AddLogEntry(levels.info, $"Detected Hystem-Extran rainfall format for file {IO.Path.GetFileName(file)}.")
                     FileInstance = New HystemExtran_WEL(file)
                 ElseIf (WBL.verifyFormat(file)) Then
                     'SYDRO binary WEL file
@@ -166,6 +174,7 @@ Public Module FileFactory
                 Dim isssv As Boolean
                 If (WEL_GISMO.verifyFormat(file, isssv)) Then
                     'GISMO result file in CSV format (separator is a ";")
+                    Log.AddLogEntry(levels.info, $"Detected GISMO result format for file {IO.Path.GetFileName(file)}.")
                     FileInstance = New WEL_GISMO(file, isssv)
                 Else
                     FileInstance = New CSV(file)
@@ -173,8 +182,12 @@ Public Module FileFactory
 
             Case FileExtOUT
                 If PRMS.verifyFormat(file) Then
+                    'PRMS result format
+                    Log.AddLogEntry(levels.info, $"Detected PRMS result format for file {IO.Path.GetFileName(file)}.")
                     FileInstance = New PRMS(file)
                 Else
+                    'Assume SWMM5 binary output format
+                    Log.AddLogEntry(levels.info, $"Assuming SWMM5 binary output format for file {IO.Path.GetFileName(file)}.")
                     FileInstance = New SWMM_OUT(file)
                 End If
 
@@ -182,9 +195,11 @@ Public Module FileFactory
                 'Check file format
                 If SWMM_LID_REPORT.verifyFormat(file) Then
                     'SWMM LID report file
+                    Log.AddLogEntry(levels.info, $"Detected SWMM LID report file format for file {IO.Path.GetFileName(file)}.")
                     FileInstance = New SWMM_LID_REPORT(file)
                 ElseIf SWMM_INTERFACE.verifyFormat(file) Then
                     'SWMM routing interface file
+                    Log.AddLogEntry(levels.info, $"Detected SWMM routing interface file format for file {IO.Path.GetFileName(file)}.")
                     FileInstance = New SWMM_INTERFACE(file)
                 Else
                     'Other text files can usually be read as CSV files
