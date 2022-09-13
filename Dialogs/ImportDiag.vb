@@ -182,7 +182,8 @@ Friend Class ImportDiag
         'Workaround for binary file formats
         If TypeOf Me.datei Is SWMM_OUT _
             Or TypeOf Me.datei Is SydroSQLite _
-            Or TypeOf Me.datei Is DFS0 Then
+            Or TypeOf Me.datei Is DFS0 _
+            Or TypeOf Me.datei Is WBL Then
 
             Me.TextBox_Preview.Text = $"{Path.GetFileName(Me.datei.File)} is a binary file.{eol}Preview is not available!"
             'Disable all other fields

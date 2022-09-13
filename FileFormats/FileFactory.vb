@@ -46,6 +46,7 @@ Public Module FileFactory
     Public Const FileExtTXT As String = ".TXT"   'SWMM interface routing file, SWMM LID report file or generic text file 
     Public Const FileExtBIN As String = ".BIN"   'SYDRO binary format
     Public Const FileExtSQLITE As String = ".DB" 'SYDRO SQLite format
+    Public Const FileExtWBL As String = ".WBL"   'SYDRO binary WEL format
     Public Const FileExtZRX As String = ".ZRX"   'ZRXP format
     Public Const FileExtZRXP As String = ".ZRXP" 'ZRXP format
     Public Const FileExtWVP As String = ".WVP"   'Wave project file
@@ -149,8 +150,12 @@ Public Module FileFactory
                 ElseIf (HystemExtran_WEL.verifyFormat(file)) Then
                     'Hystem-Extran rainfall file
                     FileInstance = New HystemExtran_WEL(file)
+                ElseIf (WBL.verifyFormat(file)) Then
+                    'SYDRO binary WEL file
+                    Log.AddLogEntry(levels.info, $"Detected SYDRO binary WEL format for file {IO.Path.GetFileName(file)}.")
+                    FileInstance = New WBL(file)
                 Else
-                    Throw New Exception("ERROR: WEL file has an unexpected format!")
+                    Throw New Exception($"File {IO.Path.GetFileName(file)} has an unknown format!")
                 End If
 
             Case FileExtZRE
@@ -187,7 +192,15 @@ Public Module FileFactory
                 End If
 
             Case FileExtBIN
+                'SYDRO binary file
                 FileInstance = New BIN(file)
+
+            Case FileExtWBL
+                'SYDRO binary WEL file
+                If Not WBL.verifyFormat(file) Then
+                    Throw New Exception($"File {IO.Path.GetFileName(file)} has an unexpected format!")
+                End If
+                FileInstance = New WBL(file)
 
             Case FileExtSQLITE
                 FileInstance = New SydroSQLite(file)

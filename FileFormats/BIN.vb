@@ -149,7 +149,7 @@ Public Class BIN
     ''' Assumes the real date is number of hours since 01.01.1601
     ''' Rounds to the nearest second
     ''' </remarks>
-    Private Shared Function rDateToDate(rDate As Double) As DateTime
+    Friend Shared Function rDateToDate(rDate As Double) As DateTime
         Dim timestamp As DateTime
         Dim hours, minutes, seconds As Integer
         hours = Math.Floor(rDate)

@@ -52,6 +52,7 @@ Public MustInherit Class FileFormatBase
         PRMS_OUT = 15
         DFS0 = 16
         SWMM_LID_REPORT = 17
+        WBL = 18
     End Enum
 
     ''' <summary>
@@ -70,6 +71,7 @@ Public MustInherit Class FileFormatBase
             "SMUSI files (*.asc. *.reg)|*.asc;*.reg|" &
             "SWMM files (*.txt, *.out)|*.txt;*.out|" &
             "SYDRO binary files (*.bin)|*.bin|" &
+            "SYDRO binary wel files (*.wbl)|*.wbl|" &
             "SYDRO SQLite files (*.db)|*.db|" &
             "UVF files (*.uvf)|*.uvf|" &
             "WEL files (*.wel, *.kwl)|*.wel;*.kwl|" &

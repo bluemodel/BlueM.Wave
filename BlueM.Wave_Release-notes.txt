@@ -5,6 +5,7 @@ BlueM.Wave Release Notes
 Version 1.13.6
 --------------
 NEW:
+* Added experimental support for reading SYDRO binary WEL files (*.WBL). Requires an accompanying *.WELINFO file for metadata info.
 * Added ISO date format "yyyy-MM-dd HH:mm:ss" to list of date format presets in import dialog
 FIXED: 
 * Fixed empty time series being added after a failed import attempt (CSV)
