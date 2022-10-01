@@ -8,6 +8,7 @@ API-CHANGES:
 * Fixed broken application state when showing the Wave window using the API #77
 * Allow multiple separate app instances to exist at the same time
 * New alternative method for launching an app instance: `BlueM.Wave.App.Launch()`
+* Introduced the namespace `BlueM.Wave.Fileformats` for all objects related to file formats
 
 Version 1.13.6
 --------------

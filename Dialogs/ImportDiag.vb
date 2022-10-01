@@ -38,7 +38,7 @@ Friend Class ImportDiag
 
     Private IsInitializing As Boolean
 
-    Private datei As FileFormatBase
+    Private datei As Fileformats.FileFormatBase
     Private WithEvents inputTimer As Timers.Timer
 
 #End Region
@@ -106,7 +106,7 @@ Friend Class ImportDiag
 
     'Konstruktor
     '***********
-    Public Sub New(ByRef _dateiobjekt As FileFormatBase)
+    Public Sub New(ByRef _dateiobjekt As Fileformats.FileFormatBase)
 
         Call MyBase.New()
 
@@ -180,10 +180,10 @@ Friend Class ImportDiag
         Me.Label_File.Text = "File: " & Path.GetFileName(Me.datei.File)
 
         'Workaround for binary file formats
-        If TypeOf Me.datei Is SWMM_OUT _
-            Or TypeOf Me.datei Is SydroSQLite _
-            Or TypeOf Me.datei Is DFS0 _
-            Or TypeOf Me.datei Is WBL Then
+        If TypeOf Me.datei Is Fileformats.SWMM_OUT _
+            Or TypeOf Me.datei Is Fileformats.SydroSQLite _
+            Or TypeOf Me.datei Is Fileformats.DFS0 _
+            Or TypeOf Me.datei Is Fileformats.WBL Then
 
             Me.TextBox_Preview.Text = $"{Path.GetFileName(Me.datei.File)} is a binary file.{eol}Preview is not available!"
             'Disable all other fields
@@ -243,7 +243,7 @@ Friend Class ImportDiag
             Me.DialogResult = Windows.Forms.DialogResult.None
             Exit Sub
         Else
-            For Each sInfo As FileFormatBase.SeriesInfo In Me.ListBox_Series.SelectedItems
+            For Each sInfo As Fileformats.FileFormatBase.SeriesInfo In Me.ListBox_Series.SelectedItems
                 Me.datei.selectSeries(sInfo.Index)
             Next
         End If
@@ -381,7 +381,7 @@ Friend Class ImportDiag
         Me.NumericUpDown_ColumnDateTime.Value = Me.datei.DateTimeColumnIndex + 1
 
         'Available series
-        Dim sInfo As FileFormatBase.SeriesInfo
+        Dim sInfo As Fileformats.FileFormatBase.SeriesInfo
         Me.Label_Series.Text = $"Available series ({Me.datei.SeriesList.Count}):"
         'remember currently selected series
         Dim selectedSeries As New List(Of String)

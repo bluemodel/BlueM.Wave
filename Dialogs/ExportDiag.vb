@@ -35,17 +35,17 @@ Friend Class ExportDiag
         ' Add any initialization after the InitializeComponent() call.
 
         'add formats to combobox
-        Me.ComboBox_Format.Items.Add(FileFormatBase.FileFormats.CSV)
-        Me.ComboBox_Format.Items.Add(FileFormatBase.FileFormats.BIN)
-        Me.ComboBox_Format.Items.Add(FileFormatBase.FileFormats.DFS0)
-        Me.ComboBox_Format.Items.Add(FileFormatBase.FileFormats.REG_HYSTEM)
-        Me.ComboBox_Format.Items.Add(FileFormatBase.FileFormats.REG_SMUSI)
-        Me.ComboBox_Format.Items.Add(FileFormatBase.FileFormats.DAT_SWMM_MASS)
-        Me.ComboBox_Format.Items.Add(FileFormatBase.FileFormats.DAT_SWMM_TIME)
-        Me.ComboBox_Format.Items.Add(FileFormatBase.FileFormats.SWMM_INTERFACE)
-        Me.ComboBox_Format.Items.Add(FileFormatBase.FileFormats.UVF)
-        Me.ComboBox_Format.Items.Add(FileFormatBase.FileFormats.ZRE)
-        Me.ComboBox_Format.Items.Add(FileFormatBase.FileFormats.ZRXP)
+        Me.ComboBox_Format.Items.Add(Fileformats.FileFormatBase.FileFormats.CSV)
+        Me.ComboBox_Format.Items.Add(Fileformats.FileFormatBase.FileFormats.BIN)
+        Me.ComboBox_Format.Items.Add(Fileformats.FileFormatBase.FileFormats.DFS0)
+        Me.ComboBox_Format.Items.Add(Fileformats.FileFormatBase.FileFormats.REG_HYSTEM)
+        Me.ComboBox_Format.Items.Add(Fileformats.FileFormatBase.FileFormats.REG_SMUSI)
+        Me.ComboBox_Format.Items.Add(Fileformats.FileFormatBase.FileFormats.DAT_SWMM_MASS)
+        Me.ComboBox_Format.Items.Add(Fileformats.FileFormatBase.FileFormats.DAT_SWMM_TIME)
+        Me.ComboBox_Format.Items.Add(Fileformats.FileFormatBase.FileFormats.SWMM_INTERFACE)
+        Me.ComboBox_Format.Items.Add(Fileformats.FileFormatBase.FileFormats.UVF)
+        Me.ComboBox_Format.Items.Add(Fileformats.FileFormatBase.FileFormats.ZRE)
+        Me.ComboBox_Format.Items.Add(Fileformats.FileFormatBase.FileFormats.ZRXP)
         Me.ComboBox_Format.SelectedIndex = 0
 
         'Add series to listbox
@@ -65,21 +65,21 @@ Friend Class ExportDiag
 
         Select Case ComboBox_Format.SelectedItem
 
-            Case FileFormatBase.FileFormats.ZRE,
-                 FileFormatBase.FileFormats.REG_HYSTEM,
-                 FileFormatBase.FileFormats.REG_SMUSI,
-                 FileFormatBase.FileFormats.DAT_SWMM_MASS,
-                 FileFormatBase.FileFormats.DAT_SWMM_TIME,
-                 FileFormatBase.FileFormats.BIN,
-                 FileFormatBase.FileFormats.UVF,
-                 FileFormatBase.FileFormats.ZRXP
+            Case Fileformats.FileFormatBase.FileFormats.ZRE,
+                 Fileformats.FileFormatBase.FileFormats.REG_HYSTEM,
+                 Fileformats.FileFormatBase.FileFormats.REG_SMUSI,
+                 Fileformats.FileFormatBase.FileFormats.DAT_SWMM_MASS,
+                 Fileformats.FileFormatBase.FileFormats.DAT_SWMM_TIME,
+                 Fileformats.FileFormatBase.FileFormats.BIN,
+                 Fileformats.FileFormatBase.FileFormats.UVF,
+                 Fileformats.FileFormatBase.FileFormats.ZRXP
                 'Allow selection of a single series
                 Me.ListBox_Series.SelectionMode = SelectionMode.One
                 Me.Button_SelectAll.Enabled = False
 
-            Case FileFormatBase.FileFormats.SWMM_INTERFACE,
-                 FileFormatBase.FileFormats.CSV,
-                 FileFormatBase.FileFormats.DFS0
+            Case Fileformats.FileFormatBase.FileFormats.SWMM_INTERFACE,
+                 Fileformats.FileFormatBase.FileFormats.CSV,
+                 Fileformats.FileFormatBase.FileFormats.DFS0
                 'Allow selection of multiple series
                 Me.ListBox_Series.SelectionMode = SelectionMode.MultiExtended
                 Me.Button_SelectAll.Enabled = True

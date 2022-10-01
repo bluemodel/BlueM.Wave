@@ -84,7 +84,7 @@ Module TestData
     ''' <returns></returns>
     Friend Function getTestTimeSeries_BIN1() As TimeSeries
         Dim binfile As String = IO.Path.Combine(getTestDataDir, "BIN", "abfluss_1.bin")
-        Dim BIN As New BIN(binfile, ReadAllNow:=True)
+        Dim BIN As New Fileformats.BIN(binfile, ReadAllNow:=True)
         Dim ts As TimeSeries = BIN.getTimeSeries(0)
         Return ts
     End Function
