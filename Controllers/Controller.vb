@@ -28,7 +28,7 @@
 ''' <summary>
 ''' Abstract Controller class
 ''' </summary>
-Public MustInherit Class Controller
+Friend MustInherit Class Controller
 
     Protected WithEvents _view As IView
     Protected WithEvents _model As Wave

@@ -28,7 +28,7 @@
 ''' <summary>
 ''' Interface for Views
 ''' </summary>
-Public Interface IView
+Friend Interface IView
 
     Sub SetController(controller As Controller)
 
