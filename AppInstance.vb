@@ -25,36 +25,48 @@
 'EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 '--------------------------------------------------------------------------------------------
 '
-Public Module App
+''' <summary>
+''' Class representing an instance of the Wave app
+''' </summary>
+Friend Class AppInstance
+    'Model
+    Private _wave As Wave
 
-    <STAThread()>
-    Public Sub Main()
-        ' Starts the application.
+    'Controllers
+    Private WithEvents _waveController As WaveController
+    Private _propController As Controller
+    Private _valuesController As Controller
 
-        Application.EnableVisualStyles()
-        Application.SetCompatibleTextRenderingDefault(False)
-
-        Dim wave As New Wave()
-
-        If Environment.GetCommandLineArgs().Count > 1 Then
-            'run the CLI
-            Dim showWave As Boolean = CLI.Run(Environment.GetCommandLineArgs().Skip(1).ToList, wave)
-            If Not showWave Then
-                Exit Sub
-            End If
-        End If
-
-        Call Launch(wave)
-
+    ''' <summary>
+    ''' Instantiates a new AppInstance with the passed Wave instance as the model
+    ''' </summary>
+    ''' <param name="wave">the Wave instance to use as the model</param>
+    Public Sub New(wave As Wave)
+        _wave = wave
+        _waveController = New WaveController(New MainWindow(), _wave)
+        _propController = New PropertiesController(New PropertiesWindow(), _wave)
+        _valuesController = New ValuesController(New ValuesWindow(), _wave)
     End Sub
 
     ''' <summary>
-    ''' Launches a new instance of the Wave app
+    ''' Shows the main Wave window
     ''' </summary>
-    ''' <param name="wave">the Wave model instance to associate with the app</param>
-    Public Sub Launch(wave As Wave)
-        Dim instance As New AppInstance(wave)
-        instance.showMainWindow()
+    Friend Sub showMainWindow()
+        _waveController.ShowView()
     End Sub
 
-End Module
+    ''' <summary>
+    ''' Shows the Timeseries Properties window
+    ''' </summary>
+    Friend Sub showPropertiesWindow() Handles _waveController.Properties_Clicked
+        _propController.ShowView()
+    End Sub
+
+    ''' <summary>
+    ''' Shows the Timeseries Values window
+    ''' </summary>
+    Friend Sub showValuesWindow() Handles _waveController.TimeseriesValues_Clicked
+        _valuesController.ShowView()
+    End Sub
+
+End Class

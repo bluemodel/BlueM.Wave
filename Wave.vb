@@ -91,6 +91,13 @@ Public Class Wave
     End Sub
 
     ''' <summary>
+    ''' Launches a new Wave app instance using itself as the model
+    ''' </summary>
+    Public Sub Show()
+        App.Launch(Me)
+    End Sub
+
+    ''' <summary>
     ''' Import series from multiple files
     ''' </summary>
     ''' <param name="files">array of file paths</param>
@@ -784,13 +791,6 @@ Public Class Wave
 
     Friend Sub SeriesPropertiesChangedHandler(id As Integer)
         RaiseEvent SeriesPropertiesChanged(id)
-    End Sub
-
-    ''' <summary>
-    ''' Displays the main window
-    ''' </summary>
-    Public Sub Show()
-        App.showMainWindow(Me)
     End Sub
 
 End Class

@@ -42,7 +42,7 @@ Friend Class WaveController
         If IsNothing(_view) Then
             _view = New MainWindow()
         End If
-        View.ShowDialog()
+        View.Show()
     End Sub
 
     Private selectionMade As Boolean 'Flag zeigt an, ob bereits ein Auswahlbereich ausgewählt wurde
@@ -69,6 +69,10 @@ Friend Class WaveController
     Private OverviewChartMouseDragOffset As Double
 
     Private WithEvents _axisDialog As AxisDialog
+
+    'Events handled by the AppInstance
+    Friend Event Properties_Clicked()
+    Friend Event TimeseriesValues_Clicked()
 
     Public Sub New(view As IView, ByRef model As Wave)
 
@@ -543,14 +547,14 @@ Friend Class WaveController
     ''' </summary>
     ''' <remarks></remarks>
     Private Sub Properties_Click(sender As System.Object, e As System.EventArgs)
-        App.showPropertiesWindow()
+        RaiseEvent Properties_Clicked()
     End Sub
 
     ''' <summary>
     ''' Timeseries Values button clicked
     ''' </summary>
     Private Sub TimeseriesValues_Click(sender As Object, e As EventArgs)
-        App.showValuesWindow()
+        RaiseEvent TimeseriesValues_Clicked()
     End Sub
 
     ''' <summary>

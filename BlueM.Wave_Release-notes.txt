@@ -2,6 +2,13 @@
 BlueM.Wave Release Notes
 ===============================================================
 
+Version 1.14.0
+--------------
+API-CHANGES:
+* Fixed broken application state when showing the Wave window using the API #77
+* Allow multiple separate app instances to exist at the same time
+* New alternative method for launching an app instance: `BlueM.Wave.App.Launch()`
+
 Version 1.13.6
 --------------
 NEW:

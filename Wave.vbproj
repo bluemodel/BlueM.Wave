@@ -189,6 +189,7 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="App.vb" />
+    <Compile Include="AppInstance.vb" />
     <Compile Include="Classes\AxisWrapper.vb" />
     <Compile Include="Classes\Character.vb" />
     <Compile Include="Classes\Metadata.vb" />
