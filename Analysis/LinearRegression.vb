@@ -103,18 +103,18 @@ Friend Class LinearRegression
     Public Overrides Sub ProcessAnalysis()
 
         'Auswahl-Dialog öffnen
-        Dim dialog As New LinearRegression_Dialog(Me.mZeitreihen(0).Title, Me.mZeitreihen(1).Title)
+        Dim dialog As New LinearRegression_Dialog(Me.InputTimeSeries(0).Title, Me.InputTimeSeries(1).Title)
         If (dialog.ShowDialog() <> DialogResult.OK) Then
             Throw New Exception("User abort")
         End If
 
         'Zeitreihen zuweisen
         If (dialog.getNrLueckenhafteReihe = 1) Then
-            Me.ts_gaps = Me.mZeitreihen(0)
-            Me.ts_ref = Me.mZeitreihen(1)
+            Me.ts_gaps = Me.InputTimeSeries(0)
+            Me.ts_ref = Me.InputTimeSeries(1)
         Else
-            Me.ts_gaps = Me.mZeitreihen(1)
-            Me.ts_ref = Me.mZeitreihen(0)
+            Me.ts_gaps = Me.InputTimeSeries(1)
+            Me.ts_ref = Me.InputTimeSeries(0)
         End If
 
         'Calculate correlation and linear regression
@@ -182,24 +182,24 @@ Friend Class LinearRegression
     Public Overrides Sub PrepareResults()
 
         'Ergebnistext
-        Me.mResultText =
+        Me.ResultText =
             $"{Me.filled_nodes.Count} gaps were filled in time series '{Me.ts_gaps.Title}'." & eol &
             $"Linear regression line: y = {Me.a} + {Me.b} * x" & eol &
             $"Correlation coefficient: r = {Me.r}"
         If Me.filled_nodes.Count > 0 Then
-            Me.mResultText &= eol &
+            Me.ResultText &= eol &
                 $"Filled gaps:"
             For Each node As KeyValuePair(Of DateTime, Double) In Me.filled_nodes
-                Me.mResultText &= $"{eol}{node.Key}{vbTab}{node.Value}"
+                Me.ResultText &= $"{eol}{node.Key}{vbTab}{node.Value}"
             Next
 
         End If
 
         'Ergebniswerte:
-        Me.mResultValues.Add("Correlation coefficient", Me.r)
+        Me.ResultValues.Add("Correlation coefficient", Me.r)
 
         'Result series
-        Me.mResultSeries = New List(Of TimeSeries) From {Me.ts_filled}
+        Me.ResultSeries = New List(Of TimeSeries) From {Me.ts_filled}
 
     End Sub
 End Class

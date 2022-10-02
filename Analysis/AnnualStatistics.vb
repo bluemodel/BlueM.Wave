@@ -111,10 +111,10 @@ Friend Class AnnualStatistics
         Dim startMonth As Integer = CType(dialog.ComboBox_startMonth.SelectedItem, Month).number
 
         'stats for entire series
-        Me.stats.Add("Entire series", calculateStats(Me.mZeitreihen(0)))
+        Me.stats.Add("Entire series", calculateStats(Me.InputTimeSeries(0)))
 
         'stats for hydrological years
-        hyoseries = Me.mZeitreihen(0).SplitHydroYears(startMonth)
+        hyoseries = Me.InputTimeSeries(0).SplitHydroYears(startMonth)
         For Each kvp As KeyValuePair(Of Integer, TimeSeries) In hyoseries
             year = kvp.Key
             series = kvp.Value
@@ -128,14 +128,14 @@ Friend Class AnnualStatistics
 
         Const formatstring As String = "F4"
 
-        Me.mResultText = "Annual statistics:" & eol & eol &
-                         $"Time series: {Me.mZeitreihen(0).Title}" & eol & eol
+        Me.ResultText = "Annual statistics:" & eol & eol &
+                         $"Time series: {Me.InputTimeSeries(0).Title}" & eol & eol
         'output results in CSV format
-        Me.mResultText &= "Results:" & eol
-        Me.mResultText &= String.Join(Helpers.CurrentListSeparator, "Description", "Start", "End", "Length", "Min", "Max", "Avg", "Volume") & eol
+        Me.ResultText &= "Results:" & eol
+        Me.ResultText &= String.Join(Helpers.CurrentListSeparator, "Description", "Start", "End", "Length", "Min", "Max", "Avg", "Volume") & eol
         For Each kvp As KeyValuePair(Of String, struct_stat) In Me.stats
             stat = kvp.Value
-            Me.mResultText &= String.Join(Helpers.CurrentListSeparator,
+            Me.ResultText &= String.Join(Helpers.CurrentListSeparator,
                 kvp.Key,
                 stat.startDate.ToString(Helpers.CurrentDateFormat),
                 stat.endDate.ToString(Helpers.CurrentDateFormat),

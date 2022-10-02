@@ -114,7 +114,7 @@ Friend Class Histogram
         ReDim Me.results(zeitreihen.Count - 1)
 
         'Show HistogramDialog
-        histogramDlg = New HistogramDialog(Me.mZeitreihen)
+        histogramDlg = New HistogramDialog(Me.InputTimeSeries)
         dlgResult = histogramDlg.ShowDialog()
         If dlgResult <> DialogResult.OK Then
             Throw New Exception("Cancelled by user")
@@ -137,7 +137,7 @@ Friend Class Histogram
         'Analyse series
         '--------------
         n = 0
-        For Each zre As TimeSeries In Me.mZeitreihen
+        For Each zre As TimeSeries In Me.InputTimeSeries
 
             With Me.results(n)
 
@@ -205,13 +205,13 @@ Friend Class Histogram
         'Ergebnistext
         '------------
         Const formatstring As String = "F4"
-        Me.mResultText = "Histogram has been calculated." & eol
-        Me.mResultText &= "Result data:" & eol
+        Me.ResultText = "Histogram has been calculated." & eol
+        Me.ResultText &= "Result data:" & eol
         For Each result As resultValues In Me.results
-            Me.mResultText &= result.title & eol
-            Me.mResultText &= String.Join(Helpers.CurrentListSeparator, "from", "to", "frequency", "probability") & eol
+            Me.ResultText &= result.title & eol
+            Me.ResultText &= String.Join(Helpers.CurrentListSeparator, "from", "to", "frequency", "probability") & eol
             For i As Integer = 0 To Me.n_bins - 1
-                Me.mResultText &= String.Join(Helpers.CurrentListSeparator,
+                Me.ResultText &= String.Join(Helpers.CurrentListSeparator,
                     Me.breaks(i).ToString(formatstring),
                     Me.breaks(i + 1).ToString(formatstring),
                     result.frequency(i),
@@ -227,32 +227,32 @@ Friend Class Histogram
         '----------------
 
         'Diagramm formatieren
-        Me.mResultChart = New Steema.TeeChart.Chart()
-        Call Helpers.FormatChart(Me.mResultChart)
-        Me.mResultChart.Header.Text = "Histogram"
+        Me.ResultChart = New Steema.TeeChart.Chart()
+        Call Helpers.FormatChart(Me.ResultChart)
+        Me.ResultChart.Header.Text = "Histogram"
 
         'Achsen
-        Me.mResultChart.Axes.Left.Title.Caption = "Probability [%]"
-        Me.mResultChart.Axes.Left.Automatic = False
-        Me.mResultChart.Axes.Left.Minimum = 0
-        Me.mResultChart.Axes.Left.AutomaticMaximum = True
-        Me.mResultChart.Axes.Left.MaximumOffset = 2
+        Me.ResultChart.Axes.Left.Title.Caption = "Probability [%]"
+        Me.ResultChart.Axes.Left.Automatic = False
+        Me.ResultChart.Axes.Left.Minimum = 0
+        Me.ResultChart.Axes.Left.AutomaticMaximum = True
+        Me.ResultChart.Axes.Left.MaximumOffset = 2
 
-        Me.mResultChart.Axes.Right.Visible = True
-        Me.mResultChart.Axes.Right.Title.Caption = "Probability of non-exceedance [%]"
-        Me.mResultChart.Axes.Right.Title.Angle = 90
-        Me.mResultChart.Axes.Right.Automatic = False
-        Me.mResultChart.Axes.Right.Minimum = 0
-        Me.mResultChart.Axes.Right.Maximum = 100
-        Me.mResultChart.Axes.Right.Grid.Visible = False
+        Me.ResultChart.Axes.Right.Visible = True
+        Me.ResultChart.Axes.Right.Title.Caption = "Probability of non-exceedance [%]"
+        Me.ResultChart.Axes.Right.Title.Angle = 90
+        Me.ResultChart.Axes.Right.Automatic = False
+        Me.ResultChart.Axes.Right.Minimum = 0
+        Me.ResultChart.Axes.Right.Maximum = 100
+        Me.ResultChart.Axes.Right.Grid.Visible = False
 
-        Me.mResultChart.Axes.Bottom.Labels.Style = Steema.TeeChart.AxisLabelStyle.Value
-        Me.mResultChart.Axes.Bottom.Title.Caption = $"Value [{Me.mZeitreihen(0).Unit}]"
+        Me.ResultChart.Axes.Bottom.Labels.Style = Steema.TeeChart.AxisLabelStyle.Value
+        Me.ResultChart.Axes.Bottom.Title.Caption = $"Value [{Me.InputTimeSeries(0).Unit}]"
 
         'Serien
         For Each res As resultValues In Me.results
 
-            Dim serieP As New Steema.TeeChart.Styles.Histogram(Me.mResultChart)
+            Dim serieP As New Steema.TeeChart.Styles.Histogram(Me.ResultChart)
             serieP.Title = $"{res.title} (P(x))"
             serieP.Marks.Visible = False
 
@@ -260,7 +260,7 @@ Friend Class Histogram
                 serieP.Add((Me.breaks(i) + Me.breaks(i + 1)) / 2, res.probability(i), res.probability(i).ToString("F2") & "%")
             Next
 
-            Dim seriePU As New Steema.TeeChart.Styles.Line(Me.mResultChart)
+            Dim seriePU As New Steema.TeeChart.Styles.Line(Me.ResultChart)
             seriePU.VertAxis = Steema.TeeChart.Styles.VerticalAxis.Right
             seriePU.Title = $"{res.title} (PU(x))"
             seriePU.LinePen.Width = 2
@@ -279,7 +279,7 @@ Friend Class Histogram
         Dim markstip As New Steema.TeeChart.Tools.MarksTip()
         markstip.Style = Steema.TeeChart.Styles.MarksStyles.Label
         'markstip.MouseAction = Steema.TeeChart.Tools.MarksTipMouseAction.Move
-        Me.mResultChart.Tools.Add(markstip)
+        Me.ResultChart.Tools.Add(markstip)
 
     End Sub
 

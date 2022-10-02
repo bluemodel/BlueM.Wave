@@ -97,7 +97,7 @@ Friend Class Comparison
     Public Overrides Sub ProcessAnalysis()
 
         ' Dialogaufruf zur Auswahl der x-Achse
-        Dim dialog As New Comparison_Dialog(Me.mZeitreihen(0).Title, Me.mZeitreihen(1).Title)
+        Dim dialog As New Comparison_Dialog(Me.InputTimeSeries(0).Title, Me.InputTimeSeries(1).Title)
 
         If (dialog.ShowDialog() <> DialogResult.OK) Then
             Throw New Exception("User abort")
@@ -106,12 +106,12 @@ Friend Class Comparison
         ' Zuweisen der x-Achse
         Dim xachse As String
         xachse = dialog.xAchse
-        If (xachse = Me.mZeitreihen(0).Title) Then
-            Me.ts_x = Me.mZeitreihen(0)
-            Me.ts_y = Me.mZeitreihen(1)
+        If (xachse = Me.InputTimeSeries(0).Title) Then
+            Me.ts_x = Me.InputTimeSeries(0)
+            Me.ts_y = Me.InputTimeSeries(1)
         Else
-            Me.ts_x = Me.mZeitreihen(1)
-            Me.ts_y = Me.mZeitreihen(0)
+            Me.ts_x = Me.InputTimeSeries(1)
+            Me.ts_y = Me.InputTimeSeries(0)
         End If
 
         'Remove NaN values
@@ -135,9 +135,9 @@ Friend Class Comparison
         r = MathNet.Numerics.GoodnessOfFit.R(y_values, x_values)
 
         'Store result values
-        Me.mResultValues.Add("Linear regression intercept", p.A)
-        Me.mResultValues.Add("Linear regression slope", p.B)
-        Me.mResultValues.Add("Correlation coefficient", r)
+        Me.ResultValues.Add("Linear regression intercept", p.A)
+        Me.ResultValues.Add("Linear regression slope", p.B)
+        Me.ResultValues.Add("Correlation coefficient", r)
 
     End Sub
 
@@ -155,35 +155,35 @@ Friend Class Comparison
 
         'Text:
         '-----
-        Me.mResultText = $"The analysis is based on {Me.ts_x.Length} coincident data points between {Me.ts_x.StartDate.ToString(Helpers.CurrentDateFormat)} and {Me.ts_x.EndDate.ToString(Helpers.CurrentDateFormat)}"
+        Me.ResultText = $"The analysis is based on {Me.ts_x.Length} coincident data points between {Me.ts_x.StartDate.ToString(Helpers.CurrentDateFormat)} and {Me.ts_x.EndDate.ToString(Helpers.CurrentDateFormat)}"
 
         'Diagramm:
         '---------
         Dim series_points As Steema.TeeChart.Styles.Points
         Dim regression_line As Steema.TeeChart.Styles.Line
 
-        Me.mResultChart = New Steema.TeeChart.Chart()
-        Call Helpers.FormatChart(Me.mResultChart)
-        Me.mResultChart.Header.Text = $"Comparison ({x_title} / {y_title})"
-        Me.mResultChart.Legend.Visible = False
+        Me.ResultChart = New Steema.TeeChart.Chart()
+        Call Helpers.FormatChart(Me.ResultChart)
+        Me.ResultChart.Header.Text = $"Comparison ({x_title} / {y_title})"
+        Me.ResultChart.Legend.Visible = False
 
         'Achsen
         '------
-        Me.mResultChart.Axes.Bottom.Title.Caption = $"{x_title}  [{x_unit}]"
-        Me.mResultChart.Axes.Bottom.Labels.Style = Steema.TeeChart.AxisLabelStyle.Value
-        Me.mResultChart.Axes.Left.Title.Caption = $"{y_title}  [{y_unit}]"
-        Me.mResultChart.Axes.Left.Labels.Style = Steema.TeeChart.AxisLabelStyle.Value
+        Me.ResultChart.Axes.Bottom.Title.Caption = $"{x_title}  [{x_unit}]"
+        Me.ResultChart.Axes.Bottom.Labels.Style = Steema.TeeChart.AxisLabelStyle.Value
+        Me.ResultChart.Axes.Left.Title.Caption = $"{y_title}  [{y_unit}]"
+        Me.ResultChart.Axes.Left.Labels.Style = Steema.TeeChart.AxisLabelStyle.Value
 
         'Reihen
         '------
-        series_points = New Steema.TeeChart.Styles.Points(Me.mResultChart)
+        series_points = New Steema.TeeChart.Styles.Points(Me.ResultChart)
         series_points.Title = $"Comparison {x_title} - {y_title}"
         series_points.Pointer.Visible = True
         series_points.Pointer.Style = Steema.TeeChart.Styles.PointerStyles.Circle
         series_points.Pointer.HorizSize = 2
         series_points.Pointer.VertSize = 2
 
-        regression_line = New Steema.TeeChart.Styles.Line(Me.mResultChart)
+        regression_line = New Steema.TeeChart.Styles.Line(Me.ResultChart)
         regression_line.Title = "Regression line"
         regression_line.LinePen.Width = 2
         regression_line.LinePen.Color = Color.Red
@@ -198,16 +198,16 @@ Friend Class Comparison
         Dim x_min, x_max As Double
         x_min = x_values.Min()
         x_max = x_values.Max()
-        intercept = Me.mResultValues("Linear regression intercept")
-        slope = Me.mResultValues("Linear regression slope")
+        intercept = Me.ResultValues("Linear regression intercept")
+        slope = Me.ResultValues("Linear regression slope")
         regression_line.Add(x_min, slope * x_min + intercept)
         regression_line.Add(x_max, slope * x_max + intercept)
 
         'Annotation
         '----------
-        Dim anno As New Steema.TeeChart.Tools.Annotation(Me.mResultChart)
+        Dim anno As New Steema.TeeChart.Tools.Annotation(Me.ResultChart)
         anno.Position = Steema.TeeChart.Tools.AnnotationPositions.RightBottom
-        anno.Text = $"Correlation coefficient: {Me.mResultValues("Correlation coefficient").ToString(DefaultNumberFormat)}" & eol
+        anno.Text = $"Correlation coefficient: {Me.ResultValues("Correlation coefficient").ToString(DefaultNumberFormat)}" & eol
         anno.Text &= "Linear regression line: " & eol
         anno.Text &= $"y = {slope.ToString(DefaultNumberFormat)} * x + {intercept.ToString(DefaultNumberFormat)}"
 

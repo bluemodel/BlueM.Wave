@@ -110,7 +110,7 @@ Friend Class Calculator
         Dim varNames As New List(Of String) From
             {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"}
         Dim i As Integer = 0
-        For Each ts As TimeSeries In Me.mZeitreihen
+        For Each ts As TimeSeries In Me.InputTimeSeries
             tsVariables.Add(New CalculatorVariable(varNames(i), ts))
             i += 1
         Next
@@ -141,7 +141,7 @@ Friend Class Calculator
 
             'collect unique timestamps
             Dim timestamps As New HashSet(Of DateTime)
-            For Each ts As TimeSeries In Me.mZeitreihen
+            For Each ts As TimeSeries In Me.InputTimeSeries
                 timestamps.UnionWith(ts.Dates)
             Next
 
@@ -170,7 +170,7 @@ Friend Class Calculator
             ts_result.Title = title
             ts_result.Unit = unit
             ts_result.DataSource = New TimeSeriesDataSource(TimeSeriesDataSource.OriginEnum.AnalysisResult)
-            Me.mResultSeries.Add(ts_result)
+            Me.ResultSeries.Add(ts_result)
 
         End If
 
@@ -180,13 +180,13 @@ Friend Class Calculator
     ''' Ergebnisse aufbereiten
     ''' </summary>
     Public Overrides Sub PrepareResults()
-        Me.mResultText = "Calculator analysis:" & eol
-        Me.mResultText &= $"Formula: {Me.expression}" & eol
-        Me.mResultText &= "Variables: " & eol
+        Me.ResultText = "Calculator analysis:" & eol
+        Me.ResultText &= $"Formula: {Me.expression}" & eol
+        Me.ResultText &= "Variables: " & eol
         For Each tsvariable As CalculatorVariable In Me.tsVariables
-            Me.mResultText &= $"{tsvariable.varName}: {tsvariable.ts.Title}" & eol
+            Me.ResultText &= $"{tsvariable.varName}: {tsvariable.ts.Title}" & eol
         Next
-        Me.mResultText &= $"Result series: {Me.mResultSeries.First.Title}"
+        Me.ResultText &= $"Result series: {Me.ResultSeries.First.Title}"
 
     End Sub
 

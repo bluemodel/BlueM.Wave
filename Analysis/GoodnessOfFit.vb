@@ -235,7 +235,7 @@ Friend Class GoodnessOfFit
         '=============
 
         'Dialog anzeigen
-        Dim dialog As New GoodnessOfFit_Dialog(Me.mZeitreihen(0).Title, Me.mZeitreihen(1).Title)
+        Dim dialog As New GoodnessOfFit_Dialog(Me.InputTimeSeries(0).Title, Me.InputTimeSeries(1).Title)
         diagresult = dialog.ShowDialog()
         If (diagresult <> DialogResult.OK) Then
             Throw New Exception("User abort")
@@ -243,11 +243,11 @@ Friend Class GoodnessOfFit
 
         'assign time series
         If (dialog.getNrGemesseneReihe = 1) Then
-            Me.ts_obs = Me.mZeitreihen(0)
-            Me.ts_sim = Me.mZeitreihen(1)
+            Me.ts_obs = Me.InputTimeSeries(0)
+            Me.ts_sim = Me.InputTimeSeries(1)
         Else
-            Me.ts_obs = Me.mZeitreihen(1)
-            Me.ts_sim = Me.mZeitreihen(0)
+            Me.ts_obs = Me.InputTimeSeries(1)
+            Me.ts_sim = Me.InputTimeSeries(0)
         End If
 
         'remove NaN values
@@ -308,22 +308,22 @@ Friend Class GoodnessOfFit
                      & "Hydrologic deviation: DEV = " & _gof.hydrodev.ToString(formatstring)
 
         'mResultText is written to the log. Contains all results.
-        Me.mResultText = "Goodness of Fit analysis:" & eol & eol &
+        Me.ResultText = "Goodness of Fit analysis:" & eol & eol &
                          $"Observed time series: {Me.ts_obs.Title}" & eol &
                          $"Simulated time series: {Me.ts_sim.Title}" & eol & eol
         'output results in CSV format
-        Me.mResultText &= "Results:" & eol
+        Me.ResultText &= "Results:" & eol
         Dim headerItems1 = New List(Of String) From {
             "Description", "Start", "End", "Length", "Volume observed", "Volume simulated", "Volume error [%]", "Sum of squared errors", "Nash-Sutcliffe efficiency", "Logarithmic Nash-Sutcliffe efficiency", "Kling-Gupta efficiency", "Coefficient of correlation", "Coefficient of determination", "Hydrologic deviation"
         }
         Dim headerItems2 = New List(Of String) From {
             "desc", "t0", "t1", "n", "Vobs", "Vsim", "m", "F²", "E", "E,ln", "KGE", "r", "r²", "DEV"
         }
-        Me.mResultText &= String.Join(Helpers.CurrentListSeparator, headerItems1.Select(Function(s) $"""{s}""")) & eol
-        Me.mResultText &= String.Join(Helpers.CurrentListSeparator, headerItems2.Select(Function(s) $"""{s}""")) & eol
+        Me.ResultText &= String.Join(Helpers.CurrentListSeparator, headerItems1.Select(Function(s) $"""{s}""")) & eol
+        Me.ResultText &= String.Join(Helpers.CurrentListSeparator, headerItems2.Select(Function(s) $"""{s}""")) & eol
         For Each GOFResult As KeyValuePair(Of String, GoF) In Me.GoFResults
             With GOFResult.Value
-                Me.mResultText &= String.Join(Helpers.CurrentListSeparator,
+                Me.ResultText &= String.Join(Helpers.CurrentListSeparator,
                     GOFResult.Key,
                     .startDate.ToString(Helpers.CurrentDateFormat),
                     .endDate.ToString(Helpers.CurrentDateFormat),
@@ -343,28 +343,28 @@ Friend Class GoodnessOfFit
 
         'Diagramm:
         '---------
-        Me.mResultChart = New Steema.TeeChart.Chart()
-        Call Helpers.FormatChart(Me.mResultChart)
-        Me.mResultChart.Header.Text = "Goodness of Fit"
+        Me.ResultChart = New Steema.TeeChart.Chart()
+        Call Helpers.FormatChart(Me.ResultChart)
+        Me.ResultChart.Header.Text = "Goodness of Fit"
 
         'Text in Diagramm einfügen
-        Dim annot As New Steema.TeeChart.Tools.Annotation(Me.mResultChart)
+        Dim annot As New Steema.TeeChart.Tools.Annotation(Me.ResultChart)
         annot.Position = Steema.TeeChart.Tools.AnnotationPositions.RightBottom
         annot.Text = shortText
 
         'Linien instanzieren
-        Dim line_gemessen As New Steema.TeeChart.Styles.Line(Me.mResultChart)
-        Dim line_simuliert As New Steema.TeeChart.Styles.Line(Me.mResultChart)
-        Dim line_fehlerquadrate As New Steema.TeeChart.Styles.Line(Me.mResultChart)
+        Dim line_gemessen As New Steema.TeeChart.Styles.Line(Me.ResultChart)
+        Dim line_simuliert As New Steema.TeeChart.Styles.Line(Me.ResultChart)
+        Dim line_fehlerquadrate As New Steema.TeeChart.Styles.Line(Me.ResultChart)
 
         'linke Achse
-        Me.mResultChart.Axes.Left.Title.Caption = "Time series value"
+        Me.ResultChart.Axes.Left.Title.Caption = "Time series value"
 
         'rechte Achse
-        line_fehlerquadrate.CustomVertAxis = Me.mResultChart.Axes.Right
-        Me.mResultChart.Axes.Right.Title.Caption = "Squared error"
-        Me.mResultChart.Axes.Right.Grid.Visible = False
-        Me.mResultChart.Axes.Right.Inverted = True
+        line_fehlerquadrate.CustomVertAxis = Me.ResultChart.Axes.Right
+        Me.ResultChart.Axes.Right.Title.Caption = "Squared error"
+        Me.ResultChart.Axes.Right.Grid.Visible = False
+        Me.ResultChart.Axes.Right.Inverted = True
 
         'Namen vergeben
         line_gemessen.Title = Me.ts_obs.Title

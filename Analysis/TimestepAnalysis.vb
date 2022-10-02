@@ -134,7 +134,7 @@ Friend Class TimeStepAnalysis
         Dim result_ts As TimeSeries
 
         'Loop over time series
-        For Each ts As TimeSeries In MyBase.mZeitreihen
+        For Each ts As TimeSeries In MyBase.InputTimeSeries
 
             'create a new result time series
             result_ts = New TimeSeries($"{ts.Title} (dt {Me.TimeUnitName})")
@@ -175,7 +175,7 @@ Friend Class TimeStepAnalysis
                 timestamp_prev = timestamp
             Next
             'save result time series
-            Me.mResultSeries.Add(result_ts)
+            Me.ResultSeries.Add(result_ts)
         Next
 
     End Sub

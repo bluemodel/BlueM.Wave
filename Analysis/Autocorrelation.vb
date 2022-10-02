@@ -104,7 +104,7 @@ Friend Class Autocorrelation
     ''' </summary>
     Public Overrides Sub ProcessAnalysis()
 
-        Me.ts_in = Me.mZeitreihen(0).Clone()
+        Me.ts_in = Me.InputTimeSeries(0).Clone()
 
         'Parameter-Dialog anzeigen
         Dim dialog As New Autocorrelation_Dialog(Me.ts_in)
@@ -195,31 +195,31 @@ Friend Class Autocorrelation
         Next
 
         'Ergebnistext
-        Me.mResultText =
+        Me.ResultText =
             $"The selected time series was offset {lagCount} times by {lagSize} time steps." & eol &
             raAuswertung & eol &
             $"Assumed periodicity: {periode_avg} time steps" & eol &
             raMaxAuswertung
 
         'Ergebnisdiagramm
-        Me.mResultChart = New Steema.TeeChart.Chart()
-        Call Helpers.FormatChart(Me.mResultChart)
-        Me.mResultChart.Header.Text = "Autocorrelation for " & ts_in.Title
+        Me.ResultChart = New Steema.TeeChart.Chart()
+        Call Helpers.FormatChart(Me.ResultChart)
+        Me.ResultChart.Header.Text = "Autocorrelation for " & ts_in.Title
 
         'X-Achse
-        Me.mResultChart.Axes.Bottom.Labels.Style = Steema.TeeChart.AxisLabelStyle.Value
-        Me.mResultChart.Axes.Bottom.Title.Caption = "Offset (Lag) [number of time steps]"
+        Me.ResultChart.Axes.Bottom.Labels.Style = Steema.TeeChart.AxisLabelStyle.Value
+        Me.ResultChart.Axes.Bottom.Title.Caption = "Offset (Lag) [number of time steps]"
 
         'Y-Achse
-        Me.mResultChart.Axes.Left.Title.Caption = "Autocorrelation coefficient (-1 < ra < 1)"
-        Me.mResultChart.Axes.Left.Automatic = False
-        Me.mResultChart.Axes.Left.Minimum = -1
-        Me.mResultChart.Axes.Left.Maximum = 1
+        Me.ResultChart.Axes.Left.Title.Caption = "Autocorrelation coefficient (-1 < ra < 1)"
+        Me.ResultChart.Axes.Left.Automatic = False
+        Me.ResultChart.Axes.Left.Minimum = -1
+        Me.ResultChart.Axes.Left.Maximum = 1
 
         'Linie instanzieren und benennen
-        Dim line_ra As New Steema.TeeChart.Styles.Bar(Me.mResultChart)
+        Dim line_ra As New Steema.TeeChart.Styles.Bar(Me.ResultChart)
         line_ra.Title = "Autocorrelogram"
-        Dim line_raMax As New Steema.TeeChart.Styles.Points(Me.mResultChart)
+        Dim line_raMax As New Steema.TeeChart.Styles.Points(Me.ResultChart)
         line_raMax.Title = "Peaks (guessed)"
 
         'Linie befüllen
@@ -237,11 +237,11 @@ Friend Class Autocorrelation
         line_ra.Marks.Visible = False
 
         'Markstips bei Mausaktion anzeigen
-        Dim markstips As New Steema.TeeChart.Tools.MarksTip(Me.mResultChart)
+        Dim markstips As New Steema.TeeChart.Tools.MarksTip(Me.ResultChart)
         markstips.MouseAction = Steema.TeeChart.Tools.MarksTipMouseAction.Move
 
         'Textfeld in Diagramm einfügen und Position bestimmen
-        Dim annot As New Steema.TeeChart.Tools.Annotation(Me.mResultChart)
+        Dim annot As New Steema.TeeChart.Tools.Annotation(Me.ResultChart)
         annot.Text =
             $"Time series was offset {lagCount} times by {lagSize} time steps." & eol &
             $"Assumed periodicity: {periode_avg}"

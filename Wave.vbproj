@@ -181,6 +181,7 @@
     <Compile Include="Analysis\MonthlyStatisticsDialog.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Analysis\TestAnalysis.vb" />
     <Compile Include="Analysis\TimestepAnalysis.vb" />
     <Compile Include="Analysis\TimestepAnalysisDialog.Designer.vb">
       <DependentUpon>TimestepAnalysisDialog.vb</DependentUpon>

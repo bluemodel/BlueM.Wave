@@ -108,7 +108,7 @@ Friend Class ChangeTimestep
         Dim startdate As DateTime
         Dim ignoreNaN As Boolean
 
-        ts = Me.mZeitreihen(0).Clone()
+        ts = Me.InputTimeSeries(0).Clone()
 
         'show the ChangeTimeStepDialog
         Dim dlg As New ChangeTimestepDialog(ts)
@@ -133,7 +133,7 @@ Friend Class ChangeTimestep
 
             'Store result series
             ts_new.DataSource = New TimeSeriesDataSource(TimeSeriesDataSource.OriginEnum.AnalysisResult)
-            Me.mResultSeries.Add(ts_new)
+            Me.ResultSeries.Add(ts_new)
 
         End If
 

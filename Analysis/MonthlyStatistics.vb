@@ -169,7 +169,7 @@ Friend Class MonthlyStatistics
         Dim N As Long
         Dim sum, sumofsquares As Double
 
-        reihe = Me.mZeitreihen.Item(0).removeNaNValues()
+        reihe = Me.InputTimeSeries.Item(0).removeNaNValues()
 
         'Sort values into months
         For i = 0 To reihe.Length - 1
@@ -233,15 +233,15 @@ Friend Class MonthlyStatistics
         'Result text
         '------------
         Const formatstring As String = "F4"
-        Me.mResultText = "Monthly statistics have been calculated." & eol
-        Me.mResultText &= "Result data:" & eol
+        Me.ResultText = "Monthly statistics have been calculated." & eol
+        Me.ResultText &= "Result data:" & eol
         'header line
-        Me.mResultText &= String.Join(Helpers.CurrentListSeparator, "Month", "Name", "ValueCount", "Average", "Median", "Min", "Max", "Stddev") & eol
+        Me.ResultText &= String.Join(Helpers.CurrentListSeparator, "Month", "Name", "ValueCount", "Average", "Median", "Min", "Max", "Stddev") & eol
 
         'data
         For Each monthData As MonthData In Me.result.Values
             If monthData.values.Count > 0 Then
-                Me.mResultText &= String.Join(Helpers.CurrentListSeparator,
+                Me.ResultText &= String.Join(Helpers.CurrentListSeparator,
                     monthData.month.number,
                     monthData.month.name,
                     monthData.values.Count,
@@ -251,7 +251,7 @@ Friend Class MonthlyStatistics
                     monthData.max.ToString(formatstring),
                     monthData.stddev.ToString(formatstring)) & eol
             Else
-                Me.mResultText &= String.Join(Helpers.CurrentListSeparator,
+                Me.ResultText &= String.Join(Helpers.CurrentListSeparator,
                     monthData.month.number,
                     monthData.month.name,
                     monthData.values.Count,
@@ -271,20 +271,20 @@ Friend Class MonthlyStatistics
         Dim minmax As Steema.TeeChart.Styles.HighLow
 
         'Diagram
-        Me.mResultChart = New Steema.TeeChart.Chart()
-        Call Helpers.FormatChart(Me.mResultChart)
-        Me.mResultChart.Header.Text = $"Monthly statistics ({Me.mZeitreihen(0).Title})"
+        Me.ResultChart = New Steema.TeeChart.Chart()
+        Call Helpers.FormatChart(Me.ResultChart)
+        Me.ResultChart.Header.Text = $"Monthly statistics ({Me.InputTimeSeries(0).Title})"
 
         'Axes
-        Me.mResultChart.Axes.Bottom.Labels.Style = Steema.TeeChart.AxisLabelStyle.Text
-        Me.mResultChart.Axes.Bottom.Labels.Angle = 90
-        Me.mResultChart.Axes.Bottom.MinorTickCount = 0
-        Me.mResultChart.Axes.Left.Title.Text = Me.mZeitreihen(0).Unit
+        Me.ResultChart.Axes.Bottom.Labels.Style = Steema.TeeChart.AxisLabelStyle.Text
+        Me.ResultChart.Axes.Bottom.Labels.Angle = 90
+        Me.ResultChart.Axes.Bottom.MinorTickCount = 0
+        Me.ResultChart.Axes.Left.Title.Text = Me.InputTimeSeries(0).Unit
 
         'Series
 
         'MinMax
-        minmax = New Steema.TeeChart.Styles.HighLow(Me.mResultChart)
+        minmax = New Steema.TeeChart.Styles.HighLow(Me.ResultChart)
         minmax.DefaultNullValue = Double.NaN
         minmax.Title = "Min / Max"
         minmax.Color = Color.DarkGray
@@ -297,7 +297,7 @@ Friend Class MonthlyStatistics
         Next
 
         'Standard deviation
-        stdabw = New Steema.TeeChart.Styles.Error(Me.mResultChart)
+        stdabw = New Steema.TeeChart.Styles.Error(Me.ResultChart)
         stdabw.DefaultNullValue = Double.NaN
         stdabw.Title = "Standard deviation"
         stdabw.Color = Color.Red
@@ -310,7 +310,7 @@ Friend Class MonthlyStatistics
         Next
 
         'Average
-        mittelwert = New Steema.TeeChart.Styles.Line(Me.mResultChart)
+        mittelwert = New Steema.TeeChart.Styles.Line(Me.ResultChart)
         mittelwert.TreatNaNAsNull = True
         mittelwert.TreatNulls = Steema.TeeChart.Styles.TreatNullsStyle.DoNotPaint
         mittelwert.Title = "Average"
@@ -321,7 +321,7 @@ Friend Class MonthlyStatistics
         Next
 
         'Median
-        median = New Steema.TeeChart.Styles.Line(Me.mResultChart)
+        median = New Steema.TeeChart.Styles.Line(Me.ResultChart)
         median.TreatNaNAsNull = True
         median.TreatNulls = Steema.TeeChart.Styles.TreatNullsStyle.DoNotPaint
         median.Title = "Median"

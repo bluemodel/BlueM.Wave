@@ -1,4 +1,4 @@
-'Copyright (c) BlueM Dev Group
+﻿'Copyright (c) BlueM Dev Group
 'Website: https://bluemodel.org
 '
 'All rights reserved.
@@ -25,42 +25,51 @@
 'EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 '--------------------------------------------------------------------------------------------
 '
+
 ''' <summary>
-''' Cumulative analysis
+''' Write description!
 ''' </summary>
-Friend Class Cumulative
+''' <remarks>https://wiki.bluemodel.org/index.php/Wave:TestAnalysis</remarks>
+Friend Class TestAnalysis
     Inherits Analysis
 
-#Region "Properties"
+    'fields for storing stuff
+    Private timeseries_input As TimeSeries  'Time series to be analyzed
+    Private title As String                 'Title of the time series
+    Private length As Integer               'Count of the time series values
+    Private timeseries_output As TimeSeries 'Result time series
 
+    ''' <summary>
+    ''' Returns the description of the analysis function
+    ''' </summary>
     Public Overloads Shared Function Description() As String
-        Return "For each selected time series, calculates a new time series that consists of the cumulative values of the original series. NaN values are ignored."
+        Return "Write description!"
     End Function
 
     ''' <summary>
-    ''' Flag indicating whether the analysis function has a result test
+    ''' Flag indicating whether the analysis function produces a result text
     ''' </summary>
     Public Overrides ReadOnly Property hasResultText() As Boolean
         Get
-            Return False
+            Return True
         End Get
     End Property
 
     ''' <summary>
-    ''' Flag indicating whether the analysis function has result values
+    ''' Flag indicating whether the analysis function produces result values
     ''' </summary>
     Public Overrides ReadOnly Property hasResultValues() As Boolean
         Get
-            Return False
+            Return True
         End Get
     End Property
 
     ''' <summary>
-    ''' Flag indicating whether the analysis function has a result diagram
+    ''' Flag indicating whether the analysis function produces a result chart
     ''' </summary>
     Public Overrides ReadOnly Property hasResultChart() As Boolean
         Get
-            Return False
+            Return True
         End Get
     End Property
 
@@ -74,68 +83,70 @@ Friend Class Cumulative
         End Get
     End Property
 
-
-#End Region 'Properties
-
-#Region "Methoden"
-
     ''' <summary>
-    ''' Konstruktor
+    ''' Class constructor
     ''' </summary>
-    ''' <param name="zeitreihen">Collection von Zeitreihen</param>
-    Public Sub New(ByRef zeitreihen As List(Of TimeSeries))
+    ''' <param name="timeseries">list of time series to be analyzed</param>
+    Public Sub New(ByRef timeseries As List(Of TimeSeries))
 
-        'Zeitreihen 
-        Call MyBase.New(zeitreihen)
+        'Call constructor of base class
+        Call MyBase.New(timeseries)
+
+        'Check expected count of time series
+        If (timeseries.Count <> 1) Then
+            Throw New Exception("The TestAnalysis requires the selection of exactly one time series!")
+        End If
 
     End Sub
 
     ''' <summary>
     ''' Process the analysis
-    ''' Creates a new result time series that contains the cumulative values of the original series
     ''' </summary>
     Public Overrides Sub ProcessAnalysis()
 
-        Dim i As Integer
-        Dim sum As Double
-        Dim ts, ts_cum As TimeSeries
+        'Get time series from list (`InputTimeSeries` defined in base class)
+        timeseries_input = InputTimeSeries.Item(0)
 
-        For Each ts In MyBase.InputTimeSeries
+        'Get values from input time series
+        title = timeseries_input.Title
+        length = timeseries_input.Length
+        '...
+        '...
 
-            ts_cum = New TimeSeries($"{ts.Title} (cumulative)")
-            ts_cum.Unit = ts.Unit
-            ts_cum.Interpretation = TimeSeries.InterpretationEnum.Cumulative
-            ts_cum.DataSource = New TimeSeriesDataSource(TimeSeriesDataSource.OriginEnum.AnalysisResult)
+        'Implement analysis here ...
 
-            sum = 0.0
-            For i = 0 To ts.Length - 1
-                If i <> 0 And i <> ts.Length - 1 Then
-                    If ts.Values(i) = 0.0 And ts.Values(i + 1) = 0.0 Then
-                        'omit intermediate nodes where the cumulative value does not change
-                        Continue For
-                    End If
-                End If
-                If Double.IsNaN(ts.Values(i)) Then
-                    'omit NaN values
-                    Continue For
-                End If
-                sum += ts.Values(i)
-                ts_cum.AddNode(ts.Dates(i), sum)
-            Next
+        'Optional: display a progress bar
+        MyBase.AnalysisProgressStart(100)
+        '...
+        MyBase.AnalysisProgressUpdate(50)
+        '...
+        MyBase.AnalysisProgressFinish()
 
-            MyBase.ResultSeries.Add(ts_cum)
-
-        Next
+        'store result for later
+        timeseries_output = timeseries_input.Clone()
 
     End Sub
 
     ''' <summary>
-    ''' Ergebnisse aufbereiten
+    ''' Prepare the results of the analysis
     ''' </summary>
     Public Overrides Sub PrepareResults()
-        'nothing to do
-    End Sub
 
-#End Region 'Methoden
+        'Result text (will be shown in WaveLog)
+        MyBase.ResultText = "Success!"
+
+        'Result values (will be shown in WaveLog)
+        MyBase.ResultValues.Add($"Count values of time series '{title}'", length)
+
+        'Result chart (will be shown in separate window)
+        MyBase.ResultChart = New Steema.TeeChart.Chart()
+        'Fill and format chart
+        '...
+        '...
+
+        'List of result series (will be loaded in main window)
+        MyBase.ResultSeries = New List(Of TimeSeries) From {timeseries_output}
+
+    End Sub
 
 End Class

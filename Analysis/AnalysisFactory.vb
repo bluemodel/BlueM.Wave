@@ -26,12 +26,12 @@
 '--------------------------------------------------------------------------------------------
 '
 ''' <summary>
-''' Fabrik zum Erzeugen von Analyse-Objekten
+''' Factory for creating analysis instances
 ''' </summary>
 Friend Module AnalysisFactory
 
     ''' <summary>
-    ''' Liste der Analysefunktionen
+    ''' List of analysis functions
     ''' </summary>
     Public Enum AnalysisFunctions
         AnnualStatistics
@@ -46,6 +46,7 @@ Friend Module AnalysisFactory
         LinearRegression
         MonthlyStatistics
         TimestepAnalysis
+        'TestAnalysis       '<--------- Add new analysis functions to enumeration here
     End Enum
 
     ''' <summary>
@@ -79,17 +80,19 @@ Friend Module AnalysisFactory
                 Return MonthlyStatistics.Description
             Case AnalysisFunctions.TimestepAnalysis
                 Return TimeStepAnalysis.Description
+            'Case AnalysisFunctions.TestAnalysis         '<--------- Add case for new analysis descriptions here
+            '    Return TestAnalysis.Description         '<--------- 
             Case Else
                 Return "Description not found"
         End Select
     End Function
 
     ''' <summary>
-    ''' Fabrikmethode zur Erzeugung eines Analyse-Objekts
+    ''' Factory method for creating an analysis instance
     ''' </summary>
-    ''' <param name="analysisfunction">Typ des zu erzeugenden Analyse-Objekts</param>
-    ''' <param name="seriesList">Collection von zu analysierenden Zeitreihen</param>
-    ''' <returns>Das Analyse-Objekt</returns>
+    ''' <param name="analysisfunction">the type of analysis instance to create</param>
+    ''' <param name="seriesList">list of input TimeSeries</param>
+    ''' <returns>the analysis instance</returns>
     Public Function CreateAnalysis(analysisfunction As AnalysisFunctions, seriesList As List(Of TimeSeries)) As Analysis
 
         Dim oAnalysis As Analysis
@@ -131,6 +134,9 @@ Friend Module AnalysisFactory
 
             Case AnalysisFunctions.TimestepAnalysis
                 oAnalysis = New TimeStepAnalysis(seriesList)
+
+            'Case AnalysisFunctions.TestAnalysis                 '<--------- Add case for creation of new analysis instance here
+            '    oAnalysis = New TestAnalysis(seriesList)        '<---------
 
             Case Else
                 Throw New Exception("Analysis not found!")

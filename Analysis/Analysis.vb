@@ -26,7 +26,7 @@
 '--------------------------------------------------------------------------------------------
 '
 ''' <summary>
-''' Basisklasse für Analysefunktionen
+''' Abstract base class for analysis functions
 ''' </summary>
 Friend MustInherit Class Analysis
 
@@ -52,33 +52,37 @@ Friend MustInherit Class Analysis
 #Region "Eigenschaften"
 
     ''' <summary>
-    ''' Die zu analysierenden Zeitreihen
+    ''' List of input TimeSeries for analysis
     ''' </summary>
-    Protected mZeitreihen As List(Of TimeSeries)
+    Protected InputTimeSeries As List(Of TimeSeries)
 
     ''' <summary>
-    ''' Ergebnistext
-    ''' </summary>
-    ''' <remarks>Optional</remarks>
-    Protected mResultText As String
-
-    ''' <summary>
-    ''' Ergebniswerte
+    ''' Result text
+    ''' is shown in the Wave log if `hasResultText` is True
     ''' </summary>
     ''' <remarks>Optional</remarks>
-    Protected mResultValues As Dictionary(Of String, Double)
+    Protected ResultText As String
 
     ''' <summary>
-    ''' Ergebnisdiagramm
+    ''' Result values
+    ''' Are shown in the Wave log if `hasResultValues` is True
     ''' </summary>
     ''' <remarks>Optional</remarks>
-    Protected mResultChart As Steema.TeeChart.Chart
+    Protected ResultValues As Dictionary(Of String, Double)
 
     ''' <summary>
-    ''' Result series
+    ''' Result chart
+    ''' is shown in a separate window if `hasResultChart` is True
+    ''' </summary>
+    ''' <remarks>Optional</remarks>
+    Protected ResultChart As Steema.TeeChart.Chart
+
+    ''' <summary>
+    ''' List of result series
+    ''' are loaded in the main chart if `hasResultSeries` is True
     ''' </summary>
     ''' <remarks>optional</remarks>
-    Protected mResultSeries As List(Of TimeSeries)
+    Protected ResultSeries As List(Of TimeSeries)
 
 #End Region 'Eigenschaften
 
@@ -93,7 +97,7 @@ Friend MustInherit Class Analysis
     End Function
 
     ''' <summary>
-    ''' Flag indicating whether the analysis function has a result test
+    ''' Flag indicating whether the analysis function has a result text
     ''' </summary>
     Public MustOverride ReadOnly Property hasResultText() As Boolean
 
@@ -114,42 +118,42 @@ Friend MustInherit Class Analysis
     Public MustOverride ReadOnly Property hasResultSeries() As Boolean
 
     ''' <summary>
-    ''' Analyseergebnis in Form von Text
+    ''' Analysis result text
     ''' </summary>
     ''' <remarks>Optional</remarks>
     Public ReadOnly Property getResultText() As String
         Get
-            Return Me.mResultText
+            Return Me.ResultText
         End Get
     End Property
 
     ''' <summary>
-    ''' Analyseergebnis in Form eines Dictionary(Of String, Double)
+    ''' Analysis result values
     ''' </summary>
     ''' <remarks>Optional</remarks>
     Public ReadOnly Property getResultValues() As Dictionary(Of String, Double)
         Get
-            Return Me.mResultValues
+            Return Me.ResultValues
         End Get
     End Property
 
     ''' <summary>
-    ''' Analyseergebnis in Form eines Diagramms
+    ''' Analysis result chart
     ''' </summary>
     ''' <remarks>Optional</remarks>
     Public ReadOnly Property getResultChart() As Steema.TeeChart.Chart
         Get
-            Return Me.mResultChart
+            Return Me.ResultChart
         End Get
     End Property
 
     ''' <summary>
-    ''' Analysis result in the form of timeseries
+    ''' Analysis result series
     ''' </summary>
     ''' <remarks>Optional</remarks>
     Public ReadOnly Property getResultSeries() As List(Of TimeSeries)
         Get
-            Return Me.mResultSeries
+            Return Me.ResultSeries
         End Get
     End Property
 
@@ -158,26 +162,26 @@ Friend MustInherit Class Analysis
 #Region "Methoden"
 
     ''' <summary>
-    ''' Konstruktor
+    ''' Constructor
     ''' </summary>
-    ''' <param name="zeitreihen">Collection von Zeitreihen</param>
-    Public Sub New(zeitreihen As List(Of TimeSeries))
+    ''' <param name="inputseries">List of input TimeSeries</param>
+    Public Sub New(inputseries As List(Of TimeSeries))
 
         'Zeitreihen 
-        Me.mZeitreihen = zeitreihen
+        Me.InputTimeSeries = inputseries
 
         'Datenstrukturen initialisieren
-        Me.mResultValues = New Dictionary(Of String, Double)
-        Me.mResultSeries = New List(Of TimeSeries)
+        Me.ResultValues = New Dictionary(Of String, Double)
+        Me.ResultSeries = New List(Of TimeSeries)
     End Sub
 
     ''' <summary>
-    ''' Analyse durchführen
+    ''' Processes the analysis
     ''' </summary>
     Public MustOverride Sub ProcessAnalysis()
 
     ''' <summary>
-    ''' Ergebnisse aufbereiten
+    ''' Prepares analysis results
     ''' </summary>
     Public MustOverride Sub PrepareResults()
 
