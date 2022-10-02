@@ -36,7 +36,7 @@ Friend Class Histogram
     Private n_bins As Integer
     Private breaks As Double()
 
-    Private Structure resultValues
+    Private Structure histogramResults
         Dim title As String
         Dim frequency, cumfrequency As Integer()
         Dim amount As Integer
@@ -44,7 +44,7 @@ Friend Class Histogram
         Dim PU As Double() ' probability of non-exceedance
     End Structure
 
-    Private results As resultValues()
+    Private results As histogramResults()
 
     Public Overloads Shared Function Description() As String
         Return "Divides the entire range of values into a series of user-defined intervals (bins) and calculates the percentage of values falling into each interval." &
@@ -207,7 +207,7 @@ Friend Class Histogram
         Const formatstring As String = "F4"
         Me.ResultText = "Histogram has been calculated." & eol
         Me.ResultText &= "Result data:" & eol
-        For Each result As resultValues In Me.results
+        For Each result As histogramResults In Me.results
             Me.ResultText &= result.title & eol
             Me.ResultText &= String.Join(Helpers.CurrentListSeparator, "from", "to", "frequency", "probability") & eol
             For i As Integer = 0 To Me.n_bins - 1
@@ -250,7 +250,7 @@ Friend Class Histogram
         Me.ResultChart.Axes.Bottom.Title.Caption = $"Value [{Me.InputTimeSeries(0).Unit}]"
 
         'Serien
-        For Each res As resultValues In Me.results
+        For Each res As histogramResults In Me.results
 
             Dim serieP As New Steema.TeeChart.Styles.Histogram(Me.ResultChart)
             serieP.Title = $"{res.title} (P(x))"

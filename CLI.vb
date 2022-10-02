@@ -86,7 +86,7 @@ Friend Class CLI
 
                     'default options
                     Dim interactive As Boolean = False
-                    Dim outputformat As Fileformats.FileFormatBase.FileFormats = Fileformats.FileFormatBase.FileFormats.CSV
+                    Dim outputformat As Fileformats.FileTypes = Fileformats.FileTypes.CSV
 
                     'parse options from commandline
                     Dim i As Integer = 1
@@ -101,11 +101,11 @@ Friend Class CLI
                             i += 1
                             Select Case args(i).ToUpper()
                                 Case "CSV"
-                                    outputformat = Fileformats.FileFormatBase.FileFormats.CSV
+                                    outputformat = Fileformats.FileTypes.CSV
                                 Case "BIN"
-                                    outputformat = Fileformats.FileFormatBase.FileFormats.BIN
+                                    outputformat = Fileformats.FileTypes.BIN
                                 Case "DFS0"
-                                    outputformat = Fileformats.FileFormatBase.FileFormats.DFS0
+                                    outputformat = Fileformats.FileTypes.DFS0
                                 Case Else
                                     Throw New ArgumentException($"Unrecognized output format option -of {args(i)}!")
                             End Select
@@ -174,24 +174,24 @@ Friend Class CLI
                     Log.AddLogEntry(BlueM.Wave.Log.levels.info, $"Exporting to {path_out}...")
 
                     Select Case outputformat
-                        Case Fileformats.FileFormatBase.FileFormats.CSV
+                        Case Fileformats.FileTypes.CSV
                             If IO.File.Exists(path_out) Then
                                 Log.AddLogEntry(BlueM.Wave.Log.levels.warning, "Overwriting existing file!")
                             End If
                             Fileformats.CSV.Write_File(tsList, path_out)
-                        Case Fileformats.FileFormatBase.FileFormats.DFS0
+                        Case Fileformats.FileTypes.DFS0
                             If IO.File.Exists(path_out) Then
                                 Log.AddLogEntry(BlueM.Wave.Log.levels.warning, "Overwriting existing file!")
                             End If
                             Fileformats.DFS0.Write_File(tsList, path_out)
-                        Case Fileformats.FileFormatBase.FileFormats.BIN
+                        Case Fileformats.FileTypes.BIN
                             'treat output path as a directory and export individual files, using the title as filename
                             IO.Directory.CreateDirectory(path_out)
                             Dim filename, filepath As String
                             Dim invalidFileNameCharsPattern As String = $"[{Text.RegularExpressions.Regex.Escape(String.Join("", IO.Path.GetInvalidFileNameChars))}]"
                             For Each ts As TimeSeries In tsList
                                 'generate file name from cleaned title
-                                filename = Text.RegularExpressions.Regex.Replace(ts.Title, invalidFileNameCharsPattern, "_") & Fileformats.FileFactory.FileExtBIN
+                                filename = Text.RegularExpressions.Regex.Replace(ts.Title, invalidFileNameCharsPattern, "_") & Fileformats.FileExtBIN
                                 filepath = IO.Path.Combine(path_out, filename)
                                 Log.AddLogEntry(BlueM.Wave.Log.levels.info, $"Exporting to {filepath}...")
                                 If IO.File.Exists(filepath) Then

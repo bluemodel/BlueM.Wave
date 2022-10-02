@@ -32,55 +32,6 @@ Namespace Fileformats
     ''' </summary>
     Public MustInherit Class FileFormatBase
 
-        ''' <summary>
-        ''' FileFormats
-        ''' </summary>
-        ''' <remarks></remarks>
-        Friend Enum FileFormats As Integer
-            ZRE = 1
-            WEL = 2
-            CSV = 3
-            ASC = 4
-            REG_HYSTEM = 5
-            REG_SMUSI = 6
-            DAT_SWMM_MASS = 7
-            DAT_SWMM_TIME = 8
-            SWMM_INTERFACE = 9
-            DAT_HYDRO_AS = 10
-            UVF = 11
-            ZRXP = 12
-            WVP = 13
-            BIN = 14
-            PRMS_OUT = 15
-            DFS0 = 16
-            SWMM_LID_REPORT = 17
-            WBL = 18
-        End Enum
-
-        ''' <summary>
-        ''' FileFilter for file dialogs
-        ''' </summary>
-        ''' <remarks></remarks>
-        Friend Const FileFilter As String =
-            "All files (*.*)|*.*|" &
-            "Text files (*.txt)|*.txt|" &
-            "CSV files (*.csv)|*.csv|" &
-            "DHI MIKE DFS0 files (*.dfs0)|*.dfs0|" &
-            "HYDRO_AS-2D result files (*.dat)|*.dat|" &
-            "Hystem-Extran files (*.dat, *.reg)|*.dat;*.reg|" &
-            "PRMS result files (*.dat, *.out)|*.dat;*.out|" &
-            "SIMBA files (*.smb)|*.smb|" &
-            "SMUSI files (*.asc. *.reg)|*.asc;*.reg|" &
-            "SWMM files (*.txt, *.out)|*.txt;*.out|" &
-            "SYDRO binary files (*.bin)|*.bin|" &
-            "SYDRO binary wel files (*.wbl)|*.wbl|" &
-            "SYDRO SQLite files (*.db)|*.db|" &
-            "UVF files (*.uvf)|*.uvf|" &
-            "WEL files (*.wel, *.kwl)|*.wel;*.kwl|" &
-            "Wave project files (*.wvp)|*.wvp|" &
-            "ZRE files (*.zre)|*.zre|" &
-            "ZRXP files (*.zrx, *.zrxp)|*.zrx;*.zrxp"
-
 #Region "allgemeine Eigenschaften"
         Protected SpaltenOffset As Integer = 0          'Anzahl Zeichen bevor die erste Spalte anfängt (nur bei Spalten mit fester Breite)
 #End Region

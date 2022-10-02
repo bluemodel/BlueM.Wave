@@ -34,26 +34,6 @@ Namespace Fileformats
     ''' </summary>
     Public Module FileFactory
 
-        Public Const FileExtASC As String = ".ASC"
-        Public Const FileExtCSV As String = ".CSV"
-        Public Const FileExtREG As String = ".REG"
-        Public Const FileExtDAT As String = ".DAT"
-        Public Const FileExtDFS0 As String = ".DFS0" 'DHI MIKE Dfs0 file format
-        Public Const FileExtSMB As String = ".SMB"
-        Public Const FileExtUVF As String = ".UVF"
-        Public Const FileExtWEL As String = ".WEL"
-        Public Const FileExtKWL As String = ".KWL"
-        Public Const FileExtZRE As String = ".ZRE"
-        Public Const FileExtTEN As String = ".TEN"
-        Public Const FileExtOUT As String = ".OUT"   'SWMM binary result file or PRMS out file
-        Public Const FileExtTXT As String = ".TXT"   'SWMM interface routing file, SWMM LID report file or generic text file 
-        Public Const FileExtBIN As String = ".BIN"   'SYDRO binary format
-        Public Const FileExtSQLITE As String = ".DB" 'SYDRO SQLite format
-        Public Const FileExtWBL As String = ".WBL"   'SYDRO binary WEL format
-        Public Const FileExtZRX As String = ".ZRX"   'ZRXP format
-        Public Const FileExtZRXP As String = ".ZRXP" 'ZRXP format
-        Public Const FileExtWVP As String = ".WVP"   'Wave project file
-
         ''' <summary>
         ''' Obsolete: Only Maintained for backwards-compatibility
         ''' Use getFileInstance() instead

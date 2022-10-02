@@ -123,12 +123,12 @@ Public Class Wave
         '---------------------
         Select Case IO.Path.GetExtension(file).ToUpper()
 
-            Case Fileformats.FileFactory.FileExtTEN
+            Case Fileformats.FileExtTEN
                 '.TEN-Datei
                 'has to be loaded by the controller/view
                 RaiseEvent TENFileLoading(file)
 
-            Case Fileformats.FileFactory.FileExtWVP
+            Case Fileformats.FileExtWVP
                 'Wave project file
                 Call Me.Load_WVP(file)
 
@@ -519,9 +519,9 @@ Public Class Wave
         For Each ts As TimeSeries In zres
             'get a list of metadata keys
             Select Case exportDlg.ComboBox_Format.SelectedItem
-                Case Fileformats.FileFormatBase.FileFormats.UVF
+                Case Fileformats.FileTypes.UVF
                     keys = Fileformats.UVF.MetadataKeys
-                Case Fileformats.FileFormatBase.FileFormats.ZRXP
+                Case Fileformats.FileTypes.ZRXP
                     keys = Fileformats.ZRXP.MetadataKeys
                 Case Else
                     keys = Fileformats.FileFormatBase.MetadataKeys 'empty list
@@ -542,9 +542,9 @@ Public Class Wave
                 Next
                 'set default metadata values
                 Select Case exportDlg.ComboBox_Format.SelectedItem
-                    Case Fileformats.FileFormatBase.FileFormats.UVF
+                    Case Fileformats.FileTypes.UVF
                         Fileformats.UVF.setDefaultMetadata(ts)
-                    Case Fileformats.FileFormatBase.FileFormats.ZRXP
+                    Case Fileformats.FileTypes.ZRXP
                         Fileformats.ZRXP.setDefaultMetadata(ts)
                     Case Else
                         Fileformats.FileFormatBase.setDefaultMetadata(ts)
@@ -566,40 +566,40 @@ Public Class Wave
         SaveFileDialog1.AddExtension = True
         SaveFileDialog1.OverwritePrompt = True
         Select Case exportDlg.ComboBox_Format.SelectedItem
-            Case Fileformats.FileFormatBase.FileFormats.ASC
+            Case Fileformats.FileTypes.ASC
                 SaveFileDialog1.DefaultExt = "asc"
                 SaveFileDialog1.Filter = "ASC files (*.asc)|*.asc"
-            Case Fileformats.FileFormatBase.FileFormats.BIN
+            Case Fileformats.FileTypes.BIN
                 SaveFileDialog1.DefaultExt = "bin"
                 SaveFileDialog1.Filter = "SYDRO binary files (*.bin)|*.bin"
-            Case Fileformats.FileFormatBase.FileFormats.CSV
+            Case Fileformats.FileTypes.CSV
                 SaveFileDialog1.DefaultExt = "csv"
                 SaveFileDialog1.Filter = "CSV files (*.csv)|*.csv"
-            Case Fileformats.FileFormatBase.FileFormats.DFS0
+            Case Fileformats.FileTypes.DFS0
                 SaveFileDialog1.DefaultExt = "dfs0"
                 SaveFileDialog1.Filter = "DFS0 files (*.dfs0)|*.dfs0"
-            Case Fileformats.FileFormatBase.FileFormats.WEL
+            Case Fileformats.FileTypes.WEL
                 SaveFileDialog1.DefaultExt = "wel"
                 SaveFileDialog1.Filter = "WEL files (*.wel)|*.wel"
-            Case Fileformats.FileFormatBase.FileFormats.ZRE
+            Case Fileformats.FileTypes.ZRE
                 SaveFileDialog1.DefaultExt = "zre"
                 SaveFileDialog1.Filter = "ZRE files (*.zre)|*.zre"
-            Case Fileformats.FileFormatBase.FileFormats.REG_HYSTEM
+            Case Fileformats.FileTypes.REG_HYSTEM
                 SaveFileDialog1.DefaultExt = "reg"
                 SaveFileDialog1.Filter = "HYSTEM REG files (*.reg)|*.reg"
-            Case Fileformats.FileFormatBase.FileFormats.REG_SMUSI
+            Case Fileformats.FileTypes.REG_SMUSI
                 SaveFileDialog1.DefaultExt = "reg"
                 SaveFileDialog1.Filter = "SMUSI REG files (*.reg)|*.reg"
-            Case Fileformats.FileFormatBase.FileFormats.DAT_SWMM_MASS, Fileformats.FileFormatBase.FileFormats.DAT_SWMM_TIME
+            Case Fileformats.FileTypes.DAT_SWMM_MASS, Fileformats.FileTypes.DAT_SWMM_TIME
                 SaveFileDialog1.DefaultExt = "dat"
                 SaveFileDialog1.Filter = "SWMM DAT files (*.dat)|*.dat"
-            Case Fileformats.FileFormatBase.FileFormats.SWMM_INTERFACE
+            Case Fileformats.FileTypes.SWMM_INTERFACE
                 SaveFileDialog1.DefaultExt = "txt"
                 SaveFileDialog1.Filter = "SWMM Interface files (*.txt)|*.txt"
-            Case Fileformats.FileFormatBase.FileFormats.UVF
+            Case Fileformats.FileTypes.UVF
                 SaveFileDialog1.DefaultExt = "uvf"
                 SaveFileDialog1.Filter = "UVF files (*.uvf)|*.uvf"
-            Case Fileformats.FileFormatBase.FileFormats.ZRXP
+            Case Fileformats.FileTypes.ZRXP
                 SaveFileDialog1.DefaultExt = "zrx"
                 SaveFileDialog1.Filter = "ZRXP files (*.zrx)|*.zrx"
         End Select
@@ -623,37 +623,37 @@ Public Class Wave
 
             Select Case exportDlg.ComboBox_Format.SelectedItem
 
-                Case Fileformats.FileFormatBase.FileFormats.BIN
+                Case Fileformats.FileTypes.BIN
                     Call Fileformats.BIN.Write_File(zres(0), filename)
 
-                Case Fileformats.FileFormatBase.FileFormats.CSV
+                Case Fileformats.FileTypes.CSV
                     Call Fileformats.CSV.Write_File(zres, filename)
 
-                Case Fileformats.FileFormatBase.FileFormats.DFS0
+                Case Fileformats.FileTypes.DFS0
                     Call Fileformats.DFS0.Write_File(zres, filename)
 
-                Case Fileformats.FileFormatBase.FileFormats.REG_HYSTEM
+                Case Fileformats.FileTypes.REG_HYSTEM
                     Call Fileformats.HystemExtran_REG.Write_File(zres(0), filename)
 
-                Case Fileformats.FileFormatBase.FileFormats.REG_SMUSI
+                Case Fileformats.FileTypes.REG_SMUSI
                     Call Fileformats.REG_SMUSI.Write_File(zres(0), filename)
 
-                Case Fileformats.FileFormatBase.FileFormats.DAT_SWMM_MASS
+                Case Fileformats.FileTypes.DAT_SWMM_MASS
                     Call Fileformats.SWMM_DAT_MASS.Write_File(zres(0), filename, 5) 'TODO: Zeitschritt ist noch nicht dynamisch definiert
 
-                Case Fileformats.FileFormatBase.FileFormats.DAT_SWMM_TIME
+                Case Fileformats.FileTypes.DAT_SWMM_TIME
                     Call Fileformats.SWMM_DAT_TIME.Write_File(zres(0), filename, 5) 'TODO: Zeitschritt ist noch nicht dynamisch definiert
 
-                Case Fileformats.FileFormatBase.FileFormats.SWMM_INTERFACE
+                Case Fileformats.FileTypes.SWMM_INTERFACE
                     Call Fileformats.SWMM_INTERFACE.Write_File(zres, filename)
 
-                Case Fileformats.FileFormatBase.FileFormats.UVF
+                Case Fileformats.FileTypes.UVF
                     Call Fileformats.UVF.Write_File(zres(0), filename)
 
-                Case Fileformats.FileFormatBase.FileFormats.ZRE
+                Case Fileformats.FileTypes.ZRE
                     Call Fileformats.ZRE.Write_File(zres(0), filename)
 
-                Case Fileformats.FileFormatBase.FileFormats.ZRXP
+                Case Fileformats.FileTypes.ZRXP
                     Call Fileformats.ZRXP.Write_File(zres(0), filename)
 
                 Case Else
