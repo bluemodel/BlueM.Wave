@@ -118,9 +118,10 @@ Namespace Fileformats
         ''' </remarks>
         Public Function getFileType(file As String) As FileTypes
 
-            Dim fileExt As String
+            Dim fileName, fileExt As String
             Dim fileType As FileTypes
 
+            fileName = IO.Path.GetFileName(file)
             fileExt = IO.Path.GetExtension(file).ToUpper()
 
             'Check whether the file exists
@@ -141,27 +142,27 @@ Namespace Fileformats
                 Case FileExtASC
                     If (GISMO_WEL.verifyFormat(file)) Then
                         'GISMO result file in WEL format
-                        Log.AddLogEntry(levels.info, $"Detected GISMO result format for file {IO.Path.GetFileName(file)}.")
+                        Log.AddLogEntry(levels.info, $"Detected GISMO result format for file {fileName}.")
                         fileType = FileTypes.GISMO_WEL
                     Else
                         'Assume SMUSI ASC format
-                        Log.AddLogEntry(levels.info, $"Assuming SMUSI ASC format for file {IO.Path.GetFileName(file)}.")
+                        Log.AddLogEntry(levels.info, $"Assuming SMUSI ASC format for file {fileName}.")
                         fileType = FileTypes.ASC
                     End If
 
                 Case FileExtBIN
                     'SYDRO binary file
-                    Log.AddLogEntry(levels.info, $"Assuming SYDRO binary format for file {IO.Path.GetFileName(file)}.")
+                    Log.AddLogEntry(levels.info, $"Assuming SYDRO binary format for file {fileName}.")
                     fileType = FileTypes.BIN
 
                 Case FileExtCSV
                     'check file format
                     If GISMO_WEL.verifyFormat(file) Then
                         'GISMO result file in CSV format
-                        Log.AddLogEntry(levels.info, $"Detected GISMO result format for file {IO.Path.GetFileName(file)}.")
+                        Log.AddLogEntry(levels.info, $"Detected GISMO result format for file {fileName}.")
                         fileType = FileTypes.GISMO_WEL
                     Else
-                        Log.AddLogEntry(levels.info, $"Assuming CSV format for file {IO.Path.GetFileName(file)}.")
+                        Log.AddLogEntry(levels.info, $"Assuming CSV format for file {fileName}.")
                         fileType = FileTypes.CSV
                     End If
 
@@ -169,32 +170,32 @@ Namespace Fileformats
                     'Check file format
                     If (HYDRO_AS_2D.verifyFormat(file)) Then
                         'HYDRO-AS_2D result file
-                        Log.AddLogEntry(levels.info, $"Detected HYDRO_AS-2D result format for file {IO.Path.GetFileName(file)}.")
+                        Log.AddLogEntry(levels.info, $"Detected HYDRO_AS-2D result format for file {fileName}.")
                         fileType = FileTypes.HYDRO_AS_DAT
                     ElseIf (HystemExtran_REG.verifyFormat(file)) Then
                         'Hystem-Extran rainfall file
-                        Log.AddLogEntry(levels.info, $"Detected Hystem-Extran rainfall format for file {IO.Path.GetFileName(file)}.")
+                        Log.AddLogEntry(levels.info, $"Detected Hystem-Extran rainfall format for file {fileName}.")
                         fileType = FileTypes.HYSTEM_REG
                     ElseIf PRMS.verifyFormat(file) Then
                         'PRMS result file
-                        Log.AddLogEntry(levels.info, $"Detected PRMS result format for file {IO.Path.GetFileName(file)}.")
+                        Log.AddLogEntry(levels.info, $"Detected PRMS result format for file {fileName}.")
                         fileType = FileTypes.PRMS_OUT
                     Else
-                        Throw New Exception($"File {IO.Path.GetFileName(file)} has an unknown format!")
+                        Throw New Exception($"File {fileName} has an unknown format!")
                     End If
 
                 Case FileExtDFS0
-                    Log.AddLogEntry(levels.info, $"Assuming DHI DFS0 format for file {IO.Path.GetFileName(file)}.")
+                    Log.AddLogEntry(levels.info, $"Assuming DHI DFS0 format for file {fileName}.")
                     fileType = FileTypes.DFS0
 
                 Case FileExtOUT
                     If PRMS.verifyFormat(file) Then
                         'PRMS result format
-                        Log.AddLogEntry(levels.info, $"Detected PRMS result format for file {IO.Path.GetFileName(file)}.")
+                        Log.AddLogEntry(levels.info, $"Detected PRMS result format for file {fileName}.")
                         fileType = FileTypes.PRMS_OUT
                     Else
                         'Assume SWMM5 binary output format
-                        Log.AddLogEntry(levels.info, $"Assuming SWMM5 binary output format for file {IO.Path.GetFileName(file)}.")
+                        Log.AddLogEntry(levels.info, $"Assuming SWMM5 binary output format for file {fileName}.")
                         fileType = FileTypes.SWMM_OUT
                     End If
 
@@ -202,37 +203,37 @@ Namespace Fileformats
                     'Check file format
                     If (SMUSI_REG.verifyFormat(file)) Then
                         'SMUSI rainfall file
-                        Log.AddLogEntry(levels.info, $"Detected SMUSI rainfall format for file {IO.Path.GetFileName(file)}.")
+                        Log.AddLogEntry(levels.info, $"Detected SMUSI rainfall format for file {fileName}.")
                         fileType = FileTypes.SMUSI_REG
                     ElseIf (HystemExtran_REG.verifyFormat(file)) Then
                         'Hystem-Extran rainfall file
-                        Log.AddLogEntry(levels.info, $"Detected Hystem-Extran rainfall format for file {IO.Path.GetFileName(file)}.")
+                        Log.AddLogEntry(levels.info, $"Detected Hystem-Extran rainfall format for file {fileName}.")
                         fileType = FileTypes.HYSTEM_REG
                     Else
-                        Throw New Exception($"File {IO.Path.GetFileName(file)} has an unknown format!")
+                        Throw New Exception($"File {fileName} has an unknown format!")
                     End If
 
                 Case FileExtSMB
-                    Log.AddLogEntry(levels.info, $"Assuming SIMBA format for file {IO.Path.GetFileName(file)}.")
+                    Log.AddLogEntry(levels.info, $"Assuming SIMBA format for file {fileName}.")
                     fileType = FileTypes.SMB
 
                 Case FileExtSQLITE
-                    Log.AddLogEntry(levels.info, $"Assuming SYDRO SQLite format for file {IO.Path.GetFileName(file)}.")
+                    Log.AddLogEntry(levels.info, $"Assuming SYDRO SQLite format for file {fileName}.")
                     fileType = FileTypes.SYDROSQLITE
 
                 Case FileExtTXT
                     'Check file format
                     If SWMM_LID_REPORT.verifyFormat(file) Then
                         'SWMM LID report file
-                        Log.AddLogEntry(levels.info, $"Detected SWMM LID report file format for file {IO.Path.GetFileName(file)}.")
+                        Log.AddLogEntry(levels.info, $"Detected SWMM LID report file format for file {fileName}.")
                         fileType = FileTypes.SWMM_LID_REPORT
                     ElseIf SWMM_INTERFACE.verifyFormat(file) Then
                         'SWMM routing interface file
-                        Log.AddLogEntry(levels.info, $"Detected SWMM routing interface file format for file {IO.Path.GetFileName(file)}.")
+                        Log.AddLogEntry(levels.info, $"Detected SWMM routing interface file format for file {fileName}.")
                         fileType = FileTypes.SWMM_INTERFACE
                     Else
                         'Other text files can usually be read as CSV files
-                        Log.AddLogEntry(levels.info, $"Assuming CSV format for file {IO.Path.GetFileName(file)}.")
+                        Log.AddLogEntry(levels.info, $"Assuming CSV format for file {fileName}.")
                         fileType = FileTypes.CSV
                     End If
 
@@ -241,52 +242,52 @@ Namespace Fileformats
                     If UVF.verifyFormat(file) Then
                         fileType = FileTypes.UVF
                     Else
-                        Throw New Exception($"File {IO.Path.GetFileName(file)} has an unexpected format!")
+                        Throw New Exception($"File {fileName} has an unexpected format!")
                     End If
 
                 Case FileExtWBL
                     'Check format
                     If WBL.verifyFormat(file) Then
                         'SYDRO binary WEL file
-                        Log.AddLogEntry(levels.info, $"Detected SYDRO binary WEL format for file {IO.Path.GetFileName(file)}.")
+                        Log.AddLogEntry(levels.info, $"Detected SYDRO binary WEL format for file {fileName}.")
                         fileType = FileTypes.WBL
                     Else
-                        Throw New Exception($"File {IO.Path.GetFileName(file)} has an unexpected format!")
+                        Throw New Exception($"File {fileName} has an unexpected format!")
                     End If
 
                 Case FileExtWEL, FileExtKWL
                     'Check file format
                     If (WEL.verifyFormat(file)) Then
                         'WEL file
-                        Log.AddLogEntry(levels.info, $"Detected BlueM/Talsim WEL format for file {IO.Path.GetFileName(file)}.")
+                        Log.AddLogEntry(levels.info, $"Detected BlueM/Talsim WEL format for file {fileName}.")
                         fileType = FileTypes.WEL
                     ElseIf (HystemExtran_WEL.verifyFormat(file)) Then
                         'Hystem-Extran rainfall file
-                        Log.AddLogEntry(levels.info, $"Detected Hystem-Extran rainfall format for file {IO.Path.GetFileName(file)}.")
+                        Log.AddLogEntry(levels.info, $"Detected Hystem-Extran rainfall format for file {fileName}.")
                         fileType = FileTypes.HYSTEM_WEL
                     ElseIf (WBL.verifyFormat(file)) Then
                         'SYDRO binary WEL file
-                        Log.AddLogEntry(levels.info, $"Detected SYDRO binary WEL format for file {IO.Path.GetFileName(file)}.")
+                        Log.AddLogEntry(levels.info, $"Detected SYDRO binary WEL format for file {fileName}.")
                         fileType = FileTypes.WBL
                     Else
-                        Throw New Exception($"File {IO.Path.GetFileName(file)} has an unknown format!")
+                        Throw New Exception($"File {fileName} has an unknown format!")
                     End If
 
                 Case FileExtWVP
-                    Log.AddLogEntry(levels.info, $"Assuming Wave project file format for file {IO.Path.GetFileName(file)}.")
+                    Log.AddLogEntry(levels.info, $"Assuming Wave project file format for file {fileName}.")
                     fileType = FileTypes.WVP
 
                 Case FileExtZRE
-                    Log.AddLogEntry(levels.info, $"Assuming ZRE format for file {IO.Path.GetFileName(file)}.")
+                    Log.AddLogEntry(levels.info, $"Assuming ZRE format for file {fileName}.")
                     fileType = FileTypes.ZRE
 
                 Case FileExtZRX, FileExtZRXP
-                    Log.AddLogEntry(levels.info, $"Assuming ZRXP format for file {IO.Path.GetFileName(file)}.")
+                    Log.AddLogEntry(levels.info, $"Assuming ZRXP format for file {fileName}.")
                     fileType = FileTypes.ZRXP
 
                 Case Else
                     'Unknown filetype
-                    Log.AddLogEntry(levels.warning, $"Unable to determine file type of file {IO.Path.GetFileName(file)}!")
+                    Log.AddLogEntry(levels.warning, $"Unable to determine file type of file {fileName}!")
                     fileType = FileTypes.UNKNOWN
 
             End Select
