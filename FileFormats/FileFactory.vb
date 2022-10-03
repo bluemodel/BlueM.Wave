@@ -67,22 +67,26 @@ Namespace Fileformats
                     FileInstance = New BIN(file)
                 Case FileTypes.CSV
                     FileInstance = New CSV(file)
-                Case FileTypes.DAT_HYDRO_AS
+                Case FileTypes.HYDRO_AS_DAT
                     FileInstance = New HYDRO_AS_2D(file)
-                Case FileTypes.DAT_SWMM_MASS
-                    Throw New NotImplementedException("Reading files of type DAT_SWMM_MASS is not yet implemented!")
-                Case FileTypes.DAT_SWMM_TIME
-                    Throw New NotImplementedException("Reading files of type DAT_SWMM_TIME is not yet implemented!")
                 Case FileTypes.DFS0
                     FileInstance = New DFS0(file)
+                Case FileTypes.GISMO_WEL
+                    FileInstance = New GISMO_WEL(file)
+                Case FileTypes.HYSTEM_REG
+                    FileInstance = New HystemExtran_REG(file)
+                Case FileTypes.HYSTEM_WEL
+                    FileInstance = New HystemExtran_WEL(file)
                 Case FileTypes.PRMS_OUT
                     FileInstance = New PRMS(file)
-                Case FileTypes.REG_HYSTEM
-                    FileInstance = New HystemExtran_REG(file)
-                Case FileTypes.REG_SMUSI
-                    FileInstance = New REG_SMUSI(file)
                 Case FileTypes.SMB
                     FileInstance = New SMB(file)
+                Case FileTypes.SMUSI_REG
+                    FileInstance = New SMUSI_REG(file)
+                Case FileTypes.SWMM_DAT_MASS
+                    Throw New NotImplementedException("Reading files of type DAT_SWMM_MASS is not yet implemented!")
+                Case FileTypes.SWMM_DAT_TIME
+                    Throw New NotImplementedException("Reading files of type DAT_SWMM_TIME is not yet implemented!")
                 Case FileTypes.SWMM_INTERFACE
                     FileInstance = New SWMM_INTERFACE(file)
                 Case FileTypes.SWMM_LID_REPORT
@@ -99,10 +103,6 @@ Namespace Fileformats
                     FileInstance = New WBL(file)
                 Case FileTypes.WEL
                     FileInstance = New WEL(file)
-                Case FileTypes.WEL_GISMO
-                    FileInstance = New WEL_GISMO(file)
-                Case FileTypes.WEL_HYSTEM
-                    FileInstance = New HystemExtran_WEL(file)
                 Case FileTypes.WVP
                     Throw New Exception("Wave project files (WVP) need to be loaded using `Wave.Import_File()` or `Wave.Load_WVP()`!")
                 Case FileTypes.ZRE

@@ -583,13 +583,13 @@ Public Class Wave
             Case Fileformats.FileTypes.ZRE
                 SaveFileDialog1.DefaultExt = "zre"
                 SaveFileDialog1.Filter = "ZRE files (*.zre)|*.zre"
-            Case Fileformats.FileTypes.REG_HYSTEM
+            Case Fileformats.FileTypes.HYSTEM_REG
                 SaveFileDialog1.DefaultExt = "reg"
                 SaveFileDialog1.Filter = "HYSTEM REG files (*.reg)|*.reg"
-            Case Fileformats.FileTypes.REG_SMUSI
+            Case Fileformats.FileTypes.SMUSI_REG
                 SaveFileDialog1.DefaultExt = "reg"
                 SaveFileDialog1.Filter = "SMUSI REG files (*.reg)|*.reg"
-            Case Fileformats.FileTypes.DAT_SWMM_MASS, Fileformats.FileTypes.DAT_SWMM_TIME
+            Case Fileformats.FileTypes.SWMM_DAT_MASS, Fileformats.FileTypes.SWMM_DAT_TIME
                 SaveFileDialog1.DefaultExt = "dat"
                 SaveFileDialog1.Filter = "SWMM DAT files (*.dat)|*.dat"
             Case Fileformats.FileTypes.SWMM_INTERFACE
@@ -631,16 +631,16 @@ Public Class Wave
                 Case Fileformats.FileTypes.DFS0
                     Call Fileformats.DFS0.Write_File(zres, filename)
 
-                Case Fileformats.FileTypes.REG_HYSTEM
+                Case Fileformats.FileTypes.HYSTEM_REG
                     Call Fileformats.HystemExtran_REG.Write_File(zres(0), filename)
 
-                Case Fileformats.FileTypes.REG_SMUSI
-                    Call Fileformats.REG_SMUSI.Write_File(zres(0), filename)
+                Case Fileformats.FileTypes.SMUSI_REG
+                    Call Fileformats.SMUSI_REG.Write_File(zres(0), filename)
 
-                Case Fileformats.FileTypes.DAT_SWMM_MASS
+                Case Fileformats.FileTypes.SWMM_DAT_MASS
                     Call Fileformats.SWMM_DAT_MASS.Write_File(zres(0), filename, 5) 'TODO: Zeitschritt ist noch nicht dynamisch definiert
 
-                Case Fileformats.FileTypes.DAT_SWMM_TIME
+                Case Fileformats.FileTypes.SWMM_DAT_TIME
                     Call Fileformats.SWMM_DAT_TIME.Write_File(zres(0), filename, 5) 'TODO: Zeitschritt ist noch nicht dynamisch definiert
 
                 Case Fileformats.FileTypes.SWMM_INTERFACE

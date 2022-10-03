@@ -34,7 +34,7 @@ Namespace Fileformats
     ''' For information about GISMO refer to http://www.sydro.de/
     ''' For file format info refer to https://wiki.bluemodel.org/index.php/WEL-Format_%28GISMO%29
     ''' </summary>
-    Public Class WEL_GISMO
+    Public Class GISMO_WEL
         Inherits FileFormatBase
         ''' <summary>
         ''' Gibt an, ob beim Import des Dateiformats der Importdialog angezeigt werden soll

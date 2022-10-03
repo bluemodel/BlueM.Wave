@@ -38,10 +38,10 @@ Friend Class ExportDiag
         Me.ComboBox_Format.Items.Add(Fileformats.FileTypes.CSV)
         Me.ComboBox_Format.Items.Add(Fileformats.FileTypes.BIN)
         Me.ComboBox_Format.Items.Add(Fileformats.FileTypes.DFS0)
-        Me.ComboBox_Format.Items.Add(Fileformats.FileTypes.REG_HYSTEM)
-        Me.ComboBox_Format.Items.Add(Fileformats.FileTypes.REG_SMUSI)
-        Me.ComboBox_Format.Items.Add(Fileformats.FileTypes.DAT_SWMM_MASS)
-        Me.ComboBox_Format.Items.Add(Fileformats.FileTypes.DAT_SWMM_TIME)
+        Me.ComboBox_Format.Items.Add(Fileformats.FileTypes.HYSTEM_REG)
+        Me.ComboBox_Format.Items.Add(Fileformats.FileTypes.SMUSI_REG)
+        Me.ComboBox_Format.Items.Add(Fileformats.FileTypes.SWMM_DAT_MASS)
+        Me.ComboBox_Format.Items.Add(Fileformats.FileTypes.SWMM_DAT_TIME)
         Me.ComboBox_Format.Items.Add(Fileformats.FileTypes.SWMM_INTERFACE)
         Me.ComboBox_Format.Items.Add(Fileformats.FileTypes.UVF)
         Me.ComboBox_Format.Items.Add(Fileformats.FileTypes.ZRE)
@@ -66,10 +66,10 @@ Friend Class ExportDiag
         Select Case ComboBox_Format.SelectedItem
 
             Case Fileformats.FileTypes.ZRE,
-                 Fileformats.FileTypes.REG_HYSTEM,
-                 Fileformats.FileTypes.REG_SMUSI,
-                 Fileformats.FileTypes.DAT_SWMM_MASS,
-                 Fileformats.FileTypes.DAT_SWMM_TIME,
+                 Fileformats.FileTypes.HYSTEM_REG,
+                 Fileformats.FileTypes.SMUSI_REG,
+                 Fileformats.FileTypes.SWMM_DAT_MASS,
+                 Fileformats.FileTypes.SWMM_DAT_TIME,
                  Fileformats.FileTypes.BIN,
                  Fileformats.FileTypes.UVF,
                  Fileformats.FileTypes.ZRXP

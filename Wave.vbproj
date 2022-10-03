@@ -296,7 +296,7 @@
     <Compile Include="FileFormats\HystemExtran_REG.vb" />
     <Compile Include="FileFormats\HystemExtran_WEL.vb" />
     <Compile Include="FileFormats\PRMS.vb" />
-    <Compile Include="FileFormats\REG_SMUSI.vb" />
+    <Compile Include="FileFormats\SMUSI_REG.vb" />
     <Compile Include="FileFormats\SMB.vb" />
     <Compile Include="FileFormats\SWMM_DAT_MASS.vb" />
     <Compile Include="FileFormats\SWMM_DAT_TIME.vb" />
@@ -304,7 +304,7 @@
     <Compile Include="FileFormats\SydroSQLite.vb" />
     <Compile Include="FileFormats\UVF.vb" />
     <Compile Include="FileFormats\WEL.vb" />
-    <Compile Include="FileFormats\WEL_GISMO.vb" />
+    <Compile Include="FileFormats\GISMO_WEL.vb" />
     <Compile Include="FileFormats\ZRE.vb" />
     <Compile Include="FileFormats\ZRXP.vb" />
     <Compile Include="Helpers.vb" />

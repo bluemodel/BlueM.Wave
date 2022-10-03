@@ -33,7 +33,7 @@ Namespace Fileformats
     ''' Klasse für das SMUSI REG-Dateiformat (SMUSI-Regendateien)
     ''' </summary>
     ''' <remarks>Format siehe https://wiki.bluemodel.org/index.php/SMUSI_REG-Format</remarks>
-    Public Class REG_SMUSI
+    Public Class SMUSI_REG
         Inherits FileFormatBase
 
         Const WerteproZeile As Integer = 12
@@ -58,7 +58,7 @@ Namespace Fileformats
         ''' <remarks>5 Minuten</remarks>
         Private ReadOnly Property Zeitintervall() As TimeSpan
             Get
-                Return New TimeSpan(0, REG_SMUSI.dt_min, 0)
+                Return New TimeSpan(0, SMUSI_REG.dt_min, 0)
             End Get
         End Property
 
@@ -121,7 +121,7 @@ Namespace Fileformats
                 sInfo.Index = 0
                 Me.SeriesList.Add(sInfo)
 
-                StrReadSync.close()
+                StrReadSync.Close()
                 StrRead.Close()
                 FiStr.Close()
 
@@ -191,8 +191,8 @@ Namespace Fileformats
 
                         '12 x Datum und Wert zur Zeitreihe hinzufügen
                         '---------------------------------------
-                        For i = 0 To REG_SMUSI.WerteproZeile - 1
-                            DatumCurrent = DatumZeile.AddMinutes(i * REG_SMUSI.dt_min)
+                        For i = 0 To SMUSI_REG.WerteproZeile - 1
+                            DatumCurrent = DatumZeile.AddMinutes(i * SMUSI_REG.dt_min)
                             Wert = StringToDouble(Zeile.Substring(LenZeilenanfang + LenWert * i, LenWert)) / 1000
                             ts.AddNode(DatumCurrent, Wert)
                         Next
