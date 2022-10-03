@@ -25,8 +25,6 @@
 'EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 '--------------------------------------------------------------------------------------------
 '
-Imports System.IO
-
 Namespace Fileformats
 
     ''' <summary>
@@ -48,18 +46,21 @@ Namespace Fileformats
         ''' <param name="file">Path to the file</param>
         ''' <param name="fileType">Optional file type. If not provided, the type is determined using `FileFormats.getFileType()`</param>
         ''' <returns>A FileFormatBase-inherited instance of the file</returns>
-        Public Function getFileInstance(file As String, Optional fileType As FileTypes = FileTypes.UNKNOWN) As FileFormatBase
+        Public Function getFileInstance(file As String, Optional fileType As FileTypes = FileTypes.UNDETERMINED) As FileFormatBase
 
             Dim FileInstance As FileFormatBase
 
             'determine file type if not passed as argument
-            If fileType = FileTypes.UNKNOWN Then
+            If fileType = FileTypes.UNDETERMINED Then
                 fileType = FileFormats.getFileType(file)
             End If
 
             'Depending on file type
             Select Case fileType
 
+                Case FileTypes.UNKNOWN
+                    Log.AddLogEntry(levels.warning, $"File {IO.Path.GetFileName(file)} has an unknown file type, attempting to load as CSV.")
+                    FileInstance = New CSV(file)
                 Case FileTypes.ASC
                     FileInstance = New ASC(file)
                 Case FileTypes.BIN

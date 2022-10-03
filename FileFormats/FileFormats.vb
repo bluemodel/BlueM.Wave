@@ -34,6 +34,7 @@ Namespace Fileformats
         ''' </summary>
         ''' <remarks></remarks>
         Public Enum FileTypes
+            UNDETERMINED
             UNKNOWN
             ASC
             BIN
@@ -284,9 +285,9 @@ Namespace Fileformats
                     fileType = FileTypes.ZRXP
 
                 Case Else
-                    'If all else fails, attempt to read as CSV
-                    Log.AddLogEntry(levels.info, $"Assuming CSV format for file {IO.Path.GetFileName(file)}.")
-                    fileType = FileTypes.CSV
+                    'Unknown filetype
+                    Log.AddLogEntry(levels.warning, $"Unable to determine file type of file {IO.Path.GetFileName(file)}!")
+                    fileType = FileTypes.UNKNOWN
 
             End Select
 
