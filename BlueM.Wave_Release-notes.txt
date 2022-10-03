@@ -9,6 +9,9 @@ API-CHANGES:
 * Allow multiple separate app instances to exist at the same time
 * New alternative method for launching an app instance: `BlueM.Wave.App.Launch()`
 * Introduced the namespace `BlueM.Wave.Fileformats` for all objects related to file formats
+* Added a new public Enum `FileFormats.FileTypes` for file types
+* Added a new method `FileFormats.getFileType()` for determining a file's type
+* The method `FileFactory.getFileInstance()` now has an optional parameter for specifying the file type
 
 Version 1.13.6
 --------------

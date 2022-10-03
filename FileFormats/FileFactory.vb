@@ -43,172 +43,73 @@ Namespace Fileformats
         End Function
 
         ''' <summary>
-        ''' Creates a FileFormatBase-inherited instance based on the file extension
+        ''' Creates a FileFormatBase-inherited instance based on the file type
         ''' </summary>
         ''' <param name="file">Path to the file</param>
+        ''' <param name="fileType">Optional file type. If not provided, the type is determined using `FileFormats.getFileType()`</param>
         ''' <returns>A FileFormatBase-inherited instance of the file</returns>
-        ''' <remarks>
-        ''' Also checks whether the file exists and if the file format is as expected.
-        ''' If the file is a WEL file, this function also checks whether the file is contained
-        ''' within a WLZIP of the same name and if it is, extracts it.
-        ''' </remarks>
-        Public Function getFileInstance(file As String) As FileFormatBase
+        Public Function getFileInstance(file As String, Optional fileType As FileTypes = FileTypes.UNKNOWN) As FileFormatBase
 
             Dim FileInstance As FileFormatBase
-            Dim FileExt As String
 
-            FileExt = Path.GetExtension(file).ToUpper()
-
-            'Check whether the file exists
-            If (Not System.IO.File.Exists(file)) Then
-                If FileExt = FileExtWEL Then
-                    'A WEL file may be zipped within a WLZIP file, so try extracting it from there
-                    If Not WEL.extractFromWLZIP(file) Then
-                        Throw New Exception($"ERROR: File '{file}' not found!")
-                    End If
-                Else
-                    Throw New Exception($"ERROR: File '{file}' not found!")
-                End If
+            'determine file type if not passed as argument
+            If fileType = FileTypes.UNKNOWN Then
+                fileType = FileFormats.getFileType(file)
             End If
 
-            'Depending on file extension
-            Select Case FileExt
+            'Depending on file type
+            Select Case fileType
 
-                Case FileExtASC
-                    Dim isSSV As Boolean
-                    If (WEL_GISMO.verifyFormat(file, isSSV)) Then
-                        'GISMO result file in WEL format (separator is " ")
-                        Log.AddLogEntry(levels.info, $"Detected GISMO result format for file {IO.Path.GetFileName(file)}.")
-                        FileInstance = New WEL_GISMO(file, isSSV)
-                    Else
-                        'Assume SMUSI ASC format
-                        Log.AddLogEntry(levels.info, $"Assuming SMUSI ASC format for file {IO.Path.GetFileName(file)}.")
-                        FileInstance = New ASC(file)
-                    End If
-
-                Case FileExtDAT
-                    'Check file format
-                    If (HYDRO_AS_2D.verifyFormat(file)) Then
-                        'HYDRO-AS_2D result file
-                        Log.AddLogEntry(levels.info, $"Detected HYDRO_AS-2D result format for file {IO.Path.GetFileName(file)}.")
-                        FileInstance = New HYDRO_AS_2D(file)
-                    ElseIf (HystemExtran_REG.verifyFormat(file)) Then
-                        'Hystem-Extran rainfall file
-                        Log.AddLogEntry(levels.info, $"Detected Hystem-Extran rainfall format for file {IO.Path.GetFileName(file)}.")
-                        FileInstance = New HystemExtran_REG(file)
-                    ElseIf PRMS.verifyFormat(file) Then
-                        'PRMS result file
-                        Log.AddLogEntry(levels.info, $"Detected PRMS result format for file {IO.Path.GetFileName(file)}.")
-                        FileInstance = New PRMS(file)
-                    Else
-                        Throw New Exception($"File {IO.Path.GetFileName(file)} has an unknown format!")
-                    End If
-
-                Case FileExtDFS0
-                    FileInstance = New DFS0(file)
-
-                Case FileExtREG
-                    'Check file format
-                    If (REG_SMUSI.verifyFormat(file)) Then
-                        'SMUSI rainfall file
-                        Log.AddLogEntry(levels.info, $"Detected SMUSI rainfall format for file {IO.Path.GetFileName(file)}.")
-                        FileInstance = New REG_SMUSI(file)
-                    ElseIf (HystemExtran_REG.verifyFormat(file)) Then
-                        'Hystem-Extran rainfall file
-                        Log.AddLogEntry(levels.info, $"Detected Hystem-Extran rainfall format for file {IO.Path.GetFileName(file)}.")
-                        FileInstance = New HystemExtran_REG(file)
-                    Else
-                        Throw New Exception($"File {IO.Path.GetFileName(file)} has an unknown format!")
-                    End If
-
-                Case FileExtSMB
-                    FileInstance = New SMB(file)
-
-                Case FileExtUVF
-                    'UVF format
-                    If Not UVF.verifyFormat(file) Then
-                        Throw New Exception($"File {IO.Path.GetFileName(file)} has an unexpected format!")
-                    End If
-                    FileInstance = New UVF(file)
-
-                Case FileExtWEL, FileExtKWL
-                    'Check file format
-                    If (WEL.verifyFormat(file)) Then
-                        'WEL file
-                        Log.AddLogEntry(levels.info, $"Detected BlueM/Talsim WEL format for file {IO.Path.GetFileName(file)}.")
-                        FileInstance = New WEL(file)
-                    ElseIf (HystemExtran_WEL.verifyFormat(file)) Then
-                        'Hystem-Extran rainfall file
-                        Log.AddLogEntry(levels.info, $"Detected Hystem-Extran rainfall format for file {IO.Path.GetFileName(file)}.")
-                        FileInstance = New HystemExtran_WEL(file)
-                    ElseIf (WBL.verifyFormat(file)) Then
-                        'SYDRO binary WEL file
-                        Log.AddLogEntry(levels.info, $"Detected SYDRO binary WEL format for file {IO.Path.GetFileName(file)}.")
-                        FileInstance = New WBL(file)
-                    Else
-                        Throw New Exception($"File {IO.Path.GetFileName(file)} has an unknown format!")
-                    End If
-
-                Case FileExtZRE
-                    FileInstance = New ZRE(file)
-
-                Case FileExtCSV
-                    'check file format
-                    Dim isssv As Boolean
-                    If (WEL_GISMO.verifyFormat(file, isssv)) Then
-                        'GISMO result file in CSV format (separator is a ";")
-                        Log.AddLogEntry(levels.info, $"Detected GISMO result format for file {IO.Path.GetFileName(file)}.")
-                        FileInstance = New WEL_GISMO(file, isssv)
-                    Else
-                        FileInstance = New CSV(file)
-                    End If
-
-                Case FileExtOUT
-                    If PRMS.verifyFormat(file) Then
-                        'PRMS result format
-                        Log.AddLogEntry(levels.info, $"Detected PRMS result format for file {IO.Path.GetFileName(file)}.")
-                        FileInstance = New PRMS(file)
-                    Else
-                        'Assume SWMM5 binary output format
-                        Log.AddLogEntry(levels.info, $"Assuming SWMM5 binary output format for file {IO.Path.GetFileName(file)}.")
-                        FileInstance = New SWMM_OUT(file)
-                    End If
-
-                Case FileExtTXT
-                    'Check file format
-                    If SWMM_LID_REPORT.verifyFormat(file) Then
-                        'SWMM LID report file
-                        Log.AddLogEntry(levels.info, $"Detected SWMM LID report file format for file {IO.Path.GetFileName(file)}.")
-                        FileInstance = New SWMM_LID_REPORT(file)
-                    ElseIf SWMM_INTERFACE.verifyFormat(file) Then
-                        'SWMM routing interface file
-                        Log.AddLogEntry(levels.info, $"Detected SWMM routing interface file format for file {IO.Path.GetFileName(file)}.")
-                        FileInstance = New SWMM_INTERFACE(file)
-                    Else
-                        'Other text files can usually be read as CSV files
-                        FileInstance = New CSV(file)
-                    End If
-
-                Case FileExtBIN
-                    'SYDRO binary file
+                Case FileTypes.ASC
+                    FileInstance = New ASC(file)
+                Case FileTypes.BIN
                     FileInstance = New BIN(file)
-
-                Case FileExtWBL
-                    'SYDRO binary WEL file
-                    If Not WBL.verifyFormat(file) Then
-                        Throw New Exception($"File {IO.Path.GetFileName(file)} has an unexpected format!")
-                    End If
-                    FileInstance = New WBL(file)
-
-                Case FileExtSQLITE
-                    FileInstance = New SydroSQLite(file)
-
-                Case FileExtZRX, FileExtZRXP
-                    FileInstance = New ZRXP(file)
-
-                Case Else
-                    'If all else fails, attempt to read as CSV
+                Case FileTypes.CSV
                     FileInstance = New CSV(file)
+                Case FileTypes.DAT_HYDRO_AS
+                    FileInstance = New HYDRO_AS_2D(file)
+                Case FileTypes.DAT_SWMM_MASS
+                    Throw New NotImplementedException("Reading files of type DAT_SWMM_MASS is not yet implemented!")
+                Case FileTypes.DAT_SWMM_TIME
+                    Throw New NotImplementedException("Reading files of type DAT_SWMM_TIME is not yet implemented!")
+                Case FileTypes.DFS0
+                    FileInstance = New DFS0(file)
+                Case FileTypes.PRMS_OUT
+                    FileInstance = New PRMS(file)
+                Case FileTypes.REG_HYSTEM
+                    FileInstance = New HystemExtran_REG(file)
+                Case FileTypes.REG_SMUSI
+                    FileInstance = New REG_SMUSI(file)
+                Case FileTypes.SMB
+                    FileInstance = New SMB(file)
+                Case FileTypes.SWMM_INTERFACE
+                    FileInstance = New SWMM_INTERFACE(file)
+                Case FileTypes.SWMM_LID_REPORT
+                    FileInstance = New SWMM_LID_REPORT(file)
+                Case FileTypes.SWMM_OUT
+                    FileInstance = New SWMM_OUT(file)
+                Case FileTypes.SYDROSQLITE
+                    FileInstance = New SydroSQLite(file)
+                Case FileTypes.TEN
+                    Throw New Exception("Native TeeChart files (TEN) must to be loaded using `Wave.Import_File()`!")
+                Case FileTypes.UVF
+                    FileInstance = New UVF(file)
+                Case FileTypes.WBL
+                    FileInstance = New WBL(file)
+                Case FileTypes.WEL
+                    FileInstance = New WEL(file)
+                Case FileTypes.WEL_GISMO
+                    FileInstance = New WEL_GISMO(file)
+                Case FileTypes.WEL_HYSTEM
+                    FileInstance = New HystemExtran_WEL(file)
+                Case FileTypes.WVP
+                    Throw New Exception("Wave project files (WVP) need to be loaded using `Wave.Import_File()` or `Wave.Load_WVP()`!")
+                Case FileTypes.ZRE
+                    FileInstance = New ZRE(file)
+                Case FileTypes.ZRXP
+                    FileInstance = New ZRXP(file)
+                Case Else
+                    Throw New Exception($"Unknown file type {fileType}!")
 
             End Select
 

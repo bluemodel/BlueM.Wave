@@ -119,30 +119,29 @@ Public Class Wave
 
         RaiseEvent IsBusyChanged(True)
 
-        'Sonderfälle abfangen:
-        '---------------------
-        Select Case IO.Path.GetExtension(file).ToUpper()
+        'Determine file type
+        Dim fileType As Fileformats.FileTypes = Fileformats.getFileType(file)
 
-            Case Fileformats.FileExtTEN
-                '.TEN-Datei
-                'has to be loaded by the controller/view
+        Select Case fileType
+
+            'some edge cases:
+            Case Fileformats.FileTypes.TEN
+                '.TEN file has to be loaded by the controller/view
                 RaiseEvent TENFileLoading(file)
 
-            Case Fileformats.FileExtWVP
+            Case Fileformats.FileTypes.WVP
                 'Wave project file
                 Call Me.Load_WVP(file)
 
+            'normal files:
             Case Else
-
-                'Normalfall:
-                '-----------
 
                 Try
                     'Log
                     Call Log.AddLogEntry(Log.levels.info, $"Importing file '{file}' ...")
 
                     'Datei-Instanz erzeugen
-                    Datei = Fileformats.FileFactory.getFileInstance(file)
+                    Datei = Fileformats.FileFactory.getFileInstance(file, fileType)
 
                     If (Datei.UseImportDialog) Then
                         'Falls Importdialog erforderlich, diesen anzeigen
