@@ -95,7 +95,7 @@ Namespace Fileformats
                 sInfo.Unit = "mm"
                 sInfo.Index = 0
 
-                StrReadSync.close()
+                StrReadSync.Close()
                 StrRead.Close()
                 FiStr.Close()
 
@@ -169,7 +169,7 @@ Namespace Fileformats
                 End If
             Loop Until StrReadSync.Peek() = -1
 
-            StrReadSync.close()
+            StrReadSync.Close()
             StrRead.Close()
             FiStr.Close()
 
