@@ -48,7 +48,7 @@ Namespace Fileformats
 #Region "Methods"
 
         ' Constructor
-        Public Sub New(FileName As String, IsSSV As Boolean)
+        Public Sub New(FileName As String)
 
             MyBase.New(FileName)
 
@@ -62,8 +62,8 @@ Namespace Fileformats
             Me.iLineUnits = 16
             Me.iLineData = 17
 
-            If (IsSSV) Then
-                ' is it a semiicolon separated file (SSV)? GISMO uses ";" to separate values if CSV mode is choosen
+            If Me.IsCSV() Then
+                ' is it a CSV file? GISMO uses ";" to separate values if CSV mode is choosen
                 Me.IsColumnSeparated = True
                 Me.Separator = Constants.semicolon
             Else
@@ -282,60 +282,72 @@ Namespace Fileformats
 
         End Sub
 
-
         ''' <summary>
-        ''' Checks, if the file is a GISMO result file (either *.CSV or *.ASC)
+        ''' Checks whether the GISMO result file is CSV (semicolon-separated) or ASC (space-separated)
         ''' </summary>
-        ''' <param name="file">file path</param>
-        ''' <param name="IsSSV">Boolean indicates wther the file is semicolon-separated</param>
-        ''' <returns>True if the file is a GISMO result file</returns>
-        Public Shared Function verifyFormat(file As String, Optional ByRef IsSSV As Boolean = False) As Boolean
-
-            Dim isGISMO As Boolean = False
+        ''' <returns>True if the file is CSV (semicolon-separated)</returns>
+        Public Function IsCSV() As Boolean
 
             ' open file
-            Dim FiStr As FileStream = New FileStream(file, FileMode.Open, IO.FileAccess.Read)
+            Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
             Dim StrRead As StreamReader = New StreamReader(FiStr, detectEncodingFromByteOrderMarks:=True)
-            Dim Zeile As String = ""
+            Dim line As String
 
             ' read first line
-            Zeile = StrRead.ReadLine.ToString()
-            Zeile = Trim(Zeile)
-
-            If (Zeile.Contains("*WEL.CSV")) Then
-                ' it's in CSV format
-                ' separator is a ";)
-                IsSSV = True
-
-                ' read third line
-                Zeile = StrRead.ReadLine.ToString()
-                Zeile = StrRead.ReadLine.ToString()
-                Zeile = Trim(Zeile)
-                ' check if it contains the word "GISMO"
-                If Zeile.Contains("GISMO") Then
-                    isGISMO = True
-                End If
-
-            ElseIf (Zeile.Contains("*WEL.ASC")) Then
-                ' it's in WEL format
-                IsSSV = False
-
-                ' read third line
-                Zeile = StrRead.ReadLine.ToString()
-                Zeile = StrRead.ReadLine.ToString()
-                Zeile = Trim(Zeile)
-                ' check if it contains the word "GISMO"
-                If Zeile.Contains("GISMO") Then
-                    isGISMO = True
-                End If
-
-            End If
+            line = StrRead.ReadLine().Trim()
 
             ' close file
             StrRead.Close()
             FiStr.Close()
 
-            Return isGISMO
+            If line.Contains("*WEL.CSV") Then
+                ' it's in CSV format
+                ' separator is a ";)
+                Return True
+
+            ElseIf line.Contains("*WEL.ASC") Then
+                ' it's in WEL format
+                Return False
+
+            Else
+                Throw New Exception("Unable to determine GISMO result file variant!")
+            End If
+
+        End Function
+
+
+        ''' <summary>
+        ''' Checks if the file is a GISMO result file (either *.CSV or *.ASC)
+        ''' </summary>
+        ''' <param name="file">file path</param>
+        ''' <returns>True if the file is a GISMO result file</returns>
+        Public Shared Function verifyFormat(file As String) As Boolean
+
+            ' open file
+            Dim FiStr As FileStream = New FileStream(file, FileMode.Open, IO.FileAccess.Read)
+            Dim StrRead As StreamReader = New StreamReader(FiStr, detectEncodingFromByteOrderMarks:=True)
+            Dim lines As New List(Of String)
+
+            ' read three lines
+            For i As Integer = 1 To 3
+                lines.Add(StrRead.ReadLine().Trim())
+            Next
+
+            ' close file
+            StrRead.Close()
+            FiStr.Close()
+
+            'check first line
+            If Not (lines(0).Contains("*WEL.CSV") Or lines(0).Contains("*WEL.ASC")) Then
+                Return False
+            End If
+
+            ' check third line, must contain the word "GISMO"
+            If Not lines(2).Contains("GISMO") Then
+                Return False
+            End If
+
+            Return True
 
         End Function
 
