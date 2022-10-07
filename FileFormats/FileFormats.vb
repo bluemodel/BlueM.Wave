@@ -221,6 +221,10 @@ Namespace Fileformats
                     Log.AddLogEntry(levels.info, $"Assuming SYDRO SQLite format for file {fileName}.")
                     fileType = FileTypes.SYDROSQLITE
 
+                Case FileExtTEN
+                    Log.AddLogEntry(levels.info, $"Assuming TeeChart native format for file {fileName}.")
+                    fileType = FileTypes.TEN
+
                 Case FileExtTXT
                     'Check file format
                     If SWMM_LID_REPORT.verifyFormat(file) Then
