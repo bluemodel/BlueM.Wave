@@ -2427,9 +2427,9 @@ Friend Class WaveController
     ''' <summary>
     ''' Used for processing drag and drop of files asynchronously
     ''' </summary>
-    ''' <param name="files">array of file paths</param>
+    ''' <param name="files">An enumerable of file paths</param>
     ''' <remarks></remarks>
-    Private Delegate Sub ImportDelegate(files() As String)
+    Private Delegate Sub ImportDelegate(files As IEnumerable(Of String))
 
     ''' <summary>
     ''' Processes the Wave.DragEnter event. Sets DragEventArgs.Effect to Copy if the dragged object consists of files

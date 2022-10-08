@@ -9,6 +9,7 @@ FIXED:
 * Fixed the order in which time series are displayed not being consistent everywhere #79
 API-CHANGES:
 * Renamed the internal storage of time series to `Wave.TimeSeries` and changed its type to `TimeSeriesCollection`
+* `Wave.Import_Files()` now accepts an enumerable of file paths as parameter
 
 Version 1.14.1
 --------------

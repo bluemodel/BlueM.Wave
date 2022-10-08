@@ -105,9 +105,9 @@ Public Class Wave
     ''' <summary>
     ''' Import series from multiple files
     ''' </summary>
-    ''' <param name="files">array of file paths</param>
+    ''' <param name="files">An enumerable of file paths</param>
     ''' <remarks></remarks>
-    Public Sub Import_Files(files() As String)
+    Public Sub Import_Files(files As IEnumerable(Of String))
         For Each file As String In files
             Call Me.Import_File(file)
         Next
