@@ -76,7 +76,7 @@ Partial Class MainWindow
         Me.ToolStripButton_ZoomPrevious = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripDropDownButton_Help = New System.Windows.Forms.ToolStripDropDownButton()
         Me.ToolStripMenuItem_Help = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ToolStripMenuItem_ReleaseNotes = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripMenuItem_Changelog = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripMenuItem_CheckForUpdate = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripMenuItem_About = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripButton_ZoomNext = New System.Windows.Forms.ToolStripButton()
@@ -546,7 +546,7 @@ Partial Class MainWindow
         '
         Me.ToolStripDropDownButton_Help.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right
         Me.ToolStripDropDownButton_Help.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.ToolStripDropDownButton_Help.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripMenuItem_Help, Me.ToolStripMenuItem_ReleaseNotes, Me.ToolStripMenuItem_CheckForUpdate, Me.ToolStripMenuItem_About})
+        Me.ToolStripDropDownButton_Help.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripMenuItem_Help, Me.ToolStripMenuItem_Changelog, Me.ToolStripMenuItem_CheckForUpdate, Me.ToolStripMenuItem_About})
         Me.ToolStripDropDownButton_Help.Image = Global.BlueM.Wave.My.Resources.Resources.help
         Me.ToolStripDropDownButton_Help.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.ToolStripDropDownButton_Help.Name = "ToolStripDropDownButton_Help"
@@ -559,11 +559,11 @@ Partial Class MainWindow
         Me.ToolStripMenuItem_Help.Size = New System.Drawing.Size(165, 22)
         Me.ToolStripMenuItem_Help.Text = "Help"
         '
-        'ToolStripMenuItem_ReleaseNotes
+        'ToolStripMenuItem_Changelog
         '
-        Me.ToolStripMenuItem_ReleaseNotes.Name = "ToolStripMenuItem_ReleaseNotes"
-        Me.ToolStripMenuItem_ReleaseNotes.Size = New System.Drawing.Size(165, 22)
-        Me.ToolStripMenuItem_ReleaseNotes.Text = "Release notes"
+        Me.ToolStripMenuItem_Changelog.Name = "ToolStripMenuItem_Changelog"
+        Me.ToolStripMenuItem_Changelog.Size = New System.Drawing.Size(165, 22)
+        Me.ToolStripMenuItem_Changelog.Text = "Changelog"
         '
         'ToolStripMenuItem_CheckForUpdate
         '
@@ -3311,7 +3311,7 @@ Partial Class MainWindow
     Friend WithEvents ToolStripSeparator9 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents ToolStripButton_AutoAdjustYAxes As System.Windows.Forms.ToolStripButton
     Friend WithEvents ToolStripButton_RemoveNaNValues As System.Windows.Forms.ToolStripButton
-    Friend WithEvents ToolStripMenuItem_ReleaseNotes As ToolStripMenuItem
+    Friend WithEvents ToolStripMenuItem_Changelog As ToolStripMenuItem
     Friend WithEvents ToolStripButton_AxisDialog As ToolStripButton
     Friend WithEvents ToolStripMenuItem_PasteFromClipboard As ToolStripMenuItem
     Friend WithEvents ToolStripSeparator10 As ToolStripSeparator

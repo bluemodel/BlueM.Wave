@@ -1,12 +1,12 @@
-﻿===============================================================
-BlueM.Wave Release Notes
-===============================================================
+﻿BlueM.Wave Release Notes
+========================
 
 Version 1.14.2
 --------------
 FIXED:
 * Fixed series being deleted in the Properties window not being propagated to the chart after a series was deleted in TeeChart
 * Fixed the order in which time series are displayed not being consistent everywhere #79
+
 API-CHANGES:
 * Renamed the internal storage of time series to `Wave.TimeSeries` and changed its type to `TimeSeriesCollection`
 * `Wave.Import_Files()` now accepts an enumerable of file paths as parameter
@@ -32,15 +32,18 @@ Version 1.13.6
 NEW:
 * Added experimental support for reading SYDRO binary WEL files (*.WBL). Requires an accompanying *.WELINFO file for metadata info.
 * Added ISO date format "yyyy-MM-dd HH:mm:ss" to list of date format presets in import dialog
+
 FIXED: 
 * Fixed empty time series being added after a failed import attempt (CSV)
 * Fixed detection of files with endings such as .CHLO.WEL within WLZIP files (TALSIM clipboard)
 * Fixed duplicate "(cut)" in series titles after cutting a time series
+
 CHANGED:
 * Added more information about detected or assumed file formats to the log
 * Upgraded MathNet.Numerics to v5.0.0
 * Upgraded DHI.DFS to v20.1.0
 * Upgraded TeeChart Pro to 4.2022.8.23
+
 API-CHANGES:
 * Attempting to call `Timeseries.Cut()` with a start date on or after the end date now throws an ArgumentException
 
@@ -53,6 +56,7 @@ Version 1.13.4
 --------------
 NEW:
 * Analysis function ChangeTimestep: added the possibility to specify the desired output interpretation #46
+
 API-CHANGES:
 * TimeSeries.ChangeTimestep now has an additional optional parameter for the output interpretation #46
 
@@ -61,6 +65,7 @@ Version 1.13.3
 NEW: 
 * Analysis function ChangeTimestep: added support for input interpretation BlockLeft #46
 * Added a test project for unit testing
+
 FIXED:
 * Analysis function ChangeTimestep: fixed some cases of wrong results #46
 
@@ -97,6 +102,7 @@ Version 1.12.1
 --------------
 FIXED:
 * Fixed detection of files with endings such as .BOF.WEL and .CWR.WEL within WLZIP files (TALSIM)
+
 CHANGED:
 * Upgraded to TeeChart Pro 4.2022.1.10
 
@@ -106,6 +112,7 @@ NEW:
 * Added the ability to export to DFS0 format #73
 * Added the ability to convert to DFS0 using the CLI #73
 * Added buttons for activating / deactivating all series at once #72
+
 CHANGED:
 * Internal code restructuring to MVC architecture #75
 * Upgraded to Math.NET Numerics v4.15.0 from NuGet #74
@@ -117,6 +124,7 @@ NEW:
 * Analysis function GoodnessOfFit: added Kling-Gupta efficiency parameter #52
 * Analysis function ChangeTimestep: the initial setting for the interpretation is now taken from the timeseries' properties
 * Added support for importing SWMM5 LID report files #61
+
 CHANGED:
 * Default line width of series is now 2
 * File import dialog: 
@@ -125,10 +133,12 @@ CHANGED:
 * CSV format: extra spaces around titles and units are now removed during import
 * Upgraded to TeeChart Pro 4.2021.11.2
 * Switched from Ionic.Zip to DotNetZip
+
 FIXED:
 * Custom axes now become invisible automatically when not used by any active series #69
 * Changing the title of a series in the TeeChart Editor no longer causes a desync with the internally stored time series #12
 * Regression: Fixed automatic renaming of duplicate time series titles
+
 REMOVED:
 * Removed "Load Theme" menu option
 
@@ -142,9 +152,11 @@ CHANGED:
 * Chart display, panning and zooming is restricted to the displayable date range between 01.01.0100 and 31.12.9000
 * Replaced DateTimePickers with MaskedTextBoxes for date time input and display
 * Cut dialog: removed preview chart
+
 FIXED:
 * Improved performance when importing series with dates before 01.01.0100 and after 31.12.9000
 * Analysis function "AnnualStatistics": fixed an error occurring with series ending in the year 9999
+
 KNOWN ISSUES:
 * Analysis Function "ChangeTimestep": Error when the last new timestep ends in year > 9999
 
@@ -171,6 +183,7 @@ CHANGED:
 FIXED:
 * Fixed TimeSeries properties Min, Max and Volume for series consisting only of NaN values
 * Fixed an uncaught exception when attempting to add a log message without a Wave window instance
+
 API-CHANGES:
 * Class TimeSeries: new overloaded properties Nodes and NodesClean for retrieving nodes within a defined time period
 * TimeSeries.SplitHydroYears() now has an optional parameter for specifiying the start month of the hydrological year (default: November)
@@ -199,6 +212,7 @@ Version 1.10.1
 --------------
 NEW:
 * Analysis function "ChangeTimestep": added an option for ignoring NaN values
+
 FIXED:
 * Prevent OverflowException when displaying time series beginning with a NaN value as a step function in the overview chart (BUG 748)
 * Prevent DateTimePicker in TimeSeriesValues window from attempting to display a date outside of the supported range
@@ -215,6 +229,7 @@ Version 1.9.7
 -------------
 CHANGED:
 * Analysis function "GoodnessOfFit": volumes, volume error and average values are now calculated based on only the timestamps common to both timeseries
+
 API-CHANGES:
 * New method Timeseries.Synchronize() for synchronizing two timeseries by only keeping the common timestamps
 
@@ -228,8 +243,10 @@ Version 1.9.5
 NEW:
 * Analysis function "Comparison" now also calculates the linear correlation coefficient
 * Added the file extension ".ZRXP" (in addition to ".ZRX") for recognizing the ZRXP file format
+
 CHANGED:
 * Zooming by dragging the mouse in the main chart now requires at least 5 horizontal pixels in order to cause a zoom
+
 FIXED:
 * Fixed wording in Histogram analysis (non-exceedance instead of subceedance)
 
@@ -237,8 +254,10 @@ Version 1.9.4
 -------------
 NEW:
 * Added a "Calculator" analysis function for performing mathematical operations on time series (BUG 722)
+
 CHANGED:
 * Vertical axes now have a maximum offset of 5 by default
+
 FIXED:
 * Fixed wrong update notification and wrong information in the about box when Wave is executed from another application
 * Improved handling and display of time series datasource information
@@ -259,8 +278,10 @@ Version 1.9.2
 NEW:
 * Added buttons for zooming in and out a fixed amount
 * Added a button for zooming to the next extent in the zoom history
+
 CHANGED:
 * Delete temporary files created when importing clipboard data after import is complete
+
 FIXED:
 * Fixed inconsistent zoom behavior when loading a TEN file saved with versions before 1.9.1
 * Fixed zoom rectangle in main chart not showing after visualizing and then hiding NaN values
@@ -293,12 +314,15 @@ NEW:
 * The logging level can be set in Wave.exe.config by setting loggingLevel to either debug, info, warning or error (default is info)
 * Added error and warning counters to the status bar
 * Added an update notification and a check for update help menu item
+
 CHANGED:
 * The Volume property of a time series is now only computed for time series with units ending with "/s", otherwise returning NaN.
   Before, the Sum property was used as a fallback for Volume.
 * Updated to .NET Framework 4.8
+
 FIXED:
 * Fixed some errors when the chart contains series that are not of type line
+
 API-CHANGES:
 * New property TimeSeries.DataSource of type KeyValuePair(String fileName, String seriesName). 
   Is used by Wave for displaying the datasource in the properties dialog, filling the MRU files menu item and for reloading time series from files.
@@ -307,6 +331,7 @@ Version 1.8.6
 -------------
 CHANGED:
 * Analysis functions Comparison and DoubleSumCurve: the result diagrams no longer contain tooltips of the points' timestamps
+
 FIXED:
 * Analysis functions Comparison and DoubleSumCurve: significantly increased the creation speed of the result diagrams
 
@@ -326,6 +351,7 @@ Version 1.8.3
 NEW:
 * Most recently loaded file is now displayed in main window title
 * Any clipboard text content can now be imported as CSV (press Ctrl+V or use menu item)
+
 CHANGED:
 * Tab characters are now represented with a visual representation in the file preview of the file import dialog
 
@@ -357,6 +383,7 @@ NEW:
 * Added a menu item for opening the release notes
 * Added support for reading BW_TMP.DAT files in HYDRO_AS-2D version 5 format (previous versions still supported)
 * Added a button for removing nodes with NaN values from the currently loaded time series
+
 CHANGED:
 * Analysis result charts are now displayed in a dedicated window
 * The Rename Series button and dialog have been removed, series titles can now be changed in the Properties dialog
@@ -366,6 +393,7 @@ CHANGED:
 * Reading SYDRO SQLite time series files is now implemented natively
 * Reading and writing SYDRO binary files is now implemented natively
 * When loading PRMS files, the file import dialog is now displayed, allowing for the selection of time series
+
 FIXED:
 * HYSTEM-EXTRAN-REG-Format: 
   * Recognize different line types as defined by the character in column 20, 
@@ -397,10 +425,12 @@ NEW
 * Added a new analysis function "TimestepAnalysis" which computes the time difference between
   each node of one or multiple time series and displays them as new time series
 * Added support for reading SYDRO SQLite time series files (*.db) of class ForecastTimeseries
+
 CHANGED:
 * The "Monthly Statistics" analysis function now asks the user whether the time series' values 
   correspond to the current or previous month
 * UI: Import series dialog improved with adjustable size of available series display
+
 FIXED:
 * Fixed not being able to open SYDRO SQLite time series files from a network path
 * Time series with interpretation BlockLeft were not being displayed as stairs
@@ -411,6 +441,7 @@ Version 1.7.0
 -------------
 NEW
 * Added support for reading SYDRO SQLite time series files (*.db) (only in x86 version)
+
 FIXED:
 * Analysis function "Cumulative" now ignores NaN values in time series 
   (before, the cumulative sum would become NaN as well)
@@ -419,6 +450,7 @@ Version 1.6.3
 -------------
 NEW
 * Added support for reading PRMS statistic variables result files (statvar.dat)
+
 CHANGED:
 * Reworked the cut time series dialog. The initial start and end dates for the cut are now taken 
   from the currently displayed time period of the main chart.
@@ -457,6 +489,7 @@ NEW:
 * Added the ability to process more clipboard contents from TALSIM 
   (including BIN files and multiple files/series at once) (BUG 695)
 * Added the ability to extract WEL files from WLZIP files of the same name
+
 CHANGED:
 * The "Enter time series" dialog has been improved, unparseable values are now converted to NaN 
   instead of causing an abort of the import.
@@ -474,6 +507,7 @@ FIXED:
 * UVF format: values equal to -777 are recognized as error values and converted to NaN during import
 * BIN format: values equal to -9999.999 are recognized as error values and converted to NaN during import
 * Fixed export to SMUSI REG format. Time series must be equidistant with 5 minute time step.
+
 API-CHANGES:
 * The function TimeSeries.getCleanZRE() has been replaced with two separate functions:
   Timeseries.removeNaNValues() and Timeseries.convertErrorValues()
@@ -503,6 +537,7 @@ NEW:
   * Added "Logarithmic Nash-Sutcliffe Efficiency" as a new GoF parameter
   * The GoF parameters can now optionally be calculated for individual hydrological years
 * Added support for importing BW_TMP.DAT result files from HYDRO_AS-2D
+
 CHANGED:
 * Error values in time series such as e.g. -777 and -9999 are now imported and displayed as regular values.
   Previously, when importing from BIN and DWD-T-L format, these would be replaced with NaN.
@@ -536,12 +571,14 @@ NEW:
 * Support for importing SYDRO binary files (x86 version only)
 * Support for loading TeeChart themes (*.xml) 
 * The date format can now be specified while importing time series (BUG 686)
+
 CHANGED:
 * Loading a TEN-file does not cause existing series to be deleted, 
   the series contained in the TEN-file can be imported optionally
 * More options for cutting time series (cut all series at once and keep original series)
 * Small improvements to layout and functionality
 * Switched to .NET Framework 3.5
+
 REMOVED:
 * RVA files no longer supported
 
@@ -553,10 +590,13 @@ Version 1.3
 -----------
 NEW:
 * Wave can now read time series from SWMM binary result files (*.OUT)
+
 FIXED:
 * Import of time series from TeeCharts native TEN files
+
 UPDATE:
 * Import of SMUSI REG files: Empty lines (dry weather periods) are improted correctly
+
 CHANGED:
 * Upgrade to TeeChart v4
 
@@ -564,6 +604,7 @@ Version 1.2
 -----------
 UPDATE:
 * Internal storage of sampling points re-engineered
+
 NEW:
 * Analysis function Goodness of Fit with new indicators: Volume error, Correlation coefficient, Hydrologic deviation
 
@@ -574,6 +615,7 @@ NEW:
 * Import formats for SMB and REG files
 * Time series are assorted to different axes according to the time series units
 * ReRead Files": Deletes all times series in current instance of BlueM.Wave and reimports the time series from it's respective files again (Bug 388)
+
 FIXED:
 * Cutting time series
 

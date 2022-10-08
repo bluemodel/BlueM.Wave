@@ -438,6 +438,9 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="CHANGELOG.md">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="lib\SQLite\System.Data.SQLite.dll.config" />
     <None Include="My Project\Application.myapp">
       <Generator>MyApplicationCodeGenerator</Generator>
@@ -453,9 +456,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="BlueM.Wave_Release-notes.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="lib\DHI.DFS\DHI.DFS.license.txt" />
     <Content Include="lib\MathNet\MathNet.Numerics.dll" />
     <Content Include="lib\MathNet\MathNet.Numerics.license.txt" />

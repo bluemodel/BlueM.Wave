@@ -133,7 +133,7 @@ Friend Class WaveController
         AddHandler Me.View.ToolStripMenuItem_Help.Click, AddressOf Help_Click
         AddHandler Me.View.ToolStripMenuItem_CheckForUpdate.Click, AddressOf CheckForUpdate_Click
         AddHandler Me.View.ToolStripButton_UpdateNotification.Click, AddressOf CheckForUpdate_Click
-        AddHandler Me.View.ToolStripMenuItem_ReleaseNotes.Click, AddressOf ReleaseNotes_Click
+        AddHandler Me.View.ToolStripMenuItem_Changelog.Click, AddressOf Changelog_Click
         AddHandler Me.View.ToolStripMenuItem_About.Click, AddressOf About_Click
 
         'keyboard events
@@ -1208,15 +1208,15 @@ Friend Class WaveController
     End Sub
 
     ''' <summary>
-    ''' Release Notes click
+    ''' Changelog click
     ''' </summary>
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
-    Private Sub ReleaseNotes_Click(sender As Object, e As EventArgs)
+    Private Sub Changelog_Click(sender As Object, e As EventArgs)
         Dim filepath As String
-        filepath = IO.Path.Combine(Application.StartupPath, "BlueM.Wave_Release-notes.txt")
+        filepath = IO.Path.Combine(Application.StartupPath, "CHANGELOG.md")
         Try
-            System.Diagnostics.Process.Start(filepath)
+            System.Diagnostics.Process.Start("notepad", filepath)
         Catch ex As Exception
             MsgBox(ex.Message, MsgBoxStyle.Critical)
         End Try
