@@ -229,7 +229,7 @@ Namespace Fileformats
                         End If
                         'Restliche Spalten: Werte
                         For Each sInfo As TimeSeriesInfo In Me.SelectedSeries
-                            Me.FileTimeSeries(sInfo.Index).AddNode(datum, StringToDouble(Zeile.Substring(sInfo.Index * Me.ColumnWidth + SpaltenOffset, Math.Min(Me.ColumnWidth, Zeile.Substring(sInfo.Index * Me.ColumnWidth + SpaltenOffset).Length)), numberformat))
+                            Me.FileTimeSeries(sInfo.Index).AddNode(datum, StringToDouble(Zeile.Substring(sInfo.Index * Me.ColumnWidth + ColumnOffset, Math.Min(Me.ColumnWidth, Zeile.Substring(sInfo.Index * Me.ColumnWidth + ColumnOffset).Length)), numberformat))
                         Next
                     End If
 

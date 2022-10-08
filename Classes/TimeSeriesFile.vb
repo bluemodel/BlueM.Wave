@@ -107,10 +107,6 @@ Public MustInherit Class TimeSeriesFile
         "ZRE files (*.zre)|*.zre|" &
         "ZRXP files (*.zrx, *.zrxp)|*.zrx;*.zrxp"
 
-#Region "allgemeine Eigenschaften"
-    Protected SpaltenOffset As Integer = 0          'Anzahl Zeichen bevor die erste Spalte anfängt (nur bei Spalten mit fester Breite)
-#End Region
-
 #Region "Eigenschaften"
 
     Private _file As String
@@ -123,6 +119,7 @@ Public MustInherit Class TimeSeriesFile
     Private _iLineData As Integer = 3
     Private _useUnits As Boolean = True
     Private _columnWidth As Integer = 16
+    Private _columnOffset As Integer = 0
     Private _dateTimeColumnIndex As Integer = 0
     Private _seriesList As List(Of TimeSeriesInfo)
     Private _selectedSeries As List(Of TimeSeriesInfo)
@@ -300,6 +297,18 @@ Public MustInherit Class TimeSeriesFile
         End Get
         Set(value As Integer)
             _columnWidth = value
+        End Set
+    End Property
+
+    ''' <summary>
+    ''' Number of characters before the first column (only relevant for fixed width columns)
+    ''' </summary>
+    Public Property ColumnOffset As Integer
+        Get
+            Return _columnOffset
+        End Get
+        Set(value As Integer)
+            _columnOffset = value
         End Set
     End Property
 

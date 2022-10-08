@@ -70,13 +70,12 @@ Namespace Fileformats
 
             MyBase.New(FileName)
 
-            SpaltenOffset = 0
-
             'Voreinstellungen
             Me.iLineHeadings = 5
             Me.UseUnits = True
             Me.IsColumnSeparated = False
             Me.ColumnWidth = 10
+            Me.ColumnOffset = 0
             Me.DecimalSeparator = Constants.period
 
             Call Me.readSeriesInfo()
@@ -139,7 +138,7 @@ Namespace Fileformats
                     Zeile = StrReadSync.ReadLine.ToString()
                     For j = 0 To AnzSpalten_dT(i) - 1
                         sInfo = New TimeSeriesInfo()
-                        sInfo.Name = Zeile.Substring((j * Me.ColumnWidth) + SpaltenOffset, Me.ColumnWidth).Trim()
+                        sInfo.Name = Zeile.Substring((j * Me.ColumnWidth) + ColumnOffset, Me.ColumnWidth).Trim()
                         sInfo.Unit = HExt_welEinheit
                         sInfo.Index = index
                         sInfo.Objekt = Trim(sInfo.Name)
@@ -204,7 +203,7 @@ Namespace Fileformats
                     Exit Do
                 End If
                 'Erste Zeile: Datum_Zeit
-                datum = New System.DateTime(Zeile.Substring(6 + SpaltenOffset, 4), Zeile.Substring(4 + SpaltenOffset, 2), Zeile.Substring(2 + SpaltenOffset, 2), Zeile.Substring(14 + SpaltenOffset, 2), Zeile.Substring(16 + SpaltenOffset, 2), 0, New System.Globalization.GregorianCalendar())
+                datum = New System.DateTime(Zeile.Substring(6 + ColumnOffset, 4), Zeile.Substring(4 + ColumnOffset, 2), Zeile.Substring(2 + ColumnOffset, 2), Zeile.Substring(14 + ColumnOffset, 2), Zeile.Substring(16 + ColumnOffset, 2), 0, New System.Globalization.GregorianCalendar())
                 'Restliche Zeilen pro Zeitschritt: Werte
                 'Alle ausgewählten Spalten durchlaufen
                 'Alle Abflusswerte einlesen
@@ -213,7 +212,7 @@ Namespace Fileformats
                     WerteString = WerteString + StrReadSync.ReadLine.ToString()
                 Next
                 For Each sInfo As TimeSeriesInfo In Me.SelectedSeries
-                    Me.FileTimeSeries(sInfo.Index).AddNode(datum, StringToDouble(WerteString.Substring(((sInfo.Index - 1) * Me.ColumnWidth) + SpaltenOffset, Me.ColumnWidth)))
+                    Me.FileTimeSeries(sInfo.Index).AddNode(datum, StringToDouble(WerteString.Substring(((sInfo.Index - 1) * Me.ColumnWidth) + ColumnOffset, Me.ColumnWidth)))
                 Next
 
             Loop Until StrReadSync.Peek() = -1

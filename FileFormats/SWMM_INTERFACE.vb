@@ -96,12 +96,11 @@ Namespace Fileformats
 
             MyBase.New(FileName)
 
-            SpaltenOffset = 0
-
             'Voreinstellungen
             Me.iLineHeadings = 2
             Me.UseUnits = True
             Me.IsColumnSeparated = False
+            Me.ColumnOffset = 0
             Me.DecimalSeparator = Constants.period
 
             Call Me.readSeriesInfo()

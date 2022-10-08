@@ -90,8 +90,6 @@ Namespace Fileformats
 
             MyBase.New(FileName)
 
-            SpaltenOffset = 1
-
             'Voreinstellungen
             Me.iLineInfo = 1
             Me.iLineHeadings = 2
@@ -99,6 +97,7 @@ Namespace Fileformats
             Me.iLineUnits = 3
             Me.iLineData = 4
             Me.IsColumnSeparated = True
+            Me.ColumnOffset = 1
             Me.Separator = Constants.semicolon
             Me.Dateformat = Helpers.DateFormats("WEL")
             Me.DecimalSeparator = Constants.period
@@ -261,7 +260,7 @@ Namespace Fileformats
                     'Spalten mit fester Breite
                     '-------------------------
                     'Erste Spalte: Datum_Zeit
-                    timestamp = Zeile.Substring(SpaltenOffset, Me.ColumnWidth).Trim()
+                    timestamp = Zeile.Substring(ColumnOffset, Me.ColumnWidth).Trim()
                     ok = DateTime.TryParseExact(timestamp, Me.Dateformat, Helpers.DefaultNumberFormat, Globalization.DateTimeStyles.None, datum)
                     If (Not ok) Then
                         Throw New Exception($"Unable to parse the timestamp '{timestamp}' using the given format '{Me.Dateformat}'!")
@@ -269,7 +268,7 @@ Namespace Fileformats
                     'Restliche Spalten: Werte
                     'Alle ausgewählten Reihen durchlaufen
                     For Each sInfo As TimeSeriesInfo In Me.SelectedSeries
-                        Me.FileTimeSeries(sInfo.Index).AddNode(datum, StringToDouble(Zeile.Substring((sInfo.Index * Me.ColumnWidth) + SpaltenOffset, Math.Min(Me.ColumnWidth, Zeile.Substring((sInfo.Index * Me.ColumnWidth) + SpaltenOffset).Length))))
+                        Me.FileTimeSeries(sInfo.Index).AddNode(datum, StringToDouble(Zeile.Substring((sInfo.Index * Me.ColumnWidth) + ColumnOffset, Math.Min(Me.ColumnWidth, Zeile.Substring((sInfo.Index * Me.ColumnWidth) + ColumnOffset).Length))))
                     Next
                 End If
 
