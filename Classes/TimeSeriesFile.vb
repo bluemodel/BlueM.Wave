@@ -30,6 +30,83 @@
 ''' </summary>
 Public MustInherit Class TimeSeriesFile
 
+    ''' <summary>
+    ''' FileTypes
+    ''' </summary>
+    ''' <remarks></remarks>
+    Public Enum FileTypes
+        UNDETERMINED
+        UNKNOWN
+        ASC
+        BIN
+        CSV
+        DFS0
+        GISMO_WEL
+        HYDRO_AS_DAT
+        HYSTEM_WEL
+        PRMS_OUT
+        HYSTEM_REG
+        SMUSI_REG
+        SMB
+        SWMM_DAT_MASS
+        SWMM_DAT_TIME
+        SWMM_INTERFACE
+        SWMM_LID_REPORT
+        SWMM_OUT
+        SYDROSQLITE
+        TEN
+        UVF
+        WBL
+        WEL
+        WVP
+        ZRE
+        ZRXP
+    End Enum
+
+    Public Const FileExtASC As String = ".ASC"
+    Public Const FileExtBIN As String = ".BIN"   'SYDRO binary format
+    Public Const FileExtCSV As String = ".CSV"
+    Public Const FileExtDAT As String = ".DAT"
+    Public Const FileExtDFS0 As String = ".DFS0" 'DHI MIKE Dfs0 file format
+    Public Const FileExtKWL As String = ".KWL"
+    Public Const FileExtOUT As String = ".OUT"   'SWMM binary result file or PRMS out file
+    Public Const FileExtREG As String = ".REG"
+    Public Const FileExtSMB As String = ".SMB"
+    Public Const FileExtSQLITE As String = ".DB" 'SYDRO SQLite format
+    Public Const FileExtTEN As String = ".TEN"
+    Public Const FileExtTXT As String = ".TXT"   'SWMM interface routing file, SWMM LID report file or generic text file 
+    Public Const FileExtUVF As String = ".UVF"
+    Public Const FileExtWBL As String = ".WBL"   'SYDRO binary WEL format
+    Public Const FileExtWEL As String = ".WEL"
+    Public Const FileExtWVP As String = ".WVP"   'Wave project file
+    Public Const FileExtZRE As String = ".ZRE"
+    Public Const FileExtZRX As String = ".ZRX"   'ZRXP format
+    Public Const FileExtZRXP As String = ".ZRXP" 'ZRXP format
+
+    ''' <summary>
+    ''' FileFilter for file dialogs
+    ''' </summary>
+    ''' <remarks></remarks>
+    Friend Const FileFilter As String =
+        "All files (*.*)|*.*|" &
+        "Text files (*.txt)|*.txt|" &
+        "CSV files (*.csv)|*.csv|" &
+        "DHI MIKE DFS0 files (*.dfs0)|*.dfs0|" &
+        "HYDRO_AS-2D result files (*.dat)|*.dat|" &
+        "Hystem-Extran files (*.dat, *.reg)|*.dat;*.reg|" &
+        "PRMS result files (*.dat, *.out)|*.dat;*.out|" &
+        "SIMBA files (*.smb)|*.smb|" &
+        "SMUSI files (*.asc. *.reg)|*.asc;*.reg|" &
+        "SWMM files (*.txt, *.out)|*.txt;*.out|" &
+        "SYDRO binary files (*.bin)|*.bin|" &
+        "SYDRO binary wel files (*.wbl)|*.wbl|" &
+        "SYDRO SQLite files (*.db)|*.db|" &
+        "UVF files (*.uvf)|*.uvf|" &
+        "WEL files (*.wel, *.kwl)|*.wel;*.kwl|" &
+        "Wave project files (*.wvp)|*.wvp|" &
+        "ZRE files (*.zre)|*.zre|" &
+        "ZRXP files (*.zrx, *.zrxp)|*.zrx;*.zrxp"
+
 #Region "allgemeine Eigenschaften"
     Protected SpaltenOffset As Integer = 0          'Anzahl Zeichen bevor die erste Spalte anfängt (nur bei Spalten mit fester Breite)
 #End Region
@@ -47,28 +124,11 @@ Public MustInherit Class TimeSeriesFile
     Private _useUnits As Boolean = True
     Private _columnWidth As Integer = 16
     Private _dateTimeColumnIndex As Integer = 0
-    Private _seriesList As List(Of SeriesInfo)
-    Private _selectedSeries As List(Of SeriesInfo)
+    Private _seriesList As List(Of TimeSeriesInfo)
+    Private _selectedSeries As List(Of TimeSeriesInfo)
     Private _nLinesperTimestamp As Integer = 1
     Private _metadata As Metadata
     Private _encoding As Text.Encoding
-
-    ''' <summary>
-    ''' Contains basic information about a series contained in a file
-    ''' </summary>
-    ''' <remarks></remarks>
-    Public Structure SeriesInfo
-        Public Name As String
-        Public Unit As String
-        Public Index As Integer
-        'TODO: The following properties are only needed by SWMM file formats
-        Public Objekt As String     'Bezeichnung des Objekts (z.B. "S101")
-        Public Type As String       '"FLOW" oder ein Stoffparameter (z.B. "CSB")
-        Public ObjType As String    '"Subcatchment", "Node" oder "Link"
-        Public Overrides Function ToString() As String
-            Return Me.Name
-        End Function
-    End Structure
 
     ''' <summary>
     ''' Encoding to use for reading the file
@@ -259,11 +319,11 @@ Public MustInherit Class TimeSeriesFile
     ''' List of all series contained in a file
     ''' </summary>
     ''' <remarks></remarks>
-    Public Property SeriesList() As List(Of SeriesInfo)
+    Public Property SeriesList() As List(Of TimeSeriesInfo)
         Get
             Return _seriesList
         End Get
-        Set(value As List(Of SeriesInfo))
+        Set(value As List(Of TimeSeriesInfo))
             _seriesList = value
         End Set
     End Property
@@ -272,7 +332,7 @@ Public MustInherit Class TimeSeriesFile
     ''' List of series currently selected for import
     ''' </summary>
     ''' <remarks></remarks>
-    Public ReadOnly Property SelectedSeries() As List(Of SeriesInfo)
+    Public ReadOnly Property SelectedSeries() As List(Of TimeSeriesInfo)
         Get
             Return _selectedSeries
         End Get
@@ -332,7 +392,7 @@ Public MustInherit Class TimeSeriesFile
             If Not found Then
                 'Timeseries was not found (perhaps not yet imported?)
                 'Check whether a column with the given title exists
-                For Each sInfo As SeriesInfo In Me.SeriesList
+                For Each sInfo As TimeSeriesInfo In Me.SeriesList
                     If (sInfo.Name = title) Then
                         'get the timeseries by its index
                         Return Me.getTimeSeries(sInfo.Index)
@@ -372,8 +432,8 @@ Public MustInherit Class TimeSeriesFile
 
         'Initialize data structures
         Me.FileTimeSeries = New Dictionary(Of Integer, TimeSeries)
-        Me._seriesList = New List(Of SeriesInfo)
-        Me._selectedSeries = New List(Of SeriesInfo)
+        Me._seriesList = New List(Of TimeSeriesInfo)
+        Me._selectedSeries = New List(Of TimeSeriesInfo)
         Me._metadata = New Metadata()
 
         'Store the filepath
@@ -396,7 +456,7 @@ Public MustInherit Class TimeSeriesFile
     Public Sub selectAllSeries()
 
         Me.SelectedSeries.Clear()
-        For Each sInfo As SeriesInfo In Me.SeriesList
+        For Each sInfo As TimeSeriesInfo In Me.SeriesList
             Me.SelectedSeries.Add(sInfo)
         Next
 
@@ -411,7 +471,7 @@ Public MustInherit Class TimeSeriesFile
     Public Function selectSeries(colIndex As Integer) As Boolean
 
         Dim i As Integer = 0
-        For Each sInfo As SeriesInfo In Me.SeriesList
+        For Each sInfo As TimeSeriesInfo In Me.SeriesList
             If sInfo.Index = colIndex Then
                 Me.SelectedSeries.Add(sInfo)
                 Return True
@@ -431,7 +491,7 @@ Public MustInherit Class TimeSeriesFile
     ''' <remarks></remarks>
     Public Function selectSeries(seriesName As String) As Boolean
 
-        For Each sInfo As SeriesInfo In Me.SeriesList
+        For Each sInfo As TimeSeriesInfo In Me.SeriesList
             If sInfo.Name = seriesName Then
                 Me.SelectedSeries.Add(sInfo)
                 Return True
@@ -459,5 +519,273 @@ Public MustInherit Class TimeSeriesFile
     End Sub
 
 #End Region 'Methods
+
+    ''' <summary>
+    ''' Determines the file type of a file based on the file's extension and contents
+    ''' </summary>
+    ''' <param name="file">Path to the file</param>
+    ''' <returns>the determined file type</returns>
+    ''' <remarks>
+    ''' Also checks whether the file exists and if the file format is as expected.
+    ''' If the file is a WEL file, this function also checks whether the file is contained
+    ''' within a WLZIP of the same name and if it is, extracts it.
+    ''' </remarks>
+    Public Shared Function getFileType(file As String) As FileTypes
+
+        Dim fileName, fileExt As String
+        Dim fileType As FileTypes
+
+        fileName = IO.Path.GetFileName(file)
+        fileExt = IO.Path.GetExtension(file).ToUpper()
+
+        'Check whether the file exists
+        If Not IO.File.Exists(file) Then
+            'A WEL file may be zipped within a WLZIP file, so try extracting it from there
+            If fileExt = FileExtWEL Then
+                If Not Fileformats.WEL.extractFromWLZIP(file) Then
+                    Throw New Exception($"ERROR: File '{file}' not found!")
+                End If
+            Else
+                Throw New Exception($"ERROR: File '{file}' not found!")
+            End If
+        End If
+
+        'Depending on file extension
+        Select Case fileExt
+
+            Case FileExtASC
+                If Fileformats.GISMO_WEL.verifyFormat(file) Then
+                    'GISMO result file in WEL format
+                    Log.AddLogEntry(levels.info, $"Detected GISMO result format for file {fileName}.")
+                    fileType = FileTypes.GISMO_WEL
+                Else
+                    'Assume SMUSI ASC format
+                    Log.AddLogEntry(levels.info, $"Assuming SMUSI ASC format for file {fileName}.")
+                    fileType = FileTypes.ASC
+                End If
+
+            Case FileExtBIN
+                'SYDRO binary file
+                Log.AddLogEntry(levels.info, $"Assuming SYDRO binary format for file {fileName}.")
+                fileType = FileTypes.BIN
+
+            Case FileExtCSV
+                'check file format
+                If Fileformats.GISMO_WEL.verifyFormat(file) Then
+                    'GISMO result file in CSV format
+                    Log.AddLogEntry(levels.info, $"Detected GISMO result format for file {fileName}.")
+                    fileType = FileTypes.GISMO_WEL
+                Else
+                    Log.AddLogEntry(levels.info, $"Assuming CSV format for file {fileName}.")
+                    fileType = FileTypes.CSV
+                End If
+
+            Case FileExtDAT
+                'Check file format
+                If Fileformats.HYDRO_AS_2D.verifyFormat(file) Then
+                    'HYDRO-AS_2D result file
+                    Log.AddLogEntry(levels.info, $"Detected HYDRO_AS-2D result format for file {fileName}.")
+                    fileType = FileTypes.HYDRO_AS_DAT
+                ElseIf Fileformats.HystemExtran_REG.verifyFormat(file) Then
+                    'Hystem-Extran rainfall file
+                    Log.AddLogEntry(levels.info, $"Detected Hystem-Extran rainfall format for file {fileName}.")
+                    fileType = FileTypes.HYSTEM_REG
+                ElseIf Fileformats.PRMS.verifyFormat(file) Then
+                    'PRMS result file
+                    Log.AddLogEntry(levels.info, $"Detected PRMS result format for file {fileName}.")
+                    fileType = FileTypes.PRMS_OUT
+                Else
+                    Throw New Exception($"File {fileName} has an unknown format!")
+                End If
+
+            Case FileExtDFS0
+                Log.AddLogEntry(levels.info, $"Assuming DHI DFS0 format for file {fileName}.")
+                fileType = FileTypes.DFS0
+
+            Case FileExtOUT
+                If Fileformats.PRMS.verifyFormat(file) Then
+                    'PRMS result format
+                    Log.AddLogEntry(levels.info, $"Detected PRMS result format for file {fileName}.")
+                    fileType = FileTypes.PRMS_OUT
+                Else
+                    'Assume SWMM5 binary output format
+                    Log.AddLogEntry(levels.info, $"Assuming SWMM5 binary output format for file {fileName}.")
+                    fileType = FileTypes.SWMM_OUT
+                End If
+
+            Case FileExtREG
+                'Check file format
+                If Fileformats.SMUSI_REG.verifyFormat(file) Then
+                    'SMUSI rainfall file
+                    Log.AddLogEntry(levels.info, $"Detected SMUSI rainfall format for file {fileName}.")
+                    fileType = FileTypes.SMUSI_REG
+                ElseIf Fileformats.HystemExtran_REG.verifyFormat(file) Then
+                    'Hystem-Extran rainfall file
+                    Log.AddLogEntry(levels.info, $"Detected Hystem-Extran rainfall format for file {fileName}.")
+                    fileType = FileTypes.HYSTEM_REG
+                Else
+                    Throw New Exception($"File {fileName} has an unknown format!")
+                End If
+
+            Case FileExtSMB
+                Log.AddLogEntry(levels.info, $"Assuming SIMBA format for file {fileName}.")
+                fileType = FileTypes.SMB
+
+            Case FileExtSQLITE
+                Log.AddLogEntry(levels.info, $"Assuming SYDRO SQLite format for file {fileName}.")
+                fileType = FileTypes.SYDROSQLITE
+
+            Case FileExtTXT
+                'Check file format
+                If Fileformats.SWMM_LID_REPORT.verifyFormat(file) Then
+                    'SWMM LID report file
+                    Log.AddLogEntry(levels.info, $"Detected SWMM LID report file format for file {fileName}.")
+                    fileType = FileTypes.SWMM_LID_REPORT
+                ElseIf Fileformats.SWMM_INTERFACE.verifyFormat(file) Then
+                    'SWMM routing interface file
+                    Log.AddLogEntry(levels.info, $"Detected SWMM routing interface file format for file {fileName}.")
+                    fileType = FileTypes.SWMM_INTERFACE
+                Else
+                    'Other text files can usually be read as CSV files
+                    Log.AddLogEntry(levels.info, $"Assuming CSV format for file {fileName}.")
+                    fileType = FileTypes.CSV
+                End If
+
+            Case FileExtUVF
+                'Check file format
+                If Fileformats.UVF.verifyFormat(file) Then
+                    fileType = FileTypes.UVF
+                Else
+                    Throw New Exception($"File {fileName} has an unexpected format!")
+                End If
+
+            Case FileExtWBL
+                'Check format
+                If Fileformats.WBL.verifyFormat(file) Then
+                    'SYDRO binary WEL file
+                    Log.AddLogEntry(levels.info, $"Detected SYDRO binary WEL format for file {fileName}.")
+                    fileType = FileTypes.WBL
+                Else
+                    Throw New Exception($"File {fileName} has an unexpected format!")
+                End If
+
+            Case FileExtWEL, FileExtKWL
+                'Check file format
+                If Fileformats.WEL.verifyFormat(file) Then
+                    'WEL file
+                    Log.AddLogEntry(levels.info, $"Detected BlueM/Talsim WEL format for file {fileName}.")
+                    fileType = FileTypes.WEL
+                ElseIf Fileformats.HystemExtran_WEL.verifyFormat(file) Then
+                    'Hystem-Extran rainfall file
+                    Log.AddLogEntry(levels.info, $"Detected Hystem-Extran rainfall format for file {fileName}.")
+                    fileType = FileTypes.HYSTEM_WEL
+                ElseIf Fileformats.WBL.verifyFormat(file) Then
+                    'SYDRO binary WEL file
+                    Log.AddLogEntry(levels.info, $"Detected SYDRO binary WEL format for file {fileName}.")
+                    fileType = FileTypes.WBL
+                Else
+                    Throw New Exception($"File {fileName} has an unknown format!")
+                End If
+
+            Case FileExtWVP
+                Log.AddLogEntry(levels.info, $"Assuming Wave project file format for file {fileName}.")
+                fileType = FileTypes.WVP
+
+            Case FileExtZRE
+                Log.AddLogEntry(levels.info, $"Assuming ZRE format for file {fileName}.")
+                fileType = FileTypes.ZRE
+
+            Case FileExtZRX, FileExtZRXP
+                Log.AddLogEntry(levels.info, $"Assuming ZRXP format for file {fileName}.")
+                fileType = FileTypes.ZRXP
+
+            Case Else
+                'Unknown filetype
+                Log.AddLogEntry(levels.warning, $"Unable to determine file type of file {fileName}!")
+                fileType = FileTypes.UNKNOWN
+
+        End Select
+
+        Return fileType
+
+    End Function
+
+    ''' <summary>
+    ''' Factory method for creating a TimeSeriesFile instance based on the file type
+    ''' </summary>
+    ''' <param name="file">Path to the file</param>
+    ''' <param name="fileType">Optional file type. If not provided, the type is determined using `getFileType()`</param>
+    ''' <returns>A TimeSeriesFile instance representing the file</returns>
+    Public Shared Function getInstance(file As String, Optional fileType As FileTypes = FileTypes.UNDETERMINED) As TimeSeriesFile
+
+        Dim FileInstance As TimeSeriesFile
+
+        'determine file type if not passed as argument
+        If fileType = FileTypes.UNDETERMINED Then
+            fileType = getFileType(file)
+        End If
+
+        'Depending on file type
+        Select Case fileType
+
+            Case FileTypes.UNKNOWN
+                Log.AddLogEntry(levels.warning, $"File {IO.Path.GetFileName(file)} has an unknown file type, attempting to load as CSV.")
+                FileInstance = New Fileformats.CSV(file)
+            Case FileTypes.ASC
+                FileInstance = New Fileformats.ASC(file)
+            Case FileTypes.BIN
+                FileInstance = New Fileformats.BIN(file)
+            Case FileTypes.CSV
+                FileInstance = New Fileformats.CSV(file)
+            Case FileTypes.HYDRO_AS_DAT
+                FileInstance = New Fileformats.HYDRO_AS_2D(file)
+            Case FileTypes.DFS0
+                FileInstance = New Fileformats.DFS0(file)
+            Case FileTypes.GISMO_WEL
+                FileInstance = New Fileformats.GISMO_WEL(file)
+            Case FileTypes.HYSTEM_REG
+                FileInstance = New Fileformats.HystemExtran_REG(file)
+            Case FileTypes.HYSTEM_WEL
+                FileInstance = New Fileformats.HystemExtran_WEL(file)
+            Case FileTypes.PRMS_OUT
+                FileInstance = New Fileformats.PRMS(file)
+            Case FileTypes.SMB
+                FileInstance = New Fileformats.SMB(file)
+            Case FileTypes.SMUSI_REG
+                FileInstance = New Fileformats.SMUSI_REG(file)
+            Case FileTypes.SWMM_DAT_MASS
+                Throw New NotImplementedException("Reading files of type DAT_SWMM_MASS is not yet implemented!")
+            Case FileTypes.SWMM_DAT_TIME
+                Throw New NotImplementedException("Reading files of type DAT_SWMM_TIME is not yet implemented!")
+            Case FileTypes.SWMM_INTERFACE
+                FileInstance = New Fileformats.SWMM_INTERFACE(file)
+            Case FileTypes.SWMM_LID_REPORT
+                FileInstance = New Fileformats.SWMM_LID_REPORT(file)
+            Case FileTypes.SWMM_OUT
+                FileInstance = New Fileformats.SWMM_OUT(file)
+            Case FileTypes.SYDROSQLITE
+                FileInstance = New Fileformats.SydroSQLite(file)
+            Case FileTypes.TEN
+                Throw New Exception("Native TeeChart files (TEN) must to be loaded using `Wave.Import_File()`!")
+            Case FileTypes.UVF
+                FileInstance = New Fileformats.UVF(file)
+            Case FileTypes.WBL
+                FileInstance = New Fileformats.WBL(file)
+            Case FileTypes.WEL
+                FileInstance = New Fileformats.WEL(file)
+            Case FileTypes.WVP
+                Throw New Exception("Wave project files (WVP) need to be loaded using `Wave.Import_File()` or `Wave.Load_WVP()`!")
+            Case FileTypes.ZRE
+                FileInstance = New Fileformats.ZRE(file)
+            Case FileTypes.ZRXP
+                FileInstance = New Fileformats.ZRXP(file)
+            Case Else
+                Throw New Exception($"Unknown file type {fileType}!")
+
+        End Select
+
+        Return FileInstance
+
+    End Function
 
 End Class

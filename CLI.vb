@@ -86,7 +86,7 @@ Friend Class CLI
 
                     'default options
                     Dim interactive As Boolean = False
-                    Dim outputformat As Fileformats.FileTypes = Fileformats.FileTypes.CSV
+                    Dim outputformat As TimeSeriesFile.FileTypes = TimeSeriesFile.FileTypes.CSV
 
                     'parse options from commandline
                     Dim i As Integer = 1
@@ -101,11 +101,11 @@ Friend Class CLI
                             i += 1
                             Select Case args(i).ToUpper()
                                 Case "CSV"
-                                    outputformat = Fileformats.FileTypes.CSV
+                                    outputformat = TimeSeriesFile.FileTypes.CSV
                                 Case "BIN"
-                                    outputformat = Fileformats.FileTypes.BIN
+                                    outputformat = TimeSeriesFile.FileTypes.BIN
                                 Case "DFS0"
-                                    outputformat = Fileformats.FileTypes.DFS0
+                                    outputformat = TimeSeriesFile.FileTypes.DFS0
                                 Case Else
                                     Throw New ArgumentException($"Unrecognized output format option -of {args(i)}!")
                             End Select
@@ -137,17 +137,17 @@ Friend Class CLI
                         Log.AddLogEntry(BlueM.Wave.Log.levels.info, $"Importing file {file_in}...")
                         Select Case IO.Path.GetExtension(file_in).ToUpper
 
-                            Case Fileformats.FileExtTEN
+                            Case TimeSeriesFile.FileExtTEN
                                 Throw New NotImplementedException("TEN files are currently not supported in the CLI!")
 
-                            Case Fileformats.FileExtWVP
+                            Case TimeSeriesFile.FileExtWVP
                                 Dim wvp As New Fileformats.WVP(file_in)
                                 Dim wvpSeries As List(Of TimeSeries) = wvp.Process()
                                 Log.AddLogEntry(Log.levels.info, $"Imported {wvpSeries.Count} time series")
                                 tsList.AddRange(wvpSeries)
 
                             Case Else
-                                fileInstance = Fileformats.FileFactory.getFileInstance(file_in)
+                                fileInstance = TimeSeriesFile.getInstance(file_in)
                                 Dim isOK As Boolean
                                 If interactive And fileInstance.UseImportDialog Then
                                     isOK = wave.ShowImportDialog(fileInstance)
@@ -174,24 +174,24 @@ Friend Class CLI
                     Log.AddLogEntry(BlueM.Wave.Log.levels.info, $"Exporting to {path_out}...")
 
                     Select Case outputformat
-                        Case Fileformats.FileTypes.CSV
+                        Case TimeSeriesFile.FileTypes.CSV
                             If IO.File.Exists(path_out) Then
                                 Log.AddLogEntry(BlueM.Wave.Log.levels.warning, "Overwriting existing file!")
                             End If
                             Fileformats.CSV.Write_File(tsList, path_out)
-                        Case Fileformats.FileTypes.DFS0
+                        Case TimeSeriesFile.FileTypes.DFS0
                             If IO.File.Exists(path_out) Then
                                 Log.AddLogEntry(BlueM.Wave.Log.levels.warning, "Overwriting existing file!")
                             End If
                             Fileformats.DFS0.Write_File(tsList, path_out)
-                        Case Fileformats.FileTypes.BIN
+                        Case TimeSeriesFile.FileTypes.BIN
                             'treat output path as a directory and export individual files, using the title as filename
                             IO.Directory.CreateDirectory(path_out)
                             Dim filename, filepath As String
                             Dim invalidFileNameCharsPattern As String = $"[{Text.RegularExpressions.Regex.Escape(String.Join("", IO.Path.GetInvalidFileNameChars))}]"
                             For Each ts As TimeSeries In tsList
                                 'generate file name from cleaned title
-                                filename = Text.RegularExpressions.Regex.Replace(ts.Title, invalidFileNameCharsPattern, "_") & Fileformats.FileExtBIN
+                                filename = Text.RegularExpressions.Regex.Replace(ts.Title, invalidFileNameCharsPattern, "_") & TimeSeriesFile.FileExtBIN
                                 filepath = IO.Path.Combine(path_out, filename)
                                 Log.AddLogEntry(BlueM.Wave.Log.levels.info, $"Exporting to {filepath}...")
                                 If IO.File.Exists(filepath) Then

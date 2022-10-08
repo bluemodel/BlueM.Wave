@@ -99,7 +99,7 @@ Namespace Fileformats
         Public Overrides Sub readSeriesInfo()
 
             Dim Zeile As String = ""
-            Dim sInfo As SeriesInfo
+            Dim sInfo As TimeSeriesInfo
 
             Me.SeriesList.Clear()
 
@@ -113,7 +113,7 @@ Namespace Fileformats
                 Zeile = StrReadSync.ReadLine.ToString()
 
                 'store series info
-                sInfo = New SeriesInfo()
+                sInfo = New TimeSeriesInfo()
                 sInfo.Name = Zeile.Trim()
                 Me.SeriesList.Add(sInfo)
 

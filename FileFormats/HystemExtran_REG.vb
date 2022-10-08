@@ -128,7 +128,7 @@ Namespace Fileformats
 
             Dim Zeile As String
             Dim title As String
-            Dim sInfo As SeriesInfo
+            Dim sInfo As TimeSeriesInfo
 
             Me.SeriesList.Clear()
 
@@ -138,7 +138,7 @@ Namespace Fileformats
                 Dim StrRead As StreamReader = New StreamReader(FiStr, Me.Encoding)
                 Dim StrReadSync = TextReader.Synchronized(StrRead)
 
-                sInfo = New SeriesInfo()
+                sInfo = New TimeSeriesInfo()
                 sInfo.Index = 0
 
                 'Reihentitel steht in 1. Zeile, ist aber optional:
@@ -180,7 +180,7 @@ Namespace Fileformats
             Dim Stunde, Minute, Tag, Monat, Jahr As Integer
             Dim Datum, Zeilendatum As DateTime
             Dim wert As Double
-            Dim sInfo As SeriesInfo
+            Dim sInfo As TimeSeriesInfo
             Dim ts As TimeSeries
 
             Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)

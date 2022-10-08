@@ -76,7 +76,7 @@ Namespace Fileformats
         Public Overrides Sub readSeriesInfo()
 
             Dim Zeile As String = ""
-            Dim sInfo As SeriesInfo
+            Dim sInfo As TimeSeriesInfo
 
             Me.SeriesList.Clear()
 
@@ -86,7 +86,7 @@ Namespace Fileformats
                 Dim StrRead As StreamReader = New StreamReader(FiStr, Me.Encoding)
                 Dim StrReadSync = TextReader.Synchronized(StrRead)
 
-                sInfo = New SeriesInfo()
+                sInfo = New TimeSeriesInfo()
 
                 'Reihentitel steht in 1. Zeile:
                 Zeile = StrReadSync.ReadLine.ToString()
@@ -118,7 +118,7 @@ Namespace Fileformats
             Dim Datum As DateTime
             Dim Anfangsdatum As DateTime
             Dim tmpWert As String
-            Dim sInfo As SeriesInfo
+            Dim sInfo As TimeSeriesInfo
             Dim ts As TimeSeries
 
             Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)

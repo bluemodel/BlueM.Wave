@@ -81,7 +81,7 @@ Namespace Fileformats
 
             Dim iLine As Integer = 0
             Dim line As String
-            Dim sInfo As SeriesInfo
+            Dim sInfo As TimeSeriesInfo
             Dim titles1, titles2, titles, units As New List(Of String)
 
             Dim FiStr As New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
@@ -121,7 +121,7 @@ Namespace Fileformats
             Me.SeriesList.Clear()
             For i As Integer = 0 To titles.Count - 1
                 If i <> Me.DateTimeColumnIndex Then
-                    sInfo = New SeriesInfo()
+                    sInfo = New TimeSeriesInfo()
                     sInfo.Index = i
                     sInfo.Name = titles(i)
                     sInfo.Unit = units(i).Trim()
@@ -144,7 +144,7 @@ Namespace Fileformats
             Dim ts As TimeSeries
 
             'instantiate time series
-            For Each sInfo As SeriesInfo In Me.SelectedSeries
+            For Each sInfo As TimeSeriesInfo In Me.SelectedSeries
                 ts = New TimeSeries(sInfo.Name)
                 If Me.UseUnits Then
                     ts.Unit = sInfo.Unit
@@ -172,7 +172,7 @@ Namespace Fileformats
                 If Not ok Then
                     Throw New Exception($"Could Not parse the timestamp '{parts(Me.DateTimeColumnIndex).Trim()}' using the given date format '{Me.Dateformat}'! Please check the date format!")
                 End If
-                For Each sInfo As SeriesInfo In Me.SelectedSeries
+                For Each sInfo As TimeSeriesInfo In Me.SelectedSeries
                     Me.FileTimeSeries(sInfo.Index).AddNode(timestamp, StringToDouble(parts(sInfo.Index), Helpers.DefaultNumberFormat))
                 Next
             Loop

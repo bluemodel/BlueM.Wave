@@ -136,7 +136,7 @@ Namespace Fileformats
 
             Dim i As Integer
             Dim Zeile As String
-            Dim sInfo As SeriesInfo
+            Dim sInfo As TimeSeriesInfo
             Dim headerFound As Boolean = False
 
             Me.SeriesList.Clear()
@@ -206,7 +206,7 @@ Namespace Fileformats
 
                 'store series info
 
-                sInfo = New SeriesInfo()
+                sInfo = New TimeSeriesInfo()
                 sInfo.Name = Me.FileMetadata("name")
                 If Me.FileMetadata("location") <> "" Then
                     'append location to series title
@@ -239,7 +239,7 @@ Namespace Fileformats
             Dim ok As Boolean
             Dim wert As Double
             Dim errorcount As Integer
-            Dim sInfo As SeriesInfo
+            Dim sInfo As TimeSeriesInfo
             Dim ts As TimeSeries
 
             Try

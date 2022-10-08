@@ -122,7 +122,7 @@ Namespace Fileformats
 
             Dim i As Integer
             Dim line, data(), keys(), value As String
-            Dim sInfo As SeriesInfo
+            Dim sInfo As TimeSeriesInfo
 
             Me.SeriesList.Clear()
 
@@ -172,7 +172,7 @@ Namespace Fileformats
                 FiStr.Close()
 
                 'store series info
-                sInfo = New SeriesInfo
+                sInfo = New TimeSeriesInfo
                 sInfo.Name = $"{Me.FileMetadata("SNAME")}.{Me.FileMetadata("CNAME")}"
                 sInfo.Unit = Me.FileMetadata("CUNIT")
                 sInfo.Index = 0
@@ -196,7 +196,7 @@ Namespace Fileformats
             Dim timestamp As DateTime
             Dim ok As Boolean
             Dim value As Double
-            Dim sInfo As SeriesInfo
+            Dim sInfo As TimeSeriesInfo
             Dim ts As TimeSeries
 
             Try

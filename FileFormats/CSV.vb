@@ -66,7 +66,7 @@ Namespace Fileformats
         Public Overrides Sub readSeriesInfo()
 
             Dim i As Integer
-            Dim sInfo As SeriesInfo
+            Dim sInfo As TimeSeriesInfo
             Dim Zeile As String = ""
             Dim ZeileSpalten As String = ""
             Dim ZeileEinheiten As String = ""
@@ -136,7 +136,7 @@ Namespace Fileformats
                 'store series info
                 For i = 0 To anzSpalten - 1
                     If i <> Me.DateTimeColumnIndex Then
-                        sInfo = New SeriesInfo()
+                        sInfo = New TimeSeriesInfo()
                         sInfo.Index = i
                         sInfo.Name = Namen(i)
                         If Me.UseUnits Then
@@ -173,7 +173,7 @@ Namespace Fileformats
                 Dim StrReadSync As TextReader = TextReader.Synchronized(StrRead)
 
                 'Zeitreihen instanzieren
-                For Each sInfo As SeriesInfo In Me.SelectedSeries
+                For Each sInfo As TimeSeriesInfo In Me.SelectedSeries
                     ts = New TimeSeries(sInfo.Name)
                     If Me.UseUnits Then
                         ts.Unit = sInfo.Unit
@@ -214,7 +214,7 @@ Namespace Fileformats
                                 Throw New Exception($"Could Not parse the date '{Werte(Me.DateTimeColumnIndex)}' using the given date format '{Me.Dateformat}'! Please check the date format!")
                             End If
                             'Restliche Spalten: Werte
-                            For Each sInfo As SeriesInfo In Me.SelectedSeries
+                            For Each sInfo As TimeSeriesInfo In Me.SelectedSeries
                                 Me.FileTimeSeries(sInfo.Index).AddNode(datum, StringToDouble(Werte(sInfo.Index), numberformat))
                             Next
                         End If
@@ -228,7 +228,7 @@ Namespace Fileformats
                             Throw New Exception($"Could Not parse the date '{Zeile.Substring(0, Me.ColumnWidth)}' using the given date format '{Me.Dateformat}'! Please check the date format!")
                         End If
                         'Restliche Spalten: Werte
-                        For Each sInfo As SeriesInfo In Me.SelectedSeries
+                        For Each sInfo As TimeSeriesInfo In Me.SelectedSeries
                             Me.FileTimeSeries(sInfo.Index).AddNode(datum, StringToDouble(Zeile.Substring(sInfo.Index * Me.ColumnWidth + SpaltenOffset, Math.Min(Me.ColumnWidth, Zeile.Substring(sInfo.Index * Me.ColumnWidth + SpaltenOffset).Length)), numberformat))
                         Next
                     End If

@@ -243,7 +243,7 @@ Friend Class ImportDiag
             Me.DialogResult = Windows.Forms.DialogResult.None
             Exit Sub
         Else
-            For Each sInfo As TimeSeriesFile.SeriesInfo In Me.ListBox_Series.SelectedItems
+            For Each sInfo As TimeSeriesInfo In Me.ListBox_Series.SelectedItems
                 Me.datei.selectSeries(sInfo.Index)
             Next
         End If
@@ -381,7 +381,7 @@ Friend Class ImportDiag
         Me.NumericUpDown_ColumnDateTime.Value = Me.datei.DateTimeColumnIndex + 1
 
         'Available series
-        Dim sInfo As TimeSeriesFile.SeriesInfo
+        Dim sInfo As TimeSeriesInfo
         Me.Label_Series.Text = $"Available series ({Me.datei.SeriesList.Count}):"
         'remember currently selected series
         Dim selectedSeries As New List(Of String)

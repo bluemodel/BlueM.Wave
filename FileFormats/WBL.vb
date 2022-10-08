@@ -137,7 +137,7 @@ Namespace Fileformats
                     End If
 
                     If isData Then
-                        Dim sInfo As New SeriesInfo()
+                        Dim sInfo As New TimeSeriesInfo()
                         sInfo.Name = line.Split(";")(0).Trim()
                         sInfo.Unit = line.Split(";")(3).Trim()
                         sInfo.Index = Integer.Parse(line.Split(";")(4).Trim())
@@ -181,7 +181,7 @@ Namespace Fileformats
             Try
 
                 'instantiate time series
-                For Each sInfo As SeriesInfo In Me.SelectedSeries
+                For Each sInfo As TimeSeriesInfo In Me.SelectedSeries
                     Dim ts As New TimeSeries(sInfo.Name)
                     ts.Unit = sInfo.Unit
                     ts.DataSource = New TimeSeriesDataSource(Me.File, sInfo.Name)
@@ -191,7 +191,7 @@ Namespace Fileformats
 
                 'get a list of selected indices
                 Dim selectedIndices As New List(Of Integer)
-                For Each sInfo As SeriesInfo In Me.SelectedSeries
+                For Each sInfo As TimeSeriesInfo In Me.SelectedSeries
                     selectedIndices.Add(sInfo.Index)
                 Next
 

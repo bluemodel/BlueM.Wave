@@ -130,7 +130,7 @@ Namespace Fileformats
         Public Overrides Sub readSeriesInfo()
 
             Dim i, l As Integer
-            Dim sInfo As SeriesInfo
+            Dim sInfo As TimeSeriesInfo
             Dim Zeile As String = ""
             Dim ZeileSpalten As String = ""
 
@@ -194,7 +194,7 @@ Namespace Fileformats
                         'store series info
 
                         For i = 0 To Namen.Length - 1
-                            sInfo = New SeriesInfo
+                            sInfo = New TimeSeriesInfo
                             sInfo.Name = Namen(i).Trim()
                             sInfo.Unit = Me._einheit
                             sInfo.Index = i + 1
@@ -221,7 +221,7 @@ Namespace Fileformats
                         'store series info
 
                         For i = 0 To names.Count - 1
-                            sInfo = New SeriesInfo
+                            sInfo = New TimeSeriesInfo
                             sInfo.Name = names(i).Trim()
                             sInfo.Unit = Me._einheit
                             sInfo.Index = i + 1 ' hier eigentlich irrelevant
@@ -261,7 +261,7 @@ Namespace Fileformats
 
             Try
                 'Instantiate time series
-                For Each sInfo As SeriesInfo In Me.SelectedSeries
+                For Each sInfo As TimeSeriesInfo In Me.SelectedSeries
                     ts = New TimeSeries(sInfo.Name)
                     ts.Unit = sInfo.Unit
                     ts.DataSource = New TimeSeriesDataSource(Me.File, sInfo.Name)
@@ -291,7 +291,7 @@ Namespace Fileformats
                             Werte = Zeile.Split(New Char() {Me.Separator.ToChar}, System.StringSplitOptions.RemoveEmptyEntries)
                             'Simulationszeit [h] wird zu Datum nach dem Referenzdatum (default: 01.01.2000 00:00:00) konvertiert
                             datum = Me.refDate + New TimeSpan(0, 0, Helpers.StringToDouble(Werte(0)) * 3600)
-                            For Each sInfo As SeriesInfo In Me.SelectedSeries
+                            For Each sInfo As TimeSeriesInfo In Me.SelectedSeries
                                 Me.FileTimeSeries(sInfo.Index).AddNode(datum, Helpers.StringToDouble(Werte(sInfo.Index)))
                             Next
 
@@ -320,7 +320,7 @@ Namespace Fileformats
                             name = $"{parts(0)}-{parts(1)}"
                             value = Helpers.StringToDouble(parts(2))
                             'nur ausgewählte Reihen abspeichern
-                            For Each sInfo As SeriesInfo In Me.SelectedSeries
+                            For Each sInfo As TimeSeriesInfo In Me.SelectedSeries
                                 If sInfo.Name = name Then
                                     Me.FileTimeSeries(sInfo.Index).AddNode(datum, value)
                                     Exit For

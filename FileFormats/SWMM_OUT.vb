@@ -111,7 +111,7 @@ Namespace Fileformats
 
             Dim i, j, index As Integer
             Dim indexSpalten As Integer
-            Dim sInfo As SeriesInfo
+            Dim sInfo As TimeSeriesInfo
 
             Me.SeriesList.Clear()
 
@@ -140,7 +140,7 @@ Namespace Fileformats
                 'Flows
                 For j = 0 To nSubcatchVars - nPolluts - 1
                     index = indexSpalten + i * nSubcatchVars + j
-                    sInfo = New SeriesInfo()
+                    sInfo = New TimeSeriesInfo()
                     sInfo.Name = $"{oSWMM.subcatchments(i)} {oSWMM.SUBCATCHVAR(j)}"
                     sInfo.Objekt = oSWMM.subcatchments(i)
                     sInfo.Unit = Units(0, j, FlowUnits)
@@ -155,7 +155,7 @@ Namespace Fileformats
                 'Pollutants
                 For j = nSubcatchVars - nPolluts To nSubcatchVars - 1
                     index = indexSpalten + i * nSubcatchVars + j
-                    sInfo = New SeriesInfo()
+                    sInfo = New TimeSeriesInfo()
                     sInfo.Name = $"{oSWMM.subcatchments(i)} {oSWMM.pollutants(j - nSubcatchVars + nPolluts)}"
                     sInfo.Objekt = oSWMM.subcatchments(i)
                     sInfo.Unit = Units(0, j, FlowUnits)
@@ -174,7 +174,7 @@ Namespace Fileformats
                 'Flows
                 For j = 0 To nNodesVars - nPolluts - 1
                     index = indexSpalten + i * nNodesVars + j
-                    sInfo = New SeriesInfo()
+                    sInfo = New TimeSeriesInfo()
                     sInfo.Name = $"{oSWMM.nodes(i)} {oSWMM.NODEVAR(j)}"
                     sInfo.Objekt = oSWMM.nodes(i)
                     sInfo.Unit = Units(1, j, FlowUnits)
@@ -189,7 +189,7 @@ Namespace Fileformats
                 'Pollutants
                 For j = nNodesVars - nPolluts To nNodesVars - 1
                     index = indexSpalten + i * nNodesVars + j
-                    sInfo = New SeriesInfo()
+                    sInfo = New TimeSeriesInfo()
                     sInfo.Name = $"{oSWMM.nodes(i)} {oSWMM.pollutants(j - nNodesVars + nPolluts)}"
                     sInfo.Objekt = oSWMM.nodes(i)
                     sInfo.Unit = Units(1, j, FlowUnits)
@@ -208,7 +208,7 @@ Namespace Fileformats
                 'Flows
                 For j = 0 To nLinksVars - nPolluts - 1
                     index = indexSpalten + i * nLinksVars + j
-                    sInfo = New SeriesInfo()
+                    sInfo = New TimeSeriesInfo()
                     sInfo.Name = $"{oSWMM.links(i)} {oSWMM.LINKVAR(j)}"
                     sInfo.Objekt = oSWMM.links(i)
                     sInfo.Unit = Units(2, j, FlowUnits)
@@ -223,7 +223,7 @@ Namespace Fileformats
                 'Pollutants
                 For j = nLinksVars - nPolluts To nLinksVars - 1
                     index = indexSpalten + i * nLinksVars + j
-                    sInfo = New SeriesInfo()
+                    sInfo = New TimeSeriesInfo()
                     sInfo.Name = $"{oSWMM.links(i)} {oSWMM.pollutants(j - nLinksVars + nPolluts)}"
                     sInfo.Objekt = oSWMM.links(i)
                     sInfo.Unit = Units(2, j, FlowUnits)
@@ -240,7 +240,7 @@ Namespace Fileformats
             indexSpalten += nLinks * nLinksVars
             For i = 0 To nSysvars - 1
                 index = indexSpalten + i
-                sInfo = New SeriesInfo()
+                sInfo = New TimeSeriesInfo()
                 sInfo.Name = oSWMM.SYSVAR(i)
                 sInfo.Unit = Units(3, j, FlowUnits)
                 sInfo.Index = index
@@ -270,7 +270,7 @@ Namespace Fileformats
             'ReDim index(anzahlZeitreihen)
 
             'Zeitreihen instanzieren
-            For Each sInfo As SeriesInfo In Me.SelectedSeries
+            For Each sInfo As TimeSeriesInfo In Me.SelectedSeries
                 ts = New TimeSeries(sInfo.Name)
                 'Einheiten?
                 If (Me.UseUnits) Then

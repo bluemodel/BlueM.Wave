@@ -95,7 +95,7 @@ Namespace Fileformats
         Public Overrides Sub readSeriesInfo()
 
             Dim Zeile, title As String
-            Dim sInfo As SeriesInfo
+            Dim sInfo As TimeSeriesInfo
 
             Me.SeriesList.Clear()
 
@@ -115,7 +115,7 @@ Namespace Fileformats
                 End If
 
                 'store series info
-                sInfo = New SeriesInfo()
+                sInfo = New TimeSeriesInfo()
                 sInfo.Name = title
                 sInfo.Unit = "mm" 'Einheit ist immer mm
                 sInfo.Index = 0
@@ -141,7 +141,7 @@ Namespace Fileformats
             Dim Stunde, Minute, Tag, Monat, Jahr As Integer
             Dim DatumCurrent, DatumZeile, DatumTmp As DateTime
             Dim Wert As Double
-            Dim sInfo As SeriesInfo
+            Dim sInfo As TimeSeriesInfo
             Dim ts As TimeSeries
 
             Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)

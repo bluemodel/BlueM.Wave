@@ -246,7 +246,7 @@ Namespace Fileformats
 
             Dim key, value As String
             Dim ts_name As String
-            Dim sInfo As SeriesInfo
+            Dim sInfo As TimeSeriesInfo
 
             'Connect to db
             Me.connection.Open()
@@ -313,7 +313,7 @@ Namespace Fileformats
 
                 Case TimeseriesClassEnum.DefaultFlag
                     '"Normal" time series has only one series
-                    sInfo = New SeriesInfo()
+                    sInfo = New TimeSeriesInfo()
                     sInfo.Name = ts_name
                     sInfo.Index = 0
                     Me.SeriesList.Add(sInfo)
@@ -327,7 +327,7 @@ Namespace Fileformats
                     For Each flag As KeyValuePair(Of Integer, String) In flags
                         flag_id = flag.Key
                         flag_desc = flag.Value
-                        sInfo = New SeriesInfo()
+                        sInfo = New TimeSeriesInfo()
                         sInfo.Name = $"{ts_name}/{flag_id}: {flag_desc}"
                         sInfo.Index = index
                         Me.SeriesList.Add(sInfo)
@@ -358,7 +358,7 @@ Namespace Fileformats
                         Loop
                         dataReader.Close()
                         For Each T0 As DateTime In T0_list
-                            sInfo = New SeriesInfo()
+                            sInfo = New TimeSeriesInfo()
                             sInfo.Name = $"{ts_name}/{flag_id}: {flag_desc} - {T0.ToString(Helpers.CurrentDateFormat)}"
                             sInfo.Index = index
                             Me.SeriesList.Add(sInfo)
@@ -384,7 +384,7 @@ Namespace Fileformats
         Public Overrides Sub readFile()
 
             Dim ts As TimeSeries
-            Dim sInfo As SeriesInfo
+            Dim sInfo As TimeSeriesInfo
             Dim flag_id As Integer
             Dim timestamp As DateTime
             Dim value As Double

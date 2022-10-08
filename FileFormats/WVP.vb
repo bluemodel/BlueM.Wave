@@ -190,7 +190,7 @@ Namespace Fileformats
                 Log.AddLogEntry(Log.levels.info, $"Reading file {file} ...")
 
                 'get an instance of the file
-                fileInstance = FileFactory.getFileInstance(file)
+                fileInstance = TimeSeriesFile.getInstance(file)
 
                 'apply custom import settings
                 If settingsDict.ContainsKey(file) Then

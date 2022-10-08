@@ -84,7 +84,7 @@ Namespace Fileformats
             Dim ZeileSpalten As String = ""
             Dim ZeileEinheiten As String = ""
             Dim SeriesName As String = ""
-            Dim sInfo As SeriesInfo
+            Dim sInfo As TimeSeriesInfo
 
             Me.SeriesList.Clear()
 
@@ -162,7 +162,7 @@ Namespace Fileformats
 
                 ' put headers and units into the Me.Spalten-array (starts with index 0, --> [anzSpalten -1])
                 For i = 1 To (anzSpalten - 1) ' first column is timestamp
-                    sInfo = New SeriesInfo()
+                    sInfo = New TimeSeriesInfo()
                     sInfo.Name = $"{SeriesName.Trim}_{Namen(i).Trim()}"
                     sInfo.Index = i
                     If Einheiten(i).Trim = "cbm/s" Then
@@ -196,7 +196,7 @@ Namespace Fileformats
                 Dim StrReadSync = TextReader.Synchronized(StrRead)
 
                 ' initialize a time series for every selected series
-                For Each sInfo As SeriesInfo In Me.SelectedSeries
+                For Each sInfo As TimeSeriesInfo In Me.SelectedSeries
                     ts = New TimeSeries(sInfo.Name)
                     If Me.UseUnits Then
                         ts.Unit = sInfo.Unit
@@ -235,7 +235,7 @@ Namespace Fileformats
                         End If
 
                         ' remaining columns are data, add to time series
-                        For Each sInfo As SeriesInfo In Me.SelectedSeries
+                        For Each sInfo As TimeSeriesInfo In Me.SelectedSeries
                             Me.FileTimeSeries(sInfo.Index).AddNode(datum, StringToDouble(Werte(sInfo.Index)))
                         Next
 
@@ -262,7 +262,7 @@ Namespace Fileformats
                         End If
 
                         ' remaining columns are data, add to time series
-                        For Each sInfo As SeriesInfo In Me.SelectedSeries
+                        For Each sInfo As TimeSeriesInfo In Me.SelectedSeries
                             Me.FileTimeSeries(sInfo.Index).AddNode(datum, StringToDouble(Werte(sInfo.Index)))
                         Next
 

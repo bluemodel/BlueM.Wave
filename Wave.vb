@@ -125,16 +125,16 @@ Public Class Wave
         RaiseEvent IsBusyChanged(True)
 
         'Determine file type
-        Dim fileType As Fileformats.FileTypes = Fileformats.getFileType(file)
+        Dim fileType As TimeSeriesFile.FileTypes = TimeSeriesFile.getFileType(file)
 
         Select Case fileType
 
             'some edge cases:
-            Case Fileformats.FileTypes.TEN
+            Case TimeSeriesFile.FileTypes.TEN
                 '.TEN file has to be loaded by the controller/view
                 RaiseEvent TENFileLoading(file)
 
-            Case Fileformats.FileTypes.WVP
+            Case TimeSeriesFile.FileTypes.WVP
                 'Wave project file
                 Call Me.Load_WVP(file)
 
@@ -146,7 +146,7 @@ Public Class Wave
                     Call Log.AddLogEntry(Log.levels.info, $"Importing file '{file}' ...")
 
                     'Datei-Instanz erzeugen
-                    Datei = Fileformats.FileFactory.getFileInstance(file, fileType)
+                    Datei = TimeSeriesFile.getInstance(file, fileType)
 
                     If (Datei.UseImportDialog) Then
                         'Falls Importdialog erforderlich, diesen anzeigen
@@ -392,7 +392,7 @@ Public Class Wave
 
                     'read file
                     Log.AddLogEntry(Log.levels.info, $"Loading file {file} ...")
-                    fileobj = Fileformats.FileFactory.getFileInstance(file)
+                    fileobj = TimeSeriesFile.getInstance(file)
 
                     'read series from file
                     ts = fileobj.getTimeSeries(name)
@@ -409,7 +409,7 @@ Public Class Wave
 
                     'read file
                     Log.AddLogEntry(Log.levels.info, $"Loading file {file} ...")
-                    fileobj = Fileformats.FileFactory.getFileInstance(file)
+                    fileobj = TimeSeriesFile.getInstance(file)
 
                     'read series from file
                     fileobj.readFile()
@@ -532,9 +532,9 @@ Public Class Wave
         For Each ts As TimeSeries In zres
             'get a list of metadata keys
             Select Case exportDlg.ComboBox_Format.SelectedItem
-                Case Fileformats.FileTypes.UVF
+                Case TimeSeriesFile.FileTypes.UVF
                     keys = Fileformats.UVF.MetadataKeys
-                Case Fileformats.FileTypes.ZRXP
+                Case TimeSeriesFile.FileTypes.ZRXP
                     keys = Fileformats.ZRXP.MetadataKeys
                 Case Else
                     keys = TimeSeriesFile.MetadataKeys 'empty list
@@ -555,9 +555,9 @@ Public Class Wave
                 Next
                 'set default metadata values
                 Select Case exportDlg.ComboBox_Format.SelectedItem
-                    Case Fileformats.FileTypes.UVF
+                    Case TimeSeriesFile.FileTypes.UVF
                         Fileformats.UVF.setDefaultMetadata(ts)
-                    Case Fileformats.FileTypes.ZRXP
+                    Case TimeSeriesFile.FileTypes.ZRXP
                         Fileformats.ZRXP.setDefaultMetadata(ts)
                     Case Else
                         TimeSeriesFile.setDefaultMetadata(ts)
@@ -579,40 +579,40 @@ Public Class Wave
         SaveFileDialog1.AddExtension = True
         SaveFileDialog1.OverwritePrompt = True
         Select Case exportDlg.ComboBox_Format.SelectedItem
-            Case Fileformats.FileTypes.ASC
+            Case TimeSeriesFile.FileTypes.ASC
                 SaveFileDialog1.DefaultExt = "asc"
                 SaveFileDialog1.Filter = "ASC files (*.asc)|*.asc"
-            Case Fileformats.FileTypes.BIN
+            Case TimeSeriesFile.FileTypes.BIN
                 SaveFileDialog1.DefaultExt = "bin"
                 SaveFileDialog1.Filter = "SYDRO binary files (*.bin)|*.bin"
-            Case Fileformats.FileTypes.CSV
+            Case TimeSeriesFile.FileTypes.CSV
                 SaveFileDialog1.DefaultExt = "csv"
                 SaveFileDialog1.Filter = "CSV files (*.csv)|*.csv"
-            Case Fileformats.FileTypes.DFS0
+            Case TimeSeriesFile.FileTypes.DFS0
                 SaveFileDialog1.DefaultExt = "dfs0"
                 SaveFileDialog1.Filter = "DFS0 files (*.dfs0)|*.dfs0"
-            Case Fileformats.FileTypes.WEL
+            Case TimeSeriesFile.FileTypes.WEL
                 SaveFileDialog1.DefaultExt = "wel"
                 SaveFileDialog1.Filter = "WEL files (*.wel)|*.wel"
-            Case Fileformats.FileTypes.ZRE
+            Case TimeSeriesFile.FileTypes.ZRE
                 SaveFileDialog1.DefaultExt = "zre"
                 SaveFileDialog1.Filter = "ZRE files (*.zre)|*.zre"
-            Case Fileformats.FileTypes.HYSTEM_REG
+            Case TimeSeriesFile.FileTypes.HYSTEM_REG
                 SaveFileDialog1.DefaultExt = "reg"
                 SaveFileDialog1.Filter = "HYSTEM REG files (*.reg)|*.reg"
-            Case Fileformats.FileTypes.SMUSI_REG
+            Case TimeSeriesFile.FileTypes.SMUSI_REG
                 SaveFileDialog1.DefaultExt = "reg"
                 SaveFileDialog1.Filter = "SMUSI REG files (*.reg)|*.reg"
-            Case Fileformats.FileTypes.SWMM_DAT_MASS, Fileformats.FileTypes.SWMM_DAT_TIME
+            Case TimeSeriesFile.FileTypes.SWMM_DAT_MASS, TimeSeriesFile.FileTypes.SWMM_DAT_TIME
                 SaveFileDialog1.DefaultExt = "dat"
                 SaveFileDialog1.Filter = "SWMM DAT files (*.dat)|*.dat"
-            Case Fileformats.FileTypes.SWMM_INTERFACE
+            Case TimeSeriesFile.FileTypes.SWMM_INTERFACE
                 SaveFileDialog1.DefaultExt = "txt"
                 SaveFileDialog1.Filter = "SWMM Interface files (*.txt)|*.txt"
-            Case Fileformats.FileTypes.UVF
+            Case TimeSeriesFile.FileTypes.UVF
                 SaveFileDialog1.DefaultExt = "uvf"
                 SaveFileDialog1.Filter = "UVF files (*.uvf)|*.uvf"
-            Case Fileformats.FileTypes.ZRXP
+            Case TimeSeriesFile.FileTypes.ZRXP
                 SaveFileDialog1.DefaultExt = "zrx"
                 SaveFileDialog1.Filter = "ZRXP files (*.zrx)|*.zrx"
         End Select
@@ -636,37 +636,37 @@ Public Class Wave
 
             Select Case exportDlg.ComboBox_Format.SelectedItem
 
-                Case Fileformats.FileTypes.BIN
+                Case TimeSeriesFile.FileTypes.BIN
                     Call Fileformats.BIN.Write_File(zres(0), filename)
 
-                Case Fileformats.FileTypes.CSV
+                Case TimeSeriesFile.FileTypes.CSV
                     Call Fileformats.CSV.Write_File(zres, filename)
 
-                Case Fileformats.FileTypes.DFS0
+                Case TimeSeriesFile.FileTypes.DFS0
                     Call Fileformats.DFS0.Write_File(zres, filename)
 
-                Case Fileformats.FileTypes.HYSTEM_REG
+                Case TimeSeriesFile.FileTypes.HYSTEM_REG
                     Call Fileformats.HystemExtran_REG.Write_File(zres(0), filename)
 
-                Case Fileformats.FileTypes.SMUSI_REG
+                Case TimeSeriesFile.FileTypes.SMUSI_REG
                     Call Fileformats.SMUSI_REG.Write_File(zres(0), filename)
 
-                Case Fileformats.FileTypes.SWMM_DAT_MASS
+                Case TimeSeriesFile.FileTypes.SWMM_DAT_MASS
                     Call Fileformats.SWMM_DAT_MASS.Write_File(zres(0), filename, 5) 'TODO: Zeitschritt ist noch nicht dynamisch definiert
 
-                Case Fileformats.FileTypes.SWMM_DAT_TIME
+                Case TimeSeriesFile.FileTypes.SWMM_DAT_TIME
                     Call Fileformats.SWMM_DAT_TIME.Write_File(zres(0), filename, 5) 'TODO: Zeitschritt ist noch nicht dynamisch definiert
 
-                Case Fileformats.FileTypes.SWMM_INTERFACE
+                Case TimeSeriesFile.FileTypes.SWMM_INTERFACE
                     Call Fileformats.SWMM_INTERFACE.Write_File(zres, filename)
 
-                Case Fileformats.FileTypes.UVF
+                Case TimeSeriesFile.FileTypes.UVF
                     Call Fileformats.UVF.Write_File(zres(0), filename)
 
-                Case Fileformats.FileTypes.ZRE
+                Case TimeSeriesFile.FileTypes.ZRE
                     Call Fileformats.ZRE.Write_File(zres(0), filename)
 
-                Case Fileformats.FileTypes.ZRXP
+                Case TimeSeriesFile.FileTypes.ZRXP
                     Call Fileformats.ZRXP.Write_File(zres(0), filename)
 
                 Case Else

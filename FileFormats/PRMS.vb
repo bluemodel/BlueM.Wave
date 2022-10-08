@@ -123,7 +123,7 @@ Namespace Fileformats
             Dim line As String
             Dim parts As String()
             Dim lines As Dictionary(Of Integer, String)
-            Dim sInfo As SeriesInfo
+            Dim sInfo As TimeSeriesInfo
 
             Me.SeriesList.Clear()
 
@@ -147,7 +147,7 @@ Namespace Fileformats
                     Case FileType.annual
                         parts = lines(2).Split(New String() {"  "}, StringSplitOptions.RemoveEmptyEntries)
                         For i = 1 To parts.Count() - 1 'first column is timestamp (year)
-                            sInfo = New SeriesInfo()
+                            sInfo = New TimeSeriesInfo()
                             sInfo.Index = i
                             sInfo.Name = parts(i).Trim()
                             sInfo.Unit = "-"
@@ -158,7 +158,7 @@ Namespace Fileformats
                     Case FileType.monthly
                         parts = lines(2).Split(New Char() {" "}, StringSplitOptions.RemoveEmptyEntries)
                         For i = 2 To parts.Count() - 1 'first two columns are timestamp (year and month)
-                            sInfo = New SeriesInfo()
+                            sInfo = New TimeSeriesInfo()
                             sInfo.Index = i
                             sInfo.Name = parts(i).Trim()
                             sInfo.Unit = "-"
@@ -171,7 +171,7 @@ Namespace Fileformats
                         For i = 3 To parts.Count() - 1 'first 3 columns are timestamp
                             Dim m As Match
                             m = Regex.Match(lines(i - 2).Trim(), ".{3} (.+)\s+\((.+)\).+")
-                            sInfo = New SeriesInfo
+                            sInfo = New TimeSeriesInfo
                             sInfo.Name = m.Groups(1).Value.Trim()
                             sInfo.Unit = m.Groups(2).Value.Trim()
                             sInfo.Index = i
@@ -182,7 +182,7 @@ Namespace Fileformats
                     Case FileType.statvar
                         parts = lines(Me.iLineData).Split(New Char() {" "}, StringSplitOptions.RemoveEmptyEntries)
                         For i = 7 To parts.Count() - 1 'first 7 columns are number and timestamp
-                            sInfo = New SeriesInfo()
+                            sInfo = New TimeSeriesInfo()
                             sInfo.Name = lines(i - 5).Trim()
                             sInfo.Unit = "-"
                             sInfo.Index = i
@@ -221,7 +221,7 @@ Namespace Fileformats
                 Dim StrReadSync = TextReader.Synchronized(StrRead)
 
                 'Instantiate time series
-                For Each sInfo As SeriesInfo In Me.SelectedSeries
+                For Each sInfo As TimeSeriesInfo In Me.SelectedSeries
                     ts = New TimeSeries()
                     ts.Title = sInfo.Name
                     ts.Unit = sInfo.Unit
@@ -252,7 +252,7 @@ Namespace Fileformats
                             timestamp = New DateTime(parts(1), parts(2), parts(3), parts(4), parts(5), parts(6))
                     End Select
                     'Parse values and store nodes
-                    For Each sInfo As SeriesInfo In Me.SelectedSeries
+                    For Each sInfo As TimeSeriesInfo In Me.SelectedSeries
                         value = Helpers.StringToDouble(parts(sInfo.Index))
                         Me.FileTimeSeries(sInfo.Index).AddNode(timestamp, value)
                     Next

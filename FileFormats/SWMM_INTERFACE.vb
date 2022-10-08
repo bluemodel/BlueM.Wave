@@ -129,7 +129,7 @@ Namespace Fileformats
             'dim AnzConstituents As Integer
             Dim Nodes() As Nodes
             Dim IDSpalte As Long
-            Dim sInfo As SeriesInfo
+            Dim sInfo As TimeSeriesInfo
 
             Me.SeriesList.Clear()
 
@@ -188,7 +188,7 @@ Namespace Fileformats
                 IDSpalte = 1
                 For i = 0 To AnzNodes - 1
                     For j = 0 To AnzConstituents - 1
-                        sInfo = New SeriesInfo()
+                        sInfo = New TimeSeriesInfo()
                         sInfo.Name = $"{Nodes(i).Bez} {Constituents(j).Type}"
                         sInfo.Objekt = Nodes(i).Bez
                         sInfo.Type = Constituents(j).Type
@@ -231,7 +231,7 @@ Namespace Fileformats
             Dim StrReadSync = TextReader.Synchronized(StrRead)
 
             'Zeitreihen instanzieren
-            For Each sInfo As SeriesInfo In Me.SelectedSeries
+            For Each sInfo As TimeSeriesInfo In Me.SelectedSeries
                 ts = New TimeSeries(sInfo.Name)
                 ts.DataSource = New TimeSeriesDataSource(Me.File, sInfo.Name)
                 Me.FileTimeSeries.Add(sInfo.Index, ts)
@@ -247,7 +247,7 @@ Namespace Fileformats
             ReDim AllNodes(Me.SelectedSeries.Count - 1)
             'Alle ausgewählten Serien durchlaufen
             i = 0
-            For Each sInfo As SeriesInfo In Me.SelectedSeries
+            For Each sInfo As TimeSeriesInfo In Me.SelectedSeries
                 Me.FileTimeSeries(sInfo.Index).Unit = sInfo.Unit
                 Me.FileTimeSeries(sInfo.Index).Objekt = sInfo.Objekt
                 AllConstituents(i) = sInfo.Type
@@ -281,7 +281,7 @@ Namespace Fileformats
                         IDWerte = IDWerte + 1
                     Next
                 Next
-                For Each sInfo As SeriesInfo In Me.SelectedSeries
+                For Each sInfo As TimeSeriesInfo In Me.SelectedSeries
                     Me.FileTimeSeries(sInfo.Index).AddNode(datum, StringToDouble(Werte(sInfo.Index)))
                 Next
 

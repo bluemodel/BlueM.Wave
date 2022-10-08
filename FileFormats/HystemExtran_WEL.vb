@@ -100,7 +100,7 @@ Namespace Fileformats
             Dim ZeileSpalten As String = ""
             Dim ZeileEinheiten As String = ""
             Dim iZeileAnzSpalten As Integer = 4
-            Dim sInfo As SeriesInfo
+            Dim sInfo As TimeSeriesInfo
 
             Me.SeriesList.Clear()
 
@@ -138,7 +138,7 @@ Namespace Fileformats
                 For i = 0 To Me.nLinesPerTimestamp - 1
                     Zeile = StrReadSync.ReadLine.ToString()
                     For j = 0 To AnzSpalten_dT(i) - 1
-                        sInfo = New SeriesInfo()
+                        sInfo = New TimeSeriesInfo()
                         sInfo.Name = Zeile.Substring((j * Me.ColumnWidth) + SpaltenOffset, Me.ColumnWidth).Trim()
                         sInfo.Unit = HExt_welEinheit
                         sInfo.Index = index
@@ -178,7 +178,7 @@ Namespace Fileformats
             Dim StrReadSync = TextReader.Synchronized(StrRead)
 
             'Zeitreihen instanzieren
-            For Each sInfo As SeriesInfo In Me.SelectedSeries
+            For Each sInfo As TimeSeriesInfo In Me.SelectedSeries
                 ts = New TimeSeries(sInfo.Name)
                 If Me.UseUnits Then
                     ts.Unit = sInfo.Unit
@@ -212,7 +212,7 @@ Namespace Fileformats
                 For i = 0 To Me.nLinesPerTimestamp - 1
                     WerteString = WerteString + StrReadSync.ReadLine.ToString()
                 Next
-                For Each sInfo As SeriesInfo In Me.SelectedSeries
+                For Each sInfo As TimeSeriesInfo In Me.SelectedSeries
                     Me.FileTimeSeries(sInfo.Index).AddNode(datum, StringToDouble(WerteString.Substring(((sInfo.Index - 1) * Me.ColumnWidth) + SpaltenOffset, Me.ColumnWidth)))
                 Next
 

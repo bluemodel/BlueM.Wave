@@ -35,17 +35,17 @@ Friend Class ExportDiag
         ' Add any initialization after the InitializeComponent() call.
 
         'add formats to combobox
-        Me.ComboBox_Format.Items.Add(Fileformats.FileTypes.CSV)
-        Me.ComboBox_Format.Items.Add(Fileformats.FileTypes.BIN)
-        Me.ComboBox_Format.Items.Add(Fileformats.FileTypes.DFS0)
-        Me.ComboBox_Format.Items.Add(Fileformats.FileTypes.HYSTEM_REG)
-        Me.ComboBox_Format.Items.Add(Fileformats.FileTypes.SMUSI_REG)
-        Me.ComboBox_Format.Items.Add(Fileformats.FileTypes.SWMM_DAT_MASS)
-        Me.ComboBox_Format.Items.Add(Fileformats.FileTypes.SWMM_DAT_TIME)
-        Me.ComboBox_Format.Items.Add(Fileformats.FileTypes.SWMM_INTERFACE)
-        Me.ComboBox_Format.Items.Add(Fileformats.FileTypes.UVF)
-        Me.ComboBox_Format.Items.Add(Fileformats.FileTypes.ZRE)
-        Me.ComboBox_Format.Items.Add(Fileformats.FileTypes.ZRXP)
+        Me.ComboBox_Format.Items.Add(TimeSeriesFile.FileTypes.CSV)
+        Me.ComboBox_Format.Items.Add(TimeSeriesFile.FileTypes.BIN)
+        Me.ComboBox_Format.Items.Add(TimeSeriesFile.FileTypes.DFS0)
+        Me.ComboBox_Format.Items.Add(TimeSeriesFile.FileTypes.HYSTEM_REG)
+        Me.ComboBox_Format.Items.Add(TimeSeriesFile.FileTypes.SMUSI_REG)
+        Me.ComboBox_Format.Items.Add(TimeSeriesFile.FileTypes.SWMM_DAT_MASS)
+        Me.ComboBox_Format.Items.Add(TimeSeriesFile.FileTypes.SWMM_DAT_TIME)
+        Me.ComboBox_Format.Items.Add(TimeSeriesFile.FileTypes.SWMM_INTERFACE)
+        Me.ComboBox_Format.Items.Add(TimeSeriesFile.FileTypes.UVF)
+        Me.ComboBox_Format.Items.Add(TimeSeriesFile.FileTypes.ZRE)
+        Me.ComboBox_Format.Items.Add(TimeSeriesFile.FileTypes.ZRXP)
         Me.ComboBox_Format.SelectedIndex = 0
 
         'Add series to listbox
@@ -65,21 +65,21 @@ Friend Class ExportDiag
 
         Select Case ComboBox_Format.SelectedItem
 
-            Case Fileformats.FileTypes.ZRE,
-                 Fileformats.FileTypes.HYSTEM_REG,
-                 Fileformats.FileTypes.SMUSI_REG,
-                 Fileformats.FileTypes.SWMM_DAT_MASS,
-                 Fileformats.FileTypes.SWMM_DAT_TIME,
-                 Fileformats.FileTypes.BIN,
-                 Fileformats.FileTypes.UVF,
-                 Fileformats.FileTypes.ZRXP
+            Case TimeSeriesFile.FileTypes.ZRE,
+                 TimeSeriesFile.FileTypes.HYSTEM_REG,
+                 TimeSeriesFile.FileTypes.SMUSI_REG,
+                 TimeSeriesFile.FileTypes.SWMM_DAT_MASS,
+                 TimeSeriesFile.FileTypes.SWMM_DAT_TIME,
+                 TimeSeriesFile.FileTypes.BIN,
+                 TimeSeriesFile.FileTypes.UVF,
+                 TimeSeriesFile.FileTypes.ZRXP
                 'Allow selection of a single series
                 Me.ListBox_Series.SelectionMode = SelectionMode.One
                 Me.Button_SelectAll.Enabled = False
 
-            Case Fileformats.FileTypes.SWMM_INTERFACE,
-                 Fileformats.FileTypes.CSV,
-                 Fileformats.FileTypes.DFS0
+            Case TimeSeriesFile.FileTypes.SWMM_INTERFACE,
+                 TimeSeriesFile.FileTypes.CSV,
+                 TimeSeriesFile.FileTypes.DFS0
                 'Allow selection of multiple series
                 Me.ListBox_Series.SelectionMode = SelectionMode.MultiExtended
                 Me.Button_SelectAll.Enabled = True

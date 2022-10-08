@@ -341,7 +341,7 @@ Friend Class WaveController
     '********************
     Private Sub ImportSeries_Click(sender As System.Object, e As System.EventArgs)
         View.OpenFileDialog1.Title = "Import time series"
-        View.OpenFileDialog1.Filter = Fileformats.FileFilter
+        View.OpenFileDialog1.Filter = TimeSeriesFile.FileFilter
         'TODO: allow selection of multiple files
         If (View.OpenFileDialog1.ShowDialog() = Windows.Forms.DialogResult.OK) Then
             Call _model.Import_File(View.OpenFileDialog1.FileName)
@@ -1120,12 +1120,12 @@ Friend Class WaveController
 
                 success = True
 
-                If IO.Path.GetExtension(file).ToUpper() = Fileformats.FileExtTEN Then
+                If IO.Path.GetExtension(file).ToUpper() = TimeSeriesFile.FileExtTEN Then
                     'TODO: this currently loads all series from the TEN, instead of only the currently loaded ones
                     Call Load_TEN(file)
                 Else
                     'get an instance of the file
-                    Dim fileObj As TimeSeriesFile = Fileformats.FileFactory.getFileInstance(file)
+                    Dim fileObj As TimeSeriesFile = TimeSeriesFile.getInstance(file)
                     'select series for importing
                     For Each title In datasources(file)
                         success = success And fileObj.selectSeries(title)

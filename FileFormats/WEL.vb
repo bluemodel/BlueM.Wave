@@ -125,7 +125,7 @@ Namespace Fileformats
             Dim ZeileSpalten As String = ""
             Dim ZeileEinheiten As String = ""
             Dim LineInfo As String = ""
-            Dim sInfo As SeriesInfo
+            Dim sInfo As TimeSeriesInfo
 
             Me.SeriesList.Clear()
 
@@ -173,7 +173,7 @@ Namespace Fileformats
                     Einheiten = ZeileEinheiten.Split(New Char() {Me.Separator.ToChar}, StringSplitOptions.RemoveEmptyEntries)
                     anzSpalten = Namen.Length
                     For i = 1 To anzSpalten - 1 'first column is timestamp
-                        sInfo = New SeriesInfo()
+                        sInfo = New TimeSeriesInfo()
                         sInfo.Name = Namen(i).Trim()
                         sInfo.Unit = Einheiten(i).Trim()
                         sInfo.Index = i
@@ -183,7 +183,7 @@ Namespace Fileformats
                     'Spalten mit fester Breite
                     anzSpalten = Math.Ceiling((ZeileSpalten.Length - Me.DateTimeLength) / Me.ColumnWidth) + 1
                     For i = 1 To anzSpalten - 1 'first column is timestamp
-                        sInfo = New SeriesInfo()
+                        sInfo = New TimeSeriesInfo()
                         sInfo.Name = ZeileSpalten.Substring(Me.DateTimeLength + (i - 1) * Me.ColumnWidth, Me.ColumnWidth).Trim()
                         sInfo.Unit = ZeileEinheiten.Substring(Me.DateTimeLength + (i - 1) * Me.ColumnWidth, Me.ColumnWidth).Trim()
                         sInfo.Index = i
@@ -215,7 +215,7 @@ Namespace Fileformats
             Dim StrReadSync = TextReader.Synchronized(StrRead)
 
             'Zeitreihen instanzieren
-            For Each sInfo As SeriesInfo In Me.SelectedSeries
+            For Each sInfo As TimeSeriesInfo In Me.SelectedSeries
                 ts = New TimeSeries(sInfo.Name)
                 If Me.UseUnits Then
                     ts.Unit = sInfo.Unit
@@ -254,7 +254,7 @@ Namespace Fileformats
                     End If
                     'Restliche Spalten: Werte
                     'Alle ausgewählten Reihen durchlaufen
-                    For Each sInfo As SeriesInfo In Me.SelectedSeries
+                    For Each sInfo As TimeSeriesInfo In Me.SelectedSeries
                         Me.FileTimeSeries(sInfo.Index).AddNode(datum, StringToDouble(Werte(sInfo.Index)))
                     Next
                 Else
@@ -268,7 +268,7 @@ Namespace Fileformats
                     End If
                     'Restliche Spalten: Werte
                     'Alle ausgewählten Reihen durchlaufen
-                    For Each sInfo As SeriesInfo In Me.SelectedSeries
+                    For Each sInfo As TimeSeriesInfo In Me.SelectedSeries
                         Me.FileTimeSeries(sInfo.Index).AddNode(datum, StringToDouble(Zeile.Substring((sInfo.Index * Me.ColumnWidth) + SpaltenOffset, Math.Min(Me.ColumnWidth, Zeile.Substring((sInfo.Index * Me.ColumnWidth) + SpaltenOffset).Length))))
                     Next
                 End If

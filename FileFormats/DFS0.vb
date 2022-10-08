@@ -82,7 +82,7 @@ Namespace Fileformats
         ''' </summary>
         Public Overrides Sub readSeriesInfo()
 
-            Dim sInfo As SeriesInfo
+            Dim sInfo As TimeSeriesInfo
 
             Me.SeriesList.Clear()
 
@@ -100,7 +100,7 @@ Namespace Fileformats
             Dim dynamicItemInfo As DFS.IDfsSimpleDynamicItemInfo
             For item_index As Integer = 0 To dfs0File.ItemInfo.Count - 1
                 dynamicItemInfo = dfs0File.ItemInfo(item_index)
-                sInfo = New SeriesInfo()
+                sInfo = New TimeSeriesInfo()
                 sInfo.Name = dynamicItemInfo.Name
                 sInfo.Unit = dynamicItemInfo.Quantity.UnitAbbreviation
                 sInfo.Index = item_index
@@ -123,7 +123,7 @@ Namespace Fileformats
 
             'Instantiate Timeseries
             Dim ts As TimeSeries
-            For Each sInfo As SeriesInfo In Me.SelectedSeries
+            For Each sInfo As TimeSeriesInfo In Me.SelectedSeries
                 ts = New TimeSeries(sInfo.Name)
                 ts.Unit = sInfo.Unit
                 ts.DataSource = New TimeSeriesDataSource(Me.File, sInfo.Name)
@@ -135,7 +135,7 @@ Namespace Fileformats
 
             'Read interpretation and metadata
             Dim dynamicItemInfo As DFS.IDfsSimpleDynamicItemInfo
-            For Each sInfo As SeriesInfo In Me.SelectedSeries
+            For Each sInfo As TimeSeriesInfo In Me.SelectedSeries
                 dynamicItemInfo = dfs0File.ItemInfo(sInfo.Index)
                 Me.FileTimeSeries(sInfo.Index).Interpretation = DataValueTypeToInterpretation(dynamicItemInfo.ValueType)
                 Me.FileTimeSeries(sInfo.Index).Metadata.Add("eumItem", [Enum].GetName(GetType(eumItem), dynamicItemInfo.Quantity.Item))
@@ -165,7 +165,7 @@ Namespace Fileformats
 
             'create a sorted list of item indices in order to significantly improve performance
             Dim itemIndices As New List(Of Integer)
-            For Each sInfo As SeriesInfo In Me.SelectedSeries
+            For Each sInfo As TimeSeriesInfo In Me.SelectedSeries
                 itemIndices.Add(sInfo.Index)
             Next
             itemIndices.Sort()

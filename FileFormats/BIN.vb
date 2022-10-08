@@ -81,7 +81,7 @@ Namespace Fileformats
         ''' </summary>
         Public Overrides Sub readSeriesInfo()
 
-            Dim sInfo As New SeriesInfo()
+            Dim sInfo As New TimeSeriesInfo()
 
             Me.SeriesList.Clear()
 
@@ -101,7 +101,7 @@ Namespace Fileformats
             Dim timestamp As DateTime
             Dim value As Single
             Dim errorcount As Integer
-            Dim sInfo As SeriesInfo
+            Dim sInfo As TimeSeriesInfo
             Dim ts As TimeSeries
 
             'Zeitreihe instanzieren (nur eine)

@@ -86,7 +86,7 @@ Namespace Fileformats
         Public Overrides Sub readSeriesInfo()
 
             Dim i As Integer
-            Dim sInfo As SeriesInfo
+            Dim sInfo As TimeSeriesInfo
             Dim Zeile As String = ""
             Dim ZeileSpalten As String = ""
             Dim ZeileEinheiten As String = ""
@@ -131,7 +131,7 @@ Namespace Fileformats
             'store series info
             For i = 0 To anzSpalten - 1
                 If i <> Me.DateTimeColumnIndex Then
-                    sInfo = New SeriesInfo()
+                    sInfo = New TimeSeriesInfo()
                     sInfo.Index = i
                     sInfo.Name = Namen(i).Trim()
                     sInfo.Unit = Einheiten(i).Trim()
@@ -160,7 +160,7 @@ Namespace Fileformats
             dt = New TimeSpan(0, 5, 0)
 
             'Instantiate time series
-            For Each sInfo As SeriesInfo In Me.SelectedSeries
+            For Each sInfo As TimeSeriesInfo In Me.SelectedSeries
                 ts = New TimeSeries(sInfo.Name)
                 If Me.UseUnits Then
                     ts.Unit = sInfo.Unit
@@ -204,7 +204,7 @@ Namespace Fileformats
                         datumLast = Me.FileTimeSeries.First.Value.EndDate
                         If (datum.Subtract(datumLast) > dt) Then 'nur wenn Lücke größer als dt ist
 
-                            For Each sInfo As SeriesInfo In Me.SelectedSeries
+                            For Each sInfo As TimeSeriesInfo In Me.SelectedSeries
                                 'Eine Null nach dem letzten Datum
                                 Me.FileTimeSeries(sInfo.Index).AddNode(datumLast.Add(dt), 0.0)
                                 If (datum.Subtract(dt) > datumLast.Add(dt)) Then 'nur wenn Lücke damit noch nicht geschlossen ist
@@ -221,7 +221,7 @@ Namespace Fileformats
                     End If
 
                     'eingelesene Stützstellen hinzufügen
-                    For Each sInfo As SeriesInfo In Me.SelectedSeries
+                    For Each sInfo As TimeSeriesInfo In Me.SelectedSeries
                         Me.FileTimeSeries(sInfo.Index).AddNode(datum, StringToDouble(Werte(sInfo.Index + 1))) '+1 weil Datum auch ein Leerzeichen enthält
                     Next
 
