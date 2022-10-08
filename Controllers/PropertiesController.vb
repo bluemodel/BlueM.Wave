@@ -55,13 +55,13 @@ Friend Class PropertiesController
         If IsNothing(_view) Then
             _view = New PropertiesWindow()
         End If
-        View.Update(_model.TimeSeries.Values.ToList)
+        View.Update(_model.TimeSeries.ToList)
         View.Show()
         View.BringToFront()
     End Sub
 
     Private Sub UpdateView()
-        View.Update(_model.TimeSeries.Values.ToList)
+        View.Update(_model.TimeSeries.ToList)
     End Sub
 
     ''' <summary>

@@ -88,6 +88,16 @@ Public Class TimeSeriesCollection
     End Property
 
     ''' <summary>
+    ''' Gets a List(Of TimeSeries) containing the TimeSeries in the TimeSeriesCollection
+    ''' </summary>
+    ''' <returns>A List(Of TimeSeries) containing the TimeSeries in the TimeSeriesCollection</returns>
+    Public ReadOnly Property ToList As List(Of TimeSeries)
+        Get
+            Return _timeseriesdict.Values.Cast(Of TimeSeries).ToList()
+        End Get
+    End Property
+
+    ''' <summary>
     ''' Gets the number of TimeSeries contained in the TimeSeriesCollection
     ''' </summary>
     ''' <returns>The number of TimeSeries contained in the TimeSeriesCollection</returns>

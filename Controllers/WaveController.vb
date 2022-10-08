@@ -434,7 +434,7 @@ Friend Class WaveController
         End If
 
         'Dialog instanzieren
-        Dim cutter As New CutDialog(_model.TimeSeries.Values.ToList, View.ChartMinX, View.ChartMaxX)
+        Dim cutter As New CutDialog(_model.TimeSeries.ToList, View.ChartMinX, View.ChartMaxX)
 
         'Dialog anzeigen
         If (cutter.ShowDialog() = Windows.Forms.DialogResult.OK) Then
@@ -486,7 +486,7 @@ Friend Class WaveController
 
         Try
 
-            dlg = New MergeSeriesDialog(_model.TimeSeries.Values.ToList)
+            dlg = New MergeSeriesDialog(_model.TimeSeries.ToList)
             dlgResult = dlg.ShowDialog()
 
             View.Cursor = Cursors.WaitCursor
@@ -728,7 +728,7 @@ Friend Class WaveController
             Exit Sub
         End If
 
-        Dim dlg As New ConvertErrorValuesDialog(_model.TimeSeries.Values.ToList)
+        Dim dlg As New ConvertErrorValuesDialog(_model.TimeSeries.ToList)
         Dim dlgresult As DialogResult = dlg.ShowDialog()
 
         If dlgresult = Windows.Forms.DialogResult.OK Then
@@ -796,7 +796,7 @@ Friend Class WaveController
             Exit Sub
         End If
 
-        Dim oAnalysisDialog As New AnalysisDialog(_model.TimeSeries.Values.ToList)
+        Dim oAnalysisDialog As New AnalysisDialog(_model.TimeSeries.ToList)
 
         'Analysisdialog anzeigen
         '-----------------------
