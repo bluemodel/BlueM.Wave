@@ -56,6 +56,11 @@ Public Class Wave
     Friend Event SeriesCleared()
 
     ''' <summary>
+    ''' Is raised when time series are reordered
+    ''' </summary>
+    Friend Event SeriesReordered()
+
+    ''' <summary>
     ''' Is raised when timestamps should be highlighted
     ''' </summary>
     ''' <param name="timestamps"></param>
@@ -133,7 +138,7 @@ Public Class Wave
                 'Wave project file
                 Call Me.Load_WVP(file)
 
-            'normal files:
+                'normal files:
             Case Else
 
                 Try
@@ -435,6 +440,15 @@ Public Class Wave
         'Store the time series
         Me.AddTimeSeries(ts)
 
+    End Sub
+
+    ''' <summary>
+    ''' Reorders the internally stored time series according to the specified list of Ids
+    ''' </summary>
+    ''' <param name="ids">List of Ids in the new order</param>
+    Friend Sub Reorder_Series(ids As List(Of Integer))
+        Me.TimeSeries.Reorder(ids)
+        RaiseEvent SeriesReordered()
     End Sub
 
     Friend Sub SaveProjectFile(projectfile)

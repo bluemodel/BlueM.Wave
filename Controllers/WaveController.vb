@@ -275,6 +275,14 @@ Friend Class WaveController
                             AddHandler _model.SeriesRemoved, AddressOf SeriesRemoved
                         End If
 
+                    Case Steema.TeeChart.Styles.SeriesEventStyle.Swap
+                        'series reordered, reorder series in model
+                        Dim ids As New List(Of Integer)
+                        For Each series As Steema.TeeChart.Styles.Series In e.sender.Series
+                            ids.Add(series.Tag)
+                        Next
+                        _model.Reorder_Series(ids)
+
                 End Select
             End If
         Catch ex As Exception

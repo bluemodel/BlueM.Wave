@@ -203,10 +203,10 @@ Public Class TimeSeriesCollection
     ''' <summary>
     ''' Reorders the TimeSeries contained in the TimeSeriesCollection according to the specified list of Ids
     ''' </summary>
-    ''' <param name="id_list">List of Ids in the new order</param>
-    Public Sub Reorder(id_list As List(Of Integer))
+    ''' <param name="ids">List of Ids in the new order</param>
+    Public Sub Reorder(ids As List(Of Integer))
         Dim newdict As New Specialized.OrderedDictionary()
-        For Each id As Integer In id_list
+        For Each id As Integer In ids
             newdict.Add(id, Me.Item(id))
         Next
         _timeseriesdict = newdict
