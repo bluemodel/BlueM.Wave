@@ -80,14 +80,14 @@ Public Class Wave
     Friend Event IsBusyChanged(isBusy As Boolean)
 
     ''' <summary>
-    ''' Internal collection of time series {id: TimeSeries, ...}
+    ''' Internal collection of time series
     ''' </summary>
-    Public TimeSeriesDict As Dictionary(Of Integer, TimeSeries)
+    Public TimeSeries As TimeSeriesCollection
 
     Public Sub New()
         'Kollektionen einrichten
         '-----------------------
-        Me.TimeSeriesDict = New Dictionary(Of Integer, TimeSeries)()
+        Me.TimeSeries = New TimeSeriesCollection()
     End Sub
 
     ''' <summary>
@@ -442,7 +442,7 @@ Public Class Wave
         'collect datasources
         Dim datasources As New Dictionary(Of String, List(Of String)) '{file: [title, ...], ...}
         Dim file, title As String
-        For Each ts As TimeSeries In Me.TimeSeriesDict.Values
+        For Each ts As TimeSeries In Me.TimeSeries.Values
             If ts.DataSource.Origin = TimeSeriesDataSource.OriginEnum.FileImport Then
                 file = ts.DataSource.FilePath
                 title = ts.DataSource.Title
@@ -493,13 +493,13 @@ Public Class Wave
         Dim zres As List(Of TimeSeries)
 
         'Abort if no time series loaded
-        If (Me.TimeSeriesDict.Count < 1) Then
+        If (Me.TimeSeries.Count < 1) Then
             MsgBox("No time series available for export!", MsgBoxStyle.Exclamation)
             Exit Sub
         End If
 
         'Show Export dialog
-        exportDlg = New ExportDiag(Me.TimeSeriesDict)
+        exportDlg = New ExportDiag(Me.TimeSeries)
         dlgResult = exportDlg.ShowDialog()
 
         If dlgResult <> Windows.Forms.DialogResult.OK Then
@@ -678,14 +678,14 @@ Public Class Wave
     Friend Sub RemoveTimeSeries(id As Integer)
 
         'Delete internally
-        Me.TimeSeriesDict.Remove(id)
+        Me.TimeSeries.Remove(id)
 
         RaiseEvent SeriesRemoved(id)
 
     End Sub
 
     Friend Sub RemoveAllTimeSeries()
-        Me.TimeSeriesDict.Clear()
+        Me.TimeSeries.Clear()
 
         RaiseEvent SeriesCleared()
     End Sub
@@ -728,7 +728,7 @@ Public Class Wave
         'Format: "Titel (n)"
         Do While True
             duplicateFound = False
-            For Each ts As TimeSeries In Me.TimeSeriesDict.Values
+            For Each ts As TimeSeries In Me.TimeSeries.Values
                 If timeseries.Title = ts.Title Then
                     duplicateFound = True
                 End If
@@ -747,7 +747,7 @@ Public Class Wave
             End If
         Loop
 
-        Me.TimeSeriesDict.Add(timeseries.Id, timeseries)
+        Me.TimeSeries.Add(timeseries)
 
         'Raise event
         RaiseEvent SeriesAdded(timeseries)

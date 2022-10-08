@@ -196,6 +196,7 @@
     <Compile Include="Classes\Metadata.vb" />
     <Compile Include="Classes\Month.vb" />
     <Compile Include="Classes\TimeSeries.vb" />
+    <Compile Include="Classes\TimeSeriesCollection.vb" />
     <Compile Include="Classes\TimeSeriesDataSource.vb" />
     <Compile Include="CLI.vb" />
     <Compile Include="Constants.vb" />

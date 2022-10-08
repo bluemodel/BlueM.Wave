@@ -190,7 +190,7 @@ Friend Class WaveController
         AddHandler _model.IsBusyChanged, AddressOf ShowBusy
 
         'add any already existing time series
-        For Each ts As TimeSeries In _model.TimeSeriesDict.Values
+        For Each ts As TimeSeries In _model.TimeSeries.Values
             Call SeriesAdded(ts)
         Next
 
@@ -258,9 +258,9 @@ Friend Class WaveController
                     Case Steema.TeeChart.Styles.SeriesEventStyle.ChangeTitle
                         'series title changed, update title in the model
                         Dim id As Integer = seriesEvent.Series.Tag
-                        If _model.TimeSeriesDict.ContainsKey(id) Then
-                            If _model.TimeSeriesDict(id).Title <> seriesEvent.Series.Title Then
-                                _model.TimeSeriesDict(id).Title = seriesEvent.Series.Title
+                        If _model.TimeSeries.ContainsId(id) Then
+                            If _model.TimeSeries(id).Title <> seriesEvent.Series.Title Then
+                                _model.TimeSeries(id).Title = seriesEvent.Series.Title
                                 _model.SeriesPropertiesChangedHandler(id)
                             End If
                         End If
@@ -268,7 +268,7 @@ Friend Class WaveController
                     Case Steema.TeeChart.Styles.SeriesEventStyle.Remove
                         'series removed, delete series from model
                         Dim id As Integer = seriesEvent.Series.Tag
-                        If _model.TimeSeriesDict.ContainsKey(id) Then
+                        If _model.TimeSeries.ContainsId(id) Then
                             'temporarily disable event handling to prevent multiple deletions
                             RemoveHandler _model.SeriesRemoved, AddressOf SeriesRemoved
                             _model.RemoveTimeSeries(id)
@@ -420,13 +420,13 @@ Friend Class WaveController
         Dim ids As List(Of Integer)
 
         'Wenn keine Zeitreihen vorhanden, abbrechen!
-        If (_model.TimeSeriesDict.Count < 1) Then
+        If (_model.TimeSeries.Count < 1) Then
             MsgBox("No time series available for cutting!", MsgBoxStyle.Exclamation)
             Exit Sub
         End If
 
         'Dialog instanzieren
-        Dim cutter As New CutDialog(_model.TimeSeriesDict.Values.ToList, View.ChartMinX, View.ChartMaxX)
+        Dim cutter As New CutDialog(_model.TimeSeries.Values.ToList, View.ChartMinX, View.ChartMaxX)
 
         'Dialog anzeigen
         If (cutter.ShowDialog() = Windows.Forms.DialogResult.OK) Then
@@ -435,7 +435,7 @@ Friend Class WaveController
                 'Alte Zeitreihe(n) löschen
                 If (cutter.ComboBox_ZeitreiheCut.SelectedItem.ToString = CutDialog.labelAlle) Then
                     ids = New List(Of Integer)
-                    For Each id In _model.TimeSeriesDict.Keys
+                    For Each id In _model.TimeSeries.Ids
                         ids.Add(id)
                     Next
                     For Each id In ids
@@ -471,14 +471,14 @@ Friend Class WaveController
         Dim mergedSeriesTitle As String
 
         'Abort if no series are loaded
-        If (_model.TimeSeriesDict.Count < 1) Then
+        If (_model.TimeSeries.Count < 1) Then
             MsgBox("No time series available for merging!", MsgBoxStyle.Exclamation)
             Exit Sub
         End If
 
         Try
 
-            dlg = New MergeSeriesDialog(_model.TimeSeriesDict.Values.ToList)
+            dlg = New MergeSeriesDialog(_model.TimeSeries.Values.ToList)
             dlgResult = dlg.ShowDialog()
 
             View.Cursor = Cursors.WaitCursor
@@ -489,11 +489,11 @@ Friend Class WaveController
                 mergedSeriesTitle = dlg.mergedSeriesTitle
 
                 'Clone the series with the highest priority
-                seriesMerged = _model.TimeSeriesDict(ids(0)).Clone
+                seriesMerged = _model.TimeSeries(ids(0)).Clone
 
                 'Append the remaining series in order
                 For i As Integer = 1 To ids.Count - 1
-                    seriesToMerge = _model.TimeSeriesDict(ids(i))
+                    seriesToMerge = _model.TimeSeries(ids(i))
                     seriesMerged.Append(seriesToMerge)
                 Next
 
@@ -610,7 +610,7 @@ Friend Class WaveController
             'Switch visualization of NaN values on
             'Show color bands for NaN values in the currently active series
             nanFound = False
-            For Each ts As TimeSeries In _model.TimeSeriesDict.Values
+            For Each ts As TimeSeries In _model.TimeSeries.Values
                 processSeries = False
                 'check if time series is currently active
                 For Each series As Steema.TeeChart.Styles.Series In View.TChart1.Series
@@ -715,12 +715,12 @@ Friend Class WaveController
     ''' <remarks></remarks>
     Private Sub ConvertErrorValues_Click(sender As System.Object, e As System.EventArgs)
         'Abort if no time series available!
-        If (_model.TimeSeriesDict.Count < 1) Then
+        If (_model.TimeSeries.Count < 1) Then
             MsgBox("No time series available!", MsgBoxStyle.Exclamation)
             Exit Sub
         End If
 
-        Dim dlg As New ConvertErrorValuesDialog(_model.TimeSeriesDict.Values.ToList)
+        Dim dlg As New ConvertErrorValuesDialog(_model.TimeSeries.Values.ToList)
         Dim dlgresult As DialogResult = dlg.ShowDialog()
 
         If dlgresult = Windows.Forms.DialogResult.OK Then
@@ -743,13 +743,13 @@ Friend Class WaveController
 
         dlgResult = MsgBox("Delete all nodes with NaN values from all series?", MsgBoxStyle.OkCancel)
         If dlgResult = Windows.Forms.DialogResult.OK Then
-            ids = _model.TimeSeriesDict.Keys.ToList()
+            ids = _model.TimeSeries.Ids.ToList()
             'loop over time series
             For Each id As Integer In ids
                 'remove NaN values
-                ts = _model.TimeSeriesDict(id)
+                ts = _model.TimeSeries(id)
                 ts = ts.removeNaNValues()
-                _model.TimeSeriesDict(id) = ts
+                _model.TimeSeries(id) = ts
                 'replace values of series in chart
                 For Each series As Steema.TeeChart.Styles.Series In View.TChart1.Series
                     If series.Tag = id Then
@@ -783,12 +783,12 @@ Friend Class WaveController
     Private Sub Analysis_Click(sender As System.Object, e As System.EventArgs)
 
         'Wenn keine Zeitreihen vorhanden, abbrechen!
-        If (_model.TimeSeriesDict.Count < 1) Then
+        If (_model.TimeSeries.Count < 1) Then
             MsgBox("No time series available for analysis!", MsgBoxStyle.Exclamation)
             Exit Sub
         End If
 
-        Dim oAnalysisDialog As New AnalysisDialog(_model.TimeSeriesDict.Values.ToList)
+        Dim oAnalysisDialog As New AnalysisDialog(_model.TimeSeries.Values.ToList)
 
         'Analysisdialog anzeigen
         '-----------------------
@@ -966,9 +966,9 @@ Friend Class WaveController
         'clear existing items
         View.ToolStripDropDownButton_ZoomToSeries.DropDown.Items.Clear()
         'create new items
-        ReDim items(_model.TimeSeriesDict.Count - 1)
+        ReDim items(_model.TimeSeries.Count - 1)
         i = 0
-        For Each ts As TimeSeries In _model.TimeSeriesDict.Values
+        For Each ts As TimeSeries In _model.TimeSeries.Values
             'store the time series Id in the Name property
             items(i) = New ToolStripMenuItem(ts.Title, Nothing, New EventHandler(AddressOf ZoomToSeries_Click), ts.Id.ToString())
             i += 1
@@ -995,9 +995,9 @@ Friend Class WaveController
     Private Sub ZoomToSeries(id As Integer)
         Dim startdate, enddate As DateTime
 
-        If _model.TimeSeriesDict.ContainsKey(id) Then
-            startdate = _model.TimeSeriesDict(id).StartDate
-            enddate = _model.TimeSeriesDict(id).EndDate
+        If _model.TimeSeries.ContainsId(id) Then
+            startdate = _model.TimeSeries(id).StartDate
+            enddate = _model.TimeSeries(id).EndDate
             'save the current zoom snapshot
             Call Me.SaveZoomSnapshot()
             'zoom
@@ -1056,7 +1056,7 @@ Friend Class WaveController
         Dim datasources As New Dictionary(Of String, List(Of String)) '{file: [title, ...], ...}
         Dim seriesNotFromFiles As New List(Of String)
         Dim file, title As String
-        For Each ts As TimeSeries In _model.TimeSeriesDict.Values
+        For Each ts As TimeSeries In _model.TimeSeries.Values
             If ts.DataSource.Origin = TimeSeriesDataSource.OriginEnum.FileImport Then
                 file = ts.DataSource.FilePath
                 title = ts.DataSource.Title
@@ -1102,7 +1102,7 @@ Friend Class WaveController
             View.TChart2.Refresh()
 
             'Collection zurücksetzen
-            _model.TimeSeriesDict.Clear()
+            _model.TimeSeries.Clear()
 
             'Alle Dateien durchlaufen
             Dim success As Boolean
@@ -1753,7 +1753,7 @@ Friend Class WaveController
                 'loop over series
                 Ymin = Double.MaxValue
                 Ymax = Double.MinValue
-                For Each ts As TimeSeries In _model.TimeSeriesDict.Values
+                For Each ts As TimeSeries In _model.TimeSeries.Values
                     title = ts.Title
 
                     'only process active series on the current axis
@@ -1886,7 +1886,7 @@ Friend Class WaveController
 
         Dim Xmin, Xmax As DateTime
 
-        If (_model.TimeSeriesDict.Count = 0) Then
+        If (_model.TimeSeries.Count = 0) Then
             'just refresh
             View.TChart1.Refresh()
             View.TChart2.Refresh()
@@ -1897,7 +1897,7 @@ Friend Class WaveController
             'Determine maximum extent of chart
             Dim startdates As New List(Of DateTime)
             Dim enddates As New List(Of DateTime)
-            For Each zre As TimeSeries In _model.TimeSeriesDict.Values
+            For Each zre As TimeSeries In _model.TimeSeries.Values
                 If zre.Length > 0 Then
                     startdates.Add(zre.StartDate)
                     enddates.Add(zre.EndDate)
@@ -2282,7 +2282,7 @@ Friend Class WaveController
                 'set line display according to interpretation
                 If TypeOf series Is Steema.TeeChart.Styles.Line Then
                     Dim seriesline As Steema.TeeChart.Styles.Line = series
-                    Select Case _model.TimeSeriesDict(id).Interpretation
+                    Select Case _model.TimeSeries(id).Interpretation
                         Case TimeSeries.InterpretationEnum.Instantaneous,
                              TimeSeries.InterpretationEnum.Undefined
                             seriesline.Stairs = False
@@ -2298,10 +2298,10 @@ Friend Class WaveController
                 End If
 
                 'update title in chart
-                series.Title = _model.TimeSeriesDict(id).Title
+                series.Title = _model.TimeSeries(id).Title
 
                 'assign to axis according to unit
-                assignSeriesToAxis(series, _model.TimeSeriesDict(id).Unit)
+                assignSeriesToAxis(series, _model.TimeSeries(id).Unit)
 
                 'TODO: apply the same changes in the overview chart?
                 Exit For
@@ -2360,14 +2360,14 @@ Friend Class WaveController
     Private Sub AxisUnitChanged()
 
         For Each series As Steema.TeeChart.Styles.Series In View.TChart1.Series
-            assignSeriesToAxis(series, _model.TimeSeriesDict(series.Tag).Unit)
+            assignSeriesToAxis(series, _model.TimeSeries(series.Tag).Unit)
         Next
 
         'deactivate unused custom axes
         Dim unitUsed As Boolean
         For Each axis As Steema.TeeChart.Axis In View.TChart1.Axes.Custom
             unitUsed = False
-            For Each ts As TimeSeries In _model.TimeSeriesDict.Values
+            For Each ts As TimeSeries In _model.TimeSeries.Values
                 If ts.Unit = axis.Tag Then
                     unitUsed = True
                     Exit For
@@ -2511,7 +2511,7 @@ Friend Class WaveController
 
             'Bereits vorhandene Reihen merken
             Dim existingIds = New List(Of Integer)
-            For Each id As Integer In _model.TimeSeriesDict.Keys
+            For Each id As Integer In _model.TimeSeries.Ids
                 existingIds.Add(id)
             Next
 
@@ -2647,7 +2647,7 @@ Friend Class WaveController
 
             'Die vor dem Laden bereits vorhandenen Zeitreihen wieder zu den Diagrammen hinzufügen (durch TEN-Import verloren)
             For Each id As Integer In existingIds
-                Call Me.SeriesAdded(_model.TimeSeriesDict(id))
+                Call Me.SeriesAdded(_model.TimeSeries(id))
             Next
 
             'Vorherigen Zoom wiederherstellen

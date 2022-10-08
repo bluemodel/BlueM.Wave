@@ -27,7 +27,7 @@
 '
 Friend Class ExportDiag
 
-    Public Sub New(ByRef zres As Dictionary(Of Integer, TimeSeries))
+    Public Sub New(ByRef timeseries As TimeSeriesCollection)
 
         ' This call is required by the Windows Form Designer.
         InitializeComponent()
@@ -49,7 +49,7 @@ Friend Class ExportDiag
         Me.ComboBox_Format.SelectedIndex = 0
 
         'Add series to listbox
-        For Each zre As TimeSeries In zres.Values
+        For Each zre As TimeSeries In timeseries.Values
             Me.ListBox_Series.Items.Add(zre)
         Next
 

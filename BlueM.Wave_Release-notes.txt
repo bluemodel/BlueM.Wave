@@ -6,6 +6,8 @@ Version 1.14.2
 --------------
 FIXED:
 * Fixed series being deleted in the Properties window not being propagated to the chart after a series was deleted in TeeChart
+API-CHANGES:
+* Renamed the internal storage of time series to `Wave.TimeSeries` and changed its type to `TimeSeriesCollection`
 
 Version 1.14.1
 --------------

@@ -48,19 +48,20 @@ Friend Class PropertiesController
         AddHandler _model.SeriesPropertiesChanged, AddressOf UpdateView
         AddHandler _model.SeriesRemoved, AddressOf UpdateView
         AddHandler _model.SeriesCleared, AddressOf UpdateView
+        AddHandler _model.SeriesReordered, AddressOf UpdateView
     End Sub
 
     Public Overrides Sub ShowView()
         If IsNothing(_view) Then
             _view = New PropertiesWindow()
         End If
-        View.Update(_model.TimeSeriesDict.Values.ToList)
+        View.Update(_model.TimeSeries.Values.ToList)
         View.Show()
         View.BringToFront()
     End Sub
 
     Private Sub UpdateView()
-        View.Update(_model.TimeSeriesDict.Values.ToList)
+        View.Update(_model.TimeSeries.Values.ToList)
     End Sub
 
     ''' <summary>
