@@ -2,6 +2,11 @@
 BlueM.Wave Release Notes
 ===============================================================
 
+Version 1.14.2
+--------------
+FIXED:
+* Fixed series being deleted in the Properties window not being propagated to the chart after a series was deleted in TeeChart
+
 Version 1.14.1
 --------------
 FIXED:

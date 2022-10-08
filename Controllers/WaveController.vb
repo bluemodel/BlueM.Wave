@@ -272,7 +272,7 @@ Friend Class WaveController
                             'temporarily disable event handling to prevent multiple deletions
                             RemoveHandler _model.SeriesRemoved, AddressOf SeriesRemoved
                             _model.RemoveTimeSeries(id)
-                            RemoveHandler _model.SeriesRemoved, AddressOf SeriesRemoved
+                            AddHandler _model.SeriesRemoved, AddressOf SeriesRemoved
                         End If
 
                 End Select
