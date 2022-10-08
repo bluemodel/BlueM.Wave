@@ -34,7 +34,7 @@ Namespace Fileformats
     ''' </summary>
     ''' <remarks></remarks>
     Public Class BIN
-        Inherits FileFormatBase
+        Inherits TimeSeriesFile
 
         ''' <summary>
         ''' Error value

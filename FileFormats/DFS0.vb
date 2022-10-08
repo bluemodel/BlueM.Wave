@@ -44,7 +44,7 @@ Namespace Fileformats
     ''' </summary>
     ''' <remarks>Only works in x64</remarks>
     Public Class DFS0
-        Inherits FileFormatBase
+        Inherits TimeSeriesFile
 
         ''' <summary>
         ''' Flag indicating whether to show the import dialog

@@ -34,7 +34,7 @@ Namespace Fileformats
     ''' </summary>
     ''' <remarks>Format siehe https://wiki.bluemodel.org/index.php/ZRE-Format</remarks>
     Public Class ZRE
-        Inherits FileFormatBase
+        Inherits TimeSeriesFile
 
         ''' <summary>
         ''' Gibt an, ob beim Import des Dateiformats der Importdialog angezeigt werden soll

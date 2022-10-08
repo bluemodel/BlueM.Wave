@@ -36,7 +36,7 @@ Namespace Fileformats
         ''' Obsolete: Only Maintained for backwards-compatibility
         ''' Use getFileInstance() instead
         ''' </summary>
-        Public Function getDateiInstanz(file As String) As FileFormatBase
+        Public Function getDateiInstanz(file As String) As TimeSeriesFile
             Return getFileInstance(file)
         End Function
 
@@ -46,9 +46,9 @@ Namespace Fileformats
         ''' <param name="file">Path to the file</param>
         ''' <param name="fileType">Optional file type. If not provided, the type is determined using `FileFormats.getFileType()`</param>
         ''' <returns>A FileFormatBase-inherited instance of the file</returns>
-        Public Function getFileInstance(file As String, Optional fileType As FileTypes = FileTypes.UNDETERMINED) As FileFormatBase
+        Public Function getFileInstance(file As String, Optional fileType As FileTypes = FileTypes.UNDETERMINED) As TimeSeriesFile
 
-            Dim FileInstance As FileFormatBase
+            Dim FileInstance As TimeSeriesFile
 
             'determine file type if not passed as argument
             If fileType = FileTypes.UNDETERMINED Then

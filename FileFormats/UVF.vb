@@ -36,7 +36,7 @@ Namespace Fileformats
     ''' Formatbeschreibung: http://aquaplan.de/public_papers/imex/sectionUVF.html
     ''' </summary>
     Public Class UVF
-        Inherits FileFormatBase
+        Inherits TimeSeriesFile
 
         ''' <summary>
         ''' Error value

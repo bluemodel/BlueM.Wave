@@ -34,7 +34,7 @@ Namespace Fileformats
     ''' </summary>
     ''' <remarks>Format siehe https://wiki.bluemodel.org/index.php/SMB-Format</remarks>
     Public Class SMB
-        Inherits FileFormatBase
+        Inherits TimeSeriesFile
 
         ''' <summary>
         ''' Gibt an, ob beim Import des Dateiformats der Importdialog angezeigt werden soll

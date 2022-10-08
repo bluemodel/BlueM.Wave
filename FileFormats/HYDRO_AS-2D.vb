@@ -33,7 +33,7 @@ Namespace Fileformats
     ''' Klasse für Q_Strg.dat, Pegel.dat und BW_TMP.dat von HYDRO_AS-2D
     ''' </summary>
     Public Class HYDRO_AS_2D
-        Inherits FileFormatBase
+        Inherits TimeSeriesFile
 
         ''' <summary>
         ''' Die Einheit der Zeitreihen

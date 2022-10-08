@@ -1125,7 +1125,7 @@ Friend Class WaveController
                     Call Load_TEN(file)
                 Else
                     'get an instance of the file
-                    Dim fileObj As Fileformats.FileFormatBase = Fileformats.FileFactory.getFileInstance(file)
+                    Dim fileObj As TimeSeriesFile = Fileformats.FileFactory.getFileInstance(file)
                     'select series for importing
                     For Each title In datasources(file)
                         success = success And fileObj.selectSeries(title)

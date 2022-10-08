@@ -180,7 +180,7 @@ Namespace Fileformats
             Dim value As String
             Dim seriesList As Dictionary(Of String, String)
             Dim seriesNotFound As List(Of String)
-            Dim fileInstance As FileFormatBase
+            Dim fileInstance As TimeSeriesFile
 
             Dim tsList As New List(Of TimeSeries)
 

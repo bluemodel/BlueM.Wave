@@ -39,7 +39,7 @@ Namespace Fileformats
     ''' TODO: Das ASC-Format ab SMUSI 4.0 sollte erkannt und zumindest eine entsprechende Meldung ausgegeben werden
     ''' </remarks>
     Public Class ASC
-        Inherits FileFormatBase
+        Inherits TimeSeriesFile
 
         ''' <summary>
         ''' Gibt an, ob beim Import des Dateiformats der Importdialog angezeigt werden soll

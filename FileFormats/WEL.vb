@@ -35,7 +35,7 @@ Namespace Fileformats
     ''' </summary>
     ''' <remarks>Format siehe https://wiki.bluemodel.org/index.php/WEL-Format</remarks>
     Public Class WEL
-        Inherits FileFormatBase
+        Inherits TimeSeriesFile
 
 #Region "Eigenschaften"
 

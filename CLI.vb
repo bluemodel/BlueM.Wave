@@ -132,7 +132,7 @@ Friend Class CLI
 
                     Dim tsList As New List(Of TimeSeries)
 
-                    Dim fileInstance As Fileformats.FileFormatBase
+                    Dim fileInstance As TimeSeriesFile
                     For Each file_in As String In files_in
                         Log.AddLogEntry(BlueM.Wave.Log.levels.info, $"Importing file {file_in}...")
                         Select Case IO.Path.GetExtension(file_in).ToUpper

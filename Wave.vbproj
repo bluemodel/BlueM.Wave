@@ -198,6 +198,7 @@
     <Compile Include="Classes\TimeSeries.vb" />
     <Compile Include="Classes\TimeSeriesCollection.vb" />
     <Compile Include="Classes\TimeSeriesDataSource.vb" />
+    <Compile Include="Classes\TimeSeriesFile.vb" />
     <Compile Include="CLI.vb" />
     <Compile Include="Constants.vb" />
     <Compile Include="Controllers\Controller.vb" />
@@ -286,7 +287,6 @@
     <Compile Include="FileFormats\BIN.vb" />
     <Compile Include="FileFormats\CSV.vb" />
     <Compile Include="FileFormats\FileFactory.vb" />
-    <Compile Include="FileFormats\FileFormatBase.vb" />
     <Compile Include="FileFormats\HYDRO_AS-2D.vb" />
     <Compile Include="FileFormats\HYDRO_AS-2D_Diag.Designer.vb">
       <DependentUpon>HYDRO_AS-2D_Diag.vb</DependentUpon>

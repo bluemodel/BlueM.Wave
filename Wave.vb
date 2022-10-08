@@ -119,7 +119,7 @@ Public Class Wave
     ''' <param name="file">file path</param>
     Public Sub Import_File(file As String)
 
-        Dim Datei As Fileformats.FileFormatBase
+        Dim Datei As TimeSeriesFile
         Dim ok As Boolean
 
         RaiseEvent IsBusyChanged(True)
@@ -348,7 +348,7 @@ Public Class Wave
         Dim zreblock As Boolean
         Dim data As New List(Of Dictionary(Of String, String)) '[{zreparams1},{zreparams2},...]
         Dim file, name As String
-        Dim fileobj As Fileformats.FileFormatBase
+        Dim fileobj As TimeSeriesFile
         Dim ts As TimeSeries
 
         zreblock = False
@@ -537,7 +537,7 @@ Public Class Wave
                 Case Fileformats.FileTypes.ZRXP
                     keys = Fileformats.ZRXP.MetadataKeys
                 Case Else
-                    keys = Fileformats.FileFormatBase.MetadataKeys 'empty list
+                    keys = TimeSeriesFile.MetadataKeys 'empty list
             End Select
             If keys.Count > 0 Then
                 'create a copy of the existing metadata
@@ -560,7 +560,7 @@ Public Class Wave
                     Case Fileformats.FileTypes.ZRXP
                         Fileformats.ZRXP.setDefaultMetadata(ts)
                     Case Else
-                        Fileformats.FileFormatBase.setDefaultMetadata(ts)
+                        TimeSeriesFile.setDefaultMetadata(ts)
                 End Select
                 'show dialog for editing metadata
                 Dim dlg As New MetadataDialog(ts.Metadata)
@@ -708,7 +708,7 @@ Public Class Wave
     ''' Zeigt den Importdialog an und liest im Anschluss die Datei mit den eingegebenen Einstellungen ein
     ''' </summary>
     ''' <param name="Datei">Instanz der Datei, die importiert werden soll</param>
-    Friend Function ShowImportDialog(ByRef Datei As Fileformats.FileFormatBase) As Boolean
+    Friend Function ShowImportDialog(ByRef Datei As TimeSeriesFile) As Boolean
 
         Datei.ImportDiag = New ImportDiag(Datei)
 

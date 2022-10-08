@@ -36,7 +36,7 @@ Namespace Fileformats
     ''' </summary>
     ''' <remarks>Format siehe https://wiki.bluemodel.org/index.php/WEL-Format</remarks>
     Public Class HystemExtran_WEL
-        Inherits FileFormatBase
+        Inherits TimeSeriesFile
 
 
 

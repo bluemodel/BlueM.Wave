@@ -34,7 +34,7 @@ Namespace Fileformats
     ''' </summary>
     ''' <remarks></remarks>
     Public Class WBL
-        Inherits FileFormatBase
+        Inherits TimeSeriesFile
 
         ''' <summary>
         ''' Gibt an, ob beim Import des Dateiformats der Importdialog angezeigt werden soll

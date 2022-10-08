@@ -36,7 +36,7 @@ Namespace Fileformats
     ''' <remarks>Format siehe https://wiki.bluemodel.org/index.php/SWMM_file_formats </remarks>
     ''' 
     Public Class SWMM_OUT
-        Inherits FileFormatBase
+        Inherits TimeSeriesFile
         Protected oSWMM As modelEAU.SWMM.DllAdapter.SWMM_iface
 
         Private anzSpalten As Integer

@@ -35,7 +35,7 @@ Namespace Fileformats
     ''' </summary>
     ''' <remarks>See https://wiki.bluemodel.org/index.php/SWMM_file_formats </remarks>
     Public Class SWMM_LID_REPORT
-        Inherits FileFormatBase
+        Inherits TimeSeriesFile
 
         Public Overrides ReadOnly Property UseImportDialog As Boolean
             Get

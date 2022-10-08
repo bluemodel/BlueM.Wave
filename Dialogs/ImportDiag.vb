@@ -38,7 +38,7 @@ Friend Class ImportDiag
 
     Private IsInitializing As Boolean
 
-    Private datei As Fileformats.FileFormatBase
+    Private datei As TimeSeriesFile
     Private WithEvents inputTimer As Timers.Timer
 
 #End Region
@@ -106,7 +106,7 @@ Friend Class ImportDiag
 
     'Konstruktor
     '***********
-    Public Sub New(ByRef _dateiobjekt As Fileformats.FileFormatBase)
+    Public Sub New(ByRef _dateiobjekt As TimeSeriesFile)
 
         Call MyBase.New()
 
@@ -243,7 +243,7 @@ Friend Class ImportDiag
             Me.DialogResult = Windows.Forms.DialogResult.None
             Exit Sub
         Else
-            For Each sInfo As Fileformats.FileFormatBase.SeriesInfo In Me.ListBox_Series.SelectedItems
+            For Each sInfo As TimeSeriesFile.SeriesInfo In Me.ListBox_Series.SelectedItems
                 Me.datei.selectSeries(sInfo.Index)
             Next
         End If
@@ -381,7 +381,7 @@ Friend Class ImportDiag
         Me.NumericUpDown_ColumnDateTime.Value = Me.datei.DateTimeColumnIndex + 1
 
         'Available series
-        Dim sInfo As Fileformats.FileFormatBase.SeriesInfo
+        Dim sInfo As TimeSeriesFile.SeriesInfo
         Me.Label_Series.Text = $"Available series ({Me.datei.SeriesList.Count}):"
         'remember currently selected series
         Dim selectedSeries As New List(Of String)

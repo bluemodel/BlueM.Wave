@@ -34,7 +34,7 @@ Namespace Fileformats
     ''' </summary>
     ''' <remarks>Format siehe https://wiki.bluemodel.org/index.php/Hystem-Extran_REG-Format</remarks>
     Public Class HystemExtran_REG
-        Inherits FileFormatBase
+        Inherits TimeSeriesFile
 
         Const DatumsformatHystemExtran As String = "ddMMyyyyHHmmss"
         Const LenString As Integer = 5   'Länge des Strings eines Wertes in der reg/dat-Datei

@@ -33,7 +33,7 @@ Namespace Fileformats
     ''' Class for the SYDRO SQLite format
     ''' </summary>
     Public Class SydroSQLite
-        Inherits FileFormatBase
+        Inherits TimeSeriesFile
 
         Private Enum TimeseriesClassEnum As Short
             Unknown = -1

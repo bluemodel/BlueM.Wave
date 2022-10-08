@@ -40,7 +40,7 @@ Namespace Fileformats
     ''' and Statistic variables result files (statvar.dat)
     ''' </remarks>
     Public Class PRMS
-        Inherits FileFormatBase
+        Inherits TimeSeriesFile
 
         ''' <summary>
         ''' Gibt an, ob beim Import des Dateiformats der Importdialog angezeigt werden soll

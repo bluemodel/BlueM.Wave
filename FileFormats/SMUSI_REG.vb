@@ -34,7 +34,7 @@ Namespace Fileformats
     ''' </summary>
     ''' <remarks>Format siehe https://wiki.bluemodel.org/index.php/SMUSI_REG-Format</remarks>
     Public Class SMUSI_REG
-        Inherits FileFormatBase
+        Inherits TimeSeriesFile
 
         Const WerteproZeile As Integer = 12
         Const LenWert As Integer = 5

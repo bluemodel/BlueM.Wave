@@ -35,7 +35,7 @@ Namespace Fileformats
     ''' Format description: https://www.kisters.de/fileadmin/user_upload/Wasser/Downloads/ZRXP3.0_DE.pdf
     ''' </summary>
     Public Class ZRXP
-        Inherits FileFormatBase
+        Inherits TimeSeriesFile
 
         ''' <summary>
         ''' Specifies whether to use the file import dialog

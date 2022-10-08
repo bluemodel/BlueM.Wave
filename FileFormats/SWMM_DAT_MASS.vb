@@ -33,7 +33,7 @@ Namespace Fileformats
     ''' Class for SWMM5 time series (DAT) data format
     ''' </summary>
     Public Class SWMM_DAT_MASS
-        Inherits FileFormatBase
+        Inherits TimeSeriesFile
 
         Const DatumsformatSWMMDAT As String = "MM/dd/yyyy HH:mm"
         Const iDim As Integer = 3        'Dezimalfaktor wird erstmal global auf 3 gesetzt
