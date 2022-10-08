@@ -2,7 +2,6 @@
 
 Partial Friend Class TimestepAnalysisDialog
 
-    Private zres As Dictionary(Of Integer, TimeSeries)
     Private isInitializing As Boolean
 
     Public Sub New()
