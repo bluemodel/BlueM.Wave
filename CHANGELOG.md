@@ -8,7 +8,10 @@ CHANGED:
 
 API-CHANGES:
 * Renamed class `FileFormatBase` to `TimeSeriesFile`
-* Removed modules `FileFactory` and `FileFormats` and integrated functionality into class `TimeSeriesFile`
+* Removed modules `FileFactory` and `FileFormats` and integrated functionality into class `TimeSeriesFile`, e.g.
+  * `FileFactory.getFileInstance()` -> `TimeSeriesFile.getInstance()`,
+  * `FileFormats.getFileType()` -> `TimeSeriesFile.getFileType()`, 
+  * `FileFormats.FileTypes` -> `TimeSeriesFile.FileTypes`
 * Renamed structure `SeriesInfo` to class `TimeSeriesInfo`
 * Encapsulated file extension constants within a new class `TimeSeriesFile.FileExtensions`
 
