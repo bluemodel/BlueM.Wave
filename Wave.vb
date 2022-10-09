@@ -119,7 +119,7 @@ Public Class Wave
     ''' <param name="file">file path</param>
     Public Sub Import_File(file As String)
 
-        Dim Datei As TimeSeriesFile
+        Dim fileInstance As TimeSeriesFile
         Dim ok As Boolean
 
         RaiseEvent IsBusyChanged(True)
@@ -146,22 +146,22 @@ Public Class Wave
                     Call Log.AddLogEntry(Log.levels.info, $"Importing file '{file}' ...")
 
                     'Datei-Instanz erzeugen
-                    Datei = TimeSeriesFile.getInstance(file, fileType)
+                    fileInstance = TimeSeriesFile.getInstance(file, fileType)
 
-                    If (Datei.UseImportDialog) Then
+                    If (fileInstance.UseImportDialog) Then
                         'Falls Importdialog erforderlich, diesen anzeigen
-                        ok = Me.ShowImportDialog(Datei)
+                        ok = Me.ShowImportDialog(fileInstance)
                         Call Application.DoEvents()
                     Else
                         'Ansonsten alle Spalten auswählen
-                        Call Datei.selectAllSeries()
+                        Call fileInstance.selectAllSeries()
                         ok = True
                     End If
 
                     If (ok) Then
 
                         'Datei einlesen
-                        Call Datei.readFile()
+                        Call fileInstance.readFile()
 
                         'Log
                         Call Log.AddLogEntry(Log.levels.info, $"File '{file}' imported successfully!")
@@ -170,7 +170,7 @@ Public Class Wave
                         Call Log.AddLogEntry(Log.levels.info, "Loading series in chart...")
 
                         'Import all time series into the chart
-                        For Each ts As TimeSeries In Datei.TimeSeries.Values
+                        For Each ts As TimeSeries In fileInstance.TimeSeries.Values
                             Call Me.Import_Series(ts)
                         Next
 
@@ -348,7 +348,7 @@ Public Class Wave
         Dim zreblock As Boolean
         Dim data As New List(Of Dictionary(Of String, String)) '[{zreparams1},{zreparams2},...]
         Dim file, name As String
-        Dim fileobj As TimeSeriesFile
+        Dim fileInstance As TimeSeriesFile
         Dim ts As TimeSeries
 
         zreblock = False
@@ -392,10 +392,10 @@ Public Class Wave
 
                     'read file
                     Log.AddLogEntry(Log.levels.info, $"Loading file {file} ...")
-                    fileobj = TimeSeriesFile.getInstance(file)
+                    fileInstance = TimeSeriesFile.getInstance(file)
 
                     'read series from file
-                    ts = fileobj.getTimeSeries(name)
+                    ts = fileInstance.getTimeSeries(name)
 
                     'set interpretation
                     ts.Interpretation = params("Interpretation")
@@ -409,11 +409,11 @@ Public Class Wave
 
                     'read file
                     Log.AddLogEntry(Log.levels.info, $"Loading file {file} ...")
-                    fileobj = TimeSeriesFile.getInstance(file)
+                    fileInstance = TimeSeriesFile.getInstance(file)
 
                     'read series from file
-                    fileobj.readFile()
-                    ts = fileobj.TimeSeries.First.Value
+                    fileInstance.readFile()
+                    ts = fileInstance.TimeSeries.First.Value
 
                     'add metadata
                     ts.Title = name

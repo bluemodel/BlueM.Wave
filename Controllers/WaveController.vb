@@ -1125,15 +1125,15 @@ Friend Class WaveController
                     Call Load_TEN(file)
                 Else
                     'get an instance of the file
-                    Dim fileObj As TimeSeriesFile = TimeSeriesFile.getInstance(file)
+                    Dim fileInstance As TimeSeriesFile = TimeSeriesFile.getInstance(file)
                     'select series for importing
                     For Each title In datasources(file)
-                        success = success And fileObj.selectSeries(title)
+                        success = success And fileInstance.selectSeries(title)
                     Next
                     'load the file
-                    Call fileObj.readFile()
+                    Call fileInstance.readFile()
                     'import the series
-                    For Each ts As TimeSeries In fileObj.TimeSeries.Values
+                    For Each ts As TimeSeries In fileInstance.TimeSeries.Values
                         Call _model.Import_Series(ts)
                     Next
                 End If
