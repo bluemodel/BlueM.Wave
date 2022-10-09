@@ -51,7 +51,9 @@
     ],
     "dest": "_site",
 	"globalMetadata": {
-		"_appTitle": "BlueM.Wave"
+		"_appTitle": "BlueM.Wave",
+		"_appLogoPath": "images/wave_logo.png",
+		"_appFaviconPath": "images/wave_icon.png"
 	},
     "globalMetadataFiles": [],
     "fileMetadataFiles": [],
