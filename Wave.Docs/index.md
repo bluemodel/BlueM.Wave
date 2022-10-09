@@ -1,4 +1,10 @@
-# This is the **HOMEPAGE**.
-Refer to [Markdown](http://daringfireball.net/projects/markdown/) for how to write markdown files.
-## Quick Start Notes:
-1. Add images to the *images* folder if the file is referencing an image.
+# Wave.Docs
+This is the developer documentation for BlueM.Wave.
+
+For general documentation, refer to https://wiki.bluemodel.org/index.php/BlueM.Wave
+
+## Source code
+The source code is managed on GitHub: https://github.com/bluemodel/BlueM.Wave
+
+## Issues
+Issues are managed on GitHub: https://github.com/bluemodel/BlueM.Wave/issues
