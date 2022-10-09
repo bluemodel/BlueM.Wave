@@ -18,8 +18,22 @@ For testing purposes, you can use the evaluation version of TeeChart creating an
 ## Testing
 The repository contains an assembly `Wave.Tests` for unit testing. Tests can be run from within Visual Studio. To add new tests, follow the pattern of the existing ones and/or refer to the [MSTest framework docs](https://docs.microsoft.com/en-us/visualstudio/test/using-microsoft-visualstudio-testtools-unittesting-members-in-unit-tests?view=vs-2022).
 
+## Debug log messages
+Debug log messages can be created with `Log.AddLogEntry(levels.debug, "message")` and are only visible in the log if the application setting `loggingLevel` is set to `debug`.
+
+To set the `loggingLevel` to `debug`, edit the section `applicationSettings` in the file `Wave.exe.config` after building to be as follows:
+```xml
+    <applicationSettings>
+        <BlueM.Wave.My.MySettings>
+            <setting name="loggingLevel" serializeAs="String">
+                <value>debug</value>
+            </setting>
+        </BlueM.Wave.My.MySettings>
+    </applicationSettings>
+```
+
 ## API
-The BlueM.Wave API provides a methods for reading time series from files, manipulating and displaying them.
+The BlueM.Wave API provides methods for reading time series from files, manipulating and displaying them.
 
 To access the API, include a reference to Wave.exe (or to the Wave project if you have the source code) in your .NET project.
 
