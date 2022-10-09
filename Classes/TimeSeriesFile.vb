@@ -63,25 +63,35 @@ Public MustInherit Class TimeSeriesFile
         ZRXP
     End Enum
 
-    Public Const FileExtASC As String = ".ASC"
-    Public Const FileExtBIN As String = ".BIN"   'SYDRO binary format
-    Public Const FileExtCSV As String = ".CSV"
-    Public Const FileExtDAT As String = ".DAT"
-    Public Const FileExtDFS0 As String = ".DFS0" 'DHI MIKE Dfs0 file format
-    Public Const FileExtKWL As String = ".KWL"
-    Public Const FileExtOUT As String = ".OUT"   'SWMM binary result file or PRMS out file
-    Public Const FileExtREG As String = ".REG"
-    Public Const FileExtSMB As String = ".SMB"
-    Public Const FileExtSQLITE As String = ".DB" 'SYDRO SQLite format
-    Public Const FileExtTEN As String = ".TEN"
-    Public Const FileExtTXT As String = ".TXT"   'SWMM interface routing file, SWMM LID report file or generic text file 
-    Public Const FileExtUVF As String = ".UVF"
-    Public Const FileExtWBL As String = ".WBL"   'SYDRO binary WEL format
-    Public Const FileExtWEL As String = ".WEL"
-    Public Const FileExtWVP As String = ".WVP"   'Wave project file
-    Public Const FileExtZRE As String = ".ZRE"
-    Public Const FileExtZRX As String = ".ZRX"   'ZRXP format
-    Public Const FileExtZRXP As String = ".ZRXP" 'ZRXP format
+    ''' <summary>
+    ''' File extensions
+    ''' </summary>
+    ''' <remarks>
+    ''' This is a replacement for an Enum of type String.
+    ''' This should actually be a static class that cannot be instantiated nor inherited from,
+    ''' which would be a Module in VB, but that cannot be nested, and would mess up the namespace.
+    ''' </remarks>
+    Public MustInherit Class FileExtensions
+        Public Shared ReadOnly ASC As String = ".ASC"
+        Public Shared ReadOnly BIN As String = ".BIN"   'SYDRO binary format
+        Public Shared ReadOnly CSV As String = ".CSV"
+        Public Shared ReadOnly DAT As String = ".DAT"
+        Public Shared ReadOnly DB As String = ".DB"     'SYDRO SQLite format
+        Public Shared ReadOnly DFS0 As String = ".DFS0" 'DHI MIKE Dfs0 file format
+        Public Shared ReadOnly KWL As String = ".KWL"
+        Public Shared ReadOnly OUT As String = ".OUT"   'SWMM binary result file or PRMS out file
+        Public Shared ReadOnly REG As String = ".REG"
+        Public Shared ReadOnly SMB As String = ".SMB"
+        Public Shared ReadOnly TEN As String = ".TEN"
+        Public Shared ReadOnly TXT As String = ".TXT"   'SWMM interface routing file, SWMM LID report file or generic text file 
+        Public Shared ReadOnly UVF As String = ".UVF"
+        Public Shared ReadOnly WBL As String = ".WBL"   'SYDRO binary WEL format
+        Public Shared ReadOnly WEL As String = ".WEL"
+        Public Shared ReadOnly WVP As String = ".WVP"   'Wave project file
+        Public Shared ReadOnly ZRE As String = ".ZRE"
+        Public Shared ReadOnly ZRX As String = ".ZRX"   'ZRXP format
+        Public Shared ReadOnly ZRXP As String = ".ZRXP" 'ZRXP format
+    End Class
 
     ''' <summary>
     ''' FileFilter for file dialogs
@@ -550,7 +560,7 @@ Public MustInherit Class TimeSeriesFile
         'Check whether the file exists
         If Not IO.File.Exists(file) Then
             'A WEL file may be zipped within a WLZIP file, so try extracting it from there
-            If fileExt = FileExtWEL Then
+            If fileExt = FileExtensions.WEL Then
                 If Not Fileformats.WEL.extractFromWLZIP(file) Then
                     Throw New Exception($"ERROR: File '{file}' not found!")
                 End If
@@ -562,7 +572,7 @@ Public MustInherit Class TimeSeriesFile
         'Depending on file extension
         Select Case fileExt
 
-            Case FileExtASC
+            Case FileExtensions.ASC
                 If Fileformats.GISMO_WEL.verifyFormat(file) Then
                     'GISMO result file in WEL format
                     Log.AddLogEntry(levels.info, $"Detected GISMO result format for file {fileName}.")
@@ -573,12 +583,12 @@ Public MustInherit Class TimeSeriesFile
                     fileType = FileTypes.ASC
                 End If
 
-            Case FileExtBIN
+            Case FileExtensions.BIN
                 'SYDRO binary file
                 Log.AddLogEntry(levels.info, $"Assuming SYDRO binary format for file {fileName}.")
                 fileType = FileTypes.BIN
 
-            Case FileExtCSV
+            Case FileExtensions.CSV
                 'check file format
                 If Fileformats.GISMO_WEL.verifyFormat(file) Then
                     'GISMO result file in CSV format
@@ -589,7 +599,7 @@ Public MustInherit Class TimeSeriesFile
                     fileType = FileTypes.CSV
                 End If
 
-            Case FileExtDAT
+            Case FileExtensions.DAT
                 'Check file format
                 If Fileformats.HYDRO_AS_2D.verifyFormat(file) Then
                     'HYDRO-AS_2D result file
@@ -607,11 +617,11 @@ Public MustInherit Class TimeSeriesFile
                     Throw New Exception($"File {fileName} has an unknown format!")
                 End If
 
-            Case FileExtDFS0
+            Case FileExtensions.DFS0
                 Log.AddLogEntry(levels.info, $"Assuming DHI DFS0 format for file {fileName}.")
                 fileType = FileTypes.DFS0
 
-            Case FileExtOUT
+            Case FileExtensions.OUT
                 If Fileformats.PRMS.verifyFormat(file) Then
                     'PRMS result format
                     Log.AddLogEntry(levels.info, $"Detected PRMS result format for file {fileName}.")
@@ -622,7 +632,7 @@ Public MustInherit Class TimeSeriesFile
                     fileType = FileTypes.SWMM_OUT
                 End If
 
-            Case FileExtREG
+            Case FileExtensions.REG
                 'Check file format
                 If Fileformats.SMUSI_REG.verifyFormat(file) Then
                     'SMUSI rainfall file
@@ -636,15 +646,15 @@ Public MustInherit Class TimeSeriesFile
                     Throw New Exception($"File {fileName} has an unknown format!")
                 End If
 
-            Case FileExtSMB
+            Case FileExtensions.SMB
                 Log.AddLogEntry(levels.info, $"Assuming SIMBA format for file {fileName}.")
                 fileType = FileTypes.SMB
 
-            Case FileExtSQLITE
+            Case FileExtensions.DB
                 Log.AddLogEntry(levels.info, $"Assuming SYDRO SQLite format for file {fileName}.")
                 fileType = FileTypes.SYDROSQLITE
 
-            Case FileExtTXT
+            Case FileExtensions.TXT
                 'Check file format
                 If Fileformats.SWMM_LID_REPORT.verifyFormat(file) Then
                     'SWMM LID report file
@@ -660,7 +670,7 @@ Public MustInherit Class TimeSeriesFile
                     fileType = FileTypes.CSV
                 End If
 
-            Case FileExtUVF
+            Case FileExtensions.UVF
                 'Check file format
                 If Fileformats.UVF.verifyFormat(file) Then
                     fileType = FileTypes.UVF
@@ -668,7 +678,7 @@ Public MustInherit Class TimeSeriesFile
                     Throw New Exception($"File {fileName} has an unexpected format!")
                 End If
 
-            Case FileExtWBL
+            Case FileExtensions.WBL
                 'Check format
                 If Fileformats.WBL.verifyFormat(file) Then
                     'SYDRO binary WEL file
@@ -678,7 +688,7 @@ Public MustInherit Class TimeSeriesFile
                     Throw New Exception($"File {fileName} has an unexpected format!")
                 End If
 
-            Case FileExtWEL, FileExtKWL
+            Case FileExtensions.WEL, FileExtensions.KWL
                 'Check file format
                 If Fileformats.WEL.verifyFormat(file) Then
                     'WEL file
@@ -696,15 +706,15 @@ Public MustInherit Class TimeSeriesFile
                     Throw New Exception($"File {fileName} has an unknown format!")
                 End If
 
-            Case FileExtWVP
+            Case FileExtensions.WVP
                 Log.AddLogEntry(levels.info, $"Assuming Wave project file format for file {fileName}.")
                 fileType = FileTypes.WVP
 
-            Case FileExtZRE
+            Case FileExtensions.ZRE
                 Log.AddLogEntry(levels.info, $"Assuming ZRE format for file {fileName}.")
                 fileType = FileTypes.ZRE
 
-            Case FileExtZRX, FileExtZRXP
+            Case FileExtensions.ZRX, FileExtensions.ZRXP
                 Log.AddLogEntry(levels.info, $"Assuming ZRXP format for file {fileName}.")
                 fileType = FileTypes.ZRXP
 

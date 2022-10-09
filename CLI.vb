@@ -137,10 +137,10 @@ Friend Class CLI
                         Log.AddLogEntry(BlueM.Wave.Log.levels.info, $"Importing file {file_in}...")
                         Select Case IO.Path.GetExtension(file_in).ToUpper
 
-                            Case TimeSeriesFile.FileExtTEN
+                            Case TimeSeriesFile.FileExtensions.TEN
                                 Throw New NotImplementedException("TEN files are currently not supported in the CLI!")
 
-                            Case TimeSeriesFile.FileExtWVP
+                            Case TimeSeriesFile.FileExtensions.WVP
                                 Dim wvp As New Fileformats.WVP(file_in)
                                 Dim wvpSeries As List(Of TimeSeries) = wvp.Process()
                                 Log.AddLogEntry(Log.levels.info, $"Imported {wvpSeries.Count} time series")
@@ -191,7 +191,7 @@ Friend Class CLI
                             Dim invalidFileNameCharsPattern As String = $"[{Text.RegularExpressions.Regex.Escape(String.Join("", IO.Path.GetInvalidFileNameChars))}]"
                             For Each ts As TimeSeries In tsList
                                 'generate file name from cleaned title
-                                filename = Text.RegularExpressions.Regex.Replace(ts.Title, invalidFileNameCharsPattern, "_") & TimeSeriesFile.FileExtBIN
+                                filename = Text.RegularExpressions.Regex.Replace(ts.Title, invalidFileNameCharsPattern, "_") & TimeSeriesFile.FileExtensions.BIN
                                 filepath = IO.Path.Combine(path_out, filename)
                                 Log.AddLogEntry(BlueM.Wave.Log.levels.info, $"Exporting to {filepath}...")
                                 If IO.File.Exists(filepath) Then
