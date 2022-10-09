@@ -50,6 +50,9 @@
       }
     ],
     "dest": "_site",
+	"globalMetadata": {
+		"_appTitle": "BlueM.Wave"
+	},
     "globalMetadataFiles": [],
     "fileMetadataFiles": [],
     "template": [
