@@ -215,7 +215,7 @@ Namespace Fileformats
             FiStr.Close()
 
             'store time series
-            Me.FileTimeSeries.Add(sInfo.Index, ts)
+            Me.TimeSeries.Add(sInfo.Index, ts)
 
         End Sub
 

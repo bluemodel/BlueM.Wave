@@ -1133,7 +1133,7 @@ Friend Class WaveController
                     'load the file
                     Call fileObj.readFile()
                     'import the series
-                    For Each ts As TimeSeries In fileObj.FileTimeSeries.Values
+                    For Each ts As TimeSeries In fileObj.TimeSeries.Values
                         Call _model.Import_Series(ts)
                     Next
                 End If

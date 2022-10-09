@@ -185,7 +185,7 @@ Namespace Fileformats
                     ts.Type = sInfo.Type
                 End If
                 ts.DataSource = New TimeSeriesDataSource(Me.File, sInfo.Name)
-                Me.FileTimeSeries.Add(sInfo.Index, ts)
+                Me.TimeSeries.Add(sInfo.Index, ts)
             Next
 
             'Einlesen
@@ -212,7 +212,7 @@ Namespace Fileformats
                     WerteString = WerteString + StrReadSync.ReadLine.ToString()
                 Next
                 For Each sInfo As TimeSeriesInfo In Me.SelectedSeries
-                    Me.FileTimeSeries(sInfo.Index).AddNode(datum, StringToDouble(WerteString.Substring(((sInfo.Index - 1) * Me.ColumnWidth) + ColumnOffset, Me.ColumnWidth)))
+                    Me.TimeSeries(sInfo.Index).AddNode(datum, StringToDouble(WerteString.Substring(((sInfo.Index - 1) * Me.ColumnWidth) + ColumnOffset, Me.ColumnWidth)))
                 Next
 
             Loop Until StrReadSync.Peek() = -1

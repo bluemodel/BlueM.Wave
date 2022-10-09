@@ -233,7 +233,7 @@ Namespace Fileformats
             For Each sInfo As TimeSeriesInfo In Me.SelectedSeries
                 ts = New TimeSeries(sInfo.Name)
                 ts.DataSource = New TimeSeriesDataSource(Me.File, sInfo.Name)
-                Me.FileTimeSeries.Add(sInfo.Index, ts)
+                Me.TimeSeries.Add(sInfo.Index, ts)
             Next
 
             'Einheiten?
@@ -247,10 +247,10 @@ Namespace Fileformats
             'Alle ausgewählten Serien durchlaufen
             i = 0
             For Each sInfo As TimeSeriesInfo In Me.SelectedSeries
-                Me.FileTimeSeries(sInfo.Index).Unit = sInfo.Unit
-                Me.FileTimeSeries(sInfo.Index).Objekt = sInfo.Objekt
+                Me.TimeSeries(sInfo.Index).Unit = sInfo.Unit
+                Me.TimeSeries(sInfo.Index).Objekt = sInfo.Objekt
                 AllConstituents(i) = sInfo.Type
-                Me.FileTimeSeries(sInfo.Index).Type = sInfo.Type
+                Me.TimeSeries(sInfo.Index).Type = sInfo.Type
                 AllNodes(i) = sInfo.Objekt
                 i += 1
             Next
@@ -281,7 +281,7 @@ Namespace Fileformats
                     Next
                 Next
                 For Each sInfo As TimeSeriesInfo In Me.SelectedSeries
-                    Me.FileTimeSeries(sInfo.Index).AddNode(datum, StringToDouble(Werte(sInfo.Index)))
+                    Me.TimeSeries(sInfo.Index).AddNode(datum, StringToDouble(Werte(sInfo.Index)))
                 Next
 
             Loop Until StrReadSync.Peek() = -1

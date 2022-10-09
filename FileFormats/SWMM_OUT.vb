@@ -292,7 +292,7 @@ Namespace Fileformats
                 Next
 
                 'store time series
-                Me.FileTimeSeries.Add(sInfo.Index, ts)
+                Me.TimeSeries.Add(sInfo.Index, ts)
             Next
 
         End Sub

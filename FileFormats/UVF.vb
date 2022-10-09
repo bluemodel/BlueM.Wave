@@ -308,7 +308,7 @@ Namespace Fileformats
                 End If
 
                 'store time series
-                Me.FileTimeSeries.Add(sInfo.Index, ts)
+                Me.TimeSeries.Add(sInfo.Index, ts)
 
             Catch ex As Exception
                 MsgBox($"Unable to read file!{eol}{eol}Error: {ex.Message}", MsgBoxStyle.Critical)

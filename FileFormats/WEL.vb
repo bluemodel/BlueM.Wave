@@ -226,7 +226,7 @@ Namespace Fileformats
                     ts.Interpretation = BlueM.Wave.TimeSeries.InterpretationEnum.BlockRight
                 End If
                 ts.DataSource = New TimeSeriesDataSource(Me.File, sInfo.Name)
-                Me.FileTimeSeries.Add(sInfo.Index, ts)
+                Me.TimeSeries.Add(sInfo.Index, ts)
             Next
 
             'Einlesen
@@ -254,7 +254,7 @@ Namespace Fileformats
                     'Restliche Spalten: Werte
                     'Alle ausgewählten Reihen durchlaufen
                     For Each sInfo As TimeSeriesInfo In Me.SelectedSeries
-                        Me.FileTimeSeries(sInfo.Index).AddNode(datum, StringToDouble(Werte(sInfo.Index)))
+                        Me.TimeSeries(sInfo.Index).AddNode(datum, StringToDouble(Werte(sInfo.Index)))
                     Next
                 Else
                     'Spalten mit fester Breite
@@ -268,7 +268,7 @@ Namespace Fileformats
                     'Restliche Spalten: Werte
                     'Alle ausgewählten Reihen durchlaufen
                     For Each sInfo As TimeSeriesInfo In Me.SelectedSeries
-                        Me.FileTimeSeries(sInfo.Index).AddNode(datum, StringToDouble(Zeile.Substring((sInfo.Index * Me.ColumnWidth) + ColumnOffset, Math.Min(Me.ColumnWidth, Zeile.Substring((sInfo.Index * Me.ColumnWidth) + ColumnOffset).Length))))
+                        Me.TimeSeries(sInfo.Index).AddNode(datum, StringToDouble(Zeile.Substring((sInfo.Index * Me.ColumnWidth) + ColumnOffset, Math.Min(Me.ColumnWidth, Zeile.Substring((sInfo.Index * Me.ColumnWidth) + ColumnOffset).Length))))
                     Next
                 End If
 

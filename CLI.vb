@@ -159,8 +159,8 @@ Friend Class CLI
                                     fileInstance.selectAllSeries()
                                 End If
                                 fileInstance.readFile()
-                                Log.AddLogEntry(Log.levels.info, $"Imported {fileInstance.FileTimeSeries.Count} time series")
-                                For Each ts As TimeSeries In fileInstance.FileTimeSeries.Values
+                                Log.AddLogEntry(Log.levels.info, $"Imported {fileInstance.TimeSeries.Count} time series")
+                                For Each ts As TimeSeries In fileInstance.TimeSeries.Values
                                     tsList.Add(ts)
                                 Next
                         End Select

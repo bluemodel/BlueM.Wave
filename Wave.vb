@@ -170,7 +170,7 @@ Public Class Wave
                         Call Log.AddLogEntry(Log.levels.info, "Loading series in chart...")
 
                         'Import all time series into the chart
-                        For Each ts As TimeSeries In Datei.FileTimeSeries.Values
+                        For Each ts As TimeSeries In Datei.TimeSeries.Values
                             Call Me.Import_Series(ts)
                         Next
 
@@ -413,7 +413,7 @@ Public Class Wave
 
                     'read series from file
                     fileobj.readFile()
-                    ts = fileobj.FileTimeSeries.First.Value
+                    ts = fileobj.TimeSeries.First.Value
 
                     'add metadata
                     ts.Title = name

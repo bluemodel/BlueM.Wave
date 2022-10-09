@@ -265,7 +265,7 @@ Namespace Fileformats
                     ts = New TimeSeries(sInfo.Name)
                     ts.Unit = sInfo.Unit
                     ts.DataSource = New TimeSeriesDataSource(Me.File, sInfo.Name)
-                    Me.FileTimeSeries.Add(sInfo.Index, ts)
+                    Me.TimeSeries.Add(sInfo.Index, ts)
                 Next
 
                 'Datei öffnen
@@ -292,7 +292,7 @@ Namespace Fileformats
                             'Simulationszeit [h] wird zu Datum nach dem Referenzdatum (default: 01.01.2000 00:00:00) konvertiert
                             datum = Me.refDate + New TimeSpan(0, 0, Helpers.StringToDouble(Werte(0)) * 3600)
                             For Each sInfo As TimeSeriesInfo In Me.SelectedSeries
-                                Me.FileTimeSeries(sInfo.Index).AddNode(datum, Helpers.StringToDouble(Werte(sInfo.Index)))
+                                Me.TimeSeries(sInfo.Index).AddNode(datum, Helpers.StringToDouble(Werte(sInfo.Index)))
                             Next
 
                         Loop Until StrReadSync.Peek() = -1
@@ -322,7 +322,7 @@ Namespace Fileformats
                             'nur ausgewählte Reihen abspeichern
                             For Each sInfo As TimeSeriesInfo In Me.SelectedSeries
                                 If sInfo.Name = name Then
-                                    Me.FileTimeSeries(sInfo.Index).AddNode(datum, value)
+                                    Me.TimeSeries(sInfo.Index).AddNode(datum, value)
                                     Exit For
                                 End If
                             Next

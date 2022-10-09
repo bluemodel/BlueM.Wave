@@ -150,7 +150,7 @@ Namespace Fileformats
                     ts.Unit = sInfo.Unit
                 End If
                 ts.DataSource = New TimeSeriesDataSource(Me.File, sInfo.Name)
-                Me.FileTimeSeries.Add(sInfo.Index, ts)
+                Me.TimeSeries.Add(sInfo.Index, ts)
             Next
 
             'read the file
@@ -173,7 +173,7 @@ Namespace Fileformats
                     Throw New Exception($"Could Not parse the timestamp '{parts(Me.DateTimeColumnIndex).Trim()}' using the given date format '{Me.Dateformat}'! Please check the date format!")
                 End If
                 For Each sInfo As TimeSeriesInfo In Me.SelectedSeries
-                    Me.FileTimeSeries(sInfo.Index).AddNode(timestamp, StringToDouble(parts(sInfo.Index), Helpers.DefaultNumberFormat))
+                    Me.TimeSeries(sInfo.Index).AddNode(timestamp, StringToDouble(parts(sInfo.Index), Helpers.DefaultNumberFormat))
                 Next
             Loop
 

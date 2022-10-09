@@ -264,7 +264,7 @@ Namespace Fileformats
                 Call Log.AddLogEntry(Log.levels.info, $"File '{file}' imported successfully!")
 
                 'store the series
-                For Each ts As TimeSeries In fileInstance.FileTimeSeries.Values
+                For Each ts As TimeSeries In fileInstance.TimeSeries.Values
                     'change title if specified in the project file
                     If seriesList.Count > 0 Then
                         If seriesList(ts.Title) <> "" Then

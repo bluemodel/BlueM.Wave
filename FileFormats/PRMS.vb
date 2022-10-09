@@ -226,7 +226,7 @@ Namespace Fileformats
                     ts.Title = sInfo.Name
                     ts.Unit = sInfo.Unit
                     ts.DataSource = New TimeSeriesDataSource(Me.File, sInfo.Name)
-                    Me.FileTimeSeries.Add(sInfo.Index, ts)
+                    Me.TimeSeries.Add(sInfo.Index, ts)
                 Next
 
                 'Skip header
@@ -254,7 +254,7 @@ Namespace Fileformats
                     'Parse values and store nodes
                     For Each sInfo As TimeSeriesInfo In Me.SelectedSeries
                         value = Helpers.StringToDouble(parts(sInfo.Index))
-                        Me.FileTimeSeries(sInfo.Index).AddNode(timestamp, value)
+                        Me.TimeSeries(sInfo.Index).AddNode(timestamp, value)
                     Next
 
                 Loop Until StrReadSync.Peek() = -1

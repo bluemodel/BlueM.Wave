@@ -127,7 +127,7 @@ Namespace Fileformats
                 ts = New TimeSeries(sInfo.Name)
                 ts.Unit = sInfo.Unit
                 ts.DataSource = New TimeSeriesDataSource(Me.File, sInfo.Name)
-                Me.FileTimeSeries.Add(sInfo.Index, ts)
+                Me.TimeSeries.Add(sInfo.Index, ts)
             Next
 
             'Open the file as a generic dfs file
@@ -137,11 +137,11 @@ Namespace Fileformats
             Dim dynamicItemInfo As DFS.IDfsSimpleDynamicItemInfo
             For Each sInfo As TimeSeriesInfo In Me.SelectedSeries
                 dynamicItemInfo = dfs0File.ItemInfo(sInfo.Index)
-                Me.FileTimeSeries(sInfo.Index).Interpretation = DataValueTypeToInterpretation(dynamicItemInfo.ValueType)
-                Me.FileTimeSeries(sInfo.Index).Metadata.Add("eumItem", [Enum].GetName(GetType(eumItem), dynamicItemInfo.Quantity.Item))
-                Me.FileTimeSeries(sInfo.Index).Metadata.Add("eumItemDescription", dynamicItemInfo.Quantity.ItemDescription)
-                Me.FileTimeSeries(sInfo.Index).Metadata.Add("eumUnit", [Enum].GetName(GetType(eumUnit), dynamicItemInfo.Quantity.Unit))
-                Me.FileTimeSeries(sInfo.Index).Metadata.Add("eumUnitAbbreviation", dynamicItemInfo.Quantity.UnitAbbreviation)
+                Me.TimeSeries(sInfo.Index).Interpretation = DataValueTypeToInterpretation(dynamicItemInfo.ValueType)
+                Me.TimeSeries(sInfo.Index).Metadata.Add("eumItem", [Enum].GetName(GetType(eumItem), dynamicItemInfo.Quantity.Item))
+                Me.TimeSeries(sInfo.Index).Metadata.Add("eumItemDescription", dynamicItemInfo.Quantity.ItemDescription)
+                Me.TimeSeries(sInfo.Index).Metadata.Add("eumUnit", [Enum].GetName(GetType(eumUnit), dynamicItemInfo.Quantity.Unit))
+                Me.TimeSeries(sInfo.Index).Metadata.Add("eumUnitAbbreviation", dynamicItemInfo.Quantity.UnitAbbreviation)
                 DataTypes.Add(sInfo.Index, dynamicItemInfo.DataType)
             Next
 
@@ -179,7 +179,7 @@ Namespace Fileformats
                     Else
                         value = Convert.ToDouble(data.Data(0))
                     End If
-                    Me.FileTimeSeries(itemIndex).AddNode(datum, value)
+                    Me.TimeSeries(itemIndex).AddNode(datum, value)
                 Next
             Next
 
@@ -196,17 +196,17 @@ Namespace Fileformats
             Dim Interpretation As TimeSeries.InterpretationEnum
             Select Case ValueType
                 Case DFS.DataValueType.Accumulated
-                    Interpretation = TimeSeries.InterpretationEnum.Cumulative
+                    Interpretation = BlueM.Wave.TimeSeries.InterpretationEnum.Cumulative
                 Case DFS.DataValueType.Instantaneous
-                    Interpretation = TimeSeries.InterpretationEnum.Instantaneous
+                    Interpretation = BlueM.Wave.TimeSeries.InterpretationEnum.Instantaneous
                 Case DFS.DataValueType.MeanStepBackward
-                    Interpretation = TimeSeries.InterpretationEnum.BlockLeft
+                    Interpretation = BlueM.Wave.TimeSeries.InterpretationEnum.BlockLeft
                 Case DFS.DataValueType.MeanStepForward
-                    Interpretation = TimeSeries.InterpretationEnum.BlockRight
+                    Interpretation = BlueM.Wave.TimeSeries.InterpretationEnum.BlockRight
                 Case DFS.DataValueType.StepAccumulated
-                    Interpretation = TimeSeries.InterpretationEnum.CumulativePerTimestep
+                    Interpretation = BlueM.Wave.TimeSeries.InterpretationEnum.CumulativePerTimestep
                 Case Else
-                    Interpretation = TimeSeries.InterpretationEnum.Undefined
+                    Interpretation = BlueM.Wave.TimeSeries.InterpretationEnum.Undefined
             End Select
             Return Interpretation
         End Function
@@ -219,15 +219,15 @@ Namespace Fileformats
         Public Shared Function InterpretationToDataValueType(interpretation As TimeSeries.InterpretationEnum) As DFS.DataValueType
             Dim ValueType As DFS.DataValueType
             Select Case interpretation
-                Case TimeSeries.InterpretationEnum.Cumulative
+                Case BlueM.Wave.TimeSeries.InterpretationEnum.Cumulative
                     ValueType = DFS.DataValueType.Accumulated
-                Case TimeSeries.InterpretationEnum.Instantaneous
+                Case BlueM.Wave.TimeSeries.InterpretationEnum.Instantaneous
                     ValueType = DFS.DataValueType.Instantaneous
-                Case TimeSeries.InterpretationEnum.BlockLeft
+                Case BlueM.Wave.TimeSeries.InterpretationEnum.BlockLeft
                     ValueType = DFS.DataValueType.MeanStepBackward
-                Case TimeSeries.InterpretationEnum.BlockRight
+                Case BlueM.Wave.TimeSeries.InterpretationEnum.BlockRight
                     ValueType = DFS.DataValueType.MeanStepForward
-                Case TimeSeries.InterpretationEnum.CumulativePerTimestep
+                Case BlueM.Wave.TimeSeries.InterpretationEnum.CumulativePerTimestep
                     ValueType = DFS.DataValueType.StepAccumulated
                 Case Else
                     ValueType = DFS.DataValueType.Instantaneous

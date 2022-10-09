@@ -167,7 +167,7 @@ Public MustInherit Class TimeSeriesFile
     ''' Stores the TimeSeries read from the file
     ''' The key corresponds to seriesInfo.index
     ''' </summary>
-    Public FileTimeSeries As Dictionary(Of Integer, TimeSeries)
+    Public TimeSeries As Dictionary(Of Integer, TimeSeries)
 
     ''' <summary>
     ''' Instance of the ImportDialog
@@ -378,14 +378,14 @@ Public MustInherit Class TimeSeriesFile
     ''' Throws an exception if the timeseries cannot be found in the file.</remarks>
     Public ReadOnly Property getTimeSeries(Optional index As Integer = 0) As TimeSeries
         Get
-            If Me.FileTimeSeries.ContainsKey(index) Then
-                Return Me.FileTimeSeries(index)
+            If Me.TimeSeries.ContainsKey(index) Then
+                Return Me.TimeSeries(index)
             Else
                 Me.selectSeries(index)
                 'read the file (again)
-                Me.FileTimeSeries.Clear()
+                Me.TimeSeries.Clear()
                 Call Me.readFile()
-                Return Me.FileTimeSeries(index)
+                Return Me.TimeSeries(index)
             End If
         End Get
     End Property
@@ -402,7 +402,7 @@ Public MustInherit Class TimeSeriesFile
         Get
             Dim found As Boolean = False
             'Find the series using the given title
-            For Each ts As TimeSeries In Me.FileTimeSeries.Values
+            For Each ts As TimeSeries In Me.TimeSeries.Values
                 If title = ts.Title Then
                     Return ts
                     found = True
@@ -450,7 +450,7 @@ Public MustInherit Class TimeSeriesFile
     Public Sub New(FileName As String, Optional ReadAllNow As Boolean = False)
 
         'Initialize data structures
-        Me.FileTimeSeries = New Dictionary(Of Integer, TimeSeries)
+        Me.TimeSeries = New Dictionary(Of Integer, TimeSeries)
         Me._seriesList = New List(Of TimeSeriesInfo)
         Me._selectedSeries = New List(Of TimeSeriesInfo)
         Me._metadata = New Metadata()

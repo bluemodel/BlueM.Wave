@@ -423,7 +423,7 @@ Namespace Fileformats
                     datareader.Close()
 
                     'store timeseries
-                    Me.FileTimeSeries.Add(sInfo.Index, ts)
+                    Me.TimeSeries.Add(sInfo.Index, ts)
 
                 Case TimeseriesClassEnum.Flagged
 
@@ -457,7 +457,7 @@ Namespace Fileformats
                         datareader.Close()
 
                         'store timeseries
-                        Me.FileTimeSeries.Add(sInfo.Index, ts)
+                        Me.TimeSeries.Add(sInfo.Index, ts)
                     Next
 
                 Case TimeseriesClassEnum.Forecast
@@ -498,7 +498,7 @@ Namespace Fileformats
                         datareader.Close()
 
                         'store time series
-                        Me.FileTimeSeries.Add(sInfo.Index, ts)
+                        Me.TimeSeries.Add(sInfo.Index, ts)
 
                     Next
 

@@ -166,7 +166,7 @@ Namespace Fileformats
                     ts.Unit = sInfo.Unit
                 End If
                 ts.DataSource = New TimeSeriesDataSource(Me.File, sInfo.Name)
-                Me.FileTimeSeries.Add(sInfo.Index, ts)
+                Me.TimeSeries.Add(sInfo.Index, ts)
             Next
 
             'Einlesen
@@ -201,15 +201,15 @@ Namespace Fileformats
                     If (Ereignisende) Then
 
                         'Mit Stützstellen vom Wert 0 Lücke zwischen Ereignissen abschliessen
-                        datumLast = Me.FileTimeSeries.First.Value.EndDate
+                        datumLast = Me.TimeSeries.First.Value.EndDate
                         If (datum.Subtract(datumLast) > dt) Then 'nur wenn Lücke größer als dt ist
 
                             For Each sInfo As TimeSeriesInfo In Me.SelectedSeries
                                 'Eine Null nach dem letzten Datum
-                                Me.FileTimeSeries(sInfo.Index).AddNode(datumLast.Add(dt), 0.0)
+                                Me.TimeSeries(sInfo.Index).AddNode(datumLast.Add(dt), 0.0)
                                 If (datum.Subtract(dt) > datumLast.Add(dt)) Then 'nur wenn Lücke damit noch nicht geschlossen ist
                                     'Eine Null vor dem aktuellen Datum
-                                    Me.FileTimeSeries(sInfo.Index).AddNode(datum.Subtract(dt), 0.0)
+                                    Me.TimeSeries(sInfo.Index).AddNode(datum.Subtract(dt), 0.0)
                                 End If
                             Next
 
@@ -222,7 +222,7 @@ Namespace Fileformats
 
                     'eingelesene Stützstellen hinzufügen
                     For Each sInfo As TimeSeriesInfo In Me.SelectedSeries
-                        Me.FileTimeSeries(sInfo.Index).AddNode(datum, StringToDouble(Werte(sInfo.Index + 1))) '+1 weil Datum auch ein Leerzeichen enthält
+                        Me.TimeSeries(sInfo.Index).AddNode(datum, StringToDouble(Werte(sInfo.Index + 1))) '+1 weil Datum auch ein Leerzeichen enthält
                     Next
 
                 Else

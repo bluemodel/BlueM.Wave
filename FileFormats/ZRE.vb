@@ -155,7 +155,7 @@ Namespace Fileformats
                 Loop Until StrReadSync.Peek() = -1
 
                 'store time series
-                Me.FileTimeSeries.Add(sInfo.Index, ts)
+                Me.TimeSeries.Add(sInfo.Index, ts)
 
             Catch ex As Exception
                 'Fehler weiterschmeissen

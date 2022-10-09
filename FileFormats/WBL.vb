@@ -185,8 +185,8 @@ Namespace Fileformats
                     Dim ts As New TimeSeries(sInfo.Name)
                     ts.Unit = sInfo.Unit
                     ts.DataSource = New TimeSeriesDataSource(Me.File, sInfo.Name)
-                    ts.Interpretation = TimeSeries.InterpretationEnum.BlockRight
-                    Me.FileTimeSeries.Add(sInfo.Index, ts)
+                    ts.Interpretation = BlueM.Wave.TimeSeries.InterpretationEnum.BlockRight
+                    Me.TimeSeries.Add(sInfo.Index, ts)
                 Next
 
                 'get a list of selected indices
@@ -227,21 +227,21 @@ Namespace Fileformats
                                     value = Double.NaN
                                     errorcount += 1
                                 End If
-                                Me.FileTimeSeries(index).AddNode(timestamp, value)
+                                Me.TimeSeries(index).AddNode(timestamp, value)
                             End If
                         Next
                     Loop Until reader.PeekChar < 0
                 End Using
 
                 'Log 
-                Call Log.AddLogEntry(Log.levels.info, $"Read {Me.FileTimeSeries.Count} time series with {Me.FileTimeSeries.First.Value.Length} nodes each.")
+                Call Log.AddLogEntry(Log.levels.info, $"Read {Me.TimeSeries.Count} time series with {Me.TimeSeries.First.Value.Length} nodes each.")
                 If errorcount > 0 Then
                     Log.AddLogEntry(Log.levels.warning, $"The file contained {errorcount} error values ({BIN.ErrorValue}), which were converted to NaN!")
                 End If
 
             Catch ex As Exception
                 Throw New Exception($"Error while reading series data: {ex.Message}")
-                Me.FileTimeSeries.Clear()
+                Me.TimeSeries.Clear()
             End Try
 
         End Sub

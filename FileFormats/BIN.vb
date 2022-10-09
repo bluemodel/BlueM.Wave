@@ -132,7 +132,7 @@ Namespace Fileformats
             End Using
 
             'store time series
-            Me.FileTimeSeries.Add(sInfo.Index, ts)
+            Me.TimeSeries.Add(sInfo.Index, ts)
 
             'Log 
             Call Log.AddLogEntry(Log.levels.info, $"Read {ts.Length} nodes.")

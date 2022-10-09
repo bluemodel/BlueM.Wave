@@ -202,7 +202,7 @@ Namespace Fileformats
                         ts.Unit = sInfo.Unit
                     End If
                     ts.DataSource = New TimeSeriesDataSource(Me.File, sInfo.Name)
-                    Me.FileTimeSeries.Add(sInfo.Index, ts)
+                    Me.TimeSeries.Add(sInfo.Index, ts)
                 Next
 
                 ' read over header lines
@@ -236,7 +236,7 @@ Namespace Fileformats
 
                         ' remaining columns are data, add to time series
                         For Each sInfo As TimeSeriesInfo In Me.SelectedSeries
-                            Me.FileTimeSeries(sInfo.Index).AddNode(datum, StringToDouble(Werte(sInfo.Index)))
+                            Me.TimeSeries(sInfo.Index).AddNode(datum, StringToDouble(Werte(sInfo.Index)))
                         Next
 
                     Else
@@ -263,7 +263,7 @@ Namespace Fileformats
 
                         ' remaining columns are data, add to time series
                         For Each sInfo As TimeSeriesInfo In Me.SelectedSeries
-                            Me.FileTimeSeries(sInfo.Index).AddNode(datum, StringToDouble(Werte(sInfo.Index)))
+                            Me.TimeSeries(sInfo.Index).AddNode(datum, StringToDouble(Werte(sInfo.Index)))
                         Next
 
                     End If

@@ -179,7 +179,7 @@ Namespace Fileformats
                         ts.Unit = sInfo.Unit
                     End If
                     ts.DataSource = New TimeSeriesDataSource(Me.File, sInfo.Name)
-                    Me.FileTimeSeries.Add(sInfo.Index, ts)
+                    Me.TimeSeries.Add(sInfo.Index, ts)
                 Next
 
                 'Use default number format by default
@@ -215,7 +215,7 @@ Namespace Fileformats
                             End If
                             'Restliche Spalten: Werte
                             For Each sInfo As TimeSeriesInfo In Me.SelectedSeries
-                                Me.FileTimeSeries(sInfo.Index).AddNode(datum, StringToDouble(Werte(sInfo.Index), numberformat))
+                                Me.TimeSeries(sInfo.Index).AddNode(datum, StringToDouble(Werte(sInfo.Index), numberformat))
                             Next
                         End If
 
@@ -229,7 +229,7 @@ Namespace Fileformats
                         End If
                         'Restliche Spalten: Werte
                         For Each sInfo As TimeSeriesInfo In Me.SelectedSeries
-                            Me.FileTimeSeries(sInfo.Index).AddNode(datum, StringToDouble(Zeile.Substring(sInfo.Index * Me.ColumnWidth + ColumnOffset, Math.Min(Me.ColumnWidth, Zeile.Substring(sInfo.Index * Me.ColumnWidth + ColumnOffset).Length)), numberformat))
+                            Me.TimeSeries(sInfo.Index).AddNode(datum, StringToDouble(Zeile.Substring(sInfo.Index * Me.ColumnWidth + ColumnOffset, Math.Min(Me.ColumnWidth, Zeile.Substring(sInfo.Index * Me.ColumnWidth + ColumnOffset).Length)), numberformat))
                         Next
                     End If
 
@@ -241,7 +241,7 @@ Namespace Fileformats
 
             Catch ex As Exception
                 MsgBox($"Unable to read file!{eol}{eol}Error: {ex.Message}", MsgBoxStyle.Critical)
-                Me.FileTimeSeries.Clear()
+                Me.TimeSeries.Clear()
             End Try
 
         End Sub
