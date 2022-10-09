@@ -124,7 +124,7 @@ Namespace Fileformats
             Dim line, data(), keys(), value As String
             Dim sInfo As TimeSeriesInfo
 
-            Me.SeriesList.Clear()
+            Me.TimeSeriesInfos.Clear()
 
             'copy metadata keys to array
             ReDim keys(Me.FileMetadata.Keys.Count - 1)
@@ -176,7 +176,7 @@ Namespace Fileformats
                 sInfo.Name = $"{Me.FileMetadata("SNAME")}.{Me.FileMetadata("CNAME")}"
                 sInfo.Unit = Me.FileMetadata("CUNIT")
                 sInfo.Index = 0
-                Me.SeriesList.Add(sInfo)
+                Me.TimeSeriesInfos.Add(sInfo)
 
             Catch ex As Exception
                 MsgBox($"Unable to read file!{eol}{eol}Error: {ex.Message}", MsgBoxStyle.Critical)
@@ -201,7 +201,7 @@ Namespace Fileformats
 
             Try
                 'instantiate time series
-                sInfo = Me.SeriesList(0)
+                sInfo = Me.TimeSeriesInfos(0)
                 ts = New TimeSeries(sInfo.Name)
                 ts.Unit = sInfo.Unit
                 ts.DataSource = New TimeSeriesDataSource(Me.File, sInfo.Name)

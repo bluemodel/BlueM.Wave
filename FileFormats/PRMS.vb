@@ -125,7 +125,7 @@ Namespace Fileformats
             Dim lines As Dictionary(Of Integer, String)
             Dim sInfo As TimeSeriesInfo
 
-            Me.SeriesList.Clear()
+            Me.TimeSeriesInfos.Clear()
 
             Try
                 'Open the file
@@ -151,7 +151,7 @@ Namespace Fileformats
                             sInfo.Index = i
                             sInfo.Name = parts(i).Trim()
                             sInfo.Unit = "-"
-                            Me.SeriesList.Add(sInfo)
+                            Me.TimeSeriesInfos.Add(sInfo)
                         Next
                         Me.DateTimeColumnIndex = 0
 
@@ -162,7 +162,7 @@ Namespace Fileformats
                             sInfo.Index = i
                             sInfo.Name = parts(i).Trim()
                             sInfo.Unit = "-"
-                            Me.SeriesList.Add(sInfo)
+                            Me.TimeSeriesInfos.Add(sInfo)
                         Next
                         Me.DateTimeColumnIndex = 0 'technically 0 and 1
 
@@ -175,7 +175,7 @@ Namespace Fileformats
                             sInfo.Name = m.Groups(1).Value.Trim()
                             sInfo.Unit = m.Groups(2).Value.Trim()
                             sInfo.Index = i
-                            Me.SeriesList.Add(sInfo)
+                            Me.TimeSeriesInfos.Add(sInfo)
                         Next
                         Me.DateTimeColumnIndex = 0 ' technically 0, 1 and 2
 
@@ -186,7 +186,7 @@ Namespace Fileformats
                             sInfo.Name = lines(i - 5).Trim()
                             sInfo.Unit = "-"
                             sInfo.Index = i
-                            Me.SeriesList.Add(sInfo)
+                            Me.TimeSeriesInfos.Add(sInfo)
                         Next
                         Me.DateTimeColumnIndex = 0 ' technically 1 to 6
                 End Select

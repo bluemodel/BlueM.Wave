@@ -71,7 +71,7 @@ Namespace Fileformats
             Dim ZeileSpalten As String = ""
             Dim ZeileEinheiten As String = ""
 
-            Me.SeriesList.Clear()
+            Me.TimeSeriesInfos.Clear()
 
             Try
                 'Datei öffnen
@@ -142,7 +142,7 @@ Namespace Fileformats
                         If Me.UseUnits Then
                             sInfo.Unit = Einheiten(i)
                         End If
-                        Me.SeriesList.Add(sInfo)
+                        Me.TimeSeriesInfos.Add(sInfo)
                     End If
                 Next
 

@@ -118,14 +118,14 @@ Namespace Fileformats
             End If
 
             'store series info
-            Me.SeriesList.Clear()
+            Me.TimeSeriesInfos.Clear()
             For i As Integer = 0 To titles.Count - 1
                 If i <> Me.DateTimeColumnIndex Then
                     sInfo = New TimeSeriesInfo()
                     sInfo.Index = i
                     sInfo.Name = titles(i)
                     sInfo.Unit = units(i).Trim()
-                    Me.SeriesList.Add(sInfo)
+                    Me.TimeSeriesInfos.Add(sInfo)
                 End If
             Next
 

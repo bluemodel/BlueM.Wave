@@ -79,7 +79,7 @@ Namespace Fileformats
             Dim Zeile As String = ""
             Dim sInfo As TimeSeriesInfo
 
-            Me.SeriesList.Clear()
+            Me.TimeSeriesInfos.Clear()
 
             Try
                 'Datei öffnen
@@ -101,7 +101,7 @@ Namespace Fileformats
                 sInfo.Name = Zeile.Substring(0, 15).Trim()
                 sInfo.Unit = Zeile.Substring(15).Trim()
                 sInfo.Index = 0
-                Me.SeriesList.Add(sInfo)
+                Me.TimeSeriesInfos.Add(sInfo)
 
             Catch ex As Exception
                 MsgBox($"Unable to read file!{eol}{eol}Error: {ex.Message}", MsgBoxStyle.Critical)
@@ -126,7 +126,7 @@ Namespace Fileformats
             Dim StrReadSync = TextReader.Synchronized(StrRead)
 
             'Zeitreihe instanzieren (nur eine)
-            sInfo = Me.SeriesList(0)
+            sInfo = Me.TimeSeriesInfos(0)
             ts = New TimeSeries(sInfo.Name)
             ts.Unit = sInfo.Unit
             ts.DataSource = New TimeSeriesDataSource(Me.File, sInfo.Name)

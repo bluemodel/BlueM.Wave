@@ -130,7 +130,7 @@ Namespace Fileformats
             Dim title As String
             Dim sInfo As TimeSeriesInfo
 
-            Me.SeriesList.Clear()
+            Me.TimeSeriesInfos.Clear()
 
             Try
                 'Datei öffnen
@@ -152,7 +152,7 @@ Namespace Fileformats
                 sInfo.Unit = Zeile.Substring(68, 2)
 
                 'store series info
-                Me.SeriesList.Add(sInfo)
+                Me.TimeSeriesInfos.Add(sInfo)
 
                 'read additional info
                 Me.DezFaktor = Zeile.Substring(29, 1)
@@ -188,7 +188,7 @@ Namespace Fileformats
             Dim StrReadSync = TextReader.Synchronized(StrRead)
 
             'Zeitreihe instanzieren (nur eine)
-            sInfo = Me.SeriesList(0)
+            sInfo = Me.TimeSeriesInfos(0)
             ts = New TimeSeries(sInfo.Name)
             ts.Unit = sInfo.Unit
             ts.DataSource = New TimeSeriesDataSource(Me.File, sInfo.Name)

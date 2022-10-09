@@ -130,7 +130,7 @@ Namespace Fileformats
             Dim IDSpalte As Long
             Dim sInfo As TimeSeriesInfo
 
-            Me.SeriesList.Clear()
+            Me.TimeSeriesInfos.Clear()
 
             Try
                 'Datei öffnen
@@ -193,7 +193,7 @@ Namespace Fileformats
                         sInfo.Type = Constituents(j).Type
                         sInfo.Unit = Constituents(j).Unit
                         sInfo.Index = IDSpalte
-                        Me.SeriesList.Add(sInfo)
+                        Me.TimeSeriesInfos.Add(sInfo)
                         IDSpalte = IDSpalte + 1
                     Next
                 Next

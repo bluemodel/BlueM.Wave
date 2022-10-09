@@ -86,7 +86,7 @@ Namespace Fileformats
             Dim SeriesName As String = ""
             Dim sInfo As TimeSeriesInfo
 
-            Me.SeriesList.Clear()
+            Me.TimeSeriesInfos.Clear()
 
             Try
                 ' open file
@@ -169,7 +169,7 @@ Namespace Fileformats
                         Einheiten(i) = "m3/s"
                     End If
                     sInfo.Unit = Einheiten(i).Trim()
-                    Me.SeriesList.Add(sInfo)
+                    Me.TimeSeriesInfos.Add(sInfo)
                 Next
 
             Catch ex As Exception

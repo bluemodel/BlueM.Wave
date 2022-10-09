@@ -104,7 +104,7 @@ Namespace Fileformats
         ''' </summary>
         Public Overrides Sub readSeriesInfo()
 
-            Me.SeriesList.Clear()
+            Me.TimeSeriesInfos.Clear()
 
             'find a *.WELINFO file with the same name in the same directory
             Dim file_welinfo As String = IO.Path.Combine(IO.Path.GetDirectoryName(Me.File), IO.Path.GetFileNameWithoutExtension(Me.File) & ".WELINFO")
@@ -141,7 +141,7 @@ Namespace Fileformats
                         sInfo.Name = line.Split(";")(0).Trim()
                         sInfo.Unit = line.Split(";")(3).Trim()
                         sInfo.Index = Integer.Parse(line.Split(";")(4).Trim())
-                        Me.SeriesList.Add(sInfo)
+                        Me.TimeSeriesInfos.Add(sInfo)
                     End If
                 Loop Until StrReadSync.Peek() = -1
 
@@ -149,7 +149,7 @@ Namespace Fileformats
                 StrRead.Close()
                 FiStr.Close()
 
-                If Me.SeriesList.Count = 0 Then
+                If Me.TimeSeriesInfos.Count = 0 Then
                     Throw New Exception($"Unable to read series info from metadata file {IO.Path.GetFileName(file_welinfo)}!")
                 End If
 
@@ -160,7 +160,7 @@ Namespace Fileformats
                     Log.AddLogEntry(levels.debug, $"Data type read from metadata file: {Me.DataType}")
                 End If
 
-                Log.AddLogEntry(levels.debug, $"Number of series read from metadata file: {Me.SeriesList.Count}")
+                Log.AddLogEntry(levels.debug, $"Number of series read from metadata file: {Me.TimeSeriesInfos.Count}")
 
             Catch ex As Exception
                 Throw New Exception($"Error while reading metadata file {IO.Path.GetFileName(file_welinfo)}: {ex.Message}")
@@ -197,7 +197,7 @@ Namespace Fileformats
 
                 Using reader As New IO.BinaryReader(IO.File.OpenRead(File), Text.ASCIIEncoding.ASCII)
                     'skip header (same length as a single record consisting of 8 bytes date and x bytes for each value depending on the data type
-                    reader.ReadBytes(8 + Me.DataTypeLength * Me.SeriesList.Count)
+                    reader.ReadBytes(8 + Me.DataTypeLength * Me.TimeSeriesInfos.Count)
                     'read values
                     errorcount = 0
                     Do
@@ -206,7 +206,7 @@ Namespace Fileformats
                         'convert real date to DateTime
                         timestamp = BIN.rDateToDate(rdate)
 
-                        For index As Integer = 0 To Me.SeriesList.Count - 1
+                        For index As Integer = 0 To Me.TimeSeriesInfos.Count - 1
 
                             'read value depending on data type
                             Select Case Me.DataType

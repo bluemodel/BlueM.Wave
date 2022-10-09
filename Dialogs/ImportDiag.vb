@@ -382,7 +382,7 @@ Friend Class ImportDiag
 
         'Available series
         Dim sInfo As TimeSeriesInfo
-        Me.Label_Series.Text = $"Available series ({Me.datei.SeriesList.Count}):"
+        Me.Label_Series.Text = $"Available series ({Me.datei.TimeSeriesInfos.Count}):"
         'remember currently selected series
         Dim selectedSeries As New List(Of String)
         For Each sInfo In Me.ListBox_Series.SelectedItems
@@ -391,7 +391,7 @@ Friend Class ImportDiag
         'update list box
         Me.ListBox_Series.Items.Clear()
         Me.ListBox_Series.BeginUpdate()
-        For Each sInfo In Me.datei.SeriesList
+        For Each sInfo In Me.datei.TimeSeriesInfos
             Me.ListBox_Series.Items.Add(sInfo)
         Next
         Me.ListBox_Series.EndUpdate()

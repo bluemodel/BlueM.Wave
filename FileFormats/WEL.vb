@@ -126,7 +126,7 @@ Namespace Fileformats
             Dim LineInfo As String = ""
             Dim sInfo As TimeSeriesInfo
 
-            Me.SeriesList.Clear()
+            Me.TimeSeriesInfos.Clear()
 
             Try
                 'Datei öffnen
@@ -176,7 +176,7 @@ Namespace Fileformats
                         sInfo.Name = Namen(i).Trim()
                         sInfo.Unit = Einheiten(i).Trim()
                         sInfo.Index = i
-                        Me.SeriesList.Add(sInfo)
+                        Me.TimeSeriesInfos.Add(sInfo)
                     Next
                 Else
                     'Spalten mit fester Breite
@@ -186,7 +186,7 @@ Namespace Fileformats
                         sInfo.Name = ZeileSpalten.Substring(Me.DateTimeLength + (i - 1) * Me.ColumnWidth, Me.ColumnWidth).Trim()
                         sInfo.Unit = ZeileEinheiten.Substring(Me.DateTimeLength + (i - 1) * Me.ColumnWidth, Me.ColumnWidth).Trim()
                         sInfo.Index = i
-                        Me.SeriesList.Add(sInfo)
+                        Me.TimeSeriesInfos.Add(sInfo)
                     Next
                 End If
 

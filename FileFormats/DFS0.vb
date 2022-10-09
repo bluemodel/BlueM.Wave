@@ -84,7 +84,7 @@ Namespace Fileformats
 
             Dim sInfo As TimeSeriesInfo
 
-            Me.SeriesList.Clear()
+            Me.TimeSeriesInfos.Clear()
 
             'Open the file as a generic dfs file
             Dim dfs0File As DFS.IDfsFile = DFS.DfsFileFactory.DfsGenericOpen(Me.File)
@@ -104,7 +104,7 @@ Namespace Fileformats
                 sInfo.Name = dynamicItemInfo.Name
                 sInfo.Unit = dynamicItemInfo.Quantity.UnitAbbreviation
                 sInfo.Index = item_index
-                Me.SeriesList.Add(sInfo)
+                Me.TimeSeriesInfos.Add(sInfo)
             Next
 
             dfs0File.Close()

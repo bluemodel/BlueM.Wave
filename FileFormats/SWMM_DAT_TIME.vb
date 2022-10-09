@@ -101,7 +101,7 @@ Namespace Fileformats
             Dim Zeile As String = ""
             Dim sInfo As TimeSeriesInfo
 
-            Me.SeriesList.Clear()
+            Me.TimeSeriesInfos.Clear()
 
             Try
                 'Datei öffnen
@@ -115,7 +115,7 @@ Namespace Fileformats
                 'store series info
                 sInfo = New TimeSeriesInfo()
                 sInfo.Name = Zeile.Trim()
-                Me.SeriesList.Add(sInfo)
+                Me.TimeSeriesInfos.Add(sInfo)
 
                 StrReadSync.Close()
                 StrRead.Close()

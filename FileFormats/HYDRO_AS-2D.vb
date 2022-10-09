@@ -134,7 +134,7 @@ Namespace Fileformats
             Dim Zeile As String = ""
             Dim ZeileSpalten As String = ""
 
-            Me.SeriesList.Clear()
+            Me.TimeSeriesInfos.Clear()
 
             Try
                 'Datei öffnen
@@ -198,7 +198,7 @@ Namespace Fileformats
                             sInfo.Name = Namen(i).Trim()
                             sInfo.Unit = Me._einheit
                             sInfo.Index = i + 1
-                            Me.SeriesList.Add(sInfo)
+                            Me.TimeSeriesInfos.Add(sInfo)
                         Next
 
                     Case "bw_tmp.dat"
@@ -225,7 +225,7 @@ Namespace Fileformats
                             sInfo.Name = names(i).Trim()
                             sInfo.Unit = Me._einheit
                             sInfo.Index = i + 1 ' hier eigentlich irrelevant
-                            Me.SeriesList.Add(sInfo)
+                            Me.TimeSeriesInfos.Add(sInfo)
                         Next
 
                 End Select

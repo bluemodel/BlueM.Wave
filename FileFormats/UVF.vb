@@ -139,7 +139,7 @@ Namespace Fileformats
             Dim sInfo As TimeSeriesInfo
             Dim headerFound As Boolean = False
 
-            Me.SeriesList.Clear()
+            Me.TimeSeriesInfos.Clear()
 
             'Header einlesen
             Try
@@ -214,7 +214,7 @@ Namespace Fileformats
                 End If
                 sInfo.Unit = Me.FileMetadata("unit")
                 sInfo.Index = 0
-                Me.SeriesList.Add(sInfo)
+                Me.TimeSeriesInfos.Add(sInfo)
 
                 If Not headerFound Then
                     Throw New Exception("The file does not contain a header line starting with '*Z'!")
@@ -244,7 +244,7 @@ Namespace Fileformats
 
             Try
                 'Zeitreihe instanzieren
-                sInfo = Me.SeriesList(0)
+                sInfo = Me.TimeSeriesInfos(0)
                 ts = New TimeSeries(sInfo.Name)
                 ts.Unit = sInfo.Unit
                 ts.DataSource = New TimeSeriesDataSource(Me.File, sInfo.Name)

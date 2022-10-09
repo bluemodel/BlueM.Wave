@@ -91,7 +91,7 @@ Namespace Fileformats
             Dim ZeileSpalten As String = ""
             Dim ZeileEinheiten As String = ""
 
-            Me.SeriesList.Clear()
+            Me.TimeSeriesInfos.Clear()
 
             'Datei öffnen
             Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
@@ -135,7 +135,7 @@ Namespace Fileformats
                     sInfo.Index = i
                     sInfo.Name = Namen(i).Trim()
                     sInfo.Unit = Einheiten(i).Trim()
-                    Me.SeriesList.Add(sInfo)
+                    Me.TimeSeriesInfos.Add(sInfo)
                 End If
             Next
 

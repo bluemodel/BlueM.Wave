@@ -304,7 +304,7 @@ Namespace Fileformats
             Loop
 
             'read and store series info
-            Me.SeriesList.Clear()
+            Me.TimeSeriesInfos.Clear()
             Me.flag_mapping = New Dictionary(Of Integer, Integer)
             Me.flag_T0_mapping = New Dictionary(Of Integer, (flag_id As Integer, T0 As DateTime))
             Select Case Me.ts_class
@@ -316,7 +316,7 @@ Namespace Fileformats
                     sInfo = New TimeSeriesInfo()
                     sInfo.Name = ts_name
                     sInfo.Index = 0
-                    Me.SeriesList.Add(sInfo)
+                    Me.TimeSeriesInfos.Add(sInfo)
                     Me.flag_mapping.Add(0, 0)
 
                 Case TimeseriesClassEnum.Flagged
@@ -330,7 +330,7 @@ Namespace Fileformats
                         sInfo = New TimeSeriesInfo()
                         sInfo.Name = $"{ts_name}/{flag_id}: {flag_desc}"
                         sInfo.Index = index
-                        Me.SeriesList.Add(sInfo)
+                        Me.TimeSeriesInfos.Add(sInfo)
                         Me.flag_mapping.Add(index, flag_id)
                         index += 1
                     Next
@@ -361,7 +361,7 @@ Namespace Fileformats
                             sInfo = New TimeSeriesInfo()
                             sInfo.Name = $"{ts_name}/{flag_id}: {flag_desc} - {T0.ToString(Helpers.CurrentDateFormat)}"
                             sInfo.Index = index
-                            Me.SeriesList.Add(sInfo)
+                            Me.TimeSeriesInfos.Add(sInfo)
                             Me.flag_T0_mapping.Add(index, (flag_id, T0))
                             index += 1
                         Next
@@ -400,7 +400,7 @@ Namespace Fileformats
                 Case TimeseriesClassEnum.DefaultFlag
 
                     'Single time series
-                    sInfo = Me.SeriesList().First()
+                    sInfo = Me.TimeSeriesInfos().First()
                     ts = New TimeSeries(sInfo.Name)
                     ts.Unit = Me.unit
                     ts.Interpretation = Me.interpretation

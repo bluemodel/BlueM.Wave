@@ -97,7 +97,7 @@ Namespace Fileformats
             Dim Zeile, title As String
             Dim sInfo As TimeSeriesInfo
 
-            Me.SeriesList.Clear()
+            Me.TimeSeriesInfos.Clear()
 
             Try
                 'Datei öffnen
@@ -119,7 +119,7 @@ Namespace Fileformats
                 sInfo.Name = title
                 sInfo.Unit = "mm" 'Einheit ist immer mm
                 sInfo.Index = 0
-                Me.SeriesList.Add(sInfo)
+                Me.TimeSeriesInfos.Add(sInfo)
 
                 StrReadSync.Close()
                 StrRead.Close()
@@ -149,7 +149,7 @@ Namespace Fileformats
             Dim StrReadSync = TextReader.Synchronized(StrRead)
 
             'Zeitreihe instanzieren (bei REG gibt es nur eine Zeitreihe)
-            sInfo = Me.SeriesList(0)
+            sInfo = Me.TimeSeriesInfos(0)
             ts = New TimeSeries(sInfo.Name)
             ts.Unit = sInfo.Unit
             ts.DataSource = New TimeSeriesDataSource(Me.File, sInfo.Name)

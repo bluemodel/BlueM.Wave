@@ -83,12 +83,12 @@ Namespace Fileformats
 
             Dim sInfo As New TimeSeriesInfo()
 
-            Me.SeriesList.Clear()
+            Me.TimeSeriesInfos.Clear()
 
             sInfo.Name = IO.Path.GetFileName(Me.File)
             sInfo.Unit = "-"
             sInfo.Index = 0
-            Me.SeriesList.Add(sInfo)
+            Me.TimeSeriesInfos.Add(sInfo)
 
         End Sub
 
@@ -105,7 +105,7 @@ Namespace Fileformats
             Dim ts As TimeSeries
 
             'Zeitreihe instanzieren (nur eine)
-            sInfo = Me.SeriesList(0)
+            sInfo = Me.TimeSeriesInfos(0)
             ts = New TimeSeries(sInfo.Name)
             ts.Unit = sInfo.Unit
             ts.DataSource = New TimeSeriesDataSource(Me.File, sInfo.Name)

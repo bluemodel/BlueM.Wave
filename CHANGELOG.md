@@ -14,6 +14,7 @@ API-CHANGES:
   * `FileFormats.getFileType()` -> `TimeSeriesFile.getFileType()`, 
   * `FileFormats.FileTypes` -> `TimeSeriesFile.FileTypes`
 * Renamed structure `SeriesInfo` to class `TimeSeriesInfo`
+* Renamed property `TimeSeriesFile.SeriesList` to `TimeSeriesFile.TimeSeriesInfos`
 * Encapsulated file extension constants within a new class `TimeSeriesFile.FileExtensions`
 
 Version 1.14.2

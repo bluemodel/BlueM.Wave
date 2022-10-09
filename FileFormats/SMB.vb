@@ -78,7 +78,7 @@ Namespace Fileformats
             Dim Zeile As String = ""
             Dim sInfo As TimeSeriesInfo
 
-            Me.SeriesList.Clear()
+            Me.TimeSeriesInfos.Clear()
 
             Try
                 'Datei öffnen
@@ -100,7 +100,7 @@ Namespace Fileformats
                 FiStr.Close()
 
                 'store series info
-                Me.SeriesList.Add(sInfo)
+                Me.TimeSeriesInfos.Add(sInfo)
 
             Catch ex As Exception
                 MsgBox($"Unable to read file!{eol}{eol}Error: {ex.Message}", MsgBoxStyle.Critical)
@@ -126,7 +126,7 @@ Namespace Fileformats
             Dim StrReadSync = TextReader.Synchronized(StrRead)
 
             'Zeitreihe instanzieren (bei SMB gibt es nur eine Zeitreihe)
-            sInfo = Me.SeriesList(0)
+            sInfo = Me.TimeSeriesInfos(0)
             ts = New TimeSeries(sInfo.Name)
             ts.Unit = sInfo.Unit
             ts.DataSource = New TimeSeriesDataSource(Me.File, sInfo.Name)

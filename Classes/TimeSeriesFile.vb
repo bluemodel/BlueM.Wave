@@ -131,7 +131,7 @@ Public MustInherit Class TimeSeriesFile
     Private _columnWidth As Integer = 16
     Private _columnOffset As Integer = 0
     Private _dateTimeColumnIndex As Integer = 0
-    Private _seriesList As List(Of TimeSeriesInfo)
+    Private _seriesInfos As List(Of TimeSeriesInfo)
     Private _selectedSeries As List(Of TimeSeriesInfo)
     Private _nLinesperTimestamp As Integer = 1
     Private _metadata As Metadata
@@ -164,8 +164,8 @@ Public MustInherit Class TimeSeriesFile
     End Property
 
     ''' <summary>
-    ''' Stores the TimeSeries read from the file
-    ''' The key corresponds to seriesInfo.index
+    ''' Stores the TimeSeries read from the file. 
+    ''' The key corresponds to the column index stored as <seealso cref="TimeSeriesInfo.Index"/> in <seealso cref="TimeSeriesInfos"/>.
     ''' </summary>
     Public TimeSeries As Dictionary(Of Integer, TimeSeries)
 
@@ -338,12 +338,12 @@ Public MustInherit Class TimeSeriesFile
     ''' List of all series contained in a file
     ''' </summary>
     ''' <remarks></remarks>
-    Public Property SeriesList() As List(Of TimeSeriesInfo)
+    Public Property TimeSeriesInfos() As List(Of TimeSeriesInfo)
         Get
-            Return _seriesList
+            Return _seriesInfos
         End Get
         Set(value As List(Of TimeSeriesInfo))
-            _seriesList = value
+            _seriesInfos = value
         End Set
     End Property
 
@@ -411,7 +411,7 @@ Public MustInherit Class TimeSeriesFile
             If Not found Then
                 'Timeseries was not found (perhaps not yet imported?)
                 'Check whether a column with the given title exists
-                For Each sInfo As TimeSeriesInfo In Me.SeriesList
+                For Each sInfo As TimeSeriesInfo In Me.TimeSeriesInfos
                     If (sInfo.Name = title) Then
                         'get the timeseries by its index
                         Return Me.getTimeSeries(sInfo.Index)
@@ -451,7 +451,7 @@ Public MustInherit Class TimeSeriesFile
 
         'Initialize data structures
         Me.TimeSeries = New Dictionary(Of Integer, TimeSeries)
-        Me._seriesList = New List(Of TimeSeriesInfo)
+        Me._seriesInfos = New List(Of TimeSeriesInfo)
         Me._selectedSeries = New List(Of TimeSeriesInfo)
         Me._metadata = New Metadata()
 
@@ -464,7 +464,7 @@ Public MustInherit Class TimeSeriesFile
     End Sub
 
     ''' <summary>
-    ''' Reads information about the series contained in the file
+    ''' Reads information about the series contained in the file and stores it in <seealso cref="TimeSeriesInfos"/>
     ''' </summary>
     Public MustOverride Sub readSeriesInfo()
 
@@ -475,7 +475,7 @@ Public MustInherit Class TimeSeriesFile
     Public Sub selectAllSeries()
 
         Me.SelectedSeries.Clear()
-        For Each sInfo As TimeSeriesInfo In Me.SeriesList
+        For Each sInfo As TimeSeriesInfo In Me.TimeSeriesInfos
             Me.SelectedSeries.Add(sInfo)
         Next
 
@@ -490,7 +490,7 @@ Public MustInherit Class TimeSeriesFile
     Public Function selectSeries(colIndex As Integer) As Boolean
 
         Dim i As Integer = 0
-        For Each sInfo As TimeSeriesInfo In Me.SeriesList
+        For Each sInfo As TimeSeriesInfo In Me.TimeSeriesInfos
             If sInfo.Index = colIndex Then
                 Me.SelectedSeries.Add(sInfo)
                 Return True
@@ -510,7 +510,7 @@ Public MustInherit Class TimeSeriesFile
     ''' <remarks></remarks>
     Public Function selectSeries(seriesName As String) As Boolean
 
-        For Each sInfo As TimeSeriesInfo In Me.SeriesList
+        For Each sInfo As TimeSeriesInfo In Me.TimeSeriesInfos
             If sInfo.Name = seriesName Then
                 Me.SelectedSeries.Add(sInfo)
                 Return True
@@ -523,7 +523,7 @@ Public MustInherit Class TimeSeriesFile
     End Function
 
     ''' <summary>
-    ''' Reads the selected series (see `SelectedSeries`) from the file and stores them as timeseries in `FileTimeSeries`
+    ''' Reads the selected series (see <seealso cref="SelectedSeries"/>) from the file and stores them as timeseries in <seealso cref="TimeSeries"/>
     ''' </summary>
     Public MustOverride Sub readFile()
 

@@ -101,7 +101,7 @@ Namespace Fileformats
             Dim iZeileAnzSpalten As Integer = 4
             Dim sInfo As TimeSeriesInfo
 
-            Me.SeriesList.Clear()
+            Me.TimeSeriesInfos.Clear()
 
             Try
                 'Datei öffnen
@@ -143,7 +143,7 @@ Namespace Fileformats
                         sInfo.Index = index
                         sInfo.Objekt = Trim(sInfo.Name)
                         sInfo.Type = "FLOW"
-                        Me.SeriesList.Add(sInfo)
+                        Me.TimeSeriesInfos.Add(sInfo)
                         index = index + 1
                     Next
                 Next
