@@ -1,6 +1,17 @@
 ﻿BlueM.Wave Release Notes
 ========================
 
+Version 1.15.0
+--------------
+CHANGED:
+* This document is now named CHANGELOG.md
+
+API-CHANGES:
+* Renamed class `FileFormatBase` to `TimeSeriesFile`
+* Removed modules `FileFactory` and `FileFormats` and integrated functionality into class `TimeSeriesFile`
+* Renamed structure `SeriesInfo` to class `TimeSeriesInfo`
+* Encapsulated file extension constants within a new class `TimeSeriesFile.FileExtensions`
+
 Version 1.14.2
 --------------
 FIXED:
