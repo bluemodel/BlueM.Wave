@@ -7,6 +7,8 @@ Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Wave", "Wave\Wave.vbproj", 
 EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Wave.Tests", "Wave.Tests\Wave.Tests.vbproj", "{B18292DE-3745-4B16-ADBF-2DA8A1E3C51E}"
 EndProject
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Wave.Examples", "Wave.Examples\Wave.Examples.vbproj", "{A4FE714C-6C93-4747-811C-74C976B15CC1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -29,6 +31,14 @@ Global
 		{B18292DE-3745-4B16-ADBF-2DA8A1E3C51E}.Debug|x86.Build.0 = Debug|x86
 		{B18292DE-3745-4B16-ADBF-2DA8A1E3C51E}.Release|x64.ActiveCfg = Release|x64
 		{B18292DE-3745-4B16-ADBF-2DA8A1E3C51E}.Release|x86.ActiveCfg = Release|x86
+		{A4FE714C-6C93-4747-811C-74C976B15CC1}.Debug|x64.ActiveCfg = Debug|x64
+		{A4FE714C-6C93-4747-811C-74C976B15CC1}.Debug|x64.Build.0 = Debug|x64
+		{A4FE714C-6C93-4747-811C-74C976B15CC1}.Debug|x86.ActiveCfg = Debug|x86
+		{A4FE714C-6C93-4747-811C-74C976B15CC1}.Debug|x86.Build.0 = Debug|x86
+		{A4FE714C-6C93-4747-811C-74C976B15CC1}.Release|x64.ActiveCfg = Release|x64
+		{A4FE714C-6C93-4747-811C-74C976B15CC1}.Release|x64.Build.0 = Release|x64
+		{A4FE714C-6C93-4747-811C-74C976B15CC1}.Release|x86.ActiveCfg = Release|x86
+		{A4FE714C-6C93-4747-811C-74C976B15CC1}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
