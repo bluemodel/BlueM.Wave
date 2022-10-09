@@ -37,9 +37,9 @@ Module TestData
     ''' <returns></returns>
     Private Function getTestDataDir() As String
         Try
-            Dim appdir As String = My.Application.Info.DirectoryPath() 'e.g. BlueM.Wave\Tests\Wave.Tests\bin\x64\Debug
+            Dim appdir As String = My.Application.Info.DirectoryPath() 'e.g. BlueM.Wave\Wave.Tests\bin\x64\Debug
             Dim testdatadir As String = appdir
-            For i As Integer = 1 To 6
+            For i As Integer = 1 To 5
                 testdatadir = IO.Directory.GetParent(testdatadir).FullName
             Next
             testdatadir = IO.Path.Combine(testdatadir, "BlueM.Datasets", "Wave")
