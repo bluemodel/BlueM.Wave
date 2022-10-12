@@ -617,6 +617,10 @@ Public MustInherit Class TimeSeriesFile
                     Throw New Exception($"File {fileName} has an unknown format!")
                 End If
 
+            Case FileExtensions.DB
+                Log.AddLogEntry(levels.info, $"Assuming SYDRO SQLite format for file {fileName}.")
+                fileType = FileTypes.SYDROSQLITE
+
             Case FileExtensions.DFS0
                 Log.AddLogEntry(levels.info, $"Assuming DHI DFS0 format for file {fileName}.")
                 fileType = FileTypes.DFS0
@@ -650,9 +654,9 @@ Public MustInherit Class TimeSeriesFile
                 Log.AddLogEntry(levels.info, $"Assuming SIMBA format for file {fileName}.")
                 fileType = FileTypes.SMB
 
-            Case FileExtensions.DB
-                Log.AddLogEntry(levels.info, $"Assuming SYDRO SQLite format for file {fileName}.")
-                fileType = FileTypes.SYDROSQLITE
+            Case FileExtensions.TEN
+                Log.AddLogEntry(levels.info, $"Assuming TeeChart native format for file {fileName}.")
+                fileType = FileTypes.TEN
 
             Case FileExtensions.TXT
                 'Check file format
