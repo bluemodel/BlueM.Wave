@@ -73,7 +73,7 @@ Public Class TimeSeriesCollection
     ''' <returns>An ICollection(Of Integer) containing the Ids in the TimeSeriesCollection</returns>
     Public ReadOnly Property Ids As ICollection(Of Integer) Implements IDictionary(Of Integer, TimeSeries).Keys
         Get
-            Return _timeseriesdict.Keys
+            Return _timeseriesdict.Keys.Cast(Of Integer).ToList()
         End Get
     End Property
 
