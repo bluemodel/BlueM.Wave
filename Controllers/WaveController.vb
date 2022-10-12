@@ -1991,29 +1991,22 @@ Friend Class WaveController
 
         'Linien instanzieren
         Dim Line1 As New Steema.TeeChart.Styles.Line(View.TChart1.Chart)
-        Dim Line2 As New Steema.TeeChart.Styles.FastLine(View.TChart2.Chart)
 
         'Do not paint NaN values
         Line1.TreatNaNAsNull = True
-        Line2.TreatNaNAsNull = True
         Line1.TreatNulls = Steema.TeeChart.Styles.TreatNullsStyle.DoNotPaint
-        Line2.TreatNulls = Steema.TeeChart.Styles.TreatNullsStyle.DoNotPaint
 
         'X-Werte als Zeitdaten einstellen
         Line1.XValues.DateTime = True
-        Line2.XValues.DateTime = True
 
         'Store id as Tag property
         Line1.Tag = ts.Id
-        Line2.Tag = ts.Id
 
         'Namen vergeben
         Line1.Title = ts.Title
-        Line2.Title = ts.Title
 
         'Set line width to 2
         Line1.LinePen.Width = 2
-        Line2.LinePen.Width = 2
 
         'Stützstellen zur Serie hinzufügen
         'Main chart
@@ -2021,10 +2014,63 @@ Friend Class WaveController
         Line1.Add(ts.Dates.ToArray(), ts.Values.ToArray())
         Line1.EndUpdate()
 
-        'Overview chart
+        'Add series to overview chart
+        Call Me.AddSeriesToOverview(ts)
+
+        'Determine total number of NaN-values and write to log
+        If ts.NaNCount > 0 Then
+            Log.AddLogEntry(Log.levels.warning, $"Series '{ts.Title}' contains {ts.NaNCount} NaN values!")
+        End If
+
+        'Y-Achsenzuordnung
+        assignSeriesToAxis(Line1, ts.Unit)
+
+        'Interpretation
+        Select Case ts.Interpretation
+            Case TimeSeries.InterpretationEnum.BlockRight
+                Line1.Stairs = True
+            Case TimeSeries.InterpretationEnum.BlockLeft,
+                TimeSeries.InterpretationEnum.CumulativePerTimestep
+                Line1.Stairs = True
+                Line1.InvertedStairs = True
+        End Select
+
+        'Charts aktualisieren
+        Call Me.UpdateChartExtents()
+
+        Call Me.ViewportChanged()
+
+    End Sub
+
+    ''' <summary>
+    ''' Adds a time series to the overview chart
+    ''' </summary>
+    ''' <param name="ts">the TimeSeries to add</param>
+    Private Sub AddSeriesToOverview(ts As TimeSeries)
+
+        'Linien instanzieren
+        Dim Line2 As New Steema.TeeChart.Styles.FastLine(View.TChart2.Chart)
+
+        'Do not paint NaN values
+        Line2.TreatNaNAsNull = True
+        Line2.TreatNulls = Steema.TeeChart.Styles.TreatNullsStyle.DoNotPaint
+
+        'X-Werte als Zeitdaten einstellen
+        Line2.XValues.DateTime = True
+
+        'Store id as Tag property
+        Line2.Tag = ts.Id
+
+        'Namen vergeben
+        Line2.Title = ts.Title
+
+        'Set line width to 2
+        Line2.LinePen.Width = 2
+
+        'Stützstellen zur Serie hinzufügen
         Line2.BeginUpdate()
         If Double.IsNaN(ts.FirstValue) Then
-            'TeeChart throws an OverflowException when attemtping to display a FastLine that begins with a NaN value as a step function!
+            'TeeChart throws an OverflowException when attempting to display a FastLine that begins with a NaN value as a step function!
             'To avoid this we generally do not add NaN values at the beginning of the time series to the FastLine (#67)
             Dim isNaN As Boolean = True
             For Each node As KeyValuePair(Of DateTime, Double) In ts.Nodes
@@ -2040,31 +2086,15 @@ Friend Class WaveController
         End If
         Line2.EndUpdate()
 
-        'Determine total number of NaN-values and write to log
-        If ts.NaNCount > 0 Then
-            Log.AddLogEntry(Log.levels.warning, $"Series '{ts.Title}' contains {ts.NaNCount} NaN values!")
-        End If
-
-        'Y-Achsenzuordnung
-        assignSeriesToAxis(Line1, ts.Unit)
-
         'Interpretation
         Select Case ts.Interpretation
             Case TimeSeries.InterpretationEnum.BlockRight
-                Line1.Stairs = True
                 Line2.Stairs = True
             Case TimeSeries.InterpretationEnum.BlockLeft,
                 TimeSeries.InterpretationEnum.CumulativePerTimestep
-                Line1.Stairs = True
                 Line2.Stairs = True
-                Line1.InvertedStairs = True
                 Line2.InvertedStairs = True
         End Select
-
-        'Charts aktualisieren
-        Call Me.UpdateChartExtents()
-
-        Call Me.ViewportChanged()
 
     End Sub
 
@@ -2532,40 +2562,10 @@ Friend Class WaveController
                 Me.selectionMade = False
             End If
 
-            'TEN-Datei importieren
-            'Diagramme werden hiermit komplett ersetzt!
+            'Load TEN file in main chart, this completely replaces the chart!
             Call View.TChart1.Import.Template.Load(FileName)
-            Call View.TChart2.Import.Template.Load(FileName)
-
-            'Übersichtsdiagramm wieder als solches formatieren
-            'TODO: als Funktion auslagern und auch bei Init_Charts() verwenden
-            Call Helpers.FormatChart(View.TChart2.Chart)
-            View.TChart2.Panel.Brush.Color = Color.FromArgb(239, 239, 239)
-            View.TChart2.Walls.Back.Color = Color.FromArgb(239, 239, 239)
-            View.TChart2.Header.Visible = False
-            View.TChart2.Legend.Visible = False
-            View.TChart2.Axes.Left.Labels.Font.Color = Color.FromArgb(100, 100, 100)
-            View.TChart2.Axes.Left.Labels.Font.Size = 8
-            View.TChart2.Axes.Bottom.Labels.Font.Color = Color.FromArgb(100, 100, 100)
-            View.TChart2.Axes.Bottom.Labels.Font.Size = 8
-            View.TChart2.Axes.Bottom.Automatic = False
-            View.TChart2.Axes.Bottom.Labels.DateTimeFormat = Globalization.CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern 'date only without time
-            View.TChart2.Axes.Bottom.Labels.Angle = 0
-
-            'Hide axis titles
-            View.TChart2.Axes.Left.Title.Visible = False
-            View.TChart2.Axes.Right.Title.Visible = False
-            For i = 0 To View.TChart2.Axes.Custom.Count - 1
-                View.TChart2.Axes.Custom(i).Title.Visible = False
-            Next
-            'change type of series to FastLine and activate
-            Dim title As String
-            For i = 0 To View.TChart2.Series.Count - 1
-                title = View.TChart2.Series(i).Title 'remember title in order to reassign it after conversion
-                Steema.TeeChart.Styles.Series.ChangeType(View.TChart2.Series(i), GetType(Steema.TeeChart.Styles.FastLine))
-                View.TChart2.Series(i).Title = title
-                View.TChart2.Series(i).Active = True
-            Next
+            'Clear overview chart
+            Call View.TChart2.Series.Clear()
 
             'Abfrage für Reihenimport
             If (View.TChart1.Series.Count() > 0) Then
@@ -2612,18 +2612,19 @@ Friend Class WaveController
                                 'Add the series to the model while temporarily disabling event handling
                                 RemoveHandler _model.SeriesAdded, AddressOf SeriesAdded
                                 Call _model.Import_Series(reihe)
-                                series.Title = reihe.Title 'update possibly changed title
                                 AddHandler _model.SeriesAdded, AddressOf SeriesAdded
+
+                                'after import in the model, the title might have been changed,
+                                'then we need to edit the title in the chart as well
+                                If reihe.Title <> series.Title Then
+                                    series.Title = reihe.Title
+                                End If
 
                                 'Store the time series id in the Tag property
                                 series.Tag = reihe.Id
-                                'Store id as Tag in Chart2 as well
-                                For Each series2 As Steema.TeeChart.Styles.Series In View.TChart2.Series
-                                    If series2.Title = series.Title Then
-                                        series2.Tag = reihe.Id
-                                        Exit For
-                                    End If
-                                Next
+
+                                'Add series to overview
+                                Call Me.AddSeriesToOverview(reihe, series.Color)
 
                                 nSeries += 1
 
@@ -2671,8 +2672,6 @@ Friend Class WaveController
             View.TChart1.Zoom.Direction = Steema.TeeChart.ZoomDirections.None
             View.TChart1.Panning.Allow = Steema.TeeChart.ScrollModes.None
             View.TChart1.Panning.MouseButton = MouseButtons.Right
-            View.TChart2.Zoom.Direction = Steema.TeeChart.ZoomDirections.None
-            View.TChart2.Panning.Allow = Steema.TeeChart.ScrollModes.None
 
             'Charts aktualisieren
             Call Me.UpdateChartExtents()

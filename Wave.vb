@@ -435,7 +435,7 @@ Public Class Wave
     ''' Import a time series
     ''' </summary>
     ''' <param name="ts">the time series</param>
-    Public Sub Import_Series(ts As TimeSeries)
+    Public Sub Import_Series(ByRef ts As TimeSeries)
 
         'Store the time series
         Me.AddTimeSeries(ts)
