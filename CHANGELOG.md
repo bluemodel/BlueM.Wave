@@ -5,8 +5,9 @@ Version 1.15.0
 --------------
 CHANGED:
 * This document is now named CHANGELOG.md
+
 FIXED:
-* Improved TEN import
+* Fixed some issues with TEN import
 
 API-CHANGES:
 * Renamed class `FileFormatBase` to `TimeSeriesFile`
