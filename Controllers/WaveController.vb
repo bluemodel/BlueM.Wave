@@ -2624,7 +2624,7 @@ Friend Class WaveController
                                 series.Tag = reihe.Id
 
                                 'Add series to overview
-                                Call Me.AddSeriesToOverview(reihe, series.Color)
+                                Call Me.AddSeriesToOverview(reihe)
 
                                 nSeries += 1
 
