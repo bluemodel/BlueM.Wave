@@ -6,7 +6,7 @@
           "files": [
             "Wave.vbproj"
           ],
-          "src": "..\\Wave"
+          "src": "..\\source"
         }
       ],
       "dest": "api",
