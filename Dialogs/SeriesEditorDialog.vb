@@ -110,7 +110,7 @@ Friend Class SeriesEditorDialog
         ClipboardContents = Clipboard.GetDataObject()
 
         'Prüfen, ob ClipboardContents im CSV-Format vorliegen oder konvertiert werden können
-        If (Not ClipboardContents.GetDataPresent(DataFormats.CommaSeparatedValue, True)) Then
+        If Not ClipboardContents.GetDataPresent(DataFormats.CommaSeparatedValue, True) Then
             MsgBox("Unable to process the clipboard contents!", MsgBoxStyle.Exclamation)
             Exit Sub
         End If
@@ -136,53 +136,48 @@ Friend Class SeriesEditorDialog
     End Sub
 
     ''' <summary>
-    ''' Checks the entered dates for parseability and ascendingness
+    ''' Checks the entered dates for parseability
     ''' </summary>
     ''' <returns>Boolean success</returns>
     ''' <remarks></remarks>
-    Private Function check_dates() As Boolean
+    Private Function CheckDates() As Boolean
 
-        Dim str As String = ""
+        Dim str As String
         Dim i As Integer
         Dim cell As DataGridViewCell
-        Dim t0, t1 As DateTime
+        Dim t As DateTime
+
+        Dim isOK As Boolean = False
 
         Try
 
             Me.Cursor = Cursors.WaitCursor
             Me.Enabled = False
 
-            t0 = New DateTime(0)
+            'Loop through all rows except for the last
+            For i = 0 To Me.DataGridView1.RowCount - 2
 
-            'Alle Einträge durchlaufen
-            For i = 0 To Me.DataGridView1.RowCount - 2 '(letzte Zeile nicht prüfen)
-
-                'Spalte Datum
-                '------------
+                'Date column
                 cell = Me.DataGridView1.Rows(i).Cells(0)
                 str = cell.Value
-                'Datumsformat prüfen
+                'Check whether the date is parseable
                 Try
-                    t1 = DateTime.Parse(str)
+                    t = DateTime.Parse(str)
                 Catch ex As Exception
                     cell.ErrorText = "Date format not recognized!"
                     Throw New Exception($"The date '{str}' can not be parsed!")
                 End Try
 
-                'Prüfen, ob Datum aufsteigend
-                If (t1 <= t0) Then
-                    cell.ErrorText = "Date not ascending!"
-                    Throw New Exception($"The date '{t1}' is not ascending!")
-                End If
-
                 cell.ErrorText = String.Empty
-                t0 = t1
 
             Next
+
+            isOK = True
 
         Catch ex As Exception
 
             MsgBox(ex.Message, MsgBoxStyle.Exclamation)
+            isOK = False
 
         Finally
 
@@ -191,7 +186,7 @@ Friend Class SeriesEditorDialog
 
         End Try
 
-        Return True
+        Return isOK
 
     End Function
 
@@ -216,7 +211,7 @@ Friend Class SeriesEditorDialog
         End If
 
         'check the dates
-        If (Not Me.check_dates()) Then
+        If Not Me.CheckDates() Then
             Me.DialogResult = DialogResult.None
             Exit Sub
         End If
