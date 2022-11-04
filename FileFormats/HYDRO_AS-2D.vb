@@ -259,85 +259,80 @@ Namespace Fileformats
             'store refDate
             Me.refDate = dlg.DateTimePicker_refDate.Value
 
-            Try
-                'Instantiate time series
-                For Each sInfo As TimeSeriesInfo In Me.SelectedSeries
-                    ts = New TimeSeries(sInfo.Name)
-                    ts.Unit = sInfo.Unit
-                    ts.DataSource = New TimeSeriesDataSource(Me.File, sInfo.Name)
-                    Me.TimeSeries.Add(sInfo.Index, ts)
-                Next
+            'Instantiate time series
+            For Each sInfo As TimeSeriesInfo In Me.SelectedSeries
+                ts = New TimeSeries(sInfo.Name)
+                ts.Unit = sInfo.Unit
+                ts.DataSource = New TimeSeriesDataSource(Me.File, sInfo.Name)
+                Me.TimeSeries.Add(sInfo.Index, ts)
+            Next
 
-                'Datei öffnen
-                Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
-                Dim StrRead As StreamReader = New StreamReader(FiStr, Me.Encoding)
-                Dim StrReadSync = TextReader.Synchronized(StrRead)
+            'Datei öffnen
+            Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
+            Dim StrRead As StreamReader = New StreamReader(FiStr, Me.Encoding)
+            Dim StrReadSync = TextReader.Synchronized(StrRead)
 
-                'Einlesen
-                '--------
+            'Einlesen
+            '--------
 
-                Select Case Path.GetFileName(Me.File).ToLower()
+            Select Case Path.GetFileName(Me.File).ToLower()
 
-                    Case "q_strg.dat", "pegel.dat"
+                Case "q_strg.dat", "pegel.dat"
 
-                        'Header
-                        For i = 0 To Me.nLinesHeader - 1
-                            StrReadSync.ReadLine()
+                    'Header
+                    For i = 0 To Me.nLinesHeader - 1
+                        StrReadSync.ReadLine()
+                    Next
+
+                    'Daten
+                    Do
+                        Zeile = StrReadSync.ReadLine.ToString()
+                        Werte = Zeile.Split(New Char() {Me.Separator.ToChar}, System.StringSplitOptions.RemoveEmptyEntries)
+                        'Simulationszeit [h] wird zu Datum nach dem Referenzdatum (default: 01.01.2000 00:00:00) konvertiert
+                        datum = Me.refDate + New TimeSpan(0, 0, Helpers.StringToDouble(Werte(0)) * 3600)
+                        For Each sInfo As TimeSeriesInfo In Me.SelectedSeries
+                            Me.TimeSeries(sInfo.Index).AddNode(datum, Helpers.StringToDouble(Werte(sInfo.Index)))
                         Next
 
-                        'Daten
-                        Do
-                            Zeile = StrReadSync.ReadLine.ToString()
-                            Werte = Zeile.Split(New Char() {Me.Separator.ToChar}, System.StringSplitOptions.RemoveEmptyEntries)
-                            'Simulationszeit [h] wird zu Datum nach dem Referenzdatum (default: 01.01.2000 00:00:00) konvertiert
-                            datum = Me.refDate + New TimeSpan(0, 0, Helpers.StringToDouble(Werte(0)) * 3600)
-                            For Each sInfo As TimeSeriesInfo In Me.SelectedSeries
-                                Me.TimeSeries(sInfo.Index).AddNode(datum, Helpers.StringToDouble(Werte(sInfo.Index)))
-                            Next
+                    Loop Until StrReadSync.Peek() = -1
 
-                        Loop Until StrReadSync.Peek() = -1
+                Case "bw_tmp.dat"
 
-                    Case "bw_tmp.dat"
+                    Dim zeit, value As Double
+                    Dim parts(), name As String
 
-                        Dim zeit, value As Double
-                        Dim parts(), name As String
-
-                        Do
-                            Zeile = StrReadSync.ReadLine.ToString().Trim()
-                            If Zeile.Length = 0 Then Continue Do
-                            'Headerzeilen
-                            If Zeile.StartsWith("---") Then Continue Do
-                            If Zeile.StartsWith("Abflu") Then
-                                'Zeit lesen
-                                zeit = Helpers.StringToDouble(Zeile.Split(New Char() {"="}, StringSplitOptions.RemoveEmptyEntries)(1).Replace("[Sek]", "").Trim())
-                                'Simulationszeit [s] wird zu Datum nach 01.01.2000 00:00:00 konvertiert
-                                datum = Me.refDate + New TimeSpan(0, 0, zeit)
-                                Continue Do
+                    Do
+                        Zeile = StrReadSync.ReadLine.ToString().Trim()
+                        If Zeile.Length = 0 Then Continue Do
+                        'Headerzeilen
+                        If Zeile.StartsWith("---") Then Continue Do
+                        If Zeile.StartsWith("Abflu") Then
+                            'Zeit lesen
+                            zeit = Helpers.StringToDouble(Zeile.Split(New Char() {"="}, StringSplitOptions.RemoveEmptyEntries)(1).Replace("[Sek]", "").Trim())
+                            'Simulationszeit [s] wird zu Datum nach 01.01.2000 00:00:00 konvertiert
+                            datum = Me.refDate + New TimeSpan(0, 0, zeit)
+                            Continue Do
+                        End If
+                        If Zeile.StartsWith("IJBW_Seg-1") Then Continue Do
+                        'Datenzeilen
+                        parts = Zeile.Split(New Char() {" "}, StringSplitOptions.RemoveEmptyEntries)
+                        name = $"{parts(0)}-{parts(1)}"
+                        value = Helpers.StringToDouble(parts(2))
+                        'nur ausgewählte Reihen abspeichern
+                        For Each sInfo As TimeSeriesInfo In Me.SelectedSeries
+                            If sInfo.Name = name Then
+                                Me.TimeSeries(sInfo.Index).AddNode(datum, value)
+                                Exit For
                             End If
-                            If Zeile.StartsWith("IJBW_Seg-1") Then Continue Do
-                            'Datenzeilen
-                            parts = Zeile.Split(New Char() {" "}, StringSplitOptions.RemoveEmptyEntries)
-                            name = $"{parts(0)}-{parts(1)}"
-                            value = Helpers.StringToDouble(parts(2))
-                            'nur ausgewählte Reihen abspeichern
-                            For Each sInfo As TimeSeriesInfo In Me.SelectedSeries
-                                If sInfo.Name = name Then
-                                    Me.TimeSeries(sInfo.Index).AddNode(datum, value)
-                                    Exit For
-                                End If
-                            Next
+                        Next
 
-                        Loop Until StrReadSync.Peek() = -1
+                    Loop Until StrReadSync.Peek() = -1
 
-                End Select
+            End Select
 
-                StrReadSync.Close()
-                StrRead.Close()
-                FiStr.Close()
-
-            Catch ex As Exception
-                MsgBox($"Unable to read file!{eol}{eol}Error: {ex.Message}", MsgBoxStyle.Critical)
-            End Try
+            StrReadSync.Close()
+            StrRead.Close()
+            FiStr.Close()
 
         End Sub
 

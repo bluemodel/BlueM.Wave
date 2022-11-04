@@ -214,58 +214,52 @@ Namespace Fileformats
             Dim timestamp As DateTime
             Dim ts As TimeSeries
 
-            Try
+            Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
+            Dim StrRead As StreamReader = New StreamReader(FiStr, Me.Encoding)
+            Dim StrReadSync = TextReader.Synchronized(StrRead)
 
-                Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
-                Dim StrRead As StreamReader = New StreamReader(FiStr, Me.Encoding)
-                Dim StrReadSync = TextReader.Synchronized(StrRead)
+            'Instantiate time series
+            For Each sInfo As TimeSeriesInfo In Me.SelectedSeries
+                ts = New TimeSeries()
+                ts.Title = sInfo.Name
+                ts.Unit = sInfo.Unit
+                ts.DataSource = New TimeSeriesDataSource(Me.File, sInfo.Name)
+                Me.TimeSeries.Add(sInfo.Index, ts)
+            Next
 
-                'Instantiate time series
+            'Skip header
+            For i = 1 To Me.iLineData - 1
+                StrReadSync.ReadLine()
+            Next
+
+            'Read data
+            Do
+                line = StrReadSync.ReadLine.ToString()
+
+                parts = line.Split(New Char() {" "}, StringSplitOptions.RemoveEmptyEntries)
+
+                'Parse date
+                Select Case Me.FileFormat
+                    Case FileType.annual
+                        timestamp = New Date(parts(0), 1, 1)
+                    Case FileType.monthly
+                        timestamp = New Date(parts(1), parts(0), 1)
+                    Case FileType.dpout
+                        timestamp = New Date(parts(0), parts(1), parts(2))
+                    Case FileType.statvar
+                        timestamp = New DateTime(parts(1), parts(2), parts(3), parts(4), parts(5), parts(6))
+                End Select
+                'Parse values and store nodes
                 For Each sInfo As TimeSeriesInfo In Me.SelectedSeries
-                    ts = New TimeSeries()
-                    ts.Title = sInfo.Name
-                    ts.Unit = sInfo.Unit
-                    ts.DataSource = New TimeSeriesDataSource(Me.File, sInfo.Name)
-                    Me.TimeSeries.Add(sInfo.Index, ts)
+                    value = Helpers.StringToDouble(parts(sInfo.Index))
+                    Me.TimeSeries(sInfo.Index).AddNode(timestamp, value)
                 Next
 
-                'Skip header
-                For i = 1 To Me.iLineData - 1
-                    StrReadSync.ReadLine()
-                Next
+            Loop Until StrReadSync.Peek() = -1
 
-                'Read data
-                Do
-                    line = StrReadSync.ReadLine.ToString()
-
-                    parts = line.Split(New Char() {" "}, StringSplitOptions.RemoveEmptyEntries)
-
-                    'Parse date
-                    Select Case Me.FileFormat
-                        Case FileType.annual
-                            timestamp = New Date(parts(0), 1, 1)
-                        Case FileType.monthly
-                            timestamp = New Date(parts(1), parts(0), 1)
-                        Case FileType.dpout
-                            timestamp = New Date(parts(0), parts(1), parts(2))
-                        Case FileType.statvar
-                            timestamp = New DateTime(parts(1), parts(2), parts(3), parts(4), parts(5), parts(6))
-                    End Select
-                    'Parse values and store nodes
-                    For Each sInfo As TimeSeriesInfo In Me.SelectedSeries
-                        value = Helpers.StringToDouble(parts(sInfo.Index))
-                        Me.TimeSeries(sInfo.Index).AddNode(timestamp, value)
-                    Next
-
-                Loop Until StrReadSync.Peek() = -1
-
-                StrReadSync.Close()
-                StrRead.Close()
-                FiStr.Close()
-
-            Catch ex As Exception
-                MsgBox($"Unable to read file!{eol}{eol}Error: {ex.Message}", MsgBoxStyle.Critical)
-            End Try
+            StrReadSync.Close()
+            StrRead.Close()
+            FiStr.Close()
 
         End Sub
 

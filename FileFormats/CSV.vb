@@ -166,83 +166,76 @@ Namespace Fileformats
             Dim Werte() As String
             Dim ts As TimeSeries
 
-            Try
+            Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
+            Dim StrRead As StreamReader = New StreamReader(FiStr, Me.Encoding)
+            Dim StrReadSync As TextReader = TextReader.Synchronized(StrRead)
 
-                Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
-                Dim StrRead As StreamReader = New StreamReader(FiStr, Me.Encoding)
-                Dim StrReadSync As TextReader = TextReader.Synchronized(StrRead)
-
-                'Zeitreihen instanzieren
-                For Each sInfo As TimeSeriesInfo In Me.SelectedSeries
-                    ts = New TimeSeries(sInfo.Name)
-                    If Me.UseUnits Then
-                        ts.Unit = sInfo.Unit
-                    End If
-                    ts.DataSource = New TimeSeriesDataSource(Me.File, sInfo.Name)
-                    Me.TimeSeries.Add(sInfo.Index, ts)
-                Next
-
-                'Use default number format by default
-                numberformat = Helpers.DefaultNumberFormat.Clone()
-                If Me.DecimalSeparator.ToChar = Chr(44) Then
-                    'change decimal separator to comma
-                    numberformat.NumberDecimalSeparator = ","
+            'Zeitreihen instanzieren
+            For Each sInfo As TimeSeriesInfo In Me.SelectedSeries
+                ts = New TimeSeries(sInfo.Name)
+                If Me.UseUnits Then
+                    ts.Unit = sInfo.Unit
                 End If
+                ts.DataSource = New TimeSeriesDataSource(Me.File, sInfo.Name)
+                Me.TimeSeries.Add(sInfo.Index, ts)
+            Next
 
-                'Einlesen
-                '--------
+            'Use default number format by default
+            numberformat = Helpers.DefaultNumberFormat.Clone()
+            If Me.DecimalSeparator.ToChar = Chr(44) Then
+                'change decimal separator to comma
+                numberformat.NumberDecimalSeparator = ","
+            End If
 
-                'Header
-                For i = 0 To Me.nLinesHeader - 1
-                    StrReadSync.ReadLine()
-                Next
+            'Einlesen
+            '--------
 
-                'Daten
-                Do
-                    Zeile = StrReadSync.ReadLine.ToString()
+            'Header
+            For i = 0 To Me.nLinesHeader - 1
+                StrReadSync.ReadLine()
+            Next
 
-                    If (Me.IsColumnSeparated) Then
+            'Daten
+            Do
+                Zeile = StrReadSync.ReadLine.ToString()
 
-                        'Zeichengetrennt
-                        '---------------
-                        Werte = Zeile.Split(New Char() {Me.Separator.ToChar})
+                If (Me.IsColumnSeparated) Then
 
-                        If (Werte.Length > 0 And Zeile.Trim.Length > 1) Then
-                            'Erste Spalte: Datum_Zeit
-                            ok = DateTime.TryParseExact(Werte(Me.DateTimeColumnIndex).Trim(), Me.Dateformat, Helpers.DefaultNumberFormat, Globalization.DateTimeStyles.None, datum)
-                            If (Not ok) Then
-                                Throw New Exception($"Could Not parse the date '{Werte(Me.DateTimeColumnIndex)}' using the given date format '{Me.Dateformat}'! Please check the date format!")
-                            End If
-                            'Restliche Spalten: Werte
-                            For Each sInfo As TimeSeriesInfo In Me.SelectedSeries
-                                Me.TimeSeries(sInfo.Index).AddNode(datum, StringToDouble(Werte(sInfo.Index), numberformat))
-                            Next
-                        End If
+                    'Zeichengetrennt
+                    '---------------
+                    Werte = Zeile.Split(New Char() {Me.Separator.ToChar})
 
-                    Else
-                        'Spalten mit fester Breite
-                        '-------------------------
+                    If (Werte.Length > 0 And Zeile.Trim.Length > 1) Then
                         'Erste Spalte: Datum_Zeit
-                        ok = DateTime.TryParseExact(Zeile.Substring(0, Me.ColumnWidth), Me.Dateformat, Helpers.DefaultNumberFormat, Globalization.DateTimeStyles.None, datum)
+                        ok = DateTime.TryParseExact(Werte(Me.DateTimeColumnIndex).Trim(), Me.Dateformat, Helpers.DefaultNumberFormat, Globalization.DateTimeStyles.None, datum)
                         If (Not ok) Then
-                            Throw New Exception($"Could Not parse the date '{Zeile.Substring(0, Me.ColumnWidth)}' using the given date format '{Me.Dateformat}'! Please check the date format!")
+                            Throw New Exception($"Could Not parse the date '{Werte(Me.DateTimeColumnIndex)}' using the given date format '{Me.Dateformat}'! Please check the date format!")
                         End If
                         'Restliche Spalten: Werte
                         For Each sInfo As TimeSeriesInfo In Me.SelectedSeries
-                            Me.TimeSeries(sInfo.Index).AddNode(datum, StringToDouble(Zeile.Substring(sInfo.Index * Me.ColumnWidth + ColumnOffset, Math.Min(Me.ColumnWidth, Zeile.Substring(sInfo.Index * Me.ColumnWidth + ColumnOffset).Length)), numberformat))
+                            Me.TimeSeries(sInfo.Index).AddNode(datum, StringToDouble(Werte(sInfo.Index), numberformat))
                         Next
                     End If
 
-                Loop Until StrReadSync.Peek() = -1
+                Else
+                    'Spalten mit fester Breite
+                    '-------------------------
+                    'Erste Spalte: Datum_Zeit
+                    ok = DateTime.TryParseExact(Zeile.Substring(0, Me.ColumnWidth), Me.Dateformat, Helpers.DefaultNumberFormat, Globalization.DateTimeStyles.None, datum)
+                    If (Not ok) Then
+                        Throw New Exception($"Could Not parse the date '{Zeile.Substring(0, Me.ColumnWidth)}' using the given date format '{Me.Dateformat}'! Please check the date format!")
+                    End If
+                    'Restliche Spalten: Werte
+                    For Each sInfo As TimeSeriesInfo In Me.SelectedSeries
+                        Me.TimeSeries(sInfo.Index).AddNode(datum, StringToDouble(Zeile.Substring(sInfo.Index * Me.ColumnWidth + ColumnOffset, Math.Min(Me.ColumnWidth, Zeile.Substring(sInfo.Index * Me.ColumnWidth + ColumnOffset).Length)), numberformat))
+                    Next
+                End If
 
-                StrReadSync.Close()
-                StrRead.Close()
-                FiStr.Close()
+            Loop Until StrReadSync.Peek() = -1
 
-            Catch ex As Exception
-                MsgBox($"Unable to read file!{eol}{eol}Error: {ex.Message}", MsgBoxStyle.Critical)
-                Me.TimeSeries.Clear()
-            End Try
+            StrReadSync.Close()
+            StrRead.Close()
+            FiStr.Close()
 
         End Sub
 

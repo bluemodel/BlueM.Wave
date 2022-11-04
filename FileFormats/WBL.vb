@@ -178,71 +178,64 @@ Namespace Fileformats
             Dim value As Single
             Dim errorcount As Integer
 
-            Try
+            'instantiate time series
+            For Each sInfo As TimeSeriesInfo In Me.SelectedSeries
+                Dim ts As New TimeSeries(sInfo.Name)
+                ts.Unit = sInfo.Unit
+                ts.DataSource = New TimeSeriesDataSource(Me.File, sInfo.Name)
+                ts.Interpretation = BlueM.Wave.TimeSeries.InterpretationEnum.BlockRight
+                Me.TimeSeries.Add(sInfo.Index, ts)
+            Next
 
-                'instantiate time series
-                For Each sInfo As TimeSeriesInfo In Me.SelectedSeries
-                    Dim ts As New TimeSeries(sInfo.Name)
-                    ts.Unit = sInfo.Unit
-                    ts.DataSource = New TimeSeriesDataSource(Me.File, sInfo.Name)
-                    ts.Interpretation = BlueM.Wave.TimeSeries.InterpretationEnum.BlockRight
-                    Me.TimeSeries.Add(sInfo.Index, ts)
-                Next
+            'get a list of selected indices
+            Dim selectedIndices As New List(Of Integer)
+            For Each sInfo As TimeSeriesInfo In Me.SelectedSeries
+                selectedIndices.Add(sInfo.Index)
+            Next
 
-                'get a list of selected indices
-                Dim selectedIndices As New List(Of Integer)
-                For Each sInfo As TimeSeriesInfo In Me.SelectedSeries
-                    selectedIndices.Add(sInfo.Index)
-                Next
+            Using reader As New IO.BinaryReader(IO.File.OpenRead(File), Text.ASCIIEncoding.ASCII)
+                'skip header (same length as a single record consisting of 8 bytes date and x bytes for each value depending on the data type
+                reader.ReadBytes(8 + Me.DataTypeLength * Me.TimeSeriesInfos.Count)
+                'read values
+                errorcount = 0
+                Do
+                    'read date
+                    rdate = reader.ReadDouble()
+                    'convert real date to DateTime
+                    timestamp = BIN.rDateToDate(rdate)
 
-                Using reader As New IO.BinaryReader(IO.File.OpenRead(File), Text.ASCIIEncoding.ASCII)
-                    'skip header (same length as a single record consisting of 8 bytes date and x bytes for each value depending on the data type
-                    reader.ReadBytes(8 + Me.DataTypeLength * Me.TimeSeriesInfos.Count)
-                    'read values
-                    errorcount = 0
-                    Do
-                        'read date
-                        rdate = reader.ReadDouble()
-                        'convert real date to DateTime
-                        timestamp = BIN.rDateToDate(rdate)
+                    For index As Integer = 0 To Me.TimeSeriesInfos.Count - 1
 
-                        For index As Integer = 0 To Me.TimeSeriesInfos.Count - 1
+                        'read value depending on data type
+                        Select Case Me.DataType
+                            Case DataTypes.Integer
+                                value = Convert.ToDouble(reader.ReadInt32())
+                            Case DataTypes.Single
+                                value = Convert.ToDouble(reader.ReadSingle())
+                            Case DataTypes.Double
+                                value = reader.ReadDouble()
+                            Case DataTypes.Boolean
+                                value = Convert.ToDouble(reader.ReadBoolean())
+                        End Select
 
-                            'read value depending on data type
-                            Select Case Me.DataType
-                                Case DataTypes.Integer
-                                    value = Convert.ToDouble(reader.ReadInt32())
-                                Case DataTypes.Single
-                                    value = Convert.ToDouble(reader.ReadSingle())
-                                Case DataTypes.Double
-                                    value = reader.ReadDouble()
-                                Case DataTypes.Boolean
-                                    value = Convert.ToDouble(reader.ReadBoolean())
-                            End Select
-
-                            ' only handle values from selected indices
-                            If selectedIndices.Contains(index) Then
-                                'convert error values to NaN
-                                If Math.Abs(value - BIN.ErrorValue) < 0.0001 Then
-                                    value = Double.NaN
-                                    errorcount += 1
-                                End If
-                                Me.TimeSeries(index).AddNode(timestamp, value)
+                        ' only handle values from selected indices
+                        If selectedIndices.Contains(index) Then
+                            'convert error values to NaN
+                            If Math.Abs(value - BIN.ErrorValue) < 0.0001 Then
+                                value = Double.NaN
+                                errorcount += 1
                             End If
-                        Next
-                    Loop Until reader.PeekChar < 0
-                End Using
+                            Me.TimeSeries(index).AddNode(timestamp, value)
+                        End If
+                    Next
+                Loop Until reader.PeekChar < 0
+            End Using
 
-                'Log 
-                Call Log.AddLogEntry(Log.levels.info, $"Read {Me.TimeSeries.Count} time series with {Me.TimeSeries.First.Value.Length} nodes each.")
-                If errorcount > 0 Then
-                    Log.AddLogEntry(Log.levels.warning, $"The file contained {errorcount} error values ({BIN.ErrorValue}), which were converted to NaN!")
-                End If
-
-            Catch ex As Exception
-                Throw New Exception($"Error while reading series data: {ex.Message}")
-                Me.TimeSeries.Clear()
-            End Try
+            'Log 
+            Call Log.AddLogEntry(Log.levels.info, $"Read {Me.TimeSeries.Count} time series with {Me.TimeSeries.First.Value.Length} nodes each.")
+            If errorcount > 0 Then
+                Log.AddLogEntry(Log.levels.warning, $"The file contained {errorcount} error values ({BIN.ErrorValue}), which were converted to NaN!")
+            End If
 
         End Sub
 

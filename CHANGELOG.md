@@ -5,6 +5,7 @@ Version 1.15.1
 --------------
 FIXED:
 * Fixed failed check for parseable dates in Enter time series dialog not aborting the import process
+* Errors encountered while reading certain file formats were not being handled correctly
 
 Version 1.15.0
 --------------

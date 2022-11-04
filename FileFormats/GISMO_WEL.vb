@@ -189,96 +189,90 @@ Namespace Fileformats
             Dim Werte(), Werte_temp() As String
             Dim ts As TimeSeries
 
-            Try
-                ' open file
-                Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
-                Dim StrRead As StreamReader = New StreamReader(FiStr, Me.Encoding)
-                Dim StrReadSync = TextReader.Synchronized(StrRead)
+            ' open file
+            Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
+            Dim StrRead As StreamReader = New StreamReader(FiStr, Me.Encoding)
+            Dim StrReadSync = TextReader.Synchronized(StrRead)
 
-                ' initialize a time series for every selected series
-                For Each sInfo As TimeSeriesInfo In Me.SelectedSeries
-                    ts = New TimeSeries(sInfo.Name)
-                    If Me.UseUnits Then
-                        ts.Unit = sInfo.Unit
-                    End If
-                    ts.DataSource = New TimeSeriesDataSource(Me.File, sInfo.Name)
-                    Me.TimeSeries.Add(sInfo.Index, ts)
-                Next
+            ' initialize a time series for every selected series
+            For Each sInfo As TimeSeriesInfo In Me.SelectedSeries
+                ts = New TimeSeries(sInfo.Name)
+                If Me.UseUnits Then
+                    ts.Unit = sInfo.Unit
+                End If
+                ts.DataSource = New TimeSeriesDataSource(Me.File, sInfo.Name)
+                Me.TimeSeries.Add(sInfo.Index, ts)
+            Next
 
-                ' read over header lines
-                For i = 0 To Me.nLinesHeader - 1
-                    StrReadSync.ReadLine()
-                Next
+            ' read over header lines
+            For i = 0 To Me.nLinesHeader - 1
+                StrReadSync.ReadLine()
+            Next
 
-                ' read date lines
-                Do
-                    Zeile = StrReadSync.ReadLine.ToString()
+            ' read date lines
+            Do
+                Zeile = StrReadSync.ReadLine.ToString()
 
-                    ' first empty space "" needs to be removed (otherwise date time format is not understood)
-                    'Zeile = Zeile.Substring(1, Zeile.Length - 1)
-                    Zeile = Trim(Zeile)
+                ' first empty space "" needs to be removed (otherwise date time format is not understood)
+                'Zeile = Zeile.Substring(1, Zeile.Length - 1)
+                Zeile = Trim(Zeile)
 
 
-                    If (Me.IsColumnSeparated) Then
-                        ' data columns are separated by ";"
+                If (Me.IsColumnSeparated) Then
+                    ' data columns are separated by ";"
 
-                        ' split data line into columns
-                        Werte = Zeile.Split(New Char() {Me.Separator.ToChar})
+                    ' split data line into columns
+                    Werte = Zeile.Split(New Char() {Me.Separator.ToChar})
 
-                        ' first column ist date time, add date time to times series
-                        ok = DateTime.TryParseExact(Werte(Me.DateTimeColumnIndex), DateFormats("GISMO1"), Helpers.DefaultNumberFormat, Globalization.DateTimeStyles.None, datum)
-                        If (Not ok) Then
-                            ok = DateTime.TryParseExact(Werte(Me.DateTimeColumnIndex), DateFormats("GISMO2"), Helpers.DefaultNumberFormat, Globalization.DateTimeStyles.None, datum)
-                            If Not ok Then
-                                Throw New Exception($"Kann das Datumsformat '{Werte(Me.DateTimeColumnIndex)}' nicht erkennen!{eol}Sollte in der Form '{DateFormats("GISMO1")} oder {DateFormats("GISMO2")}' vorliegen!")
-                            End If
+                    ' first column ist date time, add date time to times series
+                    ok = DateTime.TryParseExact(Werte(Me.DateTimeColumnIndex), DateFormats("GISMO1"), Helpers.DefaultNumberFormat, Globalization.DateTimeStyles.None, datum)
+                    If (Not ok) Then
+                        ok = DateTime.TryParseExact(Werte(Me.DateTimeColumnIndex), DateFormats("GISMO2"), Helpers.DefaultNumberFormat, Globalization.DateTimeStyles.None, datum)
+                        If Not ok Then
+                            Throw New Exception($"Kann das Datumsformat '{Werte(Me.DateTimeColumnIndex)}' nicht erkennen!{eol}Sollte in der Form '{DateFormats("GISMO1")} oder {DateFormats("GISMO2")}' vorliegen!")
                         End If
-
-                        ' remaining columns are data, add to time series
-                        For Each sInfo As TimeSeriesInfo In Me.SelectedSeries
-                            Me.TimeSeries(sInfo.Index).AddNode(datum, StringToDouble(Werte(sInfo.Index)))
-                        Next
-
-                    Else
-                        ' data columns are separated by spaces
-                        ' converge multiple spaces to one
-                        Zeile = System.Text.RegularExpressions.Regex.Replace(Zeile, "\s{2,}", Me.Separator.ToChar)
-
-                        ' the date time columns need to be moved to one column
-                        Werte_temp = Zeile.Split(New Char() {Me.Separator.ToChar})
-                        ReDim Werte(Werte_temp.Length - 2)
-                        For i = 0 To Werte.Length - 1
-                            Werte(i) = Werte_temp(i + 1)
-                        Next
-                        Werte(0) = Werte_temp(0) & " " & Werte_temp(1)
-
-                        ' first column (now) is date time, add to time series
-                        ok = DateTime.TryParseExact(Werte(Me.DateTimeColumnIndex), DateFormats("GISMO1"), Helpers.DefaultNumberFormat, Globalization.DateTimeStyles.None, datum)
-                        If (Not ok) Then
-                            ok = DateTime.TryParseExact(Werte(Me.DateTimeColumnIndex), DateFormats("GISMO2"), Helpers.DefaultNumberFormat, Globalization.DateTimeStyles.None, datum)
-                            If Not ok Then
-                                Throw New Exception($"Kann das Datumsformat '{Werte(Me.DateTimeColumnIndex)}' nicht erkennen! {eol}Sollte in der Form '{DateFormats("GISMO1")} oder {DateFormats("GISMO2")}' vorliegen!")
-                            End If
-                        End If
-
-                        ' remaining columns are data, add to time series
-                        For Each sInfo As TimeSeriesInfo In Me.SelectedSeries
-                            Me.TimeSeries(sInfo.Index).AddNode(datum, StringToDouble(Werte(sInfo.Index)))
-                        Next
-
                     End If
 
-                Loop Until StrReadSync.Peek() = -1
+                    ' remaining columns are data, add to time series
+                    For Each sInfo As TimeSeriesInfo In Me.SelectedSeries
+                        Me.TimeSeries(sInfo.Index).AddNode(datum, StringToDouble(Werte(sInfo.Index)))
+                    Next
 
-                ' close file
-                StrReadSync.Close()
-                StrRead.Close()
-                FiStr.Close()
+                Else
+                    ' data columns are separated by spaces
+                    ' converge multiple spaces to one
+                    Zeile = System.Text.RegularExpressions.Regex.Replace(Zeile, "\s{2,}", Me.Separator.ToChar)
 
-            Catch ex As Exception
-                'catch errors
-                MsgBox($"Unable to read file!{eol}{eol}Error: {ex.Message}", MsgBoxStyle.Critical)
-            End Try
+                    ' the date time columns need to be moved to one column
+                    Werte_temp = Zeile.Split(New Char() {Me.Separator.ToChar})
+                    ReDim Werte(Werte_temp.Length - 2)
+                    For i = 0 To Werte.Length - 1
+                        Werte(i) = Werte_temp(i + 1)
+                    Next
+                    Werte(0) = Werte_temp(0) & " " & Werte_temp(1)
+
+                    ' first column (now) is date time, add to time series
+                    ok = DateTime.TryParseExact(Werte(Me.DateTimeColumnIndex), DateFormats("GISMO1"), Helpers.DefaultNumberFormat, Globalization.DateTimeStyles.None, datum)
+                    If (Not ok) Then
+                        ok = DateTime.TryParseExact(Werte(Me.DateTimeColumnIndex), DateFormats("GISMO2"), Helpers.DefaultNumberFormat, Globalization.DateTimeStyles.None, datum)
+                        If Not ok Then
+                            Throw New Exception($"Kann das Datumsformat '{Werte(Me.DateTimeColumnIndex)}' nicht erkennen! {eol}Sollte in der Form '{DateFormats("GISMO1")} oder {DateFormats("GISMO2")}' vorliegen!")
+                        End If
+                    End If
+
+                    ' remaining columns are data, add to time series
+                    For Each sInfo As TimeSeriesInfo In Me.SelectedSeries
+                        Me.TimeSeries(sInfo.Index).AddNode(datum, StringToDouble(Werte(sInfo.Index)))
+                    Next
+
+                End If
+
+            Loop Until StrReadSync.Peek() = -1
+
+            ' close file
+            StrReadSync.Close()
+            StrRead.Close()
+            FiStr.Close()
 
         End Sub
 

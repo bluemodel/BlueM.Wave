@@ -242,77 +242,72 @@ Namespace Fileformats
             Dim sInfo As TimeSeriesInfo
             Dim ts As TimeSeries
 
-            Try
-                'Zeitreihe instanzieren
-                sInfo = Me.TimeSeriesInfos(0)
-                ts = New TimeSeries(sInfo.Name)
-                ts.Unit = sInfo.Unit
-                ts.DataSource = New TimeSeriesDataSource(Me.File, sInfo.Name)
+            'Zeitreihe instanzieren
+            sInfo = Me.TimeSeriesInfos(0)
+            ts = New TimeSeries(sInfo.Name)
+            ts.Unit = sInfo.Unit
+            ts.DataSource = New TimeSeriesDataSource(Me.File, sInfo.Name)
 
-                'store metadata
-                ts.Metadata = Me.FileMetadata
+            'store metadata
+            ts.Metadata = Me.FileMetadata
 
-                'Datei öffnen
-                Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
-                Dim StrRead As StreamReader = New StreamReader(FiStr, Me.Encoding)
-                Dim StrReadSync = TextReader.Synchronized(StrRead)
+            'Datei öffnen
+            Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
+            Dim StrRead As StreamReader = New StreamReader(FiStr, Me.Encoding)
+            Dim StrReadSync = TextReader.Synchronized(StrRead)
 
-                'Einlesen
-                '--------
+            'Einlesen
+            '--------
 
-                'Header
-                For i = 0 To Me.nLinesHeader - 1
-                    StrReadSync.ReadLine()
-                Next
+            'Header
+            For i = 0 To Me.nLinesHeader - 1
+                StrReadSync.ReadLine()
+            Next
 
-                'Daten
-                century = Integer.Parse(Me.FileMetadata("century"))
-                year_prev = Integer.Parse(century.ToString().Substring(2)) 'Aus Anfangsjahrhundert
-                errorcount = 0
-                Do
-                    Zeile = StrReadSync.ReadLine.ToString()
-                    'Datum lesen
-                    datumstring = Zeile.Substring(0, 10)
-                    year = Integer.Parse(datumstring.Substring(0, 2))
-                    'Jahrhundert bestimmen
-                    If year - year_prev < 0 Then
-                        'neues Jahrhundert
-                        century += 100
-                    End If
-                    year_prev = year
-                    'Jahrhundert voranstellen
-                    datumstringExt = century.ToString().Substring(0, 2) & datumstring
-                    'parse it
-                    ok = DateTime.TryParseExact(datumstringExt, Me.Dateformat, Helpers.DefaultNumberFormat, Globalization.DateTimeStyles.None, datum)
-                    If (Not ok) Then
-                        Throw New Exception($"Unable to parse the date '{datumstring}' using the given date format '{Me.Dateformat}'!")
-                    End If
-                    'Wert lesen
-                    wert = Helpers.StringToDouble(Zeile.Substring(10))
-                    If wert = UVF.ErrorValue Then
-                        'convert error value to NaN
-                        wert = Double.NaN
-                        errorcount += 1
-                    End If
-                    'Stützstelle abspeichern
-                    ts.AddNode(datum, wert)
-
-                Loop Until StrReadSync.Peek() = -1
-
-                StrReadSync.Close()
-                StrRead.Close()
-                FiStr.Close()
-
-                If errorcount > 0 Then
-                    Log.AddLogEntry(Log.levels.warning, $"The file contained {errorcount} error values ({UVF.ErrorValue}), which were converted to NaN!")
+            'Daten
+            century = Integer.Parse(Me.FileMetadata("century"))
+            year_prev = Integer.Parse(century.ToString().Substring(2)) 'Aus Anfangsjahrhundert
+            errorcount = 0
+            Do
+                Zeile = StrReadSync.ReadLine.ToString()
+                'Datum lesen
+                datumstring = Zeile.Substring(0, 10)
+                year = Integer.Parse(datumstring.Substring(0, 2))
+                'Jahrhundert bestimmen
+                If year - year_prev < 0 Then
+                    'neues Jahrhundert
+                    century += 100
                 End If
+                year_prev = year
+                'Jahrhundert voranstellen
+                datumstringExt = century.ToString().Substring(0, 2) & datumstring
+                'parse it
+                ok = DateTime.TryParseExact(datumstringExt, Me.Dateformat, Helpers.DefaultNumberFormat, Globalization.DateTimeStyles.None, datum)
+                If (Not ok) Then
+                    Throw New Exception($"Unable to parse the date '{datumstring}' using the given date format '{Me.Dateformat}'!")
+                End If
+                'Wert lesen
+                wert = Helpers.StringToDouble(Zeile.Substring(10))
+                If wert = UVF.ErrorValue Then
+                    'convert error value to NaN
+                    wert = Double.NaN
+                    errorcount += 1
+                End If
+                'Stützstelle abspeichern
+                ts.AddNode(datum, wert)
 
-                'store time series
-                Me.TimeSeries.Add(sInfo.Index, ts)
+            Loop Until StrReadSync.Peek() = -1
 
-            Catch ex As Exception
-                MsgBox($"Unable to read file!{eol}{eol}Error: {ex.Message}", MsgBoxStyle.Critical)
-            End Try
+            StrReadSync.Close()
+            StrRead.Close()
+            FiStr.Close()
+
+            If errorcount > 0 Then
+                Log.AddLogEntry(Log.levels.warning, $"The file contained {errorcount} error values ({UVF.ErrorValue}), which were converted to NaN!")
+            End If
+
+            'store time series
+            Me.TimeSeries.Add(sInfo.Index, ts)
 
         End Sub
 

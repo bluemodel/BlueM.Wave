@@ -92,7 +92,7 @@ Namespace Fileformats
                     Zeile = StrReadSync.ReadLine.ToString()
                 Next
 
-                StrReadSync.close()
+                StrReadSync.Close()
                 StrRead.Close()
                 FiStr.Close()
 
@@ -133,41 +133,33 @@ Namespace Fileformats
 
             'Einlesen
             '--------
-            Try
-                j = 0
-                Do
-                    j += 1
-                    Zeile = StrReadSync.ReadLine.ToString()
-                    If (j > Me.nLinesHeader And Zeile.Trim.Length > 0) Then
+            j = 0
+            Do
+                j += 1
+                Zeile = StrReadSync.ReadLine.ToString()
+                If (j > Me.nLinesHeader And Zeile.Trim.Length > 0) Then
 
-                        'Datum erkennen
-                        timestamp = Zeile.Substring(0, 14)
-                        ok = DateTime.TryParseExact(timestamp, Me.Dateformat, Helpers.DefaultNumberFormat, Globalization.DateTimeStyles.None, datum)
-                        If (Not ok) Then
-                            Throw New Exception($"Unable to parse the timestamp '{timestamp}' using the expected format '{Me.Dateformat}'!")
-                        End If
-
-                        'Datum und Wert zur Zeitreihe hinzufügen
-                        '---------------------------------------
-                        ts.AddNode(Datum, StringToDouble(Zeile.Substring(15)))
-
+                    'Datum erkennen
+                    timestamp = Zeile.Substring(0, 14)
+                    ok = DateTime.TryParseExact(timestamp, Me.Dateformat, Helpers.DefaultNumberFormat, Globalization.DateTimeStyles.None, Datum)
+                    If (Not ok) Then
+                        Throw New Exception($"Unable to parse the timestamp '{timestamp}' using the expected format '{Me.Dateformat}'!")
                     End If
-                Loop Until StrReadSync.Peek() = -1
 
-                'store time series
-                Me.TimeSeries.Add(sInfo.Index, ts)
+                    'Datum und Wert zur Zeitreihe hinzufügen
+                    '---------------------------------------
+                    ts.AddNode(Datum, StringToDouble(Zeile.Substring(15)))
 
-            Catch ex As Exception
-                'Fehler weiterschmeissen
-                Throw ex
+                End If
+            Loop Until StrReadSync.Peek() = -1
 
-            Finally
-                'Datei schliessen
-                StrReadSync.close()
-                StrRead.Close()
-                FiStr.Close()
+            'store time series
+            Me.TimeSeries.Add(sInfo.Index, ts)
 
-            End Try
+            'Datei schliessen
+            StrReadSync.Close()
+            StrRead.Close()
+            FiStr.Close()
 
         End Sub
 
