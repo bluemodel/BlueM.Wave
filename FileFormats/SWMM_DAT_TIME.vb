@@ -130,7 +130,7 @@ Namespace Fileformats
         'DAT-Datei einlesen
         '******************
         Public Overrides Sub readFile()
-
+            Throw New NotImplementedException("Reading SWMM5 time series (DAT) files is not yet implemented!")
         End Sub
 
         ''' <summary>
