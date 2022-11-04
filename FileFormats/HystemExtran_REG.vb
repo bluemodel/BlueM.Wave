@@ -160,7 +160,7 @@ Namespace Fileformats
                 'Zeitintervall auslesen
                 Me.Zeitintervall = Convert.ToSingle(Zeile.Substring(23, 2).Trim)
 
-                StrReadSync.close()
+                StrReadSync.Close()
                 StrRead.Close()
                 FiStr.Close()
 
@@ -260,7 +260,7 @@ Namespace Fileformats
                 End If
             Loop Until StrReadSync.Peek() = -1
 
-            StrReadSync.close()
+            StrReadSync.Close()
             StrRead.Close()
             FiStr.Close()
 
