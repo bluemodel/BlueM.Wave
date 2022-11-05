@@ -53,6 +53,15 @@ Friend Class CLI
 
         Dim showWave As Boolean = False
 
+        Dim v As Version = Reflection.Assembly.GetExecutingAssembly.GetName().Version()
+        Dim currentVersion As New Version($"{v.Major}.{v.Minor}.{v.Build}")
+
+        ConsoleOutput("")
+        ConsoleOutput($"BlueM.Wave v{currentVersion}")
+        ConsoleOutput("Copyright (C) BlueM Dev Group")
+        ConsoleOutput("This program comes with ABSOLUTELY NO WARRANTY")
+        ConsoleOutput("This is free software, and you are welcome to redistribute it under certain conditions")
+        ConsoleOutput("See COPYING and COPYING.LESSER for details")
         ConsoleOutput("")
 
         Try
