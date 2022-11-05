@@ -1,6 +1,11 @@
 ﻿BlueM.Wave Release Notes
 ========================
 
+Version 2.0.0
+-------------
+CHANGED:
+* License changed to LGPLv3, see files COPYING and COPYING.LESSER
+
 Version 1.15.1
 --------------
 FIXED:
