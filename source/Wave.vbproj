@@ -440,6 +440,12 @@
     <Content Include="CHANGELOG.md">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="COPYING">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="COPYING.LESSER">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="lib\SQLite\System.Data.SQLite.dll.config" />
     <None Include="My Project\Application.myapp">
       <Generator>MyApplicationCodeGenerator</Generator>
@@ -466,9 +472,6 @@
     <Content Include="lib\SQLite\System.Data.SQLite.dll" />
     <Content Include="lib\SQLite\x64\SQLite.Interop.dll" />
     <Content Include="lib\SQLite\x86\SQLite.Interop.dll" />
-    <Content Include="LICENSE.TXT">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <None Include="Resources\accept.png" />
     <None Include="Resources\accept_grayscale.png" />
     <None Include="Resources\accept_split.png" />
