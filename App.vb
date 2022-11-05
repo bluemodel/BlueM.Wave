@@ -38,12 +38,17 @@ Public Module App
 
         If Environment.GetCommandLineArgs().Count > 1 Then
             'run the CLI
-            Dim showWave As Boolean = CLI.Run(Environment.GetCommandLineArgs().Skip(1).ToList, wave)
+            Dim showWave As Boolean = False
+            Using cli As New CLI()
+                showWave = CLI.Run(Environment.GetCommandLineArgs().Skip(1).ToList, wave)
+            End Using
+
             If Not showWave Then
                 Exit Sub
             End If
         End If
 
+        'launch the app
         Call Launch(wave)
 
     End Sub

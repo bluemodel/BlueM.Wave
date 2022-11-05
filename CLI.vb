@@ -29,6 +29,9 @@
 ''' Wave commandline interface
 ''' </summary>
 Friend Class CLI
+    Implements IDisposable
+
+    Private disposed As Boolean = False
 
     Declare Function AttachConsole Lib "kernel32.dll" (dwProcessId As Int32) As Boolean
     Declare Function AllocConsole Lib "kernel32.dll" () As Boolean
@@ -36,7 +39,7 @@ Friend Class CLI
 
     Private Shared stdOutWriter As IO.StreamWriter
 
-    Shared Sub New()
+    Public Sub New()
 
         'Create a streamwriter for stdout in case output is piped
         Dim stdOut As IO.Stream = Console.OpenStandardOutput()
@@ -56,7 +59,7 @@ Friend Class CLI
     ''' </summary>
     ''' <param name="args">the CLI arguments</param>
     ''' <returns>whether to show Wave (True) or not (False) after the CLI is finished</returns>
-    Public Shared Function Run(args As List(Of String), wave As Wave) As Boolean
+    Public Function Run(args As List(Of String), wave As Wave) As Boolean
 
         Dim showWave As Boolean = False
 
@@ -222,9 +225,6 @@ Friend Class CLI
         Catch e As Exception
             Log.AddLogEntry(BlueM.Wave.Log.levels.error, e.Message)
 
-        Finally
-            ConsoleOutput("Press <Enter> to continue.")
-            FreeConsole()
         End Try
 
         Return showWave
@@ -270,4 +270,43 @@ Friend Class CLI
         stdOutWriter.WriteLine(msg) ' this is for when the output is being piped
     End Sub
 
+    ''' <summary>
+    ''' Dispose implementation
+    ''' </summary>
+    ''' <param name="disposing"></param>
+    ''' <remarks>see https://learn.microsoft.com/en-us/dotnet/standard/garbage-collection/implementing-dispose </remarks>
+    Protected Overridable Sub Dispose(disposing As Boolean)
+        If Not disposed Then
+            If disposing Then
+                'dispose managed state (managed objects)
+                ConsoleOutput("Press <Enter> to continue.")
+
+                'unsubscribe from log events
+                RemoveHandler Log.LogMsgAdded, AddressOf ConsoleAddLog
+
+                'close stdOut streamwriter
+                stdOutWriter.Close()
+
+                'detach from console
+                FreeConsole()
+            End If
+
+            ' TODO: free unmanaged resources (unmanaged objects) and override finalizer
+            ' TODO: set large fields to null
+            disposed = True
+        End If
+    End Sub
+
+    ' ' TODO: override finalizer only if 'Dispose(disposing As Boolean)' has code to free unmanaged resources
+    ' Protected Overrides Sub Finalize()
+    '     ' Do not change this code. Put cleanup code in 'Dispose(disposing As Boolean)' method
+    '     Dispose(disposing:=False)
+    '     MyBase.Finalize()
+    ' End Sub
+
+    Public Sub Dispose() Implements IDisposable.Dispose
+        ' Do not change this code. Put cleanup code in 'Dispose(disposing As Boolean)' method
+        Dispose(disposing:=True)
+        GC.SuppressFinalize(Me)
+    End Sub
 End Class
