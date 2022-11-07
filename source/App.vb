@@ -18,7 +18,9 @@
 ''' <summary>
 ''' Class representing an instance of the Wave app
 ''' </summary>
-Friend Class App
+Public Class App
+    Inherits ApplicationContext
+
     'Model
     Private _wave As Wave
 
@@ -28,15 +30,37 @@ Friend Class App
     Private _valuesController As Controller
 
     ''' <summary>
-    ''' Instantiates a new AppInstance with the passed Wave instance as the model
+    ''' Instantiates a new Wave app and shows the main Wave window
+    ''' </summary>
+    Public Sub New()
+        Call Me.New(New Wave())
+    End Sub
+
+    ''' <summary>
+    ''' Instantiates a new Wave app with the passed Wave instance as the model and shows the main Wave window
     ''' </summary>
     ''' <param name="wave">the Wave instance to use as the model</param>
     Public Sub New(wave As Wave)
+        MyBase.New()
         _wave = wave
         _waveController = New WaveController(New MainWindow(), _wave)
         _propController = New PropertiesController(New PropertiesWindow(), _wave)
         _valuesController = New ValuesController(New ValuesWindow(), _wave)
+
+        MyBase.MainForm = _waveController.View
+
+        showMainWindow()
     End Sub
+
+    ''' <summary>
+    ''' The Wave instance associated with this app instance
+    ''' </summary>
+    ''' <returns></returns>
+    Public ReadOnly Property Wave As Wave
+        Get
+            Return _wave
+        End Get
+    End Property
 
     ''' <summary>
     ''' Shows the main Wave window

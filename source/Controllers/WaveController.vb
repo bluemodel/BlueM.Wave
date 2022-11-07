@@ -32,9 +32,7 @@ Friend Class WaveController
         If IsNothing(_view) Then
             _view = New MainWindow()
         End If
-        Dim thread As New Threading.Thread(AddressOf View.ShowDialog)
-        thread.SetApartmentState(Threading.ApartmentState.STA)
-        thread.Start()
+        View.Show()
     End Sub
 
     Private selectionMade As Boolean 'Flag zeigt an, ob bereits ein Auswahlbereich ausgewählt wurde

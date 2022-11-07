@@ -39,17 +39,9 @@ Friend Module Main
         End If
 
         'launch the app
-        Call Launch(wave)
+        Dim app As New App(wave)
+        Application.Run(app)
 
-    End Sub
-
-    ''' <summary>
-    ''' Launches a new instance of the Wave app
-    ''' </summary>
-    ''' <param name="wave">the Wave model instance to associate with the app</param>
-    Public Sub Launch(wave As Wave)
-        Dim instance As New App(wave)
-        instance.showMainWindow()
     End Sub
 
 End Module

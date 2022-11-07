@@ -6,6 +6,10 @@ Version 2.0.0
 CHANGED:
 * License changed to LGPLv3, see files COPYING and COPYING.LESSER
 
+API-CHANGES:
+* The Wave window can no longer be shown using `Wave.Show()`. 
+  Instead, a new `BlueM.Wave.App` instance must be instantiated, see API docs for details #84
+
 Version 1.15.1
 --------------
 FIXED:

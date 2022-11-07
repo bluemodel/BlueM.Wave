@@ -44,6 +44,8 @@
         AddHandler Button3.Click, AddressOf Example3
         AddHandler Button4.Click, AddressOf Example4
         AddHandler Button5.Click, AddressOf Example5
+        AddHandler Button6.Click, AddressOf Example6
+        AddHandler Button7.Click, AddressOf Example7
 
     End Sub
 
@@ -51,9 +53,11 @@
 
         Dim Wave1 As New BlueM.Wave.Wave()
 
-        'import a time series file and then display Wave
+        'import a time series file
         Wave1.Import_File(Me.FilePath) 'depending on the file format, this may display an import dialog
-        Wave1.Show()
+
+        'instantiate and show the Wave app
+        Dim app As New BlueM.Wave.App(Wave1)
 
     End Sub
 
@@ -80,7 +84,8 @@
         Wave1.Import_Series(ts2)
         Wave1.Import_Series(ts3)
 
-        Wave1.Show()
+        'instantiate and show the Wave app
+        Dim app As New BlueM.Wave.App(Wave1)
 
     End Sub
 
@@ -115,9 +120,11 @@
         'get one particular time series
         ts = myFile.getTimeSeries("S1  _1AB")
 
-        'Display the series in Wave
+        'import the series in Wave
         Wave1.Import_Series(ts)
-        Wave1.Show()
+
+        'instantiate and show the Wave app
+        Dim app As New BlueM.Wave.App(Wave1)
 
     End Sub
 
@@ -136,9 +143,17 @@
         ts.AddNode(New DateTime(2000, 1, 3), 30)
         ts.AddNode(New DateTime(2000, 1, 4), 15)
 
-        'display the series in Wave
+        'print some information about the time series
+        Console.WriteLine("Length: " & ts.Length)
+        Console.WriteLine("Start date: " & ts.StartDate)
+        Console.WriteLine("End date: " & ts.EndDate)
+        Console.WriteLine("Average: " & ts.Average)
+
+        'import the series in Wave
         Wave1.Import_Series(ts)
-        Wave1.Show()
+
+        'instantiate and show the Wave app
+        Dim app As New BlueM.Wave.App(Wave1)
 
     End Sub
 
@@ -164,6 +179,51 @@
             v = node.Value
             Console.WriteLine($"{d}: {v}")
         Next
+
+    End Sub
+
+    Private Sub Example6()
+
+        Dim Wave1 As New BlueM.Wave.Wave()
+
+        Dim myFile As BlueM.Wave.TimeSeriesFile
+        Dim ts1, ts2 As BlueM.Wave.TimeSeries
+
+        'get a file instance
+        myFile = BlueM.Wave.TimeSeriesFile.getInstance(Me.FilePath)
+
+        'get a specific time series from the file
+        ts1 = myFile.getTimeSeries("S1  _1AB")
+
+        'import the series in Wave
+        Wave1.Import_Series(ts1)
+
+        'instantiate and show the Wave app
+        Dim app As New BlueM.Wave.App(Wave1)
+
+        'get a second time series from the file
+        ts2 = myFile.getTimeSeries("AA  _ETA")
+
+        'display the second time series in Wave
+        Wave1.Import_Series(ts2)
+    End Sub
+
+    Private Sub Example7()
+
+        Dim myFile As BlueM.Wave.TimeSeriesFile
+        Dim ts1 As BlueM.Wave.TimeSeries
+
+        'instantiate and show the Wave app
+        Dim app As New BlueM.Wave.App()
+
+        'get a file instance
+        myFile = BlueM.Wave.TimeSeriesFile.getInstance(Me.FilePath)
+
+        'get a specific time series from the file
+        ts1 = myFile.getTimeSeries("S1  _1AB")
+
+        'import the series in Wave
+        app.Wave.Import_Series(ts1)
 
     End Sub
 

@@ -86,13 +86,6 @@ Public Class Wave
     End Sub
 
     ''' <summary>
-    ''' Launches a new Wave app instance using itself as the model
-    ''' </summary>
-    Public Sub Show()
-        Main.Launch(Me)
-    End Sub
-
-    ''' <summary>
     ''' Import series from multiple files
     ''' </summary>
     ''' <param name="files">An enumerable of file paths</param>
