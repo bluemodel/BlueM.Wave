@@ -15,7 +15,7 @@
 'You should have received a copy of the GNU Lesser General Public License
 'along with this program.  If not, see <https://www.gnu.org/licenses/>.
 '
-Public Module App
+Friend Module Main
 
     <STAThread()>
     Public Sub Main()
@@ -30,7 +30,7 @@ Public Module App
             'run the CLI
             Dim showWave As Boolean = False
             Using cli As New CLI()
-                showWave = CLI.Run(Environment.GetCommandLineArgs().Skip(1).ToList, wave)
+                showWave = cli.Run(Environment.GetCommandLineArgs().Skip(1).ToList, wave)
             End Using
 
             If Not showWave Then

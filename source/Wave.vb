@@ -89,7 +89,7 @@ Public Class Wave
     ''' Launches a new Wave app instance using itself as the model
     ''' </summary>
     Public Sub Show()
-        App.Launch(Me)
+        Main.Launch(Me)
     End Sub
 
     ''' <summary>
