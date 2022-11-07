@@ -18,7 +18,7 @@
 ''' <summary>
 ''' Class representing an instance of the Wave app
 ''' </summary>
-Friend Class AppInstance
+Friend Class App
     'Model
     Private _wave As Wave
 

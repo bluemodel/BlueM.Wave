@@ -48,7 +48,7 @@ Friend Module Main
     ''' </summary>
     ''' <param name="wave">the Wave model instance to associate with the app</param>
     Public Sub Launch(wave As Wave)
-        Dim instance As New AppInstance(wave)
+        Dim instance As New App(wave)
         instance.showMainWindow()
     End Sub
 
