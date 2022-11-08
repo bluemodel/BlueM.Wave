@@ -1,4 +1,7 @@
 # BlueM.Wave
+
+[![DocFX Build and Publish](https://github.com/bluemodel/BlueM.Wave/actions/workflows/docfx-build-publish.yml/badge.svg)](https://github.com/bluemodel/BlueM.Wave/actions/workflows/docfx-build-publish.yml)
+
 Wave is a tool for displaying, analyzing and importing and exporting time series.
 
 ![Wave screenshot](https://wiki.bluemodel.org/images/thumb/1/16/Wave_screenshot.png/777px-Wave_screenshot.png)
