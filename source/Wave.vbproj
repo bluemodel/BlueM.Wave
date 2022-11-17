@@ -543,8 +543,8 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy $(SolutionDir)COPYING $(TargetDir)COPYING
-copy $(SolutionDir)COPYING.LESSER $(TargetDir)COPYING.LESSER
+    <PostBuildEvent>copy $(ProjectDir)..\COPYING $(TargetDir)COPYING
+copy $(ProjectDir)..\COPYING.LESSER $(TargetDir)COPYING.LESSER
 copy $(ProjectDir)lib\MathNet\MathNet.Numerics.license.txt $(TargetDir)MathNet.Numerics.license.txt
 copy $(ProjectDir)lib\MathParserNet\MathParserNet.license.html $(TargetDir)MathParserNet.license.html
 copy $(ProjectDir)lib\DHI.DFS\DHI.DFS.license.txt $(TargetDir)DHI.DFS.license.txt
