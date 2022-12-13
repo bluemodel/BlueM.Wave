@@ -62,7 +62,7 @@ Friend Class AnnualStatistics
     ''' </summary>
     Public Overrides ReadOnly Property hasResultSeries() As Boolean
         Get
-            Return False
+            Return True
         End Get
     End Property
 
@@ -135,6 +135,38 @@ Friend Class AnnualStatistics
                 stat.avg.ToString(formatstring),
                 stat.vol.ToString(formatstring)) & eol
         Next
+
+        'Generate timeseries with max/avg/min values if years are present
+        If (Me.stats.Count > 1) Then
+            'Prepare output timeseries
+            Dim basename As String = Me.InputTimeSeries(0).Title
+            Dim timeseries_max As TimeSeries = New TimeSeries(basename + "_max")
+            Dim timeseries_avg As TimeSeries = New TimeSeries(basename + "_avg")
+            Dim timeseries_min As TimeSeries = New TimeSeries(basename + "_min")
+
+            'Set interpretation mode
+            timeseries_max.Interpretation = TimeSeries.InterpretationEnum.BlockRight
+            timeseries_avg.Interpretation = TimeSeries.InterpretationEnum.BlockRight
+            timeseries_min.Interpretation = TimeSeries.InterpretationEnum.BlockRight
+
+            'Get Unit from input timeseries
+            Dim unit As String = Me.InputTimeSeries(0).Unit
+            timeseries_max.Unit = unit
+            timeseries_avg.Unit = unit
+            timeseries_min.Unit = unit
+
+            'Fill timeseries with values of max, avg, min
+            For Each kvp As KeyValuePair(Of String, struct_stat) In Me.stats
+                stat = kvp.Value
+                timeseries_max.AddNode(stat.startDate, stat.max)
+                timeseries_avg.AddNode(stat.startDate, stat.avg)
+                timeseries_min.AddNode(stat.startDate, stat.min)
+            Next
+
+            'Bundle output timeseries
+            MyBase.ResultSeries = New List(Of TimeSeries) From {timeseries_max, timeseries_avg, timeseries_min}
+        End If
+
     End Sub
 
 End Class
