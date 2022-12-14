@@ -4,6 +4,7 @@
 Version 2.1.0
 -------------
 NEW:
+* Analysis function Cumulative: a start date can now be specified #87
 * Analysis function AnnualStatistics: now optionally generates annual bounding box series (max, avg, min) #88
 
 Version 2.0.0
