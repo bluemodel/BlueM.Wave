@@ -1,6 +1,11 @@
 ﻿BlueM.Wave Release Notes
 ========================
 
+Version 2.1.0
+-------------
+NEW:
+* Analysis function AnnualStatistics: now optionally generates annual bounding box series (max, avg, min) #88
+
 Version 2.0.0
 -------------
 CHANGED:
