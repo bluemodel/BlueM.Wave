@@ -33,6 +33,7 @@ Friend Class AnnualStatistics
     End Structure
 
     Private stats As Dictionary(Of String, struct_stat)
+    Private generateBoundigBoxes As Boolean
 
     Public Overloads Shared Function Description() As String
         Return "Calculates annual statistics (min, max, avg, vol) based on hydrological years."
@@ -62,7 +63,7 @@ Friend Class AnnualStatistics
     ''' </summary>
     Public Overrides ReadOnly Property hasResultSeries() As Boolean
         Get
-            Return False
+            Return True
         End Get
     End Property
 
@@ -99,6 +100,7 @@ Friend Class AnnualStatistics
         End If
 
         Dim startMonth As Integer = CType(dialog.ComboBox_startMonth.SelectedItem, Month).number
+        Me.generateBoundigBoxes = dialog.CheckBox_boundingbox.Checked
 
         'stats for entire series
         Me.stats.Add("Entire series", calculateStats(Me.InputTimeSeries(0)))
@@ -135,6 +137,45 @@ Friend Class AnnualStatistics
                 stat.avg.ToString(formatstring),
                 stat.vol.ToString(formatstring)) & eol
         Next
+
+        'Generate timeseries with max/avg/min values if checkbox is checked and at least two years are present
+        If (Me.generateBoundigBoxes And Me.stats.Count > 2) Then
+            'Prepare output timeseries
+            Dim basename As String = Me.InputTimeSeries(0).Title
+            Dim timeseries_max As TimeSeries = New TimeSeries(basename & " (annual maximum)")
+            Dim timeseries_avg As TimeSeries = New TimeSeries(basename & " (annual avarage)")
+            Dim timeseries_min As TimeSeries = New TimeSeries(basename & " (annual minimum)")
+
+            'Set interpretation mode
+            timeseries_max.Interpretation = TimeSeries.InterpretationEnum.BlockRight
+            timeseries_avg.Interpretation = TimeSeries.InterpretationEnum.BlockRight
+            timeseries_min.Interpretation = TimeSeries.InterpretationEnum.BlockRight
+
+            'Transfer unit from input timeseries
+            Dim unit As String = Me.InputTimeSeries(0).Unit
+            timeseries_max.Unit = unit
+            timeseries_avg.Unit = unit
+            timeseries_min.Unit = unit
+
+            'Set data source origin
+            timeseries_max.DataSource = New TimeSeriesDataSource(TimeSeriesDataSource.OriginEnum.AnalysisResult)
+            timeseries_avg.DataSource = New TimeSeriesDataSource(TimeSeriesDataSource.OriginEnum.AnalysisResult)
+            timeseries_min.DataSource = New TimeSeriesDataSource(TimeSeriesDataSource.OriginEnum.AnalysisResult)
+
+            'Fill timeseries with values of max, avg, min
+            For Each kvp As KeyValuePair(Of String, struct_stat) In Me.stats
+                If IsNumeric(kvp.Key) Then
+                    stat = kvp.Value
+                    timeseries_max.AddNode(stat.startDate, stat.max)
+                    timeseries_avg.AddNode(stat.startDate, stat.avg)
+                    timeseries_min.AddNode(stat.startDate, stat.min)
+                End If
+            Next
+
+            'Bundle output timeseries
+            MyBase.ResultSeries = New List(Of TimeSeries) From {timeseries_max, timeseries_avg, timeseries_min}
+        End If
+
     End Sub
 
 End Class
