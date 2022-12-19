@@ -70,53 +70,64 @@ Friend Class Cumulative
 #Region "Methoden"
 
     ''' <summary>
-    ''' Konstruktor
+    ''' Constructor
     ''' </summary>
-    ''' <param name="zeitreihen">Collection von Zeitreihen</param>
-    Public Sub New(ByRef zeitreihen As List(Of TimeSeries))
-
-        'Zeitreihen 
-        Call MyBase.New(zeitreihen)
-
+    ''' <param name="ts_list">List of time series to process</param>
+    Public Sub New(ByRef ts_list As List(Of TimeSeries))
+        Call MyBase.New(ts_list)
     End Sub
 
     ''' <summary>
     ''' Process the analysis
-    ''' Creates a new result time series that contains the cumulative values of the original series
+    ''' Creates new result time series that contain the cumulative values of the original series
     ''' </summary>
     Public Overrides Sub ProcessAnalysis()
 
         Dim i As Integer
         Dim sum As Double
+        Dim startdate As DateTime
         Dim ts, ts_cum As TimeSeries
 
-        For Each ts In MyBase.InputTimeSeries
+        'show dialog
+        Dim dlg As New CumulativeDialog(MyBase.InputTimeSeries)
+        If dlg.ShowDialog() = DialogResult.OK Then
 
-            ts_cum = New TimeSeries($"{ts.Title} (cumulative)")
-            ts_cum.Unit = ts.Unit
-            ts_cum.Interpretation = TimeSeries.InterpretationEnum.Cumulative
-            ts_cum.DataSource = New TimeSeriesDataSource(TimeSeriesDataSource.OriginEnum.AnalysisResult)
+            'get start date from dialog
+            startdate = CType(dlg.MaskedTextBox_Start.ValidateText(), DateTime)
 
-            sum = 0.0
-            For i = 0 To ts.Length - 1
-                If i <> 0 And i <> ts.Length - 1 Then
-                    If ts.Values(i) = 0.0 And ts.Values(i + 1) = 0.0 Then
-                        'omit intermediate nodes where the cumulative value does not change
+            For Each ts In MyBase.InputTimeSeries
+
+                'cut time series to startdate
+                ts = ts.Clone()
+                ts.Cut(startdate, ts.EndDate)
+
+                'create new cumulative timeseries
+                ts_cum = New TimeSeries($"{ts.Title} (cumulative)")
+                ts_cum.Unit = ts.Unit
+                ts_cum.Interpretation = TimeSeries.InterpretationEnum.Cumulative
+                ts_cum.DataSource = New TimeSeriesDataSource(TimeSeriesDataSource.OriginEnum.AnalysisResult)
+
+                sum = 0.0
+                For i = 0 To ts.Length - 1
+                    If i <> 0 And i <> ts.Length - 1 Then
+                        If ts.Values(i) = 0.0 And ts.Values(i + 1) = 0.0 Then
+                            'omit intermediate nodes where the cumulative value does not change
+                            Continue For
+                        End If
+                    End If
+                    If Double.IsNaN(ts.Values(i)) Then
+                        'omit NaN values
                         Continue For
                     End If
-                End If
-                If Double.IsNaN(ts.Values(i)) Then
-                    'omit NaN values
-                    Continue For
-                End If
-                sum += ts.Values(i)
-                ts_cum.AddNode(ts.Dates(i), sum)
+                    sum += ts.Values(i)
+                    ts_cum.AddNode(ts.Dates(i), sum)
+                Next
+
+                MyBase.ResultSeries.Add(ts_cum)
+
             Next
 
-            MyBase.ResultSeries.Add(ts_cum)
-
-        Next
-
+        End If
     End Sub
 
     ''' <summary>

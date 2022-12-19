@@ -33,7 +33,7 @@ Friend Class AnnualStatistics
     End Structure
 
     Private stats As Dictionary(Of String, struct_stat)
-    Private generateBoundigBoxes As Boolean
+    Private generateBoundingBoxes As Boolean
 
     Public Overloads Shared Function Description() As String
         Return "Calculates annual statistics (min, max, avg, vol) based on hydrological years."
@@ -100,7 +100,7 @@ Friend Class AnnualStatistics
         End If
 
         Dim startMonth As Integer = CType(dialog.ComboBox_startMonth.SelectedItem, Month).number
-        Me.generateBoundigBoxes = dialog.CheckBox_boundingbox.Checked
+        Me.generateBoundingBoxes = dialog.CheckBox_boundingbox.Checked
 
         'stats for entire series
         Me.stats.Add("Entire series", calculateStats(Me.InputTimeSeries(0)))
@@ -139,11 +139,11 @@ Friend Class AnnualStatistics
         Next
 
         'Generate timeseries with max/avg/min values if checkbox is checked and at least two years are present
-        If (Me.generateBoundigBoxes And Me.stats.Count > 2) Then
+        If (Me.generateBoundingBoxes And Me.stats.Count > 2) Then
             'Prepare output timeseries
             Dim basename As String = Me.InputTimeSeries(0).Title
             Dim timeseries_max As TimeSeries = New TimeSeries(basename & " (annual maximum)")
-            Dim timeseries_avg As TimeSeries = New TimeSeries(basename & " (annual avarage)")
+            Dim timeseries_avg As TimeSeries = New TimeSeries(basename & " (annual average)")
             Dim timeseries_min As TimeSeries = New TimeSeries(basename & " (annual minimum)")
 
             'Set interpretation mode
