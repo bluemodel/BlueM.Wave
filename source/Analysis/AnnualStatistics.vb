@@ -34,6 +34,7 @@ Friend Class AnnualStatistics
 
     Private stats As Dictionary(Of String, struct_stat)
     Private generateBoundingBoxes As Boolean
+    Private createPlottingPosition As Boolean
 
     Public Overloads Shared Function Description() As String
         Return "Calculates annual statistics (min, max, avg, vol) based on hydrological years."
@@ -41,7 +42,7 @@ Friend Class AnnualStatistics
 
     Public Overrides ReadOnly Property hasResultChart() As Boolean
         Get
-            Return False
+            Return True
         End Get
     End Property
 
@@ -101,6 +102,7 @@ Friend Class AnnualStatistics
 
         Dim startMonth As Integer = CType(dialog.ComboBox_startMonth.SelectedItem, Month).number
         Me.generateBoundingBoxes = dialog.CheckBox_boundingbox.Checked
+        Me.createPlottingPosition = dialog.Checkbox_plottingPosition.Checked
 
         'stats for entire series
         Me.stats.Add("Entire series", calculateStats(Me.InputTimeSeries(0)))
@@ -174,6 +176,70 @@ Friend Class AnnualStatistics
 
             'Bundle output timeseries
             MyBase.ResultSeries = New List(Of TimeSeries) From {timeseries_max, timeseries_avg, timeseries_min}
+        End If
+
+
+        'Plotting position
+        If (Me.createPlottingPosition) Then
+            'Chart
+            Me.ResultChart = New Steema.TeeChart.Chart()
+            Call Helpers.FormatChart(Me.ResultChart)
+            Me.ResultChart.Walls.Back.Visible = True
+
+            'Legend
+            Me.ResultChart.Legend.CheckBoxes = False
+            Me.ResultChart.Legend.Alignment = Steema.TeeChart.LegendAlignments.Top
+
+            'x-Axis
+            Me.ResultChart.Axes.Bottom.Labels.Style = Steema.TeeChart.AxisLabelStyle.Value
+            Me.ResultChart.Axes.Bottom.Title.Caption = "Annual recurrence"
+            Me.ResultChart.Axes.Bottom.Labels.Angle = 90
+            Me.ResultChart.Axes.Bottom.Logarithmic = True
+            Me.ResultChart.Axes.Bottom.LogarithmicBase = 10
+            Me.ResultChart.Axes.Bottom.Automatic = False
+            Me.ResultChart.Axes.Bottom.Minimum = 1
+            Me.ResultChart.Axes.Bottom.Maximum = 100
+            Me.ResultChart.Axes.Bottom.Increment = 1
+            Me.ResultChart.Axes.Bottom.Grid.DrawEvery = 1
+
+            'y-Axis
+            Me.ResultChart.Axes.Left.AutomaticMaximum = True
+            Me.ResultChart.Axes.Left.AutomaticMinimum = False
+            Me.ResultChart.Axes.Left.Minimum = 0
+            Me.ResultChart.Axes.Left.MaximumRound = True
+            Me.ResultChart.Axes.Left.Grid.DrawEvery = 1
+            Me.ResultChart.Axes.Left.Title.Caption = Me.InputTimeSeries(0).Unit
+
+            'Scatter Plott
+            Dim scatterPlot As New Steema.TeeChart.Styles.Points(Me.ResultChart)
+            scatterPlot.Title = $"Plotting Position ({Me.InputTimeSeries(0).Title})"
+
+            'Get max values
+            Dim annualMaxValues As New List(Of Double)()
+            For Each kvp As KeyValuePair(Of String, struct_stat) In Me.stats
+                If IsNumeric(kvp.Key) Then
+                    stat = kvp.Value
+                    annualMaxValues.Add(stat.max)
+                End If
+            Next
+
+            'Sort max values
+            annualMaxValues.Sort()
+            annualMaxValues.Reverse()
+
+            'Plotting position
+            Dim n As Integer = annualMaxValues.Count
+            Dim m As Integer = 0
+            Dim Pue, T As Double
+            For Each annualMax As Double In annualMaxValues
+                m += 1
+                Pue = m / (n + 1)
+                T = 1 / Pue
+                scatterPlot.Add(T, annualMax)
+            Next
+        Else
+            Me.ResultChart = New Steema.TeeChart.Chart()  'Workaround!
+            'TODO: hasResultChart() depends on CheckBox_plottingPosition
         End If
 
     End Sub
