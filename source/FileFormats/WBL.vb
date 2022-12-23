@@ -177,11 +177,12 @@ Namespace Fileformats
                 Me.TimeSeries.Add(sInfo.Index, ts)
             Next
 
-            'get a list of selected indices
+            'get a sorted list of selected indices
             Dim selectedIndices As New List(Of Integer)
             For Each sInfo As TimeSeriesInfo In Me.SelectedSeries
                 selectedIndices.Add(sInfo.Index)
             Next
+            selectedIndices.Sort()
 
             Using reader As New IO.BinaryReader(IO.File.OpenRead(File), Text.ASCIIEncoding.ASCII)
                 'skip header (same length as a single record consisting of 8 bytes date and x bytes for each value depending on the data type
@@ -194,7 +195,12 @@ Namespace Fileformats
                     'convert real date to DateTime
                     timestamp = BIN.rDateToDate(rdate)
 
-                    For index As Integer = 0 To Me.TimeSeriesInfos.Count - 1
+                    'read values of selected indices
+                    Dim position As Integer = 0
+                    For Each index As Integer In selectedIndices
+
+                        'skip ahead to current index
+                        reader.ReadBytes(Me.DataTypeLength * (index - position))
 
                         'read value depending on data type
                         Select Case Me.DataType
@@ -208,16 +214,22 @@ Namespace Fileformats
                                 value = Convert.ToDouble(reader.ReadBoolean())
                         End Select
 
-                        ' only handle values from selected indices
-                        If selectedIndices.Contains(index) Then
-                            'convert error values to NaN
-                            If Math.Abs(value - BIN.ErrorValue) < 0.0001 Then
-                                value = Double.NaN
-                                errorcount += 1
-                            End If
-                            Me.TimeSeries(index).AddNode(timestamp, value)
+                        'convert error values to NaN
+                        If Math.Abs(value - BIN.ErrorValue) < 0.0001 Then
+                            value = Double.NaN
+                            errorcount += 1
                         End If
+
+                        'add node to time series
+                        Me.TimeSeries(index).AddNode(timestamp, value)
+
+                        'update position
+                        position = index + 1
                     Next
+
+                    'skip ahead to next timestamp
+                    reader.ReadBytes(Me.DataTypeLength * (Me.TimeSeriesInfos.Count - position))
+
                 Loop Until reader.PeekChar < 0
             End Using
 
