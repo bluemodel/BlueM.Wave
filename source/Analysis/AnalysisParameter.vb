@@ -15,6 +15,9 @@
 'You should have received a copy of the GNU Lesser General Public License
 'along with this program.  If not, see <https://www.gnu.org/licenses/>.
 '
+''' <summary>
+''' Class representing an input parameter for an analysis
+''' </summary>
 Friend Class AnalysisParameter
 
     Public Enum ParameterTypeEnum
@@ -37,6 +40,10 @@ Friend Class AnalysisParameter
     Public MaxValue As Object
     Private _Value As Object
 
+    ''' <summary>
+    ''' Parameter value
+    ''' </summary>
+    ''' <returns></returns>
     Public Property Value As Object
         Get
             Return _Value
@@ -46,6 +53,15 @@ Friend Class AnalysisParameter
         End Set
     End Property
 
+    ''' <summary>
+    ''' Constructor
+    ''' </summary>
+    ''' <param name="description">Parameter description</param>
+    ''' <param name="type">Parameter type</param>
+    ''' <param name="amount">Parameter amount (single/multiple)</param>
+    ''' <param name="def">Default value</param>
+    ''' <param name="min">Minimum value</param>
+    ''' <param name="max">Maximum value</param>
     Public Sub New(description As String, type As ParameterTypeEnum, amount As ParameterAmountEnum, Optional def As Object = Nothing, Optional min As Object = Nothing, Optional max As Object = Nothing)
 
         Me.Description = description
