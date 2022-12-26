@@ -113,7 +113,7 @@ Friend Class AnalysisDialog
                             Next
                             listbox.SelectedIndex = -1
                             param.Value = listbox.SelectedItems
-                            listbox.DataBindings.Add(New Binding("SelectedItems", param, "Value"))
+                            listbox.DataBindings.Add(New Binding("SelectedItems", param, "Value")) 'TODO: cannot bind to a read-only property!
                             control = listbox
                     End Select
 
@@ -124,6 +124,13 @@ Friend Class AnalysisDialog
                     param.Value = param.DefaultValue
                     numericupdown.DataBindings.Add(New Binding("Value", param, "Value"))
                     control = numericupdown
+
+                Case AnalysisParameter.ParameterTypeEnum.Boolean
+                    Dim checkbox As New CheckBox()
+                    checkbox.Checked = param.DefaultValue
+                    checkbox.DataBindings.Add(New Binding("Checked", param, "Value", True))
+                    control = checkbox
+
             End Select
 
             Me.TableLayoutPanel1.Controls.Add(control)
