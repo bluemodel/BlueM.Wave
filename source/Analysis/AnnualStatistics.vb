@@ -159,7 +159,7 @@ Friend Class AnnualStatistics
         'Generate timeseries with max/avg/min values if checkbox is checked and at least two years are present
         If (Me.generateBoundingBoxes And Me.stats.Count > 2) Then
             'Prepare output timeseries
-            Dim basename As String = Me.InputTimeSeries(0).Title
+            Dim basename As String = Me.timeseries.Title
             Dim timeseries_max As TimeSeries = New TimeSeries(basename & " (annual maximum)")
             Dim timeseries_avg As TimeSeries = New TimeSeries(basename & " (annual average)")
             Dim timeseries_min As TimeSeries = New TimeSeries(basename & " (annual minimum)")
@@ -170,7 +170,7 @@ Friend Class AnnualStatistics
             timeseries_min.Interpretation = TimeSeries.InterpretationEnum.BlockRight
 
             'Transfer unit from input timeseries
-            Dim unit As String = Me.InputTimeSeries(0).Unit
+            Dim unit As String = Me.timeseries.Unit
             timeseries_max.Unit = unit
             timeseries_avg.Unit = unit
             timeseries_min.Unit = unit

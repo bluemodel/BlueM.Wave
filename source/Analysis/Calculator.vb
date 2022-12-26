@@ -119,7 +119,7 @@ Friend Class Calculator
         Dim varNames As New List(Of String) From
             {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"}
         Dim i As Integer = 0
-        For Each ts As TimeSeries In Me.seriesList
+        For Each ts As TimeSeries In seriesList
             tsVariables.Add(New CalculatorVariable(varNames(i), ts))
             i += 1
         Next

@@ -4,6 +4,7 @@
         Timeseries
         [Integer]
         [Date]
+        [Boolean]
     End Enum
 
     Public Enum ParameterAmountEnum
