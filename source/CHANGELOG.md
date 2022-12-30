@@ -5,8 +5,6 @@ Version 2.2.0
 -------------
 FIXED:
 * Significantly improved the speed of reading SYDRO binary WEL files (*.WBL)
-
-CHANGED:
 * Improved handling of errors occurring while reading time series file metadata
 * Added an error message when ZRE file metadata is incomplete
 
