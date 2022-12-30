@@ -85,6 +85,11 @@ Namespace Fileformats
             StrRead.Close()
             FiStr.Close()
 
+            'checks
+            If Zeile.Length < 16 Then
+                Throw New Exception("The second line must contain at least 16 characters!")
+            End If
+
             'store series info
             sInfo = New TimeSeriesInfo
             sInfo.Name = Zeile.Substring(0, 15).Trim()
