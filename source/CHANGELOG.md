@@ -1,7 +1,7 @@
 ﻿BlueM.Wave Release Notes
 ========================
 
-Version 2.2.0
+Version 2.1.1
 -------------
 FIXED:
 * Significantly improved the speed of reading SYDRO binary WEL files (*.WBL)
