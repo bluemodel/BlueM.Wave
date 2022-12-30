@@ -6,6 +6,9 @@ Version 2.2.0
 FIXED:
 * Significantly improved the speed of reading SYDRO binary WEL files (*.WBL)
 
+CHANGED:
+* Better handling of errors occurring while reading time series file metadata
+
 Version 2.1.0
 -------------
 NEW:

@@ -104,57 +104,52 @@ Namespace Fileformats
 
             Log.AddLogEntry(levels.info, $"Reading metadata from file {IO.Path.GetFileName(file_welinfo)}...")
 
-            Try
-                'Datei öffnen
-                Dim FiStr As FileStream = New FileStream(file_welinfo, FileMode.Open, IO.FileAccess.Read)
-                Dim StrRead As StreamReader = New StreamReader(FiStr, Me.Encoding)
-                Dim StrReadSync = TextReader.Synchronized(StrRead)
+            'Datei öffnen
+            Dim FiStr As FileStream = New FileStream(file_welinfo, FileMode.Open, IO.FileAccess.Read)
+            Dim StrRead As StreamReader = New StreamReader(FiStr, Me.Encoding)
+            Dim StrReadSync = TextReader.Synchronized(StrRead)
 
-                Dim line As String
-                Dim isData As Boolean = False
+            Dim line As String
+            Dim isData As Boolean = False
 
-                Do
-                    line = StrReadSync.ReadLine.ToString
+            Do
+                line = StrReadSync.ReadLine.ToString
 
-                    If Not isData And line.StartsWith("Datentyp=") Then
-                        Me.DataType = Integer.Parse(line.Split("=").Last.Trim)
-                        Continue Do
-                    End If
-
-                    If line.StartsWith("[Elemente]") Then
-                        isData = True
-                        Continue Do
-                    End If
-
-                    If isData Then
-                        Dim sInfo As New TimeSeriesInfo()
-                        sInfo.Name = line.Split(";")(0).Trim()
-                        sInfo.Unit = line.Split(";")(3).Trim()
-                        sInfo.Index = Integer.Parse(line.Split(";")(4).Trim())
-                        Me.TimeSeriesInfos.Add(sInfo)
-                    End If
-                Loop Until StrReadSync.Peek() = -1
-
-                StrReadSync.Close()
-                StrRead.Close()
-                FiStr.Close()
-
-                If Me.TimeSeriesInfos.Count = 0 Then
-                    Throw New Exception($"Unable to read series info from metadata file {IO.Path.GetFileName(file_welinfo)}!")
+                If Not isData And line.StartsWith("Datentyp=") Then
+                    Me.DataType = Integer.Parse(line.Split("=").Last.Trim)
+                    Continue Do
                 End If
 
-                If Me.DataType = 0 Then
-                    Log.AddLogEntry(levels.warning, $"Unable to determine data type from metadata file {IO.Path.GetFileName(file_welinfo)}. Assuming Single.")
-                    Me.DataType = DataTypes.Single 'set default data type to Single
-                Else
-                    Log.AddLogEntry(levels.debug, $"Data type read from metadata file: {Me.DataType}")
+                If line.StartsWith("[Elemente]") Then
+                    isData = True
+                    Continue Do
                 End If
 
-                Log.AddLogEntry(levels.debug, $"Number of series read from metadata file: {Me.TimeSeriesInfos.Count}")
+                If isData Then
+                    Dim sInfo As New TimeSeriesInfo()
+                    sInfo.Name = line.Split(";")(0).Trim()
+                    sInfo.Unit = line.Split(";")(3).Trim()
+                    sInfo.Index = Integer.Parse(line.Split(";")(4).Trim())
+                    Me.TimeSeriesInfos.Add(sInfo)
+                End If
+            Loop Until StrReadSync.Peek() = -1
 
-            Catch ex As Exception
-                Throw New Exception($"Error while reading metadata file {IO.Path.GetFileName(file_welinfo)}: {ex.Message}")
-            End Try
+            StrReadSync.Close()
+            StrRead.Close()
+            FiStr.Close()
+
+            If Me.TimeSeriesInfos.Count = 0 Then
+                Throw New Exception($"Unable to read series info from metadata file {IO.Path.GetFileName(file_welinfo)}!")
+            End If
+
+            If Me.DataType = 0 Then
+                Log.AddLogEntry(levels.warning, $"Unable to determine data type from metadata file {IO.Path.GetFileName(file_welinfo)}. Assuming Single.")
+                Me.DataType = DataTypes.Single 'set default data type to Single
+            Else
+                Log.AddLogEntry(levels.debug, $"Data type read from metadata file: {Me.DataType}")
+            End If
+
+            Log.AddLogEntry(levels.debug, $"Number of series read from metadata file: {Me.TimeSeriesInfos.Count}")
 
         End Sub
 

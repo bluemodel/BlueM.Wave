@@ -126,108 +126,102 @@ Namespace Fileformats
 
             Me.TimeSeriesInfos.Clear()
 
-            Try
-                'Datei öffnen
-                Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
-                Dim StrRead As StreamReader = New StreamReader(FiStr, Me.Encoding)
-                Dim StrReadSync = TextReader.Synchronized(StrRead)
+            'Datei öffnen
+            Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
+            Dim StrRead As StreamReader = New StreamReader(FiStr, Me.Encoding)
+            Dim StrReadSync = TextReader.Synchronized(StrRead)
 
-                'Determine HYDRO_AS-2D version for Q_Strg.dat
-                If Path.GetFileName(Me.File).ToLower() = "q_strg.dat" Then
-                    'If the 5th line starts with "Name:", then it is HYDROAS-2D version 5 format
-                    For i = 1 To 5
-                        Zeile = StrReadSync.ReadLine.ToString()
-                    Next
-                    If Zeile.Trim.StartsWith("Name:") Then
-                        Me._HYDROAS_version = 5
-                        'use names instead of node numbers as series titles
-                        Me.iLineHeadings = 5
-                    End If
-                    'return to beginning of file
-                    FiStr.Seek(0, SeekOrigin.Begin)
-                    StrRead = New StreamReader(FiStr, Me.Encoding)
-                    StrReadSync = TextReader.Synchronized(StrRead)
+            'Determine HYDRO_AS-2D version for Q_Strg.dat
+            If Path.GetFileName(Me.File).ToLower() = "q_strg.dat" Then
+                'If the 5th line starts with "Name:", then it is HYDROAS-2D version 5 format
+                For i = 1 To 5
+                    Zeile = StrReadSync.ReadLine.ToString()
+                Next
+                If Zeile.Trim.StartsWith("Name:") Then
+                    Me._HYDROAS_version = 5
+                    'use names instead of node numbers as series titles
+                    Me.iLineHeadings = 5
                 End If
+                'return to beginning of file
+                FiStr.Seek(0, SeekOrigin.Begin)
+                StrRead = New StreamReader(FiStr, Me.Encoding)
+                StrReadSync = TextReader.Synchronized(StrRead)
+            End If
 
-                Select Case Path.GetFileName(Me.File).ToLower()
+            Select Case Path.GetFileName(Me.File).ToLower()
 
-                    Case "q_strg.dat", "pegel.dat"
+                Case "q_strg.dat", "pegel.dat"
 
-                        'Zeile mit Spaltenüberschriften lesen
-                        For i = 1 To Me.iLineHeadings
-                            Zeile = StrReadSync.ReadLine.ToString
-                            If (i = Me.iLineHeadings) Then ZeileSpalten = Zeile
-                        Next
+                    'Zeile mit Spaltenüberschriften lesen
+                    For i = 1 To Me.iLineHeadings
+                        Zeile = StrReadSync.ReadLine.ToString
+                        If (i = Me.iLineHeadings) Then ZeileSpalten = Zeile
+                    Next
 
-                        'Spaltennamen auslesen
-                        Dim anzSpalten As Integer
-                        Dim Namen(0) As String
+                    'Spaltennamen auslesen
+                    Dim anzSpalten As Integer
+                    Dim Namen(0) As String
 
-                        Select Case Me._HYDROAS_version
-                            Case 2
-                                'space separated names
-                                Namen = ZeileSpalten.Split(New Char() {Me.Separator.ToChar}, System.StringSplitOptions.RemoveEmptyEntries)
-                                anzSpalten = Namen.Length + 1 'X-Spalte künstlich dazuzählen, da ohne Namen
-                            Case 5
-                                'names in columns of equal width
-                                ZeileSpalten = ZeileSpalten.Substring(14) 'start from column 14
-                                'split into equal lengths
-                                l = 13
-                                anzSpalten = ZeileSpalten.Length / l
-                                ReDim Namen(anzSpalten - 1)
-                                For i = 0 To anzSpalten - 1
-                                    Namen(i) = ZeileSpalten.Substring(i * l, l).Trim()
-                                Next
-                                anzSpalten += 1 'X-Spalte künstlich dazuzählen, da ohne Namen
-                        End Select
+                    Select Case Me._HYDROAS_version
+                        Case 2
+                            'space separated names
+                            Namen = ZeileSpalten.Split(New Char() {Me.Separator.ToChar}, System.StringSplitOptions.RemoveEmptyEntries)
+                            anzSpalten = Namen.Length + 1 'X-Spalte künstlich dazuzählen, da ohne Namen
+                        Case 5
+                            'names in columns of equal width
+                            ZeileSpalten = ZeileSpalten.Substring(14) 'start from column 14
+                            'split into equal lengths
+                            l = 13
+                            anzSpalten = ZeileSpalten.Length / l
+                            ReDim Namen(anzSpalten - 1)
+                            For i = 0 To anzSpalten - 1
+                                Namen(i) = ZeileSpalten.Substring(i * l, l).Trim()
+                            Next
+                            anzSpalten += 1 'X-Spalte künstlich dazuzählen, da ohne Namen
+                    End Select
 
-                        'store series info
+                    'store series info
 
-                        For i = 0 To Namen.Length - 1
-                            sInfo = New TimeSeriesInfo
-                            sInfo.Name = Namen(i).Trim()
-                            sInfo.Unit = Me._einheit
-                            sInfo.Index = i + 1
-                            Me.TimeSeriesInfos.Add(sInfo)
-                        Next
+                    For i = 0 To Namen.Length - 1
+                        sInfo = New TimeSeriesInfo
+                        sInfo.Name = Namen(i).Trim()
+                        sInfo.Unit = Me._einheit
+                        sInfo.Index = i + 1
+                        Me.TimeSeriesInfos.Add(sInfo)
+                    Next
 
-                    Case "bw_tmp.dat"
+                Case "bw_tmp.dat"
 
-                        Dim parts As String()
-                        Dim names As New Collections.Generic.List(Of String)
+                    Dim parts As String()
+                    Dim names As New Collections.Generic.List(Of String)
 
-                        'Zur ersten Datenzeile springen
-                        For i = 1 To 4
-                            Zeile = StrReadSync.ReadLine.ToString
-                        Next
+                    'Zur ersten Datenzeile springen
+                    For i = 1 To 4
+                        Zeile = StrReadSync.ReadLine.ToString
+                    Next
 
-                        'Zeitreihen-Namen sind Kombination aus Spalte IJBW_Seg-1 und IJBW_Seg-2
-                        Do
-                            parts = Zeile.Split(New Char() {" "}, StringSplitOptions.RemoveEmptyEntries)
-                            names.Add($"{parts(0)}-{parts(1)}")
-                            Zeile = StrReadSync.ReadLine.ToString().Trim()
-                        Loop Until Zeile.StartsWith("---")
+                    'Zeitreihen-Namen sind Kombination aus Spalte IJBW_Seg-1 und IJBW_Seg-2
+                    Do
+                        parts = Zeile.Split(New Char() {" "}, StringSplitOptions.RemoveEmptyEntries)
+                        names.Add($"{parts(0)}-{parts(1)}")
+                        Zeile = StrReadSync.ReadLine.ToString().Trim()
+                    Loop Until Zeile.StartsWith("---")
 
-                        'store series info
+                    'store series info
 
-                        For i = 0 To names.Count - 1
-                            sInfo = New TimeSeriesInfo
-                            sInfo.Name = names(i).Trim()
-                            sInfo.Unit = Me._einheit
-                            sInfo.Index = i + 1 ' hier eigentlich irrelevant
-                            Me.TimeSeriesInfos.Add(sInfo)
-                        Next
+                    For i = 0 To names.Count - 1
+                        sInfo = New TimeSeriesInfo
+                        sInfo.Name = names(i).Trim()
+                        sInfo.Unit = Me._einheit
+                        sInfo.Index = i + 1 ' hier eigentlich irrelevant
+                        Me.TimeSeriesInfos.Add(sInfo)
+                    Next
 
-                End Select
+            End Select
 
-                StrReadSync.Close()
-                StrRead.Close()
-                FiStr.Close()
-
-            Catch ex As Exception
-                MsgBox($"Unable to read file!{eol}{eol}Error: {ex.Message}", MsgBoxStyle.Critical)
-            End Try
-
+            StrReadSync.Close()
+            StrRead.Close()
+            FiStr.Close()
 
         End Sub
 

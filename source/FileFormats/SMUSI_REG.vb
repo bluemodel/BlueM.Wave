@@ -89,35 +89,30 @@ Namespace Fileformats
 
             Me.TimeSeriesInfos.Clear()
 
-            Try
-                'Datei öffnen
-                Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
-                Dim StrRead As StreamReader = New StreamReader(FiStr, Me.Encoding)
-                Dim StrReadSync = TextReader.Synchronized(StrRead)
+            'Datei öffnen
+            Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
+            Dim StrRead As StreamReader = New StreamReader(FiStr, Me.Encoding)
+            Dim StrReadSync = TextReader.Synchronized(StrRead)
 
-                'Reihentitel aus 1. Zeile nehmen.
-                'Wenn Komma enthalten ist, nur den Teil vor dem Komma verwenden
-                Zeile = StrReadSync.ReadLine()
-                If Zeile.Contains(",") Then
-                    title = Zeile.Split(",")(0)
-                Else
-                    title = Zeile
-                End If
+            'Reihentitel aus 1. Zeile nehmen.
+            'Wenn Komma enthalten ist, nur den Teil vor dem Komma verwenden
+            Zeile = StrReadSync.ReadLine()
+            If Zeile.Contains(",") Then
+                title = Zeile.Split(",")(0)
+            Else
+                title = Zeile
+            End If
 
-                'store series info
-                sInfo = New TimeSeriesInfo()
-                sInfo.Name = title
-                sInfo.Unit = "mm" 'Einheit ist immer mm
-                sInfo.Index = 0
-                Me.TimeSeriesInfos.Add(sInfo)
+            'store series info
+            sInfo = New TimeSeriesInfo()
+            sInfo.Name = title
+            sInfo.Unit = "mm" 'Einheit ist immer mm
+            sInfo.Index = 0
+            Me.TimeSeriesInfos.Add(sInfo)
 
-                StrReadSync.Close()
-                StrRead.Close()
-                FiStr.Close()
-
-            Catch ex As Exception
-                MsgBox($"Unable to read file!{eol}{eol}Error: {ex.Message}", MsgBoxStyle.Critical)
-            End Try
+            StrReadSync.Close()
+            StrRead.Close()
+            FiStr.Close()
 
         End Sub
 

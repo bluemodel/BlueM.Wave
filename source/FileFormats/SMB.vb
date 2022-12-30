@@ -70,31 +70,26 @@ Namespace Fileformats
 
             Me.TimeSeriesInfos.Clear()
 
-            Try
-                'Datei öffnen
-                Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
-                Dim StrRead As StreamReader = New StreamReader(FiStr, Me.Encoding)
-                Dim StrReadSync = TextReader.Synchronized(StrRead)
+            'Datei öffnen
+            Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
+            Dim StrRead As StreamReader = New StreamReader(FiStr, Me.Encoding)
+            Dim StrReadSync = TextReader.Synchronized(StrRead)
 
-                sInfo = New TimeSeriesInfo()
+            sInfo = New TimeSeriesInfo()
 
-                'Reihentitel steht in 1. Zeile:
-                Zeile = StrReadSync.ReadLine.ToString()
-                sInfo.Name = Zeile.Substring(15).Trim()
-                'Annahme, dass SMB-Dateien Regenreihen sind, daher Einheit mm fest verdrahtet
-                sInfo.Unit = "mm"
-                sInfo.Index = 0
+            'Reihentitel steht in 1. Zeile:
+            Zeile = StrReadSync.ReadLine.ToString()
+            sInfo.Name = Zeile.Substring(15).Trim()
+            'Annahme, dass SMB-Dateien Regenreihen sind, daher Einheit mm fest verdrahtet
+            sInfo.Unit = "mm"
+            sInfo.Index = 0
 
-                StrReadSync.Close()
-                StrRead.Close()
-                FiStr.Close()
+            StrReadSync.Close()
+            StrRead.Close()
+            FiStr.Close()
 
-                'store series info
-                Me.TimeSeriesInfos.Add(sInfo)
-
-            Catch ex As Exception
-                MsgBox($"Unable to read file!{eol}{eol}Error: {ex.Message}", MsgBoxStyle.Critical)
-            End Try
+            'store series info
+            Me.TimeSeriesInfos.Add(sInfo)
 
         End Sub
 

@@ -71,31 +71,26 @@ Namespace Fileformats
 
             Me.TimeSeriesInfos.Clear()
 
-            Try
-                'Datei öffnen
-                Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
-                Dim StrRead As StreamReader = New StreamReader(FiStr, Me.Encoding)
-                Dim StrReadSync = TextReader.Synchronized(StrRead)
+            'Datei öffnen
+            Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
+            Dim StrRead As StreamReader = New StreamReader(FiStr, Me.Encoding)
+            Dim StrReadSync = TextReader.Synchronized(StrRead)
 
-                'Reihentitel steht in 2. Zeile:
-                For i = 0 To 1
-                    Zeile = StrReadSync.ReadLine.ToString()
-                Next
+            'Reihentitel steht in 2. Zeile:
+            For i = 0 To 1
+                Zeile = StrReadSync.ReadLine.ToString()
+            Next
 
-                StrReadSync.Close()
-                StrRead.Close()
-                FiStr.Close()
+            StrReadSync.Close()
+            StrRead.Close()
+            FiStr.Close()
 
-                'store series info
-                sInfo = New TimeSeriesInfo
-                sInfo.Name = Zeile.Substring(0, 15).Trim()
-                sInfo.Unit = Zeile.Substring(15).Trim()
-                sInfo.Index = 0
-                Me.TimeSeriesInfos.Add(sInfo)
-
-            Catch ex As Exception
-                MsgBox($"Unable to read file!{eol}{eol}Error: {ex.Message}", MsgBoxStyle.Critical)
-            End Try
+            'store series info
+            sInfo = New TimeSeriesInfo
+            sInfo.Name = Zeile.Substring(0, 15).Trim()
+            sInfo.Unit = Zeile.Substring(15).Trim()
+            sInfo.Index = 0
+            Me.TimeSeriesInfos.Add(sInfo)
 
         End Sub
 

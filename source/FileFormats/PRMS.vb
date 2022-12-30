@@ -117,77 +117,72 @@ Namespace Fileformats
 
             Me.TimeSeriesInfos.Clear()
 
-            Try
-                'Open the file
-                Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
-                Dim StrRead As StreamReader = New StreamReader(FiStr, Me.Encoding)
-                Dim StrReadSync = TextReader.Synchronized(StrRead)
+            'Open the file
+            Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
+            Dim StrRead As StreamReader = New StreamReader(FiStr, Me.Encoding)
+            Dim StrReadSync = TextReader.Synchronized(StrRead)
 
-                lines = New Dictionary(Of Integer, String)
+            lines = New Dictionary(Of Integer, String)
 
-                'Read header data
-                For i = 1 To Me.iLineData
-                    line = StrReadSync.ReadLine.ToString
-                    lines.Add(i, line)
-                Next
+            'Read header data
+            For i = 1 To Me.iLineData
+                line = StrReadSync.ReadLine.ToString
+                lines.Add(i, line)
+            Next
 
-                'process header
-                Select Case Me.FileFormat
+            'process header
+            Select Case Me.FileFormat
 
-                    Case FileType.annual
-                        parts = lines(2).Split(New String() {"  "}, StringSplitOptions.RemoveEmptyEntries)
-                        For i = 1 To parts.Count() - 1 'first column is timestamp (year)
-                            sInfo = New TimeSeriesInfo()
-                            sInfo.Index = i
-                            sInfo.Name = parts(i).Trim()
-                            sInfo.Unit = "-"
-                            Me.TimeSeriesInfos.Add(sInfo)
-                        Next
-                        Me.DateTimeColumnIndex = 0
+                Case FileType.annual
+                    parts = lines(2).Split(New String() {"  "}, StringSplitOptions.RemoveEmptyEntries)
+                    For i = 1 To parts.Count() - 1 'first column is timestamp (year)
+                        sInfo = New TimeSeriesInfo()
+                        sInfo.Index = i
+                        sInfo.Name = parts(i).Trim()
+                        sInfo.Unit = "-"
+                        Me.TimeSeriesInfos.Add(sInfo)
+                    Next
+                    Me.DateTimeColumnIndex = 0
 
-                    Case FileType.monthly
-                        parts = lines(2).Split(New Char() {" "}, StringSplitOptions.RemoveEmptyEntries)
-                        For i = 2 To parts.Count() - 1 'first two columns are timestamp (year and month)
-                            sInfo = New TimeSeriesInfo()
-                            sInfo.Index = i
-                            sInfo.Name = parts(i).Trim()
-                            sInfo.Unit = "-"
-                            Me.TimeSeriesInfos.Add(sInfo)
-                        Next
-                        Me.DateTimeColumnIndex = 0 'technically 0 and 1
+                Case FileType.monthly
+                    parts = lines(2).Split(New Char() {" "}, StringSplitOptions.RemoveEmptyEntries)
+                    For i = 2 To parts.Count() - 1 'first two columns are timestamp (year and month)
+                        sInfo = New TimeSeriesInfo()
+                        sInfo.Index = i
+                        sInfo.Name = parts(i).Trim()
+                        sInfo.Unit = "-"
+                        Me.TimeSeriesInfos.Add(sInfo)
+                    Next
+                    Me.DateTimeColumnIndex = 0 'technically 0 and 1
 
-                    Case FileType.dpout
-                        parts = lines(Me.iLineData).Split(New Char() {" "}, StringSplitOptions.RemoveEmptyEntries)
-                        For i = 3 To parts.Count() - 1 'first 3 columns are timestamp
-                            Dim m As Match
-                            m = Regex.Match(lines(i - 2).Trim(), ".{3} (.+)\s+\((.+)\).+")
-                            sInfo = New TimeSeriesInfo
-                            sInfo.Name = m.Groups(1).Value.Trim()
-                            sInfo.Unit = m.Groups(2).Value.Trim()
-                            sInfo.Index = i
-                            Me.TimeSeriesInfos.Add(sInfo)
-                        Next
-                        Me.DateTimeColumnIndex = 0 ' technically 0, 1 and 2
+                Case FileType.dpout
+                    parts = lines(Me.iLineData).Split(New Char() {" "}, StringSplitOptions.RemoveEmptyEntries)
+                    For i = 3 To parts.Count() - 1 'first 3 columns are timestamp
+                        Dim m As Match
+                        m = Regex.Match(lines(i - 2).Trim(), ".{3} (.+)\s+\((.+)\).+")
+                        sInfo = New TimeSeriesInfo
+                        sInfo.Name = m.Groups(1).Value.Trim()
+                        sInfo.Unit = m.Groups(2).Value.Trim()
+                        sInfo.Index = i
+                        Me.TimeSeriesInfos.Add(sInfo)
+                    Next
+                    Me.DateTimeColumnIndex = 0 ' technically 0, 1 and 2
 
-                    Case FileType.statvar
-                        parts = lines(Me.iLineData).Split(New Char() {" "}, StringSplitOptions.RemoveEmptyEntries)
-                        For i = 7 To parts.Count() - 1 'first 7 columns are number and timestamp
-                            sInfo = New TimeSeriesInfo()
-                            sInfo.Name = lines(i - 5).Trim()
-                            sInfo.Unit = "-"
-                            sInfo.Index = i
-                            Me.TimeSeriesInfos.Add(sInfo)
-                        Next
-                        Me.DateTimeColumnIndex = 0 ' technically 1 to 6
-                End Select
+                Case FileType.statvar
+                    parts = lines(Me.iLineData).Split(New Char() {" "}, StringSplitOptions.RemoveEmptyEntries)
+                    For i = 7 To parts.Count() - 1 'first 7 columns are number and timestamp
+                        sInfo = New TimeSeriesInfo()
+                        sInfo.Name = lines(i - 5).Trim()
+                        sInfo.Unit = "-"
+                        sInfo.Index = i
+                        Me.TimeSeriesInfos.Add(sInfo)
+                    Next
+                    Me.DateTimeColumnIndex = 0 ' technically 1 to 6
+            End Select
 
-                StrReadSync.Close()
-                StrRead.Close()
-                FiStr.Close()
-
-            Catch ex As Exception
-                MsgBox($"Unable to read file!{eol}{eol}Error: {ex.Message}", MsgBoxStyle.Critical)
-            End Try
+            StrReadSync.Close()
+            StrRead.Close()
+            FiStr.Close()
 
         End Sub
 

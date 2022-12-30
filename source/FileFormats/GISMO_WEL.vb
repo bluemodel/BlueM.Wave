@@ -78,94 +78,88 @@ Namespace Fileformats
 
             Me.TimeSeriesInfos.Clear()
 
-            Try
-                ' open file
-                Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
-                Dim StrRead As StreamReader = New StreamReader(FiStr, Me.Encoding)
-                Dim StrReadSync = TextReader.Synchronized(StrRead)
+            ' open file
+            Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
+            Dim StrRead As StreamReader = New StreamReader(FiStr, Me.Encoding)
+            Dim StrReadSync = TextReader.Synchronized(StrRead)
 
-                ' get element name to add to time series name
+            ' get element name to add to time series name
+            Zeile = StrReadSync.ReadLine.ToString
+            SeriesName = Zeile.Substring(13, 16)
+
+            ' find line with data headers and units
+            For i = 2 To Math.Max(Me.iLineData, Me.iLineHeadings + 1)
                 Zeile = StrReadSync.ReadLine.ToString
-                SeriesName = Zeile.Substring(13, 16)
+                If (i = Me.iLineHeadings) Then ZeileSpalten = Zeile
+                If (i = Me.iLineUnits) Then ZeileEinheiten = Zeile
+            Next
 
-                ' find line with data headers and units
-                For i = 2 To Math.Max(Me.iLineData, Me.iLineHeadings + 1)
-                    Zeile = StrReadSync.ReadLine.ToString
-                    If (i = Me.iLineHeadings) Then ZeileSpalten = Zeile
-                    If (i = Me.iLineUnits) Then ZeileEinheiten = Zeile
-                Next
+            ' close file
+            StrReadSync.Close()
+            StrRead.Close()
+            FiStr.Close()
 
-                ' close file
-                StrReadSync.Close()
-                StrRead.Close()
-                FiStr.Close()
+            ' get column names and units
+            Dim anzSpalten As Integer
+            Dim Namen() As String
+            Dim Einheiten() As String
 
-                ' get column names and units
-                Dim anzSpalten As Integer
-                Dim Namen() As String
-                Dim Einheiten() As String
+            ' first space needs to be removed
+            ZeileSpalten = ZeileSpalten.Substring(1, ZeileSpalten.Length - 1)
+            ZeileEinheiten = ZeileEinheiten.Substring(1, ZeileEinheiten.Length - 1)
 
-                ' first space needs to be removed
-                ZeileSpalten = ZeileSpalten.Substring(1, ZeileSpalten.Length - 1)
-                ZeileEinheiten = ZeileEinheiten.Substring(1, ZeileEinheiten.Length - 1)
-
-                If (Me.IsColumnSeparated) Then
-                    ' data columns are separated by ";"
-                    ' split string at every ";"
-                    Namen = ZeileSpalten.Split(New Char() {Me.Separator.ToChar})
-                    Einheiten = ZeileEinheiten.Split(New Char() {Me.Separator.ToChar})
-                    anzSpalten = Namen.Length
-                    If Namen.Length <> Einheiten.Length Then
-                        MsgBox("Number of column names <> number of units!")
-                    End If
-
-                Else
-                    ' data columns are separated by spaces
-                    ' converge multiple spaces to one
-                    ZeileSpalten = System.Text.RegularExpressions.Regex.Replace(ZeileSpalten, "\s{2,}", Me.Separator.ToChar)
-                    ZeileEinheiten = System.Text.RegularExpressions.Regex.Replace(ZeileEinheiten, "\s{2,}", Me.Separator.ToChar)
-                    ' remove leading and trailing spaces
-                    ZeileSpalten = Trim(ZeileSpalten)
-                    ZeileEinheiten = Trim(ZeileEinheiten)
-
-                    ' special for GISMO Aussengebiet-result-files
-                    ' wave only wants one column for datetime 
-                    ' --> Replace "Datum Zeit" with "Datum-Zeit" in ZeileSpalten and "- -" with " - " in Zeile Einheiten
-                    ' if it is there
-                    Dim Replacepostion As Integer
-                    Replacepostion = ZeileSpalten.IndexOf("Datum Zeit")
-                    If Replacepostion <> -1 Then
-                        Mid(ZeileSpalten, Replacepostion + 1, 10) = "Datum_Zeit"
-                        Mid(ZeileEinheiten, Replacepostion + 1, 3) = " - "
-                        ZeileEinheiten = Trim(System.Text.RegularExpressions.Regex.Replace(ZeileEinheiten, "\s{2,}", Me.Separator.ToChar))
-                    End If
-
-                    ' data columns are separated by " "
-                    ' split string at every " "
-                    Namen = ZeileSpalten.Split(New Char() {Me.Separator.ToChar})
-                    Einheiten = ZeileEinheiten.Split(New Char() {Me.Separator.ToChar})
-                    anzSpalten = Namen.Length
-                    If Namen.Length <> Einheiten.Length Then
-                        MsgBox("Number of column names <> number of units!")
-                    End If
+            If (Me.IsColumnSeparated) Then
+                ' data columns are separated by ";"
+                ' split string at every ";"
+                Namen = ZeileSpalten.Split(New Char() {Me.Separator.ToChar})
+                Einheiten = ZeileEinheiten.Split(New Char() {Me.Separator.ToChar})
+                anzSpalten = Namen.Length
+                If Namen.Length <> Einheiten.Length Then
+                    MsgBox("Number of column names <> number of units!")
                 End If
 
-                ' put headers and units into the Me.Spalten-array (starts with index 0, --> [anzSpalten -1])
-                For i = 1 To (anzSpalten - 1) ' first column is timestamp
-                    sInfo = New TimeSeriesInfo()
-                    sInfo.Name = $"{SeriesName.Trim}_{Namen(i).Trim()}"
-                    sInfo.Index = i
-                    If Einheiten(i).Trim = "cbm/s" Then
-                        Einheiten(i) = "m3/s"
-                    End If
-                    sInfo.Unit = Einheiten(i).Trim()
-                    Me.TimeSeriesInfos.Add(sInfo)
-                Next
+            Else
+                ' data columns are separated by spaces
+                ' converge multiple spaces to one
+                ZeileSpalten = System.Text.RegularExpressions.Regex.Replace(ZeileSpalten, "\s{2,}", Me.Separator.ToChar)
+                ZeileEinheiten = System.Text.RegularExpressions.Regex.Replace(ZeileEinheiten, "\s{2,}", Me.Separator.ToChar)
+                ' remove leading and trailing spaces
+                ZeileSpalten = Trim(ZeileSpalten)
+                ZeileEinheiten = Trim(ZeileEinheiten)
 
-            Catch ex As Exception
-                ' catch errors
-                MsgBox($"Unable to read file!{eol}{eol}Error: {ex.Message}", MsgBoxStyle.Critical)
-            End Try
+                ' special for GISMO Aussengebiet-result-files
+                ' wave only wants one column for datetime 
+                ' --> Replace "Datum Zeit" with "Datum-Zeit" in ZeileSpalten and "- -" with " - " in Zeile Einheiten
+                ' if it is there
+                Dim Replacepostion As Integer
+                Replacepostion = ZeileSpalten.IndexOf("Datum Zeit")
+                If Replacepostion <> -1 Then
+                    Mid(ZeileSpalten, Replacepostion + 1, 10) = "Datum_Zeit"
+                    Mid(ZeileEinheiten, Replacepostion + 1, 3) = " - "
+                    ZeileEinheiten = Trim(System.Text.RegularExpressions.Regex.Replace(ZeileEinheiten, "\s{2,}", Me.Separator.ToChar))
+                End If
+
+                ' data columns are separated by " "
+                ' split string at every " "
+                Namen = ZeileSpalten.Split(New Char() {Me.Separator.ToChar})
+                Einheiten = ZeileEinheiten.Split(New Char() {Me.Separator.ToChar})
+                anzSpalten = Namen.Length
+                If Namen.Length <> Einheiten.Length Then
+                    MsgBox("Number of column names <> number of units!")
+                End If
+            End If
+
+            ' put headers and units into the Me.Spalten-array (starts with index 0, --> [anzSpalten -1])
+            For i = 1 To (anzSpalten - 1) ' first column is timestamp
+                sInfo = New TimeSeriesInfo()
+                sInfo.Name = $"{SeriesName.Trim}_{Namen(i).Trim()}"
+                sInfo.Index = i
+                If Einheiten(i).Trim = "cbm/s" Then
+                    Einheiten(i) = "m3/s"
+                End If
+                sInfo.Unit = Einheiten(i).Trim()
+                Me.TimeSeriesInfos.Add(sInfo)
+            Next
 
         End Sub
 
