@@ -63,84 +63,79 @@ Namespace Fileformats
 
             Me.TimeSeriesInfos.Clear()
 
-            Try
-                'Datei öffnen
-                Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
-                Dim StrRead As StreamReader = New StreamReader(FiStr, Me.Encoding)
-                Dim StrReadSync = TextReader.Synchronized(StrRead)
+            'Datei öffnen
+            Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
+            Dim StrRead As StreamReader = New StreamReader(FiStr, Me.Encoding)
+            Dim StrReadSync = TextReader.Synchronized(StrRead)
 
-                'Spaltenüberschriften auslesen
-                For i = 1 To Math.Max(Me.iLineData, Me.iLineHeadings + 1)
-                    Zeile = StrReadSync.ReadLine.ToString
-                    If (i = Me.iLineHeadings) Then ZeileSpalten = Zeile
-                    If (i = Me.iLineUnits) Then ZeileEinheiten = Zeile
-                Next
+            'Spaltenüberschriften auslesen
+            For i = 1 To Math.Max(Me.iLineData, Me.iLineHeadings + 1)
+                Zeile = StrReadSync.ReadLine.ToString
+                If (i = Me.iLineHeadings) Then ZeileSpalten = Zeile
+                If (i = Me.iLineUnits) Then ZeileEinheiten = Zeile
+            Next
 
-                StrReadSync.Close()
-                StrRead.Close()
-                FiStr.Close()
+            StrReadSync.Close()
+            StrRead.Close()
+            FiStr.Close()
 
-                'Spaltennamen auslesen
-                '---------------------
-                Dim anzSpalten As Integer
-                Dim Namen() As String
-                Dim Einheiten() As String
+            'Spaltennamen auslesen
+            '---------------------
+            Dim anzSpalten As Integer
+            Dim Namen() As String
+            Dim Einheiten() As String
 
-                ReDim Namen(0)
-                ReDim Einheiten(0)
+            ReDim Namen(0)
+            ReDim Einheiten(0)
 
-                If (Me.IsColumnSeparated) Then
-                    'Zeichengetrennt
-                    Namen = ZeileSpalten.Split(New Char() {Me.Separator.ToChar})
-                    If Me.UseUnits Then
-                        Einheiten = ZeileEinheiten.Split(New Char() {Me.Separator.ToChar})
-                    End If
-                    anzSpalten = Namen.Length
-                Else
-                    'Spalten mit fester Breite
-                    anzSpalten = Math.Ceiling(ZeileSpalten.Length / Me.ColumnWidth)
-                    ReDim Namen(anzSpalten - 1)
-                    ReDim Einheiten(anzSpalten - 1)
-                    For i = 0 To anzSpalten - 1
-                        Namen(i) = ZeileSpalten.Substring(i * Me.ColumnWidth, Math.Min(Me.ColumnWidth, ZeileSpalten.Substring(i * Me.ColumnWidth).Length)).Trim()
-                        If Me.UseUnits Then
-                            Einheiten(i) = ZeileEinheiten.Substring(i * Me.ColumnWidth, Math.Min(Me.ColumnWidth, ZeileSpalten.Substring(i * Me.ColumnWidth).Length)).Trim()
-                        End If
-                    Next
+            If (Me.IsColumnSeparated) Then
+                'Zeichengetrennt
+                Namen = ZeileSpalten.Split(New Char() {Me.Separator.ToChar})
+                If Me.UseUnits Then
+                    Einheiten = ZeileEinheiten.Split(New Char() {Me.Separator.ToChar})
                 End If
-
-                'remove extra spaces and quotes around names and units
+                anzSpalten = Namen.Length
+            Else
+                'Spalten mit fester Breite
+                anzSpalten = Math.Ceiling(ZeileSpalten.Length / Me.ColumnWidth)
+                ReDim Namen(anzSpalten - 1)
+                ReDim Einheiten(anzSpalten - 1)
                 For i = 0 To anzSpalten - 1
-                    Namen(i) = Namen(i).Trim()
-                    If Namen(i).StartsWith("""") And Namen(i).EndsWith("""") Then
-                        Namen(i) = Namen(i).Replace("""", "")
-                    End If
+                    Namen(i) = ZeileSpalten.Substring(i * Me.ColumnWidth, Math.Min(Me.ColumnWidth, ZeileSpalten.Substring(i * Me.ColumnWidth).Length)).Trim()
                     If Me.UseUnits Then
-                        Einheiten(i) = Einheiten(i).Trim()
-                        If Einheiten(i).StartsWith("""") And Einheiten(i).EndsWith("""") Then
-                            Einheiten(i) = Einheiten(i).Replace("""", "")
-                        End If
+                        Einheiten(i) = ZeileEinheiten.Substring(i * Me.ColumnWidth, Math.Min(Me.ColumnWidth, ZeileSpalten.Substring(i * Me.ColumnWidth).Length)).Trim()
                     End If
                 Next
+            End If
 
-                'store series info
-                For i = 0 To anzSpalten - 1
-                    If i <> Me.DateTimeColumnIndex Then
-                        sInfo = New TimeSeriesInfo()
-                        sInfo.Index = i
-                        sInfo.Name = Namen(i)
-                        If Me.UseUnits Then
-                            sInfo.Unit = Einheiten(i)
-                        End If
-                        Me.TimeSeriesInfos.Add(sInfo)
+            'remove extra spaces and quotes around names and units
+            For i = 0 To anzSpalten - 1
+                Namen(i) = Namen(i).Trim()
+                If Namen(i).StartsWith("""") And Namen(i).EndsWith("""") Then
+                    Namen(i) = Namen(i).Replace("""", "")
+                End If
+                If Me.UseUnits Then
+                    Einheiten(i) = Einheiten(i).Trim()
+                    If Einheiten(i).StartsWith("""") And Einheiten(i).EndsWith("""") Then
+                        Einheiten(i) = Einheiten(i).Replace("""", "")
                     End If
-                Next
+                End If
+            Next
 
-                'TODO: gegebenes Datumsformat an dieser Stelle testen
+            'store series info
+            For i = 0 To anzSpalten - 1
+                If i <> Me.DateTimeColumnIndex Then
+                    sInfo = New TimeSeriesInfo()
+                    sInfo.Index = i
+                    sInfo.Name = Namen(i)
+                    If Me.UseUnits Then
+                        sInfo.Unit = Einheiten(i)
+                    End If
+                    Me.TimeSeriesInfos.Add(sInfo)
+                End If
+            Next
 
-            Catch ex As Exception
-                MsgBox($"Unable to read file!{eol}{eol}Error: {ex.Message}", MsgBoxStyle.Critical)
-            End Try
+            'TODO: gegebenes Datumsformat an dieser Stelle testen
 
         End Sub
 

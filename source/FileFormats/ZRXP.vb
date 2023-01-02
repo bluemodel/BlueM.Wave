@@ -121,56 +121,52 @@ Namespace Fileformats
             Me.FileMetadata.Keys.CopyTo(keys, 0)
 
             'read header
-            Try
-                'open file
-                Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
-                Dim StrRead As StreamReader = New StreamReader(FiStr, Me.Encoding)
-                Dim StrReadSync = TextReader.Synchronized(StrRead)
 
-                i = 0
-                Do
-                    line = StrReadSync.ReadLine.ToString()
-                    i += 1
-                    If line.StartsWith("##") Then Continue Do ' ignore lines starting with ##
-                    If line.StartsWith("#") Then
-                        line = line.Substring(1) ' remove "#" from the beginning of the line
-                        If line.Contains("|*|") Then
-                            data = line.Split("|*|")
-                        ElseIf line.Contains(";*;") Then
-                            data = line.Split(";*;")
-                        Else
-                            Throw New Exception("The file does not contain header lines in the expected format!")
-                        End If
-                        'process header data and store as metadata
-                        For Each block As String In data
-                            For Each key As String In keys
-                                If block.StartsWith(key) Then
-                                    value = block.Substring(key.Length)
-                                    Me.FileMetadata(key) = value
-                                End If
-                            Next
-                        Next
+            'open file
+            Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
+            Dim StrRead As StreamReader = New StreamReader(FiStr, Me.Encoding)
+            Dim StrReadSync = TextReader.Synchronized(StrRead)
+
+            i = 0
+            Do
+                line = StrReadSync.ReadLine.ToString()
+                i += 1
+                If line.StartsWith("##") Then Continue Do ' ignore lines starting with ##
+                If line.StartsWith("#") Then
+                    line = line.Substring(1) ' remove "#" from the beginning of the line
+                    If line.Contains("|*|") Then
+                        data = line.Split("|*|")
+                    ElseIf line.Contains(";*;") Then
+                        data = line.Split(";*;")
                     Else
-                        'end of header reached
-                        Me.iLineData = i
-                        Exit Do
+                        Throw New Exception("The file does not contain header lines in the expected format!")
                     End If
-                Loop Until StrReadSync.Peek() = -1
+                    'process header data and store as metadata
+                    For Each block As String In data
+                        For Each key As String In keys
+                            If block.StartsWith(key) Then
+                                value = block.Substring(key.Length)
+                                Me.FileMetadata(key) = value
+                            End If
+                        Next
+                    Next
+                Else
+                    'end of header reached
+                    Me.iLineData = i
+                    Exit Do
+                End If
+            Loop Until StrReadSync.Peek() = -1
 
-                StrReadSync.Close()
-                StrRead.Close()
-                FiStr.Close()
+            StrReadSync.Close()
+            StrRead.Close()
+            FiStr.Close()
 
-                'store series info
-                sInfo = New TimeSeriesInfo
-                sInfo.Name = $"{Me.FileMetadata("SNAME")}.{Me.FileMetadata("CNAME")}"
-                sInfo.Unit = Me.FileMetadata("CUNIT")
-                sInfo.Index = 0
-                Me.TimeSeriesInfos.Add(sInfo)
-
-            Catch ex As Exception
-                MsgBox($"Unable to read file!{eol}{eol}Error: {ex.Message}", MsgBoxStyle.Critical)
-            End Try
+            'store series info
+            sInfo = New TimeSeriesInfo
+            sInfo.Name = $"{Me.FileMetadata("SNAME")}.{Me.FileMetadata("CNAME")}"
+            sInfo.Unit = Me.FileMetadata("CUNIT")
+            sInfo.Index = 0
+            Me.TimeSeriesInfos.Add(sInfo)
 
         End Sub
 

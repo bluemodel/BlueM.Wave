@@ -122,41 +122,36 @@ Namespace Fileformats
 
             Me.TimeSeriesInfos.Clear()
 
-            Try
-                'Datei öffnen
-                Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
-                Dim StrRead As StreamReader = New StreamReader(FiStr, Me.Encoding)
-                Dim StrReadSync = TextReader.Synchronized(StrRead)
+            'Datei öffnen
+            Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
+            Dim StrRead As StreamReader = New StreamReader(FiStr, Me.Encoding)
+            Dim StrReadSync = TextReader.Synchronized(StrRead)
 
-                sInfo = New TimeSeriesInfo()
-                sInfo.Index = 0
+            sInfo = New TimeSeriesInfo()
+            sInfo.Index = 0
 
-                'Reihentitel steht in 1. Zeile, ist aber optional:
-                Zeile = StrReadSync.ReadLine.ToString()
-                title = Zeile.Substring(20, 30).Trim()
-                If title.Length = 0 Then title = Path.GetFileName(Me.File)
-                sInfo.Name = title
+            'Reihentitel steht in 1. Zeile, ist aber optional:
+            Zeile = StrReadSync.ReadLine.ToString()
+            title = Zeile.Substring(20, 30).Trim()
+            If title.Length = 0 Then title = Path.GetFileName(Me.File)
+            sInfo.Name = title
 
-                'Einheit steht in 2. Zeile:
-                Zeile = StrReadSync.ReadLine.ToString()
-                sInfo.Unit = Zeile.Substring(68, 2)
+            'Einheit steht in 2. Zeile:
+            Zeile = StrReadSync.ReadLine.ToString()
+            sInfo.Unit = Zeile.Substring(68, 2)
 
-                'store series info
-                Me.TimeSeriesInfos.Add(sInfo)
+            'store series info
+            Me.TimeSeriesInfos.Add(sInfo)
 
-                'read additional info
-                Me.DezFaktor = Zeile.Substring(29, 1)
+            'read additional info
+            Me.DezFaktor = Zeile.Substring(29, 1)
 
-                'Zeitintervall auslesen
-                Me.Zeitintervall = Convert.ToSingle(Zeile.Substring(23, 2).Trim)
+            'Zeitintervall auslesen
+            Me.Zeitintervall = Convert.ToSingle(Zeile.Substring(23, 2).Trim)
 
-                StrReadSync.Close()
-                StrRead.Close()
-                FiStr.Close()
-
-            Catch ex As Exception
-                MsgBox($"Unable to read file!{eol}{eol}Error: {ex.Message}", MsgBoxStyle.Critical)
-            End Try
+            StrReadSync.Close()
+            StrRead.Close()
+            FiStr.Close()
 
         End Sub
 

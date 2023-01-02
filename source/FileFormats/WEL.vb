@@ -118,71 +118,66 @@ Namespace Fileformats
 
             Me.TimeSeriesInfos.Clear()
 
-            Try
-                'Datei öffnen
-                Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
-                Dim StrRead As StreamReader = New StreamReader(FiStr, Me.Encoding)
-                Dim StrReadSync As TextReader = TextReader.Synchronized(StrRead)
+            'Datei öffnen
+            Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
+            Dim StrRead As StreamReader = New StreamReader(FiStr, Me.Encoding)
+            Dim StrReadSync As TextReader = TextReader.Synchronized(StrRead)
 
-                'Spaltenüberschriften auslesen
-                For i = 1 To Me.iLineUnits
-                    Zeile = StrReadSync.ReadLine.ToString()
-                    If (i = Me.iLineInfo) Then LineInfo = Zeile
-                    If (i = Me.iLineHeadings) Then ZeileSpalten = Zeile
-                    If (i = Me.iLineUnits) Then ZeileEinheiten = Zeile
+            'Spaltenüberschriften auslesen
+            For i = 1 To Me.iLineUnits
+                Zeile = StrReadSync.ReadLine.ToString()
+                If (i = Me.iLineInfo) Then LineInfo = Zeile
+                If (i = Me.iLineHeadings) Then ZeileSpalten = Zeile
+                If (i = Me.iLineUnits) Then ZeileEinheiten = Zeile
+            Next
+
+            'Are columns separted by ";" or should fixed format be used?
+            If ZeileSpalten.Contains(";") Then
+                Me.IsColumnSeparated = True
+            Else
+                Me.IsColumnSeparated = False
+            End If
+
+            'Is it a WEL or EFL_WEL file
+            If LineInfo.Contains("EFL-WEL") Then
+                Me.ColumnWidth = 41
+            Else
+                'nothing to do, presets can be applied
+            End If
+
+            StrReadSync.Close()
+            StrRead.Close()
+            FiStr.Close()
+
+            'Spalteninformationen auslesen
+            '-----------------------------
+            Dim anzSpalten As Integer
+            Dim Namen() As String
+            Dim Einheiten() As String
+
+            If (Me.IsColumnSeparated) Then
+                'Zeichengetrennt
+                Namen = ZeileSpalten.Split(New Char() {Me.Separator.ToChar}, StringSplitOptions.RemoveEmptyEntries)
+                Einheiten = ZeileEinheiten.Split(New Char() {Me.Separator.ToChar}, StringSplitOptions.RemoveEmptyEntries)
+                anzSpalten = Namen.Length
+                For i = 1 To anzSpalten - 1 'first column is timestamp
+                    sInfo = New TimeSeriesInfo()
+                    sInfo.Name = Namen(i).Trim()
+                    sInfo.Unit = Einheiten(i).Trim()
+                    sInfo.Index = i
+                    Me.TimeSeriesInfos.Add(sInfo)
                 Next
-
-                'Are columns separted by ";" or should fixed format be used?
-                If ZeileSpalten.Contains(";") Then
-                    Me.IsColumnSeparated = True
-                Else
-                    Me.IsColumnSeparated = False
-                End If
-
-                'Is it a WEL or EFL_WEL file
-                If LineInfo.Contains("EFL-WEL") Then
-                    Me.ColumnWidth = 41
-                Else
-                    'nothing to do, presets can be applied
-                End If
-
-                StrReadSync.Close()
-                StrRead.Close()
-                FiStr.Close()
-
-                'Spalteninformationen auslesen
-                '-----------------------------
-                Dim anzSpalten As Integer
-                Dim Namen() As String
-                Dim Einheiten() As String
-
-                If (Me.IsColumnSeparated) Then
-                    'Zeichengetrennt
-                    Namen = ZeileSpalten.Split(New Char() {Me.Separator.ToChar}, StringSplitOptions.RemoveEmptyEntries)
-                    Einheiten = ZeileEinheiten.Split(New Char() {Me.Separator.ToChar}, StringSplitOptions.RemoveEmptyEntries)
-                    anzSpalten = Namen.Length
-                    For i = 1 To anzSpalten - 1 'first column is timestamp
-                        sInfo = New TimeSeriesInfo()
-                        sInfo.Name = Namen(i).Trim()
-                        sInfo.Unit = Einheiten(i).Trim()
-                        sInfo.Index = i
-                        Me.TimeSeriesInfos.Add(sInfo)
-                    Next
-                Else
-                    'Spalten mit fester Breite
-                    anzSpalten = Math.Ceiling((ZeileSpalten.Length - Me.DateTimeLength) / Me.ColumnWidth) + 1
-                    For i = 1 To anzSpalten - 1 'first column is timestamp
-                        sInfo = New TimeSeriesInfo()
-                        sInfo.Name = ZeileSpalten.Substring(Me.DateTimeLength + (i - 1) * Me.ColumnWidth, Me.ColumnWidth).Trim()
-                        sInfo.Unit = ZeileEinheiten.Substring(Me.DateTimeLength + (i - 1) * Me.ColumnWidth, Me.ColumnWidth).Trim()
-                        sInfo.Index = i
-                        Me.TimeSeriesInfos.Add(sInfo)
-                    Next
-                End If
-
-            Catch ex As Exception
-                MsgBox($"Unable to read file!{eol}{eol}Error: {ex.Message}", MsgBoxStyle.Critical)
-            End Try
+            Else
+                'Spalten mit fester Breite
+                anzSpalten = Math.Ceiling((ZeileSpalten.Length - Me.DateTimeLength) / Me.ColumnWidth) + 1
+                For i = 1 To anzSpalten - 1 'first column is timestamp
+                    sInfo = New TimeSeriesInfo()
+                    sInfo.Name = ZeileSpalten.Substring(Me.DateTimeLength + (i - 1) * Me.ColumnWidth, Me.ColumnWidth).Trim()
+                    sInfo.Unit = ZeileEinheiten.Substring(Me.DateTimeLength + (i - 1) * Me.ColumnWidth, Me.ColumnWidth).Trim()
+                    sInfo.Index = i
+                    Me.TimeSeriesInfos.Add(sInfo)
+                Next
+            End If
 
         End Sub
 

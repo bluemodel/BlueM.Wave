@@ -93,61 +93,56 @@ Namespace Fileformats
 
             Me.TimeSeriesInfos.Clear()
 
-            Try
-                'Datei öffnen
-                Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
-                Dim StrRead As StreamReader = New StreamReader(FiStr, Me.Encoding)
-                Dim StrReadSync As TextReader = TextReader.Synchronized(StrRead)
+            'Datei öffnen
+            Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
+            Dim StrRead As StreamReader = New StreamReader(FiStr, Me.Encoding)
+            Dim StrReadSync As TextReader = TextReader.Synchronized(StrRead)
 
-                'Zeile mit der Anzahl der Zeireihen finden
-                For i = 1 To Me.iLineHeadings - 1
-                    Zeile = StrReadSync.ReadLine.ToString()
-                    If (i = iZeileAnzSpalten) Then ZeileSpalten = Zeile
+            'Zeile mit der Anzahl der Zeireihen finden
+            For i = 1 To Me.iLineHeadings - 1
+                Zeile = StrReadSync.ReadLine.ToString()
+                If (i = iZeileAnzSpalten) Then ZeileSpalten = Zeile
+            Next
+
+            'Anzahl der Zeitreihen auslesen
+            Dim anzSpalten As Integer
+            anzSpalten = Convert.ToSingle(Right(ZeileSpalten, 5))
+
+            'Anzahl der Zeilen und Spalten pro Zeitschritt ermitteln
+            Me.nLinesPerTimestamp = Math.Ceiling(anzSpalten / maxSpalten_dT)
+            ReDim AnzSpalten_dT(Me.nLinesPerTimestamp - 1)
+            If Me.nLinesPerTimestamp = 1 Then
+                AnzSpalten_dT(Me.nLinesPerTimestamp - 1) = anzSpalten
+            ElseIf Me.nLinesPerTimestamp > 1 Then
+                For i = 0 To Me.nLinesPerTimestamp - 2
+                    AnzSpalten_dT(i) = maxSpalten_dT
                 Next
+                AnzSpalten_dT(Me.nLinesPerTimestamp - 1) = anzSpalten - (maxSpalten_dT * (Me.nLinesPerTimestamp - 1))
+            End If
 
-                'Anzahl der Zeitreihen auslesen
-                Dim anzSpalten As Integer
-                anzSpalten = Convert.ToSingle(Right(ZeileSpalten, 5))
-
-                'Anzahl der Zeilen und Spalten pro Zeitschritt ermitteln
-                Me.nLinesPerTimestamp = Math.Ceiling(anzSpalten / maxSpalten_dT)
-                ReDim AnzSpalten_dT(Me.nLinesPerTimestamp - 1)
-                If Me.nLinesPerTimestamp = 1 Then
-                    AnzSpalten_dT(Me.nLinesPerTimestamp - 1) = anzSpalten
-                ElseIf Me.nLinesPerTimestamp > 1 Then
-                    For i = 0 To Me.nLinesPerTimestamp - 2
-                        AnzSpalten_dT(i) = maxSpalten_dT
-                    Next
-                    AnzSpalten_dT(Me.nLinesPerTimestamp - 1) = anzSpalten - (maxSpalten_dT * (Me.nLinesPerTimestamp - 1))
-                End If
-
-                'Spaltenköpfe (Zuflussknoten) und Indizes einlesen
-                Dim index As Integer
-                index = 1
-                For i = 0 To Me.nLinesPerTimestamp - 1
-                    Zeile = StrReadSync.ReadLine.ToString()
-                    For j = 0 To AnzSpalten_dT(i) - 1
-                        sInfo = New TimeSeriesInfo()
-                        sInfo.Name = Zeile.Substring((j * Me.ColumnWidth) + ColumnOffset, Me.ColumnWidth).Trim()
-                        sInfo.Unit = HExt_welEinheit
-                        sInfo.Index = index
-                        sInfo.Objekt = Trim(sInfo.Name)
-                        sInfo.Type = "FLOW"
-                        Me.TimeSeriesInfos.Add(sInfo)
-                        index = index + 1
-                    Next
+            'Spaltenköpfe (Zuflussknoten) und Indizes einlesen
+            Dim index As Integer
+            index = 1
+            For i = 0 To Me.nLinesPerTimestamp - 1
+                Zeile = StrReadSync.ReadLine.ToString()
+                For j = 0 To AnzSpalten_dT(i) - 1
+                    sInfo = New TimeSeriesInfo()
+                    sInfo.Name = Zeile.Substring((j * Me.ColumnWidth) + ColumnOffset, Me.ColumnWidth).Trim()
+                    sInfo.Unit = HExt_welEinheit
+                    sInfo.Index = index
+                    sInfo.Objekt = Trim(sInfo.Name)
+                    sInfo.Type = "FLOW"
+                    Me.TimeSeriesInfos.Add(sInfo)
+                    index = index + 1
                 Next
+            Next
 
-                'iZeileDaten kann erst jetzt gesetzt werden, wenn AnzZeilen_dT bekannt ist
-                Me.iLineData = iLineHeadings + Me.nLinesPerTimestamp
+            'iZeileDaten kann erst jetzt gesetzt werden, wenn AnzZeilen_dT bekannt ist
+            Me.iLineData = iLineHeadings + Me.nLinesPerTimestamp
 
-                StrReadSync.Close()
-                StrRead.Close()
-                FiStr.Close()
-
-            Catch ex As Exception
-                MsgBox($"Unable to read file!{eol}{eol}Error: {ex.Message}", MsgBoxStyle.Critical)
-            End Try
+            StrReadSync.Close()
+            StrRead.Close()
+            FiStr.Close()
 
         End Sub
 

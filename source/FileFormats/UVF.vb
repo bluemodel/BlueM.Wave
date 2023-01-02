@@ -132,87 +132,82 @@ Namespace Fileformats
             Me.TimeSeriesInfos.Clear()
 
             'Header einlesen
-            Try
-                'Datei öffnen
-                Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
-                Dim StrRead As StreamReader = New StreamReader(FiStr, Me.Encoding)
-                Dim StrReadSync = TextReader.Synchronized(StrRead)
+            'Datei öffnen
+            Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
+            Dim StrRead As StreamReader = New StreamReader(FiStr, Me.Encoding)
+            Dim StrReadSync = TextReader.Synchronized(StrRead)
 
-                Do
-                    Zeile = StrReadSync.ReadLine.ToString()
-                    i += 1
-                    If Zeile.StartsWith("$") Then
-                        'Kommentarzeile
-                        'TODO: store comments as metadata
-                        Continue Do
-                    ElseIf Zeile.ToLower.StartsWith("*z") Then    ' Hier fängt der Header an
-                        headerFound = True
-                        iLineHeadings = i + 1
-                        iLineUnits = i + 1
-                        iLineData = i + 4
-                        Continue Do
-                    End If
-                    If i = iLineHeadings Then
-                        'Zeitreihenname einlesen
-                        Me.FileMetadata("name") = Zeile.Substring(0, 15).Trim()
-                        'Einheit einlesen
-                        Me.FileMetadata("unit") = Zeile.Substring(15, 15).Trim()
-                        'DefArt oder Anfangsjahrhundert einlesen, falls vorhanden
-                        If Zeile.Length > 30 Then
-                            If Zeile.Substring(30, 1) = "I" Or
+            Do
+                Zeile = StrReadSync.ReadLine.ToString()
+                i += 1
+                If Zeile.StartsWith("$") Then
+                    'Kommentarzeile
+                    'TODO: store comments as metadata
+                    Continue Do
+                ElseIf Zeile.ToLower.StartsWith("*z") Then    ' Hier fängt der Header an
+                    headerFound = True
+                    iLineHeadings = i + 1
+                    iLineUnits = i + 1
+                    iLineData = i + 4
+                    Continue Do
+                End If
+                If i = iLineHeadings Then
+                    'Zeitreihenname einlesen
+                    Me.FileMetadata("name") = Zeile.Substring(0, 15).Trim()
+                    'Einheit einlesen
+                    Me.FileMetadata("unit") = Zeile.Substring(15, 15).Trim()
+                    'DefArt oder Anfangsjahrhundert einlesen, falls vorhanden
+                    If Zeile.Length > 30 Then
+                        If Zeile.Substring(30, 1) = "I" Or
                            Zeile.Substring(30, 1) = "K" Or
                            Zeile.Substring(30, 1) = "M" Then
-                                Me.FileMetadata("defArt") = Zeile.Substring(30, 1)
-                            ElseIf Regex.IsMatch(Zeile.Substring(30, 4), "\d\d\d\d") Then
-                                'Anfangsjahrhundert ist angegeben
-                                Me.FileMetadata("century") = Zeile.Substring(30, 4)
-                            End If
+                            Me.FileMetadata("defArt") = Zeile.Substring(30, 1)
+                        ElseIf Regex.IsMatch(Zeile.Substring(30, 4), "\d\d\d\d") Then
+                            'Anfangsjahrhundert ist angegeben
+                            Me.FileMetadata("century") = Zeile.Substring(30, 4)
                         End If
-                        'Anfangsjahrhundert auf 1900 setzen, falls nicht angegeben
-                        If Me.FileMetadata("century") = "" Then
-                            Me.FileMetadata("century") = "1900"
-                            Log.AddLogEntry(Log.levels.warning, "Starting century is not specified in file header, assuming 1900.")
-                        End If
-                        Continue Do
                     End If
-                    If i = iLineHeadings + 1 Then
-                        'Ort und Lage einlesen
-                        Try
-                            Me.FileMetadata("location") = Zeile.Substring(0, Math.Min(Zeile.Length, 15)).Trim()
-                            Me.FileMetadata("coord_X") = Zeile.Substring(15, 10).Trim()
-                            Me.FileMetadata("coord_Y") = Zeile.Substring(25, 10).Trim()
-                            Me.FileMetadata("coord_Z") = Zeile.Substring(35).Trim()
-                            Exit Do
-                        Catch ex As Exception
-                            'do nothing
-                        End Try
+                    'Anfangsjahrhundert auf 1900 setzen, falls nicht angegeben
+                    If Me.FileMetadata("century") = "" Then
+                        Me.FileMetadata("century") = "1900"
+                        Log.AddLogEntry(Log.levels.warning, "Starting century is not specified in file header, assuming 1900.")
                     End If
-
-                Loop Until StrReadSync.Peek() = -1
-
-                StrReadSync.Close()
-                StrRead.Close()
-                FiStr.Close()
-
-                'store series info
-
-                sInfo = New TimeSeriesInfo()
-                sInfo.Name = Me.FileMetadata("name")
-                If Me.FileMetadata("location") <> "" Then
-                    'append location to series title
-                    sInfo.Name &= " - " & Me.FileMetadata("location")
+                    Continue Do
                 End If
-                sInfo.Unit = Me.FileMetadata("unit")
-                sInfo.Index = 0
-                Me.TimeSeriesInfos.Add(sInfo)
-
-                If Not headerFound Then
-                    Throw New Exception("The file does not contain a header line starting with '*Z'!")
+                If i = iLineHeadings + 1 Then
+                    'Ort und Lage einlesen
+                    Try
+                        Me.FileMetadata("location") = Zeile.Substring(0, Math.Min(Zeile.Length, 15)).Trim()
+                        Me.FileMetadata("coord_X") = Zeile.Substring(15, 10).Trim()
+                        Me.FileMetadata("coord_Y") = Zeile.Substring(25, 10).Trim()
+                        Me.FileMetadata("coord_Z") = Zeile.Substring(35).Trim()
+                        Exit Do
+                    Catch ex As Exception
+                        'do nothing
+                    End Try
                 End If
 
-            Catch ex As Exception
-                MsgBox($"Unable to read file!{eol}{eol}Error: {ex.Message}", MsgBoxStyle.Critical)
-            End Try
+            Loop Until StrReadSync.Peek() = -1
+
+            StrReadSync.Close()
+            StrRead.Close()
+            FiStr.Close()
+
+            'store series info
+
+            sInfo = New TimeSeriesInfo()
+            sInfo.Name = Me.FileMetadata("name")
+            If Me.FileMetadata("location") <> "" Then
+                'append location to series title
+                sInfo.Name &= " - " & Me.FileMetadata("location")
+            End If
+            sInfo.Unit = Me.FileMetadata("unit")
+            sInfo.Index = 0
+            Me.TimeSeriesInfos.Add(sInfo)
+
+            If Not headerFound Then
+                Throw New Exception("The file does not contain a header line starting with '*Z'!")
+            End If
 
         End Sub
 

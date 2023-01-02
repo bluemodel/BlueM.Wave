@@ -93,27 +93,22 @@ Namespace Fileformats
 
             Me.TimeSeriesInfos.Clear()
 
-            Try
-                'Datei öffnen
-                Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
-                Dim StrRead As StreamReader = New StreamReader(FiStr, Me.Encoding)
-                Dim StrReadSync = TextReader.Synchronized(StrRead)
+            'Datei öffnen
+            Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
+            Dim StrRead As StreamReader = New StreamReader(FiStr, Me.Encoding)
+            Dim StrReadSync = TextReader.Synchronized(StrRead)
 
-                'Reihentitel steht in 1. Zeile:
-                Zeile = StrReadSync.ReadLine.ToString()
+            'Reihentitel steht in 1. Zeile:
+            Zeile = StrReadSync.ReadLine.ToString()
 
-                'store series info
-                sInfo = New TimeSeriesInfo()
-                sInfo.Name = Zeile.Trim()
-                Me.TimeSeriesInfos.Add(sInfo)
+            'store series info
+            sInfo = New TimeSeriesInfo()
+            sInfo.Name = Zeile.Trim()
+            Me.TimeSeriesInfos.Add(sInfo)
 
-                StrReadSync.Close()
-                StrRead.Close()
-                FiStr.Close()
-
-            Catch ex As Exception
-                MsgBox($"Unable to read file!{eol}{eol}Error: {ex.Message}", MsgBoxStyle.Critical)
-            End Try
+            StrReadSync.Close()
+            StrRead.Close()
+            FiStr.Close()
 
         End Sub
 

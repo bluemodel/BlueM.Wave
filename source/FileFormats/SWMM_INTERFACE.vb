@@ -122,80 +122,74 @@ Namespace Fileformats
 
             Me.TimeSeriesInfos.Clear()
 
-            Try
-                'Datei öffnen
-                Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
-                Dim StrRead As StreamReader = New StreamReader(FiStr, Me.Encoding)
-                Dim StrReadSync As TextReader = TextReader.Synchronized(StrRead)
+            'Datei öffnen
+            Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
+            Dim StrRead As StreamReader = New StreamReader(FiStr, Me.Encoding)
+            Dim StrReadSync As TextReader = TextReader.Synchronized(StrRead)
 
-                'Zeile mit Reporting Time Step finden
-                For i = 1 To iZeileReportTimeStep
-                    Zeile = StrReadSync.ReadLine.ToString()
-                Next
-                strArray = Zeile.Split(New Char() {space.ToChar}, StringSplitOptions.RemoveEmptyEntries)
-                Me.Zeitintervall = Convert.ToSingle(strArray(0))
+            'Zeile mit Reporting Time Step finden
+            For i = 1 To iZeileReportTimeStep
+                Zeile = StrReadSync.ReadLine.ToString()
+            Next
+            strArray = Zeile.Split(New Char() {space.ToChar}, StringSplitOptions.RemoveEmptyEntries)
+            Me.Zeitintervall = Convert.ToSingle(strArray(0))
 
-                'Zeile mit der Anzahl der Constituents finden
-                For i = 1 To iZeileAnzConstituents - iZeileReportTimeStep
-                    Zeile = StrReadSync.ReadLine.ToString()
-                Next
-                'Anzahl der Constituents zu einem Knoten
-                strArray = Zeile.Split(New Char() {space.ToChar}, StringSplitOptions.RemoveEmptyEntries)
-                AnzConstituents = Convert.ToSingle(strArray(0))
+            'Zeile mit der Anzahl der Constituents finden
+            For i = 1 To iZeileAnzConstituents - iZeileReportTimeStep
+                Zeile = StrReadSync.ReadLine.ToString()
+            Next
+            'Anzahl der Constituents zu einem Knoten
+            strArray = Zeile.Split(New Char() {space.ToChar}, StringSplitOptions.RemoveEmptyEntries)
+            AnzConstituents = Convert.ToSingle(strArray(0))
 
-                ReDim Constituents(AnzConstituents - 1)
-                'Inflows und Einheit einlesen
-                For i = 0 To AnzConstituents - 1
-                    Zeile = StrReadSync.ReadLine.ToString()
-                    strArray = Zeile.Split(New Char() {space.ToChar}, StringSplitOptions.RemoveEmptyEntries)
-                    Constituents(i).Type = strArray(0)
-                    Constituents(i).Unit = strArray(1)
-                    Constituents(i).Index = i
-                Next
-
-                'Anzahl der Zuflussknoten ermitteln
-                'entspricht der Anzahl der Zeilen pro Zeitschritt
+            ReDim Constituents(AnzConstituents - 1)
+            'Inflows und Einheit einlesen
+            For i = 0 To AnzConstituents - 1
                 Zeile = StrReadSync.ReadLine.ToString()
                 strArray = Zeile.Split(New Char() {space.ToChar}, StringSplitOptions.RemoveEmptyEntries)
-                Me.nLinesPerTimestamp = Convert.ToSingle(strArray(0))
-                AnzNodes = Me.nLinesPerTimestamp
-                ReDim Nodes(AnzNodes - 1)
-                For i = 0 To AnzNodes - 1
-                    Zeile = StrReadSync.ReadLine.ToString()
-                    Nodes(i).Bez = Trim(Zeile)
-                    Nodes(i).Index = i
+                Constituents(i).Type = strArray(0)
+                Constituents(i).Unit = strArray(1)
+                Constituents(i).Index = i
+            Next
+
+            'Anzahl der Zuflussknoten ermitteln
+            'entspricht der Anzahl der Zeilen pro Zeitschritt
+            Zeile = StrReadSync.ReadLine.ToString()
+            strArray = Zeile.Split(New Char() {space.ToChar}, StringSplitOptions.RemoveEmptyEntries)
+            Me.nLinesPerTimestamp = Convert.ToSingle(strArray(0))
+            AnzNodes = Me.nLinesPerTimestamp
+            ReDim Nodes(AnzNodes - 1)
+            For i = 0 To AnzNodes - 1
+                Zeile = StrReadSync.ReadLine.ToString()
+                Nodes(i).Bez = Trim(Zeile)
+                Nodes(i).Index = i
+            Next
+
+            'Anzahl der Zeitreihen (Spalten) ermitteln
+            Dim anzSpalten As Integer
+            anzSpalten = AnzConstituents * AnzNodes
+
+            'iZeileDaten kann erst jetzt gesetzt werden, wenn AnzZeilen_dT bekannt ist
+            Me.iLineData = iZeileAnzConstituents + AnzConstituents + AnzNodes + 3
+
+            'Spaltenköpfe (Zuflussknoten) und Indizes einlesen
+            IDSpalte = 1
+            For i = 0 To AnzNodes - 1
+                For j = 0 To AnzConstituents - 1
+                    sInfo = New TimeSeriesInfo()
+                    sInfo.Name = $"{Nodes(i).Bez} {Constituents(j).Type}"
+                    sInfo.Objekt = Nodes(i).Bez
+                    sInfo.Type = Constituents(j).Type
+                    sInfo.Unit = Constituents(j).Unit
+                    sInfo.Index = IDSpalte
+                    Me.TimeSeriesInfos.Add(sInfo)
+                    IDSpalte = IDSpalte + 1
                 Next
+            Next
 
-                'Anzahl der Zeitreihen (Spalten) ermitteln
-                Dim anzSpalten As Integer
-                anzSpalten = AnzConstituents * AnzNodes
-
-                'iZeileDaten kann erst jetzt gesetzt werden, wenn AnzZeilen_dT bekannt ist
-                Me.iLineData = iZeileAnzConstituents + AnzConstituents + AnzNodes + 3
-
-                'Spaltenköpfe (Zuflussknoten) und Indizes einlesen
-                IDSpalte = 1
-                For i = 0 To AnzNodes - 1
-                    For j = 0 To AnzConstituents - 1
-                        sInfo = New TimeSeriesInfo()
-                        sInfo.Name = $"{Nodes(i).Bez} {Constituents(j).Type}"
-                        sInfo.Objekt = Nodes(i).Bez
-                        sInfo.Type = Constituents(j).Type
-                        sInfo.Unit = Constituents(j).Unit
-                        sInfo.Index = IDSpalte
-                        Me.TimeSeriesInfos.Add(sInfo)
-                        IDSpalte = IDSpalte + 1
-                    Next
-                Next
-
-
-                StrReadSync.Close()
-                StrRead.Close()
-                FiStr.Close()
-
-            Catch ex As Exception
-                MsgBox($"Unable to read file!{eol}{eol}Error: {ex.Message}", MsgBoxStyle.Critical)
-            End Try
+            StrReadSync.Close()
+            StrRead.Close()
+            FiStr.Close()
 
         End Sub
 

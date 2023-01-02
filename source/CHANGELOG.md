@@ -1,6 +1,13 @@
 ﻿BlueM.Wave Release Notes
 ========================
 
+Version 2.1.1
+-------------
+FIXED:
+* Significantly improved the speed of reading SYDRO binary WEL files (*.WBL)
+* Improved handling of errors occurring while reading time series file metadata
+* Added an error message when ZRE file metadata is incomplete
+
 Version 2.1.0
 -------------
 NEW:
