@@ -24,6 +24,7 @@ Friend Module AnalysisFactory
     ''' List of analysis functions
     ''' </summary>
     Public Enum AnalysisFunctions
+        AnnualRecurrenceProbability
         AnnualStatistics
         Autocorrelation
         Calculator
@@ -46,6 +47,8 @@ Friend Module AnalysisFactory
     ''' <returns></returns>
     Public Function getAnalysisDescription(analysisfunction As AnalysisFunctions) As String
         Select Case analysisfunction
+            Case AnalysisFunctions.AnnualRecurrenceProbability
+                Return AnnualRecurrenceProbability.Description
             Case AnalysisFunctions.AnnualStatistics
                 Return AnnualStatistics.Description
             Case AnalysisFunctions.Autocorrelation
@@ -70,8 +73,8 @@ Friend Module AnalysisFactory
                 Return MonthlyStatistics.Description
             Case AnalysisFunctions.TimestepAnalysis
                 Return TimeStepAnalysis.Description
-            'Case AnalysisFunctions.TestAnalysis         '<--------- Add case for new analysis descriptions here
-            '    Return TestAnalysis.Description         '<--------- 
+                'Case AnalysisFunctions.TestAnalysis         '<--------- Add case for new analysis descriptions here
+                '    Return TestAnalysis.Description         '<--------- 
             Case Else
                 Return "Description not found"
         End Select
@@ -88,6 +91,9 @@ Friend Module AnalysisFactory
         Dim oAnalysis As Analysis
 
         Select Case analysisfunction
+
+            Case AnalysisFunctions.AnnualRecurrenceProbability
+                oAnalysis = New AnnualRecurrenceProbability(seriesList)
 
             Case AnalysisFunctions.AnnualStatistics
                 oAnalysis = New AnnualStatistics(seriesList)
@@ -125,8 +131,8 @@ Friend Module AnalysisFactory
             Case AnalysisFunctions.TimestepAnalysis
                 oAnalysis = New TimeStepAnalysis(seriesList)
 
-            'Case AnalysisFunctions.TestAnalysis                 '<--------- Add case for creation of new analysis instance here
-            '    oAnalysis = New TestAnalysis(seriesList)        '<---------
+                'Case AnalysisFunctions.TestAnalysis                 '<--------- Add case for creation of new analysis instance here
+                '    oAnalysis = New TestAnalysis(seriesList)        '<---------
 
             Case Else
                 Throw New Exception("Analysis not found!")
