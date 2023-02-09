@@ -157,17 +157,28 @@ Friend Class GoodnessOfFit
 
         'Logarithmic Nash-Sutcliffe coefficient
         '--------------------------------------
-        'Formula: Reff,ln = 1 - (SUM[(ln(x_i)-ln(y_i))^2]) / (SUM[(ln(x_i)-ln(x_avg))^2])
+        'Formula: Reff,ln = 1 - (SUM[(ln(x_i + e)-ln(y_i + e))^2]) / (SUM[(ln(x_i + e)-avg(ln(x + e))^2])
         'Reference: Merkblatt BWK M7, Okt. 2008
-        Dim ln_avg_gemessen As Double
+        Dim epsilon, avg_ln_obs As Double
+        'negligible constant to prevent Math.Log(0) = -Infinity
+        'Pushpalatha et al. (2012) DOI:10.1016/j.jhydrol.2011.11.055
+        epsilon = ts_o.Average / 100.0
+
+        ' transform all values by adding epsilon and then logarithmisizing
+        Dim values_ref As New List(Of Double)
+        Dim values_sim As New List(Of Double)
+        For i = 0 To ts_o.Length - 1
+            values_ref.Add(Math.Log(ts_o.Values(i) + epsilon))
+            values_sim.Add(Math.Log(ts_s.Values(i) + epsilon))
+        Next
+
+        avg_ln_obs = values_ref.Sum() / values_ref.Count
+
         Dim sum_ln_diff_squared As Double = 0.0
         Dim sum_ln_diff_avg_squared As Double = 0.0
-
-        ln_avg_gemessen = Math.Log(avg_obs)
-
-        For i = 0 To gof.nValues - 1
-            sum_ln_diff_squared += (Math.Log(ts_o.Values(i)) - Math.Log(ts_s.Values(i))) ^ 2
-            sum_ln_diff_avg_squared += (Math.Log(ts_o.Values(i)) - ln_avg_gemessen) ^ 2
+        For i = 0 To values_ref.Count - 1
+            sum_ln_diff_squared += (values_ref(i) - values_sim(i)) ^ 2
+            sum_ln_diff_avg_squared += (values_ref(i) - avg_ln_obs) ^ 2
         Next
 
         gof.ln_nash_sutcliffe = 1 - sum_ln_diff_squared / sum_ln_diff_avg_squared
