@@ -1,6 +1,14 @@
 ﻿BlueM.Wave Release Notes
 ========================
 
+Version 2.2.0
+-------------
+FIXED:
+* Analysis function GoodnessOfFit: fixed calculation of logarithmic Nash-Sutcliffe efficiency:
+  * Use the average of the logarithmic observed values instead of the logarithm of the average observed value in the equation
+  * A small epsilon value of 1% of the average observed values is now added to all values before the logarithmic transform in order to deal with zero values
+    See Pushpalatha et al. (2012) DOI:10.1016/j.jhydrol.2011.11.055
+
 Version 2.1.1
 -------------
 FIXED:
