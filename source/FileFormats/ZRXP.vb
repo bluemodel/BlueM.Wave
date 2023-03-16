@@ -88,7 +88,9 @@ Namespace Fileformats
                 Else
                     'try the second line
                     line = StrReadSync.ReadLine.ToString()
-                    If line.StartsWith("#ZRXP") Then isZRXP = True
+                    If line.StartsWith("#ZRXP") Then
+                        isZRXP = True
+                    End If
                 End If
 
                 StrReadSync.Close()
@@ -111,22 +113,21 @@ Namespace Fileformats
         Public Overrides Sub readSeriesInfo()
 
             Dim i As Integer
-            Dim line, data(), keys(), value As String
+            Dim line, data(), value As String
+            Dim keys As List(Of String)
             Dim sInfo As TimeSeriesInfo
 
             Me.TimeSeriesInfos.Clear()
 
-            'copy metadata keys to array
-            ReDim keys(Me.FileMetadata.Keys.Count - 1)
-            Me.FileMetadata.Keys.CopyTo(keys, 0)
-
-            'read header
+            'copy metadata keys to list
+            keys = Me.FileMetadata.Keys.ToList()
 
             'open file
             Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
             Dim StrRead As StreamReader = New StreamReader(FiStr, Me.Encoding)
             Dim StrReadSync = TextReader.Synchronized(StrRead)
 
+            'read header
             i = 0
             Do
                 line = StrReadSync.ReadLine.ToString()
@@ -162,11 +163,18 @@ Namespace Fileformats
             FiStr.Close()
 
             'store series info
-            sInfo = New TimeSeriesInfo
-            sInfo.Name = $"{Me.FileMetadata("SNAME")}.{Me.FileMetadata("CNAME")}"
-            sInfo.Unit = Me.FileMetadata("CUNIT")
-            sInfo.Index = 0
-            Me.TimeSeriesInfos.Add(sInfo)
+            If Me.FileMetadata("LAYOUT").StartsWith("(timestamp,value") Then
+                'single time series
+                sInfo = New TimeSeriesInfo()
+                sInfo.Name = $"{Me.FileMetadata("SNAME")}.{Me.FileMetadata("CNAME")}"
+                sInfo.Unit = Me.FileMetadata("CUNIT")
+                sInfo.Index = 0
+                Me.TimeSeriesInfos.Add(sInfo)
+
+            Else
+                'unsupported layout
+                Throw New Exception($"ZRXP file has unsupported layout " & Me.FileMetadata("LAYOUT") & "!")
+            End If
 
         End Sub
 
