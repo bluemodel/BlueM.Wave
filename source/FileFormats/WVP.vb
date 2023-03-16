@@ -123,7 +123,7 @@ Namespace Fileformats
                             If Not fileDict(file).ContainsKey(series) Then
                                 fileDict(file).Add(series, title)
                             Else
-                                Log.AddLogEntry(Log.levels.warning, $"Series {series} is specified twice, the second mention will be ignored!")
+                                Log.AddLogEntry(Log.levels.warning, $"Series {series} is specified more than once, only the first mention will be processed!")
                             End If
                         Else
                             Log.AddLogEntry(Log.levels.warning, $"Series {series} is not associated with a file and will be ignored!")
@@ -143,7 +143,7 @@ Namespace Fileformats
                         If Not settingsDict(file).ContainsKey(parts(0)) Then
                             settingsDict(file).Add(parts(0), parts(1))
                         Else
-                            Log.AddLogEntry(Log.levels.warning, $"Setting {parts(0)} is specified twice, the second mention will be ignored!")
+                            Log.AddLogEntry(Log.levels.warning, $"Setting {parts(0)} is specified more than once, only the first mention will be processed!")
                         End If
                     Else
                         Log.AddLogEntry(Log.levels.warning, $"Setting {parts(0)} is not associated with a file and will be ignored!")
