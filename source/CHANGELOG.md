@@ -1,6 +1,11 @@
 ﻿BlueM.Wave Release Notes
 ========================
 
+Version 2.3.0
+-------------
+NEW:
+* Added support for ZRXP files containing ensemble forecast time series #92
+
 Version 2.2.0
 -------------
 FIXED:

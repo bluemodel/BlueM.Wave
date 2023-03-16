@@ -28,6 +28,32 @@ Namespace Fileformats
         Inherits TimeSeriesFile
 
         ''' <summary>
+        ''' ZRXP layouts
+        ''' </summary>
+        Private Enum LayoutEnum
+            ''' <summary>
+            ''' A single time series consisting of timestamp and value (possibly followed by remarks, which are ignored by Wave)
+            ''' LAYOUT(timestamp,value) or LAYOUT(timestamp,value,remark)
+            ''' </summary>
+            [Single]
+            ''' <summary>
+            ''' An ensemble forecast consisting of multiple time series with different initialization dates and member numbers.
+            ''' LAYOUT(timestamp,forecast,member,value,)
+            ''' </summary>
+            EnsembleForecast
+        End Enum
+
+        ''' <summary>
+        ''' Layout of this ZRXP file
+        ''' </summary>
+        Private layout As LayoutEnum
+
+        ''' <summary>
+        ''' Number of error values encountered while reading the file
+        ''' </summary>
+        Private errorcount As Integer
+
+        ''' <summary>
         ''' Specifies whether to use the file import dialog
         ''' </summary>
         ''' <value></value>
@@ -163,17 +189,24 @@ Namespace Fileformats
             FiStr.Close()
 
             'store series info
+            sInfo = New TimeSeriesInfo()
+            sInfo.Name = $"{Me.FileMetadata("SNAME")}.{Me.FileMetadata("CNAME")}"
+            sInfo.Unit = Me.FileMetadata("CUNIT")
+            sInfo.Index = 0
+            Me.TimeSeriesInfos.Add(sInfo)
+
+            'store layout info
             If Me.FileMetadata("LAYOUT").StartsWith("(timestamp,value") Then
                 'single time series
-                sInfo = New TimeSeriesInfo()
-                sInfo.Name = $"{Me.FileMetadata("SNAME")}.{Me.FileMetadata("CNAME")}"
-                sInfo.Unit = Me.FileMetadata("CUNIT")
-                sInfo.Index = 0
-                Me.TimeSeriesInfos.Add(sInfo)
+                Me.layout = LayoutEnum.Single
 
+            ElseIf Me.FileMetadata("LAYOUT").StartsWith("(timestamp,forecast,member,value") Then
+                'forecast ensemble time series
+                Me.layout = LayoutEnum.EnsembleForecast
+                'Even though we have multiple time series, we only use a single TimeSeriesInfo instance
             Else
                 'unsupported layout
-                Throw New Exception($"ZRXP file has unsupported layout " & Me.FileMetadata("LAYOUT") & "!")
+                Throw New Exception($"ZRXP file has an unsupported layout " & Me.FileMetadata("LAYOUT") & "!")
             End If
 
         End Sub
@@ -186,9 +219,7 @@ Namespace Fileformats
 
             Dim line, parts() As String
             Dim datestring, valuestring As String
-            Dim errorcount As Integer
             Dim timestamp As DateTime
-            Dim ok As Boolean
             Dim value As Double
             Dim sInfo As TimeSeriesInfo
             Dim ts As TimeSeries
@@ -202,54 +233,75 @@ Namespace Fileformats
             'store metadata
             ts.Metadata = Me.FileMetadata
 
+            'for ensemble forecasts, use a nested dictionary of time series {initDate: {member: TimeSeries, ...}, ...}
+            Dim ts_ensemble As New Dictionary(Of DateTime, Dictionary(Of Integer, TimeSeries))
+
             'open file
             Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
             Dim StrRead As StreamReader = New StreamReader(FiStr, Me.Encoding)
             Dim StrReadSync = TextReader.Synchronized(StrRead)
 
             'read file
-            errorcount = 0
+            Me.errorcount = 0
             Do
                 line = StrReadSync.ReadLine.ToString()
-                'ignore lines starting with "#" and empty lines
+                'ignore header lines starting with "#" and empty lines
                 If line.StartsWith("#") Or line.Trim().Length = 0 Then
                     Continue Do
                 End If
                 'split line
                 parts = line.Split(New String() {" "}, StringSplitOptions.RemoveEmptyEntries)
-                'parse date
-                datestring = parts(0)
-                If datestring.Length < 14 Then
-                    'fill missing values with 0
-                    datestring = datestring.PadRight(14, "0")
-                End If
-                ok = DateTime.TryParseExact(datestring, Me.Dateformat, Helpers.DefaultNumberFormat, Globalization.DateTimeStyles.None, timestamp)
-                If (Not ok) Then
-                    'WORKAROUND: check whether the hour is 24 and if so, parse manually
-                    If datestring.Substring(8, 2) = "24" Then
-                        Dim year As Integer = Integer.Parse(datestring.Substring(0, 4))
-                        Dim month As Integer = Integer.Parse(datestring.Substring(4, 2))
-                        Dim day As Integer = Integer.Parse(datestring.Substring(6, 2))
-                        Dim hour As Integer = Integer.Parse(datestring.Substring(8, 2))
-                        Dim minute As Integer = Integer.Parse(datestring.Substring(10, 2))
-                        Dim second As Integer = Integer.Parse(datestring.Substring(12, 2))
-                        timestamp = New DateTime(year, month, day, 0, minute, second) + New TimeSpan(days:=1, 0, 0, 0)
-                        Log.AddLogEntry(levels.debug, $"Non-standard timestamp '{datestring}' parsed manually to {timestamp:G}")
-                    Else
-                        Throw New Exception($"Unable to parse the date '{datestring}' using the expected date format '{Me.Dateformat}'!")
-                    End If
-                End If
-                'parse value
-                valuestring = parts(1)
-                value = Helpers.StringToDouble(valuestring)
-                If value = Helpers.StringToDouble(Me.FileMetadata("RINVAL")) Then
-                    'convert error value to NaN
-                    value = Double.NaN
-                    errorcount += 1
-                End If
 
-                'store node
-                ts.AddNode(timestamp, value)
+                Select Case Me.layout
+                    Case LayoutEnum.Single
+                        'single time series
+
+                        'parse date
+                        datestring = parts(0)
+                        timestamp = parseDateString(datestring)
+                        'parse value
+                        valuestring = parts(1)
+                        value = parseValueString(valuestring)
+
+                        'store node
+                        ts.AddNode(timestamp, value)
+
+                    Case LayoutEnum.EnsembleForecast
+                        'forecast ensemble time series
+
+                        'parse initialization date ("timestamp")
+                        Dim initDateString As String = parts(0)
+                        Dim initDate As DateTime = parseDateString(initDateString)
+
+                        'parse forecast valid date ("forecast")
+                        Dim forecastdate As DateTime = parseDateString(parts(1))
+
+                        'parse member number
+                        Dim member As Integer = Integer.Parse(parts(2))
+
+                        'parse value
+                        valuestring = parts(3)
+                        value = parseValueString(valuestring)
+
+                        'add a time series for each new initialization date and member
+                        If Not ts_ensemble.ContainsKey(initDate) Then
+                            ts_ensemble.Add(initDate, New Dictionary(Of Integer, TimeSeries))
+                        End If
+                        If Not ts_ensemble(initDate).ContainsKey(member) Then
+                            'instantiate new Timeseries
+                            Dim ts_member As TimeSeries
+                            'copy and then adapt properties
+                            ts_member = ts.Clone()
+                            ts_member.Title &= $" ({initDateString}, {member})"
+                            ts_member.Metadata.Add("timestamp", initDateString)
+                            ts_member.Metadata.Add("member", member)
+                            ts_ensemble(initDate).Add(member, ts_member)
+                        End If
+
+                        'store node
+                        ts_ensemble(initDate)(member).AddNode(forecastdate, value)
+
+                End Select
 
             Loop Until StrReadSync.Peek() = -1
 
@@ -257,14 +309,77 @@ Namespace Fileformats
             StrRead.Close()
             FiStr.Close()
 
-            If errorcount > 0 Then
-                Log.AddLogEntry(Log.levels.warning, $"The file contained {errorcount} error values ({Me.FileMetadata("RINVAL")}), which were converted to NaN!")
+            If Me.errorcount > 0 Then
+                Log.AddLogEntry(Log.levels.warning, $"The file contained {Me.errorcount} error values ({Me.FileMetadata("RINVAL")}), which were converted to NaN!")
             End If
 
             'store time series
-            Me.TimeSeries.Add(sInfo.Index, ts)
+            Select Case Me.layout
+                Case LayoutEnum.Single
+                    Me.TimeSeries.Add(sInfo.Index, ts)
+
+                Case LayoutEnum.EnsembleForecast
+                    Dim index As Integer = 0
+                    For Each initDate As DateTime In ts_ensemble.Keys
+                        For Each member As Integer In ts_ensemble(initDate).Keys
+                            Me.TimeSeries.Add(index, ts_ensemble(initDate)(member))
+                            index += 1
+                        Next
+                    Next
+            End Select
 
         End Sub
+
+        ''' <summary>
+        ''' Parses a string representing a timestamp to a DateTime instance
+        ''' </summary>
+        ''' <param name="datestring"></param>
+        ''' <returns></returns>
+        Private Function parseDateString(datestring As String) As DateTime
+
+            Dim timestamp As DateTime
+            Dim ok As Boolean
+
+            If datestring.Length < 14 Then
+                'fill missing values with 0
+                datestring = datestring.PadRight(14, "0")
+            End If
+            ok = DateTime.TryParseExact(datestring, Me.Dateformat, Helpers.DefaultNumberFormat, Globalization.DateTimeStyles.None, timestamp)
+            If (Not ok) Then
+                'WORKAROUND: check whether the hour is 24 and if so, parse manually
+                If datestring.Substring(8, 2) = "24" Then
+                    Dim year As Integer = Integer.Parse(datestring.Substring(0, 4))
+                    Dim month As Integer = Integer.Parse(datestring.Substring(4, 2))
+                    Dim day As Integer = Integer.Parse(datestring.Substring(6, 2))
+                    Dim hour As Integer = Integer.Parse(datestring.Substring(8, 2))
+                    Dim minute As Integer = Integer.Parse(datestring.Substring(10, 2))
+                    Dim second As Integer = Integer.Parse(datestring.Substring(12, 2))
+                    timestamp = New DateTime(year, month, day, 0, minute, second) + New TimeSpan(days:=1, 0, 0, 0)
+                    Log.AddLogEntry(levels.debug, $"Non-standard timestamp '{datestring}' parsed manually to {timestamp:G}")
+                Else
+                    Throw New Exception($"Unable to parse the date '{datestring}' using the expected date format '{Me.Dateformat}'!")
+                End If
+            End If
+            Return timestamp
+        End Function
+
+        ''' <summary>
+        ''' Parses a string representing a value to a Double while considering error values
+        ''' </summary>
+        ''' <param name="valueString"></param>
+        ''' <returns></returns>
+        Private Function parseValueString(valueString As String) As Double
+
+            Dim value As Double
+
+            value = Helpers.StringToDouble(valueString)
+            If value = Helpers.StringToDouble(Me.FileMetadata("RINVAL")) Then
+                'convert error value to NaN
+                value = Double.NaN
+                Me.errorcount += 1
+            End If
+            Return value
+        End Function
 
         ''' <summary>
         ''' Returns a list of ZRXP-specific metadata keys
