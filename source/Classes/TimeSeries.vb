@@ -471,8 +471,9 @@ Public Class TimeSeries
         target.Objekt = Me.Objekt
         target.Type = Me.Type
         target._nodes = New SortedList(Of DateTime, Double)(Me._nodes)
-        target.Metadata = Me.Metadata
+        target.Metadata = Me.Metadata.Copy()
         target._Interpretation = Me.Interpretation
+        target.DataSource = Me.DataSource.Copy()
         Return target
     End Function
 

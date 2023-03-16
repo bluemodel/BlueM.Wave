@@ -86,6 +86,17 @@ Public Class TimeSeriesDataSource
     End Property
 
     ''' <summary>
+    ''' Returns a copy of the datasource
+    ''' </summary>
+    ''' <returns></returns>
+    Public Function Copy() As TimeSeriesDataSource
+        Dim _copy As New TimeSeriesDataSource(Me.Origin)
+        _copy._filepath = Me.FilePath
+        _copy._title = Me.Title
+        Return _copy
+    End Function
+
+    ''' <summary>
     ''' Returns a custom string representation of the datasource
     ''' </summary>
     ''' <returns></returns>
