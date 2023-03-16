@@ -256,7 +256,7 @@ Namespace Fileformats
                 'store the series
                 For Each ts As TimeSeries In fileInstance.TimeSeries.Values
                     'change title if specified in the project file
-                    If seriesList.Count > 0 Then
+                    If seriesList.ContainsKey(ts.Title) Then
                         If seriesList(ts.Title) <> "" Then
                             ts.Title = seriesList(ts.Title)
                         End If
