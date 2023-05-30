@@ -70,7 +70,7 @@ Namespace Fileformats
 
             'Spaltenüberschriften auslesen
             For i = 1 To Math.Max(Me.iLineData, Me.iLineHeadings + 1)
-                Zeile = StrReadSync.ReadLine.ToString
+                Zeile = StrReadSync.ReadLine()
                 If (i = Me.iLineHeadings) Then ZeileSpalten = Zeile
                 If (i = Me.iLineUnits) Then ZeileEinheiten = Zeile
             Next
@@ -78,6 +78,12 @@ Namespace Fileformats
             StrReadSync.Close()
             StrRead.Close()
             FiStr.Close()
+
+            'handle case where no units line was read
+            If IsNothing(ZeileEinheiten) Then
+                Me.UseUnits = False
+                Me.iLineData = Me.iLineHeadings + 1
+            End If
 
             'Spaltennamen auslesen
             '---------------------
