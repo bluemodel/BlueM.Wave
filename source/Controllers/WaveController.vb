@@ -395,7 +395,8 @@ Friend Class WaveController
     'Teechart Export
     '***************
     Private Sub SaveChart_Click(sender As System.Object, e As System.EventArgs)
-        Call View.TChart1.Export.ShowExportDialog()
+        Dim fmt As New Steema.TeeChart.Export.TemplateExport(View.TChart1.Chart)
+        Call View.TChart1.Export.ShowExportDialog(fmt)
     End Sub
 
     'Zeitreihen Export

@@ -6,6 +6,7 @@ Version 2.3.1
 CHANGED:
 * When importing series from clipboard CSV data, their datasource is now stored as "Clipboard"
 * When saving a project file, emit prominent warnings and errors about series that can not be saved
+* When saving a chart, the native TeeChart format (*.TEN) is now selected by default
 
 Version 2.3.0
 -------------
