@@ -370,20 +370,25 @@ Friend Class WaveController
     ''' <remarks></remarks>
     Private Sub SaveProjectFile_Click(sender As System.Object, e As System.EventArgs)
 
-        Dim dlgres As DialogResult
+        Try
+            Dim dlgres As DialogResult
 
-        'Prepare SaveFileDialog
-        View.SaveFileDialog1.Title = "Save project file"
-        View.SaveFileDialog1.Filter = "Wave project files (*.wvp)|*wvp"
-        View.SaveFileDialog1.DefaultExt = "wvp"
-        View.SaveFileDialog1.OverwritePrompt = True
+            'Prepare SaveFileDialog
+            View.SaveFileDialog1.Title = "Save project file"
+            View.SaveFileDialog1.Filter = "Wave project files (*.wvp)|*wvp"
+            View.SaveFileDialog1.DefaultExt = "wvp"
+            View.SaveFileDialog1.OverwritePrompt = True
 
-        'Show dialog
-        dlgres = View.SaveFileDialog1.ShowDialog()
+            'Show dialog
+            dlgres = View.SaveFileDialog1.ShowDialog()
 
-        If dlgres = Windows.Forms.DialogResult.OK Then
-            Call _model.SaveProjectFile(View.SaveFileDialog1.FileName)
-        End If
+            If dlgres = Windows.Forms.DialogResult.OK Then
+                Call _model.SaveProjectFile(View.SaveFileDialog1.FileName)
+            End If
+
+        Catch ex As Exception
+            MsgBox(ex.Message, MsgBoxStyle.Critical)
+        End Try
 
     End Sub
 

@@ -27,6 +27,7 @@ Public Class TimeSeriesDataSource
         FileImport
         AnalysisResult
         ManuallyEntered
+        Clipboard
         Undefined
     End Enum
 

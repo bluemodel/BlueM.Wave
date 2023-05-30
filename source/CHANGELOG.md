@@ -1,6 +1,12 @@
 ﻿BlueM.Wave Release Notes
 ========================
 
+Version 2.3.1
+-------------
+CHANGED:
+* When importing series from clipboard CSV data, their datasource is now stored as "Clipboard"
+* When saving a project file, emit prominent warnings and errors about series that can not be saved
+
 Version 2.3.0
 -------------
 NEW:

@@ -161,7 +161,12 @@ Namespace Fileformats
                 If Me.UseUnits Then
                     ts.Unit = sInfo.Unit
                 End If
-                ts.DataSource = New TimeSeriesDataSource(Me.File, sInfo.Name)
+                If IO.Path.GetDirectoryName(Me.File) = IO.Path.GetDirectoryName(IO.Path.GetTempPath()) Then
+                    'the file is located in the temp directory, we assume it's a temp file created by pasting data from the clipboard 
+                    ts.DataSource = New TimeSeriesDataSource(TimeSeriesDataSource.OriginEnum.Clipboard)
+                Else
+                    ts.DataSource = New TimeSeriesDataSource(Me.File, sInfo.Name)
+                End If
                 Me.TimeSeries.Add(sInfo.Index, ts)
             Next
 

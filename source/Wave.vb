@@ -438,6 +438,7 @@ Public Class Wave
 
         'collect datasources
         Dim datasources As New Dictionary(Of String, List(Of String)) '{file: [title, ...], ...}
+        Dim unsavedSeries As New List(Of String)
         Dim file, title As String
         For Each ts As TimeSeries In Me.TimeSeries.Values
             If ts.DataSource.Origin = TimeSeriesDataSource.OriginEnum.FileImport Then
@@ -448,9 +449,16 @@ Public Class Wave
                 End If
                 datasources(file).Add(title)
             Else
-                Log.AddLogEntry(Log.levels.warning, $"Series '{ts.Title}' does not originate from a file import and could not be saved to the project file!")
+                unsavedSeries.Add(ts.Title)
+                Log.AddLogEntry(Log.levels.warning, $"Series '{ts.Title}' with datasource {ts.DataSource} does not originate from a file import and could not be saved to the project file!")
             End If
         Next
+
+        If datasources.Count = 0 Then
+            Dim msg As String = $"None of the series originate from a file import! No project file was saved! Save the chart with data or export the time series to preserve them!"
+            Log.AddLogEntry(Log.levels.error, msg)
+            Throw New Exception(msg)
+        End If
 
         'write the project file
         Dim fs As New IO.FileStream(projectfile, IO.FileMode.Create, IO.FileAccess.Write)
@@ -474,7 +482,13 @@ Public Class Wave
         strwrite.Close()
         fs.Close()
 
-        Log.AddLogEntry(Log.levels.info, $"Wave project file {projectfile} saved.")
+        If unsavedSeries.Count = 0 Then
+            Log.AddLogEntry(Log.levels.info, $"Wave project file {projectfile} saved.")
+        Else
+            Dim msg As String = $"Wave project file {projectfile} saved. {unsavedSeries.Count} series could not be saved! Save the chart with data or export the time series to preserve them!"
+            Log.AddLogEntry(Log.levels.warning, msg)
+            Throw New Exception(msg)
+        End If
 
     End Sub
 
