@@ -1,6 +1,11 @@
 ﻿BlueM.Wave Release Notes
 ========================
 
+Version 2.3.2
+-------------
+CHANGED:
+* Analysis function GoodnessOfFit: more warnings in the log if not all data is usable
+
 Version 2.3.1
 -------------
 CHANGED:

@@ -111,8 +111,10 @@ Friend Class GoodnessOfFit
 
         Dim gof As New GoF()
 
-        'synchronize
-        TimeSeries.Synchronize(ts_o, ts_s)
+        'check synchronousness
+        If ts_o.Length <> ts_s.Length Or ts_o.StartDate <> ts_s.StartDate Or ts_o.EndDate <> ts_s.EndDate Then
+            Throw New Exception("Simulated and observed time series are not synchronous!")
+        End If
 
         'metadata
         gof.startDate = ts_o.StartDate
@@ -251,12 +253,47 @@ Friend Class GoodnessOfFit
             Me.ts_sim = Me.InputTimeSeries(0)
         End If
 
+        'check for overlap
+        If ts_obs.StartDate > ts_sim.EndDate Or ts_obs.EndDate < ts_sim.StartDate Then
+            Throw New Exception("Series have no overlap!")
+        End If
+
+        'store original start and end dates
+        Dim start_obs_original As DateTime = ts_obs.StartDate
+        Dim end_obs_original As DateTime = ts_obs.EndDate
+        Dim start_sim_original As DateTime = ts_sim.StartDate
+        Dim end_sim_original As DateTime = ts_sim.EndDate
+
+        'cut time series
+        ts_obs.Cut(ts_sim)
+        ts_sim.Cut(ts_obs)
+
+        'emit warning if overlap period differs from original series extent
+        If ts_obs.StartDate <> start_obs_original _
+            Or ts_sim.StartDate <> start_sim_original _
+            Or ts_obs.EndDate <> end_obs_original _
+            Or ts_sim.EndDate <> end_sim_original Then
+            Log.AddLogEntry(levels.warning, $"Reduced overlap period used for GoodnessOfFit analysis: {ts_obs.StartDate} - {ts_obs.EndDate}")
+        End If
+
         'remove NaN values
-        Me.ts_obs = Me.ts_obs.removeNaNValues()
-        Me.ts_sim = Me.ts_sim.removeNaNValues()
+        ts_obs = ts_obs.removeNaNValues()
+        ts_sim = ts_sim.removeNaNValues()
+
+        'store original number of non-NaN nodes
+        Dim length_obs_original As Integer = ts_obs.Length
+        Dim length_sim_original As Integer = ts_sim.Length
 
         'synchronize
-        TimeSeries.Synchronize(Me.ts_obs, Me.ts_sim)
+        TimeSeries.Synchronize(ts_obs, ts_sim)
+
+        'emit warning if number of nodes was reduced due to synchronizing
+        If ts_obs.Length < length_obs_original Then
+            Log.AddLogEntry(levels.warning, $"Series {ts_obs.Title}: only {ts_obs.Length} of {length_obs_original} nodes are coincident and can be used for GoodnessOfFit calculation")
+        End If
+        If ts_sim.Length < length_sim_original Then
+            Log.AddLogEntry(levels.warning, $"Series {ts_sim.Title}: only {ts_sim.Length} of {length_sim_original} nodes are coincident and can be used for GoodnessOfFit calculation")
+        End If
 
         'use entire series by default
         series_o.Add("Entire series", ts_obs)
@@ -309,11 +346,10 @@ Friend Class GoodnessOfFit
                      & "Hydrologic deviation: DEV = " & _gof.hydrodev.ToString(formatstring)
 
         'mResultText is written to the log. Contains all results.
-        Me.ResultText = "Goodness of Fit analysis:" & eol & eol &
+        Me.ResultText = "GoodnessOfFit analysis results:" & eol & eol &
                          $"Observed time series: {Me.ts_obs.Title}" & eol &
                          $"Simulated time series: {Me.ts_sim.Title}" & eol & eol
         'output results in CSV format
-        Me.ResultText &= "Results:" & eol
         Dim headerItems1 = New List(Of String) From {
             "Description", "Start", "End", "Length", "Volume observed", "Volume simulated", "Volume error [%]", "Sum of squared errors", "Nash-Sutcliffe efficiency", "Logarithmic Nash-Sutcliffe efficiency", "Kling-Gupta efficiency", "Coefficient of correlation", "Coefficient of determination", "Hydrologic deviation"
         }
