@@ -1143,7 +1143,13 @@ Public Class TimeSeries
         Dim nanCount As Integer
         Dim tsCleaned As TimeSeries
 
-        Log.AddLogEntry(Log.levels.info, $"Removing NaN values from series {Me.Title}...")
+        'if no NaN nodes exist, return a clone
+        If Me.NaNCount = 0 Then
+            Return Me.Clone()
+        End If
+
+        'store number of NaN nodes
+        nanCount = Me.NaNCount
 
         'Instantiate a new series
         tsCleaned = New TimeSeries(Me.Title)
@@ -1153,15 +1159,15 @@ Public Class TimeSeries
         tsCleaned.Interpretation = Me.Interpretation
         tsCleaned.Objekt = Me.Objekt
         tsCleaned.Type = Me.Type
-        tsCleaned.Metadata = Me.Metadata
+        tsCleaned.Metadata = Me.Metadata.Copy()
+        tsCleaned.DataSource = New TimeSeriesDataSource(TimeSeriesDataSource.OriginEnum.AnalysisResult)
 
         'copy clean nodes
         tsCleaned._nodes = New SortedList(Of DateTime, Double)(Me.NodesClean)
 
         'Log
-        nanCount = Me.Length - tsCleaned.Length
         If nanCount > 0 Then
-            Call Log.AddLogEntry(Log.levels.info, $"{Me.Title}: {nanCount} nodes were removed!")
+            Call Log.AddLogEntry(Log.levels.info, $"{Me.Title}: {nanCount} NaN nodes were removed!")
         End If
 
         Return tsCleaned
@@ -1320,7 +1326,7 @@ Public Class TimeSeries
     End Function
 
     ''' <summary>
-    ''' Synchronizes two timeseries in-place by only keeping the common timestamnps
+    ''' Synchronizes two timeseries in-place by only keeping the common timestamps
     ''' </summary>
     ''' <param name="ts1">First timeseries</param>
     ''' <param name="ts2">Second timeseries</param>
