@@ -98,7 +98,6 @@ Friend Class Cumulative
             For Each ts In MyBase.InputTimeSeries
 
                 'cut time series to startdate
-                ts = ts.Clone()
                 ts.Cut(startdate, ts.EndDate)
 
                 'create new cumulative timeseries

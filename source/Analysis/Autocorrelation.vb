@@ -94,7 +94,7 @@ Friend Class Autocorrelation
     ''' </summary>
     Public Overrides Sub ProcessAnalysis()
 
-        Me.ts_in = Me.InputTimeSeries(0).Clone()
+        Me.ts_in = Me.InputTimeSeries(0)
 
         'Parameter-Dialog anzeigen
         Dim dialog As New Autocorrelation_Dialog(Me.ts_in)

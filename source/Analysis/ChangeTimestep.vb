@@ -98,7 +98,7 @@ Friend Class ChangeTimestep
         Dim startdate As DateTime
         Dim ignoreNaN As Boolean
 
-        ts = Me.InputTimeSeries(0).Clone()
+        ts = Me.InputTimeSeries(0)
 
         'show the ChangeTimeStepDialog
         Dim dlg As New ChangeTimestepDialog(ts)
