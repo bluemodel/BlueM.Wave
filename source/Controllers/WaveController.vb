@@ -857,7 +857,7 @@ Friend Class WaveController
 
             Catch ex As Exception
                 'Logeintrag
-                Call Log.AddLogEntry(Log.levels.error, "Analysis failed:" & eol & ex.Message)
+                Call Log.AddLogEntry(Log.levels.error, "Analysis failed: " & ex.Message)
                 'Alert
                 MsgBox("Analysis failed:" & eol & ex.Message, MsgBoxStyle.Critical)
 
