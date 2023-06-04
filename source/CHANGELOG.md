@@ -8,6 +8,7 @@ NEW:
 
 CHANGED:
 * Analysis function GoodnessOfFit: more warnings in the log if not all data is usable
+* Show version numbers in the update check messages
 
 FIXED:
 * Improved performance when panning the main chart with the right mouse button

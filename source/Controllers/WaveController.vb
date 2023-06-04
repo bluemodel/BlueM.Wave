@@ -35,6 +35,18 @@ Friend Class WaveController
         View.Show()
     End Sub
 
+    ''' <summary>
+    ''' Returns the current version of Wave
+    ''' </summary>
+    ''' <remarks>only considers major, minor and build numbers, omitting the auto-generated revision number</remarks>
+    ''' <returns>the current version number</returns>
+    Private ReadOnly Property CurrentVersion As Version
+        Get
+            Dim v As Version = Reflection.Assembly.GetExecutingAssembly.GetName().Version()
+            Return New Version($"{v.Major}.{v.Minor}.{v.Build}")
+        End Get
+    End Property
+
     Private selectionMade As Boolean 'Flag zeigt an, ob bereits ein Auswahlbereich ausgewählt wurde
 
     ''' <summary>
@@ -208,9 +220,9 @@ Friend Class WaveController
     Private Async Sub View_Load(sender As System.Object, e As System.EventArgs)
         'Check for update
         Try
-            Dim updateAvailable As Boolean
-            updateAvailable = Await _model.CheckForUpdate()
-            If updateAvailable Then
+            Dim latestVersion As Version = Await GetLatestVersion()
+            If CurrentVersion < latestVersion Then
+                'show update available notification
                 View.ToolStripButton_UpdateNotification.Visible = True
             End If
         Catch ex As Exception
@@ -1172,21 +1184,46 @@ Friend Class WaveController
     ''' </summary>
     Private Async Sub CheckForUpdate_Click(sender As Object, e As EventArgs)
         Try
-            Dim updateAvailable As Boolean = Await _model.CheckForUpdate()
-            If updateAvailable Then
+            'get latest version from server
+            Dim latestVersion As Version = Await GetLatestVersion()
+
+            'compare versions
+            If CurrentVersion < latestVersion Then
+                'Update is available
                 View.ToolStripButton_UpdateNotification.Visible = True
-                Dim resp As MsgBoxResult = MsgBox($"A new version is available!{eol}Click OK to go to downloads.bluemodel.org to get it.", MsgBoxStyle.OkCancel)
+                Dim resp As MsgBoxResult = MsgBox($"A new version {latestVersion} is available!{eol}Click OK to go to downloads.bluemodel.org to download it.", MsgBoxStyle.OkCancel Or MsgBoxStyle.Exclamation)
                 If resp = MsgBoxResult.Ok Then
                     Process.Start(urlDownload)
                 End If
             Else
+                'No update available
                 View.ToolStripButton_UpdateNotification.Visible = False
-                MsgBox("You are already up to date!", MsgBoxStyle.Information)
+                MsgBox($"Currently used version {CurrentVersion} is up to date!", MsgBoxStyle.Information)
             End If
+
         Catch ex As Exception
             MsgBox("Error while checking for update:" & eol & ex.Message, MsgBoxStyle.Critical)
         End Try
     End Sub
+
+    ''' <summary>
+    ''' Checks for a newer version on the server
+    ''' </summary>
+    ''' <returns>True if a newer version is available</returns>
+    Private Async Function GetLatestVersion() As Threading.Tasks.Task(Of Version)
+
+        'retrieve latest version number from server
+        Dim client As New Net.Http.HttpClient()
+        Dim s As String = Await client.GetStringAsync(urlUpdateCheck)
+        Dim latestVersion As New Version(s)
+#If Not DEBUG Then
+        'TODO: Logging is not thread-safe and causes an exception in debug mode!
+        Log.AddLogEntry(Log.levels.debug, "CheckUpdate: Latest version on server: " & latestVersion.ToString())
+#End If
+
+        Return latestVersion
+
+    End Function
 
     ''' <summary>
     ''' About Click
