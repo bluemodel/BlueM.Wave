@@ -507,7 +507,7 @@
         "PackageFilesAs" = "3:2"
         "PackageFileSize" = "3:-2147483648"
         "CabType" = "3:1"
-        "Compression" = "3:2"
+        "Compression" = "3:3"
         "SignOutput" = "11:FALSE"
         "CertificateFile" = "8:"
         "PrivateKeyFile" = "8:"
@@ -1801,7 +1801,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:BlueM.Wave"
         "ProductCode" = "8:{19F0C057-05CB-4914-BACA-D48BC93A167E}"
-        "PackageCode" = "8:{CB883FCB-FE1F-4FD0-9347-BA004EA43E4B}"
+        "PackageCode" = "8:{A2C9EA21-1252-4779-920A-8DE27E3A728A}"
         "UpgradeCode" = "8:{8AC270DC-0E8D-4087-98AB-3A2C358096B9}"
         "AspNetVersion" = "8:2.0.50727.0"
         "RestartWWWService" = "11:FALSE"
@@ -2387,7 +2387,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_152A841758E942AE8286A4A2A0CCDD82"
             {
-            "SourcePath" = "8:..\\source\\obj\\x64\\Debug\\Wave.exe"
+            "SourcePath" = "8:..\\source\\obj\\x64\\Release\\Wave.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_1335334A1EB042F3AB241758004683C2"
