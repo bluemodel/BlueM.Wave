@@ -1543,10 +1543,6 @@ Friend Class WaveController
     Private Sub TChart1_MouseWheel(sender As Object, e As MouseEventArgs)
 
         Try
-
-            'save the current zoom snapshot
-            Call Me.SaveZoomSnapshot()
-
             ' Update the drawing based upon the mouse wheel scrolling.
             ' "The UI should scroll when the accumulated delta is plus or minus 120.
             '  The UI should scroll the number of logical lines returned by the
@@ -1554,8 +1550,6 @@ Friend Class WaveController
             'https://learn.microsoft.com/en-us/dotnet/api/system.windows.forms.control.mousewheel?f1url=%3FappId%3DDev16IDEF1%26l%3DEN-US%26k%3Dk(System.Windows.Forms.Control.MouseWheel)%3Bk(TargetFrameworkMoniker-.NETFramework%2CVersion%253Dv4.8)%3Bk(DevLang-VB)%26rd%3Dtrue&view=windowsdesktop-7.0#remarks
             'TODO: scale mousewheel zoom with numberOfTextLinesToMove
             Dim numberOfTextLinesToMove As Integer = CInt(e.Delta * SystemInformation.MouseWheelScrollLines / 120)
-
-            Log.AddLogEntry(levels.debug, $"MouseWheel event: numberOfTextLinesToMove: {numberOfTextLinesToMove}")
 
             'zoom while centering on mouse
             Dim currentExtent As TimeSpan = View.ChartMaxX - View.ChartMinX
@@ -1574,8 +1568,10 @@ Friend Class WaveController
             Dim leftRatio As Double = (centerDate - View.ChartMinX).Ticks / currentExtent.Ticks
             Dim rightRatio As Double = 1 - leftRatio
 
-            Log.AddLogEntry(levels.debug, $"leftRatio: {leftRatio}")
+            'save the current zoom snapshot
+            Call Me.SaveZoomSnapshot()
 
+            'set new viewport
             View.ChartMinX = centerDate - New TimeSpan(ticks:=newExtent * leftRatio)
             View.ChartMaxX = centerDate + New TimeSpan(ticks:=newExtent * rightRatio)
 
@@ -1757,8 +1753,6 @@ Friend Class WaveController
             'https://learn.microsoft.com/en-us/dotnet/api/system.windows.forms.control.mousewheel?f1url=%3FappId%3DDev16IDEF1%26l%3DEN-US%26k%3Dk(System.Windows.Forms.Control.MouseWheel)%3Bk(TargetFrameworkMoniker-.NETFramework%2CVersion%253Dv4.8)%3Bk(DevLang-VB)%26rd%3Dtrue&view=windowsdesktop-7.0#remarks
             'TODO: scale mousewheel zoom with numberOfTextLinesToMove
             Dim numberOfTextLinesToMove As Integer = CInt(e.Delta * SystemInformation.MouseWheelScrollLines / 120)
-
-            Log.AddLogEntry(levels.debug, $"MouseWheel event: numberOfTextLinesToMove: {numberOfTextLinesToMove}")
 
             'zoom while centering on mouse
             Dim newStart As Double
