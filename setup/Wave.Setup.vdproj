@@ -622,7 +622,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_0F197AD7D0A642428F391E9D26095289"
             {
-            "SourcePath" = "8:ten.ico"
+            "SourcePath" = "8:assets\\ten.ico"
             "TargetName" = "8:ten.ico"
             "Tag" = "8:"
             "Folder" = "8:_1335334A1EB042F3AB241758004683C2"
@@ -793,7 +793,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_52FCAA3DB09C4E62B0F31F85BCADCB89"
             {
-            "SourcePath" = "8:wvp.ico"
+            "SourcePath" = "8:assets\\wvp.ico"
             "TargetName" = "8:wvp.ico"
             "Tag" = "8:"
             "Folder" = "8:_1335334A1EB042F3AB241758004683C2"
@@ -1354,7 +1354,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_C012FB83DF6D4A7782E3AF17CFF0B0E6"
             {
-            "SourcePath" = "8:lgpl-3.0.rtf"
+            "SourcePath" = "8:assets\\lgpl-3.0.rtf"
             "TargetName" = "8:lgpl-3.0.rtf"
             "Tag" = "8:"
             "Folder" = "8:_1335334A1EB042F3AB241758004683C2"
@@ -1680,7 +1680,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_FAEC29D4F63549BB90924D9CC4071D96"
             {
-            "SourcePath" = "8:banner.bmp"
+            "SourcePath" = "8:assets\\banner.bmp"
             "TargetName" = "8:banner.bmp"
             "Tag" = "8:"
             "Folder" = "8:_1335334A1EB042F3AB241758004683C2"
