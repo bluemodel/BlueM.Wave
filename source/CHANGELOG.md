@@ -1,10 +1,13 @@
 ﻿BlueM.Wave Release Notes
 ========================
 
-Version 2.3.2
+Version 2.4.0
 -------------
 NEW:
-* Mouse wheel in charts now zooms
+* New BlueM.Wave installer package #89:
+  * Installs and uninstalls Wave in Windows
+  * Registers the file types WVP and TEN to open in Wave
+* Mouse wheel in charts now zooms #95
 
 CHANGED:
 * Analysis function GoodnessOfFit: more warnings in the log if not all data is usable
