@@ -3,6 +3,9 @@
 
 Version 2.3.2
 -------------
+NEW:
+* Mouse wheel in chart now zooms
+
 CHANGED:
 * Analysis function GoodnessOfFit: more warnings in the log if not all data is usable
 
