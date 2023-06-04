@@ -1556,25 +1556,27 @@ Friend Class WaveController
 
             Log.AddLogEntry(levels.debug, $"MouseWheel event: numberOfTextLinesToMove: {numberOfTextLinesToMove}")
 
-            'determine delta timespan for moving x axis start and end
-            'both are moved +- 12.5% of current display extent 
-            Dim displayExtent As TimeSpan = View.ChartMaxX - View.ChartMinX
-            Dim deltaTicks As Long = displayExtent.Ticks * 0.125
-
-            'ensure max TimeSpan is not exceeded
-            Dim maxTicks As Long = TimeSpan.MaxValue.Ticks
-            deltaTicks = Math.Min(deltaTicks, maxTicks)
-
-            'zoom
+            'zoom while centering on mouse
+            Dim currentExtent As TimeSpan = View.ChartMaxX - View.ChartMinX
+            Dim newExtent As Long
             If numberOfTextLinesToMove > 0 Then
-                'zoom in
-                View.ChartMinX = View.ChartMinX + New TimeSpan(ticks:=deltaTicks)
-                View.ChartMaxX = View.ChartMaxX - New TimeSpan(ticks:=deltaTicks)
+                'zoom in 25%
+                newExtent = currentExtent.Ticks * 0.75
             Else
-                'zoom out
-                View.ChartMinX = View.ChartMinX - New TimeSpan(ticks:=deltaTicks)
-                View.ChartMaxX = View.ChartMaxX + New TimeSpan(ticks:=deltaTicks)
+                'zoom out 25%
+                newExtent = currentExtent.Ticks * 1.25
             End If
+
+            'determine mouse position and its left-right ratio in relation to x axis
+            Dim centerOADate As Double = View.TChart1.Series(0).XScreenToValue(e.X)
+            Dim centerDate As DateTime = DateTime.FromOADate(centerOADate)
+            Dim leftRatio As Double = (centerDate - View.ChartMinX).Ticks / currentExtent.Ticks
+            Dim rightRatio As Double = 1 - leftRatio
+
+            Log.AddLogEntry(levels.debug, $"leftRatio: {leftRatio}")
+
+            View.ChartMinX = centerDate - New TimeSpan(ticks:=newExtent * leftRatio)
+            View.ChartMaxX = centerDate + New TimeSpan(ticks:=newExtent * rightRatio)
 
             Me.selectionMade = True
             Call Me.ViewportChanged()
