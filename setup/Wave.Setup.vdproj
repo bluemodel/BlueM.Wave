@@ -1801,7 +1801,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:BlueM.Wave"
         "ProductCode" = "8:{19F0C057-05CB-4914-BACA-D48BC93A167E}"
-        "PackageCode" = "8:{A2C9EA21-1252-4779-920A-8DE27E3A728A}"
+        "PackageCode" = "8:{D5DFF9A3-143C-4AE2-B608-262DA94CD2C4}"
         "UpgradeCode" = "8:{8AC270DC-0E8D-4087-98AB-3A2C358096B9}"
         "AspNetVersion" = "8:2.0.50727.0"
         "RestartWWWService" = "11:FALSE"
