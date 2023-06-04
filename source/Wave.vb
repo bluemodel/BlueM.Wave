@@ -765,35 +765,6 @@ Public Class Wave
 
     End Sub
 
-    ''' <summary>
-    ''' Checks for a newer version on the server
-    ''' </summary>
-    ''' <returns>True if a newer version is available</returns>
-    Friend Async Function CheckForUpdate() As Threading.Tasks.Task(Of Boolean)
-
-
-        'get current version (only consider major, minor and build numbers, omitting the auto-generated revision number)
-        Dim v As Version = Reflection.Assembly.GetExecutingAssembly.GetName().Version()
-        Dim currentVersion As New Version($"{v.Major}.{v.Minor}.{v.Build}")
-
-        'retrieve latest version number from server
-        Dim client As New Net.Http.HttpClient()
-        Dim s As String = Await client.GetStringAsync(urlUpdateCheck)
-        Dim latestVersion As New Version(s)
-#If Not DEBUG Then
-        'TODO: Logging is not thread-safe and causes an exception in debug mode!
-        Log.AddLogEntry(Log.levels.debug, "CheckUpdate: Latest version on server: " & latestVersion.ToString())
-#End If
-
-        'compare versions
-        If currentVersion < latestVersion Then
-            Return True
-        Else
-            Return False
-        End If
-
-    End Function
-
     Friend Sub HighlightTimestampsHandler(timestamps As List(Of DateTime))
         RaiseEvent HighlightTimestamps(timestamps)
     End Sub
