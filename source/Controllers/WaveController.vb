@@ -138,6 +138,8 @@ Friend Class WaveController
         AddHandler Me.View.TChart2.MouseUp, AddressOf OverviewChart_MouseUp
         AddHandler Me.View.TChart2.DoubleClick, AddressOf TChart2_DoubleClick
 
+        AddHandler Me.View.TChart1.MouseWheel, AddressOf TChart1_MouseWheel
+
         'drag drop events
         AddHandler Me.View.DragEnter, AddressOf Wave_DragEnter
         AddHandler Me.View.DragDrop, AddressOf Wave_DragDrop
@@ -1530,6 +1532,58 @@ Friend Class WaveController
             Me.ChartMousePanning = False
         End If
         View.TChart1.Cursor = Cursors.Default
+    End Sub
+
+    ''' <summary>
+    ''' Handles main chart MouseWheel events
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    Private Sub TChart1_MouseWheel(sender As Object, e As MouseEventArgs)
+
+        Try
+
+            'save the current zoom snapshot
+            Call Me.SaveZoomSnapshot()
+
+            ' Update the drawing based upon the mouse wheel scrolling.
+            ' "The UI should scroll when the accumulated delta is plus or minus 120.
+            '  The UI should scroll the number of logical lines returned by the
+            '  SystemInformation.MouseWheelScrollLines property for every delta value reached."
+            'https://learn.microsoft.com/en-us/dotnet/api/system.windows.forms.control.mousewheel?f1url=%3FappId%3DDev16IDEF1%26l%3DEN-US%26k%3Dk(System.Windows.Forms.Control.MouseWheel)%3Bk(TargetFrameworkMoniker-.NETFramework%2CVersion%253Dv4.8)%3Bk(DevLang-VB)%26rd%3Dtrue&view=windowsdesktop-7.0#remarks
+            'TODO: scale mousewheel zoom with numberOfTextLinesToMove
+            Dim numberOfTextLinesToMove As Integer = CInt(e.Delta * SystemInformation.MouseWheelScrollLines / 120)
+
+            Log.AddLogEntry(levels.debug, $"MouseWheel event: numberOfTextLinesToMove: {numberOfTextLinesToMove}")
+
+            'determine delta timespan for moving x axis start and end
+            'both are moved +- 12.5% of current display extent 
+            Dim displayExtent As TimeSpan = View.ChartMaxX - View.ChartMinX
+            Dim deltaTicks As Long = displayExtent.Ticks * 0.125
+
+            'ensure max TimeSpan is not exceeded
+            Dim maxTicks As Long = TimeSpan.MaxValue.Ticks
+            deltaTicks = Math.Min(deltaTicks, maxTicks)
+
+            'zoom
+            If numberOfTextLinesToMove > 0 Then
+                'zoom in
+                View.ChartMinX = View.ChartMinX + New TimeSpan(ticks:=deltaTicks)
+                View.ChartMaxX = View.ChartMaxX - New TimeSpan(ticks:=deltaTicks)
+            Else
+                'zoom out
+                View.ChartMinX = View.ChartMinX - New TimeSpan(ticks:=deltaTicks)
+                View.ChartMaxX = View.ChartMaxX + New TimeSpan(ticks:=deltaTicks)
+            End If
+
+            Me.selectionMade = True
+            Call Me.ViewportChanged()
+
+        Catch ex As ArgumentOutOfRangeException
+            'can happen when zooming out too far, TimeSpan becomes too big or DateTime is not representable
+            Log.AddLogEntry(levels.debug, $"Exception in TChart1_MouseWheel: {ex}")
+        End Try
+
     End Sub
 
     ''' <summary>
