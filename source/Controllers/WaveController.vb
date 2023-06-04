@@ -139,6 +139,7 @@ Friend Class WaveController
         AddHandler Me.View.TChart2.DoubleClick, AddressOf TChart2_DoubleClick
 
         AddHandler Me.View.TChart1.MouseWheel, AddressOf TChart1_MouseWheel
+        AddHandler Me.View.TChart2.MouseWheel, AddressOf TChart2_MouseWheel
 
         'drag drop events
         AddHandler Me.View.DragEnter, AddressOf Wave_DragEnter
@@ -1739,6 +1740,61 @@ Friend Class WaveController
                 Call Me.ViewportChanged()
             End If
         End If
+    End Sub
+
+    ''' <summary>
+    ''' Handles overview chart MouseWheel events
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    Private Sub TChart2_MouseWheel(sender As Object, e As MouseEventArgs)
+
+        Try
+            ' Update the drawing based upon the mouse wheel scrolling.
+            ' "The UI should scroll when the accumulated delta is plus or minus 120.
+            '  The UI should scroll the number of logical lines returned by the
+            '  SystemInformation.MouseWheelScrollLines property for every delta value reached."
+            'https://learn.microsoft.com/en-us/dotnet/api/system.windows.forms.control.mousewheel?f1url=%3FappId%3DDev16IDEF1%26l%3DEN-US%26k%3Dk(System.Windows.Forms.Control.MouseWheel)%3Bk(TargetFrameworkMoniker-.NETFramework%2CVersion%253Dv4.8)%3Bk(DevLang-VB)%26rd%3Dtrue&view=windowsdesktop-7.0#remarks
+            'TODO: scale mousewheel zoom with numberOfTextLinesToMove
+            Dim numberOfTextLinesToMove As Integer = CInt(e.Delta * SystemInformation.MouseWheelScrollLines / 120)
+
+            Log.AddLogEntry(levels.debug, $"MouseWheel event: numberOfTextLinesToMove: {numberOfTextLinesToMove}")
+
+            'zoom while centering on mouse
+            Dim currentExtent As Double = View.colorBandOverview.End - View.colorBandOverview.Start
+            Dim newExtent As Double
+            If numberOfTextLinesToMove > 0 Then
+                'zoom in 25%
+                newExtent = currentExtent * 0.75
+            Else
+                'zoom out 25%
+                newExtent = currentExtent * 1.25
+            End If
+
+            'determine mouse position and its left-right ratio in relation to color band
+            Dim centerOADate As Double = View.TChart2.Series(0).XScreenToValue(e.X)
+            Dim leftRatio As Double = (centerOADate - View.colorBandOverview.Start) / currentExtent
+            Dim rightRatio As Double = 1 - leftRatio
+
+            'set the new colorband
+            View.colorBandOverview.Start = centerOADate - newExtent * leftRatio
+            View.colorBandOverview.End = centerOADate + newExtent * rightRatio
+
+            'save the current zoom snapshot
+            Call Me.SaveZoomSnapshot()
+
+            'set the new viewport on the main chart
+            View.ChartMinX = DateTime.FromOADate(View.colorBandOverview.Start)
+            View.ChartMaxX = DateTime.FromOADate(View.colorBandOverview.End)
+
+            Me.selectionMade = True
+            Call Me.ViewportChanged()
+
+        Catch ex As ArgumentException
+            'can happen when zooming out too far, invalid OADate
+            Log.AddLogEntry(levels.debug, $"Exception in TChart1_MouseWheel: {ex}")
+        End Try
+
     End Sub
 
     'TChart2 DoubleClick
