@@ -1761,24 +1761,43 @@ Friend Class WaveController
             Log.AddLogEntry(levels.debug, $"MouseWheel event: numberOfTextLinesToMove: {numberOfTextLinesToMove}")
 
             'zoom while centering on mouse
+            Dim newStart As Double
+            Dim newEnd As Double
+            Dim mouseOADate As Double = View.TChart2.Series(0).XScreenToValue(e.X)
             Dim currentExtent As Double = View.colorBandOverview.End - View.colorBandOverview.Start
-            Dim newExtent As Double
-            If numberOfTextLinesToMove > 0 Then
-                'zoom in 25%
-                newExtent = currentExtent * 0.75
+
+            If mouseOADate >= View.colorBandOverview.Start And mouseOADate <= View.colorBandOverview.End Then
+                'zoom by 25% if mouse is inside color band
+                Dim newExtent As Double
+                If numberOfTextLinesToMove > 0 Then
+                    newExtent = currentExtent * 0.75
+                Else
+                    newExtent = currentExtent * 1.25
+                End If
+
+                'determine left-right ratio of mouse in relation to color band
+                Dim leftRatio As Double = (mouseOADate - View.colorBandOverview.Start) / currentExtent
+                Dim rightRatio As Double = 1 - leftRatio
+
+                newStart = mouseOADate - newExtent * leftRatio
+                newEnd = mouseOADate + newExtent * rightRatio
             Else
-                'zoom out 25%
-                newExtent = currentExtent * 1.25
+                'pan by 25% of current extent if mouse is outside of color band
+                Dim delta As Double = currentExtent * 0.25
+                If mouseOADate > View.colorBandOverview.End Then
+                    'pan right
+                    newStart = View.colorBandOverview.Start + delta
+                    newEnd = View.colorBandOverview.End + delta
+                Else
+                    'pan left
+                    newStart = View.colorBandOverview.Start - delta
+                    newEnd = View.colorBandOverview.End - delta
+                End If
             End If
 
-            'determine mouse position and its left-right ratio in relation to color band
-            Dim centerOADate As Double = View.TChart2.Series(0).XScreenToValue(e.X)
-            Dim leftRatio As Double = (centerOADate - View.colorBandOverview.Start) / currentExtent
-            Dim rightRatio As Double = 1 - leftRatio
-
             'set the new colorband
-            View.colorBandOverview.Start = centerOADate - newExtent * leftRatio
-            View.colorBandOverview.End = centerOADate + newExtent * rightRatio
+            View.colorBandOverview.Start = newStart
+            View.colorBandOverview.End = newEnd
 
             'save the current zoom snapshot
             Call Me.SaveZoomSnapshot()
