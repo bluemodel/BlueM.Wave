@@ -1801,7 +1801,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:BlueM.Wave"
         "ProductCode" = "8:{19F0C057-05CB-4914-BACA-D48BC93A167E}"
-        "PackageCode" = "8:{D5DFF9A3-143C-4AE2-B608-262DA94CD2C4}"
+        "PackageCode" = "8:{DA0A8C26-245E-486A-B876-89842173943D}"
         "UpgradeCode" = "8:{8AC270DC-0E8D-4087-98AB-3A2C358096B9}"
         "AspNetVersion" = "8:2.0.50727.0"
         "RestartWWWService" = "11:FALSE"
@@ -1962,7 +1962,8 @@
                             "Type" = "3:8"
                             "ContextData" = "8:Bitmap"
                             "Attributes" = "3:4"
-                            "Setting" = "3:1"
+                            "Setting" = "3:2"
+                            "Value" = "8:_FAEC29D4F63549BB90924D9CC4071D96"
                             "UsePlugInResources" = "11:TRUE"
                             }
                             "ShowProgress"
@@ -2006,7 +2007,8 @@
                             "Type" = "3:8"
                             "ContextData" = "8:Bitmap"
                             "Attributes" = "3:4"
-                            "Setting" = "3:1"
+                            "Setting" = "3:2"
+                            "Value" = "8:_FAEC29D4F63549BB90924D9CC4071D96"
                             "UsePlugInResources" = "11:TRUE"
                             }
                             "UpdateText"
