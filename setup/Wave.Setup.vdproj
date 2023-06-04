@@ -27,6 +27,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_0F197AD7D0A642428F391E9D26095289"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_13897E2598E244938CC47515C47E88A6"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -70,6 +76,12 @@
         "Entry"
         {
         "MsmKey" = "8:_4EB57F33CBF14768B276B9947EBE0745"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_52FCAA3DB09C4E62B0F31F85BCADCB89"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -608,6 +620,26 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_0F197AD7D0A642428F391E9D26095289"
+            {
+            "SourcePath" = "8:ten.ico"
+            "TargetName" = "8:ten.ico"
+            "Tag" = "8:"
+            "Folder" = "8:_1335334A1EB042F3AB241758004683C2"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:TRUE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_13897E2598E244938CC47515C47E88A6"
             {
             "SourcePath" = "8:..\\source\\bin\\x64\\Release\\MzCart.dll"
@@ -756,6 +788,26 @@
             "PackageAs" = "3:1"
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_52FCAA3DB09C4E62B0F31F85BCADCB89"
+            {
+            "SourcePath" = "8:wvp.ico"
+            "TargetName" = "8:wvp.ico"
+            "Tag" = "8:"
+            "Folder" = "8:_1335334A1EB042F3AB241758004683C2"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:TRUE"
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
@@ -1649,6 +1701,52 @@
         }
         "FileType"
         {
+            "{5EB83D71-FA18-4901-BE56-DE22E13CC478}:_BBB1F8DA930D493C9A84BFB62B0E28D3"
+            {
+            "Name" = "8:TEN"
+            "Description" = "8:TeeChart native format"
+            "Extensions" = "8:ten"
+            "MIME" = "8:application/x-wave-chart"
+            "Icon" = "8:_0F197AD7D0A642428F391E9D26095289"
+            "IconIndex" = "3:0"
+                "Command"
+                {
+                "Command" = "8:_152A841758E942AE8286A4A2A0CCDD82"
+                }
+                "Verbs"
+                {
+                    "{95C0C507-CBF0-42B8-B119-07219E384A4A}:_A821BDB5232F4B29B591AEE1BBCF45AD"
+                    {
+                    "Command" = "8:&Open"
+                    "Verb" = "8:open"
+                    "Arguments" = "8:-import \"%1\""
+                    "Order" = "3:0"
+                    }
+                }
+            }
+            "{5EB83D71-FA18-4901-BE56-DE22E13CC478}:_DC2D10C138EE4208A82860193ED9C2DC"
+            {
+            "Name" = "8:WVP"
+            "Description" = "8:Wave project file"
+            "Extensions" = "8:wvp"
+            "MIME" = "8:application/x-wave-project"
+            "Icon" = "8:_52FCAA3DB09C4E62B0F31F85BCADCB89"
+            "IconIndex" = "3:0"
+                "Command"
+                {
+                "Command" = "8:_152A841758E942AE8286A4A2A0CCDD82"
+                }
+                "Verbs"
+                {
+                    "{95C0C507-CBF0-42B8-B119-07219E384A4A}:_FDFB85507C2D4250BB0650507C580376"
+                    {
+                    "Command" = "8:&Open"
+                    "Verb" = "8:open"
+                    "Arguments" = "8:-import \"%1\""
+                    "Order" = "3:0"
+                    }
+                }
+            }
         }
         "Folder"
         {
@@ -1703,7 +1801,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:BlueM.Wave"
         "ProductCode" = "8:{19F0C057-05CB-4914-BACA-D48BC93A167E}"
-        "PackageCode" = "8:{1EA3F9DD-570C-4FA3-AD5B-8E70D27DBA7A}"
+        "PackageCode" = "8:{4E80558B-0CC7-495E-AD83-B97706A3EE60}"
         "UpgradeCode" = "8:{8AC270DC-0E8D-4087-98AB-3A2C358096B9}"
         "AspNetVersion" = "8:2.0.50727.0"
         "RestartWWWService" = "11:FALSE"
