@@ -1485,7 +1485,6 @@ Friend Class WaveController
             View.ChartMinX = DateTime.FromOADate(xMin)
             View.ChartMaxX = DateTime.FromOADate(xMax)
             Me.selectionMade = True
-            Call Me.ViewportChanged()
             'update drag start point
             Me.ChartMouseDragStartX = e.X
         End If
@@ -1530,6 +1529,7 @@ Friend Class WaveController
             View.colorBandZoom.Active = False
         ElseIf Me.ChartMousePanning Then
             'complete the pan process
+            Call Me.ViewportChanged()
             Me.ChartMousePanning = False
         End If
         View.TChart1.Cursor = Cursors.Default

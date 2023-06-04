@@ -9,6 +9,9 @@ NEW:
 CHANGED:
 * Analysis function GoodnessOfFit: more warnings in the log if not all data is usable
 
+FIXED:
+* Improved performance when panning the main chart with the right mouse button
+
 Version 2.3.1
 -------------
 CHANGED:
