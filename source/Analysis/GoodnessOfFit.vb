@@ -382,50 +382,54 @@ Friend Class GoodnessOfFit
         '---------
         Me.ResultChart = New Steema.TeeChart.Chart()
         Call Helpers.FormatChart(Me.ResultChart)
-        Me.ResultChart.Header.Text = "Goodness of Fit"
+        Me.ResultChart.Header.Text = $"Goodness of Fit: {Me.ts_obs.Title} vs. {Me.ts_sim.Title}"
+
+        'Me.ResultChart.Legend.LegendStyle = Steema.TeeChart.LegendStyles.Series
+        'Me.ResultChart.Legend.CheckBoxes = True
+        'Me.ResultChart.Legend.FontSeriesColor = True
+
+        '"Volume error [%]", "Sum of squared errors", "Nash-Sutcliffe efficiency", "Logarithmic Nash-Sutcliffe efficiency", "Kling-Gupta efficiency", "Coefficient of correlation", "Coefficient of determination", "Hydrologic deviation"
+        '"m", "F²", "E", "E,ln", "KGE", "r", "r²", "DEV"
+
+        For Each GOFResult As KeyValuePair(Of String, GoF) In Me.GoFResults
+            Dim title = GOFResult.Key
+            Dim gof As GoF = GOFResult.Value
+
+            Dim series As New Steema.TeeChart.Styles.Radar(Me.ResultChart.Chart)
+
+            series.Title = title
+            'add values to series
+            'X is the real value, Y is the scaled value, text is the axis label
+            series.Add(gof.volumeerror, gof.volumeerror, "Volume error [%]")
+            series.Add(gof.sum_squarederrors, gof.sum_squarederrors, "Sum of squared errors")
+            series.Add(gof.nash_sutcliffe, gof.nash_sutcliffe, "Nash-Sutcliffe efficiency")
+            series.Add(gof.ln_nash_sutcliffe, gof.ln_nash_sutcliffe, "Logarithmic Nash-Sutcliffe efficiency")
+            series.Add(gof.kge, gof.kge, "Kling-Gupta efficiency")
+            series.Add(gof.coeff_correlation, gof.coeff_correlation, "Coefficient of correlation")
+            series.Add(gof.coeff_determination, gof.coeff_determination, "Coefficient of determination")
+            series.Add(gof.hydrodev, gof.hydrodev, "Hydrologic deviation")
+
+            series.Circled = True
+            series.Pen.Width = 2
+            series.Pen.Color = series.Pointer.Color
+            'series.Color
+            series.Brush.Visible = False
+            series.Pointer.Visible = True
+            series.CircleLabels = True
+            series.Marks.Visible = True
+            series.Marks.Style = Steema.TeeChart.Styles.MarksStyles.XValue
+            series.Marks.FontSeriesColor = True
+        Next
+
+        'grid is on chart's left axis
+        'Me.ResultChart.Axes.Left.Increment = 0.2
+        'labels are on chart's right axis
+        'Me.ResultChart.Axes.Right.Labels.Visible = False
 
         'Text in Diagramm einfügen
         Dim annot As New Steema.TeeChart.Tools.Annotation(Me.ResultChart)
         annot.Position = Steema.TeeChart.Tools.AnnotationPositions.RightBottom
         annot.Text = shortText
-
-        'Linien instanzieren
-        Dim line_gemessen As New Steema.TeeChart.Styles.Line(Me.ResultChart)
-        Dim line_simuliert As New Steema.TeeChart.Styles.Line(Me.ResultChart)
-        Dim line_fehlerquadrate As New Steema.TeeChart.Styles.Line(Me.ResultChart)
-
-        'linke Achse
-        Me.ResultChart.Axes.Left.Title.Caption = "Time series value"
-
-        'rechte Achse
-        line_fehlerquadrate.CustomVertAxis = Me.ResultChart.Axes.Right
-        Me.ResultChart.Axes.Right.Title.Caption = "Squared error"
-        Me.ResultChart.Axes.Right.Grid.Visible = False
-        Me.ResultChart.Axes.Right.Inverted = True
-
-        'Namen vergeben
-        line_gemessen.Title = Me.ts_obs.Title
-        line_simuliert.Title = Me.ts_sim.Title
-        line_fehlerquadrate.Title = "Squared error"
-
-        'Reihen formatieren
-        line_fehlerquadrate.Color = Color.LightGray
-
-        'X-Werte als Zeitdaten einstellen
-        line_gemessen.XValues.DateTime = True
-        line_simuliert.XValues.DateTime = True
-        line_fehlerquadrate.XValues.DateTime = True
-
-        'Werte zu Serien hinzufügen
-        For i = 0 To Me.ts_obs.Length - 1
-            line_gemessen.Add(Me.ts_obs.Dates(i), Me.ts_obs.Values(i))
-        Next
-        For i = 0 To Me.ts_sim.Length - 1
-            line_simuliert.Add(Me.ts_sim.Dates(i), Me.ts_sim.Values(i))
-        Next
-        For i = 0 To Me.ts_obs.Length - 1
-            line_fehlerquadrate.Add(Me.ts_obs.Dates(i), (Me.ts_sim.Values(i) - Me.ts_obs.Values(i)) ^ 2)
-        Next
 
     End Sub
 
