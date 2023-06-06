@@ -390,7 +390,7 @@ Friend Class GoodnessOfFit
         '"Volume error [%]", "Sum of squared errors", "Nash-Sutcliffe efficiency", "Logarithmic Nash-Sutcliffe efficiency", "Kling-Gupta efficiency", "Coefficient of correlation", "Coefficient of determination", "Hydrologic deviation"
         '"m", "F²", "E", "E,ln", "KGE", "r", "r²", "DEV"
 
-        Dim params = New List(Of String) From {"m", "F²", "E", "E,ln", "KGE", "r", "r²", "DEV"}
+        Dim params = New List(Of String) From {"m,abs", "F²", "E", "E,ln", "KGE", "r", "r²", "DEV"}
 
         'collect parameter values
         Dim parameterValues As New Dictionary(Of String, List(Of Double))
@@ -400,7 +400,7 @@ Friend Class GoodnessOfFit
 
         For Each GOFResult As KeyValuePair(Of String, GoF) In Me.GoFResults
             Dim gof As GoF = GOFResult.Value
-            parameterValues("m").Add(gof.volumeerror)
+            parameterValues("m,abs").Add(Math.Abs(gof.volumeerror))
             parameterValues("F²").Add(gof.sum_squarederrors)
             parameterValues("E").Add(gof.nash_sutcliffe)
             parameterValues("E,ln").Add(gof.ln_nash_sutcliffe)
@@ -410,9 +410,9 @@ Friend Class GoodnessOfFit
             parameterValues("DEV").Add(gof.hydrodev)
         Next
 
-        'determine parameter ranges for scaling
+        'determine parameter ranges for normalizing
         Dim parameterRanges As New Dictionary(Of String, Tuple(Of Double, Double))
-        parameterRanges("m") = New Tuple(Of Double, Double)(parameterValues("m").Min, parameterValues("m").Max)
+        parameterRanges("m,abs") = New Tuple(Of Double, Double)(0, parameterValues("m,abs").Max)
         parameterRanges("F²") = New Tuple(Of Double, Double)(0, parameterValues("F²").Max)
         parameterRanges("E") = New Tuple(Of Double, Double)(-1, 1)
         parameterRanges("E,ln") = New Tuple(Of Double, Double)(-1, 1)
@@ -447,7 +447,7 @@ Friend Class GoodnessOfFit
             series.Title = title
             'add values to series
             'X is the real value, Y is the scaled value, text is the axis label
-            series.Add(gof.volumeerror, normalize(gof.volumeerror, parameterRanges("m")), "Volume error [%]")
+            series.Add(gof.volumeerror, normalize(Math.Abs(gof.volumeerror), parameterRanges("m,abs")), "Absolute volume error [%]")
             series.Add(gof.sum_squarederrors, normalize(gof.sum_squarederrors, parameterRanges("F²")), "Sum of squared errors")
             series.Add(gof.nash_sutcliffe, normalize(gof.nash_sutcliffe, parameterRanges("E")), "Nash-Sutcliffe efficiency")
             series.Add(gof.ln_nash_sutcliffe, normalize(gof.ln_nash_sutcliffe, parameterRanges("E,ln")), "Logarithmic Nash-Sutcliffe efficiency")
