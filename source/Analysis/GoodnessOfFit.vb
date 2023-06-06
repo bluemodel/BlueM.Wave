@@ -324,7 +324,6 @@ Friend Class GoodnessOfFit
 
     Public Overrides Sub PrepareResults()
 
-        Dim i As Integer
         Dim shortText As String
         Dim _gof As GoF
         Const formatstring As String = "F4"
@@ -391,6 +390,39 @@ Friend Class GoodnessOfFit
         '"Volume error [%]", "Sum of squared errors", "Nash-Sutcliffe efficiency", "Logarithmic Nash-Sutcliffe efficiency", "Kling-Gupta efficiency", "Coefficient of correlation", "Coefficient of determination", "Hydrologic deviation"
         '"m", "F²", "E", "E,ln", "KGE", "r", "r²", "DEV"
 
+        'collect parameter values
+        Dim parameterValues As New Dictionary(Of String, List(Of Double)) From
+            {
+                {"m", New List(Of Double)},
+                {"F²", New List(Of Double)},
+                {"NSE", New List(Of Double)},
+                {"ln,NSE", New List(Of Double)},
+                {"KGE", New List(Of Double)},
+                {"r", New List(Of Double)},
+                {"r²", New List(Of Double)},
+                {"DEV", New List(Of Double)}
+            }
+
+        For Each GOFResult As KeyValuePair(Of String, GoF) In Me.GoFResults
+            Dim gof As GoF = GOFResult.Value
+            parameterValues("m").Add(gof.volumeerror)
+            parameterValues("F²").Add(gof.sum_squarederrors)
+            parameterValues("NSE").Add(gof.nash_sutcliffe)
+            parameterValues("ln,NSE").Add(gof.ln_nash_sutcliffe)
+            parameterValues("KGE").Add(gof.kge)
+            parameterValues("r").Add(gof.coeff_correlation)
+            parameterValues("r²").Add(gof.coeff_determination)
+            parameterValues("DEV").Add(gof.hydrodev)
+        Next
+
+        'determine parameter ranges for scaling
+        Dim parameterRanges As New Dictionary(Of String, Tuple(Of Double, Double))
+        For Each kvp As KeyValuePair(Of String, List(Of Double)) In parameterValues
+            Dim param As String = kvp.Key
+            Dim values As List(Of Double) = kvp.Value
+            parameterRanges(param) = New Tuple(Of Double, Double)(values.Min, values.Max)
+        Next
+
         For Each GOFResult As KeyValuePair(Of String, GoF) In Me.GoFResults
             Dim title = GOFResult.Key
             Dim gof As GoF = GOFResult.Value
@@ -400,14 +432,14 @@ Friend Class GoodnessOfFit
             series.Title = title
             'add values to series
             'X is the real value, Y is the scaled value, text is the axis label
-            series.Add(gof.volumeerror, gof.volumeerror, "Volume error [%]")
-            series.Add(gof.sum_squarederrors, gof.sum_squarederrors, "Sum of squared errors")
-            series.Add(gof.nash_sutcliffe, gof.nash_sutcliffe, "Nash-Sutcliffe efficiency")
-            series.Add(gof.ln_nash_sutcliffe, gof.ln_nash_sutcliffe, "Logarithmic Nash-Sutcliffe efficiency")
-            series.Add(gof.kge, gof.kge, "Kling-Gupta efficiency")
-            series.Add(gof.coeff_correlation, gof.coeff_correlation, "Coefficient of correlation")
-            series.Add(gof.coeff_determination, gof.coeff_determination, "Coefficient of determination")
-            series.Add(gof.hydrodev, gof.hydrodev, "Hydrologic deviation")
+            series.Add(gof.volumeerror, normalize(gof.volumeerror, parameterRanges("m")), "Volume error [%]")
+            series.Add(gof.sum_squarederrors, normalize(gof.sum_squarederrors, parameterRanges("F²")), "Sum of squared errors")
+            series.Add(gof.nash_sutcliffe, normalize(gof.nash_sutcliffe, parameterRanges("NSE")), "Nash-Sutcliffe efficiency")
+            series.Add(gof.ln_nash_sutcliffe, normalize(gof.ln_nash_sutcliffe, parameterRanges("ln,NSE")), "Logarithmic Nash-Sutcliffe efficiency")
+            series.Add(gof.kge, normalize(gof.kge, parameterRanges("KGE")), "Kling-Gupta efficiency")
+            series.Add(gof.coeff_correlation, normalize(gof.coeff_correlation, parameterRanges("r")), "Coefficient of correlation")
+            series.Add(gof.coeff_determination, normalize(gof.coeff_determination, parameterRanges("r²")), "Coefficient of determination")
+            series.Add(gof.hydrodev, normalize(gof.hydrodev, parameterRanges("DEV")), "Hydrologic deviation")
 
             series.Circled = True
             series.Pen.Width = 2
@@ -422,9 +454,9 @@ Friend Class GoodnessOfFit
         Next
 
         'grid is on chart's left axis
-        'Me.ResultChart.Axes.Left.Increment = 0.2
-        'labels are on chart's right axis
-        'Me.ResultChart.Axes.Right.Labels.Visible = False
+        Me.ResultChart.Axes.Left.Increment = 0.2
+        'labels are on chart's right axis, hide them
+        Me.ResultChart.Axes.Right.Labels.Visible = False
 
         'Text in Diagramm einfügen
         Dim annot As New Steema.TeeChart.Tools.Annotation(Me.ResultChart)
@@ -432,5 +464,20 @@ Friend Class GoodnessOfFit
         annot.Text = shortText
 
     End Sub
+
+    ''' <summary>
+    ''' Normalizes a value to between 0 and 1 given a range
+    ''' </summary>
+    ''' <param name="value">the value to normalize</param>
+    ''' <param name="range">the range to normalize to, consisting of min and max</param>
+    ''' <returns></returns>
+    Private Function normalize(value As Double, range As Tuple(Of Double, Double)) As Double
+        Dim min, max As Double
+        range.Deconstruct(min, max)
+        If value < min Or value > max Then
+            Throw New ArgumentException($"Unable to normalize value of {value} using range ({min}, {max})")
+        End If
+        Return (value - min) / (max - min)
+    End Function
 
 End Class
