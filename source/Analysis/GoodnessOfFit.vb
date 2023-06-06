@@ -444,9 +444,12 @@ Friend Class GoodnessOfFit
 
             Dim series As New Steema.TeeChart.Styles.Radar(Me.ResultChart.Chart)
 
+            'this is important because otherwise the series nodes are automatically ordered by their x values (angles), potentially messing up the labelling
+            series.XValues.Order = Steema.TeeChart.Styles.ValueListOrder.None
+
             series.Title = title
             'add values to series
-            'X is the real value, Y is the scaled value, text is the axis label
+            'X (angle) is the real value, Y is the scaled value, text is the axis label
             series.Add(gof.volumeerror, normalize(Math.Abs(gof.volumeerror), parameterRanges("m,abs")), "Absolute volume error [%]")
             series.Add(gof.sum_squarederrors, normalize(gof.sum_squarederrors, parameterRanges("F²")), "Sum of squared errors")
             series.Add(gof.nash_sutcliffe, normalize(gof.nash_sutcliffe, parameterRanges("E")), "Nash-Sutcliffe efficiency")
@@ -465,9 +468,14 @@ Friend Class GoodnessOfFit
             series.CircleLabels = True
             'series.ClockWiseLabels = True
             series.Marks.Visible = True
-            series.Marks.Style = Steema.TeeChart.Styles.MarksStyles.XValue
+            series.Marks.Style = Steema.TeeChart.Styles.MarksStyles.XValue 'label the real value
             series.Marks.FontSeriesColor = True
         Next
+
+        'scale radar spokes between 0 and 1
+        Me.ResultChart.Axes.Left.Automatic = False
+        Me.ResultChart.Axes.Left.Minimum = 0
+        Me.ResultChart.Axes.Left.Maximum = 1
 
         'grid is on chart's left axis
         Me.ResultChart.Axes.Left.Increment = 0.2
