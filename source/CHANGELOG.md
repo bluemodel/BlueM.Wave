@@ -7,6 +7,7 @@ NEW:
 * New BlueM.Wave installer package #89:
   * Installs and uninstalls Wave in Windows
   * Registers the file types WVP and TEN to open in Wave
+* Added support for using Windows "Open with" functionality for any file type
 * Mouse wheel in charts now zooms #95
 
 CHANGED:

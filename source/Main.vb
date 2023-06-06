@@ -29,9 +29,9 @@ Friend Module Main
         Dim files As New List(Of String)
 
         If args.Count > 0 Then
-            If args.First() = "-open" Then
-                'don't run the CLI, instead collect filenames to open in the app
-                For Each file As String In args.Skip(1)
+            If Not args.First().StartsWith("-") Then
+                'don't run the CLI, instead assume that args are filenames to open in the app
+                For Each file As String In args
                     files.Add(file)
                 Next
             Else
@@ -49,7 +49,7 @@ Friend Module Main
 
         'launch the app
         Dim app As New App(wave)
-        'open any files that were passed with -open argument
+        'open any files that were passed as commandline arguments
         For Each file As String In files
             wave.Import_File(file)
         Next

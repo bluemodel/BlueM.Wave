@@ -1719,7 +1719,7 @@
                     {
                     "Command" = "8:&Open"
                     "Verb" = "8:open"
-                    "Arguments" = "8:-open \"%1\""
+                    "Arguments" = "8:\"%1\""
                     "Order" = "3:0"
                     }
                 }
@@ -1742,7 +1742,7 @@
                     {
                     "Command" = "8:&Open"
                     "Verb" = "8:open"
-                    "Arguments" = "8:-open \"%1\""
+                    "Arguments" = "8:\"%1\""
                     "Order" = "3:0"
                     }
                 }
