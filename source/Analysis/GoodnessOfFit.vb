@@ -377,18 +377,17 @@ Friend Class GoodnessOfFit
             End With
         Next
 
-        'Diagramm:
-        '---------
+        'result chart (radar plot):
+        '--------------------------
+        'TODO: E and E,ln can be < -1, what would the chart look like then?
+        'TODO: m is currently plotted using its absolute value, but labelled with the actual value, while the axis title says "absolute", confusing?
+        'TODO: some parameters (m, DEV, F²) are better when smaller, should their axis direction be switched?
+        'TODO: F² becomes larger with longer time series, "Entire series" will always have a much larger value than the individual years, maybe omit this parameter from the plot?
+        'TODO: the axis titles and grid disappear when the last series is unchecked by the user, why?
+
         Me.ResultChart = New Steema.TeeChart.Chart()
         Call Helpers.FormatChart(Me.ResultChart)
         Me.ResultChart.Header.Text = $"Goodness of Fit: {Me.ts_obs.Title} vs. {Me.ts_sim.Title}"
-
-        'Me.ResultChart.Legend.LegendStyle = Steema.TeeChart.LegendStyles.Series
-        'Me.ResultChart.Legend.CheckBoxes = True
-        'Me.ResultChart.Legend.FontSeriesColor = True
-
-        '"Volume error [%]", "Sum of squared errors", "Nash-Sutcliffe efficiency", "Logarithmic Nash-Sutcliffe efficiency", "Kling-Gupta efficiency", "Coefficient of correlation", "Coefficient of determination", "Hydrologic deviation"
-        '"m", "F²", "E", "E,ln", "KGE", "r", "r²", "DEV"
 
         Dim params = New List(Of String) From {"m,abs", "F²", "E", "E,ln", "KGE", "r", "r²", "DEV"}
 
