@@ -390,25 +390,20 @@ Friend Class GoodnessOfFit
         '"Volume error [%]", "Sum of squared errors", "Nash-Sutcliffe efficiency", "Logarithmic Nash-Sutcliffe efficiency", "Kling-Gupta efficiency", "Coefficient of correlation", "Coefficient of determination", "Hydrologic deviation"
         '"m", "F²", "E", "E,ln", "KGE", "r", "r²", "DEV"
 
+        Dim params = New List(Of String) From {"m", "F²", "E", "E,ln", "KGE", "r", "r²", "DEV"}
+
         'collect parameter values
-        Dim parameterValues As New Dictionary(Of String, List(Of Double)) From
-            {
-                {"m", New List(Of Double)},
-                {"F²", New List(Of Double)},
-                {"NSE", New List(Of Double)},
-                {"ln,NSE", New List(Of Double)},
-                {"KGE", New List(Of Double)},
-                {"r", New List(Of Double)},
-                {"r²", New List(Of Double)},
-                {"DEV", New List(Of Double)}
-            }
+        Dim parameterValues As New Dictionary(Of String, List(Of Double))
+        For Each param As String In params
+            parameterValues.Add(param, New List(Of Double))
+        Next
 
         For Each GOFResult As KeyValuePair(Of String, GoF) In Me.GoFResults
             Dim gof As GoF = GOFResult.Value
             parameterValues("m").Add(gof.volumeerror)
             parameterValues("F²").Add(gof.sum_squarederrors)
-            parameterValues("NSE").Add(gof.nash_sutcliffe)
-            parameterValues("ln,NSE").Add(gof.ln_nash_sutcliffe)
+            parameterValues("E").Add(gof.nash_sutcliffe)
+            parameterValues("E,ln").Add(gof.ln_nash_sutcliffe)
             parameterValues("KGE").Add(gof.kge)
             parameterValues("r").Add(gof.coeff_correlation)
             parameterValues("r²").Add(gof.coeff_determination)
@@ -417,10 +412,30 @@ Friend Class GoodnessOfFit
 
         'determine parameter ranges for scaling
         Dim parameterRanges As New Dictionary(Of String, Tuple(Of Double, Double))
-        For Each kvp As KeyValuePair(Of String, List(Of Double)) In parameterValues
-            Dim param As String = kvp.Key
-            Dim values As List(Of Double) = kvp.Value
-            parameterRanges(param) = New Tuple(Of Double, Double)(values.Min, values.Max)
+        parameterRanges("m") = New Tuple(Of Double, Double)(parameterValues("m").Min, parameterValues("m").Max)
+        parameterRanges("F²") = New Tuple(Of Double, Double)(0, parameterValues("F²").Max)
+        parameterRanges("E") = New Tuple(Of Double, Double)(-1, 1)
+        parameterRanges("E,ln") = New Tuple(Of Double, Double)(-1, 1)
+        parameterRanges("KGE") = New Tuple(Of Double, Double)(-1, 1)
+        parameterRanges("r") = New Tuple(Of Double, Double)(-1, 1)
+        parameterRanges("r²") = New Tuple(Of Double, Double)(0, 1)
+        parameterRanges("DEV") = New Tuple(Of Double, Double)(0, parameterValues("DEV").Max)
+
+        'extend ranges by 10%
+        For Each param As String In params
+            Dim min, max As Double
+            parameterRanges(param).Deconstruct(min, max)
+            If min < 0 Then
+                min = min * 1.1
+            Else
+                min = min * 0.9
+            End If
+            If max < 0 Then
+                max = max * 0.9
+            Else
+                max = max * 1.1
+            End If
+            parameterRanges(param) = New Tuple(Of Double, Double)(min, max)
         Next
 
         For Each GOFResult As KeyValuePair(Of String, GoF) In Me.GoFResults
@@ -434,8 +449,8 @@ Friend Class GoodnessOfFit
             'X is the real value, Y is the scaled value, text is the axis label
             series.Add(gof.volumeerror, normalize(gof.volumeerror, parameterRanges("m")), "Volume error [%]")
             series.Add(gof.sum_squarederrors, normalize(gof.sum_squarederrors, parameterRanges("F²")), "Sum of squared errors")
-            series.Add(gof.nash_sutcliffe, normalize(gof.nash_sutcliffe, parameterRanges("NSE")), "Nash-Sutcliffe efficiency")
-            series.Add(gof.ln_nash_sutcliffe, normalize(gof.ln_nash_sutcliffe, parameterRanges("ln,NSE")), "Logarithmic Nash-Sutcliffe efficiency")
+            series.Add(gof.nash_sutcliffe, normalize(gof.nash_sutcliffe, parameterRanges("E")), "Nash-Sutcliffe efficiency")
+            series.Add(gof.ln_nash_sutcliffe, normalize(gof.ln_nash_sutcliffe, parameterRanges("E,ln")), "Logarithmic Nash-Sutcliffe efficiency")
             series.Add(gof.kge, normalize(gof.kge, parameterRanges("KGE")), "Kling-Gupta efficiency")
             series.Add(gof.coeff_correlation, normalize(gof.coeff_correlation, parameterRanges("r")), "Coefficient of correlation")
             series.Add(gof.coeff_determination, normalize(gof.coeff_determination, parameterRanges("r²")), "Coefficient of determination")
@@ -448,6 +463,7 @@ Friend Class GoodnessOfFit
             series.Brush.Visible = False
             series.Pointer.Visible = True
             series.CircleLabels = True
+            'series.ClockWiseLabels = True
             series.Marks.Visible = True
             series.Marks.Style = Steema.TeeChart.Styles.MarksStyles.XValue
             series.Marks.FontSeriesColor = True
