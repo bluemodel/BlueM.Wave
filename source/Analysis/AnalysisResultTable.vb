@@ -18,7 +18,7 @@
 ''' <summary>
 ''' Window for displaying an analysis result table
 ''' </summary>
-Public Class AnalysisResultTable
+Friend Class AnalysisResultTable
 
     ''' <summary>
     ''' The DataTable to display
