@@ -6,10 +6,28 @@ To add a new analysis function in Wave
 
 ## 1. Create a new analysis class
 
-The new analysis class must inherit from `Analysis`. It receives a list of input time series and can produce text, values, a chart and/or a list of result time series.
+The new analysis class must inherit from `Analysis`. It receives a list of input time series and can produce text, values, a chart, a table and/or a list of result time series.
 
 Example `Analysis\TestAnalysis.vb`:
 ```vb
+'BlueM.Wave
+'Copyright (C) BlueM Dev Group
+'<https://www.bluemodel.org>
+'
+'This program is free software: you can redistribute it and/or modify
+'it under the terms of the GNU Lesser General Public License as published by
+'the Free Software Foundation, either version 3 of the License, or
+'(at your option) any later version.
+'
+'This program is distributed in the hope that it will be useful,
+'but WITHOUT ANY WARRANTY; without even the implied warranty of
+'MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+'GNU Lesser General Public License for more details.
+'
+'You should have received a copy of the GNU Lesser General Public License
+'along with this program.  If not, see <https://www.gnu.org/licenses/>.
+'
+
 ''' <summary>
 ''' Write description!
 ''' </summary>
@@ -62,6 +80,16 @@ Friend Class TestAnalysis
     ''' that should be added to the main diagram
     ''' </summary>
     Public Overrides ReadOnly Property hasResultSeries() As Boolean
+        Get
+            Return True
+        End Get
+    End Property
+
+    ''' <summary>
+    ''' Flag indicating whether the analysis function has a result table
+    ''' that should be shown in a separate window
+    ''' </summary>
+    Public Overrides ReadOnly Property hasResultTable() As Boolean
         Get
             Return True
         End Get
@@ -125,6 +153,12 @@ Friend Class TestAnalysis
         'Result chart (will be shown in separate window)
         MyBase.ResultChart = New Steema.TeeChart.Chart()
         'Fill and format chart
+        '...
+        '...
+
+        'Result table (will be shown in separate window)
+        MyBase.ResultTable = New DataTable("Test analysis result")
+        'add columns and rows as needed
         '...
         '...
 

@@ -79,7 +79,7 @@ Friend Class TestAnalysis
     ''' </summary>
     Public Overrides ReadOnly Property hasResultTable() As Boolean
         Get
-            Return False
+            Return True
         End Get
     End Property
 
@@ -141,6 +141,12 @@ Friend Class TestAnalysis
         'Result chart (will be shown in separate window)
         MyBase.ResultChart = New Steema.TeeChart.Chart()
         'Fill and format chart
+        '...
+        '...
+
+        'Result table (will be shown in separate window)
+        MyBase.ResultTable = New DataTable("Test analysis result")
+        'add columns and rows as needed
         '...
         '...
 
