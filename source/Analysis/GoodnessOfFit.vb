@@ -40,7 +40,12 @@ Friend Class GoodnessOfFit
         Public kge As Double
         Public volume_observed As Double
         Public volume_simulated As Double
-        Public volumeerror As Double
+        Public volume_error As Double
+        Public ReadOnly Property abs_volume_error As Double
+            Get
+                Return Math.Abs(volume_error)
+            End Get
+        End Property
         Public coeff_determination As Double
         Public coeff_correlation As Double
         Public hydrodev As Double
@@ -145,7 +150,7 @@ Friend Class GoodnessOfFit
         Next
 
         'volume error [%]
-        gof.volumeerror = 100 * (gof.volume_simulated - gof.volume_observed) / gof.volume_observed
+        gof.volume_error = 100 * (gof.volume_simulated - gof.volume_observed) / gof.volume_observed
 
         'Nash-Sutcliffe - Koeffizient
         '----------------------------
@@ -330,12 +335,12 @@ Friend Class GoodnessOfFit
 
         'Text:
         '-----
-        'shortText is displayed in the diagram. Displays the GoF parameters for the entire series
+        'shortText is displayed in the diagram. Displays the GoF indicator values for the entire series
         _gof = Me.GoFResults("Entire series")
         shortText = "Entire series (" & _gof.startDate.ToString(Helpers.CurrentDateFormat) & " - " & _gof.endDate.ToString(Helpers.CurrentDateFormat) & "):" & eol
         shortText &= "Volume observed: Vobs = " & _gof.volume_observed.ToString(formatstring) & eol _
                      & "Volume simulated: Vsim = " & _gof.volume_simulated.ToString(formatstring) & eol _
-                     & "Volume error: m = " & _gof.volumeerror.ToString(formatstring) & " %" & eol _
+                     & "Volume error: m = " & _gof.volume_error.ToString(formatstring) & " %" & eol _
                      & "Sum of squared errors: F² = " & _gof.sum_squarederrors.ToString(formatstring) & eol _
                      & "Nash-Sutcliffe efficiency: E = " & _gof.nash_sutcliffe.ToString(formatstring) & eol _
                      & "Logarithmic Nash-Sutcliffe efficiency: E,ln = " & _gof.ln_nash_sutcliffe.ToString(formatstring) & eol _
@@ -366,7 +371,7 @@ Friend Class GoodnessOfFit
                     .nValues.ToString(),
                     .volume_observed.ToString(formatstring),
                     .volume_simulated.ToString(formatstring),
-                    .volumeerror.ToString(formatstring) & "%",
+                    .volume_error.ToString(formatstring) & "%",
                     .sum_squarederrors.ToString(formatstring),
                     .nash_sutcliffe.ToString(formatstring),
                     .ln_nash_sutcliffe.ToString(formatstring),
@@ -389,52 +394,11 @@ Friend Class GoodnessOfFit
         Call Helpers.FormatChart(Me.ResultChart)
         Me.ResultChart.Header.Text = $"Goodness of Fit: {Me.ts_obs.Title} vs. {Me.ts_sim.Title}"
 
-        Dim params = New List(Of String) From {"m,abs", "F²", "E", "E,ln", "KGE", "r", "r²", "DEV"}
-
-        'collect parameter values
-        Dim parameterValues As New Dictionary(Of String, List(Of Double))
-        For Each param As String In params
-            parameterValues.Add(param, New List(Of Double))
-        Next
-
+        'determine max absolute volume error for scaling
+        Dim max_abs_volume_error As Double = 0
         For Each GOFResult As KeyValuePair(Of String, GoF) In Me.GoFResults
             Dim gof As GoF = GOFResult.Value
-            parameterValues("m,abs").Add(Math.Abs(gof.volumeerror))
-            parameterValues("F²").Add(gof.sum_squarederrors)
-            parameterValues("E").Add(gof.nash_sutcliffe)
-            parameterValues("E,ln").Add(gof.ln_nash_sutcliffe)
-            parameterValues("KGE").Add(gof.kge)
-            parameterValues("r").Add(gof.coeff_correlation)
-            parameterValues("r²").Add(gof.coeff_determination)
-            parameterValues("DEV").Add(gof.hydrodev)
-        Next
-
-        'determine parameter ranges for normalizing
-        Dim parameterRanges As New Dictionary(Of String, Tuple(Of Double, Double))
-        parameterRanges("m,abs") = New Tuple(Of Double, Double)(0, parameterValues("m,abs").Max)
-        parameterRanges("F²") = New Tuple(Of Double, Double)(0, parameterValues("F²").Max)
-        parameterRanges("E") = New Tuple(Of Double, Double)(-1, 1)
-        parameterRanges("E,ln") = New Tuple(Of Double, Double)(-1, 1)
-        parameterRanges("KGE") = New Tuple(Of Double, Double)(-1, 1)
-        parameterRanges("r") = New Tuple(Of Double, Double)(-1, 1)
-        parameterRanges("r²") = New Tuple(Of Double, Double)(0, 1)
-        parameterRanges("DEV") = New Tuple(Of Double, Double)(0, parameterValues("DEV").Max)
-
-        'extend ranges by 10%
-        For Each param As String In params
-            Dim min, max As Double
-            parameterRanges(param).Deconstruct(min, max)
-            If min < 0 Then
-                min = min * 1.1
-            Else
-                min = min * 0.9
-            End If
-            If max < 0 Then
-                max = max * 0.9
-            Else
-                max = max * 1.1
-            End If
-            parameterRanges(param) = New Tuple(Of Double, Double)(min, max)
+            max_abs_volume_error = Math.Max(max_abs_volume_error, gof.abs_volume_error)
         Next
 
         For Each GOFResult As KeyValuePair(Of String, GoF) In Me.GoFResults
@@ -442,21 +406,21 @@ Friend Class GoodnessOfFit
             Dim gof As GoF = GOFResult.Value
 
             Dim series As New Steema.TeeChart.Styles.Radar(Me.ResultChart.Chart)
+            series.Title = title
 
             'this is important because otherwise the series nodes are automatically ordered by their x values (angles), potentially messing up the labelling
             series.XValues.Order = Steema.TeeChart.Styles.ValueListOrder.None
 
-            series.Title = title
-            'add values to series
-            'X (angle) is the real value, Y is the scaled value, text is the axis label
-            series.Add(gof.volumeerror, normalize(Math.Abs(gof.volumeerror), parameterRanges("m,abs")), "Absolute volume error [%]")
-            series.Add(gof.sum_squarederrors, normalize(gof.sum_squarederrors, parameterRanges("F²")), "Sum of squared errors")
-            series.Add(gof.nash_sutcliffe, normalize(gof.nash_sutcliffe, parameterRanges("E")), "Nash-Sutcliffe efficiency")
-            series.Add(gof.ln_nash_sutcliffe, normalize(gof.ln_nash_sutcliffe, parameterRanges("E,ln")), "Logarithmic Nash-Sutcliffe efficiency")
-            series.Add(gof.kge, normalize(gof.kge, parameterRanges("KGE")), "Kling-Gupta efficiency")
-            series.Add(gof.coeff_correlation, normalize(gof.coeff_correlation, parameterRanges("r")), "Coefficient of correlation")
-            series.Add(gof.coeff_determination, normalize(gof.coeff_determination, parameterRanges("r²")), "Coefficient of determination")
-            series.Add(gof.hydrodev, normalize(gof.hydrodev, parameterRanges("DEV")), "Hydrologic deviation")
+
+            'in the chart, X (angle) represents the actual value, Y is the scaled (plotted) value, text is the axis label
+
+            'scale the absolute volume error to range (-1, 1) and reverse it's sign
+            Dim scaled_volume_error As Double = -1 * (gof.abs_volume_error / max_abs_volume_error * 2 + -1)
+            series.Add(gof.volume_error, scaled_volume_error, "Volume error [%]")
+            series.Add(gof.nash_sutcliffe, gof.nash_sutcliffe, "Nash-Sutcliffe efficiency")
+            series.Add(gof.ln_nash_sutcliffe, gof.ln_nash_sutcliffe, "Logarithmic Nash-Sutcliffe efficiency")
+            series.Add(gof.kge, gof.kge, "Kling-Gupta efficiency")
+            series.Add(gof.coeff_correlation, gof.coeff_correlation, "Coefficient of correlation")
 
             series.Circled = True
             series.Pen.Width = 2
@@ -471,9 +435,9 @@ Friend Class GoodnessOfFit
             series.Marks.FontSeriesColor = True
         Next
 
-        'scale radar spokes between 0 and 1
+        'scale radar spokes between -1 and 1
         Me.ResultChart.Axes.Left.Automatic = False
-        Me.ResultChart.Axes.Left.Minimum = 0
+        Me.ResultChart.Axes.Left.Minimum = -1
         Me.ResultChart.Axes.Left.Maximum = 1
 
         'grid is on chart's left axis
@@ -487,20 +451,5 @@ Friend Class GoodnessOfFit
         annot.Text = shortText
 
     End Sub
-
-    ''' <summary>
-    ''' Normalizes a value to between 0 and 1 given a range
-    ''' </summary>
-    ''' <param name="value">the value to normalize</param>
-    ''' <param name="range">the range to normalize to, consisting of min and max</param>
-    ''' <returns></returns>
-    Private Function normalize(value As Double, range As Tuple(Of Double, Double)) As Double
-        Dim min, max As Double
-        range.Deconstruct(min, max)
-        If value < min Or value > max Then
-            Throw New ArgumentException($"Unable to normalize value of {value} using range ({min}, {max})")
-        End If
-        Return (value - min) / (max - min)
-    End Function
 
 End Class
