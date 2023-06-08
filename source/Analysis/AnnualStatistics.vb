@@ -67,6 +67,12 @@ Friend Class AnnualStatistics
         End Get
     End Property
 
+    Public Overrides ReadOnly Property hasResultTable() As Boolean
+        Get
+            Return False
+        End Get
+    End Property
+
     Public Sub New(ByRef series As List(Of TimeSeries))
         MyBase.New(series)
         'Check: expects exactly one series

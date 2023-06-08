@@ -68,6 +68,12 @@ Friend Class ChangeTimestep
         End Get
     End Property
 
+    Public Overrides ReadOnly Property hasResultTable() As Boolean
+        Get
+            Return False
+        End Get
+    End Property
+
 #End Region 'Properties
 
 #Region "Methods"

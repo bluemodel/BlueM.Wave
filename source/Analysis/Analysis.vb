@@ -74,6 +74,13 @@ Friend MustInherit Class Analysis
     ''' <remarks>optional</remarks>
     Protected ResultSeries As List(Of TimeSeries)
 
+    ''' <summary>
+    ''' Result table
+    ''' is shown in a separate window if `hasResultTable` is True
+    ''' </summary>
+    ''' <remarks>optional</remarks>
+    Protected ResultTable As DataTable
+
 #End Region 'Eigenschaften
 
 #Region "Properties"
@@ -106,6 +113,12 @@ Friend MustInherit Class Analysis
     ''' that should be added to the main diagram
     ''' </summary>
     Public MustOverride ReadOnly Property hasResultSeries() As Boolean
+
+    ''' <summary>
+    ''' Flag indicating whether the analysis function has a result table
+    ''' that should be shown in a separate window
+    ''' </summary>
+    Public MustOverride ReadOnly Property hasResultTable() As Boolean
 
     ''' <summary>
     ''' Analysis result text
@@ -144,6 +157,16 @@ Friend MustInherit Class Analysis
     Public ReadOnly Property getResultSeries() As List(Of TimeSeries)
         Get
             Return Me.ResultSeries
+        End Get
+    End Property
+
+    ''' <summary>
+    ''' Analysis result table
+    ''' </summary>
+    ''' <remarks>Optional</remarks>
+    Public ReadOnly Property getResultTable() As DataTable
+        Get
+            Return Me.ResultTable
         End Get
     End Property
 
