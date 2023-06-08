@@ -44,4 +44,15 @@ Public Class AnalysisResultTable
         Me.DataGridView1.AutoGenerateColumns = True
         Me.DataGridView1.DataSource = Me.Data
     End Sub
+
+    Private Sub CopyToolStripButton_Click(sender As Object, e As EventArgs) Handles CopyToolStripButton.Click
+        Try
+            Me.DataGridView1.SelectAll()
+            Clipboard.SetDataObject(Me.DataGridView1.GetClipboardContent())
+
+        Catch ex As System.Runtime.InteropServices.ExternalException
+            MsgBox("The Clipboard could not be accessed. Please try again.", MsgBoxStyle.Exclamation)
+        End Try
+
+    End Sub
 End Class
