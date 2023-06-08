@@ -64,7 +64,7 @@ Friend Class GoodnessOfFit
 
     Public Overrides ReadOnly Property hasResultText() As Boolean
         Get
-            Return True
+            Return False
         End Get
     End Property
 
@@ -86,7 +86,7 @@ Friend Class GoodnessOfFit
 
     Public Overrides ReadOnly Property hasResultTable() As Boolean
         Get
-            Return False
+            Return True
         End Get
     End Property
 
@@ -345,66 +345,6 @@ Friend Class GoodnessOfFit
 
     Public Overrides Sub PrepareResults()
 
-        Const formatstring As String = "F4"
-
-        'Text:
-        '-----
-        'shortText is displayed in the diagram. Displays the GoF indicator values for the full period of each simulated series
-        Dim shortText As String = ""
-        For Each ts_sim As TimeSeries In Me.ts_sim_list
-            Dim gof As GoF = Me.GoFResults(ts_sim.Title)("Entire series")
-            shortText &= "Simulated series: " & ts_sim.Title & eol _
-                      & "Period: Entire series (" & gof.startDate.ToString(Helpers.CurrentDateFormat) & " - " & gof.endDate.ToString(Helpers.CurrentDateFormat) & "):" & eol _
-                      & "Volume observed: Vobs = " & gof.volume_observed.ToString(formatstring) & eol _
-                      & "Volume simulated: Vsim = " & gof.volume_simulated.ToString(formatstring) & eol _
-                      & "Volume error: m = " & gof.volume_error.ToString(formatstring) & " %" & eol _
-                      & "Sum of squared errors: F² = " & gof.sum_squarederrors.ToString(formatstring) & eol _
-                      & "Nash-Sutcliffe efficiency: E = " & gof.nash_sutcliffe.ToString(formatstring) & eol _
-                      & "Logarithmic Nash-Sutcliffe efficiency: E,ln = " & gof.ln_nash_sutcliffe.ToString(formatstring) & eol _
-                      & "Kling-Gupta efficiency: KGE = " & gof.kge.ToString(formatstring) & eol _
-                      & "Coefficient of correlation: r = " & gof.coeff_correlation.ToString(formatstring) & eol _
-                      & "Coefficient of determination: r² = " & gof.coeff_determination.ToString(formatstring) & eol _
-                      & "Hydrologic deviation: DEV = " & gof.hydrodev.ToString(formatstring) & eol _
-                      & " " & eol
-        Next
-
-        'mResultText is written to the log. Contains all results.
-        Me.ResultText = "GoodnessOfFit analysis results:" & eol & eol &
-                        $"Observed time series: {Me.ts_obs.Title}" & eol &
-                        $"Simulated time series: {String.Join(", ", Me.ts_sim_list)}" & eol & eol
-        'output results in CSV format
-        Dim headerItems1 = New List(Of String) From {
-        "Series", "Period", "Start", "End", "Length", "Volume observed", "Volume simulated", "Volume error [%]", "Sum of squared errors", "Nash-Sutcliffe efficiency", "Logarithmic Nash-Sutcliffe efficiency", "Kling-Gupta efficiency", "Coefficient of correlation", "Coefficient of determination", "Hydrologic deviation"
-    }
-        Dim headerItems2 = New List(Of String) From {
-        "series", "period", "t0", "t1", "n", "Vobs", "Vsim", "m", "F²", "E", "E,ln", "KGE", "r", "r²", "DEV"
-    }
-        Me.ResultText &= String.Join(Helpers.CurrentListSeparator, headerItems1.Select(Function(s) $"""{s}""")) & eol
-        Me.ResultText &= String.Join(Helpers.CurrentListSeparator, headerItems2.Select(Function(s) $"""{s}""")) & eol
-        For Each series_title As String In Me.GoFResults.Keys
-            For Each kvp As KeyValuePair(Of String, GoF) In Me.GoFResults(series_title)
-                Dim period As String = kvp.Key
-                Dim gof As GoF = kvp.Value
-                Me.ResultText &= String.Join(Helpers.CurrentListSeparator,
-                    series_title,
-                    period,
-                    gof.startDate.ToString(Helpers.CurrentDateFormat),
-                    gof.endDate.ToString(Helpers.CurrentDateFormat),
-                    gof.nValues.ToString(),
-                    gof.volume_observed.ToString(formatstring),
-                    gof.volume_simulated.ToString(formatstring),
-                    gof.volume_error.ToString(formatstring) & "%",
-                    gof.sum_squarederrors.ToString(formatstring),
-                    gof.nash_sutcliffe.ToString(formatstring),
-                    gof.ln_nash_sutcliffe.ToString(formatstring),
-                    gof.kge.ToString(formatstring),
-                    gof.coeff_correlation.ToString(formatstring),
-                    gof.coeff_determination.ToString(formatstring),
-                    gof.hydrodev.ToString(formatstring)
-               ) & eol
-            Next
-        Next
-
         'result chart (radar plot):
         '--------------------------
         'TODO: m is currently plotted using its absolute value, but labelled with the actual value, while the axis title says "absolute", confusing?
@@ -468,10 +408,49 @@ Friend Class GoodnessOfFit
         'labels are on chart's right axis, hide them
         Me.ResultChart.Axes.Right.Labels.Visible = False
 
-        'add annotation to chart
-        Dim annot As New Steema.TeeChart.Tools.Annotation(Me.ResultChart)
-        annot.Position = Steema.TeeChart.Tools.AnnotationPositions.RightBottom
-        annot.Text = shortText
+        'result table
+        '------------
+        Me.ResultTable = New DataTable($"Goodness of Fit: {Me.ts_obs.Title} vs. {String.Join(", ", Me.ts_sim_list)}")
+
+        Me.ResultTable.Columns.Add("Series", GetType(String))
+        Me.ResultTable.Columns.Add("Period", GetType(String))
+        Me.ResultTable.Columns.Add("Start", GetType(DateTime))
+        Me.ResultTable.Columns.Add("End", GetType(DateTime))
+        Me.ResultTable.Columns.Add("Length", GetType(Integer))
+        Me.ResultTable.Columns.Add("Volume observed", GetType(Double))
+        Me.ResultTable.Columns.Add("Volume simulated", GetType(Double))
+        Me.ResultTable.Columns.Add("Volume error [%]", GetType(Double))
+        Me.ResultTable.Columns.Add("Sum of squared errors", GetType(Double))
+        Me.ResultTable.Columns.Add("Nash-Sutcliffe efficiency", GetType(Double))
+        Me.ResultTable.Columns.Add("Logarithmic Nash-Sutcliffe efficiency", GetType(Double))
+        Me.ResultTable.Columns.Add("Kling-Gupta efficiency", GetType(Double))
+        Me.ResultTable.Columns.Add("Coefficient of correlation", GetType(Double))
+        Me.ResultTable.Columns.Add("Coefficient of determination", GetType(Double))
+        Me.ResultTable.Columns.Add("Hydrologic deviation", GetType(Double))
+
+        For Each series_title As String In Me.GoFResults.Keys
+            For Each kvp As KeyValuePair(Of String, GoF) In Me.GoFResults(series_title)
+                Dim period As String = kvp.Key
+                Dim gof As GoF = kvp.Value
+                Me.ResultTable.Rows.Add(
+                    series_title,
+                    period,
+                    gof.startDate,
+                    gof.endDate,
+                    gof.nValues,
+                    gof.volume_observed,
+                    gof.volume_simulated,
+                    gof.volume_error,
+                    gof.sum_squarederrors,
+                    gof.nash_sutcliffe,
+                    gof.ln_nash_sutcliffe,
+                    gof.kge,
+                    gof.coeff_correlation,
+                    gof.coeff_determination,
+                    gof.hydrodev
+               )
+            Next
+        Next
 
     End Sub
 
