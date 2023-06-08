@@ -19,7 +19,7 @@
 ''' Form to display an analysis result chart
 ''' TODO: unlike the main chart, this chart uses the inbuilt TeeChart zoom and pan behaviour, which may be unexpected for users
 ''' </summary>
-Friend Class AnalysisChart
+Friend Class AnalysisResultChart
 
     ''' <summary>
     ''' Copy chart to clipboard as PNG image
