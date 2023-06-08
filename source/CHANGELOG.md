@@ -9,13 +9,16 @@ NEW:
   * Registers the file types WVP and TEN to open in Wave
 * Added support for using Windows "Open with" functionality for any file type
 * Mouse wheel in charts now zooms #95
-* Analysis functions can now display tabular results in a dedicated window #99
+* The following analysis functions now display tabular results in a dedicated window #99
+  * AnnualStatistics
+  * GoodnessOfFit
+  * Histogram
+  * MonthlyStatistics
 
 CHANGED:
 * Analysis function GoodnessOfFit: 
   * More than two time series can now be analyzed at once
   * Results are now displayed as a radar chart #98
-  * Results are now also displayed in the new result table window #99
   * More warnings in the log if not all data is usable
 * Show version numbers in the update check messages
 
