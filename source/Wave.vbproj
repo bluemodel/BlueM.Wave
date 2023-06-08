@@ -108,10 +108,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Analysis\Analysis.vb" />
-    <Compile Include="Analysis\AnalysisChart.Designer.vb">
-      <DependentUpon>AnalysisChart.vb</DependentUpon>
+    <Compile Include="Analysis\AnalysisResultChart.Designer.vb">
+      <DependentUpon>AnalysisResultChart.vb</DependentUpon>
     </Compile>
-    <Compile Include="Analysis\AnalysisChart.vb">
+    <Compile Include="Analysis\AnalysisResultChart.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Analysis\AnalysisDialog.Designer.vb">
@@ -353,8 +353,8 @@
     <Compile Include="Wave.vb" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Analysis\AnalysisChart.resx">
-      <DependentUpon>AnalysisChart.vb</DependentUpon>
+    <EmbeddedResource Include="Analysis\AnalysisResultChart.resx">
+      <DependentUpon>AnalysisResultChart.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Analysis\AnalysisDialog.resx">
       <DependentUpon>AnalysisDialog.vb</DependentUpon>

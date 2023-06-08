@@ -1,5 +1,5 @@
 ﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
-Partial Class AnalysisChart
+Partial Class AnalysisResultChart
     Inherits System.Windows.Forms.Form
 
     'Form overrides dispose to clean up the component list.
@@ -23,7 +23,7 @@ Partial Class AnalysisChart
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Dim ToolStrip1 As System.Windows.Forms.ToolStrip
-        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(AnalysisChart))
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(AnalysisResultChart))
         Me.TChart1 = New Steema.TeeChart.TChart()
         Me.ToolStripButton_Copy = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripButton_EditChart = New System.Windows.Forms.ToolStripButton()
