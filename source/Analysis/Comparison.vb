@@ -66,6 +66,12 @@ Friend Class Comparison
         End Get
     End Property
 
+    Public Overrides ReadOnly Property hasResultTable() As Boolean
+        Get
+            Return False
+        End Get
+    End Property
+
     ''' <summary>
     ''' Konstruktor
     ''' </summary>

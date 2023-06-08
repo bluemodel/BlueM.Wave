@@ -848,6 +848,13 @@ Friend Class WaveController
                     Call resultChart.Show()
                 End If
 
+                'show result table
+                If (oAnalysis.hasResultTable) Then
+                    Dim resultTable As New AnalysisResultTable(oAnalysis.getResultTable())
+                    resultTable.Text &= " - " & oAnalysisDialog.selectedAnalysisFunction.ToString()
+                    Call resultTable.Show()
+                End If
+
                 'Ergebnistext in Log schreiben und anzeigen
                 If (oAnalysis.hasResultText) Then
                     Call Log.AddLogEntry(Log.levels.info, oAnalysis.getResultText)

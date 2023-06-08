@@ -68,6 +68,12 @@ Friend Class Calculator
         End Get
     End Property
 
+    Public Overrides ReadOnly Property hasResultTable() As Boolean
+        Get
+            Return False
+        End Get
+    End Property
+
     ''' <summary>
     ''' The mathematical expression used for the calculation
     ''' </summary>

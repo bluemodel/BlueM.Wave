@@ -121,6 +121,12 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Analysis\AnalysisFactory.vb" />
+    <Compile Include="Analysis\AnalysisResultTable.Designer.vb">
+      <DependentUpon>AnalysisResultTable.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Analysis\AnalysisResultTable.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Analysis\AnnualStatistics.vb" />
     <Compile Include="Analysis\Autocorrelation.vb" />
     <Compile Include="Analysis\Autocorrelation_Dialog.Designer.vb">
@@ -359,6 +365,9 @@
     <EmbeddedResource Include="Analysis\AnalysisDialog.resx">
       <DependentUpon>AnalysisDialog.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Analysis\AnalysisResultTable.resx">
+      <DependentUpon>AnalysisResultTable.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Analysis\Autocorrelation_Dialog.resx">
       <DependentUpon>Autocorrelation_Dialog.vb</DependentUpon>
     </EmbeddedResource>
@@ -428,6 +437,7 @@
     <EmbeddedResource Include="FileFormats\HYDRO_AS-2D_Diag.resx">
       <DependentUpon>HYDRO_AS-2D_Diag.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="My Project\licenses.licx" />
     <EmbeddedResource Include="My Project\Resources.resx">
       <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.vb</LastGenOutput>
