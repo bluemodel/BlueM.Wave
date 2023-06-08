@@ -15,6 +15,7 @@
 'You should have received a copy of the GNU Lesser General Public License
 'along with this program.  If not, see <https://www.gnu.org/licenses/>.
 '
+Imports BlueM.Wave.AnnualStatistics
 ''' <summary>
 ''' Histogram and density estimation
 ''' </summary>
@@ -46,7 +47,7 @@ Friend Class Histogram
     ''' </summary>
     Public Overrides ReadOnly Property hasResultText() As Boolean
         Get
-            Return True
+            Return False
         End Get
     End Property
 
@@ -80,7 +81,7 @@ Friend Class Histogram
 
     Public Overrides ReadOnly Property hasResultTable() As Boolean
         Get
-            Return False
+            Return True
         End Get
     End Property
 
@@ -198,21 +199,27 @@ Friend Class Histogram
     ''' </summary>
     Public Overrides Sub PrepareResults()
 
-        'Ergebnistext
-        '------------
-        Const formatstring As String = "F4"
-        Me.ResultText = "Histogram has been calculated." & eol
-        Me.ResultText &= "Result data:" & eol
+        'result table
+        Me.ResultTable = New DataTable($"Histogram: {String.Join(", ", Me.InputTimeSeries)}")
+
+        Me.ResultTable.Columns.Add("From", GetType(Double))
+        Me.ResultTable.Columns.Add("To", GetType(Double))
         For Each result As histogramResults In Me.results
-            Me.ResultText &= result.title & eol
-            Me.ResultText &= String.Join(Helpers.CurrentListSeparator, "from", "to", "frequency", "probability") & eol
-            For i As Integer = 0 To Me.n_bins - 1
-                Me.ResultText &= String.Join(Helpers.CurrentListSeparator,
-                    Me.breaks(i).ToString(formatstring),
-                    Me.breaks(i + 1).ToString(formatstring),
-                    result.frequency(i),
-                    result.probability(i).ToString(formatstring)) & eol
+            Me.ResultTable.Columns.Add($"{result.title}: frequency", GetType(Integer))
+            Me.ResultTable.Columns.Add($"{result.title}: probability [%]", GetType(Double))
+        Next
+
+        For i As Integer = 0 To Me.n_bins - 1
+            Dim row(Me.ResultTable.Columns.Count - 1) As Object
+            row(0) = Me.breaks(i)
+            row(1) = Me.breaks(i + 1)
+            Dim cellindex As Integer = 2
+            For Each result As histogramResults In Me.results
+                row(cellindex) = result.frequency(i)
+                row(cellindex + 1) = result.probability(i)
+                cellindex += 2
             Next
+            Me.ResultTable.Rows.Add(row)
         Next
 
         'Ergebniswerte
