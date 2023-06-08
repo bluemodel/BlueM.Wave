@@ -15,6 +15,7 @@
 'You should have received a copy of the GNU Lesser General Public License
 'along with this program.  If not, see <https://www.gnu.org/licenses/>.
 '
+Imports BlueM.Wave.AnnualStatistics
 ''' <summary>
 '''Calculates the following statistical values for each month of the year:
 ''' Average
@@ -72,7 +73,7 @@ Friend Class MonthlyStatistics
     ''' </summary>
     Public Overrides ReadOnly Property hasResultText() As Boolean
         Get
-            Return True
+            Return False
         End Get
     End Property
 
@@ -106,7 +107,7 @@ Friend Class MonthlyStatistics
 
     Public Overrides ReadOnly Property hasResultTable() As Boolean
         Get
-            Return False
+            Return True
         End Get
     End Property
 
@@ -226,28 +227,32 @@ Friend Class MonthlyStatistics
     ''' <remarks></remarks>
     Public Overrides Sub PrepareResults()
 
-        'Result text
-        '------------
-        Const formatstring As String = "F4"
-        Me.ResultText = "Monthly statistics have been calculated." & eol
-        Me.ResultText &= "Result data:" & eol
-        'header line
-        Me.ResultText &= String.Join(Helpers.CurrentListSeparator, "Month", "Name", "ValueCount", "Average", "Median", "Min", "Max", "Stddev") & eol
+        'result table
+        Me.ResultTable = New DataTable($"Monthly statistics: {Me.InputTimeSeries(0).Title}")
 
-        'data
+        Me.ResultTable.Columns.Add("Month", GetType(Integer))
+        Me.ResultTable.Columns.Add("Name", GetType(String))
+        Me.ResultTable.Columns.Add("ValueCount", GetType(Integer))
+        Me.ResultTable.Columns.Add("Average", GetType(Double))
+        Me.ResultTable.Columns.Add("Median", GetType(Double))
+        Me.ResultTable.Columns.Add("Minimum", GetType(Double))
+        Me.ResultTable.Columns.Add("Maximum", GetType(Double))
+        Me.ResultTable.Columns.Add("Standard deviation", GetType(Double))
+
         For Each monthData As MonthData In Me.result.Values
             If monthData.values.Count > 0 Then
-                Me.ResultText &= String.Join(Helpers.CurrentListSeparator,
+                Me.ResultTable.Rows.Add(
                     monthData.month.number,
                     monthData.month.name,
                     monthData.values.Count,
-                    monthData.average.ToString(formatstring),
-                    monthData.median.ToString(formatstring),
-                    monthData.min.ToString(formatstring),
-                    monthData.max.ToString(formatstring),
-                    monthData.stddev.ToString(formatstring)) & eol
+                    monthData.average,
+                    monthData.median,
+                    monthData.min,
+                    monthData.max,
+                    monthData.stddev
+                )
             Else
-                Me.ResultText &= String.Join(Helpers.CurrentListSeparator,
+                Me.ResultTable.Rows.Add(
                     monthData.month.number,
                     monthData.month.name,
                     monthData.values.Count,
@@ -255,7 +260,8 @@ Friend Class MonthlyStatistics
                     Double.NaN,
                     Double.NaN,
                     Double.NaN,
-                    Double.NaN) & eol
+                    Double.NaN
+                )
             End If
         Next
 
