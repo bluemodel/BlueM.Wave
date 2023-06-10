@@ -4,12 +4,15 @@
       "src": [
         {
           "files": [
-            "Wave.vbproj"
+            "Wave.exe"
           ],
-          "src": "..\\source"
+          "src": "../source/bin/x64/Release"
         }
       ],
       "dest": "api",
+      "properties": {
+          "TargetFramework": "v4.8"
+      },
       "disableGitFeatures": false,
       "disableDefaultFilter": false
     }
