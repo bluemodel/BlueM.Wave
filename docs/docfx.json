@@ -62,6 +62,7 @@
     "fileMetadataFiles": [],
     "template": [
       "default",
+	  "modern",
 	  "custom-template"
     ],
     "postProcessors": [],
