@@ -127,7 +127,7 @@ Public Module Helpers
     ''' </summary>
     ''' <param name="name">Available color palettes are "Material", "Distinct", "Color Wheel" and "Random". Defaults to "Material".</param>
     ''' <returns>A color palette</returns>
-    Public Function getColorPalette(Optional name As String = "Material")
+    Public Function getColorPalette(Optional name As String = "Material") As Color()
         Dim colorPalette As Color()
         Select Case name
             Case "Material"

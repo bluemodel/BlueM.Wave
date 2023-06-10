@@ -434,7 +434,7 @@ Public Class Wave
         RaiseEvent SeriesReordered()
     End Sub
 
-    Friend Sub SaveProjectFile(projectfile)
+    Friend Sub SaveProjectFile(projectfile As String)
 
         'collect datasources
         Dim datasources As New Dictionary(Of String, List(Of String)) '{file: [title, ...], ...}

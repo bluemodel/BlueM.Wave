@@ -2476,7 +2476,7 @@ Friend Class WaveController
         Call Application.DoEvents()
     End Sub
 
-    Private Sub SeriesPropertiesChanged(id)
+    Private Sub SeriesPropertiesChanged(id As Integer)
         'find series in chart
         For Each series As Steema.TeeChart.Styles.Series In View.TChart1.Series
             If series.Tag = id Then
