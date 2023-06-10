@@ -36,7 +36,7 @@ Friend Module AnalysisFactory
         LinearRegression
         MonthlyStatistics
         TimestepAnalysis
-        'TestAnalysis       '<--------- Add new analysis functions to enumeration here
+        'TestAnalysis    'EDIT THIS
     End Enum
 
     ''' <summary>
@@ -70,8 +70,8 @@ Friend Module AnalysisFactory
                 Return MonthlyStatistics.Description
             Case AnalysisFunctions.TimestepAnalysis
                 Return TimeStepAnalysis.Description
-            'Case AnalysisFunctions.TestAnalysis         '<--------- Add case for new analysis descriptions here
-            '    Return TestAnalysis.Description         '<--------- 
+            'Case AnalysisFunctions.TestAnalysis    'EDIT THIS
+            '    Return TestAnalysis.Description    'EDIT THIS
             Case Else
                 Return "Description not found"
         End Select
@@ -125,8 +125,8 @@ Friend Module AnalysisFactory
             Case AnalysisFunctions.TimestepAnalysis
                 oAnalysis = New TimeStepAnalysis(seriesList)
 
-            'Case AnalysisFunctions.TestAnalysis                 '<--------- Add case for creation of new analysis instance here
-            '    oAnalysis = New TestAnalysis(seriesList)        '<---------
+            'Case AnalysisFunctions.TestAnalysis             'EDIT THIS
+            '    oAnalysis = New TestAnalysis(seriesList)    'EDIT THIS
 
             Case Else
                 Throw New Exception("Analysis not found!")
