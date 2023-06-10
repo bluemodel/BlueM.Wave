@@ -242,7 +242,7 @@ Namespace Fileformats
         ''' <param name="file">path to the file to check</param>
         ''' <returns>True if verification was successful</returns>
         ''' <remarks>Adapted from Fortran routine FILE_GETRECL (formerly ZRE_GETRECL)</remarks>
-        Public Shared Function verifyFormat(file As String)
+        Public Shared Function verifyFormat(file As String) As Boolean
 
             Const unformattedbits As Byte = &HF4
             Const formattedbits As Byte = &HF8
