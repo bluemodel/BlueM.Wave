@@ -30,7 +30,7 @@ ts.Cut(New DateTime(2000, 1, 2), New DateTime(2000, 1, 3))
 ```
 
 ### TimeSeriesFile
-You can use the `BlueM.Wave.TimeSeriesFile` class' factory method to read time series from any of the supported file formats:
+You can use the `BlueM.Wave.TimeSeriesFile` class' factory method `getInstance()` to read time series from any of the supported file formats:
 ```vb
 Dim filepath as String = "path\to\file"
 Dim tsfile as BlueM.Wave.TimeSeriesFile = BlueM.Wave.TimeSeriesFile.getInstance(filepath)
