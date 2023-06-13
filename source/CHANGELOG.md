@@ -1,6 +1,11 @@
 ﻿BlueM.Wave Release Notes
 ========================
 
+Version 2.4.1
+-------------
+CHANGED:
+* Analysis function GoodnessOfFit: slight improvement to scaling of volume error for display in radar chart #98
+
 Version 2.4.0
 -------------
 NEW:

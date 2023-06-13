@@ -361,6 +361,8 @@ Friend Class GoodnessOfFit
                 max_abs_volume_error = Math.Max(max_abs_volume_error, gof.abs_volume_error)
             Next
         Next
+        'add a small buffer
+        max_abs_volume_error *= 1.1
 
         For Each series_title As String In Me.GoFResults.Keys
             For Each kvp As KeyValuePair(Of String, GoF) In Me.GoFResults(series_title)
