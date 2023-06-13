@@ -43,6 +43,8 @@ Friend Class AnalysisResultTable
         Me.GroupBox1.Text = Me.Data.TableName
         Me.DataGridView1.AutoGenerateColumns = True
         Me.DataGridView1.DataSource = Me.Data
+        'freeze the first column
+        Me.DataGridView1.Columns(0).Frozen = True
     End Sub
 
     Private Sub CopyToolStripButton_Click(sender As Object, e As EventArgs) Handles CopyToolStripButton.Click
