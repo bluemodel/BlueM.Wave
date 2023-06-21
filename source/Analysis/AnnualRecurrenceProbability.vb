@@ -80,7 +80,7 @@ Friend Class AnnualRecurrenceProbability
     ''' </summary>
     Public Overrides ReadOnly Property hasResultTable() As Boolean
         Get
-            Return False
+            Return True
         End Get
     End Property
 
@@ -158,6 +158,22 @@ Friend Class AnnualRecurrenceProbability
         ResultText &= eol & "Plotting position:" & eol
         For Each kvp As KeyValuePair(Of Double, Double) In plottingPosition
             ResultText &= String.Join(Helpers.CurrentListSeparator, kvp.Value.ToString("F4"), kvp.Key.ToString("F4")) & eol
+        Next
+
+        'Create result table
+        ResultTable = New DataTable($"Annual maxima: {Me.InputTimeSeries(0).Title}")
+        ResultTable.Columns.Add("Period", GetType(String))
+        ResultTable.Columns.Add("Max", GetType(Double))
+        ResultTable.Columns.Add("P", GetType(Double))
+
+        'Add rows to result table
+        For Each kvp As KeyValuePair(Of String, Double) In maxima
+            Dim period As String = kvp.Key
+            Dim maximum As Double = kvp.Value
+            ResultTable.Rows.Add(
+                period,
+                maximum
+            )
         Next
 
         'Chart
