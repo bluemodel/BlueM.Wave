@@ -75,6 +75,16 @@ Friend Class AnnualRecurrenceProbability
     End Property
 
     ''' <summary>
+    ''' Flag indicating whether the analysis function has a result table
+    ''' that should be shown in a separate window
+    ''' </summary>
+    Public Overrides ReadOnly Property hasResultTable() As Boolean
+        Get
+            Return False
+        End Get
+    End Property
+
+    ''' <summary>
     ''' Class constructor
     ''' </summary>
     ''' <param name="timeseries">list of time series to be analyzed</param>
