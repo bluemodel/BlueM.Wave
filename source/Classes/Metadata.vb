@@ -35,4 +35,16 @@ Public Class Metadata
         Next
     End Sub
 
+    ''' <summary>
+    ''' Returns a copy of the metadata
+    ''' </summary>
+    ''' <returns></returns>
+    Public Function Copy() As Metadata
+        Dim _copy As New Metadata()
+        For Each key As String In Me.Keys
+            _copy.Add(key, Me(key))
+        Next
+        Return _copy
+    End Function
+
 End Class

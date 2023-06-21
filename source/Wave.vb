@@ -434,10 +434,11 @@ Public Class Wave
         RaiseEvent SeriesReordered()
     End Sub
 
-    Friend Sub SaveProjectFile(projectfile)
+    Friend Sub SaveProjectFile(projectfile As String)
 
         'collect datasources
         Dim datasources As New Dictionary(Of String, List(Of String)) '{file: [title, ...], ...}
+        Dim unsavedSeries As New List(Of String)
         Dim file, title As String
         For Each ts As TimeSeries In Me.TimeSeries.Values
             If ts.DataSource.Origin = TimeSeriesDataSource.OriginEnum.FileImport Then
@@ -448,9 +449,16 @@ Public Class Wave
                 End If
                 datasources(file).Add(title)
             Else
-                Log.AddLogEntry(Log.levels.warning, $"Series '{ts.Title}' does not originate from a file import and could not be saved to the project file!")
+                unsavedSeries.Add(ts.Title)
+                Log.AddLogEntry(Log.levels.warning, $"Series '{ts.Title}' with datasource {ts.DataSource} does not originate from a file import and could not be saved to the project file!")
             End If
         Next
+
+        If datasources.Count = 0 Then
+            Dim msg As String = $"None of the series originate from a file import! No project file was saved! Save the chart with data or export the time series to preserve them!"
+            Log.AddLogEntry(Log.levels.error, msg)
+            Throw New Exception(msg)
+        End If
 
         'write the project file
         Dim fs As New IO.FileStream(projectfile, IO.FileMode.Create, IO.FileAccess.Write)
@@ -474,7 +482,13 @@ Public Class Wave
         strwrite.Close()
         fs.Close()
 
-        Log.AddLogEntry(Log.levels.info, $"Wave project file {projectfile} saved.")
+        If unsavedSeries.Count = 0 Then
+            Log.AddLogEntry(Log.levels.info, $"Wave project file {projectfile} saved.")
+        Else
+            Dim msg As String = $"Wave project file {projectfile} saved. {unsavedSeries.Count} series could not be saved! Save the chart with data or export the time series to preserve them!"
+            Log.AddLogEntry(Log.levels.warning, msg)
+            Throw New Exception(msg)
+        End If
 
     End Sub
 
@@ -750,35 +764,6 @@ Public Class Wave
         RaiseEvent SeriesAdded(timeseries)
 
     End Sub
-
-    ''' <summary>
-    ''' Checks for a newer version on the server
-    ''' </summary>
-    ''' <returns>True if a newer version is available</returns>
-    Friend Async Function CheckForUpdate() As Threading.Tasks.Task(Of Boolean)
-
-
-        'get current version (only consider major, minor and build numbers, omitting the auto-generated revision number)
-        Dim v As Version = Reflection.Assembly.GetExecutingAssembly.GetName().Version()
-        Dim currentVersion As New Version($"{v.Major}.{v.Minor}.{v.Build}")
-
-        'retrieve latest version number from server
-        Dim client As New Net.Http.HttpClient()
-        Dim s As String = Await client.GetStringAsync(urlUpdateCheck)
-        Dim latestVersion As New Version(s)
-#If Not DEBUG Then
-        'TODO: Logging is not thread-safe and causes an exception in debug mode!
-        Log.AddLogEntry(Log.levels.debug, "CheckUpdate: Latest version on server: " & latestVersion.ToString())
-#End If
-
-        'compare versions
-        If currentVersion < latestVersion Then
-            Return True
-        Else
-            Return False
-        End If
-
-    End Function
 
     Friend Sub HighlightTimestampsHandler(timestamps As List(Of DateTime))
         RaiseEvent HighlightTimestamps(timestamps)

@@ -108,10 +108,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Analysis\Analysis.vb" />
-    <Compile Include="Analysis\AnalysisChart.Designer.vb">
-      <DependentUpon>AnalysisChart.vb</DependentUpon>
+    <Compile Include="Analysis\AnalysisResultChart.Designer.vb">
+      <DependentUpon>AnalysisResultChart.vb</DependentUpon>
     </Compile>
-    <Compile Include="Analysis\AnalysisChart.vb">
+    <Compile Include="Analysis\AnalysisResultChart.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Analysis\AnalysisDialog.Designer.vb">
@@ -121,6 +121,12 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Analysis\AnalysisFactory.vb" />
+    <Compile Include="Analysis\AnalysisResultTable.Designer.vb">
+      <DependentUpon>AnalysisResultTable.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Analysis\AnalysisResultTable.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Analysis\AnnualStatistics.vb" />
     <Compile Include="Analysis\AnnualRecurrenceProbability_Dialog.Designer.vb">
       <DependentUpon>AnnualRecurrenceProbability_Dialog.vb</DependentUpon>
@@ -360,11 +366,14 @@
     <Compile Include="Wave.vb" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Analysis\AnalysisChart.resx">
-      <DependentUpon>AnalysisChart.vb</DependentUpon>
+    <EmbeddedResource Include="Analysis\AnalysisResultChart.resx">
+      <DependentUpon>AnalysisResultChart.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Analysis\AnalysisDialog.resx">
       <DependentUpon>AnalysisDialog.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Analysis\AnalysisResultTable.resx">
+      <DependentUpon>AnalysisResultTable.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Analysis\AnnualRecurrenceProbability_Dialog.resx">
       <DependentUpon>AnnualRecurrenceProbability_Dialog.vb</DependentUpon>
@@ -438,6 +447,7 @@
     <EmbeddedResource Include="FileFormats\HYDRO_AS-2D_Diag.resx">
       <DependentUpon>HYDRO_AS-2D_Diag.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="My Project\licenses.licx" />
     <EmbeddedResource Include="My Project\Resources.resx">
       <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.vb</LastGenOutput>
@@ -502,6 +512,7 @@
     <Content Include="Resources\cancel_inactive.png" />
     <Content Include="Resources\chart_curve.png" />
     <Content Include="Resources\chart_curve_edit.png" />
+    <Content Include="Resources\chart_curve_link.png" />
     <Content Include="Resources\chart_line_add.png" />
     <Content Include="Resources\chart_line_edit.png" />
     <Content Include="Resources\chart_line_error.png" />

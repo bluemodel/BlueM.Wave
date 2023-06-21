@@ -76,13 +76,21 @@ Friend Class CLI
                         Throw New ArgumentException("Too few arguments for -import!")
                     End If
 
-                    showWave = True
-
                     'Import
                     Log.AddLogEntry(BlueM.Wave.Log.levels.info, $"Starting import of {fileargs.Count} files...")
                     For Each file_in As String In fileargs
-                        Call wave.Import_File(file_in)
+                        Select Case IO.Path.GetExtension(file_in).ToUpper
+
+                            Case TimeSeriesFile.FileExtensions.TEN
+                                'TODO: #94
+                                Throw New NotImplementedException("TEN files are currently not supported in the CLI!")
+
+                            Case Else
+                                Call wave.Import_File(file_in)
+                        End Select
                     Next
+
+                    showWave = True
 
                 Case "-convert"
 
@@ -140,6 +148,7 @@ Friend Class CLI
                         Select Case IO.Path.GetExtension(file_in).ToUpper
 
                             Case TimeSeriesFile.FileExtensions.TEN
+                                'TODO: #94
                                 Throw New NotImplementedException("TEN files are currently not supported in the CLI!")
 
                             Case TimeSeriesFile.FileExtensions.WVP

@@ -1,6 +1,48 @@
 ﻿BlueM.Wave Release Notes
 ========================
 
+Version 2.4.1
+-------------
+CHANGED:
+* Analysis result table: first column is now always frozen #99
+* Analysis function GoodnessOfFit: slight improvement to scaling of volume error for display in radar chart #98
+
+Version 2.4.0
+-------------
+NEW:
+* New BlueM.Wave installer package #89:
+  * Installs and uninstalls Wave in Windows
+  * Registers the file types WVP and TEN to open in Wave
+* Added support for using Windows "Open with" functionality for any file type
+* Mouse wheel in charts now zooms #95
+* The following analysis functions now display tabular results in a dedicated window #99
+  * AnnualStatistics
+  * GoodnessOfFit
+  * Histogram
+  * MonthlyStatistics
+
+CHANGED:
+* Analysis function GoodnessOfFit: 
+  * More than two time series can now be analyzed at once
+  * Results are now displayed as a radar chart #98
+  * More warnings in the log if not all data is usable
+* Show version numbers in the update check messages
+
+FIXED:
+* Improved performance when panning the main chart with the right mouse button
+
+Version 2.3.1
+-------------
+CHANGED:
+* When importing series from clipboard CSV data, their datasource is now stored as "Clipboard"
+* When saving a project file, emit prominent warnings and errors about series that can not be saved
+* When saving a chart, the native TeeChart format (*.TEN) is now selected by default
+
+Version 2.3.0
+-------------
+NEW:
+* Added support for ZRXP files containing ensemble forecast time series #92
+
 Version 2.2.0
 -------------
 FIXED:

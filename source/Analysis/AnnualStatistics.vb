@@ -47,7 +47,7 @@ Friend Class AnnualStatistics
 
     Public Overrides ReadOnly Property hasResultText() As Boolean
         Get
-            Return True
+            Return False
         End Get
     End Property
 
@@ -62,6 +62,12 @@ Friend Class AnnualStatistics
     ''' that should be added to the main diagram
     ''' </summary>
     Public Overrides ReadOnly Property hasResultSeries() As Boolean
+        Get
+            Return True
+        End Get
+    End Property
+
+    Public Overrides ReadOnly Property hasResultTable() As Boolean
         Get
             Return True
         End Get
@@ -116,26 +122,32 @@ Friend Class AnnualStatistics
 
 
     Public Overrides Sub PrepareResults()
-        Dim stat As struct_stat
 
-        Const formatstring As String = "F4"
+        'result table
+        Me.ResultTable = New DataTable($"Annual statistics: {Me.InputTimeSeries(0).Title}")
 
-        Me.ResultText = "Annual statistics:" & eol & eol &
-                         $"Time series: {Me.InputTimeSeries(0).Title}" & eol & eol
-        'output results in CSV format
-        Me.ResultText &= "Results:" & eol
-        Me.ResultText &= String.Join(Helpers.CurrentListSeparator, "Description", "Start", "End", "Length", "Min", "Max", "Avg", "Volume") & eol
+        Me.ResultTable.Columns.Add("Period", GetType(String))
+        Me.ResultTable.Columns.Add("Start", GetType(DateTime))
+        Me.ResultTable.Columns.Add("End", GetType(DateTime))
+        Me.ResultTable.Columns.Add("Length", GetType(Integer))
+        Me.ResultTable.Columns.Add("Min", GetType(Double))
+        Me.ResultTable.Columns.Add("Max", GetType(Double))
+        Me.ResultTable.Columns.Add("Avg", GetType(Double))
+        Me.ResultTable.Columns.Add("Volume", GetType(Double))
+
         For Each kvp As KeyValuePair(Of String, struct_stat) In Me.stats
-            stat = kvp.Value
-            Me.ResultText &= String.Join(Helpers.CurrentListSeparator,
-                kvp.Key,
-                stat.startDate.ToString(Helpers.CurrentDateFormat),
-                stat.endDate.ToString(Helpers.CurrentDateFormat),
-                stat.len.ToString(),
-                stat.min.ToString(formatstring),
-                stat.max.ToString(formatstring),
-                stat.avg.ToString(formatstring),
-                stat.vol.ToString(formatstring)) & eol
+            Dim period As String = kvp.Key
+            Dim stat As struct_stat = kvp.Value
+            Me.ResultTable.Rows.Add(
+                period,
+                stat.startDate,
+                stat.endDate,
+                stat.len,
+                stat.min,
+                stat.max,
+                stat.avg,
+                stat.vol
+            )
         Next
 
         'Generate timeseries with max/avg/min values if checkbox is checked and at least two years are present
@@ -165,7 +177,7 @@ Friend Class AnnualStatistics
             'Fill timeseries with values of max, avg, min
             For Each kvp As KeyValuePair(Of String, struct_stat) In Me.stats
                 If IsNumeric(kvp.Key) Then
-                    stat = kvp.Value
+                    Dim stat As struct_stat = kvp.Value
                     timeseries_max.AddNode(stat.startDate, stat.max)
                     timeseries_avg.AddNode(stat.startDate, stat.avg)
                     timeseries_min.AddNode(stat.startDate, stat.min)

@@ -68,6 +68,12 @@ Friend Class ChangeTimestep
         End Get
     End Property
 
+    Public Overrides ReadOnly Property hasResultTable() As Boolean
+        Get
+            Return False
+        End Get
+    End Property
+
 #End Region 'Properties
 
 #Region "Methods"
@@ -98,7 +104,7 @@ Friend Class ChangeTimestep
         Dim startdate As DateTime
         Dim ignoreNaN As Boolean
 
-        ts = Me.InputTimeSeries(0).Clone()
+        ts = Me.InputTimeSeries(0)
 
         'show the ChangeTimeStepDialog
         Dim dlg As New ChangeTimestepDialog(ts)

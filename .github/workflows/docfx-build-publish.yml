@@ -12,18 +12,22 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
-      - name: Setup .NET Core
-        uses: actions/setup-dotnet@v1
+        uses: actions/checkout@v3
+      - name: Add msbuild to PATH
+        uses: microsoft/setup-msbuild@v1.1
+      - name: Create TeeChart license file from secret
+        uses: lukasa1993/secret-file-action@v1.0.4
+        id: teechart-license
         with:
-          dotnet-version: 3.1.x
-      - name: Setup DocFX
-        uses: crazy-max/ghaction-chocolatey@v1
-        with:
-          args: install docfx
-#      - name: Install dependencies
-#        run: dotnet restore
-      - name: DocFX Build
+          secret: ${{ secrets.TEECHARTLICENSE }}
+          b64-decode: false
+      - name: Copy TeeChart license file
+        run: copy ${{ steps.teechart-license.outputs.file }} "source\My Project\TeeChart.licenses"
+      - name: Build Wave
+        run: msbuild source\Wave.vbproj -restore -property:Platform=x64 -property:Configuration=Release
+      - name: Install DocFX
+        run: dotnet tool install -g docfx
+      - name: Build documentation using docfx
         working-directory: docs
         run: docfx docfx.json
         continue-on-error: false

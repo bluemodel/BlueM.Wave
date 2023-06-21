@@ -68,6 +68,12 @@ Friend Class Calculator
         End Get
     End Property
 
+    Public Overrides ReadOnly Property hasResultTable() As Boolean
+        Get
+            Return False
+        End Get
+    End Property
+
     ''' <summary>
     ''' The mathematical expression used for the calculation
     ''' </summary>
@@ -184,11 +190,11 @@ Friend Class Calculator
 
 #Region "Custom functions"
 
-    Friend Shared Function Max(val1 As Double, val2 As Double)
+    Friend Shared Function Max(val1 As Double, val2 As Double) As Double
         Return Math.Max(val1, val2)
     End Function
 
-    Friend Shared Function Min(val1 As Double, val2 As Double)
+    Friend Shared Function Min(val1 As Double, val2 As Double) As Double
         Return Math.Min(val1, val2)
     End Function
 

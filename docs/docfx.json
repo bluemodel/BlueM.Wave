@@ -4,12 +4,15 @@
       "src": [
         {
           "files": [
-            "Wave.vbproj"
+            "Wave.exe"
           ],
-          "src": "..\\source"
+          "src": "../source/bin/x64/Release"
         }
       ],
       "dest": "api",
+      "properties": {
+          "TargetFramework": "v4.8"
+      },
       "disableGitFeatures": false,
       "disableDefaultFilter": false
     }
@@ -53,12 +56,15 @@
 	"globalMetadata": {
 		"_appTitle": "BlueM.Wave",
 		"_appLogoPath": "images/wave_logo.png",
-		"_appFaviconPath": "images/wave_icon.png"
+		"_appFaviconPath": "images/wave_icon.png",
+		"_enableSearch": true
 	},
     "globalMetadataFiles": [],
     "fileMetadataFiles": [],
     "template": [
-      "default"
+      "default",
+	  "modern",
+	  "custom-template"
     ],
     "postProcessors": [],
     "markdownEngineName": "markdig",

@@ -19,14 +19,14 @@ Friend Class Autocorrelation_Dialog
 
     Private timeseries As TimeSeries
 
-    Public ReadOnly Property lagSize()
+    Public ReadOnly Property lagSize As Integer
         Get
             'Größe der Lags auslesen
             Return Me.spnGroesseLag.Value
         End Get
     End Property
 
-    Public ReadOnly Property lagCount()
+    Public ReadOnly Property lagCount As Integer
         Get
             'Anzahl der Lags auslesen
             Return Me.spnAnzahlLag.Value()

@@ -35,6 +35,18 @@ Friend Class WaveController
         View.Show()
     End Sub
 
+    ''' <summary>
+    ''' Returns the current version of Wave
+    ''' </summary>
+    ''' <remarks>only considers major, minor and build numbers, omitting the auto-generated revision number</remarks>
+    ''' <returns>the current version number</returns>
+    Private ReadOnly Property CurrentVersion As Version
+        Get
+            Dim v As Version = Reflection.Assembly.GetExecutingAssembly.GetName().Version()
+            Return New Version($"{v.Major}.{v.Minor}.{v.Build}")
+        End Get
+    End Property
+
     Private selectionMade As Boolean 'Flag zeigt an, ob bereits ein Auswahlbereich ausgewählt wurde
 
     ''' <summary>
@@ -138,6 +150,9 @@ Friend Class WaveController
         AddHandler Me.View.TChart2.MouseUp, AddressOf OverviewChart_MouseUp
         AddHandler Me.View.TChart2.DoubleClick, AddressOf TChart2_DoubleClick
 
+        AddHandler Me.View.TChart1.MouseWheel, AddressOf TChart1_MouseWheel
+        AddHandler Me.View.TChart2.MouseWheel, AddressOf TChart2_MouseWheel
+
         'drag drop events
         AddHandler Me.View.DragEnter, AddressOf Wave_DragEnter
         AddHandler Me.View.DragDrop, AddressOf Wave_DragDrop
@@ -205,9 +220,9 @@ Friend Class WaveController
     Private Async Sub View_Load(sender As System.Object, e As System.EventArgs)
         'Check for update
         Try
-            Dim updateAvailable As Boolean
-            updateAvailable = Await _model.CheckForUpdate()
-            If updateAvailable Then
+            Dim latestVersion As Version = Await GetLatestVersion()
+            If CurrentVersion < latestVersion Then
+                'show update available notification
                 View.ToolStripButton_UpdateNotification.Visible = True
             End If
         Catch ex As Exception
@@ -370,27 +385,33 @@ Friend Class WaveController
     ''' <remarks></remarks>
     Private Sub SaveProjectFile_Click(sender As System.Object, e As System.EventArgs)
 
-        Dim dlgres As DialogResult
+        Try
+            Dim dlgres As DialogResult
 
-        'Prepare SaveFileDialog
-        View.SaveFileDialog1.Title = "Save project file"
-        View.SaveFileDialog1.Filter = "Wave project files (*.wvp)|*wvp"
-        View.SaveFileDialog1.DefaultExt = "wvp"
-        View.SaveFileDialog1.OverwritePrompt = True
+            'Prepare SaveFileDialog
+            View.SaveFileDialog1.Title = "Save project file"
+            View.SaveFileDialog1.Filter = "Wave project files (*.wvp)|*wvp"
+            View.SaveFileDialog1.DefaultExt = "wvp"
+            View.SaveFileDialog1.OverwritePrompt = True
 
-        'Show dialog
-        dlgres = View.SaveFileDialog1.ShowDialog()
+            'Show dialog
+            dlgres = View.SaveFileDialog1.ShowDialog()
 
-        If dlgres = Windows.Forms.DialogResult.OK Then
-            Call _model.SaveProjectFile(View.SaveFileDialog1.FileName)
-        End If
+            If dlgres = Windows.Forms.DialogResult.OK Then
+                Call _model.SaveProjectFile(View.SaveFileDialog1.FileName)
+            End If
+
+        Catch ex As Exception
+            MsgBox(ex.Message, MsgBoxStyle.Critical)
+        End Try
 
     End Sub
 
     'Teechart Export
     '***************
     Private Sub SaveChart_Click(sender As System.Object, e As System.EventArgs)
-        Call View.TChart1.Export.ShowExportDialog()
+        Dim fmt As New Steema.TeeChart.Export.TemplateExport(View.TChart1.Chart)
+        Call View.TChart1.Export.ShowExportDialog(fmt)
     End Sub
 
     'Zeitreihen Export
@@ -821,10 +842,17 @@ Friend Class WaveController
                 '--------------------
                 'Ergebnisdiagramm anzeigen
                 If (oAnalysis.hasResultChart) Then
-                    Dim resultChart As New AnalysisChart()
+                    Dim resultChart As New AnalysisResultChart()
                     resultChart.Text &= " - " & oAnalysisDialog.selectedAnalysisFunction.ToString()
                     resultChart.TChart1.Chart = oAnalysis.getResultChart()
                     Call resultChart.Show()
+                End If
+
+                'show result table
+                If (oAnalysis.hasResultTable) Then
+                    Dim resultTable As New AnalysisResultTable(oAnalysis.getResultTable())
+                    resultTable.Text &= " - " & oAnalysisDialog.selectedAnalysisFunction.ToString()
+                    Call resultTable.Show()
                 End If
 
                 'Ergebnistext in Log schreiben und anzeigen
@@ -851,7 +879,7 @@ Friend Class WaveController
 
             Catch ex As Exception
                 'Logeintrag
-                Call Log.AddLogEntry(Log.levels.error, "Analysis failed:" & eol & ex.Message)
+                Call Log.AddLogEntry(Log.levels.error, "Analysis failed: " & ex.Message)
                 'Alert
                 MsgBox("Analysis failed:" & eol & ex.Message, MsgBoxStyle.Critical)
 
@@ -1163,21 +1191,46 @@ Friend Class WaveController
     ''' </summary>
     Private Async Sub CheckForUpdate_Click(sender As Object, e As EventArgs)
         Try
-            Dim updateAvailable As Boolean = Await _model.CheckForUpdate()
-            If updateAvailable Then
+            'get latest version from server
+            Dim latestVersion As Version = Await GetLatestVersion()
+
+            'compare versions
+            If CurrentVersion < latestVersion Then
+                'Update is available
                 View.ToolStripButton_UpdateNotification.Visible = True
-                Dim resp As MsgBoxResult = MsgBox($"A new version is available!{eol}Click OK to go to downloads.bluemodel.org to get it.", MsgBoxStyle.OkCancel)
+                Dim resp As MsgBoxResult = MsgBox($"A new version {latestVersion} is available!{eol}Click OK to go to downloads.bluemodel.org to download it.", MsgBoxStyle.OkCancel Or MsgBoxStyle.Exclamation)
                 If resp = MsgBoxResult.Ok Then
                     Process.Start(urlDownload)
                 End If
             Else
+                'No update available
                 View.ToolStripButton_UpdateNotification.Visible = False
-                MsgBox("You are already up to date!", MsgBoxStyle.Information)
+                MsgBox($"Currently used version {CurrentVersion} is up to date!", MsgBoxStyle.Information)
             End If
+
         Catch ex As Exception
             MsgBox("Error while checking for update:" & eol & ex.Message, MsgBoxStyle.Critical)
         End Try
     End Sub
+
+    ''' <summary>
+    ''' Checks for a newer version on the server
+    ''' </summary>
+    ''' <returns>True if a newer version is available</returns>
+    Private Async Function GetLatestVersion() As Threading.Tasks.Task(Of Version)
+
+        'retrieve latest version number from server
+        Dim client As New Net.Http.HttpClient()
+        Dim s As String = Await client.GetStringAsync(urlUpdateCheck)
+        Dim latestVersion As New Version(s)
+#If Not DEBUG Then
+        'TODO: Logging is not thread-safe and causes an exception in debug mode!
+        Log.AddLogEntry(Log.levels.debug, "CheckUpdate: Latest version on server: " & latestVersion.ToString())
+#End If
+
+        Return latestVersion
+
+    End Function
 
     ''' <summary>
     ''' About Click
@@ -1476,7 +1529,6 @@ Friend Class WaveController
             View.ChartMinX = DateTime.FromOADate(xMin)
             View.ChartMaxX = DateTime.FromOADate(xMax)
             Me.selectionMade = True
-            Call Me.ViewportChanged()
             'update drag start point
             Me.ChartMouseDragStartX = e.X
         End If
@@ -1521,9 +1573,60 @@ Friend Class WaveController
             View.colorBandZoom.Active = False
         ElseIf Me.ChartMousePanning Then
             'complete the pan process
+            Call Me.ViewportChanged()
             Me.ChartMousePanning = False
         End If
         View.TChart1.Cursor = Cursors.Default
+    End Sub
+
+    ''' <summary>
+    ''' Handles main chart MouseWheel events
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    Private Sub TChart1_MouseWheel(sender As Object, e As MouseEventArgs)
+
+        Try
+            ' Update the drawing based upon the mouse wheel scrolling.
+            ' "The UI should scroll when the accumulated delta is plus or minus 120.
+            '  The UI should scroll the number of logical lines returned by the
+            '  SystemInformation.MouseWheelScrollLines property for every delta value reached."
+            'https://learn.microsoft.com/en-us/dotnet/api/system.windows.forms.control.mousewheel?f1url=%3FappId%3DDev16IDEF1%26l%3DEN-US%26k%3Dk(System.Windows.Forms.Control.MouseWheel)%3Bk(TargetFrameworkMoniker-.NETFramework%2CVersion%253Dv4.8)%3Bk(DevLang-VB)%26rd%3Dtrue&view=windowsdesktop-7.0#remarks
+            'TODO: scale mousewheel zoom with numberOfTextLinesToMove
+            Dim numberOfTextLinesToMove As Integer = CInt(e.Delta * SystemInformation.MouseWheelScrollLines / 120)
+
+            'zoom while centering on mouse
+            Dim currentExtent As TimeSpan = View.ChartMaxX - View.ChartMinX
+            Dim newExtent As Long
+            If numberOfTextLinesToMove > 0 Then
+                'zoom in 25%
+                newExtent = currentExtent.Ticks * 0.75
+            Else
+                'zoom out 25%
+                newExtent = currentExtent.Ticks * 1.25
+            End If
+
+            'determine mouse position and its left-right ratio in relation to x axis
+            Dim centerOADate As Double = View.TChart1.Series(0).XScreenToValue(e.X)
+            Dim centerDate As DateTime = DateTime.FromOADate(centerOADate)
+            Dim leftRatio As Double = (centerDate - View.ChartMinX).Ticks / currentExtent.Ticks
+            Dim rightRatio As Double = 1 - leftRatio
+
+            'save the current zoom snapshot
+            Call Me.SaveZoomSnapshot()
+
+            'set new viewport
+            View.ChartMinX = centerDate - New TimeSpan(ticks:=newExtent * leftRatio)
+            View.ChartMaxX = centerDate + New TimeSpan(ticks:=newExtent * rightRatio)
+
+            Me.selectionMade = True
+            Call Me.ViewportChanged()
+
+        Catch ex As ArgumentOutOfRangeException
+            'can happen when zooming out too far, TimeSpan becomes too big or DateTime is not representable
+            Log.AddLogEntry(levels.debug, $"Exception in TChart1_MouseWheel: {ex}")
+        End Try
+
     End Sub
 
     ''' <summary>
@@ -1677,6 +1780,78 @@ Friend Class WaveController
                 Call Me.ViewportChanged()
             End If
         End If
+    End Sub
+
+    ''' <summary>
+    ''' Handles overview chart MouseWheel events
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    Private Sub TChart2_MouseWheel(sender As Object, e As MouseEventArgs)
+
+        Try
+            ' Update the drawing based upon the mouse wheel scrolling.
+            ' "The UI should scroll when the accumulated delta is plus or minus 120.
+            '  The UI should scroll the number of logical lines returned by the
+            '  SystemInformation.MouseWheelScrollLines property for every delta value reached."
+            'https://learn.microsoft.com/en-us/dotnet/api/system.windows.forms.control.mousewheel?f1url=%3FappId%3DDev16IDEF1%26l%3DEN-US%26k%3Dk(System.Windows.Forms.Control.MouseWheel)%3Bk(TargetFrameworkMoniker-.NETFramework%2CVersion%253Dv4.8)%3Bk(DevLang-VB)%26rd%3Dtrue&view=windowsdesktop-7.0#remarks
+            'TODO: scale mousewheel zoom with numberOfTextLinesToMove
+            Dim numberOfTextLinesToMove As Integer = CInt(e.Delta * SystemInformation.MouseWheelScrollLines / 120)
+
+            'zoom while centering on mouse
+            Dim newStart As Double
+            Dim newEnd As Double
+            Dim mouseOADate As Double = View.TChart2.Series(0).XScreenToValue(e.X)
+            Dim currentExtent As Double = View.colorBandOverview.End - View.colorBandOverview.Start
+
+            If mouseOADate >= View.colorBandOverview.Start And mouseOADate <= View.colorBandOverview.End Then
+                'zoom by 25% if mouse is inside color band
+                Dim newExtent As Double
+                If numberOfTextLinesToMove > 0 Then
+                    newExtent = currentExtent * 0.75
+                Else
+                    newExtent = currentExtent * 1.25
+                End If
+
+                'determine left-right ratio of mouse in relation to color band
+                Dim leftRatio As Double = (mouseOADate - View.colorBandOverview.Start) / currentExtent
+                Dim rightRatio As Double = 1 - leftRatio
+
+                newStart = mouseOADate - newExtent * leftRatio
+                newEnd = mouseOADate + newExtent * rightRatio
+            Else
+                'pan by 25% of current extent if mouse is outside of color band
+                Dim delta As Double = currentExtent * 0.25
+                If mouseOADate > View.colorBandOverview.End Then
+                    'pan right
+                    newStart = View.colorBandOverview.Start + delta
+                    newEnd = View.colorBandOverview.End + delta
+                Else
+                    'pan left
+                    newStart = View.colorBandOverview.Start - delta
+                    newEnd = View.colorBandOverview.End - delta
+                End If
+            End If
+
+            'set the new colorband
+            View.colorBandOverview.Start = newStart
+            View.colorBandOverview.End = newEnd
+
+            'save the current zoom snapshot
+            Call Me.SaveZoomSnapshot()
+
+            'set the new viewport on the main chart
+            View.ChartMinX = DateTime.FromOADate(View.colorBandOverview.Start)
+            View.ChartMaxX = DateTime.FromOADate(View.colorBandOverview.End)
+
+            Me.selectionMade = True
+            Call Me.ViewportChanged()
+
+        Catch ex As ArgumentException
+            'can happen when zooming out too far, invalid OADate
+            Log.AddLogEntry(levels.debug, $"Exception in TChart1_MouseWheel: {ex}")
+        End Try
+
     End Sub
 
     'TChart2 DoubleClick
@@ -2301,7 +2476,7 @@ Friend Class WaveController
         Call Application.DoEvents()
     End Sub
 
-    Private Sub SeriesPropertiesChanged(id)
+    Private Sub SeriesPropertiesChanged(id As Integer)
         'find series in chart
         For Each series As Steema.TeeChart.Styles.Series In View.TChart1.Series
             If series.Tag = id Then

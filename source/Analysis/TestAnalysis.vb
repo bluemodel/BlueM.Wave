@@ -74,6 +74,16 @@ Friend Class TestAnalysis
     End Property
 
     ''' <summary>
+    ''' Flag indicating whether the analysis function has a result table
+    ''' that should be shown in a separate window
+    ''' </summary>
+    Public Overrides ReadOnly Property hasResultTable() As Boolean
+        Get
+            Return True
+        End Get
+    End Property
+
+    ''' <summary>
     ''' Class constructor
     ''' </summary>
     ''' <param name="timeseries">list of time series to be analyzed</param>
@@ -131,6 +141,12 @@ Friend Class TestAnalysis
         'Result chart (will be shown in separate window)
         MyBase.ResultChart = New Steema.TeeChart.Chart()
         'Fill and format chart
+        '...
+        '...
+
+        'Result table (will be shown in separate window)
+        MyBase.ResultTable = New DataTable("Test analysis result")
+        'add columns and rows as needed
         '...
         '...
 

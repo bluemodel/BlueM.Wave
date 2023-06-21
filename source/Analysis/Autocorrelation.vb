@@ -73,6 +73,12 @@ Friend Class Autocorrelation
         End Get
     End Property
 
+    Public Overrides ReadOnly Property hasResultTable() As Boolean
+        Get
+            Return False
+        End Get
+    End Property
+
     ''' <summary>
     ''' Konstruktor
     ''' </summary>
@@ -94,7 +100,7 @@ Friend Class Autocorrelation
     ''' </summary>
     Public Overrides Sub ProcessAnalysis()
 
-        Me.ts_in = Me.InputTimeSeries(0).Clone()
+        Me.ts_in = Me.InputTimeSeries(0)
 
         'Parameter-Dialog anzeigen
         Dim dialog As New Autocorrelation_Dialog(Me.ts_in)

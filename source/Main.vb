@@ -25,21 +25,34 @@ Friend Module Main
         Application.SetCompatibleTextRenderingDefault(False)
 
         Dim wave As New Wave()
+        Dim args As List(Of String) = Environment.GetCommandLineArgs().Skip(1).ToList()
+        Dim files As New List(Of String)
 
-        If Environment.GetCommandLineArgs().Count > 1 Then
-            'run the CLI
-            Dim showWave As Boolean = False
-            Using cli As New CLI()
-                showWave = cli.Run(Environment.GetCommandLineArgs().Skip(1).ToList, wave)
-            End Using
+        If args.Count > 0 Then
+            If Not args.First().StartsWith("-") Then
+                'don't run the CLI, instead assume that args are filenames to open in the app
+                For Each file As String In args
+                    files.Add(file)
+                Next
+            Else
+                'run the CLI
+                Dim showWave As Boolean = False
+                Using cli As New CLI()
+                    showWave = cli.Run(args, wave)
+                End Using
 
-            If Not showWave Then
-                Exit Sub
+                If Not showWave Then
+                    Exit Sub
+                End If
             End If
         End If
 
         'launch the app
         Dim app As New App(wave)
+        'open any files that were passed as commandline arguments
+        For Each file As String In files
+            wave.Import_File(file)
+        Next
         Application.Run(app)
 
     End Sub

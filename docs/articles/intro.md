@@ -40,3 +40,11 @@ To access the API, include a reference to Wave.exe (or to the Wave project if yo
 The repository contains a project `Wave.Examples` with some examples of API usage.
 
 See the [API documentation](../api/index.md)
+
+## Building an installer
+An installer (.msi) for BlueM.Wave can be built using the `Wave.Setup` project located at `setup\Wave.Setup.vdproj` which is a [Visual Studio Installer Project](https://marketplace.visualstudio.com/items?itemName=VisualStudioClient.MicrosoftVisualStudio2022InstallerProjects) (see [docs](https://aka.ms/vdproj-docs)).
+
+To create an installer for a new version:
+* In Visual Studio, select the `Wave.Setup` project and update the `Version` property to the new version number.
+* Visual Studio will ask to change the `ProductCode`, answer Yes.
+* Build the solution or just the `Wave.Setup` project in the `Release` solution platform configuration.

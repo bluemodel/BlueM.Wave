@@ -6,7 +6,7 @@ To access the API, include a reference to Wave.exe (or to the Wave project if yo
 ## Introduction
 
 ### TimeSeries
-The class `BlueM.Wave.TimeSeries` represents a single time series and exposes methods for manipulating them:
+The class [`BlueM.Wave.TimeSeries`](xref:BlueM.Wave.TimeSeries) represents a single time series and exposes methods for manipulating them:
 ```vb
 'create a new time series
 Dim ts As New BlueM.Wave.TimeSeries("my series")
@@ -30,7 +30,7 @@ ts.Cut(New DateTime(2000, 1, 2), New DateTime(2000, 1, 3))
 ```
 
 ### TimeSeriesFile
-You can use the `BlueM.Wave.TimeSeriesFile` class' factory method to read time series from any of the supported file formats:
+You can use the [`BlueM.Wave.TimeSeriesFile`](xref:BlueM.Wave.TimeSeriesFile) class' factory method [`getInstance()`](xref:BlueM.Wave.TimeSeriesFile#BlueM_Wave_TimeSeriesFile_getInstance_System_String_BlueM_Wave_TimeSeriesFile_FileTypes_) to read time series from any of the supported file formats:
 ```vb
 Dim filepath as String = "path\to\file"
 Dim tsfile as BlueM.Wave.TimeSeriesFile = BlueM.Wave.TimeSeriesFile.getInstance(filepath)
@@ -58,25 +58,25 @@ Next
 Dim ts As BlueM.Wave.TimeSeries = tsfile.getTimeSeries("seriesname or index")
 ```
 
-The namespace `BlueM.Wave.Fileformats` contains special classes for reading from specific file formats, which all inherit from `TimeSeriesFile`.
+The namespace [`BlueM.Wave.Fileformats`](xref:BlueM.Wave.Fileformats) contains special classes for reading from specific file formats, which all inherit from [`TimeSeriesFile`](xref:BlueM.Wave.TimeSeriesFile).
 
 ### App
-The class `BlueM.Wave.App` represents a fully fledged Wave app instance including it's windows. Instantiate a new Wave app instance as follows. This will show the main Wave window.
+The class [`BlueM.Wave.App`](xref:BlueM.Wave.App) represents a fully fledged Wave app instance including it's windows. Instantiate a new Wave app instance as follows. This will show the main Wave window.
 ```vb
 Dim app As New BlueM.Wave.App()
 ```
 
-Then use the App's `Wave` property to access methods e.g. for importing time series:
+Then use the App's [`Wave`](xref:BlueM.Wave.App#BlueM_Wave_App_Wave) property to access methods e.g. for importing time series:
 ```vb
 app.Wave.Import_File()
 app.Wave.Import_Series()
 ```
-and use the `TimeSeries` field to access any already imported time series:
+and use the [`TimeSeries`](xref:BlueM.Wave.Wave#BlueM_Wave_Wave_TimeSeries) field to access any already imported time series:
 ```vb
 app.Wave.TimeSeries
 ```
 
-You can also use the `BlueM.Wave.Wave` class on its own to import time series and then launch the app afterwards:
+You can also use the [`BlueM.Wave.Wave`](xref:BlueM.Wave.Wave) class on its own to import time series and then launch the app afterwards:
 ```vb
 Dim wave1 as New BlueM.Wave.Wave()
 wave1.Import_Series()

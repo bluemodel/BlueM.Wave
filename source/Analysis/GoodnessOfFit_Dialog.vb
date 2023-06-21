@@ -17,31 +17,50 @@
 '
 Friend Class GoodnessOfFit_Dialog
 
-    Public Sub New(zre1 As String, zre2 As String)
+    Public Sub New(seriesList As List(Of TimeSeries))
 
         ' This call is required by the Windows Form Designer.
         InitializeComponent()
 
         ' Add any initialization after the InitializeComponent() call.
-        Me.RadioButton1.Text = zre1
-        Me.RadioButton2.Text = zre2
+        Me.ComboBox_ObservedSeries.BeginUpdate()
+        Me.ComboBox_ObservedSeries.Items.AddRange(seriesList.ToArray())
+        Me.ComboBox_ObservedSeries.EndUpdate()
+        Me.ComboBox_ObservedSeries.SelectedIndex = 0
 
         Me.ComboBox_startMonth.BeginUpdate()
         Me.ComboBox_startMonth.Items.AddRange(Helpers.CalendarMonths.ToArray)
         Me.ComboBox_startMonth.EndUpdate()
-
         Me.ComboBox_startMonth.SelectedIndex = 10 'November
     End Sub
 
-    Public Function getNrGemesseneReihe() As Integer
+    ''' <summary>
+    ''' Returns the Timeseries selected as "observed"
+    ''' </summary>
+    ''' <returns></returns>
+    Public ReadOnly Property seriesObserved() As TimeSeries
+        Get
+            Return Me.ComboBox_ObservedSeries.SelectedItem
+        End Get
+    End Property
 
-        If (Me.RadioButton1.Checked) Then
-            Return 1
-        Else
-            Return 2
-        End If
-
-    End Function
+    ''' <summary>
+    ''' Returns the list of Timeseries _not_ selected as "observed"
+    ''' </summary>
+    ''' <returns></returns>
+    Public ReadOnly Property seriesSimulated() As List(Of TimeSeries)
+        Get
+            Dim ts_list As New List(Of TimeSeries)
+            Dim index As Integer = 0
+            For Each ts As TimeSeries In Me.ComboBox_ObservedSeries.Items
+                If index <> Me.ComboBox_ObservedSeries.SelectedIndex Then
+                    ts_list.Add(ts)
+                End If
+                index += 1
+            Next
+            Return ts_list
+        End Get
+    End Property
 
     Private Sub CheckBox_Annual_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox_Annual.CheckedChanged
         If CheckBox_Annual.Checked Then

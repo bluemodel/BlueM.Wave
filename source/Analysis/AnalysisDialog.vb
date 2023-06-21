@@ -52,7 +52,7 @@ Friend Class AnalysisDialog
         Get
             Dim seriesList As New List(Of TimeSeries)()
             For Each item As Object In Me.ListBox_Series.SelectedItems
-                seriesList.Add(CType(item, TimeSeries))
+                seriesList.Add(CType(item, TimeSeries).Clone())
             Next
             Return seriesList
         End Get
