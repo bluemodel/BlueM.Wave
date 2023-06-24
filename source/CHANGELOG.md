@@ -7,6 +7,9 @@ CHANGED:
 * Analysis result table: first column is now always frozen #99
 * Analysis function GoodnessOfFit: slight improvement to scaling of volume error for display in radar chart #98
 
+FIXED:
+* Some fixes to reading and writing HYSTEM-EXTRAN REG format #106
+
 Version 2.4.0
 -------------
 NEW:
