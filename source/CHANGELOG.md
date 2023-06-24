@@ -5,6 +5,7 @@ Version 2.4.1
 -------------
 NEW:
 * Added a button for deleting time series to the properties window
+* Allow exporting multiple time series at the same time #104
 
 CHANGED:
 * Analysis result table: first column is now always frozen #99
