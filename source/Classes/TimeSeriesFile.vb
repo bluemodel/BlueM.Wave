@@ -414,8 +414,9 @@ Public MustInherit Class TimeSeriesFile
     End Property
 
     ''' <summary>
-    ''' Flag indicating whether the ImportDialog should be used for this file
+    ''' Indicates whether the ImportDialog should be shown when importing this file format
     ''' </summary>
+    ''' <returns>True if the ImportDialog should be shown when importing this file format</returns>
     Public MustOverride ReadOnly Property UseImportDialog() As Boolean
 
     ''' <summary>
@@ -586,6 +587,23 @@ Public MustInherit Class TimeSeriesFile
                 Return FileExtensions.ZRX
             Case Else
                 Throw New Exception($"File extension of file type {type} is undefined!")
+        End Select
+    End Function
+
+    ''' <summary>
+    ''' Returns whether a file type supports multiple series in one file
+    ''' </summary>
+    ''' <param name="type">The file type</param>
+    ''' <returns>True if the file type supports multiple series</returns>
+    Public Shared Function SupportsMultipleSeries(type As FileTypes) As Boolean
+        Select Case type
+            Case TimeSeriesFile.FileTypes.CSV,
+                 TimeSeriesFile.FileTypes.DFS0,
+                 TimeSeriesFile.FileTypes.SWMM_INTERFACE
+                'TODO: ZRXP does actually also support multiple series, but for simplicity's sake, we assume that it doesn't
+                Return True
+            Case Else
+                Return False
         End Select
     End Function
 
