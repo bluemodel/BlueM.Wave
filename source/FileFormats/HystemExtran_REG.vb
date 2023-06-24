@@ -139,7 +139,7 @@ Namespace Fileformats
 
             'Einheit steht in 2. Zeile:
             Zeile = StrReadSync.ReadLine.ToString()
-            sInfo.Unit = Zeile.Substring(68, 2)
+            sInfo.Unit = Zeile.Substring(68, 10).Trim()
 
             'store series info
             Me.TimeSeriesInfos.Add(sInfo)
@@ -279,7 +279,11 @@ Namespace Fileformats
             Dim IntWert As Long
 
             '1. Zeile
-            strwrite.WriteLine("TUD   0 0   0 1 0 0 Messstelle / Station                 0        0           0")
+            Dim title As String = Reihe.Title
+            If title.Length > 30 Then
+                title = title.Substring(0, 30)
+            End If
+            strwrite.WriteLine($"TUD   0 0   0 1 0 0 {title.PadRight(30)}       0        0           0")
 
             '2. Zeile: 
             'Standard
@@ -297,7 +301,7 @@ Namespace Fileformats
             'Art der Daten, N = Niederschlag, Q = Abfluss
             strwrite.Write("N    ")
             'Einheit
-            strwrite.WriteLine("MM / IB   ")
+            strwrite.WriteLine(Reihe.Unit.PadRight(10))
 
             '3. Zeile: 
             strwrite.WriteLine("TUD   0 0   0 3 0 0 Beginn         Kommentarzeile 1                        Ende")
