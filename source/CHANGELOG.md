@@ -4,7 +4,7 @@
 Version 2.4.1
 -------------
 NEW:
-* Allow deleting multiple time series at the same time from the properties window
+* Added a button for deleting time series to the properties window
 
 CHANGED:
 * Analysis result table: first column is now always frozen #99

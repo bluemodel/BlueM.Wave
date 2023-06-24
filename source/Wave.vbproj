@@ -504,6 +504,7 @@
     <Content Include="Resources\chart_curve_edit.png" />
     <Content Include="Resources\chart_curve_link.png" />
     <Content Include="Resources\chart_line_add.png" />
+    <Content Include="Resources\chart_line_delete.png" />
     <Content Include="Resources\chart_line_edit.png" />
     <Content Include="Resources\chart_line_error.png" />
     <Content Include="Resources\chart_magnify.png" />
