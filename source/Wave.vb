@@ -504,7 +504,8 @@ Public Class Wave
 
         Dim exportDlg As ExportDiag
         Dim dlgResult As DialogResult
-        Dim filename As String
+        Dim folder As String = ""
+        Dim filename As String = ""
         Dim zres As List(Of TimeSeries)
 
         'Abort if no time series loaded
@@ -521,18 +522,36 @@ Public Class Wave
             Exit Sub
         End If
 
-        'get copies of the selected series
+        Dim fileType As TimeSeriesFile.FileTypes = exportDlg.ComboBox_Format.SelectedItem
+
+        'get selected series
         zres = New List(Of TimeSeries)
         For Each ts As TimeSeries In exportDlg.ListBox_Series.SelectedItems
-            zres.Add(ts.Clone())
+            zres.Add(ts.Clone()) 'clone them because we may alter their metadata before saving
         Next
+
+        'export to one or multiple files?
+        Dim multifileExport As Boolean
+        If zres.Count = 1 Then
+            'a single series will always be exported to a single file
+            multifileExport = False
+        Else
+            'if mutiple series were selected, it depends on the file type
+            If TimeSeriesFile.SupportsMultipleSeries(fileType) Then
+                'export all series to a single file
+                multifileExport = False
+            Else
+                'export each series to an individual file
+                multifileExport = True
+            End If
+        End If
 
         'prepare metadata according to file format
         Dim keys As List(Of String)
         Dim metadata_old As Metadata
         For Each ts As TimeSeries In zres
             'get a list of metadata keys
-            Select Case exportDlg.ComboBox_Format.SelectedItem
+            Select Case fileType
                 Case TimeSeriesFile.FileTypes.UVF
                     keys = Fileformats.UVF.MetadataKeys
                 Case TimeSeriesFile.FileTypes.ZRXP
@@ -555,7 +574,7 @@ Public Class Wave
                     End If
                 Next
                 'set default metadata values
-                Select Case exportDlg.ComboBox_Format.SelectedItem
+                Select Case fileType
                     Case TimeSeriesFile.FileTypes.UVF
                         Fileformats.UVF.setDefaultMetadata(ts)
                     Case TimeSeriesFile.FileTypes.ZRXP
@@ -574,105 +593,167 @@ Public Class Wave
             End If
         Next
 
-        'Prepare Save dialog
-        Dim SaveFileDialog1 As New SaveFileDialog()
-        SaveFileDialog1.Title = "Save as..."
-        SaveFileDialog1.AddExtension = True
-        SaveFileDialog1.OverwritePrompt = True
-        Select Case exportDlg.ComboBox_Format.SelectedItem
-            Case TimeSeriesFile.FileTypes.ASC
-                SaveFileDialog1.DefaultExt = "asc"
-                SaveFileDialog1.Filter = "ASC files (*.asc)|*.asc"
-            Case TimeSeriesFile.FileTypes.BIN
-                SaveFileDialog1.DefaultExt = "bin"
-                SaveFileDialog1.Filter = "SYDRO binary files (*.bin)|*.bin"
-            Case TimeSeriesFile.FileTypes.CSV
-                SaveFileDialog1.DefaultExt = "csv"
-                SaveFileDialog1.Filter = "CSV files (*.csv)|*.csv"
-            Case TimeSeriesFile.FileTypes.DFS0
-                SaveFileDialog1.DefaultExt = "dfs0"
-                SaveFileDialog1.Filter = "DFS0 files (*.dfs0)|*.dfs0"
-            Case TimeSeriesFile.FileTypes.WEL
-                SaveFileDialog1.DefaultExt = "wel"
-                SaveFileDialog1.Filter = "WEL files (*.wel)|*.wel"
-            Case TimeSeriesFile.FileTypes.ZRE
-                SaveFileDialog1.DefaultExt = "zre"
-                SaveFileDialog1.Filter = "ZRE files (*.zre)|*.zre"
-            Case TimeSeriesFile.FileTypes.HYSTEM_REG
-                SaveFileDialog1.DefaultExt = "reg"
-                SaveFileDialog1.Filter = "HYSTEM REG files (*.reg)|*.reg"
-            Case TimeSeriesFile.FileTypes.SMUSI_REG
-                SaveFileDialog1.DefaultExt = "reg"
-                SaveFileDialog1.Filter = "SMUSI REG files (*.reg)|*.reg"
-            Case TimeSeriesFile.FileTypes.SWMM_DAT_MASS, TimeSeriesFile.FileTypes.SWMM_DAT_TIME
-                SaveFileDialog1.DefaultExt = "dat"
-                SaveFileDialog1.Filter = "SWMM DAT files (*.dat)|*.dat"
-            Case TimeSeriesFile.FileTypes.SWMM_INTERFACE
-                SaveFileDialog1.DefaultExt = "txt"
-                SaveFileDialog1.Filter = "SWMM Interface files (*.txt)|*.txt"
-            Case TimeSeriesFile.FileTypes.UVF
-                SaveFileDialog1.DefaultExt = "uvf"
-                SaveFileDialog1.Filter = "UVF files (*.uvf)|*.uvf"
-            Case TimeSeriesFile.FileTypes.ZRXP
-                SaveFileDialog1.DefaultExt = "zrx"
-                SaveFileDialog1.Filter = "ZRXP files (*.zrx)|*.zrx"
-        End Select
-        SaveFileDialog1.Filter &= "|All files (*.*)|*.*"
-        SaveFileDialog1.FilterIndex = 1
+        'determine default file name for each series
+        Dim fileExt As String = TimeSeriesFile.getFileExtension(fileType).ToLower()
+        Dim defaultFileNames As New List(Of String)
+        For Each ts As TimeSeries In zres
+            Dim name As String = ts.Title
+            'replace invalid chars in title
+            For Each c As Char In IO.Path.GetInvalidFileNameChars()
+                name = name.Replace(c, "_")
+            Next
+            defaultFileNames.Add(name & fileExt)
+        Next
 
-        'Show Save dialog
-        dlgResult = SaveFileDialog1.ShowDialog()
-        If dlgResult <> Windows.Forms.DialogResult.OK Then
-            Exit Sub
+        'prepare and show save dialog
+        If multifileExport Then
+            'let the user select a folder
+            Dim dlg As New FolderBrowserDialog()
+            dlg.Description = "Export to folder..."
+            dlg.ShowNewFolderButton = True
+            dlg.RootFolder = Environment.SpecialFolder.MyComputer
+
+            'Show dialog
+            dlgResult = dlg.ShowDialog()
+            If dlgResult <> Windows.Forms.DialogResult.OK Then
+                Exit Sub
+            End If
+
+            folder = dlg.SelectedPath
+
+            Log.AddLogEntry(Log.levels.info, $"Exporting time series to folder {folder}...")
+
+        Else
+            'let the user select a filename
+            Dim SaveFileDialog1 As New SaveFileDialog()
+            SaveFileDialog1.Title = "Export to file..."
+            SaveFileDialog1.AddExtension = True
+            SaveFileDialog1.OverwritePrompt = True
+            SaveFileDialog1.SupportMultiDottedExtensions = True
+            'suggest the default filename of the first series
+            SaveFileDialog1.FileName = defaultFileNames(0)
+
+            Select Case fileType
+                Case TimeSeriesFile.FileTypes.ASC
+                    SaveFileDialog1.DefaultExt = "asc"
+                    SaveFileDialog1.Filter = "ASC files (*.asc)|*.asc"
+                Case TimeSeriesFile.FileTypes.BIN
+                    SaveFileDialog1.DefaultExt = "bin"
+                    SaveFileDialog1.Filter = "SYDRO binary files (*.bin)|*.bin"
+                Case TimeSeriesFile.FileTypes.CSV
+                    SaveFileDialog1.DefaultExt = "csv"
+                    SaveFileDialog1.Filter = "CSV files (*.csv)|*.csv"
+                Case TimeSeriesFile.FileTypes.DFS0
+                    SaveFileDialog1.DefaultExt = "dfs0"
+                    SaveFileDialog1.Filter = "DFS0 files (*.dfs0)|*.dfs0"
+                Case TimeSeriesFile.FileTypes.WEL
+                    SaveFileDialog1.DefaultExt = "wel"
+                    SaveFileDialog1.Filter = "WEL files (*.wel)|*.wel"
+                Case TimeSeriesFile.FileTypes.ZRE
+                    SaveFileDialog1.DefaultExt = "zre"
+                    SaveFileDialog1.Filter = "ZRE files (*.zre)|*.zre"
+                Case TimeSeriesFile.FileTypes.HYSTEM_REG
+                    SaveFileDialog1.DefaultExt = "reg"
+                    SaveFileDialog1.Filter = "HYSTEM REG files (*.reg)|*.reg"
+                Case TimeSeriesFile.FileTypes.SMUSI_REG
+                    SaveFileDialog1.DefaultExt = "reg"
+                    SaveFileDialog1.Filter = "SMUSI REG files (*.reg)|*.reg"
+                Case TimeSeriesFile.FileTypes.SWMM_DAT_MASS, TimeSeriesFile.FileTypes.SWMM_DAT_TIME
+                    SaveFileDialog1.DefaultExt = "dat"
+                    SaveFileDialog1.Filter = "SWMM DAT files (*.dat)|*.dat"
+                Case TimeSeriesFile.FileTypes.SWMM_INTERFACE
+                    SaveFileDialog1.DefaultExt = "txt"
+                    SaveFileDialog1.Filter = "SWMM Interface files (*.txt)|*.txt"
+                Case TimeSeriesFile.FileTypes.UVF
+                    SaveFileDialog1.DefaultExt = "uvf"
+                    SaveFileDialog1.Filter = "UVF files (*.uvf)|*.uvf"
+                Case TimeSeriesFile.FileTypes.ZRXP
+                    SaveFileDialog1.DefaultExt = "zrx"
+                    SaveFileDialog1.Filter = "ZRXP files (*.zrx)|*.zrx"
+            End Select
+            SaveFileDialog1.Filter &= "|All files (*.*)|*.*"
+            SaveFileDialog1.FilterIndex = 1
+
+            'Show Save dialog
+            dlgResult = SaveFileDialog1.ShowDialog()
+            If dlgResult <> Windows.Forms.DialogResult.OK Then
+                Exit Sub
+            End If
+
+            filename = SaveFileDialog1.FileName
+
         End If
-
-        filename = SaveFileDialog1.FileName
-
-        'Export series
-        Log.AddLogEntry(Log.levels.info, $"Exporting time series to file {SaveFileDialog1.FileName}...")
 
         RaiseEvent IsBusyChanged(True)
 
         Try
+            If TimeSeriesFile.SupportsMultipleSeries(fileType) Then
+                'export all series to a single file
 
-            Select Case exportDlg.ComboBox_Format.SelectedItem
+                Log.AddLogEntry(Log.levels.info, $"Exporting {zres.Count} time series to file {filename}...")
 
-                Case TimeSeriesFile.FileTypes.BIN
-                    Call Fileformats.BIN.Write_File(zres(0), filename)
+                Select Case fileType
 
-                Case TimeSeriesFile.FileTypes.CSV
-                    Call Fileformats.CSV.Write_File(zres, filename)
+                    Case TimeSeriesFile.FileTypes.CSV
+                        Call Fileformats.CSV.Write_File(zres, filename)
 
-                Case TimeSeriesFile.FileTypes.DFS0
-                    Call Fileformats.DFS0.Write_File(zres, filename)
+                    Case TimeSeriesFile.FileTypes.DFS0
+                        Call Fileformats.DFS0.Write_File(zres, filename)
 
-                Case TimeSeriesFile.FileTypes.HYSTEM_REG
-                    Call Fileformats.HystemExtran_REG.Write_File(zres(0), filename)
+                    Case TimeSeriesFile.FileTypes.SWMM_INTERFACE
+                        Call Fileformats.SWMM_INTERFACE.Write_File(zres, filename)
 
-                Case TimeSeriesFile.FileTypes.SMUSI_REG
-                    Call Fileformats.SMUSI_REG.Write_File(zres(0), filename)
+                    Case Else
+                        Throw New Exception($"Export to file type {fileType} not yet implemented!")
 
-                Case TimeSeriesFile.FileTypes.SWMM_DAT_MASS
-                    Call Fileformats.SWMM_DAT_MASS.Write_File(zres(0), filename, 5) 'TODO: Zeitschritt ist noch nicht dynamisch definiert
+                End Select
 
-                Case TimeSeriesFile.FileTypes.SWMM_DAT_TIME
-                    Call Fileformats.SWMM_DAT_TIME.Write_File(zres(0), filename, 5) 'TODO: Zeitschritt ist noch nicht dynamisch definiert
+            Else
+                'export each series to a separate file
+                For i As Integer = 0 To zres.Count - 1
 
-                Case TimeSeriesFile.FileTypes.SWMM_INTERFACE
-                    Call Fileformats.SWMM_INTERFACE.Write_File(zres, filename)
+                    Dim ts As TimeSeries = zres(i)
 
-                Case TimeSeriesFile.FileTypes.UVF
-                    Call Fileformats.UVF.Write_File(zres(0), filename)
+                    If multifileExport Then
+                        'use default file name
+                        filename = IO.Path.Combine(folder, defaultFileNames(i))
+                    End If
 
-                Case TimeSeriesFile.FileTypes.ZRE
-                    Call Fileformats.ZRE.Write_File(zres(0), filename)
+                    Log.AddLogEntry(Log.levels.info, $"Exporting time series '{ts.Title}' to file {filename}...")
 
-                Case TimeSeriesFile.FileTypes.ZRXP
-                    Call Fileformats.ZRXP.Write_File(zres(0), filename)
+                    Select Case fileType
 
-                Case Else
-                    MsgBox("Not yet implemented!", MsgBoxStyle.Exclamation)
-            End Select
+                        Case TimeSeriesFile.FileTypes.BIN
+                            Call Fileformats.BIN.Write_File(ts, filename)
+
+                        Case TimeSeriesFile.FileTypes.HYSTEM_REG
+                            Call Fileformats.HystemExtran_REG.Write_File(ts, filename)
+
+                        Case TimeSeriesFile.FileTypes.SMUSI_REG
+                            Call Fileformats.SMUSI_REG.Write_File(ts, filename)
+
+                        Case TimeSeriesFile.FileTypes.SWMM_DAT_MASS
+                            Call Fileformats.SWMM_DAT_MASS.Write_File(ts, filename, 5) 'TODO: Zeitschritt ist noch nicht dynamisch definiert
+
+                        Case TimeSeriesFile.FileTypes.SWMM_DAT_TIME
+                            Call Fileformats.SWMM_DAT_TIME.Write_File(ts, filename, 5) 'TODO: Zeitschritt ist noch nicht dynamisch definiert
+
+                        Case TimeSeriesFile.FileTypes.UVF
+                            Call Fileformats.UVF.Write_File(ts, filename)
+
+                        Case TimeSeriesFile.FileTypes.ZRE
+                            Call Fileformats.ZRE.Write_File(ts, filename)
+
+                        Case TimeSeriesFile.FileTypes.ZRXP
+                            Call Fileformats.ZRXP.Write_File(ts, filename)
+
+                        Case Else
+                            Throw New Exception($"Export to file type {fileType} not yet implemented!")
+                    End Select
+
+                Next
+
+            End If
 
             MsgBox("Time series exported successfully!", MsgBoxStyle.Information)
             Log.AddLogEntry(Log.levels.info, "Time series exported successfully!")
