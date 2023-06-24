@@ -60,6 +60,7 @@ Partial Class ExportDiag
         Me.ListBox_Series.FormattingEnabled = True
         Me.ListBox_Series.Location = New System.Drawing.Point(12, 62)
         Me.ListBox_Series.Name = "ListBox_Series"
+        Me.ListBox_Series.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended
         Me.ListBox_Series.Size = New System.Drawing.Size(170, 108)
         Me.ListBox_Series.TabIndex = 0
         '
