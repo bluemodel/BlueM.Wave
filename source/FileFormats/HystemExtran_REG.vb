@@ -28,7 +28,6 @@ Namespace Fileformats
 
         Const DatumsformatHystemExtran As String = "ddMMyyyyHHmmss"
         Const LenString As Integer = 5   'Länge des Strings eines Wertes in der reg/dat-Datei
-        Const iDim As Integer = 3        'Dezimalfaktor wird erstmal global auf 3 gesetzt
         Const fehlWert As String = "-9999" 'Fehlwert / Ausfall
 
 #Region "Eigenschaften"
@@ -79,8 +78,10 @@ Namespace Fileformats
                         Return 10
                     Case 720
                         Return 2
+                    Case 1440
+                        Return 10 'TODO: Eigentlich 10 Werte für die ersten zwei Zeilen eines Monats, dann variabel für den Rest des Monats
                     Case Else
-                        Return 0 'this should never occur
+                        Throw New Exception($"Number of entries per line for time step of {dt} minutes is undefined!")
                 End Select
             End Get
         End Property
@@ -144,10 +145,10 @@ Namespace Fileformats
             Me.TimeSeriesInfos.Add(sInfo)
 
             'read additional info
-            Me.DezFaktor = Zeile.Substring(29, 1)
+            Me.DezFaktor = Zeile.Substring(25, 5)
 
             'Zeitintervall auslesen
-            Me.Zeitintervall = Convert.ToSingle(Zeile.Substring(23, 2).Trim)
+            Me.Zeitintervall = Convert.ToSingle(Zeile.Substring(20, 5).Trim)
 
             StrReadSync.Close()
             StrRead.Close()
@@ -214,7 +215,7 @@ Namespace Fileformats
                                 If wertString = fehlWert Then
                                     wert = Double.NaN
                                 Else
-                                    wert = StringToDouble(wertString) * 10 ^ (-DezFaktor)
+                                    wert = StringToDouble(wertString) * 10 ^ (DezFaktor)
                                 End If
                                 ts.AddNode(Datum, wert)
                             Next
@@ -224,7 +225,7 @@ Namespace Fileformats
                             If wertString = fehlWert Then
                                 wert = Double.NaN
                             Else
-                                wert = StringToDouble(wertString) * 10 ^ (-DezFaktor)
+                                wert = StringToDouble(wertString) * 10 ^ (DezFaktor)
                             End If
                             For i = 0 To HystemExtran_REG.WerteProZeile(Me.Zeitintervall) - 1
                                 Datum = Zeilendatum.AddMinutes(i * Me.Zeitintervall)
@@ -263,16 +264,17 @@ Namespace Fileformats
 
             Dim dt As Integer
             Dim KontiReihe As TimeSeries
+            Const iDim As Integer = -3        'Dezimalfaktor wird erstmal global auf -3 gesetzt
 
             'Zeitintervall aus ersten und zweiten Zeitschritt der Reihe ermitteln
             dt = DateDiff(DateInterval.Minute, Reihe.Dates(0), Reihe.Dates(1))
 
             'Äquidistante Zeitreihe erzeugen
-            KontiReihe = Reihe.getKontiZRE(dt)
+            KontiReihe = Reihe.ChangeTimestep(BlueM.Wave.TimeSeries.TimeStepTypeEnum.Minute, dt, Reihe.StartDate, BlueM.Wave.TimeSeries.InterpretationEnum.BlockRight)
 
             Dim strwrite As StreamWriter
             Dim iZeile, j, n As Integer
-            Const WerteproZeile As Integer = 12
+            Dim WerteproZeile As Integer = HystemExtran_REG.WerteProZeile(dt)
             strwrite = New StreamWriter(File)
             Dim IntWert As Long
 
@@ -285,7 +287,7 @@ Namespace Fileformats
             'Zeitintervall
             strwrite.Write(dt.ToString.PadLeft(5))
             'Dimension der Zehnerprotenz
-            strwrite.Write((iDim * (-1)).ToString.PadLeft(5))
+            strwrite.Write(iDim.ToString.PadLeft(5))
             'Anfangsdatum
             strwrite.Write(KontiReihe.StartDate.ToString(DatumsformatHystemExtran))
             'Enddatum
@@ -311,7 +313,14 @@ Namespace Fileformats
                 strwrite.Write("TUD  ")
                 strwrite.Write(KontiReihe.Dates(n).ToString(DatumsformatHystemExtran) & " ")
                 For j = 1 To WerteproZeile
-                    IntWert = KontiReihe.Values(n) * 10 ^ (iDim)
+                    If n > KontiReihe.Length - 1 Then
+                        'falls keine Werte mehr vorhanden Zeile mit Fehlwerten auffüllen
+                        IntWert = fehlWert
+                    ElseIf Double.IsNaN(KontiReihe.Values(n)) Then
+                        IntWert = fehlWert
+                    Else
+                        IntWert = KontiReihe.Values(n) * 10 ^ (-iDim)
+                    End If
                     strwrite.Write(IntWert.ToString.PadLeft(5))
                     n = n + 1
                 Next
