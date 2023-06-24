@@ -3,6 +3,9 @@
 
 Version 2.4.1
 -------------
+NEW:
+* Allow deleting multiple time series at the same time from the properties window
+
 CHANGED:
 * Analysis result table: first column is now always frozen #99
 * Analysis function GoodnessOfFit: slight improvement to scaling of volume error for display in radar chart #98
