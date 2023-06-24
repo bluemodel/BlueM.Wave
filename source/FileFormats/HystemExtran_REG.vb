@@ -26,7 +26,6 @@ Namespace Fileformats
     Public Class HystemExtran_REG
         Inherits TimeSeriesFile
 
-        Const DatumsformatHystemExtran As String = "ddMMyyyyHHmmss"
         Const LenString As Integer = 5   'Länge des Strings eines Wertes in der reg/dat-Datei
         Const fehlWert As String = "-9999" 'Fehlwert / Ausfall
 
@@ -102,6 +101,7 @@ Namespace Fileformats
             'Voreinstellungen
             Me.iLineData = 6
             Me.UseUnits = True
+            Me.Dateformat = Helpers.DateFormats("HYSTEMEXTRAN")
 
             Call Me.readSeriesInfo()
 
@@ -163,7 +163,6 @@ Namespace Fileformats
             Dim i, j As Integer
             Dim Zeile, wertString As String
             Dim kennzeichnung As String
-            Dim Stunde, Minute, Tag, Monat, Jahr As Integer
             Dim Datum, Zeilendatum As DateTime
             Dim wert As Double
             Dim sInfo As TimeSeriesInfo
@@ -194,14 +193,12 @@ Namespace Fileformats
                     'Kennzeichnung lesen
                     kennzeichnung = Zeile.Substring(19, 1)
 
-                    'Datum erkennen
-                    '--------------
-                    Jahr = Zeile.Substring(9, 4)
-                    Monat = Zeile.Substring(7, 2)
-                    Tag = Zeile.Substring(5, 2)
-                    Stunde = Zeile.Substring(13, 2)
-                    Minute = Zeile.Substring(15, 2)
-                    Zeilendatum = New System.DateTime(Jahr, Monat, Tag, Stunde, Minute, 0, New System.Globalization.GregorianCalendar())
+                    'Parse date of line
+                    Dim dateString As String = Zeile.Substring(5, 14)
+                    Dim success As Boolean = DateTime.TryParseExact(dateString.Replace(" ", 0), Me.Dateformat, Helpers.DefaultNumberFormat, Globalization.DateTimeStyles.None, Zeilendatum)
+                    If Not success Then
+                        Throw New Exception($"Unable to parse the date '{dateString}'!")
+                    End If
 
                     'Datum und Wert zur Zeitreihe hinzufügen
                     '---------------------------------------
@@ -293,9 +290,9 @@ Namespace Fileformats
             'Dimension der Zehnerprotenz
             strwrite.Write(iDim.ToString.PadLeft(5))
             'Anfangsdatum
-            strwrite.Write(KontiReihe.StartDate.ToString(DatumsformatHystemExtran))
+            strwrite.Write(KontiReihe.StartDate.ToString(Helpers.DateFormats("HYSTEMEXTRAN")))
             'Enddatum
-            strwrite.Write(KontiReihe.EndDate.ToString(DatumsformatHystemExtran))
+            strwrite.Write(KontiReihe.EndDate.ToString(Helpers.DateFormats("HYSTEMEXTRAN")))
             'Anzahl der Kommentarzeilen nach Zeile 2, wird = 3 gesetzt
             strwrite.Write("    3")
             'Art der Daten, N = Niederschlag, Q = Abfluss
@@ -315,7 +312,7 @@ Namespace Fileformats
             n = 0   'n = Anzahl der Zeitreihenwerte
             For iZeile = 0 To (KontiReihe.Length / WerteproZeile) - 1
                 strwrite.Write("TUD  ")
-                strwrite.Write(KontiReihe.Dates(n).ToString(DatumsformatHystemExtran) & " ")
+                strwrite.Write(KontiReihe.Dates(n).ToString(Helpers.DateFormats("HYSTEMEXTRAN")) & " ")
                 For j = 1 To WerteproZeile
                     If n > KontiReihe.Length - 1 Then
                         'falls keine Werte mehr vorhanden Zeile mit Fehlwerten auffüllen

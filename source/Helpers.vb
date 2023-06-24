@@ -83,6 +83,7 @@ Public Module Helpers
             dict.Add("default", "dd.MM.yyyy HH:mm")
             dict.Add("GISMO1", "dd.MM.yyyy HH:mm")
             dict.Add("GISMO2", "yyyyMMdd HH:mm")
+            dict.Add("HYSTEMEXTRAN", "ddMMyyyyHHmmss")
             dict.Add("SMUSI", "dd MM yyyy   HH")
             dict.Add("SWMM", "MM/dd/yyyy HH:mm:ss")
             dict.Add("UVF", "yyyyMMddHHmm") 'eigentlich nur zweistellige Jahreszahl, aber das Jahrhundert wird beim Einlesen trotzdem bestimmt
