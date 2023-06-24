@@ -536,7 +536,7 @@ Public Class Wave
             'a single series will always be exported to a single file
             multifileExport = False
         Else
-            'if mutiple series were selected, it depends on the file type
+            'if multiple series were selected, it depends on the file type
             If TimeSeriesFile.SupportsMultipleSeries(fileType) Then
                 'export all series to a single file
                 multifileExport = False
@@ -631,7 +631,7 @@ Public Class Wave
             Dim SaveFileDialog1 As New SaveFileDialog()
             SaveFileDialog1.Title = "Export to file..."
             SaveFileDialog1.AddExtension = True
-            SaveFileDialog1.OverwritePrompt = True
+            SaveFileDialog1.OverwritePrompt = False
             SaveFileDialog1.SupportMultiDottedExtensions = True
             'suggest the default filename of the first series
             SaveFileDialog1.FileName = defaultFileNames(0)
@@ -693,6 +693,15 @@ Public Class Wave
             If TimeSeriesFile.SupportsMultipleSeries(fileType) Then
                 'export all series to a single file
 
+                'check for existing files and ask to overwrite
+                If IO.File.Exists(filename) Then
+                    Dim resp As MsgBoxResult = MsgBox($"Overwrite existing file {IO.Path.GetFileName(filename)}?", MsgBoxStyle.YesNo Or MsgBoxStyle.Question)
+                    If resp = MsgBoxResult.No Then
+                        'abort
+                        Exit Sub
+                    End If
+                End If
+
                 Log.AddLogEntry(Log.levels.info, $"Exporting {zres.Count} time series to file {filename}...")
 
                 Select Case fileType
@@ -720,6 +729,15 @@ Public Class Wave
                     If multifileExport Then
                         'use default file name
                         filename = IO.Path.Combine(folder, defaultFileNames(i))
+                    End If
+
+                    'check for existing files and ask to overwrite
+                    If IO.File.Exists(filename) Then
+                        Dim resp As MsgBoxResult = MsgBox($"Overwrite existing file {IO.Path.GetFileName(filename)}?", MsgBoxStyle.YesNo Or MsgBoxStyle.Question)
+                        If resp = MsgBoxResult.No Then
+                            'skip this file
+                            Continue For
+                        End If
                     End If
 
                     Log.AddLogEntry(Log.levels.info, $"Exporting time series '{ts.Title}' to file {filename}...")
