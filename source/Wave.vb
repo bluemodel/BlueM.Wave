@@ -608,10 +608,13 @@ Public Class Wave
         'prepare and show save dialog
         If multifileExport Then
             'let the user select a folder
-            Dim dlg As New FolderBrowserDialog()
-            dlg.Description = "Export to folder..."
-            dlg.ShowNewFolderButton = True
-            dlg.RootFolder = Environment.SpecialFolder.MyComputer
+            'use the OpenFileDialog instead of the FolderBrowserDialog for better usability
+            Dim dlg As New OpenFileDialog()
+            dlg.Title = "Export to folder..."
+            dlg.ValidateNames = False
+            dlg.CheckFileExists = False
+            dlg.CheckPathExists = True
+            dlg.FileName = "Select folder"
 
             'Show dialog
             dlgResult = dlg.ShowDialog()
@@ -619,7 +622,7 @@ Public Class Wave
                 Exit Sub
             End If
 
-            folder = dlg.SelectedPath
+            folder = IO.Path.GetDirectoryName(dlg.FileName)
 
             Log.AddLogEntry(Log.levels.info, $"Exporting time series to folder {folder}...")
 
