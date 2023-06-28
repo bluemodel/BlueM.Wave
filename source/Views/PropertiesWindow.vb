@@ -32,10 +32,10 @@ Friend Class PropertiesWindow
     Friend Event SeriesPropertyChanged(id As Integer)
 
     ''' <summary>
-    ''' Is raised when the user deletes a row/series
+    ''' Is raised when the user deletes rows/series
     ''' </summary>
-    ''' <param name="id">Id of the time series that was deleted</param>
-    Friend Event SeriesDeleted(id As Integer)
+    ''' <param name="ids">List of ids of the time series that were deleted</param>
+    Friend Event SeriesDeleted(ids As List(Of Integer))
 
     Public Sub New()
         ' This call is required by the Windows Form Designer.
@@ -117,19 +117,24 @@ Friend Class PropertiesWindow
     End Sub
 
     ''' <summary>
-    ''' Handles the user deleting a row/series
+    ''' Handles the user deleting rows/series using the keyboard
     ''' </summary>
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
     Private Sub DataGridView1_UserDeletingRow(sender As Object, e As DataGridViewRowCancelEventArgs) Handles DataGridView1.UserDeletingRow
-        Dim title As String = CType(e.Row.DataBoundItem, TimeSeries).Title
-        Dim id As Integer = CType(e.Row.DataBoundItem, TimeSeries).Id
-        If MsgBox($"Delete series {title}?", MsgBoxStyle.OkCancel) = MsgBoxResult.Ok Then
-            RaiseEvent SeriesDeleted(id)
-        End If
+        Call DeleteSeries()
         'cancel row deletion because datagridview will be refreshed from outside
         'otherwise, two rows end up being deleted
         e.Cancel = True
+    End Sub
+
+    ''' <summary>
+    ''' Handles the user clicking the delete button
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    Private Sub ToolStripButton_Delete_Click(sender As Object, e As EventArgs) Handles ToolStripButton_Delete.Click
+        Call DeleteSeries()
     End Sub
 
     Private Sub PropertiesDialog_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
@@ -138,7 +143,45 @@ Friend Class PropertiesWindow
         Call Me.Hide()
     End Sub
 
+    ''' <summary>
+    ''' Handles the datagridview selection changed
+    ''' Enables/disables the delete button
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    Private Sub DataGridView1_SelectionChanged(sender As Object, e As EventArgs) Handles DataGridView1.SelectionChanged
+        If Me.DataGridView1.SelectedRows.Count > 0 Then
+            Me.ToolStripButton_Delete.Enabled = True
+        Else
+            Me.ToolStripButton_Delete.Enabled = False
+        End If
+    End Sub
+
+    ''' <summary>
+    ''' Delete all selected rows / series
+    ''' </summary>
+    Private Sub DeleteSeries()
+        'collect titles and ids of all selected rows
+        Dim titles As New List(Of String)
+        Dim ids As New List(Of Integer)
+        For Each row As DataGridViewRow In Me.DataGridView1.SelectedRows
+            Dim ts As TimeSeries = CType(row.DataBoundItem, TimeSeries)
+            If Not IsNothing(ts) Then
+                titles.Add(ts.Title)
+                ids.Add(ts.Id)
+            End If
+        Next
+        If ids.Count > 0 Then
+            'ask for user confirmation
+            Dim result As MsgBoxResult = MsgBox($"Delete {ids.Count} series?{eol}{String.Join(eol, titles)}", MsgBoxStyle.OkCancel Or MsgBoxStyle.Exclamation)
+            If result = MsgBoxResult.Ok Then
+                RaiseEvent SeriesDeleted(ids)
+            End If
+        End If
+    End Sub
+
     Private Overloads Sub Close() Implements IView.Close
         Throw New NotImplementedException()
     End Sub
+
 End Class

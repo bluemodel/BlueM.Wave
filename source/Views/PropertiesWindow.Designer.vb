@@ -28,9 +28,6 @@ Partial Class PropertiesWindow
         Dim DataGridViewCellStyle3 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(PropertiesWindow))
         Me.DataGridView1 = New System.Windows.Forms.DataGridView()
-        Me.ToolStrip1 = New System.Windows.Forms.ToolStrip()
-        Me.ToolStripButton_showStatistics = New System.Windows.Forms.ToolStripButton()
-        Me.TimeSeriesBindingSource = New System.Windows.Forms.BindingSource(Me.components)
         Me.Id = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.TitleDataGridViewTextBoxColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Interpretation = New System.Windows.Forms.DataGridViewComboBoxColumn()
@@ -47,9 +44,13 @@ Partial Class PropertiesWindow
         Me.Maximum = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Sum = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Volume = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.TimeSeriesBindingSource = New System.Windows.Forms.BindingSource(Me.components)
+        Me.ToolStrip1 = New System.Windows.Forms.ToolStrip()
+        Me.ToolStripButton_showStatistics = New System.Windows.Forms.ToolStripButton()
+        Me.ToolStripButton_Delete = New System.Windows.Forms.ToolStripButton()
         CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.ToolStrip1.SuspendLayout()
         CType(Me.TimeSeriesBindingSource, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.ToolStrip1.SuspendLayout()
         Me.SuspendLayout()
         '
         'DataGridView1
@@ -70,30 +71,6 @@ Partial Class PropertiesWindow
         Me.DataGridView1.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders
         Me.DataGridView1.Size = New System.Drawing.Size(439, 222)
         Me.DataGridView1.TabIndex = 1
-        '
-        'ToolStrip1
-        '
-        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButton_showStatistics})
-        Me.ToolStrip1.Location = New System.Drawing.Point(0, 0)
-        Me.ToolStrip1.Name = "ToolStrip1"
-        Me.ToolStrip1.Size = New System.Drawing.Size(464, 25)
-        Me.ToolStrip1.TabIndex = 2
-        Me.ToolStrip1.Text = "ToolStrip1"
-        '
-        'ToolStripButton_showStatistics
-        '
-        Me.ToolStripButton_showStatistics.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right
-        Me.ToolStripButton_showStatistics.CheckOnClick = True
-        Me.ToolStripButton_showStatistics.Image = Global.BlueM.Wave.My.Resources.Resources.table_gear
-        Me.ToolStripButton_showStatistics.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.ToolStripButton_showStatistics.Name = "ToolStripButton_showStatistics"
-        Me.ToolStripButton_showStatistics.Size = New System.Drawing.Size(104, 22)
-        Me.ToolStripButton_showStatistics.Text = "Show statistics"
-        Me.ToolStripButton_showStatistics.ToolTipText = "Show statistics"
-        '
-        'TimeSeriesBindingSource
-        '
-        Me.TimeSeriesBindingSource.DataSource = GetType(BlueM.Wave.TimeSeries)
         '
         'Id
         '
@@ -231,7 +208,42 @@ Partial Class PropertiesWindow
         Me.Volume.ReadOnly = True
         Me.Volume.Visible = False
         '
-        'PropertiesDialog
+        'TimeSeriesBindingSource
+        '
+        Me.TimeSeriesBindingSource.DataSource = GetType(BlueM.Wave.TimeSeries)
+        '
+        'ToolStrip1
+        '
+        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButton_showStatistics, Me.ToolStripButton_Delete})
+        Me.ToolStrip1.Location = New System.Drawing.Point(0, 0)
+        Me.ToolStrip1.Name = "ToolStrip1"
+        Me.ToolStrip1.Size = New System.Drawing.Size(464, 25)
+        Me.ToolStrip1.TabIndex = 2
+        Me.ToolStrip1.Text = "ToolStrip1"
+        '
+        'ToolStripButton_showStatistics
+        '
+        Me.ToolStripButton_showStatistics.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right
+        Me.ToolStripButton_showStatistics.CheckOnClick = True
+        Me.ToolStripButton_showStatistics.Image = Global.BlueM.Wave.My.Resources.Resources.table_gear
+        Me.ToolStripButton_showStatistics.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ToolStripButton_showStatistics.Name = "ToolStripButton_showStatistics"
+        Me.ToolStripButton_showStatistics.Size = New System.Drawing.Size(104, 22)
+        Me.ToolStripButton_showStatistics.Text = "Show statistics"
+        Me.ToolStripButton_showStatistics.ToolTipText = "Show statistics"
+        '
+        'ToolStripButton_Delete
+        '
+        Me.ToolStripButton_Delete.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.ToolStripButton_Delete.Enabled = False
+        Me.ToolStripButton_Delete.Image = Global.BlueM.Wave.My.Resources.Resources.chart_line_delete
+        Me.ToolStripButton_Delete.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ToolStripButton_Delete.Name = "ToolStripButton_Delete"
+        Me.ToolStripButton_Delete.Size = New System.Drawing.Size(23, 22)
+        Me.ToolStripButton_Delete.Text = "ToolStripButton_Delete"
+        Me.ToolStripButton_Delete.ToolTipText = "Delete selected time series"
+        '
+        'PropertiesWindow
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
@@ -241,13 +253,13 @@ Partial Class PropertiesWindow
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.MaximizeBox = False
         Me.MinimumSize = New System.Drawing.Size(300, 200)
-        Me.Name = "PropertiesDialog"
+        Me.Name = "PropertiesWindow"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
         Me.Text = "Time Series Properties"
         CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.TimeSeriesBindingSource, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ToolStrip1.ResumeLayout(False)
         Me.ToolStrip1.PerformLayout()
-        CType(Me.TimeSeriesBindingSource, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -272,4 +284,5 @@ Partial Class PropertiesWindow
     Friend WithEvents Maximum As DataGridViewTextBoxColumn
     Friend WithEvents Sum As DataGridViewTextBoxColumn
     Friend WithEvents Volume As DataGridViewTextBoxColumn
+    Friend WithEvents ToolStripButton_Delete As ToolStripButton
 End Class

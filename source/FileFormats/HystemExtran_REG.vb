@@ -26,9 +26,7 @@ Namespace Fileformats
     Public Class HystemExtran_REG
         Inherits TimeSeriesFile
 
-        Const DatumsformatHystemExtran As String = "ddMMyyyyHHmmss"
         Const LenString As Integer = 5   'Länge des Strings eines Wertes in der reg/dat-Datei
-        Const iDim As Integer = 3        'Dezimalfaktor wird erstmal global auf 3 gesetzt
         Const fehlWert As String = "-9999" 'Fehlwert / Ausfall
 
 #Region "Eigenschaften"
@@ -79,8 +77,10 @@ Namespace Fileformats
                         Return 10
                     Case 720
                         Return 2
+                    Case 1440
+                        Return 10 'TODO: Eigentlich 10 Werte für die ersten zwei Zeilen eines Monats, dann variabel für den Rest des Monats
                     Case Else
-                        Return 0 'this should never occur
+                        Throw New Exception($"Number of entries per line for time step of {dt} minutes is undefined!")
                 End Select
             End Get
         End Property
@@ -101,6 +101,7 @@ Namespace Fileformats
             'Voreinstellungen
             Me.iLineData = 6
             Me.UseUnits = True
+            Me.Dateformat = Helpers.DateFormats("HYSTEMEXTRAN")
 
             Call Me.readSeriesInfo()
 
@@ -138,16 +139,16 @@ Namespace Fileformats
 
             'Einheit steht in 2. Zeile:
             Zeile = StrReadSync.ReadLine.ToString()
-            sInfo.Unit = Zeile.Substring(68, 2)
+            sInfo.Unit = Zeile.Substring(68, 10).Trim()
 
             'store series info
             Me.TimeSeriesInfos.Add(sInfo)
 
             'read additional info
-            Me.DezFaktor = Zeile.Substring(29, 1)
+            Me.DezFaktor = Zeile.Substring(25, 5)
 
             'Zeitintervall auslesen
-            Me.Zeitintervall = Convert.ToSingle(Zeile.Substring(23, 2).Trim)
+            Me.Zeitintervall = Convert.ToSingle(Zeile.Substring(20, 5).Trim)
 
             StrReadSync.Close()
             StrRead.Close()
@@ -162,7 +163,6 @@ Namespace Fileformats
             Dim i, j As Integer
             Dim Zeile, wertString As String
             Dim kennzeichnung As String
-            Dim Stunde, Minute, Tag, Monat, Jahr As Integer
             Dim Datum, Zeilendatum As DateTime
             Dim wert As Double
             Dim sInfo As TimeSeriesInfo
@@ -193,14 +193,12 @@ Namespace Fileformats
                     'Kennzeichnung lesen
                     kennzeichnung = Zeile.Substring(19, 1)
 
-                    'Datum erkennen
-                    '--------------
-                    Jahr = Zeile.Substring(9, 4)
-                    Monat = Zeile.Substring(7, 2)
-                    Tag = Zeile.Substring(5, 2)
-                    Stunde = Zeile.Substring(13, 2)
-                    Minute = Zeile.Substring(15, 2)
-                    Zeilendatum = New System.DateTime(Jahr, Monat, Tag, Stunde, Minute, 0, New System.Globalization.GregorianCalendar())
+                    'Parse date of line
+                    Dim dateString As String = Zeile.Substring(5, 14)
+                    Dim success As Boolean = DateTime.TryParseExact(dateString.Replace(" ", 0), Me.Dateformat, Helpers.DefaultNumberFormat, Globalization.DateTimeStyles.None, Zeilendatum)
+                    If Not success Then
+                        Throw New Exception($"Unable to parse the date '{dateString}'!")
+                    End If
 
                     'Datum und Wert zur Zeitreihe hinzufügen
                     '---------------------------------------
@@ -214,7 +212,7 @@ Namespace Fileformats
                                 If wertString = fehlWert Then
                                     wert = Double.NaN
                                 Else
-                                    wert = StringToDouble(wertString) * 10 ^ (-DezFaktor)
+                                    wert = StringToDouble(wertString) * 10 ^ (DezFaktor)
                                 End If
                                 ts.AddNode(Datum, wert)
                             Next
@@ -224,7 +222,7 @@ Namespace Fileformats
                             If wertString = fehlWert Then
                                 wert = Double.NaN
                             Else
-                                wert = StringToDouble(wertString) * 10 ^ (-DezFaktor)
+                                wert = StringToDouble(wertString) * 10 ^ (DezFaktor)
                             End If
                             For i = 0 To HystemExtran_REG.WerteProZeile(Me.Zeitintervall) - 1
                                 Datum = Zeilendatum.AddMinutes(i * Me.Zeitintervall)
@@ -263,21 +261,26 @@ Namespace Fileformats
 
             Dim dt As Integer
             Dim KontiReihe As TimeSeries
+            Const iDim As Integer = -3        'Dezimalfaktor wird erstmal global auf -3 gesetzt
 
             'Zeitintervall aus ersten und zweiten Zeitschritt der Reihe ermitteln
             dt = DateDiff(DateInterval.Minute, Reihe.Dates(0), Reihe.Dates(1))
 
             'Äquidistante Zeitreihe erzeugen
-            KontiReihe = Reihe.getKontiZRE(dt)
+            KontiReihe = Reihe.ChangeTimestep(BlueM.Wave.TimeSeries.TimeStepTypeEnum.Minute, dt, Reihe.StartDate, BlueM.Wave.TimeSeries.InterpretationEnum.BlockRight)
 
             Dim strwrite As StreamWriter
             Dim iZeile, j, n As Integer
-            Const WerteproZeile As Integer = 12
+            Dim WerteproZeile As Integer = HystemExtran_REG.WerteProZeile(dt)
             strwrite = New StreamWriter(File)
             Dim IntWert As Long
 
             '1. Zeile
-            strwrite.WriteLine("TUD   0 0   0 1 0 0 Messstelle / Station                 0        0           0")
+            Dim title As String = Reihe.Title
+            If title.Length > 30 Then
+                title = title.Substring(0, 30)
+            End If
+            strwrite.WriteLine($"TUD   0 0   0 1 0 0 {title.PadRight(30)}       0        0           0")
 
             '2. Zeile: 
             'Standard
@@ -285,17 +288,17 @@ Namespace Fileformats
             'Zeitintervall
             strwrite.Write(dt.ToString.PadLeft(5))
             'Dimension der Zehnerprotenz
-            strwrite.Write((iDim * (-1)).ToString.PadLeft(5))
+            strwrite.Write(iDim.ToString.PadLeft(5))
             'Anfangsdatum
-            strwrite.Write(KontiReihe.StartDate.ToString(DatumsformatHystemExtran))
+            strwrite.Write(KontiReihe.StartDate.ToString(Helpers.DateFormats("HYSTEMEXTRAN")))
             'Enddatum
-            strwrite.Write(KontiReihe.EndDate.ToString(DatumsformatHystemExtran))
+            strwrite.Write(KontiReihe.EndDate.ToString(Helpers.DateFormats("HYSTEMEXTRAN")))
             'Anzahl der Kommentarzeilen nach Zeile 2, wird = 3 gesetzt
             strwrite.Write("    3")
             'Art der Daten, N = Niederschlag, Q = Abfluss
             strwrite.Write("N    ")
             'Einheit
-            strwrite.WriteLine("MM / IB   ")
+            strwrite.WriteLine(Reihe.Unit.PadRight(10))
 
             '3. Zeile: 
             strwrite.WriteLine("TUD   0 0   0 3 0 0 Beginn         Kommentarzeile 1                        Ende")
@@ -309,9 +312,16 @@ Namespace Fileformats
             n = 0   'n = Anzahl der Zeitreihenwerte
             For iZeile = 0 To (KontiReihe.Length / WerteproZeile) - 1
                 strwrite.Write("TUD  ")
-                strwrite.Write(KontiReihe.Dates(n).ToString(DatumsformatHystemExtran) & " ")
+                strwrite.Write(KontiReihe.Dates(n).ToString(Helpers.DateFormats("HYSTEMEXTRAN")) & " ")
                 For j = 1 To WerteproZeile
-                    IntWert = KontiReihe.Values(n) * 10 ^ (iDim)
+                    If n > KontiReihe.Length - 1 Then
+                        'falls keine Werte mehr vorhanden Zeile mit Fehlwerten auffüllen
+                        IntWert = fehlWert
+                    ElseIf Double.IsNaN(KontiReihe.Values(n)) Then
+                        IntWert = fehlWert
+                    Else
+                        IntWert = KontiReihe.Values(n) * 10 ^ (-iDim)
+                    End If
                     strwrite.Write(IntWert.ToString.PadLeft(5))
                     n = n + 1
                 Next

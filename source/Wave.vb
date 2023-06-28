@@ -420,6 +420,10 @@ Public Class Wave
     ''' <param name="ts">the time series</param>
     Public Sub Import_Series(ByRef ts As TimeSeries)
 
+        If ts.Length = 0 Then
+            Throw New Exception($"Time series '{ts.Title}' has length 0 and cannot be loaded in Wave!")
+        End If
+
         'Store the time series
         Me.AddTimeSeries(ts)
 

@@ -3,9 +3,16 @@
 
 Version 2.4.1
 -------------
+NEW:
+* Added a button for deleting time series to the properties window
+
 CHANGED:
 * Analysis result table: first column is now always frozen #99
 * Analysis function GoodnessOfFit: slight improvement to scaling of volume error for display in radar chart #98
+
+FIXED:
+* Detect empty time series before attempting to import them
+* Some fixes to reading and writing HYSTEM-EXTRAN REG format #106
 
 Version 2.4.0
 -------------
