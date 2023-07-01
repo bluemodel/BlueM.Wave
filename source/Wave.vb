@@ -695,7 +695,7 @@ Public Class Wave
 
                 'check for existing files and ask to overwrite
                 If IO.File.Exists(filename) Then
-                    Dim resp As MsgBoxResult = MsgBox($"Overwrite existing file {IO.Path.GetFileName(filename)}?", MsgBoxStyle.YesNo Or MsgBoxStyle.Question)
+                    Dim resp As MsgBoxResult = MsgBox($"Overwrite existing file {IO.Path.GetFileName(filename)}?", MsgBoxStyle.YesNo Or MsgBoxStyle.Exclamation)
                     If resp = MsgBoxResult.No Then
                         'abort
                         Exit Sub
@@ -733,7 +733,7 @@ Public Class Wave
 
                     'check for existing files and ask to overwrite
                     If IO.File.Exists(filename) Then
-                        Dim resp As MsgBoxResult = MsgBox($"Overwrite existing file {IO.Path.GetFileName(filename)}?", MsgBoxStyle.YesNo Or MsgBoxStyle.Question)
+                        Dim resp As MsgBoxResult = MsgBox($"Overwrite existing file {IO.Path.GetFileName(filename)}?", MsgBoxStyle.YesNo Or MsgBoxStyle.Exclamation)
                         If resp = MsgBoxResult.No Then
                             'skip this file
                             Continue For
