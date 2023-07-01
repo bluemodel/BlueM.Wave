@@ -58,35 +58,35 @@ Friend Module AnalysisFactory
             Case AnalysisFunctions.Calculator
                 oAnalysis = New Calculator()
 
-            Case AnalysisFunctions.ChangeTimestep
-                oAnalysis = New ChangeTimestep()
+                'Case AnalysisFunctions.ChangeTimestep
+                '    oAnalysis = New ChangeTimestep()
 
-            Case AnalysisFunctions.Comparison
-                oAnalysis = New Comparison()
+                'Case AnalysisFunctions.Comparison
+                '    oAnalysis = New Comparison()
 
-            Case AnalysisFunctions.Cumulative
-                oAnalysis = New Cumulative()
+                'Case AnalysisFunctions.Cumulative
+                '    oAnalysis = New Cumulative()
 
-            Case AnalysisFunctions.DoubleSumCurve
-                oAnalysis = New DoubleSumCurve()
+                'Case AnalysisFunctions.DoubleSumCurve
+                '    oAnalysis = New DoubleSumCurve()
 
-            Case AnalysisFunctions.GoodnessOfFit
-                oAnalysis = New GoodnessOfFit()
+                'Case AnalysisFunctions.GoodnessOfFit
+                '    oAnalysis = New GoodnessOfFit()
 
-            Case AnalysisFunctions.Histogram
-                oAnalysis = New Histogram()
+                'Case AnalysisFunctions.Histogram
+                '    oAnalysis = New Histogram()
 
-            Case AnalysisFunctions.LinearRegression
-                oAnalysis = New LinearRegression()
+                'Case AnalysisFunctions.LinearRegression
+                '    oAnalysis = New LinearRegression()
 
-            Case AnalysisFunctions.MonthlyStatistics
-                oAnalysis = New MonthlyStatistics()
+                'Case AnalysisFunctions.MonthlyStatistics
+                '    oAnalysis = New MonthlyStatistics()
 
-            Case AnalysisFunctions.TimestepAnalysis
-                oAnalysis = New TimeStepAnalysis()
+                'Case AnalysisFunctions.TimestepAnalysis
+                '    oAnalysis = New TimeStepAnalysis()
 
-            'Case AnalysisFunctions.TestAnalysis             'EDIT THIS
-            '    oAnalysis = New TestAnalysis()              'EDIT THIS
+                'Case AnalysisFunctions.TestAnalysis             'EDIT THIS
+                '    oAnalysis = New TestAnalysis()              'EDIT THIS
 
             Case Else
                 Throw New Exception("Analysis not found!")

@@ -131,65 +131,7 @@
     <Compile Include="Analysis\AnnualStatistics.vb" />
     <Compile Include="Analysis\Autocorrelation.vb" />
     <Compile Include="Analysis\Calculator.vb" />
-    <Compile Include="Analysis\ChangeTimestep.vb" />
-    <Compile Include="Analysis\CumulativeDialog.Designer.vb">
-      <DependentUpon>CumulativeDialog.vb</DependentUpon>
-    </Compile>
-    <Compile Include="Analysis\CumulativeDialog.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Analysis\ChangeTimestepDialog.Designer.vb">
-      <DependentUpon>ChangeTimestepDialog.vb</DependentUpon>
-    </Compile>
-    <Compile Include="Analysis\ChangeTimestepDialog.vb">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="Analysis\CalculatorVariable.vb" />
-    <Compile Include="Analysis\Comparison.vb" />
-    <Compile Include="Analysis\Comparison_Dialog.Designer.vb">
-      <DependentUpon>Comparison_Dialog.vb</DependentUpon>
-    </Compile>
-    <Compile Include="Analysis\Comparison_Dialog.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Analysis\Cumulative.vb" />
-    <Compile Include="Analysis\DoubleSumCurve.vb" />
-    <Compile Include="Analysis\GoodnessOfFit.vb" />
-    <Compile Include="Analysis\GoodnessOfFit_Dialog.Designer.vb">
-      <DependentUpon>GoodnessOfFit_Dialog.vb</DependentUpon>
-    </Compile>
-    <Compile Include="Analysis\GoodnessOfFit_Dialog.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Analysis\Histogram.vb" />
-    <Compile Include="Analysis\HistogramDialog.Designer.vb">
-      <DependentUpon>HistogramDialog.vb</DependentUpon>
-    </Compile>
-    <Compile Include="Analysis\HistogramDialog.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Analysis\LinearRegression.vb" />
-    <Compile Include="Analysis\LinearRegression_Dialog.Designer.vb">
-      <DependentUpon>LinearRegression_Dialog.vb</DependentUpon>
-    </Compile>
-    <Compile Include="Analysis\LinearRegression_Dialog.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Analysis\MonthlyStatistics.vb" />
-    <Compile Include="Analysis\MonthlyStatisticsDialog.Designer.vb">
-      <DependentUpon>MonthlyStatisticsDialog.vb</DependentUpon>
-    </Compile>
-    <Compile Include="Analysis\MonthlyStatisticsDialog.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Analysis\TestAnalysis.vb" />
-    <Compile Include="Analysis\TimestepAnalysis.vb" />
-    <Compile Include="Analysis\TimestepAnalysisDialog.Designer.vb">
-      <DependentUpon>TimestepAnalysisDialog.vb</DependentUpon>
-    </Compile>
-    <Compile Include="Analysis\TimestepAnalysisDialog.vb">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="Main.vb" />
     <Compile Include="App.vb" />
     <Compile Include="Classes\AxisWrapper.vb" />
@@ -359,30 +301,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Analysis\AnalysisResultTable.resx">
       <DependentUpon>AnalysisResultTable.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Analysis\CumulativeDialog.resx">
-      <DependentUpon>CumulativeDialog.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Analysis\ChangeTimestepDialog.resx">
-      <DependentUpon>ChangeTimestepDialog.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Analysis\Comparison_Dialog.resx">
-      <DependentUpon>Comparison_Dialog.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Analysis\GoodnessOfFit_Dialog.resx">
-      <DependentUpon>GoodnessOfFit_Dialog.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Analysis\HistogramDialog.resx">
-      <DependentUpon>HistogramDialog.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Analysis\LinearRegression_Dialog.resx">
-      <DependentUpon>LinearRegression_Dialog.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Analysis\MonthlyStatisticsDialog.resx">
-      <DependentUpon>MonthlyStatisticsDialog.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Analysis\TimestepAnalysisDialog.resx">
-      <DependentUpon>TimestepAnalysisDialog.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Dialogs\AboutBox.resx">
       <DependentUpon>AboutBox.vb</DependentUpon>
