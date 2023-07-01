@@ -140,18 +140,18 @@ Friend Class WaveController
         AddHandler Me.View.KeyDown, AddressOf KeyDown
 
         'mouse events
-        AddHandler Me.View.TChart1.MouseDown, AddressOf TChart1_MouseDown
-        AddHandler Me.View.TChart1.MouseMove, AddressOf TChart1_MouseMove
-        AddHandler Me.View.TChart1.MouseUp, AddressOf TChart1_MouseUp
+        AddHandler Me.View.TChart1.MouseDown, AddressOf Chart_MouseDown
+        AddHandler Me.View.TChart1.MouseMove, AddressOf Chart_MouseMove
+        AddHandler Me.View.TChart1.MouseUp, AddressOf Chart_MouseUp
         AddHandler Me.View.TChart1.DoubleClick, AddressOf EditChart_Click
 
         AddHandler Me.View.TChart2.MouseDown, AddressOf OverviewChart_MouseDown
         AddHandler Me.View.TChart2.MouseMove, AddressOf OverviewChart_MouseMove
         AddHandler Me.View.TChart2.MouseUp, AddressOf OverviewChart_MouseUp
-        AddHandler Me.View.TChart2.DoubleClick, AddressOf TChart2_DoubleClick
+        AddHandler Me.View.TChart2.DoubleClick, AddressOf OverviewChart_DoubleClick
 
-        AddHandler Me.View.TChart1.MouseWheel, AddressOf TChart1_MouseWheel
-        AddHandler Me.View.TChart2.MouseWheel, AddressOf TChart2_MouseWheel
+        AddHandler Me.View.TChart1.MouseWheel, AddressOf Chart_MouseWheel
+        AddHandler Me.View.TChart2.MouseWheel, AddressOf OverviewChart_MouseWheel
 
         'drag drop events
         AddHandler Me.View.DragEnter, AddressOf Wave_DragEnter
@@ -1458,7 +1458,7 @@ Friend Class WaveController
     ''' Handles main chart MouseDown event
     ''' Start a zooming or panning process, save zoom snapshot
     ''' </summary>
-    Private Sub TChart1_MouseDown(sender As System.Object, e As System.Windows.Forms.MouseEventArgs)
+    Private Sub Chart_MouseDown(sender As System.Object, e As System.Windows.Forms.MouseEventArgs)
 
         If e.Button = Windows.Forms.MouseButtons.Left Then
             'start zoom process
@@ -1504,7 +1504,7 @@ Friend Class WaveController
     ''' </summary>
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
-    Private Sub TChart1_MouseMove(sender As System.Object, e As System.Windows.Forms.MouseEventArgs)
+    Private Sub Chart_MouseMove(sender As System.Object, e As System.Windows.Forms.MouseEventArgs)
 
         If Me.ChartMouseZoomDragging Then
             Dim endValue As Double
@@ -1538,7 +1538,7 @@ Friend Class WaveController
     ''' Handles main chart MouseUp event
     ''' Complete any started zoom or pan process, update cursor
     ''' </summary>
-    Private Sub TChart1_MouseUp(sender As System.Object, e As System.Windows.Forms.MouseEventArgs)
+    Private Sub Chart_MouseUp(sender As System.Object, e As System.Windows.Forms.MouseEventArgs)
         If Me.ChartMouseZoomDragging Then
             'complete the zoom process
             Me.ChartMouseZoomDragging = False
@@ -1584,7 +1584,7 @@ Friend Class WaveController
     ''' </summary>
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
-    Private Sub TChart1_MouseWheel(sender As Object, e As MouseEventArgs)
+    Private Sub Chart_MouseWheel(sender As Object, e As MouseEventArgs)
 
         Try
             ' Update the drawing based upon the mouse wheel scrolling.
@@ -1624,7 +1624,7 @@ Friend Class WaveController
 
         Catch ex As ArgumentOutOfRangeException
             'can happen when zooming out too far, TimeSpan becomes too big or DateTime is not representable
-            Log.AddLogEntry(levels.debug, $"Exception in TChart1_MouseWheel: {ex}")
+            Log.AddLogEntry(levels.debug, $"Exception in Chart_MouseWheel: {ex}")
         End Try
 
     End Sub
@@ -1787,7 +1787,7 @@ Friend Class WaveController
     ''' </summary>
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
-    Private Sub TChart2_MouseWheel(sender As Object, e As MouseEventArgs)
+    Private Sub OverviewChart_MouseWheel(sender As Object, e As MouseEventArgs)
 
         Try
             ' Update the drawing based upon the mouse wheel scrolling.
@@ -1851,14 +1851,14 @@ Friend Class WaveController
 
         Catch ex As ArgumentException
             'can happen when zooming out too far, invalid OADate
-            Log.AddLogEntry(levels.debug, $"Exception in TChart1_MouseWheel: {ex}")
+            Log.AddLogEntry(levels.debug, $"Exception in OverviewChart_MouseWheel: {ex}")
         End Try
 
     End Sub
 
     'TChart2 DoubleClick
     '*******************
-    Private Sub TChart2_DoubleClick(sender As System.Object, e As System.EventArgs)
+    Private Sub OverviewChart_DoubleClick(sender As System.Object, e As System.EventArgs)
         Call Steema.TeeChart.Editor.Show(View.TChart2)
     End Sub
 
