@@ -1798,6 +1798,10 @@ Friend Class WaveController
             'TODO: scale mousewheel zoom with numberOfTextLinesToMove
             Dim numberOfTextLinesToMove As Integer = CInt(e.Delta * SystemInformation.MouseWheelScrollLines / 120)
 
+            If numberOfTextLinesToMove = 0 Then
+                Exit Sub
+            End If
+
             'zoom while centering on mouse
             Dim newStart As Double
             Dim newEnd As Double
@@ -1813,12 +1817,10 @@ Friend Class WaveController
                     newExtent = currentExtent * 1.25
                 End If
 
-                'determine left-right ratio of mouse in relation to color band
-                Dim leftRatio As Double = (mouseOADate - View.colorBandOverview.Start) / currentExtent
-                Dim rightRatio As Double = 1 - leftRatio
+                'set new viewport, centering on mouse
+                newStart = mouseOADate - (newExtent / 2)
+                newEnd = mouseOADate + (newExtent / 2)
 
-                newStart = mouseOADate - newExtent * leftRatio
-                newEnd = mouseOADate + newExtent * rightRatio
             Else
                 'pan by 25% of current extent if mouse is outside of color band
                 Dim delta As Double = currentExtent * 0.25

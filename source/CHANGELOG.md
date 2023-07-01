@@ -14,6 +14,7 @@ CHANGED:
 FIXED:
 * Detect empty time series before attempting to import them
 * Some fixes to reading and writing HYSTEM-EXTRAN REG format #106
+* Mousewheel scroll in the overview chart now centers the zoom on the mouse #95
 
 Version 2.4.0
 -------------
