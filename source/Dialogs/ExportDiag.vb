@@ -56,9 +56,9 @@ Friend Class ExportDiag
         'validate inputs
         If (Me.ListBox_Series.SelectedItems.Count < 1) Then
             MsgBox("Please select at least one series!", MsgBoxStyle.Exclamation)
-            Exit Sub
+            Me.DialogResult = DialogResult.None
         End If
-        Me.DialogResult = Windows.Forms.DialogResult.OK
+
     End Sub
 
     ''' <summary>
