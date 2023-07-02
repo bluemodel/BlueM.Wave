@@ -1,6 +1,11 @@
 ﻿BlueM.Wave Release Notes
 ========================
 
+Version 2.4.2
+-------------
+FIXED:
+* Analysis function GoodnessOfFit: fixed NaN result values causing the result chart to crash #105
+
 Version 2.4.1
 -------------
 NEW:
