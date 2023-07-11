@@ -46,43 +46,6 @@ Friend Class ExportDiag
     End Sub
 
     ''' <summary>
-    ''' Selected format changed
-    ''' </summary>
-    ''' <param name="sender"></param>
-    ''' <param name="e"></param>
-    ''' <remarks></remarks>
-    Private Sub ComboBox_Format_SelectedIndexChanged(sender As System.Object, e As System.EventArgs) Handles ComboBox_Format.SelectedIndexChanged
-
-        Select Case ComboBox_Format.SelectedItem
-
-            Case TimeSeriesFile.FileTypes.ZRE,
-                 TimeSeriesFile.FileTypes.HYSTEM_REG,
-                 TimeSeriesFile.FileTypes.SMUSI_REG,
-                 TimeSeriesFile.FileTypes.SWMM_DAT_MASS,
-                 TimeSeriesFile.FileTypes.SWMM_DAT_TIME,
-                 TimeSeriesFile.FileTypes.BIN,
-                 TimeSeriesFile.FileTypes.UVF,
-                 TimeSeriesFile.FileTypes.ZRXP
-                'Allow selection of a single series
-                Me.ListBox_Series.SelectionMode = SelectionMode.One
-                Me.Button_SelectAll.Enabled = False
-
-            Case TimeSeriesFile.FileTypes.SWMM_INTERFACE,
-                 TimeSeriesFile.FileTypes.CSV,
-                 TimeSeriesFile.FileTypes.DFS0
-                'Allow selection of multiple series
-                Me.ListBox_Series.SelectionMode = SelectionMode.MultiExtended
-                Me.Button_SelectAll.Enabled = True
-
-            Case Else
-                'not yet implemented
-                MsgBox("Not yet implemented!", MsgBoxStyle.Exclamation)
-                ComboBox_Format.SelectedIndex = 0
-        End Select
-
-    End Sub
-
-    ''' <summary>
     ''' OK button pressed
     ''' </summary>
     ''' <param name="sender"></param>
@@ -93,9 +56,9 @@ Friend Class ExportDiag
         'validate inputs
         If (Me.ListBox_Series.SelectedItems.Count < 1) Then
             MsgBox("Please select at least one series!", MsgBoxStyle.Exclamation)
-            Exit Sub
+            Me.DialogResult = DialogResult.None
         End If
-        Me.DialogResult = Windows.Forms.DialogResult.OK
+
     End Sub
 
     ''' <summary>

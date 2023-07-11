@@ -414,8 +414,9 @@ Public MustInherit Class TimeSeriesFile
     End Property
 
     ''' <summary>
-    ''' Flag indicating whether the ImportDialog should be used for this file
+    ''' Indicates whether the ImportDialog should be shown when importing this file format
     ''' </summary>
+    ''' <returns>True if the ImportDialog should be shown when importing this file format</returns>
     Public MustOverride ReadOnly Property UseImportDialog() As Boolean
 
     ''' <summary>
@@ -528,6 +529,83 @@ Public MustInherit Class TimeSeriesFile
     End Sub
 
 #End Region 'Methods
+
+    ''' <summary>
+    ''' Returns the default file extension for a file type
+    ''' </summary>
+    ''' <param name="type">The file type</param>
+    ''' <returns>The file extension as a string (including the leading ".")</returns>
+    Public Shared Function getFileExtension(type As FileTypes) As String
+        Select Case type
+            Case FileTypes.ASC
+                Return FileExtensions.ASC
+            Case FileTypes.BIN
+                Return FileExtensions.BIN
+            Case FileTypes.CSV
+                Return FileExtensions.CSV
+            Case FileTypes.DFS0
+                Return FileExtensions.DFS0
+            Case FileTypes.GISMO_WEL
+                Return FileExtensions.ASC
+            Case FileTypes.HYDRO_AS_DAT
+                Return FileExtensions.DAT
+            Case FileTypes.HYSTEM_WEL
+                Return FileExtensions.WEL
+            Case FileTypes.PRMS_OUT
+                Return FileExtensions.OUT
+            Case FileTypes.HYSTEM_REG
+                Return FileExtensions.REG
+            Case FileTypes.SMUSI_REG
+                Return FileExtensions.REG
+            Case FileTypes.SMB
+                Return FileExtensions.SMB
+            Case FileTypes.SWMM_DAT_MASS
+                Return FileExtensions.DAT
+            Case FileTypes.SWMM_DAT_TIME
+                Return FileExtensions.DAT
+            Case FileTypes.SWMM_INTERFACE
+                Return FileExtensions.TXT
+            Case FileTypes.SWMM_LID_REPORT
+                Return FileExtensions.TXT
+            Case FileTypes.SWMM_OUT
+                Return FileExtensions.OUT
+            Case FileTypes.SYDROSQLITE
+                Return FileExtensions.DB
+            Case FileTypes.TEN
+                Return FileExtensions.TEN
+            Case FileTypes.UVF
+                Return FileExtensions.UVF
+            Case FileTypes.WBL
+                Return FileExtensions.WBL
+            Case FileTypes.WEL
+                Return FileExtensions.WEL
+            Case FileTypes.WVP
+                Return FileExtensions.WVP
+            Case FileTypes.ZRE
+                Return FileExtensions.ZRE
+            Case FileTypes.ZRXP
+                Return FileExtensions.ZRX
+            Case Else
+                Throw New Exception($"File extension of file type {type} is undefined!")
+        End Select
+    End Function
+
+    ''' <summary>
+    ''' Returns whether a file type supports multiple series in one file
+    ''' </summary>
+    ''' <param name="type">The file type</param>
+    ''' <returns>True if the file type supports multiple series</returns>
+    Public Shared Function SupportsMultipleSeries(type As FileTypes) As Boolean
+        Select Case type
+            Case TimeSeriesFile.FileTypes.CSV,
+                 TimeSeriesFile.FileTypes.DFS0,
+                 TimeSeriesFile.FileTypes.SWMM_INTERFACE
+                'TODO: ZRXP does actually also support multiple series, but for simplicity's sake, we assume that it doesn't
+                Return True
+            Case Else
+                Return False
+        End Select
+    End Function
 
     ''' <summary>
     ''' Determines the file type of a file based on the file's extension and contents

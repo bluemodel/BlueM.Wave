@@ -358,11 +358,17 @@ Friend Class GoodnessOfFit
         Dim max_abs_volume_error As Double = 0
         For Each series_title As String In Me.GoFResults.Keys
             For Each gof As GoF In Me.GoFResults(series_title).Values
-                max_abs_volume_error = Math.Max(max_abs_volume_error, gof.abs_volume_error)
+                If Not Double.IsNaN(gof.abs_volume_error) Then
+                    max_abs_volume_error = Math.Max(max_abs_volume_error, gof.abs_volume_error)
+                End If
             Next
         Next
         'add a small buffer
-        max_abs_volume_error *= 1.1
+        If max_abs_volume_error > 0.0 Then
+            max_abs_volume_error *= 1.1
+        Else
+            max_abs_volume_error = 0.1
+        End If
 
         For Each series_title As String In Me.GoFResults.Keys
             For Each kvp As KeyValuePair(Of String, GoF) In Me.GoFResults(series_title)
@@ -371,6 +377,10 @@ Friend Class GoodnessOfFit
 
                 Dim series As New Steema.TeeChart.Styles.Radar(Me.ResultChart.Chart)
                 series.Title = $"{series_title} ({period})"
+
+                'make sure NaN values are handled
+                series.TreatNaNAsNull = True
+                series.TreatNulls = Steema.TeeChart.Styles.TreatNullsStyle.DoNotPaint
 
                 'this is important because otherwise the series nodes are automatically ordered by their x values (angles), potentially messing up the labelling
                 series.XValues.Order = Steema.TeeChart.Styles.ValueListOrder.None

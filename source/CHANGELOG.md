@@ -1,10 +1,16 @@
 ﻿BlueM.Wave Release Notes
 ========================
 
+Version 2.4.2
+-------------
+FIXED:
+* Analysis function GoodnessOfFit: fixed NaN result values causing the result chart to crash #105
+
 Version 2.4.1
 -------------
 NEW:
 * Added a button for deleting time series to the properties window
+* Allow exporting multiple time series at the same time #104
 
 CHANGED:
 * Analysis result table: first column is now always frozen #99
@@ -13,6 +19,7 @@ CHANGED:
 FIXED:
 * Detect empty time series before attempting to import them
 * Some fixes to reading and writing HYSTEM-EXTRAN REG format #106
+* Mousewheel scroll in the overview chart now centers the zoom on the mouse #95
 
 Version 2.4.0
 -------------
