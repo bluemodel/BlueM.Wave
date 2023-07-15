@@ -27,9 +27,11 @@ Friend Class Calculator
     ''' <summary>
     ''' Returns a text description of the analysis function
     ''' </summary>
-    Public Overloads Shared Function Description() As String
-        Return "Performs mathematical operations on time series and returns a new time series as the result."
-    End Function
+    Public Overrides ReadOnly Property Description() As String
+        Get
+            Return "Performs mathematical operations on time series and returns a new time series as the result."
+        End Get
+    End Property
 
     ''' <summary>
     ''' Flag indicating whether the analysis function has a result test
@@ -91,10 +93,21 @@ Friend Class Calculator
     ''' <summary>
     ''' Constructor
     ''' </summary>
-    ''' <param name="seriesList">list of TimeSeries</param>
-    Public Sub New(ByRef seriesList As List(Of TimeSeries))
+    Public Sub New()
+        MyBase.New()
+        'define input parameters
+        MyBase.parameters.Add("timeseries",
+            New AnalysisParameter("Input time series", AnalysisParameter.ParameterTypeEnum.Timeseries, AnalysisParameter.ParameterAmountEnum.Multiple)
+        )
+    End Sub
 
-        Call MyBase.New(seriesList)
+    ''' <summary>
+    ''' Analyse durchführen
+    ''' </summary>
+    Public Overrides Sub ProcessAnalysis()
+
+        'get input parameters
+        Dim seriesList As List(Of TimeSeries) = MyBase.parameters("timeseries").Value
 
         If seriesList.Count > 26 Then
             ' only 26 variable names are available
@@ -106,17 +119,10 @@ Friend Class Calculator
         Dim varNames As New List(Of String) From
             {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"}
         Dim i As Integer = 0
-        For Each ts As TimeSeries In Me.InputTimeSeries
+        For Each ts As TimeSeries In seriesList
             tsVariables.Add(New CalculatorVariable(varNames(i), ts))
             i += 1
         Next
-
-    End Sub
-
-    ''' <summary>
-    ''' Analyse durchführen
-    ''' </summary>
-    Public Overrides Sub ProcessAnalysis()
 
         'show the ChangeTimeStepDialog
         Dim dlg As New CalculatorDialog(Me.tsVariables)
@@ -137,7 +143,7 @@ Friend Class Calculator
 
             'collect unique timestamps
             Dim timestamps As New HashSet(Of DateTime)
-            For Each ts As TimeSeries In Me.InputTimeSeries
+            For Each ts As TimeSeries In seriesList
                 timestamps.UnionWith(ts.Dates)
             Next
 

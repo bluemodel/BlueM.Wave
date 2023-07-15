@@ -40,9 +40,11 @@ Friend Class TimeStepAnalysis
 
 #Region "Properties"
 
-    Public Overloads Shared Function Description() As String
-        Return "Calculates the the timestep between nodes and returns a new timeseries of timestep sizes in the user-specified unit."
-    End Function
+    Public Overrides ReadOnly Property Description As String
+        Get
+            Return "Calculates the the timestep between nodes and returns a new timeseries of timestep sizes in the user-specified unit."
+        End Get
+    End Property
 
     ''' <summary>
     ''' Flag indicating whether the analysis function has a result test

@@ -32,12 +32,16 @@ Friend Class AnnualStatistics
         Public vol As Double
     End Structure
 
+    Private timeseries As TimeSeries
+    Private startOfHydrologicalYear As Integer
     Private stats As Dictionary(Of String, struct_stat)
     Private generateBoundingBoxes As Boolean
 
-    Public Overloads Shared Function Description() As String
-        Return "Calculates annual statistics (min, max, avg, vol) based on hydrological years."
-    End Function
+    Public Overrides ReadOnly Property Description() As String
+        Get
+            Return "Calculates annual statistics (min, max, avg, vol) based on hydrological years."
+        End Get
+    End Property
 
     Public Overrides ReadOnly Property hasResultChart() As Boolean
         Get
@@ -73,12 +77,18 @@ Friend Class AnnualStatistics
         End Get
     End Property
 
-    Public Sub New(ByRef series As List(Of TimeSeries))
-        MyBase.New(series)
-        'Check: expects exactly one series
-        If (series.Count <> 1) Then
-            Throw New Exception("The Annual Statistics analysis requires the selection of exactly 1 time series!")
-        End If
+    Public Sub New()
+        MyBase.New()
+        MyBase.parameters.Add("timeseries",
+            New AnalysisParameter("Input time series", AnalysisParameter.ParameterTypeEnum.Timeseries, AnalysisParameter.ParameterAmountEnum.Single)
+        )
+        MyBase.parameters.Add("startOfHydrologicalYear",
+            New AnalysisParameter("Start of hydrological year", AnalysisParameter.ParameterTypeEnum.Integer, AnalysisParameter.ParameterAmountEnum.Single, def:=11, min:=1, max:=12)
+        )
+        MyBase.parameters.Add("generateBoundingBoxes",
+            New AnalysisParameter("Generate annual bounding boxes (max, avg, min)", AnalysisParameter.ParameterTypeEnum.Boolean, AnalysisParameter.ParameterAmountEnum.Single, def:=False)
+        )
+        'initialize data structures
         stats = New Dictionary(Of String, struct_stat)
     End Sub
 
@@ -97,26 +107,22 @@ Friend Class AnnualStatistics
     Public Overrides Sub ProcessAnalysis()
         Dim hyoseries As Dictionary(Of Integer, TimeSeries)
         Dim year As Integer
-        Dim series As TimeSeries
+        Dim ts As TimeSeries
 
-        Dim dialog As New AnnualStatistics_Dialog()
-        Dim dialogResult As DialogResult = dialog.ShowDialog()
-        If dialogResult <> DialogResult.OK Then
-            Throw New Exception("User abort!")
-        End If
-
-        Dim startMonth As Integer = CType(dialog.ComboBox_startMonth.SelectedItem, Month).number
-        Me.generateBoundingBoxes = dialog.CheckBox_boundingbox.Checked
+        'get input parameters
+        Me.timeseries = MyBase.parameters("timeseries").Value
+        Me.startOfHydrologicalYear = MyBase.parameters("startOfHydrologicalYear").Value
+		Me.generateBoundingBoxes = MyBase.parameters("generateBoundingBoxes").Value
 
         'stats for entire series
-        Me.stats.Add("Entire series", calculateStats(Me.InputTimeSeries(0)))
+        Me.stats.Add("Entire series", calculateStats(Me.timeseries))
 
         'stats for hydrological years
-        hyoseries = Me.InputTimeSeries(0).SplitHydroYears(startMonth)
+        hyoseries = Me.timeseries.SplitHydroYears(Me.startOfHydrologicalYear)
         For Each kvp As KeyValuePair(Of Integer, TimeSeries) In hyoseries
             year = kvp.Key
-            series = kvp.Value
-            Me.stats.Add(year.ToString, calculateStats(series))
+            ts = kvp.Value
+            Me.stats.Add(year.ToString, calculateStats(ts))
         Next
     End Sub
 
@@ -124,7 +130,7 @@ Friend Class AnnualStatistics
     Public Overrides Sub PrepareResults()
 
         'result table
-        Me.ResultTable = New DataTable($"Annual statistics: {Me.InputTimeSeries(0).Title}")
+        Me.ResultTable = New DataTable($"Annual statistics: {Me.timeseries.Title}")
 
         Me.ResultTable.Columns.Add("Period", GetType(String))
         Me.ResultTable.Columns.Add("Start", GetType(DateTime))
@@ -153,7 +159,7 @@ Friend Class AnnualStatistics
         'Generate timeseries with max/avg/min values if checkbox is checked and at least two years are present
         If (Me.generateBoundingBoxes And Me.stats.Count > 2) Then
             'Prepare output timeseries
-            Dim basename As String = Me.InputTimeSeries(0).Title
+            Dim basename As String = Me.timeseries.Title
             Dim timeseries_max As TimeSeries = New TimeSeries(basename & " (annual maximum)")
             Dim timeseries_avg As TimeSeries = New TimeSeries(basename & " (annual average)")
             Dim timeseries_min As TimeSeries = New TimeSeries(basename & " (annual minimum)")
@@ -164,7 +170,7 @@ Friend Class AnnualStatistics
             timeseries_min.Interpretation = TimeSeries.InterpretationEnum.BlockRight
 
             'Transfer unit from input timeseries
-            Dim unit As String = Me.InputTimeSeries(0).Unit
+            Dim unit As String = Me.timeseries.Unit
             timeseries_max.Unit = unit
             timeseries_avg.Unit = unit
             timeseries_min.Unit = unit

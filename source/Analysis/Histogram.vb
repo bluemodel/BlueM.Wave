@@ -37,10 +37,12 @@ Friend Class Histogram
 
     Private results As histogramResults()
 
-    Public Overloads Shared Function Description() As String
-        Return "Divides the entire range of values into a series of user-defined intervals (bins) and calculates the percentage of values falling into each interval." &
+    Public Overrides ReadOnly Property Description As String
+        Get
+            Return "Divides the entire range of values into a series of user-defined intervals (bins) and calculates the percentage of values falling into each interval." &
             "Also estimates a corresponding density function."
-    End Function
+        End Get
+    End Property
 
     ''' <summary>
     ''' Flag, der anzeigt, ob die Analysefunktion einen Ergebnistext erzeugt

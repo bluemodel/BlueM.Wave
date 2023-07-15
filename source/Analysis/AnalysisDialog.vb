@@ -20,17 +20,24 @@
 ''' </summary>
 Friend Class AnalysisDialog
 
+    Friend analysis As Analysis
+    Private isInitializing As Boolean
+    Private seriesList As List(Of TimeSeries)
+
     Public Sub New(seriesList As List(Of TimeSeries))
 
         Call InitializeComponent()
 
-        'Populate combobox with analysis functions
-        Me.ComboBox_Analysis.DataSource = System.Enum.GetValues(GetType(AnalysisFactory.AnalysisFunctions))
+        Me.isInitializing = True
 
-        'Populate listbox with time series
-        For Each series As TimeSeries In seriesList
-            Me.ListBox_Series.Items.Add(series)
-        Next
+        'Populate combobox with analysis functions
+        Me.ListBox_AnalysisFunctions.DataSource = System.Enum.GetValues(GetType(AnalysisFactory.AnalysisFunctions))
+        Me.ListBox_AnalysisFunctions.SelectedIndex = -1
+
+        'store list of time series
+        Me.seriesList = seriesList
+
+        Me.isInitializing = False
 
     End Sub
 
@@ -40,21 +47,8 @@ Friend Class AnalysisDialog
     ''' <returns></returns>
     Friend ReadOnly Property selectedAnalysisFunction() As AnalysisFactory.AnalysisFunctions
         Get
-            Return Me.ComboBox_Analysis.SelectedItem
-        End Get
-    End Property
 
-    ''' <summary>
-    ''' List of selected time series
-    ''' </summary>
-    ''' <returns></returns>
-    Friend ReadOnly Property selectedTimeseries() As List(Of TimeSeries)
-        Get
-            Dim seriesList As New List(Of TimeSeries)()
-            For Each item As Object In Me.ListBox_Series.SelectedItems
-                seriesList.Add(CType(item, TimeSeries).Clone())
-            Next
-            Return seriesList
+            Return Me.ListBox_AnalysisFunctions.SelectedItem
         End Get
     End Property
 
@@ -63,14 +57,88 @@ Friend Class AnalysisDialog
     ''' </summary>
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
-    Private Sub ComboBox_Analysis_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox_Analysis.SelectedIndexChanged
+    Private Sub ComboBox_Analysis_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ListBox_AnalysisFunctions.SelectedIndexChanged
+
+        If Me.isInitializing Then
+            Return
+        End If
+
+        Me.analysis = AnalysisFactory.CreateAnalysis(Me.selectedAnalysisFunction)
+
         Dim url As String
         'update the description and wiki link
-        Me.Label_AnalaysisDescription.Text = AnalysisFactory.getAnalysisDescription(Me.selectedAnalysisFunction)
+        Me.Label_AnalaysisDescription.Text = Me.analysis.Description
         url = "https://wiki.bluemodel.org/index.php/Wave:" & Me.selectedAnalysisFunction.ToString("g")
         Me.LinkLabel_Helplink.Text = url
         Me.LinkLabel_Helplink.Links.Clear()
         Me.LinkLabel_Helplink.Links.Add(0, Me.LinkLabel_Helplink.Text.Length, url)
+
+        'prepare second wizard page
+        Me.Label_AnalysisFunction.Text = Me.selectedAnalysisFunction.ToString("g")
+        Me.TableLayoutPanel1.Controls.Clear()
+        Me.TableLayoutPanel1.RowCount = analysis.parameters.Count
+        Me.TableLayoutPanel1.Visible = True
+        Dim row As Integer = 0
+        For Each param As AnalysisParameter In analysis.parameters.Values
+
+            'label
+            Dim label As New Label()
+            label.Text = param.Description & ":"
+            label.AutoSize = True
+            Me.TableLayoutPanel1.Controls.Add(label)
+            Me.TableLayoutPanel1.SetCellPosition(label, New TableLayoutPanelCellPosition(0, row))
+
+            'input control
+            Dim control As New Control()
+            Select Case param.ParameterType
+
+                Case AnalysisParameter.ParameterTypeEnum.Timeseries
+                    Select Case param.ParameterAmount
+                        Case AnalysisParameter.ParameterAmountEnum.Single
+                            Dim combobox As New ComboBox()
+                            combobox.DropDownStyle = ComboBoxStyle.DropDownList
+                            For Each ts As TimeSeries In Me.seriesList
+                                combobox.Items.Add(ts)
+                            Next
+                            combobox.SelectedIndex = 0
+                            param.Value = combobox.SelectedItem
+                            combobox.DataBindings.Add(New Binding("SelectedItem", param, "Value"))
+                            control = combobox
+
+                        Case AnalysisParameter.ParameterAmountEnum.Multiple
+                            Dim listbox As New ListBox()
+                            listbox.SelectionMode = SelectionMode.MultiExtended
+                            For Each ts As TimeSeries In Me.seriesList
+                                listbox.Items.Add(ts)
+                            Next
+                            listbox.SelectedIndex = -1
+                            param.Value = listbox.SelectedItems
+                            listbox.DataBindings.Add(New Binding("SelectedItems", param, "Value")) 'TODO: cannot bind to a read-only property!
+                            control = listbox
+                    End Select
+
+                Case AnalysisParameter.ParameterTypeEnum.Integer
+                    Dim numericupdown As New NumericUpDown()
+                    numericupdown.Minimum = param.MinValue
+                    numericupdown.Maximum = param.MaxValue
+                    param.Value = param.DefaultValue
+                    numericupdown.DataBindings.Add(New Binding("Value", param, "Value"))
+                    control = numericupdown
+
+                Case AnalysisParameter.ParameterTypeEnum.Boolean
+                    Dim checkbox As New CheckBox()
+                    checkbox.Checked = param.DefaultValue
+                    checkbox.DataBindings.Add(New Binding("Checked", param, "Value", True))
+                    control = checkbox
+
+            End Select
+
+            Me.TableLayoutPanel1.Controls.Add(control)
+            Me.TableLayoutPanel1.SetCellPosition(control, New TableLayoutPanelCellPosition(1, row))
+
+            row += 1
+        Next
+        'Me.TableLayoutPanel1.Refresh()
     End Sub
 
     ''' <summary>
@@ -87,11 +155,32 @@ Friend Class AnalysisDialog
     ''' </summary>
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
-    Private Sub Button_OK_Click(sender As System.Object, e As System.EventArgs) Handles Button_OK.Click
-        'Eingabekontrolle
-        If (Me.ListBox_Series.SelectedItems.Count < 1) Then
-            MsgBox("Please select at least one series!", MsgBoxStyle.Exclamation)
-            Me.DialogResult = Windows.Forms.DialogResult.None
+    Private Sub Button_Next_Click(sender As System.Object, e As System.EventArgs) Handles Button_Next.Click
+        Me.WizardPages1.SelectedIndex += 1
+    End Sub
+
+    Private Sub Button_Previous_Click(sender As Object, e As EventArgs) Handles Button_Previous.Click
+        Me.WizardPages1.SelectedIndex -= 1
+    End Sub
+
+    Private Sub WizardPages1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles WizardPages1.SelectedIndexChanged
+
+        If Me.WizardPages1.SelectedIndex > 0 Then
+            Me.Button_Previous.Enabled = True
+        Else
+            Me.Button_Previous.Enabled = False
+        End If
+
+        If Me.WizardPages1.SelectedIndex < Me.WizardPages1.TabCount - 1 Then
+            Me.Button_Next.Enabled = True
+        Else
+            Me.Button_Next.Enabled = False
+        End If
+
+        If Me.WizardPages1.SelectedIndex = Me.WizardPages1.TabCount - 1 Then
+            Me.Button_Execute.Enabled = True
+        Else
+            Me.Button_Execute.Enabled = False
         End If
     End Sub
 

@@ -32,9 +32,11 @@ Friend Class TestAnalysis
     ''' <summary>
     ''' Returns the description of the analysis function
     ''' </summary>
-    Public Overloads Shared Function Description() As String
-        Return "Write description!"
-    End Function
+    Public Overrides ReadOnly Property Description As String
+        Get
+            Return "Write description!"
+        End Get
+    End Property
 
     ''' <summary>
     ''' Flag indicating whether the analysis function produces a result text

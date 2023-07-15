@@ -42,9 +42,9 @@ Friend MustInherit Class Analysis
 #Region "Eigenschaften"
 
     ''' <summary>
-    ''' List of input TimeSeries for analysis
+    ''' List of analysis parameters
     ''' </summary>
-    Protected InputTimeSeries As List(Of TimeSeries)
+    Friend parameters As Dictionary(Of String, AnalysisParameter)
 
     ''' <summary>
     ''' Result text
@@ -87,11 +87,8 @@ Friend MustInherit Class Analysis
 
     ''' <summary>
     ''' Returns a text description of the analysis function
-    ''' Should be overloaded by inheriting analysis functions
     ''' </summary>
-    Public Shared Function Description() As String
-        Return "No description found"
-    End Function
+    Public MustOverride ReadOnly Property Description() As String
 
     ''' <summary>
     ''' Flag indicating whether the analysis function has a result text
@@ -177,13 +174,10 @@ Friend MustInherit Class Analysis
     ''' <summary>
     ''' Constructor
     ''' </summary>
-    ''' <param name="inputseries">List of input TimeSeries</param>
-    Public Sub New(inputseries As List(Of TimeSeries))
-
-        'Zeitreihen 
-        Me.InputTimeSeries = inputseries
+    Public Sub New()
 
         'Datenstrukturen initialisieren
+        Me.parameters = New Dictionary(Of String, AnalysisParameter)
         Me.ResultValues = New Dictionary(Of String, Double)
         Me.ResultSeries = New List(Of TimeSeries)
     End Sub

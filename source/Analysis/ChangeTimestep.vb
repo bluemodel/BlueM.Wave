@@ -27,9 +27,11 @@ Friend Class ChangeTimestep
     ''' <summary>
     ''' Returns a text description of the analysis function
     ''' </summary>
-    Public Overloads Shared Function Description() As String
-        Return "Make a time series equidistant with a user-specified timestep"
-    End Function
+    Public Overrides ReadOnly Property Description As String
+        Get
+            Return "Make a time series equidistant with a user-specified timestep"
+        End Get
+    End Property
 
     ''' <summary>
     ''' Flag indicating whether the analysis function has a result test
