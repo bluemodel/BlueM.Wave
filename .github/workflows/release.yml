@@ -10,7 +10,8 @@ on:
 jobs:
   build-and-release:
     runs-on: windows-latest
-
+    env:
+      version: "2.4.1" # ${{ github.ref }}
     steps:
 #      - name: Parse version from latest tag
 #        id: version
@@ -29,6 +30,8 @@ jobs:
         run: copy ${{ steps.teechart-license.outputs.file }} "source\My Project\TeeChart.licenses"
       - name: Build Wave
         run: msbuild source\Wave.vbproj -restore -property:Platform=x64 -property:Configuration=Release
+      - name: Create zip archive
+        run: Compress-Archive -Path source\bin\x64\Release\* -DestinationPath BlueM.Wave_${{ env.version }}_x64.zip
       - name: Setup VS Dev Environment
         uses: seanmiddleditch/gha-setup-vsdevenv@v4
       - name: DisableOutOfProc Fix # see https://stackoverflow.com/a/75641385
@@ -50,24 +53,14 @@ jobs:
           Invoke-DisableOutOfProcBuild
       - name: Build installer
         run: devenv.com setup\Wave.Setup.vdproj /build "Release|x64"
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Copy and rename installer file
+        run: copy setup\release\BlueM.Wave_x64.msi BlueM.Wave_${{ env.version }}_x64_setup.msi
+        shell: cmd
+      - name: Release
+        uses: softprops/action-gh-release@v1
         with:
-          tag_name: ${{ github.ref }}
-          release_name: Release ${{ github.ref }}
-          draft: true
-          prerelease: false
-      - name: Upload Release Asset
-        id: upload-release-asset 
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: setup\release\BlueM.Wave_x64.msi
-          #asset_name: BlueM.Wave_${{ steps.version.outputs.full }}_x64.msi
-          asset_name: BlueM.Wave_${{ github.ref }}_x64.msi
-          asset_content_type: application/x-msi
+          draft: true # for testing
+          body: "[Changelog](https://github.com/bluemodel/BlueM.Wave/blob/2.4.1/source/CHANGELOG.md)" # replace with actual tag
+          files: |
+            BlueM.Wave_${{ env.version }}_x64.zip
+            BlueM.Wave_${{ env.version }}_x64_setup.msi
