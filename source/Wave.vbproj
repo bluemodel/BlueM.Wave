@@ -476,10 +476,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="lib\DHI.DFS\DHI.DFS.license.txt" />
-    <Content Include="lib\MathNet\MathNet.Numerics.dll" />
     <Content Include="lib\MathNet\MathNet.Numerics.license.txt" />
-    <Content Include="lib\MathNet\MathNet.Numerics.pdb" />
-    <Content Include="lib\MathNet\MathNet.Numerics.xml" />
     <Content Include="lib\MathParserNet\MathParserNet.dll" />
     <Content Include="lib\MathParserNet\MathParserNet.license.html" />
     <Content Include="lib\modelEAU\modelEAU.SWMM.DllAdapter.dll" />
