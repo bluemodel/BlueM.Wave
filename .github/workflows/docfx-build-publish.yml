@@ -18,6 +18,7 @@ jobs:
       - name: Create empty TeeChart license file
         run: copy /Y nul > "source\My Project\TeeChart.licenses"
         shell: cmd
+      - name: Build Wave
         run: msbuild source\Wave.vbproj -restore -property:Platform=x64 -property:Configuration=Release
       - name: Install DocFX
         run: dotnet tool install -g docfx
