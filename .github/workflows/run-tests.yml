@@ -27,8 +27,6 @@ jobs:
       - name: Create empty TeeChart license file
         run: copy /Y nul > "BlueM.Wave\source\My Project\TeeChart.licenses"
         shell: cmd
-      - name: Build Wave
-        run: msbuild BlueM.Wave\source\Wave.vbproj -restore -property:Platform=x64 -property:Configuration=Debug
       - name: Build Wave.Tests
         run: msbuild BlueM.Wave\tests\Wave.Tests.vbproj -restore -property:Platform=x64 -property:Configuration=Debug
       - name: Run Tests
