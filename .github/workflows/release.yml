@@ -4,18 +4,15 @@ on:
   push:
     tags:
     - "*"
-  pull_request: # for testing only
-    branches: [ master ]
 
 jobs:
   build-and-release:
     runs-on: windows-latest
-    env:
-      version: "2.4.1" # ${{ github.ref }}
+
     steps:
-#      - name: Parse version from latest tag
-#        id: version
-#        uses: release-kit/semver@v2
+      - name: Parse version from latest tag
+        id: version
+        uses: release-kit/semver@v2
       - name: Checkout
         uses: actions/checkout@v3
       - name: Add msbuild to PATH
@@ -31,7 +28,7 @@ jobs:
       - name: Build Wave
         run: msbuild source\Wave.vbproj -restore -property:Platform=x64 -property:Configuration=Release
       - name: Create zip archive
-        run: Compress-Archive -Path source\bin\x64\Release\* -DestinationPath BlueM.Wave_${{ env.version }}_x64.zip
+        run: Compress-Archive -Path source\bin\x64\Release\* -DestinationPath BlueM.Wave_${{ steps.version.outputs.full }}_x64.zip
       - name: Setup VS Dev Environment
         uses: seanmiddleditch/gha-setup-vsdevenv@v4
       - name: DisableOutOfProc Fix # see https://stackoverflow.com/a/75641385
@@ -54,13 +51,14 @@ jobs:
       - name: Build installer
         run: devenv.com setup\Wave.Setup.vdproj /build "Release|x64"
       - name: Copy and rename installer file
-        run: copy setup\release\BlueM.Wave_x64.msi BlueM.Wave_${{ env.version }}_x64_setup.msi
+        run: copy setup\release\BlueM.Wave_x64.msi BlueM.Wave_${{ steps.version.outputs.full }}_x64_setup.msi
         shell: cmd
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
-          draft: true # for testing
-          body: "[Changelog](https://github.com/bluemodel/BlueM.Wave/blob/2.4.1/source/CHANGELOG.md)" # replace with actual tag
+          name: "v${{ steps.version.outputs.full }}"
+          draft: true # for now
+          body: "[Changelog](https://github.com/bluemodel/BlueM.Wave/blob/${{ steps.version.outputs.full }}/source/CHANGELOG.md)" # replace with actual tag
           files: |
-            BlueM.Wave_${{ env.version }}_x64.zip
-            BlueM.Wave_${{ env.version }}_x64_setup.msi
+            BlueM.Wave_${{ steps.version.outputs.full }}_x64.zip
+            BlueM.Wave_${{ steps.version.outputs.full }}_x64_setup.msi
