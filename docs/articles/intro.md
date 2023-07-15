@@ -44,7 +44,12 @@ See the [API documentation](../api/index.md)
 ## Building an installer
 An installer (.msi) for BlueM.Wave can be built using the `Wave.Setup` project located at `setup\Wave.Setup.vdproj` which is a [Visual Studio Installer Project](https://marketplace.visualstudio.com/items?itemName=VisualStudioClient.MicrosoftVisualStudio2022InstallerProjects) (see [docs](https://aka.ms/vdproj-docs)).
 
-To create an installer for a new version:
-* In Visual Studio, select the `Wave.Setup` project and update the `Version` property to the new version number.
+## Releases
+To create a new release:
+* Change the `AssemblyVersion` in the file `source\My Project\AssemblyInfo.vb`.
+* Update the changelog in the file `source\CHANGELOG.md`.
+* In Visual Studio, select the `Wave.Setup` project and update its `Version` property to the new version number.
 * Visual Studio will ask to change the `ProductCode`, answer Yes.
-* Build the solution or just the `Wave.Setup` project in the `Release` solution platform configuration.
+* Commit and push the changes to the master branch together with a new tag consisting of the version number (e.g. "2.4.3")
+
+When a new tag is pushed to the master branch, this triggers a [workflow](https://github.com/bluemodel/BlueM.Wave/actions/workflows/release.yml) which builds Wave and the installer and creates a new draft release on GitHub. This draft release must be published manually.
