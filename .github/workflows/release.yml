@@ -12,9 +12,9 @@ jobs:
     runs-on: windows-latest
 
     steps:
-      - name: Parse version from latest tag
-        id: version
-        uses: release-kit/semver@v2
+#      - name: Parse version from latest tag
+#        id: version
+#        uses: release-kit/semver@v2
       - name: Checkout
         uses: actions/checkout@v3
       - name: Add msbuild to PATH
@@ -68,5 +68,6 @@ jobs:
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: setup\release\BlueM.Wave_x64.msi
-          asset_name: BlueM.Wave_${{ steps.version.outputs.full }}_x64.msi
+          #asset_name: BlueM.Wave_${{ steps.version.outputs.full }}_x64.msi
+          asset_name: BlueM.Wave_${{ github.ref }}_x64.msi
           asset_content_type: application/x-msi
