@@ -6,6 +6,9 @@ Version 2.4.2
 FIXED:
 * Analysis function GoodnessOfFit: fixed NaN result values causing the result chart to crash #105
 
+CHANGED:
+* Updated DHI.DFS to v21.0.0
+
 Version 2.4.1
 -------------
 NEW:
