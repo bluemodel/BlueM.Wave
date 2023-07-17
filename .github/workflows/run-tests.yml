@@ -1,0 +1,39 @@
+name: Run Tests
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  run-tests:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout BlueM.Wave
+        uses: actions/checkout@v3
+        with:
+          path: BlueM.Wave
+      - name: Checkout BlueM.Datasets
+        uses: actions/checkout@v3
+        with: 
+          repository: bluemodel/BlueM.Datasets
+          path: BlueM.Datasets
+      - name: Add msbuild to PATH
+        uses: microsoft/setup-msbuild@v1.1
+      - name: Add vstest to PATH
+        uses: darenm/Setup-VSTest@v1.2
+      - name: Create empty TeeChart license file
+        run: copy /Y nul > "BlueM.Wave\source\My Project\TeeChart.licenses"
+        shell: cmd
+      - name: Build Wave.Tests
+        run: msbuild BlueM.Wave\tests\Wave.Tests.vbproj -restore -property:Platform=x64 -property:Configuration=Debug
+      - name: Run Tests
+        run: |
+          vstest.console.exe BlueM.Wave\tests\bin\x64\Debug\Wave.Tests.dll /Settings:BlueM.Wave\tests\tests.runsettings
+      - name: Upload test results
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-results
+          path: BlueM.Wave\tests\TestResults

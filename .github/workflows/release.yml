@@ -1,0 +1,64 @@
+name: Publish release
+
+on:
+  push:
+    tags:
+    - "*"
+
+jobs:
+  build-and-release:
+    runs-on: windows-latest
+
+    steps:
+      - name: Parse version from latest tag
+        id: version
+        uses: release-kit/semver@v2
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Add msbuild to PATH
+        uses: microsoft/setup-msbuild@v1.1
+      - name: Create TeeChart license file from secret
+        uses: lukasa1993/secret-file-action@v1.0.4
+        id: teechart-license
+        with:
+          secret: ${{ secrets.TEECHARTLICENSE }}
+          b64-decode: false
+      - name: Copy TeeChart license file
+        run: copy ${{ steps.teechart-license.outputs.file }} "source\My Project\TeeChart.licenses"
+      - name: Build Wave
+        run: msbuild source\Wave.vbproj -restore -property:Platform=x64 -property:Configuration=Release
+      - name: Create zip archive
+        run: Compress-Archive -Path source\bin\x64\Release\* -DestinationPath BlueM.Wave_${{ steps.version.outputs.full }}_x64.zip
+      - name: Setup VS Dev Environment
+        uses: seanmiddleditch/gha-setup-vsdevenv@v4
+      - name: DisableOutOfProc Fix # see https://stackoverflow.com/a/75641385
+        run: |
+          function Invoke-DisableOutOfProcBuild {
+            param ();
+            $visualStudioWherePath = ('{0}/Microsoft Visual Studio/Installer/vswhere.exe' -f ${Env:ProgramFiles(x86)});
+            $visualStudioInstallationPath = & $visualStudioWherePath -latest -products 'Microsoft.VisualStudio.Product.Enterprise' -property 'installationPath';
+            $currentWorkingDirectory = ('{0}/Common7/IDE/CommonExtensions/Microsoft/VSI/DisableOutOfProcBuild' -f $visualStudioInstallationPath);
+            
+            Set-Location -Path $currentWorkingDirectory;
+            
+            $disableOutOfProcBuildPath = ('{0}/DisableOutOfProcBuild.exe' -f $currentWorkingDirectory);
+            
+            & $disableOutOfProcBuildPath;
+            
+            return;
+          }
+          Invoke-DisableOutOfProcBuild
+      - name: Build installer
+        run: devenv.com setup\Wave.Setup.vdproj /build "Release|x64"
+      - name: Copy and rename installer file
+        run: copy setup\release\BlueM.Wave_x64.msi BlueM.Wave_${{ steps.version.outputs.full }}_x64_setup.msi
+        shell: cmd
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          name: "v${{ steps.version.outputs.full }}"
+          draft: true # for now
+          body: "[Changelog](https://github.com/bluemodel/BlueM.Wave/blob/${{ steps.version.outputs.full }}/source/CHANGELOG.md)" # replace with actual tag
+          files: |
+            BlueM.Wave_${{ steps.version.outputs.full }}_x64.zip
+            BlueM.Wave_${{ steps.version.outputs.full }}_x64_setup.msi

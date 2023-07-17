@@ -29,7 +29,7 @@ Module Constants
     Public maxOADate As New DateTime(9000, 12, 31, 23, 59, 59)
 
     Public Const urlHelp As String = "https://wiki.bluemodel.org/index.php/Wave"
-    Public Const urlUpdateCheck As String = "https://downloads.bluemodel.org/BlueM.Wave/.version-latest"
-    Public Const urlDownload As String = "https://downloads.bluemodel.org/?dir=BlueM.Wave"
+    Public Const urlUpdateCheck As String = "https://api.github.com/repos/bluemodel/BlueM.Wave/releases/latest"
+    Public Const urlDownload As String = "https://github.com/bluemodel/BlueM.Wave/releases/latest"
 
 End Module

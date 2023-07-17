@@ -15,14 +15,9 @@ jobs:
         uses: actions/checkout@v3
       - name: Add msbuild to PATH
         uses: microsoft/setup-msbuild@v1.1
-      - name: Create TeeChart license file from secret
-        uses: lukasa1993/secret-file-action@v1.0.4
-        id: teechart-license
-        with:
-          secret: ${{ secrets.TEECHARTLICENSE }}
-          b64-decode: false
-      - name: Copy TeeChart license file
-        run: copy ${{ steps.teechart-license.outputs.file }} "source\My Project\TeeChart.licenses"
+      - name: Create empty TeeChart license file
+        run: copy /Y nul > "source\My Project\TeeChart.licenses"
+        shell: cmd
       - name: Build Wave
         run: msbuild source\Wave.vbproj -restore -property:Platform=x64 -property:Configuration=Release
       - name: Install DocFX

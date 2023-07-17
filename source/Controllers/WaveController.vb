@@ -220,7 +220,7 @@ Friend Class WaveController
     Private Async Sub View_Load(sender As System.Object, e As System.EventArgs)
         'Check for update
         Try
-            Dim latestVersion As Version = Await GetLatestVersion()
+            Dim latestVersion As Version = Await GetLatestReleaseVersion()
             If CurrentVersion < latestVersion Then
                 'show update available notification
                 View.ToolStripButton_UpdateNotification.Visible = True
@@ -1191,14 +1191,14 @@ Friend Class WaveController
     ''' </summary>
     Private Async Sub CheckForUpdate_Click(sender As Object, e As EventArgs)
         Try
-            'get latest version from server
-            Dim latestVersion As Version = Await GetLatestVersion()
+            'get latest release version
+            Dim latestVersion As Version = Await GetLatestReleaseVersion()
 
             'compare versions
             If CurrentVersion < latestVersion Then
                 'Update is available
                 View.ToolStripButton_UpdateNotification.Visible = True
-                Dim resp As MsgBoxResult = MsgBox($"A new version {latestVersion} is available!{eol}Click OK to go to downloads.bluemodel.org to download it.", MsgBoxStyle.OkCancel Or MsgBoxStyle.Exclamation)
+                Dim resp As MsgBoxResult = MsgBox($"A new version {latestVersion} is available!{eol}Click OK to go to the download page.", MsgBoxStyle.OkCancel Or MsgBoxStyle.Exclamation)
                 If resp = MsgBoxResult.Ok Then
                     Process.Start(urlDownload)
                 End If
@@ -1214,18 +1214,22 @@ Friend Class WaveController
     End Sub
 
     ''' <summary>
-    ''' Checks for a newer version on the server
+    ''' Gets the version of the latest release from the GitHub API
     ''' </summary>
-    ''' <returns>True if a newer version is available</returns>
-    Private Async Function GetLatestVersion() As Threading.Tasks.Task(Of Version)
+    ''' <returns>Version of the latest release</returns>
+    Private Async Function GetLatestReleaseVersion() As Threading.Tasks.Task(Of Version)
 
-        'retrieve latest version number from server
+        'retrieve version number of latest release from GitHub API
         Dim client As New Net.Http.HttpClient()
-        Dim s As String = Await client.GetStringAsync(urlUpdateCheck)
-        Dim latestVersion As New Version(s)
+        'GitHub API requires a user agent request header
+        client.DefaultRequestHeaders.UserAgent.Clear()
+        client.DefaultRequestHeaders.UserAgent.Add(New Net.Http.Headers.ProductInfoHeaderValue(New Net.Http.Headers.ProductHeaderValue("BlueM.Wave")))
+        Dim json As String = Await client.GetStringAsync(urlUpdateCheck)
+        Dim response As Dictionary(Of String, Object) = Newtonsoft.Json.JsonConvert.DeserializeObject(Of Dictionary(Of String, Object))(json)
+        Dim latestVersion As New Version(response("tag_name"))
 #If Not DEBUG Then
         'TODO: Logging is not thread-safe and causes an exception in debug mode!
-        Log.AddLogEntry(Log.levels.debug, "CheckUpdate: Latest version on server: " & latestVersion.ToString())
+        Log.AddLogEntry(Log.levels.debug, "CheckUpdate: Latest release version: " & latestVersion.ToString())
 #End If
 
         Return latestVersion
