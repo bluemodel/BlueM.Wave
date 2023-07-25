@@ -1,6 +1,11 @@
 ﻿BlueM.Wave Release Notes
 ========================
 
+Version 2.4.3
+-------------
+FIXED:
+* Fixed reading WBL files where the series indices provided in the accompanying WELINFO file are not 0-based
+
 Version 2.4.2
 -------------
 FIXED:
