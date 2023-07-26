@@ -6,6 +6,9 @@ Version 2.4.3
 FIXED:
 * Fixed reading WBL files where the series indices provided in the accompanying WELINFO file are not 0-based
 
+CHANGED:
+* The update check and the link to the download page now point to GitHub releases
+
 Version 2.4.2
 -------------
 FIXED:
