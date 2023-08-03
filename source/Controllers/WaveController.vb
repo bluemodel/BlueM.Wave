@@ -2124,9 +2124,10 @@ Friend Class WaveController
     ''' <param name="ts">Die anzuzeigende Zeitreihe</param>
     Private Sub SeriesAdded(ts As TimeSeries)
 
-        'Remove nodes if necessary (#68)
+        'Check for extreme dates not supported by TChart
+        'and if necessary create a copy with removed nodes for display purposes (#68)
         If ts.StartDate < Constants.minOADate Then
-            ts = ts.Clone()
+            ts = ts.Clone(preserveId:=True)
             Dim t_too_early = New List(Of DateTime)
             For Each t As DateTime In ts.Dates
                 If t < Constants.minOADate Then
@@ -2141,7 +2142,7 @@ Friend Class WaveController
             Log.AddLogEntry(Log.levels.warning, $"Unable to display {t_too_early.Count} nodes between {t_too_early.First().ToString(Helpers.CurrentDateFormat)} and {t_too_early.Last().ToString(Helpers.CurrentDateFormat)}!")
         End If
         If ts.EndDate > Constants.maxOADate Then
-            ts = ts.Clone()
+            ts = ts.Clone(preserveId:=True)
             Dim t_too_late As New List(Of DateTime)
             For Each t As DateTime In ts.Dates.Reverse()
                 If t > Constants.maxOADate Then

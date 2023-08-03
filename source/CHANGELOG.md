@@ -1,6 +1,12 @@
 ﻿BlueM.Wave Release Notes
 ========================
 
+Version 2.4.4
+-------------
+FIXED:
+* Fixed issue with deleting series or editing series properties in the properties window, 
+  this only affected series with extreme dates that cannot be entirely displayed in the chart #68
+
 Version 2.4.3
 -------------
 FIXED:

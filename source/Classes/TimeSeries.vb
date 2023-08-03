@@ -465,8 +465,12 @@ Public Class TimeSeries
     ''' <summary>
     ''' Clones a time series
     ''' </summary>
-    Public Function Clone() As TimeSeries
+    ''' <param name="preserveId">if True, the Id is preserved, otherwise a new unique Id is assigned (default)</param>
+    Public Function Clone(Optional preserveId As Boolean = False) As TimeSeries
         Dim target As New TimeSeries(Me.Title)
+        If preserveId Then
+            target._id = Me.Id
+        End If
         target.Unit = Me.Unit
         target.Objekt = Me.Objekt
         target.Type = Me.Type
