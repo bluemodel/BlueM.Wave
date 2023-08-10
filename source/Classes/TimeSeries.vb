@@ -397,32 +397,48 @@ Public Class TimeSeries
     ''' </summary>
     ''' <value></value>
     ''' <returns></returns>
-    ''' <remarks>If the unit is per second (ends with "/s"), values are integrated over time using a linear interpretation. 
-    ''' Otherwise, NaN is returned.</remarks>
+    ''' <remarks>
+    ''' Only works for time-based units that end with "/s", "/min", "/h" or "/d". Otherwise returns NaN.
+    ''' An exception is if the interpretation is CumulativePerTimestep, then the volume is by definition equal to the sum, independently of the unit
+    ''' </remarks>
     Public ReadOnly Property Volume() As Double
         Get
-            Dim v0, v1, vol As Double
-            Dim t0, t1 As DateTime
-            Dim dt As TimeSpan
+            Dim v1, v2, vol As Double
+            Dim t1, t2 As DateTime
 
-            If Me.Unit.ToLower.EndsWith("/s") And Me.NodesClean.Count > 0 Then
-                Log.AddLogEntry(Log.levels.debug, "Calculating volume by integrating over time for series " & Me.Title)
-                t0 = Me.NodesClean.First().Key
-                v0 = Me.NodesClean.First().Value
-                vol = 0.0
-                For Each node As KeyValuePair(Of Date, Double) In Me.NodesClean
-                    t1 = node.Key
-                    v1 = node.Value
-                    If t1 > t0 Then 'start at the second node
-                        dt = t1 - t0
-                        vol += (v0 + v1) / 2 * dt.TotalSeconds 'linear interpretation!
-                    End If
-                    t0 = t1
-                    v0 = v1
-                Next
-            Else
-                vol = Double.NaN
+            If Me.NodesClean.Count = 0 Then
+                Return Double.NaN
             End If
+
+            If Me.Interpretation = InterpretationEnum.CumulativePerTimestep Then
+                Return Me.Sum
+            End If
+
+            'determine timestep type of unit
+            Dim unitTimesteptype As TimeStepTypeEnum
+            If Me.Unit.ToLower.EndsWith("/s") Then
+                unitTimesteptype = TimeStepTypeEnum.Second
+            ElseIf Me.Unit.ToLower.EndsWith("/min") Then
+                unitTimesteptype = TimeStepTypeEnum.Minute
+            ElseIf Me.Unit.ToLower.EndsWith("/h") Then
+                unitTimesteptype = TimeStepTypeEnum.Hour
+            ElseIf Me.Unit.ToLower.EndsWith("/d") Then
+                unitTimesteptype = TimeStepTypeEnum.Day
+            Else
+                'not a unit supported for volume calculation
+                Return Double.NaN
+            End If
+
+            'Integrate volume between each non-NaN node and cumulate
+            'TODO: we actually need to consider NaN-nodes!
+            vol = 0.0
+            For i As Integer = 1 To Me.NodesClean.Count - 1
+                t1 = Me.NodesClean.Keys(i - 1)
+                v1 = Me.NodesClean.Values(i - 1)
+                t2 = Me.NodesClean.Keys(i)
+                v2 = Me.NodesClean.Values(i)
+                vol += TimeSeries.IntegrateVolume(t1, v1, t2, v2, Me.Interpretation, unitTimesteptype)
+            Next
 
             Return vol
         End Get
@@ -1303,30 +1319,54 @@ Public Class TimeSeries
     End Function
 
     ''' <summary>
-    ''' Integrates the volume between two nodes while respecting the interpretation
-    ''' Assumes a unit in /s
+    ''' Integrates the volume between two nodes while respecting interpretation and unit
     ''' </summary>
     ''' <param name="t1">First timestamp</param>
     ''' <param name="v1">First value</param>
     ''' <param name="t2">Second timestamp</param>
     ''' <param name="v2">Second value</param>
     ''' <param name="interpretation">Interpretation to use</param>
+    ''' <param name="unitTimeStepType">TimeStepType of the unit, default is <see cref="TimeStepTypeEnum.Second">per second</see></param>
     ''' <returns>The volume</returns>
-    Public Shared Function IntegrateVolume(t1 As DateTime, v1 As Double, t2 As DateTime, v2 As Double, interpretation As InterpretationEnum) As Double
-        Dim volume As Double
+    Public Shared Function IntegrateVolume(t1 As DateTime, v1 As Double, t2 As DateTime, v2 As Double, interpretation As InterpretationEnum, Optional unitTimeStepType As TimeStepTypeEnum = TimeStepTypeEnum.Second) As Double
+
+        Dim value, volume As Double
         Dim dt As TimeSpan = t2 - t1
+
+        'determine applicable value depending on interpretation
         Select Case interpretation
             Case InterpretationEnum.Instantaneous
-                volume = (v1 + v2) / 2 * dt.TotalSeconds
+                value = (v1 + v2) / 2
             Case InterpretationEnum.BlockRight
-                volume = v1 * dt.TotalSeconds
+                value = v1
             Case InterpretationEnum.BlockLeft,
                  InterpretationEnum.CumulativePerTimestep
-                volume = v2 * dt.TotalSeconds
+                value = v2
             Case Else
                 Throw New NotImplementedException($"Integration between nodes with interpretation {[Enum].GetName(GetType(InterpretationEnum), interpretation)} is currently not implemented!")
         End Select
+
+        If interpretation = InterpretationEnum.CumulativePerTimestep Then
+            'value is by definition already the sum/volume, no need to consider the time span
+            volume = value
+        Else
+            'mutiply value by time span to get volume
+            Select Case unitTimeStepType
+                Case TimeStepTypeEnum.Second
+                    volume = value * dt.TotalSeconds
+                Case TimeStepTypeEnum.Minute
+                    volume = value * dt.TotalMinutes
+                Case TimeStepTypeEnum.Hour
+                    volume = value * dt.TotalHours
+                Case TimeStepTypeEnum.Day
+                    volume = value * dt.TotalDays
+                Case Else
+                    Throw New NotImplementedException($"Integration between nodes with unit time step type {[Enum].GetName(GetType(TimeStepTypeEnum), unitTimeStepType)} is currently not implemented!")
+            End Select
+        End If
+
         Return volume
+
     End Function
 
     ''' <summary>
