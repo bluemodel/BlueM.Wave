@@ -41,6 +41,23 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
     End Sub
 
     ''' <summary>
+    ''' Volume for time series with unit m³/s, interpretation Instantaneous, with NaN
+    ''' </summary>
+    <TestMethod()> Public Sub TestVolume_m3s_instantaneous_nan()
+
+        Dim ts As New TimeSeries()
+        ts.Unit = "m³/s"
+        ts.Interpretation = TimeSeries.InterpretationEnum.Instantaneous
+        ts.AddNode(New DateTime(2000, 1, 1), 1.0)
+        ts.AddNode(New DateTime(2000, 1, 2), Double.NaN)
+        ts.AddNode(New DateTime(2000, 1, 3), 3.0)
+        ts.AddNode(New DateTime(2000, 1, 4), 2.0)
+
+        Assert.AreEqual(216_000.0, ts.Volume)
+
+    End Sub
+
+    ''' <summary>
     ''' Volume for time series with unit m³/s, interpretation BlockRight
     ''' </summary>
     <TestMethod()> Public Sub TestVolume_m3s_blockright()
@@ -58,6 +75,23 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
     End Sub
 
     ''' <summary>
+    ''' Volume for time series with unit m³/s, interpretation BlockRight, with NaN
+    ''' </summary>
+    <TestMethod()> Public Sub TestVolume_m3s_blockright_nan()
+
+        Dim ts As New TimeSeries()
+        ts.Unit = "m³/s"
+        ts.Interpretation = TimeSeries.InterpretationEnum.BlockRight
+        ts.AddNode(New DateTime(2000, 1, 1), 1.0)
+        ts.AddNode(New DateTime(2000, 1, 2), Double.NaN)
+        ts.AddNode(New DateTime(2000, 1, 3), 3.0)
+        ts.AddNode(New DateTime(2000, 1, 4), 2.0)
+
+        Assert.AreEqual(345_600.0, ts.Volume)
+
+    End Sub
+
+    ''' <summary>
     ''' Volume for time series with unit m³/s, interpretation BlockLeft
     ''' </summary>
     <TestMethod()> Public Sub TestVolume_m3s_blockleft()
@@ -71,6 +105,23 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
         ts.AddNode(New DateTime(2000, 1, 4), 2.0)
 
         Assert.AreEqual(604_800.0, ts.Volume)
+
+    End Sub
+
+    ''' <summary>
+    ''' Volume for time series with unit m³/s, interpretation BlockLeft, with NaN
+    ''' </summary>
+    <TestMethod()> Public Sub TestVolume_m3s_blockleft_nan()
+
+        Dim ts As New TimeSeries()
+        ts.Unit = "m³/s"
+        ts.Interpretation = TimeSeries.InterpretationEnum.BlockLeft
+        ts.AddNode(New DateTime(2000, 1, 1), 1.0)
+        ts.AddNode(New DateTime(2000, 1, 2), Double.NaN)
+        ts.AddNode(New DateTime(2000, 1, 3), 3.0)
+        ts.AddNode(New DateTime(2000, 1, 4), 2.0)
+
+        Assert.AreEqual(432_000.0, ts.Volume)
 
     End Sub
 
