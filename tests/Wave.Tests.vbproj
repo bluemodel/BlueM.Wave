@@ -89,6 +89,7 @@
     <Import Include="Microsoft.VisualStudio.TestTools.UnitTesting" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="TestTimeseriesVolume.vb" />
     <Compile Include="TestData.vb" />
     <Compile Include="TestChangeTimestep.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
