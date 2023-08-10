@@ -404,7 +404,7 @@ Public Class TimeSeries
     ''' </remarks>
     Public ReadOnly Property Volume() As Double
         Get
-            Dim v1, v2, vol As Double
+            Dim v1, v2, partial_volume, total_volume As Double
             Dim t1, t2 As DateTime
 
             If Me.NodesClean.Count = 0 Then
@@ -432,18 +432,20 @@ Public Class TimeSeries
                 Return Double.NaN
             End If
 
-            'Integrate volume between each non-NaN node and cumulate
-            'TODO: we actually need to consider NaN-nodes!
-            vol = 0.0
-            For i As Integer = 1 To Me.NodesClean.Count - 1
-                t1 = Me.NodesClean.Keys(i - 1)
-                v1 = Me.NodesClean.Values(i - 1)
-                t2 = Me.NodesClean.Keys(i)
-                v2 = Me.NodesClean.Values(i)
-                vol += TimeSeries.IntegrateVolume(t1, v1, t2, v2, Me.Interpretation, unitTimesteptype)
+            'Integrate volume between each node and cumulate
+            total_volume = 0.0
+            For i As Integer = 1 To Me.Length - 1
+                t1 = Me.Nodes.Keys(i - 1)
+                v1 = Me.Nodes.Values(i - 1)
+                t2 = Me.Nodes.Keys(i)
+                v2 = Me.Nodes.Values(i)
+                partial_volume = TimeSeries.IntegrateVolume(t1, v1, t2, v2, Me.Interpretation, unitTimesteptype)
+                If Not Double.IsNaN(partial_volume) Then
+                    total_volume += partial_volume
+                End If
             Next
 
-            Return vol
+            Return total_volume
         End Get
     End Property
 
