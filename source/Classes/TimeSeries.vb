@@ -398,8 +398,9 @@ Public Class TimeSeries
     ''' <value></value>
     ''' <returns></returns>
     ''' <remarks>
-    ''' Only works for time-based units that end with "/s", "/min", "/h" or "/d". Otherwise returns NaN.
-    ''' An exception is if the interpretation is CumulativePerTimestep, then the volume is by definition equal to the sum, independently of the unit
+    ''' Only works for time-based units that end with "/s", "/min", "/h" or "/d"
+    ''' and interpretations Instantaneous, BlockLeft and BlockRight. 
+    ''' Otherwise returns NaN.
     ''' </remarks>
     Public ReadOnly Property Volume() As Double
         Get
@@ -410,8 +411,10 @@ Public Class TimeSeries
                 Return Double.NaN
             End If
 
-            If Me.Interpretation = InterpretationEnum.CumulativePerTimestep Then
-                Return Me.Sum
+            If Me.Interpretation = InterpretationEnum.CumulativePerTimestep _
+                Or Me.Interpretation = InterpretationEnum.Cumulative _
+                Or Me.Interpretation = InterpretationEnum.Undefined Then
+                Return Double.NaN
             End If
 
             'determine timestep type of unit
