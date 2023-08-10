@@ -24,12 +24,12 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
 <TestClass()> Public Class TestTimeseriesVolume
 
     ''' <summary>
-    ''' Volume for time series with unit m³/s, interpretation Instantaneous
+    ''' Volume for time series with unit mÂ³/s, interpretation Instantaneous
     ''' </summary>
     <TestMethod()> Public Sub TestVolume_m3s_instantaneous()
 
         Dim ts As New TimeSeries()
-        ts.Unit = "m³/s"
+        ts.Unit = "mÂ³/s"
         ts.Interpretation = TimeSeries.InterpretationEnum.Instantaneous
         ts.AddNode(New DateTime(2000, 1, 1), 1.0)
         ts.AddNode(New DateTime(2000, 1, 2), 2.0)
@@ -41,12 +41,12 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
     End Sub
 
     ''' <summary>
-    ''' Volume for time series with unit m³/s, interpretation Instantaneous, with NaN
+    ''' Volume for time series with unit mÂ³/s, interpretation Instantaneous, with NaN
     ''' </summary>
     <TestMethod()> Public Sub TestVolume_m3s_instantaneous_nan()
 
         Dim ts As New TimeSeries()
-        ts.Unit = "m³/s"
+        ts.Unit = "mÂ³/s"
         ts.Interpretation = TimeSeries.InterpretationEnum.Instantaneous
         ts.AddNode(New DateTime(2000, 1, 1), 1.0)
         ts.AddNode(New DateTime(2000, 1, 2), Double.NaN)
@@ -58,12 +58,12 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
     End Sub
 
     ''' <summary>
-    ''' Volume for time series with unit m³/s, interpretation BlockRight
+    ''' Volume for time series with unit mÂ³/s, interpretation BlockRight
     ''' </summary>
     <TestMethod()> Public Sub TestVolume_m3s_blockright()
 
         Dim ts As New TimeSeries()
-        ts.Unit = "m³/s"
+        ts.Unit = "mÂ³/s"
         ts.Interpretation = TimeSeries.InterpretationEnum.BlockRight
         ts.AddNode(New DateTime(2000, 1, 1), 1.0)
         ts.AddNode(New DateTime(2000, 1, 2), 2.0)
@@ -75,12 +75,12 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
     End Sub
 
     ''' <summary>
-    ''' Volume for time series with unit m³/s, interpretation BlockRight, with NaN
+    ''' Volume for time series with unit mÂ³/s, interpretation BlockRight, with NaN
     ''' </summary>
     <TestMethod()> Public Sub TestVolume_m3s_blockright_nan()
 
         Dim ts As New TimeSeries()
-        ts.Unit = "m³/s"
+        ts.Unit = "mÂ³/s"
         ts.Interpretation = TimeSeries.InterpretationEnum.BlockRight
         ts.AddNode(New DateTime(2000, 1, 1), 1.0)
         ts.AddNode(New DateTime(2000, 1, 2), Double.NaN)
@@ -92,12 +92,12 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
     End Sub
 
     ''' <summary>
-    ''' Volume for time series with unit m³/s, interpretation BlockLeft
+    ''' Volume for time series with unit mÂ³/s, interpretation BlockLeft
     ''' </summary>
     <TestMethod()> Public Sub TestVolume_m3s_blockleft()
 
         Dim ts As New TimeSeries()
-        ts.Unit = "m³/s"
+        ts.Unit = "mÂ³/s"
         ts.Interpretation = TimeSeries.InterpretationEnum.BlockLeft
         ts.AddNode(New DateTime(2000, 1, 1), 1.0)
         ts.AddNode(New DateTime(2000, 1, 2), 2.0)
@@ -109,12 +109,12 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
     End Sub
 
     ''' <summary>
-    ''' Volume for time series with unit m³/s, interpretation BlockLeft, with NaN
+    ''' Volume for time series with unit mÂ³/s, interpretation BlockLeft, with NaN
     ''' </summary>
     <TestMethod()> Public Sub TestVolume_m3s_blockleft_nan()
 
         Dim ts As New TimeSeries()
-        ts.Unit = "m³/s"
+        ts.Unit = "mÂ³/s"
         ts.Interpretation = TimeSeries.InterpretationEnum.BlockLeft
         ts.AddNode(New DateTime(2000, 1, 1), 1.0)
         ts.AddNode(New DateTime(2000, 1, 2), Double.NaN)
