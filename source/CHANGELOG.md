@@ -3,12 +3,11 @@
 
 Version 2.4.4
 -------------
-NEW:
-* Volume is now also calculated for time series with units that end with "/min", "/h" and "/d", 
-  in addition to the already supported units ending with "/s" #112
 FIXED:
-* Fixed calculation of volume not considering time series interpretation #112
-* Fixed calculation of volume not properly considering NaN nodes #112
+* Improved calculation of time series volume #112:
+  * more supported units: "/s", "/min", "/h" and "/d" 
+  * proper consideration of interpretation
+  * any NaN nodes now cause the adjacent time steps (depending on the interpretation) to not contribute to the volume
 * Fixed issue with deleting series or editing series properties in the properties window, 
   this only affected series with extreme dates that cannot be entirely displayed in the chart #68
 
