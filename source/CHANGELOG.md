@@ -9,7 +9,7 @@ FIXED:
   * proper consideration of interpretation
   * any NaN nodes now cause the adjacent time steps (depending on the interpretation) to not contribute to the volume
 * Fixed issue with deleting series or editing series properties in the properties window, 
-  this only affected series with extreme dates that cannot be entirely displayed in the chart #68
+  for series with extreme dates that cannot be entirely displayed in the chart #68
 
 Version 2.4.3
 -------------
