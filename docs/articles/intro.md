@@ -1,6 +1,7 @@
 ## Getting started
 1. Download [Visual Studio Installer (Community Edition)](https://visualstudio.microsoft.com/de/downloads/)
 1. Install Visual Studio with **.NET-desktop development tools**
+1. Optionally install the extension (Microsoft Visual Studio Installer Projects 2022)[https://marketplace.visualstudio.com/items?itemName=VisualStudioClient.MicrosoftVisualStudio2022InstallerProjects] required for building the installer
 1. Start Visual Studio and go to *Extras -> Options -> NuGet Package Manager -> Package Sources*
 1. Add `https://api.nuget.org/v3/index.json` to package sources
 1. Clone BlueM.Wave source code from https://github.com/bluemodel/BlueM.Wave
@@ -13,7 +14,7 @@
 ## TeeChart license
 BlueM.Wave uses [TeeChart .NET](https://www.steema.com/product/net) for all charts. To compile a fully functional version of BlueM.Wave, you need a TeeChart .NET Pro license.
 
-For testing purposes, you can use the evaluation version of TeeChart creating an empty file `BlueM.Wave\source\My Project\TeeChart.licenses` or removing the corresponding entry from the project in Visual Studio. This will allow you to compile, but any charts will be displayed with a watermark.
+For testing purposes, you can use the evaluation version of TeeChart by creating an empty file `BlueM.Wave\source\My Project\TeeChart.licenses` or removing the corresponding entry from the project in Visual Studio. This will allow you to compile, but any charts will be displayed with a watermark.
 
 ## Testing
 The repository contains an assembly `Wave.Tests` for unit testing. Tests can be run from within Visual Studio. To add new tests, follow the pattern of the existing ones and/or refer to the [MSTest framework docs](https://docs.microsoft.com/en-us/visualstudio/test/using-microsoft-visualstudio-testtools-unittesting-members-in-unit-tests?view=vs-2022).
