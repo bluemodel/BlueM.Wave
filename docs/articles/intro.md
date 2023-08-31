@@ -1,7 +1,7 @@
 ## Getting started
 1. Download [Visual Studio Installer (Community Edition)](https://visualstudio.microsoft.com/de/downloads/)
 1. Install Visual Studio with **.NET-desktop development tools**
-1. Optionally install the extension (Microsoft Visual Studio Installer Projects 2022)[https://marketplace.visualstudio.com/items?itemName=VisualStudioClient.MicrosoftVisualStudio2022InstallerProjects] required for building the installer
+1. Optionally install the extension [Microsoft Visual Studio Installer Projects 2022](https://marketplace.visualstudio.com/items?itemName=VisualStudioClient.MicrosoftVisualStudio2022InstallerProjects) required for building the installer
 1. Start Visual Studio and go to *Extras -> Options -> NuGet Package Manager -> Package Sources*
 1. Add `https://api.nuget.org/v3/index.json` to package sources
 1. Clone BlueM.Wave source code from https://github.com/bluemodel/BlueM.Wave
