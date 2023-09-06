@@ -85,8 +85,6 @@ Namespace Fileformats
 
         Public Overrides Sub readSeriesInfo()
 
-            'TODO: Make sure that all series names are unique!
-
             Dim i, j, index As Integer
             Dim indexSpalten As Integer
             Dim sInfo As TimeSeriesInfo
@@ -114,12 +112,13 @@ Namespace Fileformats
             ReDim SWMMBinaryFileIndex(anzSpalten - 1)
 
             indexSpalten = 0
+            'loop over subcatchments
             For i = 0 To nSubcatch - 1
                 'Flows
                 For j = 0 To nSubcatchVars - nPolluts - 1
                     index = indexSpalten + i * nSubcatchVars + j
                     sInfo = New TimeSeriesInfo()
-                    sInfo.Name = $"{oSWMM.subcatchments(i)} {oSWMM.SUBCATCHVAR(j)}"
+                    sInfo.Name = $"subcatchment {oSWMM.subcatchments(i)} {oSWMM.SUBCATCHVAR(j)}"
                     sInfo.Objekt = oSWMM.subcatchments(i)
                     sInfo.Unit = Units(0, j, FlowUnits)
                     sInfo.Type = "FLOW"
@@ -134,7 +133,7 @@ Namespace Fileformats
                 For j = nSubcatchVars - nPolluts To nSubcatchVars - 1
                     index = indexSpalten + i * nSubcatchVars + j
                     sInfo = New TimeSeriesInfo()
-                    sInfo.Name = $"{oSWMM.subcatchments(i)} {oSWMM.pollutants(j - nSubcatchVars + nPolluts)}"
+                    sInfo.Name = $"subcatchment {oSWMM.subcatchments(i)} {oSWMM.pollutants(j - nSubcatchVars + nPolluts)}"
                     sInfo.Objekt = oSWMM.subcatchments(i)
                     sInfo.Unit = Units(0, j, FlowUnits)
                     'Type aus String (z.B. für "S101 CSB" wird "CSB" ausgelesen)
@@ -148,12 +147,13 @@ Namespace Fileformats
                 Next
             Next
             indexSpalten += nSubcatch * nSubcatchVars
+            'loop over nodes
             For i = 0 To nNodes - 1
                 'Flows
                 For j = 0 To nNodesVars - nPolluts - 1
                     index = indexSpalten + i * nNodesVars + j
                     sInfo = New TimeSeriesInfo()
-                    sInfo.Name = $"{oSWMM.nodes(i)} {oSWMM.NODEVAR(j)}"
+                    sInfo.Name = $"node {oSWMM.nodes(i)} {oSWMM.NODEVAR(j)}"
                     sInfo.Objekt = oSWMM.nodes(i)
                     sInfo.Unit = Units(1, j, FlowUnits)
                     sInfo.Type = "FLOW"
@@ -168,7 +168,7 @@ Namespace Fileformats
                 For j = nNodesVars - nPolluts To nNodesVars - 1
                     index = indexSpalten + i * nNodesVars + j
                     sInfo = New TimeSeriesInfo()
-                    sInfo.Name = $"{oSWMM.nodes(i)} {oSWMM.pollutants(j - nNodesVars + nPolluts)}"
+                    sInfo.Name = $"node {oSWMM.nodes(i)} {oSWMM.pollutants(j - nNodesVars + nPolluts)}"
                     sInfo.Objekt = oSWMM.nodes(i)
                     sInfo.Unit = Units(1, j, FlowUnits)
                     'Type aus String (z.B. für "S101 CSB" wird "CSB" ausgelesen)
@@ -182,12 +182,13 @@ Namespace Fileformats
                 Next
             Next
             indexSpalten += nNodes * nNodesVars
+            'loop over links
             For i = 0 To nLinks - 1
                 'Flows
                 For j = 0 To nLinksVars - nPolluts - 1
                     index = indexSpalten + i * nLinksVars + j
                     sInfo = New TimeSeriesInfo()
-                    sInfo.Name = $"{oSWMM.links(i)} {oSWMM.LINKVAR(j)}"
+                    sInfo.Name = $"link {oSWMM.links(i)} {oSWMM.LINKVAR(j)}"
                     sInfo.Objekt = oSWMM.links(i)
                     sInfo.Unit = Units(2, j, FlowUnits)
                     sInfo.Type = "FLOW"
@@ -202,7 +203,7 @@ Namespace Fileformats
                 For j = nLinksVars - nPolluts To nLinksVars - 1
                     index = indexSpalten + i * nLinksVars + j
                     sInfo = New TimeSeriesInfo()
-                    sInfo.Name = $"{oSWMM.links(i)} {oSWMM.pollutants(j - nLinksVars + nPolluts)}"
+                    sInfo.Name = $"link {oSWMM.links(i)} {oSWMM.pollutants(j - nLinksVars + nPolluts)}"
                     sInfo.Objekt = oSWMM.links(i)
                     sInfo.Unit = Units(2, j, FlowUnits)
                     'Type aus String (z.B. für "S101 CSB" wird "CSB" ausgelesen)
@@ -216,10 +217,11 @@ Namespace Fileformats
                 Next
             Next
             indexSpalten += nLinks * nLinksVars
+            'loop over system variables
             For i = 0 To nSysvars - 1
                 index = indexSpalten + i
                 sInfo = New TimeSeriesInfo()
-                sInfo.Name = oSWMM.SYSVAR(i)
+                sInfo.Name = $"system {oSWMM.SYSVAR(i)}"
                 sInfo.Unit = Units(3, j, FlowUnits)
                 sInfo.Index = index
                 Me.TimeSeriesInfos.Add(sInfo)
