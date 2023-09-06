@@ -158,7 +158,7 @@ Namespace Fileformats
                     sInfo = New TimeSeriesInfo()
                     sInfo.Name = $"subcatchment {oSWMM.subcatchments(i)} {oSWMM.SUBCATCHVAR(j)}"
                     sInfo.Objekt = oSWMM.subcatchments(i)
-                    sInfo.Unit = Units(iType, j, FlowUnit)
+                    sInfo.Unit = getUnit(iType, j, FlowUnit)
                     sInfo.Type = "FLOW"
                     sInfo.ObjType = "Subcatchment"
                     sInfo.Index = index
@@ -173,7 +173,7 @@ Namespace Fileformats
                     sInfo = New TimeSeriesInfo()
                     sInfo.Name = $"subcatchment {oSWMM.subcatchments(i)} {oSWMM.pollutants(j - nSubcatchVars + nPolluts)}"
                     sInfo.Objekt = oSWMM.subcatchments(i)
-                    sInfo.Unit = Units(iType, j, FlowUnit)
+                    sInfo.Unit = getUnit(iType, j, FlowUnit)
                     'Type aus String (z.B. für "S101 CSB" wird "CSB" ausgelesen)
                     sInfo.Type = oSWMM.pollutants(j - nSubcatchVars + nPolluts)
                     sInfo.ObjType = "Subcatchment"
@@ -194,7 +194,7 @@ Namespace Fileformats
                     sInfo = New TimeSeriesInfo()
                     sInfo.Name = $"node {oSWMM.nodes(i)} {oSWMM.NODEVAR(j)}"
                     sInfo.Objekt = oSWMM.nodes(i)
-                    sInfo.Unit = Units(iType, j, FlowUnit)
+                    sInfo.Unit = getUnit(iType, j, FlowUnit)
                     sInfo.Type = "FLOW"
                     sInfo.ObjType = "Node"
                     sInfo.Index = index
@@ -209,7 +209,7 @@ Namespace Fileformats
                     sInfo = New TimeSeriesInfo()
                     sInfo.Name = $"node {oSWMM.nodes(i)} {oSWMM.pollutants(j - nNodesVars + nPolluts)}"
                     sInfo.Objekt = oSWMM.nodes(i)
-                    sInfo.Unit = Units(iType, j, FlowUnit)
+                    sInfo.Unit = getUnit(iType, j, FlowUnit)
                     'Type aus String (z.B. für "S101 CSB" wird "CSB" ausgelesen)
                     sInfo.Type = oSWMM.pollutants(j - nNodesVars + nPolluts)
                     sInfo.ObjType = "Node"
@@ -230,7 +230,7 @@ Namespace Fileformats
                     sInfo = New TimeSeriesInfo()
                     sInfo.Name = $"link {oSWMM.links(i)} {oSWMM.LINKVAR(j)}"
                     sInfo.Objekt = oSWMM.links(i)
-                    sInfo.Unit = Units(iType, j, FlowUnit)
+                    sInfo.Unit = getUnit(iType, j, FlowUnit)
                     sInfo.Type = "FLOW"
                     sInfo.ObjType = "Link"
                     sInfo.Index = index
@@ -245,7 +245,7 @@ Namespace Fileformats
                     sInfo = New TimeSeriesInfo()
                     sInfo.Name = $"link {oSWMM.links(i)} {oSWMM.pollutants(j - nLinksVars + nPolluts)}"
                     sInfo.Objekt = oSWMM.links(i)
-                    sInfo.Unit = Units(iType, j, FlowUnit)
+                    sInfo.Unit = getUnit(iType, j, FlowUnit)
                     'Type aus String (z.B. für "S101 CSB" wird "CSB" ausgelesen)
                     sInfo.Type = oSWMM.pollutants(j - nLinksVars + nPolluts)
                     sInfo.ObjType = "Link"
@@ -263,7 +263,7 @@ Namespace Fileformats
                 index = indexSpalten + i
                 sInfo = New TimeSeriesInfo()
                 sInfo.Name = $"system {oSWMM.SYSVAR(i)}"
-                sInfo.Unit = Units(iType, i, FlowUnit)
+                sInfo.Unit = getUnit(iType, i, FlowUnit)
                 sInfo.Index = index
                 Me.TimeSeriesInfos.Add(sInfo)
                 SeriesInfos(index).iType = iType
@@ -315,8 +315,16 @@ Namespace Fileformats
 
         End Sub
 
+        ''' <summary>
+        ''' Returns the unit for a given element type, variable and flow unit
+        ''' </summary>
+        ''' <param name="iType">element type</param>
+        ''' <param name="vIndex">variable index</param>
+        ''' <param name="FlowUnit">flow unit</param>
+        ''' <returns>unit as string</returns>
+        ''' <remarks>see https://github.com/USEPA/Stormwater-Management-Model/blob/master/src/outfile/include/swmm_output_enums.h</remarks>
+        Private Function getUnit(iType As Type, vIndex As Integer, FlowUnit As FlowUnits) As String
 
-        Private Function Units(iType As Type, vIndex As Integer, FlowUnit As FlowUnits) As String
             '_SUBCATCHVAR (iType = 0)
             '                {"Rainfall",     //0 for rainfall (in/hr or mm/hr)
             '                 "Snow Depth",   //1 for snow depth (in or mm)
@@ -353,187 +361,110 @@ Namespace Fileformats
             '                 "Stored Volume",//12 for volume of stored water (ft3 or m3),  
             '                 "Rate Evapo"};   //13 for evaporation rate (in/day or mm/day) 
 
-            Units = "-"
+            Dim unit As String = "-"
+
+            Dim flowUnitString As String
             Select Case FlowUnit
                 Case FlowUnits.CMS
-                    Select Case iType
-                        Case Type.subcatchment
-                            Select Case vIndex
-                                Case 0
-                                    Units = "mm/hr"
-                                Case 1
-                                    Units = "mm"
-                                Case 2
-                                    Units = "mm/hr"
-                                Case 3
-                                    Units = "m³s­¹"
-                                Case 4
-                                    Units = "m³s­¹"
-                                Case 5
-                                    Units = "m"
-                                Case Else
-                                    Units = "MGL"
-                            End Select
-                        Case Type.node
-                            Select Case vIndex
-                                Case 0
-                                    Units = "m"
-                                Case 1
-                                    Units = "m"
-                                Case 2
-                                    Units = "m³"
-                                Case 3
-                                    Units = "m³s­¹"
-                                Case 4
-                                    Units = "m³s­¹"
-                                Case 5
-                                    Units = "m³s­¹"
-                                Case Else
-                                    Units = "MGL"
-                            End Select
-                        Case Type.link
-                            Select Case vIndex
-                                Case 0
-                                    Units = "m³s­¹"
-                                Case 1
-                                    Units = "m"
-                                Case 2
-                                    Units = "ms­¹"
-                                Case 3
-                                    Units = "-"
-                                Case 4
-                                    Units = "-"
-                                Case Else
-                                    Units = "MGL"
-                            End Select
-                        Case Type.system
-                            Select Case vIndex
-                                Case 0
-                                    Units = "C°"
-                                Case 1
-                                    Units = "mm/hr"
-                                Case 2
-                                    Units = "mm"
-                                Case 3
-                                    Units = "mm/hr"
-                                Case 4
-                                    Units = "m³s­¹"
-                                Case 5
-                                    Units = "m³s­¹"
-                                Case 6
-                                    Units = "m³s­¹"
-                                Case 7
-                                    Units = "m³s­¹"
-                                Case 8
-                                    Units = "m³s­¹"
-                                Case 9
-                                    Units = "m³s­¹"
-                                Case 10
-                                    Units = "m³s­¹"
-                                Case 11
-                                    Units = "m³s­¹"
-                                Case 12
-                                    Units = "m³"
-                                Case 13
-                                    Units = "mm/day"
-                                Case 14
-                                    Units = "mm/day"
-                            End Select
-                        Case Else
-                            Log.AddLogEntry(levels.warning, $"Unable to determine unit for element type {iType}!")
-                    End Select
+                    flowUnitString = "m³/s"
                 Case FlowUnits.LPS
-                    Select Case iType
-                        Case Type.subcatchment
-                            Select Case vIndex
-                                Case 0
-                                    Units = "mm/hr"
-                                Case 1
-                                    Units = "mm"
-                                Case 2
-                                    Units = "mm/hr"
-                                Case 3
-                                    Units = "LPS"
-                                Case 4
-                                    Units = "LPS"
-                                Case 5
-                                    Units = "m"
-                                Case Else
-                                    Units = "MGL"
-                            End Select
-                        Case Type.node
-                            Select Case vIndex
-                                Case 0
-                                    Units = "m"
-                                Case 1
-                                    Units = "m"
-                                Case 2
-                                    Units = "m³"
-                                Case 3
-                                    Units = "LPS"
-                                Case 4
-                                    Units = "LPS"
-                                Case 5
-                                    Units = "LPS"
-                                Case Else
-                                    Units = "MGL"
-                            End Select
-                        Case Type.link
-                            Select Case vIndex
-                                Case 0
-                                    Units = "LPS"
-                                Case 1
-                                    Units = "m"
-                                Case 2
-                                    Units = "LPS"
-                                Case 3
-                                    Units = "-"
-                                Case 4
-                                    Units = "-"
-                                Case Else
-                                    Units = "MGL"
-                            End Select
-                        Case Type.system
-                            Select Case vIndex
-                                Case 0
-                                    Units = "C°"
-                                Case 1
-                                    Units = "mm/hr"
-                                Case 2
-                                    Units = "mm"
-                                Case 3
-                                    Units = "mm/hr"
-                                Case 4
-                                    Units = "LPS"
-                                Case 5
-                                    Units = "LPS"
-                                Case 6
-                                    Units = "LPS"
-                                Case 7
-                                    Units = "LPS"
-                                Case 8
-                                    Units = "LPS"
-                                Case 9
-                                    Units = "LPS"
-                                Case 10
-                                    Units = "LPS"
-                                Case 11
-                                    Units = "LPS"
-                                Case 12
-                                    Units = "m³"
-                                Case 13
-                                    Units = "mm/day"
-                                Case 14
-                                    Units = "mm/day"
-                            End Select
-                        Case Else
-                            Log.AddLogEntry(levels.warning, $"Unable to determine unit for element type {iType}!")
-                    End Select
+                    flowUnitString = "l/s"
                 Case Else
                     Log.AddLogEntry(levels.warning, $"Unable to determine unit for flow unit {FlowUnit}!")
+                    flowUnitString = "-"
             End Select
-            Return Units
+
+            Select Case iType
+                Case Type.subcatchment
+                    Select Case vIndex
+                        Case 0
+                            unit = "mm/hr"
+                        Case 1
+                            unit = "mm"
+                        Case 2
+                            unit = "mm/hr"
+                        Case 3
+                            unit = flowUnitString
+                        Case 4
+                            unit = flowUnitString
+                        Case 5
+                            unit = "m"
+                        Case Else
+                            unit = "MGL"
+                    End Select
+                Case Type.node
+                    Select Case vIndex
+                        Case 0
+                            unit = "m"
+                        Case 1
+                            unit = "m"
+                        Case 2
+                            unit = "m³"
+                        Case 3
+                            unit = flowUnitString
+                        Case 4
+                            unit = flowUnitString
+                        Case 5
+                            unit = flowUnitString
+                        Case Else
+                            unit = "MGL"
+                    End Select
+                Case Type.link
+                    Select Case vIndex
+                        Case 0
+                            unit = flowUnitString
+                        Case 1
+                            unit = "m"
+                        Case 2
+                            unit = "ms­¹"
+                        Case 3
+                            unit = "-"
+                        Case 4
+                            unit = "-"
+                        Case Else
+                            unit = "MGL"
+                    End Select
+                Case Type.system
+                    Select Case vIndex
+                        Case 0
+                            unit = "C°"
+                        Case 1
+                            unit = "mm/hr"
+                        Case 2
+                            unit = "mm"
+                        Case 3
+                            unit = "mm/hr"
+                        Case 4
+                            unit = flowUnitString
+                        Case 5
+                            unit = flowUnitString
+                        Case 6
+                            unit = flowUnitString
+                        Case 7
+                            unit = flowUnitString
+                        Case 8
+                            unit = flowUnitString
+                        Case 9
+                            unit = flowUnitString
+                        Case 10
+                            unit = flowUnitString
+                        Case 11
+                            unit = flowUnitString
+                        Case 12
+                            unit = "m³"
+                        Case 13
+                            unit = "mm/day"
+                        Case 14
+                            unit = "mm/day"
+                    End Select
+                Case Else
+                    Log.AddLogEntry(levels.warning, $"Unable to determine unit for element type {iType}!")
+            End Select
+
+            Return unit
+
         End Function
+
     End Class
 
 End Namespace
