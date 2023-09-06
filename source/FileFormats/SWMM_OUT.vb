@@ -40,17 +40,28 @@ Namespace Fileformats
         Private nSysvars As Integer
         Private FlowUnits As Integer
 
+        ''' <summary>
+        ''' Element types
+        ''' </summary>
+        ''' <remarks>see https://github.com/USEPA/Stormwater-Management-Model/blob/890ce92ac4a82f71f154fed5b1290ca44858b2de/src/outfile/include/swmm_output_enums.h#L36</remarks>
+        Private Enum Type As Integer
+            subcatchment = 0
+            node = 1
+            link = 2
+            system = 3
+            pollutant = 4
+        End Enum
+
         Private Structure SWMM_Binary_file_Definition
             'iType = type of object whose value is being sought
-            '(0 = subcatchment, 1 = node, 2 = link, 3 = system)
             'iIndex = index of item being sought (starting from 0)
             'vIndex = index of variable being sought (see Interfacing Guide)
-            Dim iType As Integer
+            Dim iType As Type
             Dim iIndex As Integer
             Dim vIndex As Integer
         End Structure
-        Private SWMMBinaryFileIndex() As SWMM_Binary_file_Definition
 
+        Private SWMMBinaryFileIndex() As SWMM_Binary_file_Definition
 
         Public Overrides ReadOnly Property UseImportDialog() As Boolean
             Get
@@ -86,6 +97,7 @@ Namespace Fileformats
         Public Overrides Sub readSeriesInfo()
 
             Dim i, j, index As Integer
+            Dim iType As Type
             Dim indexSpalten As Integer
             Dim sInfo As TimeSeriesInfo
 
@@ -113,6 +125,7 @@ Namespace Fileformats
 
             indexSpalten = 0
             'loop over subcatchments
+            iType = Type.subcatchment
             For i = 0 To nSubcatch - 1
                 'Flows
                 For j = 0 To nSubcatchVars - nPolluts - 1
@@ -120,12 +133,12 @@ Namespace Fileformats
                     sInfo = New TimeSeriesInfo()
                     sInfo.Name = $"subcatchment {oSWMM.subcatchments(i)} {oSWMM.SUBCATCHVAR(j)}"
                     sInfo.Objekt = oSWMM.subcatchments(i)
-                    sInfo.Unit = Units(0, j, FlowUnits)
+                    sInfo.Unit = Units(iType, j, FlowUnits)
                     sInfo.Type = "FLOW"
                     sInfo.ObjType = "Subcatchment"
                     sInfo.Index = index
                     Me.TimeSeriesInfos.Add(sInfo)
-                    SWMMBinaryFileIndex(index).iType = 0
+                    SWMMBinaryFileIndex(index).iType = iType
                     SWMMBinaryFileIndex(index).iIndex = i
                     SWMMBinaryFileIndex(index).vIndex = j
                 Next
@@ -135,19 +148,20 @@ Namespace Fileformats
                     sInfo = New TimeSeriesInfo()
                     sInfo.Name = $"subcatchment {oSWMM.subcatchments(i)} {oSWMM.pollutants(j - nSubcatchVars + nPolluts)}"
                     sInfo.Objekt = oSWMM.subcatchments(i)
-                    sInfo.Unit = Units(0, j, FlowUnits)
+                    sInfo.Unit = Units(iType, j, FlowUnits)
                     'Type aus String (z.B. für "S101 CSB" wird "CSB" ausgelesen)
                     sInfo.Type = oSWMM.pollutants(j - nSubcatchVars + nPolluts)
                     sInfo.ObjType = "Subcatchment"
                     sInfo.Index = index
                     Me.TimeSeriesInfos.Add(sInfo)
-                    SWMMBinaryFileIndex(index).iType = 0
+                    SWMMBinaryFileIndex(index).iType = iType
                     SWMMBinaryFileIndex(index).iIndex = i
                     SWMMBinaryFileIndex(index).vIndex = j
                 Next
             Next
             indexSpalten += nSubcatch * nSubcatchVars
             'loop over nodes
+            iType = Type.node
             For i = 0 To nNodes - 1
                 'Flows
                 For j = 0 To nNodesVars - nPolluts - 1
@@ -155,12 +169,12 @@ Namespace Fileformats
                     sInfo = New TimeSeriesInfo()
                     sInfo.Name = $"node {oSWMM.nodes(i)} {oSWMM.NODEVAR(j)}"
                     sInfo.Objekt = oSWMM.nodes(i)
-                    sInfo.Unit = Units(1, j, FlowUnits)
+                    sInfo.Unit = Units(iType, j, FlowUnits)
                     sInfo.Type = "FLOW"
                     sInfo.ObjType = "Node"
                     sInfo.Index = index
                     Me.TimeSeriesInfos.Add(sInfo)
-                    SWMMBinaryFileIndex(index).iType = 1
+                    SWMMBinaryFileIndex(index).iType = iType
                     SWMMBinaryFileIndex(index).iIndex = i
                     SWMMBinaryFileIndex(index).vIndex = j
                 Next
@@ -170,19 +184,20 @@ Namespace Fileformats
                     sInfo = New TimeSeriesInfo()
                     sInfo.Name = $"node {oSWMM.nodes(i)} {oSWMM.pollutants(j - nNodesVars + nPolluts)}"
                     sInfo.Objekt = oSWMM.nodes(i)
-                    sInfo.Unit = Units(1, j, FlowUnits)
+                    sInfo.Unit = Units(iType, j, FlowUnits)
                     'Type aus String (z.B. für "S101 CSB" wird "CSB" ausgelesen)
                     sInfo.Type = oSWMM.pollutants(j - nNodesVars + nPolluts)
                     sInfo.ObjType = "Node"
                     sInfo.Index = index
                     Me.TimeSeriesInfos.Add(sInfo)
-                    SWMMBinaryFileIndex(index).iType = 1
+                    SWMMBinaryFileIndex(index).iType = iType
                     SWMMBinaryFileIndex(index).iIndex = i
                     SWMMBinaryFileIndex(index).vIndex = j
                 Next
             Next
             indexSpalten += nNodes * nNodesVars
             'loop over links
+            iType = Type.link
             For i = 0 To nLinks - 1
                 'Flows
                 For j = 0 To nLinksVars - nPolluts - 1
@@ -190,12 +205,12 @@ Namespace Fileformats
                     sInfo = New TimeSeriesInfo()
                     sInfo.Name = $"link {oSWMM.links(i)} {oSWMM.LINKVAR(j)}"
                     sInfo.Objekt = oSWMM.links(i)
-                    sInfo.Unit = Units(2, j, FlowUnits)
+                    sInfo.Unit = Units(iType, j, FlowUnits)
                     sInfo.Type = "FLOW"
                     sInfo.ObjType = "Link"
                     sInfo.Index = index
                     Me.TimeSeriesInfos.Add(sInfo)
-                    SWMMBinaryFileIndex(index).iType = 2
+                    SWMMBinaryFileIndex(index).iType = iType
                     SWMMBinaryFileIndex(index).iIndex = i
                     SWMMBinaryFileIndex(index).vIndex = j
                 Next
@@ -205,27 +220,28 @@ Namespace Fileformats
                     sInfo = New TimeSeriesInfo()
                     sInfo.Name = $"link {oSWMM.links(i)} {oSWMM.pollutants(j - nLinksVars + nPolluts)}"
                     sInfo.Objekt = oSWMM.links(i)
-                    sInfo.Unit = Units(2, j, FlowUnits)
+                    sInfo.Unit = Units(iType, j, FlowUnits)
                     'Type aus String (z.B. für "S101 CSB" wird "CSB" ausgelesen)
                     sInfo.Type = oSWMM.pollutants(j - nLinksVars + nPolluts)
                     sInfo.ObjType = "Link"
                     sInfo.Index = index
                     Me.TimeSeriesInfos.Add(sInfo)
-                    SWMMBinaryFileIndex(index).iType = 2
+                    SWMMBinaryFileIndex(index).iType = iType
                     SWMMBinaryFileIndex(index).iIndex = i
                     SWMMBinaryFileIndex(index).vIndex = j
                 Next
             Next
             indexSpalten += nLinks * nLinksVars
             'loop over system variables
+            iType = Type.system
             For i = 0 To nSysvars - 1
                 index = indexSpalten + i
                 sInfo = New TimeSeriesInfo()
                 sInfo.Name = $"system {oSWMM.SYSVAR(i)}"
-                sInfo.Unit = Units(3, j, FlowUnits)
+                sInfo.Unit = Units(iType, j, FlowUnits)
                 sInfo.Index = index
                 Me.TimeSeriesInfos.Add(sInfo)
-                SWMMBinaryFileIndex(index).iType = 3
+                SWMMBinaryFileIndex(index).iType = iType
                 SWMMBinaryFileIndex(index).iIndex = 0
                 SWMMBinaryFileIndex(index).vIndex = i
             Next
@@ -275,7 +291,7 @@ Namespace Fileformats
         End Sub
 
 
-        Private Function Units(iType As Integer, vIndex As Integer, FlowUnits As Integer) As String
+        Private Function Units(iType As Type, vIndex As Integer, FlowUnits As Integer) As String
             '_SUBCATCHVAR (iType = 0)
             '                {"Rainfall",     //0 for rainfall (in/hr or mm/hr)
             '                 "Snow Depth",   //1 for snow depth (in or mm)
