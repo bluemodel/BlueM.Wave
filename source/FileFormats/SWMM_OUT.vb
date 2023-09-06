@@ -274,7 +274,8 @@ Namespace Fileformats
         End Sub
 
         Public Overrides Sub readFile()
-            Dim j, period As Integer
+
+            Dim period As Integer
             Dim value As Double
             Dim index As Integer
             Dim anzahlZeitreihen As Integer
@@ -295,15 +296,11 @@ Namespace Fileformats
                 'Objektname und Typ (für SWMM-Txt-Export)
                 ts.Objekt = sInfo.Objekt
                 ts.Type = sInfo.Type
-                For j = 0 To anzSpalten - 1
-                    If (sInfo.Name = Me.TimeSeriesInfos(j).Name) And (sInfo.ObjType = Me.TimeSeriesInfos(j).ObjType) Then
-                        index = j
-                        For period = 0 To oSWMM.NPeriods - 1
-                            oSWMM.GetSwmmDate(period, datum)
-                            oSWMM.GetSwmmResult(SeriesInfos(index).iType, SeriesInfos(index).iIndex, SeriesInfos(index).vIndex, period, value)
-                            ts.AddNode(DateTime.FromOADate(datum), value)
-                        Next
-                    End If
+                index = sInfo.Index
+                For period = 0 To oSWMM.NPeriods - 1
+                    oSWMM.GetSwmmDate(period, datum)
+                    oSWMM.GetSwmmResult(SeriesInfos(index).iType, SeriesInfos(index).iIndex, SeriesInfos(index).vIndex, period, value)
+                    ts.AddNode(DateTime.FromOADate(datum), value)
                 Next
 
                 'store time series
