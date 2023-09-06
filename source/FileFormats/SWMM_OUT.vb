@@ -290,10 +290,7 @@ Namespace Fileformats
             'Zeitreihen instanzieren
             For Each sInfo As TimeSeriesInfo In Me.SelectedSeries
                 ts = New TimeSeries(sInfo.Name)
-                'Einheiten?
-                If (Me.UseUnits) Then
-                    ts.Unit = sInfo.Unit
-                End If
+                ts.Unit = sInfo.Unit
                 ts.DataSource = New TimeSeriesDataSource(Me.File, sInfo.Name)
                 'Objektname und Typ (für SWMM-Txt-Export)
                 ts.Objekt = sInfo.Objekt
