@@ -43,7 +43,7 @@ Namespace Fileformats
         ''' <summary>
         ''' Element types
         ''' </summary>
-        ''' <remarks>see https://github.com/USEPA/Stormwater-Management-Model/blob/890ce92ac4a82f71f154fed5b1290ca44858b2de/src/outfile/include/swmm_output_enums.h#L36</remarks>
+        ''' <remarks>see https://github.com/USEPA/Stormwater-Management-Model/blob/master/src/outfile/include/swmm_output_enums.h#L36</remarks>
         Private Enum Type As Integer
             subcatchment = 0
             node = 1
@@ -335,7 +335,7 @@ Namespace Fileformats
             Select Case FlowUnits
                 Case 3    'CMS
                     Select Case iType
-                        Case 0
+                        Case Type.subcatchment
                             Select Case vIndex
                                 Case 0
                                     Units = "mm/hr"
@@ -352,7 +352,7 @@ Namespace Fileformats
                                 Case Else
                                     Units = "MGL"
                             End Select
-                        Case 1
+                        Case Type.node
                             Select Case vIndex
                                 Case 0
                                     Units = "m"
@@ -369,7 +369,7 @@ Namespace Fileformats
                                 Case Else
                                     Units = "MGL"
                             End Select
-                        Case 2
+                        Case Type.link
                             Select Case vIndex
                                 Case 0
                                     Units = "m³s­¹"
@@ -384,7 +384,7 @@ Namespace Fileformats
                                 Case Else
                                     Units = "MGL"
                             End Select
-                        Case 3
+                        Case Type.system
                             Select Case vIndex
                                 Case 0
                                     Units = "C°"
@@ -415,10 +415,12 @@ Namespace Fileformats
                                 Case 13
                                     Units = "mm/day"
                             End Select
+                        Case Else
+                            Log.AddLogEntry(levels.warning, $"Unable to determine unit for element type {iType}!")
                     End Select
                 Case 4  'LPS
                     Select Case iType
-                        Case 0
+                        Case Type.subcatchment
                             Select Case vIndex
                                 Case 0
                                     Units = "mm/hr"
@@ -435,7 +437,7 @@ Namespace Fileformats
                                 Case Else
                                     Units = "MGL"
                             End Select
-                        Case 1
+                        Case Type.node
                             Select Case vIndex
                                 Case 0
                                     Units = "m"
@@ -452,7 +454,7 @@ Namespace Fileformats
                                 Case Else
                                     Units = "MGL"
                             End Select
-                        Case 2
+                        Case Type.link
                             Select Case vIndex
                                 Case 0
                                     Units = "LPS"
@@ -467,7 +469,7 @@ Namespace Fileformats
                                 Case Else
                                     Units = "MGL"
                             End Select
-                        Case 3
+                        Case Type.system
                             Select Case vIndex
                                 Case 0
                                     Units = "C°"
@@ -498,6 +500,8 @@ Namespace Fileformats
                                 Case 13
                                     Units = "mm/day"
                             End Select
+                        Case Else
+                            Log.AddLogEntry(levels.warning, $"Unable to determine unit for element type {iType}!")
                     End Select
                 Case Else
                     Units = "-"
