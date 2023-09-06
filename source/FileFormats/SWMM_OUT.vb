@@ -65,16 +65,28 @@ Namespace Fileformats
             MLD = 5
         End Enum
 
-        Private Structure SWMM_Binary_file_Definition
-            'iType = type of object whose value is being sought
-            'iIndex = index of item being sought (starting from 0)
-            'vIndex = index of variable being sought (see Interfacing Guide)
+        ''' <summary>
+        ''' Structure for storing SWMM series information
+        ''' </summary>
+        Private Structure SeriesInfo
+            ''' <summary>
+            ''' element type
+            ''' </summary>
             Dim iType As Type
+            ''' <summary>
+            ''' element index (0-based)
+            ''' </summary>
             Dim iIndex As Integer
+            ''' <summary>
+            ''' variable index (see https://github.com/USEPA/Stormwater-Management-Model/blob/master/src/outfile/include/swmm_output_enums.h)
+            ''' </summary>
             Dim vIndex As Integer
         End Structure
 
-        Private SWMMBinaryFileIndex() As SWMM_Binary_file_Definition
+        ''' <summary>
+        ''' Array containing all series infos
+        ''' </summary>
+        Private SeriesInfos() As SeriesInfo
 
         Public Overrides ReadOnly Property UseImportDialog() As Boolean
             Get
@@ -134,7 +146,7 @@ Namespace Fileformats
                    + nLinks * nLinksVars _
                    + nSysvars
 
-            ReDim SWMMBinaryFileIndex(anzSpalten - 1)
+            ReDim SeriesInfos(anzSpalten - 1)
 
             indexSpalten = 0
             'loop over subcatchments
@@ -151,9 +163,9 @@ Namespace Fileformats
                     sInfo.ObjType = "Subcatchment"
                     sInfo.Index = index
                     Me.TimeSeriesInfos.Add(sInfo)
-                    SWMMBinaryFileIndex(index).iType = iType
-                    SWMMBinaryFileIndex(index).iIndex = i
-                    SWMMBinaryFileIndex(index).vIndex = j
+                    SeriesInfos(index).iType = iType
+                    SeriesInfos(index).iIndex = i
+                    SeriesInfos(index).vIndex = j
                 Next
                 'Pollutants
                 For j = nSubcatchVars - nPolluts To nSubcatchVars - 1
@@ -167,9 +179,9 @@ Namespace Fileformats
                     sInfo.ObjType = "Subcatchment"
                     sInfo.Index = index
                     Me.TimeSeriesInfos.Add(sInfo)
-                    SWMMBinaryFileIndex(index).iType = iType
-                    SWMMBinaryFileIndex(index).iIndex = i
-                    SWMMBinaryFileIndex(index).vIndex = j
+                    SeriesInfos(index).iType = iType
+                    SeriesInfos(index).iIndex = i
+                    SeriesInfos(index).vIndex = j
                 Next
             Next
             indexSpalten += nSubcatch * nSubcatchVars
@@ -187,9 +199,9 @@ Namespace Fileformats
                     sInfo.ObjType = "Node"
                     sInfo.Index = index
                     Me.TimeSeriesInfos.Add(sInfo)
-                    SWMMBinaryFileIndex(index).iType = iType
-                    SWMMBinaryFileIndex(index).iIndex = i
-                    SWMMBinaryFileIndex(index).vIndex = j
+                    SeriesInfos(index).iType = iType
+                    SeriesInfos(index).iIndex = i
+                    SeriesInfos(index).vIndex = j
                 Next
                 'Pollutants
                 For j = nNodesVars - nPolluts To nNodesVars - 1
@@ -203,9 +215,9 @@ Namespace Fileformats
                     sInfo.ObjType = "Node"
                     sInfo.Index = index
                     Me.TimeSeriesInfos.Add(sInfo)
-                    SWMMBinaryFileIndex(index).iType = iType
-                    SWMMBinaryFileIndex(index).iIndex = i
-                    SWMMBinaryFileIndex(index).vIndex = j
+                    SeriesInfos(index).iType = iType
+                    SeriesInfos(index).iIndex = i
+                    SeriesInfos(index).vIndex = j
                 Next
             Next
             indexSpalten += nNodes * nNodesVars
@@ -223,9 +235,9 @@ Namespace Fileformats
                     sInfo.ObjType = "Link"
                     sInfo.Index = index
                     Me.TimeSeriesInfos.Add(sInfo)
-                    SWMMBinaryFileIndex(index).iType = iType
-                    SWMMBinaryFileIndex(index).iIndex = i
-                    SWMMBinaryFileIndex(index).vIndex = j
+                    SeriesInfos(index).iType = iType
+                    SeriesInfos(index).iIndex = i
+                    SeriesInfos(index).vIndex = j
                 Next
                 'Pollutants
                 For j = nLinksVars - nPolluts To nLinksVars - 1
@@ -239,9 +251,9 @@ Namespace Fileformats
                     sInfo.ObjType = "Link"
                     sInfo.Index = index
                     Me.TimeSeriesInfos.Add(sInfo)
-                    SWMMBinaryFileIndex(index).iType = iType
-                    SWMMBinaryFileIndex(index).iIndex = i
-                    SWMMBinaryFileIndex(index).vIndex = j
+                    SeriesInfos(index).iType = iType
+                    SeriesInfos(index).iIndex = i
+                    SeriesInfos(index).vIndex = j
                 Next
             Next
             indexSpalten += nLinks * nLinksVars
@@ -254,9 +266,9 @@ Namespace Fileformats
                 sInfo.Unit = Units(iType, j, FlowUnit)
                 sInfo.Index = index
                 Me.TimeSeriesInfos.Add(sInfo)
-                SWMMBinaryFileIndex(index).iType = iType
-                SWMMBinaryFileIndex(index).iIndex = 0
-                SWMMBinaryFileIndex(index).vIndex = i
+                SeriesInfos(index).iType = iType
+                SeriesInfos(index).iIndex = 0
+                SeriesInfos(index).vIndex = i
             Next
 
         End Sub
@@ -291,7 +303,7 @@ Namespace Fileformats
                         index = j
                         For period = 0 To oSWMM.NPeriods - 1
                             oSWMM.GetSwmmDate(period, datum)
-                            oSWMM.GetSwmmResult(SWMMBinaryFileIndex(index).iType, SWMMBinaryFileIndex(index).iIndex, SWMMBinaryFileIndex(index).vIndex, period, value)
+                            oSWMM.GetSwmmResult(SeriesInfos(index).iType, SeriesInfos(index).iIndex, SeriesInfos(index).vIndex, period, value)
                             ts.AddNode(DateTime.FromOADate(datum), value)
                         Next
                     End If
