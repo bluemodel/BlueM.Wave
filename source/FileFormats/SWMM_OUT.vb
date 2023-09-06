@@ -21,9 +21,9 @@ Imports System.Globalization
 Namespace Fileformats
 
     ''' <summary>
-    ''' Klasse für SWMM out-Dateiformat (Binärer SWMM Ergebnisfile)
+    ''' Class for reading the SWMM binary output format
     ''' </summary>
-    ''' <remarks>Format siehe https://wiki.bluemodel.org/index.php/SWMM_file_formats </remarks>
+    ''' <remarks>See https://wiki.bluemodel.org/index.php/SWMM_file_formats </remarks>
     ''' 
     Public Class SWMM_OUT
         Inherits TimeSeriesFile
@@ -52,22 +52,12 @@ Namespace Fileformats
         Private SWMMBinaryFileIndex() As SWMM_Binary_file_Definition
 
 
-        ''' <summary>
-        ''' Gibt an, ob beim Import des Dateiformats der Importdialog angezeigt werden soll
-        ''' </summary>
         Public Overrides ReadOnly Property UseImportDialog() As Boolean
             Get
                 Return True
             End Get
         End Property
 
-#Region "Methoden"
-
-        'Methoden
-        '########
-
-        'Konstruktor
-        '***********
         Public Sub New(FileName As String, Optional ReadAllNow As Boolean = False)
 
             MyBase.New(FileName)
@@ -93,8 +83,6 @@ Namespace Fileformats
 
         End Sub
 
-        'Spalten auslesen
-        '****************
         Public Overrides Sub readSeriesInfo()
 
             'TODO: Make sure that all series names are unique!
@@ -241,9 +229,6 @@ Namespace Fileformats
             Next
 
         End Sub
-
-#End Region
-
 
         Public Overrides Sub readFile()
             Dim j, period As Integer
