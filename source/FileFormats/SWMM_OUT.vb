@@ -38,7 +38,7 @@ Namespace Fileformats
         Private nNodesVars As Integer
         Private nLinksVars As Integer
         Private nSysvars As Integer
-        Private FlowUnits As Integer
+        Private FlowUnit As FlowUnits
 
         ''' <summary>
         ''' Element types
@@ -50,6 +50,19 @@ Namespace Fileformats
             link = 2
             system = 3
             pollutant = 4
+        End Enum
+
+        ''' <summary>
+        ''' Flow units
+        ''' </summary>
+        ''' <remarks>see https://github.com/USEPA/Stormwater-Management-Model/blob/master/src/outfile/include/swmm_output_enums.h#L20</remarks>
+        Private Enum FlowUnits As Integer
+            CFS = 0
+            GPM = 1
+            MGD = 2
+            CMS = 3
+            LPS = 4
+            MLD = 5
         End Enum
 
         Private Structure SWMM_Binary_file_Definition
@@ -113,7 +126,7 @@ Namespace Fileformats
             nSubcatchVars = oSWMM.nSUBCATCHVARS
             nNodesVars = oSWMM.nNODEVARS
             nLinksVars = oSWMM.nLINKVARS
-            FlowUnits = oSWMM.FlowUnits
+            FlowUnit = oSWMM.FlowUnits
 
             'Spaltenüberschriften
             anzSpalten = nSubcatch * nSubcatchVars _
@@ -133,7 +146,7 @@ Namespace Fileformats
                     sInfo = New TimeSeriesInfo()
                     sInfo.Name = $"subcatchment {oSWMM.subcatchments(i)} {oSWMM.SUBCATCHVAR(j)}"
                     sInfo.Objekt = oSWMM.subcatchments(i)
-                    sInfo.Unit = Units(iType, j, FlowUnits)
+                    sInfo.Unit = Units(iType, j, FlowUnit)
                     sInfo.Type = "FLOW"
                     sInfo.ObjType = "Subcatchment"
                     sInfo.Index = index
@@ -148,7 +161,7 @@ Namespace Fileformats
                     sInfo = New TimeSeriesInfo()
                     sInfo.Name = $"subcatchment {oSWMM.subcatchments(i)} {oSWMM.pollutants(j - nSubcatchVars + nPolluts)}"
                     sInfo.Objekt = oSWMM.subcatchments(i)
-                    sInfo.Unit = Units(iType, j, FlowUnits)
+                    sInfo.Unit = Units(iType, j, FlowUnit)
                     'Type aus String (z.B. für "S101 CSB" wird "CSB" ausgelesen)
                     sInfo.Type = oSWMM.pollutants(j - nSubcatchVars + nPolluts)
                     sInfo.ObjType = "Subcatchment"
@@ -169,7 +182,7 @@ Namespace Fileformats
                     sInfo = New TimeSeriesInfo()
                     sInfo.Name = $"node {oSWMM.nodes(i)} {oSWMM.NODEVAR(j)}"
                     sInfo.Objekt = oSWMM.nodes(i)
-                    sInfo.Unit = Units(iType, j, FlowUnits)
+                    sInfo.Unit = Units(iType, j, FlowUnit)
                     sInfo.Type = "FLOW"
                     sInfo.ObjType = "Node"
                     sInfo.Index = index
@@ -184,7 +197,7 @@ Namespace Fileformats
                     sInfo = New TimeSeriesInfo()
                     sInfo.Name = $"node {oSWMM.nodes(i)} {oSWMM.pollutants(j - nNodesVars + nPolluts)}"
                     sInfo.Objekt = oSWMM.nodes(i)
-                    sInfo.Unit = Units(iType, j, FlowUnits)
+                    sInfo.Unit = Units(iType, j, FlowUnit)
                     'Type aus String (z.B. für "S101 CSB" wird "CSB" ausgelesen)
                     sInfo.Type = oSWMM.pollutants(j - nNodesVars + nPolluts)
                     sInfo.ObjType = "Node"
@@ -205,7 +218,7 @@ Namespace Fileformats
                     sInfo = New TimeSeriesInfo()
                     sInfo.Name = $"link {oSWMM.links(i)} {oSWMM.LINKVAR(j)}"
                     sInfo.Objekt = oSWMM.links(i)
-                    sInfo.Unit = Units(iType, j, FlowUnits)
+                    sInfo.Unit = Units(iType, j, FlowUnit)
                     sInfo.Type = "FLOW"
                     sInfo.ObjType = "Link"
                     sInfo.Index = index
@@ -220,7 +233,7 @@ Namespace Fileformats
                     sInfo = New TimeSeriesInfo()
                     sInfo.Name = $"link {oSWMM.links(i)} {oSWMM.pollutants(j - nLinksVars + nPolluts)}"
                     sInfo.Objekt = oSWMM.links(i)
-                    sInfo.Unit = Units(iType, j, FlowUnits)
+                    sInfo.Unit = Units(iType, j, FlowUnit)
                     'Type aus String (z.B. für "S101 CSB" wird "CSB" ausgelesen)
                     sInfo.Type = oSWMM.pollutants(j - nLinksVars + nPolluts)
                     sInfo.ObjType = "Link"
@@ -238,7 +251,7 @@ Namespace Fileformats
                 index = indexSpalten + i
                 sInfo = New TimeSeriesInfo()
                 sInfo.Name = $"system {oSWMM.SYSVAR(i)}"
-                sInfo.Unit = Units(iType, j, FlowUnits)
+                sInfo.Unit = Units(iType, j, FlowUnit)
                 sInfo.Index = index
                 Me.TimeSeriesInfos.Add(sInfo)
                 SWMMBinaryFileIndex(index).iType = iType
@@ -291,7 +304,7 @@ Namespace Fileformats
         End Sub
 
 
-        Private Function Units(iType As Type, vIndex As Integer, FlowUnits As Integer) As String
+        Private Function Units(iType As Type, vIndex As Integer, FlowUnit As FlowUnits) As String
             '_SUBCATCHVAR (iType = 0)
             '                {"Rainfall",     //0 for rainfall (in/hr or mm/hr)
             '                 "Snow Depth",   //1 for snow depth (in or mm)
@@ -328,12 +341,9 @@ Namespace Fileformats
             '                 "Stored Volume",//12 for volume of stored water (ft3 or m3),  
             '                 "Rate Evapo"};   //13 for evaporation rate (in/day or mm/day) 
 
-            'FlowUnits:
-            'CMS = 3
-            'LPS = 4
             Units = "-"
-            Select Case FlowUnits
-                Case 3    'CMS
+            Select Case FlowUnit
+                Case FlowUnits.CMS
                     Select Case iType
                         Case Type.subcatchment
                             Select Case vIndex
@@ -418,7 +428,7 @@ Namespace Fileformats
                         Case Else
                             Log.AddLogEntry(levels.warning, $"Unable to determine unit for element type {iType}!")
                     End Select
-                Case 4  'LPS
+                Case FlowUnits.LPS
                     Select Case iType
                         Case Type.subcatchment
                             Select Case vIndex
@@ -504,7 +514,7 @@ Namespace Fileformats
                             Log.AddLogEntry(levels.warning, $"Unable to determine unit for element type {iType}!")
                     End Select
                 Case Else
-                    Units = "-"
+                    Log.AddLogEntry(levels.warning, $"Unable to determine unit for flow unit {FlowUnit}!")
             End Select
             Return Units
         End Function
