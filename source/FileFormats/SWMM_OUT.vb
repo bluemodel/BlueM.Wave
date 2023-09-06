@@ -436,6 +436,8 @@ Namespace Fileformats
                                     Units = "m³"
                                 Case 13
                                     Units = "mm/day"
+                                Case 14
+                                    Units = "mm/day"
                             End Select
                         Case Else
                             Log.AddLogEntry(levels.warning, $"Unable to determine unit for element type {iType}!")
@@ -520,6 +522,8 @@ Namespace Fileformats
                                 Case 12
                                     Units = "m³"
                                 Case 13
+                                    Units = "mm/day"
+                                Case 14
                                     Units = "mm/day"
                             End Select
                         Case Else
