@@ -263,7 +263,7 @@ Namespace Fileformats
                 index = indexSpalten + i
                 sInfo = New TimeSeriesInfo()
                 sInfo.Name = $"system {oSWMM.SYSVAR(i)}"
-                sInfo.Unit = Units(iType, j, FlowUnit)
+                sInfo.Unit = Units(iType, i, FlowUnit)
                 sInfo.Index = index
                 Me.TimeSeriesInfos.Add(sInfo)
                 SeriesInfos(index).iType = iType
