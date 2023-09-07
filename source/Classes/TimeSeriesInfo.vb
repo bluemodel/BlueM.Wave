@@ -43,11 +43,6 @@ Public Class TimeSeriesInfo
 
     End Sub
 
-    'TODO: The following properties are only needed by SWMM file formats
-    Friend Objekt As String     'Bezeichnung des Objekts (z.B. "S101")
-    Friend Type As String       '"FLOW" oder ein Stoffparameter (z.B. "CSB")
-    Friend ObjType As String    '"Subcatchment", "Node" oder "Link"
-
     Public Overrides Function ToString() As String
         Return Me.Name
     End Function

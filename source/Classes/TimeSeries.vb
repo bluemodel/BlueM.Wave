@@ -81,24 +81,6 @@ Public Class TimeSeries
         End Set
     End Property
 
-    Public Property Objekt() As String
-        Get
-            Return _Objekt
-        End Get
-        Set(value As String)
-            _Objekt = value
-        End Set
-    End Property
-
-    Public Property Type() As String
-        Get
-            Return _Type
-        End Get
-        Set(value As String)
-            _Type = value
-        End Set
-    End Property
-
     ''' <summary>
     ''' The time series' interpretation
     ''' </summary>
@@ -469,8 +451,6 @@ Public Class TimeSeries
         Me._metadata = New Metadata()
         Me._title = title
         Me._unit = "-"
-        Me._Objekt = "-"
-        Me._Type = "-"
         Me._Interpretation = InterpretationEnum.Undefined
         Me.DataSource = New TimeSeriesDataSource(TimeSeriesDataSource.OriginEnum.Undefined)
         Me._nodes = New SortedList(Of DateTime, Double)
@@ -493,8 +473,6 @@ Public Class TimeSeries
             target._id = Me.Id
         End If
         target.Unit = Me.Unit
-        target.Objekt = Me.Objekt
-        target.Type = Me.Type
         target._nodes = New SortedList(Of DateTime, Double)(Me._nodes)
         target.Metadata = Me.Metadata.Copy()
         target._Interpretation = Me.Interpretation
@@ -1120,8 +1098,6 @@ Public Class TimeSeries
         'copy metadata
         tsConverted.Unit = Me.Unit
         tsConverted.Interpretation = Me.Interpretation
-        tsConverted.Objekt = Me.Objekt
-        tsConverted.Type = Me.Type
         tsConverted.Metadata = Me.Metadata
 
         Log.AddLogEntry(Log.levels.info, $"Converting error values from series {Me.Title}...")
@@ -1179,8 +1155,6 @@ Public Class TimeSeries
         'copy metadata
         tsCleaned.Unit = Me.Unit
         tsCleaned.Interpretation = Me.Interpretation
-        tsCleaned.Objekt = Me.Objekt
-        tsCleaned.Type = Me.Type
         tsCleaned.Metadata = Me.Metadata.Copy()
         tsCleaned.DataSource = New TimeSeriesDataSource(TimeSeriesDataSource.OriginEnum.AnalysisResult)
 
