@@ -437,33 +437,6 @@ Namespace Fileformats
 
         End Function
 
-        Public Shared Function nEqualStrings(strArrayIn() As String) As Integer
-
-            Dim Names() As String
-            Dim i, j As Integer
-            Dim strExists As Boolean
-
-            ReDim Preserve Names(0)
-            Names(0) = strArrayIn(0)
-            nEqualStrings = 1
-
-            For i = 0 To strArrayIn.Length - 1
-                strExists = False
-                For j = 0 To Names.Length - 1
-                    If strArrayIn(i) = Names(j) Then
-                        strExists = True
-                        Exit For
-                    End If
-                Next
-                If strExists = False Then
-                    nEqualStrings = nEqualStrings + 1
-                    ReDim Preserve Names(Names.Length)
-                    Names(Names.Length - 1) = strArrayIn(i)
-                End If
-            Next
-
-        End Function
-
         Public Shared Function FakConv(UnitIn As String) As Integer
 
             Select Case UnitIn
