@@ -3,8 +3,12 @@
 
 Version 2.4.5
 -------------
+NEW:
+* Added support for reading JAMS/J2000 timeseries result files
+
 CHANGED:
 * Unknown file formats will now always be attempted to be imported as CSV
+
 FIXED:
 * Fixed crash when attempting to verify HYSTEM-EXTRAN REG format on a different DAT file
 
