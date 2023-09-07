@@ -353,9 +353,9 @@ Namespace Fileformats
             Dim flowUnitString As String
             Select Case FlowUnit
                 Case FlowUnits.CMS
-                    flowUnitString = "m³/s"
+                    flowUnitString = "CMS"
                 Case FlowUnits.LPS
-                    flowUnitString = "l/s"
+                    flowUnitString = "LPS"
                 Case Else
                     Log.AddLogEntry(levels.warning, $"Unable to determine unit for flow unit {FlowUnit}!")
                     flowUnitString = "-"
