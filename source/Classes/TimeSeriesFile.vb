@@ -637,6 +637,9 @@ Public MustInherit Class TimeSeriesFile
             End If
         End If
 
+        'set default
+        fileType = FileTypes.UNKNOWN
+
         'Depending on file extension
         Select Case fileExt
 
@@ -681,8 +684,6 @@ Public MustInherit Class TimeSeriesFile
                     'PRMS result file
                     Log.AddLogEntry(levels.info, $"Detected PRMS result format for file {fileName}.")
                     fileType = FileTypes.PRMS_OUT
-                Else
-                    Throw New Exception($"File {fileName} has an unknown format!")
                 End If
 
             Case FileExtensions.DB
@@ -714,8 +715,6 @@ Public MustInherit Class TimeSeriesFile
                     'Hystem-Extran rainfall file
                     Log.AddLogEntry(levels.info, $"Detected Hystem-Extran rainfall format for file {fileName}.")
                     fileType = FileTypes.HYSTEM_REG
-                Else
-                    Throw New Exception($"File {fileName} has an unknown format!")
                 End If
 
             Case FileExtensions.SMB
@@ -736,18 +735,12 @@ Public MustInherit Class TimeSeriesFile
                     'SWMM routing interface file
                     Log.AddLogEntry(levels.info, $"Detected SWMM routing interface file format for file {fileName}.")
                     fileType = FileTypes.SWMM_INTERFACE
-                Else
-                    'Other text files can usually be read as CSV files
-                    Log.AddLogEntry(levels.info, $"Assuming CSV format for file {fileName}.")
-                    fileType = FileTypes.CSV
                 End If
 
             Case FileExtensions.UVF
                 'Check file format
                 If Fileformats.UVF.verifyFormat(file) Then
                     fileType = FileTypes.UVF
-                Else
-                    Throw New Exception($"File {fileName} has an unexpected format!")
                 End If
 
             Case FileExtensions.WBL
@@ -756,8 +749,6 @@ Public MustInherit Class TimeSeriesFile
                     'SYDRO binary WEL file
                     Log.AddLogEntry(levels.info, $"Detected SYDRO binary WEL format for file {fileName}.")
                     fileType = FileTypes.WBL
-                Else
-                    Throw New Exception($"File {fileName} has an unexpected format!")
                 End If
 
             Case FileExtensions.WEL, FileExtensions.KWL
@@ -774,8 +765,6 @@ Public MustInherit Class TimeSeriesFile
                     'SYDRO binary WEL file
                     Log.AddLogEntry(levels.info, $"Detected SYDRO binary WEL format for file {fileName}.")
                     fileType = FileTypes.WBL
-                Else
-                    Throw New Exception($"File {fileName} has an unknown format!")
                 End If
 
             Case FileExtensions.WVP
@@ -792,10 +781,14 @@ Public MustInherit Class TimeSeriesFile
 
             Case Else
                 'Unknown filetype
-                Log.AddLogEntry(levels.warning, $"Unable to determine file type of file {fileName}!")
                 fileType = FileTypes.UNKNOWN
 
         End Select
+
+        'Unknown filetype
+        If fileType = FileTypes.UNKNOWN Then
+            Log.AddLogEntry(levels.warning, $"Unable to determine file type of file {fileName}!")
+        End If
 
         Return fileType
 

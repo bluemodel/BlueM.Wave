@@ -3,6 +3,8 @@
 
 Version 2.4.5
 -------------
+CHANGED:
+* Unknown file formats will now always be attempted to be imported as CSV
 FIXED:
 * Fixed crash when attempting to verify HYSTEM-EXTRAN REG format on a different DAT file
 
