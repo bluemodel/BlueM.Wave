@@ -310,12 +310,6 @@ Namespace Fileformats
 
             Dim strwrite As StreamWriter
             Dim i, j, k As Integer
-            Dim AllConstituents() As Constituent
-            Dim UniqueConstituents(0) As Constituent
-            'Dim AnzConstituents As Integer
-            Dim AllNodes() As String
-            Dim UniqueNodes(0) As String
-            Dim AnzOutNodes As Integer
             Dim LenReihe As Long
             Dim KonFaktor As Integer
 
@@ -344,52 +338,38 @@ Namespace Fileformats
             'TODO: this assumes equidistant time series!
             dt = DateDiff(DateInterval.Minute, Reihen(0).Dates(0), Reihen(0).Dates(1))
             dt = dt * 60
-            strwrite.WriteLine($"{dt:<5} - reporting time step in sec")
+            strwrite.WriteLine($"{dt,5} - reporting time step in sec")
 
             'the number of variables stored in the file, where the first variable must always be flow rate
-            'Erstmal alle Constituents (FLOW, COD,...) ermitteln, da diese im Textkopf angegeben werden müssen
-            ReDim AllConstituents(Reihen.Count - 1)
-            For i = 0 To Reihen.Count - 1
-                AllConstituents(i).Type = Reihen(i).Metadata("Variable")
-                AllConstituents(i).Unit = Reihen(i).Unit
+            Dim variables As New HashSet(Of String)
+            For Each ts As TimeSeries In Reihen
+                variables.Add(ts.Metadata("Variable"))
             Next
-            GetUniqueConstituents(AllConstituents, UniqueConstituents)
-            strwrite.WriteLine($"{UniqueConstituents.Length} - number of constituents as listed below:")
+            strwrite.WriteLine($"{variables.Count} - number of constituents as listed below:")
 
             'the name and units of each variable (one per line), where flow rate is the first variable listed and is always named FLOW
-            For i = 0 To UniqueConstituents.Length - 1
-                strwrite.Write(UniqueConstituents(i).Type)
-                strwrite.Write("   ")
-                strwrite.WriteLine("LPS")
+            'TODO: make sure FLOW is first
+            'TODO: use actual unit instead of always "LPS"
+            For Each variable As String In variables
+                strwrite.WriteLine($"{variable}   LPS")
             Next
 
             'the number of nodes with recorded inflow data
-            ReDim AllNodes(Reihen.Count - 1)
-            For i = 0 To Reihen.Count - 1
-                AllNodes(i) = Reihen(i).Metadata("Node")
+            Dim nodes As New HashSet(Of String)
+            For Each ts As TimeSeries In Reihen
+                nodes.Add(ts.Metadata("Node"))
             Next
-            GetUniqueNodes(AllNodes, UniqueNodes)
-            AnzOutNodes = UniqueNodes.Length
-            strwrite.WriteLine($"{AnzOutNodes} - number of nodes as listed below:")
+            strwrite.WriteLine($"{nodes.Count} - number of nodes as listed below:")
 
             'the name of each node (one per line)
-            For i = 0 To AnzOutNodes - 1
-                strwrite.WriteLine(UniqueNodes(i))
+            For Each node As String In nodes
+                strwrite.WriteLine(node)
             Next
 
-            'TO DO: Hier muss noch geprüft werden, ob für alle Objects (Zuflussknoten) auch alle Constituents existieren
+            'TODO: Hier muss noch geprüft werden, ob für alle Nodes auch alle Variables existieren
 
             'a line of text that provides column headings for the data to follow (can be blank)
-            strwrite.Write("Node          Year Mon Day Hr  Min Sec         ")
-            'Constituents
-            For i = 0 To UniqueConstituents.Length - 1
-                If i < UniqueConstituents.Length - 1 Then
-                    strwrite.Write(UniqueConstituents(i).Type)
-                    strwrite.Write("   ")
-                ElseIf i = UniqueConstituents.Length - 1 Then
-                    strwrite.WriteLine(UniqueConstituents(i).Type)
-                End If
-            Next
+            strwrite.WriteLine($"Node          Year Mon Day Hr  Min Sec         {String.Join("  ", variables)}")
 
             'for each node at each time step, a line with:
             ' the name of the node
@@ -398,28 +378,27 @@ Namespace Fileformats
             ' the flow rate followed by the concentration of each quality constituent
             'Time periods with no values at any node can be skipped
 
-            'TO DO: Bei mehreren Constituents muss im Moment die richtige Reihenfolge vorab gegeben sein
-            'd.h. eigentlich muss beim rausschreiben noch Objekt und Constituent geprüft werden
+            'TODO: Bei mehreren Variablen muss im Moment die richtige Reihenfolge vorab gegeben sein!
 
             'SWMM-Reihen immer in l/s
             KonFaktor = FakConv(Reihen(0).Unit)
 
             LenReihe = Reihen(0).Length
             For i = 0 To LenReihe - 1
-                For j = 0 To AnzOutNodes - 1
-                    strwrite.Write(UniqueNodes(j).PadRight(12))
+                For j = 0 To nodes.Count - 1
+                    strwrite.Write(nodes(j).PadRight(12))
                     strwrite.Write("   ")
                     strwrite.Write(Reihen(j).Dates(i).ToString(DatumsformatSWMM_TXT))
                     strwrite.Write(" 00   ")
-                    strwrite.Write((Reihen(j * UniqueConstituents.Length).Values(i) * KonFaktor).ToString(DefaultNumberFormat).PadLeft(14))
-                    If UniqueConstituents.Length > 1 Then
-                        For k = 1 To UniqueConstituents.Length - 1
-                            If k < UniqueConstituents.Length - 1 Then
+                    strwrite.Write((Reihen(j * variables.Count).Values(i) * KonFaktor).ToString(DefaultNumberFormat).PadLeft(14))
+                    If variables.Count > 1 Then
+                        For k = 1 To variables.Count - 1
+                            If k < variables.Count - 1 Then
                                 strwrite.Write("   ")
                                 strwrite.Write((Reihen(j * k + 1).Values(i) * KonFaktor).ToString(DefaultNumberFormat).PadLeft(10))
-                            ElseIf k = UniqueConstituents.Length - 1 Then
+                            ElseIf k = variables.Count - 1 Then
                                 strwrite.Write("   ")
-                                strwrite.WriteLine((Reihen(j * UniqueConstituents.Length + 1).Values(i) * KonFaktor).ToString(DefaultNumberFormat).PadLeft(10))
+                                strwrite.WriteLine((Reihen(j * variables.Count + 1).Values(i) * KonFaktor).ToString(DefaultNumberFormat).PadLeft(10))
                             End If
                         Next
                     Else
@@ -484,54 +463,6 @@ Namespace Fileformats
             Next
 
         End Function
-
-        Public Shared Sub GetUniqueConstituents(AllConstIn() As Constituent, ByRef ConstOut() As Constituent)
-
-            Dim i, j As Integer
-            Dim ExistsOutArray As Boolean
-
-            ConstOut(0).Type = AllConstIn(0).Type
-            ConstOut(0).Unit = AllConstIn(0).Unit
-
-            For i = 0 To AllConstIn.Length - 1
-                ExistsOutArray = False
-                For j = 0 To ConstOut.Length - 1
-                    If AllConstIn(i).Type = ConstOut(j).Type Then
-                        ExistsOutArray = True
-                        Exit For
-                    End If
-                Next
-                If ExistsOutArray = False Then
-                    ReDim Preserve ConstOut(ConstOut.Length)
-                    ConstOut(ConstOut.Length - 1).Type = AllConstIn(i).Type
-                    ConstOut(ConstOut.Length - 1).Unit = AllConstIn(i).Unit
-                End If
-            Next
-
-        End Sub
-
-        Public Shared Sub GetUniqueNodes(AllNodesIn() As String, ByRef NodesOut() As String)
-
-            Dim i, j As Integer
-            Dim ExistsOutArray As Boolean
-
-            NodesOut(0) = AllNodesIn(0)
-
-            For i = 0 To AllNodesIn.Length - 1
-                ExistsOutArray = False
-                For j = 0 To NodesOut.Length - 1
-                    If AllNodesIn(i) = NodesOut(j) Then
-                        ExistsOutArray = True
-                        Exit For
-                    End If
-                Next
-                If ExistsOutArray = False Then
-                    ReDim Preserve NodesOut(NodesOut.Length)
-                    NodesOut(NodesOut.Length - 1) = AllNodesIn(i)
-                End If
-            Next
-
-        End Sub
 
         Public Shared Function FakConv(UnitIn As String) As Integer
 
