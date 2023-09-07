@@ -34,7 +34,7 @@ Public MustInherit Class TimeSeriesFile
         GISMO_WEL
         HYDRO_AS_DAT
         HYSTEM_WEL
-        J2000
+        JAMS
         PRMS_OUT
         HYSTEM_REG
         SMUSI_REG
@@ -681,10 +681,10 @@ Public MustInherit Class TimeSeriesFile
                     'PRMS result file
                     Log.AddLogEntry(levels.info, $"Detected PRMS result format for file {fileName}.")
                     fileType = FileTypes.PRMS_OUT
-                ElseIf Fileformats.J2000.verifyFormat(file) Then
-                    'J2000 result file
-                    Log.AddLogEntry(levels.info, $"Detected J2000 result format for file {fileName}.")
-                    fileType = FileTypes.J2000
+                ElseIf Fileformats.JAMS.verifyFormat(file) Then
+                    'JAMS result file
+                    Log.AddLogEntry(levels.info, $"Detected JAMS result format for file {fileName}.")
+                    fileType = FileTypes.JAMS
                 ElseIf Fileformats.HYDRO_AS_2D.verifyFormat(file) Then
                     'HYDRO-AS_2D result file
                     Log.AddLogEntry(levels.info, $"Detected HYDRO_AS-2D result format for file {fileName}.")
@@ -836,8 +836,8 @@ Public MustInherit Class TimeSeriesFile
                 FileInstance = New Fileformats.HystemExtran_REG(file)
             Case FileTypes.HYSTEM_WEL
                 FileInstance = New Fileformats.HystemExtran_WEL(file)
-            Case FileTypes.J2000
-                FileInstance = New Fileformats.J2000(file)
+            Case FileTypes.JAMS
+                FileInstance = New Fileformats.JAMS(file)
             Case FileTypes.PRMS_OUT
                 FileInstance = New Fileformats.PRMS(file)
             Case FileTypes.SMB

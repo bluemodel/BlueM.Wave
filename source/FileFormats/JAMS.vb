@@ -22,9 +22,10 @@ Imports System.Net
 Namespace Fileformats
 
     ''' <summary>
-    ''' Class for reading J2000 result format
+    ''' Class for reading JAMS/J2000/J2K timeseries results
     ''' </summary>
-    Public Class J2000
+    ''' <remarks>see https://wiki.bluemodel.org/index.php/JAMS_result_files</remarks>
+    Public Class JAMS
         Inherits TimeSeriesFile
 
         ''' <summary>
@@ -201,7 +202,7 @@ Namespace Fileformats
         End Sub
 
         ''' <summary>
-        ''' Checks whether a file is a J2000 result file
+        ''' Checks whether a file is a readable JAMS timeseries result file
         ''' </summary>
         ''' <param name="file">path to file</param>
         ''' <returns></returns>
