@@ -43,8 +43,8 @@ Namespace Fileformats
             'presets
             'TODO: some of these could be determined automatically by reading the file and locating tokens such as @attributes and @data, @start
             Me.IsColumnSeparated = True
-            Me.Separator = New Character("tab")
-            Me.DecimalSeparator = New Character(".")
+            Me.Separator = Constants.tab
+            Me.DecimalSeparator = Constants.period
             Me.iLineHeadings = 6
             Me.UseUnits = False
             Me.iLineData = 11
