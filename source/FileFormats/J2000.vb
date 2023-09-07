@@ -40,17 +40,38 @@ Namespace Fileformats
 
             MyBase.New(FileName)
 
-            'presets
-            'TODO: some of these could be determined automatically by reading the file and locating tokens such as @attributes and @data, @start
+            'Presets
             Me.IsColumnSeparated = True
             Me.Separator = Constants.tab
             Me.DecimalSeparator = Constants.period
             Me.iLineHeadings = 6
             Me.UseUnits = False
-            Me.iLineData = 11
+            Me.iLineData = 10
             Me.Dateformat = "yyyy-MM-dd HH:mm"
             Me.DateTimeColumnIndex = 0
 
+            'Determine iLineHeader and iLineData by reading the file contents and checking for tokens
+            Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
+            Dim StrRead As StreamReader = New StreamReader(FiStr, Me.Encoding)
+            Dim StrReadSync = TextReader.Synchronized(StrRead)
+
+            Dim iLine As Integer = 0
+            Do While StrReadSync.Peek <> -1
+                iLine += 1
+                Dim line As String = StrReadSync.ReadLine()
+                If line.StartsWith("@attributes") Then
+                    Me.iLineHeadings = iLine + 1
+                ElseIf line.StartsWith("@data") Then
+                    Me.iLineData = iLine + 1
+                    Exit Do
+                End If
+            Loop
+
+            StrReadSync.Close()
+            StrRead.Close()
+            FiStr.Close()
+
+            'Read series information
             Call Me.readSeriesInfo()
 
             If ReadAllNow Then
