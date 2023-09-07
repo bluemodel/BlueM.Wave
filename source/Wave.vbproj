@@ -201,7 +201,7 @@
     <Compile Include="Analysis\TimestepAnalysisDialog.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FileFormats\J2000.vb" />
+    <Compile Include="FileFormats\JAMS.vb" />
     <Compile Include="Main.vb" />
     <Compile Include="App.vb" />
     <Compile Include="Classes\AxisWrapper.vb" />
