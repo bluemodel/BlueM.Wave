@@ -34,6 +34,7 @@ Public MustInherit Class TimeSeriesFile
         GISMO_WEL
         HYDRO_AS_DAT
         HYSTEM_WEL
+        J2000
         PRMS_OUT
         HYSTEM_REG
         SMUSI_REG
@@ -672,11 +673,7 @@ Public MustInherit Class TimeSeriesFile
 
             Case FileExtensions.DAT
                 'Check file format
-                If Fileformats.HYDRO_AS_2D.verifyFormat(file) Then
-                    'HYDRO-AS_2D result file
-                    Log.AddLogEntry(levels.info, $"Detected HYDRO_AS-2D result format for file {fileName}.")
-                    fileType = FileTypes.HYDRO_AS_DAT
-                ElseIf Fileformats.HystemExtran_REG.verifyFormat(file) Then
+                If Fileformats.HystemExtran_REG.verifyFormat(file) Then
                     'Hystem-Extran rainfall file
                     Log.AddLogEntry(levels.info, $"Detected Hystem-Extran rainfall format for file {fileName}.")
                     fileType = FileTypes.HYSTEM_REG
@@ -684,6 +681,14 @@ Public MustInherit Class TimeSeriesFile
                     'PRMS result file
                     Log.AddLogEntry(levels.info, $"Detected PRMS result format for file {fileName}.")
                     fileType = FileTypes.PRMS_OUT
+                ElseIf Fileformats.J2000.verifyFormat(file) Then
+                    'J2000 result file
+                    Log.AddLogEntry(levels.info, $"Detected J2000 result format for file {fileName}.")
+                    fileType = FileTypes.J2000
+                ElseIf Fileformats.HYDRO_AS_2D.verifyFormat(file) Then
+                    'HYDRO-AS_2D result file
+                    Log.AddLogEntry(levels.info, $"Detected HYDRO_AS-2D result format for file {fileName}.")
+                    fileType = FileTypes.HYDRO_AS_DAT
                 End If
 
             Case FileExtensions.DB
@@ -831,6 +836,8 @@ Public MustInherit Class TimeSeriesFile
                 FileInstance = New Fileformats.HystemExtran_REG(file)
             Case FileTypes.HYSTEM_WEL
                 FileInstance = New Fileformats.HystemExtran_WEL(file)
+            Case FileTypes.J2000
+                FileInstance = New Fileformats.J2000(file)
             Case FileTypes.PRMS_OUT
                 FileInstance = New Fileformats.PRMS(file)
             Case FileTypes.SMB
