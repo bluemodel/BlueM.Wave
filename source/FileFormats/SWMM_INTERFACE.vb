@@ -38,6 +38,13 @@ Namespace Fileformats
         Private _Zeitintervall As Integer
         Private _noConstituents As Integer
 
+        Private Structure seriesMetadata
+            Dim Node As String
+            Dim Variable As String
+        End Structure
+
+        Private seriesMetadataIndex As Dictionary(Of Integer, seriesMetadata)
+
         Public Structure Constituent
             Dim Type As String
             Dim Unit As String
@@ -113,7 +120,6 @@ Namespace Fileformats
                 Call Me.readFile()
             End If
 
-
         End Sub
 
         ''' <summary>
@@ -133,6 +139,7 @@ Namespace Fileformats
             Dim sInfo As TimeSeriesInfo
 
             Me.TimeSeriesInfos.Clear()
+            Me.seriesMetadataIndex = New Dictionary(Of Integer, seriesMetadata)
 
             'Datei öffnen
             Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
@@ -187,13 +194,19 @@ Namespace Fileformats
             index = 1
             For i = 0 To AnzNodes - 1
                 For j = 0 To AnzConstituents - 1
+
                     sInfo = New TimeSeriesInfo()
                     sInfo.Name = $"{Nodes(i).Bez} {Constituents(j).Type}"
-                    'sInfo.Objekt = Nodes(i).Bez
-                    'sInfo.Type = Constituents(j).Type
                     sInfo.Unit = Constituents(j).Unit
                     sInfo.Index = index
                     Me.TimeSeriesInfos.Add(sInfo)
+
+                    'store metadata for later
+                    Dim metadata As seriesMetadata
+                    metadata.Node = Nodes(i).Bez
+                    metadata.Variable = Constituents(j).Type
+                    Me.seriesMetadataIndex.Add(index, metadata)
+
                     index = index + 1
                 Next
             Next
@@ -215,9 +228,6 @@ Namespace Fileformats
             Dim Werte() As String
             Dim tmpArray() As String
             Dim IDWerte As Long
-            'Dim AnzConstituents As Integer
-            'Dim AllConstituents() As String
-            'Dim AllNodes() As String
             Dim ts As TimeSeries
 
             Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
@@ -237,23 +247,16 @@ Namespace Fileformats
                 Exit Sub
             End If
 
-            'ReDim AllConstituents(Me.SelectedSeries.Count - 1)
-            'ReDim AllNodes(Me.SelectedSeries.Count - 1)
-            'Alle ausgewählten Serien durchlaufen
-            i = 0
             For Each sInfo As TimeSeriesInfo In Me.SelectedSeries
                 Me.TimeSeries(sInfo.Index).Unit = sInfo.Unit
-                'Me.TimeSeries(sInfo.Index).Objekt = sInfo.Objekt
-                'AllConstituents(i) = sInfo.Type
-                'Me.TimeSeries(sInfo.Index).Type = sInfo.Type
-                'AllNodes(i) = sInfo.Objekt
-                i += 1
+                'add metadata
+                Me.TimeSeries(sInfo.Index).Metadata.AddKeys(SWMM_INTERFACE.MetadataKeys)
+                Me.TimeSeries(sInfo.Index).Metadata("Node") = Me.seriesMetadataIndex(sInfo.Index).Node
+                Me.TimeSeries(sInfo.Index).Metadata("Variable") = Me.seriesMetadataIndex(sInfo.Index).Variable
             Next
 
             'Einlesen
             '--------
-            'AnzConstituents = nEqualStrings(AllConstituents)
-            'AnzNodes = nEqualStrings(AllNodes)
             ReDim Werte(AnzConstituents * AnzNodes)
             'Header
             For iZeile = 1 To Me.iLineData - 1
