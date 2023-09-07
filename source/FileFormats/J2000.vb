@@ -109,7 +109,7 @@ Namespace Fileformats
             Dim isData, success As Boolean
             Dim timestamp As DateTime
             Dim value As Double
-            Dim parts() As String
+            Dim parts(), valuestring As String
             Dim ts As TimeSeries
 
             'instantiate time series
@@ -138,6 +138,7 @@ Namespace Fileformats
                 iLine += 1
                 line = StrReadSync.ReadLine()
 
+                'data is only between @start and @end
                 If line.StartsWith("@start") Then
                     isData = True
                 ElseIf line.StartsWith("@end") Then
@@ -155,9 +156,17 @@ Namespace Fileformats
                     If Not success Then
                         Throw New Exception($"Could Not parse the date '{parts(Me.DateTimeColumnIndex)}' using the given date format '{Me.Dateformat}'! Please check the date format!")
                     End If
+                    'loop over selected series
                     For Each sinfo As TimeSeriesInfo In Me.SelectedSeries
-                        'parse value and add node to timeseries
-                        value = StringToDouble(parts(sinfo.Index), numberformat)
+                        'parse value
+                        valuestring = parts(sinfo.Index).Trim()
+                        'replace "Infinity" with NaN
+                        If valuestring = "Infinity" Then
+                            value = Double.NaN
+                        Else
+                            value = StringToDouble(parts(sinfo.Index), numberformat)
+                        End If
+                        'add node to timeseries
                         Me.TimeSeries(sinfo.Index).AddNode(timestamp, value)
                     Next
                 End If
