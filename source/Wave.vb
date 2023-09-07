@@ -552,6 +552,8 @@ Public Class Wave
         For Each ts As TimeSeries In zres
             'get a list of metadata keys
             Select Case fileType
+                Case TimeSeriesFile.FileTypes.SWMM_INTERFACE
+                    keys = Fileformats.SWMM_INTERFACE.MetadataKeys
                 Case TimeSeriesFile.FileTypes.UVF
                     keys = Fileformats.UVF.MetadataKeys
                 Case TimeSeriesFile.FileTypes.ZRXP
@@ -575,6 +577,8 @@ Public Class Wave
                 Next
                 'set default metadata values
                 Select Case fileType
+                    Case TimeSeriesFile.FileTypes.SWMM_INTERFACE
+                        Fileformats.SWMM_INTERFACE.setDefaultMetadata(ts)
                     Case TimeSeriesFile.FileTypes.UVF
                         Fileformats.UVF.setDefaultMetadata(ts)
                     Case TimeSeriesFile.FileTypes.ZRXP
