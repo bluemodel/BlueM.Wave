@@ -94,9 +94,10 @@ Namespace Fileformats
             Dim StrRead As StreamReader = New StreamReader(FiStr, Me.Encoding)
             Dim StrReadSync = TextReader.Synchronized(StrRead)
 
-            iLine = 1
+            iLine = 0
             Do While StrReadSync.Peek <> -1
 
+                iLine += 1
                 line = StrReadSync.ReadLine()
 
                 If iLine = Me.iLineHeadings Then
@@ -114,7 +115,6 @@ Namespace Fileformats
                     Exit Do
                 End If
 
-                iLine += 1
             Loop
 
             StrReadSync.Close()
