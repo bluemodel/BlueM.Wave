@@ -1,6 +1,11 @@
 ﻿BlueM.Wave Release Notes
 ========================
 
+Version 2.4.5
+-------------
+FIXED:
+* Fixed crash when attempting to verify HYSTEM-EXTRAN REG format on a different DAT file
+
 Version 2.4.4
 -------------
 FIXED:
