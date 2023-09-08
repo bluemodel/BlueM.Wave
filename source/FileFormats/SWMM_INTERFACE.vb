@@ -331,18 +331,41 @@ Namespace Fileformats
             Dim LenReihe As Long
             Dim KonFaktor As Integer
 
-            'Determine unique nodes and variables
-            Dim nodes As New HashSet(Of String)
-            Dim variables As New HashSet(Of String)
+            'check for required metadata
             For Each ts As TimeSeries In seriesList
                 If Not ts.Metadata.ContainsKey("Node") Then
                     Throw New Exception($"Series {ts.Title} is missing a required metadata entry 'Node'!")
                 End If
-                nodes.Add(ts.Metadata("Node"))
                 If Not ts.Metadata.ContainsKey("Variable") Then
                     Throw New Exception($"Series {ts.Title} is missing a required metadata entry 'Variable'!")
                 End If
-                variables.Add(ts.Metadata("Variable"))
+            Next
+
+            'sort series by node and then variable with FLOW first
+            seriesList.Sort(Function(ts1 As TimeSeries, ts2 As TimeSeries)
+                                If ts1.Metadata("Node") = ts2.Metadata("Node") Then
+                                    If ts1.Metadata("Variable") = "FLOW" Then
+                                        Return -1
+                                    ElseIf ts2.Metadata("Variable") = "FLOW" Then
+                                        Return 1
+                                    Else
+                                        Return ts1.Metadata("Variable").CompareTo(ts2.Metadata("Variable"))
+                                    End If
+                                Else
+                                    Return ts1.Metadata("Node").CompareTo(ts2.Metadata("Node"))
+                                End If
+                            End Function)
+
+            'Determine unique nodes and variables
+            Dim nodes As New List(Of String)
+            Dim variables As New List(Of String)
+            For Each ts As TimeSeries In seriesList
+                If Not nodes.Contains(ts.Metadata("Node")) Then
+                    nodes.Add(ts.Metadata("Node"))
+                End If
+                If Not variables.Contains(ts.Metadata("Variable")) Then
+                    variables.Add(ts.Metadata("Variable"))
+                End If
             Next
 
             'check that "FLOW" is among the variables
@@ -352,7 +375,7 @@ Namespace Fileformats
 
             'determine units for variables
             Dim units As New List(Of String)
-            For Each variable As String In variables_sorted
+            For Each variable As String In variables
                 'find the first time series containing the variable and use its unit
                 'TODO: this assumes that all series with the same variable also have the same unit!
                 For Each ts As TimeSeries In seriesList
@@ -390,9 +413,8 @@ Namespace Fileformats
             strwrite.WriteLine($"{variables.Count,-5} - number of constituents as listed below:")
 
             'the name and units of each variable (one per line), where flow rate is the first variable listed and is always named FLOW
-            'TODO: make sure FLOW is first
-            For Each variable As String In variables
-                strwrite.WriteLine($"{variable}   LPS")
+            For i = 0 To variables.Count - 1
+                strwrite.WriteLine($"{variables(i)}   {units(i)}")
             Next
 
             'the number of nodes with recorded inflow data
@@ -416,10 +438,6 @@ Namespace Fileformats
             ' the time of day (hours, minutes, and seconds separated by spaces)
             ' the flow rate followed by the concentration of each quality constituent
             'Time periods with no values at any node can be skipped
-
-            'TODO: Bei mehreren Variablen muss im Moment die richtige Reihenfolge vorab gegeben sein!
-
-
             LenReihe = seriesList(0).Length
             For i = 0 To LenReihe - 1
                 For j = 0 To nodes.Count - 1
