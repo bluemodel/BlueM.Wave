@@ -297,7 +297,17 @@ Namespace Fileformats
             'Make sure all required keys exist
             ts.Metadata.AddKeys(SWMM_INTERFACE.MetadataKeys)
             'Set default values
-            If ts.Metadata("Node") = "" Then ts.Metadata("Node") = ts.Title
+            If ts.Metadata("Node") = "" Then
+                'use series title by default
+                ts.Metadata("Node") = ts.Title
+                'check for metadata from a SWMM binary output file and reuse if possible
+                If ts.Metadata.ContainsKey("Type") And ts.Metadata.ContainsKey("Name") Then
+                    'if Type is "Node", assign "Name" to "Node"
+                    If ts.Metadata("Type") = "Node" Then
+                        ts.Metadata("Node") = ts.Metadata("Name")
+                    End If
+                End If
+            End If
             If ts.Metadata("Variable") = "" Then ts.Metadata("Variable") = "FLOW"
         End Sub
 
