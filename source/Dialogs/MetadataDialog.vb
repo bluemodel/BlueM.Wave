@@ -33,6 +33,8 @@ Friend Class MetadataDialog
 
         ' Add any initialization after the InitializeComponent() call.
 
+        Me.LabelSeries.Text = ts.Title
+
         Dim rowIndex As Integer
 
         'Display passed metadata in DataGridView

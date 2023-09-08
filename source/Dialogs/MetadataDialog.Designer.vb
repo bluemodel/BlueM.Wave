@@ -22,14 +22,16 @@ Partial Class MetadataDialog
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-        Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle
+        Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(MetadataDialog))
-        Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel
-        Me.OK_Button = New System.Windows.Forms.Button
-        Me.Cancel_Button = New System.Windows.Forms.Button
-        Me.DataGridView1 = New System.Windows.Forms.DataGridView
-        Me.NameColumn = New System.Windows.Forms.DataGridViewTextBoxColumn
-        Me.ValueColumn = New System.Windows.Forms.DataGridViewTextBoxColumn
+        Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
+        Me.OK_Button = New System.Windows.Forms.Button()
+        Me.Cancel_Button = New System.Windows.Forms.Button()
+        Me.DataGridView1 = New System.Windows.Forms.DataGridView()
+        Me.NameColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ValueColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Label1 = New System.Windows.Forms.Label()
+        Me.LabelSeries = New System.Windows.Forms.Label()
         Me.TableLayoutPanel1.SuspendLayout()
         CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
@@ -74,14 +76,14 @@ Partial Class MetadataDialog
         Me.DataGridView1.AllowUserToDeleteRows = False
         Me.DataGridView1.AllowUserToResizeRows = False
         Me.DataGridView1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-                    Or System.Windows.Forms.AnchorStyles.Left) _
-                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.DataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.DataGridView1.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.NameColumn, Me.ValueColumn})
-        Me.DataGridView1.Location = New System.Drawing.Point(13, 13)
+        Me.DataGridView1.Location = New System.Drawing.Point(13, 37)
         Me.DataGridView1.Name = "DataGridView1"
         Me.DataGridView1.RowHeadersVisible = False
-        Me.DataGridView1.Size = New System.Drawing.Size(239, 252)
+        Me.DataGridView1.Size = New System.Drawing.Size(239, 228)
         Me.DataGridView1.TabIndex = 1
         '
         'NameColumn
@@ -101,6 +103,24 @@ Partial Class MetadataDialog
         Me.ValueColumn.Name = "ValueColumn"
         Me.ValueColumn.Width = 59
         '
+        'Label1
+        '
+        Me.Label1.AutoSize = True
+        Me.Label1.Location = New System.Drawing.Point(13, 13)
+        Me.Label1.Name = "Label1"
+        Me.Label1.Size = New System.Drawing.Size(42, 13)
+        Me.Label1.TabIndex = 2
+        Me.Label1.Text = "Series: "
+        '
+        'LabelSeries
+        '
+        Me.LabelSeries.AutoSize = True
+        Me.LabelSeries.Location = New System.Drawing.Point(61, 13)
+        Me.LabelSeries.Name = "LabelSeries"
+        Me.LabelSeries.Size = New System.Drawing.Size(34, 13)
+        Me.LabelSeries.TabIndex = 3
+        Me.LabelSeries.Text = "series"
+        '
         'MetadataDialog
         '
         Me.AcceptButton = Me.OK_Button
@@ -108,6 +128,8 @@ Partial Class MetadataDialog
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.CancelButton = Me.Cancel_Button
         Me.ClientSize = New System.Drawing.Size(264, 312)
+        Me.Controls.Add(Me.LabelSeries)
+        Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.DataGridView1)
         Me.Controls.Add(Me.TableLayoutPanel1)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
@@ -121,6 +143,7 @@ Partial Class MetadataDialog
         Me.TableLayoutPanel1.ResumeLayout(False)
         CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
+        Me.PerformLayout()
 
     End Sub
     Friend WithEvents TableLayoutPanel1 As System.Windows.Forms.TableLayoutPanel
@@ -129,5 +152,6 @@ Partial Class MetadataDialog
     Friend WithEvents DataGridView1 As System.Windows.Forms.DataGridView
     Friend WithEvents NameColumn As System.Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents ValueColumn As System.Windows.Forms.DataGridViewTextBoxColumn
-
+    Friend WithEvents Label1 As Label
+    Friend WithEvents LabelSeries As Label
 End Class
