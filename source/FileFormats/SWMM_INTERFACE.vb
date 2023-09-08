@@ -453,7 +453,7 @@ Namespace Fileformats
                                 strwrite.Write((seriesList(j * k + 1).Values(i) * KonFaktor).ToString(DefaultNumberFormat).PadRight(10))
                             ElseIf k = variables.Count - 1 Then
                                 strwrite.Write("  ")
-                                strwrite.WriteLine((seriesList(j * variables.Count + 1).Values(i) * KonFaktor).ToString(DefaultNumberFormat).PadRight(10))
+                                strwrite.WriteLine(seriesList(j * variables.Count + 1).Values(i).ToString(DefaultNumberFormat).PadRight(10))
                             End If
                         Next
                     Else
