@@ -21,16 +21,27 @@ Friend Class MetadataDialog
 
     Public Metadata As Metadata
 
-    Public Sub New(_metadata As Metadata)
+    ''' <summary>
+    ''' Instantiates a new MetadataDialog
+    ''' </summary>
+    ''' <param name="ts">Timeseries whose metadata to display</param>
+    ''' <param name="visibleKeys">List of metadata keys to display (others will not be visible, thus cannot be edited)</param>
+    Public Sub New(ts As TimeSeries, visibleKeys As List(Of String))
 
         ' This call is required by the Windows Form Designer.
         InitializeComponent()
 
         ' Add any initialization after the InitializeComponent() call.
 
+        Dim rowIndex As Integer
+
         'Display passed metadata in DataGridView
-        For Each kvp As KeyValuePair(Of String, String) In _metadata
-            Me.DataGridView1.Rows.Add(kvp.Key, kvp.Value)
+        For Each kvp As KeyValuePair(Of String, String) In ts.Metadata
+            rowIndex = Me.DataGridView1.Rows.Add(kvp.Key, kvp.Value)
+            'hide rows not contained in visibleKeys
+            If Not visibleKeys.Contains(kvp.Key) Then
+                Me.DataGridView1.Rows(rowIndex).Visible = False
+            End If
         Next
 
     End Sub

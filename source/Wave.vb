@@ -548,9 +548,8 @@ Public Class Wave
 
         'prepare metadata according to file format
         Dim keys As List(Of String)
-        Dim metadata_old As Metadata
         For Each ts As TimeSeries In zres
-            'get a list of metadata keys
+            'get a list of required metadata keys depending on file type being exported
             Select Case fileType
                 Case TimeSeriesFile.FileTypes.SWMM_INTERFACE
                     keys = Fileformats.SWMM_INTERFACE.MetadataKeys
@@ -562,15 +561,9 @@ Public Class Wave
                     keys = TimeSeriesFile.MetadataKeys 'empty list
             End Select
             If keys.Count > 0 Then
-                'create a copy of the existing metadata
-                metadata_old = ts.Metadata
-                'create new metadata keys
-                ts.Metadata = New Metadata()
+                'add additional keys as necessary
                 For Each key As String In keys
-                    If metadata_old.Keys.Contains(key) Then
-                        'copy old metadata value with the same key
-                        ts.Metadata.Add(key, metadata_old(key))
-                    Else
+                    If Not ts.Metadata.ContainsKey(key) Then
                         'add a new key with an empty value
                         ts.Metadata.Add(key, "")
                     End If
@@ -587,7 +580,7 @@ Public Class Wave
                         TimeSeriesFile.setDefaultMetadata(ts)
                 End Select
                 'show dialog for editing metadata
-                Dim dlg As New MetadataDialog(ts.Metadata)
+                Dim dlg As New MetadataDialog(ts, keys)
                 dlgResult = dlg.ShowDialog()
                 If Not dlgResult = Windows.Forms.DialogResult.OK Then
                     Exit Sub
