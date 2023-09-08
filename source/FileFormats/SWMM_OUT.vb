@@ -29,7 +29,6 @@ Namespace Fileformats
         Inherits TimeSeriesFile
         Protected oSWMM As modelEAU.SWMM.DllAdapter.SWMM_iface
 
-        Private nSeries As Integer
         Private nSubcatch As Integer
         Private nNodes As Integer
         Private nLinks As Integer
@@ -162,12 +161,6 @@ Namespace Fileformats
             nNodesVars = oSWMM.nNODEVARS
             nLinksVars = oSWMM.nLINKVARS
             FlowUnit = oSWMM.FlowUnits
-
-            'Spaltenüberschriften
-            nSeries = nSubcatch * nSubcatchVars _
-                   + nNodes * nNodesVars _
-                   + nLinks * nLinksVars _
-                   + nSysvars
 
             'loop over subcatchments
             indexOffset = 0
