@@ -29,7 +29,7 @@ Namespace Fileformats
 
 #Region "Eigenschaften"
 
-        Const DatumsformatSWMM_TXT As String = "yyyy  MM dd  HH mm"
+        Const DatumsformatSWMM_TXT As String = "yyyy MM  dd  HH mm  ss"
         Const iZeileReportTimeStep As Integer = 3
         Const iZeileAnzConstituents As Integer = 4
         Private Shared AnzConstituents As Integer
@@ -355,14 +355,14 @@ Namespace Fileformats
             'TODO: this assumes equidistant time series!
             dt = DateDiff(DateInterval.Minute, Reihen(0).Dates(0), Reihen(0).Dates(1))
             dt = dt * 60
-            strwrite.WriteLine($"{dt,5} - reporting time step in sec")
+            strwrite.WriteLine($"{dt,-5} - reporting time step in sec")
 
             'the number of variables stored in the file, where the first variable must always be flow rate
             Dim variables As New HashSet(Of String)
             For Each ts As TimeSeries In Reihen
                 variables.Add(ts.Metadata("Variable"))
             Next
-            strwrite.WriteLine($"{variables.Count} - number of constituents as listed below:")
+            strwrite.WriteLine($"{variables.Count,-5} - number of constituents as listed below:")
 
             'the name and units of each variable (one per line), where flow rate is the first variable listed and is always named FLOW
             'TODO: make sure FLOW is first
@@ -376,7 +376,7 @@ Namespace Fileformats
             For Each ts As TimeSeries In Reihen
                 nodes.Add(ts.Metadata("Node"))
             Next
-            strwrite.WriteLine($"{nodes.Count} - number of nodes as listed below:")
+            strwrite.WriteLine($"{nodes.Count,-5} - number of nodes as listed below:")
 
             'the name of each node (one per line)
             For Each node As String In nodes
@@ -386,7 +386,11 @@ Namespace Fileformats
             'TODO: Hier muss noch geprüft werden, ob für alle Nodes auch alle Variables existieren
 
             'a line of text that provides column headings for the data to follow (can be blank)
-            strwrite.WriteLine($"Node          Year Mon Day Hr  Min Sec         {String.Join("  ", variables)}")
+            strwrite.Write($"Node          Year Mon Day Hr Min Sec  ")
+            For Each variable As String In variables
+                strwrite.Write($"{variable,-10}  ")
+            Next
+            strwrite.WriteLine()
 
             'for each node at each time step, a line with:
             ' the name of the node
@@ -403,19 +407,19 @@ Namespace Fileformats
             LenReihe = Reihen(0).Length
             For i = 0 To LenReihe - 1
                 For j = 0 To nodes.Count - 1
-                    strwrite.Write(nodes(j).PadRight(12))
+                    strwrite.Write(nodes(j).PadRight(11))
                     strwrite.Write("   ")
                     strwrite.Write(Reihen(j).Dates(i).ToString(DatumsformatSWMM_TXT))
-                    strwrite.Write(" 00   ")
-                    strwrite.Write((Reihen(j * variables.Count).Values(i) * KonFaktor).ToString(DefaultNumberFormat).PadLeft(14))
+                    strwrite.Write("   ")
+                    strwrite.Write((Reihen(j * variables.Count).Values(i) * KonFaktor).ToString(DefaultNumberFormat).PadRight(10))
                     If variables.Count > 1 Then
                         For k = 1 To variables.Count - 1
                             If k < variables.Count - 1 Then
-                                strwrite.Write("   ")
-                                strwrite.Write((Reihen(j * k + 1).Values(i) * KonFaktor).ToString(DefaultNumberFormat).PadLeft(10))
+                                strwrite.Write("  ")
+                                strwrite.Write((Reihen(j * k + 1).Values(i) * KonFaktor).ToString(DefaultNumberFormat).PadRight(10))
                             ElseIf k = variables.Count - 1 Then
-                                strwrite.Write("   ")
-                                strwrite.WriteLine((Reihen(j * variables.Count + 1).Values(i) * KonFaktor).ToString(DefaultNumberFormat).PadLeft(10))
+                                strwrite.Write("  ")
+                                strwrite.WriteLine((Reihen(j * variables.Count + 1).Values(i) * KonFaktor).ToString(DefaultNumberFormat).PadRight(10))
                             End If
                         Next
                     Else
