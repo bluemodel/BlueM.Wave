@@ -45,11 +45,11 @@ Namespace Fileformats
         ''' </summary>
         ''' <remarks>see https://github.com/USEPA/Stormwater-Management-Model/blob/master/src/outfile/include/swmm_output_enums.h#L36</remarks>
         Private Enum Type As Integer
-            subcatchment = 0
-            node = 1
-            link = 2
-            system = 3
-            pollutant = 4
+            Subcatchment = 0
+            Node = 1
+            Link = 2
+            System = 3
+            Pollutant = 4
         End Enum
 
         ''' <summary>
@@ -78,15 +78,37 @@ Namespace Fileformats
             ''' </summary>
             Dim iIndex As Integer
             ''' <summary>
+            ''' element name
+            ''' </summary>
+            Dim Name As String
+            ''' <summary>
+            ''' variable name
+            ''' </summary>
+            Dim Variable As String
+            ''' <summary>
             ''' variable index (see https://github.com/USEPA/Stormwater-Management-Model/blob/master/src/outfile/include/swmm_output_enums.h)
             ''' </summary>
             Dim vIndex As Integer
         End Structure
 
         ''' <summary>
-        ''' Array containing all series infos
+        ''' Dictionary containing all series infos
         ''' </summary>
-        Private SeriesInfos() As SeriesInfo
+        Private SeriesInfos As Dictionary(Of Integer, SeriesInfo)
+
+        ''' <summary>
+        ''' Returns a list of SWMM binary output file specific metadata keys
+        ''' </summary>
+        Public Overloads Shared ReadOnly Property MetadataKeys() As List(Of String)
+            Get
+                Dim keys As New List(Of String) From {
+                    "Type",
+                    "Name",
+                    "Variable"
+                }
+                Return keys
+            End Get
+        End Property
 
         Public Overrides ReadOnly Property UseImportDialog() As Boolean
             Get
@@ -127,6 +149,7 @@ Namespace Fileformats
             Dim sInfo As TimeSeriesInfo
 
             Me.TimeSeriesInfos.Clear()
+            Me.SeriesInfos = New Dictionary(Of Integer, SeriesInfo)
 
             oSWMM.OpenSwmmOutFile(Me.File)
 
@@ -146,129 +169,134 @@ Namespace Fileformats
                    + nLinks * nLinksVars _
                    + nSysvars
 
-            ReDim SeriesInfos(nSeries - 1)
-
             'loop over subcatchments
             indexOffset = 0
-            iType = Type.subcatchment
+            iType = Type.Subcatchment
             For i = 0 To nSubcatch - 1
                 'Flows
                 For j = 0 To nSubcatchVars - nPolluts - 1
                     index = indexOffset + i * nSubcatchVars + j
                     sInfo = New TimeSeriesInfo()
-                    sInfo.Name = $"subcatchment {oSWMM.subcatchments(i)} {oSWMM.SUBCATCHVAR(j)}"
-                    sInfo.Objekt = oSWMM.subcatchments(i)
+                    sInfo.Name = $"Subcatchment {oSWMM.subcatchments(i)} {oSWMM.SUBCATCHVAR(j)}"
                     sInfo.Unit = getUnit(iType, j, FlowUnit)
-                    sInfo.Type = "FLOW"
-                    sInfo.ObjType = "Subcatchment"
                     sInfo.Index = index
                     Me.TimeSeriesInfos.Add(sInfo)
-                    SeriesInfos(index).iType = iType
-                    SeriesInfos(index).iIndex = i
-                    SeriesInfos(index).vIndex = j
+                    Dim seriesInfo As New SeriesInfo()
+                    seriesInfo.iType = iType
+                    seriesInfo.Name = oSWMM.subcatchments(i)
+                    seriesInfo.Variable = "FLOW"
+                    seriesInfo.iIndex = i
+                    seriesInfo.vIndex = j
+                    SeriesInfos.Add(index, seriesInfo)
                 Next
                 'Pollutants
                 For j = nSubcatchVars - nPolluts To nSubcatchVars - 1
                     index = indexOffset + i * nSubcatchVars + j
                     sInfo = New TimeSeriesInfo()
-                    sInfo.Name = $"subcatchment {oSWMM.subcatchments(i)} {oSWMM.pollutants(j - nSubcatchVars + nPolluts)}"
-                    sInfo.Objekt = oSWMM.subcatchments(i)
+                    sInfo.Name = $"Subcatchment {oSWMM.subcatchments(i)} {oSWMM.pollutants(j - nSubcatchVars + nPolluts)}"
                     sInfo.Unit = getUnit(iType, j, FlowUnit)
-                    'Type aus String (z.B. für "S101 CSB" wird "CSB" ausgelesen)
-                    sInfo.Type = oSWMM.pollutants(j - nSubcatchVars + nPolluts)
-                    sInfo.ObjType = "Subcatchment"
                     sInfo.Index = index
                     Me.TimeSeriesInfos.Add(sInfo)
-                    SeriesInfos(index).iType = iType
-                    SeriesInfos(index).iIndex = i
-                    SeriesInfos(index).vIndex = j
+                    Dim seriesInfo As New SeriesInfo()
+                    seriesInfo.iType = iType
+                    seriesInfo.Name = oSWMM.subcatchments(i)
+                    seriesInfo.Variable = oSWMM.pollutants(j - nSubcatchVars + nPolluts)
+                    seriesInfo.iIndex = i
+                    seriesInfo.vIndex = j
+                    SeriesInfos.Add(index, seriesInfo)
                 Next
             Next
             'loop over nodes
             indexOffset += nSubcatch * nSubcatchVars
-            iType = Type.node
+            iType = Type.Node
             For i = 0 To nNodes - 1
                 'Flows
                 For j = 0 To nNodesVars - nPolluts - 1
                     index = indexOffset + i * nNodesVars + j
                     sInfo = New TimeSeriesInfo()
-                    sInfo.Name = $"node {oSWMM.nodes(i)} {oSWMM.NODEVAR(j)}"
-                    sInfo.Objekt = oSWMM.nodes(i)
+                    sInfo.Name = $"Node {oSWMM.nodes(i)} {oSWMM.NODEVAR(j)}"
                     sInfo.Unit = getUnit(iType, j, FlowUnit)
-                    sInfo.Type = "FLOW"
-                    sInfo.ObjType = "Node"
                     sInfo.Index = index
                     Me.TimeSeriesInfos.Add(sInfo)
-                    SeriesInfos(index).iType = iType
-                    SeriesInfos(index).iIndex = i
-                    SeriesInfos(index).vIndex = j
+                    Dim seriesInfo As New SeriesInfo()
+                    seriesInfo.iType = iType
+                    seriesInfo.Name = oSWMM.nodes(i)
+                    seriesInfo.Variable = "FLOW"
+                    seriesInfo.iIndex = i
+                    seriesInfo.vIndex = j
+                    SeriesInfos.Add(index, seriesInfo)
                 Next
                 'Pollutants
                 For j = nNodesVars - nPolluts To nNodesVars - 1
                     index = indexOffset + i * nNodesVars + j
                     sInfo = New TimeSeriesInfo()
-                    sInfo.Name = $"node {oSWMM.nodes(i)} {oSWMM.pollutants(j - nNodesVars + nPolluts)}"
-                    sInfo.Objekt = oSWMM.nodes(i)
+                    sInfo.Name = $"Node {oSWMM.nodes(i)} {oSWMM.pollutants(j - nNodesVars + nPolluts)}"
                     sInfo.Unit = getUnit(iType, j, FlowUnit)
-                    'Type aus String (z.B. für "S101 CSB" wird "CSB" ausgelesen)
-                    sInfo.Type = oSWMM.pollutants(j - nNodesVars + nPolluts)
-                    sInfo.ObjType = "Node"
                     sInfo.Index = index
                     Me.TimeSeriesInfos.Add(sInfo)
-                    SeriesInfos(index).iType = iType
-                    SeriesInfos(index).iIndex = i
-                    SeriesInfos(index).vIndex = j
+                    Dim seriesInfo As New SeriesInfo()
+                    seriesInfo.iType = iType
+                    seriesInfo.Name = oSWMM.nodes(i)
+                    seriesInfo.Variable = oSWMM.pollutants(j - nNodesVars + nPolluts)
+                    seriesInfo.iIndex = i
+                    seriesInfo.vIndex = j
+                    SeriesInfos.Add(index, seriesInfo)
                 Next
             Next
             'loop over links
             indexOffset += nNodes * nNodesVars
-            iType = Type.link
+            iType = Type.Link
             For i = 0 To nLinks - 1
                 'Flows
                 For j = 0 To nLinksVars - nPolluts - 1
                     index = indexOffset + i * nLinksVars + j
                     sInfo = New TimeSeriesInfo()
-                    sInfo.Name = $"link {oSWMM.links(i)} {oSWMM.LINKVAR(j)}"
-                    sInfo.Objekt = oSWMM.links(i)
+                    sInfo.Name = $"Link {oSWMM.links(i)} {oSWMM.LINKVAR(j)}"
                     sInfo.Unit = getUnit(iType, j, FlowUnit)
-                    sInfo.Type = "FLOW"
-                    sInfo.ObjType = "Link"
                     sInfo.Index = index
                     Me.TimeSeriesInfos.Add(sInfo)
-                    SeriesInfos(index).iType = iType
-                    SeriesInfos(index).iIndex = i
-                    SeriesInfos(index).vIndex = j
+                    Dim seriesInfo As New SeriesInfo()
+                    seriesInfo.iType = iType
+                    seriesInfo.Name = oSWMM.links(i)
+                    seriesInfo.Variable = "FLOW"
+                    seriesInfo.iIndex = i
+                    seriesInfo.vIndex = j
+                    SeriesInfos.Add(index, seriesInfo)
                 Next
                 'Pollutants
                 For j = nLinksVars - nPolluts To nLinksVars - 1
                     index = indexOffset + i * nLinksVars + j
                     sInfo = New TimeSeriesInfo()
-                    sInfo.Name = $"link {oSWMM.links(i)} {oSWMM.pollutants(j - nLinksVars + nPolluts)}"
-                    sInfo.Objekt = oSWMM.links(i)
+                    sInfo.Name = $"Link {oSWMM.links(i)} {oSWMM.pollutants(j - nLinksVars + nPolluts)}"
                     sInfo.Unit = getUnit(iType, j, FlowUnit)
-                    'Type aus String (z.B. für "S101 CSB" wird "CSB" ausgelesen)
-                    sInfo.Type = oSWMM.pollutants(j - nLinksVars + nPolluts)
-                    sInfo.ObjType = "Link"
                     sInfo.Index = index
                     Me.TimeSeriesInfos.Add(sInfo)
-                    SeriesInfos(index).iType = iType
-                    SeriesInfos(index).iIndex = i
-                    SeriesInfos(index).vIndex = j
+                    Dim seriesInfo As New SeriesInfo()
+                    seriesInfo.iType = iType
+                    seriesInfo.Name = oSWMM.links(i)
+                    seriesInfo.Variable = oSWMM.pollutants(j - nLinksVars + nPolluts)
+                    seriesInfo.iIndex = i
+                    seriesInfo.vIndex = j
+                    SeriesInfos.Add(index, seriesInfo)
                 Next
             Next
             'loop over system variables
             indexOffset += nLinks * nLinksVars
-            iType = Type.system
+            iType = Type.System
             For i = 0 To nSysvars - 1
                 index = indexOffset + i
                 sInfo = New TimeSeriesInfo()
-                sInfo.Name = $"system {oSWMM.SYSVAR(i)}"
+                sInfo.Name = $"System {oSWMM.SYSVAR(i)}"
                 sInfo.Unit = getUnit(iType, i, FlowUnit)
                 sInfo.Index = index
                 Me.TimeSeriesInfos.Add(sInfo)
-                SeriesInfos(index).iType = iType
-                SeriesInfos(index).iIndex = 0
-                SeriesInfos(index).vIndex = i
+                Dim seriesInfo As New SeriesInfo()
+                seriesInfo.iType = iType
+                seriesInfo.Name = "System"
+                seriesInfo.Variable = oSWMM.SYSVAR(i)
+                seriesInfo.iIndex = 0
+                seriesInfo.vIndex = i
+                SeriesInfos.Add(index, seriesInfo)
             Next
 
         End Sub
@@ -281,15 +309,22 @@ Namespace Fileformats
             Dim datum As Double
             Dim ts As TimeSeries
 
-            'Zeitreihen instanzieren
+            'loop over selected series
             For Each sInfo As TimeSeriesInfo In Me.SelectedSeries
+
+                index = sInfo.Index
+
+                'instantiate time series
                 ts = New TimeSeries(sInfo.Name)
                 ts.Unit = sInfo.Unit
                 ts.DataSource = New TimeSeriesDataSource(Me.File, sInfo.Name)
-                'Objektname und Typ (für SWMM-Txt-Export)
-                ts.Objekt = sInfo.Objekt
-                ts.Type = sInfo.Type
-                index = sInfo.Index
+
+                'add metadata
+                ts.Metadata("Type") = [Enum].GetName(GetType(Type), SeriesInfos(index).iType)
+                ts.Metadata("Name") = SeriesInfos(index).Name
+                ts.Metadata("Variable") = SeriesInfos(index).Variable
+
+                'read data and add nodes to time series
                 For period = 0 To oSWMM.NPeriods - 1
                     oSWMM.GetSwmmDate(period, datum)
                     oSWMM.GetSwmmResult(SeriesInfos(index).iType, SeriesInfos(index).iIndex, SeriesInfos(index).vIndex, period, value)
@@ -300,6 +335,18 @@ Namespace Fileformats
                 Me.TimeSeries.Add(sInfo.Index, ts)
             Next
 
+        End Sub
+
+        ''' <summary>
+        ''' Sets default metadata values for a time series corresponding to the SWMM binary output file format
+        ''' </summary>
+        Public Overloads Shared Sub setDefaultMetadata(ts As TimeSeries)
+            'Make sure all required keys exist
+            ts.Metadata.AddKeys(SWMM_OUT.MetadataKeys)
+            'Set default values
+            If ts.Metadata("Type") = "" Then ts.Metadata("Type") = "Node"
+            If ts.Metadata("Name") = "" Then ts.Metadata("Name") = ts.Title
+            If ts.Metadata("Variable") = "" Then ts.Metadata("Variable") = "FLOW"
         End Sub
 
         ''' <summary>
@@ -362,7 +409,7 @@ Namespace Fileformats
             End Select
 
             Select Case iType
-                Case Type.subcatchment
+                Case Type.Subcatchment
                     Select Case vIndex
                         Case 0
                             unit = "mm/hr"
@@ -379,7 +426,7 @@ Namespace Fileformats
                         Case Else
                             unit = "MGL"
                     End Select
-                Case Type.node
+                Case Type.Node
                     Select Case vIndex
                         Case 0
                             unit = "m"
@@ -396,7 +443,7 @@ Namespace Fileformats
                         Case Else
                             unit = "MGL"
                     End Select
-                Case Type.link
+                Case Type.Link
                     Select Case vIndex
                         Case 0
                             unit = flowUnitString
@@ -411,7 +458,7 @@ Namespace Fileformats
                         Case Else
                             unit = "MGL"
                     End Select
-                Case Type.system
+                Case Type.System
                     Select Case vIndex
                         Case 0
                             unit = "C°"
