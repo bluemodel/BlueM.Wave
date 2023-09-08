@@ -319,31 +319,63 @@ Namespace Fileformats
         End Sub
 
         ''' <summary>
-        ''' Exportiert eine Zeitreihe als TXT-Datei
+        ''' Exports a list of time series to SWMM interface text format
         ''' </summary>
-        ''' <param name="Reihen">Die zu exportierenden Zeitreihen</param>
-        ''' <param name="File">Pfad zur anzulegenden Datei</param>
-        Public Shared Sub Write_File(ByRef Reihen As List(Of TimeSeries), File As String)
+        ''' <param name="seriesList">list of time series to export</param>
+        ''' <param name="file">path to file to export to</param>
+        Public Shared Sub Write_File(ByRef seriesList As List(Of TimeSeries), file As String)
 
             Dim strwrite As StreamWriter
             Dim i, j, k As Integer
+            Dim dt As Integer
             Dim LenReihe As Long
             Dim KonFaktor As Integer
 
+            'Determine unique nodes and variables
+            Dim nodes As New HashSet(Of String)
+            Dim variables As New HashSet(Of String)
+            For Each ts As TimeSeries In seriesList
+                If Not ts.Metadata.ContainsKey("Node") Then
+                    Throw New Exception($"Series {ts.Title} is missing a required metadata entry 'Node'!")
+                End If
+                nodes.Add(ts.Metadata("Node"))
+                If Not ts.Metadata.ContainsKey("Variable") Then
+                    Throw New Exception($"Series {ts.Title} is missing a required metadata entry 'Variable'!")
+                End If
+                variables.Add(ts.Metadata("Variable"))
+            Next
 
-            'SWMM5 Interface File
-            'RTC-Demo 
-            ' 60 - reporting time step in sec
-            ' 1    - number of constituents as listed below:
-            'FLOW LPS
-            ' 5    - number of nodes as listed below:
-            'S101
-            'Node          Year Mon Day Hr  Min Sec         FLOW
-            'S101          2001 6   10  0   0   0          0.000
+            'check that "FLOW" is among the variables
+            If Not variables.Contains("FLOW") Then
+                Throw New Exception($"SWMM Interface text format requires a variable named 'FLOW'!")
+            End If
 
-            strwrite = New StreamWriter(File, False, Helpers.DefaultEncoding)
+            'determine units for variables
+            Dim units As New List(Of String)
+            For Each variable As String In variables_sorted
+                'find the first time series containing the variable and use its unit
+                'TODO: this assumes that all series with the same variable also have the same unit!
+                For Each ts As TimeSeries In seriesList
+                    If ts.Metadata("Variable") = variable Then
+                        If variable = "FLOW" Then
+                            'FLOW must always be in l/s
+                            units.Add("LPS")
+                            'determine conversion factor
+                            KonFaktor = FakConv(ts.Unit)
+                        Else
+                            units.Add(ts.Unit)
+                        End If
+                        Exit For
+                    End If
+                Next
+            Next
 
-            Dim dt As Integer
+            'determine time step in seconds
+            'TODO: this assumes that all time series are equidistant and have the same timestep!
+            dt = DateDiff(DateInterval.Second, seriesList(0).Dates(0), seriesList(0).Dates(1))
+
+            'open file for writing
+            strwrite = New StreamWriter(file, False, Helpers.DefaultEncoding)
 
             'the first line contains the keyword "SWMM5" (without the quotes)
             strwrite.WriteLine("SWMM5 Interface File")
@@ -352,38 +384,24 @@ Namespace Fileformats
             strwrite.WriteLine("BlueM.Wave export")
 
             'the time step used for all inflow records (integer seconds)
-            'TODO: this assumes equidistant time series!
-            dt = DateDiff(DateInterval.Minute, Reihen(0).Dates(0), Reihen(0).Dates(1))
-            dt = dt * 60
             strwrite.WriteLine($"{dt,-5} - reporting time step in sec")
 
             'the number of variables stored in the file, where the first variable must always be flow rate
-            Dim variables As New HashSet(Of String)
-            For Each ts As TimeSeries In Reihen
-                variables.Add(ts.Metadata("Variable"))
-            Next
             strwrite.WriteLine($"{variables.Count,-5} - number of constituents as listed below:")
 
             'the name and units of each variable (one per line), where flow rate is the first variable listed and is always named FLOW
             'TODO: make sure FLOW is first
-            'TODO: use actual unit instead of always "LPS"
             For Each variable As String In variables
                 strwrite.WriteLine($"{variable}   LPS")
             Next
 
             'the number of nodes with recorded inflow data
-            Dim nodes As New HashSet(Of String)
-            For Each ts As TimeSeries In Reihen
-                nodes.Add(ts.Metadata("Node"))
-            Next
             strwrite.WriteLine($"{nodes.Count,-5} - number of nodes as listed below:")
 
             'the name of each node (one per line)
             For Each node As String In nodes
                 strwrite.WriteLine(node)
             Next
-
-            'TODO: Hier muss noch geprüft werden, ob für alle Nodes auch alle Variables existieren
 
             'a line of text that provides column headings for the data to follow (can be blank)
             strwrite.Write($"Node          Year Mon Day Hr Min Sec  ")
@@ -401,25 +419,23 @@ Namespace Fileformats
 
             'TODO: Bei mehreren Variablen muss im Moment die richtige Reihenfolge vorab gegeben sein!
 
-            'SWMM-Reihen immer in l/s
-            KonFaktor = FakConv(Reihen(0).Unit)
 
-            LenReihe = Reihen(0).Length
+            LenReihe = seriesList(0).Length
             For i = 0 To LenReihe - 1
                 For j = 0 To nodes.Count - 1
                     strwrite.Write(nodes(j).PadRight(11))
                     strwrite.Write("   ")
-                    strwrite.Write(Reihen(j).Dates(i).ToString(DatumsformatSWMM_TXT))
+                    strwrite.Write(seriesList(j).Dates(i).ToString(DatumsformatSWMM_TXT))
                     strwrite.Write("   ")
-                    strwrite.Write((Reihen(j * variables.Count).Values(i) * KonFaktor).ToString(DefaultNumberFormat).PadRight(10))
+                    strwrite.Write((seriesList(j * variables.Count).Values(i) * KonFaktor).ToString(DefaultNumberFormat).PadRight(10))
                     If variables.Count > 1 Then
                         For k = 1 To variables.Count - 1
                             If k < variables.Count - 1 Then
                                 strwrite.Write("  ")
-                                strwrite.Write((Reihen(j * k + 1).Values(i) * KonFaktor).ToString(DefaultNumberFormat).PadRight(10))
+                                strwrite.Write((seriesList(j * k + 1).Values(i) * KonFaktor).ToString(DefaultNumberFormat).PadRight(10))
                             ElseIf k = variables.Count - 1 Then
                                 strwrite.Write("  ")
-                                strwrite.WriteLine((Reihen(j * variables.Count + 1).Values(i) * KonFaktor).ToString(DefaultNumberFormat).PadRight(10))
+                                strwrite.WriteLine((seriesList(j * variables.Count + 1).Values(i) * KonFaktor).ToString(DefaultNumberFormat).PadRight(10))
                             End If
                         Next
                     Else
