@@ -384,7 +384,7 @@ Namespace Fileformats
                             'FLOW must always be in l/s
                             units.Add("LPS")
                             'determine conversion factor
-                            KonFaktor = FakConv(ts.Unit)
+                            KonFaktor = FlowConversionFactor(ts.Unit)
                         Else
                             units.Add(ts.Unit)
                         End If
@@ -492,14 +492,22 @@ Namespace Fileformats
 
         End Function
 
-        Public Shared Function FakConv(UnitIn As String) As Integer
+        ''' <summary>
+        ''' Returns a conversion factor for converting a flow unit to LPS
+        ''' </summary>
+        ''' <param name="unit">the flow unit to convert</param>
+        ''' <returns></returns>
+        Public Shared Function FlowConversionFactor(unit As String) As Integer
 
-            Select Case UnitIn
-                Case "m3/s"
+            Select Case unit
+                Case "m3/s", "m³/s", "CMS"
                     Return 1000
-                Case Else
+                Case "l/s", "LPS"
                     Return 1
+                Case Else
+                    Throw New Exception($"Unable to determine conversion factor for converting unit {unit} to LPS!")
             End Select
+
         End Function
 
 #End Region 'Methoden
