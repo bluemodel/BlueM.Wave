@@ -38,12 +38,19 @@ Namespace Fileformats
         Private _Zeitintervall As Integer
         Private _noConstituents As Integer
 
-        Private Structure seriesMetadata
+        ''' <summary>
+        ''' Structure for storing SWMM series information
+        ''' </summary>
+        Private Structure SWMMSeriesInfo
             Dim Node As String
             Dim Variable As String
         End Structure
 
-        Private seriesMetadataIndex As Dictionary(Of Integer, seriesMetadata)
+        ''' <summary>
+        ''' Dictionary containing all SWMM series infos
+        ''' Key is series index
+        ''' </summary>
+        Private swmmInfos As Dictionary(Of Integer, SWMMSeriesInfo)
 
         Public Structure Constituent
             Dim Type As String
@@ -139,7 +146,7 @@ Namespace Fileformats
             Dim sInfo As TimeSeriesInfo
 
             Me.TimeSeriesInfos.Clear()
-            Me.seriesMetadataIndex = New Dictionary(Of Integer, seriesMetadata)
+            Me.swmmInfos = New Dictionary(Of Integer, SWMMSeriesInfo)
 
             'Datei öffnen
             Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
@@ -201,11 +208,11 @@ Namespace Fileformats
                     sInfo.Index = index
                     Me.TimeSeriesInfos.Add(sInfo)
 
-                    'store metadata for later
-                    Dim metadata As seriesMetadata
-                    metadata.Node = Nodes(i).Bez
-                    metadata.Variable = Constituents(j).Type
-                    Me.seriesMetadataIndex.Add(index, metadata)
+                    'store SWMM info
+                    Dim swmmInfo As SWMMSeriesInfo
+                    swmmInfo.Node = Nodes(i).Bez
+                    swmmInfo.Variable = Constituents(j).Type
+                    Me.swmmInfos.Add(index, swmmInfo)
 
                     index = index + 1
                 Next
@@ -251,8 +258,8 @@ Namespace Fileformats
                 Me.TimeSeries(sInfo.Index).Unit = sInfo.Unit
                 'add metadata
                 Me.TimeSeries(sInfo.Index).Metadata.AddKeys(SWMM_INTERFACE.MetadataKeys)
-                Me.TimeSeries(sInfo.Index).Metadata("Node") = Me.seriesMetadataIndex(sInfo.Index).Node
-                Me.TimeSeries(sInfo.Index).Metadata("Variable") = Me.seriesMetadataIndex(sInfo.Index).Variable
+                Me.TimeSeries(sInfo.Index).Metadata("Node") = Me.swmmInfos(sInfo.Index).Node
+                Me.TimeSeries(sInfo.Index).Metadata("Variable") = Me.swmmInfos(sInfo.Index).Variable
             Next
 
             'Einlesen
@@ -300,7 +307,7 @@ Namespace Fileformats
             If ts.Metadata("Node") = "" Then
                 'use series title by default
                 ts.Metadata("Node") = ts.Title
-                'check for metadata from a SWMM binary output file and reuse if possible
+                'check for existing metadata from a SWMM binary output file and reuse if possible
                 If ts.Metadata.ContainsKey("Type") And ts.Metadata.ContainsKey("Name") Then
                     'if Type is "Node", assign "Name" to "Node"
                     If ts.Metadata("Type") = "Node" Then
