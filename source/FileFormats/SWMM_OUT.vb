@@ -67,7 +67,7 @@ Namespace Fileformats
         ''' <summary>
         ''' Structure for storing SWMM series information
         ''' </summary>
-        Private Structure SeriesInfo
+        Private Structure SWMMSeriesInfo
             ''' <summary>
             ''' element type
             ''' </summary>
@@ -91,9 +91,10 @@ Namespace Fileformats
         End Structure
 
         ''' <summary>
-        ''' Dictionary containing all series infos
+        ''' Dictionary containing all SWMM series infos
+        ''' Key is series index
         ''' </summary>
-        Private SeriesInfos As Dictionary(Of Integer, SeriesInfo)
+        Private swmmInfos As Dictionary(Of Integer, SWMMSeriesInfo)
 
         ''' <summary>
         ''' Returns a list of SWMM binary output file specific metadata keys
@@ -148,7 +149,7 @@ Namespace Fileformats
             Dim sInfo As TimeSeriesInfo
 
             Me.TimeSeriesInfos.Clear()
-            Me.SeriesInfos = New Dictionary(Of Integer, SeriesInfo)
+            Me.swmmInfos = New Dictionary(Of Integer, SWMMSeriesInfo)
 
             oSWMM.OpenSwmmOutFile(Me.File)
 
@@ -174,13 +175,14 @@ Namespace Fileformats
                     sInfo.Unit = getUnit(iType, j, FlowUnit)
                     sInfo.Index = index
                     Me.TimeSeriesInfos.Add(sInfo)
-                    Dim seriesInfo As New SeriesInfo()
-                    seriesInfo.iType = iType
-                    seriesInfo.Name = oSWMM.subcatchments(i)
-                    seriesInfo.Variable = "FLOW"
-                    seriesInfo.iIndex = i
-                    seriesInfo.vIndex = j
-                    SeriesInfos.Add(index, seriesInfo)
+                    'store SWMM info
+                    Dim swmmInfo As New SWMMSeriesInfo()
+                    swmmInfo.iType = iType
+                    swmmInfo.Name = oSWMM.subcatchments(i)
+                    swmmInfo.Variable = "FLOW"
+                    swmmInfo.iIndex = i
+                    swmmInfo.vIndex = j
+                    Me.swmmInfos.Add(index, swmmInfo)
                 Next
                 'Pollutants
                 For j = nSubcatchVars - nPolluts To nSubcatchVars - 1
@@ -190,13 +192,14 @@ Namespace Fileformats
                     sInfo.Unit = getUnit(iType, j, FlowUnit)
                     sInfo.Index = index
                     Me.TimeSeriesInfos.Add(sInfo)
-                    Dim seriesInfo As New SeriesInfo()
-                    seriesInfo.iType = iType
-                    seriesInfo.Name = oSWMM.subcatchments(i)
-                    seriesInfo.Variable = oSWMM.pollutants(j - nSubcatchVars + nPolluts)
-                    seriesInfo.iIndex = i
-                    seriesInfo.vIndex = j
-                    SeriesInfos.Add(index, seriesInfo)
+                    'store SWMM info
+                    Dim swmmInfo As New SWMMSeriesInfo()
+                    swmmInfo.iType = iType
+                    swmmInfo.Name = oSWMM.subcatchments(i)
+                    swmmInfo.Variable = oSWMM.pollutants(j - nSubcatchVars + nPolluts)
+                    swmmInfo.iIndex = i
+                    swmmInfo.vIndex = j
+                    Me.swmmInfos.Add(index, swmmInfo)
                 Next
             Next
             'loop over nodes
@@ -211,13 +214,14 @@ Namespace Fileformats
                     sInfo.Unit = getUnit(iType, j, FlowUnit)
                     sInfo.Index = index
                     Me.TimeSeriesInfos.Add(sInfo)
-                    Dim seriesInfo As New SeriesInfo()
-                    seriesInfo.iType = iType
-                    seriesInfo.Name = oSWMM.nodes(i)
-                    seriesInfo.Variable = "FLOW"
-                    seriesInfo.iIndex = i
-                    seriesInfo.vIndex = j
-                    SeriesInfos.Add(index, seriesInfo)
+                    'store SWMM info
+                    Dim swmmInfo As New SWMMSeriesInfo()
+                    swmmInfo.iType = iType
+                    swmmInfo.Name = oSWMM.nodes(i)
+                    swmmInfo.Variable = "FLOW"
+                    swmmInfo.iIndex = i
+                    swmmInfo.vIndex = j
+                    Me.swmmInfos.Add(index, swmmInfo)
                 Next
                 'Pollutants
                 For j = nNodesVars - nPolluts To nNodesVars - 1
@@ -227,13 +231,14 @@ Namespace Fileformats
                     sInfo.Unit = getUnit(iType, j, FlowUnit)
                     sInfo.Index = index
                     Me.TimeSeriesInfos.Add(sInfo)
-                    Dim seriesInfo As New SeriesInfo()
-                    seriesInfo.iType = iType
-                    seriesInfo.Name = oSWMM.nodes(i)
-                    seriesInfo.Variable = oSWMM.pollutants(j - nNodesVars + nPolluts)
-                    seriesInfo.iIndex = i
-                    seriesInfo.vIndex = j
-                    SeriesInfos.Add(index, seriesInfo)
+                    'store SWMM info
+                    Dim swmmInfo As New SWMMSeriesInfo()
+                    swmmInfo.iType = iType
+                    swmmInfo.Name = oSWMM.nodes(i)
+                    swmmInfo.Variable = oSWMM.pollutants(j - nNodesVars + nPolluts)
+                    swmmInfo.iIndex = i
+                    swmmInfo.vIndex = j
+                    Me.swmmInfos.Add(index, swmmInfo)
                 Next
             Next
             'loop over links
@@ -248,13 +253,14 @@ Namespace Fileformats
                     sInfo.Unit = getUnit(iType, j, FlowUnit)
                     sInfo.Index = index
                     Me.TimeSeriesInfos.Add(sInfo)
-                    Dim seriesInfo As New SeriesInfo()
-                    seriesInfo.iType = iType
-                    seriesInfo.Name = oSWMM.links(i)
-                    seriesInfo.Variable = "FLOW"
-                    seriesInfo.iIndex = i
-                    seriesInfo.vIndex = j
-                    SeriesInfos.Add(index, seriesInfo)
+                    'store SWMM info
+                    Dim swmmInfo As New SWMMSeriesInfo()
+                    swmmInfo.iType = iType
+                    swmmInfo.Name = oSWMM.links(i)
+                    swmmInfo.Variable = "FLOW"
+                    swmmInfo.iIndex = i
+                    swmmInfo.vIndex = j
+                    Me.swmmInfos.Add(index, swmmInfo)
                 Next
                 'Pollutants
                 For j = nLinksVars - nPolluts To nLinksVars - 1
@@ -264,13 +270,14 @@ Namespace Fileformats
                     sInfo.Unit = getUnit(iType, j, FlowUnit)
                     sInfo.Index = index
                     Me.TimeSeriesInfos.Add(sInfo)
-                    Dim seriesInfo As New SeriesInfo()
-                    seriesInfo.iType = iType
-                    seriesInfo.Name = oSWMM.links(i)
-                    seriesInfo.Variable = oSWMM.pollutants(j - nLinksVars + nPolluts)
-                    seriesInfo.iIndex = i
-                    seriesInfo.vIndex = j
-                    SeriesInfos.Add(index, seriesInfo)
+                    'store SWMM info
+                    Dim swmmInfo As New SWMMSeriesInfo()
+                    swmmInfo.iType = iType
+                    swmmInfo.Name = oSWMM.links(i)
+                    swmmInfo.Variable = oSWMM.pollutants(j - nLinksVars + nPolluts)
+                    swmmInfo.iIndex = i
+                    swmmInfo.vIndex = j
+                    Me.swmmInfos.Add(index, swmmInfo)
                 Next
             Next
             'loop over system variables
@@ -283,13 +290,14 @@ Namespace Fileformats
                 sInfo.Unit = getUnit(iType, i, FlowUnit)
                 sInfo.Index = index
                 Me.TimeSeriesInfos.Add(sInfo)
-                Dim seriesInfo As New SeriesInfo()
-                seriesInfo.iType = iType
-                seriesInfo.Name = "System"
-                seriesInfo.Variable = oSWMM.SYSVAR(i)
-                seriesInfo.iIndex = 0
-                seriesInfo.vIndex = i
-                SeriesInfos.Add(index, seriesInfo)
+                'store SWMM info
+                Dim swmmInfo As New SWMMSeriesInfo()
+                swmmInfo.iType = iType
+                swmmInfo.Name = "System"
+                swmmInfo.Variable = oSWMM.SYSVAR(i)
+                swmmInfo.iIndex = 0
+                swmmInfo.vIndex = i
+                Me.swmmInfos.Add(index, swmmInfo)
             Next
 
         End Sub
@@ -313,14 +321,14 @@ Namespace Fileformats
                 ts.DataSource = New TimeSeriesDataSource(Me.File, sInfo.Name)
 
                 'add metadata
-                ts.Metadata("Type") = [Enum].GetName(GetType(Type), SeriesInfos(index).iType)
-                ts.Metadata("Name") = SeriesInfos(index).Name
-                ts.Metadata("Variable") = SeriesInfos(index).Variable
+                ts.Metadata("Type") = [Enum].GetName(GetType(Type), swmmInfos(index).iType)
+                ts.Metadata("Name") = swmmInfos(index).Name
+                ts.Metadata("Variable") = swmmInfos(index).Variable
 
                 'read data and add nodes to time series
                 For period = 0 To oSWMM.NPeriods - 1
                     oSWMM.GetSwmmDate(period, datum)
-                    oSWMM.GetSwmmResult(SeriesInfos(index).iType, SeriesInfos(index).iIndex, SeriesInfos(index).vIndex, period, value)
+                    oSWMM.GetSwmmResult(swmmInfos(index).iType, swmmInfos(index).iIndex, swmmInfos(index).vIndex, period, value)
                     ts.AddNode(DateTime.FromOADate(datum), value)
                 Next
 
