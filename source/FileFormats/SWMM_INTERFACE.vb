@@ -361,7 +361,8 @@ Namespace Fileformats
             Dim variables As New List(Of String)
             For Each ts As TimeSeries In seriesList
                 If Not nodes.Contains(ts.Metadata("Node")) Then
-                    nodes.Add(ts.Metadata("Node"))
+                    'node names must not contain spaces
+                    nodes.Add(ts.Metadata("Node").Replace(" ", "_"))
                 End If
                 If Not variables.Contains(ts.Metadata("Variable")) Then
                     variables.Add(ts.Metadata("Variable"))
