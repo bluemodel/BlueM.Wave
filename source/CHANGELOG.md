@@ -11,6 +11,16 @@ NEW:
 FIXED:
 * Analysis function Accumulate now repects the input interpretation
 * Time Series Properties and Values windows now restore on toolbar button press if previously minimized
+* Importing from SWMM binary output format:
+  * Read and store metadata
+  * Include the element type in series names, making them unique #63
+  * Fixed wrong units for "System" variables
+  * Always use the "official" SWMM notation for units
+* Importing from SWMM interface text format:
+  * Read and store metadata
+* Exporting to SWMM interface text format: 
+  * Allow editing of series metadata before export
+  * General improvements and additional checks
 
 CHANGED:
 * Analysis function Cumulative renamed to Accumulate
