@@ -96,7 +96,7 @@ Friend Class ImportDiag
 
     'Konstruktor
     '***********
-    Public Sub New(ByRef _dateiobjekt As TimeSeriesFile)
+    Public Sub New(ByRef fileInstance As TimeSeriesFile)
 
         Call MyBase.New()
 
@@ -104,7 +104,10 @@ Friend Class ImportDiag
 
         Call InitializeComponent()
 
-        Me.datei = _dateiobjekt
+        Me.datei = fileInstance
+
+        'add type name of file instance to dialog title
+        Me.Text &= $" - file format: {Me.datei.GetType().Name}"
 
         'initialize input delay timer
         Me.inputTimer = New Timers.Timer(1000)
