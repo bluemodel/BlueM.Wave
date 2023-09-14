@@ -1,7 +1,7 @@
 ﻿BlueM.Wave Release Notes
 ========================
 
-Version 2.4.6
+Version 2.5.0
 -------------
 NEW:
 * Allow multiple files to be selected when importing files using the Import time series menu item 
@@ -28,6 +28,7 @@ CHANGED:
 
 API-CHANGES:
 * Removed property `TimeSeriesFile.nLinesPerTimestamp`
+* Removed the properties `TimeSeries.Objekt` and `TimeSeries.Type`
 
 Version 2.4.5
 -------------
