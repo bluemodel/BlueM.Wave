@@ -1,6 +1,11 @@
 ﻿BlueM.Wave Release Notes
 ========================
 
+Version 2.4.6
+-------------
+CHANGED:
+* Added progress bar to Calculator analysis function
+
 Version 2.4.5
 -------------
 NEW:
