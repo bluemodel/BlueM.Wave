@@ -17,7 +17,20 @@ BlueM.Wave uses [TeeChart .NET](https://www.steema.com/product/net) for all char
 For testing purposes, you can use the evaluation version of TeeChart by creating an empty text file at `BlueM.Wave\source\My Project\TeeChart.licenses` or by excluding the corresponding entry `My Project\TeeChart.licenses` from the Wave project in Visual Studio. This will allow you to compile, but any charts will be displayed with a watermark.
 
 ## Testing
-The repository contains an assembly `Wave.Tests` for unit testing. Tests can be run from within Visual Studio. To add new tests, follow the pattern of the existing ones and/or refer to the [MSTest framework docs](https://docs.microsoft.com/en-us/visualstudio/test/using-microsoft-visualstudio-testtools-unittesting-members-in-unit-tests?view=vs-2022).
+The repository contains an assembly `Wave.Tests` for unit testing. 
+
+Some of the tests use test data from the [BlueM.Datasets](https://github.com/bluemodel/BlueM.Datasets) repository, which needs to be checked out alongside BlueM.Wave in the same parent folder.
+
+There are two ways to run tests:
+* from within Visual Studio using the *Text Explorer* window (see also [this article](https://learn.microsoft.com/en-us/visualstudio/test/run-unit-tests-with-test-explorer?view=vs-2022))
+* from the command-line with the following command (see also [this arcticle](https://learn.microsoft.com/en-us/visualstudio/test/vstest-console-options?view=vs-2022)):
+```bat
+vstest.console.exe BlueM.Wave\tests\bin\x64\Debug\Wave.Tests.dll /Settings:BlueM.Wave\tests\tests.runsettings
+```
+
+To add new tests, follow the pattern of the existing ones and/or refer to the [MSTest framework docs](https://docs.microsoft.com/en-us/visualstudio/test/using-microsoft-visualstudio-testtools-unittesting-members-in-unit-tests?view=vs-2022).
+
+All tests defined in `Wave.Tests` are automatically run in a GitHub action whenever a push to the master branch or to a pull request occurs (see [workflow file](https://github.com/bluemodel/BlueM.Wave/blob/master/.github/workflows/run-tests.yml)).
 
 ## Debug log messages
 Debug log messages can be created with `Log.AddLogEntry(levels.debug, "message")` and are only visible in the log if the application setting `loggingLevel` is set to `debug`.
