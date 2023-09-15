@@ -327,7 +327,7 @@ Public MustInherit Class TimeSeriesFile
     End Property
 
     ''' <summary>
-    ''' List of all series contained in a file
+    ''' List of TimeSeriesInfo of all series contained in a file
     ''' </summary>
     ''' <remarks></remarks>
     Public Property TimeSeriesInfos() As List(Of TimeSeriesInfo)
@@ -340,7 +340,7 @@ Public MustInherit Class TimeSeriesFile
     End Property
 
     ''' <summary>
-    ''' List of series currently selected for import
+    ''' List of TimeSeriesInfo of series currently selected for import
     ''' </summary>
     ''' <remarks></remarks>
     Public ReadOnly Property SelectedSeries() As List(Of TimeSeriesInfo)
@@ -475,22 +475,22 @@ Public MustInherit Class TimeSeriesFile
     End Sub
 
     ''' <summary>
-    ''' Select a series for import by column index
+    ''' Select a series for import by index
     ''' </summary>
-    ''' <param name="colIndex">column index</param>
-    ''' <returns>True if successful, False if column index was not found</returns>
+    ''' <param name="index">index</param>
+    ''' <returns>True if successful, False if index was not found</returns>
     ''' <remarks></remarks>
-    Public Function selectSeries(colIndex As Integer) As Boolean
+    Public Function selectSeries(index As Integer) As Boolean
 
         Dim i As Integer = 0
         For Each sInfo As TimeSeriesInfo In Me.TimeSeriesInfos
-            If sInfo.Index = colIndex Then
+            If sInfo.Index = index Then
                 Me.SelectedSeries.Add(sInfo)
                 Return True
             End If
         Next
         'series not found in file
-        Log.AddLogEntry(Log.levels.error, $"Series with column index {colIndex} not found in file!")
+        Log.AddLogEntry(Log.levels.error, $"Series with index {index} not found in file!")
         Return False
 
     End Function
