@@ -95,6 +95,7 @@ Public MustInherit Class TimeSeriesFile
         "DHI MIKE DFS0 files (*.dfs0)|*.dfs0|" &
         "HYDRO_AS-2D result files (*.dat)|*.dat|" &
         "Hystem-Extran files (*.dat, *.reg)|*.dat;*.reg|" &
+        "JAMS timeseries result files (*.dat)|*.dat|" &
         "PRMS result files (*.dat, *.out)|*.dat;*.out|" &
         "SIMBA files (*.smb)|*.smb|" &
         "SMUSI files (*.asc. *.reg)|*.asc;*.reg|" &
