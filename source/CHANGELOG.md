@@ -6,6 +6,9 @@ Version 2.4.6
 CHANGED:
 * Added progress bar to Calculator analysis function
 
+API-CHANGES:
+* Removed property `TimeSeriesFile.nLinesPerTimestamp`
+
 Version 2.4.5
 -------------
 NEW:

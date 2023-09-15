@@ -125,7 +125,6 @@ Public MustInherit Class TimeSeriesFile
     Private _dateTimeColumnIndex As Integer = 0
     Private _seriesInfos As List(Of TimeSeriesInfo)
     Private _selectedSeries As List(Of TimeSeriesInfo)
-    Private _nLinesperTimestamp As Integer = 1
     Private _metadata As Metadata
     Private _encoding As Text.Encoding
 
@@ -347,18 +346,6 @@ Public MustInherit Class TimeSeriesFile
         Get
             Return _selectedSeries
         End Get
-    End Property
-
-    ''' <summary>
-    ''' Number of lines per timestamp (default is 1)
-    ''' </summary>
-    Public Property nLinesPerTimestamp() As Integer
-        Get
-            Return _nLinesperTimestamp
-        End Get
-        Set(value As Integer)
-            _nLinesperTimestamp = value
-        End Set
     End Property
 
     ''' <summary>

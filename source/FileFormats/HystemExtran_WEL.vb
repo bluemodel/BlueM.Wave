@@ -35,6 +35,7 @@ Namespace Fileformats
         Const maxSpalten_dT As Integer = 8
         Const HExt_welEinheit As String = "m3/s"
         Private AnzSpalten_dT() As Integer
+        Private nLinesPerTimestamp As Integer
 
 #End Region
 

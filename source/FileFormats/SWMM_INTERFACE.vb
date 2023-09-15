@@ -156,8 +156,7 @@ Namespace Fileformats
             'entspricht der Anzahl der Zeilen pro Zeitschritt
             Zeile = StrReadSync.ReadLine.ToString()
             strArray = Zeile.Split(New Char() {space.ToChar}, StringSplitOptions.RemoveEmptyEntries)
-            Me.nLinesPerTimestamp = Convert.ToSingle(strArray(0))
-            AnzNodes = Me.nLinesPerTimestamp
+            AnzNodes = Convert.ToInt32(strArray(0))
             ReDim Nodes(AnzNodes - 1)
             For i = 0 To AnzNodes - 1
                 Zeile = StrReadSync.ReadLine.ToString()
