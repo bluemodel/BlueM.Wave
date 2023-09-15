@@ -3,6 +3,9 @@
 
 Version 2.4.6
 -------------
+NEW:
+* Allow multiple files to be selected when importing files using the Import time series menu item 
+
 CHANGED:
 * Added progress bar to Calculator analysis function
 

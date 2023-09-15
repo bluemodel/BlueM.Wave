@@ -345,9 +345,8 @@ Friend Class WaveController
     Private Sub ImportSeries_Click(sender As System.Object, e As System.EventArgs)
         View.OpenFileDialog1.Title = "Import time series"
         View.OpenFileDialog1.Filter = TimeSeriesFile.FileFilter
-        'TODO: allow selection of multiple files
         If (View.OpenFileDialog1.ShowDialog() = Windows.Forms.DialogResult.OK) Then
-            Call _model.Import_File(View.OpenFileDialog1.FileName)
+            Call _model.Import_Files(View.OpenFileDialog1.FileNames)
         End If
     End Sub
 

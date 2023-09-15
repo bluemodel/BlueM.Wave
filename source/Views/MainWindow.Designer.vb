@@ -646,6 +646,10 @@ Partial Class MainWindow
         Me.ToolStripMenuItem_DeactivateAllSeries.Size = New System.Drawing.Size(176, 22)
         Me.ToolStripMenuItem_DeactivateAllSeries.Text = "Deactivate all series"
         '
+        'OpenFileDialog1
+        '
+        Me.OpenFileDialog1.Multiselect = True
+        '
         'SplitContainer1
         '
         Me.SplitContainer1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
