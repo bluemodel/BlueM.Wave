@@ -312,8 +312,7 @@
     <Compile Include="FileFormats\PRMS.vb" />
     <Compile Include="FileFormats\SMUSI_REG.vb" />
     <Compile Include="FileFormats\SMB.vb" />
-    <Compile Include="FileFormats\SWMM_DAT_MASS.vb" />
-    <Compile Include="FileFormats\SWMM_DAT_TIME.vb" />
+    <Compile Include="FileFormats\SWMM_TIMESERIES.vb" />
     <Compile Include="FileFormats\SWMM_OUT.vb" />
     <Compile Include="FileFormats\SydroSQLite.vb" />
     <Compile Include="FileFormats\UVF.vb" />

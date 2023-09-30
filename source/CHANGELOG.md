@@ -7,6 +7,7 @@ NEW:
 * Allow multiple files to be selected when importing files using the Import time series menu item 
 * Added navigation buttons for navigating to the start and end of the currently active series
 * New analysis function Decumulate
+* Added support for importing SWMM time series (DAT) file format 
 
 FIXED:
 * Analysis function Accumulate now repects the input interpretation
@@ -21,6 +22,11 @@ FIXED:
 * Exporting to SWMM interface text format: 
   * Allow editing of series metadata before export
   * General improvements and additional checks
+* Exporting to SWMM time series (DAT) file format #118:
+  * Renamed SWMM_DAT_MASS and SWMM_DAT_TIME export formats to SWMM_TIMESERIES
+  * Removed automatic transformation of time series to 5 min equidistant timestep before export
+  * Fixed output date format to use "/" as date separator
+  * Added comment header line
 
 CHANGED:
 * Analysis function Cumulative renamed to Accumulate

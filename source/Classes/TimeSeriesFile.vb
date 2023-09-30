@@ -39,8 +39,7 @@ Public MustInherit Class TimeSeriesFile
         HYSTEM_REG
         SMUSI_REG
         SMB
-        SWMM_DAT_MASS
-        SWMM_DAT_TIME
+        SWMM_TIMESERIES
         SWMM_INTERFACE
         SWMM_LID_REPORT
         SWMM_OUT
@@ -99,7 +98,7 @@ Public MustInherit Class TimeSeriesFile
         "PRMS result files (*.dat, *.out)|*.dat;*.out|" &
         "SIMBA files (*.smb)|*.smb|" &
         "SMUSI files (*.asc. *.reg)|*.asc;*.reg|" &
-        "SWMM files (*.txt, *.out)|*.txt;*.out|" &
+        "SWMM files (*.dat, *.txt, *.out)|*.dat;*.txt;*.out|" &
         "SYDRO binary files (*.bin)|*.bin|" &
         "SYDRO binary wel files (*.wbl)|*.wbl|" &
         "SYDRO SQLite files (*.db)|*.db|" &
@@ -548,14 +547,12 @@ Public MustInherit Class TimeSeriesFile
                 Return FileExtensions.REG
             Case FileTypes.SMB
                 Return FileExtensions.SMB
-            Case FileTypes.SWMM_DAT_MASS
-                Return FileExtensions.DAT
-            Case FileTypes.SWMM_DAT_TIME
-                Return FileExtensions.DAT
             Case FileTypes.SWMM_INTERFACE
                 Return FileExtensions.TXT
             Case FileTypes.SWMM_LID_REPORT
                 Return FileExtensions.TXT
+            Case FileTypes.SWMM_TIMESERIES
+                Return FileExtensions.DAT
             Case FileTypes.SWMM_OUT
                 Return FileExtensions.OUT
             Case FileTypes.SYDROSQLITE
@@ -673,6 +670,10 @@ Public MustInherit Class TimeSeriesFile
                     'JAMS result file
                     Log.AddLogEntry(levels.info, $"Detected JAMS result format for file {fileName}.")
                     fileType = FileTypes.JAMS
+                ElseIf Fileformats.SWMM_TIMESERIES.verifyFormat(file) Then
+                    'SWMM time series format
+                    Log.AddLogEntry(levels.info, $"Detected SWMM time series format for file {fileName}.")
+                    fileType = FileTypes.SWMM_TIMESERIES
                 ElseIf Fileformats.HYDRO_AS_2D.verifyFormat(file) Then
                     'HYDRO-AS_2D result file
                     Log.AddLogEntry(levels.info, $"Detected HYDRO_AS-2D result format for file {fileName}.")
@@ -832,14 +833,12 @@ Public MustInherit Class TimeSeriesFile
                 FileInstance = New Fileformats.SMB(file)
             Case FileTypes.SMUSI_REG
                 FileInstance = New Fileformats.SMUSI_REG(file)
-            Case FileTypes.SWMM_DAT_MASS
-                Throw New NotImplementedException("Reading files of type DAT_SWMM_MASS is not yet implemented!")
-            Case FileTypes.SWMM_DAT_TIME
-                Throw New NotImplementedException("Reading files of type DAT_SWMM_TIME is not yet implemented!")
             Case FileTypes.SWMM_INTERFACE
                 FileInstance = New Fileformats.SWMM_INTERFACE(file)
             Case FileTypes.SWMM_LID_REPORT
                 FileInstance = New Fileformats.SWMM_LID_REPORT(file)
+            Case FileTypes.SWMM_TIMESERIES
+                FileInstance = New Fileformats.SWMM_TIMESERIES(file)
             Case FileTypes.SWMM_OUT
                 FileInstance = New Fileformats.SWMM_OUT(file)
             Case FileTypes.SYDROSQLITE
