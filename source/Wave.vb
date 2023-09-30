@@ -658,12 +658,12 @@ Public Class Wave
                 Case TimeSeriesFile.FileTypes.SMUSI_REG
                     SaveFileDialog1.DefaultExt = "reg"
                     SaveFileDialog1.Filter = "SMUSI REG files (*.reg)|*.reg"
-                Case TimeSeriesFile.FileTypes.SWMM_DAT_MASS, TimeSeriesFile.FileTypes.SWMM_DAT_TIME
-                    SaveFileDialog1.DefaultExt = "dat"
-                    SaveFileDialog1.Filter = "SWMM DAT files (*.dat)|*.dat"
                 Case TimeSeriesFile.FileTypes.SWMM_INTERFACE
                     SaveFileDialog1.DefaultExt = "txt"
                     SaveFileDialog1.Filter = "SWMM Interface files (*.txt)|*.txt"
+                Case TimeSeriesFile.FileTypes.SWMM_TIMESERIES
+                    SaveFileDialog1.DefaultExt = "dat"
+                    SaveFileDialog1.Filter = "SWMM time series files (*.dat)|*.dat"
                 Case TimeSeriesFile.FileTypes.UVF
                     SaveFileDialog1.DefaultExt = "uvf"
                     SaveFileDialog1.Filter = "UVF files (*.uvf)|*.uvf"
@@ -750,11 +750,8 @@ Public Class Wave
                         Case TimeSeriesFile.FileTypes.SMUSI_REG
                             Call Fileformats.SMUSI_REG.Write_File(ts, filename)
 
-                        Case TimeSeriesFile.FileTypes.SWMM_DAT_MASS
-                            Call Fileformats.SWMM_DAT_MASS.Write_File(ts, filename, 5) 'TODO: Zeitschritt ist noch nicht dynamisch definiert
-
-                        Case TimeSeriesFile.FileTypes.SWMM_DAT_TIME
-                            Call Fileformats.SWMM_DAT_TIME.Write_File(ts, filename, 5) 'TODO: Zeitschritt ist noch nicht dynamisch definiert
+                        Case TimeSeriesFile.FileTypes.SWMM_TIMESERIES
+                            Call Fileformats.SWMM_TIMESERIES.Write_File(ts, filename)
 
                         Case TimeSeriesFile.FileTypes.UVF
                             Call Fileformats.UVF.Write_File(ts, filename)
