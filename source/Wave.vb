@@ -660,7 +660,7 @@ Public Class Wave
                     SaveFileDialog1.Filter = "SMUSI REG files (*.reg)|*.reg"
                 Case TimeSeriesFile.FileTypes.SWMM_INTERFACE
                     SaveFileDialog1.DefaultExt = "txt"
-                    SaveFileDialog1.Filter = "SWMM Interface files (*.txt)|*.txt"
+                    SaveFileDialog1.Filter = "SWMM routing interface files (*.txt)|*.txt"
                 Case TimeSeriesFile.FileTypes.SWMM_TIMESERIES
                     SaveFileDialog1.DefaultExt = "dat"
                     SaveFileDialog1.Filter = "SWMM time series files (*.dat)|*.dat"

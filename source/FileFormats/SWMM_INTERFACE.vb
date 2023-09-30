@@ -20,8 +20,7 @@ Imports System.IO
 Namespace Fileformats
 
     ''' <summary>
-    ''' Class for reading the SWMM5 Routing Interface File format (*.txt)
-    ''' The format is described in the SWMM format description 
+    ''' Class for reading and writing the SWMM5 routing interface file format
     ''' </summary>
     ''' <remarks>See https://wiki.bluemodel.org/index.php/SWMM_file_formats </remarks>
     Public Class SWMM_INTERFACE
@@ -73,7 +72,7 @@ Namespace Fileformats
         End Property
 
         ''' <summary>
-        ''' Returns a list of SWMM interface file specific metadata keys
+        ''' Returns a list of SWMM routing interface file specific metadata keys
         ''' </summary>
         Public Overloads Shared ReadOnly Property MetadataKeys() As List(Of String)
             Get
@@ -298,7 +297,7 @@ Namespace Fileformats
         End Sub
 
         ''' <summary>
-        ''' Sets default metadata values for a time series corresponding to the SWMM interface file format
+        ''' Sets default metadata values for a time series corresponding to the SWMM routing interface file format
         ''' </summary>
         Public Overloads Shared Sub setDefaultMetadata(ts As TimeSeries)
             'Make sure all required keys exist
@@ -319,7 +318,7 @@ Namespace Fileformats
         End Sub
 
         ''' <summary>
-        ''' Exports a list of time series to SWMM interface text format
+        ''' Exports a list of time series to SWMM routing interface text format
         ''' </summary>
         ''' <param name="seriesList">list of time series to export</param>
         ''' <param name="file">path to file to export to</param>
@@ -371,7 +370,7 @@ Namespace Fileformats
 
             'check that "FLOW" is among the variables
             If Not variables.Contains("FLOW") Then
-                Throw New Exception($"SWMM Interface text format requires a variable named 'FLOW'!")
+                Throw New Exception($"SWMM routing interface text format requires a variable named 'FLOW'!")
             End If
 
             'determine units for variables
@@ -402,7 +401,7 @@ Namespace Fileformats
             strwrite = New StreamWriter(file, False, Helpers.DefaultEncoding)
 
             'the first line contains the keyword "SWMM5" (without the quotes)
-            strwrite.WriteLine("SWMM5 Interface File")
+            strwrite.WriteLine("SWMM5 routing interface file")
 
             'a line of text that describes the file (can be blank)
             strwrite.WriteLine("BlueM.Wave export")
