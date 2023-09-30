@@ -21,7 +21,7 @@ Imports System.IO
 Namespace Fileformats
 
     ''' <summary>
-    ''' Class for SWMM time series (DAT) file format
+    ''' Class for SWMM time series file format
     ''' </summary>
     ''' <remarks>See https://wiki.bluemodel.org/index.php/SWMM_file_formats</remarks>
     Public Class SWMM_TIMESERIES
@@ -160,7 +160,7 @@ Namespace Fileformats
         End Sub
 
         ''' <summary>
-        ''' Checks whether a file is in SWMM time series (DAT) file format
+        ''' Checks whether a file is in SWMM time series file format
         ''' </summary>
         ''' <param name="file">path to file</param>
         ''' <returns></returns>
@@ -216,7 +216,7 @@ Namespace Fileformats
         End Function
 
         ''' <summary>
-        ''' Writes a time series to file in SWMM time series (DAT) file format
+        ''' Writes a time series to file in SWMM time series file format
         ''' </summary>
         ''' <param name="ts">time series to export</param>
         ''' <param name="path">path to file to write</param>

@@ -73,7 +73,7 @@ Public MustInherit Class TimeSeriesFile
         Public Shared ReadOnly REG As String = ".REG"
         Public Shared ReadOnly SMB As String = ".SMB"
         Public Shared ReadOnly TEN As String = ".TEN"
-        Public Shared ReadOnly TXT As String = ".TXT"   'SWMM interface routing file, SWMM LID report file or generic text file 
+        Public Shared ReadOnly TXT As String = ".TXT"   'SWMM routing interface file, SWMM LID report file or generic text file 
         Public Shared ReadOnly UVF As String = ".UVF"
         Public Shared ReadOnly WBL As String = ".WBL"   'SYDRO binary WEL format
         Public Shared ReadOnly WEL As String = ".WEL"
