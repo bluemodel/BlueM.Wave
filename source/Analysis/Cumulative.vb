@@ -89,7 +89,7 @@ Friend Class Cumulative
     Public Overrides Sub ProcessAnalysis()
 
         Dim i As Integer
-        Dim sum As Double
+        Dim value, sum As Double
         Dim startdate As DateTime
         Dim ts, ts_cum As TimeSeries
 
@@ -113,20 +113,48 @@ Friend Class Cumulative
 
                 sum = 0.0
                 For i = 0 To ts.Length - 1
-                    If i <> 0 And i <> ts.Length - 1 Then
-                        If ts.Values(i) = 0.0 And ts.Values(i + 1) = 0.0 Then
-                            'omit intermediate nodes where the cumulative value does not change
-                            Continue For
-                        End If
-                    End If
-                    If Double.IsNaN(ts.Values(i)) Then
+
+                    'determine value depending on interpretation
+                    Select Case ts.Interpretation
+                        Case TimeSeries.InterpretationEnum.Instantaneous,
+                             TimeSeries.InterpretationEnum.BlockLeft,
+                             TimeSeries.InterpretationEnum.CumulativePerTimestep
+                            value = ts.Values(i)
+                        Case TimeSeries.InterpretationEnum.BlockRight
+                            If i = 0 Then
+                                value = 0
+                            Else
+                                value = ts.Values(i - 1)
+                            End If
+                        Case Else
+                            Throw New NotImplementedException($"Analysis function Cumulative is currently not supported for time series with interpretation {[Enum].GetName(GetType(TimeSeries.InterpretationEnum), ts.Interpretation)}!")
+                    End Select
+
+                    If Double.IsNaN(value) Then
                         'omit NaN values
                         Continue For
                     End If
-                    sum += ts.Values(i)
+
+                    'cumulate
+                    sum += value
+
+                    'add new node
                     ts_cum.AddNode(ts.Dates(i), sum)
                 Next
 
+                'delete intermediate nodes where the cumulative value does not change
+                Dim unnecessary_nodes As New List(Of Integer)
+                For i = 1 To ts_cum.Length - 2
+                    If ts_cum.Values(i - 1) = ts_cum.Values(i + 1) Then
+                        unnecessary_nodes.Add(i)
+                    End If
+                Next
+                unnecessary_nodes.Reverse()
+                For Each i In unnecessary_nodes
+                    ts_cum.Nodes.RemoveAt(i)
+                Next
+
+                'store result series
                 MyBase.ResultSeries.Add(ts_cum)
 
             Next
