@@ -46,6 +46,7 @@ Friend Class PropertiesController
             _view = New PropertiesWindow()
         End If
         View.Update(_model.TimeSeries.ToList)
+        View.WindowState = FormWindowState.Normal
         View.Show()
         View.BringToFront()
     End Sub

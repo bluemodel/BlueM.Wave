@@ -8,6 +8,7 @@ NEW:
 
 FIXED:
 * Analysis function Cumulative: now repects the input interpretation
+* Time Series Properties and Values windows now restore on toolbar button press if previously minimized
 
 CHANGED:
 * Added progress bar to Calculator analysis function

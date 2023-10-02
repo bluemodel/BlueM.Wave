@@ -47,6 +47,7 @@ Friend Class ValuesController
             _view = New ValuesWindow()
         End If
         View.Update(_model.TimeSeries.ToList)
+        View.WindowState = FormWindowState.Normal
         View.Show()
         View.BringToFront()
     End Sub
