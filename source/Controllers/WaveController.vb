@@ -167,8 +167,10 @@ Friend Class WaveController
 
         AddHandler Me.View.ComboBox_DisplayRangeUnit.SelectedIndexChanged, AddressOf displayRangeChanged
         AddHandler Me.View.NumericUpDown_DisplayRangeMultiplier.ValueChanged, AddressOf displayRangeChanged
-        AddHandler Me.View.Button_NavBack.Click, AddressOf navigation_Click
-        AddHandler Me.View.Button_NavForward.Click, AddressOf navigation_Click
+        AddHandler Me.View.Button_NavStart.Click, AddressOf navigationStartEnd_Click
+        AddHandler Me.View.Button_NavBack.Click, AddressOf navigationBackwardForward_Click
+        AddHandler Me.View.Button_NavForward.Click, AddressOf navigationBackwardForward_Click
+        AddHandler Me.View.Button_NavEnd.Click, AddressOf navigationStartEnd_Click
 
         'status strip events
         AddHandler Me.View.ToolStripStatusLabel_Log.Click, AddressOf ShowLog_Click
@@ -1378,7 +1380,7 @@ Friend Class WaveController
     ''' <summary>
     ''' Navigate forward/back
     ''' </summary>
-    Private Sub navigation_Click(sender As System.Object, e As System.EventArgs)
+    Private Sub navigationBackwardForward_Click(sender As System.Object, e As System.EventArgs)
 
         Dim multiplier As Integer
         Dim xMinOld, xMinNew, xMaxOld, xMaxNew As DateTime
@@ -1431,6 +1433,57 @@ Friend Class WaveController
         'update chart
         View.ChartMinX = xMinNew
         View.ChartMaxX = xMaxNew
+
+        Call Me.ViewportChanged()
+
+        Me.selectionMade = True
+
+    End Sub
+
+    ''' <summary>
+    ''' Navigate to start/end
+    ''' </summary>
+    Private Sub navigationStartEnd_Click(sender As System.Object, e As System.EventArgs)
+
+        Dim xMinNew, xMaxNew As Double
+        Dim xDiff As Double
+
+        'collect start and end dates of all currently active series
+        Dim startdates As New List(Of Double)
+        Dim enddates As New List(Of Double)
+        For Each series As Steema.TeeChart.Styles.Series In View.TChart1.Series
+            If Not series.Active Then
+                Continue For
+            End If
+            startdates.Add(series.MinXValue)
+            enddates.Add(series.MaxXValue)
+        Next
+
+        If startdates.Count = 0 Or enddates.Count = 0 Then
+            'Do nothing
+            Exit Sub
+        End If
+
+        'calculate current viewport extent in OADate units
+        xDiff = (View.ChartMaxX - View.ChartMinX).TotalDays
+
+        Select Case CType(sender, Button).Name
+            Case "Button_NavStart"
+                xMinNew = startdates.Min()
+                xMaxNew = xMinNew + xDiff
+            Case "Button_NavEnd"
+                xMaxNew = enddates.Max()
+                xMinNew = xMaxNew - xDiff
+            Case Else
+                Throw New Exception($"Unknown button pressed!")
+        End Select
+
+        'save the current zoom snapshot
+        Call Me.SaveZoomSnapshot()
+
+        'update chart
+        View.ChartMinX = DateTime.FromOADate(xMinNew)
+        View.ChartMaxX = DateTime.FromOADate(xMaxNew)
 
         Call Me.ViewportChanged()
 

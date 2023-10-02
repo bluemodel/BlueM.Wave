@@ -22,6 +22,7 @@ Partial Class MainWindow
     'Das Bearbeiten mit dem Code-Editor ist nicht möglich.
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
+        Me.components = New System.ComponentModel.Container()
         Dim ToolStripSeparator1 As System.Windows.Forms.ToolStripSeparator
         Dim toolStripSeparator As System.Windows.Forms.ToolStripSeparator
         Dim ToolStripSeparator2 As System.Windows.Forms.ToolStripSeparator
@@ -32,6 +33,8 @@ Partial Class MainWindow
         Dim ToolStripSeparator5 As System.Windows.Forms.ToolStripSeparator
         Dim ToolStripSeparator4 As System.Windows.Forms.ToolStripSeparator
         Dim ToolStripSeparator3 As System.Windows.Forms.ToolStripSeparator
+        Dim Margins2 As Steema.TeeChart.Margins = New Steema.TeeChart.Margins()
+        Dim Margins3 As Steema.TeeChart.Margins = New Steema.TeeChart.Margins()
         Me.ToolStripStatusLabel_Errors = New System.Windows.Forms.ToolStripStatusLabel()
         Me.ToolStripStatusLabel_Warnings = New System.Windows.Forms.ToolStripStatusLabel()
         Me.ToolStripStatusLabel_Log = New System.Windows.Forms.ToolStripStatusLabel()
@@ -92,6 +95,8 @@ Partial Class MainWindow
         Me.TChart2 = New Steema.TeeChart.TChart()
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
         Me.PanelNavigation = New System.Windows.Forms.Panel()
+        Me.Button_NavEnd = New System.Windows.Forms.Button()
+        Me.Button_NavStart = New System.Windows.Forms.Button()
         Me.Label_Navigate = New System.Windows.Forms.Label()
         Me.Button_NavForward = New System.Windows.Forms.Button()
         Me.Button_NavBack = New System.Windows.Forms.Button()
@@ -106,6 +111,7 @@ Partial Class MainWindow
         Me.MaskedTextBox_NavStart = New System.Windows.Forms.MaskedTextBox()
         Me.SaveFileDialog1 = New System.Windows.Forms.SaveFileDialog()
         Me.ProgressBar1 = New System.Windows.Forms.ProgressBar()
+        Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
         ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
         toolStripSeparator = New System.Windows.Forms.ToolStripSeparator()
         ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
@@ -284,21 +290,21 @@ Partial Class MainWindow
         '
         Me.ToolStripMenuItem_SaveProjectFile.Image = Global.BlueM.Wave.My.Resources.Resources.chart_curve_link
         Me.ToolStripMenuItem_SaveProjectFile.Name = "ToolStripMenuItem_SaveProjectFile"
-        Me.ToolStripMenuItem_SaveProjectFile.Size = New System.Drawing.Size(180, 22)
+        Me.ToolStripMenuItem_SaveProjectFile.Size = New System.Drawing.Size(167, 22)
         Me.ToolStripMenuItem_SaveProjectFile.Text = "Save project file"
         '
         'ToolStripMenuItem_SaveChart
         '
         Me.ToolStripMenuItem_SaveChart.Image = Global.BlueM.Wave.My.Resources.Resources.chart_pie
         Me.ToolStripMenuItem_SaveChart.Name = "ToolStripMenuItem_SaveChart"
-        Me.ToolStripMenuItem_SaveChart.Size = New System.Drawing.Size(180, 22)
+        Me.ToolStripMenuItem_SaveChart.Size = New System.Drawing.Size(167, 22)
         Me.ToolStripMenuItem_SaveChart.Text = "Save chart"
         '
         'ToolStripMenuItem_ExportSeries
         '
         Me.ToolStripMenuItem_ExportSeries.Image = Global.BlueM.Wave.My.Resources.Resources.page_white_go
         Me.ToolStripMenuItem_ExportSeries.Name = "ToolStripMenuItem_ExportSeries"
-        Me.ToolStripMenuItem_ExportSeries.Size = New System.Drawing.Size(180, 22)
+        Me.ToolStripMenuItem_ExportSeries.Size = New System.Drawing.Size(167, 22)
         Me.ToolStripMenuItem_ExportSeries.Text = "Export time series"
         '
         'ToolStripSeparator4
@@ -789,6 +795,7 @@ Partial Class MainWindow
         Me.TChart2.Axes.Bottom.Title.Shadow.Brush.Color = System.Drawing.Color.DarkGray
         Me.TChart2.Axes.Bottom.Title.Shadow.Brush.Solid = True
         Me.TChart2.Axes.Bottom.Title.Shadow.Brush.Visible = True
+        Me.TChart2.Axes.Bottom.UseMaxPixelPos = True
         '
         '
         '
@@ -901,6 +908,7 @@ Partial Class MainWindow
         Me.TChart2.Axes.Depth.Title.Shadow.Brush.Color = System.Drawing.Color.DarkGray
         Me.TChart2.Axes.Depth.Title.Shadow.Brush.Solid = True
         Me.TChart2.Axes.Depth.Title.Shadow.Brush.Visible = True
+        Me.TChart2.Axes.Depth.UseMaxPixelPos = True
         '
         '
         '
@@ -1013,6 +1021,7 @@ Partial Class MainWindow
         Me.TChart2.Axes.DepthTop.Title.Shadow.Brush.Color = System.Drawing.Color.DarkGray
         Me.TChart2.Axes.DepthTop.Title.Shadow.Brush.Solid = True
         Me.TChart2.Axes.DepthTop.Title.Shadow.Brush.Visible = True
+        Me.TChart2.Axes.DepthTop.UseMaxPixelPos = True
         '
         '
         '
@@ -1125,6 +1134,7 @@ Partial Class MainWindow
         Me.TChart2.Axes.Left.Title.Shadow.Brush.Color = System.Drawing.Color.DarkGray
         Me.TChart2.Axes.Left.Title.Shadow.Brush.Solid = True
         Me.TChart2.Axes.Left.Title.Shadow.Brush.Visible = True
+        Me.TChart2.Axes.Left.UseMaxPixelPos = True
         '
         '
         '
@@ -1237,6 +1247,7 @@ Partial Class MainWindow
         Me.TChart2.Axes.Right.Title.Shadow.Brush.Color = System.Drawing.Color.DarkGray
         Me.TChart2.Axes.Right.Title.Shadow.Brush.Solid = True
         Me.TChart2.Axes.Right.Title.Shadow.Brush.Visible = True
+        Me.TChart2.Axes.Right.UseMaxPixelPos = True
         '
         '
         '
@@ -1349,6 +1360,7 @@ Partial Class MainWindow
         Me.TChart2.Axes.Top.Title.Shadow.Brush.Color = System.Drawing.Color.DarkGray
         Me.TChart2.Axes.Top.Title.Shadow.Brush.Solid = True
         Me.TChart2.Axes.Top.Title.Shadow.Brush.Visible = True
+        Me.TChart2.Axes.Top.UseMaxPixelPos = True
         Me.TChart2.Cursor = System.Windows.Forms.Cursors.Default
         Me.TChart2.Dock = System.Windows.Forms.DockStyle.Fill
         '
@@ -1614,6 +1626,15 @@ Partial Class MainWindow
         Me.TChart2.Panel.Shadow.Brush.Color = System.Drawing.Color.DarkGray
         Me.TChart2.Panel.Shadow.Brush.Solid = True
         Me.TChart2.Panel.Shadow.Brush.Visible = True
+        '
+        '
+        '
+        Me.TChart2.Printer.Landscape = True
+        Margins2.Bottom = 10
+        Margins2.Left = 10
+        Margins2.Right = 10
+        Margins2.Top = 10
+        Me.TChart2.Printer.Margins = Margins2
         Me.TChart2.Size = New System.Drawing.Size(940, 136)
         '
         '
@@ -1890,6 +1911,8 @@ Partial Class MainWindow
         '
         'PanelNavigation
         '
+        Me.PanelNavigation.Controls.Add(Me.Button_NavEnd)
+        Me.PanelNavigation.Controls.Add(Me.Button_NavStart)
         Me.PanelNavigation.Controls.Add(Me.Label_Navigate)
         Me.PanelNavigation.Controls.Add(Me.Button_NavForward)
         Me.PanelNavigation.Controls.Add(Me.Button_NavBack)
@@ -1900,7 +1923,28 @@ Partial Class MainWindow
         Me.PanelNavigation.Margin = New System.Windows.Forms.Padding(0)
         Me.PanelNavigation.Name = "PanelNavigation"
         Me.PanelNavigation.Size = New System.Drawing.Size(938, 38)
-        Me.PanelNavigation.TabIndex = 2
+        Me.PanelNavigation.TabIndex = 0
+        '
+        'Button_NavEnd
+        '
+        Me.Button_NavEnd.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Button_NavEnd.Image = Global.BlueM.Wave.My.Resources.Resources.control_end
+        Me.Button_NavEnd.Location = New System.Drawing.Point(906, 8)
+        Me.Button_NavEnd.Name = "Button_NavEnd"
+        Me.Button_NavEnd.Size = New System.Drawing.Size(23, 23)
+        Me.Button_NavEnd.TabIndex = 6
+        Me.ToolTip1.SetToolTip(Me.Button_NavEnd, "Navigate to end")
+        Me.Button_NavEnd.UseVisualStyleBackColor = True
+        '
+        'Button_NavStart
+        '
+        Me.Button_NavStart.Image = Global.BlueM.Wave.My.Resources.Resources.control_start
+        Me.Button_NavStart.Location = New System.Drawing.Point(8, 8)
+        Me.Button_NavStart.Name = "Button_NavStart"
+        Me.Button_NavStart.Size = New System.Drawing.Size(23, 23)
+        Me.Button_NavStart.TabIndex = 0
+        Me.ToolTip1.SetToolTip(Me.Button_NavStart, "Navigate to start")
+        Me.Button_NavStart.UseVisualStyleBackColor = True
         '
         'Label_Navigate
         '
@@ -1909,26 +1953,28 @@ Partial Class MainWindow
         Me.Label_Navigate.Location = New System.Drawing.Point(376, 13)
         Me.Label_Navigate.Name = "Label_Navigate"
         Me.Label_Navigate.Size = New System.Drawing.Size(53, 13)
-        Me.Label_Navigate.TabIndex = 6
+        Me.Label_Navigate.TabIndex = 2
         Me.Label_Navigate.Text = "Navigate:"
         '
         'Button_NavForward
         '
         Me.Button_NavForward.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Button_NavForward.Image = CType(resources.GetObject("Button_NavForward.Image"), System.Drawing.Image)
-        Me.Button_NavForward.Location = New System.Drawing.Point(854, 8)
+        Me.Button_NavForward.Location = New System.Drawing.Point(831, 8)
         Me.Button_NavForward.Name = "Button_NavForward"
-        Me.Button_NavForward.Size = New System.Drawing.Size(75, 23)
-        Me.Button_NavForward.TabIndex = 6
+        Me.Button_NavForward.Size = New System.Drawing.Size(69, 23)
+        Me.Button_NavForward.TabIndex = 5
+        Me.ToolTip1.SetToolTip(Me.Button_NavForward, "Navigate forwards")
         Me.Button_NavForward.UseVisualStyleBackColor = True
         '
         'Button_NavBack
         '
         Me.Button_NavBack.Image = CType(resources.GetObject("Button_NavBack.Image"), System.Drawing.Image)
-        Me.Button_NavBack.Location = New System.Drawing.Point(8, 8)
+        Me.Button_NavBack.Location = New System.Drawing.Point(37, 8)
         Me.Button_NavBack.Name = "Button_NavBack"
-        Me.Button_NavBack.Size = New System.Drawing.Size(75, 23)
-        Me.Button_NavBack.TabIndex = 6
+        Me.Button_NavBack.Size = New System.Drawing.Size(69, 23)
+        Me.Button_NavBack.TabIndex = 1
+        Me.ToolTip1.SetToolTip(Me.Button_NavBack, "Navigate backwards")
         Me.Button_NavBack.UseVisualStyleBackColor = True
         '
         'NumericUpDown_NavMultiplier
@@ -1938,7 +1984,7 @@ Partial Class MainWindow
         Me.NumericUpDown_NavMultiplier.Minimum = New Decimal(New Integer() {1, 0, 0, 0})
         Me.NumericUpDown_NavMultiplier.Name = "NumericUpDown_NavMultiplier"
         Me.NumericUpDown_NavMultiplier.Size = New System.Drawing.Size(40, 20)
-        Me.NumericUpDown_NavMultiplier.TabIndex = 5
+        Me.NumericUpDown_NavMultiplier.TabIndex = 3
         Me.NumericUpDown_NavMultiplier.Value = New Decimal(New Integer() {1, 0, 0, 0})
         '
         'ComboBox_NavIncrement
@@ -1950,7 +1996,7 @@ Partial Class MainWindow
         Me.ComboBox_NavIncrement.Location = New System.Drawing.Point(481, 9)
         Me.ComboBox_NavIncrement.Name = "ComboBox_NavIncrement"
         Me.ComboBox_NavIncrement.Size = New System.Drawing.Size(81, 21)
-        Me.ComboBox_NavIncrement.TabIndex = 2
+        Me.ComboBox_NavIncrement.TabIndex = 4
         '
         'TChart1
         '
@@ -2069,6 +2115,7 @@ Partial Class MainWindow
         Me.TChart1.Axes.Bottom.Title.Shadow.Brush.Color = System.Drawing.Color.DarkGray
         Me.TChart1.Axes.Bottom.Title.Shadow.Brush.Solid = True
         Me.TChart1.Axes.Bottom.Title.Shadow.Brush.Visible = True
+        Me.TChart1.Axes.Bottom.UseMaxPixelPos = True
         '
         '
         '
@@ -2181,6 +2228,7 @@ Partial Class MainWindow
         Me.TChart1.Axes.Depth.Title.Shadow.Brush.Color = System.Drawing.Color.DarkGray
         Me.TChart1.Axes.Depth.Title.Shadow.Brush.Solid = True
         Me.TChart1.Axes.Depth.Title.Shadow.Brush.Visible = True
+        Me.TChart1.Axes.Depth.UseMaxPixelPos = True
         '
         '
         '
@@ -2293,6 +2341,7 @@ Partial Class MainWindow
         Me.TChart1.Axes.DepthTop.Title.Shadow.Brush.Color = System.Drawing.Color.DarkGray
         Me.TChart1.Axes.DepthTop.Title.Shadow.Brush.Solid = True
         Me.TChart1.Axes.DepthTop.Title.Shadow.Brush.Visible = True
+        Me.TChart1.Axes.DepthTop.UseMaxPixelPos = True
         '
         '
         '
@@ -2405,6 +2454,7 @@ Partial Class MainWindow
         Me.TChart1.Axes.Left.Title.Shadow.Brush.Color = System.Drawing.Color.DarkGray
         Me.TChart1.Axes.Left.Title.Shadow.Brush.Solid = True
         Me.TChart1.Axes.Left.Title.Shadow.Brush.Visible = True
+        Me.TChart1.Axes.Left.UseMaxPixelPos = True
         '
         '
         '
@@ -2517,6 +2567,7 @@ Partial Class MainWindow
         Me.TChart1.Axes.Right.Title.Shadow.Brush.Color = System.Drawing.Color.DarkGray
         Me.TChart1.Axes.Right.Title.Shadow.Brush.Solid = True
         Me.TChart1.Axes.Right.Title.Shadow.Brush.Visible = True
+        Me.TChart1.Axes.Right.UseMaxPixelPos = True
         '
         '
         '
@@ -2629,6 +2680,7 @@ Partial Class MainWindow
         Me.TChart1.Axes.Top.Title.Shadow.Brush.Color = System.Drawing.Color.DarkGray
         Me.TChart1.Axes.Top.Title.Shadow.Brush.Solid = True
         Me.TChart1.Axes.Top.Title.Shadow.Brush.Visible = True
+        Me.TChart1.Axes.Top.UseMaxPixelPos = True
         Me.TChart1.Dock = System.Windows.Forms.DockStyle.Fill
         '
         '
@@ -2894,6 +2946,15 @@ Partial Class MainWindow
         Me.TChart1.Panel.Shadow.Brush.Color = System.Drawing.Color.DarkGray
         Me.TChart1.Panel.Shadow.Brush.Solid = True
         Me.TChart1.Panel.Shadow.Brush.Visible = True
+        '
+        '
+        '
+        Me.TChart1.Printer.Landscape = True
+        Margins3.Bottom = 10
+        Margins3.Left = 10
+        Margins3.Right = 10
+        Margins3.Top = 10
+        Me.TChart1.Printer.Margins = Margins3
         Me.TChart1.Size = New System.Drawing.Size(938, 380)
         '
         '
@@ -3003,7 +3064,7 @@ Partial Class MainWindow
         Me.TChart1.SubHeader.Shadow.Brush.Color = System.Drawing.Color.FromArgb(CType(CType(169, Byte), Integer), CType(CType(169, Byte), Integer), CType(CType(169, Byte), Integer))
         Me.TChart1.SubHeader.Shadow.Brush.Solid = True
         Me.TChart1.SubHeader.Shadow.Brush.Visible = True
-        Me.TChart1.TabIndex = 0
+        Me.TChart1.TabIndex = 1
         '
         '
         '
@@ -3161,7 +3222,7 @@ Partial Class MainWindow
         Me.Panel_DisplayRange.Margin = New System.Windows.Forms.Padding(0)
         Me.Panel_DisplayRange.Name = "Panel_DisplayRange"
         Me.Panel_DisplayRange.Size = New System.Drawing.Size(938, 36)
-        Me.Panel_DisplayRange.TabIndex = 1
+        Me.Panel_DisplayRange.TabIndex = 2
         '
         'Label_Display
         '
@@ -3170,7 +3231,7 @@ Partial Class MainWindow
         Me.Label_Display.Location = New System.Drawing.Point(381, 12)
         Me.Label_Display.Name = "Label_Display"
         Me.Label_Display.Size = New System.Drawing.Size(44, 13)
-        Me.Label_Display.TabIndex = 6
+        Me.Label_Display.TabIndex = 1
         Me.Label_Display.Text = "Display:"
         '
         'NumericUpDown_DisplayRangeMultiplier
@@ -3180,7 +3241,7 @@ Partial Class MainWindow
         Me.NumericUpDown_DisplayRangeMultiplier.Minimum = New Decimal(New Integer() {1, 0, 0, 0})
         Me.NumericUpDown_DisplayRangeMultiplier.Name = "NumericUpDown_DisplayRangeMultiplier"
         Me.NumericUpDown_DisplayRangeMultiplier.Size = New System.Drawing.Size(40, 20)
-        Me.NumericUpDown_DisplayRangeMultiplier.TabIndex = 5
+        Me.NumericUpDown_DisplayRangeMultiplier.TabIndex = 2
         Me.NumericUpDown_DisplayRangeMultiplier.Value = New Decimal(New Integer() {1, 0, 0, 0})
         '
         'ComboBox_DisplayRangeUnit
@@ -3192,7 +3253,7 @@ Partial Class MainWindow
         Me.ComboBox_DisplayRangeUnit.Location = New System.Drawing.Point(477, 8)
         Me.ComboBox_DisplayRangeUnit.Name = "ComboBox_DisplayRangeUnit"
         Me.ComboBox_DisplayRangeUnit.Size = New System.Drawing.Size(81, 21)
-        Me.ComboBox_DisplayRangeUnit.TabIndex = 2
+        Me.ComboBox_DisplayRangeUnit.TabIndex = 3
         '
         'MaskedTextBox_NavEnd
         '
@@ -3201,7 +3262,7 @@ Partial Class MainWindow
         Me.MaskedTextBox_NavEnd.Location = New System.Drawing.Point(829, 8)
         Me.MaskedTextBox_NavEnd.Name = "MaskedTextBox_NavEnd"
         Me.MaskedTextBox_NavEnd.Size = New System.Drawing.Size(100, 20)
-        Me.MaskedTextBox_NavEnd.TabIndex = 1
+        Me.MaskedTextBox_NavEnd.TabIndex = 4
         Me.MaskedTextBox_NavEnd.ValidatingType = GetType(Date)
         '
         'MaskedTextBox_NavStart
@@ -3337,4 +3398,7 @@ Partial Class MainWindow
     Friend WithEvents ToolStripMenuItem_ActivateAllSeries As ToolStripMenuItem
     Friend WithEvents ToolStripMenuItem_DeactivateAllSeries As ToolStripMenuItem
     Friend WithEvents ProgressBar1 As ProgressBar
+    Friend WithEvents Button_NavStart As Button
+    Friend WithEvents Button_NavEnd As Button
+    Friend WithEvents ToolTip1 As ToolTip
 End Class

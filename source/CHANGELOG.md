@@ -5,6 +5,7 @@ Version 2.4.6
 -------------
 NEW:
 * Allow multiple files to be selected when importing files using the Import time series menu item 
+* Added navigation buttons for navigating to the start and end of the currently active series
 
 FIXED:
 * Analysis function Cumulative: now repects the input interpretation
