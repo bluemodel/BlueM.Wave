@@ -137,10 +137,10 @@
     </Compile>
     <Compile Include="Analysis\Calculator.vb" />
     <Compile Include="Analysis\ChangeTimestep.vb" />
-    <Compile Include="Analysis\CumulativeDialog.Designer.vb">
-      <DependentUpon>CumulativeDialog.vb</DependentUpon>
+    <Compile Include="Analysis\AccumulateDialog.Designer.vb">
+      <DependentUpon>AccumulateDialog.vb</DependentUpon>
     </Compile>
-    <Compile Include="Analysis\CumulativeDialog.vb">
+    <Compile Include="Analysis\AccumulateDialog.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Analysis\ChangeTimestepDialog.Designer.vb">
@@ -157,7 +157,8 @@
     <Compile Include="Analysis\Comparison_Dialog.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Analysis\Cumulative.vb" />
+    <Compile Include="Analysis\Accumulate.vb" />
+    <Compile Include="Analysis\Decumulate.vb" />
     <Compile Include="Analysis\DoubleSumCurve.vb" />
     <Compile Include="Analysis\GoodnessOfFit.vb" />
     <Compile Include="Analysis\AnnualStatistics_Dialog.Designer.vb">
@@ -372,8 +373,8 @@
     <EmbeddedResource Include="Analysis\Autocorrelation_Dialog.resx">
       <DependentUpon>Autocorrelation_Dialog.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Analysis\CumulativeDialog.resx">
-      <DependentUpon>CumulativeDialog.vb</DependentUpon>
+    <EmbeddedResource Include="Analysis\AccumulateDialog.resx">
+      <DependentUpon>AccumulateDialog.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Analysis\ChangeTimestepDialog.resx">
       <DependentUpon>ChangeTimestepDialog.vb</DependentUpon>

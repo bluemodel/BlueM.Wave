@@ -17,7 +17,7 @@
 '
 Imports System.Windows.Forms
 
-Friend Class CumulativeDialog
+Friend Class AccumulateDialog
 
     Public Sub New(ByRef ts_list As List(Of TimeSeries))
 

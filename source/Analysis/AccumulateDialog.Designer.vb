@@ -1,5 +1,5 @@
 ﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
-Partial Class CumulativeDialog
+Partial Class AccumulateDialog
     Inherits System.Windows.Forms.Form
 
     'Form overrides dispose to clean up the component list.
@@ -22,7 +22,7 @@ Partial Class CumulativeDialog
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
-        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(CumulativeDialog))
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(AccumulateDialog))
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
         Me.OK_Button = New System.Windows.Forms.Button()
         Me.Cancel_Button = New System.Windows.Forms.Button()
@@ -91,10 +91,10 @@ Partial Class CumulativeDialog
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(162, 45)
         Me.Label1.TabIndex = 7
-        Me.Label1.Text = "The time series will be cut to this start date before calculating cumulative seri" &
+        Me.Label1.Text = "The time series will be cut to this start date before calculating cumulative valu" &
     "es"
         '
-        'CumulativeDialog
+        'AccumulateDialog
         '
         Me.AcceptButton = Me.OK_Button
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -109,10 +109,10 @@ Partial Class CumulativeDialog
         Me.MaximizeBox = False
         Me.MinimizeBox = False
         Me.MinimumSize = New System.Drawing.Size(370, 130)
-        Me.Name = "CumulativeDialog"
+        Me.Name = "AccumulateDialog"
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = "Cumulative"
+        Me.Text = "Accumulate"
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()

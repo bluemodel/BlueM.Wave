@@ -24,12 +24,13 @@ Friend Module AnalysisFactory
     ''' List of analysis functions
     ''' </summary>
     Public Enum AnalysisFunctions
+        Accumulate
         AnnualStatistics
         Autocorrelation
         Calculator
         ChangeTimestep
         Comparison
-        Cumulative
+        Decumulate
         DoubleSumCurve
         GoodnessOfFit
         Histogram
@@ -46,6 +47,8 @@ Friend Module AnalysisFactory
     ''' <returns></returns>
     Public Function getAnalysisDescription(analysisfunction As AnalysisFunctions) As String
         Select Case analysisfunction
+            Case AnalysisFunctions.Accumulate
+                Return Accumulate.Description
             Case AnalysisFunctions.AnnualStatistics
                 Return AnnualStatistics.Description
             Case AnalysisFunctions.Autocorrelation
@@ -56,8 +59,8 @@ Friend Module AnalysisFactory
                 Return ChangeTimestep.Description
             Case AnalysisFunctions.Comparison
                 Return Comparison.Description
-            Case AnalysisFunctions.Cumulative
-                Return Cumulative.Description
+            Case AnalysisFunctions.Decumulate
+                Return Decumulate.Description
             Case AnalysisFunctions.DoubleSumCurve
                 Return DoubleSumCurve.Description
             Case AnalysisFunctions.GoodnessOfFit
@@ -70,8 +73,8 @@ Friend Module AnalysisFactory
                 Return MonthlyStatistics.Description
             Case AnalysisFunctions.TimestepAnalysis
                 Return TimeStepAnalysis.Description
-            'Case AnalysisFunctions.TestAnalysis    'EDIT THIS
-            '    Return TestAnalysis.Description    'EDIT THIS
+                'Case AnalysisFunctions.TestAnalysis    'EDIT THIS
+                '    Return TestAnalysis.Description    'EDIT THIS
             Case Else
                 Return "Description not found"
         End Select
@@ -89,6 +92,9 @@ Friend Module AnalysisFactory
 
         Select Case analysisfunction
 
+            Case AnalysisFunctions.Accumulate
+                oAnalysis = New Accumulate(seriesList)
+
             Case AnalysisFunctions.AnnualStatistics
                 oAnalysis = New AnnualStatistics(seriesList)
 
@@ -104,8 +110,8 @@ Friend Module AnalysisFactory
             Case AnalysisFunctions.Comparison
                 oAnalysis = New Comparison(seriesList)
 
-            Case AnalysisFunctions.Cumulative
-                oAnalysis = New Cumulative(seriesList)
+            Case AnalysisFunctions.Decumulate
+                oAnalysis = New Decumulate(seriesList)
 
             Case AnalysisFunctions.DoubleSumCurve
                 oAnalysis = New DoubleSumCurve(seriesList)

@@ -16,9 +16,9 @@
 'along with this program.  If not, see <https://www.gnu.org/licenses/>.
 '
 ''' <summary>
-''' Cumulative analysis
+''' Accumulates time series
 ''' </summary>
-Friend Class Cumulative
+Friend Class Accumulate
     Inherits Analysis
 
 #Region "Properties"
@@ -94,7 +94,7 @@ Friend Class Cumulative
         Dim ts, ts_cum As TimeSeries
 
         'show dialog
-        Dim dlg As New CumulativeDialog(MyBase.InputTimeSeries)
+        Dim dlg As New AccumulateDialog(MyBase.InputTimeSeries)
         If dlg.ShowDialog() = DialogResult.OK Then
 
             'get start date from dialog
@@ -127,7 +127,7 @@ Friend Class Cumulative
                                 value = ts.Values(i - 1)
                             End If
                         Case Else
-                            Throw New NotImplementedException($"Analysis function Cumulative is currently not supported for time series with interpretation {[Enum].GetName(GetType(TimeSeries.InterpretationEnum), ts.Interpretation)}!")
+                            Throw New NotImplementedException($"Analysis function Accumulate is currently not supported for time series with interpretation {[Enum].GetName(GetType(TimeSeries.InterpretationEnum), ts.Interpretation)}!")
                     End Select
 
                     If Double.IsNaN(value) Then

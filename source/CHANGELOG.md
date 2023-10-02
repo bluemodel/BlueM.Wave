@@ -6,12 +6,14 @@ Version 2.4.6
 NEW:
 * Allow multiple files to be selected when importing files using the Import time series menu item 
 * Added navigation buttons for navigating to the start and end of the currently active series
+* New analysis function Decumulate
 
 FIXED:
-* Analysis function Cumulative: now repects the input interpretation
+* Analysis function Accumulate now repects the input interpretation
 * Time Series Properties and Values windows now restore on toolbar button press if previously minimized
 
 CHANGED:
+* Analysis function Cumulative renamed to Accumulate
 * Added progress bar to Calculator analysis function
 
 API-CHANGES:
