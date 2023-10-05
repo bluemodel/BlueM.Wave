@@ -225,9 +225,9 @@ Friend Class GoodnessOfFit
         'Bestimmtheitsmaß
         gof.coeff_determination = gof.coeff_correlation ^ 2
 
-        'Kling-Gupta Efficiency
-        'https://permetrics.readthedocs.io/pages/regression/KGE.html
-        '----------------------
+        'Modified Kling-Gupta Efficiency, Kling et al. 2012 https://doi.org/10.1016/j.jhydrol.2012.01.011
+        'Formula: https://thibhlln.github.io/hydroeval/functions/hydroeval.kgeprime.html
+        '------------------------------------------------------------------------------------------------
         Dim biasratio As Double = avg_sim / avg_obs
         Dim variabilityratio As Double = (std_sim / avg_sim) / (std_obs / avg_obs)
         gof.kge = 1 - Math.Sqrt((gof.coeff_correlation - 1) ^ 2 + (biasratio - 1) ^ 2 + (variabilityratio - 1) ^ 2)
