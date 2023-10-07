@@ -2173,7 +2173,7 @@ Friend Class WaveController
     ''' Adds the series to the charts
     ''' Also adds the datasource to the MRU file list if the time series has a file datasource
     ''' </summary>
-    ''' <param name="ts">Die anzuzeigende Zeitreihe</param>
+    ''' <param name="ts">time series to display</param>
     Private Sub SeriesAdded(ts As TimeSeries)
 
         'Check for extreme dates not supported by TChart
@@ -2229,6 +2229,19 @@ Friend Class WaveController
 
         'Set line width to 2
         Line1.LinePen.Width = 2
+
+        'set custom display options
+        If Not IsNothing(ts.DisplayOptions) Then
+            If Not ts.DisplayOptions.Color.IsEmpty Then
+                Line1.Color = ts.DisplayOptions.Color
+            End If
+            If Not IsNothing(ts.DisplayOptions.LineStyle) Then
+                Line1.LinePen.Style = ts.DisplayOptions.LineStyle
+            End If
+            If Not IsNothing(ts.DisplayOptions.LineWidth) Then
+                Line1.LinePen.Width = ts.DisplayOptions.LineWidth
+            End If
+        End If
 
         'Stützstellen zur Serie hinzufügen
         'Main chart
@@ -2288,6 +2301,19 @@ Friend Class WaveController
 
         'Set line width to 2
         Line2.LinePen.Width = 2
+
+        'set custom display options
+        If Not IsNothing(ts.DisplayOptions) Then
+            If Not ts.DisplayOptions.Color.IsEmpty Then
+                Line2.Color = ts.DisplayOptions.Color
+            End If
+            If Not IsNothing(ts.DisplayOptions.LineStyle) Then
+                Line2.LinePen.Style = ts.DisplayOptions.LineStyle
+            End If
+            If Not IsNothing(ts.DisplayOptions.LineWidth) Then
+                Line2.LinePen.Width = ts.DisplayOptions.LineWidth
+            End If
+        End If
 
         'Stützstellen zur Serie hinzufügen
         Line2.BeginUpdate()

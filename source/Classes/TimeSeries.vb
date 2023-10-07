@@ -54,6 +54,7 @@ Public Class TimeSeries
     Private _Type As String
     Private _Interpretation As InterpretationEnum
     Private _DataSource As TimeSeriesDataSource
+    Private _displayOptions As TimeSeriesDisplayOptions
 
 #End Region 'Members
 
@@ -253,6 +254,19 @@ Public Class TimeSeries
         End Get
         Set(value As TimeSeriesDataSource)
             _DataSource = value
+        End Set
+    End Property
+
+    ''' <summary>
+    ''' Options for displaying the time series
+    ''' </summary>
+    ''' <returns></returns>
+    Public Property DisplayOptions As TimeSeriesDisplayOptions
+        Get
+            Return _displayOptions
+        End Get
+        Set(value As TimeSeriesDisplayOptions)
+            _displayOptions = value
         End Set
     End Property
 
