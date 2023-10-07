@@ -778,11 +778,10 @@ Public Class TimeSeries
             If Me.Dates(i) >= t_start Then
                 Select Case Me.Interpretation
                     Case InterpretationEnum.BlockLeft,
-                     InterpretationEnum.Cumulative,
-                     InterpretationEnum.CumulativePerTimestep
+                         InterpretationEnum.CumulativePerTimestep
                         i_start = i
                     Case InterpretationEnum.Instantaneous,
-                     InterpretationEnum.BlockRight
+                         InterpretationEnum.BlockRight
                         i_start = Math.Max(i - 1, 0)
                 End Select
                 Exit For
@@ -849,8 +848,6 @@ Public Class TimeSeries
                             value = volume / dt.TotalSeconds
                         Case InterpretationEnum.CumulativePerTimestep
                             value = cumval
-                        Case InterpretationEnum.Cumulative
-                            'TODO
                     End Select
                     'set timestamp depending on interpretation
                     Select Case outputInterpretation
@@ -858,16 +855,16 @@ Public Class TimeSeries
                              InterpretationEnum.BlockRight
                             t = t_start
                         Case InterpretationEnum.BlockLeft,
-                             InterpretationEnum.Cumulative,
                              InterpretationEnum.CumulativePerTimestep
                             t = t_end
                     End Select
+                    'store new node
                     ts.AddNode(t, value)
-                    volume = 0.0
-                    cumval = 0.0
                     'advance to next timestep
                     t_start = t_end
                     t_end = TimeSeries.AddTimeInterval(t_start, timesteptype, timestepinterval)
+                    volume = 0.0
+                    cumval = 0.0
                     timestep_full = False
                 End If
             Loop
@@ -1347,6 +1344,8 @@ Public Class TimeSeries
             Case InterpretationEnum.BlockLeft,
                  InterpretationEnum.CumulativePerTimestep
                 value = v2
+            Case InterpretationEnum.Cumulative
+                value = v2 - v1
             Case Else
                 Throw New NotImplementedException($"Integration between nodes with interpretation {[Enum].GetName(GetType(InterpretationEnum), interpretation)} is currently not implemented!")
         End Select
