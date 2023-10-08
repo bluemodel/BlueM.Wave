@@ -471,20 +471,29 @@ Public Class Wave
                 Log.AddLogEntry(Log.levels.warning, $"Series '{ts.Title}' with datasource {ts.DataSource} does not originate from a file import and could not be saved to the project file!")
             Else
                 If ts.DataSource.FilePath <> filePath Then
-                    'write file path to file
-                    'TODO: write relative paths to the project file
+                    'write file path
+                    'TODO: write relative paths to the project file?
                     filePath = ts.DataSource.FilePath
                     strwrite.WriteLine("file=" & filePath)
                 End If
-                'write series name to file
+                'write series name
+                Dim line As String
                 Dim seriesName As String = ts.DataSource.Title
-                'TODO: if a series was renamed, write the new title to the project file
-                'TODO: write display options to the project file
                 If seriesName.Contains(":") Then
-                    'enclose titles containing ":" in quotes
+                    'enclose series names containing ":" in quotes
                     seriesName = $"""{seriesName}"""
                 End If
-                strwrite.WriteLine("    series=" & seriesName)
+                line = $"    series={seriesName}"
+                'write series options
+                Dim options As String = ""
+                If ts.Title <> seriesName Then
+                    options &= $"title=""{ts.Title}"""
+                End If
+                If options.Length > 0 Then
+                    line &= $":{options}"
+                End If
+                'TODO: write display options such as color, linestyle and linewidth?
+                strwrite.WriteLine(line)
             End If
         Next
 
