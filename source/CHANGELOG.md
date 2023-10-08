@@ -8,6 +8,9 @@ NEW:
 * Added navigation buttons for navigating to the start and end of the currently active series
 * New analysis function Decumulate
 * Added support for importing SWMM time series file format 
+* Wave project file (WVP):
+  * Added support for additional series options #117
+  * When saving to WVP, changed series titles are now also saved
 
 FIXED:
 * Analysis function Accumulate now repects the input interpretation
