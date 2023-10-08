@@ -27,6 +27,7 @@ Public Class TimeSeriesDisplayOptions
     ''' <summary>
     ''' Color
     ''' </summary>
+    ''' <remarks>Default color is empty. When empty, color is automatically assigned by the chart</remarks>
     ''' <returns></returns>
     Public Property Color As Color
         Get
@@ -64,13 +65,27 @@ Public Class TimeSeriesDisplayOptions
     End Property
 
     ''' <summary>
-    ''' Creates a new TimeSeriesDisplayOption instance with empty properties
+    ''' Creates a new TimeSeriesDisplayOption instance with default properties
     ''' </summary>
+    ''' <remarks>Default Color is empty in order to allow automatic color assignment by the chart</remarks>
     Public Sub New()
-        Me.Color = Nothing
-        Me.LineStyle = Nothing
-        Me.LineWidth = Nothing
+        Me.Color = Color.Empty
+        Me.LineStyle = Drawing2D.DashStyle.Solid
+        Me.LineWidth = 2
     End Sub
+
+    ''' <summary>
+    ''' Returns a copy of the instance
+    ''' </summary>
+    ''' <returns></returns>
+    Public Function Copy() As TimeSeriesDisplayOptions
+        Dim displayOptions As New TimeSeriesDisplayOptions() With {
+            .Color = Me.Color,
+            .LineStyle = Me.LineStyle,
+            .LineWidth = Me.LineWidth
+        }
+        Return displayOptions
+    End Function
 
     ''' <summary>
     ''' Sets the color from a color name
@@ -80,7 +95,6 @@ Public Class TimeSeriesDisplayOptions
     Public Sub SetColor(colorName As String)
         If Not [Enum].IsDefined(GetType(KnownColor), colorName) Then
             Log.AddLogEntry(levels.warning, $"Color '{colorName}' is not recognized!")
-            Me.Color = Nothing
         Else
             Me.Color = Drawing.Color.FromName(colorName)
         End If
@@ -94,7 +108,6 @@ Public Class TimeSeriesDisplayOptions
     Public Sub SetLineStyle(lineStyle As String)
         If Not [Enum].IsDefined(GetType(Drawing2D.DashStyle), lineStyle) Then
             Log.AddLogEntry(levels.warning, $"Line style '{lineStyle}' is not recognized!")
-            Me.LineStyle = Nothing
         Else
             Me.LineStyle = [Enum].Parse(GetType(Drawing2D.DashStyle), lineStyle)
         End If
@@ -109,7 +122,6 @@ Public Class TimeSeriesDisplayOptions
         Dim lineWidthInt As Integer
         If Not Integer.TryParse(lineWidth, lineWidthInt) Then
             Log.AddLogEntry(levels.warning, $"Line width '{lineWidth}' can not be converted to integer!")
-            Me.LineWidth = Nothing
         Else
             Me.LineWidth = lineWidthInt
         End If

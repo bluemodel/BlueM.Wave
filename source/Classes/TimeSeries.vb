@@ -467,6 +467,7 @@ Public Class TimeSeries
         Me._unit = "-"
         Me._Interpretation = InterpretationEnum.Undefined
         Me.DataSource = New TimeSeriesDataSource(TimeSeriesDataSource.OriginEnum.Undefined)
+        Me.DisplayOptions = New TimeSeriesDisplayOptions()
         Me._nodes = New SortedList(Of DateTime, Double)
     End Sub
 
@@ -491,6 +492,7 @@ Public Class TimeSeries
         target.Metadata = Me.Metadata.Copy()
         target._Interpretation = Me.Interpretation
         target.DataSource = Me.DataSource.Copy()
+        target.DisplayOptions = Me.DisplayOptions.Copy()
         Return target
     End Function
 

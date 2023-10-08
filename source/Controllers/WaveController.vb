@@ -2227,21 +2227,12 @@ Friend Class WaveController
         'Namen vergeben
         Line1.Title = ts.Title
 
-        'Set line width to 2
-        Line1.LinePen.Width = 2
-
-        'set custom display options
-        If Not IsNothing(ts.DisplayOptions) Then
-            If Not ts.DisplayOptions.Color.IsEmpty Then
-                Line1.Color = ts.DisplayOptions.Color
-            End If
-            If Not IsNothing(ts.DisplayOptions.LineStyle) Then
-                Line1.LinePen.Style = ts.DisplayOptions.LineStyle
-            End If
-            If Not IsNothing(ts.DisplayOptions.LineWidth) Then
-                Line1.LinePen.Width = ts.DisplayOptions.LineWidth
-            End If
+        'set display options
+        If Not ts.DisplayOptions.Color.IsEmpty Then
+            Line1.Color = ts.DisplayOptions.Color
         End If
+        Line1.LinePen.Style = ts.DisplayOptions.LineStyle
+        Line1.LinePen.Width = ts.DisplayOptions.LineWidth
 
         'Stützstellen zur Serie hinzufügen
         'Main chart
@@ -2299,21 +2290,12 @@ Friend Class WaveController
         'Namen vergeben
         Line2.Title = ts.Title
 
-        'Set line width to 2
-        Line2.LinePen.Width = 2
-
-        'set custom display options
-        If Not IsNothing(ts.DisplayOptions) Then
-            If Not ts.DisplayOptions.Color.IsEmpty Then
-                Line2.Color = ts.DisplayOptions.Color
-            End If
-            If Not IsNothing(ts.DisplayOptions.LineStyle) Then
-                Line2.LinePen.Style = ts.DisplayOptions.LineStyle
-            End If
-            If Not IsNothing(ts.DisplayOptions.LineWidth) Then
-                Line2.LinePen.Width = ts.DisplayOptions.LineWidth
-            End If
+        'set display options
+        If Not ts.DisplayOptions.Color.IsEmpty Then
+            Line2.Color = ts.DisplayOptions.Color
         End If
+        Line2.LinePen.Style = ts.DisplayOptions.LineStyle
+        Line2.LinePen.Width = ts.DisplayOptions.LineWidth
 
         'Stützstellen zur Serie hinzufügen
         Line2.BeginUpdate()
