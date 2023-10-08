@@ -115,6 +115,7 @@ Namespace Fileformats
                     'series:title
                     '"se:ries":title
                     '"se:ries":"title"
+                    'series:title="title", unit=m³/s, color=Red, linestyle=Dash, linewidth=3, interpretation=BlockRight
                     Dim pattern As String
                     If line.StartsWith("""") Then
                         'series name is enclosed in quotes
@@ -167,7 +168,7 @@ Namespace Fileformats
                                 Next
                             End If
                         End If
-                        'add series to file
+                        'add series to fileDict
                         If fileDict.ContainsKey(file) Then
                             If Not fileDict(file).ContainsKey(seriesName) Then
                                 fileDict(file).Add(seriesName, seriesOptions)
@@ -183,19 +184,22 @@ Namespace Fileformats
 
                 ElseIf line.Contains("=") Then
                     'file import settings
+                    Dim key, value As String
                     parts = line.Trim().Split("=".ToCharArray(), 2)
-                    'add setting to file
+                    key = parts(0).Trim()
+                    value = parts(1).Trim()
+                    'add setting to fileDict
                     If fileDict.ContainsKey(file) Then
                         If Not settingsDict.ContainsKey(file) Then
                             settingsDict.Add(file, New Dictionary(Of String, String))
                         End If
-                        If Not settingsDict(file).ContainsKey(parts(0)) Then
-                            settingsDict(file).Add(parts(0), parts(1))
+                        If Not settingsDict(file).ContainsKey(key) Then
+                            settingsDict(file).Add(key, value)
                         Else
-                            Log.AddLogEntry(Log.levels.warning, $"Setting {parts(0)} is specified more than once, only the first mention will be processed!")
+                            Log.AddLogEntry(Log.levels.warning, $"Setting {key} is specified more than once, only the first mention will be processed!")
                         End If
                     Else
-                        Log.AddLogEntry(Log.levels.warning, $"Setting {parts(0)} is not associated with a file and will be ignored!")
+                        Log.AddLogEntry(Log.levels.warning, $"Setting {key} is not associated with a file and will be ignored!")
                     End If
 
                 Else
@@ -233,10 +237,10 @@ Namespace Fileformats
 
                 'apply custom file import settings
                 If settingsDict.ContainsKey(file) Then
-                    For Each setting As String In settingsDict(file).Keys
-                        value = settingsDict(file)(setting)
+                    For Each key As String In settingsDict(file).Keys
+                        value = settingsDict(file)(key)
                         Try
-                            Select Case setting.ToLower()
+                            Select Case key.ToLower()
                                 Case "iscolumnseparated"
                                     fileInstance.IsColumnSeparated = If(value.ToLower() = "true", True, False)
                                 Case "separator"
@@ -258,10 +262,10 @@ Namespace Fileformats
                                 Case "datetimecolumnindex"
                                     fileInstance.DateTimeColumnIndex = Convert.ToInt32(value)
                                 Case Else
-                                    Log.AddLogEntry(Log.levels.warning, $"Setting '{setting}' was not recognized and was ignored!")
+                                    Log.AddLogEntry(Log.levels.warning, $"Setting '{key}' was not recognized and was ignored!")
                             End Select
                         Catch ex As Exception
-                            Log.AddLogEntry(Log.levels.warning, $"Setting '{setting}' with value '{value}' could not be parsed and was ignored!")
+                            Log.AddLogEntry(Log.levels.warning, $"Setting '{key}' with value '{value}' could not be parsed and was ignored!")
                         End Try
                     Next
                     'reread columns with new settings
