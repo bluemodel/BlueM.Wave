@@ -440,29 +440,22 @@ Public Class Wave
 
     Friend Sub SaveProjectFile(projectfile As String)
 
-        'collect datasources
-        Dim datasources As New Dictionary(Of String, List(Of String)) '{file: [title, ...], ...}
-        Dim unsavedSeries As New List(Of String)
-        Dim file, title As String
+        'check whether there are any series with a file datasource at all
+        Dim haveFileDatasources As Boolean = False
         For Each ts As TimeSeries In Me.TimeSeries.Values
             If ts.DataSource.Origin = TimeSeriesDataSource.OriginEnum.FileImport Then
-                file = ts.DataSource.FilePath
-                title = ts.DataSource.Title
-                If Not datasources.ContainsKey(file) Then
-                    datasources.Add(file, New List(Of String))
-                End If
-                datasources(file).Add(title)
-            Else
-                unsavedSeries.Add(ts.Title)
-                Log.AddLogEntry(Log.levels.warning, $"Series '{ts.Title}' with datasource {ts.DataSource} does not originate from a file import and could not be saved to the project file!")
+                haveFileDatasources = True
+                Exit For
             End If
         Next
-
-        If datasources.Count = 0 Then
+        If Not haveFileDatasources Then
             Dim msg As String = $"None of the series originate from a file import! No project file was saved! Save the chart with data or export the time series to preserve them!"
             Log.AddLogEntry(Log.levels.error, msg)
             Throw New Exception(msg)
         End If
+
+        'keep a list of series that could not be saved
+        Dim unsavedSeries As New List(Of String)
 
         'write the project file
         Dim fs As New IO.FileStream(projectfile, IO.FileMode.Create, IO.FileAccess.Write)
@@ -470,18 +463,29 @@ Public Class Wave
 
         strwrite.WriteLine("# Wave project file")
 
-        For Each file In datasources.Keys
-            'TODO: write relative paths to the project file?
-            strwrite.WriteLine("file=" & file)
-            For Each title In datasources(file)
+        'loop over series and save to file
+        Dim filePath As String = ""
+        For Each ts As TimeSeries In Me.TimeSeries.Values
+            If Not ts.DataSource.Origin = TimeSeriesDataSource.OriginEnum.FileImport Then
+                unsavedSeries.Add(ts.Title)
+                Log.AddLogEntry(Log.levels.warning, $"Series '{ts.Title}' with datasource {ts.DataSource} does not originate from a file import and could not be saved to the project file!")
+            Else
+                If ts.DataSource.FilePath <> filePath Then
+                    'write file path to file
+                    'TODO: write relative paths to the project file
+                    filePath = ts.DataSource.FilePath
+                    strwrite.WriteLine("file=" & filePath)
+                End If
+                'write series name to file
+                Dim seriesName As String = ts.DataSource.Title
                 'TODO: if a series was renamed, write the new title to the project file
                 'TODO: write display options to the project file
-                If title.Contains(":") Then
+                If seriesName.Contains(":") Then
                     'enclose titles containing ":" in quotes
-                    title = $"""{title}"""
+                    seriesName = $"""{seriesName}"""
                 End If
-                strwrite.WriteLine("    series=" & title)
-            Next
+                strwrite.WriteLine("    series=" & seriesName)
+            End If
         Next
 
         strwrite.Close()
