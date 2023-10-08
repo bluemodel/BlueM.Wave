@@ -108,7 +108,7 @@ Namespace Fileformats
 
                 ElseIf line.ToLower().StartsWith("series=") Then
                     'series
-                    line = line.Split("=".ToCharArray(), 2)(1).Trim()
+                    line = line.Split("=".ToCharArray(), 2).Last.Trim()
                     'series name may be enclosed in quotes and be followed by an optional title, which may also be enclosed in quotes
                     'examples:
                     'series
@@ -118,14 +118,14 @@ Namespace Fileformats
                     Dim pattern As String
                     If line.StartsWith("""") Then
                         'series name is enclosed in quotes
-                        pattern = "^""([^""]+)""(:(.+))?$"
+                        pattern = "^""(?<name>[^""]+)""(?<options>:(?<optionstring>.+))?$"
                     Else
                         'no quotes around series name
-                        pattern = "^([^:]+)(:(.+))?$"
+                        pattern = "^(?<name>[^:]+)(?<options>:(?<optionstring>.+))?$"
                     End If
                     Dim m As Match = Regex.Match(line, pattern)
                     If m.Success Then
-                        seriesName = m.Groups(1).Value.Trim()
+                        seriesName = m.Groups("name").Value.Trim()
                         'check for additional series options
                         'by default, series options are nothing
                         Dim seriesOptions As New seriesOption With {
@@ -136,9 +136,9 @@ Namespace Fileformats
                             .linewidth = Nothing,
                             .interpretation = Nothing
                         }
-                        If m.Groups(2).Success Then
+                        If m.Groups("options").Success Then
                             'parse series options
-                            Dim optionString As String = m.Groups(3).Value
+                            Dim optionString As String = m.Groups("optionstring").Value
                             If Not optionString.Contains("=") Then
                                 'title only
                                 seriesOptions.title = optionString.Replace("""", "").Trim() 'remove any quotes around title
