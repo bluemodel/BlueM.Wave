@@ -143,17 +143,11 @@ Namespace Fileformats
                                 'title only
                                 seriesOptions.title = optionString.Replace("""", "").Trim() 'remove any quotes around title
                             Else
-                                'keyword options
-                                'TODO: there may be quotes around keyword values!
-                                Dim options() As String = optionString.Split(",")
-                                For Each [option] As String In options
-                                    If Not [option].Contains("=") Then
-                                        Log.AddLogEntry(levels.warning, $"Series import option {[option].Trim()} not recognized!")
-                                        Continue For
-                                    End If
-                                    parts = [option].Split("=")
-                                    Dim keyword As String = parts(0).Trim().ToLower()
-                                    Dim value As String = parts(1).Trim() 'these are case-sensitive!
+                                'keyword options, comma-separated, values may be quoted
+                                Dim matches As MatchCollection = Regex.Matches(optionString, "(?<key>[^"",=]+)\s?=\s?(?<value>(?<q>"").+?(?<-q>"")|[^"",=]+),?")
+                                For Each m In matches
+                                    Dim keyword As String = m.Groups("key").Value.ToLower().Trim()
+                                    Dim value As String = m.Groups("value").Value.Replace("""", "").Trim() 'values are case-sensitive!
                                     Select Case keyword
                                         Case "title"
                                             seriesOptions.title = value
@@ -311,7 +305,6 @@ Namespace Fileformats
                 'store the series
                 For Each ts As TimeSeries In fileInstance.TimeSeries.Values
                     'set series options
-                    ts.DisplayOptions = New TimeSeriesDisplayOptions()
                     If series.ContainsKey(ts.Title) Then
                         Dim seriesOptions As seriesOption = series(ts.Title)
                         'options affecting the time series itself
