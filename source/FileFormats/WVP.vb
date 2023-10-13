@@ -414,9 +414,8 @@ Namespace Fileformats
                     options.Add($"linestyle={ts.DisplayOptions.LineStyle}")
                     options.Add($"showpoints={ts.DisplayOptions.ShowPoints}")
 
-                    Dim optionstring As String = String.Join(", ", options)
-                    If optionstring.Length > 0 Then
-                        line &= $":{optionstring}"
+                    If options.Count > 0 Then
+                        line &= ": " & String.Join(", ", options)
                     End If
                     strwrite.WriteLine(line)
                 End If
