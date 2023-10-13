@@ -399,7 +399,24 @@ Friend Class WaveController
             dlgres = View.SaveFileDialog1.ShowDialog()
 
             If dlgres = Windows.Forms.DialogResult.OK Then
-                Call Fileformats.WVP.Write_File(_model.TimeSeries.ToList(), View.SaveFileDialog1.FileName)
+                'collect display options from chart and store them in timeseries
+                Dim tsList As New List(Of TimeSeries)
+                For Each ts As TimeSeries In _model.TimeSeries.ToList()
+                    For Each series As Steema.TeeChart.Styles.Series In View.TChart1.Series
+                        If series.Tag = ts.Id Then
+                            If TypeOf series Is Steema.TeeChart.Styles.Line Then
+                                Dim line As Steema.TeeChart.Styles.Line = CType(series, Steema.TeeChart.Styles.Line)
+                                ts.DisplayOptions.Color = line.Color
+                                ts.DisplayOptions.LineStyle = line.LinePen.Style
+                                ts.DisplayOptions.LineWidth = line.LinePen.Width
+                                ts.DisplayOptions.ShowPoints = line.Pointer.Visible
+                            End If
+                            Exit For
+                        End If
+                    Next
+                    tsList.Add(ts)
+                Next
+                Call Fileformats.WVP.Write_File(tsList, View.SaveFileDialog1.FileName)
             End If
 
         Catch ex As Exception
