@@ -405,15 +405,13 @@ Namespace Fileformats
 
                     'series options
                     Dim options As New List(Of String)
-                    If ts.Title <> seriesName Then
-                        options.Add($"title=""{ts.Title}""")
-                    End If
+                    options.Add($"title=""{ts.Title}""")
+                    options.Add($"unit=""{ts.Unit}""")
                     options.Add($"interpretation={ts.Interpretation}")
-                    options.Add($"unit={ts.Unit}")
                     'display options
                     options.Add($"color={ts.DisplayOptions.Color.Name}")
-                    options.Add($"linestyle={ts.DisplayOptions.LineStyle}")
                     options.Add($"linewidth={ts.DisplayOptions.LineWidth}")
+                    options.Add($"linestyle={ts.DisplayOptions.LineStyle}")
                     options.Add($"showpoints={ts.DisplayOptions.ShowPoints}")
 
                     Dim optionstring As String = String.Join(", ", options)
