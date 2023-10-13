@@ -37,6 +37,7 @@ Namespace Fileformats
             Dim linestyle As String
             Dim linewidth As String
             Dim interpretation As String
+            Dim showpoints As String
         End Structure
 
         'fileDict = {filename1:{series1:options1, series2:options2, ...}, ...}
@@ -162,6 +163,8 @@ Namespace Fileformats
                                             seriesOptions.linewidth = value
                                         Case "interpretation"
                                             seriesOptions.interpretation = value
+                                        Case "showpoints"
+                                            seriesOptions.showpoints = value
                                         Case Else
                                             Log.AddLogEntry(levels.warning, $"Series import option keyword {keyword} not recognized!")
                                     End Select
@@ -334,6 +337,9 @@ Namespace Fileformats
                         End If
                         If Not IsNothing(seriesOptions.linewidth) Then
                             ts.DisplayOptions.SetLineWidth(seriesOptions.linewidth)
+                        End If
+                        If Not IsNothing(seriesOptions.showpoints) Then
+                            ts.DisplayOptions.SetShowPoints(seriesOptions.showpoints)
                         End If
                     End If
                     tsList.Add(ts)

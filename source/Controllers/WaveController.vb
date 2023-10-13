@@ -2233,6 +2233,7 @@ Friend Class WaveController
         End If
         Line1.LinePen.Style = ts.DisplayOptions.LineStyle
         Line1.LinePen.Width = ts.DisplayOptions.LineWidth
+        Line1.Pointer.Visible = ts.DisplayOptions.ShowPoints
 
         'Stützstellen zur Serie hinzufügen
         'Main chart

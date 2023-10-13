@@ -23,6 +23,7 @@ Public Class TimeSeriesDisplayOptions
     Private _color As Color
     Private _linestyle As Drawing2D.DashStyle
     Private _linewidth As Integer
+    Private _showPoints As Boolean
 
     ''' <summary>
     ''' Color
@@ -65,6 +66,19 @@ Public Class TimeSeriesDisplayOptions
     End Property
 
     ''' <summary>
+    ''' Flag to show series points
+    ''' </summary>
+    ''' <returns></returns>
+    Public Property ShowPoints As Boolean
+        Get
+            Return _showPoints
+        End Get
+        Set(value As Boolean)
+            _showPoints = value
+        End Set
+    End Property
+
+    ''' <summary>
     ''' Creates a new TimeSeriesDisplayOption instance with default properties
     ''' </summary>
     ''' <remarks>Default Color is empty in order to allow automatic color assignment by the chart</remarks>
@@ -72,6 +86,7 @@ Public Class TimeSeriesDisplayOptions
         Me.Color = Color.Empty
         Me.LineStyle = Drawing2D.DashStyle.Solid
         Me.LineWidth = 2
+        Me.ShowPoints = False
     End Sub
 
     ''' <summary>
@@ -82,7 +97,8 @@ Public Class TimeSeriesDisplayOptions
         Dim displayOptions As New TimeSeriesDisplayOptions() With {
             .Color = Me.Color,
             .LineStyle = Me.LineStyle,
-            .LineWidth = Me.LineWidth
+            .LineWidth = Me.LineWidth,
+            .ShowPoints = Me.ShowPoints
         }
         Return displayOptions
     End Function
@@ -125,6 +141,20 @@ Public Class TimeSeriesDisplayOptions
         Else
             Me.LineWidth = lineWidthInt
         End If
+    End Sub
+
+    ''' <summary>
+    ''' Sets the ShowPoints property from a string
+    ''' </summary>
+    ''' <remarks>string must be convertible to a boolean</remarks>
+    ''' <param name="showPoints">whether to show points</param>
+    Public Sub SetShowPoints(showPoints As String)
+        Select Case showPoints.ToLower()
+            Case "true", "y", "1"
+                Me.ShowPoints = True
+            Case Else
+                Me.ShowPoints = False
+        End Select
     End Sub
 
 End Class
