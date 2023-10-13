@@ -402,15 +402,24 @@ Namespace Fileformats
                         seriesName = $"""{seriesName}"""
                     End If
                     line = $"    series={seriesName}"
-                    'write series options
-                    Dim options As String = ""
+
+                    'series options
+                    Dim options As New List(Of String)
                     If ts.Title <> seriesName Then
-                        options &= $"title=""{ts.Title}"""
+                        options.Add($"title=""{ts.Title}""")
                     End If
-                    If options.Length > 0 Then
-                        line &= $":{options}"
+                    options.Add($"interpretation={ts.Interpretation}")
+                    options.Add($"unit={ts.Unit}")
+                    'display options
+                    options.Add($"color={ts.DisplayOptions.Color.Name}")
+                    options.Add($"linestyle={ts.DisplayOptions.LineStyle}")
+                    options.Add($"linewidth={ts.DisplayOptions.LineWidth}")
+                    options.Add($"showpoints={ts.DisplayOptions.ShowPoints}")
+
+                    Dim optionstring As String = String.Join(", ", options)
+                    If optionstring.Length > 0 Then
+                        line &= $":{optionstring}"
                     End If
-                    'TODO: write display options such as color, linestyle and linewidth?
                     strwrite.WriteLine(line)
                 End If
             Next
