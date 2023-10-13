@@ -104,15 +104,24 @@ Public Class TimeSeriesDisplayOptions
     End Function
 
     ''' <summary>
-    ''' Sets the color from a color name
+    ''' Sets the color from a color string
     ''' </summary>
-    ''' <remarks>Recognized colors: https://learn.microsoft.com/en-us/dotnet/api/system.drawing.knowncolor</remarks>
-    ''' <param name="colorName">the color name</param>
-    Public Sub SetColor(colorName As String)
-        If Not [Enum].IsDefined(GetType(KnownColor), colorName) Then
-            Log.AddLogEntry(levels.warning, $"Color '{colorName}' is not recognized!")
+    ''' <remarks>
+    ''' Must be either the name of a known color: https://learn.microsoft.com/en-us/dotnet/api/system.drawing.knowncolor
+    ''' or a hexadecimal representation of ARGB values
+    ''' </remarks>
+    ''' <param name="colorString">the color string</param>
+    Public Sub SetColor(colorString As String)
+        If [Enum].IsDefined(GetType(KnownColor), colorString) Then
+            Me.Color = Drawing.Color.FromName(colorString)
         Else
-            Me.Color = Drawing.Color.FromName(colorName)
+            Try
+                'try to convert a hexadecimal representation of ARGB values
+                Dim argb As Integer = Int32.Parse(colorString, Globalization.NumberStyles.HexNumber)
+                Me.Color = Color.FromArgb(argb)
+            Catch e As FormatException
+                Log.AddLogEntry(levels.warning, $"Color '{colorString}' is not recognized!")
+            End Try
         End If
     End Sub
 
