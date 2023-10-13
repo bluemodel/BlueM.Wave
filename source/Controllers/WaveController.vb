@@ -399,7 +399,7 @@ Friend Class WaveController
             dlgres = View.SaveFileDialog1.ShowDialog()
 
             If dlgres = Windows.Forms.DialogResult.OK Then
-                Call _model.SaveProjectFile(View.SaveFileDialog1.FileName)
+                Call Fileformats.WVP.Write_File(_model.TimeSeries.ToList(), View.SaveFileDialog1.FileName)
             End If
 
         Catch ex As Exception

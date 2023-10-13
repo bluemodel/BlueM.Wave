@@ -39,6 +39,7 @@ CHANGED:
 API-CHANGES:
 * Removed property `TimeSeriesFile.nLinesPerTimestamp`
 * Removed the properties `TimeSeries.Objekt` and `TimeSeries.Type`
+* New public method `Fileformats.WVP.Write_File()` for writing a Wave project file
 
 Version 2.4.5
 -------------

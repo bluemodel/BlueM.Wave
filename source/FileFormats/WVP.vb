@@ -350,6 +350,84 @@ Namespace Fileformats
 
         End Function
 
+        ''' <summary>
+        ''' Write a Wave project file
+        ''' </summary>
+        ''' <remarks>Only Timeseries with `.DataSource.Origin = TimeSeriesDataSource.OriginEnum.FileImport` will be saved</remarks>
+        ''' <param name="tsList">List of Timeseries to save</param>
+        ''' <param name="file">Path to the wvp file to write</param>
+        Public Shared Sub Write_File(ByRef tsList As List(Of TimeSeries), file As String)
+
+            'check whether there are any series with a file datasource at all
+            Dim haveFileDatasources As Boolean = False
+            For Each ts As TimeSeries In tsList
+                If ts.DataSource.Origin = TimeSeriesDataSource.OriginEnum.FileImport Then
+                    haveFileDatasources = True
+                    Exit For
+                End If
+            Next
+            If Not haveFileDatasources Then
+                Dim msg As String = $"None of the series originate from a file import! No project file was saved! Save the chart with data or export the time series to preserve them!"
+                Log.AddLogEntry(Log.levels.error, msg)
+                Throw New Exception(msg)
+            End If
+
+            'keep a list of series that could not be saved
+            Dim unsavedSeries As New List(Of String)
+
+            'write the project file
+            Dim fs As New IO.FileStream(file, IO.FileMode.Create, IO.FileAccess.Write)
+            Dim strwrite As New IO.StreamWriter(fs, Helpers.DefaultEncoding)
+
+            strwrite.WriteLine("# Wave project file")
+
+            'loop over series and save to file
+            Dim filePath As String = ""
+            For Each ts As TimeSeries In tsList
+                If Not ts.DataSource.Origin = TimeSeriesDataSource.OriginEnum.FileImport Then
+                    unsavedSeries.Add(ts.Title)
+                    Log.AddLogEntry(Log.levels.warning, $"Series '{ts.Title}' with datasource {ts.DataSource} does not originate from a file import and could not be saved to the project file!")
+                Else
+                    If ts.DataSource.FilePath <> filePath Then
+                        'write file path
+                        'TODO: write relative paths to the project file?
+                        filePath = ts.DataSource.FilePath
+                        strwrite.WriteLine("file=" & filePath)
+                    End If
+                    'write series name
+                    Dim line As String
+                    Dim seriesName As String = ts.DataSource.Title
+                    If seriesName.Contains(":") Then
+                        'enclose series names containing ":" in quotes
+                        seriesName = $"""{seriesName}"""
+                    End If
+                    line = $"    series={seriesName}"
+                    'write series options
+                    Dim options As String = ""
+                    If ts.Title <> seriesName Then
+                        options &= $"title=""{ts.Title}"""
+                    End If
+                    If options.Length > 0 Then
+                        line &= $":{options}"
+                    End If
+                    'TODO: write display options such as color, linestyle and linewidth?
+                    strwrite.WriteLine(line)
+                End If
+            Next
+
+            strwrite.Close()
+            fs.Close()
+
+            If unsavedSeries.Count = 0 Then
+                Log.AddLogEntry(Log.levels.info, $"Wave project file {file} saved.")
+            Else
+                Dim msg As String = $"Wave project file {file} saved. {unsavedSeries.Count} series could not be saved! Save the chart with data or export the time series to preserve them!"
+                Log.AddLogEntry(Log.levels.warning, msg)
+                Throw New Exception(msg)
+            End If
+
+        End Sub
+
     End Class
 
 End Namespace
