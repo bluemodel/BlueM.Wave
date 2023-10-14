@@ -11,6 +11,7 @@ NEW:
 * Wave project file (WVP):
   * Added support for additional series options #117
   * When saving to WVP, series options are now also saved
+  * WVP files are now always read and written using UTF-8 encoding
 
 FIXED:
 * Analysis function Accumulate now repects the input interpretation

@@ -81,7 +81,7 @@ Namespace Fileformats
             ' series=series5
             '
             fstr = New IO.FileStream(projectfile, IO.FileMode.Open)
-            strRead = New IO.StreamReader(fstr, detectEncodingFromByteOrderMarks:=True)
+            strRead = New IO.StreamReader(fstr, Text.Encoding.UTF8)
 
             file = ""
 
@@ -377,7 +377,7 @@ Namespace Fileformats
 
             'write the project file
             Dim fs As New IO.FileStream(file, IO.FileMode.Create, IO.FileAccess.Write)
-            Dim strwrite As New IO.StreamWriter(fs, Helpers.DefaultEncoding)
+            Dim strwrite As New IO.StreamWriter(fs, Text.Encoding.UTF8)
 
             strwrite.WriteLine("# Wave project file")
 
