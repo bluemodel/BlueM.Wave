@@ -1,4 +1,4 @@
-﻿Public Class Examples
+Public Class Examples
 
     ''' <summary>
     ''' Path to the time series file
@@ -148,6 +148,12 @@
         Console.WriteLine("Start date: " & ts.StartDate)
         Console.WriteLine("End date: " & ts.EndDate)
         Console.WriteLine("Average: " & ts.Average)
+
+        'set some custom display options
+        ts.DisplayOptions.Color = Color.Red
+        ts.DisplayOptions.LineStyle = Drawing2D.DashStyle.Dash
+        ts.DisplayOptions.LineWidth = 1
+        ts.DisplayOptions.ShowPoints = True
 
         'import the series in Wave
         Wave1.Import_Series(ts)
