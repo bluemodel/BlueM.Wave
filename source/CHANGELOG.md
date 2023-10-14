@@ -31,6 +31,7 @@ FIXED:
 CHANGED:
 * Analysis function Cumulative renamed to Accumulate
 * Added progress bar to Calculator analysis function
+* Upgrade to System.Data.SQLite v1.0.118.0 and SQLite 3.42.0
 
 API-CHANGES:
 * Removed property `TimeSeriesFile.nLinesPerTimestamp`
