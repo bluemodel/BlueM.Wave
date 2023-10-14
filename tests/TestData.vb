@@ -25,7 +25,7 @@ Module TestData
     ''' which is expected to be in the same directory as BlueM.Wave
     ''' </summary>
     ''' <returns></returns>
-    Private Function getTestDataDir() As String
+    Friend Function getTestDataDir() As String
         Try
             Dim appdir As String = My.Application.Info.DirectoryPath() 'e.g. BlueM.Wave\tests\bin\x64\Debug
             Dim testdatadir As String = appdir
