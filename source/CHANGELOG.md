@@ -8,6 +8,7 @@ NEW:
 * Added navigation buttons for navigating to the start and end of the currently active series
 * New analysis function Decumulate
 * Added support for importing SWMM time series file format 
+* Added support for reading and writing REXCHANGE header values for ZRXP files #123
 
 FIXED:
 * Analysis function Accumulate now repects the input interpretation
