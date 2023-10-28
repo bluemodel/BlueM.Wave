@@ -172,25 +172,6 @@ Friend Class ImportCSVDialog
         'Dateiname anzeigen
         Me.Label_File.Text = "File: " & Path.GetFileName(Me.datei.File)
 
-        'Workaround for binary file formats
-        If TypeOf Me.datei Is Fileformats.SWMM_OUT _
-            Or TypeOf Me.datei Is Fileformats.SydroSQLite _
-            Or TypeOf Me.datei Is Fileformats.DFS0 _
-            Or TypeOf Me.datei Is Fileformats.WBL Then
-
-            Me.TextBox_Preview.Text = $"{Path.GetFileName(Me.datei.File)} is a binary file.{eol}Preview is not available!"
-            'Disable all other fields
-            Me.GroupBox_Dateformat.Enabled = False
-            Me.GroupBox_Columns.Enabled = False
-            Me.GroupBox_DecimalMark.Enabled = False
-            Me.GroupBox_Settings.Enabled = False
-            Me.Label_Encoding.Enabled = False
-            Me.ComboBox_Encoding.Enabled = False
-            Me.Button_EncodingAutodetect.Enabled = False
-
-            Exit Sub
-        End If
-
         'Vorschau anzeigen
         Dim fs As New FileStream(Me.datei.File, FileMode.Open, FileAccess.Read)
         Dim StrRead As New StreamReader(fs, Me.selectedEncoding)
