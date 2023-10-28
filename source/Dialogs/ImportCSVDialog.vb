@@ -18,7 +18,7 @@
 Imports System.IO
 Imports System.Text.RegularExpressions
 
-Friend Class ImportDiag
+Friend Class ImportCSVDialog
     Inherits System.Windows.Forms.Form
 
 #Region "Eigenschaften"
@@ -135,7 +135,7 @@ Friend Class ImportDiag
         Me.ComboBox_DecimalSeparator.Items.Add(Constants.comma)
         Me.ComboBox_DecimalSeparator.EndUpdate()
 
-        'Combobox Datumsformat füllen
+        'Combobox Datumsformat fÃ¼llen
         For Each datumsformat As String In Helpers.DateFormats.Values
             Me.DateFormat = datumsformat
         Next
@@ -207,7 +207,7 @@ Friend Class ImportDiag
             End If
 
             'replace tab characters with a visual representation
-            line = line.Replace(vbTab, " » ")
+            line = line.Replace(vbTab, " Â» ")
 
             text &= line & Constants.eol
 
@@ -226,7 +226,7 @@ Friend Class ImportDiag
 
     End Sub
 
-    'OK Button gedrückt
+    'OK Button gedrÃ¼ckt
     '******************
     Private Sub Button_OK_Click(sender As Object, e As EventArgs) Handles Button_OK.Click
 
@@ -267,7 +267,7 @@ Friend Class ImportDiag
             '------------------
             Try
 
-                'Datenzeile muss nach Überschriften und Einheiten sein!
+                'Datenzeile muss nach Ãœberschriften und Einheiten sein!
                 Me.IsInitializing = True
                 If (Me.NumericUpDown_LineData.Value <= Me.NumericUpDown_LineTitles.Value) Then
                     Me.NumericUpDown_LineData.Value = Me.NumericUpDown_LineTitles.Value + 1

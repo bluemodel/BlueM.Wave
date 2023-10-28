@@ -136,7 +136,7 @@ Public Class Wave
                         ok = Me.ShowImportDialog(fileInstance)
                         Call Application.DoEvents()
                     Else
-                        'Ansonsten alle Spalten ausw‰hlen
+                        'Ansonsten alle Spalten ausw√§hlen
                         Call fileInstance.selectAllSeries()
                         ok = True
                     End If
@@ -807,12 +807,12 @@ Public Class Wave
     ''' <param name="Datei">Instanz der Datei, die importiert werden soll</param>
     Friend Function ShowImportDialog(ByRef Datei As TimeSeriesFile) As Boolean
 
-        Datei.ImportDiag = New ImportDiag(Datei)
+        Dim ImportDiag As New ImportCSVDialog(Datei)
 
         Dim DiagResult As DialogResult
 
         'Dialog anzeigen
-        DiagResult = Datei.ImportDiag.ShowDialog()
+        DiagResult = ImportDiag.ShowDialog()
 
         If (DiagResult = Windows.Forms.DialogResult.OK) Then
             Return True

@@ -1,5 +1,5 @@
 <Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
-Partial Class ImportDiag
+Partial Class ImportCSVDialog
     Inherits System.Windows.Forms.Form
 
     'Das Formular überschreibt den Löschvorgang, um die Komponentenliste zu bereinigen.
@@ -24,7 +24,7 @@ Partial Class ImportDiag
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
         Dim SplitContainer1 As System.Windows.Forms.SplitContainer
-        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(ImportDiag))
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(ImportCSVDialog))
         Me.GroupBox_Selection = New System.Windows.Forms.GroupBox()
         Me.Label_Selected = New System.Windows.Forms.Label()
         Me.Label_Search = New System.Windows.Forms.Label()
