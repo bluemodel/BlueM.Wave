@@ -1,6 +1,10 @@
 ﻿BlueM.Wave Release Notes
 ========================
 
+Development
+-------------
+* Upgrade TeeChart to v4.2023.4.18
+
 Version 2.5.0
 -------------
 NEW:
