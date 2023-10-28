@@ -3,6 +3,10 @@
 
 Development
 -------------
+NEW:
+* Added a new series selection dialog for known (non-CSV) file types
+
+CHANGED:
 * Upgrade TeeChart to v4.2023.4.18
 
 Version 2.5.0
@@ -15,7 +19,7 @@ NEW:
 * Added support for reading and writing REXCHANGE header values for ZRXP files #123
 
 FIXED:
-* Analysis function Accumulate now repects the input interpretation
+* Analysis function Accumulate now respects the input interpretation
 * Time Series Properties and Values windows now restore on toolbar button press if previously minimized
 * Importing from SWMM binary output format:
   * Read and store metadata
