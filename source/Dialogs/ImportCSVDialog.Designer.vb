@@ -527,7 +527,7 @@ Partial Class ImportCSVDialog
         Me.ComboBox_Dateformat.Size = New System.Drawing.Size(139, 21)
         Me.ComboBox_Dateformat.TabIndex = 1
         '
-        'ImportDiag
+        'ImportCSVDialog
         '
         Me.AcceptButton = Me.Button_OK
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -546,10 +546,10 @@ Partial Class ImportCSVDialog
         Me.MaximizeBox = False
         Me.MinimizeBox = False
         Me.MinimumSize = New System.Drawing.Size(565, 500)
-        Me.Name = "ImportDiag"
+        Me.Name = "ImportCSVDialog"
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = "Import series from file"
+        Me.Text = "Import series from CSV file"
         SplitContainer1.Panel1.ResumeLayout(False)
         SplitContainer1.Panel2.ResumeLayout(False)
         CType(SplitContainer1, System.ComponentModel.ISupportInitialize).EndInit()

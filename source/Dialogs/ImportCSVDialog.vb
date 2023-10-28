@@ -106,9 +106,6 @@ Friend Class ImportCSVDialog
 
         Me.datei = fileInstance
 
-        'add type name of file instance to dialog title
-        Me.Text &= $" - file format: {Me.datei.GetType().Name}"
-
         'initialize input delay timer
         Me.inputTimer = New Timers.Timer(1000)
         Me.inputTimer.SynchronizingObject = Me
