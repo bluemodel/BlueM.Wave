@@ -2742,6 +2742,7 @@ Friend Class WaveController
     ''' <param name="value">Value to set the progress bar to</param>
     Private Sub ProgressUpdate(value As Integer)
         View.ProgressBar1.Value = Math.Min(value, View.ProgressBar1.Maximum)
+        Call Application.DoEvents()
     End Sub
 
     ''' <summary>
