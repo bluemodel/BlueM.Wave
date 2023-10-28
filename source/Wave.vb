@@ -802,19 +802,23 @@ Public Class Wave
     End Sub
 
     ''' <summary>
-    ''' Zeigt den Importdialog an und liest im Anschluss die Datei mit den eingegebenen Einstellungen ein
+    ''' Shows the import dialog for series selection
     ''' </summary>
-    ''' <param name="Datei">Instanz der Datei, die importiert werden soll</param>
-    Friend Function ShowImportDialog(ByRef Datei As TimeSeriesFile) As Boolean
+    ''' <param name="tsFile">File instance from which to import</param>
+    Friend Function ShowImportDialog(ByRef tsFile As TimeSeriesFile) As Boolean
 
-        Dim ImportDiag As New ImportCSVDialog(Datei)
+        Dim dialog As Form
+        Dim dialogResult As DialogResult
 
-        Dim DiagResult As DialogResult
+        If TypeOf tsFile Is Fileformats.CSV Then
+            dialog = New ImportCSVDialog(tsFile)
+        Else
+            dialog = New SelectSeriesDialog(tsFile)
+        End If
 
-        'Dialog anzeigen
-        DiagResult = ImportDiag.ShowDialog()
+        dialogResult = dialog.ShowDialog()
 
-        If (DiagResult = Windows.Forms.DialogResult.OK) Then
+        If dialogResult = Windows.Forms.DialogResult.OK Then
             Return True
         Else
             Return False
