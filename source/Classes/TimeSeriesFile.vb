@@ -159,11 +159,6 @@ Public MustInherit Class TimeSeriesFile
     ''' </summary>
     Public TimeSeries As Dictionary(Of Integer, TimeSeries)
 
-    ''' <summary>
-    ''' Instance of the ImportDialog
-    ''' </summary>
-    Friend ImportDiag As ImportDiag
-
 #End Region 'Eigenschaften
 
 #Region "Properties"

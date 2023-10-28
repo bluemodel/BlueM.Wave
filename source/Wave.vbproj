@@ -202,6 +202,12 @@
     <Compile Include="Analysis\TimestepAnalysisDialog.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Dialogs\SelectSeriesDialog.Designer.vb">
+      <DependentUpon>SelectSeriesDialog.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\SelectSeriesDialog.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="FileFormats\JAMS.vb" />
     <Compile Include="Main.vb" />
     <Compile Include="App.vb" />
@@ -256,10 +262,10 @@
     <Compile Include="Dialogs\ExportDiag.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Dialogs\ImportDiag.Designer.vb">
-      <DependentUpon>ImportDiag.vb</DependentUpon>
+    <Compile Include="Dialogs\ImportCSVDialog.Designer.vb">
+      <DependentUpon>ImportCSVDialog.vb</DependentUpon>
     </Compile>
-    <Compile Include="Dialogs\ImportDiag.vb">
+    <Compile Include="Dialogs\ImportCSVDialog.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Dialogs\LogWindow.Designer.vb">
@@ -417,8 +423,11 @@
     <EmbeddedResource Include="Dialogs\ExportDiag.resx">
       <DependentUpon>ExportDiag.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Dialogs\ImportDiag.resx">
-      <DependentUpon>ImportDiag.vb</DependentUpon>
+    <EmbeddedResource Include="Dialogs\SelectSeriesDialog.resx">
+      <DependentUpon>SelectSeriesDialog.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialogs\ImportCSVDialog.resx">
+      <DependentUpon>ImportCSVDialog.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Dialogs\LogWindow.resx">
       <DependentUpon>LogWindow.vb</DependentUpon>

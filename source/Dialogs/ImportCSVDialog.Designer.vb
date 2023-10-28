@@ -1,5 +1,5 @@
 <Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
-Partial Class ImportDiag
+Partial Class ImportCSVDialog
     Inherits System.Windows.Forms.Form
 
     'Das Formular überschreibt den Löschvorgang, um die Komponentenliste zu bereinigen.
@@ -24,7 +24,7 @@ Partial Class ImportDiag
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
         Dim SplitContainer1 As System.Windows.Forms.SplitContainer
-        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(ImportDiag))
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(ImportCSVDialog))
         Me.GroupBox_Selection = New System.Windows.Forms.GroupBox()
         Me.Label_Selected = New System.Windows.Forms.Label()
         Me.Label_Search = New System.Windows.Forms.Label()
@@ -527,7 +527,7 @@ Partial Class ImportDiag
         Me.ComboBox_Dateformat.Size = New System.Drawing.Size(139, 21)
         Me.ComboBox_Dateformat.TabIndex = 1
         '
-        'ImportDiag
+        'ImportCSVDialog
         '
         Me.AcceptButton = Me.Button_OK
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -546,10 +546,10 @@ Partial Class ImportDiag
         Me.MaximizeBox = False
         Me.MinimizeBox = False
         Me.MinimumSize = New System.Drawing.Size(565, 500)
-        Me.Name = "ImportDiag"
+        Me.Name = "ImportCSVDialog"
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = "Import series from file"
+        Me.Text = "Import series from CSV file"
         SplitContainer1.Panel1.ResumeLayout(False)
         SplitContainer1.Panel2.ResumeLayout(False)
         CType(SplitContainer1, System.ComponentModel.ISupportInitialize).EndInit()
