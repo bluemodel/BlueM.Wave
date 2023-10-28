@@ -54,7 +54,7 @@ Partial Class SelectSeriesDialog
         Me.GroupBox_Selection.Margin = New System.Windows.Forms.Padding(0)
         Me.GroupBox_Selection.Name = "GroupBox_Selection"
         Me.GroupBox_Selection.Size = New System.Drawing.Size(219, 322)
-        Me.GroupBox_Selection.TabIndex = 0
+        Me.GroupBox_Selection.TabIndex = 4
         Me.GroupBox_Selection.TabStop = False
         Me.GroupBox_Selection.Text = "Series selection"
         '
@@ -64,7 +64,7 @@ Partial Class SelectSeriesDialog
         Me.Label_Selected.Location = New System.Drawing.Point(138, 292)
         Me.Label_Selected.Name = "Label_Selected"
         Me.Label_Selected.Size = New System.Drawing.Size(75, 13)
-        Me.Label_Selected.TabIndex = 34
+        Me.Label_Selected.TabIndex = 5
         Me.Label_Selected.Text = "0 selected"
         Me.Label_Selected.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
@@ -124,7 +124,7 @@ Partial Class SelectSeriesDialog
         Me.Button_OK.Location = New System.Drawing.Point(75, 388)
         Me.Button_OK.Name = "Button_OK"
         Me.Button_OK.Size = New System.Drawing.Size(75, 23)
-        Me.Button_OK.TabIndex = 4
+        Me.Button_OK.TabIndex = 5
         Me.Button_OK.Text = "OK"
         Me.Button_OK.UseVisualStyleBackColor = True
         '
@@ -135,7 +135,7 @@ Partial Class SelectSeriesDialog
         Me.Button_Cancel.Location = New System.Drawing.Point(156, 388)
         Me.Button_Cancel.Name = "Button_Cancel"
         Me.Button_Cancel.Size = New System.Drawing.Size(75, 23)
-        Me.Button_Cancel.TabIndex = 5
+        Me.Button_Cancel.TabIndex = 6
         Me.Button_Cancel.Text = "Cancel"
         Me.Button_Cancel.UseVisualStyleBackColor = True
         '
@@ -145,7 +145,7 @@ Partial Class SelectSeriesDialog
         Me.Label1.Location = New System.Drawing.Point(12, 13)
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(58, 13)
-        Me.Label1.TabIndex = 6
+        Me.Label1.TabIndex = 0
         Me.Label1.Text = "File name: "
         '
         'Label2
@@ -154,7 +154,7 @@ Partial Class SelectSeriesDialog
         Me.Label2.Location = New System.Drawing.Point(12, 30)
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(52, 13)
-        Me.Label2.TabIndex = 7
+        Me.Label2.TabIndex = 2
         Me.Label2.Text = "File type: "
         '
         'Label_FileName
@@ -163,7 +163,7 @@ Partial Class SelectSeriesDialog
         Me.Label_FileName.Location = New System.Drawing.Point(68, 13)
         Me.Label_FileName.Name = "Label_FileName"
         Me.Label_FileName.Size = New System.Drawing.Size(52, 13)
-        Me.Label_FileName.TabIndex = 8
+        Me.Label_FileName.TabIndex = 1
         Me.Label_FileName.Text = "File name"
         '
         'Label_FileType
@@ -172,7 +172,7 @@ Partial Class SelectSeriesDialog
         Me.Label_FileType.Location = New System.Drawing.Point(68, 30)
         Me.Label_FileType.Name = "Label_FileType"
         Me.Label_FileType.Size = New System.Drawing.Size(46, 13)
-        Me.Label_FileType.TabIndex = 9
+        Me.Label_FileType.TabIndex = 3
         Me.Label_FileType.Text = "File type"
         '
         'SelectSeriesDialog

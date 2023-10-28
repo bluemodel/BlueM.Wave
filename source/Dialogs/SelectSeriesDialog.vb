@@ -42,6 +42,9 @@ Friend Class SelectSeriesDialog
         Me.inputTimer.SynchronizingObject = Me
         Me.inputTimer.AutoReset = False
 
+        'set intial focus
+        Me.TextBox_Search.Focus()
+
     End Sub
 
     Private Sub Form_Load(sender As Object, e As EventArgs) Handles MyBase.Load
