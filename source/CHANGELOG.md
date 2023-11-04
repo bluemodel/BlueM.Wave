@@ -5,6 +5,7 @@ Development
 -------------
 NEW:
 * Added a new series selection dialog for known (non-CSV) file types
+* Added the ability to reorder series from within the Time Series Properties window
 
 CHANGED:
 * Upgrade TeeChart to v4.2023.4.18

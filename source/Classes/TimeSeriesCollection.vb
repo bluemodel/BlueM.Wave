@@ -212,4 +212,36 @@ Public Class TimeSeriesCollection
         _timeseriesdict = newdict
     End Sub
 
+    ''' <summary>
+    ''' Reorders a TimeSeries within the collection
+    ''' </summary>
+    ''' <param name="id">Id of the TimeSeries to reorder</param>
+    ''' <param name="direction">Direction</param>
+    Public Sub Reorder(id As Integer, direction As Direction)
+        Dim ts As TimeSeries
+        'find index of timeseries to reorder
+        Dim index As Integer = 0
+        For Each ts In _timeseriesdict.Values
+            If ts.Id = id Then
+                Exit For
+            End If
+            index += 1
+        Next
+        If (direction = Direction.Up And index = 0) Or
+           (direction = Direction.Down And index = _timeseriesdict.Count - 1) Then
+            'series is already at top/bottom
+            Exit Sub
+        End If
+        'reorder series
+        Dim offset As Integer
+        If direction = Direction.Up Then
+            offset = -1
+        Else
+            offset = 1
+        End If
+        ts = _timeseriesdict(index)
+        Me._timeseriesdict.RemoveAt(index)
+        Me._timeseriesdict.Insert(index + offset, ts.Id, ts)
+    End Sub
+
 End Class

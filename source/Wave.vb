@@ -46,9 +46,14 @@ Public Class Wave
     Friend Event SeriesCleared()
 
     ''' <summary>
-    ''' Is raised when time series are reordered
+    ''' Is raised when all the time series are reordered
     ''' </summary>
-    Friend Event SeriesReordered()
+    Friend Event SeriesAllReordered()
+
+    ''' <summary>
+    ''' Is raised when a single time series is reordered
+    ''' </summary>
+    Friend Event SeriesReordered(id As Integer, direction As Integer)
 
     ''' <summary>
     ''' Is raised when timestamps should be highlighted
@@ -435,7 +440,7 @@ Public Class Wave
     ''' <param name="ids">List of Ids in the new order</param>
     Friend Sub Reorder_Series(ids As List(Of Integer))
         Me.TimeSeries.Reorder(ids)
-        RaiseEvent SeriesReordered()
+        RaiseEvent SeriesAllReordered()
     End Sub
 
     Friend Sub SaveProjectFile(projectfile As String)
@@ -873,9 +878,19 @@ Public Class Wave
         RaiseEvent HighlightTimestamps(timestamps)
     End Sub
 
-
     Friend Sub SeriesPropertiesChangedHandler(id As Integer)
         RaiseEvent SeriesPropertiesChanged(id)
+    End Sub
+
+    ''' <summary>
+    ''' Reorders a TimeSeries
+    ''' </summary>
+    ''' <param name="id">Id of the TimeSeries to reorder</param>
+    ''' <param name="direction">Direction</param>
+    Friend Sub SeriesReorder(id As Integer, direction As Direction)
+        Me.TimeSeries.Reorder(id, direction)
+        'raise event for views to handle
+        RaiseEvent SeriesReordered(id, direction)
     End Sub
 
 End Class

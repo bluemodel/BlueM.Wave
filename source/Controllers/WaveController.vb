@@ -190,6 +190,7 @@ Friend Class WaveController
         AddHandler _model.SeriesPropertiesChanged, AddressOf SeriesPropertiesChanged
         AddHandler _model.SeriesRemoved, AddressOf SeriesRemoved
         AddHandler _model.SeriesCleared, AddressOf SeriesCleared
+        AddHandler _model.SeriesReordered, AddressOf SeriesReordered
         AddHandler _model.HighlightTimestamps, AddressOf showMarkers
         AddHandler _model.TENFileLoading, AddressOf Load_TEN
         AddHandler _model.IsBusyChanged, AddressOf ShowBusy
@@ -2594,6 +2595,28 @@ Friend Class WaveController
             End If
         Next
 
+    End Sub
+
+    ''' <summary>
+    ''' Handles the case where a TimeSeries was reordered on the model side
+    ''' </summary>
+    ''' <param name="id">Id of the TimeSeries whose order was changed</param>
+    ''' <param name="direction">Direction in which the series was moved</param>
+    Private Sub SeriesReordered(id As Integer, direction As Direction)
+        'update series order in chart
+        'TODO: this causes a second, unnecessary event update through TeeEvent which I don't know how to prevent
+        Dim index As Integer = 0
+        For Each series As Steema.TeeChart.Styles.Series In View.TChart1.Series
+            If series.Tag = id Then
+                If direction = Direction.Up And index > 0 Then
+                    View.TChart1.Series.Exchange(index, index - 1)
+                ElseIf direction = Direction.Down And index < View.TChart1.Series.Count - 1 Then
+                    View.TChart1.Series.Exchange(index, index + 1)
+                End If
+                Exit For
+            End If
+            index += 1
+        Next
     End Sub
 
     ''' <summary>
