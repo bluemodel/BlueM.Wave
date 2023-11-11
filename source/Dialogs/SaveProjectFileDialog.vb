@@ -110,7 +110,7 @@ Friend Class SaveProjectFileDialog
 
         'Prepare SaveFileDialog
         SaveFileDialog1.Title = "Save project file"
-        SaveFileDialog1.Filter = "Wave project files (*.wvp)|*wvp"
+        SaveFileDialog1.Filter = "Wave project files (*.wvp)|*.wvp"
         SaveFileDialog1.DefaultExt = "wvp"
         SaveFileDialog1.OverwritePrompt = False 'will be prompted after OK button is pressed
 
