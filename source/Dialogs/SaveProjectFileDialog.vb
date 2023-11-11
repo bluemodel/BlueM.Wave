@@ -89,9 +89,17 @@ Friend Class SaveProjectFileDialog
     Private Sub Button_OK_Click(sender As System.Object, e As System.EventArgs) Handles Button_OK.Click
 
         'validate inputs
-        If Me.TextBox_File.Text.Length = 0 Then
+        If Me.FileName.Length = 0 Then
             MsgBox("Please specify a file name!", MsgBoxStyle.Exclamation)
             Me.DialogResult = DialogResult.None
+        End If
+
+        'prompt for overwrite
+        If IO.File.Exists(Me.FileName) Then
+            Dim response As MsgBoxResult = MsgBox($"Replace existing file {Me.FileName}?", MsgBoxStyle.YesNo Or MsgBoxStyle.Exclamation)
+            If Not response = MsgBoxResult.Yes Then
+                Me.DialogResult = DialogResult.None
+            End If
         End If
 
     End Sub
@@ -104,7 +112,7 @@ Friend Class SaveProjectFileDialog
         SaveFileDialog1.Title = "Save project file"
         SaveFileDialog1.Filter = "Wave project files (*.wvp)|*wvp"
         SaveFileDialog1.DefaultExt = "wvp"
-        SaveFileDialog1.OverwritePrompt = True
+        SaveFileDialog1.OverwritePrompt = False 'will be prompted after OK button is pressed
 
         'Show dialog
         dlgres = SaveFileDialog1.ShowDialog()
