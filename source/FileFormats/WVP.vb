@@ -356,6 +356,7 @@ Namespace Fileformats
         ''' <remarks>Only Timeseries with `.DataSource.Origin = TimeSeriesDataSource.OriginEnum.FileImport` will be saved</remarks>
         ''' <param name="tsList">List of Timeseries to save</param>
         ''' <param name="file">Path to the wvp file to write</param>
+        ''' <param name="saveRelativePaths">Whether to save relative paths</param>
         ''' <param name="saveTitle">Whether to save titles</param>
         ''' <param name="saveUnit">Whether to save units</param>
         ''' <param name="saveInterpretation">Whether to save interpretations</param>
@@ -364,6 +365,7 @@ Namespace Fileformats
         ''' <param name="saveLineWidth">Whether to save line widths</param>
         ''' <param name="savePointsVisibility">Whether to save points visibility</param>
         Public Shared Sub Write_File(ByRef tsList As List(Of TimeSeries), file As String,
+                                     Optional saveRelativePaths As Boolean = False,
                                      Optional saveTitle As Boolean = False,
                                      Optional saveUnit As Boolean = False,
                                      Optional saveInterpretation As Boolean = False,
@@ -397,17 +399,21 @@ Namespace Fileformats
             strwrite.WriteLine("# Wave project file")
 
             'loop over series and save to file
-            Dim filePath As String = ""
+            Dim filePath As String
+            Dim lastFilePath As String = ""
             For Each ts As TimeSeries In tsList
                 If Not ts.DataSource.Origin = TimeSeriesDataSource.OriginEnum.FileImport Then
                     unsavedSeries.Add(ts.Title)
                     Log.AddLogEntry(Log.levels.warning, $"Series '{ts.Title}' with datasource {ts.DataSource} does not originate from a file import and could not be saved to the project file!")
                 Else
-                    If ts.DataSource.FilePath <> filePath Then
-                        'write file path
-                        'TODO: write relative paths to the project file?
-                        filePath = ts.DataSource.FilePath
+                    filePath = ts.DataSource.FilePath
+                    If saveRelativePaths Then
+                        filePath = Helpers.GetRelativePath(file, filePath)
+                    End If
+                    If filePath <> lastFilePath Then
+                        'write new file path
                         strwrite.WriteLine("file=" & filePath)
+                        lastFilePath = filePath
                     End If
                     'write series name
                     Dim line As String

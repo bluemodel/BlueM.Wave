@@ -32,6 +32,12 @@ Friend Class SaveProjectFileDialog
         End Get
     End Property
 
+    Friend ReadOnly Property SaveRelativePaths As Boolean
+        Get
+            Return CheckBox_RelativePaths.Checked
+        End Get
+    End Property
+
     Friend ReadOnly Property SaveTitle As Boolean
         Get
             Return CheckBox_Title.Checked

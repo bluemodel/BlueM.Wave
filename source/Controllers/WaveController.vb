@@ -417,6 +417,7 @@ Friend Class WaveController
                     tsList.Add(ts)
                 Next
                 Call Fileformats.WVP.Write_File(tsList, dlg.FileName,
+                                                saveRelativePaths:=dlg.SaveRelativePaths,
                                                 saveTitle:=dlg.SaveTitle,
                                                 saveUnit:=dlg.SaveUnit,
                                                 saveInterpretation:=dlg.SaveInterpretation,

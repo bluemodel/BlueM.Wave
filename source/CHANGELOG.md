@@ -8,6 +8,7 @@ NEW:
 * Added the ability to reorder series from within the Time Series Properties window
 * Wave project file (WVP):
   * Added support for additional series options #117
+  * When saving to WVP, file paths can optionally be saved as relative
   * When saving to WVP, series options are now also saved
   * WVP files are now always read and written using UTF-8 encoding
 
