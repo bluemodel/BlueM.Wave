@@ -140,39 +140,41 @@ Namespace Fileformats
                         }
                         If m.Groups("options").Success Then
                             'parse series options
-                            Dim optionString As String = m.Groups("optionstring").Value
-                            If Not optionString.Contains("=") Then
-                                'title only
+                            Dim optionString As String = m.Groups("optionstring").Value.Trim()
+                            'remove quoted parts
+                            Dim stripped As String = Regex.Replace(optionString, "(?<q>"").+?(?<-q>"")", "")
+                            If Not stripped.Contains("=") Then
+                                'no keyword options, title only
                                 seriesOptions.title = optionString.Replace("""", "").Trim() 'remove any quotes around title
                             Else
                                 'keyword options, comma-separated, values may be quoted
                                 Dim matches As MatchCollection = Regex.Matches(optionString, "(?<key>[^"",=]+)\s?=\s?(?<value>(?<q>"").+?(?<-q>"")|[^"",=]+),?")
-                                For Each m In matches
-                                    Dim keyword As String = m.Groups("key").Value.ToLower().Trim()
-                                    Dim value As String = m.Groups("value").Value.Replace("""", "").Trim() 'values are case-sensitive!
-                                    Select Case keyword
-                                        Case "title"
-                                            seriesOptions.title = value
-                                        Case "unit"
-                                            seriesOptions.unit = value
-                                        Case "color"
-                                            seriesOptions.color = value
-                                        Case "linestyle"
-                                            seriesOptions.linestyle = value
-                                        Case "linewidth"
-                                            seriesOptions.linewidth = value
-                                        Case "interpretation"
-                                            seriesOptions.interpretation = value
-                                        Case "showpoints"
-                                            seriesOptions.showpoints = value
-                                        Case Else
-                                            Log.AddLogEntry(levels.warning, $"Series import option keyword {keyword} not recognized!")
-                                    End Select
-                                Next
+                                    For Each m In matches
+                                        Dim keyword As String = m.Groups("key").Value.ToLower().Trim()
+                                        Dim value As String = m.Groups("value").Value.Replace("""", "").Trim() 'values are case-sensitive!
+                                        Select Case keyword
+                                            Case "title"
+                                                seriesOptions.title = value
+                                            Case "unit"
+                                                seriesOptions.unit = value
+                                            Case "color"
+                                                seriesOptions.color = value
+                                            Case "linestyle"
+                                                seriesOptions.linestyle = value
+                                            Case "linewidth"
+                                                seriesOptions.linewidth = value
+                                            Case "interpretation"
+                                                seriesOptions.interpretation = value
+                                            Case "showpoints"
+                                                seriesOptions.showpoints = value
+                                            Case Else
+                                                Log.AddLogEntry(levels.warning, $"Series import option keyword {keyword} not recognized!")
+                                        End Select
+                                    Next
+                                End If
                             End If
-                        End If
-                        'add series to fileDict
-                        If fileDict.ContainsKey(file) Then
+                            'add series to fileDict
+                            If fileDict.ContainsKey(file) Then
                             If Not fileDict(file).ContainsKey(seriesName) Then
                                 fileDict(file).Add(seriesName, seriesOptions)
                             Else
