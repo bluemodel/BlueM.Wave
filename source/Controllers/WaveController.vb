@@ -387,6 +387,11 @@ Friend Class WaveController
     ''' <remarks></remarks>
     Private Sub SaveProjectFile_Click(sender As System.Object, e As System.EventArgs)
 
+        If _model.TimeSeries.Count = 0 Then
+            MsgBox("No time series to save!", MsgBoxStyle.Exclamation)
+            Exit Sub
+        End If
+
         Try
             'show save project file dialog
             Dim dlgres As DialogResult
