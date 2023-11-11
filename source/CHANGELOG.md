@@ -1,10 +1,10 @@
 ﻿BlueM.Wave Release Notes
 ========================
 
-Development
+Version 2.6.0
 -------------
 NEW:
-* Added a new series selection dialog for known (non-CSV) file types
+* Added a new, simpler, series selection dialog for known file types
 * Added the ability to reorder series from within the Time Series Properties window
 * Wave project file (WVP):
   * Added support for additional series options in WVP files #117

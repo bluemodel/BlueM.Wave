@@ -21,12 +21,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_051AC2210BBCDDC464F391E803231661"
-        "OwnerKey" = "8:_152A841758E942AE8286A4A2A0CCDD82"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_0F197AD7D0A642428F391E9D26095289"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -40,6 +34,12 @@
         "Entry"
         {
         "MsmKey" = "8:_0F7D7B4F60E7EF99AF52D9DF9433D636"
+        "OwnerKey" = "8:_152A841758E942AE8286A4A2A0CCDD82"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_110DFE2C3733E371ABFE1061E184260F"
         "OwnerKey" = "8:_152A841758E942AE8286A4A2A0CCDD82"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -142,13 +142,13 @@
         "Entry"
         {
         "MsmKey" = "8:_7EB65CC86E2448158C32B1BE25DE9241"
-        "OwnerKey" = "8:_B55D3CEAECB3777E85E6824CE6D7EE32"
+        "OwnerKey" = "8:_B0FEB18BE0E20DD6214010D0F59ABA2F"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_7EB65CC86E2448158C32B1BE25DE9241"
-        "OwnerKey" = "8:_F0AFB176DBF320B5AFC0B890DF96800D"
+        "OwnerKey" = "8:_110DFE2C3733E371ABFE1061E184260F"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -225,6 +225,18 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_B0FEB18BE0E20DD6214010D0F59ABA2F"
+        "OwnerKey" = "8:_152A841758E942AE8286A4A2A0CCDD82"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_B0FEB18BE0E20DD6214010D0F59ABA2F"
+        "OwnerKey" = "8:_EB4C7201A5EFE227B2CB97639A41F36E"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_B5382723FA8D2AE3A85A611F08234390"
         "OwnerKey" = "8:_152A841758E942AE8286A4A2A0CCDD82"
         "MsmSig" = "8:_UNDEFINED"
@@ -233,18 +245,6 @@
         {
         "MsmKey" = "8:_B53838DCCBF84C558B1E198D5CA8CE3F"
         "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_B55D3CEAECB3777E85E6824CE6D7EE32"
-        "OwnerKey" = "8:_152A841758E942AE8286A4A2A0CCDD82"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_B55D3CEAECB3777E85E6824CE6D7EE32"
-        "OwnerKey" = "8:_051AC2210BBCDDC464F391E803231661"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -321,6 +321,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_EB4C7201A5EFE227B2CB97639A41F36E"
+        "OwnerKey" = "8:_152A841758E942AE8286A4A2A0CCDD82"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_EE3E7F262421700A0BD0468CED1E336A"
         "OwnerKey" = "8:_8DC36EE230E22798E785C3E7AEC43CD1"
         "MsmSig" = "8:_UNDEFINED"
@@ -335,12 +341,6 @@
         {
         "MsmKey" = "8:_EF238C7BD2FE4408AF2DCD5E2B45887B"
         "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_F0AFB176DBF320B5AFC0B890DF96800D"
-        "OwnerKey" = "8:_152A841758E942AE8286A4A2A0CCDD82"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -400,19 +400,19 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_051AC2210BBCDDC464F391E803231661"
+        "OwnerKey" = "8:_EB4C7201A5EFE227B2CB97639A41F36E"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_B55D3CEAECB3777E85E6824CE6D7EE32"
+        "OwnerKey" = "8:_B0FEB18BE0E20DD6214010D0F59ABA2F"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_F0AFB176DBF320B5AFC0B890DF96800D"
+        "OwnerKey" = "8:_110DFE2C3733E371ABFE1061E184260F"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -607,37 +607,6 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_051AC2210BBCDDC464F391E803231661"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:TeeChart.Xaml.WPF, Version=4.2022.8.23, Culture=neutral, PublicKeyToken=9406d226170aa089, processorArchitecture=MSIL"
-                "ScatterAssemblies"
-                {
-                    "_051AC2210BBCDDC464F391E803231661"
-                    {
-                    "Name" = "8:TeeChart.Xaml.WPF.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:TeeChart.Xaml.WPF.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_1335334A1EB042F3AB241758004683C2"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_0F197AD7D0A642428F391E9D26095289"
             {
             "SourcePath" = "8:assets\\ten.ico"
@@ -672,6 +641,37 @@
                     }
                 }
             "SourcePath" = "8:DHI.Generic.MikeZero.EUM.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_1335334A1EB042F3AB241758004683C2"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_110DFE2C3733E371ABFE1061E184260F"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:TeeChart, Version=4.2023.4.18, Culture=neutral, PublicKeyToken=9c8126276c77bdb7, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_110DFE2C3733E371ABFE1061E184260F"
+                    {
+                    "Name" = "8:TeeChart.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:TeeChart.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_1335334A1EB042F3AB241758004683C2"
@@ -1308,6 +1308,37 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_B0FEB18BE0E20DD6214010D0F59ABA2F"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:TeeChart.WPF, Version=4.2023.4.18, Culture=neutral, PublicKeyToken=98e8c3f289a4e286, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_B0FEB18BE0E20DD6214010D0F59ABA2F"
+                    {
+                    "Name" = "8:TeeChart.WPF.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:TeeChart.WPF.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_1335334A1EB042F3AB241758004683C2"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_B5382723FA8D2AE3A85A611F08234390"
             {
             "AssemblyRegister" = "3:1"
@@ -1357,37 +1388,6 @@
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_B55D3CEAECB3777E85E6824CE6D7EE32"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:TeeChart.WPF, Version=4.2022.8.23, Culture=neutral, PublicKeyToken=98e8c3f289a4e286, processorArchitecture=MSIL"
-                "ScatterAssemblies"
-                {
-                    "_B55D3CEAECB3777E85E6824CE6D7EE32"
-                    {
-                    "Name" = "8:TeeChart.WPF.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:TeeChart.WPF.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_1335334A1EB042F3AB241758004683C2"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_C012FB83DF6D4A7782E3AF17CFF0B0E6"
@@ -1574,6 +1574,37 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_EB4C7201A5EFE227B2CB97639A41F36E"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:TeeChart.Xaml.WPF, Version=4.2023.4.18, Culture=neutral, PublicKeyToken=9406d226170aa089, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_EB4C7201A5EFE227B2CB97639A41F36E"
+                    {
+                    "Name" = "8:TeeChart.Xaml.WPF.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:TeeChart.Xaml.WPF.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_1335334A1EB042F3AB241758004683C2"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_EE3E7F262421700A0BD0468CED1E336A"
             {
             "AssemblyRegister" = "3:1"
@@ -1623,37 +1654,6 @@
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_F0AFB176DBF320B5AFC0B890DF96800D"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:TeeChart, Version=4.2022.8.23, Culture=neutral, PublicKeyToken=9c8126276c77bdb7, processorArchitecture=MSIL"
-                "ScatterAssemblies"
-                {
-                    "_F0AFB176DBF320B5AFC0B890DF96800D"
-                    {
-                    "Name" = "8:TeeChart.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:TeeChart.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_1335334A1EB042F3AB241758004683C2"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_F5DE7F1676ED4B07B077AAA3C2AEDF49"
@@ -1869,15 +1869,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:BlueM.Wave"
-        "ProductCode" = "8:{B988E5C6-EA2B-4C39-9F3F-B0E21344FFA3}"
-        "PackageCode" = "8:{A0BE46D1-3863-4536-AB7E-83B48B68127B}"
+        "ProductCode" = "8:{434612D9-F80E-4A96-9632-056F334B70D1}"
+        "PackageCode" = "8:{1160FBCE-03F7-45C5-BB9A-25FB2BCC6AE4}"
         "UpgradeCode" = "8:{8AC270DC-0E8D-4087-98AB-3A2C358096B9}"
         "AspNetVersion" = "8:2.0.50727.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:TRUE"
-        "ProductVersion" = "8:2.5.0"
+        "ProductVersion" = "8:2.6.0"
         "Manufacturer" = "8:BlueM Dev Group"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:https://wiki.bluemodel.org/index.php/BlueM.Wave"

@@ -1,4 +1,4 @@
-﻿Imports System
+Imports System
 Imports System.Reflection
 Imports System.Runtime.InteropServices
 
@@ -31,5 +31,5 @@ Imports System.Runtime.InteropServices
 ' by using the '*' as shown below:
 ' <Assembly: AssemblyVersion("1.0.*")>
 
-<Assembly: AssemblyVersion("2.5.0.*")>
-'<Assembly: AssemblyFileVersion("2.5.0.*")>
+<Assembly: AssemblyVersion("2.6.0.*")>
+'<Assembly: AssemblyFileVersion("2.6.0.*")>
