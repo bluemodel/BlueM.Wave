@@ -389,6 +389,9 @@ Namespace Fileformats
                 Throw New Exception(msg)
             End If
 
+            'check if title only
+            Dim saveTitleOnly As Boolean = Not {saveUnit, saveInterpretation, saveColor, saveLineStyle, saveLineWidth, savePointsVisibility}.Contains(True)
+
             'keep a list of series that could not be saved
             Dim unsavedSeries As New List(Of String)
 
@@ -428,7 +431,13 @@ Namespace Fileformats
                     Dim options As New List(Of String)
                     'series options
                     If saveTitle Then
-                        options.Add($"title=""{ts.Title}""")
+                        If ts.Title <> seriesName Then
+                            If saveTitleOnly Then
+                                options.Add($"""{ts.Title}""")
+                            Else
+                                options.Add($"title=""{ts.Title}""")
+                            End If
+                        End If
                     End If
                     If saveUnit Then
                         options.Add($"unit=""{ts.Unit}""")
