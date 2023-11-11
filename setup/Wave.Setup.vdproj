@@ -580,7 +580,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:System.Data.SQLite, Version=1.0.112.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:System.Data.SQLite, Version=1.0.118.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_0513BE6A37F22A315DDBF18B5A431990"
@@ -1869,15 +1869,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:BlueM.Wave"
-        "ProductCode" = "8:{002A06CD-BAE8-4528-B591-FBF486F2A293}"
-        "PackageCode" = "8:{02003563-CD5F-4392-84C5-841CB982CCE6}"
+        "ProductCode" = "8:{B988E5C6-EA2B-4C39-9F3F-B0E21344FFA3}"
+        "PackageCode" = "8:{A0BE46D1-3863-4536-AB7E-83B48B68127B}"
         "UpgradeCode" = "8:{8AC270DC-0E8D-4087-98AB-3A2C358096B9}"
         "AspNetVersion" = "8:2.0.50727.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:TRUE"
-        "ProductVersion" = "8:2.4.5"
+        "ProductVersion" = "8:2.5.0"
         "Manufacturer" = "8:BlueM Dev Group"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:https://wiki.bluemodel.org/index.php/BlueM.Wave"

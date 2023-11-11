@@ -46,9 +46,14 @@ Public Class Wave
     Friend Event SeriesCleared()
 
     ''' <summary>
-    ''' Is raised when time series are reordered
+    ''' Is raised when all the time series are reordered
     ''' </summary>
-    Friend Event SeriesReordered()
+    Friend Event SeriesAllReordered()
+
+    ''' <summary>
+    ''' Is raised when a single time series is reordered
+    ''' </summary>
+    Friend Event SeriesReordered(id As Integer, direction As Integer)
 
     ''' <summary>
     ''' Is raised when timestamps should be highlighted
@@ -136,7 +141,7 @@ Public Class Wave
                         ok = Me.ShowImportDialog(fileInstance)
                         Call Application.DoEvents()
                     Else
-                        'Ansonsten alle Spalten ausw‰hlen
+                        'Ansonsten alle Spalten ausw√§hlen
                         Call fileInstance.selectAllSeries()
                         ok = True
                     End If
@@ -435,7 +440,7 @@ Public Class Wave
     ''' <param name="ids">List of Ids in the new order</param>
     Friend Sub Reorder_Series(ids As List(Of Integer))
         Me.TimeSeries.Reorder(ids)
-        RaiseEvent SeriesReordered()
+        RaiseEvent SeriesAllReordered()
     End Sub
 
     ''' <summary>
@@ -744,19 +749,23 @@ Public Class Wave
     End Sub
 
     ''' <summary>
-    ''' Zeigt den Importdialog an und liest im Anschluss die Datei mit den eingegebenen Einstellungen ein
+    ''' Shows the import dialog for series selection
     ''' </summary>
-    ''' <param name="Datei">Instanz der Datei, die importiert werden soll</param>
-    Friend Function ShowImportDialog(ByRef Datei As TimeSeriesFile) As Boolean
+    ''' <param name="tsFile">File instance from which to import</param>
+    Friend Function ShowImportDialog(ByRef tsFile As TimeSeriesFile) As Boolean
 
-        Datei.ImportDiag = New ImportDiag(Datei)
+        Dim dialog As Form
+        Dim dialogResult As DialogResult
 
-        Dim DiagResult As DialogResult
+        If TypeOf tsFile Is Fileformats.CSV Then
+            dialog = New ImportCSVDialog(tsFile)
+        Else
+            dialog = New SelectSeriesDialog(tsFile)
+        End If
 
-        'Dialog anzeigen
-        DiagResult = Datei.ImportDiag.ShowDialog()
+        dialogResult = dialog.ShowDialog()
 
-        If (DiagResult = Windows.Forms.DialogResult.OK) Then
+        If dialogResult = Windows.Forms.DialogResult.OK Then
             Return True
         Else
             Return False
@@ -811,9 +820,19 @@ Public Class Wave
         RaiseEvent HighlightTimestamps(timestamps)
     End Sub
 
-
     Friend Sub SeriesPropertiesChangedHandler(id As Integer)
         RaiseEvent SeriesPropertiesChanged(id)
+    End Sub
+
+    ''' <summary>
+    ''' Reorders a TimeSeries
+    ''' </summary>
+    ''' <param name="id">Id of the TimeSeries to reorder</param>
+    ''' <param name="direction">Direction</param>
+    Friend Sub SeriesReorder(id As Integer, direction As Direction)
+        Me.TimeSeries.Reorder(id, direction)
+        'raise event for views to handle
+        RaiseEvent SeriesReordered(id, direction)
     End Sub
 
 End Class

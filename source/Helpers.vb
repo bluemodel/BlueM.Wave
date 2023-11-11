@@ -299,4 +299,9 @@ Public Module Helpers
 
     End Sub
 
+    Public Enum Direction
+        Up
+        Down
+    End Enum
+
 End Module

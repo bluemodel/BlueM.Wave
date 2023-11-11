@@ -1,6 +1,19 @@
 ﻿BlueM.Wave Release Notes
 ========================
 
+Development
+-------------
+NEW:
+* Added a new series selection dialog for known (non-CSV) file types
+* Added the ability to reorder series from within the Time Series Properties window
+* Wave project file (WVP):
+  * Added support for additional series options #117
+  * When saving to WVP, series options are now also saved
+  * WVP files are now always read and written using UTF-8 encoding
+
+CHANGED:
+* Upgrade TeeChart to v4.2023.4.18
+
 Version 2.5.0
 -------------
 NEW:
@@ -8,13 +21,10 @@ NEW:
 * Added navigation buttons for navigating to the start and end of the currently active series
 * New analysis function Decumulate
 * Added support for importing SWMM time series file format 
-* Wave project file (WVP):
-  * Added support for additional series options #117
-  * When saving to WVP, series options are now also saved
-  * WVP files are now always read and written using UTF-8 encoding
+* Added support for reading and writing REXCHANGE header values for ZRXP files #123
 
 FIXED:
-* Analysis function Accumulate now repects the input interpretation
+* Analysis function Accumulate now respects the input interpretation
 * Time Series Properties and Values windows now restore on toolbar button press if previously minimized
 * Importing from SWMM binary output format:
   * Read and store metadata

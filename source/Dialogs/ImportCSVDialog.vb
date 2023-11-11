@@ -18,7 +18,7 @@
 Imports System.IO
 Imports System.Text.RegularExpressions
 
-Friend Class ImportDiag
+Friend Class ImportCSVDialog
     Inherits System.Windows.Forms.Form
 
 #Region "Eigenschaften"
@@ -106,9 +106,6 @@ Friend Class ImportDiag
 
         Me.datei = fileInstance
 
-        'add type name of file instance to dialog title
-        Me.Text &= $" - file format: {Me.datei.GetType().Name}"
-
         'initialize input delay timer
         Me.inputTimer = New Timers.Timer(1000)
         Me.inputTimer.SynchronizingObject = Me
@@ -135,7 +132,7 @@ Friend Class ImportDiag
         Me.ComboBox_DecimalSeparator.Items.Add(Constants.comma)
         Me.ComboBox_DecimalSeparator.EndUpdate()
 
-        'Combobox Datumsformat füllen
+        'Combobox Datumsformat fÃ¼llen
         For Each datumsformat As String In Helpers.DateFormats.Values
             Me.DateFormat = datumsformat
         Next
@@ -172,25 +169,6 @@ Friend Class ImportDiag
         'Dateiname anzeigen
         Me.Label_File.Text = "File: " & Path.GetFileName(Me.datei.File)
 
-        'Workaround for binary file formats
-        If TypeOf Me.datei Is Fileformats.SWMM_OUT _
-            Or TypeOf Me.datei Is Fileformats.SydroSQLite _
-            Or TypeOf Me.datei Is Fileformats.DFS0 _
-            Or TypeOf Me.datei Is Fileformats.WBL Then
-
-            Me.TextBox_Preview.Text = $"{Path.GetFileName(Me.datei.File)} is a binary file.{eol}Preview is not available!"
-            'Disable all other fields
-            Me.GroupBox_Dateformat.Enabled = False
-            Me.GroupBox_Columns.Enabled = False
-            Me.GroupBox_DecimalMark.Enabled = False
-            Me.GroupBox_Settings.Enabled = False
-            Me.Label_Encoding.Enabled = False
-            Me.ComboBox_Encoding.Enabled = False
-            Me.Button_EncodingAutodetect.Enabled = False
-
-            Exit Sub
-        End If
-
         'Vorschau anzeigen
         Dim fs As New FileStream(Me.datei.File, FileMode.Open, FileAccess.Read)
         Dim StrRead As New StreamReader(fs, Me.selectedEncoding)
@@ -207,7 +185,7 @@ Friend Class ImportDiag
             End If
 
             'replace tab characters with a visual representation
-            line = line.Replace(vbTab, " » ")
+            line = line.Replace(vbTab, " Â» ")
 
             text &= line & Constants.eol
 
@@ -226,7 +204,7 @@ Friend Class ImportDiag
 
     End Sub
 
-    'OK Button gedrückt
+    'OK Button gedrÃ¼ckt
     '******************
     Private Sub Button_OK_Click(sender As Object, e As EventArgs) Handles Button_OK.Click
 
@@ -267,7 +245,7 @@ Friend Class ImportDiag
             '------------------
             Try
 
-                'Datenzeile muss nach Überschriften und Einheiten sein!
+                'Datenzeile muss nach Ãœberschriften und Einheiten sein!
                 Me.IsInitializing = True
                 If (Me.NumericUpDown_LineData.Value <= Me.NumericUpDown_LineTitles.Value) Then
                     Me.NumericUpDown_LineData.Value = Me.NumericUpDown_LineTitles.Value + 1

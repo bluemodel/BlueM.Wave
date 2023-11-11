@@ -386,25 +386,27 @@ Namespace Fileformats
         ''' </summary>
         Public Overloads Shared ReadOnly Property MetadataKeys() As List(Of String)
             Get
-                Dim keys As New List(Of String)
-                keys.Add("ZRXPVERSION")
-                keys.Add("ZRXPMODE")
-                keys.Add("ZRXPCREATOR")
-                keys.Add("TZ")
-                keys.Add("SANR")
-                keys.Add("SNAME")
-                keys.Add("SWATER")
-                keys.Add("CNR")
-                keys.Add("CNAME")
-                keys.Add("CTYPE")
-                keys.Add("CMW")
-                keys.Add("RTIMELVL")
-                keys.Add("CUNIT")
-                keys.Add("RINVAL")
-                keys.Add("RNR")
-                keys.Add("RTYPE")
-                keys.Add("RORPR")
-                keys.Add("LAYOUT")
+                Dim keys As New List(Of String) From {
+                    "ZRXPVERSION",
+                    "ZRXPMODE",
+                    "ZRXPCREATOR",
+                    "REXCHANGE",
+                    "TZ",
+                    "SANR",
+                    "SNAME",
+                    "SWATER",
+                    "CNR",
+                    "CNAME",
+                    "CTYPE",
+                    "CMW",
+                    "RTIMELVL",
+                    "CUNIT",
+                    "RINVAL",
+                    "RNR",
+                    "RTYPE",
+                    "RORPR",
+                    "LAYOUT"
+                }
                 Return keys
             End Get
         End Property
