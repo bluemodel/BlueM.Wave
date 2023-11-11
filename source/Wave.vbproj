@@ -202,6 +202,12 @@
     <Compile Include="Analysis\TimestepAnalysisDialog.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Dialogs\SaveProjectFileDialog.Designer.vb">
+      <DependentUpon>SaveProjectFileDialog.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\SaveProjectFileDialog.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Dialogs\SelectSeriesDialog.Designer.vb">
       <DependentUpon>SelectSeriesDialog.vb</DependentUpon>
     </Compile>
@@ -420,6 +426,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Analysis\CalculatorDialog.resx">
       <DependentUpon>CalculatorDialog.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialogs\SaveProjectFileDialog.resx">
+      <DependentUpon>SaveProjectFileDialog.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Dialogs\ExportDiag.resx">
       <DependentUpon>ExportDiag.vb</DependentUpon>

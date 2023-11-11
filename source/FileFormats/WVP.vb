@@ -116,7 +116,7 @@ Namespace Fileformats
                     'series:title
                     '"se:ries":title
                     '"se:ries":"title"
-                    'series:title="title", unit=m³/s, color=Red, linestyle=Dash, linewidth=3, interpretation=BlockRight
+                    'series:title="title", unit=mÂ³/s, color=Red, linestyle=Dash, linewidth=3, interpretation=BlockRight
                     Dim pattern As String
                     If line.StartsWith("""") Then
                         'series name is enclosed in quotes
@@ -356,7 +356,22 @@ Namespace Fileformats
         ''' <remarks>Only Timeseries with `.DataSource.Origin = TimeSeriesDataSource.OriginEnum.FileImport` will be saved</remarks>
         ''' <param name="tsList">List of Timeseries to save</param>
         ''' <param name="file">Path to the wvp file to write</param>
-        Public Shared Sub Write_File(ByRef tsList As List(Of TimeSeries), file As String)
+        ''' <param name="saveTitle">Whether to save titles</param>
+        ''' <param name="saveUnit">Whether to save units</param>
+        ''' <param name="saveInterpretation">Whether to save interpretations</param>
+        ''' <param name="saveColor">Whether to save line colors</param>
+        ''' <param name="saveLineStyle">Whether to save line styles</param>
+        ''' <param name="saveLineWidth">Whether to save line widths</param>
+        ''' <param name="savePointsVisibility">Whether to save points visibility</param>
+        Public Shared Sub Write_File(ByRef tsList As List(Of TimeSeries), file As String,
+                                     Optional saveTitle As Boolean = False,
+                                     Optional saveUnit As Boolean = False,
+                                     Optional saveInterpretation As Boolean = False,
+                                     Optional saveColor As Boolean = False,
+                                     Optional saveLineStyle As Boolean = False,
+                                     Optional saveLineWidth As Boolean = False,
+                                     Optional savePointsVisibility As Boolean = False
+            )
 
             'check whether there are any series with a file datasource at all
             Dim haveFileDatasources As Boolean = False
@@ -403,16 +418,31 @@ Namespace Fileformats
                     End If
                     line = $"    series={seriesName}"
 
-                    'series options
+                    'options
                     Dim options As New List(Of String)
-                    options.Add($"title=""{ts.Title}""")
-                    options.Add($"unit=""{ts.Unit}""")
-                    options.Add($"interpretation={ts.Interpretation}")
+                    'series options
+                    If saveTitle Then
+                        options.Add($"title=""{ts.Title}""")
+                    End If
+                    If saveUnit Then
+                        options.Add($"unit=""{ts.Unit}""")
+                    End If
+                    If saveInterpretation Then
+                        options.Add($"interpretation={ts.Interpretation}")
+                    End If
                     'display options
-                    options.Add($"color={ts.DisplayOptions.Color.Name}")
-                    options.Add($"linewidth={ts.DisplayOptions.LineWidth}")
-                    options.Add($"linestyle={ts.DisplayOptions.LineStyle}")
-                    options.Add($"showpoints={ts.DisplayOptions.ShowPoints}")
+                    If saveColor Then
+                        options.Add($"color={ts.DisplayOptions.Color.Name}")
+                    End If
+                    If saveLineWidth Then
+                        options.Add($"linewidth={ts.DisplayOptions.LineWidth}")
+                    End If
+                    If saveLineStyle Then
+                        options.Add($"linestyle={ts.DisplayOptions.LineStyle}")
+                    End If
+                    If savePointsVisibility Then
+                        options.Add($"showpoints={ts.DisplayOptions.ShowPoints}")
+                    End If
 
                     If options.Count > 0 Then
                         line &= ": " & String.Join(", ", options)

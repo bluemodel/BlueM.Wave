@@ -388,16 +388,10 @@ Friend Class WaveController
     Private Sub SaveProjectFile_Click(sender As System.Object, e As System.EventArgs)
 
         Try
+            'show save project file dialog
             Dim dlgres As DialogResult
-
-            'Prepare SaveFileDialog
-            View.SaveFileDialog1.Title = "Save project file"
-            View.SaveFileDialog1.Filter = "Wave project files (*.wvp)|*wvp"
-            View.SaveFileDialog1.DefaultExt = "wvp"
-            View.SaveFileDialog1.OverwritePrompt = True
-
-            'Show dialog
-            dlgres = View.SaveFileDialog1.ShowDialog()
+            Dim dlg As New SaveProjectFileDialog()
+            dlgres = dlg.ShowDialog()
 
             If dlgres = Windows.Forms.DialogResult.OK Then
                 'collect display options from chart and store them in timeseries
@@ -417,7 +411,15 @@ Friend Class WaveController
                     Next
                     tsList.Add(ts)
                 Next
-                Call Fileformats.WVP.Write_File(tsList, View.SaveFileDialog1.FileName)
+                Call Fileformats.WVP.Write_File(tsList, dlg.FileName,
+                                                saveTitle:=dlg.SaveTitle,
+                                                saveUnit:=dlg.SaveUnit,
+                                                saveInterpretation:=dlg.SaveInterpretation,
+                                                saveColor:=dlg.SaveColor,
+                                                saveLineStyle:=dlg.SaveLineStyle,
+                                                saveLineWidth:=dlg.SaveLineWidth,
+                                                savePointsVisibility:=dlg.SavePointsVisibility
+                )
             End If
 
         Catch ex As Exception
