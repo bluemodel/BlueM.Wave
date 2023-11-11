@@ -443,64 +443,6 @@ Public Class Wave
         RaiseEvent SeriesAllReordered()
     End Sub
 
-    Friend Sub SaveProjectFile(projectfile As String)
-
-        'collect datasources
-        Dim datasources As New Dictionary(Of String, List(Of String)) '{file: [title, ...], ...}
-        Dim unsavedSeries As New List(Of String)
-        Dim file, title As String
-        For Each ts As TimeSeries In Me.TimeSeries.Values
-            If ts.DataSource.Origin = TimeSeriesDataSource.OriginEnum.FileImport Then
-                file = ts.DataSource.FilePath
-                title = ts.DataSource.Title
-                If Not datasources.ContainsKey(file) Then
-                    datasources.Add(file, New List(Of String))
-                End If
-                datasources(file).Add(title)
-            Else
-                unsavedSeries.Add(ts.Title)
-                Log.AddLogEntry(Log.levels.warning, $"Series '{ts.Title}' with datasource {ts.DataSource} does not originate from a file import and could not be saved to the project file!")
-            End If
-        Next
-
-        If datasources.Count = 0 Then
-            Dim msg As String = $"None of the series originate from a file import! No project file was saved! Save the chart with data or export the time series to preserve them!"
-            Log.AddLogEntry(Log.levels.error, msg)
-            Throw New Exception(msg)
-        End If
-
-        'write the project file
-        Dim fs As New IO.FileStream(projectfile, IO.FileMode.Create, IO.FileAccess.Write)
-        Dim strwrite As New IO.StreamWriter(fs, Helpers.DefaultEncoding)
-
-        strwrite.WriteLine("# Wave project file")
-
-        For Each file In datasources.Keys
-            'TODO: write relative paths to the project file?
-            strwrite.WriteLine("file=" & file)
-            For Each title In datasources(file)
-                'TODO: if a series was renamed, write the new title to the project file
-                If title.Contains(":") Then
-                    'enclose titles containing ":" in quotes
-                    title = $"""{title}"""
-                End If
-                strwrite.WriteLine("    series=" & title)
-            Next
-        Next
-
-        strwrite.Close()
-        fs.Close()
-
-        If unsavedSeries.Count = 0 Then
-            Log.AddLogEntry(Log.levels.info, $"Wave project file {projectfile} saved.")
-        Else
-            Dim msg As String = $"Wave project file {projectfile} saved. {unsavedSeries.Count} series could not be saved! Save the chart with data or export the time series to preserve them!"
-            Log.AddLogEntry(Log.levels.warning, msg)
-            Throw New Exception(msg)
-        End If
-
-    End Sub
-
     ''' <summary>
     ''' Initiates timeseries export
     ''' </summary>

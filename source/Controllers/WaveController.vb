@@ -387,20 +387,46 @@ Friend Class WaveController
     ''' <remarks></remarks>
     Private Sub SaveProjectFile_Click(sender As System.Object, e As System.EventArgs)
 
+        If _model.TimeSeries.Count = 0 Then
+            MsgBox("No time series to save!", MsgBoxStyle.Exclamation)
+            Exit Sub
+        End If
+
         Try
+            'show save project file dialog
             Dim dlgres As DialogResult
-
-            'Prepare SaveFileDialog
-            View.SaveFileDialog1.Title = "Save project file"
-            View.SaveFileDialog1.Filter = "Wave project files (*.wvp)|*wvp"
-            View.SaveFileDialog1.DefaultExt = "wvp"
-            View.SaveFileDialog1.OverwritePrompt = True
-
-            'Show dialog
-            dlgres = View.SaveFileDialog1.ShowDialog()
+            Dim dlg As New SaveProjectFileDialog()
+            dlgres = dlg.ShowDialog()
 
             If dlgres = Windows.Forms.DialogResult.OK Then
-                Call _model.SaveProjectFile(View.SaveFileDialog1.FileName)
+                'collect display options from chart and store them in timeseries
+                Dim tsList As New List(Of TimeSeries)
+                For Each ts As TimeSeries In _model.TimeSeries.ToList()
+                    For Each series As Steema.TeeChart.Styles.Series In View.TChart1.Series
+                        If series.Tag = ts.Id Then
+                            If TypeOf series Is Steema.TeeChart.Styles.Line Then
+                                Dim line As Steema.TeeChart.Styles.Line = CType(series, Steema.TeeChart.Styles.Line)
+                                ts.DisplayOptions.Color = line.Color
+                                ts.DisplayOptions.LineStyle = line.LinePen.Style
+                                ts.DisplayOptions.LineWidth = line.LinePen.Width
+                                ts.DisplayOptions.ShowPoints = line.Pointer.Visible
+                            End If
+                            Exit For
+                        End If
+                    Next
+                    tsList.Add(ts)
+                Next
+                Call Fileformats.WVP.Write_File(tsList, dlg.FileName,
+                                                saveRelativePaths:=dlg.SaveRelativePaths,
+                                                saveTitle:=dlg.SaveTitle,
+                                                saveUnit:=dlg.SaveUnit,
+                                                saveInterpretation:=dlg.SaveInterpretation,
+                                                saveColor:=dlg.SaveColor,
+                                                saveLineStyle:=dlg.SaveLineStyle,
+                                                saveLineWidth:=dlg.SaveLineWidth,
+                                                savePointsVisibility:=dlg.SavePointsVisibility
+                )
+                MsgBox($"Wave project file {dlg.FileName} saved.", MsgBoxStyle.Information)
             End If
 
         Catch ex As Exception
@@ -2174,7 +2200,7 @@ Friend Class WaveController
     ''' Adds the series to the charts
     ''' Also adds the datasource to the MRU file list if the time series has a file datasource
     ''' </summary>
-    ''' <param name="ts">Die anzuzeigende Zeitreihe</param>
+    ''' <param name="ts">time series to display</param>
     Private Sub SeriesAdded(ts As TimeSeries)
 
         'Check for extreme dates not supported by TChart
@@ -2228,8 +2254,13 @@ Friend Class WaveController
         'Namen vergeben
         Line1.Title = ts.Title
 
-        'Set line width to 2
-        Line1.LinePen.Width = 2
+        'set display options
+        If Not ts.DisplayOptions.Color.IsEmpty Then
+            Line1.Color = ts.DisplayOptions.Color
+        End If
+        Line1.LinePen.Style = ts.DisplayOptions.LineStyle
+        Line1.LinePen.Width = ts.DisplayOptions.LineWidth
+        Line1.Pointer.Visible = ts.DisplayOptions.ShowPoints
 
         'Stützstellen zur Serie hinzufügen
         'Main chart
@@ -2287,8 +2318,12 @@ Friend Class WaveController
         'Namen vergeben
         Line2.Title = ts.Title
 
-        'Set line width to 2
-        Line2.LinePen.Width = 2
+        'set display options
+        If Not ts.DisplayOptions.Color.IsEmpty Then
+            Line2.Color = ts.DisplayOptions.Color
+        End If
+        Line2.LinePen.Style = ts.DisplayOptions.LineStyle
+        Line2.LinePen.Width = ts.DisplayOptions.LineWidth
 
         'Stützstellen zur Serie hinzufügen
         Line2.BeginUpdate()

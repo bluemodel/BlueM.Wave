@@ -6,6 +6,11 @@ Development
 NEW:
 * Added a new series selection dialog for known (non-CSV) file types
 * Added the ability to reorder series from within the Time Series Properties window
+* Wave project file (WVP):
+  * Added support for additional series options in WVP files #117
+  * When saving to WVP, a new dialog allows specifying which series options to save
+  * When saving to WVP, file paths can now optionally be saved as relative
+  * WVP files are now always read and written using UTF-8 encoding
 
 CHANGED:
 * Upgrade TeeChart to v4.2023.4.18
@@ -46,6 +51,7 @@ CHANGED:
 API-CHANGES:
 * Removed property `TimeSeriesFile.nLinesPerTimestamp`
 * Removed the properties `TimeSeries.Objekt` and `TimeSeries.Type`
+* New public method `Fileformats.WVP.Write_File()` for writing a Wave project file
 
 Version 2.4.5
 -------------

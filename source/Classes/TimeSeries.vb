@@ -54,6 +54,7 @@ Public Class TimeSeries
     Private _Type As String
     Private _Interpretation As InterpretationEnum
     Private _DataSource As TimeSeriesDataSource
+    Private _displayOptions As TimeSeriesDisplayOptions
 
 #End Region 'Members
 
@@ -257,6 +258,19 @@ Public Class TimeSeries
     End Property
 
     ''' <summary>
+    ''' Options for displaying the time series
+    ''' </summary>
+    ''' <returns></returns>
+    Public Property DisplayOptions As TimeSeriesDisplayOptions
+        Get
+            Return _displayOptions
+        End Get
+        Set(value As TimeSeriesDisplayOptions)
+            _displayOptions = value
+        End Set
+    End Property
+
+    ''' <summary>
     ''' Returns the start date of the time series
     ''' </summary>
     Public ReadOnly Property StartDate() As DateTime
@@ -453,6 +467,7 @@ Public Class TimeSeries
         Me._unit = "-"
         Me._Interpretation = InterpretationEnum.Undefined
         Me.DataSource = New TimeSeriesDataSource(TimeSeriesDataSource.OriginEnum.Undefined)
+        Me.DisplayOptions = New TimeSeriesDisplayOptions()
         Me._nodes = New SortedList(Of DateTime, Double)
     End Sub
 
@@ -477,6 +492,7 @@ Public Class TimeSeries
         target.Metadata = Me.Metadata.Copy()
         target._Interpretation = Me.Interpretation
         target.DataSource = Me.DataSource.Copy()
+        target.DisplayOptions = Me.DisplayOptions.Copy()
         Return target
     End Function
 
