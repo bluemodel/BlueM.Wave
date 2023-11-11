@@ -426,6 +426,7 @@ Friend Class WaveController
                                                 saveLineWidth:=dlg.SaveLineWidth,
                                                 savePointsVisibility:=dlg.SavePointsVisibility
                 )
+                MsgBox($"Wave project file {dlg.FileName} saved.", MsgBoxStyle.Information)
             End If
 
         Catch ex As Exception
