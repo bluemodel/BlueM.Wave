@@ -20,7 +20,10 @@ Friend Class ValuesWindow
     Implements IView
 
     Private isInitializing As Boolean
+    Private tsList As List(Of TimeSeries)
     Private dataset As DataSet
+    Private dataview As DataView
+    Private databinding As BindingSource
 
     Private _controller As ValuesController
 
@@ -63,6 +66,15 @@ Friend Class ValuesWindow
         Dim table As New DataTable("data")
         Me.dataset.Tables.Add(table)
 
+        'create the dataview and bind it to the DataGridView
+        Me.dataview = New DataView(table)
+        Me.databinding = New BindingSource With {
+            .DataSource = Me.dataview
+        }
+        Me.DataGridView1.DataSource = Me.databinding
+        'Me.DataGridView1.DataBindings(0).DataSourceUpdateMode = DataSourceUpdateMode.Never
+        'Me.DataGridView1.DataBindings.Add(New Binding(binding)
+
         'set CurrentCulture for MaskedTextBox
         Me.MaskedTextBox_JumpDate.Culture = Globalization.CultureInfo.CurrentCulture
         Me.MaskedTextBox_JumpDate.FormatProvider = Globalization.CultureInfo.CurrentCulture
@@ -78,73 +90,10 @@ Friend Class ValuesWindow
     ''' <param name="seriesList">the new List of TimeSeries</param>
     Public Overloads Sub Update(ByRef seriesList As List(Of TimeSeries))
 
-        Dim table As DataTable = Me.dataset.Tables("data")
-
-        table.Clear()
-        table.Columns.Clear()
-        table.Columns.Add("Timestamp", GetType(DateTime))
-        For Each ts As TimeSeries In seriesList
-            table.Columns.Add(ts.Title, GetType(Double))
-        Next
-
-        'collect unique timestamps
-        Dim unique_timestamps As New HashSet(Of DateTime)
-        For Each ts As TimeSeries In seriesList
-            unique_timestamps.UnionWith(New HashSet(Of DateTime)(ts.Dates))
-        Next
-        'sort timestamps
-        Dim timestamps As List(Of DateTime) = unique_timestamps.ToList()
-        timestamps.Sort()
-
-        'add a row for each timestamp
-        table.BeginLoadData()
-        Dim cellvalues() As Object
-        For Each t As DateTime In timestamps
-
-            ReDim cellvalues(seriesList.Count)
-
-            'first value is timestamp
-            cellvalues(0) = t
-
-            'add a value for each series
-            Dim icol As Integer = 1
-            For Each ts As TimeSeries In seriesList
-                If ts.Dates.Contains(t) Then
-                    cellvalues(icol) = ts.Nodes(t)
-                Else
-                    cellvalues(icol) = Nothing
-                End If
-                icol += 1
-            Next
-
-            table.Rows.Add(cellvalues)
-        Next
-        table.EndLoadData()
-
-        'Reset DatagridView
-        Me.DataGridView1.Rows.Clear()
-        Me.DataGridView1.Columns.Clear()
-        Dim colindex As Integer = 0
-        For Each col As DataColumn In table.Columns
-            Me.DataGridView1.Columns.Add(col.ColumnName, col.ColumnName)
-            If colindex = 0 Then
-                'freeze timestamp column
-                Me.DataGridView1.Columns(colindex).Frozen = True
-            End If
-            colindex += 1
-        Next
-
-        'set max startIndex
-        NumericUpDown_StartRecord.Maximum = table.Rows.Count
-
-        'set first date as initial value for jump date
-        If timestamps.Count > 0 Then
-            Dim firstDate As DateTime = timestamps.First
-            MaskedTextBox_JumpDate.Text = firstDate.ToString()
-        End If
+        Me.tsList = seriesList
 
         If Me.Visible Then
-            populateRows()
+            Call Me.loadDataTable()
         End If
 
     End Sub
@@ -156,6 +105,10 @@ Friend Class ValuesWindow
     ''' <param name="e"></param>
     Private Sub TimeSeriesValuesDialog_VisibleChanged(sender As Object, e As EventArgs) Handles MyBase.VisibleChanged
         If Me.Visible Then
+
+            'load data in the datatable
+            Call Me.loadDataTable()
+
             'load first rows
             startIndex = 0
             populateRows()
@@ -163,33 +116,104 @@ Friend Class ValuesWindow
     End Sub
 
     ''' <summary>
+    ''' Loads the current time series list into the DataTable
+    ''' </summary>
+    Private Sub loadDataTable()
+
+        Dim table As DataTable = Me.dataset.Tables("data")
+
+        Me.DataGridView1.SuspendLayout()
+        Me.databinding.SuspendBinding()
+        Me.dataview.RowStateFilter = DataViewRowState.None
+        Me.dataview.RowFilter = String.Empty
+
+        table.Clear()
+        table.Columns.Clear()
+        Dim nHeaderColumns As Integer = 2
+        table.Columns.Add("index", GetType(Long))
+        table.Columns.Add("Timestamp", GetType(DateTime))
+        Dim nColumns As Integer = Me.tsList.Count + nHeaderColumns
+        For Each ts As TimeSeries In Me.tsList
+            table.Columns.Add(ts.Title, GetType(Double))
+        Next
+
+        'collect unique timestamps
+        Dim unique_timestamps As New HashSet(Of DateTime)
+        For Each ts As TimeSeries In Me.tsList
+            unique_timestamps.UnionWith(New HashSet(Of DateTime)(ts.Dates))
+        Next
+
+        'sort timestamps
+        Dim timestamps As List(Of DateTime) = unique_timestamps.ToList()
+        timestamps.Sort()
+
+        'add a row for each timestamp
+        table.BeginLoadData()
+        Dim index As Long = 0
+        Dim cellvalues() As Object
+        For Each t As DateTime In timestamps
+
+            ReDim cellvalues(nColumns - 1)
+
+            'first column is index
+            cellvalues(0) = index
+
+            'second column is timestamp
+            cellvalues(1) = t
+
+            'add a value for each series
+            Dim icol As Integer = nHeaderColumns
+            For Each ts As TimeSeries In Me.tsList
+                If ts.Dates.Contains(t) Then
+                    cellvalues(icol) = ts.Nodes(t)
+                Else
+                    cellvalues(icol) = Nothing
+                End If
+                icol += 1
+            Next
+
+            table.Rows.Add(cellvalues)
+
+            index += 1
+        Next
+        table.EndLoadData()
+
+        Me.dataview.RowFilter = "index >= 0 and index < 100"
+        Me.dataview.RowStateFilter = DataViewRowState.CurrentRows
+        Me.databinding.ResumeBinding()
+        Me.DataGridView1.ResumeLayout()
+
+        'set max startIndex
+        NumericUpDown_StartRecord.Maximum = Me.dataset.Tables("data").Rows.Count
+
+        'set first date as initial value for jump date
+        If Me.dataset.Tables("data").Rows.Count > 0 Then
+            Dim firstDate As DateTime = Me.dataset.Tables("data").Rows(0)(1)
+            MaskedTextBox_JumpDate.Text = firstDate.ToString()
+        End If
+
+        Me.DataGridView1.Columns(0).Visible = False
+        Me.DataGridView1.Columns(0).Frozen = True
+        Me.DataGridView1.Columns(1).Frozen = True
+
+    End Sub
+
+    ''' <summary>
     ''' Populates the datagridview with data starting from the currently set startIndex
     ''' </summary>
     Private Sub populateRows()
 
-        Dim rows() As DataGridViewRow
-        Dim recordIndex, numRows As Integer
+        Me.Cursor = Cursors.WaitCursor
+        Me.DataGridView1.SuspendLayout()
+
+        Dim numRows, endIndex As Integer
         Dim table As DataTable = Me.dataset.Tables("data")
 
-        Me.Cursor = Cursors.WaitCursor
-
         numRows = Math.Min(maxRows, table.Rows.Count - startIndex)
+        endIndex = startIndex + numRows
 
-        'Add new rows to datagridview
-        Me.DataGridView1.SuspendLayout()
-        Me.DataGridView1.Rows.Clear()
-        If numRows > 0 Then
-            ReDim rows(numRows - 1)
-            For i As Integer = 0 To numRows - 1
-                recordIndex = startIndex + i
-                rows(i) = New DataGridViewRow()
-                rows(i).CreateCells(DataGridView1, table.Rows(recordIndex).ItemArray)
-                rows(i).HeaderCell.Value = (recordIndex + 1).ToString()
-            Next
-            Me.DataGridView1.Rows.AddRange(rows)
-        End If
-        Me.DataGridView1.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.DisplayedCells)
-        Me.DataGridView1.ResumeLayout()
+        'update filter
+        dataview.RowFilter = $"index >= {startIndex} and index < {endIndex}"
 
         'Update label
         Dim startRecord As Integer
@@ -200,6 +224,7 @@ Friend Class ValuesWindow
         End If
         Me.Label_DisplayCount.Text = $"Displaying records {startRecord} to {startRecord + numRows - 1} of {table.Rows.Count}"
 
+        Me.DataGridView1.ResumeLayout()
         Me.Cursor = Cursors.Default
 
     End Sub
@@ -218,7 +243,7 @@ Friend Class ValuesWindow
     ''' </summary>
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
-    Private Sub Button_previous_Click(sender As Object, e As EventArgs) Handles Button_previous.Click, Button_first.Click
+    Private Sub Button_previous_Click(sender As Object, e As EventArgs) Handles Button_previous.Click
         startIndex = Math.Max(0, startIndex - maxRows)
     End Sub
 
@@ -263,7 +288,7 @@ Friend Class ValuesWindow
             Dim selectedRows As DataGridViewSelectedRowCollection = DataGridView1.SelectedRows()
             Dim timestamps As New List(Of DateTime)
             For Each row As DataGridViewRow In selectedRows
-                timestamps.Add(row.Cells(0).Value)
+                timestamps.Add(row.Cells(1).Value)
             Next
             RaiseEvent SelectedRowsChanged(timestamps)
         End If
@@ -326,10 +351,10 @@ Friend Class ValuesWindow
         'search for selected date in dataset and set startIndex accordingly
         Dim rowIndex As Integer = 0
         For Each row As DataRow In table.Rows
-            If row.ItemArray(0) = selectedDate Then
+            If row.ItemArray(1) = selectedDate Then
                 startIndex = rowIndex
                 Exit For
-            ElseIf row.ItemArray(0) > selectedDate Then
+            ElseIf row.ItemArray(1) > selectedDate Then
                 startIndex = rowIndex - 1
                 Exit For
             End If
