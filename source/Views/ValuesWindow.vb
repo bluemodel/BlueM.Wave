@@ -89,8 +89,6 @@ Friend Class ValuesWindow
             .DataSource = Me.dataview
         }
         Me.DataGridView1.DataSource = Me.databinding
-        'Me.DataGridView1.DataBindings(0).DataSourceUpdateMode = DataSourceUpdateMode.Never
-        'Me.DataGridView1.DataBindings.Add(New Binding(binding)
 
         'set CurrentCulture for MaskedTextBox
         Me.MaskedTextBox_JumpDate.Culture = Globalization.CultureInfo.CurrentCulture
@@ -122,13 +120,12 @@ Friend Class ValuesWindow
     ''' <param name="e"></param>
     Private Sub TimeSeriesValuesDialog_VisibleChanged(sender As Object, e As EventArgs) Handles MyBase.VisibleChanged
         If Me.Visible Then
-
             'load data in the datatable
             Call Me.loadDataTable()
 
-            'load first rows
+            'display first rows
             startIndex = 0
-            populateRows()
+            updateDataViewFilter()
         End If
     End Sub
 
@@ -213,9 +210,9 @@ Friend Class ValuesWindow
     End Sub
 
     ''' <summary>
-    ''' Populates the datagridview with data starting from the currently set startIndex
+    ''' Updates the DataViewFilter to show rows starting from the currently set startIndex
     ''' </summary>
-    Private Sub populateRows()
+    Private Sub updateDataViewFilter()
 
         Me.Cursor = Cursors.WaitCursor
         Me.DataGridView1.SuspendLayout()
@@ -285,7 +282,7 @@ Friend Class ValuesWindow
     ''' <param name="e"></param>
     Private Sub NumericUpDown_StartIndex_ValueChanged(sender As Object, e As EventArgs) Handles NumericUpDown_StartRecord.ValueChanged
         If Not Me.isInitializing Then
-            populateRows()
+            updateDataViewFilter()
         End If
     End Sub
 
@@ -372,8 +369,8 @@ Friend Class ValuesWindow
             End If
             rowIndex += 1
         Next
-        'populate datagridview
-        populateRows()
+        'update data view filter
+        updateDataViewFilter()
         Me.Cursor = Cursors.Default
     End Sub
 
