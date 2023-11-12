@@ -130,6 +130,7 @@ Friend Class ValuesWindow
                 Dim firstDate As DateTime = Me.dataTable.Rows(0)(colDateTime)
                 MaskedTextBox_JumpDate.Text = firstDate.ToString()
             End If
+            Call Me.updateDataViewFilter()
         End If
     End Sub
 
