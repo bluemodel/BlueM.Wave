@@ -47,8 +47,8 @@ Friend Class ValuesController
     Public Overrides Sub ShowView()
         If IsNothing(_view) Then
             _view = New ValuesWindow()
+            View.Update(_model.TimeSeries.ToList)
         End If
-        View.Update(_model.TimeSeries.ToList)
         View.WindowState = FormWindowState.Normal
         View.Show()
         View.BringToFront()
