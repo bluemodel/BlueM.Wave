@@ -41,18 +41,25 @@ Friend Class ValuesWindow
         _controller = controller
     End Sub
 
+    ''' <summary>
+    ''' The datatable containing all the data
+    ''' </summary>
+    ''' <returns></returns>
     Private ReadOnly Property dataTable As DataTable
         Get
             Return Me.dataset.Tables("data")
         End Get
     End Property
 
+    ''' <summary>
+    ''' The number of rows currently contained in the datatable
+    ''' </summary>
+    ''' <returns></returns>
     Private ReadOnly Property nRows As Integer
         Get
             Return Me.dataTable.Rows.Count
         End Get
     End Property
-
 
     ''' <summary>
     ''' The starting index of records to display in the datagridview
@@ -70,6 +77,10 @@ Friend Class ValuesWindow
         End Set
     End Property
 
+    ''' <summary>
+    ''' Is raised when the selected rows changes
+    ''' </summary>
+    ''' <param name="timestamps">List of selected timestamps</param>
     Public Event SelectedRowsChanged(timestamps As List(Of DateTime))
 
     Public Sub New()
@@ -109,7 +120,7 @@ Friend Class ValuesWindow
         Me.tsList = seriesList
 
         If Me.Visible Then
-            Call Me.loadDataTable()
+            Call Me.UpdateDataTable()
         End If
 
     End Sub
@@ -121,8 +132,8 @@ Friend Class ValuesWindow
     ''' <param name="e"></param>
     Private Sub TimeSeriesValuesDialog_VisibleChanged(sender As Object, e As EventArgs) Handles MyBase.VisibleChanged
         If Me.Visible Then
-            'load data in the datatable
-            Call Me.loadDataTable()
+            'update the datatable
+            Call Me.UpdateDataTable()
             'reset start index and jump date
             Me.startIndex = 0
             Me.IsJumpDateSet = False
@@ -135,9 +146,9 @@ Friend Class ValuesWindow
     End Sub
 
     ''' <summary>
-    ''' Loads the current time series list into the DataTable
+    ''' Updates the DataTable using the current list of time series
     ''' </summary>
-    Private Sub loadDataTable()
+    Private Sub UpdateDataTable()
 
         Me.DataGridView1.SuspendLayout()
         Me.databinding.SuspendBinding()
