@@ -19,6 +19,10 @@ Imports System.Windows.Forms
 Friend Class ValuesWindow
     Implements IView
 
+    Const colIndex As Integer = 0
+    Const colDateTime As Integer = 1
+    Const nHeaderColumns As Integer = 2
+
     Private isInitializing As Boolean
     Private tsList As List(Of TimeSeries)
     Private dataset As DataSet
@@ -129,7 +133,6 @@ Friend Class ValuesWindow
 
         table.Clear()
         table.Columns.Clear()
-        Dim nHeaderColumns As Integer = 2
         table.Columns.Add("index", GetType(Long))
         table.Columns.Add("Timestamp", GetType(DateTime))
         Dim nColumns As Integer = Me.tsList.Count + nHeaderColumns
@@ -155,11 +158,11 @@ Friend Class ValuesWindow
 
             ReDim cellvalues(nColumns - 1)
 
-            'first column is index
-            cellvalues(0) = index
+            'index column
+            cellvalues(colIndex) = index
 
-            'second column is timestamp
-            cellvalues(1) = t
+            'timestamp column
+            cellvalues(colDateTime) = t
 
             'add a value for each series
             Dim icol As Integer = nHeaderColumns
@@ -192,9 +195,9 @@ Friend Class ValuesWindow
             MaskedTextBox_JumpDate.Text = firstDate.ToString()
         End If
 
-        Me.DataGridView1.Columns(0).Visible = False
-        Me.DataGridView1.Columns(0).Frozen = True
-        Me.DataGridView1.Columns(1).Frozen = True
+        Me.DataGridView1.Columns(colIndex).Visible = False
+        Me.DataGridView1.Columns(colIndex).Frozen = True
+        Me.DataGridView1.Columns(colDateTime).Frozen = True
 
     End Sub
 
@@ -288,7 +291,7 @@ Friend Class ValuesWindow
             Dim selectedRows As DataGridViewSelectedRowCollection = DataGridView1.SelectedRows()
             Dim timestamps As New List(Of DateTime)
             For Each row As DataGridViewRow In selectedRows
-                timestamps.Add(row.Cells(1).Value)
+                timestamps.Add(row.Cells(colDateTime).Value)
             Next
             RaiseEvent SelectedRowsChanged(timestamps)
         End If
@@ -351,10 +354,10 @@ Friend Class ValuesWindow
         'search for selected date in dataset and set startIndex accordingly
         Dim rowIndex As Integer = 0
         For Each row As DataRow In table.Rows
-            If row.ItemArray(1) = selectedDate Then
+            If row.ItemArray(colDateTime) = selectedDate Then
                 startIndex = rowIndex
                 Exit For
-            ElseIf row.ItemArray(1) > selectedDate Then
+            ElseIf row.ItemArray(colDateTime) > selectedDate Then
                 startIndex = rowIndex - 1
                 Exit For
             End If
