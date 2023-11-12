@@ -28,6 +28,7 @@ Friend Class ValuesWindow
     Private dataset As DataSet
     Private dataview As DataView
     Private databinding As BindingSource
+    Private IsJumpDateSet As Boolean = False
 
     Private _controller As ValuesController
 
@@ -122,16 +123,13 @@ Friend Class ValuesWindow
         If Me.Visible Then
             'load data in the datatable
             Call Me.loadDataTable()
-
-            'set first date as initial value for jump date
+            'reset start index and jump date
+            Me.startIndex = 0
+            Me.IsJumpDateSet = False
             If Me.nRows > 0 Then
                 Dim firstDate As DateTime = Me.dataTable.Rows(0)(colDateTime)
                 MaskedTextBox_JumpDate.Text = firstDate.ToString()
             End If
-
-            'display first rows
-            Me.startIndex = 0
-            Call Me.updateDataViewFilter()
         End If
     End Sub
 
@@ -203,8 +201,21 @@ Friend Class ValuesWindow
         'set max startIndex
         NumericUpDown_StartRecord.Maximum = Me.nRows
 
-        'reset start index
-        Me.startIndex = 0
+        'determine start index
+        Dim jumpDate As DateTime
+        Dim isDate As Boolean = DateTime.TryParse(Me.MaskedTextBox_JumpDate.Text, jumpDate)
+        If isDate And Me.IsJumpDateSet Then
+            'set start index to correspond to currently set jump date
+            Me.startIndex = Me.getStartIndexForDate(jumpDate)
+            Call Me.updateDataViewFilter()
+        Else
+            'set start index to 0 and jump date to first date
+            Me.startIndex = 0
+            If Me.nRows > 0 Then
+                Dim firstDate As DateTime = Me.dataTable.Rows(0)(colDateTime)
+                MaskedTextBox_JumpDate.Text = firstDate.ToString()
+            End If
+        End If
 
         Me.DataGridView1.Columns(colIndex).Visible = False
         Me.DataGridView1.Columns(colIndex).Frozen = True
@@ -357,27 +368,37 @@ Friend Class ValuesWindow
     ''' <param name="e"></param>
     Private Sub MaskedTextBox_JumpDate_ValueChanged(sender As Object, e As EventArgs) Handles Button_Jump.Click
         Me.Cursor = Cursors.WaitCursor
+        Dim jumpDate As DateTime = CType(Me.MaskedTextBox_JumpDate.Text, DateTime)
+        Me.IsJumpDateSet = True
+        'update data view filter
+        Me.startIndex = Me.getStartIndexForDate(jumpDate)
+        Call Me.updateDataViewFilter()
+        Me.Cursor = Cursors.Default
+    End Sub
+
+    ''' <summary>
+    ''' Returns the start index corresponding to the given date
+    ''' </summary>
+    ''' <param name="timestamp">Date</param>
+    ''' <returns>Index</returns>
+    Private Function getStartIndexForDate(timestamp As DateTime) As Integer
         Dim index As Integer
-        Dim selectedDate As DateTime = CType(Me.MaskedTextBox_JumpDate.Text, DateTime)
-        'use last record as default (will be used if the selected date is later than the last date of dataset)
+        'use last record as default (will be used if the timestamp is later than the last timestamp of the dataset)
         index = Me.nRows - 1
         'search for selected date in dataset and set startIndex accordingly
         Dim rowIndex As Integer = 0
         For Each row As DataRow In Me.dataTable.Rows
-            If row.ItemArray(colDateTime) = selectedDate Then
+            If row.ItemArray(colDateTime) = timestamp Then
                 index = rowIndex
                 Exit For
-            ElseIf row.ItemArray(colDateTime) > selectedDate Then
+            ElseIf row.ItemArray(colDateTime) > timestamp Then
                 index = rowIndex - 1
                 Exit For
             End If
             rowIndex += 1
         Next
-        'update data view filter
-        Me.startIndex = index
-        Call Me.updateDataViewFilter()
-        Me.Cursor = Cursors.Default
-    End Sub
+        Return index
+    End Function
 
     Private Sub TimeSeriesValuesDialog_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
         'stop highlighting
