@@ -123,9 +123,15 @@ Friend Class ValuesWindow
             'load data in the datatable
             Call Me.loadDataTable()
 
+            'set first date as initial value for jump date
+            If Me.nRows > 0 Then
+                Dim firstDate As DateTime = Me.dataTable.Rows(0)(colDateTime)
+                MaskedTextBox_JumpDate.Text = firstDate.ToString()
+            End If
+
             'display first rows
             Me.startIndex = 0
-            updateDataViewFilter()
+            Call Me.updateDataViewFilter()
         End If
     End Sub
 
@@ -196,12 +202,6 @@ Friend Class ValuesWindow
 
         'set max startIndex
         NumericUpDown_StartRecord.Maximum = Me.nRows
-
-        'set first date as initial value for jump date
-        If Me.nRows > 0 Then
-            Dim firstDate As DateTime = Me.dataTable.Rows(0)(colDateTime)
-            MaskedTextBox_JumpDate.Text = firstDate.ToString()
-        End If
 
         'reset start index
         Me.startIndex = 0
@@ -285,7 +285,7 @@ Friend Class ValuesWindow
     ''' <param name="e"></param>
     Private Sub NumericUpDown_StartIndex_ValueChanged(sender As Object, e As EventArgs) Handles NumericUpDown_StartRecord.ValueChanged
         If Not Me.isInitializing Then
-            updateDataViewFilter()
+            Call Me.updateDataViewFilter()
         End If
     End Sub
 
@@ -375,7 +375,7 @@ Friend Class ValuesWindow
         Next
         'update data view filter
         Me.startIndex = index
-        updateDataViewFilter()
+        Call Me.updateDataViewFilter()
         Me.Cursor = Cursors.Default
     End Sub
 
