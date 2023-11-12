@@ -12,6 +12,9 @@ NEW:
   * When saving to WVP, file paths can now optionally be saved as relative
   * WVP files are now always read and written using UTF-8 encoding
 
+FIXED:
+* Improved performance and usability of Time Series Values window
+
 CHANGED:
 * Upgrade TeeChart to v4.2023.4.18
 
