@@ -203,6 +203,9 @@ Friend Class ValuesWindow
             MaskedTextBox_JumpDate.Text = firstDate.ToString()
         End If
 
+        'reset start index
+        Me.startIndex = 0
+
         Me.DataGridView1.Columns(colIndex).Visible = False
         Me.DataGridView1.Columns(colIndex).Frozen = True
         Me.DataGridView1.Columns(colDateTime).Frozen = True
