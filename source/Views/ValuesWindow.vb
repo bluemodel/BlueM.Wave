@@ -23,6 +23,11 @@ Friend Class ValuesWindow
     Const colDateTime As Integer = 1
     Const nHeaderColumns As Integer = 2
 
+    ''' <summary>
+    ''' The maximum number of rows to display in the datagridview at a time
+    ''' </summary>
+    Private Const maxRows As Integer = 100
+
     Private isInitializing As Boolean
     Private tsList As List(Of TimeSeries)
     Private dataset As DataSet
@@ -64,11 +69,6 @@ Friend Class ValuesWindow
             NumericUpDown_StartRecord.Value = value
         End Set
     End Property
-
-    ''' <summary>
-    ''' The maximum number of rows to display in the datagridview at a time
-    ''' </summary>
-    Private Const maxRows As Integer = 100
 
     Public Event SelectedRowsChanged(timestamps As List(Of DateTime))
 
@@ -194,7 +194,7 @@ Friend Class ValuesWindow
         Next
         Me.dataTable.EndLoadData()
 
-        Me.dataview.RowFilter = "index >= 0 and index < 100"
+        Me.dataview.RowFilter = $"index >= 0 and index < {maxRows}"
         Me.dataview.RowStateFilter = DataViewRowState.CurrentRows
         Me.databinding.ResumeBinding()
         Me.DataGridView1.ResumeLayout()
