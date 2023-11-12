@@ -124,7 +124,7 @@ Friend Class ValuesWindow
             Call Me.loadDataTable()
 
             'display first rows
-            startIndex = 0
+            Me.startIndex = 0
             updateDataViewFilter()
         End If
     End Sub
@@ -199,7 +199,7 @@ Friend Class ValuesWindow
 
         'set first date as initial value for jump date
         If Me.nRows > 0 Then
-            Dim firstDate As DateTime = Me.dataTable.Rows(0)(1)
+            Dim firstDate As DateTime = Me.dataTable.Rows(0)(colDateTime)
             MaskedTextBox_JumpDate.Text = firstDate.ToString()
         End If
 
@@ -219,18 +219,18 @@ Friend Class ValuesWindow
 
         Dim numRows, endIndex As Integer
 
-        numRows = Math.Min(maxRows, Me.nRows - startIndex)
-        endIndex = startIndex + numRows
+        numRows = Math.Min(maxRows, Me.nRows - Me.startIndex)
+        endIndex = Me.startIndex + numRows
 
         'update filter
-        dataview.RowFilter = $"index >= {startIndex} and index < {endIndex}"
+        dataview.RowFilter = $"index >= {Me.startIndex} and index < {endIndex}"
 
         'Update label
         Dim startRecord As Integer
         If Me.nRows = 0 Then
             startRecord = 0
         Else
-            startRecord = startIndex + 1
+            startRecord = Me.startIndex + 1
         End If
         Me.Label_DisplayCount.Text = $"Displaying records {startRecord} to {startRecord + numRows - 1} of {Me.nRows}"
 
@@ -245,7 +245,7 @@ Friend Class ValuesWindow
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
     Private Sub Button_first_Click(sender As Object, e As EventArgs) Handles Button_first.Click
-        startIndex = 0
+        Me.startIndex = 0
     End Sub
 
     ''' <summary>
@@ -254,7 +254,7 @@ Friend Class ValuesWindow
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
     Private Sub Button_previous_Click(sender As Object, e As EventArgs) Handles Button_previous.Click
-        startIndex = Math.Max(0, startIndex - maxRows)
+        Me.startIndex = Math.Max(0, Me.startIndex - maxRows)
     End Sub
 
     ''' <summary>
@@ -263,7 +263,7 @@ Friend Class ValuesWindow
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
     Private Sub Button_next_Click(sender As Object, e As EventArgs) Handles Button_next.Click
-        startIndex = Math.Min(Me.nRows - 1, startIndex + maxRows)
+        Me.startIndex = Math.Min(Me.nRows - 1, Me.startIndex + maxRows)
     End Sub
 
     ''' <summary>
@@ -272,7 +272,7 @@ Friend Class ValuesWindow
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
     Private Sub Button_last_Click(sender As Object, e As EventArgs) Handles Button_last.Click
-        startIndex = Math.Max(0, Me.nRows - maxRows)
+        Me.startIndex = Math.Max(0, Me.nRows - maxRows)
     End Sub
 
     ''' <summary>
@@ -352,24 +352,26 @@ Friend Class ValuesWindow
     ''' </summary>
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
-    Private Sub MaskedTextBox_JumpDate_ValueChanged(sender As Object, e As EventArgs) Handles MaskedTextBox_JumpDate.Validated, Button_Jump.Click
+    Private Sub MaskedTextBox_JumpDate_ValueChanged(sender As Object, e As EventArgs) Handles Button_Jump.Click
         Me.Cursor = Cursors.WaitCursor
+        Dim index As Integer
         Dim selectedDate As DateTime = CType(Me.MaskedTextBox_JumpDate.Text, DateTime)
         'use last record as default (will be used if the selected date is later than the last date of dataset)
-        startIndex = Me.nRows - 1
+        index = Me.nRows - 1
         'search for selected date in dataset and set startIndex accordingly
         Dim rowIndex As Integer = 0
         For Each row As DataRow In Me.dataTable.Rows
             If row.ItemArray(colDateTime) = selectedDate Then
-                startIndex = rowIndex
+                index = rowIndex
                 Exit For
             ElseIf row.ItemArray(colDateTime) > selectedDate Then
-                startIndex = rowIndex - 1
+                index = rowIndex - 1
                 Exit For
             End If
             rowIndex += 1
         Next
         'update data view filter
+        Me.startIndex = index
         updateDataViewFilter()
         Me.Cursor = Cursors.Default
     End Sub
