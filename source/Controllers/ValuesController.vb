@@ -39,14 +39,16 @@ Friend Class ValuesController
         AddHandler _model.SeriesAdded, AddressOf UpdateView
         AddHandler _model.SeriesPropertiesChanged, AddressOf UpdateView
         AddHandler _model.SeriesRemoved, AddressOf UpdateView
+        AddHandler _model.SeriesAllReordered, AddressOf UpdateView
+        AddHandler _model.SeriesReordered, AddressOf UpdateView
         AddHandler _model.SeriesCleared, AddressOf UpdateView
     End Sub
 
     Public Overrides Sub ShowView()
         If IsNothing(_view) Then
             _view = New ValuesWindow()
+            View.Update(_model.TimeSeries.ToList)
         End If
-        View.Update(_model.TimeSeries.ToList)
         View.WindowState = FormWindowState.Normal
         View.Show()
         View.BringToFront()
