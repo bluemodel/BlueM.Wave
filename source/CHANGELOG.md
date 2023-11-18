@@ -1,6 +1,11 @@
 ﻿BlueM.Wave Release Notes
 ========================
 
+Development
+-------------
+FIXED:
+* Fixed superfluous metadata in export to ZRXP format #126
+
 Version 2.6.0
 -------------
 NEW:

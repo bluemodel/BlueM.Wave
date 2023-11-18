@@ -441,23 +441,27 @@ Namespace Fileformats
 
             'ensure that all required metadata keys are present
             ts.Metadata.AddKeys(ZRXP.MetadataKeys)
+            'set default values
+            ZRXP.setDefaultMetadata(ts)
 
             strwrite = New StreamWriter(file, False, Helpers.DefaultEncoding)
 
             '1st line: ZRXP version number, mode, creation tool and timezone
             strwrite.WriteLine($"#ZRXPVERSION{ts.Metadata("ZRXPVERSION")}|*|ZRXPMODE{ts.Metadata("ZRXPMODE")}|*|ZRXPCREATOR{ts.Metadata("ZRXPCREATOR")}|*|TZ{ts.Metadata("TZ")}|*|")
 
-            'next lines: remaining metadata, omitting empty keywords, wrapped
+            'next lines: remaining metadata, omitting empty values, wrapped
             Dim excludeKeys As New List(Of String)(New String() {"ZRXPVERSION", "ZRXPMODE", "ZRXPCREATOR", "TZ"})
-            Dim query As IEnumerable(Of KeyValuePair(Of String, String)) = ts.Metadata.Where(Function(kvp As KeyValuePair(Of String, String)) kvp.Value <> "" And Not excludeKeys.Contains(kvp.Key))
             Dim text As String = ""
             Dim line As String = "#"
             Dim sep As String = "|*|"
             Dim field As String
             Dim maxlength As Integer = 85
             Dim fields As New List(Of String)
-            For Each kvp As KeyValuePair(Of String, String) In query
-                field = kvp.Key & kvp.Value
+            For Each key As String In ZRXP.MetadataKeys
+                If ts.Metadata(key) = "" Or excludeKeys.Contains(key) Then
+                    Continue For
+                End If
+                field = key & ts.Metadata(key)
                 If line.Length + field.Length + sep.Length > maxlength Then
                     'start a new line
                     text &= line & eol
