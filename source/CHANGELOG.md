@@ -351,6 +351,7 @@ NOTE: Due to a migration to a different issue tracking system, issue numbers hav
 Version 1.10.6
 --------------
 This version fixes a number of issues in order to be able to support the full date range between 01.01.0001 and 31.12.9999 (BUG 749)
+
 CHANGED:
 * Import, analysis and export functions can now use the full date range between 01.01.0001 and 31.12.9999
 * Chart display, panning and zooming is restricted to the displayable date range between 01.01.0100 and 31.12.9000
@@ -384,6 +385,7 @@ CHANGED:
   * the "Description" of hydrological years in the result output now corresponds to the calendar year in which the hydrological year starts
 * Analysis function "AnnualStatistics":
   * added an option for selecting the start month for the hydrological year
+
 FIXED:
 * Fixed TimeSeries properties Min, Max and Volume for series consisting only of NaN values
 * Fixed an uncaught exception when attempting to add a log message without a Wave window instance
@@ -397,11 +399,13 @@ Version 1.10.3
 NEW:
 * Added a command-line interface (CLI) with commands for importing and converting time series files to CSV
   See documentation: https://wiki.bluemodel.org/index.php/Wave:CLI
+
 CHANGED:
 * Export to CSV:
   * NaN values are now exported as "NaN"
   * When exporting multiple time series with timestamps not common to all series, non-existant nodes are exported as empty entries
   * Performance improvements 
+
 API-CHANGES:
 * New public class WVP for parsing and processing Wave project files (*.wvp)
 * New property TimeSeries.NaNCount
@@ -565,6 +569,7 @@ FIXED:
   * Fixed crashes with very small or large dates in time series (BUG 749)
     Timeseries are now cut upon import to minimum 01.01.0100 and maximum 31.12.9900
   * Fixed error when importing CSV files without units
+
 KNOWN ISSUES:
   * DateTimePickers have a minimum date of 01.01.1753 and a maximum date of 31.12.9998
     and will display these even if timeseries / the view extends beyond that range (BUG 749)
@@ -611,6 +616,7 @@ FIXED:
 * Selected series are no longer deselected every time an input is changed in the import dialog
 * Time series statistics Minimum, Maximum, Average, Sum and Volume (shown in the properties dialog) 
   are now calculated by ignoring NaN values. (Before, any NaN values would lead to undefined values)
+
 API-CHANGES:
 * TimeSeries instances now each have a unique Id within the session
 * New method TimeSeries.ChangeTimestep()
@@ -661,6 +667,7 @@ CHANGED:
 * Unparseable values in time series files are no longer written to the log individually. Instead, 
   the total number of NaN values of each time series is written to the log when they are displayed 
   for the first time.
+
 FIXED:
 * Fixed unintended use of the system's locale settings when reading files in HYDRO_AS-2D and ZRXP format
 
@@ -701,6 +708,7 @@ CHANGED:
   user-specified error values to NaN
 * When importing time series from SMUSI REG format, the title is taken from the first line of the file, 
   before any comma
+
 FIXED:
 * The Reload from Files command now respects the previously made series selection for each file
 * Imported files are no longer kept as file objects in memory (should lead to less memory usage)
@@ -715,6 +723,7 @@ FIXED:
 API-CHANGES:
 * The function TimeSeries.getCleanZRE() has been replaced with two separate functions:
   Timeseries.removeNaNValues() and Timeseries.convertErrorValues()
+
 KNOWN ISSUES:
 * When saving a chart to the native TEN format of TeeChart, any NaN values contained in the series are lost 
   (i.e. the nodes with the NaN values are omitted from the series).
@@ -751,6 +760,7 @@ CHANGED:
 * Removed support for the DWD-T-L format
 * If a time series contains duplicate nodes, the duplicate nodes are now simply discarded 
   and a warning is written to the log instead of aborting the import
+
 FIXED:
 * The decimal mark selector in the import series dialog now actually works (BUG 351)
 * Comparison analysis function: changed the result series to a point series because a line series automatically 
