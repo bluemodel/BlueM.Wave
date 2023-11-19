@@ -5,7 +5,8 @@ Development
 -------------
 FIXED:
 * Fixed superfluous metadata in export to ZRXP format #126
-* Added a check for title uniqueness when a title is edited in the Series properties window
+* Added a check for title uniqueness when a title is edited in the Time Series properties window
+* Disable the ability to sort columns in the Time Series Values window
 
 Version 2.6.0
 -------------

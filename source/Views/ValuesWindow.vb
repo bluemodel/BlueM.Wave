@@ -229,9 +229,15 @@ Friend Class ValuesWindow
             End If
         End If
 
+        'hide index column
         Me.DataGridView1.Columns(colIndex).Visible = False
+        'freeze timestamp column
         Me.DataGridView1.Columns(colIndex).Frozen = True
         Me.DataGridView1.Columns(colDateTime).Frozen = True
+        'disable sorting
+        For Each column As DataGridViewColumn In Me.DataGridView1.Columns
+            column.SortMode = DataGridViewColumnSortMode.NotSortable
+        Next
 
     End Sub
 
