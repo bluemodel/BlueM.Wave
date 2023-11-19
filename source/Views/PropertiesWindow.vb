@@ -84,6 +84,29 @@ Friend Class PropertiesWindow
     End Sub
 
     ''' <summary>
+    ''' Handles cell validating events by performing additional checks
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    Private Sub DataGridView1_CellValidating(sender As Object, e As DataGridViewCellValidatingEventArgs) Handles DataGridView1.CellValidating
+
+        'Check that series titles are unique
+        If Me.DataGridView1.Columns(e.ColumnIndex).HeaderCell.Value = "Title" Then
+            For Each row As DataGridViewRow In Me.DataGridView1.Rows
+                If row.Index = e.RowIndex Then
+                    Continue For
+                End If
+                If e.FormattedValue = row.Cells(e.ColumnIndex).Value Then
+                    MsgBox("Title must be unique!", MsgBoxStyle.Critical)
+                    e.Cancel = True
+                    Return
+                End If
+            Next
+        End If
+
+    End Sub
+
+    ''' <summary>
     ''' Commit edits as soon as they occur, but only if they occur in the Interpretation column
     ''' </summary>
     ''' <param name="sender"></param>
