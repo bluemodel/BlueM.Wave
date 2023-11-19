@@ -56,8 +56,34 @@ Friend Class PropertiesWindow
     ''' </summary>
     ''' <param name="seriesList">the new List of TimeSeries</param>
     Public Overloads Sub Update(ByRef seriesList As List(Of TimeSeries))
+
         Me.TimeSeriesBindingSource.DataSource = seriesList
         MyBase.Update()
+
+    End Sub
+
+    ''' <summary>
+    ''' Handles data binding complete
+    ''' Adds cell error texts for NaN volumes
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    Private Sub DataGridView1_DataBindingComplete(sender As Object, e As DataGridViewBindingCompleteEventArgs) Handles DataGridView1.DataBindingComplete
+
+        'Add cell error texts for NaN volume
+        Dim colIndex_Volume As Integer
+        For Each column As DataGridViewColumn In Me.DataGridView1.Columns
+            If column.Name = "Volume" Then
+                colIndex_Volume = column.Index
+                Exit For
+            End If
+        Next
+        For Each row As DataGridViewRow In Me.DataGridView1.Rows
+            If Double.IsNaN(row.Cells(colIndex_Volume).Value) Then
+                row.Cells(colIndex_Volume).ErrorText = "Interpretation and/or unit do not allow volume calculation!"
+            End If
+        Next
+
     End Sub
 
     ''' <summary>
