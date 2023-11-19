@@ -1,7 +1,7 @@
 ﻿BlueM.Wave Release Notes
 ========================
 
-Development
+Version 2.6.1
 -------------
 NEW:
 * Added an error text in the Time Series Properties window when a time series' volume is NaN 
