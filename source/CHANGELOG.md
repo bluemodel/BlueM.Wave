@@ -5,6 +5,7 @@ Development
 -------------
 NEW:
 * Added an error text in the Time Series Properties window when a time series' volume is NaN 
+* Added a warning log message when executing the Goodness Of Fit analysis with time series whose volume is NaN
 
 FIXED:
 * Fixed superfluous metadata in export to ZRXP format #126

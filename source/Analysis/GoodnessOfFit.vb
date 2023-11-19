@@ -90,14 +90,22 @@ Friend Class GoodnessOfFit
         End Get
     End Property
 
-    Public Sub New(ByRef zeitreihen As List(Of TimeSeries))
+    Public Sub New(ByRef seriesList As List(Of TimeSeries))
 
-        Call MyBase.New(zeitreihen)
+        Call MyBase.New(seriesList)
 
-        'Prüfung: Anzahl erwarteter Zeitreihen ist >= 2
-        If (zeitreihen.Count < 2) Then
+        'number of time series must be at least 2
+        If seriesList.Count < 2 Then
             Throw New Exception("The Goodness of Fit analysis requires the selection of at least 2 time series!")
         End If
+
+        'emit a warning if any time series has a volume of NaN
+        For Each ts As TimeSeries In seriesList
+            If Double.IsNaN(ts.Volume) Then
+                Log.AddLogEntry(levels.warning, "At least one time series has a volume of NaN, volume error can not be calculated!")
+                Exit For
+            End If
+        Next
 
         'Instantiate result structure
         Me.GoFResults = New Dictionary(Of String, Dictionary(Of String, GoF))
