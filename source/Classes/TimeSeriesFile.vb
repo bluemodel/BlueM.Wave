@@ -611,13 +611,13 @@ Public MustInherit Class TimeSeriesFile
 
         'Check whether the file exists
         If Not IO.File.Exists(file) Then
-            'A WEL file may be zipped within a WLZIP file, so try extracting it from there
-            If fileExt = FileExtensions.WEL Then
+            'A WEL/WBL file may be zipped within a WLZIP file, so try extracting it from there
+            If fileExt = FileExtensions.WEL Or fileExt = FileExtensions.WBL Then
                 If Not Fileformats.WEL.extractFromWLZIP(file) Then
-                    Throw New Exception($"ERROR: File '{file}' not found!")
+                    Throw New Exception($"File '{file}' not found!")
                 End If
             Else
-                Throw New Exception($"ERROR: File '{file}' not found!")
+                Throw New Exception($"File '{file}' not found!")
             End If
         End If
 
