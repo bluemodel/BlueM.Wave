@@ -1,6 +1,12 @@
 ﻿BlueM.Wave Release Notes
 ========================
 
+Development
+-------------
+FIXED:
+* Improved handling of errors and edge cases when importing from Talsim clipboard
+* WBL files can now also be contained in WLZIP files
+
 Version 2.6.1
 -------------
 NEW:
