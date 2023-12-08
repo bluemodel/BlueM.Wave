@@ -35,6 +35,7 @@ Namespace Fileformats
         Const maxSpalten_dT As Integer = 8
         Const HExt_welEinheit As String = "m3/s"
         Private AnzSpalten_dT() As Integer
+        Private nLinesPerTimestamp As Integer
 
 #End Region
 
@@ -130,8 +131,6 @@ Namespace Fileformats
                     sInfo.Name = Zeile.Substring((j * Me.ColumnWidth) + ColumnOffset, Me.ColumnWidth).Trim()
                     sInfo.Unit = HExt_welEinheit
                     sInfo.Index = index
-                    sInfo.Objekt = Trim(sInfo.Name)
-                    sInfo.Type = "FLOW"
                     Me.TimeSeriesInfos.Add(sInfo)
                     index = index + 1
                 Next
@@ -166,8 +165,6 @@ Namespace Fileformats
                 ts = New TimeSeries(sInfo.Name)
                 If Me.UseUnits Then
                     ts.Unit = sInfo.Unit
-                    ts.Objekt = sInfo.Objekt
-                    ts.Type = sInfo.Type
                 End If
                 ts.DataSource = New TimeSeriesDataSource(Me.File, sInfo.Name)
                 Me.TimeSeries.Add(sInfo.Index, ts)

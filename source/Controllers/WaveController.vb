@@ -167,8 +167,10 @@ Friend Class WaveController
 
         AddHandler Me.View.ComboBox_DisplayRangeUnit.SelectedIndexChanged, AddressOf displayRangeChanged
         AddHandler Me.View.NumericUpDown_DisplayRangeMultiplier.ValueChanged, AddressOf displayRangeChanged
-        AddHandler Me.View.Button_NavBack.Click, AddressOf navigation_Click
-        AddHandler Me.View.Button_NavForward.Click, AddressOf navigation_Click
+        AddHandler Me.View.Button_NavStart.Click, AddressOf navigationStartEnd_Click
+        AddHandler Me.View.Button_NavBack.Click, AddressOf navigationBackwardForward_Click
+        AddHandler Me.View.Button_NavForward.Click, AddressOf navigationBackwardForward_Click
+        AddHandler Me.View.Button_NavEnd.Click, AddressOf navigationStartEnd_Click
 
         'status strip events
         AddHandler Me.View.ToolStripStatusLabel_Log.Click, AddressOf ShowLog_Click
@@ -188,6 +190,7 @@ Friend Class WaveController
         AddHandler _model.SeriesPropertiesChanged, AddressOf SeriesPropertiesChanged
         AddHandler _model.SeriesRemoved, AddressOf SeriesRemoved
         AddHandler _model.SeriesCleared, AddressOf SeriesCleared
+        AddHandler _model.SeriesReordered, AddressOf SeriesReordered
         AddHandler _model.HighlightTimestamps, AddressOf showMarkers
         AddHandler _model.TENFileLoading, AddressOf Load_TEN
         AddHandler _model.IsBusyChanged, AddressOf ShowBusy
@@ -345,9 +348,8 @@ Friend Class WaveController
     Private Sub ImportSeries_Click(sender As System.Object, e As System.EventArgs)
         View.OpenFileDialog1.Title = "Import time series"
         View.OpenFileDialog1.Filter = TimeSeriesFile.FileFilter
-        'TODO: allow selection of multiple files
         If (View.OpenFileDialog1.ShowDialog() = Windows.Forms.DialogResult.OK) Then
-            Call _model.Import_File(View.OpenFileDialog1.FileName)
+            Call _model.Import_Files(View.OpenFileDialog1.FileNames)
         End If
     End Sub
 
@@ -385,20 +387,46 @@ Friend Class WaveController
     ''' <remarks></remarks>
     Private Sub SaveProjectFile_Click(sender As System.Object, e As System.EventArgs)
 
+        If _model.TimeSeries.Count = 0 Then
+            MsgBox("No time series to save!", MsgBoxStyle.Exclamation)
+            Exit Sub
+        End If
+
         Try
+            'show save project file dialog
             Dim dlgres As DialogResult
-
-            'Prepare SaveFileDialog
-            View.SaveFileDialog1.Title = "Save project file"
-            View.SaveFileDialog1.Filter = "Wave project files (*.wvp)|*wvp"
-            View.SaveFileDialog1.DefaultExt = "wvp"
-            View.SaveFileDialog1.OverwritePrompt = True
-
-            'Show dialog
-            dlgres = View.SaveFileDialog1.ShowDialog()
+            Dim dlg As New SaveProjectFileDialog()
+            dlgres = dlg.ShowDialog()
 
             If dlgres = Windows.Forms.DialogResult.OK Then
-                Call _model.SaveProjectFile(View.SaveFileDialog1.FileName)
+                'collect display options from chart and store them in timeseries
+                Dim tsList As New List(Of TimeSeries)
+                For Each ts As TimeSeries In _model.TimeSeries.ToList()
+                    For Each series As Steema.TeeChart.Styles.Series In View.TChart1.Series
+                        If series.Tag = ts.Id Then
+                            If TypeOf series Is Steema.TeeChart.Styles.Line Then
+                                Dim line As Steema.TeeChart.Styles.Line = CType(series, Steema.TeeChart.Styles.Line)
+                                ts.DisplayOptions.Color = line.Color
+                                ts.DisplayOptions.LineStyle = line.LinePen.Style
+                                ts.DisplayOptions.LineWidth = line.LinePen.Width
+                                ts.DisplayOptions.ShowPoints = line.Pointer.Visible
+                            End If
+                            Exit For
+                        End If
+                    Next
+                    tsList.Add(ts)
+                Next
+                Call Fileformats.WVP.Write_File(tsList, dlg.FileName,
+                                                saveRelativePaths:=dlg.SaveRelativePaths,
+                                                saveTitle:=dlg.SaveTitle,
+                                                saveUnit:=dlg.SaveUnit,
+                                                saveInterpretation:=dlg.SaveInterpretation,
+                                                saveColor:=dlg.SaveColor,
+                                                saveLineStyle:=dlg.SaveLineStyle,
+                                                saveLineWidth:=dlg.SaveLineWidth,
+                                                savePointsVisibility:=dlg.SavePointsVisibility
+                )
+                MsgBox($"Wave project file {dlg.FileName} saved.", MsgBoxStyle.Information)
             End If
 
         Catch ex As Exception
@@ -1379,7 +1407,7 @@ Friend Class WaveController
     ''' <summary>
     ''' Navigate forward/back
     ''' </summary>
-    Private Sub navigation_Click(sender As System.Object, e As System.EventArgs)
+    Private Sub navigationBackwardForward_Click(sender As System.Object, e As System.EventArgs)
 
         Dim multiplier As Integer
         Dim xMinOld, xMinNew, xMaxOld, xMaxNew As DateTime
@@ -1432,6 +1460,57 @@ Friend Class WaveController
         'update chart
         View.ChartMinX = xMinNew
         View.ChartMaxX = xMaxNew
+
+        Call Me.ViewportChanged()
+
+        Me.selectionMade = True
+
+    End Sub
+
+    ''' <summary>
+    ''' Navigate to start/end
+    ''' </summary>
+    Private Sub navigationStartEnd_Click(sender As System.Object, e As System.EventArgs)
+
+        Dim xMinNew, xMaxNew As Double
+        Dim xDiff As Double
+
+        'collect start and end dates of all currently active series
+        Dim startdates As New List(Of Double)
+        Dim enddates As New List(Of Double)
+        For Each series As Steema.TeeChart.Styles.Series In View.TChart1.Series
+            If Not series.Active Then
+                Continue For
+            End If
+            startdates.Add(series.MinXValue)
+            enddates.Add(series.MaxXValue)
+        Next
+
+        If startdates.Count = 0 Or enddates.Count = 0 Then
+            'Do nothing
+            Exit Sub
+        End If
+
+        'calculate current viewport extent in OADate units
+        xDiff = (View.ChartMaxX - View.ChartMinX).TotalDays
+
+        Select Case CType(sender, Button).Name
+            Case "Button_NavStart"
+                xMinNew = startdates.Min()
+                xMaxNew = xMinNew + xDiff
+            Case "Button_NavEnd"
+                xMaxNew = enddates.Max()
+                xMinNew = xMaxNew - xDiff
+            Case Else
+                Throw New Exception($"Unknown button pressed!")
+        End Select
+
+        'save the current zoom snapshot
+        Call Me.SaveZoomSnapshot()
+
+        'update chart
+        View.ChartMinX = DateTime.FromOADate(xMinNew)
+        View.ChartMaxX = DateTime.FromOADate(xMaxNew)
 
         Call Me.ViewportChanged()
 
@@ -2121,12 +2200,13 @@ Friend Class WaveController
     ''' Adds the series to the charts
     ''' Also adds the datasource to the MRU file list if the time series has a file datasource
     ''' </summary>
-    ''' <param name="ts">Die anzuzeigende Zeitreihe</param>
+    ''' <param name="ts">time series to display</param>
     Private Sub SeriesAdded(ts As TimeSeries)
 
-        'Remove nodes if necessary (#68)
+        'Check for extreme dates not supported by TChart
+        'and if necessary create a copy with removed nodes for display purposes (#68)
         If ts.StartDate < Constants.minOADate Then
-            ts = ts.Clone()
+            ts = ts.Clone(preserveId:=True)
             Dim t_too_early = New List(Of DateTime)
             For Each t As DateTime In ts.Dates
                 If t < Constants.minOADate Then
@@ -2141,7 +2221,7 @@ Friend Class WaveController
             Log.AddLogEntry(Log.levels.warning, $"Unable to display {t_too_early.Count} nodes between {t_too_early.First().ToString(Helpers.CurrentDateFormat)} and {t_too_early.Last().ToString(Helpers.CurrentDateFormat)}!")
         End If
         If ts.EndDate > Constants.maxOADate Then
-            ts = ts.Clone()
+            ts = ts.Clone(preserveId:=True)
             Dim t_too_late As New List(Of DateTime)
             For Each t As DateTime In ts.Dates.Reverse()
                 If t > Constants.maxOADate Then
@@ -2174,8 +2254,13 @@ Friend Class WaveController
         'Namen vergeben
         Line1.Title = ts.Title
 
-        'Set line width to 2
-        Line1.LinePen.Width = 2
+        'set display options
+        If Not ts.DisplayOptions.Color.IsEmpty Then
+            Line1.Color = ts.DisplayOptions.Color
+        End If
+        Line1.LinePen.Style = ts.DisplayOptions.LineStyle
+        Line1.LinePen.Width = ts.DisplayOptions.LineWidth
+        Line1.Pointer.Visible = ts.DisplayOptions.ShowPoints
 
         'Stützstellen zur Serie hinzufügen
         'Main chart
@@ -2233,8 +2318,12 @@ Friend Class WaveController
         'Namen vergeben
         Line2.Title = ts.Title
 
-        'Set line width to 2
-        Line2.LinePen.Width = 2
+        'set display options
+        If Not ts.DisplayOptions.Color.IsEmpty Then
+            Line2.Color = ts.DisplayOptions.Color
+        End If
+        Line2.LinePen.Style = ts.DisplayOptions.LineStyle
+        Line2.LinePen.Width = ts.DisplayOptions.LineWidth
 
         'Stützstellen zur Serie hinzufügen
         Line2.BeginUpdate()
@@ -2544,6 +2633,28 @@ Friend Class WaveController
     End Sub
 
     ''' <summary>
+    ''' Handles the case where a TimeSeries was reordered on the model side
+    ''' </summary>
+    ''' <param name="id">Id of the TimeSeries whose order was changed</param>
+    ''' <param name="direction">Direction in which the series was moved</param>
+    Private Sub SeriesReordered(id As Integer, direction As Direction)
+        'update series order in chart
+        'TODO: this causes a second, unnecessary event update through TeeEvent which I don't know how to prevent
+        Dim index As Integer = 0
+        For Each series As Steema.TeeChart.Styles.Series In View.TChart1.Series
+            If series.Tag = id Then
+                If direction = Direction.Up And index > 0 Then
+                    View.TChart1.Series.Exchange(index, index - 1)
+                ElseIf direction = Direction.Down And index < View.TChart1.Series.Count - 1 Then
+                    View.TChart1.Series.Exchange(index, index + 1)
+                End If
+                Exit For
+            End If
+            index += 1
+        Next
+    End Sub
+
+    ''' <summary>
     ''' Handles axis deleted in the AxisDialog
     ''' </summary>
     ''' <param name="axisname"></param>
@@ -2689,6 +2800,7 @@ Friend Class WaveController
     ''' <param name="value">Value to set the progress bar to</param>
     Private Sub ProgressUpdate(value As Integer)
         View.ProgressBar1.Value = Math.Min(value, View.ProgressBar1.Maximum)
+        Call Application.DoEvents()
     End Sub
 
     ''' <summary>

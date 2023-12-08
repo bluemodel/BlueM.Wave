@@ -112,6 +112,7 @@ Namespace Fileformats
             Dim line As String
             Dim isData As Boolean = False
 
+            Dim index As Integer = 0
             Do
                 line = StrReadSync.ReadLine.ToString
 
@@ -129,8 +130,12 @@ Namespace Fileformats
                     Dim sInfo As New TimeSeriesInfo()
                     sInfo.Name = line.Split(";")(0).Trim()
                     sInfo.Unit = line.Split(";")(3).Trim()
-                    sInfo.Index = Integer.Parse(line.Split(";")(4).Trim())
+                    'the index in the WELINFO file is not always 0-based, safer to use our own counter as index!
+                    'sInfo.Index = Integer.Parse(line.Split(";")(4).Trim())
+                    sInfo.Index = index
                     Me.TimeSeriesInfos.Add(sInfo)
+
+                    index += 1
                 End If
             Loop Until StrReadSync.Peek() = -1
 

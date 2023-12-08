@@ -299,4 +299,57 @@ Public Module Helpers
 
     End Sub
 
+    Public Enum Direction
+        Up
+        Down
+    End Enum
+
+    '''<summary>
+    '''Creates a relative path from one file or folder to another.
+    '''</summary>
+    '''<param name="fromPath">Contains the directory that defines the start of the relative path.</param>
+    '''<param name="toPath">Contains the path that defines the endpoint of the relative path.</param>
+    '''<returns>The relative path from the start directory to the end path.</returns>
+    '''<exception cref="ArgumentNullException"><paramref name="fromPath"/> or <paramref name="toPath"/> is <c>null</c>.</exception>
+    '''<exception cref="UriFormatException"></exception>
+    '''<exception cref="InvalidOperationException"></exception>
+    '''<remarks>
+    '''This function is a replacement for IO.Path.GetRelativePath() which is only available in later .NET versions.
+    '''Based on C# code from https://stackoverflow.com/a/32113484
+    '''</remarks>
+    Public Function GetRelativePath(fromPath As String, toPath As String) As String
+
+        If String.IsNullOrEmpty(fromPath) Then
+            Throw New ArgumentNullException("fromPath")
+        End If
+        If String.IsNullOrEmpty(toPath) Then
+            Throw New ArgumentNullException("toPath")
+        End If
+
+        Dim fromUri As Uri = New Uri(AppendDirectorySeparatorChar(fromPath))
+        Dim toUri As Uri = New Uri(AppendDirectorySeparatorChar(toPath))
+
+        If fromUri.Scheme <> toUri.Scheme Then
+            Return toPath
+        End If
+
+        Dim relativeUri As Uri = fromUri.MakeRelativeUri(toUri)
+        Dim relativePath As String = Uri.UnescapeDataString(relativeUri.ToString())
+
+        If String.Equals(toUri.Scheme, Uri.UriSchemeFile, StringComparison.OrdinalIgnoreCase) Then
+            relativePath = relativePath.Replace(IO.Path.AltDirectorySeparatorChar, IO.Path.DirectorySeparatorChar)
+        End If
+
+        Return relativePath
+    End Function
+
+    Private Function AppendDirectorySeparatorChar(path As String) As String
+        'Append a slash only if the path is a directory and does not have a slash.
+        If Not IO.Path.HasExtension(path) And Not path.EndsWith(IO.Path.DirectorySeparatorChar.ToString()) Then
+            Return path + IO.Path.DirectorySeparatorChar
+        End If
+
+        Return path
+    End Function
+
 End Module

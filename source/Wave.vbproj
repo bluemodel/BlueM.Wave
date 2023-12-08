@@ -83,7 +83,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Data.SQLite, Version=1.0.112.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
+    <Reference Include="System.Data.SQLite, Version=1.0.118.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>lib\SQLite\System.Data.SQLite.dll</HintPath>
     </Reference>
@@ -143,10 +143,10 @@
     </Compile>
     <Compile Include="Analysis\Calculator.vb" />
     <Compile Include="Analysis\ChangeTimestep.vb" />
-    <Compile Include="Analysis\CumulativeDialog.Designer.vb">
-      <DependentUpon>CumulativeDialog.vb</DependentUpon>
+    <Compile Include="Analysis\AccumulateDialog.Designer.vb">
+      <DependentUpon>AccumulateDialog.vb</DependentUpon>
     </Compile>
-    <Compile Include="Analysis\CumulativeDialog.vb">
+    <Compile Include="Analysis\AccumulateDialog.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Analysis\ChangeTimestepDialog.Designer.vb">
@@ -163,7 +163,8 @@
     <Compile Include="Analysis\Comparison_Dialog.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Analysis\Cumulative.vb" />
+    <Compile Include="Analysis\Accumulate.vb" />
+    <Compile Include="Analysis\Decumulate.vb" />
     <Compile Include="Analysis\DoubleSumCurve.vb" />
     <Compile Include="Analysis\GoodnessOfFit.vb" />
     <Compile Include="Analysis\AnnualStatistics_Dialog.Designer.vb">
@@ -208,6 +209,20 @@
     <Compile Include="Analysis\TimestepAnalysisDialog.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Dialogs\SaveProjectFileDialog.Designer.vb">
+      <DependentUpon>SaveProjectFileDialog.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\SaveProjectFileDialog.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialogs\SelectSeriesDialog.Designer.vb">
+      <DependentUpon>SelectSeriesDialog.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\SelectSeriesDialog.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Classes\TimeSeriesDisplayOptions.vb" />
+    <Compile Include="FileFormats\JAMS.vb" />
     <Compile Include="Main.vb" />
     <Compile Include="App.vb" />
     <Compile Include="Classes\AxisWrapper.vb" />
@@ -261,10 +276,10 @@
     <Compile Include="Dialogs\ExportDiag.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Dialogs\ImportDiag.Designer.vb">
-      <DependentUpon>ImportDiag.vb</DependentUpon>
+    <Compile Include="Dialogs\ImportCSVDialog.Designer.vb">
+      <DependentUpon>ImportCSVDialog.vb</DependentUpon>
     </Compile>
-    <Compile Include="Dialogs\ImportDiag.vb">
+    <Compile Include="Dialogs\ImportCSVDialog.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Dialogs\LogWindow.Designer.vb">
@@ -317,8 +332,7 @@
     <Compile Include="FileFormats\PRMS.vb" />
     <Compile Include="FileFormats\SMUSI_REG.vb" />
     <Compile Include="FileFormats\SMB.vb" />
-    <Compile Include="FileFormats\SWMM_DAT_MASS.vb" />
-    <Compile Include="FileFormats\SWMM_DAT_TIME.vb" />
+    <Compile Include="FileFormats\SWMM_TIMESERIES.vb" />
     <Compile Include="FileFormats\SWMM_OUT.vb" />
     <Compile Include="FileFormats\SydroSQLite.vb" />
     <Compile Include="FileFormats\UVF.vb" />
@@ -381,8 +395,8 @@
     <EmbeddedResource Include="Analysis\Autocorrelation_Dialog.resx">
       <DependentUpon>Autocorrelation_Dialog.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Analysis\CumulativeDialog.resx">
-      <DependentUpon>CumulativeDialog.vb</DependentUpon>
+    <EmbeddedResource Include="Analysis\AccumulateDialog.resx">
+      <DependentUpon>AccumulateDialog.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Analysis\ChangeTimestepDialog.resx">
       <DependentUpon>ChangeTimestepDialog.vb</DependentUpon>
@@ -423,11 +437,17 @@
     <EmbeddedResource Include="Analysis\CalculatorDialog.resx">
       <DependentUpon>CalculatorDialog.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Dialogs\SaveProjectFileDialog.resx">
+      <DependentUpon>SaveProjectFileDialog.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Dialogs\ExportDiag.resx">
       <DependentUpon>ExportDiag.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Dialogs\ImportDiag.resx">
-      <DependentUpon>ImportDiag.vb</DependentUpon>
+    <EmbeddedResource Include="Dialogs\SelectSeriesDialog.resx">
+      <DependentUpon>SelectSeriesDialog.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialogs\ImportCSVDialog.resx">
+      <DependentUpon>ImportCSVDialog.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Dialogs\LogWindow.resx">
       <DependentUpon>LogWindow.vb</DependentUpon>
@@ -447,7 +467,6 @@
     <EmbeddedResource Include="FileFormats\HYDRO_AS-2D_Diag.resx">
       <DependentUpon>HYDRO_AS-2D_Diag.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="My Project\licenses.licx" />
     <EmbeddedResource Include="My Project\Resources.resx">
       <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.vb</LastGenOutput>
@@ -570,7 +589,7 @@
       <Version>13.0.3</Version>
     </PackageReference>
     <PackageReference Include="Steema.TeeChart.NET">
-      <Version>4.2022.8.23</Version>
+      <Version>4.2023.4.18</Version>
     </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />

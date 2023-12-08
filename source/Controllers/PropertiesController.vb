@@ -32,13 +32,14 @@ Friend Class PropertiesController
         'view events
         AddHandler Me.View.SeriesPropertyChanged, AddressOf SeriesPropertiesViewChanged
         AddHandler Me.View.SeriesDeleted, AddressOf SeriesDeletedHandler
+        AddHandler Me.View.SeriesReordered, AddressOf SeriesReorderedHandler
 
         'model events
         AddHandler _model.SeriesAdded, AddressOf UpdateView
         AddHandler _model.SeriesPropertiesChanged, AddressOf UpdateView
         AddHandler _model.SeriesRemoved, AddressOf UpdateView
         AddHandler _model.SeriesCleared, AddressOf UpdateView
-        AddHandler _model.SeriesReordered, AddressOf UpdateView
+        AddHandler _model.SeriesAllReordered, AddressOf UpdateView
     End Sub
 
     Public Overrides Sub ShowView()
@@ -46,6 +47,7 @@ Friend Class PropertiesController
             _view = New PropertiesWindow()
         End If
         View.Update(_model.TimeSeries.ToList)
+        View.WindowState = FormWindowState.Normal
         View.Show()
         View.BringToFront()
     End Sub
@@ -72,5 +74,15 @@ Friend Class PropertiesController
             _model.RemoveTimeSeries(id)
         Next
     End Sub
+
+    ''' <summary>
+    ''' Handles a series being reordered in the view by reordering it in the model
+    ''' </summary>
+    ''' <param name="id">Id of the TimeSeries that was reordered</param>
+    ''' <param name="direction">Direction</param>
+    Private Sub SeriesReorderedHandler(id As Integer, direction As Direction)
+        _model.SeriesReorder(id, direction)
+    End Sub
+
 
 End Class

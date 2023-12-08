@@ -141,7 +141,11 @@ Friend Class Calculator
                 timestamps.UnionWith(ts.Dates)
             Next
 
+            'initialize progress bar
+            MyBase.AnalysisProgressStart(timestamps.Count)
+
             'loop over timestamps
+            Dim i As Integer = 1
             For Each t As DateTime In timestamps
                 'create variables for this timestamp
                 For Each tsVariable As CalculatorVariable In tsVariables
@@ -157,6 +161,9 @@ Friend Class Calculator
                 ts_result.AddNode(t, value)
                 'remove variables
                 parser.RemoveAllVariables()
+                'update progressbar
+                MyBase.AnalysisProgressUpdate(i)
+                i += 1
             Next
 
             'clean up
@@ -167,6 +174,9 @@ Friend Class Calculator
             ts_result.Unit = unit
             ts_result.DataSource = New TimeSeriesDataSource(TimeSeriesDataSource.OriginEnum.AnalysisResult)
             Me.ResultSeries.Add(ts_result)
+
+            'finish progress bar
+            MyBase.AnalysisProgressFinish()
 
         End If
 

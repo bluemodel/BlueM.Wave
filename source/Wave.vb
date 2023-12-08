@@ -46,9 +46,14 @@ Public Class Wave
     Friend Event SeriesCleared()
 
     ''' <summary>
-    ''' Is raised when time series are reordered
+    ''' Is raised when all the time series are reordered
     ''' </summary>
-    Friend Event SeriesReordered()
+    Friend Event SeriesAllReordered()
+
+    ''' <summary>
+    ''' Is raised when a single time series is reordered
+    ''' </summary>
+    Friend Event SeriesReordered(id As Integer, direction As Integer)
 
     ''' <summary>
     ''' Is raised when timestamps should be highlighted
@@ -136,7 +141,7 @@ Public Class Wave
                         ok = Me.ShowImportDialog(fileInstance)
                         Call Application.DoEvents()
                     Else
-                        'Ansonsten alle Spalten ausw‰hlen
+                        'Ansonsten alle Spalten ausw√§hlen
                         Call fileInstance.selectAllSeries()
                         ok = True
                     End If
@@ -435,65 +440,7 @@ Public Class Wave
     ''' <param name="ids">List of Ids in the new order</param>
     Friend Sub Reorder_Series(ids As List(Of Integer))
         Me.TimeSeries.Reorder(ids)
-        RaiseEvent SeriesReordered()
-    End Sub
-
-    Friend Sub SaveProjectFile(projectfile As String)
-
-        'collect datasources
-        Dim datasources As New Dictionary(Of String, List(Of String)) '{file: [title, ...], ...}
-        Dim unsavedSeries As New List(Of String)
-        Dim file, title As String
-        For Each ts As TimeSeries In Me.TimeSeries.Values
-            If ts.DataSource.Origin = TimeSeriesDataSource.OriginEnum.FileImport Then
-                file = ts.DataSource.FilePath
-                title = ts.DataSource.Title
-                If Not datasources.ContainsKey(file) Then
-                    datasources.Add(file, New List(Of String))
-                End If
-                datasources(file).Add(title)
-            Else
-                unsavedSeries.Add(ts.Title)
-                Log.AddLogEntry(Log.levels.warning, $"Series '{ts.Title}' with datasource {ts.DataSource} does not originate from a file import and could not be saved to the project file!")
-            End If
-        Next
-
-        If datasources.Count = 0 Then
-            Dim msg As String = $"None of the series originate from a file import! No project file was saved! Save the chart with data or export the time series to preserve them!"
-            Log.AddLogEntry(Log.levels.error, msg)
-            Throw New Exception(msg)
-        End If
-
-        'write the project file
-        Dim fs As New IO.FileStream(projectfile, IO.FileMode.Create, IO.FileAccess.Write)
-        Dim strwrite As New IO.StreamWriter(fs, Helpers.DefaultEncoding)
-
-        strwrite.WriteLine("# Wave project file")
-
-        For Each file In datasources.Keys
-            'TODO: write relative paths to the project file?
-            strwrite.WriteLine("file=" & file)
-            For Each title In datasources(file)
-                'TODO: if a series was renamed, write the new title to the project file
-                If title.Contains(":") Then
-                    'enclose titles containing ":" in quotes
-                    title = $"""{title}"""
-                End If
-                strwrite.WriteLine("    series=" & title)
-            Next
-        Next
-
-        strwrite.Close()
-        fs.Close()
-
-        If unsavedSeries.Count = 0 Then
-            Log.AddLogEntry(Log.levels.info, $"Wave project file {projectfile} saved.")
-        Else
-            Dim msg As String = $"Wave project file {projectfile} saved. {unsavedSeries.Count} series could not be saved! Save the chart with data or export the time series to preserve them!"
-            Log.AddLogEntry(Log.levels.warning, msg)
-            Throw New Exception(msg)
-        End If
-
+        RaiseEvent SeriesAllReordered()
     End Sub
 
     ''' <summary>
@@ -548,10 +495,11 @@ Public Class Wave
 
         'prepare metadata according to file format
         Dim keys As List(Of String)
-        Dim metadata_old As Metadata
         For Each ts As TimeSeries In zres
-            'get a list of metadata keys
+            'get a list of required metadata keys depending on file type being exported
             Select Case fileType
+                Case TimeSeriesFile.FileTypes.SWMM_INTERFACE
+                    keys = Fileformats.SWMM_INTERFACE.MetadataKeys
                 Case TimeSeriesFile.FileTypes.UVF
                     keys = Fileformats.UVF.MetadataKeys
                 Case TimeSeriesFile.FileTypes.ZRXP
@@ -560,21 +508,17 @@ Public Class Wave
                     keys = TimeSeriesFile.MetadataKeys 'empty list
             End Select
             If keys.Count > 0 Then
-                'create a copy of the existing metadata
-                metadata_old = ts.Metadata
-                'create new metadata keys
-                ts.Metadata = New Metadata()
+                'add additional keys as necessary
                 For Each key As String In keys
-                    If metadata_old.Keys.Contains(key) Then
-                        'copy old metadata value with the same key
-                        ts.Metadata.Add(key, metadata_old(key))
-                    Else
+                    If Not ts.Metadata.ContainsKey(key) Then
                         'add a new key with an empty value
                         ts.Metadata.Add(key, "")
                     End If
                 Next
                 'set default metadata values
                 Select Case fileType
+                    Case TimeSeriesFile.FileTypes.SWMM_INTERFACE
+                        Fileformats.SWMM_INTERFACE.setDefaultMetadata(ts)
                     Case TimeSeriesFile.FileTypes.UVF
                         Fileformats.UVF.setDefaultMetadata(ts)
                     Case TimeSeriesFile.FileTypes.ZRXP
@@ -583,7 +527,7 @@ Public Class Wave
                         TimeSeriesFile.setDefaultMetadata(ts)
                 End Select
                 'show dialog for editing metadata
-                Dim dlg As New MetadataDialog(ts.Metadata)
+                Dim dlg As New MetadataDialog(ts, keys)
                 dlgResult = dlg.ShowDialog()
                 If Not dlgResult = Windows.Forms.DialogResult.OK Then
                     Exit Sub
@@ -661,12 +605,12 @@ Public Class Wave
                 Case TimeSeriesFile.FileTypes.SMUSI_REG
                     SaveFileDialog1.DefaultExt = "reg"
                     SaveFileDialog1.Filter = "SMUSI REG files (*.reg)|*.reg"
-                Case TimeSeriesFile.FileTypes.SWMM_DAT_MASS, TimeSeriesFile.FileTypes.SWMM_DAT_TIME
-                    SaveFileDialog1.DefaultExt = "dat"
-                    SaveFileDialog1.Filter = "SWMM DAT files (*.dat)|*.dat"
                 Case TimeSeriesFile.FileTypes.SWMM_INTERFACE
                     SaveFileDialog1.DefaultExt = "txt"
-                    SaveFileDialog1.Filter = "SWMM Interface files (*.txt)|*.txt"
+                    SaveFileDialog1.Filter = "SWMM routing interface files (*.txt)|*.txt"
+                Case TimeSeriesFile.FileTypes.SWMM_TIMESERIES
+                    SaveFileDialog1.DefaultExt = "dat"
+                    SaveFileDialog1.Filter = "SWMM time series files (*.dat)|*.dat"
                 Case TimeSeriesFile.FileTypes.UVF
                     SaveFileDialog1.DefaultExt = "uvf"
                     SaveFileDialog1.Filter = "UVF files (*.uvf)|*.uvf"
@@ -753,11 +697,8 @@ Public Class Wave
                         Case TimeSeriesFile.FileTypes.SMUSI_REG
                             Call Fileformats.SMUSI_REG.Write_File(ts, filename)
 
-                        Case TimeSeriesFile.FileTypes.SWMM_DAT_MASS
-                            Call Fileformats.SWMM_DAT_MASS.Write_File(ts, filename, 5) 'TODO: Zeitschritt ist noch nicht dynamisch definiert
-
-                        Case TimeSeriesFile.FileTypes.SWMM_DAT_TIME
-                            Call Fileformats.SWMM_DAT_TIME.Write_File(ts, filename, 5) 'TODO: Zeitschritt ist noch nicht dynamisch definiert
+                        Case TimeSeriesFile.FileTypes.SWMM_TIMESERIES
+                            Call Fileformats.SWMM_TIMESERIES.Write_File(ts, filename)
 
                         Case TimeSeriesFile.FileTypes.UVF
                             Call Fileformats.UVF.Write_File(ts, filename)
@@ -808,19 +749,23 @@ Public Class Wave
     End Sub
 
     ''' <summary>
-    ''' Zeigt den Importdialog an und liest im Anschluss die Datei mit den eingegebenen Einstellungen ein
+    ''' Shows the import dialog for series selection
     ''' </summary>
-    ''' <param name="Datei">Instanz der Datei, die importiert werden soll</param>
-    Friend Function ShowImportDialog(ByRef Datei As TimeSeriesFile) As Boolean
+    ''' <param name="tsFile">File instance from which to import</param>
+    Friend Function ShowImportDialog(ByRef tsFile As TimeSeriesFile) As Boolean
 
-        Datei.ImportDiag = New ImportDiag(Datei)
+        Dim dialog As Form
+        Dim dialogResult As DialogResult
 
-        Dim DiagResult As DialogResult
+        If TypeOf tsFile Is Fileformats.CSV Then
+            dialog = New ImportCSVDialog(tsFile)
+        Else
+            dialog = New SelectSeriesDialog(tsFile)
+        End If
 
-        'Dialog anzeigen
-        DiagResult = Datei.ImportDiag.ShowDialog()
+        dialogResult = dialog.ShowDialog()
 
-        If (DiagResult = Windows.Forms.DialogResult.OK) Then
+        If dialogResult = Windows.Forms.DialogResult.OK Then
             Return True
         Else
             Return False
@@ -875,9 +820,19 @@ Public Class Wave
         RaiseEvent HighlightTimestamps(timestamps)
     End Sub
 
-
     Friend Sub SeriesPropertiesChangedHandler(id As Integer)
         RaiseEvent SeriesPropertiesChanged(id)
+    End Sub
+
+    ''' <summary>
+    ''' Reorders a TimeSeries
+    ''' </summary>
+    ''' <param name="id">Id of the TimeSeries to reorder</param>
+    ''' <param name="direction">Direction</param>
+    Friend Sub SeriesReorder(id As Integer, direction As Direction)
+        Me.TimeSeries.Reorder(id, direction)
+        'raise event for views to handle
+        RaiseEvent SeriesReordered(id, direction)
     End Sub
 
 End Class

@@ -34,12 +34,12 @@ Public MustInherit Class TimeSeriesFile
         GISMO_WEL
         HYDRO_AS_DAT
         HYSTEM_WEL
+        JAMS
         PRMS_OUT
         HYSTEM_REG
         SMUSI_REG
         SMB
-        SWMM_DAT_MASS
-        SWMM_DAT_TIME
+        SWMM_TIMESERIES
         SWMM_INTERFACE
         SWMM_LID_REPORT
         SWMM_OUT
@@ -73,7 +73,7 @@ Public MustInherit Class TimeSeriesFile
         Public Shared ReadOnly REG As String = ".REG"
         Public Shared ReadOnly SMB As String = ".SMB"
         Public Shared ReadOnly TEN As String = ".TEN"
-        Public Shared ReadOnly TXT As String = ".TXT"   'SWMM interface routing file, SWMM LID report file or generic text file 
+        Public Shared ReadOnly TXT As String = ".TXT"   'SWMM routing interface file, SWMM LID report file or generic text file 
         Public Shared ReadOnly UVF As String = ".UVF"
         Public Shared ReadOnly WBL As String = ".WBL"   'SYDRO binary WEL format
         Public Shared ReadOnly WEL As String = ".WEL"
@@ -94,10 +94,11 @@ Public MustInherit Class TimeSeriesFile
         "DHI MIKE DFS0 files (*.dfs0)|*.dfs0|" &
         "HYDRO_AS-2D result files (*.dat)|*.dat|" &
         "Hystem-Extran files (*.dat, *.reg)|*.dat;*.reg|" &
+        "JAMS timeseries result files (*.dat)|*.dat|" &
         "PRMS result files (*.dat, *.out)|*.dat;*.out|" &
         "SIMBA files (*.smb)|*.smb|" &
         "SMUSI files (*.asc. *.reg)|*.asc;*.reg|" &
-        "SWMM files (*.txt, *.out)|*.txt;*.out|" &
+        "SWMM files (*.dat, *.txt, *.out)|*.dat;*.txt;*.out|" &
         "SYDRO binary files (*.bin)|*.bin|" &
         "SYDRO binary wel files (*.wbl)|*.wbl|" &
         "SYDRO SQLite files (*.db)|*.db|" &
@@ -123,7 +124,6 @@ Public MustInherit Class TimeSeriesFile
     Private _dateTimeColumnIndex As Integer = 0
     Private _seriesInfos As List(Of TimeSeriesInfo)
     Private _selectedSeries As List(Of TimeSeriesInfo)
-    Private _nLinesperTimestamp As Integer = 1
     Private _metadata As Metadata
     Private _encoding As Text.Encoding
 
@@ -158,11 +158,6 @@ Public MustInherit Class TimeSeriesFile
     ''' The key corresponds to the column index stored as <seealso cref="TimeSeriesInfo.Index"/> in <seealso cref="TimeSeriesInfos"/>.
     ''' </summary>
     Public TimeSeries As Dictionary(Of Integer, TimeSeries)
-
-    ''' <summary>
-    ''' Instance of the ImportDialog
-    ''' </summary>
-    Friend ImportDiag As ImportDiag
 
 #End Region 'Eigenschaften
 
@@ -325,7 +320,7 @@ Public MustInherit Class TimeSeriesFile
     End Property
 
     ''' <summary>
-    ''' List of all series contained in a file
+    ''' List of TimeSeriesInfo of all series contained in a file
     ''' </summary>
     ''' <remarks></remarks>
     Public Property TimeSeriesInfos() As List(Of TimeSeriesInfo)
@@ -338,25 +333,13 @@ Public MustInherit Class TimeSeriesFile
     End Property
 
     ''' <summary>
-    ''' List of series currently selected for import
+    ''' List of TimeSeriesInfo of series currently selected for import
     ''' </summary>
     ''' <remarks></remarks>
     Public ReadOnly Property SelectedSeries() As List(Of TimeSeriesInfo)
         Get
             Return _selectedSeries
         End Get
-    End Property
-
-    ''' <summary>
-    ''' Number of lines per timestamp (default is 1)
-    ''' </summary>
-    Public Property nLinesPerTimestamp() As Integer
-        Get
-            Return _nLinesperTimestamp
-        End Get
-        Set(value As Integer)
-            _nLinesperTimestamp = value
-        End Set
     End Property
 
     ''' <summary>
@@ -473,22 +456,22 @@ Public MustInherit Class TimeSeriesFile
     End Sub
 
     ''' <summary>
-    ''' Select a series for import by column index
+    ''' Select a series for import by index
     ''' </summary>
-    ''' <param name="colIndex">column index</param>
-    ''' <returns>True if successful, False if column index was not found</returns>
+    ''' <param name="index">index</param>
+    ''' <returns>True if successful, False if index was not found</returns>
     ''' <remarks></remarks>
-    Public Function selectSeries(colIndex As Integer) As Boolean
+    Public Function selectSeries(index As Integer) As Boolean
 
         Dim i As Integer = 0
         For Each sInfo As TimeSeriesInfo In Me.TimeSeriesInfos
-            If sInfo.Index = colIndex Then
+            If sInfo.Index = index Then
                 Me.SelectedSeries.Add(sInfo)
                 Return True
             End If
         Next
         'series not found in file
-        Log.AddLogEntry(Log.levels.error, $"Series with column index {colIndex} not found in file!")
+        Log.AddLogEntry(Log.levels.error, $"Series with index {index} not found in file!")
         Return False
 
     End Function
@@ -559,14 +542,12 @@ Public MustInherit Class TimeSeriesFile
                 Return FileExtensions.REG
             Case FileTypes.SMB
                 Return FileExtensions.SMB
-            Case FileTypes.SWMM_DAT_MASS
-                Return FileExtensions.DAT
-            Case FileTypes.SWMM_DAT_TIME
-                Return FileExtensions.DAT
             Case FileTypes.SWMM_INTERFACE
                 Return FileExtensions.TXT
             Case FileTypes.SWMM_LID_REPORT
                 Return FileExtensions.TXT
+            Case FileTypes.SWMM_TIMESERIES
+                Return FileExtensions.DAT
             Case FileTypes.SWMM_OUT
                 Return FileExtensions.OUT
             Case FileTypes.SYDROSQLITE
@@ -637,6 +618,9 @@ Public MustInherit Class TimeSeriesFile
             End If
         End If
 
+        'set default
+        fileType = FileTypes.UNKNOWN
+
         'Depending on file extension
         Select Case fileExt
 
@@ -669,11 +653,7 @@ Public MustInherit Class TimeSeriesFile
 
             Case FileExtensions.DAT
                 'Check file format
-                If Fileformats.HYDRO_AS_2D.verifyFormat(file) Then
-                    'HYDRO-AS_2D result file
-                    Log.AddLogEntry(levels.info, $"Detected HYDRO_AS-2D result format for file {fileName}.")
-                    fileType = FileTypes.HYDRO_AS_DAT
-                ElseIf Fileformats.HystemExtran_REG.verifyFormat(file) Then
+                If Fileformats.HystemExtran_REG.verifyFormat(file) Then
                     'Hystem-Extran rainfall file
                     Log.AddLogEntry(levels.info, $"Detected Hystem-Extran rainfall format for file {fileName}.")
                     fileType = FileTypes.HYSTEM_REG
@@ -681,8 +661,18 @@ Public MustInherit Class TimeSeriesFile
                     'PRMS result file
                     Log.AddLogEntry(levels.info, $"Detected PRMS result format for file {fileName}.")
                     fileType = FileTypes.PRMS_OUT
-                Else
-                    Throw New Exception($"File {fileName} has an unknown format!")
+                ElseIf Fileformats.JAMS.verifyFormat(file) Then
+                    'JAMS result file
+                    Log.AddLogEntry(levels.info, $"Detected JAMS result format for file {fileName}.")
+                    fileType = FileTypes.JAMS
+                ElseIf Fileformats.SWMM_TIMESERIES.verifyFormat(file) Then
+                    'SWMM time series format
+                    Log.AddLogEntry(levels.info, $"Detected SWMM time series format for file {fileName}.")
+                    fileType = FileTypes.SWMM_TIMESERIES
+                ElseIf Fileformats.HYDRO_AS_2D.verifyFormat(file) Then
+                    'HYDRO-AS_2D result file
+                    Log.AddLogEntry(levels.info, $"Detected HYDRO_AS-2D result format for file {fileName}.")
+                    fileType = FileTypes.HYDRO_AS_DAT
                 End If
 
             Case FileExtensions.DB
@@ -714,8 +704,6 @@ Public MustInherit Class TimeSeriesFile
                     'Hystem-Extran rainfall file
                     Log.AddLogEntry(levels.info, $"Detected Hystem-Extran rainfall format for file {fileName}.")
                     fileType = FileTypes.HYSTEM_REG
-                Else
-                    Throw New Exception($"File {fileName} has an unknown format!")
                 End If
 
             Case FileExtensions.SMB
@@ -736,18 +724,12 @@ Public MustInherit Class TimeSeriesFile
                     'SWMM routing interface file
                     Log.AddLogEntry(levels.info, $"Detected SWMM routing interface file format for file {fileName}.")
                     fileType = FileTypes.SWMM_INTERFACE
-                Else
-                    'Other text files can usually be read as CSV files
-                    Log.AddLogEntry(levels.info, $"Assuming CSV format for file {fileName}.")
-                    fileType = FileTypes.CSV
                 End If
 
             Case FileExtensions.UVF
                 'Check file format
                 If Fileformats.UVF.verifyFormat(file) Then
                     fileType = FileTypes.UVF
-                Else
-                    Throw New Exception($"File {fileName} has an unexpected format!")
                 End If
 
             Case FileExtensions.WBL
@@ -756,8 +738,6 @@ Public MustInherit Class TimeSeriesFile
                     'SYDRO binary WEL file
                     Log.AddLogEntry(levels.info, $"Detected SYDRO binary WEL format for file {fileName}.")
                     fileType = FileTypes.WBL
-                Else
-                    Throw New Exception($"File {fileName} has an unexpected format!")
                 End If
 
             Case FileExtensions.WEL, FileExtensions.KWL
@@ -774,8 +754,6 @@ Public MustInherit Class TimeSeriesFile
                     'SYDRO binary WEL file
                     Log.AddLogEntry(levels.info, $"Detected SYDRO binary WEL format for file {fileName}.")
                     fileType = FileTypes.WBL
-                Else
-                    Throw New Exception($"File {fileName} has an unknown format!")
                 End If
 
             Case FileExtensions.WVP
@@ -792,10 +770,14 @@ Public MustInherit Class TimeSeriesFile
 
             Case Else
                 'Unknown filetype
-                Log.AddLogEntry(levels.warning, $"Unable to determine file type of file {fileName}!")
                 fileType = FileTypes.UNKNOWN
 
         End Select
+
+        'Unknown filetype
+        If fileType = FileTypes.UNKNOWN Then
+            Log.AddLogEntry(levels.warning, $"Unable to determine file type of file {fileName}!")
+        End If
 
         Return fileType
 
@@ -838,20 +820,20 @@ Public MustInherit Class TimeSeriesFile
                 FileInstance = New Fileformats.HystemExtran_REG(file)
             Case FileTypes.HYSTEM_WEL
                 FileInstance = New Fileformats.HystemExtran_WEL(file)
+            Case FileTypes.JAMS
+                FileInstance = New Fileformats.JAMS(file)
             Case FileTypes.PRMS_OUT
                 FileInstance = New Fileformats.PRMS(file)
             Case FileTypes.SMB
                 FileInstance = New Fileformats.SMB(file)
             Case FileTypes.SMUSI_REG
                 FileInstance = New Fileformats.SMUSI_REG(file)
-            Case FileTypes.SWMM_DAT_MASS
-                Throw New NotImplementedException("Reading files of type DAT_SWMM_MASS is not yet implemented!")
-            Case FileTypes.SWMM_DAT_TIME
-                Throw New NotImplementedException("Reading files of type DAT_SWMM_TIME is not yet implemented!")
             Case FileTypes.SWMM_INTERFACE
                 FileInstance = New Fileformats.SWMM_INTERFACE(file)
             Case FileTypes.SWMM_LID_REPORT
                 FileInstance = New Fileformats.SWMM_LID_REPORT(file)
+            Case FileTypes.SWMM_TIMESERIES
+                FileInstance = New Fileformats.SWMM_TIMESERIES(file)
             Case FileTypes.SWMM_OUT
                 FileInstance = New Fileformats.SWMM_OUT(file)
             Case FileTypes.SYDROSQLITE

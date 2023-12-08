@@ -349,7 +349,7 @@ Namespace Fileformats
             StrRead.Close()
             FiStr.Close()
 
-            If Zeile.Length >= 8 Then
+            If Zeile.Length >= 13 Then
                 If (Zeile.Substring(5, 8) = " 0 0   0") Then
                     'Es ist eine Hystem-Regenreihe!
                     Return True

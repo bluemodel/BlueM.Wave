@@ -54,6 +54,7 @@ Public Class TimeSeries
     Private _Type As String
     Private _Interpretation As InterpretationEnum
     Private _DataSource As TimeSeriesDataSource
+    Private _displayOptions As TimeSeriesDisplayOptions
 
 #End Region 'Members
 
@@ -78,24 +79,6 @@ Public Class TimeSeries
         End Get
         Set(value As String)
             _title = value
-        End Set
-    End Property
-
-    Public Property Objekt() As String
-        Get
-            Return _Objekt
-        End Get
-        Set(value As String)
-            _Objekt = value
-        End Set
-    End Property
-
-    Public Property Type() As String
-        Get
-            Return _Type
-        End Get
-        Set(value As String)
-            _Type = value
         End Set
     End Property
 
@@ -275,6 +258,19 @@ Public Class TimeSeries
     End Property
 
     ''' <summary>
+    ''' Options for displaying the time series
+    ''' </summary>
+    ''' <returns></returns>
+    Public Property DisplayOptions As TimeSeriesDisplayOptions
+        Get
+            Return _displayOptions
+        End Get
+        Set(value As TimeSeriesDisplayOptions)
+            _displayOptions = value
+        End Set
+    End Property
+
+    ''' <summary>
     ''' Returns the start date of the time series
     ''' </summary>
     Public ReadOnly Property StartDate() As DateTime
@@ -397,34 +393,55 @@ Public Class TimeSeries
     ''' </summary>
     ''' <value></value>
     ''' <returns></returns>
-    ''' <remarks>If the unit is per second (ends with "/s"), values are integrated over time using a linear interpretation. 
-    ''' Otherwise, NaN is returned.</remarks>
+    ''' <remarks>
+    ''' Only works for time-based units that end with "/s", "/min", "/h" or "/d"
+    ''' and interpretations Instantaneous, BlockLeft and BlockRight. 
+    ''' Otherwise returns NaN.
+    ''' </remarks>
     Public ReadOnly Property Volume() As Double
         Get
-            Dim v0, v1, vol As Double
-            Dim t0, t1 As DateTime
-            Dim dt As TimeSpan
+            Dim v1, v2, partial_volume, total_volume As Double
+            Dim t1, t2 As DateTime
 
-            If Me.Unit.ToLower.EndsWith("/s") And Me.NodesClean.Count > 0 Then
-                Log.AddLogEntry(Log.levels.debug, "Calculating volume by integrating over time for series " & Me.Title)
-                t0 = Me.NodesClean.First().Key
-                v0 = Me.NodesClean.First().Value
-                vol = 0.0
-                For Each node As KeyValuePair(Of Date, Double) In Me.NodesClean
-                    t1 = node.Key
-                    v1 = node.Value
-                    If t1 > t0 Then 'start at the second node
-                        dt = t1 - t0
-                        vol += (v0 + v1) / 2 * dt.TotalSeconds 'linear interpretation!
-                    End If
-                    t0 = t1
-                    v0 = v1
-                Next
-            Else
-                vol = Double.NaN
+            If Me.NodesClean.Count = 0 Then
+                Return Double.NaN
             End If
 
-            Return vol
+            If Me.Interpretation = InterpretationEnum.CumulativePerTimestep _
+                Or Me.Interpretation = InterpretationEnum.Cumulative _
+                Or Me.Interpretation = InterpretationEnum.Undefined Then
+                Return Double.NaN
+            End If
+
+            'determine timestep type of unit
+            Dim unitTimesteptype As TimeStepTypeEnum
+            If Me.Unit.ToLower.EndsWith("/s") Then
+                unitTimesteptype = TimeStepTypeEnum.Second
+            ElseIf Me.Unit.ToLower.EndsWith("/min") Then
+                unitTimesteptype = TimeStepTypeEnum.Minute
+            ElseIf Me.Unit.ToLower.EndsWith("/h") Then
+                unitTimesteptype = TimeStepTypeEnum.Hour
+            ElseIf Me.Unit.ToLower.EndsWith("/d") Then
+                unitTimesteptype = TimeStepTypeEnum.Day
+            Else
+                'not a unit supported for volume calculation
+                Return Double.NaN
+            End If
+
+            'Integrate volume between each node and cumulate
+            total_volume = 0.0
+            For i As Integer = 1 To Me.Length - 1
+                t1 = Me.Nodes.Keys(i - 1)
+                v1 = Me.Nodes.Values(i - 1)
+                t2 = Me.Nodes.Keys(i)
+                v2 = Me.Nodes.Values(i)
+                partial_volume = TimeSeries.IntegrateVolume(t1, v1, t2, v2, Me.Interpretation, unitTimesteptype)
+                If Not Double.IsNaN(partial_volume) Then
+                    total_volume += partial_volume
+                End If
+            Next
+
+            Return total_volume
         End Get
     End Property
 
@@ -448,10 +465,9 @@ Public Class TimeSeries
         Me._metadata = New Metadata()
         Me._title = title
         Me._unit = "-"
-        Me._Objekt = "-"
-        Me._Type = "-"
         Me._Interpretation = InterpretationEnum.Undefined
         Me.DataSource = New TimeSeriesDataSource(TimeSeriesDataSource.OriginEnum.Undefined)
+        Me.DisplayOptions = New TimeSeriesDisplayOptions()
         Me._nodes = New SortedList(Of DateTime, Double)
     End Sub
 
@@ -465,15 +481,18 @@ Public Class TimeSeries
     ''' <summary>
     ''' Clones a time series
     ''' </summary>
-    Public Function Clone() As TimeSeries
+    ''' <param name="preserveId">if True, the Id is preserved, otherwise a new unique Id is assigned (default)</param>
+    Public Function Clone(Optional preserveId As Boolean = False) As TimeSeries
         Dim target As New TimeSeries(Me.Title)
+        If preserveId Then
+            target._id = Me.Id
+        End If
         target.Unit = Me.Unit
-        target.Objekt = Me.Objekt
-        target.Type = Me.Type
         target._nodes = New SortedList(Of DateTime, Double)(Me._nodes)
         target.Metadata = Me.Metadata.Copy()
         target._Interpretation = Me.Interpretation
         target.DataSource = Me.DataSource.Copy()
+        target.DisplayOptions = Me.DisplayOptions.Copy()
         Return target
     End Function
 
@@ -753,11 +772,10 @@ Public Class TimeSeries
             If Me.Dates(i) >= t_start Then
                 Select Case Me.Interpretation
                     Case InterpretationEnum.BlockLeft,
-                     InterpretationEnum.Cumulative,
-                     InterpretationEnum.CumulativePerTimestep
+                         InterpretationEnum.CumulativePerTimestep
                         i_start = i
                     Case InterpretationEnum.Instantaneous,
-                     InterpretationEnum.BlockRight
+                         InterpretationEnum.BlockRight
                         i_start = Math.Max(i - 1, 0)
                 End Select
                 Exit For
@@ -824,8 +842,6 @@ Public Class TimeSeries
                             value = volume / dt.TotalSeconds
                         Case InterpretationEnum.CumulativePerTimestep
                             value = cumval
-                        Case InterpretationEnum.Cumulative
-                            'TODO
                     End Select
                     'set timestamp depending on interpretation
                     Select Case outputInterpretation
@@ -833,16 +849,16 @@ Public Class TimeSeries
                              InterpretationEnum.BlockRight
                             t = t_start
                         Case InterpretationEnum.BlockLeft,
-                             InterpretationEnum.Cumulative,
                              InterpretationEnum.CumulativePerTimestep
                             t = t_end
                     End Select
+                    'store new node
                     ts.AddNode(t, value)
-                    volume = 0.0
-                    cumval = 0.0
                     'advance to next timestep
                     t_start = t_end
                     t_end = TimeSeries.AddTimeInterval(t_start, timesteptype, timestepinterval)
+                    volume = 0.0
+                    cumval = 0.0
                     timestep_full = False
                 End If
             Loop
@@ -892,194 +908,6 @@ Public Class TimeSeries
     End Function
 
     ''' <summary>
-    ''' Erstellt eine neue äquidistante Zeitreihe, neue Stützstellen kriegen den Wert 0
-    ''' </summary>
-    ''' <param name="Soll_dT">Sollzeitschritt (in Minuten)</param>      
-    Friend Function getKontiZRE(Soll_dT As Integer) As TimeSeries
-
-        Dim i As Integer
-        Dim intloop As Integer
-        Dim Ist_dT As Integer
-        Dim AnzZusWerte As Integer
-        Dim SumZusWerte As Long
-
-        Dim OutZR As New TimeSeries("Konti_" & Me.Title)
-        OutZR.Unit = Me.Unit
-
-        SumZusWerte = 0
-        For i = 0 To Me.Length - 2
-
-            AnzZusWerte = 0
-            Ist_dT = DateDiff(DateInterval.Minute, Me.Dates(i), Me.Dates(i + 1))
-
-            If (Ist_dT - Soll_dT > 0) Then
-                AnzZusWerte = (Ist_dT / Soll_dT) - 1
-                SumZusWerte = SumZusWerte + AnzZusWerte
-                OutZR.AddNode(Me.Dates(i), Me.Values(i))
-                For intloop = 1 To AnzZusWerte
-                    OutZR.AddNode(Dates(i).AddMinutes(intloop * Soll_dT), 0.0)
-                Next
-            Else
-                OutZR.AddNode(Me.Dates(i), Me.Values(i))
-            End If
-        Next
-
-        'letzten Wert schreiben
-        OutZR.AddNode(Me.Dates(i), Me.Values(i))
-
-        Return OutZR
-
-    End Function
-
-    ''' <summary>
-    ''' Erstellt eine neue äquidistante Zeitreihe, neue Stützstellen kriegen aus original Zeitreihe konvertierten Wert, geignet für Massenbezogenen Zeitreihen
-    ''' </summary>
-    ''' <param name="Soll_dT">Sollzeitschritt (in Minuten)</param>      
-    Friend Function getKontiZRE2(Soll_dT As Integer) As TimeSeries
-
-        Dim i, j As Integer
-        Dim intloop As Integer
-        Dim n_dT As Integer
-        Dim NewNodes As Integer
-        Dim newValue As Double
-        Dim sumValues As Double
-
-        Dim TempZR As New TimeSeries("Temp_" & Me.Title)
-        Dim OutZR As New TimeSeries("Konti_" & Me.Title)
-        OutZR.Unit = Me.Unit
-
-        'Zuerst wird eine Zeitreihe auf der Basis von Minutenwerten erstellt (kleinst mögliche Einheit)
-        For i = 0 To Me.Length - 2
-
-            NewNodes = 0
-            n_dT = DateDiff(DateInterval.Minute, Me.Dates(i), Me.Dates(i + 1))
-            NewNodes = n_dT
-
-            If NewNodes > 1 Then
-                newValue = Me.Values(i) / NewNodes
-                TempZR.AddNode(Me.Dates(i), newValue)
-                For intloop = 1 To NewNodes - 1
-                    TempZR.AddNode(Dates(i).AddMinutes(intloop), newValue)
-                Next
-            Else
-                TempZR.AddNode(Me.Dates(i), Me.Values(i))
-            End If
-        Next
-
-        TempZR.AddNode(Me.Dates(i), Me.Values(i))
-
-
-        'Zeitreihe mit neuer Schrittweite wird generiert
-
-        'Die Zeitreihe sollte mindestens einen Sollzeitschritt umfassen
-        If TempZR.Length < Soll_dT Then
-            Throw New Exception("Die Zeitreihe umfasst nicht genug Werte für die definierte Zeitschrittlänge")
-        End If
-        'Abarbeiten aller Werte die innerhalb ganzer Sollzeitschritte liegen.
-        i = 0
-        Do While i <= TempZR.Length - Soll_dT
-            j = 0
-            sumValues = 0
-            For j = 0 To Soll_dT - 1
-                sumValues += TempZR.Values(i + j)
-            Next
-            OutZR.AddNode(TempZR.Dates(i), sumValues)
-            i += Soll_dT
-        Loop
-
-        'Aufaddieren des Rests
-        If i Mod 5 <> 0 Then
-            sumValues = 0
-            For j = i To TempZR.Length - 1
-                sumValues += TempZR.Values(j)
-            Next
-
-            'letzten Wert schreiben
-            OutZR.AddNode(TempZR.Dates(i), sumValues)
-
-        End If
-
-        Return OutZR
-
-
-    End Function
-
-    ''' <summary>
-    ''' Erstellt eine neue äquidistante Zeitreihe, neue Stützstellen kriegen aus original Zeitreihe konvertierten Wert, geignet für zeitabhängige Zeitreihen
-    ''' </summary>
-    ''' <param name="Soll_dT">Sollzeitschritt (in Minuten)</param>      
-    Friend Function getKontiZRE3(Soll_dT As Integer) As TimeSeries
-
-        Dim i As Integer
-        Dim intloop As Integer
-        Dim n_dT As Integer
-        Dim NewNodes As Integer
-        Dim newValue As Double
-
-        Dim TempZR As New TimeSeries("Temp_" & Me.Title)
-        Dim OutZR As New TimeSeries("Konti_" & Me.Title)
-        OutZR.Unit = Me.Unit
-
-        'Zuerst wird eine Zeitreihe auf der Basis von Minutenwerten erstellt (kleinst mögliche Einheit)
-        For i = 0 To Me.Length - 2
-
-            NewNodes = 0
-            n_dT = DateDiff(DateInterval.Minute, Me.Dates(i), Me.Dates(i + 1))
-            NewNodes = n_dT
-
-            If NewNodes > 1 Then
-                newValue = Me.Values(i)
-                TempZR.AddNode(Me.Dates(i), newValue)
-                For intloop = 1 To NewNodes - 1
-                    TempZR.AddNode(Dates(i).AddMinutes(intloop), newValue)
-                Next
-            Else
-                TempZR.AddNode(Me.Dates(i), Me.Values(i))
-            End If
-        Next
-
-        TempZR.AddNode(Me.Dates(i), Me.Values(i))
-
-
-        'Zeitreihe mit neuer Schrittweite wird generiert
-
-        'Die Zeitreihe sollte mindestens einen Sollzeitschritt umfassen
-        If TempZR.Length < Soll_dT Then
-            Throw New Exception("Die Zeitreihe umfasst nicht genug Werte für die definierte Zeitschrittlänge")
-        End If
-        'Abarbeiten aller Werte die innerhalb ganzer Sollzeitschritte liegen.
-        i = 0
-        Do While i <= TempZR.Length - Soll_dT
-            'j = 0
-            'sumValues = 0
-            'For j = 0 To Soll_dT - 1
-            '    sumValues += TempZR.YWerte(i + j)
-            'Next
-            'newValue = sumValues / Soll_dT
-            'OutZR.AddNode(TempZR.XWerte(i), newValue)
-            'i += Soll_dT
-            OutZR.AddNode(TempZR.Dates(i), TempZR.Values(i))
-            i += Soll_dT
-        Loop
-
-        'Aufaddieren des Rests
-        If i Mod 5 <> 0 Then
-            'sumValues = 0
-            'For j = i To TempZR.Length - 1
-            '    sumValues += TempZR.YWerte(j)
-            'Next
-            'newValue = sumValues / Soll_dT
-            ''letzten Wert schreiben
-            'OutZR.AddNode(TempZR.XWerte(i), sumValues)
-            OutZR.AddNode(TempZR.Dates(i), TempZR.Values(i))
-        End If
-
-        Return OutZR
-
-
-    End Function
-
-    ''' <summary>
     ''' Creates a copy of the time series in which all nodes with specified error values are converted to NaN
     ''' </summary>
     ''' <param name="errorvalues">array of error values to ignore</param>
@@ -1098,8 +926,6 @@ Public Class TimeSeries
         'copy metadata
         tsConverted.Unit = Me.Unit
         tsConverted.Interpretation = Me.Interpretation
-        tsConverted.Objekt = Me.Objekt
-        tsConverted.Type = Me.Type
         tsConverted.Metadata = Me.Metadata
 
         Log.AddLogEntry(Log.levels.info, $"Converting error values from series {Me.Title}...")
@@ -1157,8 +983,6 @@ Public Class TimeSeries
         'copy metadata
         tsCleaned.Unit = Me.Unit
         tsCleaned.Interpretation = Me.Interpretation
-        tsCleaned.Objekt = Me.Objekt
-        tsCleaned.Type = Me.Type
         tsCleaned.Metadata = Me.Metadata.Copy()
         tsCleaned.DataSource = New TimeSeriesDataSource(TimeSeriesDataSource.OriginEnum.AnalysisResult)
 
@@ -1299,30 +1123,56 @@ Public Class TimeSeries
     End Function
 
     ''' <summary>
-    ''' Integrates the volume between two nodes while respecting the interpretation
-    ''' Assumes a unit in /s
+    ''' Integrates the volume between two nodes while respecting interpretation and unit
     ''' </summary>
     ''' <param name="t1">First timestamp</param>
     ''' <param name="v1">First value</param>
     ''' <param name="t2">Second timestamp</param>
     ''' <param name="v2">Second value</param>
     ''' <param name="interpretation">Interpretation to use</param>
+    ''' <param name="unitTimeStepType">TimeStepType of the unit, default is <see cref="TimeStepTypeEnum.Second">per second</see></param>
     ''' <returns>The volume</returns>
-    Public Shared Function IntegrateVolume(t1 As DateTime, v1 As Double, t2 As DateTime, v2 As Double, interpretation As InterpretationEnum) As Double
-        Dim volume As Double
+    Public Shared Function IntegrateVolume(t1 As DateTime, v1 As Double, t2 As DateTime, v2 As Double, interpretation As InterpretationEnum, Optional unitTimeStepType As TimeStepTypeEnum = TimeStepTypeEnum.Second) As Double
+
+        Dim value, volume As Double
         Dim dt As TimeSpan = t2 - t1
+
+        'determine applicable value depending on interpretation
         Select Case interpretation
             Case InterpretationEnum.Instantaneous
-                volume = (v1 + v2) / 2 * dt.TotalSeconds
+                value = (v1 + v2) / 2
             Case InterpretationEnum.BlockRight
-                volume = v1 * dt.TotalSeconds
+                value = v1
             Case InterpretationEnum.BlockLeft,
                  InterpretationEnum.CumulativePerTimestep
-                volume = v2 * dt.TotalSeconds
+                value = v2
+            Case InterpretationEnum.Cumulative
+                value = v2 - v1
             Case Else
                 Throw New NotImplementedException($"Integration between nodes with interpretation {[Enum].GetName(GetType(InterpretationEnum), interpretation)} is currently not implemented!")
         End Select
+
+        If interpretation = InterpretationEnum.CumulativePerTimestep Then
+            'value is by definition already the sum/volume, no need to consider the time span
+            volume = value
+        Else
+            'mutiply value by time span to get volume
+            Select Case unitTimeStepType
+                Case TimeStepTypeEnum.Second
+                    volume = value * dt.TotalSeconds
+                Case TimeStepTypeEnum.Minute
+                    volume = value * dt.TotalMinutes
+                Case TimeStepTypeEnum.Hour
+                    volume = value * dt.TotalHours
+                Case TimeStepTypeEnum.Day
+                    volume = value * dt.TotalDays
+                Case Else
+                    Throw New NotImplementedException($"Integration between nodes with unit time step type {[Enum].GetName(GetType(TimeStepTypeEnum), unitTimeStepType)} is currently not implemented!")
+            End Select
+        End If
+
         Return volume
+
     End Function
 
     ''' <summary>

@@ -16,15 +16,13 @@
 'along with this program.  If not, see <https://www.gnu.org/licenses/>.
 '
 ''' <summary>
-''' Cumulative analysis
+''' Decumulates time series
 ''' </summary>
-Friend Class Cumulative
+Friend Class Decumulate
     Inherits Analysis
 
-#Region "Properties"
-
     Public Overloads Shared Function Description() As String
-        Return "For each selected time series, calculates a new time series that consists of the cumulative values of the original series. NaN values are ignored."
+        Return "For each selected time series, calculates a new time series that consists of the decumulated values of the original series. NaN values are ignored."
     End Function
 
     ''' <summary>
@@ -70,10 +68,6 @@ Friend Class Cumulative
         End Get
     End Property
 
-#End Region 'Properties
-
-#Region "Methoden"
-
     ''' <summary>
     ''' Constructor
     ''' </summary>
@@ -84,54 +78,54 @@ Friend Class Cumulative
 
     ''' <summary>
     ''' Process the analysis
-    ''' Creates new result time series that contain the cumulative values of the original series
+    ''' Creates new result time series that contain the decumulated values of the original series
     ''' </summary>
     Public Overrides Sub ProcessAnalysis()
 
         Dim i As Integer
-        Dim sum As Double
-        Dim startdate As DateTime
-        Dim ts, ts_cum As TimeSeries
+        Dim value, last_value As Double
+        Dim ts, ts_decum As TimeSeries
 
-        'show dialog
-        Dim dlg As New CumulativeDialog(MyBase.InputTimeSeries)
-        If dlg.ShowDialog() = DialogResult.OK Then
+        For Each ts In MyBase.InputTimeSeries
 
-            'get start date from dialog
-            startdate = CType(dlg.MaskedTextBox_Start.ValidateText(), DateTime)
+            If Not ts.Interpretation = TimeSeries.InterpretationEnum.Cumulative Then
+                Log.AddLogEntry(levels.error, $"Time series {ts.Title} with interpretation {[Enum].GetName(GetType(TimeSeries.InterpretationEnum), ts.Interpretation)} cannot be deculumated!")
+                Continue For
+            End If
 
-            For Each ts In MyBase.InputTimeSeries
+            'create new decumulated timeseries
+            ts_decum = New TimeSeries($"{ts.Title} (decumulated)")
+            ts_decum.Unit = ts.Unit
+            ts_decum.Interpretation = TimeSeries.InterpretationEnum.CumulativePerTimestep
+            ts_decum.DataSource = New TimeSeriesDataSource(TimeSeriesDataSource.OriginEnum.AnalysisResult)
 
-                'cut time series to startdate
-                ts.Cut(startdate, ts.EndDate)
+            'copy first node unchanged
+            ts_decum.AddNode(ts.StartDate, ts.FirstValue)
 
-                'create new cumulative timeseries
-                ts_cum = New TimeSeries($"{ts.Title} (cumulative)")
-                ts_cum.Unit = ts.Unit
-                ts_cum.Interpretation = TimeSeries.InterpretationEnum.Cumulative
-                ts_cum.DataSource = New TimeSeriesDataSource(TimeSeriesDataSource.OriginEnum.AnalysisResult)
+            'loop over remaining nodes
+            last_value = ts.FirstValue
+            For i = 1 To ts.Length - 1
 
-                sum = 0.0
-                For i = 0 To ts.Length - 1
-                    If i <> 0 And i <> ts.Length - 1 Then
-                        If ts.Values(i) = 0.0 And ts.Values(i + 1) = 0.0 Then
-                            'omit intermediate nodes where the cumulative value does not change
-                            Continue For
-                        End If
-                    End If
-                    If Double.IsNaN(ts.Values(i)) Then
-                        'omit NaN values
-                        Continue For
-                    End If
-                    sum += ts.Values(i)
-                    ts_cum.AddNode(ts.Dates(i), sum)
-                Next
+                If Double.IsNaN(ts.Values(i)) Then
+                    'omit NaN values
+                    Continue For
+                End If
 
-                MyBase.ResultSeries.Add(ts_cum)
+                'decumulate
+                value = ts.Values(i) - last_value
 
+                'add new node
+                ts_decum.AddNode(ts.Dates(i), value)
+
+                'store last value
+                last_value = ts.Values(i)
             Next
 
-        End If
+            'store result series
+            MyBase.ResultSeries.Add(ts_decum)
+
+        Next
+
     End Sub
 
     ''' <summary>
@@ -140,7 +134,5 @@ Friend Class Cumulative
     Public Overrides Sub PrepareResults()
         'nothing to do
     End Sub
-
-#End Region 'Methoden
 
 End Class

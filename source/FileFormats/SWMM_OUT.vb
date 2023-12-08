@@ -21,15 +21,14 @@ Imports System.Globalization
 Namespace Fileformats
 
     ''' <summary>
-    ''' Klasse für SWMM out-Dateiformat (Binärer SWMM Ergebnisfile)
+    ''' Class for reading the SWMM binary output format
     ''' </summary>
-    ''' <remarks>Format siehe https://wiki.bluemodel.org/index.php/SWMM_file_formats </remarks>
+    ''' <remarks>See https://wiki.bluemodel.org/index.php/SWMM_file_formats </remarks>
     ''' 
     Public Class SWMM_OUT
         Inherits TimeSeriesFile
         Protected oSWMM As modelEAU.SWMM.DllAdapter.SWMM_iface
 
-        Private anzSpalten As Integer
         Private nSubcatch As Integer
         Private nNodes As Integer
         Private nLinks As Integer
@@ -38,36 +37,85 @@ Namespace Fileformats
         Private nNodesVars As Integer
         Private nLinksVars As Integer
         Private nSysvars As Integer
-        Private FlowUnits As Integer
-
-        Private Structure SWMM_Binary_file_Definition
-            'iType = type of object whose value is being sought
-            '(0 = subcatchment, 1 = node, 2 = link, 3 = system)
-            'iIndex = index of item being sought (starting from 0)
-            'vIndex = index of variable being sought (see Interfacing Guide)
-            Dim iType As Integer
-            Dim iIndex As Integer
-            Dim vIndex As Integer
-        End Structure
-        Private SWMMBinaryFileIndex() As SWMM_Binary_file_Definition
-
+        Private FlowUnit As FlowUnits
 
         ''' <summary>
-        ''' Gibt an, ob beim Import des Dateiformats der Importdialog angezeigt werden soll
+        ''' Element types
         ''' </summary>
+        ''' <remarks>see https://github.com/USEPA/Stormwater-Management-Model/blob/master/src/outfile/include/swmm_output_enums.h#L36</remarks>
+        Private Enum Type As Integer
+            Subcatchment = 0
+            Node = 1
+            Link = 2
+            System = 3
+            Pollutant = 4
+        End Enum
+
+        ''' <summary>
+        ''' Flow units
+        ''' </summary>
+        ''' <remarks>see https://github.com/USEPA/Stormwater-Management-Model/blob/master/src/outfile/include/swmm_output_enums.h#L20</remarks>
+        Private Enum FlowUnits As Integer
+            CFS = 0
+            GPM = 1
+            MGD = 2
+            CMS = 3
+            LPS = 4
+            MLD = 5
+        End Enum
+
+        ''' <summary>
+        ''' Structure for storing SWMM series information
+        ''' </summary>
+        Private Structure SWMMSeriesInfo
+            ''' <summary>
+            ''' element type
+            ''' </summary>
+            Dim iType As Type
+            ''' <summary>
+            ''' element index (0-based)
+            ''' </summary>
+            Dim iIndex As Integer
+            ''' <summary>
+            ''' element name
+            ''' </summary>
+            Dim Name As String
+            ''' <summary>
+            ''' variable name
+            ''' </summary>
+            Dim Variable As String
+            ''' <summary>
+            ''' variable index (see https://github.com/USEPA/Stormwater-Management-Model/blob/master/src/outfile/include/swmm_output_enums.h)
+            ''' </summary>
+            Dim vIndex As Integer
+        End Structure
+
+        ''' <summary>
+        ''' Dictionary containing all SWMM series infos
+        ''' Key is series index
+        ''' </summary>
+        Private swmmInfos As Dictionary(Of Integer, SWMMSeriesInfo)
+
+        ''' <summary>
+        ''' Returns a list of SWMM binary output file specific metadata keys
+        ''' </summary>
+        Public Overloads Shared ReadOnly Property MetadataKeys() As List(Of String)
+            Get
+                Dim keys As New List(Of String) From {
+                    "Type",
+                    "Name",
+                    "Variable"
+                }
+                Return keys
+            End Get
+        End Property
+
         Public Overrides ReadOnly Property UseImportDialog() As Boolean
             Get
                 Return True
             End Get
         End Property
 
-#Region "Methoden"
-
-        'Methoden
-        '########
-
-        'Konstruktor
-        '***********
         Public Sub New(FileName As String, Optional ReadAllNow As Boolean = False)
 
             MyBase.New(FileName)
@@ -93,17 +141,15 @@ Namespace Fileformats
 
         End Sub
 
-        'Spalten auslesen
-        '****************
         Public Overrides Sub readSeriesInfo()
 
-            'TODO: Make sure that all series names are unique!
-
             Dim i, j, index As Integer
-            Dim indexSpalten As Integer
+            Dim iType As Type
+            Dim indexOffset As Integer
             Dim sInfo As TimeSeriesInfo
 
             Me.TimeSeriesInfos.Clear()
+            Me.swmmInfos = New Dictionary(Of Integer, SWMMSeriesInfo)
 
             oSWMM.OpenSwmmOutFile(Me.File)
 
@@ -115,170 +161,175 @@ Namespace Fileformats
             nSubcatchVars = oSWMM.nSUBCATCHVARS
             nNodesVars = oSWMM.nNODEVARS
             nLinksVars = oSWMM.nLINKVARS
-            FlowUnits = oSWMM.FlowUnits
+            FlowUnit = oSWMM.FlowUnits
 
-            'Spaltenüberschriften
-            anzSpalten = nSubcatch * nSubcatchVars _
-                   + nNodes * nNodesVars _
-                   + nLinks * nLinksVars _
-                   + nSysvars
-
-            ReDim SWMMBinaryFileIndex(anzSpalten - 1)
-
-            indexSpalten = 0
+            'loop over subcatchments
+            indexOffset = 0
+            iType = Type.Subcatchment
             For i = 0 To nSubcatch - 1
                 'Flows
                 For j = 0 To nSubcatchVars - nPolluts - 1
-                    index = indexSpalten + i * nSubcatchVars + j
+                    index = indexOffset + i * nSubcatchVars + j
                     sInfo = New TimeSeriesInfo()
-                    sInfo.Name = $"{oSWMM.subcatchments(i)} {oSWMM.SUBCATCHVAR(j)}"
-                    sInfo.Objekt = oSWMM.subcatchments(i)
-                    sInfo.Unit = Units(0, j, FlowUnits)
-                    sInfo.Type = "FLOW"
-                    sInfo.ObjType = "Subcatchment"
+                    sInfo.Name = $"Subcatchment {oSWMM.subcatchments(i)} {oSWMM.SUBCATCHVAR(j)}"
+                    sInfo.Unit = getUnit(iType, j, FlowUnit)
                     sInfo.Index = index
                     Me.TimeSeriesInfos.Add(sInfo)
-                    SWMMBinaryFileIndex(index).iType = 0
-                    SWMMBinaryFileIndex(index).iIndex = i
-                    SWMMBinaryFileIndex(index).vIndex = j
+                    'store SWMM info
+                    Dim swmmInfo As New SWMMSeriesInfo()
+                    swmmInfo.iType = iType
+                    swmmInfo.Name = oSWMM.subcatchments(i)
+                    swmmInfo.Variable = "FLOW"
+                    swmmInfo.iIndex = i
+                    swmmInfo.vIndex = j
+                    Me.swmmInfos.Add(index, swmmInfo)
                 Next
                 'Pollutants
                 For j = nSubcatchVars - nPolluts To nSubcatchVars - 1
-                    index = indexSpalten + i * nSubcatchVars + j
+                    index = indexOffset + i * nSubcatchVars + j
                     sInfo = New TimeSeriesInfo()
-                    sInfo.Name = $"{oSWMM.subcatchments(i)} {oSWMM.pollutants(j - nSubcatchVars + nPolluts)}"
-                    sInfo.Objekt = oSWMM.subcatchments(i)
-                    sInfo.Unit = Units(0, j, FlowUnits)
-                    'Type aus String (z.B. für "S101 CSB" wird "CSB" ausgelesen)
-                    sInfo.Type = oSWMM.pollutants(j - nSubcatchVars + nPolluts)
-                    sInfo.ObjType = "Subcatchment"
+                    sInfo.Name = $"Subcatchment {oSWMM.subcatchments(i)} {oSWMM.pollutants(j - nSubcatchVars + nPolluts)}"
+                    sInfo.Unit = getUnit(iType, j, FlowUnit)
                     sInfo.Index = index
                     Me.TimeSeriesInfos.Add(sInfo)
-                    SWMMBinaryFileIndex(index).iType = 0
-                    SWMMBinaryFileIndex(index).iIndex = i
-                    SWMMBinaryFileIndex(index).vIndex = j
+                    'store SWMM info
+                    Dim swmmInfo As New SWMMSeriesInfo()
+                    swmmInfo.iType = iType
+                    swmmInfo.Name = oSWMM.subcatchments(i)
+                    swmmInfo.Variable = oSWMM.pollutants(j - nSubcatchVars + nPolluts)
+                    swmmInfo.iIndex = i
+                    swmmInfo.vIndex = j
+                    Me.swmmInfos.Add(index, swmmInfo)
                 Next
             Next
-            indexSpalten += nSubcatch * nSubcatchVars
+            'loop over nodes
+            indexOffset += nSubcatch * nSubcatchVars
+            iType = Type.Node
             For i = 0 To nNodes - 1
                 'Flows
                 For j = 0 To nNodesVars - nPolluts - 1
-                    index = indexSpalten + i * nNodesVars + j
+                    index = indexOffset + i * nNodesVars + j
                     sInfo = New TimeSeriesInfo()
-                    sInfo.Name = $"{oSWMM.nodes(i)} {oSWMM.NODEVAR(j)}"
-                    sInfo.Objekt = oSWMM.nodes(i)
-                    sInfo.Unit = Units(1, j, FlowUnits)
-                    sInfo.Type = "FLOW"
-                    sInfo.ObjType = "Node"
+                    sInfo.Name = $"Node {oSWMM.nodes(i)} {oSWMM.NODEVAR(j)}"
+                    sInfo.Unit = getUnit(iType, j, FlowUnit)
                     sInfo.Index = index
                     Me.TimeSeriesInfos.Add(sInfo)
-                    SWMMBinaryFileIndex(index).iType = 1
-                    SWMMBinaryFileIndex(index).iIndex = i
-                    SWMMBinaryFileIndex(index).vIndex = j
+                    'store SWMM info
+                    Dim swmmInfo As New SWMMSeriesInfo()
+                    swmmInfo.iType = iType
+                    swmmInfo.Name = oSWMM.nodes(i)
+                    swmmInfo.Variable = "FLOW"
+                    swmmInfo.iIndex = i
+                    swmmInfo.vIndex = j
+                    Me.swmmInfos.Add(index, swmmInfo)
                 Next
                 'Pollutants
                 For j = nNodesVars - nPolluts To nNodesVars - 1
-                    index = indexSpalten + i * nNodesVars + j
+                    index = indexOffset + i * nNodesVars + j
                     sInfo = New TimeSeriesInfo()
-                    sInfo.Name = $"{oSWMM.nodes(i)} {oSWMM.pollutants(j - nNodesVars + nPolluts)}"
-                    sInfo.Objekt = oSWMM.nodes(i)
-                    sInfo.Unit = Units(1, j, FlowUnits)
-                    'Type aus String (z.B. für "S101 CSB" wird "CSB" ausgelesen)
-                    sInfo.Type = oSWMM.pollutants(j - nNodesVars + nPolluts)
-                    sInfo.ObjType = "Node"
+                    sInfo.Name = $"Node {oSWMM.nodes(i)} {oSWMM.pollutants(j - nNodesVars + nPolluts)}"
+                    sInfo.Unit = getUnit(iType, j, FlowUnit)
                     sInfo.Index = index
                     Me.TimeSeriesInfos.Add(sInfo)
-                    SWMMBinaryFileIndex(index).iType = 1
-                    SWMMBinaryFileIndex(index).iIndex = i
-                    SWMMBinaryFileIndex(index).vIndex = j
+                    'store SWMM info
+                    Dim swmmInfo As New SWMMSeriesInfo()
+                    swmmInfo.iType = iType
+                    swmmInfo.Name = oSWMM.nodes(i)
+                    swmmInfo.Variable = oSWMM.pollutants(j - nNodesVars + nPolluts)
+                    swmmInfo.iIndex = i
+                    swmmInfo.vIndex = j
+                    Me.swmmInfos.Add(index, swmmInfo)
                 Next
             Next
-            indexSpalten += nNodes * nNodesVars
+            'loop over links
+            indexOffset += nNodes * nNodesVars
+            iType = Type.Link
             For i = 0 To nLinks - 1
                 'Flows
                 For j = 0 To nLinksVars - nPolluts - 1
-                    index = indexSpalten + i * nLinksVars + j
+                    index = indexOffset + i * nLinksVars + j
                     sInfo = New TimeSeriesInfo()
-                    sInfo.Name = $"{oSWMM.links(i)} {oSWMM.LINKVAR(j)}"
-                    sInfo.Objekt = oSWMM.links(i)
-                    sInfo.Unit = Units(2, j, FlowUnits)
-                    sInfo.Type = "FLOW"
-                    sInfo.ObjType = "Link"
+                    sInfo.Name = $"Link {oSWMM.links(i)} {oSWMM.LINKVAR(j)}"
+                    sInfo.Unit = getUnit(iType, j, FlowUnit)
                     sInfo.Index = index
                     Me.TimeSeriesInfos.Add(sInfo)
-                    SWMMBinaryFileIndex(index).iType = 2
-                    SWMMBinaryFileIndex(index).iIndex = i
-                    SWMMBinaryFileIndex(index).vIndex = j
+                    'store SWMM info
+                    Dim swmmInfo As New SWMMSeriesInfo()
+                    swmmInfo.iType = iType
+                    swmmInfo.Name = oSWMM.links(i)
+                    swmmInfo.Variable = "FLOW"
+                    swmmInfo.iIndex = i
+                    swmmInfo.vIndex = j
+                    Me.swmmInfos.Add(index, swmmInfo)
                 Next
                 'Pollutants
                 For j = nLinksVars - nPolluts To nLinksVars - 1
-                    index = indexSpalten + i * nLinksVars + j
+                    index = indexOffset + i * nLinksVars + j
                     sInfo = New TimeSeriesInfo()
-                    sInfo.Name = $"{oSWMM.links(i)} {oSWMM.pollutants(j - nLinksVars + nPolluts)}"
-                    sInfo.Objekt = oSWMM.links(i)
-                    sInfo.Unit = Units(2, j, FlowUnits)
-                    'Type aus String (z.B. für "S101 CSB" wird "CSB" ausgelesen)
-                    sInfo.Type = oSWMM.pollutants(j - nLinksVars + nPolluts)
-                    sInfo.ObjType = "Link"
+                    sInfo.Name = $"Link {oSWMM.links(i)} {oSWMM.pollutants(j - nLinksVars + nPolluts)}"
+                    sInfo.Unit = getUnit(iType, j, FlowUnit)
                     sInfo.Index = index
                     Me.TimeSeriesInfos.Add(sInfo)
-                    SWMMBinaryFileIndex(index).iType = 2
-                    SWMMBinaryFileIndex(index).iIndex = i
-                    SWMMBinaryFileIndex(index).vIndex = j
+                    'store SWMM info
+                    Dim swmmInfo As New SWMMSeriesInfo()
+                    swmmInfo.iType = iType
+                    swmmInfo.Name = oSWMM.links(i)
+                    swmmInfo.Variable = oSWMM.pollutants(j - nLinksVars + nPolluts)
+                    swmmInfo.iIndex = i
+                    swmmInfo.vIndex = j
+                    Me.swmmInfos.Add(index, swmmInfo)
                 Next
             Next
-            indexSpalten += nLinks * nLinksVars
+            'loop over system variables
+            indexOffset += nLinks * nLinksVars
+            iType = Type.System
             For i = 0 To nSysvars - 1
-                index = indexSpalten + i
+                index = indexOffset + i
                 sInfo = New TimeSeriesInfo()
-                sInfo.Name = oSWMM.SYSVAR(i)
-                sInfo.Unit = Units(3, j, FlowUnits)
+                sInfo.Name = $"System {oSWMM.SYSVAR(i)}"
+                sInfo.Unit = getUnit(iType, i, FlowUnit)
                 sInfo.Index = index
                 Me.TimeSeriesInfos.Add(sInfo)
-                SWMMBinaryFileIndex(index).iType = 3
-                SWMMBinaryFileIndex(index).iIndex = 0
-                SWMMBinaryFileIndex(index).vIndex = i
+                'store SWMM info
+                Dim swmmInfo As New SWMMSeriesInfo()
+                swmmInfo.iType = iType
+                swmmInfo.Name = "System"
+                swmmInfo.Variable = oSWMM.SYSVAR(i)
+                swmmInfo.iIndex = 0
+                swmmInfo.vIndex = i
+                Me.swmmInfos.Add(index, swmmInfo)
             Next
 
         End Sub
 
-#End Region
-
-
         Public Overrides Sub readFile()
-            Dim j, period As Integer
+
+            Dim period As Integer
             Dim value As Double
             Dim index As Integer
-            Dim anzahlZeitreihen As Integer
             Dim datum As Double
             Dim ts As TimeSeries
 
-            'Anzahl Zeitreihen
-            anzahlZeitreihen = Me.SelectedSeries.Count
-
-            'Indexarray
-            'ReDim index(anzahlZeitreihen)
-
-            'Zeitreihen instanzieren
+            'loop over selected series
             For Each sInfo As TimeSeriesInfo In Me.SelectedSeries
+
+                index = sInfo.Index
+
+                'instantiate time series
                 ts = New TimeSeries(sInfo.Name)
-                'Einheiten?
-                If (Me.UseUnits) Then
-                    ts.Unit = sInfo.Unit
-                End If
+                ts.Unit = sInfo.Unit
                 ts.DataSource = New TimeSeriesDataSource(Me.File, sInfo.Name)
-                'Objektname und Typ (für SWMM-Txt-Export)
-                ts.Objekt = sInfo.Objekt
-                ts.Type = sInfo.Type
-                For j = 0 To anzSpalten - 1
-                    If (sInfo.Name = Me.TimeSeriesInfos(j).Name) And (sInfo.ObjType = Me.TimeSeriesInfos(j).ObjType) Then
-                        index = j
-                        For period = 0 To oSWMM.NPeriods - 1
-                            oSWMM.GetSwmmDate(period, datum)
-                            oSWMM.GetSwmmResult(SWMMBinaryFileIndex(index).iType, SWMMBinaryFileIndex(index).iIndex, SWMMBinaryFileIndex(index).vIndex, period, value)
-                            ts.AddNode(DateTime.FromOADate(datum), value)
-                        Next
-                    End If
+
+                'add metadata
+                ts.Metadata("Type") = [Enum].GetName(GetType(Type), swmmInfos(index).iType)
+                ts.Metadata("Name") = swmmInfos(index).Name
+                ts.Metadata("Variable") = swmmInfos(index).Variable
+
+                'read data and add nodes to time series
+                For period = 0 To oSWMM.NPeriods - 1
+                    oSWMM.GetSwmmDate(period, datum)
+                    oSWMM.GetSwmmResult(swmmInfos(index).iType, swmmInfos(index).iIndex, swmmInfos(index).vIndex, period, value)
+                    ts.AddNode(DateTime.FromOADate(datum), value)
                 Next
 
                 'store time series
@@ -287,8 +338,28 @@ Namespace Fileformats
 
         End Sub
 
+        ''' <summary>
+        ''' Sets default metadata values for a time series corresponding to the SWMM binary output file format
+        ''' </summary>
+        Public Overloads Shared Sub setDefaultMetadata(ts As TimeSeries)
+            'Make sure all required keys exist
+            ts.Metadata.AddKeys(SWMM_OUT.MetadataKeys)
+            'Set default values
+            If ts.Metadata("Type") = "" Then ts.Metadata("Type") = "Node"
+            If ts.Metadata("Name") = "" Then ts.Metadata("Name") = ts.Title
+            If ts.Metadata("Variable") = "" Then ts.Metadata("Variable") = "FLOW"
+        End Sub
 
-        Private Function Units(iType As Integer, vIndex As Integer, FlowUnits As Integer) As String
+        ''' <summary>
+        ''' Returns the unit for a given element type, variable and flow unit
+        ''' </summary>
+        ''' <param name="iType">element type</param>
+        ''' <param name="vIndex">variable index</param>
+        ''' <param name="FlowUnit">flow unit</param>
+        ''' <returns>unit as string</returns>
+        ''' <remarks>see https://github.com/USEPA/Stormwater-Management-Model/blob/master/src/outfile/include/swmm_output_enums.h</remarks>
+        Private Function getUnit(iType As Type, vIndex As Integer, FlowUnit As FlowUnits) As String
+
             '_SUBCATCHVAR (iType = 0)
             '                {"Rainfall",     //0 for rainfall (in/hr or mm/hr)
             '                 "Snow Depth",   //1 for snow depth (in or mm)
@@ -325,182 +396,110 @@ Namespace Fileformats
             '                 "Stored Volume",//12 for volume of stored water (ft3 or m3),  
             '                 "Rate Evapo"};   //13 for evaporation rate (in/day or mm/day) 
 
-            'FlowUnits:
-            'CMS = 3
-            'LPS = 4
-            Units = "-"
-            Select Case FlowUnits
-                Case 3    'CMS
-                    Select Case iType
+            Dim unit As String = "-"
+
+            Dim flowUnitString As String
+            Select Case FlowUnit
+                Case FlowUnits.CMS
+                    flowUnitString = "CMS"
+                Case FlowUnits.LPS
+                    flowUnitString = "LPS"
+                Case Else
+                    Log.AddLogEntry(levels.warning, $"Unable to determine unit for flow unit {FlowUnit}!")
+                    flowUnitString = "-"
+            End Select
+
+            Select Case iType
+                Case Type.Subcatchment
+                    Select Case vIndex
                         Case 0
-                            Select Case vIndex
-                                Case 0
-                                    Units = "mm/hr"
-                                Case 1
-                                    Units = "mm"
-                                Case 2
-                                    Units = "mm/hr"
-                                Case 3
-                                    Units = "m³s­¹"
-                                Case 4
-                                    Units = "m³s­¹"
-                                Case 5
-                                    Units = "m"
-                                Case Else
-                                    Units = "MGL"
-                            End Select
+                            unit = "mm/hr"
                         Case 1
-                            Select Case vIndex
-                                Case 0
-                                    Units = "m"
-                                Case 1
-                                    Units = "m"
-                                Case 2
-                                    Units = "m³"
-                                Case 3
-                                    Units = "m³s­¹"
-                                Case 4
-                                    Units = "m³s­¹"
-                                Case 5
-                                    Units = "m³s­¹"
-                                Case Else
-                                    Units = "MGL"
-                            End Select
+                            unit = "mm"
                         Case 2
-                            Select Case vIndex
-                                Case 0
-                                    Units = "m³s­¹"
-                                Case 1
-                                    Units = "m"
-                                Case 2
-                                    Units = "ms­¹"
-                                Case 3
-                                    Units = "-"
-                                Case 4
-                                    Units = "-"
-                                Case Else
-                                    Units = "MGL"
-                            End Select
+                            unit = "mm/hr"
                         Case 3
-                            Select Case vIndex
-                                Case 0
-                                    Units = "C°"
-                                Case 1
-                                    Units = "mm/hr"
-                                Case 2
-                                    Units = "mm"
-                                Case 3
-                                    Units = "mm/hr"
-                                Case 4
-                                    Units = "m³s­¹"
-                                Case 5
-                                    Units = "m³s­¹"
-                                Case 6
-                                    Units = "m³s­¹"
-                                Case 7
-                                    Units = "m³s­¹"
-                                Case 8
-                                    Units = "m³s­¹"
-                                Case 9
-                                    Units = "m³s­¹"
-                                Case 10
-                                    Units = "m³s­¹"
-                                Case 11
-                                    Units = "m³s­¹"
-                                Case 12
-                                    Units = "m³"
-                                Case 13
-                                    Units = "mm/day"
-                            End Select
+                            unit = flowUnitString
+                        Case 4
+                            unit = flowUnitString
+                        Case 5
+                            unit = "m"
+                        Case Else
+                            unit = "MGL"
                     End Select
-                Case 4  'LPS
-                    Select Case iType
+                Case Type.Node
+                    Select Case vIndex
                         Case 0
-                            Select Case vIndex
-                                Case 0
-                                    Units = "mm/hr"
-                                Case 1
-                                    Units = "mm"
-                                Case 2
-                                    Units = "mm/hr"
-                                Case 3
-                                    Units = "LPS"
-                                Case 4
-                                    Units = "LPS"
-                                Case 5
-                                    Units = "m"
-                                Case Else
-                                    Units = "MGL"
-                            End Select
+                            unit = "m"
                         Case 1
-                            Select Case vIndex
-                                Case 0
-                                    Units = "m"
-                                Case 1
-                                    Units = "m"
-                                Case 2
-                                    Units = "m³"
-                                Case 3
-                                    Units = "LPS"
-                                Case 4
-                                    Units = "LPS"
-                                Case 5
-                                    Units = "LPS"
-                                Case Else
-                                    Units = "MGL"
-                            End Select
+                            unit = "m"
                         Case 2
-                            Select Case vIndex
-                                Case 0
-                                    Units = "LPS"
-                                Case 1
-                                    Units = "m"
-                                Case 2
-                                    Units = "LPS"
-                                Case 3
-                                    Units = "-"
-                                Case 4
-                                    Units = "-"
-                                Case Else
-                                    Units = "MGL"
-                            End Select
+                            unit = "m³"
                         Case 3
-                            Select Case vIndex
-                                Case 0
-                                    Units = "C°"
-                                Case 1
-                                    Units = "mm/hr"
-                                Case 2
-                                    Units = "mm"
-                                Case 3
-                                    Units = "mm/hr"
-                                Case 4
-                                    Units = "LPS"
-                                Case 5
-                                    Units = "LPS"
-                                Case 6
-                                    Units = "LPS"
-                                Case 7
-                                    Units = "LPS"
-                                Case 8
-                                    Units = "LPS"
-                                Case 9
-                                    Units = "LPS"
-                                Case 10
-                                    Units = "LPS"
-                                Case 11
-                                    Units = "LPS"
-                                Case 12
-                                    Units = "m³"
-                                Case 13
-                                    Units = "mm/day"
-                            End Select
+                            unit = flowUnitString
+                        Case 4
+                            unit = flowUnitString
+                        Case 5
+                            unit = flowUnitString
+                        Case Else
+                            unit = "MGL"
+                    End Select
+                Case Type.Link
+                    Select Case vIndex
+                        Case 0
+                            unit = flowUnitString
+                        Case 1
+                            unit = "m"
+                        Case 2
+                            unit = "ms­¹"
+                        Case 3
+                            unit = "-"
+                        Case 4
+                            unit = "-"
+                        Case Else
+                            unit = "MGL"
+                    End Select
+                Case Type.System
+                    Select Case vIndex
+                        Case 0
+                            unit = "C°"
+                        Case 1
+                            unit = "mm/hr"
+                        Case 2
+                            unit = "mm"
+                        Case 3
+                            unit = "mm/hr"
+                        Case 4
+                            unit = flowUnitString
+                        Case 5
+                            unit = flowUnitString
+                        Case 6
+                            unit = flowUnitString
+                        Case 7
+                            unit = flowUnitString
+                        Case 8
+                            unit = flowUnitString
+                        Case 9
+                            unit = flowUnitString
+                        Case 10
+                            unit = flowUnitString
+                        Case 11
+                            unit = flowUnitString
+                        Case 12
+                            unit = "m³"
+                        Case 13
+                            unit = "mm/day"
+                        Case 14
+                            unit = "mm/day"
                     End Select
                 Case Else
-                    Units = "-"
+                    Log.AddLogEntry(levels.warning, $"Unable to determine unit for element type {iType}!")
             End Select
-            Return Units
+
+            Return unit
+
         End Function
+
     End Class
 
 End Namespace

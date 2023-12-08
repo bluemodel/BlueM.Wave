@@ -1,6 +1,101 @@
 ﻿BlueM.Wave Release Notes
 ========================
 
+Version 2.6.1
+-------------
+NEW:
+* Added an error text in the Time Series Properties window when a time series' volume is NaN 
+* Added a warning log message when executing the Goodness Of Fit analysis with time series whose volume is NaN
+
+FIXED:
+* Fixed superfluous metadata in export to ZRXP format #126
+* Added a check for title uniqueness when a title is edited in the Time Series properties window
+* Disabled the ability to sort columns in the Time Series Values window
+
+Version 2.6.0
+-------------
+NEW:
+* Added a new, simpler, series selection dialog for known file types
+* Added the ability to reorder series from within the Time Series Properties window
+* Wave project file (WVP):
+  * Added support for additional series options in WVP files #117
+  * When saving to WVP, a new dialog allows specifying which series options to save
+  * When saving to WVP, file paths can now optionally be saved as relative
+  * WVP files are now always read and written using UTF-8 encoding
+
+FIXED:
+* Improved performance and usability of Time Series Values window
+
+CHANGED:
+* Upgrade TeeChart to v4.2023.4.18
+
+Version 2.5.0
+-------------
+NEW:
+* Allow multiple files to be selected when importing files using the Import time series menu item 
+* Added navigation buttons for navigating to the start and end of the currently active series
+* New analysis function Decumulate
+* Added support for importing SWMM time series file format 
+* Added support for reading and writing REXCHANGE header values for ZRXP files #123
+
+FIXED:
+* Analysis function Accumulate now respects the input interpretation
+* Time Series Properties and Values windows now restore on toolbar button press if previously minimized
+* Importing from SWMM binary output format:
+  * Read and store metadata
+  * Include the element type in series names, making them unique #63
+  * Fixed wrong units for "System" variables
+  * Always use the "official" SWMM notation for units
+* Importing from SWMM routing interface format:
+  * Read and store metadata
+* Exporting to SWMM routing interface format: 
+  * Allow editing of series metadata before export
+  * General improvements and additional checks
+* Exporting to SWMM time series file format #118:
+  * Renamed SWMM_DAT_MASS and SWMM_DAT_TIME export formats to SWMM_TIMESERIES
+  * Removed automatic transformation of time series to 5 min equidistant timestep before export
+  * Fixed output date format to use "/" as date separator
+  * Added comment header line
+
+CHANGED:
+* Analysis function Cumulative renamed to Accumulate
+* Added progress bar to Calculator analysis function
+* Upgrade to System.Data.SQLite v1.0.118.0 and SQLite 3.42.0
+
+API-CHANGES:
+* Removed property `TimeSeriesFile.nLinesPerTimestamp`
+* Removed the properties `TimeSeries.Objekt` and `TimeSeries.Type`
+* New public method `Fileformats.WVP.Write_File()` for writing a Wave project file
+
+Version 2.4.5
+-------------
+NEW:
+* Added support for reading JAMS/J2000 timeseries result files
+
+CHANGED:
+* Unknown file formats will now always be attempted to be imported as CSV
+
+FIXED:
+* Fixed crash when attempting to verify HYSTEM-EXTRAN REG format on a different DAT file
+
+Version 2.4.4
+-------------
+FIXED:
+* Improved calculation of time series volume #112:
+  * more supported units: "/s", "/min", "/h" and "/d" 
+  * proper consideration of interpretation
+  * any NaN nodes now cause the adjacent time steps (depending on the interpretation) to not contribute to the volume
+* Fixed issue with deleting series or editing series properties in the properties window, 
+  for series with extreme dates that cannot be entirely displayed in the chart #68
+
+Version 2.4.3
+-------------
+FIXED:
+* Fixed reading WBL files where the series indices provided in the accompanying WELINFO file are not 0-based
+
+CHANGED:
+* The update check and the link to the download page now point to GitHub releases
+
 Version 2.4.2
 -------------
 FIXED:
@@ -262,6 +357,7 @@ NOTE: Due to a migration to a different issue tracking system, issue numbers hav
 Version 1.10.6
 --------------
 This version fixes a number of issues in order to be able to support the full date range between 01.01.0001 and 31.12.9999 (BUG 749)
+
 CHANGED:
 * Import, analysis and export functions can now use the full date range between 01.01.0001 and 31.12.9999
 * Chart display, panning and zooming is restricted to the displayable date range between 01.01.0100 and 31.12.9000
@@ -295,6 +391,7 @@ CHANGED:
   * the "Description" of hydrological years in the result output now corresponds to the calendar year in which the hydrological year starts
 * Analysis function "AnnualStatistics":
   * added an option for selecting the start month for the hydrological year
+
 FIXED:
 * Fixed TimeSeries properties Min, Max and Volume for series consisting only of NaN values
 * Fixed an uncaught exception when attempting to add a log message without a Wave window instance
@@ -308,11 +405,13 @@ Version 1.10.3
 NEW:
 * Added a command-line interface (CLI) with commands for importing and converting time series files to CSV
   See documentation: https://wiki.bluemodel.org/index.php/Wave:CLI
+
 CHANGED:
 * Export to CSV:
   * NaN values are now exported as "NaN"
   * When exporting multiple time series with timestamps not common to all series, non-existant nodes are exported as empty entries
   * Performance improvements 
+
 API-CHANGES:
 * New public class WVP for parsing and processing Wave project files (*.wvp)
 * New property TimeSeries.NaNCount
@@ -476,6 +575,7 @@ FIXED:
   * Fixed crashes with very small or large dates in time series (BUG 749)
     Timeseries are now cut upon import to minimum 01.01.0100 and maximum 31.12.9900
   * Fixed error when importing CSV files without units
+
 KNOWN ISSUES:
   * DateTimePickers have a minimum date of 01.01.1753 and a maximum date of 31.12.9998
     and will display these even if timeseries / the view extends beyond that range (BUG 749)
@@ -522,6 +622,7 @@ FIXED:
 * Selected series are no longer deselected every time an input is changed in the import dialog
 * Time series statistics Minimum, Maximum, Average, Sum and Volume (shown in the properties dialog) 
   are now calculated by ignoring NaN values. (Before, any NaN values would lead to undefined values)
+
 API-CHANGES:
 * TimeSeries instances now each have a unique Id within the session
 * New method TimeSeries.ChangeTimestep()
@@ -572,6 +673,7 @@ CHANGED:
 * Unparseable values in time series files are no longer written to the log individually. Instead, 
   the total number of NaN values of each time series is written to the log when they are displayed 
   for the first time.
+
 FIXED:
 * Fixed unintended use of the system's locale settings when reading files in HYDRO_AS-2D and ZRXP format
 
@@ -612,6 +714,7 @@ CHANGED:
   user-specified error values to NaN
 * When importing time series from SMUSI REG format, the title is taken from the first line of the file, 
   before any comma
+
 FIXED:
 * The Reload from Files command now respects the previously made series selection for each file
 * Imported files are no longer kept as file objects in memory (should lead to less memory usage)
@@ -626,6 +729,7 @@ FIXED:
 API-CHANGES:
 * The function TimeSeries.getCleanZRE() has been replaced with two separate functions:
   Timeseries.removeNaNValues() and Timeseries.convertErrorValues()
+
 KNOWN ISSUES:
 * When saving a chart to the native TEN format of TeeChart, any NaN values contained in the series are lost 
   (i.e. the nodes with the NaN values are omitted from the series).
@@ -662,6 +766,7 @@ CHANGED:
 * Removed support for the DWD-T-L format
 * If a time series contains duplicate nodes, the duplicate nodes are now simply discarded 
   and a warning is written to the log instead of aborting the import
+
 FIXED:
 * The decimal mark selector in the import series dialog now actually works (BUG 351)
 * Comparison analysis function: changed the result series to a point series because a line series automatically 

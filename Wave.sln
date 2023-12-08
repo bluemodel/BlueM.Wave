@@ -11,6 +11,11 @@ Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Wave.Examples", "examples\W
 EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Wave.Setup", "setup\Wave.Setup.vdproj", "{68EAC8A5-045C-467E-814F-4BFCA71B9B8F}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{DBDDE525-114F-4271-83E0-590F2C96D8B4}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64

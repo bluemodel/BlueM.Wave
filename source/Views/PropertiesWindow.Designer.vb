@@ -47,7 +47,10 @@ Partial Class PropertiesWindow
         Me.TimeSeriesBindingSource = New System.Windows.Forms.BindingSource(Me.components)
         Me.ToolStrip1 = New System.Windows.Forms.ToolStrip()
         Me.ToolStripButton_showStatistics = New System.Windows.Forms.ToolStripButton()
+        Me.ToolStripButton_MoveUp = New System.Windows.Forms.ToolStripButton()
+        Me.ToolStripButton_MoveDown = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripButton_Delete = New System.Windows.Forms.ToolStripButton()
+        Me.DataGridViewTextBoxColumn1 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.TimeSeriesBindingSource, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.ToolStrip1.SuspendLayout()
@@ -214,7 +217,7 @@ Partial Class PropertiesWindow
         '
         'ToolStrip1
         '
-        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButton_showStatistics, Me.ToolStripButton_Delete})
+        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButton_showStatistics, Me.ToolStripButton_MoveUp, Me.ToolStripButton_MoveDown, Me.ToolStripButton_Delete})
         Me.ToolStrip1.Location = New System.Drawing.Point(0, 0)
         Me.ToolStrip1.Name = "ToolStrip1"
         Me.ToolStrip1.Size = New System.Drawing.Size(464, 25)
@@ -232,6 +235,27 @@ Partial Class PropertiesWindow
         Me.ToolStripButton_showStatistics.Text = "Show statistics"
         Me.ToolStripButton_showStatistics.ToolTipText = "Show statistics"
         '
+        'ToolStripButton_MoveUp
+        '
+        Me.ToolStripButton_MoveUp.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.ToolStripButton_MoveUp.Enabled = False
+        Me.ToolStripButton_MoveUp.Image = Global.BlueM.Wave.My.Resources.Resources.arrow_up
+        Me.ToolStripButton_MoveUp.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ToolStripButton_MoveUp.Name = "ToolStripButton_MoveUp"
+        Me.ToolStripButton_MoveUp.Size = New System.Drawing.Size(23, 22)
+        Me.ToolStripButton_MoveUp.Text = "Move selected time series up"
+        Me.ToolStripButton_MoveUp.ToolTipText = "Move selected time series up"
+        '
+        'ToolStripButton_MoveDown
+        '
+        Me.ToolStripButton_MoveDown.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.ToolStripButton_MoveDown.Enabled = False
+        Me.ToolStripButton_MoveDown.Image = Global.BlueM.Wave.My.Resources.Resources.arrow_down
+        Me.ToolStripButton_MoveDown.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ToolStripButton_MoveDown.Name = "ToolStripButton_MoveDown"
+        Me.ToolStripButton_MoveDown.Size = New System.Drawing.Size(23, 22)
+        Me.ToolStripButton_MoveDown.Text = "Move selected time series down"
+        '
         'ToolStripButton_Delete
         '
         Me.ToolStripButton_Delete.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
@@ -242,6 +266,13 @@ Partial Class PropertiesWindow
         Me.ToolStripButton_Delete.Size = New System.Drawing.Size(23, 22)
         Me.ToolStripButton_Delete.Text = "ToolStripButton_Delete"
         Me.ToolStripButton_Delete.ToolTipText = "Delete selected time series"
+        '
+        'DataGridViewTextBoxColumn1
+        '
+        Me.DataGridViewTextBoxColumn1.DataPropertyName = "DataSource"
+        Me.DataGridViewTextBoxColumn1.HeaderText = "DataSource"
+        Me.DataGridViewTextBoxColumn1.Name = "DataGridViewTextBoxColumn1"
+        Me.DataGridViewTextBoxColumn1.ReadOnly = True
         '
         'PropertiesWindow
         '
@@ -268,6 +299,9 @@ Partial Class PropertiesWindow
     Friend WithEvents TimeSeriesBindingSource As System.Windows.Forms.BindingSource
     Friend WithEvents ToolStrip1 As ToolStrip
     Friend WithEvents ToolStripButton_showStatistics As ToolStripButton
+    Friend WithEvents ToolStripButton_Delete As ToolStripButton
+    Friend WithEvents ToolStripButton_MoveUp As ToolStripButton
+    Friend WithEvents DataGridViewTextBoxColumn1 As DataGridViewTextBoxColumn
     Friend WithEvents Id As DataGridViewTextBoxColumn
     Friend WithEvents TitleDataGridViewTextBoxColumn As DataGridViewTextBoxColumn
     Friend WithEvents Interpretation As DataGridViewComboBoxColumn
@@ -284,5 +318,5 @@ Partial Class PropertiesWindow
     Friend WithEvents Maximum As DataGridViewTextBoxColumn
     Friend WithEvents Sum As DataGridViewTextBoxColumn
     Friend WithEvents Volume As DataGridViewTextBoxColumn
-    Friend WithEvents ToolStripButton_Delete As ToolStripButton
+    Friend WithEvents ToolStripButton_MoveDown As ToolStripButton
 End Class

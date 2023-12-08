@@ -20,8 +20,7 @@ Imports System.IO
 Namespace Fileformats
 
     ''' <summary>
-    ''' Class for reading the SWMM5 Routing Interface File format (*.txt)
-    ''' The format is described in the SWMM format description 
+    ''' Class for reading and writing the SWMM5 routing interface file format
     ''' </summary>
     ''' <remarks>See https://wiki.bluemodel.org/index.php/SWMM_file_formats </remarks>
     Public Class SWMM_INTERFACE
@@ -29,7 +28,7 @@ Namespace Fileformats
 
 #Region "Eigenschaften"
 
-        Const DatumsformatSWMM_TXT As String = "yyyy  MM dd  HH mm"
+        Const DatumsformatSWMM_TXT As String = "yyyy MM  dd  HH mm  ss"
         Const iZeileReportTimeStep As Integer = 3
         Const iZeileAnzConstituents As Integer = 4
         Private Shared AnzConstituents As Integer
@@ -38,6 +37,19 @@ Namespace Fileformats
         Private _Zeitintervall As Integer
         Private _noConstituents As Integer
 
+        ''' <summary>
+        ''' Structure for storing SWMM series information
+        ''' </summary>
+        Private Structure SWMMSeriesInfo
+            Dim Node As String
+            Dim Variable As String
+        End Structure
+
+        ''' <summary>
+        ''' Dictionary containing all SWMM series infos
+        ''' Key is series index
+        ''' </summary>
+        Private swmmInfos As Dictionary(Of Integer, SWMMSeriesInfo)
 
         Public Structure Constituent
             Dim Type As String
@@ -45,7 +57,7 @@ Namespace Fileformats
             Dim Index As Integer
         End Structure
 
-        Private Structure Nodes
+        Private Structure Node
             Dim Bez As String
             Dim Index As Integer
         End Structure
@@ -57,6 +69,19 @@ Namespace Fileformats
             Set(value As Integer)
                 _Zeitintervall = value
             End Set
+        End Property
+
+        ''' <summary>
+        ''' Returns a list of SWMM routing interface file specific metadata keys
+        ''' </summary>
+        Public Overloads Shared ReadOnly Property MetadataKeys() As List(Of String)
+            Get
+                Dim keys As New List(Of String) From {
+                    "Node",
+                    "Variable"
+                }
+                Return keys
+            End Get
         End Property
 
 
@@ -101,7 +126,6 @@ Namespace Fileformats
                 Call Me.readFile()
             End If
 
-
         End Sub
 
         ''' <summary>
@@ -116,11 +140,12 @@ Namespace Fileformats
             Dim strArray() As String
             Dim Constituents() As Constituent
             'dim AnzConstituents As Integer
-            Dim Nodes() As Nodes
-            Dim IDSpalte As Long
+            Dim Nodes() As Node
+            Dim index As Long
             Dim sInfo As TimeSeriesInfo
 
             Me.TimeSeriesInfos.Clear()
+            Me.swmmInfos = New Dictionary(Of Integer, SWMMSeriesInfo)
 
             'Datei öffnen
             Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
@@ -156,8 +181,7 @@ Namespace Fileformats
             'entspricht der Anzahl der Zeilen pro Zeitschritt
             Zeile = StrReadSync.ReadLine.ToString()
             strArray = Zeile.Split(New Char() {space.ToChar}, StringSplitOptions.RemoveEmptyEntries)
-            Me.nLinesPerTimestamp = Convert.ToSingle(strArray(0))
-            AnzNodes = Me.nLinesPerTimestamp
+            AnzNodes = Convert.ToInt32(strArray(0))
             ReDim Nodes(AnzNodes - 1)
             For i = 0 To AnzNodes - 1
                 Zeile = StrReadSync.ReadLine.ToString()
@@ -173,17 +197,23 @@ Namespace Fileformats
             Me.iLineData = iZeileAnzConstituents + AnzConstituents + AnzNodes + 3
 
             'Spaltenköpfe (Zuflussknoten) und Indizes einlesen
-            IDSpalte = 1
+            index = 1
             For i = 0 To AnzNodes - 1
                 For j = 0 To AnzConstituents - 1
+
                     sInfo = New TimeSeriesInfo()
                     sInfo.Name = $"{Nodes(i).Bez} {Constituents(j).Type}"
-                    sInfo.Objekt = Nodes(i).Bez
-                    sInfo.Type = Constituents(j).Type
                     sInfo.Unit = Constituents(j).Unit
-                    sInfo.Index = IDSpalte
+                    sInfo.Index = index
                     Me.TimeSeriesInfos.Add(sInfo)
-                    IDSpalte = IDSpalte + 1
+
+                    'store SWMM info
+                    Dim swmmInfo As SWMMSeriesInfo
+                    swmmInfo.Node = Nodes(i).Bez
+                    swmmInfo.Variable = Constituents(j).Type
+                    Me.swmmInfos.Add(index, swmmInfo)
+
+                    index = index + 1
                 Next
             Next
 
@@ -204,9 +234,6 @@ Namespace Fileformats
             Dim Werte() As String
             Dim tmpArray() As String
             Dim IDWerte As Long
-            'Dim AnzConstituents As Integer
-            Dim AllConstituents() As String
-            Dim AllNodes() As String
             Dim ts As TimeSeries
 
             Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
@@ -226,23 +253,16 @@ Namespace Fileformats
                 Exit Sub
             End If
 
-            ReDim AllConstituents(Me.SelectedSeries.Count - 1)
-            ReDim AllNodes(Me.SelectedSeries.Count - 1)
-            'Alle ausgewählten Serien durchlaufen
-            i = 0
             For Each sInfo As TimeSeriesInfo In Me.SelectedSeries
                 Me.TimeSeries(sInfo.Index).Unit = sInfo.Unit
-                Me.TimeSeries(sInfo.Index).Objekt = sInfo.Objekt
-                AllConstituents(i) = sInfo.Type
-                Me.TimeSeries(sInfo.Index).Type = sInfo.Type
-                AllNodes(i) = sInfo.Objekt
-                i += 1
+                'add metadata
+                Me.TimeSeries(sInfo.Index).Metadata.AddKeys(SWMM_INTERFACE.MetadataKeys)
+                Me.TimeSeries(sInfo.Index).Metadata("Node") = Me.swmmInfos(sInfo.Index).Node
+                Me.TimeSeries(sInfo.Index).Metadata("Variable") = Me.swmmInfos(sInfo.Index).Variable
             Next
 
             'Einlesen
             '--------
-            'AnzConstituents = nEqualStrings(AllConstituents)
-            'AnzNodes = nEqualStrings(AllNodes)
             ReDim Werte(AnzConstituents * AnzNodes)
             'Header
             For iZeile = 1 To Me.iLineData - 1
@@ -277,119 +297,163 @@ Namespace Fileformats
         End Sub
 
         ''' <summary>
-        ''' Exportiert eine Zeitreihe als TXT-Datei
+        ''' Sets default metadata values for a time series corresponding to the SWMM routing interface file format
         ''' </summary>
-        ''' <param name="Reihen">Die zu exportierenden Zeitreihen</param>
-        ''' <param name="File">Pfad zur anzulegenden Datei</param>
-        Public Shared Sub Write_File(ByRef Reihen As List(Of TimeSeries), File As String)
+        Public Overloads Shared Sub setDefaultMetadata(ts As TimeSeries)
+            'Make sure all required keys exist
+            ts.Metadata.AddKeys(SWMM_INTERFACE.MetadataKeys)
+            'Set default values
+            If ts.Metadata("Node") = "" Then
+                'use series title by default
+                ts.Metadata("Node") = ts.Title
+                'check for existing metadata from a SWMM binary output file and reuse if possible
+                If ts.Metadata.ContainsKey("Type") And ts.Metadata.ContainsKey("Name") Then
+                    'if Type is "Node", assign "Name" to "Node"
+                    If ts.Metadata("Type") = "Node" Then
+                        ts.Metadata("Node") = ts.Metadata("Name")
+                    End If
+                End If
+            End If
+            If ts.Metadata("Variable") = "" Then ts.Metadata("Variable") = "FLOW"
+        End Sub
+
+        ''' <summary>
+        ''' Exports a list of time series to SWMM routing interface text format
+        ''' </summary>
+        ''' <param name="seriesList">list of time series to export</param>
+        ''' <param name="file">path to file to export to</param>
+        Public Shared Sub Write_File(ByRef seriesList As List(Of TimeSeries), file As String)
 
             Dim strwrite As StreamWriter
             Dim i, j, k As Integer
-            Dim AllConstituents() As Constituent
-            Dim UniqueConstituents(0) As Constituent
-            'Dim AnzConstituents As Integer
-            Dim AllNodes() As String
-            Dim UniqueNodes(0) As String
-            Dim AnzOutNodes As Integer
+            Dim dt As Integer
             Dim LenReihe As Long
             Dim KonFaktor As Integer
 
-
-            'SWMM5 Interface File
-            'RTC-Demo 
-            ' 60 - reporting time step in sec
-            ' 1    - number of constituents as listed below:
-            'FLOW LPS
-            ' 5    - number of nodes as listed below:
-            'S101
-            'Node          Year Mon Day Hr  Min Sec         FLOW
-            'S101          2001 6   10  0   0   0          0.000
-
-
-            strwrite = New StreamWriter(File, False, Helpers.DefaultEncoding)
-
-            Dim dt As Integer
-            'Zeitintervall aus ersten und zweiten Zeitschritt der Reihe ermitteln
-            dt = DateDiff(DateInterval.Minute, Reihen(0).Dates(0), Reihen(0).Dates(1))
-            dt = dt * 60
-
-            '1. Zeile
-            strwrite.WriteLine("SWMM5 Interface File")
-            '2. Zeile: 
-            strwrite.WriteLine("WAVE-Export")
-            'Zeitintervall
-            strwrite.Write(dt.ToString.PadLeft(5))
-            strwrite.WriteLine(" - reporting time step in sec")
-
-            'Erstmal alle Constituents (FLOW, COD,...) ermitteln, da diese im Textkopf angegeben werden müssen
-            ReDim AllConstituents(Reihen.Count - 1)
-            For i = 0 To Reihen.Count - 1
-                AllConstituents(i).Type = Reihen(i).Type
-                AllConstituents(i).Unit = Reihen(i).Unit
-            Next
-            GetUniqueConstituents(AllConstituents, UniqueConstituents)
-
-            strwrite.Write(UniqueConstituents.Length)
-            strwrite.WriteLine(" - number of constituents as listed below:")
-
-            For i = 0 To UniqueConstituents.Length - 1
-                strwrite.Write(UniqueConstituents(i).Type)
-                strwrite.Write("   ")
-                strwrite.WriteLine("LPS")
-            Next
-
-            'Alle Zuflussknoten ermitteln, da diese im Textkopf angegeben werden müsen
-            ReDim AllNodes(Reihen.Count - 1)
-            For i = 0 To Reihen.Count - 1
-                AllNodes(i) = Reihen(i).Objekt
-            Next
-            GetUniqueNodes(AllNodes, UniqueNodes)
-            AnzOutNodes = UniqueNodes.Length
-
-            strwrite.Write(AnzOutNodes)
-            strwrite.WriteLine(" - number of nodes as listed below:")
-
-            For i = 0 To AnzOutNodes - 1
-                strwrite.WriteLine(UniqueNodes(i))
-            Next
-
-            'TO DO: Hier muss noch geprüft werden, ob für alle Objects (Zuflussknoten) auch alle Constituents existieren
-
-            'Schreiben der Überschrift, d.h. Datum und Constituents
-            'Datum
-            strwrite.Write("Node          Year Mon Day Hr  Min Sec         ")
-            'Constituents
-            For i = 0 To UniqueConstituents.Length - 1
-                If i < UniqueConstituents.Length - 1 Then
-                    strwrite.Write(UniqueConstituents(i).Type)
-                    strwrite.Write("   ")
-                ElseIf i = UniqueConstituents.Length - 1 Then
-                    strwrite.WriteLine(UniqueConstituents(i).Type)
+            'check for required metadata
+            For Each ts As TimeSeries In seriesList
+                If Not ts.Metadata.ContainsKey("Node") Then
+                    Throw New Exception($"Series {ts.Title} is missing a required metadata entry 'Node'!")
+                End If
+                If Not ts.Metadata.ContainsKey("Variable") Then
+                    Throw New Exception($"Series {ts.Title} is missing a required metadata entry 'Variable'!")
                 End If
             Next
 
-            'SWMM-Reihen immer in l/s
-            KonFaktor = FakConv(Reihen(0).Unit)
+            'sort series by node and then variable with FLOW first
+            seriesList.Sort(Function(ts1 As TimeSeries, ts2 As TimeSeries)
+                                If ts1.Metadata("Node") = ts2.Metadata("Node") Then
+                                    If ts1.Metadata("Variable") = "FLOW" Then
+                                        Return -1
+                                    ElseIf ts2.Metadata("Variable") = "FLOW" Then
+                                        Return 1
+                                    Else
+                                        Return ts1.Metadata("Variable").CompareTo(ts2.Metadata("Variable"))
+                                    End If
+                                Else
+                                    Return ts1.Metadata("Node").CompareTo(ts2.Metadata("Node"))
+                                End If
+                            End Function)
 
-            'Zeitreihen rausschreiben
-            'TO DO: Bei mehreren Constituents muss im Moment die richtige Reihenfolge vorab gegeben sein
-            'd.h. eigentlich muss beim rausschreiben noch Objekt und Constituent geprüft werden
-            LenReihe = Reihen(0).Length
+            'Determine unique nodes and variables
+            Dim nodes As New List(Of String)
+            Dim variables As New List(Of String)
+            For Each ts As TimeSeries In seriesList
+                If Not nodes.Contains(ts.Metadata("Node")) Then
+                    'node names must not contain spaces
+                    nodes.Add(ts.Metadata("Node").Replace(" ", "_"))
+                End If
+                If Not variables.Contains(ts.Metadata("Variable")) Then
+                    variables.Add(ts.Metadata("Variable"))
+                End If
+            Next
+
+            'check that "FLOW" is among the variables
+            If Not variables.Contains("FLOW") Then
+                Throw New Exception($"SWMM routing interface text format requires a variable named 'FLOW'!")
+            End If
+
+            'determine units for variables
+            Dim units As New List(Of String)
+            For Each variable As String In variables
+                'find the first time series containing the variable and use its unit
+                'TODO: this assumes that all series with the same variable also have the same unit!
+                For Each ts As TimeSeries In seriesList
+                    If ts.Metadata("Variable") = variable Then
+                        If variable = "FLOW" Then
+                            'FLOW must always be in l/s
+                            units.Add("LPS")
+                            'determine conversion factor
+                            KonFaktor = FlowConversionFactor(ts.Unit)
+                        Else
+                            units.Add(ts.Unit)
+                        End If
+                        Exit For
+                    End If
+                Next
+            Next
+
+            'determine time step in seconds
+            'TODO: this assumes that all time series are equidistant and have the same timestep!
+            dt = DateDiff(DateInterval.Second, seriesList(0).Dates(0), seriesList(0).Dates(1))
+
+            'open file for writing
+            strwrite = New StreamWriter(file, False, Helpers.DefaultEncoding)
+
+            'the first line contains the keyword "SWMM5" (without the quotes)
+            strwrite.WriteLine("SWMM5 routing interface file")
+
+            'a line of text that describes the file (can be blank)
+            strwrite.WriteLine("BlueM.Wave export")
+
+            'the time step used for all inflow records (integer seconds)
+            strwrite.WriteLine($"{dt,-5} - reporting time step in sec")
+
+            'the number of variables stored in the file, where the first variable must always be flow rate
+            strwrite.WriteLine($"{variables.Count,-5} - number of constituents as listed below:")
+
+            'the name and units of each variable (one per line), where flow rate is the first variable listed and is always named FLOW
+            For i = 0 To variables.Count - 1
+                strwrite.WriteLine($"{variables(i)}   {units(i)}")
+            Next
+
+            'the number of nodes with recorded inflow data
+            strwrite.WriteLine($"{nodes.Count,-5} - number of nodes as listed below:")
+
+            'the name of each node (one per line)
+            For Each node As String In nodes
+                strwrite.WriteLine(node)
+            Next
+
+            'a line of text that provides column headings for the data to follow (can be blank)
+            strwrite.Write($"Node          Year Mon Day Hr Min Sec  ")
+            For Each variable As String In variables
+                strwrite.Write($"{variable,-10}  ")
+            Next
+            strwrite.WriteLine()
+
+            'for each node at each time step, a line with:
+            ' the name of the node
+            ' the date (year, month, and day separated by spaces)
+            ' the time of day (hours, minutes, and seconds separated by spaces)
+            ' the flow rate followed by the concentration of each quality constituent
+            'Time periods with no values at any node can be skipped
+            LenReihe = seriesList(0).Length
             For i = 0 To LenReihe - 1
-                For j = 0 To AnzOutNodes - 1
-                    strwrite.Write(UniqueNodes(j).PadRight(12))
+                For j = 0 To nodes.Count - 1
+                    strwrite.Write(nodes(j).PadRight(11))
                     strwrite.Write("   ")
-                    strwrite.Write(Reihen(j).Dates(i).ToString(DatumsformatSWMM_TXT))
-                    strwrite.Write(" 00   ")
-                    strwrite.Write((Reihen(j * UniqueConstituents.Length).Values(i) * KonFaktor).ToString(DefaultNumberFormat).PadLeft(14))
-                    If UniqueConstituents.Length > 1 Then
-                        For k = 1 To UniqueConstituents.Length - 1
-                            If k < UniqueConstituents.Length - 1 Then
-                                strwrite.Write("   ")
-                                strwrite.Write((Reihen(j * k + 1).Values(i) * KonFaktor).ToString(DefaultNumberFormat).PadLeft(10))
-                            ElseIf k = UniqueConstituents.Length - 1 Then
-                                strwrite.Write("   ")
-                                strwrite.WriteLine((Reihen(j * UniqueConstituents.Length + 1).Values(i) * KonFaktor).ToString(DefaultNumberFormat).PadLeft(10))
+                    strwrite.Write(seriesList(j).Dates(i).ToString(DatumsformatSWMM_TXT))
+                    strwrite.Write("   ")
+                    strwrite.Write((seriesList(j * variables.Count).Values(i) * KonFaktor).ToString(DefaultNumberFormat).PadRight(10))
+                    If variables.Count > 1 Then
+                        For k = 1 To variables.Count - 1
+                            If k < variables.Count - 1 Then
+                                strwrite.Write("  ")
+                                strwrite.Write((seriesList(j * k + 1).Values(i) * KonFaktor).ToString(DefaultNumberFormat).PadRight(10))
+                            ElseIf k = variables.Count - 1 Then
+                                strwrite.Write("  ")
+                                strwrite.WriteLine(seriesList(j * variables.Count + 1).Values(i).ToString(DefaultNumberFormat).PadRight(10))
                             End If
                         Next
                     Else
@@ -428,89 +492,22 @@ Namespace Fileformats
 
         End Function
 
-        Public Shared Function nEqualStrings(strArrayIn() As String) As Integer
+        ''' <summary>
+        ''' Returns a conversion factor for converting a flow unit to LPS
+        ''' </summary>
+        ''' <param name="unit">the flow unit to convert</param>
+        ''' <returns></returns>
+        Public Shared Function FlowConversionFactor(unit As String) As Integer
 
-            Dim Names() As String
-            Dim i, j As Integer
-            Dim strExists As Boolean
-
-            ReDim Preserve Names(0)
-            Names(0) = strArrayIn(0)
-            nEqualStrings = 1
-
-            For i = 0 To strArrayIn.Length - 1
-                strExists = False
-                For j = 0 To Names.Length - 1
-                    If strArrayIn(i) = Names(j) Then
-                        strExists = True
-                        Exit For
-                    End If
-                Next
-                If strExists = False Then
-                    nEqualStrings = nEqualStrings + 1
-                    ReDim Preserve Names(Names.Length)
-                    Names(Names.Length - 1) = strArrayIn(i)
-                End If
-            Next
-
-        End Function
-
-        Public Shared Sub GetUniqueConstituents(AllConstIn() As Constituent, ByRef ConstOut() As Constituent)
-
-            Dim i, j As Integer
-            Dim ExistsOutArray As Boolean
-
-            ConstOut(0).Type = AllConstIn(0).Type
-            ConstOut(0).Unit = AllConstIn(0).Unit
-
-            For i = 0 To AllConstIn.Length - 1
-                ExistsOutArray = False
-                For j = 0 To ConstOut.Length - 1
-                    If AllConstIn(i).Type = ConstOut(j).Type Then
-                        ExistsOutArray = True
-                        Exit For
-                    End If
-                Next
-                If ExistsOutArray = False Then
-                    ReDim Preserve ConstOut(ConstOut.Length)
-                    ConstOut(ConstOut.Length - 1).Type = AllConstIn(i).Type
-                    ConstOut(ConstOut.Length - 1).Unit = AllConstIn(i).Unit
-                End If
-            Next
-
-        End Sub
-
-        Public Shared Sub GetUniqueNodes(AllNodesIn() As String, ByRef NodesOut() As String)
-
-            Dim i, j As Integer
-            Dim ExistsOutArray As Boolean
-
-            NodesOut(0) = AllNodesIn(0)
-
-            For i = 0 To AllNodesIn.Length - 1
-                ExistsOutArray = False
-                For j = 0 To NodesOut.Length - 1
-                    If AllNodesIn(i) = NodesOut(j) Then
-                        ExistsOutArray = True
-                        Exit For
-                    End If
-                Next
-                If ExistsOutArray = False Then
-                    ReDim Preserve NodesOut(NodesOut.Length)
-                    NodesOut(NodesOut.Length - 1) = AllNodesIn(i)
-                End If
-            Next
-
-        End Sub
-
-        Public Shared Function FakConv(UnitIn As String) As Integer
-
-            Select Case UnitIn
-                Case "m3/s"
+            Select Case unit
+                Case "m3/s", "m³/s", "CMS"
                     Return 1000
-                Case Else
+                Case "l/s", "LPS"
                     Return 1
+                Case Else
+                    Throw New Exception($"Unable to determine conversion factor for converting unit {unit} to LPS!")
             End Select
+
         End Function
 
 #End Region 'Methoden
