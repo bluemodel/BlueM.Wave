@@ -17,9 +17,9 @@
 '
 
 ''' <summary>
-''' Write description!
+''' Calculates the return period of annual maximum events using plotting position method
 ''' </summary>
-''' <remarks>https://wiki.bluemodel.org/index.php/Wave:TestAnalysis</remarks>
+''' <remarks>https://wiki.bluemodel.org/index.php/Wave:AnnualRecurrenceProbabilty</remarks>
 Friend Class AnnualRecurrenceProbability
     Inherits Analysis
 
@@ -42,7 +42,7 @@ Friend Class AnnualRecurrenceProbability
     ''' Returns the description of the analysis function
     ''' </summary>
     Public Overloads Shared Function Description() As String
-        Return "Write description!"
+        Return "Calculates the return period of annual maximum events using plotting position method"
     End Function
 
     ''' <summary>
@@ -103,7 +103,7 @@ Friend Class AnnualRecurrenceProbability
 
         'Check expected count of time series
         If (timeseries.Count <> 1) Then
-            Throw New Exception("The TestAnalysis requires the selection of exactly one time series!")
+            Throw New Exception("The AnnualRecurrenceProbabilty requires the selection of exactly one time series!")
         End If
 
     End Sub
