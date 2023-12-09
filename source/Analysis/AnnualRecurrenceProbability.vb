@@ -132,11 +132,13 @@ Friend Class AnnualRecurrenceProbability
             year = kvp.Key
             series = kvp.Value
 
-            Dim ev As New AnnualEvent() With {
-                .year = year,
-                .maxValue = series.Maximum
-            }
-            Me.events.Add(ev)
+            If Not Double.IsNaN(series.Maximum) Then
+                Dim ev As New AnnualEvent() With {
+                    .year = year,
+                    .maxValue = series.Maximum
+                }
+                Me.events.Add(ev)
+            End If
         Next
 
         'Sort events by maxValue values descending
