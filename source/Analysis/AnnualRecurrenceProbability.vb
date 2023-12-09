@@ -17,7 +17,7 @@
 '
 
 ''' <summary>
-''' Calculates the return period of annual maximum events using plotting position method
+''' Calculates the annual recurrence probility and return period of annual maxima using plotting position method
 ''' </summary>
 ''' <remarks>https://wiki.bluemodel.org/index.php/Wave:AnnualRecurrenceProbabilty</remarks>
 Friend Class AnnualRecurrenceProbability
@@ -30,6 +30,7 @@ Friend Class AnnualRecurrenceProbability
         Public year As Integer
         Public maxValue As Double
         Public rank As Integer
+        Public pExceedance As Double
         Public returnPeriod As Double
     End Class
 
@@ -42,7 +43,7 @@ Friend Class AnnualRecurrenceProbability
     ''' Returns the description of the analysis function
     ''' </summary>
     Public Overloads Shared Function Description() As String
-        Return "Calculates the return period of annual maximum events using plotting position method"
+        Return "Calculates the annual recurrence probility and return period of annual maxima using plotting position method"
     End Function
 
     ''' <summary>
@@ -159,6 +160,7 @@ Friend Class AnnualRecurrenceProbability
             T = 1 / Pue
 
             Me.events(i).rank = m
+            Me.events(i).pExceedance = Pue
             Me.events(i).returnPeriod = T
 
         Next
@@ -174,6 +176,7 @@ Friend Class AnnualRecurrenceProbability
         ResultTable = New DataTable($"Annual maxima: {Me.InputTimeSeries(0).Title}")
         ResultTable.Columns.Add("Period", GetType(String))
         ResultTable.Columns.Add($"Maximum [{Me.InputTimeSeries(0).Unit}]", GetType(Double))
+        ResultTable.Columns.Add("Probability of exceedance [-]", GetType(Double))
         ResultTable.Columns.Add("Return period [years]", GetType(Double))
 
         'Add rows to result table
@@ -181,6 +184,7 @@ Friend Class AnnualRecurrenceProbability
             ResultTable.Rows.Add(
                 ev.year,
                 ev.maxValue,
+                ev.pExceedance,
                 ev.returnPeriod
             )
         Next
