@@ -174,7 +174,7 @@ Friend Class AnnualRecurrenceProbability
 
         'Create result table
         ResultTable = New DataTable($"Annual maxima: {Me.InputTimeSeries(0).Title}")
-        ResultTable.Columns.Add("Period", GetType(String))
+        ResultTable.Columns.Add("Year", GetType(Integer))
         ResultTable.Columns.Add($"Maximum [{Me.InputTimeSeries(0).Unit}]", GetType(Double))
         ResultTable.Columns.Add("Probability of exceedance [-]", GetType(Double))
         ResultTable.Columns.Add("Return period [years]", GetType(Double))
