@@ -42,7 +42,7 @@ Friend Class AnnualRecurrenceProbability
     ''' </summary>
     Public Overrides ReadOnly Property hasResultText() As Boolean
         Get
-            Return True
+            Return False
         End Get
     End Property
 
@@ -148,17 +148,6 @@ Friend Class AnnualRecurrenceProbability
     ''' Prepare the results of the analysis
     ''' </summary>
     Public Overrides Sub PrepareResults()
-
-        'Result text
-        ResultText = "Annual recurrence probability:" & eol & eol & $"Time series: {Me.InputTimeSeries(0).Title}" & eol & eol
-        ResultText &= "Annual maxima:" & eol
-        For Each kvp As KeyValuePair(Of String, Double) In maxima
-            ResultText &= String.Join(Helpers.CurrentListSeparator, kvp.Key, kvp.Value.ToString("F4")) & eol
-        Next
-        ResultText &= eol & "Plotting position:" & eol
-        For Each kvp As KeyValuePair(Of Double, Double) In plottingPosition
-            ResultText &= String.Join(Helpers.CurrentListSeparator, kvp.Value.ToString("F4"), kvp.Key.ToString("F4")) & eol
-        Next
 
         'Create result table
         ResultTable = New DataTable($"Annual maxima: {Me.InputTimeSeries(0).Title}")
