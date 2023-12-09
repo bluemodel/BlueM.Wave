@@ -27,8 +27,20 @@ Imports BlueM.Wave.AnnualStatistics
 Friend Class AnnualRecurrenceProbability
     Inherits Analysis
 
-    Private maxima As Dictionary(Of String, Double)
-    Private plottingPosition As New Dictionary(Of Double, Double)()
+    ''' <summary>
+    ''' Class representing an annual event and its data
+    ''' </summary>
+    Private Class AnnualEvent
+        Public year As Integer
+        Public maxValue As Double
+        Public rank As Integer
+        Public returnPeriod As Double
+    End Class
+
+    ''' <summary>
+    ''' List of annual events
+    ''' </summary>
+    Private events As List(Of AnnualEvent)
 
     ''' <summary>
     ''' Returns the description of the analysis function
@@ -117,29 +129,40 @@ Friend Class AnnualRecurrenceProbability
 
         Dim startMonth As Integer = CType(dialog.ComboBox_startMonth.SelectedItem, Month).number
 
-        'maxima for hydrological years
-        maxima = New Dictionary(Of String, Double)
+        'get annual max values as events
+        Me.events = New List(Of AnnualEvent)
         hyoseries = InputTimeSeries(0).SplitHydroYears(startMonth)
         For Each kvp As KeyValuePair(Of Integer, TimeSeries) In hyoseries
             year = kvp.Key
             series = kvp.Value
-            maxima.Add(year.ToString, series.Maximum)
+
+            Dim ev As New AnnualEvent() With {
+                .year = year,
+                .maxValue = series.Maximum
+            }
+            Me.events.Add(ev)
         Next
 
-        'Sort annual max values descending
-        Dim maxValues As List(Of Double) = maxima.Values.ToList
-        maxValues.Sort()
-        maxValues.Reverse()
+        'Sort events by maxValue values descending
+        Me.events.Sort(Function(ev1 As AnnualEvent, ev2 As AnnualEvent)
+                           Return ev1.maxValue.CompareTo(ev2.maxValue)
+                       End Function)
+        Me.events.Reverse()
 
         'Plotting position
-        Dim n As Integer = maxValues.Count
+        Dim n As Integer = Me.events.Count
         Dim m As Integer = 0
         Dim Pue, T As Double
-        For Each annualMax As Double In maxValues
+
+        For i As Integer = 0 To n - 1
+
             m += 1
             Pue = m / (n + 1)
             T = 1 / Pue
-            plottingPosition.Add(T, annualMax)
+
+            Me.events(i).rank = m
+            Me.events(i).returnPeriod = T
+
         Next
 
     End Sub
@@ -156,12 +179,11 @@ Friend Class AnnualRecurrenceProbability
         ResultTable.Columns.Add("P", GetType(Double))
 
         'Add rows to result table
-        For Each kvp As KeyValuePair(Of String, Double) In maxima
-            Dim period As String = kvp.Key
-            Dim maximum As Double = kvp.Value
+        For Each ev As AnnualEvent In events
             ResultTable.Rows.Add(
-                period,
-                maximum
+                ev.year,
+                ev.maxValue,
+                ev.returnPeriod
             )
         Next
 
@@ -194,11 +216,11 @@ Friend Class AnnualRecurrenceProbability
         ResultChart.Axes.Left.Grid.DrawEvery = 1
         ResultChart.Axes.Left.Title.Caption = Me.InputTimeSeries(0).Unit
 
-        'Scatter Plott
-        Dim scatterPlot As New Steema.TeeChart.Styles.Points(ResultChart)
-        scatterPlot.Title = $"Plotting Position ({InputTimeSeries(0).Title})"
-        For Each kvp As KeyValuePair(Of Double, Double) In plottingPosition
-            scatterPlot.Add(kvp.Key, kvp.Value)
+        'point series
+        Dim points As New Steema.TeeChart.Styles.Points(ResultChart)
+        points.Title = $"Plotting Position ({InputTimeSeries(0).Title})"
+        For Each ev As AnnualEvent In Me.events
+            points.Add(ev.returnPeriod, ev.maxValue)
         Next
 
     End Sub
