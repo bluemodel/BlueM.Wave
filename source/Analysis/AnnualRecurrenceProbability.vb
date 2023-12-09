@@ -28,6 +28,7 @@ Friend Class AnnualRecurrenceProbability
     ''' </summary>
     Private Class AnnualEvent
         Public year As Integer
+        Public maxDate As DateTime
         Public maxValue As Double
         Public rank As Integer
         Public pExceedance As Double
@@ -79,7 +80,7 @@ Friend Class AnnualRecurrenceProbability
     ''' </summary>
     Public Overrides ReadOnly Property hasResultSeries() As Boolean
         Get
-            Return False
+            Return True
         End Get
     End Property
 
@@ -151,15 +152,16 @@ Friend Class AnnualRecurrenceProbability
             If endDate > ts.EndDate Then
                 Log.AddLogEntry(levels.warning, $"Hydrological year {year} ends after end of time series!")
             End If
-            'get max value for year
-            Dim maxValue As Double = ts.Maximum(startDate, endDate)
+            'get node with max value in year
+            Dim maxNode As KeyValuePair(Of DateTime, Double) = ts.MaximumNode(startDate, endDate)
             'store as new event
-            If Double.IsNaN(maxValue) Then
+            If Double.IsNaN(maxNode.Value) Then
                 Log.AddLogEntry(levels.warning, $"Hydrological year {year} contains no usable data!")
             Else
                 Dim ev As New AnnualEvent() With {
                     .year = year,
-                    .maxValue = maxValue
+                    .maxDate = maxNode.Key,
+                    .maxValue = maxNode.Value
                 }
                 Me.events.Add(ev)
             End If
@@ -208,6 +210,7 @@ Friend Class AnnualRecurrenceProbability
         'Create result table
         ResultTable = New DataTable($"Annual maxima: {Me.InputTimeSeries(0).Title}")
         ResultTable.Columns.Add("Year", GetType(Integer))
+        ResultTable.Columns.Add("Date", GetType(DateTime))
         ResultTable.Columns.Add($"Maximum [{Me.InputTimeSeries(0).Unit}]", GetType(Double))
         ResultTable.Columns.Add($"Rank", GetType(Integer))
         ResultTable.Columns.Add("Probability of exceedance [-]", GetType(Double))
@@ -217,6 +220,7 @@ Friend Class AnnualRecurrenceProbability
         For Each ev As AnnualEvent In events
             ResultTable.Rows.Add(
                 ev.year,
+                ev.maxDate,
                 ev.maxValue,
                 ev.rank,
                 ev.pExceedance,
@@ -262,6 +266,16 @@ Friend Class AnnualRecurrenceProbability
         'prepare year label as mark, but hide it by default
         points.Marks.Style = Steema.TeeChart.Styles.MarksStyles.Label
         points.Marks.Visible = False
+
+        'result series (annual maxima)
+        Dim ts As New TimeSeries(Me.InputTimeSeries(0).Title + " (annual maxima)")
+        ts.Unit = Me.InputTimeSeries(0).Unit
+        ts.Interpretation = TimeSeries.InterpretationEnum.Instantaneous
+        ts.DisplayOptions.ShowPoints = True
+        For Each ev As AnnualEvent In Me.events
+            ts.AddNode(ev.maxDate, ev.maxValue)
+        Next
+        Me.ResultSeries = New List(Of TimeSeries) From {ts}
 
     End Sub
 
