@@ -114,9 +114,7 @@ Friend Class AnnualRecurrenceProbability
     ''' </summary>
     Public Overrides Sub ProcessAnalysis()
 
-        Dim hyoseries As Dictionary(Of Integer, TimeSeries)
-        Dim year As Integer
-        Dim series As TimeSeries
+        Dim ts As TimeSeries = Me.InputTimeSeries(0)
 
         Dim dialog As New AnnualRecurrenceProbability_Dialog()
         Dim dialogResult As DialogResult = dialog.ShowDialog()
@@ -128,21 +126,48 @@ Friend Class AnnualRecurrenceProbability
 
         'get annual max values as events
         Me.events = New List(Of AnnualEvent)
-        hyoseries = InputTimeSeries(0).SplitHydroYears(startMonth)
-        For Each kvp As KeyValuePair(Of Integer, TimeSeries) In hyoseries
-            year = kvp.Key
-            series = kvp.Value
 
-            If Not Double.IsNaN(series.Maximum) Then
+        'determine first hydrological year
+        Dim year As Integer
+        If ts.StartDate.Month >= startMonth Then
+            year = ts.StartDate.Year
+        Else
+            year = ts.StartDate.Year - 1
+        End If
+
+        'loop over years
+        Do
+            'start of hydrological year
+            Dim startDate As New DateTime(year, startMonth, 1)
+            If startDate < ts.StartDate Then
+                Log.AddLogEntry(levels.warning, $"Hydrological year {year} begins before start of time series!")
+            End If
+            If startDate > ts.EndDate Then
+                'end of time series
+                Exit Do
+            End If
+            'end of hydrological year
+            Dim endDate As DateTime = New DateTime(year + 1, startMonth, 1) - New TimeSpan(0, 0, 1)
+            If endDate > ts.EndDate Then
+                Log.AddLogEntry(levels.warning, $"Hydrological year {year} ends after end of time series!")
+            End If
+            'get max value for year
+            Dim maxValue As Double = ts.Maximum(startDate, endDate)
+            'store as new event
+            If Double.IsNaN(maxValue) Then
+                Log.AddLogEntry(levels.warning, $"Hydrological year {year} contains no usable data!")
+            Else
                 Dim ev As New AnnualEvent() With {
                     .year = year,
-                    .maxValue = series.Maximum
+                    .maxValue = maxValue
                 }
                 Me.events.Add(ev)
             End If
-        Next
+            'next year
+            year += 1
+        Loop
 
-        'Sort events by maxValue values descending
+        'Sort events by max value descending
         Me.events.Sort(Function(ev1 As AnnualEvent, ev2 As AnnualEvent)
                            Return ev1.maxValue.CompareTo(ev2.maxValue)
                        End Function)
