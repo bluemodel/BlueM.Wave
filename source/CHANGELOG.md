@@ -1,6 +1,12 @@
 ﻿BlueM.Wave Release Notes
 ========================
 
+Development
+-------------
+API-CHANGES:
+* New property `TimeSeries.MaximumNode()` for retrieving the node (date and value) with the maximum value of a time series, 
+  optionally within a defined time period
+
 Version 2.6.1
 -------------
 NEW:
