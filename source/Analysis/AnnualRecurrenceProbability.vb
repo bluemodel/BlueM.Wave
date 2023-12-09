@@ -16,10 +16,6 @@
 'along with this program.  If not, see <https://www.gnu.org/licenses/>.
 '
 
-Imports System.Windows.Forms.AxHost
-Imports System.Windows.Forms.VisualStyles.VisualStyleElement
-Imports System.Windows.Forms.VisualStyles.VisualStyleElement.Window
-Imports BlueM.Wave.AnnualStatistics
 ''' <summary>
 ''' Write description!
 ''' </summary>
