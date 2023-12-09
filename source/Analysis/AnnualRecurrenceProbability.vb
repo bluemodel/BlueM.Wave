@@ -155,7 +155,15 @@ Friend Class AnnualRecurrenceProbability
 
         For i As Integer = 0 To n - 1
 
-            m += 1
+            m = i + 1
+
+            'if two or more events have the same max value, they get the same rank
+            If i > 0 Then
+                If Me.events(i).maxValue = Me.events(i - 1).maxValue Then
+                    m = Me.events(i - 1).rank
+                End If
+            End If
+
             Pue = m / (n + 1)
             T = 1 / Pue
 
