@@ -175,8 +175,8 @@ Friend Class AnnualRecurrenceProbability
         'Create result table
         ResultTable = New DataTable($"Annual maxima: {Me.InputTimeSeries(0).Title}")
         ResultTable.Columns.Add("Period", GetType(String))
-        ResultTable.Columns.Add("Max", GetType(Double))
-        ResultTable.Columns.Add("P", GetType(Double))
+        ResultTable.Columns.Add($"Maximum [{Me.InputTimeSeries(0).Unit}]", GetType(Double))
+        ResultTable.Columns.Add("Return period [years]", GetType(Double))
 
         'Add rows to result table
         For Each ev As AnnualEvent In events
@@ -198,7 +198,7 @@ Friend Class AnnualRecurrenceProbability
 
         'x-Axis
         ResultChart.Axes.Bottom.Labels.Style = Steema.TeeChart.AxisLabelStyle.Value
-        ResultChart.Axes.Bottom.Title.Caption = "Annual recurrence"
+        ResultChart.Axes.Bottom.Title.Caption = "Return period [years]"
         ResultChart.Axes.Bottom.Labels.Angle = 90
         ResultChart.Axes.Bottom.Logarithmic = True
         ResultChart.Axes.Bottom.LogarithmicBase = 10
@@ -220,8 +220,11 @@ Friend Class AnnualRecurrenceProbability
         Dim points As New Steema.TeeChart.Styles.Points(ResultChart)
         points.Title = $"Plotting Position ({InputTimeSeries(0).Title})"
         For Each ev As AnnualEvent In Me.events
-            points.Add(ev.returnPeriod, ev.maxValue)
+            points.Add(ev.returnPeriod, ev.maxValue, ev.year.ToString())
         Next
+        'prepare year label as mark, but hide it by default
+        points.Marks.Style = Steema.TeeChart.Styles.MarksStyles.Label
+        points.Marks.Visible = False
 
     End Sub
 
