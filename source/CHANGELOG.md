@@ -1,4 +1,4 @@
-﻿BlueM.Wave Release Notes
+BlueM.Wave Release Notes
 ========================
 
 Development
@@ -8,6 +8,10 @@ NEW:
 
 API-CHANGES:
 * New property `TimeSeries.MaximumNode()` for retrieving the node (date and value) with the maximum value of a time series, optionally within a defined time period
+
+FIXED:
+* Improved handling of errors and edge cases when importing from Talsim clipboard
+* WBL files can now also be contained in WLZIP files
 
 Version 2.6.1
 -------------

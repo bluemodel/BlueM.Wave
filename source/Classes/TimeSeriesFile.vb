@@ -349,12 +349,15 @@ Public MustInherit Class TimeSeriesFile
     ''' <returns>The timeseries</returns>
     ''' <remarks>If the timeseries has not been imported yet, an import is initiated. 
     ''' Throws an exception if the timeseries cannot be found in the file.</remarks>
-    Public ReadOnly Property getTimeSeries(Optional index As Integer = 0) As TimeSeries
+    Public Overloads ReadOnly Property getTimeSeries(Optional index As Integer = 0) As TimeSeries
         Get
             If Me.TimeSeries.ContainsKey(index) Then
                 Return Me.TimeSeries(index)
             Else
-                Me.selectSeries(index)
+                Dim found As Boolean = Me.selectSeries(index)
+                If Not found Then
+                    Throw New Exception($"Series with index {index} not found in file!")
+                End If
                 'read the file (again)
                 Me.TimeSeries.Clear()
                 Call Me.readFile()
@@ -371,7 +374,7 @@ Public MustInherit Class TimeSeriesFile
     ''' <returns>The timeseries</returns>
     ''' <remarks>If the timeseries has not been imported yet, an import is initiated. 
     ''' Throws an exception if the timeseries cannot be found in the file.</remarks>
-    Public ReadOnly Property getTimeSeries(title As String) As TimeSeries
+    Public Overloads ReadOnly Property getTimeSeries(title As String) As TimeSeries
         Get
             Dim found As Boolean = False
             'Find the series using the given title
@@ -608,13 +611,13 @@ Public MustInherit Class TimeSeriesFile
 
         'Check whether the file exists
         If Not IO.File.Exists(file) Then
-            'A WEL file may be zipped within a WLZIP file, so try extracting it from there
-            If fileExt = FileExtensions.WEL Then
+            'A WEL/WBL file may be zipped within a WLZIP file, so try extracting it from there
+            If fileExt = FileExtensions.WEL Or fileExt = FileExtensions.WBL Then
                 If Not Fileformats.WEL.extractFromWLZIP(file) Then
-                    Throw New Exception($"ERROR: File '{file}' not found!")
+                    Throw New Exception($"File '{file}' not found!")
                 End If
             Else
-                Throw New Exception($"ERROR: File '{file}' not found!")
+                Throw New Exception($"File '{file}' not found!")
             End If
         End If
 
