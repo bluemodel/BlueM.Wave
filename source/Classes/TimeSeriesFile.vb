@@ -32,6 +32,8 @@ Public MustInherit Class TimeSeriesFile
         CSV
         DFS0
         GISMO_WEL
+        HYBNAT_BCS
+        HYBNAT_WEL
         HYDRO_AS_DAT
         HYSTEM_WEL
         JAMS
@@ -63,6 +65,7 @@ Public MustInherit Class TimeSeriesFile
     ''' </remarks>
     Public MustInherit Class FileExtensions
         Public Shared ReadOnly ASC As String = ".ASC"
+        Public Shared ReadOnly BCS As String = ".BCS"   'BGS HYBNAT BCS format
         Public Shared ReadOnly BIN As String = ".BIN"   'SYDRO binary format
         Public Shared ReadOnly CSV As String = ".CSV"
         Public Shared ReadOnly DAT As String = ".DAT"
@@ -73,7 +76,7 @@ Public MustInherit Class TimeSeriesFile
         Public Shared ReadOnly REG As String = ".REG"
         Public Shared ReadOnly SMB As String = ".SMB"
         Public Shared ReadOnly TEN As String = ".TEN"
-        Public Shared ReadOnly TXT As String = ".TXT"   'SWMM routing interface file, SWMM LID report file or generic text file 
+        Public Shared ReadOnly TXT As String = ".TXT"   'SWMM routing interface file, SWMM LID report file or generic text file
         Public Shared ReadOnly UVF As String = ".UVF"
         Public Shared ReadOnly WBL As String = ".WBL"   'SYDRO binary WEL format
         Public Shared ReadOnly WEL As String = ".WEL"
@@ -92,6 +95,7 @@ Public MustInherit Class TimeSeriesFile
         "Text files (*.txt)|*.txt|" &
         "CSV files (*.csv)|*.csv|" &
         "DHI MIKE DFS0 files (*.dfs0)|*.dfs0|" &
+        "HYBNAT files (*.bcs, *.wel)|*.bcs;*.wel|" &
         "HYDRO_AS-2D result files (*.dat)|*.dat|" &
         "Hystem-Extran files (*.dat, *.reg)|*.dat;*.reg|" &
         "JAMS timeseries result files (*.dat)|*.dat|" &
@@ -154,7 +158,7 @@ Public MustInherit Class TimeSeriesFile
     End Property
 
     ''' <summary>
-    ''' Stores the TimeSeries read from the file. 
+    ''' Stores the TimeSeries read from the file.
     ''' The key corresponds to the column index stored as <seealso cref="TimeSeriesInfo.Index"/> in <seealso cref="TimeSeriesInfos"/>.
     ''' </summary>
     Public TimeSeries As Dictionary(Of Integer, TimeSeries)
@@ -347,7 +351,7 @@ Public MustInherit Class TimeSeriesFile
     ''' </summary>
     ''' <param name="index">Index of the desired timeseries within the file</param>
     ''' <returns>The timeseries</returns>
-    ''' <remarks>If the timeseries has not been imported yet, an import is initiated. 
+    ''' <remarks>If the timeseries has not been imported yet, an import is initiated.
     ''' Throws an exception if the timeseries cannot be found in the file.</remarks>
     Public ReadOnly Property getTimeSeries(Optional index As Integer = 0) As TimeSeries
         Get
@@ -369,7 +373,7 @@ Public MustInherit Class TimeSeriesFile
     ''' </summary>
     ''' <param name="title">Title of the desired timeseries.</param>
     ''' <returns>The timeseries</returns>
-    ''' <remarks>If the timeseries has not been imported yet, an import is initiated. 
+    ''' <remarks>If the timeseries has not been imported yet, an import is initiated.
     ''' Throws an exception if the timeseries cannot be found in the file.</remarks>
     Public ReadOnly Property getTimeSeries(title As String) As TimeSeries
         Get
@@ -530,6 +534,10 @@ Public MustInherit Class TimeSeriesFile
                 Return FileExtensions.DFS0
             Case FileTypes.GISMO_WEL
                 Return FileExtensions.ASC
+            Case FileTypes.HYBNAT_BCS
+                Return FileExtensions.BCS
+            Case FileTypes.HYBNAT_WEL
+                Return FileExtensions.WEL
             Case FileTypes.HYDRO_AS_DAT
                 Return FileExtensions.DAT
             Case FileTypes.HYSTEM_WEL
@@ -634,6 +642,11 @@ Public MustInherit Class TimeSeriesFile
                     Log.AddLogEntry(levels.info, $"Assuming SMUSI ASC format for file {fileName}.")
                     fileType = FileTypes.ASC
                 End If
+
+            Case FileExtensions.BCS
+                'HYBNAT BCS file
+                Log.AddLogEntry(levels.info, $"Assuming HYBNAT BCS format for file {fileName}.")
+                fileType = FileTypes.HYBNAT_BCS
 
             Case FileExtensions.BIN
                 'SYDRO binary file
@@ -754,6 +767,10 @@ Public MustInherit Class TimeSeriesFile
                     'SYDRO binary WEL file
                     Log.AddLogEntry(levels.info, $"Detected SYDRO binary WEL format for file {fileName}.")
                     fileType = FileTypes.WBL
+                ElseIf Fileformats.HYBNAT_WEL.verifyFormat(file) Then
+                    'HYBNAT WEL file
+                    Log.AddLogEntry(levels.info, $"Detected HYBNAT WEL format for file {fileName}.")
+                    fileType = FileTypes.HYBNAT_WEL
                 End If
 
             Case FileExtensions.WVP
@@ -816,6 +833,10 @@ Public MustInherit Class TimeSeriesFile
                 FileInstance = New Fileformats.DFS0(file)
             Case FileTypes.GISMO_WEL
                 FileInstance = New Fileformats.GISMO_WEL(file)
+            Case FileTypes.HYBNAT_BCS
+                FileInstance = New Fileformats.HYBNAT_BCS(file)
+            Case FileTypes.HYBNAT_WEL
+                FileInstance = New Fileformats.HYBNAT_WEL(file)
             Case FileTypes.HYSTEM_REG
                 FileInstance = New Fileformats.HystemExtran_REG(file)
             Case FileTypes.HYSTEM_WEL
