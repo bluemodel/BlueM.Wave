@@ -205,7 +205,7 @@ Namespace Fileformats
         ''' <remarks></remarks>
         Public Overrides Sub readFile()
             'Show dialog for setting the reference date
-            Dim dlg As New HYDRO_AS_2D_Diag()
+            Dim dlg As New ReferenceDateDialog()
             dlg.ShowDialog()
             refDate = dlg.DateTimePicker_refDate.Value
 

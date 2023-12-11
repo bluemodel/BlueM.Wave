@@ -324,10 +324,10 @@
     <Compile Include="FileFormats\BIN.vb" />
     <Compile Include="FileFormats\CSV.vb" />
     <Compile Include="FileFormats\HYDRO_AS-2D.vb" />
-    <Compile Include="FileFormats\HYDRO_AS-2D_Diag.Designer.vb">
-      <DependentUpon>HYDRO_AS-2D_Diag.vb</DependentUpon>
+    <Compile Include="FileFormats\ReferenceDateDialog.Designer.vb">
+      <DependentUpon>ReferenceDateDialog.vb</DependentUpon>
     </Compile>
-    <Compile Include="FileFormats\HYDRO_AS-2D_Diag.vb">
+    <Compile Include="FileFormats\ReferenceDateDialog.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="FileFormats\HystemExtran_REG.vb" />
@@ -467,8 +467,8 @@
     <EmbeddedResource Include="FileFormats\DFS0_ExportDialog.resx">
       <DependentUpon>DFS0_ExportDialog.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FileFormats\HYDRO_AS-2D_Diag.resx">
-      <DependentUpon>HYDRO_AS-2D_Diag.vb</DependentUpon>
+    <EmbeddedResource Include="FileFormats\ReferenceDateDialog.resx">
+      <DependentUpon>ReferenceDateDialog.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="My Project\Resources.resx">
       <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
