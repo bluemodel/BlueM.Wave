@@ -238,7 +238,7 @@ Namespace Fileformats
             Dim ts As TimeSeries
 
             'show dialog for setting the reference date
-            Dim dlg As New HYDRO_AS_2D_Diag()
+            Dim dlg As New ReferenceDateDialog()
             dlg.ShowDialog()
             'store refDate
             Me.refDate = dlg.DateTimePicker_refDate.Value
