@@ -315,6 +315,40 @@ Public Class TimeSeries
     End Property
 
     ''' <summary>
+    ''' Returns the node with the maximum value of the time series
+    ''' </summary>
+    Public Overloads ReadOnly Property MaximumNode() As KeyValuePair(Of DateTime, Double)
+        Get
+            Dim nodes As SortedList(Of DateTime, Double) = Me.NodesClean()
+            If nodes.Count > 0 Then
+                Dim maxValue = nodes.Values.Max
+                Dim maxIndex = nodes.IndexOfValue(maxValue)
+                Dim maxDate As DateTime = nodes.Keys(maxIndex)
+                Return New KeyValuePair(Of DateTime, Double)(maxDate, maxValue)
+            Else
+                Return New KeyValuePair(Of DateTime, Double)(Me.StartDate, Double.NaN)
+            End If
+        End Get
+    End Property
+
+    ''' <summary>
+    ''' Returns the node with the maximum value of the time series within a defined time period (inclusively)
+    ''' </summary>
+    Public Overloads ReadOnly Property MaximumNode(startdate As DateTime, enddate As DateTime) As KeyValuePair(Of DateTime, Double)
+        Get
+            Dim nodes As SortedList(Of DateTime, Double) = Me.NodesClean(startdate, enddate)
+            If nodes.Count > 0 Then
+                Dim maxValue = nodes.Values.Max
+                Dim maxIndex = nodes.IndexOfValue(maxValue)
+                Dim maxDate As DateTime = nodes.Keys(maxIndex)
+                Return New KeyValuePair(Of DateTime, Double)(maxDate, maxValue)
+            Else
+                Return New KeyValuePair(Of DateTime, Double)(startdate, Double.NaN)
+            End If
+        End Get
+    End Property
+
+    ''' <summary>
     ''' Returns the minimum value of the time series
     ''' </summary>
     Public Overloads ReadOnly Property Minimum() As Double
@@ -899,7 +933,7 @@ Public Class TimeSeries
                 Wert = Me.Sum
 
             Case Else
-                Throw New Exception($"Der Werttyp '{WertTyp}' wird nicht unterstützt!")
+                Throw New Exception($"Der Werttyp '{WertTyp}' wird nicht unterstÃ¼tzt!")
 
         End Select
 

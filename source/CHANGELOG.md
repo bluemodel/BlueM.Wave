@@ -1,8 +1,14 @@
-﻿BlueM.Wave Release Notes
+BlueM.Wave Release Notes
 ========================
 
 Development
 -------------
+NEW:
+* New analysis function AnnualRecurrenceProbability which calculates the annual recurrence probility and return period of annual maxima using plotting position method
+
+API-CHANGES:
+* New property `TimeSeries.MaximumNode()` for retrieving the node (date and value) with the maximum value of a time series, optionally within a defined time period
+
 FIXED:
 * Improved handling of errors and edge cases when importing from Talsim clipboard
 * WBL files can now also be contained in WLZIP files
