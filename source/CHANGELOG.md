@@ -13,6 +13,9 @@ FIXED:
 * Improved handling of errors and edge cases when importing from Talsim clipboard
 * WBL files can now also be contained in WLZIP files
 
+CHANGED:
+* Updated DHI.DFS to v22.0.3
+
 Version 2.6.1
 -------------
 NEW:
