@@ -2287,9 +2287,8 @@ Friend Class WaveController
             Line1.MarkerShape = ScottPlot.MarkerShape.none
         End If
 
-        'TODO: TChart
         'Y-Achsenzuordnung
-        'assignSeriesToAxis(Line1, ts.Unit)
+        assignSeriesToAxis(Line1, ts.Unit)
 
         'Interpretation
         Select Case ts.Interpretation
@@ -2413,69 +2412,52 @@ Friend Class WaveController
 
         'TODO: for now, assign series to axes by matching the axis label to the unit
 
-        If IsNothing(View.MainPlot.Plot.YAxis) Then
-            'use left axis for the first time
-            View.MainPlot.Plot.YAxis.AxisLabel.Label = unit
-            'TODO: TChart
-            'View.MainPlot.Plot.YAxis.Tag = unit
-            View.MainPlot.Plot.YAxis.IsVisible = True
-            View.MainPlot.Plot.YAxis.LockLimits(False)
-            'View.MainPlot.Plot.YAxis.MaximumOffset = 5
-            series.YAxisIndex = 0
+        'check for reusable custom axes
+        Dim axes As IEnumerable(Of ScottPlot.Renderable.Axis)
+        axes = View.MainPlot.Plot.GetAxesMatching(axisIndex:=Nothing, isVertical:=True)
 
-        ElseIf View.MainPlot.Plot.YAxis.AxisLabel.Label = unit Then
-            'reuse left axis
-            series.YAxisIndex = 0
-
-        ElseIf IsNothing(View.MainPlot.Plot.YAxis2) Then
-            'use right axis for the first time
-            View.MainPlot.Plot.YAxis2.AxisLabel.Label = unit
-            'TODO: TChart
-            'View.MainPlot.Plot.YAxis2.Tag = unit
-            View.MainPlot.Plot.YAxis2.IsVisible = True
-            View.MainPlot.Plot.YAxis2.LockLimits(False)
-            'View.MainPlot.Plot.YAxis2.MaximumOffset = 5
-            series.YAxisIndex = 1
-
-        ElseIf View.MainPlot.Plot.YAxis2.AxisLabel.Label = unit Then
-            'reuse right axis
-            series.YAxisIndex = 1
-        Else
-            'check for reusable custom axes
-            Dim axes As IEnumerable(Of ScottPlot.Renderable.Axis)
-            axes = View.MainPlot.Plot.GetAxesMatching(axisIndex:=Nothing, isVertical:=True)
-
-            Dim axisFound As Boolean = False
-            For Each axis As ScottPlot.Renderable.Axis In axes
-                If axis.AxisLabel.Label = unit Then
-                    series.YAxisIndex = axis.AxisIndex
-                    axisFound = True
-                    Exit For
-                End If
-            Next
-            If Not axisFound Then
-                'create a new custom axis
-                Dim axis As ScottPlot.Renderable.Axis
-                Dim number As Integer = axes.Count + 1
-                'Place every second axis on the right
-                If number Mod 2 = 0 Then
-                    axis = View.MainPlot.Plot.AddAxis(ScottPlot.Renderable.Edge.Right)
-                Else
-                    axis = View.MainPlot.Plot.AddAxis(ScottPlot.Renderable.Edge.Left)
-                End If
-                axis.AxisLabel.Label = unit
-                'TODO: TChart
-                'axis.Tag = unit
+        Dim axisFound As Boolean = False
+        For Each axis As ScottPlot.Renderable.Axis In axes
+            If axis.AxisLabel.Label = "" Then
+                'this axis hasn't been used yet
                 axis.IsVisible = True
-                axis.LockLimits(False)
-                'Calculate position
-                axis.SetOffset(Math.Ceiling((number) / 2) * 8)
-                'assign series to new axis
-                series.YAxisIndex = axis.AxisIndex
+                axis.Ticks(enable:=True)
+                axis.AxisTicks.IsVisible = True
+                axis.AxisLabel.IsVisible = True
+                axis.AxisLabel.Label = unit
 
-                'update axis dialog
-                Call Me.UpdateAxisDialog()
+                series.YAxisIndex = axis.AxisIndex
+                axisFound = True
+                Exit For
+            ElseIf axis.AxisLabel.Label = unit Then
+                'suitable axis found
+                series.YAxisIndex = axis.AxisIndex
+                axisFound = True
+                Exit For
             End If
+        Next
+        If Not axisFound Then
+            'create a new custom axis
+            Dim axis As ScottPlot.Renderable.Axis
+            Dim number As Integer = axes.Count + 1
+            'Place every second axis on the right
+            If number Mod 2 = 0 Then
+                axis = View.MainPlot.Plot.AddAxis(ScottPlot.Renderable.Edge.Right)
+            Else
+                axis = View.MainPlot.Plot.AddAxis(ScottPlot.Renderable.Edge.Left)
+            End If
+            axis.AxisLabel.Label = unit
+            'TODO: TChart
+            'axis.Tag = unit
+            axis.IsVisible = True
+            axis.LockLimits(False)
+            'Calculate position
+            'axis.SetOffset(Math.Ceiling((number) / 2) * 8)
+            'assign series to new axis
+            series.YAxisIndex = axis.AxisIndex
+
+            'update axis dialog
+            Call Me.UpdateAxisDialog()
         End If
 
     End Sub
