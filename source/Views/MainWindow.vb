@@ -33,8 +33,8 @@ Friend Class MainWindow
     Friend isInitializing As Boolean
 
     'TODO: TChart
-    'ColorBand that Is shown while zooming In main chart
-    'Friend colorBandZoom As ScottPlot.Plottable.RectanglePlot
+    'Rectangle that is shown while zooming in main chart
+    'Friend ZoomRectangle As ScottPlot.Plottable.RectanglePlot
 
     'Rectangle representing current view extent of main chart in overview chart
     Friend ViewExtentRectangle As ScottPlot.Plottable.RectanglePlot
@@ -175,32 +175,31 @@ Friend Class MainWindow
         'Me.TChart2.Axes.Bottom.Labels.DateTimeFormat = Globalization.CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern 'date only without time
 
         'ColorBand einrichten
-        Call Me.Init_ColorBands()
+        Call Me.InitializeRectangles()
 
     End Sub
 
     ''' <summary>
-    ''' Initialize color bands
+    ''' Initialize the chart rectangles
     ''' </summary>
-    Friend Sub Init_ColorBands()
+    Friend Sub InitializeRectangles()
 
-        Dim limits As ScottPlot.AxisLimits = Me.OverviewPlot.Plot.GetAxisLimits()
+        Dim limits As ScottPlot.AxisLimits
+
+        'view extent rectangle
+        limits = Me.OverviewPlot.Plot.GetAxisLimits()
         ViewExtentRectangle = Me.OverviewPlot.Plot.AddRectangle(limits.XMin, limits.XMax, limits.YMin, limits.YMax)
         ViewExtentRectangle.BorderColor = Color.Coral
         ViewExtentRectangle.HatchColor = Color.Coral
 
-        'TODO: TChart
-        'colorBandZoom = New Steema.TeeChart.Tools.ColorBand()
-        'Me.MainPlot.Tools.Add(colorBandZoom)
-        'colorBandZoom.Axis = Me.MainPlot.Axes.Bottom
-        'colorBandZoom.Color = Color.Black
-        'colorBandZoom.Pen.Color = Color.Black
-        'colorBandZoom.Pen.Style = Drawing2D.DashStyle.Dash
-        'colorBandZoom.Brush.Visible = False
-        'colorBandZoom.ResizeEnd = False
-        'colorBandZoom.ResizeStart = False
-        'colorBandZoom.EndLinePen.Visible = True
-        'colorBandZoom.StartLinePen.Visible = True
+        ''zoom rectangle
+        'limits = Me.MainPlot.Plot.GetAxisLimits()
+        'ZoomRectangle = Me.MainPlot.Plot.AddRectangle(limits.XMin, limits.XMax, limits.YMin, limits.YMax)
+        'ZoomRectangle.BorderColor = Color.Black
+        'ZoomRectangle.BorderLineStyle = ScottPlot.LineStyle.Dash
+        'ZoomRectangle.HatchColor = Color.Empty
+        'ZoomRectangle.IsVisible = False
+
     End Sub
 
     Private Overloads Sub Close() Implements IView.Close

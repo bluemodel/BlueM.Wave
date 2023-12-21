@@ -181,9 +181,8 @@ Friend Class WaveController
         AddHandler _axisDialog.AxisDeleted, AddressOf axisDeleted
         AddHandler _axisDialog.AxisUnitChanged, AddressOf AxisUnitChanged
 
-        'add chart event listener
-        'TODO: TChart
-        'Me.View.TChart.TChart1.Listeners.Add(Me)
+        'main chart events
+        AddHandler Me.View.MainPlot.AxesChanged, AddressOf AxesChanged
 
         'model events
         AddHandler _model.FileImported, AddressOf FileImported
@@ -1551,6 +1550,16 @@ Friend Class WaveController
     End Sub
 
     ''' <summary>
+    ''' Handles main chart axes changed event
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    Private Sub AxesChanged(sender As Object, e As EventArgs)
+        Call Me.SaveZoomSnapshot()
+        Call Me.ViewportChanged()
+    End Sub
+
+    ''' <summary>
     ''' Handles main chart MouseDown event
     ''' Start a zooming or panning process, save zoom snapshot
     ''' </summary>
@@ -1576,10 +1585,10 @@ Friend Class WaveController
         '        Me.ChartMouseZoomDragging = True
         '        Me.ChartMouseDragStartX = e.X
 
-        '        View.colorBandZoom.MainPlot = View.MainPlot.MainPlot
-        '        View.colorBandZoom.Active = True
-        '        View.colorBandZoom.Start = startValue
-        '        View.colorBandZoom.End = startValue
+        '        View.ZoomRectangle.MainPlot = View.MainPlot.MainPlot
+        '        View.ZoomRectangle.Active = True
+        '        View.ZoomRectangle.Start = startValue
+        '        View.ZoomRectangle.End = startValue
 
         '        Log.AddLogEntry(Log.levels.debug, "Zoom start at " & DateTime.FromOADate(startValue))
         '    End If
@@ -1607,7 +1616,7 @@ Friend Class WaveController
         'If Me.ChartMouseZoomDragging Then
         '    Dim endValue As Double
         '    endValue = View.MainPlot.Series(0).XScreenToValue(e.X)
-        '    View.colorBandZoom.End = endValue
+        '    View.ZoomRectangle.End = endValue
 
         'ElseIf Me.ChartMousePanning Then
         '    Dim xMin, xMax As Double
@@ -1669,7 +1678,7 @@ Friend Class WaveController
         '        Call Me.ViewportChanged()
         '    End If
         '    'hide colorband
-        '    View.colorBandZoom.Active = False
+        '    View.ZoomRectangle.Active = False
         'ElseIf Me.ChartMousePanning Then
         '    'complete the pan process
         '    Call Me.ViewportChanged()
