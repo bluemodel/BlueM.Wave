@@ -2395,7 +2395,14 @@ Friend Class WaveController
 
         'TODO: for now, assign series to axes by matching the axis label to the unit
 
-        'check for reusable custom axes
+        'determine min and max values with some padding
+        Dim serieslimits As ScottPlot.AxisLimits = series.GetAxisLimits()
+        Dim span As Double = serieslimits.YMax - serieslimits.YMin
+        Dim padding As Double = 0.05 * span
+        Dim min As Double = serieslimits.YMin - padding
+        Dim max As Double = serieslimits.YMax + padding
+
+        'check for reusable axes
         Dim axes As IEnumerable(Of ScottPlot.Renderable.Axis)
         axes = View.MainPlot.Plot.GetAxesMatching(axisIndex:=Nothing, isVertical:=True)
 
@@ -2410,10 +2417,9 @@ Friend Class WaveController
                 axis.AxisLabel.Label = unit
 
                 'set axis bounds
-                Dim serieslimits As ScottPlot.AxisLimits = series.GetAxisLimits()
-                axis.Dims.SetAxis(serieslimits.YMin, serieslimits.YMax)
-                axis.SetBoundary(serieslimits.YMin, serieslimits.YMax)
-                axis.SetInnerBoundary(serieslimits.YMin, serieslimits.YMax)
+                axis.Dims.SetAxis(min, max)
+                axis.SetBoundary(min, max)
+                axis.SetInnerBoundary(min, max)
 
                 'assign series to new axis
                 series.YAxisIndex = axis.AxisIndex
@@ -2423,12 +2429,14 @@ Friend Class WaveController
                 'suitable existing axis found
 
                 'update axis bounds
-                Dim serieslimits As ScottPlot.AxisLimits = series.GetAxisLimits()
                 Dim axisMin As Double = axis.Dims.Min
                 Dim axisMax As Double = axis.Dims.Max
-                axis.Dims.SetAxis(Math.Min(axisMin, serieslimits.YMin), Math.Max(axisMax, serieslimits.YMax))
-                axis.SetBoundary(Math.Min(axisMin, serieslimits.YMin), Math.Max(axisMax, serieslimits.YMax))
-                axis.SetInnerBoundary(Math.Min(axisMin, serieslimits.YMin), Math.Max(axisMax, serieslimits.YMax))
+                Dim newMin As Double = Math.Min(axisMin, min)
+                Dim newMax As Double = Math.Max(axisMax, max)
+
+                axis.Dims.SetAxis(newMin, newMax)
+                axis.SetBoundary(newMin, newMax)
+                axis.SetInnerBoundary(newMin, newMax)
 
                 'assign series to new axis
                 series.YAxisIndex = axis.AxisIndex
@@ -2458,10 +2466,9 @@ Friend Class WaveController
             'axis.SetOffset(Math.Ceiling((number) / 2) * 8)
 
             'set axis bounds
-            Dim serieslimits As ScottPlot.AxisLimits = series.GetAxisLimits()
-            axis.Dims.SetAxis(serieslimits.YMin, serieslimits.YMax)
-            axis.SetBoundary(serieslimits.YMin, serieslimits.YMax)
-            axis.SetInnerBoundary(serieslimits.YMin, serieslimits.YMax)
+            axis.Dims.SetAxis(min, max)
+            axis.SetBoundary(min, max)
+            axis.SetInnerBoundary(min, max)
 
             'assign series to new axis
             series.YAxisIndex = axis.AxisIndex
