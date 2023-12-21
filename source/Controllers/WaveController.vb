@@ -2324,58 +2324,39 @@ Friend Class WaveController
     ''' <param name="ts">the TimeSeries to add</param>
     Private Sub AddSeriesToOverview(ts As TimeSeries)
 
+        'Linien instanzieren
+        Dim Line2 As ScottPlot.Plottable.ScatterPlot
+        Line2 = View.OverviewPlot.Plot.AddScatterLines(ts.Dates.Select(Function(t As DateTime) t.ToOADate()).ToArray(), ts.Values.ToArray())
+
+        'Do not paint NaN values
+        Line2.OnNaN = ScottPlot.Plottable.ScatterPlot.NanBehavior.Gap
+
         'TODO: TChart
-        ''Linien instanzieren
-        'Dim Line2 As New Steema.TeeChart.Styles.FastLine(View.TChart2.Chart)
-
-        ''Do not paint NaN values
-        'Line2.TreatNaNAsNull = True
-        'Line2.TreatNulls = Steema.TeeChart.Styles.TreatNullsStyle.DoNotPaint
-
-        ''X-Werte als Zeitdaten einstellen
-        'Line2.XValues.DateTime = True
-
         ''Store id as Tag property
         'Line2.Tag = ts.Id
 
-        ''Namen vergeben
-        'Line2.Title = ts.Title
+        'Namen vergeben
+        Line2.Label = ts.Title
 
-        ''set display options
-        'If Not ts.DisplayOptions.Color.IsEmpty Then
-        '    Line2.Color = ts.DisplayOptions.Color
-        'End If
-        'Line2.LinePen.Style = ts.DisplayOptions.LineStyle
-        'Line2.LinePen.Width = ts.DisplayOptions.LineWidth
+        'set display options
+        If Not ts.DisplayOptions.Color.IsEmpty Then
+            Line2.Color = ts.DisplayOptions.Color
+        End If
+        Line2.LineStyle = ts.DisplayOptions.LineStyle
+        Line2.LineWidth = ts.DisplayOptions.LineWidth
 
-        ''Stützstellen zur Serie hinzufügen
-        'Line2.BeginUpdate()
-        'If Double.IsNaN(ts.FirstValue) Then
-        '    'TeeChart throws an OverflowException when attempting to display a FastLine that begins with a NaN value as a step function!
-        '    'To avoid this we generally do not add NaN values at the beginning of the time series to the FastLine (#67)
-        '    Dim isNaN As Boolean = True
-        '    For Each node As KeyValuePair(Of DateTime, Double) In ts.Nodes
-        '        If isNaN Then
-        '            isNaN = isNaN And Double.IsNaN(node.Value)
-        '        End If
-        '        If Not isNaN Then
-        '            Line2.Add(node.Key, node.Value)
-        '        End If
-        '    Next
-        'Else
-        '    Line2.Add(ts.Dates.ToArray(), ts.Values.ToArray())
-        'End If
-        'Line2.EndUpdate()
+        'Interpretation
+        Select Case ts.Interpretation
+            Case TimeSeries.InterpretationEnum.BlockRight
+                Line2.StepDisplay = True
+                Line2.StepDisplayRight = True
+            Case TimeSeries.InterpretationEnum.BlockLeft,
+                TimeSeries.InterpretationEnum.CumulativePerTimestep
+                Line2.StepDisplay = True
+                Line2.StepDisplayRight = False
+        End Select
 
-        ''Interpretation
-        'Select Case ts.Interpretation
-        '    Case TimeSeries.InterpretationEnum.BlockRight
-        '        Line2.Stairs = True
-        '    Case TimeSeries.InterpretationEnum.BlockLeft,
-        '        TimeSeries.InterpretationEnum.CumulativePerTimestep
-        '        Line2.Stairs = True
-        '        Line2.InvertedStairs = True
-        'End Select
+        View.OverviewPlot.Refresh()
 
     End Sub
 

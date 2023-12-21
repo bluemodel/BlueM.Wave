@@ -131,15 +131,15 @@ Friend Class MainWindow
     '*********************
     Friend Sub Init_Charts()
 
-        'Charts zurücksetzen
+        'initialize main plot
         Me.MainPlot.Plot.Clear()
-
         Call Helpers.FormatChart(Me.MainPlot.Plot)
+        Me.MainPlot.Refresh()
 
+        'initialize overview plot
         Me.OverviewPlot.Plot.Clear()
         Call Helpers.FormatChart(Me.OverviewPlot.Plot)
-
-        Me.MainPlot.Refresh()
+        Me.OverviewPlot.Plot.Legend.IsVisible = False
         Me.OverviewPlot.Refresh()
 
         'TODO: TChart
