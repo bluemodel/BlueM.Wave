@@ -2409,11 +2409,28 @@ Friend Class WaveController
                 axis.AxisLabel.IsVisible = True
                 axis.AxisLabel.Label = unit
 
+                'set axis bounds
+                Dim serieslimits As ScottPlot.AxisLimits = series.GetAxisLimits()
+                axis.Dims.SetAxis(serieslimits.YMin, serieslimits.YMax)
+                axis.SetBoundary(serieslimits.YMin, serieslimits.YMax)
+                axis.SetInnerBoundary(serieslimits.YMin, serieslimits.YMax)
+
+                'assign series to new axis
                 series.YAxisIndex = axis.AxisIndex
                 axisFound = True
                 Exit For
             ElseIf axis.AxisLabel.Label = unit Then
-                'suitable axis found
+                'suitable existing axis found
+
+                'update axis bounds
+                Dim serieslimits As ScottPlot.AxisLimits = series.GetAxisLimits()
+                Dim axisMin As Double = axis.Dims.Min
+                Dim axisMax As Double = axis.Dims.Max
+                axis.Dims.SetAxis(Math.Min(axisMin, serieslimits.YMin), Math.Max(axisMax, serieslimits.YMax))
+                axis.SetBoundary(Math.Min(axisMin, serieslimits.YMin), Math.Max(axisMax, serieslimits.YMax))
+                axis.SetInnerBoundary(Math.Min(axisMin, serieslimits.YMin), Math.Max(axisMax, serieslimits.YMax))
+
+                'assign series to new axis
                 series.YAxisIndex = axis.AxisIndex
                 axisFound = True
                 Exit For
@@ -2423,19 +2440,29 @@ Friend Class WaveController
             'create a new custom axis
             Dim axis As ScottPlot.Renderable.Axis
             Dim number As Integer = axes.Count + 1
+
             'Place every second axis on the right
             If number Mod 2 = 0 Then
                 axis = View.MainPlot.Plot.AddAxis(ScottPlot.Renderable.Edge.Right)
             Else
                 axis = View.MainPlot.Plot.AddAxis(ScottPlot.Renderable.Edge.Left)
             End If
+
             axis.AxisLabel.Label = unit
+
             'TODO: TChart
             'axis.Tag = unit
             axis.IsVisible = True
-            axis.LockLimits(False)
+
             'Calculate position
             'axis.SetOffset(Math.Ceiling((number) / 2) * 8)
+
+            'set axis bounds
+            Dim serieslimits As ScottPlot.AxisLimits = series.GetAxisLimits()
+            axis.Dims.SetAxis(serieslimits.YMin, serieslimits.YMax)
+            axis.SetBoundary(serieslimits.YMin, serieslimits.YMax)
+            axis.SetInnerBoundary(serieslimits.YMin, serieslimits.YMax)
+
             'assign series to new axis
             series.YAxisIndex = axis.AxisIndex
 

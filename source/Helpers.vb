@@ -224,7 +224,7 @@ Public Module Helpers
     End Function
 
     ''' <summary>
-    ''' Default formatting for a plot
+    ''' Default formatting for a chart
     ''' </summary>
     ''' <param name="plot"></param>
     Friend Sub FormatChart(ByRef plot As ScottPlot.Plot)
@@ -232,77 +232,27 @@ Public Module Helpers
         'set default color palette
         plot.Palette = ScottPlot.Palette.Category10
 
-        'TODO: TChart
-        'plot.Aspect.View3D = False
-        ''plot.BackColor = Color.White
-        'plot.Panel.Gradient.Visible = False
-        'plot.Panel.Brush.Color = Color.White
-        'plot.Walls.Back.Transparent = False
-        'plot.Walls.Back.Gradient.Visible = False
-        'plot.Walls.Back.Color = Color.White
-
-        ''Header
-        'plot.Header.Font.Name = "GenericSansSerif"
-        'plot.Header.Font.Color = Color.Black
-        'plot.Header.Font.Size = 12
-        'plot.Header.Text = ""
-
-        'Legende
+        'legend
         Dim legend As ScottPlot.Renderable.Legend
         legend = plot.Legend(enable:=True, location:=ScottPlot.Alignment.UpperRight)
         legend.UpdateLegendItems(plot, includeHidden:=True)
 
-        'plot.Legend.Font.Name = "GenericSansSerif"
-        'plot.Legend.Font.Size = 10
-        'plot.Legend.LegendStyle = Steema.TeeChart.LegendStyles.Series
-        'plot.Legend.FontSeriesColor = True
-        'plot.Legend.CheckBoxes = True
-
-        'Achsen
+        'X axis
         plot.XAxis.DateTimeFormat(True)
-        'plot.Axes.DrawBehind = False
 
-        'plot.Axes.Left.Title.Font.Name = "GenericSansSerif"
-        'plot.Axes.Left.Title.Font.Color = Color.Black
-        'plot.Axes.Left.Title.Font.Size = 10
+        'reset left Y axis
+        plot.YAxis.Label("")
+        plot.YAxis.Dims.ResetLimits()
 
-        'plot.Axes.Left.Labels.Font.Name = "GenericSansSerif"
-        'plot.Axes.Left.Labels.Font.Color = Color.Black
-        'plot.Axes.Left.Labels.Font.Size = 10
+        'hide right Y axis
+        plot.YAxis2.Label("")
+        plot.YAxis2.Dims.ResetLimits()
+        plot.YAxis2.IsVisible = False
 
-        'plot.Axes.Left.AxisPen.Visible = True
-
-        'plot.Axes.Left.Grid.Visible = True
-        'plot.Axes.Left.Grid.Style = Drawing2D.DashStyle.Dash
-
-        'plot.Axes.Right.Title.Font.Name = "GenericSansSerif"
-        'plot.Axes.Right.Title.Font.Color = Color.Black
-        'plot.Axes.Right.Title.Font.Size = 10
-
-        'plot.Axes.Right.Labels.Font.Name = "GenericSansSerif"
-        'plot.Axes.Right.Labels.Font.Color = Color.Black
-        'plot.Axes.Right.Labels.Font.Size = 10
-
-        'plot.Axes.Right.AxisPen.Visible = True
-
-        'plot.Axes.Right.Grid.Visible = False
-        'plot.Axes.Right.Grid.Style = Drawing2D.DashStyle.Dash
-
-        'plot.Axes.Bottom.Title.Font.Name = "GenericSansSerif"
-        'plot.Axes.Bottom.Title.Font.Color = Color.Black
-        'plot.Axes.Bottom.Title.Font.Size = 10
-
-        'plot.Axes.Bottom.Labels.Font.Name = "GenericSansSerif"
-        'plot.Axes.Bottom.Labels.Font.Color = Color.Black
-        'plot.Axes.Bottom.Labels.Font.Size = 10
-
-        'plot.Axes.Bottom.Automatic = True
-
-        'plot.Axes.Bottom.AxisPen.Visible = True
-
-        'plot.Axes.Bottom.Grid.Visible = True
-        'plot.Axes.Bottom.Grid.Style = Drawing2D.DashStyle.Dash
-
+        'remove any additional axes
+        For axisIndex As Integer = 2 To plot.GetAxesMatching(axisIndex:=Nothing, isVertical:=True).Count() - 1
+            plot.RemoveAxis(plot.GetAxesMatching(axisIndex:=axisIndex).First)
+        Next
     End Sub
 
     Public Enum Direction
