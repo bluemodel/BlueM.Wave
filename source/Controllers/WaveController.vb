@@ -1735,40 +1735,41 @@ Friend Class WaveController
     ''' <param name="e"></param>
     Private Sub OverviewChart_MouseDown(sender As Object, e As MouseEventArgs)
 
-        'If View.OverviewPlot.Series.Count > 0 Then
+        If View.OverviewPlot.Plot.GetPlottables().Count > 0 Then
 
-        '    If e.Button = MouseButtons.Left Then
-        '        'start zoom process
+            If e.Button = MouseButtons.Left Then
+                'start zoom process
 
-        '        View.OverviewPlot.Cursor = View.cursor_zoom
+                View.OverviewPlot.Cursor = View.cursor_zoom
 
-        '        Me.OverviewChartMouseDragging = True
-        '        Me.OverviewChartMouseDragStartX = e.X
+                Me.OverviewChartMouseDragging = True
+                Me.OverviewChartMouseDragStartX = e.X
 
-        '        'set start and end value of colorband to mouse position
-        '        Dim xMouse As Double
-        '        xMouse = View.OverviewPlot.Series(0).XScreenToValue(Me.OverviewChartMouseDragStartX)
+                'set start and end value of colorband to mouse position
+                Dim xMouse As Double
+                xMouse = View.OverviewPlot.Plot.GetCoordinateX(Me.OverviewChartMouseDragStartX)
 
-        '        'prevent zoom starting beyond displayable date range (#68)
-        '        xMouse = Math.Max(xMouse, Constants.minOADate.ToOADate)
-        '        xMouse = Math.Min(xMouse, Constants.maxOADate.ToOADate)
+                'prevent zoom starting beyond displayable date range (#68)
+                xMouse = Math.Max(xMouse, Constants.minOADate.ToOADate)
+                xMouse = Math.Min(xMouse, Constants.maxOADate.ToOADate)
 
-        '        View.colorBandOverview.Start = xMouse
-        '        View.colorBandOverview.End = xMouse
+                View.ViewExtentRectangle.X1 = xMouse
+                View.ViewExtentRectangle.X2 = xMouse
+                View.OverviewPlot.Refresh()
 
-        '        Log.AddLogEntry(Log.levels.debug, "Zoom start at " & DateTime.FromOADate(xMouse))
+                Log.AddLogEntry(Log.levels.debug, "Zoom start at " & DateTime.FromOADate(xMouse))
 
-        '    ElseIf e.Button = MouseButtons.Right Then
-        '        'start panning process
+            ElseIf e.Button = MouseButtons.Right Then
+                'start panning process
 
-        '        View.OverviewPlot.Cursor = View.cursor_pan
+                View.OverviewPlot.Cursor = View.cursor_pan
 
-        '        Me.OverviewChartMouseDragging = True
-        '        Me.OverviewChartMouseDragStartX = e.X
-        '        Me.OverviewChartMouseDragOffset = e.X - View.OverviewPlot.Series(0).ValuePointToScreenPoint(View.colorBandOverview.Start, 0).X
+                Me.OverviewChartMouseDragging = True
+                Me.OverviewChartMouseDragStartX = e.X
+                Me.OverviewChartMouseDragOffset = e.X - View.OverviewPlot.Plot.GetPixelX(View.ViewExtentRectangle.X1)
 
-        '    End If
-        'End If
+            End If
+        End If
     End Sub
 
     ''' <summary>
@@ -1779,41 +1780,42 @@ Friend Class WaveController
     ''' <param name="e"></param>
     Private Sub OverviewChart_MouseMove(sender As Object, e As MouseEventArgs)
 
-        'TODO: TChart
-        'If Me.OverviewChartMouseDragging Then
+        If Me.OverviewChartMouseDragging Then
 
-        '    If e.Button = MouseButtons.Left Then
-        '        'move the end of the colorband to the mouse pointer
-        '        Dim xMouse As Double = View.OverviewPlot.Series(0).XScreenToValue(e.X)
+            If e.Button = MouseButtons.Left Then
+                'move the end of the colorband to the mouse pointer
+                Dim xMouse As Double = View.OverviewPlot.Plot.GetCoordinateX(e.X)
 
-        '        'restrict to displayable date range (#68)
-        '        xMouse = Math.Max(xMouse, Constants.minOADate.ToOADate)
-        '        xMouse = Math.Min(xMouse, Constants.maxOADate.ToOADate)
+                'restrict to displayable date range (#68)
+                xMouse = Math.Max(xMouse, Constants.minOADate.ToOADate)
+                xMouse = Math.Min(xMouse, Constants.maxOADate.ToOADate)
 
-        '        View.colorBandOverview.End = xMouse
+                View.ViewExtentRectangle.X2 = xMouse
+                View.OverviewPlot.Refresh()
 
-        '    ElseIf e.Button = MouseButtons.Right Then
-        '        'move the whole color band while maintaining its width
-        '        Dim width As Double = View.colorBandOverview.End - View.colorBandOverview.Start
+            ElseIf e.Button = MouseButtons.Right Then
+                'move the whole color band while maintaining its width
+                Dim width As Double = View.ViewExtentRectangle.X2 - View.ViewExtentRectangle.X1
 
-        '        Dim startValue, endValue As Double
-        '        startValue = View.OverviewPlot.Series(0).XScreenToValue(e.X - Me.OverviewChartMouseDragOffset)
-        '        endValue = startValue + width
+                Dim startValue, endValue As Double
+                startValue = View.OverviewPlot.Plot.GetCoordinateX(e.X - Me.OverviewChartMouseDragOffset)
+                endValue = startValue + width
 
-        '        'restrict to displayable date range (#68)
-        '        If startValue < Constants.minOADate.ToOADate Then
-        '            startValue = Constants.minOADate.ToOADate
-        '            endValue = startValue + width
-        '        End If
-        '        If endValue > Constants.maxOADate.ToOADate Then
-        '            endValue = Constants.maxOADate.ToOADate
-        '            startValue = endValue - width
-        '        End If
+                'restrict to displayable date range (#68)
+                If startValue < Constants.minOADate.ToOADate Then
+                    startValue = Constants.minOADate.ToOADate
+                    endValue = startValue + width
+                End If
+                If endValue > Constants.maxOADate.ToOADate Then
+                    endValue = Constants.maxOADate.ToOADate
+                    startValue = endValue - width
+                End If
 
-        '        View.colorBandOverview.Start = startValue
-        '        View.colorBandOverview.End = endValue
-        '    End If
-        'End If
+                View.ViewExtentRectangle.X1 = startValue
+                View.ViewExtentRectangle.X2 = endValue
+                View.OverviewPlot.Refresh()
+            End If
+        End If
     End Sub
 
     ''' <summary>
@@ -1824,62 +1826,62 @@ Friend Class WaveController
     ''' <param name="e"></param>
     Private Sub OverviewChart_MouseUp(sender As System.Object, e As System.Windows.Forms.MouseEventArgs)
 
-        'TODO: TChart
-        'View.OverviewPlot.Cursor = Cursors.Default
+        View.OverviewPlot.Cursor = Cursors.Default
 
-        'If Me.OverviewChartMouseDragging Then
+        If Me.OverviewChartMouseDragging Then
 
-        '    Me.OverviewChartMouseDragging = False
+            Me.OverviewChartMouseDragging = False
 
-        '    If e.Button = MouseButtons.Left Then
-        '        'complete the zoom process
+            If e.Button = MouseButtons.Left Then
+                'complete the zoom process
 
-        '        'determine start and end of zoom
-        '        If e.X <> Me.OverviewChartMouseDragStartX Then
-        '            'set start and end depending on zoom direction
-        '            Dim startValue, endValue As Double
-        '            If e.X > Me.OverviewChartMouseDragStartX Then
-        '                startValue = View.OverviewPlot.Series(0).XScreenToValue(Me.OverviewChartMouseDragStartX)
-        '                endValue = View.OverviewPlot.Series(0).XScreenToValue(e.X)
-        '            Else
-        '                startValue = View.OverviewPlot.Series(0).XScreenToValue(e.X)
-        '                endValue = View.OverviewPlot.Series(0).XScreenToValue(Me.OverviewChartMouseDragStartX)
-        '            End If
-        '            'restrict to displayable date range (#68)
-        '            startValue = Math.Max(startValue, Constants.minOADate.ToOADate)
-        '            endValue = Math.Min(endValue, Constants.maxOADate.ToOADate)
+                'determine start and end of zoom
+                If e.X <> Me.OverviewChartMouseDragStartX Then
+                    'set start and end depending on zoom direction
+                    Dim startValue, endValue As Double
+                    If e.X > Me.OverviewChartMouseDragStartX Then
+                        startValue = View.OverviewPlot.Plot.GetCoordinateX(Me.OverviewChartMouseDragStartX)
+                        endValue = View.OverviewPlot.Plot.GetCoordinateX(e.X)
+                    Else
+                        startValue = View.OverviewPlot.Plot.GetCoordinateX(e.X)
+                        endValue = View.OverviewPlot.Plot.GetCoordinateX(Me.OverviewChartMouseDragStartX)
+                    End If
+                    'restrict to displayable date range (#68)
+                    startValue = Math.Max(startValue, Constants.minOADate.ToOADate)
+                    endValue = Math.Min(endValue, Constants.maxOADate.ToOADate)
 
-        '            Log.AddLogEntry(Log.levels.debug, "Zoom end at " & DateTime.FromOADate(endValue))
+                    Log.AddLogEntry(Log.levels.debug, "Zoom end at " & DateTime.FromOADate(endValue))
 
-        '            'adjust colorband
-        '            View.colorBandOverview.Start = startValue
-        '            View.colorBandOverview.End = endValue
+                    'adjust colorband
+                    View.ViewExtentRectangle.X1 = startValue
+                    View.ViewExtentRectangle.X2 = endValue
+                    View.OverviewPlot.Refresh()
 
-        '            'save the current zoom snapshot
-        '            Call Me.SaveZoomSnapshot()
+                    'save the current zoom snapshot
+                    Call Me.SaveZoomSnapshot()
 
-        '            'set the new viewport on the main chart
-        '            View.ChartMinX = DateTime.FromOADate(View.colorBandOverview.Start)
-        '            View.ChartMaxX = DateTime.FromOADate(View.colorBandOverview.End)
+                    'set the new viewport on the main chart
+                    View.ChartMinX = DateTime.FromOADate(View.ViewExtentRectangle.X1)
+                    View.ChartMaxX = DateTime.FromOADate(View.ViewExtentRectangle.X2)
 
-        '            Me.selectionMade = True
-        '            Call Me.ViewportChanged()
-        '        End If
+                    Me.selectionMade = True
+                    Call Me.ViewportChanged()
+                End If
 
-        '    ElseIf e.Button = MouseButtons.Right Then
-        '        'complete the pan process
+            ElseIf e.Button = MouseButtons.Right Then
+                'complete the pan process
 
-        '        'save the current zoom snapshot
-        '        Call Me.SaveZoomSnapshot()
+                'save the current zoom snapshot
+                Call Me.SaveZoomSnapshot()
 
-        '        'set the new viewport on the main chart
-        '        View.ChartMinX = DateTime.FromOADate(View.colorBandOverview.Start)
-        '        View.ChartMaxX = DateTime.FromOADate(View.colorBandOverview.End)
+                'set the new viewport on the main chart
+                View.ChartMinX = DateTime.FromOADate(View.ViewExtentRectangle.X1)
+                View.ChartMaxX = DateTime.FromOADate(View.ViewExtentRectangle.X2)
 
-        '        Me.selectionMade = True
-        '        Call Me.ViewportChanged()
-        '    End If
-        'End If
+                Me.selectionMade = True
+                Call Me.ViewportChanged()
+            End If
+        End If
     End Sub
 
     ''' <summary>
@@ -1890,70 +1892,71 @@ Friend Class WaveController
     Private Sub OverviewChart_MouseWheel(sender As Object, e As MouseEventArgs)
 
         'TODO: TChart
-        'Try
-        '    ' Update the drawing based upon the mouse wheel scrolling.
-        '    ' "The UI should scroll when the accumulated delta is plus or minus 120.
-        '    '  The UI should scroll the number of logical lines returned by the
-        '    '  SystemInformation.MouseWheelScrollLines property for every delta value reached."
-        '    'https://learn.microsoft.com/en-us/dotnet/api/system.windows.forms.control.mousewheel?f1url=%3FappId%3DDev16IDEF1%26l%3DEN-US%26k%3Dk(System.Windows.Forms.Control.MouseWheel)%3Bk(TargetFrameworkMoniker-.NETFramework%2CVersion%253Dv4.8)%3Bk(DevLang-VB)%26rd%3Dtrue&view=windowsdesktop-7.0#remarks
-        '    'TODO: scale mousewheel zoom with numberOfTextLinesToMove
-        '    Dim numberOfTextLinesToMove As Integer = CInt(e.Delta * SystemInformation.MouseWheelScrollLines / 120)
+        Try
+            ' Update the drawing based upon the mouse wheel scrolling.
+            ' "The UI should scroll when the accumulated delta is plus or minus 120.
+            '  The UI should scroll the number of logical lines returned by the
+            '  SystemInformation.MouseWheelScrollLines property for every delta value reached."
+            'https://learn.microsoft.com/en-us/dotnet/api/system.windows.forms.control.mousewheel?f1url=%3FappId%3DDev16IDEF1%26l%3DEN-US%26k%3Dk(System.Windows.Forms.Control.MouseWheel)%3Bk(TargetFrameworkMoniker-.NETFramework%2CVersion%253Dv4.8)%3Bk(DevLang-VB)%26rd%3Dtrue&view=windowsdesktop-7.0#remarks
+            'TODO: scale mousewheel zoom with numberOfTextLinesToMove
+            Dim numberOfTextLinesToMove As Integer = CInt(e.Delta * SystemInformation.MouseWheelScrollLines / 120)
 
-        '    If numberOfTextLinesToMove = 0 Then
-        '        Exit Sub
-        '    End If
+            If numberOfTextLinesToMove = 0 Then
+                Exit Sub
+            End If
 
-        '    'zoom while centering on mouse
-        '    Dim newStart As Double
-        '    Dim newEnd As Double
-        '    Dim mouseOADate As Double = View.OverviewPlot.Series(0).XScreenToValue(e.X)
-        '    Dim currentExtent As Double = View.colorBandOverview.End - View.colorBandOverview.Start
+            'zoom while centering on mouse
+            Dim newStart As Double
+            Dim newEnd As Double
+            Dim mouseOADate As Double = View.OverviewPlot.Plot.GetCoordinateX(e.X)
+            Dim currentExtent As Double = View.ViewExtentRectangle.X2 - View.ViewExtentRectangle.X1
 
-        '    If mouseOADate >= View.colorBandOverview.Start And mouseOADate <= View.colorBandOverview.End Then
-        '        'zoom by 25% if mouse is inside color band
-        '        Dim newExtent As Double
-        '        If numberOfTextLinesToMove > 0 Then
-        '            newExtent = currentExtent * 0.75
-        '        Else
-        '            newExtent = currentExtent * 1.25
-        '        End If
+            If mouseOADate >= View.ViewExtentRectangle.X1 And mouseOADate <= View.ViewExtentRectangle.X2 Then
+                'zoom by 25% if mouse is inside color band
+                Dim newExtent As Double
+                If numberOfTextLinesToMove > 0 Then
+                    newExtent = currentExtent * 0.75
+                Else
+                    newExtent = currentExtent * 1.25
+                End If
 
-        '        'set new viewport, centering on mouse
-        '        newStart = mouseOADate - (newExtent / 2)
-        '        newEnd = mouseOADate + (newExtent / 2)
+                'set new viewport, centering on mouse
+                newStart = mouseOADate - (newExtent / 2)
+                newEnd = mouseOADate + (newExtent / 2)
 
-        '    Else
-        '        'pan by 25% of current extent if mouse is outside of color band
-        '        Dim delta As Double = currentExtent * 0.25
-        '        If mouseOADate > View.colorBandOverview.End Then
-        '            'pan right
-        '            newStart = View.colorBandOverview.Start + delta
-        '            newEnd = View.colorBandOverview.End + delta
-        '        Else
-        '            'pan left
-        '            newStart = View.colorBandOverview.Start - delta
-        '            newEnd = View.colorBandOverview.End - delta
-        '        End If
-        '    End If
+            Else
+                'pan by 25% of current extent if mouse is outside of color band
+                Dim delta As Double = currentExtent * 0.25
+                If mouseOADate > View.ViewExtentRectangle.X2 Then
+                    'pan right
+                    newStart = View.ViewExtentRectangle.X1 + delta
+                    newEnd = View.ViewExtentRectangle.X2 + delta
+                Else
+                    'pan left
+                    newStart = View.ViewExtentRectangle.X1 - delta
+                    newEnd = View.ViewExtentRectangle.X2 - delta
+                End If
+            End If
 
-        '    'set the new colorband
-        '    View.colorBandOverview.Start = newStart
-        '    View.colorBandOverview.End = newEnd
+            'set the new colorband
+            View.ViewExtentRectangle.X1 = newStart
+            View.ViewExtentRectangle.X2 = newEnd
+            View.OverviewPlot.Refresh()
 
-        '    'save the current zoom snapshot
-        '    Call Me.SaveZoomSnapshot()
+            'save the current zoom snapshot
+            Call Me.SaveZoomSnapshot()
 
-        '    'set the new viewport on the main chart
-        '    View.ChartMinX = DateTime.FromOADate(View.colorBandOverview.Start)
-        '    View.ChartMaxX = DateTime.FromOADate(View.colorBandOverview.End)
+            'set the new viewport on the main chart
+            View.ChartMinX = DateTime.FromOADate(View.ViewExtentRectangle.X1)
+            View.ChartMaxX = DateTime.FromOADate(View.ViewExtentRectangle.X2)
 
-        '    Me.selectionMade = True
-        '    Call Me.ViewportChanged()
+            Me.selectionMade = True
+            Call Me.ViewportChanged()
 
-        'Catch ex As ArgumentException
-        '    'can happen when zooming out too far, invalid OADate
-        '    Log.AddLogEntry(levels.debug, $"Exception in OverviewChart_MouseWheel: {ex}")
-        'End Try
+        Catch ex As ArgumentException
+            'can happen when zooming out too far, invalid OADate
+            Log.AddLogEntry(levels.debug, $"Exception in OverviewChart_MouseWheel: {ex}")
+        End Try
 
     End Sub
 
