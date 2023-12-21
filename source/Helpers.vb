@@ -224,78 +224,84 @@ Public Module Helpers
     End Function
 
     ''' <summary>
-    ''' Führt Standardformatierung eines TCharts aus
+    ''' Default formatting for a plot
     ''' </summary>
-    ''' <param name="chart"></param>
-    Friend Sub FormatChart(ByRef chart As Steema.TeeChart.Chart)
+    ''' <param name="plot"></param>
+    Friend Sub FormatChart(ByRef plot As ScottPlot.Plot)
 
         'set default color palette
-        chart.ColorPalette = Helpers.getColorPalette()
+        plot.Palette = ScottPlot.Palette.Category10
 
-        chart.Aspect.View3D = False
-        'chart.BackColor = Color.White
-        chart.Panel.Gradient.Visible = False
-        chart.Panel.Brush.Color = Color.White
-        chart.Walls.Back.Transparent = False
-        chart.Walls.Back.Gradient.Visible = False
-        chart.Walls.Back.Color = Color.White
+        'TODO: TChart
+        'plot.Aspect.View3D = False
+        ''plot.BackColor = Color.White
+        'plot.Panel.Gradient.Visible = False
+        'plot.Panel.Brush.Color = Color.White
+        'plot.Walls.Back.Transparent = False
+        'plot.Walls.Back.Gradient.Visible = False
+        'plot.Walls.Back.Color = Color.White
 
-        'Header
-        chart.Header.Font.Name = "GenericSansSerif"
-        chart.Header.Font.Color = Color.Black
-        chart.Header.Font.Size = 12
-        chart.Header.Text = ""
+        ''Header
+        'plot.Header.Font.Name = "GenericSansSerif"
+        'plot.Header.Font.Color = Color.Black
+        'plot.Header.Font.Size = 12
+        'plot.Header.Text = ""
 
         'Legende
-        chart.Legend.Font.Name = "GenericSansSerif"
-        chart.Legend.Font.Size = 10
-        chart.Legend.LegendStyle = Steema.TeeChart.LegendStyles.Series
-        chart.Legend.FontSeriesColor = True
-        chart.Legend.CheckBoxes = True
+        Dim legend As ScottPlot.Renderable.Legend
+        legend = plot.Legend(enable:=True, location:=ScottPlot.Alignment.UpperRight)
+        legend.UpdateLegendItems(plot, includeHidden:=True)
+
+        'plot.Legend.Font.Name = "GenericSansSerif"
+        'plot.Legend.Font.Size = 10
+        'plot.Legend.LegendStyle = Steema.TeeChart.LegendStyles.Series
+        'plot.Legend.FontSeriesColor = True
+        'plot.Legend.CheckBoxes = True
 
         'Achsen
-        chart.Axes.DrawBehind = False
+        plot.XAxis.DateTimeFormat(True)
+        'plot.Axes.DrawBehind = False
 
-        chart.Axes.Left.Title.Font.Name = "GenericSansSerif"
-        chart.Axes.Left.Title.Font.Color = Color.Black
-        chart.Axes.Left.Title.Font.Size = 10
+        'plot.Axes.Left.Title.Font.Name = "GenericSansSerif"
+        'plot.Axes.Left.Title.Font.Color = Color.Black
+        'plot.Axes.Left.Title.Font.Size = 10
 
-        chart.Axes.Left.Labels.Font.Name = "GenericSansSerif"
-        chart.Axes.Left.Labels.Font.Color = Color.Black
-        chart.Axes.Left.Labels.Font.Size = 10
+        'plot.Axes.Left.Labels.Font.Name = "GenericSansSerif"
+        'plot.Axes.Left.Labels.Font.Color = Color.Black
+        'plot.Axes.Left.Labels.Font.Size = 10
 
-        chart.Axes.Left.AxisPen.Visible = True
+        'plot.Axes.Left.AxisPen.Visible = True
 
-        chart.Axes.Left.Grid.Visible = True
-        chart.Axes.Left.Grid.Style = Drawing2D.DashStyle.Dash
+        'plot.Axes.Left.Grid.Visible = True
+        'plot.Axes.Left.Grid.Style = Drawing2D.DashStyle.Dash
 
-        chart.Axes.Right.Title.Font.Name = "GenericSansSerif"
-        chart.Axes.Right.Title.Font.Color = Color.Black
-        chart.Axes.Right.Title.Font.Size = 10
+        'plot.Axes.Right.Title.Font.Name = "GenericSansSerif"
+        'plot.Axes.Right.Title.Font.Color = Color.Black
+        'plot.Axes.Right.Title.Font.Size = 10
 
-        chart.Axes.Right.Labels.Font.Name = "GenericSansSerif"
-        chart.Axes.Right.Labels.Font.Color = Color.Black
-        chart.Axes.Right.Labels.Font.Size = 10
+        'plot.Axes.Right.Labels.Font.Name = "GenericSansSerif"
+        'plot.Axes.Right.Labels.Font.Color = Color.Black
+        'plot.Axes.Right.Labels.Font.Size = 10
 
-        chart.Axes.Right.AxisPen.Visible = True
+        'plot.Axes.Right.AxisPen.Visible = True
 
-        chart.Axes.Right.Grid.Visible = False
-        chart.Axes.Right.Grid.Style = Drawing2D.DashStyle.Dash
+        'plot.Axes.Right.Grid.Visible = False
+        'plot.Axes.Right.Grid.Style = Drawing2D.DashStyle.Dash
 
-        chart.Axes.Bottom.Title.Font.Name = "GenericSansSerif"
-        chart.Axes.Bottom.Title.Font.Color = Color.Black
-        chart.Axes.Bottom.Title.Font.Size = 10
+        'plot.Axes.Bottom.Title.Font.Name = "GenericSansSerif"
+        'plot.Axes.Bottom.Title.Font.Color = Color.Black
+        'plot.Axes.Bottom.Title.Font.Size = 10
 
-        chart.Axes.Bottom.Labels.Font.Name = "GenericSansSerif"
-        chart.Axes.Bottom.Labels.Font.Color = Color.Black
-        chart.Axes.Bottom.Labels.Font.Size = 10
+        'plot.Axes.Bottom.Labels.Font.Name = "GenericSansSerif"
+        'plot.Axes.Bottom.Labels.Font.Color = Color.Black
+        'plot.Axes.Bottom.Labels.Font.Size = 10
 
-        chart.Axes.Bottom.Automatic = True
+        'plot.Axes.Bottom.Automatic = True
 
-        chart.Axes.Bottom.AxisPen.Visible = True
+        'plot.Axes.Bottom.AxisPen.Visible = True
 
-        chart.Axes.Bottom.Grid.Visible = True
-        chart.Axes.Bottom.Grid.Style = Drawing2D.DashStyle.Dash
+        'plot.Axes.Bottom.Grid.Visible = True
+        'plot.Axes.Bottom.Grid.Style = Drawing2D.DashStyle.Dash
 
     End Sub
 

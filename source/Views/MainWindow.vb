@@ -33,10 +33,12 @@ Friend Class MainWindow
     Friend isInitializing As Boolean
 
     'ColorBand that is shown while zooming in main chart
-    Friend colorBandZoom As Steema.TeeChart.Tools.ColorBand
+    'TODO: TChart
+    'Friend colorBandZoom As Steema.TeeChart.Tools.ColorBand
 
     'ColorBand representing current view extent of main chart in OverviewChart
-    Friend colorBandOverview As Steema.TeeChart.Tools.ColorBand
+    'TODO: TChart
+    'Friend colorBandOverview As Steema.TeeChart.Tools.ColorBand
 
     'Cursors
     Friend cursor_pan As Cursor
@@ -61,7 +63,7 @@ Friend Class MainWindow
     Friend Property ChartMinX As DateTime
         Get
             Try
-                Return DateTime.FromOADate(Me.TChart1.Axes.Bottom.Minimum)
+                Return DateTime.FromOADate(Me.MainPlot.Plot.XAxis.Dims.Min)
             Catch ex As ArgumentException
                 Return Constants.minOADate
             End Try
@@ -70,14 +72,14 @@ Friend Class MainWindow
             If value < Constants.minOADate Then
                 value = Constants.minOADate
             End If
-            Me.TChart1.Axes.Bottom.Minimum = value.ToOADate()
+            Me.MainPlot.Plot.XAxis.Dims.SetAxis(min:=value.ToOADate(), max:=Nothing)
         End Set
     End Property
 
     Friend Property ChartMaxX As DateTime
         Get
             Try
-                Return DateTime.FromOADate(Me.TChart1.Axes.Bottom.Maximum)
+                Return DateTime.FromOADate(Me.MainPlot.Plot.XAxis.Dims.Max)
             Catch ex As ArgumentException
                 Return Constants.maxOADate
             End Try
@@ -86,7 +88,7 @@ Friend Class MainWindow
             If value > Constants.maxOADate Then
                 value = Constants.maxOADate
             End If
-            Me.TChart1.Axes.Bottom.Maximum = value.ToOADate()
+            Me.MainPlot.Plot.XAxis.Dims.SetAxis(min:=Nothing, max:=value.ToOADate())
         End Set
     End Property
 
@@ -96,7 +98,7 @@ Friend Class MainWindow
 
         Me.isInitializing = True
 
-        ' Dieser Aufruf ist für den Windows Form-Designer erforderlich.
+        ' Dieser Aufruf ist fÃ¼r den Windows Form-Designer erforderlich.
         InitializeComponent()
 
         'Charts einrichten
@@ -129,38 +131,44 @@ Friend Class MainWindow
     '*********************
     Friend Sub Init_Charts()
 
-        'Charts zurücksetzen
-        Me.TChart1.Clear()
-        Call Helpers.FormatChart(Me.TChart1.Chart)
+        'Charts zurÃ¼cksetzen
+        Me.MainPlot.Plot.Clear()
 
-        Me.TChart2.Clear()
-        Call Helpers.FormatChart(Me.TChart2.Chart)
-        Me.TChart2.Panel.Brush.Color = Color.FromArgb(239, 239, 239)
-        Me.TChart2.Walls.Back.Color = Color.FromArgb(239, 239, 239)
-        Me.TChart2.Header.Visible = False
-        Me.TChart2.Legend.Visible = False
+        Call Helpers.FormatChart(Me.MainPlot.Plot)
 
-        'Disable TeeChart builtin zooming and panning functionality
-        Me.TChart1.Zoom.Direction = Steema.TeeChart.ZoomDirections.None
-        Me.TChart1.Zoom.History = False
-        Me.TChart1.Zoom.Animated = True
-        Me.TChart1.Panning.Allow = Steema.TeeChart.ScrollModes.None
+        Me.OverviewPlot.Plot.Clear()
+        Call Helpers.FormatChart(Me.OverviewPlot.Plot)
 
-        Me.TChart2.Zoom.Direction = Steema.TeeChart.ZoomDirections.None
-        Me.TChart2.Panning.Allow = Steema.TeeChart.ScrollModes.None
+        Me.MainPlot.Refresh()
+        Me.OverviewPlot.Refresh()
 
-        'Achsen
-        Me.TChart1.Axes.Bottom.Automatic = False
-        Me.TChart1.Axes.Bottom.Labels.Angle = 90
-        Me.TChart1.Axes.Bottom.Labels.DateTimeFormat = Helpers.CurrentDateFormat
-        Me.TChart1.Axes.Right.Title.Angle = 90
+        'TODO: TChart
+        'Me.TChart2.Panel.Brush.Color = Color.FromArgb(239, 239, 239)
+        'Me.TChart2.Walls.Back.Color = Color.FromArgb(239, 239, 239)
+        'Me.TChart2.Header.Visible = False
+        'Me.TChart2.Legend.Visible = False
 
-        Me.TChart2.Axes.Left.Labels.Font.Color = Color.FromArgb(100, 100, 100)
-        Me.TChart2.Axes.Left.Labels.Font.Size = 8
-        Me.TChart2.Axes.Bottom.Labels.Font.Color = Color.FromArgb(100, 100, 100)
-        Me.TChart2.Axes.Bottom.Labels.Font.Size = 8
-        Me.TChart2.Axes.Bottom.Automatic = False
-        Me.TChart2.Axes.Bottom.Labels.DateTimeFormat = Globalization.CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern 'date only without time
+        ''Disable TeeChart builtin zooming and panning functionality
+        'Me.MainPlot.Zoom.Direction = Steema.TeeChart.ZoomDirections.None
+        'Me.MainPlot.Zoom.History = False
+        'Me.MainPlot.Zoom.Animated = True
+        'Me.MainPlot.Panning.Allow = Steema.TeeChart.ScrollModes.None
+
+        'Me.TChart2.Zoom.Direction = Steema.TeeChart.ZoomDirections.None
+        'Me.TChart2.Panning.Allow = Steema.TeeChart.ScrollModes.None
+
+        ''Achsen
+        'Me.MainPlot.Axes.Bottom.Automatic = False
+        'Me.MainPlot.Axes.Bottom.Labels.Angle = 90
+        'Me.MainPlot.Axes.Bottom.Labels.DateTimeFormat = Helpers.CurrentDateFormat
+        'Me.MainPlot.Axes.Right.Title.Angle = 90
+
+        'Me.TChart2.Axes.Left.Labels.Font.Color = Color.FromArgb(100, 100, 100)
+        'Me.TChart2.Axes.Left.Labels.Font.Size = 8
+        'Me.TChart2.Axes.Bottom.Labels.Font.Color = Color.FromArgb(100, 100, 100)
+        'Me.TChart2.Axes.Bottom.Labels.Font.Size = 8
+        'Me.TChart2.Axes.Bottom.Automatic = False
+        'Me.TChart2.Axes.Bottom.Labels.DateTimeFormat = Globalization.CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern 'date only without time
 
         'ColorBand einrichten
         Call Me.Init_ColorBands()
@@ -172,27 +180,28 @@ Friend Class MainWindow
     ''' </summary>
     Friend Sub Init_ColorBands()
 
-        colorBandOverview = New Steema.TeeChart.Tools.ColorBand()
-        Me.TChart2.Tools.Add(colorBandOverview)
-        colorBandOverview.Axis = Me.TChart2.Axes.Bottom
-        colorBandOverview.Brush.Color = Color.Coral
-        colorBandOverview.Brush.Transparency = 50
-        colorBandOverview.ResizeEnd = False
-        colorBandOverview.ResizeStart = False
-        colorBandOverview.EndLinePen.Visible = False
-        colorBandOverview.StartLinePen.Visible = False
+        'TODO: TChart
+        'colorBandOverview = New Steema.TeeChart.Tools.ColorBand()
+        'Me.OverviewPlot.Tools.Add(colorBandOverview)
+        'colorBandOverview.Axis = Me.OverviewPlot.Axes.Bottom
+        'colorBandOverview.Brush.Color = Color.Coral
+        'colorBandOverview.Brush.Transparency = 50
+        'colorBandOverview.ResizeEnd = False
+        'colorBandOverview.ResizeStart = False
+        'colorBandOverview.EndLinePen.Visible = False
+        'colorBandOverview.StartLinePen.Visible = False
 
-        colorBandZoom = New Steema.TeeChart.Tools.ColorBand()
-        Me.TChart1.Tools.Add(colorBandZoom)
-        colorBandZoom.Axis = Me.TChart1.Axes.Bottom
-        colorBandZoom.Color = Color.Black
-        colorBandZoom.Pen.Color = Color.Black
-        colorBandZoom.Pen.Style = Drawing2D.DashStyle.Dash
-        colorBandZoom.Brush.Visible = False
-        colorBandZoom.ResizeEnd = False
-        colorBandZoom.ResizeStart = False
-        colorBandZoom.EndLinePen.Visible = True
-        colorBandZoom.StartLinePen.Visible = True
+        'colorBandZoom = New Steema.TeeChart.Tools.ColorBand()
+        'Me.MainPlot.Tools.Add(colorBandZoom)
+        'colorBandZoom.Axis = Me.MainPlot.Axes.Bottom
+        'colorBandZoom.Color = Color.Black
+        'colorBandZoom.Pen.Color = Color.Black
+        'colorBandZoom.Pen.Style = Drawing2D.DashStyle.Dash
+        'colorBandZoom.Brush.Visible = False
+        'colorBandZoom.ResizeEnd = False
+        'colorBandZoom.ResizeStart = False
+        'colorBandZoom.EndLinePen.Visible = True
+        'colorBandZoom.StartLinePen.Visible = True
     End Sub
 
     Private Overloads Sub Close() Implements IView.Close
