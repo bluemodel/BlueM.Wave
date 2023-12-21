@@ -2216,7 +2216,8 @@ Friend Class WaveController
     ''' <remarks></remarks>
     Private Sub UpdateOverviewZoomExtent()
         Dim limits As ScottPlot.AxisLimits = View.OverviewPlot.Plot.GetAxisLimits()
-        View.ViewExtentRectangle.Rectangle = New ScottPlot.CoordinateRect(View.ChartMinX.ToOADate(), View.ChartMaxX.ToOADate(), limits.YMin, limits.YMax)
+        View.ViewExtentRectangle.X1 = View.ChartMinX.ToOADate()
+        View.ViewExtentRectangle.X2 = View.ChartMaxX.ToOADate()
         View.OverviewPlot.Refresh()
     End Sub
 

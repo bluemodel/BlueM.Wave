@@ -36,7 +36,7 @@ Friend Class MainWindow
     Friend ZoomRectangle As ScottPlot.Plottable.HSpan
 
     'Rectangle representing current view extent of main chart in overview chart
-    Friend ViewExtentRectangle As ScottPlot.Plottable.RectanglePlot
+    Friend ViewExtentRectangle As ScottPlot.Plottable.HSpan
 
     'Cursors
     Friend cursor_pan As Cursor
@@ -189,9 +189,11 @@ Friend Class MainWindow
 
         'view extent rectangle
         limits = Me.OverviewPlot.Plot.GetAxisLimits()
-        ViewExtentRectangle = Me.OverviewPlot.Plot.AddRectangle(limits.XMin, limits.XMax, limits.YMin, limits.YMax)
+        ViewExtentRectangle = Me.OverviewPlot.Plot.AddHorizontalSpan(limits.XMin, limits.XMax)
+        ViewExtentRectangle.Color = Color.FromArgb(100, Color.Coral)
         ViewExtentRectangle.BorderColor = Color.Coral
-        ViewExtentRectangle.HatchColor = Color.Coral
+        ViewExtentRectangle.BorderLineStyle = ScottPlot.LineStyle.Solid
+        ViewExtentRectangle.BorderLineWidth = 1
 
         'zoom rectangle
         limits = Me.MainPlot.Plot.GetAxisLimits()
