@@ -181,9 +181,6 @@ Friend Class WaveController
         AddHandler _axisDialog.AxisDeleted, AddressOf axisDeleted
         AddHandler _axisDialog.AxisUnitChanged, AddressOf AxisUnitChanged
 
-        'main chart events
-        AddHandler Me.View.MainPlot.AxesChanged, AddressOf AxesChanged
-
         'model events
         AddHandler _model.FileImported, AddressOf FileImported
         AddHandler _model.SeriesAdded, AddressOf SeriesAdded
@@ -1550,57 +1547,47 @@ Friend Class WaveController
     End Sub
 
     ''' <summary>
-    ''' Handles main chart axes changed event
-    ''' </summary>
-    ''' <param name="sender"></param>
-    ''' <param name="e"></param>
-    Private Sub AxesChanged(sender As Object, e As EventArgs)
-        Call Me.SaveZoomSnapshot()
-        Call Me.ViewportChanged()
-    End Sub
-
-    ''' <summary>
     ''' Handles main chart MouseDown event
     ''' Start a zooming or panning process, save zoom snapshot
     ''' </summary>
     Private Sub Chart_MouseDown(sender As System.Object, e As System.Windows.Forms.MouseEventArgs)
 
-        'TODO: TChart
-        'If e.Button = Windows.Forms.MouseButtons.Left Then
-        '    'start zoom process
-        '    If View.MainPlot.Series.Count > 0 Then
+        If e.Button = Windows.Forms.MouseButtons.Left Then
+            'start zoom process
+            If View.MainPlot.Plot.GetPlottables().Length > 0 Then
 
-        '        Dim startValue As Double
-        '        startValue = View.MainPlot.Series(0).XScreenToValue(e.X)
+                Dim startValue As Double
+                startValue = View.MainPlot.Plot.GetCoordinateX(e.X)
 
-        '        If startValue < View.ChartMinX.ToOADate() Or
-        '            startValue > View.ChartMaxX.ToOADate() Then
-        '            'click outside of chart, don't start zoom process
-        '            Exit Sub
-        '        End If
+                If startValue < View.ChartMinX.ToOADate() Or
+                    startValue > View.ChartMaxX.ToOADate() Then
+                    'click outside of chart, don't start zoom process
+                    Exit Sub
+                End If
 
-        '        View.MainPlot.Cursor = View.cursor_zoom
-        '        Call Me.SaveZoomSnapshot()
+                View.MainPlot.Cursor = View.cursor_zoom
+                Call Me.SaveZoomSnapshot()
 
-        '        Me.ChartMouseZoomDragging = True
-        '        Me.ChartMouseDragStartX = e.X
+                Me.ChartMouseZoomDragging = True
+                Me.ChartMouseDragStartX = e.X
 
-        '        View.ZoomRectangle.MainPlot = View.MainPlot.MainPlot
-        '        View.ZoomRectangle.Active = True
-        '        View.ZoomRectangle.Start = startValue
-        '        View.ZoomRectangle.End = startValue
+                View.ZoomRectangle.X1 = startValue
+                View.ZoomRectangle.X2 = startValue
+                View.ZoomRectangle.IsVisible = True
 
-        '        Log.AddLogEntry(Log.levels.debug, "Zoom start at " & DateTime.FromOADate(startValue))
-        '    End If
+                View.MainPlot.Refresh()
 
-        'ElseIf e.Button = MouseButtons.Right Then
-        '    'start pan process
-        '    Me.ChartMousePanning = True
-        '    Me.ChartMouseDragStartX = e.X
-        '    Me.ChartMousePanDisplayRange = View.MainPlot.Axes.Bottom.Maximum - View.MainPlot.Axes.Bottom.Minimum
-        '    Call Me.SaveZoomSnapshot()
-        '    View.MainPlot.Cursor = View.cursor_pan
-        'End If
+                Log.AddLogEntry(Log.levels.debug, "Zoom start at " & DateTime.FromOADate(startValue))
+            End If
+
+        ElseIf e.Button = MouseButtons.Right Then
+            'start pan process
+            Me.ChartMousePanning = True
+            Me.ChartMouseDragStartX = e.X
+            Me.ChartMousePanDisplayRange = View.MainPlot.Plot.XAxis.Dims.Span
+            Call Me.SaveZoomSnapshot()
+            View.MainPlot.Cursor = View.cursor_pan
+        End If
 
     End Sub
 
@@ -1612,33 +1599,33 @@ Friend Class WaveController
     ''' <param name="e"></param>
     Private Sub Chart_MouseMove(sender As System.Object, e As System.Windows.Forms.MouseEventArgs)
 
-        'TODO: TChart
-        'If Me.ChartMouseZoomDragging Then
-        '    Dim endValue As Double
-        '    endValue = View.MainPlot.Series(0).XScreenToValue(e.X)
-        '    View.ZoomRectangle.End = endValue
+        If Me.ChartMouseZoomDragging Then
+            Dim endValue As Double
+            endValue = View.MainPlot.Plot.GetCoordinateX(e.X)
+            View.ZoomRectangle.X2 = endValue
+            View.MainPlot.Refresh()
 
-        'ElseIf Me.ChartMousePanning Then
-        '    Dim xMin, xMax As Double
-        '    Dim panDistance As Double = View.MainPlot.Series(0).XScreenToValue(Me.ChartMouseDragStartX) - View.MainPlot.Series(0).XScreenToValue(e.X)
-        '    xMin = View.MainPlot.Axes.Bottom.Minimum + panDistance
-        '    xMax = View.MainPlot.Axes.Bottom.Maximum + panDistance
-        '    'prevent panning beyond displayable range (#68)
-        '    If xMin < Constants.minOADate.ToOADate() Then
-        '        xMin = Constants.minOADate.ToOADate()
-        '        xMax = xMin + Me.ChartMousePanDisplayRange
-        '    End If
-        '    If xMax > Constants.maxOADate.ToOADate() Then
-        '        xMax = Constants.maxOADate.ToOADate()
-        '        xMin = xMax - Me.ChartMousePanDisplayRange
-        '    End If
-        '    'set the new viewport 
-        '    View.ChartMinX = DateTime.FromOADate(xMin)
-        '    View.ChartMaxX = DateTime.FromOADate(xMax)
-        '    Me.selectionMade = True
-        '    'update drag start point
-        '    Me.ChartMouseDragStartX = e.X
-        'End If
+        ElseIf Me.ChartMousePanning Then
+            Dim xMin, xMax As Double
+            Dim panDistance As Double = View.MainPlot.Plot.GetCoordinateX(Me.ChartMouseDragStartX) - View.MainPlot.Plot.GetCoordinateX(e.X)
+            xMin = View.MainPlot.Plot.XAxis.Dims.Min + panDistance
+            xMax = View.MainPlot.Plot.XAxis.Dims.Max + panDistance
+            'prevent panning beyond displayable range (#68)
+            If xMin < Constants.minOADate.ToOADate() Then
+                xMin = Constants.minOADate.ToOADate()
+                xMax = xMin + Me.ChartMousePanDisplayRange
+            End If
+            If xMax > Constants.maxOADate.ToOADate() Then
+                xMax = Constants.maxOADate.ToOADate()
+                xMin = xMax - Me.ChartMousePanDisplayRange
+            End If
+            'set the new viewport 
+            View.ChartMinX = DateTime.FromOADate(xMin)
+            View.ChartMaxX = DateTime.FromOADate(xMax)
+            Me.selectionMade = True
+            'update drag start point
+            Me.ChartMouseDragStartX = e.X
+        End If
     End Sub
 
     ''' <summary>
@@ -1646,45 +1633,47 @@ Friend Class WaveController
     ''' Complete any started zoom or pan process, update cursor
     ''' </summary>
     Private Sub Chart_MouseUp(sender As System.Object, e As System.Windows.Forms.MouseEventArgs)
-        'TODO: TChart
-        'If Me.ChartMouseZoomDragging Then
-        '    'complete the zoom process
-        '    Me.ChartMouseZoomDragging = False
-        '    'only zoom if at least 5 pixels difference to start of drag operation
-        '    If Math.Abs(e.X - Me.ChartMouseDragStartX) > 5 Then
-        '        'determine start and end dates of zoom
-        '        Dim mouseValue, startValue, endValue As Double
-        '        'prevent zooming beyond the displayable date range (#68)
-        '        mouseValue = View.MainPlot.Series(0).XScreenToValue(e.X)
-        '        mouseValue = Math.Max(mouseValue, Constants.minOADate.ToOADate)
-        '        mouseValue = Math.Min(mouseValue, Constants.maxOADate.ToOADate)
-        '        'set start and end depending on zoom direction
-        '        If e.X > Me.ChartMouseDragStartX Then
-        '            startValue = View.MainPlot.Series(0).XScreenToValue(Me.ChartMouseDragStartX)
-        '            endValue = mouseValue
-        '        Else
-        '            startValue = mouseValue
-        '            endValue = View.MainPlot.Series(0).XScreenToValue(Me.ChartMouseDragStartX)
-        '        End If
-        '        Log.AddLogEntry(Log.levels.debug, "Zoom end at " & DateTime.FromOADate(endValue))
+        If Me.ChartMouseZoomDragging Then
+            'complete the zoom process
+            Me.ChartMouseZoomDragging = False
+            'only zoom if at least 5 pixels difference to start of drag operation
+            If Math.Abs(e.X - Me.ChartMouseDragStartX) > 5 Then
+                'determine start and end dates of zoom
+                Dim mouseValue, startValue, endValue As Double
+                'prevent zooming beyond the displayable date range (#68)
+                mouseValue = View.MainPlot.Plot.GetCoordinateX(e.X)
+                mouseValue = Math.Max(mouseValue, Constants.minOADate.ToOADate)
+                mouseValue = Math.Min(mouseValue, Constants.maxOADate.ToOADate)
+                'set start and end depending on zoom direction
+                If e.X > Me.ChartMouseDragStartX Then
+                    startValue = View.MainPlot.Plot.GetCoordinateX(Me.ChartMouseDragStartX)
+                    endValue = mouseValue
+                Else
+                    startValue = mouseValue
+                    endValue = View.MainPlot.Plot.GetCoordinateX(Me.ChartMouseDragStartX)
+                End If
+                Log.AddLogEntry(Log.levels.debug, "Zoom end at " & DateTime.FromOADate(endValue))
 
-        '        'save the current zoom snapshot
-        '        Call Me.SaveZoomSnapshot()
+                'save the current zoom snapshot
+                Call Me.SaveZoomSnapshot()
 
-        '        'set the new viewport 
-        '        View.ChartMinX = DateTime.FromOADate(startValue)
-        '        View.ChartMaxX = DateTime.FromOADate(endValue)
-        '        Me.selectionMade = True
-        '        Call Me.ViewportChanged()
-        '    End If
-        '    'hide colorband
-        '    View.ZoomRectangle.Active = False
-        'ElseIf Me.ChartMousePanning Then
-        '    'complete the pan process
-        '    Call Me.ViewportChanged()
-        '    Me.ChartMousePanning = False
-        'End If
-        'View.MainPlot.Cursor = Cursors.Default
+                'set the new viewport 
+                View.ChartMinX = DateTime.FromOADate(startValue)
+                View.ChartMaxX = DateTime.FromOADate(endValue)
+                Me.selectionMade = True
+                Call Me.ViewportChanged()
+            End If
+            'hide zoom rectangle
+            View.ZoomRectangle.IsVisible = False
+
+            View.MainPlot.Refresh()
+
+        ElseIf Me.ChartMousePanning Then
+            'complete the pan process
+            Call Me.ViewportChanged()
+            Me.ChartMousePanning = False
+        End If
+        View.MainPlot.Cursor = Cursors.Default
     End Sub
 
     ''' <summary>

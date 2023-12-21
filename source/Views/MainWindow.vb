@@ -32,9 +32,8 @@ Friend Class MainWindow
     ''' <remarks></remarks>
     Friend isInitializing As Boolean
 
-    'TODO: TChart
     'Rectangle that is shown while zooming in main chart
-    'Friend ZoomRectangle As ScottPlot.Plottable.RectanglePlot
+    Friend ZoomRectangle As ScottPlot.Plottable.HSpan
 
     'Rectangle representing current view extent of main chart in overview chart
     Friend ViewExtentRectangle As ScottPlot.Plottable.RectanglePlot
@@ -135,6 +134,8 @@ Friend Class MainWindow
         'initialize main plot
         Me.MainPlot.Plot.Clear()
         Call Helpers.FormatChart(Me.MainPlot.Plot)
+        Me.MainPlot.Configuration.Pan = False
+        Me.MainPlot.Configuration.Zoom = False
         Me.MainPlot.Configuration.LockVerticalAxis = True 'TODO: this only locks YAxis1
         Me.MainPlot.Refresh()
 
@@ -192,13 +193,15 @@ Friend Class MainWindow
         ViewExtentRectangle.BorderColor = Color.Coral
         ViewExtentRectangle.HatchColor = Color.Coral
 
-        ''zoom rectangle
-        'limits = Me.MainPlot.Plot.GetAxisLimits()
-        'ZoomRectangle = Me.MainPlot.Plot.AddRectangle(limits.XMin, limits.XMax, limits.YMin, limits.YMax)
-        'ZoomRectangle.BorderColor = Color.Black
-        'ZoomRectangle.BorderLineStyle = ScottPlot.LineStyle.Dash
-        'ZoomRectangle.HatchColor = Color.Empty
-        'ZoomRectangle.IsVisible = False
+        'zoom rectangle
+        limits = Me.MainPlot.Plot.GetAxisLimits()
+        ZoomRectangle = Me.MainPlot.Plot.AddHorizontalSpan(limits.XMin, limits.XMax)
+        ZoomRectangle.DragEnabled = False
+        ZoomRectangle.Color = Color.FromArgb(0, Color.Empty)
+        ZoomRectangle.BorderColor = Color.Black
+        ZoomRectangle.BorderLineStyle = ScottPlot.LineStyle.Dash
+        ZoomRectangle.BorderLineWidth = 1
+        ZoomRectangle.IsVisible = False
 
     End Sub
 
