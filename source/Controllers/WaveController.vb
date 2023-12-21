@@ -2206,6 +2206,8 @@ Friend Class WaveController
             'TODO: Update Y-Axis extents
             'View.OverviewPlot.Plot.YAxis.Dims.
 
+            View.MainPlot.Refresh()
+            View.OverviewPlot.Refresh()
         End If
 
     End Sub

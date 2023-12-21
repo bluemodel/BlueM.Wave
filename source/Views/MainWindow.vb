@@ -73,6 +73,7 @@ Friend Class MainWindow
                 value = Constants.minOADate
             End If
             Me.MainPlot.Plot.XAxis.Dims.SetAxis(min:=value.ToOADate(), max:=Nothing)
+            Me.MainPlot.Refresh()
         End Set
     End Property
 
@@ -89,6 +90,7 @@ Friend Class MainWindow
                 value = Constants.maxOADate
             End If
             Me.MainPlot.Plot.XAxis.Dims.SetAxis(min:=Nothing, max:=value.ToOADate())
+            Me.MainPlot.Refresh()
         End Set
     End Property
 
