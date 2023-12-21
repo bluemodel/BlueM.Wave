@@ -32,13 +32,12 @@ Friend Class MainWindow
     ''' <remarks></remarks>
     Friend isInitializing As Boolean
 
-    'ColorBand that is shown while zooming in main chart
     'TODO: TChart
-    'Friend colorBandZoom As Steema.TeeChart.Tools.ColorBand
+    'ColorBand that Is shown while zooming In main chart
+    'Friend colorBandZoom As ScottPlot.Plottable.RectanglePlot
 
-    'ColorBand representing current view extent of main chart in OverviewChart
-    'TODO: TChart
-    'Friend colorBandOverview As Steema.TeeChart.Tools.ColorBand
+    'Rectangle representing current view extent of main chart in overview chart
+    Friend ViewExtentRectangle As ScottPlot.Plottable.RectanglePlot
 
     'Cursors
     Friend cursor_pan As Cursor
@@ -136,6 +135,7 @@ Friend Class MainWindow
         'initialize main plot
         Me.MainPlot.Plot.Clear()
         Call Helpers.FormatChart(Me.MainPlot.Plot)
+        Me.MainPlot.Configuration.LockVerticalAxis = True 'TODO: this only locks YAxis1
         Me.MainPlot.Refresh()
 
         'initialize overview plot
@@ -184,17 +184,12 @@ Friend Class MainWindow
     ''' </summary>
     Friend Sub Init_ColorBands()
 
-        'TODO: TChart
-        'colorBandOverview = New Steema.TeeChart.Tools.ColorBand()
-        'Me.OverviewPlot.Tools.Add(colorBandOverview)
-        'colorBandOverview.Axis = Me.OverviewPlot.Axes.Bottom
-        'colorBandOverview.Brush.Color = Color.Coral
-        'colorBandOverview.Brush.Transparency = 50
-        'colorBandOverview.ResizeEnd = False
-        'colorBandOverview.ResizeStart = False
-        'colorBandOverview.EndLinePen.Visible = False
-        'colorBandOverview.StartLinePen.Visible = False
+        Dim limits As ScottPlot.AxisLimits = Me.OverviewPlot.Plot.GetAxisLimits()
+        ViewExtentRectangle = Me.OverviewPlot.Plot.AddRectangle(limits.XMin, limits.XMax, limits.YMin, limits.YMax)
+        ViewExtentRectangle.BorderColor = Color.Coral
+        ViewExtentRectangle.HatchColor = Color.Coral
 
+        'TODO: TChart
         'colorBandZoom = New Steema.TeeChart.Tools.ColorBand()
         'Me.MainPlot.Tools.Add(colorBandZoom)
         'colorBandZoom.Axis = Me.MainPlot.Axes.Bottom

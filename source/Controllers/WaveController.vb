@@ -2217,9 +2217,9 @@ Friend Class WaveController
     ''' </summary>
     ''' <remarks></remarks>
     Private Sub UpdateOverviewZoomExtent()
-        'TODO: TChart
-        'View.colorBandOverview.Start = View.ChartMinX.ToOADate()
-        'View.colorBandOverview.End = View.ChartMaxX.ToOADate()
+        Dim limits As ScottPlot.AxisLimits = View.OverviewPlot.Plot.GetAxisLimits()
+        View.ViewExtentRectangle.Rectangle = New ScottPlot.CoordinateRect(View.ChartMinX.ToOADate(), View.ChartMaxX.ToOADate(), limits.YMin, limits.YMax)
+        View.OverviewPlot.Refresh()
     End Sub
 
     ''' <summary>
