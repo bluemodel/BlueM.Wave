@@ -142,6 +142,8 @@ Friend Class MainWindow
         Me.OverviewPlot.Plot.Clear()
         Call Helpers.FormatChart(Me.OverviewPlot.Plot)
         Me.OverviewPlot.Plot.Legend.IsVisible = False
+        Me.OverviewPlot.Configuration.Pan = False
+        Me.OverviewPlot.Configuration.Zoom = False
         Me.OverviewPlot.Refresh()
 
         'TODO: TChart
