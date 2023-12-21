@@ -1683,47 +1683,46 @@ Friend Class WaveController
     ''' <param name="e"></param>
     Private Sub Chart_MouseWheel(sender As Object, e As MouseEventArgs)
 
-        'TODO: TChart
-        'Try
-        '    ' Update the drawing based upon the mouse wheel scrolling.
-        '    ' "The UI should scroll when the accumulated delta is plus or minus 120.
-        '    '  The UI should scroll the number of logical lines returned by the
-        '    '  SystemInformation.MouseWheelScrollLines property for every delta value reached."
-        '    'https://learn.microsoft.com/en-us/dotnet/api/system.windows.forms.control.mousewheel?f1url=%3FappId%3DDev16IDEF1%26l%3DEN-US%26k%3Dk(System.Windows.Forms.Control.MouseWheel)%3Bk(TargetFrameworkMoniker-.NETFramework%2CVersion%253Dv4.8)%3Bk(DevLang-VB)%26rd%3Dtrue&view=windowsdesktop-7.0#remarks
-        '    'TODO: scale mousewheel zoom with numberOfTextLinesToMove
-        '    Dim numberOfTextLinesToMove As Integer = CInt(e.Delta * SystemInformation.MouseWheelScrollLines / 120)
+        Try
+            ' Update the drawing based upon the mouse wheel scrolling.
+            ' "The UI should scroll when the accumulated delta is plus or minus 120.
+            '  The UI should scroll the number of logical lines returned by the
+            '  SystemInformation.MouseWheelScrollLines property for every delta value reached."
+            'https://learn.microsoft.com/en-us/dotnet/api/system.windows.forms.control.mousewheel?f1url=%3FappId%3DDev16IDEF1%26l%3DEN-US%26k%3Dk(System.Windows.Forms.Control.MouseWheel)%3Bk(TargetFrameworkMoniker-.NETFramework%2CVersion%253Dv4.8)%3Bk(DevLang-VB)%26rd%3Dtrue&view=windowsdesktop-7.0#remarks
+            'TODO: scale mousewheel zoom with numberOfTextLinesToMove
+            Dim numberOfTextLinesToMove As Integer = CInt(e.Delta * SystemInformation.MouseWheelScrollLines / 120)
 
-        '    'zoom while centering on mouse
-        '    Dim currentExtent As TimeSpan = View.ChartMaxX - View.ChartMinX
-        '    Dim newExtent As Long
-        '    If numberOfTextLinesToMove > 0 Then
-        '        'zoom in 25%
-        '        newExtent = currentExtent.Ticks * 0.75
-        '    Else
-        '        'zoom out 25%
-        '        newExtent = currentExtent.Ticks * 1.25
-        '    End If
+            'zoom while centering on mouse
+            Dim currentExtent As TimeSpan = View.ChartMaxX - View.ChartMinX
+            Dim newExtent As Long
+            If numberOfTextLinesToMove > 0 Then
+                'zoom in 25%
+                newExtent = currentExtent.Ticks * 0.75
+            Else
+                'zoom out 25%
+                newExtent = currentExtent.Ticks * 1.25
+            End If
 
-        '    'determine mouse position and its left-right ratio in relation to x axis
-        '    Dim centerOADate As Double = View.MainPlot.Series(0).XScreenToValue(e.X)
-        '    Dim centerDate As DateTime = DateTime.FromOADate(centerOADate)
-        '    Dim leftRatio As Double = (centerDate - View.ChartMinX).Ticks / currentExtent.Ticks
-        '    Dim rightRatio As Double = 1 - leftRatio
+            'determine mouse position and its left-right ratio in relation to x axis
+            Dim centerOADate As Double = View.MainPlot.Plot.GetCoordinateX(e.X)
+            Dim centerDate As DateTime = DateTime.FromOADate(centerOADate)
+            Dim leftRatio As Double = (centerDate - View.ChartMinX).Ticks / currentExtent.Ticks
+            Dim rightRatio As Double = 1 - leftRatio
 
-        '    'save the current zoom snapshot
-        '    Call Me.SaveZoomSnapshot()
+            'save the current zoom snapshot
+            Call Me.SaveZoomSnapshot()
 
-        '    'set new viewport
-        '    View.ChartMinX = centerDate - New TimeSpan(ticks:=newExtent * leftRatio)
-        '    View.ChartMaxX = centerDate + New TimeSpan(ticks:=newExtent * rightRatio)
+            'set new viewport
+            View.ChartMinX = centerDate - New TimeSpan(ticks:=newExtent * leftRatio)
+            View.ChartMaxX = centerDate + New TimeSpan(ticks:=newExtent * rightRatio)
 
-        '    Me.selectionMade = True
-        '    Call Me.ViewportChanged()
+            Me.selectionMade = True
+            Call Me.ViewportChanged()
 
-        'Catch ex As ArgumentOutOfRangeException
-        '    'can happen when zooming out too far, TimeSpan becomes too big or DateTime is not representable
-        '    Log.AddLogEntry(levels.debug, $"Exception in Chart_MouseWheel: {ex}")
-        'End Try
+        Catch ex As ArgumentOutOfRangeException
+            'can happen when zooming out too far, TimeSpan becomes too big or DateTime is not representable
+            Log.AddLogEntry(levels.debug, $"Exception in Chart_MouseWheel: {ex}")
+        End Try
 
     End Sub
 
