@@ -2602,9 +2602,33 @@ Friend Class WaveController
             'assign series to new axis
             series.YAxisIndex = axis.AxisIndex
 
-            'update axis dialog
-            Call Me.UpdateAxisDialog()
         End If
+
+        'check for unused axes and remove them
+        Dim units As New HashSet(Of String)
+        Dim axesToRemove As New List(Of ScottPlot.Renderable.Axis)
+        For Each ts As TimeSeries In Model.TimeSeries.Values
+            units.Add(ts.Unit)
+        Next
+        For Each axis As ScottPlot.Renderable.Axis In Me.View.MainPlot.Plot.GetAxesMatching(axisIndex:=Nothing, isVertical:=True)
+            If axis.AxisLabel.Label <> "" And Not units.Contains(axis.AxisLabel.Label) Then
+                axesToRemove.Add(axis)
+            End If
+        Next
+        If axesToRemove.Count > 0 Then
+            For Each axis As ScottPlot.Renderable.Axis In axesToRemove
+                If axis.AxisIndex <= 1 Then
+                    'left and right Y axis should never be removed, just reset
+                    axis.Label("")
+                    axis.Dims.ResetLimits()
+                Else
+                    Me.View.MainPlot.Plot.RemoveAxis(axis)
+                End If
+            Next
+        End If
+
+        'update axis dialog
+        Call Me.UpdateAxisDialog()
 
     End Sub
 
