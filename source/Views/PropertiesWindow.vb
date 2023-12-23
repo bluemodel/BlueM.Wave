@@ -37,13 +37,6 @@ Friend Class PropertiesWindow
     ''' <param name="ids">List of ids of the time series that were deleted</param>
     Friend Event SeriesDeleted(ids As List(Of Integer))
 
-    ''' <summary>
-    ''' Is raised when the user reorders a row/series
-    ''' </summary>
-    ''' <param name="id">Id of TimeSeries that was reordered</param>
-    ''' <param name="direction">Direction</param>
-    Friend Event SeriesReordered(id As Integer, direction As Direction)
-
     Public Sub New()
         ' This call is required by the Windows Form Designer.
         InitializeComponent()
@@ -193,61 +186,6 @@ Friend Class PropertiesWindow
         Call DeleteSeries()
     End Sub
 
-    ''' <summary>
-    ''' Handles the user clicking the move up button
-    ''' </summary>
-    ''' <param name="sender"></param>
-    ''' <param name="e"></param>
-    Private Sub ToolStripButton_MoveUp_Click(sender As Object, e As EventArgs) Handles ToolStripButton_MoveUp.Click
-        Call ReorderSelectedSeries(Direction.Up)
-    End Sub
-
-    ''' <summary>
-    ''' Handles the user clicking the move down button
-    ''' </summary>
-    ''' <param name="sender"></param>
-    ''' <param name="e"></param>
-    Private Sub ToolStripButton_MoveDown_Click(sender As Object, e As EventArgs) Handles ToolStripButton_MoveDown.Click
-        Call ReorderSelectedSeries(Direction.Down)
-    End Sub
-
-    ''' <summary>
-    ''' Reorder selected series
-    ''' </summary>
-    ''' <param name="direction">Direction in which to move selected series</param>
-    Private Sub ReorderSelectedSeries(direction As Direction)
-
-        Dim indices As New List(Of Integer)
-        Dim ids As New List(Of Integer)
-        For Each row As DataGridViewRow In Me.DataGridView1.Rows
-            If row.Selected Then
-                If (direction = Direction.Up And row.Index = 0) Or
-                   (direction = Direction.Down And row.Index = Me.DataGridView1.RowCount - 1) Then
-                    'if first row is selected, moving up does nothing
-                    'if last row is selected, moving down does nothing
-                    Exit Sub
-                End If
-                indices.Add(row.Index)
-                ids.Add(CType(row.DataBoundItem, TimeSeries).Id)
-            End If
-        Next
-        'raise event for each series
-        For Each id As Integer In ids
-            RaiseEvent SeriesReordered(id, direction)
-        Next
-        'reselect previously sslected rows in their new positions
-        Me.DataGridView1.ClearSelection()
-        Dim offset As Integer
-        If direction = Direction.Up Then
-            offset = -1
-        Else
-            offset = 1
-        End If
-        For Each index As Integer In indices
-            Me.DataGridView1.Rows(index + offset).Selected = True
-        Next
-    End Sub
-
     Private Sub PropertiesDialog_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
         'prevent the form from closing and hide it instead
         e.Cancel = True
@@ -264,20 +202,8 @@ Friend Class PropertiesWindow
         'Check if any rows are selected
         If Me.DataGridView1.SelectedRows.Count = 0 Then
             Me.ToolStripButton_Delete.Enabled = False
-            Me.ToolStripButton_MoveUp.Enabled = False
-            Me.ToolStripButton_MoveDown.Enabled = False
         Else
             Me.ToolStripButton_Delete.Enabled = True
-            Me.ToolStripButton_MoveUp.Enabled = True
-            Me.ToolStripButton_MoveDown.Enabled = True
-            'check if first row is selected
-            If Me.DataGridView1.Rows(0).Selected Then
-                Me.ToolStripButton_MoveUp.Enabled = False
-            End If
-            'check if last row is selected
-            If Me.DataGridView1.Rows(Me.DataGridView1.Rows.Count - 1).Selected Then
-                Me.ToolStripButton_MoveDown.Enabled = False
-            End If
         End If
     End Sub
 
