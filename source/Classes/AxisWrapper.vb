@@ -15,81 +15,96 @@
 'You should have received a copy of the GNU Lesser General Public License
 'along with this program.  If not, see <https://www.gnu.org/licenses/>.
 '
-Imports System.Text.RegularExpressions
-
 ''' <summary>
-''' Wrapper around a Steema.TeeChart.Axis instance
-''' exposing selected properties
+''' Wrapper for a Y axis
 ''' </summary>
 Friend Class AxisWrapper
 
-    Private _name As String
-    Private _TAxis As Steema.TeeChart.Axis
+    Private _axis As ScottPlot.Renderable.Axis
+    Private _min As Double
+    Private _max As Double
+    Private _autoMin As Boolean
+    Private _autoMax As Boolean
 
-    ''' <summary>
-    ''' Constructor
-    ''' </summary>
-    ''' <param name="_name">One of "Left", "Right", "Custom 0", etc.</param>
-    ''' <param name="_axis">The axis instance to wrap around</param>
-    Public Sub New(_name As String, ByRef _axis As Steema.TeeChart.Axis)
-        Me._name = _name
-        Me._TAxis = _axis
+    Public Sub New(axis As ScottPlot.Renderable.Axis)
+        Me._axis = axis
+        Me._autoMin = True
+        Me._autoMax = True
     End Sub
 
-    ''' <summary>
-    ''' Axis Name, e.g. "Left", "Right", "Custom 0", etc.
-    ''' </summary>
-    Public ReadOnly Property Name As String
+    Public ReadOnly Property AxisIndex As Integer
         Get
-            Return Me._name
+            Return Me._axis.AxisIndex
         End Get
     End Property
 
-    ''' <summary>
-    ''' Axis Title as displayed in the chart
-    ''' </summary>
-    ''' <returns></returns>
-    Public Property Title As String
-        Get
-            Return Me._TAxis.Title.Text
-        End Get
-        Set(value As String)
-            Me._TAxis.Title.Text = value
-        End Set
-    End Property
-
-    ''' <summary>
-    ''' Axis Unit, internally stored in the Tag property
-    ''' </summary>
-    ''' <returns></returns>
     Public Property Unit As String
         Get
-            Return Me._TAxis.Tag
+            Return Me._axis.AxisLabel.Label
         End Get
         Set(value As String)
-            Me._TAxis.Tag = value
+            Me._axis.AxisLabel.Label = value
         End Set
     End Property
 
-    ''' <summary>
-    ''' Attempts to extract a unit enclosed in square or round brackets from a text
-    ''' </summary>
-    ''' <param name="text">Text from which to extract the unit</param>
-    ''' <returns>The extracted unit or if unsuccessful the original text</returns>
-    Public Shared Function parseUnit(text As String) As String
+    Public Property AutoMin As Boolean
+        Get
+            Return Me._autoMin
+        End Get
+        Set(value As Boolean)
+            Me._autoMin = value
+            Call Me.setLimits()
+        End Set
+    End Property
 
-        Dim m As Match
-        Dim unit As String
+    Public Property AutoMax As Boolean
+        Get
+            Return Me._autoMax
+        End Get
+        Set(value As Boolean)
+            Me._autoMax = value
+            Call Me.setLimits()
+        End Set
+    End Property
 
-        m = Regex.Match(text, ".*[\[\(](.+?)[\]\)].*")
-        If m.Success Then
-            unit = m.Groups(1).Value
+    Public Property Max As Double
+        Get
+            Return Me._axis.Dims.Max
+        End Get
+        Set(value As Double)
+            Me._axis.Dims.SetAxis(min:=Nothing, max:=value)
+            Me._autoMax = False
+            'Call Me.setLimits()
+        End Set
+    End Property
+
+    Public Property Min As Double
+        Get
+            Return Me._axis.Dims.Min
+        End Get
+        Set(value As Double)
+            Me._axis.Dims.SetAxis(min:=value, max:=Nothing)
+            Me._autoMin = False
+            'Call Me.setLimits()
+        End Set
+    End Property
+
+    Private Sub setLimits()
+        If Me._autoMin And Me._autoMax Then
+            Me._axis.Dims.ResetLimits()
+            'Me._axis.Dims.SetAxis(min:=Nothing, max:=Nothing)
+        ElseIf Me._autoMin Then
+            Dim max As Double = Me.Max
+            Me._axis.Dims.ResetLimits()
+            Me._axis.Dims.SetAxis(min:=Nothing, max:=max)
+        ElseIf Me._autoMax Then
+            Dim min As Double = Me.Min
+            Me._axis.Dims.ResetLimits()
+            Me._axis.Dims.SetAxis(min:=min, max:=Nothing)
         Else
-            unit = text
+            Me._axis.Dims.SetAxis(Me.Min, Me.Max)
         End If
-
-        Return unit
-
-    End Function
+    End Sub
 
 End Class
+

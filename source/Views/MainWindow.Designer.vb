@@ -58,6 +58,8 @@ Partial Class MainWindow
         Me.ToolStripButton_Analysis = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripButton_EditChart = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripDropDownButton_ColorPalette = New System.Windows.Forms.ToolStripDropDownButton()
+        Me.ToolStripMenuItem_ColorPaletteCategory10 = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripMenuItem_ColorPaletteCategory20 = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripMenuItem_ColorPaletteMaterial = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripMenuItem_ColorPaletteDistinct = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripMenuItem_ColorPaletteWheel = New System.Windows.Forms.ToolStripMenuItem()
@@ -66,7 +68,6 @@ Partial Class MainWindow
         Me.ToolStripButton_Properties = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripButton_TimeseriesValues = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripSeparator10 = New System.Windows.Forms.ToolStripSeparator()
-        Me.ToolStripButton_AxisDialog = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripButton_AutoAdjustYAxes = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripButton_ToggleOverview = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripButton_ToggleNavigation = New System.Windows.Forms.ToolStripButton()
@@ -209,7 +210,7 @@ Partial Class MainWindow
         '
         ToolStrip1.AutoSize = False
         ToolStrip1.BackColor = System.Drawing.SystemColors.Control
-        ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButton_New, Me.ToolStripDropDownButton_Open, Me.ToolStripDropDownButton_Save, ToolStripSeparator4, Me.ToolStripButton_Copy, ToolStripSeparator2, Me.ToolStripButton_Cut, Me.ToolStripButton_Merge, Me.ToolStripSeparator8, Me.ToolStripButton_ShowNaNValues, Me.ToolStripButton_ConvertErrorValues, Me.ToolStripButton_RemoveNaNValues, Me.ToolStripSeparator7, Me.ToolStripButton_Analysis, ToolStripSeparator1, Me.ToolStripButton_EditChart, Me.ToolStripDropDownButton_ColorPalette, Me.ToolStripSeparator9, Me.ToolStripButton_Properties, Me.ToolStripButton_TimeseriesValues, Me.ToolStripSeparator10, Me.ToolStripButton_AxisDialog, Me.ToolStripButton_AutoAdjustYAxes, ToolStripSeparator3, Me.ToolStripButton_ToggleOverview, Me.ToolStripButton_ToggleNavigation, toolStripSeparator, Me.ToolStripButton_ZoomIn, Me.ToolStripButton_ZoomOut, Me.ToolStripButton_ZoomPrevious, Me.ToolStripDropDownButton_Help, Me.ToolStripButton_ZoomNext, Me.ToolStripDropDownButton_ZoomToSeries, Me.ToolStripButton_ZoomAll, Me.ToolStripButton_UpdateNotification, Me.ToolStripSeparator11})
+        ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButton_New, Me.ToolStripDropDownButton_Open, Me.ToolStripDropDownButton_Save, ToolStripSeparator4, Me.ToolStripButton_Copy, ToolStripSeparator2, Me.ToolStripButton_Cut, Me.ToolStripButton_Merge, Me.ToolStripSeparator8, Me.ToolStripButton_ShowNaNValues, Me.ToolStripButton_ConvertErrorValues, Me.ToolStripButton_RemoveNaNValues, Me.ToolStripSeparator7, Me.ToolStripButton_Analysis, ToolStripSeparator1, Me.ToolStripButton_EditChart, Me.ToolStripDropDownButton_ColorPalette, Me.ToolStripSeparator9, Me.ToolStripButton_Properties, Me.ToolStripButton_TimeseriesValues, Me.ToolStripSeparator10, Me.ToolStripButton_AutoAdjustYAxes, ToolStripSeparator3, Me.ToolStripButton_ToggleOverview, Me.ToolStripButton_ToggleNavigation, toolStripSeparator, Me.ToolStripButton_ZoomIn, Me.ToolStripButton_ZoomOut, Me.ToolStripButton_ZoomPrevious, Me.ToolStripDropDownButton_Help, Me.ToolStripButton_ZoomNext, Me.ToolStripDropDownButton_ZoomToSeries, Me.ToolStripButton_ZoomAll, Me.ToolStripButton_UpdateNotification, Me.ToolStripSeparator11})
         ToolStrip1.Location = New System.Drawing.Point(0, 0)
         ToolStrip1.Name = "ToolStrip1"
         ToolStrip1.Size = New System.Drawing.Size(944, 34)
@@ -412,13 +413,13 @@ Partial Class MainWindow
         'ToolStripMenuItem_ColorPaletteCategory10
         '
         Me.ToolStripMenuItem_ColorPaletteCategory10.Name = "ToolStripMenuItem_ColorPaletteCategory10"
-        Me.ToolStripMenuItem_ColorPaletteCategory10.Size = New System.Drawing.Size(139, 22)
+        Me.ToolStripMenuItem_ColorPaletteCategory10.Size = New System.Drawing.Size(180, 22)
         Me.ToolStripMenuItem_ColorPaletteCategory10.Text = "Category10"
         '
         'ToolStripMenuItem_ColorPaletteCategory20
         '
         Me.ToolStripMenuItem_ColorPaletteCategory20.Name = "ToolStripMenuItem_ColorPaletteCategory20"
-        Me.ToolStripMenuItem_ColorPaletteCategory20.Size = New System.Drawing.Size(139, 22)
+        Me.ToolStripMenuItem_ColorPaletteCategory20.Size = New System.Drawing.Size(180, 22)
         Me.ToolStripMenuItem_ColorPaletteCategory20.Text = "Category20"
         '
         'ToolStripMenuItem_ColorPaletteMaterial
@@ -474,16 +475,6 @@ Partial Class MainWindow
         '
         Me.ToolStripSeparator10.Name = "ToolStripSeparator10"
         Me.ToolStripSeparator10.Size = New System.Drawing.Size(6, 34)
-        '
-        'ToolStripButton_AxisDialog
-        '
-        Me.ToolStripButton_AxisDialog.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.ToolStripButton_AxisDialog.Image = Global.BlueM.Wave.My.Resources.Resources.shape_align_bottom
-        Me.ToolStripButton_AxisDialog.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.ToolStripButton_AxisDialog.Name = "ToolStripButton_AxisDialog"
-        Me.ToolStripButton_AxisDialog.Size = New System.Drawing.Size(23, 31)
-        Me.ToolStripButton_AxisDialog.Text = "ToolStripButton_AxisDialog"
-        Me.ToolStripButton_AxisDialog.ToolTipText = "Manage Axes"
         '
         'ToolStripButton_AutoAdjustYAxes
         '
@@ -1070,7 +1061,6 @@ Partial Class MainWindow
     Friend WithEvents ToolStripButton_AutoAdjustYAxes As System.Windows.Forms.ToolStripButton
     Friend WithEvents ToolStripButton_RemoveNaNValues As System.Windows.Forms.ToolStripButton
     Friend WithEvents ToolStripMenuItem_Changelog As ToolStripMenuItem
-    Friend WithEvents ToolStripButton_AxisDialog As ToolStripButton
     Friend WithEvents ToolStripMenuItem_PasteFromClipboard As ToolStripMenuItem
     Friend WithEvents ToolStripSeparator10 As ToolStripSeparator
     Friend WithEvents ToolStripStatusLabel_Errors As ToolStripStatusLabel

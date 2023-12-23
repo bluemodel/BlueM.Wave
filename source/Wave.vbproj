@@ -209,6 +209,13 @@
     <Compile Include="Analysis\TimestepAnalysisDialog.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Classes\AxisWrapper.vb" />
+    <Compile Include="Dialogs\EditChartDialog.Designer.vb">
+      <DependentUpon>EditChartDialog.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\EditChartDialog.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Dialogs\SaveProjectFileDialog.Designer.vb">
       <DependentUpon>SaveProjectFileDialog.vb</DependentUpon>
     </Compile>
@@ -225,7 +232,6 @@
     <Compile Include="FileFormats\JAMS.vb" />
     <Compile Include="Main.vb" />
     <Compile Include="App.vb" />
-    <Compile Include="Classes\AxisWrapper.vb" />
     <Compile Include="Classes\Character.vb" />
     <Compile Include="Classes\Metadata.vb" />
     <Compile Include="Classes\Month.vb" />
@@ -244,12 +250,6 @@
       <DependentUpon>AboutBox.vb</DependentUpon>
     </Compile>
     <Compile Include="Dialogs\AboutBox.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Dialogs\AxisDialog.Designer.vb">
-      <DependentUpon>AxisDialog.vb</DependentUpon>
-    </Compile>
-    <Compile Include="Dialogs\AxisDialog.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Dialogs\ConvertErrorValuesDialog.Designer.vb">
@@ -425,9 +425,6 @@
     <EmbeddedResource Include="Dialogs\AboutBox.resx">
       <DependentUpon>AboutBox.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Dialogs\AxisDialog.resx">
-      <DependentUpon>AxisDialog.vb</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Dialogs\ConvertErrorValuesDialog.resx">
       <DependentUpon>ConvertErrorValuesDialog.vb</DependentUpon>
     </EmbeddedResource>
@@ -436,6 +433,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Analysis\CalculatorDialog.resx">
       <DependentUpon>CalculatorDialog.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialogs\EditChartDialog.resx">
+      <DependentUpon>EditChartDialog.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Dialogs\SaveProjectFileDialog.resx">
       <DependentUpon>SaveProjectFileDialog.vb</DependentUpon>

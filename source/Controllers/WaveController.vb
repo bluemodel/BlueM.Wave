@@ -60,6 +60,14 @@ Friend Class WaveController
     ''' </summary>
     Private ChartMarkers As Dictionary(Of Integer, ScottPlot.Plottable.IPlottable)
 
+    ''' <summary>
+    ''' List of Y axes
+    ''' </summary>
+    Private Axes As System.ComponentModel.BindingList(Of AxisWrapper)
+
+    'Edit Chart dialog
+    Private WithEvents EditChartDlg As EditChartDialog
+
     Private selectionMade As Boolean 'Flag zeigt an, ob bereits ein Auswahlbereich ausgewählt wurde
 
     ''' <summary>
@@ -83,8 +91,6 @@ Friend Class WaveController
     Private OverviewChartMouseDragStartX As Double
     Private OverviewChartMouseDragOffset As Double
 
-    Private WithEvents _axisDialog As AxisDialog
-
     'Events handled by the AppInstance
     Friend Event Properties_Clicked()
     Friend Event TimeseriesValues_Clicked()
@@ -95,16 +101,18 @@ Friend Class WaveController
 
         Me.View.SetController(Me)
 
-        'Initialize chart series container
+        'Initialize chart series containers
         Me.ChartSeries = New Dictionary(Of Integer, ScottPlot.Plottable.IPlottable)
         Me.OverviewSeries = New Dictionary(Of Integer, ScottPlot.Plottable.IPlottable)
         Me.ChartMarkers = New Dictionary(Of Integer, ScottPlot.Plottable.IPlottable)
+        Me.Axes = New ComponentModel.BindingList(Of AxisWrapper)
+
+        'Initialize edit chart dialog
+        Me.EditChartDlg = New EditChartDialog(Me.Axes)
 
         'Initialize zoom history
         Me.ZoomHistory = New List(Of (xmin As Double, xmax As Double))
         Me.ZoomHistoryIndex = 0
-
-        _axisDialog = New AxisDialog()
 
         'Subscribe to view events
 
@@ -125,7 +133,6 @@ Friend Class WaveController
         AddHandler Me.View.ToolStripButton_Cut.Click, AddressOf Zuschneiden_Click
         AddHandler Me.View.ToolStripButton_Merge.Click, AddressOf Merge_Click
         AddHandler Me.View.ToolStripButton_Analysis.Click, AddressOf Analysis_Click
-        AddHandler Me.View.ToolStripButton_AxisDialog.Click, AddressOf AxisDialog_Click
         AddHandler Me.View.ToolStripButton_EditChart.Click, AddressOf EditChart_Click
         AddHandler Me.View.ToolStripMenuItem_ColorPaletteCategory10.Click, AddressOf ColorPalette_Click
         AddHandler Me.View.ToolStripMenuItem_ColorPaletteCategory20.Click, AddressOf ColorPalette_Click
@@ -202,10 +209,6 @@ Friend Class WaveController
         AddHandler Me.View.ToolStripStatusLabel_Errors.Click, AddressOf ShowLog_Click
         AddHandler Me.View.ToolStripStatusLabel_Warnings.Click, AddressOf ShowLog_Click
 
-        'axis dialog events
-        AddHandler _axisDialog.AxisDeleted, AddressOf axisDeleted
-        AddHandler _axisDialog.AxisUnitChanged, AddressOf AxisUnitChanged
-
         'model events
         AddHandler _model.FileImported, AddressOf FileImported
         AddHandler _model.SeriesAdded, AddressOf SeriesAdded
@@ -216,6 +219,9 @@ Friend Class WaveController
         AddHandler _model.HighlightTimestamps, AddressOf showMarkers
         AddHandler _model.TENFileLoading, AddressOf Load_TEN
         AddHandler _model.IsBusyChanged, AddressOf ShowBusy
+
+        'edit chart events
+        AddHandler EditChartDlg.AxesEdited, AddressOf AxesEditedHandler
 
         'add any already existing time series
         For Each ts As TimeSeries In _model.TimeSeries.Values
@@ -232,6 +238,10 @@ Friend Class WaveController
             Call LogMsgAdded(msg.Key, msg.Value)
         Next
 
+    End Sub
+
+    Private Sub AxesEditedHandler()
+        View.MainPlot.Refresh()
     End Sub
 
     ''' <summary>
@@ -300,9 +310,6 @@ Friend Class WaveController
         View.ToolStripStatusLabel_Warnings.Text = 0
         View.ToolStripStatusLabel_Errors.Image = My.Resources.cancel_inactive
         View.ToolStripStatusLabel_Warnings.Image = My.Resources.warning_inactive
-
-        'Update axis dialog
-        Me.UpdateAxisDialog()
 
         Me.selectionMade = False
 
@@ -544,8 +551,9 @@ Friend Class WaveController
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
     Private Sub EditChart_Click(sender As System.Object, e As System.EventArgs)
-        'TODO: TChart
-        'Call Steema.TeeChart.Editor.Show(View.MainPlot)
+        Me.EditChartDlg.Visible = True
+        Me.EditChartDlg.Show()
+        Me.EditChartDlg.BringToFront()
     End Sub
 
     ''' <summary>
@@ -556,17 +564,6 @@ Friend Class WaveController
     Private Sub ColorPalette_Click(sender As Object, e As EventArgs)
         Dim colorPaletteName As String = CType(sender, ToolStripMenuItem).Text
         SetChartColorPalette(Helpers.getColorPalette(colorPaletteName))
-    End Sub
-
-    ''' <summary>
-    ''' Show AxisDialog button clicked
-    ''' </summary>
-    ''' <param name="sender"></param>
-    ''' <param name="e"></param>
-    Private Sub AxisDialog_Click(sender As Object, e As EventArgs)
-        Call UpdateAxisDialog()
-        _axisDialog.Show()
-        _axisDialog.BringToFront()
     End Sub
 
     ''' <summary>
@@ -2421,59 +2418,63 @@ Friend Class WaveController
     ''' <param name="unit">The unit</param>
     Private Sub assignSeriesToAxis(ByRef series As ScottPlot.Plottable.IPlottable, unit As String)
 
-        'TODO: for now, assign series to axes by matching the axis label to the unit
+        Dim axisW As AxisWrapper
 
-        'check for reusable axes
-        Dim axes As IEnumerable(Of ScottPlot.Renderable.Axis)
-        axes = View.MainPlot.Plot.GetAxesMatching(axisIndex:=Nothing, isVertical:=True)
-
-        Dim axisFound As Boolean = False
-        For Each axis As ScottPlot.Renderable.Axis In axes
-            If axis.AxisLabel.Label = "" Then
-                'this axis hasn't been used yet
-                axis.AxisLabel.Label = unit
-                axis.AxisLabel.IsVisible = True
-                axis.Ticks(enable:=True)
-
-                'assign series to new axis
-                series.YAxisIndex = axis.AxisIndex
-
-                axis.Dims.ResetLimits()
-
-                axisFound = True
-                Exit For
-            ElseIf axis.AxisLabel.Label = unit Then
-                'suitable existing axis found
-
-                'assign series to new axis
-                series.YAxisIndex = axis.AxisIndex
-
-                axis.Dims.ResetLimits()
-
-                axisFound = True
+        'check for existing axes
+        Dim axisExists As Boolean = False
+        For Each axisW In Me.Axes
+            If axisW.Unit = unit Then
+                axisExists = True
+                'assign series to axis
+                series.YAxisIndex = axisW.AxisIndex
                 Exit For
             End If
         Next
-        If Not axisFound Then
-            'create a new custom axis
-            Dim axis As ScottPlot.Renderable.Axis
-            Dim number As Integer = axes.Count + 1
 
-            'Place every second axis on the right
-            If number Mod 2 = 0 Then
-                axis = View.MainPlot.Plot.AddAxis(ScottPlot.Renderable.Edge.Right)
-            Else
-                axis = View.MainPlot.Plot.AddAxis(ScottPlot.Renderable.Edge.Left)
+        If Not axisExists Then
+            'check for existing, but unused axes
+            Dim axisFound As Boolean = False
+            For Each axis As ScottPlot.Renderable.Axis In View.MainPlot.Plot.GetAxesMatching(axisIndex:=Nothing, isVertical:=True)
+                If axis.AxisLabel.Label = "" Then
+                    'this axis hasn't been used yet
+                    axis.AxisLabel.Label = unit
+                    axis.AxisLabel.IsVisible = True
+                    axis.Ticks(enable:=True)
+
+                    'assign series to axis
+                    series.YAxisIndex = axis.AxisIndex
+
+                    'store axis
+                    axisW = New AxisWrapper(axis)
+                    Me.Axes.Add(axisW)
+
+                    axisFound = True
+                    Exit For
+                End If
+            Next
+            If Not axisFound Then
+                'create a new custom axis
+                Dim axis As ScottPlot.Renderable.Axis
+                Dim number As Integer = Axes.Count + 1
+
+                'Place every second axis on the right
+                If number Mod 2 = 0 Then
+                    axis = View.MainPlot.Plot.AddAxis(ScottPlot.Renderable.Edge.Right)
+                Else
+                    axis = View.MainPlot.Plot.AddAxis(ScottPlot.Renderable.Edge.Left)
+                End If
+
+                axis.AxisLabel.Label = unit
+                axis.IsVisible = True
+
+                'assign series to axis
+                series.YAxisIndex = axis.AxisIndex
+
+                'store axis
+                axisW = New AxisWrapper(axis)
+                Me.Axes.Add(axisW)
             End If
 
-            axis.AxisLabel.Label = unit
-
-            axis.IsVisible = True
-
-            'assign series to new axis
-            series.YAxisIndex = axis.AxisIndex
-
-            axis.Dims.ResetLimits()
         End If
 
         'remove any unused axes
@@ -2515,8 +2516,7 @@ Friend Class WaveController
             View.MainPlot.Refresh()
         End If
 
-        'update axis dialog
-        Call Me.UpdateAxisDialog()
+        'TODO: remove axis wrappers
 
     End Sub
 
@@ -2796,68 +2796,6 @@ Friend Class WaveController
             View.CheckedListBox_Series.SetItemChecked(index + offset, isChecked)
         End If
 
-    End Sub
-
-    ''' <summary>
-    ''' Handles axis deleted in the AxisDialog
-    ''' </summary>
-    ''' <param name="axisname"></param>
-    Private Sub axisDeleted(axisname As String)
-        'TODO: TChart
-        'Dim axisnumber As Integer
-        'Dim m As Match = Regex.Match(axisname, "Custom (\d+)")
-        'If m.Success Then
-        '    axisnumber = Integer.Parse(m.Groups(1).Value)
-        '    'Delete axis from chart
-        '    View.MainPlot.Axes.Custom.RemoveAt(axisnumber)
-        '    View.MainPlot.Refresh()
-        '    'update axis dialog
-        '    Call Me.UpdateAxisDialog()
-        'End If
-    End Sub
-
-    ''' <summary>
-    ''' Handles axis unit changed in the AxisDialog
-    ''' </summary>
-    ''' <remarks>Reassigns all series to their appropriate axis</remarks>
-    Private Sub AxisUnitChanged()
-
-        'TODO: TChart
-        'For Each series As Steema.TeeChart.Styles.Series In View.MainPlot.Series
-        '    assignSeriesToAxis(series, _model.TimeSeries(series.Tag).Unit)
-        'Next
-
-        ''deactivate unused custom axes
-        'Dim unitUsed As Boolean
-        'For Each axis As Steema.TeeChart.Axis In View.MainPlot.Axes.Custom
-        '    unitUsed = False
-        '    For Each ts As TimeSeries In _model.TimeSeries.Values
-        '        If ts.Unit = axis.Tag Then
-        '            unitUsed = True
-        '            Exit For
-        '        End If
-        '    Next
-        '    If Not unitUsed Then
-        '        axis.Visible = False
-        '    End If
-        'Next
-
-    End Sub
-
-    ''' <summary>
-    ''' Update AxisDialog
-    ''' </summary>
-    Private Sub UpdateAxisDialog()
-        'TODO: TChart
-        ''Wrap Left, Right and Custom axes
-        'Dim axisList As New List(Of AxisWrapper)
-        'axisList.Add(New AxisWrapper("Left", View.MainPlot.Axes.Left))
-        'axisList.Add(New AxisWrapper("Right", View.MainPlot.Axes.Right))
-        'For i As Integer = 0 To View.MainPlot.Axes.Custom.Count - 1
-        '    axisList.Add(New AxisWrapper("Custom " & i, View.MainPlot.Axes.Custom(i)))
-        'Next
-
-        '_axisDialog.Update(axisList)
     End Sub
 
     ''' <summary>
