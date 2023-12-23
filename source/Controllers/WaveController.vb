@@ -2733,7 +2733,8 @@ Friend Class WaveController
         'Remove series from main chart
         If Me.Plottables.ContainsKey(id) Then
             View.MainPlot.Plot.Remove(Me.Plottables(id))
-            'TODO: rescale all y axes?
+            'reset Y axis limits
+            View.MainPlot.Plot.GetAxesMatching(axisIndex:=Me.Plottables(id).XAxisIndex, isVertical:=True).First().Dims.ResetLimits()
             View.MainPlot.Refresh()
         End If
         Me.Plottables.Remove(id)
@@ -2741,7 +2742,9 @@ Friend Class WaveController
         'Remove series from overview chart
         If Me.PlottablesOverview.ContainsKey(id) Then
             View.OverviewPlot.Plot.Remove(Me.PlottablesOverview(id))
-            'TODO: rescale both x and y axes
+            'reset Y axis limits
+            View.OverviewPlot.Plot.YAxis.Dims.ResetLimits()
+            'TODO: reset x axis to new extents
             View.OverviewPlot.Refresh()
         End If
         Me.PlottablesOverview.Remove(id)
