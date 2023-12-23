@@ -47,6 +47,11 @@ Friend Class WaveController
         End Get
     End Property
 
+    ''' <summary>
+    ''' Dictionary of series in the chart, key corresponds to TimeSeries ID
+    ''' </summary>
+    Friend ChartSeries As Dictionary(Of Integer, ScottPlot.Plottable.IPlottable)
+
     Private selectionMade As Boolean 'Flag zeigt an, ob bereits ein Auswahlbereich ausgewählt wurde
 
     ''' <summary>
@@ -81,6 +86,9 @@ Friend Class WaveController
         Call MyBase.New(view, model)
 
         Me.View.SetController(Me)
+
+        'Initialize chart series container
+        Me.ChartSeries = New Dictionary(Of Integer, ScottPlot.Plottable.IPlottable)
 
         'Initialize zoom history
         Me.ZoomHistory = New List(Of (xmin As Double, xmax As Double))
@@ -156,6 +164,9 @@ Friend Class WaveController
         'drag drop events
         AddHandler Me.View.DragEnter, AddressOf Wave_DragEnter
         AddHandler Me.View.DragDrop, AddressOf Wave_DragDrop
+
+        'TOC events
+        AddHandler Me.View.CheckedListBox_Series.ItemCheck, AddressOf SeriesActiveChanged
 
         'navigation events
         AddHandler Me.View.MaskedTextBox_NavStart.KeyDown, AddressOf navigationKeyDown
@@ -308,6 +319,9 @@ Friend Class WaveController
             res = MsgBox($"All existing series will be deleted!{eol}Continue?", MsgBoxStyle.OkCancel)
             If (Not res = Windows.Forms.DialogResult.OK) Then Exit Sub
         End If
+
+        'Clear chart series
+        Me.ChartSeries.Clear()
 
         'Charts zurücksetzen
         Call View.Init_Charts()
@@ -2273,10 +2287,6 @@ Friend Class WaveController
         'Do not paint NaN values
         Line1.OnNaN = ScottPlot.Plottable.ScatterPlot.NanBehavior.Gap
 
-        'Store id as Tag property
-        'TODO: TChart
-        'Line1.Tag = ts.Id
-
         'Namen vergeben
         Line1.Label = ts.Title
 
@@ -2304,6 +2314,9 @@ Friend Class WaveController
                 Line1.StepDisplayRight = False
         End Select
 
+        'Store chart series
+        Me.ChartSeries.Add(ts.Id, Line1)
+
         'Add series to overview chart
         Call Me.AddSeriesToOverview(ts)
 
@@ -2318,6 +2331,9 @@ Friend Class WaveController
         If ts.NaNCount > 0 Then
             Log.AddLogEntry(Log.levels.warning, $"Series '{ts.Title}' contains {ts.NaNCount} NaN values!")
         End If
+
+        'add series to TOC
+        View.CheckedListBox_Series.Items.Add(ts, isChecked:=True)
 
     End Sub
 
@@ -2478,6 +2494,21 @@ Friend Class WaveController
             Call Me.UpdateAxisDialog()
         End If
 
+    End Sub
+
+    ''' <summary>
+    ''' Handles a series being activated/deactivated in the TOC
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    Private Sub SeriesActiveChanged(sender As Object, e As ItemCheckEventArgs)
+
+        Dim id As Integer = View.CheckedListBox_Series.Items(e.Index).Id
+
+        If Me.ChartSeries.ContainsKey(id) Then
+            Me.ChartSeries(id).IsVisible = (e.NewValue = CheckState.Checked)
+        End If
+        Me.View.MainPlot.Refresh()
     End Sub
 
     ''' <summary>

@@ -100,16 +100,19 @@ Partial Class MainWindow
         Me.Button_NavBack = New System.Windows.Forms.Button()
         Me.NumericUpDown_NavMultiplier = New System.Windows.Forms.NumericUpDown()
         Me.ComboBox_NavIncrement = New System.Windows.Forms.ComboBox()
+        Me.MainPlot = New ScottPlot.FormsPlot()
         Me.Panel_DisplayRange = New System.Windows.Forms.Panel()
         Me.Label_Display = New System.Windows.Forms.Label()
         Me.NumericUpDown_DisplayRangeMultiplier = New System.Windows.Forms.NumericUpDown()
         Me.ComboBox_DisplayRangeUnit = New System.Windows.Forms.ComboBox()
         Me.MaskedTextBox_NavEnd = New System.Windows.Forms.MaskedTextBox()
         Me.MaskedTextBox_NavStart = New System.Windows.Forms.MaskedTextBox()
-        Me.MainPlot = New ScottPlot.FormsPlot()
         Me.SaveFileDialog1 = New System.Windows.Forms.SaveFileDialog()
         Me.ProgressBar1 = New System.Windows.Forms.ProgressBar()
         Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
+        Me.SplitContainer2 = New System.Windows.Forms.SplitContainer()
+        Me.GroupBox1 = New System.Windows.Forms.GroupBox()
+        Me.CheckedListBox_Series = New System.Windows.Forms.CheckedListBox()
         ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
         toolStripSeparator = New System.Windows.Forms.ToolStripSeparator()
         ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
@@ -130,6 +133,11 @@ Partial Class MainWindow
         CType(Me.NumericUpDown_NavMultiplier, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Panel_DisplayRange.SuspendLayout()
         CType(Me.NumericUpDown_DisplayRangeMultiplier, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.SplitContainer2, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.SplitContainer2.Panel1.SuspendLayout()
+        Me.SplitContainer2.Panel2.SuspendLayout()
+        Me.SplitContainer2.SuspendLayout()
+        Me.GroupBox1.SuspendLayout()
         Me.SuspendLayout()
         '
         'ToolStripSeparator1
@@ -656,11 +664,9 @@ Partial Class MainWindow
         '
         'SplitContainer1
         '
-        Me.SplitContainer1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.SplitContainer1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
-        Me.SplitContainer1.Location = New System.Drawing.Point(0, 34)
+        Me.SplitContainer1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.SplitContainer1.Location = New System.Drawing.Point(0, 0)
         Me.SplitContainer1.Name = "SplitContainer1"
         Me.SplitContainer1.Orientation = System.Windows.Forms.Orientation.Horizontal
         '
@@ -672,8 +678,8 @@ Partial Class MainWindow
         'SplitContainer1.Panel2
         '
         Me.SplitContainer1.Panel2.Controls.Add(Me.TableLayoutPanel1)
-        Me.SplitContainer1.Size = New System.Drawing.Size(944, 606)
-        Me.SplitContainer1.SplitterDistance = 140
+        Me.SplitContainer1.Size = New System.Drawing.Size(820, 605)
+        Me.SplitContainer1.SplitterDistance = 139
         Me.SplitContainer1.TabIndex = 1
         '
         'OverviewPlot
@@ -681,7 +687,7 @@ Partial Class MainWindow
         Me.OverviewPlot.Dock = System.Windows.Forms.DockStyle.Fill
         Me.OverviewPlot.Location = New System.Drawing.Point(0, 0)
         Me.OverviewPlot.Name = "OverviewPlot"
-        Me.OverviewPlot.Size = New System.Drawing.Size(940, 136)
+        Me.OverviewPlot.Size = New System.Drawing.Size(816, 135)
         Me.OverviewPlot.TabIndex = 0
         '
         'TableLayoutPanel1
@@ -690,17 +696,18 @@ Partial Class MainWindow
         Me.TableLayoutPanel1.ColumnCount = 1
         Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.TableLayoutPanel1.Controls.Add(Me.PanelNavigation, 0, 0)
-        Me.TableLayoutPanel1.Controls.Add(Me.Panel_DisplayRange, 0, 2)
         Me.TableLayoutPanel1.Controls.Add(Me.MainPlot, 0, 1)
+        Me.TableLayoutPanel1.Controls.Add(Me.Panel_DisplayRange, 0, 2)
         Me.TableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TableLayoutPanel1.Location = New System.Drawing.Point(0, 0)
         Me.TableLayoutPanel1.Margin = New System.Windows.Forms.Padding(0)
         Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
-        Me.TableLayoutPanel1.RowCount = 3
+        Me.TableLayoutPanel1.RowCount = 4
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 38.0!))
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 36.0!))
-        Me.TableLayoutPanel1.Size = New System.Drawing.Size(940, 458)
+        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
+        Me.TableLayoutPanel1.Size = New System.Drawing.Size(816, 458)
         Me.TableLayoutPanel1.TabIndex = 3
         '
         'PanelNavigation
@@ -716,14 +723,14 @@ Partial Class MainWindow
         Me.PanelNavigation.Location = New System.Drawing.Point(1, 1)
         Me.PanelNavigation.Margin = New System.Windows.Forms.Padding(0)
         Me.PanelNavigation.Name = "PanelNavigation"
-        Me.PanelNavigation.Size = New System.Drawing.Size(938, 38)
+        Me.PanelNavigation.Size = New System.Drawing.Size(814, 38)
         Me.PanelNavigation.TabIndex = 0
         '
         'Button_NavEnd
         '
         Me.Button_NavEnd.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Button_NavEnd.Image = Global.BlueM.Wave.My.Resources.Resources.control_end
-        Me.Button_NavEnd.Location = New System.Drawing.Point(906, 8)
+        Me.Button_NavEnd.Location = New System.Drawing.Point(782, 8)
         Me.Button_NavEnd.Name = "Button_NavEnd"
         Me.Button_NavEnd.Size = New System.Drawing.Size(23, 23)
         Me.Button_NavEnd.TabIndex = 6
@@ -744,7 +751,7 @@ Partial Class MainWindow
         '
         Me.Label_Navigate.Anchor = System.Windows.Forms.AnchorStyles.Top
         Me.Label_Navigate.AutoSize = True
-        Me.Label_Navigate.Location = New System.Drawing.Point(376, 13)
+        Me.Label_Navigate.Location = New System.Drawing.Point(314, 13)
         Me.Label_Navigate.Name = "Label_Navigate"
         Me.Label_Navigate.Size = New System.Drawing.Size(53, 13)
         Me.Label_Navigate.TabIndex = 2
@@ -754,7 +761,7 @@ Partial Class MainWindow
         '
         Me.Button_NavForward.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Button_NavForward.Image = CType(resources.GetObject("Button_NavForward.Image"), System.Drawing.Image)
-        Me.Button_NavForward.Location = New System.Drawing.Point(831, 8)
+        Me.Button_NavForward.Location = New System.Drawing.Point(707, 8)
         Me.Button_NavForward.Name = "Button_NavForward"
         Me.Button_NavForward.Size = New System.Drawing.Size(69, 23)
         Me.Button_NavForward.TabIndex = 5
@@ -774,7 +781,7 @@ Partial Class MainWindow
         'NumericUpDown_NavMultiplier
         '
         Me.NumericUpDown_NavMultiplier.Anchor = System.Windows.Forms.AnchorStyles.Top
-        Me.NumericUpDown_NavMultiplier.Location = New System.Drawing.Point(435, 9)
+        Me.NumericUpDown_NavMultiplier.Location = New System.Drawing.Point(373, 9)
         Me.NumericUpDown_NavMultiplier.Minimum = New Decimal(New Integer() {1, 0, 0, 0})
         Me.NumericUpDown_NavMultiplier.Name = "NumericUpDown_NavMultiplier"
         Me.NumericUpDown_NavMultiplier.Size = New System.Drawing.Size(40, 20)
@@ -787,10 +794,18 @@ Partial Class MainWindow
         Me.ComboBox_NavIncrement.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.ComboBox_NavIncrement.FormattingEnabled = True
         Me.ComboBox_NavIncrement.Items.AddRange(New Object() {"Centuries", "Decades", "Years", "Months", "Weeks", "Days", "Hours", "Minutes", "Seconds"})
-        Me.ComboBox_NavIncrement.Location = New System.Drawing.Point(481, 9)
+        Me.ComboBox_NavIncrement.Location = New System.Drawing.Point(419, 9)
         Me.ComboBox_NavIncrement.Name = "ComboBox_NavIncrement"
         Me.ComboBox_NavIncrement.Size = New System.Drawing.Size(81, 21)
         Me.ComboBox_NavIncrement.TabIndex = 4
+        '
+        'MainPlot
+        '
+        Me.MainPlot.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.MainPlot.Location = New System.Drawing.Point(4, 43)
+        Me.MainPlot.Name = "MainPlot"
+        Me.MainPlot.Size = New System.Drawing.Size(808, 353)
+        Me.MainPlot.TabIndex = 3
         '
         'Panel_DisplayRange
         '
@@ -800,17 +815,17 @@ Partial Class MainWindow
         Me.Panel_DisplayRange.Controls.Add(Me.MaskedTextBox_NavEnd)
         Me.Panel_DisplayRange.Controls.Add(Me.MaskedTextBox_NavStart)
         Me.Panel_DisplayRange.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Panel_DisplayRange.Location = New System.Drawing.Point(1, 421)
+        Me.Panel_DisplayRange.Location = New System.Drawing.Point(1, 400)
         Me.Panel_DisplayRange.Margin = New System.Windows.Forms.Padding(0)
         Me.Panel_DisplayRange.Name = "Panel_DisplayRange"
-        Me.Panel_DisplayRange.Size = New System.Drawing.Size(938, 36)
+        Me.Panel_DisplayRange.Size = New System.Drawing.Size(814, 36)
         Me.Panel_DisplayRange.TabIndex = 2
         '
         'Label_Display
         '
         Me.Label_Display.Anchor = System.Windows.Forms.AnchorStyles.Top
         Me.Label_Display.AutoSize = True
-        Me.Label_Display.Location = New System.Drawing.Point(381, 12)
+        Me.Label_Display.Location = New System.Drawing.Point(319, 12)
         Me.Label_Display.Name = "Label_Display"
         Me.Label_Display.Size = New System.Drawing.Size(44, 13)
         Me.Label_Display.TabIndex = 1
@@ -819,7 +834,7 @@ Partial Class MainWindow
         'NumericUpDown_DisplayRangeMultiplier
         '
         Me.NumericUpDown_DisplayRangeMultiplier.Anchor = System.Windows.Forms.AnchorStyles.Top
-        Me.NumericUpDown_DisplayRangeMultiplier.Location = New System.Drawing.Point(431, 8)
+        Me.NumericUpDown_DisplayRangeMultiplier.Location = New System.Drawing.Point(369, 8)
         Me.NumericUpDown_DisplayRangeMultiplier.Minimum = New Decimal(New Integer() {1, 0, 0, 0})
         Me.NumericUpDown_DisplayRangeMultiplier.Name = "NumericUpDown_DisplayRangeMultiplier"
         Me.NumericUpDown_DisplayRangeMultiplier.Size = New System.Drawing.Size(40, 20)
@@ -832,7 +847,7 @@ Partial Class MainWindow
         Me.ComboBox_DisplayRangeUnit.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.ComboBox_DisplayRangeUnit.FormattingEnabled = True
         Me.ComboBox_DisplayRangeUnit.Items.AddRange(New Object() {"", "Centuries", "Decades", "Years", "Months", "Weeks", "Days", "Hours", "Minutes", "Seconds"})
-        Me.ComboBox_DisplayRangeUnit.Location = New System.Drawing.Point(477, 8)
+        Me.ComboBox_DisplayRangeUnit.Location = New System.Drawing.Point(415, 8)
         Me.ComboBox_DisplayRangeUnit.Name = "ComboBox_DisplayRangeUnit"
         Me.ComboBox_DisplayRangeUnit.Size = New System.Drawing.Size(81, 21)
         Me.ComboBox_DisplayRangeUnit.TabIndex = 3
@@ -841,7 +856,7 @@ Partial Class MainWindow
         '
         Me.MaskedTextBox_NavEnd.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.MaskedTextBox_NavEnd.Culture = New System.Globalization.CultureInfo("")
-        Me.MaskedTextBox_NavEnd.Location = New System.Drawing.Point(829, 8)
+        Me.MaskedTextBox_NavEnd.Location = New System.Drawing.Point(705, 8)
         Me.MaskedTextBox_NavEnd.Name = "MaskedTextBox_NavEnd"
         Me.MaskedTextBox_NavEnd.Size = New System.Drawing.Size(100, 20)
         Me.MaskedTextBox_NavEnd.TabIndex = 4
@@ -856,14 +871,6 @@ Partial Class MainWindow
         Me.MaskedTextBox_NavStart.TabIndex = 0
         Me.MaskedTextBox_NavStart.ValidatingType = GetType(Date)
         '
-        'MainPlot
-        '
-        Me.MainPlot.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.MainPlot.Location = New System.Drawing.Point(4, 43)
-        Me.MainPlot.Name = "MainPlot"
-        Me.MainPlot.Size = New System.Drawing.Size(932, 374)
-        Me.MainPlot.TabIndex = 3
-        '
         'ProgressBar1
         '
         Me.ProgressBar1.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
@@ -874,6 +881,47 @@ Partial Class MainWindow
         Me.ProgressBar1.Step = 1
         Me.ProgressBar1.TabIndex = 2
         '
+        'SplitContainer2
+        '
+        Me.SplitContainer2.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.SplitContainer2.FixedPanel = System.Windows.Forms.FixedPanel.Panel1
+        Me.SplitContainer2.Location = New System.Drawing.Point(0, 34)
+        Me.SplitContainer2.Name = "SplitContainer2"
+        '
+        'SplitContainer2.Panel1
+        '
+        Me.SplitContainer2.Panel1.AutoScroll = True
+        Me.SplitContainer2.Panel1.Controls.Add(Me.GroupBox1)
+        '
+        'SplitContainer2.Panel2
+        '
+        Me.SplitContainer2.Panel2.Controls.Add(Me.SplitContainer1)
+        Me.SplitContainer2.Size = New System.Drawing.Size(944, 605)
+        Me.SplitContainer2.SplitterDistance = 120
+        Me.SplitContainer2.TabIndex = 7
+        '
+        'GroupBox1
+        '
+        Me.GroupBox1.Controls.Add(Me.CheckedListBox_Series)
+        Me.GroupBox1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.GroupBox1.Location = New System.Drawing.Point(0, 0)
+        Me.GroupBox1.Name = "GroupBox1"
+        Me.GroupBox1.Size = New System.Drawing.Size(120, 605)
+        Me.GroupBox1.TabIndex = 2
+        Me.GroupBox1.TabStop = False
+        Me.GroupBox1.Text = "Series"
+        '
+        'CheckedListBox_Series
+        '
+        Me.CheckedListBox_Series.BackColor = System.Drawing.SystemColors.Control
+        Me.CheckedListBox_Series.CheckOnClick = True
+        Me.CheckedListBox_Series.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.CheckedListBox_Series.FormattingEnabled = True
+        Me.CheckedListBox_Series.Location = New System.Drawing.Point(3, 16)
+        Me.CheckedListBox_Series.Name = "CheckedListBox_Series"
+        Me.CheckedListBox_Series.Size = New System.Drawing.Size(114, 586)
+        Me.CheckedListBox_Series.TabIndex = 0
+        '
         'MainWindow
         '
         Me.AllowDrop = True
@@ -881,9 +929,9 @@ Partial Class MainWindow
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.SystemColors.Control
         Me.ClientSize = New System.Drawing.Size(944, 661)
+        Me.Controls.Add(Me.SplitContainer2)
         Me.Controls.Add(Me.ProgressBar1)
         Me.Controls.Add(ToolStrip1)
-        Me.Controls.Add(Me.SplitContainer1)
         Me.Controls.Add(StatusStrip1)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.KeyPreview = True
@@ -905,6 +953,11 @@ Partial Class MainWindow
         Me.Panel_DisplayRange.ResumeLayout(False)
         Me.Panel_DisplayRange.PerformLayout()
         CType(Me.NumericUpDown_DisplayRangeMultiplier, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.SplitContainer2.Panel1.ResumeLayout(False)
+        Me.SplitContainer2.Panel2.ResumeLayout(False)
+        CType(Me.SplitContainer2, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.SplitContainer2.ResumeLayout(False)
+        Me.GroupBox1.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -991,4 +1044,7 @@ Partial Class MainWindow
     Friend WithEvents ToolTip1 As ToolTip
     Friend WithEvents MainPlot As ScottPlot.FormsPlot
     Friend WithEvents OverviewPlot As ScottPlot.FormsPlot
+    Friend WithEvents SplitContainer2 As SplitContainer
+    Friend WithEvents CheckedListBox_Series As CheckedListBox
+    Friend WithEvents GroupBox1 As GroupBox
 End Class
