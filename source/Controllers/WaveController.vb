@@ -2562,6 +2562,7 @@ Friend Class WaveController
                 Dim newMin As Double = Math.Min(axisMin, min)
                 Dim newMax As Double = Math.Max(axisMax, max)
 
+                axis.Dims.ResetLimits()
                 axis.Dims.SetAxis(newMin, newMax)
                 axis.SetBoundary(newMin, newMax)
                 axis.SetInnerBoundary(newMin, newMax)
