@@ -2422,7 +2422,6 @@ Friend Class WaveController
                 axis.AxisLabel.Label = unit
                 axis.AxisLabel.IsVisible = True
                 axis.Ticks(enable:=True)
-                axis.AxisTicks.IsVisible = True
 
                 'assign series to new axis
                 series.YAxisIndex = axis.AxisIndex
@@ -2465,7 +2464,7 @@ Friend Class WaveController
             axis.Dims.ResetLimits()
         End If
 
-        'check for unused axes and remove them
+        'check for unused axes and remove them (because units may have changed)
         Dim units As New HashSet(Of String)
         Dim axesToRemove As New List(Of ScottPlot.Renderable.Axis)
         For Each ts As TimeSeries In Model.TimeSeries.Values
@@ -2526,7 +2525,14 @@ Friend Class WaveController
         'rescale and set visibility of axes
         For Each axis As ScottPlot.Renderable.Axis In View.MainPlot.Plot.GetAxesMatching(axisIndex:=Nothing, isVertical:=True)
             axis.Dims.ResetLimits()
-            axis.IsVisible = activeUnits.Contains(axis.AxisLabel.Label)
+            Dim visibility As Boolean = activeUnits.Contains(axis.AxisLabel.Label)
+            If axis.AxisIndex <= 1 Then
+                'left and right axis should never be made completely invisible
+                axis.AxisLabel.IsVisible = visibility
+                axis.Ticks(enable:=visibility)
+            Else
+                axis.IsVisible = visibility
+            End If
         Next
 
         View.MainPlot.Refresh()
