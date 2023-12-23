@@ -101,7 +101,6 @@ Friend Class WaveController
         'toolbar buttons
         AddHandler Me.View.ToolStripButton_New.Click, AddressOf New_Click
         AddHandler Me.View.ToolStripButton_Copy.Click, AddressOf Copy_Click
-        AddHandler Me.View.ToolStripButton_Print.Click, AddressOf Print_Click
         AddHandler Me.View.ToolStripMenuItem_ImportSeries.Click, AddressOf ImportSeries_Click
         AddHandler Me.View.ToolStripMenuItem_LoadTEN.Click, AddressOf LoadTEN_Click
         AddHandler Me.View.ToolStripMenuItem_ReloadFromFiles.Click, AddressOf RefreshFromFiles_Click
@@ -745,13 +744,6 @@ Friend Class WaveController
             Next
             View.MainPlot.Refresh()
         End If
-    End Sub
-
-    'Drucken
-    '*******
-    Private Sub Print_Click(sender As System.Object, e As System.EventArgs)
-        'TODO: TChart
-        'Call View.MainPlot.Printer.Preview()
     End Sub
 
     'Kopieren (als PNG)

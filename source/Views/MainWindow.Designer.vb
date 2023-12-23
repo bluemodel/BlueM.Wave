@@ -49,7 +49,6 @@ Partial Class MainWindow
         Me.ToolStripMenuItem_SaveChart = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripMenuItem_ExportSeries = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripButton_Copy = New System.Windows.Forms.ToolStripButton()
-        Me.ToolStripButton_Print = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripButton_Cut = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripButton_Merge = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripSeparator8 = New System.Windows.Forms.ToolStripSeparator()
@@ -108,16 +107,16 @@ Partial Class MainWindow
         Me.ProgressBar1 = New System.Windows.Forms.ProgressBar()
         Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
         Me.SplitContainer2 = New System.Windows.Forms.SplitContainer()
-        Me.CheckedListBox_Series = New System.Windows.Forms.CheckedListBox()
         Me.ToolStrip2 = New System.Windows.Forms.ToolStrip()
+        Me.ToolStripButton_Delete = New System.Windows.Forms.ToolStripButton()
+        Me.ToolStripSeparator12 = New System.Windows.Forms.ToolStripSeparator()
+        Me.ToolStripButton_MoveUp = New System.Windows.Forms.ToolStripButton()
+        Me.ToolStripButton_MoveDown = New System.Windows.Forms.ToolStripButton()
+        Me.ToolStripSeparator13 = New System.Windows.Forms.ToolStripSeparator()
         Me.ToolStripDropDownButton1 = New System.Windows.Forms.ToolStripDropDownButton()
         Me.ToolStripMenuItem_ActivateAllSeries = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripMenuItem_DeactivateAllSeries = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ToolStripButton_MoveUp = New System.Windows.Forms.ToolStripButton()
-        Me.ToolStripButton_MoveDown = New System.Windows.Forms.ToolStripButton()
-        Me.ToolStripButton_Delete = New System.Windows.Forms.ToolStripButton()
-        Me.ToolStripSeparator12 = New System.Windows.Forms.ToolStripSeparator()
-        Me.ToolStripSeparator13 = New System.Windows.Forms.ToolStripSeparator()
+        Me.CheckedListBox_Series = New System.Windows.Forms.CheckedListBox()
         ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
         toolStripSeparator = New System.Windows.Forms.ToolStripSeparator()
         ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
@@ -210,7 +209,7 @@ Partial Class MainWindow
         '
         ToolStrip1.AutoSize = False
         ToolStrip1.BackColor = System.Drawing.SystemColors.Control
-        ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButton_New, Me.ToolStripDropDownButton_Open, Me.ToolStripDropDownButton_Save, ToolStripSeparator4, Me.ToolStripButton_Copy, Me.ToolStripButton_Print, ToolStripSeparator2, Me.ToolStripButton_Cut, Me.ToolStripButton_Merge, Me.ToolStripSeparator8, Me.ToolStripButton_ShowNaNValues, Me.ToolStripButton_ConvertErrorValues, Me.ToolStripButton_RemoveNaNValues, Me.ToolStripSeparator7, Me.ToolStripButton_Analysis, ToolStripSeparator1, Me.ToolStripButton_EditChart, Me.ToolStripDropDownButton_ColorPalette, Me.ToolStripSeparator9, Me.ToolStripButton_Properties, Me.ToolStripButton_TimeseriesValues, Me.ToolStripSeparator10, Me.ToolStripButton_AxisDialog, Me.ToolStripButton_AutoAdjustYAxes, ToolStripSeparator3, Me.ToolStripButton_ToggleOverview, Me.ToolStripButton_ToggleNavigation, toolStripSeparator, Me.ToolStripButton_ZoomIn, Me.ToolStripButton_ZoomOut, Me.ToolStripButton_ZoomPrevious, Me.ToolStripDropDownButton_Help, Me.ToolStripButton_ZoomNext, Me.ToolStripDropDownButton_ZoomToSeries, Me.ToolStripButton_ZoomAll, Me.ToolStripButton_UpdateNotification, Me.ToolStripSeparator11})
+        ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButton_New, Me.ToolStripDropDownButton_Open, Me.ToolStripDropDownButton_Save, ToolStripSeparator4, Me.ToolStripButton_Copy, ToolStripSeparator2, Me.ToolStripButton_Cut, Me.ToolStripButton_Merge, Me.ToolStripSeparator8, Me.ToolStripButton_ShowNaNValues, Me.ToolStripButton_ConvertErrorValues, Me.ToolStripButton_RemoveNaNValues, Me.ToolStripSeparator7, Me.ToolStripButton_Analysis, ToolStripSeparator1, Me.ToolStripButton_EditChart, Me.ToolStripDropDownButton_ColorPalette, Me.ToolStripSeparator9, Me.ToolStripButton_Properties, Me.ToolStripButton_TimeseriesValues, Me.ToolStripSeparator10, Me.ToolStripButton_AxisDialog, Me.ToolStripButton_AutoAdjustYAxes, ToolStripSeparator3, Me.ToolStripButton_ToggleOverview, Me.ToolStripButton_ToggleNavigation, toolStripSeparator, Me.ToolStripButton_ZoomIn, Me.ToolStripButton_ZoomOut, Me.ToolStripButton_ZoomPrevious, Me.ToolStripDropDownButton_Help, Me.ToolStripButton_ZoomNext, Me.ToolStripDropDownButton_ZoomToSeries, Me.ToolStripButton_ZoomAll, Me.ToolStripButton_UpdateNotification, Me.ToolStripSeparator11})
         ToolStrip1.Location = New System.Drawing.Point(0, 0)
         ToolStrip1.Name = "ToolStrip1"
         ToolStrip1.Size = New System.Drawing.Size(944, 34)
@@ -331,15 +330,6 @@ Partial Class MainWindow
         Me.ToolStripButton_Copy.Name = "ToolStripButton_Copy"
         Me.ToolStripButton_Copy.Size = New System.Drawing.Size(23, 31)
         Me.ToolStripButton_Copy.Text = "&Copy chart to clipboard (PNG)"
-        '
-        'ToolStripButton_Print
-        '
-        Me.ToolStripButton_Print.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.ToolStripButton_Print.Image = CType(resources.GetObject("ToolStripButton_Print.Image"), System.Drawing.Image)
-        Me.ToolStripButton_Print.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.ToolStripButton_Print.Name = "ToolStripButton_Print"
-        Me.ToolStripButton_Print.Size = New System.Drawing.Size(23, 31)
-        Me.ToolStripButton_Print.Text = "&Print"
         '
         'ToolStripButton_Cut
         '
@@ -883,21 +873,6 @@ Partial Class MainWindow
         Me.SplitContainer2.SplitterDistance = 135
         Me.SplitContainer2.TabIndex = 7
         '
-        'CheckedListBox_Series
-        '
-        Me.CheckedListBox_Series.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.CheckedListBox_Series.BackColor = System.Drawing.SystemColors.Control
-        Me.CheckedListBox_Series.FormattingEnabled = True
-        Me.CheckedListBox_Series.HorizontalScrollbar = True
-        Me.CheckedListBox_Series.Location = New System.Drawing.Point(5, 31)
-        Me.CheckedListBox_Series.Margin = New System.Windows.Forms.Padding(5)
-        Me.CheckedListBox_Series.Name = "CheckedListBox_Series"
-        Me.CheckedListBox_Series.Size = New System.Drawing.Size(125, 559)
-        Me.CheckedListBox_Series.TabIndex = 0
-        Me.CheckedListBox_Series.ThreeDCheckBoxes = True
-        '
         'ToolStrip2
         '
         Me.ToolStrip2.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButton_Delete, Me.ToolStripSeparator12, Me.ToolStripButton_MoveUp, Me.ToolStripButton_MoveDown, Me.ToolStripSeparator13, Me.ToolStripDropDownButton1})
@@ -907,28 +882,21 @@ Partial Class MainWindow
         Me.ToolStrip2.TabIndex = 1
         Me.ToolStrip2.Text = "ToolStrip2"
         '
-        'ToolStripDropDownButton1
+        'ToolStripButton_Delete
         '
-        Me.ToolStripDropDownButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.ToolStripDropDownButton1.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripMenuItem_ActivateAllSeries, Me.ToolStripMenuItem_DeactivateAllSeries})
-        Me.ToolStripDropDownButton1.Image = Global.BlueM.Wave.My.Resources.Resources.accept_split
-        Me.ToolStripDropDownButton1.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.ToolStripDropDownButton1.Name = "ToolStripDropDownButton1"
-        Me.ToolStripDropDownButton1.Size = New System.Drawing.Size(29, 22)
+        Me.ToolStripButton_Delete.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.ToolStripButton_Delete.Enabled = False
+        Me.ToolStripButton_Delete.Image = Global.BlueM.Wave.My.Resources.Resources.chart_line_delete
+        Me.ToolStripButton_Delete.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ToolStripButton_Delete.Name = "ToolStripButton_Delete"
+        Me.ToolStripButton_Delete.Size = New System.Drawing.Size(23, 22)
+        Me.ToolStripButton_Delete.Text = "ToolStripButton_Delete"
+        Me.ToolStripButton_Delete.ToolTipText = "Delete selected time series"
         '
-        'ToolStripMenuItem_ActivateAllSeries
+        'ToolStripSeparator12
         '
-        Me.ToolStripMenuItem_ActivateAllSeries.Image = Global.BlueM.Wave.My.Resources.Resources.accept
-        Me.ToolStripMenuItem_ActivateAllSeries.Name = "ToolStripMenuItem_ActivateAllSeries"
-        Me.ToolStripMenuItem_ActivateAllSeries.Size = New System.Drawing.Size(180, 22)
-        Me.ToolStripMenuItem_ActivateAllSeries.Text = "Activate all series"
-        '
-        'ToolStripMenuItem_DeactivateAllSeries
-        '
-        Me.ToolStripMenuItem_DeactivateAllSeries.Image = Global.BlueM.Wave.My.Resources.Resources.accept_grayscale
-        Me.ToolStripMenuItem_DeactivateAllSeries.Name = "ToolStripMenuItem_DeactivateAllSeries"
-        Me.ToolStripMenuItem_DeactivateAllSeries.Size = New System.Drawing.Size(180, 22)
-        Me.ToolStripMenuItem_DeactivateAllSeries.Text = "Deactivate all series"
+        Me.ToolStripSeparator12.Name = "ToolStripSeparator12"
+        Me.ToolStripSeparator12.Size = New System.Drawing.Size(6, 25)
         '
         'ToolStripButton_MoveUp
         '
@@ -951,26 +919,48 @@ Partial Class MainWindow
         Me.ToolStripButton_MoveDown.Size = New System.Drawing.Size(23, 22)
         Me.ToolStripButton_MoveDown.Text = "Move selected time series down"
         '
-        'ToolStripButton_Delete
-        '
-        Me.ToolStripButton_Delete.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.ToolStripButton_Delete.Enabled = False
-        Me.ToolStripButton_Delete.Image = Global.BlueM.Wave.My.Resources.Resources.chart_line_delete
-        Me.ToolStripButton_Delete.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.ToolStripButton_Delete.Name = "ToolStripButton_Delete"
-        Me.ToolStripButton_Delete.Size = New System.Drawing.Size(23, 22)
-        Me.ToolStripButton_Delete.Text = "ToolStripButton_Delete"
-        Me.ToolStripButton_Delete.ToolTipText = "Delete selected time series"
-        '
-        'ToolStripSeparator12
-        '
-        Me.ToolStripSeparator12.Name = "ToolStripSeparator12"
-        Me.ToolStripSeparator12.Size = New System.Drawing.Size(6, 25)
-        '
         'ToolStripSeparator13
         '
         Me.ToolStripSeparator13.Name = "ToolStripSeparator13"
         Me.ToolStripSeparator13.Size = New System.Drawing.Size(6, 25)
+        '
+        'ToolStripDropDownButton1
+        '
+        Me.ToolStripDropDownButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.ToolStripDropDownButton1.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripMenuItem_ActivateAllSeries, Me.ToolStripMenuItem_DeactivateAllSeries})
+        Me.ToolStripDropDownButton1.Image = Global.BlueM.Wave.My.Resources.Resources.accept_split
+        Me.ToolStripDropDownButton1.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ToolStripDropDownButton1.Name = "ToolStripDropDownButton1"
+        Me.ToolStripDropDownButton1.Size = New System.Drawing.Size(29, 22)
+        '
+        'ToolStripMenuItem_ActivateAllSeries
+        '
+        Me.ToolStripMenuItem_ActivateAllSeries.Image = Global.BlueM.Wave.My.Resources.Resources.accept
+        Me.ToolStripMenuItem_ActivateAllSeries.Name = "ToolStripMenuItem_ActivateAllSeries"
+        Me.ToolStripMenuItem_ActivateAllSeries.Size = New System.Drawing.Size(176, 22)
+        Me.ToolStripMenuItem_ActivateAllSeries.Text = "Activate all series"
+        '
+        'ToolStripMenuItem_DeactivateAllSeries
+        '
+        Me.ToolStripMenuItem_DeactivateAllSeries.Image = Global.BlueM.Wave.My.Resources.Resources.accept_grayscale
+        Me.ToolStripMenuItem_DeactivateAllSeries.Name = "ToolStripMenuItem_DeactivateAllSeries"
+        Me.ToolStripMenuItem_DeactivateAllSeries.Size = New System.Drawing.Size(176, 22)
+        Me.ToolStripMenuItem_DeactivateAllSeries.Text = "Deactivate all series"
+        '
+        'CheckedListBox_Series
+        '
+        Me.CheckedListBox_Series.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.CheckedListBox_Series.BackColor = System.Drawing.SystemColors.Control
+        Me.CheckedListBox_Series.FormattingEnabled = True
+        Me.CheckedListBox_Series.HorizontalScrollbar = True
+        Me.CheckedListBox_Series.Location = New System.Drawing.Point(5, 31)
+        Me.CheckedListBox_Series.Margin = New System.Windows.Forms.Padding(5)
+        Me.CheckedListBox_Series.Name = "CheckedListBox_Series"
+        Me.CheckedListBox_Series.Size = New System.Drawing.Size(125, 559)
+        Me.CheckedListBox_Series.TabIndex = 0
+        Me.CheckedListBox_Series.ThreeDCheckBoxes = True
         '
         'MainWindow
         '
@@ -1024,7 +1014,6 @@ Partial Class MainWindow
     Friend WithEvents ToolStripButton_New As System.Windows.Forms.ToolStripButton
     Friend WithEvents ToolStripDropDownButton_Open As System.Windows.Forms.ToolStripDropDownButton
     Friend WithEvents ToolStripDropDownButton_Save As System.Windows.Forms.ToolStripDropDownButton
-    Friend WithEvents ToolStripButton_Print As System.Windows.Forms.ToolStripButton
     Friend WithEvents ToolStripButton_Copy As System.Windows.Forms.ToolStripButton
     Friend WithEvents ToolStripButton_EditChart As System.Windows.Forms.ToolStripButton
     Friend WithEvents ToolStripButton_ToggleOverview As System.Windows.Forms.ToolStripButton
