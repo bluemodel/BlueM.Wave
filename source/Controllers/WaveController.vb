@@ -725,34 +725,26 @@ Friend Class WaveController
     ''' <remarks></remarks>
     Private Sub RemoveNaNValues_Click(sender As System.Object, e As System.EventArgs)
 
-        'TODO: TChart
-        'Dim dlgResult As DialogResult
-        'Dim ids As List(Of Integer)
-        'Dim ts As TimeSeries
+        Dim dlgResult As DialogResult
+        Dim ids As List(Of Integer)
+        Dim ts As TimeSeries
 
-        'dlgResult = MsgBox("Delete all nodes with NaN values from all series?", MsgBoxStyle.OkCancel)
-        'If dlgResult = Windows.Forms.DialogResult.OK Then
-        '    ids = _model.TimeSeries.Ids.ToList()
-        '    'loop over time series
-        '    For Each id As Integer In ids
-        '        'remove NaN values
-        '        ts = _model.TimeSeries(id)
-        '        ts = ts.removeNaNValues()
-        '        _model.TimeSeries(id) = ts
-        '        'replace values of series in chart
-        '        For Each series As Steema.TeeChart.Styles.Series In View.MainPlot.Series
-        '            If series.Tag = id Then
-        '                series.BeginUpdate()
-        '                series.Clear()
-        '                For Each kvp As KeyValuePair(Of DateTime, Double) In ts.Nodes
-        '                    series.Add(kvp.Key, kvp.Value)
-        '                Next
-        '                series.EndUpdate()
-        '                Exit For
-        '            End If
-        '        Next
-        '    Next
-        'End If
+        dlgResult = MsgBox("Delete all nodes with NaN values from all series?", MsgBoxStyle.OkCancel)
+        If dlgResult = Windows.Forms.DialogResult.OK Then
+            ids = _model.TimeSeries.Ids.ToList()
+            'loop over time series
+            For Each id As Integer In ids
+                'remove NaN values
+                ts = _model.TimeSeries(id)
+                ts = ts.removeNaNValues()
+                _model.TimeSeries(id) = ts
+                'replace values of series in chart
+                Dim series As ScottPlot.Plottable.ScatterPlot = Me.ChartSeries(id)
+                series.Update(ts.Dates.Select(Function(t As DateTime) t.ToOADate()).ToArray(), ts.Values.ToArray())
+                'TODO: update series in overview chart
+            Next
+            View.MainPlot.Refresh()
+        End If
     End Sub
 
     'Drucken
