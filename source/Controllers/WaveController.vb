@@ -222,8 +222,12 @@ Friend Class WaveController
 
     End Sub
 
+    ''' <summary>
+    ''' Handles the case where all series were cleared from the model
+    ''' </summary>
     Private Sub SeriesCleared()
-        'nothing to do
+        'remove TOC items
+        View.CheckedListBox_Series.Items.Clear()
     End Sub
 
     ''' <summary>
