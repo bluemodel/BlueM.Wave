@@ -1536,14 +1536,12 @@ Friend Class WaveController
         'collect start and end dates of all currently active series
         Dim startdates As New List(Of Double)
         Dim enddates As New List(Of Double)
-        'TODO: TChart
-        'For Each series As Steema.TeeChart.Styles.Series In View.MainPlot.Series
-        '    If Not series.Active Then
-        '        Continue For
-        '    End If
-        '    startdates.Add(series.MinXValue)
-        '    enddates.Add(series.MaxXValue)
-        'Next
+
+        For Each index As Integer In View.CheckedListBox_Series.CheckedIndices
+            Dim ts As TimeSeries = View.CheckedListBox_Series.Items(index)
+            startdates.Add(ts.StartDate.ToOADate())
+            enddates.Add(ts.EndDate.ToOADate())
+        Next
 
         If startdates.Count = 0 Or enddates.Count = 0 Then
             'Do nothing
