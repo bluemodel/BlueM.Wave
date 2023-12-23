@@ -164,6 +164,9 @@ Friend Class WaveController
         AddHandler Me.View.DragDrop, AddressOf Wave_DragDrop
 
         'TOC events
+        AddHandler Me.View.CheckedListBox_Series.SelectedIndexChanged, AddressOf TOC_SelectionChanged
+        AddHandler Me.View.ToolStripButton_MoveUp.Click, AddressOf ToolStripButton_MoveUp_Click
+        AddHandler Me.View.ToolStripButton_MoveDown.Click, AddressOf ToolStripButton_MoveDown_Click
         AddHandler Me.View.ToolStripMenuItem_ActivateAllSeries.Click, AddressOf ActivateAllSeries_Click
         AddHandler Me.View.ToolStripMenuItem_DeactivateAllSeries.Click, AddressOf DeactivateAllSeries_Click
         AddHandler Me.View.CheckedListBox_Series.ItemCheck, AddressOf SeriesActiveChanged
@@ -1232,6 +1235,84 @@ Friend Class WaveController
         For i As Integer = 0 To View.CheckedListBox_Series.Items.Count - 1
             View.CheckedListBox_Series.SetItemChecked(i, False)
         Next
+    End Sub
+
+    ''' <summary>
+    ''' Handles the user clicking the move up button
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    Private Sub ToolStripButton_MoveUp_Click(sender As Object, e As EventArgs)
+        Call ReorderSelectedSeries(Direction.Up)
+    End Sub
+
+    ''' <summary>
+    ''' Handles the user clicking the move down button
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    Private Sub ToolStripButton_MoveDown_Click(sender As Object, e As EventArgs)
+        Call ReorderSelectedSeries(Direction.Down)
+    End Sub
+
+    ''' <summary>
+    ''' Reorder selected series
+    ''' </summary>
+    ''' <param name="direction">Direction in which to move selected series</param>
+    Private Sub ReorderSelectedSeries(direction As Direction)
+
+        Dim indices As New List(Of Integer)
+        Dim ids As New List(Of Integer)
+        For Each index As Integer In Me.View.CheckedListBox_Series.SelectedIndices
+            If (direction = Direction.Up And index = 0) Or
+               (direction = Direction.Down And index = Me.View.CheckedListBox_Series.Items.Count - 1) Then
+                'if first row is selected, moving up does nothing
+                'if last row is selected, moving down does nothing
+                Exit Sub
+            End If
+            indices.Add(index)
+            ids.Add(CType(Me.View.CheckedListBox_Series.Items(index), TimeSeries).Id)
+        Next
+        'reorder each series in the model
+        For Each id As Integer In ids
+            Model.SeriesReorder(id, direction)
+        Next
+        'reselect previously selected items in their new positions
+        Me.View.CheckedListBox_Series.ClearSelected()
+        Dim offset As Integer
+        If direction = Direction.Up Then
+            offset = -1
+        Else
+            offset = 1
+        End If
+        For Each index As Integer In indices
+            Me.View.CheckedListBox_Series.SetSelected(index + offset, True)
+        Next
+    End Sub
+
+    ''' <summary>
+    ''' Handles the TOC selection changed
+    ''' Enables/disables buttons
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    Private Sub TOC_SelectionChanged(sender As Object, e As EventArgs)
+        'Check if any items are selected
+        If Me.View.CheckedListBox_Series.SelectedIndices.Count = 0 Then
+            Me.View.ToolStripButton_MoveUp.Enabled = False
+            Me.View.ToolStripButton_MoveDown.Enabled = False
+        Else
+            Me.View.ToolStripButton_MoveUp.Enabled = True
+            Me.View.ToolStripButton_MoveDown.Enabled = True
+            'check if first row is selected
+            If Me.View.CheckedListBox_Series.GetSelected(0) Then
+                Me.View.ToolStripButton_MoveUp.Enabled = False
+            End If
+            'check if last row is selected
+            If Me.View.CheckedListBox_Series.GetSelected(Me.View.CheckedListBox_Series.Items.Count - 1) Then
+                Me.View.ToolStripButton_MoveDown.Enabled = False
+            End If
+        End If
     End Sub
 
     ''' <summary>
@@ -2691,21 +2772,48 @@ Friend Class WaveController
     ''' <param name="id">Id of the TimeSeries whose order was changed</param>
     ''' <param name="direction">Direction in which the series was moved</param>
     Private Sub SeriesReordered(id As Integer, direction As Direction)
-        'TODO: TChart
-        ''update series order in chart
-        ''TODO: this causes a second, unnecessary event update through TeeEvent which I don't know how to prevent
-        'Dim index As Integer = 0
-        'For Each series As Steema.TeeChart.Styles.Series In View.MainPlot.Series
-        '    If series.Tag = id Then
-        '        If direction = Direction.Up And index > 0 Then
-        '            View.MainPlot.Series.Exchange(index, index - 1)
-        '        ElseIf direction = Direction.Down And index < View.MainPlot.Series.Count - 1 Then
-        '            View.MainPlot.Series.Exchange(index, index + 1)
-        '        End If
-        '        Exit For
-        '    End If
-        '    index += 1
-        'Next
+
+        Dim offset As Integer
+        If direction = Direction.Up Then
+            offset = -1
+        Else
+            offset = 1
+        End If
+
+        'update series order in chart
+        'find the index of the series in the chart by comparing titles
+        'TODO: find a better way to detemine a series' index in the chart
+        Dim index As Integer = 0
+        For Each plottable As ScottPlot.Plottable.IPlottable In Me.View.MainPlot.Plot.GetPlottables()
+            Dim series As ScottPlot.Plottable.ScatterPlot = TryCast(plottable, ScottPlot.Plottable.ScatterPlot)
+            If Not IsNothing(series) Then
+                If series.Label = Me.Model.TimeSeries(id).Title Then
+                    Me.View.MainPlot.Plot.Move(index, index + offset)
+                    Me.View.MainPlot.Refresh()
+                    Exit For
+                End If
+            End If
+            index += 1
+        Next
+
+        'update series order in TOC
+        'find the index of the series in the TOC by comparing titles
+        Dim indexFound As Boolean = False
+        index = 0
+        For Each ts As TimeSeries In Me.View.CheckedListBox_Series.Items
+            If ts.Title = Me.Model.TimeSeries(id).Title Then
+                indexFound = True
+                Exit For
+            End If
+            index += 1
+        Next
+        If indexFound Then
+            Dim isChecked As Boolean = Me.View.CheckedListBox_Series.GetItemChecked(index)
+            Me.View.CheckedListBox_Series.Items.RemoveAt(index)
+            Me.View.CheckedListBox_Series.Items.Insert(index + offset, Me.Model.TimeSeries(id))
+            Me.View.CheckedListBox_Series.SetItemChecked(index + offset, isChecked)
+        End If
+
     End Sub
 
     ''' <summary>

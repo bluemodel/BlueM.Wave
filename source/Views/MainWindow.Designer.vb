@@ -113,6 +113,8 @@ Partial Class MainWindow
         Me.ToolStripDropDownButton1 = New System.Windows.Forms.ToolStripDropDownButton()
         Me.ToolStripMenuItem_ActivateAllSeries = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripMenuItem_DeactivateAllSeries = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripButton_MoveUp = New System.Windows.Forms.ToolStripButton()
+        Me.ToolStripButton_MoveDown = New System.Windows.Forms.ToolStripButton()
         ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
         toolStripSeparator = New System.Windows.Forms.ToolStripSeparator()
         ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
@@ -884,7 +886,6 @@ Partial Class MainWindow
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.CheckedListBox_Series.BackColor = System.Drawing.SystemColors.Control
-        Me.CheckedListBox_Series.CheckOnClick = True
         Me.CheckedListBox_Series.FormattingEnabled = True
         Me.CheckedListBox_Series.HorizontalScrollbar = True
         Me.CheckedListBox_Series.Location = New System.Drawing.Point(5, 31)
@@ -896,7 +897,7 @@ Partial Class MainWindow
         '
         'ToolStrip2
         '
-        Me.ToolStrip2.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripDropDownButton1})
+        Me.ToolStrip2.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButton_MoveUp, Me.ToolStripButton_MoveDown, Me.ToolStripDropDownButton1})
         Me.ToolStrip2.Location = New System.Drawing.Point(0, 0)
         Me.ToolStrip2.Name = "ToolStrip2"
         Me.ToolStrip2.Size = New System.Drawing.Size(120, 25)
@@ -925,6 +926,27 @@ Partial Class MainWindow
         Me.ToolStripMenuItem_DeactivateAllSeries.Name = "ToolStripMenuItem_DeactivateAllSeries"
         Me.ToolStripMenuItem_DeactivateAllSeries.Size = New System.Drawing.Size(180, 22)
         Me.ToolStripMenuItem_DeactivateAllSeries.Text = "Deactivate all series"
+        '
+        'ToolStripButton_MoveUp
+        '
+        Me.ToolStripButton_MoveUp.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.ToolStripButton_MoveUp.Enabled = False
+        Me.ToolStripButton_MoveUp.Image = Global.BlueM.Wave.My.Resources.Resources.arrow_up
+        Me.ToolStripButton_MoveUp.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ToolStripButton_MoveUp.Name = "ToolStripButton_MoveUp"
+        Me.ToolStripButton_MoveUp.Size = New System.Drawing.Size(23, 22)
+        Me.ToolStripButton_MoveUp.Text = "Move selected time series up"
+        Me.ToolStripButton_MoveUp.ToolTipText = "Move selected time series up"
+        '
+        'ToolStripButton_MoveDown
+        '
+        Me.ToolStripButton_MoveDown.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.ToolStripButton_MoveDown.Enabled = False
+        Me.ToolStripButton_MoveDown.Image = Global.BlueM.Wave.My.Resources.Resources.arrow_down
+        Me.ToolStripButton_MoveDown.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ToolStripButton_MoveDown.Name = "ToolStripButton_MoveDown"
+        Me.ToolStripButton_MoveDown.Size = New System.Drawing.Size(23, 22)
+        Me.ToolStripButton_MoveDown.Text = "Move selected time series down"
         '
         'MainWindow
         '
@@ -1053,4 +1075,6 @@ Partial Class MainWindow
     Friend WithEvents ToolStripDropDownButton1 As ToolStripDropDownButton
     Friend WithEvents ToolStripMenuItem_ActivateAllSeries As ToolStripMenuItem
     Friend WithEvents ToolStripMenuItem_DeactivateAllSeries As ToolStripMenuItem
+    Friend WithEvents ToolStripButton_MoveUp As ToolStripButton
+    Friend WithEvents ToolStripButton_MoveDown As ToolStripButton
 End Class

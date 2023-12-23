@@ -40,6 +40,7 @@ Friend Class PropertiesController
         AddHandler _model.SeriesRemoved, AddressOf UpdateView
         AddHandler _model.SeriesCleared, AddressOf UpdateView
         AddHandler _model.SeriesAllReordered, AddressOf UpdateView
+        AddHandler _model.SeriesReordered, AddressOf UpdateView
     End Sub
 
     Public Overrides Sub ShowView()
