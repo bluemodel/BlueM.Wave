@@ -1104,9 +1104,7 @@ Friend Class WaveController
             Call Me.ViewportChanged()
         Else
             'Reset the Y axes to automatic
-            Dim axes As List(Of ScottPlot.Renderable.Axis)
-            axes = View.MainPlot.Plot.GetAxesMatching(axisIndex:=Nothing, isVertical:=True)
-            For Each axis As ScottPlot.Renderable.Axis In axes
+            For Each axis As ScottPlot.Renderable.Axis In View.MainPlot.Plot.GetAxesMatching(axisIndex:=Nothing, isVertical:=True)
                 axis.Dims.ResetLimits()
             Next
             View.MainPlot.Refresh()
@@ -2129,67 +2127,42 @@ Friend Class WaveController
         'Auto-adjust Y-axes to current viewport
         If View.AutoAdjustYAxes Then
 
-            'TODO: TChart
-            'Dim startdate, enddate As DateTime
-            'Dim title As String
-            'Dim seriesMin, seriesMax, Ymin, Ymax As Double
-            'Dim axisType As Steema.TeeChart.Styles.VerticalAxis
-            'Dim axis As Steema.TeeChart.Axis
+            'get start and end date of current viewport
+            Dim startdate As DateTime = View.ChartMinX
+            Dim enddate As DateTime = View.ChartMaxX
 
-            ''get start and end date of current viewport
-            'startdate = View.ChartMinX
-            'enddate = View.ChartMaxX
+            'get min and max values of visible series grouped by unit
+            Dim unitRanges As New Dictionary(Of String, (min As Double, max As Double))
+            For Each index As Integer In Me.View.CheckedListBox_Series.CheckedIndices
+                Dim ts As TimeSeries = CType(Me.View.CheckedListBox_Series.Items(index), TimeSeries)
+                Dim seriesMin As Double = ts.Minimum(startdate, enddate)
+                Dim seriesMax As Double = ts.Maximum(startdate, enddate)
+                If Not unitRanges.ContainsKey(ts.Unit) Then
+                    unitRanges.Add(ts.Unit, (seriesMin, seriesMax))
+                Else
+                    If seriesMin < unitRanges(ts.Unit).min Then
+                        unitRanges(ts.Unit) = (seriesMin, unitRanges(ts.Unit).max)
+                    End If
+                    If seriesMax > unitRanges(ts.Unit).max Then
+                        unitRanges(ts.Unit) = (unitRanges(ts.Unit).min, seriesMax)
+                    End If
+                End If
+            Next
 
-            ''define axes to process
-            'Dim axes As New List(Of (axisType As Steema.TeeChart.Styles.VerticalAxis, axis As Steema.TeeChart.Axis))
-            'axes.Add((Steema.TeeChart.Styles.VerticalAxis.Left, View.MainPlot.Axes.Left))
-            'axes.Add((Steema.TeeChart.Styles.VerticalAxis.Right, View.MainPlot.Axes.Right))
-            'For Each axis In View.MainPlot.Axes.Custom
-            '    axes.Add((Steema.TeeChart.Styles.VerticalAxis.Custom, axis))
-            'Next
-
-            ''loop over Y-axes
-            'For Each t As (axisType As Steema.TeeChart.Styles.VerticalAxis, axis As Steema.TeeChart.Axis) In axes
-            '    axisType = t.axisType
-            '    axis = t.axis
-
-            '    'loop over series
-            '    Ymin = Double.MaxValue
-            '    Ymax = Double.MinValue
-            '    For Each ts As TimeSeries In _model.TimeSeries.Values
-            '        title = ts.Title
-
-            '        'only process active series on the current axis
-            '        If View.MainPlot.Series.WithTitle(title).Active And View.MainPlot.Series.WithTitle(title).VertAxis = axisType Then
-
-            '            If axisType = Steema.TeeChart.Styles.VerticalAxis.Custom And ts.Unit <> axis.Tag Then
-            '                'series is on a different custom axis, skip it
-            '                Continue For
-            '            End If
-
-            '            'get series min and max for current viewport
-            '            seriesMin = ts.Minimum(startdate, enddate)
-            '            If seriesMin < Ymin Then
-            '                Ymin = seriesMin
-            '            End If
-            '            seriesMax = ts.Maximum(startdate, enddate)
-            '            If seriesMax > Ymax Then
-            '                Ymax = seriesMax
-            '            End If
-            '        End If
-            '    Next
-
-            '    'set new Y axis bounds
-            '    If Ymin < Double.MaxValue Then
-            '        axis.AutomaticMinimum = False
-            '        axis.Minimum = Ymin
-            '    End If
-            '    If Ymax > Double.MinValue Then
-            '        axis.AutomaticMaximum = False
-            '        axis.Maximum = Ymax
-            '    End If
-            'Next
+            'loop over Y-axes
+            For Each axis As ScottPlot.Renderable.Axis In Me.View.MainPlot.Plot.GetAxesMatching(axisIndex:=Nothing, isVertical:=True)
+                Dim axisUnit As String = axis.AxisLabel.Label
+                If unitRanges.ContainsKey(axisUnit) Then
+                    'set new limits
+                    Dim range As (min As Double, max As Double) = unitRanges(axisUnit)
+                    Dim padding As Double = (range.max - range.min) * 0.05
+                    axis.Dims.ResetLimits()
+                    axis.Dims.SetAxis(range.min - padding, range.max + padding)
+                End If
+            Next
+            Me.View.MainPlot.Refresh()
         End If
+
     End Sub
 
     ''' <summary>
