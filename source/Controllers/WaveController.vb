@@ -2220,9 +2220,6 @@ Friend Class WaveController
             'Extent auf Colorband übertragen
             Call Me.UpdateOverviewZoomExtent()
 
-            'TODO: Update Y-Axis extents
-            'View.OverviewPlot.Plot.YAxis.Dims.
-
             View.MainPlot.Refresh()
             View.OverviewPlot.Refresh()
         End If
@@ -2744,8 +2741,8 @@ Friend Class WaveController
             View.OverviewPlot.Plot.Remove(Me.PlottablesOverview(id))
             'reset Y axis limits
             View.OverviewPlot.Plot.YAxis.Dims.ResetLimits()
-            'TODO: reset x axis to new extents
-            View.OverviewPlot.Refresh()
+            'update chart extents
+            Call Me.UpdateChartExtents()
         End If
         Me.PlottablesOverview.Remove(id)
 
