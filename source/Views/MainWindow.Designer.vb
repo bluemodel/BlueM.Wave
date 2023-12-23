@@ -85,9 +85,6 @@ Partial Class MainWindow
         Me.ToolStripButton_ZoomAll = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripButton_UpdateNotification = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripSeparator11 = New System.Windows.Forms.ToolStripSeparator()
-        Me.ToolStripDropDownButton_ActivateAllSeries = New System.Windows.Forms.ToolStripDropDownButton()
-        Me.ToolStripMenuItem_ActivateAllSeries = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ToolStripMenuItem_DeactivateAllSeries = New System.Windows.Forms.ToolStripMenuItem()
         Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog()
         Me.SplitContainer1 = New System.Windows.Forms.SplitContainer()
         Me.OverviewPlot = New ScottPlot.FormsPlot()
@@ -111,8 +108,11 @@ Partial Class MainWindow
         Me.ProgressBar1 = New System.Windows.Forms.ProgressBar()
         Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
         Me.SplitContainer2 = New System.Windows.Forms.SplitContainer()
-        Me.GroupBox1 = New System.Windows.Forms.GroupBox()
         Me.CheckedListBox_Series = New System.Windows.Forms.CheckedListBox()
+        Me.ToolStrip2 = New System.Windows.Forms.ToolStrip()
+        Me.ToolStripDropDownButton1 = New System.Windows.Forms.ToolStripDropDownButton()
+        Me.ToolStripMenuItem_ActivateAllSeries = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripMenuItem_DeactivateAllSeries = New System.Windows.Forms.ToolStripMenuItem()
         ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
         toolStripSeparator = New System.Windows.Forms.ToolStripSeparator()
         ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
@@ -137,7 +137,7 @@ Partial Class MainWindow
         Me.SplitContainer2.Panel1.SuspendLayout()
         Me.SplitContainer2.Panel2.SuspendLayout()
         Me.SplitContainer2.SuspendLayout()
-        Me.GroupBox1.SuspendLayout()
+        Me.ToolStrip2.SuspendLayout()
         Me.SuspendLayout()
         '
         'ToolStripSeparator1
@@ -205,7 +205,7 @@ Partial Class MainWindow
         '
         ToolStrip1.AutoSize = False
         ToolStrip1.BackColor = System.Drawing.SystemColors.Control
-        ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButton_New, Me.ToolStripDropDownButton_Open, Me.ToolStripDropDownButton_Save, ToolStripSeparator4, Me.ToolStripButton_Copy, Me.ToolStripButton_Print, ToolStripSeparator2, Me.ToolStripButton_Cut, Me.ToolStripButton_Merge, Me.ToolStripSeparator8, Me.ToolStripButton_ShowNaNValues, Me.ToolStripButton_ConvertErrorValues, Me.ToolStripButton_RemoveNaNValues, Me.ToolStripSeparator7, Me.ToolStripButton_Analysis, ToolStripSeparator1, Me.ToolStripButton_EditChart, Me.ToolStripDropDownButton_ColorPalette, Me.ToolStripSeparator9, Me.ToolStripButton_Properties, Me.ToolStripButton_TimeseriesValues, Me.ToolStripSeparator10, Me.ToolStripButton_AxisDialog, Me.ToolStripButton_AutoAdjustYAxes, ToolStripSeparator3, Me.ToolStripButton_ToggleOverview, Me.ToolStripButton_ToggleNavigation, toolStripSeparator, Me.ToolStripButton_ZoomIn, Me.ToolStripButton_ZoomOut, Me.ToolStripButton_ZoomPrevious, Me.ToolStripDropDownButton_Help, Me.ToolStripButton_ZoomNext, Me.ToolStripDropDownButton_ZoomToSeries, Me.ToolStripButton_ZoomAll, Me.ToolStripButton_UpdateNotification, Me.ToolStripSeparator11, Me.ToolStripDropDownButton_ActivateAllSeries})
+        ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButton_New, Me.ToolStripDropDownButton_Open, Me.ToolStripDropDownButton_Save, ToolStripSeparator4, Me.ToolStripButton_Copy, Me.ToolStripButton_Print, ToolStripSeparator2, Me.ToolStripButton_Cut, Me.ToolStripButton_Merge, Me.ToolStripSeparator8, Me.ToolStripButton_ShowNaNValues, Me.ToolStripButton_ConvertErrorValues, Me.ToolStripButton_RemoveNaNValues, Me.ToolStripSeparator7, Me.ToolStripButton_Analysis, ToolStripSeparator1, Me.ToolStripButton_EditChart, Me.ToolStripDropDownButton_ColorPalette, Me.ToolStripSeparator9, Me.ToolStripButton_Properties, Me.ToolStripButton_TimeseriesValues, Me.ToolStripSeparator10, Me.ToolStripButton_AxisDialog, Me.ToolStripButton_AutoAdjustYAxes, ToolStripSeparator3, Me.ToolStripButton_ToggleOverview, Me.ToolStripButton_ToggleNavigation, toolStripSeparator, Me.ToolStripButton_ZoomIn, Me.ToolStripButton_ZoomOut, Me.ToolStripButton_ZoomPrevious, Me.ToolStripDropDownButton_Help, Me.ToolStripButton_ZoomNext, Me.ToolStripDropDownButton_ZoomToSeries, Me.ToolStripButton_ZoomAll, Me.ToolStripButton_UpdateNotification, Me.ToolStripSeparator11})
         ToolStrip1.Location = New System.Drawing.Point(0, 0)
         ToolStrip1.Name = "ToolStrip1"
         ToolStrip1.Size = New System.Drawing.Size(944, 34)
@@ -635,29 +635,6 @@ Partial Class MainWindow
         Me.ToolStripSeparator11.Name = "ToolStripSeparator11"
         Me.ToolStripSeparator11.Size = New System.Drawing.Size(6, 34)
         '
-        'ToolStripDropDownButton_ActivateAllSeries
-        '
-        Me.ToolStripDropDownButton_ActivateAllSeries.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.ToolStripDropDownButton_ActivateAllSeries.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripMenuItem_ActivateAllSeries, Me.ToolStripMenuItem_DeactivateAllSeries})
-        Me.ToolStripDropDownButton_ActivateAllSeries.Image = Global.BlueM.Wave.My.Resources.Resources.accept_split
-        Me.ToolStripDropDownButton_ActivateAllSeries.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.ToolStripDropDownButton_ActivateAllSeries.Name = "ToolStripDropDownButton_ActivateAllSeries"
-        Me.ToolStripDropDownButton_ActivateAllSeries.Size = New System.Drawing.Size(29, 31)
-        '
-        'ToolStripMenuItem_ActivateAllSeries
-        '
-        Me.ToolStripMenuItem_ActivateAllSeries.Image = Global.BlueM.Wave.My.Resources.Resources.accept
-        Me.ToolStripMenuItem_ActivateAllSeries.Name = "ToolStripMenuItem_ActivateAllSeries"
-        Me.ToolStripMenuItem_ActivateAllSeries.Size = New System.Drawing.Size(176, 22)
-        Me.ToolStripMenuItem_ActivateAllSeries.Text = "Activate all series"
-        '
-        'ToolStripMenuItem_DeactivateAllSeries
-        '
-        Me.ToolStripMenuItem_DeactivateAllSeries.Image = Global.BlueM.Wave.My.Resources.Resources.accept_grayscale
-        Me.ToolStripMenuItem_DeactivateAllSeries.Name = "ToolStripMenuItem_DeactivateAllSeries"
-        Me.ToolStripMenuItem_DeactivateAllSeries.Size = New System.Drawing.Size(176, 22)
-        Me.ToolStripMenuItem_DeactivateAllSeries.Text = "Deactivate all series"
-        '
         'OpenFileDialog1
         '
         Me.OpenFileDialog1.Multiselect = True
@@ -891,7 +868,8 @@ Partial Class MainWindow
         'SplitContainer2.Panel1
         '
         Me.SplitContainer2.Panel1.AutoScroll = True
-        Me.SplitContainer2.Panel1.Controls.Add(Me.GroupBox1)
+        Me.SplitContainer2.Panel1.Controls.Add(Me.ToolStrip2)
+        Me.SplitContainer2.Panel1.Controls.Add(Me.CheckedListBox_Series)
         '
         'SplitContainer2.Panel2
         '
@@ -900,27 +878,53 @@ Partial Class MainWindow
         Me.SplitContainer2.SplitterDistance = 120
         Me.SplitContainer2.TabIndex = 7
         '
-        'GroupBox1
-        '
-        Me.GroupBox1.Controls.Add(Me.CheckedListBox_Series)
-        Me.GroupBox1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.GroupBox1.Location = New System.Drawing.Point(0, 0)
-        Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Size = New System.Drawing.Size(120, 605)
-        Me.GroupBox1.TabIndex = 2
-        Me.GroupBox1.TabStop = False
-        Me.GroupBox1.Text = "Series"
-        '
         'CheckedListBox_Series
         '
+        Me.CheckedListBox_Series.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.CheckedListBox_Series.BackColor = System.Drawing.SystemColors.Control
         Me.CheckedListBox_Series.CheckOnClick = True
-        Me.CheckedListBox_Series.Dock = System.Windows.Forms.DockStyle.Fill
         Me.CheckedListBox_Series.FormattingEnabled = True
-        Me.CheckedListBox_Series.Location = New System.Drawing.Point(3, 16)
+        Me.CheckedListBox_Series.HorizontalScrollbar = True
+        Me.CheckedListBox_Series.Location = New System.Drawing.Point(5, 31)
+        Me.CheckedListBox_Series.Margin = New System.Windows.Forms.Padding(5)
         Me.CheckedListBox_Series.Name = "CheckedListBox_Series"
-        Me.CheckedListBox_Series.Size = New System.Drawing.Size(114, 586)
+        Me.CheckedListBox_Series.Size = New System.Drawing.Size(110, 559)
         Me.CheckedListBox_Series.TabIndex = 0
+        Me.CheckedListBox_Series.ThreeDCheckBoxes = True
+        '
+        'ToolStrip2
+        '
+        Me.ToolStrip2.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripDropDownButton1})
+        Me.ToolStrip2.Location = New System.Drawing.Point(0, 0)
+        Me.ToolStrip2.Name = "ToolStrip2"
+        Me.ToolStrip2.Size = New System.Drawing.Size(120, 25)
+        Me.ToolStrip2.TabIndex = 1
+        Me.ToolStrip2.Text = "ToolStrip2"
+        '
+        'ToolStripDropDownButton1
+        '
+        Me.ToolStripDropDownButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.ToolStripDropDownButton1.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripMenuItem_ActivateAllSeries, Me.ToolStripMenuItem_DeactivateAllSeries})
+        Me.ToolStripDropDownButton1.Image = Global.BlueM.Wave.My.Resources.Resources.accept_split
+        Me.ToolStripDropDownButton1.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ToolStripDropDownButton1.Name = "ToolStripDropDownButton1"
+        Me.ToolStripDropDownButton1.Size = New System.Drawing.Size(29, 22)
+        '
+        'ToolStripMenuItem_ActivateAllSeries
+        '
+        Me.ToolStripMenuItem_ActivateAllSeries.Image = Global.BlueM.Wave.My.Resources.Resources.accept
+        Me.ToolStripMenuItem_ActivateAllSeries.Name = "ToolStripMenuItem_ActivateAllSeries"
+        Me.ToolStripMenuItem_ActivateAllSeries.Size = New System.Drawing.Size(180, 22)
+        Me.ToolStripMenuItem_ActivateAllSeries.Text = "Activate all series"
+        '
+        'ToolStripMenuItem_DeactivateAllSeries
+        '
+        Me.ToolStripMenuItem_DeactivateAllSeries.Image = Global.BlueM.Wave.My.Resources.Resources.accept_grayscale
+        Me.ToolStripMenuItem_DeactivateAllSeries.Name = "ToolStripMenuItem_DeactivateAllSeries"
+        Me.ToolStripMenuItem_DeactivateAllSeries.Size = New System.Drawing.Size(180, 22)
+        Me.ToolStripMenuItem_DeactivateAllSeries.Text = "Deactivate all series"
         '
         'MainWindow
         '
@@ -954,10 +958,12 @@ Partial Class MainWindow
         Me.Panel_DisplayRange.PerformLayout()
         CType(Me.NumericUpDown_DisplayRangeMultiplier, System.ComponentModel.ISupportInitialize).EndInit()
         Me.SplitContainer2.Panel1.ResumeLayout(False)
+        Me.SplitContainer2.Panel1.PerformLayout()
         Me.SplitContainer2.Panel2.ResumeLayout(False)
         CType(Me.SplitContainer2, System.ComponentModel.ISupportInitialize).EndInit()
         Me.SplitContainer2.ResumeLayout(False)
-        Me.GroupBox1.ResumeLayout(False)
+        Me.ToolStrip2.ResumeLayout(False)
+        Me.ToolStrip2.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -1035,9 +1041,6 @@ Partial Class MainWindow
     Friend WithEvents ToolStripMenuItem_ColorPaletteWheel As ToolStripMenuItem
     Friend WithEvents ToolStripMenuItem_ColorPaletteRandom As ToolStripMenuItem
     Friend WithEvents ToolStripSeparator11 As ToolStripSeparator
-    Friend WithEvents ToolStripDropDownButton_ActivateAllSeries As ToolStripDropDownButton
-    Friend WithEvents ToolStripMenuItem_ActivateAllSeries As ToolStripMenuItem
-    Friend WithEvents ToolStripMenuItem_DeactivateAllSeries As ToolStripMenuItem
     Friend WithEvents ProgressBar1 As ProgressBar
     Friend WithEvents Button_NavStart As Button
     Friend WithEvents Button_NavEnd As Button
@@ -1046,5 +1049,8 @@ Partial Class MainWindow
     Friend WithEvents OverviewPlot As ScottPlot.FormsPlot
     Friend WithEvents SplitContainer2 As SplitContainer
     Friend WithEvents CheckedListBox_Series As CheckedListBox
-    Friend WithEvents GroupBox1 As GroupBox
+    Friend WithEvents ToolStrip2 As ToolStrip
+    Friend WithEvents ToolStripDropDownButton1 As ToolStripDropDownButton
+    Friend WithEvents ToolStripMenuItem_ActivateAllSeries As ToolStripMenuItem
+    Friend WithEvents ToolStripMenuItem_DeactivateAllSeries As ToolStripMenuItem
 End Class

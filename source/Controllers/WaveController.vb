@@ -136,8 +136,6 @@ Friend Class WaveController
         AddHandler Me.View.ToolStripButton_ZoomNext.Click, AddressOf ZoomNext_Click
         AddHandler Me.View.ToolStripButton_ZoomAll.Click, AddressOf ZoomAll_Click
         AddHandler Me.View.ToolStripDropDownButton_ZoomToSeries.DropDownOpening, AddressOf ZoomToSeries_DropDown
-        AddHandler Me.View.ToolStripMenuItem_ActivateAllSeries.Click, AddressOf ActivateAllSeries_Click
-        AddHandler Me.View.ToolStripMenuItem_DeactivateAllSeries.Click, AddressOf DeactivateAllSeries_Click
         AddHandler Me.View.ToolStripMenuItem_Help.Click, AddressOf Help_Click
         AddHandler Me.View.ToolStripMenuItem_CheckForUpdate.Click, AddressOf CheckForUpdate_Click
         AddHandler Me.View.ToolStripButton_UpdateNotification.Click, AddressOf CheckForUpdate_Click
@@ -166,6 +164,8 @@ Friend Class WaveController
         AddHandler Me.View.DragDrop, AddressOf Wave_DragDrop
 
         'TOC events
+        AddHandler Me.View.ToolStripMenuItem_ActivateAllSeries.Click, AddressOf ActivateAllSeries_Click
+        AddHandler Me.View.ToolStripMenuItem_DeactivateAllSeries.Click, AddressOf DeactivateAllSeries_Click
         AddHandler Me.View.CheckedListBox_Series.ItemCheck, AddressOf SeriesActiveChanged
 
         'navigation events
@@ -1218,10 +1218,9 @@ Friend Class WaveController
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
     Private Sub ActivateAllSeries_Click(sender As Object, e As EventArgs)
-        'TODO: TChart
-        'For Each series As Steema.TeeChart.Styles.Series In View.MainPlot.Series
-        '    series.Active = True
-        'Next
+        For i As Integer = 0 To View.CheckedListBox_Series.Items.Count - 1
+            View.CheckedListBox_Series.SetItemChecked(i, True)
+        Next
     End Sub
 
     ''' <summary>
@@ -1230,10 +1229,9 @@ Friend Class WaveController
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
     Private Sub DeactivateAllSeries_Click(sender As Object, e As EventArgs)
-        'TODO: TChart
-        'For Each series As Steema.TeeChart.Styles.Series In View.MainPlot.Series
-        '    series.Active = False
-        'Next
+        For i As Integer = 0 To View.CheckedListBox_Series.Items.Count - 1
+            View.CheckedListBox_Series.SetItemChecked(i, False)
+        Next
     End Sub
 
     ''' <summary>
