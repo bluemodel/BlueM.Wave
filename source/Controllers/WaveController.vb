@@ -662,11 +662,11 @@ Friend Class WaveController
                             'end of NaN period reached
 
                             'add a horizontal span
-                            Dim hspan As ScottPlot.Plottable.HSpan = Me.View.MainPlot.Plot.AddHorizontalSpan(spanStart.ToOADate(), spanEnd.ToOADate())
+                            Dim hspan As ScottPlot.Plottable.HSpan = View.MainPlot.Plot.AddHorizontalSpan(spanStart.ToOADate(), spanEnd.ToOADate())
                             hspan.BorderLineStyle = ScottPlot.LineStyle.None
                             hspan.Color = Color.FromArgb(100, ControlPaint.Light(color))
                             hspan.DragEnabled = False
-                            Me.View.NaNSpans.Add(hspan)
+                            View.NaNSpans.Add(hspan)
 
                             'write to log
                             Log.AddLogEntry(Log.levels.info, $"Series {ts.Title} contains {nanCount} NaN values from {nanStart.ToString(Helpers.CurrentDateFormat)} to {nanEnd.ToString(Helpers.CurrentDateFormat)}")
@@ -1196,22 +1196,22 @@ Friend Class WaveController
 
         Dim indices As New List(Of Integer)
         Dim ids As New List(Of Integer)
-        For Each index As Integer In Me.View.CheckedListBox_Series.SelectedIndices
+        For Each index As Integer In View.CheckedListBox_Series.SelectedIndices
             If (direction = Direction.Up And index = 0) Or
-               (direction = Direction.Down And index = Me.View.CheckedListBox_Series.Items.Count - 1) Then
+               (direction = Direction.Down And index = View.CheckedListBox_Series.Items.Count - 1) Then
                 'if first row is selected, moving up does nothing
                 'if last row is selected, moving down does nothing
                 Exit Sub
             End If
             indices.Add(index)
-            ids.Add(CType(Me.View.CheckedListBox_Series.Items(index), TimeSeries).Id)
+            ids.Add(CType(View.CheckedListBox_Series.Items(index), TimeSeries).Id)
         Next
         'reorder each series in the model
         For Each id As Integer In ids
             Model.SeriesReorder(id, direction)
         Next
         'reselect previously selected items in their new positions
-        Me.View.CheckedListBox_Series.ClearSelected()
+        View.CheckedListBox_Series.ClearSelected()
         Dim offset As Integer
         If direction = Direction.Up Then
             offset = -1
@@ -1219,7 +1219,7 @@ Friend Class WaveController
             offset = 1
         End If
         For Each index As Integer In indices
-            Me.View.CheckedListBox_Series.SetSelected(index + offset, True)
+            View.CheckedListBox_Series.SetSelected(index + offset, True)
         Next
     End Sub
 
@@ -1233,7 +1233,7 @@ Friend Class WaveController
         'collect titles and ids of all selected items
         Dim titles As New List(Of String)
         Dim ids As New List(Of Integer)
-        For Each ts As TimeSeries In Me.View.CheckedListBox_Series.SelectedItems
+        For Each ts As TimeSeries In View.CheckedListBox_Series.SelectedItems
             titles.Add(ts.Title)
             ids.Add(ts.Id)
         Next
@@ -1257,21 +1257,21 @@ Friend Class WaveController
     ''' <param name="e"></param>
     Private Sub TOC_SelectionChanged(sender As Object, e As EventArgs)
         'Check if any items are selected
-        If Me.View.CheckedListBox_Series.SelectedIndices.Count = 0 Then
-            Me.View.ToolStripButton_Delete.Enabled = False
-            Me.View.ToolStripButton_MoveUp.Enabled = False
-            Me.View.ToolStripButton_MoveDown.Enabled = False
+        If View.CheckedListBox_Series.SelectedIndices.Count = 0 Then
+            View.ToolStripButton_Delete.Enabled = False
+            View.ToolStripButton_MoveUp.Enabled = False
+            View.ToolStripButton_MoveDown.Enabled = False
         Else
-            Me.View.ToolStripButton_Delete.Enabled = True
-            Me.View.ToolStripButton_MoveUp.Enabled = True
-            Me.View.ToolStripButton_MoveDown.Enabled = True
+            View.ToolStripButton_Delete.Enabled = True
+            View.ToolStripButton_MoveUp.Enabled = True
+            View.ToolStripButton_MoveDown.Enabled = True
             'check if first row is selected
-            If Me.View.CheckedListBox_Series.GetSelected(0) Then
-                Me.View.ToolStripButton_MoveUp.Enabled = False
+            If View.CheckedListBox_Series.GetSelected(0) Then
+                View.ToolStripButton_MoveUp.Enabled = False
             End If
             'check if last row is selected
-            If Me.View.CheckedListBox_Series.GetSelected(Me.View.CheckedListBox_Series.Items.Count - 1) Then
-                Me.View.ToolStripButton_MoveDown.Enabled = False
+            If View.CheckedListBox_Series.GetSelected(View.CheckedListBox_Series.Items.Count - 1) Then
+                View.ToolStripButton_MoveDown.Enabled = False
             End If
         End If
     End Sub
@@ -1331,7 +1331,7 @@ Friend Class WaveController
     ''' </summary>
     Private Sub About_Click(sender As System.Object, e As System.EventArgs)
         Dim about As New AboutBox()
-        Call about.ShowDialog(Me.View)
+        Call about.ShowDialog(View)
     End Sub
 
     ''' <summary>
@@ -2064,8 +2064,8 @@ Friend Class WaveController
 
             'get min and max values of visible series grouped by unit
             Dim unitRanges As New Dictionary(Of String, (min As Double, max As Double))
-            For Each index As Integer In Me.View.CheckedListBox_Series.CheckedIndices
-                Dim ts As TimeSeries = CType(Me.View.CheckedListBox_Series.Items(index), TimeSeries)
+            For Each index As Integer In View.CheckedListBox_Series.CheckedIndices
+                Dim ts As TimeSeries = CType(View.CheckedListBox_Series.Items(index), TimeSeries)
                 Dim seriesMin As Double = ts.Minimum(startdate, enddate)
                 Dim seriesMax As Double = ts.Maximum(startdate, enddate)
                 If Not unitRanges.ContainsKey(ts.Unit) Then
@@ -2081,7 +2081,7 @@ Friend Class WaveController
             Next
 
             'loop over Y-axes
-            For Each axis As ScottPlot.Renderable.Axis In Me.View.MainPlot.Plot.GetAxesMatching(axisIndex:=Nothing, isVertical:=True)
+            For Each axis As ScottPlot.Renderable.Axis In View.MainPlot.Plot.GetAxesMatching(axisIndex:=Nothing, isVertical:=True)
                 Dim axisUnit As String = axis.AxisLabel.Label
                 If unitRanges.ContainsKey(axisUnit) Then
                     'set new limits
@@ -2091,7 +2091,7 @@ Friend Class WaveController
                     axis.Dims.SetAxis(range.min - padding, range.max + padding)
                 End If
             Next
-            Me.View.MainPlot.Refresh()
+            View.MainPlot.Refresh()
         End If
 
     End Sub
@@ -2514,7 +2514,7 @@ Friend Class WaveController
         For Each ts As TimeSeries In Model.TimeSeries.Values
             units.Add(ts.Unit)
         Next
-        For Each axis As ScottPlot.Renderable.Axis In Me.View.MainPlot.Plot.GetAxesMatching(axisIndex:=Nothing, isVertical:=True)
+        For Each axis As ScottPlot.Renderable.Axis In View.MainPlot.Plot.GetAxesMatching(axisIndex:=Nothing, isVertical:=True)
             If axis.AxisLabel.Label <> "" And Not units.Contains(axis.AxisLabel.Label) Then
                 axesToRemove.Add(axis)
             End If
@@ -2526,7 +2526,7 @@ Friend Class WaveController
                     axis.Label("")
                     axis.Dims.ResetLimits()
                 Else
-                    Me.View.MainPlot.Plot.RemoveAxis(axis)
+                    View.MainPlot.Plot.RemoveAxis(axis)
                 End If
             Next
         End If
@@ -2549,7 +2549,7 @@ Friend Class WaveController
             Me.ChartSeries(id).IsVisible = (e.NewValue = CheckState.Checked)
         End If
         'TODO: hide unused y axes if no active series uses them
-        Me.View.MainPlot.Refresh()
+        View.MainPlot.Refresh()
     End Sub
 
     ''' <summary>
@@ -2693,14 +2693,14 @@ Friend Class WaveController
                     Case Else
                         series.StepDisplay = False
                 End Select
-                Me.View.MainPlot.Refresh()
+                View.MainPlot.Refresh()
             End If
         End If
 
         'TODO: apply the same changes in the overview chart?
 
         'update the TOC
-        Me.View.CheckedListBox_Series.Refresh()
+        View.CheckedListBox_Series.Refresh()
 
     End Sub
 
@@ -2712,14 +2712,14 @@ Friend Class WaveController
 
         'Remove series from main chart
         If Me.ChartSeries.ContainsKey(id) Then
-            Me.View.MainPlot.Plot.Remove(Me.ChartSeries(id))
+            View.MainPlot.Plot.Remove(Me.ChartSeries(id))
             View.MainPlot.Refresh()
         End If
 
         'Remove series from TOC
         Dim indexFound As Boolean = False
         Dim index As Integer = 0
-        For Each ts As TimeSeries In Me.View.CheckedListBox_Series.Items
+        For Each ts As TimeSeries In View.CheckedListBox_Series.Items
             If ts.Id = id Then
                 indexFound = True
                 Exit For
@@ -2727,7 +2727,7 @@ Friend Class WaveController
             index += 1
         Next
         If indexFound Then
-            Me.View.CheckedListBox_Series.Items.RemoveAt(index)
+            View.CheckedListBox_Series.Items.RemoveAt(index)
         End If
 
         'remove series from internal storage
@@ -2753,12 +2753,12 @@ Friend Class WaveController
         'find the index of the series in the chart by comparing titles
         'TODO: find a better way to detemine a series' index in the chart
         Dim index As Integer = 0
-        For Each plottable As ScottPlot.Plottable.IPlottable In Me.View.MainPlot.Plot.GetPlottables()
+        For Each plottable As ScottPlot.Plottable.IPlottable In View.MainPlot.Plot.GetPlottables()
             Dim series As ScottPlot.Plottable.ScatterPlot = TryCast(plottable, ScottPlot.Plottable.ScatterPlot)
             If Not IsNothing(series) Then
                 If series.Label = Me.Model.TimeSeries(id).Title Then
-                    Me.View.MainPlot.Plot.Move(index, index + offset)
-                    Me.View.MainPlot.Refresh()
+                    View.MainPlot.Plot.Move(index, index + offset)
+                    View.MainPlot.Refresh()
                     Exit For
                 End If
             End If
@@ -2769,7 +2769,7 @@ Friend Class WaveController
         'find the index of the series in the TOC by comparing titles
         Dim indexFound As Boolean = False
         index = 0
-        For Each ts As TimeSeries In Me.View.CheckedListBox_Series.Items
+        For Each ts As TimeSeries In View.CheckedListBox_Series.Items
             If ts.Title = Me.Model.TimeSeries(id).Title Then
                 indexFound = True
                 Exit For
@@ -2777,10 +2777,10 @@ Friend Class WaveController
             index += 1
         Next
         If indexFound Then
-            Dim isChecked As Boolean = Me.View.CheckedListBox_Series.GetItemChecked(index)
-            Me.View.CheckedListBox_Series.Items.RemoveAt(index)
-            Me.View.CheckedListBox_Series.Items.Insert(index + offset, Me.Model.TimeSeries(id))
-            Me.View.CheckedListBox_Series.SetItemChecked(index + offset, isChecked)
+            Dim isChecked As Boolean = View.CheckedListBox_Series.GetItemChecked(index)
+            View.CheckedListBox_Series.Items.RemoveAt(index)
+            View.CheckedListBox_Series.Items.Insert(index + offset, Me.Model.TimeSeries(id))
+            View.CheckedListBox_Series.SetItemChecked(index + offset, isChecked)
         End If
 
     End Sub
