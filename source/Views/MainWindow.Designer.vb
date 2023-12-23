@@ -115,6 +115,9 @@ Partial Class MainWindow
         Me.ToolStripMenuItem_DeactivateAllSeries = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripButton_MoveUp = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripButton_MoveDown = New System.Windows.Forms.ToolStripButton()
+        Me.ToolStripButton_Delete = New System.Windows.Forms.ToolStripButton()
+        Me.ToolStripSeparator12 = New System.Windows.Forms.ToolStripSeparator()
+        Me.ToolStripSeparator13 = New System.Windows.Forms.ToolStripSeparator()
         ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
         toolStripSeparator = New System.Windows.Forms.ToolStripSeparator()
         ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
@@ -657,7 +660,7 @@ Partial Class MainWindow
         'SplitContainer1.Panel2
         '
         Me.SplitContainer1.Panel2.Controls.Add(Me.TableLayoutPanel1)
-        Me.SplitContainer1.Size = New System.Drawing.Size(820, 605)
+        Me.SplitContainer1.Size = New System.Drawing.Size(805, 605)
         Me.SplitContainer1.SplitterDistance = 139
         Me.SplitContainer1.TabIndex = 1
         '
@@ -666,7 +669,7 @@ Partial Class MainWindow
         Me.OverviewPlot.Dock = System.Windows.Forms.DockStyle.Fill
         Me.OverviewPlot.Location = New System.Drawing.Point(0, 0)
         Me.OverviewPlot.Name = "OverviewPlot"
-        Me.OverviewPlot.Size = New System.Drawing.Size(816, 135)
+        Me.OverviewPlot.Size = New System.Drawing.Size(801, 135)
         Me.OverviewPlot.TabIndex = 0
         '
         'TableLayoutPanel1
@@ -686,7 +689,7 @@ Partial Class MainWindow
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 36.0!))
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
-        Me.TableLayoutPanel1.Size = New System.Drawing.Size(816, 458)
+        Me.TableLayoutPanel1.Size = New System.Drawing.Size(801, 458)
         Me.TableLayoutPanel1.TabIndex = 3
         '
         'PanelNavigation
@@ -702,14 +705,14 @@ Partial Class MainWindow
         Me.PanelNavigation.Location = New System.Drawing.Point(1, 1)
         Me.PanelNavigation.Margin = New System.Windows.Forms.Padding(0)
         Me.PanelNavigation.Name = "PanelNavigation"
-        Me.PanelNavigation.Size = New System.Drawing.Size(814, 38)
+        Me.PanelNavigation.Size = New System.Drawing.Size(799, 38)
         Me.PanelNavigation.TabIndex = 0
         '
         'Button_NavEnd
         '
         Me.Button_NavEnd.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Button_NavEnd.Image = Global.BlueM.Wave.My.Resources.Resources.control_end
-        Me.Button_NavEnd.Location = New System.Drawing.Point(782, 8)
+        Me.Button_NavEnd.Location = New System.Drawing.Point(767, 8)
         Me.Button_NavEnd.Name = "Button_NavEnd"
         Me.Button_NavEnd.Size = New System.Drawing.Size(23, 23)
         Me.Button_NavEnd.TabIndex = 6
@@ -730,7 +733,7 @@ Partial Class MainWindow
         '
         Me.Label_Navigate.Anchor = System.Windows.Forms.AnchorStyles.Top
         Me.Label_Navigate.AutoSize = True
-        Me.Label_Navigate.Location = New System.Drawing.Point(314, 13)
+        Me.Label_Navigate.Location = New System.Drawing.Point(306, 13)
         Me.Label_Navigate.Name = "Label_Navigate"
         Me.Label_Navigate.Size = New System.Drawing.Size(53, 13)
         Me.Label_Navigate.TabIndex = 2
@@ -740,7 +743,7 @@ Partial Class MainWindow
         '
         Me.Button_NavForward.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Button_NavForward.Image = CType(resources.GetObject("Button_NavForward.Image"), System.Drawing.Image)
-        Me.Button_NavForward.Location = New System.Drawing.Point(707, 8)
+        Me.Button_NavForward.Location = New System.Drawing.Point(692, 8)
         Me.Button_NavForward.Name = "Button_NavForward"
         Me.Button_NavForward.Size = New System.Drawing.Size(69, 23)
         Me.Button_NavForward.TabIndex = 5
@@ -760,7 +763,7 @@ Partial Class MainWindow
         'NumericUpDown_NavMultiplier
         '
         Me.NumericUpDown_NavMultiplier.Anchor = System.Windows.Forms.AnchorStyles.Top
-        Me.NumericUpDown_NavMultiplier.Location = New System.Drawing.Point(373, 9)
+        Me.NumericUpDown_NavMultiplier.Location = New System.Drawing.Point(365, 9)
         Me.NumericUpDown_NavMultiplier.Minimum = New Decimal(New Integer() {1, 0, 0, 0})
         Me.NumericUpDown_NavMultiplier.Name = "NumericUpDown_NavMultiplier"
         Me.NumericUpDown_NavMultiplier.Size = New System.Drawing.Size(40, 20)
@@ -773,7 +776,7 @@ Partial Class MainWindow
         Me.ComboBox_NavIncrement.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.ComboBox_NavIncrement.FormattingEnabled = True
         Me.ComboBox_NavIncrement.Items.AddRange(New Object() {"Centuries", "Decades", "Years", "Months", "Weeks", "Days", "Hours", "Minutes", "Seconds"})
-        Me.ComboBox_NavIncrement.Location = New System.Drawing.Point(419, 9)
+        Me.ComboBox_NavIncrement.Location = New System.Drawing.Point(411, 9)
         Me.ComboBox_NavIncrement.Name = "ComboBox_NavIncrement"
         Me.ComboBox_NavIncrement.Size = New System.Drawing.Size(81, 21)
         Me.ComboBox_NavIncrement.TabIndex = 4
@@ -783,7 +786,7 @@ Partial Class MainWindow
         Me.MainPlot.Dock = System.Windows.Forms.DockStyle.Fill
         Me.MainPlot.Location = New System.Drawing.Point(4, 43)
         Me.MainPlot.Name = "MainPlot"
-        Me.MainPlot.Size = New System.Drawing.Size(808, 353)
+        Me.MainPlot.Size = New System.Drawing.Size(793, 353)
         Me.MainPlot.TabIndex = 3
         '
         'Panel_DisplayRange
@@ -797,14 +800,14 @@ Partial Class MainWindow
         Me.Panel_DisplayRange.Location = New System.Drawing.Point(1, 400)
         Me.Panel_DisplayRange.Margin = New System.Windows.Forms.Padding(0)
         Me.Panel_DisplayRange.Name = "Panel_DisplayRange"
-        Me.Panel_DisplayRange.Size = New System.Drawing.Size(814, 36)
+        Me.Panel_DisplayRange.Size = New System.Drawing.Size(799, 36)
         Me.Panel_DisplayRange.TabIndex = 2
         '
         'Label_Display
         '
         Me.Label_Display.Anchor = System.Windows.Forms.AnchorStyles.Top
         Me.Label_Display.AutoSize = True
-        Me.Label_Display.Location = New System.Drawing.Point(319, 12)
+        Me.Label_Display.Location = New System.Drawing.Point(311, 12)
         Me.Label_Display.Name = "Label_Display"
         Me.Label_Display.Size = New System.Drawing.Size(44, 13)
         Me.Label_Display.TabIndex = 1
@@ -813,7 +816,7 @@ Partial Class MainWindow
         'NumericUpDown_DisplayRangeMultiplier
         '
         Me.NumericUpDown_DisplayRangeMultiplier.Anchor = System.Windows.Forms.AnchorStyles.Top
-        Me.NumericUpDown_DisplayRangeMultiplier.Location = New System.Drawing.Point(369, 8)
+        Me.NumericUpDown_DisplayRangeMultiplier.Location = New System.Drawing.Point(361, 8)
         Me.NumericUpDown_DisplayRangeMultiplier.Minimum = New Decimal(New Integer() {1, 0, 0, 0})
         Me.NumericUpDown_DisplayRangeMultiplier.Name = "NumericUpDown_DisplayRangeMultiplier"
         Me.NumericUpDown_DisplayRangeMultiplier.Size = New System.Drawing.Size(40, 20)
@@ -826,7 +829,7 @@ Partial Class MainWindow
         Me.ComboBox_DisplayRangeUnit.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.ComboBox_DisplayRangeUnit.FormattingEnabled = True
         Me.ComboBox_DisplayRangeUnit.Items.AddRange(New Object() {"", "Centuries", "Decades", "Years", "Months", "Weeks", "Days", "Hours", "Minutes", "Seconds"})
-        Me.ComboBox_DisplayRangeUnit.Location = New System.Drawing.Point(415, 8)
+        Me.ComboBox_DisplayRangeUnit.Location = New System.Drawing.Point(407, 8)
         Me.ComboBox_DisplayRangeUnit.Name = "ComboBox_DisplayRangeUnit"
         Me.ComboBox_DisplayRangeUnit.Size = New System.Drawing.Size(81, 21)
         Me.ComboBox_DisplayRangeUnit.TabIndex = 3
@@ -835,7 +838,7 @@ Partial Class MainWindow
         '
         Me.MaskedTextBox_NavEnd.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.MaskedTextBox_NavEnd.Culture = New System.Globalization.CultureInfo("")
-        Me.MaskedTextBox_NavEnd.Location = New System.Drawing.Point(705, 8)
+        Me.MaskedTextBox_NavEnd.Location = New System.Drawing.Point(690, 8)
         Me.MaskedTextBox_NavEnd.Name = "MaskedTextBox_NavEnd"
         Me.MaskedTextBox_NavEnd.Size = New System.Drawing.Size(100, 20)
         Me.MaskedTextBox_NavEnd.TabIndex = 4
@@ -877,7 +880,7 @@ Partial Class MainWindow
         '
         Me.SplitContainer2.Panel2.Controls.Add(Me.SplitContainer1)
         Me.SplitContainer2.Size = New System.Drawing.Size(944, 605)
-        Me.SplitContainer2.SplitterDistance = 120
+        Me.SplitContainer2.SplitterDistance = 135
         Me.SplitContainer2.TabIndex = 7
         '
         'CheckedListBox_Series
@@ -891,16 +894,16 @@ Partial Class MainWindow
         Me.CheckedListBox_Series.Location = New System.Drawing.Point(5, 31)
         Me.CheckedListBox_Series.Margin = New System.Windows.Forms.Padding(5)
         Me.CheckedListBox_Series.Name = "CheckedListBox_Series"
-        Me.CheckedListBox_Series.Size = New System.Drawing.Size(110, 559)
+        Me.CheckedListBox_Series.Size = New System.Drawing.Size(125, 559)
         Me.CheckedListBox_Series.TabIndex = 0
         Me.CheckedListBox_Series.ThreeDCheckBoxes = True
         '
         'ToolStrip2
         '
-        Me.ToolStrip2.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButton_MoveUp, Me.ToolStripButton_MoveDown, Me.ToolStripDropDownButton1})
+        Me.ToolStrip2.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButton_Delete, Me.ToolStripSeparator12, Me.ToolStripButton_MoveUp, Me.ToolStripButton_MoveDown, Me.ToolStripSeparator13, Me.ToolStripDropDownButton1})
         Me.ToolStrip2.Location = New System.Drawing.Point(0, 0)
         Me.ToolStrip2.Name = "ToolStrip2"
-        Me.ToolStrip2.Size = New System.Drawing.Size(120, 25)
+        Me.ToolStrip2.Size = New System.Drawing.Size(135, 25)
         Me.ToolStrip2.TabIndex = 1
         Me.ToolStrip2.Text = "ToolStrip2"
         '
@@ -947,6 +950,27 @@ Partial Class MainWindow
         Me.ToolStripButton_MoveDown.Name = "ToolStripButton_MoveDown"
         Me.ToolStripButton_MoveDown.Size = New System.Drawing.Size(23, 22)
         Me.ToolStripButton_MoveDown.Text = "Move selected time series down"
+        '
+        'ToolStripButton_Delete
+        '
+        Me.ToolStripButton_Delete.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.ToolStripButton_Delete.Enabled = False
+        Me.ToolStripButton_Delete.Image = Global.BlueM.Wave.My.Resources.Resources.chart_line_delete
+        Me.ToolStripButton_Delete.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ToolStripButton_Delete.Name = "ToolStripButton_Delete"
+        Me.ToolStripButton_Delete.Size = New System.Drawing.Size(23, 22)
+        Me.ToolStripButton_Delete.Text = "ToolStripButton_Delete"
+        Me.ToolStripButton_Delete.ToolTipText = "Delete selected time series"
+        '
+        'ToolStripSeparator12
+        '
+        Me.ToolStripSeparator12.Name = "ToolStripSeparator12"
+        Me.ToolStripSeparator12.Size = New System.Drawing.Size(6, 25)
+        '
+        'ToolStripSeparator13
+        '
+        Me.ToolStripSeparator13.Name = "ToolStripSeparator13"
+        Me.ToolStripSeparator13.Size = New System.Drawing.Size(6, 25)
         '
         'MainWindow
         '
@@ -1077,4 +1101,7 @@ Partial Class MainWindow
     Friend WithEvents ToolStripMenuItem_DeactivateAllSeries As ToolStripMenuItem
     Friend WithEvents ToolStripButton_MoveUp As ToolStripButton
     Friend WithEvents ToolStripButton_MoveDown As ToolStripButton
+    Friend WithEvents ToolStripButton_Delete As ToolStripButton
+    Friend WithEvents ToolStripSeparator12 As ToolStripSeparator
+    Friend WithEvents ToolStripSeparator13 As ToolStripSeparator
 End Class

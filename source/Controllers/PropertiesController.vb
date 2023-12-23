@@ -31,7 +31,6 @@ Friend Class PropertiesController
 
         'view events
         AddHandler Me.View.SeriesPropertyChanged, AddressOf SeriesPropertiesViewChanged
-        AddHandler Me.View.SeriesDeleted, AddressOf SeriesDeletedHandler
 
         'model events
         AddHandler _model.SeriesAdded, AddressOf UpdateView
@@ -62,16 +61,6 @@ Friend Class PropertiesController
     ''' <remarks>Handles changed interpretation, title and unit</remarks>
     Private Sub SeriesPropertiesViewChanged(id As Integer)
         _model.SeriesPropertiesChangedHandler(id)
-    End Sub
-
-    ''' <summary>
-    ''' Deletes series deleted in the view from the model
-    ''' </summary>
-    ''' <param name="ids">List of time series ids to delete</param>
-    Private Sub SeriesDeletedHandler(ids As List(Of Integer))
-        For Each id As Integer In ids
-            _model.RemoveTimeSeries(id)
-        Next
     End Sub
 
 End Class

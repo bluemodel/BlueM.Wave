@@ -165,6 +165,7 @@ Friend Class WaveController
 
         'TOC events
         AddHandler Me.View.CheckedListBox_Series.SelectedIndexChanged, AddressOf TOC_SelectionChanged
+        AddHandler Me.View.ToolStripButton_Delete.Click, AddressOf ToolStripButton_Delete_Click
         AddHandler Me.View.ToolStripButton_MoveUp.Click, AddressOf ToolStripButton_MoveUp_Click
         AddHandler Me.View.ToolStripButton_MoveDown.Click, AddressOf ToolStripButton_MoveDown_Click
         AddHandler Me.View.ToolStripMenuItem_ActivateAllSeries.Click, AddressOf ActivateAllSeries_Click
@@ -1208,6 +1209,33 @@ Friend Class WaveController
     End Sub
 
     ''' <summary>
+    ''' Handles the user clicking the delete button
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    Private Sub ToolStripButton_Delete_Click(sender As Object, e As EventArgs)
+        Call DeleteSelectedSeries()
+    End Sub
+
+    ''' <summary>
+    ''' Handles the user clicking the move up button
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    Private Sub ToolStripButton_MoveUp_Click(sender As Object, e As EventArgs)
+        Call ReorderSelectedSeries(Direction.Up)
+    End Sub
+
+    ''' <summary>
+    ''' Handles the user clicking the move down button
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    Private Sub ToolStripButton_MoveDown_Click(sender As Object, e As EventArgs)
+        Call ReorderSelectedSeries(Direction.Down)
+    End Sub
+
+    ''' <summary>
     ''' Activate all series button clicked
     ''' </summary>
     ''' <param name="sender"></param>
@@ -1230,28 +1258,12 @@ Friend Class WaveController
     End Sub
 
     ''' <summary>
-    ''' Handles the user clicking the move up button
-    ''' </summary>
-    ''' <param name="sender"></param>
-    ''' <param name="e"></param>
-    Private Sub ToolStripButton_MoveUp_Click(sender As Object, e As EventArgs)
-        Call ReorderSelectedSeries(Direction.Up)
-    End Sub
-
-    ''' <summary>
-    ''' Handles the user clicking the move down button
-    ''' </summary>
-    ''' <param name="sender"></param>
-    ''' <param name="e"></param>
-    Private Sub ToolStripButton_MoveDown_Click(sender As Object, e As EventArgs)
-        Call ReorderSelectedSeries(Direction.Down)
-    End Sub
-
-    ''' <summary>
     ''' Reorder selected series
     ''' </summary>
     ''' <param name="direction">Direction in which to move selected series</param>
     Private Sub ReorderSelectedSeries(direction As Direction)
+
+        'TODO: CheckedListBox does not allow multiselection, so only one series will ever be selected
 
         Dim indices As New List(Of Integer)
         Dim ids As New List(Of Integer)
@@ -1283,6 +1295,32 @@ Friend Class WaveController
     End Sub
 
     ''' <summary>
+    ''' Deletes the series currently selected in the TOC
+    ''' </summary>
+    Private Sub DeleteSelectedSeries()
+
+        'TODO: CheckedListBox does not allow multiselection, so only one series will ever be selected
+
+        'collect titles and ids of all selected items
+        Dim titles As New List(Of String)
+        Dim ids As New List(Of Integer)
+        For Each ts As TimeSeries In Me.View.CheckedListBox_Series.SelectedItems
+            titles.Add(ts.Title)
+            ids.Add(ts.Id)
+        Next
+        If ids.Count > 0 Then
+            'ask for user confirmation
+            Dim result As MsgBoxResult = MsgBox($"Delete {ids.Count} series?{eol}{String.Join(eol, titles)}", MsgBoxStyle.OkCancel Or MsgBoxStyle.Exclamation)
+            If result = MsgBoxResult.Ok Then
+                For Each id As Integer In ids
+                    Model.RemoveTimeSeries(id)
+                Next
+            End If
+        End If
+
+    End Sub
+
+    ''' <summary>
     ''' Handles the TOC selection changed
     ''' Enables/disables buttons
     ''' </summary>
@@ -1291,9 +1329,11 @@ Friend Class WaveController
     Private Sub TOC_SelectionChanged(sender As Object, e As EventArgs)
         'Check if any items are selected
         If Me.View.CheckedListBox_Series.SelectedIndices.Count = 0 Then
+            Me.View.ToolStripButton_Delete.Enabled = False
             Me.View.ToolStripButton_MoveUp.Enabled = False
             Me.View.ToolStripButton_MoveDown.Enabled = False
         Else
+            Me.View.ToolStripButton_Delete.Enabled = True
             Me.View.ToolStripButton_MoveUp.Enabled = True
             Me.View.ToolStripButton_MoveDown.Enabled = True
             'check if first row is selected
@@ -2731,30 +2771,34 @@ Friend Class WaveController
 
     End Sub
 
+    ''' <summary>
+    ''' Handles the case where a TimeSeries was removed from the model
+    ''' </summary>
+    ''' <param name="id"></param>
     Private Sub SeriesRemoved(id As Integer)
 
-        'TODO: TChart
-        ''Remove series from main chart
-        'For i As Integer = View.MainPlot.Series.Count - 1 To 0 Step -1
-        '    If CType(View.MainPlot.Series.Item(i).Tag, String) = "_markers" Then
-        '        'TODO: marker series belonging to the removed series should be removed as well, skip for now
-        '        Continue For
-        '    End If
-        '    If View.MainPlot.Series.Item(i).Tag = id Then
-        '        View.MainPlot.Series.RemoveAt(i)
-        '        View.MainPlot.Refresh()
-        '        Exit For
-        '    End If
-        'Next
+        'Remove series from main chart
+        If Me.ChartSeries.ContainsKey(id) Then
+            Me.View.MainPlot.Plot.Remove(Me.ChartSeries(id))
+            View.MainPlot.Refresh()
+        End If
 
-        ''Remove series from overview chart
-        'For i As Integer = View.OverviewPlot.Series.Count - 1 To 0 Step -1
-        '    If (View.OverviewPlot.Series.Item(i).Tag = id) Then
-        '        View.OverviewPlot.Series.RemoveAt(i)
-        '        View.OverviewPlot.Refresh()
-        '        Exit For
-        '    End If
-        'Next
+        'Remove series from TOC
+        Dim indexFound As Boolean = False
+        Dim index As Integer = 0
+        For Each ts As TimeSeries In Me.View.CheckedListBox_Series.Items
+            If ts.Id = id Then
+                indexFound = True
+                Exit For
+            End If
+            index += 1
+        Next
+        If indexFound Then
+            Me.View.CheckedListBox_Series.Items.RemoveAt(index)
+        End If
+
+        'remove series from internal storage
+        Me.ChartSeries.Remove(id)
 
     End Sub
 
