@@ -159,7 +159,6 @@ Friend Class WaveController
         AddHandler Me.View.OverviewPlot.MouseDown, AddressOf OverviewChart_MouseDown
         AddHandler Me.View.OverviewPlot.MouseMove, AddressOf OverviewChart_MouseMove
         AddHandler Me.View.OverviewPlot.MouseUp, AddressOf OverviewChart_MouseUp
-        AddHandler Me.View.OverviewPlot.DoubleClick, AddressOf OverviewChart_DoubleClick
 
         AddHandler Me.View.MainPlot.MouseWheel, AddressOf Chart_MouseWheel
         AddHandler Me.View.OverviewPlot.MouseWheel, AddressOf OverviewChart_MouseWheel
@@ -2006,13 +2005,6 @@ Friend Class WaveController
             Log.AddLogEntry(levels.debug, $"Exception in OverviewChart_MouseWheel: {ex}")
         End Try
 
-    End Sub
-
-    'TChart2 DoubleClick
-    '*******************
-    Private Sub OverviewChart_DoubleClick(sender As System.Object, e As System.EventArgs)
-        'TODO: TChart
-        'Call Steema.TeeChart.Editor.Show(View.OverviewPlot)
     End Sub
 
     ''' <summary>
