@@ -324,7 +324,7 @@ Friend Class WaveController
         Me.ChartSeries.Clear()
 
         'Charts zurücksetzen
-        Call View.Init_Charts()
+        Call View.InitializeCharts()
 
         'Reset Zoom history
         Me.ZoomHistory.Clear()

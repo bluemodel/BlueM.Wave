@@ -247,7 +247,6 @@ Public Module Helpers
         'hide right Y axis
         plot.YAxis2.Label("")
         plot.YAxis2.Dims.ResetLimits()
-        plot.YAxis2.IsVisible = False
 
         'remove any additional axes
         For axisIndex As Integer = 2 To plot.GetAxesMatching(axisIndex:=Nothing, isVertical:=True).Count() - 1

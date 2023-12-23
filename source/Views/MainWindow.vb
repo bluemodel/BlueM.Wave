@@ -103,7 +103,7 @@ Friend Class MainWindow
 
         'Charts einrichten
         '-----------------
-        Call Me.Init_Charts()
+        Call Me.InitializeCharts()
 
         'Navigation initialisieren
         Me.ComboBox_NavIncrement.SelectedItem = "Days"
@@ -126,17 +126,16 @@ Friend Class MainWindow
 
     End Sub
 
-
-    'Charts neu einrichten
-    '*********************
-    Friend Sub Init_Charts()
+    ''' <summary>
+    ''' Initializes/resets the charts
+    ''' </summary>
+    Friend Sub InitializeCharts()
 
         'initialize main plot
         Me.MainPlot.Plot.Clear()
         Call Helpers.FormatChart(Me.MainPlot.Plot)
         Me.MainPlot.Configuration.Pan = False
         Me.MainPlot.Configuration.Zoom = False
-        Me.MainPlot.Configuration.LockVerticalAxis = True 'TODO: this only locks YAxis1
         Me.MainPlot.Refresh()
 
         'initialize overview plot
@@ -147,35 +146,7 @@ Friend Class MainWindow
         Me.OverviewPlot.Configuration.Zoom = False
         Me.OverviewPlot.Refresh()
 
-        'TODO: TChart
-        'Me.TChart2.Panel.Brush.Color = Color.FromArgb(239, 239, 239)
-        'Me.TChart2.Walls.Back.Color = Color.FromArgb(239, 239, 239)
-        'Me.TChart2.Header.Visible = False
-        'Me.TChart2.Legend.Visible = False
-
-        ''Disable TeeChart builtin zooming and panning functionality
-        'Me.MainPlot.Zoom.Direction = Steema.TeeChart.ZoomDirections.None
-        'Me.MainPlot.Zoom.History = False
-        'Me.MainPlot.Zoom.Animated = True
-        'Me.MainPlot.Panning.Allow = Steema.TeeChart.ScrollModes.None
-
-        'Me.TChart2.Zoom.Direction = Steema.TeeChart.ZoomDirections.None
-        'Me.TChart2.Panning.Allow = Steema.TeeChart.ScrollModes.None
-
-        ''Achsen
-        'Me.MainPlot.Axes.Bottom.Automatic = False
-        'Me.MainPlot.Axes.Bottom.Labels.Angle = 90
-        'Me.MainPlot.Axes.Bottom.Labels.DateTimeFormat = Helpers.CurrentDateFormat
-        'Me.MainPlot.Axes.Right.Title.Angle = 90
-
-        'Me.TChart2.Axes.Left.Labels.Font.Color = Color.FromArgb(100, 100, 100)
-        'Me.TChart2.Axes.Left.Labels.Font.Size = 8
-        'Me.TChart2.Axes.Bottom.Labels.Font.Color = Color.FromArgb(100, 100, 100)
-        'Me.TChart2.Axes.Bottom.Labels.Font.Size = 8
-        'Me.TChart2.Axes.Bottom.Automatic = False
-        'Me.TChart2.Axes.Bottom.Labels.DateTimeFormat = Globalization.CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern 'date only without time
-
-        'ColorBand einrichten
+        'initialize rectangles
         Call Me.InitializeRectangles()
 
     End Sub
@@ -194,6 +165,7 @@ Friend Class MainWindow
         ViewExtentRectangle.BorderColor = Color.Coral
         ViewExtentRectangle.BorderLineStyle = ScottPlot.LineStyle.Solid
         ViewExtentRectangle.BorderLineWidth = 1
+        Me.OverviewPlot.Refresh()
 
         'zoom rectangle
         limits = Me.MainPlot.Plot.GetAxisLimits()
