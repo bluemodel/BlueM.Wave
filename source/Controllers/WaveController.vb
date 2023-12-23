@@ -1670,6 +1670,7 @@ Friend Class WaveController
             'set the new viewport 
             View.ChartMinX = DateTime.FromOADate(xMin)
             View.ChartMaxX = DateTime.FromOADate(xMax)
+            View.MainPlot.Refresh()
             Me.selectionMade = True
             'update drag start point
             Me.ChartMouseDragStartX = e.X
@@ -1765,6 +1766,7 @@ Friend Class WaveController
             View.ChartMaxX = centerDate + New TimeSpan(ticks:=newExtent * rightRatio)
 
             Me.selectionMade = True
+
             Call Me.ViewportChanged()
 
         Catch ex As ArgumentOutOfRangeException
@@ -1938,7 +1940,6 @@ Friend Class WaveController
     ''' <param name="e"></param>
     Private Sub OverviewChart_MouseWheel(sender As Object, e As MouseEventArgs)
 
-        'TODO: TChart
         Try
             ' Update the drawing based upon the mouse wheel scrolling.
             ' "The UI should scroll when the accumulated delta is plus or minus 120.
@@ -2085,8 +2086,9 @@ Friend Class WaveController
                     axis.Dims.SetAxis(range.min - padding, range.max + padding)
                 End If
             Next
-            View.MainPlot.Refresh()
         End If
+
+        View.MainPlot.Refresh()
 
     End Sub
 
@@ -2333,8 +2335,6 @@ Friend Class WaveController
         Call Me.UpdateChartExtents()
 
         Call Me.ViewportChanged()
-
-        View.MainPlot.Refresh()
 
         'Determine total number of NaN-values and write to log
         If ts.NaNCount > 0 Then
