@@ -20,8 +20,6 @@ Imports System.Text.RegularExpressions
 Friend Class WaveController
     Inherits Controller
 
-    Implements Steema.TeeChart.ITeeEventListener
-
     Private Overloads ReadOnly Property View As MainWindow
         Get
             Return _view
@@ -243,62 +241,6 @@ Friend Class WaveController
         Catch ex As Exception
             'do nothing if check for update fails at startup
         End Try
-    End Sub
-
-    ''' <summary>
-    ''' Handles TeeChart Events
-    ''' </summary>
-    ''' <param name="e"></param>
-    Private Sub TeeEvent(e As Steema.TeeChart.TeeEvent) Implements Steema.TeeChart.ITeeEventListener.TeeEvent
-        'TODO: TChart
-        'Try
-        '    If TypeOf e Is Steema.TeeChart.Styles.SeriesEvent Then
-        '        Dim seriesEvent As Steema.TeeChart.Styles.SeriesEvent = CType(e, Steema.TeeChart.Styles.SeriesEvent)
-        '        Select Case seriesEvent.Event
-        '            Case Steema.TeeChart.Styles.SeriesEventStyle.ChangeActive
-        '                'series visibility has been changed. check whether custom axes should be made invisible
-
-        '                'collect units of all active series
-        '                Dim activeUnits As New HashSet(Of String)
-        '                For Each series As Steema.TeeChart.Styles.Series In View.MainPlot.Series
-        '                    If series.Active Then
-        '                        activeUnits.Add(series.GetVertAxis.Tag)
-        '                    End If
-        '                Next
-        '                'set visibility of custom axes accordingly
-        '                For Each axis As Steema.TeeChart.Axis In View.MainPlot.Axes.Custom
-        '                    If activeUnits.Contains(axis.Tag) Then
-        '                        axis.Visible = True
-        '                    Else
-        '                        axis.Visible = False
-        '                    End If
-        '                Next
-
-        '            Case Steema.TeeChart.Styles.SeriesEventStyle.ChangeTitle
-        '                'series title changed, update title in the model
-        '                Dim id As Integer = seriesEvent.Series.Tag
-        '                If _model.TimeSeries.ContainsId(id) Then
-        '                    If _model.TimeSeries(id).Title <> seriesEvent.Series.Title Then
-        '                        _model.TimeSeries(id).Title = seriesEvent.Series.Title
-        '                        _model.SeriesPropertiesChangedHandler(id)
-        '                    End If
-        '                End If
-
-        '            Case Steema.TeeChart.Styles.SeriesEventStyle.Remove
-        '                'series removed, delete series from model
-        '                Dim id As Integer = seriesEvent.Series.Tag
-        '                If _model.TimeSeries.ContainsId(id) Then
-        '                    'temporarily disable event handling to prevent multiple deletions
-        '                    RemoveHandler _model.SeriesRemoved, AddressOf SeriesRemoved
-        '                    _model.RemoveTimeSeries(id)
-        '                    AddHandler _model.SeriesRemoved, AddressOf SeriesRemoved
-        '                End If
-
-        '        End Select
-        '    End If
-        'Catch ex As Exception
-        '    Log.AddLogEntry(Log.levels.debug, ex.Message)
-        'End Try
     End Sub
 
 #Region "user events"
@@ -2617,6 +2559,7 @@ Friend Class WaveController
         If Me.ChartSeries.ContainsKey(id) Then
             Me.ChartSeries(id).IsVisible = (e.NewValue = CheckState.Checked)
         End If
+        'TODO: hide unused y axes if no active series uses them
         Me.View.MainPlot.Refresh()
     End Sub
 
