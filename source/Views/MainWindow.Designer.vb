@@ -329,7 +329,7 @@ Partial Class MainWindow
         Me.ToolStripButton_Copy.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.ToolStripButton_Copy.Name = "ToolStripButton_Copy"
         Me.ToolStripButton_Copy.Size = New System.Drawing.Size(23, 31)
-        Me.ToolStripButton_Copy.Text = "&Copy chart to clipboard (PNG)"
+        Me.ToolStripButton_Copy.Text = "&Copy chart image to clipboard"
         '
         'ToolStripButton_Cut
         '

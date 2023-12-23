@@ -746,11 +746,13 @@ Friend Class WaveController
         End If
     End Sub
 
-    'Kopieren (als PNG)
-    '******************
+    ''' <summary>
+    ''' Handles copy button clicked
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
     Private Sub Copy_Click(sender As System.Object, e As System.EventArgs)
-        'TODO: TChart
-        'Call View.MainPlot.Export.Image.PNG.CopyToClipboard()
+        Clipboard.SetImage(View.MainPlot.Plot.Render())
     End Sub
 
     'Analysieren

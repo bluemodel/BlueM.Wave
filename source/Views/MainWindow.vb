@@ -139,6 +139,7 @@ Friend Class MainWindow
         'initialize main plot
         Me.MainPlot.Plot.Clear()
         Call Helpers.FormatChart(Me.MainPlot.Plot)
+        Me.MainPlot.Plot.Style(figureBackground:=Color.White)
         Me.MainPlot.Configuration.Pan = False
         Me.MainPlot.Configuration.Zoom = False
         Me.MainPlot.Refresh()
