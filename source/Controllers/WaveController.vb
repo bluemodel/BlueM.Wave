@@ -2464,27 +2464,43 @@ Friend Class WaveController
             axis.Dims.ResetLimits()
         End If
 
-        'check for unused axes and remove them (because units may have changed)
-        Dim units As New HashSet(Of String)
-        Dim axesToRemove As New List(Of ScottPlot.Renderable.Axis)
+        'remove any unused axes
+        Call Me.RemoveUnusedAxes()
+
+    End Sub
+
+    ''' <summary>
+    ''' Checks for any unused axes and removes them
+    ''' </summary>
+    Private Sub RemoveUnusedAxes()
+
+        'collect used units
+        Dim usedUnits As New HashSet(Of String)
         For Each ts As TimeSeries In Model.TimeSeries.Values
-            units.Add(ts.Unit)
+            usedUnits.Add(ts.Unit)
         Next
+
+        'find unused axes
+        Dim axesToRemove As New List(Of ScottPlot.Renderable.Axis)
         For Each axis As ScottPlot.Renderable.Axis In View.MainPlot.Plot.GetAxesMatching(axisIndex:=Nothing, isVertical:=True)
-            If axis.AxisLabel.Label <> "" And Not units.Contains(axis.AxisLabel.Label) Then
+            If axis.AxisLabel.Label <> "" And Not usedUnits.Contains(axis.AxisLabel.Label) Then
                 axesToRemove.Add(axis)
             End If
         Next
+
+        'remove unused axes
         If axesToRemove.Count > 0 Then
             For Each axis As ScottPlot.Renderable.Axis In axesToRemove
                 If axis.AxisIndex <= 1 Then
                     'left and right Y axis should never be removed, just reset
                     axis.Label("")
                     axis.Dims.ResetLimits()
+                    axis.Ticks(enable:=False)
                 Else
                     View.MainPlot.Plot.RemoveAxis(axis)
                 End If
             Next
+            View.MainPlot.Refresh()
         End If
 
         'update axis dialog
@@ -2743,6 +2759,9 @@ Friend Class WaveController
         If indexFound Then
             View.CheckedListBox_Series.Items.RemoveAt(index)
         End If
+
+        'remove any unused axes
+        Call Me.RemoveUnusedAxes()
 
     End Sub
 
