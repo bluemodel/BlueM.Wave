@@ -595,117 +595,102 @@ Friend Class WaveController
     ''' <remarks></remarks>
     Private Sub ShowNaNValues_Click(sender As System.Object, e As System.EventArgs)
 
-        'TODO: TChart
-        'Dim processSeries As Boolean
-        'Dim nanStart, nanEnd, bandStart, bandEnd As DateTime
-        'Dim band As Steema.TeeChart.Tools.ColorBand
-        'Dim color As Drawing.Color
-        'Dim isNaNPeriod, nanFound, nanFoundInSeries As Boolean
+        Dim nanStart, nanEnd, spanStart, spanEnd As DateTime
+        Dim isNaNPeriod, nanFound, nanFoundInSeries As Boolean
+        Dim nanCount As Integer
 
-        ''set default color
-        'color = Color.Red
+        If View.ToolStripButton_ShowNaNValues.Checked Then
+            'Switch visualization of NaN values on
+            'Show horizontal spans for NaN values in the currently active series
+            nanFound = False
+            For Each index As Integer In View.CheckedListBox_Series.CheckedIndices
 
-        'If View.ToolStripButton_ShowNaNValues.Checked Then
-        '    'Switch visualization of NaN values on
-        '    'Show color bands for NaN values in the currently active series
-        '    nanFound = False
-        '    For Each ts As TimeSeries In _model.TimeSeries.Values
-        '        processSeries = False
-        '        'check if time series is currently active
-        '        For Each series As Steema.TeeChart.Styles.Series In View.MainPlot.Series
-        '            If series.Title = ts.Title Then
-        '                If series.Active Then
-        '                    'process this series
-        '                    processSeries = True
-        '                    color = series.Color
-        '                End If
-        '                Exit For
-        '            End If
-        '        Next
-        '        If processSeries Then
-        '            'log
-        '            Log.AddLogEntry(Log.levels.info, $"Finding NaN values for series {ts.Title}...")
-        '            'find beginning and end of nan values
-        '            nanFoundInSeries = False
-        '            isNaNPeriod = False
-        '            For i As Integer = 0 To ts.Length - 1
-        '                If Not isNaNPeriod Then
-        '                    'test for start of NaN values
-        '                    If Double.IsNaN(ts.Values(i)) Then
-        '                        isNaNPeriod = True
-        '                        nanFoundInSeries = True
-        '                        nanFound = True
-        '                        If i = 0 Then
-        '                            bandStart = ts.Dates(i)
-        '                        Else
-        '                            bandStart = ts.Dates(i - 1)
-        '                        End If
-        '                        nanStart = ts.Dates(i)
+                Dim ts As TimeSeries = CType(View.CheckedListBox_Series.Items(index), TimeSeries)
+                Dim color As Color = CType(Me.ChartSeries(ts.Id), ScottPlot.Plottable.ScatterPlot).LineColor
 
-        '                        If i < ts.Length - 1 Then
-        '                            Continue For
-        '                        End If
-        '                    End If
-        '                End If
-        '                If isNaNPeriod Then
-        '                    'test for end of NaN values
-        '                    If Not Double.IsNaN(ts.Values(i)) Then
-        '                        bandEnd = ts.Dates(i)
-        '                        nanEnd = ts.Dates(i - 1)
-        '                        isNaNPeriod = False
+                'find beginning and end of nan values
+                nanFoundInSeries = False
+                isNaNPeriod = False
+                nanCount = 0
+                For i As Integer = 0 To ts.Length - 1
 
-        '                    ElseIf i = ts.Length - 1 Then
-        '                        'force end if end of time series reached
-        '                        bandEnd = ts.Dates(i)
-        '                        nanEnd = ts.Dates(i)
-        '                        isNaNPeriod = False
+                    If Not isNaNPeriod Then
+                        'test for start of NaN values
+                        If Double.IsNaN(ts.Values(i)) Then
+                            isNaNPeriod = True
+                            nanFoundInSeries = True
+                            nanFound = True
+                            If i = 0 Then
+                                spanStart = ts.Dates(i)
+                            Else
+                                spanStart = ts.Dates(i - 1)
+                            End If
+                            nanStart = ts.Dates(i)
 
-        '                    End If
+                            If i < ts.Length - 1 Then
+                                'cycle to the next node directly
+                                nanCount += 1
+                                Continue For
+                            End If
+                        End If
+                    End If
 
-        '                    If Not isNaNPeriod Then
-        '                        'end of NaN period reached, add a color band
-        '                        band = New Steema.TeeChart.Tools.ColorBand()
-        '                        View.MainPlot.Tools.Add(band)
-        '                        band.Axis = View.MainPlot.Axes.Bottom
-        '                        band.Start = bandStart.ToOADate()
-        '                        band.End = bandEnd.ToOADate()
-        '                        band.Pen.Visible = False
-        '                        band.Pen.Color = color
-        '                        band.Brush.Color = ControlPaint.Light(color)
-        '                        band.Brush.Transparency = 50
-        '                        band.ResizeEnd = False
-        '                        band.ResizeStart = False
-        '                        band.EndLinePen.Visible = False
-        '                        band.StartLinePen.Visible = False
-        '                        band.Tag = "NaN"
+                    If isNaNPeriod Then
 
-        '                        'write to log
-        '                        Log.AddLogEntry(Log.levels.info, $"Series contains NaN values from {nanStart.ToString(Helpers.CurrentDateFormat)} to {nanEnd.ToString(Helpers.CurrentDateFormat)}")
-        '                    End If
-        '                End If
-        '            Next
-        '            If Not nanFoundInSeries Then
-        '                Log.AddLogEntry(Log.levels.info, "Series does not contain any NaN values")
-        '            End If
-        '        End If
-        '    Next
-        '    If Not nanFound Then
-        '        MsgBox("No NaN values found in the currently active series!", MsgBoxStyle.Information)
-        '        View.ToolStripButton_ShowNaNValues.Checked = False
-        '    End If
-        'Else
-        '    'Switch visualization of NaN values off
-        '    'Remove all tools of type ColorBand with Tag "NaN" from MainPlot
-        '    Dim nanbands As New List(Of Steema.TeeChart.Tools.ColorBand)
-        '    For Each tool As Steema.TeeChart.Tools.Tool In View.MainPlot.Tools
-        '        If tool.GetType Is GetType(Steema.TeeChart.Tools.ColorBand) And tool.Tag = "NaN" Then
-        '            nanbands.Add(tool)
-        '        End If
-        '    Next
-        '    For Each nanband As Steema.TeeChart.Tools.ColorBand In nanbands
-        '        View.MainPlot.Tools.Remove(nanband)
-        '    Next
-        'End If
+                        'test for end of NaN values
+                        If Not Double.IsNaN(ts.Values(i)) Then
+                            spanEnd = ts.Dates(i)
+                            nanEnd = ts.Dates(i - 1)
+                            isNaNPeriod = False
+                        Else
+                            nanCount += 1
+
+                            If i = ts.Length - 1 Then
+                                'force end if end of time series reached
+                                spanEnd = ts.Dates(i)
+                                nanEnd = ts.Dates(i)
+                                isNaNPeriod = False
+                            End If
+
+                        End If
+
+                        If Not isNaNPeriod Then
+                            'end of NaN period reached
+
+                            'add a horizontal span
+                            Dim hspan As ScottPlot.Plottable.HSpan = Me.View.MainPlot.Plot.AddHorizontalSpan(spanStart.ToOADate(), spanEnd.ToOADate())
+                            hspan.BorderLineStyle = ScottPlot.LineStyle.None
+                            hspan.Color = Color.FromArgb(100, ControlPaint.Light(color))
+                            hspan.DragEnabled = False
+                            Me.View.NaNSpans.Add(hspan)
+
+                            'write to log
+                            Log.AddLogEntry(Log.levels.info, $"Series {ts.Title} contains {nanCount} NaN values from {nanStart.ToString(Helpers.CurrentDateFormat)} to {nanEnd.ToString(Helpers.CurrentDateFormat)}")
+
+                            'reset nanCount
+                            nanCount = 0
+                        End If
+                    End If
+                Next
+                If Not nanFoundInSeries Then
+                    Log.AddLogEntry(Log.levels.info, $"Series {ts.Title} does not contain any NaN values")
+                End If
+            Next
+            If Not nanFound Then
+                MsgBox("No NaN values found in the currently active series!", MsgBoxStyle.Information)
+                View.ToolStripButton_ShowNaNValues.Checked = False
+            End If
+        Else
+            'Switch visualization of NaN values off
+            'Remove all corresponding hspans in main chart
+            For Each hspan In View.NaNSpans
+                View.MainPlot.Plot.Remove(hspan)
+            Next
+            View.NaNSpans.Clear()
+        End If
+
+        View.MainPlot.Refresh()
+
     End Sub
 
     ''' <summary>

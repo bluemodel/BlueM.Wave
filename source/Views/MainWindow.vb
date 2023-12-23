@@ -38,6 +38,11 @@ Friend Class MainWindow
     'Rectangle representing current view extent of main chart in overview chart
     Friend ViewExtentRectangle As ScottPlot.Plottable.HSpan
 
+    ''' <summary>
+    ''' List of HorizontalSpans representing NaN periods
+    ''' </summary>
+    Friend NaNSpans As List(Of ScottPlot.Plottable.HSpan)
+
     'Cursors
     Friend cursor_pan As Cursor
     Friend cursor_zoom As Cursor
@@ -148,6 +153,9 @@ Friend Class MainWindow
 
         'initialize rectangles
         Call Me.InitializeRectangles()
+
+        'initialize list of HorizontalSpans representing NaN periods
+        Me.NaNSpans = New List(Of ScottPlot.Plottable.HSpan)
 
     End Sub
 
