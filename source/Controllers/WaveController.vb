@@ -115,6 +115,8 @@ Friend Class WaveController
         AddHandler Me.View.ToolStripButton_Analysis.Click, AddressOf Analysis_Click
         AddHandler Me.View.ToolStripButton_AxisDialog.Click, AddressOf AxisDialog_Click
         AddHandler Me.View.ToolStripButton_EditChart.Click, AddressOf EditChart_Click
+        AddHandler Me.View.ToolStripMenuItem_ColorPaletteCategory10.Click, AddressOf ColorPalette_Click
+        AddHandler Me.View.ToolStripMenuItem_ColorPaletteCategory20.Click, AddressOf ColorPalette_Click
         AddHandler Me.View.ToolStripMenuItem_ColorPaletteMaterial.Click, AddressOf ColorPalette_Click
         AddHandler Me.View.ToolStripMenuItem_ColorPaletteDistinct.Click, AddressOf ColorPalette_Click
         AddHandler Me.View.ToolStripMenuItem_ColorPaletteWheel.Click, AddressOf ColorPalette_Click
@@ -534,6 +536,7 @@ Friend Class WaveController
         Dim colorPaletteName As String = CType(sender, ToolStripMenuItem).Text
         SetChartColorPalette(Helpers.getColorPalette(colorPaletteName))
     End Sub
+
     ''' <summary>
     ''' Show AxisDialog button clicked
     ''' </summary>
@@ -2878,31 +2881,27 @@ Friend Class WaveController
     ''' <summary>
     ''' Sets a color palette in the charts and changes the colors of any existing series accordingly
     ''' </summary>
-    ''' <param name="colorPalette">The color palette to apply</param>
-    Private Sub SetChartColorPalette(colorPalette As Color())
+    ''' <param name="colors">The color palette to apply</param>
+    Private Sub SetChartColorPalette(colors As Color())
 
-        'TODO: TChart
-        ''set colorpalette in charts
-        'View.MainPlot.Chart.ColorPalette = colorPalette
-        'View.TChart2.Chart.ColorPalette = colorPalette
+        Dim palette As ScottPlot.IPalette = ScottPlot.Palette.FromColors(colors)
 
-        ''change colors of existing series
-        'Dim counter As Integer = 0
-        'For Each series As Steema.TeeChart.Styles.Series In View.MainPlot.Series
-        '    If counter >= colorPalette.Length Then
-        '        'loop color palette
-        '        counter = 0
-        '    End If
-        '    series.Color = colorPalette(counter)
-        '    'apply same color to series in overview chart
-        '    For Each series2 As Steema.TeeChart.Styles.Series In View.TChart2.Series
-        '        If series2.Tag = series.Tag Then
-        '            series2.Color = colorPalette(counter)
-        '            Exit For
-        '        End If
-        '    Next
-        '    counter += 1
-        'Next
+        'set colorpalette in charts
+        View.MainPlot.Plot.Palette = palette
+        View.OverviewPlot.Plot.Palette = palette
+
+        'change colors of existing series
+        Dim counter As Integer = 0
+        For Each series As ScottPlot.Plottable.ScatterPlot In Me.ChartSeries.Values
+            If counter >= colors.Length Then
+                'loop color palette
+                counter = 0
+            End If
+            series.Color = colors(counter)
+            counter += 1
+        Next
+        View.MainPlot.Refresh()
+        'TODO: also change colors in overview plot
     End Sub
 
     ''' <summary>

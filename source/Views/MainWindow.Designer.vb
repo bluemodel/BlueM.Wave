@@ -409,7 +409,7 @@ Partial Class MainWindow
         'ToolStripDropDownButton_ColorPalette
         '
         Me.ToolStripDropDownButton_ColorPalette.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.ToolStripDropDownButton_ColorPalette.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripMenuItem_ColorPaletteMaterial, Me.ToolStripMenuItem_ColorPaletteDistinct, Me.ToolStripMenuItem_ColorPaletteWheel, Me.ToolStripMenuItem_ColorPaletteRandom})
+        Me.ToolStripDropDownButton_ColorPalette.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripMenuItem_ColorPaletteCategory10, Me.ToolStripMenuItem_ColorPaletteCategory20, Me.ToolStripMenuItem_ColorPaletteMaterial, Me.ToolStripMenuItem_ColorPaletteDistinct, Me.ToolStripMenuItem_ColorPaletteWheel, Me.ToolStripMenuItem_ColorPaletteRandom})
         Me.ToolStripDropDownButton_ColorPalette.Image = Global.BlueM.Wave.My.Resources.Resources.color_wheel
         Me.ToolStripDropDownButton_ColorPalette.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.ToolStripDropDownButton_ColorPalette.Name = "ToolStripDropDownButton_ColorPalette"
@@ -419,25 +419,25 @@ Partial Class MainWindow
         'ToolStripMenuItem_ColorPaletteMaterial
         '
         Me.ToolStripMenuItem_ColorPaletteMaterial.Name = "ToolStripMenuItem_ColorPaletteMaterial"
-        Me.ToolStripMenuItem_ColorPaletteMaterial.Size = New System.Drawing.Size(139, 22)
+        Me.ToolStripMenuItem_ColorPaletteMaterial.Size = New System.Drawing.Size(180, 22)
         Me.ToolStripMenuItem_ColorPaletteMaterial.Text = "Material"
         '
         'ToolStripMenuItem_ColorPaletteDistinct
         '
         Me.ToolStripMenuItem_ColorPaletteDistinct.Name = "ToolStripMenuItem_ColorPaletteDistinct"
-        Me.ToolStripMenuItem_ColorPaletteDistinct.Size = New System.Drawing.Size(139, 22)
+        Me.ToolStripMenuItem_ColorPaletteDistinct.Size = New System.Drawing.Size(180, 22)
         Me.ToolStripMenuItem_ColorPaletteDistinct.Text = "Distinct"
         '
         'ToolStripMenuItem_ColorPaletteWheel
         '
         Me.ToolStripMenuItem_ColorPaletteWheel.Name = "ToolStripMenuItem_ColorPaletteWheel"
-        Me.ToolStripMenuItem_ColorPaletteWheel.Size = New System.Drawing.Size(139, 22)
+        Me.ToolStripMenuItem_ColorPaletteWheel.Size = New System.Drawing.Size(180, 22)
         Me.ToolStripMenuItem_ColorPaletteWheel.Text = "Color Wheel"
         '
         'ToolStripMenuItem_ColorPaletteRandom
         '
         Me.ToolStripMenuItem_ColorPaletteRandom.Name = "ToolStripMenuItem_ColorPaletteRandom"
-        Me.ToolStripMenuItem_ColorPaletteRandom.Size = New System.Drawing.Size(139, 22)
+        Me.ToolStripMenuItem_ColorPaletteRandom.Size = New System.Drawing.Size(180, 22)
         Me.ToolStripMenuItem_ColorPaletteRandom.Text = "Random"
         '
         'ToolStripSeparator9
@@ -1093,4 +1093,6 @@ Partial Class MainWindow
     Friend WithEvents ToolStripButton_Delete As ToolStripButton
     Friend WithEvents ToolStripSeparator12 As ToolStripSeparator
     Friend WithEvents ToolStripSeparator13 As ToolStripSeparator
+    Friend WithEvents ToolStripMenuItem_ColorPaletteCategory10 As ToolStripMenuItem
+    Friend WithEvents ToolStripMenuItem_ColorPaletteCategory20 As ToolStripMenuItem
 End Class

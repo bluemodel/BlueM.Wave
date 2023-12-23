@@ -126,11 +126,15 @@ Public Module Helpers
     ''' <summary>
     ''' Returns a specified color palette
     ''' </summary>
-    ''' <param name="name">Available color palettes are "Material", "Distinct", "Color Wheel" and "Random". Defaults to "Material".</param>
+    ''' <param name="name">Available color palettes are "Category10", "Category20", "Material", "Distinct", "Color Wheel" and "Random". Defaults to "Category10".</param>
     ''' <returns>A color palette</returns>
-    Public Function getColorPalette(Optional name As String = "Material") As Color()
+    Public Function getColorPalette(Optional name As String = "Category10") As Color()
         Dim colorPalette As Color()
         Select Case name
+            Case "Category10"
+                colorPalette = New ScottPlot.Palettes.Category10().Colors
+            Case "Category20"
+                colorPalette = New ScottPlot.Palettes.Category20().Colors
             Case "Material"
                 'Material Design Palette
                 'https://hexcolor.co/material-design-colors
@@ -230,7 +234,7 @@ Public Module Helpers
     Friend Sub FormatChart(ByRef plot As ScottPlot.Plot)
 
         'set default color palette
-        plot.Palette = ScottPlot.Palette.Category10
+        plot.Palette = ScottPlot.Palette.FromColors(getColorPalette())
 
         'legend
         Dim legend As ScottPlot.Renderable.Legend
