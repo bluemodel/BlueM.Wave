@@ -2735,39 +2735,42 @@ Friend Class WaveController
         Call Application.DoEvents()
     End Sub
 
+    ''' <summary>
+    ''' Handles the case where a TimeSeries' properties were changed in the model
+    ''' </summary>
+    ''' <param name="id">TimeSeries ID</param>
     Private Sub SeriesPropertiesChanged(id As Integer)
-        'TODO: TChart
-        ''find series in chart
-        'For Each series As Steema.TeeChart.Styles.Series In View.MainPlot.Series
-        '    If series.Tag = id Then
-        '        'set line display according to interpretation
-        '        If TypeOf series Is Steema.TeeChart.Styles.Line Then
-        '            Dim seriesline As Steema.TeeChart.Styles.Line = series
-        '            Select Case _model.TimeSeries(id).Interpretation
-        '                Case TimeSeries.InterpretationEnum.Instantaneous,
-        '                     TimeSeries.InterpretationEnum.Undefined
-        '                    seriesline.Stairs = False
-        '                    seriesline.InvertedStairs = False
-        '                Case TimeSeries.InterpretationEnum.BlockRight
-        '                    seriesline.Stairs = True
-        '                    seriesline.InvertedStairs = False
-        '                Case TimeSeries.InterpretationEnum.BlockLeft,
-        '                     TimeSeries.InterpretationEnum.CumulativePerTimestep
-        '                    seriesline.Stairs = True
-        '                    seriesline.InvertedStairs = True
-        '            End Select
-        '        End If
 
-        '        'update title in chart
-        '        series.Title = _model.TimeSeries(id).Title
+        Dim ts As TimeSeries = Model.TimeSeries(id)
 
-        '        'assign to axis according to unit
-        '        assignSeriesToAxis(series, _model.TimeSeries(id).Unit)
+        'update series in main chart
+        If Me.ChartSeries.ContainsKey(id) Then
+            Dim series As ScottPlot.Plottable.ScatterPlot = TryCast(Me.ChartSeries(id), ScottPlot.Plottable.ScatterPlot)
+            If Not IsNothing(series) Then
+                'label
+                series.Label = ts.Title
+                'y axis
+                assignSeriesToAxis(series, ts.Unit)
+                'interpretation
+                Select Case ts.Interpretation
+                    Case TimeSeries.InterpretationEnum.BlockRight
+                        series.StepDisplay = True
+                        series.StepDisplayRight = True
+                    Case TimeSeries.InterpretationEnum.BlockLeft,
+                         TimeSeries.InterpretationEnum.CumulativePerTimestep
+                        series.StepDisplay = True
+                        series.StepDisplayRight = False
+                    Case Else
+                        series.StepDisplay = False
+                End Select
+                Me.View.MainPlot.Refresh()
+            End If
+        End If
 
-        '        'TODO: apply the same changes in the overview chart?
-        '        Exit For
-        '    End If
-        'Next
+        'TODO: apply the same changes in the overview chart?
+
+        'update the TOC
+        Me.View.CheckedListBox_Series.Refresh()
 
     End Sub
 
