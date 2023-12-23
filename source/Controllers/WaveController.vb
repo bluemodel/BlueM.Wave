@@ -2421,13 +2421,6 @@ Friend Class WaveController
 
         'TODO: for now, assign series to axes by matching the axis label to the unit
 
-        'determine min and max values with some padding
-        Dim serieslimits As ScottPlot.AxisLimits = series.GetAxisLimits()
-        Dim span As Double = serieslimits.YMax - serieslimits.YMin
-        Dim padding As Double = 0.05 * span
-        Dim min As Double = serieslimits.YMin - padding
-        Dim max As Double = serieslimits.YMax + padding
-
         'check for reusable axes
         Dim axes As IEnumerable(Of ScottPlot.Renderable.Axis)
         axes = View.MainPlot.Plot.GetAxesMatching(axisIndex:=Nothing, isVertical:=True)
@@ -2436,37 +2429,26 @@ Friend Class WaveController
         For Each axis As ScottPlot.Renderable.Axis In axes
             If axis.AxisLabel.Label = "" Then
                 'this axis hasn't been used yet
-                axis.IsVisible = True
+                axis.AxisLabel.Label = unit
+                axis.AxisLabel.IsVisible = True
                 axis.Ticks(enable:=True)
                 axis.AxisTicks.IsVisible = True
-                axis.AxisLabel.IsVisible = True
-                axis.AxisLabel.Label = unit
-
-                'set axis bounds
-                axis.Dims.SetAxis(min, max)
-                axis.SetBoundary(min, max)
-                axis.SetInnerBoundary(min, max)
 
                 'assign series to new axis
                 series.YAxisIndex = axis.AxisIndex
+
+                axis.Dims.ResetLimits()
+
                 axisFound = True
                 Exit For
             ElseIf axis.AxisLabel.Label = unit Then
                 'suitable existing axis found
 
-                'update axis bounds
-                Dim axisMin As Double = axis.Dims.Min
-                Dim axisMax As Double = axis.Dims.Max
-                Dim newMin As Double = Math.Min(axisMin, min)
-                Dim newMax As Double = Math.Max(axisMax, max)
-
-                axis.Dims.ResetLimits()
-                axis.Dims.SetAxis(newMin, newMax)
-                axis.SetBoundary(newMin, newMax)
-                axis.SetInnerBoundary(newMin, newMax)
-
                 'assign series to new axis
                 series.YAxisIndex = axis.AxisIndex
+
+                axis.Dims.ResetLimits()
+
                 axisFound = True
                 Exit For
             End If
@@ -2485,21 +2467,12 @@ Friend Class WaveController
 
             axis.AxisLabel.Label = unit
 
-            'TODO: TChart
-            'axis.Tag = unit
             axis.IsVisible = True
-
-            'Calculate position
-            'axis.SetOffset(Math.Ceiling((number) / 2) * 8)
-
-            'set axis bounds
-            axis.Dims.SetAxis(min, max)
-            axis.SetBoundary(min, max)
-            axis.SetInnerBoundary(min, max)
 
             'assign series to new axis
             series.YAxisIndex = axis.AxisIndex
 
+            axis.Dims.ResetLimits()
         End If
 
         'check for unused axes and remove them
@@ -2542,8 +2515,30 @@ Friend Class WaveController
         If Me.Plottables.ContainsKey(id) Then
             Me.Plottables(id).IsVisible = (e.NewValue = CheckState.Checked)
         End If
-        'TODO: rescale y axes?
-        'TODO: hide unused y axes if no active series uses them
+
+        'collect units of active series
+        Dim activeUnits As New HashSet(Of String)
+        Dim index As Integer = 0
+        Dim isActive As Boolean
+        For Each ts As TimeSeries In View.CheckedListBox_Series.Items
+            If ts.Id = id Then
+                'checkstate of the item being changed has not been updated in the CheckedListBox yet
+                isActive = (e.NewValue = CheckState.Checked)
+            Else
+                isActive = View.CheckedListBox_Series.GetItemChecked(index)
+            End If
+            If isActive Then
+                activeUnits.Add(ts.Unit)
+            End If
+            index += 1
+        Next
+
+        'rescale and set visibility of axes
+        For Each axis As ScottPlot.Renderable.Axis In View.MainPlot.Plot.GetAxesMatching(axisIndex:=Nothing, isVertical:=True)
+            axis.Dims.ResetLimits()
+            axis.IsVisible = activeUnits.Contains(axis.AxisLabel.Label)
+        Next
+
         View.MainPlot.Refresh()
     End Sub
 
