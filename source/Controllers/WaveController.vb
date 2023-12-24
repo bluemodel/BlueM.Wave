@@ -55,6 +55,11 @@ Friend Class WaveController
     ''' </summary>
     Friend PlottablesOverview As Dictionary(Of Integer, ScottPlot.Plottable.IPlottable)
 
+    ''' <summary>
+    ''' Dictionary of markers in main chart, key corresponds to TimeSeries ID
+    ''' </summary>
+    Friend ChartMarkers As Dictionary(Of Integer, ScottPlot.Plottable.IPlottable)
+
     Private selectionMade As Boolean 'Flag zeigt an, ob bereits ein Auswahlbereich ausgewählt wurde
 
     ''' <summary>
@@ -93,6 +98,7 @@ Friend Class WaveController
         'Initialize chart series container
         Me.Plottables = New Dictionary(Of Integer, ScottPlot.Plottable.IPlottable)
         Me.PlottablesOverview = New Dictionary(Of Integer, ScottPlot.Plottable.IPlottable)
+        Me.ChartMarkers = New Dictionary(Of Integer, ScottPlot.Plottable.IPlottable)
 
         'Initialize zoom history
         Me.ZoomHistory = New List(Of (xmin As Double, xmax As Double))
@@ -271,6 +277,7 @@ Friend Class WaveController
         'Clear chart series
         Me.Plottables.Clear()
         Me.PlottablesOverview.Clear()
+        Me.ChartMarkers.Clear()
 
         'Charts zurücksetzen
         Call View.InitializeCharts()
@@ -2557,74 +2564,40 @@ Friend Class WaveController
     ''' <param name="timestamps">List of timestamps for which to show markers</param>
     Private Sub showMarkers(timestamps As List(Of DateTime))
 
-        'TODO: TChart
-        ''Remove any existing marker series
-        'For i As Integer = View.MainPlot.Series.Count - 1 To 0 Step -1
-        '    Try
-        '        If CType(View.MainPlot.Series(i).Tag, String) = "_markers" Then
-        '            View.MainPlot.Series.RemoveAt(i)
-        '        End If
-        '    Catch ex As Exception
-        '        Log.AddLogEntry(Log.levels.debug, ex.Message)
-        '    End Try
-        'Next
-        'View.MainPlot.Refresh()
+        'Remove any existing marker series
+        For Each marker As ScottPlot.Plottable.IPlottable In Me.ChartMarkers.Values
+            View.MainPlot.Plot.Remove(marker)
+        Next
+        Me.ChartMarkers.Clear()
+        View.MainPlot.Refresh()
 
-        'If timestamps.Count = 0 Then
-        '    Exit Sub
-        'End If
+        If timestamps.Count = 0 Then
+            Exit Sub
+        End If
 
-        ''loop over series and create a marker series for each
-        'For i As Integer = 0 To View.MainPlot.Series.Count - 1
-        '    Try
-        '        Dim series As Steema.TeeChart.Styles.Series = View.MainPlot.Series(i)
-        '        If Not series.Active Then
-        '            'do not display markers for inactive series
-        '            Continue For
-        '        End If
-        '        'collect all non-NaN values to display as markers
-        '        Dim markerValues As New Dictionary(Of DateTime, Double)
-        '        For Each t As DateTime In timestamps
-        '            Dim index As Integer = series.XValues.IndexOf(t.ToOADate)
-        '            If index <> -1 Then
-        '                If Not series.IsNull(index) Then
-        '                    markerValues.Add(t, series.YValues(index))
-        '                End If
-        '            End If
-        '        Next
-        '        If markerValues.Count > 0 Then
-        '            'create a new point series for markers
-        '            Dim markers As New Steema.TeeChart.Styles.Points(View.MainPlot.Chart)
-        '            markers.Legend.Visible = False
-        '            markers.Title = $"{series.Title} (selection)"
-        '            markers.Tag = "_markers"
-        '            markers.VertAxis = series.VertAxis
-        '            If series.VertAxis = Steema.TeeChart.Styles.VerticalAxis.Custom Then
-        '                markers.CustomVertAxis = series.CustomVertAxis
-        '            End If
-        '            markers.Pointer.Style = Steema.TeeChart.Styles.PointerStyles.Circle
-        '            markers.Pointer.Brush.Visible = False
-        '            markers.Color = series.Color
-        '            markers.Pointer.Color = series.Color
-        '            markers.Pointer.Pen.Color = series.Color
-        '            markers.Pointer.Pen.Width = 2
-        '            markers.Marks.Visible = True
-        '            markers.Marks.Style = Steema.TeeChart.Styles.MarksStyles.Value
-        '            'markers.Marks.OnTop = True 'causes crash when markers are panned out of view on the left
-        '            markers.Marks.Callout.Visible = False
-        '            markers.Marks.FontSeriesColor = True
-        '            markers.Marks.Arrow.Visible = False
-        '            markers.Marks.ArrowLength = 5
-        '            markers.Marks.Pen.Color = series.Color
-        '            'add data points
-        '            For Each t As DateTime In markerValues.Keys
-        '                markers.Add(t, markerValues(t))
-        '            Next
-        '        End If
-        '    Catch ex As Exception
-        '        Log.AddLogEntry(Log.levels.debug, ex.Message)
-        '    End Try
-        'Next
+        'loop over active series and create a marker series for each
+        For Each ts As TimeSeries In View.CheckedListBox_Series.CheckedItems
+            Dim Xs As New List(Of DateTime)
+            Dim Ys As New List(Of Double)
+            For Each t As DateTime In timestamps
+                If ts.Nodes.ContainsKey(t) Then
+                    If Not Double.IsNaN(ts.Nodes(t)) Then
+                        Xs.Add(t)
+                        Ys.Add(ts.Nodes(t))
+                    End If
+                End If
+            Next
+            Dim markers As ScottPlot.Plottable.ScatterPlot
+            markers = View.MainPlot.Plot.AddScatterPoints(Xs.Select(Function(t As DateTime) t.ToOADate()).ToArray(), Ys.ToArray())
+            markers.DataPointLabels = Ys.Select(Function(y As Double) y.ToString()).ToArray()
+            markers.MarkerSize = 8
+            markers.YAxisIndex = Me.Plottables(ts.Id).YAxisIndex
+            Dim lineColor As Color = CType(Me.Plottables(ts.Id), ScottPlot.Plottable.ScatterPlot).LineColor
+            markers.MarkerColor = lineColor
+            markers.DataPointLabelFont.Color = ControlPaint.Dark(lineColor)
+            Me.ChartMarkers.Add(ts.Id, markers)
+        Next
+        View.MainPlot.Refresh()
 
     End Sub
 
