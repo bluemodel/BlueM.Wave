@@ -48,17 +48,17 @@ Friend Class WaveController
     ''' <summary>
     ''' Dictionary of series in the main chart, key corresponds to TimeSeries ID
     ''' </summary>
-    Friend ChartSeries As Dictionary(Of Integer, ScottPlot.Plottable.IPlottable)
+    Private ChartSeries As Dictionary(Of Integer, ScottPlot.Plottable.IPlottable)
 
     ''' <summary>
     ''' Dictionary of series in the overview chart, key corresponds to TimeSeries ID
     ''' </summary>
-    Friend OverviewSeries As Dictionary(Of Integer, ScottPlot.Plottable.IPlottable)
+    Private OverviewSeries As Dictionary(Of Integer, ScottPlot.Plottable.IPlottable)
 
     ''' <summary>
     ''' Dictionary of markers in main chart, key corresponds to TimeSeries ID
     ''' </summary>
-    Friend ChartMarkers As Dictionary(Of Integer, ScottPlot.Plottable.IPlottable)
+    Private ChartMarkers As Dictionary(Of Integer, ScottPlot.Plottable.IPlottable)
 
     Private selectionMade As Boolean 'Flag zeigt an, ob bereits ein Auswahlbereich ausgewählt wurde
 
