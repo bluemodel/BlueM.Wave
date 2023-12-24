@@ -46,7 +46,6 @@ Partial Class MainWindow
         Me.ToolStripMenuItem_RecentlyUsedFiles = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripDropDownButton_Save = New System.Windows.Forms.ToolStripDropDownButton()
         Me.ToolStripMenuItem_SaveProjectFile = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ToolStripMenuItem_SaveChart = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripMenuItem_ExportSeries = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripButton_Copy = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripButton_Cut = New System.Windows.Forms.ToolStripButton()
@@ -117,6 +116,7 @@ Partial Class MainWindow
         Me.ToolStripMenuItem_ActivateAllSeries = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripMenuItem_DeactivateAllSeries = New System.Windows.Forms.ToolStripMenuItem()
         Me.CheckedListBox_Series = New System.Windows.Forms.CheckedListBox()
+        Me.ToolStripMenuItem_SaveImage = New System.Windows.Forms.ToolStripMenuItem()
         ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
         toolStripSeparator = New System.Windows.Forms.ToolStripSeparator()
         ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
@@ -289,7 +289,7 @@ Partial Class MainWindow
         'ToolStripDropDownButton_Save
         '
         Me.ToolStripDropDownButton_Save.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.ToolStripDropDownButton_Save.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripMenuItem_SaveProjectFile, Me.ToolStripMenuItem_SaveChart, Me.ToolStripMenuItem_ExportSeries})
+        Me.ToolStripDropDownButton_Save.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripMenuItem_SaveProjectFile, Me.ToolStripMenuItem_SaveImage, Me.ToolStripMenuItem_ExportSeries})
         Me.ToolStripDropDownButton_Save.Image = CType(resources.GetObject("ToolStripDropDownButton_Save.Image"), System.Drawing.Image)
         Me.ToolStripDropDownButton_Save.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.ToolStripDropDownButton_Save.Name = "ToolStripDropDownButton_Save"
@@ -300,21 +300,14 @@ Partial Class MainWindow
         '
         Me.ToolStripMenuItem_SaveProjectFile.Image = Global.BlueM.Wave.My.Resources.Resources.chart_curve_link
         Me.ToolStripMenuItem_SaveProjectFile.Name = "ToolStripMenuItem_SaveProjectFile"
-        Me.ToolStripMenuItem_SaveProjectFile.Size = New System.Drawing.Size(167, 22)
+        Me.ToolStripMenuItem_SaveProjectFile.Size = New System.Drawing.Size(180, 22)
         Me.ToolStripMenuItem_SaveProjectFile.Text = "Save project file"
-        '
-        'ToolStripMenuItem_SaveChart
-        '
-        Me.ToolStripMenuItem_SaveChart.Image = Global.BlueM.Wave.My.Resources.Resources.chart_pie
-        Me.ToolStripMenuItem_SaveChart.Name = "ToolStripMenuItem_SaveChart"
-        Me.ToolStripMenuItem_SaveChart.Size = New System.Drawing.Size(167, 22)
-        Me.ToolStripMenuItem_SaveChart.Text = "Save chart"
         '
         'ToolStripMenuItem_ExportSeries
         '
         Me.ToolStripMenuItem_ExportSeries.Image = Global.BlueM.Wave.My.Resources.Resources.page_white_go
         Me.ToolStripMenuItem_ExportSeries.Name = "ToolStripMenuItem_ExportSeries"
-        Me.ToolStripMenuItem_ExportSeries.Size = New System.Drawing.Size(167, 22)
+        Me.ToolStripMenuItem_ExportSeries.Size = New System.Drawing.Size(180, 22)
         Me.ToolStripMenuItem_ExportSeries.Text = "Export time series"
         '
         'ToolStripSeparator4
@@ -416,28 +409,40 @@ Partial Class MainWindow
         Me.ToolStripDropDownButton_ColorPalette.Size = New System.Drawing.Size(29, 31)
         Me.ToolStripDropDownButton_ColorPalette.Text = "Set color palette"
         '
+        'ToolStripMenuItem_ColorPaletteCategory10
+        '
+        Me.ToolStripMenuItem_ColorPaletteCategory10.Name = "ToolStripMenuItem_ColorPaletteCategory10"
+        Me.ToolStripMenuItem_ColorPaletteCategory10.Size = New System.Drawing.Size(139, 22)
+        Me.ToolStripMenuItem_ColorPaletteCategory10.Text = "Category10"
+        '
+        'ToolStripMenuItem_ColorPaletteCategory20
+        '
+        Me.ToolStripMenuItem_ColorPaletteCategory20.Name = "ToolStripMenuItem_ColorPaletteCategory20"
+        Me.ToolStripMenuItem_ColorPaletteCategory20.Size = New System.Drawing.Size(139, 22)
+        Me.ToolStripMenuItem_ColorPaletteCategory20.Text = "Category20"
+        '
         'ToolStripMenuItem_ColorPaletteMaterial
         '
         Me.ToolStripMenuItem_ColorPaletteMaterial.Name = "ToolStripMenuItem_ColorPaletteMaterial"
-        Me.ToolStripMenuItem_ColorPaletteMaterial.Size = New System.Drawing.Size(180, 22)
+        Me.ToolStripMenuItem_ColorPaletteMaterial.Size = New System.Drawing.Size(139, 22)
         Me.ToolStripMenuItem_ColorPaletteMaterial.Text = "Material"
         '
         'ToolStripMenuItem_ColorPaletteDistinct
         '
         Me.ToolStripMenuItem_ColorPaletteDistinct.Name = "ToolStripMenuItem_ColorPaletteDistinct"
-        Me.ToolStripMenuItem_ColorPaletteDistinct.Size = New System.Drawing.Size(180, 22)
+        Me.ToolStripMenuItem_ColorPaletteDistinct.Size = New System.Drawing.Size(139, 22)
         Me.ToolStripMenuItem_ColorPaletteDistinct.Text = "Distinct"
         '
         'ToolStripMenuItem_ColorPaletteWheel
         '
         Me.ToolStripMenuItem_ColorPaletteWheel.Name = "ToolStripMenuItem_ColorPaletteWheel"
-        Me.ToolStripMenuItem_ColorPaletteWheel.Size = New System.Drawing.Size(180, 22)
+        Me.ToolStripMenuItem_ColorPaletteWheel.Size = New System.Drawing.Size(139, 22)
         Me.ToolStripMenuItem_ColorPaletteWheel.Text = "Color Wheel"
         '
         'ToolStripMenuItem_ColorPaletteRandom
         '
         Me.ToolStripMenuItem_ColorPaletteRandom.Name = "ToolStripMenuItem_ColorPaletteRandom"
-        Me.ToolStripMenuItem_ColorPaletteRandom.Size = New System.Drawing.Size(180, 22)
+        Me.ToolStripMenuItem_ColorPaletteRandom.Size = New System.Drawing.Size(139, 22)
         Me.ToolStripMenuItem_ColorPaletteRandom.Text = "Random"
         '
         'ToolStripSeparator9
@@ -962,6 +967,13 @@ Partial Class MainWindow
         Me.CheckedListBox_Series.TabIndex = 0
         Me.CheckedListBox_Series.ThreeDCheckBoxes = True
         '
+        'ToolStripMenuItem_SaveImage
+        '
+        Me.ToolStripMenuItem_SaveImage.Image = Global.BlueM.Wave.My.Resources.Resources.picture_save
+        Me.ToolStripMenuItem_SaveImage.Name = "ToolStripMenuItem_SaveImage"
+        Me.ToolStripMenuItem_SaveImage.Size = New System.Drawing.Size(180, 22)
+        Me.ToolStripMenuItem_SaveImage.Text = "Save image"
+        '
         'MainWindow
         '
         Me.AllowDrop = True
@@ -1026,7 +1038,6 @@ Partial Class MainWindow
     Friend WithEvents ToolStripMenuItem_About As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolStripMenuItem_ImportSeries As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolStripMenuItem_LoadTEN As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents ToolStripMenuItem_SaveChart As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolStripMenuItem_ExportSeries As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolStripMenuItem_ReloadFromFiles As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolStripMenuItem_EnterSeries As System.Windows.Forms.ToolStripMenuItem
@@ -1095,4 +1106,5 @@ Partial Class MainWindow
     Friend WithEvents ToolStripSeparator13 As ToolStripSeparator
     Friend WithEvents ToolStripMenuItem_ColorPaletteCategory10 As ToolStripMenuItem
     Friend WithEvents ToolStripMenuItem_ColorPaletteCategory20 As ToolStripMenuItem
+    Friend WithEvents ToolStripMenuItem_SaveImage As ToolStripMenuItem
 End Class

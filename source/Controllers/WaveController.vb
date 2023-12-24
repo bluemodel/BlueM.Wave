@@ -119,7 +119,7 @@ Friend Class WaveController
         AddHandler Me.View.ToolStripMenuItem_RecentlyUsedFiles.DropDownItemClicked, AddressOf openRecentlyUsedFile
         AddHandler Me.View.ToolStripMenuItem_PasteFromClipboard.Click, AddressOf PasteFromClipboard_Click
         AddHandler Me.View.ToolStripMenuItem_SaveProjectFile.Click, AddressOf SaveProjectFile_Click
-        AddHandler Me.View.ToolStripMenuItem_SaveChart.Click, AddressOf SaveChart_Click
+        AddHandler Me.View.ToolStripMenuItem_SaveImage.Click, AddressOf SaveImage_Click
         AddHandler Me.View.ToolStripMenuItem_ExportSeries.Click, AddressOf ExportZeitreihe_Click
         AddHandler Me.View.ToolStripMenuItem_EnterSeries.Click, AddressOf Eingeben_Click
         AddHandler Me.View.ToolStripButton_Cut.Click, AddressOf Zuschneiden_Click
@@ -404,12 +404,20 @@ Friend Class WaveController
 
     End Sub
 
-    'Teechart Export
-    '***************
-    Private Sub SaveChart_Click(sender As System.Object, e As System.EventArgs)
-        'TODO: TChart
-        'Dim fmt As New Steema.TeeChart.Export.TemplateExport(View.MainPlot.MainPlot)
-        'Call View.MainPlot.Export.ShowExportDialog(fmt)
+    ''' <summary>
+    ''' Save image button clicked
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    Private Sub SaveImage_Click(sender As System.Object, e As System.EventArgs)
+        View.SaveFileDialog1.Title = "Save image"
+        View.SaveFileDialog1.Filter = "PNG images (*.png)|*.png"
+        View.SaveFileDialog1.DefaultExt = "png"
+        View.SaveFileDialog1.OverwritePrompt = True
+        Dim dlgResult As DialogResult = View.SaveFileDialog1.ShowDialog()
+        If dlgResult = DialogResult.OK Then
+            View.MainPlot.Plot.SaveFig(View.SaveFileDialog1.FileName)
+        End If
     End Sub
 
     'Zeitreihen Export

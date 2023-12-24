@@ -560,6 +560,7 @@
     <Content Include="Resources\page_save.png" />
     <Content Include="Resources\page_white_go.png" />
     <Content Include="Resources\pan.png" />
+    <Content Include="Resources\picture_save.png" />
     <Content Include="Resources\script.png" />
     <Content Include="Resources\shape_align_bottom.png" />
     <Content Include="Resources\table.png" />
