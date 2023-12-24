@@ -48,12 +48,12 @@ Friend Class WaveController
     ''' <summary>
     ''' Dictionary of series in the main chart, key corresponds to TimeSeries ID
     ''' </summary>
-    Friend Plottables As Dictionary(Of Integer, ScottPlot.Plottable.IPlottable)
+    Friend ChartSeries As Dictionary(Of Integer, ScottPlot.Plottable.IPlottable)
 
     ''' <summary>
     ''' Dictionary of series in the overview chart, key corresponds to TimeSeries ID
     ''' </summary>
-    Friend PlottablesOverview As Dictionary(Of Integer, ScottPlot.Plottable.IPlottable)
+    Friend OverviewSeries As Dictionary(Of Integer, ScottPlot.Plottable.IPlottable)
 
     ''' <summary>
     ''' Dictionary of markers in main chart, key corresponds to TimeSeries ID
@@ -96,8 +96,8 @@ Friend Class WaveController
         Me.View.SetController(Me)
 
         'Initialize chart series container
-        Me.Plottables = New Dictionary(Of Integer, ScottPlot.Plottable.IPlottable)
-        Me.PlottablesOverview = New Dictionary(Of Integer, ScottPlot.Plottable.IPlottable)
+        Me.ChartSeries = New Dictionary(Of Integer, ScottPlot.Plottable.IPlottable)
+        Me.OverviewSeries = New Dictionary(Of Integer, ScottPlot.Plottable.IPlottable)
         Me.ChartMarkers = New Dictionary(Of Integer, ScottPlot.Plottable.IPlottable)
 
         'Initialize zoom history
@@ -275,8 +275,8 @@ Friend Class WaveController
         End If
 
         'Clear chart series
-        Me.Plottables.Clear()
-        Me.PlottablesOverview.Clear()
+        Me.ChartSeries.Clear()
+        Me.OverviewSeries.Clear()
         Me.ChartMarkers.Clear()
 
         'Charts zurücksetzen
@@ -625,7 +625,7 @@ Friend Class WaveController
             For Each index As Integer In View.CheckedListBox_Series.CheckedIndices
 
                 Dim ts As TimeSeries = CType(View.CheckedListBox_Series.Items(index), TimeSeries)
-                Dim color As Color = CType(Me.Plottables(ts.Id), ScottPlot.Plottable.ScatterPlot).LineColor
+                Dim color As Color = CType(Me.ChartSeries(ts.Id), ScottPlot.Plottable.ScatterPlot).LineColor
 
                 'find beginning and end of nan values
                 nanFoundInSeries = False
@@ -754,7 +754,7 @@ Friend Class WaveController
                 ts = ts.removeNaNValues()
                 _model.TimeSeries(id) = ts
                 'replace values of series in chart
-                Dim series As ScottPlot.Plottable.ScatterPlot = Me.Plottables(id)
+                Dim series As ScottPlot.Plottable.ScatterPlot = Me.ChartSeries(id)
                 series.Update(ts.Dates.Select(Function(t As DateTime) t.ToOADate()).ToArray(), ts.Values.ToArray())
                 'TODO: update series in overview chart
             Next
@@ -2322,7 +2322,7 @@ Friend Class WaveController
         End Select
 
         'Store chart series
-        Me.Plottables.Add(ts.Id, Line1)
+        Me.ChartSeries.Add(ts.Id, Line1)
 
         'Add series to overview chart
         Call Me.AddSeriesToOverview(ts, Line1.Color)
@@ -2376,7 +2376,7 @@ Friend Class WaveController
         View.OverviewPlot.Plot.MoveLast(View.ViewExtentRectangle)
 
         'store plottable
-        Me.PlottablesOverview.Add(ts.Id, Line2)
+        Me.OverviewSeries.Add(ts.Id, Line2)
 
         View.OverviewPlot.Refresh()
 
@@ -2521,8 +2521,8 @@ Friend Class WaveController
 
         Dim id As Integer = View.CheckedListBox_Series.Items(e.Index).Id
 
-        If Me.Plottables.ContainsKey(id) Then
-            Me.Plottables(id).IsVisible = (e.NewValue = CheckState.Checked)
+        If Me.ChartSeries.ContainsKey(id) Then
+            Me.ChartSeries(id).IsVisible = (e.NewValue = CheckState.Checked)
         End If
 
         'collect units of active series
@@ -2591,8 +2591,8 @@ Friend Class WaveController
             markers = View.MainPlot.Plot.AddScatterPoints(Xs.Select(Function(t As DateTime) t.ToOADate()).ToArray(), Ys.ToArray())
             markers.DataPointLabels = Ys.Select(Function(y As Double) y.ToString()).ToArray()
             markers.MarkerSize = 8
-            markers.YAxisIndex = Me.Plottables(ts.Id).YAxisIndex
-            Dim lineColor As Color = CType(Me.Plottables(ts.Id), ScottPlot.Plottable.ScatterPlot).LineColor
+            markers.YAxisIndex = Me.ChartSeries(ts.Id).YAxisIndex
+            Dim lineColor As Color = CType(Me.ChartSeries(ts.Id), ScottPlot.Plottable.ScatterPlot).LineColor
             markers.MarkerColor = lineColor
             markers.DataPointLabelFont.Color = ControlPaint.Dark(lineColor)
             Me.ChartMarkers.Add(ts.Id, markers)
@@ -2646,8 +2646,8 @@ Friend Class WaveController
         Dim ts As TimeSeries = Model.TimeSeries(id)
 
         'update series in main chart
-        If Me.Plottables.ContainsKey(id) Then
-            Dim series As ScottPlot.Plottable.ScatterPlot = TryCast(Me.Plottables(id), ScottPlot.Plottable.ScatterPlot)
+        If Me.ChartSeries.ContainsKey(id) Then
+            Dim series As ScottPlot.Plottable.ScatterPlot = TryCast(Me.ChartSeries(id), ScottPlot.Plottable.ScatterPlot)
             If Not IsNothing(series) Then
                 'label
                 series.Label = ts.Title
@@ -2670,8 +2670,8 @@ Friend Class WaveController
         End If
 
         'update series in overview chart
-        If Me.PlottablesOverview.ContainsKey(id) Then
-            Dim series As ScottPlot.Plottable.ScatterPlot = TryCast(Me.PlottablesOverview(id), ScottPlot.Plottable.ScatterPlot)
+        If Me.OverviewSeries.ContainsKey(id) Then
+            Dim series As ScottPlot.Plottable.ScatterPlot = TryCast(Me.OverviewSeries(id), ScottPlot.Plottable.ScatterPlot)
             If Not IsNothing(series) Then
                 'interpretation
                 Select Case ts.Interpretation
@@ -2701,23 +2701,23 @@ Friend Class WaveController
     Private Sub SeriesRemoved(id As Integer)
 
         'Remove series from main chart
-        If Me.Plottables.ContainsKey(id) Then
-            View.MainPlot.Plot.Remove(Me.Plottables(id))
+        If Me.ChartSeries.ContainsKey(id) Then
+            View.MainPlot.Plot.Remove(Me.ChartSeries(id))
             'reset Y axis limits
-            View.MainPlot.Plot.GetAxesMatching(axisIndex:=Me.Plottables(id).XAxisIndex, isVertical:=True).First().Dims.ResetLimits()
+            View.MainPlot.Plot.GetAxesMatching(axisIndex:=Me.ChartSeries(id).XAxisIndex, isVertical:=True).First().Dims.ResetLimits()
             View.MainPlot.Refresh()
         End If
-        Me.Plottables.Remove(id)
+        Me.ChartSeries.Remove(id)
 
         'Remove series from overview chart
-        If Me.PlottablesOverview.ContainsKey(id) Then
-            View.OverviewPlot.Plot.Remove(Me.PlottablesOverview(id))
+        If Me.OverviewSeries.ContainsKey(id) Then
+            View.OverviewPlot.Plot.Remove(Me.OverviewSeries(id))
             'reset Y axis limits
             View.OverviewPlot.Plot.YAxis.Dims.ResetLimits()
             'update chart extents
             Call Me.UpdateChartExtents()
         End If
-        Me.PlottablesOverview.Remove(id)
+        Me.OverviewSeries.Remove(id)
 
         'Remove series from TOC
         Dim indexFound As Boolean = False
@@ -2908,7 +2908,7 @@ Friend Class WaveController
 
         'change colors of existing series in main chart
         Dim counter As Integer = 0
-        For Each series As ScottPlot.Plottable.ScatterPlot In Me.Plottables.Values
+        For Each series As ScottPlot.Plottable.ScatterPlot In Me.ChartSeries.Values
             If counter >= colors.Length Then
                 'loop color palette
                 counter = 0
@@ -2920,7 +2920,7 @@ Friend Class WaveController
 
         'change colors of existing series in overview chart
         counter = 0
-        For Each series As ScottPlot.Plottable.ScatterPlot In Me.PlottablesOverview.Values
+        For Each series As ScottPlot.Plottable.ScatterPlot In Me.OverviewSeries.Values
             If counter >= colors.Length Then
                 'loop color palette
                 counter = 0
