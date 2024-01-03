@@ -228,44 +228,45 @@ Friend Class AnnualRecurrenceProbability
             )
         Next
 
-        'Chart
-        ResultChart = New Steema.TeeChart.Chart()
-        Call Helpers.FormatChart(ResultChart)
-        ResultChart.Walls.Back.Visible = True
+        'result chart
+        ResultChart = New ScottPlot.FormsPlot()
+        Call Helpers.FormatChart(ResultChart.Plot)
 
-        'Legend
-        ResultChart.Legend.CheckBoxes = False
-        ResultChart.Legend.Alignment = Steema.TeeChart.LegendAlignments.Top
+        'legend
+        ResultChart.Plot.Legend.Location = ScottPlot.Alignment.LowerRight
 
-        'x-Axis
-        ResultChart.Axes.Bottom.Labels.Style = Steema.TeeChart.AxisLabelStyle.Value
-        ResultChart.Axes.Bottom.Title.Caption = "Return period [years]"
-        ResultChart.Axes.Bottom.Labels.Angle = 90
-        ResultChart.Axes.Bottom.Logarithmic = True
-        ResultChart.Axes.Bottom.LogarithmicBase = 10
-        ResultChart.Axes.Bottom.Automatic = False
-        ResultChart.Axes.Bottom.Minimum = 1
-        ResultChart.Axes.Bottom.Maximum = 100
-        ResultChart.Axes.Bottom.Increment = 1
-        ResultChart.Axes.Bottom.Grid.DrawEvery = 1
+        'X axis
+        ResultChart.Plot.XLabel("Return period [years]")
+        ResultChart.Plot.XAxis.DateTimeFormat(False)
+        ResultChart.Plot.XAxis.TickLabelStyle(rotation:=90)
+        'logarithmic labels and ticks
+        ResultChart.Plot.XAxis.TickLabelFormat(Function(x As Double) Math.Pow(10, x).ToString("N0"))
+        ResultChart.Plot.XAxis.MinorLogScale(True)
+        ResultChart.Plot.XAxis.MajorGrid(True, Color.FromArgb(80, Color.Black))
+        ResultChart.Plot.XAxis.MinorGrid(True, Color.FromArgb(20, Color.Black))
 
-        'y-Axis
-        ResultChart.Axes.Left.AutomaticMaximum = True
-        ResultChart.Axes.Left.AutomaticMinimum = False
-        ResultChart.Axes.Left.Minimum = 0
-        ResultChart.Axes.Left.MaximumRound = True
-        ResultChart.Axes.Left.Grid.DrawEvery = 1
-        ResultChart.Axes.Left.Title.Caption = Me.InputTimeSeries(0).Unit
+        'Y axis
+        ResultChart.Plot.YLabel(Me.InputTimeSeries(0).Unit)
 
         'point series
-        Dim points As New Steema.TeeChart.Styles.Points(ResultChart)
-        points.Title = $"Plotting Position ({InputTimeSeries(0).Title})"
+        Dim Xs As New List(Of Double)
+        Dim Ys As New List(Of Double)
+        Dim labels As New List(Of String)
         For Each ev As AnnualEvent In Me.events
-            points.Add(ev.returnPeriod, ev.maxValue, ev.year.ToString())
+            Xs.Add(Math.Log10(ev.returnPeriod)) 'plot the log value
+            Ys.Add(ev.maxValue)
+            labels.Add(ev.year.ToString())
         Next
-        'prepare year label as mark, but hide it by default
-        points.Marks.Style = Steema.TeeChart.Styles.MarksStyles.Label
-        points.Marks.Visible = False
+        Dim points As ScottPlot.Plottable.ScatterPlot
+        points = ResultChart.Plot.AddScatterPoints(Xs.ToArray(), Ys.ToArray())
+        points.Label = $"Plotting Position ({InputTimeSeries(0).Title})"
+        points.MarkerSize = 10
+        points.MarkerShape = ScottPlot.MarkerShape.filledSquare
+        'add data point labels
+        points.DataPointLabels = labels.ToArray()
+
+        'set Y axis limits
+        ResultChart.Plot.YAxis.Dims.SetAxis(0, Ys.Max() * 1.1)
 
         'result series (annual maxima)
         Dim ts As New TimeSeries(Me.InputTimeSeries(0).Title + " (annual maxima)")
