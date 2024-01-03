@@ -823,10 +823,8 @@ Friend Class WaveController
                 '--------------------
                 'Ergebnisdiagramm anzeigen
                 If (oAnalysis.hasResultChart) Then
-                    Dim resultChart As New AnalysisResultChart()
+                    Dim resultChart As New AnalysisResultChart(oAnalysis.getResultChart())
                     resultChart.Text &= " - " & oAnalysisDialog.selectedAnalysisFunction.ToString()
-                    'TODO: TChart
-                    'resultChart.ResultChart.Controls.Add(oAnalysis.getResultChart())
                     Call resultChart.Show()
                 End If
 

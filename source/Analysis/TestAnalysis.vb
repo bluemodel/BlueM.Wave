@@ -139,7 +139,7 @@ Friend Class TestAnalysis
         MyBase.ResultValues.Add($"Count values of time series '{title}'", length)
 
         'Result chart (will be shown in separate window)
-        MyBase.ResultChart = New ScottPlot.Plot()
+        MyBase.ResultChart = New ScottPlot.FormsPlot()
         'Fill and format chart
         '...
         '...

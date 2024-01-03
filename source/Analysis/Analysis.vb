@@ -65,7 +65,7 @@ Friend MustInherit Class Analysis
     ''' is shown in a separate window if `hasResultChart` is True
     ''' </summary>
     ''' <remarks>Optional</remarks>
-    Protected ResultChart As ScottPlot.Plot
+    Protected ResultChart As ScottPlot.FormsPlot
 
     ''' <summary>
     ''' List of result series
@@ -144,7 +144,7 @@ Friend MustInherit Class Analysis
     ''' Analysis result chart
     ''' </summary>
     ''' <remarks>Optional</remarks>
-    Public ReadOnly Property getResultChart() As ScottPlot.Plot
+    Public ReadOnly Property getResultChart() As ScottPlot.FormsPlot
         Get
             Return Me.ResultChart
         End Get
