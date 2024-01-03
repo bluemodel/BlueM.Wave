@@ -1,7 +1,7 @@
 BlueM.Wave Release Notes
 ========================
 
-Development
+Version 2.7.0
 -------------
 NEW:
 * New analysis function AnnualRecurrenceProbability which calculates the annual recurrence probility and return period of annual maxima using plotting position method
