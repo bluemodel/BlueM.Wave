@@ -20,30 +20,30 @@
 ''' </summary>
 Friend Class AxisWrapper
 
-    Private _axis As ScottPlot.Renderable.Axis
+    Public Axis As ScottPlot.Renderable.Axis
     Private _min As Double
     Private _max As Double
     Private _autoMin As Boolean
     Private _autoMax As Boolean
 
     Public Sub New(axis As ScottPlot.Renderable.Axis)
-        Me._axis = axis
+        Me.Axis = axis
         Me._autoMin = True
         Me._autoMax = True
     End Sub
 
     Public ReadOnly Property AxisIndex As Integer
         Get
-            Return Me._axis.AxisIndex
+            Return Me.Axis.AxisIndex
         End Get
     End Property
 
     Public Property Unit As String
         Get
-            Return Me._axis.AxisLabel.Label
+            Return Me.Axis.AxisLabel.Label
         End Get
         Set(value As String)
-            Me._axis.AxisLabel.Label = value
+            Me.Axis.AxisLabel.Label = value
         End Set
     End Property
 
@@ -69,10 +69,10 @@ Friend Class AxisWrapper
 
     Public Property Max As Double
         Get
-            Return Me._axis.Dims.Max
+            Return Me.Axis.Dims.Max
         End Get
         Set(value As Double)
-            Me._axis.Dims.SetAxis(min:=Nothing, max:=value)
+            Me.Axis.Dims.SetAxis(min:=Nothing, max:=value)
             Me._autoMax = False
             'Call Me.setLimits()
         End Set
@@ -80,29 +80,29 @@ Friend Class AxisWrapper
 
     Public Property Min As Double
         Get
-            Return Me._axis.Dims.Min
+            Return Me.Axis.Dims.Min
         End Get
         Set(value As Double)
-            Me._axis.Dims.SetAxis(min:=value, max:=Nothing)
+            Me.Axis.Dims.SetAxis(min:=value, max:=Nothing)
             Me._autoMin = False
             'Call Me.setLimits()
         End Set
     End Property
 
-    Private Sub setLimits()
+    Public Sub setLimits()
         If Me._autoMin And Me._autoMax Then
-            Me._axis.Dims.ResetLimits()
+            Me.Axis.Dims.ResetLimits()
             'Me._axis.Dims.SetAxis(min:=Nothing, max:=Nothing)
         ElseIf Me._autoMin Then
             Dim max As Double = Me.Max
-            Me._axis.Dims.ResetLimits()
-            Me._axis.Dims.SetAxis(min:=Nothing, max:=max)
+            Me.Axis.Dims.ResetLimits()
+            Me.Axis.Dims.SetAxis(min:=Nothing, max:=max)
         ElseIf Me._autoMax Then
             Dim min As Double = Me.Min
-            Me._axis.Dims.ResetLimits()
-            Me._axis.Dims.SetAxis(min:=min, max:=Nothing)
+            Me.Axis.Dims.ResetLimits()
+            Me.Axis.Dims.SetAxis(min:=min, max:=Nothing)
         Else
-            Me._axis.Dims.SetAxis(Me.Min, Me.Max)
+            Me.Axis.Dims.SetAxis(Me.Min, Me.Max)
         End If
     End Sub
 

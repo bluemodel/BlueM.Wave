@@ -2551,15 +2551,15 @@ Friend Class WaveController
         Next
 
         'rescale and set visibility of axes
-        For Each axis As ScottPlot.Renderable.Axis In View.MainPlot.Plot.GetAxesMatching(axisIndex:=Nothing, isVertical:=True)
-            axis.Dims.ResetLimits()
-            Dim visibility As Boolean = activeUnits.Contains(axis.AxisLabel.Label)
-            If axis.AxisIndex <= 1 Then
+        For Each axisW As AxisWrapper In Me.Axes
+            axisW.setLimits()
+            Dim visibility As Boolean = activeUnits.Contains(axisW.Unit)
+            If axisW.AxisIndex <= 1 Then
                 'left and right axis should never be made completely invisible
-                axis.AxisLabel.IsVisible = visibility
-                axis.Ticks(enable:=visibility)
+                axisW.Axis.AxisLabel.IsVisible = visibility
+                axisW.Axis.Ticks(enable:=visibility)
             Else
-                axis.IsVisible = visibility
+                axisW.Axis.IsVisible = visibility
             End If
         Next
 
