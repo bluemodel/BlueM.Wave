@@ -355,12 +355,13 @@ Friend Class GoodnessOfFit
 
         'result chart (radar plot):
         '--------------------------
-        'TODO: m is currently plotted using its absolute value, but labelled with the actual value, while the axis title says "absolute", confusing?
-        'TODO: the axis titles and grid disappear when the last series is unchecked by the user, why?
+        'TODO: NaN and negative values mess up the chart!
 
-        Me.ResultChart = New Steema.TeeChart.Chart()
-        Call Helpers.FormatChart(Me.ResultChart)
-        Me.ResultChart.Header.Text = $"Goodness of Fit: {Me.ts_obs.Title} vs. {String.Join(", ", Me.ts_sim_list)}"
+        Me.ResultChart = New ScottPlot.FormsPlot()
+        Call Helpers.FormatChart(Me.ResultChart.Plot)
+        Me.ResultChart.Plot.XAxis.DateTimeFormat(False)
+
+        Me.ResultChart.Plot.Title($"Goodness of Fit: {Me.ts_obs.Title} vs. {String.Join(", ", Me.ts_sim_list)}")
 
         'determine max absolute volume error for scaling
         Dim max_abs_volume_error As Double = 0
@@ -378,55 +379,48 @@ Friend Class GoodnessOfFit
             max_abs_volume_error = 0.1
         End If
 
+        Dim axistitles() As String = {
+            "Absolute volume error [%]",
+            "Nash-Sutcliffe efficiency",
+            "Logarithmic Nash-Sutcliffe efficiency",
+            "Kling-Gupta efficiency",
+            "Coefficient of correlation"
+        }
+
+        Dim maxvalues() As Double = {
+            max_abs_volume_error,
+            1,
+            1,
+            1,
+            1
+        }
+
+        Dim labels As New List(Of String)
         For Each series_title As String In Me.GoFResults.Keys
-            For Each kvp As KeyValuePair(Of String, GoF) In Me.GoFResults(series_title)
-                Dim period = kvp.Key
-                Dim gof As GoF = kvp.Value
-
-                Dim series As New Steema.TeeChart.Styles.Radar(Me.ResultChart.Chart)
-                series.Title = $"{series_title} ({period})"
-
-                'make sure NaN values are handled
-                series.TreatNaNAsNull = True
-                series.TreatNulls = Steema.TeeChart.Styles.TreatNullsStyle.DoNotPaint
-
-                'this is important because otherwise the series nodes are automatically ordered by their x values (angles), potentially messing up the labelling
-                series.XValues.Order = Steema.TeeChart.Styles.ValueListOrder.None
-
-                'in the chart, X (angle) represents the actual value, Y is the scaled (plotted) value, text is the axis label
-
-                'scale the absolute volume error to range (-1, 1) and reverse it's sign
-                Dim scaled_volume_error As Double = -1 * (gof.abs_volume_error / max_abs_volume_error * 2 + -1)
-                'plot other indicators with their actual values
-                series.Add(gof.volume_error, scaled_volume_error, "Volume error [%]")
-                series.Add(gof.nash_sutcliffe, gof.nash_sutcliffe, "Nash-Sutcliffe efficiency")
-                series.Add(gof.ln_nash_sutcliffe, gof.ln_nash_sutcliffe, "Logarithmic Nash-Sutcliffe efficiency")
-                series.Add(gof.kge, gof.kge, "Kling-Gupta efficiency")
-                series.Add(gof.coeff_correlation, gof.coeff_correlation, "Coefficient of correlation")
-
-                series.Circled = True
-                series.Pen.Width = 2
-                series.Pen.Color = series.Pointer.Color
-                'series.Color
-                series.Brush.Visible = False
-                series.Pointer.Visible = True
-                series.CircleLabels = True
-                series.ClockWiseLabels = False
-                series.Marks.Visible = True
-                series.Marks.Style = Steema.TeeChart.Styles.MarksStyles.XValue 'label the actual value
-                series.Marks.FontSeriesColor = True
+            For Each period As String In Me.GoFResults(series_title).Keys
+                labels.Add($"{series_title} ({period})")
             Next
         Next
 
-        'scale radar spokes between -1 and 1
-        Me.ResultChart.Axes.Left.Automatic = False
-        Me.ResultChart.Axes.Left.Minimum = -1
-        Me.ResultChart.Axes.Left.Maximum = 1
+        Dim values(labels.Count - 1, 4) As Double
 
-        'grid is on chart's left axis
-        Me.ResultChart.Axes.Left.Increment = 0.2
-        'labels are on chart's right axis, hide them
-        Me.ResultChart.Axes.Right.Labels.Visible = False
+        Dim i As Integer = 0
+        For Each series_title As String In Me.GoFResults.Keys
+            For Each period As String In Me.GoFResults(series_title).Keys
+                values(i, 0) = Me.GoFResults(series_title)(period).abs_volume_error
+                values(i, 1) = Me.GoFResults(series_title)(period).nash_sutcliffe
+                values(i, 2) = Me.GoFResults(series_title)(period).ln_nash_sutcliffe
+                values(i, 3) = Me.GoFResults(series_title)(period).kge
+                values(i, 4) = Me.GoFResults(series_title)(period).coeff_correlation
+                i += 1
+            Next
+        Next
+
+        Dim radar As ScottPlot.Plottable.RadarPlot
+        radar = Me.ResultChart.Plot.AddRadar(values, independentAxes:=True, maxValues:=maxvalues)
+        radar.AxisType = ScottPlot.RadarAxis.Polygon
+        radar.CategoryLabels = axistitles
+        radar.GroupLabels = labels.ToArray()
 
         'result table
         '------------
