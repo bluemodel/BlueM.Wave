@@ -200,7 +200,11 @@ Friend Class MonthlyStatistics
                     End If
                 Else
                     Log.AddLogEntry(Log.levels.warning, $"The series does not contain any data for the month of { .month}!")
-                    'TODO: ideally we would set all result values to Double.NaN here but this inexplicably causes the result chart to crash!
+                    .average = Double.NaN
+                    .stddev = Double.NaN
+                    .min = Double.NaN
+                    .max = Double.NaN
+                    .median = Double.NaN
                 End If
 
             End With
@@ -227,29 +231,16 @@ Friend Class MonthlyStatistics
         Me.ResultTable.Columns.Add("Standard deviation", GetType(Double))
 
         For Each monthData As MonthData In Me.result.Values
-            If monthData.values.Count > 0 Then
-                Me.ResultTable.Rows.Add(
-                    monthData.month.number,
-                    monthData.month.name,
-                    monthData.values.Count,
-                    monthData.average,
-                    monthData.median,
-                    monthData.min,
-                    monthData.max,
-                    monthData.stddev
-                )
-            Else
-                Me.ResultTable.Rows.Add(
-                    monthData.month.number,
-                    monthData.month.name,
-                    monthData.values.Count,
-                    Double.NaN,
-                    Double.NaN,
-                    Double.NaN,
-                    Double.NaN,
-                    Double.NaN
-                )
-            End If
+            Me.ResultTable.Rows.Add(
+                monthData.month.number,
+                monthData.month.name,
+                monthData.values.Count,
+                monthData.average,
+                monthData.median,
+                monthData.min,
+                monthData.max,
+                monthData.stddev
+            )
         Next
 
         'Result chart
@@ -270,19 +261,29 @@ Friend Class MonthlyStatistics
         Dim mins As New List(Of Double)
         Dim maxs As New List(Of Double)
         Dim avgs As New List(Of Double)
+        Dim stddevbases As New List(Of Double)
         Dim stddevs As New List(Of Double)
         Dim medians As New List(Of Double)
         For Each monthdata As MonthData In monthDatas
             xLabels.Add(monthdata.month.name)
-            mins.Add(monthdata.min)
-            maxs.Add(monthdata.max)
             avgs.Add(monthdata.average)
-            stddevs.Add(monthdata.stddev)
             medians.Add(monthdata.median)
+            If monthdata.values.Count > 0 Then
+                mins.Add(monthdata.min)
+                maxs.Add(monthdata.max)
+                stddevbases.Add(monthdata.stddev)
+                stddevs.Add(monthdata.stddev)
+            Else
+                'series that cannot handle NaNs are displayed as 0
+                mins.Add(0)
+                maxs.Add(0)
+                stddevbases.Add(0)
+                stddevs.Add(0)
+            End If
         Next
 
         'axes
-        Me.ResultChart.Plot.XAxis.ManualTickPositions(Xs, xLabels.ToArray)
+        Me.ResultChart.Plot.XAxis.ManualTickPositions(Xs, xLabels.ToArray())
         Me.ResultChart.Plot.XAxis.AxisTicks.TickLabelRotation = 90
         Me.ResultChart.Plot.XAxis.AxisTicks.MinorGridVisible = False
         Me.ResultChart.Plot.YLabel(Me.InputTimeSeries(0).Unit)
@@ -297,14 +298,14 @@ Friend Class MonthlyStatistics
 
         'series standard deviation
         Dim stddev As ScottPlot.Plottable.ErrorBar
-        stddev = Me.ResultChart.Plot.AddErrorBars(Xs, avgs.ToArray(), xErrors:=Nothing, yErrors:=stddevs.ToArray())
+        stddev = Me.ResultChart.Plot.AddErrorBars(Xs, stddevbases.ToArray(), xErrors:=Nothing, yErrors:=stddevs.ToArray())
         stddev.Label = "Standard deviation"
         stddev.Color = Color.Red
         stddev.CapSize = 8
 
         'series average
         Dim avg As ScottPlot.Plottable.ScatterPlot
-        avg = Me.ResultChart.Plot.AddScatterLines(Xs, avgs.ToArray())
+        avg = Me.ResultChart.Plot.AddScatter(Xs, avgs.ToArray())
         avg.OnNaN = ScottPlot.Plottable.ScatterPlot.NanBehavior.Gap
         avg.Label = "Average"
         avg.Color = Color.Blue
@@ -312,7 +313,7 @@ Friend Class MonthlyStatistics
 
         'series median
         Dim median As ScottPlot.Plottable.ScatterPlot
-        median = Me.ResultChart.Plot.AddScatterLines(Xs, medians.ToArray())
+        median = Me.ResultChart.Plot.AddScatter(Xs, medians.ToArray())
         median.OnNaN = ScottPlot.Plottable.ScatterPlot.NanBehavior.Gap
         median.Label = "Median"
         median.Color = Color.Green
