@@ -226,63 +226,66 @@ Friend Class Histogram
         '-------------
         'TODO: Ergebniswerte zurückgeben?
 
-        'Ergebnisdiagramm
-        '----------------
+        'Result chart
+        '------------
+        Me.ResultChart = New ScottPlot.FormsPlot()
+        Call Helpers.FormatChart(Me.ResultChart.Plot)
+        Me.ResultChart.Plot.XAxis.DateTimeFormat(False)
 
-        'Diagramm formatieren
-        Me.ResultChart = New Steema.TeeChart.Chart()
-        Call Helpers.FormatChart(Me.ResultChart)
-        Me.ResultChart.Header.Text = "Histogram"
+        Me.ResultChart.Plot.Title("Histogram")
 
-        'Achsen
-        Me.ResultChart.Axes.Left.Title.Caption = "Probability [%]"
-        Me.ResultChart.Axes.Left.Automatic = False
-        Me.ResultChart.Axes.Left.Minimum = 0
-        Me.ResultChart.Axes.Left.AutomaticMaximum = True
-        Me.ResultChart.Axes.Left.MaximumOffset = 2
-
-        Me.ResultChart.Axes.Right.Visible = True
-        Me.ResultChart.Axes.Right.Title.Caption = "Probability of non-exceedance [%]"
-        Me.ResultChart.Axes.Right.Title.Angle = 90
-        Me.ResultChart.Axes.Right.Automatic = False
-        Me.ResultChart.Axes.Right.Minimum = 0
-        Me.ResultChart.Axes.Right.Maximum = 100
-        Me.ResultChart.Axes.Right.Grid.Visible = False
-
-        Me.ResultChart.Axes.Bottom.Labels.Style = Steema.TeeChart.AxisLabelStyle.Value
-        Me.ResultChart.Axes.Bottom.Title.Caption = $"Value [{Me.InputTimeSeries(0).Unit}]"
-
-        'Serien
+        'series
         For Each res As histogramResults In Me.results
 
-            Dim serieP As New Steema.TeeChart.Styles.Histogram(Me.ResultChart)
-            serieP.Title = $"{res.title} (P(x))"
-            serieP.Marks.Visible = False
-
+            'bars
+            Dim Xs As New List(Of Double)
+            Dim Ys As New List(Of Double)
             For i As Integer = 0 To n_bins - 1
-                serieP.Add((Me.breaks(i) + Me.breaks(i + 1)) / 2, res.probability(i), res.probability(i).ToString("F2") & "%")
+                Xs.Add((Me.breaks(i) + Me.breaks(i + 1)) / 2)
+                Ys.Add(res.probability(i))
             Next
 
-            Dim seriePU As New Steema.TeeChart.Styles.Line(Me.ResultChart)
-            seriePU.VertAxis = Steema.TeeChart.Styles.VerticalAxis.Right
-            seriePU.Title = $"{res.title} (PU(x))"
-            seriePU.LinePen.Width = 2
-            seriePU.Pointer.Visible = True
-            seriePU.Pointer.Style = Steema.TeeChart.Styles.PointerStyles.Circle
-            seriePU.Pointer.HorizSize = 2
-            seriePU.Pointer.VertSize = 2
+            Dim serieP As ScottPlot.Plottable.BarPlot
+            serieP = Me.ResultChart.Plot.AddBar(values:=Ys.ToArray(), positions:=Xs.ToArray())
+            serieP.Label = $"{res.title} (P(x))"
+            serieP.BarWidth = Me.breaks(1) - Me.breaks(0) 'TODO: bars are not necessarily all the same width!
+            Dim originalColor As Color = serieP.FillColor
+            serieP.FillColor = Color.FromArgb(128, originalColor.R, originalColor.G, originalColor.B)
+            If Me.results.Length = 1 Then
+                'show values if there is only one series
+                serieP.ShowValuesAboveBars = True
+                serieP.ValueFormatter = Function(v As Double) v.ToString("F2") & "%"
+            End If
 
+            'line
+            Xs = New List(Of Double)
+            Ys = New List(Of Double)
             For i As Integer = 0 To Me.n_bins - 1
-                seriePU.Add(Me.breaks(i + 1), res.PU(i), res.PU(i).ToString("F2") & "%")
+                Xs.Add(Me.breaks(i + 1))
+                Ys.Add(res.PU(i))
             Next
+
+            Dim seriePU As ScottPlot.Plottable.ScatterPlot
+            seriePU = Me.ResultChart.Plot.AddScatter(Xs.ToArray(), Ys.ToArray())
+            seriePU.YAxisIndex = 1
+            seriePU.Label = $"{res.title} (PU(x))"
+            seriePU.LineWidth = 2
+            seriePU.MarkerShape = ScottPlot.MarkerShape.filledCircle
+            seriePU.MarkerSize = 4
+            seriePU.Color = originalColor
 
         Next
 
-        'Markstips
-        Dim markstip As New Steema.TeeChart.Tools.MarksTip()
-        markstip.Style = Steema.TeeChart.Styles.MarksStyles.Label
-        'markstip.MouseAction = Steema.TeeChart.Tools.MarksTipMouseAction.Move
-        Me.ResultChart.Tools.Add(markstip)
+        'axes
+        Me.ResultChart.Plot.XLabel($"Value [{Me.InputTimeSeries(0).Unit}]")
+
+        Me.ResultChart.Plot.YLabel("Probability [%]")
+        Me.ResultChart.Plot.SetAxisLimits(yMin:=0, yAxisIndex:=0)
+
+        Me.ResultChart.Plot.YAxis2.Label("Probability of non-exceedance [%]")
+        Me.ResultChart.Plot.YAxis2.LabelStyle(rotation:=90)
+        Me.ResultChart.Plot.YAxis2.Ticks(enable:=True)
+        Me.ResultChart.Plot.SetAxisLimits(yMin:=0, yMax:=105, yAxisIndex:=1)
 
     End Sub
 
