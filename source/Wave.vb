@@ -46,11 +46,6 @@ Public Class Wave
     Friend Event SeriesCleared()
 
     ''' <summary>
-    ''' Is raised when all the time series are reordered
-    ''' </summary>
-    Friend Event SeriesAllReordered()
-
-    ''' <summary>
     ''' Is raised when a single time series is reordered
     ''' </summary>
     Friend Event SeriesReordered(id As Integer, direction As Integer)
@@ -457,15 +452,6 @@ Public Class Wave
         'Store the time series
         Me.AddTimeSeries(ts)
 
-    End Sub
-
-    ''' <summary>
-    ''' Reorders the internally stored time series according to the specified list of Ids
-    ''' </summary>
-    ''' <param name="ids">List of Ids in the new order</param>
-    Friend Sub Reorder_Series(ids As List(Of Integer))
-        Me.TimeSeries.Reorder(ids)
-        RaiseEvent SeriesAllReordered()
     End Sub
 
     ''' <summary>

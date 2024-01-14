@@ -27,8 +27,6 @@ Imports BlueM.Wave.AnnualStatistics
 Friend Class MonthlyStatistics
     Inherits Analysis
 
-#Region "Data structures"
-
     ''' <summary>
     ''' Class for storing the statistic values of a month
     ''' </summary>
@@ -43,11 +41,6 @@ Friend Class MonthlyStatistics
         Public median As Double
     End Class
 
-
-#End Region 'Data structures
-
-#Region "Members"
-
     ''' <summary>
     ''' Result of the analysis
     ''' </summary>
@@ -59,9 +52,7 @@ Friend Class MonthlyStatistics
     ''' <remarks></remarks>
     Private isPreviousMonth As Boolean
 
-#End Region 'Members
-
-#Region "Properties"
+    Private startMonth As Integer
 
     Public Overloads Shared Function Description() As String
         Return "Calculates the following statistical values for each month of the year: average, median, minimum, maximum, standard deviation " &
@@ -111,10 +102,6 @@ Friend Class MonthlyStatistics
         End Get
     End Property
 
-#End Region ' Properties
-
-#Region "Methoden"
-
     ''' <summary>
     ''' Constructor
     ''' </summary>
@@ -136,7 +123,7 @@ Friend Class MonthlyStatistics
         End If
 
         Me.isPreviousMonth = (dlg.ComboBox_MonthType.SelectedItem = "previous month")
-        Dim startMonth As Integer = CType(dlg.ComboBox_startMonth.SelectedItem, Month).number
+        Me.startMonth = CType(dlg.ComboBox_startMonth.SelectedItem, Month).number
 
         'Initialize result data structure
         Me.result = New Dictionary(Of Integer, MonthData)
@@ -213,7 +200,11 @@ Friend Class MonthlyStatistics
                     End If
                 Else
                     Log.AddLogEntry(Log.levels.warning, $"The series does not contain any data for the month of { .month}!")
-                    'TODO: ideally we would set all result values to Double.NaN here but this inexplicably causes the result chart to crash!
+                    .average = Double.NaN
+                    .stddev = Double.NaN
+                    .min = Double.NaN
+                    .max = Double.NaN
+                    .median = Double.NaN
                 End If
 
             End With
@@ -240,100 +231,94 @@ Friend Class MonthlyStatistics
         Me.ResultTable.Columns.Add("Standard deviation", GetType(Double))
 
         For Each monthData As MonthData In Me.result.Values
-            If monthData.values.Count > 0 Then
-                Me.ResultTable.Rows.Add(
-                    monthData.month.number,
-                    monthData.month.name,
-                    monthData.values.Count,
-                    monthData.average,
-                    monthData.median,
-                    monthData.min,
-                    monthData.max,
-                    monthData.stddev
-                )
-            Else
-                Me.ResultTable.Rows.Add(
-                    monthData.month.number,
-                    monthData.month.name,
-                    monthData.values.Count,
-                    Double.NaN,
-                    Double.NaN,
-                    Double.NaN,
-                    Double.NaN,
-                    Double.NaN
-                )
-            End If
+            Me.ResultTable.Rows.Add(
+                monthData.month.number,
+                monthData.month.name,
+                monthData.values.Count,
+                monthData.average,
+                monthData.median,
+                monthData.min,
+                monthData.max,
+                monthData.stddev
+            )
         Next
 
         'Result chart
-        '------------
-        Dim i As Integer
-        Dim mittelwert, median As Steema.TeeChart.Styles.Line
-        Dim stdabw As Steema.TeeChart.Styles.Error
-        Dim minmax As Steema.TeeChart.Styles.HighLow
-
-        'Diagram
-        Me.ResultChart = New Steema.TeeChart.Chart()
+        Me.ResultChart = New ScottPlot.Plot()
         Call Helpers.FormatChart(Me.ResultChart)
-        Me.ResultChart.Header.Text = $"Monthly statistics ({Me.InputTimeSeries(0).Title})"
+        Me.ResultChart.XAxis.DateTimeFormat(False)
+        Me.ResultChart.Title($"Monthly statistics ({Me.InputTimeSeries(0).Title})")
 
-        'Axes
-        Me.ResultChart.Axes.Bottom.Labels.Style = Steema.TeeChart.AxisLabelStyle.Text
-        Me.ResultChart.Axes.Bottom.Labels.Angle = 90
-        Me.ResultChart.Axes.Bottom.MinorTickCount = 0
-        Me.ResultChart.Axes.Left.Title.Text = Me.InputTimeSeries(0).Unit
+        'sort month data by index for plotting
+        Dim monthDatas As List(Of MonthData) = Me.result.Values.ToList()
+        monthDatas.Sort(Function(m1 As MonthData, m2 As MonthData)
+                            Return m1.index.CompareTo(m2.index)
+                        End Function)
 
-        'Series
-
-        'MinMax
-        minmax = New Steema.TeeChart.Styles.HighLow(Me.ResultChart)
-        minmax.DefaultNullValue = Double.NaN
-        minmax.Title = "Min / Max"
-        minmax.Color = Color.DarkGray
-        minmax.Pen.Color = Color.DarkGray
-        minmax.HighBrush.Visible = True
-        minmax.HighBrush.Color = Color.LightGray
-        minmax.HighBrush.Transparency = 50
-        For i = 1 To 12
-            minmax.Add(Me.result(i).index, Me.result(i).max, Me.result(i).min, Me.result(i).month.name)
-        Next
-
-        'Standard deviation
-        stdabw = New Steema.TeeChart.Styles.Error(Me.ResultChart)
-        stdabw.DefaultNullValue = Double.NaN
-        stdabw.Title = "Standard deviation"
-        stdabw.Color = Color.Red
-        stdabw.ErrorWidth = 50
-        For i = 1 To 12
-            'Skip months with no or NaN data
-            If Me.result(i).values.Count > 0 And Not Double.IsNaN(Me.result(i).stddev) Then
-                stdabw.Add(Me.result(i).index, Me.result(i).average, Me.result(i).stddev, Me.result(i).month.name)
+        'collect data
+        Dim Xs As Double() = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11}
+        Dim xLabels As New List(Of String)
+        Dim mins As New List(Of Double)
+        Dim maxs As New List(Of Double)
+        Dim avgs As New List(Of Double)
+        Dim stddevbases As New List(Of Double)
+        Dim stddevs As New List(Of Double)
+        Dim medians As New List(Of Double)
+        For Each monthdata As MonthData In monthDatas
+            xLabels.Add(monthdata.month.name)
+            avgs.Add(monthdata.average)
+            medians.Add(monthdata.median)
+            If monthdata.values.Count > 0 Then
+                mins.Add(monthdata.min)
+                maxs.Add(monthdata.max)
+                stddevbases.Add(monthdata.stddev)
+                stddevs.Add(monthdata.stddev)
+            Else
+                'series that cannot handle NaNs are displayed as 0
+                mins.Add(0)
+                maxs.Add(0)
+                stddevbases.Add(0)
+                stddevs.Add(0)
             End If
         Next
 
-        'Average
-        mittelwert = New Steema.TeeChart.Styles.Line(Me.ResultChart)
-        mittelwert.TreatNaNAsNull = True
-        mittelwert.TreatNulls = Steema.TeeChart.Styles.TreatNullsStyle.DoNotPaint
-        mittelwert.Title = "Average"
-        mittelwert.Color = Color.Blue
-        mittelwert.LinePen.Width = 2
-        For i = 1 To 12
-            mittelwert.Add(Me.result(i).index, Me.result(i).average, Me.result(i).month.name)
-        Next
+        'axes
+        Me.ResultChart.XAxis.ManualTickPositions(Xs, xLabels.ToArray())
+        Me.ResultChart.XAxis.AxisTicks.TickLabelRotation = 90
+        Me.ResultChart.XAxis.AxisTicks.MinorGridVisible = False
+        Me.ResultChart.YLabel(Me.InputTimeSeries(0).Unit)
 
-        'Median
-        median = New Steema.TeeChart.Styles.Line(Me.ResultChart)
-        median.TreatNaNAsNull = True
-        median.TreatNulls = Steema.TeeChart.Styles.TreatNullsStyle.DoNotPaint
-        median.Title = "Median"
+        'series min-max
+        Dim minmax As ScottPlot.Plottable.Polygon
+        minmax = Me.ResultChart.AddFill(Xs, mins.ToArray(), maxs.ToArray())
+        minmax.Label = "Min / Max"
+        minmax.FillColor = Color.FromArgb(128, Color.LightGray.R, Color.LightGray.G, Color.LightGray.B)
+        minmax.LineColor = Color.DarkGray
+        minmax.LineWidth = 1
+
+        'series standard deviation
+        Dim stddev As ScottPlot.Plottable.ErrorBar
+        stddev = Me.ResultChart.AddErrorBars(Xs, stddevbases.ToArray(), xErrors:=Nothing, yErrors:=stddevs.ToArray())
+        stddev.Label = "Standard deviation"
+        stddev.Color = Color.Red
+        stddev.CapSize = 8
+
+        'series average
+        Dim avg As ScottPlot.Plottable.ScatterPlot
+        avg = Me.ResultChart.AddScatter(Xs, avgs.ToArray())
+        avg.OnNaN = ScottPlot.Plottable.ScatterPlot.NanBehavior.Gap
+        avg.Label = "Average"
+        avg.Color = Color.Blue
+        avg.LineWidth = 2
+
+        'series median
+        Dim median As ScottPlot.Plottable.ScatterPlot
+        median = Me.ResultChart.AddScatter(Xs, medians.ToArray())
+        median.OnNaN = ScottPlot.Plottable.ScatterPlot.NanBehavior.Gap
+        median.Label = "Median"
         median.Color = Color.Green
-        For i = 1 To 12
-            median.Add(Me.result(i).index, Me.result(i).median, Me.result(i).month.name)
-        Next
+        median.LineWidth = 1
 
     End Sub
-
-#End Region 'Methods
 
 End Class

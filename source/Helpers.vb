@@ -126,11 +126,15 @@ Public Module Helpers
     ''' <summary>
     ''' Returns a specified color palette
     ''' </summary>
-    ''' <param name="name">Available color palettes are "Material", "Distinct", "Color Wheel" and "Random". Defaults to "Material".</param>
+    ''' <param name="name">Available color palettes are "Category10", "Category20", "Material", "Distinct", "Color Wheel" and "Random". Defaults to "Category10".</param>
     ''' <returns>A color palette</returns>
-    Public Function getColorPalette(Optional name As String = "Material") As Color()
+    Public Function getColorPalette(Optional name As String = "Category10") As Color()
         Dim colorPalette As Color()
         Select Case name
+            Case "Category10"
+                colorPalette = New ScottPlot.Palettes.Category10().Colors
+            Case "Category20"
+                colorPalette = New ScottPlot.Palettes.Category20().Colors
             Case "Material"
                 'Material Design Palette
                 'https://hexcolor.co/material-design-colors
@@ -224,79 +228,34 @@ Public Module Helpers
     End Function
 
     ''' <summary>
-    ''' Führt Standardformatierung eines TCharts aus
+    ''' Default formatting for a chart
     ''' </summary>
-    ''' <param name="chart"></param>
-    Friend Sub FormatChart(ByRef chart As Steema.TeeChart.Chart)
+    ''' <param name="plot"></param>
+    Friend Sub FormatChart(ByRef plot As ScottPlot.Plot)
 
         'set default color palette
-        chart.ColorPalette = Helpers.getColorPalette()
+        plot.Palette = ScottPlot.Palette.FromColors(getColorPalette())
 
-        chart.Aspect.View3D = False
-        'chart.BackColor = Color.White
-        chart.Panel.Gradient.Visible = False
-        chart.Panel.Brush.Color = Color.White
-        chart.Walls.Back.Transparent = False
-        chart.Walls.Back.Gradient.Visible = False
-        chart.Walls.Back.Color = Color.White
+        'legend
+        Dim legend As ScottPlot.Renderable.Legend
+        legend = plot.Legend(enable:=True, location:=ScottPlot.Alignment.UpperRight)
+        legend.UpdateLegendItems(plot, includeHidden:=True)
 
-        'Header
-        chart.Header.Font.Name = "GenericSansSerif"
-        chart.Header.Font.Color = Color.Black
-        chart.Header.Font.Size = 12
-        chart.Header.Text = ""
+        'X axis
+        plot.XAxis.DateTimeFormat(True)
 
-        'Legende
-        chart.Legend.Font.Name = "GenericSansSerif"
-        chart.Legend.Font.Size = 10
-        chart.Legend.LegendStyle = Steema.TeeChart.LegendStyles.Series
-        chart.Legend.FontSeriesColor = True
-        chart.Legend.CheckBoxes = True
+        'reset left Y axis
+        plot.YAxis.Label("")
+        plot.YAxis.Dims.ResetLimits()
 
-        'Achsen
-        chart.Axes.DrawBehind = False
+        'hide right Y axis
+        plot.YAxis2.Label("")
+        plot.YAxis2.Dims.ResetLimits()
 
-        chart.Axes.Left.Title.Font.Name = "GenericSansSerif"
-        chart.Axes.Left.Title.Font.Color = Color.Black
-        chart.Axes.Left.Title.Font.Size = 10
-
-        chart.Axes.Left.Labels.Font.Name = "GenericSansSerif"
-        chart.Axes.Left.Labels.Font.Color = Color.Black
-        chart.Axes.Left.Labels.Font.Size = 10
-
-        chart.Axes.Left.AxisPen.Visible = True
-
-        chart.Axes.Left.Grid.Visible = True
-        chart.Axes.Left.Grid.Style = Drawing2D.DashStyle.Dash
-
-        chart.Axes.Right.Title.Font.Name = "GenericSansSerif"
-        chart.Axes.Right.Title.Font.Color = Color.Black
-        chart.Axes.Right.Title.Font.Size = 10
-
-        chart.Axes.Right.Labels.Font.Name = "GenericSansSerif"
-        chart.Axes.Right.Labels.Font.Color = Color.Black
-        chart.Axes.Right.Labels.Font.Size = 10
-
-        chart.Axes.Right.AxisPen.Visible = True
-
-        chart.Axes.Right.Grid.Visible = False
-        chart.Axes.Right.Grid.Style = Drawing2D.DashStyle.Dash
-
-        chart.Axes.Bottom.Title.Font.Name = "GenericSansSerif"
-        chart.Axes.Bottom.Title.Font.Color = Color.Black
-        chart.Axes.Bottom.Title.Font.Size = 10
-
-        chart.Axes.Bottom.Labels.Font.Name = "GenericSansSerif"
-        chart.Axes.Bottom.Labels.Font.Color = Color.Black
-        chart.Axes.Bottom.Labels.Font.Size = 10
-
-        chart.Axes.Bottom.Automatic = True
-
-        chart.Axes.Bottom.AxisPen.Visible = True
-
-        chart.Axes.Bottom.Grid.Visible = True
-        chart.Axes.Bottom.Grid.Style = Drawing2D.DashStyle.Dash
-
+        'remove any additional axes
+        For axisIndex As Integer = 2 To plot.GetAxesMatching(axisIndex:=Nothing, isVertical:=True).Count() - 1
+            plot.RemoveAxis(plot.GetAxesMatching(axisIndex:=axisIndex).First)
+        Next
     End Sub
 
     Public Enum Direction

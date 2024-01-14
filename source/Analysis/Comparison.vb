@@ -149,63 +149,51 @@ Friend Class Comparison
         Dim x_unit As String = Me.ts_x.Unit
         Dim y_unit As String = Me.ts_y.Unit
 
-        'Text:
-        '-----
+        'Result text
         Me.ResultText = $"The analysis is based on {Me.ts_x.Length} coincident data points between {Me.ts_x.StartDate.ToString(Helpers.CurrentDateFormat)} and {Me.ts_x.EndDate.ToString(Helpers.CurrentDateFormat)}"
 
-        'Diagramm:
-        '---------
-        Dim series_points As Steema.TeeChart.Styles.Points
-        Dim regression_line As Steema.TeeChart.Styles.Line
+        'Result chart
+        Dim series_points As ScottPlot.Plottable.ScatterPlot
+        Dim regression_line As ScottPlot.Plottable.ScatterPlot
 
-        Me.ResultChart = New Steema.TeeChart.Chart()
+        Me.ResultChart = New ScottPlot.Plot()
         Call Helpers.FormatChart(Me.ResultChart)
-        Me.ResultChart.Header.Text = $"Comparison ({x_title} / {y_title})"
-        Me.ResultChart.Legend.Visible = False
+        Me.ResultChart.XAxis.DateTimeFormat(False)
 
-        'Achsen
-        '------
-        Me.ResultChart.Axes.Bottom.Title.Caption = $"{x_title}  [{x_unit}]"
-        Me.ResultChart.Axes.Bottom.Labels.Style = Steema.TeeChart.AxisLabelStyle.Value
-        Me.ResultChart.Axes.Left.Title.Caption = $"{y_title}  [{y_unit}]"
-        Me.ResultChart.Axes.Left.Labels.Style = Steema.TeeChart.AxisLabelStyle.Value
+        Me.ResultChart.Title($"Comparison ({x_title} / {y_title})")
+        Me.ResultChart.Legend.IsVisible = False
 
-        'Reihen
-        '------
-        series_points = New Steema.TeeChart.Styles.Points(Me.ResultChart)
-        series_points.Title = $"Comparison {x_title} - {y_title}"
-        series_points.Pointer.Visible = True
-        series_points.Pointer.Style = Steema.TeeChart.Styles.PointerStyles.Circle
-        series_points.Pointer.HorizSize = 2
-        series_points.Pointer.VertSize = 2
+        'axes
+        Me.ResultChart.XLabel($"{x_title}  [{x_unit}]")
+        Me.ResultChart.YLabel($"{y_title}  [{y_unit}]")
 
-        regression_line = New Steema.TeeChart.Styles.Line(Me.ResultChart)
-        regression_line.Title = "Regression line"
-        regression_line.LinePen.Width = 2
-        regression_line.LinePen.Color = Color.Red
+        'point series
+        series_points = Me.ResultChart.AddScatterPoints(x_values, y_values)
+        series_points.Label = $"Comparison {x_title} - {y_title}"
+        series_points.MarkerShape = ScottPlot.MarkerShape.filledCircle
+        series_points.MarkerSize = 4
 
-        'Plot points
-        '-----------
-        series_points.Add(x_values, y_values)
-
-        'Plot regression line
-        '--------------------
+        'regression line
         Dim intercept, slope As Double
         Dim x_min, x_max As Double
         x_min = x_values.Min()
         x_max = x_values.Max()
         intercept = Me.ResultValues("Linear regression intercept")
         slope = Me.ResultValues("Linear regression slope")
-        regression_line.Add(x_min, slope * x_min + intercept)
-        regression_line.Add(x_max, slope * x_max + intercept)
+        regression_line = Me.ResultChart.AddScatterLines({x_min, x_max}, {slope * x_min + intercept, slope * x_max + intercept})
+        regression_line.Label = "Regression line"
+        regression_line.LineWidth = 2
+        regression_line.LineColor = Color.Red
 
-        'Annotation
-        '----------
-        Dim anno As New Steema.TeeChart.Tools.Annotation(Me.ResultChart)
-        anno.Position = Steema.TeeChart.Tools.AnnotationPositions.RightBottom
-        anno.Text = $"Correlation coefficient: {Me.ResultValues("Correlation coefficient").ToString(DefaultNumberFormat)}" & eol
-        anno.Text &= "Linear regression line: " & eol
-        anno.Text &= $"y = {slope.ToString(DefaultNumberFormat)} * x + {intercept.ToString(DefaultNumberFormat)}"
+        'annotation
+        Dim annot As New ScottPlot.Plottable.Annotation()
+        annot.Label =
+            $"Correlation coefficient: {Me.ResultValues("Correlation coefficient").ToString(DefaultNumberFormat)}" & eol &
+            "Linear regression line: " & eol &
+            $"y = {slope.ToString(DefaultNumberFormat)} * x + {intercept.ToString(DefaultNumberFormat)}"
+        annot.Alignment = ScottPlot.Alignment.LowerRight
+        annot.BackgroundColor = Color.White
+        Me.ResultChart.Add(annot)
 
     End Sub
 

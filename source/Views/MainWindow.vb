@@ -32,11 +32,16 @@ Friend Class MainWindow
     ''' <remarks></remarks>
     Friend isInitializing As Boolean
 
-    'ColorBand that is shown while zooming in main chart
-    Friend colorBandZoom As Steema.TeeChart.Tools.ColorBand
+    'Rectangle that is shown while zooming in main chart
+    Friend ZoomRectangle As ScottPlot.Plottable.HSpan
 
-    'ColorBand representing current view extent of main chart in OverviewChart
-    Friend colorBandOverview As Steema.TeeChart.Tools.ColorBand
+    'Rectangle representing current view extent of main chart in overview chart
+    Friend ViewExtentRectangle As ScottPlot.Plottable.HSpan
+
+    ''' <summary>
+    ''' List of HorizontalSpans representing NaN periods
+    ''' </summary>
+    Friend NaNSpans As List(Of ScottPlot.Plottable.HSpan)
 
     'Cursors
     Friend cursor_pan As Cursor
@@ -61,7 +66,7 @@ Friend Class MainWindow
     Friend Property ChartMinX As DateTime
         Get
             Try
-                Return DateTime.FromOADate(Me.TChart1.Axes.Bottom.Minimum)
+                Return DateTime.FromOADate(Me.MainPlot.Plot.XAxis.Dims.Min)
             Catch ex As ArgumentException
                 Return Constants.minOADate
             End Try
@@ -70,14 +75,14 @@ Friend Class MainWindow
             If value < Constants.minOADate Then
                 value = Constants.minOADate
             End If
-            Me.TChart1.Axes.Bottom.Minimum = value.ToOADate()
+            Me.MainPlot.Plot.XAxis.Dims.SetAxis(min:=value.ToOADate(), max:=Nothing)
         End Set
     End Property
 
     Friend Property ChartMaxX As DateTime
         Get
             Try
-                Return DateTime.FromOADate(Me.TChart1.Axes.Bottom.Maximum)
+                Return DateTime.FromOADate(Me.MainPlot.Plot.XAxis.Dims.Max)
             Catch ex As ArgumentException
                 Return Constants.maxOADate
             End Try
@@ -86,7 +91,7 @@ Friend Class MainWindow
             If value > Constants.maxOADate Then
                 value = Constants.maxOADate
             End If
-            Me.TChart1.Axes.Bottom.Maximum = value.ToOADate()
+            Me.MainPlot.Plot.XAxis.Dims.SetAxis(min:=Nothing, max:=value.ToOADate())
         End Set
     End Property
 
@@ -96,12 +101,12 @@ Friend Class MainWindow
 
         Me.isInitializing = True
 
-        ' Dieser Aufruf ist für den Windows Form-Designer erforderlich.
+        ' Dieser Aufruf ist fÃ¼r den Windows Form-Designer erforderlich.
         InitializeComponent()
 
         'Charts einrichten
         '-----------------
-        Call Me.Init_Charts()
+        Call Me.InitializeCharts()
 
         'Navigation initialisieren
         Me.ComboBox_NavIncrement.SelectedItem = "Days"
@@ -124,75 +129,61 @@ Friend Class MainWindow
 
     End Sub
 
+    ''' <summary>
+    ''' Initializes/resets the charts
+    ''' </summary>
+    Friend Sub InitializeCharts()
 
-    'Charts neu einrichten
-    '*********************
-    Friend Sub Init_Charts()
+        'initialize main plot
+        Me.MainPlot.Plot.Clear()
+        Call Helpers.FormatChart(Me.MainPlot.Plot)
+        Me.MainPlot.Plot.Style(figureBackground:=Color.White)
+        Me.MainPlot.Configuration.Pan = False
+        Me.MainPlot.Configuration.Zoom = False
+        Me.MainPlot.Refresh()
 
-        'Charts zurücksetzen
-        Me.TChart1.Clear()
-        Call Helpers.FormatChart(Me.TChart1.Chart)
+        'initialize overview plot
+        Me.OverviewPlot.Plot.Clear()
+        Call Helpers.FormatChart(Me.OverviewPlot.Plot)
+        Me.OverviewPlot.Plot.Legend.IsVisible = False
+        Me.OverviewPlot.Configuration.Pan = False
+        Me.OverviewPlot.Configuration.Zoom = False
+        Me.OverviewPlot.Refresh()
 
-        Me.TChart2.Clear()
-        Call Helpers.FormatChart(Me.TChart2.Chart)
-        Me.TChart2.Panel.Brush.Color = Color.FromArgb(239, 239, 239)
-        Me.TChart2.Walls.Back.Color = Color.FromArgb(239, 239, 239)
-        Me.TChart2.Header.Visible = False
-        Me.TChart2.Legend.Visible = False
+        'initialize rectangles
+        Call Me.InitializeRectangles()
 
-        'Disable TeeChart builtin zooming and panning functionality
-        Me.TChart1.Zoom.Direction = Steema.TeeChart.ZoomDirections.None
-        Me.TChart1.Zoom.History = False
-        Me.TChart1.Zoom.Animated = True
-        Me.TChart1.Panning.Allow = Steema.TeeChart.ScrollModes.None
-
-        Me.TChart2.Zoom.Direction = Steema.TeeChart.ZoomDirections.None
-        Me.TChart2.Panning.Allow = Steema.TeeChart.ScrollModes.None
-
-        'Achsen
-        Me.TChart1.Axes.Bottom.Automatic = False
-        Me.TChart1.Axes.Bottom.Labels.Angle = 90
-        Me.TChart1.Axes.Bottom.Labels.DateTimeFormat = Helpers.CurrentDateFormat
-        Me.TChart1.Axes.Right.Title.Angle = 90
-
-        Me.TChart2.Axes.Left.Labels.Font.Color = Color.FromArgb(100, 100, 100)
-        Me.TChart2.Axes.Left.Labels.Font.Size = 8
-        Me.TChart2.Axes.Bottom.Labels.Font.Color = Color.FromArgb(100, 100, 100)
-        Me.TChart2.Axes.Bottom.Labels.Font.Size = 8
-        Me.TChart2.Axes.Bottom.Automatic = False
-        Me.TChart2.Axes.Bottom.Labels.DateTimeFormat = Globalization.CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern 'date only without time
-
-        'ColorBand einrichten
-        Call Me.Init_ColorBands()
+        'initialize list of HorizontalSpans representing NaN periods
+        Me.NaNSpans = New List(Of ScottPlot.Plottable.HSpan)
 
     End Sub
 
     ''' <summary>
-    ''' Initialize color bands
+    ''' Initialize the chart rectangles
     ''' </summary>
-    Friend Sub Init_ColorBands()
+    Friend Sub InitializeRectangles()
 
-        colorBandOverview = New Steema.TeeChart.Tools.ColorBand()
-        Me.TChart2.Tools.Add(colorBandOverview)
-        colorBandOverview.Axis = Me.TChart2.Axes.Bottom
-        colorBandOverview.Brush.Color = Color.Coral
-        colorBandOverview.Brush.Transparency = 50
-        colorBandOverview.ResizeEnd = False
-        colorBandOverview.ResizeStart = False
-        colorBandOverview.EndLinePen.Visible = False
-        colorBandOverview.StartLinePen.Visible = False
+        Dim limits As ScottPlot.AxisLimits
 
-        colorBandZoom = New Steema.TeeChart.Tools.ColorBand()
-        Me.TChart1.Tools.Add(colorBandZoom)
-        colorBandZoom.Axis = Me.TChart1.Axes.Bottom
-        colorBandZoom.Color = Color.Black
-        colorBandZoom.Pen.Color = Color.Black
-        colorBandZoom.Pen.Style = Drawing2D.DashStyle.Dash
-        colorBandZoom.Brush.Visible = False
-        colorBandZoom.ResizeEnd = False
-        colorBandZoom.ResizeStart = False
-        colorBandZoom.EndLinePen.Visible = True
-        colorBandZoom.StartLinePen.Visible = True
+        'view extent rectangle
+        limits = Me.OverviewPlot.Plot.GetAxisLimits()
+        ViewExtentRectangle = Me.OverviewPlot.Plot.AddHorizontalSpan(limits.XMin, limits.XMax)
+        ViewExtentRectangle.Color = Color.FromArgb(100, Color.Coral)
+        ViewExtentRectangle.BorderColor = Color.Coral
+        ViewExtentRectangle.BorderLineStyle = ScottPlot.LineStyle.Solid
+        ViewExtentRectangle.BorderLineWidth = 1
+        Me.OverviewPlot.Refresh()
+
+        'zoom rectangle
+        limits = Me.MainPlot.Plot.GetAxisLimits()
+        ZoomRectangle = Me.MainPlot.Plot.AddHorizontalSpan(limits.XMin, limits.XMax)
+        ZoomRectangle.DragEnabled = False
+        ZoomRectangle.Color = Color.FromArgb(0, Color.Empty)
+        ZoomRectangle.BorderColor = Color.Black
+        ZoomRectangle.BorderLineStyle = ScottPlot.LineStyle.Dash
+        ZoomRectangle.BorderLineWidth = 1
+        ZoomRectangle.IsVisible = False
+
     End Sub
 
     Private Overloads Sub Close() Implements IView.Close

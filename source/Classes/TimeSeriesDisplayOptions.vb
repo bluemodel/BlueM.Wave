@@ -1,4 +1,4 @@
-﻿'BlueM.Wave
+'BlueM.Wave
 'Copyright (C) BlueM Dev Group
 '<https://www.bluemodel.org>
 '
@@ -43,11 +43,11 @@ Public Class TimeSeriesDisplayOptions
     ''' Line style
     ''' </summary>
     ''' <returns></returns>
-    Public Property LineStyle As Drawing2D.DashStyle
+    Public Property LineStyle As ScottPlot.LineStyle
         Get
             Return _linestyle
         End Get
-        Set(value As Drawing2D.DashStyle)
+        Set(value As ScottPlot.LineStyle)
             _linestyle = value
         End Set
     End Property
@@ -84,7 +84,7 @@ Public Class TimeSeriesDisplayOptions
     ''' <remarks>Default Color is empty in order to allow automatic color assignment by the chart</remarks>
     Public Sub New()
         Me.Color = Color.Empty
-        Me.LineStyle = Drawing2D.DashStyle.Solid
+        Me.LineStyle = ScottPlot.LineStyle.Solid
         Me.LineWidth = 2
         Me.ShowPoints = False
     End Sub
@@ -131,10 +131,10 @@ Public Class TimeSeriesDisplayOptions
     ''' <remarks>Recognized line styles: https://learn.microsoft.com/en-us/dotnet/api/system.drawing.drawing2d.dashstyle</remarks>
     ''' <param name="lineStyle">the line style as string</param>
     Public Sub SetLineStyle(lineStyle As String)
-        If Not [Enum].IsDefined(GetType(Drawing2D.DashStyle), lineStyle) Then
+        If Not [Enum].IsDefined(GetType(ScottPlot.LineStyle), lineStyle) Then
             Log.AddLogEntry(levels.warning, $"Line style '{lineStyle}' is not recognized!")
         Else
-            Me.LineStyle = [Enum].Parse(GetType(Drawing2D.DashStyle), lineStyle)
+            Me.LineStyle = [Enum].Parse(GetType(ScottPlot.LineStyle), lineStyle)
         End If
     End Sub
 

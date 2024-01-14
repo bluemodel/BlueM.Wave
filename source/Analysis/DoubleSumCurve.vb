@@ -126,42 +126,30 @@ Friend Class DoubleSumCurve
         '-----
         Me.ResultText = $"The analysis is based on {Me.summe1.Length} coincident data points between {Me.ts_1.StartDate.ToString(Helpers.CurrentDateFormat)} and {Me.ts_1.EndDate.ToString(Helpers.CurrentDateFormat)}"
 
-        'Diagramm:
-        '---------
-        Dim doppelsumme, gerade As Steema.TeeChart.Styles.Line
+        'Result chart:
+        Dim doppelsumme, gerade As ScottPlot.Plottable.ScatterPlot
 
-        Me.ResultChart = New Steema.TeeChart.Chart()
+        Me.ResultChart = New ScottPlot.Plot()
         Call Helpers.FormatChart(Me.ResultChart)
-        Me.ResultChart.Header.Text = $"Double Sum Curve ({Me.ts_1.Title} / {Me.ts_2.Title})"
-        Me.ResultChart.Legend.Visible = False
+        Me.ResultChart.XAxis.DateTimeFormat(False)
+        Me.ResultChart.Title($"Double Sum Curve ({Me.ts_1.Title} / {Me.ts_2.Title})")
+        Me.ResultChart.Legend.IsVisible = False
 
-        'Achsen
-        '------
-        Me.ResultChart.Axes.Bottom.Title.Caption = $"Sum {Me.ts_1.Title}"
-        Me.ResultChart.Axes.Bottom.Labels.Style = Steema.TeeChart.AxisLabelStyle.Value
-        Me.ResultChart.Axes.Left.Title.Caption = $"Sum {Me.ts_2.Title}"
-        Me.ResultChart.Axes.Left.Labels.Style = Steema.TeeChart.AxisLabelStyle.Value
+        'axes
+        Me.ResultChart.XLabel($"Sum {Me.ts_1.Title}")
+        Me.ResultChart.YLabel($"Sum {Me.ts_2.Title}")
 
-        'Reihen
-        '------
-        doppelsumme = New Steema.TeeChart.Styles.Line(Me.ResultChart)
-        doppelsumme.Title = $"Double Sum Curve {Me.ts_1.Title} - {Me.ts_2.Title}"
-        doppelsumme.Pointer.Visible = True
-        doppelsumme.Pointer.Style = Steema.TeeChart.Styles.PointerStyles.Circle
-        doppelsumme.Pointer.HorizSize = 2
-        doppelsumme.Pointer.VertSize = 2
+        'series
+        doppelsumme = Me.ResultChart.AddScatter(summe1, summe2)
+        doppelsumme.Label = $"Double Sum Curve {Me.ts_1.Title} - {Me.ts_2.Title}"
+        doppelsumme.MarkerShape = ScottPlot.MarkerShape.filledCircle
+        doppelsumme.MarkerSize = 4
 
-        gerade = New Steema.TeeChart.Styles.Line(Me.ResultChart)
-        gerade.Title = "45° line"
-        gerade.Color = Color.DarkGray
-        gerade.LinePen.Style = Drawing2D.DashStyle.Dash
-
-        'Werte eintragen
-        doppelsumme.Add(summe1, summe2)
-
-        gerade.Add(0, 0)
-        Dim maxwert As Double = Math.Min(Me.ResultChart.Axes.Bottom.MaxXValue, Me.ResultChart.Axes.Left.MaxYValue)
-        gerade.Add(maxwert, maxwert)
+        Dim max As Double = Math.Max(summe1.Max, summe2.Max)
+        gerade = Me.ResultChart.AddScatterLines({0, max}, {0, max})
+        gerade.Label = "45° line"
+        gerade.LineColor = Color.DarkGray
+        gerade.LineStyle = ScottPlot.LineStyle.Dash
 
     End Sub
 

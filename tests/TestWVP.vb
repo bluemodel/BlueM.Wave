@@ -58,7 +58,7 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
             Assert.AreEqual(TimeSeries.InterpretationEnum.BlockLeft, .Interpretation)
             Assert.AreEqual("Red", .DisplayOptions.Color.Name)
             Assert.AreEqual(4, .DisplayOptions.LineWidth)
-            Assert.AreEqual(Drawing.Drawing2D.DashStyle.Dash, .DisplayOptions.LineStyle)
+            Assert.AreEqual(ScottPlot.LineStyle.Dash, .DisplayOptions.LineStyle)
             Assert.AreEqual(True, .DisplayOptions.ShowPoints)
         End With
 

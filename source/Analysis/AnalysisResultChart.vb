@@ -17,9 +17,20 @@
 '
 ''' <summary>
 ''' Form to display an analysis result chart
-''' TODO: unlike the main chart, this chart uses the inbuilt TeeChart zoom and pan behaviour, which may be unexpected for users
 ''' </summary>
 Friend Class AnalysisResultChart
+
+    Public Sub New(plot As ScottPlot.Plot)
+
+        ' This call is required by the designer.
+        InitializeComponent()
+
+        ' Add any initialization after the InitializeComponent() call.
+
+        'replace the plot
+        Me.ResultPlot.Reset(plot)
+
+    End Sub
 
     ''' <summary>
     ''' Copy chart to clipboard as PNG image
@@ -27,7 +38,7 @@ Friend Class AnalysisResultChart
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
     Private Sub ToolStripButton_Copy_Click(sender As Object, e As EventArgs) Handles ToolStripButton_Copy.Click
-        Call Me.TChart1.Export.Image.PNG.CopyToClipboard()
+        Clipboard.SetImage(Me.ResultPlot.Plot.Render())
     End Sub
 
     ''' <summary>
@@ -35,8 +46,13 @@ Friend Class AnalysisResultChart
     ''' </summary>
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
-    Private Sub ToolStripButton_EditChart_Click(sender As Object, e As EventArgs) Handles ToolStripButton_EditChart.Click, TChart1.DoubleClick
-        TChart1.ShowEditor()
+    Private Sub ToolStripButton_EditChart_Click(sender As Object, e As EventArgs) Handles ToolStripButton_EditChart.Click
+        'TODO: TChart
+        MsgBox("Not yet implemented!", MsgBoxStyle.Critical)
+    End Sub
+
+    Private Sub AnalysisResultChart_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        Me.ResultPlot.Refresh()
     End Sub
 
 End Class

@@ -20,8 +20,6 @@ Imports System.Text.RegularExpressions
 Friend Class WaveController
     Inherits Controller
 
-    Implements Steema.TeeChart.ITeeEventListener
-
     Private Overloads ReadOnly Property View As MainWindow
         Get
             Return _view
@@ -47,6 +45,29 @@ Friend Class WaveController
         End Get
     End Property
 
+    ''' <summary>
+    ''' Dictionary of series in the main chart, key corresponds to TimeSeries ID
+    ''' </summary>
+    Private ChartSeries As Dictionary(Of Integer, ScottPlot.Plottable.IPlottable)
+
+    ''' <summary>
+    ''' Dictionary of series in the overview chart, key corresponds to TimeSeries ID
+    ''' </summary>
+    Private OverviewSeries As Dictionary(Of Integer, ScottPlot.Plottable.IPlottable)
+
+    ''' <summary>
+    ''' Dictionary of markers in main chart, key corresponds to TimeSeries ID
+    ''' </summary>
+    Private ChartMarkers As Dictionary(Of Integer, ScottPlot.Plottable.IPlottable)
+
+    ''' <summary>
+    ''' List of Y axes
+    ''' </summary>
+    Private Axes As System.ComponentModel.BindingList(Of AxisWrapper)
+
+    'Edit Chart dialog
+    Private WithEvents EditChartDlg As EditChartDialog
+
     Private selectionMade As Boolean 'Flag zeigt an, ob bereits ein Auswahlbereich ausgewählt wurde
 
     ''' <summary>
@@ -70,8 +91,6 @@ Friend Class WaveController
     Private OverviewChartMouseDragStartX As Double
     Private OverviewChartMouseDragOffset As Double
 
-    Private WithEvents _axisDialog As AxisDialog
-
     'Events handled by the AppInstance
     Friend Event Properties_Clicked()
     Friend Event TimeseriesValues_Clicked()
@@ -82,11 +101,18 @@ Friend Class WaveController
 
         Me.View.SetController(Me)
 
+        'Initialize chart series containers
+        Me.ChartSeries = New Dictionary(Of Integer, ScottPlot.Plottable.IPlottable)
+        Me.OverviewSeries = New Dictionary(Of Integer, ScottPlot.Plottable.IPlottable)
+        Me.ChartMarkers = New Dictionary(Of Integer, ScottPlot.Plottable.IPlottable)
+        Me.Axes = New ComponentModel.BindingList(Of AxisWrapper)
+
+        'Initialize edit chart dialog
+        Me.EditChartDlg = New EditChartDialog(Me.Axes)
+
         'Initialize zoom history
         Me.ZoomHistory = New List(Of (xmin As Double, xmax As Double))
         Me.ZoomHistoryIndex = 0
-
-        _axisDialog = New AxisDialog()
 
         'Subscribe to view events
 
@@ -95,21 +121,21 @@ Friend Class WaveController
         'toolbar buttons
         AddHandler Me.View.ToolStripButton_New.Click, AddressOf New_Click
         AddHandler Me.View.ToolStripButton_Copy.Click, AddressOf Copy_Click
-        AddHandler Me.View.ToolStripButton_Print.Click, AddressOf Print_Click
         AddHandler Me.View.ToolStripMenuItem_ImportSeries.Click, AddressOf ImportSeries_Click
         AddHandler Me.View.ToolStripMenuItem_LoadTEN.Click, AddressOf LoadTEN_Click
         AddHandler Me.View.ToolStripMenuItem_ReloadFromFiles.Click, AddressOf RefreshFromFiles_Click
         AddHandler Me.View.ToolStripMenuItem_RecentlyUsedFiles.DropDownItemClicked, AddressOf openRecentlyUsedFile
         AddHandler Me.View.ToolStripMenuItem_PasteFromClipboard.Click, AddressOf PasteFromClipboard_Click
         AddHandler Me.View.ToolStripMenuItem_SaveProjectFile.Click, AddressOf SaveProjectFile_Click
-        AddHandler Me.View.ToolStripMenuItem_SaveChart.Click, AddressOf SaveChart_Click
+        AddHandler Me.View.ToolStripMenuItem_SaveImage.Click, AddressOf SaveImage_Click
         AddHandler Me.View.ToolStripMenuItem_ExportSeries.Click, AddressOf ExportZeitreihe_Click
         AddHandler Me.View.ToolStripMenuItem_EnterSeries.Click, AddressOf Eingeben_Click
         AddHandler Me.View.ToolStripButton_Cut.Click, AddressOf Zuschneiden_Click
         AddHandler Me.View.ToolStripButton_Merge.Click, AddressOf Merge_Click
         AddHandler Me.View.ToolStripButton_Analysis.Click, AddressOf Analysis_Click
-        AddHandler Me.View.ToolStripButton_AxisDialog.Click, AddressOf AxisDialog_Click
         AddHandler Me.View.ToolStripButton_EditChart.Click, AddressOf EditChart_Click
+        AddHandler Me.View.ToolStripMenuItem_ColorPaletteCategory10.Click, AddressOf ColorPalette_Click
+        AddHandler Me.View.ToolStripMenuItem_ColorPaletteCategory20.Click, AddressOf ColorPalette_Click
         AddHandler Me.View.ToolStripMenuItem_ColorPaletteMaterial.Click, AddressOf ColorPalette_Click
         AddHandler Me.View.ToolStripMenuItem_ColorPaletteDistinct.Click, AddressOf ColorPalette_Click
         AddHandler Me.View.ToolStripMenuItem_ColorPaletteWheel.Click, AddressOf ColorPalette_Click
@@ -128,8 +154,6 @@ Friend Class WaveController
         AddHandler Me.View.ToolStripButton_ZoomNext.Click, AddressOf ZoomNext_Click
         AddHandler Me.View.ToolStripButton_ZoomAll.Click, AddressOf ZoomAll_Click
         AddHandler Me.View.ToolStripDropDownButton_ZoomToSeries.DropDownOpening, AddressOf ZoomToSeries_DropDown
-        AddHandler Me.View.ToolStripMenuItem_ActivateAllSeries.Click, AddressOf ActivateAllSeries_Click
-        AddHandler Me.View.ToolStripMenuItem_DeactivateAllSeries.Click, AddressOf DeactivateAllSeries_Click
         AddHandler Me.View.ToolStripMenuItem_Help.Click, AddressOf Help_Click
         AddHandler Me.View.ToolStripMenuItem_CheckForUpdate.Click, AddressOf CheckForUpdate_Click
         AddHandler Me.View.ToolStripButton_UpdateNotification.Click, AddressOf CheckForUpdate_Click
@@ -140,22 +164,30 @@ Friend Class WaveController
         AddHandler Me.View.KeyDown, AddressOf KeyDown
 
         'mouse events
-        AddHandler Me.View.TChart1.MouseDown, AddressOf Chart_MouseDown
-        AddHandler Me.View.TChart1.MouseMove, AddressOf Chart_MouseMove
-        AddHandler Me.View.TChart1.MouseUp, AddressOf Chart_MouseUp
-        AddHandler Me.View.TChart1.DoubleClick, AddressOf EditChart_Click
+        AddHandler Me.View.MainPlot.MouseDown, AddressOf Chart_MouseDown
+        AddHandler Me.View.MainPlot.MouseMove, AddressOf Chart_MouseMove
+        AddHandler Me.View.MainPlot.MouseUp, AddressOf Chart_MouseUp
+        AddHandler Me.View.MainPlot.DoubleClick, AddressOf EditChart_Click
 
-        AddHandler Me.View.TChart2.MouseDown, AddressOf OverviewChart_MouseDown
-        AddHandler Me.View.TChart2.MouseMove, AddressOf OverviewChart_MouseMove
-        AddHandler Me.View.TChart2.MouseUp, AddressOf OverviewChart_MouseUp
-        AddHandler Me.View.TChart2.DoubleClick, AddressOf OverviewChart_DoubleClick
+        AddHandler Me.View.OverviewPlot.MouseDown, AddressOf OverviewChart_MouseDown
+        AddHandler Me.View.OverviewPlot.MouseMove, AddressOf OverviewChart_MouseMove
+        AddHandler Me.View.OverviewPlot.MouseUp, AddressOf OverviewChart_MouseUp
 
-        AddHandler Me.View.TChart1.MouseWheel, AddressOf Chart_MouseWheel
-        AddHandler Me.View.TChart2.MouseWheel, AddressOf OverviewChart_MouseWheel
+        AddHandler Me.View.MainPlot.MouseWheel, AddressOf Chart_MouseWheel
+        AddHandler Me.View.OverviewPlot.MouseWheel, AddressOf OverviewChart_MouseWheel
 
         'drag drop events
         AddHandler Me.View.DragEnter, AddressOf Wave_DragEnter
         AddHandler Me.View.DragDrop, AddressOf Wave_DragDrop
+
+        'TOC events
+        AddHandler Me.View.CheckedListBox_Series.SelectedIndexChanged, AddressOf TOC_SelectionChanged
+        AddHandler Me.View.ToolStripButton_Delete.Click, AddressOf ToolStripButton_Delete_Click
+        AddHandler Me.View.ToolStripButton_MoveUp.Click, AddressOf ToolStripButton_MoveUp_Click
+        AddHandler Me.View.ToolStripButton_MoveDown.Click, AddressOf ToolStripButton_MoveDown_Click
+        AddHandler Me.View.ToolStripMenuItem_ActivateAllSeries.Click, AddressOf ActivateAllSeries_Click
+        AddHandler Me.View.ToolStripMenuItem_DeactivateAllSeries.Click, AddressOf DeactivateAllSeries_Click
+        AddHandler Me.View.CheckedListBox_Series.ItemCheck, AddressOf SeriesActiveChanged
 
         'navigation events
         AddHandler Me.View.MaskedTextBox_NavStart.KeyDown, AddressOf navigationKeyDown
@@ -177,13 +209,6 @@ Friend Class WaveController
         AddHandler Me.View.ToolStripStatusLabel_Errors.Click, AddressOf ShowLog_Click
         AddHandler Me.View.ToolStripStatusLabel_Warnings.Click, AddressOf ShowLog_Click
 
-        'axis dialog events
-        AddHandler _axisDialog.AxisDeleted, AddressOf axisDeleted
-        AddHandler _axisDialog.AxisUnitChanged, AddressOf AxisUnitChanged
-
-        'add chart event listener
-        Me.View.TChart1.Chart.Listeners.Add(Me)
-
         'model events
         AddHandler _model.FileImported, AddressOf FileImported
         AddHandler _model.SeriesAdded, AddressOf SeriesAdded
@@ -194,6 +219,9 @@ Friend Class WaveController
         AddHandler _model.HighlightTimestamps, AddressOf showMarkers
         AddHandler _model.TENFileLoading, AddressOf Load_TEN
         AddHandler _model.IsBusyChanged, AddressOf ShowBusy
+
+        'edit chart events
+        AddHandler EditChartDlg.AxesEdited, AddressOf AxesEditedHandler
 
         'add any already existing time series
         For Each ts As TimeSeries In _model.TimeSeries.Values
@@ -212,8 +240,16 @@ Friend Class WaveController
 
     End Sub
 
+    Private Sub AxesEditedHandler()
+        View.MainPlot.Refresh()
+    End Sub
+
+    ''' <summary>
+    ''' Handles the case where all series were cleared from the model
+    ''' </summary>
     Private Sub SeriesCleared()
-        'nothing to do
+        'remove TOC items
+        View.CheckedListBox_Series.Items.Clear()
     End Sub
 
     ''' <summary>
@@ -233,69 +269,6 @@ Friend Class WaveController
         End Try
     End Sub
 
-    ''' <summary>
-    ''' Handles TeeChart Events
-    ''' </summary>
-    ''' <param name="e"></param>
-    Private Sub TeeEvent(e As Steema.TeeChart.TeeEvent) Implements Steema.TeeChart.ITeeEventListener.TeeEvent
-        Try
-            If TypeOf e Is Steema.TeeChart.Styles.SeriesEvent Then
-                Dim seriesEvent As Steema.TeeChart.Styles.SeriesEvent = CType(e, Steema.TeeChart.Styles.SeriesEvent)
-                Select Case seriesEvent.Event
-                    Case Steema.TeeChart.Styles.SeriesEventStyle.ChangeActive
-                        'series visibility has been changed. check whether custom axes should be made invisible
-
-                        'collect units of all active series
-                        Dim activeUnits As New HashSet(Of String)
-                        For Each series As Steema.TeeChart.Styles.Series In View.TChart1.Series
-                            If series.Active Then
-                                activeUnits.Add(series.GetVertAxis.Tag)
-                            End If
-                        Next
-                        'set visibility of custom axes accordingly
-                        For Each axis As Steema.TeeChart.Axis In View.TChart1.Axes.Custom
-                            If activeUnits.Contains(axis.Tag) Then
-                                axis.Visible = True
-                            Else
-                                axis.Visible = False
-                            End If
-                        Next
-
-                    Case Steema.TeeChart.Styles.SeriesEventStyle.ChangeTitle
-                        'series title changed, update title in the model
-                        Dim id As Integer = seriesEvent.Series.Tag
-                        If _model.TimeSeries.ContainsId(id) Then
-                            If _model.TimeSeries(id).Title <> seriesEvent.Series.Title Then
-                                _model.TimeSeries(id).Title = seriesEvent.Series.Title
-                                _model.SeriesPropertiesChangedHandler(id)
-                            End If
-                        End If
-
-                    Case Steema.TeeChart.Styles.SeriesEventStyle.Remove
-                        'series removed, delete series from model
-                        Dim id As Integer = seriesEvent.Series.Tag
-                        If _model.TimeSeries.ContainsId(id) Then
-                            'temporarily disable event handling to prevent multiple deletions
-                            RemoveHandler _model.SeriesRemoved, AddressOf SeriesRemoved
-                            _model.RemoveTimeSeries(id)
-                            AddHandler _model.SeriesRemoved, AddressOf SeriesRemoved
-                        End If
-
-                    Case Steema.TeeChart.Styles.SeriesEventStyle.Swap
-                        'series reordered, reorder series in model
-                        Dim ids As New List(Of Integer)
-                        For Each series As Steema.TeeChart.Styles.Series In e.sender.Series
-                            ids.Add(series.Tag)
-                        Next
-                        _model.Reorder_Series(ids)
-
-                End Select
-            End If
-        Catch ex As Exception
-            Log.AddLogEntry(Log.levels.debug, ex.Message)
-        End Try
-    End Sub
-
 #Region "user events"
 
     'Neu
@@ -306,13 +279,18 @@ Friend Class WaveController
 
         'Warnen, wenn bereits Serien vorhanden
         '-------------------------------------
-        If (View.TChart1.Series.Count() > 0) Then
+        If (View.MainPlot.Plot.GetPlottables().Count() > 0) Then
             res = MsgBox($"All existing series will be deleted!{eol}Continue?", MsgBoxStyle.OkCancel)
             If (Not res = Windows.Forms.DialogResult.OK) Then Exit Sub
         End If
 
+        'Clear chart series
+        Me.ChartSeries.Clear()
+        Me.OverviewSeries.Clear()
+        Me.ChartMarkers.Clear()
+
         'Charts zurücksetzen
-        Call View.Init_Charts()
+        Call View.InitializeCharts()
 
         'Reset Zoom history
         Me.ZoomHistory.Clear()
@@ -332,9 +310,6 @@ Friend Class WaveController
         View.ToolStripStatusLabel_Warnings.Text = 0
         View.ToolStripStatusLabel_Errors.Image = My.Resources.cancel_inactive
         View.ToolStripStatusLabel_Warnings.Image = My.Resources.warning_inactive
-
-        'Update axis dialog
-        Me.UpdateAxisDialog()
 
         Me.selectionMade = False
 
@@ -402,18 +377,19 @@ Friend Class WaveController
                 'collect display options from chart and store them in timeseries
                 Dim tsList As New List(Of TimeSeries)
                 For Each ts As TimeSeries In _model.TimeSeries.ToList()
-                    For Each series As Steema.TeeChart.Styles.Series In View.TChart1.Series
-                        If series.Tag = ts.Id Then
-                            If TypeOf series Is Steema.TeeChart.Styles.Line Then
-                                Dim line As Steema.TeeChart.Styles.Line = CType(series, Steema.TeeChart.Styles.Line)
-                                ts.DisplayOptions.Color = line.Color
-                                ts.DisplayOptions.LineStyle = line.LinePen.Style
-                                ts.DisplayOptions.LineWidth = line.LinePen.Width
-                                ts.DisplayOptions.ShowPoints = line.Pointer.Visible
-                            End If
-                            Exit For
-                        End If
-                    Next
+                    'TODO: TChart
+                    'For Each series As Steema.TeeChart.Styles.Series In View.MainPlot.Series
+                    '    If series.Tag = ts.Id Then
+                    '        If TypeOf series Is Steema.TeeChart.Styles.Line Then
+                    '            Dim line As Steema.TeeChart.Styles.Line = CType(series, Steema.TeeChart.Styles.Line)
+                    '            ts.DisplayOptions.Color = line.Color
+                    '            ts.DisplayOptions.LineStyle = line.LinePen.Style
+                    '            ts.DisplayOptions.LineWidth = line.LinePen.Width
+                    '            ts.DisplayOptions.ShowPoints = line.Pointer.Visible
+                    '        End If
+                    '        Exit For
+                    '    End If
+                    'Next
                     tsList.Add(ts)
                 Next
                 Call Fileformats.WVP.Write_File(tsList, dlg.FileName,
@@ -435,11 +411,20 @@ Friend Class WaveController
 
     End Sub
 
-    'Teechart Export
-    '***************
-    Private Sub SaveChart_Click(sender As System.Object, e As System.EventArgs)
-        Dim fmt As New Steema.TeeChart.Export.TemplateExport(View.TChart1.Chart)
-        Call View.TChart1.Export.ShowExportDialog(fmt)
+    ''' <summary>
+    ''' Save image button clicked
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    Private Sub SaveImage_Click(sender As System.Object, e As System.EventArgs)
+        View.SaveFileDialog1.Title = "Save image"
+        View.SaveFileDialog1.Filter = "PNG images (*.png)|*.png"
+        View.SaveFileDialog1.DefaultExt = "png"
+        View.SaveFileDialog1.OverwritePrompt = True
+        Dim dlgResult As DialogResult = View.SaveFileDialog1.ShowDialog()
+        If dlgResult = DialogResult.OK Then
+            View.MainPlot.Plot.SaveFig(View.SaveFileDialog1.FileName)
+        End If
     End Sub
 
     'Zeitreihen Export
@@ -566,7 +551,9 @@ Friend Class WaveController
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
     Private Sub EditChart_Click(sender As System.Object, e As System.EventArgs)
-        Call Steema.TeeChart.Editor.Show(View.TChart1)
+        Me.EditChartDlg.Visible = True
+        Me.EditChartDlg.Show()
+        Me.EditChartDlg.BringToFront()
     End Sub
 
     ''' <summary>
@@ -577,16 +564,6 @@ Friend Class WaveController
     Private Sub ColorPalette_Click(sender As Object, e As EventArgs)
         Dim colorPaletteName As String = CType(sender, ToolStripMenuItem).Text
         SetChartColorPalette(Helpers.getColorPalette(colorPaletteName))
-    End Sub
-    ''' <summary>
-    ''' Show AxisDialog button clicked
-    ''' </summary>
-    ''' <param name="sender"></param>
-    ''' <param name="e"></param>
-    Private Sub AxisDialog_Click(sender As Object, e As EventArgs)
-        Call UpdateAxisDialog()
-        _axisDialog.Show()
-        _axisDialog.BringToFront()
     End Sub
 
     ''' <summary>
@@ -642,97 +619,85 @@ Friend Class WaveController
     ''' <remarks></remarks>
     Private Sub ShowNaNValues_Click(sender As System.Object, e As System.EventArgs)
 
-        Dim processSeries As Boolean
-        Dim nanStart, nanEnd, bandStart, bandEnd As DateTime
-        Dim band As Steema.TeeChart.Tools.ColorBand
-        Dim color As Drawing.Color
+        Dim nanStart, nanEnd, spanStart, spanEnd As DateTime
         Dim isNaNPeriod, nanFound, nanFoundInSeries As Boolean
-
-        'set default color
-        color = Color.Red
+        Dim nanCount As Integer
 
         If View.ToolStripButton_ShowNaNValues.Checked Then
             'Switch visualization of NaN values on
-            'Show color bands for NaN values in the currently active series
+            'Show horizontal spans for NaN values in the currently active series
             nanFound = False
-            For Each ts As TimeSeries In _model.TimeSeries.Values
-                processSeries = False
-                'check if time series is currently active
-                For Each series As Steema.TeeChart.Styles.Series In View.TChart1.Series
-                    If series.Title = ts.Title Then
-                        If series.Active Then
-                            'process this series
-                            processSeries = True
-                            color = series.Color
-                        End If
-                        Exit For
-                    End If
-                Next
-                If processSeries Then
-                    'log
-                    Log.AddLogEntry(Log.levels.info, $"Finding NaN values for series {ts.Title}...")
-                    'find beginning and end of nan values
-                    nanFoundInSeries = False
-                    isNaNPeriod = False
-                    For i As Integer = 0 To ts.Length - 1
-                        If Not isNaNPeriod Then
-                            'test for start of NaN values
-                            If Double.IsNaN(ts.Values(i)) Then
-                                isNaNPeriod = True
-                                nanFoundInSeries = True
-                                nanFound = True
-                                If i = 0 Then
-                                    bandStart = ts.Dates(i)
-                                Else
-                                    bandStart = ts.Dates(i - 1)
-                                End If
-                                nanStart = ts.Dates(i)
+            For Each index As Integer In View.CheckedListBox_Series.CheckedIndices
 
-                                If i < ts.Length - 1 Then
-                                    Continue For
-                                End If
+                Dim ts As TimeSeries = CType(View.CheckedListBox_Series.Items(index), TimeSeries)
+                Dim color As Color = CType(Me.ChartSeries(ts.Id), ScottPlot.Plottable.ScatterPlot).LineColor
+
+                'find beginning and end of nan values
+                nanFoundInSeries = False
+                isNaNPeriod = False
+                nanCount = 0
+                For i As Integer = 0 To ts.Length - 1
+
+                    If Not isNaNPeriod Then
+                        'test for start of NaN values
+                        If Double.IsNaN(ts.Values(i)) Then
+                            isNaNPeriod = True
+                            nanFoundInSeries = True
+                            nanFound = True
+                            If i = 0 Then
+                                spanStart = ts.Dates(i)
+                            Else
+                                spanStart = ts.Dates(i - 1)
+                            End If
+                            nanStart = ts.Dates(i)
+
+                            If i < ts.Length - 1 Then
+                                'cycle to the next node directly
+                                nanCount += 1
+                                Continue For
                             End If
                         End If
-                        If isNaNPeriod Then
-                            'test for end of NaN values
-                            If Not Double.IsNaN(ts.Values(i)) Then
-                                bandEnd = ts.Dates(i)
-                                nanEnd = ts.Dates(i - 1)
-                                isNaNPeriod = False
+                    End If
 
-                            ElseIf i = ts.Length - 1 Then
+                    If isNaNPeriod Then
+
+                        'test for end of NaN values
+                        If Not Double.IsNaN(ts.Values(i)) Then
+                            spanEnd = ts.Dates(i)
+                            nanEnd = ts.Dates(i - 1)
+                            isNaNPeriod = False
+                        Else
+                            nanCount += 1
+
+                            If i = ts.Length - 1 Then
                                 'force end if end of time series reached
-                                bandEnd = ts.Dates(i)
+                                spanEnd = ts.Dates(i)
                                 nanEnd = ts.Dates(i)
                                 isNaNPeriod = False
-
                             End If
 
-                            If Not isNaNPeriod Then
-                                'end of NaN period reached, add a color band
-                                band = New Steema.TeeChart.Tools.ColorBand()
-                                View.TChart1.Tools.Add(band)
-                                band.Axis = View.TChart1.Axes.Bottom
-                                band.Start = bandStart.ToOADate()
-                                band.End = bandEnd.ToOADate()
-                                band.Pen.Visible = False
-                                band.Pen.Color = color
-                                band.Brush.Color = ControlPaint.Light(color)
-                                band.Brush.Transparency = 50
-                                band.ResizeEnd = False
-                                band.ResizeStart = False
-                                band.EndLinePen.Visible = False
-                                band.StartLinePen.Visible = False
-                                band.Tag = "NaN"
-
-                                'write to log
-                                Log.AddLogEntry(Log.levels.info, $"Series contains NaN values from {nanStart.ToString(Helpers.CurrentDateFormat)} to {nanEnd.ToString(Helpers.CurrentDateFormat)}")
-                            End If
                         End If
-                    Next
-                    If Not nanFoundInSeries Then
-                        Log.AddLogEntry(Log.levels.info, "Series does not contain any NaN values")
+
+                        If Not isNaNPeriod Then
+                            'end of NaN period reached
+
+                            'add a horizontal span
+                            Dim hspan As ScottPlot.Plottable.HSpan = View.MainPlot.Plot.AddHorizontalSpan(spanStart.ToOADate(), spanEnd.ToOADate())
+                            hspan.BorderLineStyle = ScottPlot.LineStyle.None
+                            hspan.Color = Color.FromArgb(100, ControlPaint.Light(color))
+                            hspan.DragEnabled = False
+                            View.NaNSpans.Add(hspan)
+
+                            'write to log
+                            Log.AddLogEntry(Log.levels.info, $"Series {ts.Title} contains {nanCount} NaN values from {nanStart.ToString(Helpers.CurrentDateFormat)} to {nanEnd.ToString(Helpers.CurrentDateFormat)}")
+
+                            'reset nanCount
+                            nanCount = 0
+                        End If
                     End If
+                Next
+                If Not nanFoundInSeries Then
+                    Log.AddLogEntry(Log.levels.info, $"Series {ts.Title} does not contain any NaN values")
                 End If
             Next
             If Not nanFound Then
@@ -741,17 +706,15 @@ Friend Class WaveController
             End If
         Else
             'Switch visualization of NaN values off
-            'Remove all tools of type ColorBand with Tag "NaN" from TChart1
-            Dim nanbands As New List(Of Steema.TeeChart.Tools.ColorBand)
-            For Each tool As Steema.TeeChart.Tools.Tool In View.TChart1.Tools
-                If tool.GetType Is GetType(Steema.TeeChart.Tools.ColorBand) And tool.Tag = "NaN" Then
-                    nanbands.Add(tool)
-                End If
+            'Remove all corresponding hspans in main chart
+            For Each hspan In View.NaNSpans
+                View.MainPlot.Plot.Remove(hspan)
             Next
-            For Each nanband As Steema.TeeChart.Tools.ColorBand In nanbands
-                View.TChart1.Tools.Remove(nanband)
-            Next
+            View.NaNSpans.Clear()
         End If
+
+        View.MainPlot.Refresh()
+
     End Sub
 
     ''' <summary>
@@ -796,31 +759,21 @@ Friend Class WaveController
                 ts = ts.removeNaNValues()
                 _model.TimeSeries(id) = ts
                 'replace values of series in chart
-                For Each series As Steema.TeeChart.Styles.Series In View.TChart1.Series
-                    If series.Tag = id Then
-                        series.BeginUpdate()
-                        series.Clear()
-                        For Each kvp As KeyValuePair(Of DateTime, Double) In ts.Nodes
-                            series.Add(kvp.Key, kvp.Value)
-                        Next
-                        series.EndUpdate()
-                        Exit For
-                    End If
-                Next
+                Dim series As ScottPlot.Plottable.ScatterPlot = Me.ChartSeries(id)
+                series.Update(ts.Dates.Select(Function(t As DateTime) t.ToOADate()).ToArray(), ts.Values.ToArray())
+                'TODO: update series in overview chart
             Next
+            View.MainPlot.Refresh()
         End If
     End Sub
 
-    'Drucken
-    '*******
-    Private Sub Print_Click(sender As System.Object, e As System.EventArgs)
-        Call View.TChart1.Printer.Preview()
-    End Sub
-
-    'Kopieren (als PNG)
-    '******************
+    ''' <summary>
+    ''' Handles copy button clicked
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
     Private Sub Copy_Click(sender As System.Object, e As System.EventArgs)
-        Call View.TChart1.Export.Image.PNG.CopyToClipboard()
+        Clipboard.SetImage(View.MainPlot.Plot.Render())
     End Sub
 
     'Analysieren
@@ -870,9 +823,8 @@ Friend Class WaveController
                 '--------------------
                 'Ergebnisdiagramm anzeigen
                 If (oAnalysis.hasResultChart) Then
-                    Dim resultChart As New AnalysisResultChart()
+                    Dim resultChart As New AnalysisResultChart(oAnalysis.getResultChart())
                     resultChart.Text &= " - " & oAnalysisDialog.selectedAnalysisFunction.ToString()
-                    resultChart.TChart1.Chart = oAnalysis.getResultChart()
                     Call resultChart.Show()
                 End If
 
@@ -1088,12 +1040,10 @@ Friend Class WaveController
             Call Me.ViewportChanged()
         Else
             'Reset the Y axes to automatic
-            View.TChart1.Axes.Left.Automatic = True
-            View.TChart1.Axes.Right.Automatic = True
-            For Each axis As Steema.TeeChart.Axis In View.TChart1.Axes.Custom
-                axis.Automatic = True
+            For Each axis As ScottPlot.Renderable.Axis In View.MainPlot.Plot.GetAxesMatching(axisIndex:=Nothing, isVertical:=True)
+                axis.Dims.ResetLimits()
             Next
-            View.TChart1.Refresh()
+            View.MainPlot.Refresh()
         End If
     End Sub
 
@@ -1148,10 +1098,10 @@ Friend Class WaveController
             Log.AddLogEntry(Log.levels.info, "Reloading all series from their original datasources...")
 
             'Alle Serien löschen
-            View.TChart1.Series.RemoveAllSeries()
-            View.TChart2.Series.RemoveAllSeries()
-            View.TChart1.Refresh()
-            View.TChart2.Refresh()
+            View.MainPlot.Plot.Clear()
+            View.OverviewPlot.Plot.Clear()
+            'View.MainPlot.Refresh()
+            'View.OverviewPlot.Refresh()
 
             'Collection zurücksetzen
             _model.TimeSeries.Clear()
@@ -1193,13 +1143,40 @@ Friend Class WaveController
     End Sub
 
     ''' <summary>
+    ''' Handles the user clicking the delete button
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    Private Sub ToolStripButton_Delete_Click(sender As Object, e As EventArgs)
+        Call DeleteSelectedSeries()
+    End Sub
+
+    ''' <summary>
+    ''' Handles the user clicking the move up button
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    Private Sub ToolStripButton_MoveUp_Click(sender As Object, e As EventArgs)
+        Call ReorderSelectedSeries(Direction.Up)
+    End Sub
+
+    ''' <summary>
+    ''' Handles the user clicking the move down button
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    Private Sub ToolStripButton_MoveDown_Click(sender As Object, e As EventArgs)
+        Call ReorderSelectedSeries(Direction.Down)
+    End Sub
+
+    ''' <summary>
     ''' Activate all series button clicked
     ''' </summary>
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
     Private Sub ActivateAllSeries_Click(sender As Object, e As EventArgs)
-        For Each series As Steema.TeeChart.Styles.Series In View.TChart1.Series
-            series.Active = True
+        For i As Integer = 0 To View.CheckedListBox_Series.Items.Count - 1
+            View.CheckedListBox_Series.SetItemChecked(i, True)
         Next
     End Sub
 
@@ -1209,9 +1186,99 @@ Friend Class WaveController
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
     Private Sub DeactivateAllSeries_Click(sender As Object, e As EventArgs)
-        For Each series As Steema.TeeChart.Styles.Series In View.TChart1.Series
-            series.Active = False
+        For i As Integer = 0 To View.CheckedListBox_Series.Items.Count - 1
+            View.CheckedListBox_Series.SetItemChecked(i, False)
         Next
+    End Sub
+
+    ''' <summary>
+    ''' Reorder selected series
+    ''' </summary>
+    ''' <param name="direction">Direction in which to move selected series</param>
+    Private Sub ReorderSelectedSeries(direction As Direction)
+
+        'TODO: CheckedListBox does not allow multiselection, so only one series will ever be selected
+
+        Dim indices As New List(Of Integer)
+        Dim ids As New List(Of Integer)
+        For Each index As Integer In View.CheckedListBox_Series.SelectedIndices
+            If (direction = Direction.Up And index = 0) Or
+               (direction = Direction.Down And index = View.CheckedListBox_Series.Items.Count - 1) Then
+                'if first row is selected, moving up does nothing
+                'if last row is selected, moving down does nothing
+                Exit Sub
+            End If
+            indices.Add(index)
+            ids.Add(CType(View.CheckedListBox_Series.Items(index), TimeSeries).Id)
+        Next
+        'reorder each series in the model
+        For Each id As Integer In ids
+            Model.SeriesReorder(id, direction)
+        Next
+        'reselect previously selected items in their new positions
+        View.CheckedListBox_Series.ClearSelected()
+        Dim offset As Integer
+        If direction = Direction.Up Then
+            offset = -1
+        Else
+            offset = 1
+        End If
+        For Each index As Integer In indices
+            View.CheckedListBox_Series.SetSelected(index + offset, True)
+        Next
+    End Sub
+
+    ''' <summary>
+    ''' Deletes the series currently selected in the TOC
+    ''' </summary>
+    Private Sub DeleteSelectedSeries()
+
+        'TODO: CheckedListBox does not allow multiselection, so only one series will ever be selected
+
+        'collect titles and ids of all selected items
+        Dim titles As New List(Of String)
+        Dim ids As New List(Of Integer)
+        For Each ts As TimeSeries In View.CheckedListBox_Series.SelectedItems
+            titles.Add(ts.Title)
+            ids.Add(ts.Id)
+        Next
+        If ids.Count > 0 Then
+            'ask for user confirmation
+            Dim result As MsgBoxResult = MsgBox($"Delete {ids.Count} series?{eol}{String.Join(eol, titles)}", MsgBoxStyle.OkCancel Or MsgBoxStyle.Exclamation)
+            If result = MsgBoxResult.Ok Then
+                For Each id As Integer In ids
+                    Model.RemoveTimeSeries(id)
+                Next
+            End If
+        End If
+
+    End Sub
+
+    ''' <summary>
+    ''' Handles the TOC selection changed
+    ''' Enables/disables buttons
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    Private Sub TOC_SelectionChanged(sender As Object, e As EventArgs)
+        'Check if any items are selected
+        If View.CheckedListBox_Series.SelectedIndices.Count = 0 Then
+            View.ToolStripButton_Delete.Enabled = False
+            View.ToolStripButton_MoveUp.Enabled = False
+            View.ToolStripButton_MoveDown.Enabled = False
+        Else
+            View.ToolStripButton_Delete.Enabled = True
+            View.ToolStripButton_MoveUp.Enabled = True
+            View.ToolStripButton_MoveDown.Enabled = True
+            'check if first row is selected
+            If View.CheckedListBox_Series.GetSelected(0) Then
+                View.ToolStripButton_MoveUp.Enabled = False
+            End If
+            'check if last row is selected
+            If View.CheckedListBox_Series.GetSelected(View.CheckedListBox_Series.Items.Count - 1) Then
+                View.ToolStripButton_MoveDown.Enabled = False
+            End If
+        End If
     End Sub
 
     ''' <summary>
@@ -1269,7 +1336,7 @@ Friend Class WaveController
     ''' </summary>
     Private Sub About_Click(sender As System.Object, e As System.EventArgs)
         Dim about As New AboutBox()
-        Call about.ShowDialog(Me.View)
+        Call about.ShowDialog(View)
     End Sub
 
     ''' <summary>
@@ -1478,12 +1545,11 @@ Friend Class WaveController
         'collect start and end dates of all currently active series
         Dim startdates As New List(Of Double)
         Dim enddates As New List(Of Double)
-        For Each series As Steema.TeeChart.Styles.Series In View.TChart1.Series
-            If Not series.Active Then
-                Continue For
-            End If
-            startdates.Add(series.MinXValue)
-            enddates.Add(series.MaxXValue)
+
+        For Each index As Integer In View.CheckedListBox_Series.CheckedIndices
+            Dim ts As TimeSeries = View.CheckedListBox_Series.Items(index)
+            startdates.Add(ts.StartDate.ToOADate())
+            enddates.Add(ts.EndDate.ToOADate())
         Next
 
         If startdates.Count = 0 Or enddates.Count = 0 Then
@@ -1545,10 +1611,10 @@ Friend Class WaveController
 
         If e.Button = Windows.Forms.MouseButtons.Left Then
             'start zoom process
-            If View.TChart1.Series.Count > 0 Then
+            If View.MainPlot.Plot.GetPlottables().Length > 0 Then
 
                 Dim startValue As Double
-                startValue = View.TChart1.Series(0).XScreenToValue(e.X)
+                startValue = View.MainPlot.Plot.GetCoordinateX(e.X)
 
                 If startValue < View.ChartMinX.ToOADate() Or
                     startValue > View.ChartMaxX.ToOADate() Then
@@ -1556,16 +1622,17 @@ Friend Class WaveController
                     Exit Sub
                 End If
 
-                View.TChart1.Cursor = View.cursor_zoom
+                View.MainPlot.Cursor = View.cursor_zoom
                 Call Me.SaveZoomSnapshot()
 
                 Me.ChartMouseZoomDragging = True
                 Me.ChartMouseDragStartX = e.X
 
-                View.colorBandZoom.Chart = View.TChart1.Chart
-                View.colorBandZoom.Active = True
-                View.colorBandZoom.Start = startValue
-                View.colorBandZoom.End = startValue
+                View.ZoomRectangle.X1 = startValue
+                View.ZoomRectangle.X2 = startValue
+                View.ZoomRectangle.IsVisible = True
+
+                View.MainPlot.Refresh()
 
                 Log.AddLogEntry(Log.levels.debug, "Zoom start at " & DateTime.FromOADate(startValue))
             End If
@@ -1574,9 +1641,9 @@ Friend Class WaveController
             'start pan process
             Me.ChartMousePanning = True
             Me.ChartMouseDragStartX = e.X
-            Me.ChartMousePanDisplayRange = View.TChart1.Axes.Bottom.Maximum - View.TChart1.Axes.Bottom.Minimum
+            Me.ChartMousePanDisplayRange = View.MainPlot.Plot.XAxis.Dims.Span
             Call Me.SaveZoomSnapshot()
-            View.TChart1.Cursor = View.cursor_pan
+            View.MainPlot.Cursor = View.cursor_pan
         End If
 
     End Sub
@@ -1591,14 +1658,15 @@ Friend Class WaveController
 
         If Me.ChartMouseZoomDragging Then
             Dim endValue As Double
-            endValue = View.TChart1.Series(0).XScreenToValue(e.X)
-            View.colorBandZoom.End = endValue
+            endValue = View.MainPlot.Plot.GetCoordinateX(e.X)
+            View.ZoomRectangle.X2 = endValue
+            View.MainPlot.Refresh()
 
         ElseIf Me.ChartMousePanning Then
             Dim xMin, xMax As Double
-            Dim panDistance As Double = View.TChart1.Series(0).XScreenToValue(Me.ChartMouseDragStartX) - View.TChart1.Series(0).XScreenToValue(e.X)
-            xMin = View.TChart1.Axes.Bottom.Minimum + panDistance
-            xMax = View.TChart1.Axes.Bottom.Maximum + panDistance
+            Dim panDistance As Double = View.MainPlot.Plot.GetCoordinateX(Me.ChartMouseDragStartX) - View.MainPlot.Plot.GetCoordinateX(e.X)
+            xMin = View.MainPlot.Plot.XAxis.Dims.Min + panDistance
+            xMax = View.MainPlot.Plot.XAxis.Dims.Max + panDistance
             'prevent panning beyond displayable range (#68)
             If xMin < Constants.minOADate.ToOADate() Then
                 xMin = Constants.minOADate.ToOADate()
@@ -1611,6 +1679,7 @@ Friend Class WaveController
             'set the new viewport 
             View.ChartMinX = DateTime.FromOADate(xMin)
             View.ChartMaxX = DateTime.FromOADate(xMax)
+            View.MainPlot.Refresh()
             Me.selectionMade = True
             'update drag start point
             Me.ChartMouseDragStartX = e.X
@@ -1630,16 +1699,16 @@ Friend Class WaveController
                 'determine start and end dates of zoom
                 Dim mouseValue, startValue, endValue As Double
                 'prevent zooming beyond the displayable date range (#68)
-                mouseValue = View.TChart1.Series(0).XScreenToValue(e.X)
+                mouseValue = View.MainPlot.Plot.GetCoordinateX(e.X)
                 mouseValue = Math.Max(mouseValue, Constants.minOADate.ToOADate)
                 mouseValue = Math.Min(mouseValue, Constants.maxOADate.ToOADate)
                 'set start and end depending on zoom direction
                 If e.X > Me.ChartMouseDragStartX Then
-                    startValue = View.TChart1.Series(0).XScreenToValue(Me.ChartMouseDragStartX)
+                    startValue = View.MainPlot.Plot.GetCoordinateX(Me.ChartMouseDragStartX)
                     endValue = mouseValue
                 Else
                     startValue = mouseValue
-                    endValue = View.TChart1.Series(0).XScreenToValue(Me.ChartMouseDragStartX)
+                    endValue = View.MainPlot.Plot.GetCoordinateX(Me.ChartMouseDragStartX)
                 End If
                 Log.AddLogEntry(Log.levels.debug, "Zoom end at " & DateTime.FromOADate(endValue))
 
@@ -1652,14 +1721,17 @@ Friend Class WaveController
                 Me.selectionMade = True
                 Call Me.ViewportChanged()
             End If
-            'hide colorband
-            View.colorBandZoom.Active = False
+            'hide zoom rectangle
+            View.ZoomRectangle.IsVisible = False
+
+            View.MainPlot.Refresh()
+
         ElseIf Me.ChartMousePanning Then
             'complete the pan process
             Call Me.ViewportChanged()
             Me.ChartMousePanning = False
         End If
-        View.TChart1.Cursor = Cursors.Default
+        View.MainPlot.Cursor = Cursors.Default
     End Sub
 
     ''' <summary>
@@ -1690,7 +1762,7 @@ Friend Class WaveController
             End If
 
             'determine mouse position and its left-right ratio in relation to x axis
-            Dim centerOADate As Double = View.TChart1.Series(0).XScreenToValue(e.X)
+            Dim centerOADate As Double = View.MainPlot.Plot.GetCoordinateX(e.X)
             Dim centerDate As DateTime = DateTime.FromOADate(centerOADate)
             Dim leftRatio As Double = (centerDate - View.ChartMinX).Ticks / currentExtent.Ticks
             Dim rightRatio As Double = 1 - leftRatio
@@ -1703,6 +1775,7 @@ Friend Class WaveController
             View.ChartMaxX = centerDate + New TimeSpan(ticks:=newExtent * rightRatio)
 
             Me.selectionMade = True
+
             Call Me.ViewportChanged()
 
         Catch ex As ArgumentOutOfRangeException
@@ -1720,37 +1793,38 @@ Friend Class WaveController
     ''' <param name="e"></param>
     Private Sub OverviewChart_MouseDown(sender As Object, e As MouseEventArgs)
 
-        If View.TChart2.Series.Count > 0 Then
+        If View.OverviewPlot.Plot.GetPlottables().Count > 0 Then
 
             If e.Button = MouseButtons.Left Then
                 'start zoom process
 
-                View.TChart2.Cursor = View.cursor_zoom
+                View.OverviewPlot.Cursor = View.cursor_zoom
 
                 Me.OverviewChartMouseDragging = True
                 Me.OverviewChartMouseDragStartX = e.X
 
                 'set start and end value of colorband to mouse position
                 Dim xMouse As Double
-                xMouse = View.TChart2.Series(0).XScreenToValue(Me.OverviewChartMouseDragStartX)
+                xMouse = View.OverviewPlot.Plot.GetCoordinateX(Me.OverviewChartMouseDragStartX)
 
                 'prevent zoom starting beyond displayable date range (#68)
                 xMouse = Math.Max(xMouse, Constants.minOADate.ToOADate)
                 xMouse = Math.Min(xMouse, Constants.maxOADate.ToOADate)
 
-                View.colorBandOverview.Start = xMouse
-                View.colorBandOverview.End = xMouse
+                View.ViewExtentRectangle.X1 = xMouse
+                View.ViewExtentRectangle.X2 = xMouse
+                View.OverviewPlot.Refresh()
 
                 Log.AddLogEntry(Log.levels.debug, "Zoom start at " & DateTime.FromOADate(xMouse))
 
             ElseIf e.Button = MouseButtons.Right Then
                 'start panning process
 
-                View.TChart2.Cursor = View.cursor_pan
+                View.OverviewPlot.Cursor = View.cursor_pan
 
                 Me.OverviewChartMouseDragging = True
                 Me.OverviewChartMouseDragStartX = e.X
-                Me.OverviewChartMouseDragOffset = e.X - View.TChart2.Series(0).ValuePointToScreenPoint(View.colorBandOverview.Start, 0).X
+                Me.OverviewChartMouseDragOffset = e.X - View.OverviewPlot.Plot.GetPixelX(View.ViewExtentRectangle.X1)
 
             End If
         End If
@@ -1768,20 +1842,21 @@ Friend Class WaveController
 
             If e.Button = MouseButtons.Left Then
                 'move the end of the colorband to the mouse pointer
-                Dim xMouse As Double = View.TChart2.Series(0).XScreenToValue(e.X)
+                Dim xMouse As Double = View.OverviewPlot.Plot.GetCoordinateX(e.X)
 
                 'restrict to displayable date range (#68)
                 xMouse = Math.Max(xMouse, Constants.minOADate.ToOADate)
                 xMouse = Math.Min(xMouse, Constants.maxOADate.ToOADate)
 
-                View.colorBandOverview.End = xMouse
+                View.ViewExtentRectangle.X2 = xMouse
+                View.OverviewPlot.Refresh()
 
             ElseIf e.Button = MouseButtons.Right Then
                 'move the whole color band while maintaining its width
-                Dim width As Double = View.colorBandOverview.End - View.colorBandOverview.Start
+                Dim width As Double = View.ViewExtentRectangle.X2 - View.ViewExtentRectangle.X1
 
                 Dim startValue, endValue As Double
-                startValue = View.TChart2.Series(0).XScreenToValue(e.X - Me.OverviewChartMouseDragOffset)
+                startValue = View.OverviewPlot.Plot.GetCoordinateX(e.X - Me.OverviewChartMouseDragOffset)
                 endValue = startValue + width
 
                 'restrict to displayable date range (#68)
@@ -1794,8 +1869,9 @@ Friend Class WaveController
                     startValue = endValue - width
                 End If
 
-                View.colorBandOverview.Start = startValue
-                View.colorBandOverview.End = endValue
+                View.ViewExtentRectangle.X1 = startValue
+                View.ViewExtentRectangle.X2 = endValue
+                View.OverviewPlot.Refresh()
             End If
         End If
     End Sub
@@ -1808,7 +1884,7 @@ Friend Class WaveController
     ''' <param name="e"></param>
     Private Sub OverviewChart_MouseUp(sender As System.Object, e As System.Windows.Forms.MouseEventArgs)
 
-        View.TChart2.Cursor = Cursors.Default
+        View.OverviewPlot.Cursor = Cursors.Default
 
         If Me.OverviewChartMouseDragging Then
 
@@ -1822,11 +1898,11 @@ Friend Class WaveController
                     'set start and end depending on zoom direction
                     Dim startValue, endValue As Double
                     If e.X > Me.OverviewChartMouseDragStartX Then
-                        startValue = View.TChart2.Series(0).XScreenToValue(Me.OverviewChartMouseDragStartX)
-                        endValue = View.TChart2.Series(0).XScreenToValue(e.X)
+                        startValue = View.OverviewPlot.Plot.GetCoordinateX(Me.OverviewChartMouseDragStartX)
+                        endValue = View.OverviewPlot.Plot.GetCoordinateX(e.X)
                     Else
-                        startValue = View.TChart2.Series(0).XScreenToValue(e.X)
-                        endValue = View.TChart2.Series(0).XScreenToValue(Me.OverviewChartMouseDragStartX)
+                        startValue = View.OverviewPlot.Plot.GetCoordinateX(e.X)
+                        endValue = View.OverviewPlot.Plot.GetCoordinateX(Me.OverviewChartMouseDragStartX)
                     End If
                     'restrict to displayable date range (#68)
                     startValue = Math.Max(startValue, Constants.minOADate.ToOADate)
@@ -1835,15 +1911,16 @@ Friend Class WaveController
                     Log.AddLogEntry(Log.levels.debug, "Zoom end at " & DateTime.FromOADate(endValue))
 
                     'adjust colorband
-                    View.colorBandOverview.Start = startValue
-                    View.colorBandOverview.End = endValue
+                    View.ViewExtentRectangle.X1 = startValue
+                    View.ViewExtentRectangle.X2 = endValue
+                    View.OverviewPlot.Refresh()
 
                     'save the current zoom snapshot
                     Call Me.SaveZoomSnapshot()
 
                     'set the new viewport on the main chart
-                    View.ChartMinX = DateTime.FromOADate(View.colorBandOverview.Start)
-                    View.ChartMaxX = DateTime.FromOADate(View.colorBandOverview.End)
+                    View.ChartMinX = DateTime.FromOADate(View.ViewExtentRectangle.X1)
+                    View.ChartMaxX = DateTime.FromOADate(View.ViewExtentRectangle.X2)
 
                     Me.selectionMade = True
                     Call Me.ViewportChanged()
@@ -1856,8 +1933,8 @@ Friend Class WaveController
                 Call Me.SaveZoomSnapshot()
 
                 'set the new viewport on the main chart
-                View.ChartMinX = DateTime.FromOADate(View.colorBandOverview.Start)
-                View.ChartMaxX = DateTime.FromOADate(View.colorBandOverview.End)
+                View.ChartMinX = DateTime.FromOADate(View.ViewExtentRectangle.X1)
+                View.ChartMaxX = DateTime.FromOADate(View.ViewExtentRectangle.X2)
 
                 Me.selectionMade = True
                 Call Me.ViewportChanged()
@@ -1888,10 +1965,10 @@ Friend Class WaveController
             'zoom while centering on mouse
             Dim newStart As Double
             Dim newEnd As Double
-            Dim mouseOADate As Double = View.TChart2.Series(0).XScreenToValue(e.X)
-            Dim currentExtent As Double = View.colorBandOverview.End - View.colorBandOverview.Start
+            Dim mouseOADate As Double = View.OverviewPlot.Plot.GetCoordinateX(e.X)
+            Dim currentExtent As Double = View.ViewExtentRectangle.X2 - View.ViewExtentRectangle.X1
 
-            If mouseOADate >= View.colorBandOverview.Start And mouseOADate <= View.colorBandOverview.End Then
+            If mouseOADate >= View.ViewExtentRectangle.X1 And mouseOADate <= View.ViewExtentRectangle.X2 Then
                 'zoom by 25% if mouse is inside color band
                 Dim newExtent As Double
                 If numberOfTextLinesToMove > 0 Then
@@ -1907,27 +1984,28 @@ Friend Class WaveController
             Else
                 'pan by 25% of current extent if mouse is outside of color band
                 Dim delta As Double = currentExtent * 0.25
-                If mouseOADate > View.colorBandOverview.End Then
+                If mouseOADate > View.ViewExtentRectangle.X2 Then
                     'pan right
-                    newStart = View.colorBandOverview.Start + delta
-                    newEnd = View.colorBandOverview.End + delta
+                    newStart = View.ViewExtentRectangle.X1 + delta
+                    newEnd = View.ViewExtentRectangle.X2 + delta
                 Else
                     'pan left
-                    newStart = View.colorBandOverview.Start - delta
-                    newEnd = View.colorBandOverview.End - delta
+                    newStart = View.ViewExtentRectangle.X1 - delta
+                    newEnd = View.ViewExtentRectangle.X2 - delta
                 End If
             End If
 
             'set the new colorband
-            View.colorBandOverview.Start = newStart
-            View.colorBandOverview.End = newEnd
+            View.ViewExtentRectangle.X1 = newStart
+            View.ViewExtentRectangle.X2 = newEnd
+            View.OverviewPlot.Refresh()
 
             'save the current zoom snapshot
             Call Me.SaveZoomSnapshot()
 
             'set the new viewport on the main chart
-            View.ChartMinX = DateTime.FromOADate(View.colorBandOverview.Start)
-            View.ChartMaxX = DateTime.FromOADate(View.colorBandOverview.End)
+            View.ChartMinX = DateTime.FromOADate(View.ViewExtentRectangle.X1)
+            View.ChartMaxX = DateTime.FromOADate(View.ViewExtentRectangle.X2)
 
             Me.selectionMade = True
             Call Me.ViewportChanged()
@@ -1937,12 +2015,6 @@ Friend Class WaveController
             Log.AddLogEntry(levels.debug, $"Exception in OverviewChart_MouseWheel: {ex}")
         End Try
 
-    End Sub
-
-    'TChart2 DoubleClick
-    '*******************
-    Private Sub OverviewChart_DoubleClick(sender As System.Object, e As System.EventArgs)
-        Call Steema.TeeChart.Editor.Show(View.TChart2)
     End Sub
 
     ''' <summary>
@@ -1983,66 +2055,43 @@ Friend Class WaveController
         'Auto-adjust Y-axes to current viewport
         If View.AutoAdjustYAxes Then
 
-            Dim startdate, enddate As DateTime
-            Dim title As String
-            Dim seriesMin, seriesMax, Ymin, Ymax As Double
-            Dim axisType As Steema.TeeChart.Styles.VerticalAxis
-            Dim axis As Steema.TeeChart.Axis
-
             'get start and end date of current viewport
-            startdate = View.ChartMinX
-            enddate = View.ChartMaxX
+            Dim startdate As DateTime = View.ChartMinX
+            Dim enddate As DateTime = View.ChartMaxX
 
-            'define axes to process
-            Dim axes As New List(Of (axisType As Steema.TeeChart.Styles.VerticalAxis, axis As Steema.TeeChart.Axis))
-            axes.Add((Steema.TeeChart.Styles.VerticalAxis.Left, View.TChart1.Axes.Left))
-            axes.Add((Steema.TeeChart.Styles.VerticalAxis.Right, View.TChart1.Axes.Right))
-            For Each axis In View.TChart1.Axes.Custom
-                axes.Add((Steema.TeeChart.Styles.VerticalAxis.Custom, axis))
+            'get min and max values of visible series grouped by unit
+            Dim unitRanges As New Dictionary(Of String, (min As Double, max As Double))
+            For Each index As Integer In View.CheckedListBox_Series.CheckedIndices
+                Dim ts As TimeSeries = CType(View.CheckedListBox_Series.Items(index), TimeSeries)
+                Dim seriesMin As Double = ts.Minimum(startdate, enddate)
+                Dim seriesMax As Double = ts.Maximum(startdate, enddate)
+                If Not unitRanges.ContainsKey(ts.Unit) Then
+                    unitRanges.Add(ts.Unit, (seriesMin, seriesMax))
+                Else
+                    If seriesMin < unitRanges(ts.Unit).min Then
+                        unitRanges(ts.Unit) = (seriesMin, unitRanges(ts.Unit).max)
+                    End If
+                    If seriesMax > unitRanges(ts.Unit).max Then
+                        unitRanges(ts.Unit) = (unitRanges(ts.Unit).min, seriesMax)
+                    End If
+                End If
             Next
 
             'loop over Y-axes
-            For Each t As (axisType As Steema.TeeChart.Styles.VerticalAxis, axis As Steema.TeeChart.Axis) In axes
-                axisType = t.axisType
-                axis = t.axis
-
-                'loop over series
-                Ymin = Double.MaxValue
-                Ymax = Double.MinValue
-                For Each ts As TimeSeries In _model.TimeSeries.Values
-                    title = ts.Title
-
-                    'only process active series on the current axis
-                    If View.TChart1.Series.WithTitle(title).Active And View.TChart1.Series.WithTitle(title).VertAxis = axisType Then
-
-                        If axisType = Steema.TeeChart.Styles.VerticalAxis.Custom And ts.Unit <> axis.Tag Then
-                            'series is on a different custom axis, skip it
-                            Continue For
-                        End If
-
-                        'get series min and max for current viewport
-                        seriesMin = ts.Minimum(startdate, enddate)
-                        If seriesMin < Ymin Then
-                            Ymin = seriesMin
-                        End If
-                        seriesMax = ts.Maximum(startdate, enddate)
-                        If seriesMax > Ymax Then
-                            Ymax = seriesMax
-                        End If
-                    End If
-                Next
-
-                'set new Y axis bounds
-                If Ymin < Double.MaxValue Then
-                    axis.AutomaticMinimum = False
-                    axis.Minimum = Ymin
-                End If
-                If Ymax > Double.MinValue Then
-                    axis.AutomaticMaximum = False
-                    axis.Maximum = Ymax
+            For Each axis As ScottPlot.Renderable.Axis In View.MainPlot.Plot.GetAxesMatching(axisIndex:=Nothing, isVertical:=True)
+                Dim axisUnit As String = axis.AxisLabel.Label
+                If unitRanges.ContainsKey(axisUnit) Then
+                    'set new limits
+                    Dim range As (min As Double, max As Double) = unitRanges(axisUnit)
+                    Dim padding As Double = (range.max - range.min) * 0.05
+                    axis.Dims.ResetLimits()
+                    axis.Dims.SetAxis(range.min - padding, range.max + padding)
                 End If
             Next
         End If
+
+        View.MainPlot.Refresh()
+
     End Sub
 
     ''' <summary>
@@ -2144,8 +2193,8 @@ Friend Class WaveController
 
         If (_model.TimeSeries.Count = 0) Then
             'just refresh
-            View.TChart1.Refresh()
-            View.TChart2.Refresh()
+            View.MainPlot.Refresh()
+            View.OverviewPlot.Refresh()
 
         Else
             'Update X-Axis and colorBand
@@ -2171,8 +2220,7 @@ Friend Class WaveController
             End If
 
             'Übersicht neu skalieren
-            View.TChart2.Axes.Bottom.Minimum = Xmin.ToOADate()
-            View.TChart2.Axes.Bottom.Maximum = Xmax.ToOADate()
+            View.OverviewPlot.Plot.XAxis.Dims.SetAxis(min:=Xmin.ToOADate(), max:=Xmax.ToOADate())
 
             If (Not Me.selectionMade) Then
                 'Wenn noch nicht gezoomed wurde, Gesamtzeitraum auswählen
@@ -2182,6 +2230,8 @@ Friend Class WaveController
             'Extent auf Colorband übertragen
             Call Me.UpdateOverviewZoomExtent()
 
+            View.MainPlot.Refresh()
+            View.OverviewPlot.Refresh()
         End If
 
     End Sub
@@ -2191,8 +2241,10 @@ Friend Class WaveController
     ''' </summary>
     ''' <remarks></remarks>
     Private Sub UpdateOverviewZoomExtent()
-        View.colorBandOverview.Start = View.ChartMinX.ToOADate()
-        View.colorBandOverview.End = View.ChartMaxX.ToOADate()
+        Dim limits As ScottPlot.AxisLimits = View.OverviewPlot.Plot.GetAxisLimits()
+        View.ViewExtentRectangle.X1 = View.ChartMinX.ToOADate()
+        View.ViewExtentRectangle.X2 = View.ChartMaxX.ToOADate()
+        View.OverviewPlot.Refresh()
     End Sub
 
     ''' <summary>
@@ -2239,41 +2291,23 @@ Friend Class WaveController
         'Serie zu Diagramm hinzufügen
 
         'Linien instanzieren
-        Dim Line1 As New Steema.TeeChart.Styles.Line(View.TChart1.Chart)
+        Dim Line1 As ScottPlot.Plottable.ScatterPlot
+        Line1 = View.MainPlot.Plot.AddScatter(ts.Dates.Select(Function(t As DateTime) t.ToOADate()).ToArray(), ts.Values.ToArray())
 
         'Do not paint NaN values
-        Line1.TreatNaNAsNull = True
-        Line1.TreatNulls = Steema.TeeChart.Styles.TreatNullsStyle.DoNotPaint
-
-        'X-Werte als Zeitdaten einstellen
-        Line1.XValues.DateTime = True
-
-        'Store id as Tag property
-        Line1.Tag = ts.Id
+        Line1.OnNaN = ScottPlot.Plottable.ScatterPlot.NanBehavior.Gap
 
         'Namen vergeben
-        Line1.Title = ts.Title
+        Line1.Label = ts.Title
 
         'set display options
         If Not ts.DisplayOptions.Color.IsEmpty Then
             Line1.Color = ts.DisplayOptions.Color
         End If
-        Line1.LinePen.Style = ts.DisplayOptions.LineStyle
-        Line1.LinePen.Width = ts.DisplayOptions.LineWidth
-        Line1.Pointer.Visible = ts.DisplayOptions.ShowPoints
-
-        'Stützstellen zur Serie hinzufügen
-        'Main chart
-        Line1.BeginUpdate()
-        Line1.Add(ts.Dates.ToArray(), ts.Values.ToArray())
-        Line1.EndUpdate()
-
-        'Add series to overview chart
-        Call Me.AddSeriesToOverview(ts)
-
-        'Determine total number of NaN-values and write to log
-        If ts.NaNCount > 0 Then
-            Log.AddLogEntry(Log.levels.warning, $"Series '{ts.Title}' contains {ts.NaNCount} NaN values!")
+        Line1.LineStyle = ts.DisplayOptions.LineStyle
+        Line1.LineWidth = ts.DisplayOptions.LineWidth
+        If Not ts.DisplayOptions.ShowPoints Then
+            Line1.MarkerShape = ScottPlot.MarkerShape.none
         End If
 
         'Y-Achsenzuordnung
@@ -2282,77 +2316,72 @@ Friend Class WaveController
         'Interpretation
         Select Case ts.Interpretation
             Case TimeSeries.InterpretationEnum.BlockRight
-                Line1.Stairs = True
+                Line1.StepDisplay = True
+                Line1.StepDisplayRight = True
             Case TimeSeries.InterpretationEnum.BlockLeft,
-                TimeSeries.InterpretationEnum.CumulativePerTimestep
-                Line1.Stairs = True
-                Line1.InvertedStairs = True
+                 TimeSeries.InterpretationEnum.CumulativePerTimestep
+                Line1.StepDisplay = True
+                Line1.StepDisplayRight = False
         End Select
+
+        'Store chart series
+        Me.ChartSeries.Add(ts.Id, Line1)
+
+        'Add series to overview chart
+        Call Me.AddSeriesToOverview(ts, Line1.Color)
 
         'Charts aktualisieren
         Call Me.UpdateChartExtents()
 
         Call Me.ViewportChanged()
 
+        'Determine total number of NaN-values and write to log
+        If ts.NaNCount > 0 Then
+            Log.AddLogEntry(Log.levels.warning, $"Series '{ts.Title}' contains {ts.NaNCount} NaN values!")
+        End If
+
+        'add series to TOC
+        View.CheckedListBox_Series.Items.Add(ts, isChecked:=True)
+
     End Sub
 
     ''' <summary>
-    ''' Adds a time series to the overview chart
+    ''' Adds a series to the overview chart
     ''' </summary>
     ''' <param name="ts">the TimeSeries to add</param>
-    Private Sub AddSeriesToOverview(ts As TimeSeries)
+    ''' <param name="color">the color to use</param>
+    Private Sub AddSeriesToOverview(ts As TimeSeries, color As Color)
 
-        'Linien instanzieren
-        Dim Line2 As New Steema.TeeChart.Styles.FastLine(View.TChart2.Chart)
+        Dim Line2 As ScottPlot.Plottable.ScatterPlot
+        Line2 = View.OverviewPlot.Plot.AddScatterLines(ts.Dates.Select(Function(t As DateTime) t.ToOADate()).ToArray(), ts.Values.ToArray())
+
+        'Set color
+        Line2.Color = color
 
         'Do not paint NaN values
-        Line2.TreatNaNAsNull = True
-        Line2.TreatNulls = Steema.TeeChart.Styles.TreatNullsStyle.DoNotPaint
-
-        'X-Werte als Zeitdaten einstellen
-        Line2.XValues.DateTime = True
-
-        'Store id as Tag property
-        Line2.Tag = ts.Id
-
-        'Namen vergeben
-        Line2.Title = ts.Title
-
-        'set display options
-        If Not ts.DisplayOptions.Color.IsEmpty Then
-            Line2.Color = ts.DisplayOptions.Color
-        End If
-        Line2.LinePen.Style = ts.DisplayOptions.LineStyle
-        Line2.LinePen.Width = ts.DisplayOptions.LineWidth
-
-        'Stützstellen zur Serie hinzufügen
-        Line2.BeginUpdate()
-        If Double.IsNaN(ts.FirstValue) Then
-            'TeeChart throws an OverflowException when attempting to display a FastLine that begins with a NaN value as a step function!
-            'To avoid this we generally do not add NaN values at the beginning of the time series to the FastLine (#67)
-            Dim isNaN As Boolean = True
-            For Each node As KeyValuePair(Of DateTime, Double) In ts.Nodes
-                If isNaN Then
-                    isNaN = isNaN And Double.IsNaN(node.Value)
-                End If
-                If Not isNaN Then
-                    Line2.Add(node.Key, node.Value)
-                End If
-            Next
-        Else
-            Line2.Add(ts.Dates.ToArray(), ts.Values.ToArray())
-        End If
-        Line2.EndUpdate()
+        Line2.OnNaN = ScottPlot.Plottable.ScatterPlot.NanBehavior.Gap
 
         'Interpretation
         Select Case ts.Interpretation
             Case TimeSeries.InterpretationEnum.BlockRight
-                Line2.Stairs = True
+                Line2.StepDisplay = True
+                Line2.StepDisplayRight = True
             Case TimeSeries.InterpretationEnum.BlockLeft,
-                TimeSeries.InterpretationEnum.CumulativePerTimestep
-                Line2.Stairs = True
-                Line2.InvertedStairs = True
+                 TimeSeries.InterpretationEnum.CumulativePerTimestep
+                Line2.StepDisplay = True
+                Line2.StepDisplayRight = False
         End Select
+
+        'reset y axis
+        View.OverviewPlot.Plot.YAxis.Dims.ResetLimits()
+
+        'Move extent rectangle to top
+        View.OverviewPlot.Plot.MoveLast(View.ViewExtentRectangle)
+
+        'store plottable
+        Me.OverviewSeries.Add(ts.Id, Line2)
+
+        View.OverviewPlot.Refresh()
 
     End Sub
 
@@ -2383,80 +2412,156 @@ Friend Class WaveController
     ''' Assigns a series to the appropriate axis depending on its unit
     ''' If no axis exists for the given unit, a new axis is created
     ''' </summary>
+    ''' <param name="series">The series</param>
     ''' <param name="unit">The unit</param>
-    Private Sub assignSeriesToAxis(ByRef series As Steema.TeeChart.Styles.Series, unit As String)
+    Private Sub assignSeriesToAxis(ByRef series As ScottPlot.Plottable.IPlottable, unit As String)
 
-        If IsNothing(View.TChart1.Axes.Left.Tag) Then
-            'use left axis for the first time
-            View.TChart1.Axes.Left.Title.Text = unit
-            View.TChart1.Axes.Left.Tag = unit
-            View.TChart1.Axes.Left.Visible = True
-            View.TChart1.Axes.Left.Automatic = True
-            View.TChart1.Axes.Left.MaximumOffset = 5
-            series.VertAxis = Steema.TeeChart.Styles.VerticalAxis.Left
+        Dim axisW As AxisWrapper
 
-        ElseIf View.TChart1.Axes.Left.Tag = unit Then
-            'reuse left axis
-            series.VertAxis = Steema.TeeChart.Styles.VerticalAxis.Left
+        'check for existing axes
+        Dim axisExists As Boolean = False
+        For Each axisW In Me.Axes
+            If axisW.Unit = unit Then
+                axisExists = True
+                'assign series to axis
+                series.YAxisIndex = axisW.AxisIndex
+                Exit For
+            End If
+        Next
 
-        ElseIf IsNothing(View.TChart1.Axes.Right.Tag) Then
-            'use right axis for the first time
-            View.TChart1.Axes.Right.Title.Text = unit
-            View.TChart1.Axes.Right.Tag = unit
-            View.TChart1.Axes.Right.Visible = True
-            View.TChart1.Axes.Right.Automatic = True
-            View.TChart1.Axes.Right.MaximumOffset = 5
-            series.VertAxis = Steema.TeeChart.Styles.VerticalAxis.Right
-
-        ElseIf View.TChart1.Axes.Right.Tag = unit Then
-            'reuse right axis
-            series.VertAxis = Steema.TeeChart.Styles.VerticalAxis.Right
-        Else
-            'check for reusable custom axes
+        If Not axisExists Then
+            'check for existing, but unused axes
             Dim axisFound As Boolean = False
-            For Each axis As Steema.TeeChart.Axis In View.TChart1.Axes.Custom
-                If axis.Tag = unit Then
-                    series.VertAxis = Steema.TeeChart.Styles.VerticalAxis.Custom
-                    series.CustomVertAxis = axis
+            For Each axis As ScottPlot.Renderable.Axis In View.MainPlot.Plot.GetAxesMatching(axisIndex:=Nothing, isVertical:=True)
+                If axis.AxisLabel.Label = "" Then
+                    'this axis hasn't been used yet
+                    axis.AxisLabel.Label = unit
+                    axis.AxisLabel.IsVisible = True
+                    axis.Ticks(enable:=True)
+
+                    'assign series to axis
+                    series.YAxisIndex = axis.AxisIndex
+
+                    'store axis
+                    axisW = New AxisWrapper(axis)
+                    Me.Axes.Add(axisW)
+
                     axisFound = True
                     Exit For
                 End If
             Next
             If Not axisFound Then
                 'create a new custom axis
-                Dim axis As Steema.TeeChart.Axis
-                Dim number As Integer = View.TChart1.Axes.Custom.Count + 1
-                axis = New Steema.TeeChart.Axis(View.TChart1.Chart)
-                View.TChart1.Axes.Custom.Add(axis)
-                axis.Labels.Font.Name = "GenericSansSerif"
-                axis.Labels.Font.Color = Color.Black
-                axis.Labels.Font.Size = 10
-                axis.Title.Font.Name = "GenericSansSerif"
-                axis.Title.Font.Color = Color.Black
-                axis.Title.Font.Size = 10
-                axis.Title.Text = unit
-                axis.Title.Angle = 90
-                axis.Tag = unit
-                axis.Visible = True
-                axis.Automatic = True
-                axis.MaximumOffset = 5
-                axis.AxisPen.Visible = True
-                axis.Grid.Visible = False
+                Dim axis As ScottPlot.Renderable.Axis
+                Dim number As Integer = Axes.Count + 1
+
                 'Place every second axis on the right
                 If number Mod 2 = 0 Then
-                    axis.OtherSide = True
+                    axis = View.MainPlot.Plot.AddAxis(ScottPlot.Renderable.Edge.Right)
+                Else
+                    axis = View.MainPlot.Plot.AddAxis(ScottPlot.Renderable.Edge.Left)
                 End If
-                'Calculate position
-                axis.RelativePosition = Math.Ceiling((number) / 2) * 8
-                'assign series to new axis
-                series.VertAxis = Steema.TeeChart.Styles.VerticalAxis.Custom
-                series.CustomVertAxis = axis
 
-                'update axis dialog
-                Call Me.UpdateAxisDialog()
+                axis.AxisLabel.Label = unit
+                axis.IsVisible = True
+
+                'assign series to axis
+                series.YAxisIndex = axis.AxisIndex
+
+                'store axis
+                axisW = New AxisWrapper(axis)
+                Me.Axes.Add(axisW)
             End If
+
         End If
 
+        'remove any unused axes
+        Call Me.RemoveUnusedAxes()
+
+    End Sub
+
+    ''' <summary>
+    ''' Checks for any unused axes and removes them
+    ''' </summary>
+    Private Sub RemoveUnusedAxes()
+
+        'collect used units
+        Dim usedUnits As New HashSet(Of String)
+        For Each ts As TimeSeries In Model.TimeSeries.Values
+            usedUnits.Add(ts.Unit)
+        Next
+
+        'find unused axes
+        Dim axesToRemove As New List(Of ScottPlot.Renderable.Axis)
+        For Each axis As ScottPlot.Renderable.Axis In View.MainPlot.Plot.GetAxesMatching(axisIndex:=Nothing, isVertical:=True)
+            If axis.AxisLabel.Label <> "" And Not usedUnits.Contains(axis.AxisLabel.Label) Then
+                axesToRemove.Add(axis)
+            End If
+        Next
+
+        'remove unused axes
+        If axesToRemove.Count > 0 Then
+            For Each axis As ScottPlot.Renderable.Axis In axesToRemove
+                If axis.AxisIndex <= 1 Then
+                    'left and right Y axis should never be removed, just reset
+                    axis.Label("")
+                    axis.Dims.ResetLimits()
+                    axis.Ticks(enable:=False)
+                Else
+                    View.MainPlot.Plot.RemoveAxis(axis)
+                End If
+            Next
+            View.MainPlot.Refresh()
+        End If
+
+        'TODO: remove axis wrappers
+
+    End Sub
+
+    ''' <summary>
+    ''' Handles a series being activated/deactivated in the TOC
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    Private Sub SeriesActiveChanged(sender As Object, e As ItemCheckEventArgs)
+
+        Dim id As Integer = View.CheckedListBox_Series.Items(e.Index).Id
+
+        If Me.ChartSeries.ContainsKey(id) Then
+            Me.ChartSeries(id).IsVisible = (e.NewValue = CheckState.Checked)
+        End If
+
+        'collect units of active series
+        Dim activeUnits As New HashSet(Of String)
+        Dim index As Integer = 0
+        Dim isActive As Boolean
+        For Each ts As TimeSeries In View.CheckedListBox_Series.Items
+            If ts.Id = id Then
+                'checkstate of the item being changed has not been updated in the CheckedListBox yet
+                isActive = (e.NewValue = CheckState.Checked)
+            Else
+                isActive = View.CheckedListBox_Series.GetItemChecked(index)
+            End If
+            If isActive Then
+                activeUnits.Add(ts.Unit)
+            End If
+            index += 1
+        Next
+
+        'rescale and set visibility of axes
+        For Each axisW As AxisWrapper In Me.Axes
+            axisW.setLimits()
+            Dim visibility As Boolean = activeUnits.Contains(axisW.Unit)
+            If axisW.AxisIndex <= 1 Then
+                'left and right axis should never be made completely invisible
+                axisW.Axis.AxisLabel.IsVisible = visibility
+                axisW.Axis.Ticks(enable:=visibility)
+            Else
+                axisW.Axis.IsVisible = visibility
+            End If
+        Next
+
+        View.MainPlot.Refresh()
     End Sub
 
     ''' <summary>
@@ -2466,72 +2571,39 @@ Friend Class WaveController
     Private Sub showMarkers(timestamps As List(Of DateTime))
 
         'Remove any existing marker series
-        For i As Integer = View.TChart1.Series.Count - 1 To 0 Step -1
-            Try
-                If CType(View.TChart1.Series(i).Tag, String) = "_markers" Then
-                    View.TChart1.Series.RemoveAt(i)
-                End If
-            Catch ex As Exception
-                Log.AddLogEntry(Log.levels.debug, ex.Message)
-            End Try
+        For Each marker As ScottPlot.Plottable.IPlottable In Me.ChartMarkers.Values
+            View.MainPlot.Plot.Remove(marker)
         Next
-        View.TChart1.Refresh()
+        Me.ChartMarkers.Clear()
+        View.MainPlot.Refresh()
 
         If timestamps.Count = 0 Then
             Exit Sub
         End If
 
-        'loop over series and create a marker series for each
-        For i As Integer = 0 To View.TChart1.Series.Count - 1
-            Try
-                Dim series As Steema.TeeChart.Styles.Series = View.TChart1.Series(i)
-                If Not series.Active Then
-                    'do not display markers for inactive series
-                    Continue For
-                End If
-                'collect all non-NaN values to display as markers
-                Dim markerValues As New Dictionary(Of DateTime, Double)
-                For Each t As DateTime In timestamps
-                    Dim index As Integer = series.XValues.IndexOf(t.ToOADate)
-                    If index <> -1 Then
-                        If Not series.IsNull(index) Then
-                            markerValues.Add(t, series.YValues(index))
-                        End If
+        'loop over active series and create a marker series for each
+        For Each ts As TimeSeries In View.CheckedListBox_Series.CheckedItems
+            Dim Xs As New List(Of DateTime)
+            Dim Ys As New List(Of Double)
+            For Each t As DateTime In timestamps
+                If ts.Nodes.ContainsKey(t) Then
+                    If Not Double.IsNaN(ts.Nodes(t)) Then
+                        Xs.Add(t)
+                        Ys.Add(ts.Nodes(t))
                     End If
-                Next
-                If markerValues.Count > 0 Then
-                    'create a new point series for markers
-                    Dim markers As New Steema.TeeChart.Styles.Points(View.TChart1.Chart)
-                    markers.Legend.Visible = False
-                    markers.Title = $"{series.Title} (selection)"
-                    markers.Tag = "_markers"
-                    markers.VertAxis = series.VertAxis
-                    If series.VertAxis = Steema.TeeChart.Styles.VerticalAxis.Custom Then
-                        markers.CustomVertAxis = series.CustomVertAxis
-                    End If
-                    markers.Pointer.Style = Steema.TeeChart.Styles.PointerStyles.Circle
-                    markers.Pointer.Brush.Visible = False
-                    markers.Color = series.Color
-                    markers.Pointer.Color = series.Color
-                    markers.Pointer.Pen.Color = series.Color
-                    markers.Pointer.Pen.Width = 2
-                    markers.Marks.Visible = True
-                    markers.Marks.Style = Steema.TeeChart.Styles.MarksStyles.Value
-                    'markers.Marks.OnTop = True 'causes crash when markers are panned out of view on the left
-                    markers.Marks.Callout.Visible = False
-                    markers.Marks.FontSeriesColor = True
-                    markers.Marks.Arrow.Visible = False
-                    markers.Marks.ArrowLength = 5
-                    markers.Marks.Pen.Color = series.Color
-                    'add data points
-                    For Each t As DateTime In markerValues.Keys
-                        markers.Add(t, markerValues(t))
-                    Next
                 End If
-            Catch ex As Exception
-                Log.AddLogEntry(Log.levels.debug, ex.Message)
-            End Try
+            Next
+            Dim markers As ScottPlot.Plottable.ScatterPlot
+            markers = View.MainPlot.Plot.AddScatterPoints(Xs.Select(Function(t As DateTime) t.ToOADate()).ToArray(), Ys.ToArray())
+            markers.DataPointLabels = Ys.Select(Function(y As Double) y.ToString()).ToArray()
+            markers.MarkerSize = 8
+            markers.YAxisIndex = Me.ChartSeries(ts.Id).YAxisIndex
+            Dim lineColor As Color = CType(Me.ChartSeries(ts.Id), ScottPlot.Plottable.ScatterPlot).LineColor
+            markers.MarkerColor = lineColor
+            markers.DataPointLabelFont.Color = ControlPaint.Dark(lineColor)
+            Me.ChartMarkers.Add(ts.Id, markers)
         Next
+        View.MainPlot.Refresh()
 
     End Sub
 
@@ -2571,64 +2643,104 @@ Friend Class WaveController
         Call Application.DoEvents()
     End Sub
 
+    ''' <summary>
+    ''' Handles the case where a TimeSeries' properties were changed in the model
+    ''' </summary>
+    ''' <param name="id">TimeSeries ID</param>
     Private Sub SeriesPropertiesChanged(id As Integer)
-        'find series in chart
-        For Each series As Steema.TeeChart.Styles.Series In View.TChart1.Series
-            If series.Tag = id Then
-                'set line display according to interpretation
-                If TypeOf series Is Steema.TeeChart.Styles.Line Then
-                    Dim seriesline As Steema.TeeChart.Styles.Line = series
-                    Select Case _model.TimeSeries(id).Interpretation
-                        Case TimeSeries.InterpretationEnum.Instantaneous,
-                             TimeSeries.InterpretationEnum.Undefined
-                            seriesline.Stairs = False
-                            seriesline.InvertedStairs = False
-                        Case TimeSeries.InterpretationEnum.BlockRight
-                            seriesline.Stairs = True
-                            seriesline.InvertedStairs = False
-                        Case TimeSeries.InterpretationEnum.BlockLeft,
-                             TimeSeries.InterpretationEnum.CumulativePerTimestep
-                            seriesline.Stairs = True
-                            seriesline.InvertedStairs = True
-                    End Select
-                End If
 
-                'update title in chart
-                series.Title = _model.TimeSeries(id).Title
+        Dim ts As TimeSeries = Model.TimeSeries(id)
 
-                'assign to axis according to unit
-                assignSeriesToAxis(series, _model.TimeSeries(id).Unit)
-
-                'TODO: apply the same changes in the overview chart?
-                Exit For
+        'update series in main chart
+        If Me.ChartSeries.ContainsKey(id) Then
+            Dim series As ScottPlot.Plottable.ScatterPlot = TryCast(Me.ChartSeries(id), ScottPlot.Plottable.ScatterPlot)
+            If Not IsNothing(series) Then
+                'label
+                series.Label = ts.Title
+                'y axis
+                assignSeriesToAxis(series, ts.Unit)
+                'interpretation
+                Select Case ts.Interpretation
+                    Case TimeSeries.InterpretationEnum.BlockRight
+                        series.StepDisplay = True
+                        series.StepDisplayRight = True
+                    Case TimeSeries.InterpretationEnum.BlockLeft,
+                         TimeSeries.InterpretationEnum.CumulativePerTimestep
+                        series.StepDisplay = True
+                        series.StepDisplayRight = False
+                    Case Else
+                        series.StepDisplay = False
+                End Select
+                View.MainPlot.Refresh()
             End If
-        Next
+        End If
+
+        'update series in overview chart
+        If Me.OverviewSeries.ContainsKey(id) Then
+            Dim series As ScottPlot.Plottable.ScatterPlot = TryCast(Me.OverviewSeries(id), ScottPlot.Plottable.ScatterPlot)
+            If Not IsNothing(series) Then
+                'interpretation
+                Select Case ts.Interpretation
+                    Case TimeSeries.InterpretationEnum.BlockRight
+                        series.StepDisplay = True
+                        series.StepDisplayRight = True
+                    Case TimeSeries.InterpretationEnum.BlockLeft,
+                         TimeSeries.InterpretationEnum.CumulativePerTimestep
+                        series.StepDisplay = True
+                        series.StepDisplayRight = False
+                    Case Else
+                        series.StepDisplay = False
+                End Select
+                View.OverviewPlot.Refresh()
+            End If
+        End If
+
+        'update the TOC
+        View.CheckedListBox_Series.Refresh()
 
     End Sub
 
+    ''' <summary>
+    ''' Handles the case where a TimeSeries was removed from the model
+    ''' </summary>
+    ''' <param name="id"></param>
     Private Sub SeriesRemoved(id As Integer)
 
         'Remove series from main chart
-        For i As Integer = View.TChart1.Series.Count - 1 To 0 Step -1
-            If CType(View.TChart1.Series.Item(i).Tag, String) = "_markers" Then
-                'TODO: marker series belonging to the removed series should be removed as well, skip for now
-                Continue For
-            End If
-            If View.TChart1.Series.Item(i).Tag = id Then
-                View.TChart1.Series.RemoveAt(i)
-                View.TChart1.Refresh()
-                Exit For
-            End If
-        Next
+        If Me.ChartSeries.ContainsKey(id) Then
+            View.MainPlot.Plot.Remove(Me.ChartSeries(id))
+            'reset Y axis limits
+            View.MainPlot.Plot.GetAxesMatching(axisIndex:=Me.ChartSeries(id).XAxisIndex, isVertical:=True).First().Dims.ResetLimits()
+            View.MainPlot.Refresh()
+        End If
+        Me.ChartSeries.Remove(id)
 
         'Remove series from overview chart
-        For i As Integer = View.TChart2.Series.Count - 1 To 0 Step -1
-            If (View.TChart2.Series.Item(i).Tag = id) Then
-                View.TChart2.Series.RemoveAt(i)
-                View.TChart2.Refresh()
+        If Me.OverviewSeries.ContainsKey(id) Then
+            View.OverviewPlot.Plot.Remove(Me.OverviewSeries(id))
+            'reset Y axis limits
+            View.OverviewPlot.Plot.YAxis.Dims.ResetLimits()
+            'update chart extents
+            Call Me.UpdateChartExtents()
+        End If
+        Me.OverviewSeries.Remove(id)
+
+        'Remove series from TOC
+        Dim indexFound As Boolean = False
+        Dim index As Integer = 0
+        For Each ts As TimeSeries In View.CheckedListBox_Series.Items
+            If ts.Id = id Then
+                indexFound = True
                 Exit For
             End If
+            index += 1
         Next
+        If indexFound Then
+            View.CheckedListBox_Series.Items.RemoveAt(index)
+        End If
+
+        'remove any unused axes
+        Call Me.RemoveUnusedAxes()
 
     End Sub
 
@@ -2638,79 +2750,50 @@ Friend Class WaveController
     ''' <param name="id">Id of the TimeSeries whose order was changed</param>
     ''' <param name="direction">Direction in which the series was moved</param>
     Private Sub SeriesReordered(id As Integer, direction As Direction)
+
+        Dim offset As Integer
+        If direction = Direction.Up Then
+            offset = -1
+        Else
+            offset = 1
+        End If
+
         'update series order in chart
-        'TODO: this causes a second, unnecessary event update through TeeEvent which I don't know how to prevent
+        'find the index of the series in the chart by comparing titles
+        'TODO: find a better way to detemine a series' index in the chart
         Dim index As Integer = 0
-        For Each series As Steema.TeeChart.Styles.Series In View.TChart1.Series
-            If series.Tag = id Then
-                If direction = Direction.Up And index > 0 Then
-                    View.TChart1.Series.Exchange(index, index - 1)
-                ElseIf direction = Direction.Down And index < View.TChart1.Series.Count - 1 Then
-                    View.TChart1.Series.Exchange(index, index + 1)
+        For Each plottable As ScottPlot.Plottable.IPlottable In View.MainPlot.Plot.GetPlottables()
+            Dim series As ScottPlot.Plottable.ScatterPlot = TryCast(plottable, ScottPlot.Plottable.ScatterPlot)
+            If Not IsNothing(series) Then
+                If series.Label = Me.Model.TimeSeries(id).Title Then
+                    View.MainPlot.Plot.Move(index, index + offset)
+                    View.MainPlot.Refresh()
+                    Exit For
                 End If
+            End If
+            index += 1
+        Next
+
+        'TODO: reorder series in overview chart
+
+        'update series order in TOC
+        'find the index of the series in the TOC by comparing titles
+        Dim indexFound As Boolean = False
+        index = 0
+        For Each ts As TimeSeries In View.CheckedListBox_Series.Items
+            If ts.Title = Me.Model.TimeSeries(id).Title Then
+                indexFound = True
                 Exit For
             End If
             index += 1
         Next
-    End Sub
-
-    ''' <summary>
-    ''' Handles axis deleted in the AxisDialog
-    ''' </summary>
-    ''' <param name="axisname"></param>
-    Private Sub axisDeleted(axisname As String)
-        Dim axisnumber As Integer
-        Dim m As Match = Regex.Match(axisname, "Custom (\d+)")
-        If m.Success Then
-            axisnumber = Integer.Parse(m.Groups(1).Value)
-            'Delete axis from chart
-            View.TChart1.Axes.Custom.RemoveAt(axisnumber)
-            View.TChart1.Refresh()
-            'update axis dialog
-            Call Me.UpdateAxisDialog()
+        If indexFound Then
+            Dim isChecked As Boolean = View.CheckedListBox_Series.GetItemChecked(index)
+            View.CheckedListBox_Series.Items.RemoveAt(index)
+            View.CheckedListBox_Series.Items.Insert(index + offset, Me.Model.TimeSeries(id))
+            View.CheckedListBox_Series.SetItemChecked(index + offset, isChecked)
         End If
-    End Sub
 
-    ''' <summary>
-    ''' Handles axis unit changed in the AxisDialog
-    ''' </summary>
-    ''' <remarks>Reassigns all series to their appropriate axis</remarks>
-    Private Sub AxisUnitChanged()
-
-        For Each series As Steema.TeeChart.Styles.Series In View.TChart1.Series
-            assignSeriesToAxis(series, _model.TimeSeries(series.Tag).Unit)
-        Next
-
-        'deactivate unused custom axes
-        Dim unitUsed As Boolean
-        For Each axis As Steema.TeeChart.Axis In View.TChart1.Axes.Custom
-            unitUsed = False
-            For Each ts As TimeSeries In _model.TimeSeries.Values
-                If ts.Unit = axis.Tag Then
-                    unitUsed = True
-                    Exit For
-                End If
-            Next
-            If Not unitUsed Then
-                axis.Visible = False
-            End If
-        Next
-
-    End Sub
-
-    ''' <summary>
-    ''' Update AxisDialog
-    ''' </summary>
-    Private Sub UpdateAxisDialog()
-        'Wrap Left, Right and Custom axes
-        Dim axisList As New List(Of AxisWrapper)
-        axisList.Add(New AxisWrapper("Left", View.TChart1.Axes.Left))
-        axisList.Add(New AxisWrapper("Right", View.TChart1.Axes.Right))
-        For i As Integer = 0 To View.TChart1.Axes.Custom.Count - 1
-            axisList.Add(New AxisWrapper("Custom " & i, View.TChart1.Axes.Custom(i)))
-        Next
-
-        _axisDialog.Update(axisList)
     End Sub
 
     ''' <summary>
@@ -2758,30 +2841,39 @@ Friend Class WaveController
     ''' <summary>
     ''' Sets a color palette in the charts and changes the colors of any existing series accordingly
     ''' </summary>
-    ''' <param name="colorPalette">The color palette to apply</param>
-    Private Sub SetChartColorPalette(colorPalette As Color())
+    ''' <param name="colors">The color palette to apply</param>
+    Private Sub SetChartColorPalette(colors As Color())
+
+        Dim palette As ScottPlot.IPalette = ScottPlot.Palette.FromColors(colors)
 
         'set colorpalette in charts
-        View.TChart1.Chart.ColorPalette = colorPalette
-        View.TChart2.Chart.ColorPalette = colorPalette
+        View.MainPlot.Plot.Palette = palette
+        View.OverviewPlot.Plot.Palette = palette
 
-        'change colors of existing series
+        'change colors of existing series in main chart
         Dim counter As Integer = 0
-        For Each series As Steema.TeeChart.Styles.Series In View.TChart1.Series
-            If counter >= colorPalette.Length Then
+        For Each series As ScottPlot.Plottable.ScatterPlot In Me.ChartSeries.Values
+            If counter >= colors.Length Then
                 'loop color palette
                 counter = 0
             End If
-            series.Color = colorPalette(counter)
-            'apply same color to series in overview chart
-            For Each series2 As Steema.TeeChart.Styles.Series In View.TChart2.Series
-                If series2.Tag = series.Tag Then
-                    series2.Color = colorPalette(counter)
-                    Exit For
-                End If
-            Next
+            series.Color = colors(counter)
             counter += 1
         Next
+        View.MainPlot.Refresh()
+
+        'change colors of existing series in overview chart
+        counter = 0
+        For Each series As ScottPlot.Plottable.ScatterPlot In Me.OverviewSeries.Values
+            If counter >= colors.Length Then
+                'loop color palette
+                counter = 0
+            End If
+            series.Color = colors(counter)
+            counter += 1
+        Next
+        View.OverviewPlot.Refresh()
+
     End Sub
 
     ''' <summary>
@@ -2818,156 +2910,157 @@ Friend Class WaveController
     ''' <param name="FileName">Path to TEN file</param>
     Private Sub Load_TEN(FileName As String)
 
-        Dim result As DialogResult
-        Dim i As Integer
-        Dim reihe As TimeSeries
-        Dim XMin, XMax As DateTime
+        'TODO: TChart
+        'Dim result As DialogResult
+        'Dim i As Integer
+        'Dim reihe As TimeSeries
+        'Dim XMin, XMax As DateTime
 
-        Try
+        'Try
 
-            'Log
-            Call Log.AddLogEntry(Log.levels.info, $"Loading file '{FileName}' ...")
+        '    'Log
+        '    Call Log.AddLogEntry(Log.levels.info, $"Loading file '{FileName}' ...")
 
-            'Bereits vorhandene Reihen merken
-            Dim existingIds = New List(Of Integer)
-            For Each id As Integer In _model.TimeSeries.Ids
-                existingIds.Add(id)
-            Next
+        '    'Bereits vorhandene Reihen merken
+        '    Dim existingIds = New List(Of Integer)
+        '    For Each id As Integer In _model.TimeSeries.Ids
+        '        existingIds.Add(id)
+        '    Next
 
-            'Zoom der X-Achse merken
-            XMin = View.ChartMinX
-            XMax = View.ChartMaxX
-            If (XMin <> XMax) Then
-                Me.selectionMade = True
-            Else
-                Me.selectionMade = False
-            End If
+        '    'Zoom der X-Achse merken
+        '    XMin = View.ChartMinX
+        '    XMax = View.ChartMaxX
+        '    If (XMin <> XMax) Then
+        '        Me.selectionMade = True
+        '    Else
+        '        Me.selectionMade = False
+        '    End If
 
-            'Load TEN file in main chart, this completely replaces the chart!
-            Call View.TChart1.Import.Template.Load(FileName)
-            'Clear overview chart
-            Call View.TChart2.Series.Clear()
+        '    'Load TEN file in main chart, this completely replaces the chart!
+        '    Call View.MainPlot.Import.Template.Load(FileName)
+        '    'Clear overview chart
+        '    Call View.TChart2.Series.Clear()
 
-            'Abfrage für Reihenimport
-            If (View.TChart1.Series.Count() > 0) Then
-                result = MsgBox("Also import time series?", MsgBoxStyle.YesNo)
+        '    'Abfrage für Reihenimport
+        '    If (View.MainPlot.Series.Count() > 0) Then
+        '        result = MsgBox("Also import time series?", MsgBoxStyle.YesNo)
 
-                Select Case result
+        '        Select Case result
 
-                    Case Windows.Forms.DialogResult.Yes
-                        'Reihen aus TEN-Datei sollen importiert werden
+        '            Case Windows.Forms.DialogResult.Yes
+        '                'Reihen aus TEN-Datei sollen importiert werden
 
-                        Dim nSeries As Integer = 0
+        '                Dim nSeries As Integer = 0
 
-                        'Alle Reihen durchlaufen
-                        For Each series As Steema.TeeChart.Styles.Series In View.TChart1.Series
+        '                'Alle Reihen durchlaufen
+        '                For Each series As Steema.TeeChart.Styles.Series In View.MainPlot.Series
 
-                            'Nur Zeitreihen behandeln
-                            If (series.XValues.DateTime) Then
+        '                    'Nur Zeitreihen behandeln
+        '                    If (series.XValues.DateTime) Then
 
-                                'Zeitreihe aus dem importierten Diagramm nach intern übertragen
-                                Log.AddLogEntry(Log.levels.info, $"Importing series '{series.Title}' from TEN file...")
-                                reihe = New TimeSeries(series.Title)
-                                For i = 0 To series.Count - 1
-                                    reihe.AddNode(DateTime.FromOADate(series.XValues(i)), series.YValues(i))
-                                Next
-                                'Determine total number of NaN-values and write to log
-                                If reihe.NaNCount > 0 Then
-                                    Log.AddLogEntry(Log.levels.warning, $"Series '{reihe.Title}' contains {reihe.NaNCount} NaN values!")
-                                End If
-                                'Get the series' unit from the axis title
-                                Dim axistitle As String = ""
-                                Select Case series.VertAxis
-                                    Case Steema.TeeChart.Styles.VerticalAxis.Left
-                                        axistitle = View.TChart1.Axes.Left.Title.Text
-                                    Case Steema.TeeChart.Styles.VerticalAxis.Right
-                                        axistitle = View.TChart1.Axes.Right.Title.Text
-                                    Case Steema.TeeChart.Styles.VerticalAxis.Custom
-                                        axistitle = series.CustomVertAxis.Title.Text
-                                End Select
-                                reihe.Unit = AxisWrapper.parseUnit(axistitle)
+        '                        'Zeitreihe aus dem importierten Diagramm nach intern übertragen
+        '                        Log.AddLogEntry(Log.levels.info, $"Importing series '{series.Title}' from TEN file...")
+        '                        reihe = New TimeSeries(series.Title)
+        '                        For i = 0 To series.Count - 1
+        '                            reihe.AddNode(DateTime.FromOADate(series.XValues(i)), series.YValues(i))
+        '                        Next
+        '                        'Determine total number of NaN-values and write to log
+        '                        If reihe.NaNCount > 0 Then
+        '                            Log.AddLogEntry(Log.levels.warning, $"Series '{reihe.Title}' contains {reihe.NaNCount} NaN values!")
+        '                        End If
+        '                        'Get the series' unit from the axis title
+        '                        Dim axistitle As String = ""
+        '                        Select Case series.VertAxis
+        '                            Case Steema.TeeChart.Styles.VerticalAxis.Left
+        '                                axistitle = View.MainPlot.Axes.Left.Title.Text
+        '                            Case Steema.TeeChart.Styles.VerticalAxis.Right
+        '                                axistitle = View.MainPlot.Axes.Right.Title.Text
+        '                            Case Steema.TeeChart.Styles.VerticalAxis.Custom
+        '                                axistitle = series.CustomVertAxis.Title.Text
+        '                        End Select
+        '                        reihe.Unit = AxisWrapper.parseUnit(axistitle)
 
-                                'Save datasource
-                                reihe.DataSource = New TimeSeriesDataSource(FileName, series.Title)
+        '                        'Save datasource
+        '                        reihe.DataSource = New TimeSeriesDataSource(FileName, series.Title)
 
-                                'Add the series to the model while temporarily disabling event handling
-                                RemoveHandler _model.SeriesAdded, AddressOf SeriesAdded
-                                Call _model.Import_Series(reihe)
-                                AddHandler _model.SeriesAdded, AddressOf SeriesAdded
+        '                        'Add the series to the model while temporarily disabling event handling
+        '                        RemoveHandler _model.SeriesAdded, AddressOf SeriesAdded
+        '                        Call _model.Import_Series(reihe)
+        '                        AddHandler _model.SeriesAdded, AddressOf SeriesAdded
 
-                                'after import in the model, the title might have been changed,
-                                'then we need to edit the title in the chart as well
-                                If reihe.Title <> series.Title Then
-                                    series.Title = reihe.Title
-                                End If
+        '                        'after import in the model, the title might have been changed,
+        '                        'then we need to edit the title in the chart as well
+        '                        If reihe.Title <> series.Title Then
+        '                            series.Title = reihe.Title
+        '                        End If
 
-                                'Store the time series id in the Tag property
-                                series.Tag = reihe.Id
+        '                        'Store the time series id in the Tag property
+        '                        series.Tag = reihe.Id
 
-                                'Add series to overview
-                                Call Me.AddSeriesToOverview(reihe)
+        '                        'Add series to overview
+        '                        Call Me.AddSeriesToOverview(reihe)
 
-                                nSeries += 1
+        '                        nSeries += 1
 
-                            End If
-                        Next
+        '                    End If
+        '                Next
 
-                        Log.AddLogEntry(levels.info, $"Imported {nSeries} time series from TEN file.")
+        '                Log.AddLogEntry(levels.info, $"Imported {nSeries} time series from TEN file.")
 
-                        'Update window title
-                        View.Text = "BlueM.Wave - " & FileName
+        '                'Update window title
+        '                View.Text = "BlueM.Wave - " & FileName
 
-                    Case Windows.Forms.DialogResult.No
-                        'Reihen aus TEN-Datei sollen nicht importiert werden
+        '            Case Windows.Forms.DialogResult.No
+        '                'Reihen aus TEN-Datei sollen nicht importiert werden
 
-                        'Alle Reihen aus den Diagrammen löschen (wurden bei TEN-Import automatisch mit eingeladen)
-                        View.TChart1.Series.RemoveAllSeries()
-                        View.TChart2.Series.RemoveAllSeries()
+        '                'Alle Reihen aus den Diagrammen löschen (wurden bei TEN-Import automatisch mit eingeladen)
+        '                View.MainPlot.Series.RemoveAllSeries()
+        '                View.TChart2.Series.RemoveAllSeries()
 
-                End Select
+        '        End Select
 
-            End If
+        '    End If
 
-            'extract units from axis titles and store as tags
-            View.TChart1.Axes.Left.Tag = AxisWrapper.parseUnit(View.TChart1.Axes.Left.TitleOrName)
-            View.TChart1.Axes.Right.Tag = AxisWrapper.parseUnit(View.TChart1.Axes.Right.TitleOrName)
-            For Each axis As Steema.TeeChart.Axis In View.TChart1.Axes.Custom
-                axis.Tag = AxisWrapper.parseUnit(axis.TitleOrName)
-            Next
+        '    'extract units from axis titles and store as tags
+        '    View.MainPlot.Axes.Left.Tag = AxisWrapper.parseUnit(View.MainPlot.Axes.Left.TitleOrName)
+        '    View.MainPlot.Axes.Right.Tag = AxisWrapper.parseUnit(View.MainPlot.Axes.Right.TitleOrName)
+        '    For Each axis As Steema.TeeChart.Axis In View.MainPlot.Axes.Custom
+        '        axis.Tag = AxisWrapper.parseUnit(axis.TitleOrName)
+        '    Next
 
-            'Die vor dem Laden bereits vorhandenen Zeitreihen wieder zu den Diagrammen hinzufügen (durch TEN-Import verloren)
-            For Each id As Integer In existingIds
-                Call Me.SeriesAdded(_model.TimeSeries(id))
-            Next
+        '    'Die vor dem Laden bereits vorhandenen Zeitreihen wieder zu den Diagrammen hinzufügen (durch TEN-Import verloren)
+        '    For Each id As Integer In existingIds
+        '        Call Me.SeriesAdded(_model.TimeSeries(id))
+        '    Next
 
-            'Vorherigen Zoom wiederherstellen
-            If (Me.selectionMade) Then
-                View.ChartMinX = XMin
-                View.ChartMaxX = XMax
-            End If
+        '    'Vorherigen Zoom wiederherstellen
+        '    If (Me.selectionMade) Then
+        '        View.ChartMinX = XMin
+        '        View.ChartMaxX = XMax
+        '    End If
 
-            'ColorBands neu einrichten (durch TEN-Import verloren)
-            Call View.Init_ColorBands()
+        '    'ColorBands neu einrichten (durch TEN-Import verloren)
+        '    Call View.Init_ColorBands()
 
-            'Reset zoom and pan settings
-            View.TChart1.Zoom.Direction = Steema.TeeChart.ZoomDirections.None
-            View.TChart1.Panning.Allow = Steema.TeeChart.ScrollModes.None
-            View.TChart1.Panning.MouseButton = MouseButtons.Right
+        '    'Reset zoom and pan settings
+        '    View.MainPlot.Zoom.Direction = Steema.TeeChart.ZoomDirections.None
+        '    View.MainPlot.Panning.Allow = Steema.TeeChart.ScrollModes.None
+        '    View.MainPlot.Panning.MouseButton = MouseButtons.Right
 
-            'Charts aktualisieren
-            Call Me.UpdateChartExtents()
+        '    'Charts aktualisieren
+        '    Call Me.UpdateChartExtents()
 
-            Call Me.ViewportChanged()
+        '    Call Me.ViewportChanged()
 
-            'Log
-            Call Log.AddLogEntry(Log.levels.info, $"TEN file '{FileName}' loaded successfully!")
+        '    'Log
+        '    Call Log.AddLogEntry(Log.levels.info, $"TEN file '{FileName}' loaded successfully!")
 
-            Call FileImported(FileName)
+        '    Call FileImported(FileName)
 
-        Catch ex As Exception
-            MsgBox("Error while loading:" & eol & ex.Message, MsgBoxStyle.Critical)
-            Call Log.AddLogEntry(Log.levels.error, "Error while loading:" & eol & ex.Message)
-        End Try
+        'Catch ex As Exception
+        '    MsgBox("Error while loading:" & eol & ex.Message, MsgBoxStyle.Critical)
+        '    Call Log.AddLogEntry(Log.levels.error, "Error while loading:" & eol & ex.Message)
+        'End Try
 
     End Sub
 

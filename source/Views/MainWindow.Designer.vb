@@ -33,8 +33,6 @@ Partial Class MainWindow
         Dim ToolStripSeparator5 As System.Windows.Forms.ToolStripSeparator
         Dim ToolStripSeparator4 As System.Windows.Forms.ToolStripSeparator
         Dim ToolStripSeparator3 As System.Windows.Forms.ToolStripSeparator
-        Dim Margins2 As Steema.TeeChart.Margins = New Steema.TeeChart.Margins()
-        Dim Margins3 As Steema.TeeChart.Margins = New Steema.TeeChart.Margins()
         Me.ToolStripStatusLabel_Errors = New System.Windows.Forms.ToolStripStatusLabel()
         Me.ToolStripStatusLabel_Warnings = New System.Windows.Forms.ToolStripStatusLabel()
         Me.ToolStripStatusLabel_Log = New System.Windows.Forms.ToolStripStatusLabel()
@@ -48,10 +46,8 @@ Partial Class MainWindow
         Me.ToolStripMenuItem_RecentlyUsedFiles = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripDropDownButton_Save = New System.Windows.Forms.ToolStripDropDownButton()
         Me.ToolStripMenuItem_SaveProjectFile = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ToolStripMenuItem_SaveChart = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripMenuItem_ExportSeries = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripButton_Copy = New System.Windows.Forms.ToolStripButton()
-        Me.ToolStripButton_Print = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripButton_Cut = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripButton_Merge = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripSeparator8 = New System.Windows.Forms.ToolStripSeparator()
@@ -62,6 +58,8 @@ Partial Class MainWindow
         Me.ToolStripButton_Analysis = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripButton_EditChart = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripDropDownButton_ColorPalette = New System.Windows.Forms.ToolStripDropDownButton()
+        Me.ToolStripMenuItem_ColorPaletteCategory10 = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripMenuItem_ColorPaletteCategory20 = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripMenuItem_ColorPaletteMaterial = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripMenuItem_ColorPaletteDistinct = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripMenuItem_ColorPaletteWheel = New System.Windows.Forms.ToolStripMenuItem()
@@ -70,7 +68,6 @@ Partial Class MainWindow
         Me.ToolStripButton_Properties = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripButton_TimeseriesValues = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripSeparator10 = New System.Windows.Forms.ToolStripSeparator()
-        Me.ToolStripButton_AxisDialog = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripButton_AutoAdjustYAxes = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripButton_ToggleOverview = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripButton_ToggleNavigation = New System.Windows.Forms.ToolStripButton()
@@ -87,12 +84,9 @@ Partial Class MainWindow
         Me.ToolStripButton_ZoomAll = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripButton_UpdateNotification = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripSeparator11 = New System.Windows.Forms.ToolStripSeparator()
-        Me.ToolStripDropDownButton_ActivateAllSeries = New System.Windows.Forms.ToolStripDropDownButton()
-        Me.ToolStripMenuItem_ActivateAllSeries = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ToolStripMenuItem_DeactivateAllSeries = New System.Windows.Forms.ToolStripMenuItem()
         Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog()
         Me.SplitContainer1 = New System.Windows.Forms.SplitContainer()
-        Me.TChart2 = New Steema.TeeChart.TChart()
+        Me.OverviewPlot = New ScottPlot.FormsPlot()
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
         Me.PanelNavigation = New System.Windows.Forms.Panel()
         Me.Button_NavEnd = New System.Windows.Forms.Button()
@@ -102,7 +96,7 @@ Partial Class MainWindow
         Me.Button_NavBack = New System.Windows.Forms.Button()
         Me.NumericUpDown_NavMultiplier = New System.Windows.Forms.NumericUpDown()
         Me.ComboBox_NavIncrement = New System.Windows.Forms.ComboBox()
-        Me.TChart1 = New Steema.TeeChart.TChart()
+        Me.MainPlot = New ScottPlot.FormsPlot()
         Me.Panel_DisplayRange = New System.Windows.Forms.Panel()
         Me.Label_Display = New System.Windows.Forms.Label()
         Me.NumericUpDown_DisplayRangeMultiplier = New System.Windows.Forms.NumericUpDown()
@@ -112,6 +106,18 @@ Partial Class MainWindow
         Me.SaveFileDialog1 = New System.Windows.Forms.SaveFileDialog()
         Me.ProgressBar1 = New System.Windows.Forms.ProgressBar()
         Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
+        Me.SplitContainer2 = New System.Windows.Forms.SplitContainer()
+        Me.ToolStrip2 = New System.Windows.Forms.ToolStrip()
+        Me.ToolStripButton_Delete = New System.Windows.Forms.ToolStripButton()
+        Me.ToolStripSeparator12 = New System.Windows.Forms.ToolStripSeparator()
+        Me.ToolStripButton_MoveUp = New System.Windows.Forms.ToolStripButton()
+        Me.ToolStripButton_MoveDown = New System.Windows.Forms.ToolStripButton()
+        Me.ToolStripSeparator13 = New System.Windows.Forms.ToolStripSeparator()
+        Me.ToolStripDropDownButton1 = New System.Windows.Forms.ToolStripDropDownButton()
+        Me.ToolStripMenuItem_ActivateAllSeries = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripMenuItem_DeactivateAllSeries = New System.Windows.Forms.ToolStripMenuItem()
+        Me.CheckedListBox_Series = New System.Windows.Forms.CheckedListBox()
+        Me.ToolStripMenuItem_SaveImage = New System.Windows.Forms.ToolStripMenuItem()
         ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
         toolStripSeparator = New System.Windows.Forms.ToolStripSeparator()
         ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
@@ -132,6 +138,11 @@ Partial Class MainWindow
         CType(Me.NumericUpDown_NavMultiplier, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Panel_DisplayRange.SuspendLayout()
         CType(Me.NumericUpDown_DisplayRangeMultiplier, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.SplitContainer2, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.SplitContainer2.Panel1.SuspendLayout()
+        Me.SplitContainer2.Panel2.SuspendLayout()
+        Me.SplitContainer2.SuspendLayout()
+        Me.ToolStrip2.SuspendLayout()
         Me.SuspendLayout()
         '
         'ToolStripSeparator1
@@ -199,7 +210,7 @@ Partial Class MainWindow
         '
         ToolStrip1.AutoSize = False
         ToolStrip1.BackColor = System.Drawing.SystemColors.Control
-        ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButton_New, Me.ToolStripDropDownButton_Open, Me.ToolStripDropDownButton_Save, ToolStripSeparator4, Me.ToolStripButton_Copy, Me.ToolStripButton_Print, ToolStripSeparator2, Me.ToolStripButton_Cut, Me.ToolStripButton_Merge, Me.ToolStripSeparator8, Me.ToolStripButton_ShowNaNValues, Me.ToolStripButton_ConvertErrorValues, Me.ToolStripButton_RemoveNaNValues, Me.ToolStripSeparator7, Me.ToolStripButton_Analysis, ToolStripSeparator1, Me.ToolStripButton_EditChart, Me.ToolStripDropDownButton_ColorPalette, Me.ToolStripSeparator9, Me.ToolStripButton_Properties, Me.ToolStripButton_TimeseriesValues, Me.ToolStripSeparator10, Me.ToolStripButton_AxisDialog, Me.ToolStripButton_AutoAdjustYAxes, ToolStripSeparator3, Me.ToolStripButton_ToggleOverview, Me.ToolStripButton_ToggleNavigation, toolStripSeparator, Me.ToolStripButton_ZoomIn, Me.ToolStripButton_ZoomOut, Me.ToolStripButton_ZoomPrevious, Me.ToolStripDropDownButton_Help, Me.ToolStripButton_ZoomNext, Me.ToolStripDropDownButton_ZoomToSeries, Me.ToolStripButton_ZoomAll, Me.ToolStripButton_UpdateNotification, Me.ToolStripSeparator11, Me.ToolStripDropDownButton_ActivateAllSeries})
+        ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButton_New, Me.ToolStripDropDownButton_Open, Me.ToolStripDropDownButton_Save, ToolStripSeparator4, Me.ToolStripButton_Copy, ToolStripSeparator2, Me.ToolStripButton_Cut, Me.ToolStripButton_Merge, Me.ToolStripSeparator8, Me.ToolStripButton_ShowNaNValues, Me.ToolStripButton_ConvertErrorValues, Me.ToolStripButton_RemoveNaNValues, Me.ToolStripSeparator7, Me.ToolStripButton_Analysis, ToolStripSeparator1, Me.ToolStripButton_EditChart, Me.ToolStripDropDownButton_ColorPalette, Me.ToolStripSeparator9, Me.ToolStripButton_Properties, Me.ToolStripButton_TimeseriesValues, Me.ToolStripSeparator10, Me.ToolStripButton_AutoAdjustYAxes, ToolStripSeparator3, Me.ToolStripButton_ToggleOverview, Me.ToolStripButton_ToggleNavigation, toolStripSeparator, Me.ToolStripButton_ZoomIn, Me.ToolStripButton_ZoomOut, Me.ToolStripButton_ZoomPrevious, Me.ToolStripDropDownButton_Help, Me.ToolStripButton_ZoomNext, Me.ToolStripDropDownButton_ZoomToSeries, Me.ToolStripButton_ZoomAll, Me.ToolStripButton_UpdateNotification, Me.ToolStripSeparator11})
         ToolStrip1.Location = New System.Drawing.Point(0, 0)
         ToolStrip1.Name = "ToolStrip1"
         ToolStrip1.Size = New System.Drawing.Size(944, 34)
@@ -279,7 +290,7 @@ Partial Class MainWindow
         'ToolStripDropDownButton_Save
         '
         Me.ToolStripDropDownButton_Save.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.ToolStripDropDownButton_Save.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripMenuItem_SaveProjectFile, Me.ToolStripMenuItem_SaveChart, Me.ToolStripMenuItem_ExportSeries})
+        Me.ToolStripDropDownButton_Save.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripMenuItem_SaveProjectFile, Me.ToolStripMenuItem_SaveImage, Me.ToolStripMenuItem_ExportSeries})
         Me.ToolStripDropDownButton_Save.Image = CType(resources.GetObject("ToolStripDropDownButton_Save.Image"), System.Drawing.Image)
         Me.ToolStripDropDownButton_Save.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.ToolStripDropDownButton_Save.Name = "ToolStripDropDownButton_Save"
@@ -290,21 +301,14 @@ Partial Class MainWindow
         '
         Me.ToolStripMenuItem_SaveProjectFile.Image = Global.BlueM.Wave.My.Resources.Resources.chart_curve_link
         Me.ToolStripMenuItem_SaveProjectFile.Name = "ToolStripMenuItem_SaveProjectFile"
-        Me.ToolStripMenuItem_SaveProjectFile.Size = New System.Drawing.Size(167, 22)
+        Me.ToolStripMenuItem_SaveProjectFile.Size = New System.Drawing.Size(180, 22)
         Me.ToolStripMenuItem_SaveProjectFile.Text = "Save project file"
-        '
-        'ToolStripMenuItem_SaveChart
-        '
-        Me.ToolStripMenuItem_SaveChart.Image = Global.BlueM.Wave.My.Resources.Resources.chart_pie
-        Me.ToolStripMenuItem_SaveChart.Name = "ToolStripMenuItem_SaveChart"
-        Me.ToolStripMenuItem_SaveChart.Size = New System.Drawing.Size(167, 22)
-        Me.ToolStripMenuItem_SaveChart.Text = "Save chart"
         '
         'ToolStripMenuItem_ExportSeries
         '
         Me.ToolStripMenuItem_ExportSeries.Image = Global.BlueM.Wave.My.Resources.Resources.page_white_go
         Me.ToolStripMenuItem_ExportSeries.Name = "ToolStripMenuItem_ExportSeries"
-        Me.ToolStripMenuItem_ExportSeries.Size = New System.Drawing.Size(167, 22)
+        Me.ToolStripMenuItem_ExportSeries.Size = New System.Drawing.Size(180, 22)
         Me.ToolStripMenuItem_ExportSeries.Text = "Export time series"
         '
         'ToolStripSeparator4
@@ -319,16 +323,7 @@ Partial Class MainWindow
         Me.ToolStripButton_Copy.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.ToolStripButton_Copy.Name = "ToolStripButton_Copy"
         Me.ToolStripButton_Copy.Size = New System.Drawing.Size(23, 31)
-        Me.ToolStripButton_Copy.Text = "&Copy chart to clipboard (PNG)"
-        '
-        'ToolStripButton_Print
-        '
-        Me.ToolStripButton_Print.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.ToolStripButton_Print.Image = CType(resources.GetObject("ToolStripButton_Print.Image"), System.Drawing.Image)
-        Me.ToolStripButton_Print.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.ToolStripButton_Print.Name = "ToolStripButton_Print"
-        Me.ToolStripButton_Print.Size = New System.Drawing.Size(23, 31)
-        Me.ToolStripButton_Print.Text = "&Print"
+        Me.ToolStripButton_Copy.Text = "&Copy chart image to clipboard"
         '
         'ToolStripButton_Cut
         '
@@ -408,12 +403,24 @@ Partial Class MainWindow
         'ToolStripDropDownButton_ColorPalette
         '
         Me.ToolStripDropDownButton_ColorPalette.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.ToolStripDropDownButton_ColorPalette.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripMenuItem_ColorPaletteMaterial, Me.ToolStripMenuItem_ColorPaletteDistinct, Me.ToolStripMenuItem_ColorPaletteWheel, Me.ToolStripMenuItem_ColorPaletteRandom})
+        Me.ToolStripDropDownButton_ColorPalette.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripMenuItem_ColorPaletteCategory10, Me.ToolStripMenuItem_ColorPaletteCategory20, Me.ToolStripMenuItem_ColorPaletteMaterial, Me.ToolStripMenuItem_ColorPaletteDistinct, Me.ToolStripMenuItem_ColorPaletteWheel, Me.ToolStripMenuItem_ColorPaletteRandom})
         Me.ToolStripDropDownButton_ColorPalette.Image = Global.BlueM.Wave.My.Resources.Resources.color_wheel
         Me.ToolStripDropDownButton_ColorPalette.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.ToolStripDropDownButton_ColorPalette.Name = "ToolStripDropDownButton_ColorPalette"
         Me.ToolStripDropDownButton_ColorPalette.Size = New System.Drawing.Size(29, 31)
         Me.ToolStripDropDownButton_ColorPalette.Text = "Set color palette"
+        '
+        'ToolStripMenuItem_ColorPaletteCategory10
+        '
+        Me.ToolStripMenuItem_ColorPaletteCategory10.Name = "ToolStripMenuItem_ColorPaletteCategory10"
+        Me.ToolStripMenuItem_ColorPaletteCategory10.Size = New System.Drawing.Size(180, 22)
+        Me.ToolStripMenuItem_ColorPaletteCategory10.Text = "Category10"
+        '
+        'ToolStripMenuItem_ColorPaletteCategory20
+        '
+        Me.ToolStripMenuItem_ColorPaletteCategory20.Name = "ToolStripMenuItem_ColorPaletteCategory20"
+        Me.ToolStripMenuItem_ColorPaletteCategory20.Size = New System.Drawing.Size(180, 22)
+        Me.ToolStripMenuItem_ColorPaletteCategory20.Text = "Category20"
         '
         'ToolStripMenuItem_ColorPaletteMaterial
         '
@@ -468,16 +475,6 @@ Partial Class MainWindow
         '
         Me.ToolStripSeparator10.Name = "ToolStripSeparator10"
         Me.ToolStripSeparator10.Size = New System.Drawing.Size(6, 34)
-        '
-        'ToolStripButton_AxisDialog
-        '
-        Me.ToolStripButton_AxisDialog.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.ToolStripButton_AxisDialog.Image = Global.BlueM.Wave.My.Resources.Resources.shape_align_bottom
-        Me.ToolStripButton_AxisDialog.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.ToolStripButton_AxisDialog.Name = "ToolStripButton_AxisDialog"
-        Me.ToolStripButton_AxisDialog.Size = New System.Drawing.Size(23, 31)
-        Me.ToolStripButton_AxisDialog.Text = "ToolStripButton_AxisDialog"
-        Me.ToolStripButton_AxisDialog.ToolTipText = "Manage Axes"
         '
         'ToolStripButton_AutoAdjustYAxes
         '
@@ -629,1266 +626,37 @@ Partial Class MainWindow
         Me.ToolStripSeparator11.Name = "ToolStripSeparator11"
         Me.ToolStripSeparator11.Size = New System.Drawing.Size(6, 34)
         '
-        'ToolStripDropDownButton_ActivateAllSeries
-        '
-        Me.ToolStripDropDownButton_ActivateAllSeries.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.ToolStripDropDownButton_ActivateAllSeries.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripMenuItem_ActivateAllSeries, Me.ToolStripMenuItem_DeactivateAllSeries})
-        Me.ToolStripDropDownButton_ActivateAllSeries.Image = Global.BlueM.Wave.My.Resources.Resources.accept_split
-        Me.ToolStripDropDownButton_ActivateAllSeries.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.ToolStripDropDownButton_ActivateAllSeries.Name = "ToolStripDropDownButton_ActivateAllSeries"
-        Me.ToolStripDropDownButton_ActivateAllSeries.Size = New System.Drawing.Size(29, 31)
-        '
-        'ToolStripMenuItem_ActivateAllSeries
-        '
-        Me.ToolStripMenuItem_ActivateAllSeries.Image = Global.BlueM.Wave.My.Resources.Resources.accept
-        Me.ToolStripMenuItem_ActivateAllSeries.Name = "ToolStripMenuItem_ActivateAllSeries"
-        Me.ToolStripMenuItem_ActivateAllSeries.Size = New System.Drawing.Size(176, 22)
-        Me.ToolStripMenuItem_ActivateAllSeries.Text = "Activate all series"
-        '
-        'ToolStripMenuItem_DeactivateAllSeries
-        '
-        Me.ToolStripMenuItem_DeactivateAllSeries.Image = Global.BlueM.Wave.My.Resources.Resources.accept_grayscale
-        Me.ToolStripMenuItem_DeactivateAllSeries.Name = "ToolStripMenuItem_DeactivateAllSeries"
-        Me.ToolStripMenuItem_DeactivateAllSeries.Size = New System.Drawing.Size(176, 22)
-        Me.ToolStripMenuItem_DeactivateAllSeries.Text = "Deactivate all series"
-        '
         'OpenFileDialog1
         '
         Me.OpenFileDialog1.Multiselect = True
         '
         'SplitContainer1
         '
-        Me.SplitContainer1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.SplitContainer1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
-        Me.SplitContainer1.Location = New System.Drawing.Point(0, 34)
+        Me.SplitContainer1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.SplitContainer1.Location = New System.Drawing.Point(0, 0)
         Me.SplitContainer1.Name = "SplitContainer1"
         Me.SplitContainer1.Orientation = System.Windows.Forms.Orientation.Horizontal
         '
         'SplitContainer1.Panel1
         '
-        Me.SplitContainer1.Panel1.Controls.Add(Me.TChart2)
+        Me.SplitContainer1.Panel1.Controls.Add(Me.OverviewPlot)
         Me.SplitContainer1.Panel1MinSize = 100
         '
         'SplitContainer1.Panel2
         '
         Me.SplitContainer1.Panel2.Controls.Add(Me.TableLayoutPanel1)
-        Me.SplitContainer1.Size = New System.Drawing.Size(944, 606)
-        Me.SplitContainer1.SplitterDistance = 140
+        Me.SplitContainer1.Size = New System.Drawing.Size(805, 605)
+        Me.SplitContainer1.SplitterDistance = 139
         Me.SplitContainer1.TabIndex = 1
         '
-        'TChart2
-        '
-        '
-        '
-        '
-        '
-        '
-        '
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart2.Axes.Bottom.Labels.Bevel.ColorOne = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
-        Me.TChart2.Axes.Bottom.Labels.Bevel.ColorTwo = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer))
-        Me.TChart2.Axes.Bottom.Labels.Bevel.Outer = Steema.TeeChart.Drawing.BevelStyles.None
-        '
-        '
-        '
-        Me.TChart2.Axes.Bottom.Labels.Brush.Color = System.Drawing.Color.White
-        Me.TChart2.Axes.Bottom.Labels.Brush.Solid = True
-        Me.TChart2.Axes.Bottom.Labels.Brush.Visible = True
-        '
-        '
-        '
-        Me.TChart2.Axes.Bottom.Labels.Font.Bold = False
-        '
-        '
-        '
-        Me.TChart2.Axes.Bottom.Labels.Font.Brush.Color = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer))
-        Me.TChart2.Axes.Bottom.Labels.Font.Brush.Solid = True
-        Me.TChart2.Axes.Bottom.Labels.Font.Brush.Visible = True
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart2.Axes.Bottom.Labels.Font.Shadow.Brush.Color = System.Drawing.Color.DarkGray
-        Me.TChart2.Axes.Bottom.Labels.Font.Shadow.Brush.Solid = True
-        Me.TChart2.Axes.Bottom.Labels.Font.Shadow.Brush.Visible = True
-        Me.TChart2.Axes.Bottom.Labels.Font.Size = 9
-        Me.TChart2.Axes.Bottom.Labels.Font.SizeFloat = 9.0!
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart2.Axes.Bottom.Labels.ImageBevel.Brush.Color = System.Drawing.Color.LightGray
-        Me.TChart2.Axes.Bottom.Labels.ImageBevel.Brush.Solid = True
-        Me.TChart2.Axes.Bottom.Labels.ImageBevel.Brush.Visible = True
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart2.Axes.Bottom.Labels.Shadow.Brush.Color = System.Drawing.Color.DarkGray
-        Me.TChart2.Axes.Bottom.Labels.Shadow.Brush.Solid = True
-        Me.TChart2.Axes.Bottom.Labels.Shadow.Brush.Visible = True
-        '
-        '
-        '
-        Me.TChart2.Axes.Bottom.Title.Angle = 0
-        '
-        '
-        '
-        Me.TChart2.Axes.Bottom.Title.Bevel.ColorOne = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
-        Me.TChart2.Axes.Bottom.Title.Bevel.ColorTwo = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer))
-        Me.TChart2.Axes.Bottom.Title.Bevel.Outer = Steema.TeeChart.Drawing.BevelStyles.None
-        '
-        '
-        '
-        Me.TChart2.Axes.Bottom.Title.Brush.Color = System.Drawing.Color.Silver
-        Me.TChart2.Axes.Bottom.Title.Brush.Solid = True
-        Me.TChart2.Axes.Bottom.Title.Brush.Visible = True
-        '
-        '
-        '
-        Me.TChart2.Axes.Bottom.Title.Font.Bold = False
-        '
-        '
-        '
-        Me.TChart2.Axes.Bottom.Title.Font.Brush.Color = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
-        Me.TChart2.Axes.Bottom.Title.Font.Brush.Solid = True
-        Me.TChart2.Axes.Bottom.Title.Font.Brush.Visible = True
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart2.Axes.Bottom.Title.Font.Shadow.Brush.Color = System.Drawing.Color.DarkGray
-        Me.TChart2.Axes.Bottom.Title.Font.Shadow.Brush.Solid = True
-        Me.TChart2.Axes.Bottom.Title.Font.Shadow.Brush.Visible = True
-        Me.TChart2.Axes.Bottom.Title.Font.Size = 11
-        Me.TChart2.Axes.Bottom.Title.Font.SizeFloat = 11.0!
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart2.Axes.Bottom.Title.ImageBevel.Brush.Color = System.Drawing.Color.LightGray
-        Me.TChart2.Axes.Bottom.Title.ImageBevel.Brush.Solid = True
-        Me.TChart2.Axes.Bottom.Title.ImageBevel.Brush.Visible = True
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart2.Axes.Bottom.Title.Shadow.Brush.Color = System.Drawing.Color.DarkGray
-        Me.TChart2.Axes.Bottom.Title.Shadow.Brush.Solid = True
-        Me.TChart2.Axes.Bottom.Title.Shadow.Brush.Visible = True
-        Me.TChart2.Axes.Bottom.UseMaxPixelPos = True
-        '
-        '
-        '
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart2.Axes.Depth.Labels.Bevel.ColorOne = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
-        Me.TChart2.Axes.Depth.Labels.Bevel.ColorTwo = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer))
-        Me.TChart2.Axes.Depth.Labels.Bevel.Outer = Steema.TeeChart.Drawing.BevelStyles.None
-        '
-        '
-        '
-        Me.TChart2.Axes.Depth.Labels.Brush.Color = System.Drawing.Color.White
-        Me.TChart2.Axes.Depth.Labels.Brush.Solid = True
-        Me.TChart2.Axes.Depth.Labels.Brush.Visible = True
-        '
-        '
-        '
-        Me.TChart2.Axes.Depth.Labels.Font.Bold = False
-        '
-        '
-        '
-        Me.TChart2.Axes.Depth.Labels.Font.Brush.Color = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer))
-        Me.TChart2.Axes.Depth.Labels.Font.Brush.Solid = True
-        Me.TChart2.Axes.Depth.Labels.Font.Brush.Visible = True
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart2.Axes.Depth.Labels.Font.Shadow.Brush.Color = System.Drawing.Color.DarkGray
-        Me.TChart2.Axes.Depth.Labels.Font.Shadow.Brush.Solid = True
-        Me.TChart2.Axes.Depth.Labels.Font.Shadow.Brush.Visible = True
-        Me.TChart2.Axes.Depth.Labels.Font.Size = 9
-        Me.TChart2.Axes.Depth.Labels.Font.SizeFloat = 9.0!
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart2.Axes.Depth.Labels.ImageBevel.Brush.Color = System.Drawing.Color.LightGray
-        Me.TChart2.Axes.Depth.Labels.ImageBevel.Brush.Solid = True
-        Me.TChart2.Axes.Depth.Labels.ImageBevel.Brush.Visible = True
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart2.Axes.Depth.Labels.Shadow.Brush.Color = System.Drawing.Color.DarkGray
-        Me.TChart2.Axes.Depth.Labels.Shadow.Brush.Solid = True
-        Me.TChart2.Axes.Depth.Labels.Shadow.Brush.Visible = True
-        '
-        '
-        '
-        Me.TChart2.Axes.Depth.Title.Angle = 0
-        '
-        '
-        '
-        Me.TChart2.Axes.Depth.Title.Bevel.ColorOne = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
-        Me.TChart2.Axes.Depth.Title.Bevel.ColorTwo = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer))
-        Me.TChart2.Axes.Depth.Title.Bevel.Outer = Steema.TeeChart.Drawing.BevelStyles.None
-        '
-        '
-        '
-        Me.TChart2.Axes.Depth.Title.Brush.Color = System.Drawing.Color.Silver
-        Me.TChart2.Axes.Depth.Title.Brush.Solid = True
-        Me.TChart2.Axes.Depth.Title.Brush.Visible = True
-        '
-        '
-        '
-        Me.TChart2.Axes.Depth.Title.Font.Bold = False
-        '
-        '
-        '
-        Me.TChart2.Axes.Depth.Title.Font.Brush.Color = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
-        Me.TChart2.Axes.Depth.Title.Font.Brush.Solid = True
-        Me.TChart2.Axes.Depth.Title.Font.Brush.Visible = True
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart2.Axes.Depth.Title.Font.Shadow.Brush.Color = System.Drawing.Color.DarkGray
-        Me.TChart2.Axes.Depth.Title.Font.Shadow.Brush.Solid = True
-        Me.TChart2.Axes.Depth.Title.Font.Shadow.Brush.Visible = True
-        Me.TChart2.Axes.Depth.Title.Font.Size = 11
-        Me.TChart2.Axes.Depth.Title.Font.SizeFloat = 11.0!
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart2.Axes.Depth.Title.ImageBevel.Brush.Color = System.Drawing.Color.LightGray
-        Me.TChart2.Axes.Depth.Title.ImageBevel.Brush.Solid = True
-        Me.TChart2.Axes.Depth.Title.ImageBevel.Brush.Visible = True
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart2.Axes.Depth.Title.Shadow.Brush.Color = System.Drawing.Color.DarkGray
-        Me.TChart2.Axes.Depth.Title.Shadow.Brush.Solid = True
-        Me.TChart2.Axes.Depth.Title.Shadow.Brush.Visible = True
-        Me.TChart2.Axes.Depth.UseMaxPixelPos = True
-        '
-        '
-        '
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart2.Axes.DepthTop.Labels.Bevel.ColorOne = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
-        Me.TChart2.Axes.DepthTop.Labels.Bevel.ColorTwo = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer))
-        Me.TChart2.Axes.DepthTop.Labels.Bevel.Outer = Steema.TeeChart.Drawing.BevelStyles.None
-        '
-        '
-        '
-        Me.TChart2.Axes.DepthTop.Labels.Brush.Color = System.Drawing.Color.White
-        Me.TChart2.Axes.DepthTop.Labels.Brush.Solid = True
-        Me.TChart2.Axes.DepthTop.Labels.Brush.Visible = True
-        '
-        '
-        '
-        Me.TChart2.Axes.DepthTop.Labels.Font.Bold = False
-        '
-        '
-        '
-        Me.TChart2.Axes.DepthTop.Labels.Font.Brush.Color = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer))
-        Me.TChart2.Axes.DepthTop.Labels.Font.Brush.Solid = True
-        Me.TChart2.Axes.DepthTop.Labels.Font.Brush.Visible = True
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart2.Axes.DepthTop.Labels.Font.Shadow.Brush.Color = System.Drawing.Color.DarkGray
-        Me.TChart2.Axes.DepthTop.Labels.Font.Shadow.Brush.Solid = True
-        Me.TChart2.Axes.DepthTop.Labels.Font.Shadow.Brush.Visible = True
-        Me.TChart2.Axes.DepthTop.Labels.Font.Size = 9
-        Me.TChart2.Axes.DepthTop.Labels.Font.SizeFloat = 9.0!
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart2.Axes.DepthTop.Labels.ImageBevel.Brush.Color = System.Drawing.Color.LightGray
-        Me.TChart2.Axes.DepthTop.Labels.ImageBevel.Brush.Solid = True
-        Me.TChart2.Axes.DepthTop.Labels.ImageBevel.Brush.Visible = True
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart2.Axes.DepthTop.Labels.Shadow.Brush.Color = System.Drawing.Color.DarkGray
-        Me.TChart2.Axes.DepthTop.Labels.Shadow.Brush.Solid = True
-        Me.TChart2.Axes.DepthTop.Labels.Shadow.Brush.Visible = True
-        '
-        '
-        '
-        Me.TChart2.Axes.DepthTop.Title.Angle = 0
-        '
-        '
-        '
-        Me.TChart2.Axes.DepthTop.Title.Bevel.ColorOne = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
-        Me.TChart2.Axes.DepthTop.Title.Bevel.ColorTwo = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer))
-        Me.TChart2.Axes.DepthTop.Title.Bevel.Outer = Steema.TeeChart.Drawing.BevelStyles.None
-        '
-        '
-        '
-        Me.TChart2.Axes.DepthTop.Title.Brush.Color = System.Drawing.Color.Silver
-        Me.TChart2.Axes.DepthTop.Title.Brush.Solid = True
-        Me.TChart2.Axes.DepthTop.Title.Brush.Visible = True
-        '
-        '
-        '
-        Me.TChart2.Axes.DepthTop.Title.Font.Bold = False
-        '
-        '
-        '
-        Me.TChart2.Axes.DepthTop.Title.Font.Brush.Color = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
-        Me.TChart2.Axes.DepthTop.Title.Font.Brush.Solid = True
-        Me.TChart2.Axes.DepthTop.Title.Font.Brush.Visible = True
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart2.Axes.DepthTop.Title.Font.Shadow.Brush.Color = System.Drawing.Color.DarkGray
-        Me.TChart2.Axes.DepthTop.Title.Font.Shadow.Brush.Solid = True
-        Me.TChart2.Axes.DepthTop.Title.Font.Shadow.Brush.Visible = True
-        Me.TChart2.Axes.DepthTop.Title.Font.Size = 11
-        Me.TChart2.Axes.DepthTop.Title.Font.SizeFloat = 11.0!
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart2.Axes.DepthTop.Title.ImageBevel.Brush.Color = System.Drawing.Color.LightGray
-        Me.TChart2.Axes.DepthTop.Title.ImageBevel.Brush.Solid = True
-        Me.TChart2.Axes.DepthTop.Title.ImageBevel.Brush.Visible = True
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart2.Axes.DepthTop.Title.Shadow.Brush.Color = System.Drawing.Color.DarkGray
-        Me.TChart2.Axes.DepthTop.Title.Shadow.Brush.Solid = True
-        Me.TChart2.Axes.DepthTop.Title.Shadow.Brush.Visible = True
-        Me.TChart2.Axes.DepthTop.UseMaxPixelPos = True
-        '
-        '
-        '
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart2.Axes.Left.Labels.Bevel.ColorOne = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
-        Me.TChart2.Axes.Left.Labels.Bevel.ColorTwo = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer))
-        Me.TChart2.Axes.Left.Labels.Bevel.Outer = Steema.TeeChart.Drawing.BevelStyles.None
-        '
-        '
-        '
-        Me.TChart2.Axes.Left.Labels.Brush.Color = System.Drawing.Color.White
-        Me.TChart2.Axes.Left.Labels.Brush.Solid = True
-        Me.TChart2.Axes.Left.Labels.Brush.Visible = True
-        '
-        '
-        '
-        Me.TChart2.Axes.Left.Labels.Font.Bold = False
-        '
-        '
-        '
-        Me.TChart2.Axes.Left.Labels.Font.Brush.Color = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer))
-        Me.TChart2.Axes.Left.Labels.Font.Brush.Solid = True
-        Me.TChart2.Axes.Left.Labels.Font.Brush.Visible = True
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart2.Axes.Left.Labels.Font.Shadow.Brush.Color = System.Drawing.Color.DarkGray
-        Me.TChart2.Axes.Left.Labels.Font.Shadow.Brush.Solid = True
-        Me.TChart2.Axes.Left.Labels.Font.Shadow.Brush.Visible = True
-        Me.TChart2.Axes.Left.Labels.Font.Size = 9
-        Me.TChart2.Axes.Left.Labels.Font.SizeFloat = 9.0!
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart2.Axes.Left.Labels.ImageBevel.Brush.Color = System.Drawing.Color.LightGray
-        Me.TChart2.Axes.Left.Labels.ImageBevel.Brush.Solid = True
-        Me.TChart2.Axes.Left.Labels.ImageBevel.Brush.Visible = True
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart2.Axes.Left.Labels.Shadow.Brush.Color = System.Drawing.Color.DarkGray
-        Me.TChart2.Axes.Left.Labels.Shadow.Brush.Solid = True
-        Me.TChart2.Axes.Left.Labels.Shadow.Brush.Visible = True
-        '
-        '
-        '
-        Me.TChart2.Axes.Left.Title.Angle = 90
-        '
-        '
-        '
-        Me.TChart2.Axes.Left.Title.Bevel.ColorOne = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
-        Me.TChart2.Axes.Left.Title.Bevel.ColorTwo = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer))
-        Me.TChart2.Axes.Left.Title.Bevel.Outer = Steema.TeeChart.Drawing.BevelStyles.None
-        '
-        '
-        '
-        Me.TChart2.Axes.Left.Title.Brush.Color = System.Drawing.Color.Silver
-        Me.TChart2.Axes.Left.Title.Brush.Solid = True
-        Me.TChart2.Axes.Left.Title.Brush.Visible = True
-        '
-        '
-        '
-        Me.TChart2.Axes.Left.Title.Font.Bold = False
-        '
-        '
-        '
-        Me.TChart2.Axes.Left.Title.Font.Brush.Color = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
-        Me.TChart2.Axes.Left.Title.Font.Brush.Solid = True
-        Me.TChart2.Axes.Left.Title.Font.Brush.Visible = True
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart2.Axes.Left.Title.Font.Shadow.Brush.Color = System.Drawing.Color.DarkGray
-        Me.TChart2.Axes.Left.Title.Font.Shadow.Brush.Solid = True
-        Me.TChart2.Axes.Left.Title.Font.Shadow.Brush.Visible = True
-        Me.TChart2.Axes.Left.Title.Font.Size = 11
-        Me.TChart2.Axes.Left.Title.Font.SizeFloat = 11.0!
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart2.Axes.Left.Title.ImageBevel.Brush.Color = System.Drawing.Color.LightGray
-        Me.TChart2.Axes.Left.Title.ImageBevel.Brush.Solid = True
-        Me.TChart2.Axes.Left.Title.ImageBevel.Brush.Visible = True
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart2.Axes.Left.Title.Shadow.Brush.Color = System.Drawing.Color.DarkGray
-        Me.TChart2.Axes.Left.Title.Shadow.Brush.Solid = True
-        Me.TChart2.Axes.Left.Title.Shadow.Brush.Visible = True
-        Me.TChart2.Axes.Left.UseMaxPixelPos = True
-        '
-        '
-        '
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart2.Axes.Right.Labels.Bevel.ColorOne = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
-        Me.TChart2.Axes.Right.Labels.Bevel.ColorTwo = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer))
-        Me.TChart2.Axes.Right.Labels.Bevel.Outer = Steema.TeeChart.Drawing.BevelStyles.None
-        '
-        '
-        '
-        Me.TChart2.Axes.Right.Labels.Brush.Color = System.Drawing.Color.White
-        Me.TChart2.Axes.Right.Labels.Brush.Solid = True
-        Me.TChart2.Axes.Right.Labels.Brush.Visible = True
-        '
-        '
-        '
-        Me.TChart2.Axes.Right.Labels.Font.Bold = False
-        '
-        '
-        '
-        Me.TChart2.Axes.Right.Labels.Font.Brush.Color = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer))
-        Me.TChart2.Axes.Right.Labels.Font.Brush.Solid = True
-        Me.TChart2.Axes.Right.Labels.Font.Brush.Visible = True
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart2.Axes.Right.Labels.Font.Shadow.Brush.Color = System.Drawing.Color.DarkGray
-        Me.TChart2.Axes.Right.Labels.Font.Shadow.Brush.Solid = True
-        Me.TChart2.Axes.Right.Labels.Font.Shadow.Brush.Visible = True
-        Me.TChart2.Axes.Right.Labels.Font.Size = 9
-        Me.TChart2.Axes.Right.Labels.Font.SizeFloat = 9.0!
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart2.Axes.Right.Labels.ImageBevel.Brush.Color = System.Drawing.Color.LightGray
-        Me.TChart2.Axes.Right.Labels.ImageBevel.Brush.Solid = True
-        Me.TChart2.Axes.Right.Labels.ImageBevel.Brush.Visible = True
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart2.Axes.Right.Labels.Shadow.Brush.Color = System.Drawing.Color.DarkGray
-        Me.TChart2.Axes.Right.Labels.Shadow.Brush.Solid = True
-        Me.TChart2.Axes.Right.Labels.Shadow.Brush.Visible = True
-        '
-        '
-        '
-        Me.TChart2.Axes.Right.Title.Angle = 270
-        '
-        '
-        '
-        Me.TChart2.Axes.Right.Title.Bevel.ColorOne = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
-        Me.TChart2.Axes.Right.Title.Bevel.ColorTwo = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer))
-        Me.TChart2.Axes.Right.Title.Bevel.Outer = Steema.TeeChart.Drawing.BevelStyles.None
-        '
-        '
-        '
-        Me.TChart2.Axes.Right.Title.Brush.Color = System.Drawing.Color.Silver
-        Me.TChart2.Axes.Right.Title.Brush.Solid = True
-        Me.TChart2.Axes.Right.Title.Brush.Visible = True
-        '
-        '
-        '
-        Me.TChart2.Axes.Right.Title.Font.Bold = False
-        '
-        '
-        '
-        Me.TChart2.Axes.Right.Title.Font.Brush.Color = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
-        Me.TChart2.Axes.Right.Title.Font.Brush.Solid = True
-        Me.TChart2.Axes.Right.Title.Font.Brush.Visible = True
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart2.Axes.Right.Title.Font.Shadow.Brush.Color = System.Drawing.Color.DarkGray
-        Me.TChart2.Axes.Right.Title.Font.Shadow.Brush.Solid = True
-        Me.TChart2.Axes.Right.Title.Font.Shadow.Brush.Visible = True
-        Me.TChart2.Axes.Right.Title.Font.Size = 11
-        Me.TChart2.Axes.Right.Title.Font.SizeFloat = 11.0!
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart2.Axes.Right.Title.ImageBevel.Brush.Color = System.Drawing.Color.LightGray
-        Me.TChart2.Axes.Right.Title.ImageBevel.Brush.Solid = True
-        Me.TChart2.Axes.Right.Title.ImageBevel.Brush.Visible = True
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart2.Axes.Right.Title.Shadow.Brush.Color = System.Drawing.Color.DarkGray
-        Me.TChart2.Axes.Right.Title.Shadow.Brush.Solid = True
-        Me.TChart2.Axes.Right.Title.Shadow.Brush.Visible = True
-        Me.TChart2.Axes.Right.UseMaxPixelPos = True
-        '
-        '
-        '
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart2.Axes.Top.Labels.Bevel.ColorOne = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
-        Me.TChart2.Axes.Top.Labels.Bevel.ColorTwo = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer))
-        Me.TChart2.Axes.Top.Labels.Bevel.Outer = Steema.TeeChart.Drawing.BevelStyles.None
-        '
-        '
-        '
-        Me.TChart2.Axes.Top.Labels.Brush.Color = System.Drawing.Color.White
-        Me.TChart2.Axes.Top.Labels.Brush.Solid = True
-        Me.TChart2.Axes.Top.Labels.Brush.Visible = True
-        '
-        '
-        '
-        Me.TChart2.Axes.Top.Labels.Font.Bold = False
-        '
-        '
-        '
-        Me.TChart2.Axes.Top.Labels.Font.Brush.Color = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer))
-        Me.TChart2.Axes.Top.Labels.Font.Brush.Solid = True
-        Me.TChart2.Axes.Top.Labels.Font.Brush.Visible = True
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart2.Axes.Top.Labels.Font.Shadow.Brush.Color = System.Drawing.Color.DarkGray
-        Me.TChart2.Axes.Top.Labels.Font.Shadow.Brush.Solid = True
-        Me.TChart2.Axes.Top.Labels.Font.Shadow.Brush.Visible = True
-        Me.TChart2.Axes.Top.Labels.Font.Size = 9
-        Me.TChart2.Axes.Top.Labels.Font.SizeFloat = 9.0!
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart2.Axes.Top.Labels.ImageBevel.Brush.Color = System.Drawing.Color.LightGray
-        Me.TChart2.Axes.Top.Labels.ImageBevel.Brush.Solid = True
-        Me.TChart2.Axes.Top.Labels.ImageBevel.Brush.Visible = True
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart2.Axes.Top.Labels.Shadow.Brush.Color = System.Drawing.Color.DarkGray
-        Me.TChart2.Axes.Top.Labels.Shadow.Brush.Solid = True
-        Me.TChart2.Axes.Top.Labels.Shadow.Brush.Visible = True
-        '
-        '
-        '
-        Me.TChart2.Axes.Top.Title.Angle = 0
-        '
-        '
-        '
-        Me.TChart2.Axes.Top.Title.Bevel.ColorOne = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
-        Me.TChart2.Axes.Top.Title.Bevel.ColorTwo = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer))
-        Me.TChart2.Axes.Top.Title.Bevel.Outer = Steema.TeeChart.Drawing.BevelStyles.None
-        '
-        '
-        '
-        Me.TChart2.Axes.Top.Title.Brush.Color = System.Drawing.Color.Silver
-        Me.TChart2.Axes.Top.Title.Brush.Solid = True
-        Me.TChart2.Axes.Top.Title.Brush.Visible = True
-        '
-        '
-        '
-        Me.TChart2.Axes.Top.Title.Font.Bold = False
-        '
-        '
-        '
-        Me.TChart2.Axes.Top.Title.Font.Brush.Color = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
-        Me.TChart2.Axes.Top.Title.Font.Brush.Solid = True
-        Me.TChart2.Axes.Top.Title.Font.Brush.Visible = True
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart2.Axes.Top.Title.Font.Shadow.Brush.Color = System.Drawing.Color.DarkGray
-        Me.TChart2.Axes.Top.Title.Font.Shadow.Brush.Solid = True
-        Me.TChart2.Axes.Top.Title.Font.Shadow.Brush.Visible = True
-        Me.TChart2.Axes.Top.Title.Font.Size = 11
-        Me.TChart2.Axes.Top.Title.Font.SizeFloat = 11.0!
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart2.Axes.Top.Title.ImageBevel.Brush.Color = System.Drawing.Color.LightGray
-        Me.TChart2.Axes.Top.Title.ImageBevel.Brush.Solid = True
-        Me.TChart2.Axes.Top.Title.ImageBevel.Brush.Visible = True
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart2.Axes.Top.Title.Shadow.Brush.Color = System.Drawing.Color.DarkGray
-        Me.TChart2.Axes.Top.Title.Shadow.Brush.Solid = True
-        Me.TChart2.Axes.Top.Title.Shadow.Brush.Visible = True
-        Me.TChart2.Axes.Top.UseMaxPixelPos = True
-        Me.TChart2.Cursor = System.Windows.Forms.Cursors.Default
-        Me.TChart2.Dock = System.Windows.Forms.DockStyle.Fill
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart2.Footer.Bevel.ColorOne = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
-        Me.TChart2.Footer.Bevel.ColorTwo = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer))
-        Me.TChart2.Footer.Bevel.Outer = Steema.TeeChart.Drawing.BevelStyles.None
-        '
-        '
-        '
-        Me.TChart2.Footer.Brush.Color = System.Drawing.Color.Silver
-        Me.TChart2.Footer.Brush.Solid = True
-        Me.TChart2.Footer.Brush.Visible = True
-        '
-        '
-        '
-        Me.TChart2.Footer.Font.Bold = False
-        '
-        '
-        '
-        Me.TChart2.Footer.Font.Brush.Color = System.Drawing.Color.Red
-        Me.TChart2.Footer.Font.Brush.Solid = True
-        Me.TChart2.Footer.Font.Brush.Visible = True
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart2.Footer.Font.Shadow.Brush.Color = System.Drawing.Color.DarkGray
-        Me.TChart2.Footer.Font.Shadow.Brush.Solid = True
-        Me.TChart2.Footer.Font.Shadow.Brush.Visible = True
-        Me.TChart2.Footer.Font.Size = 8
-        Me.TChart2.Footer.Font.SizeFloat = 8.0!
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart2.Footer.ImageBevel.Brush.Color = System.Drawing.Color.LightGray
-        Me.TChart2.Footer.ImageBevel.Brush.Solid = True
-        Me.TChart2.Footer.ImageBevel.Brush.Visible = True
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart2.Footer.Shadow.Brush.Color = System.Drawing.Color.DarkGray
-        Me.TChart2.Footer.Shadow.Brush.Solid = True
-        Me.TChart2.Footer.Shadow.Brush.Visible = True
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart2.Header.Bevel.ColorOne = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
-        Me.TChart2.Header.Bevel.ColorTwo = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer))
-        Me.TChart2.Header.Bevel.Outer = Steema.TeeChart.Drawing.BevelStyles.None
-        '
-        '
-        '
-        Me.TChart2.Header.Brush.Color = System.Drawing.Color.FromArgb(CType(CType(192, Byte), Integer), CType(CType(192, Byte), Integer), CType(CType(192, Byte), Integer))
-        Me.TChart2.Header.Brush.Solid = True
-        Me.TChart2.Header.Brush.Visible = True
-        '
-        '
-        '
-        Me.TChart2.Header.Font.Bold = False
-        '
-        '
-        '
-        Me.TChart2.Header.Font.Brush.Color = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer))
-        Me.TChart2.Header.Font.Brush.Solid = True
-        Me.TChart2.Header.Font.Brush.Visible = True
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart2.Header.Font.Shadow.Brush.Color = System.Drawing.Color.DarkGray
-        Me.TChart2.Header.Font.Shadow.Brush.Solid = True
-        Me.TChart2.Header.Font.Shadow.Brush.Visible = True
-        Me.TChart2.Header.Font.Size = 12
-        Me.TChart2.Header.Font.SizeFloat = 12.0!
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart2.Header.ImageBevel.Brush.Color = System.Drawing.Color.LightGray
-        Me.TChart2.Header.ImageBevel.Brush.Solid = True
-        Me.TChart2.Header.ImageBevel.Brush.Visible = True
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart2.Header.Shadow.Brush.Color = System.Drawing.Color.FromArgb(CType(CType(169, Byte), Integer), CType(CType(169, Byte), Integer), CType(CType(169, Byte), Integer))
-        Me.TChart2.Header.Shadow.Brush.Solid = True
-        Me.TChart2.Header.Shadow.Brush.Visible = True
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart2.Legend.Bevel.ColorOne = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
-        Me.TChart2.Legend.Bevel.ColorTwo = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer))
-        Me.TChart2.Legend.Bevel.Outer = Steema.TeeChart.Drawing.BevelStyles.None
-        '
-        '
-        '
-        Me.TChart2.Legend.Brush.Color = System.Drawing.Color.White
-        Me.TChart2.Legend.Brush.Solid = True
-        Me.TChart2.Legend.Brush.Visible = True
-        '
-        '
-        '
-        Me.TChart2.Legend.Font.Bold = False
-        '
-        '
-        '
-        Me.TChart2.Legend.Font.Brush.Color = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
-        Me.TChart2.Legend.Font.Brush.Solid = True
-        Me.TChart2.Legend.Font.Brush.Visible = True
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart2.Legend.Font.Shadow.Brush.Color = System.Drawing.Color.DarkGray
-        Me.TChart2.Legend.Font.Shadow.Brush.Solid = True
-        Me.TChart2.Legend.Font.Shadow.Brush.Visible = True
-        Me.TChart2.Legend.Font.Size = 9
-        Me.TChart2.Legend.Font.SizeFloat = 9.0!
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart2.Legend.ImageBevel.Brush.Color = System.Drawing.Color.LightGray
-        Me.TChart2.Legend.ImageBevel.Brush.Solid = True
-        Me.TChart2.Legend.ImageBevel.Brush.Visible = True
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart2.Legend.Shadow.Brush.Color = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(0, Byte), Integer))
-        Me.TChart2.Legend.Shadow.Brush.Solid = True
-        Me.TChart2.Legend.Shadow.Brush.Visible = True
-        '
-        '
-        '
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart2.Legend.Symbol.Shadow.Brush.Color = System.Drawing.Color.DarkGray
-        Me.TChart2.Legend.Symbol.Shadow.Brush.Solid = True
-        Me.TChart2.Legend.Symbol.Shadow.Brush.Visible = True
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart2.Legend.Title.Bevel.ColorOne = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
-        Me.TChart2.Legend.Title.Bevel.ColorTwo = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer))
-        Me.TChart2.Legend.Title.Bevel.Outer = Steema.TeeChart.Drawing.BevelStyles.None
-        '
-        '
-        '
-        Me.TChart2.Legend.Title.Brush.Color = System.Drawing.Color.White
-        Me.TChart2.Legend.Title.Brush.Solid = True
-        Me.TChart2.Legend.Title.Brush.Visible = True
-        '
-        '
-        '
-        Me.TChart2.Legend.Title.Font.Bold = True
-        '
-        '
-        '
-        Me.TChart2.Legend.Title.Font.Brush.Color = System.Drawing.Color.Black
-        Me.TChart2.Legend.Title.Font.Brush.Solid = True
-        Me.TChart2.Legend.Title.Font.Brush.Visible = True
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart2.Legend.Title.Font.Shadow.Brush.Color = System.Drawing.Color.DarkGray
-        Me.TChart2.Legend.Title.Font.Shadow.Brush.Solid = True
-        Me.TChart2.Legend.Title.Font.Shadow.Brush.Visible = True
-        Me.TChart2.Legend.Title.Font.Size = 8
-        Me.TChart2.Legend.Title.Font.SizeFloat = 8.0!
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart2.Legend.Title.ImageBevel.Brush.Color = System.Drawing.Color.LightGray
-        Me.TChart2.Legend.Title.ImageBevel.Brush.Solid = True
-        Me.TChart2.Legend.Title.ImageBevel.Brush.Visible = True
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart2.Legend.Title.Shadow.Brush.Color = System.Drawing.Color.DarkGray
-        Me.TChart2.Legend.Title.Shadow.Brush.Solid = True
-        Me.TChart2.Legend.Title.Shadow.Brush.Visible = True
-        Me.TChart2.Location = New System.Drawing.Point(0, 0)
-        Me.TChart2.Name = "TChart2"
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart2.Panel.Bevel.ColorOne = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
-        Me.TChart2.Panel.Bevel.ColorTwo = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer))
-        Me.TChart2.Panel.Bevel.Outer = Steema.TeeChart.Drawing.BevelStyles.None
-        '
-        '
-        '
-        Me.TChart2.Panel.Brush.Color = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
-        Me.TChart2.Panel.Brush.Solid = True
-        Me.TChart2.Panel.Brush.Visible = True
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart2.Panel.ImageBevel.Brush.Color = System.Drawing.Color.LightGray
-        Me.TChart2.Panel.ImageBevel.Brush.Solid = True
-        Me.TChart2.Panel.ImageBevel.Brush.Visible = True
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart2.Panel.Shadow.Brush.Color = System.Drawing.Color.DarkGray
-        Me.TChart2.Panel.Shadow.Brush.Solid = True
-        Me.TChart2.Panel.Shadow.Brush.Visible = True
-        '
-        '
-        '
-        Me.TChart2.Printer.Landscape = True
-        Margins2.Bottom = 10
-        Margins2.Left = 10
-        Margins2.Right = 10
-        Margins2.Top = 10
-        Me.TChart2.Printer.Margins = Margins2
-        Me.TChart2.Size = New System.Drawing.Size(940, 136)
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart2.SubFooter.Bevel.ColorOne = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
-        Me.TChart2.SubFooter.Bevel.ColorTwo = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer))
-        Me.TChart2.SubFooter.Bevel.Outer = Steema.TeeChart.Drawing.BevelStyles.None
-        '
-        '
-        '
-        Me.TChart2.SubFooter.Brush.Color = System.Drawing.Color.Silver
-        Me.TChart2.SubFooter.Brush.Solid = True
-        Me.TChart2.SubFooter.Brush.Visible = True
-        '
-        '
-        '
-        Me.TChart2.SubFooter.Font.Bold = False
-        '
-        '
-        '
-        Me.TChart2.SubFooter.Font.Brush.Color = System.Drawing.Color.Red
-        Me.TChart2.SubFooter.Font.Brush.Solid = True
-        Me.TChart2.SubFooter.Font.Brush.Visible = True
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart2.SubFooter.Font.Shadow.Brush.Color = System.Drawing.Color.DarkGray
-        Me.TChart2.SubFooter.Font.Shadow.Brush.Solid = True
-        Me.TChart2.SubFooter.Font.Shadow.Brush.Visible = True
-        Me.TChart2.SubFooter.Font.Size = 8
-        Me.TChart2.SubFooter.Font.SizeFloat = 8.0!
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart2.SubFooter.ImageBevel.Brush.Color = System.Drawing.Color.LightGray
-        Me.TChart2.SubFooter.ImageBevel.Brush.Solid = True
-        Me.TChart2.SubFooter.ImageBevel.Brush.Visible = True
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart2.SubFooter.Shadow.Brush.Color = System.Drawing.Color.DarkGray
-        Me.TChart2.SubFooter.Shadow.Brush.Solid = True
-        Me.TChart2.SubFooter.Shadow.Brush.Visible = True
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart2.SubHeader.Bevel.ColorOne = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
-        Me.TChart2.SubHeader.Bevel.ColorTwo = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer))
-        Me.TChart2.SubHeader.Bevel.Outer = Steema.TeeChart.Drawing.BevelStyles.None
-        '
-        '
-        '
-        Me.TChart2.SubHeader.Brush.Color = System.Drawing.Color.FromArgb(CType(CType(192, Byte), Integer), CType(CType(192, Byte), Integer), CType(CType(192, Byte), Integer))
-        Me.TChart2.SubHeader.Brush.Solid = True
-        Me.TChart2.SubHeader.Brush.Visible = True
-        '
-        '
-        '
-        Me.TChart2.SubHeader.Font.Bold = False
-        '
-        '
-        '
-        Me.TChart2.SubHeader.Font.Brush.Color = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer))
-        Me.TChart2.SubHeader.Font.Brush.Solid = True
-        Me.TChart2.SubHeader.Font.Brush.Visible = True
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart2.SubHeader.Font.Shadow.Brush.Color = System.Drawing.Color.DarkGray
-        Me.TChart2.SubHeader.Font.Shadow.Brush.Solid = True
-        Me.TChart2.SubHeader.Font.Shadow.Brush.Visible = True
-        Me.TChart2.SubHeader.Font.Size = 12
-        Me.TChart2.SubHeader.Font.SizeFloat = 12.0!
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart2.SubHeader.ImageBevel.Brush.Color = System.Drawing.Color.LightGray
-        Me.TChart2.SubHeader.ImageBevel.Brush.Solid = True
-        Me.TChart2.SubHeader.ImageBevel.Brush.Visible = True
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart2.SubHeader.Shadow.Brush.Color = System.Drawing.Color.FromArgb(CType(CType(169, Byte), Integer), CType(CType(169, Byte), Integer), CType(CType(169, Byte), Integer))
-        Me.TChart2.SubHeader.Shadow.Brush.Solid = True
-        Me.TChart2.SubHeader.Shadow.Brush.Visible = True
-        Me.TChart2.TabIndex = 0
-        '
-        '
-        '
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart2.Walls.Back.Bevel.ColorOne = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
-        Me.TChart2.Walls.Back.Bevel.ColorTwo = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer))
-        Me.TChart2.Walls.Back.Bevel.Outer = Steema.TeeChart.Drawing.BevelStyles.None
-        '
-        '
-        '
-        Me.TChart2.Walls.Back.Brush.Color = System.Drawing.Color.Silver
-        Me.TChart2.Walls.Back.Brush.Solid = True
-        Me.TChart2.Walls.Back.Brush.Visible = False
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart2.Walls.Back.ImageBevel.Brush.Color = System.Drawing.Color.LightGray
-        Me.TChart2.Walls.Back.ImageBevel.Brush.Solid = True
-        Me.TChart2.Walls.Back.ImageBevel.Brush.Visible = True
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart2.Walls.Back.Shadow.Brush.Color = System.Drawing.Color.DarkGray
-        Me.TChart2.Walls.Back.Shadow.Brush.Solid = True
-        Me.TChart2.Walls.Back.Shadow.Brush.Visible = True
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart2.Walls.Bottom.Bevel.ColorOne = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
-        Me.TChart2.Walls.Bottom.Bevel.ColorTwo = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer))
-        Me.TChart2.Walls.Bottom.Bevel.Outer = Steema.TeeChart.Drawing.BevelStyles.None
-        '
-        '
-        '
-        Me.TChart2.Walls.Bottom.Brush.Color = System.Drawing.Color.White
-        Me.TChart2.Walls.Bottom.Brush.Solid = True
-        Me.TChart2.Walls.Bottom.Brush.Visible = True
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart2.Walls.Bottom.ImageBevel.Brush.Color = System.Drawing.Color.LightGray
-        Me.TChart2.Walls.Bottom.ImageBevel.Brush.Solid = True
-        Me.TChart2.Walls.Bottom.ImageBevel.Brush.Visible = True
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart2.Walls.Bottom.Shadow.Brush.Color = System.Drawing.Color.DarkGray
-        Me.TChart2.Walls.Bottom.Shadow.Brush.Solid = True
-        Me.TChart2.Walls.Bottom.Shadow.Brush.Visible = True
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart2.Walls.Left.Bevel.ColorOne = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
-        Me.TChart2.Walls.Left.Bevel.ColorTwo = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer))
-        Me.TChart2.Walls.Left.Bevel.Outer = Steema.TeeChart.Drawing.BevelStyles.None
-        '
-        '
-        '
-        Me.TChart2.Walls.Left.Brush.Color = System.Drawing.Color.LightYellow
-        Me.TChart2.Walls.Left.Brush.Solid = True
-        Me.TChart2.Walls.Left.Brush.Visible = True
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart2.Walls.Left.ImageBevel.Brush.Color = System.Drawing.Color.LightGray
-        Me.TChart2.Walls.Left.ImageBevel.Brush.Solid = True
-        Me.TChart2.Walls.Left.ImageBevel.Brush.Visible = True
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart2.Walls.Left.Shadow.Brush.Color = System.Drawing.Color.DarkGray
-        Me.TChart2.Walls.Left.Shadow.Brush.Solid = True
-        Me.TChart2.Walls.Left.Shadow.Brush.Visible = True
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart2.Walls.Right.Bevel.ColorOne = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
-        Me.TChart2.Walls.Right.Bevel.ColorTwo = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer))
-        Me.TChart2.Walls.Right.Bevel.Outer = Steema.TeeChart.Drawing.BevelStyles.None
-        '
-        '
-        '
-        Me.TChart2.Walls.Right.Brush.Color = System.Drawing.Color.LightYellow
-        Me.TChart2.Walls.Right.Brush.Solid = True
-        Me.TChart2.Walls.Right.Brush.Visible = True
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart2.Walls.Right.ImageBevel.Brush.Color = System.Drawing.Color.LightGray
-        Me.TChart2.Walls.Right.ImageBevel.Brush.Solid = True
-        Me.TChart2.Walls.Right.ImageBevel.Brush.Visible = True
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart2.Walls.Right.Shadow.Brush.Color = System.Drawing.Color.DarkGray
-        Me.TChart2.Walls.Right.Shadow.Brush.Solid = True
-        Me.TChart2.Walls.Right.Shadow.Brush.Visible = True
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart2.Zoom.Brush.Color = System.Drawing.Color.LightBlue
-        Me.TChart2.Zoom.Brush.Solid = True
-        Me.TChart2.Zoom.Brush.Visible = True
+        'OverviewPlot
+        '
+        Me.OverviewPlot.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.OverviewPlot.Location = New System.Drawing.Point(0, 0)
+        Me.OverviewPlot.Name = "OverviewPlot"
+        Me.OverviewPlot.Size = New System.Drawing.Size(801, 135)
+        Me.OverviewPlot.TabIndex = 0
         '
         'TableLayoutPanel1
         '
@@ -1896,17 +664,18 @@ Partial Class MainWindow
         Me.TableLayoutPanel1.ColumnCount = 1
         Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.TableLayoutPanel1.Controls.Add(Me.PanelNavigation, 0, 0)
-        Me.TableLayoutPanel1.Controls.Add(Me.TChart1, 0, 1)
+        Me.TableLayoutPanel1.Controls.Add(Me.MainPlot, 0, 1)
         Me.TableLayoutPanel1.Controls.Add(Me.Panel_DisplayRange, 0, 2)
         Me.TableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TableLayoutPanel1.Location = New System.Drawing.Point(0, 0)
         Me.TableLayoutPanel1.Margin = New System.Windows.Forms.Padding(0)
         Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
-        Me.TableLayoutPanel1.RowCount = 3
+        Me.TableLayoutPanel1.RowCount = 4
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 38.0!))
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 36.0!))
-        Me.TableLayoutPanel1.Size = New System.Drawing.Size(940, 458)
+        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
+        Me.TableLayoutPanel1.Size = New System.Drawing.Size(801, 458)
         Me.TableLayoutPanel1.TabIndex = 3
         '
         'PanelNavigation
@@ -1922,14 +691,14 @@ Partial Class MainWindow
         Me.PanelNavigation.Location = New System.Drawing.Point(1, 1)
         Me.PanelNavigation.Margin = New System.Windows.Forms.Padding(0)
         Me.PanelNavigation.Name = "PanelNavigation"
-        Me.PanelNavigation.Size = New System.Drawing.Size(938, 38)
+        Me.PanelNavigation.Size = New System.Drawing.Size(799, 38)
         Me.PanelNavigation.TabIndex = 0
         '
         'Button_NavEnd
         '
         Me.Button_NavEnd.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Button_NavEnd.Image = Global.BlueM.Wave.My.Resources.Resources.control_end
-        Me.Button_NavEnd.Location = New System.Drawing.Point(906, 8)
+        Me.Button_NavEnd.Location = New System.Drawing.Point(767, 8)
         Me.Button_NavEnd.Name = "Button_NavEnd"
         Me.Button_NavEnd.Size = New System.Drawing.Size(23, 23)
         Me.Button_NavEnd.TabIndex = 6
@@ -1950,7 +719,7 @@ Partial Class MainWindow
         '
         Me.Label_Navigate.Anchor = System.Windows.Forms.AnchorStyles.Top
         Me.Label_Navigate.AutoSize = True
-        Me.Label_Navigate.Location = New System.Drawing.Point(376, 13)
+        Me.Label_Navigate.Location = New System.Drawing.Point(306, 13)
         Me.Label_Navigate.Name = "Label_Navigate"
         Me.Label_Navigate.Size = New System.Drawing.Size(53, 13)
         Me.Label_Navigate.TabIndex = 2
@@ -1960,7 +729,7 @@ Partial Class MainWindow
         '
         Me.Button_NavForward.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Button_NavForward.Image = CType(resources.GetObject("Button_NavForward.Image"), System.Drawing.Image)
-        Me.Button_NavForward.Location = New System.Drawing.Point(831, 8)
+        Me.Button_NavForward.Location = New System.Drawing.Point(692, 8)
         Me.Button_NavForward.Name = "Button_NavForward"
         Me.Button_NavForward.Size = New System.Drawing.Size(69, 23)
         Me.Button_NavForward.TabIndex = 5
@@ -1980,7 +749,7 @@ Partial Class MainWindow
         'NumericUpDown_NavMultiplier
         '
         Me.NumericUpDown_NavMultiplier.Anchor = System.Windows.Forms.AnchorStyles.Top
-        Me.NumericUpDown_NavMultiplier.Location = New System.Drawing.Point(435, 9)
+        Me.NumericUpDown_NavMultiplier.Location = New System.Drawing.Point(365, 9)
         Me.NumericUpDown_NavMultiplier.Minimum = New Decimal(New Integer() {1, 0, 0, 0})
         Me.NumericUpDown_NavMultiplier.Name = "NumericUpDown_NavMultiplier"
         Me.NumericUpDown_NavMultiplier.Size = New System.Drawing.Size(40, 20)
@@ -1993,1222 +762,18 @@ Partial Class MainWindow
         Me.ComboBox_NavIncrement.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.ComboBox_NavIncrement.FormattingEnabled = True
         Me.ComboBox_NavIncrement.Items.AddRange(New Object() {"Centuries", "Decades", "Years", "Months", "Weeks", "Days", "Hours", "Minutes", "Seconds"})
-        Me.ComboBox_NavIncrement.Location = New System.Drawing.Point(481, 9)
+        Me.ComboBox_NavIncrement.Location = New System.Drawing.Point(411, 9)
         Me.ComboBox_NavIncrement.Name = "ComboBox_NavIncrement"
         Me.ComboBox_NavIncrement.Size = New System.Drawing.Size(81, 21)
         Me.ComboBox_NavIncrement.TabIndex = 4
         '
-        'TChart1
-        '
-        '
-        '
-        '
-        '
-        '
-        '
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart1.Axes.Bottom.Labels.Bevel.ColorOne = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
-        Me.TChart1.Axes.Bottom.Labels.Bevel.ColorTwo = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer))
-        Me.TChart1.Axes.Bottom.Labels.Bevel.Outer = Steema.TeeChart.Drawing.BevelStyles.None
-        '
-        '
-        '
-        Me.TChart1.Axes.Bottom.Labels.Brush.Color = System.Drawing.Color.White
-        Me.TChart1.Axes.Bottom.Labels.Brush.Solid = True
-        Me.TChart1.Axes.Bottom.Labels.Brush.Visible = True
-        '
-        '
-        '
-        Me.TChart1.Axes.Bottom.Labels.Font.Bold = False
-        '
-        '
-        '
-        Me.TChart1.Axes.Bottom.Labels.Font.Brush.Color = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer))
-        Me.TChart1.Axes.Bottom.Labels.Font.Brush.Solid = True
-        Me.TChart1.Axes.Bottom.Labels.Font.Brush.Visible = True
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart1.Axes.Bottom.Labels.Font.Shadow.Brush.Color = System.Drawing.Color.DarkGray
-        Me.TChart1.Axes.Bottom.Labels.Font.Shadow.Brush.Solid = True
-        Me.TChart1.Axes.Bottom.Labels.Font.Shadow.Brush.Visible = True
-        Me.TChart1.Axes.Bottom.Labels.Font.Size = 9
-        Me.TChart1.Axes.Bottom.Labels.Font.SizeFloat = 9.0!
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart1.Axes.Bottom.Labels.ImageBevel.Brush.Color = System.Drawing.Color.LightGray
-        Me.TChart1.Axes.Bottom.Labels.ImageBevel.Brush.Solid = True
-        Me.TChart1.Axes.Bottom.Labels.ImageBevel.Brush.Visible = True
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart1.Axes.Bottom.Labels.Shadow.Brush.Color = System.Drawing.Color.DarkGray
-        Me.TChart1.Axes.Bottom.Labels.Shadow.Brush.Solid = True
-        Me.TChart1.Axes.Bottom.Labels.Shadow.Brush.Visible = True
-        '
-        '
-        '
-        Me.TChart1.Axes.Bottom.Title.Angle = 0
-        '
-        '
-        '
-        Me.TChart1.Axes.Bottom.Title.Bevel.ColorOne = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
-        Me.TChart1.Axes.Bottom.Title.Bevel.ColorTwo = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer))
-        Me.TChart1.Axes.Bottom.Title.Bevel.Outer = Steema.TeeChart.Drawing.BevelStyles.None
-        '
-        '
-        '
-        Me.TChart1.Axes.Bottom.Title.Brush.Color = System.Drawing.Color.Silver
-        Me.TChart1.Axes.Bottom.Title.Brush.Solid = True
-        Me.TChart1.Axes.Bottom.Title.Brush.Visible = True
-        '
-        '
-        '
-        Me.TChart1.Axes.Bottom.Title.Font.Bold = False
-        '
-        '
-        '
-        Me.TChart1.Axes.Bottom.Title.Font.Brush.Color = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
-        Me.TChart1.Axes.Bottom.Title.Font.Brush.Solid = True
-        Me.TChart1.Axes.Bottom.Title.Font.Brush.Visible = True
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart1.Axes.Bottom.Title.Font.Shadow.Brush.Color = System.Drawing.Color.DarkGray
-        Me.TChart1.Axes.Bottom.Title.Font.Shadow.Brush.Solid = True
-        Me.TChart1.Axes.Bottom.Title.Font.Shadow.Brush.Visible = True
-        Me.TChart1.Axes.Bottom.Title.Font.Size = 11
-        Me.TChart1.Axes.Bottom.Title.Font.SizeFloat = 11.0!
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart1.Axes.Bottom.Title.ImageBevel.Brush.Color = System.Drawing.Color.LightGray
-        Me.TChart1.Axes.Bottom.Title.ImageBevel.Brush.Solid = True
-        Me.TChart1.Axes.Bottom.Title.ImageBevel.Brush.Visible = True
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart1.Axes.Bottom.Title.Shadow.Brush.Color = System.Drawing.Color.DarkGray
-        Me.TChart1.Axes.Bottom.Title.Shadow.Brush.Solid = True
-        Me.TChart1.Axes.Bottom.Title.Shadow.Brush.Visible = True
-        Me.TChart1.Axes.Bottom.UseMaxPixelPos = True
-        '
-        '
-        '
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart1.Axes.Depth.Labels.Bevel.ColorOne = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
-        Me.TChart1.Axes.Depth.Labels.Bevel.ColorTwo = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer))
-        Me.TChart1.Axes.Depth.Labels.Bevel.Outer = Steema.TeeChart.Drawing.BevelStyles.None
-        '
-        '
-        '
-        Me.TChart1.Axes.Depth.Labels.Brush.Color = System.Drawing.Color.White
-        Me.TChart1.Axes.Depth.Labels.Brush.Solid = True
-        Me.TChart1.Axes.Depth.Labels.Brush.Visible = True
-        '
-        '
-        '
-        Me.TChart1.Axes.Depth.Labels.Font.Bold = False
-        '
-        '
-        '
-        Me.TChart1.Axes.Depth.Labels.Font.Brush.Color = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer))
-        Me.TChart1.Axes.Depth.Labels.Font.Brush.Solid = True
-        Me.TChart1.Axes.Depth.Labels.Font.Brush.Visible = True
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart1.Axes.Depth.Labels.Font.Shadow.Brush.Color = System.Drawing.Color.DarkGray
-        Me.TChart1.Axes.Depth.Labels.Font.Shadow.Brush.Solid = True
-        Me.TChart1.Axes.Depth.Labels.Font.Shadow.Brush.Visible = True
-        Me.TChart1.Axes.Depth.Labels.Font.Size = 9
-        Me.TChart1.Axes.Depth.Labels.Font.SizeFloat = 9.0!
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart1.Axes.Depth.Labels.ImageBevel.Brush.Color = System.Drawing.Color.LightGray
-        Me.TChart1.Axes.Depth.Labels.ImageBevel.Brush.Solid = True
-        Me.TChart1.Axes.Depth.Labels.ImageBevel.Brush.Visible = True
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart1.Axes.Depth.Labels.Shadow.Brush.Color = System.Drawing.Color.DarkGray
-        Me.TChart1.Axes.Depth.Labels.Shadow.Brush.Solid = True
-        Me.TChart1.Axes.Depth.Labels.Shadow.Brush.Visible = True
-        '
-        '
-        '
-        Me.TChart1.Axes.Depth.Title.Angle = 0
-        '
-        '
-        '
-        Me.TChart1.Axes.Depth.Title.Bevel.ColorOne = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
-        Me.TChart1.Axes.Depth.Title.Bevel.ColorTwo = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer))
-        Me.TChart1.Axes.Depth.Title.Bevel.Outer = Steema.TeeChart.Drawing.BevelStyles.None
-        '
-        '
-        '
-        Me.TChart1.Axes.Depth.Title.Brush.Color = System.Drawing.Color.Silver
-        Me.TChart1.Axes.Depth.Title.Brush.Solid = True
-        Me.TChart1.Axes.Depth.Title.Brush.Visible = True
-        '
-        '
-        '
-        Me.TChart1.Axes.Depth.Title.Font.Bold = False
-        '
-        '
-        '
-        Me.TChart1.Axes.Depth.Title.Font.Brush.Color = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
-        Me.TChart1.Axes.Depth.Title.Font.Brush.Solid = True
-        Me.TChart1.Axes.Depth.Title.Font.Brush.Visible = True
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart1.Axes.Depth.Title.Font.Shadow.Brush.Color = System.Drawing.Color.DarkGray
-        Me.TChart1.Axes.Depth.Title.Font.Shadow.Brush.Solid = True
-        Me.TChart1.Axes.Depth.Title.Font.Shadow.Brush.Visible = True
-        Me.TChart1.Axes.Depth.Title.Font.Size = 11
-        Me.TChart1.Axes.Depth.Title.Font.SizeFloat = 11.0!
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart1.Axes.Depth.Title.ImageBevel.Brush.Color = System.Drawing.Color.LightGray
-        Me.TChart1.Axes.Depth.Title.ImageBevel.Brush.Solid = True
-        Me.TChart1.Axes.Depth.Title.ImageBevel.Brush.Visible = True
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart1.Axes.Depth.Title.Shadow.Brush.Color = System.Drawing.Color.DarkGray
-        Me.TChart1.Axes.Depth.Title.Shadow.Brush.Solid = True
-        Me.TChart1.Axes.Depth.Title.Shadow.Brush.Visible = True
-        Me.TChart1.Axes.Depth.UseMaxPixelPos = True
-        '
-        '
-        '
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart1.Axes.DepthTop.Labels.Bevel.ColorOne = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
-        Me.TChart1.Axes.DepthTop.Labels.Bevel.ColorTwo = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer))
-        Me.TChart1.Axes.DepthTop.Labels.Bevel.Outer = Steema.TeeChart.Drawing.BevelStyles.None
-        '
-        '
-        '
-        Me.TChart1.Axes.DepthTop.Labels.Brush.Color = System.Drawing.Color.White
-        Me.TChart1.Axes.DepthTop.Labels.Brush.Solid = True
-        Me.TChart1.Axes.DepthTop.Labels.Brush.Visible = True
-        '
-        '
-        '
-        Me.TChart1.Axes.DepthTop.Labels.Font.Bold = False
-        '
-        '
-        '
-        Me.TChart1.Axes.DepthTop.Labels.Font.Brush.Color = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer))
-        Me.TChart1.Axes.DepthTop.Labels.Font.Brush.Solid = True
-        Me.TChart1.Axes.DepthTop.Labels.Font.Brush.Visible = True
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart1.Axes.DepthTop.Labels.Font.Shadow.Brush.Color = System.Drawing.Color.DarkGray
-        Me.TChart1.Axes.DepthTop.Labels.Font.Shadow.Brush.Solid = True
-        Me.TChart1.Axes.DepthTop.Labels.Font.Shadow.Brush.Visible = True
-        Me.TChart1.Axes.DepthTop.Labels.Font.Size = 9
-        Me.TChart1.Axes.DepthTop.Labels.Font.SizeFloat = 9.0!
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart1.Axes.DepthTop.Labels.ImageBevel.Brush.Color = System.Drawing.Color.LightGray
-        Me.TChart1.Axes.DepthTop.Labels.ImageBevel.Brush.Solid = True
-        Me.TChart1.Axes.DepthTop.Labels.ImageBevel.Brush.Visible = True
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart1.Axes.DepthTop.Labels.Shadow.Brush.Color = System.Drawing.Color.DarkGray
-        Me.TChart1.Axes.DepthTop.Labels.Shadow.Brush.Solid = True
-        Me.TChart1.Axes.DepthTop.Labels.Shadow.Brush.Visible = True
-        '
-        '
-        '
-        Me.TChart1.Axes.DepthTop.Title.Angle = 0
-        '
-        '
-        '
-        Me.TChart1.Axes.DepthTop.Title.Bevel.ColorOne = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
-        Me.TChart1.Axes.DepthTop.Title.Bevel.ColorTwo = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer))
-        Me.TChart1.Axes.DepthTop.Title.Bevel.Outer = Steema.TeeChart.Drawing.BevelStyles.None
-        '
-        '
-        '
-        Me.TChart1.Axes.DepthTop.Title.Brush.Color = System.Drawing.Color.Silver
-        Me.TChart1.Axes.DepthTop.Title.Brush.Solid = True
-        Me.TChart1.Axes.DepthTop.Title.Brush.Visible = True
-        '
-        '
-        '
-        Me.TChart1.Axes.DepthTop.Title.Font.Bold = False
-        '
-        '
-        '
-        Me.TChart1.Axes.DepthTop.Title.Font.Brush.Color = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
-        Me.TChart1.Axes.DepthTop.Title.Font.Brush.Solid = True
-        Me.TChart1.Axes.DepthTop.Title.Font.Brush.Visible = True
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart1.Axes.DepthTop.Title.Font.Shadow.Brush.Color = System.Drawing.Color.DarkGray
-        Me.TChart1.Axes.DepthTop.Title.Font.Shadow.Brush.Solid = True
-        Me.TChart1.Axes.DepthTop.Title.Font.Shadow.Brush.Visible = True
-        Me.TChart1.Axes.DepthTop.Title.Font.Size = 11
-        Me.TChart1.Axes.DepthTop.Title.Font.SizeFloat = 11.0!
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart1.Axes.DepthTop.Title.ImageBevel.Brush.Color = System.Drawing.Color.LightGray
-        Me.TChart1.Axes.DepthTop.Title.ImageBevel.Brush.Solid = True
-        Me.TChart1.Axes.DepthTop.Title.ImageBevel.Brush.Visible = True
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart1.Axes.DepthTop.Title.Shadow.Brush.Color = System.Drawing.Color.DarkGray
-        Me.TChart1.Axes.DepthTop.Title.Shadow.Brush.Solid = True
-        Me.TChart1.Axes.DepthTop.Title.Shadow.Brush.Visible = True
-        Me.TChart1.Axes.DepthTop.UseMaxPixelPos = True
-        '
-        '
-        '
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart1.Axes.Left.Labels.Bevel.ColorOne = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
-        Me.TChart1.Axes.Left.Labels.Bevel.ColorTwo = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer))
-        Me.TChart1.Axes.Left.Labels.Bevel.Outer = Steema.TeeChart.Drawing.BevelStyles.None
-        '
-        '
-        '
-        Me.TChart1.Axes.Left.Labels.Brush.Color = System.Drawing.Color.White
-        Me.TChart1.Axes.Left.Labels.Brush.Solid = True
-        Me.TChart1.Axes.Left.Labels.Brush.Visible = True
-        '
-        '
-        '
-        Me.TChart1.Axes.Left.Labels.Font.Bold = False
-        '
-        '
-        '
-        Me.TChart1.Axes.Left.Labels.Font.Brush.Color = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer))
-        Me.TChart1.Axes.Left.Labels.Font.Brush.Solid = True
-        Me.TChart1.Axes.Left.Labels.Font.Brush.Visible = True
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart1.Axes.Left.Labels.Font.Shadow.Brush.Color = System.Drawing.Color.DarkGray
-        Me.TChart1.Axes.Left.Labels.Font.Shadow.Brush.Solid = True
-        Me.TChart1.Axes.Left.Labels.Font.Shadow.Brush.Visible = True
-        Me.TChart1.Axes.Left.Labels.Font.Size = 9
-        Me.TChart1.Axes.Left.Labels.Font.SizeFloat = 9.0!
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart1.Axes.Left.Labels.ImageBevel.Brush.Color = System.Drawing.Color.LightGray
-        Me.TChart1.Axes.Left.Labels.ImageBevel.Brush.Solid = True
-        Me.TChart1.Axes.Left.Labels.ImageBevel.Brush.Visible = True
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart1.Axes.Left.Labels.Shadow.Brush.Color = System.Drawing.Color.DarkGray
-        Me.TChart1.Axes.Left.Labels.Shadow.Brush.Solid = True
-        Me.TChart1.Axes.Left.Labels.Shadow.Brush.Visible = True
-        '
-        '
-        '
-        Me.TChart1.Axes.Left.Title.Angle = 90
-        '
-        '
-        '
-        Me.TChart1.Axes.Left.Title.Bevel.ColorOne = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
-        Me.TChart1.Axes.Left.Title.Bevel.ColorTwo = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer))
-        Me.TChart1.Axes.Left.Title.Bevel.Outer = Steema.TeeChart.Drawing.BevelStyles.None
-        '
-        '
-        '
-        Me.TChart1.Axes.Left.Title.Brush.Color = System.Drawing.Color.Silver
-        Me.TChart1.Axes.Left.Title.Brush.Solid = True
-        Me.TChart1.Axes.Left.Title.Brush.Visible = True
-        '
-        '
-        '
-        Me.TChart1.Axes.Left.Title.Font.Bold = False
-        '
-        '
-        '
-        Me.TChart1.Axes.Left.Title.Font.Brush.Color = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
-        Me.TChart1.Axes.Left.Title.Font.Brush.Solid = True
-        Me.TChart1.Axes.Left.Title.Font.Brush.Visible = True
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart1.Axes.Left.Title.Font.Shadow.Brush.Color = System.Drawing.Color.DarkGray
-        Me.TChart1.Axes.Left.Title.Font.Shadow.Brush.Solid = True
-        Me.TChart1.Axes.Left.Title.Font.Shadow.Brush.Visible = True
-        Me.TChart1.Axes.Left.Title.Font.Size = 11
-        Me.TChart1.Axes.Left.Title.Font.SizeFloat = 11.0!
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart1.Axes.Left.Title.ImageBevel.Brush.Color = System.Drawing.Color.LightGray
-        Me.TChart1.Axes.Left.Title.ImageBevel.Brush.Solid = True
-        Me.TChart1.Axes.Left.Title.ImageBevel.Brush.Visible = True
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart1.Axes.Left.Title.Shadow.Brush.Color = System.Drawing.Color.DarkGray
-        Me.TChart1.Axes.Left.Title.Shadow.Brush.Solid = True
-        Me.TChart1.Axes.Left.Title.Shadow.Brush.Visible = True
-        Me.TChart1.Axes.Left.UseMaxPixelPos = True
-        '
-        '
-        '
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart1.Axes.Right.Labels.Bevel.ColorOne = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
-        Me.TChart1.Axes.Right.Labels.Bevel.ColorTwo = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer))
-        Me.TChart1.Axes.Right.Labels.Bevel.Outer = Steema.TeeChart.Drawing.BevelStyles.None
-        '
-        '
-        '
-        Me.TChart1.Axes.Right.Labels.Brush.Color = System.Drawing.Color.White
-        Me.TChart1.Axes.Right.Labels.Brush.Solid = True
-        Me.TChart1.Axes.Right.Labels.Brush.Visible = True
-        '
-        '
-        '
-        Me.TChart1.Axes.Right.Labels.Font.Bold = False
-        '
-        '
-        '
-        Me.TChart1.Axes.Right.Labels.Font.Brush.Color = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer))
-        Me.TChart1.Axes.Right.Labels.Font.Brush.Solid = True
-        Me.TChart1.Axes.Right.Labels.Font.Brush.Visible = True
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart1.Axes.Right.Labels.Font.Shadow.Brush.Color = System.Drawing.Color.DarkGray
-        Me.TChart1.Axes.Right.Labels.Font.Shadow.Brush.Solid = True
-        Me.TChart1.Axes.Right.Labels.Font.Shadow.Brush.Visible = True
-        Me.TChart1.Axes.Right.Labels.Font.Size = 9
-        Me.TChart1.Axes.Right.Labels.Font.SizeFloat = 9.0!
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart1.Axes.Right.Labels.ImageBevel.Brush.Color = System.Drawing.Color.LightGray
-        Me.TChart1.Axes.Right.Labels.ImageBevel.Brush.Solid = True
-        Me.TChart1.Axes.Right.Labels.ImageBevel.Brush.Visible = True
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart1.Axes.Right.Labels.Shadow.Brush.Color = System.Drawing.Color.DarkGray
-        Me.TChart1.Axes.Right.Labels.Shadow.Brush.Solid = True
-        Me.TChart1.Axes.Right.Labels.Shadow.Brush.Visible = True
-        '
-        '
-        '
-        Me.TChart1.Axes.Right.Title.Angle = 270
-        '
-        '
-        '
-        Me.TChart1.Axes.Right.Title.Bevel.ColorOne = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
-        Me.TChart1.Axes.Right.Title.Bevel.ColorTwo = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer))
-        Me.TChart1.Axes.Right.Title.Bevel.Outer = Steema.TeeChart.Drawing.BevelStyles.None
-        '
-        '
-        '
-        Me.TChart1.Axes.Right.Title.Brush.Color = System.Drawing.Color.Silver
-        Me.TChart1.Axes.Right.Title.Brush.Solid = True
-        Me.TChart1.Axes.Right.Title.Brush.Visible = True
-        '
-        '
-        '
-        Me.TChart1.Axes.Right.Title.Font.Bold = False
-        '
-        '
-        '
-        Me.TChart1.Axes.Right.Title.Font.Brush.Color = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
-        Me.TChart1.Axes.Right.Title.Font.Brush.Solid = True
-        Me.TChart1.Axes.Right.Title.Font.Brush.Visible = True
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart1.Axes.Right.Title.Font.Shadow.Brush.Color = System.Drawing.Color.DarkGray
-        Me.TChart1.Axes.Right.Title.Font.Shadow.Brush.Solid = True
-        Me.TChart1.Axes.Right.Title.Font.Shadow.Brush.Visible = True
-        Me.TChart1.Axes.Right.Title.Font.Size = 11
-        Me.TChart1.Axes.Right.Title.Font.SizeFloat = 11.0!
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart1.Axes.Right.Title.ImageBevel.Brush.Color = System.Drawing.Color.LightGray
-        Me.TChart1.Axes.Right.Title.ImageBevel.Brush.Solid = True
-        Me.TChart1.Axes.Right.Title.ImageBevel.Brush.Visible = True
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart1.Axes.Right.Title.Shadow.Brush.Color = System.Drawing.Color.DarkGray
-        Me.TChart1.Axes.Right.Title.Shadow.Brush.Solid = True
-        Me.TChart1.Axes.Right.Title.Shadow.Brush.Visible = True
-        Me.TChart1.Axes.Right.UseMaxPixelPos = True
-        '
-        '
-        '
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart1.Axes.Top.Labels.Bevel.ColorOne = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
-        Me.TChart1.Axes.Top.Labels.Bevel.ColorTwo = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer))
-        Me.TChart1.Axes.Top.Labels.Bevel.Outer = Steema.TeeChart.Drawing.BevelStyles.None
-        '
-        '
-        '
-        Me.TChart1.Axes.Top.Labels.Brush.Color = System.Drawing.Color.White
-        Me.TChart1.Axes.Top.Labels.Brush.Solid = True
-        Me.TChart1.Axes.Top.Labels.Brush.Visible = True
-        '
-        '
-        '
-        Me.TChart1.Axes.Top.Labels.Font.Bold = False
-        '
-        '
-        '
-        Me.TChart1.Axes.Top.Labels.Font.Brush.Color = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer))
-        Me.TChart1.Axes.Top.Labels.Font.Brush.Solid = True
-        Me.TChart1.Axes.Top.Labels.Font.Brush.Visible = True
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart1.Axes.Top.Labels.Font.Shadow.Brush.Color = System.Drawing.Color.DarkGray
-        Me.TChart1.Axes.Top.Labels.Font.Shadow.Brush.Solid = True
-        Me.TChart1.Axes.Top.Labels.Font.Shadow.Brush.Visible = True
-        Me.TChart1.Axes.Top.Labels.Font.Size = 9
-        Me.TChart1.Axes.Top.Labels.Font.SizeFloat = 9.0!
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart1.Axes.Top.Labels.ImageBevel.Brush.Color = System.Drawing.Color.LightGray
-        Me.TChart1.Axes.Top.Labels.ImageBevel.Brush.Solid = True
-        Me.TChart1.Axes.Top.Labels.ImageBevel.Brush.Visible = True
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart1.Axes.Top.Labels.Shadow.Brush.Color = System.Drawing.Color.DarkGray
-        Me.TChart1.Axes.Top.Labels.Shadow.Brush.Solid = True
-        Me.TChart1.Axes.Top.Labels.Shadow.Brush.Visible = True
-        '
-        '
-        '
-        Me.TChart1.Axes.Top.Title.Angle = 0
-        '
-        '
-        '
-        Me.TChart1.Axes.Top.Title.Bevel.ColorOne = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
-        Me.TChart1.Axes.Top.Title.Bevel.ColorTwo = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer))
-        Me.TChart1.Axes.Top.Title.Bevel.Outer = Steema.TeeChart.Drawing.BevelStyles.None
-        '
-        '
-        '
-        Me.TChart1.Axes.Top.Title.Brush.Color = System.Drawing.Color.Silver
-        Me.TChart1.Axes.Top.Title.Brush.Solid = True
-        Me.TChart1.Axes.Top.Title.Brush.Visible = True
-        '
-        '
-        '
-        Me.TChart1.Axes.Top.Title.Font.Bold = False
-        '
-        '
-        '
-        Me.TChart1.Axes.Top.Title.Font.Brush.Color = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
-        Me.TChart1.Axes.Top.Title.Font.Brush.Solid = True
-        Me.TChart1.Axes.Top.Title.Font.Brush.Visible = True
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart1.Axes.Top.Title.Font.Shadow.Brush.Color = System.Drawing.Color.DarkGray
-        Me.TChart1.Axes.Top.Title.Font.Shadow.Brush.Solid = True
-        Me.TChart1.Axes.Top.Title.Font.Shadow.Brush.Visible = True
-        Me.TChart1.Axes.Top.Title.Font.Size = 11
-        Me.TChart1.Axes.Top.Title.Font.SizeFloat = 11.0!
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart1.Axes.Top.Title.ImageBevel.Brush.Color = System.Drawing.Color.LightGray
-        Me.TChart1.Axes.Top.Title.ImageBevel.Brush.Solid = True
-        Me.TChart1.Axes.Top.Title.ImageBevel.Brush.Visible = True
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart1.Axes.Top.Title.Shadow.Brush.Color = System.Drawing.Color.DarkGray
-        Me.TChart1.Axes.Top.Title.Shadow.Brush.Solid = True
-        Me.TChart1.Axes.Top.Title.Shadow.Brush.Visible = True
-        Me.TChart1.Axes.Top.UseMaxPixelPos = True
-        Me.TChart1.Dock = System.Windows.Forms.DockStyle.Fill
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart1.Footer.Bevel.ColorOne = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
-        Me.TChart1.Footer.Bevel.ColorTwo = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer))
-        Me.TChart1.Footer.Bevel.Outer = Steema.TeeChart.Drawing.BevelStyles.None
-        '
-        '
-        '
-        Me.TChart1.Footer.Brush.Color = System.Drawing.Color.Silver
-        Me.TChart1.Footer.Brush.Solid = True
-        Me.TChart1.Footer.Brush.Visible = True
-        '
-        '
-        '
-        Me.TChart1.Footer.Font.Bold = False
-        '
-        '
-        '
-        Me.TChart1.Footer.Font.Brush.Color = System.Drawing.Color.Red
-        Me.TChart1.Footer.Font.Brush.Solid = True
-        Me.TChart1.Footer.Font.Brush.Visible = True
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart1.Footer.Font.Shadow.Brush.Color = System.Drawing.Color.DarkGray
-        Me.TChart1.Footer.Font.Shadow.Brush.Solid = True
-        Me.TChart1.Footer.Font.Shadow.Brush.Visible = True
-        Me.TChart1.Footer.Font.Size = 8
-        Me.TChart1.Footer.Font.SizeFloat = 8.0!
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart1.Footer.ImageBevel.Brush.Color = System.Drawing.Color.LightGray
-        Me.TChart1.Footer.ImageBevel.Brush.Solid = True
-        Me.TChart1.Footer.ImageBevel.Brush.Visible = True
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart1.Footer.Shadow.Brush.Color = System.Drawing.Color.DarkGray
-        Me.TChart1.Footer.Shadow.Brush.Solid = True
-        Me.TChart1.Footer.Shadow.Brush.Visible = True
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart1.Header.Bevel.ColorOne = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
-        Me.TChart1.Header.Bevel.ColorTwo = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer))
-        Me.TChart1.Header.Bevel.Outer = Steema.TeeChart.Drawing.BevelStyles.None
-        '
-        '
-        '
-        Me.TChart1.Header.Brush.Color = System.Drawing.Color.FromArgb(CType(CType(192, Byte), Integer), CType(CType(192, Byte), Integer), CType(CType(192, Byte), Integer))
-        Me.TChart1.Header.Brush.Solid = True
-        Me.TChart1.Header.Brush.Visible = True
-        '
-        '
-        '
-        Me.TChart1.Header.Font.Bold = False
-        '
-        '
-        '
-        Me.TChart1.Header.Font.Brush.Color = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer))
-        Me.TChart1.Header.Font.Brush.Solid = True
-        Me.TChart1.Header.Font.Brush.Visible = True
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart1.Header.Font.Shadow.Brush.Color = System.Drawing.Color.DarkGray
-        Me.TChart1.Header.Font.Shadow.Brush.Solid = True
-        Me.TChart1.Header.Font.Shadow.Brush.Visible = True
-        Me.TChart1.Header.Font.Size = 12
-        Me.TChart1.Header.Font.SizeFloat = 12.0!
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart1.Header.ImageBevel.Brush.Color = System.Drawing.Color.LightGray
-        Me.TChart1.Header.ImageBevel.Brush.Solid = True
-        Me.TChart1.Header.ImageBevel.Brush.Visible = True
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart1.Header.Shadow.Brush.Color = System.Drawing.Color.FromArgb(CType(CType(169, Byte), Integer), CType(CType(169, Byte), Integer), CType(CType(169, Byte), Integer))
-        Me.TChart1.Header.Shadow.Brush.Solid = True
-        Me.TChart1.Header.Shadow.Brush.Visible = True
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart1.Legend.Bevel.ColorOne = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
-        Me.TChart1.Legend.Bevel.ColorTwo = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer))
-        Me.TChart1.Legend.Bevel.Outer = Steema.TeeChart.Drawing.BevelStyles.None
-        '
-        '
-        '
-        Me.TChart1.Legend.Brush.Color = System.Drawing.Color.White
-        Me.TChart1.Legend.Brush.Solid = True
-        Me.TChart1.Legend.Brush.Visible = True
-        '
-        '
-        '
-        Me.TChart1.Legend.Font.Bold = False
-        '
-        '
-        '
-        Me.TChart1.Legend.Font.Brush.Color = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
-        Me.TChart1.Legend.Font.Brush.Solid = True
-        Me.TChart1.Legend.Font.Brush.Visible = True
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart1.Legend.Font.Shadow.Brush.Color = System.Drawing.Color.DarkGray
-        Me.TChart1.Legend.Font.Shadow.Brush.Solid = True
-        Me.TChart1.Legend.Font.Shadow.Brush.Visible = True
-        Me.TChart1.Legend.Font.Size = 9
-        Me.TChart1.Legend.Font.SizeFloat = 9.0!
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart1.Legend.ImageBevel.Brush.Color = System.Drawing.Color.LightGray
-        Me.TChart1.Legend.ImageBevel.Brush.Solid = True
-        Me.TChart1.Legend.ImageBevel.Brush.Visible = True
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart1.Legend.Shadow.Brush.Color = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(0, Byte), Integer))
-        Me.TChart1.Legend.Shadow.Brush.Solid = True
-        Me.TChart1.Legend.Shadow.Brush.Visible = True
-        '
-        '
-        '
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart1.Legend.Symbol.Shadow.Brush.Color = System.Drawing.Color.DarkGray
-        Me.TChart1.Legend.Symbol.Shadow.Brush.Solid = True
-        Me.TChart1.Legend.Symbol.Shadow.Brush.Visible = True
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart1.Legend.Title.Bevel.ColorOne = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
-        Me.TChart1.Legend.Title.Bevel.ColorTwo = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer))
-        Me.TChart1.Legend.Title.Bevel.Outer = Steema.TeeChart.Drawing.BevelStyles.None
-        '
-        '
-        '
-        Me.TChart1.Legend.Title.Brush.Color = System.Drawing.Color.White
-        Me.TChart1.Legend.Title.Brush.Solid = True
-        Me.TChart1.Legend.Title.Brush.Visible = True
-        '
-        '
-        '
-        Me.TChart1.Legend.Title.Font.Bold = True
-        '
-        '
-        '
-        Me.TChart1.Legend.Title.Font.Brush.Color = System.Drawing.Color.Black
-        Me.TChart1.Legend.Title.Font.Brush.Solid = True
-        Me.TChart1.Legend.Title.Font.Brush.Visible = True
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart1.Legend.Title.Font.Shadow.Brush.Color = System.Drawing.Color.DarkGray
-        Me.TChart1.Legend.Title.Font.Shadow.Brush.Solid = True
-        Me.TChart1.Legend.Title.Font.Shadow.Brush.Visible = True
-        Me.TChart1.Legend.Title.Font.Size = 8
-        Me.TChart1.Legend.Title.Font.SizeFloat = 8.0!
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart1.Legend.Title.ImageBevel.Brush.Color = System.Drawing.Color.LightGray
-        Me.TChart1.Legend.Title.ImageBevel.Brush.Solid = True
-        Me.TChart1.Legend.Title.ImageBevel.Brush.Visible = True
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart1.Legend.Title.Shadow.Brush.Color = System.Drawing.Color.DarkGray
-        Me.TChart1.Legend.Title.Shadow.Brush.Solid = True
-        Me.TChart1.Legend.Title.Shadow.Brush.Visible = True
-        Me.TChart1.Location = New System.Drawing.Point(1, 40)
-        Me.TChart1.Margin = New System.Windows.Forms.Padding(0)
-        Me.TChart1.Name = "TChart1"
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart1.Panel.Bevel.ColorOne = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
-        Me.TChart1.Panel.Bevel.ColorTwo = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer))
-        Me.TChart1.Panel.Bevel.Outer = Steema.TeeChart.Drawing.BevelStyles.None
-        '
-        '
-        '
-        Me.TChart1.Panel.Brush.Color = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
-        Me.TChart1.Panel.Brush.Solid = True
-        Me.TChart1.Panel.Brush.Visible = True
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart1.Panel.ImageBevel.Brush.Color = System.Drawing.Color.LightGray
-        Me.TChart1.Panel.ImageBevel.Brush.Solid = True
-        Me.TChart1.Panel.ImageBevel.Brush.Visible = True
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart1.Panel.Shadow.Brush.Color = System.Drawing.Color.DarkGray
-        Me.TChart1.Panel.Shadow.Brush.Solid = True
-        Me.TChart1.Panel.Shadow.Brush.Visible = True
-        '
-        '
-        '
-        Me.TChart1.Printer.Landscape = True
-        Margins3.Bottom = 10
-        Margins3.Left = 10
-        Margins3.Right = 10
-        Margins3.Top = 10
-        Me.TChart1.Printer.Margins = Margins3
-        Me.TChart1.Size = New System.Drawing.Size(938, 380)
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart1.SubFooter.Bevel.ColorOne = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
-        Me.TChart1.SubFooter.Bevel.ColorTwo = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer))
-        Me.TChart1.SubFooter.Bevel.Outer = Steema.TeeChart.Drawing.BevelStyles.None
-        '
-        '
-        '
-        Me.TChart1.SubFooter.Brush.Color = System.Drawing.Color.Silver
-        Me.TChart1.SubFooter.Brush.Solid = True
-        Me.TChart1.SubFooter.Brush.Visible = True
-        '
-        '
-        '
-        Me.TChart1.SubFooter.Font.Bold = False
-        '
-        '
-        '
-        Me.TChart1.SubFooter.Font.Brush.Color = System.Drawing.Color.Red
-        Me.TChart1.SubFooter.Font.Brush.Solid = True
-        Me.TChart1.SubFooter.Font.Brush.Visible = True
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart1.SubFooter.Font.Shadow.Brush.Color = System.Drawing.Color.DarkGray
-        Me.TChart1.SubFooter.Font.Shadow.Brush.Solid = True
-        Me.TChart1.SubFooter.Font.Shadow.Brush.Visible = True
-        Me.TChart1.SubFooter.Font.Size = 8
-        Me.TChart1.SubFooter.Font.SizeFloat = 8.0!
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart1.SubFooter.ImageBevel.Brush.Color = System.Drawing.Color.LightGray
-        Me.TChart1.SubFooter.ImageBevel.Brush.Solid = True
-        Me.TChart1.SubFooter.ImageBevel.Brush.Visible = True
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart1.SubFooter.Shadow.Brush.Color = System.Drawing.Color.DarkGray
-        Me.TChart1.SubFooter.Shadow.Brush.Solid = True
-        Me.TChart1.SubFooter.Shadow.Brush.Visible = True
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart1.SubHeader.Bevel.ColorOne = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
-        Me.TChart1.SubHeader.Bevel.ColorTwo = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer))
-        Me.TChart1.SubHeader.Bevel.Outer = Steema.TeeChart.Drawing.BevelStyles.None
-        '
-        '
-        '
-        Me.TChart1.SubHeader.Brush.Color = System.Drawing.Color.FromArgb(CType(CType(192, Byte), Integer), CType(CType(192, Byte), Integer), CType(CType(192, Byte), Integer))
-        Me.TChart1.SubHeader.Brush.Solid = True
-        Me.TChart1.SubHeader.Brush.Visible = True
-        '
-        '
-        '
-        Me.TChart1.SubHeader.Font.Bold = False
-        '
-        '
-        '
-        Me.TChart1.SubHeader.Font.Brush.Color = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer))
-        Me.TChart1.SubHeader.Font.Brush.Solid = True
-        Me.TChart1.SubHeader.Font.Brush.Visible = True
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart1.SubHeader.Font.Shadow.Brush.Color = System.Drawing.Color.DarkGray
-        Me.TChart1.SubHeader.Font.Shadow.Brush.Solid = True
-        Me.TChart1.SubHeader.Font.Shadow.Brush.Visible = True
-        Me.TChart1.SubHeader.Font.Size = 12
-        Me.TChart1.SubHeader.Font.SizeFloat = 12.0!
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart1.SubHeader.ImageBevel.Brush.Color = System.Drawing.Color.LightGray
-        Me.TChart1.SubHeader.ImageBevel.Brush.Solid = True
-        Me.TChart1.SubHeader.ImageBevel.Brush.Visible = True
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart1.SubHeader.Shadow.Brush.Color = System.Drawing.Color.FromArgb(CType(CType(169, Byte), Integer), CType(CType(169, Byte), Integer), CType(CType(169, Byte), Integer))
-        Me.TChart1.SubHeader.Shadow.Brush.Solid = True
-        Me.TChart1.SubHeader.Shadow.Brush.Visible = True
-        Me.TChart1.TabIndex = 1
-        '
-        '
-        '
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart1.Walls.Back.Bevel.ColorOne = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
-        Me.TChart1.Walls.Back.Bevel.ColorTwo = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer))
-        Me.TChart1.Walls.Back.Bevel.Outer = Steema.TeeChart.Drawing.BevelStyles.None
-        '
-        '
-        '
-        Me.TChart1.Walls.Back.Brush.Color = System.Drawing.Color.Silver
-        Me.TChart1.Walls.Back.Brush.Solid = True
-        Me.TChart1.Walls.Back.Brush.Visible = False
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart1.Walls.Back.ImageBevel.Brush.Color = System.Drawing.Color.LightGray
-        Me.TChart1.Walls.Back.ImageBevel.Brush.Solid = True
-        Me.TChart1.Walls.Back.ImageBevel.Brush.Visible = True
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart1.Walls.Back.Shadow.Brush.Color = System.Drawing.Color.DarkGray
-        Me.TChart1.Walls.Back.Shadow.Brush.Solid = True
-        Me.TChart1.Walls.Back.Shadow.Brush.Visible = True
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart1.Walls.Bottom.Bevel.ColorOne = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
-        Me.TChart1.Walls.Bottom.Bevel.ColorTwo = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer))
-        Me.TChart1.Walls.Bottom.Bevel.Outer = Steema.TeeChart.Drawing.BevelStyles.None
-        '
-        '
-        '
-        Me.TChart1.Walls.Bottom.Brush.Color = System.Drawing.Color.White
-        Me.TChart1.Walls.Bottom.Brush.Solid = True
-        Me.TChart1.Walls.Bottom.Brush.Visible = True
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart1.Walls.Bottom.ImageBevel.Brush.Color = System.Drawing.Color.LightGray
-        Me.TChart1.Walls.Bottom.ImageBevel.Brush.Solid = True
-        Me.TChart1.Walls.Bottom.ImageBevel.Brush.Visible = True
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart1.Walls.Bottom.Shadow.Brush.Color = System.Drawing.Color.DarkGray
-        Me.TChart1.Walls.Bottom.Shadow.Brush.Solid = True
-        Me.TChart1.Walls.Bottom.Shadow.Brush.Visible = True
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart1.Walls.Left.Bevel.ColorOne = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
-        Me.TChart1.Walls.Left.Bevel.ColorTwo = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer))
-        Me.TChart1.Walls.Left.Bevel.Outer = Steema.TeeChart.Drawing.BevelStyles.None
-        '
-        '
-        '
-        Me.TChart1.Walls.Left.Brush.Color = System.Drawing.Color.LightYellow
-        Me.TChart1.Walls.Left.Brush.Solid = True
-        Me.TChart1.Walls.Left.Brush.Visible = True
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart1.Walls.Left.ImageBevel.Brush.Color = System.Drawing.Color.LightGray
-        Me.TChart1.Walls.Left.ImageBevel.Brush.Solid = True
-        Me.TChart1.Walls.Left.ImageBevel.Brush.Visible = True
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart1.Walls.Left.Shadow.Brush.Color = System.Drawing.Color.DarkGray
-        Me.TChart1.Walls.Left.Shadow.Brush.Solid = True
-        Me.TChart1.Walls.Left.Shadow.Brush.Visible = True
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart1.Walls.Right.Bevel.ColorOne = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
-        Me.TChart1.Walls.Right.Bevel.ColorTwo = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer))
-        Me.TChart1.Walls.Right.Bevel.Outer = Steema.TeeChart.Drawing.BevelStyles.None
-        '
-        '
-        '
-        Me.TChart1.Walls.Right.Brush.Color = System.Drawing.Color.LightYellow
-        Me.TChart1.Walls.Right.Brush.Solid = True
-        Me.TChart1.Walls.Right.Brush.Visible = True
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart1.Walls.Right.ImageBevel.Brush.Color = System.Drawing.Color.LightGray
-        Me.TChart1.Walls.Right.ImageBevel.Brush.Solid = True
-        Me.TChart1.Walls.Right.ImageBevel.Brush.Visible = True
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart1.Walls.Right.Shadow.Brush.Color = System.Drawing.Color.DarkGray
-        Me.TChart1.Walls.Right.Shadow.Brush.Solid = True
-        Me.TChart1.Walls.Right.Shadow.Brush.Visible = True
-        '
-        '
-        '
-        '
-        '
-        '
-        Me.TChart1.Zoom.Brush.Color = System.Drawing.Color.LightBlue
-        Me.TChart1.Zoom.Brush.Solid = True
-        Me.TChart1.Zoom.Brush.Visible = True
+        'MainPlot
+        '
+        Me.MainPlot.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.MainPlot.Location = New System.Drawing.Point(4, 43)
+        Me.MainPlot.Name = "MainPlot"
+        Me.MainPlot.Size = New System.Drawing.Size(793, 353)
+        Me.MainPlot.TabIndex = 3
         '
         'Panel_DisplayRange
         '
@@ -3218,17 +783,17 @@ Partial Class MainWindow
         Me.Panel_DisplayRange.Controls.Add(Me.MaskedTextBox_NavEnd)
         Me.Panel_DisplayRange.Controls.Add(Me.MaskedTextBox_NavStart)
         Me.Panel_DisplayRange.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Panel_DisplayRange.Location = New System.Drawing.Point(1, 421)
+        Me.Panel_DisplayRange.Location = New System.Drawing.Point(1, 400)
         Me.Panel_DisplayRange.Margin = New System.Windows.Forms.Padding(0)
         Me.Panel_DisplayRange.Name = "Panel_DisplayRange"
-        Me.Panel_DisplayRange.Size = New System.Drawing.Size(938, 36)
+        Me.Panel_DisplayRange.Size = New System.Drawing.Size(799, 36)
         Me.Panel_DisplayRange.TabIndex = 2
         '
         'Label_Display
         '
         Me.Label_Display.Anchor = System.Windows.Forms.AnchorStyles.Top
         Me.Label_Display.AutoSize = True
-        Me.Label_Display.Location = New System.Drawing.Point(381, 12)
+        Me.Label_Display.Location = New System.Drawing.Point(311, 12)
         Me.Label_Display.Name = "Label_Display"
         Me.Label_Display.Size = New System.Drawing.Size(44, 13)
         Me.Label_Display.TabIndex = 1
@@ -3237,7 +802,7 @@ Partial Class MainWindow
         'NumericUpDown_DisplayRangeMultiplier
         '
         Me.NumericUpDown_DisplayRangeMultiplier.Anchor = System.Windows.Forms.AnchorStyles.Top
-        Me.NumericUpDown_DisplayRangeMultiplier.Location = New System.Drawing.Point(431, 8)
+        Me.NumericUpDown_DisplayRangeMultiplier.Location = New System.Drawing.Point(361, 8)
         Me.NumericUpDown_DisplayRangeMultiplier.Minimum = New Decimal(New Integer() {1, 0, 0, 0})
         Me.NumericUpDown_DisplayRangeMultiplier.Name = "NumericUpDown_DisplayRangeMultiplier"
         Me.NumericUpDown_DisplayRangeMultiplier.Size = New System.Drawing.Size(40, 20)
@@ -3250,7 +815,7 @@ Partial Class MainWindow
         Me.ComboBox_DisplayRangeUnit.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.ComboBox_DisplayRangeUnit.FormattingEnabled = True
         Me.ComboBox_DisplayRangeUnit.Items.AddRange(New Object() {"", "Centuries", "Decades", "Years", "Months", "Weeks", "Days", "Hours", "Minutes", "Seconds"})
-        Me.ComboBox_DisplayRangeUnit.Location = New System.Drawing.Point(477, 8)
+        Me.ComboBox_DisplayRangeUnit.Location = New System.Drawing.Point(407, 8)
         Me.ComboBox_DisplayRangeUnit.Name = "ComboBox_DisplayRangeUnit"
         Me.ComboBox_DisplayRangeUnit.Size = New System.Drawing.Size(81, 21)
         Me.ComboBox_DisplayRangeUnit.TabIndex = 3
@@ -3259,7 +824,7 @@ Partial Class MainWindow
         '
         Me.MaskedTextBox_NavEnd.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.MaskedTextBox_NavEnd.Culture = New System.Globalization.CultureInfo("")
-        Me.MaskedTextBox_NavEnd.Location = New System.Drawing.Point(829, 8)
+        Me.MaskedTextBox_NavEnd.Location = New System.Drawing.Point(690, 8)
         Me.MaskedTextBox_NavEnd.Name = "MaskedTextBox_NavEnd"
         Me.MaskedTextBox_NavEnd.Size = New System.Drawing.Size(100, 20)
         Me.MaskedTextBox_NavEnd.TabIndex = 4
@@ -3284,6 +849,122 @@ Partial Class MainWindow
         Me.ProgressBar1.Step = 1
         Me.ProgressBar1.TabIndex = 2
         '
+        'SplitContainer2
+        '
+        Me.SplitContainer2.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.SplitContainer2.FixedPanel = System.Windows.Forms.FixedPanel.Panel1
+        Me.SplitContainer2.Location = New System.Drawing.Point(0, 34)
+        Me.SplitContainer2.Name = "SplitContainer2"
+        '
+        'SplitContainer2.Panel1
+        '
+        Me.SplitContainer2.Panel1.AutoScroll = True
+        Me.SplitContainer2.Panel1.Controls.Add(Me.ToolStrip2)
+        Me.SplitContainer2.Panel1.Controls.Add(Me.CheckedListBox_Series)
+        '
+        'SplitContainer2.Panel2
+        '
+        Me.SplitContainer2.Panel2.Controls.Add(Me.SplitContainer1)
+        Me.SplitContainer2.Size = New System.Drawing.Size(944, 605)
+        Me.SplitContainer2.SplitterDistance = 135
+        Me.SplitContainer2.TabIndex = 7
+        '
+        'ToolStrip2
+        '
+        Me.ToolStrip2.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButton_Delete, Me.ToolStripSeparator12, Me.ToolStripButton_MoveUp, Me.ToolStripButton_MoveDown, Me.ToolStripSeparator13, Me.ToolStripDropDownButton1})
+        Me.ToolStrip2.Location = New System.Drawing.Point(0, 0)
+        Me.ToolStrip2.Name = "ToolStrip2"
+        Me.ToolStrip2.Size = New System.Drawing.Size(135, 25)
+        Me.ToolStrip2.TabIndex = 1
+        Me.ToolStrip2.Text = "ToolStrip2"
+        '
+        'ToolStripButton_Delete
+        '
+        Me.ToolStripButton_Delete.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.ToolStripButton_Delete.Enabled = False
+        Me.ToolStripButton_Delete.Image = Global.BlueM.Wave.My.Resources.Resources.chart_line_delete
+        Me.ToolStripButton_Delete.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ToolStripButton_Delete.Name = "ToolStripButton_Delete"
+        Me.ToolStripButton_Delete.Size = New System.Drawing.Size(23, 22)
+        Me.ToolStripButton_Delete.Text = "ToolStripButton_Delete"
+        Me.ToolStripButton_Delete.ToolTipText = "Delete selected time series"
+        '
+        'ToolStripSeparator12
+        '
+        Me.ToolStripSeparator12.Name = "ToolStripSeparator12"
+        Me.ToolStripSeparator12.Size = New System.Drawing.Size(6, 25)
+        '
+        'ToolStripButton_MoveUp
+        '
+        Me.ToolStripButton_MoveUp.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.ToolStripButton_MoveUp.Enabled = False
+        Me.ToolStripButton_MoveUp.Image = Global.BlueM.Wave.My.Resources.Resources.arrow_up
+        Me.ToolStripButton_MoveUp.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ToolStripButton_MoveUp.Name = "ToolStripButton_MoveUp"
+        Me.ToolStripButton_MoveUp.Size = New System.Drawing.Size(23, 22)
+        Me.ToolStripButton_MoveUp.Text = "Move selected time series up"
+        Me.ToolStripButton_MoveUp.ToolTipText = "Move selected time series up"
+        '
+        'ToolStripButton_MoveDown
+        '
+        Me.ToolStripButton_MoveDown.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.ToolStripButton_MoveDown.Enabled = False
+        Me.ToolStripButton_MoveDown.Image = Global.BlueM.Wave.My.Resources.Resources.arrow_down
+        Me.ToolStripButton_MoveDown.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ToolStripButton_MoveDown.Name = "ToolStripButton_MoveDown"
+        Me.ToolStripButton_MoveDown.Size = New System.Drawing.Size(23, 22)
+        Me.ToolStripButton_MoveDown.Text = "Move selected time series down"
+        '
+        'ToolStripSeparator13
+        '
+        Me.ToolStripSeparator13.Name = "ToolStripSeparator13"
+        Me.ToolStripSeparator13.Size = New System.Drawing.Size(6, 25)
+        '
+        'ToolStripDropDownButton1
+        '
+        Me.ToolStripDropDownButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.ToolStripDropDownButton1.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripMenuItem_ActivateAllSeries, Me.ToolStripMenuItem_DeactivateAllSeries})
+        Me.ToolStripDropDownButton1.Image = Global.BlueM.Wave.My.Resources.Resources.accept_split
+        Me.ToolStripDropDownButton1.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ToolStripDropDownButton1.Name = "ToolStripDropDownButton1"
+        Me.ToolStripDropDownButton1.Size = New System.Drawing.Size(29, 22)
+        '
+        'ToolStripMenuItem_ActivateAllSeries
+        '
+        Me.ToolStripMenuItem_ActivateAllSeries.Image = Global.BlueM.Wave.My.Resources.Resources.accept
+        Me.ToolStripMenuItem_ActivateAllSeries.Name = "ToolStripMenuItem_ActivateAllSeries"
+        Me.ToolStripMenuItem_ActivateAllSeries.Size = New System.Drawing.Size(176, 22)
+        Me.ToolStripMenuItem_ActivateAllSeries.Text = "Activate all series"
+        '
+        'ToolStripMenuItem_DeactivateAllSeries
+        '
+        Me.ToolStripMenuItem_DeactivateAllSeries.Image = Global.BlueM.Wave.My.Resources.Resources.accept_grayscale
+        Me.ToolStripMenuItem_DeactivateAllSeries.Name = "ToolStripMenuItem_DeactivateAllSeries"
+        Me.ToolStripMenuItem_DeactivateAllSeries.Size = New System.Drawing.Size(176, 22)
+        Me.ToolStripMenuItem_DeactivateAllSeries.Text = "Deactivate all series"
+        '
+        'CheckedListBox_Series
+        '
+        Me.CheckedListBox_Series.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.CheckedListBox_Series.BackColor = System.Drawing.SystemColors.Control
+        Me.CheckedListBox_Series.FormattingEnabled = True
+        Me.CheckedListBox_Series.HorizontalScrollbar = True
+        Me.CheckedListBox_Series.Location = New System.Drawing.Point(5, 31)
+        Me.CheckedListBox_Series.Margin = New System.Windows.Forms.Padding(5)
+        Me.CheckedListBox_Series.Name = "CheckedListBox_Series"
+        Me.CheckedListBox_Series.Size = New System.Drawing.Size(125, 559)
+        Me.CheckedListBox_Series.TabIndex = 0
+        Me.CheckedListBox_Series.ThreeDCheckBoxes = True
+        '
+        'ToolStripMenuItem_SaveImage
+        '
+        Me.ToolStripMenuItem_SaveImage.Image = Global.BlueM.Wave.My.Resources.Resources.picture_save
+        Me.ToolStripMenuItem_SaveImage.Name = "ToolStripMenuItem_SaveImage"
+        Me.ToolStripMenuItem_SaveImage.Size = New System.Drawing.Size(180, 22)
+        Me.ToolStripMenuItem_SaveImage.Text = "Save image"
+        '
         'MainWindow
         '
         Me.AllowDrop = True
@@ -3291,9 +972,9 @@ Partial Class MainWindow
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.SystemColors.Control
         Me.ClientSize = New System.Drawing.Size(944, 661)
+        Me.Controls.Add(Me.SplitContainer2)
         Me.Controls.Add(Me.ProgressBar1)
         Me.Controls.Add(ToolStrip1)
-        Me.Controls.Add(Me.SplitContainer1)
         Me.Controls.Add(StatusStrip1)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.KeyPreview = True
@@ -3315,6 +996,13 @@ Partial Class MainWindow
         Me.Panel_DisplayRange.ResumeLayout(False)
         Me.Panel_DisplayRange.PerformLayout()
         CType(Me.NumericUpDown_DisplayRangeMultiplier, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.SplitContainer2.Panel1.ResumeLayout(False)
+        Me.SplitContainer2.Panel1.PerformLayout()
+        Me.SplitContainer2.Panel2.ResumeLayout(False)
+        CType(Me.SplitContainer2, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.SplitContainer2.ResumeLayout(False)
+        Me.ToolStrip2.ResumeLayout(False)
+        Me.ToolStrip2.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -3326,11 +1014,9 @@ Partial Class MainWindow
 
     Friend WithEvents OpenFileDialog1 As System.Windows.Forms.OpenFileDialog
     Friend WithEvents SplitContainer1 As System.Windows.Forms.SplitContainer
-    Friend WithEvents TChart2 As Steema.TeeChart.TChart
     Friend WithEvents ToolStripButton_New As System.Windows.Forms.ToolStripButton
     Friend WithEvents ToolStripDropDownButton_Open As System.Windows.Forms.ToolStripDropDownButton
     Friend WithEvents ToolStripDropDownButton_Save As System.Windows.Forms.ToolStripDropDownButton
-    Friend WithEvents ToolStripButton_Print As System.Windows.Forms.ToolStripButton
     Friend WithEvents ToolStripButton_Copy As System.Windows.Forms.ToolStripButton
     Friend WithEvents ToolStripButton_EditChart As System.Windows.Forms.ToolStripButton
     Friend WithEvents ToolStripButton_ToggleOverview As System.Windows.Forms.ToolStripButton
@@ -3343,7 +1029,6 @@ Partial Class MainWindow
     Friend WithEvents ToolStripMenuItem_About As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolStripMenuItem_ImportSeries As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolStripMenuItem_LoadTEN As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents ToolStripMenuItem_SaveChart As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolStripMenuItem_ExportSeries As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolStripMenuItem_ReloadFromFiles As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolStripMenuItem_EnterSeries As System.Windows.Forms.ToolStripMenuItem
@@ -3353,7 +1038,6 @@ Partial Class MainWindow
     Friend WithEvents ComboBox_DisplayRangeUnit As System.Windows.Forms.ComboBox
     Friend WithEvents MaskedTextBox_NavEnd As System.Windows.Forms.MaskedTextBox
     Friend WithEvents MaskedTextBox_NavStart As System.Windows.Forms.MaskedTextBox
-    Friend WithEvents TChart1 As Steema.TeeChart.TChart
     Friend WithEvents PanelNavigation As System.Windows.Forms.Panel
     Friend WithEvents NumericUpDown_NavMultiplier As System.Windows.Forms.NumericUpDown
     Friend WithEvents ComboBox_NavIncrement As System.Windows.Forms.ComboBox
@@ -3377,7 +1061,6 @@ Partial Class MainWindow
     Friend WithEvents ToolStripButton_AutoAdjustYAxes As System.Windows.Forms.ToolStripButton
     Friend WithEvents ToolStripButton_RemoveNaNValues As System.Windows.Forms.ToolStripButton
     Friend WithEvents ToolStripMenuItem_Changelog As ToolStripMenuItem
-    Friend WithEvents ToolStripButton_AxisDialog As ToolStripButton
     Friend WithEvents ToolStripMenuItem_PasteFromClipboard As ToolStripMenuItem
     Friend WithEvents ToolStripSeparator10 As ToolStripSeparator
     Friend WithEvents ToolStripStatusLabel_Errors As ToolStripStatusLabel
@@ -3394,11 +1077,24 @@ Partial Class MainWindow
     Friend WithEvents ToolStripMenuItem_ColorPaletteWheel As ToolStripMenuItem
     Friend WithEvents ToolStripMenuItem_ColorPaletteRandom As ToolStripMenuItem
     Friend WithEvents ToolStripSeparator11 As ToolStripSeparator
-    Friend WithEvents ToolStripDropDownButton_ActivateAllSeries As ToolStripDropDownButton
-    Friend WithEvents ToolStripMenuItem_ActivateAllSeries As ToolStripMenuItem
-    Friend WithEvents ToolStripMenuItem_DeactivateAllSeries As ToolStripMenuItem
     Friend WithEvents ProgressBar1 As ProgressBar
     Friend WithEvents Button_NavStart As Button
     Friend WithEvents Button_NavEnd As Button
     Friend WithEvents ToolTip1 As ToolTip
+    Friend WithEvents MainPlot As ScottPlot.FormsPlot
+    Friend WithEvents OverviewPlot As ScottPlot.FormsPlot
+    Friend WithEvents SplitContainer2 As SplitContainer
+    Friend WithEvents CheckedListBox_Series As CheckedListBox
+    Friend WithEvents ToolStrip2 As ToolStrip
+    Friend WithEvents ToolStripDropDownButton1 As ToolStripDropDownButton
+    Friend WithEvents ToolStripMenuItem_ActivateAllSeries As ToolStripMenuItem
+    Friend WithEvents ToolStripMenuItem_DeactivateAllSeries As ToolStripMenuItem
+    Friend WithEvents ToolStripButton_MoveUp As ToolStripButton
+    Friend WithEvents ToolStripButton_MoveDown As ToolStripButton
+    Friend WithEvents ToolStripButton_Delete As ToolStripButton
+    Friend WithEvents ToolStripSeparator12 As ToolStripSeparator
+    Friend WithEvents ToolStripSeparator13 As ToolStripSeparator
+    Friend WithEvents ToolStripMenuItem_ColorPaletteCategory10 As ToolStripMenuItem
+    Friend WithEvents ToolStripMenuItem_ColorPaletteCategory20 As ToolStripMenuItem
+    Friend WithEvents ToolStripMenuItem_SaveImage As ToolStripMenuItem
 End Class

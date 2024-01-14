@@ -197,51 +197,67 @@ Friend Class Autocorrelation
             $"Assumed periodicity: {periode_avg} time steps" & eol &
             raMaxAuswertung
 
-        'Ergebnisdiagramm
-        Me.ResultChart = New Steema.TeeChart.Chart()
+        'Result chart
+        Me.ResultChart = New ScottPlot.Plot()
         Call Helpers.FormatChart(Me.ResultChart)
-        Me.ResultChart.Header.Text = "Autocorrelation for " & ts_in.Title
 
-        'X-Achse
-        Me.ResultChart.Axes.Bottom.Labels.Style = Steema.TeeChart.AxisLabelStyle.Value
-        Me.ResultChart.Axes.Bottom.Title.Caption = "Offset (Lag) [number of time steps]"
+        Me.ResultChart.Title($"Autocorrelation for {ts_in.Title}")
 
-        'Y-Achse
-        Me.ResultChart.Axes.Left.Title.Caption = "Autocorrelation coefficient (-1 < ra < 1)"
-        Me.ResultChart.Axes.Left.Automatic = False
-        Me.ResultChart.Axes.Left.Minimum = -1
-        Me.ResultChart.Axes.Left.Maximum = 1
+        'X axis
+        Me.ResultChart.XLabel("Offset (Lag) [number of time steps]")
+        Me.ResultChart.XAxis.DateTimeFormat(False)
 
-        'Linie instanzieren und benennen
-        Dim line_ra As New Steema.TeeChart.Styles.Bar(Me.ResultChart)
-        line_ra.Title = "Autocorrelogram"
-        Dim line_raMax As New Steema.TeeChart.Styles.Points(Me.ResultChart)
-        line_raMax.Title = "Peaks (guessed)"
+        'Y axis
+        Me.ResultChart.YLabel("Autocorrelation coefficient (-1 < ra < 1)")
+        Me.ResultChart.YAxis.Dims.SetAxis(-1, 1)
 
-        'Linie befüllen
+        'series
+        Dim Xs, Ys As List(Of Double)
+        Dim labels As List(Of String)
+
+        'add bar plot
+        Xs = New List(Of Double)
+        Ys = New List(Of Double)
+        labels = New List(Of String)
         For i = 0 To Me.lagCount
-            Dim mark As String = $"Lag {i * lagSize}, ra = {raList.Item(i)}"
-            line_ra.Add(i * lagSize, raList.Item(i), mark)
+            Xs.Add(i * lagSize)
+            Ys.Add(raList.Item(i))
+            labels.Add($"Lag {i * lagSize}, ra = {Math.Round(raList.Item(i), 3)}")
         Next
+        Dim bars As ScottPlot.Plottable.BarPlot
+        bars = Me.ResultChart.AddBar(values:=Ys.ToArray(), positions:=Xs.ToArray())
+        bars.Label = "Autocorrelogram"
+        bars.BarWidth = lagSize
+        bars.PositionOffset = -0.5 * lagSize 'center bars
+        bars.FillColorNegative = bars.FillColor 'use same color for positive and negative values
+        'TODO: TChart
+        'show labels on hover
+        'Dim markstips As New Steema.TeeChart.Tools.MarksTip(Me.ResultChart)
+        'markstips.MouseAction = Steema.TeeChart.Tools.MarksTipMouseAction.Move
 
+        'add point series
+        Xs = New List(Of Double)
+        Ys = New List(Of Double)
+        labels = New List(Of String)
         For i = 0 To Me.periodeList.Count - 1
-            Dim mark As String = $"Lag {periodeList.Item(i)}, ra = {raMaxlist.Item(i)}"
-            line_raMax.Add(periodeList.Item(i), raMaxlist.Item(i), mark)
+            Xs.Add(periodeList.Item(i))
+            Ys.Add(raMaxlist.Item(i))
+            labels.Add($"Lag {periodeList.Item(i)}, ra = {Math.Round(raMaxlist.Item(i), 3)}")
         Next
+        Dim points As ScottPlot.Plottable.ScatterPlot
+        points = Me.ResultChart.AddScatterPoints(Xs.ToArray(), Ys.ToArray(), label:="Peaks (guessed)")
+        points.MarkerShape = ScottPlot.MarkerShape.filledSquare
+        points.MarkerSize = 10
+        points.DataPointLabels = labels.ToArray()
 
-        'Marks nicht anzeigen
-        line_ra.Marks.Visible = False
-
-        'Markstips bei Mausaktion anzeigen
-        Dim markstips As New Steema.TeeChart.Tools.MarksTip(Me.ResultChart)
-        markstips.MouseAction = Steema.TeeChart.Tools.MarksTipMouseAction.Move
-
-        'Textfeld in Diagramm einfügen und Position bestimmen
-        Dim annot As New Steema.TeeChart.Tools.Annotation(Me.ResultChart)
-        annot.Text =
+        'add annotation
+        Dim annot As New ScottPlot.Plottable.Annotation()
+        annot.Label =
             $"Time series was offset {lagCount} times by {lagSize} time steps." & eol &
             $"Assumed periodicity: {periode_avg}"
-        annot.Position = Steema.TeeChart.Tools.AnnotationPositions.RightTop
+        annot.Alignment = ScottPlot.Alignment.LowerRight
+        annot.BackgroundColor = Color.White
+        Me.ResultChart.Add(annot)
 
         'Announce finish
         MyBase.AnalysisProgressFinish()

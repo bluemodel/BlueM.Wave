@@ -23,17 +23,14 @@ Partial Class PropertiesWindow
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle3 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(PropertiesWindow))
         Me.DataGridView1 = New System.Windows.Forms.DataGridView()
         Me.Id = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.TitleDataGridViewTextBoxColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Interpretation = New System.Windows.Forms.DataGridViewComboBoxColumn()
-        Me.UnitDataGridViewTextBoxColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.MetadataText = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.DataSource = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Length = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.StartDate = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.EndDate = New System.Windows.Forms.DataGridViewTextBoxColumn()
@@ -44,21 +41,22 @@ Partial Class PropertiesWindow
         Me.Maximum = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Sum = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Volume = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.TimeSeriesBindingSource = New System.Windows.Forms.BindingSource(Me.components)
-        Me.ToolStrip1 = New System.Windows.Forms.ToolStrip()
-        Me.ToolStripButton_showStatistics = New System.Windows.Forms.ToolStripButton()
-        Me.ToolStripButton_MoveUp = New System.Windows.Forms.ToolStripButton()
-        Me.ToolStripButton_MoveDown = New System.Windows.Forms.ToolStripButton()
-        Me.ToolStripButton_Delete = New System.Windows.Forms.ToolStripButton()
         Me.DataGridViewTextBoxColumn1 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ToolStripButton_showStatistics = New System.Windows.Forms.ToolStripButton()
+        Me.ToolStrip1 = New System.Windows.Forms.ToolStrip()
+        Me.TitleDataGridViewTextBoxColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.UnitDataGridViewTextBoxColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.DataSource = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.TimeSeriesBindingSource = New System.Windows.Forms.BindingSource(Me.components)
         CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.TimeSeriesBindingSource, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.ToolStrip1.SuspendLayout()
+        CType(Me.TimeSeriesBindingSource, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'DataGridView1
         '
         Me.DataGridView1.AllowUserToAddRows = False
+        Me.DataGridView1.AllowUserToDeleteRows = False
         Me.DataGridView1.AllowUserToResizeRows = False
         Me.DataGridView1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left) _
@@ -85,17 +83,6 @@ Partial Class PropertiesWindow
         Me.Id.Visible = False
         Me.Id.Width = 41
         '
-        'TitleDataGridViewTextBoxColumn
-        '
-        Me.TitleDataGridViewTextBoxColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells
-        Me.TitleDataGridViewTextBoxColumn.DataPropertyName = "Title"
-        DataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
-        Me.TitleDataGridViewTextBoxColumn.DefaultCellStyle = DataGridViewCellStyle1
-        Me.TitleDataGridViewTextBoxColumn.Frozen = True
-        Me.TitleDataGridViewTextBoxColumn.HeaderText = "Title"
-        Me.TitleDataGridViewTextBoxColumn.Name = "TitleDataGridViewTextBoxColumn"
-        Me.TitleDataGridViewTextBoxColumn.Width = 52
-        '
         'Interpretation
         '
         Me.Interpretation.DataPropertyName = "Interpretation"
@@ -108,28 +95,12 @@ Partial Class PropertiesWindow
         Me.Interpretation.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic
         Me.Interpretation.Width = 94
         '
-        'UnitDataGridViewTextBoxColumn
-        '
-        Me.UnitDataGridViewTextBoxColumn.DataPropertyName = "Unit"
-        DataGridViewCellStyle3.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
-        Me.UnitDataGridViewTextBoxColumn.DefaultCellStyle = DataGridViewCellStyle3
-        Me.UnitDataGridViewTextBoxColumn.HeaderText = "Unit"
-        Me.UnitDataGridViewTextBoxColumn.Name = "UnitDataGridViewTextBoxColumn"
-        Me.UnitDataGridViewTextBoxColumn.Width = 51
-        '
         'MetadataText
         '
         Me.MetadataText.DataPropertyName = "MetadataText"
         Me.MetadataText.HeaderText = "Metadata"
         Me.MetadataText.Name = "MetadataText"
         Me.MetadataText.ReadOnly = True
-        '
-        'DataSource
-        '
-        Me.DataSource.DataPropertyName = "DataSource"
-        Me.DataSource.HeaderText = "DataSource"
-        Me.DataSource.Name = "DataSource"
-        Me.DataSource.ReadOnly = True
         '
         'Length
         '
@@ -211,18 +182,12 @@ Partial Class PropertiesWindow
         Me.Volume.ReadOnly = True
         Me.Volume.Visible = False
         '
-        'TimeSeriesBindingSource
+        'DataGridViewTextBoxColumn1
         '
-        Me.TimeSeriesBindingSource.DataSource = GetType(BlueM.Wave.TimeSeries)
-        '
-        'ToolStrip1
-        '
-        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButton_showStatistics, Me.ToolStripButton_MoveUp, Me.ToolStripButton_MoveDown, Me.ToolStripButton_Delete})
-        Me.ToolStrip1.Location = New System.Drawing.Point(0, 0)
-        Me.ToolStrip1.Name = "ToolStrip1"
-        Me.ToolStrip1.Size = New System.Drawing.Size(464, 25)
-        Me.ToolStrip1.TabIndex = 2
-        Me.ToolStrip1.Text = "ToolStrip1"
+        Me.DataGridViewTextBoxColumn1.DataPropertyName = "DataSource"
+        Me.DataGridViewTextBoxColumn1.HeaderText = "DataSource"
+        Me.DataGridViewTextBoxColumn1.Name = "DataGridViewTextBoxColumn1"
+        Me.DataGridViewTextBoxColumn1.ReadOnly = True
         '
         'ToolStripButton_showStatistics
         '
@@ -235,44 +200,45 @@ Partial Class PropertiesWindow
         Me.ToolStripButton_showStatistics.Text = "Show statistics"
         Me.ToolStripButton_showStatistics.ToolTipText = "Show statistics"
         '
-        'ToolStripButton_MoveUp
+        'ToolStrip1
         '
-        Me.ToolStripButton_MoveUp.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.ToolStripButton_MoveUp.Enabled = False
-        Me.ToolStripButton_MoveUp.Image = Global.BlueM.Wave.My.Resources.Resources.arrow_up
-        Me.ToolStripButton_MoveUp.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.ToolStripButton_MoveUp.Name = "ToolStripButton_MoveUp"
-        Me.ToolStripButton_MoveUp.Size = New System.Drawing.Size(23, 22)
-        Me.ToolStripButton_MoveUp.Text = "Move selected time series up"
-        Me.ToolStripButton_MoveUp.ToolTipText = "Move selected time series up"
+        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButton_showStatistics})
+        Me.ToolStrip1.Location = New System.Drawing.Point(0, 0)
+        Me.ToolStrip1.Name = "ToolStrip1"
+        Me.ToolStrip1.Size = New System.Drawing.Size(464, 25)
+        Me.ToolStrip1.TabIndex = 2
+        Me.ToolStrip1.Text = "ToolStrip1"
         '
-        'ToolStripButton_MoveDown
+        'TitleDataGridViewTextBoxColumn
         '
-        Me.ToolStripButton_MoveDown.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.ToolStripButton_MoveDown.Enabled = False
-        Me.ToolStripButton_MoveDown.Image = Global.BlueM.Wave.My.Resources.Resources.arrow_down
-        Me.ToolStripButton_MoveDown.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.ToolStripButton_MoveDown.Name = "ToolStripButton_MoveDown"
-        Me.ToolStripButton_MoveDown.Size = New System.Drawing.Size(23, 22)
-        Me.ToolStripButton_MoveDown.Text = "Move selected time series down"
+        Me.TitleDataGridViewTextBoxColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells
+        Me.TitleDataGridViewTextBoxColumn.DataPropertyName = "Title"
+        DataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
+        Me.TitleDataGridViewTextBoxColumn.DefaultCellStyle = DataGridViewCellStyle1
+        Me.TitleDataGridViewTextBoxColumn.Frozen = True
+        Me.TitleDataGridViewTextBoxColumn.HeaderText = "Title"
+        Me.TitleDataGridViewTextBoxColumn.Name = "TitleDataGridViewTextBoxColumn"
+        Me.TitleDataGridViewTextBoxColumn.Width = 52
         '
-        'ToolStripButton_Delete
+        'UnitDataGridViewTextBoxColumn
         '
-        Me.ToolStripButton_Delete.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.ToolStripButton_Delete.Enabled = False
-        Me.ToolStripButton_Delete.Image = Global.BlueM.Wave.My.Resources.Resources.chart_line_delete
-        Me.ToolStripButton_Delete.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.ToolStripButton_Delete.Name = "ToolStripButton_Delete"
-        Me.ToolStripButton_Delete.Size = New System.Drawing.Size(23, 22)
-        Me.ToolStripButton_Delete.Text = "ToolStripButton_Delete"
-        Me.ToolStripButton_Delete.ToolTipText = "Delete selected time series"
+        Me.UnitDataGridViewTextBoxColumn.DataPropertyName = "Unit"
+        DataGridViewCellStyle3.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
+        Me.UnitDataGridViewTextBoxColumn.DefaultCellStyle = DataGridViewCellStyle3
+        Me.UnitDataGridViewTextBoxColumn.HeaderText = "Unit"
+        Me.UnitDataGridViewTextBoxColumn.Name = "UnitDataGridViewTextBoxColumn"
+        Me.UnitDataGridViewTextBoxColumn.Width = 51
         '
-        'DataGridViewTextBoxColumn1
+        'DataSource
         '
-        Me.DataGridViewTextBoxColumn1.DataPropertyName = "DataSource"
-        Me.DataGridViewTextBoxColumn1.HeaderText = "DataSource"
-        Me.DataGridViewTextBoxColumn1.Name = "DataGridViewTextBoxColumn1"
-        Me.DataGridViewTextBoxColumn1.ReadOnly = True
+        Me.DataSource.DataPropertyName = "DataSource"
+        Me.DataSource.HeaderText = "DataSource"
+        Me.DataSource.Name = "DataSource"
+        Me.DataSource.ReadOnly = True
+        '
+        'TimeSeriesBindingSource
+        '
+        Me.TimeSeriesBindingSource.DataSource = GetType(BlueM.Wave.TimeSeries)
         '
         'PropertiesWindow
         '
@@ -288,19 +254,15 @@ Partial Class PropertiesWindow
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
         Me.Text = "Time Series Properties"
         CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.TimeSeriesBindingSource, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ToolStrip1.ResumeLayout(False)
         Me.ToolStrip1.PerformLayout()
+        CType(Me.TimeSeriesBindingSource, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
     End Sub
     Friend WithEvents DataGridView1 As System.Windows.Forms.DataGridView
     Friend WithEvents TimeSeriesBindingSource As System.Windows.Forms.BindingSource
-    Friend WithEvents ToolStrip1 As ToolStrip
-    Friend WithEvents ToolStripButton_showStatistics As ToolStripButton
-    Friend WithEvents ToolStripButton_Delete As ToolStripButton
-    Friend WithEvents ToolStripButton_MoveUp As ToolStripButton
     Friend WithEvents DataGridViewTextBoxColumn1 As DataGridViewTextBoxColumn
     Friend WithEvents Id As DataGridViewTextBoxColumn
     Friend WithEvents TitleDataGridViewTextBoxColumn As DataGridViewTextBoxColumn
@@ -318,5 +280,6 @@ Partial Class PropertiesWindow
     Friend WithEvents Maximum As DataGridViewTextBoxColumn
     Friend WithEvents Sum As DataGridViewTextBoxColumn
     Friend WithEvents Volume As DataGridViewTextBoxColumn
-    Friend WithEvents ToolStripButton_MoveDown As ToolStripButton
+    Friend WithEvents ToolStripButton_showStatistics As ToolStripButton
+    Friend WithEvents ToolStrip1 As ToolStrip
 End Class

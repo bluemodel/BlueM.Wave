@@ -151,7 +151,7 @@ Public Class Examples
 
         'set some custom display options
         ts.DisplayOptions.Color = Color.Red
-        ts.DisplayOptions.LineStyle = Drawing2D.DashStyle.Dash
+        ts.DisplayOptions.LineStyle = ScottPlot.LineStyle.Dash
         ts.DisplayOptions.LineWidth = 1
         ts.DisplayOptions.ShowPoints = True
 
