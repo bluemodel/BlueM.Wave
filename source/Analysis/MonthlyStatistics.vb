@@ -244,10 +244,10 @@ Friend Class MonthlyStatistics
         Next
 
         'Result chart
-        Me.ResultChart = New ScottPlot.FormsPlot()
-        Call Helpers.FormatChart(Me.ResultChart.Plot)
-        Me.ResultChart.Plot.XAxis.DateTimeFormat(False)
-        Me.ResultChart.Plot.Title($"Monthly statistics ({Me.InputTimeSeries(0).Title})")
+        Me.ResultChart = New ScottPlot.Plot()
+        Call Helpers.FormatChart(Me.ResultChart)
+        Me.ResultChart.XAxis.DateTimeFormat(False)
+        Me.ResultChart.Title($"Monthly statistics ({Me.InputTimeSeries(0).Title})")
 
         'sort month data by index for plotting
         Dim monthDatas As List(Of MonthData) = Me.result.Values.ToList()
@@ -283,14 +283,14 @@ Friend Class MonthlyStatistics
         Next
 
         'axes
-        Me.ResultChart.Plot.XAxis.ManualTickPositions(Xs, xLabels.ToArray())
-        Me.ResultChart.Plot.XAxis.AxisTicks.TickLabelRotation = 90
-        Me.ResultChart.Plot.XAxis.AxisTicks.MinorGridVisible = False
-        Me.ResultChart.Plot.YLabel(Me.InputTimeSeries(0).Unit)
+        Me.ResultChart.XAxis.ManualTickPositions(Xs, xLabels.ToArray())
+        Me.ResultChart.XAxis.AxisTicks.TickLabelRotation = 90
+        Me.ResultChart.XAxis.AxisTicks.MinorGridVisible = False
+        Me.ResultChart.YLabel(Me.InputTimeSeries(0).Unit)
 
         'series min-max
         Dim minmax As ScottPlot.Plottable.Polygon
-        minmax = Me.ResultChart.Plot.AddFill(Xs, mins.ToArray(), maxs.ToArray())
+        minmax = Me.ResultChart.AddFill(Xs, mins.ToArray(), maxs.ToArray())
         minmax.Label = "Min / Max"
         minmax.FillColor = Color.FromArgb(128, Color.LightGray.R, Color.LightGray.G, Color.LightGray.B)
         minmax.LineColor = Color.DarkGray
@@ -298,14 +298,14 @@ Friend Class MonthlyStatistics
 
         'series standard deviation
         Dim stddev As ScottPlot.Plottable.ErrorBar
-        stddev = Me.ResultChart.Plot.AddErrorBars(Xs, stddevbases.ToArray(), xErrors:=Nothing, yErrors:=stddevs.ToArray())
+        stddev = Me.ResultChart.AddErrorBars(Xs, stddevbases.ToArray(), xErrors:=Nothing, yErrors:=stddevs.ToArray())
         stddev.Label = "Standard deviation"
         stddev.Color = Color.Red
         stddev.CapSize = 8
 
         'series average
         Dim avg As ScottPlot.Plottable.ScatterPlot
-        avg = Me.ResultChart.Plot.AddScatter(Xs, avgs.ToArray())
+        avg = Me.ResultChart.AddScatter(Xs, avgs.ToArray())
         avg.OnNaN = ScottPlot.Plottable.ScatterPlot.NanBehavior.Gap
         avg.Label = "Average"
         avg.Color = Color.Blue
@@ -313,7 +313,7 @@ Friend Class MonthlyStatistics
 
         'series median
         Dim median As ScottPlot.Plottable.ScatterPlot
-        median = Me.ResultChart.Plot.AddScatter(Xs, medians.ToArray())
+        median = Me.ResultChart.AddScatter(Xs, medians.ToArray())
         median.OnNaN = ScottPlot.Plottable.ScatterPlot.NanBehavior.Gap
         median.Label = "Median"
         median.Color = Color.Green

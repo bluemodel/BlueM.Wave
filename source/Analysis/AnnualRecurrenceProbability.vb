@@ -229,24 +229,24 @@ Friend Class AnnualRecurrenceProbability
         Next
 
         'result chart
-        ResultChart = New ScottPlot.FormsPlot()
-        Call Helpers.FormatChart(ResultChart.Plot)
+        ResultChart = New ScottPlot.Plot()
+        Call Helpers.FormatChart(ResultChart)
 
         'legend
-        ResultChart.Plot.Legend.Location = ScottPlot.Alignment.LowerRight
+        ResultChart.Legend.Location = ScottPlot.Alignment.LowerRight
 
         'X axis
-        ResultChart.Plot.XLabel("Return period [years]")
-        ResultChart.Plot.XAxis.DateTimeFormat(False)
-        ResultChart.Plot.XAxis.TickLabelStyle(rotation:=90)
+        ResultChart.XLabel("Return period [years]")
+        ResultChart.XAxis.DateTimeFormat(False)
+        ResultChart.XAxis.TickLabelStyle(rotation:=90)
         'logarithmic labels and ticks
-        ResultChart.Plot.XAxis.TickLabelFormat(Function(x As Double) Math.Pow(10, x).ToString("N0"))
-        ResultChart.Plot.XAxis.MinorLogScale(True)
-        ResultChart.Plot.XAxis.MajorGrid(True, Color.FromArgb(80, Color.Black))
-        ResultChart.Plot.XAxis.MinorGrid(True, Color.FromArgb(20, Color.Black))
+        ResultChart.XAxis.TickLabelFormat(Function(x As Double) Math.Pow(10, x).ToString("N0"))
+        ResultChart.XAxis.MinorLogScale(True)
+        ResultChart.XAxis.MajorGrid(True, Color.FromArgb(80, Color.Black))
+        ResultChart.XAxis.MinorGrid(True, Color.FromArgb(20, Color.Black))
 
         'Y axis
-        ResultChart.Plot.YLabel(Me.InputTimeSeries(0).Unit)
+        ResultChart.YLabel(Me.InputTimeSeries(0).Unit)
 
         'point series
         Dim Xs As New List(Of Double)
@@ -258,7 +258,7 @@ Friend Class AnnualRecurrenceProbability
             labels.Add(ev.year.ToString())
         Next
         Dim points As ScottPlot.Plottable.ScatterPlot
-        points = ResultChart.Plot.AddScatterPoints(Xs.ToArray(), Ys.ToArray())
+        points = ResultChart.AddScatterPoints(Xs.ToArray(), Ys.ToArray())
         points.Label = $"Plotting Position ({InputTimeSeries(0).Title})"
         points.MarkerSize = 10
         points.MarkerShape = ScottPlot.MarkerShape.filledSquare
@@ -266,7 +266,7 @@ Friend Class AnnualRecurrenceProbability
         points.DataPointLabels = labels.ToArray()
 
         'set Y axis limits
-        ResultChart.Plot.YAxis.Dims.SetAxis(0, Ys.Max() * 1.1)
+        ResultChart.YAxis.Dims.SetAxis(0, Ys.Max() * 1.1)
 
         'result series (annual maxima)
         Dim ts As New TimeSeries(Me.InputTimeSeries(0).Title + " (annual maxima)")

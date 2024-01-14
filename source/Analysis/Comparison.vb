@@ -156,19 +156,19 @@ Friend Class Comparison
         Dim series_points As ScottPlot.Plottable.ScatterPlot
         Dim regression_line As ScottPlot.Plottable.ScatterPlot
 
-        Me.ResultChart = New ScottPlot.FormsPlot()
-        Call Helpers.FormatChart(Me.ResultChart.Plot)
-        Me.ResultChart.Plot.XAxis.DateTimeFormat(False)
+        Me.ResultChart = New ScottPlot.Plot()
+        Call Helpers.FormatChart(Me.ResultChart)
+        Me.ResultChart.XAxis.DateTimeFormat(False)
 
-        Me.ResultChart.Plot.Title($"Comparison ({x_title} / {y_title})")
-        Me.ResultChart.Plot.Legend.IsVisible = False
+        Me.ResultChart.Title($"Comparison ({x_title} / {y_title})")
+        Me.ResultChart.Legend.IsVisible = False
 
         'axes
-        Me.ResultChart.Plot.XLabel($"{x_title}  [{x_unit}]")
-        Me.ResultChart.Plot.YLabel($"{y_title}  [{y_unit}]")
+        Me.ResultChart.XLabel($"{x_title}  [{x_unit}]")
+        Me.ResultChart.YLabel($"{y_title}  [{y_unit}]")
 
         'point series
-        series_points = Me.ResultChart.Plot.AddScatterPoints(x_values, y_values)
+        series_points = Me.ResultChart.AddScatterPoints(x_values, y_values)
         series_points.Label = $"Comparison {x_title} - {y_title}"
         series_points.MarkerShape = ScottPlot.MarkerShape.filledCircle
         series_points.MarkerSize = 4
@@ -180,7 +180,7 @@ Friend Class Comparison
         x_max = x_values.Max()
         intercept = Me.ResultValues("Linear regression intercept")
         slope = Me.ResultValues("Linear regression slope")
-        regression_line = Me.ResultChart.Plot.AddScatterLines({x_min, x_max}, {slope * x_min + intercept, slope * x_max + intercept})
+        regression_line = Me.ResultChart.AddScatterLines({x_min, x_max}, {slope * x_min + intercept, slope * x_max + intercept})
         regression_line.Label = "Regression line"
         regression_line.LineWidth = 2
         regression_line.LineColor = Color.Red
@@ -193,7 +193,7 @@ Friend Class Comparison
             $"y = {slope.ToString(DefaultNumberFormat)} * x + {intercept.ToString(DefaultNumberFormat)}"
         annot.Alignment = ScottPlot.Alignment.LowerRight
         annot.BackgroundColor = Color.White
-        Me.ResultChart.Plot.Add(annot)
+        Me.ResultChart.Add(annot)
 
     End Sub
 

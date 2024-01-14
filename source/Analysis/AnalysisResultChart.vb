@@ -20,19 +20,15 @@
 ''' </summary>
 Friend Class AnalysisResultChart
 
-    Private formsPlot As ScottPlot.FormsPlot
-
-    Public Sub New(formsPlot As ScottPlot.FormsPlot)
+    Public Sub New(plot As ScottPlot.Plot)
 
         ' This call is required by the designer.
         InitializeComponent()
 
         ' Add any initialization after the InitializeComponent() call.
-        Me.formsPlot = formsPlot
 
-        'add plot to form
-        Me.formsPlot.Dock = DockStyle.Fill
-        Me.Panel1.Controls.Add(Me.formsPlot)
+        'replace the plot
+        Me.ResultPlot.Reset(plot)
 
     End Sub
 
@@ -42,7 +38,7 @@ Friend Class AnalysisResultChart
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
     Private Sub ToolStripButton_Copy_Click(sender As Object, e As EventArgs) Handles ToolStripButton_Copy.Click
-        Clipboard.SetImage(Me.formsPlot.Plot.Render())
+        Clipboard.SetImage(Me.ResultPlot.Plot.Render())
     End Sub
 
     ''' <summary>
@@ -56,7 +52,7 @@ Friend Class AnalysisResultChart
     End Sub
 
     Private Sub AnalysisResultChart_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        Me.formsPlot.Refresh()
+        Me.ResultPlot.Refresh()
     End Sub
 
 End Class

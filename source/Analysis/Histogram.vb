@@ -228,11 +228,11 @@ Friend Class Histogram
 
         'Result chart
         '------------
-        Me.ResultChart = New ScottPlot.FormsPlot()
-        Call Helpers.FormatChart(Me.ResultChart.Plot)
-        Me.ResultChart.Plot.XAxis.DateTimeFormat(False)
+        Me.ResultChart = New ScottPlot.Plot()
+        Call Helpers.FormatChart(Me.ResultChart)
+        Me.ResultChart.XAxis.DateTimeFormat(False)
 
-        Me.ResultChart.Plot.Title("Histogram")
+        Me.ResultChart.Title("Histogram")
 
         'series
         For Each res As histogramResults In Me.results
@@ -246,7 +246,7 @@ Friend Class Histogram
             Next
 
             Dim serieP As ScottPlot.Plottable.BarPlot
-            serieP = Me.ResultChart.Plot.AddBar(values:=Ys.ToArray(), positions:=Xs.ToArray())
+            serieP = Me.ResultChart.AddBar(values:=Ys.ToArray(), positions:=Xs.ToArray())
             serieP.Label = $"{res.title} (P(x))"
             serieP.BarWidth = Me.breaks(1) - Me.breaks(0) 'TODO: bars are not necessarily all the same width!
             Dim originalColor As Color = serieP.FillColor
@@ -266,7 +266,7 @@ Friend Class Histogram
             Next
 
             Dim seriePU As ScottPlot.Plottable.ScatterPlot
-            seriePU = Me.ResultChart.Plot.AddScatter(Xs.ToArray(), Ys.ToArray())
+            seriePU = Me.ResultChart.AddScatter(Xs.ToArray(), Ys.ToArray())
             seriePU.YAxisIndex = 1
             seriePU.Label = $"{res.title} (PU(x))"
             seriePU.LineWidth = 2
@@ -277,15 +277,15 @@ Friend Class Histogram
         Next
 
         'axes
-        Me.ResultChart.Plot.XLabel($"Value [{Me.InputTimeSeries(0).Unit}]")
+        Me.ResultChart.XLabel($"Value [{Me.InputTimeSeries(0).Unit}]")
 
-        Me.ResultChart.Plot.YLabel("Probability [%]")
-        Me.ResultChart.Plot.SetAxisLimits(yMin:=0, yAxisIndex:=0)
+        Me.ResultChart.YLabel("Probability [%]")
+        Me.ResultChart.SetAxisLimits(yMin:=0, yAxisIndex:=0)
 
-        Me.ResultChart.Plot.YAxis2.Label("Probability of non-exceedance [%]")
-        Me.ResultChart.Plot.YAxis2.LabelStyle(rotation:=90)
-        Me.ResultChart.Plot.YAxis2.Ticks(enable:=True)
-        Me.ResultChart.Plot.SetAxisLimits(yMin:=0, yMax:=105, yAxisIndex:=1)
+        Me.ResultChart.YAxis2.Label("Probability of non-exceedance [%]")
+        Me.ResultChart.YAxis2.LabelStyle(rotation:=90)
+        Me.ResultChart.YAxis2.Ticks(enable:=True)
+        Me.ResultChart.SetAxisLimits(yMin:=0, yMax:=105, yAxisIndex:=1)
 
     End Sub
 

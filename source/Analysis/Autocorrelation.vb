@@ -198,18 +198,18 @@ Friend Class Autocorrelation
             raMaxAuswertung
 
         'Result chart
-        Me.ResultChart = New ScottPlot.FormsPlot()
-        Call Helpers.FormatChart(Me.ResultChart.Plot)
+        Me.ResultChart = New ScottPlot.Plot()
+        Call Helpers.FormatChart(Me.ResultChart)
 
-        Me.ResultChart.Plot.Title($"Autocorrelation for {ts_in.Title}")
+        Me.ResultChart.Title($"Autocorrelation for {ts_in.Title}")
 
         'X axis
-        Me.ResultChart.Plot.XLabel("Offset (Lag) [number of time steps]")
-        Me.ResultChart.Plot.XAxis.DateTimeFormat(False)
+        Me.ResultChart.XLabel("Offset (Lag) [number of time steps]")
+        Me.ResultChart.XAxis.DateTimeFormat(False)
 
         'Y axis
-        Me.ResultChart.Plot.YLabel("Autocorrelation coefficient (-1 < ra < 1)")
-        Me.ResultChart.Plot.YAxis.Dims.SetAxis(-1, 1)
+        Me.ResultChart.YLabel("Autocorrelation coefficient (-1 < ra < 1)")
+        Me.ResultChart.YAxis.Dims.SetAxis(-1, 1)
 
         'series
         Dim Xs, Ys As List(Of Double)
@@ -225,7 +225,7 @@ Friend Class Autocorrelation
             labels.Add($"Lag {i * lagSize}, ra = {Math.Round(raList.Item(i), 3)}")
         Next
         Dim bars As ScottPlot.Plottable.BarPlot
-        bars = Me.ResultChart.Plot.AddBar(values:=Ys.ToArray(), positions:=Xs.ToArray())
+        bars = Me.ResultChart.AddBar(values:=Ys.ToArray(), positions:=Xs.ToArray())
         bars.Label = "Autocorrelogram"
         bars.BarWidth = lagSize
         bars.PositionOffset = -0.5 * lagSize 'center bars
@@ -245,7 +245,7 @@ Friend Class Autocorrelation
             labels.Add($"Lag {periodeList.Item(i)}, ra = {Math.Round(raMaxlist.Item(i), 3)}")
         Next
         Dim points As ScottPlot.Plottable.ScatterPlot
-        points = Me.ResultChart.Plot.AddScatterPoints(Xs.ToArray(), Ys.ToArray(), label:="Peaks (guessed)")
+        points = Me.ResultChart.AddScatterPoints(Xs.ToArray(), Ys.ToArray(), label:="Peaks (guessed)")
         points.MarkerShape = ScottPlot.MarkerShape.filledSquare
         points.MarkerSize = 10
         points.DataPointLabels = labels.ToArray()
@@ -257,7 +257,7 @@ Friend Class Autocorrelation
             $"Assumed periodicity: {periode_avg}"
         annot.Alignment = ScottPlot.Alignment.LowerRight
         annot.BackgroundColor = Color.White
-        Me.ResultChart.Plot.Add(annot)
+        Me.ResultChart.Add(annot)
 
         'Announce finish
         MyBase.AnalysisProgressFinish()

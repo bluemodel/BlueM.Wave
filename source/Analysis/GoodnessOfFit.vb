@@ -357,11 +357,11 @@ Friend Class GoodnessOfFit
         '--------------------------
         'TODO: NaN and negative values mess up the chart!
 
-        Me.ResultChart = New ScottPlot.FormsPlot()
-        Call Helpers.FormatChart(Me.ResultChart.Plot)
-        Me.ResultChart.Plot.XAxis.DateTimeFormat(False)
+        Me.ResultChart = New ScottPlot.Plot()
+        Call Helpers.FormatChart(Me.ResultChart)
+        Me.ResultChart.XAxis.DateTimeFormat(False)
 
-        Me.ResultChart.Plot.Title($"Goodness of Fit: {Me.ts_obs.Title} vs. {String.Join(", ", Me.ts_sim_list)}")
+        Me.ResultChart.Title($"Goodness of Fit: {Me.ts_obs.Title} vs. {String.Join(", ", Me.ts_sim_list)}")
 
         'determine max absolute volume error for scaling
         Dim max_abs_volume_error As Double = 0
@@ -417,7 +417,7 @@ Friend Class GoodnessOfFit
         Next
 
         Dim radar As ScottPlot.Plottable.RadarPlot
-        radar = Me.ResultChart.Plot.AddRadar(values, independentAxes:=True, maxValues:=maxvalues)
+        radar = Me.ResultChart.AddRadar(values, independentAxes:=True, maxValues:=maxvalues)
         radar.AxisType = ScottPlot.RadarAxis.Polygon
         radar.CategoryLabels = axistitles
         radar.GroupLabels = labels.ToArray()

@@ -129,24 +129,24 @@ Friend Class DoubleSumCurve
         'Result chart:
         Dim doppelsumme, gerade As ScottPlot.Plottable.ScatterPlot
 
-        Me.ResultChart = New ScottPlot.FormsPlot()
-        Call Helpers.FormatChart(Me.ResultChart.Plot)
-        Me.ResultChart.Plot.XAxis.DateTimeFormat(False)
-        Me.ResultChart.Plot.Title($"Double Sum Curve ({Me.ts_1.Title} / {Me.ts_2.Title})")
-        Me.ResultChart.Plot.Legend.IsVisible = False
+        Me.ResultChart = New ScottPlot.Plot()
+        Call Helpers.FormatChart(Me.ResultChart)
+        Me.ResultChart.XAxis.DateTimeFormat(False)
+        Me.ResultChart.Title($"Double Sum Curve ({Me.ts_1.Title} / {Me.ts_2.Title})")
+        Me.ResultChart.Legend.IsVisible = False
 
         'axes
-        Me.ResultChart.Plot.XLabel($"Sum {Me.ts_1.Title}")
-        Me.ResultChart.Plot.YLabel($"Sum {Me.ts_2.Title}")
+        Me.ResultChart.XLabel($"Sum {Me.ts_1.Title}")
+        Me.ResultChart.YLabel($"Sum {Me.ts_2.Title}")
 
         'series
-        doppelsumme = Me.ResultChart.Plot.AddScatter(summe1, summe2)
+        doppelsumme = Me.ResultChart.AddScatter(summe1, summe2)
         doppelsumme.Label = $"Double Sum Curve {Me.ts_1.Title} - {Me.ts_2.Title}"
         doppelsumme.MarkerShape = ScottPlot.MarkerShape.filledCircle
         doppelsumme.MarkerSize = 4
 
         Dim max As Double = Math.Max(summe1.Max, summe2.Max)
-        gerade = Me.ResultChart.Plot.AddScatterLines({0, max}, {0, max})
+        gerade = Me.ResultChart.AddScatterLines({0, max}, {0, max})
         gerade.Label = "45° line"
         gerade.LineColor = Color.DarkGray
         gerade.LineStyle = ScottPlot.LineStyle.Dash

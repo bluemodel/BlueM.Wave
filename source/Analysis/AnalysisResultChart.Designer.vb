@@ -27,8 +27,10 @@ Partial Class AnalysisResultChart
         Me.ToolStripButton_Copy = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripButton_EditChart = New System.Windows.Forms.ToolStripButton()
         Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.ResultPlot = New ScottPlot.FormsPlot()
         ToolStrip1 = New System.Windows.Forms.ToolStrip()
         ToolStrip1.SuspendLayout()
+        Me.Panel1.SuspendLayout()
         Me.SuspendLayout()
         '
         'ToolStrip1
@@ -60,11 +62,20 @@ Partial Class AnalysisResultChart
         '
         'Panel1
         '
+        Me.Panel1.Controls.Add(Me.ResultPlot)
         Me.Panel1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Panel1.Location = New System.Drawing.Point(0, 25)
         Me.Panel1.Name = "Panel1"
         Me.Panel1.Size = New System.Drawing.Size(784, 425)
         Me.Panel1.TabIndex = 3
+        '
+        'ResultPlot
+        '
+        Me.ResultPlot.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.ResultPlot.Location = New System.Drawing.Point(0, 0)
+        Me.ResultPlot.Name = "ResultPlot"
+        Me.ResultPlot.Size = New System.Drawing.Size(784, 425)
+        Me.ResultPlot.TabIndex = 0
         '
         'AnalysisResultChart
         '
@@ -79,6 +90,7 @@ Partial Class AnalysisResultChart
         Me.Text = "Analysis Result Chart"
         ToolStrip1.ResumeLayout(False)
         ToolStrip1.PerformLayout()
+        Me.Panel1.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -86,4 +98,5 @@ Partial Class AnalysisResultChart
     Friend WithEvents ToolStripButton_Copy As ToolStripButton
     Friend WithEvents ToolStripButton_EditChart As ToolStripButton
     Friend WithEvents Panel1 As Panel
+    Friend WithEvents ResultPlot As ScottPlot.FormsPlot
 End Class
