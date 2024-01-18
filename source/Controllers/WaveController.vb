@@ -72,6 +72,8 @@ Friend Class WaveController
 
     Private WithEvents _axisDialog As AxisDialog
 
+    Private _logWindow As LogWindow
+
     'Events handled by the AppInstance
     Friend Event Properties_Clicked()
     Friend Event TimeseriesValues_Clicked()
@@ -87,6 +89,8 @@ Friend Class WaveController
         Me.ZoomHistoryIndex = 0
 
         _axisDialog = New AxisDialog()
+
+        _logWindow = New LogWindow()
 
         'Subscribe to view events
 
@@ -173,9 +177,9 @@ Friend Class WaveController
         AddHandler Me.View.Button_NavEnd.Click, AddressOf navigationStartEnd_Click
 
         'status strip events
-        AddHandler Me.View.ToolStripStatusLabel_Log.Click, AddressOf ShowLog_Click
-        AddHandler Me.View.ToolStripStatusLabel_Errors.Click, AddressOf ShowLog_Click
-        AddHandler Me.View.ToolStripStatusLabel_Warnings.Click, AddressOf ShowLog_Click
+        AddHandler Me.View.ToolStripStatusLabel_Log.Click, AddressOf LogShowWindow
+        AddHandler Me.View.ToolStripStatusLabel_Errors.Click, AddressOf LogShowWindow
+        AddHandler Me.View.ToolStripStatusLabel_Warnings.Click, AddressOf LogShowWindow
 
         'axis dialog events
         AddHandler _axisDialog.AxisDeleted, AddressOf axisDeleted
@@ -325,7 +329,7 @@ Friend Class WaveController
 
         'Log zurücksetzen
         Call Log.ClearLog()
-        Call Log.HideLogWindow()
+        Call LogHideWindow()
 
         'Reset counters
         View.ToolStripStatusLabel_Errors.Text = 0
@@ -886,7 +890,7 @@ Friend Class WaveController
                 'Ergebnistext in Log schreiben und anzeigen
                 If (oAnalysis.hasResultText) Then
                     Call Log.AddLogEntry(Log.levels.info, oAnalysis.getResultText)
-                    Call Log.ShowLogWindow()
+                    Call LogShowWindow()
                 End If
 
                 'Ergebniswerte in Log schreiben
@@ -895,7 +899,7 @@ Friend Class WaveController
                     For Each kvp As KeyValuePair(Of String, Double) In oAnalysis.getResultValues
                         Call Log.AddLogEntry(Log.levels.info, kvp.Key + ": " + Str(kvp.Value))
                     Next
-                    Call Log.ShowLogWindow()
+                    Call LogShowWindow()
                 End If
 
                 'Display result series in main diagram
@@ -1516,13 +1520,6 @@ Friend Class WaveController
 
         Me.selectionMade = True
 
-    End Sub
-
-    'Log anzeigen
-    '************
-    Private Sub ShowLog_Click(sender As System.Object, e As System.EventArgs)
-        'LogWindow anzeigen
-        Call Log.ShowLogWindow()
     End Sub
 
     ''' <summary>
@@ -2533,6 +2530,21 @@ Friend Class WaveController
             End Try
         Next
 
+    End Sub
+
+    Private Sub LogShowWindow()
+        If IsNothing(_logWindow) Then
+            _logWindow = New LogWindow()
+        End If
+        _logWindow.Show()
+        _logWindow.WindowState = FormWindowState.Normal
+        _logWindow.BringToFront()
+    End Sub
+
+    Public Sub LogHideWindow()
+        If Not IsNothing(_logWindow) Then
+            _logWindow.Hide()
+        End If
     End Sub
 
     ''' <summary>

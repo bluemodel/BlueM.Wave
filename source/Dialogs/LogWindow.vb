@@ -24,11 +24,22 @@ Friend Class LogWindow
         ' This call is required by the Windows Form Designer.
         InitializeComponent()
 
+        AddHandler Log.LogMsgAdded, AddressOf AddLogEntry
+        AddHandler Log.LogCleared, AddressOf ClearLog
+
         ' Add any initialization after the InitializeComponent() call.
         Me.AddLogEntry(Log.levels.info, "Logging level is set to " & Log.level.ToString())
+
+        'add any already existing messages
+        If Not IsNothing(Log.logMessages) Then
+            For Each msg As KeyValuePair(Of levels, String) In Log.logMessages
+                Me.AddLogEntry(msg.Key, msg.Value)
+            Next
+        End If
+
     End Sub
 
-    Friend Sub AddLogEntry(level As Log.levels, msg As String)
+    Private Sub AddLogEntry(level As Log.levels, msg As String)
 
         Dim start, length As Integer
 
@@ -76,16 +87,16 @@ Friend Class LogWindow
         Call Application.DoEvents()
     End Sub
 
-    Friend Sub ClearLog()
+    Private Sub ClearLog()
         Me.TextBox_Log.Text = ""
         Call Application.DoEvents()
     End Sub
 
-    'Form schlieﬂen
+    'Form schlie√üen
     '**************
     Private Sub LogWindow_FormClosing(sender As System.Object, e As System.Windows.Forms.FormClosingEventArgs) Handles MyBase.FormClosing
 
-        'verhindern, dass das Formular komplett gelˆscht wird
+        'verhindern, dass das Formular komplett gel√∂scht wird
         e.Cancel = True
 
         'Formular verstecken

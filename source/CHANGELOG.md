@@ -1,6 +1,11 @@
 BlueM.Wave Release Notes
 ========================
 
+Development
+-------------
+API-CHANGES:
+* Allow using the API for reading time series files without requiring a reference to System.Windows.Forms
+
 Version 2.7.0
 -------------
 NEW:

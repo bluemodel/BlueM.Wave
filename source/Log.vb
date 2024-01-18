@@ -20,8 +20,6 @@
 ''' </summary>
 Public Module Log
 
-    Private logWindow As LogWindow
-
     Public logMessages As List(Of KeyValuePair(Of levels, String))
 
     ''' <summary>
@@ -43,6 +41,11 @@ Public Module Log
     ''' Is triggered after a log message was added
     ''' </summary>
     Public Event LogMsgAdded(level As Log.levels, msg As String)
+
+    ''' <summary>
+    ''' Is triggered when the log was cleared
+    ''' </summary>
+    Public Event LogCleared()
 
     Sub New()
         'attempt to read loggingLevel from application settings
@@ -69,10 +72,6 @@ Public Module Log
                 msg = Constants.eol & "  " & msg.Replace(Constants.eol, Constants.eol & "  ")
             End If
 
-            If Not IsNothing(logWindow) Then
-                Log.logWindow.AddLogEntry(level, msg)
-            End If
-
             RaiseEvent LogMsgAdded(level, msg)
         End If
 
@@ -85,31 +84,8 @@ Public Module Log
 
         Log.logMessages.Clear()
 
-        If Not IsNothing(Log.logWindow) Then
-            Log.logWindow.ClearLog()
-        End If
+        RaiseEvent LogCleared()
 
-        RaiseEvent LogMsgAdded(Log.levels.info, "")
-    End Sub
-
-    Public Sub HideLogWindow()
-        If Not IsNothing(Log.logWindow) Then
-            Log.logWindow.Hide()
-        End If
-    End Sub
-
-    Public Sub ShowLogWindow()
-
-        If IsNothing(logWindow) Then
-            logWindow = New LogWindow()
-            'if this is the first time the window is shown, add any already existing messages
-            For Each msg As KeyValuePair(Of levels, String) In logMessages
-                logWindow.AddLogEntry(msg.Key, msg.Value)
-            Next
-        End If
-        logWindow.Show()
-        logWindow.WindowState = FormWindowState.Normal
-        logWindow.BringToFront()
     End Sub
 
 End Module
