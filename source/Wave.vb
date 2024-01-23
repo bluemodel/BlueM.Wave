@@ -374,8 +374,7 @@ Public Class Wave
                 "Datei",
                 "ZRFormat",
                 "Kennung",
-                "Interpretation",
-                "Einheit"
+                "Interpretation"
             }
             For Each key As String In expectedKeys
                 If Not params.ContainsKey(key) Then
@@ -414,6 +413,10 @@ Public Class Wave
                     Call Me.Import_Series(ts)
 
                 Case "99" 'BIN file
+
+                    If Not params.ContainsKey("Einheit") Then
+                        Throw New Exception("Missing required entry 'Einheit' in clipboard content!")
+                    End If
 
                     name = params("Kennung")
 

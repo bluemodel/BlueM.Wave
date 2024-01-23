@@ -1,6 +1,11 @@
 BlueM.Wave Release Notes
 ========================
 
+Development
+-------------
+FIXED:
+* Talsim clipboard content no longer requires the entry 'Einheit' to be present for WEL files
+
 Version 2.7.1
 -------------
 API-CHANGES:
