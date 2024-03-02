@@ -1,0 +1,598 @@
+{
+  "source_base_path": "D:/a/BlueM.Wave/BlueM.Wave/docs",
+  "xrefmap": "xrefmap.yml",
+  "files": [
+    {
+      "type": "Resource",
+      "output": {
+        "resource": {
+          "relative_path": "index.json"
+        }
+      }
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/BlueM.Wave.App.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/BlueM.Wave.App.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/BlueM.Wave.Character.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/BlueM.Wave.Character.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/BlueM.Wave.Fileformats.ASC.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/BlueM.Wave.Fileformats.ASC.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/BlueM.Wave.Fileformats.BIN.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/BlueM.Wave.Fileformats.BIN.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/BlueM.Wave.Fileformats.CSV.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/BlueM.Wave.Fileformats.CSV.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/BlueM.Wave.Fileformats.DFS0.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/BlueM.Wave.Fileformats.DFS0.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/BlueM.Wave.Fileformats.GISMO_WEL.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/BlueM.Wave.Fileformats.GISMO_WEL.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/BlueM.Wave.Fileformats.HYDRO_AS_2D.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/BlueM.Wave.Fileformats.HYDRO_AS_2D.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/BlueM.Wave.Fileformats.HystemExtran_REG.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/BlueM.Wave.Fileformats.HystemExtran_REG.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/BlueM.Wave.Fileformats.HystemExtran_WEL.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/BlueM.Wave.Fileformats.HystemExtran_WEL.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/BlueM.Wave.Fileformats.JAMS.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/BlueM.Wave.Fileformats.JAMS.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/BlueM.Wave.Fileformats.PRMS.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/BlueM.Wave.Fileformats.PRMS.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/BlueM.Wave.Fileformats.SMB.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/BlueM.Wave.Fileformats.SMB.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/BlueM.Wave.Fileformats.SMUSI_REG.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/BlueM.Wave.Fileformats.SMUSI_REG.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/BlueM.Wave.Fileformats.SWMM_INTERFACE.Constituent.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/BlueM.Wave.Fileformats.SWMM_INTERFACE.Constituent.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/BlueM.Wave.Fileformats.SWMM_INTERFACE.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/BlueM.Wave.Fileformats.SWMM_INTERFACE.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/BlueM.Wave.Fileformats.SWMM_LID_REPORT.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/BlueM.Wave.Fileformats.SWMM_LID_REPORT.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/BlueM.Wave.Fileformats.SWMM_OUT.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/BlueM.Wave.Fileformats.SWMM_OUT.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/BlueM.Wave.Fileformats.SWMM_TIMESERIES.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/BlueM.Wave.Fileformats.SWMM_TIMESERIES.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/BlueM.Wave.Fileformats.SydroSQLite.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/BlueM.Wave.Fileformats.SydroSQLite.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/BlueM.Wave.Fileformats.UVF.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/BlueM.Wave.Fileformats.UVF.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/BlueM.Wave.Fileformats.WBL.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/BlueM.Wave.Fileformats.WBL.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/BlueM.Wave.Fileformats.WEL.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/BlueM.Wave.Fileformats.WEL.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/BlueM.Wave.Fileformats.WVP.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/BlueM.Wave.Fileformats.WVP.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/BlueM.Wave.Fileformats.ZRE.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/BlueM.Wave.Fileformats.ZRE.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/BlueM.Wave.Fileformats.ZRXP.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/BlueM.Wave.Fileformats.ZRXP.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/BlueM.Wave.Fileformats.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/BlueM.Wave.Fileformats.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/BlueM.Wave.Helpers.Direction.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/BlueM.Wave.Helpers.Direction.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/BlueM.Wave.Helpers.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/BlueM.Wave.Helpers.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/BlueM.Wave.Log.LogClearedEventHandler.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/BlueM.Wave.Log.LogClearedEventHandler.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/BlueM.Wave.Log.LogMsgAddedEventHandler.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/BlueM.Wave.Log.LogMsgAddedEventHandler.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/BlueM.Wave.Log.levels.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/BlueM.Wave.Log.levels.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/BlueM.Wave.Log.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/BlueM.Wave.Log.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/BlueM.Wave.Metadata.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/BlueM.Wave.Metadata.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/BlueM.Wave.Month.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/BlueM.Wave.Month.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/BlueM.Wave.TimeSeries.InterpretationEnum.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/BlueM.Wave.TimeSeries.InterpretationEnum.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/BlueM.Wave.TimeSeries.TimeStepTypeEnum.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/BlueM.Wave.TimeSeries.TimeStepTypeEnum.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/BlueM.Wave.TimeSeries.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/BlueM.Wave.TimeSeries.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/BlueM.Wave.TimeSeriesCollection.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/BlueM.Wave.TimeSeriesCollection.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/BlueM.Wave.TimeSeriesDataSource.OriginEnum.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/BlueM.Wave.TimeSeriesDataSource.OriginEnum.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/BlueM.Wave.TimeSeriesDataSource.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/BlueM.Wave.TimeSeriesDataSource.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/BlueM.Wave.TimeSeriesDisplayOptions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/BlueM.Wave.TimeSeriesDisplayOptions.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/BlueM.Wave.TimeSeriesFile.FileExtensions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/BlueM.Wave.TimeSeriesFile.FileExtensions.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/BlueM.Wave.TimeSeriesFile.FileTypes.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/BlueM.Wave.TimeSeriesFile.FileTypes.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/BlueM.Wave.TimeSeriesFile.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/BlueM.Wave.TimeSeriesFile.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/BlueM.Wave.TimeSeriesInfo.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/BlueM.Wave.TimeSeriesInfo.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/BlueM.Wave.Wave.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/BlueM.Wave.Wave.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/BlueM.Wave.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/BlueM.Wave.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "api/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "api/index.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "api/toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/toc.html"
+        },
+        ".json": {
+          "relative_path": "api/toc.json"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/analysis.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/analysis.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/intro.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/intro.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "articles/toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "articles/toc.html"
+        },
+        ".json": {
+          "relative_path": "articles/toc.json"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/wave_icon.png",
+      "output": {
+        "resource": {
+          "relative_path": "images/wave_icon.png"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/wave_logo.png",
+      "output": {
+        "resource": {
+          "relative_path": "images/wave_logo.png"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "index.md",
+      "output": {
+        ".html": {
+          "relative_path": "index.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "toc.html"
+        },
+        ".json": {
+          "relative_path": "toc.json"
+        }
+      },
+      "version": ""
+    }
+  ],
+  "groups": [
+    {
+      "xrefmap": "xrefmap.yml"
+    }
+  ]
+}
