@@ -337,6 +337,10 @@ Friend Class WaveController
         View.ToolStripStatusLabel_Errors.Image = My.Resources.cancel_inactive
         View.ToolStripStatusLabel_Warnings.Image = My.Resources.warning_inactive
 
+        'Reset togglable toolbar buttons
+        View.ToolStripButton_ShowNaNValues.Checked = False
+        View.ToolStripButton_AutoAdjustYAxes.Checked = False
+
         'Update axis dialog
         Me.UpdateAxisDialog()
 

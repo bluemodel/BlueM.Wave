@@ -9,6 +9,7 @@ CHANGED:
 FIXED:
 * Analysis GoodnessOfFit: fixed volume error calculation if one of the compared time series contains NaN values #151
 * Talsim clipboard content no longer requires the entry 'Einheit' to be present for WEL files
+* Togglable toolbar buttons are now reset when the New button is clicked
 
 API-CHANGES:
 * New property `TimeSeries.NaNPeriods()` for retrieving a list of time periods consisting of NaN nodes
