@@ -647,10 +647,9 @@ Friend Class WaveController
     Private Sub ShowNaNValues_Click(sender As System.Object, e As System.EventArgs)
 
         Dim processSeries As Boolean
-        Dim nanStart, nanEnd, bandStart, bandEnd As DateTime
         Dim band As Steema.TeeChart.Tools.ColorBand
         Dim color As Drawing.Color
-        Dim isNaNPeriod, nanFound, nanFoundInSeries As Boolean
+        Dim nanFound As Boolean
 
         'set default color
         color = Color.Red
@@ -673,69 +672,36 @@ Friend Class WaveController
                     End If
                 Next
                 If processSeries Then
-                    'log
-                    Log.AddLogEntry(Log.levels.info, $"Finding NaN values for series {ts.Title}...")
-                    'find beginning and end of nan values
-                    nanFoundInSeries = False
-                    isNaNPeriod = False
-                    For i As Integer = 0 To ts.Length - 1
-                        If Not isNaNPeriod Then
-                            'test for start of NaN values
-                            If Double.IsNaN(ts.Values(i)) Then
-                                isNaNPeriod = True
-                                nanFoundInSeries = True
-                                nanFound = True
-                                If i = 0 Then
-                                    bandStart = ts.Dates(i)
-                                Else
-                                    bandStart = ts.Dates(i - 1)
-                                End If
-                                nanStart = ts.Dates(i)
+                    'get NaN periods
+                    Dim NaNPeriods As List(Of (start As DateTime, [end] As DateTime)) = ts.NaNPeriods
 
-                                If i < ts.Length - 1 Then
-                                    Continue For
-                                End If
-                            End If
-                        End If
-                        If isNaNPeriod Then
-                            'test for end of NaN values
-                            If Not Double.IsNaN(ts.Values(i)) Then
-                                bandEnd = ts.Dates(i)
-                                nanEnd = ts.Dates(i - 1)
-                                isNaNPeriod = False
+                    If NaNPeriods.Count > 0 Then
 
-                            ElseIf i = ts.Length - 1 Then
-                                'force end if end of time series reached
-                                bandEnd = ts.Dates(i)
-                                nanEnd = ts.Dates(i)
-                                isNaNPeriod = False
+                        'loop through periods
+                        For Each NaNPeriod As (start As DateTime, [end] As DateTime) In NaNPeriods
+                            'add a color band
+                            band = New Steema.TeeChart.Tools.ColorBand()
+                            View.TChart1.Tools.Add(band)
+                            band.Axis = View.TChart1.Axes.Bottom
+                            band.Start = NaNPeriod.start.ToOADate()
+                            band.End = NaNPeriod.end.ToOADate()
+                            band.Pen.Visible = False
+                            band.Pen.Color = color
+                            band.Brush.Color = ControlPaint.Light(color)
+                            band.Brush.Transparency = 50
+                            band.ResizeEnd = False
+                            band.ResizeStart = False
+                            band.EndLinePen.Visible = False
+                            band.StartLinePen.Visible = False
+                            band.Tag = "NaN"
 
-                            End If
-
-                            If Not isNaNPeriod Then
-                                'end of NaN period reached, add a color band
-                                band = New Steema.TeeChart.Tools.ColorBand()
-                                View.TChart1.Tools.Add(band)
-                                band.Axis = View.TChart1.Axes.Bottom
-                                band.Start = bandStart.ToOADate()
-                                band.End = bandEnd.ToOADate()
-                                band.Pen.Visible = False
-                                band.Pen.Color = color
-                                band.Brush.Color = ControlPaint.Light(color)
-                                band.Brush.Transparency = 50
-                                band.ResizeEnd = False
-                                band.ResizeStart = False
-                                band.EndLinePen.Visible = False
-                                band.StartLinePen.Visible = False
-                                band.Tag = "NaN"
-
-                                'write to log
-                                Log.AddLogEntry(Log.levels.info, $"Series contains NaN values from {nanStart.ToString(Helpers.CurrentDateFormat)} to {nanEnd.ToString(Helpers.CurrentDateFormat)}")
-                            End If
-                        End If
-                    Next
-                    If Not nanFoundInSeries Then
-                        Log.AddLogEntry(Log.levels.info, "Series does not contain any NaN values")
+                            'write to log
+                            Log.AddLogEntry(Log.levels.info, $"Series {ts.Title} contains NaN values from {NaNPeriod.start.ToString(Helpers.CurrentDateFormat)} to {NaNPeriod.end.ToString(Helpers.CurrentDateFormat)}")
+                        Next
+                        nanFound = True
+                    Else
+                        'series contains no NaN values
+                        Log.AddLogEntry(Log.levels.info, $"Series {ts.Title} does not contain any NaN values")
                     End If
                 End If
             Next
