@@ -7,6 +7,7 @@ CHANGED:
 * The select series dialog is now always displayed on top
 
 FIXED:
+* Analysis GoodnessOfFit: fixed volume error calculation if one of the compared time series contains NaN values #151
 * Talsim clipboard content no longer requires the entry 'Einheit' to be present for WEL files
 
 API-CHANGES:
