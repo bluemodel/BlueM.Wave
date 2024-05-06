@@ -3,6 +3,9 @@ BlueM.Wave Release Notes
 
 Development
 -------------
+CHANGED:
+* The select series dialog is now always displayed on top
+
 FIXED:
 * Talsim clipboard content no longer requires the entry 'Einheit' to be present for WEL files
 

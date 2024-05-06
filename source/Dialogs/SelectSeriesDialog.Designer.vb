@@ -197,6 +197,7 @@ Partial Class SelectSeriesDialog
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
         Me.Text = "Import series from file"
+        Me.TopMost = True
         Me.GroupBox_Selection.ResumeLayout(False)
         Me.GroupBox_Selection.PerformLayout()
         Me.ResumeLayout(False)
