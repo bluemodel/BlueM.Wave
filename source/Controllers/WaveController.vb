@@ -673,18 +673,18 @@ Friend Class WaveController
                 Next
                 If processSeries Then
                     'get NaN periods
-                    Dim NaNPeriods As List(Of (start As DateTime, [end] As DateTime, count As Integer)) = ts.NaNPeriods
+                    Dim NaNPeriods As List(Of (range As DateRange, count As Integer)) = ts.NaNPeriods
 
                     If NaNPeriods.Count > 0 Then
 
                         'loop through periods
-                        For Each NaNPeriod As (start As DateTime, [end] As DateTime, count As Integer) In NaNPeriods
+                        For Each NaNPeriod As (range As DateRange, count As Integer) In NaNPeriods
                             'add a color band
                             band = New Steema.TeeChart.Tools.ColorBand()
                             View.TChart1.Tools.Add(band)
                             band.Axis = View.TChart1.Axes.Bottom
-                            band.Start = NaNPeriod.start.ToOADate()
-                            band.End = NaNPeriod.end.ToOADate()
+                            band.Start = NaNPeriod.range.start.ToOADate()
+                            band.End = NaNPeriod.range.end.ToOADate()
                             band.Pen.Visible = False
                             band.Pen.Color = color
                             band.Brush.Color = ControlPaint.Light(color)
@@ -697,9 +697,9 @@ Friend Class WaveController
 
                             'write to log
                             If NaNPeriod.count = 1 Then
-                                Log.AddLogEntry(Log.levels.info, $"Series {ts.Title} contains 1 NaN value on {NaNPeriod.start.ToString(Helpers.CurrentDateFormat)}")
+                                Log.AddLogEntry(Log.levels.info, $"Series {ts.Title} contains 1 NaN value on {NaNPeriod.range.start.ToString(Helpers.CurrentDateFormat)}")
                             Else
-                                Log.AddLogEntry(Log.levels.info, $"Series {ts.Title} contains {NaNPeriod.count} NaN values from {NaNPeriod.start.ToString(Helpers.CurrentDateFormat)} to {NaNPeriod.end.ToString(Helpers.CurrentDateFormat)}")
+                                Log.AddLogEntry(Log.levels.info, $"Series {ts.Title} contains {NaNPeriod.count} NaN values from {NaNPeriod.range.start.ToString(Helpers.CurrentDateFormat)} to {NaNPeriod.range.end.ToString(Helpers.CurrentDateFormat)}")
                             End If
 
                         Next

@@ -232,12 +232,12 @@ Public Class TimeSeries
     End Property
 
     ''' <summary>
-    ''' Returns the list of time periods (start, end, count) consisting of NaN nodes
+    ''' Returns the list of time periods (range, count) consisting of NaN nodes
     ''' </summary>
     ''' <returns></returns>
-    Public ReadOnly Property NaNPeriods As List(Of (start As DateTime, [end] As DateTime, count As Integer))
+    Public ReadOnly Property NaNPeriods As List(Of (range As DateRange, count As Integer))
         Get
-            NaNPeriods = New List(Of (start As DateTime, [end] As DateTime, count As Integer))
+            NaNPeriods = New List(Of (range As DateRange, count As Integer))
 
             If Me.NaNCount > 0 Then
 
@@ -271,14 +271,14 @@ Public Class TimeSeries
                             isNanPeriod = False
                             [end] = Me.Dates(i - 1)
                             'store NaN period
-                            NaNPeriods.Add((start, [end], count))
+                            NaNPeriods.Add((New DateRange(start, [end]), count))
                         End If
                     End If
                 Next
 
                 'if the last value is NaN, add a last NaN period
                 If Double.IsNaN(Me.LastValue) Then
-                    NaNPeriods.Add((start, Me.EndDate, count))
+                    NaNPeriods.Add((New DateRange(start, Me.EndDate), count))
                 End If
 
             End If
