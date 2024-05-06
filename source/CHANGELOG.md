@@ -11,6 +11,7 @@ FIXED:
 
 API-CHANGES:
 * New property `TimeSeries.NaNPeriods()` for retrieving a list of time periods consisting of NaN nodes
+* New method `TimeSeries.UpdateNode()` for updating the value of an existing node
 
 Version 2.7.1
 -------------

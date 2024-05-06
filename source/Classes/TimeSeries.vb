@@ -596,6 +596,18 @@ Public Class TimeSeries
     End Sub
 
     ''' <summary>
+    ''' Updates the value of an existing node
+    ''' </summary>
+    ''' <param name="_date">Date</param>
+    ''' <param name="_value">Value</param>
+    Public Sub UpdateNode(_date As DateTime, _value As Double)
+        If Not Me.Nodes.ContainsKey(_date) Then
+            Throw New Exception($"Unable to update node, no existing node for date {_date} found!")
+        End If
+        Me._nodes(_date) = _value
+    End Sub
+
+    ''' <summary>
     ''' Cut a time series using start and end dates
     ''' </summary>
     ''' <param name="_start">start date</param>
