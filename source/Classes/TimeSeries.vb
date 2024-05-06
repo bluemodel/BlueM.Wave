@@ -232,12 +232,12 @@ Public Class TimeSeries
     End Property
 
     ''' <summary>
-    ''' Returns the list of time periods (start, end) consisting of NaN nodes
+    ''' Returns the list of time periods (start, end, count) consisting of NaN nodes
     ''' </summary>
     ''' <returns></returns>
-    Public ReadOnly Property NaNPeriods As List(Of (start As DateTime, [end] As DateTime))
+    Public ReadOnly Property NaNPeriods As List(Of (start As DateTime, [end] As DateTime, count As Integer))
         Get
-            NaNPeriods = New List(Of (start As DateTime, [end] As DateTime))
+            NaNPeriods = New List(Of (start As DateTime, [end] As DateTime, count As Integer))
 
             If Me.NaNCount > 0 Then
 
@@ -245,6 +245,7 @@ Public Class TimeSeries
 
                 Dim start As DateTime = Nothing
                 Dim [end] As DateTime = Nothing
+                Dim count As Integer
 
                 'if the first value is NaN, start a NaN period
                 If Double.IsNaN(Me.FirstValue) Then
@@ -253,27 +254,31 @@ Public Class TimeSeries
                 End If
 
                 'loop through all nodes
+                count = 0
                 For i = 0 To Me.Length - 1
                     If Not isNanPeriod Then
                         If Double.IsNaN(Me.Values(i)) Then
                             'start of NaN period
                             isNanPeriod = True
                             start = Me.Dates(i)
+                            count = 1
                         End If
                     Else
-                        If Not Double.IsNaN(Me.Values(i)) Then
+                        If Double.IsNaN(Me.Values(i)) Then
+                            count += 1
+                        Else
                             'end of NaN period
                             isNanPeriod = False
                             [end] = Me.Dates(i - 1)
                             'store NaN period
-                            NaNPeriods.Add((start, [end]))
+                            NaNPeriods.Add((start, [end], count))
                         End If
                     End If
                 Next
 
                 'if the last value is NaN, add a last NaN period
                 If Double.IsNaN(Me.LastValue) Then
-                    NaNPeriods.Add((start, Me.EndDate))
+                    NaNPeriods.Add((start, Me.EndDate, count))
                 End If
 
             End If

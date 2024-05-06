@@ -673,12 +673,12 @@ Friend Class WaveController
                 Next
                 If processSeries Then
                     'get NaN periods
-                    Dim NaNPeriods As List(Of (start As DateTime, [end] As DateTime)) = ts.NaNPeriods
+                    Dim NaNPeriods As List(Of (start As DateTime, [end] As DateTime, count As Integer)) = ts.NaNPeriods
 
                     If NaNPeriods.Count > 0 Then
 
                         'loop through periods
-                        For Each NaNPeriod As (start As DateTime, [end] As DateTime) In NaNPeriods
+                        For Each NaNPeriod As (start As DateTime, [end] As DateTime, count As Integer) In NaNPeriods
                             'add a color band
                             band = New Steema.TeeChart.Tools.ColorBand()
                             View.TChart1.Tools.Add(band)
@@ -696,7 +696,12 @@ Friend Class WaveController
                             band.Tag = "NaN"
 
                             'write to log
-                            Log.AddLogEntry(Log.levels.info, $"Series {ts.Title} contains NaN values from {NaNPeriod.start.ToString(Helpers.CurrentDateFormat)} to {NaNPeriod.end.ToString(Helpers.CurrentDateFormat)}")
+                            If NaNPeriod.count = 1 Then
+                                Log.AddLogEntry(Log.levels.info, $"Series {ts.Title} contains 1 NaN value on {NaNPeriod.start.ToString(Helpers.CurrentDateFormat)}")
+                            Else
+                                Log.AddLogEntry(Log.levels.info, $"Series {ts.Title} contains {NaNPeriod.count} NaN values from {NaNPeriod.start.ToString(Helpers.CurrentDateFormat)} to {NaNPeriod.end.ToString(Helpers.CurrentDateFormat)}")
+                            End If
+
                         Next
                         nanFound = True
                     Else
