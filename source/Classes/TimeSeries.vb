@@ -232,6 +232,57 @@ Public Class TimeSeries
     End Property
 
     ''' <summary>
+    ''' Returns the list of time periods (start, end) consisting of NaN nodes
+    ''' </summary>
+    ''' <returns></returns>
+    Public ReadOnly Property NaNPeriods As List(Of (start As DateTime, [end] As DateTime))
+        Get
+            NaNPeriods = New List(Of (start As DateTime, [end] As DateTime))
+
+            If Me.NaNCount > 0 Then
+
+                Dim isNanPeriod As Boolean = False
+
+                Dim start As DateTime = Nothing
+                Dim [end] As DateTime = Nothing
+
+                'if the first value is NaN, start a NaN period
+                If Double.IsNaN(Me.FirstValue) Then
+                    isNanPeriod = True
+                    start = Me.StartDate
+                End If
+
+                'loop through all nodes
+                For i = 0 To Me.Length - 1
+                    If Not isNanPeriod Then
+                        If Double.IsNaN(Me.Values(i)) Then
+                            'start of NaN period
+                            isNanPeriod = True
+                            start = Me.Dates(i)
+                        End If
+                    Else
+                        If Not Double.IsNaN(Me.Values(i)) Then
+                            'end of NaN period
+                            isNanPeriod = False
+                            [end] = Me.Dates(i - 1)
+                            'store NaN period
+                            NaNPeriods.Add((start, [end]))
+                        End If
+                    End If
+                Next
+
+                'if the last value is NaN, add a last NaN period
+                If Double.IsNaN(Me.LastValue) Then
+                    NaNPeriods.Add((start, Me.EndDate))
+                End If
+
+            End If
+
+            Return NaNPeriods
+        End Get
+    End Property
+
+    ''' <summary>
     ''' The unit of the the time series' values
     ''' </summary>
     Public Property Unit() As String

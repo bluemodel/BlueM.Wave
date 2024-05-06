@@ -9,6 +9,9 @@ CHANGED:
 FIXED:
 * Talsim clipboard content no longer requires the entry 'Einheit' to be present for WEL files
 
+API-CHANGES:
+* New property `TimeSeries.NaNPeriods()` for retrieving a list of time periods consisting of NaN nodes
+
 Version 2.7.1
 -------------
 API-CHANGES:
