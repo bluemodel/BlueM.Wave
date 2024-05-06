@@ -1,7 +1,7 @@
 BlueM.Wave Release Notes
 ========================
 
-Development
+Version 2.8.0
 -------------
 CHANGED:
 * The select series dialog is now always displayed on top
