@@ -591,7 +591,8 @@ Public MustInherit Class TimeSeriesFile
         Select Case type
             Case TimeSeriesFile.FileTypes.CSV,
                  TimeSeriesFile.FileTypes.DFS0,
-                 TimeSeriesFile.FileTypes.SWMM_INTERFACE
+                 TimeSeriesFile.FileTypes.SWMM_INTERFACE,
+                 TimeSeriesFile.FileTypes.HYBNAT_BCS
                 'TODO: ZRXP does actually also support multiple series, but for simplicity's sake, we assume that it doesn't
                 Return True
             Case Else

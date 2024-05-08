@@ -627,6 +627,9 @@ Public Class Wave
                 Case TimeSeriesFile.FileTypes.ZRE
                     SaveFileDialog1.DefaultExt = "zre"
                     SaveFileDialog1.Filter = "ZRE files (*.zre)|*.zre"
+                Case TimeSeriesFile.FileTypes.HYBNAT_BCS
+                    SaveFileDialog1.DefaultExt = "bcs"
+                    SaveFileDialog1.Filter = "HYBNAT BCS files (*.bcs)|*.bcs"
                 Case TimeSeriesFile.FileTypes.HYSTEM_REG
                     SaveFileDialog1.DefaultExt = "reg"
                     SaveFileDialog1.Filter = "HYSTEM REG files (*.reg)|*.reg"
@@ -686,6 +689,9 @@ Public Class Wave
 
                     Case TimeSeriesFile.FileTypes.SWMM_INTERFACE
                         Call Fileformats.SWMM_INTERFACE.Write_File(zres, filename)
+
+                    Case TimeSeriesFile.FileTypes.HYBNAT_BCS
+                        Call Fileformats.HYBNAT_BCS.Write_File(zres, filename)
 
                     Case Else
                         Throw New Exception($"Export to file type {fileType} not yet implemented!")

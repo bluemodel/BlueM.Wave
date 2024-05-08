@@ -15,6 +15,7 @@
 'You should have received a copy of the GNU Lesser General Public License
 'along with this program.  If not, see <https://www.gnu.org/licenses/>.
 '
+Imports System.Globalization
 Imports System.IO
 
 Namespace Fileformats
@@ -179,6 +180,63 @@ Namespace Fileformats
             syncReader.Close()
             reader.Close()
             stream.Close()
+        End Sub
+
+        ''' <summary>
+        ''' Write one or multiple series to a BCS file
+        ''' </summary>
+        ''' <param name="tsList">time series to write to file</param>
+        ''' <param name="file">path to the bcs file</param>
+        ''' <remarks></remarks>
+        Public Shared Sub Write_File(ByRef tsList As List(Of TimeSeries), file As String)
+
+            Dim strwrite As StreamWriter
+            Dim t As DateTime
+            Dim value As String
+            Dim line As String
+
+            Dim numberFormat As NumberFormatInfo = New NumberFormatInfo()
+            numberFormat.NumberDecimalSeparator = "."
+
+            'collect unique timestamps
+            Dim unique_timestamps As New HashSet(Of DateTime)
+            For Each ts As TimeSeries In tsList
+                unique_timestamps.UnionWith(New HashSet(Of DateTime)(ts.Dates))
+            Next
+            'sort timestamps
+            Dim timestamps As List(Of DateTime) = unique_timestamps.ToList()
+            timestamps.Sort()
+
+            'write the file
+            strwrite = New StreamWriter(file, False, Helpers.DefaultEncoding)
+
+            '1st line: titles
+            line = "time"
+            For Each zre As TimeSeries In tsList
+                line &= ";" & zre.Title
+            Next
+            strwrite.WriteLine(line)
+            '2nd row onwards: data
+            Dim startdate As DateTime = timestamps(0)
+            For Each t In timestamps
+                line = t.Subtract(startdate).TotalSeconds.ToString()
+                For Each ts As TimeSeries In tsList
+                    If ts.Dates.Contains(t) Then
+                        If Double.IsNaN(ts.Nodes(t)) Then
+                            value = "NaN"
+                        Else
+                            value = ts.Nodes(t).ToString(numberFormat)
+                        End If
+                    Else
+                        value = "" 'empty value
+                    End If
+                    line &= ";" & value
+                Next
+                strwrite.WriteLine(line)
+            Next
+
+            strwrite.Close()
+
         End Sub
 
     End Class
