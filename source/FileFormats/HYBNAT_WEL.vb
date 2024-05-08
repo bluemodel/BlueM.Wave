@@ -101,21 +101,25 @@ Namespace Fileformats
             Dim reader As New StreamReader(stream, System.Text.Encoding.Default)
             Dim syncReader = TextReader.Synchronized(reader)
 
-            'Overjump first 3 lines
-            For i = 1 To 3
-                syncReader.ReadLine()
-            Next
-
-            'Check if line 4 starts with "Ganglinien:"
-            If Not syncReader.ReadLine.ToString.Trim().StartsWith("Ganglinien:") Then Return False
+            'Loop throgh file and search lines that start with "Ganglinien:" or "Zeit"
+            Dim foundGanglinien As Boolean = False
+            Dim foundZeit As Boolean = False
+            Do
+                Dim line As String = syncReader.ReadLine()
+                If line.Trim().ToLower().StartsWith("ganglinien:") Then
+                    foundGanglinien = True
+                ElseIf line.Trim().ToLower().StartsWith("zeit") Then
+                    foundZeit = True
+                End If
+            Loop Until syncReader.Peek() = -1
 
             'Close file
             syncReader.Close()
             reader.Close()
             stream.Close()
 
-            'Valid file
-            Return True
+            'Valid file if both lines were found
+            Return foundGanglinien And foundZeit
         End Function
 
         ''' <summary>
@@ -131,50 +135,47 @@ Namespace Fileformats
             Dim reader As New StreamReader(stream, System.Text.Encoding.Default)
             Dim syncReader = TextReader.Synchronized(reader)
 
-            'Overjump first 3 lines
-            For i = 1 To 3
-                syncReader.ReadLine()
-            Next
+            'Loop throgh file until line starts with "Ganglinien:" and get element name and type
+            Do
+                Dim line As String = syncReader.ReadLine()
+                If line.Trim().ToLower().StartsWith("ganglinien:") Then
+                    'Determine element name and type
+                    _elmentName = line.Split(":")(1).Split("/")(0).Trim()
+                    _elementType = _elmentName(0)
+                    Exit Do
+                End If
+            Loop Until syncReader.Peek() = -1
 
-            'Determine element name and type
-            _elmentName = syncReader.ReadLine.ToString.Split(":")(1).Split("/")(0).Trim()
-            _elementType = _elmentName.Substring(0, 1)
+            'Check element type
+            If Not {"N", "K", "T", "B", "V", "E", "P"}.Contains(_elementType) Then
+                Throw New Exception($"Unknown HYBNAT element type '{_elementType}'!")
+            End If
 
             'Jump back to beginning of file
             stream.Seek(0, SeekOrigin.Begin)
             reader = New StreamReader(stream, Me.Encoding)
             syncReader = TextReader.Synchronized(reader)
 
-            'Set line numbers for headings, units and data according to element type
-            Select Case _elementType
-                Case "N", "K", "T", "B"
-                    iLineHeadings = 17
-                    iLineUnits = 18
-                    iLineData = 20
-                Case "E"
-                    iLineHeadings = 8
-                    iLineUnits = 9
-                    iLineData = 11
-                Case "P"
-                    iLineHeadings = 11
-                    iLineUnits = 12
-                    iLineData = 14
-                Case "V"
-                    iLineHeadings = 14
-                    iLineUnits = 15
-                    iLineData = 17
-                Case Else
-                    Throw New Exception($"Unknown HYBNAT element type '{_elementType}'!")
-            End Select
+            'Initialize arrays for column names and units
+            Dim columnNames() As String = Nothing
+            Dim columnUnits() As String = Nothing
+            iLineHeadings = 0
 
-            'Overjump lines until headings
-            For i = 1 To iLineHeadings - 1
-                syncReader.ReadLine()
-            Next
+            'Loop throgh file until line starts with "Zeit"
+            Do
+                Dim line As String = syncReader.ReadLine()
+                If line.Trim().ToLower().StartsWith("zeit") Then
+                    'Set line numbers for headings, units and data
+                    iLineUnits = iLineHeadings + 1
+                    iLineData = iLineHeadings + 3
 
-            'Read headings and units
-            Dim columnNames() As String = syncReader.ReadLine.Split(New Char() {" "}, System.StringSplitOptions.RemoveEmptyEntries)
-            Dim columnUnits() As String = syncReader.ReadLine.Split(New Char() {" "}, System.StringSplitOptions.RemoveEmptyEntries)
+                    'Read headings and units
+                    columnNames = line.Split(New Char() {" "}, System.StringSplitOptions.RemoveEmptyEntries)
+                    columnUnits = syncReader.ReadLine.Split(New Char() {" "}, System.StringSplitOptions.RemoveEmptyEntries)
+                    Exit Do
+                End If
+                iLineHeadings += 1
+            Loop Until syncReader.Peek() = -1
 
             'Close file
             syncReader.Close()
@@ -232,7 +233,7 @@ Namespace Fileformats
             Dim syncReader = TextReader.Synchronized(reader)
 
             'Overjump lines with headings and units
-            For i = 1 To iLineData - 1
+            For i = 1 To iLineData
                 syncReader.ReadLine()
             Next
 
