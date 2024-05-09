@@ -15,4 +15,4 @@ Example `Analysis\TestAnalysis.vb`:
 
 Add the new analysis function to the AnalysisFactory (file `Analysis\AnalysisFactory.vb`). The locations to edit are highlighted below and marked with `EDIT THIS`.
 
-[!code-vb[](../../source/Analysis/AnalysisFactory.vb?highlight=40,76-77,134-135)]
+[!code-vb[](../../source/Analysis/AnalysisFactory.vb?highlight=41,79-80,140-141)]

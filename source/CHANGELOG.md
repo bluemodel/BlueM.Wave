@@ -1,5 +1,40 @@
-﻿BlueM.Wave Release Notes
+BlueM.Wave Release Notes
 ========================
+
+Version 2.8.0
+-------------
+CHANGED:
+* The select series dialog is now always displayed on top
+
+FIXED:
+* Analysis GoodnessOfFit: fixed volume error calculation if one of the compared time series contains NaN values #151
+* Talsim clipboard content no longer requires the entry 'Einheit' to be present for WEL files
+* Togglable toolbar buttons are now reset when the New button is clicked
+
+API-CHANGES:
+* New property `TimeSeries.NaNPeriods()` for retrieving a list of time periods consisting of NaN nodes
+* New method `TimeSeries.UpdateNode()` for updating the value of an existing node
+* New class `DateRange` representing a date range with defined start and end dates
+
+Version 2.7.1
+-------------
+API-CHANGES:
+* Allow using the API for reading time series files without requiring a reference to System.Windows.Forms
+
+Version 2.7.0
+-------------
+NEW:
+* New analysis function AnnualRecurrenceProbability which calculates the annual recurrence probility and return period of annual maxima using plotting position method
+
+API-CHANGES:
+* New property `TimeSeries.MaximumNode()` for retrieving the node (date and value) with the maximum value of a time series, optionally within a defined time period
+
+FIXED:
+* Improved handling of errors and edge cases when importing from Talsim clipboard
+* WBL files can now also be contained in WLZIP files
+
+CHANGED:
+* Updated DHI.DFS to v22.0.3
 
 Version 2.6.1
 -------------

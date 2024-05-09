@@ -25,6 +25,7 @@ Friend Module AnalysisFactory
     ''' </summary>
     Public Enum AnalysisFunctions
         Accumulate
+        AnnualRecurrenceProbability
         AnnualStatistics
         Autocorrelation
         Calculator
@@ -49,6 +50,8 @@ Friend Module AnalysisFactory
         Select Case analysisfunction
             Case AnalysisFunctions.Accumulate
                 Return Accumulate.Description
+            Case AnalysisFunctions.AnnualRecurrenceProbability
+                Return AnnualRecurrenceProbability.Description
             Case AnalysisFunctions.AnnualStatistics
                 Return AnnualStatistics.Description
             Case AnalysisFunctions.Autocorrelation
@@ -94,6 +97,9 @@ Friend Module AnalysisFactory
 
             Case AnalysisFunctions.Accumulate
                 oAnalysis = New Accumulate(seriesList)
+
+            Case AnalysisFunctions.AnnualRecurrenceProbability
+                oAnalysis = New AnnualRecurrenceProbability(seriesList)
 
             Case AnalysisFunctions.AnnualStatistics
                 oAnalysis = New AnnualStatistics(seriesList)

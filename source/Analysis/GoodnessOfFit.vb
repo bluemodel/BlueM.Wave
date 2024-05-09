@@ -135,6 +135,67 @@ Friend Class GoodnessOfFit
 
         Dim gof As New GoF()
 
+        'calculate volume error before synchronization and NaN removal, so that we can properly respect NaN values
+
+        'set all nodes within NaN periods of the other series to NaN
+        Dim datesToUpdate As List(Of DateTime)
+
+        Dim ts_o_nan As TimeSeries = ts_o.Clone()
+        datesToUpdate = New List(Of DateTime)
+        For Each t As DateTime In ts_o_nan.Dates
+            For Each NaNPeriod As (range As DateRange, count As Integer) In ts_s.NaNPeriods
+                If t >= NaNPeriod.range.start And t <= NaNPeriod.range.end Then
+                    datesToUpdate.Add(t)
+                    Exit For
+                End If
+            Next
+        Next
+        For Each t As DateTime In datesToUpdate
+            ts_o_nan.UpdateNode(t, Double.NaN)
+        Next
+
+        Dim ts_s_nan As TimeSeries = ts_s.Clone()
+        datesToUpdate = New List(Of DateTime)
+        For Each t As DateTime In ts_s_nan.Dates
+            For Each NaNPeriod As (range As DateRange, count As Integer) In ts_o.NaNPeriods
+                If t >= NaNPeriod.range.start And t <= NaNPeriod.range.end Then
+                    datesToUpdate.Add(t)
+                    Exit For
+                End If
+            Next
+        Next
+        For Each t As DateTime In datesToUpdate
+            ts_s_nan.UpdateNode(t, Double.NaN)
+        Next
+
+        'volumes
+        gof.volume_observed = ts_o_nan.Volume
+        gof.volume_simulated = ts_s_nan.Volume
+
+        'volume error [%]
+        gof.volume_error = 100 * (gof.volume_simulated - gof.volume_observed) / gof.volume_observed
+
+        'for the remaining indicators, remove all NaN nodes and synchronize series
+
+        'remove NaN values
+        ts_o = ts_o.removeNaNValues()
+        ts_s = ts_s.removeNaNValues()
+
+        'store original number of non-NaN nodes
+        Dim length_obs_original As Integer = ts_o.Length
+        Dim length_sim_original As Integer = ts_s.Length
+
+        'synchronize
+        TimeSeries.Synchronize(ts_o, ts_s)
+
+        'emit warning if number of nodes was reduced due to synchronizing
+        If ts_o.Length < length_obs_original Then
+            Log.AddLogEntry(levels.warning, $"Series {ts_o.Title}: only {ts_o.Length} of {length_obs_original} nodes are coincident and can be used for GoodnessOfFit calculation")
+        End If
+        If ts_s.Length < length_sim_original Then
+            Log.AddLogEntry(levels.warning, $"Series {ts_s.Title}: only {ts_s.Length} of {length_sim_original} nodes are coincident and can be used for GoodnessOfFit calculation")
+        End If
+
         'check synchronousness
         If ts_o.Length <> ts_s.Length Or ts_o.StartDate <> ts_s.StartDate Or ts_o.EndDate <> ts_s.EndDate Then
             Throw New Exception("Simulated and observed time series are not synchronous!")
@@ -144,10 +205,6 @@ Friend Class GoodnessOfFit
         gof.startDate = ts_o.StartDate
         gof.endDate = ts_o.EndDate
         gof.nValues = ts_o.Length
-
-        'volumes
-        gof.volume_observed = ts_o.Volume
-        gof.volume_simulated = ts_s.Volume
 
         'averages
         avg_obs = ts_o.Average
@@ -167,9 +224,6 @@ Friend Class GoodnessOfFit
             squarederrors(i) = errors(i) ^ 2
             gof.sum_squarederrors += squarederrors(i)
         Next
-
-        'volume error [%]
-        gof.volume_error = 100 * (gof.volume_simulated - gof.volume_observed) / gof.volume_observed
 
         'Nash-Sutcliffe - Koeffizient
         '----------------------------
@@ -298,25 +352,6 @@ Friend Class GoodnessOfFit
                 Or ts_obs.EndDate <> end_obs_original _
                 Or ts_sim.EndDate <> end_sim_original Then
                 Log.AddLogEntry(levels.warning, $"Reduced overlap period used for GoodnessOfFit analysis: {ts_obs.StartDate} - {ts_obs.EndDate}")
-            End If
-
-            'remove NaN values
-            ts_obs = ts_obs.removeNaNValues()
-            ts_sim = ts_sim.removeNaNValues()
-
-            'store original number of non-NaN nodes
-            Dim length_obs_original As Integer = ts_obs.Length
-            Dim length_sim_original As Integer = ts_sim.Length
-
-            'synchronize
-            TimeSeries.Synchronize(ts_obs, ts_sim)
-
-            'emit warning if number of nodes was reduced due to synchronizing
-            If ts_obs.Length < length_obs_original Then
-                Log.AddLogEntry(levels.warning, $"Series {ts_obs.Title}: only {ts_obs.Length} of {length_obs_original} nodes are coincident and can be used for GoodnessOfFit calculation")
-            End If
-            If ts_sim.Length < length_sim_original Then
-                Log.AddLogEntry(levels.warning, $"Series {ts_sim.Title}: only {ts_sim.Length} of {length_sim_original} nodes are coincident and can be used for GoodnessOfFit calculation")
             End If
 
             Dim series_o As New Dictionary(Of String, TimeSeries)

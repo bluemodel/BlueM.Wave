@@ -128,6 +128,12 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Analysis\AnnualStatistics.vb" />
+    <Compile Include="Analysis\AnnualRecurrenceProbability_Dialog.Designer.vb">
+      <DependentUpon>AnnualRecurrenceProbability_Dialog.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Analysis\AnnualRecurrenceProbability_Dialog.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Analysis\Autocorrelation.vb" />
     <Compile Include="Analysis\Autocorrelation_Dialog.Designer.vb">
       <DependentUpon>Autocorrelation_Dialog.vb</DependentUpon>
@@ -194,6 +200,7 @@
     <Compile Include="Analysis\MonthlyStatisticsDialog.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Analysis\AnnualRecurrenceProbability.vb" />
     <Compile Include="Analysis\TestAnalysis.vb" />
     <Compile Include="Analysis\TimestepAnalysis.vb" />
     <Compile Include="Analysis\TimestepAnalysisDialog.Designer.vb">
@@ -202,6 +209,7 @@
     <Compile Include="Analysis\TimestepAnalysisDialog.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Classes\DateRange.vb" />
     <Compile Include="Dialogs\SaveProjectFileDialog.Designer.vb">
       <DependentUpon>SaveProjectFileDialog.vb</DependentUpon>
     </Compile>
@@ -383,6 +391,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Analysis\AnalysisResultTable.resx">
       <DependentUpon>AnalysisResultTable.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Analysis\AnnualRecurrenceProbability_Dialog.resx">
+      <DependentUpon>AnnualRecurrenceProbability_Dialog.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Analysis\Autocorrelation_Dialog.resx">
       <DependentUpon>Autocorrelation_Dialog.vb</DependentUpon>
@@ -569,7 +580,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="DHI.DFS">
-      <Version>21.0.0</Version>
+      <Version>22.0.3</Version>
     </PackageReference>
     <PackageReference Include="DotNetZip">
       <Version>1.16.0</Version>

@@ -72,6 +72,8 @@ Friend Class WaveController
 
     Private WithEvents _axisDialog As AxisDialog
 
+    Private _logWindow As LogWindow
+
     'Events handled by the AppInstance
     Friend Event Properties_Clicked()
     Friend Event TimeseriesValues_Clicked()
@@ -87,6 +89,8 @@ Friend Class WaveController
         Me.ZoomHistoryIndex = 0
 
         _axisDialog = New AxisDialog()
+
+        _logWindow = New LogWindow()
 
         'Subscribe to view events
 
@@ -173,9 +177,9 @@ Friend Class WaveController
         AddHandler Me.View.Button_NavEnd.Click, AddressOf navigationStartEnd_Click
 
         'status strip events
-        AddHandler Me.View.ToolStripStatusLabel_Log.Click, AddressOf ShowLog_Click
-        AddHandler Me.View.ToolStripStatusLabel_Errors.Click, AddressOf ShowLog_Click
-        AddHandler Me.View.ToolStripStatusLabel_Warnings.Click, AddressOf ShowLog_Click
+        AddHandler Me.View.ToolStripStatusLabel_Log.Click, AddressOf LogShowWindow
+        AddHandler Me.View.ToolStripStatusLabel_Errors.Click, AddressOf LogShowWindow
+        AddHandler Me.View.ToolStripStatusLabel_Warnings.Click, AddressOf LogShowWindow
 
         'axis dialog events
         AddHandler _axisDialog.AxisDeleted, AddressOf axisDeleted
@@ -325,13 +329,17 @@ Friend Class WaveController
 
         'Log zurücksetzen
         Call Log.ClearLog()
-        Call Log.HideLogWindow()
+        Call LogHideWindow()
 
         'Reset counters
         View.ToolStripStatusLabel_Errors.Text = 0
         View.ToolStripStatusLabel_Warnings.Text = 0
         View.ToolStripStatusLabel_Errors.Image = My.Resources.cancel_inactive
         View.ToolStripStatusLabel_Warnings.Image = My.Resources.warning_inactive
+
+        'Reset togglable toolbar buttons
+        View.ToolStripButton_ShowNaNValues.Checked = False
+        View.ToolStripButton_AutoAdjustYAxes.Checked = False
 
         'Update axis dialog
         Me.UpdateAxisDialog()
@@ -643,10 +651,9 @@ Friend Class WaveController
     Private Sub ShowNaNValues_Click(sender As System.Object, e As System.EventArgs)
 
         Dim processSeries As Boolean
-        Dim nanStart, nanEnd, bandStart, bandEnd As DateTime
         Dim band As Steema.TeeChart.Tools.ColorBand
         Dim color As Drawing.Color
-        Dim isNaNPeriod, nanFound, nanFoundInSeries As Boolean
+        Dim nanFound As Boolean
 
         'set default color
         color = Color.Red
@@ -669,69 +676,41 @@ Friend Class WaveController
                     End If
                 Next
                 If processSeries Then
-                    'log
-                    Log.AddLogEntry(Log.levels.info, $"Finding NaN values for series {ts.Title}...")
-                    'find beginning and end of nan values
-                    nanFoundInSeries = False
-                    isNaNPeriod = False
-                    For i As Integer = 0 To ts.Length - 1
-                        If Not isNaNPeriod Then
-                            'test for start of NaN values
-                            If Double.IsNaN(ts.Values(i)) Then
-                                isNaNPeriod = True
-                                nanFoundInSeries = True
-                                nanFound = True
-                                If i = 0 Then
-                                    bandStart = ts.Dates(i)
-                                Else
-                                    bandStart = ts.Dates(i - 1)
-                                End If
-                                nanStart = ts.Dates(i)
+                    'get NaN periods
+                    Dim NaNPeriods As List(Of (range As DateRange, count As Integer)) = ts.NaNPeriods
 
-                                If i < ts.Length - 1 Then
-                                    Continue For
-                                End If
-                            End If
-                        End If
-                        If isNaNPeriod Then
-                            'test for end of NaN values
-                            If Not Double.IsNaN(ts.Values(i)) Then
-                                bandEnd = ts.Dates(i)
-                                nanEnd = ts.Dates(i - 1)
-                                isNaNPeriod = False
+                    If NaNPeriods.Count > 0 Then
 
-                            ElseIf i = ts.Length - 1 Then
-                                'force end if end of time series reached
-                                bandEnd = ts.Dates(i)
-                                nanEnd = ts.Dates(i)
-                                isNaNPeriod = False
+                        'loop through periods
+                        For Each NaNPeriod As (range As DateRange, count As Integer) In NaNPeriods
+                            'add a color band
+                            band = New Steema.TeeChart.Tools.ColorBand()
+                            View.TChart1.Tools.Add(band)
+                            band.Axis = View.TChart1.Axes.Bottom
+                            band.Start = NaNPeriod.range.start.ToOADate()
+                            band.End = NaNPeriod.range.end.ToOADate()
+                            band.Pen.Visible = False
+                            band.Pen.Color = color
+                            band.Brush.Color = ControlPaint.Light(color)
+                            band.Brush.Transparency = 50
+                            band.ResizeEnd = False
+                            band.ResizeStart = False
+                            band.EndLinePen.Visible = False
+                            band.StartLinePen.Visible = False
+                            band.Tag = "NaN"
 
+                            'write to log
+                            If NaNPeriod.count = 1 Then
+                                Log.AddLogEntry(Log.levels.info, $"Series {ts.Title} contains 1 NaN value on {NaNPeriod.range.start.ToString(Helpers.CurrentDateFormat)}")
+                            Else
+                                Log.AddLogEntry(Log.levels.info, $"Series {ts.Title} contains {NaNPeriod.count} NaN values from {NaNPeriod.range.start.ToString(Helpers.CurrentDateFormat)} to {NaNPeriod.range.end.ToString(Helpers.CurrentDateFormat)}")
                             End If
 
-                            If Not isNaNPeriod Then
-                                'end of NaN period reached, add a color band
-                                band = New Steema.TeeChart.Tools.ColorBand()
-                                View.TChart1.Tools.Add(band)
-                                band.Axis = View.TChart1.Axes.Bottom
-                                band.Start = bandStart.ToOADate()
-                                band.End = bandEnd.ToOADate()
-                                band.Pen.Visible = False
-                                band.Pen.Color = color
-                                band.Brush.Color = ControlPaint.Light(color)
-                                band.Brush.Transparency = 50
-                                band.ResizeEnd = False
-                                band.ResizeStart = False
-                                band.EndLinePen.Visible = False
-                                band.StartLinePen.Visible = False
-                                band.Tag = "NaN"
-
-                                'write to log
-                                Log.AddLogEntry(Log.levels.info, $"Series contains NaN values from {nanStart.ToString(Helpers.CurrentDateFormat)} to {nanEnd.ToString(Helpers.CurrentDateFormat)}")
-                            End If
-                        End If
-                    Next
-                    If Not nanFoundInSeries Then
-                        Log.AddLogEntry(Log.levels.info, "Series does not contain any NaN values")
+                        Next
+                        nanFound = True
+                    Else
+                        'series contains no NaN values
+                        Log.AddLogEntry(Log.levels.info, $"Series {ts.Title} does not contain any NaN values")
                     End If
                 End If
             Next
@@ -886,7 +865,7 @@ Friend Class WaveController
                 'Ergebnistext in Log schreiben und anzeigen
                 If (oAnalysis.hasResultText) Then
                     Call Log.AddLogEntry(Log.levels.info, oAnalysis.getResultText)
-                    Call Log.ShowLogWindow()
+                    Call LogShowWindow()
                 End If
 
                 'Ergebniswerte in Log schreiben
@@ -895,7 +874,7 @@ Friend Class WaveController
                     For Each kvp As KeyValuePair(Of String, Double) In oAnalysis.getResultValues
                         Call Log.AddLogEntry(Log.levels.info, kvp.Key + ": " + Str(kvp.Value))
                     Next
-                    Call Log.ShowLogWindow()
+                    Call LogShowWindow()
                 End If
 
                 'Display result series in main diagram
@@ -1516,13 +1495,6 @@ Friend Class WaveController
 
         Me.selectionMade = True
 
-    End Sub
-
-    'Log anzeigen
-    '************
-    Private Sub ShowLog_Click(sender As System.Object, e As System.EventArgs)
-        'LogWindow anzeigen
-        Call Log.ShowLogWindow()
     End Sub
 
     ''' <summary>
@@ -2533,6 +2505,21 @@ Friend Class WaveController
             End Try
         Next
 
+    End Sub
+
+    Private Sub LogShowWindow()
+        If IsNothing(_logWindow) Then
+            _logWindow = New LogWindow()
+        End If
+        _logWindow.Show()
+        _logWindow.WindowState = FormWindowState.Normal
+        _logWindow.BringToFront()
+    End Sub
+
+    Public Sub LogHideWindow()
+        If Not IsNothing(_logWindow) Then
+            _logWindow.Hide()
+        End If
     End Sub
 
     ''' <summary>

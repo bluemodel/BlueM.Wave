@@ -362,13 +362,34 @@ Public Class Wave
 
         Next
 
+        If data.Count = 0 Then
+            Throw New Exception("No series could be parsed from TALSIM clipboard content!")
+        End If
+
         'initiate loading of series
         For Each params As Dictionary(Of String, String) In data
+
+            ' check all required parameters are present
+            Dim expectedKeys As New List(Of String) From {
+                "Datei",
+                "ZRFormat",
+                "Kennung",
+                "Interpretation"
+            }
+            For Each key As String In expectedKeys
+                If Not params.ContainsKey(key) Then
+                    Throw New Exception($"Missing required entry '{key}' in clipboard content!")
+                End If
+            Next
 
             file = params("Datei")
 
             Select Case params("ZRFormat")
                 Case "4" 'WEL file
+
+                    If Not params.ContainsKey("Zustand") Then
+                        Throw New Exception("Missing required entry 'Zustand' in clipboard content!")
+                    End If
 
                     'build series name
                     If params("Kennung") = "ZPG" Then
@@ -393,6 +414,10 @@ Public Class Wave
 
                 Case "99" 'BIN file
 
+                    If Not params.ContainsKey("Einheit") Then
+                        Throw New Exception("Missing required entry 'Einheit' in clipboard content!")
+                    End If
+
                     name = params("Kennung")
 
                     'read file
@@ -412,6 +437,9 @@ Public Class Wave
 
                     'import series
                     Call Me.Import_Series(ts)
+
+                Case Else
+                    Throw New Exception($"Unsupported value {params("ZRFormat")} for ZRFormat!")
 
             End Select
 

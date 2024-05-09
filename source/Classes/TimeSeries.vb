@@ -232,6 +232,62 @@ Public Class TimeSeries
     End Property
 
     ''' <summary>
+    ''' Returns the list of time periods (range, count) consisting of NaN nodes
+    ''' </summary>
+    ''' <returns></returns>
+    Public ReadOnly Property NaNPeriods As List(Of (range As DateRange, count As Integer))
+        Get
+            NaNPeriods = New List(Of (range As DateRange, count As Integer))
+
+            If Me.NaNCount > 0 Then
+
+                Dim isNanPeriod As Boolean = False
+
+                Dim start As DateTime = Nothing
+                Dim [end] As DateTime = Nothing
+                Dim count As Integer
+
+                'if the first value is NaN, start a NaN period
+                If Double.IsNaN(Me.FirstValue) Then
+                    isNanPeriod = True
+                    start = Me.StartDate
+                End If
+
+                'loop through all nodes
+                count = 0
+                For i = 0 To Me.Length - 1
+                    If Not isNanPeriod Then
+                        If Double.IsNaN(Me.Values(i)) Then
+                            'start of NaN period
+                            isNanPeriod = True
+                            start = Me.Dates(i)
+                            count = 1
+                        End If
+                    Else
+                        If Double.IsNaN(Me.Values(i)) Then
+                            count += 1
+                        Else
+                            'end of NaN period
+                            isNanPeriod = False
+                            [end] = Me.Dates(i - 1)
+                            'store NaN period
+                            NaNPeriods.Add((New DateRange(start, [end]), count))
+                        End If
+                    End If
+                Next
+
+                'if the last value is NaN, add a last NaN period
+                If Double.IsNaN(Me.LastValue) Then
+                    NaNPeriods.Add((New DateRange(start, Me.EndDate), count))
+                End If
+
+            End If
+
+            Return NaNPeriods
+        End Get
+    End Property
+
+    ''' <summary>
     ''' The unit of the the time series' values
     ''' </summary>
     Public Property Unit() As String
@@ -310,6 +366,40 @@ Public Class TimeSeries
                 Return Me.NodesClean(startdate, enddate).Values.Max
             Else
                 Return Double.NaN
+            End If
+        End Get
+    End Property
+
+    ''' <summary>
+    ''' Returns the node with the maximum value of the time series
+    ''' </summary>
+    Public Overloads ReadOnly Property MaximumNode() As KeyValuePair(Of DateTime, Double)
+        Get
+            Dim nodes As SortedList(Of DateTime, Double) = Me.NodesClean()
+            If nodes.Count > 0 Then
+                Dim maxValue = nodes.Values.Max
+                Dim maxIndex = nodes.IndexOfValue(maxValue)
+                Dim maxDate As DateTime = nodes.Keys(maxIndex)
+                Return New KeyValuePair(Of DateTime, Double)(maxDate, maxValue)
+            Else
+                Return New KeyValuePair(Of DateTime, Double)(Me.StartDate, Double.NaN)
+            End If
+        End Get
+    End Property
+
+    ''' <summary>
+    ''' Returns the node with the maximum value of the time series within a defined time period (inclusively)
+    ''' </summary>
+    Public Overloads ReadOnly Property MaximumNode(startdate As DateTime, enddate As DateTime) As KeyValuePair(Of DateTime, Double)
+        Get
+            Dim nodes As SortedList(Of DateTime, Double) = Me.NodesClean(startdate, enddate)
+            If nodes.Count > 0 Then
+                Dim maxValue = nodes.Values.Max
+                Dim maxIndex = nodes.IndexOfValue(maxValue)
+                Dim maxDate As DateTime = nodes.Keys(maxIndex)
+                Return New KeyValuePair(Of DateTime, Double)(maxDate, maxValue)
+            Else
+                Return New KeyValuePair(Of DateTime, Double)(startdate, Double.NaN)
             End If
         End Get
     End Property
@@ -508,6 +598,18 @@ Public Class TimeSeries
             Exit Sub
         End If
         Me._nodes.Add(_date, _value)
+    End Sub
+
+    ''' <summary>
+    ''' Updates the value of an existing node
+    ''' </summary>
+    ''' <param name="_date">Date</param>
+    ''' <param name="_value">Value</param>
+    Public Sub UpdateNode(_date As DateTime, _value As Double)
+        If Not Me.Nodes.ContainsKey(_date) Then
+            Throw New Exception($"Unable to update node, no existing node for date {_date} found!")
+        End If
+        Me._nodes(_date) = _value
     End Sub
 
     ''' <summary>
@@ -899,7 +1001,7 @@ Public Class TimeSeries
                 Wert = Me.Sum
 
             Case Else
-                Throw New Exception($"Der Werttyp '{WertTyp}' wird nicht unterstützt!")
+                Throw New Exception($"Der Werttyp '{WertTyp}' wird nicht unterstÃ¼tzt!")
 
         End Select
 
