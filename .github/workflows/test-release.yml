@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - 'test-release'
+      
+env:
+  MSBUILDDISABLENODEREUSE: 1
 
 jobs:
   build-and-release:
