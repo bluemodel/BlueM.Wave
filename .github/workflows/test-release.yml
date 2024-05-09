@@ -10,13 +10,13 @@ jobs:
     runs-on: windows-latest
 
     steps:
+      - name: Checkout
+        uses: actions/checkout@v3
       - name: Parse version from latest tag
         id: version
         uses: release-kit/semver@v2
         with:
           source: latest-tag
-      - name: Checkout
-        uses: actions/checkout@v3
       - name: Add msbuild to PATH
         uses: microsoft/setup-msbuild@v1.1
       - name: Create TeeChart license file from secret
