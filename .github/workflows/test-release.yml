@@ -17,6 +17,7 @@ jobs:
         uses: release-kit/semver@v2
         with:
           source: latest-tag
+          fallback: 'v2.8.0'
       - name: Add msbuild to PATH
         uses: microsoft/setup-msbuild@v1.1
       - name: Create TeeChart license file from secret
