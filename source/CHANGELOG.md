@@ -3,6 +3,10 @@ BlueM.Wave Release Notes
 
 Version 2.8.0
 -------------
+NEW:
+* Added support for reading HYBNAT WEL and BCS files #130
+* Added support for exporting to HYBNAT BCS format #130
+
 CHANGED:
 * The select series dialog is now always displayed on top
 
