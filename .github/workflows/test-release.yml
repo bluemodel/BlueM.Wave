@@ -5,12 +5,9 @@ on:
     branches:
       - 'test-release'
       
-env:
-  MSBUILDDISABLENODEREUSE: 1
-
 jobs:
   build-and-release:
-    runs-on: windows-latest
+    runs-on: windows-2019
 
     steps:
       - name: Checkout
@@ -32,7 +29,7 @@ jobs:
       - name: Copy TeeChart license file
         run: copy ${{ steps.teechart-license.outputs.file }} "source\My Project\TeeChart.licenses"
       - name: Build Wave
-        run: msbuild source\Wave.vbproj -restore -property:Platform=x64 -property:Configuration=Release /nr:false
+        run: msbuild source\Wave.vbproj -restore -property:Platform=x64 -property:Configuration=Release
       - name: Create zip archive
         run: Compress-Archive -Path source\bin\x64\Release\* -DestinationPath BlueM.Wave_${{ steps.version.outputs.full }}_x64.zip
       - name: Setup VS Dev Environment
