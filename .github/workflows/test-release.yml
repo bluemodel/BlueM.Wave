@@ -13,6 +13,8 @@ jobs:
       - name: Parse version from latest tag
         id: version
         uses: release-kit/semver@v2
+        with:
+          source: latest-tag
       - name: Checkout
         uses: actions/checkout@v3
       - name: Add msbuild to PATH
