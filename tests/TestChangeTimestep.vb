@@ -332,4 +332,25 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
 
     End Sub
 
+    ''' <summary>
+    ''' Change timestep from an irregular timestep to 1 hour, interpretation CumulativePerTimestep
+    ''' </summary>
+    <TestMethod()> Public Sub TestChangeTimestep_irregular_1h_CumulativePerTimestep()
+
+        Dim ts, ts_new As TimeSeries
+
+        ts = getTestTimeSeries("ZRXP\cmp_Z329_S109.zrx")
+        ts.Interpretation = TimeSeries.InterpretationEnum.CumulativePerTimestep
+
+        Dim startdate As DateTime = New DateTime(2000, 11, 1, 7, 30, 0)
+        ts_new = ts.ChangeTimestep(TimeSeries.TimeStepTypeEnum.Hour, 1, startdate, outputInterpretation:=TimeSeries.InterpretationEnum.CumulativePerTimestep)
+
+        Assert.AreEqual(startdate + New TimeSpan(hours:=1, 0, 0), ts_new.StartDate)
+        Assert.AreEqual(8759, ts_new.Length)
+        Assert.AreEqual(ts.Sum, ts_new.Sum, 0.001)
+        Assert.AreEqual(0.0, ts_new.FirstValue, 0.001)
+        Assert.AreEqual(0.208, ts_new.Nodes(New DateTime(2000, 11, 1, 13, 30, 0)), 0.001)
+
+    End Sub
+
 End Class
