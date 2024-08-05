@@ -312,7 +312,7 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
 
         Dim ts, ts_new As TimeSeries
 
-        ts = getTestTimeSeries_BIN1()
+        ts = getTestTimeSeries("BIN\abfluss_1.bin")
         ts.Interpretation = TimeSeries.InterpretationEnum.BlockRight
 
         Dim startdate As DateTime = New DateTime(ts.StartDate.Year, ts.StartDate.Month, 1)

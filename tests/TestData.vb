@@ -69,13 +69,18 @@ Module TestData
     End Function
 
     ''' <summary>
-    ''' Returns the time series contained in the file BlueM.Datasets\Wave\BIN\abfluss_1.bin
+    ''' Returns a time series contained in the given file from BlueM.Datasets\Wave\
     ''' </summary>
+    ''' <param name="relativePath">Path to the time series file, relative to BlueM.Datasets\Wave\</param>
     ''' <returns></returns>
-    Friend Function getTestTimeSeries_BIN1() As TimeSeries
-        Dim binfile As String = IO.Path.Combine(getTestDataDir, "BIN", "abfluss_1.bin")
-        Dim BIN As New Fileformats.BIN(binfile, ReadAllNow:=True)
-        Dim ts As TimeSeries = BIN.getTimeSeries(0)
+    Friend Function getTestTimeSeries(relativePath As String) As TimeSeries
+        Dim fullPath As String = IO.Path.Combine(getTestDataDir, relativePath)
+        If Not IO.File.Exists(fullPath) Then
+            Throw New Exception($"File {fullPath} not found!")
+        End If
+        Dim file As TimeSeriesFile = TimeSeriesFile.getInstance(fullPath)
+        ' read the first time series from the file
+        Dim ts As TimeSeries = file.getTimeSeries(0)
         Return ts
     End Function
 
