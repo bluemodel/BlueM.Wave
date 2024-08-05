@@ -873,11 +873,11 @@ Public Class TimeSeries
         For i = 0 To Me.Length - 1
             If Me.Dates(i) >= t_start Then
                 Select Case Me.Interpretation
-                    Case InterpretationEnum.BlockLeft,
-                         InterpretationEnum.CumulativePerTimestep
+                    Case InterpretationEnum.BlockLeft
                         i_start = i
                     Case InterpretationEnum.Instantaneous,
-                         InterpretationEnum.BlockRight
+                         InterpretationEnum.BlockRight,
+                         InterpretationEnum.CumulativePerTimestep
                         i_start = Math.Max(i - 1, 0)
                 End Select
                 Exit For

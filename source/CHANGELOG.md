@@ -6,6 +6,9 @@ Version 2.8.1
 NEW:
 * Analysis AnnualStatistics: now also outputs the sum of values per year
 
+FIXED:
+* Analysis ChangeTimestep: fixed failure to execute with some time series with interpretation CumulativePerTimestep
+
 Version 2.8.0
 -------------
 NEW:
