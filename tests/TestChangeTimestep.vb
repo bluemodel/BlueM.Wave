@@ -80,8 +80,8 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
         ts_new = ts.ChangeTimestep(TimeSeries.TimeStepTypeEnum.Hour, 1, ts.StartDate)
 
         Assert.AreEqual(TimeSeries.InterpretationEnum.CumulativePerTimestep, ts_new.Interpretation)
-        Assert.AreEqual(3, ts_new.Length)
-        Assert.AreEqual(New DateTime(2000, 1, 1, 1, 0, 0), ts_new.StartDate)
+        Assert.AreEqual(4, ts_new.Length)
+        Assert.AreEqual(ts.StartDate, ts_new.StartDate)
         Assert.AreEqual(14.0, ts_new.Nodes(New DateTime(2000, 1, 1, 1, 0, 0)))
         Assert.AreEqual(11.0, ts_new.Nodes(New DateTime(2000, 1, 1, 2, 0, 0)))
         Assert.AreEqual(14.0, ts_new.Nodes(New DateTime(2000, 1, 1, 3, 0, 0)))
@@ -189,9 +189,10 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
         ts_new = ts.ChangeTimestep(TimeSeries.TimeStepTypeEnum.Minute, 10, ts.StartDate)
 
         Assert.AreEqual(TimeSeries.InterpretationEnum.CumulativePerTimestep, ts_new.Interpretation)
-        Assert.AreEqual(19, ts_new.Length)
-        Assert.AreEqual(New DateTime(2000, 1, 1, 0, 10, 0), ts_new.StartDate)
+        Assert.AreEqual(20, ts_new.Length)
+        Assert.AreEqual(ts.StartDate, ts_new.StartDate)
         Dim expected_values As New List(Of Double) From {
+            0.0,
             1.333,
             1.667,
             2.0,
@@ -345,8 +346,8 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
         Dim startdate As DateTime = New DateTime(2000, 11, 1, 7, 30, 0)
         ts_new = ts.ChangeTimestep(TimeSeries.TimeStepTypeEnum.Hour, 1, startdate, outputInterpretation:=TimeSeries.InterpretationEnum.CumulativePerTimestep)
 
-        Assert.AreEqual(startdate + New TimeSpan(hours:=1, 0, 0), ts_new.StartDate)
-        Assert.AreEqual(8759, ts_new.Length)
+        Assert.AreEqual(startdate, ts_new.StartDate)
+        Assert.AreEqual(8760, ts_new.Length)
         Assert.AreEqual(ts.Sum, ts_new.Sum, 0.001)
         Assert.AreEqual(0.0, ts_new.FirstValue, 0.001)
         Assert.AreEqual(0.208, ts_new.Nodes(New DateTime(2000, 11, 1, 13, 30, 0)), 0.001)

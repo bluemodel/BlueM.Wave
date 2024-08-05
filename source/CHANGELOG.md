@@ -8,6 +8,7 @@ NEW:
 
 FIXED:
 * Analysis ChangeTimestep: fixed failure to execute with some time series with interpretation CumulativePerTimestep
+* Analysis ChangeTimestep: fixed missing first node when output interpretation is CumulativePerTimestep
 
 Version 2.8.0
 -------------

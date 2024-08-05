@@ -884,6 +884,11 @@ Public Class TimeSeries
             End If
         Next
 
+        'if output interpretation is CumulativePerTimestep, we need to add an initial node with value 0 at the start date
+        If outputInterpretation = InterpretationEnum.CumulativePerTimestep Then
+            ts.AddNode(startdate, 0.0)
+        End If
+
         volume = 0.0
         cumval = 0.0
         timestep_full = False
