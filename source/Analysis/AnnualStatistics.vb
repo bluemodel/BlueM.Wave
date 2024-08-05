@@ -29,6 +29,7 @@ Friend Class AnnualStatistics
         Public min As Double
         Public max As Double
         Public avg As Double
+        Public sum As Double
         Public vol As Double
     End Structure
 
@@ -90,6 +91,7 @@ Friend Class AnnualStatistics
         stats.min = series.Minimum
         stats.max = series.Maximum
         stats.avg = series.Average
+        stats.sum = series.Sum
         stats.vol = series.Volume
         Return stats
     End Function
@@ -133,6 +135,7 @@ Friend Class AnnualStatistics
         Me.ResultTable.Columns.Add("Min", GetType(Double))
         Me.ResultTable.Columns.Add("Max", GetType(Double))
         Me.ResultTable.Columns.Add("Avg", GetType(Double))
+        Me.ResultTable.Columns.Add("Sum", GetType(Double))
         Me.ResultTable.Columns.Add("Volume", GetType(Double))
 
         For Each kvp As KeyValuePair(Of String, struct_stat) In Me.stats
@@ -146,6 +149,7 @@ Friend Class AnnualStatistics
                 stat.min,
                 stat.max,
                 stat.avg,
+                stat.sum,
                 stat.vol
             )
         Next

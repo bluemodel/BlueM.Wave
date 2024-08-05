@@ -1,6 +1,11 @@
 BlueM.Wave Release Notes
 ========================
 
+Version 2.8.1
+-------------
+NEW:
+* Analysis AnnualStatistics: now also outputs the sum of values per year
+
 Version 2.8.0
 -------------
 NEW:
