@@ -133,7 +133,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="MSTest.TestAdapter">
-      <Version>3.5.1</Version>
+      <Version>3.5.2</Version>
     </PackageReference>
     <PackageReference Include="MSTest.TestFramework">
       <Version>3.5.2</Version>
