@@ -117,6 +117,11 @@ Friend Class Comparison
         'Synchronize
         TimeSeries.Synchronize(Me.ts_x, Me.ts_y)
 
+        'Check if enough data is present
+        If Me.ts_x.Length < 2 Then
+            Throw New Exception("Not enough coincident data points available!")
+        End If
+
         Dim x_values As Double()
         Dim y_values As Double()
         x_values = Me.ts_x.Values.ToArray()

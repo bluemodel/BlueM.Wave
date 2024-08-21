@@ -1,6 +1,11 @@
 BlueM.Wave Release Notes
 ========================
 
+Version 2.8.2
+-------------
+FIXED:
+* Analysis Comparison: if not enough coincident data points are available, a relevant error message is displayed
+
 Version 2.8.1
 -------------
 NEW:
