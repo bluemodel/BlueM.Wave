@@ -173,7 +173,12 @@ Namespace Fileformats
                 For i = 1 To anzSpalten - 1 'first column is timestamp
                     sInfo = New TimeSeriesInfo()
                     sInfo.Name = ZeileSpalten.Substring(Me.DateTimeLength + (i - 1) * Me.ColumnWidth, Me.ColumnWidth).Trim()
-                    sInfo.Unit = ZeileEinheiten.Substring(Me.DateTimeLength + (i - 1) * Me.ColumnWidth, Me.ColumnWidth).Trim()
+                    If ZeileEinheiten.Length < Me.DateTimeLength + (i - 1) * Me.ColumnWidth + Me.ColumnWidth Then
+                        Log.AddLogEntry(levels.warning, $"Unable to read unit for series {sInfo.Name}!")
+                        sInfo.Unit = "-"
+                    Else
+                        sInfo.Unit = ZeileEinheiten.Substring(Me.DateTimeLength + (i - 1) * Me.ColumnWidth, Me.ColumnWidth).Trim()
+                    End If
                     sInfo.Index = i
                     Me.TimeSeriesInfos.Add(sInfo)
                 Next
