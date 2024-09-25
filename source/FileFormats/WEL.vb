@@ -21,7 +21,7 @@ Imports System.Text.RegularExpressions
 Namespace Fileformats
 
     ''' <summary>
-    ''' Klasse für das WEL-Dateiformat
+    ''' Klasse fÃ¼r das WEL-Dateiformat
     ''' </summary>
     ''' <remarks>Format siehe https://wiki.bluemodel.org/index.php/WEL-Format</remarks>
     Public Class WEL
@@ -118,12 +118,12 @@ Namespace Fileformats
 
             Me.TimeSeriesInfos.Clear()
 
-            'Datei öffnen
+            'Datei Ã¶ffnen
             Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
             Dim StrRead As StreamReader = New StreamReader(FiStr, Me.Encoding)
             Dim StrReadSync As TextReader = TextReader.Synchronized(StrRead)
 
-            'Spaltenüberschriften auslesen
+            'SpaltenÃ¼berschriften auslesen
             For i = 1 To Me.iLineUnits
                 Zeile = StrReadSync.ReadLine.ToString()
                 If (i = Me.iLineInfo) Then LineInfo = Zeile
@@ -225,6 +225,10 @@ Namespace Fileformats
             'Daten
             Do
                 Zeile = StrReadSync.ReadLine.ToString()
+                If Zeile.Trim().Length = 0 Then
+                    'skip emtpy lines
+                    Continue Do
+                End If
 
                 If (Me.IsColumnSeparated) Then
                     'Zeichengetrennt
@@ -237,7 +241,7 @@ Namespace Fileformats
                         Throw New Exception($"Unable to parse the timestamp '{timestamp}' using the given format '{Me.Dateformat}'!")
                     End If
                     'Restliche Spalten: Werte
-                    'Alle ausgewählten Reihen durchlaufen
+                    'Alle ausgewÃ¤hlten Reihen durchlaufen
                     For Each sInfo As TimeSeriesInfo In Me.SelectedSeries
                         Me.TimeSeries(sInfo.Index).AddNode(datum, StringToDouble(Werte(sInfo.Index)))
                     Next
@@ -251,7 +255,7 @@ Namespace Fileformats
                         Throw New Exception($"Unable to parse the timestamp '{timestamp}' using the given format '{Me.Dateformat}'!")
                     End If
                     'Restliche Spalten: Werte
-                    'Alle ausgewählten Reihen durchlaufen
+                    'Alle ausgewÃ¤hlten Reihen durchlaufen
                     For Each sInfo As TimeSeriesInfo In Me.SelectedSeries
                         Me.TimeSeries(sInfo.Index).AddNode(datum, StringToDouble(Zeile.Substring((sInfo.Index * Me.ColumnWidth) + ColumnOffset, Math.Min(Me.ColumnWidth, Zeile.Substring((sInfo.Index * Me.ColumnWidth) + ColumnOffset).Length))))
                     Next
