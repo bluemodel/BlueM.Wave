@@ -58,6 +58,15 @@ Friend Class MainWindow
         End Get
     End Property
 
+    ''' <summary>
+    ''' Checks whether the crosshair option is activated
+    ''' </summary>
+    Friend ReadOnly Property Crosshair() As Boolean
+        Get
+            Return Me.ToolStripButton_Crosshair.Checked
+        End Get
+    End Property
+
     Friend Property ChartMinX As DateTime
         Get
             Try
