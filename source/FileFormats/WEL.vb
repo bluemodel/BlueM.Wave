@@ -319,8 +319,7 @@ Namespace Fileformats
         Public Shared Function extractFromWLZIP(file As String) As Boolean
 
             Dim file_wlzip As String
-            Dim ze As Ionic.Zip.ZipEntry
-            Dim filename, dir As String
+            Dim filename As String
             Dim zipEntryFound As Boolean = False
             Dim success As Boolean = False
 
@@ -332,15 +331,21 @@ Namespace Fileformats
                 If IO.File.Exists(file_wlzip) Then
 
                     Log.AddLogEntry(Log.levels.info, $"Looking for file in {file_wlzip} ...")
-                    dir = IO.Path.GetDirectoryName(file)
                     filename = IO.Path.GetFileName(file)
 
-                    For Each ze In Ionic.Zip.ZipFile.Read(file_wlzip)
-                        If ze.FileName.ToLower() = filename.ToLower() Then
+                    Dim zip As IO.Compression.ZipArchive = IO.Compression.ZipFile.OpenRead(file_wlzip)
+
+                    For Each entry As IO.Compression.ZipArchiveEntry In zip.Entries
+                        If entry.Name.ToLower() = filename.ToLower() Then
                             zipEntryFound = True
+                            'extract file from zip archive
                             Log.AddLogEntry(Log.levels.info, $"Extracting file from {file_wlzip} ...")
-                            ze.Extract(dir, Ionic.Zip.ExtractExistingFileAction.OverwriteSilently)
+                            Dim fs As New IO.FileStream(file, FileMode.CreateNew)
+                            entry.Open().CopyTo(fs)
+                            fs.Flush()
+                            fs.Close()
                             success = True
+                            Exit For
                         End If
                     Next
 
