@@ -5,6 +5,8 @@ Version 2.8.2
 -------------
 FIXED:
 * Analysis Comparison: if not enough coincident data points are available, a relevant error message is displayed
+* WEL format: handle incomplete line with units
+* Removed DotNetZip dependency and use .NET's IO.Compression instead #179
 
 Version 2.8.1
 -------------
