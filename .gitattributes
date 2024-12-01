@@ -1,0 +1,3 @@
+# force windows line-endings
+.* eol=crlf
+*.* eol=crlf
