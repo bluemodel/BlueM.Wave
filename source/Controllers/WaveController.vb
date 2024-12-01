@@ -135,6 +135,7 @@ Friend Class WaveController
         AddHandler Me.View.ToolStripButton_ConvertErrorValues.Click, AddressOf ConvertErrorValues_Click
         AddHandler Me.View.ToolStripButton_RemoveNaNValues.Click, AddressOf RemoveNaNValues_Click
         AddHandler Me.View.ToolStripButton_AutoAdjustYAxes.CheckedChanged, AddressOf AutoAdjustYAxis_CheckedChanged
+        AddHandler Me.View.ToolStripButton_Crosshair.CheckedChanged, AddressOf Crosshair_CheckedChanged
         AddHandler Me.View.ToolStripButton_ZoomIn.Click, AddressOf ZoomIn_Click
         AddHandler Me.View.ToolStripButton_ZoomOut.Click, AddressOf ZoomOut_Click
         AddHandler Me.View.ToolStripButton_ZoomPrevious.Click, AddressOf ZoomPrevious_Click
@@ -1173,6 +1174,36 @@ Friend Class WaveController
         End If
     End Sub
 
+    Private WithEvents NearestPointTool As Steema.TeeChart.Tools.NearestPoint
+
+    ''' <summary>
+    ''' Crosshair button clicked
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    ''' <remarks></remarks>
+    Private Sub Crosshair_CheckedChanged(sender As Object, e As System.EventArgs)
+        If View.ToolStripButton_Crosshair.Checked Then
+            'setup NearestPoint tool
+            'TODO: this must be done for all active series?
+            Me.NearestPointTool = New Steema.TeeChart.Tools.NearestPoint(View.TChart1.Chart) With
+                    {
+                        .Style = Steema.TeeChart.Tools.NearestPointStyles.None,
+                        .DrawLine = False,
+                        .Direction = Steema.TeeChart.Tools.NearestPointDirection.Horizontal,
+                        .Active = True,
+                        .Series = View.TChart1.Series(0)
+                    }
+            'add event handler
+            AddHandler Me.NearestPointTool.Change, AddressOf Me.OnNearestPointChange
+        Else
+            'remove existing markers
+            showMarkers(New List(Of Date)())
+            'remove event handler
+            RemoveHandler Me.NearestPointTool.Change, AddressOf Me.OnNearestPointChange
+        End If
+    End Sub
+
     ''' <summary>
     ''' Löscht alle vorhandenen Serien und liest alle importierten Zeitreihen neu ein
     ''' </summary>
@@ -1648,6 +1679,26 @@ Friend Class WaveController
             View.TChart1.Cursor = View.cursor_pan
         End If
 
+    End Sub
+
+    ''' <summary>
+    ''' Handles NearestPointTool changing to a new point
+    ''' Highlights the solution
+    ''' </summary>
+    ''' <param name="nearestPointTool">tool</param>
+    ''' <param name="e"></param>
+    Private Sub OnNearestPointChange(nearestPointTool As Steema.TeeChart.Tools.NearestPoint, e As EventArgs)
+        If Not View.Crosshair Then
+            Exit Sub
+        End If
+        Try
+            If nearestPointTool.Active And nearestPointTool.Point > -1 Then
+                Dim xvalue = nearestPointTool.Series.XValues(nearestPointTool.Point)
+                showMarkers(New List(Of Date) From {DateTime.FromOADate(xvalue)})
+            End If
+        Catch ex As Exception
+            'do nothing
+        End Try
     End Sub
 
     ''' <summary>

@@ -583,6 +583,7 @@
     <Content Include="Resources\control_fastforward.png" />
     <Content Include="Resources\control_rewind.png" />
     <Content Include="Resources\control_start.png" />
+    <Content Include="Resources\crosshair.png" />
     <Content Include="Resources\cursor.png" />
     <EmbeddedResource Include="Resources\cursor_pan.cur" />
     <EmbeddedResource Include="Resources\cursor_zoom.cur" />

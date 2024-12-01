@@ -22,7 +22,6 @@ Partial Class MainWindow
     'Das Bearbeiten mit dem Code-Editor ist nicht möglich.
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
-        Me.components = New System.ComponentModel.Container()
         Dim ToolStripSeparator1 As System.Windows.Forms.ToolStripSeparator
         Dim toolStripSeparator As System.Windows.Forms.ToolStripSeparator
         Dim ToolStripSeparator2 As System.Windows.Forms.ToolStripSeparator
@@ -111,7 +110,8 @@ Partial Class MainWindow
         Me.MaskedTextBox_NavStart = New System.Windows.Forms.MaskedTextBox()
         Me.SaveFileDialog1 = New System.Windows.Forms.SaveFileDialog()
         Me.ProgressBar1 = New System.Windows.Forms.ProgressBar()
-        Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
+        Me.ToolTip1 = New System.Windows.Forms.ToolTip()
+        Me.ToolStripButton_Crosshair = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripButton_Settings = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripSeparator12 = New System.Windows.Forms.ToolStripSeparator()
         ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
@@ -201,7 +201,7 @@ Partial Class MainWindow
         '
         ToolStrip1.AutoSize = False
         ToolStrip1.BackColor = System.Drawing.SystemColors.Control
-        ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButton_New, Me.ToolStripDropDownButton_Open, Me.ToolStripDropDownButton_Save, ToolStripSeparator4, Me.ToolStripButton_Settings, Me.ToolStripSeparator12, Me.ToolStripButton_Copy, Me.ToolStripButton_Print, ToolStripSeparator2, Me.ToolStripButton_Cut, Me.ToolStripButton_Merge, Me.ToolStripSeparator8, Me.ToolStripButton_ShowNaNValues, Me.ToolStripButton_ConvertErrorValues, Me.ToolStripButton_RemoveNaNValues, Me.ToolStripSeparator7, Me.ToolStripButton_Analysis, ToolStripSeparator1, Me.ToolStripButton_EditChart, Me.ToolStripDropDownButton_ColorPalette, Me.ToolStripSeparator9, Me.ToolStripButton_Properties, Me.ToolStripButton_TimeseriesValues, Me.ToolStripSeparator10, Me.ToolStripButton_AxisDialog, Me.ToolStripButton_AutoAdjustYAxes, ToolStripSeparator3, Me.ToolStripButton_ToggleOverview, Me.ToolStripButton_ToggleNavigation, toolStripSeparator, Me.ToolStripButton_ZoomIn, Me.ToolStripButton_ZoomOut, Me.ToolStripButton_ZoomPrevious, Me.ToolStripDropDownButton_Help, Me.ToolStripButton_ZoomNext, Me.ToolStripDropDownButton_ZoomToSeries, Me.ToolStripButton_ZoomAll, Me.ToolStripButton_UpdateNotification, Me.ToolStripSeparator11, Me.ToolStripDropDownButton_ActivateAllSeries})
+        ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButton_New, Me.ToolStripDropDownButton_Open, Me.ToolStripDropDownButton_Save, ToolStripSeparator4, Me.ToolStripButton_Settings, Me.ToolStripSeparator12, Me.ToolStripButton_Copy, Me.ToolStripButton_Print, ToolStripSeparator2, Me.ToolStripButton_Cut, Me.ToolStripButton_Merge, Me.ToolStripSeparator8, Me.ToolStripButton_ShowNaNValues, Me.ToolStripButton_ConvertErrorValues, Me.ToolStripButton_RemoveNaNValues, Me.ToolStripSeparator7, Me.ToolStripButton_Analysis, ToolStripSeparator1, Me.ToolStripButton_EditChart, Me.ToolStripDropDownButton_ColorPalette, Me.ToolStripSeparator9, Me.ToolStripButton_Properties, Me.ToolStripButton_TimeseriesValues, Me.ToolStripSeparator10, Me.ToolStripButton_AxisDialog, Me.ToolStripButton_AutoAdjustYAxes, Me.ToolStripButton_Crosshair, ToolStripSeparator3, Me.ToolStripButton_ToggleOverview, Me.ToolStripButton_ToggleNavigation, toolStripSeparator, Me.ToolStripButton_ZoomIn, Me.ToolStripButton_ZoomOut, Me.ToolStripButton_ZoomPrevious, Me.ToolStripDropDownButton_Help, Me.ToolStripButton_ZoomNext, Me.ToolStripDropDownButton_ZoomToSeries, Me.ToolStripButton_ZoomAll, Me.ToolStripButton_UpdateNotification, Me.ToolStripSeparator11, Me.ToolStripDropDownButton_ActivateAllSeries})
         ToolStrip1.Location = New System.Drawing.Point(0, 0)
         ToolStrip1.Name = "ToolStrip1"
         ToolStrip1.Size = New System.Drawing.Size(944, 34)
@@ -1626,11 +1626,6 @@ Partial Class MainWindow
         '
         '
         Me.TChart2.Printer.Landscape = True
-        Margins1.Bottom = 10
-        Margins1.Left = 10
-        Margins1.Right = 10
-        Margins1.Top = 10
-        Me.TChart2.Printer.Margins = Margins1
         Me.TChart2.Size = New System.Drawing.Size(940, 136)
         '
         '
@@ -2940,11 +2935,11 @@ Partial Class MainWindow
         '
         '
         Me.TChart1.Printer.Landscape = True
-        Margins2.Bottom = 10
-        Margins2.Left = 10
-        Margins2.Right = 10
-        Margins2.Top = 10
-        Me.TChart1.Printer.Margins = Margins2
+        Margins1.Bottom = 10
+        Margins1.Left = 10
+        Margins1.Right = 10
+        Margins1.Top = 10
+        Me.TChart1.Printer.Margins = Margins1
         Me.TChart1.Size = New System.Drawing.Size(938, 380)
         '
         '
@@ -3288,6 +3283,17 @@ Partial Class MainWindow
         Me.ToolStripSeparator12.Name = "ToolStripSeparator12"
         Me.ToolStripSeparator12.Size = New System.Drawing.Size(6, 34)
         '
+        'ToolStripButton_Crosshair
+        '
+        Me.ToolStripButton_Crosshair.CheckOnClick = True
+        Me.ToolStripButton_Crosshair.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.ToolStripButton_Crosshair.Image = Global.BlueM.Wave.My.Resources.Resources.crosshair
+        Me.ToolStripButton_Crosshair.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ToolStripButton_Crosshair.Name = "ToolStripButton_Crosshair"
+        Me.ToolStripButton_Crosshair.Size = New System.Drawing.Size(23, 31)
+        Me.ToolStripButton_Crosshair.Text = "Crosshair"
+        Me.ToolStripButton_Crosshair.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
+        '
         'MainWindow
         '
         Me.AllowDrop = True
@@ -3407,4 +3413,5 @@ Partial Class MainWindow
     Friend WithEvents ToolTip1 As ToolTip
     Friend WithEvents ToolStripButton_Settings As ToolStripButton
     Friend WithEvents ToolStripSeparator12 As ToolStripSeparator
+    Friend WithEvents ToolStripButton_Crosshair As ToolStripButton
 End Class
