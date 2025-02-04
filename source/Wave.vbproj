@@ -582,7 +582,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="DHI.DFS">
-      <Version>22.0.3</Version>
+      <Version>23.0.3</Version>
     </PackageReference>
     <PackageReference Include="MathNet.Numerics">
       <Version>5.0.0</Version>
