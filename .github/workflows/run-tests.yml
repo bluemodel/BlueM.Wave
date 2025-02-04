@@ -33,7 +33,7 @@ jobs:
         run: |
           vstest.console.exe BlueM.Wave\tests\bin\x64\Debug\Wave.Tests.dll /Settings:BlueM.Wave\tests\tests.runsettings
       - name: Upload test results
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: test-results
           path: BlueM.Wave\tests\TestResults
