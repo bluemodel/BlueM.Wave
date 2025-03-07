@@ -30,7 +30,7 @@ jobs:
       - name: Create zip archive
         run: Compress-Archive -Path source\bin\x64\Release\* -DestinationPath BlueM.Wave_${{ steps.version.outputs.full }}_x64.zip
       - name: Setup VS Dev Environment
-        uses: seanmiddleditch/gha-setup-vsdevenv@v4
+        uses: seanmiddleditch/gha-setup-vsdevenv@v5
       - name: DisableOutOfProc Fix # see https://stackoverflow.com/a/75641385
         run: |
           function Invoke-DisableOutOfProcBuild {
