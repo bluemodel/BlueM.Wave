@@ -15,6 +15,7 @@
 'You should have received a copy of the GNU Lesser General Public License
 'along with this program.  If not, see <https://www.gnu.org/licenses/>.
 '
+Imports System.Text.RegularExpressions
 Friend Class SelectSeriesDialog
     Inherits System.Windows.Forms.Form
 
@@ -119,6 +120,9 @@ Friend Class SelectSeriesDialog
 
     ''' <summary>
     ''' Do a case-insensitive search for matching list items and select them
+    ''' Supports wildcards '*' and '?' in the search string
+    ''' '*' matches any number of characters, '?' matches a single character
+    ''' The search string is converted to a regex pattern
     ''' </summary>
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
@@ -127,16 +131,21 @@ Friend Class SelectSeriesDialog
 
         Dim search, itemname As String
 
-        search = Me.TextBox_Search.Text.ToLower()
+        search = Me.TextBox_Search.Text
 
         If (search = "") Then Return
+
+        'convert search string to regex pattern
+        Dim pattern As String = Regex.Escape(search).Replace("\ ", " ").Replace("\?", ".").Replace("\*", ".*")
+
+        Log.AddLogEntry(Log.levels.debug, "Searching for series matching pattern: " & pattern)
 
         Me.IsInitializing = True
         Me.ListBox_Series.BeginUpdate()
         Me.ListBox_Series.ClearSelected()
         For i As Integer = 0 To Me.ListBox_Series.Items.Count - 1
-            itemname = Me.ListBox_Series.Items(i).ToString().ToLower()
-            If (itemname.Contains(search)) Then
+            itemname = Me.ListBox_Series.Items(i).ToString()
+            If Regex.IsMatch(itemname, pattern, RegexOptions.IgnoreCase) Then
                 Me.ListBox_Series.SetSelected(i, True)
             End If
         Next
