@@ -1,6 +1,14 @@
 BlueM.Wave Release Notes
 ========================
 
+Version 2.8.3
+-------------
+NEW:
+* Added support for wildcards when selecting series to import #173
+
+FIXED:
+* The Import series dialog is now always centered and focussed when importing from files via drag and drop
+
 Version 2.8.2
 -------------
 FIXED:
