@@ -2715,6 +2715,9 @@ Friend Class WaveController
             'get array of file paths
             files = e.Data.GetData(DataFormats.FileDrop)
 
+            ' activate (and focus) the main window in order to allow a possible SelectSeriesDialog to also be focussed
+            Me.View.Activate()
+
             'Invoke the file import process asynchronously
             View.BeginInvoke(New ImportDelegate(AddressOf _model.Import_Files), New String()() {files})
         End If
