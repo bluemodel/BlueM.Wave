@@ -797,6 +797,11 @@ Public Class Wave
             dialog = New SelectSeriesDialog(tsFile)
         End If
 
+        ' Ensure the dialog is focused and centered
+        dialog.StartPosition = FormStartPosition.CenterParent
+        dialog.Focus()
+
+        ' show the dialog and wait for user input
         dialogResult = dialog.ShowDialog()
 
         If dialogResult = Windows.Forms.DialogResult.OK Then
