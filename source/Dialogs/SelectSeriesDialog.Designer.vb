@@ -22,8 +22,10 @@ Partial Class SelectSeriesDialog
     'Das Bearbeiten mit dem Code-Editor ist nicht möglich.
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
+        Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(SelectSeriesDialog))
         Me.GroupBox_Selection = New System.Windows.Forms.GroupBox()
+        Me.PictureBox_SearchHelp = New System.Windows.Forms.PictureBox()
         Me.Label_Selected = New System.Windows.Forms.Label()
         Me.Label_Search = New System.Windows.Forms.Label()
         Me.TextBox_Search = New System.Windows.Forms.TextBox()
@@ -36,7 +38,9 @@ Partial Class SelectSeriesDialog
         Me.Label2 = New System.Windows.Forms.Label()
         Me.Label_FileName = New System.Windows.Forms.Label()
         Me.Label_FileType = New System.Windows.Forms.Label()
+        Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
         Me.GroupBox_Selection.SuspendLayout()
+        CType(Me.PictureBox_SearchHelp, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'GroupBox_Selection
@@ -44,6 +48,7 @@ Partial Class SelectSeriesDialog
         Me.GroupBox_Selection.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.GroupBox_Selection.Controls.Add(Me.PictureBox_SearchHelp)
         Me.GroupBox_Selection.Controls.Add(Me.Label_Selected)
         Me.GroupBox_Selection.Controls.Add(Me.Label_Search)
         Me.GroupBox_Selection.Controls.Add(Me.TextBox_Search)
@@ -57,6 +62,17 @@ Partial Class SelectSeriesDialog
         Me.GroupBox_Selection.TabIndex = 4
         Me.GroupBox_Selection.TabStop = False
         Me.GroupBox_Selection.Text = "Series selection"
+        '
+        'PictureBox_SearchHelp
+        '
+        Me.PictureBox_SearchHelp.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.PictureBox_SearchHelp.Image = Global.BlueM.Wave.My.Resources.Resources.help
+        Me.PictureBox_SearchHelp.Location = New System.Drawing.Point(197, 19)
+        Me.PictureBox_SearchHelp.Name = "PictureBox_SearchHelp"
+        Me.PictureBox_SearchHelp.Size = New System.Drawing.Size(16, 16)
+        Me.PictureBox_SearchHelp.TabIndex = 7
+        Me.PictureBox_SearchHelp.TabStop = False
+        Me.ToolTip1.SetToolTip(Me.PictureBox_SearchHelp, "Wildcards: * matches any number of characters, ? matches a single character")
         '
         'Label_Selected
         '
@@ -83,7 +99,7 @@ Partial Class SelectSeriesDialog
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.TextBox_Search.Location = New System.Drawing.Point(59, 18)
         Me.TextBox_Search.Name = "TextBox_Search"
-        Me.TextBox_Search.Size = New System.Drawing.Size(154, 20)
+        Me.TextBox_Search.Size = New System.Drawing.Size(132, 20)
         Me.TextBox_Search.TabIndex = 1
         '
         'Label_Series
@@ -200,6 +216,7 @@ Partial Class SelectSeriesDialog
         Me.TopMost = True
         Me.GroupBox_Selection.ResumeLayout(False)
         Me.GroupBox_Selection.PerformLayout()
+        CType(Me.PictureBox_SearchHelp, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -217,4 +234,6 @@ Partial Class SelectSeriesDialog
     Friend WithEvents Label2 As Label
     Friend WithEvents Label_FileName As Label
     Friend WithEvents Label_FileType As Label
+    Friend WithEvents PictureBox_SearchHelp As PictureBox
+    Friend WithEvents ToolTip1 As ToolTip
 End Class
