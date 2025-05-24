@@ -41,8 +41,10 @@ Partial Class SelectSeriesDialog
         Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
         Me.TextBox_TitleSuffix = New System.Windows.Forms.TextBox()
         Me.Label_TitleSuffix = New System.Windows.Forms.Label()
+        Me.PictureBox_TitleSuffixHelp = New System.Windows.Forms.PictureBox()
         Me.GroupBox_Selection.SuspendLayout()
         CType(Me.PictureBox_SearchHelp, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.PictureBox_TitleSuffixHelp, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'GroupBox_Selection
@@ -61,7 +63,7 @@ Partial Class SelectSeriesDialog
         Me.GroupBox_Selection.Margin = New System.Windows.Forms.Padding(0)
         Me.GroupBox_Selection.Name = "GroupBox_Selection"
         Me.GroupBox_Selection.Size = New System.Drawing.Size(219, 297)
-        Me.GroupBox_Selection.TabIndex = 5
+        Me.GroupBox_Selection.TabIndex = 4
         Me.GroupBox_Selection.TabStop = False
         Me.GroupBox_Selection.Text = "Series selection"
         '
@@ -142,7 +144,7 @@ Partial Class SelectSeriesDialog
         Me.Button_OK.Location = New System.Drawing.Point(75, 385)
         Me.Button_OK.Name = "Button_OK"
         Me.Button_OK.Size = New System.Drawing.Size(75, 23)
-        Me.Button_OK.TabIndex = 8
+        Me.Button_OK.TabIndex = 7
         Me.Button_OK.Text = "OK"
         Me.Button_OK.UseVisualStyleBackColor = True
         '
@@ -153,7 +155,7 @@ Partial Class SelectSeriesDialog
         Me.Button_Cancel.Location = New System.Drawing.Point(156, 385)
         Me.Button_Cancel.Name = "Button_Cancel"
         Me.Button_Cancel.Size = New System.Drawing.Size(75, 23)
-        Me.Button_Cancel.TabIndex = 0
+        Me.Button_Cancel.TabIndex = 8
         Me.Button_Cancel.Text = "Cancel"
         Me.Button_Cancel.UseVisualStyleBackColor = True
         '
@@ -199,8 +201,8 @@ Partial Class SelectSeriesDialog
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.TextBox_TitleSuffix.Location = New System.Drawing.Point(75, 356)
         Me.TextBox_TitleSuffix.Name = "TextBox_TitleSuffix"
-        Me.TextBox_TitleSuffix.Size = New System.Drawing.Size(156, 20)
-        Me.TextBox_TitleSuffix.TabIndex = 7
+        Me.TextBox_TitleSuffix.Size = New System.Drawing.Size(134, 20)
+        Me.TextBox_TitleSuffix.TabIndex = 6
         '
         'Label_TitleSuffix
         '
@@ -209,8 +211,19 @@ Partial Class SelectSeriesDialog
         Me.Label_TitleSuffix.Location = New System.Drawing.Point(12, 359)
         Me.Label_TitleSuffix.Name = "Label_TitleSuffix"
         Me.Label_TitleSuffix.Size = New System.Drawing.Size(57, 13)
-        Me.Label_TitleSuffix.TabIndex = 6
+        Me.Label_TitleSuffix.TabIndex = 5
         Me.Label_TitleSuffix.Text = "Title suffix:"
+        '
+        'PictureBox_TitleSuffixHelp
+        '
+        Me.PictureBox_TitleSuffixHelp.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.PictureBox_TitleSuffixHelp.Image = Global.BlueM.Wave.My.Resources.Resources.help
+        Me.PictureBox_TitleSuffixHelp.Location = New System.Drawing.Point(215, 359)
+        Me.PictureBox_TitleSuffixHelp.Name = "PictureBox_TitleSuffixHelp"
+        Me.PictureBox_TitleSuffixHelp.Size = New System.Drawing.Size(16, 16)
+        Me.PictureBox_TitleSuffixHelp.TabIndex = 8
+        Me.PictureBox_TitleSuffixHelp.TabStop = False
+        Me.ToolTip1.SetToolTip(Me.PictureBox_TitleSuffixHelp, "The title suffix will be appended to each series' title during import")
         '
         'SelectSeriesDialog
         '
@@ -219,6 +232,7 @@ Partial Class SelectSeriesDialog
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.CancelButton = Me.Button_Cancel
         Me.ClientSize = New System.Drawing.Size(239, 420)
+        Me.Controls.Add(Me.PictureBox_TitleSuffixHelp)
         Me.Controls.Add(Me.Label_TitleSuffix)
         Me.Controls.Add(Me.TextBox_TitleSuffix)
         Me.Controls.Add(Me.Label_FileType)
@@ -240,6 +254,7 @@ Partial Class SelectSeriesDialog
         Me.GroupBox_Selection.ResumeLayout(False)
         Me.GroupBox_Selection.PerformLayout()
         CType(Me.PictureBox_SearchHelp, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.PictureBox_TitleSuffixHelp, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -261,4 +276,5 @@ Partial Class SelectSeriesDialog
     Friend WithEvents ToolTip1 As ToolTip
     Friend WithEvents TextBox_TitleSuffix As TextBox
     Friend WithEvents Label_TitleSuffix As Label
+    Friend WithEvents PictureBox_TitleSuffixHelp As PictureBox
 End Class
