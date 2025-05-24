@@ -1,6 +1,11 @@
 BlueM.Wave Release Notes
 ========================
 
+Version 2.8.4
+-------------
+NEW:
+* Added support for an optional series title suffix when importing series from a file #191
+
 Version 2.8.3
 -------------
 NEW:

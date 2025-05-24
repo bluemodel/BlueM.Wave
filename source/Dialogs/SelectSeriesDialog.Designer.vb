@@ -39,6 +39,8 @@ Partial Class SelectSeriesDialog
         Me.Label_FileName = New System.Windows.Forms.Label()
         Me.Label_FileType = New System.Windows.Forms.Label()
         Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
+        Me.TextBox_TitleSuffix = New System.Windows.Forms.TextBox()
+        Me.Label_TitleSuffix = New System.Windows.Forms.Label()
         Me.GroupBox_Selection.SuspendLayout()
         CType(Me.PictureBox_SearchHelp, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
@@ -58,8 +60,8 @@ Partial Class SelectSeriesDialog
         Me.GroupBox_Selection.Location = New System.Drawing.Point(12, 53)
         Me.GroupBox_Selection.Margin = New System.Windows.Forms.Padding(0)
         Me.GroupBox_Selection.Name = "GroupBox_Selection"
-        Me.GroupBox_Selection.Size = New System.Drawing.Size(219, 322)
-        Me.GroupBox_Selection.TabIndex = 4
+        Me.GroupBox_Selection.Size = New System.Drawing.Size(219, 297)
+        Me.GroupBox_Selection.TabIndex = 5
         Me.GroupBox_Selection.TabStop = False
         Me.GroupBox_Selection.Text = "Series selection"
         '
@@ -77,7 +79,7 @@ Partial Class SelectSeriesDialog
         'Label_Selected
         '
         Me.Label_Selected.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Label_Selected.Location = New System.Drawing.Point(138, 292)
+        Me.Label_Selected.Location = New System.Drawing.Point(138, 267)
         Me.Label_Selected.Name = "Label_Selected"
         Me.Label_Selected.Size = New System.Drawing.Size(75, 13)
         Me.Label_Selected.TabIndex = 5
@@ -120,13 +122,13 @@ Partial Class SelectSeriesDialog
         Me.ListBox_Series.Location = New System.Drawing.Point(15, 64)
         Me.ListBox_Series.Name = "ListBox_Series"
         Me.ListBox_Series.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended
-        Me.ListBox_Series.Size = New System.Drawing.Size(198, 212)
+        Me.ListBox_Series.Size = New System.Drawing.Size(198, 186)
         Me.ListBox_Series.TabIndex = 3
         '
         'Button_SelectAll
         '
         Me.Button_SelectAll.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.Button_SelectAll.Location = New System.Drawing.Point(15, 287)
+        Me.Button_SelectAll.Location = New System.Drawing.Point(15, 262)
         Me.Button_SelectAll.Name = "Button_SelectAll"
         Me.Button_SelectAll.Size = New System.Drawing.Size(73, 23)
         Me.Button_SelectAll.TabIndex = 4
@@ -137,10 +139,10 @@ Partial Class SelectSeriesDialog
         '
         Me.Button_OK.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Button_OK.DialogResult = System.Windows.Forms.DialogResult.OK
-        Me.Button_OK.Location = New System.Drawing.Point(75, 388)
+        Me.Button_OK.Location = New System.Drawing.Point(75, 385)
         Me.Button_OK.Name = "Button_OK"
         Me.Button_OK.Size = New System.Drawing.Size(75, 23)
-        Me.Button_OK.TabIndex = 5
+        Me.Button_OK.TabIndex = 8
         Me.Button_OK.Text = "OK"
         Me.Button_OK.UseVisualStyleBackColor = True
         '
@@ -148,10 +150,10 @@ Partial Class SelectSeriesDialog
         '
         Me.Button_Cancel.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Button_Cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel
-        Me.Button_Cancel.Location = New System.Drawing.Point(156, 388)
+        Me.Button_Cancel.Location = New System.Drawing.Point(156, 385)
         Me.Button_Cancel.Name = "Button_Cancel"
         Me.Button_Cancel.Size = New System.Drawing.Size(75, 23)
-        Me.Button_Cancel.TabIndex = 6
+        Me.Button_Cancel.TabIndex = 0
         Me.Button_Cancel.Text = "Cancel"
         Me.Button_Cancel.UseVisualStyleBackColor = True
         '
@@ -191,13 +193,34 @@ Partial Class SelectSeriesDialog
         Me.Label_FileType.TabIndex = 3
         Me.Label_FileType.Text = "File type"
         '
+        'TextBox_TitleSuffix
+        '
+        Me.TextBox_TitleSuffix.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.TextBox_TitleSuffix.Location = New System.Drawing.Point(75, 356)
+        Me.TextBox_TitleSuffix.Name = "TextBox_TitleSuffix"
+        Me.TextBox_TitleSuffix.Size = New System.Drawing.Size(156, 20)
+        Me.TextBox_TitleSuffix.TabIndex = 7
+        '
+        'Label_TitleSuffix
+        '
+        Me.Label_TitleSuffix.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.Label_TitleSuffix.AutoSize = True
+        Me.Label_TitleSuffix.Location = New System.Drawing.Point(12, 359)
+        Me.Label_TitleSuffix.Name = "Label_TitleSuffix"
+        Me.Label_TitleSuffix.Size = New System.Drawing.Size(57, 13)
+        Me.Label_TitleSuffix.TabIndex = 6
+        Me.Label_TitleSuffix.Text = "Title suffix:"
+        '
         'SelectSeriesDialog
         '
         Me.AcceptButton = Me.Button_OK
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.CancelButton = Me.Button_Cancel
-        Me.ClientSize = New System.Drawing.Size(239, 423)
+        Me.ClientSize = New System.Drawing.Size(239, 420)
+        Me.Controls.Add(Me.Label_TitleSuffix)
+        Me.Controls.Add(Me.TextBox_TitleSuffix)
         Me.Controls.Add(Me.Label_FileType)
         Me.Controls.Add(Me.Label_FileName)
         Me.Controls.Add(Me.Label2)
@@ -236,4 +259,6 @@ Partial Class SelectSeriesDialog
     Friend WithEvents Label_FileType As Label
     Friend WithEvents PictureBox_SearchHelp As PictureBox
     Friend WithEvents ToolTip1 As ToolTip
+    Friend WithEvents TextBox_TitleSuffix As TextBox
+    Friend WithEvents Label_TitleSuffix As Label
 End Class

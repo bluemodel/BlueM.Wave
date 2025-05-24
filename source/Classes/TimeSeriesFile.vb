@@ -130,6 +130,7 @@ Public MustInherit Class TimeSeriesFile
     Private _selectedSeries As List(Of TimeSeriesInfo)
     Private _metadata As Metadata
     Private _encoding As Text.Encoding
+    Private _titleSuffix As String = ""
 
     ''' <summary>
     ''' Encoding to use for reading the file
@@ -344,6 +345,23 @@ Public MustInherit Class TimeSeriesFile
         Get
             Return _selectedSeries
         End Get
+    End Property
+
+    ''' <summary>
+    ''' Suffix to be added to the timeseries titles when imported from this file
+    ''' </summary>
+    ''' <remarks>
+    ''' This is useful for distinguishing between series with the same titles in different files.
+    ''' For example, if you import two files with the same series names, you can set a suffix
+    ''' for each file to differentiate them in the resulting timeseries.
+    ''' </remarks>
+    Public Property TitleSuffix As String
+        Get
+            Return _titleSuffix
+        End Get
+        Set(value As String)
+            _titleSuffix = value
+        End Set
     End Property
 
     ''' <summary>

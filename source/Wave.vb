@@ -159,6 +159,11 @@ Public Class Wave
 
                         'Import all time series into the chart
                         For Each ts As TimeSeries In fileInstance.TimeSeries.Values
+                            If fileInstance.TitleSuffix.Length > 0 Then
+                                'append title suffix if set
+                                ts.Title &= fileInstance.TitleSuffix
+                            End If
+                            'Import the series
                             Call Me.Import_Series(ts)
                         Next
 

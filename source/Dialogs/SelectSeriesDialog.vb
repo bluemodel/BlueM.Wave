@@ -73,6 +73,8 @@ Friend Class SelectSeriesDialog
             Next
         End If
 
+        Me.tsFile.TitleSuffix = Me.TextBox_TitleSuffix.Text.TrimEnd()
+
     End Sub
 
     Private Sub RefreshDisplay()
