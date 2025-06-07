@@ -4,9 +4,6 @@ Public Class SettingsDialog
 
     Private Sub SettingsDialog_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
-        'load the settings
-        My.Settings.Reload()
-
         'set values in the form
         Me.NumericUpDown_DefaultLineWidth.Value = My.Settings.defaultLineWidth
 
