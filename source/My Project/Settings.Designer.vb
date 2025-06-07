@@ -74,6 +74,18 @@ Namespace My
                 Me("defaultLineWidth") = value
             End Set
         End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("True")>  _
+        Public Property isNewVersion() As Boolean
+            Get
+                Return CType(Me("isNewVersion"),Boolean)
+            End Get
+            Set
+                Me("isNewVersion") = value
+            End Set
+        End Property
     End Class
 End Namespace
 
