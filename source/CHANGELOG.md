@@ -5,6 +5,11 @@ Version 2.8.4
 -------------
 NEW:
 * Added support for an optional series title suffix when importing series from a file #191
+* Added a user settings dialog
+* Added a user setting for the default series line width #192
+
+CHANGED:
+* Changed the loggingLevel application setting to a user setting
 
 Version 2.8.3
 -------------
