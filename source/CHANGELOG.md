@@ -1,7 +1,7 @@
 BlueM.Wave Release Notes
 ========================
 
-Version 2.8.4
+Version 2.9.0
 -------------
 NEW:
 * Added user settings and a dialog for changing them
