@@ -38,18 +38,11 @@ To add new tests, follow the pattern of the existing ones and/or refer to the [M
 All tests defined in `Wave.Tests` are automatically run in a GitHub action whenever a push to the master branch or to a pull request occurs (see [workflow file](https://github.com/bluemodel/BlueM.Wave/blob/master/.github/workflows/run-tests.yml)).
 
 ## Debug log messages
-Debug log messages can be created with `Log.AddLogEntry(levels.debug, "message")` and are only visible in the log if the application setting `loggingLevel` is set to `debug`.
-
-To set the `loggingLevel` to `debug`, edit the section `applicationSettings` in the file `Wave.exe.config` after building to be as follows:
-```xml
-    <applicationSettings>
-        <BlueM.Wave.My.MySettings>
-            <setting name="loggingLevel" serializeAs="String">
-                <value>debug</value>
-            </setting>
-        </BlueM.Wave.My.MySettings>
-    </applicationSettings>
+Debug log messages can be created by calling 
+```vbnet
+Log.AddLogEntry(levels.debug, "message")
 ```
+and are only visible in the log if the user setting `loggingLevel` is set to `debug`.
 
 ## API
 The BlueM.Wave API provides methods for reading time series from files, manipulating and displaying them.

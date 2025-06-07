@@ -98,6 +98,7 @@ Friend Class WaveController
 
         'toolbar buttons
         AddHandler Me.View.ToolStripButton_New.Click, AddressOf New_Click
+        AddHandler Me.View.ToolStripButton_Settings.Click, AddressOf Settings_Click
         AddHandler Me.View.ToolStripButton_Copy.Click, AddressOf Copy_Click
         AddHandler Me.View.ToolStripButton_Print.Click, AddressOf Print_Click
         AddHandler Me.View.ToolStripMenuItem_ImportSeries.Click, AddressOf ImportSeries_Click
@@ -223,6 +224,7 @@ Friend Class WaveController
     ''' <summary>
     ''' View is loading
     ''' Checks for update and displays a notification
+    ''' Populates Recently used files menu with MRU files from user settings
     ''' </summary>
     Private Async Sub View_Load(sender As System.Object, e As System.EventArgs)
         'Check for update
@@ -235,6 +237,11 @@ Friend Class WaveController
         Catch ex As Exception
             'do nothing if check for update fails at startup
         End Try
+
+        'populate Recently used files menu with MRU files from user setting
+        For Each mrufile As String In My.Settings.MRUFiles
+            View.ToolStripMenuItem_RecentlyUsedFiles.DropDownItems.Add(mrufile)
+        Next
     End Sub
 
     ''' <summary>
@@ -463,6 +470,11 @@ Friend Class WaveController
         If (SeriesEditor.ShowDialog() = Windows.Forms.DialogResult.OK) Then
             Call _model.Import_Series(SeriesEditor.Zeitreihe)
         End If
+    End Sub
+
+    Private Sub Settings_Click(sender As System.Object, e As System.EventArgs)
+        Dim SettingsDlg As New SettingsDialog()
+        SettingsDlg.ShowDialog()
     End Sub
 
     'Zeitreihe zuschneiden
@@ -2170,7 +2182,6 @@ Friend Class WaveController
     ''' <summary>
     ''' Handles a new series being added to the model
     ''' Adds the series to the charts
-    ''' Also adds the datasource to the MRU file list if the time series has a file datasource
     ''' </summary>
     ''' <param name="ts">time series to display</param>
     Private Sub SeriesAdded(ts As TimeSeries)
@@ -2330,22 +2341,31 @@ Friend Class WaveController
 
     ''' <summary>
     ''' Handles file imported in the model event
+    ''' Adds the datasource to the MRU file list
     ''' </summary>
     ''' <param name="file"></param>
     Private Sub FileImported(file As String)
-        'add filename to Recently Used Files menu
-        'remove if already present
-        Dim i As Integer = 0
-        For Each _item As ToolStripItem In View.ToolStripMenuItem_RecentlyUsedFiles.DropDownItems
-            If _item.Text = file Then
-                View.ToolStripMenuItem_RecentlyUsedFiles.DropDownItems.RemoveAt(i)
-                Exit For
-            End If
-            i += 1
-        Next
+
+        'add file to MRU files user setting
+        If My.Settings.MRUFiles.Contains(file) Then
+            'remove file if already present
+            My.Settings.MRUFiles.Remove(file)
+        End If
         'add to top of list
-        Dim item As New ToolStripMenuItem(file)
-        View.ToolStripMenuItem_RecentlyUsedFiles.DropDownItems.Insert(0, item)
+        My.Settings.MRUFiles.Insert(0, file)
+
+        'limit MRU list to 10 entries
+        If My.Settings.MRUFiles.Count > 10 Then
+            My.Settings.MRUFiles.RemoveAt(10)
+        End If
+        'save settings
+        My.Settings.Save()
+
+        'update Recently used files menu
+        View.ToolStripMenuItem_RecentlyUsedFiles.DropDownItems.Clear()
+        For Each mrufile As String In My.Settings.MRUFiles
+            View.ToolStripMenuItem_RecentlyUsedFiles.DropDownItems.Add(mrufile)
+        Next
 
         'add filename to window title
         View.Text = $"BlueM.Wave - {file}"

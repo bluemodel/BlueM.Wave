@@ -24,6 +24,19 @@ Friend Module Main
         Application.EnableVisualStyles()
         Application.SetCompatibleTextRenderingDefault(False)
 
+        'load user settings
+        My.Settings.Reload()
+        If My.Settings.isNewVersion Then
+            'upgrade settings from previous version
+            Try
+                My.Settings.Upgrade()
+                My.Settings.isNewVersion = False
+                Log.AddLogEntry(Log.levels.debug, "User settings upgraded from previous version.")
+            Catch ex As System.Configuration.ConfigurationErrorsException
+                Log.AddLogEntry(Log.levels.error, "Error upgrading user settings: " & ex.Message)
+            End Try
+        End If
+
         Dim wave As New Wave()
         Dim args As List(Of String) = Environment.GetCommandLineArgs().Skip(1).ToList()
         Dim files As New List(Of String)
