@@ -138,12 +138,6 @@
   <metadata name="ToolStrip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>120, 3</value>
   </metadata>
-  <metadata name="ToolStripSeparator4.GenerateMember" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>False</value>
-  </metadata>
-  <metadata name="ToolStripSeparator3.GenerateMember" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>False</value>
-  </metadata>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="ToolStripButton_New.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -178,12 +172,6 @@
         g6eHO+A/lyD8ARfG3mk9fv1YAAAAAElFTkSuQmCC
 </value>
   </data>
-  <metadata name="ToolStripSeparator6.GenerateMember" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>False</value>
-  </metadata>
-  <metadata name="ToolStripSeparator5.GenerateMember" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>False</value>
-  </metadata>
   <data name="ToolStripDropDownButton_Save.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
@@ -253,19 +241,19 @@
   <data name="ToolStripButton_ZoomNext.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
-        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAK8SURBVDhPjZFfTFJRHMfZerHWQ2v9e6jlfLrWQ5nN25xG
-        rUJk6S2DFBWUGVKYc05zuTBJgRpO0TIR3bokXhRpMnM2MpREkQq5uFq5tRZCW9RYq8CXHtivi1zHmq76
-        bOflnN/n9z3ndxhruI2lqGdIaCGHykL24dyo3ZgTdeKCkKuv0OLqvoDSZRvjNQrE3kFR0GMQkm59sWwB
-        5yNOXQHi6uPKXDoeOactDDo058R0+Z/EkuNyicrjC6eSy2Eu6Y/UeAORq4v+n3mv/T9SHJ2YalaDBafb
-        OOtv4jEKLbHkBV8YIf3hK9Rq9AbCDWRgpd7rj9RSjUq8vu/JMx0YOXWbY6G1BKSxLOTWF8kWP4ULKPl6
-        XI7UxWTWNROkSXCgbnR6SsmRWZV5IVpLYB/KiS7o+AiVVLWWuvaEk9UEFLeMA8LvBWszC5lWM6O0lsBO
-        sKKxgXn9YUl2LQGZtYOQUTUAR8QPgHfTAl1mN2ANZtjD1sCUaoMGTrwk5OrhyjyBFTZabYCeMRK6Rz2r
-        YqfJDfVdNlAPuIAlJSAJVQKtJZjXci3z3TwyNqg0Mb4q12gmoUpthUrVExDdGgdJ6wS06hyQJdQDY6f0
-        F63GcWjy0bn7WPB5B6ZKFfRD58graDe+oFLn4Q7uBCnVpKXXAezLBOw7VAejNVl8Wk1gV+eLHdQ/p3C1
-        sPfsXdjF0sC2422QWY6DXDsDrEsGQJgt8HGuHWytGIxVoLtpNcG0ioNOKjgWq5IVig3LpmBGNx+VwynR
-        Qzh4ogm+vDXA1yUC3j+Tgzk3O2rcqMk69jeGNiXfgJmOIvA5NRB8o4dl1z142S8C1Rnkw+PK9C105d95
-        JM0S2BTnYWmiCd5NNMNs10UwS9K+jfAObKVL/o1JnCEgStPhqZwNw+XoZ4KfvoM++n9MFce29xUdVuBl
-        zKT4DoPxGz/xlyzmeBdoAAAAAElFTkSuQmCC
+        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAK7SURBVDhPjZFfTFJRHMfZerHWQ2v9e6jlfLrWQ5nN25xG
+        rbxjLKUMUlRQZkhhzjnN5cIkBWo0vVomoluXxIsiTWbORoaSKFIhF1crt9ZCaIsaaxX40gP7dZHrWNNV
+        n+28nPP7/L7n/A5rDY+pDPUOia3UUHnYMcyJOUxYzEWIwu6+Iqu7+zzKlG2MzySS+gYlIa9RTHkMJYoF
+        Qoi49IWIu4+vcOsF1JyuKOTEz0qZ8j+JJyfkUo3XH0mnliN8KhCt9QWjVxYDP/NfB36kOTt5mlmcF5q+
+        w11/E69JbI0nL/gjCBWIXKZXky8YaaSCKw2+QLSOblTq839PnengUVO3uFZGS0KZysMeQ7Fi8VOkkJav
+        JeRofVzGrpohQ0YAfaPTU2quwqbODzNaEscQFlvQCxE6qXotde0JJ2tIKGkdB0TYC7YWDJnWsmOMlsRB
+        5sXiA/MFIrLcOhKy6wYhq3oAjkgfgOCGFbosHuA1WmAPB4cpzQYNXERp2N3DV3iDKxy0xgg9YxR0j3pX
+        xU6zBxq67KAdcAMmJyEFVQOjJZnX8a3z3QIqPqgMKbEq1+KTUK21QZXmCUhujoOsbQLa9E7IERuAtVP+
+        i1ETOPECdO4+L/S8g6dJF/VD58graDe9oFPn4TbhAjndpLXXCZxLJOw7VA+jtTlCRk3i0BZInfQ/p/F1
+        sPfMXdiF4bDt+B3IriBAqZsB7KIREHYrfJxrB3sbD8Yq0d2MmmRaw0UnVVyrTY2F48Oyq9ixzUeVcEry
+        EA6eaIYvb43wdYmE98+UYOHkxkwbNVnH/qbwptTrMNNRDH4XDqE3Blh234OX/RLQ5CEfHldlbmEq/84j
+        eY7IrjoHSxPN8G6iBWa7LoBFlvFtRHBgK1Pyb8zSLBFZlglPlRwYrkA/k8LMHczR/2OuPLa9r/iwiihn
+        pyR2WKzfMaWXJxOd0nMAAAAASUVORK5CYII=
 </value>
   </data>
   <data name="ToolStripButton_ZoomAll.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
@@ -310,9 +298,6 @@
         1GNPK3gAAAAASUVORK5CYII=
 </value>
   </data>
-  <metadata name="ToolTip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>458, 4</value>
-  </metadata>
   <data name="Button_NavBack.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAAK/INwWK6QAAAAlwSFlzAAAO

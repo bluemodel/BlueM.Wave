@@ -33,8 +33,8 @@ Partial Class MainWindow
         Dim ToolStripSeparator5 As System.Windows.Forms.ToolStripSeparator
         Dim ToolStripSeparator4 As System.Windows.Forms.ToolStripSeparator
         Dim ToolStripSeparator3 As System.Windows.Forms.ToolStripSeparator
+        Dim Margins1 As Steema.TeeChart.Margins = New Steema.TeeChart.Margins()
         Dim Margins2 As Steema.TeeChart.Margins = New Steema.TeeChart.Margins()
-        Dim Margins3 As Steema.TeeChart.Margins = New Steema.TeeChart.Margins()
         Me.ToolStripStatusLabel_Errors = New System.Windows.Forms.ToolStripStatusLabel()
         Me.ToolStripStatusLabel_Warnings = New System.Windows.Forms.ToolStripStatusLabel()
         Me.ToolStripStatusLabel_Log = New System.Windows.Forms.ToolStripStatusLabel()
@@ -112,6 +112,8 @@ Partial Class MainWindow
         Me.SaveFileDialog1 = New System.Windows.Forms.SaveFileDialog()
         Me.ProgressBar1 = New System.Windows.Forms.ProgressBar()
         Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
+        Me.ToolStripButton_Settings = New System.Windows.Forms.ToolStripButton()
+        Me.ToolStripSeparator12 = New System.Windows.Forms.ToolStripSeparator()
         ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
         toolStripSeparator = New System.Windows.Forms.ToolStripSeparator()
         ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
@@ -199,7 +201,7 @@ Partial Class MainWindow
         '
         ToolStrip1.AutoSize = False
         ToolStrip1.BackColor = System.Drawing.SystemColors.Control
-        ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButton_New, Me.ToolStripDropDownButton_Open, Me.ToolStripDropDownButton_Save, ToolStripSeparator4, Me.ToolStripButton_Copy, Me.ToolStripButton_Print, ToolStripSeparator2, Me.ToolStripButton_Cut, Me.ToolStripButton_Merge, Me.ToolStripSeparator8, Me.ToolStripButton_ShowNaNValues, Me.ToolStripButton_ConvertErrorValues, Me.ToolStripButton_RemoveNaNValues, Me.ToolStripSeparator7, Me.ToolStripButton_Analysis, ToolStripSeparator1, Me.ToolStripButton_EditChart, Me.ToolStripDropDownButton_ColorPalette, Me.ToolStripSeparator9, Me.ToolStripButton_Properties, Me.ToolStripButton_TimeseriesValues, Me.ToolStripSeparator10, Me.ToolStripButton_AxisDialog, Me.ToolStripButton_AutoAdjustYAxes, ToolStripSeparator3, Me.ToolStripButton_ToggleOverview, Me.ToolStripButton_ToggleNavigation, toolStripSeparator, Me.ToolStripButton_ZoomIn, Me.ToolStripButton_ZoomOut, Me.ToolStripButton_ZoomPrevious, Me.ToolStripDropDownButton_Help, Me.ToolStripButton_ZoomNext, Me.ToolStripDropDownButton_ZoomToSeries, Me.ToolStripButton_ZoomAll, Me.ToolStripButton_UpdateNotification, Me.ToolStripSeparator11, Me.ToolStripDropDownButton_ActivateAllSeries})
+        ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButton_New, Me.ToolStripDropDownButton_Open, Me.ToolStripDropDownButton_Save, ToolStripSeparator4, Me.ToolStripButton_Settings, Me.ToolStripSeparator12, Me.ToolStripButton_Copy, Me.ToolStripButton_Print, ToolStripSeparator2, Me.ToolStripButton_Cut, Me.ToolStripButton_Merge, Me.ToolStripSeparator8, Me.ToolStripButton_ShowNaNValues, Me.ToolStripButton_ConvertErrorValues, Me.ToolStripButton_RemoveNaNValues, Me.ToolStripSeparator7, Me.ToolStripButton_Analysis, ToolStripSeparator1, Me.ToolStripButton_EditChart, Me.ToolStripDropDownButton_ColorPalette, Me.ToolStripSeparator9, Me.ToolStripButton_Properties, Me.ToolStripButton_TimeseriesValues, Me.ToolStripSeparator10, Me.ToolStripButton_AxisDialog, Me.ToolStripButton_AutoAdjustYAxes, ToolStripSeparator3, Me.ToolStripButton_ToggleOverview, Me.ToolStripButton_ToggleNavigation, toolStripSeparator, Me.ToolStripButton_ZoomIn, Me.ToolStripButton_ZoomOut, Me.ToolStripButton_ZoomPrevious, Me.ToolStripDropDownButton_Help, Me.ToolStripButton_ZoomNext, Me.ToolStripDropDownButton_ZoomToSeries, Me.ToolStripButton_ZoomAll, Me.ToolStripButton_UpdateNotification, Me.ToolStripSeparator11, Me.ToolStripDropDownButton_ActivateAllSeries})
         ToolStrip1.Location = New System.Drawing.Point(0, 0)
         ToolStrip1.Name = "ToolStrip1"
         ToolStrip1.Size = New System.Drawing.Size(944, 34)
@@ -795,7 +797,6 @@ Partial Class MainWindow
         Me.TChart2.Axes.Bottom.Title.Shadow.Brush.Color = System.Drawing.Color.DarkGray
         Me.TChart2.Axes.Bottom.Title.Shadow.Brush.Solid = True
         Me.TChart2.Axes.Bottom.Title.Shadow.Brush.Visible = True
-        Me.TChart2.Axes.Bottom.UseMaxPixelPos = True
         '
         '
         '
@@ -908,7 +909,6 @@ Partial Class MainWindow
         Me.TChart2.Axes.Depth.Title.Shadow.Brush.Color = System.Drawing.Color.DarkGray
         Me.TChart2.Axes.Depth.Title.Shadow.Brush.Solid = True
         Me.TChart2.Axes.Depth.Title.Shadow.Brush.Visible = True
-        Me.TChart2.Axes.Depth.UseMaxPixelPos = True
         '
         '
         '
@@ -1021,7 +1021,6 @@ Partial Class MainWindow
         Me.TChart2.Axes.DepthTop.Title.Shadow.Brush.Color = System.Drawing.Color.DarkGray
         Me.TChart2.Axes.DepthTop.Title.Shadow.Brush.Solid = True
         Me.TChart2.Axes.DepthTop.Title.Shadow.Brush.Visible = True
-        Me.TChart2.Axes.DepthTop.UseMaxPixelPos = True
         '
         '
         '
@@ -1134,7 +1133,6 @@ Partial Class MainWindow
         Me.TChart2.Axes.Left.Title.Shadow.Brush.Color = System.Drawing.Color.DarkGray
         Me.TChart2.Axes.Left.Title.Shadow.Brush.Solid = True
         Me.TChart2.Axes.Left.Title.Shadow.Brush.Visible = True
-        Me.TChart2.Axes.Left.UseMaxPixelPos = True
         '
         '
         '
@@ -1247,7 +1245,6 @@ Partial Class MainWindow
         Me.TChart2.Axes.Right.Title.Shadow.Brush.Color = System.Drawing.Color.DarkGray
         Me.TChart2.Axes.Right.Title.Shadow.Brush.Solid = True
         Me.TChart2.Axes.Right.Title.Shadow.Brush.Visible = True
-        Me.TChart2.Axes.Right.UseMaxPixelPos = True
         '
         '
         '
@@ -1360,7 +1357,6 @@ Partial Class MainWindow
         Me.TChart2.Axes.Top.Title.Shadow.Brush.Color = System.Drawing.Color.DarkGray
         Me.TChart2.Axes.Top.Title.Shadow.Brush.Solid = True
         Me.TChart2.Axes.Top.Title.Shadow.Brush.Visible = True
-        Me.TChart2.Axes.Top.UseMaxPixelPos = True
         Me.TChart2.Cursor = System.Windows.Forms.Cursors.Default
         Me.TChart2.Dock = System.Windows.Forms.DockStyle.Fill
         '
@@ -1630,11 +1626,11 @@ Partial Class MainWindow
         '
         '
         Me.TChart2.Printer.Landscape = True
-        Margins2.Bottom = 10
-        Margins2.Left = 10
-        Margins2.Right = 10
-        Margins2.Top = 10
-        Me.TChart2.Printer.Margins = Margins2
+        Margins1.Bottom = 10
+        Margins1.Left = 10
+        Margins1.Right = 10
+        Margins1.Top = 10
+        Me.TChart2.Printer.Margins = Margins1
         Me.TChart2.Size = New System.Drawing.Size(940, 136)
         '
         '
@@ -2115,7 +2111,6 @@ Partial Class MainWindow
         Me.TChart1.Axes.Bottom.Title.Shadow.Brush.Color = System.Drawing.Color.DarkGray
         Me.TChart1.Axes.Bottom.Title.Shadow.Brush.Solid = True
         Me.TChart1.Axes.Bottom.Title.Shadow.Brush.Visible = True
-        Me.TChart1.Axes.Bottom.UseMaxPixelPos = True
         '
         '
         '
@@ -2228,7 +2223,6 @@ Partial Class MainWindow
         Me.TChart1.Axes.Depth.Title.Shadow.Brush.Color = System.Drawing.Color.DarkGray
         Me.TChart1.Axes.Depth.Title.Shadow.Brush.Solid = True
         Me.TChart1.Axes.Depth.Title.Shadow.Brush.Visible = True
-        Me.TChart1.Axes.Depth.UseMaxPixelPos = True
         '
         '
         '
@@ -2341,7 +2335,6 @@ Partial Class MainWindow
         Me.TChart1.Axes.DepthTop.Title.Shadow.Brush.Color = System.Drawing.Color.DarkGray
         Me.TChart1.Axes.DepthTop.Title.Shadow.Brush.Solid = True
         Me.TChart1.Axes.DepthTop.Title.Shadow.Brush.Visible = True
-        Me.TChart1.Axes.DepthTop.UseMaxPixelPos = True
         '
         '
         '
@@ -2454,7 +2447,6 @@ Partial Class MainWindow
         Me.TChart1.Axes.Left.Title.Shadow.Brush.Color = System.Drawing.Color.DarkGray
         Me.TChart1.Axes.Left.Title.Shadow.Brush.Solid = True
         Me.TChart1.Axes.Left.Title.Shadow.Brush.Visible = True
-        Me.TChart1.Axes.Left.UseMaxPixelPos = True
         '
         '
         '
@@ -2567,7 +2559,6 @@ Partial Class MainWindow
         Me.TChart1.Axes.Right.Title.Shadow.Brush.Color = System.Drawing.Color.DarkGray
         Me.TChart1.Axes.Right.Title.Shadow.Brush.Solid = True
         Me.TChart1.Axes.Right.Title.Shadow.Brush.Visible = True
-        Me.TChart1.Axes.Right.UseMaxPixelPos = True
         '
         '
         '
@@ -2680,7 +2671,6 @@ Partial Class MainWindow
         Me.TChart1.Axes.Top.Title.Shadow.Brush.Color = System.Drawing.Color.DarkGray
         Me.TChart1.Axes.Top.Title.Shadow.Brush.Solid = True
         Me.TChart1.Axes.Top.Title.Shadow.Brush.Visible = True
-        Me.TChart1.Axes.Top.UseMaxPixelPos = True
         Me.TChart1.Dock = System.Windows.Forms.DockStyle.Fill
         '
         '
@@ -2950,11 +2940,11 @@ Partial Class MainWindow
         '
         '
         Me.TChart1.Printer.Landscape = True
-        Margins3.Bottom = 10
-        Margins3.Left = 10
-        Margins3.Right = 10
-        Margins3.Top = 10
-        Me.TChart1.Printer.Margins = Margins3
+        Margins2.Bottom = 10
+        Margins2.Left = 10
+        Margins2.Right = 10
+        Margins2.Top = 10
+        Me.TChart1.Printer.Margins = Margins2
         Me.TChart1.Size = New System.Drawing.Size(938, 380)
         '
         '
@@ -3284,6 +3274,20 @@ Partial Class MainWindow
         Me.ProgressBar1.Step = 1
         Me.ProgressBar1.TabIndex = 2
         '
+        'ToolStripButton_Settings
+        '
+        Me.ToolStripButton_Settings.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.ToolStripButton_Settings.Image = Global.BlueM.Wave.My.Resources.Resources.cog
+        Me.ToolStripButton_Settings.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ToolStripButton_Settings.Name = "ToolStripButton_Settings"
+        Me.ToolStripButton_Settings.Size = New System.Drawing.Size(23, 31)
+        Me.ToolStripButton_Settings.Text = "Settings"
+        '
+        'ToolStripSeparator12
+        '
+        Me.ToolStripSeparator12.Name = "ToolStripSeparator12"
+        Me.ToolStripSeparator12.Size = New System.Drawing.Size(6, 34)
+        '
         'MainWindow
         '
         Me.AllowDrop = True
@@ -3401,4 +3405,6 @@ Partial Class MainWindow
     Friend WithEvents Button_NavStart As Button
     Friend WithEvents Button_NavEnd As Button
     Friend WithEvents ToolTip1 As ToolTip
+    Friend WithEvents ToolStripButton_Settings As ToolStripButton
+    Friend WithEvents ToolStripSeparator12 As ToolStripSeparator
 End Class
