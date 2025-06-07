@@ -28,6 +28,8 @@ Partial Class SettingsDialog
         Me.Cancel_Button = New System.Windows.Forms.Button()
         Me.NumericUpDown_DefaultLineWidth = New System.Windows.Forms.NumericUpDown()
         Me.Label1 = New System.Windows.Forms.Label()
+        Me.Label_loggingLevel = New System.Windows.Forms.Label()
+        Me.ComboBox_loggingLevel = New System.Windows.Forms.ComboBox()
         Me.TableLayoutPanel1.SuspendLayout()
         CType(Me.NumericUpDown_DefaultLineWidth, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
@@ -40,7 +42,7 @@ Partial Class SettingsDialog
         Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
         Me.TableLayoutPanel1.Controls.Add(Me.OK_Button, 0, 0)
         Me.TableLayoutPanel1.Controls.Add(Me.Cancel_Button, 1, 0)
-        Me.TableLayoutPanel1.Location = New System.Drawing.Point(46, 270)
+        Me.TableLayoutPanel1.Location = New System.Drawing.Point(85, 270)
         Me.TableLayoutPanel1.MinimumSize = New System.Drawing.Size(150, 30)
         Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
         Me.TableLayoutPanel1.RowCount = 1
@@ -75,7 +77,7 @@ Partial Class SettingsDialog
         Me.NumericUpDown_DefaultLineWidth.Maximum = New Decimal(New Integer() {10, 0, 0, 0})
         Me.NumericUpDown_DefaultLineWidth.Minimum = New Decimal(New Integer() {1, 0, 0, 0})
         Me.NumericUpDown_DefaultLineWidth.Name = "NumericUpDown_DefaultLineWidth"
-        Me.NumericUpDown_DefaultLineWidth.Size = New System.Drawing.Size(43, 20)
+        Me.NumericUpDown_DefaultLineWidth.Size = New System.Drawing.Size(82, 20)
         Me.NumericUpDown_DefaultLineWidth.TabIndex = 1
         Me.NumericUpDown_DefaultLineWidth.Value = New Decimal(New Integer() {1, 0, 0, 0})
         '
@@ -88,13 +90,35 @@ Partial Class SettingsDialog
         Me.Label1.TabIndex = 2
         Me.Label1.Text = "Default Series Line Width:"
         '
+        'Label_loggingLevel
+        '
+        Me.Label_loggingLevel.AutoSize = True
+        Me.Label_loggingLevel.Location = New System.Drawing.Point(12, 42)
+        Me.Label_loggingLevel.Name = "Label_loggingLevel"
+        Me.Label_loggingLevel.Size = New System.Drawing.Size(73, 13)
+        Me.Label_loggingLevel.TabIndex = 3
+        Me.Label_loggingLevel.Text = "Logging level:"
+        '
+        'ComboBox_loggingLevel
+        '
+        Me.ComboBox_loggingLevel.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.ComboBox_loggingLevel.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.ComboBox_loggingLevel.FormattingEnabled = True
+        Me.ComboBox_loggingLevel.Location = New System.Drawing.Point(149, 39)
+        Me.ComboBox_loggingLevel.Name = "ComboBox_loggingLevel"
+        Me.ComboBox_loggingLevel.Size = New System.Drawing.Size(82, 21)
+        Me.ComboBox_loggingLevel.TabIndex = 4
+        '
         'SettingsDialog
         '
         Me.AcceptButton = Me.OK_Button
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.CancelButton = Me.Cancel_Button
-        Me.ClientSize = New System.Drawing.Size(204, 311)
+        Me.ClientSize = New System.Drawing.Size(243, 311)
+        Me.Controls.Add(Me.ComboBox_loggingLevel)
+        Me.Controls.Add(Me.Label_loggingLevel)
         Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.NumericUpDown_DefaultLineWidth)
         Me.Controls.Add(Me.TableLayoutPanel1)
@@ -118,4 +142,6 @@ Partial Class SettingsDialog
     Friend WithEvents Cancel_Button As System.Windows.Forms.Button
     Friend WithEvents NumericUpDown_DefaultLineWidth As NumericUpDown
     Friend WithEvents Label1 As Label
+    Friend WithEvents Label_loggingLevel As Label
+    Friend WithEvents ComboBox_loggingLevel As ComboBox
 End Class

@@ -54,13 +54,16 @@ Namespace My
             End Get
         End Property
         
-        <Global.System.Configuration.ApplicationScopedSettingAttribute(),  _
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.Configuration.DefaultSettingValueAttribute("info")>  _
-        Public ReadOnly Property loggingLevel() As String
+        Public Property loggingLevel() As String
             Get
                 Return CType(Me("loggingLevel"),String)
             End Get
+            Set
+                Me("loggingLevel") = value
+            End Set
         End Property
         
         <Global.System.Configuration.UserScopedSettingAttribute(),  _
