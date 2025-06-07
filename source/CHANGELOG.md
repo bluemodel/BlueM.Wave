@@ -4,12 +4,13 @@ BlueM.Wave Release Notes
 Version 2.8.4
 -------------
 NEW:
-* Added support for an optional series title suffix when importing series from a file #191
 * Added a user settings dialog
 * Added a user setting for the default series line width #192
+* Added support for an optional series title suffix when importing series from a file #191
 
 CHANGED:
-* Changed the loggingLevel application setting to a user setting
+* The list of recently used files in the Open menu is now persistent across sessions
+* Changed the loggingLevel application setting to a user setting configurable in the settings dialog
 
 Version 2.8.3
 -------------

@@ -224,6 +224,7 @@ Friend Class WaveController
     ''' <summary>
     ''' View is loading
     ''' Checks for update and displays a notification
+    ''' Populates Recently used files menu with MRU files from user settings
     ''' </summary>
     Private Async Sub View_Load(sender As System.Object, e As System.EventArgs)
         'Check for update
@@ -236,6 +237,11 @@ Friend Class WaveController
         Catch ex As Exception
             'do nothing if check for update fails at startup
         End Try
+
+        'populate Recently used files menu with MRU files from user setting
+        For Each mrufile As String In My.Settings.MRUFiles
+            View.ToolStripMenuItem_RecentlyUsedFiles.DropDownItems.Add(mrufile)
+        Next
     End Sub
 
     ''' <summary>
@@ -2339,19 +2345,27 @@ Friend Class WaveController
     ''' </summary>
     ''' <param name="file"></param>
     Private Sub FileImported(file As String)
-        'add filename to Recently Used Files menu
-        'remove if already present
-        Dim i As Integer = 0
-        For Each _item As ToolStripItem In View.ToolStripMenuItem_RecentlyUsedFiles.DropDownItems
-            If _item.Text = file Then
-                View.ToolStripMenuItem_RecentlyUsedFiles.DropDownItems.RemoveAt(i)
-                Exit For
-            End If
-            i += 1
-        Next
+
+        'add file to MRU files user setting
+        If My.Settings.MRUFiles.Contains(file) Then
+            'remove file if already present
+            My.Settings.MRUFiles.Remove(file)
+        End If
         'add to top of list
-        Dim item As New ToolStripMenuItem(file)
-        View.ToolStripMenuItem_RecentlyUsedFiles.DropDownItems.Insert(0, item)
+        My.Settings.MRUFiles.Insert(0, file)
+
+        'limit MRU list to 10 entries
+        If My.Settings.MRUFiles.Count > 10 Then
+            My.Settings.MRUFiles.RemoveAt(10)
+        End If
+        'save settings
+        My.Settings.Save()
+
+        'update Recently used files menu
+        View.ToolStripMenuItem_RecentlyUsedFiles.DropDownItems.Clear()
+        For Each mrufile As String In My.Settings.MRUFiles
+            View.ToolStripMenuItem_RecentlyUsedFiles.DropDownItems.Add(mrufile)
+        Next
 
         'add filename to window title
         View.Text = $"BlueM.Wave - {file}"
