@@ -2176,7 +2176,6 @@ Friend Class WaveController
     ''' <summary>
     ''' Handles a new series being added to the model
     ''' Adds the series to the charts
-    ''' Also adds the datasource to the MRU file list if the time series has a file datasource
     ''' </summary>
     ''' <param name="ts">time series to display</param>
     Private Sub SeriesAdded(ts As TimeSeries)
@@ -2336,6 +2335,7 @@ Friend Class WaveController
 
     ''' <summary>
     ''' Handles file imported in the model event
+    ''' Adds the datasource to the MRU file list
     ''' </summary>
     ''' <param name="file"></param>
     Private Sub FileImported(file As String)
