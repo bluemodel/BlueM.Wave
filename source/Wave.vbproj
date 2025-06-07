@@ -225,6 +225,12 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Classes\TimeSeriesDisplayOptions.vb" />
+    <Compile Include="Dialogs\SettingsDialog.Designer.vb">
+      <DependentUpon>SettingsDialog.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\SettingsDialog.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="FileFormats\HYBNAT_BCS.vb" />
     <Compile Include="FileFormats\HYBNAT_WEL.vb" />
     <Compile Include="FileFormats\JAMS.vb" />
@@ -354,8 +360,8 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="My Project\Resources.Designer.vb">
-      <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="My Project\Settings.Designer.vb">
@@ -466,6 +472,9 @@
     <EmbeddedResource Include="Dialogs\SeriesEditorDialog.resx">
       <DependentUpon>SeriesEditorDialog.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Dialogs\SettingsDialog.resx">
+      <DependentUpon>SettingsDialog.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FileFormats\DFS0_ExportDialog.resx">
       <DependentUpon>DFS0_ExportDialog.vb</DependentUpon>
     </EmbeddedResource>
@@ -474,9 +483,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="My Project\Resources.resx">
       <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.vb</LastGenOutput>
       <CustomToolNamespace>My.Resources</CustomToolNamespace>
       <SubType>Designer</SubType>
+      <LastGenOutput>Resources.Designer.vb</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="My Project\TeeChart.licenses" />
     <EmbeddedResource Include="Views\MainWindow.resx">
@@ -541,6 +550,8 @@
     <Content Include="Resources\chart_line_error.png" />
     <Content Include="Resources\chart_magnify.png" />
     <Content Include="Resources\chart_pie.png" />
+    <Content Include="Resources\cog.png" />
+    <Content Include="Resources\cog.ico" />
     <Content Include="Resources\color_wheel.png" />
     <Content Include="Resources\comments.png" />
     <Content Include="Resources\controller.png" />

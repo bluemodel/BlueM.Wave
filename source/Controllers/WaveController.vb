@@ -98,6 +98,7 @@ Friend Class WaveController
 
         'toolbar buttons
         AddHandler Me.View.ToolStripButton_New.Click, AddressOf New_Click
+        AddHandler Me.View.ToolStripButton_Settings.Click, AddressOf Settings_Click
         AddHandler Me.View.ToolStripButton_Copy.Click, AddressOf Copy_Click
         AddHandler Me.View.ToolStripButton_Print.Click, AddressOf Print_Click
         AddHandler Me.View.ToolStripMenuItem_ImportSeries.Click, AddressOf ImportSeries_Click
@@ -463,6 +464,11 @@ Friend Class WaveController
         If (SeriesEditor.ShowDialog() = Windows.Forms.DialogResult.OK) Then
             Call _model.Import_Series(SeriesEditor.Zeitreihe)
         End If
+    End Sub
+
+    Private Sub Settings_Click(sender As System.Object, e As System.EventArgs)
+        Dim SettingsDlg As New SettingsDialog()
+        SettingsDlg.ShowDialog()
     End Sub
 
     'Zeitreihe zuschneiden

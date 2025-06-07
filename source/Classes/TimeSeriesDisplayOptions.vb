@@ -1,4 +1,4 @@
-﻿'BlueM.Wave
+'BlueM.Wave
 'Copyright (C) BlueM Dev Group
 '<https://www.bluemodel.org>
 '
@@ -85,7 +85,7 @@ Public Class TimeSeriesDisplayOptions
     Public Sub New()
         Me.Color = Color.Empty
         Me.LineStyle = Drawing2D.DashStyle.Solid
-        Me.LineWidth = 2
+        Me.LineWidth = My.Settings.defaultLineWidth
         Me.ShowPoints = False
     End Sub
 
