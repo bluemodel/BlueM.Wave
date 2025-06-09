@@ -4,12 +4,9 @@ Public Class SettingsDialog
 
     Private Sub SettingsDialog_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
-        'initialize form
-        Me.ComboBox_loggingLevel.Items.AddRange([Enum].GetNames(GetType(Log.levels)))
-
         'set current setting values in the form
         Me.NumericUpDown_DefaultLineWidth.Value = My.Settings.defaultLineWidth
-        Me.ComboBox_loggingLevel.SelectedItem = My.Settings.loggingLevel.ToString()
+        Me.CheckBox_logShowDebugMessages.Checked = (My.Settings.loggingLevel = Log.levels.debug.ToString())
 
     End Sub
 
@@ -17,7 +14,7 @@ Public Class SettingsDialog
 
         'store the settings
         My.Settings.defaultLineWidth = CInt(Me.NumericUpDown_DefaultLineWidth.Value)
-        My.Settings.loggingLevel = Me.ComboBox_loggingLevel.SelectedItem.ToString()
+        My.Settings.loggingLevel = IIf(Me.CheckBox_logShowDebugMessages.Checked, Log.levels.debug.ToString(), Log.levels.info.ToString())
 
         'save them
         My.Settings.Save()
