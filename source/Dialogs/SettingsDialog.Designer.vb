@@ -29,9 +29,9 @@ Partial Class SettingsDialog
         Me.NumericUpDown_DefaultLineWidth = New System.Windows.Forms.NumericUpDown()
         Me.Label_defaultLineWidth = New System.Windows.Forms.Label()
         Me.Label_loggingLevel = New System.Windows.Forms.Label()
-        Me.ComboBox_loggingLevel = New System.Windows.Forms.ComboBox()
         Me.GroupBox_Chart = New System.Windows.Forms.GroupBox()
         Me.GroupBox_Logging = New System.Windows.Forms.GroupBox()
+        Me.CheckBox_logShowDebugMessages = New System.Windows.Forms.CheckBox()
         Me.TableLayoutPanel1.SuspendLayout()
         CType(Me.NumericUpDown_DefaultLineWidth, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.GroupBox_Chart.SuspendLayout()
@@ -99,20 +99,9 @@ Partial Class SettingsDialog
         Me.Label_loggingLevel.AutoSize = True
         Me.Label_loggingLevel.Location = New System.Drawing.Point(6, 22)
         Me.Label_loggingLevel.Name = "Label_loggingLevel"
-        Me.Label_loggingLevel.Size = New System.Drawing.Size(73, 13)
+        Me.Label_loggingLevel.Size = New System.Drawing.Size(120, 13)
         Me.Label_loggingLevel.TabIndex = 3
-        Me.Label_loggingLevel.Text = "Logging level:"
-        '
-        'ComboBox_loggingLevel
-        '
-        Me.ComboBox_loggingLevel.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ComboBox_loggingLevel.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.ComboBox_loggingLevel.FormattingEnabled = True
-        Me.ComboBox_loggingLevel.Location = New System.Drawing.Point(133, 19)
-        Me.ComboBox_loggingLevel.Name = "ComboBox_loggingLevel"
-        Me.ComboBox_loggingLevel.Size = New System.Drawing.Size(71, 21)
-        Me.ComboBox_loggingLevel.TabIndex = 4
+        Me.Label_loggingLevel.Text = "Show debug messages:"
         '
         'GroupBox_Chart
         '
@@ -131,14 +120,24 @@ Partial Class SettingsDialog
         '
         Me.GroupBox_Logging.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.GroupBox_Logging.Controls.Add(Me.ComboBox_loggingLevel)
         Me.GroupBox_Logging.Controls.Add(Me.Label_loggingLevel)
+        Me.GroupBox_Logging.Controls.Add(Me.CheckBox_logShowDebugMessages)
         Me.GroupBox_Logging.Location = New System.Drawing.Point(12, 73)
         Me.GroupBox_Logging.Name = "GroupBox_Logging"
         Me.GroupBox_Logging.Size = New System.Drawing.Size(210, 52)
         Me.GroupBox_Logging.TabIndex = 6
         Me.GroupBox_Logging.TabStop = False
         Me.GroupBox_Logging.Text = "Logging"
+        '
+        'CheckBox_logShowDebugMessages
+        '
+        Me.CheckBox_logShowDebugMessages.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.CheckBox_logShowDebugMessages.AutoSize = True
+        Me.CheckBox_logShowDebugMessages.Location = New System.Drawing.Point(189, 22)
+        Me.CheckBox_logShowDebugMessages.Name = "CheckBox_logShowDebugMessages"
+        Me.CheckBox_logShowDebugMessages.Size = New System.Drawing.Size(15, 14)
+        Me.CheckBox_logShowDebugMessages.TabIndex = 7
+        Me.CheckBox_logShowDebugMessages.UseVisualStyleBackColor = True
         '
         'SettingsDialog
         '
@@ -174,7 +173,7 @@ Partial Class SettingsDialog
     Friend WithEvents NumericUpDown_DefaultLineWidth As NumericUpDown
     Friend WithEvents Label_defaultLineWidth As Label
     Friend WithEvents Label_loggingLevel As Label
-    Friend WithEvents ComboBox_loggingLevel As ComboBox
     Friend WithEvents GroupBox_Chart As GroupBox
     Friend WithEvents GroupBox_Logging As GroupBox
+    Friend WithEvents CheckBox_logShowDebugMessages As CheckBox
 End Class

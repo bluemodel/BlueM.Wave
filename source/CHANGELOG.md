@@ -10,7 +10,7 @@ NEW:
 
 CHANGED:
 * The list of recently used files in the Open menu is now persistent across sessions
-* Changed the loggingLevel application setting to a user setting
+* Changed the loggingLevel application setting to a user setting with a togglable option for showing debug messages
 
 Version 2.8.3
 -------------
