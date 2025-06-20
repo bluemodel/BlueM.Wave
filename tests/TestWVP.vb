@@ -69,12 +69,12 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
     ''' </summary>
     <TestMethod()> Public Sub TestWVP_WriteOptions()
 
-        'read time series using a WVP fileOut
+        'read time series using a WVP file
         Dim fileIn As String = IO.Path.Combine(TestData.getTestDataDir(), "WVP", "test_displayoptions.wvp")
         Dim wvp As New Fileformats.WVP(fileIn)
         Dim tsList As List(Of TimeSeries) = wvp.Process()
 
-        'write the time series to a WVP fileOut
+        'write the time series to a WVP file
         Dim fileOut As String = IO.Path.Combine(TestData.getTestDataDir(), "WVP", "test_displayoptions_export.wvp")
         Call Fileformats.WVP.Write_File(tsList, fileOut,
                                         saveRelativePaths:=True,
@@ -87,7 +87,7 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
                                         savePointsVisibility:=True
         )
 
-        'check the fileOut contents of the written WVP fileOut
+        'check the file contents of the written WVP file
         'NOTE: because the series were never loaded in the chart, colors that were not set in the input wvp
         'will have the default value of Color.Empty (0)
         Dim fileContents As String = New IO.StreamReader(fileOut, Text.Encoding.UTF8).ReadToEnd()
@@ -113,6 +113,24 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
                     Assert.AreEqual("    series=AD  _1AB: title=""AD  _1AB ,= custom title"", unit=""m³/s"", interpretation=BlockLeft, color=Red, linewidth=4, linestyle=Dash, showpoints=True", line)
             End Select
         Next
+
+    End Sub
+
+    ''' <summary>
+    ''' Tests whether the order of series in a WVP file is preserved
+    ''' </summary>
+    <TestMethod()> Public Sub TestWVP_Order()
+
+        'read time series using a WVP file
+        Dim file As String = IO.Path.Combine(TestData.getTestDataDir(), "WVP", "test_preserve_order.wvp")
+        Dim wvp As New Fileformats.WVP(file)
+        Dim tsList As List(Of TimeSeries) = wvp.Process()
+
+        'check the order of series
+        Assert.AreEqual(3, tsList.Count)
+        Assert.AreEqual("Series 1", tsList(0).Title)
+        'series 2 is unnamed in the WVP file
+        Assert.AreEqual("Series 3", tsList(2).Title)
 
     End Sub
 

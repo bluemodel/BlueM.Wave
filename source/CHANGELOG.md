@@ -1,6 +1,11 @@
 BlueM.Wave Release Notes
 ========================
 
+Version 2.9.1
+-------------
+FIXED:
+* Fixed order of series specified in a WVP file not being preserved on import #194
+
 Version 2.9.0
 -------------
 NEW:
