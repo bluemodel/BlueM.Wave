@@ -3,6 +3,8 @@ BlueM.Wave Release Notes
 
 Version 2.9.1
 -------------
+CHANGED:
+* Changing the user setting for default series line width now changes all currently loaded series #192
 FIXED:
 * Fixed order of series specified in a WVP file not being preserved on import #194
 

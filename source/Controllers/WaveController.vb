@@ -15,6 +15,7 @@
 'You should have received a copy of the GNU Lesser General Public License
 'along with this program.  If not, see <https://www.gnu.org/licenses/>.
 '
+Imports System.ComponentModel
 Imports System.Text.RegularExpressions
 
 Friend Class WaveController
@@ -200,6 +201,9 @@ Friend Class WaveController
         AddHandler _model.TENFileLoading, AddressOf Load_TEN
         AddHandler _model.IsBusyChanged, AddressOf ShowBusy
 
+        'user setting events
+        AddHandler My.Settings.PropertyChanged, AddressOf UserSettingsChanged
+
         'add any already existing time series
         For Each ts As TimeSeries In _model.TimeSeries.Values
             Call SeriesAdded(ts)
@@ -242,6 +246,23 @@ Friend Class WaveController
         For Each mrufile As String In My.Settings.MRUFiles
             View.ToolStripMenuItem_RecentlyUsedFiles.DropDownItems.Add(mrufile)
         Next
+    End Sub
+
+    ''' <summary>
+    ''' Handles user settings changes
+    ''' Updates the view accordingly, e.g. setting new series line widths
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    Private Sub UserSettingsChanged(sender As Object, e As PropertyChangedEventArgs)
+        If e.PropertyName =  "defaultLineWidth" Then
+            'update line width of all line series in the chart
+            For Each series As Steema.TeeChart.Styles.Series In View.TChart1.Series
+                If TypeOf series Is Steema.TeeChart.Styles.Line Then
+                    CType(series, Steema.TeeChart.Styles.Line).LinePen.Width = My.Settings.defaultLineWidth
+                End If
+            Next
+        End If
     End Sub
 
     ''' <summary>
