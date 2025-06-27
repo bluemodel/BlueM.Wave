@@ -255,13 +255,16 @@ Friend Class WaveController
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
     Private Sub UserSettingsChanged(sender As Object, e As PropertyChangedEventArgs)
-        If e.PropertyName =  "defaultLineWidth" Then
+        If e.PropertyName = "defaultLineWidth" Then
             'update line width of all line series in the chart
             For Each series As Steema.TeeChart.Styles.Series In View.TChart1.Series
                 If TypeOf series Is Steema.TeeChart.Styles.Line Then
                     CType(series, Steema.TeeChart.Styles.Line).LinePen.Width = My.Settings.defaultLineWidth
                 End If
             Next
+        ElseIf e.PropertyName = "defaultFontSize" Then
+            'update font size of chart
+            Helpers.ChartSetFontSize(View.TChart1.Chart, My.Settings.defaultFontSize)
         End If
     End Sub
 
@@ -2443,10 +2446,10 @@ Friend Class WaveController
                 View.TChart1.Axes.Custom.Add(axis)
                 axis.Labels.Font.Name = "GenericSansSerif"
                 axis.Labels.Font.Color = Color.Black
-                axis.Labels.Font.Size = 10
+                axis.Labels.Font.Size = My.Settings.defaultFontSize
                 axis.Title.Font.Name = "GenericSansSerif"
                 axis.Title.Font.Color = Color.Black
-                axis.Title.Font.Size = 10
+                axis.Title.Font.Size = My.Settings.defaultFontSize
                 axis.Title.Text = unit
                 axis.Title.Angle = 90
                 axis.Tag = unit

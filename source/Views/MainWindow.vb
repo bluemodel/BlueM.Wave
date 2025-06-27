@@ -96,7 +96,7 @@ Friend Class MainWindow
 
         Me.isInitializing = True
 
-        ' Dieser Aufruf ist für den Windows Form-Designer erforderlich.
+        ' Dieser Aufruf ist fÃ¼r den Windows Form-Designer erforderlich.
         InitializeComponent()
 
         'Charts einrichten
@@ -129,12 +129,12 @@ Friend Class MainWindow
     '*********************
     Friend Sub Init_Charts()
 
-        'Charts zurücksetzen
+        'Charts zurÃ¼cksetzen
         Me.TChart1.Clear()
-        Call Helpers.FormatChart(Me.TChart1.Chart)
+        Call Helpers.ChartSetDefaultFormat(Me.TChart1.Chart)
 
         Me.TChart2.Clear()
-        Call Helpers.FormatChart(Me.TChart2.Chart)
+        Call Helpers.ChartSetDefaultFormat(Me.TChart2.Chart)
         Me.TChart2.Panel.Brush.Color = Color.FromArgb(239, 239, 239)
         Me.TChart2.Walls.Back.Color = Color.FromArgb(239, 239, 239)
         Me.TChart2.Header.Visible = False

@@ -3,6 +3,8 @@ BlueM.Wave Release Notes
 
 Version 2.9.1
 -------------
+NEW:
+* Added a user setting for the default font size of the chart #195
 CHANGED:
 * Changing the user setting for default series line width now changes all currently loaded series #192
 FIXED:

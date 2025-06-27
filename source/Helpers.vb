@@ -224,10 +224,10 @@ Public Module Helpers
     End Function
 
     ''' <summary>
-    ''' Führt Standardformatierung eines TCharts aus
+    ''' Formats a chart with default settings
     ''' </summary>
     ''' <param name="chart"></param>
-    Friend Sub FormatChart(ByRef chart As Steema.TeeChart.Chart)
+    Friend Sub ChartSetDefaultFormat(ByRef chart As Steema.TeeChart.Chart)
 
         'set default color palette
         chart.ColorPalette = Helpers.getColorPalette()
@@ -243,12 +243,10 @@ Public Module Helpers
         'Header
         chart.Header.Font.Name = "GenericSansSerif"
         chart.Header.Font.Color = Color.Black
-        chart.Header.Font.Size = 12
         chart.Header.Text = ""
 
         'Legende
         chart.Legend.Font.Name = "GenericSansSerif"
-        chart.Legend.Font.Size = 10
         chart.Legend.LegendStyle = Steema.TeeChart.LegendStyles.Series
         chart.Legend.FontSeriesColor = True
         chart.Legend.CheckBoxes = True
@@ -258,11 +256,9 @@ Public Module Helpers
 
         chart.Axes.Left.Title.Font.Name = "GenericSansSerif"
         chart.Axes.Left.Title.Font.Color = Color.Black
-        chart.Axes.Left.Title.Font.Size = 10
 
         chart.Axes.Left.Labels.Font.Name = "GenericSansSerif"
         chart.Axes.Left.Labels.Font.Color = Color.Black
-        chart.Axes.Left.Labels.Font.Size = 10
 
         chart.Axes.Left.AxisPen.Visible = True
 
@@ -271,11 +267,9 @@ Public Module Helpers
 
         chart.Axes.Right.Title.Font.Name = "GenericSansSerif"
         chart.Axes.Right.Title.Font.Color = Color.Black
-        chart.Axes.Right.Title.Font.Size = 10
 
         chart.Axes.Right.Labels.Font.Name = "GenericSansSerif"
         chart.Axes.Right.Labels.Font.Color = Color.Black
-        chart.Axes.Right.Labels.Font.Size = 10
 
         chart.Axes.Right.AxisPen.Visible = True
 
@@ -284,11 +278,9 @@ Public Module Helpers
 
         chart.Axes.Bottom.Title.Font.Name = "GenericSansSerif"
         chart.Axes.Bottom.Title.Font.Color = Color.Black
-        chart.Axes.Bottom.Title.Font.Size = 10
 
         chart.Axes.Bottom.Labels.Font.Name = "GenericSansSerif"
         chart.Axes.Bottom.Labels.Font.Color = Color.Black
-        chart.Axes.Bottom.Labels.Font.Size = 10
 
         chart.Axes.Bottom.Automatic = True
 
@@ -297,6 +289,36 @@ Public Module Helpers
         chart.Axes.Bottom.Grid.Visible = True
         chart.Axes.Bottom.Grid.Style = Drawing2D.DashStyle.Dash
 
+        'set font size with user setting
+        Call ChartSetFontSize(chart, My.Settings.defaultFontSize)
+
+    End Sub
+
+    ''' <summary>
+    ''' Sets the font size of all chart elements
+    ''' </summary>
+    ''' <param name="chart"></param>
+    ''' <param name="size"></param>
+    Friend Sub ChartSetFontSize(ByRef chart As Steema.TeeChart.Chart, size As Integer)
+        'Set font size for all chart elements
+        chart.Header.Font.Size = size + 2
+        chart.Legend.Font.Size = size
+        chart.Axes.Left.Title.Font.Size = size
+        chart.Axes.Left.Labels.Font.Size = size
+        chart.Axes.Right.Title.Font.Size = size
+        chart.Axes.Right.Labels.Font.Size = size
+        chart.Axes.Bottom.Title.Font.Size = size
+        chart.Axes.Bottom.Labels.Font.Size = size
+        chart.Axes.Top.Title.Font.Size = size
+        chart.Axes.Top.Labels.Font.Size = size
+        chart.Axes.Depth.Title.Font.Size = size
+        chart.Axes.Depth.Labels.Font.Size = size
+        chart.Axes.DepthTop.Title.Font.Size = size
+        chart.Axes.DepthTop.Labels.Font.Size = size
+        For Each axis As Steema.TeeChart.Axis In chart.Axes.Custom
+            axis.Labels.Font.Size = size
+            axis.Title.Font.Size = size
+        Next
     End Sub
 
     Public Enum Direction

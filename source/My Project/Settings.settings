@@ -2,18 +2,21 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="My" GeneratedClassName="MySettings" UseMySettingsClassName="true">
   <Profiles />
   <Settings>
-    <Setting Name="loggingLevel" Type="System.String" Scope="User">
-      <Value Profile="(Default)">info</Value>
+    <Setting Name="defaultFontSize" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">10</Value>
     </Setting>
     <Setting Name="defaultLineWidth" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">2</Value>
     </Setting>
-    <Setting Name="isNewVersion" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">True</Value>
+    <Setting Name="loggingLevel" Type="System.String" Scope="User">
+      <Value Profile="(Default)">info</Value>
     </Setting>
     <Setting Name="MRUFiles" Type="System.Collections.Specialized.StringCollection" Scope="User">
       <Value Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
 &lt;ArrayOfString xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" /&gt;</Value>
+    </Setting>
+    <Setting Name="isNewVersion" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
     </Setting>
   </Settings>
 </SettingsFile>

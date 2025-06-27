@@ -230,7 +230,7 @@ Friend Class AnnualRecurrenceProbability
 
         'Chart
         ResultChart = New Steema.TeeChart.Chart()
-        Call Helpers.FormatChart(ResultChart)
+        Call Helpers.ChartSetDefaultFormat(ResultChart)
         ResultChart.Walls.Back.Visible = True
 
         'Legend

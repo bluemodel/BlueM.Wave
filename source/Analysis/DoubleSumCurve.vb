@@ -131,7 +131,7 @@ Friend Class DoubleSumCurve
         Dim doppelsumme, gerade As Steema.TeeChart.Styles.Line
 
         Me.ResultChart = New Steema.TeeChart.Chart()
-        Call Helpers.FormatChart(Me.ResultChart)
+        Call Helpers.ChartSetDefaultFormat(Me.ResultChart)
         Me.ResultChart.Header.Text = $"Double Sum Curve ({Me.ts_1.Title} / {Me.ts_2.Title})"
         Me.ResultChart.Legend.Visible = False
 

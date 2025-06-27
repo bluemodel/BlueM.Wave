@@ -394,7 +394,7 @@ Friend Class GoodnessOfFit
         'TODO: the axis titles and grid disappear when the last series is unchecked by the user, why?
 
         Me.ResultChart = New Steema.TeeChart.Chart()
-        Call Helpers.FormatChart(Me.ResultChart)
+        Call Helpers.ChartSetDefaultFormat(Me.ResultChart)
         Me.ResultChart.Header.Text = $"Goodness of Fit: {Me.ts_obs.Title} vs. {String.Join(", ", Me.ts_sim_list)}"
 
         'determine max absolute volume error for scaling

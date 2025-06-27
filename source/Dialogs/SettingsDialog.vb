@@ -6,6 +6,7 @@ Public Class SettingsDialog
 
         'set current setting values in the form
         Me.NumericUpDown_DefaultLineWidth.Value = My.Settings.defaultLineWidth
+        Me.NumericUpDown_DefaultFontSize.Value = My.Settings.defaultFontSize
         Me.CheckBox_logShowDebugMessages.Checked = (My.Settings.loggingLevel = Log.levels.debug.ToString())
 
     End Sub
@@ -14,6 +15,7 @@ Public Class SettingsDialog
 
         'store the settings
         My.Settings.defaultLineWidth = CInt(Me.NumericUpDown_DefaultLineWidth.Value)
+        My.Settings.defaultFontSize = CInt(Me.NumericUpDown_DefaultFontSize.Value)
         My.Settings.loggingLevel = IIf(Me.CheckBox_logShowDebugMessages.Checked, Log.levels.debug.ToString(), Log.levels.info.ToString())
 
         'save them
