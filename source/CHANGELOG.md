@@ -5,8 +5,10 @@ Version 2.9.1
 -------------
 NEW:
 * Added a user setting for the default font size of the chart #195
+
 CHANGED:
 * Changing chart user settings now has an immediate effect on the chart
+
 FIXED:
 * Fixed order of series specified in a WVP file not being preserved on import #194
 
