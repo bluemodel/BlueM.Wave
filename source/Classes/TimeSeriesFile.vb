@@ -31,6 +31,7 @@ Public MustInherit Class TimeSeriesFile
         BIN
         CSV
         DFS0
+        GBL
         GISMO_WEL
         HYBNAT_BCS
         HYBNAT_WEL
@@ -71,6 +72,7 @@ Public MustInherit Class TimeSeriesFile
         Public Shared ReadOnly DAT As String = ".DAT"
         Public Shared ReadOnly DB As String = ".DB"     'SYDRO SQLite format
         Public Shared ReadOnly DFS0 As String = ".DFS0" 'DHI MIKE Dfs0 file format
+        Public Shared ReadOnly GBL As String = ".GBL"   'GINA GBL format
         Public Shared ReadOnly KWL As String = ".KWL"
         Public Shared ReadOnly OUT As String = ".OUT"   'SWMM binary result file or PRMS out file
         Public Shared ReadOnly REG As String = ".REG"
@@ -95,6 +97,7 @@ Public MustInherit Class TimeSeriesFile
         "Text files (*.txt)|*.txt|" &
         "CSV files (*.csv)|*.csv|" &
         "DHI MIKE DFS0 files (*.dfs0)|*.dfs0|" &
+        "GINA binary wel files (*.gbl)|*.gbl|" &
         "HYBNAT files (*.bcs, *.wel)|*.bcs;*.wel|" &
         "HYDRO_AS-2D result files (*.dat)|*.dat|" &
         "Hystem-Extran files (*.dat, *.reg)|*.dat;*.reg|" &
@@ -553,6 +556,8 @@ Public MustInherit Class TimeSeriesFile
                 Return FileExtensions.CSV
             Case FileTypes.DFS0
                 Return FileExtensions.DFS0
+            Case FileTypes.GBL
+                Return FileExtensions.GBL
             Case FileTypes.GISMO_WEL
                 Return FileExtensions.ASC
             Case FileTypes.HYBNAT_BCS
@@ -718,6 +723,14 @@ Public MustInherit Class TimeSeriesFile
                 Log.AddLogEntry(levels.info, $"Assuming DHI DFS0 format for file {fileName}.")
                 fileType = FileTypes.DFS0
 
+            Case FileExtensions.GBL
+                'Check format
+                If Fileformats.GBL.verifyFormat(file) Then
+                    'GINA binary WEL file
+                    Log.AddLogEntry(levels.info, $"Detected GINA binary WEL format for file {fileName}.")
+                    fileType = FileTypes.GBL
+                End If
+
             Case FileExtensions.OUT
                 If Fileformats.PRMS.verifyFormat(file) Then
                     'PRMS result format
@@ -853,6 +866,8 @@ Public MustInherit Class TimeSeriesFile
                 FileInstance = New Fileformats.HYDRO_AS_2D(file)
             Case FileTypes.DFS0
                 FileInstance = New Fileformats.DFS0(file)
+            Case FileTypes.GBL
+                FileInstance = New Fileformats.GBL(file)
             Case FileTypes.GISMO_WEL
                 FileInstance = New Fileformats.GISMO_WEL(file)
             Case FileTypes.HYBNAT_BCS

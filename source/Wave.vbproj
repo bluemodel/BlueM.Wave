@@ -235,6 +235,7 @@
     <Compile Include="FileFormats\HYBNAT_BCS.vb" />
     <Compile Include="FileFormats\HYBNAT_WEL.vb" />
     <Compile Include="FileFormats\JAMS.vb" />
+    <Compile Include="FileFormats\GBL.vb" />
     <Compile Include="Main.vb" />
     <Compile Include="App.vb" />
     <Compile Include="Classes\AxisWrapper.vb" />
