@@ -1,6 +1,11 @@
 BlueM.Wave Release Notes
 ========================
 
+Version 2.9.2
+-------------
+FIXED:
+* Fixed crash when series containing values of Infinity are displayed in the chart. Such values are now treated as NaN by the chart. #199
+
 Version 2.9.1
 -------------
 NEW:
