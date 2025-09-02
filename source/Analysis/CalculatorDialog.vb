@@ -16,6 +16,7 @@
 'along with this program.  If not, see <https://www.gnu.org/licenses/>.
 '
 Imports System.Windows.Forms
+Imports System.Text.RegularExpressions
 
 Friend Class CalculatorDialog
 
@@ -92,6 +93,16 @@ Friend Class CalculatorDialog
     End Sub
 
     Private Sub OK_Button_Click(sender As System.Object, e As System.EventArgs) Handles OK_Button.Click
+
+        'check for comma as decimal separator in formula
+        If Regex.IsMatch(Me.TextBox_Formula.Text, "\d,\d") Then
+            Dim dlgResult As DialogResult = MsgBox($"Warning: The formula '{Me.TextBox_Formula.Text}' seems to contain a comma (',') as decimal separator. Only point ('.') is allowed as decimal separator here. Are you sure you want to evaluate this formula?", MsgBoxStyle.Exclamation Or MsgBoxStyle.OkCancel)
+            If dlgResult = DialogResult.Cancel Then
+                Me.TextBox_Formula.Focus()
+                Me.TextBox_Formula.SelectAll()
+                Return
+            End If
+        End If
 
         Try
             'Test formula parsing
