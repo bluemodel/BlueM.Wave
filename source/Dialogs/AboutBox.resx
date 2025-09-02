@@ -207,7 +207,7 @@ Michael Bach, Felix Froehlich, Steffen Heusch, Christoph Hübner, Michael Kissel
 Third party components:
 Silk Icons: http://www.famfamfam.com/lab/icons/silk/
 TeeChart: http://www.steema.com/products/teechart/
-Math Parser .NET: https://www.codeproject.com/articles/274093/math-parser-net
+MathParserNet: https://github.com/bluemodel/MathParserNet
 Math.NET Numerics: https://numerics.mathdotnet.com/
 Newtonsoft.Json: https://www.newtonsoft.com/json
 DotNetZip: https://github.com/haf/DotNetZip.Semverd
