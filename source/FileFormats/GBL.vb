@@ -70,18 +70,14 @@ Namespace Fileformats
             End Get
         End Property
 
-        Private Shared ReadOnly ColumnNames As String() = {
-            "Qzu", "Qab", "Pges_zu", "Pges_ab",
-            "AFS_zu", "AFS_ab", "AFS63_zu", "AFS63_ab", "NH4-N_zu", "NH4-N_ab",
-            "CSB_zu", "CSB_ab", "T_zu", "T_ab", "pH_zu",
-            "pH_ab", "O2_zu", "O2_ab", "NH3_zu", "k2", "tf"
-        }
-
-        Private Shared ReadOnly ColumnUnits As String() = {
-            "l/s", "l/s", "mg/l", "mg/l",
-            "mg/l", "mg/l", "mg/l", "mg/l", "mg/l", "mg/l",
-            "mg/l", "mg/l", "°C", "°C", "-",
-            "-", "mg/l", "mg/l", "mg/l", "-", "min"
+        ''' <summary>
+        ''' Column definitions with name and unit pairs for GBL format
+        ''' </summary>
+        Private Shared ReadOnly ColumnDefinitions As (Name As String, Unit As String)() = {
+            ("Qzu", "l/s"), ("Qab", "l/s"), ("Pges_zu", "mg/l"), ("Pges_ab", "mg/l"),
+            ("AFS_zu", "mg/l"), ("AFS_ab", "mg/l"), ("AFS63_zu", "mg/l"), ("AFS63_ab", "mg/l"), ("NH4-N_zu", "mg/l"), ("NH4-N_ab", "mg/l"),
+            ("CSB_zu", "mg/l"), ("CSB_ab", "mg/l"), ("T_zu", "°C"), ("T_ab", "°C"), ("pH_zu", "-"),
+            ("pH_ab", "-"), ("O2_zu", "mg/l"), ("O2_ab", "mg/l"), ("NH3_zu", "mg/l"), ("k2", "-"), ("tf", "min")
         }
 
         Public Sub New(FileName As String, Optional ReadAllNow As Boolean = False)
@@ -114,10 +110,10 @@ Namespace Fileformats
             Me.DataType = DataTypes.Single ' Fixed data type for GBL format
 
             ' Create 21 time series info objects for the fixed columns
-            For i As Integer = 0 To 20 ' 21 columns (0-20)
+            For i As Integer = 0 To ColumnDefinitions.Length - 1
                 Dim sInfo As New TimeSeriesInfo()
-                sInfo.Name = ColumnNames(i)
-                sInfo.Unit = ColumnUnits(i)
+                sInfo.Name = ColumnDefinitions(i).Name
+                sInfo.Unit = ColumnDefinitions(i).Unit
                 sInfo.Index = i
                 Me.TimeSeriesInfos.Add(sInfo)
             Next
