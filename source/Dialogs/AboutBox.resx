@@ -123,6 +123,18 @@
 (At runtime, the labels' text will be replaced with the application's assembly information.
 Customize the application's assembly information in the Application pane of Project Designer.)</value>
   </data>
+  <data name="TextBox_Credits.Text" xml:space="preserve">
+    <value>Developers (in alphabetical order):
+Michael Bach, Felix Froehlich, Steffen Heusch, Christoph Hübner, Michael Kissel, Dirk Muschalla, Manfred Ostrowski, Frank Reußner, Tobias Rosskopf
+
+Third party components:
+Silk Icons: http://www.famfamfam.com/lab/icons/silk/
+TeeChart: http://www.steema.com/products/teechart/
+MathParserNet: https://github.com/bluemodel/MathParserNet
+Math.NET Numerics: https://numerics.mathdotnet.com/
+Newtonsoft.Json: https://www.newtonsoft.com/json
+DHI.DFS: https://www.nuget.org/packages/DHI.DFS/</value>
+  </data>
   <data name="TextBox_License.Text" xml:space="preserve">
     <value>                   GNU LESSER GENERAL PUBLIC LICENSE
                        Version 3, 29 June 2007
@@ -199,18 +211,5 @@ The Free Software Foundation may publish revised and/or new versions of the GNU 
 Each version is given a distinguishing version number. If the Library as you received it specifies that a certain numbered version of the GNU Lesser General Public License "or any later version" applies to it, you have the option of following the terms and conditions either of that published version or of any later version published by the Free Software Foundation. If the Library as you received it does not specify a version number of the GNU Lesser General Public License, you may choose any version of the GNU Lesser General Public License ever published by the Free Software Foundation.
 
 If the Library as you received it specifies that a proxy can decide whether future versions of the GNU Lesser General Public License shall apply, that proxy's public statement of acceptance of any version is permanent authorization for you to choose that version for the Library.</value>
-  </data>
-  <data name="TextBox_Credits.Text" xml:space="preserve">
-    <value>Developers (in alphabetical order):
-Michael Bach, Felix Froehlich, Steffen Heusch, Christoph Hübner, Michael Kissel, Dirk Muschalla, Manfred Ostrowski, Frank Reußner, Tobias Rosskopf
-
-Third party components:
-Silk Icons: http://www.famfamfam.com/lab/icons/silk/
-TeeChart: http://www.steema.com/products/teechart/
-MathParserNet: https://github.com/bluemodel/MathParserNet
-Math.NET Numerics: https://numerics.mathdotnet.com/
-Newtonsoft.Json: https://www.newtonsoft.com/json
-DotNetZip: https://github.com/haf/DotNetZip.Semverd
-DHI.DFS: https://www.nuget.org/packages/DHI.DFS/</value>
   </data>
 </root>
