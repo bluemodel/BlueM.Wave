@@ -114,71 +114,71 @@ Friend Class Calculator
     End Sub
 
     ''' <summary>
-    ''' Analyse durchführen
+    ''' Analyse durchfÃ¼hren
     ''' </summary>
     Public Overrides Sub ProcessAnalysis()
 
         'show the ChangeTimeStepDialog
         Dim dlg As New CalculatorDialog(Me.tsVariables)
-        If dlg.ShowDialog() = Windows.Forms.DialogResult.OK Then
-
-            'read settings from dialog
-            Me.expression = dlg.TextBox_Formula.Text
-            Dim title As String = dlg.TextBox_Title.Text
-            Dim unit As String = dlg.ComboBox_Unit.Text
-
-            'initialize parser and add custom functions
-            Dim parser As New MathParserNet.Parser()
-            parser.RegisterCustomDoubleFunction("MAX", AddressOf Calculator.Max)
-            parser.RegisterCustomDoubleFunction("MIN", AddressOf Calculator.Min)
-
-            Dim value As Double
-            Dim ts_result As New TimeSeries()
-
-            'collect unique timestamps
-            Dim timestamps As New HashSet(Of DateTime)
-            For Each ts As TimeSeries In Me.InputTimeSeries
-                timestamps.UnionWith(ts.Dates)
-            Next
-
-            'initialize progress bar
-            MyBase.AnalysisProgressStart(timestamps.Count)
-
-            'loop over timestamps
-            Dim i As Integer = 1
-            For Each t As DateTime In timestamps
-                'create variables for this timestamp
-                For Each tsVariable As CalculatorVariable In tsVariables
-                    value = Double.NaN
-                    If tsVariable.ts.Dates.Contains(t) Then
-                        value = tsVariable.ts.Nodes(t)
-                    End If
-                    parser.AddVariable(tsVariable.varName, value)
-                Next
-                'evaluate formula
-                value = parser.SimplifyDouble(Me.expression)
-                'store as new node in result series
-                ts_result.AddNode(t, value)
-                'remove variables
-                parser.RemoveAllVariables()
-                'update progressbar
-                MyBase.AnalysisProgressUpdate(i)
-                i += 1
-            Next
-
-            'clean up
-            parser.UnregisterAllCustomFunctions()
-
-            'Store result series
-            ts_result.Title = title
-            ts_result.Unit = unit
-            ts_result.DataSource = New TimeSeriesDataSource(TimeSeriesDataSource.OriginEnum.AnalysisResult)
-            Me.ResultSeries.Add(ts_result)
-
-            'finish progress bar
-            MyBase.AnalysisProgressFinish()
-
+        If dlg.ShowDialog() <> DialogResult.OK Then
+            Throw New Exception("Cancelled by user")
         End If
+
+        'read settings from dialog
+        Me.expression = dlg.TextBox_Formula.Text
+        Dim title As String = dlg.TextBox_Title.Text
+        Dim unit As String = dlg.ComboBox_Unit.Text
+
+        'initialize parser and add custom functions
+        Dim parser As New MathParserNet.Parser()
+        parser.RegisterCustomDoubleFunction("MAX", AddressOf Calculator.Max)
+        parser.RegisterCustomDoubleFunction("MIN", AddressOf Calculator.Min)
+
+        Dim value As Double
+        Dim ts_result As New TimeSeries()
+
+        'collect unique timestamps
+        Dim timestamps As New HashSet(Of DateTime)
+        For Each ts As TimeSeries In Me.InputTimeSeries
+            timestamps.UnionWith(ts.Dates)
+        Next
+
+        'initialize progress bar
+        MyBase.AnalysisProgressStart(timestamps.Count)
+
+        'loop over timestamps
+        Dim i As Integer = 1
+        For Each t As DateTime In timestamps
+            'create variables for this timestamp
+            For Each tsVariable As CalculatorVariable In tsVariables
+                value = Double.NaN
+                If tsVariable.ts.Dates.Contains(t) Then
+                    value = tsVariable.ts.Nodes(t)
+                End If
+                parser.AddVariable(tsVariable.varName, value)
+            Next
+            'evaluate formula
+            value = parser.SimplifyDouble(Me.expression)
+            'store as new node in result series
+            ts_result.AddNode(t, value)
+            'remove variables
+            parser.RemoveAllVariables()
+            'update progressbar
+            MyBase.AnalysisProgressUpdate(i)
+            i += 1
+        Next
+
+        'clean up
+        parser.UnregisterAllCustomFunctions()
+
+        'Store result series
+        ts_result.Title = title
+        ts_result.Unit = unit
+        ts_result.DataSource = New TimeSeriesDataSource(TimeSeriesDataSource.OriginEnum.AnalysisResult)
+        Me.ResultSeries.Add(ts_result)
+
+        'finish progress bar
+        MyBase.AnalysisProgressFinish()
 
     End Sub
 

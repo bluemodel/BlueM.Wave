@@ -73,7 +73,7 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="MathParserNet, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="MathParserNet, Version=1.2.0.0, Culture=neutral, processorArchitecture=AMD64">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>lib\MathParserNet\MathParserNet.dll</HintPath>
     </Reference>

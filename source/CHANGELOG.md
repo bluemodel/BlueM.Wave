@@ -1,6 +1,12 @@
 BlueM.Wave Release Notes
 ========================
 
+Version 2.9.2
+-------------
+FIXED:
+* Fixed crash when series containing values of Infinity are displayed in the chart. Such values are now treated as NaN by the chart. #199
+* Fixed decimal numbers not being interpreted correctly when evaluating formulas in the Calculator analysis function if the system's decimal separator is not "." #198
+
 Version 2.9.1
 -------------
 NEW:

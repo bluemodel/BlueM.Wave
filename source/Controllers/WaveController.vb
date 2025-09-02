@@ -2243,6 +2243,21 @@ Friend Class WaveController
             Log.AddLogEntry(Log.levels.warning, $"Unable to display {t_too_late.Count} nodes between {t_too_late.Last().ToString(Helpers.CurrentDateFormat)} and {t_too_late.First().ToString(Helpers.CurrentDateFormat)}!")
         End If
 
+        'check for infinity values and replace with NaN (#199)
+        If ts.Nodes.Values.Contains(Double.PositiveInfinity) Or ts.Nodes.Values.Contains(Double.NegativeInfinity) Then
+            ts = ts.Clone(preserveId:=True)
+            Dim t_inf As New List(Of DateTime)
+            For Each kvp As KeyValuePair(Of DateTime, Double) In ts.Nodes
+                If Double.IsInfinity(kvp.Value) Then
+                    t_inf.Add(kvp.Key)
+                End If
+            Next
+            For Each t As DateTime In t_inf
+                ts.UpdateNode(t, Double.NaN)
+            Next
+            Log.AddLogEntry(Log.levels.warning, $"Replaced {t_inf.Count} infinity values with NaN in series '{ts.Title}' for display in chart")
+        End If
+
         'Serie zu Diagramm hinzufügen
 
         'Linien instanzieren
@@ -2280,7 +2295,7 @@ Friend Class WaveController
 
         'Determine total number of NaN-values and write to log
         If ts.NaNCount > 0 Then
-            Log.AddLogEntry(Log.levels.warning, $"Series '{ts.Title}' contains {ts.NaNCount} NaN values!")
+            Log.AddLogEntry(Log.levels.warning, $"Series '{ts.Title}' contains {ts.NaNCount} NaN and Infinity values!")
         End If
 
         'Y-Achsenzuordnung

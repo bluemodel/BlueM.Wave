@@ -223,7 +223,7 @@ Public Class TimeSeries
     End Property
 
     ''' <summary>
-    ''' The number of NaN nodes
+    ''' The number of NaN and Infinity nodes
     ''' </summary>
     Public ReadOnly Property NaNCount As Integer
         Get
@@ -1098,7 +1098,7 @@ Public Class TimeSeries
 
         'Log
         If nanCount > 0 Then
-            Call Log.AddLogEntry(Log.levels.info, $"{Me.Title}: {nanCount} NaN nodes were removed!")
+            Call Log.AddLogEntry(Log.levels.info, $"{Me.Title}: {nanCount} NaN and Infinity nodes were removed!")
         End If
 
         Return tsCleaned
