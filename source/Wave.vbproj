@@ -94,6 +94,7 @@
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Core" />
     <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
@@ -236,6 +237,7 @@
     <Compile Include="FileFormats\HYBNAT_WEL.vb" />
     <Compile Include="FileFormats\JAMS.vb" />
     <Compile Include="FileFormats\GBL.vb" />
+    <Compile Include="FileFormats\FEWS_PI.vb" />
     <Compile Include="Main.vb" />
     <Compile Include="App.vb" />
     <Compile Include="Classes\AxisWrapper.vb" />
