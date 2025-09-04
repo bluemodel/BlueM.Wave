@@ -31,6 +31,7 @@ Public MustInherit Class TimeSeriesFile
         BIN
         CSV
         DFS0
+        FEWS_PI
         GBL
         GISMO_WEL
         HYBNAT_BCS
@@ -83,6 +84,7 @@ Public MustInherit Class TimeSeriesFile
         Public Shared ReadOnly WBL As String = ".WBL"   'SYDRO binary WEL format
         Public Shared ReadOnly WEL As String = ".WEL"
         Public Shared ReadOnly WVP As String = ".WVP"   'Wave project file
+        Public Shared ReadOnly XML As String = ".XML"
         Public Shared ReadOnly ZRE As String = ".ZRE"
         Public Shared ReadOnly ZRX As String = ".ZRX"   'ZRXP format
         Public Shared ReadOnly ZRXP As String = ".ZRXP" 'ZRXP format
@@ -112,6 +114,7 @@ Public MustInherit Class TimeSeriesFile
         "UVF files (*.uvf)|*.uvf|" &
         "WEL files (*.wel, *.kwl)|*.wel;*.kwl|" &
         "Wave project files (*.wvp)|*.wvp|" &
+        "XML files (*.xml)|*.xml|" &
         "ZRE files (*.zre)|*.zre|" &
         "ZRXP files (*.zrx, *.zrxp)|*.zrx;*.zrxp"
 
@@ -556,6 +559,8 @@ Public MustInherit Class TimeSeriesFile
                 Return FileExtensions.CSV
             Case FileTypes.DFS0
                 Return FileExtensions.DFS0
+            Case FileTypes.FEWS_PI
+                Return FileExtensions.XML
             Case FileTypes.GBL
                 Return FileExtensions.GBL
             Case FileTypes.GISMO_WEL
@@ -614,6 +619,7 @@ Public MustInherit Class TimeSeriesFile
         Select Case type
             Case TimeSeriesFile.FileTypes.CSV,
                  TimeSeriesFile.FileTypes.DFS0,
+                 TimeSeriesFile.FileTypes.FEWS_PI,
                  TimeSeriesFile.FileTypes.SWMM_INTERFACE,
                  TimeSeriesFile.FileTypes.HYBNAT_BCS
                 'TODO: ZRXP does actually also support multiple series, but for simplicity's sake, we assume that it doesn't
@@ -812,6 +818,14 @@ Public MustInherit Class TimeSeriesFile
                 Log.AddLogEntry(levels.info, $"Assuming Wave project file format for file {fileName}.")
                 fileType = FileTypes.WVP
 
+            Case FileExtensions.XML
+                'Check file format
+                If Fileformats.FEWS_PI.verifyFormat(file) Then
+                    'FEWS PI XML file
+                    Log.AddLogEntry(levels.info, $"Detected FEWS PI XML format for file {fileName}.")
+                    fileType = FileTypes.FEWS_PI
+                End If
+
             Case FileExtensions.ZRE
                 Log.AddLogEntry(levels.info, $"Assuming ZRE format for file {fileName}.")
                 fileType = FileTypes.ZRE
@@ -906,6 +920,8 @@ Public MustInherit Class TimeSeriesFile
                 FileInstance = New Fileformats.WEL(file)
             Case FileTypes.WVP
                 Throw New Exception("Wave project files (WVP) need to be loaded using `Wave.Import_File()` or `Wave.Load_WVP()`!")
+            Case FileTypes.FEWS_PI
+                FileInstance = New Fileformats.FEWS_PI(file)
             Case FileTypes.ZRE
                 FileInstance = New Fileformats.ZRE(file)
             Case FileTypes.ZRXP
