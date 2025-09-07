@@ -28,6 +28,7 @@ Friend Class ExportDiag
         Me.ComboBox_Format.Items.Add(TimeSeriesFile.FileTypes.CSV)
         Me.ComboBox_Format.Items.Add(TimeSeriesFile.FileTypes.BIN)
         Me.ComboBox_Format.Items.Add(TimeSeriesFile.FileTypes.DFS0)
+        Me.ComboBox_Format.Items.Add(TimeSeriesFile.FileTypes.FEWS_PI)
         Me.ComboBox_Format.Items.Add(TimeSeriesFile.FileTypes.HYBNAT_BCS)
         Me.ComboBox_Format.Items.Add(TimeSeriesFile.FileTypes.HYSTEM_REG)
         Me.ComboBox_Format.Items.Add(TimeSeriesFile.FileTypes.SMUSI_REG)

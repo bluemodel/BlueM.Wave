@@ -23,6 +23,7 @@ Namespace Fileformats
     ''' <summary>
     ''' Class for the Delft-FEWS published interface timeseries format
     ''' Format description: https://publicwiki.deltares.nl/spaces/FEWSDOC/pages/8683960/Delft-Fews+Published+Interface+timeseries+Format+PI+Import
+    ''' XML schema: https://fews.wldelft.nl/schemas/version1.0/pi-schemas/pi_timeseries.xsd
     ''' </summary>
     Public Class FEWS_PI
         Inherits TimeSeriesFile
@@ -150,10 +151,15 @@ Namespace Fileformats
                         Case "mean"
                             ts.Interpretation = BlueM.Wave.TimeSeries.InterpretationEnum.BlockRight
                     End Select
-                    'store additional metadata
+                    'store FEWS PI specific metadata
+                    ts.Metadata.Add("type", series.header.type)
                     ts.Metadata.Add("locationId", series.header.locationId)
                     ts.Metadata.Add("parameterId", series.header.parameterId)
+                    ts.Metadata.Add("timeStep", series.header.timeStep.unit)
+                    ts.Metadata.Add("multiplier", series.header.timeStep.multiplier)
+                    ts.Metadata.Add("missVal", series.header.missVal.ToString(Globalization.CultureInfo.InvariantCulture))
                     ts.Metadata.Add("stationName", series.header.stationName)
+                    ts.Metadata.Add("units", series.header.units)
                     'store events as nodes
                     Dim errorvalue As Double = series.header.missVal
                     For Each xmlevent As XMLEvent In series.events
@@ -182,6 +188,7 @@ Namespace Fileformats
                 "locationId",
                 "parameterId",
                 "timeStep",
+                "multiplier",
                 "missVal",
                 "stationName",
                 "units"
@@ -189,6 +196,31 @@ Namespace Fileformats
                 Return keys
             End Get
         End Property
+
+        ''' <summary>
+        ''' Sets default metadata values for a time series corresponding to the Delft-FEWS PI timeseries format
+        ''' </summary>
+        Public Overloads Shared Sub setDefaultMetadata(ts As TimeSeries)
+            'Make sure all required keys exist
+            ts.Metadata.AddKeys(FEWS_PI.MetadataKeys)
+            'Set default values
+            If ts.Metadata("type") = "" Then
+                Select Case ts.Interpretation
+                    Case BlueM.Wave.TimeSeries.InterpretationEnum.Instantaneous
+                        ts.Metadata("type") = "instantaneous"
+                    Case BlueM.Wave.TimeSeries.InterpretationEnum.CumulativePerTimestep
+                        ts.Metadata("type") = "accumulative"
+                    Case BlueM.Wave.TimeSeries.InterpretationEnum.BlockRight
+                        ts.Metadata("type") = "mean"
+                    Case Else
+                        ts.Metadata("type") = "unknown"
+                End Select
+            End If
+            If ts.Metadata("timeStep") = "" Then ts.Metadata("timeStep") = "nonequidistant"
+            If ts.Metadata("multiplier") = "" Then ts.Metadata("multiplier") = "1"
+            If ts.Metadata("missVal") = "" Then ts.Metadata("missVal") = "-999.0"
+            If ts.Metadata("units") = "" Then ts.Metadata("units") = ts.Unit
+        End Sub
 
         ''' <summary>
         ''' Parses a date and time string into a DateTime object
@@ -207,10 +239,76 @@ Namespace Fileformats
         End Function
 
         ''' <summary>
+        ''' Write one or multiple series to an XML file in Delft-FEWS PI timeseries format
+        ''' </summary>
+        ''' <param name="tsList">time series to write to file</param>
+        ''' <param name="file">path to the xml file</param>
+        ''' <remarks></remarks>
+        Public Shared Sub Write_File(ByRef tsList As List(Of TimeSeries), file As String)
+            Dim xmlserializer As New XmlSerializer(GetType(XMLTimeSeries))
+            Dim xmlroot As New XMLTimeSeries With {
+                .version = "1.2",
+                .timeZone = "0.0",
+                .series = New List(Of XMLSeries)
+            }
+            For Each ts As TimeSeries In tsList
+                Dim xmlseries As New XMLSeries
+                Dim xmlheader As New XMLHeader With {
+                    .type = ts.Metadata("type"),
+                    .locationId = ts.Metadata("locationId"),
+                    .parameterId = ts.Metadata("parameterId"),
+                    .timeStep = New XMLTimeStep With {
+                        .unit = ts.Metadata("timeStep"),
+                        .multiplier = ts.Metadata("multiplier")
+                    },
+                    .startDate = New XMLDate With {
+                        .date = ts.StartDate.ToString("yyyy-MM-dd"),
+                        .time = ts.StartDate.ToString("HH:mm:ss")
+                    },
+                    .endDate = New XMLDate With {
+                        .date = ts.EndDate.ToString("yyyy-MM-dd"),
+                        .time = ts.EndDate.ToString("HH:mm:ss")
+                    },
+                    .missVal = Double.Parse(ts.Metadata("missVal"), Globalization.CultureInfo.InvariantCulture),
+                    .stationName = ts.Metadata("stationName"),
+                    .units = ts.Metadata("units")
+                }
+                xmlseries.header = xmlheader
+                xmlseries.events = New List(Of XMLEvent)
+                For Each node As KeyValuePair(Of DateTime, Double) In ts.Nodes
+                    Dim xmlevent As New XMLEvent With {
+                        .date = node.Key.ToString("yyyy-MM-dd"),
+                        .time = node.Key.ToString("HH:mm:ss"),
+                        .value = If(Double.IsNaN(node.Value), xmlheader.missVal, node.Value),
+                        .flag = 2 'Completed/Reliable: Original value was missing. Value has been filled in through interpolation, transformation(e.g.stage discharge) Or a model.
+                    }
+                    xmlseries.events.Add(xmlevent)
+                Next
+                xmlroot.series.Add(xmlseries)
+            Next
+            Dim xmlwriter As New XmlTextWriter(file, System.Text.Encoding.UTF8) With {
+                .Formatting = Formatting.Indented,
+                .IndentChar = ControlChars.Tab,
+                .Indentation = 1
+            }
+            xmlserializer.Serialize(xmlwriter, xmlroot)
+            xmlwriter.Close()
+        End Sub
+
+        ''' <summary>
         ''' Object representation of the Delft-FEWS PI timeseries XML structure
         ''' </summary>
         <XmlRoot("TimeSeries", Namespace:="http://www.wldelft.nl/fews/PI")>
         Public Class XMLTimeSeries
+            <XmlNamespaceDeclarations>
+            Public xmlns As New XmlSerializerNamespaces(
+                {New XmlQualifiedName("", "http://www.wldelft.nl/fews/PI"),
+                 New XmlQualifiedName("xsi", "http://www.w3.org/2001/XMLSchema-instance")}
+            )
+
+            <XmlAttribute(AttributeName:="schemaLocation", Namespace:="http://www.w3.org/2001/XMLSchema-instance")>
+            Public Property schemaLocation As String = "http://www.wldelft.nl/fews/PI http://fews.wldelft.nl/schemas/version1.0/pi-schemas/pi_timeseries.xsd"
+
             <XmlAttribute("version")>
             Public version As String
 

@@ -531,6 +531,8 @@ Public Class Wave
         For Each ts As TimeSeries In zres
             'get a list of required metadata keys depending on file type being exported
             Select Case fileType
+                Case TimeSeriesFile.FileTypes.FEWS_PI
+                    keys = Fileformats.FEWS_PI.MetadataKeys
                 Case TimeSeriesFile.FileTypes.SWMM_INTERFACE
                     keys = Fileformats.SWMM_INTERFACE.MetadataKeys
                 Case TimeSeriesFile.FileTypes.UVF
@@ -550,6 +552,8 @@ Public Class Wave
                 Next
                 'set default metadata values
                 Select Case fileType
+                    Case TimeSeriesFile.FileTypes.FEWS_PI
+                        Fileformats.FEWS_PI.setDefaultMetadata(ts)
                     Case TimeSeriesFile.FileTypes.SWMM_INTERFACE
                         Fileformats.SWMM_INTERFACE.setDefaultMetadata(ts)
                     Case TimeSeriesFile.FileTypes.UVF
@@ -626,6 +630,9 @@ Public Class Wave
                 Case TimeSeriesFile.FileTypes.DFS0
                     SaveFileDialog1.DefaultExt = "dfs0"
                     SaveFileDialog1.Filter = "DFS0 files (*.dfs0)|*.dfs0"
+                Case TimeSeriesFile.FileTypes.FEWS_PI
+                    SaveFileDialog1.DefaultExt = "xml"
+                    SaveFileDialog1.Filter = "Delf-FEWS PI timeseries files (*.xml)|*.xml"
                 Case TimeSeriesFile.FileTypes.WEL
                     SaveFileDialog1.DefaultExt = "wel"
                     SaveFileDialog1.Filter = "WEL files (*.wel)|*.wel"
@@ -691,6 +698,9 @@ Public Class Wave
 
                     Case TimeSeriesFile.FileTypes.DFS0
                         Call Fileformats.DFS0.Write_File(zres, filename)
+
+                    Case TimeSeriesFile.FileTypes.FEWS_PI
+                        Call Fileformats.FEWS_PI.Write_File(zres, filename)
 
                     Case TimeSeriesFile.FileTypes.SWMM_INTERFACE
                         Call Fileformats.SWMM_INTERFACE.Write_File(zres, filename)
