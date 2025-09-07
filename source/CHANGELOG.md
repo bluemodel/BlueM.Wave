@@ -5,6 +5,8 @@ Version 2.10.0
 --------------
 NEW:
 * Added support for reading and writing files in Delft-FEWS PI timeseries XML format #200
+
+CHANGED:
 * Updated about box
 
 Version 2.9.2
