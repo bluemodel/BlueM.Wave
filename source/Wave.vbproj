@@ -238,6 +238,7 @@
     <Compile Include="FileFormats\JAMS.vb" />
     <Compile Include="FileFormats\GBL.vb" />
     <Compile Include="FileFormats\FEWS_PI.vb" />
+    <Compile Include="FileFormats\GINA_WEL.vb" />
     <Compile Include="Main.vb" />
     <Compile Include="App.vb" />
     <Compile Include="Classes\AxisWrapper.vb" />

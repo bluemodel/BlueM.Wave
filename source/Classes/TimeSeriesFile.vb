@@ -33,6 +33,7 @@ Public MustInherit Class TimeSeriesFile
         DFS0
         FEWS_PI
         GBL
+        GINA_WEL
         GISMO_WEL
         HYBNAT_BCS
         HYBNAT_WEL
@@ -563,6 +564,8 @@ Public MustInherit Class TimeSeriesFile
                 Return FileExtensions.XML
             Case FileTypes.GBL
                 Return FileExtensions.GBL
+            Case FileTypes.GINA_WEL
+                Return FileExtensions.CSV
             Case FileTypes.GISMO_WEL
                 Return FileExtensions.ASC
             Case FileTypes.HYBNAT_BCS
@@ -692,9 +695,14 @@ Public MustInherit Class TimeSeriesFile
                     'GISMO result file in CSV format
                     Log.AddLogEntry(levels.info, $"Detected GISMO result format for file {fileName}.")
                     fileType = FileTypes.GISMO_WEL
+                ElseIf Fileformats.GINA_WEL.verifyFormat(file) Then
+                    'GINA WEL file in CSV format
+                    Log.AddLogEntry(levels.info, $"Detected GINA  WEL format for file {fileName}.")
+                    fileType = FileTypes.GINA_WEL
                 Else
                     Log.AddLogEntry(levels.info, $"Assuming CSV format for file {fileName}.")
                     fileType = FileTypes.CSV
+
                 End If
 
             Case FileExtensions.DAT
@@ -882,6 +890,8 @@ Public MustInherit Class TimeSeriesFile
                 FileInstance = New Fileformats.DFS0(file)
             Case FileTypes.GBL
                 FileInstance = New Fileformats.GBL(file)
+            Case FileTypes.GINA_WEL
+                FileInstance = New Fileformats.GINA_WEL(file)
             Case FileTypes.GISMO_WEL
                 FileInstance = New Fileformats.GISMO_WEL(file)
             Case FileTypes.HYBNAT_BCS
