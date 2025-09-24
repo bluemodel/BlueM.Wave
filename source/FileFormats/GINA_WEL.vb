@@ -16,25 +16,17 @@
 'along with this program.  If not, see <https://www.gnu.org/licenses/>.
 '
 Imports System.IO
-Imports System.Text.RegularExpressions
-Imports System.Linq
 
 Namespace Fileformats
 
     ''' <summary>
-    ''' Klasse für das GINA WEL-Dateiformat
+    ''' Class for the GINA WEL file format
+    ''' It is essentially a CSV format, this class only contains a method for detecting the format
+    ''' and overrides the CSV import settings in the constructor
     ''' </summary>
     ''' <remarks>Format siehe https://wiki.bluemodel.org/index.php/GINA-WEL-Format</remarks>
     Public Class GINA_WEL
-        Inherits TimeSeriesFile
-
-        Public Overrides ReadOnly Property UseImportDialog() As Boolean
-            Get
-                Return True
-            End Get
-        End Property
-
-#Region "Methoden"
+        Inherits CSV
 
         'Constructor
         Public Sub New(FileName As String)
@@ -57,133 +49,11 @@ Namespace Fileformats
 
         End Sub
 
-        ' get columns
-        Public Overrides Sub readSeriesInfo()
-
-            Dim i As Integer
-            Dim Zeile As String = ""
-            Dim ZeileSpalten As String = ""
-            Dim ZeileEinheiten As String = ""
-            Dim SeriesName As String = ""
-            Dim sInfo As TimeSeriesInfo
-
-            Me.TimeSeriesInfos.Clear()
-
-            ' open file
-            Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
-            Dim StrRead As StreamReader = New StreamReader(FiStr, Me.Encoding)
-            Dim StrReadSync = TextReader.Synchronized(StrRead)
-
-            ' find line with column headings and units
-            For i = 1 To Me.iLineHeadings + 1
-                Zeile = StrReadSync.ReadLine.ToString()
-                If (i = Me.iLineHeadings) Then ZeileSpalten = Zeile
-                If (i = Me.iLineUnits) Then ZeileEinheiten = Zeile
-            Next
-
-            ' close file
-            StrReadSync.Close()
-            StrRead.Close()
-            FiStr.Close()
-
-            ' get column names and units
-            Dim anzSpalten As Integer
-            Dim Namen() As String
-            Dim Einheiten() As String
-
-            ' split line with column headings
-            Namen = ZeileSpalten.Split(New Char() {Me.Separator.ToChar})
-            Einheiten = ZeileEinheiten.Split(New Char() {Me.Separator.ToChar})
-            anzSpalten = Namen.Length
-            If Namen.Length <> Einheiten.Length Then
-                MsgBox("Number of column names <> number of units!")
-            End If
-
-            ' put headers and units into the Me.Spalten-array (starts with index 0, --> [anzSpalten -1])
-            For i = 1 To (anzSpalten - 1) ' first column is timestamp
-                sInfo = New TimeSeriesInfo()
-                sInfo.Name = Namen(i).Trim()
-                sInfo.Index = i
-                If Einheiten(i).Trim = "cbm/s" Then
-                    Einheiten(i) = "m3/s"
-                End If
-                sInfo.Unit = Einheiten(i).Trim()
-                Me.TimeSeriesInfos.Add(sInfo)
-            Next
-
-        End Sub
-
-        ' read file
-        Public Overrides Sub readFile()
-
-            Dim i As Integer
-            Dim Zeile As String
-            Dim ok As Boolean
-            Dim datum As DateTime
-            Dim Werte()
-            Dim ts As TimeSeries
-
-            ' open file
-            Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
-            Dim StrRead As StreamReader = New StreamReader(FiStr, Me.Encoding)
-            Dim StrReadSync = TextReader.Synchronized(StrRead)
-
-            ' initialize a time series for every selected series
-            For Each sInfo As TimeSeriesInfo In Me.SelectedSeries
-                ts = New TimeSeries(sInfo.Name)
-                If Me.UseUnits Then
-                    ts.Unit = sInfo.Unit
-                End If
-                ts.DataSource = New TimeSeriesDataSource(Me.File, sInfo.Name)
-                Me.TimeSeries.Add(sInfo.Index, ts)
-            Next
-
-            ' read over header lines
-            For i = 0 To Me.nLinesHeader - 1
-                StrReadSync.ReadLine()
-            Next
-
-            ' read date lines
-            Do
-                Zeile = StrReadSync.ReadLine.ToString()
-
-                ' remove Whitespaces
-                Zeile = Trim(Zeile)
-
-                ' data columns are separated by ";"
-
-                ' split data line into columns and trim
-                Werte = Zeile.Split(New Char() {Me.Separator.ToChar}).Select(Function(s) s.Trim()).ToArray()
-
-                ' first column ist date time, add date time to times series
-                ok = DateTime.TryParseExact(Werte(Me.DateTimeColumnIndex), DateFormats("default"), Helpers.DefaultNumberFormat, Globalization.DateTimeStyles.None, datum)
-                If (Not ok) Then
-                    ok = DateTime.TryParseExact(Werte(Me.DateTimeColumnIndex), DateFormats("default"), Helpers.DefaultNumberFormat, Globalization.DateTimeStyles.None, datum)
-                    If Not ok Then
-                        Throw New Exception($"Kann das Datumsformat '{Werte(Me.DateTimeColumnIndex)}' nicht erkennen!{eol}Sollte in der Form '{DateFormats("default")} vorliegen!")
-                    End If
-                End If
-
-                ' remaining columns are data, add to time series
-                For Each sInfo As TimeSeriesInfo In Me.SelectedSeries
-                    Me.TimeSeries(sInfo.Index).AddNode(datum, StringToDouble(Werte(sInfo.Index)))
-                Next
-
-            Loop Until StrReadSync.Peek() = -1
-
-            ' close file
-            StrReadSync.Close()
-            StrRead.Close()
-            FiStr.Close()
-
-        End Sub
-
-
         ''' <summary>
-        ''' Checks if the file is a GISMO result file (either *.CSV or *.ASC)
+        ''' Checks if the file is a GINA WEL result file
         ''' </summary>
         ''' <param name="file">file path</param>
-        ''' <returns>True if the file is a GISMO result file</returns>
+        ''' <returns>True if the file is a GINA WEL result file</returns>
         Public Shared Function verifyFormat(file As String) As Boolean
 
             ' open file
@@ -223,8 +93,6 @@ Namespace Fileformats
             Return True
 
         End Function
-
-#End Region 'Methoden
 
     End Class
 
