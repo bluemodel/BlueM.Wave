@@ -15,7 +15,7 @@ Option Explicit On
 Namespace My
     
     <Global.System.Runtime.CompilerServices.CompilerGeneratedAttribute(),  _
-     Global.System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "17.13.0.0"),  _
+     Global.System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "17.14.0.0"),  _
      Global.System.ComponentModel.EditorBrowsableAttribute(Global.System.ComponentModel.EditorBrowsableState.Advanced)>  _
     Partial Friend NotInheritable Class MySettings
         Inherits Global.System.Configuration.ApplicationSettingsBase
@@ -56,13 +56,25 @@ Namespace My
         
         <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("info")>  _
-        Public Property loggingLevel() As String
+         Global.System.Configuration.DefaultSettingValueAttribute("True")>  _
+        Public Property showOverviewOnStartup() As Boolean
             Get
-                Return CType(Me("loggingLevel"),String)
+                Return CType(Me("showOverviewOnStartup"),Boolean)
             End Get
             Set
-                Me("loggingLevel") = value
+                Me("showOverviewOnStartup") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("10")>  _
+        Public Property defaultFontSize() As Integer
+            Get
+                Return CType(Me("defaultFontSize"),Integer)
+            End Get
+            Set
+                Me("defaultFontSize") = value
             End Set
         End Property
         
@@ -80,13 +92,13 @@ Namespace My
         
         <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("True")>  _
-        Public Property isNewVersion() As Boolean
+         Global.System.Configuration.DefaultSettingValueAttribute("info")>  _
+        Public Property loggingLevel() As String
             Get
-                Return CType(Me("isNewVersion"),Boolean)
+                Return CType(Me("loggingLevel"),String)
             End Get
             Set
-                Me("isNewVersion") = value
+                Me("loggingLevel") = value
             End Set
         End Property
         
@@ -105,13 +117,13 @@ Namespace My
         
         <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("10")>  _
-        Public Property defaultFontSize() As Integer
+         Global.System.Configuration.DefaultSettingValueAttribute("True")>  _
+        Public Property isNewVersion() As Boolean
             Get
-                Return CType(Me("defaultFontSize"),Integer)
+                Return CType(Me("isNewVersion"),Boolean)
             End Get
             Set
-                Me("defaultFontSize") = value
+                Me("isNewVersion") = value
             End Set
         End Property
     End Class

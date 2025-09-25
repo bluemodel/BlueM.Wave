@@ -85,6 +85,13 @@ Friend Class WaveController
 
         Me.View.SetController(Me)
 
+        'apply interface user settings
+        If My.Settings.showOverviewOnStartup Then
+            Me.ShowOverviewChart()
+        Else
+            Me.HideOverviewChart()
+        End If
+
         'Initialize zoom history
         Me.ZoomHistory = New List(Of (xmin As Double, xmax As Double))
         Me.ZoomHistoryIndex = 0
@@ -655,13 +662,22 @@ Friend Class WaveController
     ''' <param name="e"></param>
     Private Sub ToggleOverview_Clicked(sender As System.Object, e As System.EventArgs)
         If View.ToolStripButton_ToggleOverview.Checked Then
-            View.SplitContainer1.Panel1Collapsed = False
-            View.ToolStripButton_ToggleOverview.Checked = True
+            Me.ShowOverviewChart()
         Else
-            View.SplitContainer1.Panel1Collapsed = True
-            View.ToolStripButton_ToggleOverview.Checked = False
+            Me.HideOverviewChart()
         End If
     End Sub
+
+    Private Sub ShowOverviewChart()
+        View.SplitContainer1.Panel1Collapsed = False
+        View.ToolStripButton_ToggleOverview.Checked = True
+    End Sub
+
+    Private Sub HideOverviewChart()
+        View.SplitContainer1.Panel1Collapsed = True
+        View.ToolStripButton_ToggleOverview.Checked = False
+    End Sub
+
 
     ''' <summary>
     ''' Show Navigation button clicked

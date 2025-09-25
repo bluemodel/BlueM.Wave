@@ -9,12 +9,18 @@ Public Class SettingsDialog
         Me.isLoading = True
 
         'set current setting values in the form
+        Me.CheckBox_showOverviewOnStartup.Checked = My.Settings.showOverviewOnStartup
         Me.NumericUpDown_DefaultLineWidth.Value = My.Settings.defaultLineWidth
         Me.NumericUpDown_DefaultFontSize.Value = My.Settings.defaultFontSize
         Me.CheckBox_logShowDebugMessages.Checked = (My.Settings.loggingLevel = Log.levels.debug.ToString())
 
         Me.isLoading = False
 
+    End Sub
+
+    Private Sub CheckBox_showOverviewOnStartup_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox_showOverviewOnStartup.CheckedChanged
+        My.Settings.showOverviewOnStartup = Me.CheckBox_showOverviewOnStartup.Checked
+        My.Settings.Save()
     End Sub
 
     Private Sub NumericUpDown_DefaultFontSize_ValueChanged(sender As Object, e As EventArgs) Handles NumericUpDown_DefaultFontSize.ValueChanged

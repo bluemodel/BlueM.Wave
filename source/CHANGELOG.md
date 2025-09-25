@@ -5,6 +5,7 @@ Version 2.11.0
 --------------
 NEW:
 * Added support for reading files in GINA CSV WEL format #203
+* Added a user setting for showing/hiding the overview chart on startup #38
 
 Version 2.10.0
 --------------

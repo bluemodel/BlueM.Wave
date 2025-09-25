@@ -32,10 +32,14 @@ Partial Class SettingsDialog
         Me.Label_DefaultFontSize = New System.Windows.Forms.Label()
         Me.GroupBox_Logging = New System.Windows.Forms.GroupBox()
         Me.CheckBox_logShowDebugMessages = New System.Windows.Forms.CheckBox()
+        Me.GroupBox_Interface = New System.Windows.Forms.GroupBox()
+        Me.Label_showOverview = New System.Windows.Forms.Label()
+        Me.CheckBox_showOverviewOnStartup = New System.Windows.Forms.CheckBox()
         CType(Me.NumericUpDown_DefaultLineWidth, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.GroupBox_Chart.SuspendLayout()
         CType(Me.NumericUpDown_DefaultFontSize, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.GroupBox_Logging.SuspendLayout()
+        Me.GroupBox_Interface.SuspendLayout()
         Me.SuspendLayout()
         '
         'Button_Close
@@ -85,7 +89,7 @@ Partial Class SettingsDialog
         Me.GroupBox_Chart.Controls.Add(Me.Label_DefaultFontSize)
         Me.GroupBox_Chart.Controls.Add(Me.Label_defaultLineWidth)
         Me.GroupBox_Chart.Controls.Add(Me.NumericUpDown_DefaultLineWidth)
-        Me.GroupBox_Chart.Location = New System.Drawing.Point(12, 12)
+        Me.GroupBox_Chart.Location = New System.Drawing.Point(12, 70)
         Me.GroupBox_Chart.Name = "GroupBox_Chart"
         Me.GroupBox_Chart.Size = New System.Drawing.Size(210, 78)
         Me.GroupBox_Chart.TabIndex = 0
@@ -119,7 +123,7 @@ Partial Class SettingsDialog
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.GroupBox_Logging.Controls.Add(Me.Label_loggingLevel)
         Me.GroupBox_Logging.Controls.Add(Me.CheckBox_logShowDebugMessages)
-        Me.GroupBox_Logging.Location = New System.Drawing.Point(12, 96)
+        Me.GroupBox_Logging.Location = New System.Drawing.Point(12, 154)
         Me.GroupBox_Logging.Name = "GroupBox_Logging"
         Me.GroupBox_Logging.Size = New System.Drawing.Size(210, 52)
         Me.GroupBox_Logging.TabIndex = 1
@@ -136,12 +140,45 @@ Partial Class SettingsDialog
         Me.CheckBox_logShowDebugMessages.TabIndex = 1
         Me.CheckBox_logShowDebugMessages.UseVisualStyleBackColor = True
         '
+        'GroupBox_Interface
+        '
+        Me.GroupBox_Interface.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.GroupBox_Interface.Controls.Add(Me.Label_showOverview)
+        Me.GroupBox_Interface.Controls.Add(Me.CheckBox_showOverviewOnStartup)
+        Me.GroupBox_Interface.Location = New System.Drawing.Point(12, 12)
+        Me.GroupBox_Interface.Name = "GroupBox_Interface"
+        Me.GroupBox_Interface.Size = New System.Drawing.Size(209, 52)
+        Me.GroupBox_Interface.TabIndex = 3
+        Me.GroupBox_Interface.TabStop = False
+        Me.GroupBox_Interface.Text = "Interface"
+        '
+        'Label_showOverview
+        '
+        Me.Label_showOverview.AutoSize = True
+        Me.Label_showOverview.Location = New System.Drawing.Point(8, 20)
+        Me.Label_showOverview.Name = "Label_showOverview"
+        Me.Label_showOverview.Size = New System.Drawing.Size(160, 13)
+        Me.Label_showOverview.TabIndex = 1
+        Me.Label_showOverview.Text = "Show overview chart on startup:"
+        '
+        'CheckBox_showOverviewOnStartup
+        '
+        Me.CheckBox_showOverviewOnStartup.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.CheckBox_showOverviewOnStartup.AutoSize = True
+        Me.CheckBox_showOverviewOnStartup.Location = New System.Drawing.Point(187, 20)
+        Me.CheckBox_showOverviewOnStartup.Name = "CheckBox_showOverviewOnStartup"
+        Me.CheckBox_showOverviewOnStartup.Size = New System.Drawing.Size(15, 14)
+        Me.CheckBox_showOverviewOnStartup.TabIndex = 0
+        Me.CheckBox_showOverviewOnStartup.UseVisualStyleBackColor = True
+        '
         'SettingsDialog
         '
         Me.AcceptButton = Me.Button_Close
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(234, 311)
+        Me.Controls.Add(Me.GroupBox_Interface)
         Me.Controls.Add(Me.Button_Close)
         Me.Controls.Add(Me.GroupBox_Logging)
         Me.Controls.Add(Me.GroupBox_Chart)
@@ -160,6 +197,8 @@ Partial Class SettingsDialog
         CType(Me.NumericUpDown_DefaultFontSize, System.ComponentModel.ISupportInitialize).EndInit()
         Me.GroupBox_Logging.ResumeLayout(False)
         Me.GroupBox_Logging.PerformLayout()
+        Me.GroupBox_Interface.ResumeLayout(False)
+        Me.GroupBox_Interface.PerformLayout()
         Me.ResumeLayout(False)
 
     End Sub
@@ -172,4 +211,7 @@ Partial Class SettingsDialog
     Friend WithEvents CheckBox_logShowDebugMessages As CheckBox
     Friend WithEvents NumericUpDown_DefaultFontSize As NumericUpDown
     Friend WithEvents Label_DefaultFontSize As Label
+    Friend WithEvents GroupBox_Interface As GroupBox
+    Friend WithEvents Label_showOverview As Label
+    Friend WithEvents CheckBox_showOverviewOnStartup As CheckBox
 End Class
