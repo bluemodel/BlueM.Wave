@@ -36,48 +36,30 @@ Namespace Fileformats
         End Property
 
         ''' <summary>
-        ''' Possible data types of values
-        ''' </summary>
-        Private Enum DataTypes As Integer
-            [Integer] = 1
-            [Single] = 2
-            [Double] = 3
-            [Boolean] = 4
-        End Enum
-
-        ''' <summary>
-        ''' Lengths in bytes for different data types
-        ''' </summary>
-        Private Shared ReadOnly DataTypeLengths As New Dictionary(Of DataTypes, Integer) From {
-        {DataTypes.Integer, 4},
-        {DataTypes.Single, 4},
-        {DataTypes.Double, 8},
-        {DataTypes.Boolean, 1}
-    }
-
-        ''' <summary>
-        ''' The data type of values in this file instance
-        ''' </summary>
-        Private DataType As DataTypes
-
-        ''' <summary>
-        ''' The length in bytes of the values in this file instance
-        ''' </summary>
-        ''' <returns></returns>
-        Private ReadOnly Property DataTypeLength As Integer
-            Get
-                Return GBL.DataTypeLengths(Me.DataType)
-            End Get
-        End Property
-
-        ''' <summary>
         ''' Column definitions with name and unit pairs for GBL format
         ''' </summary>
         Private Shared ReadOnly ColumnDefinitions As (Name As String, Unit As String)() = {
-            ("Qzu", "l/s"), ("Qab", "l/s"), ("Pges_zu", "mg/l"), ("Pges_ab", "mg/l"),
-            ("AFS_zu", "mg/l"), ("AFS_ab", "mg/l"), ("AFS63_zu", "mg/l"), ("AFS63_ab", "mg/l"), ("NH4-N_zu", "mg/l"), ("NH4-N_ab", "mg/l"),
-            ("CSB_zu", "mg/l"), ("CSB_ab", "mg/l"), ("T_zu", "°C"), ("T_ab", "°C"), ("pH_zu", "-"),
-            ("pH_ab", "-"), ("O2_zu", "mg/l"), ("O2_ab", "mg/l"), ("NH3_zu", "mg/l"), ("k2", "-"), ("tf", "min")
+            ("Qzu", "l/s"),
+            ("Qab", "l/s"),
+            ("Pges_zu", "mg/l"),
+            ("Pges_ab", "mg/l"),
+            ("AFS_zu", "mg/l"),
+            ("AFS_ab", "mg/l"),
+            ("AFS63_zu", "mg/l"),
+            ("AFS63_ab", "mg/l"),
+            ("NH4-N_zu", "mg/l"),
+            ("NH4-N_ab", "mg/l"),
+            ("CSB_zu", "mg/l"),
+            ("CSB_ab", "mg/l"),
+            ("T_zu", "°C"),
+            ("T_ab", "°C"),
+            ("pH_zu", "-"),
+            ("pH_ab", "-"),
+            ("O2_zu", "mg/l"),
+            ("O2_ab", "mg/l"),
+            ("NH3_zu", "mg/l"),
+            ("k2", "-"),
+            ("tf", "min")
         }
 
         Public Sub New(FileName As String, Optional ReadAllNow As Boolean = False)
@@ -107,7 +89,6 @@ Namespace Fileformats
             Me.TimeSeriesInfos.Clear()
 
             ' GBL format has fixed structure: 8 bytes date + 21 * 4 bytes data columns
-            Me.DataType = DataTypes.Single ' Fixed data type for GBL format
 
             ' Create 21 time series info objects for the fixed columns
             For i As Integer = 0 To ColumnDefinitions.Length - 1
@@ -149,9 +130,6 @@ Namespace Fileformats
             selectedIndices.Sort()
 
             Using reader As New IO.BinaryReader(IO.File.OpenRead(File), Text.ASCIIEncoding.ASCII)
-                'skip first record (header) - 92 bytes für Fortran direct access
-                'reader.ReadBytes(92)
-
                 'read data records
                 errorcount = 0
                 Do Until reader.BaseStream.Position >= reader.BaseStream.Length
@@ -161,31 +139,23 @@ Namespace Fileformats
                         'convert real date to DateTime
                         timestamp = BIN.rDateToDate(rdate)
 
-                        'read all 21 values (each 4 bytes = Single)
-                        Dim allValues(20) As Single
-                        For i As Integer = 0 To 20
-                            allValues(i) = reader.ReadSingle()
-                        Next
-
-                        'add selected values to time series
-                        For Each index As Integer In selectedIndices
-                            value = allValues(index)
-
-                            'convert error values to NaN
-                            If Math.Abs(value - BIN.ErrorValue) < 0.0001 Then
-                                value = Double.NaN
-                                errorcount += 1
+                        'loop over all columns (each 4 bytes = Single)
+                        For i As Integer = 0 To GBL.ColumnDefinitions.Length - 1
+                            If selectedIndices.Contains(i) Then
+                                'read value
+                                value = reader.ReadSingle()
+                                'convert error values to NaN
+                                If Math.Abs(value - BIN.ErrorValue) < 0.0001 Then
+                                    value = Double.NaN
+                                    errorcount += 1
+                                End If
+                                'add node to time series
+                                Me.TimeSeries(i).AddNode(timestamp, value)
+                            Else
+                                'skip value
+                                reader.ReadBytes(4)
                             End If
-
-                            'add node to time series
-                            Me.TimeSeries(index).AddNode(timestamp, value)
                         Next
-
-                        'skip padding bytes to complete 92-byte record if needed
-                        Dim bytesRead As Integer = 8 + (21 * 4) ' 8 + 84 = 92
-                        If bytesRead < 92 Then
-                            reader.ReadBytes(92 - bytesRead)
-                        End If
 
                     Catch ex As EndOfStreamException
                         Exit Do
