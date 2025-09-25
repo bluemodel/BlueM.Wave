@@ -806,7 +806,8 @@ Public Class Wave
         Dim dialog As Form
         Dim dialogResult As DialogResult
 
-        If TypeOf tsFile Is Fileformats.CSV Then
+        If tsFile.GetType() Is GetType(Fileformats.CSV) Then
+            ' show the import CSV dialog for exact CSV instances (but not for derived classes)
             dialog = New ImportCSVDialog(tsFile)
         Else
             dialog = New SelectSeriesDialog(tsFile)
