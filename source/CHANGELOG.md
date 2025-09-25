@@ -1,6 +1,11 @@
 BlueM.Wave Release Notes
 ========================
 
+Version 2.11.0
+--------------
+NEW:
+* Added support for reading files in GINA CSV WEL format #203
+
 Version 2.10.0
 --------------
 NEW:
