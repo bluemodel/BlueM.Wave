@@ -373,8 +373,6 @@ Friend Class WaveController
             unitsInUse.Add(ts.Unit)
         Next
         For i As Integer = View.TChart1.Axes.Custom.Count - 1 To 0 Step -1
-            'Dim axis As Steema.TeeChart.Axis = View.TChart1.Axes.Custom(i)
-            'If Not unitsInUse.Contains(axis.Tag) Then
             Dim axisUnit As String = View.TChart1.Axes.Custom(i).Tag
             If Not unitsInUse.Contains(axisUnit) Then
                 'this axis is no longer used, remove it
