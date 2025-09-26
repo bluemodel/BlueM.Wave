@@ -317,9 +317,21 @@ Friend Class WaveController
                         'series removed, delete series from model
                         Dim id As Integer = seriesEvent.Series.Tag
                         If _model.TimeSeries.ContainsId(id) Then
-                            'temporarily disable event handling to prevent multiple deletions
+                            ' NOTE: This event is raised before the series is actually removed in TeeChart.
+                            ' We must NOT remove the series from the chart ourselves here.
+                            ' Otherwise, after we have handled the event, TeeChart will attempt to carry out
+                            ' the actual removal itself and thereby remove a different, additional series!
+                            ' Therefore, we must temporarily disable event handling here.
+                            ' (An alternative would be to cancel the TeeChart event here, but it's unclear if/how that is possible.)
                             RemoveHandler _model.SeriesRemoved, AddressOf SeriesRemoved
                             _model.RemoveTimeSeries(id)
+                            'remove series from overview chart manually because event handling is disabled
+                            For Each series As Steema.TeeChart.Styles.Series In View.TChart2.Series
+                                If series.Tag = id Then
+                                    View.TChart2.Series.Remove(series)
+                                    Exit For
+                                End If
+                            Next
                             AddHandler _model.SeriesRemoved, AddressOf SeriesRemoved
                         End If
 
@@ -2668,6 +2680,18 @@ Friend Class WaveController
 
     End Sub
 
+    ''' <summary>
+    ''' Handles the case where a TimeSeries was removed from the model
+    ''' Removes the series from the charts
+    ''' </summary>
+    ''' <param name="id">Id of the removed TimeSeries</param>
+    ''' <remarks>
+    ''' This handler must not be called if the event originates from a
+    ''' Steema.TeeChart.Styles.SeriesEventStyle.Remove event
+    ''' (i.e. when the user presses the delete button in the chart list box),
+    ''' because otherwise TeeChart will carry out the actual removal afterwards
+    ''' and thereby actually remove a different, additional series!
+    ''' </remarks>
     Private Sub SeriesRemoved(id As Integer)
 
         'Remove series from main chart

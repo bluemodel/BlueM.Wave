@@ -7,6 +7,9 @@ NEW:
 * Added support for reading files in GINA CSV WEL format #203
 * Added a user setting for showing/hiding the overview chart on startup #38
 
+FIXED:
+* Fixed series not being removed from the overview chart when they are deleted using the TeeChart editor #205
+
 Version 2.10.0
 --------------
 NEW:
