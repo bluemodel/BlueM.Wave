@@ -320,7 +320,9 @@ Friend Class WaveController
                         End If
 
                     Case Steema.TeeChart.Styles.SeriesEventStyle.Remove
-                        'series removed, delete series from model
+                        'series removed
+
+                        'delete series from model
                         Dim id As Integer = seriesEvent.Series.Tag
                         If _model.TimeSeries.ContainsId(id) Then
                             ' NOTE: This event is raised before the series is actually removed in TeeChart.
@@ -341,6 +343,11 @@ Friend Class WaveController
                             AddHandler _model.SeriesRemoved, AddressOf SeriesRemoved
                         End If
 
+                        'if the removed series was assigned to a custom axis, remove the axis if no other series is using it
+                        If seriesEvent.Series.VertAxis = Steema.TeeChart.Styles.VerticalAxis.Custom Then
+                            Call Me.RemoveUnusedCustomAxes()
+                        End If
+
                     Case Steema.TeeChart.Styles.SeriesEventStyle.Swap
                         'series reordered, reorder series in model
                         Dim ids As New List(Of Integer)
@@ -354,6 +361,27 @@ Friend Class WaveController
         Catch ex As Exception
             Log.AddLogEntry(Log.levels.debug, ex.Message)
         End Try
+    End Sub
+
+    ''' <summary>
+    ''' Removes any custom axes that are no longer used by any time series
+    ''' </summary>
+    Private Sub RemoveUnusedCustomAxes()
+
+        Dim unitsInUse As New HashSet(Of String)
+        For Each ts As TimeSeries In _model.TimeSeries.Values
+            unitsInUse.Add(ts.Unit)
+        Next
+        For i As Integer = View.TChart1.Axes.Custom.Count - 1 To 0 Step -1
+            'Dim axis As Steema.TeeChart.Axis = View.TChart1.Axes.Custom(i)
+            'If Not unitsInUse.Contains(axis.Tag) Then
+            Dim axisUnit As String = View.TChart1.Axes.Custom(i).Tag
+            If Not unitsInUse.Contains(axisUnit) Then
+                'this axis is no longer used, remove it
+                View.TChart1.Axes.Custom.RemoveAt(i)
+                View.TChart1.Refresh()
+            End If
+        Next
     End Sub
 
 #Region "user events"
@@ -2696,7 +2724,7 @@ Friend Class WaveController
 
     ''' <summary>
     ''' Handles the case where a TimeSeries was removed from the model
-    ''' Removes the series from the charts
+    ''' Removes the series from the charts and removes any unused custom axes
     ''' </summary>
     ''' <param name="id">Id of the removed TimeSeries</param>
     ''' <remarks>
@@ -2729,6 +2757,9 @@ Friend Class WaveController
                 Exit For
             End If
         Next
+
+        'remove any unused custom axes
+        Call Me.RemoveUnusedCustomAxes()
 
     End Sub
 
