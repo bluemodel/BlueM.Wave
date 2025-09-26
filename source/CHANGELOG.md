@@ -9,6 +9,7 @@ NEW:
 
 FIXED:
 * Fixed series not being removed from the overview chart when they are deleted using the TeeChart editor #205
+* Fixed Y axes not auto-adjusting when series are activated or deactivated
 
 Version 2.10.0
 --------------

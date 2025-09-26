@@ -285,8 +285,9 @@ Friend Class WaveController
                 Dim seriesEvent As Steema.TeeChart.Styles.SeriesEvent = CType(e, Steema.TeeChart.Styles.SeriesEvent)
                 Select Case seriesEvent.Event
                     Case Steema.TeeChart.Styles.SeriesEventStyle.ChangeActive
-                        'series visibility has been changed. check whether custom axes should be made invisible
+                        'series visibility has been changed
 
+                        'check whether custom axes should be made invisible
                         'collect units of all active series
                         Dim activeUnits As New HashSet(Of String)
                         For Each series As Steema.TeeChart.Styles.Series In View.TChart1.Series
@@ -302,6 +303,11 @@ Friend Class WaveController
                                 axis.Visible = False
                             End If
                         Next
+
+                        'update Y axis scales if auto adjust is enabled
+                        If View.AutoAdjustYAxes Then
+                            Call Me.AdjustYAxes()
+                        End If
 
                     Case Steema.TeeChart.Styles.SeriesEventStyle.ChangeTitle
                         'series title changed, update title in the model
@@ -2016,69 +2022,77 @@ Friend Class WaveController
         'Update overview
         Call Me.UpdateOverviewZoomExtent()
 
-        'Auto-adjust Y-axes to current viewport
+        'Auto-adjust Y-axes to current viewport if activated
         If View.AutoAdjustYAxes Then
-
-            Dim startdate, enddate As DateTime
-            Dim title As String
-            Dim seriesMin, seriesMax, Ymin, Ymax As Double
-            Dim axisType As Steema.TeeChart.Styles.VerticalAxis
-            Dim axis As Steema.TeeChart.Axis
-
-            'get start and end date of current viewport
-            startdate = View.ChartMinX
-            enddate = View.ChartMaxX
-
-            'define axes to process
-            Dim axes As New List(Of (axisType As Steema.TeeChart.Styles.VerticalAxis, axis As Steema.TeeChart.Axis))
-            axes.Add((Steema.TeeChart.Styles.VerticalAxis.Left, View.TChart1.Axes.Left))
-            axes.Add((Steema.TeeChart.Styles.VerticalAxis.Right, View.TChart1.Axes.Right))
-            For Each axis In View.TChart1.Axes.Custom
-                axes.Add((Steema.TeeChart.Styles.VerticalAxis.Custom, axis))
-            Next
-
-            'loop over Y-axes
-            For Each t As (axisType As Steema.TeeChart.Styles.VerticalAxis, axis As Steema.TeeChart.Axis) In axes
-                axisType = t.axisType
-                axis = t.axis
-
-                'loop over series
-                Ymin = Double.MaxValue
-                Ymax = Double.MinValue
-                For Each ts As TimeSeries In _model.TimeSeries.Values
-                    title = ts.Title
-
-                    'only process active series on the current axis
-                    If View.TChart1.Series.WithTitle(title).Active And View.TChart1.Series.WithTitle(title).VertAxis = axisType Then
-
-                        If axisType = Steema.TeeChart.Styles.VerticalAxis.Custom And ts.Unit <> axis.Tag Then
-                            'series is on a different custom axis, skip it
-                            Continue For
-                        End If
-
-                        'get series min and max for current viewport
-                        seriesMin = ts.Minimum(startdate, enddate)
-                        If seriesMin < Ymin Then
-                            Ymin = seriesMin
-                        End If
-                        seriesMax = ts.Maximum(startdate, enddate)
-                        If seriesMax > Ymax Then
-                            Ymax = seriesMax
-                        End If
-                    End If
-                Next
-
-                'set new Y axis bounds
-                If Ymin < Double.MaxValue Then
-                    axis.AutomaticMinimum = False
-                    axis.Minimum = Ymin
-                End If
-                If Ymax > Double.MinValue Then
-                    axis.AutomaticMaximum = False
-                    axis.Maximum = Ymax
-                End If
-            Next
+            Call Me.AdjustYAxes()
         End If
+    End Sub
+
+    ''' <summary>
+    ''' Adjust all Y-axes to the min and max of all active series on the respective axis
+    ''' for the currently displayed viewport
+    ''' </summary>
+    ''' <remarks></remarks>
+    Private Sub AdjustYAxes()
+        Dim startdate, enddate As DateTime
+        Dim title As String
+        Dim seriesMin, seriesMax, Ymin, Ymax As Double
+        Dim axisType As Steema.TeeChart.Styles.VerticalAxis
+        Dim axis As Steema.TeeChart.Axis
+
+        'get start and end date of current viewport
+        startdate = View.ChartMinX
+        enddate = View.ChartMaxX
+
+        'define axes to process
+        Dim axes As New List(Of (axisType As Steema.TeeChart.Styles.VerticalAxis, axis As Steema.TeeChart.Axis))
+        axes.Add((Steema.TeeChart.Styles.VerticalAxis.Left, View.TChart1.Axes.Left))
+        axes.Add((Steema.TeeChart.Styles.VerticalAxis.Right, View.TChart1.Axes.Right))
+        For Each axis In View.TChart1.Axes.Custom
+            axes.Add((Steema.TeeChart.Styles.VerticalAxis.Custom, axis))
+        Next
+
+        'loop over Y-axes
+        For Each t As (axisType As Steema.TeeChart.Styles.VerticalAxis, axis As Steema.TeeChart.Axis) In axes
+            axisType = t.axisType
+            axis = t.axis
+
+            'loop over series
+            Ymin = Double.MaxValue
+            Ymax = Double.MinValue
+            For Each ts As TimeSeries In _model.TimeSeries.Values
+                title = ts.Title
+
+                'only process active series on the current axis
+                If View.TChart1.Series.WithTitle(title).Active And View.TChart1.Series.WithTitle(title).VertAxis = axisType Then
+
+                    If axisType = Steema.TeeChart.Styles.VerticalAxis.Custom And ts.Unit <> axis.Tag Then
+                        'series is on a different custom axis, skip it
+                        Continue For
+                    End If
+
+                    'get series min and max for current viewport
+                    seriesMin = ts.Minimum(startdate, enddate)
+                    If seriesMin < Ymin Then
+                        Ymin = seriesMin
+                    End If
+                    seriesMax = ts.Maximum(startdate, enddate)
+                    If seriesMax > Ymax Then
+                        Ymax = seriesMax
+                    End If
+                End If
+            Next
+
+            'set new Y axis bounds
+            If Ymin < Double.MaxValue Then
+                axis.AutomaticMinimum = False
+                axis.Minimum = Ymin
+            End If
+            If Ymax > Double.MinValue Then
+                axis.AutomaticMaximum = False
+                axis.Maximum = Ymax
+            End If
+        Next
     End Sub
 
     ''' <summary>
