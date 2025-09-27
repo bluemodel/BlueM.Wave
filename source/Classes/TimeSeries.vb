@@ -1321,14 +1321,10 @@ Public Class TimeSeries
     ''' <param name="timestepInterval">The number of intervals to offset (can be negative in order to subtract)</param>
     ''' <returns>The shifted timeseries</returns>
     ''' <remarks>
-    ''' Attempting to shift a time series by months will throw an ArgumentException.
-    ''' Shifting by years may cause the loss of leap days.
+    ''' Shifting by months may cause the loss of data points due to varying month lengths.
+    ''' Shifting by years may cause the loss of data points due to leap days.
     ''' </remarks>
     Public Function ShiftTime(timestepInterval As Integer, timestepType As TimeStepTypeEnum) As TimeSeries
-
-        If timestepType = TimeStepTypeEnum.Month Then
-            Throw New ArgumentException("Shifting time series by months is not supported due to varying month lengths!")
-        End If
 
         Dim ts As TimeSeries = Me.Clone()
         ts.Nodes.Clear()
@@ -1340,7 +1336,16 @@ Public Class TimeSeries
                 'skip leap day if target year is not a leap year
                 Dim targetYear As Integer = node.Key.Year + timestepInterval
                 If calendar.IsLeapDay(node.Key.Year, node.Key.Month, node.Key.Day) AndAlso Not calendar.IsLeapYear(targetYear) Then
-                    Log.AddLogEntry(Log.levels.warning, $"Skipping timestamp on leap day {node.Key} when shifting time series '{Me.Title}'!")
+                    Log.AddLogEntry(Log.levels.warning, $"Skipping timestamp on leap day {node.Key} when shifting time series '{Me.Title}' by years!")
+                    Continue For
+                End If
+            ElseIf timestepType = TimeStepTypeEnum.Month Then
+                'skip day 29, 30, 31 if target month does not have that many days
+                Dim targetYear As Integer = node.Key.AddMonths(timestepInterval).Year
+                Dim targetMonth As Integer = node.Key.AddMonths(timestepInterval).Month
+                Dim daysInTargetMonth As Integer = DateTime.DaysInMonth(targetYear, targetMonth)
+                If node.Key.Day > daysInTargetMonth Then
+                    Log.AddLogEntry(Log.levels.warning, $"Skipping timestamp on end of month {node.Key} when shifting time series '{Me.Title}' by months!")
                     Continue For
                 End If
             End If

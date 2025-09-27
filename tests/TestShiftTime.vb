@@ -138,15 +138,19 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
     ''' <summary>
     ''' Test ShiftTime with an interval of months that would cause duplicate keys
     ''' </summary>
-    <TestMethod()> Public Sub TestShiftTime_DuplicateKeys()
+    <TestMethod()> Public Sub TestShiftTime_Months()
         Dim ts As New TimeSeries("TestSeries")
         ts.AddNode(New DateTime(2021, 1, 28), 28.0)
         ts.AddNode(New DateTime(2021, 1, 29), 29.0)
         ts.AddNode(New DateTime(2021, 1, 30), 30.0)
         ts.AddNode(New DateTime(2021, 1, 31), 31.0)
 
-        ' All would shift to February 28, 2021 if interval is 1 month
-        Assert.ThrowsException(Of ArgumentException)(Sub() ts.ShiftTime(1, TimeSeries.TimeStepTypeEnum.Month))
+        Dim shifted As TimeSeries = ts.ShiftTime(1, TimeSeries.TimeStepTypeEnum.Month)
+
+        'February 29, 30 and 31 should have been skipped because those dates do not exist
+        Assert.AreEqual(1, shifted.Length)
+        Assert.AreEqual(28.0, shifted.Nodes(New DateTime(2021, 2, 28)))
+
     End Sub
 
 End Class
