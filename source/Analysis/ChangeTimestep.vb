@@ -108,30 +108,30 @@ Friend Class ChangeTimestep
 
         'show the ChangeTimeStepDialog
         Dim dlg As New ChangeTimestepDialog(ts)
-        If dlg.ShowDialog() = Windows.Forms.DialogResult.OK Then
-
-            'read settings from dialog
-            inputInterpretation = dlg.ComboBox_InputInterpretation.SelectedItem
-            outputInterpretation = dlg.ComboBox_OutputInterpretation.SelectedItem
-            timesteptype = dlg.ComboBox_TimestepType.SelectedItem
-            timestepinterval = dlg.NumericUpDown_TimestepInterval.Value
-            startdate = CType(dlg.MaskedTextBox_Start.ValidateText(), DateTime)
-            ignoreNaN = dlg.CheckBox_IgnoreNaN.Checked
-
-            'if ignoreNaN is set, remove all NaN values from time series
-            If ignoreNaN = True Then
-                ts = ts.removeNaNValues()
-            End If
-
-            'change timestep
-            ts.Interpretation = inputInterpretation
-            ts_new = ts.ChangeTimestep(timesteptype, timestepinterval, startdate, outputInterpretation)
-
-            'Store result series
-            ts_new.DataSource = New TimeSeriesDataSource(TimeSeriesDataSource.OriginEnum.AnalysisResult)
-            Me.ResultSeries.Add(ts_new)
-
+        If dlg.ShowDialog() <> DialogResult.OK Then
+            Throw New AnalysisCancelledException("Analysis cancelled")
         End If
+
+        'read settings from dialog
+        inputInterpretation = dlg.ComboBox_InputInterpretation.SelectedItem
+        outputInterpretation = dlg.ComboBox_OutputInterpretation.SelectedItem
+        timesteptype = dlg.ComboBox_TimestepType.SelectedItem
+        timestepinterval = dlg.NumericUpDown_TimestepInterval.Value
+        startdate = CType(dlg.MaskedTextBox_Start.ValidateText(), DateTime)
+        ignoreNaN = dlg.CheckBox_IgnoreNaN.Checked
+
+        'if ignoreNaN is set, remove all NaN values from time series
+        If ignoreNaN = True Then
+            ts = ts.removeNaNValues()
+        End If
+
+        'change timestep
+        ts.Interpretation = inputInterpretation
+        ts_new = ts.ChangeTimestep(timesteptype, timestepinterval, startdate, outputInterpretation)
+
+        'Store result series
+        ts_new.DataSource = New TimeSeriesDataSource(TimeSeriesDataSource.OriginEnum.AnalysisResult)
+        Me.ResultSeries.Add(ts_new)
 
     End Sub
 

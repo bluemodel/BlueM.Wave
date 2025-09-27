@@ -112,6 +112,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Analysis\Analysis.vb" />
+    <Compile Include="Classes\Exceptions.vb" />
     <Compile Include="Analysis\AnalysisResultChart.Designer.vb">
       <DependentUpon>AnalysisResultChart.vb</DependentUpon>
     </Compile>
@@ -211,7 +212,6 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Analysis\AnnualRecurrenceProbability.vb" />
-    <Compile Include="Analysis\TestAnalysis.vb" />
     <Compile Include="Analysis\TimeShift.vb" />
     <Compile Include="Analysis\TimestepAnalysis.vb" />
     <Compile Include="Analysis\TimestepAnalysisDialog.Designer.vb">

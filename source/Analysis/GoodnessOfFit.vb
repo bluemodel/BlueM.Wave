@@ -308,21 +308,18 @@ Friend Class GoodnessOfFit
 
     Public Overrides Sub ProcessAnalysis()
 
-        Dim diagresult As DialogResult
-
         'Preprocessing
         '=============
 
         'Dialog anzeigen
-        Dim dialog As New GoodnessOfFit_Dialog(Me.InputTimeSeries)
-        diagresult = dialog.ShowDialog()
-        If (diagresult <> DialogResult.OK) Then
-            Throw New Exception("User abort")
+        Dim dlg As New GoodnessOfFit_Dialog(Me.InputTimeSeries)
+        If dlg.ShowDialog() <> DialogResult.OK Then
+            Throw New AnalysisCancelledException("Analysis cancelled")
         End If
 
         'assign time series
-        Me.ts_obs = dialog.seriesObserved
-        Me.ts_sim_list = dialog.seriesSimulated
+        Me.ts_obs = dlg.seriesObserved
+        Me.ts_sim_list = dlg.seriesSimulated
 
         For Each ts_sim As TimeSeries In Me.ts_sim_list
 
@@ -362,8 +359,8 @@ Friend Class GoodnessOfFit
             series_s.Add("Entire series", ts_sim)
 
             'calculate annual GoF parameters?
-            If dialog.CheckBox_Annual.Checked Then
-                Dim startMonth As Integer = CType(dialog.ComboBox_startMonth.SelectedItem, Month).number
+            If dlg.CheckBox_Annual.Checked Then
+                Dim startMonth As Integer = CType(dlg.ComboBox_startMonth.SelectedItem, Month).number
                 Dim splits As Dictionary(Of Integer, TimeSeries)
                 'split observed series and store them
                 splits = ts_obs.SplitHydroYears(startMonth)

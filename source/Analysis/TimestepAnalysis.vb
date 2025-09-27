@@ -108,15 +108,6 @@ Friend Class TimeStepAnalysis
 
         Call MyBase.New(ts_list)
 
-        Dim dlg As New TimestepAnalysisDialog()
-        Dim dlg_result As DialogResult = dlg.ShowDialog()
-
-        If Not dlg_result = DialogResult.OK Then
-            Throw New Exception("User abort")
-        End If
-
-        Me.TimeUnit = dlg.ComboBox_TimestepType.SelectedItem
-
     End Sub
 
     ''' <summary>
@@ -128,6 +119,13 @@ Friend Class TimeStepAnalysis
         Dim dt As TimeSpan
         Dim dt_val As Double
         Dim result_ts As TimeSeries
+
+        Dim dlg As New TimestepAnalysisDialog()
+        If dlg.ShowDialog() <> DialogResult.OK Then
+            Throw New AnalysisCancelledException("Analysis cancelled")
+        End If
+
+        Me.TimeUnit = dlg.ComboBox_TimestepType.SelectedItem
 
         'Loop over time series
         For Each ts As TimeSeries In MyBase.InputTimeSeries
