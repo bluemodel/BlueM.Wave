@@ -93,7 +93,7 @@ Friend Class ChangeTimestep
     End Sub
 
     ''' <summary>
-    ''' Analyse durchführen
+    ''' Analyse durchfÃ¼hren
     ''' </summary>
     Public Overrides Sub ProcessAnalysis()
 
