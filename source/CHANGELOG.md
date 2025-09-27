@@ -4,7 +4,7 @@ BlueM.Wave Release Notes
 Version 2.11.0
 --------------
 NEW:
-* New analysis function TimeShift for shifting time series by a specified time interval
+* New analysis function TimeShift for shifting time series by a specified time interval #206
 * Added support for reading files in GINA CSV WEL format #203
 * Added a user setting for showing/hiding the overview chart on startup #38
 
