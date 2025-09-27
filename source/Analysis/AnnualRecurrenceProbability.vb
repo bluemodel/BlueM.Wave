@@ -117,13 +117,12 @@ Friend Class AnnualRecurrenceProbability
 
         Dim ts As TimeSeries = Me.InputTimeSeries(0)
 
-        Dim dialog As New AnnualRecurrenceProbability_Dialog()
-        Dim dialogResult As DialogResult = dialog.ShowDialog()
-        If dialogResult <> DialogResult.OK Then
-            Throw New Exception("User abort!")
+        Dim dlg As New AnnualRecurrenceProbability_Dialog()
+        If dlg.ShowDialog() <> DialogResult.OK Then
+            Throw New AnalysisCancelledException("Analysis cancelled")
         End If
 
-        Dim startMonth As Integer = CType(dialog.ComboBox_startMonth.SelectedItem, Month).number
+        Dim startMonth As Integer = CType(dlg.ComboBox_startMonth.SelectedItem, Month).number
 
         'get annual max values as events
         Me.events = New List(Of AnnualEvent)

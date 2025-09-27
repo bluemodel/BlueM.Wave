@@ -94,9 +94,8 @@ Friend Class TimeShift
     Public Overrides Sub ProcessAnalysis()
 
         Dim dlg As New TimeShiftDialog()
-        If dlg.ShowDialog() = DialogResult.Cancel Then
-            'user cancelled
-            Throw New Exception("User cancelled analysis")
+        If dlg.ShowDialog() <> DialogResult.OK Then
+            Throw New AnalysisCancelledException("Analysis cancelled")
         End If
 
         Dim timestepInterval As Integer = dlg.NumericUpDown_TimestepInterval.Value

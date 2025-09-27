@@ -99,13 +99,13 @@ Friend Class LinearRegression
     Public Overrides Sub ProcessAnalysis()
 
         'Auswahl-Dialog öffnen
-        Dim dialog As New LinearRegression_Dialog(Me.InputTimeSeries(0).Title, Me.InputTimeSeries(1).Title)
-        If (dialog.ShowDialog() <> DialogResult.OK) Then
-            Throw New Exception("User abort")
+        Dim dlg As New LinearRegression_Dialog(Me.InputTimeSeries(0).Title, Me.InputTimeSeries(1).Title)
+        If dlg.ShowDialog() <> DialogResult.OK Then
+            Throw New AnalysisCancelledException("Analysis cancelled")
         End If
 
         'Zeitreihen zuweisen
-        If (dialog.getNrLueckenhafteReihe = 1) Then
+        If (dlg.getNrLueckenhafteReihe = 1) Then
             Me.ts_gaps = Me.InputTimeSeries(0)
             Me.ts_ref = Me.InputTimeSeries(1)
         Else

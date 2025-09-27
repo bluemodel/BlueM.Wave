@@ -101,14 +101,13 @@ Friend Class AnnualStatistics
         Dim year As Integer
         Dim series As TimeSeries
 
-        Dim dialog As New AnnualStatistics_Dialog()
-        Dim dialogResult As DialogResult = dialog.ShowDialog()
-        If dialogResult <> DialogResult.OK Then
-            Throw New Exception("User abort!")
+        Dim dlg As New AnnualStatistics_Dialog()
+        If dlg.ShowDialog() <> DialogResult.OK Then
+            Throw New AnalysisCancelledException("Analysis cancelled")
         End If
 
-        Dim startMonth As Integer = CType(dialog.ComboBox_startMonth.SelectedItem, Month).number
-        Me.generateBoundingBoxes = dialog.CheckBox_boundingbox.Checked
+        Dim startMonth As Integer = CType(dlg.ComboBox_startMonth.SelectedItem, Month).number
+        Me.generateBoundingBoxes = dlg.CheckBox_boundingbox.Checked
 
         'stats for entire series
         Me.stats.Add("Entire series", calculateStats(Me.InputTimeSeries(0)))

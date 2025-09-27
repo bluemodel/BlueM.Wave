@@ -121,7 +121,7 @@ Friend Class Calculator
         'show the ChangeTimeStepDialog
         Dim dlg As New CalculatorDialog(Me.tsVariables)
         If dlg.ShowDialog() <> DialogResult.OK Then
-            Throw New Exception("Cancelled by user")
+            Throw New AnalysisCancelledException("Analysis cancelled")
         End If
 
         'read settings from dialog

@@ -980,10 +980,11 @@ Friend Class WaveController
                     Next
                 End If
 
+            Catch ex As AnalysisCancelledException
+                Call Log.AddLogEntry(Log.levels.info, "Analysis cancelled by user")
+
             Catch ex As Exception
-                'Logeintrag
                 Call Log.AddLogEntry(Log.levels.error, "Analysis failed: " & ex.Message)
-                'Alert
                 MsgBox("Analysis failed:" & eol & ex.Message, MsgBoxStyle.Critical)
 
             Finally

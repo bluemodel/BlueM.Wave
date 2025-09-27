@@ -103,14 +103,14 @@ Friend Class Autocorrelation
         Me.ts_in = Me.InputTimeSeries(0)
 
         'Parameter-Dialog anzeigen
-        Dim dialog As New Autocorrelation_Dialog(Me.ts_in)
-        If (dialog.ShowDialog() <> DialogResult.OK) Then
-            Throw New Exception("User abort")
+        Dim dlg As New Autocorrelation_Dialog(Me.ts_in)
+        If dlg.ShowDialog() <> DialogResult.OK Then
+            Throw New AnalysisCancelledException("Analysis cancelled")
         End If
 
         'Parameter der Lags aus Dialog abfragen
-        Me.lagSize = dialog.lagSize
-        Me.lagCount = dialog.lagCount
+        Me.lagSize = dlg.lagSize
+        Me.lagCount = dlg.lagCount
 
         'Announce progress start
         MyBase.AnalysisProgressStart(lagCount)

@@ -95,10 +95,12 @@ Friend Class Accumulate
 
         'show dialog
         Dim dlg As New AccumulateDialog(MyBase.InputTimeSeries)
-        If dlg.ShowDialog() = DialogResult.OK Then
+        If dlg.ShowDialog() <> DialogResult.OK Then
+            Throw New AnalysisCancelledException("Analysis cancelled")
+        End If
 
-            'get start date from dialog
-            startdate = CType(dlg.MaskedTextBox_Start.ValidateText(), DateTime)
+        'get start date from dialog
+        startdate = CType(dlg.MaskedTextBox_Start.ValidateText(), DateTime)
 
             For Each ts In MyBase.InputTimeSeries
 
@@ -159,7 +161,6 @@ Friend Class Accumulate
 
             Next
 
-        End If
     End Sub
 
     ''' <summary>

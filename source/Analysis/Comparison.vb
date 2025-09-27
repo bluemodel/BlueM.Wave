@@ -93,15 +93,14 @@ Friend Class Comparison
     Public Overrides Sub ProcessAnalysis()
 
         ' Dialogaufruf zur Auswahl der x-Achse
-        Dim dialog As New Comparison_Dialog(Me.InputTimeSeries(0).Title, Me.InputTimeSeries(1).Title)
-
-        If (dialog.ShowDialog() <> DialogResult.OK) Then
-            Throw New Exception("User abort")
+        Dim dlg As New Comparison_Dialog(Me.InputTimeSeries(0).Title, Me.InputTimeSeries(1).Title)
+        If dlg.ShowDialog() <> DialogResult.OK Then
+            Throw New AnalysisCancelledException("Analysis cancelled")
         End If
 
         ' Zuweisen der x-Achse
         Dim xachse As String
-        xachse = dialog.xAchse
+        xachse = dlg.xAchse
         If (xachse = Me.InputTimeSeries(0).Title) Then
             Me.ts_x = Me.InputTimeSeries(0)
             Me.ts_y = Me.InputTimeSeries(1)
