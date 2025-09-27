@@ -1314,6 +1314,54 @@ Public Class TimeSeries
 
     End Sub
 
+    ''' <summary>
+    ''' Returns a new time series with all timestamps shifted by the specified interval
+    ''' </summary>
+    ''' <param name="timestepType">The type of interval to offset</param>
+    ''' <param name="timestepInterval">The number of intervals to offset (can be negative in order to subtract)</param>
+    ''' <returns>The shifted timeseries</returns>
+    ''' <remarks>
+    ''' Attempting to shift a time series by months will throw an ArgumentException.
+    ''' Shifting by years may cause the loss of leap days.
+    ''' </remarks>
+    Public Function ShiftTime(timestepInterval As Integer, timestepType As TimeStepTypeEnum) As TimeSeries
+
+        If timestepType = TimeStepTypeEnum.Month Then
+            Throw New ArgumentException("Shifting time series by months is not supported due to varying month lengths!")
+        End If
+
+        Dim ts As TimeSeries = Me.Clone()
+        ts.Nodes.Clear()
+
+        Dim calendar As Calendar = CultureInfo.CurrentCulture.Calendar
+        Dim t_new As DateTime
+        For Each node As KeyValuePair(Of DateTime, Double) In Me.Nodes
+            If timestepType = TimeStepTypeEnum.Year Then
+                'skip leap day if target year is not a leap year
+                Dim targetYear As Integer = node.Key.Year + timestepInterval
+                If calendar.IsLeapDay(node.Key.Year, node.Key.Month, node.Key.Day) AndAlso Not calendar.IsLeapYear(targetYear) Then
+                    Log.AddLogEntry(Log.levels.warning, $"Skipping timestamp on leap day {node.Key} when shifting time series '{Me.Title}'!")
+                    Continue For
+                End If
+            End If
+            t_new = TimeSeries.AddTimeInterval(node.Key, timestepType, timestepInterval)
+            ts.AddNode(t_new, node.Value)
+        Next
+
+        'append timeshift description to title
+        Dim timesteptypeString As String = [Enum].GetName(GetType(TimeStepTypeEnum), timestepType)
+        Dim timestepIntervalString As String = timestepInterval.ToString()
+        If timestepInterval > 0 Then
+            timestepIntervalString = "+" & timestepIntervalString
+        End If
+        If timestepInterval > 1 Then
+            timesteptypeString &= "s"
+        End If
+        ts.Title &= $" ({timestepIntervalString} {timesteptypeString})"
+
+        Return ts
+    End Function
+
 #End Region
 
 End Class
