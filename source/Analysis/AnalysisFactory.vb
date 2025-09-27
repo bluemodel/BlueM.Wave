@@ -37,6 +37,7 @@ Friend Module AnalysisFactory
         Histogram
         LinearRegression
         MonthlyStatistics
+        TimeShift
         TimestepAnalysis
         'TestAnalysis    'EDIT THIS
     End Enum
@@ -74,6 +75,8 @@ Friend Module AnalysisFactory
                 Return LinearRegression.Description
             Case AnalysisFunctions.MonthlyStatistics
                 Return MonthlyStatistics.Description
+            Case AnalysisFunctions.TimeShift
+                Return TimeShift.Description
             Case AnalysisFunctions.TimestepAnalysis
                 Return TimeStepAnalysis.Description
                 'Case AnalysisFunctions.TestAnalysis    'EDIT THIS
@@ -133,6 +136,9 @@ Friend Module AnalysisFactory
 
             Case AnalysisFunctions.MonthlyStatistics
                 oAnalysis = New MonthlyStatistics(seriesList)
+
+            Case AnalysisFunctions.TimeShift
+                oAnalysis = New TimeShift(seriesList)
 
             Case AnalysisFunctions.TimestepAnalysis
                 oAnalysis = New TimeStepAnalysis(seriesList)
