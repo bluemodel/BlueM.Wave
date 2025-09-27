@@ -15,6 +15,12 @@
 'You should have received a copy of the GNU Lesser General Public License
 'along with this program.  If not, see <https://www.gnu.org/licenses/>.
 '
+Imports System.Globalization
+
+''' <summary>
+''' Class representing a time series
+''' </summary>
+''' <remarks>A time series consists of a list of nodes (date, value) and associated metadata</remarks>
 Public Class TimeSeries
 
     ''' <summary>
@@ -1130,59 +1136,38 @@ Public Class TimeSeries
     ''' </summary>
     ''' <param name="t">Base DateTime from which to offset</param>
     ''' <param name="timesteptype">The type of interval to offset</param>
-    ''' <param name="timestepinterval">The number of intervals to offset (can be negative in order to subract)</param>
+    ''' <param name="timestepinterval">The number of intervals to offset (can be negative in order to subtract)</param>
     ''' <returns>The offset DateTime</returns>
+    ''' <remarks>
+    ''' Does not check for exceeding DateTime.MaxValue or going below DateTime.MinValue.
+    ''' Handles leap days and varying month lengths correctly when offsetting by years or months.
+    ''' </remarks>
     Public Shared Function AddTimeInterval(t As DateTime, timesteptype As TimeStepTypeEnum, timestepinterval As Integer) As DateTime
 
         'TODO: handle not going above DateTime.MaxValue #68
 
-        Dim n As Integer
-
-        If timestepinterval > 0 Then
-            'add time interval
-            For n = 0 To timestepinterval - 1
-                Select Case timesteptype
-                    Case TimeStepTypeEnum.Second
-                        t += TimeSpan.FromSeconds(1)
-                    Case TimeStepTypeEnum.Minute
-                        t += TimeSpan.FromMinutes(1)
-                    Case TimeStepTypeEnum.Hour
-                        t += TimeSpan.FromHours(1)
-                    Case TimeStepTypeEnum.Day
-                        t += TimeSpan.FromDays(1)
-                    Case TimeStepTypeEnum.Week
-                        t += TimeSpan.FromDays(7)
-                    Case TimeStepTypeEnum.Month
-                        t += TimeSpan.FromDays(DateTime.DaysInMonth(t.Year, t.Month))
-                    Case TimeStepTypeEnum.Year
-                        t = New Date(t.Year + 1, t.Month, t.Day, t.Hour, t.Minute, t.Second)
-                    Case Else
-                        Throw New NotImplementedException($"TimeStepType {timesteptype} not implemented!")
-                End Select
-            Next
-        Else
-            'subtract time interval
-            For n = 0 To Math.Abs(timestepinterval) - 1
-                Select Case timesteptype
-                    Case TimeStepTypeEnum.Second
-                        t -= TimeSpan.FromSeconds(1)
-                    Case TimeStepTypeEnum.Minute
-                        t -= TimeSpan.FromMinutes(1)
-                    Case TimeStepTypeEnum.Hour
-                        t -= TimeSpan.FromHours(1)
-                    Case TimeStepTypeEnum.Day
-                        t -= TimeSpan.FromDays(1)
-                    Case TimeStepTypeEnum.Week
-                        t -= TimeSpan.FromDays(7)
-                    Case TimeStepTypeEnum.Month
-                        t -= TimeSpan.FromDays(DateTime.DaysInMonth(t.Year, t.Month - 1))
-                    Case TimeStepTypeEnum.Year
-                        t = New Date(t.Year - 1, t.Month, t.Day, t.Hour, t.Minute, t.Second)
-                    Case Else
-                        Throw New NotImplementedException($"TimeStepType {timesteptype} not implemented!")
-                End Select
-            Next
+        If timestepinterval = 0 Then
+            Return t
         End If
+
+        Select Case timesteptype
+            Case TimeStepTypeEnum.Second
+                t += TimeSpan.FromSeconds(timestepinterval)
+            Case TimeStepTypeEnum.Minute
+                t += TimeSpan.FromMinutes(timestepinterval)
+            Case TimeStepTypeEnum.Hour
+                t += TimeSpan.FromHours(timestepinterval)
+            Case TimeStepTypeEnum.Day
+                t += TimeSpan.FromDays(timestepinterval)
+            Case TimeStepTypeEnum.Week
+                t += TimeSpan.FromDays(7 * timestepinterval)
+            Case TimeStepTypeEnum.Month
+                t = t.AddMonths(timestepinterval)
+            Case TimeStepTypeEnum.Year
+                t = t.AddYears(timestepinterval)
+            Case Else
+                Throw New NotImplementedException($"TimeStepType {timesteptype} not implemented!")
+        End Select
 
         Return t
 
