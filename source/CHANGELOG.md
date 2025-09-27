@@ -4,6 +4,7 @@ BlueM.Wave Release Notes
 Version 2.11.0
 --------------
 NEW:
+* New analysis function TimeShift for shifting time series by a specified time interval
 * Added support for reading files in GINA CSV WEL format #203
 * Added a user setting for showing/hiding the overview chart on startup #38
 
@@ -13,6 +14,10 @@ CHANGED:
 FIXED:
 * Fixed series not being removed from the overview chart when they are deleted using the TeeChart editor #205
 * Fixed Y axes not auto-adjusting when series are activated or deactivated
+
+API-CHANGES:
+* New public function `TimeSeries.ShiftTime()` for shifting all timestamps by a specified time interval
+* `TimeSeries.AddTimeInterval()` now correctly handles varying month lengths and leap days when offsetting by months or years
 
 Version 2.10.0
 --------------
