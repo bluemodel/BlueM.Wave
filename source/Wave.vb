@@ -486,7 +486,7 @@ Public Class Wave
         Dim dlgResult As DialogResult
         Dim folder As String = ""
         Dim filename As String = ""
-        Dim zres As List(Of TimeSeries)
+        Dim tsList As List(Of TimeSeries)
 
         'Abort if no time series loaded
         If (Me.TimeSeries.Count < 1) Then
@@ -505,14 +505,14 @@ Public Class Wave
         Dim fileType As TimeSeriesFile.FileTypes = exportDlg.ComboBox_Format.SelectedItem
 
         'get selected series
-        zres = New List(Of TimeSeries)
+        tsList = New List(Of TimeSeries)
         For Each ts As TimeSeries In exportDlg.ListBox_Series.SelectedItems
-            zres.Add(ts.Clone()) 'clone them because we may alter their metadata before saving
+            tsList.Add(ts.Clone()) 'clone them because we may alter their metadata before saving
         Next
 
         'export to one or multiple files?
         Dim multifileExport As Boolean
-        If zres.Count = 1 Then
+        If tsList.Count = 1 Then
             'a single series will always be exported to a single file
             multifileExport = False
         Else
@@ -528,20 +528,21 @@ Public Class Wave
 
         'prepare metadata according to file format
         Dim keys As List(Of String)
-        For Each ts As TimeSeries In zres
-            'get a list of required metadata keys depending on file type being exported
-            Select Case fileType
-                Case TimeSeriesFile.FileTypes.FEWS_PI
-                    keys = Fileformats.FEWS_PI.MetadataKeys
-                Case TimeSeriesFile.FileTypes.SWMM_INTERFACE
-                    keys = Fileformats.SWMM_INTERFACE.MetadataKeys
-                Case TimeSeriesFile.FileTypes.UVF
-                    keys = Fileformats.UVF.MetadataKeys
-                Case TimeSeriesFile.FileTypes.ZRXP
-                    keys = Fileformats.ZRXP.MetadataKeys
-                Case Else
-                    keys = TimeSeriesFile.MetadataKeys 'empty list
-            End Select
+        'get a list of required metadata keys depending on file type being exported
+        Select Case fileType
+            Case TimeSeriesFile.FileTypes.FEWS_PI
+                keys = Fileformats.FEWS_PI.MetadataKeys
+            Case TimeSeriesFile.FileTypes.SWMM_INTERFACE
+                keys = Fileformats.SWMM_INTERFACE.MetadataKeys
+            Case TimeSeriesFile.FileTypes.UVF
+                keys = Fileformats.UVF.MetadataKeys
+            Case TimeSeriesFile.FileTypes.ZRXP
+                keys = Fileformats.ZRXP.MetadataKeys
+            Case Else
+                keys = TimeSeriesFile.MetadataKeys 'empty list
+        End Select
+        'add missing keys to each series
+        For Each ts As TimeSeries In tsList
             If keys.Count > 0 Then
                 'add additional keys as necessary
                 For Each key As String In keys
@@ -563,21 +564,38 @@ Public Class Wave
                     Case Else
                         TimeSeriesFile.setDefaultMetadata(ts)
                 End Select
-                'show dialog for editing metadata
-                Dim dlg As New MetadataDialog(ts, keys)
+            End If
+        Next
+
+        'let user edit metadata
+        If keys.Count > 0 Then
+            If tsList.Count = 1 Then
+                'show dialog for editing metadata of a single series
+                Dim dlg As New MetadataDialog(tsList.First, keys)
                 dlgResult = dlg.ShowDialog()
                 If Not dlgResult = Windows.Forms.DialogResult.OK Then
                     Exit Sub
                 End If
                 'update metadata of series
-                ts.Metadata = dlg.Metadata
+                tsList.First.Metadata = dlg.Metadata
+            Else
+                'show dialog for editing metadata of multiple series
+                Dim dlg As New MultiMetadataDialog(tsList, keys)
+                dlgResult = dlg.ShowDialog()
+                If Not dlgResult = Windows.Forms.DialogResult.OK Then
+                    Exit Sub
+                End If
+                'update metadata of series
+                For Each ts As TimeSeries In tsList
+                    ts.Metadata = dlg.getMetadata(ts.Title)
+                Next
             End If
-        Next
+        End If
 
         'determine default file name for each series
         Dim fileExt As String = TimeSeriesFile.getFileExtension(fileType).ToLower()
         Dim defaultFileNames As New List(Of String)
-        For Each ts As TimeSeries In zres
+        For Each ts As TimeSeries In tsList
             Dim name As String = ts.Title
             'replace invalid chars in title
             For Each c As Char In IO.Path.GetInvalidFileNameChars()
@@ -689,24 +707,24 @@ Public Class Wave
                     End If
                 End If
 
-                Log.AddLogEntry(Log.levels.info, $"Exporting {zres.Count} time series to file {filename}...")
+                Log.AddLogEntry(Log.levels.info, $"Exporting {tsList.Count} time series to file {filename}...")
 
                 Select Case fileType
 
                     Case TimeSeriesFile.FileTypes.CSV
-                        Call Fileformats.CSV.Write_File(zres, filename)
+                        Call Fileformats.CSV.Write_File(tsList, filename)
 
                     Case TimeSeriesFile.FileTypes.DFS0
-                        Call Fileformats.DFS0.Write_File(zres, filename)
+                        Call Fileformats.DFS0.Write_File(tsList, filename)
 
                     Case TimeSeriesFile.FileTypes.FEWS_PI
-                        Call Fileformats.FEWS_PI.Write_File(zres, filename)
+                        Call Fileformats.FEWS_PI.Write_File(tsList, filename)
 
                     Case TimeSeriesFile.FileTypes.SWMM_INTERFACE
-                        Call Fileformats.SWMM_INTERFACE.Write_File(zres, filename)
+                        Call Fileformats.SWMM_INTERFACE.Write_File(tsList, filename)
 
                     Case TimeSeriesFile.FileTypes.HYBNAT_BCS
-                        Call Fileformats.HYBNAT_BCS.Write_File(zres, filename)
+                        Call Fileformats.HYBNAT_BCS.Write_File(tsList, filename)
 
                     Case Else
                         Throw New Exception($"Export to file type {fileType} not yet implemented!")
@@ -715,9 +733,9 @@ Public Class Wave
 
             Else
                 'export each series to a separate file
-                For i As Integer = 0 To zres.Count - 1
+                For i As Integer = 0 To tsList.Count - 1
 
-                    Dim ts As TimeSeries = zres(i)
+                    Dim ts As TimeSeries = tsList(i)
 
                     If multifileExport Then
                         'use default file name
