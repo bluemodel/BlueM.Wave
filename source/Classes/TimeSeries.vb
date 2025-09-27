@@ -855,7 +855,7 @@ Public Class TimeSeries
         ts.Interpretation = outputInterpretation
         ts.Metadata = Me.Metadata
         'append timestep description to title
-        Dim timesteptypeString As String = [Enum].GetName(GetType(TimeStepTypeEnum), timesteptype)
+        Dim timesteptypeString As String = [Enum].GetName(GetType(TimeStepTypeEnum), timesteptype).ToLower()
         If timestepinterval > 1 Then
             timesteptypeString &= "s"
         End If
@@ -1354,7 +1354,7 @@ Public Class TimeSeries
         Next
 
         'append timeshift description to title
-        Dim timesteptypeString As String = [Enum].GetName(GetType(TimeStepTypeEnum), timestepType)
+        Dim timesteptypeString As String = [Enum].GetName(GetType(TimeStepTypeEnum), timestepType).ToLower()
         Dim timestepIntervalString As String = timestepInterval.ToString()
         If timestepInterval > 0 Then
             timestepIntervalString = "+" & timestepIntervalString
