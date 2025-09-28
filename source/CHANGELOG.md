@@ -5,6 +5,7 @@ Version 2.11.0
 --------------
 NEW:
 * New analysis function TimeShift for shifting time series by a specified time interval #206
+* New dialog for editing metadata of multiple series at once when exporting #202
 * Added support for reading files in GINA CSV WEL format #203
 * Added a user setting for showing/hiding the overview chart on startup #38
 
