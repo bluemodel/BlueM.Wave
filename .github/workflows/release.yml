@@ -42,15 +42,15 @@ jobs:
             /DMySourceDir=..\source\bin\Release\net10.0-windows\win-x64
             
       - name: Sign installer
-        uses: DanaBear/code-sign-action@v4
+        uses: dlemstra/code-sign-action@v1
         with:
-          certificate: '${{ secrets.CERTIFICATE }}'
-          password: '${{ secrets.PASSWORD }}'
-          certificatesha1: '${{ secrets.CERTHASH }}'
-          #certificatename: '${{ secrets.CERTNAME }}'
-          timestampUrl: 'http://timestamp.digicert.com'
-          folder: .
+          certificate: "${{ secrets.CERTIFICATE }}"
+          password: "${{ secrets.CERTIFICATE_PASSWORD }}"
+          folder: "."
+          files: |
+            BlueM.Wave_${{ steps.version.outputs.full }}_x64_setup.msi
           recursive: false
+          description: "BlueM.Wave"
           
       - name: Release
         uses: softprops/action-gh-release@v3.0.4
