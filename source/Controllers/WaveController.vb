@@ -2332,6 +2332,14 @@ Friend Class WaveController
         'Linien instanzieren
         Dim Line1 As New Steema.TeeChart.Styles.Line(View.TChart1.Chart)
 
+        If View.TChart1.Series.Count > View.TChart1.Chart.ColorPalette.Length Then
+            'more series than colors in palette, so reuse colors
+            'TODO: if the "random" color palette was set by the user, we should also use random colors here
+            Dim colorIndex As Integer = View.TChart1.Series.Count Mod View.TChart1.Chart.ColorPalette.Length - 1
+            If colorIndex < 0 Then colorIndex = View.TChart1.Chart.ColorPalette.Length - 1
+            Line1.Color = View.TChart1.Chart.ColorPalette(colorIndex)
+        End If
+
         'Do not paint NaN values
         Line1.TreatNaNAsNull = True
         Line1.TreatNulls = Steema.TeeChart.Styles.TreatNullsStyle.DoNotPaint
@@ -2395,6 +2403,14 @@ Friend Class WaveController
 
         'Linien instanzieren
         Dim Line2 As New Steema.TeeChart.Styles.FastLine(View.TChart2.Chart)
+
+        If View.TChart2.Series.Count > View.TChart2.Chart.ColorPalette.Length Then
+            'more series than colors in palette, so reuse colors
+            'TODO: if the "random" color palette was set by the user, we should also use random colors here
+            Dim colorIndex As Integer = View.TChart2.Series.Count Mod View.TChart2.Chart.ColorPalette.Length - 1
+            If colorIndex < 0 Then colorIndex = View.TChart2.Chart.ColorPalette.Length - 1
+            Line2.Color = View.TChart2.Chart.ColorPalette(colorIndex)
+        End If
 
         'Do not paint NaN values
         Line2.TreatNaNAsNull = True

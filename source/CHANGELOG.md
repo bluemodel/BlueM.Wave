@@ -15,6 +15,7 @@ CHANGED:
 FIXED:
 * Fixed series not being removed from the overview chart when they are deleted using the TeeChart editor #205
 * Fixed Y axes not auto-adjusting when series are activated or deactivated
+* Fixed series having the same color when the color palette is exhausted, the color palette now repeats instead
 
 API-CHANGES:
 * New public function `TimeSeries.ShiftTime()` for shifting all timestamps by a specified time interval
