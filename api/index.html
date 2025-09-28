@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>BlueM.Wave API | BlueM.Wave </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="BlueM.Wave API | BlueM.Wave ">
+      
+      
+      <link rel="icon" href="../images/wave_icon.png">
+      <link rel="stylesheet" href="../public/docfx.min.css">
+      <link rel="stylesheet" href="../public/main.css">
+      <meta name="docfx:navrel" content="../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/bluemodel/BlueM.Wave/blob/master/docs/api/index.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../index.html">
+            <img id="logo" class="svg" src="../images/wave_logo.png" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="bluemwave-api">BlueM.Wave API</h1>
+
+<p>The BlueM.Wave API provides methods for reading time series from files, manipulating and displaying them.</p>
+<p>To access the API, include a reference to Wave.exe (or to the Wave project if you have the source code) in your .NET project.</p>
+<h2 id="introduction">Introduction</h2>
+<h3 id="timeseries">TimeSeries</h3>
+<p>The class <a class="xref" href="BlueM.Wave.TimeSeries.html"><code>BlueM.Wave.TimeSeries</code></a> represents a single time series and exposes methods for manipulating them:</p>
+<pre><code class="lang-vb">'create a new time series
+Dim ts As New BlueM.Wave.TimeSeries(&quot;my series&quot;)
+ts.Unit = &quot;m3/s&quot;
+ts.Interpretation = BlueM.Wave.TimeSeries.InterpretationEnum.BlockRight
+
+'add some nodes to the time series
+ts.AddNode(New DateTime(2000, 1, 1), 10)
+ts.AddNode(New DateTime(2000, 1, 2), 20)
+ts.AddNode(New DateTime(2000, 1, 3), 30)
+ts.AddNode(New DateTime(2000, 1, 4), 15)
+
+'print some information about the time series
+Console.WriteLine(&quot;Length: &quot; &amp; ts.Length)
+Console.WriteLine(&quot;Start date: &quot; &amp; ts.StartDate)
+Console.WriteLine(&quot;End date: &quot; &amp; ts.EndDate)
+Console.WriteLine(&quot;Average: &quot; &amp; ts.Average)
+
+'manipulate the time series, e.g. by cutting it
+ts.Cut(New DateTime(2000, 1, 2), New DateTime(2000, 1, 3))
+</code></pre>
+<h3 id="timeseriesfile">TimeSeriesFile</h3>
+<p>You can use the <a class="xref" href="BlueM.Wave.TimeSeriesFile.html"><code>BlueM.Wave.TimeSeriesFile</code></a> class' factory method <a class="xref" href="BlueM.Wave.TimeSeriesFile.html#BlueM_Wave_TimeSeriesFile_getInstance_System_String_BlueM_Wave_TimeSeriesFile_FileTypes_"><code>getInstance()</code></a> to read time series from any of the supported file formats:</p>
+<pre><code class="lang-vb">Dim filepath as String = &quot;path\to\file&quot;
+Dim tsfile as BlueM.Wave.TimeSeriesFile = BlueM.Wave.TimeSeriesFile.getInstance(filepath)
+
+'check the time series contained in the file
+For Each sInfo As BlueM.Wave.TimeSeriesInfo In tsfile.TimeSeriesInfos
+	Console.WriteLine(sInfo.Name)
+Next
+
+'select some series for import
+tsfile.selectAllSeries()
+
+'read the selected time series from the file
+tsfile.readFile()
+
+'loop over all series read from the file and print some information about them
+For Each ts As BlueM.Wave.TimeSeries In tsfile.TimeSeries.Values
+	Console.WriteLine(&quot;Series title: &quot; &amp; ts.Title)
+	Console.WriteLine(&quot;Extent: &quot; &amp; ts.StartDate &amp; &quot; - &quot; &amp; ts.EndDate)
+	Console.WriteLine(&quot;Max value: &quot; &amp; ts.Maximum)
+	Console.WriteLine(&quot;Min value: &quot; &amp; ts.Minimum)
+Next
+
+'get one particular time series
+Dim ts As BlueM.Wave.TimeSeries = tsfile.getTimeSeries(&quot;seriesname or index&quot;)
+</code></pre>
+<p>The namespace <a class="xref" href="BlueM.Wave.Fileformats.html"><code>BlueM.Wave.Fileformats</code></a> contains special classes for reading from specific file formats, which all inherit from <a class="xref" href="BlueM.Wave.TimeSeriesFile.html"><code>TimeSeriesFile</code></a>.</p>
+<h3 id="app">App</h3>
+<p>The class <a class="xref" href="BlueM.Wave.App.html"><code>BlueM.Wave.App</code></a> represents a fully fledged Wave app instance including it's windows. Instantiate a new Wave app instance as follows. This will show the main Wave window.</p>
+<pre><code class="lang-vb">Dim app As New BlueM.Wave.App()
+</code></pre>
+<p>Then use the App's <a class="xref" href="BlueM.Wave.App.html#BlueM_Wave_App_Wave"><code>Wave</code></a> property to access methods e.g. for importing time series:</p>
+<pre><code class="lang-vb">app.Wave.Import_File()
+app.Wave.Import_Series()
+</code></pre>
+<p>and use the <a class="xref" href="BlueM.Wave.Wave.html#BlueM_Wave_Wave_TimeSeries"><code>TimeSeries</code></a> field to access any already imported time series:</p>
+<pre><code class="lang-vb">app.Wave.TimeSeries
+</code></pre>
+<p>You can also use the <a class="xref" href="BlueM.Wave.Wave.html"><code>BlueM.Wave.Wave</code></a> class on its own to import time series and then launch the app afterwards:</p>
+<pre><code class="lang-vb">Dim wave1 as New BlueM.Wave.Wave()
+wave1.Import_Series()
+'instantiate the app with the existing Wave instance
+Dim app As New BlueM.Wave.App(wave1)
+</code></pre>
+<h2 id="examples">Examples</h2>
+<p>The repository contains a project <code>Wave.Examples</code> with some more examples of API usage.</p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/bluemodel/BlueM.Wave/blob/master/docs/api/index.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
