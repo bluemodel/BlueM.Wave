@@ -32,7 +32,7 @@ jobs:
         
       - name: Create zip archive
         run: Compress-Archive -Path source\bin\Release\net10.0-windows\win-x64\* -DestinationPath BlueM.Wave_${{ steps.version.outputs.full }}_x64.zip
-        
+            
       - name: Build installer
         uses: Minionguyjpro/Inno-Setup-Action@v1.3.0
         with:
@@ -40,7 +40,19 @@ jobs:
           options: |
             /DMyAppVersion=${{ steps.version.outputs.full }}
             /DMySourceDir=..\source\bin\Release\net10.0-windows\win-x64
-
+            
+      - name: Sign installer
+        uses: skymatic/code-sign-action@v1
+        with:
+          certificate: '${{ secrets.CERTIFICATE }}'
+          password: '${{ secrets.PASSWORD }}'
+          certificatesha1: '${{ secrets.CERTHASH }}'
+          #certificatename: '${{ secrets.CERTNAME }}'
+          description: 'BlueM.Wave'
+          timestampUrl: 'http://timestamp.digicert.com'
+          folder: setup\release
+          recursive: true
+          
       - name: Release
         uses: softprops/action-gh-release@v3.0.4
         with:
