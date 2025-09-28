@@ -23,13 +23,16 @@ Friend Class MultiMetadataDialog
     ''' Instantiates a new MultiMetadataDialog
     ''' </summary>
     ''' <param name="tsList">List of Timeseries whose metadata to display</param>
+    ''' <param name="fileformat">File format for which to edit metadata</param>
     ''' <param name="visibleKeys">List of metadata keys to display (others will be lost)</param>
-    Public Sub New(tsList As List(Of TimeSeries), visibleKeys As List(Of String))
+    Public Sub New(tsList As List(Of TimeSeries), fileformat As TimeSeriesFile.FileTypes, visibleKeys As List(Of String))
 
         ' This call is required by the Windows Form Designer.
         InitializeComponent()
 
         ' Add any initialization after the InitializeComponent() call.
+
+        Me.Text = $"Edit metadata for file format {fileformat}"
 
         Dim rowIndex As Integer
 
@@ -58,6 +61,11 @@ Friend Class MultiMetadataDialog
         End If
     End Sub
 
+    ''' <summary>
+    ''' Pastes tab-delimited text from the clipboard into the DataGridView
+    ''' Expects the first column to contain the time series titles, which must match those already in the DataGridView
+    ''' The number of rows and columns must also match (without column headers)
+    ''' </summary>
     Private Sub PasteClipBoard()
         Dim grid As DataGridView = Me.DataGridView1
         Dim rowSplitter As Char() = {vbCr, vbLf}
@@ -91,7 +99,6 @@ Friend Class MultiMetadataDialog
         Next
     End Sub
 
-
     Private Sub OK_Button_Click(sender As System.Object, e As System.EventArgs) Handles OK_Button.Click
         Me.DialogResult = DialogResult.OK
         Me.Close()
@@ -102,6 +109,11 @@ Friend Class MultiMetadataDialog
         Me.Close()
     End Sub
 
+    ''' <summary>
+    ''' Returns the metadata for the time series with the given title from the DataGridView
+    ''' </summary>
+    ''' <param name="title">time series title</param>
+    ''' <returns>Metadata instance</returns>
     Friend Function getMetadata(title As String) As Metadata
         Dim md As New Metadata()
         Dim row As DataGridViewRow = Me.DataGridView1.Rows.Cast(Of DataGridViewRow)().Where(Function(r) r.Cells(0).Value = title).FirstOrDefault()

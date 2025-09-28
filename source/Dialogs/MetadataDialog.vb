@@ -19,20 +19,20 @@ Imports System.Windows.Forms
 
 Friend Class MetadataDialog
 
-    Public Metadata As Metadata
-
     ''' <summary>
     ''' Instantiates a new MetadataDialog
     ''' </summary>
     ''' <param name="ts">Timeseries whose metadata to display</param>
+    ''' <param name="fileformat">File format for which to edit metadata</param>
     ''' <param name="visibleKeys">List of metadata keys to display (others will not be visible, thus cannot be edited)</param>
-    Public Sub New(ts As TimeSeries, visibleKeys As List(Of String))
+    Public Sub New(ts As TimeSeries, fileformat As TimeSeriesFile.FileTypes, visibleKeys As List(Of String))
 
         ' This call is required by the Windows Form Designer.
         InitializeComponent()
 
         ' Add any initialization after the InitializeComponent() call.
 
+        Me.Text = $"Edit metadata for file format {fileformat}"
         Me.LabelSeries.Text = ts.Title
 
         Dim rowIndex As Integer
@@ -49,11 +49,6 @@ Friend Class MetadataDialog
     End Sub
 
     Private Sub OK_Button_Click(sender As System.Object, e As System.EventArgs) Handles OK_Button.Click
-        'Store metadata
-        Me.Metadata = New Metadata()
-        For Each row As DataGridViewRow In Me.DataGridView1.Rows
-            Me.Metadata.Add(row.Cells(0).Value, row.Cells(1).Value)
-        Next
         Me.DialogResult = System.Windows.Forms.DialogResult.OK
         Me.Close()
     End Sub
@@ -62,5 +57,17 @@ Friend Class MetadataDialog
         Me.DialogResult = System.Windows.Forms.DialogResult.Cancel
         Me.Close()
     End Sub
+
+    ''' <summary>
+    ''' Returns the metadata from the DataGridView
+    ''' </summary>
+    ''' <returns>Metadata instance</returns>
+    Friend Function getMetadata() As Metadata
+        Dim md As New Metadata()
+        For Each row As DataGridViewRow In Me.DataGridView1.Rows
+            md.Add(row.Cells(0).Value, row.Cells(1).Value)
+        Next
+        Return md
+    End Function
 
 End Class

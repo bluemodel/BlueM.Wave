@@ -571,16 +571,16 @@ Public Class Wave
         If keys.Count > 0 Then
             If tsList.Count = 1 Then
                 'show dialog for editing metadata of a single series
-                Dim dlg As New MetadataDialog(tsList.First, keys)
+                Dim dlg As New MetadataDialog(tsList.First, fileType, keys)
                 dlgResult = dlg.ShowDialog()
                 If Not dlgResult = Windows.Forms.DialogResult.OK Then
                     Exit Sub
                 End If
                 'update metadata of series
-                tsList.First.Metadata = dlg.Metadata
+                tsList.First.Metadata = dlg.getMetadata()
             Else
                 'show dialog for editing metadata of multiple series
-                Dim dlg As New MultiMetadataDialog(tsList, keys)
+                Dim dlg As New MultiMetadataDialog(tsList, fileType, keys)
                 dlgResult = dlg.ShowDialog()
                 If Not dlgResult = Windows.Forms.DialogResult.OK Then
                     Exit Sub
