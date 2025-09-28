@@ -62,8 +62,8 @@ jobs:
           #certificatename: '${{ secrets.CERTNAME }}'
           description: 'BlueM.Wave'
           timestampUrl: 'http://timestamp.digicert.com'
-          folder: setup\release
-          recursive: true
+          folder: .
+          recursive: false
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
