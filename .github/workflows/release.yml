@@ -42,13 +42,12 @@ jobs:
             /DMySourceDir=..\source\bin\Release\net10.0-windows\win-x64
             
       - name: Sign installer
-        uses: skymatic/code-sign-action@v1
+        uses: DanaBear/code-sign-action@v4
         with:
           certificate: '${{ secrets.CERTIFICATE }}'
           password: '${{ secrets.PASSWORD }}'
           certificatesha1: '${{ secrets.CERTHASH }}'
           #certificatename: '${{ secrets.CERTNAME }}'
-          description: 'BlueM.Wave'
           timestampUrl: 'http://timestamp.digicert.com'
           folder: .
           recursive: false
