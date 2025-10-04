@@ -64,11 +64,11 @@ Friend Class MainWindow
     End Property
 
     ''' <summary>
-    ''' Checks whether the crosshair option is activated
+    ''' Checks whether the Add markers button is activated
     ''' </summary>
-    Friend ReadOnly Property CrosshairActive() As Boolean
+    Friend ReadOnly Property AddMarkersActive() As Boolean
         Get
-            Return Me.ToolStripButton_Crosshair.Checked
+            Return Me.ToolStripButton_AddMarkers.Checked
         End Get
     End Property
 
@@ -238,7 +238,7 @@ Friend Class MainWindow
                 Return s
             End If
         Next
-        Log.AddLogEntry(levels.debug, $"Unable to find series with id {id} in chart!")
+        Log.AddLogEntry(levels.error, $"Unable to find series with id {id} in chart!")
         Dim series As Steema.TeeChart.Styles.Series = Nothing
         Return series
     End Function
