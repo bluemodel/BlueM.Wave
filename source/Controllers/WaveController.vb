@@ -71,6 +71,9 @@ Friend Class WaveController
     Private OverviewChartMouseDragStartX As Double
     Private OverviewChartMouseDragOffset As Double
 
+    'List of timestamps where markers are shown
+    Private markerPositions As New List(Of DateTime)
+
     Private WithEvents _axisDialog As AxisDialog
 
     Private _logWindow As LogWindow
@@ -205,7 +208,7 @@ Friend Class WaveController
         AddHandler _model.SeriesRemoved, AddressOf SeriesRemoved
         AddHandler _model.SeriesCleared, AddressOf SeriesCleared
         AddHandler _model.SeriesReordered, AddressOf SeriesReordered
-        AddHandler _model.HighlightTimestamps, AddressOf showMarkers
+        AddHandler _model.HighlightTimestamps, AddressOf setMarkers
         AddHandler _model.TENFileLoading, AddressOf Load_TEN
         AddHandler _model.IsBusyChanged, AddressOf ShowBusy
 
@@ -1197,7 +1200,8 @@ Friend Class WaveController
                 View.CrosshairLine = Nothing
             End If
             'remove any existing markers
-            showMarkers(New List(Of Date)())
+            Me.markerPositions.Clear()
+            showMarkers()
         End If
     End Sub
 
@@ -1680,7 +1684,7 @@ Friend Class WaveController
 
     ''' <summary>
     ''' Handles main chart MouseMove event
-    ''' Animates any started zoom or pan process
+    ''' Animates any started zoom or pan process and updates the crosshair position if active
     ''' </summary>
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
@@ -1749,8 +1753,8 @@ Friend Class WaveController
             If xValue <> View.CrosshairPosition Then
                 'update crosshair position
                 View.CrosshairPosition = xValue
-                'show new markers
-                showMarkers(New List(Of Date) From {DateTime.FromOADate(xValue)})
+                'show markers
+                showMarkers(New List(Of DateTime) From {DateTime.FromOADate(xValue)})
             End If
         End If
 
@@ -1758,9 +1762,10 @@ Friend Class WaveController
 
     ''' <summary>
     ''' Handles main chart MouseUp event
-    ''' Complete any started zoom or pan process, update cursor
+    ''' Complete any started zoom or pan process, make crosshair markers permanent if active, update cursor
     ''' </summary>
     Private Sub Chart_MouseUp(sender As System.Object, e As System.Windows.Forms.MouseEventArgs)
+
         If Me.ChartMouseZoomDragging Then
             'complete the zoom process
             Me.ChartMouseZoomDragging = False
@@ -1793,11 +1798,24 @@ Friend Class WaveController
             End If
             'hide colorband
             View.colorBandZoom.Active = False
+
         ElseIf Me.ChartMousePanning Then
             'complete the pan process
             Call Me.ViewportChanged()
             Me.ChartMousePanning = False
+
         End If
+
+        If View.CrosshairActive And e.Button = MouseButtons.Left Then
+            'crosshair active, add or remove current crosshair position from list of markers
+            Dim crosshairTimestamp As DateTime = DateTime.FromOADate(View.CrosshairPosition)
+            If Not Me.markerPositions.Contains(crosshairTimestamp) Then
+                Me.markerPositions.Add(crosshairTimestamp)
+            Else
+                Me.markerPositions.Remove(crosshairTimestamp)
+            End If
+        End If
+
         View.TChart1.Cursor = Cursors.Default
     End Sub
 
@@ -2646,10 +2664,23 @@ Friend Class WaveController
     End Sub
 
     ''' <summary>
-    ''' Shows markers at the given timestamps in the chart
+    ''' Sets markers at the given timestamps and then shows them in the chart
+    ''' Replaces any existing markers
     ''' </summary>
-    ''' <param name="timestamps">List of timestamps for which to show markers</param>
-    Private Sub showMarkers(timestamps As List(Of DateTime))
+    ''' <param name="timestamps">List of timestamps for which to add markers</param>
+    Private Sub setMarkers(timestamps As List(Of DateTime))
+        'sets new marker positions
+        Me.markerPositions = timestamps
+        'show markers in chart
+        Call Me.showMarkers()
+    End Sub
+
+    ''' <summary>
+    ''' Shows markers in the chart
+    ''' Displays the stored permanent markers and optionally temporary markers at the given timestamps
+    ''' </summary>
+    ''' <param name="timestamps">List of timestamps for which to show temporary markers</param>
+    Private Sub showMarkers(Optional timestamps As List(Of DateTime) = Nothing)
 
         'Remove any existing marker series
         For i As Integer = View.TChart1.Series.Count - 1 To 0 Step -1
@@ -2662,6 +2693,18 @@ Friend Class WaveController
             End Try
         Next
         View.TChart1.Refresh()
+
+        If timestamps Is Nothing Then
+            timestamps = New List(Of DateTime)
+        End If
+
+        'combine permanent and temporary marker positions
+        For Each t As DateTime In Me.markerPositions
+            If Not timestamps.Contains(t) Then
+                timestamps.Add(t)
+            End If
+        Next
+        timestamps.Sort()
 
         If timestamps.Count = 0 Then
             Exit Sub
