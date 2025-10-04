@@ -22,6 +22,7 @@ Partial Class MainWindow
     'Das Bearbeiten mit dem Code-Editor ist nicht möglich.
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
+        Me.components = New System.ComponentModel.Container()
         Dim ToolStripSeparator1 As System.Windows.Forms.ToolStripSeparator
         Dim toolStripSeparator As System.Windows.Forms.ToolStripSeparator
         Dim ToolStripSeparator2 As System.Windows.Forms.ToolStripSeparator
@@ -49,6 +50,8 @@ Partial Class MainWindow
         Me.ToolStripMenuItem_SaveProjectFile = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripMenuItem_SaveChart = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripMenuItem_ExportSeries = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripButton_Settings = New System.Windows.Forms.ToolStripButton()
+        Me.ToolStripSeparator12 = New System.Windows.Forms.ToolStripSeparator()
         Me.ToolStripButton_Copy = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripButton_Print = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripButton_Cut = New System.Windows.Forms.ToolStripButton()
@@ -71,6 +74,7 @@ Partial Class MainWindow
         Me.ToolStripSeparator10 = New System.Windows.Forms.ToolStripSeparator()
         Me.ToolStripButton_AxisDialog = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripButton_AutoAdjustYAxes = New System.Windows.Forms.ToolStripButton()
+        Me.ToolStripButton_Crosshair = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripButton_ToggleOverview = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripButton_ToggleNavigation = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripButton_ZoomIn = New System.Windows.Forms.ToolStripButton()
@@ -110,10 +114,7 @@ Partial Class MainWindow
         Me.MaskedTextBox_NavStart = New System.Windows.Forms.MaskedTextBox()
         Me.SaveFileDialog1 = New System.Windows.Forms.SaveFileDialog()
         Me.ProgressBar1 = New System.Windows.Forms.ProgressBar()
-        Me.ToolTip1 = New System.Windows.Forms.ToolTip()
-        Me.ToolStripButton_Crosshair = New System.Windows.Forms.ToolStripButton()
-        Me.ToolStripButton_Settings = New System.Windows.Forms.ToolStripButton()
-        Me.ToolStripSeparator12 = New System.Windows.Forms.ToolStripSeparator()
+        Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
         ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
         toolStripSeparator = New System.Windows.Forms.ToolStripSeparator()
         ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
@@ -314,6 +315,20 @@ Partial Class MainWindow
         ToolStripSeparator4.Name = "ToolStripSeparator4"
         ToolStripSeparator4.Size = New System.Drawing.Size(6, 34)
         '
+        'ToolStripButton_Settings
+        '
+        Me.ToolStripButton_Settings.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.ToolStripButton_Settings.Image = Global.BlueM.Wave.My.Resources.Resources.cog
+        Me.ToolStripButton_Settings.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ToolStripButton_Settings.Name = "ToolStripButton_Settings"
+        Me.ToolStripButton_Settings.Size = New System.Drawing.Size(23, 31)
+        Me.ToolStripButton_Settings.Text = "Settings"
+        '
+        'ToolStripSeparator12
+        '
+        Me.ToolStripSeparator12.Name = "ToolStripSeparator12"
+        Me.ToolStripSeparator12.Size = New System.Drawing.Size(6, 34)
+        '
         'ToolStripButton_Copy
         '
         Me.ToolStripButton_Copy.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
@@ -490,6 +505,17 @@ Partial Class MainWindow
         Me.ToolStripButton_AutoAdjustYAxes.Name = "ToolStripButton_AutoAdjustYAxes"
         Me.ToolStripButton_AutoAdjustYAxes.Size = New System.Drawing.Size(23, 31)
         Me.ToolStripButton_AutoAdjustYAxes.Text = "Auto-adjust Y-axes to current view"
+        '
+        'ToolStripButton_Crosshair
+        '
+        Me.ToolStripButton_Crosshair.CheckOnClick = True
+        Me.ToolStripButton_Crosshair.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.ToolStripButton_Crosshair.Image = Global.BlueM.Wave.My.Resources.Resources.crosshair
+        Me.ToolStripButton_Crosshair.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ToolStripButton_Crosshair.Name = "ToolStripButton_Crosshair"
+        Me.ToolStripButton_Crosshair.Size = New System.Drawing.Size(23, 31)
+        Me.ToolStripButton_Crosshair.Text = "Crosshair"
+        Me.ToolStripButton_Crosshair.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
         '
         'ToolStripSeparator3
         '
@@ -1458,6 +1484,7 @@ Partial Class MainWindow
         Me.TChart2.Header.ImageBevel.Brush.Color = System.Drawing.Color.LightGray
         Me.TChart2.Header.ImageBevel.Brush.Solid = True
         Me.TChart2.Header.ImageBevel.Brush.Visible = True
+        Me.TChart2.Header.Lines = New String() {"Overview chart"}
         '
         '
         '
@@ -1626,6 +1653,11 @@ Partial Class MainWindow
         '
         '
         Me.TChart2.Printer.Landscape = True
+        Margins1.Bottom = 100
+        Margins1.Left = 100
+        Margins1.Right = 100
+        Margins1.Top = 100
+        Me.TChart2.Printer.Margins = Margins1
         Me.TChart2.Size = New System.Drawing.Size(940, 136)
         '
         '
@@ -2766,6 +2798,7 @@ Partial Class MainWindow
         Me.TChart1.Header.ImageBevel.Brush.Color = System.Drawing.Color.LightGray
         Me.TChart1.Header.ImageBevel.Brush.Solid = True
         Me.TChart1.Header.ImageBevel.Brush.Visible = True
+        Me.TChart1.Header.Lines = New String() {"Main chart"}
         '
         '
         '
@@ -2935,11 +2968,11 @@ Partial Class MainWindow
         '
         '
         Me.TChart1.Printer.Landscape = True
-        Margins1.Bottom = 10
-        Margins1.Left = 10
-        Margins1.Right = 10
-        Margins1.Top = 10
-        Me.TChart1.Printer.Margins = Margins1
+        Margins2.Bottom = 10
+        Margins2.Left = 10
+        Margins2.Right = 10
+        Margins2.Top = 10
+        Me.TChart1.Printer.Margins = Margins2
         Me.TChart1.Size = New System.Drawing.Size(938, 380)
         '
         '
@@ -3268,31 +3301,6 @@ Partial Class MainWindow
         Me.ProgressBar1.Size = New System.Drawing.Size(108, 16)
         Me.ProgressBar1.Step = 1
         Me.ProgressBar1.TabIndex = 2
-        '
-        'ToolStripButton_Settings
-        '
-        Me.ToolStripButton_Settings.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.ToolStripButton_Settings.Image = Global.BlueM.Wave.My.Resources.Resources.cog
-        Me.ToolStripButton_Settings.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.ToolStripButton_Settings.Name = "ToolStripButton_Settings"
-        Me.ToolStripButton_Settings.Size = New System.Drawing.Size(23, 31)
-        Me.ToolStripButton_Settings.Text = "Settings"
-        '
-        'ToolStripSeparator12
-        '
-        Me.ToolStripSeparator12.Name = "ToolStripSeparator12"
-        Me.ToolStripSeparator12.Size = New System.Drawing.Size(6, 34)
-        '
-        'ToolStripButton_Crosshair
-        '
-        Me.ToolStripButton_Crosshair.CheckOnClick = True
-        Me.ToolStripButton_Crosshair.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.ToolStripButton_Crosshair.Image = Global.BlueM.Wave.My.Resources.Resources.crosshair
-        Me.ToolStripButton_Crosshair.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.ToolStripButton_Crosshair.Name = "ToolStripButton_Crosshair"
-        Me.ToolStripButton_Crosshair.Size = New System.Drawing.Size(23, 31)
-        Me.ToolStripButton_Crosshair.Text = "Crosshair"
-        Me.ToolStripButton_Crosshair.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
         '
         'MainWindow
         '
