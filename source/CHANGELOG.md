@@ -1,6 +1,11 @@
 BlueM.Wave Release Notes
 ========================
 
+Version 2.12.0
+--------------
+NEW:
+* New toolbar buttons for interactively adding and removing markers to display series values at selected timestamps #209
+
 Version 2.11.0
 --------------
 NEW:
