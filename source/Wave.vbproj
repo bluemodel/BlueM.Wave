@@ -578,6 +578,8 @@
     <Content Include="Resources\cog.ico" />
     <Content Include="Resources\color_wheel.png" />
     <Content Include="Resources\comments.png" />
+    <None Include="Resources\comments_add.png" />
+    <None Include="Resources\comments_delete.png" />
     <Content Include="Resources\controller.png" />
     <Content Include="Resources\control_end.png" />
     <Content Include="Resources\control_fastforward.png" />

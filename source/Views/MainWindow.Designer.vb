@@ -50,6 +50,8 @@ Partial Class MainWindow
         Me.ToolStripMenuItem_SaveProjectFile = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripMenuItem_SaveChart = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripMenuItem_ExportSeries = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripButton_Settings = New System.Windows.Forms.ToolStripButton()
+        Me.ToolStripSeparator12 = New System.Windows.Forms.ToolStripSeparator()
         Me.ToolStripButton_Copy = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripButton_Print = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripButton_Cut = New System.Windows.Forms.ToolStripButton()
@@ -72,6 +74,9 @@ Partial Class MainWindow
         Me.ToolStripSeparator10 = New System.Windows.Forms.ToolStripSeparator()
         Me.ToolStripButton_AxisDialog = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripButton_AutoAdjustYAxes = New System.Windows.Forms.ToolStripButton()
+        Me.ToolStripSeparator13 = New System.Windows.Forms.ToolStripSeparator()
+        Me.ToolStripButton_AddMarkers = New System.Windows.Forms.ToolStripButton()
+        Me.ToolStripButton_RemoveMarkers = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripButton_ToggleOverview = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripButton_ToggleNavigation = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripButton_ZoomIn = New System.Windows.Forms.ToolStripButton()
@@ -112,8 +117,6 @@ Partial Class MainWindow
         Me.SaveFileDialog1 = New System.Windows.Forms.SaveFileDialog()
         Me.ProgressBar1 = New System.Windows.Forms.ProgressBar()
         Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
-        Me.ToolStripButton_Settings = New System.Windows.Forms.ToolStripButton()
-        Me.ToolStripSeparator12 = New System.Windows.Forms.ToolStripSeparator()
         ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
         toolStripSeparator = New System.Windows.Forms.ToolStripSeparator()
         ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
@@ -201,7 +204,7 @@ Partial Class MainWindow
         '
         ToolStrip1.AutoSize = False
         ToolStrip1.BackColor = System.Drawing.SystemColors.Control
-        ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButton_New, Me.ToolStripDropDownButton_Open, Me.ToolStripDropDownButton_Save, ToolStripSeparator4, Me.ToolStripButton_Settings, Me.ToolStripSeparator12, Me.ToolStripButton_Copy, Me.ToolStripButton_Print, ToolStripSeparator2, Me.ToolStripButton_Cut, Me.ToolStripButton_Merge, Me.ToolStripSeparator8, Me.ToolStripButton_ShowNaNValues, Me.ToolStripButton_ConvertErrorValues, Me.ToolStripButton_RemoveNaNValues, Me.ToolStripSeparator7, Me.ToolStripButton_Analysis, ToolStripSeparator1, Me.ToolStripButton_EditChart, Me.ToolStripDropDownButton_ColorPalette, Me.ToolStripSeparator9, Me.ToolStripButton_Properties, Me.ToolStripButton_TimeseriesValues, Me.ToolStripSeparator10, Me.ToolStripButton_AxisDialog, Me.ToolStripButton_AutoAdjustYAxes, ToolStripSeparator3, Me.ToolStripButton_ToggleOverview, Me.ToolStripButton_ToggleNavigation, toolStripSeparator, Me.ToolStripButton_ZoomIn, Me.ToolStripButton_ZoomOut, Me.ToolStripButton_ZoomPrevious, Me.ToolStripDropDownButton_Help, Me.ToolStripButton_ZoomNext, Me.ToolStripDropDownButton_ZoomToSeries, Me.ToolStripButton_ZoomAll, Me.ToolStripButton_UpdateNotification, Me.ToolStripSeparator11, Me.ToolStripDropDownButton_ActivateAllSeries})
+        ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButton_New, Me.ToolStripDropDownButton_Open, Me.ToolStripDropDownButton_Save, ToolStripSeparator4, Me.ToolStripButton_Settings, Me.ToolStripSeparator12, Me.ToolStripButton_Copy, Me.ToolStripButton_Print, ToolStripSeparator2, Me.ToolStripButton_Cut, Me.ToolStripButton_Merge, Me.ToolStripSeparator8, Me.ToolStripButton_ShowNaNValues, Me.ToolStripButton_ConvertErrorValues, Me.ToolStripButton_RemoveNaNValues, Me.ToolStripSeparator7, Me.ToolStripButton_Analysis, ToolStripSeparator1, Me.ToolStripButton_EditChart, Me.ToolStripDropDownButton_ColorPalette, Me.ToolStripSeparator9, Me.ToolStripButton_Properties, Me.ToolStripButton_TimeseriesValues, Me.ToolStripSeparator10, Me.ToolStripButton_AxisDialog, Me.ToolStripButton_AutoAdjustYAxes, Me.ToolStripSeparator13, Me.ToolStripButton_AddMarkers, Me.ToolStripButton_RemoveMarkers, ToolStripSeparator3, Me.ToolStripButton_ToggleOverview, Me.ToolStripButton_ToggleNavigation, toolStripSeparator, Me.ToolStripButton_ZoomIn, Me.ToolStripButton_ZoomOut, Me.ToolStripButton_ZoomPrevious, Me.ToolStripDropDownButton_Help, Me.ToolStripButton_ZoomNext, Me.ToolStripDropDownButton_ZoomToSeries, Me.ToolStripButton_ZoomAll, Me.ToolStripButton_UpdateNotification, Me.ToolStripSeparator11, Me.ToolStripDropDownButton_ActivateAllSeries})
         ToolStrip1.Location = New System.Drawing.Point(0, 0)
         ToolStrip1.Name = "ToolStrip1"
         ToolStrip1.Size = New System.Drawing.Size(944, 34)
@@ -313,6 +316,20 @@ Partial Class MainWindow
         '
         ToolStripSeparator4.Name = "ToolStripSeparator4"
         ToolStripSeparator4.Size = New System.Drawing.Size(6, 34)
+        '
+        'ToolStripButton_Settings
+        '
+        Me.ToolStripButton_Settings.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.ToolStripButton_Settings.Image = Global.BlueM.Wave.My.Resources.Resources.cog
+        Me.ToolStripButton_Settings.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ToolStripButton_Settings.Name = "ToolStripButton_Settings"
+        Me.ToolStripButton_Settings.Size = New System.Drawing.Size(23, 31)
+        Me.ToolStripButton_Settings.Text = "Settings"
+        '
+        'ToolStripSeparator12
+        '
+        Me.ToolStripSeparator12.Name = "ToolStripSeparator12"
+        Me.ToolStripSeparator12.Size = New System.Drawing.Size(6, 34)
         '
         'ToolStripButton_Copy
         '
@@ -490,6 +507,33 @@ Partial Class MainWindow
         Me.ToolStripButton_AutoAdjustYAxes.Name = "ToolStripButton_AutoAdjustYAxes"
         Me.ToolStripButton_AutoAdjustYAxes.Size = New System.Drawing.Size(23, 31)
         Me.ToolStripButton_AutoAdjustYAxes.Text = "Auto-adjust Y-axes to current view"
+        '
+        'ToolStripSeparator13
+        '
+        Me.ToolStripSeparator13.Name = "ToolStripSeparator13"
+        Me.ToolStripSeparator13.Size = New System.Drawing.Size(6, 34)
+        '
+        'ToolStripButton_AddMarkers
+        '
+        Me.ToolStripButton_AddMarkers.CheckOnClick = True
+        Me.ToolStripButton_AddMarkers.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.ToolStripButton_AddMarkers.Image = Global.BlueM.Wave.My.Resources.Resources.comments_add
+        Me.ToolStripButton_AddMarkers.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ToolStripButton_AddMarkers.Name = "ToolStripButton_AddMarkers"
+        Me.ToolStripButton_AddMarkers.Size = New System.Drawing.Size(23, 31)
+        Me.ToolStripButton_AddMarkers.Text = "Add markers"
+        Me.ToolStripButton_AddMarkers.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
+        Me.ToolStripButton_AddMarkers.ToolTipText = "Shows markers with series values at the current mouse position. " & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Click in the ch" &
+    "art to make individual markers persistent or to remove them again."
+        '
+        'ToolStripButton_RemoveMarkers
+        '
+        Me.ToolStripButton_RemoveMarkers.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.ToolStripButton_RemoveMarkers.Image = Global.BlueM.Wave.My.Resources.Resources.comments_delete
+        Me.ToolStripButton_RemoveMarkers.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ToolStripButton_RemoveMarkers.Name = "ToolStripButton_RemoveMarkers"
+        Me.ToolStripButton_RemoveMarkers.Size = New System.Drawing.Size(23, 31)
+        Me.ToolStripButton_RemoveMarkers.Text = "Remove all markers"
         '
         'ToolStripSeparator3
         '
@@ -1458,6 +1502,7 @@ Partial Class MainWindow
         Me.TChart2.Header.ImageBevel.Brush.Color = System.Drawing.Color.LightGray
         Me.TChart2.Header.ImageBevel.Brush.Solid = True
         Me.TChart2.Header.ImageBevel.Brush.Visible = True
+        Me.TChart2.Header.Lines = New String() {"Overview chart"}
         '
         '
         '
@@ -1626,10 +1671,10 @@ Partial Class MainWindow
         '
         '
         Me.TChart2.Printer.Landscape = True
-        Margins1.Bottom = 10
-        Margins1.Left = 10
-        Margins1.Right = 10
-        Margins1.Top = 10
+        Margins1.Bottom = 100
+        Margins1.Left = 100
+        Margins1.Right = 100
+        Margins1.Top = 100
         Me.TChart2.Printer.Margins = Margins1
         Me.TChart2.Size = New System.Drawing.Size(940, 136)
         '
@@ -2771,6 +2816,7 @@ Partial Class MainWindow
         Me.TChart1.Header.ImageBevel.Brush.Color = System.Drawing.Color.LightGray
         Me.TChart1.Header.ImageBevel.Brush.Solid = True
         Me.TChart1.Header.ImageBevel.Brush.Visible = True
+        Me.TChart1.Header.Lines = New String() {"Main chart"}
         '
         '
         '
@@ -3274,20 +3320,6 @@ Partial Class MainWindow
         Me.ProgressBar1.Step = 1
         Me.ProgressBar1.TabIndex = 2
         '
-        'ToolStripButton_Settings
-        '
-        Me.ToolStripButton_Settings.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.ToolStripButton_Settings.Image = Global.BlueM.Wave.My.Resources.Resources.cog
-        Me.ToolStripButton_Settings.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.ToolStripButton_Settings.Name = "ToolStripButton_Settings"
-        Me.ToolStripButton_Settings.Size = New System.Drawing.Size(23, 31)
-        Me.ToolStripButton_Settings.Text = "Settings"
-        '
-        'ToolStripSeparator12
-        '
-        Me.ToolStripSeparator12.Name = "ToolStripSeparator12"
-        Me.ToolStripSeparator12.Size = New System.Drawing.Size(6, 34)
-        '
         'MainWindow
         '
         Me.AllowDrop = True
@@ -3407,4 +3439,7 @@ Partial Class MainWindow
     Friend WithEvents ToolTip1 As ToolTip
     Friend WithEvents ToolStripButton_Settings As ToolStripButton
     Friend WithEvents ToolStripSeparator12 As ToolStripSeparator
+    Friend WithEvents ToolStripButton_AddMarkers As ToolStripButton
+    Friend WithEvents ToolStripSeparator13 As ToolStripSeparator
+    Friend WithEvents ToolStripButton_RemoveMarkers As ToolStripButton
 End Class

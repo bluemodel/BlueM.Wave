@@ -71,6 +71,9 @@ Friend Class WaveController
     Private OverviewChartMouseDragStartX As Double
     Private OverviewChartMouseDragOffset As Double
 
+    'List of timestamps where markers are shown
+    Private markerPositions As New List(Of DateTime)
+
     Private WithEvents _axisDialog As AxisDialog
 
     Private _logWindow As LogWindow
@@ -78,6 +81,30 @@ Friend Class WaveController
     'Events handled by the AppInstance
     Friend Event Properties_Clicked()
     Friend Event TimeseriesValues_Clicked()
+
+    ''' <summary>
+    ''' Returns a list of all series in the main chart that correspond to time series in the model
+    ''' </summary>
+    ''' <returns>list of series</returns>
+    Private ReadOnly Property SeriesList As List(Of Steema.TeeChart.Styles.Series)
+        Get
+            Dim list As New List(Of Steema.TeeChart.Styles.Series)
+            For Each id As Integer In _model.TimeSeries.Ids
+                Dim series As Steema.TeeChart.Styles.Series
+                series = View.GetSeries(id)
+                If series IsNot Nothing Then
+                    list.Add(series)
+                End If
+            Next
+            Return list
+        End Get
+    End Property
+
+    ''' <summary>
+    ''' Constructor
+    ''' </summary>
+    ''' <param name="view">the view to control</param>
+    ''' <param name="model">the model to control</param>
 
     Public Sub New(view As IView, ByRef model As Wave)
 
@@ -135,6 +162,8 @@ Friend Class WaveController
         AddHandler Me.View.ToolStripButton_ConvertErrorValues.Click, AddressOf ConvertErrorValues_Click
         AddHandler Me.View.ToolStripButton_RemoveNaNValues.Click, AddressOf RemoveNaNValues_Click
         AddHandler Me.View.ToolStripButton_AutoAdjustYAxes.CheckedChanged, AddressOf AutoAdjustYAxis_CheckedChanged
+        AddHandler Me.View.ToolStripButton_AddMarkers.CheckedChanged, AddressOf AddMarkers_CheckedChanged
+        AddHandler Me.View.ToolStripButton_RemoveMarkers.Click, AddressOf RemoveMarkers_Click
         AddHandler Me.View.ToolStripButton_ZoomIn.Click, AddressOf ZoomIn_Click
         AddHandler Me.View.ToolStripButton_ZoomOut.Click, AddressOf ZoomOut_Click
         AddHandler Me.View.ToolStripButton_ZoomPrevious.Click, AddressOf ZoomPrevious_Click
@@ -204,7 +233,7 @@ Friend Class WaveController
         AddHandler _model.SeriesRemoved, AddressOf SeriesRemoved
         AddHandler _model.SeriesCleared, AddressOf SeriesCleared
         AddHandler _model.SeriesReordered, AddressOf SeriesReordered
-        AddHandler _model.HighlightTimestamps, AddressOf showMarkers
+        AddHandler _model.HighlightTimestamps, AddressOf setMarkers
         AddHandler _model.TENFileLoading, AddressOf Load_TEN
         AddHandler _model.IsBusyChanged, AddressOf ShowBusy
 
@@ -264,7 +293,7 @@ Friend Class WaveController
     Private Sub UserSettingsChanged(sender As Object, e As PropertyChangedEventArgs)
         If e.PropertyName = "defaultLineWidth" Then
             'update line width of all line series in the chart
-            For Each series As Steema.TeeChart.Styles.Series In View.TChart1.Series
+            For Each series As Steema.TeeChart.Styles.Series In Me.SeriesList
                 If TypeOf series Is Steema.TeeChart.Styles.Line Then
                     CType(series, Steema.TeeChart.Styles.Line).LinePen.Width = My.Settings.defaultLineWidth
                 End If
@@ -290,7 +319,7 @@ Friend Class WaveController
                         'check whether custom axes should be made invisible
                         'collect units of all active series
                         Dim activeUnits As New HashSet(Of String)
-                        For Each series As Steema.TeeChart.Styles.Series In View.TChart1.Series
+                        For Each series As Steema.TeeChart.Styles.Series In Me.SeriesList
                             If series.Active Then
                                 activeUnits.Add(series.GetVertAxis.Tag)
                             End If
@@ -491,19 +520,15 @@ Friend Class WaveController
             If dlgres = Windows.Forms.DialogResult.OK Then
                 'collect display options from chart and store them in timeseries
                 Dim tsList As New List(Of TimeSeries)
-                For Each ts As TimeSeries In _model.TimeSeries.ToList()
-                    For Each series As Steema.TeeChart.Styles.Series In View.TChart1.Series
-                        If series.Tag = ts.Id Then
-                            If TypeOf series Is Steema.TeeChart.Styles.Line Then
-                                Dim line As Steema.TeeChart.Styles.Line = CType(series, Steema.TeeChart.Styles.Line)
-                                ts.DisplayOptions.Color = line.Color
-                                ts.DisplayOptions.LineStyle = line.LinePen.Style
-                                ts.DisplayOptions.LineWidth = line.LinePen.Width
-                                ts.DisplayOptions.ShowPoints = line.Pointer.Visible
-                            End If
-                            Exit For
-                        End If
-                    Next
+                For Each ts As TimeSeries In _model.TimeSeries.Values
+                    Dim series As Steema.TeeChart.Styles.Series = View.GetSeries(ts.Id)
+                    If series IsNot Nothing AndAlso TypeOf series Is Steema.TeeChart.Styles.Line Then
+                        Dim line As Steema.TeeChart.Styles.Line = CType(series, Steema.TeeChart.Styles.Line)
+                        ts.DisplayOptions.Color = line.Color
+                        ts.DisplayOptions.LineStyle = line.LinePen.Style
+                        ts.DisplayOptions.LineWidth = line.LinePen.Width
+                        ts.DisplayOptions.ShowPoints = line.Pointer.Visible
+                    End If
                     tsList.Add(ts)
                 Next
                 Call Fileformats.WVP.Write_File(tsList, dlg.FileName,
@@ -746,7 +771,6 @@ Friend Class WaveController
     ''' <remarks></remarks>
     Private Sub ShowNaNValues_Click(sender As System.Object, e As System.EventArgs)
 
-        Dim processSeries As Boolean
         Dim band As Steema.TeeChart.Tools.ColorBand
         Dim color As Drawing.Color
         Dim nanFound As Boolean
@@ -759,19 +783,10 @@ Friend Class WaveController
             'Show color bands for NaN values in the currently active series
             nanFound = False
             For Each ts As TimeSeries In _model.TimeSeries.Values
-                processSeries = False
-                'check if time series is currently active
-                For Each series As Steema.TeeChart.Styles.Series In View.TChart1.Series
-                    If series.Title = ts.Title Then
-                        If series.Active Then
-                            'process this series
-                            processSeries = True
-                            color = series.Color
-                        End If
-                        Exit For
-                    End If
-                Next
-                If processSeries Then
+                'get corresponding series in chart
+                Dim series As Steema.TeeChart.Styles.Series = View.GetSeries(ts.Id)
+                If series IsNot Nothing AndAlso series.Active Then
+
                     'get NaN periods
                     Dim NaNPeriods As List(Of (range As DateRange, count As Integer)) = ts.NaNPeriods
 
@@ -786,8 +801,8 @@ Friend Class WaveController
                             band.Start = NaNPeriod.range.start.ToOADate()
                             band.End = NaNPeriod.range.end.ToOADate()
                             band.Pen.Visible = False
-                            band.Pen.Color = color
-                            band.Brush.Color = ControlPaint.Light(color)
+                            band.Pen.Color = series.Color
+                            band.Brush.Color = ControlPaint.Light(series.Color)
                             band.Brush.Transparency = 50
                             band.ResizeEnd = False
                             band.ResizeStart = False
@@ -858,31 +873,25 @@ Friend Class WaveController
     Private Sub RemoveNaNValues_Click(sender As System.Object, e As System.EventArgs)
 
         Dim dlgResult As DialogResult
-        Dim ids As List(Of Integer)
-        Dim ts As TimeSeries
 
         dlgResult = MsgBox("Delete all nodes with NaN values from all series?", MsgBoxStyle.OkCancel)
         If dlgResult = Windows.Forms.DialogResult.OK Then
-            ids = _model.TimeSeries.Ids.ToList()
             'loop over time series
-            For Each id As Integer In ids
-                'remove NaN values
-                ts = _model.TimeSeries(id)
-                ts = ts.removeNaNValues()
-                _model.TimeSeries(id) = ts
-                'replace values of series in chart
-                For Each series As Steema.TeeChart.Styles.Series In View.TChart1.Series
-                    If series.Tag = id Then
-                        series.BeginUpdate()
-                        series.Clear()
-                        For Each kvp As KeyValuePair(Of DateTime, Double) In ts.Nodes
-                            series.Add(kvp.Key, kvp.Value)
-                        Next
-                        series.EndUpdate()
-                        Exit For
-                    End If
-                Next
+            For Each id As Integer In _model.TimeSeries.Ids
+                'remove NaN values in model
+                _model.TimeSeries(id) = _model.TimeSeries(id).removeNaNValues()
+                'update values of series in chart
+                Dim series As Steema.TeeChart.Styles.Series = View.GetSeries(id)
+                If series IsNot Nothing Then
+                    series.BeginUpdate()
+                    series.Clear()
+                    For Each kvp As KeyValuePair(Of DateTime, Double) In _model.TimeSeries(id).Nodes
+                        series.Add(kvp.Key, kvp.Value)
+                    Next
+                    series.EndUpdate()
+                End If
             Next
+            View.TChart1.Refresh()
         End If
     End Sub
 
@@ -1170,6 +1179,33 @@ Friend Class WaveController
                 axis.Automatic = True
             Next
             View.TChart1.Refresh()
+        End If
+    End Sub
+
+    ''' <summary>
+    ''' Crosshair toolbar button clicked
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    ''' <remarks></remarks>
+    Private Sub AddMarkers_CheckedChanged(sender As Object, e As System.EventArgs)
+        If View.AddMarkersActive Then
+            'setup crosshair line
+            View.CrosshairLine = New Steema.TeeChart.Tools.ColorLine(View.TChart1.Chart) With
+            {
+                .Axis = View.TChart1.Axes.Bottom,
+                .AllowDrag = False
+            }
+            View.CrosshairLine.Pen.Style = Drawing2D.DashStyle.Dash
+            View.CrosshairLine.Pen.Color = Color.Gray
+        Else
+            'remove crosshair line
+            If View.CrosshairLine IsNot Nothing Then
+                View.TChart1.Tools.Remove(View.CrosshairLine)
+                View.CrosshairLine = Nothing
+            End If
+            'show only stored markers
+            Call Me.showMarkers()
         End If
     End Sub
 
@@ -1652,7 +1688,7 @@ Friend Class WaveController
 
     ''' <summary>
     ''' Handles main chart MouseMove event
-    ''' Animates any started zoom or pan process
+    ''' Animates any started zoom or pan process and updates the crosshair position if active
     ''' </summary>
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
@@ -1683,14 +1719,57 @@ Friend Class WaveController
             Me.selectionMade = True
             'update drag start point
             Me.ChartMouseDragStartX = e.X
+
+        ElseIf View.AddMarkersActive Then
+            ' update crosshair position
+            If View.TChart1.Series.Count = 0 Then
+                'no series, nothing to do
+                Exit Sub
+            End If
+            Dim xMouseValue As Double = View.TChart1.Series(0).XScreenToValue(e.X)
+            Dim xValue As Double
+            ' find the closest x value in all series
+            Dim distance As Double = Double.MaxValue
+            For Each id As Integer In _model.TimeSeries.Ids
+                Dim series As Steema.TeeChart.Styles.Series = View.GetSeries(id)
+                If series IsNot Nothing AndAlso series.Active AndAlso series.Count > 0 Then
+                    Dim xValueSeries, distanceSeries As Double
+                    For index As Integer = series.FirstVisibleIndex To series.LastVisibleIndex
+                        If series.XValues(index) >= xMouseValue Then
+                            'check whether previous or current index is nearer
+                            If index > 0 AndAlso Math.Abs(series.XValues(index - 1) - xMouseValue) < Math.Abs(series.XValues(index) - xMouseValue) Then
+                                xValueSeries = series.XValues(index - 1)
+                                distanceSeries = xMouseValue - series.XValues(index - 1)
+                            Else
+                                xValueSeries = series.XValues(index)
+                                distanceSeries = series.XValues(index) - xMouseValue
+                            End If
+                            If distanceSeries < distance Then
+                                'found new nearest point
+                                xValue = xValueSeries
+                                distance = distanceSeries
+                            End If
+                            Exit For
+                        End If
+                    Next
+                End If
+            Next
+            If xValue <> View.CrosshairPosition Then
+                'update crosshair position
+                View.CrosshairPosition = xValue
+                'show markers
+                showMarkers(New List(Of DateTime) From {DateTime.FromOADate(xValue)})
+            End If
         End If
+
     End Sub
 
     ''' <summary>
     ''' Handles main chart MouseUp event
-    ''' Complete any started zoom or pan process, update cursor
+    ''' Complete any started zoom or pan process, make crosshair markers permanent if active, update cursor
     ''' </summary>
     Private Sub Chart_MouseUp(sender As System.Object, e As System.Windows.Forms.MouseEventArgs)
+
         If Me.ChartMouseZoomDragging Then
             'complete the zoom process
             Me.ChartMouseZoomDragging = False
@@ -1723,11 +1802,24 @@ Friend Class WaveController
             End If
             'hide colorband
             View.colorBandZoom.Active = False
+
         ElseIf Me.ChartMousePanning Then
             'complete the pan process
             Call Me.ViewportChanged()
             Me.ChartMousePanning = False
+
         End If
+
+        If View.AddMarkersActive And e.Button = MouseButtons.Left Then
+            'crosshair active, add or remove current crosshair position from list of markers
+            Dim crosshairTimestamp As DateTime = DateTime.FromOADate(View.CrosshairPosition)
+            If Not Me.markerPositions.Contains(crosshairTimestamp) Then
+                Me.markerPositions.Add(crosshairTimestamp)
+            Else
+                Me.markerPositions.Remove(crosshairTimestamp)
+            End If
+        End If
+
         View.TChart1.Cursor = Cursors.Default
     End Sub
 
@@ -2576,10 +2668,25 @@ Friend Class WaveController
     End Sub
 
     ''' <summary>
-    ''' Shows markers at the given timestamps in the chart
+    ''' Sets markers at the given timestamps and then shows them in the chart
+    ''' Replaces any existing markers
     ''' </summary>
-    ''' <param name="timestamps">List of timestamps for which to show markers</param>
-    Private Sub showMarkers(timestamps As List(Of DateTime))
+    ''' <param name="timestamps">List of timestamps for which to add markers</param>
+    Private Sub setMarkers(timestamps As List(Of DateTime))
+        'sets new marker positions
+        Me.markerPositions = timestamps
+        'show markers in chart
+        Call Me.showMarkers()
+    End Sub
+
+    ''' <summary>
+    ''' Shows markers in the chart
+    ''' Displays the stored permanent markers and optionally temporary markers at the given timestamps
+    ''' </summary>
+    ''' <param name="timestamps">List of timestamps for which to show temporary markers</param>
+    Private Sub showMarkers(Optional timestamps As List(Of DateTime) = Nothing)
+
+        'TODO: optimize by reusing existing marker series if possible
 
         'Remove any existing marker series
         For i As Integer = View.TChart1.Series.Count - 1 To 0 Step -1
@@ -2593,14 +2700,25 @@ Friend Class WaveController
         Next
         View.TChart1.Refresh()
 
+        If timestamps Is Nothing Then
+            timestamps = New List(Of DateTime)
+        End If
+
+        'combine permanent and temporary marker positions
+        For Each t As DateTime In Me.markerPositions
+            If Not timestamps.Contains(t) Then
+                timestamps.Add(t)
+            End If
+        Next
+        timestamps.Sort()
+
         If timestamps.Count = 0 Then
             Exit Sub
         End If
 
         'loop over series and create a marker series for each
-        For i As Integer = 0 To View.TChart1.Series.Count - 1
+        For Each series As Steema.TeeChart.Styles.Series In Me.SeriesList
             Try
-                Dim series As Steema.TeeChart.Styles.Series = View.TChart1.Series(i)
                 If Not series.Active Then
                     'do not display markers for inactive series
                     Continue For
@@ -2619,7 +2737,7 @@ Friend Class WaveController
                     'create a new point series for markers
                     Dim markers As New Steema.TeeChart.Styles.Points(View.TChart1.Chart)
                     markers.Legend.Visible = False
-                    markers.Title = $"{series.Title} (selection)"
+                    markers.Title = $"{series.Title} (markers)"
                     markers.Tag = "_markers"
                     markers.VertAxis = series.VertAxis
                     If series.VertAxis = Steema.TeeChart.Styles.VerticalAxis.Custom Then
@@ -2636,9 +2754,13 @@ Friend Class WaveController
                     'markers.Marks.OnTop = True 'causes crash when markers are panned out of view on the left
                     markers.Marks.Callout.Visible = False
                     markers.Marks.FontSeriesColor = True
-                    markers.Marks.Arrow.Visible = False
-                    markers.Marks.ArrowLength = 5
                     markers.Marks.Pen.Color = series.Color
+                    markers.Marks.Arrow.Visible = False
+                    markers.Marks.ArrowLength = 8
+                    markers.Marks.TailParams.Align = Steema.TeeChart.Styles.TailAlignment.Auto
+                    markers.Marks.TailParams.PointerHeight = 8
+                    markers.Marks.TailParams.PointerWidth = 6
+                    markers.Pointer.InflateMargins = False
                     'add data points
                     For Each t As DateTime In markerValues.Keys
                         markers.Add(t, markerValues(t))
@@ -2649,6 +2771,12 @@ Friend Class WaveController
             End Try
         Next
 
+    End Sub
+
+    Private Sub RemoveMarkers_Click()
+        'remove all markers
+        Me.markerPositions.Clear()
+        Call Me.showMarkers()
     End Sub
 
     Private Sub LogShowWindow()
@@ -2702,38 +2830,52 @@ Friend Class WaveController
         Call Application.DoEvents()
     End Sub
 
+    ''' <summary>
+    ''' Handles the case where properties of a TimeSeries were changed in the model
+    ''' Updates the corresponding series in the chart
+    ''' </summary>
+    ''' <param name="id">Id of the changed TimeSeries</param>
     Private Sub SeriesPropertiesChanged(id As Integer)
-        'find series in chart
-        For Each series As Steema.TeeChart.Styles.Series In View.TChart1.Series
-            If series.Tag = id Then
-                'set line display according to interpretation
-                If TypeOf series Is Steema.TeeChart.Styles.Line Then
-                    Dim seriesline As Steema.TeeChart.Styles.Line = series
-                    Select Case _model.TimeSeries(id).Interpretation
-                        Case TimeSeries.InterpretationEnum.Instantaneous,
-                             TimeSeries.InterpretationEnum.Undefined
-                            seriesline.Stairs = False
-                            seriesline.InvertedStairs = False
-                        Case TimeSeries.InterpretationEnum.BlockRight
-                            seriesline.Stairs = True
-                            seriesline.InvertedStairs = False
-                        Case TimeSeries.InterpretationEnum.BlockLeft,
-                             TimeSeries.InterpretationEnum.CumulativePerTimestep
-                            seriesline.Stairs = True
-                            seriesline.InvertedStairs = True
-                    End Select
-                End If
 
-                'update title in chart
-                series.Title = _model.TimeSeries(id).Title
+        'get TimeSeries from model
+        If Not _model.TimeSeries.ContainsId(id) Then
+            Log.AddLogEntry(Log.levels.error, $"Unable to update series properties for id {id}, series not found in model!")
+            Exit Sub
+        End If
+        Dim ts As TimeSeries = _model.TimeSeries(id)
 
-                'assign to axis according to unit
-                assignSeriesToAxis(series, _model.TimeSeries(id).Unit)
+        'get series in chart
+        Dim series As Steema.TeeChart.Styles.Series = View.GetSeries(id)
+        If series Is Nothing Then
+            Log.AddLogEntry(Log.levels.error, $"Unable to update series properties for id {id}, series not found in view!")
+            Exit Sub
+        End If
 
-                'TODO: apply the same changes in the overview chart?
-                Exit For
-            End If
-        Next
+        'set line display according to interpretation
+        If TypeOf series Is Steema.TeeChart.Styles.Line Then
+            Dim seriesline As Steema.TeeChart.Styles.Line = series
+            Select Case ts.Interpretation
+                Case TimeSeries.InterpretationEnum.Instantaneous,
+                        TimeSeries.InterpretationEnum.Undefined
+                    seriesline.Stairs = False
+                    seriesline.InvertedStairs = False
+                Case TimeSeries.InterpretationEnum.BlockRight
+                    seriesline.Stairs = True
+                    seriesline.InvertedStairs = False
+                Case TimeSeries.InterpretationEnum.BlockLeft,
+                        TimeSeries.InterpretationEnum.CumulativePerTimestep
+                    seriesline.Stairs = True
+                    seriesline.InvertedStairs = True
+            End Select
+        End If
+
+        'update title in chart
+        series.Title = ts.Title
+
+        'assign to axis according to unit
+        assignSeriesToAxis(series, ts.Unit)
+
+        'TODO: apply the same changes in the overview chart?
 
     End Sub
 
@@ -2823,8 +2965,13 @@ Friend Class WaveController
     ''' <remarks>Reassigns all series to their appropriate axis</remarks>
     Private Sub AxisUnitChanged()
 
-        For Each series As Steema.TeeChart.Styles.Series In View.TChart1.Series
-            assignSeriesToAxis(series, _model.TimeSeries(series.Tag).Unit)
+        For Each ts As TimeSeries In _model.TimeSeries.Values
+            Dim series As Steema.TeeChart.Styles.Series = View.GetSeries(ts.Id)
+            If series Is Nothing Then
+                Log.AddLogEntry(Log.levels.error, $"Unable to update axis assignment for series id {ts.Id}, series not found in view!")
+                Continue For
+            End If
+            assignSeriesToAxis(series, ts.Unit)
         Next
 
         'deactivate unused custom axes
