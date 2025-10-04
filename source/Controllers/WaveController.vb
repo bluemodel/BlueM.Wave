@@ -2682,6 +2682,8 @@ Friend Class WaveController
     ''' <param name="timestamps">List of timestamps for which to show temporary markers</param>
     Private Sub showMarkers(Optional timestamps As List(Of DateTime) = Nothing)
 
+        'TODO: optimize by reusing existing marker series if possible
+
         'Remove any existing marker series
         For i As Integer = View.TChart1.Series.Count - 1 To 0 Step -1
             Try
