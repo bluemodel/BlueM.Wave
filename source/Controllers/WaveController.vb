@@ -2732,7 +2732,7 @@ Friend Class WaveController
                     'create a new point series for markers
                     Dim markers As New Steema.TeeChart.Styles.Points(View.TChart1.Chart)
                     markers.Legend.Visible = False
-                    markers.Title = $"{series.Title} (selection)"
+                    markers.Title = $"{series.Title} (markers)"
                     markers.Tag = "_markers"
                     markers.VertAxis = series.VertAxis
                     If series.VertAxis = Steema.TeeChart.Styles.VerticalAxis.Custom Then
@@ -2749,9 +2749,13 @@ Friend Class WaveController
                     'markers.Marks.OnTop = True 'causes crash when markers are panned out of view on the left
                     markers.Marks.Callout.Visible = False
                     markers.Marks.FontSeriesColor = True
-                    markers.Marks.Arrow.Visible = False
-                    markers.Marks.ArrowLength = 5
                     markers.Marks.Pen.Color = series.Color
+                    markers.Marks.Arrow.Visible = False
+                    markers.Marks.ArrowLength = 8
+                    markers.Marks.TailParams.Align = Steema.TeeChart.Styles.TailAlignment.Auto
+                    markers.Marks.TailParams.PointerHeight = 8
+                    markers.Marks.TailParams.PointerWidth = 6
+                    markers.Pointer.InflateMargins = False
                     'add data points
                     For Each t As DateTime In markerValues.Keys
                         markers.Add(t, markerValues(t))
