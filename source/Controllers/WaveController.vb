@@ -1174,33 +1174,30 @@ Friend Class WaveController
         End If
     End Sub
 
-    Private WithEvents NearestPointTool As Steema.TeeChart.Tools.NearestPoint
-
     ''' <summary>
-    ''' Crosshair button clicked
+    ''' Crosshair toolbar button clicked
     ''' </summary>
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
     ''' <remarks></remarks>
     Private Sub Crosshair_CheckedChanged(sender As Object, e As System.EventArgs)
         If View.ToolStripButton_Crosshair.Checked Then
-            'setup NearestPoint tool
-            'TODO: this must be done for all active series?
-            Me.NearestPointTool = New Steema.TeeChart.Tools.NearestPoint(View.TChart1.Chart) With
-                    {
-                        .Style = Steema.TeeChart.Tools.NearestPointStyles.None,
-                        .DrawLine = False,
-                        .Direction = Steema.TeeChart.Tools.NearestPointDirection.Horizontal,
-                        .Active = True,
-                        .Series = View.TChart1.Series(0)
-                    }
-            'add event handler
-            AddHandler Me.NearestPointTool.Change, AddressOf Me.OnNearestPointChange
+            'setup crosshair line
+            View.CrosshairLine = New Steema.TeeChart.Tools.ColorLine(View.TChart1.Chart) With
+            {
+                .Axis = View.TChart1.Axes.Bottom,
+                .AllowDrag = False
+            }
+            View.CrosshairLine.Pen.Style = Drawing2D.DashStyle.Dash
+            View.CrosshairLine.Pen.Color = Color.Gray
         Else
-            'remove existing markers
+            'remove crosshair line
+            If View.CrosshairLine IsNot Nothing Then
+                View.TChart1.Tools.Remove(View.CrosshairLine)
+                View.CrosshairLine = Nothing
+            End If
+            'remove any existing markers
             showMarkers(New List(Of Date)())
-            'remove event handler
-            RemoveHandler Me.NearestPointTool.Change, AddressOf Me.OnNearestPointChange
         End If
     End Sub
 
@@ -1682,26 +1679,6 @@ Friend Class WaveController
     End Sub
 
     ''' <summary>
-    ''' Handles NearestPointTool changing to a new point
-    ''' Highlights the solution
-    ''' </summary>
-    ''' <param name="nearestPointTool">tool</param>
-    ''' <param name="e"></param>
-    Private Sub OnNearestPointChange(nearestPointTool As Steema.TeeChart.Tools.NearestPoint, e As EventArgs)
-        If Not View.Crosshair Then
-            Exit Sub
-        End If
-        Try
-            If nearestPointTool.Active And nearestPointTool.Point > -1 Then
-                Dim xvalue = nearestPointTool.Series.XValues(nearestPointTool.Point)
-                showMarkers(New List(Of Date) From {DateTime.FromOADate(xvalue)})
-            End If
-        Catch ex As Exception
-            'do nothing
-        End Try
-    End Sub
-
-    ''' <summary>
     ''' Handles main chart MouseMove event
     ''' Animates any started zoom or pan process
     ''' </summary>
@@ -1734,7 +1711,49 @@ Friend Class WaveController
             Me.selectionMade = True
             'update drag start point
             Me.ChartMouseDragStartX = e.X
+
+        ElseIf View.CrosshairActive Then
+            ' update crosshair position
+            If View.TChart1.Series.Count = 0 Then
+                'no series, nothing to do
+                Exit Sub
+            End If
+            Dim xMouseValue As Double = View.TChart1.Series(0).XScreenToValue(e.X)
+            Dim xValue As Double
+            ' find the closest x value in all series
+            Dim distance As Double = Double.MaxValue
+            For Each id As Integer In _model.TimeSeries.Ids
+                Dim series As Steema.TeeChart.Styles.Series = View.GetSeries(id)
+                If series IsNot Nothing AndAlso series.Active AndAlso series.Count > 0 Then
+                    Dim xValueSeries, distanceSeries As Double
+                    For index As Integer = series.FirstVisibleIndex To series.LastVisibleIndex
+                        If series.XValues(index) >= xMouseValue Then
+                            'check whether previous or current index is nearer
+                            If index > 0 AndAlso Math.Abs(series.XValues(index - 1) - xMouseValue) < Math.Abs(series.XValues(index) - xMouseValue) Then
+                                xValueSeries = series.XValues(index - 1)
+                                distanceSeries = xMouseValue - series.XValues(index - 1)
+                            Else
+                                xValueSeries = series.XValues(index)
+                                distanceSeries = series.XValues(index) - xMouseValue
+                            End If
+                            If distanceSeries < distance Then
+                                'found new nearest point
+                                xValue = xValueSeries
+                                distance = distanceSeries
+                            End If
+                            Exit For
+                        End If
+                    Next
+                End If
+            Next
+            If xValue <> View.CrosshairPosition Then
+                'update crosshair position
+                View.CrosshairPosition = xValue
+                'show new markers
+                showMarkers(New List(Of Date) From {DateTime.FromOADate(xValue)})
+            End If
         End If
+
     End Sub
 
     ''' <summary>
