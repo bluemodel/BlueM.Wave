@@ -38,6 +38,11 @@ Friend Class MainWindow
     'ColorBand representing current view extent of main chart in OverviewChart
     Friend colorBandOverview As Steema.TeeChart.Tools.ColorBand
 
+    ''' <summary>
+    ''' ColorLine representing the crosshair line
+    ''' </summary>
+    Friend CrosshairLine As Steema.TeeChart.Tools.ColorLine
+
     'Cursors
     Friend cursor_pan As Cursor
     Friend cursor_zoom As Cursor
@@ -61,10 +66,28 @@ Friend Class MainWindow
     ''' <summary>
     ''' Checks whether the crosshair option is activated
     ''' </summary>
-    Friend ReadOnly Property Crosshair() As Boolean
+    Friend ReadOnly Property CrosshairActive() As Boolean
         Get
             Return Me.ToolStripButton_Crosshair.Checked
         End Get
+    End Property
+
+    ''' <summary>
+    ''' Current crosshair position in OADate format
+    ''' </summary>
+    Friend Property CrosshairPosition As Double
+        Get
+            If Me.CrosshairLine IsNot Nothing Then
+                Return Me.CrosshairLine.Value
+            Else
+                Return Double.NaN
+            End If
+        End Get
+        Set(value As Double)
+            If Me.CrosshairLine IsNot Nothing Then
+                Me.CrosshairLine.Value = value
+            End If
+        End Set
     End Property
 
     Friend Property ChartMinX As DateTime
@@ -203,6 +226,22 @@ Friend Class MainWindow
         colorBandZoom.EndLinePen.Visible = True
         colorBandZoom.StartLinePen.Visible = True
     End Sub
+
+    ''' <summary>
+    ''' Returns a series from the chart corresponding to a time series id
+    ''' </summary>
+    ''' <param name="id">the time series id</param>
+    ''' <returns>the series or Nothing if series not found</returns>
+    Friend Function GetSeries(id As Integer) As Steema.TeeChart.Styles.Series
+        For Each s As Steema.TeeChart.Styles.Series In Me.TChart1.Series
+            If s.Tag IsNot Nothing AndAlso s.Tag.Equals(id) Then
+                Return s
+            End If
+        Next
+        Log.AddLogEntry(levels.debug, $"Unable to find series with id {id} in chart!")
+        Dim series As Steema.TeeChart.Styles.Series = Nothing
+        Return series
+    End Function
 
     Private Overloads Sub Close() Implements IView.Close
         Throw New NotImplementedException()
