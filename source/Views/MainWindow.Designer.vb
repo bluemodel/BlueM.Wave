@@ -516,6 +516,8 @@ Partial Class MainWindow
         Me.ToolStripButton_Crosshair.Size = New System.Drawing.Size(23, 31)
         Me.ToolStripButton_Crosshair.Text = "Crosshair"
         Me.ToolStripButton_Crosshair.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
+        Me.ToolStripButton_Crosshair.ToolTipText = "Shows temporary markers at the current mouse position. Click to keep/remove marke" &
+    "rs."
         '
         'ToolStripSeparator3
         '
