@@ -162,7 +162,8 @@ Friend Class WaveController
         AddHandler Me.View.ToolStripButton_ConvertErrorValues.Click, AddressOf ConvertErrorValues_Click
         AddHandler Me.View.ToolStripButton_RemoveNaNValues.Click, AddressOf RemoveNaNValues_Click
         AddHandler Me.View.ToolStripButton_AutoAdjustYAxes.CheckedChanged, AddressOf AutoAdjustYAxis_CheckedChanged
-        AddHandler Me.View.ToolStripButton_Crosshair.CheckedChanged, AddressOf Crosshair_CheckedChanged
+        AddHandler Me.View.ToolStripButton_AddMarkers.CheckedChanged, AddressOf AddMarkers_CheckedChanged
+        AddHandler Me.View.ToolStripButton_RemoveMarkers.Click, AddressOf RemoveMarkers_Click
         AddHandler Me.View.ToolStripButton_ZoomIn.Click, AddressOf ZoomIn_Click
         AddHandler Me.View.ToolStripButton_ZoomOut.Click, AddressOf ZoomOut_Click
         AddHandler Me.View.ToolStripButton_ZoomPrevious.Click, AddressOf ZoomPrevious_Click
@@ -1187,8 +1188,8 @@ Friend Class WaveController
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
     ''' <remarks></remarks>
-    Private Sub Crosshair_CheckedChanged(sender As Object, e As System.EventArgs)
-        If View.ToolStripButton_Crosshair.Checked Then
+    Private Sub AddMarkers_CheckedChanged(sender As Object, e As System.EventArgs)
+        If View.AddMarkersActive Then
             'setup crosshair line
             View.CrosshairLine = New Steema.TeeChart.Tools.ColorLine(View.TChart1.Chart) With
             {
@@ -1203,9 +1204,8 @@ Friend Class WaveController
                 View.TChart1.Tools.Remove(View.CrosshairLine)
                 View.CrosshairLine = Nothing
             End If
-            'remove any existing markers
-            Me.markerPositions.Clear()
-            showMarkers()
+            'show only stored markers
+            Call Me.showMarkers()
         End If
     End Sub
 
@@ -1720,7 +1720,7 @@ Friend Class WaveController
             'update drag start point
             Me.ChartMouseDragStartX = e.X
 
-        ElseIf View.CrosshairActive Then
+        ElseIf View.AddMarkersActive Then
             ' update crosshair position
             If View.TChart1.Series.Count = 0 Then
                 'no series, nothing to do
@@ -1810,7 +1810,7 @@ Friend Class WaveController
 
         End If
 
-        If View.CrosshairActive And e.Button = MouseButtons.Left Then
+        If View.AddMarkersActive And e.Button = MouseButtons.Left Then
             'crosshair active, add or remove current crosshair position from list of markers
             Dim crosshairTimestamp As DateTime = DateTime.FromOADate(View.CrosshairPosition)
             If Not Me.markerPositions.Contains(crosshairTimestamp) Then
@@ -2771,6 +2771,12 @@ Friend Class WaveController
             End Try
         Next
 
+    End Sub
+
+    Private Sub RemoveMarkers_Click()
+        'remove all markers
+        Me.markerPositions.Clear()
+        Call Me.showMarkers()
     End Sub
 
     Private Sub LogShowWindow()
