@@ -312,6 +312,12 @@ Friend Class WaveController
         Try
             If TypeOf e Is Steema.TeeChart.Styles.SeriesEvent Then
                 Dim seriesEvent As Steema.TeeChart.Styles.SeriesEvent = CType(e, Steema.TeeChart.Styles.SeriesEvent)
+                Dim id As Integer
+                Dim haveId As Boolean = Integer.TryParse(seriesEvent.Series.Tag, id)
+                If Not haveId Then
+                    'series does not correspond to a time series in the model, ignore event
+                    Exit Sub
+                End If
                 Select Case seriesEvent.Event
                     Case Steema.TeeChart.Styles.SeriesEventStyle.ChangeActive
                         'series visibility has been changed
@@ -340,37 +346,31 @@ Friend Class WaveController
 
                     Case Steema.TeeChart.Styles.SeriesEventStyle.ChangeTitle
                         'series title changed, update title in the model
-                        Dim id As Integer = seriesEvent.Series.Tag
-                        If _model.TimeSeries.ContainsId(id) Then
-                            If _model.TimeSeries(id).Title <> seriesEvent.Series.Title Then
-                                _model.TimeSeries(id).Title = seriesEvent.Series.Title
-                                _model.SeriesPropertiesChangedHandler(id)
-                            End If
+                        If _model.TimeSeries(id).Title <> seriesEvent.Series.Title Then
+                            _model.TimeSeries(id).Title = seriesEvent.Series.Title
+                            _model.SeriesPropertiesChangedHandler(id)
                         End If
 
                     Case Steema.TeeChart.Styles.SeriesEventStyle.Remove
                         'series removed
 
                         'delete series from model
-                        Dim id As Integer = seriesEvent.Series.Tag
-                        If _model.TimeSeries.ContainsId(id) Then
-                            ' NOTE: This event is raised before the series is actually removed in TeeChart.
-                            ' We must NOT remove the series from the chart ourselves here.
-                            ' Otherwise, after we have handled the event, TeeChart will attempt to carry out
-                            ' the actual removal itself and thereby remove a different, additional series!
-                            ' Therefore, we must temporarily disable event handling here.
-                            ' (An alternative would be to cancel the TeeChart event here, but it's unclear if/how that is possible.)
-                            RemoveHandler _model.SeriesRemoved, AddressOf SeriesRemoved
-                            _model.RemoveTimeSeries(id)
-                            'remove series from overview chart manually because event handling is disabled
-                            For Each series As Steema.TeeChart.Styles.Series In View.TChart2.Series
-                                If series.Tag = id Then
-                                    View.TChart2.Series.Remove(series)
-                                    Exit For
-                                End If
-                            Next
-                            AddHandler _model.SeriesRemoved, AddressOf SeriesRemoved
-                        End If
+                        ' NOTE: This event is raised before the series is actually removed in TeeChart.
+                        ' We must NOT remove the series from the chart ourselves here.
+                        ' Otherwise, after we have handled the event, TeeChart will attempt to carry out
+                        ' the actual removal itself and thereby remove a different, additional series!
+                        ' Therefore, we must temporarily disable event handling here.
+                        ' (An alternative would be to cancel the TeeChart event here, but it's unclear if/how that is possible.)
+                        RemoveHandler _model.SeriesRemoved, AddressOf SeriesRemoved
+                        _model.RemoveTimeSeries(id)
+                        'remove series from overview chart manually because event handling is disabled
+                        For Each series As Steema.TeeChart.Styles.Series In View.TChart2.Series
+                            If series.Tag = id Then
+                                View.TChart2.Series.Remove(series)
+                                Exit For
+                            End If
+                        Next
+                        AddHandler _model.SeriesRemoved, AddressOf SeriesRemoved
 
                         'if the removed series was assigned to a custom axis, remove the axis if no other series is using it
                         If seriesEvent.Series.VertAxis = Steema.TeeChart.Styles.VerticalAxis.Custom Then
