@@ -1,13 +1,14 @@
 BlueM.Wave Release Notes
 ========================
 
-Version 2.12.0
+Version 2.12.1
 --------------
 NEW:
 * New toolbar buttons for interactively adding and removing markers to display series values at selected timestamps #209
 
 FIXED:
 * Fixed duplicate entries in zoom history when zooming by left-click dragging in the main chart
+* Handle nonexistent files in the recently used files menu
 
 Version 2.11.0
 --------------

@@ -497,9 +497,20 @@ Friend Class WaveController
     ''' <param name="e"></param>
     ''' <remarks></remarks>
     Private Sub openRecentlyUsedFile(sender As Object, e As ToolStripItemClickedEventArgs)
-        Dim filename As String
-        filename = e.ClickedItem.Text
-        Call _model.Import_File(filename)
+        Dim filepath As String = e.ClickedItem.Text
+        If Not IO.File.Exists(filepath) Then
+            'remove file from MRU list in user settings
+            My.Settings.MRUFiles.Remove(filepath)
+            My.Settings.Save()
+            'remove file from Recently Used Files menu
+            View.ToolStripMenuItem_RecentlyUsedFiles.DropDownItems.Remove(e.ClickedItem)
+            'close menu before showing message box
+            View.ToolStripDropDownButton_Open.DropDown.Close()
+            Log.AddLogEntry(Log.levels.error, $"File {filepath} not found!")
+            MsgBox($"File {filepath} not found!", MsgBoxStyle.Exclamation)
+            Exit Sub
+        End If
+        Call _model.Import_File(filepath)
     End Sub
 
     'TEN-Datei laden
