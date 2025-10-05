@@ -1760,7 +1760,7 @@ Friend Class WaveController
                 If series IsNot Nothing AndAlso series.Active AndAlso series.Count > 0 Then
                     Dim xValueSeries, distanceSeries As Double
                     For index As Integer = series.FirstVisibleIndex To series.LastVisibleIndex
-                        If series.XValues(index) >= xMouseValue Then
+                        If index <> -1 AndAlso series.XValues(index) >= xMouseValue Then
                             'check whether previous or current index is nearer
                             If index > 0 AndAlso Math.Abs(series.XValues(index - 1) - xMouseValue) < Math.Abs(series.XValues(index) - xMouseValue) Then
                                 xValueSeries = series.XValues(index - 1)
