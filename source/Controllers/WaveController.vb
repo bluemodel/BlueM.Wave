@@ -314,6 +314,10 @@ Friend Class WaveController
         Try
             If TypeOf e Is Steema.TeeChart.Styles.SeriesEvent Then
                 Dim seriesEvent As Steema.TeeChart.Styles.SeriesEvent = CType(e, Steema.TeeChart.Styles.SeriesEvent)
+                If seriesEvent.Event = Steema.TeeChart.Styles.SeriesEventStyle.RemoveAll Then
+                    'nothing to do, abort
+                    Exit Sub
+                End If
                 Dim id As Integer
                 Dim haveId As Boolean = Integer.TryParse(seriesEvent.Series.Tag, id)
                 If Not haveId Then
