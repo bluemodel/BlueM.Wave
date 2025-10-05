@@ -42,6 +42,10 @@ Friend Class MainWindow
     ''' ColorLine representing the crosshair line
     ''' </summary>
     Friend CrosshairLine As Steema.TeeChart.Tools.ColorLine
+    ''' <summary>
+    ''' Annotation showing the date of the crosshair line
+    ''' </summary>
+    Friend CrosshairDate As Steema.TeeChart.Tools.Annotation
 
     'Cursors
     Friend cursor_pan As Cursor
@@ -74,6 +78,7 @@ Friend Class MainWindow
 
     ''' <summary>
     ''' Current crosshair position in OADate format
+    ''' Also updates the crosshair date annotation
     ''' </summary>
     Friend Property CrosshairPosition As Double
         Get
@@ -86,6 +91,23 @@ Friend Class MainWindow
         Set(value As Double)
             If Me.CrosshairLine IsNot Nothing Then
                 Me.CrosshairLine.Value = value
+                'update date annotation
+                Me.CrosshairDate.Active = False
+                For Each series As Steema.TeeChart.Styles.Series In Me.TChart1.Series
+                    Dim id As Integer
+                    If series.Active AndAlso Integer.TryParse(series.Tag, id) Then
+                        Me.CrosshairDate.Active = True
+                        Me.CrosshairDate.Text = DateTime.FromOADate(value).ToString(Helpers.CurrentDateFormat)
+                        'get x position from series
+                        Dim x As Integer = series.ValuePointToScreenPoint(value, 0).X
+                        'get y position from bottom axis
+                        Dim y As Integer = Me.TChart1.Axes.Bottom.Position
+                        'set position of annotation
+                        Me.CrosshairDate.Left = x - Me.CrosshairDate.Width / 2
+                        Me.CrosshairDate.Top = y
+                        Exit For
+                    End If
+                Next
             End If
         End Set
     End Property

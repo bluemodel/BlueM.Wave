@@ -1204,11 +1204,19 @@ Friend Class WaveController
             }
             View.CrosshairLine.Pen.Style = Drawing2D.DashStyle.Dash
             View.CrosshairLine.Pen.Color = Color.Gray
+            'setup crosshair date annotation
+            View.CrosshairDate = New Steema.TeeChart.Tools.Annotation(View.TChart1.Chart) With
+            {
+                .TextAlign = StringAlignment.Center,
+                .Active = False 'will be activated once moved
+            }
         Else
-            'remove crosshair line
+            'remove crosshair line and date annotation
             If View.CrosshairLine IsNot Nothing Then
                 View.TChart1.Tools.Remove(View.CrosshairLine)
                 View.CrosshairLine = Nothing
+                View.TChart1.Tools.Remove(View.CrosshairDate)
+                View.CrosshairDate = Nothing
             End If
             'show only stored markers
             Call Me.showMarkers()
