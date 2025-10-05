@@ -9,7 +9,6 @@ NEW:
 FIXED:
 * Fixed duplicate entries in zoom history when zooming by left-click dragging in the main chart
 
-
 Version 2.11.0
 --------------
 NEW:
