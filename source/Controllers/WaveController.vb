@@ -1668,7 +1668,6 @@ Friend Class WaveController
                 End If
 
                 View.TChart1.Cursor = View.cursor_zoom
-                Call Me.SaveZoomSnapshot()
 
                 Me.ChartMouseZoomDragging = True
                 Me.ChartMouseDragStartX = e.X

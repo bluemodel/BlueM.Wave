@@ -6,6 +6,10 @@ Version 2.12.0
 NEW:
 * New toolbar buttons for interactively adding and removing markers to display series values at selected timestamps #209
 
+FIXED:
+* Fixed duplicate entries in zoom history when zooming by left-click dragging in the main chart
+
+
 Version 2.11.0
 --------------
 NEW:
