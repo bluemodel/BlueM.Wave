@@ -73,6 +73,8 @@ Friend Class WaveController
 
     'List of timestamps where markers are shown
     Private markerPositions As New List(Of DateTime)
+    'Dictionary of marker series, the key corresponds to the associated time series id
+    Private markerSeries As New Dictionary(Of Integer, Steema.TeeChart.Styles.Points)
 
     Private WithEvents _axisDialog As AxisDialog
 
@@ -1183,7 +1185,7 @@ Friend Class WaveController
     End Sub
 
     ''' <summary>
-    ''' Crosshair toolbar button clicked
+    ''' Add Markers toolbar button clicked
     ''' </summary>
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
@@ -2686,20 +2688,6 @@ Friend Class WaveController
     ''' <param name="timestamps">List of timestamps for which to show temporary markers</param>
     Private Sub showMarkers(Optional timestamps As List(Of DateTime) = Nothing)
 
-        'TODO: optimize by reusing existing marker series if possible
-
-        'Remove any existing marker series
-        For i As Integer = View.TChart1.Series.Count - 1 To 0 Step -1
-            Try
-                If CType(View.TChart1.Series(i).Tag, String) = "_markers" Then
-                    View.TChart1.Series.RemoveAt(i)
-                End If
-            Catch ex As Exception
-                Log.AddLogEntry(Log.levels.debug, ex.Message)
-            End Try
-        Next
-        View.TChart1.Refresh()
-
         If timestamps Is Nothing Then
             timestamps = New List(Of DateTime)
         End If
@@ -2712,59 +2700,90 @@ Friend Class WaveController
         Next
         timestamps.Sort()
 
+        'Remove unneeded marker points
+        For Each markers As Steema.TeeChart.Styles.Points In Me.markerSeries.Values
+            For i As Integer = markers.Count - 1 To 0 Step -1
+                If Not timestamps.Contains(DateTime.FromOADate(markers.XValues(i))) Then
+                    markers.Delete(i)
+                End If
+            Next
+            'remove empty marker series from chart
+            If markers.Count = 0 Then
+                View.TChart1.Series.Remove(markers)
+            End If
+        Next
+
+        View.TChart1.Refresh()
+
         If timestamps.Count = 0 Then
+            'no markers to display
             Exit Sub
         End If
 
-        'loop over series and create a marker series for each
-        For Each series As Steema.TeeChart.Styles.Series In Me.SeriesList
+        'loop over time series
+        For Each ts As TimeSeries In _model.TimeSeries.Values
             Try
+                Dim series As Steema.TeeChart.Styles.Series = View.GetSeries(ts.Id)
                 If Not series.Active Then
                     'do not display markers for inactive series
                     Continue For
                 End If
+
                 'collect all non-NaN values to display as markers
                 Dim markerValues As New Dictionary(Of DateTime, Double)
                 For Each t As DateTime In timestamps
-                    Dim index As Integer = series.XValues.IndexOf(t.ToOADate)
-                    If index <> -1 Then
-                        If Not series.IsNull(index) Then
-                            markerValues.Add(t, series.YValues(index))
-                        End If
+                    If ts.NodesClean.ContainsKey(t) Then
+                        markerValues.Add(t, ts.Nodes(t))
                     End If
                 Next
+
                 If markerValues.Count > 0 Then
-                    'create a new point series for markers
-                    Dim markers As New Steema.TeeChart.Styles.Points(View.TChart1.Chart)
-                    markers.Legend.Visible = False
-                    markers.Title = $"{series.Title} (markers)"
-                    markers.Tag = "_markers"
-                    markers.VertAxis = series.VertAxis
-                    If series.VertAxis = Steema.TeeChart.Styles.VerticalAxis.Custom Then
-                        markers.CustomVertAxis = series.CustomVertAxis
+                    Dim markers As Steema.TeeChart.Styles.Points
+                    If Not Me.markerSeries.ContainsKey(ts.Id) Then
+                        'create a new point series for markers
+                        markers = New Steema.TeeChart.Styles.Points(View.TChart1.Chart)
+                        markers.Legend.Visible = False
+                        markers.Title = $"{series.Title} (markers)"
+                        markers.Tag = "_markers"
+                        markers.VertAxis = series.VertAxis
+                        If series.VertAxis = Steema.TeeChart.Styles.VerticalAxis.Custom Then
+                            markers.CustomVertAxis = series.CustomVertAxis
+                        End If
+                        markers.Pointer.Style = Steema.TeeChart.Styles.PointerStyles.Circle
+                        markers.Pointer.Brush.Visible = False
+                        markers.Color = series.Color
+                        markers.Pointer.Color = series.Color
+                        markers.Pointer.Pen.Color = series.Color
+                        markers.Pointer.Pen.Width = 2
+                        markers.Marks.Visible = True
+                        markers.Marks.Style = Steema.TeeChart.Styles.MarksStyles.Value
+                        'markers.Marks.OnTop = True 'causes crash when markers are panned out of view on the left
+                        markers.Marks.Callout.Visible = False
+                        markers.Marks.FontSeriesColor = True
+                        markers.Marks.Pen.Color = series.Color
+                        markers.Marks.Arrow.Visible = False
+                        markers.Marks.ArrowLength = 8
+                        markers.Marks.TailParams.Align = Steema.TeeChart.Styles.TailAlignment.Auto
+                        markers.Marks.TailParams.PointerHeight = 8
+                        markers.Marks.TailParams.PointerWidth = 6
+                        markers.Pointer.InflateMargins = False
+
+                        Me.markerSeries.Add(ts.Id, markers)
                     End If
-                    markers.Pointer.Style = Steema.TeeChart.Styles.PointerStyles.Circle
-                    markers.Pointer.Brush.Visible = False
-                    markers.Color = series.Color
-                    markers.Pointer.Color = series.Color
-                    markers.Pointer.Pen.Color = series.Color
-                    markers.Pointer.Pen.Width = 2
-                    markers.Marks.Visible = True
-                    markers.Marks.Style = Steema.TeeChart.Styles.MarksStyles.Value
-                    'markers.Marks.OnTop = True 'causes crash when markers are panned out of view on the left
-                    markers.Marks.Callout.Visible = False
-                    markers.Marks.FontSeriesColor = True
-                    markers.Marks.Pen.Color = series.Color
-                    markers.Marks.Arrow.Visible = False
-                    markers.Marks.ArrowLength = 8
-                    markers.Marks.TailParams.Align = Steema.TeeChart.Styles.TailAlignment.Auto
-                    markers.Marks.TailParams.PointerHeight = 8
-                    markers.Marks.TailParams.PointerWidth = 6
-                    markers.Pointer.InflateMargins = False
+
+                    markers = Me.markerSeries(ts.Id)
+
+                    'assign to chart
+                    markers.Chart = View.TChart1.Chart
+
                     'add data points
                     For Each t As DateTime In markerValues.Keys
-                        markers.Add(t, markerValues(t))
+                        If markers.XValues.IndexOf(t.ToOADate) = -1 Then
+                            'only add if not already present
+                            markers.Add(t, markerValues(t))
+                        End If
                     Next
+
                 End If
             Catch ex As Exception
                 Log.AddLogEntry(Log.levels.debug, ex.Message)
@@ -2894,17 +2913,9 @@ Friend Class WaveController
     Private Sub SeriesRemoved(id As Integer)
 
         'Remove series from main chart
-        For i As Integer = View.TChart1.Series.Count - 1 To 0 Step -1
-            If CType(View.TChart1.Series.Item(i).Tag, String) = "_markers" Then
-                'TODO: marker series belonging to the removed series should be removed as well, skip for now
-                Continue For
-            End If
-            If View.TChart1.Series.Item(i).Tag = id Then
-                View.TChart1.Series.RemoveAt(i)
-                View.TChart1.Refresh()
-                Exit For
-            End If
-        Next
+        Dim series As Steema.TeeChart.Styles.Series = View.GetSeries(id)
+        View.TChart1.Series.Remove(series)
+        View.TChart1.Refresh()
 
         'Remove series from overview chart
         For i As Integer = View.TChart2.Series.Count - 1 To 0 Step -1
@@ -2917,6 +2928,12 @@ Friend Class WaveController
 
         'remove any unused custom axes
         Call Me.RemoveUnusedCustomAxes()
+
+        'remove any marker series belonging to the removed series
+        If Me.markerSeries.ContainsKey(id) Then
+            View.TChart1.Series.Remove(Me.markerSeries(id))
+            Me.markerSeries.Remove(id)
+        End If
 
     End Sub
 
