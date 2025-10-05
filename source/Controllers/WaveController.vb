@@ -350,6 +350,18 @@ Friend Class WaveController
                             Call Me.AdjustYAxes()
                         End If
 
+                        'update associated markers
+                        If seriesEvent.Series.Active Then
+                            'show markers
+                            Call Me.showMarkers()
+                        Else
+                            'remove markers
+                            If Me.markerSeries.ContainsKey(id) Then
+                                View.TChart1.Series.Remove(Me.markerSeries(id))
+                                Me.markerSeries.Remove(id)
+                            End If
+                        End If
+
                     Case Steema.TeeChart.Styles.SeriesEventStyle.ChangeTitle
                         'series title changed, update title in the model
                         If _model.TimeSeries(id).Title <> seriesEvent.Series.Title Then
