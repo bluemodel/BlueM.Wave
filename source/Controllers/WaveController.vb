@@ -1801,6 +1801,17 @@ Friend Class WaveController
                 View.ChartMaxX = DateTime.FromOADate(endValue)
                 Me.selectionMade = True
                 Call Me.ViewportChanged()
+            Else
+                'no zoom, maybe something else
+                If View.AddMarkersActive Then
+                    'add markers active, add or remove current crosshair position from list of markers
+                    Dim crosshairTimestamp As DateTime = DateTime.FromOADate(View.CrosshairPosition)
+                    If Not Me.markerPositions.Contains(crosshairTimestamp) Then
+                        Me.markerPositions.Add(crosshairTimestamp)
+                    Else
+                        Me.markerPositions.Remove(crosshairTimestamp)
+                    End If
+                End If
             End If
             'hide colorband
             View.colorBandZoom.Active = False
@@ -1810,16 +1821,6 @@ Friend Class WaveController
             Call Me.ViewportChanged()
             Me.ChartMousePanning = False
 
-        End If
-
-        If View.AddMarkersActive And e.Button = MouseButtons.Left Then
-            'crosshair active, add or remove current crosshair position from list of markers
-            Dim crosshairTimestamp As DateTime = DateTime.FromOADate(View.CrosshairPosition)
-            If Not Me.markerPositions.Contains(crosshairTimestamp) Then
-                Me.markerPositions.Add(crosshairTimestamp)
-            Else
-                Me.markerPositions.Remove(crosshairTimestamp)
-            End If
         End If
 
         View.TChart1.Cursor = Cursors.Default
