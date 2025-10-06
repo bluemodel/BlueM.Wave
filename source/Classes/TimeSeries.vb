@@ -759,12 +759,12 @@ Public Class TimeSeries
 
         'determine first and last hydrological year
         If Me.StartDate < New DateTime(Me.StartDate.Year, startMonth, 1) Then
-            year_start = Me.StartDate.Year
+            year_start = Me.StartDate.Year - 1
         Else
-            year_start = Me.StartDate.Year + 1
+            year_start = Me.StartDate.Year
         End If
 
-        If Me.EndDate > New DateTime(Me.EndDate.Year, startMonth, 1) Then
+        If Me.EndDate >= New DateTime(Me.EndDate.Year, startMonth, 1) Then
             year_end = Me.EndDate.Year
         Else
             year_end = Me.EndDate.Year - 1
