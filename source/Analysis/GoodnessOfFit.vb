@@ -142,11 +142,14 @@ Friend Class GoodnessOfFit
 
         Dim ts_o_nan As TimeSeries = ts_o.Clone()
         datesToUpdate = New List(Of DateTime)
-        For Each t As DateTime In ts_o_nan.Dates
-            For Each NaNPeriod As (range As DateRange, count As Integer) In ts_s.NaNPeriods
-                If t >= NaNPeriod.range.start And t <= NaNPeriod.range.end Then
-                    datesToUpdate.Add(t)
+        For Each NaNPeriod As (range As DateRange, count As Integer) In ts_s.NaNPeriods
+            For Each t As DateTime In ts_o_nan.Dates
+                If t < NaNPeriod.range.start Then
+                    Continue For
+                ElseIf t > NaNPeriod.range.end Then
                     Exit For
+                Else
+                    datesToUpdate.Add(t)
                 End If
             Next
         Next
@@ -156,11 +159,14 @@ Friend Class GoodnessOfFit
 
         Dim ts_s_nan As TimeSeries = ts_s.Clone()
         datesToUpdate = New List(Of DateTime)
-        For Each t As DateTime In ts_s_nan.Dates
-            For Each NaNPeriod As (range As DateRange, count As Integer) In ts_o.NaNPeriods
-                If t >= NaNPeriod.range.start And t <= NaNPeriod.range.end Then
-                    datesToUpdate.Add(t)
+        For Each NaNPeriod As (range As DateRange, count As Integer) In ts_o.NaNPeriods
+            For Each t As DateTime In ts_s_nan.Dates
+                If t < NaNPeriod.range.start Then
+                    Continue For
+                ElseIf t > NaNPeriod.range.end Then
                     Exit For
+                Else
+                    datesToUpdate.Add(t)
                 End If
             Next
         Next
