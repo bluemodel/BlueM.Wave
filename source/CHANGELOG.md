@@ -1,6 +1,11 @@
 BlueM.Wave Release Notes
 ========================
 
+Version 2.12.2
+--------------
+FIXED:
+* Fixed series reordering in TeeChart editor no longer working
+
 Version 2.12.1
 --------------
 NEW:
