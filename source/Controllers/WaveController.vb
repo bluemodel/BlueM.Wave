@@ -317,11 +317,20 @@ Friend Class WaveController
                 If seriesEvent.Event = Steema.TeeChart.Styles.SeriesEventStyle.RemoveAll Then
                     'nothing to do, abort
                     Exit Sub
+                ElseIf seriesEvent.Event = Steema.TeeChart.Styles.SeriesEventStyle.Swap Then
+                    'series reordered, reorder series in model
+                    Dim ids As New List(Of Integer)
+                    For Each series As Steema.TeeChart.Styles.Series In e.sender.Series
+                        ids.Add(series.Tag)
+                    Next
+                    _model.Reorder_Series(ids)
+                    Exit Sub
                 End If
+                'all other events can only be handled if the triggering series also exists in the model, i.e. has an id
                 Dim id As Integer
                 Dim haveId As Boolean = Integer.TryParse(seriesEvent.Series.Tag, id)
                 If Not haveId Then
-                    'series does not correspond to a time series in the model, ignore event
+                    'ignore event
                     Exit Sub
                 End If
                 Select Case seriesEvent.Event
@@ -394,14 +403,6 @@ Friend Class WaveController
                         If seriesEvent.Series.VertAxis = Steema.TeeChart.Styles.VerticalAxis.Custom Then
                             Call Me.RemoveUnusedCustomAxes()
                         End If
-
-                    Case Steema.TeeChart.Styles.SeriesEventStyle.Swap
-                        'series reordered, reorder series in model
-                        Dim ids As New List(Of Integer)
-                        For Each series As Steema.TeeChart.Styles.Series In e.sender.Series
-                            ids.Add(series.Tag)
-                        Next
-                        _model.Reorder_Series(ids)
 
                 End Select
             End If
