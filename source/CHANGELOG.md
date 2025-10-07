@@ -3,7 +3,13 @@ BlueM.Wave Release Notes
 
 Version 2.12.2
 --------------
+CHANGED:
+* When performing analyses based on years (GoodnessOfFit, AnnualStatistics) with series with interpretation block right, 
+  the end date of each year is now more exactly defined as the last timestamp before the start of the next year
+
 FIXED:
+* GoodnessOfFit analysis: major performance improvement when processing series with NaN values
+* Fixed first year missing from result of GoodnessOfFit analysis #210
 * Fixed series reordering in TeeChart editor no longer working
 
 Version 2.12.1
