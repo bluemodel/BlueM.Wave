@@ -62,6 +62,21 @@ Namespace Fileformats
             ("tf", "min")
         }
 
+        ''' <summary>
+        ''' Column indices for 20-byte format (Qzu, Qab, tf)
+        ''' </summary>
+        Private Shared ReadOnly Format2ColumnIndices As Integer() = {0, 1, 20}
+
+        ''' <summary>
+        ''' Format type read from header: 1 for 92-byte records, 2 for 20-byte records
+        ''' </summary>
+        Private RecordFormat As Integer
+
+        ''' <summary>
+        ''' Number of data columns based on format type
+        ''' </summary>
+        Private ColumnCount As Integer
+
         Public Sub New(FileName As String, Optional ReadAllNow As Boolean = False)
 
             MyBase.New(FileName)
@@ -82,29 +97,73 @@ Namespace Fileformats
         End Sub
 
         ''' <summary>
-        ''' Reads series info for fixed GBL format structure
+        ''' Reads series info for GBL format structure based on header
         ''' </summary>
         Public Overrides Sub readSeriesInfo()
 
             Me.TimeSeriesInfos.Clear()
 
-            ' GBL format has fixed structure: 8 bytes date + 21 * 4 bytes data columns
+            ' Read header to determine format
+            Using reader As New IO.BinaryReader(IO.File.OpenRead(File), Text.ASCIIEncoding.ASCII)
+                ' Read header marker (first 8 bytes)
+                Dim headerMarker As Double = reader.ReadDouble()
 
-            ' Create 21 time series info objects for the fixed columns
-            For i As Integer = 0 To ColumnDefinitions.Length - 1
-                Dim sInfo As New TimeSeriesInfo()
-                sInfo.Name = ColumnDefinitions(i).Name
-                sInfo.Unit = ColumnDefinitions(i).Unit
-                sInfo.Index = i
-                Me.TimeSeriesInfos.Add(sInfo)
-            Next
+                ' Validate header
+                If Math.Abs(headerMarker - (-999.0)) > 0.0001 Then
+                    Throw New Exception($"Invalid GBL file header. Expected marker -999.0, found {headerMarker}")
+                End If
 
-            Log.AddLogEntry(Log.levels.debug, $"GBL format: Created {Me.TimeSeriesInfos.Count} fixed time series definitions")
+                ' Read format marker (next 4 bytes)
+                Dim formatMarker As Single = reader.ReadSingle()
+
+                ' Determine format based on marker
+                If Math.Abs(formatMarker - (-1.0F)) < 0.0001F Then
+                    ' Format 1: 92-byte records (21 columns)
+                    Me.RecordFormat = 1
+                    Me.ColumnCount = 21
+                    ' Skip remaining bytes of header (80 bytes: 20 more singles = 20 * 4 bytes)
+                    reader.ReadBytes(80)
+                    Log.AddLogEntry(Log.levels.debug, "GBL format: Detected format 1 (92-byte records, 21 columns)")
+                ElseIf Math.Abs(formatMarker - (-2.0F)) < 0.0001F Then
+                    ' Format 2: 20-byte records (3 columns: Qzu, Qab, tf)
+                    Me.RecordFormat = 2
+                    Me.ColumnCount = 3
+                    ' Skip remaining bytes of header (8 bytes: 2 more singles = 2 * 4 bytes)
+                    reader.ReadBytes(8)
+                    Log.AddLogEntry(Log.levels.debug, "GBL format: Detected format 2 (20-byte records, 3 columns: Qzu, Qab, tf)")
+                Else
+                    Throw New Exception($"Invalid GBL format marker. Expected -1.0 or -2.0, found {formatMarker}")
+                End If
+            End Using
+
+            ' Create time series info objects based on detected format
+            If Me.RecordFormat = 1 Then
+                ' Format 1: All 21 columns
+                For i As Integer = 0 To Me.ColumnCount - 1
+                    Dim sInfo As New TimeSeriesInfo()
+                    sInfo.Name = ColumnDefinitions(i).Name
+                    sInfo.Unit = ColumnDefinitions(i).Unit
+                    sInfo.Index = i
+                    Me.TimeSeriesInfos.Add(sInfo)
+                Next
+            Else
+                ' Format 2: Only Qzu (index 0), Qab (index 1), and tf (index 20)
+                For i As Integer = 0 To Me.ColumnCount - 1
+                    Dim columnIndex As Integer = Format2ColumnIndices(i)
+                    Dim sInfo As New TimeSeriesInfo()
+                    sInfo.Name = ColumnDefinitions(columnIndex).Name
+                    sInfo.Unit = ColumnDefinitions(columnIndex).Unit
+                    sInfo.Index = i ' Use sequential index for format 2
+                    Me.TimeSeriesInfos.Add(sInfo)
+                Next
+            End If
+
+            Log.AddLogEntry(Log.levels.debug, $"GBL format: Created {Me.TimeSeriesInfos.Count} time series definitions")
 
         End Sub
 
         ''' <summary>
-        ''' Reads the file with fixed GBL format structure
+        ''' Reads the file with GBL format structure
         ''' </summary>
         Public Overrides Sub readFile()
 
@@ -130,6 +189,10 @@ Namespace Fileformats
             selectedIndices.Sort()
 
             Using reader As New IO.BinaryReader(IO.File.OpenRead(File), Text.ASCIIEncoding.ASCII)
+                ' Skip header record (full record: 92 or 20 bytes depending on format)
+                Dim headerSize As Integer = If(Me.RecordFormat = 1, 92, 20)
+                reader.ReadBytes(headerSize)
+
                 'read data records
                 errorcount = 0
                 Do Until reader.BaseStream.Position >= reader.BaseStream.Length
@@ -139,8 +202,8 @@ Namespace Fileformats
                         'convert real date to DateTime
                         timestamp = BIN.rDateToDate(rdate)
 
-                        'loop over all columns (each 4 bytes = Single)
-                        For i As Integer = 0 To GBL.ColumnDefinitions.Length - 1
+                        'loop over columns based on format (each 4 bytes = Single)
+                        For i As Integer = 0 To Me.ColumnCount - 1
                             If selectedIndices.Contains(i) Then
                                 'read value
                                 value = reader.ReadSingle()
@@ -180,12 +243,38 @@ Namespace Fileformats
         ''' <returns>True if verification was successful</returns>
         ''' <remarks>Adapted from Fortran routine FILE_GETRECL (formerly ZRE_GETRECL)</remarks>
         Public Shared Function verifyFormat(file As String) As Boolean
-            ' Für GBL-Format: Prüfung auf Dateiendung und Dateigröße (Vielfaches von 92)
+            ' Check file extension
             If Not file.ToLower().EndsWith(".gbl") Then Return False
 
             Dim fileInfo As New IO.FileInfo(file)
-            ' Prüfen, ob Dateigröße ein Vielfaches von 92 ist
-            Return (fileInfo.Length Mod 92 = 0) AndAlso (fileInfo.Length > 0)
+            If fileInfo.Length < 20 Then Return False ' At least a 20-byte header must be present
+
+            Try
+                ' Read and validate header
+                Using reader As New IO.BinaryReader(IO.File.OpenRead(file), Text.ASCIIEncoding.ASCII)
+                    Dim headerMarker As Double = reader.ReadDouble()
+                    Dim formatMarker As Single = reader.ReadSingle()
+
+                    ' Validate header marker
+                    If Math.Abs(headerMarker - (-999.0)) > 0.0001 Then Return False
+
+                    ' Determine expected record size based on format marker
+                    Dim recordSize As Integer
+                    If Math.Abs(formatMarker - (-1.0F)) < 0.0001F Then
+                        recordSize = 92 ' 8 bytes date + 21 * 4 bytes data
+                    ElseIf Math.Abs(formatMarker - (-2.0F)) < 0.0001F Then
+                        recordSize = 20 ' 8 bytes date + 3 * 4 bytes data
+                    Else
+                        Return False ' Invalid format marker
+                    End If
+
+                    ' Validate file size: must be a multiple of recordSize (header + data records)
+                    ' File size = n * recordSize where n >= 1 (at least header present)
+                    Return (fileInfo.Length Mod recordSize = 0) AndAlso (fileInfo.Length >= recordSize)
+                End Using
+            Catch ex As Exception
+                Return False
+            End Try
         End Function
 
     End Class
