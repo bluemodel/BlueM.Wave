@@ -3,6 +3,9 @@ BlueM.Wave Release Notes
 
 Version 2.12.2
 --------------
+NEW:
+* Added support for reading GINA GBL files in hydraulic scenario format #212
+
 CHANGED:
 * When performing analyses based on years (GoodnessOfFit, AnnualStatistics) with series with interpretation block right, 
   the end date of each year is now more exactly defined as the last timestamp before the start of the next year
