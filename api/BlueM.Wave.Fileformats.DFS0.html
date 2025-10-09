@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Class DFS0 | BlueM.Wave </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Class DFS0 | BlueM.Wave ">
+      
+      <meta name="description" content="Class for importing the DHI MIKE Dfs0 format Requires the DHI.DFS Nuget package: https://www.nuget.org/packages/DHI.DFS/ Docs:  https://docs.mikepoweredbydhi.com/core_libraries/dfs/dfs_api/ https://docs.mikepoweredbydhi.com/core_libraries/dfs/dfs-file-formats/#dfs0-file https://docs.mikepoweredbydhi.com/SDK_UserGuide/#eum-quantity  Code is loosely based on the following examples: https://github.com/DHI/MIKECore-Examples/blob/master/Examples/CSharp/ExamplesDfs0.cs">
+      <link rel="icon" href="../images/wave_icon.png">
+      <link rel="stylesheet" href="../public/docfx.min.css">
+      <link rel="stylesheet" href="../public/main.css">
+      <meta name="docfx:navrel" content="../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../">
+      
+      
+      
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="ManagedReference">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../index.html">
+            <img id="logo" class="svg" src="../images/wave_logo.png" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="BlueM.Wave.Fileformats.DFS0">
+
+
+
+  <h1 id="BlueM_Wave_Fileformats_DFS0" data-uid="BlueM.Wave.Fileformats.DFS0" class="text-break">
+Class DFS0  
+  </h1>
+
+  <div class="facts text-secondary">
+    <dl><dt>Namespace</dt><dd><a class="xref" href="BlueM.html">BlueM</a>.<a class="xref" href="BlueM.Wave.html">Wave</a>.<a class="xref" href="BlueM.Wave.Fileformats.html">Fileformats</a></dd></dl>
+  <dl><dt>Assembly</dt><dd>Wave.dll</dd></dl>
+  </div>
+
+  <div class="markdown summary"><p>Class for importing the DHI MIKE Dfs0 format</p>
+<p>Requires the DHI.DFS Nuget package: <a href="https://www.nuget.org/packages/DHI.DFS/">https://www.nuget.org/packages/DHI.DFS/</a></p>
+<p>Docs:</p>
+<ul>
+<li><a href="https://docs.mikepoweredbydhi.com/core_libraries/dfs/dfs_api/">https://docs.mikepoweredbydhi.com/core_libraries/dfs/dfs_api/</a></li>
+<li><a href="https://docs.mikepoweredbydhi.com/core_libraries/dfs/dfs-file-formats/#dfs0-file">https://docs.mikepoweredbydhi.com/core_libraries/dfs/dfs-file-formats/#dfs0-file</a></li>
+<li><a href="https://docs.mikepoweredbydhi.com/SDK_UserGuide/#eum-quantity">https://docs.mikepoweredbydhi.com/SDK_UserGuide/#eum-quantity</a></li>
+</ul>
+<p>Code is loosely based on the following examples: <a href="https://github.com/DHI/MIKECore-Examples/blob/master/Examples/CSharp/ExamplesDfs0.cs">https://github.com/DHI/MIKECore-Examples/blob/master/Examples/CSharp/ExamplesDfs0.cs</a></p>
+</div>
+  <div class="markdown conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public class DFS0 : TimeSeriesFile</code></pre>
+  </div>
+
+
+
+
+  <dl class="typelist inheritance">
+    <dt>Inheritance</dt>
+    <dd>
+      <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a></div>
+      <div><a class="xref" href="BlueM.Wave.TimeSeriesFile.html">TimeSeriesFile</a></div>
+      <div><span class="xref">DFS0</span></div>
+    </dd>
+  </dl>
+
+
+
+  <dl class="typelist inheritedMembers">
+    <dt>Inherited Members</dt>
+    <dd>
+    <div>
+      <a class="xref" href="BlueM.Wave.TimeSeriesFile.html#BlueM_Wave_TimeSeriesFile_TimeSeries">TimeSeriesFile.TimeSeries</a>
+    </div>
+    <div>
+      <a class="xref" href="BlueM.Wave.TimeSeriesFile.html#BlueM_Wave_TimeSeriesFile_get_getTimeSeries_System_Int32_">TimeSeriesFile.get_getTimeSeries(int)</a>
+    </div>
+    <div>
+      <a class="xref" href="BlueM.Wave.TimeSeriesFile.html#BlueM_Wave_TimeSeriesFile_get_getTimeSeries_System_String_">TimeSeriesFile.get_getTimeSeries(string)</a>
+    </div>
+    <div>
+      <a class="xref" href="BlueM.Wave.TimeSeriesFile.html#BlueM_Wave_TimeSeriesFile_selectAllSeries">TimeSeriesFile.selectAllSeries()</a>
+    </div>
+    <div>
+      <a class="xref" href="BlueM.Wave.TimeSeriesFile.html#BlueM_Wave_TimeSeriesFile_selectSeries_System_Int32_">TimeSeriesFile.selectSeries(int)</a>
+    </div>
+    <div>
+      <a class="xref" href="BlueM.Wave.TimeSeriesFile.html#BlueM_Wave_TimeSeriesFile_selectSeries_System_String_">TimeSeriesFile.selectSeries(string)</a>
+    </div>
+    <div>
+      <a class="xref" href="BlueM.Wave.TimeSeriesFile.html#BlueM_Wave_TimeSeriesFile_setDefaultMetadata_BlueM_Wave_TimeSeries_">TimeSeriesFile.setDefaultMetadata(TimeSeries)</a>
+    </div>
+    <div>
+      <a class="xref" href="BlueM.Wave.TimeSeriesFile.html#BlueM_Wave_TimeSeriesFile_getFileExtension_BlueM_Wave_TimeSeriesFile_FileTypes_">TimeSeriesFile.getFileExtension(TimeSeriesFile.FileTypes)</a>
+    </div>
+    <div>
+      <a class="xref" href="BlueM.Wave.TimeSeriesFile.html#BlueM_Wave_TimeSeriesFile_SupportsMultipleSeries_BlueM_Wave_TimeSeriesFile_FileTypes_">TimeSeriesFile.SupportsMultipleSeries(TimeSeriesFile.FileTypes)</a>
+    </div>
+    <div>
+      <a class="xref" href="BlueM.Wave.TimeSeriesFile.html#BlueM_Wave_TimeSeriesFile_getFileType_System_String_">TimeSeriesFile.getFileType(string)</a>
+    </div>
+    <div>
+      <a class="xref" href="BlueM.Wave.TimeSeriesFile.html#BlueM_Wave_TimeSeriesFile_getInstance_System_String_BlueM_Wave_TimeSeriesFile_FileTypes_">TimeSeriesFile.getInstance(string, TimeSeriesFile.FileTypes)</a>
+    </div>
+    <div>
+      <a class="xref" href="BlueM.Wave.TimeSeriesFile.html#BlueM_Wave_TimeSeriesFile_Encoding">TimeSeriesFile.Encoding</a>
+    </div>
+    <div>
+      <a class="xref" href="BlueM.Wave.TimeSeriesFile.html#BlueM_Wave_TimeSeriesFile_FileMetadata">TimeSeriesFile.FileMetadata</a>
+    </div>
+    <div>
+      <a class="xref" href="BlueM.Wave.TimeSeriesFile.html#BlueM_Wave_TimeSeriesFile_File">TimeSeriesFile.File</a>
+    </div>
+    <div>
+      <a class="xref" href="BlueM.Wave.TimeSeriesFile.html#BlueM_Wave_TimeSeriesFile_IsColumnSeparated">TimeSeriesFile.IsColumnSeparated</a>
+    </div>
+    <div>
+      <a class="xref" href="BlueM.Wave.TimeSeriesFile.html#BlueM_Wave_TimeSeriesFile_Separator">TimeSeriesFile.Separator</a>
+    </div>
+    <div>
+      <a class="xref" href="BlueM.Wave.TimeSeriesFile.html#BlueM_Wave_TimeSeriesFile_Dateformat">TimeSeriesFile.Dateformat</a>
+    </div>
+    <div>
+      <a class="xref" href="BlueM.Wave.TimeSeriesFile.html#BlueM_Wave_TimeSeriesFile_DecimalSeparator">TimeSeriesFile.DecimalSeparator</a>
+    </div>
+    <div>
+      <a class="xref" href="BlueM.Wave.TimeSeriesFile.html#BlueM_Wave_TimeSeriesFile_iLineHeadings">TimeSeriesFile.iLineHeadings</a>
+    </div>
+    <div>
+      <a class="xref" href="BlueM.Wave.TimeSeriesFile.html#BlueM_Wave_TimeSeriesFile_iLineUnits">TimeSeriesFile.iLineUnits</a>
+    </div>
+    <div>
+      <a class="xref" href="BlueM.Wave.TimeSeriesFile.html#BlueM_Wave_TimeSeriesFile_iLineData">TimeSeriesFile.iLineData</a>
+    </div>
+    <div>
+      <a class="xref" href="BlueM.Wave.TimeSeriesFile.html#BlueM_Wave_TimeSeriesFile_nLinesHeader">TimeSeriesFile.nLinesHeader</a>
+    </div>
+    <div>
+      <a class="xref" href="BlueM.Wave.TimeSeriesFile.html#BlueM_Wave_TimeSeriesFile_UseUnits">TimeSeriesFile.UseUnits</a>
+    </div>
+    <div>
+      <a class="xref" href="BlueM.Wave.TimeSeriesFile.html#BlueM_Wave_TimeSeriesFile_ColumnWidth">TimeSeriesFile.ColumnWidth</a>
+    </div>
+    <div>
+      <a class="xref" href="BlueM.Wave.TimeSeriesFile.html#BlueM_Wave_TimeSeriesFile_ColumnOffset">TimeSeriesFile.ColumnOffset</a>
+    </div>
+    <div>
+      <a class="xref" href="BlueM.Wave.TimeSeriesFile.html#BlueM_Wave_TimeSeriesFile_DateTimeColumnIndex">TimeSeriesFile.DateTimeColumnIndex</a>
+    </div>
+    <div>
+      <a class="xref" href="BlueM.Wave.TimeSeriesFile.html#BlueM_Wave_TimeSeriesFile_TimeSeriesInfos">TimeSeriesFile.TimeSeriesInfos</a>
+    </div>
+    <div>
+      <a class="xref" href="BlueM.Wave.TimeSeriesFile.html#BlueM_Wave_TimeSeriesFile_SelectedSeries">TimeSeriesFile.SelectedSeries</a>
+    </div>
+    <div>
+      <a class="xref" href="BlueM.Wave.TimeSeriesFile.html#BlueM_Wave_TimeSeriesFile_TitleSuffix">TimeSeriesFile.TitleSuffix</a>
+    </div>
+    <div>
+      <a class="xref" href="BlueM.Wave.TimeSeriesFile.html#BlueM_Wave_TimeSeriesFile_getTimeSeries_System_Int32_">TimeSeriesFile.getTimeSeries[int]</a>
+    </div>
+    <div>
+      <a class="xref" href="BlueM.Wave.TimeSeriesFile.html#BlueM_Wave_TimeSeriesFile_getTimeSeries_System_String_">TimeSeriesFile.getTimeSeries[string]</a>
+    </div>
+    <div>
+      <a class="xref" href="BlueM.Wave.TimeSeriesFile.html#BlueM_Wave_TimeSeriesFile_MetadataKeys">TimeSeriesFile.MetadataKeys</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.tostring">object.ToString()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)">object.Equals(object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)">object.Equals(object, object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.referenceequals">object.ReferenceEquals(object, object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gethashcode">object.GetHashCode()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gettype">object.GetType()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone">object.MemberwiseClone()</a>
+    </div>
+  </dd></dl>
+
+
+
+
+  <h2 id="BlueM_Wave_Fileformats_DFS0_remarks">Remarks</h2>
+  <div class="markdown level0 remarks"><p>Only works in x64</p>
+</div>
+
+
+  <h2 class="section" id="constructors">Constructors
+</h2>
+
+
+  <a id="BlueM_Wave_Fileformats_DFS0__ctor_" data-uid="BlueM.Wave.Fileformats.DFS0.#ctor*"></a>
+
+  <h3 id="BlueM_Wave_Fileformats_DFS0__ctor_System_String_System_Boolean_" data-uid="BlueM.Wave.Fileformats.DFS0.#ctor(System.String,System.Boolean)">
+  DFS0(string, bool)
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public DFS0(string FileName, bool ReadAllNow = false)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>FileName</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd></dd>
+    <dt><code>ReadAllNow</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <h2 class="section" id="properties">Properties
+</h2>
+
+
+  <a id="BlueM_Wave_Fileformats_DFS0_UseImportDialog_" data-uid="BlueM.Wave.Fileformats.DFS0.UseImportDialog*"></a>
+
+  <h3 id="BlueM_Wave_Fileformats_DFS0_UseImportDialog" data-uid="BlueM.Wave.Fileformats.DFS0.UseImportDialog">
+  UseImportDialog
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Flag indicating whether to show the import dialog</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override bool UseImportDialog { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <h2 class="section" id="methods">Methods
+</h2>
+
+
+  <a id="BlueM_Wave_Fileformats_DFS0_InterpretationToDataValueType_" data-uid="BlueM.Wave.Fileformats.DFS0.InterpretationToDataValueType*"></a>
+
+  <h3 id="BlueM_Wave_Fileformats_DFS0_InterpretationToDataValueType_BlueM_Wave_TimeSeries_InterpretationEnum_" data-uid="BlueM.Wave.Fileformats.DFS0.InterpretationToDataValueType(BlueM.Wave.TimeSeries.InterpretationEnum)">
+  InterpretationToDataValueType(InterpretationEnum)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Converts a TimeSeries.Interpretation to a DHI.Generic.MikeZero.DFS.DataValueType</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static DataValueType InterpretationToDataValueType(TimeSeries.InterpretationEnum interpretation)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>interpretation</code> <a class="xref" href="BlueM.Wave.TimeSeries.html">TimeSeries</a>.<a class="xref" href="BlueM.Wave.TimeSeries.InterpretationEnum.html">InterpretationEnum</a></dt>
+    <dd><p>the interpretation to convert</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><span class="xref">DataValueType</span></dt>
+    <dd><p>the corresponding DataValueType, defaults to DataValueType.Instantaneous</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="BlueM_Wave_Fileformats_DFS0_UnitToEUMUnit_" data-uid="BlueM.Wave.Fileformats.DFS0.UnitToEUMUnit*"></a>
+
+  <h3 id="BlueM_Wave_Fileformats_DFS0_UnitToEUMUnit_System_String_" data-uid="BlueM.Wave.Fileformats.DFS0.UnitToEUMUnit(System.String)">
+  UnitToEUMUnit(string)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Converts a string unit to a DHI.Generic.MikeZero.eumUnit</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static eumUnit UnitToEUMUnit(string unit)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>unit</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd><p>unit</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><span class="xref">eumUnit</span></dt>
+    <dd><p>the corresponding eumUnit, defaults to eumUUnitUndefined</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="BlueM_Wave_Fileformats_DFS0_Write_File_" data-uid="BlueM.Wave.Fileformats.DFS0.Write_File*"></a>
+
+  <h3 id="BlueM_Wave_Fileformats_DFS0_Write_File_System_Collections_Generic_List_BlueM_Wave_TimeSeries___System_String_" data-uid="BlueM.Wave.Fileformats.DFS0.Write_File(System.Collections.Generic.List{BlueM.Wave.TimeSeries}@,System.String)">
+  Write_File(ref List&lt;TimeSeries&gt;, string)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Writes one or more timeseries to a DFS0 file
+Displays a dialog for setting EUM Item and Unit</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static void Write_File(ref List&lt;TimeSeries&gt; tsList, string path)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>tsList</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1">List</a>&lt;<a class="xref" href="BlueM.Wave.TimeSeries.html">TimeSeries</a>&gt;</dt>
+    <dd><p>list of TimeSeries</p>
+</dd>
+    <dt><code>path</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd><p>path to file</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="BlueM_Wave_Fileformats_DFS0_readFile_" data-uid="BlueM.Wave.Fileformats.DFS0.readFile*"></a>
+
+  <h3 id="BlueM_Wave_Fileformats_DFS0_readFile" data-uid="BlueM.Wave.Fileformats.DFS0.readFile">
+  readFile()
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Reads the file</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void readFile()</code></pre>
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="BlueM_Wave_Fileformats_DFS0_readSeriesInfo_" data-uid="BlueM.Wave.Fileformats.DFS0.readSeriesInfo*"></a>
+
+  <h3 id="BlueM_Wave_Fileformats_DFS0_readSeriesInfo" data-uid="BlueM.Wave.Fileformats.DFS0.readSeriesInfo">
+  readSeriesInfo()
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Reads series info</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void readSeriesInfo()</code></pre>
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+        <div class="contribution d-print-none">
+        </div>
+
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
