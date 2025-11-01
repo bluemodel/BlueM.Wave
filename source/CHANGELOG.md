@@ -1,6 +1,11 @@
 BlueM.Wave Release Notes
 ========================
 
+Version 2.12.3
+--------------
+API-CHANGES:
+* New public function `TimeSeries.ClosestDate()` for finding the date of the node closest to the specified timestamp
+
 Version 2.12.2
 --------------
 NEW:
