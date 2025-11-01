@@ -28,11 +28,9 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
     ''' </summary>
     <TestMethod()> Public Sub TestSplitHydroYears1()
 
-        Dim ts, ts_new As TimeSeries
+        Dim ts As New TimeSeries("testinput")
 
-        ts = New TimeSeries("testinput")
-
-        Dim t As DateTime = New DateTime(2000, 11, 1)
+        Dim t As New DateTime(2000, 11, 1)
         For i As Integer = 0 To 1000
             ts.AddNode(t, 1.0)
             t = t.AddDays(1)
@@ -51,11 +49,9 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
     ''' </summary>
     <TestMethod()> Public Sub TestSplitHydroYears2()
 
-        Dim ts, ts_new As TimeSeries
+        Dim ts As New TimeSeries("testinput")
 
-        ts = New TimeSeries("testinput")
-
-        Dim t As DateTime = New DateTime(2000, 11, 2)
+        Dim t As New DateTime(2000, 11, 2)
         For i As Integer = 0 To 1000
             ts.AddNode(t, 1.0)
             t = t.AddDays(1)
@@ -74,12 +70,10 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
     ''' </summary>
     <TestMethod()> Public Sub TestSplitHydroYears3()
 
-        Dim ts, ts_new As TimeSeries
-
-        ts = New TimeSeries("testinput")
+        Dim ts As New TimeSeries("testinput")
         ts.Interpretation = TimeSeries.InterpretationEnum.BlockRight
 
-        Dim t As DateTime = New DateTime(2000, 10, 31)
+        Dim t As New DateTime(2000, 10, 31)
         For i As Integer = 0 To 1000
             ts.AddNode(t, 1.0)
             t = t.AddDays(1)
@@ -99,11 +93,9 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
     ''' </summary>
     <TestMethod()> Public Sub TestSplitHydroYears31()
 
-        Dim ts, ts_new As TimeSeries
+        Dim ts As New TimeSeries("testinput")
 
-        ts = New TimeSeries("testinput")
-
-        Dim t As DateTime = New DateTime(2000, 10, 31)
+        Dim t As New DateTime(2000, 10, 31)
         For i As Integer = 0 To 1000
             ts.AddNode(t, 1.0)
             t = t.AddDays(1)
@@ -124,12 +116,10 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
     ''' </summary>
     <TestMethod()> Public Sub TestSplitHydroYears4()
 
-        Dim ts, ts_new As TimeSeries
-
-        ts = New TimeSeries("testinput")
+        Dim ts As New TimeSeries("testinput")
         ts.Interpretation = TimeSeries.InterpretationEnum.BlockRight
 
-        Dim t As DateTime = New DateTime(2000, 10, 31)
+        Dim t As New DateTime(2000, 10, 31)
         For i As Integer = 0 To 1000 * 24
             ts.AddNode(t, 1.0)
             t = t.AddHours(1)
