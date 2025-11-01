@@ -37,4 +37,9 @@ Public Module Constants
         Down
     End Enum
 
+    Public Enum TimeDirection
+        After
+        Before
+    End Enum
+
 End Module

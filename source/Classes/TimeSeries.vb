@@ -741,6 +741,62 @@ Public Class TimeSeries
 
     End Sub
 
+
+    ''' <summary>
+    ''' Returns the index of the node with the specified timestamp
+    ''' </summary>
+    ''' <param name="timestamp">The timestamp to look for</param>
+    ''' <param name="direction">The direction to search if the exact timestamp is not found (default: Before)</param>
+    ''' <returns>The index of the node with the specified timestamp, or the index of the date closest to the timestamp in the given direction</returns>
+    Private Function IndexOfDate(timestamp As DateTime, Optional direction As TimeDirection = TimeDirection.Before) As Integer
+
+        If timestamp < Me.StartDate Then
+            Return 0
+        End If
+        If timestamp > Me.EndDate Then
+            Return Me.Length - 1
+        End If
+        If Me._nodes.ContainsKey(timestamp) Then
+            Return Me._nodes.IndexOfKey(timestamp)
+        End If
+
+        'return index of the date closest to the timestamp
+        Dim t_index As Integer
+        Dim t As DateTime
+        Select Case direction
+            Case TimeDirection.Before
+                'start at the end and go backwards
+                t_index = Me.Length - 1
+                t = Me.Dates(t_index)
+                While t >= timestamp And t_index > 0
+                    t_index -= 1
+                    t = Me.Dates(t_index)
+                End While
+            Case TimeDirection.After
+                'start at the beginning and go forwards
+                t_index = 0
+                t = Me.Dates(t_index)
+                While t <= timestamp And t_index < Me.Length - 1
+                    t_index += 1
+                    t = Me.Dates(t_index)
+                End While
+        End Select
+
+        Return t_index
+
+    End Function
+
+    ''' <summary>
+    ''' Returns the date of the node closest to the specified timestamp
+    ''' </summary>
+    ''' <param name="timestamp">The timestamp to look for</param>
+    ''' <param name="direction">The direction to search if the exact timestamp is not found (default: Before)</param>
+    ''' <returns>The date of the node closest to the specified timestamp in the given direction</returns>
+    Public Function ClosestDate(timestamp As DateTime, Optional direction As TimeDirection = TimeDirection.Before) As DateTime
+        Dim index As Integer = Me.IndexOfDate(timestamp, direction)
+        Return Me.Dates(index)
+    End Function
+
     ''' <summary>
     ''' Splits a time series into individual series for each hydrological year
     ''' </summary>
@@ -770,7 +826,7 @@ Public Class TimeSeries
             year_end = Me.EndDate.Year - 1
         End If
 
-        'cut the series
+        'cut the series into years
         For year = year_start To year_end
             ts = Me.Clone()
             Dim t_start, t_end As DateTime
@@ -781,14 +837,15 @@ Public Class TimeSeries
             Else
                 t_end = Me.EndDate
             End If
-            ts.Cut(t_start, t_end)
             If ts.Interpretation = InterpretationEnum.BlockRight Then
-                'if interpretation is block right, remove any remaining
-                'nodes from the end that are already part of the next hydrological year
-                Do While ts.EndDate >= New DateTime(year + 1, startMonth, 1)
-                    ts.Nodes.RemoveAt(ts.Length - 1)
-                Loop
+                'if interpretation is block right, use the last date before the end of the year
+                If Me.Dates.Contains(t_end) Then
+                    t_end = ts.Dates(ts.IndexOfDate(t_end) - 1)
+                Else
+                    t_end = ts.Dates(ts.IndexOfDate(t_end, TimeDirection.Before))
+                End If
             End If
+            ts.Cut(t_start, t_end)
             ts.Title &= $" ({year})"
             tsDict.Add(year, ts)
         Next
