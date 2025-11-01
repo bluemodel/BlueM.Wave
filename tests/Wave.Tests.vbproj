@@ -91,6 +91,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="TestChangeTimestep.vb" />
+    <Compile Include="TestClosestDate.vb" />
     <Compile Include="TestImport.vb" />
     <Compile Include="TestSplitHydroYears.vb" />
     <Compile Include="TestTimeseriesVolume.vb" />

@@ -136,4 +136,30 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
 
     End Sub
 
+    ''' <summary>
+    ''' Time series without node at hydro year split
+    ''' </summary>
+    <TestMethod()> Public Sub TestSplitHydroYears5()
+
+        Dim ts As New TimeSeries("testinput")
+        ts.Interpretation = TimeSeries.InterpretationEnum.BlockRight
+
+        Dim t As New DateTime(2000, 10, 31, 12, 0, 0)
+        For i As Integer = 0 To 1000
+            ts.AddNode(t, 1.0)
+            t = t.AddDays(1)
+        Next
+
+        Dim hydroyears As Dictionary(Of Integer, TimeSeries)
+        hydroyears = ts.SplitHydroYears()
+
+        Assert.IsTrue(hydroyears.ContainsKey(1999))
+        Assert.AreEqual(ts.StartDate, hydroyears(1999).StartDate)
+        Assert.AreEqual(New DateTime(2000, 10, 31, 12, 0, 0), hydroyears(1999).EndDate)
+        Assert.IsTrue(hydroyears.ContainsKey(2000))
+        Assert.AreEqual(New DateTime(2000, 10, 31, 12, 0, 0), hydroyears(2000).StartDate) ' start date equals end date of previous hydro year
+        Assert.AreEqual(New DateTime(2001, 10, 31, 12, 0, 0), hydroyears(2000).EndDate)
+
+    End Sub
+
 End Class
