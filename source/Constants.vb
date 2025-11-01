@@ -15,21 +15,26 @@
 'You should have received a copy of the GNU Lesser General Public License
 'along with this program.  If not, see <https://www.gnu.org/licenses/>.
 '
-Module Constants
+Public Module Constants
 
-    Public Const eol As String = Chr(13) & Chr(10) 'line break
-    Public semicolon As Character = New Character(";")
-    Public comma As Character = New Character(",")
-    Public period As Character = New Character(".")
-    Public space As Character = New Character(" ")
-    Public tab As Character = New Character(Chr(9))
+    Friend Const eol As String = Chr(13) & Chr(10) 'line break
+    Friend semicolon As Character = New Character(";")
+    Friend comma As Character = New Character(",")
+    Friend period As Character = New Character(".")
+    Friend space As Character = New Character(" ")
+    Friend tab As Character = New Character(Chr(9))
     'minimum OADate
-    Public minOADate As New DateTime(100, 1, 1)
+    Friend minOADate As New DateTime(100, 1, 1)
     'maxmimum OADate is supposed to be 9999/12/31 23:59:59 but using that date causes OverflowExceptions from within TeeChart
-    Public maxOADate As New DateTime(9000, 12, 31, 23, 59, 59)
+    Friend maxOADate As New DateTime(9000, 12, 31, 23, 59, 59)
 
-    Public Const urlHelp As String = "https://wiki.bluemodel.org/index.php/Wave"
-    Public Const urlUpdateCheck As String = "https://api.github.com/repos/bluemodel/BlueM.Wave/releases/latest"
-    Public Const urlDownload As String = "https://github.com/bluemodel/BlueM.Wave/releases/latest"
+    Friend Const urlHelp As String = "https://wiki.bluemodel.org/index.php/Wave"
+    Friend Const urlUpdateCheck As String = "https://api.github.com/repos/bluemodel/BlueM.Wave/releases/latest"
+    Friend Const urlDownload As String = "https://github.com/bluemodel/BlueM.Wave/releases/latest"
+
+    Public Enum Direction
+        Up
+        Down
+    End Enum
 
 End Module

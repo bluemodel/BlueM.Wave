@@ -321,11 +321,6 @@ Public Module Helpers
         Next
     End Sub
 
-    Public Enum Direction
-        Up
-        Down
-    End Enum
-
     '''<summary>
     '''Creates a relative path from one file or folder to another.
     '''</summary>
