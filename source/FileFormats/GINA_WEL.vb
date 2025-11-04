@@ -41,9 +41,9 @@ Namespace Fileformats
             Me.UseUnits = True
 
             ' Index of header rows
-            Me.iLineHeadings = 5
-            Me.iLineUnits = 6
-            Me.iLineData = 7
+            Me.iLineHeadings = 6
+            Me.iLineUnits = 7
+            Me.iLineData = 8
 
             Call Me.readSeriesInfo()
 
@@ -81,12 +81,17 @@ Namespace Fileformats
             End If
 
             ' check third line
-            If Not (lines(2).Contains("AEO")) Then
+            If Not (lines(2).Contains("QM Klaeranlage")) Then
                 Return False
             End If
 
             ' check fourth line
-            If Not lines(3).Contains("AEOpnat") Then
+            If Not (lines(3).Contains("AEO")) Then
+                Return False
+            End If
+
+            ' check fifth line
+            If Not lines(4).Contains("AEOpnat") Then
                 Return False
             End If
 
