@@ -62,7 +62,7 @@ Namespace Fileformats
             Dim lines As New List(Of String)
 
             ' read four lines
-            For i As Integer = 1 To 4
+            For i As Integer = 1 To 5
                 lines.Add(StrRead.ReadLine().Trim())
             Next
 
