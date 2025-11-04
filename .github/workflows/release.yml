@@ -53,6 +53,17 @@ jobs:
       - name: Copy and rename installer file
         run: copy setup\release\BlueM.Wave_x64.msi BlueM.Wave_${{ steps.version.outputs.full }}_x64_setup.msi
         shell: cmd
+      - name: Sign installer
+        # TODO: also sign the contents of the zip release!
+        uses: dlemstra/code-sign-action@v1
+        with:
+          certificate: "${{ secrets.CERTIFICATE }}"
+          password: "${{ secrets.CERTIFICATE_PASSWORD }}"
+          folder: "."
+          files: |
+            BlueM.Wave_${{ steps.version.outputs.full }}_x64_setup.msi
+          recursive: false
+          description: "BlueM.Wave"
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
