@@ -155,7 +155,7 @@ Namespace Fileformats
             FiStr.Close()
 
             'store timeseries
-            Me.TimeSeries.Add(1, ts)
+            Me.TimeSeries.Add(0, ts)
 
         End Sub
 
