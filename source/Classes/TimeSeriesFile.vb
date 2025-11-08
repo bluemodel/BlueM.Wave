@@ -48,7 +48,6 @@ Public MustInherit Class TimeSeriesFile
         SWMM_INTERFACE
         SWMM_LID_REPORT
         SWMM_OUT
-        SYDROSQLITE
         TEN
         UVF
         WBL
@@ -72,7 +71,6 @@ Public MustInherit Class TimeSeriesFile
         Public Shared ReadOnly BIN As String = ".BIN"   'SYDRO binary format
         Public Shared ReadOnly CSV As String = ".CSV"
         Public Shared ReadOnly DAT As String = ".DAT"
-        Public Shared ReadOnly DB As String = ".DB"     'SYDRO SQLite format
         Public Shared ReadOnly DFS0 As String = ".DFS0" 'DHI MIKE Dfs0 file format
         Public Shared ReadOnly GBL As String = ".GBL"   'GINA GBL format
         Public Shared ReadOnly KWL As String = ".KWL"
@@ -111,7 +109,6 @@ Public MustInherit Class TimeSeriesFile
         "SWMM files (*.dat, *.txt, *.out)|*.dat;*.txt;*.out|" &
         "SYDRO binary files (*.bin)|*.bin|" &
         "SYDRO binary wel files (*.wbl)|*.wbl|" &
-        "SYDRO SQLite files (*.db)|*.db|" &
         "UVF files (*.uvf)|*.uvf|" &
         "WEL files (*.wel, *.kwl)|*.wel;*.kwl|" &
         "Wave project files (*.wvp)|*.wvp|" &
@@ -592,8 +589,6 @@ Public MustInherit Class TimeSeriesFile
                 Return FileExtensions.DAT
             Case FileTypes.SWMM_OUT
                 Return FileExtensions.OUT
-            Case FileTypes.SYDROSQLITE
-                Return FileExtensions.DB
             Case FileTypes.TEN
                 Return FileExtensions.TEN
             Case FileTypes.UVF
@@ -728,10 +723,6 @@ Public MustInherit Class TimeSeriesFile
                     Log.AddLogEntry(levels.info, $"Detected HYDRO_AS-2D result format for file {fileName}.")
                     fileType = FileTypes.HYDRO_AS_DAT
                 End If
-
-            Case FileExtensions.DB
-                Log.AddLogEntry(levels.info, $"Assuming SYDRO SQLite format for file {fileName}.")
-                fileType = FileTypes.SYDROSQLITE
 
             Case FileExtensions.DFS0
                 Log.AddLogEntry(levels.info, $"Assuming DHI DFS0 format for file {fileName}.")
@@ -918,8 +909,6 @@ Public MustInherit Class TimeSeriesFile
                 FileInstance = New Fileformats.SWMM_TIMESERIES(file)
             Case FileTypes.SWMM_OUT
                 FileInstance = New Fileformats.SWMM_OUT(file)
-            Case FileTypes.SYDROSQLITE
-                FileInstance = New Fileformats.SydroSQLite(file)
             Case FileTypes.TEN
                 Throw New Exception("Native TeeChart files (TEN) must to be loaded using `Wave.Import_File()`!")
             Case FileTypes.UVF

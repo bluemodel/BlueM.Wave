@@ -6,6 +6,9 @@ Version 2.13.0
 CHANGED:
 * Updated GINA file format #215
 
+REMOVED:
+* Removed support for reading obsolete SYDRO SQLite file format
+
 Version 2.12.3
 --------------
 API-CHANGES:
