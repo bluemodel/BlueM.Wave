@@ -7,6 +7,7 @@ CHANGED:
 * Updated GINA file format #215
 * Updated Newtonsoft.Json to 3.0.4
 * Updated DHI.DFS to 23.0.3
+* Updated MSTest to 4.0.1
 
 REMOVED:
 * Removed support for reading obsolete SYDRO SQLite file format
