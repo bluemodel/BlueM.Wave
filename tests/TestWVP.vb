@@ -59,7 +59,7 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
             Assert.AreEqual("Red", .DisplayOptions.Color.Name)
             Assert.AreEqual(4, .DisplayOptions.LineWidth)
             Assert.AreEqual(Drawing.Drawing2D.DashStyle.Dash, .DisplayOptions.LineStyle)
-            Assert.AreEqual(True, .DisplayOptions.ShowPoints)
+            Assert.IsTrue(.DisplayOptions.ShowPoints)
         End With
 
     End Sub
@@ -93,14 +93,14 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
         Dim fileContents As String = New IO.StreamReader(fileOut, Text.Encoding.UTF8).ReadToEnd()
         Dim lines As String() = fileContents.Split({vbCrLf}, StringSplitOptions.None)
 
-        Assert.IsTrue(lines.Count = 7)
+        Assert.AreEqual(7, lines.Count)
 
         Dim iLine As Integer = 0
         For Each line As String In lines
             iLine += 1
             Select Case iLine
                 Case 1
-                    Assert.IsTrue(line.StartsWith("#"))
+                    Assert.StartsWith("#", line)
                 Case 2
                     Assert.AreEqual("file=..\WEL\DEMONA_PSI.wel", line)
                 Case 3
@@ -127,7 +127,7 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
         Dim tsList As List(Of TimeSeries) = wvp.Process()
 
         'check the order of series
-        Assert.AreEqual(3, tsList.Count)
+        Assert.HasCount(3, tsList)
         Assert.AreEqual("Series 1", tsList(0).Title)
         'series 2 is unnamed in the WVP file
         Assert.AreEqual("Series 3", tsList(2).Title)
