@@ -33,6 +33,9 @@ Module TestData
                 testdatadir = IO.Directory.GetParent(testdatadir).FullName
             Next
             testdatadir = IO.Path.Combine(testdatadir, "BlueM.Datasets", "Wave")
+            If Not IO.Directory.Exists(testdatadir) Then
+                Throw New AssertInconclusiveException($"Directory {testdatadir} does not exist.")
+            End If
             Return testdatadir
         Catch ex As Exception
             Throw New AssertInconclusiveException(
