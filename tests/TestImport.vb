@@ -51,6 +51,11 @@ Public Class TestImport
     ''' </summary>
     ''' <param name="filepath">relative path to the file in the test data directory</param>
     ''' <remarks>
+    ''' TODO: the following files cannot be tested yet because they are dependent on the user's region settings:
+    ''' "CSV\DEMONA_PSI.csv"
+    ''' "CSV\MergeTest.csv"
+    ''' "CSV\UTF-8.csv"
+    '''
     ''' TODO: the following files connot be tested yet because they require user dialog input:
     ''' "HYBNAT\BCS\aligned.BCS"
     ''' "HYBNAT\BCS\shrinked.BCS"
@@ -78,9 +83,6 @@ Public Class TestImport
     <DataRow("BIN\TS_LM.m3s.10000a.bin")>
     <DataRow("BIN\abfluss_1.bin")>
     <DataRow("BIN\abfluss_2.bin")>
-    <DataRow("CSV\DEMONA_PSI.csv")>
-    <DataRow("CSV\MergeTest.csv")>
-    <DataRow("CSV\UTF-8.csv")>
     <DataRow("DFS0\Rain_accumulated.dfs0")>
     <DataRow("DFS0\Rain_backwardStep.dfs0")>
     <DataRow("DFS0\Rain_forwardStep.dfs0")>
