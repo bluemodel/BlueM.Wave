@@ -1,6 +1,11 @@
 BlueM.Wave Release Notes
 ========================
 
+Version 2.13.0
+--------------
+CHANGED:
+* Updated GINA file format #215
+
 Version 2.12.3
 --------------
 API-CHANGES:
