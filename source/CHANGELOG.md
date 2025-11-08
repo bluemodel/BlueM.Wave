@@ -5,6 +5,7 @@ Version 2.13.0
 --------------
 CHANGED:
 * Updated GINA file format #215
+* Updated Newtonsoft.Json to 3.0.4
 
 REMOVED:
 * Removed support for reading obsolete SYDRO SQLite file format
