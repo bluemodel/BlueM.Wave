@@ -84,10 +84,6 @@
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Data.SQLite, Version=1.0.118.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>lib\SQLite\System.Data.SQLite.dll</HintPath>
-    </Reference>
     <Reference Include="System.Drawing" />
     <Reference Include="System.IO.Compression" />
     <Reference Include="System.IO.Compression.FileSystem" />
@@ -363,7 +359,6 @@
     <Compile Include="FileFormats\SMB.vb" />
     <Compile Include="FileFormats\SWMM_TIMESERIES.vb" />
     <Compile Include="FileFormats\SWMM_OUT.vb" />
-    <Compile Include="FileFormats\SydroSQLite.vb" />
     <Compile Include="FileFormats\UVF.vb" />
     <Compile Include="FileFormats\WEL.vb" />
     <Compile Include="FileFormats\GISMO_WEL.vb" />
@@ -639,6 +634,6 @@ copy $(ProjectDir)lib\MathNet\MathNet.Numerics.license.txt $(TargetDir)MathNet.N
 copy $(ProjectDir)lib\MathParserNet\MathParserNet.license.html $(TargetDir)MathParserNet.license.html
 copy $(ProjectDir)lib\Newtonsoft.Json\Newtonsoft.Json.LICENSE.md $(TargetDir)Newtonsoft.Json.LICENSE.md
 copy $(ProjectDir)lib\DHI.DFS\DHI.DFS.license.txt $(TargetDir)DHI.DFS.license.txt
-copy $(ProjectDir)lib\SQLite\$(PlatformName)\SQLite.Interop.dll $(TargetDir)SQLite.Interop.dll</PostBuildEvent>
+</PostBuildEvent>
   </PropertyGroup>
 </Project>
