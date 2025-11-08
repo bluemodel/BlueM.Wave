@@ -35,7 +35,7 @@ Module TestData
             testdatadir = IO.Path.Combine(testdatadir, "BlueM.Datasets", "Wave")
             Return testdatadir
         Catch ex As Exception
-            Throw New InternalTestFailureException(
+            Throw New AssertInconclusiveException(
                 "Unable to locate directory with test data! " &
                 "Expected directory: BlueM.Datasets\Wave in the same directory as BlueM.Wave! " &
                 ex.Message
