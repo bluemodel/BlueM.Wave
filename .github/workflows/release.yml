@@ -13,24 +13,32 @@ jobs:
       - name: Parse version from latest tag
         id: version
         uses: release-kit/semver@v2
+        
       - name: Checkout
         uses: actions/checkout@v3
+        
       - name: Add msbuild to PATH
         uses: microsoft/setup-msbuild@v1.1
+        
       - name: Create TeeChart license file from secret
         uses: lukasa1993/secret-file-action@v1.0.4
         id: teechart-license
         with:
           secret: ${{ secrets.TEECHARTLICENSE }}
           b64-decode: false
+          
       - name: Copy TeeChart license file
         run: copy ${{ steps.teechart-license.outputs.file }} "source\My Project\TeeChart.licenses"
+        
       - name: Build Wave
         run: msbuild source\Wave.vbproj -restore -property:Platform=x64 -property:Configuration=Release
+        
       - name: Create zip archive
         run: Compress-Archive -Path source\bin\x64\Release\* -DestinationPath BlueM.Wave_${{ steps.version.outputs.full }}_x64.zip
+        
       - name: Setup VS Dev Environment
-        uses: seanmiddleditch/gha-setup-vsdevenv@v4
+        uses: seanmiddleditch/gha-setup-vsdevenv@v5
+        
       - name: DisableOutOfProc Fix # see https://stackoverflow.com/a/75641385
         run: |
           function Invoke-DisableOutOfProcBuild {
@@ -48,11 +56,14 @@ jobs:
             return;
           }
           Invoke-DisableOutOfProcBuild
+          
       - name: Build installer
         run: devenv.com setup\Wave.Setup.vdproj /build "Release|x64"
+        
       - name: Copy and rename installer file
         run: copy setup\release\BlueM.Wave_x64.msi BlueM.Wave_${{ steps.version.outputs.full }}_x64_setup.msi
         shell: cmd
+        
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
