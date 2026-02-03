@@ -217,6 +217,9 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Classes\DateRange.vb" />
+    <Compile Include="Dialogs\HDF5ImportDialog.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Dialogs\MultiMetadataDialog.Designer.vb">
       <DependentUpon>MultiMetadataDialog.vb</DependentUpon>
     </Compile>

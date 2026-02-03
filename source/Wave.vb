@@ -827,6 +827,9 @@ Public Class Wave
         If tsFile.GetType() Is GetType(Fileformats.CSV) Then
             ' show the import CSV dialog for exact CSV instances (but not for derived classes)
             dialog = New ImportCSVDialog(tsFile)
+        ElseIf tsFile.GetType() Is GetType(Fileformats.HDF5) Then
+            ' show the HDF5 import dialog with two-panel selection
+            dialog = New HDF5ImportDialog(CType(tsFile, Fileformats.HDF5))
         Else
             dialog = New SelectSeriesDialog(tsFile)
         End If
