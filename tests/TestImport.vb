@@ -91,6 +91,8 @@ Public Class TestImport
     <DataRow("DFS0\data_ndr_roese.dfs0")>
     <DataRow("FEWS_PI\test_fews_pi.xml")>
     <DataRow("GINA\gina_HNW.csv")>
+    <DataRow("GINA\hdf5_hydraulic.h5")>
+    <DataRow("GINA\hdf5_pollutant.h5")>
     <DataRow("GINA\sample_hydraulic.gbl")>
     <DataRow("GINA\sample_pollutant.gbl")>
     <DataRow("GISMO\AUS_WEL.asc")>
