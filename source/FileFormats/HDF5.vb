@@ -68,8 +68,10 @@ Namespace Fileformats
 
         End Sub
 
+
         ''' <summary>
         ''' Reads series info from the HDF5 file
+        ''' Creates a separate entry for each column of each dataset (e.g., T_Dru0161_Qzu, T_Dru0161_Qab)
         ''' </summary>
         Public Overrides Sub readSeriesInfo()
 
@@ -115,17 +117,77 @@ Namespace Fileformats
 
                     Log.AddLogEntry(Log.levels.info, $"Found data group: {_dataGroupName}")
 
-                    'Read dataset names (excluding 'time' which contains timestamps)
+                    'Read column names and units from group attributes if available
+                    Dim columnNames As String() = Nothing
+                    Dim columnUnits As String() = Nothing
+
+                    If dataGroup.AttributeExists("Spalten_Namen") Then
+                        Try
+                            Dim namesAttr = dataGroup.Attribute("Spalten_Namen")
+                            columnNames = namesAttr.Read(Of String())()
+                            Log.AddLogEntry(Log.levels.info, $"Read column names from attribute: {String.Join(", ", columnNames)}")
+                        Catch ex As Exception
+                            Log.AddLogEntry(Log.levels.warning, $"Could not read Spalten_Namen attribute: {ex.Message}")
+                        End Try
+                    End If
+
+                    If dataGroup.AttributeExists("Spalten_Einheiten") Then
+                        Try
+                            Dim unitsAttr = dataGroup.Attribute("Spalten_Einheiten")
+                            columnUnits = unitsAttr.Read(Of String())()
+                            Log.AddLogEntry(Log.levels.info, $"Read column units from attribute: {String.Join(", ", columnUnits)}")
+                        Catch ex As Exception
+                            Log.AddLogEntry(Log.levels.warning, $"Could not read Spalten_Einheiten attribute: {ex.Message}")
+                        End Try
+                    End If
+
+                    'Read dataset names and enumerate columns for each
                     For Each child As NativeObject In dataGroup.Children()
                         If child.Name.ToLower() <> "time" Then
                             'Check if it's a dataset
                             If TypeOf child Is NativeDataset Then
-                                sInfo = New TimeSeriesInfo()
-                                sInfo.Name = child.Name
-                                sInfo.Unit = "-"
-                                sInfo.Index = index
-                                Me.TimeSeriesInfos.Add(sInfo)
-                                index += 1
+                                Dim dataset As NativeDataset = CType(child, NativeDataset)
+                                Dim dimensions = dataset.Space.Dimensions
+                                Dim datasetName As String = child.Name
+
+                                If dimensions.Length = 1 Then
+                                    '1D dataset - single series
+                                    sInfo = New TimeSeriesInfo()
+                                    sInfo.Name = datasetName
+                                    sInfo.Unit = "-"
+                                    sInfo.Index = index
+                                    Me.TimeSeriesInfos.Add(sInfo)
+                                    index += 1
+
+                                ElseIf dimensions.Length = 2 Then
+                                    '2D dataset - create entry for each column
+                                    Dim numDataCols As Integer = CInt(dimensions(0))
+
+                                    For col As Integer = 0 To numDataCols - 1
+                                        'Use column name from attribute if available
+                                        Dim colName As String
+                                        If columnNames IsNot Nothing AndAlso col < columnNames.Length Then
+                                            colName = columnNames(col).Trim()
+                                        Else
+                                            colName = $"Col{col}"
+                                        End If
+
+                                        'Use column unit from attribute if available
+                                        Dim colUnit As String
+                                        If columnUnits IsNot Nothing AndAlso col < columnUnits.Length Then
+                                            colUnit = columnUnits(col).Trim()
+                                        Else
+                                            colUnit = "-"
+                                        End If
+
+                                        sInfo = New TimeSeriesInfo()
+                                        sInfo.Name = $"{datasetName}_{colName}"
+                                        sInfo.Unit = colUnit
+                                        sInfo.Index = index
+                                        Me.TimeSeriesInfos.Add(sInfo)
+                                        index += 1
+                                    Next
+                                End If
                             End If
                         End If
                     Next
@@ -142,6 +204,7 @@ Namespace Fileformats
                 Log.AddLogEntry(Log.levels.error, $"Error reading HDF5 file: {ex.Message}")
                 Throw
             End Try
+
 
         End Sub
 
@@ -160,20 +223,31 @@ Namespace Fileformats
                     'Navigate to the data group
                     Dim dataGroup As NativeGroup = h5File.Group($"timeseries/{_dataGroupName}")
 
+                    'Read column names and units from group attributes if available
+                    Dim columnNames As String() = Nothing
+                    Dim columnUnits As String() = Nothing
+
+                    If dataGroup.AttributeExists("Spalten_Namen") Then
+                        Try
+                            Dim namesAttr = dataGroup.Attribute("Spalten_Namen")
+                            columnNames = namesAttr.Read(Of String())()
+                        Catch ex As Exception
+                            Log.AddLogEntry(Log.levels.warning, $"Could not read Spalten_Namen attribute: {ex.Message}")
+                        End Try
+                    End If
+
+                    If dataGroup.AttributeExists("Spalten_Einheiten") Then
+                        Try
+                            Dim unitsAttr = dataGroup.Attribute("Spalten_Einheiten")
+                            columnUnits = unitsAttr.Read(Of String())()
+                        Catch ex As Exception
+                            Log.AddLogEntry(Log.levels.warning, $"Could not read Spalten_Einheiten attribute: {ex.Message}")
+                        End Try
+                    End If
+
                     'Read timestamps from the 'time' dataset
                     Dim timeDataset As NativeDataset = dataGroup.Dataset("time")
                     Dim timeStrings As String() = timeDataset.Read(Of String())()
-
-                    'DEBUG: Write timestamps to CSV
-                    Dim debugFolder As String = IO.Path.GetDirectoryName(Me.File)
-                    Dim timestampsCsvPath As String = IO.Path.Combine(debugFolder, "debug_timestamps.csv")
-                    Using writer As New IO.StreamWriter(timestampsCsvPath)
-                        writer.WriteLine("Index;Timestamp")
-                        For i As Integer = 0 To Math.Min(timeStrings.Length - 1, 100) 'First 100 entries
-                            writer.WriteLine($"{i};{timeStrings(i)}")
-                        Next
-                    End Using
-                    Log.AddLogEntry(Log.levels.info, $"DEBUG: Written timestamps to {timestampsCsvPath}")
 
                     'Parse timestamps
                     Dim timestamps As New List(Of DateTime)
@@ -195,110 +269,132 @@ Namespace Fileformats
 
                     Log.AddLogEntry(Log.levels.info, $"Read {timestamps.Count} timestamps from 'time' dataset.")
 
-                    'Read each selected series
+                    'Group selected series by dataset name (series name format: "DatasetName_ColumnName")
+                    Dim datasetColumns As New Dictionary(Of String, List(Of Tuple(Of Integer, String, String, Integer)))  'DatasetName -> List of (colIndex, colName, unit, seriesIndex)
+
                     For Each sInfo As TimeSeriesInfo In Me.SelectedSeries
+                        'Parse series name to extract dataset name and column name
+                        'The column name may contain underscores (e.g., "Q_zu"), so we need to match against known column names
+                        Dim foundMatch As Boolean = False
+
+                        If columnNames IsNot Nothing Then
+                            'Try to find a matching column name suffix
+                            For colIndex As Integer = 0 To columnNames.Length - 1
+                                Dim colName As String = columnNames(colIndex).Trim()
+                                Dim suffix As String = "_" & colName
+
+                                If sInfo.Name.EndsWith(suffix) Then
+                                    Dim datasetName As String = sInfo.Name.Substring(0, sInfo.Name.Length - suffix.Length)
+
+                                    If Not datasetColumns.ContainsKey(datasetName) Then
+                                        datasetColumns.Add(datasetName, New List(Of Tuple(Of Integer, String, String, Integer)))
+                                    End If
+                                    datasetColumns(datasetName).Add(Tuple.Create(colIndex, colName, sInfo.Unit, sInfo.Index))
+                                    foundMatch = True
+                                    Exit For
+                                End If
+                            Next
+                        End If
+
+                        If Not foundMatch Then
+                            'Fallback: try splitting by last underscore for Col# format or 1D datasets
+                            Dim lastUnderscore As Integer = sInfo.Name.LastIndexOf("_"c)
+                            If lastUnderscore > 0 Then
+                                Dim datasetName As String = sInfo.Name.Substring(0, lastUnderscore)
+                                Dim colName As String = sInfo.Name.Substring(lastUnderscore + 1)
+
+                                'Try parsing as Col# format
+                                Dim colIndex As Integer = -1
+                                If colName.StartsWith("Col") Then
+                                    Integer.TryParse(colName.Substring(3), colIndex)
+                                End If
+
+                                If colIndex >= 0 Then
+                                    If Not datasetColumns.ContainsKey(datasetName) Then
+                                        datasetColumns.Add(datasetName, New List(Of Tuple(Of Integer, String, String, Integer)))
+                                    End If
+                                    datasetColumns(datasetName).Add(Tuple.Create(colIndex, colName, sInfo.Unit, sInfo.Index))
+                                Else
+                                    Log.AddLogEntry(Log.levels.warning, $"Could not determine column index for series '{sInfo.Name}'")
+                                End If
+                            Else
+                                '1D dataset (no column suffix) - treat as single series
+                                If Not datasetColumns.ContainsKey(sInfo.Name) Then
+                                    datasetColumns.Add(sInfo.Name, New List(Of Tuple(Of Integer, String, String, Integer)))
+                                End If
+                                datasetColumns(sInfo.Name).Add(Tuple.Create(-1, "", sInfo.Unit, sInfo.Index))
+                            End If
+                        End If
+                    Next
+
+                    'Read each dataset and extract only the requested columns
+                    For Each kvp In datasetColumns
+                        Dim datasetName As String = kvp.Key
+                        Dim columnsToRead As List(Of Tuple(Of Integer, String, String, Integer)) = kvp.Value
 
                         Try
-                            Dim dataset As NativeDataset = dataGroup.Dataset(sInfo.Name)
+                            Dim dataset As NativeDataset = dataGroup.Dataset(datasetName)
                             Dim dimensions = dataset.Space.Dimensions
-                            Dim dataType = dataset.Type
-
-                            Log.AddLogEntry(Log.levels.info, $"DEBUG: Dataset '{sInfo.Name}' - Dimensions: {String.Join("x", dimensions)}, Type Class: {dataType.Class}, Size: {dataType.Size} bytes")
-
-                            'DEBUG: Write raw dataset info to CSV
-                            Dim dataCsvPath As String = IO.Path.Combine(debugFolder, $"debug_data_{sInfo.Name}.csv")
 
                             If dimensions.Length = 1 Then
-                                '1D dataset - one value per timestamp
+                                '1D dataset - single series
                                 Dim values As Single() = dataset.Read(Of Single())()
 
-                                Using writer As New IO.StreamWriter(dataCsvPath)
-                                    writer.WriteLine("Index;Value")
-                                    For i As Integer = 0 To Math.Min(values.Length - 1, 100)
-                                        writer.WriteLine($"{i};{values(i)}")
-                                    Next
-                                End Using
-                                Log.AddLogEntry(Log.levels.info, $"DEBUG: Written 1D data to {dataCsvPath}")
-
-                                Dim ts As New TimeSeries(sInfo.Name)
-                                ts.Unit = sInfo.Unit
-                                ts.DataSource = New TimeSeriesDataSource(Me.File, sInfo.Name)
+                                Dim colInfo = columnsToRead(0)
+                                Dim ts As New TimeSeries(datasetName)
+                                ts.Unit = colInfo.Item3
+                                ts.DataSource = New TimeSeriesDataSource(Me.File, datasetName)
 
                                 For i As Integer = 0 To Math.Min(timestamps.Count, values.Length) - 1
                                     ts.AddNode(timestamps(i), CDbl(values(i)))
                                 Next
 
-                                Me.TimeSeries.Add(sInfo.Index, ts)
-                                Log.AddLogEntry(Log.levels.info, $"Read series '{sInfo.Name}' with {ts.Length} nodes.")
+                                Me.TimeSeries.Add(colInfo.Item4, ts)
+                                Log.AddLogEntry(Log.levels.info, $"Read series '{datasetName}' with {ts.Length} nodes.")
 
                             ElseIf dimensions.Length = 2 Then
-                                '2D dataset - Fortran stores as (numColumns, numTimesteps)
-                                'dimensions(0) = number of data columns (e.g., Qzu, Qab, tf = 3)
-                                'dimensions(1) = number of timestamps (e.g., 58609)
+                                '2D dataset - read entire dataset, then extract selected columns
                                 Dim numDataCols As Integer = CInt(dimensions(0))
                                 Dim numTimesteps As Integer = CInt(dimensions(1))
 
-                                Log.AddLogEntry(Log.levels.info, $"DEBUG: 2D dataset with {numDataCols} data columns and {numTimesteps} timesteps")
-
-                                'Read as flat 1D array
                                 Dim flatValues As Single() = dataset.Read(Of Single())()
-                                Log.AddLogEntry(Log.levels.info, $"DEBUG: Read {flatValues.Length} values (expected {numDataCols * numTimesteps})")
+                                Log.AddLogEntry(Log.levels.info, $"Read dataset '{datasetName}': {flatValues.Length} values ({numDataCols} columns x {numTimesteps} timesteps)")
 
-                                'Write debug CSV - rows are timesteps, columns are data series
-                                Using writer As New IO.StreamWriter(dataCsvPath)
-                                    Dim header As String = "TimeIndex"
-                                    For c As Integer = 0 To numDataCols - 1
-                                        header &= $";Col{c}"
-                                    Next
-                                    writer.WriteLine(header)
-                                    For t As Integer = 0 To Math.Min(numTimesteps - 1, 100)
-                                        Dim line As String = t.ToString()
-                                        For c As Integer = 0 To numDataCols - 1
-                                            'Fortran column-major: data for column c, timestep t is at index c * numTimesteps + t
-                                            Dim flatIndex As Integer = c * numTimesteps + t
+                                'Extract only the selected columns
+                                For Each colInfo In columnsToRead
+                                    Dim colIndex As Integer = colInfo.Item1
+                                    Dim colName As String = colInfo.Item2
+                                    Dim colUnit As String = colInfo.Item3
+                                    Dim seriesIndex As Integer = colInfo.Item4
+
+                                    If colIndex >= 0 AndAlso colIndex < numDataCols Then
+                                        Dim seriesName As String = $"{datasetName}_{colName}"
+                                        Dim ts As New TimeSeries(seriesName)
+                                        ts.Unit = colUnit
+                                        ts.DataSource = New TimeSeriesDataSource(Me.File, seriesName)
+
+                                        For t As Integer = 0 To Math.Min(timestamps.Count, numTimesteps) - 1
+                                            'Fortran column-major order: column c, timestep t is at index c * numTimesteps + t
+                                            Dim flatIndex As Integer = colIndex * numTimesteps + t
                                             If flatIndex < flatValues.Length Then
-                                                line &= $";{flatValues(flatIndex)}"
+                                                ts.AddNode(timestamps(t), CDbl(flatValues(flatIndex)))
                                             End If
                                         Next
-                                        writer.WriteLine(line)
-                                    Next
-                                End Using
-                                Log.AddLogEntry(Log.levels.info, $"DEBUG: Written 2D data to {dataCsvPath}")
 
-                                'Create a separate TimeSeries for each data column
-                                For col As Integer = 0 To numDataCols - 1
-                                    Dim seriesName As String = If(numDataCols > 1, $"{sInfo.Name}_Col{col}", sInfo.Name)
-                                    Dim ts As New TimeSeries(seriesName)
-                                    ts.Unit = sInfo.Unit
-                                    ts.DataSource = New TimeSeriesDataSource(Me.File, seriesName)
-
-                                    For t As Integer = 0 To Math.Min(timestamps.Count, numTimesteps) - 1
-                                        'Fortran column-major order: column c, timestep t is at index c * numTimesteps + t
-                                        Dim flatIndex As Integer = col * numTimesteps + t
-                                        If flatIndex < flatValues.Length Then
-                                            ts.AddNode(timestamps(t), CDbl(flatValues(flatIndex)))
-                                        End If
-                                    Next
-
-                                    'Use unique index for each column series
-                                    Dim uniqueIndex As Integer = sInfo.Index * 100 + col
-                                    Me.TimeSeries.Add(uniqueIndex, ts)
-                                    Log.AddLogEntry(Log.levels.info, $"Read series '{seriesName}' with {ts.Length} nodes.")
+                                        Me.TimeSeries.Add(seriesIndex, ts)
+                                        Log.AddLogEntry(Log.levels.info, $"Read series '{seriesName}' (unit: {colUnit}) with {ts.Length} nodes.")
+                                    Else
+                                        Log.AddLogEntry(Log.levels.warning, $"Column index {colIndex} out of range for dataset '{datasetName}' (has {numDataCols} columns)")
+                                    End If
                                 Next
-
-                            Else
-                                Log.AddLogEntry(Log.levels.warning, $"Dataset '{sInfo.Name}' has unsupported dimensionality: {dimensions.Length}")
                             End If
 
-
                         Catch ex As Exception
-                            Log.AddLogEntry(Log.levels.error, $"Error reading dataset '{sInfo.Name}': {ex.Message}")
+                            Log.AddLogEntry(Log.levels.error, $"Error reading dataset '{datasetName}': {ex.Message}")
                             If ex.InnerException IsNot Nothing Then
                                 Log.AddLogEntry(Log.levels.error, $"Inner exception: {ex.InnerException.Message}")
                             End If
-                            Log.AddLogEntry(Log.levels.error, $"Stack trace: {ex.StackTrace}")
                         End Try
-
                     Next
 
                 End Using
