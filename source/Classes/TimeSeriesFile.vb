@@ -55,6 +55,7 @@ Public MustInherit Class TimeSeriesFile
         WVP
         ZRE
         ZRXP
+        HDF5
     End Enum
 
     ''' <summary>
@@ -87,6 +88,7 @@ Public MustInherit Class TimeSeriesFile
         Public Shared ReadOnly ZRE As String = ".ZRE"
         Public Shared ReadOnly ZRX As String = ".ZRX"   'ZRXP format
         Public Shared ReadOnly ZRXP As String = ".ZRXP" 'ZRXP format
+        Public Shared ReadOnly H5 As String = ".H5"     'HDF5 format
     End Class
 
     ''' <summary>
@@ -99,6 +101,7 @@ Public MustInherit Class TimeSeriesFile
         "CSV files (*.csv)|*.csv|" &
         "DHI MIKE DFS0 files (*.dfs0)|*.dfs0|" &
         "GINA binary wel files (*.gbl)|*.gbl|" &
+        "HDF5 files (*.h5)|*.h5|" &
         "HYBNAT files (*.bcs, *.wel)|*.bcs;*.wel|" &
         "HYDRO_AS-2D result files (*.dat)|*.dat|" &
         "Hystem-Extran files (*.dat, *.reg)|*.dat;*.reg|" &
@@ -603,6 +606,8 @@ Public MustInherit Class TimeSeriesFile
                 Return FileExtensions.ZRE
             Case FileTypes.ZRXP
                 Return FileExtensions.ZRX
+            Case FileTypes.HDF5
+                Return FileExtensions.H5
             Case Else
                 Throw New Exception($"File extension of file type {type} is undefined!")
         End Select
@@ -619,7 +624,8 @@ Public MustInherit Class TimeSeriesFile
                  TimeSeriesFile.FileTypes.DFS0,
                  TimeSeriesFile.FileTypes.FEWS_PI,
                  TimeSeriesFile.FileTypes.SWMM_INTERFACE,
-                 TimeSeriesFile.FileTypes.HYBNAT_BCS
+                 TimeSeriesFile.FileTypes.HYBNAT_BCS,
+                 TimeSeriesFile.FileTypes.HDF5
                 'TODO: ZRXP does actually also support multiple series, but for simplicity's sake, we assume that it doesn't
                 Return True
             Case Else
@@ -833,6 +839,13 @@ Public MustInherit Class TimeSeriesFile
                 Log.AddLogEntry(levels.info, $"Assuming ZRXP format for file {fileName}.")
                 fileType = FileTypes.ZRXP
 
+            Case FileExtensions.H5
+                'Check file format
+                If Fileformats.HDF5.verifyFormat(file) Then
+                    Log.AddLogEntry(levels.info, $"Detected HDF5 timeseries format for file {fileName}.")
+                    fileType = FileTypes.HDF5
+                End If
+
             Case Else
                 'Unknown filetype
                 fileType = FileTypes.UNKNOWN
@@ -925,6 +938,8 @@ Public MustInherit Class TimeSeriesFile
                 FileInstance = New Fileformats.ZRE(file)
             Case FileTypes.ZRXP
                 FileInstance = New Fileformats.ZRXP(file)
+            Case FileTypes.HDF5
+                FileInstance = New Fileformats.HDF5(file)
             Case Else
                 Throw New Exception($"Unknown file type {fileType}!")
 
