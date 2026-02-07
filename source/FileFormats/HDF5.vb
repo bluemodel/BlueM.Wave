@@ -25,9 +25,9 @@ Namespace Fileformats
     ''' 
     ''' Expected structure:
     ''' /timeseries/
-    '''   /<group> (e.g., HNW, SN1, SN2)
+    '''   /[group] (e.g., HNW, SN1, SN2)
     '''     /time (string dataset with timestamps) - required
-    '''     /<element_name> (2D dataset with Real values) - at least one required
+    '''     /[element_name] (2D dataset with Real values) - at least one required
     ''' 
     ''' Requires the PureHDF NuGet package: https://www.nuget.org/packages/PureHDF/
     ''' </summary>
