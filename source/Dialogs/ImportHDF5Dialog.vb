@@ -38,135 +38,9 @@ Friend Class ImportHDF5Dialog
     'Sorted list of unique variable names
     Private variableNames As New List(Of String)
 
-    'UI Controls
-    Private WithEvents ListBox_Elements As ListBox
-    Private WithEvents CheckedListBox_Variables As CheckedListBox
-    Private Label_Elements As Label
-    Private Label_Variables As Label
-    Private Label_FileName As Label
-    Private Button_OK As Button
-    Private Button_Cancel As Button
-    Private Button_SelectAllElements As Button
-    Private Button_SelectNoneElements As Button
-    Private Button_SelectAllVariables As Button
-    Private Button_SelectNoneVariables As Button
-    Private TextBox_TitleSuffix As TextBox
-    Private Label_TitleSuffix As Label
-
     Public Sub New(ByRef fileInstance As Fileformats.GINA_HDF5)
         Me.tsFile = fileInstance
         Call InitializeComponent()
-    End Sub
-
-    Private Sub InitializeComponent()
-        Me.Text = "Import HDF5 File"
-        Me.Size = New Drawing.Size(800, 600)
-        Me.MinimumSize = New Drawing.Size(600, 400)
-        Me.StartPosition = FormStartPosition.CenterParent
-        Me.FormBorderStyle = FormBorderStyle.Sizable
-
-        'File name label
-        Label_FileName = New Label()
-        Label_FileName.Location = New Drawing.Point(10, 10)
-        Label_FileName.Size = New Drawing.Size(760, 20)
-        Label_FileName.Font = New Drawing.Font(Label_FileName.Font, Drawing.FontStyle.Bold)
-        Label_FileName.Anchor = AnchorStyles.Top Or AnchorStyles.Left Or AnchorStyles.Right
-        Me.Controls.Add(Label_FileName)
-
-        'Elements panel (left)
-        Label_Elements = New Label()
-        Label_Elements.Text = "Elements:"
-        Label_Elements.Location = New Drawing.Point(10, 40)
-        Label_Elements.Size = New Drawing.Size(350, 20)
-        Me.Controls.Add(Label_Elements)
-
-        ListBox_Elements = New ListBox()
-        ListBox_Elements.Location = New Drawing.Point(10, 65)
-        ListBox_Elements.Size = New Drawing.Size(350, 380)
-        ListBox_Elements.SelectionMode = SelectionMode.MultiExtended
-        ListBox_Elements.Anchor = AnchorStyles.Top Or AnchorStyles.Bottom Or AnchorStyles.Left
-        Me.Controls.Add(ListBox_Elements)
-
-        Button_SelectAllElements = New Button()
-        Button_SelectAllElements.Text = "Select All"
-        Button_SelectAllElements.Location = New Drawing.Point(10, 450)
-        Button_SelectAllElements.Size = New Drawing.Size(80, 25)
-        Button_SelectAllElements.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
-        AddHandler Button_SelectAllElements.Click, AddressOf Button_SelectAllElements_Click
-        Me.Controls.Add(Button_SelectAllElements)
-
-        Button_SelectNoneElements = New Button()
-        Button_SelectNoneElements.Text = "Select None"
-        Button_SelectNoneElements.Location = New Drawing.Point(95, 450)
-        Button_SelectNoneElements.Size = New Drawing.Size(80, 25)
-        Button_SelectNoneElements.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
-        AddHandler Button_SelectNoneElements.Click, AddressOf Button_SelectNoneElements_Click
-        Me.Controls.Add(Button_SelectNoneElements)
-
-        'Variables panel (right)
-        Label_Variables = New Label()
-        Label_Variables.Text = "Variables:"
-        Label_Variables.Location = New Drawing.Point(380, 40)
-        Label_Variables.Size = New Drawing.Size(390, 20)
-        Label_Variables.Anchor = AnchorStyles.Top Or AnchorStyles.Left Or AnchorStyles.Right
-        Me.Controls.Add(Label_Variables)
-
-        CheckedListBox_Variables = New CheckedListBox()
-        CheckedListBox_Variables.Location = New Drawing.Point(380, 65)
-        CheckedListBox_Variables.Size = New Drawing.Size(390, 380)
-        CheckedListBox_Variables.CheckOnClick = True
-        CheckedListBox_Variables.Anchor = AnchorStyles.Top Or AnchorStyles.Bottom Or AnchorStyles.Left Or AnchorStyles.Right
-        Me.Controls.Add(CheckedListBox_Variables)
-
-        Button_SelectAllVariables = New Button()
-        Button_SelectAllVariables.Text = "Select All"
-        Button_SelectAllVariables.Location = New Drawing.Point(380, 450)
-        Button_SelectAllVariables.Size = New Drawing.Size(80, 25)
-        Button_SelectAllVariables.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
-        AddHandler Button_SelectAllVariables.Click, AddressOf Button_SelectAllVariables_Click
-        Me.Controls.Add(Button_SelectAllVariables)
-
-        Button_SelectNoneVariables = New Button()
-        Button_SelectNoneVariables.Text = "Select None"
-        Button_SelectNoneVariables.Location = New Drawing.Point(465, 450)
-        Button_SelectNoneVariables.Size = New Drawing.Size(80, 25)
-        Button_SelectNoneVariables.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
-        AddHandler Button_SelectNoneVariables.Click, AddressOf Button_SelectNoneVariables_Click
-        Me.Controls.Add(Button_SelectNoneVariables)
-
-        'Title suffix
-        Label_TitleSuffix = New Label()
-        Label_TitleSuffix.Text = "Title Suffix:"
-        Label_TitleSuffix.Location = New Drawing.Point(10, 485)
-        Label_TitleSuffix.Size = New Drawing.Size(80, 20)
-        Label_TitleSuffix.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
-        Me.Controls.Add(Label_TitleSuffix)
-
-        TextBox_TitleSuffix = New TextBox()
-        TextBox_TitleSuffix.Location = New Drawing.Point(95, 482)
-        TextBox_TitleSuffix.Size = New Drawing.Size(300, 20)
-        TextBox_TitleSuffix.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
-        Me.Controls.Add(TextBox_TitleSuffix)
-
-        'OK/Cancel buttons
-        Button_OK = New Button()
-        Button_OK.Text = "OK"
-        Button_OK.Location = New Drawing.Point(610, 520)
-        Button_OK.Size = New Drawing.Size(80, 30)
-        Button_OK.Anchor = AnchorStyles.Bottom Or AnchorStyles.Right
-        Button_OK.DialogResult = DialogResult.OK
-        AddHandler Button_OK.Click, AddressOf Button_OK_Click
-        Me.Controls.Add(Button_OK)
-        Me.AcceptButton = Button_OK
-
-        Button_Cancel = New Button()
-        Button_Cancel.Text = "Cancel"
-        Button_Cancel.Location = New Drawing.Point(695, 520)
-        Button_Cancel.Size = New Drawing.Size(80, 30)
-        Button_Cancel.Anchor = AnchorStyles.Bottom Or AnchorStyles.Right
-        Button_Cancel.DialogResult = DialogResult.Cancel
-        Me.Controls.Add(Button_Cancel)
-        Me.CancelButton = Button_Cancel
     End Sub
 
     Private Sub Form_Load(sender As Object, e As EventArgs) Handles MyBase.Load
@@ -286,29 +160,29 @@ Friend Class ImportHDF5Dialog
         End If
     End Function
 
-    Private Sub Button_SelectAllElements_Click(sender As Object, e As EventArgs)
+    Private Sub Button_SelectAllElements_Click(sender As Object, e As EventArgs) Handles Button_SelectAllElements.Click
         For i As Integer = 0 To ListBox_Elements.Items.Count - 1
             ListBox_Elements.SetSelected(i, True)
         Next
     End Sub
 
-    Private Sub Button_SelectNoneElements_Click(sender As Object, e As EventArgs)
+    Private Sub Button_SelectNoneElements_Click(sender As Object, e As EventArgs) Handles Button_SelectNoneElements.Click
         ListBox_Elements.ClearSelected()
     End Sub
 
-    Private Sub Button_SelectAllVariables_Click(sender As Object, e As EventArgs)
+    Private Sub Button_SelectAllVariables_Click(sender As Object, e As EventArgs) Handles Button_SelectAllVariables.Click
         For i As Integer = 0 To CheckedListBox_Variables.Items.Count - 1
             CheckedListBox_Variables.SetItemChecked(i, True)
         Next
     End Sub
 
-    Private Sub Button_SelectNoneVariables_Click(sender As Object, e As EventArgs)
+    Private Sub Button_SelectNoneVariables_Click(sender As Object, e As EventArgs) Handles Button_SelectNoneVariables.Click
         For i As Integer = 0 To CheckedListBox_Variables.Items.Count - 1
             CheckedListBox_Variables.SetItemChecked(i, False)
         Next
     End Sub
 
-    Private Sub Button_OK_Click(sender As Object, e As EventArgs)
+    Private Sub Button_OK_Click(sender As Object, e As EventArgs) Handles Button_OK.Click
         'Validate selection
         If ListBox_Elements.SelectedItems.Count < 1 Then
             MsgBox("Please select at least one element!", MsgBoxStyle.Exclamation)
