@@ -532,6 +532,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="lib\Newtonsoft.Json\Newtonsoft.Json.LICENSE.md" />
+    <None Include="lib\PureHDF\PureHDF.LICENSE.md" />
     <None Include="lib\SQLite\System.Data.SQLite.dll.config" />
     <None Include="My Project\Application.myapp">
       <Generator>MyApplicationCodeGenerator</Generator>
@@ -647,6 +648,7 @@ copy $(ProjectDir)lib\MathNet\MathNet.Numerics.license.txt $(TargetDir)MathNet.N
 copy $(ProjectDir)lib\MathParserNet\MathParserNet.license.html $(TargetDir)MathParserNet.license.html
 copy $(ProjectDir)lib\Newtonsoft.Json\Newtonsoft.Json.LICENSE.md $(TargetDir)Newtonsoft.Json.LICENSE.md
 copy $(ProjectDir)lib\DHI.DFS\DHI.DFS.license.txt $(TargetDir)DHI.DFS.license.txt
+copy $(ProjectDir)lib\PureHDF\PureHDF.LICENSE.md $(TargetDir)PureHDF.LICENSE.md
 </PostBuildEvent>
   </PropertyGroup>
 </Project>
