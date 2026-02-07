@@ -133,7 +133,8 @@ TeeChart: http://www.steema.com/products/teechart/
 MathParserNet: https://github.com/bluemodel/MathParserNet
 Math.NET Numerics: https://numerics.mathdotnet.com/
 Newtonsoft.Json: https://www.newtonsoft.com/json
-DHI.DFS: https://www.nuget.org/packages/DHI.DFS/</value>
+DHI.DFS: https://www.nuget.org/packages/DHI.DFS/
+PureHDF: https://www.nuget.org/packages/PureHDF/</value>
   </data>
   <data name="TextBox_License.Text" xml:space="preserve">
     <value>                   GNU LESSER GENERAL PUBLIC LICENSE
