@@ -33,6 +33,7 @@ Public MustInherit Class TimeSeriesFile
         DFS0
         FEWS_PI
         GBL
+        GINA_HDF5
         GINA_WEL
         GISMO_WEL
         HYBNAT_BCS
@@ -55,7 +56,6 @@ Public MustInherit Class TimeSeriesFile
         WVP
         ZRE
         ZRXP
-        HDF5
     End Enum
 
     ''' <summary>
@@ -74,6 +74,7 @@ Public MustInherit Class TimeSeriesFile
         Public Shared ReadOnly DAT As String = ".DAT"
         Public Shared ReadOnly DFS0 As String = ".DFS0" 'DHI MIKE Dfs0 file format
         Public Shared ReadOnly GBL As String = ".GBL"   'GINA GBL format
+        Public Shared ReadOnly H5 As String = ".H5"     'HDF5 format
         Public Shared ReadOnly KWL As String = ".KWL"
         Public Shared ReadOnly OUT As String = ".OUT"   'SWMM binary result file or PRMS out file
         Public Shared ReadOnly REG As String = ".REG"
@@ -88,7 +89,6 @@ Public MustInherit Class TimeSeriesFile
         Public Shared ReadOnly ZRE As String = ".ZRE"
         Public Shared ReadOnly ZRX As String = ".ZRX"   'ZRXP format
         Public Shared ReadOnly ZRXP As String = ".ZRXP" 'ZRXP format
-        Public Shared ReadOnly H5 As String = ".H5"     'HDF5 format
     End Class
 
     ''' <summary>
@@ -568,6 +568,8 @@ Public MustInherit Class TimeSeriesFile
                 Return FileExtensions.CSV
             Case FileTypes.GISMO_WEL
                 Return FileExtensions.ASC
+            Case FileTypes.GINA_HDF5
+                Return FileExtensions.H5
             Case FileTypes.HYBNAT_BCS
                 Return FileExtensions.BCS
             Case FileTypes.HYBNAT_WEL
@@ -606,8 +608,6 @@ Public MustInherit Class TimeSeriesFile
                 Return FileExtensions.ZRE
             Case FileTypes.ZRXP
                 Return FileExtensions.ZRX
-            Case FileTypes.HDF5
-                Return FileExtensions.H5
             Case Else
                 Throw New Exception($"File extension of file type {type} is undefined!")
         End Select
@@ -623,9 +623,9 @@ Public MustInherit Class TimeSeriesFile
             Case TimeSeriesFile.FileTypes.CSV,
                  TimeSeriesFile.FileTypes.DFS0,
                  TimeSeriesFile.FileTypes.FEWS_PI,
-                 TimeSeriesFile.FileTypes.SWMM_INTERFACE,
+                 TimeSeriesFile.FileTypes.GINA_HDF5,
                  TimeSeriesFile.FileTypes.HYBNAT_BCS,
-                 TimeSeriesFile.FileTypes.HDF5
+                 TimeSeriesFile.FileTypes.SWMM_INTERFACE
                 'TODO: ZRXP does actually also support multiple series, but for simplicity's sake, we assume that it doesn't
                 Return True
             Case Else
@@ -742,6 +742,13 @@ Public MustInherit Class TimeSeriesFile
                     fileType = FileTypes.GBL
                 End If
 
+            Case FileExtensions.H5
+                'Check file format
+                If Fileformats.GINA_HDF5.verifyFormat(file) Then
+                    Log.AddLogEntry(levels.info, $"Detected GINA HDF5 timeseries format for file {fileName}.")
+                    fileType = FileTypes.GINA_HDF5
+                End If
+
             Case FileExtensions.OUT
                 If Fileformats.PRMS.verifyFormat(file) Then
                     'PRMS result format
@@ -839,13 +846,6 @@ Public MustInherit Class TimeSeriesFile
                 Log.AddLogEntry(levels.info, $"Assuming ZRXP format for file {fileName}.")
                 fileType = FileTypes.ZRXP
 
-            Case FileExtensions.H5
-                'Check file format
-                If Fileformats.GINA_HDF5.verifyFormat(file) Then
-                    Log.AddLogEntry(levels.info, $"Detected GINA HDF5 timeseries format for file {fileName}.")
-                    fileType = FileTypes.HDF5
-                End If
-
             Case Else
                 'Unknown filetype
                 fileType = FileTypes.UNKNOWN
@@ -938,7 +938,7 @@ Public MustInherit Class TimeSeriesFile
                 FileInstance = New Fileformats.ZRE(file)
             Case FileTypes.ZRXP
                 FileInstance = New Fileformats.ZRXP(file)
-            Case FileTypes.HDF5
+            Case FileTypes.GINA_HDF5
                 FileInstance = New Fileformats.GINA_HDF5(file)
             Case Else
                 Throw New Exception($"Unknown file type {fileType}!")
