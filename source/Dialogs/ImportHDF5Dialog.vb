@@ -23,7 +23,7 @@ Imports System.Text.RegularExpressions
 ''' Left panel: Select base elements (e.g., T_Dru0161, T_Dru0800)
 ''' Right panel: Select variable columns (e.g., Q_zu, Q_ab, Pges_zu, AFS_ab)
 ''' </summary>
-Friend Class HDF5ImportDialog
+Friend Class ImportHDF5Dialog
     Inherits Form
 
     Private tsFile As Fileformats.GINA_HDF5

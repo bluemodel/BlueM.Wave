@@ -829,7 +829,7 @@ Public Class Wave
             dialog = New ImportCSVDialog(tsFile)
         ElseIf tsFile.GetType() Is GetType(Fileformats.GINA_HDF5) Then
             ' show the HDF5 import dialog with two-panel selection
-            dialog = New HDF5ImportDialog(CType(tsFile, Fileformats.GINA_HDF5))
+            dialog = New ImportHDF5Dialog(CType(tsFile, Fileformats.GINA_HDF5))
         Else
             dialog = New SelectSeriesDialog(tsFile)
         End If
