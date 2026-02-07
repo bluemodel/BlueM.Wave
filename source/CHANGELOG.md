@@ -1,6 +1,11 @@
 BlueM.Wave Release Notes
 ========================
 
+Version 2.14.0
+--------------
+NEW:
+* Added support for reading GINA HDF5 file format #220
+
 Version 2.13.0
 --------------
 CHANGED:
