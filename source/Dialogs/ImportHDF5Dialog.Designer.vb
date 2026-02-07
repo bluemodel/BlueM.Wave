@@ -186,6 +186,7 @@ Partial Class ImportHDF5Dialog
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
         Me.Text = "Import series from HDF5 file"
+        Me.TopMost = True
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
