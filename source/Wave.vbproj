@@ -217,6 +217,9 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Classes\DateRange.vb" />
+    <Compile Include="Dialogs\ImportHDF5Dialog.Designer.vb">
+      <DependentUpon>ImportHDF5Dialog.vb</DependentUpon>
+    </Compile>
     <Compile Include="Dialogs\ImportHDF5Dialog.vb">
       <SubType>Form</SubType>
     </Compile>
@@ -467,6 +470,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Analysis\CalculatorDialog.resx">
       <DependentUpon>CalculatorDialog.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialogs\ImportHDF5Dialog.resx">
+      <DependentUpon>ImportHDF5Dialog.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Dialogs\MultiMetadataDialog.resx">
       <DependentUpon>MultiMetadataDialog.vb</DependentUpon>
