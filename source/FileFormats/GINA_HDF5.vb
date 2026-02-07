@@ -21,7 +21,7 @@ Imports PureHDF.VOL.Native
 Namespace Fileformats
 
     ''' <summary>
-    ''' Class for importing HDF5 files with timeseries data
+    ''' Class for importing GINA HDF5 files with timeseries data
     ''' 
     ''' Expected structure:
     ''' /timeseries/
@@ -31,7 +31,7 @@ Namespace Fileformats
     ''' 
     ''' Requires the PureHDF NuGet package: https://www.nuget.org/packages/PureHDF/
     ''' </summary>
-    Public Class HDF5
+    Public Class GINA_HDF5
         Inherits TimeSeriesFile
 
         ''' <summary>
@@ -70,7 +70,7 @@ Namespace Fileformats
 
 
         ''' <summary>
-        ''' Reads series info from the HDF5 file
+        ''' Reads series info from the GINA HDF5 file
         ''' Creates a separate entry for each column of each dataset (e.g., T_Dru0161_Qzu, T_Dru0161_Qab)
         ''' </summary>
         Public Overrides Sub readSeriesInfo()
@@ -85,7 +85,7 @@ Namespace Fileformats
 
                     'Navigate to the timeseries group
                     If Not h5File.LinkExists("timeseries") Then
-                        Throw New Exception("HDF5 file does not contain a 'timeseries' group!")
+                        Throw New Exception("GINA HDF5 file does not contain a 'timeseries' group!")
                     End If
 
                     Dim timeseriesGroup As NativeGroup = h5File.Group("timeseries")
@@ -198,10 +198,10 @@ Namespace Fileformats
 
                 End Using
 
-                Log.AddLogEntry(Log.levels.info, $"Found {Me.TimeSeriesInfos.Count} series in HDF5 file.")
+                Log.AddLogEntry(Log.levels.info, $"Found {Me.TimeSeriesInfos.Count} series in GINA HDF5 file.")
 
             Catch ex As Exception
-                Log.AddLogEntry(Log.levels.error, $"Error reading HDF5 file: {ex.Message}")
+                Log.AddLogEntry(Log.levels.error, $"Error reading GINA HDF5 file: {ex.Message}")
                 Throw
             End Try
 
@@ -209,7 +209,7 @@ Namespace Fileformats
         End Sub
 
         ''' <summary>
-        ''' Reads the selected series from the HDF5 file
+        ''' Reads the selected series from the GINA HDF5 file
         ''' </summary>
         Public Overrides Sub readFile()
 
@@ -400,17 +400,17 @@ Namespace Fileformats
                 End Using
 
             Catch ex As Exception
-                Log.AddLogEntry(Log.levels.error, $"Error reading HDF5 file: {ex.Message}")
+                Log.AddLogEntry(Log.levels.error, $"Error reading GINA HDF5 file: {ex.Message}")
                 Throw
             End Try
 
         End Sub
 
         ''' <summary>
-        ''' Verifies whether the file is a valid HDF5 file with the expected structure
+        ''' Verifies whether the file is a valid GINA HDF5 file with the expected structure
         ''' </summary>
         ''' <param name="file">Path to the file</param>
-        ''' <returns>True if the file is a valid HDF5 file with timeseries structure containing time and element datasets</returns>
+        ''' <returns>True if the file is a valid GINA HDF5 file with timeseries structure containing time and element datasets</returns>
         Public Shared Function verifyFormat(file As String) As Boolean
             Try
                 Using h5File As NativeFile = PureHDF.H5File.OpenRead(file)

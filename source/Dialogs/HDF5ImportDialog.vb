@@ -26,7 +26,7 @@ Imports System.Text.RegularExpressions
 Friend Class HDF5ImportDialog
     Inherits Form
 
-    Private tsFile As Fileformats.HDF5
+    Private tsFile As Fileformats.GINA_HDF5
 
     'Data structures for grouping
     'Key: base element name (e.g., "T_Dru0161"), Value: list of series info for that element
@@ -53,7 +53,7 @@ Friend Class HDF5ImportDialog
     Private TextBox_TitleSuffix As TextBox
     Private Label_TitleSuffix As Label
 
-    Public Sub New(ByRef fileInstance As Fileformats.HDF5)
+    Public Sub New(ByRef fileInstance As Fileformats.GINA_HDF5)
         Me.tsFile = fileInstance
         Call InitializeComponent()
         Call LoadData()
