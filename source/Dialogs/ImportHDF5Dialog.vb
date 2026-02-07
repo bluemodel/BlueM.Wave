@@ -56,7 +56,6 @@ Friend Class ImportHDF5Dialog
     Public Sub New(ByRef fileInstance As Fileformats.GINA_HDF5)
         Me.tsFile = fileInstance
         Call InitializeComponent()
-        Call LoadData()
     End Sub
 
     Private Sub InitializeComponent()
@@ -68,7 +67,6 @@ Friend Class ImportHDF5Dialog
 
         'File name label
         Label_FileName = New Label()
-        Label_FileName.Text = IO.Path.GetFileName(Me.tsFile.File)
         Label_FileName.Location = New Drawing.Point(10, 10)
         Label_FileName.Size = New Drawing.Size(760, 20)
         Label_FileName.Font = New Drawing.Font(Label_FileName.Font, Drawing.FontStyle.Bold)
@@ -171,45 +169,11 @@ Friend Class ImportHDF5Dialog
         Me.CancelButton = Button_Cancel
     End Sub
 
-    ''' <summary>
-    ''' Extracts the base element name from a dataset name
-    ''' Pattern: Element names like T_Dru0161, T_Sch0821, T_Wfg0014 end with digits
-    ''' Dataset names may have additional suffixes like _Q, _Pges, _AFS
-    ''' </summary>
-    Private Function ExtractBaseElementName(datasetName As String) As String
-        'Pattern: Match element names that end with digits (e.g., T_Dru0161)
-        'The base element is everything up to and including the numeric suffix
-        Dim match As Match = Regex.Match(datasetName, "^(.+?\d+)")
-        If match.Success Then
-            Return match.Groups(1).Value
-        Else
-            'If no pattern match, use the full name up to the last underscore
-            Dim lastUnderscore As Integer = datasetName.LastIndexOf("_"c)
-            If lastUnderscore > 0 Then
-                Return datasetName.Substring(0, lastUnderscore)
-            Else
-                Return datasetName
-            End If
-        End If
-    End Function
+    Private Sub Form_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
-    ''' <summary>
-    ''' Extracts the measurement type from a dataset name (e.g., "Q" from "T_Dru0161_Q")
-    ''' </summary>
-    Private Function ExtractMeasurementType(datasetName As String, baseElementName As String) As String
-        If datasetName.Length > baseElementName.Length AndAlso datasetName.StartsWith(baseElementName) Then
-            Dim suffix As String = datasetName.Substring(baseElementName.Length)
-            If suffix.StartsWith("_") Then
-                Return suffix.Substring(1)
-            Else
-                Return suffix
-            End If
-        Else
-            Return ""
-        End If
-    End Function
+        'File name label
+        Label_FileName.Text = IO.Path.GetFileName(Me.tsFile.File)
 
-    Private Sub LoadData()
         'Read series info from file
         Call Me.tsFile.readSeriesInfo()
 
@@ -280,7 +244,47 @@ Friend Class ImportHDF5Dialog
         'Update labels
         Label_Elements.Text = $"Elements ({elementNames.Count}):"
         Label_Variables.Text = $"Variables ({variableNames.Count}):"
+
     End Sub
+
+
+    ''' <summary>
+    ''' Extracts the base element name from a dataset name
+    ''' Pattern: Element names like T_Dru0161, T_Sch0821, T_Wfg0014 end with digits
+    ''' Dataset names may have additional suffixes like _Q, _Pges, _AFS
+    ''' </summary>
+    Private Function ExtractBaseElementName(datasetName As String) As String
+        'Pattern: Match element names that end with digits (e.g., T_Dru0161)
+        'The base element is everything up to and including the numeric suffix
+        Dim match As Match = Regex.Match(datasetName, "^(.+?\d+)")
+        If match.Success Then
+            Return match.Groups(1).Value
+        Else
+            'If no pattern match, use the full name up to the last underscore
+            Dim lastUnderscore As Integer = datasetName.LastIndexOf("_"c)
+            If lastUnderscore > 0 Then
+                Return datasetName.Substring(0, lastUnderscore)
+            Else
+                Return datasetName
+            End If
+        End If
+    End Function
+
+    ''' <summary>
+    ''' Extracts the measurement type from a dataset name (e.g., "Q" from "T_Dru0161_Q")
+    ''' </summary>
+    Private Function ExtractMeasurementType(datasetName As String, baseElementName As String) As String
+        If datasetName.Length > baseElementName.Length AndAlso datasetName.StartsWith(baseElementName) Then
+            Dim suffix As String = datasetName.Substring(baseElementName.Length)
+            If suffix.StartsWith("_") Then
+                Return suffix.Substring(1)
+            Else
+                Return suffix
+            End If
+        Else
+            Return ""
+        End If
+    End Function
 
     Private Sub Button_SelectAllElements_Click(sender As Object, e As EventArgs)
         For i As Integer = 0 To ListBox_Elements.Items.Count - 1
