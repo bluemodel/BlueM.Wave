@@ -550,6 +550,7 @@ Partial Class ImportCSVDialog
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
         Me.Text = "Import series from CSV file"
+        Me.TopMost = True
         SplitContainer1.Panel1.ResumeLayout(False)
         SplitContainer1.Panel2.ResumeLayout(False)
         CType(SplitContainer1, System.ComponentModel.ISupportInitialize).EndInit()
