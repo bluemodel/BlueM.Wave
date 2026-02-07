@@ -841,8 +841,8 @@ Public MustInherit Class TimeSeriesFile
 
             Case FileExtensions.H5
                 'Check file format
-                If Fileformats.HDF5.verifyFormat(file) Then
-                    Log.AddLogEntry(levels.info, $"Detected HDF5 timeseries format for file {fileName}.")
+                If Fileformats.GINA_HDF5.verifyFormat(file) Then
+                    Log.AddLogEntry(levels.info, $"Detected GINA HDF5 timeseries format for file {fileName}.")
                     fileType = FileTypes.HDF5
                 End If
 
@@ -939,7 +939,7 @@ Public MustInherit Class TimeSeriesFile
             Case FileTypes.ZRXP
                 FileInstance = New Fileformats.ZRXP(file)
             Case FileTypes.HDF5
-                FileInstance = New Fileformats.HDF5(file)
+                FileInstance = New Fileformats.GINA_HDF5(file)
             Case Else
                 Throw New Exception($"Unknown file type {fileType}!")
 

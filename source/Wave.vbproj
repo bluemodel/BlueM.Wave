@@ -245,7 +245,7 @@
     <Compile Include="Dialogs\SettingsDialog.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FileFormats\HDF5.vb" />
+    <Compile Include="FileFormats\GINA_HDF5.vb" />
     <Compile Include="FileFormats\HYBNAT_BCS.vb" />
     <Compile Include="FileFormats\HYBNAT_WEL.vb" />
     <Compile Include="FileFormats\JAMS.vb" />
