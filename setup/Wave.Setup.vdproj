@@ -189,6 +189,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_81CAC81B1BFA49DDB444358CF2D23BB1"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_83EB600008C24E1D8806D696FEA26DDE"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -1208,6 +1214,26 @@
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_81CAC81B1BFA49DDB444358CF2D23BB1"
+            {
+            "SourcePath" = "8:..\\source\\lib\\PureHDF\\PureHDF.LICENSE.md"
+            "TargetName" = "8:PureHDF.LICENSE.md"
+            "Tag" = "8:"
+            "Folder" = "8:_1335334A1EB042F3AB241758004683C2"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_83EB600008C24E1D8806D696FEA26DDE"
@@ -2677,7 +2703,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_152A841758E942AE8286A4A2A0CCDD82"
             {
-            "SourcePath" = "8:..\\source\\obj\\x64\\Debug\\Wave.exe"
+            "SourcePath" = "8:..\\source\\obj\\x64\\Release\\Wave.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_1335334A1EB042F3AB241758004683C2"
