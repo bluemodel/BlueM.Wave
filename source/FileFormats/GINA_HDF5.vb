@@ -176,6 +176,9 @@ Namespace Fileformats
                                         Dim colUnit As String
                                         If columnUnits IsNot Nothing AndAlso col < columnUnits.Length Then
                                             colUnit = columnUnits(col).Trim()
+                                            If colUnit = "degC" Then
+                                                colUnit = "°C"
+                                            End If
                                         Else
                                             colUnit = "-"
                                         End If
