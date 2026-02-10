@@ -1,0 +1,986 @@
+{
+  "source_base_path": "D:/a/BlueM.Wave/BlueM.Wave/docs",
+  "xrefmap": "xrefmap.yml",
+  "files": [
+    {
+      "type": "Resource",
+      "output": {
+        "resource": {
+          "relative_path": "index.json"
+        }
+      }
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/BlueM.Wave.App.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/BlueM.Wave.App.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "BlueM.Wave.App",
+      "Summary": "<p sourcefile=\"api/BlueM.Wave.App.yml\" sourcestartlinenumber=\"1\">Class representing an instance of the Wave app</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/BlueM.Wave.Character.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/BlueM.Wave.Character.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "BlueM.Wave.Character",
+      "Summary": "<p sourcefile=\"api/BlueM.Wave.Character.yml\" sourcestartlinenumber=\"1\">Helper Class for Characters</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/BlueM.Wave.Constants.Direction.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/BlueM.Wave.Constants.Direction.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "BlueM.Wave.Constants.Direction",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/BlueM.Wave.Constants.TimeDirection.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/BlueM.Wave.Constants.TimeDirection.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "BlueM.Wave.Constants.TimeDirection",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/BlueM.Wave.Constants.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/BlueM.Wave.Constants.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "BlueM.Wave.Constants",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/BlueM.Wave.DateRange.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/BlueM.Wave.DateRange.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "BlueM.Wave.DateRange",
+      "Summary": "<p sourcefile=\"api/BlueM.Wave.DateRange.yml\" sourcestartlinenumber=\"1\">Represents a date range with defined start and end dates</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/BlueM.Wave.Fileformats.ASC.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/BlueM.Wave.Fileformats.ASC.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "BlueM.Wave.Fileformats.ASC",
+      "Summary": "<p sourcefile=\"api/BlueM.Wave.Fileformats.ASC.yml\" sourcestartlinenumber=\"1\">Klasse für ASC-Dateiformat (SMUSI)</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/BlueM.Wave.Fileformats.BIN.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/BlueM.Wave.Fileformats.BIN.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "BlueM.Wave.Fileformats.BIN",
+      "Summary": "<p sourcefile=\"api/BlueM.Wave.Fileformats.BIN.yml\" sourcestartlinenumber=\"1\">Klasse für das SYDRO Binärformat</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/BlueM.Wave.Fileformats.CSV.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/BlueM.Wave.Fileformats.CSV.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "BlueM.Wave.Fileformats.CSV",
+      "Summary": "<p sourcefile=\"api/BlueM.Wave.Fileformats.CSV.yml\" sourcestartlinenumber=\"1\">Klasse für generisches Textformat</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/BlueM.Wave.Fileformats.DFS0.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/BlueM.Wave.Fileformats.DFS0.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "BlueM.Wave.Fileformats.DFS0",
+      "Summary": "<p sourcefile=\"api/BlueM.Wave.Fileformats.DFS0.yml\" sourcestartlinenumber=\"1\">Class for importing the DHI MIKE Dfs0 format</p>\n<p sourcefile=\"api/BlueM.Wave.Fileformats.DFS0.yml\" sourcestartlinenumber=\"3\">Requires the DHI.DFS Nuget package: <a href=\"https://www.nuget.org/packages/DHI.DFS/\" sourcefile=\"api/BlueM.Wave.Fileformats.DFS0.yml\" sourcestartlinenumber=\"3\">https://www.nuget.org/packages/DHI.DFS/</a></p>\n<p sourcefile=\"api/BlueM.Wave.Fileformats.DFS0.yml\" sourcestartlinenumber=\"5\">Docs:</p>\n<ul sourcefile=\"api/BlueM.Wave.Fileformats.DFS0.yml\" sourcestartlinenumber=\"6\">\n<li sourcefile=\"api/BlueM.Wave.Fileformats.DFS0.yml\" sourcestartlinenumber=\"6\"><a href=\"https://docs.mikepoweredbydhi.com/core_libraries/dfs/dfs_api/\" sourcefile=\"api/BlueM.Wave.Fileformats.DFS0.yml\" sourcestartlinenumber=\"6\">https://docs.mikepoweredbydhi.com/core_libraries/dfs/dfs_api/</a></li>\n<li sourcefile=\"api/BlueM.Wave.Fileformats.DFS0.yml\" sourcestartlinenumber=\"7\"><a href=\"https://docs.mikepoweredbydhi.com/core_libraries/dfs/dfs-file-formats/#dfs0-file\" sourcefile=\"api/BlueM.Wave.Fileformats.DFS0.yml\" sourcestartlinenumber=\"7\">https://docs.mikepoweredbydhi.com/core_libraries/dfs/dfs-file-formats/#dfs0-file</a></li>\n<li sourcefile=\"api/BlueM.Wave.Fileformats.DFS0.yml\" sourcestartlinenumber=\"8\"><a href=\"https://docs.mikepoweredbydhi.com/SDK_UserGuide/#eum-quantity\" sourcefile=\"api/BlueM.Wave.Fileformats.DFS0.yml\" sourcestartlinenumber=\"8\">https://docs.mikepoweredbydhi.com/SDK_UserGuide/#eum-quantity</a></li>\n</ul>\n<p sourcefile=\"api/BlueM.Wave.Fileformats.DFS0.yml\" sourcestartlinenumber=\"10\">Code is loosely based on the following examples: <a href=\"https://github.com/DHI/MIKECore-Examples/blob/master/Examples/CSharp/ExamplesDfs0.cs\" sourcefile=\"api/BlueM.Wave.Fileformats.DFS0.yml\" sourcestartlinenumber=\"10\">https://github.com/DHI/MIKECore-Examples/blob/master/Examples/CSharp/ExamplesDfs0.cs</a></p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/BlueM.Wave.Fileformats.FEWS_PI.XMLDate.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/BlueM.Wave.Fileformats.FEWS_PI.XMLDate.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "BlueM.Wave.Fileformats.FEWS_PI.XMLDate",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/BlueM.Wave.Fileformats.FEWS_PI.XMLEvent.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/BlueM.Wave.Fileformats.FEWS_PI.XMLEvent.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "BlueM.Wave.Fileformats.FEWS_PI.XMLEvent",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/BlueM.Wave.Fileformats.FEWS_PI.XMLHeader.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/BlueM.Wave.Fileformats.FEWS_PI.XMLHeader.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "BlueM.Wave.Fileformats.FEWS_PI.XMLHeader",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/BlueM.Wave.Fileformats.FEWS_PI.XMLSeries.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/BlueM.Wave.Fileformats.FEWS_PI.XMLSeries.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "BlueM.Wave.Fileformats.FEWS_PI.XMLSeries",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/BlueM.Wave.Fileformats.FEWS_PI.XMLTimeSeries.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/BlueM.Wave.Fileformats.FEWS_PI.XMLTimeSeries.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "BlueM.Wave.Fileformats.FEWS_PI.XMLTimeSeries",
+      "Summary": "<p sourcefile=\"api/BlueM.Wave.Fileformats.FEWS_PI.XMLTimeSeries.yml\" sourcestartlinenumber=\"1\">Object representation of the Delft-FEWS PI timeseries XML structure</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/BlueM.Wave.Fileformats.FEWS_PI.XMLTimeStep.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/BlueM.Wave.Fileformats.FEWS_PI.XMLTimeStep.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "BlueM.Wave.Fileformats.FEWS_PI.XMLTimeStep",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/BlueM.Wave.Fileformats.FEWS_PI.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/BlueM.Wave.Fileformats.FEWS_PI.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "BlueM.Wave.Fileformats.FEWS_PI",
+      "Summary": "<p sourcefile=\"api/BlueM.Wave.Fileformats.FEWS_PI.yml\" sourcestartlinenumber=\"1\">Class for the Delft-FEWS published interface timeseries format\nFormat description: <a href=\"https://publicwiki.deltares.nl/spaces/FEWSDOC/pages/8683960/Delft-Fews+Published+Interface+timeseries+Format+PI+Import\" sourcefile=\"api/BlueM.Wave.Fileformats.FEWS_PI.yml\" sourcestartlinenumber=\"2\">https://publicwiki.deltares.nl/spaces/FEWSDOC/pages/8683960/Delft-Fews+Published+Interface+timeseries+Format+PI+Import</a>\nXML schema: <a href=\"https://fews.wldelft.nl/schemas/version1.0/pi-schemas/pi_timeseries.xsd\" sourcefile=\"api/BlueM.Wave.Fileformats.FEWS_PI.yml\" sourcestartlinenumber=\"3\">https://fews.wldelft.nl/schemas/version1.0/pi-schemas/pi_timeseries.xsd</a></p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/BlueM.Wave.Fileformats.GBL.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/BlueM.Wave.Fileformats.GBL.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "BlueM.Wave.Fileformats.GBL",
+      "Summary": "<p sourcefile=\"api/BlueM.Wave.Fileformats.GBL.yml\" sourcestartlinenumber=\"1\">Class for the GINA binary WEL format</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/BlueM.Wave.Fileformats.GINA_HDF5.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/BlueM.Wave.Fileformats.GINA_HDF5.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "BlueM.Wave.Fileformats.GINA_HDF5",
+      "Summary": "<p sourcefile=\"api/BlueM.Wave.Fileformats.GINA_HDF5.yml\" sourcestartlinenumber=\"1\">Class for importing GINA HDF5 files with timeseries data</p>\n<p sourcefile=\"api/BlueM.Wave.Fileformats.GINA_HDF5.yml\" sourcestartlinenumber=\"3\">Expected structure:\n/timeseries/\n/[group] (e.g., HNW, SN1, SN2)\n/time (string dataset with timestamps) - required\n/[element_name] (2D dataset with Real values) - at least one required</p>\n<p sourcefile=\"api/BlueM.Wave.Fileformats.GINA_HDF5.yml\" sourcestartlinenumber=\"9\">Requires the PureHDF NuGet package: <a href=\"https://www.nuget.org/packages/PureHDF/\" sourcefile=\"api/BlueM.Wave.Fileformats.GINA_HDF5.yml\" sourcestartlinenumber=\"9\">https://www.nuget.org/packages/PureHDF/</a></p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/BlueM.Wave.Fileformats.GINA_WEL.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/BlueM.Wave.Fileformats.GINA_WEL.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "BlueM.Wave.Fileformats.GINA_WEL",
+      "Summary": "<p sourcefile=\"api/BlueM.Wave.Fileformats.GINA_WEL.yml\" sourcestartlinenumber=\"1\">Class for the GINA WEL file format\nIt is essentially a CSV format, this class only contains a method for detecting the format\nand overrides the CSV import settings in the constructor</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/BlueM.Wave.Fileformats.GISMO_WEL.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/BlueM.Wave.Fileformats.GISMO_WEL.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "BlueM.Wave.Fileformats.GISMO_WEL",
+      "Summary": "<p sourcefile=\"api/BlueM.Wave.Fileformats.GISMO_WEL.yml\" sourcestartlinenumber=\"1\">Class for importing GISMO result files (<em sourcefile=\"api/BlueM.Wave.Fileformats.GISMO_WEL.yml\" sourcestartlinenumber=\"1\">.CSV,</em>.ASC)\nFor information about GISMO refer to <a href=\"http://www.sydro.de/\" sourcefile=\"api/BlueM.Wave.Fileformats.GISMO_WEL.yml\" sourcestartlinenumber=\"2\">http://www.sydro.de/</a>\nFor file format info refer to <a href=\"https://wiki.bluemodel.org/index.php/WEL-Format_%28GISMO%29\" sourcefile=\"api/BlueM.Wave.Fileformats.GISMO_WEL.yml\" sourcestartlinenumber=\"3\">https://wiki.bluemodel.org/index.php/WEL-Format_%28GISMO%29</a></p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/BlueM.Wave.Fileformats.HYBNAT_BCS.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/BlueM.Wave.Fileformats.HYBNAT_BCS.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "BlueM.Wave.Fileformats.HYBNAT_BCS",
+      "Summary": "<p sourcefile=\"api/BlueM.Wave.Fileformats.HYBNAT_BCS.yml\" sourcestartlinenumber=\"1\">Class for HYBNAT BCS files</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/BlueM.Wave.Fileformats.HYBNAT_WEL.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/BlueM.Wave.Fileformats.HYBNAT_WEL.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "BlueM.Wave.Fileformats.HYBNAT_WEL",
+      "Summary": "<p sourcefile=\"api/BlueM.Wave.Fileformats.HYBNAT_WEL.yml\" sourcestartlinenumber=\"1\">Class for HYBNAT WEL files</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/BlueM.Wave.Fileformats.HYDRO_AS_2D.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/BlueM.Wave.Fileformats.HYDRO_AS_2D.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "BlueM.Wave.Fileformats.HYDRO_AS_2D",
+      "Summary": "<p sourcefile=\"api/BlueM.Wave.Fileformats.HYDRO_AS_2D.yml\" sourcestartlinenumber=\"1\">Klasse für Q_Strg.dat, Pegel.dat und BW_TMP.dat von HYDRO_AS-2D</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/BlueM.Wave.Fileformats.HystemExtran_REG.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/BlueM.Wave.Fileformats.HystemExtran_REG.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "BlueM.Wave.Fileformats.HystemExtran_REG",
+      "Summary": "<p sourcefile=\"api/BlueM.Wave.Fileformats.HystemExtran_REG.yml\" sourcestartlinenumber=\"1\">Klasse für das Hystem-Extran REG-Dateiformat</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/BlueM.Wave.Fileformats.HystemExtran_WEL.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/BlueM.Wave.Fileformats.HystemExtran_WEL.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "BlueM.Wave.Fileformats.HystemExtran_WEL",
+      "Summary": "<p sourcefile=\"api/BlueM.Wave.Fileformats.HystemExtran_WEL.yml\" sourcestartlinenumber=\"1\">Klasse für das WEL-Dateiformat von Hystem-Extran\nBei WEL-Dateien in Hystem handelt es sich immer um Zuflussdaten\nFormat ist festgeschrieben im HystemExtran-Anwenderhandbuch</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/BlueM.Wave.Fileformats.JAMS.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/BlueM.Wave.Fileformats.JAMS.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "BlueM.Wave.Fileformats.JAMS",
+      "Summary": "<p sourcefile=\"api/BlueM.Wave.Fileformats.JAMS.yml\" sourcestartlinenumber=\"1\">Class for reading JAMS/J2000/J2K timeseries results</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/BlueM.Wave.Fileformats.PRMS.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/BlueM.Wave.Fileformats.PRMS.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "BlueM.Wave.Fileformats.PRMS",
+      "Summary": "<p sourcefile=\"api/BlueM.Wave.Fileformats.PRMS.yml\" sourcestartlinenumber=\"1\">Class for PRMS result files</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/BlueM.Wave.Fileformats.SMB.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/BlueM.Wave.Fileformats.SMB.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "BlueM.Wave.Fileformats.SMB",
+      "Summary": "<p sourcefile=\"api/BlueM.Wave.Fileformats.SMB.yml\" sourcestartlinenumber=\"1\">Klasse für das Simba-Dateiformat (*.SMB)</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/BlueM.Wave.Fileformats.SMUSI_REG.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/BlueM.Wave.Fileformats.SMUSI_REG.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "BlueM.Wave.Fileformats.SMUSI_REG",
+      "Summary": "<p sourcefile=\"api/BlueM.Wave.Fileformats.SMUSI_REG.yml\" sourcestartlinenumber=\"1\">Klasse für das SMUSI REG-Dateiformat (SMUSI-Regendateien)</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/BlueM.Wave.Fileformats.SWMM_INTERFACE.Constituent.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/BlueM.Wave.Fileformats.SWMM_INTERFACE.Constituent.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "BlueM.Wave.Fileformats.SWMM_INTERFACE.Constituent",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/BlueM.Wave.Fileformats.SWMM_INTERFACE.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/BlueM.Wave.Fileformats.SWMM_INTERFACE.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "BlueM.Wave.Fileformats.SWMM_INTERFACE",
+      "Summary": "<p sourcefile=\"api/BlueM.Wave.Fileformats.SWMM_INTERFACE.yml\" sourcestartlinenumber=\"1\">Class for reading and writing the SWMM5 routing interface file format</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/BlueM.Wave.Fileformats.SWMM_LID_REPORT.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/BlueM.Wave.Fileformats.SWMM_LID_REPORT.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "BlueM.Wave.Fileformats.SWMM_LID_REPORT",
+      "Summary": "<p sourcefile=\"api/BlueM.Wave.Fileformats.SWMM_LID_REPORT.yml\" sourcestartlinenumber=\"1\">Class for reading the SWMM5 LID Report format (*.txt)\nThe format is described in the SWMM format description</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/BlueM.Wave.Fileformats.SWMM_OUT.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/BlueM.Wave.Fileformats.SWMM_OUT.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "BlueM.Wave.Fileformats.SWMM_OUT",
+      "Summary": "<p sourcefile=\"api/BlueM.Wave.Fileformats.SWMM_OUT.yml\" sourcestartlinenumber=\"1\">Class for reading the SWMM binary output format</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/BlueM.Wave.Fileformats.SWMM_TIMESERIES.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/BlueM.Wave.Fileformats.SWMM_TIMESERIES.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "BlueM.Wave.Fileformats.SWMM_TIMESERIES",
+      "Summary": "<p sourcefile=\"api/BlueM.Wave.Fileformats.SWMM_TIMESERIES.yml\" sourcestartlinenumber=\"1\">Class for SWMM time series file format</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/BlueM.Wave.Fileformats.UVF.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/BlueM.Wave.Fileformats.UVF.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "BlueM.Wave.Fileformats.UVF",
+      "Summary": "<p sourcefile=\"api/BlueM.Wave.Fileformats.UVF.yml\" sourcestartlinenumber=\"1\">Klasse für UVF Dateiformat\nFormatbeschreibung: <a href=\"http://aquaplan.de/public_papers/imex/sectionUVF.html\" sourcefile=\"api/BlueM.Wave.Fileformats.UVF.yml\" sourcestartlinenumber=\"2\">http://aquaplan.de/public_papers/imex/sectionUVF.html</a></p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/BlueM.Wave.Fileformats.WBL.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/BlueM.Wave.Fileformats.WBL.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "BlueM.Wave.Fileformats.WBL",
+      "Summary": "<p sourcefile=\"api/BlueM.Wave.Fileformats.WBL.yml\" sourcestartlinenumber=\"1\">Class for the SYDRO binary WEL format</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/BlueM.Wave.Fileformats.WEL.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/BlueM.Wave.Fileformats.WEL.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "BlueM.Wave.Fileformats.WEL",
+      "Summary": "<p sourcefile=\"api/BlueM.Wave.Fileformats.WEL.yml\" sourcestartlinenumber=\"1\">Klasse für das WEL-Dateiformat</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/BlueM.Wave.Fileformats.WVP.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/BlueM.Wave.Fileformats.WVP.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "BlueM.Wave.Fileformats.WVP",
+      "Summary": "<p sourcefile=\"api/BlueM.Wave.Fileformats.WVP.yml\" sourcestartlinenumber=\"1\">Class for importing a wave project file\n<a href=\"https://wiki.bluemodel.org/index.php/Wave_project_file\" sourcefile=\"api/BlueM.Wave.Fileformats.WVP.yml\" sourcestartlinenumber=\"2\">https://wiki.bluemodel.org/index.php/Wave_project_file</a></p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/BlueM.Wave.Fileformats.ZRE.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/BlueM.Wave.Fileformats.ZRE.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "BlueM.Wave.Fileformats.ZRE",
+      "Summary": "<p sourcefile=\"api/BlueM.Wave.Fileformats.ZRE.yml\" sourcestartlinenumber=\"1\">Klasse für das ZRE-Dateiformat</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/BlueM.Wave.Fileformats.ZRXP.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/BlueM.Wave.Fileformats.ZRXP.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "BlueM.Wave.Fileformats.ZRXP",
+      "Summary": "<p sourcefile=\"api/BlueM.Wave.Fileformats.ZRXP.yml\" sourcestartlinenumber=\"1\">Class for the ZRXP file format\nFormat description: <a href=\"https://www.kisters.de/fileadmin/user_upload/Wasser/Downloads/ZRXP3.0_DE.pdf\" sourcefile=\"api/BlueM.Wave.Fileformats.ZRXP.yml\" sourcestartlinenumber=\"2\">https://www.kisters.de/fileadmin/user_upload/Wasser/Downloads/ZRXP3.0_DE.pdf</a></p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/BlueM.Wave.Fileformats.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/BlueM.Wave.Fileformats.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "BlueM.Wave.Fileformats",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/BlueM.Wave.Helpers.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/BlueM.Wave.Helpers.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "BlueM.Wave.Helpers",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/BlueM.Wave.Log.LogClearedEventHandler.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/BlueM.Wave.Log.LogClearedEventHandler.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "BlueM.Wave.Log.LogClearedEventHandler",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/BlueM.Wave.Log.LogMsgAddedEventHandler.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/BlueM.Wave.Log.LogMsgAddedEventHandler.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "BlueM.Wave.Log.LogMsgAddedEventHandler",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/BlueM.Wave.Log.levels.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/BlueM.Wave.Log.levels.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "BlueM.Wave.Log.levels",
+      "Summary": "<p sourcefile=\"api/BlueM.Wave.Log.levels.yml\" sourcestartlinenumber=\"1\">Log levels</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/BlueM.Wave.Log.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/BlueM.Wave.Log.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "BlueM.Wave.Log",
+      "Summary": "<p sourcefile=\"api/BlueM.Wave.Log.yml\" sourcestartlinenumber=\"1\">Log</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/BlueM.Wave.Metadata.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/BlueM.Wave.Metadata.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "BlueM.Wave.Metadata",
+      "Summary": "<p sourcefile=\"api/BlueM.Wave.Metadata.yml\" sourcestartlinenumber=\"1\">Class representing time series metadata</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/BlueM.Wave.Month.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/BlueM.Wave.Month.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "BlueM.Wave.Month",
+      "Summary": "<p sourcefile=\"api/BlueM.Wave.Month.yml\" sourcestartlinenumber=\"1\">Class representing a calendar month</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/BlueM.Wave.TimeSeries.InterpretationEnum.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/BlueM.Wave.TimeSeries.InterpretationEnum.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "BlueM.Wave.TimeSeries.InterpretationEnum",
+      "Summary": "<p sourcefile=\"api/BlueM.Wave.TimeSeries.InterpretationEnum.yml\" sourcestartlinenumber=\"1\">Interpretations</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/BlueM.Wave.TimeSeries.TimeStepTypeEnum.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/BlueM.Wave.TimeSeries.TimeStepTypeEnum.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "BlueM.Wave.TimeSeries.TimeStepTypeEnum",
+      "Summary": "<p sourcefile=\"api/BlueM.Wave.TimeSeries.TimeStepTypeEnum.yml\" sourcestartlinenumber=\"1\">Timestep types</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/BlueM.Wave.TimeSeries.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/BlueM.Wave.TimeSeries.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "BlueM.Wave.TimeSeries",
+      "Summary": "<p sourcefile=\"api/BlueM.Wave.TimeSeries.yml\" sourcestartlinenumber=\"1\">Class representing a time series</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/BlueM.Wave.TimeSeriesCollection.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/BlueM.Wave.TimeSeriesCollection.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "BlueM.Wave.TimeSeriesCollection",
+      "Summary": "<p sourcefile=\"api/BlueM.Wave.TimeSeriesCollection.yml\" sourcestartlinenumber=\"1\">Collection of TimeSeries\nImplemented as an ordered dictionary with Ids as keys and TimeSeries as values</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/BlueM.Wave.TimeSeriesDataSource.OriginEnum.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/BlueM.Wave.TimeSeriesDataSource.OriginEnum.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "BlueM.Wave.TimeSeriesDataSource.OriginEnum",
+      "Summary": "<p sourcefile=\"api/BlueM.Wave.TimeSeriesDataSource.OriginEnum.yml\" sourcestartlinenumber=\"1\">Origin types</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/BlueM.Wave.TimeSeriesDataSource.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/BlueM.Wave.TimeSeriesDataSource.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "BlueM.Wave.TimeSeriesDataSource",
+      "Summary": "<p sourcefile=\"api/BlueM.Wave.TimeSeriesDataSource.yml\" sourcestartlinenumber=\"1\">Stores information about the datasource of a time series</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/BlueM.Wave.TimeSeriesDisplayOptions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/BlueM.Wave.TimeSeriesDisplayOptions.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "BlueM.Wave.TimeSeriesDisplayOptions",
+      "Summary": "<p sourcefile=\"api/BlueM.Wave.TimeSeriesDisplayOptions.yml\" sourcestartlinenumber=\"1\">Class for storing time series display options</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/BlueM.Wave.TimeSeriesFile.FileExtensions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/BlueM.Wave.TimeSeriesFile.FileExtensions.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "BlueM.Wave.TimeSeriesFile.FileExtensions",
+      "Summary": "<p sourcefile=\"api/BlueM.Wave.TimeSeriesFile.FileExtensions.yml\" sourcestartlinenumber=\"1\">File extensions</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/BlueM.Wave.TimeSeriesFile.FileTypes.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/BlueM.Wave.TimeSeriesFile.FileTypes.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "BlueM.Wave.TimeSeriesFile.FileTypes",
+      "Summary": "<p sourcefile=\"api/BlueM.Wave.TimeSeriesFile.FileTypes.yml\" sourcestartlinenumber=\"1\">FileTypes</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/BlueM.Wave.TimeSeriesFile.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/BlueM.Wave.TimeSeriesFile.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "BlueM.Wave.TimeSeriesFile",
+      "Summary": "<p sourcefile=\"api/BlueM.Wave.TimeSeriesFile.yml\" sourcestartlinenumber=\"1\">Abstract base class for all file formats</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/BlueM.Wave.TimeSeriesInfo.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/BlueM.Wave.TimeSeriesInfo.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "BlueM.Wave.TimeSeriesInfo",
+      "Summary": "<p sourcefile=\"api/BlueM.Wave.TimeSeriesInfo.yml\" sourcestartlinenumber=\"1\">Contains basic information about a series contained in a file</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/BlueM.Wave.Wave.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/BlueM.Wave.Wave.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "BlueM.Wave.Wave",
+      "Summary": "<p sourcefile=\"api/BlueM.Wave.Wave.yml\" sourcestartlinenumber=\"1\">Wave Model</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/BlueM.Wave.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/BlueM.Wave.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "BlueM.Wave",
+      "Summary": null
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "api/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "api/index.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "api/toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/toc.html"
+        },
+        ".json": {
+          "relative_path": "api/toc.json"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/analysis.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/analysis.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/intro.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/intro.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "articles/toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "articles/toc.html"
+        },
+        ".json": {
+          "relative_path": "articles/toc.json"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/wave_icon.png",
+      "output": {
+        "resource": {
+          "relative_path": "images/wave_icon.png"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/wave_logo.png",
+      "output": {
+        "resource": {
+          "relative_path": "images/wave_logo.png"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "index.md",
+      "output": {
+        ".html": {
+          "relative_path": "index.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "toc.html"
+        },
+        ".json": {
+          "relative_path": "toc.json"
+        }
+      },
+      "version": ""
+    }
+  ],
+  "groups": [
+    {
+      "xrefmap": "xrefmap.yml"
+    }
+  ]
+}
