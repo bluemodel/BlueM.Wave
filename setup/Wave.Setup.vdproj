@@ -40,13 +40,13 @@
         "Entry"
         {
         "MsmKey" = "8:_1C326BE2F7C71E5D3F0C0522C5DBED67"
-        "OwnerKey" = "8:_2DB3AE10BF5861D8BC401E0D2F22EF86"
+        "OwnerKey" = "8:_152A841758E942AE8286A4A2A0CCDD82"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_1C326BE2F7C71E5D3F0C0522C5DBED67"
-        "OwnerKey" = "8:_152A841758E942AE8286A4A2A0CCDD82"
+        "OwnerKey" = "8:_2DB3AE10BF5861D8BC401E0D2F22EF86"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -448,6 +448,12 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_1C326BE2F7C71E5D3F0C0522C5DBED67"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_CE6859736890221DFBCB3F64A276E1E5"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -497,12 +503,6 @@
         {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_D6452BB397F900F8F46ECB171C360060"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_1C326BE2F7C71E5D3F0C0522C5DBED67"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -741,7 +741,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51"
+            "AssemblyAsmDisplayName" = "8:System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_1C326BE2F7C71E5D3F0C0522C5DBED67"
@@ -2114,15 +2114,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:BlueM.Wave"
-        "ProductCode" = "8:{9F7C8AE9-DB33-4429-BE9D-56595AF08257}"
-        "PackageCode" = "8:{70932EF5-D92E-48A3-A1A1-1F436EC06055}"
+        "ProductCode" = "8:{88C0F161-270F-4739-9E60-D3C8D5F7A81E}"
+        "PackageCode" = "8:{1127A0E5-8691-4706-956C-9C34C37CC356}"
         "UpgradeCode" = "8:{8AC270DC-0E8D-4087-98AB-3A2C358096B9}"
         "AspNetVersion" = "8:2.0.50727.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:TRUE"
-        "ProductVersion" = "8:2.14.0"
+        "ProductVersion" = "8:2.14.1"
         "Manufacturer" = "8:BlueM Dev Group"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:https://wiki.bluemodel.org/index.php/BlueM.Wave"
