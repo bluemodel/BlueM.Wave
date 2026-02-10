@@ -1,6 +1,11 @@
 BlueM.Wave Release Notes
 ========================
 
+Version 2.14.1
+--------------
+FIXED:
+* Fixed installer version not reading metadata from GINA HDF5 files properly #222
+
 Version 2.14.0
 --------------
 NEW:
