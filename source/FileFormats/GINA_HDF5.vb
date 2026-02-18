@@ -40,6 +40,16 @@ Namespace Fileformats
         Private _dataGroupName As String
 
         ''' <summary>
+        ''' Maps series index to the HDF5 dataset name (element name)
+        ''' </summary>
+        Public ReadOnly SeriesDatasetMap As New Dictionary(Of Integer, String)
+
+        ''' <summary>
+        ''' Maps series index to the column name (variable name)
+        ''' </summary>
+        Public ReadOnly SeriesColumnMap As New Dictionary(Of Integer, String)
+
+        ''' <summary>
         ''' Flag indicating whether to show the import dialog
         ''' </summary>
         Public Overrides ReadOnly Property UseImportDialog() As Boolean
@@ -79,6 +89,8 @@ Namespace Fileformats
             Dim index As Integer = 0
 
             Me.TimeSeriesInfos.Clear()
+            Me.SeriesDatasetMap.Clear()
+            Me.SeriesColumnMap.Clear()
 
             Try
                 Using h5File As NativeFile = PureHDF.H5File.OpenRead(Me.File)
@@ -157,6 +169,8 @@ Namespace Fileformats
                                     sInfo.Unit = "-"
                                     sInfo.Index = index
                                     Me.TimeSeriesInfos.Add(sInfo)
+                                    Me.SeriesDatasetMap.Add(index, datasetName)
+                                    Me.SeriesColumnMap.Add(index, "")
                                     index += 1
 
                                 ElseIf dimensions.Length = 2 Then
@@ -188,6 +202,8 @@ Namespace Fileformats
                                         sInfo.Unit = colUnit
                                         sInfo.Index = index
                                         Me.TimeSeriesInfos.Add(sInfo)
+                                        Me.SeriesDatasetMap.Add(index, datasetName)
+                                        Me.SeriesColumnMap.Add(index, colName)
                                         index += 1
                                     Next
                                 End If
