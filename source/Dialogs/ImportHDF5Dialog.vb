@@ -16,7 +16,6 @@
 'along with this program.  If not, see <https://www.gnu.org/licenses/>.
 '
 Imports System.Windows.Forms
-Imports System.Text.RegularExpressions
 
 ''' <summary>
 ''' Custom import dialog for HDF5 files with two-panel selection:
@@ -59,24 +58,20 @@ Friend Class ImportHDF5Dialog
 
         'Process each series to extract element names and variable names
         For Each sInfo As TimeSeriesInfo In Me.tsFile.TimeSeriesInfos
-            'Series name format: "DatasetName_ColumnName" (e.g., "T_Dru0161_Q_zu")
-            'Parse to get: dataset name and column name
-            Dim lastUnderscore As Integer = sInfo.Name.LastIndexOf("_"c)
-            If lastUnderscore <= 0 Then Continue For
+            'Use the dataset/column maps from GINA_HDF5
+            Dim datasetName As String = Me.tsFile.SeriesDatasetMap(sInfo.Index)
+            Dim columnName As String = Me.tsFile.SeriesColumnMap(sInfo.Index)
 
-            Dim datasetName As String = sInfo.Name.Substring(0, lastUnderscore)
-            Dim columnName As String = sInfo.Name.Substring(lastUnderscore + 1)
+            'Use dataset name as element name
+            Dim baseElement As String = datasetName
 
-            'Extract base element name from dataset name
-            Dim baseElement As String = ExtractBaseElementName(datasetName)
-            Dim measurementType As String = ExtractMeasurementType(datasetName, baseElement)
+            'Use column name as variable name
+            Dim variableName As String = columnName
 
-            'Build variable name: measurementType_columnName (e.g., "Q_zu") or just columnName if no measurement type
-            Dim variableName As String
-            If measurementType.Length > 0 Then
-                variableName = $"{measurementType}_{columnName}"
-            Else
-                variableName = columnName
+            '1D datasets have no column name
+            If variableName = "" Then
+                variableName = datasetName
+                baseElement = datasetName
             End If
 
             'Add to element series map
@@ -121,44 +116,6 @@ Friend Class ImportHDF5Dialog
 
     End Sub
 
-
-    ''' <summary>
-    ''' Extracts the base element name from a dataset name
-    ''' Pattern: Element names like T_Dru0161, T_Sch0821, T_Wfg0014 end with digits
-    ''' Dataset names may have additional suffixes like _Q, _Pges, _AFS
-    ''' </summary>
-    Private Function ExtractBaseElementName(datasetName As String) As String
-        'Pattern: Match element names that end with digits (e.g., T_Dru0161)
-        'The base element is everything up to and including the numeric suffix
-        Dim match As Match = Regex.Match(datasetName, "^(.+?\d+)")
-        If match.Success Then
-            Return match.Groups(1).Value
-        Else
-            'If no pattern match, use the full name up to the last underscore
-            Dim lastUnderscore As Integer = datasetName.LastIndexOf("_"c)
-            If lastUnderscore > 0 Then
-                Return datasetName.Substring(0, lastUnderscore)
-            Else
-                Return datasetName
-            End If
-        End If
-    End Function
-
-    ''' <summary>
-    ''' Extracts the measurement type from a dataset name (e.g., "Q" from "T_Dru0161_Q")
-    ''' </summary>
-    Private Function ExtractMeasurementType(datasetName As String, baseElementName As String) As String
-        If datasetName.Length > baseElementName.Length AndAlso datasetName.StartsWith(baseElementName) Then
-            Dim suffix As String = datasetName.Substring(baseElementName.Length)
-            If suffix.StartsWith("_") Then
-                Return suffix.Substring(1)
-            Else
-                Return suffix
-            End If
-        Else
-            Return ""
-        End If
-    End Function
 
     Private Sub Button_SelectAllElements_Click(sender As Object, e As EventArgs) Handles Button_SelectAllElements.Click
         For i As Integer = 0 To ListBox_Elements.Items.Count - 1
@@ -217,21 +174,17 @@ Friend Class ImportHDF5Dialog
 
         'Select series that match both selected elements AND selected variables
         For Each sInfo As TimeSeriesInfo In Me.tsFile.TimeSeriesInfos
-            'Parse series name
-            Dim lastUnderscore As Integer = sInfo.Name.LastIndexOf("_"c)
-            If lastUnderscore <= 0 Then Continue For
+            'Use the dataset/column maps from GINA_HDF5
+            Dim datasetName As String = Me.tsFile.SeriesDatasetMap(sInfo.Index)
+            Dim columnName As String = Me.tsFile.SeriesColumnMap(sInfo.Index)
 
-            Dim datasetName As String = sInfo.Name.Substring(0, lastUnderscore)
-            Dim columnName As String = sInfo.Name.Substring(lastUnderscore + 1)
+            Dim baseElement As String = datasetName
+            Dim variableName As String = columnName
 
-            Dim baseElement As String = ExtractBaseElementName(datasetName)
-            Dim measurementType As String = ExtractMeasurementType(datasetName, baseElement)
-
-            Dim variableName As String
-            If measurementType.Length > 0 Then
-                variableName = $"{measurementType}_{columnName}"
-            Else
-                variableName = columnName
+            '1D datasets have no column name
+            If variableName = "" Then
+                variableName = datasetName
+                baseElement = datasetName
             End If
 
             'Check if this series should be selected
