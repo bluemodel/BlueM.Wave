@@ -1,6 +1,11 @@
 BlueM.Wave Release Notes
 ========================
 
+Version 2.14.2
+--------------
+FIXED:
+* Fixed bug which lead to duplicate columns when reading certain GINA HDF5 files #223
+
 Version 2.14.1
 --------------
 FIXED:
