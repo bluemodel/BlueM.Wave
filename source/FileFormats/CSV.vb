@@ -21,7 +21,7 @@ Imports System.Globalization
 Namespace Fileformats
 
     ''' <summary>
-    ''' Klasse für generisches Textformat
+    ''' Klasse fÃ¼r generisches Textformat
     ''' </summary>
     Public Class CSV
         Inherits TimeSeriesFile
@@ -63,12 +63,12 @@ Namespace Fileformats
 
             Me.TimeSeriesInfos.Clear()
 
-            'Datei öffnen
+            'Datei Ã¶ffnen
             Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
             Dim StrRead As StreamReader = New StreamReader(FiStr, Me.Encoding)
             Dim StrReadSync = TextReader.Synchronized(StrRead)
 
-            'Spaltenüberschriften auslesen
+            'SpaltenÃ¼berschriften auslesen
             For i = 1 To Math.Max(Me.iLineData, Me.iLineHeadings + 1)
                 Zeile = StrReadSync.ReadLine()
                 If (i = Me.iLineHeadings) Then ZeileSpalten = Zeile
