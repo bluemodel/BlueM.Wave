@@ -6,6 +6,9 @@ Version 2.15.0
 NEW:
 * Add title suffix option to CSV import dialog #224
 
+API-CHANGES:
+* New optional parameter `titleSuffix` in `TimeSeries.Cut()` for changing the suffix added to the title after cutting
+
 Version 2.14.2
 --------------
 FIXED:

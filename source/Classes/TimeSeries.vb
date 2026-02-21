@@ -623,12 +623,13 @@ Public Class TimeSeries
     ''' </summary>
     ''' <param name="_start">start date</param>
     ''' <param name="_end">end date</param>
+    ''' <param name="titleSuffix">suffix to be added to the title of time series after cutting (default: " (cut)")</param>
     ''' <remarks>
     ''' Removes all nodes before the start date and after the end date.
     ''' If there is no node with the exact start date, the closest node before the start date is also kept.
     ''' If there is no node with the exact end date, the closest node after the end date is also kept.
     ''' </remarks>
-    Public Overloads Sub Cut(_start As DateTime, _end As DateTime)
+    Public Overloads Sub Cut(_start As DateTime, _end As DateTime, Optional titleSuffix As String = " (cut)")
 
         Dim i, lengthOld, lengthNew As Integer
         Dim iStart, iEnd As Integer
@@ -640,7 +641,7 @@ Public Class TimeSeries
 
         If (Me.StartDate < _start Or Me.EndDate > _end) Then
 
-            Me.Title &= " (cut)"
+            Me.Title &= titleSuffix
 
             lengthOld = Me.Length
 
@@ -703,11 +704,12 @@ Public Class TimeSeries
     ''' Cut the time series to the timespan of another time series
     ''' </summary>
     ''' <param name="series2">the time series to whose timespan the time series should be cut</param>
+    ''' <param name="titleSuffix">suffix to be added to the title of time series after cutting (default: " (cut)")</param>
     ''' <remarks></remarks>
-    Public Overloads Sub Cut(series2 As TimeSeries)
+    Public Overloads Sub Cut(series2 As TimeSeries, Optional titleSuffix As String = " (cut)")
 
         If (Me.StartDate < series2.StartDate Or Me.EndDate > series2.EndDate) Then
-            Call Me.Cut(series2.StartDate, series2.EndDate)
+            Call Me.Cut(series2.StartDate, series2.EndDate, titleSuffix)
         End If
 
     End Sub
