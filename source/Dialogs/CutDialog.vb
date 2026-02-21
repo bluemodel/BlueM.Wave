@@ -159,6 +159,7 @@ Friend Class CutDialog
         End If
 
         Me.cutStart = Me.MaskedTextBox_cutStart.Text
+        Me.ComboBox_RefSeries.SelectedIndex = -1 'reset reference series selection, as the cut extent may no longer match the reference series
 
     End Sub
 
@@ -174,6 +175,7 @@ Friend Class CutDialog
         End If
 
         Me.cutEnd = Me.MaskedTextBox_cutEnd.Text
+        Me.ComboBox_RefSeries.SelectedIndex = -1 'reset reference series selection, as the cut extent may no longer match the reference series
 
     End Sub
 
@@ -198,14 +200,14 @@ Friend Class CutDialog
     ''' <param name="e"></param>
     Private Sub ComboBox_RefSeries_SelectedIndexChanged(sender As System.Object, e As System.EventArgs) Handles ComboBox_RefSeries.SelectedIndexChanged
 
-        If (Me.IsInitializing) Then
+        If Me.IsInitializing Or ComboBox_RefSeries.SelectedIndex = -1 Then
             Exit Sub
         End If
 
         Dim tsRef As TimeSeries = Me.ComboBox_RefSeries.SelectedItem
 
         'check whether selected time series overlap with reference time series
-        If (tsRef.EndDate < Me.earliestStart Or tsRef.StartDate > Me.latestEnd) Then
+        If tsRef.EndDate < Me.earliestStart Or tsRef.StartDate > Me.latestEnd Then
             MsgBox("The selected series do not overlap!", MsgBoxStyle.Exclamation)
             'cancel
             Exit Sub
