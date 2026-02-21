@@ -847,8 +847,7 @@ Public Class TimeSeries
                     t_end = ts.Dates(ts.IndexOfDate(t_end, TimeDirection.Before))
                 End If
             End If
-            ts.Cut(t_start, t_end)
-            ts.Title &= $" ({year})"
+            ts.Cut(t_start, t_end, titleSuffix:=$" ({year})")
             tsDict.Add(year, ts)
         Next
 
