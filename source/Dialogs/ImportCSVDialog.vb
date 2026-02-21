@@ -199,6 +199,8 @@ Friend Class ImportCSVDialog
             Next
         End If
 
+        Me.tsFile.TitleSuffix = Me.TextBox_TitleSuffix.Text.TrimEnd()
+
     End Sub
 
     ''' <summary>

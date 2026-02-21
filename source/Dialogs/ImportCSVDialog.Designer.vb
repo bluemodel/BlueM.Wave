@@ -64,6 +64,9 @@ Partial Class ImportCSVDialog
         Me.Label_Dateformat = New System.Windows.Forms.Label()
         Me.ComboBox_Dateformat = New System.Windows.Forms.ComboBox()
         Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
+        Me.PictureBox_TitleSuffixHelp = New System.Windows.Forms.PictureBox()
+        Me.Label_TitleSuffix = New System.Windows.Forms.Label()
+        Me.TextBox_TitleSuffix = New System.Windows.Forms.TextBox()
         SplitContainer1 = New System.Windows.Forms.SplitContainer()
         CType(SplitContainer1, System.ComponentModel.ISupportInitialize).BeginInit()
         SplitContainer1.Panel1.SuspendLayout()
@@ -81,6 +84,7 @@ Partial Class ImportCSVDialog
         Me.StatusStrip1.SuspendLayout()
         Me.GroupBox_Dateformat.SuspendLayout()
         CType(Me.PictureBox_DateFormatHelp, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.PictureBox_TitleSuffixHelp, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'SplitContainer1
@@ -527,6 +531,36 @@ Partial Class ImportCSVDialog
         Me.ComboBox_Dateformat.Size = New System.Drawing.Size(139, 21)
         Me.ComboBox_Dateformat.TabIndex = 1
         '
+        'PictureBox_TitleSuffixHelp
+        '
+        Me.PictureBox_TitleSuffixHelp.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.PictureBox_TitleSuffixHelp.Image = Global.BlueM.Wave.My.Resources.Resources.help
+        Me.PictureBox_TitleSuffixHelp.Location = New System.Drawing.Point(217, 419)
+        Me.PictureBox_TitleSuffixHelp.Name = "PictureBox_TitleSuffixHelp"
+        Me.PictureBox_TitleSuffixHelp.Size = New System.Drawing.Size(16, 16)
+        Me.PictureBox_TitleSuffixHelp.TabIndex = 36
+        Me.PictureBox_TitleSuffixHelp.TabStop = False
+        Me.ToolTip1.SetToolTip(Me.PictureBox_TitleSuffixHelp, "The title suffix will be appended to each series' title during import")
+        '
+        'Label_TitleSuffix
+        '
+        Me.Label_TitleSuffix.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.Label_TitleSuffix.AutoSize = True
+        Me.Label_TitleSuffix.Location = New System.Drawing.Point(14, 419)
+        Me.Label_TitleSuffix.Name = "Label_TitleSuffix"
+        Me.Label_TitleSuffix.Size = New System.Drawing.Size(57, 13)
+        Me.Label_TitleSuffix.TabIndex = 34
+        Me.Label_TitleSuffix.Text = "Title suffix:"
+        '
+        'TextBox_TitleSuffix
+        '
+        Me.TextBox_TitleSuffix.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.TextBox_TitleSuffix.Location = New System.Drawing.Point(77, 416)
+        Me.TextBox_TitleSuffix.Name = "TextBox_TitleSuffix"
+        Me.TextBox_TitleSuffix.Size = New System.Drawing.Size(134, 20)
+        Me.TextBox_TitleSuffix.TabIndex = 35
+        '
         'ImportCSVDialog
         '
         Me.AcceptButton = Me.Button_OK
@@ -534,6 +568,9 @@ Partial Class ImportCSVDialog
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.CancelButton = Me.Button_Cancel
         Me.ClientSize = New System.Drawing.Size(549, 462)
+        Me.Controls.Add(Me.PictureBox_TitleSuffixHelp)
+        Me.Controls.Add(Me.Label_TitleSuffix)
+        Me.Controls.Add(Me.TextBox_TitleSuffix)
         Me.Controls.Add(SplitContainer1)
         Me.Controls.Add(Me.GroupBox_Columns)
         Me.Controls.Add(Me.GroupBox_Dateformat)
@@ -574,6 +611,7 @@ Partial Class ImportCSVDialog
         Me.GroupBox_Dateformat.ResumeLayout(False)
         Me.GroupBox_Dateformat.PerformLayout()
         CType(Me.PictureBox_DateFormatHelp, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.PictureBox_TitleSuffixHelp, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -617,4 +655,7 @@ Partial Class ImportCSVDialog
     Friend WithEvents Label_Encoding As Label
     Friend WithEvents Button_EncodingAutodetect As Button
     Friend WithEvents Label_Selected As Label
+    Friend WithEvents PictureBox_TitleSuffixHelp As PictureBox
+    Friend WithEvents Label_TitleSuffix As Label
+    Friend WithEvents TextBox_TitleSuffix As TextBox
 End Class
