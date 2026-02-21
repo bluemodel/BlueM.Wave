@@ -31,11 +31,8 @@ Partial Class CutDialog
         Me.Button_OK = New System.Windows.Forms.Button()
         Me.Label_MinDateTime = New System.Windows.Forms.Label()
         Me.Label_MaxDateTime = New System.Windows.Forms.Label()
-        Me.TabControl1 = New System.Windows.Forms.TabControl()
-        Me.TabPage_DateTime = New System.Windows.Forms.TabPage()
         Me.MaskedTextBox_cutEnd = New System.Windows.Forms.MaskedTextBox()
         Me.MaskedTextBox_cutStart = New System.Windows.Forms.MaskedTextBox()
-        Me.TabPage_ZRE = New System.Windows.Forms.TabPage()
         Me.ComboBox_RefSeries = New System.Windows.Forms.ComboBox()
         Me.Button_Cancel = New System.Windows.Forms.Button()
         Me.CheckBox_keepUncutSeries = New System.Windows.Forms.CheckBox()
@@ -50,9 +47,6 @@ Partial Class CutDialog
         Label_End = New System.Windows.Forms.Label()
         Label1 = New System.Windows.Forms.Label()
         Label2 = New System.Windows.Forms.Label()
-        Me.TabControl1.SuspendLayout()
-        Me.TabPage_DateTime.SuspendLayout()
-        Me.TabPage_ZRE.SuspendLayout()
         CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SplitContainer1.Panel1.SuspendLayout()
         Me.SplitContainer1.Panel2.SuspendLayout()
@@ -74,7 +68,7 @@ Partial Class CutDialog
         'Label_Start
         '
         Label_Start.AutoSize = True
-        Label_Start.Location = New System.Drawing.Point(6, 15)
+        Label_Start.Location = New System.Drawing.Point(6, 41)
         Label_Start.Name = "Label_Start"
         Label_Start.Size = New System.Drawing.Size(32, 13)
         Label_Start.TabIndex = 0
@@ -84,7 +78,7 @@ Partial Class CutDialog
         '
         Label_End.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Label_End.AutoSize = True
-        Label_End.Location = New System.Drawing.Point(275, 15)
+        Label_End.Location = New System.Drawing.Point(302, 41)
         Label_End.Name = "Label_End"
         Label_End.Size = New System.Drawing.Size(29, 13)
         Label_End.TabIndex = 2
@@ -93,11 +87,11 @@ Partial Class CutDialog
         'Label1
         '
         Label1.AutoSize = True
-        Label1.Location = New System.Drawing.Point(7, 7)
+        Label1.Location = New System.Drawing.Point(6, 90)
         Label1.Name = "Label1"
-        Label1.Size = New System.Drawing.Size(192, 13)
+        Label1.Size = New System.Drawing.Size(136, 13)
         Label1.TabIndex = 0
-        Label1.Text = "Cut to the extent of the following series:"
+        Label1.Text = "Use time period from series:"
         '
         'Label2
         '
@@ -121,7 +115,7 @@ Partial Class CutDialog
         '
         Me.Label_MinDateTime.AutoSize = True
         Me.Label_MinDateTime.ForeColor = System.Drawing.SystemColors.ControlDarkDark
-        Me.Label_MinDateTime.Location = New System.Drawing.Point(4, 114)
+        Me.Label_MinDateTime.Location = New System.Drawing.Point(6, 19)
         Me.Label_MinDateTime.Name = "Label_MinDateTime"
         Me.Label_MinDateTime.Size = New System.Drawing.Size(33, 13)
         Me.Label_MinDateTime.TabIndex = 2
@@ -131,44 +125,18 @@ Partial Class CutDialog
         '
         Me.Label_MaxDateTime.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Label_MaxDateTime.ForeColor = System.Drawing.SystemColors.ControlDarkDark
-        Me.Label_MaxDateTime.Location = New System.Drawing.Point(262, 114)
+        Me.Label_MaxDateTime.Location = New System.Drawing.Point(264, 19)
         Me.Label_MaxDateTime.Name = "Label_MaxDateTime"
         Me.Label_MaxDateTime.Size = New System.Drawing.Size(136, 13)
         Me.Label_MaxDateTime.TabIndex = 3
         Me.Label_MaxDateTime.Text = "Max: -"
         Me.Label_MaxDateTime.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
-        'TabControl1
-        '
-        Me.TabControl1.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TabControl1.Controls.Add(Me.TabPage_DateTime)
-        Me.TabControl1.Controls.Add(Me.TabPage_ZRE)
-        Me.TabControl1.Location = New System.Drawing.Point(6, 19)
-        Me.TabControl1.Name = "TabControl1"
-        Me.TabControl1.SelectedIndex = 0
-        Me.TabControl1.Size = New System.Drawing.Size(392, 92)
-        Me.TabControl1.TabIndex = 5
-        '
-        'TabPage_DateTime
-        '
-        Me.TabPage_DateTime.Controls.Add(Me.MaskedTextBox_cutEnd)
-        Me.TabPage_DateTime.Controls.Add(Me.MaskedTextBox_cutStart)
-        Me.TabPage_DateTime.Controls.Add(Label_Start)
-        Me.TabPage_DateTime.Controls.Add(Label_End)
-        Me.TabPage_DateTime.Location = New System.Drawing.Point(4, 22)
-        Me.TabPage_DateTime.Name = "TabPage_DateTime"
-        Me.TabPage_DateTime.Padding = New System.Windows.Forms.Padding(3)
-        Me.TabPage_DateTime.Size = New System.Drawing.Size(384, 66)
-        Me.TabPage_DateTime.TabIndex = 0
-        Me.TabPage_DateTime.Text = "Date/time"
-        Me.TabPage_DateTime.UseVisualStyleBackColor = True
-        '
         'MaskedTextBox_cutEnd
         '
         Me.MaskedTextBox_cutEnd.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.MaskedTextBox_cutEnd.Culture = New System.Globalization.CultureInfo("")
-        Me.MaskedTextBox_cutEnd.Location = New System.Drawing.Point(278, 31)
+        Me.MaskedTextBox_cutEnd.Location = New System.Drawing.Point(305, 57)
         Me.MaskedTextBox_cutEnd.Name = "MaskedTextBox_cutEnd"
         Me.MaskedTextBox_cutEnd.Size = New System.Drawing.Size(100, 20)
         Me.MaskedTextBox_cutEnd.TabIndex = 3
@@ -177,23 +145,11 @@ Partial Class CutDialog
         'MaskedTextBox_cutStart
         '
         Me.MaskedTextBox_cutStart.Culture = New System.Globalization.CultureInfo("")
-        Me.MaskedTextBox_cutStart.Location = New System.Drawing.Point(7, 31)
+        Me.MaskedTextBox_cutStart.Location = New System.Drawing.Point(7, 57)
         Me.MaskedTextBox_cutStart.Name = "MaskedTextBox_cutStart"
         Me.MaskedTextBox_cutStart.Size = New System.Drawing.Size(100, 20)
         Me.MaskedTextBox_cutStart.TabIndex = 1
         Me.MaskedTextBox_cutStart.ValidatingType = GetType(Date)
-        '
-        'TabPage_ZRE
-        '
-        Me.TabPage_ZRE.Controls.Add(Label1)
-        Me.TabPage_ZRE.Controls.Add(Me.ComboBox_RefSeries)
-        Me.TabPage_ZRE.Location = New System.Drawing.Point(4, 22)
-        Me.TabPage_ZRE.Name = "TabPage_ZRE"
-        Me.TabPage_ZRE.Padding = New System.Windows.Forms.Padding(3)
-        Me.TabPage_ZRE.Size = New System.Drawing.Size(384, 66)
-        Me.TabPage_ZRE.TabIndex = 1
-        Me.TabPage_ZRE.Text = "Series"
-        Me.TabPage_ZRE.UseVisualStyleBackColor = True
         '
         'ComboBox_RefSeries
         '
@@ -201,9 +157,9 @@ Partial Class CutDialog
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.ComboBox_RefSeries.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.ComboBox_RefSeries.FormattingEnabled = True
-        Me.ComboBox_RefSeries.Location = New System.Drawing.Point(10, 28)
+        Me.ComboBox_RefSeries.Location = New System.Drawing.Point(6, 106)
         Me.ComboBox_RefSeries.Name = "ComboBox_RefSeries"
-        Me.ComboBox_RefSeries.Size = New System.Drawing.Size(368, 21)
+        Me.ComboBox_RefSeries.Size = New System.Drawing.Size(399, 21)
         Me.ComboBox_RefSeries.TabIndex = 1
         '
         'Button_Cancel
@@ -264,7 +220,7 @@ Partial Class CutDialog
         Me.GroupBox_Selection.Size = New System.Drawing.Size(174, 291)
         Me.GroupBox_Selection.TabIndex = 1
         Me.GroupBox_Selection.TabStop = False
-        Me.GroupBox_Selection.Text = "Series"
+        Me.GroupBox_Selection.Text = "Series to cut"
         '
         'ListBox_Series
         '
@@ -292,15 +248,20 @@ Partial Class CutDialog
         '
         Me.GroupBox_Timeperiod.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.GroupBox_Timeperiod.Controls.Add(Me.TabControl1)
+        Me.GroupBox_Timeperiod.Controls.Add(Label1)
+        Me.GroupBox_Timeperiod.Controls.Add(Me.MaskedTextBox_cutEnd)
         Me.GroupBox_Timeperiod.Controls.Add(Me.Label_MinDateTime)
+        Me.GroupBox_Timeperiod.Controls.Add(Me.ComboBox_RefSeries)
         Me.GroupBox_Timeperiod.Controls.Add(Me.Label_MaxDateTime)
+        Me.GroupBox_Timeperiod.Controls.Add(Label_End)
+        Me.GroupBox_Timeperiod.Controls.Add(Label_Start)
+        Me.GroupBox_Timeperiod.Controls.Add(Me.MaskedTextBox_cutStart)
         Me.GroupBox_Timeperiod.Location = New System.Drawing.Point(5, 3)
         Me.GroupBox_Timeperiod.Name = "GroupBox_Timeperiod"
         Me.GroupBox_Timeperiod.Size = New System.Drawing.Size(411, 133)
         Me.GroupBox_Timeperiod.TabIndex = 0
         Me.GroupBox_Timeperiod.TabStop = False
-        Me.GroupBox_Timeperiod.Text = "Time period"
+        Me.GroupBox_Timeperiod.Text = "Time period to cut to"
         '
         'GroupBox_Settings
         '
@@ -334,11 +295,6 @@ Partial Class CutDialog
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
         Me.Text = "Cut time series"
-        Me.TabControl1.ResumeLayout(False)
-        Me.TabPage_DateTime.ResumeLayout(False)
-        Me.TabPage_DateTime.PerformLayout()
-        Me.TabPage_ZRE.ResumeLayout(False)
-        Me.TabPage_ZRE.PerformLayout()
         Me.SplitContainer1.Panel1.ResumeLayout(False)
         Me.SplitContainer1.Panel2.ResumeLayout(False)
         CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).EndInit()
@@ -353,11 +309,8 @@ Partial Class CutDialog
 
     End Sub
     Friend WithEvents Button_OK As System.Windows.Forms.Button
-    Friend WithEvents TabPage_DateTime As System.Windows.Forms.TabPage
-    Private WithEvents TabControl1 As System.Windows.Forms.TabControl
     Private WithEvents Label_MinDateTime As System.Windows.Forms.Label
     Private WithEvents Label_MaxDateTime As System.Windows.Forms.Label
-    Private WithEvents TabPage_ZRE As System.Windows.Forms.TabPage
     Private WithEvents ComboBox_RefSeries As System.Windows.Forms.ComboBox
     Private WithEvents Button_Cancel As System.Windows.Forms.Button
     Friend WithEvents MaskedTextBox_cutStart As MaskedTextBox
