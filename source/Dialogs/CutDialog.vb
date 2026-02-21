@@ -24,15 +24,45 @@ Imports System.Windows.Forms
 Friend Class CutDialog
 
     Private IsInitializing As Boolean
+    Private earliestStart, latestEnd As DateTime
     Private cutStart, cutEnd As DateTime
-    Private zreOrig As List(Of TimeSeries)
 
-    Public zreCut As List(Of TimeSeries)
-    Public Const labelAlle As String = "- ALL -"
+    ''' <summary>
+    ''' List of cut time series resulting from the dialog. Each selected time series is cut to the specified start and end and added to this list.
+    ''' </summary>
+    Friend CutSeries As List(Of TimeSeries)
 
-    'Konstruktor
-    '***********
-    Public Sub New(ByRef zeitreihen As List(Of TimeSeries), initialStart As DateTime, initialEnd As DateTime)
+    ''' <summary>
+    ''' Whether to keep uncut versions of the time series in the project. If false, the cut time series will replace the original time series in the project. If true, the cut time series will be added to the project and the original time series will be kept unchanged.
+    ''' </summary>
+    ''' <returns></returns>
+    Friend ReadOnly Property KeepUncutSeries As Boolean
+        Get
+            Return Me.CheckBox_keepUncutSeries.Checked
+        End Get
+    End Property
+
+    ''' <summary>
+    ''' List of time series selected to be cut. These are the time series that are selected in the listbox in the dialog. The cut time series resulting from the dialog are stored in the CutSeries property.
+    ''' </summary>
+    ''' <returns></returns>
+    Friend ReadOnly Property SelectedSeries As List(Of TimeSeries)
+        Get
+            Dim tsList As New List(Of TimeSeries)
+            For Each ts As TimeSeries In Me.ListBox_Series.SelectedItems
+                tsList.Add(ts)
+            Next
+            Return tsList
+        End Get
+    End Property
+
+    ''' <summary>
+    ''' Constructor
+    ''' </summary>
+    ''' <param name="tsList">List of time series to be displayed in the dialog</param>
+    ''' <param name="initialStart">Initial start date for the cut</param>
+    ''' <param name="initialEnd">Initial end date for the cut</param>
+    Public Sub New(ByRef tsList As List(Of TimeSeries), initialStart As DateTime, initialEnd As DateTime)
 
         Me.IsInitializing = True
 
@@ -41,8 +71,7 @@ Friend Class CutDialog
 
         ' Add any initialization after the InitializeComponent() call.
 
-        Me.zreCut = New List(Of TimeSeries)
-        Me.zreOrig = zeitreihen
+        Me.CutSeries = New List(Of TimeSeries)
 
         Me.cutStart = initialStart
         Me.cutEnd = initialEnd
@@ -53,65 +82,45 @@ Friend Class CutDialog
         Me.MaskedTextBox_cutEnd.Culture = Globalization.CultureInfo.CurrentCulture
         Me.MaskedTextBox_cutEnd.FormatProvider = Globalization.CultureInfo.CurrentCulture
 
-        'Comboboxen füllen
-        'Option zum Zuschneiden von allen Reihen
-        Me.ComboBox_ZeitreiheCut.Items.Add(labelAlle)
-        'Zeitreihen hinzufügen
-        For Each zre As TimeSeries In Me.zreOrig
-            Me.ComboBox_ZeitreiheCut.Items.Add(zre)
-            Me.ComboBox_RefSeries.Items.Add(zre)
+        'populate controls
+        For Each ts As TimeSeries In tsList
+            Me.ListBox_Series.Items.Add(ts)
+            Me.ComboBox_RefSeries.Items.Add(ts)
         Next
 
         'Update MaskedTextboxes
-        Call Me.updateMaskedTextBoxes()
+        Call Me.UpdateCutExtentControls()
 
         Me.IsInitializing = False
 
     End Sub
 
-    'Zuzuschneidende Zeitreihe wurde ausgewählt
-    '******************************************
-    Private Sub ComboBox_ZeitreiheCut_SelectedIndexChanged(sender As System.Object, e As System.EventArgs) Handles ComboBox_ZeitreiheCut.SelectedIndexChanged
+    ''' <summary>
+    ''' Handles selection of time series to be cut
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    Private Sub ListBox_Series_SelectedIndexChanged(sender As System.Object, e As System.EventArgs) Handles ListBox_Series.SelectedIndexChanged
 
         If (Me.IsInitializing) Then
             Exit Sub
         End If
 
-        Dim zre As TimeSeries
-        Dim earliestStart, latestEnd As DateTime
+        Me.earliestStart = DateTime.MaxValue
+        Me.latestEnd = DateTime.MinValue
 
-        earliestStart = DateTime.MaxValue
-        latestEnd = DateTime.MinValue
+        'determine earliest start and latest end of selected time series
+        For Each ts As TimeSeries In Me.ListBox_Series.SelectedItems
+            If (ts.StartDate < Me.earliestStart) Then Me.earliestStart = ts.StartDate
+            If (ts.EndDate > Me.latestEnd) Then Me.latestEnd = ts.EndDate
+        Next
 
-        'Ausgewählte Zeitreihe
-        If (Me.ComboBox_ZeitreiheCut.SelectedItem.ToString = labelAlle) Then
+        'update min and max labels
+        Me.Label_MinDateTime.Text = "Min: " & Me.earliestStart.ToString(Helpers.CurrentDateFormat)
+        Me.Label_MaxDateTime.Text = "Max: " & Me.latestEnd.ToString(Helpers.CurrentDateFormat)
 
-            'Anfangs- und Enddatum von allen Zeitreihen bestimmen
-            For Each zre In Me.zreOrig
-                If (zre.StartDate < earliestStart) Then earliestStart = zre.StartDate
-                If (zre.EndDate > latestEnd) Then latestEnd = zre.EndDate
-            Next
-
-        Else
-
-            'Eine einzige Zeitreihe wurde ausgewählt
-            zre = CType(Me.ComboBox_ZeitreiheCut.SelectedItem, TimeSeries)
-
-            earliestStart = zre.StartDate
-            latestEnd = zre.EndDate
-
-        End If
-
-        Me.IsInitializing = True 'um eine Kettenreaktionen zu verhindern
-
-        'Min und Max setzen
-        Me.Label_StartDateTime.Text = "Min: " & earliestStart.ToString(Helpers.CurrentDateFormat)
-        Me.Label_EndDateTime.Text = "Max: " & latestEnd.ToString(Helpers.CurrentDateFormat)
-
-        Me.IsInitializing = False
-
-        'Anzeige aktualisieren
-        Call Me.updateMaskedTextBoxes()
+        'update controls
+        Call Me.UpdateCutExtentControls()
 
     End Sub
 
@@ -150,6 +159,7 @@ Friend Class CutDialog
         End If
 
         Me.cutStart = Me.MaskedTextBox_cutStart.Text
+
     End Sub
 
     ''' <summary>
@@ -170,9 +180,9 @@ Friend Class CutDialog
     ''' <summary>
     ''' Updates the MaskedTextBoxes displaying the currently set cut start and end dates
     ''' </summary>
-    Private Sub updateMaskedTextBoxes()
+    Private Sub UpdateCutExtentControls()
 
-        Me.IsInitializing = True 'um eine Kettenreaktion zu verhindern
+        Me.IsInitializing = True 'avoid chain reaction of events
 
         Me.MaskedTextBox_cutStart.Text = Me.cutStart
         Me.MaskedTextBox_cutEnd.Text = Me.cutEnd
@@ -186,96 +196,72 @@ Friend Class CutDialog
     ''' </summary>
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
-    Private Sub ComboBox_ZeitreiheRef_SelectedIndexChanged(sender As System.Object, e As System.EventArgs) Handles ComboBox_RefSeries.SelectedIndexChanged
+    Private Sub ComboBox_RefSeries_SelectedIndexChanged(sender As System.Object, e As System.EventArgs) Handles ComboBox_RefSeries.SelectedIndexChanged
 
         If (Me.IsInitializing) Then
             Exit Sub
         End If
 
-        Dim zre, zreRef As TimeSeries
-        Dim tmp_anfang, tmp_ende As DateTime
-        Dim answer As MsgBoxResult
+        Dim tsRef As TimeSeries = Me.ComboBox_RefSeries.SelectedItem
 
-        zreRef = Me.ComboBox_RefSeries.SelectedItem
-
-        tmp_anfang = zreRef.StartDate
-        tmp_ende = zreRef.EndDate
-
-        If (Me.ComboBox_ZeitreiheCut.SelectedItem.ToString <> labelAlle) Then
-
-            'Kontrolle ob Referenzreihe zu schneidende Zeitreihe abdeckt
-            zre = Me.ComboBox_ZeitreiheCut.SelectedItem
-            If (zreRef.EndDate < zre.StartDate Or zreRef.StartDate > zre.EndDate) Then
-                MsgBox("The two time series do not overlap!", MsgBoxStyle.Exclamation)
-                'Abbrechen
-                Exit Sub
-            End If
-
-            'Man kann nicht abschneiden, was nicht existiert
-            If (zreRef.StartDate < zre.StartDate) Then
-                answer = MsgBox($"The start date of this time series is earlier than the start of the time series that you want to cut. Nothing will be cut from the start.{eol}Continue?", MsgBoxStyle.OkCancel)
-                If (answer = MsgBoxResult.Ok) Then
-                    'Kleinstes mögliches Datum nehmen
-                    tmp_anfang = zre.StartDate
-                Else
-                    'Abbrechen
-                    Exit Sub
-                End If
-            End If
-            If (zreRef.EndDate > zre.EndDate) Then
-                answer = MsgBox($"The end date of this time series is later than the end of the time series that you want to cut. Nothing will be cut from the end. {eol}Continue?", MsgBoxStyle.OkCancel)
-                If (answer = MsgBoxResult.Ok) Then
-                    'Größtes mögliches Datum für Ende nehmen
-                    tmp_ende = zre.EndDate
-                Else
-                    'Abbrechen
-                    Exit Sub
-                End If
-            End If
-
+        'check whether selected time series overlap with reference time series
+        If (tsRef.EndDate < Me.earliestStart Or tsRef.StartDate > Me.latestEnd) Then
+            MsgBox("The selected series do not overlap!", MsgBoxStyle.Exclamation)
+            'cancel
+            Exit Sub
         End If
 
-        'Neuen Anfang und Ende setzen
-        Me.cutStart = tmp_anfang
-        Me.cutEnd = tmp_ende
+        'set new start and end
+        Me.cutStart = tsRef.StartDate
+        Me.cutEnd = tsRef.EndDate
 
-        'Anzeige aktualisieren
-        Call Me.updateMaskedTextBoxes()
+        'update controls
+        Call Me.UpdateCutExtentControls()
 
     End Sub
 
-    'OK gedrückt
-    '***********
+    ''' <summary>
+    ''' Select all button clicked
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    Private Sub Button_SelectAll_Click(sender As Object, e As EventArgs) Handles Button_SelectAll.Click
+        Me.IsInitializing = True
+        Me.ListBox_Series.BeginUpdate()
+        For i As Integer = 0 To Me.ListBox_Series.Items.Count - 1
+            Me.ListBox_Series.SetSelected(i, True)
+        Next
+        Me.ListBox_Series.EndUpdate()
+        Me.IsInitializing = False
+        Call ListBox_Series_SelectedIndexChanged(ListBox_Series, New EventArgs())
+    End Sub
+
+    ''' <summary>
+    ''' OK button clicked
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
     Private Sub OK_Button_Click(sender As System.Object, e As System.EventArgs) Handles Button_OK.Click
 
-        Dim zre, ts_cut As TimeSeries
-
-        'Prüfung
-        If (Me.ComboBox_ZeitreiheCut.SelectedIndex = -1) Then
-            MsgBox("Please select a time series to be cut!", MsgBoxStyle.Exclamation)
+        'validation
+        If Me.ListBox_Series.SelectedIndices.Count = 0 Then
+            MsgBox("Please select at least one time series to be cut!", MsgBoxStyle.Exclamation)
             Me.DialogResult = Windows.Forms.DialogResult.None
             Exit Sub
         End If
 
-        If (Me.cutStart >= Me.cutEnd) Then
+        If Me.cutStart >= Me.cutEnd Then
             MsgBox("The end must be later than the start!", MsgBoxStyle.Exclamation)
             Me.DialogResult = Windows.Forms.DialogResult.None
             Exit Sub
         End If
 
-        'Zeitreihe(n) zuschneiden
-        If (Me.ComboBox_ZeitreiheCut.SelectedItem.ToString = labelAlle) Then
-            For Each zre In Me.zreOrig
-                ts_cut = zre.Clone()
-                Call ts_cut.Cut(Me.cutStart, Me.cutEnd)
-                Me.zreCut.Add(ts_cut)
-            Next
-        Else
-            zre = Me.ComboBox_ZeitreiheCut.SelectedItem
-            ts_cut = zre.Clone()
+        'cut selected time series
+        For Each ts As TimeSeries In Me.ListBox_Series.SelectedItems
+            Dim ts_cut As TimeSeries = ts.Clone()
             Call ts_cut.Cut(Me.cutStart, Me.cutEnd)
-            Me.zreCut.Add(ts_cut)
-        End If
+            Me.CutSeries.Add(ts_cut)
+        Next
 
         Me.DialogResult = System.Windows.Forms.DialogResult.OK
         Me.Close()

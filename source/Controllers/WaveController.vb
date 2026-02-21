@@ -147,7 +147,7 @@ Friend Class WaveController
         AddHandler Me.View.ToolStripMenuItem_SaveChart.Click, AddressOf SaveChart_Click
         AddHandler Me.View.ToolStripMenuItem_ExportSeries.Click, AddressOf ExportZeitreihe_Click
         AddHandler Me.View.ToolStripMenuItem_EnterSeries.Click, AddressOf Eingeben_Click
-        AddHandler Me.View.ToolStripButton_Cut.Click, AddressOf Zuschneiden_Click
+        AddHandler Me.View.ToolStripButton_Cut.Click, AddressOf Cut_Click
         AddHandler Me.View.ToolStripButton_Merge.Click, AddressOf Merge_Click
         AddHandler Me.View.ToolStripButton_Analysis.Click, AddressOf Analysis_Click
         AddHandler Me.View.ToolStripButton_AxisDialog.Click, AddressOf AxisDialog_Click
@@ -607,44 +607,36 @@ Friend Class WaveController
         SettingsDlg.ShowDialog()
     End Sub
 
-    'Zeitreihe zuschneiden
-    '*********************
-    Private Sub Zuschneiden_Click(sender As System.Object, e As System.EventArgs)
+    ''' <summary>
+    ''' Cut time series button clicked
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    Private Sub Cut_Click(sender As System.Object, e As System.EventArgs)
 
-        Dim id As String
-        Dim ids As List(Of Integer)
-
-        'Wenn keine Zeitreihen vorhanden, abbrechen!
         If (_model.TimeSeries.Count < 1) Then
             MsgBox("No time series available for cutting!", MsgBoxStyle.Exclamation)
             Exit Sub
         End If
 
-        'Dialog instanzieren
-        Dim cutter As New CutDialog(_model.TimeSeries.ToList, View.ChartMinX, View.ChartMaxX)
+        'show dialog
+        Dim cutDialog As New CutDialog(_model.TimeSeries.ToList, View.ChartMinX, View.ChartMaxX)
+        If cutDialog.ShowDialog() = Windows.Forms.DialogResult.OK Then
 
-        'Dialog anzeigen
-        If (cutter.ShowDialog() = Windows.Forms.DialogResult.OK) Then
-
-            If (cutter.CheckBox_keepUncutSeries.Checked = False) Then
-                'Alte Zeitreihe(n) löschen
-                If (cutter.ComboBox_ZeitreiheCut.SelectedItem.ToString = CutDialog.labelAlle) Then
-                    ids = New List(Of Integer)
-                    For Each id In _model.TimeSeries.Ids
-                        ids.Add(id)
-                    Next
-                    For Each id In ids
-                        Call _model.RemoveTimeSeries(id)
-                    Next
-                Else
-                    id = CType(cutter.ComboBox_ZeitreiheCut.SelectedItem, TimeSeries).Id
+            If Not cutDialog.KeepUncutSeries Then
+                'delete old time series
+                Dim ids As New List(Of Integer)
+                For Each ts As TimeSeries In cutDialog.SelectedSeries
+                    ids.Add(ts.Id)
+                Next
+                For Each id As Integer In ids
                     Call _model.RemoveTimeSeries(id)
-                End If
+                Next
             End If
 
-            'Neue Reihe(n) importieren
-            For Each zre As TimeSeries In cutter.zreCut
-                _model.Import_Series(zre)
+            'import new cut series
+            For Each ts As TimeSeries In cutDialog.CutSeries
+                _model.Import_Series(ts)
             Next
 
         End If
