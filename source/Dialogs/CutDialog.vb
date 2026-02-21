@@ -266,7 +266,7 @@ Friend Class CutDialog
         'cut selected time series
         For Each ts As TimeSeries In Me.ListBox_Series.SelectedItems
             Dim ts_cut As TimeSeries = ts.Clone()
-            Call ts_cut.Cut(Me.cutStart, Me.cutEnd)
+            Call ts_cut.Cut(Me.cutStart, Me.cutEnd, titleSuffix:=Me.TextBox_TitleSuffix.Text.TrimEnd())
             Me.CutSeries.Add(ts_cut)
         Next
 

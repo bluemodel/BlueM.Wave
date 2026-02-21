@@ -22,6 +22,7 @@ Partial Class CutDialog
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
+        Me.components = New System.ComponentModel.Container()
         Dim Label_Start As System.Windows.Forms.Label
         Dim Label_End As System.Windows.Forms.Label
         Dim Label1 As System.Windows.Forms.Label
@@ -40,6 +41,10 @@ Partial Class CutDialog
         Me.Button_SelectAll = New System.Windows.Forms.Button()
         Me.GroupBox_Timeperiod = New System.Windows.Forms.GroupBox()
         Me.GroupBox_Settings = New System.Windows.Forms.GroupBox()
+        Me.Label_TitleSuffix = New System.Windows.Forms.Label()
+        Me.TextBox_TitleSuffix = New System.Windows.Forms.TextBox()
+        Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
+        Me.PictureBox_TitleSuffixHelp = New System.Windows.Forms.PictureBox()
         Label_Start = New System.Windows.Forms.Label()
         Label_End = New System.Windows.Forms.Label()
         Label1 = New System.Windows.Forms.Label()
@@ -50,6 +55,7 @@ Partial Class CutDialog
         Me.GroupBox_Selection.SuspendLayout()
         Me.GroupBox_Timeperiod.SuspendLayout()
         Me.GroupBox_Settings.SuspendLayout()
+        CType(Me.PictureBox_TitleSuffixHelp, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'Label_Start
@@ -153,12 +159,14 @@ Partial Class CutDialog
         '
         'CheckBox_keepUncutSeries
         '
-        Me.CheckBox_keepUncutSeries.AutoSize = True
-        Me.CheckBox_keepUncutSeries.Location = New System.Drawing.Point(6, 19)
+        Me.CheckBox_keepUncutSeries.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.CheckBox_keepUncutSeries.CheckAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.CheckBox_keepUncutSeries.Location = New System.Drawing.Point(6, 16)
         Me.CheckBox_keepUncutSeries.Name = "CheckBox_keepUncutSeries"
-        Me.CheckBox_keepUncutSeries.Size = New System.Drawing.Size(111, 17)
+        Me.CheckBox_keepUncutSeries.Size = New System.Drawing.Size(399, 20)
         Me.CheckBox_keepUncutSeries.TabIndex = 0
-        Me.CheckBox_keepUncutSeries.Text = "Keep uncut series"
+        Me.CheckBox_keepUncutSeries.Text = "Keep uncut series:"
         Me.CheckBox_keepUncutSeries.UseVisualStyleBackColor = True
         '
         'SplitContainer1
@@ -246,6 +254,9 @@ Partial Class CutDialog
         Me.GroupBox_Settings.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.GroupBox_Settings.Controls.Add(Me.PictureBox_TitleSuffixHelp)
+        Me.GroupBox_Settings.Controls.Add(Me.Label_TitleSuffix)
+        Me.GroupBox_Settings.Controls.Add(Me.TextBox_TitleSuffix)
         Me.GroupBox_Settings.Controls.Add(Me.CheckBox_keepUncutSeries)
         Me.GroupBox_Settings.Location = New System.Drawing.Point(5, 142)
         Me.GroupBox_Settings.Name = "GroupBox_Settings"
@@ -253,6 +264,36 @@ Partial Class CutDialog
         Me.GroupBox_Settings.TabIndex = 0
         Me.GroupBox_Settings.TabStop = False
         Me.GroupBox_Settings.Text = "Settings"
+        '
+        'Label_TitleSuffix
+        '
+        Me.Label_TitleSuffix.AutoSize = True
+        Me.Label_TitleSuffix.Location = New System.Drawing.Point(6, 39)
+        Me.Label_TitleSuffix.Name = "Label_TitleSuffix"
+        Me.Label_TitleSuffix.Size = New System.Drawing.Size(57, 13)
+        Me.Label_TitleSuffix.TabIndex = 37
+        Me.Label_TitleSuffix.Text = "Title suffix:"
+        '
+        'TextBox_TitleSuffix
+        '
+        Me.TextBox_TitleSuffix.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.TextBox_TitleSuffix.Location = New System.Drawing.Point(108, 36)
+        Me.TextBox_TitleSuffix.Name = "TextBox_TitleSuffix"
+        Me.TextBox_TitleSuffix.Size = New System.Drawing.Size(275, 20)
+        Me.TextBox_TitleSuffix.TabIndex = 38
+        Me.TextBox_TitleSuffix.Text = " (cut)"
+        '
+        'PictureBox_TitleSuffixHelp
+        '
+        Me.PictureBox_TitleSuffixHelp.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.PictureBox_TitleSuffixHelp.Image = Global.BlueM.Wave.My.Resources.Resources.help
+        Me.PictureBox_TitleSuffixHelp.Location = New System.Drawing.Point(389, 38)
+        Me.PictureBox_TitleSuffixHelp.Name = "PictureBox_TitleSuffixHelp"
+        Me.PictureBox_TitleSuffixHelp.Size = New System.Drawing.Size(16, 16)
+        Me.PictureBox_TitleSuffixHelp.TabIndex = 39
+        Me.PictureBox_TitleSuffixHelp.TabStop = False
+        Me.ToolTip1.SetToolTip(Me.PictureBox_TitleSuffixHelp, "The title suffix will be appended to each cut series' title")
         '
         'CutDialog
         '
@@ -280,6 +321,7 @@ Partial Class CutDialog
         Me.GroupBox_Timeperiod.PerformLayout()
         Me.GroupBox_Settings.ResumeLayout(False)
         Me.GroupBox_Settings.PerformLayout()
+        CType(Me.PictureBox_TitleSuffixHelp, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub
@@ -297,4 +339,8 @@ Partial Class CutDialog
     Friend WithEvents GroupBox_Settings As GroupBox
     Private WithEvents CheckBox_keepUncutSeries As CheckBox
     Private WithEvents ListBox_Series As ListBox
+    Friend WithEvents Label_TitleSuffix As Label
+    Friend WithEvents TextBox_TitleSuffix As TextBox
+    Friend WithEvents ToolTip1 As ToolTip
+    Friend WithEvents PictureBox_TitleSuffixHelp As PictureBox
 End Class
