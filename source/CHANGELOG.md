@@ -4,7 +4,11 @@ BlueM.Wave Release Notes
 Version 2.15.0
 --------------
 NEW:
-* Add title suffix option to CSV import dialog #224
+* Added title suffix option to CSV import dialog #224
+* UX improvements for cut dialog #225:
+  * Improved dialog layout
+  * Allow individual selection of series to cut
+  * Added title suffix option for cut series
 
 API-CHANGES:
 * New optional parameter `titleSuffix` in `TimeSeries.Cut()` for changing the suffix added to the title after cutting
