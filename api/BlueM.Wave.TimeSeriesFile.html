@@ -1,0 +1,1463 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Class TimeSeriesFile | BlueM.Wave </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Class TimeSeriesFile | BlueM.Wave ">
+      
+      <meta name="description" content="Abstract base class for all file formats">
+      <link rel="icon" href="../images/wave_icon.png">
+      <link rel="stylesheet" href="../public/docfx.min.css">
+      <link rel="stylesheet" href="../public/main.css">
+      <meta name="docfx:navrel" content="../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../">
+      
+      
+      
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="ManagedReference">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../index.html">
+            <img id="logo" class="svg" src="../images/wave_logo.png" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="BlueM.Wave.TimeSeriesFile">
+
+
+
+  <h1 id="BlueM_Wave_TimeSeriesFile" data-uid="BlueM.Wave.TimeSeriesFile" class="text-break">
+Class TimeSeriesFile  
+  </h1>
+
+  <div class="facts text-secondary">
+    <dl><dt>Namespace</dt><dd><a class="xref" href="BlueM.html">BlueM</a>.<a class="xref" href="BlueM.Wave.html">Wave</a></dd></dl>
+  <dl><dt>Assembly</dt><dd>Wave.dll</dd></dl>
+  </div>
+
+  <div class="markdown summary"><p>Abstract base class for all file formats</p>
+</div>
+  <div class="markdown conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract class TimeSeriesFile</code></pre>
+  </div>
+
+
+
+
+  <dl class="typelist inheritance">
+    <dt>Inheritance</dt>
+    <dd>
+      <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a></div>
+      <div><span class="xref">TimeSeriesFile</span></div>
+    </dd>
+  </dl>
+
+
+  <dl class="typelist derived">
+    <dt>Derived</dt>
+    <dd>
+      <div><a class="xref" href="BlueM.Wave.Fileformats.ASC.html">ASC</a></div>
+      <div><a class="xref" href="BlueM.Wave.Fileformats.BIN.html">BIN</a></div>
+      <div><a class="xref" href="BlueM.Wave.Fileformats.CSV.html">CSV</a></div>
+      <div><a class="xref" href="BlueM.Wave.Fileformats.DFS0.html">DFS0</a></div>
+      <div><a class="xref" href="BlueM.Wave.Fileformats.FEWS_PI.html">FEWS_PI</a></div>
+      <div><a class="xref" href="BlueM.Wave.Fileformats.GBL.html">GBL</a></div>
+      <div><a class="xref" href="BlueM.Wave.Fileformats.GINA_HDF5.html">GINA_HDF5</a></div>
+      <div><a class="xref" href="BlueM.Wave.Fileformats.GISMO_WEL.html">GISMO_WEL</a></div>
+      <div><a class="xref" href="BlueM.Wave.Fileformats.HYBNAT_BCS.html">HYBNAT_BCS</a></div>
+      <div><a class="xref" href="BlueM.Wave.Fileformats.HYBNAT_WEL.html">HYBNAT_WEL</a></div>
+      <div><a class="xref" href="BlueM.Wave.Fileformats.HYDRO_AS_2D.html">HYDRO_AS_2D</a></div>
+      <div><a class="xref" href="BlueM.Wave.Fileformats.HystemExtran_REG.html">HystemExtran_REG</a></div>
+      <div><a class="xref" href="BlueM.Wave.Fileformats.HystemExtran_WEL.html">HystemExtran_WEL</a></div>
+      <div><a class="xref" href="BlueM.Wave.Fileformats.JAMS.html">JAMS</a></div>
+      <div><a class="xref" href="BlueM.Wave.Fileformats.PRMS.html">PRMS</a></div>
+      <div><a class="xref" href="BlueM.Wave.Fileformats.SMB.html">SMB</a></div>
+      <div><a class="xref" href="BlueM.Wave.Fileformats.SMUSI_REG.html">SMUSI_REG</a></div>
+      <div><a class="xref" href="BlueM.Wave.Fileformats.SWMM_INTERFACE.html">SWMM_INTERFACE</a></div>
+      <div><a class="xref" href="BlueM.Wave.Fileformats.SWMM_LID_REPORT.html">SWMM_LID_REPORT</a></div>
+      <div><a class="xref" href="BlueM.Wave.Fileformats.SWMM_OUT.html">SWMM_OUT</a></div>
+      <div><a class="xref" href="BlueM.Wave.Fileformats.SWMM_TIMESERIES.html">SWMM_TIMESERIES</a></div>
+      <div><a class="xref" href="BlueM.Wave.Fileformats.UVF.html">UVF</a></div>
+      <div><a class="xref" href="BlueM.Wave.Fileformats.WBL.html">WBL</a></div>
+      <div><a class="xref" href="BlueM.Wave.Fileformats.WEL.html">WEL</a></div>
+      <div><a class="xref" href="BlueM.Wave.Fileformats.ZRE.html">ZRE</a></div>
+      <div><a class="xref" href="BlueM.Wave.Fileformats.ZRXP.html">ZRXP</a></div>
+    </dd>
+  </dl>
+
+  <dl class="typelist inheritedMembers">
+    <dt>Inherited Members</dt>
+    <dd>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.tostring">object.ToString()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)">object.Equals(object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)">object.Equals(object, object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.referenceequals">object.ReferenceEquals(object, object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gethashcode">object.GetHashCode()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gettype">object.GetType()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone">object.MemberwiseClone()</a>
+    </div>
+  </dd></dl>
+
+
+
+
+
+
+  <h2 class="section" id="constructors">Constructors
+</h2>
+
+
+  <a id="BlueM_Wave_TimeSeriesFile__ctor_" data-uid="BlueM.Wave.TimeSeriesFile.#ctor*"></a>
+
+  <h3 id="BlueM_Wave_TimeSeriesFile__ctor_System_String_System_Boolean_" data-uid="BlueM.Wave.TimeSeriesFile.#ctor(System.String,System.Boolean)">
+  TimeSeriesFile(string, bool)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Constructor</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public TimeSeriesFile(string FileName, bool ReadAllNow = false)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>FileName</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd><p>Path to the file to be imported</p>
+</dd>
+    <dt><code>ReadAllNow</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd><p>If True, select all series and read the file immediately</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <h2 class="section" id="fields">Fields
+</h2>
+
+
+
+  <h3 id="BlueM_Wave_TimeSeriesFile_TimeSeries" data-uid="BlueM.Wave.TimeSeriesFile.TimeSeries">
+  TimeSeries
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Stores the TimeSeries read from the file.
+The key corresponds to the column index stored as <a class="xref" href="BlueM.Wave.TimeSeriesInfo.html#BlueM_Wave_TimeSeriesInfo_Index">Index</a> in <a class="xref" href="BlueM.Wave.TimeSeriesFile.html#BlueM_Wave_TimeSeriesFile_TimeSeriesInfos">TimeSeriesInfos</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Dictionary&lt;int, TimeSeries&gt; TimeSeries</code></pre>
+  </div>
+
+
+
+
+  <h4 class="section">Field Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a>, <a class="xref" href="BlueM.Wave.TimeSeries.html">TimeSeries</a>&gt;</dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+  <h2 class="section" id="properties">Properties
+</h2>
+
+
+  <a id="BlueM_Wave_TimeSeriesFile_ColumnOffset_" data-uid="BlueM.Wave.TimeSeriesFile.ColumnOffset*"></a>
+
+  <h3 id="BlueM_Wave_TimeSeriesFile_ColumnOffset" data-uid="BlueM.Wave.TimeSeriesFile.ColumnOffset">
+  ColumnOffset
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Number of characters before the first column (only relevant for fixed width columns)</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public int ColumnOffset { get; set; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="BlueM_Wave_TimeSeriesFile_ColumnWidth_" data-uid="BlueM.Wave.TimeSeriesFile.ColumnWidth*"></a>
+
+  <h3 id="BlueM_Wave_TimeSeriesFile_ColumnWidth" data-uid="BlueM.Wave.TimeSeriesFile.ColumnWidth">
+  ColumnWidth
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Column width (default is 16)</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public int ColumnWidth { get; set; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+  <h4 class="section" id="BlueM_Wave_TimeSeriesFile_ColumnWidth_remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>only relevant for fixed width files</p>
+</div>
+
+
+
+
+  <a id="BlueM_Wave_TimeSeriesFile_DateTimeColumnIndex_" data-uid="BlueM.Wave.TimeSeriesFile.DateTimeColumnIndex*"></a>
+
+  <h3 id="BlueM_Wave_TimeSeriesFile_DateTimeColumnIndex" data-uid="BlueM.Wave.TimeSeriesFile.DateTimeColumnIndex">
+  DateTimeColumnIndex
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Index of the column containing the datetime values</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public int DateTimeColumnIndex { get; set; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="BlueM_Wave_TimeSeriesFile_Dateformat_" data-uid="BlueM.Wave.TimeSeriesFile.Dateformat*"></a>
+
+  <h3 id="BlueM_Wave_TimeSeriesFile_Dateformat" data-uid="BlueM.Wave.TimeSeriesFile.Dateformat">
+  Dateformat
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Date format (default is Helpers.CurrentDateFormat)</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public string Dateformat { get; set; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="BlueM_Wave_TimeSeriesFile_DecimalSeparator_" data-uid="BlueM.Wave.TimeSeriesFile.DecimalSeparator*"></a>
+
+  <h3 id="BlueM_Wave_TimeSeriesFile_DecimalSeparator" data-uid="BlueM.Wave.TimeSeriesFile.DecimalSeparator">
+  DecimalSeparator
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Decimal separator (default is period)</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Character DecimalSeparator { get; set; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="BlueM.Wave.Character.html">Character</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="BlueM_Wave_TimeSeriesFile_Encoding_" data-uid="BlueM.Wave.TimeSeriesFile.Encoding*"></a>
+
+  <h3 id="BlueM_Wave_TimeSeriesFile_Encoding" data-uid="BlueM.Wave.TimeSeriesFile.Encoding">
+  Encoding
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Encoding to use for reading the file</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Encoding Encoding { get; set; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.text.encoding">Encoding</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+  <h4 class="section" id="BlueM_Wave_TimeSeriesFile_Encoding_remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>Defaults to the system default (usually ISO-8859-1)</p>
+</div>
+
+
+
+
+  <a id="BlueM_Wave_TimeSeriesFile_File_" data-uid="BlueM.Wave.TimeSeriesFile.File*"></a>
+
+  <h3 id="BlueM_Wave_TimeSeriesFile_File" data-uid="BlueM.Wave.TimeSeriesFile.File">
+  File
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Path to file</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public string File { get; set; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="BlueM_Wave_TimeSeriesFile_FileMetadata_" data-uid="BlueM.Wave.TimeSeriesFile.FileMetadata*"></a>
+
+  <h3 id="BlueM_Wave_TimeSeriesFile_FileMetadata" data-uid="BlueM.Wave.TimeSeriesFile.FileMetadata">
+  FileMetadata
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>File metadata</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Metadata FileMetadata { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="BlueM.Wave.Metadata.html">Metadata</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="BlueM_Wave_TimeSeriesFile_IsColumnSeparated_" data-uid="BlueM.Wave.TimeSeriesFile.IsColumnSeparated*"></a>
+
+  <h3 id="BlueM_Wave_TimeSeriesFile_IsColumnSeparated" data-uid="BlueM.Wave.TimeSeriesFile.IsColumnSeparated">
+  IsColumnSeparated
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Indicates whether the file contains columns separated by a character (True, default) or is fixed width (False)</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool IsColumnSeparated { get; set; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="BlueM_Wave_TimeSeriesFile_MetadataKeys_" data-uid="BlueM.Wave.TimeSeriesFile.MetadataKeys*"></a>
+
+  <h3 id="BlueM_Wave_TimeSeriesFile_MetadataKeys" data-uid="BlueM.Wave.TimeSeriesFile.MetadataKeys">
+  MetadataKeys
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Returns a list of format-specific metadata keys</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static List&lt;string&gt; MetadataKeys { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1">List</a>&lt;<a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a>&gt;</dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+  <h4 class="section" id="BlueM_Wave_TimeSeriesFile_MetadataKeys_remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>Is an empty list by default, should be overridden by inheriting classes</p>
+</div>
+
+
+
+
+  <a id="BlueM_Wave_TimeSeriesFile_SelectedSeries_" data-uid="BlueM.Wave.TimeSeriesFile.SelectedSeries*"></a>
+
+  <h3 id="BlueM_Wave_TimeSeriesFile_SelectedSeries" data-uid="BlueM.Wave.TimeSeriesFile.SelectedSeries">
+  SelectedSeries
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>List of TimeSeriesInfo of series currently selected for import</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public List&lt;TimeSeriesInfo&gt; SelectedSeries { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1">List</a>&lt;<a class="xref" href="BlueM.Wave.TimeSeriesInfo.html">TimeSeriesInfo</a>&gt;</dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="BlueM_Wave_TimeSeriesFile_Separator_" data-uid="BlueM.Wave.TimeSeriesFile.Separator*"></a>
+
+  <h3 id="BlueM_Wave_TimeSeriesFile_Separator" data-uid="BlueM.Wave.TimeSeriesFile.Separator">
+  Separator
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Separator (default is semicolon)</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Character Separator { get; set; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="BlueM.Wave.Character.html">Character</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="BlueM_Wave_TimeSeriesFile_TimeSeriesInfos_" data-uid="BlueM.Wave.TimeSeriesFile.TimeSeriesInfos*"></a>
+
+  <h3 id="BlueM_Wave_TimeSeriesFile_TimeSeriesInfos" data-uid="BlueM.Wave.TimeSeriesFile.TimeSeriesInfos">
+  TimeSeriesInfos
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>List of TimeSeriesInfo of all series contained in a file</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public List&lt;TimeSeriesInfo&gt; TimeSeriesInfos { get; set; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1">List</a>&lt;<a class="xref" href="BlueM.Wave.TimeSeriesInfo.html">TimeSeriesInfo</a>&gt;</dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="BlueM_Wave_TimeSeriesFile_TitleSuffix_" data-uid="BlueM.Wave.TimeSeriesFile.TitleSuffix*"></a>
+
+  <h3 id="BlueM_Wave_TimeSeriesFile_TitleSuffix" data-uid="BlueM.Wave.TimeSeriesFile.TitleSuffix">
+  TitleSuffix
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Suffix to be added to the timeseries titles when imported from this file</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public string TitleSuffix { get; set; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+  <h4 class="section" id="BlueM_Wave_TimeSeriesFile_TitleSuffix_remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>This is useful for distinguishing between series with the same titles in different files.
+For example, if you import two files with the same series names, you can set a suffix
+for each file to differentiate them in the resulting timeseries.</p>
+</div>
+
+
+
+
+  <a id="BlueM_Wave_TimeSeriesFile_UseImportDialog_" data-uid="BlueM.Wave.TimeSeriesFile.UseImportDialog*"></a>
+
+  <h3 id="BlueM_Wave_TimeSeriesFile_UseImportDialog" data-uid="BlueM.Wave.TimeSeriesFile.UseImportDialog">
+  UseImportDialog
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Indicates whether the ImportDialog should be shown when importing this file format</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract bool UseImportDialog { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd><p>True if the ImportDialog should be shown when importing this file format</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="BlueM_Wave_TimeSeriesFile_UseUnits_" data-uid="BlueM.Wave.TimeSeriesFile.UseUnits*"></a>
+
+  <h3 id="BlueM_Wave_TimeSeriesFile_UseUnits" data-uid="BlueM.Wave.TimeSeriesFile.UseUnits">
+  UseUnits
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Read units from the file? (default is True)</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool UseUnits { get; set; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="BlueM_Wave_TimeSeriesFile_getTimeSeries_" data-uid="BlueM.Wave.TimeSeriesFile.getTimeSeries*"></a>
+
+  <h3 id="BlueM_Wave_TimeSeriesFile_getTimeSeries_System_Int32_" data-uid="BlueM.Wave.TimeSeriesFile.getTimeSeries(System.Int32)">
+  getTimeSeries[int]
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Get a timeseries from the file using its index</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public TimeSeries getTimeSeries[int index = 0] { get; }</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>index</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd><p>Index of the desired timeseries within the file</p>
+</dd>
+  </dl>
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="BlueM.Wave.TimeSeries.html">TimeSeries</a></dt>
+    <dd><p>The timeseries</p>
+</dd>
+  </dl>
+
+
+
+
+  <h4 class="section" id="BlueM_Wave_TimeSeriesFile_getTimeSeries_System_Int32__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>If the timeseries has not been imported yet, an import is initiated.
+Throws an exception if the timeseries cannot be found in the file.</p>
+</div>
+
+
+
+
+  <a id="BlueM_Wave_TimeSeriesFile_getTimeSeries_" data-uid="BlueM.Wave.TimeSeriesFile.getTimeSeries*"></a>
+
+  <h3 id="BlueM_Wave_TimeSeriesFile_getTimeSeries_System_String_" data-uid="BlueM.Wave.TimeSeriesFile.getTimeSeries(System.String)">
+  getTimeSeries[string]
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Get a timeseries from the file using its title</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public TimeSeries getTimeSeries[string title] { get; }</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>title</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd><p>Title of the desired timeseries.</p>
+</dd>
+  </dl>
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="BlueM.Wave.TimeSeries.html">TimeSeries</a></dt>
+    <dd><p>The timeseries</p>
+</dd>
+  </dl>
+
+
+
+
+  <h4 class="section" id="BlueM_Wave_TimeSeriesFile_getTimeSeries_System_String__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>If the timeseries has not been imported yet, an import is initiated.
+Throws an exception if the timeseries cannot be found in the file.</p>
+</div>
+
+
+
+
+  <a id="BlueM_Wave_TimeSeriesFile_iLineData_" data-uid="BlueM.Wave.TimeSeriesFile.iLineData*"></a>
+
+  <h3 id="BlueM_Wave_TimeSeriesFile_iLineData" data-uid="BlueM.Wave.TimeSeriesFile.iLineData">
+  iLineData
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Number of the first line containing data</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public int iLineData { get; set; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="BlueM_Wave_TimeSeriesFile_iLineHeadings_" data-uid="BlueM.Wave.TimeSeriesFile.iLineHeadings*"></a>
+
+  <h3 id="BlueM_Wave_TimeSeriesFile_iLineHeadings" data-uid="BlueM.Wave.TimeSeriesFile.iLineHeadings">
+  iLineHeadings
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Number of the line containing column headings</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public int iLineHeadings { get; set; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="BlueM_Wave_TimeSeriesFile_iLineUnits_" data-uid="BlueM.Wave.TimeSeriesFile.iLineUnits*"></a>
+
+  <h3 id="BlueM_Wave_TimeSeriesFile_iLineUnits" data-uid="BlueM.Wave.TimeSeriesFile.iLineUnits">
+  iLineUnits
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Number of the line containing units</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public int iLineUnits { get; set; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="BlueM_Wave_TimeSeriesFile_nLinesHeader_" data-uid="BlueM.Wave.TimeSeriesFile.nLinesHeader*"></a>
+
+  <h3 id="BlueM_Wave_TimeSeriesFile_nLinesHeader" data-uid="BlueM.Wave.TimeSeriesFile.nLinesHeader">
+  nLinesHeader
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Number of header lines</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public int nLinesHeader { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd><p>iLineData - 1</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <h2 class="section" id="methods">Methods
+</h2>
+
+
+  <a id="BlueM_Wave_TimeSeriesFile_SupportsMultipleSeries_" data-uid="BlueM.Wave.TimeSeriesFile.SupportsMultipleSeries*"></a>
+
+  <h3 id="BlueM_Wave_TimeSeriesFile_SupportsMultipleSeries_BlueM_Wave_TimeSeriesFile_FileTypes_" data-uid="BlueM.Wave.TimeSeriesFile.SupportsMultipleSeries(BlueM.Wave.TimeSeriesFile.FileTypes)">
+  SupportsMultipleSeries(FileTypes)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Returns whether a file type supports multiple series in one file</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static bool SupportsMultipleSeries(TimeSeriesFile.FileTypes type)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>type</code> <a class="xref" href="BlueM.Wave.TimeSeriesFile.html">TimeSeriesFile</a>.<a class="xref" href="BlueM.Wave.TimeSeriesFile.FileTypes.html">FileTypes</a></dt>
+    <dd><p>The file type</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd><p>True if the file type supports multiple series</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="BlueM_Wave_TimeSeriesFile_getFileExtension_" data-uid="BlueM.Wave.TimeSeriesFile.getFileExtension*"></a>
+
+  <h3 id="BlueM_Wave_TimeSeriesFile_getFileExtension_BlueM_Wave_TimeSeriesFile_FileTypes_" data-uid="BlueM.Wave.TimeSeriesFile.getFileExtension(BlueM.Wave.TimeSeriesFile.FileTypes)">
+  getFileExtension(FileTypes)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Returns the default file extension for a file type</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string getFileExtension(TimeSeriesFile.FileTypes type)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>type</code> <a class="xref" href="BlueM.Wave.TimeSeriesFile.html">TimeSeriesFile</a>.<a class="xref" href="BlueM.Wave.TimeSeriesFile.FileTypes.html">FileTypes</a></dt>
+    <dd><p>The file type</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd><p>The file extension as a string (including the leading &quot;.&quot;)</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="BlueM_Wave_TimeSeriesFile_getFileType_" data-uid="BlueM.Wave.TimeSeriesFile.getFileType*"></a>
+
+  <h3 id="BlueM_Wave_TimeSeriesFile_getFileType_System_String_" data-uid="BlueM.Wave.TimeSeriesFile.getFileType(System.String)">
+  getFileType(string)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Determines the file type of a file based on the file's extension and contents</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static TimeSeriesFile.FileTypes getFileType(string file)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>file</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd><p>Path to the file</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="BlueM.Wave.TimeSeriesFile.html">TimeSeriesFile</a>.<a class="xref" href="BlueM.Wave.TimeSeriesFile.FileTypes.html">FileTypes</a></dt>
+    <dd><p>the determined file type</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section" id="BlueM_Wave_TimeSeriesFile_getFileType_System_String__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>Also checks whether the file exists and if the file format is as expected.
+If the file is a WEL file, this function also checks whether the file is contained
+within a WLZIP of the same name and if it is, extracts it.</p>
+</div>
+
+
+
+
+  <a id="BlueM_Wave_TimeSeriesFile_getInstance_" data-uid="BlueM.Wave.TimeSeriesFile.getInstance*"></a>
+
+  <h3 id="BlueM_Wave_TimeSeriesFile_getInstance_System_String_BlueM_Wave_TimeSeriesFile_FileTypes_" data-uid="BlueM.Wave.TimeSeriesFile.getInstance(System.String,BlueM.Wave.TimeSeriesFile.FileTypes)">
+  getInstance(string, FileTypes)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Factory method for creating a TimeSeriesFile instance based on the file type</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static TimeSeriesFile getInstance(string file, TimeSeriesFile.FileTypes fileType = FileTypes.UNDETERMINED)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>file</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd><p>Path to the file</p>
+</dd>
+    <dt><code>fileType</code> <a class="xref" href="BlueM.Wave.TimeSeriesFile.html">TimeSeriesFile</a>.<a class="xref" href="BlueM.Wave.TimeSeriesFile.FileTypes.html">FileTypes</a></dt>
+    <dd><p>Optional file type. If not provided, the type is determined using <code>getFileType()</code></p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="BlueM.Wave.TimeSeriesFile.html">TimeSeriesFile</a></dt>
+    <dd><p>A TimeSeriesFile instance representing the file</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="BlueM_Wave_TimeSeriesFile_get_getTimeSeries_" data-uid="BlueM.Wave.TimeSeriesFile.get_getTimeSeries*"></a>
+
+  <h3 id="BlueM_Wave_TimeSeriesFile_get_getTimeSeries_System_Int32_" data-uid="BlueM.Wave.TimeSeriesFile.get_getTimeSeries(System.Int32)">
+  get_getTimeSeries(int)
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public TimeSeries get_getTimeSeries(int index = 0)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>index</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="BlueM.Wave.TimeSeries.html">TimeSeries</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="BlueM_Wave_TimeSeriesFile_get_getTimeSeries_" data-uid="BlueM.Wave.TimeSeriesFile.get_getTimeSeries*"></a>
+
+  <h3 id="BlueM_Wave_TimeSeriesFile_get_getTimeSeries_System_String_" data-uid="BlueM.Wave.TimeSeriesFile.get_getTimeSeries(System.String)">
+  get_getTimeSeries(string)
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public TimeSeries get_getTimeSeries(string title)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>title</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="BlueM.Wave.TimeSeries.html">TimeSeries</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="BlueM_Wave_TimeSeriesFile_readFile_" data-uid="BlueM.Wave.TimeSeriesFile.readFile*"></a>
+
+  <h3 id="BlueM_Wave_TimeSeriesFile_readFile" data-uid="BlueM.Wave.TimeSeriesFile.readFile">
+  readFile()
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Reads the selected series (see <a class="xref" href="BlueM.Wave.TimeSeriesFile.html#BlueM_Wave_TimeSeriesFile_SelectedSeries">SelectedSeries</a>) from the file and stores them as timeseries in <a class="xref" href="BlueM.Wave.TimeSeriesFile.html#BlueM_Wave_TimeSeriesFile_TimeSeries">TimeSeries</a></p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract void readFile()</code></pre>
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="BlueM_Wave_TimeSeriesFile_readSeriesInfo_" data-uid="BlueM.Wave.TimeSeriesFile.readSeriesInfo*"></a>
+
+  <h3 id="BlueM_Wave_TimeSeriesFile_readSeriesInfo" data-uid="BlueM.Wave.TimeSeriesFile.readSeriesInfo">
+  readSeriesInfo()
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Reads information about the series contained in the file and stores it in <a class="xref" href="BlueM.Wave.TimeSeriesFile.html#BlueM_Wave_TimeSeriesFile_TimeSeriesInfos">TimeSeriesInfos</a></p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract void readSeriesInfo()</code></pre>
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="BlueM_Wave_TimeSeriesFile_selectAllSeries_" data-uid="BlueM.Wave.TimeSeriesFile.selectAllSeries*"></a>
+
+  <h3 id="BlueM_Wave_TimeSeriesFile_selectAllSeries" data-uid="BlueM.Wave.TimeSeriesFile.selectAllSeries">
+  selectAllSeries()
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Select all available series for import</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void selectAllSeries()</code></pre>
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="BlueM_Wave_TimeSeriesFile_selectSeries_" data-uid="BlueM.Wave.TimeSeriesFile.selectSeries*"></a>
+
+  <h3 id="BlueM_Wave_TimeSeriesFile_selectSeries_System_Int32_" data-uid="BlueM.Wave.TimeSeriesFile.selectSeries(System.Int32)">
+  selectSeries(int)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Select a series for import by index</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool selectSeries(int index)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>index</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd><p>index</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd><p>True if successful, False if index was not found</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="BlueM_Wave_TimeSeriesFile_selectSeries_" data-uid="BlueM.Wave.TimeSeriesFile.selectSeries*"></a>
+
+  <h3 id="BlueM_Wave_TimeSeriesFile_selectSeries_System_String_" data-uid="BlueM.Wave.TimeSeriesFile.selectSeries(System.String)">
+  selectSeries(string)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Select a series for import by name</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool selectSeries(string seriesName)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>seriesName</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd><p>name of the series</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd><p>True if successful, False if series name was not found</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="BlueM_Wave_TimeSeriesFile_setDefaultMetadata_" data-uid="BlueM.Wave.TimeSeriesFile.setDefaultMetadata*"></a>
+
+  <h3 id="BlueM_Wave_TimeSeriesFile_setDefaultMetadata_BlueM_Wave_TimeSeries_" data-uid="BlueM.Wave.TimeSeriesFile.setDefaultMetadata(BlueM.Wave.TimeSeries)">
+  setDefaultMetadata(TimeSeries)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Sets default metadata keys and values for a time series corresponding to the file format</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static void setDefaultMetadata(TimeSeries ts)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>ts</code> <a class="xref" href="BlueM.Wave.TimeSeries.html">TimeSeries</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <h4 class="section" id="BlueM_Wave_TimeSeriesFile_setDefaultMetadata_BlueM_Wave_TimeSeries__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>Should be overloaded by inheriting classes that deal with metadata</p>
+</div>
+
+
+
+
+
+</article>
+
+        <div class="contribution d-print-none">
+        </div>
+
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

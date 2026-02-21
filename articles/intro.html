@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title> | BlueM.Wave </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content=" | BlueM.Wave ">
+      
+      
+      <link rel="icon" href="../images/wave_icon.png">
+      <link rel="stylesheet" href="../public/docfx.min.css">
+      <link rel="stylesheet" href="../public/main.css">
+      <meta name="docfx:navrel" content="../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/bluemodel/BlueM.Wave/blob/master/docs/articles/intro.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../index.html">
+            <img id="logo" class="svg" src="../images/wave_logo.png" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+
+<h2 id="getting-started">Getting started</h2>
+<ol>
+<li>Download <a href="https://visualstudio.microsoft.com/de/downloads/">Visual Studio Installer (Community Edition)</a></li>
+<li>Install Visual Studio with <strong>.NET-desktop development tools</strong></li>
+<li>Start Visual Studio and go to <em>Extras -&gt; Options -&gt; NuGet Package Manager -&gt; Package Sources</em></li>
+<li>Add <code>https://api.nuget.org/v3/index.json</code> to package sources</li>
+<li>Clone BlueM.Wave source code from <a href="https://github.com/bluemodel/BlueM.Wave">https://github.com/bluemodel/BlueM.Wave</a></li>
+<li>Copy a valid TeeChart Pro license file to <code>BlueM.Wave\source\My Project\TeeChart.licenses</code> (see below for instructions on using the evaluation version of TeeChart for testing purposes)</li>
+<li>Open <code>Wave.sln</code> in Visual Studio</li>
+<li>Set <code>Wave</code> as the startup project</li>
+<li>Run project (<em>Debug -&gt; Start Debugging</em>)</li>
+</ol>
+<p>Optional setup steps:</p>
+<ul>
+<li>To run tests in <code>Wave.Tests</code>:
+<ul>
+<li>Clone BlueM.Datasets from <a href="https://github.com/bluemodel/BlueM.Datasets">https://github.com/bluemodel/BlueM.Datasets</a> into the same parent directory as BlueM.Wave</li>
+<li>Run Tests (<em>Test -&gt; Run all Tests</em>), see below for details</li>
+</ul>
+</li>
+<li>To build the installer project <code>Wave.Setup</code>:
+<ul>
+<li>Install the extension <a href="https://marketplace.visualstudio.com/items?itemName=VisualStudioClient.MicrosoftVisualStudio2022InstallerProjects">Microsoft Visual Studio Installer Projects 2022</a>, see below for details</li>
+</ul>
+</li>
+</ul>
+<h2 id="teechart-license">TeeChart license</h2>
+<p>BlueM.Wave uses <a href="https://www.steema.com/product/net">TeeChart .NET</a> for all charts. To compile a fully functional version of BlueM.Wave, you need a valid TeeChart .NET Pro license file located at <code>BlueM.Wave\source\My Project\TeeChart.licenses</code>.</p>
+<p>For testing purposes, you can use the evaluation version of TeeChart by creating an empty text file at <code>BlueM.Wave\source\My Project\TeeChart.licenses</code> or by excluding the corresponding entry <code>My Project\TeeChart.licenses</code> from the Wave project in Visual Studio. This will allow you to compile, but any charts will be displayed with a watermark.</p>
+<h2 id="testing">Testing</h2>
+<p>The repository contains an assembly <code>Wave.Tests</code> for unit testing.</p>
+<p>Some of the tests use test data from the <a href="https://github.com/bluemodel/BlueM.Datasets">BlueM.Datasets</a> repository, which needs to be checked out alongside BlueM.Wave in the same parent folder.</p>
+<p>There are two ways to run tests:</p>
+<ul>
+<li>from within Visual Studio using the <em>Text Explorer</em> window (see also <a href="https://learn.microsoft.com/en-us/visualstudio/test/run-unit-tests-with-test-explorer?view=vs-2022">this article</a>)</li>
+<li>from the command-line with the following command (see also <a href="https://learn.microsoft.com/en-us/visualstudio/test/vstest-console-options?view=vs-2022">this arcticle</a>):</li>
+</ul>
+<pre><code class="lang-bat">vstest.console.exe BlueM.Wave\tests\bin\x64\Debug\Wave.Tests.dll /Settings:BlueM.Wave\tests\tests.runsettings
+</code></pre>
+<p>To add new tests, follow the pattern of the existing ones and/or refer to the <a href="https://docs.microsoft.com/en-us/visualstudio/test/using-microsoft-visualstudio-testtools-unittesting-members-in-unit-tests?view=vs-2022">MSTest framework docs</a>.</p>
+<p>All tests defined in <code>Wave.Tests</code> are automatically run in a GitHub action whenever a push to the master branch or to a pull request occurs (see <a href="https://github.com/bluemodel/BlueM.Wave/blob/master/.github/workflows/run-tests.yml">workflow file</a>).</p>
+<h2 id="debug-log-messages">Debug log messages</h2>
+<p>Debug log messages can be created by calling</p>
+<pre><code class="lang-vbnet">Log.AddLogEntry(levels.debug, &quot;message&quot;)
+</code></pre>
+<p>and are only visible in the log if the user setting <code>loggingLevel</code> is set to <code>debug</code>.</p>
+<h2 id="api">API</h2>
+<p>The BlueM.Wave API provides methods for reading time series from files, manipulating and displaying them.</p>
+<p>To access the API, include a reference to Wave.exe (or to the Wave project if you have the source code) in your .NET project.</p>
+<p>The repository contains a project <code>Wave.Examples</code> with some examples of API usage.</p>
+<p>See the <a href="../api/index.html">API documentation</a></p>
+<h2 id="building-an-installer">Building an installer</h2>
+<p>An installer (.msi) for BlueM.Wave can be built using the <code>Wave.Setup</code> project located at <code>setup\Wave.Setup.vdproj</code>. This is a Visual Studio Installer Project which requires a <a href="https://marketplace.visualstudio.com/items?itemName=VisualStudioClient.MicrosoftVisualStudio2022InstallerProjects">Visual Studio extension</a> to be installed (see <a href="https://aka.ms/vdproj-docs">docs</a>).</p>
+<h2 id="releases">Releases</h2>
+<p>To create a new release:</p>
+<ul>
+<li>Change the <code>AssemblyVersion</code> in the file <code>source\My Project\AssemblyInfo.vb</code>.</li>
+<li>Update the changelog in the file <code>source\CHANGELOG.md</code>.</li>
+<li>In Visual Studio, select the <code>Wave.Setup</code> project and update its <code>Version</code> property to the new version number.</li>
+<li>Visual Studio will ask to change the <code>ProductCode</code>, answer Yes.</li>
+<li>Commit and push the changes to the master branch together with a new tag consisting of the version number (e.g. &quot;2.4.3&quot;)</li>
+</ul>
+<p>When a new tag is pushed to the master branch, this triggers a <a href="https://github.com/bluemodel/BlueM.Wave/actions/workflows/release.yml">workflow</a> which builds Wave and the installer and creates a new draft release on GitHub. This draft release must be published manually.</p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/bluemodel/BlueM.Wave/blob/master/docs/articles/intro.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
