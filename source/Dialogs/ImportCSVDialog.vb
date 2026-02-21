@@ -21,19 +21,10 @@ Imports System.Text.RegularExpressions
 Friend Class ImportCSVDialog
     Inherits System.Windows.Forms.Form
 
-#Region "Eigenschaften"
-
-    'Eigenschaften
-    '#############
-
     Private IsInitializing As Boolean
 
-    Private datei As TimeSeriesFile
+    Private tsFile As TimeSeriesFile
     Private WithEvents inputTimer As Timers.Timer
-
-#End Region
-
-#Region "Properties"
 
     ''' <summary>
     ''' Gets and sets the date format string in the corresponding combobox while escaping and unescaping any special characters.
@@ -87,15 +78,6 @@ Friend Class ImportCSVDialog
         End Set
     End Property
 
-#End Region
-
-#Region "Methoden"
-
-    'Methoden
-    '########
-
-    'Konstruktor
-    '***********
     Public Sub New(ByRef fileInstance As TimeSeriesFile)
 
         Call MyBase.New()
@@ -104,7 +86,7 @@ Friend Class ImportCSVDialog
 
         Call InitializeComponent()
 
-        Me.datei = fileInstance
+        Me.tsFile = fileInstance
 
         'initialize input delay timer
         Me.inputTimer = New Timers.Timer(1000)
@@ -113,8 +95,6 @@ Friend Class ImportCSVDialog
 
     End Sub
 
-    'Form laden
-    '**********
     Private Sub Form_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
         'Combobox Trennzeichen initialisieren
@@ -142,35 +122,37 @@ Friend Class ImportCSVDialog
         Me.ComboBox_Encoding.DataSource = System.Text.Encoding.GetEncodings()
         Me.ComboBox_Encoding.DisplayMember = "Name"
         Me.ComboBox_Encoding.ValueMember = "CodePage"
-        Me.ComboBox_Encoding.SelectedValue = Me.datei.Encoding.CodePage
+        Me.ComboBox_Encoding.SelectedValue = Me.tsFile.Encoding.CodePage
 
         'Versuchen, die Spalten auszulesen (mit Standardeinstellungen)
-        Call Me.datei.readSeriesInfo()
+        Call Me.tsFile.readSeriesInfo()
 
         'Anzeige aktualisieren
-        Call Me.aktualisieren()
+        Call Me.UpdateControls()
 
         'Ende der Initialisierung
         IsInitializing = False
 
         'Datei als Vorschau anzeigen
-        Call Me.VorschauAnzeigen()
+        Call Me.ShowFilePreview()
 
     End Sub
 
-    'Vorschau der Datei anzeigen
-    '***************************
-    Private Sub VorschauAnzeigen()
+    ''' <summary>
+    ''' Displays a preview of the file by reading the first few lines and showing them in a text box.
+    ''' Also displays the file name.
+    ''' </summary>
+    Private Sub ShowFilePreview()
 
         Const anzZeilen As Integer = 50 'maximal 50 Zeilen anzeigen
         Const anzSpalten As Integer = 3500 'maximal 3500 Spalten anzeigen (bei mehr wird immer umgebrochen!)
         Dim line, text As String
 
         'Dateiname anzeigen
-        Me.Label_File.Text = "File: " & Path.GetFileName(Me.datei.File)
+        Me.Label_File.Text = "File: " & Path.GetFileName(Me.tsFile.File)
 
         'Vorschau anzeigen
-        Dim fs As New FileStream(Me.datei.File, FileMode.Open, FileAccess.Read)
+        Dim fs As New FileStream(Me.tsFile.File, FileMode.Open, FileAccess.Read)
         Dim StrRead As New StreamReader(fs, Me.selectedEncoding)
 
         text = ""
@@ -204,8 +186,6 @@ Friend Class ImportCSVDialog
 
     End Sub
 
-    'OK Button gedrückt
-    '******************
     Private Sub Button_OK_Click(sender As Object, e As EventArgs) Handles Button_OK.Click
 
         'Selected series
@@ -215,14 +195,18 @@ Friend Class ImportCSVDialog
             Exit Sub
         Else
             For Each sInfo As TimeSeriesInfo In Me.ListBox_Series.SelectedItems
-                Me.datei.selectSeries(sInfo.Index)
+                Me.tsFile.selectSeries(sInfo.Index)
             Next
         End If
 
     End Sub
 
-    'Benutzereingabe verarbeiten
-    '***************************
+    ''' <summary>
+    ''' Process user input by saving the settings to the TimeSeriesFile instance and updating the display.
+    ''' Also handles any exceptions that may occur during this process and displays an error status if necessary.
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
     Private Sub inputChanged(sender As Object, e As EventArgs) Handles _
         NumericUpDown_LineTitles.TextChanged,
         NumericUpDown_LineUnits.TextChanged,
@@ -257,41 +241,41 @@ Friend Class ImportCSVDialog
                 Me.IsInitializing = False
 
                 'Zeilennummern
-                Me.datei.iLineHeadings = Me.NumericUpDown_LineTitles.Value
-                Me.datei.iLineData = Me.NumericUpDown_LineData.Value
+                Me.tsFile.iLineHeadings = Me.NumericUpDown_LineTitles.Value
+                Me.tsFile.iLineData = Me.NumericUpDown_LineData.Value
 
                 'Einheiten
-                Me.datei.UseUnits = Me.CheckBox_Units.Checked
+                Me.tsFile.UseUnits = Me.CheckBox_Units.Checked
                 If (Me.CheckBox_Units.Checked) Then
-                    Me.datei.iLineUnits = Me.NumericUpDown_LineUnits.Value
+                    Me.tsFile.iLineUnits = Me.NumericUpDown_LineUnits.Value
                 End If
 
                 'Datumsformat
-                Me.datei.Dateformat = Me.DateFormat
+                Me.tsFile.Dateformat = Me.DateFormat
 
                 'Dezimaltrennzeichen
-                Me.datei.DecimalSeparator = Me.ComboBox_DecimalSeparator.SelectedItem
+                Me.tsFile.DecimalSeparator = Me.ComboBox_DecimalSeparator.SelectedItem
 
                 'Spalteneinstellungen
                 If (Me.RadioButton_CharSeparated.Checked) Then
-                    Me.datei.IsColumnSeparated = True
-                    Me.datei.Separator = Me.ComboBox_Separator.SelectedItem
+                    Me.tsFile.IsColumnSeparated = True
+                    Me.tsFile.Separator = Me.ComboBox_Separator.SelectedItem
                 Else
-                    Me.datei.IsColumnSeparated = False
-                    Me.datei.ColumnWidth = Convert.ToInt32(Me.TextBox_ColumnWidth.Text)
+                    Me.tsFile.IsColumnSeparated = False
+                    Me.tsFile.ColumnWidth = Convert.ToInt32(Me.TextBox_ColumnWidth.Text)
                 End If
 
                 'Datum
-                Me.datei.DateTimeColumnIndex = Me.NumericUpDown_ColumnDateTime.Value - 1 'Immer eins weniger wie du ! 
+                Me.tsFile.DateTimeColumnIndex = Me.NumericUpDown_ColumnDateTime.Value - 1 'Immer eins weniger wie du ! 
 
                 'Encoding
-                Me.datei.Encoding = Me.selectedEncoding
+                Me.tsFile.Encoding = Me.selectedEncoding
 
                 'Spalten neu auslesen
-                Call Me.datei.readSeriesInfo()
+                Call Me.tsFile.readSeriesInfo()
 
                 'Anzeige aktualisieren
-                Call Me.aktualisieren()
+                Call Me.UpdateControls()
 
                 'Wenn alles glatt gelaufen ist:
                 Me.StatusImage.Image = Global.BlueM.Wave.My.Resources.Resources.tick
@@ -307,29 +291,30 @@ Friend Class ImportCSVDialog
 
     End Sub
 
-    'Anzeige aktualisieren
-    '*********************
-    Private Sub aktualisieren()
+    ''' <summary>
+    ''' Updates the form by setting the values of the controls according to the current settings in the TimeSeriesFile instance and refreshing the preview.
+    ''' </summary>
+    Private Sub UpdateControls()
 
         'Dezimaltrennzeichen
-        Me.ComboBox_DecimalSeparator.SelectedItem = Me.datei.DecimalSeparator
+        Me.ComboBox_DecimalSeparator.SelectedItem = Me.tsFile.DecimalSeparator
 
         'Zeilennummern
-        Me.NumericUpDown_LineTitles.Text = Me.datei.iLineHeadings
-        Me.NumericUpDown_LineData.Text = Me.datei.iLineData
+        Me.NumericUpDown_LineTitles.Text = Me.tsFile.iLineHeadings
+        Me.NumericUpDown_LineData.Text = Me.tsFile.iLineData
 
         'Einheiten
-        If (Me.datei.UseUnits) Then
+        If (Me.tsFile.UseUnits) Then
             Me.CheckBox_Units.Checked = True
             Me.NumericUpDown_LineUnits.Enabled = True
         Else
             Me.CheckBox_Units.Checked = False
             Me.NumericUpDown_LineUnits.Enabled = False
         End If
-        Me.NumericUpDown_LineUnits.Text = Me.datei.iLineUnits
+        Me.NumericUpDown_LineUnits.Text = Me.tsFile.iLineUnits
 
         'Spaltenformat
-        If (Me.datei.IsColumnSeparated) Then
+        If (Me.tsFile.IsColumnSeparated) Then
             Me.RadioButton_CharSeparated.Checked = True
             Me.ComboBox_Separator.Enabled = True
             Me.TextBox_ColumnWidth.Enabled = False
@@ -340,20 +325,20 @@ Friend Class ImportCSVDialog
         End If
 
         'Trennzeichen
-        Me.ComboBox_Separator.SelectedItem = Me.datei.Separator
+        Me.ComboBox_Separator.SelectedItem = Me.tsFile.Separator
 
         'Datumsformat
-        Me.DateFormat = Me.datei.Dateformat
+        Me.DateFormat = Me.tsFile.Dateformat
 
         'Spaltenbreite
-        Me.TextBox_ColumnWidth.Text = Me.datei.ColumnWidth
+        Me.TextBox_ColumnWidth.Text = Me.tsFile.ColumnWidth
 
         'XSpalte
-        Me.NumericUpDown_ColumnDateTime.Value = Me.datei.DateTimeColumnIndex + 1
+        Me.NumericUpDown_ColumnDateTime.Value = Me.tsFile.DateTimeColumnIndex + 1
 
         'Available series
         Dim sInfo As TimeSeriesInfo
-        Me.Label_Series.Text = $"Available series ({Me.datei.TimeSeriesInfos.Count}):"
+        Me.Label_Series.Text = $"Available series ({Me.tsFile.TimeSeriesInfos.Count}):"
         'remember currently selected series
         Dim selectedSeries As New List(Of String)
         For Each sInfo In Me.ListBox_Series.SelectedItems
@@ -362,7 +347,7 @@ Friend Class ImportCSVDialog
         'update list box
         Me.ListBox_Series.Items.Clear()
         Me.ListBox_Series.BeginUpdate()
-        For Each sInfo In Me.datei.TimeSeriesInfos
+        For Each sInfo In Me.tsFile.TimeSeriesInfos
             Me.ListBox_Series.Items.Add(sInfo)
         Next
         Me.ListBox_Series.EndUpdate()
@@ -378,7 +363,7 @@ Friend Class ImportCSVDialog
         Next
 
         'refresh preview
-        Call Me.VorschauAnzeigen()
+        Call Me.ShowFilePreview()
 
     End Sub
 
@@ -462,7 +447,7 @@ Friend Class ImportCSVDialog
     Private Sub Button_EncodingAutodetect_Click(sender As Object, e As EventArgs) Handles Button_EncodingAutodetect.Click
         Dim enc As Text.Encoding
         'Autodetect file encoding
-        Dim strreader As New StreamReader(Me.datei.File, detectEncodingFromByteOrderMarks:=True)
+        Dim strreader As New StreamReader(Me.tsFile.File, detectEncodingFromByteOrderMarks:=True)
         strreader.ReadLine()
         enc = strreader.CurrentEncoding
         strreader.Close()
@@ -484,7 +469,5 @@ Friend Class ImportCSVDialog
     Private Sub ImportDiag_FormClosed(sender As Object, e As FormClosedEventArgs) Handles MyBase.FormClosed
         Me.inputTimer.Dispose()
     End Sub
-
-#End Region 'Methoden
 
 End Class
