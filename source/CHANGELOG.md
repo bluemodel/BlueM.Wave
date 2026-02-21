@@ -1,6 +1,11 @@
 BlueM.Wave Release Notes
 ========================
 
+Version 2.15.0
+--------------
+NEW:
+* Add title suffix option to CSV import dialog #224
+
 Version 2.14.2
 --------------
 FIXED:
