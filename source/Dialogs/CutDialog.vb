@@ -93,6 +93,11 @@ Friend Class CutDialog
 
         Me.IsInitializing = False
 
+        If Me.ListBox_Series.Items.Count = 1 Then
+            'if only one time series is available, select it by default
+            Me.ListBox_Series.SetSelected(0, True)
+        End If
+
     End Sub
 
     ''' <summary>
