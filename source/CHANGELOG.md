@@ -1,6 +1,11 @@
 BlueM.Wave Release Notes
 ========================
 
+Version 2.15.1
+--------------
+FIXED:
+* Fixed `TimeSeries.SplitHydroYears()` not being able to handle single-node years #226
+
 Version 2.15.0
 --------------
 NEW:

@@ -161,5 +161,29 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
         Assert.AreEqual(New DateTime(2001, 10, 31, 12, 0, 0), hydroyears(2000).EndDate)
 
     End Sub
+    ''' <summary>
+    ''' Time series with only one node in one year
+    ''' </summary>
+    ''' 
+    <TestMethod()> Public Sub TestSplitHydroYears_SingleNodeInOneYear()
+
+        Dim ts As New TimeSeries("testinput")
+        ts.Interpretation = TimeSeries.InterpretationEnum.BlockRight
+
+        Dim t As New DateTime(2000, 11, 1, 0, 0, 0)
+        For i As Integer = 0 To 365
+            ts.AddNode(t, 1.0)
+            t = t.AddDays(1)
+        Next
+
+        Dim hydroyears As Dictionary(Of Integer, TimeSeries)
+        hydroyears = ts.SplitHydroYears()
+
+        Assert.IsTrue(hydroyears.ContainsKey(2000))
+        Assert.AreEqual(365, hydroyears(2000).Length)
+        Assert.IsTrue(hydroyears.ContainsKey(2001))
+        Assert.AreEqual(1, hydroyears(2001).Length)
+
+    End Sub
 
 End Class
