@@ -26,7 +26,7 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
     ''' <summary>
     ''' Time series starting on 01.11.
     ''' </summary>
-    <TestMethod()> Public Sub TestSplitHydroYears1()
+    <TestMethod()> Public Sub TestSplitHydroYears_StartNov01()
 
         Dim ts As New TimeSeries("testinput")
 
@@ -47,7 +47,7 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
     ''' <summary>
     ''' Time series starting on 02.11.
     ''' </summary>
-    <TestMethod()> Public Sub TestSplitHydroYears2()
+    <TestMethod()> Public Sub TestSplitHydroYears_StartNov02()
 
         Dim ts As New TimeSeries("testinput")
 
@@ -68,7 +68,7 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
     ''' <summary>
     ''' Time series starting on 31.10. with block right interpretation
     ''' </summary>
-    <TestMethod()> Public Sub TestSplitHydroYears3()
+    <TestMethod()> Public Sub TestSplitHydroYears_StartOct31BlockRight()
 
         Dim ts As New TimeSeries("testinput")
         ts.Interpretation = TimeSeries.InterpretationEnum.BlockRight
@@ -91,7 +91,7 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
     ''' <summary>
     ''' Time series starting on 31.10. with no interpretation
     ''' </summary>
-    <TestMethod()> Public Sub TestSplitHydroYears31()
+    <TestMethod()> Public Sub TestSplitHydroYears_StartOct31NoInterpretation()
 
         Dim ts As New TimeSeries("testinput")
 
@@ -114,7 +114,7 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
     ''' <summary>
     ''' Time series with hourly data
     ''' </summary>
-    <TestMethod()> Public Sub TestSplitHydroYears4()
+    <TestMethod()> Public Sub TestSplitHydroYears_HourlyData()
 
         Dim ts As New TimeSeries("testinput")
         ts.Interpretation = TimeSeries.InterpretationEnum.BlockRight
@@ -137,9 +137,9 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
     End Sub
 
     ''' <summary>
-    ''' Time series without node at hydro year split
+    ''' Time series without exact node at hydro year split
     ''' </summary>
-    <TestMethod()> Public Sub TestSplitHydroYears5()
+    <TestMethod()> Public Sub TestSplitHydroYears_NoExactNodeOnSplit()
 
         Dim ts As New TimeSeries("testinput")
         ts.Interpretation = TimeSeries.InterpretationEnum.BlockRight
