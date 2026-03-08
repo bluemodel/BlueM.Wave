@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Class Helpers | BlueM.Wave </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Class Helpers | BlueM.Wave ">
+      
+      
+      <link rel="icon" href="../images/wave_icon.png">
+      <link rel="stylesheet" href="../public/docfx.min.css">
+      <link rel="stylesheet" href="../public/main.css">
+      <meta name="docfx:navrel" content="../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../">
+      
+      
+      
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="ManagedReference">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../index.html">
+            <img id="logo" class="svg" src="../images/wave_logo.png" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="BlueM.Wave.Helpers">
+
+
+
+  <h1 id="BlueM_Wave_Helpers" data-uid="BlueM.Wave.Helpers" class="text-break">
+Class Helpers  
+  </h1>
+
+  <div class="facts text-secondary">
+    <dl><dt>Namespace</dt><dd><a class="xref" href="BlueM.html">BlueM</a>.<a class="xref" href="BlueM.Wave.html">Wave</a></dd></dl>
+  <dl><dt>Assembly</dt><dd>Wave.dll</dd></dl>
+  </div>
+
+  <div class="markdown summary"></div>
+  <div class="markdown conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[StandardModule]
+public sealed class Helpers</code></pre>
+  </div>
+
+
+
+
+  <dl class="typelist inheritance">
+    <dt>Inheritance</dt>
+    <dd>
+      <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a></div>
+      <div><span class="xref">Helpers</span></div>
+    </dd>
+  </dl>
+
+
+
+  <dl class="typelist inheritedMembers">
+    <dt>Inherited Members</dt>
+    <dd>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.tostring">object.ToString()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)">object.Equals(object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)">object.Equals(object, object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.referenceequals">object.ReferenceEquals(object, object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gethashcode">object.GetHashCode()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gettype">object.GetType()</a>
+    </div>
+  </dd></dl>
+
+
+
+
+
+
+  <h2 class="section" id="properties">Properties
+</h2>
+
+
+  <a id="BlueM_Wave_Helpers_CurrentDateFormat_" data-uid="BlueM.Wave.Helpers.CurrentDateFormat*"></a>
+
+  <h3 id="BlueM_Wave_Helpers_CurrentDateFormat" data-uid="BlueM.Wave.Helpers.CurrentDateFormat">
+  CurrentDateFormat
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Returns the current date time format as set by the operating system</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string CurrentDateFormat { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="BlueM_Wave_Helpers_CurrentListSeparator_" data-uid="BlueM.Wave.Helpers.CurrentListSeparator*"></a>
+
+  <h3 id="BlueM_Wave_Helpers_CurrentListSeparator" data-uid="BlueM.Wave.Helpers.CurrentListSeparator">
+  CurrentListSeparator
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Returns the list separator as set by the operating system (e.g. &quot;,&quot; or &quot;;&quot;)</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string CurrentListSeparator { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="BlueM_Wave_Helpers_CurrentNumberFormat_" data-uid="BlueM.Wave.Helpers.CurrentNumberFormat*"></a>
+
+  <h3 id="BlueM_Wave_Helpers_CurrentNumberFormat" data-uid="BlueM.Wave.Helpers.CurrentNumberFormat">
+  CurrentNumberFormat
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Returns the number format as set by the operating system</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static NumberFormatInfo CurrentNumberFormat { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.globalization.numberformatinfo">NumberFormatInfo</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="BlueM_Wave_Helpers_DateFormats_" data-uid="BlueM.Wave.Helpers.DateFormats*"></a>
+
+  <h3 id="BlueM_Wave_Helpers_DateFormats" data-uid="BlueM.Wave.Helpers.DateFormats">
+  DateFormats
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Date formats</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static Dictionary&lt;string, string&gt; DateFormats { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a>, <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a>&gt;</dt>
+    <dd><p>Dictionary of available DateFormats</p>
+</dd>
+  </dl>
+
+
+
+
+  <h4 class="section" id="BlueM_Wave_Helpers_DateFormats_remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>see <a href="https://docs.microsoft.com/en-us/dotnet/standard/base-types/custom-date-and-time-format-strings">https://docs.microsoft.com/en-us/dotnet/standard/base-types/custom-date-and-time-format-strings</a></p>
+</div>
+
+
+
+
+  <a id="BlueM_Wave_Helpers_DefaultEncoding_" data-uid="BlueM.Wave.Helpers.DefaultEncoding*"></a>
+
+  <h3 id="BlueM_Wave_Helpers_DefaultEncoding" data-uid="BlueM.Wave.Helpers.DefaultEncoding">
+  DefaultEncoding
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Default Encoding (as set by the operating system, usually ISO-8859-1)</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static Encoding DefaultEncoding { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.text.encoding">Encoding</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="BlueM_Wave_Helpers_DefaultNumberFormat_" data-uid="BlueM.Wave.Helpers.DefaultNumberFormat*"></a>
+
+  <h3 id="BlueM_Wave_Helpers_DefaultNumberFormat" data-uid="BlueM.Wave.Helpers.DefaultNumberFormat">
+  DefaultNumberFormat
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Default NumberFormat</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static NumberFormatInfo DefaultNumberFormat { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.globalization.numberformatinfo">NumberFormatInfo</a></dt>
+    <dd><p>NumberFormatInfo instance with decimal separator &quot;.&quot; and no NumberGroupSeparator</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <h2 class="section" id="methods">Methods
+</h2>
+
+
+  <a id="BlueM_Wave_Helpers_CalendarMonths_" data-uid="BlueM.Wave.Helpers.CalendarMonths*"></a>
+
+  <h3 id="BlueM_Wave_Helpers_CalendarMonths" data-uid="BlueM.Wave.Helpers.CalendarMonths">
+  CalendarMonths()
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Returns a list of calendar months from January to December</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static List&lt;Month&gt; CalendarMonths()</code></pre>
+  </div>
+
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1">List</a>&lt;<a class="xref" href="BlueM.Wave.Month.html">Month</a>&gt;</dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="BlueM_Wave_Helpers_GetRelativePath_" data-uid="BlueM.Wave.Helpers.GetRelativePath*"></a>
+
+  <h3 id="BlueM_Wave_Helpers_GetRelativePath_System_String_System_String_" data-uid="BlueM.Wave.Helpers.GetRelativePath(System.String,System.String)">
+  GetRelativePath(string, string)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Creates a relative path from one file or folder to another.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string GetRelativePath(string fromPath, string toPath)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>fromPath</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd><p>Contains the directory that defines the start of the relative path.</p>
+</dd>
+    <dt><code>toPath</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd><p>Contains the path that defines the endpoint of the relative path.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd><p>The relative path from the start directory to the end path.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section" id="BlueM_Wave_Helpers_GetRelativePath_System_String_System_String__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>This function is a replacement for IO.Path.GetRelativePath() which is only available in later .NET versions.
+Based on C# code from <a href="https://stackoverflow.com/a/32113484">https://stackoverflow.com/a/32113484</a></p>
+</div>
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></dt>
+    <dd><p><code class="paramref">fromPath</code> or <code class="paramref">toPath</code> is <code>null</code>.</p>
+</dd>
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uriformatexception">UriFormatException</a></dt>
+    <dd></dd>
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.invalidoperationexception">InvalidOperationException</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+  <a id="BlueM_Wave_Helpers_StringToDouble_" data-uid="BlueM.Wave.Helpers.StringToDouble*"></a>
+
+  <h3 id="BlueM_Wave_Helpers_StringToDouble_System_String_System_Globalization_NumberFormatInfo_" data-uid="BlueM.Wave.Helpers.StringToDouble(System.String,System.Globalization.NumberFormatInfo)">
+  StringToDouble(string, NumberFormatInfo)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Converts a string to a double</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static double StringToDouble(string str, NumberFormatInfo format = null)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>str</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd><p>string to be converted</p>
+</dd>
+    <dt><code>format</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.globalization.numberformatinfo">NumberFormatInfo</a></dt>
+    <dd><p>optional NumberFormatInfo object to use for the conversion. If not provided, the DefaultNumberInfo is used.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></dt>
+    <dd><p>Double value, set to NaN if the string was not parseable. NaN and +-Infinity in the input string are recognized and converted to the correspoing Double value.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="BlueM_Wave_Helpers_getColorPalette_" data-uid="BlueM.Wave.Helpers.getColorPalette*"></a>
+
+  <h3 id="BlueM_Wave_Helpers_getColorPalette_System_String_" data-uid="BlueM.Wave.Helpers.getColorPalette(System.String)">
+  getColorPalette(string)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Returns a specified color palette</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static Color[] getColorPalette(string name = &quot;Material&quot;)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>name</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd><p>Available color palettes are &quot;Material&quot;, &quot;Distinct&quot;, &quot;Color Wheel&quot; and &quot;Random&quot;. Defaults to &quot;Material&quot;.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.drawing.color">Color</a>[]</dt>
+    <dd><p>A color palette</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+        <div class="contribution d-print-none">
+        </div>
+
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

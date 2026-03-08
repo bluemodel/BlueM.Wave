@@ -1,0 +1,2310 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Class TimeSeries | BlueM.Wave </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Class TimeSeries | BlueM.Wave ">
+      
+      <meta name="description" content="Class representing a time series">
+      <link rel="icon" href="../images/wave_icon.png">
+      <link rel="stylesheet" href="../public/docfx.min.css">
+      <link rel="stylesheet" href="../public/main.css">
+      <meta name="docfx:navrel" content="../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../">
+      
+      
+      
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="ManagedReference">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../index.html">
+            <img id="logo" class="svg" src="../images/wave_logo.png" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="BlueM.Wave.TimeSeries">
+
+
+
+  <h1 id="BlueM_Wave_TimeSeries" data-uid="BlueM.Wave.TimeSeries" class="text-break">
+Class TimeSeries  
+  </h1>
+
+  <div class="facts text-secondary">
+    <dl><dt>Namespace</dt><dd><a class="xref" href="BlueM.html">BlueM</a>.<a class="xref" href="BlueM.Wave.html">Wave</a></dd></dl>
+  <dl><dt>Assembly</dt><dd>Wave.dll</dd></dl>
+  </div>
+
+  <div class="markdown summary"><p>Class representing a time series</p>
+</div>
+  <div class="markdown conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public class TimeSeries</code></pre>
+  </div>
+
+
+
+
+  <dl class="typelist inheritance">
+    <dt>Inheritance</dt>
+    <dd>
+      <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a></div>
+      <div><span class="xref">TimeSeries</span></div>
+    </dd>
+  </dl>
+
+
+
+  <dl class="typelist inheritedMembers">
+    <dt>Inherited Members</dt>
+    <dd>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)">object.Equals(object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)">object.Equals(object, object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.referenceequals">object.ReferenceEquals(object, object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gethashcode">object.GetHashCode()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gettype">object.GetType()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone">object.MemberwiseClone()</a>
+    </div>
+  </dd></dl>
+
+
+
+
+  <h2 id="BlueM_Wave_TimeSeries_remarks">Remarks</h2>
+  <div class="markdown level0 remarks"><p>A time series consists of a list of nodes (date, value) and associated metadata</p>
+</div>
+
+
+  <h2 class="section" id="constructors">Constructors
+</h2>
+
+
+  <a id="BlueM_Wave_TimeSeries__ctor_" data-uid="BlueM.Wave.TimeSeries.#ctor*"></a>
+
+  <h3 id="BlueM_Wave_TimeSeries__ctor" data-uid="BlueM.Wave.TimeSeries.#ctor">
+  TimeSeries()
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Default Constructor</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public TimeSeries()</code></pre>
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="BlueM_Wave_TimeSeries__ctor_" data-uid="BlueM.Wave.TimeSeries.#ctor*"></a>
+
+  <h3 id="BlueM_Wave_TimeSeries__ctor_System_String_" data-uid="BlueM.Wave.TimeSeries.#ctor(System.String)">
+  TimeSeries(string)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Constructor</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public TimeSeries(string title)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>title</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd><p>Title of the time series</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <h2 class="section" id="properties">Properties
+</h2>
+
+
+  <a id="BlueM_Wave_TimeSeries_Average_" data-uid="BlueM.Wave.TimeSeries.Average*"></a>
+
+  <h3 id="BlueM_Wave_TimeSeries_Average" data-uid="BlueM.Wave.TimeSeries.Average">
+  Average
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Returns the average value of the time series</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public double Average { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+  <h4 class="section" id="BlueM_Wave_TimeSeries_Average_remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>Simple average calculation without regard for time</p>
+</div>
+
+
+
+
+  <a id="BlueM_Wave_TimeSeries_DataSource_" data-uid="BlueM.Wave.TimeSeries.DataSource*"></a>
+
+  <h3 id="BlueM_Wave_TimeSeries_DataSource" data-uid="BlueM.Wave.TimeSeries.DataSource">
+  DataSource
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>The original datasource of the time series</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public TimeSeriesDataSource DataSource { get; set; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="BlueM.Wave.TimeSeriesDataSource.html">TimeSeriesDataSource</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="BlueM_Wave_TimeSeries_Dates_" data-uid="BlueM.Wave.TimeSeries.Dates*"></a>
+
+  <h3 id="BlueM_Wave_TimeSeries_Dates" data-uid="BlueM.Wave.TimeSeries.Dates">
+  Dates
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>The time series' dates</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IList&lt;DateTime&gt; Dates { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.ilist-1">IList</a>&lt;<a class="xref" href="https://learn.microsoft.com/dotnet/api/system.datetime">DateTime</a>&gt;</dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="BlueM_Wave_TimeSeries_DisplayOptions_" data-uid="BlueM.Wave.TimeSeries.DisplayOptions*"></a>
+
+  <h3 id="BlueM_Wave_TimeSeries_DisplayOptions" data-uid="BlueM.Wave.TimeSeries.DisplayOptions">
+  DisplayOptions
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Options for displaying the time series</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public TimeSeriesDisplayOptions DisplayOptions { get; set; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="BlueM.Wave.TimeSeriesDisplayOptions.html">TimeSeriesDisplayOptions</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="BlueM_Wave_TimeSeries_EndDate_" data-uid="BlueM.Wave.TimeSeries.EndDate*"></a>
+
+  <h3 id="BlueM_Wave_TimeSeries_EndDate" data-uid="BlueM.Wave.TimeSeries.EndDate">
+  EndDate
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Returns the end date of the time series</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public DateTime EndDate { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.datetime">DateTime</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="BlueM_Wave_TimeSeries_FirstValue_" data-uid="BlueM.Wave.TimeSeries.FirstValue*"></a>
+
+  <h3 id="BlueM_Wave_TimeSeries_FirstValue" data-uid="BlueM.Wave.TimeSeries.FirstValue">
+  FirstValue
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Returns the first value of the time series</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public double FirstValue { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="BlueM_Wave_TimeSeries_Id_" data-uid="BlueM.Wave.TimeSeries.Id*"></a>
+
+  <h3 id="BlueM_Wave_TimeSeries_Id" data-uid="BlueM.Wave.TimeSeries.Id">
+  Id
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Unique Id</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public int Id { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="BlueM_Wave_TimeSeries_Interpretation_" data-uid="BlueM.Wave.TimeSeries.Interpretation*"></a>
+
+  <h3 id="BlueM_Wave_TimeSeries_Interpretation" data-uid="BlueM.Wave.TimeSeries.Interpretation">
+  Interpretation
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>The time series' interpretation</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public TimeSeries.InterpretationEnum Interpretation { get; set; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="BlueM.Wave.TimeSeries.html">TimeSeries</a>.<a class="xref" href="BlueM.Wave.TimeSeries.InterpretationEnum.html">InterpretationEnum</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="BlueM_Wave_TimeSeries_LastValue_" data-uid="BlueM.Wave.TimeSeries.LastValue*"></a>
+
+  <h3 id="BlueM_Wave_TimeSeries_LastValue" data-uid="BlueM.Wave.TimeSeries.LastValue">
+  LastValue
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Returns the last value of the time series</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public double LastValue { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="BlueM_Wave_TimeSeries_Length_" data-uid="BlueM.Wave.TimeSeries.Length*"></a>
+
+  <h3 id="BlueM_Wave_TimeSeries_Length" data-uid="BlueM.Wave.TimeSeries.Length">
+  Length
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>The time series' length (number of nodes)</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public int Length { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="BlueM_Wave_TimeSeries_Maximum_" data-uid="BlueM.Wave.TimeSeries.Maximum*"></a>
+
+  <h3 id="BlueM_Wave_TimeSeries_Maximum" data-uid="BlueM.Wave.TimeSeries.Maximum">
+  Maximum
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Returns the maximum value of the time series</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public double Maximum { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="BlueM_Wave_TimeSeries_Maximum_" data-uid="BlueM.Wave.TimeSeries.Maximum*"></a>
+
+  <h3 id="BlueM_Wave_TimeSeries_Maximum_System_DateTime_System_DateTime_" data-uid="BlueM.Wave.TimeSeries.Maximum(System.DateTime,System.DateTime)">
+  Maximum[DateTime, DateTime]
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Returns the maximum value of the time series within a defined time period (inclusively)</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public double Maximum[DateTime startdate, DateTime enddate] { get; }</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>startdate</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.datetime">DateTime</a></dt>
+    <dd></dd>
+    <dt><code>enddate</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.datetime">DateTime</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="BlueM_Wave_TimeSeries_MaximumNode_" data-uid="BlueM.Wave.TimeSeries.MaximumNode*"></a>
+
+  <h3 id="BlueM_Wave_TimeSeries_MaximumNode" data-uid="BlueM.Wave.TimeSeries.MaximumNode">
+  MaximumNode
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Returns the node with the maximum value of the time series</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public KeyValuePair&lt;DateTime, double&gt; MaximumNode { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.keyvaluepair-2">KeyValuePair</a>&lt;<a class="xref" href="https://learn.microsoft.com/dotnet/api/system.datetime">DateTime</a>, <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a>&gt;</dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="BlueM_Wave_TimeSeries_MaximumNode_" data-uid="BlueM.Wave.TimeSeries.MaximumNode*"></a>
+
+  <h3 id="BlueM_Wave_TimeSeries_MaximumNode_System_DateTime_System_DateTime_" data-uid="BlueM.Wave.TimeSeries.MaximumNode(System.DateTime,System.DateTime)">
+  MaximumNode[DateTime, DateTime]
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Returns the node with the maximum value of the time series within a defined time period (inclusively)</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public KeyValuePair&lt;DateTime, double&gt; MaximumNode[DateTime startdate, DateTime enddate] { get; }</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>startdate</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.datetime">DateTime</a></dt>
+    <dd></dd>
+    <dt><code>enddate</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.datetime">DateTime</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.keyvaluepair-2">KeyValuePair</a>&lt;<a class="xref" href="https://learn.microsoft.com/dotnet/api/system.datetime">DateTime</a>, <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a>&gt;</dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="BlueM_Wave_TimeSeries_Metadata_" data-uid="BlueM.Wave.TimeSeries.Metadata*"></a>
+
+  <h3 id="BlueM_Wave_TimeSeries_Metadata" data-uid="BlueM.Wave.TimeSeries.Metadata">
+  Metadata
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>The time series' metadata</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Metadata Metadata { get; set; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="BlueM.Wave.Metadata.html">Metadata</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="BlueM_Wave_TimeSeries_MetadataText_" data-uid="BlueM.Wave.TimeSeries.MetadataText*"></a>
+
+  <h3 id="BlueM_Wave_TimeSeries_MetadataText" data-uid="BlueM.Wave.TimeSeries.MetadataText">
+  MetadataText
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>The time series' metadata formatted as a single string</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public string MetadataText { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+  <h4 class="section" id="BlueM_Wave_TimeSeries_MetadataText_remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>Empty entries are omitted from the string</p>
+</div>
+
+
+
+
+  <a id="BlueM_Wave_TimeSeries_Minimum_" data-uid="BlueM.Wave.TimeSeries.Minimum*"></a>
+
+  <h3 id="BlueM_Wave_TimeSeries_Minimum" data-uid="BlueM.Wave.TimeSeries.Minimum">
+  Minimum
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Returns the minimum value of the time series</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public double Minimum { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="BlueM_Wave_TimeSeries_Minimum_" data-uid="BlueM.Wave.TimeSeries.Minimum*"></a>
+
+  <h3 id="BlueM_Wave_TimeSeries_Minimum_System_DateTime_System_DateTime_" data-uid="BlueM.Wave.TimeSeries.Minimum(System.DateTime,System.DateTime)">
+  Minimum[DateTime, DateTime]
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Returns the minimum value of the time series within a defined time period (inclusively)</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public double Minimum[DateTime startdate, DateTime enddate] { get; }</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>startdate</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.datetime">DateTime</a></dt>
+    <dd></dd>
+    <dt><code>enddate</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.datetime">DateTime</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="BlueM_Wave_TimeSeries_NaNCount_" data-uid="BlueM.Wave.TimeSeries.NaNCount*"></a>
+
+  <h3 id="BlueM_Wave_TimeSeries_NaNCount" data-uid="BlueM.Wave.TimeSeries.NaNCount">
+  NaNCount
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>The number of NaN and Infinity nodes</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public int NaNCount { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="BlueM_Wave_TimeSeries_NaNPeriods_" data-uid="BlueM.Wave.TimeSeries.NaNPeriods*"></a>
+
+  <h3 id="BlueM_Wave_TimeSeries_NaNPeriods" data-uid="BlueM.Wave.TimeSeries.NaNPeriods">
+  NaNPeriods
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Returns the list of time periods (range, count) consisting of NaN nodes</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public List&lt;(DateRange range, int count)&gt; NaNPeriods { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1">List</a>&lt;(<a class="xref" href="BlueM.Wave.DateRange.html">DateRange</a> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.valuetuple-bluem.wave.daterange,system.int32-.range">range</a>, <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.valuetuple-bluem.wave.daterange,system.int32-.count">count</a>)&gt;</dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="BlueM_Wave_TimeSeries_Nodes_" data-uid="BlueM.Wave.TimeSeries.Nodes*"></a>
+
+  <h3 id="BlueM_Wave_TimeSeries_Nodes" data-uid="BlueM.Wave.TimeSeries.Nodes">
+  Nodes
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>The time series' nodes</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public SortedList&lt;DateTime, double&gt; Nodes { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.sortedlist-2">SortedList</a>&lt;<a class="xref" href="https://learn.microsoft.com/dotnet/api/system.datetime">DateTime</a>, <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a>&gt;</dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="BlueM_Wave_TimeSeries_Nodes_" data-uid="BlueM.Wave.TimeSeries.Nodes*"></a>
+
+  <h3 id="BlueM_Wave_TimeSeries_Nodes_System_DateTime_" data-uid="BlueM.Wave.TimeSeries.Nodes(System.DateTime)">
+  Nodes[DateTime]
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Returns the value at timestamp t</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public double Nodes[DateTime t] { get; }</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>t</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.datetime">DateTime</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="BlueM_Wave_TimeSeries_Nodes_" data-uid="BlueM.Wave.TimeSeries.Nodes*"></a>
+
+  <h3 id="BlueM_Wave_TimeSeries_Nodes_System_DateTime_System_DateTime_" data-uid="BlueM.Wave.TimeSeries.Nodes(System.DateTime,System.DateTime)">
+  Nodes[DateTime, DateTime]
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>The time series' nodes within a defined time period (inclusively)</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public SortedList&lt;DateTime, double&gt; Nodes[DateTime startdate, DateTime enddate] { get; }</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>startdate</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.datetime">DateTime</a></dt>
+    <dd></dd>
+    <dt><code>enddate</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.datetime">DateTime</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.sortedlist-2">SortedList</a>&lt;<a class="xref" href="https://learn.microsoft.com/dotnet/api/system.datetime">DateTime</a>, <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a>&gt;</dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="BlueM_Wave_TimeSeries_NodesClean_" data-uid="BlueM.Wave.TimeSeries.NodesClean*"></a>
+
+  <h3 id="BlueM_Wave_TimeSeries_NodesClean" data-uid="BlueM.Wave.TimeSeries.NodesClean">
+  NodesClean
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>The time series' nodes without NaN and Infinity values</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public SortedList&lt;DateTime, double&gt; NodesClean { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.sortedlist-2">SortedList</a>&lt;<a class="xref" href="https://learn.microsoft.com/dotnet/api/system.datetime">DateTime</a>, <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a>&gt;</dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+  <h4 class="section" id="BlueM_Wave_TimeSeries_NodesClean_remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>The cleaned nodes are cached and only created once per instance</p>
+</div>
+
+
+
+
+  <a id="BlueM_Wave_TimeSeries_NodesClean_" data-uid="BlueM.Wave.TimeSeries.NodesClean*"></a>
+
+  <h3 id="BlueM_Wave_TimeSeries_NodesClean_System_DateTime_System_DateTime_" data-uid="BlueM.Wave.TimeSeries.NodesClean(System.DateTime,System.DateTime)">
+  NodesClean[DateTime, DateTime]
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>The time series' nodes without NaN and Infinity values within a defined time period (inclusively)</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public SortedList&lt;DateTime, double&gt; NodesClean[DateTime startdate, DateTime enddate] { get; }</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>startdate</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.datetime">DateTime</a></dt>
+    <dd></dd>
+    <dt><code>enddate</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.datetime">DateTime</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.sortedlist-2">SortedList</a>&lt;<a class="xref" href="https://learn.microsoft.com/dotnet/api/system.datetime">DateTime</a>, <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a>&gt;</dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="BlueM_Wave_TimeSeries_StartDate_" data-uid="BlueM.Wave.TimeSeries.StartDate*"></a>
+
+  <h3 id="BlueM_Wave_TimeSeries_StartDate" data-uid="BlueM.Wave.TimeSeries.StartDate">
+  StartDate
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Returns the start date of the time series</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public DateTime StartDate { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.datetime">DateTime</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="BlueM_Wave_TimeSeries_Sum_" data-uid="BlueM.Wave.TimeSeries.Sum*"></a>
+
+  <h3 id="BlueM_Wave_TimeSeries_Sum" data-uid="BlueM.Wave.TimeSeries.Sum">
+  Sum
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Returns the sum of the time series' values</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public double Sum { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="BlueM_Wave_TimeSeries_Title_" data-uid="BlueM.Wave.TimeSeries.Title*"></a>
+
+  <h3 id="BlueM_Wave_TimeSeries_Title" data-uid="BlueM.Wave.TimeSeries.Title">
+  Title
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Title of the time series</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public string Title { get; set; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="BlueM_Wave_TimeSeries_Unit_" data-uid="BlueM.Wave.TimeSeries.Unit*"></a>
+
+  <h3 id="BlueM_Wave_TimeSeries_Unit" data-uid="BlueM.Wave.TimeSeries.Unit">
+  Unit
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>The unit of the the time series' values</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public string Unit { get; set; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="BlueM_Wave_TimeSeries_Values_" data-uid="BlueM.Wave.TimeSeries.Values*"></a>
+
+  <h3 id="BlueM_Wave_TimeSeries_Values" data-uid="BlueM.Wave.TimeSeries.Values">
+  Values
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>The time series' values</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IList&lt;double&gt; Values { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.ilist-1">IList</a>&lt;<a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a>&gt;</dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="BlueM_Wave_TimeSeries_Volume_" data-uid="BlueM.Wave.TimeSeries.Volume*"></a>
+
+  <h3 id="BlueM_Wave_TimeSeries_Volume" data-uid="BlueM.Wave.TimeSeries.Volume">
+  Volume
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Returns the volume of the time series (values integrated over time)</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public double Volume { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+  <h4 class="section" id="BlueM_Wave_TimeSeries_Volume_remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>Only works for time-based units that end with &quot;/s&quot;, &quot;/min&quot;, &quot;/h&quot; or &quot;/d&quot;
+and interpretations Instantaneous, BlockLeft and BlockRight.
+Otherwise returns NaN.</p>
+</div>
+
+
+
+
+  <a id="BlueM_Wave_TimeSeries_getUniqueID_" data-uid="BlueM.Wave.TimeSeries.getUniqueID*"></a>
+
+  <h3 id="BlueM_Wave_TimeSeries_getUniqueID" data-uid="BlueM.Wave.TimeSeries.getUniqueID">
+  getUniqueID
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Returns a new unique ID</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static int getUniqueID { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <h2 class="section" id="methods">Methods
+</h2>
+
+
+  <a id="BlueM_Wave_TimeSeries_AddNode_" data-uid="BlueM.Wave.TimeSeries.AddNode*"></a>
+
+  <h3 id="BlueM_Wave_TimeSeries_AddNode_System_DateTime_System_Double_" data-uid="BlueM.Wave.TimeSeries.AddNode(System.DateTime,System.Double)">
+  AddNode(DateTime, double)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Adds a node to the time series</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void AddNode(DateTime _date, double _value)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>_date</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.datetime">DateTime</a></dt>
+    <dd><p>Date</p>
+</dd>
+    <dt><code>_value</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></dt>
+    <dd><p>Value</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <h4 class="section" id="BlueM_Wave_TimeSeries_AddNode_System_DateTime_System_Double__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>If the given date already exists, the new node is discarded and a warning is written to the log</p>
+</div>
+
+
+
+
+  <a id="BlueM_Wave_TimeSeries_AddTimeInterval_" data-uid="BlueM.Wave.TimeSeries.AddTimeInterval*"></a>
+
+  <h3 id="BlueM_Wave_TimeSeries_AddTimeInterval_System_DateTime_BlueM_Wave_TimeSeries_TimeStepTypeEnum_System_Int32_" data-uid="BlueM.Wave.TimeSeries.AddTimeInterval(System.DateTime,BlueM.Wave.TimeSeries.TimeStepTypeEnum,System.Int32)">
+  AddTimeInterval(DateTime, TimeStepTypeEnum, int)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Returns a new DateTime offset from the given base DateTime by the specified interval</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static DateTime AddTimeInterval(DateTime t, TimeSeries.TimeStepTypeEnum timesteptype, int timestepinterval)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>t</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.datetime">DateTime</a></dt>
+    <dd><p>Base DateTime from which to offset</p>
+</dd>
+    <dt><code>timesteptype</code> <a class="xref" href="BlueM.Wave.TimeSeries.html">TimeSeries</a>.<a class="xref" href="BlueM.Wave.TimeSeries.TimeStepTypeEnum.html">TimeStepTypeEnum</a></dt>
+    <dd><p>The type of interval to offset</p>
+</dd>
+    <dt><code>timestepinterval</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd><p>The number of intervals to offset (can be negative in order to subtract)</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.datetime">DateTime</a></dt>
+    <dd><p>The offset DateTime</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section" id="BlueM_Wave_TimeSeries_AddTimeInterval_System_DateTime_BlueM_Wave_TimeSeries_TimeStepTypeEnum_System_Int32__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>Does not check for exceeding DateTime.MaxValue or going below DateTime.MinValue.
+Handles leap days and varying month lengths correctly when offsetting by years or months.</p>
+</div>
+
+
+
+
+  <a id="BlueM_Wave_TimeSeries_Append_" data-uid="BlueM.Wave.TimeSeries.Append*"></a>
+
+  <h3 id="BlueM_Wave_TimeSeries_Append_BlueM_Wave_TimeSeries_" data-uid="BlueM.Wave.TimeSeries.Append(BlueM.Wave.TimeSeries)">
+  Append(TimeSeries)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Appends a time series</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void Append(TimeSeries series2)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>series2</code> <a class="xref" href="BlueM.Wave.TimeSeries.html">TimeSeries</a></dt>
+    <dd><p>series to be appended</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <h4 class="section" id="BlueM_Wave_TimeSeries_Append_BlueM_Wave_TimeSeries__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>in the case of an overlap between the two series,
+the nodes of the appended series within the overlap are discarded</p>
+</div>
+
+
+
+
+  <a id="BlueM_Wave_TimeSeries_ChangeTimestep_" data-uid="BlueM.Wave.TimeSeries.ChangeTimestep*"></a>
+
+  <h3 id="BlueM_Wave_TimeSeries_ChangeTimestep_BlueM_Wave_TimeSeries_TimeStepTypeEnum_System_Int32_System_DateTime_BlueM_Wave_TimeSeries_InterpretationEnum_" data-uid="BlueM.Wave.TimeSeries.ChangeTimestep(BlueM.Wave.TimeSeries.TimeStepTypeEnum,System.Int32,System.DateTime,BlueM.Wave.TimeSeries.InterpretationEnum)">
+  ChangeTimestep(TimeStepTypeEnum, int, DateTime, InterpretationEnum)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Returns a new, equidistant time series with the specified timestep</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public TimeSeries ChangeTimestep(TimeSeries.TimeStepTypeEnum timesteptype, int timestepinterval, DateTime startdate, TimeSeries.InterpretationEnum outputInterpretation = InterpretationEnum.Undefined)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>timesteptype</code> <a class="xref" href="BlueM.Wave.TimeSeries.html">TimeSeries</a>.<a class="xref" href="BlueM.Wave.TimeSeries.TimeStepTypeEnum.html">TimeStepTypeEnum</a></dt>
+    <dd><p>The type of timestep interval</p>
+</dd>
+    <dt><code>timestepinterval</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd><p>The number of intervals that make up each timestep</p>
+</dd>
+    <dt><code>startdate</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.datetime">DateTime</a></dt>
+    <dd><p>Start date for the new time series</p>
+</dd>
+    <dt><code>outputInterpretation</code> <a class="xref" href="BlueM.Wave.TimeSeries.html">TimeSeries</a>.<a class="xref" href="BlueM.Wave.TimeSeries.InterpretationEnum.html">InterpretationEnum</a></dt>
+    <dd><p>Optional interpretation to use for the output timeseries.
+If not defined, the original interpretation is preserved, if possible</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="BlueM.Wave.TimeSeries.html">TimeSeries</a></dt>
+    <dd><p>The new time series</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section" id="BlueM_Wave_TimeSeries_ChangeTimestep_BlueM_Wave_TimeSeries_TimeStepTypeEnum_System_Int32_System_DateTime_BlueM_Wave_TimeSeries_InterpretationEnum__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>Output interpretation Instantaneous is not implemented,
+because it would require considering a time interval 0.5 * dt to the left and right of the output timestamps
+which causes issues with timestep intervals of type Month (and also headaches).
+Time steps that are not fully within the time series are not included in the result time series.
+Time steps within which at least one node contain NaN values also get the value NaN.</p>
+<p>TODO:
+Support more interpretations
+Allow handling NaN values (e.g. as 0)?</p>
+</div>
+
+
+
+
+  <a id="BlueM_Wave_TimeSeries_Clone_" data-uid="BlueM.Wave.TimeSeries.Clone*"></a>
+
+  <h3 id="BlueM_Wave_TimeSeries_Clone_System_Boolean_" data-uid="BlueM.Wave.TimeSeries.Clone(System.Boolean)">
+  Clone(bool)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Clones a time series</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public TimeSeries Clone(bool preserveId = false)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>preserveId</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd><p>if True, the Id is preserved, otherwise a new unique Id is assigned (default)</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="BlueM.Wave.TimeSeries.html">TimeSeries</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="BlueM_Wave_TimeSeries_ClosestDate_" data-uid="BlueM.Wave.TimeSeries.ClosestDate*"></a>
+
+  <h3 id="BlueM_Wave_TimeSeries_ClosestDate_System_DateTime_BlueM_Wave_Constants_TimeDirection_" data-uid="BlueM.Wave.TimeSeries.ClosestDate(System.DateTime,BlueM.Wave.Constants.TimeDirection)">
+  ClosestDate(DateTime, TimeDirection)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Returns the date of the node closest to the specified timestamp</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public DateTime ClosestDate(DateTime timestamp, Constants.TimeDirection direction = TimeDirection.Before)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>timestamp</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.datetime">DateTime</a></dt>
+    <dd><p>The timestamp to look for</p>
+</dd>
+    <dt><code>direction</code> <a class="xref" href="BlueM.Wave.Constants.html">Constants</a>.<a class="xref" href="BlueM.Wave.Constants.TimeDirection.html">TimeDirection</a></dt>
+    <dd><p>The direction to search if the exact timestamp is not found (default: Before)</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.datetime">DateTime</a></dt>
+    <dd><p>The date of the node closest to the specified timestamp in the given direction</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="BlueM_Wave_TimeSeries_Cut_" data-uid="BlueM.Wave.TimeSeries.Cut*"></a>
+
+  <h3 id="BlueM_Wave_TimeSeries_Cut_BlueM_Wave_TimeSeries_System_String_" data-uid="BlueM.Wave.TimeSeries.Cut(BlueM.Wave.TimeSeries,System.String)">
+  Cut(TimeSeries, string)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Cut the time series to the timespan of another time series</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void Cut(TimeSeries series2, string titleSuffix = &quot; (cut)&quot;)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>series2</code> <a class="xref" href="BlueM.Wave.TimeSeries.html">TimeSeries</a></dt>
+    <dd><p>the time series to whose timespan the time series should be cut</p>
+</dd>
+    <dt><code>titleSuffix</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd><p>suffix to be added to the title of time series after cutting (default: &quot; (cut)&quot;)</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="BlueM_Wave_TimeSeries_Cut_" data-uid="BlueM.Wave.TimeSeries.Cut*"></a>
+
+  <h3 id="BlueM_Wave_TimeSeries_Cut_System_DateTime_System_DateTime_System_String_" data-uid="BlueM.Wave.TimeSeries.Cut(System.DateTime,System.DateTime,System.String)">
+  Cut(DateTime, DateTime, string)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Cut a time series using start and end dates</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void Cut(DateTime _start, DateTime _end, string titleSuffix = &quot; (cut)&quot;)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>_start</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.datetime">DateTime</a></dt>
+    <dd><p>start date</p>
+</dd>
+    <dt><code>_end</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.datetime">DateTime</a></dt>
+    <dd><p>end date</p>
+</dd>
+    <dt><code>titleSuffix</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd><p>suffix to be added to the title of time series after cutting (default: &quot; (cut)&quot;)</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <h4 class="section" id="BlueM_Wave_TimeSeries_Cut_System_DateTime_System_DateTime_System_String__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>Removes all nodes before the start date and after the end date.
+If there is no node with the exact start date, the closest node before the start date is also kept.
+If there is no node with the exact end date, the closest node after the end date is also kept.</p>
+</div>
+
+
+
+
+  <a id="BlueM_Wave_TimeSeries_IntegrateVolume_" data-uid="BlueM.Wave.TimeSeries.IntegrateVolume*"></a>
+
+  <h3 id="BlueM_Wave_TimeSeries_IntegrateVolume_System_DateTime_System_Double_System_DateTime_System_Double_BlueM_Wave_TimeSeries_InterpretationEnum_BlueM_Wave_TimeSeries_TimeStepTypeEnum_" data-uid="BlueM.Wave.TimeSeries.IntegrateVolume(System.DateTime,System.Double,System.DateTime,System.Double,BlueM.Wave.TimeSeries.InterpretationEnum,BlueM.Wave.TimeSeries.TimeStepTypeEnum)">
+  IntegrateVolume(DateTime, double, DateTime, double, InterpretationEnum, TimeStepTypeEnum)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Integrates the volume between two nodes while respecting interpretation and unit</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static double IntegrateVolume(DateTime t1, double v1, DateTime t2, double v2, TimeSeries.InterpretationEnum interpretation, TimeSeries.TimeStepTypeEnum unitTimeStepType = TimeStepTypeEnum.Second)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>t1</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.datetime">DateTime</a></dt>
+    <dd><p>First timestamp</p>
+</dd>
+    <dt><code>v1</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></dt>
+    <dd><p>First value</p>
+</dd>
+    <dt><code>t2</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.datetime">DateTime</a></dt>
+    <dd><p>Second timestamp</p>
+</dd>
+    <dt><code>v2</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></dt>
+    <dd><p>Second value</p>
+</dd>
+    <dt><code>interpretation</code> <a class="xref" href="BlueM.Wave.TimeSeries.html">TimeSeries</a>.<a class="xref" href="BlueM.Wave.TimeSeries.InterpretationEnum.html">InterpretationEnum</a></dt>
+    <dd><p>Interpretation to use</p>
+</dd>
+    <dt><code>unitTimeStepType</code> <a class="xref" href="BlueM.Wave.TimeSeries.html">TimeSeries</a>.<a class="xref" href="BlueM.Wave.TimeSeries.TimeStepTypeEnum.html">TimeStepTypeEnum</a></dt>
+    <dd><p>TimeStepType of the unit, default is <a class="xref" href="BlueM.Wave.TimeSeries.TimeStepTypeEnum.html#BlueM_Wave_TimeSeries_TimeStepTypeEnum_Second">per second</a></p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></dt>
+    <dd><p>The volume</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="BlueM_Wave_TimeSeries_InterpolateValue_" data-uid="BlueM.Wave.TimeSeries.InterpolateValue*"></a>
+
+  <h3 id="BlueM_Wave_TimeSeries_InterpolateValue_System_DateTime_System_Double_System_DateTime_System_Double_System_DateTime_BlueM_Wave_TimeSeries_InterpretationEnum_" data-uid="BlueM.Wave.TimeSeries.InterpolateValue(System.DateTime,System.Double,System.DateTime,System.Double,System.DateTime,BlueM.Wave.TimeSeries.InterpretationEnum)">
+  InterpolateValue(DateTime, double, DateTime, double, DateTime, InterpretationEnum)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Interpolates a value between two nodes while respecting the interpretation</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static double InterpolateValue(DateTime t1, double v1, DateTime t2, double v2, DateTime t, TimeSeries.InterpretationEnum interpretation)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>t1</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.datetime">DateTime</a></dt>
+    <dd><p>First timestamp</p>
+</dd>
+    <dt><code>v1</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></dt>
+    <dd><p>First value</p>
+</dd>
+    <dt><code>t2</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.datetime">DateTime</a></dt>
+    <dd><p>Second timestamp</p>
+</dd>
+    <dt><code>v2</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></dt>
+    <dd><p>Second value</p>
+</dd>
+    <dt><code>t</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.datetime">DateTime</a></dt>
+    <dd><p>Timestamp at which to interpolate</p>
+</dd>
+    <dt><code>interpretation</code> <a class="xref" href="BlueM.Wave.TimeSeries.html">TimeSeries</a>.<a class="xref" href="BlueM.Wave.TimeSeries.InterpretationEnum.html">InterpretationEnum</a></dt>
+    <dd><p>Interpretation to use</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></dt>
+    <dd><p>The interpolated value</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="BlueM_Wave_TimeSeries_ShiftTime_" data-uid="BlueM.Wave.TimeSeries.ShiftTime*"></a>
+
+  <h3 id="BlueM_Wave_TimeSeries_ShiftTime_System_Int32_BlueM_Wave_TimeSeries_TimeStepTypeEnum_" data-uid="BlueM.Wave.TimeSeries.ShiftTime(System.Int32,BlueM.Wave.TimeSeries.TimeStepTypeEnum)">
+  ShiftTime(int, TimeStepTypeEnum)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Returns a new time series with all timestamps shifted by the specified interval</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public TimeSeries ShiftTime(int timestepInterval, TimeSeries.TimeStepTypeEnum timestepType)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>timestepInterval</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd><p>The number of intervals to offset (can be negative in order to subtract)</p>
+</dd>
+    <dt><code>timestepType</code> <a class="xref" href="BlueM.Wave.TimeSeries.html">TimeSeries</a>.<a class="xref" href="BlueM.Wave.TimeSeries.TimeStepTypeEnum.html">TimeStepTypeEnum</a></dt>
+    <dd><p>The type of interval to offset</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="BlueM.Wave.TimeSeries.html">TimeSeries</a></dt>
+    <dd><p>The shifted timeseries</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section" id="BlueM_Wave_TimeSeries_ShiftTime_System_Int32_BlueM_Wave_TimeSeries_TimeStepTypeEnum__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>Shifting by months may cause the loss of data points due to varying month lengths.
+Shifting by years may cause the loss of data points due to leap days.</p>
+</div>
+
+
+
+
+  <a id="BlueM_Wave_TimeSeries_SplitHydroYears_" data-uid="BlueM.Wave.TimeSeries.SplitHydroYears*"></a>
+
+  <h3 id="BlueM_Wave_TimeSeries_SplitHydroYears_System_Int32_" data-uid="BlueM.Wave.TimeSeries.SplitHydroYears(System.Int32)">
+  SplitHydroYears(int)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Splits a time series into individual series for each hydrological year</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Dictionary&lt;int, TimeSeries&gt; SplitHydroYears(int startMonth = 11)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>startMonth</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd><p>the month with which the hydrological year starts. Default = 11 (November)</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a>, <a class="xref" href="BlueM.Wave.TimeSeries.html">TimeSeries</a>&gt;</dt>
+    <dd><p>A dictionary of time series, the key represents the calendar year in which each hydrological year starts</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="BlueM_Wave_TimeSeries_Synchronize_" data-uid="BlueM.Wave.TimeSeries.Synchronize*"></a>
+
+  <h3 id="BlueM_Wave_TimeSeries_Synchronize_BlueM_Wave_TimeSeries__BlueM_Wave_TimeSeries__" data-uid="BlueM.Wave.TimeSeries.Synchronize(BlueM.Wave.TimeSeries@,BlueM.Wave.TimeSeries@)">
+  Synchronize(ref TimeSeries, ref TimeSeries)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Synchronizes two timeseries in-place by only keeping the common timestamps</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static void Synchronize(ref TimeSeries ts1, ref TimeSeries ts2)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>ts1</code> <a class="xref" href="BlueM.Wave.TimeSeries.html">TimeSeries</a></dt>
+    <dd><p>First timeseries</p>
+</dd>
+    <dt><code>ts2</code> <a class="xref" href="BlueM.Wave.TimeSeries.html">TimeSeries</a></dt>
+    <dd><p>Second timeseries</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="BlueM_Wave_TimeSeries_ToString_" data-uid="BlueM.Wave.TimeSeries.ToString*"></a>
+
+  <h3 id="BlueM_Wave_TimeSeries_ToString" data-uid="BlueM.Wave.TimeSeries.ToString">
+  ToString()
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Returns the time series' title</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override string ToString()</code></pre>
+  </div>
+
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="BlueM_Wave_TimeSeries_UpdateNode_" data-uid="BlueM.Wave.TimeSeries.UpdateNode*"></a>
+
+  <h3 id="BlueM_Wave_TimeSeries_UpdateNode_System_DateTime_System_Double_" data-uid="BlueM.Wave.TimeSeries.UpdateNode(System.DateTime,System.Double)">
+  UpdateNode(DateTime, double)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Updates the value of an existing node</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void UpdateNode(DateTime _date, double _value)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>_date</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.datetime">DateTime</a></dt>
+    <dd><p>Date</p>
+</dd>
+    <dt><code>_value</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></dt>
+    <dd><p>Value</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="BlueM_Wave_TimeSeries_convertErrorValues_" data-uid="BlueM.Wave.TimeSeries.convertErrorValues*"></a>
+
+  <h3 id="BlueM_Wave_TimeSeries_convertErrorValues_System_Double___" data-uid="BlueM.Wave.TimeSeries.convertErrorValues(System.Double[])">
+  convertErrorValues(params double[])
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Creates a copy of the time series in which all nodes with specified error values are converted to NaN</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public TimeSeries convertErrorValues(params double[] errorvalues)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>errorvalues</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a>[]</dt>
+    <dd><p>array of error values to ignore</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="BlueM.Wave.TimeSeries.html">TimeSeries</a></dt>
+    <dd><p>the cleaned time series</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section" id="BlueM_Wave_TimeSeries_convertErrorValues_System_Double____remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>a tolerance of 0.0001 is used to compare series values to errorvalues</p>
+</div>
+
+
+
+
+  <a id="BlueM_Wave_TimeSeries_getWert_" data-uid="BlueM.Wave.TimeSeries.getWert*"></a>
+
+  <h3 id="BlueM_Wave_TimeSeries_getWert_System_String_" data-uid="BlueM.Wave.TimeSeries.getWert(System.String)">
+  getWert(string)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Calculate a metric from the time series' values</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public double getWert(string WertTyp)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>WertTyp</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd><p>MaxWert, MinWert, Average, AnfWert, EndWert, Summe</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></dt>
+    <dd><p>the calculated metric</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section" id="BlueM_Wave_TimeSeries_getWert_System_String__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>Obsolete, kept for backwards compatibility with BlueM.Opt</p>
+</div>
+
+
+
+
+  <a id="BlueM_Wave_TimeSeries_get_Maximum_" data-uid="BlueM.Wave.TimeSeries.get_Maximum*"></a>
+
+  <h3 id="BlueM_Wave_TimeSeries_get_Maximum_System_DateTime_System_DateTime_" data-uid="BlueM.Wave.TimeSeries.get_Maximum(System.DateTime,System.DateTime)">
+  get_Maximum(DateTime, DateTime)
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public double get_Maximum(DateTime startdate, DateTime enddate)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>startdate</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.datetime">DateTime</a></dt>
+    <dd></dd>
+    <dt><code>enddate</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.datetime">DateTime</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="BlueM_Wave_TimeSeries_get_MaximumNode_" data-uid="BlueM.Wave.TimeSeries.get_MaximumNode*"></a>
+
+  <h3 id="BlueM_Wave_TimeSeries_get_MaximumNode_System_DateTime_System_DateTime_" data-uid="BlueM.Wave.TimeSeries.get_MaximumNode(System.DateTime,System.DateTime)">
+  get_MaximumNode(DateTime, DateTime)
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public KeyValuePair&lt;DateTime, double&gt; get_MaximumNode(DateTime startdate, DateTime enddate)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>startdate</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.datetime">DateTime</a></dt>
+    <dd></dd>
+    <dt><code>enddate</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.datetime">DateTime</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.keyvaluepair-2">KeyValuePair</a>&lt;<a class="xref" href="https://learn.microsoft.com/dotnet/api/system.datetime">DateTime</a>, <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a>&gt;</dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="BlueM_Wave_TimeSeries_get_Minimum_" data-uid="BlueM.Wave.TimeSeries.get_Minimum*"></a>
+
+  <h3 id="BlueM_Wave_TimeSeries_get_Minimum_System_DateTime_System_DateTime_" data-uid="BlueM.Wave.TimeSeries.get_Minimum(System.DateTime,System.DateTime)">
+  get_Minimum(DateTime, DateTime)
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public double get_Minimum(DateTime startdate, DateTime enddate)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>startdate</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.datetime">DateTime</a></dt>
+    <dd></dd>
+    <dt><code>enddate</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.datetime">DateTime</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="BlueM_Wave_TimeSeries_get_Nodes_" data-uid="BlueM.Wave.TimeSeries.get_Nodes*"></a>
+
+  <h3 id="BlueM_Wave_TimeSeries_get_Nodes_System_DateTime_" data-uid="BlueM.Wave.TimeSeries.get_Nodes(System.DateTime)">
+  get_Nodes(DateTime)
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public double get_Nodes(DateTime t)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>t</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.datetime">DateTime</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="BlueM_Wave_TimeSeries_get_Nodes_" data-uid="BlueM.Wave.TimeSeries.get_Nodes*"></a>
+
+  <h3 id="BlueM_Wave_TimeSeries_get_Nodes_System_DateTime_System_DateTime_" data-uid="BlueM.Wave.TimeSeries.get_Nodes(System.DateTime,System.DateTime)">
+  get_Nodes(DateTime, DateTime)
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public SortedList&lt;DateTime, double&gt; get_Nodes(DateTime startdate, DateTime enddate)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>startdate</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.datetime">DateTime</a></dt>
+    <dd></dd>
+    <dt><code>enddate</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.datetime">DateTime</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.sortedlist-2">SortedList</a>&lt;<a class="xref" href="https://learn.microsoft.com/dotnet/api/system.datetime">DateTime</a>, <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a>&gt;</dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="BlueM_Wave_TimeSeries_get_NodesClean_" data-uid="BlueM.Wave.TimeSeries.get_NodesClean*"></a>
+
+  <h3 id="BlueM_Wave_TimeSeries_get_NodesClean_System_DateTime_System_DateTime_" data-uid="BlueM.Wave.TimeSeries.get_NodesClean(System.DateTime,System.DateTime)">
+  get_NodesClean(DateTime, DateTime)
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public SortedList&lt;DateTime, double&gt; get_NodesClean(DateTime startdate, DateTime enddate)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>startdate</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.datetime">DateTime</a></dt>
+    <dd></dd>
+    <dt><code>enddate</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.datetime">DateTime</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.sortedlist-2">SortedList</a>&lt;<a class="xref" href="https://learn.microsoft.com/dotnet/api/system.datetime">DateTime</a>, <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a>&gt;</dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="BlueM_Wave_TimeSeries_removeNaNValues_" data-uid="BlueM.Wave.TimeSeries.removeNaNValues*"></a>
+
+  <h3 id="BlueM_Wave_TimeSeries_removeNaNValues" data-uid="BlueM.Wave.TimeSeries.removeNaNValues">
+  removeNaNValues()
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Returns a copy of the time series without the nodes having NaN and Infinity values</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public TimeSeries removeNaNValues()</code></pre>
+  </div>
+
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="BlueM.Wave.TimeSeries.html">TimeSeries</a></dt>
+    <dd><p>the cleaned time series</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+        <div class="contribution d-print-none">
+        </div>
+
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
