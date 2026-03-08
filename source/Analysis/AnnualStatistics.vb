@@ -33,7 +33,10 @@ Friend Class AnnualStatistics
         Public vol As Double
     End Structure
 
-    Private stats As Dictionary(Of String, struct_stat)
+    ''' <summary>
+    ''' Nested dictionary with key of series title and values as dictionary with key of period (entire series or year) and value of struct_stat with the calculated statistics for the period
+    ''' </summary>
+    Private stats As Dictionary(Of String, Dictionary(Of String, struct_stat))
     Private generateBoundingBoxes As Boolean
 
     Public Overloads Shared Function Description() As String
@@ -76,11 +79,7 @@ Friend Class AnnualStatistics
 
     Public Sub New(ByRef series As List(Of TimeSeries))
         MyBase.New(series)
-        'Check: expects exactly one series
-        If (series.Count <> 1) Then
-            Throw New Exception("The Annual Statistics analysis requires the selection of exactly 1 time series!")
-        End If
-        stats = New Dictionary(Of String, struct_stat)
+        stats = New Dictionary(Of String, Dictionary(Of String, struct_stat))()
     End Sub
 
     Private Function calculateStats(ByRef series As TimeSeries) As struct_stat
@@ -97,6 +96,7 @@ Friend Class AnnualStatistics
     End Function
 
     Public Overrides Sub ProcessAnalysis()
+
         Dim hyoseries As Dictionary(Of Integer, TimeSeries)
         Dim year As Integer
         Dim series As TimeSeries
@@ -109,24 +109,34 @@ Friend Class AnnualStatistics
         Dim startMonth As Integer = CType(dlg.ComboBox_startMonth.SelectedItem, Month).number
         Me.generateBoundingBoxes = dlg.CheckBox_boundingbox.Checked
 
-        'stats for entire series
-        Me.stats.Add("Entire series", calculateStats(Me.InputTimeSeries(0)))
+        For Each ts As TimeSeries In Me.InputTimeSeries
 
-        'stats for hydrological years
-        hyoseries = Me.InputTimeSeries(0).SplitHydroYears(startMonth)
-        For Each kvp As KeyValuePair(Of Integer, TimeSeries) In hyoseries
-            year = kvp.Key
-            series = kvp.Value
-            Me.stats.Add(year.ToString, calculateStats(series))
+            Dim tsStats As New Dictionary(Of String, struct_stat)()
+
+            'stats for entire series
+            tsStats.Add("Entire series", calculateStats(ts))
+
+            'stats for hydrological years
+            hyoseries = ts.SplitHydroYears(startMonth)
+            For Each kvp As KeyValuePair(Of Integer, TimeSeries) In hyoseries
+                year = kvp.Key
+                series = kvp.Value
+                tsStats.Add(year.ToString, calculateStats(series))
+            Next
+
+            Me.stats.Add(ts.Title, tsStats)
+
         Next
+
     End Sub
 
 
     Public Overrides Sub PrepareResults()
 
         'result table
-        Me.ResultTable = New DataTable($"Annual statistics: {Me.InputTimeSeries(0).Title}")
+        Me.ResultTable = New DataTable($"Annual statistics: {String.Join(", ", Me.InputTimeSeries.Select(Function(ts1) ts1.Title))}")
 
+        Me.ResultTable.Columns.Add("Series", GetType(String))
         Me.ResultTable.Columns.Add("Period", GetType(String))
         Me.ResultTable.Columns.Add("Start", GetType(DateTime))
         Me.ResultTable.Columns.Add("End", GetType(DateTime))
@@ -137,58 +147,71 @@ Friend Class AnnualStatistics
         Me.ResultTable.Columns.Add("Sum", GetType(Double))
         Me.ResultTable.Columns.Add("Volume", GetType(Double))
 
-        For Each kvp As KeyValuePair(Of String, struct_stat) In Me.stats
-            Dim period As String = kvp.Key
-            Dim stat As struct_stat = kvp.Value
-            Me.ResultTable.Rows.Add(
-                period,
-                stat.startDate,
-                stat.endDate,
-                stat.len,
-                stat.min,
-                stat.max,
-                stat.avg,
-                stat.sum,
-                stat.vol
-            )
+        For Each ts As TimeSeries In Me.InputTimeSeries
+            Dim tsStats As Dictionary(Of String, struct_stat) = Me.stats(ts.Title)
+            For Each kvp As KeyValuePair(Of String, struct_stat) In tsStats
+                Dim period As String = kvp.Key
+                Dim stat As struct_stat = kvp.Value
+                Me.ResultTable.Rows.Add(
+                    ts.Title,
+                    period,
+                    stat.startDate,
+                    stat.endDate,
+                    stat.len,
+                    stat.min,
+                    stat.max,
+                    stat.avg,
+                    stat.sum,
+                    stat.vol
+                )
+            Next
         Next
 
         'Generate timeseries with max/avg/min values if checkbox is checked and at least two years are present
-        If (Me.generateBoundingBoxes And Me.stats.Count > 2) Then
-            'Prepare output timeseries
-            Dim basename As String = Me.InputTimeSeries(0).Title
-            Dim timeseries_max As TimeSeries = New TimeSeries(basename & " (annual maximum)")
-            Dim timeseries_avg As TimeSeries = New TimeSeries(basename & " (annual average)")
-            Dim timeseries_min As TimeSeries = New TimeSeries(basename & " (annual minimum)")
+        If Me.generateBoundingBoxes Then
+            MyBase.ResultSeries = New List(Of TimeSeries)
+            For Each ts As TimeSeries In Me.InputTimeSeries
+                Dim tsStats As Dictionary(Of String, struct_stat) = Me.stats(ts.Title)
+                If tsStats.Count > 2 Then
+                    'Prepare output timeseries
+                    Dim basename As String = ts.Title
+                    Dim timeseries_max As New TimeSeries(basename & " (annual maximum)")
+                    Dim timeseries_avg As New TimeSeries(basename & " (annual average)")
+                    Dim timeseries_min As New TimeSeries(basename & " (annual minimum)")
 
-            'Set interpretation mode
-            timeseries_max.Interpretation = TimeSeries.InterpretationEnum.BlockRight
-            timeseries_avg.Interpretation = TimeSeries.InterpretationEnum.BlockRight
-            timeseries_min.Interpretation = TimeSeries.InterpretationEnum.BlockRight
+                    'Set interpretation mode
+                    timeseries_max.Interpretation = TimeSeries.InterpretationEnum.BlockRight
+                    timeseries_avg.Interpretation = TimeSeries.InterpretationEnum.BlockRight
+                    timeseries_min.Interpretation = TimeSeries.InterpretationEnum.BlockRight
 
-            'Transfer unit from input timeseries
-            Dim unit As String = Me.InputTimeSeries(0).Unit
-            timeseries_max.Unit = unit
-            timeseries_avg.Unit = unit
-            timeseries_min.Unit = unit
+                    'Transfer unit from input timeseries
+                    Dim unit As String = ts.Unit
+                    timeseries_max.Unit = unit
+                    timeseries_avg.Unit = unit
+                    timeseries_min.Unit = unit
 
-            'Set data source origin
-            timeseries_max.DataSource = New TimeSeriesDataSource(TimeSeriesDataSource.OriginEnum.AnalysisResult)
-            timeseries_avg.DataSource = New TimeSeriesDataSource(TimeSeriesDataSource.OriginEnum.AnalysisResult)
-            timeseries_min.DataSource = New TimeSeriesDataSource(TimeSeriesDataSource.OriginEnum.AnalysisResult)
+                    'Set data source origin
+                    timeseries_max.DataSource = New TimeSeriesDataSource(TimeSeriesDataSource.OriginEnum.AnalysisResult)
+                    timeseries_avg.DataSource = New TimeSeriesDataSource(TimeSeriesDataSource.OriginEnum.AnalysisResult)
+                    timeseries_min.DataSource = New TimeSeriesDataSource(TimeSeriesDataSource.OriginEnum.AnalysisResult)
 
-            'Fill timeseries with values of max, avg, min
-            For Each kvp As KeyValuePair(Of String, struct_stat) In Me.stats
-                If IsNumeric(kvp.Key) Then
-                    Dim stat As struct_stat = kvp.Value
-                    timeseries_max.AddNode(stat.startDate, stat.max)
-                    timeseries_avg.AddNode(stat.startDate, stat.avg)
-                    timeseries_min.AddNode(stat.startDate, stat.min)
+                    'Fill timeseries with values of max, avg, min
+                    For Each kvp As KeyValuePair(Of String, struct_stat) In tsStats
+                        If IsNumeric(kvp.Key) Then
+                            Dim stat As struct_stat = kvp.Value
+                            timeseries_max.AddNode(stat.startDate, stat.max)
+                            timeseries_avg.AddNode(stat.startDate, stat.avg)
+                            timeseries_min.AddNode(stat.startDate, stat.min)
+                        End If
+                    Next
+
+                    'store output timeseries
+                    MyBase.ResultSeries.Add(timeseries_max)
+                    MyBase.ResultSeries.Add(timeseries_avg)
+                    MyBase.ResultSeries.Add(timeseries_min)
+
                 End If
             Next
-
-            'Bundle output timeseries
-            MyBase.ResultSeries = New List(Of TimeSeries) From {timeseries_max, timeseries_avg, timeseries_min}
         End If
 
     End Sub

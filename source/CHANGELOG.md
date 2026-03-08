@@ -4,7 +4,7 @@ BlueM.Wave Release Notes
 Version 2.16.0
 --------------
 NEW:
-* Analysis function AnnualRecurrenceProbability can now handle multiple time series at once
+* Analysis functions AnnualRecurrenceProbability and AnnualStatistics can now handle multiple time series at once
 
 FIXED:
 * Fixed `TimeSeries.SplitHydroYears()` not being able to handle single-node years #226
