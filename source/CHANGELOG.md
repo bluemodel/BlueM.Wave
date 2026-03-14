@@ -3,7 +3,14 @@ BlueM.Wave Release Notes
 
 Version X.X.X
 -------------
+FIXED:
+* WEL files extracted from WLZIP archives when processing Talsim clipboard data are now deleted after use #136
+
+CHANGED:
+* Automatic extraction of WEL files from WLZIP archives now only occurs when processing Talsim clipboard data
+
 API-CHANGES:
+* New namespace `Parsers` containing classes for parsing file import instructions such as WVP files and Talsim clipboard content
 * Renamed `TimeSeriesFile.Write_File()` functions to `writeFile()` for consistency
 
 Version 2.16.0
