@@ -196,12 +196,10 @@ Public Class Wave
     Private Sub Load_WVP(projectfile As String)
 
         Try
-            Dim tsList As List(Of TimeSeries)
-
             Call Log.AddLogEntry(Log.levels.info, $"Loading Wave project file '{projectfile}'...")
 
             Dim wvp As New Parsers.WVP(projectfile)
-            tsList = wvp.Process()
+            Dim tsList As List(Of TimeSeries) = wvp.Process()
 
             Call Log.AddLogEntry(Log.levels.info, $"Imported {tsList.Count} timeseries")
 

@@ -388,6 +388,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="Parsers\Parser.vb" />
     <Compile Include="Parsers\WVP.vb" />
     <Compile Include="Views\IView.vb" />
     <Compile Include="Views\MainWindow.Designer.vb">
