@@ -96,6 +96,11 @@ Namespace Parsers
             Call Me.Parse()
         End Sub
 
+        Public Shared Function verifyFormat() As Boolean
+            'default implementation always returns true, can be overridden in subclasses to implement specific format verification
+            Return True
+        End Function
+
         ''' <summary>
         ''' Parses the input and stores the results in the FileReferences list
         ''' </summary>

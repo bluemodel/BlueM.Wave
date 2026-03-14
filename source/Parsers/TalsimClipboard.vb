@@ -29,6 +29,16 @@ Namespace Parsers
             MyBase.New(inputtext:=clipboardtext)
         End Sub
 
+        Public Overloads Shared Function verifyFormat(clipboardtext As String) As Boolean
+            'check if content contains expected header
+            If clipboardtext.Contains("SydroTyp=SydroErgZre") Or
+               clipboardtext.Contains("SydroTyp=SydroBinZre") Then
+                Return True
+            Else
+                Return False
+            End If
+        End Function
+
         ''' <summary>
         ''' Parses the clipboard content
         ''' </summary>

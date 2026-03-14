@@ -238,30 +238,25 @@ Public Class Wave
                 Dim clipboardtext As String
                 clipboardtext = Clipboard.GetText(TextDataFormat.Text)
 
-                If clipboardtext.Contains("SydroTyp=SydroErgZre") Or
-                   clipboardtext.Contains("SydroTyp=SydroBinZre") Then
-                    'it's a clipboard entry from TALSIM!
-
+                If Parsers.TalsimClipboard.verifyFormat(clipboardtext) Then
                     'ask the user for confirmation
                     dlgres = MessageBox.Show($"TALSIM clipboard content detected!{eol}Load series in Wave?", "Load from clipboard", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
-                    If Not dlgres = Windows.Forms.DialogResult.Yes Then
-                        Exit Sub
+                    If dlgres = Windows.Forms.DialogResult.Yes Then
+                        Call Me.LoadFromClipboard_TALSIM(clipboardtext)
                     End If
-                    Call Me.LoadFromClipboard_TALSIM(clipboardtext)
                 Else
-                    'ask the user whether to attempt plain text import
+                    'ask the user whether to attempt CSV import
                     dlgres = MessageBox.Show("Attempt to load clipboard text content in Wave as CSV data?", "Load from clipboard", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
-                    If Not dlgres = Windows.Forms.DialogResult.Yes Then
-                        Exit Sub
+                    If dlgres = Windows.Forms.DialogResult.Yes Then
+                        'save as temp text file and then load file
+                        Dim tmpfile As String = IO.Path.GetTempFileName()
+                        Using writer As New IO.StreamWriter(tmpfile, False, Helpers.DefaultEncoding)
+                            writer.Write(clipboardtext)
+                        End Using
+                        Call Me.Import_File(tmpfile)
+                        'delete temp file after import
+                        IO.File.Delete(tmpfile)
                     End If
-                    'save as temp text file and then load file
-                    Dim tmpfile As String = IO.Path.GetTempFileName()
-                    Using writer As New IO.StreamWriter(tmpfile, False, Helpers.DefaultEncoding)
-                        writer.Write(clipboardtext)
-                    End Using
-                    Call Me.Import_File(tmpfile)
-                    'delete temp file after import
-                    IO.File.Delete(tmpfile)
                 End If
             Else
                 MessageBox.Show("No usable clipboard content detected!", "Load from clipboard", MessageBoxButtons.OK, MessageBoxIcon.Error)
