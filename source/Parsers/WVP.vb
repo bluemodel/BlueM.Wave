@@ -17,7 +17,7 @@
 '
 Imports System.Text.RegularExpressions
 
-Namespace Fileformats
+Namespace Parsers
 
     ''' <summary>
     ''' Class for importing a wave project file

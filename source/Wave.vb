@@ -200,7 +200,7 @@ Public Class Wave
 
             Call Log.AddLogEntry(Log.levels.info, $"Loading Wave project file '{projectfile}'...")
 
-            Dim wvp As New Fileformats.WVP(projectfile)
+            Dim wvp As New Parsers.WVP(projectfile)
             tsList = wvp.Process()
 
             Call Log.AddLogEntry(Log.levels.info, $"Imported {tsList.Count} timeseries")
