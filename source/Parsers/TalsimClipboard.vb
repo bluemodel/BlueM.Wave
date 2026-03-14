@@ -162,13 +162,6 @@ Namespace Parsers
                             name = params("Kennung").PadRight(4, " ") & "_" & params("Zustand")
                         End If
 
-                        If Not IO.File.Exists(file) Then
-                            'A WEL/WBL file may be zipped within a WLZIP file, so try extracting it from there
-                            If Fileformats.WEL.extractFromWLZIP(file) Then
-                                'TODO #136: we should ideally clean up the extracted file later
-                            End If
-                        End If
-
                         'convert interpretation value to string
                         Dim interpretationValue As Integer = Integer.Parse(params("Interpretation"))
                         Dim interpretationString As String = [Enum].GetName(GetType(TimeSeries.InterpretationEnum), interpretationValue)
@@ -215,6 +208,38 @@ Namespace Parsers
             Next
 
         End Sub
+
+        Public Overloads Function Process() As List(Of TimeSeries)
+
+            'check for WEL/WBL that do not exist and try to extract them from WLZIP files if possible
+            Dim extractedFiles As New List(Of String)
+            For Each fileRef As FileReference In FileReferences
+                If Not IO.File.Exists(fileRef.path) Then
+                    Dim fileExt As String = IO.Path.GetExtension(fileRef.path).ToUpper()
+                    If fileExt = TimeSeriesFile.FileExtensions.WEL Or fileExt = TimeSeriesFile.FileExtensions.WBL Then
+                        If Fileformats.WEL.extractFromWLZIP(fileRef.path) Then
+                            'remember the file so that we can delete it later
+                            extractedFiles.Add(fileRef.path)
+                        End If
+                    End If
+                End If
+            Next
+
+            'process the files as usual
+            Dim tsList As List(Of TimeSeries) = MyBase.Process()
+
+            'delete any extracted files
+            For Each file As String In extractedFiles
+                Try
+                    IO.File.Delete(file)
+                Catch ex As Exception
+                    'ignore any errors during deletion
+                End Try
+            Next
+
+            Return tsList
+
+        End Function
 
     End Class
 
