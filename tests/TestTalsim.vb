@@ -38,7 +38,7 @@ Public Class TestTalsim
         End If
 
         'attempt to extract from WLZIP
-        Dim success As Boolean = Fileformats.WEL.extractFromWLZIP(file_wel)
+        Dim success As Boolean = Parsers.TalsimClipboard.extractFromWLZIP(file_wel)
 
         Assert.IsTrue(success)
         Assert.IsTrue(IO.File.Exists(file_wel))
