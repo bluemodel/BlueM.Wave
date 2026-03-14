@@ -23,13 +23,33 @@ Namespace Parsers
     Public MustInherit Class Parser
 
         ''' <summary>
-        ''' Holds reference to a file to be imported, file import settings and the series to be imported from that file with their options
+        ''' A reference to a file to be imported with all information needed for importing series from that file
         ''' </summary>
-        Protected Structure FileReference
-            Dim path As String 'path to file
-            Dim series As Dictionary(Of String, SeriesOptions) 'series name -> options
-            Dim settings As Dictionary(Of String, String) 'file import settings as key value pairs, e.g. separator, date format, etc.
-        End Structure
+        Protected Class FileReference
+
+            ''' <summary>
+            ''' The path to the file to be imported
+            ''' </summary>
+            Public path As String
+
+            ''' <summary>
+            ''' The series to be imported from the file with their options, where the key is the name of the series as it appears in the file and the value is a SeriesOptions object containing options for importing that series
+            ''' An empty dictionary means that all series contained in the file should be imported with default options
+            ''' </summary>
+            Public series As Dictionary(Of String, SeriesOptions)
+
+            ''' <summary>
+            ''' File import settings as key value pairs, e.g. separator, date format, etc.
+            ''' An empty dictionary means that default settings should be used for importing the file.
+            ''' </summary>
+            Public settings As Dictionary(Of String, String)
+
+            Public Sub New()
+                Me.series = New Dictionary(Of String, SeriesOptions)
+                Me.settings = New Dictionary(Of String, String)
+            End Sub
+
+        End Class
 
         ''' <summary>
         ''' Holds options for importing a series, e.g. display options, custom title and unit, etc.
