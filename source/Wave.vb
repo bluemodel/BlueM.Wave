@@ -283,170 +283,27 @@ Public Class Wave
     ''' <remarks></remarks>
     Private Sub LoadFromClipboard_TALSIM(clipboardtext As String)
 
-        'Examples:
+        Try
+            Call Log.AddLogEntry(Log.levels.info, $"Parsing Talsim clipboard content...")
 
-        '[SETTINGS]
-        'Count = 1
-        '[Zeitreihe1]
-        'SydroTyp=SydroErgZre
-        'ZRFormat=4
-        'ID=362
-        'Extension=.WEL
-        'Kennung=S000
-        'KennungLang={S000} {1AB, HYO} Ablauf_1
-        'Zustand=1AB
-        'Datei=D:\Talsim-NG\customers\WVER\projectData\felix\dataBase\Felix_data\00000362.WEL
-        'GeaendertAm=
-        'Modell=TALSIM
-        'Herkunft=simuliert
-        'Interpretation=2
-        'SimVariante=Test Langzeit/HWMerkmal_HWGK_v02
-        'Simulation=Test Langzeit
-        'Einheit=m3/s
-        'EndZeitreihe
+            Dim wvp As New Parsers.TalsimClipboard(clipboardtext)
+            Dim tsList As List(Of TimeSeries) = wvp.Process()
 
-        '[SETTINGS]
-        'Count=2
-        '[Zeitreihe1]
-        'SydroTyp=SydroBinZre
-        'ZRFormat=99
-        'ID=1041
-        'Extension=.BIN
-        'Kennung=Sce10, E038, C38 (TA_Tekeze TK 04B)
-        'KennungLang=Sce10, E038, C38 (TA_Tekeze TK 04B), m3/s
-        'Datei=C:\Talsim-NG\customers\Nile\projectData\hubert\dataBase\hubert_zre\00001041.BIN
-        'Einheit=m3/s
-        'Modell=TALSIM
-        'Interpretation=1
-        'EndZeitreihe
-        '[Zeitreihe2]
-        'SydroTyp=SydroBinZre
-        'ZRFormat=99
-        'ID=1042
-        'Extension=.BIN
-        'Kennung=Sce10, E039, C39 (TA_TK5)
-        'KennungLang=Sce10, E039, C39 (TA_TK5), m3/s
-        'Datei=C:\Talsim-NG\customers\Nile\projectData\hubert\dataBase\hubert_zre\00001042.BIN
-        'Einheit=m3/s
-        'Modell=TALSIM
-        'Interpretation=1
-        'EndZeitreihe
+            Call Log.AddLogEntry(Log.levels.info, $"Imported {tsList.Count} timeseries")
 
-        'parse clipboard contents
-        Dim m As Match
-        Dim i_series As Integer
-        Dim parts() As String
-        Dim zreblock As Boolean
-        Dim data As New List(Of Dictionary(Of String, String)) '[{zreparams1},{zreparams2},...]
-        Dim file, name As String
-        Dim fileInstance As TimeSeriesFile
-        Dim ts As TimeSeries
-
-        zreblock = False
-        For Each line As String In clipboardtext.Split(eol)
-            line = line.Trim()
-
-            m = Regex.Match(line, "\[Zeitreihe(\d+)\]")
-            If m.Success Then
-                i_series = m.Groups(1).Value
-                data.Add(New Dictionary(Of String, String))
-                zreblock = True
-            End If
-
-            If zreblock Then
-                If line.Contains("=") Then
-                    parts = line.Split("=")
-                    data(i_series - 1).Add(parts(0), parts(1))
-                ElseIf line = "EndZeitreihe" Then
-                    zreblock = False
-                    Continue For
-                End If
-            End If
-
-        Next
-
-        If data.Count = 0 Then
-            Throw New Exception("No series could be parsed from TALSIM clipboard content!")
-        End If
-
-        'initiate loading of series
-        For Each params As Dictionary(Of String, String) In data
-
-            ' check all required parameters are present
-            Dim expectedKeys As New List(Of String) From {
-                "Datei",
-                "ZRFormat",
-                "Kennung",
-                "Interpretation"
-            }
-            For Each key As String In expectedKeys
-                If Not params.ContainsKey(key) Then
-                    Throw New Exception($"Missing required entry '{key}' in clipboard content!")
-                End If
+            'import the series
+            Call Log.AddLogEntry(Log.levels.info, "Loading series in chart...")
+            For Each ts As TimeSeries In tsList
+                Call Me.Import_Series(ts)
             Next
 
-            file = params("Datei")
+            'Log
+            Call Log.AddLogEntry(Log.levels.info, $"Talsim clipboard content parsed successfully!")
 
-            Select Case params("ZRFormat")
-                Case "4" 'WEL file
-
-                    If Not params.ContainsKey("Zustand") Then
-                        Throw New Exception("Missing required entry 'Zustand' in clipboard content!")
-                    End If
-
-                    'build series name
-                    If params("Kennung") = "ZPG" Then
-                        'handle control groups
-                        name = "KGRP_" & params("Zustand")
-                    Else
-                        name = params("Kennung").PadRight(4, " ") & "_" & params("Zustand")
-                    End If
-
-                    'read file
-                    Log.AddLogEntry(Log.levels.info, $"Loading file {file} ...")
-                    fileInstance = TimeSeriesFile.getInstance(file)
-
-                    'read series from file
-                    ts = fileInstance.getTimeSeries(name)
-
-                    'set interpretation
-                    ts.Interpretation = params("Interpretation")
-
-                    'import series
-                    Call Me.Import_Series(ts)
-
-                Case "99" 'BIN file
-
-                    If Not params.ContainsKey("Einheit") Then
-                        Throw New Exception("Missing required entry 'Einheit' in clipboard content!")
-                    End If
-
-                    name = params("Kennung")
-
-                    'read file
-                    Log.AddLogEntry(Log.levels.info, $"Loading file {file} ...")
-                    fileInstance = TimeSeriesFile.getInstance(file)
-
-                    'read series from file
-                    fileInstance.readFile()
-                    ts = fileInstance.TimeSeries.First.Value
-
-                    'add metadata
-                    ts.Title = name
-                    ts.Unit = params("Einheit")
-
-                    'set interpretation
-                    ts.Interpretation = params("Interpretation")
-
-                    'import series
-                    Call Me.Import_Series(ts)
-
-                Case Else
-                    Throw New Exception($"Unsupported value {params("ZRFormat")} for ZRFormat!")
-
-            End Select
-
-        Next
+        Catch ex As Exception
+            MsgBox("Error while processing Talsim clipboard content:" & eol & ex.Message, MsgBoxStyle.Critical)
+            Call Log.AddLogEntry(Log.levels.error, "Error while processing Talsim clipboard content:" & eol & ex.Message)
+        End Try
 
     End Sub
 
