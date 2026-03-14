@@ -126,7 +126,7 @@ Public Class TestImport
     <DataRow("SWMM\SWMM5_TimeSeriesFile.dat")>
     <DataRow("SWMM\Tst_SubC.out")>
     <DataRow("SWMM\Wissmarbach.out")>
-    <DataRow("TALSIM\TALSIM.wel")>
+    <DataRow("TALSIM\TALSIM.WBL")>
     <DataRow("TALSIM\Talsim_states.KTR.WEL")>
     <DataRow("UVF\42007.0_q.uvf")>
     <DataRow("UVF\42960.0_q_28.uvf")>
