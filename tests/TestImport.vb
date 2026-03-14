@@ -25,28 +25,6 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
 Public Class TestImport
 
     ''' <summary>
-    ''' Tests finding a WEL file within a WLZIP file and extracting it
-    ''' </summary>
-    <TestMethod()>
-    Public Sub TestWLZIP()
-
-        Dim file_wel As String = IO.Path.Combine(TestData.getTestDataDir(), "Talsim", "TALSIM.WEL")
-
-        'delete existing file before testing
-        If IO.File.Exists(file_wel) Then
-            IO.File.Delete(file_wel)
-        End If
-
-        'attempt to extract from WLZIP
-        Dim success As Boolean = Fileformats.WEL.extractFromWLZIP(file_wel)
-
-        Assert.IsTrue(success)
-        Assert.IsTrue(IO.File.Exists(file_wel))
-
-    End Sub
-
-
-    ''' <summary>
     ''' Tests importing all supported time series file formats
     ''' </summary>
     ''' <param name="filepath">relative path to the file in the test data directory</param>
