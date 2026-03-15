@@ -8,7 +8,7 @@ Reading files always happens in steps:
 3. `.readFile()` reads the time series data for the selected series from the file
 
 There are some shortcuts:
-* `.getTimeSeries()` retrieves a time series from the file and if necessary, selects and reads it from the file first.
+* `.getTimeSeries()` retrieves one time series and if necessary, selects and reads it from the file first.
 
 ### Adding a new file format
 * Create a new class in the namespace [`FileFormats`](/api/BlueM.Wave.FileFormats.html) that inherits from [`TimeSeriesFile`](/api/BlueM.Wave.TimeSeriesFile.html).
