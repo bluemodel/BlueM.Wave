@@ -2,3 +2,5 @@
   href: intro.md
 - name: Analysis functions
   href: analysis.md
+- name: Time series file formats
+  href: fileformats.md
