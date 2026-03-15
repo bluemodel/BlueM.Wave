@@ -20,10 +20,10 @@ ts.AddNode(New DateTime(2000, 1, 3), 30)
 ts.AddNode(New DateTime(2000, 1, 4), 15)
 
 'print some information about the time series
-Console.WriteLine("Length: " & ts.Length)
-Console.WriteLine("Start date: " & ts.StartDate)
-Console.WriteLine("End date: " & ts.EndDate)
-Console.WriteLine("Average: " & ts.Average)
+Console.WriteLine($"Length: {ts.Length}")
+Console.WriteLine($"Start date: {ts.StartDate}")
+Console.WriteLine($"End date: {ts.EndDate}")
+Console.WriteLine($"Average: {ts.Average}")
 
 'manipulate the time series, e.g. by cutting it
 ts.Cut(New DateTime(2000, 1, 2), New DateTime(2000, 1, 3))
@@ -40,7 +40,8 @@ For Each sInfo As BlueM.Wave.TimeSeriesInfo In tsfile.TimeSeriesInfos
 	Console.WriteLine(sInfo.Name)
 Next
 
-'select some series for import
+'select some or all series for import
+tsFile.selectSeries("name or index")
 tsfile.selectAllSeries()
 
 'read the selected time series from the file
@@ -48,14 +49,14 @@ tsfile.readFile()
 
 'loop over all series read from the file and print some information about them
 For Each ts As BlueM.Wave.TimeSeries In tsfile.TimeSeries.Values
-	Console.WriteLine("Series title: " & ts.Title)
-	Console.WriteLine("Extent: " & ts.StartDate & " - " & ts.EndDate)
-	Console.WriteLine("Max value: " & ts.Maximum)
-	Console.WriteLine("Min value: " & ts.Minimum)
+	Console.WriteLine($"Series title: {ts.Title}")
+	Console.WriteLine($"Extent: {ts.StartDate} - {ts.EndDate}")
+	Console.WriteLine($"Max value: {ts.Maximum}")
+	Console.WriteLine($"Min value: {ts.Minimum}")
 Next
 
-'get one particular time series
-Dim ts As BlueM.Wave.TimeSeries = tsfile.getTimeSeries("seriesname or index")
+'get one particular time series (selects the series and reads it from the file if necessary)
+Dim ts As BlueM.Wave.TimeSeries = tsfile.getTimeSeries("name or index")
 ```
 
 The namespace [`BlueM.Wave.Fileformats`](xref:BlueM.Wave.Fileformats) contains special classes for reading from specific file formats, which all inherit from [`TimeSeriesFile`](xref:BlueM.Wave.TimeSeriesFile).
