@@ -359,7 +359,7 @@ Namespace Fileformats
         ''' <param name="saveLineStyle">Whether to save line styles</param>
         ''' <param name="saveLineWidth">Whether to save line widths</param>
         ''' <param name="savePointsVisibility">Whether to save points visibility</param>
-        Public Shared Sub Write_File(ByRef tsList As List(Of TimeSeries), file As String,
+        Public Overloads Shared Sub writeFile(ByRef tsList As List(Of TimeSeries), file As String,
                                      Optional saveRelativePaths As Boolean = False,
                                      Optional saveTitle As Boolean = False,
                                      Optional saveUnit As Boolean = False,

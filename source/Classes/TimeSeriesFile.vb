@@ -534,6 +534,17 @@ Public MustInherit Class TimeSeriesFile
     Public MustOverride Sub readFile()
 
     ''' <summary>
+    ''' Write time series series to a file in the corresponding format.
+    ''' Must be implemented by inheriting classes, as the base class does not know how to write files.
+    ''' </summary>
+    ''' <param name="tsList">time series to write to file</param>
+    ''' <param name="file">path to the file to write</param>
+    ''' <remarks></remarks>
+    Public Shared Sub writeFile(tsList As List(Of TimeSeries), file As String)
+        Throw New NotImplementedException("The writeFile method is not implemented for the base TimeSeriesFile class. Please use a derived class that implements this method.")
+    End Sub
+
+    ''' <summary>
     ''' Sets default metadata keys and values for a time series corresponding to the file format
     ''' </summary>
     ''' <remarks>Should be overloaded by inheriting classes that deal with metadata</remarks>

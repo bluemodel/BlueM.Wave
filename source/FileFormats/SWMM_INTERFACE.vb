@@ -129,7 +129,7 @@ Namespace Fileformats
         End Sub
 
         ''' <summary>
-        ''' Spaltenköpfe auslesen
+        ''' SpaltenkÃ¶pfe auslesen
         ''' </summary>
         Public Overrides Sub readSeriesInfo()
 
@@ -147,7 +147,7 @@ Namespace Fileformats
             Me.TimeSeriesInfos.Clear()
             Me.swmmInfos = New Dictionary(Of Integer, SWMMSeriesInfo)
 
-            'Datei öffnen
+            'Datei Ã¶ffnen
             Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
             Dim StrRead As StreamReader = New StreamReader(FiStr, Me.Encoding)
             Dim StrReadSync As TextReader = TextReader.Synchronized(StrRead)
@@ -196,7 +196,7 @@ Namespace Fileformats
             'iZeileDaten kann erst jetzt gesetzt werden, wenn AnzZeilen_dT bekannt ist
             Me.iLineData = iZeileAnzConstituents + AnzConstituents + AnzNodes + 3
 
-            'Spaltenköpfe (Zuflussknoten) und Indizes einlesen
+            'SpaltenkÃ¶pfe (Zuflussknoten) und Indizes einlesen
             index = 1
             For i = 0 To AnzNodes - 1
                 For j = 0 To AnzConstituents - 1
@@ -249,7 +249,7 @@ Namespace Fileformats
 
             'Einheiten?
             If (Me.UseUnits = False) Then
-                MsgBox("Beim Einlesen eines SWMM-Interface-Files müssen immer die Einheiten gesetzt sein!")
+                MsgBox("Beim Einlesen eines SWMM-Interface-Files mÃ¼ssen immer die Einheiten gesetzt sein!")
                 Exit Sub
             End If
 
@@ -270,7 +270,7 @@ Namespace Fileformats
             Next
 
             'Daten
-            'Schema: Alle Werte in Array Werte schreiben, dann aber über SpaltenSel.Index nur die ausgewählten in Zeitreihe importieren
+            'Schema: Alle Werte in Array Werte schreiben, dann aber Ã¼ber SpaltenSel.Index nur die ausgewÃ¤hlten in Zeitreihe importieren
             Do
                 IDWerte = 1
                 For i = 0 To AnzNodes - 1
@@ -322,7 +322,7 @@ Namespace Fileformats
         ''' </summary>
         ''' <param name="seriesList">list of time series to export</param>
         ''' <param name="file">path to file to export to</param>
-        Public Shared Sub Write_File(ByRef seriesList As List(Of TimeSeries), file As String)
+        Public Overloads Shared Sub writeFile(ByRef seriesList As List(Of TimeSeries), file As String)
 
             Dim strwrite As StreamWriter
             Dim i, j, k As Integer
@@ -467,7 +467,7 @@ Namespace Fileformats
         End Sub
 
         ''' <summary>
-        ''' Prüft, ob es sich um ein Routing Interface File für SWMM handelt
+        ''' PrÃ¼ft, ob es sich um ein Routing Interface File fÃ¼r SWMM handelt
         ''' </summary>
         ''' <param name="file">Pfad zur Datei</param>
         ''' <returns></returns>
@@ -500,7 +500,7 @@ Namespace Fileformats
         Public Shared Function FlowConversionFactor(unit As String) As Integer
 
             Select Case unit
-                Case "m3/s", "m³/s", "CMS"
+                Case "m3/s", "mÂ³/s", "CMS"
                     Return 1000
                 Case "l/s", "LPS"
                     Return 1

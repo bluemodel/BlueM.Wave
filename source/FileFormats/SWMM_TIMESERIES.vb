@@ -220,7 +220,7 @@ Namespace Fileformats
         ''' </summary>
         ''' <param name="ts">time series to export</param>
         ''' <param name="path">path to file to write</param>
-        Public Shared Sub Write_File(ts As TimeSeries, path As String)
+        Public Overloads Shared Sub writeFile(ts As TimeSeries, path As String)
 
             Dim strwrite As New StreamWriter(path)
 

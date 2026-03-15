@@ -210,7 +210,7 @@ Namespace Fileformats
         ''' <param name="Reihe">Die zu exportierende Zeitreihe</param>
         ''' <param name="File">Pfad zur anzulegenden Datei</param>
         ''' <remarks>Zeitreihe muss äquidistant mit 5 min Zeitschritt vorliegen!</remarks>
-        Public Shared Sub Write_File(Reihe As TimeSeries, File As String)
+        Public Overloads Shared Sub writeFile(Reihe As TimeSeries, File As String)
 
             Dim t1, t2 As DateTime
             Dim dt As Integer

@@ -244,7 +244,7 @@ Namespace Fileformats
         ''' <param name="tsList">time series to write to file</param>
         ''' <param name="file">path to the xml file</param>
         ''' <remarks></remarks>
-        Public Shared Sub Write_File(ByRef tsList As List(Of TimeSeries), file As String)
+        Public Overloads Shared Sub writeFile(ByRef tsList As List(Of TimeSeries), file As String)
             Dim xmlserializer As New XmlSerializer(GetType(XMLTimeSeries))
             Dim xmlroot As New XMLTimeSeries With {
                 .version = "1.2",

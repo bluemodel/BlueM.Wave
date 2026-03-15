@@ -188,7 +188,7 @@ Namespace Fileformats
         ''' <param name="tsList">time series to write to file</param>
         ''' <param name="file">path to the bcs file</param>
         ''' <remarks></remarks>
-        Public Shared Sub Write_File(ByRef tsList As List(Of TimeSeries), file As String)
+        Public Overloads Shared Sub writeFile(ByRef tsList As List(Of TimeSeries), file As String)
 
             Dim strwrite As StreamWriter
             Dim t As DateTime

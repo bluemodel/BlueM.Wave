@@ -712,19 +712,19 @@ Public Class Wave
                 Select Case fileType
 
                     Case TimeSeriesFile.FileTypes.CSV
-                        Call Fileformats.CSV.Write_File(tsList, filename)
+                        Call Fileformats.CSV.writeFile(tsList, filename)
 
                     Case TimeSeriesFile.FileTypes.DFS0
-                        Call Fileformats.DFS0.Write_File(tsList, filename)
+                        Call Fileformats.DFS0.writeFile(tsList, filename)
 
                     Case TimeSeriesFile.FileTypes.FEWS_PI
-                        Call Fileformats.FEWS_PI.Write_File(tsList, filename)
+                        Call Fileformats.FEWS_PI.writeFile(tsList, filename)
 
                     Case TimeSeriesFile.FileTypes.SWMM_INTERFACE
-                        Call Fileformats.SWMM_INTERFACE.Write_File(tsList, filename)
+                        Call Fileformats.SWMM_INTERFACE.writeFile(tsList, filename)
 
                     Case TimeSeriesFile.FileTypes.HYBNAT_BCS
-                        Call Fileformats.HYBNAT_BCS.Write_File(tsList, filename)
+                        Call Fileformats.HYBNAT_BCS.writeFile(tsList, filename)
 
                     Case Else
                         Throw New Exception($"Export to file type {fileType} not yet implemented!")
@@ -756,25 +756,25 @@ Public Class Wave
                     Select Case fileType
 
                         Case TimeSeriesFile.FileTypes.BIN
-                            Call Fileformats.BIN.Write_File(ts, filename)
+                            Call Fileformats.BIN.writeFile(ts, filename)
 
                         Case TimeSeriesFile.FileTypes.HYSTEM_REG
-                            Call Fileformats.HystemExtran_REG.Write_File(ts, filename)
+                            Call Fileformats.HystemExtran_REG.writeFile(ts, filename)
 
                         Case TimeSeriesFile.FileTypes.SMUSI_REG
-                            Call Fileformats.SMUSI_REG.Write_File(ts, filename)
+                            Call Fileformats.SMUSI_REG.writeFile(ts, filename)
 
                         Case TimeSeriesFile.FileTypes.SWMM_TIMESERIES
-                            Call Fileformats.SWMM_TIMESERIES.Write_File(ts, filename)
+                            Call Fileformats.SWMM_TIMESERIES.writeFile(ts, filename)
 
                         Case TimeSeriesFile.FileTypes.UVF
-                            Call Fileformats.UVF.Write_File(ts, filename)
+                            Call Fileformats.UVF.writeFile(ts, filename)
 
                         Case TimeSeriesFile.FileTypes.ZRE
-                            Call Fileformats.ZRE.Write_File(ts, filename)
+                            Call Fileformats.ZRE.writeFile(ts, filename)
 
                         Case TimeSeriesFile.FileTypes.ZRXP
-                            Call Fileformats.ZRXP.Write_File(ts, filename)
+                            Call Fileformats.ZRXP.writeFile(ts, filename)
 
                         Case Else
                             Throw New Exception($"Export to file type {fileType} not yet implemented!")

@@ -20,13 +20,13 @@ Imports System.IO
 Namespace Fileformats
 
     ''' <summary>
-    ''' Klasse für das Hystem-Extran REG-Dateiformat
+    ''' Klasse fÃ¼r das Hystem-Extran REG-Dateiformat
     ''' </summary>
     ''' <remarks>Format siehe https://wiki.bluemodel.org/index.php/Hystem-Extran_REG-Format</remarks>
     Public Class HystemExtran_REG
         Inherits TimeSeriesFile
 
-        Const LenString As Integer = 5   'Länge des Strings eines Wertes in der reg/dat-Datei
+        Const LenString As Integer = 5   'LÃ¤nge des Strings eines Wertes in der reg/dat-Datei
         Const fehlWert As String = "-9999" 'Fehlwert / Ausfall
 
 #Region "Eigenschaften"
@@ -78,7 +78,7 @@ Namespace Fileformats
                     Case 720
                         Return 2
                     Case 1440
-                        Return 10 'TODO: Eigentlich 10 Werte für die ersten zwei Zeilen eines Monats, dann variabel für den Rest des Monats
+                        Return 10 'TODO: Eigentlich 10 Werte fÃ¼r die ersten zwei Zeilen eines Monats, dann variabel fÃ¼r den Rest des Monats
                     Case Else
                         Throw New Exception($"Number of entries per line for time step of {dt} minutes is undefined!")
                 End Select
@@ -123,7 +123,7 @@ Namespace Fileformats
 
             Me.TimeSeriesInfos.Clear()
 
-            'Datei öffnen
+            'Datei Ã¶ffnen
             Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
             Dim StrRead As StreamReader = New StreamReader(FiStr, Me.Encoding)
             Dim StrReadSync = TextReader.Synchronized(StrRead)
@@ -200,12 +200,12 @@ Namespace Fileformats
                         Throw New Exception($"Unable to parse the date '{dateString}'!")
                     End If
 
-                    'Datum und Wert zur Zeitreihe hinzufügen
+                    'Datum und Wert zur Zeitreihe hinzufÃ¼gen
                     '---------------------------------------
                     Select Case kennzeichnung
-                        Case " ", "S" 'normale Datenzeile oder Datenzeile mit Ausfällen
+                        Case " ", "S" 'normale Datenzeile oder Datenzeile mit AusfÃ¤llen
                             'alle bis auf den letzten Wert einlesen
-                            'beim letzten Wert besteht die Möglichkeit, dass nicht alle Zeichen belegt sind
+                            'beim letzten Wert besteht die MÃ¶glichkeit, dass nicht alle Zeichen belegt sind
                             For i = 0 To HystemExtran_REG.WerteProZeile(Me.Zeitintervall) - 1
                                 Datum = Zeilendatum.AddMinutes(i * Me.Zeitintervall)
                                 wertString = Zeile.Substring(20 + LenString * i, LenString)
@@ -217,7 +217,7 @@ Namespace Fileformats
                                 ts.AddNode(Datum, wert)
                             Next
                         Case "K" 'Konstantsatz
-                            ' nur ein Wert für die gesamte Zeile
+                            ' nur ein Wert fÃ¼r die gesamte Zeile
                             wertString = Zeile.Substring(20)
                             If wertString = fehlWert Then
                                 wert = Double.NaN
@@ -257,7 +257,7 @@ Namespace Fileformats
         ''' </summary>
         ''' <param name="Reihe">Die zu exportierende Zeitreihe</param>
         ''' <param name="File">Pfad zur anzulegenden Datei</param>
-        Public Shared Sub Write_File(Reihe As TimeSeries, File As String)
+        Public Overloads Shared Sub writeFile(Reihe As TimeSeries, File As String)
 
             Dim dt As Integer
             Dim KontiReihe As TimeSeries
@@ -266,7 +266,7 @@ Namespace Fileformats
             'Zeitintervall aus ersten und zweiten Zeitschritt der Reihe ermitteln
             dt = DateDiff(DateInterval.Minute, Reihe.Dates(0), Reihe.Dates(1))
 
-            'Äquidistante Zeitreihe erzeugen
+            'Ã„quidistante Zeitreihe erzeugen
             KontiReihe = Reihe.ChangeTimestep(BlueM.Wave.TimeSeries.TimeStepTypeEnum.Minute, dt, Reihe.StartDate, BlueM.Wave.TimeSeries.InterpretationEnum.BlockRight)
 
             Dim strwrite As StreamWriter
@@ -315,7 +315,7 @@ Namespace Fileformats
                 strwrite.Write(KontiReihe.Dates(n).ToString(Helpers.DateFormats("HYSTEMEXTRAN")) & " ")
                 For j = 1 To WerteproZeile
                     If n > KontiReihe.Length - 1 Then
-                        'falls keine Werte mehr vorhanden Zeile mit Fehlwerten auffüllen
+                        'falls keine Werte mehr vorhanden Zeile mit Fehlwerten auffÃ¼llen
                         IntWert = fehlWert
                     ElseIf Double.IsNaN(KontiReihe.Values(n)) Then
                         IntWert = fehlWert
@@ -333,7 +333,7 @@ Namespace Fileformats
         End Sub
 
         ''' <summary>
-        ''' Prüft, ob es sich um eine HystemExtran-REG-Datei handelt
+        ''' PrÃ¼ft, ob es sich um eine HystemExtran-REG-Datei handelt
         ''' </summary>
         ''' <param name="file">Pfad zur Datei</param>
         ''' <returns></returns>

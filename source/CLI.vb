@@ -189,12 +189,12 @@ Friend Class CLI
                             If IO.File.Exists(path_out) Then
                                 Log.AddLogEntry(BlueM.Wave.Log.levels.warning, "Overwriting existing file!")
                             End If
-                            Fileformats.CSV.Write_File(tsList, path_out)
+                            Fileformats.CSV.writeFile(tsList, path_out)
                         Case TimeSeriesFile.FileTypes.DFS0
                             If IO.File.Exists(path_out) Then
                                 Log.AddLogEntry(BlueM.Wave.Log.levels.warning, "Overwriting existing file!")
                             End If
-                            Fileformats.DFS0.Write_File(tsList, path_out)
+                            Fileformats.DFS0.writeFile(tsList, path_out)
                         Case TimeSeriesFile.FileTypes.BIN
                             'treat output path as a directory and export individual files, using the title as filename
                             IO.Directory.CreateDirectory(path_out)
@@ -208,7 +208,7 @@ Friend Class CLI
                                 If IO.File.Exists(filepath) Then
                                     Log.AddLogEntry(Log.levels.warning, "Overwriting existing file!")
                                 End If
-                                Fileformats.BIN.Write_File(ts, filepath)
+                                Fileformats.BIN.writeFile(ts, filepath)
                             Next
                     End Select
                     Log.AddLogEntry(BlueM.Wave.Log.levels.info, "Finished conversion!")

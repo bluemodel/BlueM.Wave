@@ -233,9 +233,9 @@ Namespace Fileformats
         Public Shared Function UnitToEUMUnit(unit As String) As eumUnit
             Dim eumUnit As eumUnit
             Select Case unit.ToLower()
-                Case "m3/s", "m³/s", "m^3/s", "m^3s^-1", "meter^3/sec"
+                Case "m3/s", "mÂ³/s", "m^3/s", "m^3s^-1", "meter^3/sec"
                     eumUnit = eumUnit.eumUm3PerSec
-                Case "m", "masl", "m.a.s.l.", "münn", "mnn", "meter"
+                Case "m", "masl", "m.a.s.l.", "mÃ¼nn", "mnn", "meter"
                     eumUnit = eumUnit.eumUmeter
                 Case "m/s", "ms^-1", "meter/sec"
                     eumUnit = eumUnit.eumUmeterPerSec
@@ -249,17 +249,17 @@ Namespace Fileformats
                     eumUnit = eumUnit.eumUmillimeterPerMonth
                 Case "mm/y", "mm/year", "mm/yr"
                     eumUnit = eumUnit.eumUmillimeterPerYear
-                Case "°c", "degree celsius", "degree c", "deg c"
+                Case "Â°c", "degree celsius", "degree c", "deg c"
                     eumUnit = eumUnit.eumUdegreeCelsius
                 Case "()"
                     eumUnit = eumUnit.eumUOnePerOne
                 Case "%", "percent"
                     eumUnit = eumUnit.eumUPerCent
-                Case "m³", "m3", "cbm"
+                Case "mÂ³", "m3", "cbm"
                     eumUnit = eumUnit.eumUm3
-                Case "mm³", "mm3", "million m³", "million m3", "10^6m^3"
+                Case "mmÂ³", "mm3", "million mÂ³", "million m3", "10^6m^3"
                     eumUnit = eumUnit.eumUTenTo6m3
-                Case "m²", "m2", "sqm"
+                Case "mÂ²", "m2", "sqm"
                     eumUnit = eumUnit.eumUm2
                 Case "tj"
                     eumUnit = eumUnit.eumUteraJoule
@@ -282,7 +282,7 @@ Namespace Fileformats
         ''' <param name="tsList">list of TimeSeries</param>
         ''' <param name="path">path to file</param>
         ''' <remarks></remarks>
-        Public Shared Sub Write_File(ByRef tsList As List(Of TimeSeries), path As String)
+        Public Overloads Shared Sub writeFile(ByRef tsList As List(Of TimeSeries), path As String)
 
             'show DFS0 export dialog in order to allow the user to specify EUM Items and Units
             Dim dlg As New DFS0_ExportDialog(tsList)

@@ -245,7 +245,7 @@ Namespace Fileformats
         '''     if not set, these settings are taken from CurrentCulture
         ''' </param>
         ''' <remarks></remarks>
-        Public Shared Sub Write_File(ByRef tsList As List(Of TimeSeries), file As String, Optional cInfo As CultureInfo = Nothing)
+        Public Overloads Shared Sub writeFile(ByRef tsList As List(Of TimeSeries), file As String, Optional cInfo As CultureInfo = Nothing)
 
             Dim strwrite As StreamWriter
             Dim t As DateTime

@@ -20,7 +20,7 @@ Imports System.IO
 Namespace Fileformats
 
     ''' <summary>
-    ''' Klasse f¸r das SYDRO Bin‰rformat
+    ''' Klasse f√ºr das SYDRO Bin√§rformat
     ''' </summary>
     ''' <remarks></remarks>
     Public Class BIN
@@ -52,7 +52,7 @@ Namespace Fileformats
             MyBase.New(FileName)
 
             'Voreinstellungen
-            Me.Dateformat = Helpers.CurrentDateFormat 'irrelevant weil bin‰r
+            Me.Dateformat = Helpers.CurrentDateFormat 'irrelevant weil bin√§r
             Me.iLineData = 0
             Me.UseUnits = False
 
@@ -168,7 +168,7 @@ Namespace Fileformats
         ''' </summary>
         ''' <param name="ts">the timeseries to write</param>
         ''' <param name="file">path to the file</param>
-        Public Shared Sub Write_File(ByRef ts As TimeSeries, file As String)
+        Public Overloads Shared Sub writeFile(ByRef ts As TimeSeries, file As String)
 
             Dim header() As Int32
             Dim rdate As Double

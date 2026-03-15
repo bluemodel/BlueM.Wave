@@ -435,7 +435,7 @@ Namespace Fileformats
         ''' <param name="ts">the time series to export</param>
         ''' <param name="file">path to the file</param>
         ''' <remarks></remarks>
-        Public Shared Sub Write_File(ByRef ts As TimeSeries, file As String)
+        Public Overloads Shared Sub writeFile(ByRef ts As TimeSeries, file As String)
 
             Dim strwrite As StreamWriter
 

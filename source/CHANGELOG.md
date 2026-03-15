@@ -1,6 +1,11 @@
 BlueM.Wave Release Notes
 ========================
 
+Version X.X.X
+-------------
+API-CHANGES:
+* Renamed `TimeSeriesFile.Write_File()` functions to `writeFile()` for consistency
+
 Version 2.16.0
 --------------
 NEW:

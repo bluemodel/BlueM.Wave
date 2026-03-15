@@ -20,7 +20,7 @@ Imports System.IO
 Namespace Fileformats
 
     ''' <summary>
-    ''' Klasse für das ZRE-Dateiformat
+    ''' Klasse fÃ¼r das ZRE-Dateiformat
     ''' </summary>
     ''' <remarks>Format siehe https://wiki.bluemodel.org/index.php/ZRE-Format</remarks>
     Public Class ZRE
@@ -71,7 +71,7 @@ Namespace Fileformats
 
             Me.TimeSeriesInfos.Clear()
 
-            'Datei öffnen
+            'Datei Ã¶ffnen
             Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
             Dim StrRead As StreamReader = New StreamReader(FiStr, Me.Encoding)
             Dim StrReadSync = TextReader.Synchronized(StrRead)
@@ -136,7 +136,7 @@ Namespace Fileformats
                         Throw New Exception($"Unable to parse the timestamp '{timestamp}' using the expected format '{Me.Dateformat}'!")
                     End If
 
-                    'Datum und Wert zur Zeitreihe hinzufügen
+                    'Datum und Wert zur Zeitreihe hinzufÃ¼gen
                     '---------------------------------------
                     ts.AddNode(Datum, StringToDouble(Zeile.Substring(15)))
 
@@ -158,7 +158,7 @@ Namespace Fileformats
         ''' </summary>
         ''' <param name="Reihe">Die zu exportierende Zeitreihe</param>
         ''' <param name="File">Pfad zur anzulegenden Datei</param>
-        Public Shared Sub Write_File(Reihe As TimeSeries, File As String)
+        Public Overloads Shared Sub writeFile(Reihe As TimeSeries, File As String)
 
             Dim strwrite As StreamWriter
             Dim i As Integer
