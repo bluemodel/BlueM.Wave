@@ -23,6 +23,8 @@ Friend Module Main
 
         Application.EnableVisualStyles()
         Application.SetCompatibleTextRenderingDefault(False)
+        Dim colormode As SystemColorMode = If(Helpers.GetWindowsColorMode() = 0, SystemColorMode.Dark, SystemColorMode.Classic)
+        Application.SetColorMode(colormode)
 
         'load user settings
         My.Settings.Reload()

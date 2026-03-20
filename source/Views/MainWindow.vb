@@ -211,8 +211,6 @@ Friend Class MainWindow
 
         Me.TChart2.Clear()
         Call Helpers.ChartSetDefaultFormat(Me.TChart2.Chart)
-        Me.TChart2.Panel.Brush.Color = Color.FromArgb(239, 239, 239)
-        Me.TChart2.Walls.Back.Color = Color.FromArgb(239, 239, 239)
         Me.TChart2.Header.Visible = False
         Me.TChart2.Legend.Visible = False
 
@@ -231,12 +229,38 @@ Friend Class MainWindow
         Me.TChart1.Axes.Bottom.Labels.DateTimeFormat = Helpers.CurrentDateFormat
         Me.TChart1.Axes.Right.Title.Angle = 90
 
-        Me.TChart2.Axes.Left.Labels.Font.Color = Color.FromArgb(100, 100, 100)
         Me.TChart2.Axes.Left.Labels.Font.Size = 8
-        Me.TChart2.Axes.Bottom.Labels.Font.Color = Color.FromArgb(100, 100, 100)
         Me.TChart2.Axes.Bottom.Labels.Font.Size = 8
         Me.TChart2.Axes.Bottom.Automatic = False
         Me.TChart2.Axes.Bottom.Labels.DateTimeFormat = Globalization.CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern 'date only without time
+
+        'set colors of overview chart depending on color mode
+        Dim backColor As Color
+        Dim foreColor As Color
+        Dim lightColor As Color
+        Dim mode As SystemColorMode = Application.ColorMode
+        If mode = SystemColorMode.System Then
+            'determine system color mode
+            mode = If(GetWindowsColorMode() = 0, SystemColorMode.Dark, SystemColorMode.Classic)
+        End If
+        Select Case mode
+            Case SystemColorMode.Classic
+                backColor = Color.FromArgb(239, 239, 239)
+                foreColor = Color.FromArgb(100, 100, 100)
+                lightColor = Color.FromArgb(169, 169, 169)
+            Case SystemColorMode.Dark
+                backColor = Color.FromArgb(48, 48, 48)
+                foreColor = Color.FromArgb(200, 200, 200)
+                lightColor = Color.FromArgb(125, 125, 125)
+        End Select
+        Me.TChart2.Panel.Brush.Color = backColor
+        Me.TChart2.Walls.Back.Color = backColor
+        Me.TChart2.Axes.Left.Labels.Font.Color = foreColor
+        Me.TChart2.Axes.Left.AxisPen.Color = foreColor
+        Me.TChart2.Axes.Left.Grid.Color = lightColor
+        Me.TChart2.Axes.Bottom.Labels.Font.Color = foreColor
+        Me.TChart2.Axes.Bottom.AxisPen.Color = foreColor
+        Me.TChart2.Axes.Bottom.Grid.Color = lightColor
 
         'ColorBand einrichten
         Call Me.Init_ColorBands()
