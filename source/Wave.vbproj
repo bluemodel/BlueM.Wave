@@ -197,7 +197,6 @@ copy $(MSBuildProjectDirectory)\lib\PureHDF\PureHDF.LICENSE.md $(OutDir)PureHDF.
     <Content Include="lib\MathNet\MathNet.Numerics.license.txt" />
     <Content Include="lib\MathParserNet\MathParserNet.dll" />
     <Content Include="lib\MathParserNet\MathParserNet.license.html" />
-    <Content Include="lib\modelEAU\modelEAU.SWMM.DllAdapter.dll" />
     <Content Include="lib\SQLite\System.Data.SQLite.dll" />
     <Content Include="lib\SQLite\x64\SQLite.Interop.dll" />
     <Content Include="lib\SQLite\x86\SQLite.Interop.dll" />
