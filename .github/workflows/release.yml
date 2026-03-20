@@ -15,10 +15,10 @@ jobs:
         uses: release-kit/semver@v2
         
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v6
         
       - name: Add msbuild to PATH
-        uses: microsoft/setup-msbuild@v1.1
+        uses: microsoft/setup-msbuild@v2
         
       - name: Create TeeChart license file from secret
         uses: lukasa1993/secret-file-action@v1.0.4
@@ -65,7 +65,7 @@ jobs:
         shell: cmd
         
       - name: Release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
           name: "v${{ steps.version.outputs.full }}"
           draft: true # for now
