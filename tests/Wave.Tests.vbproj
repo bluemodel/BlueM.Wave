@@ -4,6 +4,7 @@
     <OutputType>Library</OutputType>
     <RootNamespace>BlueM.Wave.Tests</RootNamespace>
     <MyType>Windows</MyType>
+    <Platforms>x86;x64</Platforms>
     <AssemblyTitle>BlueM.Wave.Tests</AssemblyTitle>
     <Description>Unit testing assembly for BlueM.Wave</Description>
     <Company>BlueM Dev Group</Company>
@@ -11,26 +12,6 @@
     <Copyright>Copyright © BlueM Dev Group</Copyright>
     <AssemblyVersion>1.13.4</AssemblyVersion>
     <FileVersion>1.13.4.0</FileVersion>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
-    <OutputPath>bin\x64\Debug\</OutputPath>
-    <DocumentationFile>Wave.Tests.xml</DocumentationFile>
-    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
-    <OutputPath>bin\x64\Release\</OutputPath>
-    <DocumentationFile>Wave.Tests.xml</DocumentationFile>
-    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
-    <OutputPath>bin\x86\Debug\</OutputPath>
-    <DocumentationFile>Wave.Tests.xml</DocumentationFile>
-    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
-    <OutputPath>bin\x86\Release\</OutputPath>
-    <DocumentationFile>Wave.Tests.xml</DocumentationFile>
-    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
   </PropertyGroup>
   <ItemGroup>
     <Import Include="Microsoft.VisualStudio.TestTools.UnitTesting" />
