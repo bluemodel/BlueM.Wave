@@ -24,6 +24,25 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
 <TestClass()>
 Public Class TestTalsim
 
+    <TestMethod()>
+    <DataRow("TALSIM\Clipboard_Talsim_WLZIP.txt")>
+    <DataRow("TALSIM\Clipboard_Talsim_Zeitreihe_BIN.txt")>
+    <DataRow("TALSIM\Clipboard_Talsim_Zeitreihe_WEL.txt")>
+    <DataRow("TALSIM\Clipboard_Talsim_Zeitreihen_multi.txt")>
+    <DataRow("TALSIM\Clipboard_Talsim4_Zeitreihe_KTR.WEL.txt")>
+    <DataRow("TALSIM\Clipboard_Talsim5_Zeitreihe_KTR.WEL.txt")>
+    Public Sub TestTestTalsimClipboard(clipboardFile As String)
+
+        Dim clipboardData As String = IO.File.ReadAllText(IO.Path.Combine(TestData.getTestDataDir(), clipboardFile))
+
+        Dim wave As New BlueM.Wave.Wave()
+        wave.LoadFromClipboard_TALSIM(clipboardData)
+
+        'check that time series were imported
+        Assert.IsTrue(wave.TimeSeries.Count > 0)
+
+    End Sub
+
     ''' <summary>
     ''' Tests finding a WEL file within a WLZIP file and extracting it
     ''' </summary>
@@ -68,7 +87,7 @@ Public Class TestTalsim
         Dim wave As New BlueM.Wave.Wave()
         wave.LoadFromClipboard_TALSIM(clipboardData)
 
-        'check that time series was loaded into app
+        'check that time series was imported
         Assert.IsTrue(wave.TimeSeries.Count > 0)
 
         'check that extracted file was deleted
