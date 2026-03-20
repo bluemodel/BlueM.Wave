@@ -98,15 +98,7 @@ Namespace Parsers
                     If m.Success Then
                         seriesName = m.Groups("name").Value.Trim()
                         'check for additional series options
-                        'by default, series options are nothing
-                        Dim options As New SeriesOptions With {
-                            .title = Nothing,
-                            .unit = Nothing,
-                            .color = Nothing,
-                            .linestyle = Nothing,
-                            .linewidth = Nothing,
-                            .interpretation = Nothing
-                        }
+                        Dim options As New SeriesOptions()
                         If m.Groups("options").Success Then
                             'parse series options
                             Dim optionString As String = m.Groups("optionstring").Value.Trim()
@@ -126,16 +118,16 @@ Namespace Parsers
                                             options.title = value
                                         Case "unit"
                                             options.unit = value
-                                        Case "color"
-                                            options.color = value
-                                        Case "linestyle"
-                                            options.linestyle = value
-                                        Case "linewidth"
-                                            options.linewidth = value
                                         Case "interpretation"
                                             options.interpretation = value
+                                        Case "color"
+                                            options.displayOptions.SetColor(value)
+                                        Case "linestyle"
+                                            options.displayOptions.SetLineStyle(value)
+                                        Case "linewidth"
+                                            options.displayOptions.SetLineWidth(value)
                                         Case "showpoints"
-                                            options.showpoints = value
+                                            options.displayOptions.SetShowPoints(value)
                                         Case Else
                                             Log.AddLogEntry(levels.warning, $"Series import option keyword {keyword} not recognized!")
                                     End Select

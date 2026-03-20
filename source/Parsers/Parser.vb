@@ -54,15 +54,15 @@ Namespace Parsers
         ''' <summary>
         ''' Holds options for importing a series, e.g. display options, custom title and unit, etc.
         ''' </summary>
-        Protected Structure SeriesOptions
-            Dim title As String
-            Dim unit As String
-            Dim color As String
-            Dim linestyle As String
-            Dim linewidth As String
-            Dim interpretation As String
-            Dim showpoints As String
-        End Structure
+        Protected Class SeriesOptions
+            Public title As String
+            Public unit As String
+            Public interpretation As String
+            Public displayOptions As TimeSeriesDisplayOptions
+            Public Sub New()
+                Me.displayOptions = New TimeSeriesDisplayOptions()
+            End Sub
+        End Class
 
         ''' <summary>
         ''' The path to the input file
@@ -212,18 +212,7 @@ Namespace Parsers
                             End If
                         End If
                         'display options
-                        If Not IsNothing(options.color) Then
-                            ts.DisplayOptions.SetColor(options.color)
-                        End If
-                        If Not IsNothing(options.linestyle) Then
-                            ts.DisplayOptions.SetLineStyle(options.linestyle)
-                        End If
-                        If Not IsNothing(options.linewidth) Then
-                            ts.DisplayOptions.SetLineWidth(options.linewidth)
-                        End If
-                        If Not IsNothing(options.showpoints) Then
-                            ts.DisplayOptions.SetShowPoints(options.showpoints)
-                        End If
+                        ts.DisplayOptions = options.displayOptions
                     End If
                     'store the time series in the list
                     tsList.Add(ts)
