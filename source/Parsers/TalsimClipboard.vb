@@ -102,7 +102,7 @@ Namespace Parsers
             Dim file, name As String
 
             zreblock = False
-            For Each line As String In InputText.Split(eol)
+            For Each line As String In InputText.Split(New String() {vbCr, vbLf}, StringSplitOptions.RemoveEmptyEntries)
 
                 line = line.Trim()
 
