@@ -35,11 +35,11 @@ Public Class TestTalsim
 
         Dim clipboardData As String = IO.File.ReadAllText(IO.Path.Combine(TestData.getTestDataDir(), clipboardFile))
 
-        Dim wave As New BlueM.Wave.Wave()
-        wave.LoadFromClipboard_TALSIM(clipboardData)
+        Dim talsimclipboard As New Parsers.TalsimClipboard(clipboardData)
+        Dim tsList As List(Of TimeSeries) = talsimclipboard.Process()
 
-        'check that time series were imported
-        Assert.IsTrue(wave.TimeSeries.Count > 0)
+        'check that time series were created
+        Assert.IsTrue(tsList.Count > 0)
 
     End Sub
 
@@ -84,11 +84,11 @@ Public Class TestTalsim
 
         Dim clipboardData As String = IO.File.ReadAllText(file_clipboard)
 
-        Dim wave As New BlueM.Wave.Wave()
-        wave.LoadFromClipboard_TALSIM(clipboardData)
+        Dim talsimclipboard As New Parsers.TalsimClipboard(clipboardData)
+        Dim tsList As List(Of TimeSeries) = talsimclipboard.Process()
 
-        'check that time series was imported
-        Assert.IsTrue(wave.TimeSeries.Count > 0)
+        'check that time series were created
+        Assert.IsTrue(tsList.Count > 0)
 
         'check that extracted file was deleted
         Assert.IsFalse(IO.File.Exists(file_wel))
