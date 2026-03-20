@@ -46,6 +46,17 @@ copy $(MSBuildProjectDirectory)\lib\PureHDF\PureHDF.LICENSE.md $(OutDir)PureHDF.
     <EmbeddedResource Remove="lib\modelEAU\**" />
     <None Remove="lib\modelEAU\**" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Analysis\Calculator.vb" />
+    <Compile Remove="Analysis\CalculatorDialog.Designer.vb" />
+    <Compile Remove="Analysis\CalculatorDialog.vb" />
+    <Compile Remove="Analysis\CalculatorVariable.vb" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Remove="Analysis\CalculatorDialog.resx" />
+  </ItemGroup>
   <ItemGroup>
     <PackageReference Include="DHI.DFS" Version="23.0.3" />
     <PackageReference Include="MathNet.Numerics" Version="5.0.0" />

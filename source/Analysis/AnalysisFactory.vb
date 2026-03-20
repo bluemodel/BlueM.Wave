@@ -57,8 +57,6 @@ Friend Module AnalysisFactory
                 Return AnnualStatistics.Description
             Case AnalysisFunctions.Autocorrelation
                 Return Autocorrelation.Description
-            Case AnalysisFunctions.Calculator
-                Return Calculator.Description
             Case AnalysisFunctions.ChangeTimestep
                 Return ChangeTimestep.Description
             Case AnalysisFunctions.Comparison
@@ -109,9 +107,6 @@ Friend Module AnalysisFactory
 
             Case AnalysisFunctions.Autocorrelation
                 oAnalysis = New Autocorrelation(seriesList)
-
-            Case AnalysisFunctions.Calculator
-                oAnalysis = New Calculator(seriesList)
 
             Case AnalysisFunctions.ChangeTimestep
                 oAnalysis = New ChangeTimestep(seriesList)
