@@ -166,6 +166,9 @@ Namespace Parsers
                             .title = name,
                             .interpretation = Helpers.ParseInterpretation(Integer.Parse(params("Interpretation")))
                         }
+                        If params.ContainsKey("Einheit") Then
+                            options.unit = params("Einheit")
+                        End If
 
                         Dim fileRef As New FileReference() With {
                             .path = file,
