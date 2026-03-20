@@ -15,6 +15,7 @@
 'You should have received a copy of the GNU Lesser General Public License
 'along with this program.  If not, see <https://www.gnu.org/licenses/>.
 '
+Imports System.Data
 Imports BlueM.Wave.AnnualStatistics
 ''' <summary>
 '''Calculates the following statistical values for each month of the year:
