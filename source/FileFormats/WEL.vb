@@ -310,56 +310,6 @@ Namespace Fileformats
 
         End Function
 
-        ''' <summary>
-        ''' Attempts to extract a specified WEL file from a WLZIP file of the same name
-        ''' </summary>
-        ''' <param name="file">path to WEL file</param>
-        ''' <returns>True if successful</returns>
-        ''' <remarks>TALSIM specific</remarks>
-        Public Shared Function extractFromWLZIP(file As String) As Boolean
-
-            Dim file_wlzip As String
-            Dim filename As String
-            Dim zipEntryFound As Boolean = False
-            Dim success As Boolean = False
-
-            'determine WLZIP filename for files ending with .WEL (may also be e.g. .KTR.WEL, .CHLO.WEL, etc.)
-            Dim m As Match = Regex.Match(file, "^(.+?)(\.[a-z]+)?\.WEL$", RegexOptions.IgnoreCase)
-            If m.Success Then
-                file_wlzip = $"{m.Groups(1)}.WLZIP"
-
-                If IO.File.Exists(file_wlzip) Then
-
-                    Log.AddLogEntry(Log.levels.info, $"Looking for file in {file_wlzip} ...")
-                    filename = IO.Path.GetFileName(file)
-
-                    Dim zip As IO.Compression.ZipArchive = IO.Compression.ZipFile.OpenRead(file_wlzip)
-
-                    For Each entry As IO.Compression.ZipArchiveEntry In zip.Entries
-                        If entry.Name.ToLower() = filename.ToLower() Then
-                            zipEntryFound = True
-                            'extract file from zip archive
-                            Log.AddLogEntry(Log.levels.info, $"Extracting file from {file_wlzip} ...")
-                            Dim fs As New IO.FileStream(file, FileMode.CreateNew)
-                            entry.Open().CopyTo(fs)
-                            fs.Flush()
-                            fs.Close()
-                            success = True
-                            Exit For
-                        End If
-                    Next
-
-                    If Not zipEntryFound Then
-                        Log.AddLogEntry(Log.levels.error, $"File {filename} not found in {file_wlzip}!")
-                    End If
-
-                End If
-            End If
-
-            Return success
-
-        End Function
-
 #End Region 'Methoden
 
     End Class

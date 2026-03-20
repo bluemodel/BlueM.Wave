@@ -34,7 +34,7 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
         }
 
         For Each file As String In filesWVP
-            Dim wvp As New Fileformats.WVP(file)
+            Dim wvp As New Parsers.WVP(file)
         Next
 
     End Sub
@@ -46,7 +46,7 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
 
         Dim fileWVP As String = IO.Path.Combine(TestData.getTestDataDir(), "WVP", "test_displayoptions.wvp")
 
-        Dim wvp As New Fileformats.WVP(fileWVP)
+        Dim wvp As New Parsers.WVP(fileWVP)
         Dim tsList As List(Of TimeSeries) = wvp.Process()
 
         Assert.AreEqual("AA  _1AB", tsList(0).Title)
@@ -71,20 +71,20 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
 
         'read time series using a WVP file
         Dim fileIn As String = IO.Path.Combine(TestData.getTestDataDir(), "WVP", "test_displayoptions.wvp")
-        Dim wvp As New Fileformats.WVP(fileIn)
+        Dim wvp As New Parsers.WVP(fileIn)
         Dim tsList As List(Of TimeSeries) = wvp.Process()
 
         'write the time series to a WVP file
         Dim fileOut As String = IO.Path.Combine(TestData.getTestDataDir(), "WVP", "test_displayoptions_export.wvp")
-        Call Fileformats.WVP.writeFile(tsList, fileOut,
-                                        saveRelativePaths:=True,
-                                        saveTitle:=True,
-                                        saveUnit:=True,
-                                        saveInterpretation:=True,
-                                        saveColor:=True,
-                                        saveLineStyle:=True,
-                                        saveLineWidth:=True,
-                                        savePointsVisibility:=True
+        Call Parsers.WVP.writeFile(tsList, fileOut,
+                                   saveRelativePaths:=True,
+                                   saveTitle:=True,
+                                   saveUnit:=True,
+                                   saveInterpretation:=True,
+                                   saveColor:=True,
+                                   saveLineStyle:=True,
+                                   saveLineWidth:=True,
+                                   savePointsVisibility:=True
         )
 
         'check the file contents of the written WVP file
@@ -123,7 +123,7 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
 
         'read time series using a WVP file
         Dim file As String = IO.Path.Combine(TestData.getTestDataDir(), "WVP", "test_preserve_order.wvp")
-        Dim wvp As New Fileformats.WVP(file)
+        Dim wvp As New Parsers.WVP(file)
         Dim tsList As List(Of TimeSeries) = wvp.Process()
 
         'check the order of series

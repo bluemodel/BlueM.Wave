@@ -17,54 +17,29 @@
 '
 Imports System.Text.RegularExpressions
 
-Namespace Fileformats
+Namespace Parsers
 
     ''' <summary>
-    ''' Class for importing a wave project file
+    ''' Class for parsing a wave project file
     ''' https://wiki.bluemodel.org/index.php/Wave_project_file
     ''' </summary>
     Public Class WVP
-
-        Private projectfile As String
-
-        Private Structure FileEntry
-            Dim path As String 'path to file
-            Dim series As Dictionary(Of String, SeriesOptions) 'series name -> options
-            Dim settings As Dictionary(Of String, String) 'file import settings as key value pairs, e.g. separator, date format, etc.
-        End Structure
-
-        Private Structure SeriesOptions
-            Dim title As String
-            Dim unit As String
-            Dim color As String
-            Dim linestyle As String
-            Dim linewidth As String
-            Dim interpretation As String
-            Dim showpoints As String
-        End Structure
-
-        Private fileEntries As New List(Of FileEntry)
+        Inherits Parser
 
         Public Sub New(file As String)
-
-            Me.projectfile = file
-
-            Call Me.Parse()
-
+            MyBase.New(inputfile:=file)
         End Sub
 
         ''' <summary>
         ''' Parses the project file
         ''' </summary>
-        Private Sub Parse()
+        Protected Overrides Sub Parse()
 
-            Dim fstr As IO.FileStream
-            Dim strRead As IO.StreamReader
             Dim line, parts(), file, seriesName As String
 
-            Log.AddLogEntry(Log.levels.info, $"Parsing Wave project file {projectfile} ...")
+            Log.AddLogEntry(Log.levels.info, $"Parsing Wave project file {MyBase.InputFile} ...")
 
-            'read project file
+            'parse Wave project file
 
             'file format (all whitespace is optional):
             '
@@ -76,20 +51,15 @@ Namespace Fileformats
             ' series=series4
             ' series=series5
             '
-            fstr = New IO.FileStream(projectfile, IO.FileMode.Open)
-            strRead = New IO.StreamReader(fstr, Text.Encoding.UTF8)
-
             file = ""
 
-            line = strRead.ReadLine()
-            While Not IsNothing(line)
+            For Each line In Me.inputText.Split({vbCrLf, vbLf}, StringSplitOptions.RemoveEmptyEntries)
 
                 line = line.Trim() 'get rid of whitespace
 
                 If line.StartsWith("#") Then
                     'skip comments
-                    line = strRead.ReadLine()
-                    Continue While
+                    Continue For
                 End If
 
                 If line.ToLower().StartsWith("file=") Then
@@ -97,10 +67,10 @@ Namespace Fileformats
                     file = line.Split("=".ToCharArray(), 2)(1).Trim()
                     If Not IO.Path.IsPathRooted(file) Then
                         'it's a relative path: construct the full path relative to the project file
-                        file = IO.Path.GetFullPath(IO.Path.Combine(IO.Path.GetDirectoryName(projectfile), file))
+                        file = IO.Path.GetFullPath(IO.Path.Combine(IO.Path.GetDirectoryName(MyBase.InputFile), file))
                     End If
                     'store file entry
-                    fileEntries.Add(New FileEntry With {
+                    FileReferences.Add(New FileReference With {
                         .path = file,
                         .series = New Dictionary(Of String, SeriesOptions)(),
                         .settings = New Dictionary(Of String, String)()
@@ -128,15 +98,7 @@ Namespace Fileformats
                     If m.Success Then
                         seriesName = m.Groups("name").Value.Trim()
                         'check for additional series options
-                        'by default, series options are nothing
-                        Dim options As New SeriesOptions With {
-                            .title = Nothing,
-                            .unit = Nothing,
-                            .color = Nothing,
-                            .linestyle = Nothing,
-                            .linewidth = Nothing,
-                            .interpretation = Nothing
-                        }
+                        Dim options As New SeriesOptions()
                         If m.Groups("options").Success Then
                             'parse series options
                             Dim optionString As String = m.Groups("optionstring").Value.Trim()
@@ -156,16 +118,16 @@ Namespace Fileformats
                                             options.title = value
                                         Case "unit"
                                             options.unit = value
-                                        Case "color"
-                                            options.color = value
-                                        Case "linestyle"
-                                            options.linestyle = value
-                                        Case "linewidth"
-                                            options.linewidth = value
                                         Case "interpretation"
-                                            options.interpretation = value
+                                            options.interpretation = Helpers.ParseInterpretation(value)
+                                        Case "color"
+                                            options.displayOptions.SetColor(value)
+                                        Case "linestyle"
+                                            options.displayOptions.SetLineStyle(value)
+                                        Case "linewidth"
+                                            options.displayOptions.SetLineWidth(value)
                                         Case "showpoints"
-                                            options.showpoints = value
+                                            options.displayOptions.SetShowPoints(value)
                                         Case Else
                                             Log.AddLogEntry(levels.warning, $"Series import option keyword {keyword} not recognized!")
                                     End Select
@@ -173,9 +135,9 @@ Namespace Fileformats
                             End If
                         End If
                         'add series to last entry of filelist
-                        If fileEntries.Count > 0 Then
-                            If Not fileEntries.Last().series.ContainsKey(seriesName) Then
-                                fileEntries.Last().series.Add(seriesName, options)
+                        If FileReferences.Count > 0 Then
+                            If Not FileReferences.Last().series.ContainsKey(seriesName) Then
+                                FileReferences.Last().series.Add(seriesName, options)
                             Else
                                 'duplicate series
                                 Log.AddLogEntry(Log.levels.warning, $"Series {seriesName} is specified more than once, only the first mention will be processed!")
@@ -195,9 +157,9 @@ Namespace Fileformats
                     key = parts(0).Trim()
                     value = parts(1).Trim()
                     'add settings to last entry of file list
-                    If fileEntries.Count > 0 Then
-                        If Not fileEntries.Last().settings.ContainsKey(key) Then
-                            fileEntries.Last().settings.Add(key, value)
+                    If FileReferences.Count > 0 Then
+                        If Not FileReferences.Last().settings.ContainsKey(key) Then
+                            FileReferences.Last().settings.Add(key, value)
                         Else
                             'duplicate setting
                             Log.AddLogEntry(Log.levels.warning, $"File import setting {key} is specified more than once, only the first mention will be processed!")
@@ -209,141 +171,9 @@ Namespace Fileformats
                 Else
                     'ignore any other lines
                 End If
-                line = strRead.ReadLine()
-            End While
-
-            strRead.Close()
-            fstr.Close()
-
-        End Sub
-
-        ''' <summary>
-        ''' Reads all timeseries from all files as specified in the project file
-        ''' </summary>
-        ''' <returns>the list of time series</returns>
-        Public Function Process() As List(Of TimeSeries)
-
-            Dim tsList As New List(Of TimeSeries)
-
-            'loop over file list
-            For Each fileEntry As FileEntry In fileEntries
-
-                Log.AddLogEntry(Log.levels.info, $"Reading file {fileEntry.path} ...")
-
-                'get an instance of the file
-                Dim fileInstance As TimeSeriesFile = TimeSeriesFile.getInstance(fileEntry.path)
-
-                'apply custom file import settings
-                If fileEntry.settings.Count > 0 Then
-                    For Each key As String In fileEntry.settings.Keys
-                        Dim value As String = fileEntry.settings(key)
-                        Try
-                            Select Case key.ToLower()
-                                Case "iscolumnseparated"
-                                    fileInstance.IsColumnSeparated = If(value.ToLower() = "true", True, False)
-                                Case "separator"
-                                    fileInstance.Separator = New Character(value)
-                                Case "dateformat"
-                                    fileInstance.Dateformat = value
-                                Case "decimalseparator"
-                                    fileInstance.DecimalSeparator = New Character(value)
-                                Case "ilineheadings"
-                                    fileInstance.iLineHeadings = Convert.ToInt32(value)
-                                Case "ilineunits"
-                                    fileInstance.iLineUnits = Convert.ToInt32(value)
-                                Case "ilinedata"
-                                    fileInstance.iLineData = Convert.ToInt32(value)
-                                Case "useunits"
-                                    fileInstance.UseUnits = If(value.ToLower() = "true", True, False)
-                                Case "columnwidth"
-                                    fileInstance.ColumnWidth = Convert.ToInt32(value)
-                                Case "datetimecolumnindex"
-                                    fileInstance.DateTimeColumnIndex = Convert.ToInt32(value)
-                                Case Else
-                                    Log.AddLogEntry(Log.levels.warning, $"Setting '{key}' was not recognized and was ignored!")
-                            End Select
-                        Catch ex As Exception
-                            Log.AddLogEntry(Log.levels.warning, $"Setting '{key}' with value '{value}' could not be parsed and was ignored!")
-                        End Try
-                    Next
-                    'reread columns with new settings
-                    fileInstance.readSeriesInfo()
-                End If
-
-                'select series for importing
-                If fileEntry.series.Count = 0 Then
-                    'read all series contained in the file
-                    Call fileInstance.selectAllSeries()
-                Else
-                    'loop over series names
-                    Dim seriesNames As List(Of String) = fileEntry.series.Keys.ToList()
-                    Dim seriesNotFound As New List(Of String)
-                    For Each seriesName As String In seriesNames
-                        Dim found As Boolean = fileInstance.selectSeries(seriesName)
-                        If Not found Then
-                            seriesNotFound.Add(seriesName)
-                            Log.AddLogEntry(Log.levels.error, $"Series {seriesName} not found in file, skipping series!")
-                        End If
-                    Next
-                    'remove series that were not found from the list
-                    For Each seriesName As String In seriesNotFound
-                        seriesNames.Remove(seriesName)
-                    Next
-                    'if no series remain to be imported, abort reading the file altogether
-                    If seriesNames.Count = 0 Then
-                        Log.AddLogEntry(Log.levels.error, "No series left to import, skipping file!")
-                        Continue For
-                    End If
-
-                End If
-
-                'read the file
-                fileInstance.readFile()
-
-                'Log
-                Call Log.AddLogEntry(Log.levels.info, $"File '{fileEntry.path}' imported successfully!")
-
-                'store the series
-                For Each ts As TimeSeries In fileInstance.TimeSeries.Values
-                    'set series options
-                    If fileEntry.series.ContainsKey(ts.Title) Then
-                        Dim options As SeriesOptions = fileEntry.series(ts.Title)
-                        'options affecting the time series itself
-                        If Not IsNothing(options.title) Then
-                            ts.Title = options.title
-                        End If
-                        If Not IsNothing(options.unit) Then
-                            ts.Unit = options.unit
-                        End If
-                        If Not IsNothing(options.interpretation) Then
-                            If Not [Enum].IsDefined(GetType(TimeSeries.InterpretationEnum), options.interpretation) Then
-                                Log.AddLogEntry(levels.warning, $"Interpretation {options.interpretation} is not recognized!")
-                            Else
-                                ts.Interpretation = [Enum].Parse(GetType(TimeSeries.InterpretationEnum), options.interpretation)
-                            End If
-                        End If
-                        'display options
-                        If Not IsNothing(options.color) Then
-                            ts.DisplayOptions.SetColor(options.color)
-                        End If
-                        If Not IsNothing(options.linestyle) Then
-                            ts.DisplayOptions.SetLineStyle(options.linestyle)
-                        End If
-                        If Not IsNothing(options.linewidth) Then
-                            ts.DisplayOptions.SetLineWidth(options.linewidth)
-                        End If
-                        If Not IsNothing(options.showpoints) Then
-                            ts.DisplayOptions.SetShowPoints(options.showpoints)
-                        End If
-                    End If
-                    'store the time series in the list
-                    tsList.Add(ts)
-                Next
             Next
 
-            Return tsList
-
-        End Function
+        End Sub
 
         ''' <summary>
         ''' Write a Wave project file

@@ -152,7 +152,7 @@ Friend Class CLI
                                 Throw New NotImplementedException("TEN files are currently not supported in the CLI!")
 
                             Case TimeSeriesFile.FileExtensions.WVP
-                                Dim wvp As New Fileformats.WVP(file_in)
+                                Dim wvp As New Parsers.WVP(file_in)
                                 Dim wvpSeries As List(Of TimeSeries) = wvp.Process()
                                 Log.AddLogEntry(Log.levels.info, $"Imported {wvpSeries.Count} time series")
                                 tsList.AddRange(wvpSeries)

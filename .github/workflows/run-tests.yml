@@ -37,6 +37,7 @@ jobs:
           dotnet test BlueM.Wave\tests\bin\x64\Debug\Wave.Tests.dll --settings BlueM.Wave\tests\tests.runsettings
           
       - name: Upload test results
+        if: always()
         uses: actions/upload-artifact@v6
         with:
           name: test-results

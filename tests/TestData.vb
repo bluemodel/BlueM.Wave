@@ -21,18 +21,25 @@
 Module TestData
 
     ''' <summary>
+    ''' Returns the absolute path to the parent directory of the repository
+    ''' by going up 5 levels from the application directory
+    ''' </summary>
+    Friend Function getParentDir() As String
+        Dim appdir As String = My.Application.Info.DirectoryPath() 'e.g. BlueM.Wave\tests\bin\x64\Debug
+        Dim rootdir As String = appdir
+        For i As Integer = 1 To 5
+            rootdir = IO.Directory.GetParent(rootdir).FullName
+        Next
+        Return rootdir
+    End Function
+
+    ''' <summary>
     ''' Returns the absolute path to the test data directory BlueM.Datasets\Wave
     ''' which is expected to be in the same directory as BlueM.Wave
     ''' </summary>
-    ''' <returns></returns>
     Friend Function getTestDataDir() As String
         Try
-            Dim appdir As String = My.Application.Info.DirectoryPath() 'e.g. BlueM.Wave\tests\bin\x64\Debug
-            Dim testdatadir As String = appdir
-            For i As Integer = 1 To 5
-                testdatadir = IO.Directory.GetParent(testdatadir).FullName
-            Next
-            testdatadir = IO.Path.Combine(testdatadir, "BlueM.Datasets", "Wave")
+            Dim testdatadir As String = IO.Path.Combine(getParentDir(), "BlueM.Datasets", "Wave")
             If Not IO.Directory.Exists(testdatadir) Then
                 Throw New AssertInconclusiveException($"Directory {testdatadir} does not exist.")
             End If

@@ -561,15 +561,15 @@ Friend Class WaveController
                     End If
                     tsList.Add(ts)
                 Next
-                Call Fileformats.WVP.writeFile(tsList, dlg.FileName,
-                                                saveRelativePaths:=dlg.SaveRelativePaths,
-                                                saveTitle:=dlg.SaveTitle,
-                                                saveUnit:=dlg.SaveUnit,
-                                                saveInterpretation:=dlg.SaveInterpretation,
-                                                saveColor:=dlg.SaveColor,
-                                                saveLineStyle:=dlg.SaveLineStyle,
-                                                saveLineWidth:=dlg.SaveLineWidth,
-                                                savePointsVisibility:=dlg.SavePointsVisibility
+                Call Parsers.WVP.writeFile(tsList, dlg.FileName,
+                                           saveRelativePaths:=dlg.SaveRelativePaths,
+                                           saveTitle:=dlg.SaveTitle,
+                                           saveUnit:=dlg.SaveUnit,
+                                           saveInterpretation:=dlg.SaveInterpretation,
+                                           saveColor:=dlg.SaveColor,
+                                           saveLineStyle:=dlg.SaveLineStyle,
+                                           saveLineWidth:=dlg.SaveLineWidth,
+                                           savePointsVisibility:=dlg.SavePointsVisibility
                 )
                 MsgBox($"Wave project file {dlg.FileName} saved.", MsgBoxStyle.Information)
             End If
