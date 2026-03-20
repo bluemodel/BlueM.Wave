@@ -33,13 +33,26 @@ Public Class TestTalsim
     <DataRow("TALSIM\Clipboard_Talsim5_Zeitreihe_KTR.WEL.txt")>
     Public Sub TestTalsimClipboard(clipboardFile As String)
 
-        Dim clipboardData As String = IO.File.ReadAllText(IO.Path.Combine(TestData.getTestDataDir(), clipboardFile))
+        Dim workdir = IO.Directory.GetCurrentDirectory()
+        Try
+            'set current directory to test assemply path to ensure any relative paths in the clipboard data are correct
+            IO.Directory.SetCurrentDirectory(My.Application.Info.DirectoryPath())
 
-        Dim talsimclipboard As New Parsers.TalsimClipboard(clipboardData)
-        Dim tsList As List(Of TimeSeries) = talsimclipboard.Process()
+            Dim clipboardData As String = IO.File.ReadAllText(IO.Path.Combine(TestData.getTestDataDir(), clipboardFile))
 
-        'check that time series were created
-        Assert.IsTrue(tsList.Count > 0)
+            Dim talsimclipboard As New Parsers.TalsimClipboard(clipboardData)
+            Dim tsList As List(Of TimeSeries) = talsimclipboard.Process()
+
+            'check that time series were created
+            Assert.IsTrue(tsList.Count > 0)
+
+        Catch ex As Exception
+            Assert.Fail("Exception occurred: " & ex.Message)
+
+        Finally
+            'restore original working directory
+            IO.Directory.SetCurrentDirectory(workdir)
+        End Try
 
     End Sub
 
@@ -74,24 +87,37 @@ Public Class TestTalsim
     <TestMethod()>
     Public Sub TestWLZIPFromTalsimClipboard()
 
-        Dim file_clipboard As String = IO.Path.Combine(TestData.getTestDataDir(), "Talsim", "Clipboard_Talsim_WLZIP.txt")
-        Dim file_wel As String = IO.Path.Combine(TestData.getTestDataDir(), "Talsim", "TALSIM.WEL")
+        Dim workdir = IO.Directory.GetCurrentDirectory()
+        Try
+            'set current directory to test assemply path to ensure any relative paths in the clipboard data are correct
+            IO.Directory.SetCurrentDirectory(My.Application.Info.DirectoryPath())
 
-        'delete existing file before testing
-        If IO.File.Exists(file_wel) Then
-            IO.File.Delete(file_wel)
-        End If
+            Dim file_clipboard As String = IO.Path.Combine(TestData.getTestDataDir(), "Talsim", "Clipboard_Talsim_WLZIP.txt")
+            Dim file_wel As String = IO.Path.Combine(TestData.getTestDataDir(), "Talsim", "TALSIM.WEL")
 
-        Dim clipboardData As String = IO.File.ReadAllText(file_clipboard)
+            'delete existing file before testing
+            If IO.File.Exists(file_wel) Then
+                IO.File.Delete(file_wel)
+            End If
 
-        Dim talsimclipboard As New Parsers.TalsimClipboard(clipboardData)
-        Dim tsList As List(Of TimeSeries) = talsimclipboard.Process()
+            Dim clipboardData As String = IO.File.ReadAllText(file_clipboard)
 
-        'check that time series were created
-        Assert.IsTrue(tsList.Count > 0)
+            Dim talsimclipboard As New Parsers.TalsimClipboard(clipboardData)
+            Dim tsList As List(Of TimeSeries) = talsimclipboard.Process()
 
-        'check that extracted file was deleted
-        Assert.IsFalse(IO.File.Exists(file_wel))
+            'check that time series were created
+            Assert.IsTrue(tsList.Count > 0)
+
+            'check that extracted file was deleted
+            Assert.IsFalse(IO.File.Exists(file_wel))
+
+        Catch ex As Exception
+            Assert.Fail("Exception occurred: " & ex.Message)
+
+        Finally
+            'restore original working directory
+            IO.Directory.SetCurrentDirectory(workdir)
+        End Try
 
     End Sub
 
