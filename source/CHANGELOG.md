@@ -11,6 +11,7 @@ CHANGED:
 
 API-CHANGES:
 * New namespace `Parsers` containing classes for parsing file import instructions such as WVP files and Talsim clipboard content
+* New helper method `Helpers.ParseInterpretation()` for parsing interpretation from strings and integers
 * Renamed `TimeSeriesFile.Write_File()` functions to `writeFile()` for consistency
 
 Version 2.16.0
