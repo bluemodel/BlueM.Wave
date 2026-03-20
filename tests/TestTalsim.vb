@@ -31,7 +31,7 @@ Public Class TestTalsim
     <DataRow("TALSIM\Clipboard_Talsim_Zeitreihen_multi.txt")>
     <DataRow("TALSIM\Clipboard_Talsim4_Zeitreihe_KTR.WEL.txt")>
     <DataRow("TALSIM\Clipboard_Talsim5_Zeitreihe_KTR.WEL.txt")>
-    Public Sub TestTestTalsimClipboard(clipboardFile As String)
+    Public Sub TestTalsimClipboard(clipboardFile As String)
 
         Dim clipboardData As String = IO.File.ReadAllText(IO.Path.Combine(TestData.getTestDataDir(), clipboardFile))
 
