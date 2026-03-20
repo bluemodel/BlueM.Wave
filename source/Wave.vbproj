@@ -262,4 +262,9 @@ copy $(MSBuildProjectDirectory)\lib\PureHDF\PureHDF.LICENSE.md $(OutDir)PureHDF.
     <Content Include="Resources\zoom_previous.png" />
     <Content Include="Resources\zoom_world.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Reference Include="MathParserNet">
+      <HintPath>lib\MathParserNet\MathParserNet.dll</HintPath>
+    </Reference>
+  </ItemGroup>
 </Project>
