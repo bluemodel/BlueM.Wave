@@ -328,10 +328,15 @@ Friend Class WaveController
                 End If
                 'all other events can only be handled if the triggering series also exists in the model, i.e. has an id
                 Dim id As Integer
-                Dim haveId As Boolean = Integer.TryParse(seriesEvent.Series.Tag, id)
-                If Not haveId Then
+                If IsNothing(seriesEvent.Series.Tag) Then
                     'ignore event
                     Exit Sub
+                Else
+                    Dim haveId As Boolean = Integer.TryParse(seriesEvent.Series.Tag, id)
+                    If Not haveId Then
+                        'ignore event
+                        Exit Sub
+                    End If
                 End If
                 Select Case seriesEvent.Event
                     Case Steema.TeeChart.Styles.SeriesEventStyle.ChangeActive
