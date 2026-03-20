@@ -211,6 +211,12 @@ Namespace Parsers
 
         End Sub
 
+        ''' <summary>
+        ''' Wraps the base Process() method to check for WEL/WBL files that do not exist
+        ''' and attempt to extract them from WLZIP files if possible before processing,
+        ''' and then deletes any extracted files after processing
+        ''' </summary>
+        ''' <returns>A list of processed time series</returns>
         Public Overloads Function Process() As List(Of TimeSeries)
 
             'check for WEL/WBL that do not exist and try to extract them from WLZIP files if possible
@@ -235,7 +241,7 @@ Namespace Parsers
                 Try
                     IO.File.Delete(file)
                 Catch ex As Exception
-                    'ignore any errors during deletion
+                    Log.AddLogEntry(Log.levels.warning, $"Could not delete extracted file {file}: {ex.Message}")
                 End Try
             Next
 
