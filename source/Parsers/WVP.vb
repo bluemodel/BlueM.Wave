@@ -119,7 +119,7 @@ Namespace Parsers
                                         Case "unit"
                                             options.unit = value
                                         Case "interpretation"
-                                            options.interpretation = value
+                                            options.interpretation = Helpers.ParseInterpretation(value)
                                         Case "color"
                                             options.displayOptions.SetColor(value)
                                         Case "linestyle"

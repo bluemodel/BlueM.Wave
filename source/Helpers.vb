@@ -124,6 +124,36 @@ Public Module Helpers
     End Function
 
     ''' <summary>
+    ''' Parses a string to a TimeSeries.InterpretationEnum value.
+    ''' If the string does not match any of the enum names, TimeSeries.InterpretationEnum.Undefined is returned and a warning is logged.
+    ''' </summary>
+    ''' <param name="interpretationString">The string to be parsed</param>
+    ''' <returns>The corresponding TimeSeries.InterpretationEnum value</returns>
+    Public Function ParseInterpretation(interpretationString As String) As TimeSeries.InterpretationEnum
+        If Not [Enum].IsDefined(GetType(TimeSeries.InterpretationEnum), interpretationString) Then
+            Log.AddLogEntry(levels.warning, $"Interpretation {interpretationString} is not recognized!")
+            Return TimeSeries.InterpretationEnum.Undefined
+        Else
+            Return [Enum].Parse(GetType(TimeSeries.InterpretationEnum), interpretationString)
+        End If
+    End Function
+
+    ''' <summary>
+    ''' Parses an integer to a TimeSeries.InterpretationEnum value.
+    ''' If the integer does not match any of the enum values, TimeSeries.InterpretationEnum.Undefined is returned and a warning is logged.
+    ''' </summary>
+    ''' <param name="interpretationValue">The integer value to be parsed</param>
+    ''' <returns>The corresponding TimeSeries.InterpretationEnum value</returns>
+    Public Function ParseInterpretation(interpretationValue As Integer) As TimeSeries.InterpretationEnum
+        If Not [Enum].IsDefined(GetType(TimeSeries.InterpretationEnum), interpretationValue) Then
+            Log.AddLogEntry(levels.warning, $"Interpretation {interpretationValue} is not recognized!")
+            Return TimeSeries.InterpretationEnum.Undefined
+        Else
+            Return [Enum].Parse(GetType(TimeSeries.InterpretationEnum), interpretationValue)
+        End If
+    End Function
+
+    ''' <summary>
     ''' Returns a specified color palette
     ''' </summary>
     ''' <param name="name">Available color palettes are "Material", "Distinct", "Color Wheel" and "Random". Defaults to "Material".</param>

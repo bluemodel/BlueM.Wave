@@ -57,7 +57,7 @@ Namespace Parsers
         Protected Class SeriesOptions
             Public title As String
             Public unit As String
-            Public interpretation As String
+            Public interpretation As TimeSeries.InterpretationEnum?
             Public displayOptions As TimeSeriesDisplayOptions
             Public Sub New()
                 Me.displayOptions = New TimeSeriesDisplayOptions()
@@ -204,12 +204,8 @@ Namespace Parsers
                         If Not IsNothing(options.unit) Then
                             ts.Unit = options.unit
                         End If
-                        If Not IsNothing(options.interpretation) Then
-                            If Not [Enum].IsDefined(GetType(TimeSeries.InterpretationEnum), options.interpretation) Then
-                                Log.AddLogEntry(levels.warning, $"Interpretation {options.interpretation} is not recognized!")
-                            Else
-                                ts.Interpretation = [Enum].Parse(GetType(TimeSeries.InterpretationEnum), options.interpretation)
-                            End If
+                        If options.interpretation.HasValue Then
+                            ts.Interpretation = options.interpretation
                         End If
                         'display options
                         ts.DisplayOptions = options.displayOptions

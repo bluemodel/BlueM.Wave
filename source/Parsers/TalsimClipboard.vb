@@ -162,14 +162,15 @@ Namespace Parsers
                             name = params("Kennung").PadRight(4, " ") & "_" & params("Zustand")
                         End If
 
-                        'convert interpretation value to string
-                        Dim interpretationValue As Integer = Integer.Parse(params("Interpretation"))
-                        Dim interpretationString As String = [Enum].GetName(GetType(TimeSeries.InterpretationEnum), interpretationValue)
+                        Dim options As New SeriesOptions() With {
+                            .title = name,
+                            .interpretation = Helpers.ParseInterpretation(Integer.Parse(params("Interpretation")))
+                        }
 
                         Dim fileRef As New FileReference() With {
                             .path = file,
                             .series = New Dictionary(Of String, SeriesOptions)() From {
-                                {name, New SeriesOptions() With {.interpretation = interpretationString}}
+                                {name, options}
                             }
                         }
                         FileReferences.Add(fileRef)
@@ -182,19 +183,17 @@ Namespace Parsers
 
                         name = params("Kennung")
 
-                        'convert interpretation value to string
-                        Dim interpretationValue As Integer = Integer.Parse(params("Interpretation"))
-                        Dim interpretationString As String = [Enum].GetName(GetType(TimeSeries.InterpretationEnum), interpretationValue)
+                        Dim options As New SeriesOptions() With {
+                            .title = name,
+                            .unit = params("Einheit"),
+                            .interpretation = Helpers.ParseInterpretation(Integer.Parse(params("Interpretation")))
+                        }
 
                         Dim fileRef As New FileReference() With {
                             .path = file,
                             .series = New Dictionary(Of String, SeriesOptions)() From {
                                 {
-                                    IO.Path.GetFileName(file), New SeriesOptions() With {
-                                        .title = name,
-                                        .unit = params("Einheit"),
-                                        .interpretation = interpretationString
-                                    }
+                                    IO.Path.GetFileName(file), options
                                 }
                             }
                         }
