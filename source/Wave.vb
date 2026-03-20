@@ -276,7 +276,7 @@ Public Class Wave
     ''' </summary>
     ''' <param name="clipboardtext">text content of the clipboard</param>
     ''' <remarks></remarks>
-    Public Sub LoadFromClipboard_TALSIM(clipboardtext As String)
+    Private Sub LoadFromClipboard_TALSIM(clipboardtext As String)
 
         Try
             Call Log.AddLogEntry(Log.levels.info, $"Parsing Talsim clipboard content...")
