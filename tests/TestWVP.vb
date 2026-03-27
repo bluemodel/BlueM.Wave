@@ -42,7 +42,9 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
     ''' <summary>
     ''' Tests reading WVP series options
     ''' </summary>
-    <TestMethod()> Public Sub TestWVP_ReadOptions()
+    <DoNotParallelize>
+    <TestMethod>
+    Public Sub TestWVP_ReadOptions()
 
         Dim fileWVP As String = IO.Path.Combine(TestData.getTestDataDir(), "WVP", "test_displayoptions.wvp")
 
@@ -67,7 +69,9 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
     ''' <summary>
     ''' Tests writing WVP series options
     ''' </summary>
-    <TestMethod()> Public Sub TestWVP_WriteOptions()
+    <DoNotParallelize>
+    <TestMethod>
+    Public Sub TestWVP_WriteOptions()
 
         'read time series using a WVP file
         Dim fileIn As String = IO.Path.Combine(TestData.getTestDataDir(), "WVP", "test_displayoptions.wvp")
