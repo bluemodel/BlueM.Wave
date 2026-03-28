@@ -46,7 +46,7 @@ copy $(MSBuildProjectDirectory)\lib\PureHDF\PureHDF.LICENSE.md $(OutDir)PureHDF.
     <PackageReference Include="MathNet.Numerics" Version="5.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
     <PackageReference Include="PureHDF" Version="1.0.1" />
-    <PackageReference Include="Steema.TeeChart.NET" Version="4.2023.4.18" />
+    <PackageReference Include="Steema.TeeChart.NET" Version="4.2026.3.2" />
     <PackageReference Include="System.Configuration.ConfigurationManager" Version="10.0.5" />
   </ItemGroup>
   <ItemGroup>
