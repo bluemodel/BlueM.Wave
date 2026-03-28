@@ -22,12 +22,12 @@ Module TestData
 
     ''' <summary>
     ''' Returns the absolute path to the parent directory of the repository
-    ''' by going up 5 levels from the application directory
+    ''' by going up 6 levels from the application directory
     ''' </summary>
     Friend Function getParentDir() As String
-        Dim appdir As String = My.Application.Info.DirectoryPath() 'e.g. BlueM.Wave\tests\bin\x64\Debug
+        Dim appdir As String = My.Application.Info.DirectoryPath() 'e.g. BlueM.Wave\tests\bin\x64\Debug\net9.0-windows
         Dim rootdir As String = appdir
-        For i As Integer = 1 To 5
+        For i As Integer = 1 To 6
             rootdir = IO.Directory.GetParent(rootdir).FullName
         Next
         Return rootdir
