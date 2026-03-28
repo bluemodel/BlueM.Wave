@@ -33,7 +33,4 @@ Friend Class AnalysisCancelledException
         MyBase.New(message, innerException)
     End Sub
 
-    Protected Sub New(info As SerializationInfo, context As StreamingContext)
-        MyBase.New(info, context)
-    End Sub
 End Class
