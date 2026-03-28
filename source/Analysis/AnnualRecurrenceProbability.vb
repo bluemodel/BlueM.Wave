@@ -245,7 +245,7 @@ Friend Class AnnualRecurrenceProbability
         ResultChart.Header.Text = $"Annual maxima (plotting position)"
 
         'Legend
-        ResultChart.Legend.CheckBoxes = False
+        ResultChart.Legend.ActiveStyle = Steema.TeeChart.LegendActiveStyles.None
         ResultChart.Legend.Alignment = Steema.TeeChart.LegendAlignments.Top
 
         'x-Axis

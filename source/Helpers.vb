@@ -279,7 +279,7 @@ Public Module Helpers
         chart.Legend.Font.Name = "GenericSansSerif"
         chart.Legend.LegendStyle = Steema.TeeChart.LegendStyles.Series
         chart.Legend.FontSeriesColor = True
-        chart.Legend.CheckBoxes = True
+        chart.Legend.ActiveStyle = Steema.TeeChart.LegendActiveStyles.CheckBox
 
         'Achsen
         chart.Axes.DrawBehind = False
