@@ -41,7 +41,7 @@
     <DeleteDeploymentDirectoryAfterTestRunIsComplete>False</DeleteDeploymentDirectoryAfterTestRunIsComplete>
     <DeploymentEnabled>False</DeploymentEnabled>
     <AssemblyResolution>
-      <Directory path="bin\Debug\x64" includeSubDirectories="false"/>
+      <Directory path="bin\Debug\x64\net9.0-windows\" includeSubDirectories="false"/>
     </AssemblyResolution>
   </MSTest>
 
