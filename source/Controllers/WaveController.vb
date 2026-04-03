@@ -442,7 +442,7 @@ Friend Class WaveController
         '-------------------------------------
         If (View.TChart1.Series.Count() > 0) Then
             res = MsgBox($"All existing series will be deleted!{eol}Continue?", MsgBoxStyle.OkCancel)
-            If (Not res = Windows.Forms.DialogResult.OK) Then Exit Sub
+            If (Not res = DialogResult.OK) Then Exit Sub
         End If
 
         'Charts zurücksetzen
@@ -486,7 +486,7 @@ Friend Class WaveController
     Private Sub ImportSeries_Click(sender As System.Object, e As System.EventArgs)
         View.OpenFileDialog1.Title = "Import time series"
         View.OpenFileDialog1.Filter = TimeSeriesFile.FileFilter
-        If (View.OpenFileDialog1.ShowDialog() = Windows.Forms.DialogResult.OK) Then
+        If (View.OpenFileDialog1.ShowDialog() = DialogResult.OK) Then
             Call _model.Import_Files(View.OpenFileDialog1.FileNames)
         End If
     End Sub
@@ -519,7 +519,7 @@ Friend Class WaveController
     Private Sub LoadTEN_Click(sender As System.Object, e As System.EventArgs)
         View.OpenFileDialog1.Title = "Load TEN file"
         View.OpenFileDialog1.Filter = "TeeChart files (*.ten)|*.ten"
-        If (View.OpenFileDialog1.ShowDialog() = Windows.Forms.DialogResult.OK) Then
+        If (View.OpenFileDialog1.ShowDialog() = DialogResult.OK) Then
             Call Load_TEN(View.OpenFileDialog1.FileName)
         End If
     End Sub
@@ -547,7 +547,7 @@ Friend Class WaveController
             Dim dlg As New SaveProjectFileDialog()
             dlgres = dlg.ShowDialog()
 
-            If dlgres = Windows.Forms.DialogResult.OK Then
+            If dlgres = DialogResult.OK Then
                 'collect display options from chart and store them in timeseries
                 Dim tsList As New List(Of TimeSeries)
                 For Each ts As TimeSeries In _model.TimeSeries.Values
@@ -597,7 +597,7 @@ Friend Class WaveController
     '**************
     Private Sub Eingeben_Click(sender As System.Object, e As System.EventArgs)
         Dim SeriesEditor As New SeriesEditorDialog()
-        If (SeriesEditor.ShowDialog() = Windows.Forms.DialogResult.OK) Then
+        If (SeriesEditor.ShowDialog() = DialogResult.OK) Then
             Call _model.Import_Series(SeriesEditor.Zeitreihe)
         End If
     End Sub
@@ -621,7 +621,7 @@ Friend Class WaveController
 
         'show dialog
         Dim cutDialog As New CutDialog(_model.TimeSeries.ToList, View.ChartMinX, View.ChartMaxX)
-        If cutDialog.ShowDialog() = Windows.Forms.DialogResult.OK Then
+        If cutDialog.ShowDialog() = DialogResult.OK Then
 
             If Not cutDialog.KeepUncutSeries Then
                 'delete old time series
@@ -670,7 +670,7 @@ Friend Class WaveController
 
             View.Cursor = Cursors.WaitCursor
 
-            If dlgResult = Windows.Forms.DialogResult.OK Then
+            If dlgResult = DialogResult.OK Then
 
                 ids = dlg.selectedSeries
                 mergedSeriesTitle = dlg.mergedSeriesTitle
@@ -880,7 +880,7 @@ Friend Class WaveController
         Dim dlg As New ConvertErrorValuesDialog(_model.TimeSeries.ToList)
         Dim dlgresult As DialogResult = dlg.ShowDialog()
 
-        If dlgresult = Windows.Forms.DialogResult.OK Then
+        If dlgresult = DialogResult.OK Then
             'import cleaned series
             For Each zre As TimeSeries In dlg.tsConverted
                 _model.Import_Series(zre)
@@ -897,7 +897,7 @@ Friend Class WaveController
         Dim dlgResult As DialogResult
 
         dlgResult = MsgBox("Delete all nodes with NaN values from all series?", MsgBoxStyle.OkCancel)
-        If dlgResult = Windows.Forms.DialogResult.OK Then
+        If dlgResult = DialogResult.OK Then
             'loop over time series
             For Each id As Integer In _model.TimeSeries.Ids
                 'remove NaN values in model
@@ -943,7 +943,7 @@ Friend Class WaveController
 
         'Analysisdialog anzeigen
         '-----------------------
-        If (oAnalysisDialog.ShowDialog() = Windows.Forms.DialogResult.OK) Then
+        If (oAnalysisDialog.ShowDialog() = DialogResult.OK) Then
 
             Try
                 'Wait-Cursor
@@ -1678,7 +1678,7 @@ Friend Class WaveController
     ''' </summary>
     Private Sub Chart_MouseDown(sender As System.Object, e As System.Windows.Forms.MouseEventArgs)
 
-        If e.Button = Windows.Forms.MouseButtons.Left Then
+        If e.Button = MouseButtons.Left Then
             'start zoom process
             If View.TChart1.Series.Count > 0 Then
 
@@ -3195,7 +3195,7 @@ Friend Class WaveController
 
                 Select Case result
 
-                    Case Windows.Forms.DialogResult.Yes
+                    Case DialogResult.Yes
                         'Reihen aus TEN-Datei sollen importiert werden
 
                         Dim nSeries As Integer = 0
@@ -3258,7 +3258,7 @@ Friend Class WaveController
                         'Update window title
                         View.Text = "BlueM.Wave - " & FileName
 
-                    Case Windows.Forms.DialogResult.No
+                    Case DialogResult.No
                         'Reihen aus TEN-Datei sollen nicht importiert werden
 
                         'Alle Reihen aus den Diagrammen löschen (wurden bei TEN-Import automatisch mit eingeladen)
