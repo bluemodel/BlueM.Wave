@@ -16,6 +16,8 @@
 'along with this program.  If not, see <https://www.gnu.org/licenses/>.
 '
 
+Imports System.Data
+
 ''' <summary>
 ''' Calculates the annual recurrence probility and return period of annual maxima using plotting position method
 ''' </summary>
