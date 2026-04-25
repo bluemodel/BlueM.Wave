@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title> | BlueM.Wave </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content=" | BlueM.Wave ">
+      
+      
+      <link rel="icon" href="../images/wave_icon.png">
+      <link rel="stylesheet" href="../public/docfx.min.css">
+      <link rel="stylesheet" href="../public/main.css">
+      <meta name="docfx:navrel" content="../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/bluemodel/BlueM.Wave/blob/master/docs/articles/fileformats.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../index.html">
+            <img id="logo" class="svg" src="../images/wave_logo.png" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+
+<h2 id="file-formats">File formats</h2>
+<p>Each supported file format is represented by its own class that inherits from <a class="xref" href="../api/BlueM.Wave.TimeSeriesFile.html"><code>TimeSeriesFile</code></a>.</p>
+<p>Reading files always happens in steps:</p>
+<ol>
+<li><code>.readSeriesInfo()</code> reads time series metadata from the file</li>
+<li>One or multiple time series are selected for import (e.g. by the user)</li>
+<li><code>.readFile()</code> reads the time series data for the selected series from the file</li>
+</ol>
+<p>There are some shortcuts:</p>
+<ul>
+<li><code>.getTimeSeries()</code> retrieves one time series and if necessary, selects and reads it from the file first.</li>
+</ul>
+<h3 id="adding-a-new-file-format">Adding a new file format</h3>
+<ul>
+<li>Create a new class in the namespace <a class="xref" href="../api/BlueM.Wave.Fileformats.html"><code>FileFormats</code></a> that inherits from <a class="xref" href="../api/BlueM.Wave.TimeSeriesFile.html"><code>TimeSeriesFile</code></a>.</li>
+<li>Implement a constructor that calls <code>.readSeriesInfo()</code></li>
+<li>Implement <code>.readSeriesInfo()</code> and store the information in <code>.TimeSeriesInfos</code> as a list of <a class="xref" href="../api/BlueM.Wave.TimeSeriesInfo.html"><code>TimeSeriesInfo</code></a>. Each <code>TimeSeriesInfo</code> must hold all the information required to uniquely identify and read a series from the file.</li>
+<li>If the file format can hold multiple time series and you want the user to be able to select which series to import, make <code>.UseImportDialog()</code> return <code>True</code>.</li>
+<li>Implement <code>.readFile()</code> to read those series that were selected for import (those stored in <code>.SelectedSeries</code>) from the file. Store the time series in <code>.Timeseries</code> as a dictionary with series index as key and <a class="xref" href="../api/BlueM.Wave.TimeSeries.html"><code>TimeSeries</code></a> as values.</li>
+<li>If the file format's file extension is not unique, implement <code>.verifyFormat()</code> for verifying whether a file has this format.</li>
+</ul>
+<h3 id="registering-the-file-format">Registering the file format</h3>
+<p>The new file format must be registered</p>
+<ul>
+<li>Add a new entry to the Enum <a class="xref" href="../api/BlueM.Wave.TimeSeriesFile.FileTypes.html"><code>TimeSeriesFile.FileTypes</code></a>.</li>
+<li>Add the file format's file extension to <a class="xref" href="../api/BlueM.Wave.TimeSeriesFile.FileExtensions.html"><code>TimeSeriesFile.FileExtensions</code></a> and to <code>TimeSeriesFile.FileFilter</code> if it is not yet included.</li>
+<li>Add a case for handling the file format's extension to the <a class="xref" href="../api/BlueM.Wave.TimeSeriesFile.html#BlueM_Wave_TimeSeriesFile_getFileType_System_String_"><code>TimeSeriesFile.getFileType()</code></a> method. If other file formats use the same extension, use calls to <code>.verifyFormat()</code> to distinguish between them.</li>
+</ul>
+<h3 id="implementing-file-writing">Implementing file writing</h3>
+<p>If you want the file format to also be exportable from Wave:</p>
+<ul>
+<li>Implement <code>.writeFile()</code> to write a list of time series to a file.</li>
+<li>If the file format supports multiple series per file, add the format in <a class="xref" href="../api/BlueM.Wave.TimeSeriesFile.html#BlueM_Wave_TimeSeriesFile_SupportsMultipleSeries_BlueM_Wave_TimeSeriesFile_FileTypes_"><code>TimeSeriesFile.SupportsMultipleSeries()</code></a>.</li>
+<li>Add a case for the file format to <code>Wave.ExportTimeseries()</code>.</li>
+<li>Optional: add metadata handling by implementing <code>.MetadataKeys()</code> and <code>.setDefaultMetadata()</code> and adding corresponding cases to <code>Wave.ExportTimeseries()</code>.</li>
+</ul>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/bluemodel/BlueM.Wave/blob/master/docs/articles/fileformats.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
