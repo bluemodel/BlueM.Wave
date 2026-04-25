@@ -22,6 +22,7 @@ copy $(MSBuildProjectDirectory)\lib\PureHDF\PureHDF.LICENSE.md $(OutDir)PureHDF.
     <Company>BlueM Dev Group</Company>
     <Product>BlueM.Wave</Product>
     <Copyright>Copyright © BlueM Dev Group</Copyright>
+    <Description>BlueM.Wave is part of the BlueM software package. BlueM.Wave is a tool for time series management and analysis.</Description>
     <AssemblyVersion>3.0.0</AssemblyVersion>
   </PropertyGroup>
 
