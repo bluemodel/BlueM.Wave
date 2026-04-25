@@ -236,7 +236,7 @@ Namespace Parsers
                 Else
                     filePath = ts.DataSource.FilePath
                     If saveRelativePaths Then
-                        filePath = IO.Path.GetRelativePath(file, filePath)
+                        filePath = IO.Path.GetRelativePath(IO.Path.GetDirectoryName(file), filePath)
                     End If
                     If filePath <> lastFilePath Then
                         'write new file path
