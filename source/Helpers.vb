@@ -35,7 +35,7 @@ Public Module Helpers
     End Property
 
     ''' <summary>
-    ''' Default Encoding (as set by the operating system, usually ISO-8859-1)
+    ''' Default Encoding (as set by the .NET implementation, in .NET Core and later versions this is UTF-8)
     ''' </summary>
     Public ReadOnly Property DefaultEncoding As Text.Encoding
         Get
