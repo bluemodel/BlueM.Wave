@@ -530,15 +530,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:BlueM.Wave"
-        "ProductCode" = "8:{55975F17-910F-4F7C-80A1-D70FB2AF0F9F}"
-        "PackageCode" = "8:{9E4BAC1A-C9A0-448B-AB26-06F87A699442}"
+        "ProductCode" = "8:{3128C6A3-BFD3-4FA7-8804-864259246326}"
+        "PackageCode" = "8:{12ED4339-06BC-430B-948C-51DA135813A5}"
         "UpgradeCode" = "8:{8AC270DC-0E8D-4087-98AB-3A2C358096B9}"
         "AspNetVersion" = "8:2.0.50727.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:TRUE"
-        "ProductVersion" = "8:2.16.0"
+        "ProductVersion" = "8:2.17.0"
         "Manufacturer" = "8:BlueM Dev Group"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:https://wiki.bluemodel.org/index.php/BlueM.Wave"
@@ -1119,7 +1119,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_0F1A2DF2855E45D693DBC03E56915092"
             {
-            "SourcePath" = "8:..\\source\\obj\\x64\\Release\\net9.0-windows\\apphost.exe"
+            "SourcePath" = "8:..\\source\\obj\\x64\\Debug\\net9.0-windows\\apphost.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_1335334A1EB042F3AB241758004683C2"

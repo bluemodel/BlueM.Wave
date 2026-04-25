@@ -1,8 +1,8 @@
 BlueM.Wave Release Notes
 ========================
 
-Version X.X.X
--------------
+Version 2.17.0
+--------------
 FIXED:
 * WEL files extracted from WLZIP archives when processing Talsim clipboard data are now deleted after use #136
 
