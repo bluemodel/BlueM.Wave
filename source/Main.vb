@@ -23,6 +23,7 @@ Friend Module Main
 
         Application.EnableVisualStyles()
         Application.SetCompatibleTextRenderingDefault(False)
+        Application.SetColorMode(Application.ColorMode.Dark)
 
         'load user settings
         My.Settings.Reload()
