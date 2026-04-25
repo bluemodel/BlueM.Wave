@@ -23,7 +23,7 @@ Friend Module Main
 
         Application.EnableVisualStyles()
         Application.SetCompatibleTextRenderingDefault(False)
-        Application.SetDefaultFont(New Font("Segoe UI", 8, GraphicsUnit.Point))
+        Application.SetDefaultFont(New Font("Segoe UI", 9, GraphicsUnit.Point))
 
         'load user settings
         My.Settings.Reload()
