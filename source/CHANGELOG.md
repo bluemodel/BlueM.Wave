@@ -1,6 +1,15 @@
 BlueM.Wave Release Notes
 ========================
 
+Version 3.0.0
+-------------
+CHANGED:
+* Upgraded from .NET Framework 4.8 to .NET 9
+* Updated TeeChart to v4.2026.3.2
+
+REMOVED:
+* Dropped support for reading SWMM OUT binary files
+
 Version 2.17.0
 --------------
 FIXED:

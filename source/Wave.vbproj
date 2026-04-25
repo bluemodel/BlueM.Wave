@@ -22,7 +22,7 @@ copy $(MSBuildProjectDirectory)\lib\PureHDF\PureHDF.LICENSE.md $(OutDir)PureHDF.
     <Company>BlueM Dev Group</Company>
     <Product>BlueM.Wave</Product>
     <Copyright>Copyright © BlueM Dev Group</Copyright>
-    <AssemblyVersion>2.17.0</AssemblyVersion>
+    <AssemblyVersion>3.0.0</AssemblyVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
