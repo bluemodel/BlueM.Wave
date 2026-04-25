@@ -23,70 +23,71 @@ Partial Class Comparison_Dialog
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Comparison_Dialog))
-        Me.RadioButton_Reihe1 = New System.Windows.Forms.RadioButton
-        Me.RadioButton_Reihe2 = New System.Windows.Forms.RadioButton
-        Me.Label1 = New System.Windows.Forms.Label
-        Me.Button_OK = New System.Windows.Forms.Button
-        Me.SuspendLayout()
-        '
-        'RadioButton_Reihe1
-        '
-        Me.RadioButton_Reihe1.AutoSize = True
-        Me.RadioButton_Reihe1.Checked = True
-        Me.RadioButton_Reihe1.Location = New System.Drawing.Point(12, 34)
-        Me.RadioButton_Reihe1.Name = "RadioButton_Reihe1"
-        Me.RadioButton_Reihe1.Size = New System.Drawing.Size(90, 17)
-        Me.RadioButton_Reihe1.TabIndex = 0
-        Me.RadioButton_Reihe1.TabStop = True
-        Me.RadioButton_Reihe1.Text = "RadioButton1"
-        '
-        'RadioButton_Reihe2
-        '
-        Me.RadioButton_Reihe2.AutoSize = True
-        Me.RadioButton_Reihe2.Location = New System.Drawing.Point(12, 57)
-        Me.RadioButton_Reihe2.Name = "RadioButton_Reihe2"
-        Me.RadioButton_Reihe2.Size = New System.Drawing.Size(90, 17)
-        Me.RadioButton_Reihe2.TabIndex = 1
-        Me.RadioButton_Reihe2.Text = "RadioButton2"
-        '
-        'Label1
-        '
-        Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(12, 9)
-        Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(255, 13)
-        Me.Label1.TabIndex = 2
-        Me.Label1.Text = "Select the series that should be plotted on the x-axis:"
-        '
-        'Button_OK
-        '
-        Me.Button_OK.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Button_OK.DialogResult = System.Windows.Forms.DialogResult.OK
-        Me.Button_OK.Location = New System.Drawing.Point(245, 91)
-        Me.Button_OK.Name = "Button_OK"
-        Me.Button_OK.Size = New System.Drawing.Size(75, 23)
-        Me.Button_OK.TabIndex = 3
-        Me.Button_OK.Text = "OK"
-        Me.Button_OK.UseVisualStyleBackColor = True
-        '
-        'Comparison_Dialog
-        '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
-        Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(332, 126)
-        Me.Controls.Add(Me.Button_OK)
-        Me.Controls.Add(Me.Label1)
-        Me.Controls.Add(Me.RadioButton_Reihe1)
-        Me.Controls.Add(Me.RadioButton_Reihe2)
-        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog
-        Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
-        Me.MaximizeBox = False
-        Me.MinimizeBox = False
-        Me.Name = "Comparison_Dialog"
-        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = "Comparison"
-        Me.ResumeLayout(False)
-        Me.PerformLayout()
+        RadioButton_Reihe1 = New RadioButton()
+        RadioButton_Reihe2 = New RadioButton()
+        Label1 = New Label()
+        Button_OK = New Button()
+        SuspendLayout()
+        ' 
+        ' RadioButton_Reihe1
+        ' 
+        RadioButton_Reihe1.AutoSize = True
+        RadioButton_Reihe1.Checked = True
+        RadioButton_Reihe1.Location = New Point(14, 39)
+        RadioButton_Reihe1.Name = "RadioButton_Reihe1"
+        RadioButton_Reihe1.Size = New Size(97, 19)
+        RadioButton_Reihe1.TabIndex = 0
+        RadioButton_Reihe1.TabStop = True
+        RadioButton_Reihe1.Text = "RadioButton1"
+        ' 
+        ' RadioButton_Reihe2
+        ' 
+        RadioButton_Reihe2.AutoSize = True
+        RadioButton_Reihe2.Location = New Point(14, 66)
+        RadioButton_Reihe2.Name = "RadioButton_Reihe2"
+        RadioButton_Reihe2.Size = New Size(97, 19)
+        RadioButton_Reihe2.TabIndex = 1
+        RadioButton_Reihe2.Text = "RadioButton2"
+        ' 
+        ' Label1
+        ' 
+        Label1.AutoSize = True
+        Label1.Location = New Point(14, 10)
+        Label1.Name = "Label1"
+        Label1.Size = New Size(284, 15)
+        Label1.TabIndex = 2
+        Label1.Text = "Select the series that should be plotted on the x-axis:"
+        ' 
+        ' Button_OK
+        ' 
+        Button_OK.Anchor = AnchorStyles.Bottom Or AnchorStyles.Right
+        Button_OK.DialogResult = DialogResult.OK
+        Button_OK.Location = New Point(295, 106)
+        Button_OK.Name = "Button_OK"
+        Button_OK.Size = New Size(80, 27)
+        Button_OK.TabIndex = 3
+        Button_OK.Text = "OK"
+        Button_OK.UseVisualStyleBackColor = True
+        ' 
+        ' Comparison_Dialog
+        ' 
+        AutoScaleDimensions = New SizeF(7F, 15F)
+        AutoScaleMode = AutoScaleMode.Font
+        ClientSize = New Size(387, 145)
+        Controls.Add(Button_OK)
+        Controls.Add(Label1)
+        Controls.Add(RadioButton_Reihe1)
+        Controls.Add(RadioButton_Reihe2)
+        FormBorderStyle = FormBorderStyle.FixedDialog
+        Icon = CType(resources.GetObject("$this.Icon"), Icon)
+        Margin = New Padding(4, 3, 4, 3)
+        MaximizeBox = False
+        MinimizeBox = False
+        Name = "Comparison_Dialog"
+        StartPosition = FormStartPosition.CenterParent
+        Text = "Comparison"
+        ResumeLayout(False)
+        PerformLayout()
 
     End Sub
     Friend WithEvents Button_OK As System.Windows.Forms.Button

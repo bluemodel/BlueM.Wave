@@ -23,109 +23,111 @@ Partial Class GoodnessOfFit_Dialog
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(GoodnessOfFit_Dialog))
-        Me.Button_OK = New System.Windows.Forms.Button()
-        Me.CheckBox_Annual = New System.Windows.Forms.CheckBox()
-        Me.ComboBox_startMonth = New System.Windows.Forms.ComboBox()
-        Me.Label_startMonth = New System.Windows.Forms.Label()
-        Me.GroupBox1 = New System.Windows.Forms.GroupBox()
-        Me.GroupBox2 = New System.Windows.Forms.GroupBox()
-        Me.ComboBox_ObservedSeries = New System.Windows.Forms.ComboBox()
-        Me.GroupBox1.SuspendLayout()
-        Me.GroupBox2.SuspendLayout()
-        Me.SuspendLayout()
-        '
-        'Button_OK
-        '
-        Me.Button_OK.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Button_OK.DialogResult = System.Windows.Forms.DialogResult.OK
-        Me.Button_OK.Location = New System.Drawing.Point(245, 155)
-        Me.Button_OK.Name = "Button_OK"
-        Me.Button_OK.Size = New System.Drawing.Size(75, 23)
-        Me.Button_OK.TabIndex = 3
-        Me.Button_OK.Text = "OK"
-        Me.Button_OK.UseVisualStyleBackColor = True
-        '
-        'CheckBox_Annual
-        '
-        Me.CheckBox_Annual.AutoSize = True
-        Me.CheckBox_Annual.Location = New System.Drawing.Point(7, 19)
-        Me.CheckBox_Annual.Name = "CheckBox_Annual"
-        Me.CheckBox_Annual.Size = New System.Drawing.Size(274, 17)
-        Me.CheckBox_Annual.TabIndex = 4
-        Me.CheckBox_Annual.Text = "Calculate parameters for individual hydrological years"
-        Me.CheckBox_Annual.UseVisualStyleBackColor = True
-        '
-        'ComboBox_startMonth
-        '
-        Me.ComboBox_startMonth.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.ComboBox_startMonth.Enabled = False
-        Me.ComboBox_startMonth.FormattingEnabled = True
-        Me.ComboBox_startMonth.Location = New System.Drawing.Point(138, 41)
-        Me.ComboBox_startMonth.Name = "ComboBox_startMonth"
-        Me.ComboBox_startMonth.Size = New System.Drawing.Size(102, 21)
-        Me.ComboBox_startMonth.TabIndex = 14
-        '
-        'Label_startMonth
-        '
-        Me.Label_startMonth.AutoSize = True
-        Me.Label_startMonth.Enabled = False
-        Me.Label_startMonth.Location = New System.Drawing.Point(6, 44)
-        Me.Label_startMonth.Name = "Label_startMonth"
-        Me.Label_startMonth.Size = New System.Drawing.Size(126, 13)
-        Me.Label_startMonth.TabIndex = 13
-        Me.Label_startMonth.Text = "Start of hydrological year:"
-        '
-        'GroupBox1
-        '
-        Me.GroupBox1.Controls.Add(Me.CheckBox_Annual)
-        Me.GroupBox1.Controls.Add(Me.ComboBox_startMonth)
-        Me.GroupBox1.Controls.Add(Me.Label_startMonth)
-        Me.GroupBox1.Location = New System.Drawing.Point(12, 71)
-        Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Size = New System.Drawing.Size(308, 73)
-        Me.GroupBox1.TabIndex = 15
-        Me.GroupBox1.TabStop = False
-        Me.GroupBox1.Text = "Hydrological years"
-        '
-        'GroupBox2
-        '
-        Me.GroupBox2.Controls.Add(Me.ComboBox_ObservedSeries)
-        Me.GroupBox2.Location = New System.Drawing.Point(12, 12)
-        Me.GroupBox2.Name = "GroupBox2"
-        Me.GroupBox2.Size = New System.Drawing.Size(308, 53)
-        Me.GroupBox2.TabIndex = 16
-        Me.GroupBox2.TabStop = False
-        Me.GroupBox2.Text = "Series with ""observed"" values"
-        '
-        'ComboBox_ObservedSeries
-        '
-        Me.ComboBox_ObservedSeries.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.ComboBox_ObservedSeries.FormattingEnabled = True
-        Me.ComboBox_ObservedSeries.Location = New System.Drawing.Point(7, 19)
-        Me.ComboBox_ObservedSeries.Name = "ComboBox_ObservedSeries"
-        Me.ComboBox_ObservedSeries.Size = New System.Drawing.Size(295, 21)
-        Me.ComboBox_ObservedSeries.TabIndex = 3
-        '
-        'GoodnessOfFit_Dialog
-        '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
-        Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(332, 190)
-        Me.Controls.Add(Me.GroupBox2)
-        Me.Controls.Add(Me.GroupBox1)
-        Me.Controls.Add(Me.Button_OK)
-        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog
-        Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
-        Me.MaximizeBox = False
-        Me.MinimizeBox = False
-        Me.Name = "GoodnessOfFit_Dialog"
-        Me.ShowInTaskbar = False
-        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = "Goodness of Fit"
-        Me.GroupBox1.ResumeLayout(False)
-        Me.GroupBox1.PerformLayout()
-        Me.GroupBox2.ResumeLayout(False)
-        Me.ResumeLayout(False)
+        Button_OK = New Button()
+        CheckBox_Annual = New CheckBox()
+        ComboBox_startMonth = New ComboBox()
+        Label_startMonth = New Label()
+        GroupBox1 = New GroupBox()
+        GroupBox2 = New GroupBox()
+        ComboBox_ObservedSeries = New ComboBox()
+        GroupBox1.SuspendLayout()
+        GroupBox2.SuspendLayout()
+        SuspendLayout()
+        ' 
+        ' Button_OK
+        ' 
+        Button_OK.Anchor = AnchorStyles.Bottom Or AnchorStyles.Right
+        Button_OK.DialogResult = DialogResult.OK
+        Button_OK.Location = New Point(295, 180)
+        Button_OK.Name = "Button_OK"
+        Button_OK.Size = New Size(80, 27)
+        Button_OK.TabIndex = 3
+        Button_OK.Text = "OK"
+        Button_OK.UseVisualStyleBackColor = True
+        ' 
+        ' CheckBox_Annual
+        ' 
+        CheckBox_Annual.AutoSize = True
+        CheckBox_Annual.Location = New Point(7, 22)
+        CheckBox_Annual.Name = "CheckBox_Annual"
+        CheckBox_Annual.Size = New Size(309, 19)
+        CheckBox_Annual.TabIndex = 4
+        CheckBox_Annual.Text = "Calculate parameters for individual hydrological years"
+        CheckBox_Annual.UseVisualStyleBackColor = True
+        ' 
+        ' ComboBox_startMonth
+        ' 
+        ComboBox_startMonth.DropDownStyle = ComboBoxStyle.DropDownList
+        ComboBox_startMonth.Enabled = False
+        ComboBox_startMonth.FormattingEnabled = True
+        ComboBox_startMonth.Location = New Point(161, 47)
+        ComboBox_startMonth.Name = "ComboBox_startMonth"
+        ComboBox_startMonth.Size = New Size(118, 23)
+        ComboBox_startMonth.TabIndex = 14
+        ' 
+        ' Label_startMonth
+        ' 
+        Label_startMonth.AutoSize = True
+        Label_startMonth.Enabled = False
+        Label_startMonth.Location = New Point(6, 51)
+        Label_startMonth.Margin = New Padding(4, 0, 4, 0)
+        Label_startMonth.Name = "Label_startMonth"
+        Label_startMonth.Size = New Size(142, 15)
+        Label_startMonth.TabIndex = 13
+        Label_startMonth.Text = "Start of hydrological year:"
+        ' 
+        ' GroupBox1
+        ' 
+        GroupBox1.Controls.Add(CheckBox_Annual)
+        GroupBox1.Controls.Add(ComboBox_startMonth)
+        GroupBox1.Controls.Add(Label_startMonth)
+        GroupBox1.Location = New Point(14, 82)
+        GroupBox1.Name = "GroupBox1"
+        GroupBox1.Size = New Size(361, 84)
+        GroupBox1.TabIndex = 15
+        GroupBox1.TabStop = False
+        GroupBox1.Text = "Hydrological years"
+        ' 
+        ' GroupBox2
+        ' 
+        GroupBox2.Controls.Add(ComboBox_ObservedSeries)
+        GroupBox2.Location = New Point(14, 14)
+        GroupBox2.Name = "GroupBox2"
+        GroupBox2.Size = New Size(361, 61)
+        GroupBox2.TabIndex = 16
+        GroupBox2.TabStop = False
+        GroupBox2.Text = "Series with ""observed"" values"
+        ' 
+        ' ComboBox_ObservedSeries
+        ' 
+        ComboBox_ObservedSeries.DropDownStyle = ComboBoxStyle.DropDownList
+        ComboBox_ObservedSeries.FormattingEnabled = True
+        ComboBox_ObservedSeries.Location = New Point(8, 22)
+        ComboBox_ObservedSeries.Name = "ComboBox_ObservedSeries"
+        ComboBox_ObservedSeries.Size = New Size(344, 23)
+        ComboBox_ObservedSeries.TabIndex = 3
+        ' 
+        ' GoodnessOfFit_Dialog
+        ' 
+        AutoScaleDimensions = New SizeF(7F, 15F)
+        AutoScaleMode = AutoScaleMode.Font
+        ClientSize = New Size(387, 219)
+        Controls.Add(GroupBox2)
+        Controls.Add(GroupBox1)
+        Controls.Add(Button_OK)
+        FormBorderStyle = FormBorderStyle.FixedDialog
+        Icon = CType(resources.GetObject("$this.Icon"), Icon)
+        Margin = New Padding(4, 3, 4, 3)
+        MaximizeBox = False
+        MinimizeBox = False
+        Name = "GoodnessOfFit_Dialog"
+        ShowInTaskbar = False
+        StartPosition = FormStartPosition.CenterParent
+        Text = "Goodness of Fit"
+        GroupBox1.ResumeLayout(False)
+        GroupBox1.PerformLayout()
+        GroupBox2.ResumeLayout(False)
+        ResumeLayout(False)
 
     End Sub
     Private WithEvents Button_OK As System.Windows.Forms.Button
