@@ -34,9 +34,8 @@ Namespace Fileformats
             ' 
             OK_Button.Anchor = AnchorStyles.Bottom Or AnchorStyles.Right
             OK_Button.Location = New Point(300, 53)
-            OK_Button.Margin = New Padding(4, 3, 4, 3)
             OK_Button.Name = "OK_Button"
-            OK_Button.Size = New Size(78, 27)
+            OK_Button.Size = New Size(80, 27)
             OK_Button.TabIndex = 0
             OK_Button.Text = "OK"
             ' 
@@ -45,8 +44,7 @@ Namespace Fileformats
             DateTimePicker_refDate.Anchor = AnchorStyles.Top Or AnchorStyles.Right
             DateTimePicker_refDate.CustomFormat = "dd.MM.yyyy HH:mm"
             DateTimePicker_refDate.Format = DateTimePickerFormat.Custom
-            DateTimePicker_refDate.Location = New Point(234, 14)
-            DateTimePicker_refDate.Margin = New Padding(4, 3, 4, 3)
+            DateTimePicker_refDate.Location = New Point(237, 12)
             DateTimePicker_refDate.Name = "DateTimePicker_refDate"
             DateTimePicker_refDate.Size = New Size(143, 23)
             DateTimePicker_refDate.TabIndex = 1
@@ -55,8 +53,7 @@ Namespace Fileformats
             ' Label1
             ' 
             Label1.AutoSize = True
-            Label1.Location = New Point(14, 17)
-            Label1.Margin = New Padding(4, 0, 4, 0)
+            Label1.Location = New Point(16, 18)
             Label1.Name = "Label1"
             Label1.Size = New Size(205, 15)
             Label1.TabIndex = 2
@@ -65,12 +62,12 @@ Namespace Fileformats
             ' Label2
             ' 
             Label2.AutoSize = True
-            Label2.Location = New Point(16, 59)
-            Label2.Margin = New Padding(4, 0, 4, 0)
+            Label2.ForeColor = SystemColors.ControlDarkDark
+            Label2.Location = New Point(12, 59)
             Label2.Name = "Label2"
-            Label2.Size = New Size(208, 15)
+            Label2.Size = New Size(200, 15)
             Label2.TabIndex = 3
-            Label2.Text = "(Simulation time is added to this date)"
+            Label2.Text = "Simulation time is added to this date"
             ' 
             ' ReferenceDateDialog
             ' 
