@@ -2671,10 +2671,10 @@ Friend Class WaveController
                 Dim number As Integer = View.TChart1.Axes.Custom.Count + 1
                 axis = New Steema.TeeChart.Axis(View.TChart1.Chart)
                 View.TChart1.Axes.Custom.Add(axis)
-                axis.Labels.Font.Name = "GenericSansSerif"
+                axis.Labels.Font.Name = "Segoe UI"
                 axis.Labels.Font.Color = Color.Black
                 axis.Labels.Font.Size = My.Settings.defaultFontSize
-                axis.Title.Font.Name = "GenericSansSerif"
+                axis.Title.Font.Name = "Segoe UI"
                 axis.Title.Font.Color = Color.Black
                 axis.Title.Font.Size = My.Settings.defaultFontSize
                 axis.Title.Text = unit

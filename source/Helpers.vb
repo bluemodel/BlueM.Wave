@@ -271,12 +271,12 @@ Public Module Helpers
         chart.Walls.Back.Color = Color.White
 
         'Header
-        chart.Header.Font.Name = "GenericSansSerif"
+        chart.Header.Font.Name = "Segoe UI"
         chart.Header.Font.Color = Color.Black
         chart.Header.Text = ""
 
         'Legende
-        chart.Legend.Font.Name = "GenericSansSerif"
+        chart.Legend.Font.Name = "Segoe UI"
         chart.Legend.LegendStyle = Steema.TeeChart.LegendStyles.Series
         chart.Legend.FontSeriesColor = True
         chart.Legend.ActiveStyle = Steema.TeeChart.LegendActiveStyles.CheckBox
@@ -284,10 +284,10 @@ Public Module Helpers
         'Achsen
         chart.Axes.DrawBehind = False
 
-        chart.Axes.Left.Title.Font.Name = "GenericSansSerif"
+        chart.Axes.Left.Title.Font.Name = "Segoe UI"
         chart.Axes.Left.Title.Font.Color = Color.Black
 
-        chart.Axes.Left.Labels.Font.Name = "GenericSansSerif"
+        chart.Axes.Left.Labels.Font.Name = "Segoe UI"
         chart.Axes.Left.Labels.Font.Color = Color.Black
 
         chart.Axes.Left.AxisPen.Visible = True
@@ -295,10 +295,10 @@ Public Module Helpers
         chart.Axes.Left.Grid.Visible = True
         chart.Axes.Left.Grid.Style = Drawing2D.DashStyle.Dash
 
-        chart.Axes.Right.Title.Font.Name = "GenericSansSerif"
+        chart.Axes.Right.Title.Font.Name = "Segoe UI"
         chart.Axes.Right.Title.Font.Color = Color.Black
 
-        chart.Axes.Right.Labels.Font.Name = "GenericSansSerif"
+        chart.Axes.Right.Labels.Font.Name = "Segoe UI"
         chart.Axes.Right.Labels.Font.Color = Color.Black
 
         chart.Axes.Right.AxisPen.Visible = True
@@ -306,10 +306,10 @@ Public Module Helpers
         chart.Axes.Right.Grid.Visible = False
         chart.Axes.Right.Grid.Style = Drawing2D.DashStyle.Dash
 
-        chart.Axes.Bottom.Title.Font.Name = "GenericSansSerif"
+        chart.Axes.Bottom.Title.Font.Name = "Segoe UI"
         chart.Axes.Bottom.Title.Font.Color = Color.Black
 
-        chart.Axes.Bottom.Labels.Font.Name = "GenericSansSerif"
+        chart.Axes.Bottom.Labels.Font.Name = "Segoe UI"
         chart.Axes.Bottom.Labels.Font.Color = Color.Black
 
         chart.Axes.Bottom.Automatic = True
