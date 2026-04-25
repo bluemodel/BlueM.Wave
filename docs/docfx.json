@@ -4,7 +4,7 @@
       "src": [
         {
           "files": [
-            "Wave.exe"
+            "Wave.dll"
           ],
           "src": "../source/bin/x64/Release/net9.0-windows"
         }
