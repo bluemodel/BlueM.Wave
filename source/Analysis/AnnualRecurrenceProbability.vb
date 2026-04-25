@@ -242,6 +242,7 @@ Friend Class AnnualRecurrenceProbability
         ResultChart = New Steema.TeeChart.Chart()
         Call Helpers.ChartSetDefaultFormat(ResultChart)
         ResultChart.Walls.Back.Visible = True
+        ResultChart.Header.Visible = True
         ResultChart.Header.Text = $"Annual maxima (plotting position)"
 
         'Legend

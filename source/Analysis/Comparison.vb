@@ -164,6 +164,7 @@ Friend Class Comparison
 
         Me.ResultChart = New Steema.TeeChart.Chart()
         Call Helpers.ChartSetDefaultFormat(Me.ResultChart)
+        Me.ResultChart.Header.Visible = True
         Me.ResultChart.Header.Text = $"Comparison ({x_title} / {y_title})"
         Me.ResultChart.Legend.Visible = False
 

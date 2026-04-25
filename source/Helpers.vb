@@ -271,6 +271,7 @@ Public Module Helpers
         chart.Walls.Back.Color = Color.White
 
         'Header
+        chart.Header.Visible = False
         chart.Header.Font.Name = "Segoe UI"
         chart.Header.Font.Color = Color.Black
         chart.Header.Text = ""

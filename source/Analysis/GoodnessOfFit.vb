@@ -400,6 +400,7 @@ Friend Class GoodnessOfFit
 
         Me.ResultChart = New Steema.TeeChart.Chart()
         Call Helpers.ChartSetDefaultFormat(Me.ResultChart)
+        Me.ResultChart.Header.Visible = True
         Me.ResultChart.Header.Text = $"Goodness of Fit: {Me.ts_obs.Title} vs. {String.Join(", ", Me.ts_sim_list)}"
 
         'determine max absolute volume error for scaling

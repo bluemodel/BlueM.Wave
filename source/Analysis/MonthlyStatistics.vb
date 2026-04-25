@@ -276,6 +276,7 @@ Friend Class MonthlyStatistics
         'Diagram
         Me.ResultChart = New Steema.TeeChart.Chart()
         Call Helpers.ChartSetDefaultFormat(Me.ResultChart)
+        Me.ResultChart.Header.Visible = True
         Me.ResultChart.Header.Text = $"Monthly statistics ({Me.InputTimeSeries(0).Title})"
 
         'Axes

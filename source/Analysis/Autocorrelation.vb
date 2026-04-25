@@ -200,6 +200,7 @@ Friend Class Autocorrelation
         'Ergebnisdiagramm
         Me.ResultChart = New Steema.TeeChart.Chart()
         Call Helpers.ChartSetDefaultFormat(Me.ResultChart)
+        Me.ResultChart.Header.Visible = True
         Me.ResultChart.Header.Text = "Autocorrelation for " & ts_in.Title
 
         'X-Achse
