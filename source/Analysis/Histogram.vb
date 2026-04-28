@@ -231,8 +231,8 @@ Friend Class Histogram
         '----------------
 
         'Diagramm formatieren
-        Me.ResultChart = New Steema.TeeChart.Chart()
-        Call Helpers.ChartSetDefaultFormat(Me.ResultChart)
+        Me.ResultChart = New Steema.TeeChart.TChart()
+        Call Helpers.ChartSetDefaultFormat(Me.ResultChart.Chart)
         Me.ResultChart.Header.Visible = True
         Me.ResultChart.Header.Text = "Histogram"
 
@@ -257,7 +257,7 @@ Friend Class Histogram
         'Serien
         For Each res As histogramResults In Me.results
 
-            Dim serieP As New Steema.TeeChart.Styles.Histogram(Me.ResultChart)
+            Dim serieP As New Steema.TeeChart.Styles.Histogram(Me.ResultChart.Chart)
             serieP.Title = $"{res.title} (P(x))"
             serieP.Marks.Visible = False
 
@@ -265,7 +265,7 @@ Friend Class Histogram
                 serieP.Add((Me.breaks(i) + Me.breaks(i + 1)) / 2, res.probability(i), res.probability(i).ToString("F2") & "%")
             Next
 
-            Dim seriePU As New Steema.TeeChart.Styles.Line(Me.ResultChart)
+            Dim seriePU As New Steema.TeeChart.Styles.Line(Me.ResultChart.Chart)
             seriePU.VertAxis = Steema.TeeChart.Styles.VerticalAxis.Right
             seriePU.Title = $"{res.title} (PU(x))"
             seriePU.LinePen.Width = 2

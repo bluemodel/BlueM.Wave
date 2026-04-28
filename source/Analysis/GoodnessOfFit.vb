@@ -398,8 +398,8 @@ Friend Class GoodnessOfFit
         'TODO: m is currently plotted using its absolute value, but labelled with the actual value, while the axis title says "absolute", confusing?
         'TODO: the axis titles and grid disappear when the last series is unchecked by the user, why?
 
-        Me.ResultChart = New Steema.TeeChart.Chart()
-        Call Helpers.ChartSetDefaultFormat(Me.ResultChart)
+        Me.ResultChart = New Steema.TeeChart.TChart()
+        Call Helpers.ChartSetDefaultFormat(Me.ResultChart.Chart)
         Me.ResultChart.Header.Visible = True
         Me.ResultChart.Header.Text = $"Goodness of Fit: {Me.ts_obs.Title} vs. {String.Join(", ", Me.ts_sim_list)}"
 
