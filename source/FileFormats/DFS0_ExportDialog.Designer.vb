@@ -23,143 +23,124 @@
         'Do not modify it using the code editor.
         <System.Diagnostics.DebuggerStepThrough()>
         Private Sub InitializeComponent()
-            Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-            Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+            Dim DataGridViewCellStyle1 As DataGridViewCellStyle = New DataGridViewCellStyle()
+            Dim DataGridViewCellStyle2 As DataGridViewCellStyle = New DataGridViewCellStyle()
             Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(DFS0_ExportDialog))
-            Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
-            Me.OK_Button = New System.Windows.Forms.Button()
-            Me.Cancel_Button = New System.Windows.Forms.Button()
-            Me.DataGridView1 = New System.Windows.Forms.DataGridView()
-            Me.Label1 = New System.Windows.Forms.Label()
-            Me.Id = New System.Windows.Forms.DataGridViewTextBoxColumn()
-            Me.Title = New System.Windows.Forms.DataGridViewTextBoxColumn()
-            Me.Unit = New System.Windows.Forms.DataGridViewTextBoxColumn()
-            Me.EUMItemColumn = New System.Windows.Forms.DataGridViewComboBoxColumn()
-            Me.EUMUnitColumn = New System.Windows.Forms.DataGridViewComboBoxColumn()
-            Me.TableLayoutPanel1.SuspendLayout()
-            CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).BeginInit()
-            Me.SuspendLayout()
-            '
-            'TableLayoutPanel1
-            '
-            Me.TableLayoutPanel1.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-            Me.TableLayoutPanel1.ColumnCount = 2
-            Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-            Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-            Me.TableLayoutPanel1.Controls.Add(Me.OK_Button, 0, 0)
-            Me.TableLayoutPanel1.Controls.Add(Me.Cancel_Button, 1, 0)
-            Me.TableLayoutPanel1.Location = New System.Drawing.Point(334, 171)
-            Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
-            Me.TableLayoutPanel1.RowCount = 1
-            Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-            Me.TableLayoutPanel1.Size = New System.Drawing.Size(146, 29)
-            Me.TableLayoutPanel1.TabIndex = 0
-            '
-            'OK_Button
-            '
-            Me.OK_Button.Anchor = System.Windows.Forms.AnchorStyles.None
-            Me.OK_Button.Location = New System.Drawing.Point(3, 3)
-            Me.OK_Button.Name = "OK_Button"
-            Me.OK_Button.Size = New System.Drawing.Size(67, 23)
-            Me.OK_Button.TabIndex = 0
-            Me.OK_Button.Text = "OK"
-            '
-            'Cancel_Button
-            '
-            Me.Cancel_Button.Anchor = System.Windows.Forms.AnchorStyles.None
-            Me.Cancel_Button.DialogResult = System.Windows.Forms.DialogResult.Cancel
-            Me.Cancel_Button.Location = New System.Drawing.Point(76, 3)
-            Me.Cancel_Button.Name = "Cancel_Button"
-            Me.Cancel_Button.Size = New System.Drawing.Size(67, 23)
-            Me.Cancel_Button.TabIndex = 1
-            Me.Cancel_Button.Text = "Cancel"
-            '
-            'DataGridView1
-            '
-            Me.DataGridView1.AllowUserToAddRows = False
-            Me.DataGridView1.AllowUserToDeleteRows = False
-            Me.DataGridView1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-            Me.DataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-            Me.DataGridView1.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.Id, Me.Title, Me.Unit, Me.EUMItemColumn, Me.EUMUnitColumn})
-            Me.DataGridView1.Location = New System.Drawing.Point(13, 29)
-            Me.DataGridView1.Name = "DataGridView1"
-            Me.DataGridView1.Size = New System.Drawing.Size(467, 131)
-            Me.DataGridView1.TabIndex = 1
-            '
-            'Label1
-            '
-            Me.Label1.AutoSize = True
-            Me.Label1.Location = New System.Drawing.Point(13, 13)
-            Me.Label1.Name = "Label1"
-            Me.Label1.Size = New System.Drawing.Size(213, 13)
-            Me.Label1.TabIndex = 2
-            Me.Label1.Text = "Set desired EUM Item and Unit in DFS0 file:"
-            '
-            'Id
-            '
-            Me.Id.HeaderText = "ID"
-            Me.Id.Name = "Id"
-            Me.Id.Visible = False
-            '
-            'Title
-            '
-            Me.Title.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells
-            Me.Title.HeaderText = "Title"
-            Me.Title.Name = "Title"
-            Me.Title.ReadOnly = True
-            Me.Title.Width = 52
-            '
-            'Unit
-            '
-            Me.Unit.HeaderText = "Unit"
-            Me.Unit.Name = "Unit"
-            Me.Unit.ReadOnly = True
-            Me.Unit.Width = 60
-            '
-            'EUMItemColumn
-            '
-            Me.EUMItemColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells
-            DataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
-            Me.EUMItemColumn.DefaultCellStyle = DataGridViewCellStyle1
-            Me.EUMItemColumn.HeaderText = "EUM Item"
-            Me.EUMItemColumn.Name = "EUMItemColumn"
-            Me.EUMItemColumn.Width = 60
-            '
-            'EUMUnitColumn
-            '
-            Me.EUMUnitColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells
-            DataGridViewCellStyle2.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
-            Me.EUMUnitColumn.DefaultCellStyle = DataGridViewCellStyle2
-            Me.EUMUnitColumn.HeaderText = "EUM Unit"
-            Me.EUMUnitColumn.Name = "EUMUnitColumn"
-            Me.EUMUnitColumn.Width = 59
-            '
-            'DFS0_ExportDialog
-            '
-            Me.AcceptButton = Me.OK_Button
-            Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
-            Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-            Me.CancelButton = Me.Cancel_Button
-            Me.ClientSize = New System.Drawing.Size(492, 212)
-            Me.Controls.Add(Me.Label1)
-            Me.Controls.Add(Me.DataGridView1)
-            Me.Controls.Add(Me.TableLayoutPanel1)
-            Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
-            Me.MaximizeBox = False
-            Me.MinimizeBox = False
-            Me.Name = "DFS0_ExportDialog"
-            Me.ShowInTaskbar = False
-            Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-            Me.Text = "DFS0 Export"
-            Me.TableLayoutPanel1.ResumeLayout(False)
-            CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).EndInit()
-            Me.ResumeLayout(False)
-            Me.PerformLayout()
+            OK_Button = New Button()
+            Cancel_Button = New Button()
+            DataGridView1 = New DataGridView()
+            Id = New DataGridViewTextBoxColumn()
+            Title = New DataGridViewTextBoxColumn()
+            Unit = New DataGridViewTextBoxColumn()
+            EUMItemColumn = New DataGridViewComboBoxColumn()
+            EUMUnitColumn = New DataGridViewComboBoxColumn()
+            Label1 = New Label()
+            CType(DataGridView1, ComponentModel.ISupportInitialize).BeginInit()
+            SuspendLayout()
+            ' 
+            ' OK_Button
+            ' 
+            OK_Button.Anchor = AnchorStyles.Bottom Or AnchorStyles.Right
+            OK_Button.Location = New Point(396, 206)
+            OK_Button.Name = "OK_Button"
+            OK_Button.Size = New Size(80, 27)
+            OK_Button.TabIndex = 0
+            OK_Button.Text = "OK"
+            ' 
+            ' Cancel_Button
+            ' 
+            Cancel_Button.Anchor = AnchorStyles.Bottom Or AnchorStyles.Right
+            Cancel_Button.DialogResult = DialogResult.Cancel
+            Cancel_Button.Location = New Point(482, 206)
+            Cancel_Button.Name = "Cancel_Button"
+            Cancel_Button.Size = New Size(80, 27)
+            Cancel_Button.TabIndex = 1
+            Cancel_Button.Text = "Cancel"
+            ' 
+            ' DataGridView1
+            ' 
+            DataGridView1.AllowUserToAddRows = False
+            DataGridView1.AllowUserToDeleteRows = False
+            DataGridView1.Anchor = AnchorStyles.Top Or AnchorStyles.Bottom Or AnchorStyles.Left Or AnchorStyles.Right
+            DataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize
+            DataGridView1.Columns.AddRange(New DataGridViewColumn() {Id, Title, Unit, EUMItemColumn, EUMUnitColumn})
+            DataGridView1.Location = New Point(15, 33)
+            DataGridView1.Name = "DataGridView1"
+            DataGridView1.Size = New Size(547, 151)
+            DataGridView1.TabIndex = 1
+            ' 
+            ' Id
+            ' 
+            Id.HeaderText = "ID"
+            Id.Name = "Id"
+            Id.Visible = False
+            ' 
+            ' Title
+            ' 
+            Title.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells
+            Title.HeaderText = "Title"
+            Title.Name = "Title"
+            Title.ReadOnly = True
+            Title.Width = 54
+            ' 
+            ' Unit
+            ' 
+            Unit.HeaderText = "Unit"
+            Unit.Name = "Unit"
+            Unit.ReadOnly = True
+            Unit.Width = 60
+            ' 
+            ' EUMItemColumn
+            ' 
+            EUMItemColumn.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells
+            DataGridViewCellStyle1.BackColor = Color.FromArgb(CByte(255), CByte(255), CByte(192))
+            EUMItemColumn.DefaultCellStyle = DataGridViewCellStyle1
+            EUMItemColumn.HeaderText = "EUM Item"
+            EUMItemColumn.Name = "EUMItemColumn"
+            EUMItemColumn.Width = 65
+            ' 
+            ' EUMUnitColumn
+            ' 
+            EUMUnitColumn.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells
+            DataGridViewCellStyle2.BackColor = Color.FromArgb(CByte(255), CByte(255), CByte(192))
+            EUMUnitColumn.DefaultCellStyle = DataGridViewCellStyle2
+            EUMUnitColumn.HeaderText = "EUM Unit"
+            EUMUnitColumn.Name = "EUMUnitColumn"
+            EUMUnitColumn.Width = 63
+            ' 
+            ' Label1
+            ' 
+            Label1.AutoSize = True
+            Label1.Location = New Point(15, 15)
+            Label1.Name = "Label1"
+            Label1.Size = New Size(231, 15)
+            Label1.TabIndex = 2
+            Label1.Text = "Set desired EUM Item and Unit in DFS0 file:"
+            ' 
+            ' DFS0_ExportDialog
+            ' 
+            AcceptButton = OK_Button
+            AutoScaleDimensions = New SizeF(7F, 15F)
+            AutoScaleMode = AutoScaleMode.Font
+            CancelButton = Cancel_Button
+            ClientSize = New Size(574, 245)
+            Controls.Add(OK_Button)
+            Controls.Add(Label1)
+            Controls.Add(Cancel_Button)
+            Controls.Add(DataGridView1)
+            Icon = CType(resources.GetObject("$this.Icon"), Icon)
+            Margin = New Padding(4, 3, 4, 3)
+            MaximizeBox = False
+            MinimizeBox = False
+            Name = "DFS0_ExportDialog"
+            ShowInTaskbar = False
+            StartPosition = FormStartPosition.CenterParent
+            Text = "DFS0 Export"
+            CType(DataGridView1, ComponentModel.ISupportInitialize).EndInit()
+            ResumeLayout(False)
+            PerformLayout()
 
         End Sub
-        Friend WithEvents TableLayoutPanel1 As System.Windows.Forms.TableLayoutPanel
         Friend WithEvents OK_Button As System.Windows.Forms.Button
         Friend WithEvents Cancel_Button As System.Windows.Forms.Button
         Friend WithEvents DataGridView1 As DataGridView

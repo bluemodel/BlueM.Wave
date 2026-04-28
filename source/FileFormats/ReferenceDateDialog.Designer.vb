@@ -1,4 +1,4 @@
-﻿Namespace Fileformats
+Namespace Fileformats
     <Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
     Partial Class ReferenceDateDialog
         Inherits System.Windows.Forms.Form
@@ -24,70 +24,73 @@
         <System.Diagnostics.DebuggerStepThrough()>
         Private Sub InitializeComponent()
             Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(ReferenceDateDialog))
-            Me.OK_Button = New System.Windows.Forms.Button()
-            Me.DateTimePicker_refDate = New System.Windows.Forms.DateTimePicker()
-            Me.Label1 = New System.Windows.Forms.Label()
-            Me.Label2 = New System.Windows.Forms.Label()
-            Me.SuspendLayout()
-            '
-            'OK_Button
-            '
-            Me.OK_Button.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-            Me.OK_Button.Location = New System.Drawing.Point(257, 46)
-            Me.OK_Button.Name = "OK_Button"
-            Me.OK_Button.Size = New System.Drawing.Size(67, 23)
-            Me.OK_Button.TabIndex = 0
-            Me.OK_Button.Text = "OK"
-            '
-            'DateTimePicker_refDate
-            '
-            Me.DateTimePicker_refDate.CustomFormat = "dd.MM.yyyy HH:mm"
-            Me.DateTimePicker_refDate.Format = System.Windows.Forms.DateTimePickerFormat.Custom
-            Me.DateTimePicker_refDate.Location = New System.Drawing.Point(201, 12)
-            Me.DateTimePicker_refDate.Name = "DateTimePicker_refDate"
-            Me.DateTimePicker_refDate.Size = New System.Drawing.Size(123, 20)
-            Me.DateTimePicker_refDate.TabIndex = 1
-            Me.DateTimePicker_refDate.Value = New Date(2000, 1, 1, 0, 0, 0, 0)
-            '
-            'Label1
-            '
-            Me.Label1.AutoSize = True
-            Me.Label1.Location = New System.Drawing.Point(12, 15)
-            Me.Label1.Name = "Label1"
-            Me.Label1.Size = New System.Drawing.Size(183, 13)
-            Me.Label1.TabIndex = 2
-            Me.Label1.Text = "Reference date for start of simulation:"
-            '
-            'Label2
-            '
-            Me.Label2.AutoSize = True
-            Me.Label2.Location = New System.Drawing.Point(14, 51)
-            Me.Label2.Name = "Label2"
-            Me.Label2.Size = New System.Drawing.Size(181, 13)
-            Me.Label2.TabIndex = 3
-            Me.Label2.Text = "(Simulation time is added to this date)"
-            '
-            'ReferenceDateDialog
-            '
-            Me.AcceptButton = Me.OK_Button
-            Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
-            Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-            Me.ClientSize = New System.Drawing.Size(336, 81)
-            Me.ControlBox = False
-            Me.Controls.Add(Me.Label2)
-            Me.Controls.Add(Me.OK_Button)
-            Me.Controls.Add(Me.Label1)
-            Me.Controls.Add(Me.DateTimePicker_refDate)
-            Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog
-            Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
-            Me.MaximizeBox = False
-            Me.MinimizeBox = False
-            Me.Name = "ReferenceDateDialog"
-            Me.ShowInTaskbar = False
-            Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-            Me.Text = "Reference Date"
-            Me.ResumeLayout(False)
-            Me.PerformLayout()
+            OK_Button = New Button()
+            DateTimePicker_refDate = New DateTimePicker()
+            Label1 = New Label()
+            Label2 = New Label()
+            SuspendLayout()
+            ' 
+            ' OK_Button
+            ' 
+            OK_Button.Anchor = AnchorStyles.Bottom Or AnchorStyles.Right
+            OK_Button.Location = New Point(300, 53)
+            OK_Button.Name = "OK_Button"
+            OK_Button.Size = New Size(80, 27)
+            OK_Button.TabIndex = 0
+            OK_Button.Text = "OK"
+            ' 
+            ' DateTimePicker_refDate
+            ' 
+            DateTimePicker_refDate.Anchor = AnchorStyles.Top Or AnchorStyles.Right
+            DateTimePicker_refDate.CustomFormat = "dd.MM.yyyy HH:mm"
+            DateTimePicker_refDate.Format = DateTimePickerFormat.Custom
+            DateTimePicker_refDate.Location = New Point(237, 12)
+            DateTimePicker_refDate.Name = "DateTimePicker_refDate"
+            DateTimePicker_refDate.Size = New Size(143, 23)
+            DateTimePicker_refDate.TabIndex = 1
+            DateTimePicker_refDate.Value = New Date(2000, 1, 1, 0, 0, 0, 0)
+            ' 
+            ' Label1
+            ' 
+            Label1.AutoSize = True
+            Label1.Location = New Point(16, 18)
+            Label1.Name = "Label1"
+            Label1.Size = New Size(205, 15)
+            Label1.TabIndex = 2
+            Label1.Text = "Reference date for start of simulation:"
+            ' 
+            ' Label2
+            ' 
+            Label2.AutoSize = True
+            Label2.ForeColor = SystemColors.ControlDarkDark
+            Label2.Location = New Point(12, 59)
+            Label2.Name = "Label2"
+            Label2.Size = New Size(200, 15)
+            Label2.TabIndex = 3
+            Label2.Text = "Simulation time is added to this date"
+            ' 
+            ' ReferenceDateDialog
+            ' 
+            AcceptButton = OK_Button
+            AutoScaleDimensions = New SizeF(7F, 15F)
+            AutoScaleMode = AutoScaleMode.Font
+            ClientSize = New Size(392, 93)
+            ControlBox = False
+            Controls.Add(Label2)
+            Controls.Add(OK_Button)
+            Controls.Add(Label1)
+            Controls.Add(DateTimePicker_refDate)
+            FormBorderStyle = FormBorderStyle.FixedDialog
+            Icon = CType(resources.GetObject("$this.Icon"), Icon)
+            Margin = New Padding(4, 3, 4, 3)
+            MaximizeBox = False
+            MinimizeBox = False
+            Name = "ReferenceDateDialog"
+            ShowInTaskbar = False
+            StartPosition = FormStartPosition.CenterParent
+            Text = "Reference Date"
+            ResumeLayout(False)
+            PerformLayout()
 
         End Sub
         Friend WithEvents OK_Button As System.Windows.Forms.Button

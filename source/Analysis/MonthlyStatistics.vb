@@ -15,6 +15,7 @@
 'You should have received a copy of the GNU Lesser General Public License
 'along with this program.  If not, see <https://www.gnu.org/licenses/>.
 '
+Imports System.Data
 Imports BlueM.Wave.AnnualStatistics
 ''' <summary>
 '''Calculates the following statistical values for each month of the year:
@@ -273,8 +274,9 @@ Friend Class MonthlyStatistics
         Dim minmax As Steema.TeeChart.Styles.HighLow
 
         'Diagram
-        Me.ResultChart = New Steema.TeeChart.Chart()
-        Call Helpers.ChartSetDefaultFormat(Me.ResultChart)
+        Me.ResultChart = New Steema.TeeChart.TChart()
+        Call Helpers.ChartSetDefaultFormat(Me.ResultChart.Chart)
+        Me.ResultChart.Header.Visible = True
         Me.ResultChart.Header.Text = $"Monthly statistics ({Me.InputTimeSeries(0).Title})"
 
         'Axes
@@ -286,7 +288,7 @@ Friend Class MonthlyStatistics
         'Series
 
         'MinMax
-        minmax = New Steema.TeeChart.Styles.HighLow(Me.ResultChart)
+        minmax = New Steema.TeeChart.Styles.HighLow(Me.ResultChart.Chart)
         minmax.DefaultNullValue = Double.NaN
         minmax.Title = "Min / Max"
         minmax.Color = Color.DarkGray
@@ -299,7 +301,7 @@ Friend Class MonthlyStatistics
         Next
 
         'Standard deviation
-        stdabw = New Steema.TeeChart.Styles.Error(Me.ResultChart)
+        stdabw = New Steema.TeeChart.Styles.Error(Me.ResultChart.Chart)
         stdabw.DefaultNullValue = Double.NaN
         stdabw.Title = "Standard deviation"
         stdabw.Color = Color.Red
@@ -312,7 +314,7 @@ Friend Class MonthlyStatistics
         Next
 
         'Average
-        mittelwert = New Steema.TeeChart.Styles.Line(Me.ResultChart)
+        mittelwert = New Steema.TeeChart.Styles.Line(Me.ResultChart.Chart)
         mittelwert.TreatNaNAsNull = True
         mittelwert.TreatNulls = Steema.TeeChart.Styles.TreatNullsStyle.DoNotPaint
         mittelwert.Title = "Average"
@@ -323,7 +325,7 @@ Friend Class MonthlyStatistics
         Next
 
         'Median
-        median = New Steema.TeeChart.Styles.Line(Me.ResultChart)
+        median = New Steema.TeeChart.Styles.Line(Me.ResultChart.Chart)
         median.TreatNaNAsNull = True
         median.TreatNulls = Steema.TeeChart.Styles.TreatNullsStyle.DoNotPaint
         median.Title = "Median"

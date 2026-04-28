@@ -78,9 +78,8 @@ Friend Class MainWindow
 
     ''' <summary>
     ''' Current crosshair position in OADate format
-    ''' Also updates the crosshair date annotation
     ''' </summary>
-    Friend Property CrosshairPosition As Double
+    Friend ReadOnly Property CrosshairPosition As Double
         Get
             If Me.CrosshairLine IsNot Nothing Then
                 Return Me.CrosshairLine.Value
@@ -88,31 +87,40 @@ Friend Class MainWindow
                 Return Double.NaN
             End If
         End Get
-        Set(value As Double)
-            If Me.CrosshairLine IsNot Nothing Then
-                Me.CrosshairLine.Value = value
-                'update date annotation
-                Me.CrosshairDate.Active = False
-                For Each series As Steema.TeeChart.Styles.Series In Me.TChart1.Series
-                    Dim id As Integer
-                    If series.Active AndAlso Integer.TryParse(series.Tag, id) Then
-                        Me.CrosshairDate.Active = True
-                        Me.CrosshairDate.Text = DateTime.FromOADate(value).ToString(Helpers.CurrentDateFormat)
-                        'get x position from series
-                        Dim x As Integer = series.ValuePointToScreenPoint(value, 0).X
-                        'get y position from bottom axis
-                        Dim y As Integer = Me.TChart1.Axes.Bottom.Position
-                        'set position of annotation
-                        Me.CrosshairDate.Left = x - Me.CrosshairDate.Width / 2
-                        Me.CrosshairDate.Top = y
-                        Exit For
-                    End If
-                Next
-            End If
-        End Set
     End Property
 
-    Friend Property ChartMinX As DateTime
+    ''' <summary>
+    ''' Sets the position of the crosshair line and the corresponding date annotation
+    ''' </summary>
+    ''' <param name="value">The new position of the crosshair line in OADate format.</param>
+    Friend Sub SetCrosshairPosition(value As Double)
+        If Me.CrosshairLine IsNot Nothing Then
+            Me.CrosshairLine.Value = value
+            'update date annotation
+            Me.CrosshairDate.Active = False
+            For Each series As Steema.TeeChart.Styles.Series In Me.TChart1.Series
+                Dim id As Integer
+                If series.Active AndAlso Integer.TryParse(series.Tag, id) Then
+                    Me.CrosshairDate.Active = True
+                    Me.CrosshairDate.Text = DateTime.FromOADate(value).ToString(Helpers.CurrentDateFormat)
+                    'get x position from series
+                    Dim x As Integer = series.ValuePointToScreenPoint(value, 0).X
+                    'get y position from bottom axis
+                    Dim y As Integer = Me.TChart1.Axes.Bottom.Position
+                    'set position of annotation
+                    Me.CrosshairDate.Left = x - Me.CrosshairDate.Width / 2
+                    Me.CrosshairDate.Top = y
+                    Exit For
+                End If
+            Next
+        End If
+    End Sub
+
+    ''' <summary>
+    ''' Returns the minimum x-value of the main chart as DateTime. If no minimum is set, returns Constants.minOADate.
+    ''' </summary>
+    ''' <returns></returns>
+    Friend ReadOnly Property ChartMinX As DateTime
         Get
             Try
                 Return DateTime.FromOADate(Me.TChart1.Axes.Bottom.Minimum)
@@ -120,15 +128,24 @@ Friend Class MainWindow
                 Return Constants.minOADate
             End Try
         End Get
-        Set(value As DateTime)
-            If value < Constants.minOADate Then
-                value = Constants.minOADate
-            End If
-            Me.TChart1.Axes.Bottom.Minimum = value.ToOADate()
-        End Set
     End Property
 
-    Friend Property ChartMaxX As DateTime
+    ''' <summary>
+    ''' Sets the minimum x-value of the main chart. If the given value is smaller than Constants.minOADate, Constants.minOADate will be set as minimum.
+    ''' </summary>
+    ''' <param name="value">The new minimum x-value of the main chart.</param>
+    Friend Sub SetChartMinX(value As DateTime)
+        If value < Constants.minOADate Then
+            value = Constants.minOADate
+        End If
+        Me.TChart1.Axes.Bottom.Minimum = value.ToOADate()
+    End Sub
+
+    ''' <summary>
+    ''' Returns the maximum x-value of the main chart as DateTime. If no maximum is set, returns Constants.maxOADate.
+    ''' </summary>
+    ''' <returns></returns>
+    Friend ReadOnly Property ChartMaxX As DateTime
         Get
             Try
                 Return DateTime.FromOADate(Me.TChart1.Axes.Bottom.Maximum)
@@ -136,13 +153,18 @@ Friend Class MainWindow
                 Return Constants.maxOADate
             End Try
         End Get
-        Set(value As DateTime)
-            If value > Constants.maxOADate Then
-                value = Constants.maxOADate
-            End If
-            Me.TChart1.Axes.Bottom.Maximum = value.ToOADate()
-        End Set
     End Property
+
+    ''' <summary>
+    ''' Sets the maximum x-value of the main chart. If the given value is larger than Constants.maxOADate, Constants.maxOADate will be set as maximum.
+    ''' </summary>
+    ''' <param name="value">The new maximum x-value of the main chart.</param>
+    Friend Sub SetChartMaxX(value As DateTime)
+        If value > Constants.maxOADate Then
+            value = Constants.maxOADate
+        End If
+        Me.TChart1.Axes.Bottom.Maximum = value.ToOADate()
+    End Sub
 
     'Konstruktor
     '***********

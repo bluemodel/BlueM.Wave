@@ -1,4 +1,4 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
+<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
 Partial Class AxisDialog
     Inherits System.Windows.Forms.Form
 
@@ -22,84 +22,83 @@ Partial Class AxisDialog
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
-        Me.components = New System.ComponentModel.Container()
+        components = New ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(AxisDialog))
-        Me.DataGridView1 = New System.Windows.Forms.DataGridView()
-        Me.NameColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.TitleColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.UnitColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.AxisWrapperBindingSource = New System.Windows.Forms.BindingSource(Me.components)
-        Me.DataGridViewTextBoxColumn1 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.AxisWrapperBindingSource, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.SuspendLayout()
-        '
-        'DataGridView1
-        '
-        Me.DataGridView1.AllowUserToAddRows = False
-        Me.DataGridView1.AllowUserToResizeRows = False
-        Me.DataGridView1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.DataGridView1.AutoGenerateColumns = False
-        Me.DataGridView1.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells
-        Me.DataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.DataGridView1.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.NameColumn, Me.TitleColumn, Me.UnitColumn})
-        Me.DataGridView1.DataSource = Me.AxisWrapperBindingSource
-        Me.DataGridView1.Location = New System.Drawing.Point(15, 12)
-        Me.DataGridView1.Name = "DataGridView1"
-        Me.DataGridView1.Size = New System.Drawing.Size(405, 199)
-        Me.DataGridView1.TabIndex = 3
-        '
-        'NameColumn
-        '
-        Me.NameColumn.DataPropertyName = "Name"
-        Me.NameColumn.HeaderText = "Name"
-        Me.NameColumn.Name = "NameColumn"
-        Me.NameColumn.ReadOnly = True
-        Me.NameColumn.Width = 60
-        '
-        'TitleColumn
-        '
-        Me.TitleColumn.DataPropertyName = "Title"
-        Me.TitleColumn.HeaderText = "Title"
-        Me.TitleColumn.Name = "TitleColumn"
-        Me.TitleColumn.Width = 52
-        '
-        'UnitColumn
-        '
-        Me.UnitColumn.DataPropertyName = "Unit"
-        Me.UnitColumn.HeaderText = "Unit"
-        Me.UnitColumn.Name = "UnitColumn"
-        Me.UnitColumn.Width = 51
-        '
-        'AxisWrapperBindingSource
-        '
-        Me.AxisWrapperBindingSource.DataSource = GetType(BlueM.Wave.AxisWrapper)
-        '
-        'DataGridViewTextBoxColumn1
-        '
-        Me.DataGridViewTextBoxColumn1.DataPropertyName = "Tag"
-        Me.DataGridViewTextBoxColumn1.HeaderText = "Tag"
-        Me.DataGridViewTextBoxColumn1.Name = "DataGridViewTextBoxColumn1"
-        Me.DataGridViewTextBoxColumn1.Width = 51
-        '
-        'AxisDialog
-        '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
-        Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(435, 223)
-        Me.Controls.Add(Me.DataGridView1)
-        Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
-        Me.MaximizeBox = False
-        Me.MinimizeBox = False
-        Me.Name = "AxisDialog"
-        Me.ShowInTaskbar = False
-        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = "Manage Axes"
-        CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.AxisWrapperBindingSource, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.ResumeLayout(False)
+        DataGridView1 = New DataGridView()
+        NameColumn = New DataGridViewTextBoxColumn()
+        TitleColumn = New DataGridViewTextBoxColumn()
+        UnitColumn = New DataGridViewTextBoxColumn()
+        AxisWrapperBindingSource = New BindingSource(components)
+        DataGridViewTextBoxColumn1 = New DataGridViewTextBoxColumn()
+        CType(DataGridView1, ComponentModel.ISupportInitialize).BeginInit()
+        CType(AxisWrapperBindingSource, ComponentModel.ISupportInitialize).BeginInit()
+        SuspendLayout()
+        ' 
+        ' DataGridView1
+        ' 
+        DataGridView1.AllowUserToAddRows = False
+        DataGridView1.AllowUserToResizeRows = False
+        DataGridView1.Anchor = AnchorStyles.Top Or AnchorStyles.Bottom Or AnchorStyles.Left Or AnchorStyles.Right
+        DataGridView1.AutoGenerateColumns = False
+        DataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells
+        DataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize
+        DataGridView1.Columns.AddRange(New DataGridViewColumn() {NameColumn, TitleColumn, UnitColumn})
+        DataGridView1.DataSource = AxisWrapperBindingSource
+        DataGridView1.Location = New Point(12, 12)
+        DataGridView1.Name = "DataGridView1"
+        DataGridView1.Size = New Size(483, 233)
+        DataGridView1.TabIndex = 3
+        ' 
+        ' NameColumn
+        ' 
+        NameColumn.DataPropertyName = "Name"
+        NameColumn.HeaderText = "Name"
+        NameColumn.Name = "NameColumn"
+        NameColumn.ReadOnly = True
+        NameColumn.Width = 64
+        ' 
+        ' TitleColumn
+        ' 
+        TitleColumn.DataPropertyName = "Title"
+        TitleColumn.HeaderText = "Title"
+        TitleColumn.Name = "TitleColumn"
+        TitleColumn.Width = 54
+        ' 
+        ' UnitColumn
+        ' 
+        UnitColumn.DataPropertyName = "Unit"
+        UnitColumn.HeaderText = "Unit"
+        UnitColumn.Name = "UnitColumn"
+        UnitColumn.Width = 54
+        ' 
+        ' AxisWrapperBindingSource
+        ' 
+        AxisWrapperBindingSource.DataSource = GetType(AxisWrapper)
+        ' 
+        ' DataGridViewTextBoxColumn1
+        ' 
+        DataGridViewTextBoxColumn1.DataPropertyName = "Tag"
+        DataGridViewTextBoxColumn1.HeaderText = "Tag"
+        DataGridViewTextBoxColumn1.Name = "DataGridViewTextBoxColumn1"
+        DataGridViewTextBoxColumn1.Width = 51
+        ' 
+        ' AxisDialog
+        ' 
+        AutoScaleDimensions = New SizeF(7F, 15F)
+        AutoScaleMode = AutoScaleMode.Font
+        ClientSize = New Size(507, 257)
+        Controls.Add(DataGridView1)
+        Icon = CType(resources.GetObject("$this.Icon"), Icon)
+        Margin = New Padding(4, 3, 4, 3)
+        MaximizeBox = False
+        MinimizeBox = False
+        Name = "AxisDialog"
+        ShowInTaskbar = False
+        StartPosition = FormStartPosition.CenterParent
+        Text = "Manage Axes"
+        CType(DataGridView1, ComponentModel.ISupportInitialize).EndInit()
+        CType(AxisWrapperBindingSource, ComponentModel.ISupportInitialize).EndInit()
+        ResumeLayout(False)
 
     End Sub
     Friend WithEvents DataGridView1 As DataGridView

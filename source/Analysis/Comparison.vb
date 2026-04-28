@@ -162,8 +162,9 @@ Friend Class Comparison
         Dim series_points As Steema.TeeChart.Styles.Points
         Dim regression_line As Steema.TeeChart.Styles.Line
 
-        Me.ResultChart = New Steema.TeeChart.Chart()
-        Call Helpers.ChartSetDefaultFormat(Me.ResultChart)
+        Me.ResultChart = New Steema.TeeChart.TChart()
+        Call Helpers.ChartSetDefaultFormat(Me.ResultChart.Chart)
+        Me.ResultChart.Header.Visible = True
         Me.ResultChart.Header.Text = $"Comparison ({x_title} / {y_title})"
         Me.ResultChart.Legend.Visible = False
 
@@ -176,14 +177,14 @@ Friend Class Comparison
 
         'Reihen
         '------
-        series_points = New Steema.TeeChart.Styles.Points(Me.ResultChart)
+        series_points = New Steema.TeeChart.Styles.Points(Me.ResultChart.Chart)
         series_points.Title = $"Comparison {x_title} - {y_title}"
         series_points.Pointer.Visible = True
         series_points.Pointer.Style = Steema.TeeChart.Styles.PointerStyles.Circle
         series_points.Pointer.HorizSize = 2
         series_points.Pointer.VertSize = 2
 
-        regression_line = New Steema.TeeChart.Styles.Line(Me.ResultChart)
+        regression_line = New Steema.TeeChart.Styles.Line(Me.ResultChart.Chart)
         regression_line.Title = "Regression line"
         regression_line.LinePen.Width = 2
         regression_line.LinePen.Color = Color.Red
@@ -205,7 +206,7 @@ Friend Class Comparison
 
         'Annotation
         '----------
-        Dim anno As New Steema.TeeChart.Tools.Annotation(Me.ResultChart)
+        Dim anno As New Steema.TeeChart.Tools.Annotation(Me.ResultChart.Chart)
         anno.Position = Steema.TeeChart.Tools.AnnotationPositions.RightBottom
         anno.Text = $"Correlation coefficient: {Me.ResultValues("Correlation coefficient").ToString(DefaultNumberFormat)}" & eol
         anno.Text &= "Linear regression line: " & eol

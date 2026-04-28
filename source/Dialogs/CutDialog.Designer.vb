@@ -22,307 +22,302 @@ Partial Class CutDialog
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-        Me.components = New System.ComponentModel.Container()
-        Dim Label_Start As System.Windows.Forms.Label
-        Dim Label_End As System.Windows.Forms.Label
-        Dim Label1 As System.Windows.Forms.Label
+        components = New ComponentModel.Container()
+        Dim Label_Start As Label
+        Dim Label_End As Label
+        Dim Label1 As Label
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(CutDialog))
-        Me.Button_OK = New System.Windows.Forms.Button()
-        Me.Label_MinDateTime = New System.Windows.Forms.Label()
-        Me.Label_MaxDateTime = New System.Windows.Forms.Label()
-        Me.MaskedTextBox_cutEnd = New System.Windows.Forms.MaskedTextBox()
-        Me.MaskedTextBox_cutStart = New System.Windows.Forms.MaskedTextBox()
-        Me.ComboBox_RefSeries = New System.Windows.Forms.ComboBox()
-        Me.Button_Cancel = New System.Windows.Forms.Button()
-        Me.CheckBox_keepUncutSeries = New System.Windows.Forms.CheckBox()
-        Me.SplitContainer1 = New System.Windows.Forms.SplitContainer()
-        Me.GroupBox_Selection = New System.Windows.Forms.GroupBox()
-        Me.ListBox_Series = New System.Windows.Forms.ListBox()
-        Me.Button_SelectAll = New System.Windows.Forms.Button()
-        Me.GroupBox_Timeperiod = New System.Windows.Forms.GroupBox()
-        Me.GroupBox_Settings = New System.Windows.Forms.GroupBox()
-        Me.Label_TitleSuffix = New System.Windows.Forms.Label()
-        Me.TextBox_TitleSuffix = New System.Windows.Forms.TextBox()
-        Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
-        Me.PictureBox_TitleSuffixHelp = New System.Windows.Forms.PictureBox()
-        Label_Start = New System.Windows.Forms.Label()
-        Label_End = New System.Windows.Forms.Label()
-        Label1 = New System.Windows.Forms.Label()
-        CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.SplitContainer1.Panel1.SuspendLayout()
-        Me.SplitContainer1.Panel2.SuspendLayout()
-        Me.SplitContainer1.SuspendLayout()
-        Me.GroupBox_Selection.SuspendLayout()
-        Me.GroupBox_Timeperiod.SuspendLayout()
-        Me.GroupBox_Settings.SuspendLayout()
-        CType(Me.PictureBox_TitleSuffixHelp, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.SuspendLayout()
-        '
-        'Label_Start
-        '
+        Button_OK = New Button()
+        Label_MinDateTime = New Label()
+        Label_MaxDateTime = New Label()
+        MaskedTextBox_cutEnd = New MaskedTextBox()
+        MaskedTextBox_cutStart = New MaskedTextBox()
+        ComboBox_RefSeries = New ComboBox()
+        Button_Cancel = New Button()
+        CheckBox_keepUncutSeries = New CheckBox()
+        SplitContainer1 = New SplitContainer()
+        GroupBox_Selection = New GroupBox()
+        ListBox_Series = New ListBox()
+        Button_SelectAll = New Button()
+        GroupBox_Timeperiod = New GroupBox()
+        GroupBox_Settings = New GroupBox()
+        PictureBox_TitleSuffixHelp = New PictureBox()
+        Label_TitleSuffix = New Label()
+        TextBox_TitleSuffix = New TextBox()
+        ToolTip1 = New ToolTip(components)
+        Label_Start = New Label()
+        Label_End = New Label()
+        Label1 = New Label()
+        CType(SplitContainer1, ComponentModel.ISupportInitialize).BeginInit()
+        SplitContainer1.Panel1.SuspendLayout()
+        SplitContainer1.Panel2.SuspendLayout()
+        SplitContainer1.SuspendLayout()
+        GroupBox_Selection.SuspendLayout()
+        GroupBox_Timeperiod.SuspendLayout()
+        GroupBox_Settings.SuspendLayout()
+        CType(PictureBox_TitleSuffixHelp, ComponentModel.ISupportInitialize).BeginInit()
+        SuspendLayout()
+        ' 
+        ' Label_Start
+        ' 
         Label_Start.AutoSize = True
-        Label_Start.Location = New System.Drawing.Point(6, 41)
+        Label_Start.Location = New Point(7, 47)
         Label_Start.Name = "Label_Start"
-        Label_Start.Size = New System.Drawing.Size(32, 13)
+        Label_Start.Size = New Size(34, 15)
         Label_Start.TabIndex = 2
         Label_Start.Text = "Start:"
-        '
-        'Label_End
-        '
-        Label_End.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        ' 
+        ' Label_End
+        ' 
+        Label_End.Anchor = AnchorStyles.Top Or AnchorStyles.Right
         Label_End.AutoSize = True
-        Label_End.Location = New System.Drawing.Point(302, 41)
+        Label_End.Location = New Point(180, 47)
         Label_End.Name = "Label_End"
-        Label_End.Size = New System.Drawing.Size(29, 13)
+        Label_End.Size = New Size(30, 15)
         Label_End.TabIndex = 4
         Label_End.Text = "End:"
-        '
-        'Label1
-        '
+        ' 
+        ' Label1
+        ' 
         Label1.AutoSize = True
-        Label1.Location = New System.Drawing.Point(6, 90)
+        Label1.Location = New Point(7, 104)
         Label1.Name = "Label1"
-        Label1.Size = New System.Drawing.Size(136, 13)
+        Label1.Size = New Size(154, 15)
         Label1.TabIndex = 6
         Label1.Text = "Use time period from series:"
-        '
-        'Button_OK
-        '
-        Me.Button_OK.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Button_OK.Location = New System.Drawing.Point(470, 315)
-        Me.Button_OK.Name = "Button_OK"
-        Me.Button_OK.Size = New System.Drawing.Size(67, 23)
-        Me.Button_OK.TabIndex = 1
-        Me.Button_OK.Text = "OK"
-        '
-        'Label_MinDateTime
-        '
-        Me.Label_MinDateTime.AutoSize = True
-        Me.Label_MinDateTime.ForeColor = System.Drawing.SystemColors.ControlDarkDark
-        Me.Label_MinDateTime.Location = New System.Drawing.Point(6, 19)
-        Me.Label_MinDateTime.Name = "Label_MinDateTime"
-        Me.Label_MinDateTime.Size = New System.Drawing.Size(33, 13)
-        Me.Label_MinDateTime.TabIndex = 0
-        Me.Label_MinDateTime.Text = "Min: -"
-        '
-        'Label_MaxDateTime
-        '
-        Me.Label_MaxDateTime.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Label_MaxDateTime.ForeColor = System.Drawing.SystemColors.ControlDarkDark
-        Me.Label_MaxDateTime.Location = New System.Drawing.Point(264, 19)
-        Me.Label_MaxDateTime.Name = "Label_MaxDateTime"
-        Me.Label_MaxDateTime.Size = New System.Drawing.Size(136, 13)
-        Me.Label_MaxDateTime.TabIndex = 1
-        Me.Label_MaxDateTime.Text = "Max: -"
-        Me.Label_MaxDateTime.TextAlign = System.Drawing.ContentAlignment.TopRight
-        '
-        'MaskedTextBox_cutEnd
-        '
-        Me.MaskedTextBox_cutEnd.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.MaskedTextBox_cutEnd.Culture = New System.Globalization.CultureInfo("")
-        Me.MaskedTextBox_cutEnd.Location = New System.Drawing.Point(305, 57)
-        Me.MaskedTextBox_cutEnd.Name = "MaskedTextBox_cutEnd"
-        Me.MaskedTextBox_cutEnd.Size = New System.Drawing.Size(100, 20)
-        Me.MaskedTextBox_cutEnd.TabIndex = 5
-        Me.MaskedTextBox_cutEnd.ValidatingType = GetType(Date)
-        '
-        'MaskedTextBox_cutStart
-        '
-        Me.MaskedTextBox_cutStart.Culture = New System.Globalization.CultureInfo("")
-        Me.MaskedTextBox_cutStart.Location = New System.Drawing.Point(7, 57)
-        Me.MaskedTextBox_cutStart.Name = "MaskedTextBox_cutStart"
-        Me.MaskedTextBox_cutStart.Size = New System.Drawing.Size(100, 20)
-        Me.MaskedTextBox_cutStart.TabIndex = 3
-        Me.MaskedTextBox_cutStart.ValidatingType = GetType(Date)
-        '
-        'ComboBox_RefSeries
-        '
-        Me.ComboBox_RefSeries.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ComboBox_RefSeries.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.ComboBox_RefSeries.FormattingEnabled = True
-        Me.ComboBox_RefSeries.Location = New System.Drawing.Point(6, 106)
-        Me.ComboBox_RefSeries.Name = "ComboBox_RefSeries"
-        Me.ComboBox_RefSeries.Size = New System.Drawing.Size(399, 21)
-        Me.ComboBox_RefSeries.TabIndex = 7
-        '
-        'Button_Cancel
-        '
-        Me.Button_Cancel.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Button_Cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel
-        Me.Button_Cancel.Location = New System.Drawing.Point(543, 315)
-        Me.Button_Cancel.Name = "Button_Cancel"
-        Me.Button_Cancel.Size = New System.Drawing.Size(75, 23)
-        Me.Button_Cancel.TabIndex = 2
-        Me.Button_Cancel.Text = "Cancel"
-        Me.Button_Cancel.UseVisualStyleBackColor = True
-        '
-        'CheckBox_keepUncutSeries
-        '
-        Me.CheckBox_keepUncutSeries.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.CheckBox_keepUncutSeries.CheckAlign = System.Drawing.ContentAlignment.MiddleRight
-        Me.CheckBox_keepUncutSeries.Location = New System.Drawing.Point(6, 16)
-        Me.CheckBox_keepUncutSeries.Name = "CheckBox_keepUncutSeries"
-        Me.CheckBox_keepUncutSeries.Size = New System.Drawing.Size(399, 20)
-        Me.CheckBox_keepUncutSeries.TabIndex = 0
-        Me.CheckBox_keepUncutSeries.Text = "Keep uncut series:"
-        Me.CheckBox_keepUncutSeries.UseVisualStyleBackColor = True
-        '
-        'SplitContainer1
-        '
-        Me.SplitContainer1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.SplitContainer1.Location = New System.Drawing.Point(12, 12)
-        Me.SplitContainer1.Name = "SplitContainer1"
-        '
-        'SplitContainer1.Panel1
-        '
-        Me.SplitContainer1.Panel1.Controls.Add(Me.GroupBox_Selection)
-        Me.SplitContainer1.Panel1.Padding = New System.Windows.Forms.Padding(3)
-        Me.SplitContainer1.Panel1MinSize = 180
-        '
-        'SplitContainer1.Panel2
-        '
-        Me.SplitContainer1.Panel2.Controls.Add(Me.GroupBox_Timeperiod)
-        Me.SplitContainer1.Panel2.Controls.Add(Me.GroupBox_Settings)
-        Me.SplitContainer1.Panel2.Padding = New System.Windows.Forms.Padding(3)
-        Me.SplitContainer1.Panel2MinSize = 300
-        Me.SplitContainer1.Size = New System.Drawing.Size(606, 297)
-        Me.SplitContainer1.SplitterDistance = 180
-        Me.SplitContainer1.TabIndex = 0
-        '
-        'GroupBox_Selection
-        '
-        Me.GroupBox_Selection.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.GroupBox_Selection.Controls.Add(Me.ListBox_Series)
-        Me.GroupBox_Selection.Controls.Add(Me.Button_SelectAll)
-        Me.GroupBox_Selection.Location = New System.Drawing.Point(3, 3)
-        Me.GroupBox_Selection.Margin = New System.Windows.Forms.Padding(0)
-        Me.GroupBox_Selection.Name = "GroupBox_Selection"
-        Me.GroupBox_Selection.Size = New System.Drawing.Size(174, 291)
-        Me.GroupBox_Selection.TabIndex = 0
-        Me.GroupBox_Selection.TabStop = False
-        Me.GroupBox_Selection.Text = "Series to cut"
-        '
-        'ListBox_Series
-        '
-        Me.ListBox_Series.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ListBox_Series.FormattingEnabled = True
-        Me.ListBox_Series.Location = New System.Drawing.Point(6, 19)
-        Me.ListBox_Series.Name = "ListBox_Series"
-        Me.ListBox_Series.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended
-        Me.ListBox_Series.Size = New System.Drawing.Size(162, 238)
-        Me.ListBox_Series.TabIndex = 1
-        '
-        'Button_SelectAll
-        '
-        Me.Button_SelectAll.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.Button_SelectAll.Location = New System.Drawing.Point(6, 263)
-        Me.Button_SelectAll.Name = "Button_SelectAll"
-        Me.Button_SelectAll.Size = New System.Drawing.Size(73, 23)
-        Me.Button_SelectAll.TabIndex = 0
-        Me.Button_SelectAll.Text = "Select all"
-        Me.Button_SelectAll.UseVisualStyleBackColor = True
-        '
-        'GroupBox_Timeperiod
-        '
-        Me.GroupBox_Timeperiod.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.GroupBox_Timeperiod.Controls.Add(Label1)
-        Me.GroupBox_Timeperiod.Controls.Add(Me.MaskedTextBox_cutEnd)
-        Me.GroupBox_Timeperiod.Controls.Add(Me.Label_MinDateTime)
-        Me.GroupBox_Timeperiod.Controls.Add(Me.ComboBox_RefSeries)
-        Me.GroupBox_Timeperiod.Controls.Add(Me.Label_MaxDateTime)
-        Me.GroupBox_Timeperiod.Controls.Add(Label_End)
-        Me.GroupBox_Timeperiod.Controls.Add(Label_Start)
-        Me.GroupBox_Timeperiod.Controls.Add(Me.MaskedTextBox_cutStart)
-        Me.GroupBox_Timeperiod.Location = New System.Drawing.Point(5, 3)
-        Me.GroupBox_Timeperiod.Name = "GroupBox_Timeperiod"
-        Me.GroupBox_Timeperiod.Size = New System.Drawing.Size(411, 133)
-        Me.GroupBox_Timeperiod.TabIndex = 0
-        Me.GroupBox_Timeperiod.TabStop = False
-        Me.GroupBox_Timeperiod.Text = "Time period to cut to"
-        '
-        'GroupBox_Settings
-        '
-        Me.GroupBox_Settings.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.GroupBox_Settings.Controls.Add(Me.PictureBox_TitleSuffixHelp)
-        Me.GroupBox_Settings.Controls.Add(Me.Label_TitleSuffix)
-        Me.GroupBox_Settings.Controls.Add(Me.TextBox_TitleSuffix)
-        Me.GroupBox_Settings.Controls.Add(Me.CheckBox_keepUncutSeries)
-        Me.GroupBox_Settings.Location = New System.Drawing.Point(5, 142)
-        Me.GroupBox_Settings.Name = "GroupBox_Settings"
-        Me.GroupBox_Settings.Size = New System.Drawing.Size(411, 152)
-        Me.GroupBox_Settings.TabIndex = 0
-        Me.GroupBox_Settings.TabStop = False
-        Me.GroupBox_Settings.Text = "Settings"
-        '
-        'Label_TitleSuffix
-        '
-        Me.Label_TitleSuffix.AutoSize = True
-        Me.Label_TitleSuffix.Location = New System.Drawing.Point(6, 39)
-        Me.Label_TitleSuffix.Name = "Label_TitleSuffix"
-        Me.Label_TitleSuffix.Size = New System.Drawing.Size(57, 13)
-        Me.Label_TitleSuffix.TabIndex = 37
-        Me.Label_TitleSuffix.Text = "Title suffix:"
-        '
-        'TextBox_TitleSuffix
-        '
-        Me.TextBox_TitleSuffix.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TextBox_TitleSuffix.Location = New System.Drawing.Point(108, 36)
-        Me.TextBox_TitleSuffix.Name = "TextBox_TitleSuffix"
-        Me.TextBox_TitleSuffix.Size = New System.Drawing.Size(275, 20)
-        Me.TextBox_TitleSuffix.TabIndex = 38
-        Me.TextBox_TitleSuffix.Text = " (cut)"
-        '
-        'PictureBox_TitleSuffixHelp
-        '
-        Me.PictureBox_TitleSuffixHelp.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.PictureBox_TitleSuffixHelp.Image = Global.BlueM.Wave.My.Resources.Resources.help
-        Me.PictureBox_TitleSuffixHelp.Location = New System.Drawing.Point(389, 38)
-        Me.PictureBox_TitleSuffixHelp.Name = "PictureBox_TitleSuffixHelp"
-        Me.PictureBox_TitleSuffixHelp.Size = New System.Drawing.Size(16, 16)
-        Me.PictureBox_TitleSuffixHelp.TabIndex = 39
-        Me.PictureBox_TitleSuffixHelp.TabStop = False
-        Me.ToolTip1.SetToolTip(Me.PictureBox_TitleSuffixHelp, "The title suffix will be appended to each cut series' title")
-        '
-        'CutDialog
-        '
-        Me.AcceptButton = Me.Button_OK
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
-        Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(630, 344)
-        Me.Controls.Add(Me.SplitContainer1)
-        Me.Controls.Add(Me.Button_OK)
-        Me.Controls.Add(Me.Button_Cancel)
-        Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
-        Me.MaximizeBox = False
-        Me.MinimizeBox = False
-        Me.MinimumSize = New System.Drawing.Size(600, 350)
-        Me.Name = "CutDialog"
-        Me.ShowInTaskbar = False
-        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = "Cut time series"
-        Me.SplitContainer1.Panel1.ResumeLayout(False)
-        Me.SplitContainer1.Panel2.ResumeLayout(False)
-        CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.SplitContainer1.ResumeLayout(False)
-        Me.GroupBox_Selection.ResumeLayout(False)
-        Me.GroupBox_Timeperiod.ResumeLayout(False)
-        Me.GroupBox_Timeperiod.PerformLayout()
-        Me.GroupBox_Settings.ResumeLayout(False)
-        Me.GroupBox_Settings.PerformLayout()
-        CType(Me.PictureBox_TitleSuffixHelp, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.ResumeLayout(False)
+        ' 
+        ' Button_OK
+        ' 
+        Button_OK.Anchor = AnchorStyles.Bottom Or AnchorStyles.Right
+        Button_OK.Location = New Point(352, 363)
+        Button_OK.Margin = New Padding(4, 3, 4, 3)
+        Button_OK.Name = "Button_OK"
+        Button_OK.Size = New Size(80, 27)
+        Button_OK.TabIndex = 1
+        Button_OK.Text = "OK"
+        ' 
+        ' Label_MinDateTime
+        ' 
+        Label_MinDateTime.AutoSize = True
+        Label_MinDateTime.ForeColor = SystemColors.ControlDarkDark
+        Label_MinDateTime.Location = New Point(7, 22)
+        Label_MinDateTime.Name = "Label_MinDateTime"
+        Label_MinDateTime.Size = New Size(39, 15)
+        Label_MinDateTime.TabIndex = 0
+        Label_MinDateTime.Text = "Min: -"
+        ' 
+        ' Label_MaxDateTime
+        ' 
+        Label_MaxDateTime.Anchor = AnchorStyles.Top Or AnchorStyles.Right
+        Label_MaxDateTime.ForeColor = SystemColors.ControlDarkDark
+        Label_MaxDateTime.Location = New Point(136, 22)
+        Label_MaxDateTime.Name = "Label_MaxDateTime"
+        Label_MaxDateTime.Size = New Size(159, 15)
+        Label_MaxDateTime.TabIndex = 1
+        Label_MaxDateTime.Text = "Max: -"
+        Label_MaxDateTime.TextAlign = ContentAlignment.TopRight
+        ' 
+        ' MaskedTextBox_cutEnd
+        ' 
+        MaskedTextBox_cutEnd.Anchor = AnchorStyles.Top Or AnchorStyles.Right
+        MaskedTextBox_cutEnd.Culture = New System.Globalization.CultureInfo("")
+        MaskedTextBox_cutEnd.Location = New Point(184, 66)
+        MaskedTextBox_cutEnd.Name = "MaskedTextBox_cutEnd"
+        MaskedTextBox_cutEnd.Size = New Size(117, 23)
+        MaskedTextBox_cutEnd.TabIndex = 5
+        MaskedTextBox_cutEnd.ValidatingType = GetType(Date)
+        ' 
+        ' MaskedTextBox_cutStart
+        ' 
+        MaskedTextBox_cutStart.Culture = New System.Globalization.CultureInfo("")
+        MaskedTextBox_cutStart.Location = New Point(8, 66)
+        MaskedTextBox_cutStart.Name = "MaskedTextBox_cutStart"
+        MaskedTextBox_cutStart.Size = New Size(116, 23)
+        MaskedTextBox_cutStart.TabIndex = 3
+        MaskedTextBox_cutStart.ValidatingType = GetType(Date)
+        ' 
+        ' ComboBox_RefSeries
+        ' 
+        ComboBox_RefSeries.Anchor = AnchorStyles.Top Or AnchorStyles.Left Or AnchorStyles.Right
+        ComboBox_RefSeries.DropDownStyle = ComboBoxStyle.DropDownList
+        ComboBox_RefSeries.FormattingEnabled = True
+        ComboBox_RefSeries.Location = New Point(7, 122)
+        ComboBox_RefSeries.Name = "ComboBox_RefSeries"
+        ComboBox_RefSeries.Size = New Size(293, 23)
+        ComboBox_RefSeries.TabIndex = 7
+        ' 
+        ' Button_Cancel
+        ' 
+        Button_Cancel.Anchor = AnchorStyles.Bottom Or AnchorStyles.Right
+        Button_Cancel.DialogResult = DialogResult.Cancel
+        Button_Cancel.Location = New Point(440, 363)
+        Button_Cancel.Margin = New Padding(4, 3, 4, 3)
+        Button_Cancel.Name = "Button_Cancel"
+        Button_Cancel.Size = New Size(80, 27)
+        Button_Cancel.TabIndex = 2
+        Button_Cancel.Text = "Cancel"
+        Button_Cancel.UseVisualStyleBackColor = True
+        ' 
+        ' CheckBox_keepUncutSeries
+        ' 
+        CheckBox_keepUncutSeries.Anchor = AnchorStyles.Top Or AnchorStyles.Left Or AnchorStyles.Right
+        CheckBox_keepUncutSeries.CheckAlign = ContentAlignment.MiddleRight
+        CheckBox_keepUncutSeries.Location = New Point(7, 18)
+        CheckBox_keepUncutSeries.Name = "CheckBox_keepUncutSeries"
+        CheckBox_keepUncutSeries.Size = New Size(293, 23)
+        CheckBox_keepUncutSeries.TabIndex = 0
+        CheckBox_keepUncutSeries.Text = "Keep uncut series:"
+        CheckBox_keepUncutSeries.UseVisualStyleBackColor = True
+        ' 
+        ' SplitContainer1
+        ' 
+        SplitContainer1.Anchor = AnchorStyles.Top Or AnchorStyles.Bottom Or AnchorStyles.Left Or AnchorStyles.Right
+        SplitContainer1.Location = New Point(14, 14)
+        SplitContainer1.Margin = New Padding(4, 3, 4, 3)
+        SplitContainer1.Name = "SplitContainer1"
+        ' 
+        ' SplitContainer1.Panel1
+        ' 
+        SplitContainer1.Panel1.Controls.Add(GroupBox_Selection)
+        SplitContainer1.Panel1.Padding = New Padding(4, 3, 4, 3)
+        SplitContainer1.Panel1MinSize = 180
+        ' 
+        ' SplitContainer1.Panel2
+        ' 
+        SplitContainer1.Panel2.Controls.Add(GroupBox_Timeperiod)
+        SplitContainer1.Panel2.Controls.Add(GroupBox_Settings)
+        SplitContainer1.Panel2.Padding = New Padding(4, 3, 4, 3)
+        SplitContainer1.Panel2MinSize = 300
+        SplitContainer1.Size = New Size(506, 343)
+        SplitContainer1.SplitterDistance = 180
+        SplitContainer1.SplitterWidth = 5
+        SplitContainer1.TabIndex = 0
+        ' 
+        ' GroupBox_Selection
+        ' 
+        GroupBox_Selection.Anchor = AnchorStyles.Top Or AnchorStyles.Bottom Or AnchorStyles.Left Or AnchorStyles.Right
+        GroupBox_Selection.Controls.Add(ListBox_Series)
+        GroupBox_Selection.Controls.Add(Button_SelectAll)
+        GroupBox_Selection.Location = New Point(4, 3)
+        GroupBox_Selection.Name = "GroupBox_Selection"
+        GroupBox_Selection.Padding = New Padding(4, 3, 4, 3)
+        GroupBox_Selection.Size = New Size(173, 336)
+        GroupBox_Selection.TabIndex = 0
+        GroupBox_Selection.TabStop = False
+        GroupBox_Selection.Text = "Series to cut"
+        ' 
+        ' ListBox_Series
+        ' 
+        ListBox_Series.Anchor = AnchorStyles.Top Or AnchorStyles.Bottom Or AnchorStyles.Left Or AnchorStyles.Right
+        ListBox_Series.FormattingEnabled = True
+        ListBox_Series.Location = New Point(7, 22)
+        ListBox_Series.Name = "ListBox_Series"
+        ListBox_Series.SelectionMode = SelectionMode.MultiExtended
+        ListBox_Series.Size = New Size(158, 274)
+        ListBox_Series.TabIndex = 1
+        ' 
+        ' Button_SelectAll
+        ' 
+        Button_SelectAll.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
+        Button_SelectAll.Location = New Point(7, 303)
+        Button_SelectAll.Name = "Button_SelectAll"
+        Button_SelectAll.Size = New Size(80, 27)
+        Button_SelectAll.TabIndex = 0
+        Button_SelectAll.Text = "Select all"
+        Button_SelectAll.UseVisualStyleBackColor = True
+        ' 
+        ' GroupBox_Timeperiod
+        ' 
+        GroupBox_Timeperiod.Anchor = AnchorStyles.Top Or AnchorStyles.Left Or AnchorStyles.Right
+        GroupBox_Timeperiod.Controls.Add(Label1)
+        GroupBox_Timeperiod.Controls.Add(MaskedTextBox_cutEnd)
+        GroupBox_Timeperiod.Controls.Add(Label_MinDateTime)
+        GroupBox_Timeperiod.Controls.Add(ComboBox_RefSeries)
+        GroupBox_Timeperiod.Controls.Add(Label_MaxDateTime)
+        GroupBox_Timeperiod.Controls.Add(Label_End)
+        GroupBox_Timeperiod.Controls.Add(Label_Start)
+        GroupBox_Timeperiod.Controls.Add(MaskedTextBox_cutStart)
+        GroupBox_Timeperiod.Location = New Point(6, 3)
+        GroupBox_Timeperiod.Name = "GroupBox_Timeperiod"
+        GroupBox_Timeperiod.Padding = New Padding(4, 3, 4, 3)
+        GroupBox_Timeperiod.Size = New Size(307, 153)
+        GroupBox_Timeperiod.TabIndex = 0
+        GroupBox_Timeperiod.TabStop = False
+        GroupBox_Timeperiod.Text = "Time period to cut to"
+        ' 
+        ' GroupBox_Settings
+        ' 
+        GroupBox_Settings.Anchor = AnchorStyles.Top Or AnchorStyles.Bottom Or AnchorStyles.Left Or AnchorStyles.Right
+        GroupBox_Settings.Controls.Add(PictureBox_TitleSuffixHelp)
+        GroupBox_Settings.Controls.Add(Label_TitleSuffix)
+        GroupBox_Settings.Controls.Add(TextBox_TitleSuffix)
+        GroupBox_Settings.Controls.Add(CheckBox_keepUncutSeries)
+        GroupBox_Settings.Location = New Point(6, 164)
+        GroupBox_Settings.Name = "GroupBox_Settings"
+        GroupBox_Settings.Padding = New Padding(4, 3, 4, 3)
+        GroupBox_Settings.Size = New Size(307, 175)
+        GroupBox_Settings.TabIndex = 0
+        GroupBox_Settings.TabStop = False
+        GroupBox_Settings.Text = "Settings"
+        ' 
+        ' PictureBox_TitleSuffixHelp
+        ' 
+        PictureBox_TitleSuffixHelp.Anchor = AnchorStyles.Top Or AnchorStyles.Right
+        PictureBox_TitleSuffixHelp.Image = CType(resources.GetObject("PictureBox_TitleSuffixHelp.Image"), Image)
+        PictureBox_TitleSuffixHelp.Location = New Point(282, 44)
+        PictureBox_TitleSuffixHelp.Name = "PictureBox_TitleSuffixHelp"
+        PictureBox_TitleSuffixHelp.Size = New Size(19, 18)
+        PictureBox_TitleSuffixHelp.TabIndex = 39
+        PictureBox_TitleSuffixHelp.TabStop = False
+        ToolTip1.SetToolTip(PictureBox_TitleSuffixHelp, "The title suffix will be appended to each cut series' title")
+        ' 
+        ' Label_TitleSuffix
+        ' 
+        Label_TitleSuffix.AutoSize = True
+        Label_TitleSuffix.Location = New Point(7, 45)
+        Label_TitleSuffix.Name = "Label_TitleSuffix"
+        Label_TitleSuffix.Size = New Size(64, 15)
+        Label_TitleSuffix.TabIndex = 37
+        Label_TitleSuffix.Text = "Title suffix:"
+        ' 
+        ' TextBox_TitleSuffix
+        ' 
+        TextBox_TitleSuffix.Anchor = AnchorStyles.Top Or AnchorStyles.Left Or AnchorStyles.Right
+        TextBox_TitleSuffix.Location = New Point(184, 42)
+        TextBox_TitleSuffix.Name = "TextBox_TitleSuffix"
+        TextBox_TitleSuffix.Size = New Size(90, 23)
+        TextBox_TitleSuffix.TabIndex = 38
+        TextBox_TitleSuffix.Text = " (cut)"
+        ' 
+        ' CutDialog
+        ' 
+        AcceptButton = Button_OK
+        AutoScaleDimensions = New SizeF(7F, 15F)
+        AutoScaleMode = AutoScaleMode.Font
+        ClientSize = New Size(534, 397)
+        Controls.Add(SplitContainer1)
+        Controls.Add(Button_OK)
+        Controls.Add(Button_Cancel)
+        Icon = CType(resources.GetObject("$this.Icon"), Icon)
+        Margin = New Padding(4, 3, 4, 3)
+        MaximizeBox = False
+        MinimizeBox = False
+        MinimumSize = New Size(550, 398)
+        Name = "CutDialog"
+        ShowInTaskbar = False
+        StartPosition = FormStartPosition.CenterParent
+        Text = "Cut time series"
+        SplitContainer1.Panel1.ResumeLayout(False)
+        SplitContainer1.Panel2.ResumeLayout(False)
+        CType(SplitContainer1, ComponentModel.ISupportInitialize).EndInit()
+        SplitContainer1.ResumeLayout(False)
+        GroupBox_Selection.ResumeLayout(False)
+        GroupBox_Timeperiod.ResumeLayout(False)
+        GroupBox_Timeperiod.PerformLayout()
+        GroupBox_Settings.ResumeLayout(False)
+        GroupBox_Settings.PerformLayout()
+        CType(PictureBox_TitleSuffixHelp, ComponentModel.ISupportInitialize).EndInit()
+        ResumeLayout(False)
 
     End Sub
     Friend WithEvents Button_OK As System.Windows.Forms.Button

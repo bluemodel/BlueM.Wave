@@ -23,175 +23,154 @@ Partial Class CalculatorDialog
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(CalculatorDialog))
-        Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
-        Me.OK_Button = New System.Windows.Forms.Button()
-        Me.Cancel_Button = New System.Windows.Forms.Button()
-        Me.TextBox_Title = New System.Windows.Forms.TextBox()
-        Me.TextBox_Formula = New System.Windows.Forms.TextBox()
-        Me.ListBox_Variables = New System.Windows.Forms.ListBox()
-        Me.Label_Formula = New System.Windows.Forms.Label()
-        Me.Label_Variables = New System.Windows.Forms.Label()
-        Me.Label1 = New System.Windows.Forms.Label()
-        Me.Label2 = New System.Windows.Forms.Label()
-        Me.ComboBox_Unit = New System.Windows.Forms.ComboBox()
-        Me.LinkLabel_Help = New System.Windows.Forms.LinkLabel()
-        Me.TableLayoutPanel1.SuspendLayout()
-        Me.SuspendLayout()
-        '
-        'TableLayoutPanel1
-        '
-        Me.TableLayoutPanel1.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TableLayoutPanel1.ColumnCount = 2
-        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-        Me.TableLayoutPanel1.Controls.Add(Me.OK_Button, 0, 0)
-        Me.TableLayoutPanel1.Controls.Add(Me.Cancel_Button, 1, 0)
-        Me.TableLayoutPanel1.Location = New System.Drawing.Point(276, 259)
-        Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
-        Me.TableLayoutPanel1.RowCount = 1
-        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-        Me.TableLayoutPanel1.Size = New System.Drawing.Size(146, 29)
-        Me.TableLayoutPanel1.TabIndex = 8
-        '
-        'OK_Button
-        '
-        Me.OK_Button.Anchor = System.Windows.Forms.AnchorStyles.None
-        Me.OK_Button.Location = New System.Drawing.Point(3, 3)
-        Me.OK_Button.Name = "OK_Button"
-        Me.OK_Button.Size = New System.Drawing.Size(67, 23)
-        Me.OK_Button.TabIndex = 0
-        Me.OK_Button.Text = "OK"
-        '
-        'Cancel_Button
-        '
-        Me.Cancel_Button.Anchor = System.Windows.Forms.AnchorStyles.None
-        Me.Cancel_Button.DialogResult = System.Windows.Forms.DialogResult.Cancel
-        Me.Cancel_Button.Location = New System.Drawing.Point(76, 3)
-        Me.Cancel_Button.Name = "Cancel_Button"
-        Me.Cancel_Button.Size = New System.Drawing.Size(67, 23)
-        Me.Cancel_Button.TabIndex = 1
-        Me.Cancel_Button.Text = "Cancel"
-        '
-        'TextBox_Title
-        '
-        Me.TextBox_Title.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TextBox_Title.Location = New System.Drawing.Point(12, 233)
-        Me.TextBox_Title.Name = "TextBox_Title"
-        Me.TextBox_Title.Size = New System.Drawing.Size(301, 20)
-        Me.TextBox_Title.TabIndex = 5
-        Me.TextBox_Title.Text = "Calculation result"
-        '
-        'TextBox_Formula
-        '
-        Me.TextBox_Formula.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TextBox_Formula.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.TextBox_Formula.Location = New System.Drawing.Point(12, 25)
-        Me.TextBox_Formula.Name = "TextBox_Formula"
-        Me.TextBox_Formula.Size = New System.Drawing.Size(407, 23)
-        Me.TextBox_Formula.TabIndex = 1
-        '
-        'ListBox_Variables
-        '
-        Me.ListBox_Variables.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ListBox_Variables.FormattingEnabled = True
-        Me.ListBox_Variables.Location = New System.Drawing.Point(12, 67)
-        Me.ListBox_Variables.Name = "ListBox_Variables"
-        Me.ListBox_Variables.Size = New System.Drawing.Size(407, 147)
-        Me.ListBox_Variables.TabIndex = 3
-        '
-        'Label_Formula
-        '
-        Me.Label_Formula.AutoSize = True
-        Me.Label_Formula.Location = New System.Drawing.Point(10, 9)
-        Me.Label_Formula.Name = "Label_Formula"
-        Me.Label_Formula.Size = New System.Drawing.Size(47, 13)
-        Me.Label_Formula.TabIndex = 0
-        Me.Label_Formula.Text = "Formula:"
-        '
-        'Label_Variables
-        '
-        Me.Label_Variables.AutoSize = True
-        Me.Label_Variables.Location = New System.Drawing.Point(10, 51)
-        Me.Label_Variables.Name = "Label_Variables"
-        Me.Label_Variables.Size = New System.Drawing.Size(53, 13)
-        Me.Label_Variables.TabIndex = 2
-        Me.Label_Variables.Text = "Variables:"
-        '
-        'Label1
-        '
-        Me.Label1.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(10, 217)
-        Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(89, 13)
-        Me.Label1.TabIndex = 4
-        Me.Label1.Text = "Result series title:"
-        '
-        'Label2
-        '
-        Me.Label2.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Label2.AutoSize = True
-        Me.Label2.Location = New System.Drawing.Point(316, 217)
-        Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(29, 13)
-        Me.Label2.TabIndex = 6
-        Me.Label2.Text = "Unit:"
-        '
-        'ComboBox_Unit
-        '
-        Me.ComboBox_Unit.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ComboBox_Unit.FormattingEnabled = True
-        Me.ComboBox_Unit.Location = New System.Drawing.Point(319, 232)
-        Me.ComboBox_Unit.Name = "ComboBox_Unit"
-        Me.ComboBox_Unit.Size = New System.Drawing.Size(100, 21)
-        Me.ComboBox_Unit.TabIndex = 7
-        '
-        'LinkLabel_Help
-        '
-        Me.LinkLabel_Help.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.LinkLabel_Help.AutoSize = True
-        Me.LinkLabel_Help.Location = New System.Drawing.Point(10, 267)
-        Me.LinkLabel_Help.Name = "LinkLabel_Help"
-        Me.LinkLabel_Help.Size = New System.Drawing.Size(29, 13)
-        Me.LinkLabel_Help.TabIndex = 9
-        Me.LinkLabel_Help.TabStop = True
-        Me.LinkLabel_Help.Text = "Help"
-        '
-        'CalculatorDialog
-        '
-        Me.AcceptButton = Me.OK_Button
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
-        Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.CancelButton = Me.Cancel_Button
-        Me.ClientSize = New System.Drawing.Size(434, 297)
-        Me.Controls.Add(Me.LinkLabel_Help)
-        Me.Controls.Add(Me.ComboBox_Unit)
-        Me.Controls.Add(Me.Label2)
-        Me.Controls.Add(Me.Label1)
-        Me.Controls.Add(Me.Label_Variables)
-        Me.Controls.Add(Me.Label_Formula)
-        Me.Controls.Add(Me.ListBox_Variables)
-        Me.Controls.Add(Me.TextBox_Title)
-        Me.Controls.Add(Me.TextBox_Formula)
-        Me.Controls.Add(Me.TableLayoutPanel1)
-        Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
-        Me.MaximizeBox = False
-        Me.MinimizeBox = False
-        Me.MinimumSize = New System.Drawing.Size(450, 336)
-        Me.Name = "CalculatorDialog"
-        Me.ShowInTaskbar = False
-        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = "Calculator"
-        Me.TableLayoutPanel1.ResumeLayout(False)
-        Me.ResumeLayout(False)
-        Me.PerformLayout()
+        OK_Button = New Button()
+        Cancel_Button = New Button()
+        TextBox_Title = New TextBox()
+        TextBox_Formula = New TextBox()
+        ListBox_Variables = New ListBox()
+        Label_Formula = New Label()
+        Label_Variables = New Label()
+        Label1 = New Label()
+        Label2 = New Label()
+        ComboBox_Unit = New ComboBox()
+        LinkLabel_Help = New LinkLabel()
+        SuspendLayout()
+        ' 
+        ' OK_Button
+        ' 
+        OK_Button.Anchor = AnchorStyles.Bottom Or AnchorStyles.Right
+        OK_Button.Location = New Point(328, 304)
+        OK_Button.Name = "OK_Button"
+        OK_Button.Size = New Size(80, 27)
+        OK_Button.TabIndex = 0
+        OK_Button.Text = "OK"
+        ' 
+        ' Cancel_Button
+        ' 
+        Cancel_Button.Anchor = AnchorStyles.Bottom Or AnchorStyles.Right
+        Cancel_Button.DialogResult = DialogResult.Cancel
+        Cancel_Button.Location = New Point(414, 304)
+        Cancel_Button.Name = "Cancel_Button"
+        Cancel_Button.Size = New Size(80, 27)
+        Cancel_Button.TabIndex = 1
+        Cancel_Button.Text = "Cancel"
+        ' 
+        ' TextBox_Title
+        ' 
+        TextBox_Title.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left Or AnchorStyles.Right
+        TextBox_Title.Location = New Point(14, 269)
+        TextBox_Title.Name = "TextBox_Title"
+        TextBox_Title.Size = New Size(358, 23)
+        TextBox_Title.TabIndex = 5
+        TextBox_Title.Text = "Calculation result"
+        ' 
+        ' TextBox_Formula
+        ' 
+        TextBox_Formula.Anchor = AnchorStyles.Top Or AnchorStyles.Left Or AnchorStyles.Right
+        TextBox_Formula.Font = New Font("Consolas", 9.75F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        TextBox_Formula.Location = New Point(14, 29)
+        TextBox_Formula.Name = "TextBox_Formula"
+        TextBox_Formula.Size = New Size(480, 23)
+        TextBox_Formula.TabIndex = 1
+        ' 
+        ' ListBox_Variables
+        ' 
+        ListBox_Variables.Anchor = AnchorStyles.Top Or AnchorStyles.Bottom Or AnchorStyles.Left Or AnchorStyles.Right
+        ListBox_Variables.FormattingEnabled = True
+        ListBox_Variables.Location = New Point(14, 77)
+        ListBox_Variables.Name = "ListBox_Variables"
+        ListBox_Variables.Size = New Size(480, 169)
+        ListBox_Variables.TabIndex = 3
+        ' 
+        ' Label_Formula
+        ' 
+        Label_Formula.AutoSize = True
+        Label_Formula.Location = New Point(12, 10)
+        Label_Formula.Name = "Label_Formula"
+        Label_Formula.Size = New Size(54, 15)
+        Label_Formula.TabIndex = 0
+        Label_Formula.Text = "Formula:"
+        ' 
+        ' Label_Variables
+        ' 
+        Label_Variables.AutoSize = True
+        Label_Variables.Location = New Point(12, 59)
+        Label_Variables.Name = "Label_Variables"
+        Label_Variables.Size = New Size(56, 15)
+        Label_Variables.TabIndex = 2
+        Label_Variables.Text = "Variables:"
+        ' 
+        ' Label1
+        ' 
+        Label1.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
+        Label1.AutoSize = True
+        Label1.Location = New Point(12, 250)
+        Label1.Name = "Label1"
+        Label1.Size = New Size(97, 15)
+        Label1.TabIndex = 4
+        Label1.Text = "Result series title:"
+        ' 
+        ' Label2
+        ' 
+        Label2.Anchor = AnchorStyles.Bottom Or AnchorStyles.Right
+        Label2.AutoSize = True
+        Label2.Location = New Point(369, 250)
+        Label2.Name = "Label2"
+        Label2.Size = New Size(32, 15)
+        Label2.TabIndex = 6
+        Label2.Text = "Unit:"
+        ' 
+        ' ComboBox_Unit
+        ' 
+        ComboBox_Unit.Anchor = AnchorStyles.Bottom Or AnchorStyles.Right
+        ComboBox_Unit.FormattingEnabled = True
+        ComboBox_Unit.Location = New Point(378, 268)
+        ComboBox_Unit.Name = "ComboBox_Unit"
+        ComboBox_Unit.Size = New Size(116, 23)
+        ComboBox_Unit.TabIndex = 7
+        ' 
+        ' LinkLabel_Help
+        ' 
+        LinkLabel_Help.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
+        LinkLabel_Help.AutoSize = True
+        LinkLabel_Help.Location = New Point(12, 308)
+        LinkLabel_Help.Name = "LinkLabel_Help"
+        LinkLabel_Help.Size = New Size(32, 15)
+        LinkLabel_Help.TabIndex = 9
+        LinkLabel_Help.TabStop = True
+        LinkLabel_Help.Text = "Help"
+        ' 
+        ' CalculatorDialog
+        ' 
+        AcceptButton = OK_Button
+        AutoScaleDimensions = New SizeF(7F, 15F)
+        AutoScaleMode = AutoScaleMode.Font
+        CancelButton = Cancel_Button
+        ClientSize = New Size(506, 343)
+        Controls.Add(OK_Button)
+        Controls.Add(LinkLabel_Help)
+        Controls.Add(Cancel_Button)
+        Controls.Add(ComboBox_Unit)
+        Controls.Add(Label2)
+        Controls.Add(Label1)
+        Controls.Add(Label_Variables)
+        Controls.Add(Label_Formula)
+        Controls.Add(ListBox_Variables)
+        Controls.Add(TextBox_Title)
+        Controls.Add(TextBox_Formula)
+        Icon = CType(resources.GetObject("$this.Icon"), Icon)
+        Margin = New Padding(4, 3, 4, 3)
+        MaximizeBox = False
+        MinimizeBox = False
+        MinimumSize = New Size(522, 382)
+        Name = "CalculatorDialog"
+        ShowInTaskbar = False
+        StartPosition = FormStartPosition.CenterParent
+        Text = "Calculator"
+        ResumeLayout(False)
+        PerformLayout()
 
     End Sub
-    Friend WithEvents TableLayoutPanel1 As System.Windows.Forms.TableLayoutPanel
     Friend WithEvents OK_Button As System.Windows.Forms.Button
     Friend WithEvents Cancel_Button As System.Windows.Forms.Button
     Friend WithEvents TextBox_Title As TextBox

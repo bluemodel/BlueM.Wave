@@ -21,13 +21,7 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_13897E2598E244938CC47515C47E88A6"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_2397D405645942F995E26345879C5439"
+        "MsmKey" = "8:_0F1A2DF2855E45D693DBC03E56915092"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -40,12 +34,6 @@
         "Entry"
         {
         "MsmKey" = "8:_3D2C6E932643489689DAF50C20A315F0"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_4A44C77B534C43CD8D0115AC8AFF0D54"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -69,18 +57,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_691A9A56B22E467D90FBF1F6CB2F34F3"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_6F6943E58C0D4E8AB84B55AE0E9EDF29"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_7F2347FC908A49EEBCEA622E359D4BD3"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -93,31 +69,7 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_83EB600008C24E1D8806D696FEA26DDE"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_8E5B45916B5B442692DFB42B8F028464"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_9824F9CD6AA54AA7BEEFC874ED60A7BB"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_982C79C5DE994B6A8689DE9185DB1F89"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_A2F71A71B8E446B8BE08EF5DEE69BA11"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -130,48 +82,6 @@
         "Entry"
         {
         "MsmKey" = "8:_C012FB83DF6D4A7782E3AF17CFF0B0E6"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_C09C1850D863439A8C0741F67D97875C"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_C603B2246F1247E29386A97B21CE0AE4"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_DEF0A8CB9B9946B28A80874A2A499209"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_EF238C7BD2FE4408AF2DCD5E2B45887B"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_F5DE7F1676ED4B07B077AAA3C2AEDF49"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_F725C70CB90F4266A641292EBF7C92C7"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_FA25F522EA5C4686AD54B99A4955CC00"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -240,10 +150,10 @@
             "ComponentsUrl" = "8:"
                 "Items"
                 {
-                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.8"
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:Microsoft.NetCore.DesktopRuntime.9.0.x64"
                     {
-                    "Name" = "8:Microsoft .NET Framework 4.8 (x86 and x64)"
-                    "ProductCode" = "8:.NETFramework,Version=v4.8"
+                    "Name" = "8:.NET Desktop Runtime 9.0.14 (x64)"
+                    "ProductCode" = "8:Microsoft.NetCore.DesktopRuntime.9.0.x64"
                     }
                 }
             }
@@ -264,13 +174,15 @@
         {
             "LaunchCondition"
             {
-                "{A06ECF26-33A3-4562-8140-9B0E340D4F24}:_BEFEC6D979EA4506A83FB97598C4C49E"
+                "{A06ECF26-33A3-4562-8140-9B0E340D4F24}:_4BBC35D209A844A4AD2CF358F292625F"
                 {
-                "Name" = "8:.NET Framework"
-                "Message" = "8:[VSDNETMSG]"
-                "FrameworkVersion" = "8:.NETFramework,Version=v4.8"
+                "Name" = "8:.NET Core"
+                "Message" = "8:[VSDNETCOREMSG]"
                 "AllowLaterVersions" = "11:FALSE"
-                "InstallUrl" = "8:http://go.microsoft.com/fwlink/?LinkId=863262"
+                "InstallUrl" = "8:https://dotnet.microsoft.com/download/dotnet-core/[NetCoreVerMajorDotMinor]"
+                "IsNETCore" = "11:TRUE"
+                "Architecture" = "2:0"
+                "Runtime" = "2:0"
                 }
             }
         }
@@ -293,46 +205,6 @@
             "PackageAs" = "3:1"
             "Register" = "3:1"
             "Exclude" = "11:TRUE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_13897E2598E244938CC47515C47E88A6"
-            {
-            "SourcePath" = "8:..\\source\\bin\\x64\\Release\\MzCart.dll"
-            "TargetName" = "8:MzCart.dll"
-            "Tag" = "8:"
-            "Folder" = "8:_1335334A1EB042F3AB241758004683C2"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_2397D405645942F995E26345879C5439"
-            {
-            "SourcePath" = "8:..\\source\\bin\\x64\\Release\\EUM.xml"
-            "TargetName" = "8:EUM.xml"
-            "Tag" = "8:"
-            "Folder" = "8:_1335334A1EB042F3AB241758004683C2"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
@@ -360,26 +232,6 @@
             {
             "SourcePath" = "8:..\\source\\lib\\MathParserNet\\MathParserNet.license.html"
             "TargetName" = "8:MathParserNet.license.html"
-            "Tag" = "8:"
-            "Folder" = "8:_1335334A1EB042F3AB241758004683C2"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_4A44C77B534C43CD8D0115AC8AFF0D54"
-            {
-            "SourcePath" = "8:..\\source\\bin\\x64\\Release\\EUM_US_Units.ubg"
-            "TargetName" = "8:EUM_US_Units.ubg"
             "Tag" = "8:"
             "Folder" = "8:_1335334A1EB042F3AB241758004683C2"
             "Condition" = "8:"
@@ -456,46 +308,6 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_691A9A56B22E467D90FBF1F6CB2F34F3"
-            {
-            "SourcePath" = "8:..\\source\\bin\\x64\\Release\\state_plane_nad83.pfs"
-            "TargetName" = "8:state_plane_nad83.pfs"
-            "Tag" = "8:"
-            "Folder" = "8:_1335334A1EB042F3AB241758004683C2"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_6F6943E58C0D4E8AB84B55AE0E9EDF29"
-            {
-            "SourcePath" = "8:..\\source\\bin\\x64\\Release\\EUM.ubg"
-            "TargetName" = "8:EUM.ubg"
-            "Tag" = "8:"
-            "Folder" = "8:_1335334A1EB042F3AB241758004683C2"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_7F2347FC908A49EEBCEA622E359D4BD3"
             {
             "SourcePath" = "8:..\\COPYING"
@@ -536,90 +348,10 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_83EB600008C24E1D8806D696FEA26DDE"
-            {
-            "SourcePath" = "8:..\\source\\bin\\x64\\Release\\DHIfl.dll"
-            "TargetName" = "8:DHIfl.dll"
-            "Tag" = "8:"
-            "Folder" = "8:_1335334A1EB042F3AB241758004683C2"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_8E5B45916B5B442692DFB42B8F028464"
-            {
-            "SourcePath" = "8:..\\source\\bin\\x64\\Release\\ellipsoid.pfs"
-            "TargetName" = "8:ellipsoid.pfs"
-            "Tag" = "8:"
-            "Folder" = "8:_1335334A1EB042F3AB241758004683C2"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_9824F9CD6AA54AA7BEEFC874ED60A7BB"
             {
             "SourcePath" = "8:..\\source\\lib\\MathNet\\MathNet.Numerics.license.txt"
             "TargetName" = "8:MathNet.Numerics.license.txt"
-            "Tag" = "8:"
-            "Folder" = "8:_1335334A1EB042F3AB241758004683C2"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_982C79C5DE994B6A8689DE9185DB1F89"
-            {
-            "SourcePath" = "8:..\\source\\bin\\x64\\Release\\pfs2004.dll"
-            "TargetName" = "8:pfs2004.dll"
-            "Tag" = "8:"
-            "Folder" = "8:_1335334A1EB042F3AB241758004683C2"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_A2F71A71B8E446B8BE08EF5DEE69BA11"
-            {
-            "SourcePath" = "8:..\\source\\bin\\x64\\Release\\eum.dll"
-            "TargetName" = "8:eum.dll"
             "Tag" = "8:"
             "Folder" = "8:_1335334A1EB042F3AB241758004683C2"
             "Condition" = "8:"
@@ -676,126 +408,6 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_C603B2246F1247E29386A97B21CE0AE4"
-            {
-            "SourcePath" = "8:..\\source\\bin\\x64\\Release\\map_projection.pfs"
-            "TargetName" = "8:map_projection.pfs"
-            "Tag" = "8:"
-            "Folder" = "8:_1335334A1EB042F3AB241758004683C2"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_DEF0A8CB9B9946B28A80874A2A499209"
-            {
-            "SourcePath" = "8:..\\source\\bin\\x64\\Release\\amsT2004.dll"
-            "TargetName" = "8:amsT2004.dll"
-            "Tag" = "8:"
-            "Folder" = "8:_1335334A1EB042F3AB241758004683C2"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_EF238C7BD2FE4408AF2DCD5E2B45887B"
-            {
-            "SourcePath" = "8:..\\source\\bin\\x64\\Release\\ufs.dll"
-            "TargetName" = "8:ufs.dll"
-            "Tag" = "8:"
-            "Folder" = "8:_1335334A1EB042F3AB241758004683C2"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_F5DE7F1676ED4B07B077AAA3C2AEDF49"
-            {
-            "SourcePath" = "8:..\\source\\bin\\x64\\Release\\state_plane_nad27.pfs"
-            "TargetName" = "8:state_plane_nad27.pfs"
-            "Tag" = "8:"
-            "Folder" = "8:_1335334A1EB042F3AB241758004683C2"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_F725C70CB90F4266A641292EBF7C92C7"
-            {
-            "SourcePath" = "8:..\\source\\bin\\x64\\Release\\EUM_Default_Units.ubg"
-            "TargetName" = "8:EUM_Default_Units.ubg"
-            "Tag" = "8:"
-            "Folder" = "8:_1335334A1EB042F3AB241758004683C2"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_FA25F522EA5C4686AD54B99A4955CC00"
-            {
-            "SourcePath" = "8:..\\source\\bin\\x64\\Release\\ams2004.dll"
-            "TargetName" = "8:ams2004.dll"
-            "Tag" = "8:"
-            "Folder" = "8:_1335334A1EB042F3AB241758004683C2"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_FAEC29D4F63549BB90924D9CC4071D96"
             {
             "SourcePath" = "8:assets\\banner.bmp"
@@ -829,7 +441,7 @@
             "IconIndex" = "3:0"
                 "Command"
                 {
-                "Command" = "8:_C09C1850D863439A8C0741F67D97875C"
+                "Command" = "8:_0F1A2DF2855E45D693DBC03E56915092"
                 }
                 "Verbs"
                 {
@@ -852,7 +464,7 @@
             "IconIndex" = "3:0"
                 "Command"
                 {
-                "Command" = "8:_C09C1850D863439A8C0741F67D97875C"
+                "Command" = "8:_0F1A2DF2855E45D693DBC03E56915092"
                 }
                 "Verbs"
                 {
@@ -918,15 +530,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:BlueM.Wave"
-        "ProductCode" = "8:{DBF82E08-D54C-4310-8AA8-2C514F13AC26}"
-        "PackageCode" = "8:{D627D7DD-971C-442F-81B9-E9D633130DA4}"
+        "ProductCode" = "8:{509B21A3-7DA3-43AF-AE24-7F42F2F20121}"
+        "PackageCode" = "8:{6041E3BC-7604-41F8-B5CD-4C38F6D6B114}"
         "UpgradeCode" = "8:{8AC270DC-0E8D-4087-98AB-3A2C358096B9}"
         "AspNetVersion" = "8:2.0.50727.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:TRUE"
-        "ProductVersion" = "8:2.17.0"
+        "ProductVersion" = "8:3.0.0"
         "Manufacturer" = "8:BlueM Dev Group"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:https://wiki.bluemodel.org/index.php/BlueM.Wave"
@@ -1047,10 +659,10 @@
             "ShowCmd" = "3:1"
             "IconIndex" = "3:32512"
             "Transitive" = "11:FALSE"
-            "Target" = "8:_C09C1850D863439A8C0741F67D97875C"
+            "Target" = "8:_0F1A2DF2855E45D693DBC03E56915092"
             "Folder" = "8:_04E36A0066A44597BA3C9933A394A3B4"
             "WorkingFolder" = "8:_1335334A1EB042F3AB241758004683C2"
-            "Icon" = "8:_C09C1850D863439A8C0741F67D97875C"
+            "Icon" = "8:_0F1A2DF2855E45D693DBC03E56915092"
             "Feature" = "8:"
             }
         }
@@ -1505,9 +1117,9 @@
         }
         "ProjectOutput"
         {
-            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_C09C1850D863439A8C0741F67D97875C"
+            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_0F1A2DF2855E45D693DBC03E56915092"
             {
-            "SourcePath" = "8:..\\source\\obj\\x64\\Debug\\Wave.exe"
+            "SourcePath" = "8:..\\source\\obj\\x64\\Debug\\net9.0-windows\\apphost.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_1335334A1EB042F3AB241758004683C2"
@@ -1526,7 +1138,7 @@
             "IsolateTo" = "8:"
             "ProjectOutputGroupRegister" = "3:1"
             "OutputConfiguration" = "8:"
-            "OutputGroupCanonicalName" = "8:Built"
+            "OutputGroupCanonicalName" = "8:PublishItems"
             "OutputProjectGuid" = "8:{CE4132A2-2E2F-4F54-B66D-1BAA928D499E}"
             "ShowKeyOutput" = "11:TRUE"
                 "ExcludeFilters"

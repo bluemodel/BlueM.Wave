@@ -253,13 +253,13 @@ Friend Class CutDialog
         'validation
         If Me.ListBox_Series.SelectedIndices.Count = 0 Then
             MsgBox("Please select at least one time series to be cut!", MsgBoxStyle.Exclamation)
-            Me.DialogResult = Windows.Forms.DialogResult.None
+            Me.DialogResult = DialogResult.None
             Exit Sub
         End If
 
         If Me.cutStart >= Me.cutEnd Then
             MsgBox("The end must be later than the start!", MsgBoxStyle.Exclamation)
-            Me.DialogResult = Windows.Forms.DialogResult.None
+            Me.DialogResult = DialogResult.None
             Exit Sub
         End If
 

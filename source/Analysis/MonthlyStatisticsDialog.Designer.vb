@@ -23,114 +23,96 @@ Partial Friend Class MonthlyStatisticsDialog
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(MonthlyStatisticsDialog))
-        Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
-        Me.OK_Button = New System.Windows.Forms.Button()
-        Me.Cancel_Button = New System.Windows.Forms.Button()
-        Me.ComboBox_MonthType = New System.Windows.Forms.ComboBox()
-        Me.Label1 = New System.Windows.Forms.Label()
-        Me.Label2 = New System.Windows.Forms.Label()
-        Me.ComboBox_startMonth = New System.Windows.Forms.ComboBox()
-        Me.TableLayoutPanel1.SuspendLayout()
-        Me.SuspendLayout()
-        '
-        'TableLayoutPanel1
-        '
-        Me.TableLayoutPanel1.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TableLayoutPanel1.ColumnCount = 2
-        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-        Me.TableLayoutPanel1.Controls.Add(Me.OK_Button, 0, 0)
-        Me.TableLayoutPanel1.Controls.Add(Me.Cancel_Button, 1, 0)
-        Me.TableLayoutPanel1.Location = New System.Drawing.Point(116, 69)
-        Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
-        Me.TableLayoutPanel1.RowCount = 1
-        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-        Me.TableLayoutPanel1.Size = New System.Drawing.Size(146, 29)
-        Me.TableLayoutPanel1.TabIndex = 0
-        '
-        'OK_Button
-        '
-        Me.OK_Button.Anchor = System.Windows.Forms.AnchorStyles.None
-        Me.OK_Button.Location = New System.Drawing.Point(3, 3)
-        Me.OK_Button.Name = "OK_Button"
-        Me.OK_Button.Size = New System.Drawing.Size(67, 23)
-        Me.OK_Button.TabIndex = 0
-        Me.OK_Button.Text = "OK"
-        '
-        'Cancel_Button
-        '
-        Me.Cancel_Button.Anchor = System.Windows.Forms.AnchorStyles.None
-        Me.Cancel_Button.DialogResult = System.Windows.Forms.DialogResult.Cancel
-        Me.Cancel_Button.Location = New System.Drawing.Point(76, 3)
-        Me.Cancel_Button.Name = "Cancel_Button"
-        Me.Cancel_Button.Size = New System.Drawing.Size(67, 23)
-        Me.Cancel_Button.TabIndex = 1
-        Me.Cancel_Button.Text = "Cancel"
-        '
-        'ComboBox_MonthType
-        '
-        Me.ComboBox_MonthType.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ComboBox_MonthType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.ComboBox_MonthType.Items.AddRange(New Object() {"current month", "previous month"})
-        Me.ComboBox_MonthType.Location = New System.Drawing.Point(160, 12)
-        Me.ComboBox_MonthType.Name = "ComboBox_MonthType"
-        Me.ComboBox_MonthType.Size = New System.Drawing.Size(102, 21)
-        Me.ComboBox_MonthType.TabIndex = 8
-        '
-        'Label1
-        '
-        Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(13, 15)
-        Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(141, 13)
-        Me.Label1.TabIndex = 10
-        Me.Label1.Text = "Series values correspond to "
-        '
-        'Label2
-        '
-        Me.Label2.AutoSize = True
-        Me.Label2.Location = New System.Drawing.Point(13, 42)
-        Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(102, 13)
-        Me.Label2.TabIndex = 11
-        Me.Label2.Text = "Start month in chart:"
-        '
-        'ComboBox_startMonth
-        '
-        Me.ComboBox_startMonth.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.ComboBox_startMonth.FormattingEnabled = True
-        Me.ComboBox_startMonth.Location = New System.Drawing.Point(160, 39)
-        Me.ComboBox_startMonth.Name = "ComboBox_startMonth"
-        Me.ComboBox_startMonth.Size = New System.Drawing.Size(102, 21)
-        Me.ComboBox_startMonth.TabIndex = 12
-        '
-        'MonthlyStatisticsDialog
-        '
-        Me.AcceptButton = Me.OK_Button
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
-        Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.CancelButton = Me.Cancel_Button
-        Me.ClientSize = New System.Drawing.Size(274, 110)
-        Me.Controls.Add(Me.ComboBox_startMonth)
-        Me.Controls.Add(Me.Label2)
-        Me.Controls.Add(Me.Label1)
-        Me.Controls.Add(Me.ComboBox_MonthType)
-        Me.Controls.Add(Me.TableLayoutPanel1)
-        Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
-        Me.MaximizeBox = False
-        Me.MinimizeBox = False
-        Me.MinimumSize = New System.Drawing.Size(290, 120)
-        Me.Name = "MonthlyStatisticsDialog"
-        Me.ShowInTaskbar = False
-        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = "Monthly Statistics"
-        Me.TableLayoutPanel1.ResumeLayout(False)
-        Me.ResumeLayout(False)
-        Me.PerformLayout()
+        OK_Button = New Button()
+        Cancel_Button = New Button()
+        ComboBox_MonthType = New ComboBox()
+        Label1 = New Label()
+        Label2 = New Label()
+        ComboBox_startMonth = New ComboBox()
+        SuspendLayout()
+        ' 
+        ' OK_Button
+        ' 
+        OK_Button.Anchor = AnchorStyles.Bottom Or AnchorStyles.Right
+        OK_Button.Location = New Point(142, 88)
+        OK_Button.Name = "OK_Button"
+        OK_Button.Size = New Size(80, 27)
+        OK_Button.TabIndex = 0
+        OK_Button.Text = "OK"
+        ' 
+        ' Cancel_Button
+        ' 
+        Cancel_Button.Anchor = AnchorStyles.Bottom Or AnchorStyles.Right
+        Cancel_Button.DialogResult = DialogResult.Cancel
+        Cancel_Button.Location = New Point(228, 88)
+        Cancel_Button.Name = "Cancel_Button"
+        Cancel_Button.Size = New Size(80, 27)
+        Cancel_Button.TabIndex = 1
+        Cancel_Button.Text = "Cancel"
+        ' 
+        ' ComboBox_MonthType
+        ' 
+        ComboBox_MonthType.Anchor = AnchorStyles.Top Or AnchorStyles.Left Or AnchorStyles.Right
+        ComboBox_MonthType.DropDownStyle = ComboBoxStyle.DropDownList
+        ComboBox_MonthType.Items.AddRange(New Object() {"current month", "previous month"})
+        ComboBox_MonthType.Location = New Point(190, 14)
+        ComboBox_MonthType.Name = "ComboBox_MonthType"
+        ComboBox_MonthType.Size = New Size(118, 23)
+        ComboBox_MonthType.TabIndex = 8
+        ' 
+        ' Label1
+        ' 
+        Label1.AutoSize = True
+        Label1.Location = New Point(15, 17)
+        Label1.Name = "Label1"
+        Label1.Size = New Size(153, 15)
+        Label1.TabIndex = 10
+        Label1.Text = "Series values correspond to "
+        ' 
+        ' Label2
+        ' 
+        Label2.AutoSize = True
+        Label2.Location = New Point(15, 48)
+        Label2.Name = "Label2"
+        Label2.Size = New Size(116, 15)
+        Label2.TabIndex = 11
+        Label2.Text = "Start month in chart:"
+        ' 
+        ' ComboBox_startMonth
+        ' 
+        ComboBox_startMonth.DropDownStyle = ComboBoxStyle.DropDownList
+        ComboBox_startMonth.FormattingEnabled = True
+        ComboBox_startMonth.Location = New Point(190, 45)
+        ComboBox_startMonth.Name = "ComboBox_startMonth"
+        ComboBox_startMonth.Size = New Size(118, 23)
+        ComboBox_startMonth.TabIndex = 12
+        ' 
+        ' MonthlyStatisticsDialog
+        ' 
+        AcceptButton = OK_Button
+        AutoScaleDimensions = New SizeF(7F, 15F)
+        AutoScaleMode = AutoScaleMode.Font
+        CancelButton = Cancel_Button
+        ClientSize = New Size(320, 127)
+        Controls.Add(OK_Button)
+        Controls.Add(Cancel_Button)
+        Controls.Add(ComboBox_startMonth)
+        Controls.Add(Label2)
+        Controls.Add(Label1)
+        Controls.Add(ComboBox_MonthType)
+        Icon = CType(resources.GetObject("$this.Icon"), Icon)
+        Margin = New Padding(4, 3, 4, 3)
+        MaximizeBox = False
+        MinimizeBox = False
+        MinimumSize = New Size(336, 132)
+        Name = "MonthlyStatisticsDialog"
+        ShowInTaskbar = False
+        StartPosition = FormStartPosition.CenterParent
+        Text = "Monthly Statistics"
+        ResumeLayout(False)
+        PerformLayout()
 
     End Sub
-    Friend WithEvents TableLayoutPanel1 As System.Windows.Forms.TableLayoutPanel
     Friend WithEvents OK_Button As System.Windows.Forms.Button
     Friend WithEvents Cancel_Button As System.Windows.Forms.Button
     Friend WithEvents ComboBox_MonthType As System.Windows.Forms.ComboBox

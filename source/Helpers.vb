@@ -35,7 +35,7 @@ Public Module Helpers
     End Property
 
     ''' <summary>
-    ''' Default Encoding (as set by the operating system, usually ISO-8859-1)
+    ''' Default Encoding (as set by the .NET implementation, in .NET Core and later versions this is UTF-8)
     ''' </summary>
     Public ReadOnly Property DefaultEncoding As Text.Encoding
         Get
@@ -271,23 +271,24 @@ Public Module Helpers
         chart.Walls.Back.Color = Color.White
 
         'Header
-        chart.Header.Font.Name = "GenericSansSerif"
+        chart.Header.Visible = False
+        chart.Header.Font.Name = "Segoe UI"
         chart.Header.Font.Color = Color.Black
         chart.Header.Text = ""
 
         'Legende
-        chart.Legend.Font.Name = "GenericSansSerif"
+        chart.Legend.Font.Name = "Segoe UI"
         chart.Legend.LegendStyle = Steema.TeeChart.LegendStyles.Series
         chart.Legend.FontSeriesColor = True
-        chart.Legend.CheckBoxes = True
+        chart.Legend.ActiveStyle = Steema.TeeChart.LegendActiveStyles.CheckBox
 
         'Achsen
         chart.Axes.DrawBehind = False
 
-        chart.Axes.Left.Title.Font.Name = "GenericSansSerif"
+        chart.Axes.Left.Title.Font.Name = "Segoe UI"
         chart.Axes.Left.Title.Font.Color = Color.Black
 
-        chart.Axes.Left.Labels.Font.Name = "GenericSansSerif"
+        chart.Axes.Left.Labels.Font.Name = "Segoe UI"
         chart.Axes.Left.Labels.Font.Color = Color.Black
 
         chart.Axes.Left.AxisPen.Visible = True
@@ -295,10 +296,10 @@ Public Module Helpers
         chart.Axes.Left.Grid.Visible = True
         chart.Axes.Left.Grid.Style = Drawing2D.DashStyle.Dash
 
-        chart.Axes.Right.Title.Font.Name = "GenericSansSerif"
+        chart.Axes.Right.Title.Font.Name = "Segoe UI"
         chart.Axes.Right.Title.Font.Color = Color.Black
 
-        chart.Axes.Right.Labels.Font.Name = "GenericSansSerif"
+        chart.Axes.Right.Labels.Font.Name = "Segoe UI"
         chart.Axes.Right.Labels.Font.Color = Color.Black
 
         chart.Axes.Right.AxisPen.Visible = True
@@ -306,10 +307,10 @@ Public Module Helpers
         chart.Axes.Right.Grid.Visible = False
         chart.Axes.Right.Grid.Style = Drawing2D.DashStyle.Dash
 
-        chart.Axes.Bottom.Title.Font.Name = "GenericSansSerif"
+        chart.Axes.Bottom.Title.Font.Name = "Segoe UI"
         chart.Axes.Bottom.Title.Font.Color = Color.Black
 
-        chart.Axes.Bottom.Labels.Font.Name = "GenericSansSerif"
+        chart.Axes.Bottom.Labels.Font.Name = "Segoe UI"
         chart.Axes.Bottom.Labels.Font.Color = Color.Black
 
         chart.Axes.Bottom.Automatic = True
@@ -350,53 +351,5 @@ Public Module Helpers
             axis.Title.Font.Size = size
         Next
     End Sub
-
-    '''<summary>
-    '''Creates a relative path from one file or folder to another.
-    '''</summary>
-    '''<param name="fromPath">Contains the directory that defines the start of the relative path.</param>
-    '''<param name="toPath">Contains the path that defines the endpoint of the relative path.</param>
-    '''<returns>The relative path from the start directory to the end path.</returns>
-    '''<exception cref="ArgumentNullException"><paramref name="fromPath"/> or <paramref name="toPath"/> is <c>null</c>.</exception>
-    '''<exception cref="UriFormatException"></exception>
-    '''<exception cref="InvalidOperationException"></exception>
-    '''<remarks>
-    '''This function is a replacement for IO.Path.GetRelativePath() which is only available in later .NET versions.
-    '''Based on C# code from https://stackoverflow.com/a/32113484
-    '''</remarks>
-    Public Function GetRelativePath(fromPath As String, toPath As String) As String
-
-        If String.IsNullOrEmpty(fromPath) Then
-            Throw New ArgumentNullException("fromPath")
-        End If
-        If String.IsNullOrEmpty(toPath) Then
-            Throw New ArgumentNullException("toPath")
-        End If
-
-        Dim fromUri As Uri = New Uri(AppendDirectorySeparatorChar(fromPath))
-        Dim toUri As Uri = New Uri(AppendDirectorySeparatorChar(toPath))
-
-        If fromUri.Scheme <> toUri.Scheme Then
-            Return toPath
-        End If
-
-        Dim relativeUri As Uri = fromUri.MakeRelativeUri(toUri)
-        Dim relativePath As String = Uri.UnescapeDataString(relativeUri.ToString())
-
-        If String.Equals(toUri.Scheme, Uri.UriSchemeFile, StringComparison.OrdinalIgnoreCase) Then
-            relativePath = relativePath.Replace(IO.Path.AltDirectorySeparatorChar, IO.Path.DirectorySeparatorChar)
-        End If
-
-        Return relativePath
-    End Function
-
-    Private Function AppendDirectorySeparatorChar(path As String) As String
-        'Append a slash only if the path is a directory and does not have a slash.
-        If Not IO.Path.HasExtension(path) And Not path.EndsWith(IO.Path.DirectorySeparatorChar.ToString()) Then
-            Return path + IO.Path.DirectorySeparatorChar
-        End If
-
-        Return path
-    End Function
 
 End Module

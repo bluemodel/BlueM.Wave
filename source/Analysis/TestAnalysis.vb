@@ -16,6 +16,8 @@
 'along with this program.  If not, see <https://www.gnu.org/licenses/>.
 '
 
+Imports System.Data
+
 ''' <summary>
 ''' Write description!
 ''' </summary>
@@ -139,7 +141,7 @@ Friend Class TestAnalysis
         MyBase.ResultValues.Add($"Count values of time series '{title}'", length)
 
         'Result chart (will be shown in separate window)
-        MyBase.ResultChart = New Steema.TeeChart.Chart()
+        MyBase.ResultChart = New Steema.TeeChart.TChart()
         'Fill and format chart
         '...
         '...

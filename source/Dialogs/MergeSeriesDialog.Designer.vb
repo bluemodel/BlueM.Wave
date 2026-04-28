@@ -1,4 +1,4 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class MergeSeriesDialog
     Inherits System.Windows.Forms.Form
 
@@ -23,208 +23,186 @@ Partial Class MergeSeriesDialog
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(MergeSeriesDialog))
-        Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel
-        Me.OK_Button = New System.Windows.Forms.Button
-        Me.Cancel_Button = New System.Windows.Forms.Button
-        Me.CheckedListBox_AvailableSeries = New System.Windows.Forms.CheckedListBox
-        Me.ListBox_SelectedSeries = New System.Windows.Forms.ListBox
-        Me.Button_Up = New System.Windows.Forms.Button
-        Me.Button_Down = New System.Windows.Forms.Button
-        Me.Label1 = New System.Windows.Forms.Label
-        Me.Label2 = New System.Windows.Forms.Label
-        Me.SplitContainer1 = New System.Windows.Forms.SplitContainer
-        Me.Button_SelectAll = New System.Windows.Forms.Button
-        Me.Label3 = New System.Windows.Forms.Label
-        Me.TextBox_MergedSeriesTitle = New System.Windows.Forms.TextBox
-        Me.TableLayoutPanel1.SuspendLayout()
-        Me.SplitContainer1.Panel1.SuspendLayout()
-        Me.SplitContainer1.Panel2.SuspendLayout()
-        Me.SplitContainer1.SuspendLayout()
-        Me.SuspendLayout()
-        '
-        'TableLayoutPanel1
-        '
-        Me.TableLayoutPanel1.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TableLayoutPanel1.ColumnCount = 2
-        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-        Me.TableLayoutPanel1.Controls.Add(Me.OK_Button, 0, 0)
-        Me.TableLayoutPanel1.Controls.Add(Me.Cancel_Button, 1, 0)
-        Me.TableLayoutPanel1.Location = New System.Drawing.Point(309, 283)
-        Me.TableLayoutPanel1.Margin = New System.Windows.Forms.Padding(0)
-        Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
-        Me.TableLayoutPanel1.RowCount = 1
-        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-        Me.TableLayoutPanel1.Size = New System.Drawing.Size(146, 29)
-        Me.TableLayoutPanel1.TabIndex = 2
-        '
-        'OK_Button
-        '
-        Me.OK_Button.Anchor = System.Windows.Forms.AnchorStyles.None
-        Me.OK_Button.Location = New System.Drawing.Point(3, 3)
-        Me.OK_Button.Name = "OK_Button"
-        Me.OK_Button.Size = New System.Drawing.Size(67, 23)
-        Me.OK_Button.TabIndex = 0
-        Me.OK_Button.Text = "OK"
-        '
-        'Cancel_Button
-        '
-        Me.Cancel_Button.Anchor = System.Windows.Forms.AnchorStyles.None
-        Me.Cancel_Button.DialogResult = System.Windows.Forms.DialogResult.Cancel
-        Me.Cancel_Button.Location = New System.Drawing.Point(76, 3)
-        Me.Cancel_Button.Name = "Cancel_Button"
-        Me.Cancel_Button.Size = New System.Drawing.Size(67, 23)
-        Me.Cancel_Button.TabIndex = 1
-        Me.Cancel_Button.Text = "Cancel"
-        '
-        'CheckedListBox_AvailableSeries
-        '
-        Me.CheckedListBox_AvailableSeries.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-                    Or System.Windows.Forms.AnchorStyles.Left) _
-                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.CheckedListBox_AvailableSeries.CheckOnClick = True
-        Me.CheckedListBox_AvailableSeries.FormattingEnabled = True
-        Me.CheckedListBox_AvailableSeries.Location = New System.Drawing.Point(12, 26)
-        Me.CheckedListBox_AvailableSeries.Name = "CheckedListBox_AvailableSeries"
-        Me.CheckedListBox_AvailableSeries.Size = New System.Drawing.Size(214, 214)
-        Me.CheckedListBox_AvailableSeries.TabIndex = 0
-        Me.CheckedListBox_AvailableSeries.ThreeDCheckBoxes = True
-        '
-        'ListBox_SelectedSeries
-        '
-        Me.ListBox_SelectedSeries.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-                    Or System.Windows.Forms.AnchorStyles.Left) _
-                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ListBox_SelectedSeries.FormattingEnabled = True
-        Me.ListBox_SelectedSeries.Location = New System.Drawing.Point(6, 26)
-        Me.ListBox_SelectedSeries.Name = "ListBox_SelectedSeries"
-        Me.ListBox_SelectedSeries.Size = New System.Drawing.Size(183, 238)
-        Me.ListBox_SelectedSeries.TabIndex = 0
-        '
-        'Button_Up
-        '
-        Me.Button_Up.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Button_Up.Image = Global.BlueM.Wave.My.Resources.Resources.arrow_up
-        Me.Button_Up.Location = New System.Drawing.Point(195, 26)
-        Me.Button_Up.Name = "Button_Up"
-        Me.Button_Up.Size = New System.Drawing.Size(23, 23)
-        Me.Button_Up.TabIndex = 1
-        Me.Button_Up.UseVisualStyleBackColor = True
-        '
-        'Button_Down
-        '
-        Me.Button_Down.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Button_Down.Image = Global.BlueM.Wave.My.Resources.Resources.arrow_down
-        Me.Button_Down.Location = New System.Drawing.Point(195, 56)
-        Me.Button_Down.Name = "Button_Down"
-        Me.Button_Down.Size = New System.Drawing.Size(23, 23)
-        Me.Button_Down.TabIndex = 2
-        Me.Button_Down.UseVisualStyleBackColor = True
-        '
-        'Label1
-        '
-        Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(13, 10)
-        Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(83, 13)
-        Me.Label1.TabIndex = 5
-        Me.Label1.Text = "Series to merge:"
-        '
-        'Label2
-        '
-        Me.Label2.AutoSize = True
-        Me.Label2.Location = New System.Drawing.Point(3, 9)
-        Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(49, 13)
-        Me.Label2.TabIndex = 5
-        Me.Label2.Text = "Priorities:"
-        '
-        'SplitContainer1
-        '
-        Me.SplitContainer1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-                    Or System.Windows.Forms.AnchorStyles.Left) _
-                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.SplitContainer1.Location = New System.Drawing.Point(0, 0)
-        Me.SplitContainer1.Margin = New System.Windows.Forms.Padding(0)
-        Me.SplitContainer1.Name = "SplitContainer1"
-        '
-        'SplitContainer1.Panel1
-        '
-        Me.SplitContainer1.Panel1.Controls.Add(Me.Button_SelectAll)
-        Me.SplitContainer1.Panel1.Controls.Add(Me.Label1)
-        Me.SplitContainer1.Panel1.Controls.Add(Me.CheckedListBox_AvailableSeries)
-        Me.SplitContainer1.Panel1MinSize = 100
-        '
-        'SplitContainer1.Panel2
-        '
-        Me.SplitContainer1.Panel2.Controls.Add(Me.Label2)
-        Me.SplitContainer1.Panel2.Controls.Add(Me.ListBox_SelectedSeries)
-        Me.SplitContainer1.Panel2.Controls.Add(Me.Button_Down)
-        Me.SplitContainer1.Panel2.Controls.Add(Me.Button_Up)
-        Me.SplitContainer1.Panel2MinSize = 100
-        Me.SplitContainer1.Size = New System.Drawing.Size(460, 277)
-        Me.SplitContainer1.SplitterDistance = 230
-        Me.SplitContainer1.TabIndex = 0
-        '
-        'Button_SelectAll
-        '
-        Me.Button_SelectAll.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.Button_SelectAll.Location = New System.Drawing.Point(12, 247)
-        Me.Button_SelectAll.Name = "Button_SelectAll"
-        Me.Button_SelectAll.Size = New System.Drawing.Size(75, 23)
-        Me.Button_SelectAll.TabIndex = 1
-        Me.Button_SelectAll.Text = "Select all"
-        Me.Button_SelectAll.UseVisualStyleBackColor = True
-        '
-        'Label3
-        '
-        Me.Label3.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.Label3.AutoSize = True
-        Me.Label3.Location = New System.Drawing.Point(10, 291)
-        Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(110, 13)
-        Me.Label3.TabIndex = 7
-        Me.Label3.Text = "Title of merged series:"
-        '
-        'TextBox_MergedSeriesTitle
-        '
-        Me.TextBox_MergedSeriesTitle.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
-                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TextBox_MergedSeriesTitle.Location = New System.Drawing.Point(126, 288)
-        Me.TextBox_MergedSeriesTitle.Name = "TextBox_MergedSeriesTitle"
-        Me.TextBox_MergedSeriesTitle.Size = New System.Drawing.Size(177, 20)
-        Me.TextBox_MergedSeriesTitle.TabIndex = 1
-        '
-        'MergeSeriesDialog
-        '
-        Me.AcceptButton = Me.OK_Button
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
-        Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.CancelButton = Me.Cancel_Button
-        Me.ClientSize = New System.Drawing.Size(464, 321)
-        Me.Controls.Add(Me.TextBox_MergedSeriesTitle)
-        Me.Controls.Add(Me.Label3)
-        Me.Controls.Add(Me.SplitContainer1)
-        Me.Controls.Add(Me.TableLayoutPanel1)
-        Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
-        Me.MaximizeBox = False
-        Me.MinimizeBox = False
-        Me.MinimumSize = New System.Drawing.Size(480, 360)
-        Me.Name = "MergeSeriesDialog"
-        Me.ShowInTaskbar = False
-        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = "Merge Series"
-        Me.TableLayoutPanel1.ResumeLayout(False)
-        Me.SplitContainer1.Panel1.ResumeLayout(False)
-        Me.SplitContainer1.Panel1.PerformLayout()
-        Me.SplitContainer1.Panel2.ResumeLayout(False)
-        Me.SplitContainer1.Panel2.PerformLayout()
-        Me.SplitContainer1.ResumeLayout(False)
-        Me.ResumeLayout(False)
-        Me.PerformLayout()
+        OK_Button = New Button()
+        Cancel_Button = New Button()
+        CheckedListBox_AvailableSeries = New CheckedListBox()
+        ListBox_SelectedSeries = New ListBox()
+        Button_Up = New Button()
+        Button_Down = New Button()
+        Label1 = New Label()
+        Label2 = New Label()
+        SplitContainer1 = New SplitContainer()
+        Button_SelectAll = New Button()
+        Label3 = New Label()
+        TextBox_MergedSeriesTitle = New TextBox()
+        CType(SplitContainer1, ComponentModel.ISupportInitialize).BeginInit()
+        SplitContainer1.Panel1.SuspendLayout()
+        SplitContainer1.Panel2.SuspendLayout()
+        SplitContainer1.SuspendLayout()
+        SuspendLayout()
+        ' 
+        ' OK_Button
+        ' 
+        OK_Button.Anchor = AnchorStyles.Bottom Or AnchorStyles.Right
+        OK_Button.Location = New Point(369, 330)
+        OK_Button.Name = "OK_Button"
+        OK_Button.Size = New Size(80, 27)
+        OK_Button.TabIndex = 0
+        OK_Button.Text = "OK"
+        ' 
+        ' Cancel_Button
+        ' 
+        Cancel_Button.Anchor = AnchorStyles.Bottom Or AnchorStyles.Right
+        Cancel_Button.DialogResult = DialogResult.Cancel
+        Cancel_Button.Location = New Point(457, 330)
+        Cancel_Button.Name = "Cancel_Button"
+        Cancel_Button.Size = New Size(80, 27)
+        Cancel_Button.TabIndex = 1
+        Cancel_Button.Text = "Cancel"
+        ' 
+        ' CheckedListBox_AvailableSeries
+        ' 
+        CheckedListBox_AvailableSeries.Anchor = AnchorStyles.Top Or AnchorStyles.Bottom Or AnchorStyles.Left Or AnchorStyles.Right
+        CheckedListBox_AvailableSeries.CheckOnClick = True
+        CheckedListBox_AvailableSeries.FormattingEnabled = True
+        CheckedListBox_AvailableSeries.Location = New Point(14, 30)
+        CheckedListBox_AvailableSeries.Name = "CheckedListBox_AvailableSeries"
+        CheckedListBox_AvailableSeries.Size = New Size(249, 238)
+        CheckedListBox_AvailableSeries.TabIndex = 0
+        CheckedListBox_AvailableSeries.ThreeDCheckBoxes = True
+        ' 
+        ' ListBox_SelectedSeries
+        ' 
+        ListBox_SelectedSeries.Anchor = AnchorStyles.Top Or AnchorStyles.Bottom Or AnchorStyles.Left Or AnchorStyles.Right
+        ListBox_SelectedSeries.FormattingEnabled = True
+        ListBox_SelectedSeries.Location = New Point(7, 30)
+        ListBox_SelectedSeries.Name = "ListBox_SelectedSeries"
+        ListBox_SelectedSeries.Size = New Size(212, 274)
+        ListBox_SelectedSeries.TabIndex = 0
+        ' 
+        ' Button_Up
+        ' 
+        Button_Up.Anchor = AnchorStyles.Top Or AnchorStyles.Right
+        Button_Up.Image = CType(resources.GetObject("Button_Up.Image"), Image)
+        Button_Up.Location = New Point(226, 30)
+        Button_Up.Name = "Button_Up"
+        Button_Up.Size = New Size(27, 27)
+        Button_Up.TabIndex = 1
+        Button_Up.UseVisualStyleBackColor = True
+        ' 
+        ' Button_Down
+        ' 
+        Button_Down.Anchor = AnchorStyles.Top Or AnchorStyles.Right
+        Button_Down.Image = CType(resources.GetObject("Button_Down.Image"), Image)
+        Button_Down.Location = New Point(226, 65)
+        Button_Down.Name = "Button_Down"
+        Button_Down.Size = New Size(27, 27)
+        Button_Down.TabIndex = 2
+        Button_Down.UseVisualStyleBackColor = True
+        ' 
+        ' Label1
+        ' 
+        Label1.AutoSize = True
+        Label1.Location = New Point(15, 12)
+        Label1.Name = "Label1"
+        Label1.Size = New Size(91, 15)
+        Label1.TabIndex = 5
+        Label1.Text = "Series to merge:"
+        ' 
+        ' Label2
+        ' 
+        Label2.AutoSize = True
+        Label2.Location = New Point(4, 10)
+        Label2.Name = "Label2"
+        Label2.Size = New Size(56, 15)
+        Label2.TabIndex = 5
+        Label2.Text = "Priorities:"
+        ' 
+        ' SplitContainer1
+        ' 
+        SplitContainer1.Anchor = AnchorStyles.Top Or AnchorStyles.Bottom Or AnchorStyles.Left Or AnchorStyles.Right
+        SplitContainer1.Location = New Point(0, 0)
+        SplitContainer1.Margin = New Padding(0)
+        SplitContainer1.Name = "SplitContainer1"
+        ' 
+        ' SplitContainer1.Panel1
+        ' 
+        SplitContainer1.Panel1.Controls.Add(Button_SelectAll)
+        SplitContainer1.Panel1.Controls.Add(Label1)
+        SplitContainer1.Panel1.Controls.Add(CheckedListBox_AvailableSeries)
+        SplitContainer1.Panel1MinSize = 100
+        ' 
+        ' SplitContainer1.Panel2
+        ' 
+        SplitContainer1.Panel2.Controls.Add(Label2)
+        SplitContainer1.Panel2.Controls.Add(ListBox_SelectedSeries)
+        SplitContainer1.Panel2.Controls.Add(Button_Down)
+        SplitContainer1.Panel2.Controls.Add(Button_Up)
+        SplitContainer1.Panel2MinSize = 100
+        SplitContainer1.Size = New Size(537, 320)
+        SplitContainer1.SplitterDistance = 268
+        SplitContainer1.SplitterWidth = 5
+        SplitContainer1.TabIndex = 0
+        ' 
+        ' Button_SelectAll
+        ' 
+        Button_SelectAll.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
+        Button_SelectAll.Location = New Point(14, 285)
+        Button_SelectAll.Name = "Button_SelectAll"
+        Button_SelectAll.Size = New Size(80, 27)
+        Button_SelectAll.TabIndex = 1
+        Button_SelectAll.Text = "Select all"
+        Button_SelectAll.UseVisualStyleBackColor = True
+        ' 
+        ' Label3
+        ' 
+        Label3.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
+        Label3.AutoSize = True
+        Label3.Location = New Point(12, 336)
+        Label3.Name = "Label3"
+        Label3.Size = New Size(122, 15)
+        Label3.TabIndex = 7
+        Label3.Text = "Title of merged series:"
+        ' 
+        ' TextBox_MergedSeriesTitle
+        ' 
+        TextBox_MergedSeriesTitle.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left Or AnchorStyles.Right
+        TextBox_MergedSeriesTitle.Location = New Point(140, 333)
+        TextBox_MergedSeriesTitle.Name = "TextBox_MergedSeriesTitle"
+        TextBox_MergedSeriesTitle.Size = New Size(206, 23)
+        TextBox_MergedSeriesTitle.TabIndex = 1
+        ' 
+        ' MergeSeriesDialog
+        ' 
+        AcceptButton = OK_Button
+        AutoScaleDimensions = New SizeF(7F, 15F)
+        AutoScaleMode = AutoScaleMode.Font
+        CancelButton = Cancel_Button
+        ClientSize = New Size(541, 370)
+        Controls.Add(OK_Button)
+        Controls.Add(TextBox_MergedSeriesTitle)
+        Controls.Add(Label3)
+        Controls.Add(Cancel_Button)
+        Controls.Add(SplitContainer1)
+        Icon = CType(resources.GetObject("$this.Icon"), Icon)
+        Margin = New Padding(4, 3, 4, 3)
+        MaximizeBox = False
+        MinimizeBox = False
+        MinimumSize = New Size(557, 409)
+        Name = "MergeSeriesDialog"
+        ShowInTaskbar = False
+        StartPosition = FormStartPosition.CenterParent
+        Text = "Merge Series"
+        SplitContainer1.Panel1.ResumeLayout(False)
+        SplitContainer1.Panel1.PerformLayout()
+        SplitContainer1.Panel2.ResumeLayout(False)
+        SplitContainer1.Panel2.PerformLayout()
+        CType(SplitContainer1, ComponentModel.ISupportInitialize).EndInit()
+        SplitContainer1.ResumeLayout(False)
+        ResumeLayout(False)
+        PerformLayout()
 
     End Sub
-    Friend WithEvents TableLayoutPanel1 As System.Windows.Forms.TableLayoutPanel
     Friend WithEvents OK_Button As System.Windows.Forms.Button
     Friend WithEvents Cancel_Button As System.Windows.Forms.Button
     Friend WithEvents CheckedListBox_AvailableSeries As System.Windows.Forms.CheckedListBox

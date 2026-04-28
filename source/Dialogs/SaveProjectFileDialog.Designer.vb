@@ -23,239 +23,240 @@ Partial Class SaveProjectFileDialog
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(SaveProjectFileDialog))
-        Me.Button_OK = New System.Windows.Forms.Button()
-        Me.Button_Cancel = New System.Windows.Forms.Button()
-        Me.GroupBox_DisplayOptions = New System.Windows.Forms.GroupBox()
-        Me.CheckBox_PointsVisibility = New System.Windows.Forms.CheckBox()
-        Me.CheckBox_LineWidth = New System.Windows.Forms.CheckBox()
-        Me.CheckBox_LineStyle = New System.Windows.Forms.CheckBox()
-        Me.CheckBox_Color = New System.Windows.Forms.CheckBox()
-        Me.CheckBox_Title = New System.Windows.Forms.CheckBox()
-        Me.CheckBox_Unit = New System.Windows.Forms.CheckBox()
-        Me.CheckBox_Interpretation = New System.Windows.Forms.CheckBox()
-        Me.GroupBox_SeriesProperties = New System.Windows.Forms.GroupBox()
-        Me.TextBox_File = New System.Windows.Forms.TextBox()
-        Me.Button_Browse = New System.Windows.Forms.Button()
-        Me.Label1 = New System.Windows.Forms.Label()
-        Me.GroupBox_File = New System.Windows.Forms.GroupBox()
-        Me.GroupBox_Options = New System.Windows.Forms.GroupBox()
-        Me.SaveFileDialog1 = New System.Windows.Forms.SaveFileDialog()
-        Me.CheckBox_RelativePaths = New System.Windows.Forms.CheckBox()
-        Me.GroupBox_DisplayOptions.SuspendLayout()
-        Me.GroupBox_SeriesProperties.SuspendLayout()
-        Me.GroupBox_File.SuspendLayout()
-        Me.GroupBox_Options.SuspendLayout()
-        Me.SuspendLayout()
-        '
-        'Button_OK
-        '
-        Me.Button_OK.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Button_OK.DialogResult = System.Windows.Forms.DialogResult.OK
-        Me.Button_OK.Location = New System.Drawing.Point(126, 246)
-        Me.Button_OK.Name = "Button_OK"
-        Me.Button_OK.Size = New System.Drawing.Size(75, 23)
-        Me.Button_OK.TabIndex = 1
-        Me.Button_OK.Text = "Ok"
-        Me.Button_OK.UseVisualStyleBackColor = True
-        '
-        'Button_Cancel
-        '
-        Me.Button_Cancel.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Button_Cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel
-        Me.Button_Cancel.Location = New System.Drawing.Point(207, 246)
-        Me.Button_Cancel.Name = "Button_Cancel"
-        Me.Button_Cancel.Size = New System.Drawing.Size(75, 23)
-        Me.Button_Cancel.TabIndex = 5
-        Me.Button_Cancel.Text = "Cancel"
-        Me.Button_Cancel.UseVisualStyleBackColor = True
-        '
-        'GroupBox_DisplayOptions
-        '
-        Me.GroupBox_DisplayOptions.Controls.Add(Me.CheckBox_PointsVisibility)
-        Me.GroupBox_DisplayOptions.Controls.Add(Me.CheckBox_LineWidth)
-        Me.GroupBox_DisplayOptions.Controls.Add(Me.CheckBox_LineStyle)
-        Me.GroupBox_DisplayOptions.Controls.Add(Me.CheckBox_Color)
-        Me.GroupBox_DisplayOptions.Location = New System.Drawing.Point(138, 42)
-        Me.GroupBox_DisplayOptions.Name = "GroupBox_DisplayOptions"
-        Me.GroupBox_DisplayOptions.Size = New System.Drawing.Size(123, 120)
-        Me.GroupBox_DisplayOptions.TabIndex = 7
-        Me.GroupBox_DisplayOptions.TabStop = False
-        Me.GroupBox_DisplayOptions.Text = "Display options"
-        '
-        'CheckBox_PointsVisibility
-        '
-        Me.CheckBox_PointsVisibility.AutoSize = True
-        Me.CheckBox_PointsVisibility.Location = New System.Drawing.Point(6, 88)
-        Me.CheckBox_PointsVisibility.Name = "CheckBox_PointsVisibility"
-        Me.CheckBox_PointsVisibility.Size = New System.Drawing.Size(93, 17)
-        Me.CheckBox_PointsVisibility.TabIndex = 13
-        Me.CheckBox_PointsVisibility.Text = "Points visibility"
-        Me.CheckBox_PointsVisibility.UseVisualStyleBackColor = True
-        '
-        'CheckBox_LineWidth
-        '
-        Me.CheckBox_LineWidth.AutoSize = True
-        Me.CheckBox_LineWidth.Location = New System.Drawing.Point(6, 65)
-        Me.CheckBox_LineWidth.Name = "CheckBox_LineWidth"
-        Me.CheckBox_LineWidth.Size = New System.Drawing.Size(74, 17)
-        Me.CheckBox_LineWidth.TabIndex = 12
-        Me.CheckBox_LineWidth.Text = "Line width"
-        Me.CheckBox_LineWidth.UseVisualStyleBackColor = True
-        '
-        'CheckBox_LineStyle
-        '
-        Me.CheckBox_LineStyle.AutoSize = True
-        Me.CheckBox_LineStyle.Location = New System.Drawing.Point(6, 42)
-        Me.CheckBox_LineStyle.Name = "CheckBox_LineStyle"
-        Me.CheckBox_LineStyle.Size = New System.Drawing.Size(70, 17)
-        Me.CheckBox_LineStyle.TabIndex = 8
-        Me.CheckBox_LineStyle.Text = "Line style"
-        Me.CheckBox_LineStyle.UseVisualStyleBackColor = True
-        '
-        'CheckBox_Color
-        '
-        Me.CheckBox_Color.AutoSize = True
-        Me.CheckBox_Color.Location = New System.Drawing.Point(6, 19)
-        Me.CheckBox_Color.Name = "CheckBox_Color"
-        Me.CheckBox_Color.Size = New System.Drawing.Size(72, 17)
-        Me.CheckBox_Color.TabIndex = 7
-        Me.CheckBox_Color.Text = "Line color"
-        Me.CheckBox_Color.UseVisualStyleBackColor = True
-        '
-        'CheckBox_Title
-        '
-        Me.CheckBox_Title.AutoSize = True
-        Me.CheckBox_Title.Location = New System.Drawing.Point(6, 19)
-        Me.CheckBox_Title.Name = "CheckBox_Title"
-        Me.CheckBox_Title.Size = New System.Drawing.Size(46, 17)
-        Me.CheckBox_Title.TabIndex = 9
-        Me.CheckBox_Title.Text = "Title"
-        Me.CheckBox_Title.UseVisualStyleBackColor = True
-        '
-        'CheckBox_Unit
-        '
-        Me.CheckBox_Unit.AutoSize = True
-        Me.CheckBox_Unit.Location = New System.Drawing.Point(6, 42)
-        Me.CheckBox_Unit.Name = "CheckBox_Unit"
-        Me.CheckBox_Unit.Size = New System.Drawing.Size(45, 17)
-        Me.CheckBox_Unit.TabIndex = 10
-        Me.CheckBox_Unit.Text = "Unit"
-        Me.CheckBox_Unit.UseVisualStyleBackColor = True
-        '
-        'CheckBox_Interpretation
-        '
-        Me.CheckBox_Interpretation.AutoSize = True
-        Me.CheckBox_Interpretation.Location = New System.Drawing.Point(6, 65)
-        Me.CheckBox_Interpretation.Name = "CheckBox_Interpretation"
-        Me.CheckBox_Interpretation.Size = New System.Drawing.Size(88, 17)
-        Me.CheckBox_Interpretation.TabIndex = 11
-        Me.CheckBox_Interpretation.Text = "Interpretation"
-        Me.CheckBox_Interpretation.UseVisualStyleBackColor = True
-        '
-        'GroupBox_SeriesProperties
-        '
-        Me.GroupBox_SeriesProperties.Controls.Add(Me.CheckBox_Title)
-        Me.GroupBox_SeriesProperties.Controls.Add(Me.CheckBox_Unit)
-        Me.GroupBox_SeriesProperties.Controls.Add(Me.CheckBox_Interpretation)
-        Me.GroupBox_SeriesProperties.Location = New System.Drawing.Point(9, 42)
-        Me.GroupBox_SeriesProperties.Name = "GroupBox_SeriesProperties"
-        Me.GroupBox_SeriesProperties.Size = New System.Drawing.Size(123, 120)
-        Me.GroupBox_SeriesProperties.TabIndex = 8
-        Me.GroupBox_SeriesProperties.TabStop = False
-        Me.GroupBox_SeriesProperties.Text = "Series properties"
-        '
-        'TextBox_File
-        '
-        Me.TextBox_File.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TextBox_File.Location = New System.Drawing.Point(62, 15)
-        Me.TextBox_File.Name = "TextBox_File"
-        Me.TextBox_File.Size = New System.Drawing.Size(162, 20)
-        Me.TextBox_File.TabIndex = 9
-        '
-        'Button_Browse
-        '
-        Me.Button_Browse.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Button_Browse.Location = New System.Drawing.Point(230, 14)
-        Me.Button_Browse.Name = "Button_Browse"
-        Me.Button_Browse.Size = New System.Drawing.Size(34, 23)
-        Me.Button_Browse.TabIndex = 10
-        Me.Button_Browse.Text = "..."
-        Me.Button_Browse.UseVisualStyleBackColor = True
-        '
-        'Label1
-        '
-        Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(6, 19)
-        Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(50, 13)
-        Me.Label1.TabIndex = 11
-        Me.Label1.Text = "File path:"
-        '
-        'GroupBox_File
-        '
-        Me.GroupBox_File.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.GroupBox_File.Controls.Add(Me.Label1)
-        Me.GroupBox_File.Controls.Add(Me.TextBox_File)
-        Me.GroupBox_File.Controls.Add(Me.Button_Browse)
-        Me.GroupBox_File.Location = New System.Drawing.Point(12, 12)
-        Me.GroupBox_File.Name = "GroupBox_File"
-        Me.GroupBox_File.Size = New System.Drawing.Size(270, 46)
-        Me.GroupBox_File.TabIndex = 12
-        Me.GroupBox_File.TabStop = False
-        '
-        'GroupBox_Options
-        '
-        Me.GroupBox_Options.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.GroupBox_Options.Controls.Add(Me.CheckBox_RelativePaths)
-        Me.GroupBox_Options.Controls.Add(Me.GroupBox_SeriesProperties)
-        Me.GroupBox_Options.Controls.Add(Me.GroupBox_DisplayOptions)
-        Me.GroupBox_Options.Location = New System.Drawing.Point(12, 64)
-        Me.GroupBox_Options.Name = "GroupBox_Options"
-        Me.GroupBox_Options.Size = New System.Drawing.Size(270, 171)
-        Me.GroupBox_Options.TabIndex = 13
-        Me.GroupBox_Options.TabStop = False
-        Me.GroupBox_Options.Text = "Options"
-        '
-        'CheckBox_RelativePaths
-        '
-        Me.CheckBox_RelativePaths.AutoSize = True
-        Me.CheckBox_RelativePaths.Location = New System.Drawing.Point(15, 19)
-        Me.CheckBox_RelativePaths.Name = "CheckBox_RelativePaths"
-        Me.CheckBox_RelativePaths.Size = New System.Drawing.Size(117, 17)
-        Me.CheckBox_RelativePaths.TabIndex = 9
-        Me.CheckBox_RelativePaths.Text = "Save relative paths"
-        Me.CheckBox_RelativePaths.UseVisualStyleBackColor = True
-        '
-        'SaveProjectFileDialog
-        '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
-        Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(294, 281)
-        Me.Controls.Add(Me.GroupBox_Options)
-        Me.Controls.Add(Me.GroupBox_File)
-        Me.Controls.Add(Me.Button_OK)
-        Me.Controls.Add(Me.Button_Cancel)
-        Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
-        Me.MaximizeBox = False
-        Me.MinimizeBox = False
-        Me.MinimumSize = New System.Drawing.Size(310, 320)
-        Me.Name = "SaveProjectFileDialog"
-        Me.ShowInTaskbar = False
-        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = "Save project file"
-        Me.GroupBox_DisplayOptions.ResumeLayout(False)
-        Me.GroupBox_DisplayOptions.PerformLayout()
-        Me.GroupBox_SeriesProperties.ResumeLayout(False)
-        Me.GroupBox_SeriesProperties.PerformLayout()
-        Me.GroupBox_File.ResumeLayout(False)
-        Me.GroupBox_File.PerformLayout()
-        Me.GroupBox_Options.ResumeLayout(False)
-        Me.GroupBox_Options.PerformLayout()
-        Me.ResumeLayout(False)
+        Button_OK = New Button()
+        Button_Cancel = New Button()
+        GroupBox_DisplayOptions = New GroupBox()
+        CheckBox_PointsVisibility = New CheckBox()
+        CheckBox_LineWidth = New CheckBox()
+        CheckBox_LineStyle = New CheckBox()
+        CheckBox_Color = New CheckBox()
+        CheckBox_Title = New CheckBox()
+        CheckBox_Unit = New CheckBox()
+        CheckBox_Interpretation = New CheckBox()
+        GroupBox_SeriesProperties = New GroupBox()
+        TextBox_File = New TextBox()
+        Button_Browse = New Button()
+        Label1 = New Label()
+        GroupBox_File = New GroupBox()
+        GroupBox_Options = New GroupBox()
+        CheckBox_RelativePaths = New CheckBox()
+        SaveFileDialog1 = New SaveFileDialog()
+        GroupBox_DisplayOptions.SuspendLayout()
+        GroupBox_SeriesProperties.SuspendLayout()
+        GroupBox_File.SuspendLayout()
+        GroupBox_Options.SuspendLayout()
+        SuspendLayout()
+        ' 
+        ' Button_OK
+        ' 
+        Button_OK.Anchor = AnchorStyles.Bottom Or AnchorStyles.Right
+        Button_OK.DialogResult = DialogResult.OK
+        Button_OK.Location = New Point(163, 284)
+        Button_OK.Name = "Button_OK"
+        Button_OK.Size = New Size(80, 27)
+        Button_OK.TabIndex = 1
+        Button_OK.Text = "Ok"
+        Button_OK.UseVisualStyleBackColor = True
+        ' 
+        ' Button_Cancel
+        ' 
+        Button_Cancel.Anchor = AnchorStyles.Bottom Or AnchorStyles.Right
+        Button_Cancel.DialogResult = DialogResult.Cancel
+        Button_Cancel.Location = New Point(249, 284)
+        Button_Cancel.Name = "Button_Cancel"
+        Button_Cancel.Size = New Size(80, 27)
+        Button_Cancel.TabIndex = 5
+        Button_Cancel.Text = "Cancel"
+        Button_Cancel.UseVisualStyleBackColor = True
+        ' 
+        ' GroupBox_DisplayOptions
+        ' 
+        GroupBox_DisplayOptions.Controls.Add(CheckBox_PointsVisibility)
+        GroupBox_DisplayOptions.Controls.Add(CheckBox_LineWidth)
+        GroupBox_DisplayOptions.Controls.Add(CheckBox_LineStyle)
+        GroupBox_DisplayOptions.Controls.Add(CheckBox_Color)
+        GroupBox_DisplayOptions.Location = New Point(161, 48)
+        GroupBox_DisplayOptions.Name = "GroupBox_DisplayOptions"
+        GroupBox_DisplayOptions.Padding = New Padding(4, 3, 4, 3)
+        GroupBox_DisplayOptions.Size = New Size(144, 138)
+        GroupBox_DisplayOptions.TabIndex = 7
+        GroupBox_DisplayOptions.TabStop = False
+        GroupBox_DisplayOptions.Text = "Display options"
+        ' 
+        ' CheckBox_PointsVisibility
+        ' 
+        CheckBox_PointsVisibility.AutoSize = True
+        CheckBox_PointsVisibility.Location = New Point(7, 102)
+        CheckBox_PointsVisibility.Name = "CheckBox_PointsVisibility"
+        CheckBox_PointsVisibility.Size = New Size(105, 19)
+        CheckBox_PointsVisibility.TabIndex = 13
+        CheckBox_PointsVisibility.Text = "Points visibility"
+        CheckBox_PointsVisibility.UseVisualStyleBackColor = True
+        ' 
+        ' CheckBox_LineWidth
+        ' 
+        CheckBox_LineWidth.AutoSize = True
+        CheckBox_LineWidth.Location = New Point(7, 75)
+        CheckBox_LineWidth.Name = "CheckBox_LineWidth"
+        CheckBox_LineWidth.Size = New Size(81, 19)
+        CheckBox_LineWidth.TabIndex = 12
+        CheckBox_LineWidth.Text = "Line width"
+        CheckBox_LineWidth.UseVisualStyleBackColor = True
+        ' 
+        ' CheckBox_LineStyle
+        ' 
+        CheckBox_LineStyle.AutoSize = True
+        CheckBox_LineStyle.Location = New Point(7, 48)
+        CheckBox_LineStyle.Name = "CheckBox_LineStyle"
+        CheckBox_LineStyle.Size = New Size(75, 19)
+        CheckBox_LineStyle.TabIndex = 8
+        CheckBox_LineStyle.Text = "Line style"
+        CheckBox_LineStyle.UseVisualStyleBackColor = True
+        ' 
+        ' CheckBox_Color
+        ' 
+        CheckBox_Color.AutoSize = True
+        CheckBox_Color.Location = New Point(7, 22)
+        CheckBox_Color.Name = "CheckBox_Color"
+        CheckBox_Color.Size = New Size(78, 19)
+        CheckBox_Color.TabIndex = 7
+        CheckBox_Color.Text = "Line color"
+        CheckBox_Color.UseVisualStyleBackColor = True
+        ' 
+        ' CheckBox_Title
+        ' 
+        CheckBox_Title.AutoSize = True
+        CheckBox_Title.Location = New Point(7, 22)
+        CheckBox_Title.Name = "CheckBox_Title"
+        CheckBox_Title.Size = New Size(48, 19)
+        CheckBox_Title.TabIndex = 9
+        CheckBox_Title.Text = "Title"
+        CheckBox_Title.UseVisualStyleBackColor = True
+        ' 
+        ' CheckBox_Unit
+        ' 
+        CheckBox_Unit.AutoSize = True
+        CheckBox_Unit.Location = New Point(7, 48)
+        CheckBox_Unit.Name = "CheckBox_Unit"
+        CheckBox_Unit.Size = New Size(48, 19)
+        CheckBox_Unit.TabIndex = 10
+        CheckBox_Unit.Text = "Unit"
+        CheckBox_Unit.UseVisualStyleBackColor = True
+        ' 
+        ' CheckBox_Interpretation
+        ' 
+        CheckBox_Interpretation.AutoSize = True
+        CheckBox_Interpretation.Location = New Point(7, 75)
+        CheckBox_Interpretation.Name = "CheckBox_Interpretation"
+        CheckBox_Interpretation.Size = New Size(98, 19)
+        CheckBox_Interpretation.TabIndex = 11
+        CheckBox_Interpretation.Text = "Interpretation"
+        CheckBox_Interpretation.UseVisualStyleBackColor = True
+        ' 
+        ' GroupBox_SeriesProperties
+        ' 
+        GroupBox_SeriesProperties.Controls.Add(CheckBox_Title)
+        GroupBox_SeriesProperties.Controls.Add(CheckBox_Unit)
+        GroupBox_SeriesProperties.Controls.Add(CheckBox_Interpretation)
+        GroupBox_SeriesProperties.Location = New Point(10, 48)
+        GroupBox_SeriesProperties.Name = "GroupBox_SeriesProperties"
+        GroupBox_SeriesProperties.Padding = New Padding(4, 3, 4, 3)
+        GroupBox_SeriesProperties.Size = New Size(144, 138)
+        GroupBox_SeriesProperties.TabIndex = 8
+        GroupBox_SeriesProperties.TabStop = False
+        GroupBox_SeriesProperties.Text = "Series properties"
+        ' 
+        ' TextBox_File
+        ' 
+        TextBox_File.Anchor = AnchorStyles.Top Or AnchorStyles.Left Or AnchorStyles.Right
+        TextBox_File.Location = New Point(72, 17)
+        TextBox_File.Name = "TextBox_File"
+        TextBox_File.Size = New Size(188, 23)
+        TextBox_File.TabIndex = 9
+        ' 
+        ' Button_Browse
+        ' 
+        Button_Browse.Anchor = AnchorStyles.Top Or AnchorStyles.Right
+        Button_Browse.Location = New Point(268, 16)
+        Button_Browse.Name = "Button_Browse"
+        Button_Browse.Size = New Size(40, 27)
+        Button_Browse.TabIndex = 10
+        Button_Browse.Text = "..."
+        Button_Browse.UseVisualStyleBackColor = True
+        ' 
+        ' Label1
+        ' 
+        Label1.AutoSize = True
+        Label1.Location = New Point(7, 22)
+        Label1.Name = "Label1"
+        Label1.Size = New Size(55, 15)
+        Label1.TabIndex = 11
+        Label1.Text = "File path:"
+        ' 
+        ' GroupBox_File
+        ' 
+        GroupBox_File.Anchor = AnchorStyles.Top Or AnchorStyles.Left Or AnchorStyles.Right
+        GroupBox_File.Controls.Add(Label1)
+        GroupBox_File.Controls.Add(TextBox_File)
+        GroupBox_File.Controls.Add(Button_Browse)
+        GroupBox_File.Location = New Point(14, 14)
+        GroupBox_File.Name = "GroupBox_File"
+        GroupBox_File.Padding = New Padding(4, 3, 4, 3)
+        GroupBox_File.Size = New Size(315, 53)
+        GroupBox_File.TabIndex = 12
+        GroupBox_File.TabStop = False
+        ' 
+        ' GroupBox_Options
+        ' 
+        GroupBox_Options.Anchor = AnchorStyles.Top Or AnchorStyles.Bottom Or AnchorStyles.Left Or AnchorStyles.Right
+        GroupBox_Options.Controls.Add(CheckBox_RelativePaths)
+        GroupBox_Options.Controls.Add(GroupBox_SeriesProperties)
+        GroupBox_Options.Controls.Add(GroupBox_DisplayOptions)
+        GroupBox_Options.Location = New Point(14, 74)
+        GroupBox_Options.Name = "GroupBox_Options"
+        GroupBox_Options.Padding = New Padding(4, 3, 4, 3)
+        GroupBox_Options.Size = New Size(315, 197)
+        GroupBox_Options.TabIndex = 13
+        GroupBox_Options.TabStop = False
+        GroupBox_Options.Text = "Options"
+        ' 
+        ' CheckBox_RelativePaths
+        ' 
+        CheckBox_RelativePaths.AutoSize = True
+        CheckBox_RelativePaths.Location = New Point(18, 22)
+        CheckBox_RelativePaths.Name = "CheckBox_RelativePaths"
+        CheckBox_RelativePaths.Size = New Size(123, 19)
+        CheckBox_RelativePaths.TabIndex = 9
+        CheckBox_RelativePaths.Text = "Save relative paths"
+        CheckBox_RelativePaths.UseVisualStyleBackColor = True
+        ' 
+        ' SaveProjectFileDialog
+        ' 
+        AutoScaleDimensions = New SizeF(7F, 15F)
+        AutoScaleMode = AutoScaleMode.Font
+        ClientSize = New Size(343, 324)
+        Controls.Add(GroupBox_Options)
+        Controls.Add(GroupBox_File)
+        Controls.Add(Button_OK)
+        Controls.Add(Button_Cancel)
+        Icon = CType(resources.GetObject("$this.Icon"), Icon)
+        Margin = New Padding(4, 3, 4, 3)
+        MaximizeBox = False
+        MinimizeBox = False
+        MinimumSize = New Size(359, 363)
+        Name = "SaveProjectFileDialog"
+        ShowInTaskbar = False
+        StartPosition = FormStartPosition.CenterParent
+        Text = "Save project file"
+        GroupBox_DisplayOptions.ResumeLayout(False)
+        GroupBox_DisplayOptions.PerformLayout()
+        GroupBox_SeriesProperties.ResumeLayout(False)
+        GroupBox_SeriesProperties.PerformLayout()
+        GroupBox_File.ResumeLayout(False)
+        GroupBox_File.PerformLayout()
+        GroupBox_Options.ResumeLayout(False)
+        GroupBox_Options.PerformLayout()
+        ResumeLayout(False)
 
     End Sub
     Friend WithEvents Button_OK As System.Windows.Forms.Button

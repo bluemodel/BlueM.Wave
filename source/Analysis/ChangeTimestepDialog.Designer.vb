@@ -23,197 +23,177 @@ Partial Class ChangeTimestepDialog
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(ChangeTimestepDialog))
-        Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
-        Me.OK_Button = New System.Windows.Forms.Button()
-        Me.Cancel_Button = New System.Windows.Forms.Button()
-        Me.Label2 = New System.Windows.Forms.Label()
-        Me.ComboBox_InputInterpretation = New System.Windows.Forms.ComboBox()
-        Me.Label3 = New System.Windows.Forms.Label()
-        Me.ComboBox_TimestepType = New System.Windows.Forms.ComboBox()
-        Me.NumericUpDown_TimestepInterval = New System.Windows.Forms.NumericUpDown()
-        Me.MaskedTextBox_Start = New System.Windows.Forms.MaskedTextBox()
-        Me.Label4 = New System.Windows.Forms.Label()
-        Me.CheckBox_IgnoreNaN = New System.Windows.Forms.CheckBox()
-        Me.Label_IgnoreNaN = New System.Windows.Forms.Label()
-        Me.ComboBox_OutputInterpretation = New System.Windows.Forms.ComboBox()
-        Me.Label1 = New System.Windows.Forms.Label()
-        Me.TableLayoutPanel1.SuspendLayout()
-        CType(Me.NumericUpDown_TimestepInterval, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.SuspendLayout()
-        '
-        'TableLayoutPanel1
-        '
-        Me.TableLayoutPanel1.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TableLayoutPanel1.ColumnCount = 2
-        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-        Me.TableLayoutPanel1.Controls.Add(Me.OK_Button, 0, 0)
-        Me.TableLayoutPanel1.Controls.Add(Me.Cancel_Button, 1, 0)
-        Me.TableLayoutPanel1.Location = New System.Drawing.Point(246, 133)
-        Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
-        Me.TableLayoutPanel1.RowCount = 1
-        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-        Me.TableLayoutPanel1.Size = New System.Drawing.Size(146, 29)
-        Me.TableLayoutPanel1.TabIndex = 0
-        '
-        'OK_Button
-        '
-        Me.OK_Button.Anchor = System.Windows.Forms.AnchorStyles.None
-        Me.OK_Button.Location = New System.Drawing.Point(3, 3)
-        Me.OK_Button.Name = "OK_Button"
-        Me.OK_Button.Size = New System.Drawing.Size(67, 23)
-        Me.OK_Button.TabIndex = 0
-        Me.OK_Button.Text = "OK"
-        '
-        'Cancel_Button
-        '
-        Me.Cancel_Button.Anchor = System.Windows.Forms.AnchorStyles.None
-        Me.Cancel_Button.DialogResult = System.Windows.Forms.DialogResult.Cancel
-        Me.Cancel_Button.Location = New System.Drawing.Point(76, 3)
-        Me.Cancel_Button.Name = "Cancel_Button"
-        Me.Cancel_Button.Size = New System.Drawing.Size(67, 23)
-        Me.Cancel_Button.TabIndex = 1
-        Me.Cancel_Button.Text = "Cancel"
-        '
-        'Label2
-        '
-        Me.Label2.AutoSize = True
-        Me.Label2.Location = New System.Drawing.Point(12, 9)
-        Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(98, 13)
-        Me.Label2.TabIndex = 0
-        Me.Label2.Text = "Input interpretation:"
-        '
-        'ComboBox_InputInterpretation
-        '
-        Me.ComboBox_InputInterpretation.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ComboBox_InputInterpretation.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.ComboBox_InputInterpretation.FormattingEnabled = True
-        Me.ComboBox_InputInterpretation.Location = New System.Drawing.Point(124, 6)
-        Me.ComboBox_InputInterpretation.Name = "ComboBox_InputInterpretation"
-        Me.ComboBox_InputInterpretation.Size = New System.Drawing.Size(268, 21)
-        Me.ComboBox_InputInterpretation.TabIndex = 1
-        '
-        'Label3
-        '
-        Me.Label3.AutoSize = True
-        Me.Label3.Location = New System.Drawing.Point(12, 62)
-        Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(90, 13)
-        Me.Label3.TabIndex = 2
-        Me.Label3.Text = "Timestep interval:"
-        '
-        'ComboBox_TimestepType
-        '
-        Me.ComboBox_TimestepType.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ComboBox_TimestepType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.ComboBox_TimestepType.FormattingEnabled = True
-        Me.ComboBox_TimestepType.Location = New System.Drawing.Point(184, 60)
-        Me.ComboBox_TimestepType.Name = "ComboBox_TimestepType"
-        Me.ComboBox_TimestepType.Size = New System.Drawing.Size(208, 21)
-        Me.ComboBox_TimestepType.TabIndex = 4
-        '
-        'NumericUpDown_TimestepInterval
-        '
-        Me.NumericUpDown_TimestepInterval.Location = New System.Drawing.Point(124, 60)
-        Me.NumericUpDown_TimestepInterval.Minimum = New Decimal(New Integer() {1, 0, 0, 0})
-        Me.NumericUpDown_TimestepInterval.Name = "NumericUpDown_TimestepInterval"
-        Me.NumericUpDown_TimestepInterval.Size = New System.Drawing.Size(54, 20)
-        Me.NumericUpDown_TimestepInterval.TabIndex = 3
-        Me.NumericUpDown_TimestepInterval.Value = New Decimal(New Integer() {1, 0, 0, 0})
-        '
-        'MaskedTextBox_Start
-        '
-        Me.MaskedTextBox_Start.Culture = New System.Globalization.CultureInfo("")
-        Me.MaskedTextBox_Start.Location = New System.Drawing.Point(124, 87)
-        Me.MaskedTextBox_Start.Name = "MaskedTextBox_Start"
-        Me.MaskedTextBox_Start.Size = New System.Drawing.Size(100, 20)
-        Me.MaskedTextBox_Start.TabIndex = 6
-        Me.MaskedTextBox_Start.ValidatingType = GetType(Date)
-        '
-        'Label4
-        '
-        Me.Label4.AutoSize = True
-        Me.Label4.Location = New System.Drawing.Point(12, 90)
-        Me.Label4.Name = "Label4"
-        Me.Label4.Size = New System.Drawing.Size(32, 13)
-        Me.Label4.TabIndex = 5
-        Me.Label4.Text = "Start:"
-        '
-        'CheckBox_IgnoreNaN
-        '
-        Me.CheckBox_IgnoreNaN.AutoSize = True
-        Me.CheckBox_IgnoreNaN.Location = New System.Drawing.Point(124, 114)
-        Me.CheckBox_IgnoreNaN.Name = "CheckBox_IgnoreNaN"
-        Me.CheckBox_IgnoreNaN.Size = New System.Drawing.Size(15, 14)
-        Me.CheckBox_IgnoreNaN.TabIndex = 8
-        Me.CheckBox_IgnoreNaN.UseVisualStyleBackColor = True
-        '
-        'Label_IgnoreNaN
-        '
-        Me.Label_IgnoreNaN.AutoSize = True
-        Me.Label_IgnoreNaN.Location = New System.Drawing.Point(12, 115)
-        Me.Label_IgnoreNaN.Name = "Label_IgnoreNaN"
-        Me.Label_IgnoreNaN.Size = New System.Drawing.Size(65, 13)
-        Me.Label_IgnoreNaN.TabIndex = 7
-        Me.Label_IgnoreNaN.Text = "Ignore NaN:"
-        '
-        'ComboBox_OutputInterpretation
-        '
-        Me.ComboBox_OutputInterpretation.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ComboBox_OutputInterpretation.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.ComboBox_OutputInterpretation.FormattingEnabled = True
-        Me.ComboBox_OutputInterpretation.Location = New System.Drawing.Point(124, 33)
-        Me.ComboBox_OutputInterpretation.Name = "ComboBox_OutputInterpretation"
-        Me.ComboBox_OutputInterpretation.Size = New System.Drawing.Size(268, 21)
-        Me.ComboBox_OutputInterpretation.TabIndex = 10
-        '
-        'Label1
-        '
-        Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(12, 36)
-        Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(106, 13)
-        Me.Label1.TabIndex = 9
-        Me.Label1.Text = "Output interpretation:"
-        '
-        'ChangeTimestepDialog
-        '
-        Me.AcceptButton = Me.OK_Button
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
-        Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.CancelButton = Me.Cancel_Button
-        Me.ClientSize = New System.Drawing.Size(404, 174)
-        Me.Controls.Add(Me.Label2)
-        Me.Controls.Add(Me.ComboBox_InputInterpretation)
-        Me.Controls.Add(Me.Label1)
-        Me.Controls.Add(Me.ComboBox_OutputInterpretation)
-        Me.Controls.Add(Me.Label3)
-        Me.Controls.Add(Me.NumericUpDown_TimestepInterval)
-        Me.Controls.Add(Me.ComboBox_TimestepType)
-        Me.Controls.Add(Me.Label4)
-        Me.Controls.Add(Me.MaskedTextBox_Start)
-        Me.Controls.Add(Me.Label_IgnoreNaN)
-        Me.Controls.Add(Me.CheckBox_IgnoreNaN)
-        Me.Controls.Add(Me.TableLayoutPanel1)
-        Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
-        Me.MaximizeBox = False
-        Me.MinimizeBox = False
-        Me.MinimumSize = New System.Drawing.Size(420, 170)
-        Me.Name = "ChangeTimestepDialog"
-        Me.ShowInTaskbar = False
-        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = "Change Timestep"
-        Me.TableLayoutPanel1.ResumeLayout(False)
-        CType(Me.NumericUpDown_TimestepInterval, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.ResumeLayout(False)
-        Me.PerformLayout()
+        OK_Button = New Button()
+        Cancel_Button = New Button()
+        Label2 = New Label()
+        ComboBox_InputInterpretation = New ComboBox()
+        Label3 = New Label()
+        ComboBox_TimestepType = New ComboBox()
+        NumericUpDown_TimestepInterval = New NumericUpDown()
+        MaskedTextBox_Start = New MaskedTextBox()
+        Label4 = New Label()
+        CheckBox_IgnoreNaN = New CheckBox()
+        Label_IgnoreNaN = New Label()
+        ComboBox_OutputInterpretation = New ComboBox()
+        Label1 = New Label()
+        CType(NumericUpDown_TimestepInterval, ComponentModel.ISupportInitialize).BeginInit()
+        SuspendLayout()
+        ' 
+        ' OK_Button
+        ' 
+        OK_Button.Anchor = AnchorStyles.Bottom Or AnchorStyles.Right
+        OK_Button.Location = New Point(293, 162)
+        OK_Button.Name = "OK_Button"
+        OK_Button.Size = New Size(80, 27)
+        OK_Button.TabIndex = 0
+        OK_Button.Text = "OK"
+        ' 
+        ' Cancel_Button
+        ' 
+        Cancel_Button.Anchor = AnchorStyles.Bottom Or AnchorStyles.Right
+        Cancel_Button.DialogResult = DialogResult.Cancel
+        Cancel_Button.Location = New Point(379, 162)
+        Cancel_Button.Name = "Cancel_Button"
+        Cancel_Button.Size = New Size(80, 27)
+        Cancel_Button.TabIndex = 1
+        Cancel_Button.Text = "Cancel"
+        ' 
+        ' Label2
+        ' 
+        Label2.AutoSize = True
+        Label2.Location = New Point(14, 10)
+        Label2.Name = "Label2"
+        Label2.Size = New Size(113, 15)
+        Label2.TabIndex = 0
+        Label2.Text = "Input interpretation:"
+        ' 
+        ' ComboBox_InputInterpretation
+        ' 
+        ComboBox_InputInterpretation.Anchor = AnchorStyles.Top Or AnchorStyles.Left Or AnchorStyles.Right
+        ComboBox_InputInterpretation.DropDownStyle = ComboBoxStyle.DropDownList
+        ComboBox_InputInterpretation.FormattingEnabled = True
+        ComboBox_InputInterpretation.Location = New Point(145, 7)
+        ComboBox_InputInterpretation.Name = "ComboBox_InputInterpretation"
+        ComboBox_InputInterpretation.Size = New Size(314, 23)
+        ComboBox_InputInterpretation.TabIndex = 1
+        ' 
+        ' Label3
+        ' 
+        Label3.AutoSize = True
+        Label3.Location = New Point(14, 72)
+        Label3.Name = "Label3"
+        Label3.Size = New Size(100, 15)
+        Label3.TabIndex = 2
+        Label3.Text = "Timestep interval:"
+        ' 
+        ' ComboBox_TimestepType
+        ' 
+        ComboBox_TimestepType.Anchor = AnchorStyles.Top Or AnchorStyles.Left Or AnchorStyles.Right
+        ComboBox_TimestepType.DropDownStyle = ComboBoxStyle.DropDownList
+        ComboBox_TimestepType.FormattingEnabled = True
+        ComboBox_TimestepType.Location = New Point(214, 69)
+        ComboBox_TimestepType.Name = "ComboBox_TimestepType"
+        ComboBox_TimestepType.Size = New Size(245, 23)
+        ComboBox_TimestepType.TabIndex = 4
+        ' 
+        ' NumericUpDown_TimestepInterval
+        ' 
+        NumericUpDown_TimestepInterval.Location = New Point(145, 69)
+        NumericUpDown_TimestepInterval.Minimum = New Decimal(New Integer() {1, 0, 0, 0})
+        NumericUpDown_TimestepInterval.Name = "NumericUpDown_TimestepInterval"
+        NumericUpDown_TimestepInterval.Size = New Size(63, 23)
+        NumericUpDown_TimestepInterval.TabIndex = 3
+        NumericUpDown_TimestepInterval.Value = New Decimal(New Integer() {1, 0, 0, 0})
+        ' 
+        ' MaskedTextBox_Start
+        ' 
+        MaskedTextBox_Start.Culture = New System.Globalization.CultureInfo("")
+        MaskedTextBox_Start.Location = New Point(145, 100)
+        MaskedTextBox_Start.Name = "MaskedTextBox_Start"
+        MaskedTextBox_Start.Size = New Size(116, 23)
+        MaskedTextBox_Start.TabIndex = 6
+        MaskedTextBox_Start.ValidatingType = GetType(Date)
+        ' 
+        ' Label4
+        ' 
+        Label4.AutoSize = True
+        Label4.Location = New Point(14, 104)
+        Label4.Name = "Label4"
+        Label4.Size = New Size(34, 15)
+        Label4.TabIndex = 5
+        Label4.Text = "Start:"
+        ' 
+        ' CheckBox_IgnoreNaN
+        ' 
+        CheckBox_IgnoreNaN.AutoSize = True
+        CheckBox_IgnoreNaN.Location = New Point(145, 132)
+        CheckBox_IgnoreNaN.Name = "CheckBox_IgnoreNaN"
+        CheckBox_IgnoreNaN.Size = New Size(15, 14)
+        CheckBox_IgnoreNaN.TabIndex = 8
+        CheckBox_IgnoreNaN.UseVisualStyleBackColor = True
+        ' 
+        ' Label_IgnoreNaN
+        ' 
+        Label_IgnoreNaN.AutoSize = True
+        Label_IgnoreNaN.Location = New Point(14, 133)
+        Label_IgnoreNaN.Name = "Label_IgnoreNaN"
+        Label_IgnoreNaN.Size = New Size(71, 15)
+        Label_IgnoreNaN.TabIndex = 7
+        Label_IgnoreNaN.Text = "Ignore NaN:"
+        ' 
+        ' ComboBox_OutputInterpretation
+        ' 
+        ComboBox_OutputInterpretation.Anchor = AnchorStyles.Top Or AnchorStyles.Left Or AnchorStyles.Right
+        ComboBox_OutputInterpretation.DropDownStyle = ComboBoxStyle.DropDownList
+        ComboBox_OutputInterpretation.FormattingEnabled = True
+        ComboBox_OutputInterpretation.Location = New Point(145, 38)
+        ComboBox_OutputInterpretation.Name = "ComboBox_OutputInterpretation"
+        ComboBox_OutputInterpretation.Size = New Size(314, 23)
+        ComboBox_OutputInterpretation.TabIndex = 10
+        ' 
+        ' Label1
+        ' 
+        Label1.AutoSize = True
+        Label1.Location = New Point(14, 42)
+        Label1.Name = "Label1"
+        Label1.Size = New Size(123, 15)
+        Label1.TabIndex = 9
+        Label1.Text = "Output interpretation:"
+        ' 
+        ' ChangeTimestepDialog
+        ' 
+        AcceptButton = OK_Button
+        AutoScaleDimensions = New SizeF(7F, 15F)
+        AutoScaleMode = AutoScaleMode.Font
+        CancelButton = Cancel_Button
+        ClientSize = New Size(471, 201)
+        Controls.Add(OK_Button)
+        Controls.Add(Label2)
+        Controls.Add(Cancel_Button)
+        Controls.Add(ComboBox_InputInterpretation)
+        Controls.Add(Label1)
+        Controls.Add(ComboBox_OutputInterpretation)
+        Controls.Add(Label3)
+        Controls.Add(NumericUpDown_TimestepInterval)
+        Controls.Add(ComboBox_TimestepType)
+        Controls.Add(Label4)
+        Controls.Add(MaskedTextBox_Start)
+        Controls.Add(Label_IgnoreNaN)
+        Controls.Add(CheckBox_IgnoreNaN)
+        Icon = CType(resources.GetObject("$this.Icon"), Icon)
+        Margin = New Padding(4, 3, 4, 3)
+        MaximizeBox = False
+        MinimizeBox = False
+        MinimumSize = New Size(487, 190)
+        Name = "ChangeTimestepDialog"
+        ShowInTaskbar = False
+        StartPosition = FormStartPosition.CenterParent
+        Text = "Change Timestep"
+        CType(NumericUpDown_TimestepInterval, ComponentModel.ISupportInitialize).EndInit()
+        ResumeLayout(False)
+        PerformLayout()
 
     End Sub
-    Friend WithEvents TableLayoutPanel1 As System.Windows.Forms.TableLayoutPanel
     Friend WithEvents OK_Button As System.Windows.Forms.Button
     Friend WithEvents Cancel_Button As System.Windows.Forms.Button
     Friend WithEvents Label2 As System.Windows.Forms.Label

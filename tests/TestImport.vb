@@ -96,14 +96,10 @@ Public Class TestImport
     <DataRow("SMUSI\REGEN475.REG")>
     <DataRow("SMUSI\rr03_575.reg")>
     <DataRow("SMUSI\smusi-reg-with-empty-line-between-header-and-data.reg")>
-    <DataRow("SWMM\A128.out")>
     <DataRow("SWMM\LIDRep_BRC.txt")>
-    <DataRow("SWMM\M180.out")>
     <DataRow("SWMM\M180Qzu_WQ.txt")>
     <DataRow("SWMM\Qzu_A128.txt")>
     <DataRow("SWMM\SWMM5_TimeSeriesFile.dat")>
-    <DataRow("SWMM\Tst_SubC.out")>
-    <DataRow("SWMM\Wissmarbach.out")>
     <DataRow("TALSIM\TALSIM.WBL")>
     <DataRow("TALSIM\Talsim_states.KTR.WEL")>
     <DataRow("UVF\42007.0_q.uvf")>

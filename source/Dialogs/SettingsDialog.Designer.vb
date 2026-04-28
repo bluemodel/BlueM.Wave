@@ -23,183 +23,179 @@ Partial Class SettingsDialog
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(SettingsDialog))
-        Me.Button_Close = New System.Windows.Forms.Button()
-        Me.NumericUpDown_DefaultLineWidth = New System.Windows.Forms.NumericUpDown()
-        Me.Label_defaultLineWidth = New System.Windows.Forms.Label()
-        Me.Label_loggingLevel = New System.Windows.Forms.Label()
-        Me.GroupBox_Chart = New System.Windows.Forms.GroupBox()
-        Me.NumericUpDown_DefaultFontSize = New System.Windows.Forms.NumericUpDown()
-        Me.Label_DefaultFontSize = New System.Windows.Forms.Label()
-        Me.GroupBox_Logging = New System.Windows.Forms.GroupBox()
-        Me.CheckBox_logShowDebugMessages = New System.Windows.Forms.CheckBox()
-        Me.GroupBox_Interface = New System.Windows.Forms.GroupBox()
-        Me.Label_showOverview = New System.Windows.Forms.Label()
-        Me.CheckBox_showOverviewOnStartup = New System.Windows.Forms.CheckBox()
-        CType(Me.NumericUpDown_DefaultLineWidth, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.GroupBox_Chart.SuspendLayout()
-        CType(Me.NumericUpDown_DefaultFontSize, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.GroupBox_Logging.SuspendLayout()
-        Me.GroupBox_Interface.SuspendLayout()
-        Me.SuspendLayout()
-        '
-        'Button_Close
-        '
-        Me.Button_Close.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Button_Close.Location = New System.Drawing.Point(155, 276)
-        Me.Button_Close.Name = "Button_Close"
-        Me.Button_Close.Size = New System.Drawing.Size(67, 23)
-        Me.Button_Close.TabIndex = 2
-        Me.Button_Close.Text = "Close"
-        '
-        'NumericUpDown_DefaultLineWidth
-        '
-        Me.NumericUpDown_DefaultLineWidth.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.NumericUpDown_DefaultLineWidth.Location = New System.Drawing.Point(133, 45)
-        Me.NumericUpDown_DefaultLineWidth.Maximum = New Decimal(New Integer() {10, 0, 0, 0})
-        Me.NumericUpDown_DefaultLineWidth.Minimum = New Decimal(New Integer() {1, 0, 0, 0})
-        Me.NumericUpDown_DefaultLineWidth.Name = "NumericUpDown_DefaultLineWidth"
-        Me.NumericUpDown_DefaultLineWidth.Size = New System.Drawing.Size(71, 20)
-        Me.NumericUpDown_DefaultLineWidth.TabIndex = 3
-        Me.NumericUpDown_DefaultLineWidth.Value = New Decimal(New Integer() {1, 0, 0, 0})
-        '
-        'Label_defaultLineWidth
-        '
-        Me.Label_defaultLineWidth.AutoSize = True
-        Me.Label_defaultLineWidth.Location = New System.Drawing.Point(6, 47)
-        Me.Label_defaultLineWidth.Name = "Label_defaultLineWidth"
-        Me.Label_defaultLineWidth.Size = New System.Drawing.Size(121, 13)
-        Me.Label_defaultLineWidth.TabIndex = 2
-        Me.Label_defaultLineWidth.Text = "Default series line width:"
-        '
-        'Label_loggingLevel
-        '
-        Me.Label_loggingLevel.AutoSize = True
-        Me.Label_loggingLevel.Location = New System.Drawing.Point(6, 22)
-        Me.Label_loggingLevel.Name = "Label_loggingLevel"
-        Me.Label_loggingLevel.Size = New System.Drawing.Size(120, 13)
-        Me.Label_loggingLevel.TabIndex = 0
-        Me.Label_loggingLevel.Text = "Show debug messages:"
-        '
-        'GroupBox_Chart
-        '
-        Me.GroupBox_Chart.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.GroupBox_Chart.Controls.Add(Me.NumericUpDown_DefaultFontSize)
-        Me.GroupBox_Chart.Controls.Add(Me.Label_DefaultFontSize)
-        Me.GroupBox_Chart.Controls.Add(Me.Label_defaultLineWidth)
-        Me.GroupBox_Chart.Controls.Add(Me.NumericUpDown_DefaultLineWidth)
-        Me.GroupBox_Chart.Location = New System.Drawing.Point(12, 70)
-        Me.GroupBox_Chart.Name = "GroupBox_Chart"
-        Me.GroupBox_Chart.Size = New System.Drawing.Size(210, 78)
-        Me.GroupBox_Chart.TabIndex = 0
-        Me.GroupBox_Chart.TabStop = False
-        Me.GroupBox_Chart.Text = "Chart"
-        '
-        'NumericUpDown_DefaultFontSize
-        '
-        Me.NumericUpDown_DefaultFontSize.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.NumericUpDown_DefaultFontSize.Location = New System.Drawing.Point(133, 19)
-        Me.NumericUpDown_DefaultFontSize.Maximum = New Decimal(New Integer() {20, 0, 0, 0})
-        Me.NumericUpDown_DefaultFontSize.Minimum = New Decimal(New Integer() {6, 0, 0, 0})
-        Me.NumericUpDown_DefaultFontSize.Name = "NumericUpDown_DefaultFontSize"
-        Me.NumericUpDown_DefaultFontSize.Size = New System.Drawing.Size(71, 20)
-        Me.NumericUpDown_DefaultFontSize.TabIndex = 1
-        Me.NumericUpDown_DefaultFontSize.Value = New Decimal(New Integer() {10, 0, 0, 0})
-        '
-        'Label_DefaultFontSize
-        '
-        Me.Label_DefaultFontSize.AutoSize = True
-        Me.Label_DefaultFontSize.Location = New System.Drawing.Point(6, 21)
-        Me.Label_DefaultFontSize.Name = "Label_DefaultFontSize"
-        Me.Label_DefaultFontSize.Size = New System.Drawing.Size(86, 13)
-        Me.Label_DefaultFontSize.TabIndex = 0
-        Me.Label_DefaultFontSize.Text = "Default font size:"
-        '
-        'GroupBox_Logging
-        '
-        Me.GroupBox_Logging.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.GroupBox_Logging.Controls.Add(Me.Label_loggingLevel)
-        Me.GroupBox_Logging.Controls.Add(Me.CheckBox_logShowDebugMessages)
-        Me.GroupBox_Logging.Location = New System.Drawing.Point(12, 154)
-        Me.GroupBox_Logging.Name = "GroupBox_Logging"
-        Me.GroupBox_Logging.Size = New System.Drawing.Size(210, 52)
-        Me.GroupBox_Logging.TabIndex = 1
-        Me.GroupBox_Logging.TabStop = False
-        Me.GroupBox_Logging.Text = "Logging"
-        '
-        'CheckBox_logShowDebugMessages
-        '
-        Me.CheckBox_logShowDebugMessages.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.CheckBox_logShowDebugMessages.AutoSize = True
-        Me.CheckBox_logShowDebugMessages.Location = New System.Drawing.Point(189, 22)
-        Me.CheckBox_logShowDebugMessages.Name = "CheckBox_logShowDebugMessages"
-        Me.CheckBox_logShowDebugMessages.Size = New System.Drawing.Size(15, 14)
-        Me.CheckBox_logShowDebugMessages.TabIndex = 1
-        Me.CheckBox_logShowDebugMessages.UseVisualStyleBackColor = True
-        '
-        'GroupBox_Interface
-        '
-        Me.GroupBox_Interface.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.GroupBox_Interface.Controls.Add(Me.Label_showOverview)
-        Me.GroupBox_Interface.Controls.Add(Me.CheckBox_showOverviewOnStartup)
-        Me.GroupBox_Interface.Location = New System.Drawing.Point(12, 12)
-        Me.GroupBox_Interface.Name = "GroupBox_Interface"
-        Me.GroupBox_Interface.Size = New System.Drawing.Size(209, 52)
-        Me.GroupBox_Interface.TabIndex = 3
-        Me.GroupBox_Interface.TabStop = False
-        Me.GroupBox_Interface.Text = "Interface"
-        '
-        'Label_showOverview
-        '
-        Me.Label_showOverview.AutoSize = True
-        Me.Label_showOverview.Location = New System.Drawing.Point(8, 20)
-        Me.Label_showOverview.Name = "Label_showOverview"
-        Me.Label_showOverview.Size = New System.Drawing.Size(160, 13)
-        Me.Label_showOverview.TabIndex = 1
-        Me.Label_showOverview.Text = "Show overview chart on startup:"
-        '
-        'CheckBox_showOverviewOnStartup
-        '
-        Me.CheckBox_showOverviewOnStartup.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.CheckBox_showOverviewOnStartup.AutoSize = True
-        Me.CheckBox_showOverviewOnStartup.Location = New System.Drawing.Point(187, 20)
-        Me.CheckBox_showOverviewOnStartup.Name = "CheckBox_showOverviewOnStartup"
-        Me.CheckBox_showOverviewOnStartup.Size = New System.Drawing.Size(15, 14)
-        Me.CheckBox_showOverviewOnStartup.TabIndex = 0
-        Me.CheckBox_showOverviewOnStartup.UseVisualStyleBackColor = True
-        '
-        'SettingsDialog
-        '
-        Me.AcceptButton = Me.Button_Close
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
-        Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(234, 311)
-        Me.Controls.Add(Me.GroupBox_Interface)
-        Me.Controls.Add(Me.Button_Close)
-        Me.Controls.Add(Me.GroupBox_Logging)
-        Me.Controls.Add(Me.GroupBox_Chart)
-        Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
-        Me.MaximizeBox = False
-        Me.MinimizeBox = False
-        Me.MinimumSize = New System.Drawing.Size(250, 350)
-        Me.Name = "SettingsDialog"
-        Me.ShowInTaskbar = False
-        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = "Settings"
-        Me.TopMost = True
-        CType(Me.NumericUpDown_DefaultLineWidth, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.GroupBox_Chart.ResumeLayout(False)
-        Me.GroupBox_Chart.PerformLayout()
-        CType(Me.NumericUpDown_DefaultFontSize, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.GroupBox_Logging.ResumeLayout(False)
-        Me.GroupBox_Logging.PerformLayout()
-        Me.GroupBox_Interface.ResumeLayout(False)
-        Me.GroupBox_Interface.PerformLayout()
-        Me.ResumeLayout(False)
+        Button_Close = New Button()
+        NumericUpDown_DefaultLineWidth = New NumericUpDown()
+        Label_defaultLineWidth = New Label()
+        Label_loggingLevel = New Label()
+        GroupBox_Chart = New GroupBox()
+        NumericUpDown_DefaultFontSize = New NumericUpDown()
+        Label_DefaultFontSize = New Label()
+        GroupBox_Logging = New GroupBox()
+        CheckBox_logShowDebugMessages = New CheckBox()
+        GroupBox_Interface = New GroupBox()
+        Label_showOverview = New Label()
+        CheckBox_showOverviewOnStartup = New CheckBox()
+        CType(NumericUpDown_DefaultLineWidth, ComponentModel.ISupportInitialize).BeginInit()
+        GroupBox_Chart.SuspendLayout()
+        CType(NumericUpDown_DefaultFontSize, ComponentModel.ISupportInitialize).BeginInit()
+        GroupBox_Logging.SuspendLayout()
+        GroupBox_Interface.SuspendLayout()
+        SuspendLayout()
+        ' 
+        ' Button_Close
+        ' 
+        Button_Close.Anchor = AnchorStyles.Bottom Or AnchorStyles.Right
+        Button_Close.Location = New Point(181, 320)
+        Button_Close.Name = "Button_Close"
+        Button_Close.Size = New Size(80, 27)
+        Button_Close.TabIndex = 2
+        Button_Close.Text = "Close"
+        ' 
+        ' NumericUpDown_DefaultLineWidth
+        ' 
+        NumericUpDown_DefaultLineWidth.Anchor = AnchorStyles.Top Or AnchorStyles.Left Or AnchorStyles.Right
+        NumericUpDown_DefaultLineWidth.Location = New Point(154, 52)
+        NumericUpDown_DefaultLineWidth.Maximum = New Decimal(New Integer() {10, 0, 0, 0})
+        NumericUpDown_DefaultLineWidth.Minimum = New Decimal(New Integer() {1, 0, 0, 0})
+        NumericUpDown_DefaultLineWidth.Name = "NumericUpDown_DefaultLineWidth"
+        NumericUpDown_DefaultLineWidth.Size = New Size(87, 23)
+        NumericUpDown_DefaultLineWidth.TabIndex = 3
+        NumericUpDown_DefaultLineWidth.Value = New Decimal(New Integer() {1, 0, 0, 0})
+        ' 
+        ' Label_defaultLineWidth
+        ' 
+        Label_defaultLineWidth.AutoSize = True
+        Label_defaultLineWidth.Location = New Point(6, 54)
+        Label_defaultLineWidth.Name = "Label_defaultLineWidth"
+        Label_defaultLineWidth.Size = New Size(135, 15)
+        Label_defaultLineWidth.TabIndex = 2
+        Label_defaultLineWidth.Text = "Default series line width:"
+        ' 
+        ' Label_loggingLevel
+        ' 
+        Label_loggingLevel.AutoSize = True
+        Label_loggingLevel.Location = New Point(6, 25)
+        Label_loggingLevel.Name = "Label_loggingLevel"
+        Label_loggingLevel.Size = New Size(130, 15)
+        Label_loggingLevel.TabIndex = 0
+        Label_loggingLevel.Text = "Show debug messages:"
+        ' 
+        ' GroupBox_Chart
+        ' 
+        GroupBox_Chart.Anchor = AnchorStyles.Top Or AnchorStyles.Left Or AnchorStyles.Right
+        GroupBox_Chart.Controls.Add(NumericUpDown_DefaultFontSize)
+        GroupBox_Chart.Controls.Add(Label_DefaultFontSize)
+        GroupBox_Chart.Controls.Add(Label_defaultLineWidth)
+        GroupBox_Chart.Controls.Add(NumericUpDown_DefaultLineWidth)
+        GroupBox_Chart.Location = New Point(14, 81)
+        GroupBox_Chart.Name = "GroupBox_Chart"
+        GroupBox_Chart.Size = New Size(247, 90)
+        GroupBox_Chart.TabIndex = 0
+        GroupBox_Chart.TabStop = False
+        GroupBox_Chart.Text = "Chart"
+        ' 
+        ' NumericUpDown_DefaultFontSize
+        ' 
+        NumericUpDown_DefaultFontSize.Anchor = AnchorStyles.Top Or AnchorStyles.Left Or AnchorStyles.Right
+        NumericUpDown_DefaultFontSize.Location = New Point(154, 22)
+        NumericUpDown_DefaultFontSize.Maximum = New Decimal(New Integer() {20, 0, 0, 0})
+        NumericUpDown_DefaultFontSize.Minimum = New Decimal(New Integer() {6, 0, 0, 0})
+        NumericUpDown_DefaultFontSize.Name = "NumericUpDown_DefaultFontSize"
+        NumericUpDown_DefaultFontSize.Size = New Size(87, 23)
+        NumericUpDown_DefaultFontSize.TabIndex = 1
+        NumericUpDown_DefaultFontSize.Value = New Decimal(New Integer() {10, 0, 0, 0})
+        ' 
+        ' Label_DefaultFontSize
+        ' 
+        Label_DefaultFontSize.AutoSize = True
+        Label_DefaultFontSize.Location = New Point(6, 24)
+        Label_DefaultFontSize.Name = "Label_DefaultFontSize"
+        Label_DefaultFontSize.Size = New Size(95, 15)
+        Label_DefaultFontSize.TabIndex = 0
+        Label_DefaultFontSize.Text = "Default font size:"
+        ' 
+        ' GroupBox_Logging
+        ' 
+        GroupBox_Logging.Anchor = AnchorStyles.Top Or AnchorStyles.Left Or AnchorStyles.Right
+        GroupBox_Logging.Controls.Add(Label_loggingLevel)
+        GroupBox_Logging.Controls.Add(CheckBox_logShowDebugMessages)
+        GroupBox_Logging.Location = New Point(14, 178)
+        GroupBox_Logging.Name = "GroupBox_Logging"
+        GroupBox_Logging.Size = New Size(247, 60)
+        GroupBox_Logging.TabIndex = 1
+        GroupBox_Logging.TabStop = False
+        GroupBox_Logging.Text = "Logging"
+        ' 
+        ' CheckBox_logShowDebugMessages
+        ' 
+        CheckBox_logShowDebugMessages.Anchor = AnchorStyles.Top Or AnchorStyles.Right
+        CheckBox_logShowDebugMessages.AutoSize = True
+        CheckBox_logShowDebugMessages.Location = New Point(226, 25)
+        CheckBox_logShowDebugMessages.Name = "CheckBox_logShowDebugMessages"
+        CheckBox_logShowDebugMessages.Size = New Size(15, 14)
+        CheckBox_logShowDebugMessages.TabIndex = 1
+        CheckBox_logShowDebugMessages.UseVisualStyleBackColor = True
+        ' 
+        ' GroupBox_Interface
+        ' 
+        GroupBox_Interface.Anchor = AnchorStyles.Top Or AnchorStyles.Left Or AnchorStyles.Right
+        GroupBox_Interface.Controls.Add(Label_showOverview)
+        GroupBox_Interface.Controls.Add(CheckBox_showOverviewOnStartup)
+        GroupBox_Interface.Location = New Point(14, 14)
+        GroupBox_Interface.Name = "GroupBox_Interface"
+        GroupBox_Interface.Size = New Size(246, 60)
+        GroupBox_Interface.TabIndex = 3
+        GroupBox_Interface.TabStop = False
+        GroupBox_Interface.Text = "Interface"
+        ' 
+        ' Label_showOverview
+        ' 
+        Label_showOverview.AutoSize = True
+        Label_showOverview.Location = New Point(8, 23)
+        Label_showOverview.Name = "Label_showOverview"
+        Label_showOverview.Size = New Size(176, 15)
+        Label_showOverview.TabIndex = 1
+        Label_showOverview.Text = "Show overview chart on startup:"
+        ' 
+        ' CheckBox_showOverviewOnStartup
+        ' 
+        CheckBox_showOverviewOnStartup.Anchor = AnchorStyles.Top Or AnchorStyles.Right
+        CheckBox_showOverviewOnStartup.AutoSize = True
+        CheckBox_showOverviewOnStartup.Location = New Point(224, 23)
+        CheckBox_showOverviewOnStartup.Name = "CheckBox_showOverviewOnStartup"
+        CheckBox_showOverviewOnStartup.Size = New Size(15, 14)
+        CheckBox_showOverviewOnStartup.TabIndex = 0
+        CheckBox_showOverviewOnStartup.UseVisualStyleBackColor = True
+        ' 
+        ' SettingsDialog
+        ' 
+        AcceptButton = Button_Close
+        AutoScaleDimensions = New SizeF(7F, 15F)
+        AutoScaleMode = AutoScaleMode.Font
+        ClientSize = New Size(273, 359)
+        Controls.Add(GroupBox_Interface)
+        Controls.Add(Button_Close)
+        Controls.Add(GroupBox_Logging)
+        Controls.Add(GroupBox_Chart)
+        Icon = CType(resources.GetObject("$this.Icon"), Icon)
+        Margin = New Padding(4, 3, 4, 3)
+        MaximizeBox = False
+        MinimizeBox = False
+        MinimumSize = New Size(289, 398)
+        Name = "SettingsDialog"
+        ShowInTaskbar = False
+        StartPosition = FormStartPosition.CenterParent
+        Text = "Settings"
+        TopMost = True
+        CType(NumericUpDown_DefaultLineWidth, ComponentModel.ISupportInitialize).EndInit()
+        GroupBox_Chart.ResumeLayout(False)
+        GroupBox_Chart.PerformLayout()
+        CType(NumericUpDown_DefaultFontSize, ComponentModel.ISupportInitialize).EndInit()
+        GroupBox_Logging.ResumeLayout(False)
+        GroupBox_Logging.PerformLayout()
+        GroupBox_Interface.ResumeLayout(False)
+        GroupBox_Interface.PerformLayout()
+        ResumeLayout(False)
 
     End Sub
     Friend WithEvents Button_Close As System.Windows.Forms.Button
