@@ -65,7 +65,7 @@ Friend Class SelectSeriesDialog
 
         If (Me.ListBox_Series.SelectedItems.Count < 1) Then
             MsgBox("Please select at least one series!", MsgBoxStyle.Exclamation)
-            Me.DialogResult = Windows.Forms.DialogResult.None
+            Me.DialogResult = DialogResult.None
             Exit Sub
         Else
             For Each sInfo As TimeSeriesInfo In Me.ListBox_Series.SelectedItems

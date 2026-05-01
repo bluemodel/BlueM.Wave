@@ -300,6 +300,9 @@ Friend Class WaveController
                     CType(series, Steema.TeeChart.Styles.Line).LinePen.Width = My.Settings.defaultLineWidth
                 End If
             Next
+        ElseIf e.PropertyName = "defaultFont" Then
+            'update font of chart
+            Helpers.ChartSetFont(View.TChart1.Chart, My.Settings.defaultFont)
         ElseIf e.PropertyName = "defaultFontSize" Then
             'update font size of chart
             Helpers.ChartSetFontSize(View.TChart1.Chart, My.Settings.defaultFontSize)
@@ -328,10 +331,15 @@ Friend Class WaveController
                 End If
                 'all other events can only be handled if the triggering series also exists in the model, i.e. has an id
                 Dim id As Integer
-                Dim haveId As Boolean = Integer.TryParse(seriesEvent.Series.Tag, id)
-                If Not haveId Then
+                If IsNothing(seriesEvent.Series.Tag) Then
                     'ignore event
                     Exit Sub
+                Else
+                    Dim haveId As Boolean = Integer.TryParse(seriesEvent.Series.Tag, id)
+                    If Not haveId Then
+                        'ignore event
+                        Exit Sub
+                    End If
                 End If
                 Select Case seriesEvent.Event
                     Case Steema.TeeChart.Styles.SeriesEventStyle.ChangeActive
@@ -442,7 +450,7 @@ Friend Class WaveController
         '-------------------------------------
         If (View.TChart1.Series.Count() > 0) Then
             res = MsgBox($"All existing series will be deleted!{eol}Continue?", MsgBoxStyle.OkCancel)
-            If (Not res = Windows.Forms.DialogResult.OK) Then Exit Sub
+            If (Not res = DialogResult.OK) Then Exit Sub
         End If
 
         'Charts zurücksetzen
@@ -486,7 +494,7 @@ Friend Class WaveController
     Private Sub ImportSeries_Click(sender As System.Object, e As System.EventArgs)
         View.OpenFileDialog1.Title = "Import time series"
         View.OpenFileDialog1.Filter = TimeSeriesFile.FileFilter
-        If (View.OpenFileDialog1.ShowDialog() = Windows.Forms.DialogResult.OK) Then
+        If (View.OpenFileDialog1.ShowDialog() = DialogResult.OK) Then
             Call _model.Import_Files(View.OpenFileDialog1.FileNames)
         End If
     End Sub
@@ -519,7 +527,7 @@ Friend Class WaveController
     Private Sub LoadTEN_Click(sender As System.Object, e As System.EventArgs)
         View.OpenFileDialog1.Title = "Load TEN file"
         View.OpenFileDialog1.Filter = "TeeChart files (*.ten)|*.ten"
-        If (View.OpenFileDialog1.ShowDialog() = Windows.Forms.DialogResult.OK) Then
+        If (View.OpenFileDialog1.ShowDialog() = DialogResult.OK) Then
             Call Load_TEN(View.OpenFileDialog1.FileName)
         End If
     End Sub
@@ -547,7 +555,7 @@ Friend Class WaveController
             Dim dlg As New SaveProjectFileDialog()
             dlgres = dlg.ShowDialog()
 
-            If dlgres = Windows.Forms.DialogResult.OK Then
+            If dlgres = DialogResult.OK Then
                 'collect display options from chart and store them in timeseries
                 Dim tsList As New List(Of TimeSeries)
                 For Each ts As TimeSeries In _model.TimeSeries.Values
@@ -597,7 +605,7 @@ Friend Class WaveController
     '**************
     Private Sub Eingeben_Click(sender As System.Object, e As System.EventArgs)
         Dim SeriesEditor As New SeriesEditorDialog()
-        If (SeriesEditor.ShowDialog() = Windows.Forms.DialogResult.OK) Then
+        If (SeriesEditor.ShowDialog() = DialogResult.OK) Then
             Call _model.Import_Series(SeriesEditor.Zeitreihe)
         End If
     End Sub
@@ -621,7 +629,7 @@ Friend Class WaveController
 
         'show dialog
         Dim cutDialog As New CutDialog(_model.TimeSeries.ToList, View.ChartMinX, View.ChartMaxX)
-        If cutDialog.ShowDialog() = Windows.Forms.DialogResult.OK Then
+        If cutDialog.ShowDialog() = DialogResult.OK Then
 
             If Not cutDialog.KeepUncutSeries Then
                 'delete old time series
@@ -670,7 +678,7 @@ Friend Class WaveController
 
             View.Cursor = Cursors.WaitCursor
 
-            If dlgResult = Windows.Forms.DialogResult.OK Then
+            If dlgResult = DialogResult.OK Then
 
                 ids = dlg.selectedSeries
                 mergedSeriesTitle = dlg.mergedSeriesTitle
@@ -880,7 +888,7 @@ Friend Class WaveController
         Dim dlg As New ConvertErrorValuesDialog(_model.TimeSeries.ToList)
         Dim dlgresult As DialogResult = dlg.ShowDialog()
 
-        If dlgresult = Windows.Forms.DialogResult.OK Then
+        If dlgresult = DialogResult.OK Then
             'import cleaned series
             For Each zre As TimeSeries In dlg.tsConverted
                 _model.Import_Series(zre)
@@ -897,7 +905,7 @@ Friend Class WaveController
         Dim dlgResult As DialogResult
 
         dlgResult = MsgBox("Delete all nodes with NaN values from all series?", MsgBoxStyle.OkCancel)
-        If dlgResult = Windows.Forms.DialogResult.OK Then
+        If dlgResult = DialogResult.OK Then
             'loop over time series
             For Each id As Integer In _model.TimeSeries.Ids
                 'remove NaN values in model
@@ -943,7 +951,7 @@ Friend Class WaveController
 
         'Analysisdialog anzeigen
         '-----------------------
-        If (oAnalysisDialog.ShowDialog() = Windows.Forms.DialogResult.OK) Then
+        If (oAnalysisDialog.ShowDialog() = DialogResult.OK) Then
 
             Try
                 'Wait-Cursor
@@ -978,7 +986,7 @@ Friend Class WaveController
                 If (oAnalysis.hasResultChart) Then
                     Dim resultChart As New AnalysisResultChart()
                     resultChart.Text &= " - " & oAnalysisDialog.selectedAnalysisFunction.ToString()
-                    resultChart.TChart1.Chart = oAnalysis.getResultChart()
+                    resultChart.TChart1.Chart = oAnalysis.getResultChart().Chart
                     Call resultChart.Show()
                 End If
 
@@ -1039,8 +1047,8 @@ Friend Class WaveController
 
         'zoom
         Dim displayRange As TimeSpan = View.ChartMaxX - View.ChartMinX
-        View.ChartMinX = View.ChartMinX + New TimeSpan(0, 0, seconds:=displayRange.TotalSeconds * 0.125)
-        View.ChartMaxX = View.ChartMaxX - New TimeSpan(0, 0, seconds:=displayRange.TotalSeconds * 0.125)
+        View.SetChartMinX(View.ChartMinX + New TimeSpan(0, 0, seconds:=displayRange.TotalSeconds * 0.125))
+        View.SetChartMaxX(View.ChartMaxX - New TimeSpan(0, 0, seconds:=displayRange.TotalSeconds * 0.125))
 
         Me.selectionMade = True
         Call Me.ViewportChanged()
@@ -1058,8 +1066,8 @@ Friend Class WaveController
 
         'zoom
         Dim displayRange As TimeSpan = View.ChartMaxX - View.ChartMinX
-        View.ChartMinX = View.ChartMinX - New TimeSpan(0, 0, seconds:=displayRange.TotalSeconds * 0.125)
-        View.ChartMaxX = View.ChartMaxX + New TimeSpan(0, 0, seconds:=displayRange.TotalSeconds * 0.125)
+        View.SetChartMinX(View.ChartMinX - New TimeSpan(0, 0, seconds:=displayRange.TotalSeconds * 0.125))
+        View.SetChartMaxX(View.ChartMaxX + New TimeSpan(0, 0, seconds:=displayRange.TotalSeconds * 0.125))
 
         Me.selectionMade = True
         Call Me.ViewportChanged()
@@ -1078,8 +1086,8 @@ Friend Class WaveController
                 Call Me.SaveZoomSnapshot()
             End If
             Dim extent As (xmin As Double, xmax As Double) = ZoomHistory(prevIndex)
-            View.ChartMinX = DateTime.FromOADate(extent.xmin)
-            View.ChartMaxX = DateTime.FromOADate(extent.xmax)
+            View.SetChartMinX(DateTime.FromOADate(extent.xmin))
+            View.SetChartMaxX(DateTime.FromOADate(extent.xmax))
             ZoomHistoryIndex = prevIndex
             Call Me.ViewportChanged()
             Log.AddLogEntry(Log.levels.debug, "Zoomed to history index " & prevIndex)
@@ -1099,8 +1107,8 @@ Friend Class WaveController
 
         If Me.ZoomHistory.Count > (ZoomHistoryIndex + 1) Then
             Dim extent As (xmin As Double, xmax As Double) = ZoomHistory(ZoomHistoryIndex + 1)
-            View.ChartMinX = DateTime.FromOADate(extent.xmin)
-            View.ChartMaxX = DateTime.FromOADate(extent.xmax)
+            View.SetChartMinX(DateTime.FromOADate(extent.xmin))
+            View.SetChartMaxX(DateTime.FromOADate(extent.xmax))
             ZoomHistoryIndex += 1
             Call Me.ViewportChanged()
             Log.AddLogEntry(Log.levels.debug, "Zoomed to history index " & ZoomHistoryIndex)
@@ -1160,8 +1168,8 @@ Friend Class WaveController
             'save the current zoom snapshot
             Call Me.SaveZoomSnapshot()
             'zoom
-            View.ChartMinX = startdate
-            View.ChartMaxX = enddate
+            View.SetChartMinX(startdate)
+            View.SetChartMaxX(enddate)
             Me.selectionMade = True
             Call Me.ViewportChanged()
         Else
@@ -1489,8 +1497,8 @@ Friend Class WaveController
             'save the current zoom snapshot
             Call Me.SaveZoomSnapshot()
             'Adjust the display range of the main chart
-            View.ChartMinX = CType(View.MaskedTextBox_NavStart.Text(), DateTime)
-            View.ChartMaxX = CType(View.MaskedTextBox_NavEnd.Text(), DateTime)
+            View.SetChartMinX(CType(View.MaskedTextBox_NavStart.Text(), DateTime))
+            View.SetChartMaxX(CType(View.MaskedTextBox_NavEnd.Text(), DateTime))
             Call Me.ViewportChanged()
             Me.selectionMade = True
         End If
@@ -1538,7 +1546,7 @@ Friend Class WaveController
         Call Me.SaveZoomSnapshot()
 
         'Set new max value for x axis
-        View.ChartMaxX = xMax
+        View.SetChartMaxX(xMax)
 
         Call Me.ViewportChanged()
 
@@ -1600,8 +1608,8 @@ Friend Class WaveController
         Call Me.SaveZoomSnapshot()
 
         'update chart
-        View.ChartMinX = xMinNew
-        View.ChartMaxX = xMaxNew
+        View.SetChartMinX(xMinNew)
+        View.SetChartMaxX(xMaxNew)
 
         Call Me.ViewportChanged()
 
@@ -1651,8 +1659,8 @@ Friend Class WaveController
         Call Me.SaveZoomSnapshot()
 
         'update chart
-        View.ChartMinX = DateTime.FromOADate(xMinNew)
-        View.ChartMaxX = DateTime.FromOADate(xMaxNew)
+        View.SetChartMinX(DateTime.FromOADate(xMinNew))
+        View.SetChartMaxX(DateTime.FromOADate(xMaxNew))
 
         Call Me.ViewportChanged()
 
@@ -1678,7 +1686,7 @@ Friend Class WaveController
     ''' </summary>
     Private Sub Chart_MouseDown(sender As System.Object, e As System.Windows.Forms.MouseEventArgs)
 
-        If e.Button = Windows.Forms.MouseButtons.Left Then
+        If e.Button = MouseButtons.Left Then
             'start zoom process
             If View.TChart1.Series.Count > 0 Then
 
@@ -1743,8 +1751,8 @@ Friend Class WaveController
                 xMin = xMax - Me.ChartMousePanDisplayRange
             End If
             'set the new viewport 
-            View.ChartMinX = DateTime.FromOADate(xMin)
-            View.ChartMaxX = DateTime.FromOADate(xMax)
+            View.SetChartMinX(DateTime.FromOADate(xMin))
+            View.SetChartMaxX(DateTime.FromOADate(xMax))
             Me.selectionMade = True
             'update drag start point
             Me.ChartMouseDragStartX = e.X
@@ -1785,7 +1793,7 @@ Friend Class WaveController
             Next
             If xValue <> View.CrosshairPosition Then
                 'update crosshair position
-                View.CrosshairPosition = xValue
+                View.SetCrosshairPosition(xValue)
                 'show markers
                 showMarkers(New List(Of DateTime) From {DateTime.FromOADate(xValue)})
             End If
@@ -1824,8 +1832,8 @@ Friend Class WaveController
                 Call Me.SaveZoomSnapshot()
 
                 'set the new viewport 
-                View.ChartMinX = DateTime.FromOADate(startValue)
-                View.ChartMaxX = DateTime.FromOADate(endValue)
+                View.SetChartMinX(DateTime.FromOADate(startValue))
+                View.SetChartMaxX(DateTime.FromOADate(endValue))
                 Me.selectionMade = True
                 Call Me.ViewportChanged()
             Else
@@ -1890,8 +1898,8 @@ Friend Class WaveController
             Call Me.SaveZoomSnapshot()
 
             'set new viewport
-            View.ChartMinX = centerDate - New TimeSpan(ticks:=newExtent * leftRatio)
-            View.ChartMaxX = centerDate + New TimeSpan(ticks:=newExtent * rightRatio)
+            View.SetChartMinX(centerDate - New TimeSpan(ticks:=newExtent * leftRatio))
+            View.SetChartMaxX(centerDate + New TimeSpan(ticks:=newExtent * rightRatio))
 
             Me.selectionMade = True
             Call Me.ViewportChanged()
@@ -2033,8 +2041,8 @@ Friend Class WaveController
                     Call Me.SaveZoomSnapshot()
 
                     'set the new viewport on the main chart
-                    View.ChartMinX = DateTime.FromOADate(View.colorBandOverview.Start)
-                    View.ChartMaxX = DateTime.FromOADate(View.colorBandOverview.End)
+                    View.SetChartMinX(DateTime.FromOADate(View.colorBandOverview.Start))
+                    View.SetChartMaxX(DateTime.FromOADate(View.colorBandOverview.End))
 
                     Me.selectionMade = True
                     Call Me.ViewportChanged()
@@ -2047,8 +2055,8 @@ Friend Class WaveController
                 Call Me.SaveZoomSnapshot()
 
                 'set the new viewport on the main chart
-                View.ChartMinX = DateTime.FromOADate(View.colorBandOverview.Start)
-                View.ChartMaxX = DateTime.FromOADate(View.colorBandOverview.End)
+                View.SetChartMinX(DateTime.FromOADate(View.colorBandOverview.Start))
+                View.SetChartMaxX(DateTime.FromOADate(View.colorBandOverview.End))
 
                 Me.selectionMade = True
                 Call Me.ViewportChanged()
@@ -2117,8 +2125,8 @@ Friend Class WaveController
             Call Me.SaveZoomSnapshot()
 
             'set the new viewport on the main chart
-            View.ChartMinX = DateTime.FromOADate(View.colorBandOverview.Start)
-            View.ChartMaxX = DateTime.FromOADate(View.colorBandOverview.End)
+            View.SetChartMinX(DateTime.FromOADate(View.colorBandOverview.Start))
+            View.SetChartMaxX(DateTime.FromOADate(View.colorBandOverview.End))
 
             Me.selectionMade = True
             Call Me.ViewportChanged()
@@ -2375,8 +2383,8 @@ Friend Class WaveController
 
             If (Not Me.selectionMade) Then
                 'Wenn noch nicht gezoomed wurde, Gesamtzeitraum auswählen
-                View.ChartMinX = Xmin
-                View.ChartMaxX = Xmax
+                View.SetChartMinX(Xmin)
+                View.SetChartMaxX(Xmax)
             End If
             'Extent auf Colorband übertragen
             Call Me.UpdateOverviewZoomExtent()
@@ -2666,10 +2674,10 @@ Friend Class WaveController
                 Dim number As Integer = View.TChart1.Axes.Custom.Count + 1
                 axis = New Steema.TeeChart.Axis(View.TChart1.Chart)
                 View.TChart1.Axes.Custom.Add(axis)
-                axis.Labels.Font.Name = "GenericSansSerif"
+                axis.Labels.Font.Name = My.Settings.defaultFont
                 axis.Labels.Font.Color = Color.Black
                 axis.Labels.Font.Size = My.Settings.defaultFontSize
-                axis.Title.Font.Name = "GenericSansSerif"
+                axis.Title.Font.Name = My.Settings.defaultFont
                 axis.Title.Font.Color = Color.Black
                 axis.Title.Font.Size = My.Settings.defaultFontSize
                 axis.Title.Text = unit
@@ -3195,7 +3203,7 @@ Friend Class WaveController
 
                 Select Case result
 
-                    Case Windows.Forms.DialogResult.Yes
+                    Case DialogResult.Yes
                         'Reihen aus TEN-Datei sollen importiert werden
 
                         Dim nSeries As Integer = 0
@@ -3258,7 +3266,7 @@ Friend Class WaveController
                         'Update window title
                         View.Text = "BlueM.Wave - " & FileName
 
-                    Case Windows.Forms.DialogResult.No
+                    Case DialogResult.No
                         'Reihen aus TEN-Datei sollen nicht importiert werden
 
                         'Alle Reihen aus den Diagrammen löschen (wurden bei TEN-Import automatisch mit eingeladen)
@@ -3283,8 +3291,8 @@ Friend Class WaveController
 
             'Vorherigen Zoom wiederherstellen
             If (Me.selectionMade) Then
-                View.ChartMinX = XMin
-                View.ChartMaxX = XMax
+                View.SetChartMinX(XMin)
+                View.SetChartMaxX(XMax)
             End If
 
             'ColorBands neu einrichten (durch TEN-Import verloren)

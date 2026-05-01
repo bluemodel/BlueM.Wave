@@ -48,7 +48,6 @@ Public MustInherit Class TimeSeriesFile
         SWMM_TIMESERIES
         SWMM_INTERFACE
         SWMM_LID_REPORT
-        SWMM_OUT
         TEN
         UVF
         WBL
@@ -76,7 +75,7 @@ Public MustInherit Class TimeSeriesFile
         Public Shared ReadOnly GBL As String = ".GBL"   'GINA GBL format
         Public Shared ReadOnly H5 As String = ".H5"     'HDF5 format
         Public Shared ReadOnly KWL As String = ".KWL"
-        Public Shared ReadOnly OUT As String = ".OUT"   'SWMM binary result file or PRMS out file
+        Public Shared ReadOnly OUT As String = ".OUT"   'PRMS out file
         Public Shared ReadOnly REG As String = ".REG"
         Public Shared ReadOnly SMB As String = ".SMB"
         Public Shared ReadOnly TEN As String = ".TEN"
@@ -109,7 +108,7 @@ Public MustInherit Class TimeSeriesFile
         "PRMS result files (*.dat, *.out)|*.dat;*.out|" &
         "SIMBA files (*.smb)|*.smb|" &
         "SMUSI files (*.asc. *.reg)|*.asc;*.reg|" &
-        "SWMM files (*.dat, *.txt, *.out)|*.dat;*.txt;*.out|" &
+        "SWMM files (*.dat, *.txt)|*.dat;*.txt|" &
         "SYDRO binary files (*.bin)|*.bin|" &
         "SYDRO binary wel files (*.wbl)|*.wbl|" &
         "UVF files (*.uvf)|*.uvf|" &
@@ -603,8 +602,6 @@ Public MustInherit Class TimeSeriesFile
                 Return FileExtensions.TXT
             Case FileTypes.SWMM_TIMESERIES
                 Return FileExtensions.DAT
-            Case FileTypes.SWMM_OUT
-                Return FileExtensions.OUT
             Case FileTypes.TEN
                 Return FileExtensions.TEN
             Case FileTypes.UVF
@@ -758,10 +755,6 @@ Public MustInherit Class TimeSeriesFile
                     'PRMS result format
                     Log.AddLogEntry(levels.info, $"Detected PRMS result format for file {fileName}.")
                     fileType = FileTypes.PRMS_OUT
-                Else
-                    'Assume SWMM5 binary output format
-                    Log.AddLogEntry(levels.info, $"Assuming SWMM5 binary output format for file {fileName}.")
-                    fileType = FileTypes.SWMM_OUT
                 End If
 
             Case FileExtensions.REG
@@ -924,8 +917,6 @@ Public MustInherit Class TimeSeriesFile
                 FileInstance = New Fileformats.SWMM_LID_REPORT(file)
             Case FileTypes.SWMM_TIMESERIES
                 FileInstance = New Fileformats.SWMM_TIMESERIES(file)
-            Case FileTypes.SWMM_OUT
-                FileInstance = New Fileformats.SWMM_OUT(file)
             Case FileTypes.TEN
                 Throw New Exception("Native TeeChart files (TEN) must to be loaded using `Wave.Import_File()`!")
             Case FileTypes.UVF

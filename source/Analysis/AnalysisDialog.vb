@@ -91,7 +91,7 @@ Friend Class AnalysisDialog
         'Eingabekontrolle
         If (Me.ListBox_Series.SelectedItems.Count < 1) Then
             MsgBox("Please select at least one series!", MsgBoxStyle.Exclamation)
-            Me.DialogResult = Windows.Forms.DialogResult.None
+            Me.DialogResult = DialogResult.None
         End If
     End Sub
 

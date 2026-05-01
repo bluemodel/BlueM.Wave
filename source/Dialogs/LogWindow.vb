@@ -109,7 +109,7 @@ Friend Class LogWindow
     End Sub
 
     Private Sub ToolStripButton_Save_Click(sender As System.Object, e As System.EventArgs) Handles ToolStripButton_Save.Click
-        If (Me.SaveFileDialog1.ShowDialog = Windows.Forms.DialogResult.OK) Then
+        If (Me.SaveFileDialog1.ShowDialog = DialogResult.OK) Then
             Me.TextBox_Log.SaveFile(Me.SaveFileDialog1.FileName, RichTextBoxStreamType.PlainText)
         End If
     End Sub

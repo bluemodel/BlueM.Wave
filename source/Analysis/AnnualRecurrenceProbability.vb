@@ -16,6 +16,8 @@
 'along with this program.  If not, see <https://www.gnu.org/licenses/>.
 '
 
+Imports System.Data
+
 ''' <summary>
 ''' Calculates the annual recurrence probility and return period of annual maxima using plotting position method
 ''' </summary>
@@ -237,13 +239,14 @@ Friend Class AnnualRecurrenceProbability
         Next
 
         'Chart
-        ResultChart = New Steema.TeeChart.Chart()
-        Call Helpers.ChartSetDefaultFormat(ResultChart)
+        ResultChart = New Steema.TeeChart.TChart()
+        Call Helpers.ChartSetDefaultFormat(ResultChart.Chart)
         ResultChart.Walls.Back.Visible = True
+        ResultChart.Header.Visible = True
         ResultChart.Header.Text = $"Annual maxima (plotting position)"
 
         'Legend
-        ResultChart.Legend.CheckBoxes = False
+        ResultChart.Legend.ActiveStyle = Steema.TeeChart.LegendActiveStyles.None
         ResultChart.Legend.Alignment = Steema.TeeChart.LegendAlignments.Top
 
         'x-Axis
@@ -269,7 +272,7 @@ Friend Class AnnualRecurrenceProbability
         'point series
         For Each ts As TimeSeries In Me.InputTimeSeries
             Dim tsEvents As List(Of AnnualEvent) = Me.events(ts.Title)
-            Dim points As New Steema.TeeChart.Styles.Points(ResultChart)
+            Dim points As New Steema.TeeChart.Styles.Points(ResultChart.Chart)
             points.Title = ts.Title
             For Each ev As AnnualEvent In tsEvents
                 points.Add(ev.returnPeriod, ev.maxValue, ev.year.ToString())

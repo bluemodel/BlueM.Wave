@@ -15,6 +15,7 @@
 'You should have received a copy of the GNU Lesser General Public License
 'along with this program.  If not, see <https://www.gnu.org/licenses/>.
 '
+Imports System.Drawing.Text
 Imports System.Windows.Forms
 
 ''' <summary>
@@ -28,7 +29,17 @@ Friend Class SettingsDialog
 
         Me.isLoading = True
 
+        'get installed fonts
+        Dim installedFontCollection As New InstalledFontCollection()
+        Dim fontFamilies() As FontFamily = installedFontCollection.Families
+
+        'add list of installed fonts to the combo box
+        For Each fontFamily As FontFamily In fontFamilies
+            Me.ComboBox_Font.Items.Add(fontFamily.Name)
+        Next
+
         'set current setting values in the form
+        Me.ComboBox_Font.SelectedItem = My.Settings.defaultFont
         Me.CheckBox_showOverviewOnStartup.Checked = My.Settings.showOverviewOnStartup
         Me.NumericUpDown_DefaultLineWidth.Value = My.Settings.defaultLineWidth
         Me.NumericUpDown_DefaultFontSize.Value = My.Settings.defaultFontSize
@@ -41,6 +52,15 @@ Friend Class SettingsDialog
     Private Sub CheckBox_showOverviewOnStartup_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox_showOverviewOnStartup.CheckedChanged
         My.Settings.showOverviewOnStartup = Me.CheckBox_showOverviewOnStartup.Checked
         My.Settings.Save()
+    End Sub
+
+    Private Sub ComboBox_Font_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox_Font.SelectedIndexChanged
+        If Not isLoading Then
+            'update the default font
+            Dim selectedFont As String = Me.ComboBox_Font.SelectedItem
+            My.Settings.defaultFont = selectedFont
+            My.Settings.Save()
+        End If
     End Sub
 
     Private Sub NumericUpDown_DefaultFontSize_ValueChanged(sender As Object, e As EventArgs) Handles NumericUpDown_DefaultFontSize.ValueChanged
@@ -64,6 +84,14 @@ Friend Class SettingsDialog
             'update the logging level
             My.Settings.loggingLevel = IIf(Me.CheckBox_logShowDebugMessages.Checked, Log.levels.debug.ToString(), Log.levels.info.ToString())
             My.Settings.Save()
+        End If
+    End Sub
+
+    Private Sub Button_ShowFontDialog_Click(sender As Object, e As EventArgs) Handles Button_ShowFontDialog.Click
+        Dim dlgResult As DialogResult = Me.FontDialog1.ShowDialog()
+        If dlgResult = DialogResult.OK Then
+            Me.ComboBox_Font.SelectedItem = Me.FontDialog1.Font.Name
+            Me.NumericUpDown_DefaultFontSize.Value = CInt(Me.FontDialog1.Font.Size)
         End If
     End Sub
 

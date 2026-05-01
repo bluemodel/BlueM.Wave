@@ -130,8 +130,9 @@ Friend Class DoubleSumCurve
         '---------
         Dim doppelsumme, gerade As Steema.TeeChart.Styles.Line
 
-        Me.ResultChart = New Steema.TeeChart.Chart()
-        Call Helpers.ChartSetDefaultFormat(Me.ResultChart)
+        Me.ResultChart = New Steema.TeeChart.TChart()
+        Call Helpers.ChartSetDefaultFormat(Me.ResultChart.Chart)
+        Me.ResultChart.Header.Visible = True
         Me.ResultChart.Header.Text = $"Double Sum Curve ({Me.ts_1.Title} / {Me.ts_2.Title})"
         Me.ResultChart.Legend.Visible = False
 
@@ -144,14 +145,14 @@ Friend Class DoubleSumCurve
 
         'Reihen
         '------
-        doppelsumme = New Steema.TeeChart.Styles.Line(Me.ResultChart)
+        doppelsumme = New Steema.TeeChart.Styles.Line(Me.ResultChart.Chart)
         doppelsumme.Title = $"Double Sum Curve {Me.ts_1.Title} - {Me.ts_2.Title}"
         doppelsumme.Pointer.Visible = True
         doppelsumme.Pointer.Style = Steema.TeeChart.Styles.PointerStyles.Circle
         doppelsumme.Pointer.HorizSize = 2
         doppelsumme.Pointer.VertSize = 2
 
-        gerade = New Steema.TeeChart.Styles.Line(Me.ResultChart)
+        gerade = New Steema.TeeChart.Styles.Line(Me.ResultChart.Chart)
         gerade.Title = "45° line"
         gerade.Color = Color.DarkGray
         gerade.LinePen.Style = Drawing2D.DashStyle.Dash

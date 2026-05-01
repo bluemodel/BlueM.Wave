@@ -241,13 +241,13 @@ Public Class Wave
                 If Parsers.TalsimClipboard.verifyFormat(clipboardtext) Then
                     'ask the user for confirmation
                     dlgres = MessageBox.Show($"TALSIM clipboard content detected!{eol}Load series in Wave?", "Load from clipboard", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
-                    If dlgres = Windows.Forms.DialogResult.Yes Then
+                    If dlgres = DialogResult.Yes Then
                         Call Me.LoadFromClipboard_TALSIM(clipboardtext)
                     End If
                 Else
                     'ask the user whether to attempt CSV import
                     dlgres = MessageBox.Show("Attempt to load clipboard text content in Wave as CSV data?", "Load from clipboard", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
-                    If dlgres = Windows.Forms.DialogResult.Yes Then
+                    If dlgres = DialogResult.Yes Then
                         'save as temp text file and then load file
                         Dim tmpfile As String = IO.Path.GetTempFileName()
                         Using writer As New IO.StreamWriter(tmpfile, False, Helpers.DefaultEncoding)
@@ -348,7 +348,7 @@ Public Class Wave
         exportDlg = New ExportDiag(Me.TimeSeries)
         dlgResult = exportDlg.ShowDialog()
 
-        If dlgResult <> Windows.Forms.DialogResult.OK Then
+        If dlgResult <> DialogResult.OK Then
             Exit Sub
         End If
 
@@ -423,7 +423,7 @@ Public Class Wave
                 'show dialog for editing metadata of a single series
                 Dim dlg As New MetadataDialog(tsList.First, fileType, keys)
                 dlgResult = dlg.ShowDialog()
-                If Not dlgResult = Windows.Forms.DialogResult.OK Then
+                If Not dlgResult = DialogResult.OK Then
                     Exit Sub
                 End If
                 'update metadata of series
@@ -432,7 +432,7 @@ Public Class Wave
                 'show dialog for editing metadata of multiple series
                 Dim dlg As New MultiMetadataDialog(tsList, fileType, keys)
                 dlgResult = dlg.ShowDialog()
-                If Not dlgResult = Windows.Forms.DialogResult.OK Then
+                If Not dlgResult = DialogResult.OK Then
                     Exit Sub
                 End If
                 'update metadata of series
@@ -467,7 +467,7 @@ Public Class Wave
 
             'Show dialog
             dlgResult = dlg.ShowDialog()
-            If dlgResult <> Windows.Forms.DialogResult.OK Then
+            If dlgResult <> DialogResult.OK Then
                 Exit Sub
             End If
 
@@ -534,7 +534,7 @@ Public Class Wave
 
             'Show Save dialog
             dlgResult = SaveFileDialog1.ShowDialog()
-            If dlgResult <> Windows.Forms.DialogResult.OK Then
+            If dlgResult <> DialogResult.OK Then
                 Exit Sub
             End If
 
@@ -691,7 +691,7 @@ Public Class Wave
         ' show the dialog and wait for user input
         dialogResult = dialog.ShowDialog()
 
-        If dialogResult = Windows.Forms.DialogResult.OK Then
+        If dialogResult = DialogResult.OK Then
             Return True
         Else
             Return False

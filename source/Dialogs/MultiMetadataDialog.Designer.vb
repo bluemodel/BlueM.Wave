@@ -22,101 +22,83 @@ Partial Class MultiMetadataDialog
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
-        Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle1 As DataGridViewCellStyle = New DataGridViewCellStyle()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(MultiMetadataDialog))
-        Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
-        Me.OK_Button = New System.Windows.Forms.Button()
-        Me.Cancel_Button = New System.Windows.Forms.Button()
-        Me.DataGridView1 = New System.Windows.Forms.DataGridView()
-        Me.NameColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.TableLayoutPanel1.SuspendLayout()
-        CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.SuspendLayout()
-        '
-        'TableLayoutPanel1
-        '
-        Me.TableLayoutPanel1.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TableLayoutPanel1.ColumnCount = 2
-        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-        Me.TableLayoutPanel1.Controls.Add(Me.OK_Button, 0, 0)
-        Me.TableLayoutPanel1.Controls.Add(Me.Cancel_Button, 1, 0)
-        Me.TableLayoutPanel1.Location = New System.Drawing.Point(317, 260)
-        Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
-        Me.TableLayoutPanel1.RowCount = 1
-        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-        Me.TableLayoutPanel1.Size = New System.Drawing.Size(146, 29)
-        Me.TableLayoutPanel1.TabIndex = 0
-        '
-        'OK_Button
-        '
-        Me.OK_Button.Anchor = System.Windows.Forms.AnchorStyles.None
-        Me.OK_Button.Location = New System.Drawing.Point(3, 3)
-        Me.OK_Button.Name = "OK_Button"
-        Me.OK_Button.Size = New System.Drawing.Size(67, 23)
-        Me.OK_Button.TabIndex = 0
-        Me.OK_Button.Text = "OK"
-        '
-        'Cancel_Button
-        '
-        Me.Cancel_Button.Anchor = System.Windows.Forms.AnchorStyles.None
-        Me.Cancel_Button.DialogResult = System.Windows.Forms.DialogResult.Cancel
-        Me.Cancel_Button.Location = New System.Drawing.Point(76, 3)
-        Me.Cancel_Button.Name = "Cancel_Button"
-        Me.Cancel_Button.Size = New System.Drawing.Size(67, 23)
-        Me.Cancel_Button.TabIndex = 1
-        Me.Cancel_Button.Text = "Cancel"
-        '
-        'DataGridView1
-        '
-        Me.DataGridView1.AllowUserToAddRows = False
-        Me.DataGridView1.AllowUserToDeleteRows = False
-        Me.DataGridView1.AllowUserToResizeRows = False
-        Me.DataGridView1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.DataGridView1.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.EnableAlwaysIncludeHeaderText
-        Me.DataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.DataGridView1.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.NameColumn})
-        Me.DataGridView1.Location = New System.Drawing.Point(13, 12)
-        Me.DataGridView1.Name = "DataGridView1"
-        Me.DataGridView1.RowHeadersWidth = 10
-        Me.DataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect
-        Me.DataGridView1.Size = New System.Drawing.Size(450, 242)
-        Me.DataGridView1.TabIndex = 1
-        '
-        'NameColumn
-        '
-        Me.NameColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells
-        DataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer))
-        Me.NameColumn.DefaultCellStyle = DataGridViewCellStyle1
-        Me.NameColumn.Frozen = True
-        Me.NameColumn.HeaderText = "Series"
-        Me.NameColumn.Name = "NameColumn"
-        Me.NameColumn.ReadOnly = True
-        Me.NameColumn.Width = 61
-        '
-        'MultiMetadataDialog
-        '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
-        Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(475, 301)
-        Me.Controls.Add(Me.DataGridView1)
-        Me.Controls.Add(Me.TableLayoutPanel1)
-        Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
-        Me.MaximizeBox = False
-        Me.MinimizeBox = False
-        Me.MinimumSize = New System.Drawing.Size(270, 340)
-        Me.Name = "MultiMetadataDialog"
-        Me.ShowInTaskbar = False
-        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = "Edit metadata"
-        Me.TableLayoutPanel1.ResumeLayout(False)
-        CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.ResumeLayout(False)
+        OK_Button = New Button()
+        Cancel_Button = New Button()
+        DataGridView1 = New DataGridView()
+        NameColumn = New DataGridViewTextBoxColumn()
+        CType(DataGridView1, ComponentModel.ISupportInitialize).BeginInit()
+        SuspendLayout()
+        ' 
+        ' OK_Button
+        ' 
+        OK_Button.Anchor = AnchorStyles.Bottom Or AnchorStyles.Right
+        OK_Button.Location = New Point(378, 308)
+        OK_Button.Name = "OK_Button"
+        OK_Button.Size = New Size(80, 27)
+        OK_Button.TabIndex = 0
+        OK_Button.Text = "OK"
+        ' 
+        ' Cancel_Button
+        ' 
+        Cancel_Button.Anchor = AnchorStyles.Bottom Or AnchorStyles.Right
+        Cancel_Button.DialogResult = DialogResult.Cancel
+        Cancel_Button.Location = New Point(464, 308)
+        Cancel_Button.Name = "Cancel_Button"
+        Cancel_Button.Size = New Size(80, 27)
+        Cancel_Button.TabIndex = 1
+        Cancel_Button.Text = "Cancel"
+        ' 
+        ' DataGridView1
+        ' 
+        DataGridView1.AllowUserToAddRows = False
+        DataGridView1.AllowUserToDeleteRows = False
+        DataGridView1.AllowUserToResizeRows = False
+        DataGridView1.Anchor = AnchorStyles.Top Or AnchorStyles.Bottom Or AnchorStyles.Left Or AnchorStyles.Right
+        DataGridView1.ClipboardCopyMode = DataGridViewClipboardCopyMode.EnableAlwaysIncludeHeaderText
+        DataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize
+        DataGridView1.Columns.AddRange(New DataGridViewColumn() {NameColumn})
+        DataGridView1.Location = New Point(15, 14)
+        DataGridView1.Margin = New Padding(4, 3, 4, 3)
+        DataGridView1.Name = "DataGridView1"
+        DataGridView1.RowHeadersWidth = 10
+        DataGridView1.SelectionMode = DataGridViewSelectionMode.CellSelect
+        DataGridView1.Size = New Size(525, 279)
+        DataGridView1.TabIndex = 1
+        ' 
+        ' NameColumn
+        ' 
+        NameColumn.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells
+        DataGridViewCellStyle1.BackColor = Color.FromArgb(CByte(224), CByte(224), CByte(224))
+        NameColumn.DefaultCellStyle = DataGridViewCellStyle1
+        NameColumn.Frozen = True
+        NameColumn.HeaderText = "Series"
+        NameColumn.Name = "NameColumn"
+        NameColumn.ReadOnly = True
+        NameColumn.Width = 62
+        ' 
+        ' MultiMetadataDialog
+        ' 
+        AutoScaleDimensions = New SizeF(7F, 15F)
+        AutoScaleMode = AutoScaleMode.Font
+        ClientSize = New Size(554, 347)
+        Controls.Add(Cancel_Button)
+        Controls.Add(DataGridView1)
+        Controls.Add(OK_Button)
+        Icon = CType(resources.GetObject("$this.Icon"), Icon)
+        Margin = New Padding(4, 3, 4, 3)
+        MaximizeBox = False
+        MinimizeBox = False
+        MinimumSize = New Size(312, 386)
+        Name = "MultiMetadataDialog"
+        ShowInTaskbar = False
+        StartPosition = FormStartPosition.CenterParent
+        Text = "Edit metadata"
+        CType(DataGridView1, ComponentModel.ISupportInitialize).EndInit()
+        ResumeLayout(False)
 
     End Sub
-    Friend WithEvents TableLayoutPanel1 As System.Windows.Forms.TableLayoutPanel
     Friend WithEvents OK_Button As System.Windows.Forms.Button
     Friend WithEvents Cancel_Button As System.Windows.Forms.Button
     Friend WithEvents DataGridView1 As System.Windows.Forms.DataGridView

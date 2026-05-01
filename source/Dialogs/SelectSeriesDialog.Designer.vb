@@ -22,241 +22,236 @@ Partial Class SelectSeriesDialog
     'Das Bearbeiten mit dem Code-Editor ist nicht möglich.
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
-        Me.components = New System.ComponentModel.Container()
+        components = New ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(SelectSeriesDialog))
-        Me.GroupBox_Selection = New System.Windows.Forms.GroupBox()
-        Me.PictureBox_SearchHelp = New System.Windows.Forms.PictureBox()
-        Me.Label_Selected = New System.Windows.Forms.Label()
-        Me.Label_Search = New System.Windows.Forms.Label()
-        Me.TextBox_Search = New System.Windows.Forms.TextBox()
-        Me.Label_Series = New System.Windows.Forms.Label()
-        Me.ListBox_Series = New System.Windows.Forms.ListBox()
-        Me.Button_SelectAll = New System.Windows.Forms.Button()
-        Me.Button_OK = New System.Windows.Forms.Button()
-        Me.Button_Cancel = New System.Windows.Forms.Button()
-        Me.Label1 = New System.Windows.Forms.Label()
-        Me.Label2 = New System.Windows.Forms.Label()
-        Me.Label_FileName = New System.Windows.Forms.Label()
-        Me.Label_FileType = New System.Windows.Forms.Label()
-        Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
-        Me.TextBox_TitleSuffix = New System.Windows.Forms.TextBox()
-        Me.Label_TitleSuffix = New System.Windows.Forms.Label()
-        Me.PictureBox_TitleSuffixHelp = New System.Windows.Forms.PictureBox()
-        Me.GroupBox_Selection.SuspendLayout()
-        CType(Me.PictureBox_SearchHelp, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.PictureBox_TitleSuffixHelp, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.SuspendLayout()
-        '
-        'GroupBox_Selection
-        '
-        Me.GroupBox_Selection.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.GroupBox_Selection.Controls.Add(Me.PictureBox_SearchHelp)
-        Me.GroupBox_Selection.Controls.Add(Me.Label_Selected)
-        Me.GroupBox_Selection.Controls.Add(Me.Label_Search)
-        Me.GroupBox_Selection.Controls.Add(Me.TextBox_Search)
-        Me.GroupBox_Selection.Controls.Add(Me.Label_Series)
-        Me.GroupBox_Selection.Controls.Add(Me.ListBox_Series)
-        Me.GroupBox_Selection.Controls.Add(Me.Button_SelectAll)
-        Me.GroupBox_Selection.Location = New System.Drawing.Point(12, 53)
-        Me.GroupBox_Selection.Margin = New System.Windows.Forms.Padding(0)
-        Me.GroupBox_Selection.Name = "GroupBox_Selection"
-        Me.GroupBox_Selection.Size = New System.Drawing.Size(219, 297)
-        Me.GroupBox_Selection.TabIndex = 4
-        Me.GroupBox_Selection.TabStop = False
-        Me.GroupBox_Selection.Text = "Series selection"
-        '
-        'PictureBox_SearchHelp
-        '
-        Me.PictureBox_SearchHelp.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.PictureBox_SearchHelp.Image = Global.BlueM.Wave.My.Resources.Resources.help
-        Me.PictureBox_SearchHelp.Location = New System.Drawing.Point(197, 19)
-        Me.PictureBox_SearchHelp.Name = "PictureBox_SearchHelp"
-        Me.PictureBox_SearchHelp.Size = New System.Drawing.Size(16, 16)
-        Me.PictureBox_SearchHelp.TabIndex = 7
-        Me.PictureBox_SearchHelp.TabStop = False
-        Me.ToolTip1.SetToolTip(Me.PictureBox_SearchHelp, "Wildcards: * matches any number of characters, ? matches a single character")
-        '
-        'Label_Selected
-        '
-        Me.Label_Selected.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Label_Selected.Location = New System.Drawing.Point(138, 267)
-        Me.Label_Selected.Name = "Label_Selected"
-        Me.Label_Selected.Size = New System.Drawing.Size(75, 13)
-        Me.Label_Selected.TabIndex = 5
-        Me.Label_Selected.Text = "0 selected"
-        Me.Label_Selected.TextAlign = System.Drawing.ContentAlignment.TopRight
-        '
-        'Label_Search
-        '
-        Me.Label_Search.AutoSize = True
-        Me.Label_Search.Location = New System.Drawing.Point(12, 21)
-        Me.Label_Search.Name = "Label_Search"
-        Me.Label_Search.Size = New System.Drawing.Size(44, 13)
-        Me.Label_Search.TabIndex = 0
-        Me.Label_Search.Text = "Search:"
-        '
-        'TextBox_Search
-        '
-        Me.TextBox_Search.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TextBox_Search.Location = New System.Drawing.Point(59, 18)
-        Me.TextBox_Search.Name = "TextBox_Search"
-        Me.TextBox_Search.Size = New System.Drawing.Size(132, 20)
-        Me.TextBox_Search.TabIndex = 1
-        '
-        'Label_Series
-        '
-        Me.Label_Series.AutoSize = True
-        Me.Label_Series.Location = New System.Drawing.Point(12, 46)
-        Me.Label_Series.Name = "Label_Series"
-        Me.Label_Series.Size = New System.Drawing.Size(83, 13)
-        Me.Label_Series.TabIndex = 2
-        Me.Label_Series.Text = "Available series:"
-        '
-        'ListBox_Series
-        '
-        Me.ListBox_Series.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ListBox_Series.FormattingEnabled = True
-        Me.ListBox_Series.Location = New System.Drawing.Point(15, 64)
-        Me.ListBox_Series.Name = "ListBox_Series"
-        Me.ListBox_Series.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended
-        Me.ListBox_Series.Size = New System.Drawing.Size(198, 186)
-        Me.ListBox_Series.TabIndex = 3
-        '
-        'Button_SelectAll
-        '
-        Me.Button_SelectAll.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.Button_SelectAll.Location = New System.Drawing.Point(15, 262)
-        Me.Button_SelectAll.Name = "Button_SelectAll"
-        Me.Button_SelectAll.Size = New System.Drawing.Size(73, 23)
-        Me.Button_SelectAll.TabIndex = 4
-        Me.Button_SelectAll.Text = "Select all"
-        Me.Button_SelectAll.UseVisualStyleBackColor = True
-        '
-        'Button_OK
-        '
-        Me.Button_OK.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Button_OK.DialogResult = System.Windows.Forms.DialogResult.OK
-        Me.Button_OK.Location = New System.Drawing.Point(75, 385)
-        Me.Button_OK.Name = "Button_OK"
-        Me.Button_OK.Size = New System.Drawing.Size(75, 23)
-        Me.Button_OK.TabIndex = 7
-        Me.Button_OK.Text = "OK"
-        Me.Button_OK.UseVisualStyleBackColor = True
-        '
-        'Button_Cancel
-        '
-        Me.Button_Cancel.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Button_Cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel
-        Me.Button_Cancel.Location = New System.Drawing.Point(156, 385)
-        Me.Button_Cancel.Name = "Button_Cancel"
-        Me.Button_Cancel.Size = New System.Drawing.Size(75, 23)
-        Me.Button_Cancel.TabIndex = 8
-        Me.Button_Cancel.Text = "Cancel"
-        Me.Button_Cancel.UseVisualStyleBackColor = True
-        '
-        'Label1
-        '
-        Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(12, 13)
-        Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(58, 13)
-        Me.Label1.TabIndex = 0
-        Me.Label1.Text = "File name: "
-        '
-        'Label2
-        '
-        Me.Label2.AutoSize = True
-        Me.Label2.Location = New System.Drawing.Point(12, 30)
-        Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(52, 13)
-        Me.Label2.TabIndex = 2
-        Me.Label2.Text = "File type: "
-        '
-        'Label_FileName
-        '
-        Me.Label_FileName.AutoSize = True
-        Me.Label_FileName.Location = New System.Drawing.Point(68, 13)
-        Me.Label_FileName.Name = "Label_FileName"
-        Me.Label_FileName.Size = New System.Drawing.Size(52, 13)
-        Me.Label_FileName.TabIndex = 1
-        Me.Label_FileName.Text = "File name"
-        '
-        'Label_FileType
-        '
-        Me.Label_FileType.AutoSize = True
-        Me.Label_FileType.Location = New System.Drawing.Point(68, 30)
-        Me.Label_FileType.Name = "Label_FileType"
-        Me.Label_FileType.Size = New System.Drawing.Size(46, 13)
-        Me.Label_FileType.TabIndex = 3
-        Me.Label_FileType.Text = "File type"
-        '
-        'TextBox_TitleSuffix
-        '
-        Me.TextBox_TitleSuffix.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TextBox_TitleSuffix.Location = New System.Drawing.Point(75, 356)
-        Me.TextBox_TitleSuffix.Name = "TextBox_TitleSuffix"
-        Me.TextBox_TitleSuffix.Size = New System.Drawing.Size(134, 20)
-        Me.TextBox_TitleSuffix.TabIndex = 6
-        '
-        'Label_TitleSuffix
-        '
-        Me.Label_TitleSuffix.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.Label_TitleSuffix.AutoSize = True
-        Me.Label_TitleSuffix.Location = New System.Drawing.Point(12, 359)
-        Me.Label_TitleSuffix.Name = "Label_TitleSuffix"
-        Me.Label_TitleSuffix.Size = New System.Drawing.Size(57, 13)
-        Me.Label_TitleSuffix.TabIndex = 5
-        Me.Label_TitleSuffix.Text = "Title suffix:"
-        '
-        'PictureBox_TitleSuffixHelp
-        '
-        Me.PictureBox_TitleSuffixHelp.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.PictureBox_TitleSuffixHelp.Image = Global.BlueM.Wave.My.Resources.Resources.help
-        Me.PictureBox_TitleSuffixHelp.Location = New System.Drawing.Point(215, 359)
-        Me.PictureBox_TitleSuffixHelp.Name = "PictureBox_TitleSuffixHelp"
-        Me.PictureBox_TitleSuffixHelp.Size = New System.Drawing.Size(16, 16)
-        Me.PictureBox_TitleSuffixHelp.TabIndex = 8
-        Me.PictureBox_TitleSuffixHelp.TabStop = False
-        Me.ToolTip1.SetToolTip(Me.PictureBox_TitleSuffixHelp, "The title suffix will be appended to each series' title during import")
-        '
-        'SelectSeriesDialog
-        '
-        Me.AcceptButton = Me.Button_OK
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
-        Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.CancelButton = Me.Button_Cancel
-        Me.ClientSize = New System.Drawing.Size(239, 420)
-        Me.Controls.Add(Me.PictureBox_TitleSuffixHelp)
-        Me.Controls.Add(Me.Label_TitleSuffix)
-        Me.Controls.Add(Me.TextBox_TitleSuffix)
-        Me.Controls.Add(Me.Label_FileType)
-        Me.Controls.Add(Me.Label_FileName)
-        Me.Controls.Add(Me.Label2)
-        Me.Controls.Add(Me.Label1)
-        Me.Controls.Add(Me.GroupBox_Selection)
-        Me.Controls.Add(Me.Button_OK)
-        Me.Controls.Add(Me.Button_Cancel)
-        Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
-        Me.MaximizeBox = False
-        Me.MinimizeBox = False
-        Me.MinimumSize = New System.Drawing.Size(220, 320)
-        Me.Name = "SelectSeriesDialog"
-        Me.ShowInTaskbar = False
-        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = "Import series from file"
-        Me.TopMost = True
-        Me.GroupBox_Selection.ResumeLayout(False)
-        Me.GroupBox_Selection.PerformLayout()
-        CType(Me.PictureBox_SearchHelp, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.PictureBox_TitleSuffixHelp, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.ResumeLayout(False)
-        Me.PerformLayout()
+        GroupBox_Selection = New GroupBox()
+        PictureBox_SearchHelp = New PictureBox()
+        Label_Selected = New Label()
+        Label_Search = New Label()
+        TextBox_Search = New TextBox()
+        Label_Series = New Label()
+        ListBox_Series = New ListBox()
+        Button_SelectAll = New Button()
+        Button_OK = New Button()
+        Button_Cancel = New Button()
+        Label1 = New Label()
+        Label2 = New Label()
+        Label_FileName = New Label()
+        Label_FileType = New Label()
+        ToolTip1 = New ToolTip(components)
+        PictureBox_TitleSuffixHelp = New PictureBox()
+        TextBox_TitleSuffix = New TextBox()
+        Label_TitleSuffix = New Label()
+        GroupBox_Selection.SuspendLayout()
+        CType(PictureBox_SearchHelp, ComponentModel.ISupportInitialize).BeginInit()
+        CType(PictureBox_TitleSuffixHelp, ComponentModel.ISupportInitialize).BeginInit()
+        SuspendLayout()
+        ' 
+        ' GroupBox_Selection
+        ' 
+        GroupBox_Selection.Anchor = AnchorStyles.Top Or AnchorStyles.Bottom Or AnchorStyles.Left Or AnchorStyles.Right
+        GroupBox_Selection.Controls.Add(PictureBox_SearchHelp)
+        GroupBox_Selection.Controls.Add(Label_Selected)
+        GroupBox_Selection.Controls.Add(Label_Search)
+        GroupBox_Selection.Controls.Add(TextBox_Search)
+        GroupBox_Selection.Controls.Add(Label_Series)
+        GroupBox_Selection.Controls.Add(ListBox_Series)
+        GroupBox_Selection.Controls.Add(Button_SelectAll)
+        GroupBox_Selection.Location = New Point(14, 61)
+        GroupBox_Selection.Name = "GroupBox_Selection"
+        GroupBox_Selection.Padding = New Padding(4, 3, 4, 3)
+        GroupBox_Selection.Size = New Size(255, 343)
+        GroupBox_Selection.TabIndex = 4
+        GroupBox_Selection.TabStop = False
+        GroupBox_Selection.Text = "Series selection"
+        ' 
+        ' PictureBox_SearchHelp
+        ' 
+        PictureBox_SearchHelp.Anchor = AnchorStyles.Top Or AnchorStyles.Right
+        PictureBox_SearchHelp.Image = CType(resources.GetObject("PictureBox_SearchHelp.Image"), Image)
+        PictureBox_SearchHelp.Location = New Point(230, 22)
+        PictureBox_SearchHelp.Name = "PictureBox_SearchHelp"
+        PictureBox_SearchHelp.Size = New Size(19, 18)
+        PictureBox_SearchHelp.TabIndex = 7
+        PictureBox_SearchHelp.TabStop = False
+        ToolTip1.SetToolTip(PictureBox_SearchHelp, "Wildcards: * matches any number of characters, ? matches a single character")
+        ' 
+        ' Label_Selected
+        ' 
+        Label_Selected.Anchor = AnchorStyles.Bottom Or AnchorStyles.Right
+        Label_Selected.Location = New Point(161, 308)
+        Label_Selected.Name = "Label_Selected"
+        Label_Selected.Size = New Size(88, 15)
+        Label_Selected.TabIndex = 5
+        Label_Selected.Text = "0 selected"
+        Label_Selected.TextAlign = ContentAlignment.TopRight
+        ' 
+        ' Label_Search
+        ' 
+        Label_Search.AutoSize = True
+        Label_Search.Location = New Point(14, 24)
+        Label_Search.Name = "Label_Search"
+        Label_Search.Size = New Size(45, 15)
+        Label_Search.TabIndex = 0
+        Label_Search.Text = "Search:"
+        ' 
+        ' TextBox_Search
+        ' 
+        TextBox_Search.Anchor = AnchorStyles.Top Or AnchorStyles.Left Or AnchorStyles.Right
+        TextBox_Search.Location = New Point(69, 21)
+        TextBox_Search.Name = "TextBox_Search"
+        TextBox_Search.Size = New Size(153, 23)
+        TextBox_Search.TabIndex = 1
+        ' 
+        ' Label_Series
+        ' 
+        Label_Series.AutoSize = True
+        Label_Series.Location = New Point(14, 53)
+        Label_Series.Name = "Label_Series"
+        Label_Series.Size = New Size(90, 15)
+        Label_Series.TabIndex = 2
+        Label_Series.Text = "Available series:"
+        ' 
+        ' ListBox_Series
+        ' 
+        ListBox_Series.Anchor = AnchorStyles.Top Or AnchorStyles.Bottom Or AnchorStyles.Left Or AnchorStyles.Right
+        ListBox_Series.FormattingEnabled = True
+        ListBox_Series.Location = New Point(18, 74)
+        ListBox_Series.Name = "ListBox_Series"
+        ListBox_Series.SelectionMode = SelectionMode.MultiExtended
+        ListBox_Series.Size = New Size(230, 214)
+        ListBox_Series.TabIndex = 3
+        ' 
+        ' Button_SelectAll
+        ' 
+        Button_SelectAll.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
+        Button_SelectAll.Location = New Point(18, 302)
+        Button_SelectAll.Name = "Button_SelectAll"
+        Button_SelectAll.Size = New Size(85, 27)
+        Button_SelectAll.TabIndex = 4
+        Button_SelectAll.Text = "Select all"
+        Button_SelectAll.UseVisualStyleBackColor = True
+        ' 
+        ' Button_OK
+        ' 
+        Button_OK.Anchor = AnchorStyles.Bottom Or AnchorStyles.Right
+        Button_OK.DialogResult = DialogResult.OK
+        Button_OK.Location = New Point(103, 446)
+        Button_OK.Name = "Button_OK"
+        Button_OK.Size = New Size(80, 27)
+        Button_OK.TabIndex = 7
+        Button_OK.Text = "OK"
+        Button_OK.UseVisualStyleBackColor = True
+        ' 
+        ' Button_Cancel
+        ' 
+        Button_Cancel.Anchor = AnchorStyles.Bottom Or AnchorStyles.Right
+        Button_Cancel.DialogResult = DialogResult.Cancel
+        Button_Cancel.Location = New Point(189, 446)
+        Button_Cancel.Name = "Button_Cancel"
+        Button_Cancel.Size = New Size(80, 27)
+        Button_Cancel.TabIndex = 8
+        Button_Cancel.Text = "Cancel"
+        Button_Cancel.UseVisualStyleBackColor = True
+        ' 
+        ' Label1
+        ' 
+        Label1.AutoSize = True
+        Label1.Location = New Point(14, 15)
+        Label1.Name = "Label1"
+        Label1.Size = New Size(64, 15)
+        Label1.TabIndex = 0
+        Label1.Text = "File name: "
+        ' 
+        ' Label2
+        ' 
+        Label2.AutoSize = True
+        Label2.Location = New Point(14, 35)
+        Label2.Name = "Label2"
+        Label2.Size = New Size(57, 15)
+        Label2.TabIndex = 2
+        Label2.Text = "File type: "
+        ' 
+        ' Label_FileName
+        ' 
+        Label_FileName.AutoSize = True
+        Label_FileName.Location = New Point(79, 15)
+        Label_FileName.Name = "Label_FileName"
+        Label_FileName.Size = New Size(58, 15)
+        Label_FileName.TabIndex = 1
+        Label_FileName.Text = "File name"
+        ' 
+        ' Label_FileType
+        ' 
+        Label_FileType.AutoSize = True
+        Label_FileType.Location = New Point(79, 35)
+        Label_FileType.Name = "Label_FileType"
+        Label_FileType.Size = New Size(51, 15)
+        Label_FileType.TabIndex = 3
+        Label_FileType.Text = "File type"
+        ' 
+        ' PictureBox_TitleSuffixHelp
+        ' 
+        PictureBox_TitleSuffixHelp.Anchor = AnchorStyles.Bottom Or AnchorStyles.Right
+        PictureBox_TitleSuffixHelp.Image = CType(resources.GetObject("PictureBox_TitleSuffixHelp.Image"), Image)
+        PictureBox_TitleSuffixHelp.Location = New Point(251, 414)
+        PictureBox_TitleSuffixHelp.Name = "PictureBox_TitleSuffixHelp"
+        PictureBox_TitleSuffixHelp.Size = New Size(19, 18)
+        PictureBox_TitleSuffixHelp.TabIndex = 8
+        PictureBox_TitleSuffixHelp.TabStop = False
+        ToolTip1.SetToolTip(PictureBox_TitleSuffixHelp, "The title suffix will be appended to each series' title during import")
+        ' 
+        ' TextBox_TitleSuffix
+        ' 
+        TextBox_TitleSuffix.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left Or AnchorStyles.Right
+        TextBox_TitleSuffix.Location = New Point(88, 411)
+        TextBox_TitleSuffix.Name = "TextBox_TitleSuffix"
+        TextBox_TitleSuffix.Size = New Size(156, 23)
+        TextBox_TitleSuffix.TabIndex = 6
+        ' 
+        ' Label_TitleSuffix
+        ' 
+        Label_TitleSuffix.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
+        Label_TitleSuffix.AutoSize = True
+        Label_TitleSuffix.Location = New Point(14, 414)
+        Label_TitleSuffix.Name = "Label_TitleSuffix"
+        Label_TitleSuffix.Size = New Size(64, 15)
+        Label_TitleSuffix.TabIndex = 5
+        Label_TitleSuffix.Text = "Title suffix:"
+        ' 
+        ' SelectSeriesDialog
+        ' 
+        AcceptButton = Button_OK
+        AutoScaleDimensions = New SizeF(7F, 15F)
+        AutoScaleMode = AutoScaleMode.Font
+        CancelButton = Button_Cancel
+        ClientSize = New Size(279, 485)
+        Controls.Add(PictureBox_TitleSuffixHelp)
+        Controls.Add(Label_TitleSuffix)
+        Controls.Add(TextBox_TitleSuffix)
+        Controls.Add(Label_FileType)
+        Controls.Add(Label_FileName)
+        Controls.Add(Label2)
+        Controls.Add(Label1)
+        Controls.Add(GroupBox_Selection)
+        Controls.Add(Button_OK)
+        Controls.Add(Button_Cancel)
+        Icon = CType(resources.GetObject("$this.Icon"), Icon)
+        Margin = New Padding(4, 3, 4, 3)
+        MaximizeBox = False
+        MinimizeBox = False
+        MinimumSize = New Size(254, 363)
+        Name = "SelectSeriesDialog"
+        ShowInTaskbar = False
+        StartPosition = FormStartPosition.CenterParent
+        Text = "Import series from file"
+        TopMost = True
+        GroupBox_Selection.ResumeLayout(False)
+        GroupBox_Selection.PerformLayout()
+        CType(PictureBox_SearchHelp, ComponentModel.ISupportInitialize).EndInit()
+        CType(PictureBox_TitleSuffixHelp, ComponentModel.ISupportInitialize).EndInit()
+        ResumeLayout(False)
+        PerformLayout()
 
     End Sub
     Private WithEvents Button_OK As System.Windows.Forms.Button

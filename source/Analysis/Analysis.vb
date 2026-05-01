@@ -15,6 +15,8 @@
 'You should have received a copy of the GNU Lesser General Public License
 'along with this program.  If not, see <https://www.gnu.org/licenses/>.
 '
+Imports System.Data
+
 ''' <summary>
 ''' Abstract base class for analysis functions
 ''' </summary>
@@ -65,7 +67,7 @@ Friend MustInherit Class Analysis
     ''' is shown in a separate window if `hasResultChart` is True
     ''' </summary>
     ''' <remarks>Optional</remarks>
-    Protected ResultChart As Steema.TeeChart.Chart
+    Protected ResultChart As Steema.TeeChart.TChart
 
     ''' <summary>
     ''' List of result series
@@ -144,7 +146,7 @@ Friend MustInherit Class Analysis
     ''' Analysis result chart
     ''' </summary>
     ''' <remarks>Optional</remarks>
-    Public ReadOnly Property getResultChart() As Steema.TeeChart.Chart
+    Public ReadOnly Property getResultChart() As Steema.TeeChart.TChart
         Get
             Return Me.ResultChart
         End Get

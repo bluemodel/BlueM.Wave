@@ -1,4 +1,4 @@
-﻿'BlueM.Wave
+'BlueM.Wave
 'Copyright (C) BlueM Dev Group
 '<https://www.bluemodel.org>
 '
@@ -15,6 +15,8 @@
 'You should have received a copy of the GNU Lesser General Public License
 'along with this program.  If not, see <https://www.gnu.org/licenses/>.
 '
+Imports System.Data
+
 ''' <summary>
 ''' Window for displaying an analysis result table
 ''' </summary>

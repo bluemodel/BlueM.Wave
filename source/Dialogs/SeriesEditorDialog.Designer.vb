@@ -1,4 +1,4 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class SeriesEditorDialog
     Inherits System.Windows.Forms.Form
 
@@ -22,137 +22,136 @@ Partial Class SeriesEditorDialog
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-        Dim Label_Title As System.Windows.Forms.Label
+        Dim Label_Title As Label
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(SeriesEditorDialog))
-        Me.DataGridView1 = New System.Windows.Forms.DataGridView
-        Me.ColumnDate = New System.Windows.Forms.DataGridViewTextBoxColumn
-        Me.ColumnValue = New System.Windows.Forms.DataGridViewTextBoxColumn
-        Me.Button_Paste = New System.Windows.Forms.Button
-        Me.Button_OK = New System.Windows.Forms.Button
-        Me.TextBox_Title = New System.Windows.Forms.TextBox
-        Me.Label_Unit = New System.Windows.Forms.Label
-        Me.TextBox_Unit = New System.Windows.Forms.TextBox
-        Me.Label_Help = New System.Windows.Forms.Label
-        Label_Title = New System.Windows.Forms.Label
-        CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.SuspendLayout()
-        '
-        'Label_Title
-        '
+        DataGridView1 = New DataGridView()
+        ColumnDate = New DataGridViewTextBoxColumn()
+        ColumnValue = New DataGridViewTextBoxColumn()
+        Button_Paste = New Button()
+        Button_OK = New Button()
+        TextBox_Title = New TextBox()
+        Label_Unit = New Label()
+        TextBox_Unit = New TextBox()
+        Label_Help = New Label()
+        Label_Title = New Label()
+        CType(DataGridView1, ComponentModel.ISupportInitialize).BeginInit()
+        SuspendLayout()
+        ' 
+        ' Label_Title
+        ' 
         Label_Title.AutoSize = True
-        Label_Title.Location = New System.Drawing.Point(9, 15)
+        Label_Title.Location = New Point(10, 17)
         Label_Title.Name = "Label_Title"
-        Label_Title.Size = New System.Drawing.Size(30, 13)
+        Label_Title.Size = New Size(32, 15)
         Label_Title.TabIndex = 0
         Label_Title.Text = "Title:"
-        '
-        'DataGridView1
-        '
-        Me.DataGridView1.AllowUserToResizeRows = False
-        Me.DataGridView1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-                    Or System.Windows.Forms.AnchorStyles.Left) _
-                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.DataGridView1.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells
-        Me.DataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.DataGridView1.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.ColumnDate, Me.ColumnValue})
-        Me.DataGridView1.Location = New System.Drawing.Point(12, 96)
-        Me.DataGridView1.Name = "DataGridView1"
-        Me.DataGridView1.Size = New System.Drawing.Size(268, 193)
-        Me.DataGridView1.TabIndex = 6
-        '
-        'ColumnDate
-        '
-        Me.ColumnDate.HeaderText = "Date"
-        Me.ColumnDate.Name = "ColumnDate"
-        Me.ColumnDate.Width = 55
-        '
-        'ColumnValue
-        '
-        Me.ColumnValue.HeaderText = "Value"
-        Me.ColumnValue.Name = "ColumnValue"
-        Me.ColumnValue.Width = 59
-        '
-        'Button_Paste
-        '
-        Me.Button_Paste.Image = Global.BlueM.Wave.My.Resources.Resources.page_paste
-        Me.Button_Paste.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.Button_Paste.Location = New System.Drawing.Point(12, 66)
-        Me.Button_Paste.Name = "Button_Paste"
-        Me.Button_Paste.Size = New System.Drawing.Size(75, 24)
-        Me.Button_Paste.TabIndex = 4
-        Me.Button_Paste.Text = "Paste"
-        Me.Button_Paste.TextAlign = System.Drawing.ContentAlignment.MiddleRight
-        Me.Button_Paste.UseVisualStyleBackColor = True
-        '
-        'Button_OK
-        '
-        Me.Button_OK.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Button_OK.DialogResult = System.Windows.Forms.DialogResult.OK
-        Me.Button_OK.Location = New System.Drawing.Point(205, 295)
-        Me.Button_OK.Name = "Button_OK"
-        Me.Button_OK.Size = New System.Drawing.Size(75, 23)
-        Me.Button_OK.TabIndex = 7
-        Me.Button_OK.Text = "OK"
-        Me.Button_OK.UseVisualStyleBackColor = True
-        '
-        'TextBox_Title
-        '
-        Me.TextBox_Title.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TextBox_Title.Location = New System.Drawing.Point(57, 12)
-        Me.TextBox_Title.Name = "TextBox_Title"
-        Me.TextBox_Title.Size = New System.Drawing.Size(223, 20)
-        Me.TextBox_Title.TabIndex = 1
-        '
-        'Label_Unit
-        '
-        Me.Label_Unit.AutoSize = True
-        Me.Label_Unit.Location = New System.Drawing.Point(9, 43)
-        Me.Label_Unit.Name = "Label_Unit"
-        Me.Label_Unit.Size = New System.Drawing.Size(29, 13)
-        Me.Label_Unit.TabIndex = 2
-        Me.Label_Unit.Text = "Unit:"
-        '
-        'TextBox_Unit
-        '
-        Me.TextBox_Unit.Location = New System.Drawing.Point(57, 40)
-        Me.TextBox_Unit.Name = "TextBox_Unit"
-        Me.TextBox_Unit.Size = New System.Drawing.Size(100, 20)
-        Me.TextBox_Unit.TabIndex = 3
-        Me.TextBox_Unit.Text = "-"
-        '
-        'Label_Help
-        '
-        Me.Label_Help.ForeColor = System.Drawing.SystemColors.ControlDarkDark
-        Me.Label_Help.Location = New System.Drawing.Point(94, 65)
-        Me.Label_Help.Name = "Label_Help"
-        Me.Label_Help.Size = New System.Drawing.Size(185, 26)
-        Me.Label_Help.TabIndex = 5
-        Me.Label_Help.Text = "accepts two adjacent columns (dates and values) from Excel"
-        '
-        'SeriesEditorDialog
-        '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
-        Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(291, 327)
-        Me.Controls.Add(Label_Title)
-        Me.Controls.Add(Me.TextBox_Title)
-        Me.Controls.Add(Me.Label_Unit)
-        Me.Controls.Add(Me.TextBox_Unit)
-        Me.Controls.Add(Me.Button_Paste)
-        Me.Controls.Add(Me.Label_Help)
-        Me.Controls.Add(Me.DataGridView1)
-        Me.Controls.Add(Me.Button_OK)
-        Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
-        Me.MaximizeBox = False
-        Me.MinimizeBox = False
-        Me.Name = "SeriesEditorDialog"
-        Me.ShowInTaskbar = False
-        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = "Enter time series"
-        CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.ResumeLayout(False)
-        Me.PerformLayout()
+        ' 
+        ' DataGridView1
+        ' 
+        DataGridView1.AllowUserToResizeRows = False
+        DataGridView1.Anchor = AnchorStyles.Top Or AnchorStyles.Bottom Or AnchorStyles.Left Or AnchorStyles.Right
+        DataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells
+        DataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize
+        DataGridView1.Columns.AddRange(New DataGridViewColumn() {ColumnDate, ColumnValue})
+        DataGridView1.Location = New Point(14, 111)
+        DataGridView1.Name = "DataGridView1"
+        DataGridView1.Size = New Size(313, 223)
+        DataGridView1.TabIndex = 6
+        ' 
+        ' ColumnDate
+        ' 
+        ColumnDate.HeaderText = "Date"
+        ColumnDate.Name = "ColumnDate"
+        ColumnDate.Width = 56
+        ' 
+        ' ColumnValue
+        ' 
+        ColumnValue.HeaderText = "Value"
+        ColumnValue.Name = "ColumnValue"
+        ColumnValue.Width = 60
+        ' 
+        ' Button_Paste
+        ' 
+        Button_Paste.Image = CType(resources.GetObject("Button_Paste.Image"), Image)
+        Button_Paste.ImageAlign = ContentAlignment.MiddleLeft
+        Button_Paste.Location = New Point(14, 75)
+        Button_Paste.Name = "Button_Paste"
+        Button_Paste.Size = New Size(80, 27)
+        Button_Paste.TabIndex = 4
+        Button_Paste.Text = "Paste"
+        Button_Paste.TextAlign = ContentAlignment.MiddleRight
+        Button_Paste.UseVisualStyleBackColor = True
+        ' 
+        ' Button_OK
+        ' 
+        Button_OK.Anchor = AnchorStyles.Bottom Or AnchorStyles.Right
+        Button_OK.DialogResult = DialogResult.OK
+        Button_OK.Location = New Point(248, 340)
+        Button_OK.Name = "Button_OK"
+        Button_OK.Size = New Size(80, 27)
+        Button_OK.TabIndex = 7
+        Button_OK.Text = "OK"
+        Button_OK.UseVisualStyleBackColor = True
+        ' 
+        ' TextBox_Title
+        ' 
+        TextBox_Title.Anchor = AnchorStyles.Top Or AnchorStyles.Left Or AnchorStyles.Right
+        TextBox_Title.Location = New Point(66, 14)
+        TextBox_Title.Name = "TextBox_Title"
+        TextBox_Title.Size = New Size(259, 23)
+        TextBox_Title.TabIndex = 1
+        ' 
+        ' Label_Unit
+        ' 
+        Label_Unit.AutoSize = True
+        Label_Unit.Location = New Point(10, 50)
+        Label_Unit.Name = "Label_Unit"
+        Label_Unit.Size = New Size(32, 15)
+        Label_Unit.TabIndex = 2
+        Label_Unit.Text = "Unit:"
+        ' 
+        ' TextBox_Unit
+        ' 
+        TextBox_Unit.Location = New Point(66, 46)
+        TextBox_Unit.Name = "TextBox_Unit"
+        TextBox_Unit.Size = New Size(116, 23)
+        TextBox_Unit.TabIndex = 3
+        TextBox_Unit.Text = "-"
+        ' 
+        ' Label_Help
+        ' 
+        Label_Help.ForeColor = SystemColors.ControlDarkDark
+        Label_Help.Location = New Point(110, 75)
+        Label_Help.Margin = New Padding(4, 0, 4, 0)
+        Label_Help.Name = "Label_Help"
+        Label_Help.Size = New Size(216, 30)
+        Label_Help.TabIndex = 5
+        Label_Help.Text = "accepts two adjacent columns (dates and values) from Excel"
+        ' 
+        ' SeriesEditorDialog
+        ' 
+        AutoScaleDimensions = New SizeF(7F, 15F)
+        AutoScaleMode = AutoScaleMode.Font
+        ClientSize = New Size(340, 377)
+        Controls.Add(Label_Title)
+        Controls.Add(TextBox_Title)
+        Controls.Add(Label_Unit)
+        Controls.Add(TextBox_Unit)
+        Controls.Add(Button_Paste)
+        Controls.Add(Label_Help)
+        Controls.Add(DataGridView1)
+        Controls.Add(Button_OK)
+        Icon = CType(resources.GetObject("$this.Icon"), Icon)
+        Margin = New Padding(4, 3, 4, 3)
+        MaximizeBox = False
+        MinimizeBox = False
+        Name = "SeriesEditorDialog"
+        ShowInTaskbar = False
+        StartPosition = FormStartPosition.CenterParent
+        Text = "Enter time series"
+        CType(DataGridView1, ComponentModel.ISupportInitialize).EndInit()
+        ResumeLayout(False)
+        PerformLayout()
 
     End Sub
     Friend WithEvents ColumnDate As System.Windows.Forms.DataGridViewTextBoxColumn

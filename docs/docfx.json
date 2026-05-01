@@ -4,14 +4,14 @@
       "src": [
         {
           "files": [
-            "Wave.exe"
+            "Wave.dll"
           ],
-          "src": "../source/bin/x64/Release"
+          "src": "../source/bin/x64/Release/net9.0-windows"
         }
       ],
       "dest": "api",
       "properties": {
-          "TargetFramework": "v4.8"
+          "TargetFramework": "net9.0"
       },
       "disableGitFeatures": false,
       "disableDefaultFilter": false

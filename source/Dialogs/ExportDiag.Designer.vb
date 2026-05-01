@@ -22,111 +22,110 @@ Partial Class ExportDiag
     'Das Bearbeiten mit dem Code-Editor ist nicht möglich.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-        Dim Label_Format As System.Windows.Forms.Label
-        Dim Label_Series As System.Windows.Forms.Label
+        Dim Label_Format As Label
+        Dim Label_Series As Label
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(ExportDiag))
-        Me.ListBox_Series = New System.Windows.Forms.ListBox()
-        Me.Button_OK = New System.Windows.Forms.Button()
-        Me.ComboBox_Format = New System.Windows.Forms.ComboBox()
-        Me.Button_Cancel = New System.Windows.Forms.Button()
-        Me.Button_SelectAll = New System.Windows.Forms.Button()
-        Label_Format = New System.Windows.Forms.Label()
-        Label_Series = New System.Windows.Forms.Label()
-        Me.SuspendLayout()
-        '
-        'Label_Format
-        '
+        ListBox_Series = New ListBox()
+        Button_OK = New Button()
+        ComboBox_Format = New ComboBox()
+        Button_Cancel = New Button()
+        Button_SelectAll = New Button()
+        Label_Format = New Label()
+        Label_Series = New Label()
+        SuspendLayout()
+        ' 
+        ' Label_Format
+        ' 
         Label_Format.AutoSize = True
-        Label_Format.Location = New System.Drawing.Point(12, 12)
+        Label_Format.Location = New Point(14, 14)
         Label_Format.Name = "Label_Format"
-        Label_Format.Size = New System.Drawing.Size(42, 13)
+        Label_Format.Size = New Size(48, 15)
         Label_Format.TabIndex = 3
         Label_Format.Text = "Format:"
-        '
-        'Label_Series
-        '
+        ' 
+        ' Label_Series
+        ' 
         Label_Series.AutoSize = True
-        Label_Series.Location = New System.Drawing.Point(12, 46)
+        Label_Series.Location = New Point(14, 53)
         Label_Series.Name = "Label_Series"
-        Label_Series.Size = New System.Drawing.Size(39, 13)
+        Label_Series.Size = New Size(40, 15)
         Label_Series.TabIndex = 4
         Label_Series.Text = "Series:"
-        '
-        'ListBox_Series
-        '
-        Me.ListBox_Series.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ListBox_Series.FormattingEnabled = True
-        Me.ListBox_Series.Location = New System.Drawing.Point(12, 62)
-        Me.ListBox_Series.Name = "ListBox_Series"
-        Me.ListBox_Series.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended
-        Me.ListBox_Series.Size = New System.Drawing.Size(170, 108)
-        Me.ListBox_Series.TabIndex = 0
-        '
-        'Button_OK
-        '
-        Me.Button_OK.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Button_OK.DialogResult = System.Windows.Forms.DialogResult.OK
-        Me.Button_OK.Location = New System.Drawing.Point(26, 186)
-        Me.Button_OK.Name = "Button_OK"
-        Me.Button_OK.Size = New System.Drawing.Size(75, 23)
-        Me.Button_OK.TabIndex = 1
-        Me.Button_OK.Text = "Ok"
-        Me.Button_OK.UseVisualStyleBackColor = True
-        '
-        'ComboBox_Format
-        '
-        Me.ComboBox_Format.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.ComboBox_Format.FormattingEnabled = True
-        Me.ComboBox_Format.Location = New System.Drawing.Point(60, 9)
-        Me.ComboBox_Format.Name = "ComboBox_Format"
-        Me.ComboBox_Format.Size = New System.Drawing.Size(121, 21)
-        Me.ComboBox_Format.TabIndex = 2
-        '
-        'Button_Cancel
-        '
-        Me.Button_Cancel.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Button_Cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel
-        Me.Button_Cancel.Location = New System.Drawing.Point(107, 186)
-        Me.Button_Cancel.Name = "Button_Cancel"
-        Me.Button_Cancel.Size = New System.Drawing.Size(75, 23)
-        Me.Button_Cancel.TabIndex = 5
-        Me.Button_Cancel.Text = "Cancel"
-        Me.Button_Cancel.UseVisualStyleBackColor = True
-        '
-        'Button_SelectAll
-        '
-        Me.Button_SelectAll.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Button_SelectAll.Location = New System.Drawing.Point(121, 36)
-        Me.Button_SelectAll.Name = "Button_SelectAll"
-        Me.Button_SelectAll.Size = New System.Drawing.Size(61, 23)
-        Me.Button_SelectAll.TabIndex = 5
-        Me.Button_SelectAll.Text = "Select All"
-        Me.Button_SelectAll.UseVisualStyleBackColor = True
-        '
-        'ExportDiag
-        '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
-        Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(194, 221)
-        Me.Controls.Add(Label_Format)
-        Me.Controls.Add(Me.ComboBox_Format)
-        Me.Controls.Add(Label_Series)
-        Me.Controls.Add(Me.Button_SelectAll)
-        Me.Controls.Add(Me.ListBox_Series)
-        Me.Controls.Add(Me.Button_OK)
-        Me.Controls.Add(Me.Button_Cancel)
-        Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
-        Me.MaximizeBox = False
-        Me.MinimizeBox = False
-        Me.MinimumSize = New System.Drawing.Size(210, 260)
-        Me.Name = "ExportDiag"
-        Me.ShowInTaskbar = False
-        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = "Export time series"
-        Me.ResumeLayout(False)
-        Me.PerformLayout()
+        ' 
+        ' ListBox_Series
+        ' 
+        ListBox_Series.Anchor = AnchorStyles.Top Or AnchorStyles.Bottom Or AnchorStyles.Left Or AnchorStyles.Right
+        ListBox_Series.FormattingEnabled = True
+        ListBox_Series.Location = New Point(14, 72)
+        ListBox_Series.Name = "ListBox_Series"
+        ListBox_Series.SelectionMode = SelectionMode.MultiExtended
+        ListBox_Series.Size = New Size(198, 124)
+        ListBox_Series.TabIndex = 0
+        ' 
+        ' Button_OK
+        ' 
+        Button_OK.Anchor = AnchorStyles.Bottom Or AnchorStyles.Right
+        Button_OK.DialogResult = DialogResult.OK
+        Button_OK.Location = New Point(46, 215)
+        Button_OK.Name = "Button_OK"
+        Button_OK.Size = New Size(80, 27)
+        Button_OK.TabIndex = 1
+        Button_OK.Text = "Ok"
+        Button_OK.UseVisualStyleBackColor = True
+        ' 
+        ' ComboBox_Format
+        ' 
+        ComboBox_Format.DropDownStyle = ComboBoxStyle.DropDownList
+        ComboBox_Format.FormattingEnabled = True
+        ComboBox_Format.Location = New Point(70, 10)
+        ComboBox_Format.Name = "ComboBox_Format"
+        ComboBox_Format.Size = New Size(140, 23)
+        ComboBox_Format.TabIndex = 2
+        ' 
+        ' Button_Cancel
+        ' 
+        Button_Cancel.Anchor = AnchorStyles.Bottom Or AnchorStyles.Right
+        Button_Cancel.DialogResult = DialogResult.Cancel
+        Button_Cancel.Location = New Point(132, 215)
+        Button_Cancel.Name = "Button_Cancel"
+        Button_Cancel.Size = New Size(80, 27)
+        Button_Cancel.TabIndex = 5
+        Button_Cancel.Text = "Cancel"
+        Button_Cancel.UseVisualStyleBackColor = True
+        ' 
+        ' Button_SelectAll
+        ' 
+        Button_SelectAll.Anchor = AnchorStyles.Top Or AnchorStyles.Right
+        Button_SelectAll.Location = New Point(132, 39)
+        Button_SelectAll.Name = "Button_SelectAll"
+        Button_SelectAll.Size = New Size(80, 27)
+        Button_SelectAll.TabIndex = 5
+        Button_SelectAll.Text = "Select All"
+        Button_SelectAll.UseVisualStyleBackColor = True
+        ' 
+        ' ExportDiag
+        ' 
+        AutoScaleDimensions = New SizeF(7F, 15F)
+        AutoScaleMode = AutoScaleMode.Font
+        ClientSize = New Size(226, 255)
+        Controls.Add(Label_Format)
+        Controls.Add(ComboBox_Format)
+        Controls.Add(Label_Series)
+        Controls.Add(Button_SelectAll)
+        Controls.Add(ListBox_Series)
+        Controls.Add(Button_OK)
+        Controls.Add(Button_Cancel)
+        Icon = CType(resources.GetObject("$this.Icon"), Icon)
+        Margin = New Padding(4, 3, 4, 3)
+        MaximizeBox = False
+        MinimizeBox = False
+        MinimumSize = New Size(242, 294)
+        Name = "ExportDiag"
+        ShowInTaskbar = False
+        StartPosition = FormStartPosition.CenterParent
+        Text = "Export time series"
+        ResumeLayout(False)
+        PerformLayout()
 
     End Sub
     Friend WithEvents ListBox_Series As System.Windows.Forms.ListBox

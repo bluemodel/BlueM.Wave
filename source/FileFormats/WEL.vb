@@ -92,6 +92,7 @@ Namespace Fileformats
             Me.Dateformat = Helpers.DateFormats("WEL")
             Me.DecimalSeparator = Constants.period
             Me.DateTimeLength = 17
+            Me.Encoding = Text.Encoding.GetEncoding("iso-8859-1")
 
             Call Me.readSeriesInfo()
 

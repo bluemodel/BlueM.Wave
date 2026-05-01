@@ -20,6 +20,7 @@ jobs:
         uses: actions/checkout@v6
         with: 
           repository: bluemodel/BlueM.Datasets
+          ref: net
           path: BlueM.Datasets
           
       - name: Add msbuild to PATH
@@ -34,7 +35,7 @@ jobs:
         
       - name: Run Tests
         run: |
-          dotnet test BlueM.Wave\tests\bin\x64\Debug\Wave.Tests.dll --settings BlueM.Wave\tests\tests.runsettings
+          dotnet test BlueM.Wave\tests\bin\x64\Debug\net9.0-windows\Wave.Tests.dll --settings BlueM.Wave\tests\tests.runsettings
           
       - name: Upload test results
         if: always()

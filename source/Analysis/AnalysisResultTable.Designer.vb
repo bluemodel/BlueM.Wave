@@ -23,78 +23,78 @@ Partial Class AnalysisResultTable
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(AnalysisResultTable))
-        Me.DataGridView1 = New System.Windows.Forms.DataGridView()
-        Me.GroupBox1 = New System.Windows.Forms.GroupBox()
-        Me.ToolStrip1 = New System.Windows.Forms.ToolStrip()
-        Me.CopyToolStripButton = New System.Windows.Forms.ToolStripButton()
-        CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.GroupBox1.SuspendLayout()
-        Me.ToolStrip1.SuspendLayout()
-        Me.SuspendLayout()
-        '
-        'DataGridView1
-        '
-        Me.DataGridView1.AllowUserToAddRows = False
-        Me.DataGridView1.AllowUserToDeleteRows = False
-        Me.DataGridView1.AllowUserToOrderColumns = True
-        Me.DataGridView1.AllowUserToResizeRows = False
-        Me.DataGridView1.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.EnableAlwaysIncludeHeaderText
-        Me.DataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.DataGridView1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.DataGridView1.Location = New System.Drawing.Point(3, 16)
-        Me.DataGridView1.Name = "DataGridView1"
-        Me.DataGridView1.ReadOnly = True
-        Me.DataGridView1.RowHeadersVisible = False
-        Me.DataGridView1.Size = New System.Drawing.Size(769, 391)
-        Me.DataGridView1.TabIndex = 0
-        '
-        'GroupBox1
-        '
-        Me.GroupBox1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.GroupBox1.Controls.Add(Me.DataGridView1)
-        Me.GroupBox1.Location = New System.Drawing.Point(13, 28)
-        Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Size = New System.Drawing.Size(775, 410)
-        Me.GroupBox1.TabIndex = 1
-        Me.GroupBox1.TabStop = False
-        Me.GroupBox1.Text = "GroupBox1"
-        '
-        'ToolStrip1
-        '
-        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.CopyToolStripButton})
-        Me.ToolStrip1.Location = New System.Drawing.Point(0, 0)
-        Me.ToolStrip1.Name = "ToolStrip1"
-        Me.ToolStrip1.Size = New System.Drawing.Size(800, 25)
-        Me.ToolStrip1.TabIndex = 2
-        Me.ToolStrip1.Text = "ToolStrip1"
-        '
-        'CopyToolStripButton
-        '
-        Me.CopyToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.CopyToolStripButton.Image = CType(resources.GetObject("CopyToolStripButton.Image"), System.Drawing.Image)
-        Me.CopyToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.CopyToolStripButton.Name = "CopyToolStripButton"
-        Me.CopyToolStripButton.Size = New System.Drawing.Size(23, 22)
-        Me.CopyToolStripButton.Text = "&Copy table to clipboard"
-        '
-        'AnalysisResultTable
-        '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
-        Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(800, 450)
-        Me.Controls.Add(Me.ToolStrip1)
-        Me.Controls.Add(Me.GroupBox1)
-        Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
-        Me.Name = "AnalysisResultTable"
-        Me.Text = "Analysis Result Table"
-        CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.GroupBox1.ResumeLayout(False)
-        Me.ToolStrip1.ResumeLayout(False)
-        Me.ToolStrip1.PerformLayout()
-        Me.ResumeLayout(False)
-        Me.PerformLayout()
+        DataGridView1 = New DataGridView()
+        GroupBox1 = New GroupBox()
+        ToolStrip1 = New ToolStrip()
+        CopyToolStripButton = New ToolStripButton()
+        CType(DataGridView1, ComponentModel.ISupportInitialize).BeginInit()
+        GroupBox1.SuspendLayout()
+        ToolStrip1.SuspendLayout()
+        SuspendLayout()
+        ' 
+        ' DataGridView1
+        ' 
+        DataGridView1.AllowUserToAddRows = False
+        DataGridView1.AllowUserToDeleteRows = False
+        DataGridView1.AllowUserToOrderColumns = True
+        DataGridView1.AllowUserToResizeRows = False
+        DataGridView1.ClipboardCopyMode = DataGridViewClipboardCopyMode.EnableAlwaysIncludeHeaderText
+        DataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize
+        DataGridView1.Dock = DockStyle.Fill
+        DataGridView1.Location = New Point(4, 19)
+        DataGridView1.Margin = New Padding(4, 3, 4, 3)
+        DataGridView1.Name = "DataGridView1"
+        DataGridView1.ReadOnly = True
+        DataGridView1.RowHeadersVisible = False
+        DataGridView1.Size = New Size(896, 451)
+        DataGridView1.TabIndex = 0
+        ' 
+        ' GroupBox1
+        ' 
+        GroupBox1.Anchor = AnchorStyles.Top Or AnchorStyles.Bottom Or AnchorStyles.Left Or AnchorStyles.Right
+        GroupBox1.Controls.Add(DataGridView1)
+        GroupBox1.Location = New Point(15, 32)
+        GroupBox1.Name = "GroupBox1"
+        GroupBox1.Size = New Size(904, 473)
+        GroupBox1.TabIndex = 1
+        GroupBox1.TabStop = False
+        GroupBox1.Text = "GroupBox1"
+        ' 
+        ' ToolStrip1
+        ' 
+        ToolStrip1.Items.AddRange(New ToolStripItem() {CopyToolStripButton})
+        ToolStrip1.Location = New Point(0, 0)
+        ToolStrip1.Name = "ToolStrip1"
+        ToolStrip1.Size = New Size(933, 25)
+        ToolStrip1.TabIndex = 2
+        ToolStrip1.Text = "ToolStrip1"
+        ' 
+        ' CopyToolStripButton
+        ' 
+        CopyToolStripButton.DisplayStyle = ToolStripItemDisplayStyle.Image
+        CopyToolStripButton.Image = CType(resources.GetObject("CopyToolStripButton.Image"), Image)
+        CopyToolStripButton.ImageTransparentColor = Color.Magenta
+        CopyToolStripButton.Name = "CopyToolStripButton"
+        CopyToolStripButton.Size = New Size(23, 22)
+        CopyToolStripButton.Text = "&Copy table to clipboard"
+        ' 
+        ' AnalysisResultTable
+        ' 
+        AutoScaleDimensions = New SizeF(7F, 15F)
+        AutoScaleMode = AutoScaleMode.Font
+        ClientSize = New Size(933, 519)
+        Controls.Add(ToolStrip1)
+        Controls.Add(GroupBox1)
+        Icon = CType(resources.GetObject("$this.Icon"), Icon)
+        Margin = New Padding(4, 3, 4, 3)
+        Name = "AnalysisResultTable"
+        Text = "Analysis Result Table"
+        CType(DataGridView1, ComponentModel.ISupportInitialize).EndInit()
+        GroupBox1.ResumeLayout(False)
+        ToolStrip1.ResumeLayout(False)
+        ToolStrip1.PerformLayout()
+        ResumeLayout(False)
+        PerformLayout()
 
     End Sub
 

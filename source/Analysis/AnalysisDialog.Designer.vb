@@ -22,126 +22,122 @@ Partial Class AnalysisDialog
     'Das Bearbeiten mit dem Code-Editor ist nicht möglich.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-        Dim Label_Series As System.Windows.Forms.Label
-        Dim Label_Analysis As System.Windows.Forms.Label
+        Dim Label_Series As Label
+        Dim Label_Analysis As Label
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(AnalysisDialog))
-        Me.Button_Cancel = New System.Windows.Forms.Button()
-        Me.Button_OK = New System.Windows.Forms.Button()
-        Me.ListBox_Series = New System.Windows.Forms.ListBox()
-        Me.ComboBox_Analysis = New System.Windows.Forms.ComboBox()
-        Me.Label_AnalaysisDescription = New System.Windows.Forms.Label()
-        Me.LinkLabel_Helplink = New System.Windows.Forms.LinkLabel()
-        Label_Series = New System.Windows.Forms.Label()
-        Label_Analysis = New System.Windows.Forms.Label()
-        Me.SuspendLayout()
-        '
-        'Label_Series
-        '
+        Button_Cancel = New Button()
+        Button_OK = New Button()
+        ListBox_Series = New ListBox()
+        ComboBox_Analysis = New ComboBox()
+        Label_AnalaysisDescription = New Label()
+        LinkLabel_Helplink = New LinkLabel()
+        Label_Series = New Label()
+        Label_Analysis = New Label()
+        SuspendLayout()
+        ' 
+        ' Label_Series
+        ' 
         Label_Series.AutoSize = True
-        Label_Series.Location = New System.Drawing.Point(12, 120)
+        Label_Series.Location = New Point(14, 138)
         Label_Series.Name = "Label_Series"
-        Label_Series.Size = New System.Drawing.Size(39, 13)
+        Label_Series.Size = New Size(40, 15)
         Label_Series.TabIndex = 8
         Label_Series.Text = "Series:"
-        '
-        'Label_Analysis
-        '
+        ' 
+        ' Label_Analysis
+        ' 
         Label_Analysis.AutoSize = True
-        Label_Analysis.Location = New System.Drawing.Point(12, 15)
+        Label_Analysis.Location = New Point(14, 17)
         Label_Analysis.Name = "Label_Analysis"
-        Label_Analysis.Size = New System.Drawing.Size(48, 13)
+        Label_Analysis.Size = New Size(53, 15)
         Label_Analysis.TabIndex = 8
         Label_Analysis.Text = "Analysis:"
-        '
-        'Button_Cancel
-        '
-        Me.Button_Cancel.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Button_Cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel
-        Me.Button_Cancel.Location = New System.Drawing.Point(207, 308)
-        Me.Button_Cancel.Name = "Button_Cancel"
-        Me.Button_Cancel.Size = New System.Drawing.Size(75, 23)
-        Me.Button_Cancel.TabIndex = 9
-        Me.Button_Cancel.Text = "Cancel"
-        Me.Button_Cancel.UseVisualStyleBackColor = True
-        '
-        'Button_OK
-        '
-        Me.Button_OK.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Button_OK.DialogResult = System.Windows.Forms.DialogResult.OK
-        Me.Button_OK.Location = New System.Drawing.Point(126, 308)
-        Me.Button_OK.Name = "Button_OK"
-        Me.Button_OK.Size = New System.Drawing.Size(75, 23)
-        Me.Button_OK.TabIndex = 7
-        Me.Button_OK.Text = "OK"
-        Me.Button_OK.UseVisualStyleBackColor = True
-        '
-        'ListBox_Series
-        '
-        Me.ListBox_Series.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ListBox_Series.FormattingEnabled = True
-        Me.ListBox_Series.Location = New System.Drawing.Point(12, 140)
-        Me.ListBox_Series.Name = "ListBox_Series"
-        Me.ListBox_Series.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended
-        Me.ListBox_Series.Size = New System.Drawing.Size(272, 160)
-        Me.ListBox_Series.TabIndex = 6
-        '
-        'ComboBox_Analysis
-        '
-        Me.ComboBox_Analysis.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ComboBox_Analysis.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.ComboBox_Analysis.FormattingEnabled = True
-        Me.ComboBox_Analysis.Location = New System.Drawing.Point(69, 12)
-        Me.ComboBox_Analysis.Name = "ComboBox_Analysis"
-        Me.ComboBox_Analysis.Size = New System.Drawing.Size(213, 21)
-        Me.ComboBox_Analysis.TabIndex = 10
-        '
-        'Label_AnalaysisDescription
-        '
-        Me.Label_AnalaysisDescription.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Label_AnalaysisDescription.Location = New System.Drawing.Point(12, 44)
-        Me.Label_AnalaysisDescription.Name = "Label_AnalaysisDescription"
-        Me.Label_AnalaysisDescription.Size = New System.Drawing.Size(272, 51)
-        Me.Label_AnalaysisDescription.TabIndex = 11
-        Me.Label_AnalaysisDescription.Text = "Select an analysis method"
-        '
-        'LinkLabel_Helplink
-        '
-        Me.LinkLabel_Helplink.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.LinkLabel_Helplink.Location = New System.Drawing.Point(12, 98)
-        Me.LinkLabel_Helplink.Name = "LinkLabel_Helplink"
-        Me.LinkLabel_Helplink.Size = New System.Drawing.Size(272, 16)
-        Me.LinkLabel_Helplink.TabIndex = 12
-        Me.LinkLabel_Helplink.TabStop = True
-        Me.LinkLabel_Helplink.Text = "Open wiki page"
-        '
-        'AnalysisDialog
-        '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
-        Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(294, 343)
-        Me.Controls.Add(Me.LinkLabel_Helplink)
-        Me.Controls.Add(Me.Label_AnalaysisDescription)
-        Me.Controls.Add(Label_Analysis)
-        Me.Controls.Add(Me.ComboBox_Analysis)
-        Me.Controls.Add(Label_Series)
-        Me.Controls.Add(Me.ListBox_Series)
-        Me.Controls.Add(Me.Button_OK)
-        Me.Controls.Add(Me.Button_Cancel)
-        Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
-        Me.MaximizeBox = False
-        Me.MinimizeBox = False
-        Me.MinimumSize = New System.Drawing.Size(300, 300)
-        Me.Name = "AnalysisDialog"
-        Me.ShowInTaskbar = False
-        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = "Analysis"
-        Me.ResumeLayout(False)
-        Me.PerformLayout()
+        ' 
+        ' Button_Cancel
+        ' 
+        Button_Cancel.Anchor = AnchorStyles.Bottom Or AnchorStyles.Right
+        Button_Cancel.DialogResult = DialogResult.Cancel
+        Button_Cancel.Location = New Point(251, 357)
+        Button_Cancel.Name = "Button_Cancel"
+        Button_Cancel.Size = New Size(80, 27)
+        Button_Cancel.TabIndex = 9
+        Button_Cancel.Text = "Cancel"
+        Button_Cancel.UseVisualStyleBackColor = True
+        ' 
+        ' Button_OK
+        ' 
+        Button_OK.Anchor = AnchorStyles.Bottom Or AnchorStyles.Right
+        Button_OK.DialogResult = DialogResult.OK
+        Button_OK.Location = New Point(165, 357)
+        Button_OK.Name = "Button_OK"
+        Button_OK.Size = New Size(80, 27)
+        Button_OK.TabIndex = 7
+        Button_OK.Text = "OK"
+        Button_OK.UseVisualStyleBackColor = True
+        ' 
+        ' ListBox_Series
+        ' 
+        ListBox_Series.Anchor = AnchorStyles.Top Or AnchorStyles.Bottom Or AnchorStyles.Left Or AnchorStyles.Right
+        ListBox_Series.FormattingEnabled = True
+        ListBox_Series.Location = New Point(14, 162)
+        ListBox_Series.Name = "ListBox_Series"
+        ListBox_Series.SelectionMode = SelectionMode.MultiExtended
+        ListBox_Series.Size = New Size(317, 184)
+        ListBox_Series.TabIndex = 6
+        ' 
+        ' ComboBox_Analysis
+        ' 
+        ComboBox_Analysis.Anchor = AnchorStyles.Top Or AnchorStyles.Left Or AnchorStyles.Right
+        ComboBox_Analysis.DropDownStyle = ComboBoxStyle.DropDownList
+        ComboBox_Analysis.FormattingEnabled = True
+        ComboBox_Analysis.Location = New Point(80, 14)
+        ComboBox_Analysis.Name = "ComboBox_Analysis"
+        ComboBox_Analysis.Size = New Size(248, 23)
+        ComboBox_Analysis.TabIndex = 10
+        ' 
+        ' Label_AnalaysisDescription
+        ' 
+        Label_AnalaysisDescription.Anchor = AnchorStyles.Top Or AnchorStyles.Left Or AnchorStyles.Right
+        Label_AnalaysisDescription.Location = New Point(14, 51)
+        Label_AnalaysisDescription.Name = "Label_AnalaysisDescription"
+        Label_AnalaysisDescription.Size = New Size(317, 59)
+        Label_AnalaysisDescription.TabIndex = 11
+        Label_AnalaysisDescription.Text = "Select an analysis method"
+        ' 
+        ' LinkLabel_Helplink
+        ' 
+        LinkLabel_Helplink.Anchor = AnchorStyles.Top Or AnchorStyles.Left Or AnchorStyles.Right
+        LinkLabel_Helplink.Location = New Point(14, 113)
+        LinkLabel_Helplink.Name = "LinkLabel_Helplink"
+        LinkLabel_Helplink.Size = New Size(317, 18)
+        LinkLabel_Helplink.TabIndex = 12
+        LinkLabel_Helplink.TabStop = True
+        LinkLabel_Helplink.Text = "Open wiki page"
+        ' 
+        ' AnalysisDialog
+        ' 
+        AutoScaleDimensions = New SizeF(7F, 15F)
+        AutoScaleMode = AutoScaleMode.Font
+        ClientSize = New Size(343, 396)
+        Controls.Add(LinkLabel_Helplink)
+        Controls.Add(Label_AnalaysisDescription)
+        Controls.Add(Label_Analysis)
+        Controls.Add(ComboBox_Analysis)
+        Controls.Add(Label_Series)
+        Controls.Add(ListBox_Series)
+        Controls.Add(Button_OK)
+        Controls.Add(Button_Cancel)
+        Icon = CType(resources.GetObject("$this.Icon"), Icon)
+        Margin = New Padding(4, 3, 4, 3)
+        MaximizeBox = False
+        MinimizeBox = False
+        MinimumSize = New Size(347, 340)
+        Name = "AnalysisDialog"
+        ShowInTaskbar = False
+        StartPosition = FormStartPosition.CenterParent
+        Text = "Analysis"
+        ResumeLayout(False)
+        PerformLayout()
 
     End Sub
     Private WithEvents Button_Cancel As System.Windows.Forms.Button

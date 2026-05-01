@@ -1,4 +1,4 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class ConvertErrorValuesDialog
     Inherits System.Windows.Forms.Form
 
@@ -23,133 +23,116 @@ Partial Class ConvertErrorValuesDialog
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(ConvertErrorValuesDialog))
-        Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel
-        Me.OK_Button = New System.Windows.Forms.Button
-        Me.Cancel_Button = New System.Windows.Forms.Button
-        Me.ComboBox_Series = New System.Windows.Forms.ComboBox
-        Me.Label_Series = New System.Windows.Forms.Label
-        Me.TextBox_errorvalues = New System.Windows.Forms.TextBox
-        Me.Label_ErrorValues = New System.Windows.Forms.Label
-        Me.Label_note = New System.Windows.Forms.Label
-        Me.Label_Help = New System.Windows.Forms.Label
-        Me.TableLayoutPanel1.SuspendLayout()
-        Me.SuspendLayout()
-        '
-        'TableLayoutPanel1
-        '
-        Me.TableLayoutPanel1.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TableLayoutPanel1.ColumnCount = 2
-        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-        Me.TableLayoutPanel1.Controls.Add(Me.OK_Button, 0, 0)
-        Me.TableLayoutPanel1.Controls.Add(Me.Cancel_Button, 1, 0)
-        Me.TableLayoutPanel1.Location = New System.Drawing.Point(140, 71)
-        Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
-        Me.TableLayoutPanel1.RowCount = 1
-        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-        Me.TableLayoutPanel1.Size = New System.Drawing.Size(146, 29)
-        Me.TableLayoutPanel1.TabIndex = 0
-        '
-        'OK_Button
-        '
-        Me.OK_Button.Anchor = System.Windows.Forms.AnchorStyles.None
-        Me.OK_Button.Location = New System.Drawing.Point(3, 3)
-        Me.OK_Button.Name = "OK_Button"
-        Me.OK_Button.Size = New System.Drawing.Size(67, 23)
-        Me.OK_Button.TabIndex = 0
-        Me.OK_Button.Text = "OK"
-        '
-        'Cancel_Button
-        '
-        Me.Cancel_Button.Anchor = System.Windows.Forms.AnchorStyles.None
-        Me.Cancel_Button.DialogResult = System.Windows.Forms.DialogResult.Cancel
-        Me.Cancel_Button.Location = New System.Drawing.Point(76, 3)
-        Me.Cancel_Button.Name = "Cancel_Button"
-        Me.Cancel_Button.Size = New System.Drawing.Size(67, 23)
-        Me.Cancel_Button.TabIndex = 1
-        Me.Cancel_Button.Text = "Cancel"
-        '
-        'ComboBox_Series
-        '
-        Me.ComboBox_Series.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.ComboBox_Series.FormattingEnabled = True
-        Me.ComboBox_Series.Location = New System.Drawing.Point(85, 10)
-        Me.ComboBox_Series.Name = "ComboBox_Series"
-        Me.ComboBox_Series.Size = New System.Drawing.Size(203, 21)
-        Me.ComboBox_Series.TabIndex = 1
-        '
-        'Label_Series
-        '
-        Me.Label_Series.AutoSize = True
-        Me.Label_Series.Location = New System.Drawing.Point(13, 13)
-        Me.Label_Series.Name = "Label_Series"
-        Me.Label_Series.Size = New System.Drawing.Size(39, 13)
-        Me.Label_Series.TabIndex = 2
-        Me.Label_Series.Text = "Series:"
-        '
-        'TextBox_errorvalues
-        '
-        Me.TextBox_errorvalues.Location = New System.Drawing.Point(85, 38)
-        Me.TextBox_errorvalues.Name = "TextBox_errorvalues"
-        Me.TextBox_errorvalues.Size = New System.Drawing.Size(100, 20)
-        Me.TextBox_errorvalues.TabIndex = 3
-        Me.TextBox_errorvalues.Text = "-777,-9999.999"
-        '
-        'Label_ErrorValues
-        '
-        Me.Label_ErrorValues.AutoSize = True
-        Me.Label_ErrorValues.Location = New System.Drawing.Point(13, 41)
-        Me.Label_ErrorValues.Name = "Label_ErrorValues"
-        Me.Label_ErrorValues.Size = New System.Drawing.Size(66, 13)
-        Me.Label_ErrorValues.TabIndex = 4
-        Me.Label_ErrorValues.Text = "Error values:"
-        '
-        'Label_note
-        '
-        Me.Label_note.AutoSize = True
-        Me.Label_note.Location = New System.Drawing.Point(191, 41)
-        Me.Label_note.Name = "Label_note"
-        Me.Label_note.Size = New System.Drawing.Size(97, 13)
-        Me.Label_note.TabIndex = 5
-        Me.Label_note.Text = "(comma-separated)"
-        '
-        'Label_Help
-        '
-        Me.Label_Help.ForeColor = System.Drawing.SystemColors.ControlDarkDark
-        Me.Label_Help.Location = New System.Drawing.Point(13, 74)
-        Me.Label_Help.Name = "Label_Help"
-        Me.Label_Help.Size = New System.Drawing.Size(121, 32)
-        Me.Label_Help.TabIndex = 6
-        Me.Label_Help.Text = "Converts error values to NaN"
-        '
-        'ConvertErrorValuesDialog
-        '
-        Me.AcceptButton = Me.OK_Button
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
-        Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.CancelButton = Me.Cancel_Button
-        Me.ClientSize = New System.Drawing.Size(298, 112)
-        Me.Controls.Add(Me.Label_Help)
-        Me.Controls.Add(Me.Label_note)
-        Me.Controls.Add(Me.Label_ErrorValues)
-        Me.Controls.Add(Me.TextBox_errorvalues)
-        Me.Controls.Add(Me.Label_Series)
-        Me.Controls.Add(Me.ComboBox_Series)
-        Me.Controls.Add(Me.TableLayoutPanel1)
-        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog
-        Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
-        Me.MaximizeBox = False
-        Me.MinimizeBox = False
-        Me.Name = "ConvertErrorValuesDialog"
-        Me.ShowInTaskbar = False
-        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = "Convert error values"
-        Me.TableLayoutPanel1.ResumeLayout(False)
-        Me.ResumeLayout(False)
-        Me.PerformLayout()
+        OK_Button = New Button()
+        Cancel_Button = New Button()
+        ComboBox_Series = New ComboBox()
+        Label_Series = New Label()
+        TextBox_errorvalues = New TextBox()
+        Label_ErrorValues = New Label()
+        Label_note = New Label()
+        Label_Help = New Label()
+        SuspendLayout()
+        ' 
+        ' OK_Button
+        ' 
+        OK_Button.Anchor = AnchorStyles.Bottom Or AnchorStyles.Right
+        OK_Button.Location = New Point(169, 90)
+        OK_Button.Name = "OK_Button"
+        OK_Button.Size = New Size(80, 27)
+        OK_Button.TabIndex = 0
+        OK_Button.Text = "OK"
+        ' 
+        ' Cancel_Button
+        ' 
+        Cancel_Button.Anchor = AnchorStyles.Bottom Or AnchorStyles.Right
+        Cancel_Button.DialogResult = DialogResult.Cancel
+        Cancel_Button.Location = New Point(255, 90)
+        Cancel_Button.Name = "Cancel_Button"
+        Cancel_Button.Size = New Size(80, 27)
+        Cancel_Button.TabIndex = 1
+        Cancel_Button.Text = "Cancel"
+        ' 
+        ' ComboBox_Series
+        ' 
+        ComboBox_Series.DropDownStyle = ComboBoxStyle.DropDownList
+        ComboBox_Series.FormattingEnabled = True
+        ComboBox_Series.Location = New Point(99, 12)
+        ComboBox_Series.Name = "ComboBox_Series"
+        ComboBox_Series.Size = New Size(236, 23)
+        ComboBox_Series.TabIndex = 1
+        ' 
+        ' Label_Series
+        ' 
+        Label_Series.AutoSize = True
+        Label_Series.Location = New Point(15, 15)
+        Label_Series.Name = "Label_Series"
+        Label_Series.Size = New Size(40, 15)
+        Label_Series.TabIndex = 2
+        Label_Series.Text = "Series:"
+        ' 
+        ' TextBox_errorvalues
+        ' 
+        TextBox_errorvalues.Location = New Point(99, 44)
+        TextBox_errorvalues.Name = "TextBox_errorvalues"
+        TextBox_errorvalues.Size = New Size(116, 23)
+        TextBox_errorvalues.TabIndex = 3
+        TextBox_errorvalues.Text = "-777,-9999.999"
+        ' 
+        ' Label_ErrorValues
+        ' 
+        Label_ErrorValues.AutoSize = True
+        Label_ErrorValues.Location = New Point(15, 47)
+        Label_ErrorValues.Name = "Label_ErrorValues"
+        Label_ErrorValues.Size = New Size(71, 15)
+        Label_ErrorValues.TabIndex = 4
+        Label_ErrorValues.Text = "Error values:"
+        ' 
+        ' Label_note
+        ' 
+        Label_note.AutoSize = True
+        Label_note.Location = New Point(223, 47)
+        Label_note.Name = "Label_note"
+        Label_note.Size = New Size(112, 15)
+        Label_note.TabIndex = 5
+        Label_note.Text = "(comma-separated)"
+        ' 
+        ' Label_Help
+        ' 
+        Label_Help.ForeColor = SystemColors.ControlDarkDark
+        Label_Help.Location = New Point(15, 85)
+        Label_Help.Name = "Label_Help"
+        Label_Help.Size = New Size(141, 37)
+        Label_Help.TabIndex = 6
+        Label_Help.Text = "Converts error values to NaN"
+        ' 
+        ' ConvertErrorValuesDialog
+        ' 
+        AcceptButton = OK_Button
+        AutoScaleDimensions = New SizeF(7F, 15F)
+        AutoScaleMode = AutoScaleMode.Font
+        CancelButton = Cancel_Button
+        ClientSize = New Size(348, 129)
+        Controls.Add(OK_Button)
+        Controls.Add(Label_Help)
+        Controls.Add(Cancel_Button)
+        Controls.Add(Label_note)
+        Controls.Add(Label_ErrorValues)
+        Controls.Add(TextBox_errorvalues)
+        Controls.Add(Label_Series)
+        Controls.Add(ComboBox_Series)
+        FormBorderStyle = FormBorderStyle.FixedDialog
+        Icon = CType(resources.GetObject("$this.Icon"), Icon)
+        Margin = New Padding(4, 3, 4, 3)
+        MaximizeBox = False
+        MinimizeBox = False
+        Name = "ConvertErrorValuesDialog"
+        ShowInTaskbar = False
+        StartPosition = FormStartPosition.CenterParent
+        Text = "Convert error values"
+        ResumeLayout(False)
+        PerformLayout()
 
     End Sub
-    Friend WithEvents TableLayoutPanel1 As System.Windows.Forms.TableLayoutPanel
     Friend WithEvents OK_Button As System.Windows.Forms.Button
     Friend WithEvents Cancel_Button As System.Windows.Forms.Button
     Friend WithEvents ComboBox_Series As System.Windows.Forms.ComboBox
