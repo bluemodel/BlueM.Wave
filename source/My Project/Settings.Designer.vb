@@ -68,7 +68,7 @@ Namespace My
 
         <Global.System.Configuration.UserScopedSettingAttribute(),
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),
-         Global.System.Configuration.DefaultSettingValueAttribute("Segoe UI")>
+         Global.System.Configuration.DefaultSettingValueAttribute("Microsoft Sans Serif")>
         Public Property defaultFont() As String
             Get
                 Return CType(Me("defaultFont"), String)
