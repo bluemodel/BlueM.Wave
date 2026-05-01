@@ -5,6 +5,9 @@
     <Setting Name="showOverviewOnStartup" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
+    <Setting Name="defaultFont" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Segoe UI</Value>
+    </Setting>
     <Setting Name="defaultFontSize" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">9</Value>
     </Setting>

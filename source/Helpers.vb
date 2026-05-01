@@ -272,12 +272,10 @@ Public Module Helpers
 
         'Header
         chart.Header.Visible = False
-        chart.Header.Font.Name = "Segoe UI"
         chart.Header.Font.Color = Color.Black
         chart.Header.Text = ""
 
         'Legende
-        chart.Legend.Font.Name = "Segoe UI"
         chart.Legend.LegendStyle = Steema.TeeChart.LegendStyles.Series
         chart.Legend.Alignment = Steema.TeeChart.LegendAlignments.Right
         chart.Legend.ResizeChart = True
@@ -290,10 +288,8 @@ Public Module Helpers
         'Achsen
         chart.Axes.DrawBehind = False
 
-        chart.Axes.Left.Title.Font.Name = "Segoe UI"
         chart.Axes.Left.Title.Font.Color = Color.Black
 
-        chart.Axes.Left.Labels.Font.Name = "Segoe UI"
         chart.Axes.Left.Labels.Font.Color = Color.Black
 
         chart.Axes.Left.AxisPen.Visible = True
@@ -301,10 +297,8 @@ Public Module Helpers
         chart.Axes.Left.Grid.Visible = True
         chart.Axes.Left.Grid.Style = Drawing2D.DashStyle.Dash
 
-        chart.Axes.Right.Title.Font.Name = "Segoe UI"
         chart.Axes.Right.Title.Font.Color = Color.Black
 
-        chart.Axes.Right.Labels.Font.Name = "Segoe UI"
         chart.Axes.Right.Labels.Font.Color = Color.Black
 
         chart.Axes.Right.AxisPen.Visible = True
@@ -312,10 +306,8 @@ Public Module Helpers
         chart.Axes.Right.Grid.Visible = False
         chart.Axes.Right.Grid.Style = Drawing2D.DashStyle.Dash
 
-        chart.Axes.Bottom.Title.Font.Name = "Segoe UI"
         chart.Axes.Bottom.Title.Font.Color = Color.Black
 
-        chart.Axes.Bottom.Labels.Font.Name = "Segoe UI"
         chart.Axes.Bottom.Labels.Font.Color = Color.Black
 
         chart.Axes.Bottom.Automatic = True
@@ -325,10 +317,40 @@ Public Module Helpers
         chart.Axes.Bottom.Grid.Visible = True
         chart.Axes.Bottom.Grid.Style = Drawing2D.DashStyle.Dash
 
+        'set font with user setting
+        Call ChartSetFont(chart, My.Settings.defaultFont)
         'set font size with user setting
         Call ChartSetFontSize(chart, My.Settings.defaultFontSize)
 
     End Sub
+
+    ''' <summary>
+    ''' Sets the font of all chart elements
+    ''' </summary>
+    ''' <param name="chart"></param>
+    ''' <param name="font"></param>
+    Friend Sub ChartSetFont(ByRef chart As Steema.TeeChart.Chart, font As String)
+        'Set font for all chart elements
+        chart.Header.Font.Name = font
+        chart.Legend.Font.Name = font
+        chart.Axes.Left.Title.Font.Name = font
+        chart.Axes.Left.Labels.Font.Name = font
+        chart.Axes.Right.Title.Font.Name = font
+        chart.Axes.Right.Labels.Font.Name = font
+        chart.Axes.Bottom.Title.Font.Name = font
+        chart.Axes.Bottom.Labels.Font.Name = font
+        chart.Axes.Top.Title.Font.Name = font
+        chart.Axes.Top.Labels.Font.Name = font
+        chart.Axes.Depth.Title.Font.Name = font
+        chart.Axes.Depth.Labels.Font.Name = font
+        chart.Axes.DepthTop.Title.Font.Name = font
+        chart.Axes.DepthTop.Labels.Font.Name = font
+        For Each axis As Steema.TeeChart.Axis In chart.Axes.Custom
+            axis.Title.Font.Name = font
+            axis.Labels.Font.Name = font
+        Next
+    End Sub
+
 
     ''' <summary>
     ''' Sets the font size of all chart elements

@@ -300,6 +300,9 @@ Friend Class WaveController
                     CType(series, Steema.TeeChart.Styles.Line).LinePen.Width = My.Settings.defaultLineWidth
                 End If
             Next
+        ElseIf e.PropertyName = "defaultFont" Then
+            'update font of chart
+            Helpers.ChartSetFont(View.TChart1.Chart, My.Settings.defaultFont)
         ElseIf e.PropertyName = "defaultFontSize" Then
             'update font size of chart
             Helpers.ChartSetFontSize(View.TChart1.Chart, My.Settings.defaultFontSize)

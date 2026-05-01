@@ -3,6 +3,9 @@ BlueM.Wave Release Notes
 
 Version 3.0.0
 -------------
+NEW:
+* Added a user setting for the default font of the chart
+
 CHANGED:
 * Upgraded from .NET Framework 4.8 to .NET 9
 * Updated TeeChart to v4.2026.3.2
