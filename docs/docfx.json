@@ -6,12 +6,12 @@
           "files": [
             "Wave.dll"
           ],
-          "src": "../source/bin/x64/Release/net9.0-windows"
+          "src": "../source/bin/x64/Release/net10.0-windows"
         }
       ],
       "dest": "api",
       "properties": {
-          "TargetFramework": "net9.0"
+          "TargetFramework": "net10.0"
       },
       "disableGitFeatures": false,
       "disableDefaultFilter": false
