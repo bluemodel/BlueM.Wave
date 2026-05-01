@@ -283,6 +283,7 @@ Public Module Helpers
         chart.Legend.ResizeChart = True
         chart.Legend.HorizMargin = 1
         chart.Legend.VertMargin = 1
+        chart.Legend.VertSpacing = 3
         chart.Legend.FontSeriesColor = True
         chart.Legend.ActiveStyle = Steema.TeeChart.LegendActiveStyles.CheckBox
 
