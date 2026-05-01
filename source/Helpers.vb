@@ -279,6 +279,10 @@ Public Module Helpers
         'Legende
         chart.Legend.Font.Name = "Segoe UI"
         chart.Legend.LegendStyle = Steema.TeeChart.LegendStyles.Series
+        chart.Legend.Alignment = Steema.TeeChart.LegendAlignments.Right
+        chart.Legend.ResizeChart = True
+        chart.Legend.HorizMargin = 1
+        chart.Legend.VertMargin = 1
         chart.Legend.FontSeriesColor = True
         chart.Legend.ActiveStyle = Steema.TeeChart.LegendActiveStyles.CheckBox
 
