@@ -41,7 +41,6 @@ Partial Class ImportHDF5Dialog
         ' Label_FileName
         ' 
         Label_FileName.Anchor = AnchorStyles.Top Or AnchorStyles.Left Or AnchorStyles.Right
-        Label_FileName.Font = New Font("Microsoft Sans Serif", 8.25F, FontStyle.Bold)
         Label_FileName.Location = New Point(10, 10)
         Label_FileName.Name = "Label_FileName"
         Label_FileName.Size = New Size(760, 20)

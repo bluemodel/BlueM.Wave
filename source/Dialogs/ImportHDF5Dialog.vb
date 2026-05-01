@@ -45,7 +45,7 @@ Friend Class ImportHDF5Dialog
     Private Sub Form_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
         'File name label
-        Label_FileName.Text = IO.Path.GetFileName(Me.tsFile.File)
+        Label_FileName.Text = "File: " & IO.Path.GetFileName(Me.tsFile.File)
 
         'Read series info from file
         Call Me.tsFile.readSeriesInfo()
