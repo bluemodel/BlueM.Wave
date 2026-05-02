@@ -65,10 +65,10 @@ Friend Class AxisDialog
 
         axisname = CType(e.Row.DataBoundItem, AxisWrapper).Name
         If axisname = "Left" Or axisname = "Right" Then
-            MsgBox("Left and Right axes cannot be deleted.", MsgBoxStyle.Information, "Information")
+            MessageBox.Show("Left and Right axes cannot be deleted.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information)
             Return
         Else
-            If MsgBox($"Delete axis {axisname}?", MsgBoxStyle.Exclamation Or MsgBoxStyle.OkCancel, "Warning") = MsgBoxResult.Ok Then
+            If MessageBox.Show($"Delete axis {axisname}?", "Warning", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) = DialogResult.OK Then
                 RaiseEvent AxisDeleted(axisname)
             End If
         End If

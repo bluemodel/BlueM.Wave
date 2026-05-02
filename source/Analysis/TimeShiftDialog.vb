@@ -38,18 +38,18 @@ Friend Class TimeShiftDialog
     Private Sub OK_Button_Click(sender As System.Object, e As System.EventArgs) Handles OK_Button.Click
 
         If Me.NumericUpDown_TimestepInterval.Value = 0 Then
-            MessageBox.Show("Please select a non-zero timespan.", "Time Shift", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+            MessageBox.Show("Please select a non-zero timespan.", "Time Shift", MessageBoxButtons.OK, MessageBoxIcon.Warning)
             Me.DialogResult = DialogResult.None
             Exit Sub
         End If
         If Me.ComboBox_TimestepType.SelectedItem = TimeSeries.TimeStepTypeEnum.Year Then
-            Dim dlgresult As DialogResult = MessageBox.Show("Shifting by years can cause the loss of data due to leap days! Are you sure?", "Time Shift", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation)
+            Dim dlgresult As DialogResult = MessageBox.Show("Shifting by years can cause the loss of data due to leap days! Are you sure?", "Time Shift", MessageBoxButtons.YesNo, MessageBoxIcon.Warning)
             If dlgresult = DialogResult.No Then
                 Me.DialogResult = DialogResult.None
                 Exit Sub
             End If
         ElseIf Me.ComboBox_TimestepType.SelectedItem = TimeSeries.TimeStepTypeEnum.Month Then
-            Dim dlgresult As DialogResult = MessageBox.Show("Shifting by months can cause the loss of data due to varying month lengths! Are you sure?", "Time Shift", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation)
+            Dim dlgresult As DialogResult = MessageBox.Show("Shifting by months can cause the loss of data due to varying month lengths! Are you sure?", "Time Shift", MessageBoxButtons.YesNo, MessageBoxIcon.Warning)
             If dlgresult = DialogResult.No Then
                 Me.DialogResult = DialogResult.None
                 Exit Sub

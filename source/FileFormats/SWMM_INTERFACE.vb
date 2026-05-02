@@ -249,8 +249,7 @@ Namespace Fileformats
 
             'Einheiten?
             If (Me.UseUnits = False) Then
-                MsgBox("Beim Einlesen eines SWMM-Interface-Files müssen immer die Einheiten gesetzt sein!")
-                Exit Sub
+                Throw New Exception("When reading a SWMM-Interface-File, UseUnits must be True!")
             End If
 
             For Each sInfo As TimeSeriesInfo In Me.SelectedSeries

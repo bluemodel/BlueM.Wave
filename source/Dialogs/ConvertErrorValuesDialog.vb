@@ -48,7 +48,7 @@ Friend Class ConvertErrorValuesDialog
     Private Sub OK_Button_Click(sender As System.Object, e As System.EventArgs) Handles OK_Button.Click
         'Abort if no series is selected
         If Me.ComboBox_Series.SelectedIndex = -1 Then
-            MsgBox("Please select a series!", MsgBoxStyle.Exclamation, "Warning")
+            MessageBox.Show("Please select a series!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning)
             Exit Sub
         End If
 
@@ -63,7 +63,7 @@ Friend Class ConvertErrorValuesDialog
         i = 0
         For Each str As String In errorstrings
             If Not Double.TryParse(str, errorvalue) Then
-                MsgBox($"Could not parse the value '{str}'!", MsgBoxStyle.Exclamation, "Warning")
+                MessageBox.Show($"Could not parse the value '{str}'!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning)
                 Exit Sub
             Else
                 errorvalues(i) = errorvalue

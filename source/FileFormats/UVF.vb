@@ -112,7 +112,7 @@ Namespace Fileformats
                 Return True
 
             Catch ex As Exception
-                MsgBox($"Unable to read file!{eol}{eol}Error: {ex.Message}", MsgBoxStyle.Critical, "Error")
+                MessageBox.Show($"Unable to read file!{eol}{eol}Error: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
                 Return False
             End Try
 

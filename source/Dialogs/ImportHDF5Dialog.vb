@@ -142,13 +142,13 @@ Friend Class ImportHDF5Dialog
     Private Sub Button_OK_Click(sender As Object, e As EventArgs) Handles Button_OK.Click
         'Validate selection
         If ListBox_Elements.SelectedItems.Count < 1 Then
-            MsgBox("Please select at least one element!", MsgBoxStyle.Exclamation, "Warning")
+            MessageBox.Show("Please select at least one element!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning)
             Me.DialogResult = DialogResult.None
             Exit Sub
         End If
 
         If CheckedListBox_Variables.CheckedItems.Count < 1 Then
-            MsgBox("Please select at least one variable!", MsgBoxStyle.Exclamation, "Warning")
+            MessageBox.Show("Please select at least one variable!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning)
             Me.DialogResult = DialogResult.None
             Exit Sub
         End If

@@ -96,7 +96,7 @@ Friend Class CalculatorDialog
 
         'check for comma as decimal separator in formula
         If Regex.IsMatch(Me.TextBox_Formula.Text, "\d,\d") Then
-            Dim dlgResult As DialogResult = MsgBox($"The formula '{Me.TextBox_Formula.Text}' seems to contain a comma (',') as decimal separator. Only point ('.') is allowed as decimal separator here. Are you sure you want to evaluate this formula?", MsgBoxStyle.Exclamation Or MsgBoxStyle.OkCancel, "Warning")
+            Dim dlgResult As DialogResult = MessageBox.Show($"The formula '{Me.TextBox_Formula.Text}' seems to contain a comma (',') as decimal separator. Only point ('.') is allowed as decimal separator here. Are you sure you want to evaluate this formula?", "Warning", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning)
             If dlgResult = DialogResult.Cancel Then
                 Me.TextBox_Formula.Focus()
                 Me.TextBox_Formula.SelectAll()
@@ -120,7 +120,7 @@ Friend Class CalculatorDialog
             parser.RemoveAllVariables()
             parser.UnregisterAllCustomFunctions()
         Catch ex As Exception
-            MsgBox("Error while parsing formula: " & eol & ex.Message, MsgBoxStyle.Critical, "Error")
+            MessageBox.Show("Error while parsing formula: " & eol & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
             Return
         End Try
 

@@ -115,7 +115,7 @@ Namespace Fileformats
                 Einheiten = ZeileEinheiten.Split(New Char() {Me.Separator.ToChar})
                 anzSpalten = Namen.Length
                 If Namen.Length <> Einheiten.Length Then
-                    MsgBox("Number of column names <> number of units!")
+                    MessageBox.Show("Number of column names <> number of units!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning)
                 End If
 
             Else
@@ -145,7 +145,7 @@ Namespace Fileformats
                 Einheiten = ZeileEinheiten.Split(New Char() {Me.Separator.ToChar})
                 anzSpalten = Namen.Length
                 If Namen.Length <> Einheiten.Length Then
-                    MsgBox("Number of column names <> number of units!")
+                    MessageBox.Show("Number of column names <> number of units!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning)
                 End If
             End If
 

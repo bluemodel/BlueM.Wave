@@ -48,9 +48,12 @@ Friend Class Autocorrelation_Dialog
         'Check max possible lag
         Dim maxlag As Integer = Me.timeseries.Length / lagSize - 1
         If lagSize * lagCount > Me.timeseries.Length Then
-            MsgBox(
+            MessageBox.Show(
                 $"The selected time series is too short or the largest lag is too long! " &
-                $"Please select at most {maxlag} offsets with the currently set number of time steps!", MsgBoxStyle.Exclamation)
+                $"Please select at most {maxlag} offsets with the currently set number of time steps!",
+                "Warning",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Warning)
             Return
         End If
 
