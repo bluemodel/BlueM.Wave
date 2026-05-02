@@ -178,7 +178,7 @@ Public Class Wave
                     End If
 
                 Catch ex As Exception
-                    MsgBox("Error during import:" & eol & ex.Message, MsgBoxStyle.Critical)
+                    MsgBox("Error during import:" & eol & ex.Message, MsgBoxStyle.Critical, "Error")
                     Call Log.AddLogEntry(Log.levels.error, "Error during import: " & ex.Message)
                 End Try
 
@@ -215,7 +215,7 @@ Public Class Wave
             RaiseEvent FileImported(projectfile)
 
         Catch ex As Exception
-            MsgBox("Error while loading project file:" & eol & ex.Message, MsgBoxStyle.Critical)
+            MsgBox("Error while loading project file:" & eol & ex.Message, MsgBoxStyle.Critical, "Error")
             Call Log.AddLogEntry(Log.levels.error, "Error while loading project file:" & eol & ex.Message)
         End Try
 
@@ -264,7 +264,7 @@ Public Class Wave
 
         Catch ex As Exception
             Log.AddLogEntry(Log.levels.error, ex.Message)
-            MsgBox("ERROR: " & ex.Message, MsgBoxStyle.Critical)
+            MsgBox("ERROR: " & ex.Message, MsgBoxStyle.Critical, "Error")
         End Try
 
         RaiseEvent IsBusyChanged(False)
@@ -296,7 +296,7 @@ Public Class Wave
             Call Log.AddLogEntry(Log.levels.info, $"Talsim clipboard content parsed successfully!")
 
         Catch ex As Exception
-            MsgBox("Error while processing Talsim clipboard content:" & eol & ex.Message, MsgBoxStyle.Critical)
+            MsgBox("Error while processing Talsim clipboard content:" & eol & ex.Message, MsgBoxStyle.Critical, "Error")
             Call Log.AddLogEntry(Log.levels.error, "Error while processing Talsim clipboard content:" & eol & ex.Message)
         End Try
 
@@ -340,7 +340,7 @@ Public Class Wave
 
         'Abort if no time series loaded
         If (Me.TimeSeries.Count < 1) Then
-            MsgBox("No time series available for export!", MsgBoxStyle.Exclamation)
+            MsgBox("No time series available for export!", MsgBoxStyle.Exclamation, "Warning")
             Exit Sub
         End If
 
@@ -550,7 +550,7 @@ Public Class Wave
 
                 'check for existing files and ask to overwrite
                 If IO.File.Exists(filename) Then
-                    Dim resp As MsgBoxResult = MsgBox($"Overwrite existing file {IO.Path.GetFileName(filename)}?", MsgBoxStyle.YesNo Or MsgBoxStyle.Exclamation)
+                    Dim resp As MsgBoxResult = MsgBox($"Overwrite existing file {IO.Path.GetFileName(filename)}?", MsgBoxStyle.YesNo Or MsgBoxStyle.Exclamation, "Warning")
                     If resp = MsgBoxResult.No Then
                         'abort
                         Exit Sub
@@ -594,7 +594,7 @@ Public Class Wave
 
                     'check for existing files and ask to overwrite
                     If IO.File.Exists(filename) Then
-                        Dim resp As MsgBoxResult = MsgBox($"Overwrite existing file {IO.Path.GetFileName(filename)}?", MsgBoxStyle.YesNo Or MsgBoxStyle.Exclamation)
+                        Dim resp As MsgBoxResult = MsgBox($"Overwrite existing file {IO.Path.GetFileName(filename)}?", MsgBoxStyle.YesNo Or MsgBoxStyle.Exclamation, "Warning")
                         If resp = MsgBoxResult.No Then
                             'skip this file
                             Continue For
@@ -634,12 +634,12 @@ Public Class Wave
 
             End If
 
-            MsgBox("Time series exported successfully!", MsgBoxStyle.Information)
+            MsgBox("Time series exported successfully!", MsgBoxStyle.Information, "Information")
             Log.AddLogEntry(Log.levels.info, "Time series exported successfully!")
 
         Catch ex As Exception
             Log.AddLogEntry(Log.levels.error, "Error during export: " & ex.Message)
-            MsgBox("Error during export: " & ex.Message, MsgBoxStyle.Critical)
+            MsgBox("Error during export: " & ex.Message, MsgBoxStyle.Critical, "Error")
         End Try
 
         RaiseEvent IsBusyChanged(False)

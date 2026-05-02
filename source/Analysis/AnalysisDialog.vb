@@ -90,7 +90,7 @@ Friend Class AnalysisDialog
     Private Sub Button_OK_Click(sender As System.Object, e As System.EventArgs) Handles Button_OK.Click
         'Eingabekontrolle
         If (Me.ListBox_Series.SelectedItems.Count < 1) Then
-            MsgBox("Please select at least one series!", MsgBoxStyle.Exclamation)
+            MsgBox("Please select at least one series!", MsgBoxStyle.Exclamation, "Warning")
             Me.DialogResult = DialogResult.None
         End If
     End Sub

@@ -299,7 +299,7 @@ Namespace Fileformats
                 Return False
 
             Catch ex As Exception
-                MsgBox($"Unable to read file!{eol}{eol}Error: {ex.Message}", MsgBoxStyle.Critical)
+                MsgBox($"Unable to read file!{eol}{eol}Error: {ex.Message}", MsgBoxStyle.Critical, "Error")
                 Return False
             End Try
 

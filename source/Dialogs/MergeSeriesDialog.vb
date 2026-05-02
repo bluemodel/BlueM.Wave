@@ -144,11 +144,11 @@ Friend Class MergeSeriesDialog
     Private Sub OK_Button_Click(sender As System.Object, e As System.EventArgs) Handles OK_Button.Click
         'Check for valid inputs
         If Me.selectedSeries.Count < 2 Then
-            MsgBox("Please select at least two series to merge!", MsgBoxStyle.Exclamation)
+            MsgBox("Please select at least two series to merge!", MsgBoxStyle.Exclamation, "Warning")
             Return
         End If
         If Me.mergedSeriesTitle = "" Then
-            MsgBox("Please enter a title for the merged series!", MsgBoxStyle.Exclamation)
+            MsgBox("Please enter a title for the merged series!", MsgBoxStyle.Exclamation, "Warning")
             Me.TextBox_MergedSeriesTitle.Focus()
             Return
         End If

@@ -449,7 +449,7 @@ Friend Class WaveController
         'Warnen, wenn bereits Serien vorhanden
         '-------------------------------------
         If (View.TChart1.Series.Count() > 0) Then
-            res = MsgBox($"All existing series will be deleted!{eol}Continue?", MsgBoxStyle.OkCancel)
+            res = MsgBox($"All existing series will be deleted!{eol}Continue?", MsgBoxStyle.OkCancel, "Warning")
             If (Not res = DialogResult.OK) Then Exit Sub
         End If
 
@@ -516,7 +516,7 @@ Friend Class WaveController
             'close menu before showing message box
             View.ToolStripDropDownButton_Open.DropDown.Close()
             Log.AddLogEntry(Log.levels.error, $"File {filepath} not found!")
-            MsgBox($"File {filepath} not found!", MsgBoxStyle.Exclamation)
+            MsgBox($"File {filepath} not found!", MsgBoxStyle.Exclamation, "Warning")
             Exit Sub
         End If
         Call _model.Import_File(filepath)
@@ -545,7 +545,7 @@ Friend Class WaveController
     Private Sub SaveProjectFile_Click(sender As System.Object, e As System.EventArgs)
 
         If _model.TimeSeries.Count = 0 Then
-            MsgBox("No time series to save!", MsgBoxStyle.Exclamation)
+            MsgBox("No time series to save!", MsgBoxStyle.Exclamation, "Warning")
             Exit Sub
         End If
 
@@ -579,11 +579,11 @@ Friend Class WaveController
                                            saveLineWidth:=dlg.SaveLineWidth,
                                            savePointsVisibility:=dlg.SavePointsVisibility
                 )
-                MsgBox($"Wave project file {dlg.FileName} saved.", MsgBoxStyle.Information)
+                MsgBox($"Wave project file {dlg.FileName} saved.", MsgBoxStyle.Information, "Information")
             End If
 
         Catch ex As Exception
-            MsgBox(ex.Message, MsgBoxStyle.Critical)
+            MsgBox(ex.Message, MsgBoxStyle.Critical, "Error")
         End Try
 
     End Sub
@@ -623,7 +623,7 @@ Friend Class WaveController
     Private Sub Cut_Click(sender As System.Object, e As System.EventArgs)
 
         If (_model.TimeSeries.Count < 1) Then
-            MsgBox("No time series available for cutting!", MsgBoxStyle.Exclamation)
+            MsgBox("No time series available for cutting!", MsgBoxStyle.Exclamation, "Warning")
             Exit Sub
         End If
 
@@ -667,7 +667,7 @@ Friend Class WaveController
 
         'Abort if no series are loaded
         If (_model.TimeSeries.Count < 1) Then
-            MsgBox("No time series available for merging!", MsgBoxStyle.Exclamation)
+            MsgBox("No time series available for merging!", MsgBoxStyle.Exclamation, "Warning")
             Exit Sub
         End If
 
@@ -703,7 +703,7 @@ Friend Class WaveController
 
         Catch ex As Exception
             Log.AddLogEntry(Log.levels.error, "Error during merge: " & ex.Message)
-            MsgBox("Error during merge: " & ex.Message, MsgBoxStyle.Critical)
+            MsgBox("Error during merge: " & ex.Message, MsgBoxStyle.Critical, "Error")
         Finally
             View.Cursor = Cursors.Default
         End Try
@@ -856,7 +856,7 @@ Friend Class WaveController
                 End If
             Next
             If Not nanFound Then
-                MsgBox("No NaN values found in the currently active series!", MsgBoxStyle.Information)
+                MsgBox("No NaN values found in the currently active series!", MsgBoxStyle.Information, "Information")
                 View.ToolStripButton_ShowNaNValues.Checked = False
             End If
         Else
@@ -881,7 +881,7 @@ Friend Class WaveController
     Private Sub ConvertErrorValues_Click(sender As System.Object, e As System.EventArgs)
         'Abort if no time series available!
         If (_model.TimeSeries.Count < 1) Then
-            MsgBox("No time series available!", MsgBoxStyle.Exclamation)
+            MsgBox("No time series available!", MsgBoxStyle.Exclamation, "Warning")
             Exit Sub
         End If
 
@@ -904,7 +904,7 @@ Friend Class WaveController
 
         Dim dlgResult As DialogResult
 
-        dlgResult = MsgBox("Delete all nodes with NaN values from all series?", MsgBoxStyle.OkCancel)
+        dlgResult = MsgBox("Delete all nodes with NaN values from all series?", MsgBoxStyle.Exclamation Or MsgBoxStyle.OkCancel, "Warning")
         If dlgResult = DialogResult.OK Then
             'loop over time series
             For Each id As Integer In _model.TimeSeries.Ids
@@ -943,7 +943,7 @@ Friend Class WaveController
 
         'Wenn keine Zeitreihen vorhanden, abbrechen!
         If (_model.TimeSeries.Count < 1) Then
-            MsgBox("No time series available for analysis!", MsgBoxStyle.Exclamation)
+            MsgBox("No time series available for analysis!", MsgBoxStyle.Exclamation, "Warning")
             Exit Sub
         End If
 
@@ -1024,7 +1024,7 @@ Friend Class WaveController
 
             Catch ex As Exception
                 Call Log.AddLogEntry(Log.levels.error, "Analysis failed: " & ex.Message)
-                MsgBox("Analysis failed:" & eol & ex.Message, MsgBoxStyle.Critical)
+                MsgBox("Analysis failed:" & eol & ex.Message, MsgBoxStyle.Critical, "Error")
 
             Finally
                 View.Cursor = Cursors.Default
@@ -1273,7 +1273,7 @@ Friend Class WaveController
 
         'Wenn keine Dateien vorhanden, abbrechen
         If (datasources.Count = 0) Then
-            MsgBox("There are no known files that could be reloaded!", MsgBoxStyle.Information)
+            MsgBox("There are no known files that could be reloaded!", MsgBoxStyle.Information, "Information")
             Exit Sub
         End If
 
@@ -1293,7 +1293,7 @@ Friend Class WaveController
         Next
 
         'Ask for user confirmation
-        If MsgBox(msg, MsgBoxStyle.OkCancel) = MsgBoxResult.Ok Then
+        If MsgBox(msg, MsgBoxStyle.Exclamation Or MsgBoxStyle.OkCancel, "Warning") = MsgBoxResult.Ok Then
 
             Log.AddLogEntry(Log.levels.info, "Reloading all series from their original datasources...")
 
@@ -1376,18 +1376,18 @@ Friend Class WaveController
             If CurrentVersion < latestVersion Then
                 'Update is available
                 View.ToolStripButton_UpdateNotification.Visible = True
-                Dim resp As MsgBoxResult = MsgBox($"A new version {latestVersion} is available!{eol}Click OK to go to the download page.", MsgBoxStyle.OkCancel Or MsgBoxStyle.Exclamation)
+                Dim resp As MsgBoxResult = MsgBox($"A new version {latestVersion} is available!{eol}Click OK to go to the download page.", MsgBoxStyle.Exclamation Or MsgBoxStyle.OkCancel, "Information")
                 If resp = MsgBoxResult.Ok Then
                     Process.Start(urlDownload)
                 End If
             Else
                 'No update available
                 View.ToolStripButton_UpdateNotification.Visible = False
-                MsgBox($"Currently used version {CurrentVersion} is up to date!", MsgBoxStyle.Information)
+                MsgBox($"Currently used version {CurrentVersion} is up to date!", MsgBoxStyle.Information, "Information")
             End If
 
         Catch ex As Exception
-            MsgBox("Error while checking for update:" & eol & ex.Message, MsgBoxStyle.Critical)
+            MsgBox("Error while checking for update:" & eol & ex.Message, MsgBoxStyle.Critical, "Error")
         End Try
     End Sub
 
@@ -1441,7 +1441,7 @@ Friend Class WaveController
         Try
             System.Diagnostics.Process.Start("notepad", filepath)
         Catch ex As Exception
-            MsgBox(ex.Message, MsgBoxStyle.Critical)
+            MsgBox(ex.Message, MsgBoxStyle.Critical, "Error")
         End Try
     End Sub
 
@@ -3199,7 +3199,7 @@ Friend Class WaveController
 
             'Abfrage für Reihenimport
             If (View.TChart1.Series.Count() > 0) Then
-                result = MsgBox("Also import time series?", MsgBoxStyle.YesNo)
+                result = MsgBox("Also import time series?", MsgBoxStyle.Question Or MsgBoxStyle.YesNo, "Question")
 
                 Select Case result
 
@@ -3314,7 +3314,7 @@ Friend Class WaveController
             Call FileImported(FileName)
 
         Catch ex As Exception
-            MsgBox("Error while loading:" & eol & ex.Message, MsgBoxStyle.Critical)
+            MsgBox("Error while loading:" & eol & ex.Message, MsgBoxStyle.Critical, "Error")
             Call Log.AddLogEntry(Log.levels.error, "Error while loading:" & eol & ex.Message)
         End Try
 

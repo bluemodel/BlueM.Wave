@@ -64,7 +64,7 @@ Friend Class SelectSeriesDialog
     Private Sub Button_OK_Click(sender As Object, e As EventArgs) Handles Button_OK.Click
 
         If (Me.ListBox_Series.SelectedItems.Count < 1) Then
-            MsgBox("Please select at least one series!", MsgBoxStyle.Exclamation)
+            MsgBox("Please select at least one series!", MsgBoxStyle.Exclamation, "Warning")
             Me.DialogResult = DialogResult.None
             Exit Sub
         Else

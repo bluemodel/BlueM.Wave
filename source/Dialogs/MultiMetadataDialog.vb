@@ -75,12 +75,12 @@ Friend Class MultiMetadataDialog
         Dim rowsInClipboard As String() = stringInClipboard.Split(rowSplitter, StringSplitOptions.RemoveEmptyEntries)
 
         If grid.RowCount <> rowsInClipboard.Length Then
-            MsgBox($"Number of rows in clipboard ({rowsInClipboard.Length}) does not match number of rows in grid ({grid.Rows.Count}). Paste cancelled.", MsgBoxStyle.Critical)
+            MsgBox($"Number of rows in clipboard ({rowsInClipboard.Length}) does not match number of rows in grid ({grid.Rows.Count}). Paste cancelled.", MsgBoxStyle.Critical, "Error")
             Exit Sub
         End If
         Dim clipboardColumnCount As Integer = rowsInClipboard(0).Split(columnSplitter).Length
         If grid.ColumnCount <> clipboardColumnCount Then
-            MsgBox($"Number of columns in clipboard ({clipboardColumnCount}) does not match number of columns in grid ({grid.ColumnCount}). Paste cancelled.", MsgBoxStyle.Critical)
+            MsgBox($"Number of columns in clipboard ({clipboardColumnCount}) does not match number of columns in grid ({grid.ColumnCount}). Paste cancelled.", MsgBoxStyle.Critical, "Error")
             Exit Sub
         End If
 
@@ -88,7 +88,7 @@ Friend Class MultiMetadataDialog
             Dim valuesInRow As String() = rowsInClipboard(iRow).Split(columnSplitter)
             'check series titles match in first column
             If valuesInRow(0) <> grid.Rows(iRow).Cells(0).Value Then
-                MsgBox($"Series title in row {iRow + 1} in clipboard ('{valuesInRow(0)}') does not match title in grid ('{grid.Rows(iRow).Cells(0).Value}'). Paste cancelled.", MsgBoxStyle.Critical)
+                MsgBox($"Series title in row {iRow + 1} in clipboard ('{valuesInRow(0)}') does not match title in grid ('{grid.Rows(iRow).Cells(0).Value}'). Paste cancelled.", MsgBoxStyle.Critical, "Error")
                 Exit Sub
             End If
             'paste values in other columns
