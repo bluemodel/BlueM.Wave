@@ -50,12 +50,14 @@ jobs:
           
       - name: Build and analyze
         shell: pwsh
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
           # Fail fast and propagate errors to the runner
           # https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_preference_variables?view=powershell-7.5
           $ErrorActionPreference = "Stop"
           $PSNativeCommandUseErrorActionPreference = $true
-          .\.sonar\scanner\dotnet-sonarscanner begin /k:"bluemodel_BlueM.Wave" /o:"bluemodel" /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
+          .\.sonar\scanner\dotnet-sonarscanner begin /k:"bluemodel_BlueM.Wave" /o:"bluemodel" /d:sonar.token="$env:SONAR_TOKEN"
           dotnet build source\Wave.vbproj
-          .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
+          .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.token="$env:SONAR_TOKEN"
 
