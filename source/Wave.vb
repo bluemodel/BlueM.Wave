@@ -249,9 +249,12 @@ Public Class Wave
                     dlgres = MessageBox.Show("Attempt to load clipboard text content in Wave as CSV data?", "Load from clipboard", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
                     If dlgres = DialogResult.Yes Then
                         'save as temp text file and then load file
-                        Dim tmpfile As String = IO.Path.GetTempFileName()
-                        Using writer As New IO.StreamWriter(tmpfile, False, Helpers.DefaultEncoding)
-                            writer.Write(clipboardtext)
+                        Dim tmpfile As String = IO.Path.Combine(IO.Path.GetTempPath(), IO.Path.GetRandomFileName() & ".csv")
+                        Log.AddLogEntry(levels.info, $"Saving clipboard text to temporary file {tmpfile}...")
+                        Using fileStream As New IO.FileStream(tmpfile, IO.FileMode.CreateNew, IO.FileAccess.Write, IO.FileShare.None)
+                            Using writer As New IO.StreamWriter(fileStream, Helpers.DefaultEncoding)
+                                writer.Write(clipboardtext)
+                            End Using
                         End Using
                         Call Me.Import_File(tmpfile)
                         'delete temp file after import
