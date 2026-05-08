@@ -1,0 +1,63 @@
+name: SonarQube
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+    types: [ opened, synchronize, reopened ]
+    
+jobs:
+  build-and-analyze:
+    name: Build and analyze
+    runs-on: windows-latest
+    
+    steps:
+      - name: Set up JDK 17
+        uses: actions/setup-java@v5.2.0
+        with:
+          java-version: 17
+          distribution: 'zulu'
+          
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+          
+      - name: Create empty TeeChart license file
+        run: copy /Y nul > "source\My Project\TeeChart.licenses"
+        shell: cmd
+        
+      - name: Cache SonarQube packages
+        uses: actions/cache@v5.0.5
+        with:
+          path: .\.sonar\cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
+          
+      - name: Cache SonarQube scanner
+        id: cache-sonar-scanner
+        uses: actions/cache@v5.0.5
+        with:
+          path: .\.sonar\scanner
+          key: ${{ runner.os }}-sonar-scanner
+          restore-keys: ${{ runner.os }}-sonar-scanner
+          
+      - name: Install SonarQube scanner
+        if: steps.cache-sonar-scanner.outputs.cache-hit != 'true'
+        shell: powershell
+        run: |
+          New-Item -Path .\.sonar\scanner -ItemType Directory
+          dotnet tool update dotnet-sonarscanner --tool-path .\.sonar\scanner
+          
+      - name: Build and analyze
+        shell: pwsh
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: |
+          # Fail fast and propagate errors to the runner
+          # https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_preference_variables?view=powershell-7.5
+          $ErrorActionPreference = "Stop"
+          $PSNativeCommandUseErrorActionPreference = $true
+          .\.sonar\scanner\dotnet-sonarscanner begin /k:"bluemodel_BlueM.Wave" /o:"bluemodel" /d:sonar.token="$env:SONAR_TOKEN"
+          dotnet build source\Wave.vbproj
+          .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.token="$env:SONAR_TOKEN"
+
