@@ -49,7 +49,7 @@ Partial Class LogWindow
         ToolStripButton_Clear.ImageTransparentColor = Color.Magenta
         ToolStripButton_Clear.Name = "ToolStripButton_Clear"
         ToolStripButton_Clear.Size = New Size(23, 22)
-        ToolStripButton_Clear.Text = "Clear log"
+        ToolStripButton_Clear.Text = "Clear"
         ToolStripButton_Clear.ToolTipText = "Clear log"
         ' 
         ' ToolStripButton_Save
@@ -64,7 +64,6 @@ Partial Class LogWindow
         ' ToolStripButton_Copy
         ' 
         ToolStripButton_Copy.DisplayStyle = ToolStripItemDisplayStyle.Image
-        ToolStripButton_Copy.Enabled = False
         ToolStripButton_Copy.Image = CType(resources.GetObject("ToolStripButton_Copy.Image"), Image)
         ToolStripButton_Copy.ImageTransparentColor = Color.Magenta
         ToolStripButton_Copy.Name = "ToolStripButton_Copy"

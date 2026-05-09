@@ -114,4 +114,7 @@ Friend Class LogWindow
         End If
     End Sub
 
+    Private Sub ToolStripButton_Copy_Click(sender As Object, e As EventArgs) Handles ToolStripButton_Copy.Click
+        Clipboard.SetText(Me.TextBox_Log.Text)
+    End Sub
 End Class
