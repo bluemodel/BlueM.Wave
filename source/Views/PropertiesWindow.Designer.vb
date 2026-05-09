@@ -1,4 +1,4 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
+<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
 Partial Class PropertiesWindow
     Inherits System.Windows.Forms.Form
 
@@ -22,277 +22,278 @@ Partial Class PropertiesWindow
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
-        Me.components = New System.ComponentModel.Container()
-        Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle3 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        components = New ComponentModel.Container()
+        Dim DataGridViewCellStyle1 As DataGridViewCellStyle = New DataGridViewCellStyle()
+        Dim DataGridViewCellStyle2 As DataGridViewCellStyle = New DataGridViewCellStyle()
+        Dim DataGridViewCellStyle3 As DataGridViewCellStyle = New DataGridViewCellStyle()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(PropertiesWindow))
-        Me.DataGridView1 = New System.Windows.Forms.DataGridView()
-        Me.Id = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.TitleDataGridViewTextBoxColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.Interpretation = New System.Windows.Forms.DataGridViewComboBoxColumn()
-        Me.UnitDataGridViewTextBoxColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.MetadataText = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.DataSource = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.Length = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.StartDate = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.EndDate = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.Average = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.FirstValue = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.LastValue = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.Minimum = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.Maximum = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.Sum = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.Volume = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.TimeSeriesBindingSource = New System.Windows.Forms.BindingSource(Me.components)
-        Me.ToolStrip1 = New System.Windows.Forms.ToolStrip()
-        Me.ToolStripButton_showStatistics = New System.Windows.Forms.ToolStripButton()
-        Me.ToolStripButton_MoveUp = New System.Windows.Forms.ToolStripButton()
-        Me.ToolStripButton_MoveDown = New System.Windows.Forms.ToolStripButton()
-        Me.ToolStripButton_Delete = New System.Windows.Forms.ToolStripButton()
-        Me.DataGridViewTextBoxColumn1 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.TimeSeriesBindingSource, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.ToolStrip1.SuspendLayout()
-        Me.SuspendLayout()
-        '
-        'DataGridView1
-        '
-        Me.DataGridView1.AllowUserToAddRows = False
-        Me.DataGridView1.AllowUserToResizeRows = False
-        Me.DataGridView1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.DataGridView1.AutoGenerateColumns = False
-        Me.DataGridView1.CausesValidation = False
-        Me.DataGridView1.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.EnableAlwaysIncludeHeaderText
-        Me.DataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.DataGridView1.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.Id, Me.TitleDataGridViewTextBoxColumn, Me.Interpretation, Me.UnitDataGridViewTextBoxColumn, Me.MetadataText, Me.DataSource, Me.Length, Me.StartDate, Me.EndDate, Me.Average, Me.FirstValue, Me.LastValue, Me.Minimum, Me.Maximum, Me.Sum, Me.Volume})
-        Me.DataGridView1.DataSource = Me.TimeSeriesBindingSource
-        Me.DataGridView1.Location = New System.Drawing.Point(13, 28)
-        Me.DataGridView1.Name = "DataGridView1"
-        Me.DataGridView1.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders
-        Me.DataGridView1.Size = New System.Drawing.Size(439, 222)
-        Me.DataGridView1.TabIndex = 1
-        '
-        'Id
-        '
-        Me.Id.DataPropertyName = "Id"
-        Me.Id.Frozen = True
-        Me.Id.HeaderText = "Id"
-        Me.Id.Name = "Id"
-        Me.Id.ReadOnly = True
-        Me.Id.Visible = False
-        Me.Id.Width = 41
-        '
-        'TitleDataGridViewTextBoxColumn
-        '
-        Me.TitleDataGridViewTextBoxColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells
-        Me.TitleDataGridViewTextBoxColumn.DataPropertyName = "Title"
-        DataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
-        Me.TitleDataGridViewTextBoxColumn.DefaultCellStyle = DataGridViewCellStyle1
-        Me.TitleDataGridViewTextBoxColumn.Frozen = True
-        Me.TitleDataGridViewTextBoxColumn.HeaderText = "Title"
-        Me.TitleDataGridViewTextBoxColumn.Name = "TitleDataGridViewTextBoxColumn"
-        Me.TitleDataGridViewTextBoxColumn.Width = 52
-        '
-        'Interpretation
-        '
-        Me.Interpretation.DataPropertyName = "Interpretation"
-        DataGridViewCellStyle2.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
-        Me.Interpretation.DefaultCellStyle = DataGridViewCellStyle2
-        Me.Interpretation.DisplayStyleForCurrentCellOnly = True
-        Me.Interpretation.HeaderText = "Interpretation"
-        Me.Interpretation.Name = "Interpretation"
-        Me.Interpretation.Resizable = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.Interpretation.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic
-        Me.Interpretation.Width = 94
-        '
-        'UnitDataGridViewTextBoxColumn
-        '
-        Me.UnitDataGridViewTextBoxColumn.DataPropertyName = "Unit"
-        DataGridViewCellStyle3.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
-        Me.UnitDataGridViewTextBoxColumn.DefaultCellStyle = DataGridViewCellStyle3
-        Me.UnitDataGridViewTextBoxColumn.HeaderText = "Unit"
-        Me.UnitDataGridViewTextBoxColumn.Name = "UnitDataGridViewTextBoxColumn"
-        Me.UnitDataGridViewTextBoxColumn.Width = 51
-        '
-        'MetadataText
-        '
-        Me.MetadataText.DataPropertyName = "MetadataText"
-        Me.MetadataText.HeaderText = "Metadata"
-        Me.MetadataText.Name = "MetadataText"
-        Me.MetadataText.ReadOnly = True
-        '
-        'DataSource
-        '
-        Me.DataSource.DataPropertyName = "DataSource"
-        Me.DataSource.HeaderText = "DataSource"
-        Me.DataSource.Name = "DataSource"
-        Me.DataSource.ReadOnly = True
-        '
-        'Length
-        '
-        Me.Length.DataPropertyName = "Length"
-        Me.Length.HeaderText = "Length"
-        Me.Length.Name = "Length"
-        Me.Length.ReadOnly = True
-        Me.Length.Visible = False
-        '
-        'StartDate
-        '
-        Me.StartDate.DataPropertyName = "StartDate"
-        Me.StartDate.HeaderText = "StartDate"
-        Me.StartDate.Name = "StartDate"
-        Me.StartDate.ReadOnly = True
-        Me.StartDate.Visible = False
-        '
-        'EndDate
-        '
-        Me.EndDate.DataPropertyName = "EndDate"
-        Me.EndDate.HeaderText = "EndDate"
-        Me.EndDate.Name = "EndDate"
-        Me.EndDate.ReadOnly = True
-        Me.EndDate.Visible = False
-        '
-        'Average
-        '
-        Me.Average.DataPropertyName = "Average"
-        Me.Average.HeaderText = "Average"
-        Me.Average.Name = "Average"
-        Me.Average.ReadOnly = True
-        Me.Average.Visible = False
-        '
-        'FirstValue
-        '
-        Me.FirstValue.DataPropertyName = "FirstValue"
-        Me.FirstValue.HeaderText = "FirstValue"
-        Me.FirstValue.Name = "FirstValue"
-        Me.FirstValue.ReadOnly = True
-        Me.FirstValue.Visible = False
-        '
-        'LastValue
-        '
-        Me.LastValue.DataPropertyName = "LastValue"
-        Me.LastValue.HeaderText = "LastValue"
-        Me.LastValue.Name = "LastValue"
-        Me.LastValue.ReadOnly = True
-        Me.LastValue.Visible = False
-        '
-        'Minimum
-        '
-        Me.Minimum.DataPropertyName = "Minimum"
-        Me.Minimum.HeaderText = "Minimum"
-        Me.Minimum.Name = "Minimum"
-        Me.Minimum.ReadOnly = True
-        Me.Minimum.Visible = False
-        '
-        'Maximum
-        '
-        Me.Maximum.DataPropertyName = "Maximum"
-        Me.Maximum.HeaderText = "Maximum"
-        Me.Maximum.Name = "Maximum"
-        Me.Maximum.ReadOnly = True
-        Me.Maximum.Visible = False
-        '
-        'Sum
-        '
-        Me.Sum.DataPropertyName = "Sum"
-        Me.Sum.HeaderText = "Sum"
-        Me.Sum.Name = "Sum"
-        Me.Sum.ReadOnly = True
-        Me.Sum.Visible = False
-        '
-        'Volume
-        '
-        Me.Volume.DataPropertyName = "Volume"
-        Me.Volume.HeaderText = "Volume"
-        Me.Volume.Name = "Volume"
-        Me.Volume.ReadOnly = True
-        Me.Volume.Visible = False
-        '
-        'TimeSeriesBindingSource
-        '
-        Me.TimeSeriesBindingSource.DataSource = GetType(BlueM.Wave.TimeSeries)
-        '
-        'ToolStrip1
-        '
-        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButton_showStatistics, Me.ToolStripButton_MoveUp, Me.ToolStripButton_MoveDown, Me.ToolStripButton_Delete})
-        Me.ToolStrip1.Location = New System.Drawing.Point(0, 0)
-        Me.ToolStrip1.Name = "ToolStrip1"
-        Me.ToolStrip1.Size = New System.Drawing.Size(464, 25)
-        Me.ToolStrip1.TabIndex = 2
-        Me.ToolStrip1.Text = "ToolStrip1"
-        '
-        'ToolStripButton_showStatistics
-        '
-        Me.ToolStripButton_showStatistics.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right
-        Me.ToolStripButton_showStatistics.CheckOnClick = True
-        Me.ToolStripButton_showStatistics.Image = Global.BlueM.Wave.My.Resources.Resources.table_gear
-        Me.ToolStripButton_showStatistics.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.ToolStripButton_showStatistics.Name = "ToolStripButton_showStatistics"
-        Me.ToolStripButton_showStatistics.Size = New System.Drawing.Size(104, 22)
-        Me.ToolStripButton_showStatistics.Text = "Show statistics"
-        Me.ToolStripButton_showStatistics.ToolTipText = "Show statistics"
-        '
-        'ToolStripButton_MoveUp
-        '
-        Me.ToolStripButton_MoveUp.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.ToolStripButton_MoveUp.Enabled = False
-        Me.ToolStripButton_MoveUp.Image = Global.BlueM.Wave.My.Resources.Resources.arrow_up
-        Me.ToolStripButton_MoveUp.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.ToolStripButton_MoveUp.Name = "ToolStripButton_MoveUp"
-        Me.ToolStripButton_MoveUp.Size = New System.Drawing.Size(23, 22)
-        Me.ToolStripButton_MoveUp.Text = "Move selected time series up"
-        Me.ToolStripButton_MoveUp.ToolTipText = "Move selected time series up"
-        '
-        'ToolStripButton_MoveDown
-        '
-        Me.ToolStripButton_MoveDown.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.ToolStripButton_MoveDown.Enabled = False
-        Me.ToolStripButton_MoveDown.Image = Global.BlueM.Wave.My.Resources.Resources.arrow_down
-        Me.ToolStripButton_MoveDown.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.ToolStripButton_MoveDown.Name = "ToolStripButton_MoveDown"
-        Me.ToolStripButton_MoveDown.Size = New System.Drawing.Size(23, 22)
-        Me.ToolStripButton_MoveDown.Text = "Move selected time series down"
-        '
-        'ToolStripButton_Delete
-        '
-        Me.ToolStripButton_Delete.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.ToolStripButton_Delete.Enabled = False
-        Me.ToolStripButton_Delete.Image = Global.BlueM.Wave.My.Resources.Resources.chart_line_delete
-        Me.ToolStripButton_Delete.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.ToolStripButton_Delete.Name = "ToolStripButton_Delete"
-        Me.ToolStripButton_Delete.Size = New System.Drawing.Size(23, 22)
-        Me.ToolStripButton_Delete.Text = "ToolStripButton_Delete"
-        Me.ToolStripButton_Delete.ToolTipText = "Delete selected time series"
-        '
-        'DataGridViewTextBoxColumn1
-        '
-        Me.DataGridViewTextBoxColumn1.DataPropertyName = "DataSource"
-        Me.DataGridViewTextBoxColumn1.HeaderText = "DataSource"
-        Me.DataGridViewTextBoxColumn1.Name = "DataGridViewTextBoxColumn1"
-        Me.DataGridViewTextBoxColumn1.ReadOnly = True
-        '
-        'PropertiesWindow
-        '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
-        Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(464, 262)
-        Me.Controls.Add(Me.ToolStrip1)
-        Me.Controls.Add(Me.DataGridView1)
-        Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
-        Me.MaximizeBox = False
-        Me.MinimumSize = New System.Drawing.Size(300, 200)
-        Me.Name = "PropertiesWindow"
-        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = "Time Series Properties"
-        CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.TimeSeriesBindingSource, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.ToolStrip1.ResumeLayout(False)
-        Me.ToolStrip1.PerformLayout()
-        Me.ResumeLayout(False)
-        Me.PerformLayout()
+        DataGridView1 = New DataGridView()
+        Id = New DataGridViewTextBoxColumn()
+        TitleDataGridViewTextBoxColumn = New DataGridViewTextBoxColumn()
+        Interpretation = New DataGridViewComboBoxColumn()
+        UnitDataGridViewTextBoxColumn = New DataGridViewTextBoxColumn()
+        MetadataText = New DataGridViewTextBoxColumn()
+        DataSource = New DataGridViewTextBoxColumn()
+        Length = New DataGridViewTextBoxColumn()
+        StartDate = New DataGridViewTextBoxColumn()
+        EndDate = New DataGridViewTextBoxColumn()
+        Average = New DataGridViewTextBoxColumn()
+        FirstValue = New DataGridViewTextBoxColumn()
+        LastValue = New DataGridViewTextBoxColumn()
+        Minimum = New DataGridViewTextBoxColumn()
+        Maximum = New DataGridViewTextBoxColumn()
+        Sum = New DataGridViewTextBoxColumn()
+        Volume = New DataGridViewTextBoxColumn()
+        TimeSeriesBindingSource = New BindingSource(components)
+        ToolStrip1 = New ToolStrip()
+        ToolStripButton_showStatistics = New ToolStripButton()
+        ToolStripButton_MoveUp = New ToolStripButton()
+        ToolStripButton_MoveDown = New ToolStripButton()
+        ToolStripButton_Delete = New ToolStripButton()
+        DataGridViewTextBoxColumn1 = New DataGridViewTextBoxColumn()
+        CType(DataGridView1, ComponentModel.ISupportInitialize).BeginInit()
+        CType(TimeSeriesBindingSource, ComponentModel.ISupportInitialize).BeginInit()
+        ToolStrip1.SuspendLayout()
+        SuspendLayout()
+        ' 
+        ' DataGridView1
+        ' 
+        DataGridView1.AllowUserToAddRows = False
+        DataGridView1.AllowUserToResizeRows = False
+        DataGridView1.Anchor = AnchorStyles.Top Or AnchorStyles.Bottom Or AnchorStyles.Left Or AnchorStyles.Right
+        DataGridView1.AutoGenerateColumns = False
+        DataGridView1.CausesValidation = False
+        DataGridView1.ClipboardCopyMode = DataGridViewClipboardCopyMode.EnableAlwaysIncludeHeaderText
+        DataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize
+        DataGridView1.Columns.AddRange(New DataGridViewColumn() {Id, TitleDataGridViewTextBoxColumn, Interpretation, UnitDataGridViewTextBoxColumn, MetadataText, DataSource, Length, StartDate, EndDate, Average, FirstValue, LastValue, Minimum, Maximum, Sum, Volume})
+        DataGridView1.DataSource = TimeSeriesBindingSource
+        DataGridView1.EnableHeadersVisualStyles = False
+        DataGridView1.Location = New Point(15, 32)
+        DataGridView1.Margin = New Padding(4, 3, 4, 3)
+        DataGridView1.Name = "DataGridView1"
+        DataGridView1.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders
+        DataGridView1.Size = New Size(512, 256)
+        DataGridView1.TabIndex = 1
+        ' 
+        ' Id
+        ' 
+        Id.DataPropertyName = "Id"
+        Id.Frozen = True
+        Id.HeaderText = "Id"
+        Id.Name = "Id"
+        Id.ReadOnly = True
+        Id.Visible = False
+        Id.Width = 41
+        ' 
+        ' TitleDataGridViewTextBoxColumn
+        ' 
+        TitleDataGridViewTextBoxColumn.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells
+        TitleDataGridViewTextBoxColumn.DataPropertyName = "Title"
+        DataGridViewCellStyle1.BackColor = Color.FromArgb(CByte(255), CByte(255), CByte(192))
+        TitleDataGridViewTextBoxColumn.DefaultCellStyle = DataGridViewCellStyle1
+        TitleDataGridViewTextBoxColumn.Frozen = True
+        TitleDataGridViewTextBoxColumn.HeaderText = "Title"
+        TitleDataGridViewTextBoxColumn.Name = "TitleDataGridViewTextBoxColumn"
+        TitleDataGridViewTextBoxColumn.Width = 54
+        ' 
+        ' Interpretation
+        ' 
+        Interpretation.DataPropertyName = "Interpretation"
+        DataGridViewCellStyle2.BackColor = Color.FromArgb(CByte(255), CByte(255), CByte(192))
+        Interpretation.DefaultCellStyle = DataGridViewCellStyle2
+        Interpretation.DisplayStyleForCurrentCellOnly = True
+        Interpretation.HeaderText = "Interpretation"
+        Interpretation.Name = "Interpretation"
+        Interpretation.Resizable = DataGridViewTriState.True
+        Interpretation.SortMode = DataGridViewColumnSortMode.Automatic
+        Interpretation.Width = 94
+        ' 
+        ' UnitDataGridViewTextBoxColumn
+        ' 
+        UnitDataGridViewTextBoxColumn.DataPropertyName = "Unit"
+        DataGridViewCellStyle3.BackColor = Color.FromArgb(CByte(255), CByte(255), CByte(192))
+        UnitDataGridViewTextBoxColumn.DefaultCellStyle = DataGridViewCellStyle3
+        UnitDataGridViewTextBoxColumn.HeaderText = "Unit"
+        UnitDataGridViewTextBoxColumn.Name = "UnitDataGridViewTextBoxColumn"
+        UnitDataGridViewTextBoxColumn.Width = 51
+        ' 
+        ' MetadataText
+        ' 
+        MetadataText.DataPropertyName = "MetadataText"
+        MetadataText.HeaderText = "Metadata"
+        MetadataText.Name = "MetadataText"
+        MetadataText.ReadOnly = True
+        ' 
+        ' DataSource
+        ' 
+        DataSource.DataPropertyName = "DataSource"
+        DataSource.HeaderText = "DataSource"
+        DataSource.Name = "DataSource"
+        DataSource.ReadOnly = True
+        ' 
+        ' Length
+        ' 
+        Length.DataPropertyName = "Length"
+        Length.HeaderText = "Length"
+        Length.Name = "Length"
+        Length.ReadOnly = True
+        Length.Visible = False
+        ' 
+        ' StartDate
+        ' 
+        StartDate.DataPropertyName = "StartDate"
+        StartDate.HeaderText = "StartDate"
+        StartDate.Name = "StartDate"
+        StartDate.ReadOnly = True
+        StartDate.Visible = False
+        ' 
+        ' EndDate
+        ' 
+        EndDate.DataPropertyName = "EndDate"
+        EndDate.HeaderText = "EndDate"
+        EndDate.Name = "EndDate"
+        EndDate.ReadOnly = True
+        EndDate.Visible = False
+        ' 
+        ' Average
+        ' 
+        Average.DataPropertyName = "Average"
+        Average.HeaderText = "Average"
+        Average.Name = "Average"
+        Average.ReadOnly = True
+        Average.Visible = False
+        ' 
+        ' FirstValue
+        ' 
+        FirstValue.DataPropertyName = "FirstValue"
+        FirstValue.HeaderText = "FirstValue"
+        FirstValue.Name = "FirstValue"
+        FirstValue.ReadOnly = True
+        FirstValue.Visible = False
+        ' 
+        ' LastValue
+        ' 
+        LastValue.DataPropertyName = "LastValue"
+        LastValue.HeaderText = "LastValue"
+        LastValue.Name = "LastValue"
+        LastValue.ReadOnly = True
+        LastValue.Visible = False
+        ' 
+        ' Minimum
+        ' 
+        Minimum.DataPropertyName = "Minimum"
+        Minimum.HeaderText = "Minimum"
+        Minimum.Name = "Minimum"
+        Minimum.ReadOnly = True
+        Minimum.Visible = False
+        ' 
+        ' Maximum
+        ' 
+        Maximum.DataPropertyName = "Maximum"
+        Maximum.HeaderText = "Maximum"
+        Maximum.Name = "Maximum"
+        Maximum.ReadOnly = True
+        Maximum.Visible = False
+        ' 
+        ' Sum
+        ' 
+        Sum.DataPropertyName = "Sum"
+        Sum.HeaderText = "Sum"
+        Sum.Name = "Sum"
+        Sum.ReadOnly = True
+        Sum.Visible = False
+        ' 
+        ' Volume
+        ' 
+        Volume.DataPropertyName = "Volume"
+        Volume.HeaderText = "Volume"
+        Volume.Name = "Volume"
+        Volume.ReadOnly = True
+        Volume.Visible = False
+        ' 
+        ' TimeSeriesBindingSource
+        ' 
+        TimeSeriesBindingSource.DataSource = GetType(TimeSeries)
+        ' 
+        ' ToolStrip1
+        ' 
+        ToolStrip1.Items.AddRange(New ToolStripItem() {ToolStripButton_showStatistics, ToolStripButton_MoveUp, ToolStripButton_MoveDown, ToolStripButton_Delete})
+        ToolStrip1.Location = New Point(0, 0)
+        ToolStrip1.Name = "ToolStrip1"
+        ToolStrip1.Size = New Size(541, 25)
+        ToolStrip1.TabIndex = 2
+        ToolStrip1.Text = "ToolStrip1"
+        ' 
+        ' ToolStripButton_showStatistics
+        ' 
+        ToolStripButton_showStatistics.Alignment = ToolStripItemAlignment.Right
+        ToolStripButton_showStatistics.CheckOnClick = True
+        ToolStripButton_showStatistics.Image = CType(resources.GetObject("ToolStripButton_showStatistics.Image"), Image)
+        ToolStripButton_showStatistics.ImageTransparentColor = Color.Magenta
+        ToolStripButton_showStatistics.Name = "ToolStripButton_showStatistics"
+        ToolStripButton_showStatistics.Size = New Size(104, 22)
+        ToolStripButton_showStatistics.Text = "Show statistics"
+        ToolStripButton_showStatistics.ToolTipText = "Show statistics"
+        ' 
+        ' ToolStripButton_MoveUp
+        ' 
+        ToolStripButton_MoveUp.DisplayStyle = ToolStripItemDisplayStyle.Image
+        ToolStripButton_MoveUp.Enabled = False
+        ToolStripButton_MoveUp.Image = CType(resources.GetObject("ToolStripButton_MoveUp.Image"), Image)
+        ToolStripButton_MoveUp.ImageTransparentColor = Color.Magenta
+        ToolStripButton_MoveUp.Name = "ToolStripButton_MoveUp"
+        ToolStripButton_MoveUp.Size = New Size(23, 22)
+        ToolStripButton_MoveUp.Text = "Move selected time series up"
+        ToolStripButton_MoveUp.ToolTipText = "Move selected time series up"
+        ' 
+        ' ToolStripButton_MoveDown
+        ' 
+        ToolStripButton_MoveDown.DisplayStyle = ToolStripItemDisplayStyle.Image
+        ToolStripButton_MoveDown.Enabled = False
+        ToolStripButton_MoveDown.Image = CType(resources.GetObject("ToolStripButton_MoveDown.Image"), Image)
+        ToolStripButton_MoveDown.ImageTransparentColor = Color.Magenta
+        ToolStripButton_MoveDown.Name = "ToolStripButton_MoveDown"
+        ToolStripButton_MoveDown.Size = New Size(23, 22)
+        ToolStripButton_MoveDown.Text = "Move selected time series down"
+        ' 
+        ' ToolStripButton_Delete
+        ' 
+        ToolStripButton_Delete.DisplayStyle = ToolStripItemDisplayStyle.Image
+        ToolStripButton_Delete.Enabled = False
+        ToolStripButton_Delete.Image = CType(resources.GetObject("ToolStripButton_Delete.Image"), Image)
+        ToolStripButton_Delete.ImageTransparentColor = Color.Magenta
+        ToolStripButton_Delete.Name = "ToolStripButton_Delete"
+        ToolStripButton_Delete.Size = New Size(23, 22)
+        ToolStripButton_Delete.Text = "ToolStripButton_Delete"
+        ToolStripButton_Delete.ToolTipText = "Delete selected time series"
+        ' 
+        ' DataGridViewTextBoxColumn1
+        ' 
+        DataGridViewTextBoxColumn1.DataPropertyName = "DataSource"
+        DataGridViewTextBoxColumn1.HeaderText = "DataSource"
+        DataGridViewTextBoxColumn1.Name = "DataGridViewTextBoxColumn1"
+        DataGridViewTextBoxColumn1.ReadOnly = True
+        ' 
+        ' PropertiesWindow
+        ' 
+        AutoScaleDimensions = New SizeF(7F, 15F)
+        AutoScaleMode = AutoScaleMode.Font
+        ClientSize = New Size(541, 302)
+        Controls.Add(ToolStrip1)
+        Controls.Add(DataGridView1)
+        Icon = CType(resources.GetObject("$this.Icon"), Icon)
+        Margin = New Padding(4, 3, 4, 3)
+        MaximizeBox = False
+        MinimumSize = New Size(347, 225)
+        Name = "PropertiesWindow"
+        StartPosition = FormStartPosition.CenterParent
+        Text = "Time Series Properties"
+        CType(DataGridView1, ComponentModel.ISupportInitialize).EndInit()
+        CType(TimeSeriesBindingSource, ComponentModel.ISupportInitialize).EndInit()
+        ToolStrip1.ResumeLayout(False)
+        ToolStrip1.PerformLayout()
+        ResumeLayout(False)
+        PerformLayout()
 
     End Sub
     Friend WithEvents DataGridView1 As System.Windows.Forms.DataGridView

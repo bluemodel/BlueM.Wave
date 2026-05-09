@@ -44,6 +44,7 @@ Partial Class AxisDialog
         DataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize
         DataGridView1.Columns.AddRange(New DataGridViewColumn() {NameColumn, TitleColumn, UnitColumn})
         DataGridView1.DataSource = AxisWrapperBindingSource
+        DataGridView1.EnableHeadersVisualStyles = False
         DataGridView1.Location = New Point(12, 12)
         DataGridView1.Name = "DataGridView1"
         DataGridView1.Size = New Size(483, 233)

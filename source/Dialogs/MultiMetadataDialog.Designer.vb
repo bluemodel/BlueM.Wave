@@ -59,6 +59,7 @@ Partial Class MultiMetadataDialog
         DataGridView1.ClipboardCopyMode = DataGridViewClipboardCopyMode.EnableAlwaysIncludeHeaderText
         DataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize
         DataGridView1.Columns.AddRange(New DataGridViewColumn() {NameColumn})
+        DataGridView1.EnableHeadersVisualStyles = False
         DataGridView1.Location = New Point(15, 14)
         DataGridView1.Margin = New Padding(4, 3, 4, 3)
         DataGridView1.Name = "DataGridView1"

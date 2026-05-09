@@ -53,6 +53,7 @@ Partial Class SeriesEditorDialog
         DataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells
         DataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize
         DataGridView1.Columns.AddRange(New DataGridViewColumn() {ColumnDate, ColumnValue})
+        DataGridView1.EnableHeadersVisualStyles = False
         DataGridView1.Location = New Point(14, 111)
         DataGridView1.Name = "DataGridView1"
         DataGridView1.Size = New Size(313, 223)
