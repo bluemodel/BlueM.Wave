@@ -2674,11 +2674,14 @@ Friend Class WaveController
                 Dim number As Integer = View.TChart1.Axes.Custom.Count + 1
                 axis = New Steema.TeeChart.Axis(View.TChart1.Chart)
                 View.TChart1.Axes.Custom.Add(axis)
+                axis.AxisPen.Color = If(Helpers.GetCurrentColorMode = SystemColorMode.Dark, Color.White, Color.Black)
+                axis.Ticks.Color = If(Helpers.GetCurrentColorMode = SystemColorMode.Dark, Color.White, Color.Black)
+                axis.Grid.Color = If(Helpers.GetCurrentColorMode = SystemColorMode.Dark, Color.FromArgb(169, 169, 169), Color.FromArgb(125, 125, 125))
                 axis.Labels.Font.Name = My.Settings.defaultFont
-                axis.Labels.Font.Color = Color.Black 'TODO: depends on color mode!
+                axis.Labels.Font.Color = If(Helpers.GetCurrentColorMode = SystemColorMode.Dark, Color.White, Color.Black)
                 axis.Labels.Font.Size = My.Settings.defaultFontSize
                 axis.Title.Font.Name = My.Settings.defaultFont
-                axis.Title.Font.Color = Color.Black 'TODO: depends on color mode!
+                axis.Title.Font.Color = If(Helpers.GetCurrentColorMode = SystemColorMode.Dark, Color.White, Color.Black)
                 axis.Title.Font.Size = My.Settings.defaultFontSize
                 axis.Title.Text = unit
                 axis.Title.Angle = 90
