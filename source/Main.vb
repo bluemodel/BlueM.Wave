@@ -23,8 +23,6 @@ Friend Module Main
 
         Application.EnableVisualStyles()
         Application.SetCompatibleTextRenderingDefault(False)
-        Dim colormode As SystemColorMode = If(Helpers.GetWindowsColorMode() = 0, SystemColorMode.Dark, SystemColorMode.Classic)
-        Application.SetColorMode(colormode)
 
         'load user settings
         My.Settings.Reload()
@@ -38,6 +36,9 @@ Friend Module Main
                 Log.AddLogEntry(Log.levels.error, "Error upgrading user settings: " & ex.Message)
             End Try
         End If
+
+        'set color mode (depends on user settings)
+        Application.SetColorMode(Helpers.GetCurrentColorMode)
 
         Dim wave As New Wave()
         Dim args As List(Of String) = Environment.GetCommandLineArgs().Skip(1).ToList()

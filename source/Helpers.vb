@@ -298,7 +298,7 @@ Public Module Helpers
         chart.Axes.Bottom.Grid.Style = Drawing2D.DashStyle.Dash
 
         'set color mode
-        Call ChartSetColorMode(chart, Application.ColorMode)
+        Call ChartSetColorMode(chart, Helpers.GetCurrentColorMode)
 
         'set font with user setting
         Call ChartSetFont(chart, My.Settings.defaultFont)
@@ -318,20 +318,15 @@ Public Module Helpers
         Dim foreColor As Color
         Dim lightColor As Color
 
-        If mode = SystemColorMode.System Then
-            'determine system color mode
-            mode = If(GetWindowsColorMode() = 0, SystemColorMode.Dark, SystemColorMode.Classic)
-        End If
-
         Select Case mode
-            Case SystemColorMode.Classic
-                backColor = Color.White
-                foreColor = Color.Black
-                lightColor = Color.FromArgb(169, 169, 169)
             Case SystemColorMode.Dark
                 backColor = Color.FromArgb(48, 48, 48)
                 foreColor = Color.White
                 lightColor = Color.FromArgb(125, 125, 125)
+            Case Else
+                backColor = Color.White
+                foreColor = Color.Black
+                lightColor = Color.FromArgb(169, 169, 169)
         End Select
 
         chart.Walls.Back.Color = backColor
@@ -427,13 +422,30 @@ Public Module Helpers
     End Sub
 
     ''' <summary>
+    ''' Returns the current color mode based on user settings and system color mode
+    ''' </summary>
+    ''' <returns>Either SystemColorMode.Classic or SystemColorMode.Dark</returns>
+    Friend Function GetCurrentColorMode() As SystemColorMode
+        Select Case My.Settings.colorMode
+            Case "Auto"
+                Return If(Helpers.GetWindowsColorMode() = 0, SystemColorMode.Dark, SystemColorMode.Classic)
+            Case "Light"
+                Return SystemColorMode.Classic
+            Case "Dark"
+                Return SystemColorMode.Dark
+            Case Else
+                Return SystemColorMode.Classic
+        End Select
+    End Function
+
+    ''' <summary>
     ''' Returns Windows Color Mode for Applications.
     ''' 0 = dark theme, 1 = light theme
     ''' </summary>
     ''' <param name="GetSystemColorModeInstead">If True, returns system color mode; otherwise, returns app color mode.</param>
     ''' <returns>0 for dark theme, 1 for light theme</returns>
     ''' <remarks>based on https://stackoverflow.com/a/77891877</remarks>
-    Friend Function GetWindowsColorMode(Optional GetSystemColorModeInstead As Boolean = False) As Integer
+    Private Function GetWindowsColorMode(Optional GetSystemColorModeInstead As Boolean = False) As Integer
         Try
             Return CInt(Microsoft.Win32.Registry.GetValue(
                 "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize",

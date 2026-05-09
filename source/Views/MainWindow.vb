@@ -238,20 +238,16 @@ Friend Class MainWindow
         Dim backColor As Color
         Dim foreColor As Color
         Dim lightColor As Color
-        Dim mode As SystemColorMode = Application.ColorMode
-        If mode = SystemColorMode.System Then
-            'determine system color mode
-            mode = If(GetWindowsColorMode() = 0, SystemColorMode.Dark, SystemColorMode.Classic)
-        End If
+        Dim mode As SystemColorMode = Helpers.GetCurrentColorMode()
         Select Case mode
-            Case SystemColorMode.Classic
-                backColor = Color.FromArgb(239, 239, 239)
-                foreColor = Color.FromArgb(100, 100, 100)
-                lightColor = Color.FromArgb(169, 169, 169)
             Case SystemColorMode.Dark
                 backColor = Color.FromArgb(48, 48, 48)
                 foreColor = Color.FromArgb(200, 200, 200)
                 lightColor = Color.FromArgb(125, 125, 125)
+            Case Else
+                backColor = Color.FromArgb(239, 239, 239)
+                foreColor = Color.FromArgb(100, 100, 100)
+                lightColor = Color.FromArgb(169, 169, 169)
         End Select
         Me.TChart2.Panel.Brush.Color = backColor
         Me.TChart2.Walls.Back.Color = backColor
