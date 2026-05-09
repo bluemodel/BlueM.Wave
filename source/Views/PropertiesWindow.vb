@@ -49,6 +49,19 @@ Friend Class PropertiesWindow
         InitializeComponent()
         ' Add any initialization after the InitializeComponent() call.
         Me.Interpretation.DataSource = System.Enum.GetValues(GetType(TimeSeries.InterpretationEnum))
+
+        'set background color for editable columns
+        Dim backColor As Color
+        Select Case Helpers.GetCurrentColorMode()
+            Case SystemColorMode.Dark
+                backColor = Color.FromArgb(255, 81, 81, 22) 'dark yellow
+            Case Else
+                backColor = Color.FromArgb(255, 255, 255, 192) 'light yellow
+        End Select
+        Dim cellstyle As New DataGridViewCellStyle With {.BackColor = backColor}
+        DataGridView1.Columns("Title").DefaultCellStyle = cellstyle
+        DataGridView1.Columns("Unit").DefaultCellStyle = cellstyle
+        DataGridView1.Columns("Interpretation").DefaultCellStyle = cellstyle
     End Sub
 
     ''' <summary>

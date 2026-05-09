@@ -23,15 +23,22 @@ Partial Class PropertiesWindow
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         components = New ComponentModel.Container()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(PropertiesWindow))
         Dim DataGridViewCellStyle1 As DataGridViewCellStyle = New DataGridViewCellStyle()
         Dim DataGridViewCellStyle2 As DataGridViewCellStyle = New DataGridViewCellStyle()
         Dim DataGridViewCellStyle3 As DataGridViewCellStyle = New DataGridViewCellStyle()
-        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(PropertiesWindow))
         DataGridView1 = New DataGridView()
+        TimeSeriesBindingSource = New BindingSource(components)
+        ToolStrip1 = New ToolStrip()
+        ToolStripButton_showStatistics = New ToolStripButton()
+        ToolStripButton_MoveUp = New ToolStripButton()
+        ToolStripButton_MoveDown = New ToolStripButton()
+        ToolStripButton_Delete = New ToolStripButton()
+        DataGridViewTextBoxColumn1 = New DataGridViewTextBoxColumn()
         Id = New DataGridViewTextBoxColumn()
-        TitleDataGridViewTextBoxColumn = New DataGridViewTextBoxColumn()
+        Title = New DataGridViewTextBoxColumn()
         Interpretation = New DataGridViewComboBoxColumn()
-        UnitDataGridViewTextBoxColumn = New DataGridViewTextBoxColumn()
+        Unit = New DataGridViewTextBoxColumn()
         MetadataText = New DataGridViewTextBoxColumn()
         DataSource = New DataGridViewTextBoxColumn()
         Length = New DataGridViewTextBoxColumn()
@@ -44,13 +51,6 @@ Partial Class PropertiesWindow
         Maximum = New DataGridViewTextBoxColumn()
         Sum = New DataGridViewTextBoxColumn()
         Volume = New DataGridViewTextBoxColumn()
-        TimeSeriesBindingSource = New BindingSource(components)
-        ToolStrip1 = New ToolStrip()
-        ToolStripButton_showStatistics = New ToolStripButton()
-        ToolStripButton_MoveUp = New ToolStripButton()
-        ToolStripButton_MoveDown = New ToolStripButton()
-        ToolStripButton_Delete = New ToolStripButton()
-        DataGridViewTextBoxColumn1 = New DataGridViewTextBoxColumn()
         CType(DataGridView1, ComponentModel.ISupportInitialize).BeginInit()
         CType(TimeSeriesBindingSource, ComponentModel.ISupportInitialize).BeginInit()
         ToolStrip1.SuspendLayout()
@@ -65,7 +65,7 @@ Partial Class PropertiesWindow
         DataGridView1.CausesValidation = False
         DataGridView1.ClipboardCopyMode = DataGridViewClipboardCopyMode.EnableAlwaysIncludeHeaderText
         DataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        DataGridView1.Columns.AddRange(New DataGridViewColumn() {Id, TitleDataGridViewTextBoxColumn, Interpretation, UnitDataGridViewTextBoxColumn, MetadataText, DataSource, Length, StartDate, EndDate, Average, FirstValue, LastValue, Minimum, Maximum, Sum, Volume})
+        DataGridView1.Columns.AddRange(New DataGridViewColumn() {Id, Title, Interpretation, Unit, MetadataText, DataSource, Length, StartDate, EndDate, Average, FirstValue, LastValue, Minimum, Maximum, Sum, Volume})
         DataGridView1.DataSource = TimeSeriesBindingSource
         DataGridView1.EnableHeadersVisualStyles = False
         DataGridView1.Location = New Point(15, 32)
@@ -74,6 +74,69 @@ Partial Class PropertiesWindow
         DataGridView1.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders
         DataGridView1.Size = New Size(512, 256)
         DataGridView1.TabIndex = 1
+        ' 
+        ' TimeSeriesBindingSource
+        ' 
+        TimeSeriesBindingSource.DataSource = GetType(TimeSeries)
+        ' 
+        ' ToolStrip1
+        ' 
+        ToolStrip1.Items.AddRange(New ToolStripItem() {ToolStripButton_showStatistics, ToolStripButton_MoveUp, ToolStripButton_MoveDown, ToolStripButton_Delete})
+        ToolStrip1.Location = New Point(0, 0)
+        ToolStrip1.Name = "ToolStrip1"
+        ToolStrip1.Size = New Size(541, 25)
+        ToolStrip1.TabIndex = 2
+        ToolStrip1.Text = "ToolStrip1"
+        ' 
+        ' ToolStripButton_showStatistics
+        ' 
+        ToolStripButton_showStatistics.Alignment = ToolStripItemAlignment.Right
+        ToolStripButton_showStatistics.CheckOnClick = True
+        ToolStripButton_showStatistics.Image = CType(resources.GetObject("ToolStripButton_showStatistics.Image"), Image)
+        ToolStripButton_showStatistics.ImageTransparentColor = Color.Magenta
+        ToolStripButton_showStatistics.Name = "ToolStripButton_showStatistics"
+        ToolStripButton_showStatistics.Size = New Size(104, 22)
+        ToolStripButton_showStatistics.Text = "Show statistics"
+        ToolStripButton_showStatistics.ToolTipText = "Show statistics"
+        ' 
+        ' ToolStripButton_MoveUp
+        ' 
+        ToolStripButton_MoveUp.DisplayStyle = ToolStripItemDisplayStyle.Image
+        ToolStripButton_MoveUp.Enabled = False
+        ToolStripButton_MoveUp.Image = CType(resources.GetObject("ToolStripButton_MoveUp.Image"), Image)
+        ToolStripButton_MoveUp.ImageTransparentColor = Color.Magenta
+        ToolStripButton_MoveUp.Name = "ToolStripButton_MoveUp"
+        ToolStripButton_MoveUp.Size = New Size(23, 22)
+        ToolStripButton_MoveUp.Text = "Move selected time series up"
+        ToolStripButton_MoveUp.ToolTipText = "Move selected time series up"
+        ' 
+        ' ToolStripButton_MoveDown
+        ' 
+        ToolStripButton_MoveDown.DisplayStyle = ToolStripItemDisplayStyle.Image
+        ToolStripButton_MoveDown.Enabled = False
+        ToolStripButton_MoveDown.Image = CType(resources.GetObject("ToolStripButton_MoveDown.Image"), Image)
+        ToolStripButton_MoveDown.ImageTransparentColor = Color.Magenta
+        ToolStripButton_MoveDown.Name = "ToolStripButton_MoveDown"
+        ToolStripButton_MoveDown.Size = New Size(23, 22)
+        ToolStripButton_MoveDown.Text = "Move selected time series down"
+        ' 
+        ' ToolStripButton_Delete
+        ' 
+        ToolStripButton_Delete.DisplayStyle = ToolStripItemDisplayStyle.Image
+        ToolStripButton_Delete.Enabled = False
+        ToolStripButton_Delete.Image = CType(resources.GetObject("ToolStripButton_Delete.Image"), Image)
+        ToolStripButton_Delete.ImageTransparentColor = Color.Magenta
+        ToolStripButton_Delete.Name = "ToolStripButton_Delete"
+        ToolStripButton_Delete.Size = New Size(23, 22)
+        ToolStripButton_Delete.Text = "ToolStripButton_Delete"
+        ToolStripButton_Delete.ToolTipText = "Delete selected time series"
+        ' 
+        ' DataGridViewTextBoxColumn1
+        ' 
+        DataGridViewTextBoxColumn1.DataPropertyName = "DataSource"
+        DataGridViewTextBoxColumn1.HeaderText = "DataSource"
+        DataGridViewTextBoxColumn1.Name = "DataGridViewTextBoxColumn1"
+        DataGridViewTextBoxColumn1.ReadOnly = True
         ' 
         ' Id
         ' 
@@ -85,16 +148,16 @@ Partial Class PropertiesWindow
         Id.Visible = False
         Id.Width = 41
         ' 
-        ' TitleDataGridViewTextBoxColumn
+        ' Title
         ' 
-        TitleDataGridViewTextBoxColumn.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells
-        TitleDataGridViewTextBoxColumn.DataPropertyName = "Title"
+        Title.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells
+        Title.DataPropertyName = "Title"
         DataGridViewCellStyle1.BackColor = Color.FromArgb(CByte(255), CByte(255), CByte(192))
-        TitleDataGridViewTextBoxColumn.DefaultCellStyle = DataGridViewCellStyle1
-        TitleDataGridViewTextBoxColumn.Frozen = True
-        TitleDataGridViewTextBoxColumn.HeaderText = "Title"
-        TitleDataGridViewTextBoxColumn.Name = "TitleDataGridViewTextBoxColumn"
-        TitleDataGridViewTextBoxColumn.Width = 54
+        Title.DefaultCellStyle = DataGridViewCellStyle1
+        Title.Frozen = True
+        Title.HeaderText = "Title"
+        Title.Name = "Title"
+        Title.Width = 54
         ' 
         ' Interpretation
         ' 
@@ -108,14 +171,14 @@ Partial Class PropertiesWindow
         Interpretation.SortMode = DataGridViewColumnSortMode.Automatic
         Interpretation.Width = 94
         ' 
-        ' UnitDataGridViewTextBoxColumn
+        ' Unit
         ' 
-        UnitDataGridViewTextBoxColumn.DataPropertyName = "Unit"
+        Unit.DataPropertyName = "Unit"
         DataGridViewCellStyle3.BackColor = Color.FromArgb(CByte(255), CByte(255), CByte(192))
-        UnitDataGridViewTextBoxColumn.DefaultCellStyle = DataGridViewCellStyle3
-        UnitDataGridViewTextBoxColumn.HeaderText = "Unit"
-        UnitDataGridViewTextBoxColumn.Name = "UnitDataGridViewTextBoxColumn"
-        UnitDataGridViewTextBoxColumn.Width = 51
+        Unit.DefaultCellStyle = DataGridViewCellStyle3
+        Unit.HeaderText = "Unit"
+        Unit.Name = "Unit"
+        Unit.Width = 51
         ' 
         ' MetadataText
         ' 
@@ -211,69 +274,6 @@ Partial Class PropertiesWindow
         Volume.ReadOnly = True
         Volume.Visible = False
         ' 
-        ' TimeSeriesBindingSource
-        ' 
-        TimeSeriesBindingSource.DataSource = GetType(TimeSeries)
-        ' 
-        ' ToolStrip1
-        ' 
-        ToolStrip1.Items.AddRange(New ToolStripItem() {ToolStripButton_showStatistics, ToolStripButton_MoveUp, ToolStripButton_MoveDown, ToolStripButton_Delete})
-        ToolStrip1.Location = New Point(0, 0)
-        ToolStrip1.Name = "ToolStrip1"
-        ToolStrip1.Size = New Size(541, 25)
-        ToolStrip1.TabIndex = 2
-        ToolStrip1.Text = "ToolStrip1"
-        ' 
-        ' ToolStripButton_showStatistics
-        ' 
-        ToolStripButton_showStatistics.Alignment = ToolStripItemAlignment.Right
-        ToolStripButton_showStatistics.CheckOnClick = True
-        ToolStripButton_showStatistics.Image = CType(resources.GetObject("ToolStripButton_showStatistics.Image"), Image)
-        ToolStripButton_showStatistics.ImageTransparentColor = Color.Magenta
-        ToolStripButton_showStatistics.Name = "ToolStripButton_showStatistics"
-        ToolStripButton_showStatistics.Size = New Size(104, 22)
-        ToolStripButton_showStatistics.Text = "Show statistics"
-        ToolStripButton_showStatistics.ToolTipText = "Show statistics"
-        ' 
-        ' ToolStripButton_MoveUp
-        ' 
-        ToolStripButton_MoveUp.DisplayStyle = ToolStripItemDisplayStyle.Image
-        ToolStripButton_MoveUp.Enabled = False
-        ToolStripButton_MoveUp.Image = CType(resources.GetObject("ToolStripButton_MoveUp.Image"), Image)
-        ToolStripButton_MoveUp.ImageTransparentColor = Color.Magenta
-        ToolStripButton_MoveUp.Name = "ToolStripButton_MoveUp"
-        ToolStripButton_MoveUp.Size = New Size(23, 22)
-        ToolStripButton_MoveUp.Text = "Move selected time series up"
-        ToolStripButton_MoveUp.ToolTipText = "Move selected time series up"
-        ' 
-        ' ToolStripButton_MoveDown
-        ' 
-        ToolStripButton_MoveDown.DisplayStyle = ToolStripItemDisplayStyle.Image
-        ToolStripButton_MoveDown.Enabled = False
-        ToolStripButton_MoveDown.Image = CType(resources.GetObject("ToolStripButton_MoveDown.Image"), Image)
-        ToolStripButton_MoveDown.ImageTransparentColor = Color.Magenta
-        ToolStripButton_MoveDown.Name = "ToolStripButton_MoveDown"
-        ToolStripButton_MoveDown.Size = New Size(23, 22)
-        ToolStripButton_MoveDown.Text = "Move selected time series down"
-        ' 
-        ' ToolStripButton_Delete
-        ' 
-        ToolStripButton_Delete.DisplayStyle = ToolStripItemDisplayStyle.Image
-        ToolStripButton_Delete.Enabled = False
-        ToolStripButton_Delete.Image = CType(resources.GetObject("ToolStripButton_Delete.Image"), Image)
-        ToolStripButton_Delete.ImageTransparentColor = Color.Magenta
-        ToolStripButton_Delete.Name = "ToolStripButton_Delete"
-        ToolStripButton_Delete.Size = New Size(23, 22)
-        ToolStripButton_Delete.Text = "ToolStripButton_Delete"
-        ToolStripButton_Delete.ToolTipText = "Delete selected time series"
-        ' 
-        ' DataGridViewTextBoxColumn1
-        ' 
-        DataGridViewTextBoxColumn1.DataPropertyName = "DataSource"
-        DataGridViewTextBoxColumn1.HeaderText = "DataSource"
-        DataGridViewTextBoxColumn1.Name = "DataGridViewTextBoxColumn1"
-        DataGridViewTextBoxColumn1.ReadOnly = True
-        ' 
         ' PropertiesWindow
         ' 
         AutoScaleDimensions = New SizeF(7F, 15F)
@@ -303,10 +303,11 @@ Partial Class PropertiesWindow
     Friend WithEvents ToolStripButton_Delete As ToolStripButton
     Friend WithEvents ToolStripButton_MoveUp As ToolStripButton
     Friend WithEvents DataGridViewTextBoxColumn1 As DataGridViewTextBoxColumn
+    Friend WithEvents ToolStripButton_MoveDown As ToolStripButton
     Friend WithEvents Id As DataGridViewTextBoxColumn
-    Friend WithEvents TitleDataGridViewTextBoxColumn As DataGridViewTextBoxColumn
+    Friend WithEvents Title As DataGridViewTextBoxColumn
     Friend WithEvents Interpretation As DataGridViewComboBoxColumn
-    Friend WithEvents UnitDataGridViewTextBoxColumn As DataGridViewTextBoxColumn
+    Friend WithEvents Unit As DataGridViewTextBoxColumn
     Friend WithEvents MetadataText As DataGridViewTextBoxColumn
     Friend WithEvents DataSource As DataGridViewTextBoxColumn
     Friend WithEvents Length As DataGridViewTextBoxColumn
@@ -319,5 +320,4 @@ Partial Class PropertiesWindow
     Friend WithEvents Maximum As DataGridViewTextBoxColumn
     Friend WithEvents Sum As DataGridViewTextBoxColumn
     Friend WithEvents Volume As DataGridViewTextBoxColumn
-    Friend WithEvents ToolStripButton_MoveDown As ToolStripButton
 End Class
