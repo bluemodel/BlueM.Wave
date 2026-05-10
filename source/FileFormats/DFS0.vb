@@ -51,7 +51,7 @@ Namespace Fileformats
 
             'Check for 64bit environment
             If Not Environment.Is64BitProcess() Then
-                Throw New Exception("Loading Dfs0 files is not supported in a 32bit environment. Please use the 64bit version of BlueM.Wave instead!")
+                Throw New TimeSeriesFileReadingException("Loading Dfs0 files is not supported in a 32bit environment. Please use the 64bit version of BlueM.Wave instead!")
             End If
 
             'Basic settings
@@ -83,7 +83,7 @@ Namespace Fileformats
             Dim FileInfo As DFS.IDfsFileInfo = dfs0File.FileInfo
             If Not FileInfo.TimeAxis.IsCalendar Then
                 'TODO: if the file uses a TemporalTimeAxis, we could ask the user for a date offset, like we do for HYDRO_AS-2D
-                Throw New Exception("Dfs0 file does not have a calendar time axis, unable to open!")
+                Throw New TimeSeriesFileReadingException("Dfs0 file does not have a calendar time axis, unable to open!")
             End If
 
             'Loop over all items in the file
@@ -290,7 +290,7 @@ Namespace Fileformats
             Dim dlg As New DFS0_ExportDialog(tsList)
             Dim dlgresult As DialogResult = dlg.ShowDialog()
             If dlgresult <> DialogResult.OK Then
-                Throw New Exception("Export to DFS0 cancelled by user!")
+                Throw New TimeSeriesFileWritingException("Export to DFS0 cancelled by user!")
             End If
             Dim quantities As Dictionary(Of Integer, eumQuantity) = dlg.Quantities
 

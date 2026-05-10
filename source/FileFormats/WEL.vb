@@ -244,7 +244,7 @@ Namespace Fileformats
                     timestamp = Werte(0).Trim()
                     ok = DateTime.TryParseExact(timestamp, Me.Dateformat, Helpers.DefaultNumberFormat, Globalization.DateTimeStyles.None, datum)
                     If (Not ok) Then
-                        Throw New Exception($"Unable to parse the timestamp '{timestamp}' using the given format '{Me.Dateformat}'!")
+                        Throw New TimeSeriesFileReadingException($"Unable to parse the timestamp '{timestamp}' using the given format '{Me.Dateformat}'!")
                     End If
                     'Restliche Spalten: Werte
                     'Alle ausgewählten Reihen durchlaufen
@@ -258,7 +258,7 @@ Namespace Fileformats
                     timestamp = Zeile.Substring(ColumnOffset, Me.ColumnWidth).Trim()
                     ok = DateTime.TryParseExact(timestamp, Me.Dateformat, Helpers.DefaultNumberFormat, Globalization.DateTimeStyles.None, datum)
                     If (Not ok) Then
-                        Throw New Exception($"Unable to parse the timestamp '{timestamp}' using the given format '{Me.Dateformat}'!")
+                        Throw New TimeSeriesFileReadingException($"Unable to parse the timestamp '{timestamp}' using the given format '{Me.Dateformat}'!")
                     End If
                     'Restliche Spalten: Werte
                     'Alle ausgewählten Reihen durchlaufen

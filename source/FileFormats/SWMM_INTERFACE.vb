@@ -249,7 +249,7 @@ Namespace Fileformats
 
             'Einheiten?
             If (Me.UseUnits = False) Then
-                Throw New Exception("When reading a SWMM-Interface-File, UseUnits must be True!")
+                Throw New TimeSeriesFileReadingException("When reading a SWMM-Interface-File, UseUnits must be True!")
             End If
 
             For Each sInfo As TimeSeriesInfo In Me.SelectedSeries
@@ -332,10 +332,10 @@ Namespace Fileformats
             'check for required metadata
             For Each ts As TimeSeries In seriesList
                 If Not ts.Metadata.ContainsKey("Node") Then
-                    Throw New Exception($"Series {ts.Title} is missing a required metadata entry 'Node'!")
+                    Throw New TimeSeriesFileWritingException($"Series {ts.Title} is missing a required metadata entry 'Node'!")
                 End If
                 If Not ts.Metadata.ContainsKey("Variable") Then
-                    Throw New Exception($"Series {ts.Title} is missing a required metadata entry 'Variable'!")
+                    Throw New TimeSeriesFileWritingException($"Series {ts.Title} is missing a required metadata entry 'Variable'!")
                 End If
             Next
 
@@ -369,7 +369,7 @@ Namespace Fileformats
 
             'check that "FLOW" is among the variables
             If Not variables.Contains("FLOW") Then
-                Throw New Exception($"SWMM routing interface text format requires a variable named 'FLOW'!")
+                Throw New TimeSeriesFileWritingException($"SWMM routing interface text format requires a variable named 'FLOW'!")
             End If
 
             'determine units for variables
@@ -504,7 +504,7 @@ Namespace Fileformats
                 Case "l/s", "LPS"
                     Return 1
                 Case Else
-                    Throw New Exception($"Unable to determine conversion factor for converting unit {unit} to LPS!")
+                    Throw New TimeSeriesFileWritingException($"Unable to determine conversion factor for converting unit {unit} to LPS!")
             End Select
 
         End Function

@@ -80,7 +80,7 @@ Namespace Fileformats
                     Case 1440
                         Return 10 'TODO: Eigentlich 10 Werte für die ersten zwei Zeilen eines Monats, dann variabel für den Rest des Monats
                     Case Else
-                        Throw New Exception($"Number of entries per line for time step of {dt} minutes is undefined!")
+                        Throw New TimeSeriesFileReadingException($"Number of entries per line for time step of {dt} minutes is undefined!")
                 End Select
             End Get
         End Property
@@ -197,7 +197,7 @@ Namespace Fileformats
                     Dim dateString As String = Zeile.Substring(5, 14)
                     Dim success As Boolean = DateTime.TryParseExact(dateString.Replace(" ", 0), Me.Dateformat, Helpers.DefaultNumberFormat, Globalization.DateTimeStyles.None, Zeilendatum)
                     If Not success Then
-                        Throw New Exception($"Unable to parse the date '{dateString}'!")
+                        Throw New TimeSeriesFileReadingException($"Unable to parse the date '{dateString}'!")
                     End If
 
                     'Datum und Wert zur Zeitreihe hinzufügen

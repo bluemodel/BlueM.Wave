@@ -205,7 +205,7 @@ Namespace Fileformats
                         'Erste Spalte: Datum_Zeit
                         ok = DateTime.TryParseExact(Werte(Me.DateTimeColumnIndex).Trim(), Me.Dateformat, Helpers.DefaultNumberFormat, Globalization.DateTimeStyles.None, datum)
                         If (Not ok) Then
-                            Throw New Exception($"Could Not parse the date '{Werte(Me.DateTimeColumnIndex)}' using the given date format '{Me.Dateformat}'! Please check the date format!")
+                            Throw New TimeSeriesFileReadingException($"Could Not parse the date '{Werte(Me.DateTimeColumnIndex)}' using the given date format '{Me.Dateformat}'! Please check the date format!")
                         End If
                         'Restliche Spalten: Werte
                         For Each sInfo As TimeSeriesInfo In Me.SelectedSeries
@@ -219,7 +219,7 @@ Namespace Fileformats
                     'Erste Spalte: Datum_Zeit
                     ok = DateTime.TryParseExact(Zeile.Substring(0, Me.ColumnWidth), Me.Dateformat, Helpers.DefaultNumberFormat, Globalization.DateTimeStyles.None, datum)
                     If (Not ok) Then
-                        Throw New Exception($"Could Not parse the date '{Zeile.Substring(0, Me.ColumnWidth)}' using the given date format '{Me.Dateformat}'! Please check the date format!")
+                        Throw New TimeSeriesFileReadingException($"Could Not parse the date '{Zeile.Substring(0, Me.ColumnWidth)}' using the given date format '{Me.Dateformat}'! Please check the date format!")
                     End If
                     'Restliche Spalten: Werte
                     For Each sInfo As TimeSeriesInfo In Me.SelectedSeries

@@ -126,14 +126,14 @@ Friend Class MonthlyStatistics
 
         'Check: must be only one series
         If (series.Count <> 1) Then
-            Throw New Exception("The Monthly analysis requires that exactly 1 time series is selected!")
+            Throw New AnalysisInvalidInputException("The Monthly analysis requires that exactly 1 time series is selected!")
         End If
 
         Dim dlg As New MonthlyStatisticsDialog()
         Dim dlg_result As DialogResult = dlg.ShowDialog()
 
         If Not dlg_result = DialogResult.OK Then
-            Throw New Exception("User abort")
+            Throw New AnalysisCancelledException("User abort")
         End If
 
         Me.isPreviousMonth = (dlg.ComboBox_MonthType.SelectedItem = "previous month")

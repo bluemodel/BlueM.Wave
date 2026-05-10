@@ -155,7 +155,7 @@ Friend Class SeriesEditorDialog
                     t = DateTime.Parse(str)
                 Catch ex As Exception
                     cell.ErrorText = "Date format not recognized!"
-                    Throw New Exception($"The date '{str}' can not be parsed!")
+                    Throw New InternalException($"The date '{str}' can not be parsed!")
                 End Try
 
                 cell.ErrorText = String.Empty

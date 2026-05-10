@@ -178,7 +178,7 @@ Namespace Fileformats
                     'parse timestamp
                     success = DateTime.TryParseExact(parts(Me.DateTimeColumnIndex).Trim(), Me.Dateformat, Helpers.DefaultNumberFormat, Globalization.DateTimeStyles.None, timestamp)
                     If Not success Then
-                        Throw New Exception($"Could Not parse the date '{parts(Me.DateTimeColumnIndex)}' using the given date format '{Me.Dateformat}'! Please check the date format!")
+                        Throw New TimeSeriesFileReadingException($"Could Not parse the date '{parts(Me.DateTimeColumnIndex)}' using the given date format '{Me.Dateformat}'! Please check the date format!")
                     End If
                     'loop over selected series
                     For Each sinfo As TimeSeriesInfo In Me.SelectedSeries

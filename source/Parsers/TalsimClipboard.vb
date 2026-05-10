@@ -16,6 +16,7 @@
 'along with this program.  If not, see <https://www.gnu.org/licenses/>.
 '
 Imports System.Text.RegularExpressions
+Imports BlueM.Wave.TimeSeriesFileWritingException
 
 Namespace Parsers
 
@@ -126,7 +127,7 @@ Namespace Parsers
             Next
 
             If data.Count = 0 Then
-                Throw New Exception("No series could be parsed from TALSIM clipboard content!")
+                Throw New ParserException("No series could be parsed from TALSIM clipboard content!")
             End If
 
             'initiate parsing of series
@@ -141,7 +142,7 @@ Namespace Parsers
                 }
                 For Each key As String In expectedKeys
                     If Not params.ContainsKey(key) Then
-                        Throw New Exception($"Missing required entry '{key}' in clipboard content!")
+                        Throw New ParserException($"Missing required entry '{key}' in clipboard content!")
                     End If
                 Next
 
@@ -151,7 +152,7 @@ Namespace Parsers
                     Case "4" 'WEL file
 
                         If Not params.ContainsKey("Zustand") Then
-                            Throw New Exception("Missing required entry 'Zustand' in clipboard content!")
+                            Throw New ParserException("Missing required entry 'Zustand' in clipboard content!")
                         End If
 
                         'build series name
@@ -181,7 +182,7 @@ Namespace Parsers
                     Case "99" 'BIN file
 
                         If Not params.ContainsKey("Einheit") Then
-                            Throw New Exception("Missing required entry 'Einheit' in clipboard content!")
+                            Throw New ParserException("Missing required entry 'Einheit' in clipboard content!")
                         End If
 
                         name = params("Kennung")
@@ -203,7 +204,7 @@ Namespace Parsers
                         FileReferences.Add(fileRef)
 
                     Case Else
-                        Throw New Exception($"Unsupported value {params("ZRFormat")} for ZRFormat!")
+                        Throw New ParserException($"Unsupported value {params("ZRFormat")} for ZRFormat!")
 
                 End Select
 

@@ -16,6 +16,7 @@
 'along with this program.  If not, see <https://www.gnu.org/licenses/>.
 '
 Imports System.Text.RegularExpressions
+Imports BlueM.Wave.TimeSeriesFileWritingException
 
 Namespace Parsers
 
@@ -209,7 +210,7 @@ Namespace Parsers
             If Not haveFileDatasources Then
                 Dim msg As String = $"None of the series originate from a file import! No project file was saved! Save the chart with data or export the time series to preserve them!"
                 Log.AddLogEntry(Log.Levels.error, msg)
-                Throw New Exception(msg)
+                Throw New ParserException(msg)
             End If
 
             'check if title only
@@ -297,7 +298,7 @@ Namespace Parsers
             Else
                 Dim msg As String = $"Wave project file {file} saved. {unsavedSeries.Count} series could not be saved! Save the chart with data or export the time series to preserve them!"
                 Log.AddLogEntry(Log.Levels.warning, msg)
-                Throw New Exception(msg)
+                Throw New ParserException(msg)
             End If
 
         End Sub

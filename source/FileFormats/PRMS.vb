@@ -100,7 +100,7 @@ Namespace Fileformats
                     Me.LineNumberData = nSeries + 2
                 End If
             Else
-                Throw New Exception("Unexpected file format for a PRMS OUT file!")
+                Throw New TimeSeriesFileReadingException("Unexpected file format for a PRMS OUT file!")
             End If
 
             Call Me.ReadSeriesInfo()

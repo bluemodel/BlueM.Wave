@@ -104,7 +104,7 @@ Friend Class Histogram
             einheit = zeitreihen(1).Unit
             For Each zre As TimeSeries In zeitreihen
                 If (zre.Unit <> einheit) Then
-                    Throw New Exception("Please select only series with the same unit!")
+                    Throw New AnalysisInvalidInputException("Please select only series with the same unit!")
                 End If
             Next
         End If
@@ -115,7 +115,7 @@ Friend Class Histogram
         histogramDlg = New HistogramDialog(Me.InputTimeSeries)
         dlgResult = histogramDlg.ShowDialog()
         If dlgResult <> DialogResult.OK Then
-            Throw New Exception("Cancelled by user")
+            Throw New AnalysisCancelledException("Cancelled by user")
         End If
 
         'store parameters

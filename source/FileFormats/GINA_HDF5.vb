@@ -108,7 +108,7 @@ Namespace Fileformats
 
                     'Navigate to the timeseries group
                     If Not h5File.LinkExists("timeseries") Then
-                        Throw New Exception("GINA HDF5 file does not contain a 'timeseries' group!")
+                        Throw New TimeSeriesFileReadingException("GINA HDF5 file does not contain a 'timeseries' group!")
                     End If
 
                     Dim timeseriesGroup As NativeGroup = h5File.Group("timeseries")
@@ -131,11 +131,11 @@ Namespace Fileformats
                     Next
 
                     If dataGroup Is Nothing Then
-                        Throw New Exception("No data group found under 'timeseries' group!")
+                        Throw New TimeSeriesFileReadingException("No data group found under 'timeseries' group!")
                     End If
 
                     If Not hasTimeDataset Then
-                        Throw New Exception($"Data group '{_dataGroupName}' does not contain a required 'time' dataset!")
+                        Throw New TimeSeriesFileReadingException($"Data group '{_dataGroupName}' does not contain a required 'time' dataset!")
                     End If
 
                     Log.AddLogEntry(Log.Levels.info, $"Found data group: {_dataGroupName}")
@@ -225,7 +225,7 @@ Namespace Fileformats
                     Next
 
                     If Me.TimeSeriesInfos.Count = 0 Then
-                        Throw New Exception($"Data group '{_dataGroupName}' does not contain any element datasets!")
+                        Throw New TimeSeriesFileReadingException($"Data group '{_dataGroupName}' does not contain any element datasets!")
                     End If
 
                 End Using
@@ -246,7 +246,7 @@ Namespace Fileformats
         Public Overrides Sub ReadFile()
 
             If Me.SelectedSeries.Count = 0 Then
-                Throw New Exception("No series selected for import!")
+                Throw New TimeSeriesFileReadingException("No series selected for import!")
             End If
 
             Try
@@ -294,7 +294,7 @@ Namespace Fileformats
                                                       Globalization.DateTimeStyles.None, timestamp) Then
                                 timestamps.Add(timestamp)
                             Else
-                                Throw New Exception($"Unable to parse timestamp: {timeStr}")
+                                Throw New TimeSeriesFileReadingException($"Unable to parse timestamp: {timeStr}")
                             End If
                         End If
                     Next

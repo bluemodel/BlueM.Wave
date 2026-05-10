@@ -15,6 +15,8 @@
 'You should have received a copy of the GNU Lesser General Public License
 'along with this program.  If not, see <https://www.gnu.org/licenses/>.
 '
+Imports System.IO
+
 ''' <summary>
 ''' Module to generate and read test data
 ''' </summary>
@@ -86,7 +88,7 @@ Module TestData
     Friend Function getTestTimeSeries(relativePath As String) As TimeSeries
         Dim fullPath As String = IO.Path.Combine(getTestDataDir, relativePath)
         If Not IO.File.Exists(fullPath) Then
-            Throw New Exception($"File {fullPath} not found!")
+            Throw New FileNotFoundException($"File {fullPath} not found!")
         End If
         Dim file As TimeSeriesFile = TimeSeriesFile.GetInstance(fullPath)
         ' read the first time series from the file

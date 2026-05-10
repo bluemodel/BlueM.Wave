@@ -82,7 +82,7 @@ Friend Class Comparison
 
         'Prüfung: genau 2 Zeitreihen erlaubt
         If (zeitreihen.Count <> 2) Then
-            Throw New Exception("The Comparison analysis requires the selection of exactly 2 time series!")
+            Throw New AnalysisInvalidInputException("The Comparison analysis requires the selection of exactly 2 time series!")
         End If
 
     End Sub
@@ -118,7 +118,7 @@ Friend Class Comparison
 
         'Check if enough data is present
         If Me.ts_x.Length < 2 Then
-            Throw New Exception("Not enough coincident data points available!")
+            Throw New AnalysisFailedException("Not enough coincident data points available!")
         End If
 
         Dim x_values As Double()

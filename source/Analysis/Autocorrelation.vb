@@ -90,7 +90,7 @@ Friend Class Autocorrelation
 
         'Prüfung: Anzahl erwarteter Zeitreihen
         If (zeitreihen.Count <> 1) Then
-            Throw New Exception("The Autocorrelation analysis requires the selection of exactly 1 time series!")
+            Throw New AnalysisInvalidInputException("The Autocorrelation analysis requires the selection of exactly 1 time series!")
         End If
 
     End Sub

@@ -82,7 +82,7 @@ Friend Class DoubleSumCurve
 
         'Prüfung: genau 2 Zeitreihen erlaubt
         If (zeitreihen.Count <> 2) Then
-            Throw New Exception("The Double Sum Curve analysis requires the selection of exactly 2 time series!")
+            Throw New AnalysisInvalidInputException("The Double Sum Curve analysis requires the selection of exactly 2 time series!")
         End If
 
     End Sub

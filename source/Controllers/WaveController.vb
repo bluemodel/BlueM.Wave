@@ -1656,7 +1656,7 @@ Friend Class WaveController
                 xMaxNew = enddates.Max()
                 xMinNew = xMaxNew - xDiff
             Case Else
-                Throw New Exception($"Unknown button pressed!")
+                Throw New InternalException($"Unknown button pressed!")
         End Select
 
         'save the current zoom snapshot

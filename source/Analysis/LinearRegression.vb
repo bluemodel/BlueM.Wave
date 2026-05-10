@@ -88,7 +88,7 @@ Friend Class LinearRegression
 
         'Prüfung: Anzahl erwarteter Zeitreihen
         If (zeitreihen.Count <> 2) Then
-            Throw New Exception("The LinearRegression analysis requires the selection of exactly 2 time series!")
+            Throw New AnalysisInvalidInputException("The LinearRegression analysis requires the selection of exactly 2 time series!")
         End If
 
     End Sub

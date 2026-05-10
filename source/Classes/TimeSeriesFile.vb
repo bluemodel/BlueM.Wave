@@ -384,7 +384,7 @@ Public MustInherit Class TimeSeriesFile
             Else
                 Dim found As Boolean = Me.SelectSeries(index)
                 If Not found Then
-                    Throw New Exception($"Series with index {index} not found in file!")
+                    Throw New SeriesNotFoundException($"Series with index {index} not found in file!")
                 End If
                 'read the file (again)
                 Me.TimeSeries.Clear()
@@ -423,7 +423,7 @@ Public MustInherit Class TimeSeriesFile
                 Next
             End If
             'Timeseries not found in file
-            Throw New Exception($"The timeseries '{title}' could not be found in the file '{IO.Path.GetFileName(Me.File)}'!")
+            Throw New SeriesNotFoundException($"The timeseries '{title}' could not be found in the file '{IO.Path.GetFileName(Me.File)}'!")
         End Get
     End Property
 
@@ -616,7 +616,7 @@ Public MustInherit Class TimeSeriesFile
             Case FileTypes.ZRXP
                 Return FileExtensions.ZRX
             Case Else
-                Throw New Exception($"File extension of file type {type} is undefined!")
+                Throw New TimeSeriesFileReadingException($"File extension of file type {type} is undefined!")
         End Select
     End Function
 
@@ -917,7 +917,7 @@ Public MustInherit Class TimeSeriesFile
             Case FileTypes.SWMM_TIMESERIES
                 FileInstance = New Fileformats.SWMM_TIMESERIES(file)
             Case FileTypes.TEN
-                Throw New Exception("Native TeeChart files (TEN) must to be loaded using `Wave.Import_File()`!")
+                Throw New TimeSeriesFileReadingException("Native TeeChart files (TEN) must to be loaded using `Wave.Import_File()`!")
             Case FileTypes.UVF
                 FileInstance = New Fileformats.UVF(file)
             Case FileTypes.WBL
@@ -925,7 +925,7 @@ Public MustInherit Class TimeSeriesFile
             Case FileTypes.WEL
                 FileInstance = New Fileformats.WEL(file)
             Case FileTypes.WVP
-                Throw New Exception("Wave project files (WVP) need to be loaded using `Wave.Import_File()` or `Wave.Load_WVP()`!")
+                Throw New TimeSeriesFileReadingException("Wave project files (WVP) need to be loaded using `Wave.Import_File()` or `Wave.Load_WVP()`!")
             Case FileTypes.FEWS_PI
                 FileInstance = New Fileformats.FEWS_PI(file)
             Case FileTypes.ZRE
@@ -935,7 +935,7 @@ Public MustInherit Class TimeSeriesFile
             Case FileTypes.GINA_HDF5
                 FileInstance = New Fileformats.GINA_HDF5(file)
             Case Else
-                Throw New Exception($"Unknown file type {fileType}!")
+                Throw New TimeSeriesFileReadingException($"Unknown file type {fileType}!")
 
         End Select
 

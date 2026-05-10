@@ -167,7 +167,7 @@ Namespace Fileformats
                     ElseIf line.Contains(";*;") Then
                         data = line.Split(";*;")
                     Else
-                        Throw New Exception("The file does not contain header lines in the expected format!")
+                        Throw New TimeSeriesFileReadingException("The file does not contain header lines in the expected format!")
                     End If
                     'process header data and store as metadata
                     For Each block As String In data
@@ -208,7 +208,7 @@ Namespace Fileformats
                 'Even though we have multiple time series, we only use a single TimeSeriesInfo instance
             Else
                 'unsupported layout
-                Throw New Exception($"ZRXP file has an unsupported layout " & Me.FileMetadata("LAYOUT") & "!")
+                Throw New TimeSeriesFileReadingException($"ZRXP file has an unsupported layout " & Me.FileMetadata("LAYOUT") & "!")
             End If
 
         End Sub
@@ -359,7 +359,7 @@ Namespace Fileformats
                     timestamp = New DateTime(year, month, day, 0, minute, second) + New TimeSpan(days:=1, 0, 0, 0)
                     Log.AddLogEntry(Levels.debug, $"Non-standard timestamp '{datestring}' parsed manually to {timestamp:G}")
                 Else
-                    Throw New Exception($"Unable to parse the date '{datestring}' using the expected date format '{Me.Dateformat}'!")
+                    Throw New TimeSeriesFileReadingException($"Unable to parse the date '{datestring}' using the expected date format '{Me.Dateformat}'!")
                 End If
             End If
             Return timestamp

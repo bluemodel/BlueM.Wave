@@ -213,7 +213,7 @@ Namespace Fileformats
                     If (Not ok) Then
                         ok = DateTime.TryParseExact(Werte(Me.DateTimeColumnIndex), DateFormats("GISMO2"), Helpers.DefaultNumberFormat, Globalization.DateTimeStyles.None, datum)
                         If Not ok Then
-                            Throw New Exception($"Kann das Datumsformat '{Werte(Me.DateTimeColumnIndex)}' nicht erkennen!{eol}Sollte in der Form '{DateFormats("GISMO1")} oder {DateFormats("GISMO2")}' vorliegen!")
+                            Throw New TimeSeriesFileReadingException($"Kann das Datumsformat '{Werte(Me.DateTimeColumnIndex)}' nicht erkennen!{eol}Sollte in der Form '{DateFormats("GISMO1")} oder {DateFormats("GISMO2")}' vorliegen!")
                         End If
                     End If
 
@@ -240,7 +240,7 @@ Namespace Fileformats
                     If (Not ok) Then
                         ok = DateTime.TryParseExact(Werte(Me.DateTimeColumnIndex), DateFormats("GISMO2"), Helpers.DefaultNumberFormat, Globalization.DateTimeStyles.None, datum)
                         If Not ok Then
-                            Throw New Exception($"Kann das Datumsformat '{Werte(Me.DateTimeColumnIndex)}' nicht erkennen! {eol}Sollte in der Form '{DateFormats("GISMO1")} oder {DateFormats("GISMO2")}' vorliegen!")
+                            Throw New TimeSeriesFileReadingException($"Kann das Datumsformat '{Werte(Me.DateTimeColumnIndex)}' nicht erkennen! {eol}Sollte in der Form '{DateFormats("GISMO1")} oder {DateFormats("GISMO2")}' vorliegen!")
                         End If
                     End If
 
@@ -288,7 +288,7 @@ Namespace Fileformats
                 Return False
 
             Else
-                Throw New Exception("Unable to determine GISMO result file variant!")
+                Throw New TimeSeriesFileReadingException("Unable to determine GISMO result file variant!")
             End If
 
         End Function

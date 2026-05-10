@@ -312,7 +312,7 @@ Public Class Wave
     Public Sub Import_Series(ByRef ts As TimeSeries)
 
         If ts.Length = 0 Then
-            Throw New Exception($"Time series '{ts.Title}' has length 0 and cannot be loaded in Wave!")
+            Throw New InternalException($"Time series '{ts.Title}' has length 0 and cannot be loaded in Wave!")
         End If
 
         'Store the time series
@@ -582,7 +582,7 @@ Public Class Wave
                         Call Fileformats.HYBNAT_BCS.writeFile(tsList, filename)
 
                     Case Else
-                        Throw New Exception($"Export to file type {fileType} not yet implemented!")
+                        Throw New TimeSeriesFileWritingException($"Export to file type {fileType} not yet implemented!")
 
                 End Select
 
@@ -632,7 +632,7 @@ Public Class Wave
                             Call Fileformats.ZRXP.WriteFile(ts, filename)
 
                         Case Else
-                            Throw New Exception($"Export to file type {fileType} not yet implemented!")
+                            Throw New TimeSeriesFileWritingException($"Export to file type {fileType} not yet implemented!")
                     End Select
 
                 Next

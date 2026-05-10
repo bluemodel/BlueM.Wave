@@ -87,7 +87,7 @@ Friend Class ChangeTimestep
         Call MyBase.New(seriesList)
 
         If seriesList.Count <> 1 Then
-            Throw New Exception("The ChangeTimestep analysis requires the selection of exactly 1 time series!")
+            Throw New AnalysisInvalidInputException("The ChangeTimestep analysis requires the selection of exactly 1 time series!")
         End If
 
     End Sub

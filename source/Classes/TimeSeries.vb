@@ -611,7 +611,7 @@ Public Class TimeSeries
     ''' <param name="_value">Value</param>
     Public Sub UpdateNode(_date As DateTime, _value As Double)
         If Not Me.Nodes.ContainsKey(_date) Then
-            Throw New Exception($"Unable to update node, no existing node for date {_date} found!")
+            Throw New KeyNotFoundException($"Unable to update node, no existing node for date {_date} found!")
         End If
         Me._nodes(_date) = _value
     End Sub
@@ -1210,7 +1210,7 @@ Public Class TimeSeries
         Dim value As Double
 
         If t < t1 Or t > t2 Then
-            Throw New Exception("Timestamp to interpolate is not within range!")
+            Throw New ArgumentException("Timestamp to interpolate is not within range!")
         End If
 
         dt_total = t2 - t1

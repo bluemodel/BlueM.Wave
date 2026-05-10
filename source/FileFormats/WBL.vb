@@ -99,7 +99,7 @@ Namespace Fileformats
             'find a *.WELINFO file with the same name in the same directory
             Dim file_welinfo As String = IO.Path.Combine(IO.Path.GetDirectoryName(Me.File), IO.Path.GetFileNameWithoutExtension(Me.File) & ".WELINFO")
             If Not IO.File.Exists(file_welinfo) Then
-                Throw New Exception($"Required metadata file {IO.Path.GetFileName(file_welinfo)} not found!")
+                Throw New TimeSeriesFileReadingException($"Required metadata file {IO.Path.GetFileName(file_welinfo)} not found!")
             End If
 
             Log.AddLogEntry(Levels.info, $"Reading metadata from file {IO.Path.GetFileName(file_welinfo)}...")
@@ -144,7 +144,7 @@ Namespace Fileformats
             FiStr.Close()
 
             If Me.TimeSeriesInfos.Count = 0 Then
-                Throw New Exception($"Unable to read series info from metadata file {IO.Path.GetFileName(file_welinfo)}!")
+                Throw New TimeSeriesFileReadingException($"Unable to read series info from metadata file {IO.Path.GetFileName(file_welinfo)}!")
             End If
 
             If Me.DataType = 0 Then

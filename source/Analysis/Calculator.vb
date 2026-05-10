@@ -98,7 +98,7 @@ Friend Class Calculator
 
         If seriesList.Count > 26 Then
             ' only 26 variable names are available
-            Throw New Exception("The Calculator analysis only supports up to 26 time series!")
+            Throw New AnalysisInvalidInputException("The Calculator analysis only supports up to 26 time series!")
         End If
 
         'assign variable names to time series and store as dictionary

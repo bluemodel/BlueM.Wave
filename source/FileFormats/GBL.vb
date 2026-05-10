@@ -110,7 +110,7 @@ Namespace Fileformats
 
                 ' Validate header
                 If Math.Abs(headerMarker - (-999.0)) > 0.0001 Then
-                    Throw New Exception($"Invalid GBL file header. Expected marker -999.0, found {headerMarker}")
+                    Throw New TimeSeriesFileReadingException($"Invalid GBL file header. Expected marker -999.0, found {headerMarker}")
                 End If
 
                 ' Read format marker (next 4 bytes)
@@ -132,7 +132,7 @@ Namespace Fileformats
                     reader.ReadBytes(8)
                     Log.AddLogEntry(Log.Levels.debug, "GBL format: Detected format 2 (20-byte records, 3 columns: Qzu, Qab, tf)")
                 Else
-                    Throw New Exception($"Invalid GBL format marker. Expected -1.0 or -2.0, found {formatMarker}")
+                    Throw New TimeSeriesFileReadingException($"Invalid GBL format marker. Expected -1.0 or -2.0, found {formatMarker}")
                 End If
             End Using
 

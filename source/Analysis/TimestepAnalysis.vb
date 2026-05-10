@@ -161,7 +161,7 @@ Friend Class TimeStepAnalysis
                         Case TimeUnitEnum.Seconds
                             dt_val = dt.TotalSeconds
                         Case Else
-                            Throw New Exception($"Conversion of timestep to time unit {Me.TimeUnitName} is not yet implemented!")
+                            Throw New AnalysisFailedException($"Conversion of timestep to time unit {Me.TimeUnitName} is not yet implemented!")
                     End Select
                     'store dt value as new node in result series
                     result_ts.AddNode(timestamp, dt_val)

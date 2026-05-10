@@ -231,9 +231,11 @@ Namespace Fileformats
             For Each t2 In Reihe.Dates.Skip(1)
                 dt = (t2 - t1).Minutes
                 If dt <> 5 Then
-                    Throw New Exception($"Unable to export to SMUSI REG format!" & eol &
-                                    $"Time series must be equidistant with a time step of 5 minutes." & eol &
-                                    $"Timestep between {t1} and {t2} is not 5 minutes!")
+                    Throw New TimeSeriesFileWritingException(
+                        $"Unable to export to SMUSI REG format!" & eol &
+                        $"Time series must be equidistant with a time step of 5 minutes." & eol &
+                        $"Timestep between {t1} and {t2} is not 5 minutes!"
+                    )
                 End If
                 t1 = t2
             Next

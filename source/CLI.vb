@@ -180,7 +180,7 @@ Friend Class CLI
 
                     'Export
                     If tsList.Count = 0 Then
-                        Throw New Exception("No time series to export!")
+                        Throw New TimeSeriesFileWritingException("No time series to export!")
                     End If
 
                     Log.AddLogEntry(BlueM.Wave.Log.Levels.info, $"Exporting to {path_out}...")

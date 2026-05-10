@@ -98,7 +98,7 @@ Friend Class GoodnessOfFit
 
         'number of time series must be at least 2
         If seriesList.Count < 2 Then
-            Throw New Exception("The Goodness of Fit analysis requires the selection of at least 2 time series!")
+            Throw New AnalysisInvalidInputException("The Goodness of Fit analysis requires the selection of at least 2 time series!")
         End If
 
         'emit a warning if any time series has a volume of NaN
@@ -206,7 +206,7 @@ Friend Class GoodnessOfFit
 
         'check synchronousness
         If ts_o.Length <> ts_s.Length Or ts_o.StartDate <> ts_s.StartDate Or ts_o.EndDate <> ts_s.EndDate Then
-            Throw New Exception("Simulated and observed time series are not synchronous!")
+            Throw New AnalysisFailedException("Simulated and observed time series are not synchronous!")
         End If
 
         'metadata
@@ -338,7 +338,7 @@ Friend Class GoodnessOfFit
 
             'check for overlap
             If ts_obs.StartDate > ts_sim.EndDate Or ts_obs.EndDate < ts_sim.StartDate Then
-                Throw New Exception("Series have no overlap!")
+                Throw New AnalysisFailedException("Series have no overlap!")
             End If
 
             'store original start and end dates

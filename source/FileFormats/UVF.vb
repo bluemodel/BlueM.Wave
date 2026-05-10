@@ -106,7 +106,7 @@ Namespace Fileformats
                 FiStr.Close()
 
                 If Not headerFound Then
-                    Throw New Exception("The file does not contain a header line starting with '*Z'!")
+                    Throw New TimeSeriesFileReadingException("The file does not contain a header line starting with '*Z'!")
                 End If
 
                 Return True
@@ -207,7 +207,7 @@ Namespace Fileformats
             Me.TimeSeriesInfos.Add(sInfo)
 
             If Not headerFound Then
-                Throw New Exception("The file does not contain a header line starting with '*Z'!")
+                Throw New TimeSeriesFileReadingException("The file does not contain a header line starting with '*Z'!")
             End If
 
         End Sub
@@ -270,7 +270,7 @@ Namespace Fileformats
                 'parse it
                 ok = DateTime.TryParseExact(datumstringExt, Me.Dateformat, Helpers.DefaultNumberFormat, Globalization.DateTimeStyles.None, datum)
                 If (Not ok) Then
-                    Throw New Exception($"Unable to parse the date '{datumstring}' using the given date format '{Me.Dateformat}'!")
+                    Throw New TimeSeriesFileReadingException($"Unable to parse the date '{datumstring}' using the given date format '{Me.Dateformat}'!")
                 End If
                 'Wert lesen
                 wert = Helpers.StringToDouble(Zeile.Substring(10))

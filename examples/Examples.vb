@@ -1,3 +1,5 @@
+Imports System.IO
+
 Public Class Examples
 
     ''' <summary>
@@ -27,10 +29,10 @@ Public Class Examples
             testdatadir = IO.Path.Combine(testdatadir, "BlueM.Datasets", "Wave")
             Dim filePath As String = IO.Path.Combine(testdatadir, "WEL", "DEMONA_PSI.wel")
             If Not IO.File.Exists(filePath) Then
-                Throw New Exception($"File not found: {filePath}")
+                Throw New FileNotFoundException($"File not found: {filePath}")
             End If
             Me.TextBox_File.Text = filePath
-        Catch ex As Exception
+        Catch ex As FileNotFoundException
             MsgBox("Unable to locate test file! " &
                    "Expected directory: BlueM.Datasets\Wave in the same directory as BlueM.Wave! " &
                    ex.Message,

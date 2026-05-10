@@ -141,7 +141,7 @@ Namespace Fileformats
                 'parse date
                 dateString = line.Substring(0, Me.Dateformat.Length)
                 If Not DateTime.TryParseExact(dateString, Me.Dateformat, SWMM_TIMESERIES.SWMMDateTimeFormatInfo, Globalization.DateTimeStyles.None, timestamp) Then
-                    Throw New Exception($"Unable to parse the date {dateString} using the format {Me.Dateformat}!")
+                    Throw New TimeSeriesFileReadingException($"Unable to parse the date {dateString} using the format {Me.Dateformat}!")
                 End If
                 'parse value
                 valueString = line.Substring(Me.Dateformat.Length).Trim()
@@ -193,7 +193,7 @@ Namespace Fileformats
                     'try to parse the date
                     dateString = line.Substring(0, SWMM_DATEFORMAT.Length)
                     If Not DateTime.TryParseExact(dateString, SWMM_DATEFORMAT, SWMM_TIMESERIES.SWMMDateTimeFormatInfo, Globalization.DateTimeStyles.None, timestamp) Then
-                        Throw New Exception($"Unable to parse the date {dateString} using the format {SWMM_DATEFORMAT}!")
+                        Throw New TimeSeriesFileReadingException($"Unable to parse the date {dateString} using the format {SWMM_DATEFORMAT}!")
                     End If
                     'try to parse the value
                     valueString = line.Substring(SWMM_DATEFORMAT.Length).Trim()

@@ -113,7 +113,7 @@ Namespace Fileformats
                     index += 1
                 Next
             Catch ex As Exception
-                Throw New Exception("Error while reading Delft-FEWS PI XML file!", ex)
+                Throw New TimeSeriesFileReadingException("Error while reading Delft-FEWS PI XML file!", ex)
             End Try
 
         End Sub
@@ -173,7 +173,7 @@ Namespace Fileformats
                     index += 1
                 Next
             Catch ex As Exception
-                Throw New Exception("Error while reading Delft-FEWS PI XML file!", ex)
+                Throw New TimeSeriesFileReadingException("Error while reading Delft-FEWS PI XML file!", ex)
             End Try
 
         End Sub
@@ -233,7 +233,7 @@ Namespace Fileformats
             Dim timestamp As DateTime
             success = DateTime.TryParseExact($"{dateString} {timeString}", Helpers.DateFormats("ISO"), Helpers.DefaultNumberFormat, Globalization.DateTimeStyles.None, timestamp)
             If Not success Then
-                Throw New Exception($"Unable to parse timestamp {dateString} {timeString}!")
+                Throw New TimeSeriesFileReadingException($"Unable to parse timestamp {dateString} {timeString}!")
             End If
             Return timestamp
         End Function

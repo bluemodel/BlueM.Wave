@@ -148,7 +148,7 @@ Namespace Fileformats
 
             'Check element type
             If Not {"N", "K", "T", "B", "V", "E", "P"}.Contains(_elementType) Then
-                Throw New Exception($"Unknown HYBNAT element type '{_elementType}'!")
+                Throw New TimeSeriesFileReadingException($"Unknown HYBNAT element type '{_elementType}'!")
             End If
 
             'Jump back to beginning of file

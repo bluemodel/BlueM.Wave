@@ -15,6 +15,8 @@
 'You should have received a copy of the GNU Lesser General Public License
 'along with this program.  If not, see <https://www.gnu.org/licenses/>.
 '
+Imports MathNet.Numerics
+
 ''' <summary>
 ''' Represents a date range with defined start and end dates
 ''' </summary>
@@ -25,7 +27,7 @@ Public Class DateRange
 
     Public Sub New(start As Date, [end] As Date)
         If [end] < start Then
-            Throw New Exception($"End date must be greater or equal to start date!")
+            Throw New ArgumentException($"End date must be greater or equal to start date!")
         End If
         Me.start = start
         Me.end = [end]

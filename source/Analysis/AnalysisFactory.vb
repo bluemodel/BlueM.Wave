@@ -147,7 +147,7 @@ Friend Module AnalysisFactory
             '    oAnalysis = New TestAnalysis(seriesList)    'EDIT THIS
 
             Case Else
-                Throw New Exception("Analysis not found!")
+                Throw New AnalysisFailedException("Analysis not found!")
 
         End Select
 

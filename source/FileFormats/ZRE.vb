@@ -87,7 +87,7 @@ Namespace Fileformats
 
             'checks
             If Zeile.Length < 16 Then
-                Throw New Exception("The second line must contain at least 16 characters!")
+                Throw New TimeSeriesFileReadingException("The second line must contain at least 16 characters!")
             End If
 
             'store series info
@@ -133,7 +133,7 @@ Namespace Fileformats
                     timestamp = Zeile.Substring(0, 14)
                     ok = DateTime.TryParseExact(timestamp, Me.Dateformat, Helpers.DefaultNumberFormat, Globalization.DateTimeStyles.None, Datum)
                     If (Not ok) Then
-                        Throw New Exception($"Unable to parse the timestamp '{timestamp}' using the expected format '{Me.Dateformat}'!")
+                        Throw New TimeSeriesFileReadingException($"Unable to parse the timestamp '{timestamp}' using the expected format '{Me.Dateformat}'!")
                     End If
 
                     'Datum und Wert zur Zeitreihe hinzufügen
