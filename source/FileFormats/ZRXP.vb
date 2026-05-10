@@ -104,8 +104,8 @@ Namespace Fileformats
 
             Try
                 'open file
-                Dim FiStr As FileStream = New FileStream(file, FileMode.Open, IO.FileAccess.Read)
-                Dim StrRead As StreamReader = New StreamReader(FiStr, detectEncodingFromByteOrderMarks:=True)
+                Dim FiStr As New FileStream(file, FileMode.Open, IO.FileAccess.Read)
+                Dim StrRead As New StreamReader(FiStr, detectEncodingFromByteOrderMarks:=True)
                 Dim StrReadSync = TextReader.Synchronized(StrRead)
 
                 line = StrReadSync.ReadLine.ToString()
@@ -149,8 +149,8 @@ Namespace Fileformats
             keys = Me.FileMetadata.Keys.ToList()
 
             'open file
-            Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
-            Dim StrRead As StreamReader = New StreamReader(FiStr, Me.Encoding)
+            Dim FiStr As New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
+            Dim StrRead As New StreamReader(FiStr, Me.Encoding)
             Dim StrReadSync = TextReader.Synchronized(StrRead)
 
             'read header
@@ -238,8 +238,8 @@ Namespace Fileformats
             Dim ts_ensemble As New Dictionary(Of DateTime, Dictionary(Of Integer, TimeSeries))
 
             'open file
-            Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
-            Dim StrRead As StreamReader = New StreamReader(FiStr, Me.Encoding)
+            Dim FiStr As New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
+            Dim StrRead As New StreamReader(FiStr, Me.Encoding)
             Dim StrReadSync = TextReader.Synchronized(StrRead)
 
             'read file

@@ -76,8 +76,8 @@ Namespace Fileformats
             Me.TimeSeriesInfos.Clear()
 
             'Open the file
-            Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
-            Dim StrRead As StreamReader = New StreamReader(FiStr, Me.Encoding)
+            Dim FiStr As New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
+            Dim StrRead As New StreamReader(FiStr, Me.Encoding)
             Dim StrReadSync = TextReader.Synchronized(StrRead)
 
             'find a commented header line
@@ -127,8 +127,8 @@ Namespace Fileformats
             ts.DataSource = New TimeSeriesDataSource(Me.File, ts.Title)
 
             'Open the file
-            Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
-            Dim StrRead As StreamReader = New StreamReader(FiStr, Me.Encoding)
+            Dim FiStr As New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
+            Dim StrRead As New StreamReader(FiStr, Me.Encoding)
             Dim StrReadSync = TextReader.Synchronized(StrRead)
 
             Do
@@ -177,8 +177,8 @@ Namespace Fileformats
             verificationResult = False
 
             'Open the file
-            Dim FiStr As FileStream = New FileStream(file, FileMode.Open, IO.FileAccess.Read)
-            Dim StrRead As StreamReader = New StreamReader(FiStr, Helpers.DefaultEncoding)
+            Dim FiStr As New FileStream(file, FileMode.Open, IO.FileAccess.Read)
+            Dim StrRead As New StreamReader(FiStr, Helpers.DefaultEncoding)
             Dim StrReadSync = TextReader.Synchronized(StrRead)
 
             'try to read the first data line
