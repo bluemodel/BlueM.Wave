@@ -107,7 +107,7 @@ Public Class TimeSeriesDataSource
             Case OriginEnum.FileImport
                 Return $"File: ""{_filepath}"", Title: ""{_title}"""
             Case Else
-                Return [Enum].GetName(GetType(OriginEnum), _origin)
+                Return [Enum].GetName(_origin)
         End Select
     End Function
 End Class

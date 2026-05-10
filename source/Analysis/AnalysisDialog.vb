@@ -25,7 +25,7 @@ Friend Class AnalysisDialog
         Call InitializeComponent()
 
         'Populate combobox with analysis functions
-        Me.ComboBox_Analysis.DataSource = System.Enum.GetValues(GetType(AnalysisFactory.AnalysisFunctions))
+        Me.ComboBox_Analysis.DataSource = [Enum].GetValues(Of AnalysisFactory.AnalysisFunctions)()
 
         'Populate listbox with time series
         For Each series As TimeSeries In seriesList

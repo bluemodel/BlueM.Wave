@@ -130,8 +130,8 @@ Friend Class Accumulate
                                 value = ts.Values(i - 1)
                             End If
                         Case Else
-                            Throw New NotImplementedException($"Analysis function Accumulate is currently not supported for time series with interpretation {[Enum].GetName(GetType(TimeSeries.InterpretationEnum), ts.Interpretation)}!")
-                    End Select
+                        Throw New NotImplementedException($"Analysis function Accumulate is currently not supported for time series with interpretation {[Enum].GetName(Of TimeSeries.InterpretationEnum)(ts.Interpretation)}!")
+                End Select
 
                     If Double.IsNaN(value) Then
                         'omit NaN values

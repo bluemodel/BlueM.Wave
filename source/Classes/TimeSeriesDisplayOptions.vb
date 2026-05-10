@@ -131,10 +131,10 @@ Public Class TimeSeriesDisplayOptions
     ''' <remarks>Recognized line styles: https://learn.microsoft.com/en-us/dotnet/api/system.drawing.drawing2d.dashstyle</remarks>
     ''' <param name="lineStyle">the line style as string</param>
     Public Sub SetLineStyle(lineStyle As String)
-        If Not [Enum].IsDefined(GetType(Drawing2D.DashStyle), lineStyle) Then
+        If Not [Enum].IsDefined(Of Drawing2D.DashStyle)(lineStyle) Then
             Log.AddLogEntry(Levels.warning, $"Line style '{lineStyle}' is not recognized!")
         Else
-            Me.LineStyle = [Enum].Parse(GetType(Drawing2D.DashStyle), lineStyle)
+            Me.LineStyle = [Enum].Parse(Of Drawing2D.DashStyle)(lineStyle)
         End If
     End Sub
 

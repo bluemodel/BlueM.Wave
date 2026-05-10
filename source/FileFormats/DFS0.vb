@@ -130,9 +130,9 @@ Namespace Fileformats
             For Each sInfo As TimeSeriesInfo In Me.SelectedSeries
                 dynamicItemInfo = dfs0File.ItemInfo(sInfo.Index)
                 Me.TimeSeries(sInfo.Index).Interpretation = DataValueTypeToInterpretation(dynamicItemInfo.ValueType)
-                Me.TimeSeries(sInfo.Index).Metadata.Add("eumItem", [Enum].GetName(GetType(eumItem), dynamicItemInfo.Quantity.Item))
+                Me.TimeSeries(sInfo.Index).Metadata.Add("eumItem", [Enum].GetName(dynamicItemInfo.Quantity.Item))
                 Me.TimeSeries(sInfo.Index).Metadata.Add("eumItemDescription", dynamicItemInfo.Quantity.ItemDescription)
-                Me.TimeSeries(sInfo.Index).Metadata.Add("eumUnit", [Enum].GetName(GetType(eumUnit), dynamicItemInfo.Quantity.Unit))
+                Me.TimeSeries(sInfo.Index).Metadata.Add("eumUnit", [Enum].GetName(dynamicItemInfo.Quantity.Unit))
                 Me.TimeSeries(sInfo.Index).Metadata.Add("eumUnitAbbreviation", dynamicItemInfo.Quantity.UnitAbbreviation)
                 DataTypes.Add(sInfo.Index, dynamicItemInfo.DataType)
             Next

@@ -895,7 +895,7 @@ Public Class TimeSeries
                  InterpretationEnum.CumulativePerTimestep
                 'everything OK
             Case Else
-                Throw New NotImplementedException($"Changing the timestep of a time series with interpretation {[Enum].GetName(GetType(InterpretationEnum), Me.Interpretation)} is currently not implemented!")
+                Throw New NotImplementedException($"Changing the timestep of a time series with interpretation {[Enum].GetName(Me.Interpretation)} is currently not implemented!")
         End Select
 
         'set output interpretation to input interpretation if undefined
@@ -910,7 +910,7 @@ Public Class TimeSeries
                  InterpretationEnum.CumulativePerTimestep
                 'everything OK
             Case Else
-                Throw New NotImplementedException($"Changing the timestep of a time series to an output interpretation {[Enum].GetName(GetType(InterpretationEnum), outputInterpretation)} is currently not implemented!")
+                Throw New NotImplementedException($"Changing the timestep of a time series to an output interpretation {[Enum].GetName(outputInterpretation)} is currently not implemented!")
         End Select
 
         'create a new timeseries with output interpretation and copied metadata
@@ -920,7 +920,7 @@ Public Class TimeSeries
             .Metadata = Me.Metadata.Copy()
         }
         'append timestep description to title
-        Dim timesteptypeString As String = [Enum].GetName(GetType(TimeStepTypeEnum), timesteptype).ToLower()
+        Dim timesteptypeString As String = [Enum].GetName(timesteptype).ToLower()
         If timestepinterval > 1 Then
             timesteptypeString &= "s"
         End If
@@ -1268,7 +1268,7 @@ Public Class TimeSeries
             Case InterpretationEnum.CumulativePerTimestep
                 value = v2 / dt_total.TotalSeconds * dt_part.TotalSeconds
             Case Else
-                Throw New NotImplementedException($"Interpolation between nodes with interpretation {[Enum].GetName(GetType(InterpretationEnum), interpretation)} is currently not implemented!")
+                Throw New NotImplementedException($"Interpolation between nodes with interpretation {[Enum].GetName(interpretation)} is currently not implemented!")
         End Select
 
         Return value
@@ -1302,7 +1302,7 @@ Public Class TimeSeries
             Case InterpretationEnum.Cumulative
                 value = v2 - v1
             Case Else
-                Throw New NotImplementedException($"Integration between nodes with interpretation {[Enum].GetName(GetType(InterpretationEnum), interpretation)} is currently not implemented!")
+                Throw New NotImplementedException($"Integration between nodes with interpretation {[Enum].GetName(interpretation)} is currently not implemented!")
         End Select
 
         If interpretation = InterpretationEnum.CumulativePerTimestep Then
@@ -1320,7 +1320,7 @@ Public Class TimeSeries
                 Case TimeStepTypeEnum.Day
                     volume = value * dt.TotalDays
                 Case Else
-                    Throw New NotImplementedException($"Integration between nodes with unit time step type {[Enum].GetName(GetType(TimeStepTypeEnum), unitTimeStepType)} is currently not implemented!")
+                    Throw New NotImplementedException($"Integration between nodes with unit time step type {[Enum].GetName(unitTimeStepType)} is currently not implemented!")
             End Select
         End If
 
@@ -1415,7 +1415,7 @@ Public Class TimeSeries
         Next
 
         'append timeshift description to title
-        Dim timesteptypeString As String = [Enum].GetName(GetType(TimeStepTypeEnum), timestepType).ToLower()
+        Dim timesteptypeString As String = [Enum].GetName(timestepType).ToLower()
         Dim timestepIntervalString As String = timestepInterval.ToString()
         If timestepInterval > 0 Then
             timestepIntervalString = "+" & timestepIntervalString
