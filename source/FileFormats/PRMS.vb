@@ -136,10 +136,11 @@ Namespace Fileformats
                 Case FileType.annual
                     parts = lines(2).Split(New String() {"  "}, StringSplitOptions.RemoveEmptyEntries)
                     For i = 1 To parts.Count() - 1 'first column is timestamp (year)
-                        sInfo = New TimeSeriesInfo()
-                        sInfo.Index = i
-                        sInfo.Name = parts(i).Trim()
-                        sInfo.Unit = "-"
+                        sInfo = New TimeSeriesInfo With {
+                            .Index = i,
+                            .Name = parts(i).Trim(),
+                            .Unit = "-"
+                        }
                         Me.TimeSeriesInfos.Add(sInfo)
                     Next
                     Me.DateTimeColumnIndex = 0
@@ -147,10 +148,11 @@ Namespace Fileformats
                 Case FileType.monthly
                     parts = lines(2).Split(New Char() {" "}, StringSplitOptions.RemoveEmptyEntries)
                     For i = 2 To parts.Count() - 1 'first two columns are timestamp (year and month)
-                        sInfo = New TimeSeriesInfo()
-                        sInfo.Index = i
-                        sInfo.Name = parts(i).Trim()
-                        sInfo.Unit = "-"
+                        sInfo = New TimeSeriesInfo With {
+                            .Index = i,
+                            .Name = parts(i).Trim(),
+                            .Unit = "-"
+                        }
                         Me.TimeSeriesInfos.Add(sInfo)
                     Next
                     Me.DateTimeColumnIndex = 0 'technically 0 and 1
@@ -160,10 +162,11 @@ Namespace Fileformats
                     For i = 3 To parts.Count() - 1 'first 3 columns are timestamp
                         Dim m As Match
                         m = Regex.Match(lines(i - 2).Trim(), ".{3} (.+)\s+\((.+)\).+")
-                        sInfo = New TimeSeriesInfo
-                        sInfo.Name = m.Groups(1).Value.Trim()
-                        sInfo.Unit = m.Groups(2).Value.Trim()
-                        sInfo.Index = i
+                        sInfo = New TimeSeriesInfo With {
+                            .Name = m.Groups(1).Value.Trim(),
+                            .Unit = m.Groups(2).Value.Trim(),
+                            .Index = i
+                        }
                         Me.TimeSeriesInfos.Add(sInfo)
                     Next
                     Me.DateTimeColumnIndex = 0 ' technically 0, 1 and 2
@@ -171,10 +174,11 @@ Namespace Fileformats
                 Case FileType.statvar
                     parts = lines(Me.LineNumberData).Split(New Char() {" "}, StringSplitOptions.RemoveEmptyEntries)
                     For i = 7 To parts.Count() - 1 'first 7 columns are number and timestamp
-                        sInfo = New TimeSeriesInfo()
-                        sInfo.Name = lines(i - 5).Trim()
-                        sInfo.Unit = "-"
-                        sInfo.Index = i
+                        sInfo = New TimeSeriesInfo With {
+                            .Name = lines(i - 5).Trim(),
+                            .Unit = "-",
+                            .Index = i
+                        }
                         Me.TimeSeriesInfos.Add(sInfo)
                     Next
                     Me.DateTimeColumnIndex = 0 ' technically 1 to 6
@@ -205,10 +209,11 @@ Namespace Fileformats
 
             'Instantiate time series
             For Each sInfo As TimeSeriesInfo In Me.SelectedSeries
-                ts = New TimeSeries()
-                ts.Title = sInfo.Name
-                ts.Unit = sInfo.Unit
-                ts.DataSource = New TimeSeriesDataSource(Me.File, sInfo.Name)
+                ts = New TimeSeries With {
+                    .Title = sInfo.Name,
+                    .Unit = sInfo.Unit,
+                    .DataSource = New TimeSeriesDataSource(Me.File, sInfo.Name)
+                }
                 Me.TimeSeries.Add(sInfo.Index, ts)
             Next
 

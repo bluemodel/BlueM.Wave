@@ -111,10 +111,11 @@ Namespace Fileformats
             Me.TimeSeriesInfos.Clear()
             For i As Integer = 0 To titles.Count - 1
                 If i <> Me.DateTimeColumnIndex Then
-                    sInfo = New TimeSeriesInfo()
-                    sInfo.Index = i
-                    sInfo.Name = titles(i)
-                    sInfo.Unit = units(i).Trim()
+                    sInfo = New TimeSeriesInfo With {
+                        .Index = i,
+                        .Name = titles(i),
+                        .Unit = units(i).Trim()
+                    }
                     Me.TimeSeriesInfos.Add(sInfo)
                 End If
             Next

@@ -127,12 +127,11 @@ Namespace Fileformats
                 End If
 
                 If isData Then
-                    Dim sInfo As New TimeSeriesInfo()
-                    sInfo.Name = line.Split(";")(0).Trim()
-                    sInfo.Unit = line.Split(";")(3).Trim()
-                    'the index in the WELINFO file is not always 0-based, safer to use our own counter as index!
-                    'sInfo.Index = Integer.Parse(line.Split(";")(4).Trim())
-                    sInfo.Index = index
+                    Dim sInfo As New TimeSeriesInfo With {
+                        .Name = line.Split(";")(0).Trim(),
+                        .Unit = line.Split(";")(3).Trim(),
+                        .Index = index '.Index = Integer.Parse(line.Split(";")(4).Trim()) 'the index in the WELINFO file is not always 0-based, safer to use our own counter as index!
+                    }
                     Me.TimeSeriesInfos.Add(sInfo)
 
                     index += 1
@@ -170,10 +169,11 @@ Namespace Fileformats
 
             'instantiate time series
             For Each sInfo As TimeSeriesInfo In Me.SelectedSeries
-                Dim ts As New TimeSeries(sInfo.Name)
-                ts.Unit = sInfo.Unit
-                ts.DataSource = New TimeSeriesDataSource(Me.File, sInfo.Name)
-                ts.Interpretation = BlueM.Wave.TimeSeries.InterpretationEnum.BlockRight
+                Dim ts As New TimeSeries(sInfo.Name) With {
+                    .Unit = sInfo.Unit,
+                    .DataSource = New TimeSeriesDataSource(Me.File, sInfo.Name),
+                    .Interpretation = BlueM.Wave.TimeSeries.InterpretationEnum.BlockRight
+                }
                 Me.TimeSeries.Add(sInfo.Index, ts)
             Next
 

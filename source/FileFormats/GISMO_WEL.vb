@@ -151,9 +151,10 @@ Namespace Fileformats
 
             ' put headers and units into the Me.Spalten-array (starts with index 0, --> [anzSpalten -1])
             For i = 1 To (anzSpalten - 1) ' first column is timestamp
-                sInfo = New TimeSeriesInfo()
-                sInfo.Name = $"{SeriesName.Trim}_{Namen(i).Trim()}"
-                sInfo.Index = i
+                sInfo = New TimeSeriesInfo With {
+                    .Name = $"{SeriesName.Trim}_{Namen(i).Trim()}",
+                    .Index = i
+                }
                 If Einheiten(i).Trim = "cbm/s" Then
                     Einheiten(i) = "m3/s"
                 End If

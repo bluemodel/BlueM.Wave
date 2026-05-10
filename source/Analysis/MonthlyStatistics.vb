@@ -288,10 +288,11 @@ Friend Class MonthlyStatistics
         'Series
 
         'MinMax
-        minmax = New Steema.TeeChart.Styles.HighLow(Me.ResultChart.Chart)
-        minmax.DefaultNullValue = Double.NaN
-        minmax.Title = "Min / Max"
-        minmax.Color = Color.DarkGray
+        minmax = New Steema.TeeChart.Styles.HighLow(Me.ResultChart.Chart) With {
+            .DefaultNullValue = Double.NaN,
+            .Title = "Min / Max",
+            .Color = Color.DarkGray
+        }
         minmax.Pen.Color = Color.DarkGray
         minmax.HighBrush.Visible = True
         minmax.HighBrush.Color = Color.LightGray
@@ -301,11 +302,12 @@ Friend Class MonthlyStatistics
         Next
 
         'Standard deviation
-        stdabw = New Steema.TeeChart.Styles.Error(Me.ResultChart.Chart)
-        stdabw.DefaultNullValue = Double.NaN
-        stdabw.Title = "Standard deviation"
-        stdabw.Color = Color.Red
-        stdabw.ErrorWidth = 50
+        stdabw = New Steema.TeeChart.Styles.Error(Me.ResultChart.Chart) With {
+            .DefaultNullValue = Double.NaN,
+            .Title = "Standard deviation",
+            .Color = Color.Red,
+            .ErrorWidth = 50
+        }
         For i = 1 To 12
             'Skip months with no or NaN data
             If Me.result(i).values.Count > 0 And Not Double.IsNaN(Me.result(i).stddev) Then
@@ -314,22 +316,24 @@ Friend Class MonthlyStatistics
         Next
 
         'Average
-        mittelwert = New Steema.TeeChart.Styles.Line(Me.ResultChart.Chart)
-        mittelwert.TreatNaNAsNull = True
-        mittelwert.TreatNulls = Steema.TeeChart.Styles.TreatNullsStyle.DoNotPaint
-        mittelwert.Title = "Average"
-        mittelwert.Color = Color.Blue
+        mittelwert = New Steema.TeeChart.Styles.Line(Me.ResultChart.Chart) With {
+            .TreatNaNAsNull = True,
+            .TreatNulls = Steema.TeeChart.Styles.TreatNullsStyle.DoNotPaint,
+            .Title = "Average",
+            .Color = Color.Blue
+        }
         mittelwert.LinePen.Width = 2
         For i = 1 To 12
             mittelwert.Add(Me.result(i).index, Me.result(i).average, Me.result(i).month.name)
         Next
 
         'Median
-        median = New Steema.TeeChart.Styles.Line(Me.ResultChart.Chart)
-        median.TreatNaNAsNull = True
-        median.TreatNulls = Steema.TeeChart.Styles.TreatNullsStyle.DoNotPaint
-        median.Title = "Median"
-        median.Color = Color.Green
+        median = New Steema.TeeChart.Styles.Line(Me.ResultChart.Chart) With {
+            .TreatNaNAsNull = True,
+            .TreatNulls = Steema.TeeChart.Styles.TreatNullsStyle.DoNotPaint,
+            .Title = "Median",
+            .Color = Color.Green
+        }
         For i = 1 To 12
             median.Add(Me.result(i).index, Me.result(i).median, Me.result(i).month.name)
         Next

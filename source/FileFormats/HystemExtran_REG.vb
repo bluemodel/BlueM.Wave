@@ -128,8 +128,9 @@ Namespace Fileformats
             Dim StrRead As StreamReader = New StreamReader(FiStr, Me.Encoding)
             Dim StrReadSync = TextReader.Synchronized(StrRead)
 
-            sInfo = New TimeSeriesInfo()
-            sInfo.Index = 0
+            sInfo = New TimeSeriesInfo With {
+                .Index = 0
+            }
 
             'Reihentitel steht in 1. Zeile, ist aber optional:
             Zeile = StrReadSync.ReadLine.ToString()
@@ -174,9 +175,10 @@ Namespace Fileformats
 
             'Zeitreihe instanzieren (nur eine)
             sInfo = Me.TimeSeriesInfos(0)
-            ts = New TimeSeries(sInfo.Name)
-            ts.Unit = sInfo.Unit
-            ts.DataSource = New TimeSeriesDataSource(Me.File, sInfo.Name)
+            ts = New TimeSeries(sInfo.Name) With {
+                .Unit = sInfo.Unit,
+                .DataSource = New TimeSeriesDataSource(Me.File, sInfo.Name)
+            }
 
             'Einlesen
             '--------

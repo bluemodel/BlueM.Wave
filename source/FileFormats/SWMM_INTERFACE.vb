@@ -201,10 +201,11 @@ Namespace Fileformats
             For i = 0 To AnzNodes - 1
                 For j = 0 To AnzConstituents - 1
 
-                    sInfo = New TimeSeriesInfo()
-                    sInfo.Name = $"{Nodes(i).Bez} {Constituents(j).Type}"
-                    sInfo.Unit = Constituents(j).Unit
-                    sInfo.Index = index
+                    sInfo = New TimeSeriesInfo With {
+                        .Name = $"{Nodes(i).Bez} {Constituents(j).Type}",
+                        .Unit = Constituents(j).Unit,
+                        .Index = index
+                    }
                     Me.TimeSeriesInfos.Add(sInfo)
 
                     'store SWMM info
@@ -242,8 +243,9 @@ Namespace Fileformats
 
             'Zeitreihen instanzieren
             For Each sInfo As TimeSeriesInfo In Me.SelectedSeries
-                ts = New TimeSeries(sInfo.Name)
-                ts.DataSource = New TimeSeriesDataSource(Me.File, sInfo.Name)
+                ts = New TimeSeries(sInfo.Name) With {
+                    .DataSource = New TimeSeriesDataSource(Me.File, sInfo.Name)
+                }
                 Me.TimeSeries.Add(sInfo.Index, ts)
             Next
 

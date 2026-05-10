@@ -104,10 +104,11 @@ Namespace Fileformats
             End If
 
             'store series info
-            sInfo = New TimeSeriesInfo()
-            sInfo.Name = title
-            sInfo.Unit = "mm" 'Einheit ist immer mm
-            sInfo.Index = 0
+            sInfo = New TimeSeriesInfo With {
+                .Name = title,
+                .Unit = "mm", 'Einheit ist immer mm
+                .Index = 0
+            }
             Me.TimeSeriesInfos.Add(sInfo)
 
             StrReadSync.Close()
@@ -135,9 +136,10 @@ Namespace Fileformats
 
             'Zeitreihe instanzieren (bei REG gibt es nur eine Zeitreihe)
             sInfo = Me.TimeSeriesInfos(0)
-            ts = New TimeSeries(sInfo.Name)
-            ts.Unit = sInfo.Unit
-            ts.DataSource = New TimeSeriesDataSource(Me.File, sInfo.Name)
+            ts = New TimeSeries(sInfo.Name) With {
+                .Unit = sInfo.Unit,
+                .DataSource = New TimeSeriesDataSource(Me.File, sInfo.Name)
+            }
 
             'Einlesen
             '--------

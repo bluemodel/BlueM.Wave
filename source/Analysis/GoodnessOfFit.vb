@@ -424,12 +424,11 @@ Friend Class GoodnessOfFit
                 Dim period = kvp.Key
                 Dim gof As GoF = kvp.Value
 
-                Dim series As New Steema.TeeChart.Styles.Radar(Me.ResultChart.Chart)
-                series.Title = $"{series_title} ({period})"
-
-                'make sure NaN values are handled
-                series.TreatNaNAsNull = True
-                series.TreatNulls = Steema.TeeChart.Styles.TreatNullsStyle.DoNotPaint
+                Dim series As New Steema.TeeChart.Styles.Radar(Me.ResultChart.Chart) With {
+                    .Title = $"{series_title} ({period})",
+                    .TreatNaNAsNull = True, 'make sure NaN values are handled
+                    .TreatNulls = Steema.TeeChart.Styles.TreatNullsStyle.DoNotPaint
+                }
 
                 'this is important because otherwise the series nodes are automatically ordered by their x values (angles), potentially messing up the labelling
                 series.XValues.Order = Steema.TeeChart.Styles.ValueListOrder.None

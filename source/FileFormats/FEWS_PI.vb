@@ -15,6 +15,7 @@
 'You should have received a copy of the GNU Lesser General Public License
 'along with this program.  If not, see <https://www.gnu.org/licenses/>.
 '
+Imports System.Data.Common
 Imports System.Xml
 Imports System.Xml.Serialization
 
@@ -105,10 +106,11 @@ Namespace Fileformats
                 'store time series info
                 Dim index As Integer = 0
                 For Each series As XMLSeries In tsRoot.series
-                    Dim tsInfo As New TimeSeriesInfo
-                    tsInfo.Index = index
-                    tsInfo.Name = $"{series.header.locationId}.{series.header.parameterId}"
-                    tsInfo.Unit = series.header.units
+                    Dim tsInfo As New TimeSeriesInfo With {
+                        .Index = index,
+                        .Name = $"{series.header.locationId}.{series.header.parameterId}",
+                        .Unit = series.header.units
+                    }
                     Me.TimeSeriesInfos.Add(tsInfo)
                     index += 1
                 Next
@@ -138,10 +140,11 @@ Namespace Fileformats
                 Dim index As Integer = 0
                 For Each sInfo As TimeSeriesInfo In Me.SelectedSeries
                     Dim series As XMLSeries = xmlroot.series(sInfo.Index)
-                    Dim ts As New TimeSeries()
-                    ts.Title = $"{series.header.locationId}.{series.header.parameterId}"
-                    ts.Unit = series.header.units
-                    ts.DataSource = New TimeSeriesDataSource(Me.File, ts.Title)
+                    Dim ts As New TimeSeries With {
+                        .Title = $"{series.header.locationId}.{series.header.parameterId}",
+                        .Unit = series.header.units,
+                        .DataSource = New TimeSeriesDataSource(Me.File, .Title)
+                    }
                     'set interpretation
                     Select Case series.header.type
                         Case "instantaneous"

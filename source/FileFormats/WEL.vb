@@ -162,18 +162,20 @@ Namespace Fileformats
                 Einheiten = ZeileEinheiten.Split(New Char() {Me.Separator.ToChar}, StringSplitOptions.RemoveEmptyEntries)
                 anzSpalten = Namen.Length
                 For i = 1 To anzSpalten - 1 'first column is timestamp
-                    sInfo = New TimeSeriesInfo()
-                    sInfo.Name = Namen(i).Trim()
-                    sInfo.Unit = Einheiten(i).Trim()
-                    sInfo.Index = i
+                    sInfo = New TimeSeriesInfo With {
+                        .Name = Namen(i).Trim(),
+                        .Unit = Einheiten(i).Trim(),
+                        .Index = i
+                    }
                     Me.TimeSeriesInfos.Add(sInfo)
                 Next
             Else
                 'Spalten mit fester Breite
                 anzSpalten = Math.Ceiling((ZeileSpalten.Length - Me.DateTimeLength) / Me.ColumnWidth) + 1
                 For i = 1 To anzSpalten - 1 'first column is timestamp
-                    sInfo = New TimeSeriesInfo()
-                    sInfo.Name = ZeileSpalten.Substring(Me.DateTimeLength + (i - 1) * Me.ColumnWidth, Me.ColumnWidth).Trim()
+                    sInfo = New TimeSeriesInfo With {
+                        .Name = ZeileSpalten.Substring(Me.DateTimeLength + (i - 1) * Me.ColumnWidth, Me.ColumnWidth).Trim()
+                    }
                     If ZeileEinheiten.Length < Me.DateTimeLength + (i - 1) * Me.ColumnWidth + Me.ColumnWidth Then
                         Log.AddLogEntry(Levels.warning, $"Unable to read unit for series {sInfo.Name}!")
                         sInfo.Unit = "-"

@@ -257,17 +257,19 @@ Friend Class Histogram
         'Serien
         For Each res As histogramResults In Me.results
 
-            Dim serieP As New Steema.TeeChart.Styles.Histogram(Me.ResultChart.Chart)
-            serieP.Title = $"{res.title} (P(x))"
+            Dim serieP As New Steema.TeeChart.Styles.Histogram(Me.ResultChart.Chart) With {
+                .Title = $"{res.title} (P(x))"
+            }
             serieP.Marks.Visible = False
 
             For i As Integer = 0 To n_bins - 1
                 serieP.Add((Me.breaks(i) + Me.breaks(i + 1)) / 2, res.probability(i), res.probability(i).ToString("F2") & "%")
             Next
 
-            Dim seriePU As New Steema.TeeChart.Styles.Line(Me.ResultChart.Chart)
-            seriePU.VertAxis = Steema.TeeChart.Styles.VerticalAxis.Right
-            seriePU.Title = $"{res.title} (PU(x))"
+            Dim seriePU As New Steema.TeeChart.Styles.Line(Me.ResultChart.Chart) With {
+                .VertAxis = Steema.TeeChart.Styles.VerticalAxis.Right,
+                .Title = $"{res.title} (PU(x))"
+            }
             seriePU.LinePen.Width = 2
             seriePU.Pointer.Visible = True
             seriePU.Pointer.Style = Steema.TeeChart.Styles.PointerStyles.Circle
@@ -281,8 +283,9 @@ Friend Class Histogram
         Next
 
         'Markstips
-        Dim markstip As New Steema.TeeChart.Tools.MarksTip()
-        markstip.Style = Steema.TeeChart.Styles.MarksStyles.Label
+        Dim markstip As New Steema.TeeChart.Tools.MarksTip With {
+            .Style = Steema.TeeChart.Styles.MarksStyles.Label
+        }
         'markstip.MouseAction = Steema.TeeChart.Tools.MarksTipMouseAction.Move
         Me.ResultChart.Tools.Add(markstip)
 

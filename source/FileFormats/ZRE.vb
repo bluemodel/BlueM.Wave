@@ -91,10 +91,11 @@ Namespace Fileformats
             End If
 
             'store series info
-            sInfo = New TimeSeriesInfo
-            sInfo.Name = Zeile.Substring(0, 15).Trim()
-            sInfo.Unit = Zeile.Substring(15).Trim()
-            sInfo.Index = 0
+            sInfo = New TimeSeriesInfo With {
+                .Name = Zeile.Substring(0, 15).Trim(),
+                .Unit = Zeile.Substring(15).Trim(),
+                .Index = 0
+            }
             Me.TimeSeriesInfos.Add(sInfo)
 
         End Sub
@@ -117,9 +118,10 @@ Namespace Fileformats
 
             'Zeitreihe instanzieren (nur eine)
             sInfo = Me.TimeSeriesInfos(0)
-            ts = New TimeSeries(sInfo.Name)
-            ts.Unit = sInfo.Unit
-            ts.DataSource = New TimeSeriesDataSource(Me.File, sInfo.Name)
+            ts = New TimeSeries(sInfo.Name) With {
+                .Unit = sInfo.Unit,
+                .DataSource = New TimeSeriesDataSource(Me.File, sInfo.Name)
+            }
 
             'Einlesen
             '--------

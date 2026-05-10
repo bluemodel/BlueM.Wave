@@ -145,16 +145,18 @@ Friend Class DoubleSumCurve
 
         'Reihen
         '------
-        doppelsumme = New Steema.TeeChart.Styles.Line(Me.ResultChart.Chart)
-        doppelsumme.Title = $"Double Sum Curve {Me.ts_1.Title} - {Me.ts_2.Title}"
+        doppelsumme = New Steema.TeeChart.Styles.Line(Me.ResultChart.Chart) With {
+            .Title = $"Double Sum Curve {Me.ts_1.Title} - {Me.ts_2.Title}"
+        }
         doppelsumme.Pointer.Visible = True
         doppelsumme.Pointer.Style = Steema.TeeChart.Styles.PointerStyles.Circle
         doppelsumme.Pointer.HorizSize = 2
         doppelsumme.Pointer.VertSize = 2
 
-        gerade = New Steema.TeeChart.Styles.Line(Me.ResultChart.Chart)
-        gerade.Title = "45° line"
-        gerade.Color = Color.DarkGray
+        gerade = New Steema.TeeChart.Styles.Line(Me.ResultChart.Chart) With {
+            .Title = "45° line",
+            .Color = Color.DarkGray
+        }
         gerade.LinePen.Style = Drawing2D.DashStyle.Dash
 
         'Werte eintragen

@@ -135,9 +135,10 @@ Public Class Examples
         Dim Wave1 As New BlueM.Wave.Wave()
 
         'create a new time series
-        Dim ts As New BlueM.Wave.TimeSeries("my series")
-        ts.Unit = "m3/s"
-        ts.Interpretation = BlueM.Wave.TimeSeries.InterpretationEnum.BlockRight
+        Dim ts As New BlueM.Wave.TimeSeries("my series") With {
+            .Unit = "m3/s",
+            .Interpretation = BlueM.Wave.TimeSeries.InterpretationEnum.BlockRight
+        }
 
         'add some nodes to the time series
         ts.AddNode(New DateTime(2000, 1, 1), 10)

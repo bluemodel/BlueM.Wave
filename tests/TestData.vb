@@ -61,8 +61,9 @@ Module TestData
     ''' </summary>
     ''' <returns></returns>
     Friend Function getTestTimeSeries_15min() As TimeSeries
-        Dim ts As New TimeSeries("TestTimeSeries_15min")
-        ts.Interpretation = TimeSeries.InterpretationEnum.Undefined
+        Dim ts As New TimeSeries("TestTimeSeries_15min") With {
+            .Interpretation = TimeSeries.InterpretationEnum.Undefined
+        }
         ts.AddNode(New DateTime(2000, 1, 1, 0, 0, 0), 0.0)
         ts.AddNode(New DateTime(2000, 1, 1, 0, 15, 0), 2.0)
         ts.AddNode(New DateTime(2000, 1, 1, 0, 30, 0), 3.0)
