@@ -302,15 +302,16 @@ Namespace Fileformats
         ''' </summary>
         Public Overloads Shared ReadOnly Property MetadataKeys() As List(Of String)
             Get
-                Dim keys As New List(Of String)
-                keys.Add("name")
-                keys.Add("unit")
-                keys.Add("defArt")
-                keys.Add("century")
-                keys.Add("location")
-                keys.Add("coord_X")
-                keys.Add("coord_Y")
-                keys.Add("coord_Z")
+                Dim keys As New List(Of String) From {
+                    "name",
+                    "unit",
+                    "defArt",
+                    "century",
+                    "location",
+                    "coord_X",
+                    "coord_Y",
+                    "coord_Z"
+                }
                 Return keys
             End Get
         End Property

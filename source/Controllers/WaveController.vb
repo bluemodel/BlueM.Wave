@@ -2206,9 +2206,10 @@ Friend Class WaveController
         enddate = View.ChartMaxX
 
         'define axes to process
-        Dim axes As New List(Of (axisType As Steema.TeeChart.Styles.VerticalAxis, axis As Steema.TeeChart.Axis))
-        axes.Add((Steema.TeeChart.Styles.VerticalAxis.Left, View.TChart1.Axes.Left))
-        axes.Add((Steema.TeeChart.Styles.VerticalAxis.Right, View.TChart1.Axes.Right))
+        Dim axes As New List(Of (axisType As Steema.TeeChart.Styles.VerticalAxis, axis As Steema.TeeChart.Axis)) From {
+            (Steema.TeeChart.Styles.VerticalAxis.Left, View.TChart1.Axes.Left),
+            (Steema.TeeChart.Styles.VerticalAxis.Right, View.TChart1.Axes.Right)
+        }
         For Each axis In View.TChart1.Axes.Custom
             axes.Add((Steema.TeeChart.Styles.VerticalAxis.Custom, axis))
         Next
@@ -3057,9 +3058,10 @@ Friend Class WaveController
     ''' </summary>
     Private Sub UpdateAxisDialog()
         'Wrap Left, Right and Custom axes
-        Dim axisList As New List(Of AxisWrapper)
-        axisList.Add(New AxisWrapper("Left", View.TChart1.Axes.Left))
-        axisList.Add(New AxisWrapper("Right", View.TChart1.Axes.Right))
+        Dim axisList As New List(Of AxisWrapper) From {
+            New AxisWrapper("Left", View.TChart1.Axes.Left),
+            New AxisWrapper("Right", View.TChart1.Axes.Right)
+        }
         For i As Integer = 0 To View.TChart1.Axes.Custom.Count - 1
             axisList.Add(New AxisWrapper("Custom " & i, View.TChart1.Axes.Custom(i)))
         Next
