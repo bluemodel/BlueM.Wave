@@ -95,7 +95,7 @@ Namespace Fileformats
             ElseIf lines(1).Trim().Contains("PRED DISCH    (m3/s)") Then
                 Me.FileFormat = FileType.dpout
                 Me.LineNumberData = 12
-            ElseIf Path.GetExtension(FileName).ToLower = ".dat" Then
+            ElseIf Path.GetExtension(FileName).Equals(".dat", StringComparison.CurrentCultureIgnoreCase) Then
                 Dim nSeries As Integer
                 If Integer.TryParse(lines(1).Trim(), nSeries) Then
                     Me.FileFormat = FileType.statvar
@@ -294,7 +294,7 @@ Namespace Fileformats
                     Return True
                 ElseIf lines(1).Trim().Contains("PRED DISCH    (m3/s)") Then
                     Return True
-                ElseIf Path.GetExtension(file).ToLower = ".dat" Then
+                ElseIf Path.GetExtension(file).Equals(".dat", StringComparison.CurrentCultureIgnoreCase) Then
                     'first line should contain only an integer
                     Dim nLinesHeader As Integer
                     If Integer.TryParse(lines(1).Trim(), nLinesHeader) Then
