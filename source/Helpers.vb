@@ -131,7 +131,7 @@ Public Module Helpers
     ''' <param name="interpretationString">The string to be parsed</param>
     ''' <returns>The corresponding TimeSeries.InterpretationEnum value</returns>
     Public Function ParseInterpretation(interpretationString As String) As TimeSeries.InterpretationEnum
-        If Not [Enum].IsDefined(Of TimeSeries.InterpretationEnum)(interpretationString) Then
+        If Not [Enum].IsDefined(GetType(TimeSeries.InterpretationEnum), interpretationString) Then
             Log.AddLogEntry(Levels.warning, $"Interpretation {interpretationString} is not recognized!")
             Return TimeSeries.InterpretationEnum.Undefined
         Else
@@ -146,7 +146,7 @@ Public Module Helpers
     ''' <param name="interpretationValue">The integer value to be parsed</param>
     ''' <returns>The corresponding TimeSeries.InterpretationEnum value</returns>
     Public Function ParseInterpretation(interpretationValue As Integer) As TimeSeries.InterpretationEnum
-        If Not [Enum].IsDefined(Of TimeSeries.InterpretationEnum)(interpretationValue) Then
+        If Not [Enum].IsDefined(GetType(TimeSeries.InterpretationEnum), interpretationValue) Then
             Log.AddLogEntry(Levels.warning, $"Interpretation {interpretationValue} is not recognized!")
             Return TimeSeries.InterpretationEnum.Undefined
         Else
