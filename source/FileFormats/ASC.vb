@@ -121,10 +121,11 @@ Namespace Fileformats
             'store series info
             For i = 0 To anzSpalten - 1
                 If i <> Me.DateTimeColumnIndex Then
-                    sInfo = New TimeSeriesInfo()
-                    sInfo.Index = i
-                    sInfo.Name = Namen(i).Trim()
-                    sInfo.Unit = Einheiten(i).Trim()
+                    sInfo = New TimeSeriesInfo With {
+                        .Index = i,
+                        .Name = Namen(i).Trim(),
+                        .Unit = Einheiten(i).Trim()
+                    }
                     Me.TimeSeriesInfos.Add(sInfo)
                 End If
             Next

@@ -105,9 +105,10 @@ Namespace Fileformats
                     index = 0
                     For Each part As String In parts
                         If part.Trim() <> "" And index <> Me.DateTimeColumnIndex Then
-                            sInfo = New TimeSeriesInfo()
-                            sInfo.Name = part.Trim()
-                            sInfo.Index = index
+                            sInfo = New TimeSeriesInfo With {
+                                .Name = part.Trim(),
+                                .Index = index
+                            }
                             Me.TimeSeriesInfos.Add(sInfo)
                         End If
                         index += 1
@@ -136,8 +137,9 @@ Namespace Fileformats
 
             'instantiate time series
             For Each sInfo As TimeSeriesInfo In Me.SelectedSeries
-                ts = New TimeSeries(sInfo.Name)
-                ts.DataSource = New TimeSeriesDataSource(Me.File, sInfo.Name)
+                ts = New TimeSeries(sInfo.Name) With {
+                    .DataSource = New TimeSeriesDataSource(Me.File, sInfo.Name)
+                }
                 Me.TimeSeries.Add(sInfo.Index, ts)
             Next
 

@@ -90,10 +90,11 @@ Namespace Fileformats
             Dim dynamicItemInfo As DFS.IDfsSimpleDynamicItemInfo
             For item_index As Integer = 0 To dfs0File.ItemInfo.Count - 1
                 dynamicItemInfo = dfs0File.ItemInfo(item_index)
-                sInfo = New TimeSeriesInfo()
-                sInfo.Name = dynamicItemInfo.Name
-                sInfo.Unit = dynamicItemInfo.Quantity.UnitAbbreviation
-                sInfo.Index = item_index
+                sInfo = New TimeSeriesInfo With {
+                    .Name = dynamicItemInfo.Name,
+                    .Unit = dynamicItemInfo.Quantity.UnitAbbreviation,
+                    .Index = item_index
+                }
                 Me.TimeSeriesInfos.Add(sInfo)
             Next
 
@@ -114,9 +115,10 @@ Namespace Fileformats
             'Instantiate Timeseries
             Dim ts As TimeSeries
             For Each sInfo As TimeSeriesInfo In Me.SelectedSeries
-                ts = New TimeSeries(sInfo.Name)
-                ts.Unit = sInfo.Unit
-                ts.DataSource = New TimeSeriesDataSource(Me.File, sInfo.Name)
+                ts = New TimeSeries(sInfo.Name) With {
+                    .Unit = sInfo.Unit,
+                    .DataSource = New TimeSeriesDataSource(Me.File, sInfo.Name)
+                }
                 Me.TimeSeries.Add(sInfo.Index, ts)
             Next
 

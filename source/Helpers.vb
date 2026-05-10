@@ -27,10 +27,11 @@ Public Module Helpers
     Public ReadOnly Property DefaultNumberFormat() As NumberFormatInfo
         Get
             'NumberFormatInfo einrichten
-            DefaultNumberFormat = New NumberFormatInfo()
-            DefaultNumberFormat.NumberDecimalSeparator = "."
-            DefaultNumberFormat.NumberGroupSeparator = ""
-            DefaultNumberFormat.NumberGroupSizes = New Integer() {3}
+            DefaultNumberFormat = New NumberFormatInfo With {
+                .NumberDecimalSeparator = ".",
+                .NumberGroupSeparator = "",
+                .NumberGroupSizes = New Integer() {3}
+            }
         End Get
     End Property
 

@@ -100,9 +100,10 @@ Namespace Fileformats
             End If
 
             'store series info
-            sInfo = New TimeSeriesInfo()
-            sInfo.Name = title
-            sInfo.Index = 0
+            sInfo = New TimeSeriesInfo With {
+                .Name = title,
+                .Index = 0
+            }
             Me.TimeSeriesInfos.Add(sInfo)
 
         End Sub
@@ -120,8 +121,9 @@ Namespace Fileformats
 
             'instantiate a single timeseries
             sinfo = Me.TimeSeriesInfos.First
-            ts = New TimeSeries()
-            ts.Title = sinfo.Name
+            ts = New TimeSeries With {
+                .Title = sinfo.Name
+            }
             ts.DataSource = New TimeSeriesDataSource(Me.File, ts.Title)
 
             'Open the file

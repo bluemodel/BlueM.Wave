@@ -461,12 +461,13 @@ Public Class Wave
         If multifileExport Then
             'let the user select a folder
             'use the OpenFileDialog instead of the FolderBrowserDialog for better usability
-            Dim dlg As New OpenFileDialog()
-            dlg.Title = "Export to folder..."
-            dlg.ValidateNames = False
-            dlg.CheckFileExists = False
-            dlg.CheckPathExists = True
-            dlg.FileName = "Select folder"
+            Dim dlg As New OpenFileDialog With {
+                .Title = "Export to folder...",
+                .ValidateNames = False,
+                .CheckFileExists = False,
+                .CheckPathExists = True,
+                .FileName = "Select folder"
+            }
 
             'Show dialog
             dlgResult = dlg.ShowDialog()
@@ -480,13 +481,14 @@ Public Class Wave
 
         Else
             'let the user select a filename
-            Dim SaveFileDialog1 As New SaveFileDialog()
-            SaveFileDialog1.Title = "Export to file..."
-            SaveFileDialog1.AddExtension = True
-            SaveFileDialog1.OverwritePrompt = False
-            SaveFileDialog1.SupportMultiDottedExtensions = True
             'suggest the default filename of the first series
-            SaveFileDialog1.FileName = defaultFileNames(0)
+            Dim SaveFileDialog1 As New SaveFileDialog With {
+                .Title = "Export to file...",
+                .AddExtension = True,
+                .OverwritePrompt = False,
+                .SupportMultiDottedExtensions = True,
+                .FileName = defaultFileNames(0)
+            }
 
             Select Case fileType
                 Case TimeSeriesFile.FileTypes.ASC

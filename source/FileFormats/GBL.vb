@@ -140,20 +140,22 @@ Namespace Fileformats
             If Me.RecordFormat = 1 Then
                 ' Format 1: All 21 columns
                 For i As Integer = 0 To Me.ColumnCount - 1
-                    Dim sInfo As New TimeSeriesInfo()
-                    sInfo.Name = ColumnDefinitions(i).Name
-                    sInfo.Unit = ColumnDefinitions(i).Unit
-                    sInfo.Index = i
+                    Dim sInfo As New TimeSeriesInfo With {
+                        .Name = ColumnDefinitions(i).Name,
+                        .Unit = ColumnDefinitions(i).Unit,
+                        .Index = i
+                    }
                     Me.TimeSeriesInfos.Add(sInfo)
                 Next
             Else
                 ' Format 2: Only Qzu (index 0), Qab (index 1), and tf (index 20)
                 For i As Integer = 0 To Me.ColumnCount - 1
                     Dim columnIndex As Integer = Format2ColumnIndices(i)
-                    Dim sInfo As New TimeSeriesInfo()
-                    sInfo.Name = ColumnDefinitions(columnIndex).Name
-                    sInfo.Unit = ColumnDefinitions(columnIndex).Unit
-                    sInfo.Index = i ' Use sequential index for format 2
+                    Dim sInfo As New TimeSeriesInfo With {
+                        .Name = ColumnDefinitions(columnIndex).Name,
+                        .Unit = ColumnDefinitions(columnIndex).Unit,
+                        .Index = i ' Use sequential index for format 2
+                        }
                     Me.TimeSeriesInfos.Add(sInfo)
                 Next
             End If
@@ -174,10 +176,11 @@ Namespace Fileformats
 
             'instantiate time series
             For Each sInfo As TimeSeriesInfo In Me.SelectedSeries
-                Dim ts As New TimeSeries(sInfo.Name)
-                ts.Unit = sInfo.Unit
-                ts.DataSource = New TimeSeriesDataSource(Me.File, sInfo.Name)
-                ts.Interpretation = BlueM.Wave.TimeSeries.InterpretationEnum.BlockRight
+                Dim ts As New TimeSeries(sInfo.Name) With {
+                    .Unit = sInfo.Unit,
+                    .DataSource = New TimeSeriesDataSource(Me.File, sInfo.Name),
+                    .Interpretation = BlueM.Wave.TimeSeries.InterpretationEnum.BlockRight
+                }
                 Me.TimeSeries.Add(sInfo.Index, ts)
             Next
 

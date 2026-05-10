@@ -183,10 +183,11 @@ Namespace Fileformats
                     'store series info
 
                     For i = 0 To Namen.Length - 1
-                        sInfo = New TimeSeriesInfo
-                        sInfo.Name = Namen(i).Trim()
-                        sInfo.Unit = Me._einheit
-                        sInfo.Index = i + 1
+                        sInfo = New TimeSeriesInfo With {
+                            .Name = Namen(i).Trim(),
+                            .Unit = Me._einheit,
+                            .Index = i + 1
+                        }
                         Me.TimeSeriesInfos.Add(sInfo)
                     Next
 
@@ -210,10 +211,11 @@ Namespace Fileformats
                     'store series info
 
                     For i = 0 To names.Count - 1
-                        sInfo = New TimeSeriesInfo
-                        sInfo.Name = names(i).Trim()
-                        sInfo.Unit = Me._einheit
-                        sInfo.Index = i + 1 ' hier eigentlich irrelevant
+                        sInfo = New TimeSeriesInfo With {
+                            .Name = names(i).Trim(),
+                            .Unit = Me._einheit,
+                            .Index = i + 1 ' hier eigentlich irrelevant
+                            }
                         Me.TimeSeriesInfos.Add(sInfo)
                     Next
 
@@ -245,9 +247,10 @@ Namespace Fileformats
 
             'Instantiate time series
             For Each sInfo As TimeSeriesInfo In Me.SelectedSeries
-                ts = New TimeSeries(sInfo.Name)
-                ts.Unit = sInfo.Unit
-                ts.DataSource = New TimeSeriesDataSource(Me.File, sInfo.Name)
+                ts = New TimeSeries(sInfo.Name) With {
+                    .Unit = sInfo.Unit,
+                    .DataSource = New TimeSeriesDataSource(Me.File, sInfo.Name)
+                }
                 Me.TimeSeries.Add(sInfo.Index, ts)
             Next
 

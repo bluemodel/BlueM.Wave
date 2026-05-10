@@ -33,8 +33,9 @@ Friend Class CLI
 
         'Create a streamwriter for stdout in case output is piped
         Dim stdOut As IO.Stream = Console.OpenStandardOutput()
-        stdOutWriter = New IO.StreamWriter(stdOut)
-        stdOutWriter.AutoFlush = True
+        stdOutWriter = New IO.StreamWriter(stdOut) With {
+            .AutoFlush = True
+        }
 
         'Attach to parent console
         If Not AttachConsole(-1) Then AllocConsole()

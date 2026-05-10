@@ -164,10 +164,11 @@ Namespace Fileformats
 
                                 If dimensions.Length = 1 Then
                                     '1D dataset - single series
-                                    sInfo = New TimeSeriesInfo()
-                                    sInfo.Name = datasetName
-                                    sInfo.Unit = "-"
-                                    sInfo.Index = index
+                                    sInfo = New TimeSeriesInfo With {
+                                        .Name = datasetName,
+                                        .Unit = "-",
+                                        .Index = index
+                                    }
                                     Me.TimeSeriesInfos.Add(sInfo)
                                     Me.SeriesDatasetMap.Add(index, datasetName)
                                     Me.SeriesColumnMap.Add(index, "")
@@ -197,10 +198,11 @@ Namespace Fileformats
                                             colUnit = "-"
                                         End If
 
-                                        sInfo = New TimeSeriesInfo()
-                                        sInfo.Name = $"{datasetName}_{colName}"
-                                        sInfo.Unit = colUnit
-                                        sInfo.Index = index
+                                        sInfo = New TimeSeriesInfo With {
+                                            .Name = $"{datasetName}_{colName}",
+                                            .Unit = colUnit,
+                                            .Index = index
+                                        }
                                         Me.TimeSeriesInfos.Add(sInfo)
                                         Me.SeriesDatasetMap.Add(index, datasetName)
                                         Me.SeriesColumnMap.Add(index, colName)
@@ -360,9 +362,10 @@ Namespace Fileformats
                                 Dim values As Single() = dataset.Read(Of Single())()
 
                                 Dim colInfo = columnsToRead(0)
-                                Dim ts As New TimeSeries(datasetName)
-                                ts.Unit = colInfo.Item3
-                                ts.DataSource = New TimeSeriesDataSource(Me.File, datasetName)
+                                Dim ts As New TimeSeries(datasetName) With {
+                                    .Unit = colInfo.Item3,
+                                    .DataSource = New TimeSeriesDataSource(Me.File, datasetName)
+                                }
 
                                 For i As Integer = 0 To Math.Min(timestamps.Count, values.Length) - 1
                                     ts.AddNode(timestamps(i), CDbl(values(i)))
@@ -388,9 +391,10 @@ Namespace Fileformats
 
                                     If colIndex >= 0 AndAlso colIndex < numDataCols Then
                                         Dim seriesName As String = $"{datasetName}_{colName}"
-                                        Dim ts As New TimeSeries(seriesName)
-                                        ts.Unit = colUnit
-                                        ts.DataSource = New TimeSeriesDataSource(Me.File, seriesName)
+                                        Dim ts As New TimeSeries(seriesName) With {
+                                            .Unit = colUnit,
+                                            .DataSource = New TimeSeriesDataSource(Me.File, seriesName)
+                                        }
 
                                         For t As Integer = 0 To Math.Min(timestamps.Count, numTimesteps) - 1
                                             'Fortran column-major order: column c, timestep t is at index c * numTimesteps + t

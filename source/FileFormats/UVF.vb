@@ -195,8 +195,9 @@ Namespace Fileformats
 
             'store series info
 
-            sInfo = New TimeSeriesInfo()
-            sInfo.Name = Me.FileMetadata("name")
+            sInfo = New TimeSeriesInfo With {
+                .Name = Me.FileMetadata("name")
+            }
             If Me.FileMetadata("location") <> "" Then
                 'append location to series title
                 sInfo.Name &= " - " & Me.FileMetadata("location")
@@ -229,12 +230,12 @@ Namespace Fileformats
 
             'Zeitreihe instanzieren
             sInfo = Me.TimeSeriesInfos(0)
-            ts = New TimeSeries(sInfo.Name)
-            ts.Unit = sInfo.Unit
-            ts.DataSource = New TimeSeriesDataSource(Me.File, sInfo.Name)
-
             'store metadata
-            ts.Metadata = Me.FileMetadata
+            ts = New TimeSeries(sInfo.Name) With {
+                .Unit = sInfo.Unit,
+                .DataSource = New TimeSeriesDataSource(Me.File, sInfo.Name),
+                .Metadata = Me.FileMetadata
+            }
 
             'Datei öffnen
             Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)

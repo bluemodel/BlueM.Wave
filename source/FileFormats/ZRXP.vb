@@ -189,10 +189,11 @@ Namespace Fileformats
             FiStr.Close()
 
             'store series info
-            sInfo = New TimeSeriesInfo()
-            sInfo.Name = $"{Me.FileMetadata("SNAME")}.{Me.FileMetadata("CNAME")}"
-            sInfo.Unit = Me.FileMetadata("CUNIT")
-            sInfo.Index = 0
+            sInfo = New TimeSeriesInfo With {
+                .Name = $"{Me.FileMetadata("SNAME")}.{Me.FileMetadata("CNAME")}",
+                .Unit = Me.FileMetadata("CUNIT"),
+                .Index = 0
+            }
             Me.TimeSeriesInfos.Add(sInfo)
 
             'store layout info
@@ -226,12 +227,12 @@ Namespace Fileformats
 
             'instantiate time series
             sInfo = Me.TimeSeriesInfos(0)
-            ts = New TimeSeries(sInfo.Name)
-            ts.Unit = sInfo.Unit
-            ts.DataSource = New TimeSeriesDataSource(Me.File, sInfo.Name)
-
             'store metadata
-            ts.Metadata = Me.FileMetadata
+            ts = New TimeSeries(sInfo.Name) With {
+                .Unit = sInfo.Unit,
+                .DataSource = New TimeSeriesDataSource(Me.File, sInfo.Name),
+                .Metadata = Me.FileMetadata
+            }
 
             'for ensemble forecasts, use a nested dictionary of time series {initDate: {member: TimeSeries, ...}, ...}
             Dim ts_ensemble As New Dictionary(Of DateTime, Dictionary(Of Integer, TimeSeries))

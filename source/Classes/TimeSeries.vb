@@ -913,11 +913,12 @@ Public Class TimeSeries
                 Throw New NotImplementedException($"Changing the timestep of a time series to an output interpretation {[Enum].GetName(GetType(InterpretationEnum), outputInterpretation)} is currently not implemented!")
         End Select
 
-        'create a new timeseries
-        ts = New TimeSeries(Me.Title)
-        ts.Unit = Me.Unit
-        ts.Interpretation = outputInterpretation
-        ts.Metadata = Me.Metadata
+        'create a new timeseries with output interpretation and copied metadata
+        ts = New TimeSeries(Me.Title) With {
+            .Unit = Me.Unit,
+            .Interpretation = outputInterpretation,
+            .Metadata = Me.Metadata.Copy()
+        }
         'append timestep description to title
         Dim timesteptypeString As String = [Enum].GetName(GetType(TimeStepTypeEnum), timesteptype).ToLower()
         If timestepinterval > 1 Then
@@ -1097,13 +1098,12 @@ Public Class TimeSeries
         Dim errorCount As Integer
         Dim tsConverted As TimeSeries
 
-        'Instantiate a new series
-        tsConverted = New TimeSeries(Me.Title)
-
-        'copy metadata
-        tsConverted.Unit = Me.Unit
-        tsConverted.Interpretation = Me.Interpretation
-        tsConverted.Metadata = Me.Metadata
+        'Instantiate a new series with copied metadata
+        tsConverted = New TimeSeries(Me.Title) With {
+            .Unit = Me.Unit,
+            .Interpretation = Me.Interpretation,
+            .Metadata = Me.Metadata.Copy()
+        }
 
         Log.AddLogEntry(Log.levels.info, $"Converting error values from series {Me.Title}...")
 
@@ -1154,17 +1154,14 @@ Public Class TimeSeries
         'store number of NaN nodes
         nanCount = Me.NaNCount
 
-        'Instantiate a new series
-        tsCleaned = New TimeSeries(Me.Title)
-
-        'copy metadata
-        tsCleaned.Unit = Me.Unit
-        tsCleaned.Interpretation = Me.Interpretation
-        tsCleaned.Metadata = Me.Metadata.Copy()
-        tsCleaned.DataSource = New TimeSeriesDataSource(TimeSeriesDataSource.OriginEnum.AnalysisResult)
-
-        'copy clean nodes
-        tsCleaned._nodes = New SortedList(Of DateTime, Double)(Me.NodesClean)
+        'Instantiate a new series with copied metadata and only clean nodes
+        tsCleaned = New TimeSeries(Me.Title) With {
+            .Unit = Me.Unit,
+            .Interpretation = Me.Interpretation,
+            .Metadata = Me.Metadata.Copy(),
+            .DataSource = New TimeSeriesDataSource(TimeSeriesDataSource.OriginEnum.AnalysisResult),
+            ._nodes = New SortedList(Of DateTime, Double)(Me.NodesClean)
+        }
 
         'Log
         If nanCount > 0 Then

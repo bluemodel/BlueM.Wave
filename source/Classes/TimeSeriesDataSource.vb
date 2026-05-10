@@ -91,9 +91,10 @@ Public Class TimeSeriesDataSource
     ''' </summary>
     ''' <returns></returns>
     Public Function Copy() As TimeSeriesDataSource
-        Dim _copy As New TimeSeriesDataSource(Me.Origin)
-        _copy._filepath = Me.FilePath
-        _copy._title = Me.Title
+        Dim _copy As New TimeSeriesDataSource(Me.Origin) With {
+            ._filepath = Me.FilePath,
+            ._title = Me.Title
+        }
         Return _copy
     End Function
 
