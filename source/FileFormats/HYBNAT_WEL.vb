@@ -157,8 +157,8 @@ Namespace Fileformats
             syncReader = TextReader.Synchronized(reader)
 
             'Initialize arrays for column names and units
-            Dim columnNames() As String = Nothing
-            Dim columnUnits() As String = Nothing
+            Dim columnNames(0) As String
+            Dim columnUnits(0) As String
             LineNumberHeaders = 0
 
             'Loop throgh file until line starts with "Zeit"
