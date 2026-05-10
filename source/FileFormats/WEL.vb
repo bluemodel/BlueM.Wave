@@ -282,7 +282,7 @@ Namespace Fileformats
         ''' </summary>
         ''' <param name="file">path to the file to check</param>
         ''' <returns>True if verification was successful</returns>
-        Public Shared Function verifyFormat(file As String) As Boolean
+        Public Shared Function VerifyFormat(file As String) As Boolean
 
             Dim FiStr As FileStream
             Dim StrRead As StreamReader

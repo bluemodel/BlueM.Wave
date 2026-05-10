@@ -121,7 +121,7 @@ Public Class TestImport
     <DataRow("ZRXP\multiple_timeseries.zrxp")>
     <DataRow("ZRXP\series_with_infinity.zrx")>
     Public Sub TestFileImport(filepath As String)
-        filepath = IO.Path.Combine(TestData.getTestDataDir(), filepath)
+        filepath = IO.Path.Combine(TestData.GetTestDataDir(), filepath)
         Try
             Dim file As TimeSeriesFile = TimeSeriesFile.GetInstance(filepath)
             'read series info from file

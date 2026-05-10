@@ -47,7 +47,7 @@ Friend Module AnalysisFactory
     ''' </summary>
     ''' <param name="analysisfunction"></param>
     ''' <returns></returns>
-    Public Function getAnalysisDescription(analysisfunction As AnalysisFunctions) As String
+    Public Function GetAnalysisDescription(analysisfunction As AnalysisFunctions) As String
         Select Case analysisfunction
             Case AnalysisFunctions.Accumulate
                 Return Accumulate.Description

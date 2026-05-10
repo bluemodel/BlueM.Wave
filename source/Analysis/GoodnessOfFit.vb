@@ -121,7 +121,7 @@ Friend Class GoodnessOfFit
     ''' <param name="ts_s">timeseries with simulated values</param>
     ''' <returns>GoF parameters</returns>
     ''' <remarks></remarks>
-    Private Shared Function calculateGOF(ts_o As TimeSeries, ts_s As TimeSeries) As GoF
+    Private Shared Function CalculateGOF(ts_o As TimeSeries, ts_s As TimeSeries) As GoF
 
         Dim i As Integer
         Dim errors() As Double
@@ -385,7 +385,7 @@ Friend Class GoodnessOfFit
             'Calculate GoF parameters for each series
             Me.GoFResults.Add(ts_sim.Title, New Dictionary(Of String, GoF))
             For Each period As String In series_o.Keys
-                Me.GoFResults(ts_sim.Title).Add(period, GoodnessOfFit.calculateGOF(series_o(period), series_s(period)))
+                Me.GoFResults(ts_sim.Title).Add(period, GoodnessOfFit.CalculateGOF(series_o(period), series_s(period)))
             Next
         Next
 

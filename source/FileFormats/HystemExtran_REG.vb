@@ -259,7 +259,7 @@ Namespace Fileformats
         ''' </summary>
         ''' <param name="Reihe">Die zu exportierende Zeitreihe</param>
         ''' <param name="File">Pfad zur anzulegenden Datei</param>
-        Public Overloads Shared Sub writeFile(Reihe As TimeSeries, File As String)
+        Public Overloads Shared Sub WriteFile(Reihe As TimeSeries, File As String)
 
             Dim dt As Integer
             Dim KontiReihe As TimeSeries
@@ -339,7 +339,7 @@ Namespace Fileformats
         ''' </summary>
         ''' <param name="file">Pfad zur Datei</param>
         ''' <returns></returns>
-        Public Shared Function verifyFormat(file As String) As Boolean
+        Public Shared Function VerifyFormat(file As String) As Boolean
 
             Dim FiStr As New FileStream(file, FileMode.Open, IO.FileAccess.Read)
             Dim StrRead As New StreamReader(FiStr, detectEncodingFromByteOrderMarks:=True)

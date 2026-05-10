@@ -300,7 +300,7 @@ Namespace Fileformats
         ''' <summary>
         ''' Sets default metadata values for a time series corresponding to the SWMM routing interface file format
         ''' </summary>
-        Public Overloads Shared Sub setDefaultMetadata(ts As TimeSeries)
+        Public Overloads Shared Sub SetDefaultMetadata(ts As TimeSeries)
             'Make sure all required keys exist
             ts.Metadata.AddKeys(SWMM_INTERFACE.MetadataKeys)
             'Set default values
@@ -323,7 +323,7 @@ Namespace Fileformats
         ''' </summary>
         ''' <param name="seriesList">list of time series to export</param>
         ''' <param name="file">path to file to export to</param>
-        Public Overloads Shared Sub writeFile(ByRef seriesList As List(Of TimeSeries), file As String)
+        Public Overloads Shared Sub WriteFile(ByRef seriesList As List(Of TimeSeries), file As String)
 
             Dim strwrite As StreamWriter
             Dim i, j, k As Integer
@@ -472,7 +472,7 @@ Namespace Fileformats
         ''' </summary>
         ''' <param name="file">Pfad zur Datei</param>
         ''' <returns></returns>
-        Public Shared Function verifyFormat(file As String) As Boolean
+        Public Shared Function VerifyFormat(file As String) As Boolean
 
             Dim FiStr As New FileStream(file, FileMode.Open, IO.FileAccess.Read)
             Dim StrRead As New StreamReader(FiStr, detectEncodingFromByteOrderMarks:=True)

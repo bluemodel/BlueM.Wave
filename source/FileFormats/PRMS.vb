@@ -260,7 +260,7 @@ Namespace Fileformats
         ''' <param name="file"></param>
         ''' <returns></returns>
         ''' <remarks>Assumes that headers are fixed (always the same variables)</remarks>
-        Public Shared Function verifyFormat(file As String) As Boolean
+        Public Shared Function VerifyFormat(file As String) As Boolean
 
             Dim i As Integer
             Dim line As String

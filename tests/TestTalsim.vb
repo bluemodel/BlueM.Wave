@@ -38,7 +38,7 @@ Public Class TestTalsim
             'set current directory to test assemply path to ensure any relative paths in the clipboard data are correct
             IO.Directory.SetCurrentDirectory(My.Application.Info.DirectoryPath())
 
-            Dim clipboardData As String = IO.File.ReadAllText(IO.Path.Combine(TestData.getTestDataDir(), clipboardFile))
+            Dim clipboardData As String = IO.File.ReadAllText(IO.Path.Combine(TestData.GetTestDataDir(), clipboardFile))
 
             Dim talsimclipboard As New Parsers.TalsimClipboard(clipboardData)
             Dim tsList As List(Of TimeSeries) = talsimclipboard.Process()
@@ -62,7 +62,7 @@ Public Class TestTalsim
     <TestMethod()>
     Public Sub TestWLZIP()
 
-        Dim file_wel As String = IO.Path.Combine(TestData.getTestDataDir(), "Talsim", "TALSIM.WEL")
+        Dim file_wel As String = IO.Path.Combine(TestData.GetTestDataDir(), "Talsim", "TALSIM.WEL")
 
         'delete existing file before testing
         If IO.File.Exists(file_wel) Then
@@ -92,8 +92,8 @@ Public Class TestTalsim
             'set current directory to test assemply path to ensure any relative paths in the clipboard data are correct
             IO.Directory.SetCurrentDirectory(My.Application.Info.DirectoryPath())
 
-            Dim file_clipboard As String = IO.Path.Combine(TestData.getTestDataDir(), "Talsim", "Clipboard_Talsim_WLZIP.txt")
-            Dim file_wel As String = IO.Path.Combine(TestData.getTestDataDir(), "Talsim", "TALSIM.WEL")
+            Dim file_clipboard As String = IO.Path.Combine(TestData.GetTestDataDir(), "Talsim", "Clipboard_Talsim_WLZIP.txt")
+            Dim file_wel As String = IO.Path.Combine(TestData.GetTestDataDir(), "Talsim", "TALSIM.WEL")
 
             'delete existing file before testing
             If IO.File.Exists(file_wel) Then

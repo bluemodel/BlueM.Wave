@@ -73,7 +73,7 @@ Namespace Fileformats
         ''' <param name="file">path to file</param>
         ''' <returns>Boolean</returns>
         ''' <remarks></remarks>
-        Public Shared Function verifyFormat(file As String) As Boolean
+        Public Shared Function VerifyFormat(file As String) As Boolean
             Try
                 'attempt to deserialize XML
                 Dim serializer As New XmlSerializer(GetType(XMLTimeSeries))
@@ -203,7 +203,7 @@ Namespace Fileformats
         ''' <summary>
         ''' Sets default metadata values for a time series corresponding to the Delft-FEWS PI timeseries format
         ''' </summary>
-        Public Overloads Shared Sub setDefaultMetadata(ts As TimeSeries)
+        Public Overloads Shared Sub SetDefaultMetadata(ts As TimeSeries)
             'Make sure all required keys exist
             ts.Metadata.AddKeys(FEWS_PI.MetadataKeys)
             'Set default values
@@ -231,7 +231,7 @@ Namespace Fileformats
         ''' <param name="dateString">date string</param>
         ''' <param name="timeString">time string</param>
         ''' <returns>DateTime object</returns>
-        Private Shared Function parseDateTime(dateString As String, timeString As String) As DateTime
+        Private Shared Function ParseDateTime(dateString As String, timeString As String) As DateTime
             Dim success As Boolean
             Dim timestamp As DateTime
             success = DateTime.TryParseExact($"{dateString} {timeString}", Helpers.DateFormats("ISO"), Helpers.DefaultNumberFormat, Globalization.DateTimeStyles.None, timestamp)
@@ -247,7 +247,7 @@ Namespace Fileformats
         ''' <param name="tsList">time series to write to file</param>
         ''' <param name="file">path to the xml file</param>
         ''' <remarks></remarks>
-        Public Overloads Shared Sub writeFile(ByRef tsList As List(Of TimeSeries), file As String)
+        Public Overloads Shared Sub WriteFile(ByRef tsList As List(Of TimeSeries), file As String)
             Dim xmlserializer As New XmlSerializer(GetType(XMLTimeSeries))
             Dim xmlroot As New XMLTimeSeries With {
                 .version = "1.2",
@@ -377,7 +377,7 @@ Namespace Fileformats
             <XmlIgnore>
             ReadOnly Property dt As DateTime
                 Get
-                    Return parseDateTime(Me.date, Me.time)
+                    Return ParseDateTime(Me.date, Me.time)
                 End Get
             End Property
         End Class
@@ -398,7 +398,7 @@ Namespace Fileformats
             <XmlIgnore>
             ReadOnly Property dt As DateTime
                 Get
-                    Return parseDateTime(Me.date, Me.time)
+                    Return ParseDateTime(Me.date, Me.time)
                 End Get
             End Property
 

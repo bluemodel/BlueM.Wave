@@ -66,7 +66,7 @@ Friend Class AnalysisDialog
     Private Sub ComboBox_Analysis_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox_Analysis.SelectedIndexChanged
         Dim url As String
         'update the description and wiki link
-        Me.Label_AnalaysisDescription.Text = AnalysisFactory.getAnalysisDescription(Me.SelectedAnalysisFunction)
+        Me.Label_AnalaysisDescription.Text = AnalysisFactory.GetAnalysisDescription(Me.SelectedAnalysisFunction)
         url = "https://wiki.bluemodel.org/index.php/Wave:" & Me.SelectedAnalysisFunction.ToString("g")
         Me.LinkLabel_Helplink.Text = url
         Me.LinkLabel_Helplink.Links.Clear()

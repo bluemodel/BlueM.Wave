@@ -712,7 +712,7 @@ Public MustInherit Class TimeSeriesFile
                     'Hystem-Extran rainfall file
                     Log.AddLogEntry(Levels.info, $"Detected Hystem-Extran rainfall format for file {fileName}.")
                     fileType = FileTypes.HYSTEM_REG
-                ElseIf Fileformats.PRMS.verifyFormat(file) Then
+                ElseIf Fileformats.PRMS.VerifyFormat(file) Then
                     'PRMS result file
                     Log.AddLogEntry(Levels.info, $"Detected PRMS result format for file {fileName}.")
                     fileType = FileTypes.PRMS_OUT
@@ -750,7 +750,7 @@ Public MustInherit Class TimeSeriesFile
                 End If
 
             Case FileExtensions.OUT
-                If Fileformats.PRMS.verifyFormat(file) Then
+                If Fileformats.PRMS.VerifyFormat(file) Then
                     'PRMS result format
                     Log.AddLogEntry(Levels.info, $"Detected PRMS result format for file {fileName}.")
                     fileType = FileTypes.PRMS_OUT
@@ -758,11 +758,11 @@ Public MustInherit Class TimeSeriesFile
 
             Case FileExtensions.REG
                 'Check file format
-                If Fileformats.SMUSI_REG.verifyFormat(file) Then
+                If Fileformats.SMUSI_REG.VerifyFormat(file) Then
                     'SMUSI rainfall file
                     Log.AddLogEntry(Levels.info, $"Detected SMUSI rainfall format for file {fileName}.")
                     fileType = FileTypes.SMUSI_REG
-                ElseIf Fileformats.HystemExtran_REG.verifyFormat(file) Then
+                ElseIf Fileformats.HystemExtran_REG.VerifyFormat(file) Then
                     'Hystem-Extran rainfall file
                     Log.AddLogEntry(Levels.info, $"Detected Hystem-Extran rainfall format for file {fileName}.")
                     fileType = FileTypes.HYSTEM_REG
@@ -778,11 +778,11 @@ Public MustInherit Class TimeSeriesFile
 
             Case FileExtensions.TXT
                 'Check file format
-                If Fileformats.SWMM_LID_REPORT.verifyFormat(file) Then
+                If Fileformats.SWMM_LID_REPORT.VerifyFormat(file) Then
                     'SWMM LID report file
                     Log.AddLogEntry(Levels.info, $"Detected SWMM LID report file format for file {fileName}.")
                     fileType = FileTypes.SWMM_LID_REPORT
-                ElseIf Fileformats.SWMM_INTERFACE.verifyFormat(file) Then
+                ElseIf Fileformats.SWMM_INTERFACE.VerifyFormat(file) Then
                     'SWMM routing interface file
                     Log.AddLogEntry(Levels.info, $"Detected SWMM routing interface file format for file {fileName}.")
                     fileType = FileTypes.SWMM_INTERFACE
@@ -812,7 +812,7 @@ Public MustInherit Class TimeSeriesFile
                     'Hystem-Extran rainfall file
                     Log.AddLogEntry(Levels.info, $"Detected Hystem-Extran rainfall format for file {fileName}.")
                     fileType = FileTypes.HYSTEM_WEL
-                ElseIf Fileformats.WBL.verifyFormat(file) Then
+                ElseIf Fileformats.WBL.VerifyFormat(file) Then
                     'SYDRO binary WEL file
                     Log.AddLogEntry(Levels.info, $"Detected SYDRO binary WEL format for file {fileName}.")
                     fileType = FileTypes.WBL

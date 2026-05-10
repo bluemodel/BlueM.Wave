@@ -179,7 +179,7 @@ Namespace Fileformats
         ''' </summary>
         ''' <param name="file">path to file</param>
         ''' <returns></returns>
-        Public Shared Function verifyFormat(file As String) As Boolean
+        Public Shared Function VerifyFormat(file As String) As Boolean
 
             Dim line As String
 

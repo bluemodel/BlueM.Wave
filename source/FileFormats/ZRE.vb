@@ -160,7 +160,7 @@ Namespace Fileformats
         ''' </summary>
         ''' <param name="Reihe">Die zu exportierende Zeitreihe</param>
         ''' <param name="File">Pfad zur anzulegenden Datei</param>
-        Public Overloads Shared Sub writeFile(Reihe As TimeSeries, File As String)
+        Public Overloads Shared Sub WriteFile(Reihe As TimeSeries, File As String)
 
             Dim strwrite As StreamWriter
             Dim i As Integer

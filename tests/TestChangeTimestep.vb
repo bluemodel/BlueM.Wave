@@ -30,7 +30,7 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
 
         Dim ts, ts_new As TimeSeries
 
-        ts = getTestTimeSeries_15min()
+        ts = GetTestTimeSeries_15min()
         ts.Interpretation = TimeSeries.InterpretationEnum.BlockLeft
 
         ts_new = ts.ChangeTimestep(TimeSeries.TimeStepTypeEnum.Hour, 1, ts.StartDate)
@@ -52,7 +52,7 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
 
         Dim ts, ts_new As TimeSeries
 
-        ts = getTestTimeSeries_15min()
+        ts = GetTestTimeSeries_15min()
         ts.Interpretation = TimeSeries.InterpretationEnum.BlockLeft
 
         ts_new = ts.ChangeTimestep(TimeSeries.TimeStepTypeEnum.Hour, 1, ts.StartDate, outputInterpretation:=TimeSeries.InterpretationEnum.BlockRight)
@@ -74,7 +74,7 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
 
         Dim ts, ts_new As TimeSeries
 
-        ts = getTestTimeSeries_15min()
+        ts = GetTestTimeSeries_15min()
         ts.Interpretation = TimeSeries.InterpretationEnum.CumulativePerTimestep
 
         ts_new = ts.ChangeTimestep(TimeSeries.TimeStepTypeEnum.Hour, 1, ts.StartDate)
@@ -96,7 +96,7 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
 
         Dim ts, ts_new As TimeSeries
 
-        ts = getTestTimeSeries_15min()
+        ts = GetTestTimeSeries_15min()
         ts.Interpretation = TimeSeries.InterpretationEnum.BlockRight
 
         ts_new = ts.ChangeTimestep(TimeSeries.TimeStepTypeEnum.Hour, 1, ts.StartDate)
@@ -118,7 +118,7 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
 
         Dim ts, ts_new As TimeSeries
 
-        ts = getTestTimeSeries_15min()
+        ts = GetTestTimeSeries_15min()
         ts.Interpretation = TimeSeries.InterpretationEnum.Instantaneous
 
         ts_new = ts.ChangeTimestep(TimeSeries.TimeStepTypeEnum.Hour, 1, ts.StartDate, outputInterpretation:=TimeSeries.InterpretationEnum.BlockRight)
@@ -140,7 +140,7 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
 
         Dim ts, ts_new As TimeSeries
 
-        ts = getTestTimeSeries_15min()
+        ts = GetTestTimeSeries_15min()
         ts.Interpretation = TimeSeries.InterpretationEnum.BlockLeft
 
         ts_new = ts.ChangeTimestep(TimeSeries.TimeStepTypeEnum.Minute, 10, ts.StartDate)
@@ -183,7 +183,7 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
 
         Dim ts, ts_new As TimeSeries
 
-        ts = getTestTimeSeries_15min()
+        ts = GetTestTimeSeries_15min()
         ts.Interpretation = TimeSeries.InterpretationEnum.CumulativePerTimestep
 
         ts_new = ts.ChangeTimestep(TimeSeries.TimeStepTypeEnum.Minute, 10, ts.StartDate)
@@ -227,7 +227,7 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
 
         Dim ts, ts_new As TimeSeries
 
-        ts = getTestTimeSeries_15min()
+        ts = GetTestTimeSeries_15min()
         ts.Interpretation = TimeSeries.InterpretationEnum.BlockRight
 
         ts_new = ts.ChangeTimestep(TimeSeries.TimeStepTypeEnum.Minute, 10, ts.StartDate)
@@ -270,7 +270,7 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
 
         Dim ts, ts_new As TimeSeries
 
-        ts = getTestTimeSeries_15min()
+        ts = GetTestTimeSeries_15min()
         ts.Interpretation = TimeSeries.InterpretationEnum.Instantaneous
 
         ts_new = ts.ChangeTimestep(TimeSeries.TimeStepTypeEnum.Minute, 10, ts.StartDate, outputInterpretation:=TimeSeries.InterpretationEnum.BlockRight)
@@ -313,7 +313,7 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
 
         Dim ts, ts_new As TimeSeries
 
-        ts = getTestTimeSeries("BIN\abfluss_1.bin")
+        ts = GetTestTimeSeries("BIN\abfluss_1.bin")
         ts.Interpretation = TimeSeries.InterpretationEnum.BlockRight
 
         Dim startdate As DateTime = New DateTime(ts.StartDate.Year, ts.StartDate.Month, 1)
@@ -340,7 +340,7 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
 
         Dim ts, ts_new As TimeSeries
 
-        ts = getTestTimeSeries("ZRXP\cmp_Z329_S109.zrx")
+        ts = GetTestTimeSeries("ZRXP\cmp_Z329_S109.zrx")
         ts.Interpretation = TimeSeries.InterpretationEnum.CumulativePerTimestep
 
         Dim startdate As DateTime = New DateTime(2000, 11, 1, 7, 30, 0)

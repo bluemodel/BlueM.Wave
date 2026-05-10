@@ -407,9 +407,9 @@ Public Class Wave
                 'set default metadata values
                 Select Case fileType
                     Case TimeSeriesFile.FileTypes.FEWS_PI
-                        Fileformats.FEWS_PI.setDefaultMetadata(ts)
+                        Fileformats.FEWS_PI.SetDefaultMetadata(ts)
                     Case TimeSeriesFile.FileTypes.SWMM_INTERFACE
-                        Fileformats.SWMM_INTERFACE.setDefaultMetadata(ts)
+                        Fileformats.SWMM_INTERFACE.SetDefaultMetadata(ts)
                     Case TimeSeriesFile.FileTypes.UVF
                         Fileformats.UVF.SetDefaultMetadata(ts)
                     Case TimeSeriesFile.FileTypes.ZRXP
@@ -573,10 +573,10 @@ Public Class Wave
                         Call Fileformats.DFS0.WriteFile(tsList, filename)
 
                     Case TimeSeriesFile.FileTypes.FEWS_PI
-                        Call Fileformats.FEWS_PI.writeFile(tsList, filename)
+                        Call Fileformats.FEWS_PI.WriteFile(tsList, filename)
 
                     Case TimeSeriesFile.FileTypes.SWMM_INTERFACE
-                        Call Fileformats.SWMM_INTERFACE.writeFile(tsList, filename)
+                        Call Fileformats.SWMM_INTERFACE.WriteFile(tsList, filename)
 
                     Case TimeSeriesFile.FileTypes.HYBNAT_BCS
                         Call Fileformats.HYBNAT_BCS.writeFile(tsList, filename)
@@ -614,10 +614,10 @@ Public Class Wave
                             Call Fileformats.BIN.writeFile(ts, filename)
 
                         Case TimeSeriesFile.FileTypes.HYSTEM_REG
-                            Call Fileformats.HystemExtran_REG.writeFile(ts, filename)
+                            Call Fileformats.HystemExtran_REG.WriteFile(ts, filename)
 
                         Case TimeSeriesFile.FileTypes.SMUSI_REG
-                            Call Fileformats.SMUSI_REG.writeFile(ts, filename)
+                            Call Fileformats.SMUSI_REG.WriteFile(ts, filename)
 
                         Case TimeSeriesFile.FileTypes.SWMM_TIMESERIES
                             Call Fileformats.SWMM_TIMESERIES.WriteFile(ts, filename)
@@ -626,7 +626,7 @@ Public Class Wave
                             Call Fileformats.UVF.WriteFile(ts, filename)
 
                         Case TimeSeriesFile.FileTypes.ZRE
-                            Call Fileformats.ZRE.writeFile(ts, filename)
+                            Call Fileformats.ZRE.WriteFile(ts, filename)
 
                         Case TimeSeriesFile.FileTypes.ZRXP
                             Call Fileformats.ZRXP.WriteFile(ts, filename)
