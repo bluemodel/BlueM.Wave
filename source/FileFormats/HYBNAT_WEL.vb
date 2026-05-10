@@ -183,7 +183,7 @@ Namespace Fileformats
             stream.Close()
 
             'Store series info
-            For i = 0 To columnNames.Count - 1
+            For i = 0 To columnNames.Length - 1
                 'Overjump time column
                 If i = DateTimeColumnIndex Then Continue For
 
