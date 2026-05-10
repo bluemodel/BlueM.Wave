@@ -133,13 +133,13 @@ Namespace Fileformats
             }
 
             'Reihentitel steht in 1. Zeile, ist aber optional:
-            Zeile = StrReadSync.ReadLine.ToString()
+            Zeile = StrReadSync.ReadLine()
             title = Zeile.Substring(20, 30).Trim()
             If title.Length = 0 Then title = Path.GetFileName(Me.File)
             sInfo.Name = title
 
             'Einheit steht in 2. Zeile:
-            Zeile = StrReadSync.ReadLine.ToString()
+            Zeile = StrReadSync.ReadLine()
             sInfo.Unit = Zeile.Substring(68, 10).Trim()
 
             'store series info
@@ -186,7 +186,7 @@ Namespace Fileformats
 
             Do
                 j += 1
-                Zeile = StrReadSync.ReadLine.ToString()
+                Zeile = StrReadSync.ReadLine()
 
                 If Zeile.Substring(19, 1) = "E" Then Exit Do
 
@@ -346,7 +346,7 @@ Namespace Fileformats
             Dim Zeile As String
 
             '1 Zeile einlesen
-            Zeile = StrRead.ReadLine.ToString()
+            Zeile = StrRead.ReadLine()
 
             StrRead.Close()
             FiStr.Close()

@@ -135,7 +135,7 @@ Namespace Fileformats
             If Path.GetFileName(Me.File).Equals("Q_Strg.dat", StringComparison.CurrentCultureIgnoreCase) Then
                 'If the 5th line starts with "Name:", then it is HYDROAS-2D version 5 format
                 For i = 1 To 5
-                    Zeile = StrReadSync.ReadLine.ToString()
+                    Zeile = StrReadSync.ReadLine()
                 Next
                 If Zeile.Trim.StartsWith("Name:") Then
                     Me._HYDROAS_version = 5
@@ -200,7 +200,7 @@ Namespace Fileformats
                     Do
                         parts = Zeile.Split(New Char() {" "}, StringSplitOptions.RemoveEmptyEntries)
                         names.Add($"{parts(0)}-{parts(1)}")
-                        Zeile = StrReadSync.ReadLine.ToString().Trim()
+                        Zeile = StrReadSync.ReadLine().Trim()
                     Loop Until Zeile.StartsWith("---")
 
                     'store series info
@@ -268,7 +268,7 @@ Namespace Fileformats
 
                     'Daten
                     Do
-                        Zeile = StrReadSync.ReadLine.ToString()
+                        Zeile = StrReadSync.ReadLine()
                         Werte = Zeile.Split(Me.Separator.ToChar, System.StringSplitOptions.RemoveEmptyEntries)
                         'Simulationszeit [h] wird zu Datum nach dem Referenzdatum (default: 01.01.2000 00:00:00) konvertiert
                         datum = Me.refDate + New TimeSpan(0, 0, Helpers.StringToDouble(Werte(0)) * 3600)
@@ -284,7 +284,7 @@ Namespace Fileformats
                     Dim parts(), name As String
 
                     Do
-                        Zeile = StrReadSync.ReadLine.ToString().Trim()
+                        Zeile = StrReadSync.ReadLine().Trim()
                         If Zeile.Length = 0 Then Continue Do
                         'Headerzeilen
                         If Zeile.StartsWith("---") Then Continue Do

@@ -126,7 +126,7 @@ Namespace Fileformats
 
             'Spaltenüberschriften auslesen
             For i = 1 To Me.LineNumberUnits
-                Zeile = StrReadSync.ReadLine.ToString()
+                Zeile = StrReadSync.ReadLine()
                 If (i = Me.iLineInfo) Then LineInfo = Zeile
                 If (i = Me.LineNumberHeaders) Then ZeileSpalten = Zeile
                 If (i = Me.LineNumberUnits) Then ZeileEinheiten = Zeile
@@ -227,12 +227,12 @@ Namespace Fileformats
 
             'Header
             For iZeile = 1 To Me.NLinesHeader
-                StrReadSync.ReadLine.ToString()
+                StrReadSync.ReadLine()
             Next
 
             'Daten
             Do
-                Zeile = StrReadSync.ReadLine.ToString()
+                Zeile = StrReadSync.ReadLine()
                 If Zeile.Trim().Length = 0 Then
                     'skip emtpy lines
                     Continue Do
@@ -293,7 +293,7 @@ Namespace Fileformats
             StrRead = New StreamReader(FiStr, detectEncodingFromByteOrderMarks:=True)
 
             'read only the first line
-            Zeile = StrRead.ReadLine.ToString()
+            Zeile = StrRead.ReadLine()
 
             StrRead.Close()
             FiStr.Close()

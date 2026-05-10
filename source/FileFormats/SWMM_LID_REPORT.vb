@@ -80,7 +80,7 @@ Namespace Fileformats
 
             Do Until StrReadSync.Peek() = -1
                 iLine += 1
-                line = StrReadSync.ReadLine.ToString().Trim()
+                line = StrReadSync.ReadLine().Trim()
 
                 If iLine = Me.LineNumberHeaders Then
                     titles1 = line.Split(Me.Separator.ToChar).ToList
@@ -151,7 +151,7 @@ Namespace Fileformats
 
             Do Until StrReadSync.Peek() = -1
                 iLine += 1
-                line = StrReadSync.ReadLine.ToString().Trim()
+                line = StrReadSync.ReadLine().Trim()
 
                 If iLine < Me.LineNumberData OrElse line.Trim().Length = 0 Then
                     Continue Do
@@ -187,7 +187,7 @@ Namespace Fileformats
             Dim StrRead As New StreamReader(FiStr, detectEncodingFromByteOrderMarks:=True)
 
             'read first line
-            line = StrRead.ReadLine.ToString().Trim()
+            line = StrRead.ReadLine().Trim()
 
             StrRead.Close()
             FiStr.Close()

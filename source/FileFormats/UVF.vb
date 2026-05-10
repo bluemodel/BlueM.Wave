@@ -91,7 +91,7 @@ Namespace Fileformats
                 Dim StrReadSync = TextReader.Synchronized(StrRead)
 
                 Do
-                    Zeile = StrReadSync.ReadLine.ToString()
+                    Zeile = StrReadSync.ReadLine()
                     i += 1
                     If Zeile.StartsWith("$"c) Then Continue Do ' Kommentarzeile
                     If Zeile.StartsWith("*z", StringComparison.CurrentCultureIgnoreCase) Then    ' Hier fängt der Header an
@@ -138,7 +138,7 @@ Namespace Fileformats
             Dim StrReadSync = TextReader.Synchronized(StrRead)
 
             Do
-                Zeile = StrReadSync.ReadLine.ToString()
+                Zeile = StrReadSync.ReadLine()
                 i += 1
                 If Zeile.StartsWith("$"c) Then
                     'Kommentarzeile
@@ -255,7 +255,7 @@ Namespace Fileformats
             year_prev = Integer.Parse(century.ToString().Substring(2)) 'Aus Anfangsjahrhundert
             errorcount = 0
             Do
-                Zeile = StrReadSync.ReadLine.ToString()
+                Zeile = StrReadSync.ReadLine()
                 'Datum lesen
                 datumstring = Zeile.Substring(0, 10)
                 year = Integer.Parse(datumstring.Substring(0, 2))

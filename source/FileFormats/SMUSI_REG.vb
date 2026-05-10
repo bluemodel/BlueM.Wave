@@ -148,7 +148,7 @@ Namespace Fileformats
 
             Do
                 j += 1
-                Zeile = StrReadSync.ReadLine.ToString()
+                Zeile = StrReadSync.ReadLine()
 
                 If (j > Me.NLinesHeader) Then
 
@@ -319,8 +319,8 @@ Namespace Fileformats
             Dim Zeile As String
 
             '2 Zeilen einlesen
-            StrRead.ReadLine.ToString()
-            Zeile = StrRead.ReadLine.ToString()
+            StrRead.ReadLine()
+            Zeile = StrRead.ReadLine()
 
             StrRead.Close()
             FiStr.Close()

@@ -78,7 +78,7 @@ Namespace Fileformats
             sInfo = New TimeSeriesInfo()
 
             'Reihentitel steht in 1. Zeile:
-            Zeile = StrReadSync.ReadLine.ToString()
+            Zeile = StrReadSync.ReadLine()
             sInfo.Name = Zeile.Substring(15).Trim()
             'Annahme, dass SMB-Dateien Regenreihen sind, daher Einheit mm fest verdrahtet
             sInfo.Unit = "mm"
@@ -119,7 +119,7 @@ Namespace Fileformats
             j = 1
 
             'Anfangsdatum einlesen
-            Zeile = StrReadSync.ReadLine.ToString()
+            Zeile = StrReadSync.ReadLine()
             Tag = Zeile.Substring(0, 2)
             Monat = Zeile.Substring(2, 2)
             Jahr = Zeile.Substring(4, 4)
@@ -131,7 +131,7 @@ Namespace Fileformats
             'Einlesen
             '--------
             Do
-                Zeile = StrReadSync.ReadLine.ToString()
+                Zeile = StrReadSync.ReadLine()
                 j += 1
                 If (j > Me.NLinesHeader And Zeile.Length > 0) Then
 

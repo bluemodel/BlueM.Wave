@@ -196,7 +196,7 @@ Namespace Fileformats
 
             ' read date lines
             Do
-                Zeile = StrReadSync.ReadLine.ToString()
+                Zeile = StrReadSync.ReadLine()
 
                 ' first empty space "" needs to be removed (otherwise date time format is not understood)
                 'Zeile = Zeile.Substring(1, Zeile.Length - 1)

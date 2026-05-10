@@ -159,7 +159,7 @@ Friend Class ImportCSVDialog
 
         For i As Integer = 1 To anzZeilen
 
-            line = StrRead.ReadLine.ToString()
+            line = StrRead.ReadLine()
 
             'gucken, ob Zeile zu lang
             If (line.Length > anzSpalten) Then

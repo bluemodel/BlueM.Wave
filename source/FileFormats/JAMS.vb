@@ -217,12 +217,12 @@ Namespace Fileformats
             verificationResult = False
 
             'check first line
-            line = StrRead.ReadLine.ToString()
+            line = StrRead.ReadLine()
             If line.StartsWith("@context") Then
                 verificationResult = True
             End If
             'check second line
-            line = StrRead.ReadLine.ToString()
+            line = StrRead.ReadLine()
             If line.StartsWith("jams.components.core.TemporalContext") Then
                 verificationResult = verificationResult And True
             End If

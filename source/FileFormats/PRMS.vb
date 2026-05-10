@@ -75,7 +75,7 @@ Namespace Fileformats
             i = 0
             lines = New Dictionary(Of Integer, String)
             Do
-                line = StrReadSync.ReadLine.ToString()
+                line = StrReadSync.ReadLine()
                 i += 1
                 lines.Add(i, line)
             Loop Until i = 3
@@ -226,7 +226,7 @@ Namespace Fileformats
 
             'Read data
             Do
-                line = StrReadSync.ReadLine.ToString()
+                line = StrReadSync.ReadLine()
 
                 parts = line.Split(Me.Separator.ToChar, StringSplitOptions.RemoveEmptyEntries)
 
@@ -278,7 +278,7 @@ Namespace Fileformats
                 lines = New Dictionary(Of Integer, String)
                 Do
                     i += 1
-                    line = StrReadSync.ReadLine.ToString()
+                    line = StrReadSync.ReadLine()
                     lines.Add(i, line)
                 Loop Until i = 3
 

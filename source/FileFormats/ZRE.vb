@@ -78,7 +78,7 @@ Namespace Fileformats
 
             'Reihentitel steht in 2. Zeile:
             For i = 0 To 1
-                Zeile = StrReadSync.ReadLine.ToString()
+                Zeile = StrReadSync.ReadLine()
             Next
 
             StrReadSync.Close()
@@ -128,7 +128,7 @@ Namespace Fileformats
             j = 0
             Do
                 j += 1
-                Zeile = StrReadSync.ReadLine.ToString()
+                Zeile = StrReadSync.ReadLine()
                 If (j > Me.NLinesHeader AndAlso Zeile.Trim.Length > 0) Then
 
                     'Datum erkennen

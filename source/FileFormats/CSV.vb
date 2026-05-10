@@ -193,7 +193,7 @@ Namespace Fileformats
 
             'Daten
             Do
-                Zeile = StrReadSync.ReadLine.ToString()
+                Zeile = StrReadSync.ReadLine()
 
                 If (Me.IsColumnSeparated) Then
 

@@ -101,7 +101,7 @@ Namespace Fileformats
 
             'Zeile mit der Anzahl der Zeireihen finden
             For i = 1 To Me.LineNumberHeaders - 1
-                Zeile = StrReadSync.ReadLine.ToString()
+                Zeile = StrReadSync.ReadLine()
                 If (i = iZeileAnzSpalten) Then ZeileSpalten = Zeile
             Next
 
@@ -125,7 +125,7 @@ Namespace Fileformats
             Dim index As Integer
             index = 1
             For i = 0 To Me.nLinesPerTimestamp - 1
-                Zeile = StrReadSync.ReadLine.ToString()
+                Zeile = StrReadSync.ReadLine()
                 For j = 0 To AnzSpalten_dT(i) - 1
                     sInfo = New TimeSeriesInfo()
                     sInfo.Name = Zeile.Substring((j * Me.ColumnWidth) + ColumnOffset, Me.ColumnWidth).Trim()
@@ -175,12 +175,12 @@ Namespace Fileformats
 
             'Header
             For iZeile = 1 To Me.LineNumberData - 1
-                Zeile = StrReadSync.ReadLine.ToString()
+                Zeile = StrReadSync.ReadLine()
             Next
 
             'Daten
             Do
-                Zeile = StrReadSync.ReadLine.ToString()
+                Zeile = StrReadSync.ReadLine()
                 If Zeile.Substring(0, 5) = "*****" Then
                     Exit Do
                 End If
@@ -191,7 +191,7 @@ Namespace Fileformats
                 'Alle Abflusswerte einlesen
                 WerteString = ""
                 For i = 0 To Me.nLinesPerTimestamp - 1
-                    WerteString &= StrReadSync.ReadLine.ToString()
+                    WerteString &= StrReadSync.ReadLine()
                 Next
                 For Each sInfo As TimeSeriesInfo In Me.SelectedSeries
                     Me.TimeSeries(sInfo.Index).AddNode(datum, StringToDouble(WerteString.Substring(((sInfo.Index - 1) * Me.ColumnWidth) + ColumnOffset, Me.ColumnWidth)))
@@ -217,9 +217,9 @@ Namespace Fileformats
             Dim Zeile As String = ""
 
             '3 Zeilen einlesen
-            Zeile = StrRead.ReadLine.ToString()
-            Zeile = StrRead.ReadLine.ToString()
-            Zeile = StrRead.ReadLine.ToString()
+            Zeile = StrRead.ReadLine()
+            Zeile = StrRead.ReadLine()
+            Zeile = StrRead.ReadLine()
 
             StrRead.Close()
             FiStr.Close()

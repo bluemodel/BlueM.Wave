@@ -109,12 +109,12 @@ Namespace Fileformats
                 Dim StrRead As New StreamReader(FiStr, detectEncodingFromByteOrderMarks:=True)
                 Dim StrReadSync = TextReader.Synchronized(StrRead)
 
-                line = StrReadSync.ReadLine.ToString()
+                line = StrReadSync.ReadLine()
                 If line.StartsWith("#ZRXP") Then
                     isZRXP = True
                 Else
                     'try the second line
-                    line = StrReadSync.ReadLine.ToString()
+                    line = StrReadSync.ReadLine()
                     If line.StartsWith("#ZRXP") Then
                         isZRXP = True
                     End If
@@ -157,7 +157,7 @@ Namespace Fileformats
             'read header
             i = 0
             Do
-                line = StrReadSync.ReadLine.ToString()
+                line = StrReadSync.ReadLine()
                 i += 1
                 If line.StartsWith("##") Then Continue Do ' ignore lines starting with ##
                 If line.StartsWith("#"c) Then
@@ -246,7 +246,7 @@ Namespace Fileformats
             'read file
             Me.errorcount = 0
             Do
-                line = StrReadSync.ReadLine.ToString()
+                line = StrReadSync.ReadLine()
                 'ignore header lines starting with "#" and empty lines
                 If line.StartsWith("#"c) OrElse line.Trim().Length = 0 Then
                     Continue Do
