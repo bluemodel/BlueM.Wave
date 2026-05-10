@@ -193,7 +193,7 @@ Namespace Fileformats
                     'read date
                     rdate = reader.ReadDouble()
                     'convert real date to DateTime
-                    timestamp = BIN.rDateToDate(rdate)
+                    timestamp = BIN.DoubleToDate(rdate)
 
                     'read values of selected indices
                     Dim position As Integer = 0

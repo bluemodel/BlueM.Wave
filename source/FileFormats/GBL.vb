@@ -203,7 +203,7 @@ Namespace Fileformats
                         'read date (8 bytes)
                         rdate = reader.ReadDouble()
                         'convert real date to DateTime
-                        timestamp = BIN.rDateToDate(rdate)
+                        timestamp = BIN.DoubleToDate(rdate)
 
                         'loop over columns based on format (each 4 bytes = Single)
                         For i As Integer = 0 To Me.ColumnCount - 1

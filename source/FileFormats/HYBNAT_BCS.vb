@@ -30,7 +30,7 @@ Namespace Fileformats
         ''' The unit of the time series
         ''' </summary>
         ''' <remarks> Is fixed for each type of file</remarks>
-        Private _unit As String
+        Private ReadOnly _unit As String
 
         ''' <summary>
         ''' Referencedate for the beginning of the simulation
@@ -123,7 +123,7 @@ Namespace Fileformats
             stream.Close()
 
             'Store series info
-            For i = 0 To columnNames.Count - 1
+            For i = 0 To columnNames.Length - 1
                 'Overjump time column and empty columns
                 If i = DateTimeColumnIndex Then Continue For
                 If columnNames(i).Trim() = "" Then Continue For
@@ -195,8 +195,9 @@ Namespace Fileformats
             Dim value As String
             Dim line As String
 
-            Dim numberFormat As NumberFormatInfo = New NumberFormatInfo()
-            numberFormat.NumberDecimalSeparator = "."
+            Dim numberFormat As New NumberFormatInfo With {
+                .NumberDecimalSeparator = "."
+            }
 
             'collect unique timestamps
             Dim unique_timestamps As New HashSet(Of DateTime)

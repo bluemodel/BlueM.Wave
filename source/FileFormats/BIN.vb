@@ -34,7 +34,7 @@ Namespace Fileformats
         ''' <summary>
         ''' Reference date for real dates
         ''' </summary>
-        Private Shared ReadOnly refdate As DateTime = New DateTime(1601, 1, 1)
+        Private Shared ReadOnly refdate As New DateTime(1601, 1, 1)
 
         ''' <summary>
         ''' Gibt an, ob beim Import des Dateiformats der Importdialog angezeigt werden soll
@@ -96,9 +96,10 @@ Namespace Fileformats
 
             'Zeitreihe instanzieren (nur eine)
             sInfo = Me.TimeSeriesInfos(0)
-            ts = New TimeSeries(sInfo.Name)
-            ts.Unit = sInfo.Unit
-            ts.DataSource = New TimeSeriesDataSource(Me.File, sInfo.Name)
+            ts = New TimeSeries(sInfo.Name) With {
+                .Unit = sInfo.Unit,
+                .DataSource = New TimeSeriesDataSource(Me.File, sInfo.Name)
+            }
 
             Using reader As New IO.BinaryReader(IO.File.OpenRead(File), Text.ASCIIEncoding.ASCII)
                 'skip header
@@ -110,7 +111,7 @@ Namespace Fileformats
                     value = reader.ReadSingle()
 
                     'convert real date to DateTime
-                    timestamp = rDateToDate(rdate)
+                    timestamp = DoubleToDate(rdate)
                     'convert error values to NaN
                     If Math.Abs(value - BIN.ErrorValue) < 0.0001 Then
                         value = Double.NaN
@@ -141,7 +142,7 @@ Namespace Fileformats
         ''' Assumes the real date is number of hours since 01.01.1601
         ''' Rounds to the nearest second
         ''' </remarks>
-        Friend Shared Function rDateToDate(rDate As Double) As DateTime
+        Friend Shared Function DoubleToDate(rDate As Double) As DateTime
             Dim timestamp As DateTime
             Dim hours, minutes, seconds As Integer
             hours = Math.Floor(rDate)
@@ -157,7 +158,7 @@ Namespace Fileformats
         ''' <param name="timestamp"></param>
         ''' <returns>real (double) date</returns>
         ''' <remarks>real (double date) is hours since 01.01.1601</remarks>
-        Private Shared Function dateToRDate(timestamp As DateTime) As Double
+        Private Shared Function DateToDouble(timestamp As DateTime) As Double
             Dim rDate As Double
             rDate = (timestamp - refdate).TotalHours
             Return rDate
@@ -186,7 +187,7 @@ Namespace Fileformats
                 'write values
                 For Each node As KeyValuePair(Of DateTime, Double) In ts.Nodes
                     'convert DateTime to rDate
-                    rdate = dateToRDate(node.Key)
+                    rdate = DateToDouble(node.Key)
                     'convert error values
                     If Double.IsNaN(node.Value) Then
                         value = BIN.ErrorValue
