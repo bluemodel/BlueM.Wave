@@ -38,7 +38,7 @@ Friend Class AnalysisDialog
     ''' Selected analysis function
     ''' </summary>
     ''' <returns></returns>
-    Friend ReadOnly Property selectedAnalysisFunction() As AnalysisFactory.AnalysisFunctions
+    Friend ReadOnly Property SelectedAnalysisFunction() As AnalysisFactory.AnalysisFunctions
         Get
             Return Me.ComboBox_Analysis.SelectedItem
         End Get
@@ -48,7 +48,7 @@ Friend Class AnalysisDialog
     ''' List of selected time series
     ''' </summary>
     ''' <returns></returns>
-    Friend ReadOnly Property selectedTimeseries() As List(Of TimeSeries)
+    Friend ReadOnly Property SelectedTimeseries() As List(Of TimeSeries)
         Get
             Dim seriesList As New List(Of TimeSeries)()
             For Each item As Object In Me.ListBox_Series.SelectedItems
@@ -66,8 +66,8 @@ Friend Class AnalysisDialog
     Private Sub ComboBox_Analysis_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox_Analysis.SelectedIndexChanged
         Dim url As String
         'update the description and wiki link
-        Me.Label_AnalaysisDescription.Text = AnalysisFactory.getAnalysisDescription(Me.selectedAnalysisFunction)
-        url = "https://wiki.bluemodel.org/index.php/Wave:" & Me.selectedAnalysisFunction.ToString("g")
+        Me.Label_AnalaysisDescription.Text = AnalysisFactory.getAnalysisDescription(Me.SelectedAnalysisFunction)
+        url = "https://wiki.bluemodel.org/index.php/Wave:" & Me.SelectedAnalysisFunction.ToString("g")
         Me.LinkLabel_Helplink.Text = url
         Me.LinkLabel_Helplink.Links.Clear()
         Me.LinkLabel_Helplink.Links.Add(0, Me.LinkLabel_Helplink.Text.Length, url)

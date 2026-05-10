@@ -83,15 +83,15 @@ Namespace Fileformats
 
             'Voreinstellungen
             Me.Dateformat = Helpers.CurrentDateFormat 'irrelevant because binary
-            Me.iLineData = 0
+            Me.LineNumberData = 0
             Me.UseUnits = True
 
-            Call Me.readSeriesInfo()
+            Call Me.ReadSeriesInfo()
 
             If (ReadAllNow) Then
                 'Direkt einlesen
-                Call Me.selectAllSeries()
-                Call Me.readFile()
+                Call Me.SelectAllSeries()
+                Call Me.ReadFile()
             End If
 
         End Sub
@@ -99,7 +99,7 @@ Namespace Fileformats
         ''' <summary>
         ''' Reads series info for GBL format structure based on header
         ''' </summary>
-        Public Overrides Sub readSeriesInfo()
+        Public Overrides Sub ReadSeriesInfo()
 
             Me.TimeSeriesInfos.Clear()
 
@@ -123,14 +123,14 @@ Namespace Fileformats
                     Me.ColumnCount = 21
                     ' Skip remaining bytes of header (80 bytes: 20 more singles = 20 * 4 bytes)
                     reader.ReadBytes(80)
-                    Log.AddLogEntry(Log.levels.debug, "GBL format: Detected format 1 (92-byte records, 21 columns)")
+                    Log.AddLogEntry(Log.Levels.debug, "GBL format: Detected format 1 (92-byte records, 21 columns)")
                 ElseIf Math.Abs(formatMarker - (-2.0F)) < 0.0001F Then
                     ' Format 2: 20-byte records (3 columns: Qzu, Qab, tf)
                     Me.RecordFormat = 2
                     Me.ColumnCount = 3
                     ' Skip remaining bytes of header (8 bytes: 2 more singles = 2 * 4 bytes)
                     reader.ReadBytes(8)
-                    Log.AddLogEntry(Log.levels.debug, "GBL format: Detected format 2 (20-byte records, 3 columns: Qzu, Qab, tf)")
+                    Log.AddLogEntry(Log.Levels.debug, "GBL format: Detected format 2 (20-byte records, 3 columns: Qzu, Qab, tf)")
                 Else
                     Throw New Exception($"Invalid GBL format marker. Expected -1.0 or -2.0, found {formatMarker}")
                 End If
@@ -160,14 +160,14 @@ Namespace Fileformats
                 Next
             End If
 
-            Log.AddLogEntry(Log.levels.debug, $"GBL format: Created {Me.TimeSeriesInfos.Count} time series definitions")
+            Log.AddLogEntry(Log.Levels.debug, $"GBL format: Created {Me.TimeSeriesInfos.Count} time series definitions")
 
         End Sub
 
         ''' <summary>
         ''' Reads the file with GBL format structure
         ''' </summary>
-        Public Overrides Sub readFile()
+        Public Overrides Sub ReadFile()
 
             Dim rdate As Double
             Dim timestamp As DateTime
@@ -231,10 +231,10 @@ Namespace Fileformats
 
             'Log 
             If Me.TimeSeries.Count > 0 Then
-                Call Log.AddLogEntry(Log.levels.info, $"Read {Me.TimeSeries.Count} time series with {Me.TimeSeries.First.Value.Length} nodes each.")
+                Call Log.AddLogEntry(Log.Levels.info, $"Read {Me.TimeSeries.Count} time series with {Me.TimeSeries.First.Value.Length} nodes each.")
             End If
             If errorcount > 0 Then
-                Log.AddLogEntry(Log.levels.warning, $"The file contained {errorcount} error values ({BIN.ErrorValue}), which were converted to NaN!")
+                Log.AddLogEntry(Log.Levels.warning, $"The file contained {errorcount} error values ({BIN.ErrorValue}), which were converted to NaN!")
             End If
 
         End Sub
@@ -245,7 +245,7 @@ Namespace Fileformats
         ''' <param name="file">path to the file to check</param>
         ''' <returns>True if verification was successful</returns>
         ''' <remarks>Adapted from Fortran routine FILE_GETRECL (formerly ZRE_GETRECL)</remarks>
-        Public Shared Function verifyFormat(file As String) As Boolean
+        Public Shared Function VerifyFormat(file As String) As Boolean
             ' Check file extension
             If Not file.EndsWith(".gbl", StringComparison.CurrentCultureIgnoreCase) Then Return False
 

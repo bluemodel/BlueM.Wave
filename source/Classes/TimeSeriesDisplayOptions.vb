@@ -120,7 +120,7 @@ Public Class TimeSeriesDisplayOptions
                 Dim argb As Integer = Int32.Parse(colorString, Globalization.NumberStyles.HexNumber)
                 Me.Color = Color.FromArgb(argb)
             Catch e As FormatException
-                Log.AddLogEntry(levels.warning, $"Color '{colorString}' is not recognized!")
+                Log.AddLogEntry(Levels.warning, $"Color '{colorString}' is not recognized!")
             End Try
         End If
     End Sub
@@ -132,7 +132,7 @@ Public Class TimeSeriesDisplayOptions
     ''' <param name="lineStyle">the line style as string</param>
     Public Sub SetLineStyle(lineStyle As String)
         If Not [Enum].IsDefined(GetType(Drawing2D.DashStyle), lineStyle) Then
-            Log.AddLogEntry(levels.warning, $"Line style '{lineStyle}' is not recognized!")
+            Log.AddLogEntry(Levels.warning, $"Line style '{lineStyle}' is not recognized!")
         Else
             Me.LineStyle = [Enum].Parse(GetType(Drawing2D.DashStyle), lineStyle)
         End If
@@ -146,7 +146,7 @@ Public Class TimeSeriesDisplayOptions
     Public Sub SetLineWidth(lineWidth As String)
         Dim lineWidthInt As Integer
         If Not Integer.TryParse(lineWidth, lineWidthInt) Then
-            Log.AddLogEntry(levels.warning, $"Line width '{lineWidth}' can not be converted to integer!")
+            Log.AddLogEntry(Levels.warning, $"Line width '{lineWidth}' can not be converted to integer!")
         Else
             Me.LineWidth = lineWidthInt
         End If

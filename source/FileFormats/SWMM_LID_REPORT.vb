@@ -41,24 +41,24 @@ Namespace Fileformats
             MyBase.New(file)
 
             'default settings
-            Me.iLineHeadings = 2
+            Me.LineNumberHeaders = 2
             Me.UseUnits = True
             Me.IsColumnSeparated = True
             Me.Separator = Constants.tab
             Me.DecimalSeparator = Constants.period
-            Me.iLineHeadings = 6 ' and 7!
+            Me.LineNumberHeaders = 6 ' and 7!
             Me.UseUnits = True
-            Me.iLineUnits = 8
-            Me.iLineData = 10
+            Me.LineNumberUnits = 8
+            Me.LineNumberData = 10
             Me.Dateformat = "MM/dd/yyyy HH:mm:ss"
             Me.DateTimeColumnIndex = 0
 
-            Call Me.readSeriesInfo()
+            Call Me.ReadSeriesInfo()
 
             If (ReadAllNow) Then
                 'Datei komplett einlesen
-                Call Me.selectAllSeries()
-                Call Me.readFile()
+                Call Me.SelectAllSeries()
+                Call Me.ReadFile()
             End If
 
 
@@ -67,7 +67,7 @@ Namespace Fileformats
         ''' <summary>
         ''' Reads series information from the file
         ''' </summary>
-        Public Overrides Sub readSeriesInfo()
+        Public Overrides Sub ReadSeriesInfo()
 
             Dim iLine As Integer = 0
             Dim line As String
@@ -82,13 +82,13 @@ Namespace Fileformats
                 iLine += 1
                 line = StrReadSync.ReadLine.ToString().Trim()
 
-                If iLine = Me.iLineHeadings Then
+                If iLine = Me.LineNumberHeaders Then
                     titles1 = line.Split(Me.Separator.ToChar).ToList
-                ElseIf iLine = Me.iLineHeadings + 1 Then 'titles span two lines!
+                ElseIf iLine = Me.LineNumberHeaders + 1 Then 'titles span two lines!
                     titles2 = line.Split(Me.Separator.ToChar).ToList
-                ElseIf iLine = Me.iLineUnits Then
+                ElseIf iLine = Me.LineNumberUnits Then
                     units = line.Split(Me.Separator.ToChar).ToList
-                ElseIf iLine = Me.iLineData Then
+                ElseIf iLine = Me.LineNumberData Then
                     Exit Do
                 End If
             Loop
@@ -124,7 +124,7 @@ Namespace Fileformats
         ''' <summary>
         ''' Reads the file
         ''' </summary>
-        Public Overrides Sub readFile()
+        Public Overrides Sub ReadFile()
 
             Dim iLine As Integer = 0
             Dim line As String
@@ -152,7 +152,7 @@ Namespace Fileformats
                 iLine += 1
                 line = StrReadSync.ReadLine.ToString().Trim()
 
-                If iLine < Me.iLineData Or line.Trim().Length = 0 Then
+                If iLine < Me.LineNumberData Or line.Trim().Length = 0 Then
                     Continue Do
                 End If
 

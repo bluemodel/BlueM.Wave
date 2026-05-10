@@ -132,7 +132,7 @@ Public Module Helpers
     ''' <returns>The corresponding TimeSeries.InterpretationEnum value</returns>
     Public Function ParseInterpretation(interpretationString As String) As TimeSeries.InterpretationEnum
         If Not [Enum].IsDefined(GetType(TimeSeries.InterpretationEnum), interpretationString) Then
-            Log.AddLogEntry(levels.warning, $"Interpretation {interpretationString} is not recognized!")
+            Log.AddLogEntry(Levels.warning, $"Interpretation {interpretationString} is not recognized!")
             Return TimeSeries.InterpretationEnum.Undefined
         Else
             Return [Enum].Parse(GetType(TimeSeries.InterpretationEnum), interpretationString)
@@ -147,7 +147,7 @@ Public Module Helpers
     ''' <returns>The corresponding TimeSeries.InterpretationEnum value</returns>
     Public Function ParseInterpretation(interpretationValue As Integer) As TimeSeries.InterpretationEnum
         If Not [Enum].IsDefined(GetType(TimeSeries.InterpretationEnum), interpretationValue) Then
-            Log.AddLogEntry(levels.warning, $"Interpretation {interpretationValue} is not recognized!")
+            Log.AddLogEntry(Levels.warning, $"Interpretation {interpretationValue} is not recognized!")
             Return TimeSeries.InterpretationEnum.Undefined
         Else
             Return [Enum].Parse(GetType(TimeSeries.InterpretationEnum), interpretationValue)
@@ -159,7 +159,7 @@ Public Module Helpers
     ''' </summary>
     ''' <param name="name">Available color palettes are "Material", "Distinct", "Color Wheel" and "Random". Defaults to "Material".</param>
     ''' <returns>A color palette</returns>
-    Public Function getColorPalette(Optional name As String = "Material") As Color()
+    Public Function GetColorPalette(Optional name As String = "Material") As Color()
         Dim colorPalette As Color()
         Select Case name
             Case "Material"
@@ -227,7 +227,7 @@ Public Module Helpers
                     colorPalette(i) = Color.FromArgb(random.Next(256), random.Next(256), random.Next(256))
                 Next
             Case Else
-                colorPalette = getColorPalette()
+                colorPalette = GetColorPalette()
         End Select
         Return colorPalette
     End Function
@@ -261,7 +261,7 @@ Public Module Helpers
     Friend Sub ChartSetDefaultFormat(ByRef chart As Steema.TeeChart.Chart)
 
         'set default color palette
-        chart.ColorPalette = Helpers.getColorPalette()
+        chart.ColorPalette = Helpers.GetColorPalette()
 
         chart.Aspect.View3D = False
         chart.Panel.Gradient.Visible = False

@@ -49,7 +49,7 @@ Friend Class SettingsDialog
         Me.ComboBox_Font.SelectedItem = My.Settings.defaultFont
         Me.NumericUpDown_DefaultFontSize.Value = My.Settings.defaultFontSize
         Me.NumericUpDown_DefaultLineWidth.Value = My.Settings.defaultLineWidth
-        Me.CheckBox_logShowDebugMessages.Checked = (My.Settings.loggingLevel = Log.levels.debug.ToString())
+        Me.CheckBox_logShowDebugMessages.Checked = (My.Settings.loggingLevel = Log.Levels.debug.ToString())
 
         Me.isLoading = False
 
@@ -93,7 +93,7 @@ Friend Class SettingsDialog
     Private Sub CheckBox_logShowDebugMessages_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox_logShowDebugMessages.CheckedChanged
         If Not isLoading Then
             'update the logging level
-            My.Settings.loggingLevel = IIf(Me.CheckBox_logShowDebugMessages.Checked, Log.levels.debug.ToString(), Log.levels.info.ToString())
+            My.Settings.loggingLevel = IIf(Me.CheckBox_logShowDebugMessages.Checked, Log.Levels.debug.ToString(), Log.Levels.info.ToString())
             My.Settings.Save()
         End If
     End Sub

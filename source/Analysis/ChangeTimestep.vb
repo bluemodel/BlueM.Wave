@@ -122,7 +122,7 @@ Friend Class ChangeTimestep
 
         'if ignoreNaN is set, remove all NaN values from time series
         If ignoreNaN = True Then
-            ts = ts.removeNaNValues()
+            ts = ts.RemoveNaNValues()
         End If
 
         'change timestep

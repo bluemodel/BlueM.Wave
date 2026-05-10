@@ -53,15 +53,15 @@ Namespace Fileformats
 
             'Voreinstellungen
             Me.Dateformat = Helpers.CurrentDateFormat 'irrelevant weil binär
-            Me.iLineData = 0
+            Me.LineNumberData = 0
             Me.UseUnits = False
 
-            Call Me.readSeriesInfo()
+            Call Me.ReadSeriesInfo()
 
             If (ReadAllNow) Then
                 'Direkt einlesen
-                Call Me.selectAllSeries()
-                Call Me.readFile()
+                Call Me.SelectAllSeries()
+                Call Me.ReadFile()
             End If
 
         End Sub
@@ -69,7 +69,7 @@ Namespace Fileformats
         ''' <summary>
         ''' Reads series info
         ''' </summary>
-        Public Overrides Sub readSeriesInfo()
+        Public Overrides Sub ReadSeriesInfo()
 
             Dim sInfo As New TimeSeriesInfo()
 
@@ -86,7 +86,7 @@ Namespace Fileformats
         ''' <summary>
         ''' Reads the file
         ''' </summary>
-        Public Overrides Sub readFile()
+        Public Overrides Sub ReadFile()
             Dim rdate As Double
             Dim timestamp As DateTime
             Dim value As Single
@@ -125,9 +125,9 @@ Namespace Fileformats
             Me.TimeSeries.Add(sInfo.Index, ts)
 
             'Log 
-            Call Log.AddLogEntry(Log.levels.info, $"Read {ts.Length} nodes.")
+            Call Log.AddLogEntry(Log.Levels.info, $"Read {ts.Length} nodes.")
             If errorcount > 0 Then
-                Log.AddLogEntry(Log.levels.warning, $"The file contained {errorcount} error values ({BIN.ErrorValue}), which were converted to NaN!")
+                Log.AddLogEntry(Log.Levels.warning, $"The file contained {errorcount} error values ({BIN.ErrorValue}), which were converted to NaN!")
             End If
 
         End Sub

@@ -76,15 +76,15 @@ Namespace Fileformats
 
             'Voreinstellungen
             Me.Dateformat = Helpers.CurrentDateFormat 'irrelevant because binary
-            Me.iLineData = 0
+            Me.LineNumberData = 0
             Me.UseUnits = True
 
-            Call Me.readSeriesInfo()
+            Call Me.ReadSeriesInfo()
 
             If (ReadAllNow) Then
                 'Direkt einlesen
-                Call Me.selectAllSeries()
-                Call Me.readFile()
+                Call Me.SelectAllSeries()
+                Call Me.ReadFile()
             End If
 
         End Sub
@@ -92,7 +92,7 @@ Namespace Fileformats
         ''' <summary>
         ''' Reads series info and datatype from accompanying *.WELINFO file
         ''' </summary>
-        Public Overrides Sub readSeriesInfo()
+        Public Overrides Sub ReadSeriesInfo()
 
             Me.TimeSeriesInfos.Clear()
 
@@ -102,9 +102,9 @@ Namespace Fileformats
                 Throw New Exception($"Required metadata file {IO.Path.GetFileName(file_welinfo)} not found!")
             End If
 
-            Log.AddLogEntry(levels.info, $"Reading metadata from file {IO.Path.GetFileName(file_welinfo)}...")
+            Log.AddLogEntry(Levels.info, $"Reading metadata from file {IO.Path.GetFileName(file_welinfo)}...")
 
-            'Datei öffnen
+            'Datei Ã¶ffnen
             Dim FiStr As FileStream = New FileStream(file_welinfo, FileMode.Open, IO.FileAccess.Read)
             Dim StrRead As StreamReader = New StreamReader(FiStr, Me.Encoding)
             Dim StrReadSync = TextReader.Synchronized(StrRead)
@@ -148,20 +148,20 @@ Namespace Fileformats
             End If
 
             If Me.DataType = 0 Then
-                Log.AddLogEntry(levels.warning, $"Unable to determine data type from metadata file {IO.Path.GetFileName(file_welinfo)}. Assuming Single.")
+                Log.AddLogEntry(Levels.warning, $"Unable to determine data type from metadata file {IO.Path.GetFileName(file_welinfo)}. Assuming Single.")
                 Me.DataType = DataTypes.Single 'set default data type to Single
             Else
-                Log.AddLogEntry(levels.debug, $"Data type read from metadata file: {Me.DataType}")
+                Log.AddLogEntry(Levels.debug, $"Data type read from metadata file: {Me.DataType}")
             End If
 
-            Log.AddLogEntry(levels.debug, $"Number of series read from metadata file: {Me.TimeSeriesInfos.Count}")
+            Log.AddLogEntry(Levels.debug, $"Number of series read from metadata file: {Me.TimeSeriesInfos.Count}")
 
         End Sub
 
         ''' <summary>
         ''' Reads the file
         ''' </summary>
-        Public Overrides Sub readFile()
+        Public Overrides Sub ReadFile()
 
             Dim rdate As Double
             Dim timestamp As DateTime
@@ -234,9 +234,9 @@ Namespace Fileformats
             End Using
 
             'Log 
-            Call Log.AddLogEntry(Log.levels.info, $"Read {Me.TimeSeries.Count} time series with {Me.TimeSeries.First.Value.Length} nodes each.")
+            Call Log.AddLogEntry(Log.Levels.info, $"Read {Me.TimeSeries.Count} time series with {Me.TimeSeries.First.Value.Length} nodes each.")
             If errorcount > 0 Then
-                Log.AddLogEntry(Log.levels.warning, $"The file contained {errorcount} error values ({BIN.ErrorValue}), which were converted to NaN!")
+                Log.AddLogEntry(Log.Levels.warning, $"The file contained {errorcount} error values ({BIN.ErrorValue}), which were converted to NaN!")
             End If
 
         End Sub

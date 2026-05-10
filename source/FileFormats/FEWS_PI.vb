@@ -56,12 +56,12 @@ Namespace Fileformats
             'set default metadata keys
             Me.FileMetadata.AddKeys(FEWS_PI.MetadataKeys)
 
-            Call Me.readSeriesInfo()
+            Call Me.ReadSeriesInfo()
 
             If (ReadAllNow) Then
                 'read immediately
-                Call Me.selectAllSeries()
-                Call Me.readFile()
+                Call Me.SelectAllSeries()
+                Call Me.ReadFile()
             End If
 
         End Sub
@@ -82,7 +82,7 @@ Namespace Fileformats
                 End Using
                 Return True
             Catch ex As Exception
-                Log.AddLogEntry(levels.debug, $"Failed to verify XML file as Delft-FEWS PI format due to error {ex}")
+                Log.AddLogEntry(Levels.debug, $"Failed to verify XML file as Delft-FEWS PI format due to error {ex}")
                 Return False
             End Try
         End Function
@@ -91,7 +91,7 @@ Namespace Fileformats
         ''' Reads the metadata from the file
         ''' </summary>
         ''' <remarks></remarks>
-        Public Overrides Sub readSeriesInfo()
+        Public Overrides Sub ReadSeriesInfo()
 
             Me.TimeSeriesInfos.Clear()
 
@@ -122,7 +122,7 @@ Namespace Fileformats
         ''' reads the file
         ''' </summary>
         ''' <remarks></remarks>
-        Public Overrides Sub readFile()
+        Public Overrides Sub ReadFile()
 
             Me.TimeSeries.Clear()
 

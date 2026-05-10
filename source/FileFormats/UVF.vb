@@ -62,12 +62,12 @@ Namespace Fileformats
             'set default metadata keys
             Me.FileMetadata.AddKeys(UVF.MetadataKeys)
 
-            Call Me.readSeriesInfo()
+            Call Me.ReadSeriesInfo()
 
             If (ReadAllNow) Then
                 'Direkt einlesen
-                Call Me.selectAllSeries()
-                Call Me.readFile()
+                Call Me.SelectAllSeries()
+                Call Me.ReadFile()
             End If
 
         End Sub
@@ -78,7 +78,7 @@ Namespace Fileformats
         ''' <param name="file">Pfad zur Datei</param>
         ''' <returns>Boolean</returns>
         ''' <remarks>Prüfung erfolgt anhand der Zeile *Z</remarks>
-        Public Shared Function verifyFormat(file As String) As Boolean
+        Public Shared Function VerifyFormat(file As String) As Boolean
 
             Dim i As Integer
             Dim Zeile As String
@@ -122,7 +122,7 @@ Namespace Fileformats
         ''' Liest die Metadaten der in der Datei enthaltenen Zeitreihe aus
         ''' </summary>
         ''' <remarks></remarks>
-        Public Overrides Sub readSeriesInfo()
+        Public Overrides Sub ReadSeriesInfo()
 
             Dim i As Integer
             Dim Zeile As String
@@ -146,12 +146,12 @@ Namespace Fileformats
                     Continue Do
                 ElseIf Zeile.StartsWith("*z", StringComparison.CurrentCultureIgnoreCase) Then    ' Hier fängt der Header an
                     headerFound = True
-                    iLineHeadings = i + 1
-                    iLineUnits = i + 1
-                    iLineData = i + 4
+                    LineNumberHeaders = i + 1
+                    LineNumberUnits = i + 1
+                    LineNumberData = i + 4
                     Continue Do
                 End If
-                If i = iLineHeadings Then
+                If i = LineNumberHeaders Then
                     'Zeitreihenname einlesen
                     Me.FileMetadata("name") = Zeile.Substring(0, 15).Trim()
                     'Einheit einlesen
@@ -170,11 +170,11 @@ Namespace Fileformats
                     'Anfangsjahrhundert auf 1900 setzen, falls nicht angegeben
                     If Me.FileMetadata("century") = "" Then
                         Me.FileMetadata("century") = "1900"
-                        Log.AddLogEntry(Log.levels.warning, "Starting century is not specified in file header, assuming 1900.")
+                        Log.AddLogEntry(Log.Levels.warning, "Starting century is not specified in file header, assuming 1900.")
                     End If
                     Continue Do
                 End If
-                If i = iLineHeadings + 1 Then
+                If i = LineNumberHeaders + 1 Then
                     'Ort und Lage einlesen
                     Try
                         Me.FileMetadata("location") = Zeile.Substring(0, Math.Min(Zeile.Length, 15)).Trim()
@@ -216,7 +216,7 @@ Namespace Fileformats
         ''' Liest die Datei ein
         ''' </summary>
         ''' <remarks></remarks>
-        Public Overrides Sub readFile()
+        Public Overrides Sub ReadFile()
 
             Dim i, year, year_prev, century As Integer
             Dim Zeile As String
@@ -246,7 +246,7 @@ Namespace Fileformats
             '--------
 
             'Header
-            For i = 0 To Me.nLinesHeader - 1
+            For i = 0 To Me.NLinesHeader - 1
                 StrReadSync.ReadLine()
             Next
 
@@ -289,7 +289,7 @@ Namespace Fileformats
             FiStr.Close()
 
             If errorcount > 0 Then
-                Log.AddLogEntry(Log.levels.warning, $"The file contained {errorcount} error values ({UVF.ErrorValue}), which were converted to NaN!")
+                Log.AddLogEntry(Log.Levels.warning, $"The file contained {errorcount} error values ({UVF.ErrorValue}), which were converted to NaN!")
             End If
 
             'store time series
@@ -318,7 +318,7 @@ Namespace Fileformats
         ''' <summary>
         ''' Sets default metadata values for a time series corresponding to the UVF file format
         ''' </summary>
-        Public Overloads Shared Sub setDefaultMetadata(ts As TimeSeries)
+        Public Overloads Shared Sub SetDefaultMetadata(ts As TimeSeries)
             'Make sure all required keys exist
             ts.Metadata.AddKeys(UVF.MetadataKeys)
             'Set default values
@@ -337,7 +337,7 @@ Namespace Fileformats
         ''' <param name="ts">the time series to export</param>
         ''' <param name="file">path to the file</param>
         ''' <remarks></remarks>
-        Public Overloads Shared Sub writeFile(ByRef ts As TimeSeries, file As String)
+        Public Overloads Shared Sub WriteFile(ByRef ts As TimeSeries, file As String)
 
             'Format specification:
             'http://aquaplan.de/public_papers/imex/sectionUVF.html

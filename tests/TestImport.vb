@@ -123,12 +123,12 @@ Public Class TestImport
     Public Sub TestFileImport(filepath As String)
         filepath = IO.Path.Combine(TestData.getTestDataDir(), filepath)
         Try
-            Dim file As TimeSeriesFile = TimeSeriesFile.getInstance(filepath)
+            Dim file As TimeSeriesFile = TimeSeriesFile.GetInstance(filepath)
             'read series info from file
-            Call file.readSeriesInfo()
+            Call file.ReadSeriesInfo()
             'select first series and read it
             Dim sInfo As TimeSeriesInfo = file.TimeSeriesInfos.First()
-            Dim ts As TimeSeries = file.getTimeSeries(sInfo.Index)
+            Dim ts As TimeSeries = file.GetTimeSeries(sInfo.Index)
         Catch ex As Exception
             Assert.Fail($"Exception thrown when reading file {filepath}: " & ex.Message)
         End Try

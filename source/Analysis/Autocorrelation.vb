@@ -150,7 +150,7 @@ Friend Class Autocorrelation
         Next
 
         If dtList.Max <> dtList.Min Then
-            Log.AddLogEntry(levels.warning, "Non-equidistant timesteps encountered. Autocorrelation analysis may be unreliable!")
+            Log.AddLogEntry(Levels.warning, "Non-equidistant timesteps encountered. Autocorrelation analysis may be unreliable!")
         End If
 
         'Bestimmung der Scheitelpunkte

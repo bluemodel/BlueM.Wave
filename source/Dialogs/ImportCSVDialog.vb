@@ -125,7 +125,7 @@ Friend Class ImportCSVDialog
         Me.ComboBox_Encoding.SelectedValue = Me.tsFile.Encoding.CodePage
 
         'Versuchen, die Spalten auszulesen (mit Standardeinstellungen)
-        Call Me.tsFile.readSeriesInfo()
+        Call Me.tsFile.ReadSeriesInfo()
 
         'Anzeige aktualisieren
         Call Me.UpdateControls()
@@ -195,7 +195,7 @@ Friend Class ImportCSVDialog
             Exit Sub
         Else
             For Each sInfo As TimeSeriesInfo In Me.ListBox_Series.SelectedItems
-                Me.tsFile.selectSeries(sInfo.Index)
+                Me.tsFile.SelectSeries(sInfo.Index)
             Next
         End If
 
@@ -243,13 +243,13 @@ Friend Class ImportCSVDialog
                 Me.IsInitializing = False
 
                 'Zeilennummern
-                Me.tsFile.iLineHeadings = Me.NumericUpDown_LineTitles.Value
-                Me.tsFile.iLineData = Me.NumericUpDown_LineData.Value
+                Me.tsFile.LineNumberHeaders = Me.NumericUpDown_LineTitles.Value
+                Me.tsFile.LineNumberData = Me.NumericUpDown_LineData.Value
 
                 'Einheiten
                 Me.tsFile.UseUnits = Me.CheckBox_Units.Checked
                 If (Me.CheckBox_Units.Checked) Then
-                    Me.tsFile.iLineUnits = Me.NumericUpDown_LineUnits.Value
+                    Me.tsFile.LineNumberUnits = Me.NumericUpDown_LineUnits.Value
                 End If
 
                 'Datumsformat
@@ -274,7 +274,7 @@ Friend Class ImportCSVDialog
                 Me.tsFile.Encoding = Me.selectedEncoding
 
                 'Spalten neu auslesen
-                Call Me.tsFile.readSeriesInfo()
+                Call Me.tsFile.ReadSeriesInfo()
 
                 'Anzeige aktualisieren
                 Call Me.UpdateControls()
@@ -302,8 +302,8 @@ Friend Class ImportCSVDialog
         Me.ComboBox_DecimalSeparator.SelectedItem = Me.tsFile.DecimalSeparator
 
         'Zeilennummern
-        Me.NumericUpDown_LineTitles.Text = Me.tsFile.iLineHeadings
-        Me.NumericUpDown_LineData.Text = Me.tsFile.iLineData
+        Me.NumericUpDown_LineTitles.Text = Me.tsFile.LineNumberHeaders
+        Me.NumericUpDown_LineData.Text = Me.tsFile.LineNumberData
 
         'Einheiten
         If (Me.tsFile.UseUnits) Then
@@ -313,7 +313,7 @@ Friend Class ImportCSVDialog
             Me.CheckBox_Units.Checked = False
             Me.NumericUpDown_LineUnits.Enabled = False
         End If
-        Me.NumericUpDown_LineUnits.Text = Me.tsFile.iLineUnits
+        Me.NumericUpDown_LineUnits.Text = Me.tsFile.LineNumberUnits
 
         'Spaltenformat
         If (Me.tsFile.IsColumnSeparated) Then

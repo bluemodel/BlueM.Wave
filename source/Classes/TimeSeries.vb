@@ -557,7 +557,7 @@ Public Class TimeSeries
     ''' </summary>
     ''' <param name="title">Title of the time series</param>
     Public Sub New(title As String)
-        Me._id = TimeSeries.getUniqueID()
+        Me._id = TimeSeries.GetUniqueID()
         Me._metadata = New Metadata()
         Me._title = title
         Me._unit = "-"
@@ -600,7 +600,7 @@ Public Class TimeSeries
     ''' <remarks>If the given date already exists, the new node is discarded and a warning is written to the log</remarks>
     Public Sub AddNode(_date As DateTime, _value As Double)
         If (Me.Nodes.ContainsKey(_date)) Then
-            Log.AddLogEntry(Log.levels.warning, $"Duplicate data point at {_date.ToString(Helpers.CurrentDateFormat)}: Value of {_value.ToString(Helpers.DefaultNumberFormat)} will be discarded. Existing value: {Me.Nodes(_date).ToString(Helpers.DefaultNumberFormat)}")
+            Log.AddLogEntry(Log.Levels.warning, $"Duplicate data point at {_date.ToString(Helpers.CurrentDateFormat)}: Value of {_value.ToString(Helpers.DefaultNumberFormat)} will be discarded. Existing value: {Me.Nodes(_date).ToString(Helpers.DefaultNumberFormat)}")
             Exit Sub
         End If
         Me._nodes.Add(_date, _value)
@@ -694,7 +694,7 @@ Public Class TimeSeries
             Me._nodesCleaned = Nothing
 
             'Log 
-            Call Log.AddLogEntry(Log.levels.info, $"{Me.Title}: cut from {lengthOld} to {lengthNew} data points.")
+            Call Log.AddLogEntry(Log.Levels.info, $"{Me.Title}: cut from {lengthOld} to {lengthNew} data points.")
 
         End If
 
@@ -726,7 +726,7 @@ Public Class TimeSeries
 
         If series2.EndDate <= Me.EndDate And series2.StartDate >= Me.StartDate Then
             'series2 does not extend beyond this series, so nothing to do
-            Log.AddLogEntry(Log.levels.warning, $"Series '{series2.Title}' does not extend beyond series '{Me.Title}' so nothing can be appended!")
+            Log.AddLogEntry(Log.Levels.warning, $"Series '{series2.Title}' does not extend beyond series '{Me.Title}' so nothing can be appended!")
             Return
         End If
 
@@ -1091,7 +1091,7 @@ Public Class TimeSeries
     ''' <param name="errorvalues">array of error values to ignore</param>
     ''' <returns>the cleaned time series</returns>
     ''' <remarks>a tolerance of 0.0001 is used to compare series values to errorvalues</remarks>
-    Public Function convertErrorValues(ParamArray errorvalues() As Double) As TimeSeries
+    Public Function ConvertErrorValues(ParamArray errorvalues() As Double) As TimeSeries
 
         Const tolerance As Double = 0.0001
         Dim isErrorvalue As Boolean
@@ -1105,7 +1105,7 @@ Public Class TimeSeries
             .Metadata = Me.Metadata.Copy()
         }
 
-        Log.AddLogEntry(Log.levels.info, $"Converting error values from series {Me.Title}...")
+        Log.AddLogEntry(Log.Levels.info, $"Converting error values from series {Me.Title}...")
 
         errorCount = 0
         For Each node As KeyValuePair(Of DateTime, Double) In Me.Nodes
@@ -1121,7 +1121,7 @@ Public Class TimeSeries
                 'convert the node to NaN
                 tsConverted.AddNode(node.Key, Double.NaN)
                 errorCount += 1
-                Call Log.AddLogEntry(Log.levels.info, $"Converting node at {node.Key} with value {node.Value} to NaN")
+                Call Log.AddLogEntry(Log.Levels.info, $"Converting node at {node.Key} with value {node.Value} to NaN")
             Else
                 'copy the node
                 tsConverted.AddNode(node.Key, node.Value)
@@ -1130,7 +1130,7 @@ Public Class TimeSeries
 
         'Log
         If errorCount > 0 Then
-            Call Log.AddLogEntry(Log.levels.info, $"{Me.Title}: {errorCount} nodes were coverted to NaN!")
+            Call Log.AddLogEntry(Log.Levels.info, $"{Me.Title}: {errorCount} nodes were coverted to NaN!")
         End If
 
         Return tsConverted
@@ -1141,7 +1141,7 @@ Public Class TimeSeries
     ''' Returns a copy of the time series without the nodes having NaN and Infinity values
     ''' </summary>
     ''' <returns>the cleaned time series</returns>
-    Public Function removeNaNValues() As TimeSeries
+    Public Function RemoveNaNValues() As TimeSeries
 
         Dim nanCount As Integer
         Dim tsCleaned As TimeSeries
@@ -1165,7 +1165,7 @@ Public Class TimeSeries
 
         'Log
         If nanCount > 0 Then
-            Call Log.AddLogEntry(Log.levels.info, $"{Me.Title}: {nanCount} NaN and Infinity nodes were removed!")
+            Call Log.AddLogEntry(Log.Levels.info, $"{Me.Title}: {nanCount} NaN and Infinity nodes were removed!")
         End If
 
         Return tsCleaned
@@ -1185,7 +1185,7 @@ Public Class TimeSeries
     ''' Returns a new unique ID
     ''' </summary>
     ''' <returns></returns>
-    Public Shared ReadOnly Property getUniqueID As Integer
+    Public Shared ReadOnly Property GetUniqueID As Integer
         Get
             TimeSeries._globalId += 1
             Return TimeSeries._globalId
@@ -1397,7 +1397,7 @@ Public Class TimeSeries
                 'skip leap day if target year is not a leap year
                 Dim targetYear As Integer = node.Key.Year + timestepInterval
                 If calendar.IsLeapDay(node.Key.Year, node.Key.Month, node.Key.Day) AndAlso Not calendar.IsLeapYear(targetYear) Then
-                    Log.AddLogEntry(Log.levels.warning, $"Skipping timestamp on leap day {node.Key} when shifting time series '{Me.Title}' by years!")
+                    Log.AddLogEntry(Log.Levels.warning, $"Skipping timestamp on leap day {node.Key} when shifting time series '{Me.Title}' by years!")
                     Continue For
                 End If
             ElseIf timestepType = TimeStepTypeEnum.Month Then
@@ -1406,7 +1406,7 @@ Public Class TimeSeries
                 Dim targetMonth As Integer = node.Key.AddMonths(timestepInterval).Month
                 Dim daysInTargetMonth As Integer = DateTime.DaysInMonth(targetYear, targetMonth)
                 If node.Key.Day > daysInTargetMonth Then
-                    Log.AddLogEntry(Log.levels.warning, $"Skipping timestamp on end of month {node.Key} when shifting time series '{Me.Title}' by months!")
+                    Log.AddLogEntry(Log.Levels.warning, $"Skipping timestamp on end of month {node.Key} when shifting time series '{Me.Title}' by months!")
                     Continue For
                 End If
             End If

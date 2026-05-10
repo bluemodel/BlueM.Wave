@@ -76,7 +76,7 @@ Friend Class WaveController
     'Dictionary of marker series, the key corresponds to the associated time series id
     Private markerSeries As New Dictionary(Of Integer, Steema.TeeChart.Styles.Points)
 
-    Private WithEvents _axisDialog As AxisDialog
+    Private WithEvents AxisDialog As AxisDialog
 
     Private _logWindow As LogWindow
 
@@ -125,7 +125,7 @@ Friend Class WaveController
         Me.ZoomHistory = New List(Of (xmin As Double, xmax As Double))
         Me.ZoomHistoryIndex = 0
 
-        _axisDialog = New AxisDialog()
+        AxisDialog = New AxisDialog()
 
         _logWindow = New LogWindow()
 
@@ -141,7 +141,7 @@ Friend Class WaveController
         AddHandler Me.View.ToolStripMenuItem_ImportSeries.Click, AddressOf ImportSeries_Click
         AddHandler Me.View.ToolStripMenuItem_LoadTEN.Click, AddressOf LoadTEN_Click
         AddHandler Me.View.ToolStripMenuItem_ReloadFromFiles.Click, AddressOf RefreshFromFiles_Click
-        AddHandler Me.View.ToolStripMenuItem_RecentlyUsedFiles.DropDownItemClicked, AddressOf openRecentlyUsedFile
+        AddHandler Me.View.ToolStripMenuItem_RecentlyUsedFiles.DropDownItemClicked, AddressOf OpenRecentlyUsedFile
         AddHandler Me.View.ToolStripMenuItem_PasteFromClipboard.Click, AddressOf PasteFromClipboard_Click
         AddHandler Me.View.ToolStripMenuItem_SaveProjectFile.Click, AddressOf SaveProjectFile_Click
         AddHandler Me.View.ToolStripMenuItem_SaveChart.Click, AddressOf SaveChart_Click
@@ -202,19 +202,19 @@ Friend Class WaveController
         AddHandler Me.View.DragDrop, AddressOf Wave_DragDrop
 
         'navigation events
-        AddHandler Me.View.MaskedTextBox_NavStart.KeyDown, AddressOf navigationKeyDown
-        AddHandler Me.View.MaskedTextBox_NavEnd.KeyDown, AddressOf navigationKeyDown
-        AddHandler Me.View.MaskedTextBox_NavStart.TypeValidationCompleted, AddressOf navigationTypeValidationCompleted
-        AddHandler Me.View.MaskedTextBox_NavEnd.TypeValidationCompleted, AddressOf navigationTypeValidationCompleted
-        AddHandler Me.View.MaskedTextBox_NavStart.Validated, AddressOf navigationValidated
-        AddHandler Me.View.MaskedTextBox_NavEnd.Validated, AddressOf navigationValidated
+        AddHandler Me.View.MaskedTextBox_NavStart.KeyDown, AddressOf NavigationKeyDown
+        AddHandler Me.View.MaskedTextBox_NavEnd.KeyDown, AddressOf NavigationKeyDown
+        AddHandler Me.View.MaskedTextBox_NavStart.TypeValidationCompleted, AddressOf NavigationTypeValidationCompleted
+        AddHandler Me.View.MaskedTextBox_NavEnd.TypeValidationCompleted, AddressOf NavigationTypeValidationCompleted
+        AddHandler Me.View.MaskedTextBox_NavStart.Validated, AddressOf NavigationValidated
+        AddHandler Me.View.MaskedTextBox_NavEnd.Validated, AddressOf NavigationValidated
 
-        AddHandler Me.View.ComboBox_DisplayRangeUnit.SelectedIndexChanged, AddressOf displayRangeChanged
-        AddHandler Me.View.NumericUpDown_DisplayRangeMultiplier.ValueChanged, AddressOf displayRangeChanged
-        AddHandler Me.View.Button_NavStart.Click, AddressOf navigationStartEnd_Click
-        AddHandler Me.View.Button_NavBack.Click, AddressOf navigationBackwardForward_Click
-        AddHandler Me.View.Button_NavForward.Click, AddressOf navigationBackwardForward_Click
-        AddHandler Me.View.Button_NavEnd.Click, AddressOf navigationStartEnd_Click
+        AddHandler Me.View.ComboBox_DisplayRangeUnit.SelectedIndexChanged, AddressOf DisplayRangeChanged
+        AddHandler Me.View.NumericUpDown_DisplayRangeMultiplier.ValueChanged, AddressOf DisplayRangeChanged
+        AddHandler Me.View.Button_NavStart.Click, AddressOf NavigationStartEnd_Click
+        AddHandler Me.View.Button_NavBack.Click, AddressOf NavigationBackwardForward_Click
+        AddHandler Me.View.Button_NavForward.Click, AddressOf NavigationBackwardForward_Click
+        AddHandler Me.View.Button_NavEnd.Click, AddressOf NavigationStartEnd_Click
 
         'status strip events
         AddHandler Me.View.ToolStripStatusLabel_Log.Click, AddressOf LogShowWindow
@@ -222,8 +222,8 @@ Friend Class WaveController
         AddHandler Me.View.ToolStripStatusLabel_Warnings.Click, AddressOf LogShowWindow
 
         'axis dialog events
-        AddHandler _axisDialog.AxisDeleted, AddressOf axisDeleted
-        AddHandler _axisDialog.AxisUnitChanged, AddressOf AxisUnitChanged
+        AddHandler AxisDialog.AxisDeleted, AddressOf AxisDeleted
+        AddHandler AxisDialog.AxisUnitChanged, AddressOf AxisUnitChanged
 
         'add chart event listener
         Me.View.TChart1.Chart.Listeners.Add(Me)
@@ -235,7 +235,7 @@ Friend Class WaveController
         AddHandler _model.SeriesRemoved, AddressOf SeriesRemoved
         AddHandler _model.SeriesCleared, AddressOf SeriesCleared
         AddHandler _model.SeriesReordered, AddressOf SeriesReordered
-        AddHandler _model.HighlightTimestamps, AddressOf setMarkers
+        AddHandler _model.HighlightTimestamps, AddressOf SetMarkers
         AddHandler _model.TENFileLoading, AddressOf Load_TEN
         AddHandler _model.IsBusyChanged, AddressOf ShowBusy
 
@@ -253,7 +253,7 @@ Friend Class WaveController
         'Handlers for events from Analyses are added dynamically
 
         'add any already existing log messages
-        For Each msg As KeyValuePair(Of levels, String) In Log.logMessages
+        For Each msg As KeyValuePair(Of Levels, String) In Log.logMessages
             Call LogMsgAdded(msg.Key, msg.Value)
         Next
 
@@ -323,7 +323,7 @@ Friend Class WaveController
                 ElseIf seriesEvent.Event = Steema.TeeChart.Styles.SeriesEventStyle.Swap Then
                     'series reordered, reorder series in model
                     Dim ids As New List(Of Integer)
-                    For Each series As Steema.TeeChart.Styles.Series In e.sender.Series
+                    For Each series As Steema.TeeChart.Styles.Series In e.Sender.Series
                         ids.Add(series.Tag)
                     Next
                     _model.Reorder_Series(ids)
@@ -370,7 +370,7 @@ Friend Class WaveController
                         'update associated markers
                         If seriesEvent.Series.Active Then
                             'show markers
-                            Call Me.showMarkers()
+                            Call Me.ShowMarkers()
                         Else
                             'remove markers
                             If Me.markerSeries.ContainsKey(id) Then
@@ -415,7 +415,7 @@ Friend Class WaveController
                 End Select
             End If
         Catch ex As Exception
-            Log.AddLogEntry(Log.levels.debug, ex.Message)
+            Log.AddLogEntry(Log.Levels.debug, ex.Message)
         End Try
     End Sub
 
@@ -505,7 +505,7 @@ Friend Class WaveController
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
     ''' <remarks></remarks>
-    Private Sub openRecentlyUsedFile(sender As Object, e As ToolStripItemClickedEventArgs)
+    Private Sub OpenRecentlyUsedFile(sender As Object, e As ToolStripItemClickedEventArgs)
         Dim filepath As String = e.ClickedItem.Text
         If Not IO.File.Exists(filepath) Then
             'remove file from MRU list in user settings
@@ -515,7 +515,7 @@ Friend Class WaveController
             View.ToolStripMenuItem_RecentlyUsedFiles.DropDownItems.Remove(e.ClickedItem)
             'close menu before showing message box
             View.ToolStripDropDownButton_Open.DropDown.Close()
-            Log.AddLogEntry(Log.levels.error, $"File {filepath} not found!")
+            Log.AddLogEntry(Log.Levels.error, $"File {filepath} not found!")
             MessageBox.Show($"File {filepath} not found!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning)
             Exit Sub
         End If
@@ -569,7 +569,7 @@ Friend Class WaveController
                     End If
                     tsList.Add(ts)
                 Next
-                Call Parsers.WVP.writeFile(tsList, dlg.FileName,
+                Call Parsers.WVP.WriteFile(tsList, dlg.FileName,
                                            saveRelativePaths:=dlg.SaveRelativePaths,
                                            saveTitle:=dlg.SaveTitle,
                                            saveUnit:=dlg.SaveUnit,
@@ -695,14 +695,14 @@ Friend Class WaveController
                 'Assign title
                 seriesMerged.Title = mergedSeriesTitle
 
-                Log.AddLogEntry(Log.levels.info, "Series successfully merged!")
+                Log.AddLogEntry(Log.Levels.info, "Series successfully merged!")
 
                 _model.Import_Series(seriesMerged)
 
             End If
 
         Catch ex As Exception
-            Log.AddLogEntry(Log.levels.error, "Error during merge: " & ex.Message)
+            Log.AddLogEntry(Log.Levels.error, "Error during merge: " & ex.Message)
             MessageBox.Show("Error during merge: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         Finally
             View.Cursor = Cursors.Default
@@ -726,7 +726,7 @@ Friend Class WaveController
     ''' <param name="e"></param>
     Private Sub ColorPalette_Click(sender As Object, e As EventArgs)
         Dim colorPaletteName As String = CType(sender, ToolStripMenuItem).Text
-        SetChartColorPalette(Helpers.getColorPalette(colorPaletteName))
+        SetChartColorPalette(Helpers.GetColorPalette(colorPaletteName))
     End Sub
     ''' <summary>
     ''' Show AxisDialog button clicked
@@ -735,8 +735,8 @@ Friend Class WaveController
     ''' <param name="e"></param>
     Private Sub AxisDialog_Click(sender As Object, e As EventArgs)
         Call UpdateAxisDialog()
-        _axisDialog.Show()
-        _axisDialog.BringToFront()
+        AxisDialog.Show()
+        AxisDialog.BringToFront()
     End Sub
 
     ''' <summary>
@@ -842,16 +842,16 @@ Friend Class WaveController
 
                             'write to log
                             If NaNPeriod.count = 1 Then
-                                Log.AddLogEntry(Log.levels.info, $"Series {ts.Title} contains 1 NaN value on {NaNPeriod.range.start.ToString(Helpers.CurrentDateFormat)}")
+                                Log.AddLogEntry(Log.Levels.info, $"Series {ts.Title} contains 1 NaN value on {NaNPeriod.range.start.ToString(Helpers.CurrentDateFormat)}")
                             Else
-                                Log.AddLogEntry(Log.levels.info, $"Series {ts.Title} contains {NaNPeriod.count} NaN values from {NaNPeriod.range.start.ToString(Helpers.CurrentDateFormat)} to {NaNPeriod.range.end.ToString(Helpers.CurrentDateFormat)}")
+                                Log.AddLogEntry(Log.Levels.info, $"Series {ts.Title} contains {NaNPeriod.count} NaN values from {NaNPeriod.range.start.ToString(Helpers.CurrentDateFormat)} to {NaNPeriod.range.end.ToString(Helpers.CurrentDateFormat)}")
                             End If
 
                         Next
                         nanFound = True
                     Else
                         'series contains no NaN values
-                        Log.AddLogEntry(Log.levels.info, $"Series {ts.Title} does not contain any NaN values")
+                        Log.AddLogEntry(Log.Levels.info, $"Series {ts.Title} does not contain any NaN values")
                     End If
                 End If
             Next
@@ -909,7 +909,7 @@ Friend Class WaveController
             'loop over time series
             For Each id As Integer In _model.TimeSeries.Ids
                 'remove NaN values in model
-                _model.TimeSeries(id) = _model.TimeSeries(id).removeNaNValues()
+                _model.TimeSeries(id) = _model.TimeSeries(id).RemoveNaNValues()
                 'update values of series in chart
                 Dim series As Steema.TeeChart.Styles.Series = View.GetSeries(id)
                 If series IsNot Nothing Then
@@ -957,35 +957,35 @@ Friend Class WaveController
                 'Wait-Cursor
                 View.Cursor = Cursors.WaitCursor
 
-                Call Log.AddLogEntry(Log.levels.info, $"Starting analysis {oAnalysisDialog.selectedAnalysisFunction} ...")
+                Call Log.AddLogEntry(Log.Levels.info, $"Starting analysis {oAnalysisDialog.SelectedAnalysisFunction} ...")
 
                 'Analyse instanzieren
                 Dim oAnalysis As Analysis
-                oAnalysis = AnalysisFactory.CreateAnalysis(oAnalysisDialog.selectedAnalysisFunction, oAnalysisDialog.selectedTimeseries)
+                oAnalysis = AnalysisFactory.CreateAnalysis(oAnalysisDialog.SelectedAnalysisFunction, oAnalysisDialog.SelectedTimeseries)
 
                 'Add handlers for progress events
                 AddHandler oAnalysis.AnalysisStarted, AddressOf ProgressReset
                 AddHandler oAnalysis.AnalysisUpdated, AddressOf ProgressUpdate
                 AddHandler oAnalysis.AnalysisFinished, AddressOf ProgressFinish
 
-                Call Log.AddLogEntry(Log.levels.info, "... executing analysis ...")
+                Call Log.AddLogEntry(Log.Levels.info, "... executing analysis ...")
 
                 'Analyse ausführen
                 Call oAnalysis.ProcessAnalysis()
 
-                Call Log.AddLogEntry(Log.levels.info, "... preparing analysis result ...")
+                Call Log.AddLogEntry(Log.Levels.info, "... preparing analysis result ...")
 
                 'Ergebnisse aufbereiten
                 Call oAnalysis.PrepareResults()
 
-                Call Log.AddLogEntry(Log.levels.info, "Analysis complete")
+                Call Log.AddLogEntry(Log.Levels.info, "Analysis complete")
 
                 'Ergebnisse anzeigen:
                 '--------------------
                 'Ergebnisdiagramm anzeigen
                 If (oAnalysis.hasResultChart) Then
                     Dim resultChart As New AnalysisResultChart()
-                    resultChart.Text &= " - " & oAnalysisDialog.selectedAnalysisFunction.ToString()
+                    resultChart.Text &= " - " & oAnalysisDialog.SelectedAnalysisFunction.ToString()
                     resultChart.TChart1.Chart = oAnalysis.getResultChart().Chart
                     Call resultChart.Show()
                 End If
@@ -993,21 +993,21 @@ Friend Class WaveController
                 'show result table
                 If (oAnalysis.hasResultTable) Then
                     Dim resultTable As New AnalysisResultTable(oAnalysis.getResultTable())
-                    resultTable.Text &= " - " & oAnalysisDialog.selectedAnalysisFunction.ToString()
+                    resultTable.Text &= " - " & oAnalysisDialog.SelectedAnalysisFunction.ToString()
                     Call resultTable.Show()
                 End If
 
                 'Ergebnistext in Log schreiben und anzeigen
                 If (oAnalysis.hasResultText) Then
-                    Call Log.AddLogEntry(Log.levels.info, oAnalysis.getResultText)
+                    Call Log.AddLogEntry(Log.Levels.info, oAnalysis.getResultText)
                     Call LogShowWindow()
                 End If
 
                 'Ergebniswerte in Log schreiben
                 If (oAnalysis.hasResultValues) Then
-                    Call Log.AddLogEntry(Log.levels.info, "Analysis results:")
+                    Call Log.AddLogEntry(Log.Levels.info, "Analysis results:")
                     For Each kvp As KeyValuePair(Of String, Double) In oAnalysis.getResultValues
-                        Call Log.AddLogEntry(Log.levels.info, kvp.Key + ": " + Str(kvp.Value))
+                        Call Log.AddLogEntry(Log.Levels.info, kvp.Key + ": " + Str(kvp.Value))
                     Next
                     Call LogShowWindow()
                 End If
@@ -1020,10 +1020,10 @@ Friend Class WaveController
                 End If
 
             Catch ex As AnalysisCancelledException
-                Call Log.AddLogEntry(Log.levels.info, "Analysis cancelled by user")
+                Call Log.AddLogEntry(Log.Levels.info, "Analysis cancelled by user")
 
             Catch ex As Exception
-                Call Log.AddLogEntry(Log.levels.error, "Analysis failed: " & ex.Message)
+                Call Log.AddLogEntry(Log.Levels.error, "Analysis failed: " & ex.Message)
                 MessageBox.Show("Analysis failed:" & eol & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
 
             Finally
@@ -1090,9 +1090,9 @@ Friend Class WaveController
             View.SetChartMaxX(DateTime.FromOADate(extent.xmax))
             ZoomHistoryIndex = prevIndex
             Call Me.ViewportChanged()
-            Log.AddLogEntry(Log.levels.debug, "Zoomed to history index " & prevIndex)
+            Log.AddLogEntry(Log.Levels.debug, "Zoomed to history index " & prevIndex)
         Else
-            Log.AddLogEntry(Log.levels.debug, $"No zoom history before index {ZoomHistoryIndex} available!")
+            Log.AddLogEntry(Log.Levels.debug, $"No zoom history before index {ZoomHistoryIndex} available!")
         End If
 
         View.ToolStripButton_ZoomPrevious.Enabled = (ZoomHistoryIndex - 1 < ZoomHistory.Count And ZoomHistoryIndex > 0)
@@ -1111,9 +1111,9 @@ Friend Class WaveController
             View.SetChartMaxX(DateTime.FromOADate(extent.xmax))
             ZoomHistoryIndex += 1
             Call Me.ViewportChanged()
-            Log.AddLogEntry(Log.levels.debug, "Zoomed to history index " & ZoomHistoryIndex)
+            Log.AddLogEntry(Log.Levels.debug, "Zoomed to history index " & ZoomHistoryIndex)
         Else
-            Log.AddLogEntry(Log.levels.debug, $"No zoom history after index {ZoomHistoryIndex} available!")
+            Log.AddLogEntry(Log.Levels.debug, $"No zoom history after index {ZoomHistoryIndex} available!")
         End If
 
         View.ToolStripButton_ZoomPrevious.Enabled = (ZoomHistoryIndex - 1 < ZoomHistory.Count And ZoomHistoryIndex > 0)
@@ -1247,7 +1247,7 @@ Friend Class WaveController
                 View.CrosshairDate = Nothing
             End If
             'show only stored markers
-            Call Me.showMarkers()
+            Call Me.ShowMarkers()
         End If
     End Sub
 
@@ -1299,7 +1299,7 @@ Friend Class WaveController
         'Ask for user confirmation
         If MessageBox.Show(msg, "Warning", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) = DialogResult.OK Then
 
-            Log.AddLogEntry(Log.levels.info, "Reloading all series from their original datasources...")
+            Log.AddLogEntry(Log.Levels.info, "Reloading all series from their original datasources...")
 
             'Alle Serien löschen
             View.TChart1.Series.RemoveAllSeries()
@@ -1314,7 +1314,7 @@ Friend Class WaveController
             Dim success As Boolean
             For Each file In datasources.Keys
 
-                Log.AddLogEntry(Log.levels.info, $"Reading file {file} ...")
+                Log.AddLogEntry(Log.Levels.info, $"Reading file {file} ...")
 
                 success = True
 
@@ -1323,22 +1323,22 @@ Friend Class WaveController
                     Call Load_TEN(file)
                 Else
                     'get an instance of the file
-                    Dim fileInstance As TimeSeriesFile = TimeSeriesFile.getInstance(file)
+                    Dim fileInstance As TimeSeriesFile = TimeSeriesFile.GetInstance(file)
                     'select series for importing
                     For Each title In datasources(file)
-                        success = success And fileInstance.selectSeries(title)
+                        success = success And fileInstance.SelectSeries(title)
                     Next
                     'load the file
-                    Call fileInstance.readFile()
+                    Call fileInstance.ReadFile()
                     'import the series
                     For Each ts As TimeSeries In fileInstance.TimeSeries.Values
                         Call _model.Import_Series(ts)
                     Next
                 End If
                 If success Then
-                    Log.AddLogEntry(Log.levels.info, $"File '{file}' imported successfully!")
+                    Log.AddLogEntry(Log.Levels.info, $"File '{file}' imported successfully!")
                 Else
-                    Log.AddLogEntry(Log.levels.error, $"Error while importing file '{file}'!")
+                    Log.AddLogEntry(Log.Levels.error, $"Error while importing file '{file}'!")
                 End If
             Next
 
@@ -1455,7 +1455,7 @@ Friend Class WaveController
     ''' </summary>
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
-    Private Sub navigationKeyDown(sender As System.Object, e As System.Windows.Forms.KeyEventArgs)
+    Private Sub NavigationKeyDown(sender As System.Object, e As System.Windows.Forms.KeyEventArgs)
         CType(sender, MaskedTextBox).ForeColor = Control.DefaultForeColor
         If e.KeyCode = Keys.Escape Then
             'reset navigation to correspond to chart
@@ -1469,7 +1469,7 @@ Friend Class WaveController
     ''' </summary>
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
-    Private Sub navigationTypeValidationCompleted(sender As System.Object, e As TypeValidationEventArgs)
+    Private Sub NavigationTypeValidationCompleted(sender As System.Object, e As TypeValidationEventArgs)
         If Not e.IsValidInput Then
             e.Cancel = True
             CType(sender, MaskedTextBox).ForeColor = Color.Red
@@ -1496,7 +1496,7 @@ Friend Class WaveController
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
     ''' <remarks></remarks>
-    Private Sub navigationValidated(sender As System.Object, e As System.EventArgs)
+    Private Sub NavigationValidated(sender As System.Object, e As System.EventArgs)
         If Not View.isInitializing Then
             'save the current zoom snapshot
             Call Me.SaveZoomSnapshot()
@@ -1512,7 +1512,7 @@ Friend Class WaveController
     ''' The Display range has been changed - update the chart accordingly
     ''' </summary>
     ''' <remarks></remarks>
-    Private Sub displayRangeChanged()
+    Private Sub DisplayRangeChanged()
 
         Dim xMin, xMax As DateTime
         Dim multiplier As Integer
@@ -1561,7 +1561,7 @@ Friend Class WaveController
     ''' <summary>
     ''' Navigate forward/back
     ''' </summary>
-    Private Sub navigationBackwardForward_Click(sender As System.Object, e As System.EventArgs)
+    Private Sub NavigationBackwardForward_Click(sender As System.Object, e As System.EventArgs)
 
         Dim multiplier As Integer
         Dim xMinOld, xMinNew, xMaxOld, xMaxNew As DateTime
@@ -1624,7 +1624,7 @@ Friend Class WaveController
     ''' <summary>
     ''' Navigate to start/end
     ''' </summary>
-    Private Sub navigationStartEnd_Click(sender As System.Object, e As System.EventArgs)
+    Private Sub NavigationStartEnd_Click(sender As System.Object, e As System.EventArgs)
 
         Dim xMinNew, xMaxNew As Double
         Dim xDiff As Double
@@ -1713,7 +1713,7 @@ Friend Class WaveController
                 View.colorBandZoom.Start = startValue
                 View.colorBandZoom.End = startValue
 
-                Log.AddLogEntry(Log.levels.debug, "Zoom start at " & DateTime.FromOADate(startValue))
+                Log.AddLogEntry(Log.Levels.debug, "Zoom start at " & DateTime.FromOADate(startValue))
             End If
 
         ElseIf e.Button = MouseButtons.Right Then
@@ -1799,7 +1799,7 @@ Friend Class WaveController
                 'update crosshair position
                 View.SetCrosshairPosition(xValue)
                 'show markers
-                showMarkers(New List(Of DateTime) From {DateTime.FromOADate(xValue)})
+                ShowMarkers(New List(Of DateTime) From {DateTime.FromOADate(xValue)})
             End If
         End If
 
@@ -1830,7 +1830,7 @@ Friend Class WaveController
                     startValue = mouseValue
                     endValue = View.TChart1.Series(0).XScreenToValue(Me.ChartMouseDragStartX)
                 End If
-                Log.AddLogEntry(Log.levels.debug, "Zoom end at " & DateTime.FromOADate(endValue))
+                Log.AddLogEntry(Log.Levels.debug, "Zoom end at " & DateTime.FromOADate(endValue))
 
                 'save the current zoom snapshot
                 Call Me.SaveZoomSnapshot()
@@ -1910,7 +1910,7 @@ Friend Class WaveController
 
         Catch ex As ArgumentOutOfRangeException
             'can happen when zooming out too far, TimeSpan becomes too big or DateTime is not representable
-            Log.AddLogEntry(levels.debug, $"Exception in Chart_MouseWheel: {ex}")
+            Log.AddLogEntry(Levels.debug, $"Exception in Chart_MouseWheel: {ex}")
         End Try
 
     End Sub
@@ -1944,7 +1944,7 @@ Friend Class WaveController
                 View.colorBandOverview.Start = xMouse
                 View.colorBandOverview.End = xMouse
 
-                Log.AddLogEntry(Log.levels.debug, "Zoom start at " & DateTime.FromOADate(xMouse))
+                Log.AddLogEntry(Log.Levels.debug, "Zoom start at " & DateTime.FromOADate(xMouse))
 
             ElseIf e.Button = MouseButtons.Right Then
                 'start panning process
@@ -2035,7 +2035,7 @@ Friend Class WaveController
                     startValue = Math.Max(startValue, Constants.minOADate.ToOADate)
                     endValue = Math.Min(endValue, Constants.maxOADate.ToOADate)
 
-                    Log.AddLogEntry(Log.levels.debug, "Zoom end at " & DateTime.FromOADate(endValue))
+                    Log.AddLogEntry(Log.Levels.debug, "Zoom end at " & DateTime.FromOADate(endValue))
 
                     'adjust colorband
                     View.colorBandOverview.Start = startValue
@@ -2137,7 +2137,7 @@ Friend Class WaveController
 
         Catch ex As ArgumentException
             'can happen when zooming out too far, invalid OADate
-            Log.AddLogEntry(levels.debug, $"Exception in OverviewChart_MouseWheel: {ex}")
+            Log.AddLogEntry(Levels.debug, $"Exception in OverviewChart_MouseWheel: {ex}")
         End Try
 
     End Sub
@@ -2156,11 +2156,11 @@ Friend Class WaveController
         If ZoomHistoryIndex < (ZoomHistory.Count - 1) Then
             'if we are branching off from an old index, just remove the zoom history after the current index
             ZoomHistory.RemoveRange(ZoomHistoryIndex + 1, ZoomHistory.Count - (ZoomHistoryIndex + 1))
-            Log.AddLogEntry(Log.levels.debug, $"Removed zoom history after index {ZoomHistoryIndex}")
+            Log.AddLogEntry(Log.Levels.debug, $"Removed zoom history after index {ZoomHistoryIndex}")
         Else
             'add new snapshot
             ZoomHistory.Add((View.ChartMinX.ToOADate(), View.ChartMaxX.ToOADate()))
-            Log.AddLogEntry(Log.levels.debug, $"Saved zoom snapshot {ZoomHistoryIndex}: {View.ChartMinX}, {View.ChartMaxX}")
+            Log.AddLogEntry(Log.Levels.debug, $"Saved zoom snapshot {ZoomHistoryIndex}: {View.ChartMinX}, {View.ChartMaxX}")
         End If
         ZoomHistoryIndex += 1
 
@@ -2428,7 +2428,7 @@ Friend Class WaveController
             For Each t As DateTime In t_too_early
                 ts.Nodes.Remove(t)
             Next
-            Log.AddLogEntry(Log.levels.warning, $"Unable to display {t_too_early.Count} nodes between {t_too_early.First().ToString(Helpers.CurrentDateFormat)} and {t_too_early.Last().ToString(Helpers.CurrentDateFormat)}!")
+            Log.AddLogEntry(Log.Levels.warning, $"Unable to display {t_too_early.Count} nodes between {t_too_early.First().ToString(Helpers.CurrentDateFormat)} and {t_too_early.Last().ToString(Helpers.CurrentDateFormat)}!")
         End If
         If ts.EndDate > Constants.maxOADate Then
             ts = ts.Clone(preserveId:=True)
@@ -2443,7 +2443,7 @@ Friend Class WaveController
             For Each t As DateTime In t_too_late
                 ts.Nodes.Remove(t)
             Next
-            Log.AddLogEntry(Log.levels.warning, $"Unable to display {t_too_late.Count} nodes between {t_too_late.Last().ToString(Helpers.CurrentDateFormat)} and {t_too_late.First().ToString(Helpers.CurrentDateFormat)}!")
+            Log.AddLogEntry(Log.Levels.warning, $"Unable to display {t_too_late.Count} nodes between {t_too_late.Last().ToString(Helpers.CurrentDateFormat)} and {t_too_late.First().ToString(Helpers.CurrentDateFormat)}!")
         End If
 
         'check for infinity values and replace with NaN (#199)
@@ -2458,7 +2458,7 @@ Friend Class WaveController
             For Each t As DateTime In t_inf
                 ts.UpdateNode(t, Double.NaN)
             Next
-            Log.AddLogEntry(Log.levels.warning, $"Replaced {t_inf.Count} infinity values with NaN in series '{ts.Title}' for display in chart")
+            Log.AddLogEntry(Log.Levels.warning, $"Replaced {t_inf.Count} infinity values with NaN in series '{ts.Title}' for display in chart")
         End If
 
         'Serie zu Diagramm hinzufügen
@@ -2506,11 +2506,11 @@ Friend Class WaveController
 
         'Determine total number of NaN-values and write to log
         If ts.NaNCount > 0 Then
-            Log.AddLogEntry(Log.levels.warning, $"Series '{ts.Title}' contains {ts.NaNCount} NaN and Infinity values!")
+            Log.AddLogEntry(Log.Levels.warning, $"Series '{ts.Title}' contains {ts.NaNCount} NaN and Infinity values!")
         End If
 
         'Y-Achsenzuordnung
-        assignSeriesToAxis(Line1, ts.Unit)
+        AssignSeriesToAxis(Line1, ts.Unit)
 
         'Interpretation
         Select Case ts.Interpretation
@@ -2634,7 +2634,7 @@ Friend Class WaveController
     ''' If no axis exists for the given unit, a new axis is created
     ''' </summary>
     ''' <param name="unit">The unit</param>
-    Private Sub assignSeriesToAxis(ByRef series As Steema.TeeChart.Styles.Series, unit As String)
+    Private Sub AssignSeriesToAxis(ByRef series As Steema.TeeChart.Styles.Series, unit As String)
 
         If IsNothing(View.TChart1.Axes.Left.Tag) Then
             'use left axis for the first time
@@ -2717,11 +2717,11 @@ Friend Class WaveController
     ''' Replaces any existing markers
     ''' </summary>
     ''' <param name="timestamps">List of timestamps for which to add markers</param>
-    Private Sub setMarkers(timestamps As List(Of DateTime))
+    Private Sub SetMarkers(timestamps As List(Of DateTime))
         'sets new marker positions
         Me.markerPositions = timestamps
         'show markers in chart
-        Call Me.showMarkers()
+        Call Me.ShowMarkers()
     End Sub
 
     ''' <summary>
@@ -2729,7 +2729,7 @@ Friend Class WaveController
     ''' Displays the stored permanent markers and optionally temporary markers at the given timestamps
     ''' </summary>
     ''' <param name="timestamps">List of timestamps for which to show temporary markers</param>
-    Private Sub showMarkers(Optional timestamps As List(Of DateTime) = Nothing)
+    Private Sub ShowMarkers(Optional timestamps As List(Of DateTime) = Nothing)
 
         If timestamps Is Nothing Then
             timestamps = New List(Of DateTime)
@@ -2830,7 +2830,7 @@ Friend Class WaveController
 
                 End If
             Catch ex As Exception
-                Log.AddLogEntry(Log.levels.debug, ex.Message)
+                Log.AddLogEntry(Log.Levels.debug, ex.Message)
             End Try
         Next
 
@@ -2839,7 +2839,7 @@ Friend Class WaveController
     Private Sub RemoveMarkers_Click()
         'remove all markers
         Me.markerPositions.Clear()
-        Call Me.showMarkers()
+        Call Me.ShowMarkers()
     End Sub
 
     Private Sub LogShowWindow()
@@ -2860,7 +2860,7 @@ Friend Class WaveController
     ''' <summary>
     ''' Wenn sich der Log verändert hat, Statustext aktualisieren
     ''' </summary>
-    Friend Sub LogMsgAdded(level As Log.levels, msg As String)
+    Friend Sub LogMsgAdded(level As Log.Levels, msg As String)
         'remove any linebreak at the beginning
         If msg.StartsWith(eol) Then
             msg = msg.Substring(eol.Length)
@@ -2873,20 +2873,20 @@ Friend Class WaveController
         View.ToolStripStatusLabel_Log.Text = msg.Trim()
         'set color according to level
         Select Case level
-            Case Log.levels.debug
+            Case Log.Levels.debug
                 View.ToolStripStatusLabel_Log.LinkColor = Color.DarkGreen
-            Case Log.levels.warning
+            Case Log.Levels.warning
                 View.ToolStripStatusLabel_Log.LinkColor = Color.DarkOrange
-            Case Log.levels.error
+            Case Log.Levels.error
                 View.ToolStripStatusLabel_Log.LinkColor = Color.Red
             Case Else
                 View.ToolStripStatusLabel_Log.LinkColor = SystemColors.ControlDarkDark
         End Select
         'Update counters
-        If level = Log.levels.warning Then
+        If level = Log.Levels.warning Then
             View.ToolStripStatusLabel_Warnings.Text = Int(View.ToolStripStatusLabel_Warnings.Text) + 1
             View.ToolStripStatusLabel_Warnings.Image = My.Resources.warning
-        ElseIf level = Log.levels.error Then
+        ElseIf level = Log.Levels.error Then
             View.ToolStripStatusLabel_Errors.Text = Int(View.ToolStripStatusLabel_Errors.Text) + 1
             View.ToolStripStatusLabel_Errors.Image = My.Resources.cancel
         End If
@@ -2902,7 +2902,7 @@ Friend Class WaveController
 
         'get TimeSeries from model
         If Not _model.TimeSeries.ContainsId(id) Then
-            Log.AddLogEntry(Log.levels.error, $"Unable to update series properties for id {id}, series not found in model!")
+            Log.AddLogEntry(Log.Levels.error, $"Unable to update series properties for id {id}, series not found in model!")
             Exit Sub
         End If
         Dim ts As TimeSeries = _model.TimeSeries(id)
@@ -2910,7 +2910,7 @@ Friend Class WaveController
         'get series in chart
         Dim series As Steema.TeeChart.Styles.Series = View.GetSeries(id)
         If series Is Nothing Then
-            Log.AddLogEntry(Log.levels.error, $"Unable to update series properties for id {id}, series not found in view!")
+            Log.AddLogEntry(Log.Levels.error, $"Unable to update series properties for id {id}, series not found in view!")
             Exit Sub
         End If
 
@@ -2936,7 +2936,7 @@ Friend Class WaveController
         series.Title = ts.Title
 
         'assign to axis according to unit
-        assignSeriesToAxis(series, ts.Unit)
+        AssignSeriesToAxis(series, ts.Unit)
 
         'TODO: apply the same changes in the overview chart?
 
@@ -3007,7 +3007,7 @@ Friend Class WaveController
     ''' Handles axis deleted in the AxisDialog
     ''' </summary>
     ''' <param name="axisname"></param>
-    Private Sub axisDeleted(axisname As String)
+    Private Sub AxisDeleted(axisname As String)
         Dim axisnumber As Integer
         Dim m As Match = Regex.Match(axisname, "Custom (\d+)")
         If m.Success Then
@@ -3029,10 +3029,10 @@ Friend Class WaveController
         For Each ts As TimeSeries In _model.TimeSeries.Values
             Dim series As Steema.TeeChart.Styles.Series = View.GetSeries(ts.Id)
             If series Is Nothing Then
-                Log.AddLogEntry(Log.levels.error, $"Unable to update axis assignment for series id {ts.Id}, series not found in view!")
+                Log.AddLogEntry(Log.Levels.error, $"Unable to update axis assignment for series id {ts.Id}, series not found in view!")
                 Continue For
             End If
-            assignSeriesToAxis(series, ts.Unit)
+            AssignSeriesToAxis(series, ts.Unit)
         Next
 
         'deactivate unused custom axes
@@ -3064,7 +3064,7 @@ Friend Class WaveController
             axisList.Add(New AxisWrapper("Custom " & i, View.TChart1.Axes.Custom(i)))
         Next
 
-        _axisDialog.Update(axisList)
+        AxisDialog.Update(axisList)
     End Sub
 
     ''' <summary>
@@ -3183,7 +3183,7 @@ Friend Class WaveController
         Try
 
             'Log
-            Call Log.AddLogEntry(Log.levels.info, $"Loading file '{FileName}' ...")
+            Call Log.AddLogEntry(Log.Levels.info, $"Loading file '{FileName}' ...")
 
             'Bereits vorhandene Reihen merken
             Dim existingIds = New List(Of Integer)
@@ -3223,14 +3223,14 @@ Friend Class WaveController
                             If (series.XValues.DateTime) Then
 
                                 'Zeitreihe aus dem importierten Diagramm nach intern übertragen
-                                Log.AddLogEntry(Log.levels.info, $"Importing series '{series.Title}' from TEN file...")
+                                Log.AddLogEntry(Log.Levels.info, $"Importing series '{series.Title}' from TEN file...")
                                 reihe = New TimeSeries(series.Title)
                                 For i = 0 To series.Count - 1
                                     reihe.AddNode(DateTime.FromOADate(series.XValues(i)), series.YValues(i))
                                 Next
                                 'Determine total number of NaN-values and write to log
                                 If reihe.NaNCount > 0 Then
-                                    Log.AddLogEntry(Log.levels.warning, $"Series '{reihe.Title}' contains {reihe.NaNCount} NaN values!")
+                                    Log.AddLogEntry(Log.Levels.warning, $"Series '{reihe.Title}' contains {reihe.NaNCount} NaN values!")
                                 End If
                                 'Get the series' unit from the axis title
                                 Dim axistitle As String = ""
@@ -3269,7 +3269,7 @@ Friend Class WaveController
                             End If
                         Next
 
-                        Log.AddLogEntry(levels.info, $"Imported {nSeries} time series from TEN file.")
+                        Log.AddLogEntry(Levels.info, $"Imported {nSeries} time series from TEN file.")
 
                         'Update window title
                         View.Text = "BlueM.Wave - " & FileName
@@ -3317,13 +3317,13 @@ Friend Class WaveController
             Call Me.ViewportChanged()
 
             'Log
-            Call Log.AddLogEntry(Log.levels.info, $"TEN file '{FileName}' loaded successfully!")
+            Call Log.AddLogEntry(Log.Levels.info, $"TEN file '{FileName}' loaded successfully!")
 
             Call FileImported(FileName)
 
         Catch ex As Exception
             MessageBox.Show("Error while loading:" & eol & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-            Call Log.AddLogEntry(Log.levels.error, "Error while loading:" & eol & ex.Message)
+            Call Log.AddLogEntry(Log.Levels.error, "Error while loading:" & eol & ex.Message)
         End Try
 
     End Sub

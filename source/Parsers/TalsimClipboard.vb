@@ -29,7 +29,7 @@ Namespace Parsers
             MyBase.New(inputtext:=clipboardtext)
         End Sub
 
-        Public Overloads Shared Function verifyFormat(clipboardtext As String) As Boolean
+        Public Overloads Shared Function VerifyFormat(clipboardtext As String) As Boolean
             'check if content contains expected header
             If clipboardtext.Contains("SydroTyp=SydroErgZre") Or
                clipboardtext.Contains("SydroTyp=SydroBinZre") Then
@@ -225,7 +225,7 @@ Namespace Parsers
                 If Not IO.File.Exists(fileRef.path) Then
                     Dim fileExt As String = IO.Path.GetExtension(fileRef.path).ToUpper()
                     If fileExt = TimeSeriesFile.FileExtensions.WEL Or fileExt = TimeSeriesFile.FileExtensions.WBL Then
-                        If TalsimClipboard.extractFromWLZIP(fileRef.path) Then
+                        If TalsimClipboard.ExtractFromWLZIP(fileRef.path) Then
                             'remember the file so that we can delete it later
                             extractedFiles.Add(fileRef.path)
                         End If
@@ -241,7 +241,7 @@ Namespace Parsers
                 Try
                     IO.File.Delete(file)
                 Catch ex As Exception
-                    Log.AddLogEntry(Log.levels.warning, $"Could not delete extracted file {file}: {ex.Message}")
+                    Log.AddLogEntry(Log.Levels.warning, $"Could not delete extracted file {file}: {ex.Message}")
                 End Try
             Next
 
@@ -255,7 +255,7 @@ Namespace Parsers
         ''' <param name="file">path to WEL file</param>
         ''' <returns>True if successful</returns>
         ''' <remarks>TALSIM specific</remarks>
-        Public Shared Function extractFromWLZIP(file As String) As Boolean
+        Public Shared Function ExtractFromWLZIP(file As String) As Boolean
 
             Dim file_wlzip As String
             Dim filename As String
@@ -269,7 +269,7 @@ Namespace Parsers
 
                 If IO.File.Exists(file_wlzip) Then
 
-                    Log.AddLogEntry(Log.levels.info, $"Looking for file in {file_wlzip} ...")
+                    Log.AddLogEntry(Log.Levels.info, $"Looking for file in {file_wlzip} ...")
                     filename = IO.Path.GetFileName(file)
 
                     Dim zip As IO.Compression.ZipArchive = IO.Compression.ZipFile.OpenRead(file_wlzip)
@@ -278,7 +278,7 @@ Namespace Parsers
                         If entry.Name.Equals(filename, StringComparison.CurrentCultureIgnoreCase) Then
                             zipEntryFound = True
                             'extract file from zip archive
-                            Log.AddLogEntry(Log.levels.info, $"Extracting file from {file_wlzip} ...")
+                            Log.AddLogEntry(Log.Levels.info, $"Extracting file from {file_wlzip} ...")
                             Dim fs As New IO.FileStream(file, IO.FileMode.CreateNew)
                             entry.Open().CopyTo(fs)
                             fs.Flush()
@@ -289,7 +289,7 @@ Namespace Parsers
                     Next
 
                     If Not zipEntryFound Then
-                        Log.AddLogEntry(Log.levels.error, $"File {filename} not found in {file_wlzip}!")
+                        Log.AddLogEntry(Log.Levels.error, $"File {filename} not found in {file_wlzip}!")
                     End If
 
                 End If

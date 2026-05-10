@@ -33,7 +33,7 @@ Namespace Fileformats
         ''' Date time format to force "/" as date separator
         ''' </summary>
         ''' <returns></returns>
-        Private Shared ReadOnly Property dtfi As DateTimeFormatInfo
+        Private Shared ReadOnly Property SWMMDateTimeFormatInfo As DateTimeFormatInfo
             Get
                 Return CultureInfo.GetCultureInfo("en-US").DateTimeFormat
             End Get
@@ -53,21 +53,21 @@ Namespace Fileformats
             MyBase.New(FileName)
 
             'Voreinstellungen
-            Me.iLineData = 2
+            Me.LineNumberData = 2
             Me.UseUnits = False
             Me.Dateformat = SWMM_DATEFORMAT
 
-            Call Me.readSeriesInfo()
+            Call Me.ReadSeriesInfo()
 
             If (ReadAllNow) Then
                 'Direkt einlesen
-                Call Me.selectAllSeries()
-                Call Me.readFile()
+                Call Me.SelectAllSeries()
+                Call Me.ReadFile()
             End If
 
         End Sub
 
-        Public Overrides Sub readSeriesInfo()
+        Public Overrides Sub ReadSeriesInfo()
 
             Dim line As String
             Dim title As String = Nothing
@@ -108,7 +108,7 @@ Namespace Fileformats
 
         End Sub
 
-        Public Overrides Sub readFile()
+        Public Overrides Sub ReadFile()
 
             Dim line As String
             Dim dateString, valueString As String
@@ -140,7 +140,7 @@ Namespace Fileformats
 
                 'parse date
                 dateString = line.Substring(0, Me.Dateformat.Length)
-                If Not DateTime.TryParseExact(dateString, Me.Dateformat, SWMM_TIMESERIES.dtfi, Globalization.DateTimeStyles.None, timestamp) Then
+                If Not DateTime.TryParseExact(dateString, Me.Dateformat, SWMM_TIMESERIES.SWMMDateTimeFormatInfo, Globalization.DateTimeStyles.None, timestamp) Then
                     Throw New Exception($"Unable to parse the date {dateString} using the format {Me.Dateformat}!")
                 End If
                 'parse value
@@ -166,7 +166,7 @@ Namespace Fileformats
         ''' </summary>
         ''' <param name="file">path to file</param>
         ''' <returns></returns>
-        Public Shared Function verifyFormat(file As String) As Boolean
+        Public Shared Function VerifyFormat(file As String) As Boolean
 
             Dim line As String
             Dim dateString, valueString As String
@@ -192,7 +192,7 @@ Namespace Fileformats
 
                     'try to parse the date
                     dateString = line.Substring(0, SWMM_DATEFORMAT.Length)
-                    If Not DateTime.TryParseExact(dateString, SWMM_DATEFORMAT, SWMM_TIMESERIES.dtfi, Globalization.DateTimeStyles.None, timestamp) Then
+                    If Not DateTime.TryParseExact(dateString, SWMM_DATEFORMAT, SWMM_TIMESERIES.SWMMDateTimeFormatInfo, Globalization.DateTimeStyles.None, timestamp) Then
                         Throw New Exception($"Unable to parse the date {dateString} using the format {SWMM_DATEFORMAT}!")
                     End If
                     'try to parse the value
@@ -222,7 +222,7 @@ Namespace Fileformats
         ''' </summary>
         ''' <param name="ts">time series to export</param>
         ''' <param name="path">path to file to write</param>
-        Public Overloads Shared Sub writeFile(ts As TimeSeries, path As String)
+        Public Overloads Shared Sub WriteFile(ts As TimeSeries, path As String)
 
             Dim strwrite As New StreamWriter(path)
 
@@ -232,7 +232,7 @@ Namespace Fileformats
             For Each kvp As KeyValuePair(Of DateTime, Double) In ts.Nodes
                 Dim timestamp As DateTime = kvp.Key
                 Dim value As Double = kvp.Value
-                strwrite.WriteLine($"{timestamp.ToString(SWMM_DATEFORMAT, SWMM_TIMESERIES.dtfi)} {value.ToString(Helpers.DefaultNumberFormat)}")
+                strwrite.WriteLine($"{timestamp.ToString(SWMM_DATEFORMAT, SWMM_TIMESERIES.SWMMDateTimeFormatInfo)} {value.ToString(Helpers.DefaultNumberFormat)}")
             Next
             strwrite.Close()
 

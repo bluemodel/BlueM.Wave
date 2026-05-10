@@ -37,7 +37,7 @@ Namespace Parsers
 
             Dim line, parts(), file, seriesName As String
 
-            Log.AddLogEntry(Log.levels.info, $"Parsing Wave project file {MyBase.InputFile} ...")
+            Log.AddLogEntry(Log.Levels.info, $"Parsing Wave project file {MyBase.InputFile} ...")
 
             'parse Wave project file
 
@@ -129,7 +129,7 @@ Namespace Parsers
                                         Case "showpoints"
                                             options.displayOptions.SetShowPoints(value)
                                         Case Else
-                                            Log.AddLogEntry(levels.warning, $"Series import option keyword {keyword} not recognized!")
+                                            Log.AddLogEntry(Levels.warning, $"Series import option keyword {keyword} not recognized!")
                                     End Select
                                 Next
                             End If
@@ -140,14 +140,14 @@ Namespace Parsers
                                 FileReferences.Last().series.Add(seriesName, options)
                             Else
                                 'duplicate series
-                                Log.AddLogEntry(Log.levels.warning, $"Series {seriesName} is specified more than once, only the first mention will be processed!")
+                                Log.AddLogEntry(Log.Levels.warning, $"Series {seriesName} is specified more than once, only the first mention will be processed!")
                             End If
                         Else
                             'no file was specified before series definition
-                            Log.AddLogEntry(Log.levels.error, $"No file specified before series definition 'series={line}', this series will be ignored!")
+                            Log.AddLogEntry(Log.Levels.error, $"No file specified before series definition 'series={line}', this series will be ignored!")
                         End If
                     Else
-                        Log.AddLogEntry(Log.levels.warning, $"Unable to parse series definition 'series={line}', this series will be ignored!")
+                        Log.AddLogEntry(Log.Levels.warning, $"Unable to parse series definition 'series={line}', this series will be ignored!")
                     End If
 
                 ElseIf line.Contains("=") Then
@@ -162,11 +162,11 @@ Namespace Parsers
                             FileReferences.Last().settings.Add(key, value)
                         Else
                             'duplicate setting
-                            Log.AddLogEntry(Log.levels.warning, $"File import setting {key} is specified more than once, only the first mention will be processed!")
+                            Log.AddLogEntry(Log.Levels.warning, $"File import setting {key} is specified more than once, only the first mention will be processed!")
                         End If
                     Else
                         'no file was specified before setting
-                        Log.AddLogEntry(Log.levels.error, $"No file specified before setting '{key}={value}', this setting will be ignored!")
+                        Log.AddLogEntry(Log.Levels.error, $"No file specified before setting '{key}={value}', this setting will be ignored!")
                     End If
                 Else
                     'ignore any other lines
@@ -189,7 +189,7 @@ Namespace Parsers
         ''' <param name="saveLineStyle">Whether to save line styles</param>
         ''' <param name="saveLineWidth">Whether to save line widths</param>
         ''' <param name="savePointsVisibility">Whether to save points visibility</param>
-        Public Overloads Shared Sub writeFile(ByRef tsList As List(Of TimeSeries), file As String,
+        Public Overloads Shared Sub WriteFile(ByRef tsList As List(Of TimeSeries), file As String,
                                      Optional saveRelativePaths As Boolean = False,
                                      Optional saveTitle As Boolean = False,
                                      Optional saveUnit As Boolean = False,
@@ -210,7 +210,7 @@ Namespace Parsers
             Next
             If Not haveFileDatasources Then
                 Dim msg As String = $"None of the series originate from a file import! No project file was saved! Save the chart with data or export the time series to preserve them!"
-                Log.AddLogEntry(Log.levels.error, msg)
+                Log.AddLogEntry(Log.Levels.error, msg)
                 Throw New Exception(msg)
             End If
 
@@ -232,7 +232,7 @@ Namespace Parsers
             For Each ts As TimeSeries In tsList
                 If Not ts.DataSource.Origin = TimeSeriesDataSource.OriginEnum.FileImport Then
                     unsavedSeries.Add(ts.Title)
-                    Log.AddLogEntry(Log.levels.warning, $"Series '{ts.Title}' with datasource {ts.DataSource} does not originate from a file import and could not be saved to the project file!")
+                    Log.AddLogEntry(Log.Levels.warning, $"Series '{ts.Title}' with datasource {ts.DataSource} does not originate from a file import and could not be saved to the project file!")
                 Else
                     filePath = ts.DataSource.FilePath
                     If saveRelativePaths Then
@@ -295,10 +295,10 @@ Namespace Parsers
             fs.Close()
 
             If unsavedSeries.Count = 0 Then
-                Log.AddLogEntry(Log.levels.info, $"Wave project file {file} saved.")
+                Log.AddLogEntry(Log.Levels.info, $"Wave project file {file} saved.")
             Else
                 Dim msg As String = $"Wave project file {file} saved. {unsavedSeries.Count} series could not be saved! Save the chart with data or export the time series to preserve them!"
-                Log.AddLogEntry(Log.levels.warning, msg)
+                Log.AddLogEntry(Log.Levels.warning, msg)
                 Throw New Exception(msg)
             End If
 

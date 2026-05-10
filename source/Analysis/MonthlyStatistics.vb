@@ -167,7 +167,7 @@ Friend Class MonthlyStatistics
         Dim N As Long
         Dim sum, sumofsquares As Double
 
-        reihe = Me.InputTimeSeries.Item(0).removeNaNValues()
+        reihe = Me.InputTimeSeries.Item(0).RemoveNaNValues()
 
         'Sort values into months
         For i = 0 To reihe.Length - 1
@@ -213,7 +213,7 @@ Friend Class MonthlyStatistics
                         .median = .values(((N + 1) / 2) - 1)
                     End If
                 Else
-                    Log.AddLogEntry(Log.levels.warning, $"The series does not contain any data for the month of { .month}!")
+                    Log.AddLogEntry(Log.Levels.warning, $"The series does not contain any data for the month of { .month}!")
                     'TODO: ideally we would set all result values to Double.NaN here but this inexplicably causes the result chart to crash!
                 End If
 

@@ -81,12 +81,12 @@ Namespace Fileformats
             'set default metadata keys
             Me.FileMetadata.AddKeys(ZRXP.MetadataKeys)
 
-            Call Me.readSeriesInfo()
+            Call Me.ReadSeriesInfo()
 
             If (ReadAllNow) Then
                 'read immediately
-                Call Me.selectAllSeries()
-                Call Me.readFile()
+                Call Me.SelectAllSeries()
+                Call Me.ReadFile()
             End If
 
         End Sub
@@ -97,7 +97,7 @@ Namespace Fileformats
         ''' <param name="file">path to file</param>
         ''' <returns>Boolean</returns>
         ''' <remarks>Checks whether the first or second line starts with the string "#ZRXP"</remarks>
-        Public Shared Function verifyFormat(file As String) As Boolean
+        Public Shared Function VerifyFormat(file As String) As Boolean
 
             Dim line As String
             Dim isZRXP As Boolean = False
@@ -136,7 +136,7 @@ Namespace Fileformats
         ''' Reads the metadata from the file
         ''' </summary>
         ''' <remarks></remarks>
-        Public Overrides Sub readSeriesInfo()
+        Public Overrides Sub ReadSeriesInfo()
 
             Dim i As Integer
             Dim line, data(), value As String
@@ -179,7 +179,7 @@ Namespace Fileformats
                     Next
                 Else
                     'end of header reached
-                    Me.iLineData = i
+                    Me.LineNumberData = i
                     Exit Do
                 End If
             Loop Until StrReadSync.Peek() = -1
@@ -216,7 +216,7 @@ Namespace Fileformats
         ''' reads the file
         ''' </summary>
         ''' <remarks></remarks>
-        Public Overrides Sub readFile()
+        Public Overrides Sub ReadFile()
 
             Dim line, parts() As String
             Dim datestring, valuestring As String
@@ -259,10 +259,10 @@ Namespace Fileformats
 
                         'parse date
                         datestring = parts(0)
-                        timestamp = parseDateString(datestring)
+                        timestamp = ParseDateString(datestring)
                         'parse value
                         valuestring = parts(1)
-                        value = parseValueString(valuestring)
+                        value = ParseValueString(valuestring)
 
                         'store node
                         ts.AddNode(timestamp, value)
@@ -272,17 +272,17 @@ Namespace Fileformats
 
                         'parse initialization date ("timestamp")
                         Dim initDateString As String = parts(0)
-                        Dim initDate As DateTime = parseDateString(initDateString)
+                        Dim initDate As DateTime = ParseDateString(initDateString)
 
                         'parse forecast valid date ("forecast")
-                        Dim forecastdate As DateTime = parseDateString(parts(1))
+                        Dim forecastdate As DateTime = ParseDateString(parts(1))
 
                         'parse member number
                         Dim member As Integer = Integer.Parse(parts(2))
 
                         'parse value
                         valuestring = parts(3)
-                        value = parseValueString(valuestring)
+                        value = ParseValueString(valuestring)
 
                         'add a time series for each new initialization date and member
                         If Not ts_ensemble.ContainsKey(initDate) Then
@@ -311,7 +311,7 @@ Namespace Fileformats
             FiStr.Close()
 
             If Me.errorcount > 0 Then
-                Log.AddLogEntry(Log.levels.warning, $"The file contained {Me.errorcount} error values ({Me.FileMetadata("RINVAL")}), which were converted to NaN!")
+                Log.AddLogEntry(Log.Levels.warning, $"The file contained {Me.errorcount} error values ({Me.FileMetadata("RINVAL")}), which were converted to NaN!")
             End If
 
             'store time series
@@ -336,7 +336,7 @@ Namespace Fileformats
         ''' </summary>
         ''' <param name="datestring"></param>
         ''' <returns></returns>
-        Private Function parseDateString(datestring As String) As DateTime
+        Private Function ParseDateString(datestring As String) As DateTime
 
             Dim timestamp As DateTime
             Dim ok As Boolean
@@ -356,7 +356,7 @@ Namespace Fileformats
                     Dim minute As Integer = Integer.Parse(datestring.Substring(10, 2))
                     Dim second As Integer = Integer.Parse(datestring.Substring(12, 2))
                     timestamp = New DateTime(year, month, day, 0, minute, second) + New TimeSpan(days:=1, 0, 0, 0)
-                    Log.AddLogEntry(levels.debug, $"Non-standard timestamp '{datestring}' parsed manually to {timestamp:G}")
+                    Log.AddLogEntry(Levels.debug, $"Non-standard timestamp '{datestring}' parsed manually to {timestamp:G}")
                 Else
                     Throw New Exception($"Unable to parse the date '{datestring}' using the expected date format '{Me.Dateformat}'!")
                 End If
@@ -369,7 +369,7 @@ Namespace Fileformats
         ''' </summary>
         ''' <param name="valueString"></param>
         ''' <returns></returns>
-        Private Function parseValueString(valueString As String) As Double
+        Private Function ParseValueString(valueString As String) As Double
 
             Dim value As Double
 
@@ -415,7 +415,7 @@ Namespace Fileformats
         ''' <summary>
         ''' Sets default metadata values for a time series corresponding to the ZRXP file format
         ''' </summary>
-        Public Overloads Shared Sub setDefaultMetadata(ts As TimeSeries)
+        Public Overloads Shared Sub SetDefaultMetadata(ts As TimeSeries)
             'Make sure all required keys exist
             ts.Metadata.AddKeys(ZRXP.MetadataKeys)
             'Set default values
@@ -436,14 +436,14 @@ Namespace Fileformats
         ''' <param name="ts">the time series to export</param>
         ''' <param name="file">path to the file</param>
         ''' <remarks></remarks>
-        Public Overloads Shared Sub writeFile(ByRef ts As TimeSeries, file As String)
+        Public Overloads Shared Sub WriteFile(ByRef ts As TimeSeries, file As String)
 
             Dim strwrite As StreamWriter
 
             'ensure that all required metadata keys are present
             ts.Metadata.AddKeys(ZRXP.MetadataKeys)
             'set default values
-            ZRXP.setDefaultMetadata(ts)
+            ZRXP.SetDefaultMetadata(ts)
 
             strwrite = New StreamWriter(file, False, Helpers.DefaultEncoding)
 

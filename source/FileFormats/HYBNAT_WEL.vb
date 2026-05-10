@@ -81,7 +81,7 @@ Namespace Fileformats
             DateTimeColumnIndex = 0
             refDate = New DateTime(2000, 1, 1, 0, 0, 0)
 
-            Call readSeriesInfo()
+            Call ReadSeriesInfo()
 
         End Sub
 
@@ -91,7 +91,7 @@ Namespace Fileformats
         ''' <param name="file">Path to file</param>
         ''' <returns>Boolean</returns>
         ''' <remarks>Check is based on line 4 (must start with "Ganglinien:")</remarks>
-        Public Shared Function verifyFormat(file As String) As Boolean
+        Public Shared Function VerifyFormat(file As String) As Boolean
             'Check if file name ends with .wel
             Dim filename As String = Path.GetFileName(file).ToLower()
             If Not filename.EndsWith(".wel") Then Return False
@@ -126,7 +126,7 @@ Namespace Fileformats
         ''' Read number of columns and their names
         ''' </summary>
         ''' <remarks></remarks>
-        Public Overrides Sub readSeriesInfo()
+        Public Overrides Sub ReadSeriesInfo()
             'Clear series infos
             TimeSeriesInfos.Clear()
 
@@ -159,22 +159,22 @@ Namespace Fileformats
             'Initialize arrays for column names and units
             Dim columnNames() As String = Nothing
             Dim columnUnits() As String = Nothing
-            iLineHeadings = 0
+            LineNumberHeaders = 0
 
             'Loop throgh file until line starts with "Zeit"
             Do
                 Dim line As String = syncReader.ReadLine()
                 If line.Trim().StartsWith("zeit", StringComparison.CurrentCultureIgnoreCase) Then
                     'Set line numbers for headings, units and data
-                    iLineUnits = iLineHeadings + 1
-                    iLineData = iLineHeadings + 3
+                    LineNumberUnits = LineNumberHeaders + 1
+                    LineNumberData = LineNumberHeaders + 3
 
                     'Read headings and units
                     columnNames = line.Split(New Char() {" "}, System.StringSplitOptions.RemoveEmptyEntries)
                     columnUnits = syncReader.ReadLine.Split(New Char() {" "}, System.StringSplitOptions.RemoveEmptyEntries)
                     Exit Do
                 End If
-                iLineHeadings += 1
+                LineNumberHeaders += 1
             Loop Until syncReader.Peek() = -1
 
             'Close file
@@ -204,7 +204,7 @@ Namespace Fileformats
         ''' Reads the time series from the file
         ''' </summary>
         ''' <remarks></remarks>
-        Public Overrides Sub readFile()
+        Public Overrides Sub ReadFile()
             'Show dialog for setting the reference date
             Dim dlg As New ReferenceDateDialog()
             dlg.ShowDialog()
@@ -233,7 +233,7 @@ Namespace Fileformats
             Dim syncReader = TextReader.Synchronized(reader)
 
             'Overjump lines with headings and units
-            For i = 1 To iLineData
+            For i = 1 To LineNumberData
                 syncReader.ReadLine()
             Next
 

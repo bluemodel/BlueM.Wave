@@ -82,10 +82,10 @@ Namespace Fileformats
 
             'Voreinstellungen
             Me.iLineInfo = 1
-            Me.iLineHeadings = 2
+            Me.LineNumberHeaders = 2
             Me.UseUnits = True
-            Me.iLineUnits = 3
-            Me.iLineData = 4
+            Me.LineNumberUnits = 3
+            Me.LineNumberData = 4
             Me.IsColumnSeparated = True
             Me.ColumnOffset = 1
             Me.Separator = Constants.semicolon
@@ -94,12 +94,12 @@ Namespace Fileformats
             Me.DateTimeLength = 17
             Me.Encoding = Text.Encoding.GetEncoding("iso-8859-1")
 
-            Call Me.readSeriesInfo()
+            Call Me.ReadSeriesInfo()
 
             If (ReadAllNow) Then
                 'Datei komplett einlesen
-                Call Me.selectAllSeries()
-                Call Me.readFile()
+                Call Me.SelectAllSeries()
+                Call Me.ReadFile()
             End If
 
 
@@ -108,7 +108,7 @@ Namespace Fileformats
         ''' <summary>
         ''' Spalten auslesen
         ''' </summary>
-        Public Overrides Sub readSeriesInfo()
+        Public Overrides Sub ReadSeriesInfo()
 
             Dim i As Integer
             Dim Zeile As String = ""
@@ -125,11 +125,11 @@ Namespace Fileformats
             Dim StrReadSync As TextReader = TextReader.Synchronized(StrRead)
 
             'Spaltenüberschriften auslesen
-            For i = 1 To Me.iLineUnits
+            For i = 1 To Me.LineNumberUnits
                 Zeile = StrReadSync.ReadLine.ToString()
                 If (i = Me.iLineInfo) Then LineInfo = Zeile
-                If (i = Me.iLineHeadings) Then ZeileSpalten = Zeile
-                If (i = Me.iLineUnits) Then ZeileEinheiten = Zeile
+                If (i = Me.LineNumberHeaders) Then ZeileSpalten = Zeile
+                If (i = Me.LineNumberUnits) Then ZeileEinheiten = Zeile
             Next
 
             'Are columns separted by ";" or should fixed format be used?
@@ -175,7 +175,7 @@ Namespace Fileformats
                     sInfo = New TimeSeriesInfo()
                     sInfo.Name = ZeileSpalten.Substring(Me.DateTimeLength + (i - 1) * Me.ColumnWidth, Me.ColumnWidth).Trim()
                     If ZeileEinheiten.Length < Me.DateTimeLength + (i - 1) * Me.ColumnWidth + Me.ColumnWidth Then
-                        Log.AddLogEntry(levels.warning, $"Unable to read unit for series {sInfo.Name}!")
+                        Log.AddLogEntry(Levels.warning, $"Unable to read unit for series {sInfo.Name}!")
                         sInfo.Unit = "-"
                     Else
                         sInfo.Unit = ZeileEinheiten.Substring(Me.DateTimeLength + (i - 1) * Me.ColumnWidth, Me.ColumnWidth).Trim()
@@ -190,7 +190,7 @@ Namespace Fileformats
         ''' <summary>
         ''' WEL-Datei einlesen
         ''' </summary>
-        Public Overrides Sub readFile()
+        Public Overrides Sub ReadFile()
 
             Dim iZeile As Integer
             Dim Zeile As String
@@ -224,7 +224,7 @@ Namespace Fileformats
             '--------
 
             'Header
-            For iZeile = 1 To Me.nLinesHeader
+            For iZeile = 1 To Me.NLinesHeader
                 Zeile = StrReadSync.ReadLine.ToString()
             Next
 

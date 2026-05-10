@@ -52,28 +52,28 @@ Namespace Fileformats
             MyBase.New(FileName)
 
             'Voreinstellungen
-            Me.iLineHeadings = 2
+            Me.LineNumberHeaders = 2
             Me.UseUnits = True
-            Me.iLineUnits = 3
-            Me.iLineData = 4
+            Me.LineNumberUnits = 3
+            Me.LineNumberData = 4
             Me.IsColumnSeparated = True
             Me.Separator = Constants.space
             Me.DecimalSeparator = Constants.period
             Me.DateTimeColumnIndex = 0
 
-            Call Me.readSeriesInfo()
+            Call Me.ReadSeriesInfo()
 
             If (ReadAllNow) Then
                 'Datei komplett einlesen
-                Call Me.selectAllSeries()
-                Call Me.readFile()
+                Call Me.SelectAllSeries()
+                Call Me.ReadFile()
             End If
 
         End Sub
 
         'Spalten auslesen
         '****************
-        Public Overrides Sub readSeriesInfo()
+        Public Overrides Sub ReadSeriesInfo()
 
             Dim i As Integer
             Dim sInfo As TimeSeriesInfo
@@ -89,10 +89,10 @@ Namespace Fileformats
             Dim StrReadSync As TextReader = TextReader.Synchronized(StrRead)
 
             'Spaltenüberschriften
-            For i = 1 To Me.iLineData
+            For i = 1 To Me.LineNumberData
                 Zeile = StrReadSync.ReadLine.ToString
-                If (i = Me.iLineHeadings) Then ZeileSpalten = Zeile
-                If (i = Me.iLineUnits) Then ZeileEinheiten = Zeile
+                If (i = Me.LineNumberHeaders) Then ZeileSpalten = Zeile
+                If (i = Me.LineNumberUnits) Then ZeileEinheiten = Zeile
             Next
             StrReadSync.Close()
             StrRead.Close()
@@ -134,7 +134,7 @@ Namespace Fileformats
 
         'ASC-Datei einlesen
         '******************
-        Public Overrides Sub readFile()
+        Public Overrides Sub ReadFile()
 
             Dim i As Integer
             Dim Zeile As String
@@ -164,7 +164,7 @@ Namespace Fileformats
             '--------
 
             'Header
-            For i = 1 To Me.nLinesHeader + 1
+            For i = 1 To Me.NLinesHeader + 1
                 StrReadSync.ReadLine()
             Next
 
@@ -205,7 +205,7 @@ Namespace Fileformats
                             Next
 
                             'Log
-                            Call Log.AddLogEntry(Log.levels.info, $"Die Lücke zwischen {datumLast.ToString(Helpers.CurrentDateFormat)} und {datum.ToString(Helpers.CurrentDateFormat)} wurde mit 0-Werten abgeschlossen.")
+                            Call Log.AddLogEntry(Log.Levels.info, $"Die Lücke zwischen {datumLast.ToString(Helpers.CurrentDateFormat)} und {datum.ToString(Helpers.CurrentDateFormat)} wurde mit 0-Werten abgeschlossen.")
                         End If
                         Ereignisende = False 'zurücksetzen
 

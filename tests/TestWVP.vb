@@ -76,7 +76,7 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
 
         'write the time series to a WVP file
         Dim fileOut As String = IO.Path.Combine(TestData.getTestDataDir(), "WVP", "test_displayoptions_export.wvp")
-        Call Parsers.WVP.writeFile(tsList, fileOut,
+        Call Parsers.WVP.WriteFile(tsList, fileOut,
                                    saveRelativePaths:=True,
                                    saveTitle:=True,
                                    saveUnit:=True,

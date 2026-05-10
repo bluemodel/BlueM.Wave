@@ -88,9 +88,9 @@ Module TestData
         If Not IO.File.Exists(fullPath) Then
             Throw New Exception($"File {fullPath} not found!")
         End If
-        Dim file As TimeSeriesFile = TimeSeriesFile.getInstance(fullPath)
+        Dim file As TimeSeriesFile = TimeSeriesFile.GetInstance(fullPath)
         ' read the first time series from the file
-        Dim ts As TimeSeries = file.getTimeSeries(0)
+        Dim ts As TimeSeries = file.GetTimeSeries(0)
         Return ts
     End Function
 

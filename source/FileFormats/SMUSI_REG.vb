@@ -67,22 +67,22 @@ Namespace Fileformats
 
             'Voreinstellungen
             Me.Dateformat = DateFormats("SMUSI")
-            Me.iLineData = 4
+            Me.LineNumberData = 4
             Me.UseUnits = True
 
-            Call Me.readSeriesInfo()
+            Call Me.ReadSeriesInfo()
 
             If (ReadAllNow) Then
                 'Direkt einlesen
-                Call Me.selectAllSeries()
-                Call Me.readFile()
+                Call Me.SelectAllSeries()
+                Call Me.ReadFile()
             End If
 
         End Sub
 
         'Spalten auslesen
         '****************
-        Public Overrides Sub readSeriesInfo()
+        Public Overrides Sub ReadSeriesInfo()
 
             Dim Zeile, title As String
             Dim sInfo As TimeSeriesInfo
@@ -118,7 +118,7 @@ Namespace Fileformats
 
         'SMUSI_REG-Datei einlesen
         '******************
-        Public Overrides Sub readFile()
+        Public Overrides Sub ReadFile()
 
             Dim i, j As Integer
             Dim leerzeile As Boolean
@@ -148,7 +148,7 @@ Namespace Fileformats
                 j += 1
                 Zeile = StrReadSync.ReadLine.ToString()
 
-                If (j > Me.nLinesHeader) Then
+                If (j > Me.NLinesHeader) Then
 
                     If (Zeile.Trim.Length < 1) Then
                         'Leere Zeile

@@ -158,7 +158,7 @@ Namespace Fileformats
                     If items.Contains(eumItem) Then
                         item = eumItem
                     Else
-                        Log.AddLogEntry(levels.debug, $"Metadata eumItem '{eumItemString}' is not contained in list.")
+                        Log.AddLogEntry(Levels.debug, $"Metadata eumItem '{eumItemString}' is not contained in list.")
                     End If
                 End If
                 'cast item and unit cell values to Integer to prevent automatic conversion of enum members to string

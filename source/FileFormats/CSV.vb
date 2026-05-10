@@ -48,12 +48,12 @@ Namespace Fileformats
             'Me.Dateformat = Helpers.CurrentDateFormat.ShortDatePattern & " " & Helpers.CurrentDateFormat.LongTimePattern
             'Me.Separator = New Character(Helpers.CurrentListSeparator)
             'Me.DecimalSeparator = New Character(Helpers.CurrentNumberFormat.NumberDecimalSeparator)
-            Call Me.readSeriesInfo()
+            Call Me.ReadSeriesInfo()
         End Sub
 
         'Spalten auslesen
         '****************
-        Public Overrides Sub readSeriesInfo()
+        Public Overrides Sub ReadSeriesInfo()
 
             Dim i As Integer
             Dim sInfo As TimeSeriesInfo
@@ -69,10 +69,10 @@ Namespace Fileformats
             Dim StrReadSync = TextReader.Synchronized(StrRead)
 
             'Spaltenüberschriften auslesen
-            For i = 1 To Math.Max(Me.iLineData, Me.iLineHeadings + 1)
+            For i = 1 To Math.Max(Me.LineNumberData, Me.LineNumberHeaders + 1)
                 Zeile = StrReadSync.ReadLine()
-                If (i = Me.iLineHeadings) Then ZeileSpalten = Zeile
-                If (i = Me.iLineUnits) Then ZeileEinheiten = Zeile
+                If (i = Me.LineNumberHeaders) Then ZeileSpalten = Zeile
+                If (i = Me.LineNumberUnits) Then ZeileEinheiten = Zeile
             Next
 
             StrReadSync.Close()
@@ -82,7 +82,7 @@ Namespace Fileformats
             'handle case where no units line was read
             If IsNothing(ZeileEinheiten) Then
                 Me.UseUnits = False
-                Me.iLineData = Me.iLineHeadings + 1
+                Me.LineNumberData = Me.LineNumberHeaders + 1
             End If
 
             'Spaltennamen auslesen
@@ -148,7 +148,7 @@ Namespace Fileformats
 
         'CSV-Datei einlesen
         '******************
-        Public Overrides Sub readFile()
+        Public Overrides Sub ReadFile()
 
             Dim i As Integer
             Dim Zeile As String
@@ -188,7 +188,7 @@ Namespace Fileformats
             '--------
 
             'Header
-            For i = 0 To Me.nLinesHeader - 1
+            For i = 0 To Me.NLinesHeader - 1
                 StrReadSync.ReadLine()
             Next
 
@@ -246,7 +246,7 @@ Namespace Fileformats
         '''     if not set, these settings are taken from CurrentCulture
         ''' </param>
         ''' <remarks></remarks>
-        Public Overloads Shared Sub writeFile(ByRef tsList As List(Of TimeSeries), file As String, Optional cInfo As CultureInfo = Nothing)
+        Public Overloads Shared Sub WriteFile(ByRef tsList As List(Of TimeSeries), file As String, Optional cInfo As CultureInfo = Nothing)
 
             Dim strwrite As StreamWriter
             Dim t As DateTime

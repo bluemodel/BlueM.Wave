@@ -112,18 +112,18 @@ Namespace Fileformats
             MyBase.New(FileName)
 
             'Voreinstellungen
-            Me.iLineHeadings = 2
+            Me.LineNumberHeaders = 2
             Me.UseUnits = True
             Me.IsColumnSeparated = False
             Me.ColumnOffset = 0
             Me.DecimalSeparator = Constants.period
 
-            Call Me.readSeriesInfo()
+            Call Me.ReadSeriesInfo()
 
             If (ReadAllNow) Then
                 'Datei komplett einlesen
-                Call Me.selectAllSeries()
-                Call Me.readFile()
+                Call Me.SelectAllSeries()
+                Call Me.ReadFile()
             End If
 
         End Sub
@@ -131,7 +131,7 @@ Namespace Fileformats
         ''' <summary>
         ''' Spaltenköpfe auslesen
         ''' </summary>
-        Public Overrides Sub readSeriesInfo()
+        Public Overrides Sub ReadSeriesInfo()
 
             Dim i, j As Integer
             Dim Zeile As String = ""
@@ -194,7 +194,7 @@ Namespace Fileformats
             anzSpalten = AnzConstituents * AnzNodes
 
             'iZeileDaten kann erst jetzt gesetzt werden, wenn AnzZeilen_dT bekannt ist
-            Me.iLineData = iZeileAnzConstituents + AnzConstituents + AnzNodes + 3
+            Me.LineNumberData = iZeileAnzConstituents + AnzConstituents + AnzNodes + 3
 
             'Spaltenköpfe (Zuflussknoten) und Indizes einlesen
             index = 1
@@ -226,7 +226,7 @@ Namespace Fileformats
         ''' <summary>
         ''' Zeitreihen einlesen
         ''' </summary>
-        Public Overrides Sub readFile()
+        Public Overrides Sub ReadFile()
 
             Dim iZeile, i As Integer, j As Integer
             Dim Zeile As String
@@ -264,7 +264,7 @@ Namespace Fileformats
             '--------
             ReDim Werte(AnzConstituents * AnzNodes)
             'Header
-            For iZeile = 1 To Me.iLineData - 1
+            For iZeile = 1 To Me.LineNumberData - 1
                 Zeile = StrReadSync.ReadLine.ToString()
             Next
 

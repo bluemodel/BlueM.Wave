@@ -69,11 +69,11 @@ Namespace Fileformats
 
             Me.UseUnits = False
 
-            Call Me.readSeriesInfo()
+            Call Me.ReadSeriesInfo()
 
             If ReadAllNow Then
-                Call Me.selectAllSeries()
-                Call Me.readFile()
+                Call Me.SelectAllSeries()
+                Call Me.ReadFile()
             End If
 
         End Sub
@@ -83,7 +83,7 @@ Namespace Fileformats
         ''' Reads series info from the GINA HDF5 file
         ''' Creates a separate entry for each column of each dataset (e.g., T_Dru0161_Qzu, T_Dru0161_Qab)
         ''' </summary>
-        Public Overrides Sub readSeriesInfo()
+        Public Overrides Sub ReadSeriesInfo()
 
             Dim sInfo As TimeSeriesInfo
             Dim index As Integer = 0
@@ -127,7 +127,7 @@ Namespace Fileformats
                         Throw New Exception($"Data group '{_dataGroupName}' does not contain a required 'time' dataset!")
                     End If
 
-                    Log.AddLogEntry(Log.levels.info, $"Found data group: {_dataGroupName}")
+                    Log.AddLogEntry(Log.Levels.info, $"Found data group: {_dataGroupName}")
 
                     'Read column names and units from group attributes if available
                     Dim columnNames As String() = Nothing
@@ -137,9 +137,9 @@ Namespace Fileformats
                         Try
                             Dim namesAttr = dataGroup.Attribute("Spalten_Namen")
                             columnNames = namesAttr.Read(Of String())()
-                            Log.AddLogEntry(Log.levels.info, $"Read column names from attribute: {String.Join(", ", columnNames)}")
+                            Log.AddLogEntry(Log.Levels.info, $"Read column names from attribute: {String.Join(", ", columnNames)}")
                         Catch ex As Exception
-                            Log.AddLogEntry(Log.levels.warning, $"Could not read Spalten_Namen attribute: {ex.Message}")
+                            Log.AddLogEntry(Log.Levels.warning, $"Could not read Spalten_Namen attribute: {ex.Message}")
                         End Try
                     End If
 
@@ -147,9 +147,9 @@ Namespace Fileformats
                         Try
                             Dim unitsAttr = dataGroup.Attribute("Spalten_Einheiten")
                             columnUnits = unitsAttr.Read(Of String())()
-                            Log.AddLogEntry(Log.levels.info, $"Read column units from attribute: {String.Join(", ", columnUnits)}")
+                            Log.AddLogEntry(Log.Levels.info, $"Read column units from attribute: {String.Join(", ", columnUnits)}")
                         Catch ex As Exception
-                            Log.AddLogEntry(Log.levels.warning, $"Could not read Spalten_Einheiten attribute: {ex.Message}")
+                            Log.AddLogEntry(Log.Levels.warning, $"Could not read Spalten_Einheiten attribute: {ex.Message}")
                         End Try
                     End If
 
@@ -219,10 +219,10 @@ Namespace Fileformats
 
                 End Using
 
-                Log.AddLogEntry(Log.levels.info, $"Found {Me.TimeSeriesInfos.Count} series in GINA HDF5 file.")
+                Log.AddLogEntry(Log.Levels.info, $"Found {Me.TimeSeriesInfos.Count} series in GINA HDF5 file.")
 
             Catch ex As Exception
-                Log.AddLogEntry(Log.levels.error, $"Error reading GINA HDF5 file: {ex.Message}")
+                Log.AddLogEntry(Log.Levels.error, $"Error reading GINA HDF5 file: {ex.Message}")
                 Throw
             End Try
 
@@ -232,7 +232,7 @@ Namespace Fileformats
         ''' <summary>
         ''' Reads the selected series from the GINA HDF5 file
         ''' </summary>
-        Public Overrides Sub readFile()
+        Public Overrides Sub ReadFile()
 
             If Me.SelectedSeries.Count = 0 Then
                 Throw New Exception("No series selected for import!")
@@ -253,7 +253,7 @@ Namespace Fileformats
                             Dim namesAttr = dataGroup.Attribute("Spalten_Namen")
                             columnNames = namesAttr.Read(Of String())()
                         Catch ex As Exception
-                            Log.AddLogEntry(Log.levels.warning, $"Could not read Spalten_Namen attribute: {ex.Message}")
+                            Log.AddLogEntry(Log.Levels.warning, $"Could not read Spalten_Namen attribute: {ex.Message}")
                         End Try
                     End If
 
@@ -262,7 +262,7 @@ Namespace Fileformats
                             Dim unitsAttr = dataGroup.Attribute("Spalten_Einheiten")
                             columnUnits = unitsAttr.Read(Of String())()
                         Catch ex As Exception
-                            Log.AddLogEntry(Log.levels.warning, $"Could not read Spalten_Einheiten attribute: {ex.Message}")
+                            Log.AddLogEntry(Log.Levels.warning, $"Could not read Spalten_Einheiten attribute: {ex.Message}")
                         End Try
                     End If
 
@@ -288,7 +288,7 @@ Namespace Fileformats
                         End If
                     Next
 
-                    Log.AddLogEntry(Log.levels.info, $"Read {timestamps.Count} timestamps from 'time' dataset.")
+                    Log.AddLogEntry(Log.Levels.info, $"Read {timestamps.Count} timestamps from 'time' dataset.")
 
                     'Group selected series by dataset name (series name format: "DatasetName_ColumnName")
                     Dim datasetColumns As New Dictionary(Of String, List(Of Tuple(Of Integer, String, String, Integer)))  'DatasetName -> List of (colIndex, colName, unit, seriesIndex)
@@ -336,7 +336,7 @@ Namespace Fileformats
                                     End If
                                     datasetColumns(datasetName).Add(Tuple.Create(colIndex, colName, sInfo.Unit, sInfo.Index))
                                 Else
-                                    Log.AddLogEntry(Log.levels.warning, $"Could not determine column index for series '{sInfo.Name}'")
+                                    Log.AddLogEntry(Log.Levels.warning, $"Could not determine column index for series '{sInfo.Name}'")
                                 End If
                             Else
                                 '1D dataset (no column suffix) - treat as single series
@@ -372,7 +372,7 @@ Namespace Fileformats
                                 Next
 
                                 Me.TimeSeries.Add(colInfo.Item4, ts)
-                                Log.AddLogEntry(Log.levels.info, $"Read series '{datasetName}' with {ts.Length} nodes.")
+                                Log.AddLogEntry(Log.Levels.info, $"Read series '{datasetName}' with {ts.Length} nodes.")
 
                             ElseIf dimensions.Length = 2 Then
                                 '2D dataset - read entire dataset, then extract selected columns
@@ -380,7 +380,7 @@ Namespace Fileformats
                                 Dim numTimesteps As Integer = CInt(dimensions(1))
 
                                 Dim flatValues As Single() = dataset.Read(Of Single())()
-                                Log.AddLogEntry(Log.levels.info, $"Read dataset '{datasetName}': {flatValues.Length} values ({numDataCols} columns x {numTimesteps} timesteps)")
+                                Log.AddLogEntry(Log.Levels.info, $"Read dataset '{datasetName}': {flatValues.Length} values ({numDataCols} columns x {numTimesteps} timesteps)")
 
                                 'Extract only the selected columns
                                 For Each colInfo In columnsToRead
@@ -405,17 +405,17 @@ Namespace Fileformats
                                         Next
 
                                         Me.TimeSeries.Add(seriesIndex, ts)
-                                        Log.AddLogEntry(Log.levels.info, $"Read series '{seriesName}' (unit: {colUnit}) with {ts.Length} nodes.")
+                                        Log.AddLogEntry(Log.Levels.info, $"Read series '{seriesName}' (unit: {colUnit}) with {ts.Length} nodes.")
                                     Else
-                                        Log.AddLogEntry(Log.levels.warning, $"Column index {colIndex} out of range for dataset '{datasetName}' (has {numDataCols} columns)")
+                                        Log.AddLogEntry(Log.Levels.warning, $"Column index {colIndex} out of range for dataset '{datasetName}' (has {numDataCols} columns)")
                                     End If
                                 Next
                             End If
 
                         Catch ex As Exception
-                            Log.AddLogEntry(Log.levels.error, $"Error reading dataset '{datasetName}': {ex.Message}")
+                            Log.AddLogEntry(Log.Levels.error, $"Error reading dataset '{datasetName}': {ex.Message}")
                             If ex.InnerException IsNot Nothing Then
-                                Log.AddLogEntry(Log.levels.error, $"Inner exception: {ex.InnerException.Message}")
+                                Log.AddLogEntry(Log.Levels.error, $"Inner exception: {ex.InnerException.Message}")
                             End If
                         End Try
                     Next
@@ -423,7 +423,7 @@ Namespace Fileformats
                 End Using
 
             Catch ex As Exception
-                Log.AddLogEntry(Log.levels.error, $"Error reading GINA HDF5 file: {ex.Message}")
+                Log.AddLogEntry(Log.Levels.error, $"Error reading GINA HDF5 file: {ex.Message}")
                 Throw
             End Try
 
@@ -434,7 +434,7 @@ Namespace Fileformats
         ''' </summary>
         ''' <param name="file">Path to the file</param>
         ''' <returns>True if the file is a valid GINA HDF5 file with timeseries structure containing time and element datasets</returns>
-        Public Shared Function verifyFormat(file As String) As Boolean
+        Public Shared Function VerifyFormat(file As String) As Boolean
             Try
                 Using h5File As NativeFile = PureHDF.H5File.OpenRead(file)
                     'Check if 'timeseries' group exists

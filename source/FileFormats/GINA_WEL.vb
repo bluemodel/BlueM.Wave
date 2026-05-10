@@ -41,11 +41,11 @@ Namespace Fileformats
             Me.UseUnits = True
 
             ' Index of header rows
-            Me.iLineHeadings = 6
-            Me.iLineUnits = 7
-            Me.iLineData = 8
+            Me.LineNumberHeaders = 6
+            Me.LineNumberUnits = 7
+            Me.LineNumberData = 8
 
-            Call Me.readSeriesInfo()
+            Call Me.ReadSeriesInfo()
 
         End Sub
 

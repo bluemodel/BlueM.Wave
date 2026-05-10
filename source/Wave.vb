@@ -113,7 +113,7 @@ Public Class Wave
         RaiseEvent IsBusyChanged(True)
 
         'Determine file type
-        Dim fileType As TimeSeriesFile.FileTypes = TimeSeriesFile.getFileType(file)
+        Dim fileType As TimeSeriesFile.FileTypes = TimeSeriesFile.GetFileType(file)
 
         Select Case fileType
 
@@ -131,10 +131,10 @@ Public Class Wave
 
                 Try
                     'Log
-                    Call Log.AddLogEntry(Log.levels.info, $"Importing file '{file}' ...")
+                    Call Log.AddLogEntry(Log.Levels.info, $"Importing file '{file}' ...")
 
                     'Datei-Instanz erzeugen
-                    fileInstance = TimeSeriesFile.getInstance(file, fileType)
+                    fileInstance = TimeSeriesFile.GetInstance(file, fileType)
 
                     If (fileInstance.UseImportDialog) Then
                         'Falls Importdialog erforderlich, diesen anzeigen
@@ -142,20 +142,20 @@ Public Class Wave
                         Call Application.DoEvents()
                     Else
                         'Ansonsten alle Spalten auswählen
-                        Call fileInstance.selectAllSeries()
+                        Call fileInstance.SelectAllSeries()
                         ok = True
                     End If
 
                     If (ok) Then
 
                         'Datei einlesen
-                        Call fileInstance.readFile()
+                        Call fileInstance.ReadFile()
 
                         'Log
-                        Call Log.AddLogEntry(Log.levels.info, $"File '{file}' imported successfully!")
+                        Call Log.AddLogEntry(Log.Levels.info, $"File '{file}' imported successfully!")
 
                         'Log
-                        Call Log.AddLogEntry(Log.levels.info, "Loading series in chart...")
+                        Call Log.AddLogEntry(Log.Levels.info, "Loading series in chart...")
 
                         'Import all time series into the chart
                         For Each ts As TimeSeries In fileInstance.TimeSeries.Values
@@ -168,18 +168,18 @@ Public Class Wave
                         Next
 
                         'Log
-                        Call Log.AddLogEntry(Log.levels.info, "Successfully loaded series in chart!")
+                        Call Log.AddLogEntry(Log.Levels.info, "Successfully loaded series in chart!")
 
                         RaiseEvent FileImported(file)
 
                     Else
                         'Import abgebrochen
-                        Log.AddLogEntry(Log.levels.error, "Import cancelled!")
+                        Log.AddLogEntry(Log.Levels.error, "Import cancelled!")
                     End If
 
                 Catch ex As Exception
                     MessageBox.Show("Error during import:" & eol & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-                    Call Log.AddLogEntry(Log.levels.error, "Error during import: " & ex.Message)
+                    Call Log.AddLogEntry(Log.Levels.error, "Error during import: " & ex.Message)
                 End Try
 
         End Select
@@ -196,27 +196,27 @@ Public Class Wave
     Private Sub Load_WVP(projectfile As String)
 
         Try
-            Call Log.AddLogEntry(Log.levels.info, $"Loading Wave project file '{projectfile}'...")
+            Call Log.AddLogEntry(Log.Levels.info, $"Loading Wave project file '{projectfile}'...")
 
             Dim wvp As New Parsers.WVP(projectfile)
             Dim tsList As List(Of TimeSeries) = wvp.Process()
 
-            Call Log.AddLogEntry(Log.levels.info, $"Imported {tsList.Count} timeseries")
+            Call Log.AddLogEntry(Log.Levels.info, $"Imported {tsList.Count} timeseries")
 
             'import the series
-            Call Log.AddLogEntry(Log.levels.info, "Loading series in chart...")
+            Call Log.AddLogEntry(Log.Levels.info, "Loading series in chart...")
             For Each ts As TimeSeries In tsList
                 Call Me.Import_Series(ts)
             Next
 
             'Log
-            Call Log.AddLogEntry(Log.levels.info, $"Project file '{projectfile}' loaded successfully!")
+            Call Log.AddLogEntry(Log.Levels.info, $"Project file '{projectfile}' loaded successfully!")
 
             RaiseEvent FileImported(projectfile)
 
         Catch ex As Exception
             MessageBox.Show("Error while loading project file:" & eol & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-            Call Log.AddLogEntry(Log.levels.error, "Error while loading project file:" & eol & ex.Message)
+            Call Log.AddLogEntry(Log.Levels.error, "Error while loading project file:" & eol & ex.Message)
         End Try
 
     End Sub
@@ -238,7 +238,7 @@ Public Class Wave
                 Dim clipboardtext As String
                 clipboardtext = Clipboard.GetText(TextDataFormat.Text)
 
-                If Parsers.TalsimClipboard.verifyFormat(clipboardtext) Then
+                If Parsers.TalsimClipboard.VerifyFormat(clipboardtext) Then
                     'ask the user for confirmation
                     dlgres = MessageBox.Show($"TALSIM clipboard content detected!{eol}Load series in Wave?", "Load from clipboard", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
                     If dlgres = DialogResult.Yes Then
@@ -250,7 +250,7 @@ Public Class Wave
                     If dlgres = DialogResult.Yes Then
                         'save as temp text file and then load file
                         Dim tmpfile As String = IO.Path.Combine(IO.Path.GetTempPath(), IO.Path.GetRandomFileName() & ".csv")
-                        Log.AddLogEntry(levels.info, $"Saving clipboard text to temporary file {tmpfile}...")
+                        Log.AddLogEntry(Levels.info, $"Saving clipboard text to temporary file {tmpfile}...")
                         Using fileStream As New IO.FileStream(tmpfile, IO.FileMode.CreateNew, IO.FileAccess.Write, IO.FileShare.None)
                             Using writer As New IO.StreamWriter(fileStream, Helpers.DefaultEncoding)
                                 writer.Write(clipboardtext)
@@ -266,7 +266,7 @@ Public Class Wave
             End If
 
         Catch ex As Exception
-            Log.AddLogEntry(Log.levels.error, ex.Message)
+            Log.AddLogEntry(Log.Levels.error, ex.Message)
             MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
 
@@ -282,25 +282,25 @@ Public Class Wave
     Private Sub LoadFromClipboard_TALSIM(clipboardtext As String)
 
         Try
-            Call Log.AddLogEntry(Log.levels.info, $"Parsing Talsim clipboard content...")
+            Call Log.AddLogEntry(Log.Levels.info, $"Parsing Talsim clipboard content...")
 
             Dim wvp As New Parsers.TalsimClipboard(clipboardtext)
             Dim tsList As List(Of TimeSeries) = wvp.Process()
 
-            Call Log.AddLogEntry(Log.levels.info, $"Imported {tsList.Count} timeseries")
+            Call Log.AddLogEntry(Log.Levels.info, $"Imported {tsList.Count} timeseries")
 
             'import the series
-            Call Log.AddLogEntry(Log.levels.info, "Loading series in chart...")
+            Call Log.AddLogEntry(Log.Levels.info, "Loading series in chart...")
             For Each ts As TimeSeries In tsList
                 Call Me.Import_Series(ts)
             Next
 
             'Log
-            Call Log.AddLogEntry(Log.levels.info, $"Talsim clipboard content parsed successfully!")
+            Call Log.AddLogEntry(Log.Levels.info, $"Talsim clipboard content parsed successfully!")
 
         Catch ex As Exception
             MessageBox.Show("Error while processing Talsim clipboard content:" & eol & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-            Call Log.AddLogEntry(Log.levels.error, "Error while processing Talsim clipboard content:" & eol & ex.Message)
+            Call Log.AddLogEntry(Log.Levels.error, "Error while processing Talsim clipboard content:" & eol & ex.Message)
         End Try
 
     End Sub
@@ -411,11 +411,11 @@ Public Class Wave
                     Case TimeSeriesFile.FileTypes.SWMM_INTERFACE
                         Fileformats.SWMM_INTERFACE.setDefaultMetadata(ts)
                     Case TimeSeriesFile.FileTypes.UVF
-                        Fileformats.UVF.setDefaultMetadata(ts)
+                        Fileformats.UVF.SetDefaultMetadata(ts)
                     Case TimeSeriesFile.FileTypes.ZRXP
-                        Fileformats.ZRXP.setDefaultMetadata(ts)
+                        Fileformats.ZRXP.SetDefaultMetadata(ts)
                     Case Else
-                        TimeSeriesFile.setDefaultMetadata(ts)
+                        TimeSeriesFile.SetDefaultMetadata(ts)
                 End Select
             End If
         Next
@@ -446,7 +446,7 @@ Public Class Wave
         End If
 
         'determine default file name for each series
-        Dim fileExt As String = TimeSeriesFile.getFileExtension(fileType).ToLower()
+        Dim fileExt As String = TimeSeriesFile.GetFileExtension(fileType).ToLower()
         Dim defaultFileNames As New List(Of String)
         For Each ts As TimeSeries In tsList
             Dim name As String = ts.Title
@@ -477,7 +477,7 @@ Public Class Wave
 
             folder = IO.Path.GetDirectoryName(dlg.FileName)
 
-            Log.AddLogEntry(Log.levels.info, $"Exporting time series to folder {folder}...")
+            Log.AddLogEntry(Log.Levels.info, $"Exporting time series to folder {folder}...")
 
         Else
             'let the user select a filename
@@ -562,15 +562,15 @@ Public Class Wave
                     End If
                 End If
 
-                Log.AddLogEntry(Log.levels.info, $"Exporting {tsList.Count} time series to file {filename}...")
+                Log.AddLogEntry(Log.Levels.info, $"Exporting {tsList.Count} time series to file {filename}...")
 
                 Select Case fileType
 
                     Case TimeSeriesFile.FileTypes.CSV
-                        Call Fileformats.CSV.writeFile(tsList, filename)
+                        Call Fileformats.CSV.WriteFile(tsList, filename)
 
                     Case TimeSeriesFile.FileTypes.DFS0
-                        Call Fileformats.DFS0.writeFile(tsList, filename)
+                        Call Fileformats.DFS0.WriteFile(tsList, filename)
 
                     Case TimeSeriesFile.FileTypes.FEWS_PI
                         Call Fileformats.FEWS_PI.writeFile(tsList, filename)
@@ -606,7 +606,7 @@ Public Class Wave
                         End If
                     End If
 
-                    Log.AddLogEntry(Log.levels.info, $"Exporting time series '{ts.Title}' to file {filename}...")
+                    Log.AddLogEntry(Log.Levels.info, $"Exporting time series '{ts.Title}' to file {filename}...")
 
                     Select Case fileType
 
@@ -620,16 +620,16 @@ Public Class Wave
                             Call Fileformats.SMUSI_REG.writeFile(ts, filename)
 
                         Case TimeSeriesFile.FileTypes.SWMM_TIMESERIES
-                            Call Fileformats.SWMM_TIMESERIES.writeFile(ts, filename)
+                            Call Fileformats.SWMM_TIMESERIES.WriteFile(ts, filename)
 
                         Case TimeSeriesFile.FileTypes.UVF
-                            Call Fileformats.UVF.writeFile(ts, filename)
+                            Call Fileformats.UVF.WriteFile(ts, filename)
 
                         Case TimeSeriesFile.FileTypes.ZRE
                             Call Fileformats.ZRE.writeFile(ts, filename)
 
                         Case TimeSeriesFile.FileTypes.ZRXP
-                            Call Fileformats.ZRXP.writeFile(ts, filename)
+                            Call Fileformats.ZRXP.WriteFile(ts, filename)
 
                         Case Else
                             Throw New Exception($"Export to file type {fileType} not yet implemented!")
@@ -640,10 +640,10 @@ Public Class Wave
             End If
 
             MessageBox.Show("Time series exported successfully!", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information)
-            Log.AddLogEntry(Log.levels.info, "Time series exported successfully!")
+            Log.AddLogEntry(Log.Levels.info, "Time series exported successfully!")
 
         Catch ex As Exception
-            Log.AddLogEntry(Log.levels.error, "Error during export: " & ex.Message)
+            Log.AddLogEntry(Log.Levels.error, "Error during export: " & ex.Message)
             MessageBox.Show("Error during export: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
 

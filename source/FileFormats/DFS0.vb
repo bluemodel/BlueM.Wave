@@ -57,12 +57,12 @@ Namespace Fileformats
             'Basic settings
             Me.UseUnits = True
 
-            Call Me.readSeriesInfo()
+            Call Me.ReadSeriesInfo()
 
             If (ReadAllNow) Then
                 'Direkt einlesen
-                Call Me.selectAllSeries()
-                Call Me.readFile()
+                Call Me.SelectAllSeries()
+                Call Me.ReadFile()
             End If
 
         End Sub
@@ -70,7 +70,7 @@ Namespace Fileformats
         ''' <summary>
         ''' Reads series info
         ''' </summary>
-        Public Overrides Sub readSeriesInfo()
+        Public Overrides Sub ReadSeriesInfo()
 
             Dim sInfo As TimeSeriesInfo
 
@@ -105,7 +105,7 @@ Namespace Fileformats
         ''' <summary>
         ''' Reads the file
         ''' </summary>
-        Public Overrides Sub readFile()
+        Public Overrides Sub ReadFile()
 
             'dictionary for temporarily storing datatypes 
             Dim DataTypes As New Dictionary(Of Integer, DFS.DfsSimpleType)
@@ -270,7 +270,7 @@ Namespace Fileformats
                 Case "liter/sec/km^2", "l/s/km^2"
                     eumUnit = eumUnit.eumUliterPerSecPerKm2
                 Case Else
-                    Log.AddLogEntry(levels.debug, $"Unable to convert unit '{unit}' to a DHI EUM unit. Using undefined.")
+                    Log.AddLogEntry(Levels.debug, $"Unable to convert unit '{unit}' to a DHI EUM unit. Using undefined.")
                     eumUnit = eumUnit.eumUUnitUndefined
             End Select
             Return eumUnit
@@ -284,7 +284,7 @@ Namespace Fileformats
         ''' <param name="tsList">list of TimeSeries</param>
         ''' <param name="path">path to file</param>
         ''' <remarks></remarks>
-        Public Overloads Shared Sub writeFile(ByRef tsList As List(Of TimeSeries), path As String)
+        Public Overloads Shared Sub WriteFile(ByRef tsList As List(Of TimeSeries), path As String)
 
             'show DFS0 export dialog in order to allow the user to specify EUM Items and Units
             Dim dlg As New DFS0_ExportDialog(tsList)

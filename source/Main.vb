@@ -31,9 +31,9 @@ Friend Module Main
             Try
                 My.Settings.Upgrade()
                 My.Settings.isNewVersion = False
-                Log.AddLogEntry(Log.levels.debug, "User settings upgraded from previous version.")
+                Log.AddLogEntry(Log.Levels.debug, "User settings upgraded from previous version.")
             Catch ex As System.Configuration.ConfigurationErrorsException
-                Log.AddLogEntry(Log.levels.error, "Error upgrading user settings: " & ex.Message)
+                Log.AddLogEntry(Log.Levels.error, "Error upgrading user settings: " & ex.Message)
             End Try
         End If
 

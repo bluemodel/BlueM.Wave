@@ -68,8 +68,8 @@ Namespace Fileformats
             Me._HYDROAS_version = 2
 
             'default settings apply to HYDRO_AS-2D version 2 
-            Me.iLineData = 9
-            Me.iLineHeadings = 4
+            Me.LineNumberData = 9
+            Me.LineNumberHeaders = 4
             Me.UseUnits = False
             Me.IsColumnSeparated = True
             Me.Separator = New BlueM.Wave.Character(" ")
@@ -90,7 +90,7 @@ Namespace Fileformats
             'Default Referenzdatum für den Beginn der Simulation
             Me.refDate = New DateTime(2000, 1, 1, 0, 0, 0)
 
-            Call Me.readSeriesInfo()
+            Call Me.ReadSeriesInfo()
 
         End Sub
 
@@ -100,7 +100,7 @@ Namespace Fileformats
         ''' <param name="file">Pfad zur Datei</param>
         ''' <returns>Boolean</returns>
         ''' <remarks>Prüfung erfolgt anhand des Dateinamens (Q_Strg.dat, Pegel.dat oder BW_TMP.dat)</remarks>
-        Public Shared Function verifyFormat(file As String) As Boolean
+        Public Shared Function VerifyFormat(file As String) As Boolean
 
             'TODO: Prüfung etwas robuster machen
 
@@ -117,7 +117,7 @@ Namespace Fileformats
         ''' Liest die Anzahl der Spalten und ihre Namen aus
         ''' </summary>
         ''' <remarks></remarks>
-        Public Overrides Sub readSeriesInfo()
+        Public Overrides Sub ReadSeriesInfo()
 
             Dim i, l As Integer
             Dim sInfo As TimeSeriesInfo
@@ -140,7 +140,7 @@ Namespace Fileformats
                 If Zeile.Trim.StartsWith("Name:") Then
                     Me._HYDROAS_version = 5
                     'use names instead of node numbers as series titles
-                    Me.iLineHeadings = 5
+                    Me.LineNumberHeaders = 5
                 End If
                 'return to beginning of file
                 FiStr.Seek(0, SeekOrigin.Begin)
@@ -153,9 +153,9 @@ Namespace Fileformats
                 Case "q_strg.dat", "pegel.dat"
 
                     'Zeile mit Spaltenüberschriften lesen
-                    For i = 1 To Me.iLineHeadings
+                    For i = 1 To Me.LineNumberHeaders
                         Zeile = StrReadSync.ReadLine.ToString
-                        If (i = Me.iLineHeadings) Then ZeileSpalten = Zeile
+                        If (i = Me.LineNumberHeaders) Then ZeileSpalten = Zeile
                     Next
 
                     'Spaltennamen auslesen
@@ -231,7 +231,7 @@ Namespace Fileformats
         ''' Liest die Datei ein
         ''' </summary>
         ''' <remarks></remarks>
-        Public Overrides Sub readFile()
+        Public Overrides Sub ReadFile()
 
             Dim i As Integer
             Dim Zeile As String = ""
@@ -267,7 +267,7 @@ Namespace Fileformats
                 Case "q_strg.dat", "pegel.dat"
 
                     'Header
-                    For i = 0 To Me.nLinesHeader - 1
+                    For i = 0 To Me.NLinesHeader - 1
                         StrReadSync.ReadLine()
                     Next
 

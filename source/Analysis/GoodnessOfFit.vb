@@ -104,7 +104,7 @@ Friend Class GoodnessOfFit
         'emit a warning if any time series has a volume of NaN
         For Each ts As TimeSeries In seriesList
             If Double.IsNaN(ts.Volume) Then
-                Log.AddLogEntry(levels.warning, "At least one time series has a volume of NaN, volume error can not be calculated!")
+                Log.AddLogEntry(Levels.warning, "At least one time series has a volume of NaN, volume error can not be calculated!")
                 Exit For
             End If
         Next
@@ -186,8 +186,8 @@ Friend Class GoodnessOfFit
         'for the remaining indicators, remove all NaN nodes and synchronize series
 
         'remove NaN values
-        ts_o = ts_o.removeNaNValues()
-        ts_s = ts_s.removeNaNValues()
+        ts_o = ts_o.RemoveNaNValues()
+        ts_s = ts_s.RemoveNaNValues()
 
         'store original number of non-NaN nodes
         Dim length_obs_original As Integer = ts_o.Length
@@ -198,10 +198,10 @@ Friend Class GoodnessOfFit
 
         'emit warning if number of nodes was reduced due to synchronizing
         If ts_o.Length < length_obs_original Then
-            Log.AddLogEntry(levels.warning, $"Series {ts_o.Title}: only {ts_o.Length} of {length_obs_original} nodes are coincident and can be used for GoodnessOfFit calculation")
+            Log.AddLogEntry(Levels.warning, $"Series {ts_o.Title}: only {ts_o.Length} of {length_obs_original} nodes are coincident and can be used for GoodnessOfFit calculation")
         End If
         If ts_s.Length < length_sim_original Then
-            Log.AddLogEntry(levels.warning, $"Series {ts_s.Title}: only {ts_s.Length} of {length_sim_original} nodes are coincident and can be used for GoodnessOfFit calculation")
+            Log.AddLogEntry(Levels.warning, $"Series {ts_s.Title}: only {ts_s.Length} of {length_sim_original} nodes are coincident and can be used for GoodnessOfFit calculation")
         End If
 
         'check synchronousness
@@ -334,7 +334,7 @@ Friend Class GoodnessOfFit
             'make a local copy of observed series in order to not affect subsequent evaluations using other simulated series
             Dim ts_obs As TimeSeries = Me.ts_obs.Clone()
 
-            Log.AddLogEntry(levels.info, $"Calculating goodness of fit indicators for {ts_obs.Title} vs. {ts_sim.Title}...")
+            Log.AddLogEntry(Levels.info, $"Calculating goodness of fit indicators for {ts_obs.Title} vs. {ts_sim.Title}...")
 
             'check for overlap
             If ts_obs.StartDate > ts_sim.EndDate Or ts_obs.EndDate < ts_sim.StartDate Then
@@ -356,7 +356,7 @@ Friend Class GoodnessOfFit
                 Or ts_sim.StartDate <> start_sim_original _
                 Or ts_obs.EndDate <> end_obs_original _
                 Or ts_sim.EndDate <> end_sim_original Then
-                Log.AddLogEntry(levels.warning, $"Reduced overlap period used for GoodnessOfFit analysis: {ts_obs.StartDate} - {ts_obs.EndDate}")
+                Log.AddLogEntry(Levels.warning, $"Reduced overlap period used for GoodnessOfFit analysis: {ts_obs.StartDate} - {ts_obs.EndDate}")
             End If
 
             Dim series_o As New Dictionary(Of String, TimeSeries)

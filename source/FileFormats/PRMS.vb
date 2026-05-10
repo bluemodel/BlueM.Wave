@@ -85,29 +85,29 @@ Namespace Fileformats
             If lines(1).Trim() = "ANNUAL SUMMARY" And
             lines(2).Trim() = "YEAR   OBS. PREC.   INT.LOSS   NET PREC.   POT.ET     NET ET   SNOWMELT    SIMRO   OBSRO     ERR.*100    CUMS    CUMS2" Then
                 Me.FileFormat = FileType.annual
-                Me.iLineData = 3
+                Me.LineNumberData = 3
             ElseIf lines(1).Trim() = "MONTHLY SUMMARY" And
             lines(2).Trim() = "MO   YEAR  O-PPT  N-PPT  INLOS    P-ET   A-ET   SMELT   GW-FL   RS-FL    SRO SIMRO[mm] OBSRO[mm] ERR*100" Then
                 Me.FileFormat = FileType.monthly
-                Me.iLineData = 3
+                Me.LineNumberData = 3
             ElseIf lines(1).Trim().Contains("PRED DISCH    (m3/s)") Then
                 Me.FileFormat = FileType.dpout
-                Me.iLineData = 12
+                Me.LineNumberData = 12
             ElseIf Path.GetExtension(FileName).ToLower = ".dat" Then
                 Dim nSeries As Integer
                 If Integer.TryParse(lines(1).Trim(), nSeries) Then
                     Me.FileFormat = FileType.statvar
-                    Me.iLineData = nSeries + 2
+                    Me.LineNumberData = nSeries + 2
                 End If
             Else
                 Throw New Exception("Unexpected file format for a PRMS OUT file!")
             End If
 
-            Call Me.readSeriesInfo()
+            Call Me.ReadSeriesInfo()
 
         End Sub
 
-        Public Overrides Sub readSeriesInfo()
+        Public Overrides Sub ReadSeriesInfo()
 
             Dim i As Integer
             Dim line As String
@@ -125,7 +125,7 @@ Namespace Fileformats
             lines = New Dictionary(Of Integer, String)
 
             'Read header data
-            For i = 1 To Me.iLineData
+            For i = 1 To Me.LineNumberData
                 line = StrReadSync.ReadLine.ToString
                 lines.Add(i, line)
             Next
@@ -156,7 +156,7 @@ Namespace Fileformats
                     Me.DateTimeColumnIndex = 0 'technically 0 and 1
 
                 Case FileType.dpout
-                    parts = lines(Me.iLineData).Split(New Char() {" "}, StringSplitOptions.RemoveEmptyEntries)
+                    parts = lines(Me.LineNumberData).Split(New Char() {" "}, StringSplitOptions.RemoveEmptyEntries)
                     For i = 3 To parts.Count() - 1 'first 3 columns are timestamp
                         Dim m As Match
                         m = Regex.Match(lines(i - 2).Trim(), ".{3} (.+)\s+\((.+)\).+")
@@ -169,7 +169,7 @@ Namespace Fileformats
                     Me.DateTimeColumnIndex = 0 ' technically 0, 1 and 2
 
                 Case FileType.statvar
-                    parts = lines(Me.iLineData).Split(New Char() {" "}, StringSplitOptions.RemoveEmptyEntries)
+                    parts = lines(Me.LineNumberData).Split(New Char() {" "}, StringSplitOptions.RemoveEmptyEntries)
                     For i = 7 To parts.Count() - 1 'first 7 columns are number and timestamp
                         sInfo = New TimeSeriesInfo()
                         sInfo.Name = lines(i - 5).Trim()
@@ -190,7 +190,7 @@ Namespace Fileformats
         ''' Reads the file
         ''' </summary>
         ''' <remarks></remarks>
-        Public Overrides Sub readFile()
+        Public Overrides Sub ReadFile()
 
             Dim i As Integer
             Dim line As String
@@ -213,7 +213,7 @@ Namespace Fileformats
             Next
 
             'Skip header
-            For i = 1 To Me.iLineData - 1
+            For i = 1 To Me.LineNumberData - 1
                 StrReadSync.ReadLine()
             Next
 

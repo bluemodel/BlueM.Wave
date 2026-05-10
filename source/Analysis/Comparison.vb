@@ -110,8 +110,8 @@ Friend Class Comparison
         End If
 
         'Remove NaN values
-        Me.ts_x = Me.ts_x.removeNaNValues()
-        Me.ts_y = Me.ts_y.removeNaNValues()
+        Me.ts_x = Me.ts_x.RemoveNaNValues()
+        Me.ts_y = Me.ts_y.RemoveNaNValues()
 
         'Synchronize
         TimeSeries.Synchronize(Me.ts_x, Me.ts_y)

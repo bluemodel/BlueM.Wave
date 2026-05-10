@@ -48,9 +48,9 @@ Namespace Fileformats
             Me.UseUnits = True
 
             ' which lines contain heading, units, first data line
-            Me.iLineHeadings = 15
-            Me.iLineUnits = 16
-            Me.iLineData = 17
+            Me.LineNumberHeaders = 15
+            Me.LineNumberUnits = 16
+            Me.LineNumberData = 17
 
             If Me.IsCSV() Then
                 ' is it a CSV file? GISMO uses ";" to separate values if CSV mode is choosen
@@ -62,12 +62,12 @@ Namespace Fileformats
                 Me.Separator = space
             End If
 
-            Call Me.readSeriesInfo()
+            Call Me.ReadSeriesInfo()
 
         End Sub
 
         ' get columns
-        Public Overrides Sub readSeriesInfo()
+        Public Overrides Sub ReadSeriesInfo()
 
             Dim i As Integer
             Dim Zeile As String = ""
@@ -88,10 +88,10 @@ Namespace Fileformats
             SeriesName = Zeile.Substring(13, 16)
 
             ' find line with data headers and units
-            For i = 2 To Math.Max(Me.iLineData, Me.iLineHeadings + 1)
+            For i = 2 To Math.Max(Me.LineNumberData, Me.LineNumberHeaders + 1)
                 Zeile = StrReadSync.ReadLine.ToString
-                If (i = Me.iLineHeadings) Then ZeileSpalten = Zeile
-                If (i = Me.iLineUnits) Then ZeileEinheiten = Zeile
+                If (i = Me.LineNumberHeaders) Then ZeileSpalten = Zeile
+                If (i = Me.LineNumberUnits) Then ZeileEinheiten = Zeile
             Next
 
             ' close file
@@ -164,7 +164,7 @@ Namespace Fileformats
         End Sub
 
         ' read file
-        Public Overrides Sub readFile()
+        Public Overrides Sub ReadFile()
 
             Dim i As Integer
             Dim Zeile As String
@@ -189,7 +189,7 @@ Namespace Fileformats
             Next
 
             ' read over header lines
-            For i = 0 To Me.nLinesHeader - 1
+            For i = 0 To Me.NLinesHeader - 1
                 StrReadSync.ReadLine()
             Next
 

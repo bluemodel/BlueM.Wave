@@ -99,23 +99,23 @@ Namespace Fileformats
             MyBase.New(FileName)
 
             'Voreinstellungen
-            Me.iLineData = 6
+            Me.LineNumberData = 6
             Me.UseUnits = True
             Me.Dateformat = Helpers.DateFormats("HYSTEMEXTRAN")
 
-            Call Me.readSeriesInfo()
+            Call Me.ReadSeriesInfo()
 
             If (ReadAllNow) Then
                 'Direkt einlesen
-                Call Me.selectAllSeries()
-                Call Me.readFile()
+                Call Me.SelectAllSeries()
+                Call Me.ReadFile()
             End If
 
         End Sub
 
         'Spalten auslesen
         '****************
-        Public Overrides Sub readSeriesInfo()
+        Public Overrides Sub ReadSeriesInfo()
 
             Dim Zeile As String
             Dim title As String
@@ -158,7 +158,7 @@ Namespace Fileformats
 
         'REG-Datei einlesen
         '******************
-        Public Overrides Sub readFile()
+        Public Overrides Sub ReadFile()
 
             Dim i, j As Integer
             Dim Zeile, wertString As String
@@ -188,7 +188,7 @@ Namespace Fileformats
 
                 If Zeile.Substring(19, 1) = "E" Then Exit Do
 
-                If (j > Me.nLinesHeader And Zeile.Length > 0) Then
+                If (j > Me.NLinesHeader And Zeile.Length > 0) Then
 
                     'Kennzeichnung lesen
                     kennzeichnung = Zeile.Substring(19, 1)
@@ -237,7 +237,7 @@ Namespace Fileformats
                         Case "N" 'Nullsatz, keine Daten
                             Continue Do
                         Case Else
-                            Log.AddLogEntry(Log.levels.warning, $"Unrecognized character {kennzeichnung} in line {j} column 20!")
+                            Log.AddLogEntry(Log.Levels.warning, $"Unrecognized character {kennzeichnung} in line {j} column 20!")
                     End Select
 
                 End If

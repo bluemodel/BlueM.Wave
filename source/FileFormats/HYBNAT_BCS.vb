@@ -60,8 +60,8 @@ Namespace Fileformats
             Call MyBase.New(file)
 
             'Default settings
-            iLineHeadings = 1
-            iLineData = 2
+            LineNumberHeaders = 1
+            LineNumberData = 2
             UseUnits = False
             _unit = "m³/s"
             IsColumnSeparated = True
@@ -69,7 +69,7 @@ Namespace Fileformats
             DateTimeColumnIndex = 0
             refDate = New DateTime(2000, 1, 1, 0, 0, 0)
 
-            Call readSeriesInfo()
+            Call ReadSeriesInfo()
 
         End Sub
 
@@ -105,7 +105,7 @@ Namespace Fileformats
         ''' Read number of columns and their names
         ''' </summary>
         ''' <remarks></remarks>
-        Public Overrides Sub readSeriesInfo()
+        Public Overrides Sub ReadSeriesInfo()
             'Clear series infos
             TimeSeriesInfos.Clear()
 
@@ -142,7 +142,7 @@ Namespace Fileformats
         ''' Reads the time series from the file
         ''' </summary>
         ''' <remarks></remarks>
-        Public Overrides Sub readFile()
+        Public Overrides Sub ReadFile()
             'Show dialog for setting the reference date
             Dim dlg As New ReferenceDateDialog()
             dlg.ShowDialog()

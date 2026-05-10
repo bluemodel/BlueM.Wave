@@ -48,22 +48,22 @@ Namespace Fileformats
 
             'Voreinstellungen
             Me.Dateformat = DateFormats("ZRE")
-            Me.iLineData = 5
+            Me.LineNumberData = 5
             Me.UseUnits = True
 
-            Call Me.readSeriesInfo()
+            Call Me.ReadSeriesInfo()
 
             If (ReadAllNow) Then
                 'Direkt einlesen
-                Call Me.selectAllSeries()
-                Call Me.readFile()
+                Call Me.SelectAllSeries()
+                Call Me.ReadFile()
             End If
 
         End Sub
 
         'Spalten auslesen
         '****************
-        Public Overrides Sub readSeriesInfo()
+        Public Overrides Sub ReadSeriesInfo()
 
             Dim i As Integer
             Dim Zeile As String = ""
@@ -101,7 +101,7 @@ Namespace Fileformats
 
         'ZRE-Datei einlesen
         '******************
-        Public Overrides Sub readFile()
+        Public Overrides Sub ReadFile()
 
             Dim j As Integer
             Dim Zeile As String
@@ -127,7 +127,7 @@ Namespace Fileformats
             Do
                 j += 1
                 Zeile = StrReadSync.ReadLine.ToString()
-                If (j > Me.nLinesHeader And Zeile.Trim.Length > 0) Then
+                If (j > Me.NLinesHeader And Zeile.Trim.Length > 0) Then
 
                     'Datum erkennen
                     timestamp = Zeile.Substring(0, 14)

@@ -45,9 +45,9 @@ Namespace Fileformats
             Me.IsColumnSeparated = True
             Me.Separator = Constants.tab
             Me.DecimalSeparator = Constants.period
-            Me.iLineHeadings = 6
+            Me.LineNumberHeaders = 6
             Me.UseUnits = False
-            Me.iLineData = 10
+            Me.LineNumberData = 10
             Me.Dateformat = "yyyy-MM-dd HH:mm"
             Me.DateTimeColumnIndex = 0
 
@@ -61,9 +61,9 @@ Namespace Fileformats
                 iLine += 1
                 Dim line As String = StrReadSync.ReadLine()
                 If line.StartsWith("@attributes") Then
-                    Me.iLineHeadings = iLine + 1
+                    Me.LineNumberHeaders = iLine + 1
                 ElseIf line.StartsWith("@data") Then
-                    Me.iLineData = iLine + 1
+                    Me.LineNumberData = iLine + 1
                     Exit Do
                 End If
             Loop
@@ -73,15 +73,15 @@ Namespace Fileformats
             FiStr.Close()
 
             'Read series information
-            Call Me.readSeriesInfo()
+            Call Me.ReadSeriesInfo()
 
             If ReadAllNow Then
-                Me.selectAllSeries()
-                Me.readFile()
+                Me.SelectAllSeries()
+                Me.ReadFile()
             End If
         End Sub
 
-        Public Overrides Sub readSeriesInfo()
+        Public Overrides Sub ReadSeriesInfo()
 
             Dim iLine, index As Integer
             Dim line As String
@@ -100,7 +100,7 @@ Namespace Fileformats
                 iLine += 1
                 line = StrReadSync.ReadLine()
 
-                If iLine = Me.iLineHeadings Then
+                If iLine = Me.LineNumberHeaders Then
                     Dim parts() As String = line.Split(Me.Separator.ToChar())
                     index = 0
                     For Each part As String In parts
@@ -124,7 +124,7 @@ Namespace Fileformats
 
         End Sub
 
-        Public Overrides Sub readFile()
+        Public Overrides Sub ReadFile()
 
             Dim iLine As Integer
             Dim line As String
@@ -173,7 +173,7 @@ Namespace Fileformats
                     Continue Do
                 End If
 
-                If iLine >= Me.iLineData And isData Then
+                If iLine >= Me.LineNumberData And isData Then
                     parts = line.Split(Me.Separator.ToChar())
                     'parse timestamp
                     success = DateTime.TryParseExact(parts(Me.DateTimeColumnIndex).Trim(), Me.Dateformat, Helpers.DefaultNumberFormat, Globalization.DateTimeStyles.None, timestamp)
@@ -208,7 +208,7 @@ Namespace Fileformats
         ''' </summary>
         ''' <param name="file">path to file</param>
         ''' <returns></returns>
-        Public Shared Function verifyFormat(file As String) As Boolean
+        Public Shared Function VerifyFormat(file As String) As Boolean
             Dim FiStr As New FileStream(file, FileMode.Open, IO.FileAccess.Read)
             Dim StrRead As New StreamReader(FiStr, detectEncodingFromByteOrderMarks:=True)
             Dim line As String

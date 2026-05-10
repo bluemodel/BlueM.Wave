@@ -302,7 +302,7 @@ Friend Class MainWindow
                 Return s
             End If
         Next
-        Log.AddLogEntry(levels.error, $"Unable to find series with id {id} in chart!")
+        Log.AddLogEntry(Levels.error, $"Unable to find series with id {id} in chart!")
         Dim series As Steema.TeeChart.Styles.Series = Nothing
         Return series
     End Function

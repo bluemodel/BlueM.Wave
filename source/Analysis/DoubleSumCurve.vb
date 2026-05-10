@@ -95,8 +95,8 @@ Friend Class DoubleSumCurve
         Dim i, n As Integer
 
         'assign timeseries and remove NaN values
-        Me.ts_1 = Me.InputTimeSeries(0).removeNaNValues()
-        Me.ts_2 = Me.InputTimeSeries(1).removeNaNValues()
+        Me.ts_1 = Me.InputTimeSeries(0).RemoveNaNValues()
+        Me.ts_2 = Me.InputTimeSeries(1).RemoveNaNValues()
 
         'synchronize
         TimeSeries.Synchronize(Me.ts_1, Me.ts_2)

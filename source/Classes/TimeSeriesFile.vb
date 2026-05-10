@@ -125,9 +125,9 @@ Public MustInherit Class TimeSeriesFile
     Private _trennzeichen As Character = semicolon
     Private _dateFormat As String = Helpers.CurrentDateFormat
     Private _decimalSeparator As Character = period
-    Private _iLineHeadings As Integer = 1
-    Private _iLineUnits As Integer = 2
-    Private _iLineData As Integer = 3
+    Private _lineNumberHeaders As Integer = 1
+    Private _lineNumberUnits As Integer = 2
+    Private _lineNumberData As Integer = 3
     Private _useUnits As Boolean = True
     Private _columnWidth As Integer = 16
     Private _columnOffset As Integer = 0
@@ -235,38 +235,38 @@ Public MustInherit Class TimeSeriesFile
     End Property
 
     ''' <summary>
-    ''' Number of the line containing column headings
+    ''' Number of the line containing column headers
     ''' </summary>
-    Public Property iLineHeadings() As Integer
+    Public Property LineNumberHeaders() As Integer
         Get
-            Return _iLineHeadings
+            Return _lineNumberHeaders
         End Get
         Set(value As Integer)
-            _iLineHeadings = value
+            _lineNumberHeaders = value
         End Set
     End Property
 
     ''' <summary>
     ''' Number of the line containing units
     ''' </summary>
-    Public Property iLineUnits() As Integer
+    Public Property LineNumberUnits() As Integer
         Get
-            Return _iLineUnits
+            Return _lineNumberUnits
         End Get
         Set(value As Integer)
-            _iLineUnits = value
+            _lineNumberUnits = value
         End Set
     End Property
 
     ''' <summary>
     ''' Number of the first line containing data
     ''' </summary>
-    Public Property iLineData() As Integer
+    Public Property LineNumberData() As Integer
         Get
-            Return _iLineData
+            Return _lineNumberData
         End Get
         Set(value As Integer)
-            _iLineData = value
+            _lineNumberData = value
         End Set
     End Property
 
@@ -275,9 +275,9 @@ Public MustInherit Class TimeSeriesFile
     ''' </summary>
     ''' <returns>iLineData - 1</returns>
     ''' <remarks></remarks>
-    Public ReadOnly Property nLinesHeader() As Integer
+    Public ReadOnly Property NLinesHeader() As Integer
         Get
-            Return _iLineData - 1
+            Return _lineNumberData - 1
         End Get
     End Property
 
@@ -377,18 +377,18 @@ Public MustInherit Class TimeSeriesFile
     ''' <returns>The timeseries</returns>
     ''' <remarks>If the timeseries has not been imported yet, an import is initiated.
     ''' Throws an exception if the timeseries cannot be found in the file.</remarks>
-    Public Overloads ReadOnly Property getTimeSeries(Optional index As Integer = 0) As TimeSeries
+    Public Overloads ReadOnly Property GetTimeSeries(Optional index As Integer = 0) As TimeSeries
         Get
             If Me.TimeSeries.ContainsKey(index) Then
                 Return Me.TimeSeries(index)
             Else
-                Dim found As Boolean = Me.selectSeries(index)
+                Dim found As Boolean = Me.SelectSeries(index)
                 If Not found Then
                     Throw New Exception($"Series with index {index} not found in file!")
                 End If
                 'read the file (again)
                 Me.TimeSeries.Clear()
-                Call Me.readFile()
+                Call Me.ReadFile()
                 Return Me.TimeSeries(index)
             End If
         End Get
@@ -402,7 +402,7 @@ Public MustInherit Class TimeSeriesFile
     ''' <returns>The timeseries</returns>
     ''' <remarks>If the timeseries has not been imported yet, an import is initiated.
     ''' Throws an exception if the timeseries cannot be found in the file.</remarks>
-    Public Overloads ReadOnly Property getTimeSeries(title As String) As TimeSeries
+    Public Overloads ReadOnly Property GetTimeSeries(title As String) As TimeSeries
         Get
             Dim found As Boolean = False
             'Find the series using the given title
@@ -418,7 +418,7 @@ Public MustInherit Class TimeSeriesFile
                 For Each sInfo As TimeSeriesInfo In Me.TimeSeriesInfos
                     If (sInfo.Name = title) Then
                         'get the timeseries by its index
-                        Return Me.getTimeSeries(sInfo.Index)
+                        Return Me.GetTimeSeries(sInfo.Index)
                     End If
                 Next
             End If
@@ -471,13 +471,13 @@ Public MustInherit Class TimeSeriesFile
     ''' <summary>
     ''' Reads information about the series contained in the file and stores it in <seealso cref="TimeSeriesInfos"/>
     ''' </summary>
-    Public MustOverride Sub readSeriesInfo()
+    Public MustOverride Sub ReadSeriesInfo()
 
     ''' <summary>
     ''' Select all available series for import
     ''' </summary>
     ''' <remarks></remarks>
-    Public Sub selectAllSeries()
+    Public Sub SelectAllSeries()
 
         Me.SelectedSeries.Clear()
         For Each sInfo As TimeSeriesInfo In Me.TimeSeriesInfos
@@ -492,7 +492,7 @@ Public MustInherit Class TimeSeriesFile
     ''' <param name="index">index</param>
     ''' <returns>True if successful, False if index was not found</returns>
     ''' <remarks></remarks>
-    Public Function selectSeries(index As Integer) As Boolean
+    Public Function SelectSeries(index As Integer) As Boolean
 
         Dim i As Integer = 0
         For Each sInfo As TimeSeriesInfo In Me.TimeSeriesInfos
@@ -502,7 +502,7 @@ Public MustInherit Class TimeSeriesFile
             End If
         Next
         'series not found in file
-        Log.AddLogEntry(Log.levels.error, $"Series with index {index} not found in file!")
+        Log.AddLogEntry(Log.Levels.error, $"Series with index {index} not found in file!")
         Return False
 
     End Function
@@ -513,7 +513,7 @@ Public MustInherit Class TimeSeriesFile
     ''' <param name="seriesName">name of the series</param>
     ''' <returns>True if successful, False if series name was not found</returns>
     ''' <remarks></remarks>
-    Public Function selectSeries(seriesName As String) As Boolean
+    Public Function SelectSeries(seriesName As String) As Boolean
 
         For Each sInfo As TimeSeriesInfo In Me.TimeSeriesInfos
             If sInfo.Name = seriesName Then
@@ -522,7 +522,7 @@ Public MustInherit Class TimeSeriesFile
             End If
         Next
         'series not found in file
-        Log.AddLogEntry(Log.levels.error, $"Series {seriesName} not found in file!")
+        Log.AddLogEntry(Log.Levels.error, $"Series {seriesName} not found in file!")
         Return False
 
     End Function
@@ -530,7 +530,7 @@ Public MustInherit Class TimeSeriesFile
     ''' <summary>
     ''' Reads the selected series (see <seealso cref="SelectedSeries"/>) from the file and stores them as timeseries in <seealso cref="TimeSeries"/>
     ''' </summary>
-    Public MustOverride Sub readFile()
+    Public MustOverride Sub ReadFile()
 
     ''' <summary>
     ''' Write time series series to a file in the corresponding format.
@@ -539,7 +539,7 @@ Public MustInherit Class TimeSeriesFile
     ''' <param name="tsList">time series to write to file</param>
     ''' <param name="file">path to the file to write</param>
     ''' <remarks></remarks>
-    Public Shared Sub writeFile(tsList As List(Of TimeSeries), file As String)
+    Public Shared Sub WriteFile(tsList As List(Of TimeSeries), file As String)
         Throw New NotImplementedException("The writeFile method is not implemented for the base TimeSeriesFile class. Please use a derived class that implements this method.")
     End Sub
 
@@ -547,7 +547,7 @@ Public MustInherit Class TimeSeriesFile
     ''' Sets default metadata keys and values for a time series corresponding to the file format
     ''' </summary>
     ''' <remarks>Should be overloaded by inheriting classes that deal with metadata</remarks>
-    Public Shared Sub setDefaultMetadata(ts As TimeSeries)
+    Public Shared Sub SetDefaultMetadata(ts As TimeSeries)
         'add default keys
         ts.Metadata.AddKeys(TimeSeriesFile.MetadataKeys)
         'no default values to set
@@ -560,7 +560,7 @@ Public MustInherit Class TimeSeriesFile
     ''' </summary>
     ''' <param name="type">The file type</param>
     ''' <returns>The file extension as a string (including the leading ".")</returns>
-    Public Shared Function getFileExtension(type As FileTypes) As String
+    Public Shared Function GetFileExtension(type As FileTypes) As String
         Select Case type
             Case FileTypes.ASC
                 Return FileExtensions.ASC
@@ -651,7 +651,7 @@ Public MustInherit Class TimeSeriesFile
     ''' If the file is a WEL file, this function also checks whether the file is contained
     ''' within a WLZIP of the same name and if it is, extracts it.
     ''' </remarks>
-    Public Shared Function getFileType(file As String) As FileTypes
+    Public Shared Function GetFileType(file As String) As FileTypes
 
         Dim fileName, fileExt As String
         Dim fileType As FileTypes
@@ -673,36 +673,36 @@ Public MustInherit Class TimeSeriesFile
             Case FileExtensions.ASC
                 If Fileformats.GISMO_WEL.verifyFormat(file) Then
                     'GISMO result file in WEL format
-                    Log.AddLogEntry(levels.info, $"Detected GISMO result format for file {fileName}.")
+                    Log.AddLogEntry(Levels.info, $"Detected GISMO result format for file {fileName}.")
                     fileType = FileTypes.GISMO_WEL
                 Else
                     'Assume SMUSI ASC format
-                    Log.AddLogEntry(levels.info, $"Assuming SMUSI ASC format for file {fileName}.")
+                    Log.AddLogEntry(Levels.info, $"Assuming SMUSI ASC format for file {fileName}.")
                     fileType = FileTypes.ASC
                 End If
 
             Case FileExtensions.BCS
                 'HYBNAT BCS file
-                Log.AddLogEntry(levels.info, $"Assuming HYBNAT BCS format for file {fileName}.")
+                Log.AddLogEntry(Levels.info, $"Assuming HYBNAT BCS format for file {fileName}.")
                 fileType = FileTypes.HYBNAT_BCS
 
             Case FileExtensions.BIN
                 'SYDRO binary file
-                Log.AddLogEntry(levels.info, $"Assuming SYDRO binary format for file {fileName}.")
+                Log.AddLogEntry(Levels.info, $"Assuming SYDRO binary format for file {fileName}.")
                 fileType = FileTypes.BIN
 
             Case FileExtensions.CSV
                 'check file format
                 If Fileformats.GISMO_WEL.verifyFormat(file) Then
                     'GISMO result file in CSV format
-                    Log.AddLogEntry(levels.info, $"Detected GISMO result format for file {fileName}.")
+                    Log.AddLogEntry(Levels.info, $"Detected GISMO result format for file {fileName}.")
                     fileType = FileTypes.GISMO_WEL
                 ElseIf Fileformats.GINA_WEL.verifyFormat(file) Then
                     'GINA WEL file in CSV format
-                    Log.AddLogEntry(levels.info, $"Detected GINA  WEL format for file {fileName}.")
+                    Log.AddLogEntry(Levels.info, $"Detected GINA  WEL format for file {fileName}.")
                     fileType = FileTypes.GINA_WEL
                 Else
-                    Log.AddLogEntry(levels.info, $"Assuming CSV format for file {fileName}.")
+                    Log.AddLogEntry(Levels.info, $"Assuming CSV format for file {fileName}.")
                     fileType = FileTypes.CSV
 
                 End If
@@ -711,49 +711,49 @@ Public MustInherit Class TimeSeriesFile
                 'Check file format
                 If Fileformats.HystemExtran_REG.verifyFormat(file) Then
                     'Hystem-Extran rainfall file
-                    Log.AddLogEntry(levels.info, $"Detected Hystem-Extran rainfall format for file {fileName}.")
+                    Log.AddLogEntry(Levels.info, $"Detected Hystem-Extran rainfall format for file {fileName}.")
                     fileType = FileTypes.HYSTEM_REG
                 ElseIf Fileformats.PRMS.verifyFormat(file) Then
                     'PRMS result file
-                    Log.AddLogEntry(levels.info, $"Detected PRMS result format for file {fileName}.")
+                    Log.AddLogEntry(Levels.info, $"Detected PRMS result format for file {fileName}.")
                     fileType = FileTypes.PRMS_OUT
-                ElseIf Fileformats.JAMS.verifyFormat(file) Then
+                ElseIf Fileformats.JAMS.VerifyFormat(file) Then
                     'JAMS result file
-                    Log.AddLogEntry(levels.info, $"Detected JAMS result format for file {fileName}.")
+                    Log.AddLogEntry(Levels.info, $"Detected JAMS result format for file {fileName}.")
                     fileType = FileTypes.JAMS
-                ElseIf Fileformats.SWMM_TIMESERIES.verifyFormat(file) Then
+                ElseIf Fileformats.SWMM_TIMESERIES.VerifyFormat(file) Then
                     'SWMM time series format
-                    Log.AddLogEntry(levels.info, $"Detected SWMM time series format for file {fileName}.")
+                    Log.AddLogEntry(Levels.info, $"Detected SWMM time series format for file {fileName}.")
                     fileType = FileTypes.SWMM_TIMESERIES
-                ElseIf Fileformats.HYDRO_AS_2D.verifyFormat(file) Then
+                ElseIf Fileformats.HYDRO_AS_2D.VerifyFormat(file) Then
                     'HYDRO-AS_2D result file
-                    Log.AddLogEntry(levels.info, $"Detected HYDRO_AS-2D result format for file {fileName}.")
+                    Log.AddLogEntry(Levels.info, $"Detected HYDRO_AS-2D result format for file {fileName}.")
                     fileType = FileTypes.HYDRO_AS_DAT
                 End If
 
             Case FileExtensions.DFS0
-                Log.AddLogEntry(levels.info, $"Assuming DHI DFS0 format for file {fileName}.")
+                Log.AddLogEntry(Levels.info, $"Assuming DHI DFS0 format for file {fileName}.")
                 fileType = FileTypes.DFS0
 
             Case FileExtensions.GBL
                 'Check format
-                If Fileformats.GBL.verifyFormat(file) Then
+                If Fileformats.GBL.VerifyFormat(file) Then
                     'GINA binary WEL file
-                    Log.AddLogEntry(levels.info, $"Detected GINA binary WEL format for file {fileName}.")
+                    Log.AddLogEntry(Levels.info, $"Detected GINA binary WEL format for file {fileName}.")
                     fileType = FileTypes.GBL
                 End If
 
             Case FileExtensions.H5
                 'Check file format
-                If Fileformats.GINA_HDF5.verifyFormat(file) Then
-                    Log.AddLogEntry(levels.info, $"Detected GINA HDF5 timeseries format for file {fileName}.")
+                If Fileformats.GINA_HDF5.VerifyFormat(file) Then
+                    Log.AddLogEntry(Levels.info, $"Detected GINA HDF5 timeseries format for file {fileName}.")
                     fileType = FileTypes.GINA_HDF5
                 End If
 
             Case FileExtensions.OUT
                 If Fileformats.PRMS.verifyFormat(file) Then
                     'PRMS result format
-                    Log.AddLogEntry(levels.info, $"Detected PRMS result format for file {fileName}.")
+                    Log.AddLogEntry(Levels.info, $"Detected PRMS result format for file {fileName}.")
                     fileType = FileTypes.PRMS_OUT
                 End If
 
@@ -761,37 +761,37 @@ Public MustInherit Class TimeSeriesFile
                 'Check file format
                 If Fileformats.SMUSI_REG.verifyFormat(file) Then
                     'SMUSI rainfall file
-                    Log.AddLogEntry(levels.info, $"Detected SMUSI rainfall format for file {fileName}.")
+                    Log.AddLogEntry(Levels.info, $"Detected SMUSI rainfall format for file {fileName}.")
                     fileType = FileTypes.SMUSI_REG
                 ElseIf Fileformats.HystemExtran_REG.verifyFormat(file) Then
                     'Hystem-Extran rainfall file
-                    Log.AddLogEntry(levels.info, $"Detected Hystem-Extran rainfall format for file {fileName}.")
+                    Log.AddLogEntry(Levels.info, $"Detected Hystem-Extran rainfall format for file {fileName}.")
                     fileType = FileTypes.HYSTEM_REG
                 End If
 
             Case FileExtensions.SMB
-                Log.AddLogEntry(levels.info, $"Assuming SIMBA format for file {fileName}.")
+                Log.AddLogEntry(Levels.info, $"Assuming SIMBA format for file {fileName}.")
                 fileType = FileTypes.SMB
 
             Case FileExtensions.TEN
-                Log.AddLogEntry(levels.info, $"Assuming TeeChart native format for file {fileName}.")
+                Log.AddLogEntry(Levels.info, $"Assuming TeeChart native format for file {fileName}.")
                 fileType = FileTypes.TEN
 
             Case FileExtensions.TXT
                 'Check file format
                 If Fileformats.SWMM_LID_REPORT.verifyFormat(file) Then
                     'SWMM LID report file
-                    Log.AddLogEntry(levels.info, $"Detected SWMM LID report file format for file {fileName}.")
+                    Log.AddLogEntry(Levels.info, $"Detected SWMM LID report file format for file {fileName}.")
                     fileType = FileTypes.SWMM_LID_REPORT
                 ElseIf Fileformats.SWMM_INTERFACE.verifyFormat(file) Then
                     'SWMM routing interface file
-                    Log.AddLogEntry(levels.info, $"Detected SWMM routing interface file format for file {fileName}.")
+                    Log.AddLogEntry(Levels.info, $"Detected SWMM routing interface file format for file {fileName}.")
                     fileType = FileTypes.SWMM_INTERFACE
                 End If
 
             Case FileExtensions.UVF
                 'Check file format
-                If Fileformats.UVF.verifyFormat(file) Then
+                If Fileformats.UVF.VerifyFormat(file) Then
                     fileType = FileTypes.UVF
                 End If
 
@@ -799,7 +799,7 @@ Public MustInherit Class TimeSeriesFile
                 'Check format
                 If Fileformats.WBL.verifyFormat(file) Then
                     'SYDRO binary WEL file
-                    Log.AddLogEntry(levels.info, $"Detected SYDRO binary WEL format for file {fileName}.")
+                    Log.AddLogEntry(Levels.info, $"Detected SYDRO binary WEL format for file {fileName}.")
                     fileType = FileTypes.WBL
                 End If
 
@@ -807,40 +807,40 @@ Public MustInherit Class TimeSeriesFile
                 'Check file format
                 If Fileformats.WEL.verifyFormat(file) Then
                     'WEL file
-                    Log.AddLogEntry(levels.info, $"Detected BlueM/Talsim WEL format for file {fileName}.")
+                    Log.AddLogEntry(Levels.info, $"Detected BlueM/Talsim WEL format for file {fileName}.")
                     fileType = FileTypes.WEL
                 ElseIf Fileformats.HystemExtran_WEL.verifyFormat(file) Then
                     'Hystem-Extran rainfall file
-                    Log.AddLogEntry(levels.info, $"Detected Hystem-Extran rainfall format for file {fileName}.")
+                    Log.AddLogEntry(Levels.info, $"Detected Hystem-Extran rainfall format for file {fileName}.")
                     fileType = FileTypes.HYSTEM_WEL
                 ElseIf Fileformats.WBL.verifyFormat(file) Then
                     'SYDRO binary WEL file
-                    Log.AddLogEntry(levels.info, $"Detected SYDRO binary WEL format for file {fileName}.")
+                    Log.AddLogEntry(Levels.info, $"Detected SYDRO binary WEL format for file {fileName}.")
                     fileType = FileTypes.WBL
-                ElseIf Fileformats.HYBNAT_WEL.verifyFormat(file) Then
+                ElseIf Fileformats.HYBNAT_WEL.VerifyFormat(file) Then
                     'HYBNAT WEL file
-                    Log.AddLogEntry(levels.info, $"Detected HYBNAT WEL format for file {fileName}.")
+                    Log.AddLogEntry(Levels.info, $"Detected HYBNAT WEL format for file {fileName}.")
                     fileType = FileTypes.HYBNAT_WEL
                 End If
 
             Case FileExtensions.WVP
-                Log.AddLogEntry(levels.info, $"Assuming Wave project file format for file {fileName}.")
+                Log.AddLogEntry(Levels.info, $"Assuming Wave project file format for file {fileName}.")
                 fileType = FileTypes.WVP
 
             Case FileExtensions.XML
                 'Check file format
                 If Fileformats.FEWS_PI.verifyFormat(file) Then
                     'FEWS PI XML file
-                    Log.AddLogEntry(levels.info, $"Detected FEWS PI XML format for file {fileName}.")
+                    Log.AddLogEntry(Levels.info, $"Detected FEWS PI XML format for file {fileName}.")
                     fileType = FileTypes.FEWS_PI
                 End If
 
             Case FileExtensions.ZRE
-                Log.AddLogEntry(levels.info, $"Assuming ZRE format for file {fileName}.")
+                Log.AddLogEntry(Levels.info, $"Assuming ZRE format for file {fileName}.")
                 fileType = FileTypes.ZRE
 
             Case FileExtensions.ZRX, FileExtensions.ZRXP
-                Log.AddLogEntry(levels.info, $"Assuming ZRXP format for file {fileName}.")
+                Log.AddLogEntry(Levels.info, $"Assuming ZRXP format for file {fileName}.")
                 fileType = FileTypes.ZRXP
 
             Case Else
@@ -851,7 +851,7 @@ Public MustInherit Class TimeSeriesFile
 
         'Unknown filetype
         If fileType = FileTypes.UNKNOWN Then
-            Log.AddLogEntry(levels.warning, $"Unable to determine file type of file {fileName}!")
+            Log.AddLogEntry(Levels.warning, $"Unable to determine file type of file {fileName}!")
         End If
 
         Return fileType
@@ -864,20 +864,20 @@ Public MustInherit Class TimeSeriesFile
     ''' <param name="file">Path to the file</param>
     ''' <param name="fileType">Optional file type. If not provided, the type is determined using `getFileType()`</param>
     ''' <returns>A TimeSeriesFile instance representing the file</returns>
-    Public Shared Function getInstance(file As String, Optional fileType As FileTypes = FileTypes.UNDETERMINED) As TimeSeriesFile
+    Public Shared Function GetInstance(file As String, Optional fileType As FileTypes = FileTypes.UNDETERMINED) As TimeSeriesFile
 
         Dim FileInstance As TimeSeriesFile
 
         'determine file type if not passed as argument
         If fileType = FileTypes.UNDETERMINED Then
-            fileType = getFileType(file)
+            fileType = GetFileType(file)
         End If
 
         'Depending on file type
         Select Case fileType
 
             Case FileTypes.UNKNOWN
-                Log.AddLogEntry(levels.warning, $"File {IO.Path.GetFileName(file)} has an unknown file type, attempting to load as CSV.")
+                Log.AddLogEntry(Levels.warning, $"File {IO.Path.GetFileName(file)} has an unknown file type, attempting to load as CSV.")
                 FileInstance = New Fileformats.CSV(file)
             Case FileTypes.ASC
                 FileInstance = New Fileformats.ASC(file)
