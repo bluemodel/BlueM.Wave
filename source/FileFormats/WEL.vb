@@ -111,7 +111,7 @@ Namespace Fileformats
         Public Overrides Sub ReadSeriesInfo()
 
             Dim i As Integer
-            Dim Zeile As String = ""
+            Dim Zeile As String
             Dim ZeileSpalten As String = ""
             Dim ZeileEinheiten As String = ""
             Dim LineInfo As String = ""
@@ -227,7 +227,7 @@ Namespace Fileformats
 
             'Header
             For iZeile = 1 To Me.NLinesHeader
-                Zeile = StrReadSync.ReadLine.ToString()
+                StrReadSync.ReadLine.ToString()
             Next
 
             'Daten

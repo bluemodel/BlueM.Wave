@@ -265,7 +265,6 @@ Namespace Fileformats
             Dim i As Integer
             Dim line As String
             Dim lines As Dictionary(Of Integer, String)
-            Dim headerFound As Boolean = False
 
             Try
                 'Open the file

@@ -135,8 +135,6 @@ Namespace Fileformats
 
             Dim i, j As Integer
             Dim Zeile As String = ""
-            Dim ZeileSpalten As String = ""
-            Dim ZeileEinheiten As String = ""
             Dim strArray() As String
             Dim Constituents() As Constituent
             'dim AnzConstituents As Integer
@@ -267,7 +265,7 @@ Namespace Fileformats
             ReDim Werte(AnzConstituents * AnzNodes)
             'Header
             For iZeile = 1 To Me.LineNumberData - 1
-                Zeile = StrReadSync.ReadLine.ToString()
+                StrReadSync.ReadLine.ToString()
             Next
 
             'Daten
@@ -476,7 +474,7 @@ Namespace Fileformats
 
             Dim FiStr As New FileStream(file, FileMode.Open, IO.FileAccess.Read)
             Dim StrRead As New StreamReader(FiStr, detectEncodingFromByteOrderMarks:=True)
-            Dim Zeile As String = ""
+            Dim Zeile As String
 
             '1. Zeile einlesen
             Zeile = StrRead.ReadLine.ToString().Trim()

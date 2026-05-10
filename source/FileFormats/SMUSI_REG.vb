@@ -316,10 +316,10 @@ Namespace Fileformats
 
             Dim FiStr As New FileStream(file, FileMode.Open, IO.FileAccess.Read)
             Dim StrRead As New StreamReader(FiStr, detectEncodingFromByteOrderMarks:=True)
-            Dim Zeile As String = ""
+            Dim Zeile As String
 
             '2 Zeilen einlesen
-            Zeile = StrRead.ReadLine.ToString()
+            StrRead.ReadLine.ToString()
             Zeile = StrRead.ReadLine.ToString()
 
             StrRead.Close()
