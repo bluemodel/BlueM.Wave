@@ -1048,44 +1048,6 @@ Public Class TimeSeries
     End Function
 
     ''' <summary>
-    ''' Calculate a metric from the time series' values
-    ''' </summary>
-    ''' <param name="WertTyp">MaxWert, MinWert, Average, AnfWert, EndWert, Summe</param>
-    ''' <returns>the calculated metric</returns>
-    ''' <remarks>Obsolete, kept for backwards compatibility with BlueM.Opt</remarks>
-    Public Function getWert(WertTyp As String) As Double
-        Dim Wert As Double
-
-        Select Case WertTyp
-
-            Case "MaxWert"
-                Wert = Me.Maximum
-
-            Case "MinWert"
-                Wert = Me.Minimum
-
-            Case "Average"
-                Wert = Me.Average
-
-            Case "AnfWert"
-                Wert = Me.FirstValue
-
-            Case "EndWert"
-                Wert = Me.LastValue
-
-            Case "Summe"
-                Wert = Me.Sum
-
-            Case Else
-                Throw New Exception($"Der Werttyp '{WertTyp}' wird nicht unterstützt!")
-
-        End Select
-
-        Return Wert
-
-    End Function
-
-    ''' <summary>
     ''' Creates a copy of the time series in which all nodes with specified error values are converted to NaN
     ''' </summary>
     ''' <param name="errorvalues">array of error values to ignore</param>
