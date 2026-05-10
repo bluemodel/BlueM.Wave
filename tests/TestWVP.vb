@@ -93,7 +93,7 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
         Dim fileContents As String = New IO.StreamReader(fileOut, Text.Encoding.UTF8).ReadToEnd()
         Dim lines As String() = fileContents.Split({vbCrLf}, StringSplitOptions.None)
 
-        Assert.AreEqual(7, lines.Count)
+        Assert.HasCount(7, lines)
 
         Dim iLine As Integer = 0
         For Each line As String In lines
