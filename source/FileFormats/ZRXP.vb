@@ -77,6 +77,7 @@ Namespace Fileformats
             'settings
             Me.Dateformat = Helpers.DateFormats("ZRXP")
             Me.UseUnits = True
+            Me.Separator = New Character(" "c)
 
             'set default metadata keys
             Me.FileMetadata.AddKeys(ZRXP.MetadataKeys)
@@ -251,7 +252,7 @@ Namespace Fileformats
                     Continue Do
                 End If
                 'split line
-                parts = line.Split(New String() {" "}, StringSplitOptions.RemoveEmptyEntries)
+                parts = line.Split(Me.Separator.ToChar(), StringSplitOptions.RemoveEmptyEntries)
 
                 Select Case Me.layout
                     Case LayoutEnum.Single
@@ -451,7 +452,7 @@ Namespace Fileformats
             strwrite.WriteLine($"#ZRXPVERSION{ts.Metadata("ZRXPVERSION")}|*|ZRXPMODE{ts.Metadata("ZRXPMODE")}|*|ZRXPCREATOR{ts.Metadata("ZRXPCREATOR")}|*|TZ{ts.Metadata("TZ")}|*|")
 
             'next lines: remaining metadata, omitting empty values, wrapped
-            Dim excludeKeys As New List(Of String)(New String() {"ZRXPVERSION", "ZRXPMODE", "ZRXPCREATOR", "TZ"})
+            Dim excludeKeys As New List(Of String) From {"ZRXPVERSION", "ZRXPMODE", "ZRXPCREATOR", "TZ"}
             Dim text As String = ""
             Dim line As String = "#"
             Dim sep As String = "|*|"

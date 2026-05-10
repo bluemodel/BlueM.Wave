@@ -35,6 +35,17 @@ Namespace Fileformats
         Inherits TimeSeriesFile
 
         ''' <summary>
+        ''' Date formats to use for parsing timestamps
+        ''' </summary>
+        Private Shared ReadOnly _dateFormats As String() = {
+            "yyyy-MM-dd HH:mm:ss",
+            "yyyy-MM-dd HH:mm",
+            "dd.MM.yyyy HH:mm:ss",
+            "dd.MM.yyyy HH:mm",
+            "yyyy-MM-ddTHH:mm:ss"
+        }
+
+        ''' <summary>
         ''' The name of the child group containing the data (e.g., HNW, SN1, SN2)
         ''' </summary>
         Private _dataGroupName As String
@@ -278,7 +289,7 @@ Namespace Fileformats
                             timestamps.Add(timestamp)
                         Else
                             'Try parsing with common formats
-                            If DateTime.TryParseExact(timeStr, {"yyyy-MM-dd HH:mm:ss", "yyyy-MM-dd HH:mm", "dd.MM.yyyy HH:mm:ss", "dd.MM.yyyy HH:mm", "yyyy-MM-ddTHH:mm:ss"},
+                            If DateTime.TryParseExact(timeStr, _dateFormats,
                                                       Globalization.CultureInfo.InvariantCulture,
                                                       Globalization.DateTimeStyles.None, timestamp) Then
                                 timestamps.Add(timestamp)
