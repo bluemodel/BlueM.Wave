@@ -105,8 +105,8 @@ Namespace Fileformats
             Dim Einheiten() As String
 
             ' first space needs to be removed
-            ZeileSpalten = ZeileSpalten.Substring(1, ZeileSpalten.Length - 1)
-            ZeileEinheiten = ZeileEinheiten.Substring(1, ZeileEinheiten.Length - 1)
+            ZeileSpalten = ZeileSpalten.Substring(1)
+            ZeileEinheiten = ZeileEinheiten.Substring(1)
 
             If (Me.IsColumnSeparated) Then
                 ' data columns are separated by ";"
