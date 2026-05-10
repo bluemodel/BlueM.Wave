@@ -127,10 +127,11 @@ Namespace Fileformats
             For i = 0 To Me.nLinesPerTimestamp - 1
                 Zeile = StrReadSync.ReadLine()
                 For j = 0 To AnzSpalten_dT(i) - 1
-                    sInfo = New TimeSeriesInfo()
-                    sInfo.Name = Zeile.Substring((j * Me.ColumnWidth) + ColumnOffset, Me.ColumnWidth).Trim()
-                    sInfo.Unit = HExt_welEinheit
-                    sInfo.Index = index
+                    sInfo = New TimeSeriesInfo With {
+                        .Name = Zeile.Substring((j * Me.ColumnWidth) + ColumnOffset, Me.ColumnWidth).Trim(),
+                        .Unit = HExt_welEinheit,
+                        .Index = index
+                    }
                     Me.TimeSeriesInfos.Add(sInfo)
                     index = index + 1
                 Next

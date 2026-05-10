@@ -89,9 +89,10 @@ Friend Class ImportCSVDialog
         Me.tsFile = fileInstance
 
         'initialize input delay timer
-        Me.inputTimer = New Timers.Timer(1000)
-        Me.inputTimer.SynchronizingObject = Me
-        Me.inputTimer.AutoReset = False
+        Me.inputTimer = New Timers.Timer(1000) With {
+            .SynchronizingObject = Me,
+            .AutoReset = False
+        }
 
     End Sub
 
