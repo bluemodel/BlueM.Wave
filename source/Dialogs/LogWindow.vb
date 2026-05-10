@@ -75,13 +75,13 @@ Friend Class LogWindow
                 Me.TextBox_Log.SelectionColor = Color.Red
                 Me.TextBox_Log.SelectionFont = boldFont
             Case Else
-                Me.TextBox_Log.SelectionColor = Color.Black
+                Me.TextBox_Log.SelectionColor = If(Helpers.GetCurrentColorMode = SystemColorMode.Dark, Color.White, Color.Black)
                 Me.TextBox_Log.SelectionFont = currentFont
         End Select
 
         'unselect and reset formatting
         Me.TextBox_Log.Select(Me.TextBox_Log.Text.Length, 0)
-        Me.TextBox_Log.SelectionColor = Color.Black
+        Me.TextBox_Log.SelectionColor = If(Helpers.GetCurrentColorMode = SystemColorMode.Dark, Color.White, Color.Black)
         Me.TextBox_Log.SelectionFont = currentFont
 
         Call Application.DoEvents()
@@ -114,4 +114,7 @@ Friend Class LogWindow
         End If
     End Sub
 
+    Private Sub ToolStripButton_Copy_Click(sender As Object, e As EventArgs) Handles ToolStripButton_Copy.Click
+        Clipboard.SetText(Me.TextBox_Log.Text)
+    End Sub
 End Class

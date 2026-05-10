@@ -263,16 +263,12 @@ Public Module Helpers
         chart.ColorPalette = Helpers.getColorPalette()
 
         chart.Aspect.View3D = False
-        'chart.BackColor = Color.White
         chart.Panel.Gradient.Visible = False
-        chart.Panel.Brush.Color = Color.White
         chart.Walls.Back.Transparent = False
         chart.Walls.Back.Gradient.Visible = False
-        chart.Walls.Back.Color = Color.White
 
         'Header
         chart.Header.Visible = False
-        chart.Header.Font.Color = Color.Black
         chart.Header.Text = ""
 
         'Legende
@@ -288,40 +284,86 @@ Public Module Helpers
         'Achsen
         chart.Axes.DrawBehind = False
 
-        chart.Axes.Left.Title.Font.Color = Color.Black
-
-        chart.Axes.Left.Labels.Font.Color = Color.Black
-
         chart.Axes.Left.AxisPen.Visible = True
-
         chart.Axes.Left.Grid.Visible = True
         chart.Axes.Left.Grid.Style = Drawing2D.DashStyle.Dash
 
-        chart.Axes.Right.Title.Font.Color = Color.Black
-
-        chart.Axes.Right.Labels.Font.Color = Color.Black
-
         chart.Axes.Right.AxisPen.Visible = True
-
         chart.Axes.Right.Grid.Visible = False
         chart.Axes.Right.Grid.Style = Drawing2D.DashStyle.Dash
 
-        chart.Axes.Bottom.Title.Font.Color = Color.Black
-
-        chart.Axes.Bottom.Labels.Font.Color = Color.Black
-
         chart.Axes.Bottom.Automatic = True
-
         chart.Axes.Bottom.AxisPen.Visible = True
-
         chart.Axes.Bottom.Grid.Visible = True
         chart.Axes.Bottom.Grid.Style = Drawing2D.DashStyle.Dash
+
+        'set color mode
+        Call ChartSetColorMode(chart, Helpers.GetCurrentColorMode)
 
         'set font with user setting
         Call ChartSetFont(chart, My.Settings.defaultFont)
         'set font size with user setting
         Call ChartSetFontSize(chart, My.Settings.defaultFontSize)
 
+    End Sub
+
+    ''' <summary>
+    ''' Sets the color mode of a chart to either classic (light) or dark mode, depending on the provided SystemColorMode value
+    ''' </summary>
+    ''' <param name="chart"></param>
+    ''' <param name="mode"></param>
+    Friend Sub ChartSetColorMode(ByRef chart As Steema.TeeChart.Chart, mode As SystemColorMode)
+
+        Dim backColor As Color
+        Dim foreColor As Color
+        Dim lightColor As Color
+
+        Select Case mode
+            Case SystemColorMode.Dark
+                backColor = Color.FromArgb(48, 48, 48)
+                foreColor = Color.White
+                lightColor = Color.FromArgb(125, 125, 125)
+            Case Else
+                backColor = Color.White
+                foreColor = Color.Black
+                lightColor = Color.FromArgb(169, 169, 169)
+        End Select
+
+        chart.Walls.Back.Color = backColor
+        chart.Panel.Brush.Color = backColor
+        chart.Header.Font.Color = foreColor
+        chart.Axes.Left.AxisPen.Color = foreColor
+        chart.Axes.Left.Ticks.Color = foreColor
+        chart.Axes.Left.Grid.Color = lightColor
+        chart.Axes.Left.Title.Font.Color = foreColor
+        chart.Axes.Left.Labels.Font.Color = foreColor
+        chart.Axes.Right.AxisPen.Color = foreColor
+        chart.Axes.Right.Ticks.Color = foreColor
+        chart.Axes.Right.Title.Font.Color = foreColor
+        chart.Axes.Right.Labels.Font.Color = foreColor
+        chart.Axes.Right.Grid.Color = foreColor
+        chart.Axes.Bottom.AxisPen.Color = foreColor
+        chart.Axes.Bottom.Ticks.Color = foreColor
+        chart.Axes.Bottom.Title.Font.Color = foreColor
+        chart.Axes.Bottom.Labels.Font.Color = foreColor
+        chart.Axes.Bottom.Grid.Color = lightColor
+        chart.Axes.Top.AxisPen.Color = foreColor
+        chart.Axes.Top.Ticks.Color = foreColor
+        chart.Axes.Top.Title.Font.Color = foreColor
+        chart.Axes.Top.Labels.Font.Color = foreColor
+        chart.Axes.Top.Grid.Color = lightColor
+        chart.Axes.DepthTop.AxisPen.Color = foreColor
+        chart.Axes.DepthTop.Ticks.Color = foreColor
+        chart.Axes.DepthTop.Title.Font.Color = foreColor
+        chart.Axes.DepthTop.Labels.Font.Color = foreColor
+        chart.Axes.DepthTop.Grid.Color = lightColor
+        For Each axis As Steema.TeeChart.Axis In chart.Axes.Custom
+            axis.AxisPen.Color = foreColor
+            axis.Ticks.Color = foreColor
+            axis.Title.Font.Color = foreColor
+            axis.Labels.Font.Color = foreColor
+            axis.Grid.Color = foreColor
+        Next
     End Sub
 
     ''' <summary>
@@ -378,5 +420,40 @@ Public Module Helpers
             axis.Title.Font.Size = size
         Next
     End Sub
+
+    ''' <summary>
+    ''' Returns the current color mode based on user settings and system color mode
+    ''' </summary>
+    ''' <returns>Either SystemColorMode.Classic or SystemColorMode.Dark</returns>
+    Friend Function GetCurrentColorMode() As SystemColorMode
+        Select Case My.Settings.colorMode
+            Case "Auto"
+                Return If(Helpers.GetWindowsColorMode() = 0, SystemColorMode.Dark, SystemColorMode.Classic)
+            Case "Light"
+                Return SystemColorMode.Classic
+            Case "Dark"
+                Return SystemColorMode.Dark
+            Case Else
+                Return SystemColorMode.Classic
+        End Select
+    End Function
+
+    ''' <summary>
+    ''' Returns Windows Color Mode for Applications.
+    ''' 0 = dark theme, 1 = light theme
+    ''' </summary>
+    ''' <param name="GetSystemColorModeInstead">If True, returns system color mode; otherwise, returns app color mode.</param>
+    ''' <returns>0 for dark theme, 1 for light theme</returns>
+    ''' <remarks>based on https://stackoverflow.com/a/77891877</remarks>
+    Private Function GetWindowsColorMode(Optional GetSystemColorModeInstead As Boolean = False) As Integer
+        Try
+            Return CInt(Microsoft.Win32.Registry.GetValue(
+                "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize",
+                If(GetSystemColorModeInstead, "SystemUsesLightTheme", "AppsUseLightTheme"),
+                -1))
+        Catch
+            Return 1
+        End Try
+    End Function
 
 End Module

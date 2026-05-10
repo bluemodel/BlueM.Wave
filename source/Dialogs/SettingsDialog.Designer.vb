@@ -36,6 +36,8 @@ Partial Class SettingsDialog
         GroupBox_Logging = New GroupBox()
         CheckBox_logShowDebugMessages = New CheckBox()
         GroupBox_Interface = New GroupBox()
+        ComboBox_Colormode = New ComboBox()
+        Label_Colormode = New Label()
         Label_showOverview = New Label()
         CheckBox_showOverviewOnStartup = New CheckBox()
         FontDialog1 = New FontDialog()
@@ -94,7 +96,7 @@ Partial Class SettingsDialog
         GroupBox_Chart.Controls.Add(Label_DefaultFontSize)
         GroupBox_Chart.Controls.Add(Label_defaultLineWidth)
         GroupBox_Chart.Controls.Add(NumericUpDown_DefaultLineWidth)
-        GroupBox_Chart.Location = New Point(14, 81)
+        GroupBox_Chart.Location = New Point(14, 100)
         GroupBox_Chart.Name = "GroupBox_Chart"
         GroupBox_Chart.Size = New Size(308, 110)
         GroupBox_Chart.TabIndex = 1
@@ -155,7 +157,7 @@ Partial Class SettingsDialog
         GroupBox_Logging.Anchor = AnchorStyles.Top Or AnchorStyles.Left Or AnchorStyles.Right
         GroupBox_Logging.Controls.Add(Label_loggingLevel)
         GroupBox_Logging.Controls.Add(CheckBox_logShowDebugMessages)
-        GroupBox_Logging.Location = New Point(14, 197)
+        GroupBox_Logging.Location = New Point(14, 216)
         GroupBox_Logging.Name = "GroupBox_Logging"
         GroupBox_Logging.Size = New Size(308, 60)
         GroupBox_Logging.TabIndex = 2
@@ -175,19 +177,40 @@ Partial Class SettingsDialog
         ' GroupBox_Interface
         ' 
         GroupBox_Interface.Anchor = AnchorStyles.Top Or AnchorStyles.Left Or AnchorStyles.Right
+        GroupBox_Interface.Controls.Add(ComboBox_Colormode)
+        GroupBox_Interface.Controls.Add(Label_Colormode)
         GroupBox_Interface.Controls.Add(Label_showOverview)
         GroupBox_Interface.Controls.Add(CheckBox_showOverviewOnStartup)
         GroupBox_Interface.Location = New Point(14, 14)
         GroupBox_Interface.Name = "GroupBox_Interface"
-        GroupBox_Interface.Size = New Size(307, 60)
+        GroupBox_Interface.Size = New Size(307, 80)
         GroupBox_Interface.TabIndex = 0
         GroupBox_Interface.TabStop = False
         GroupBox_Interface.Text = "Interface"
         ' 
+        ' ComboBox_Colormode
+        ' 
+        ComboBox_Colormode.Anchor = AnchorStyles.Top Or AnchorStyles.Left Or AnchorStyles.Right
+        ComboBox_Colormode.DropDownStyle = ComboBoxStyle.DropDownList
+        ComboBox_Colormode.FormattingEnabled = True
+        ComboBox_Colormode.Location = New Point(190, 22)
+        ComboBox_Colormode.Name = "ComboBox_Colormode"
+        ComboBox_Colormode.Size = New Size(110, 23)
+        ComboBox_Colormode.TabIndex = 3
+        ' 
+        ' Label_Colormode
+        ' 
+        Label_Colormode.AutoSize = True
+        Label_Colormode.Location = New Point(6, 25)
+        Label_Colormode.Name = "Label_Colormode"
+        Label_Colormode.Size = New Size(162, 15)
+        Label_Colormode.TabIndex = 2
+        Label_Colormode.Text = "Color mode (requires restart):"
+        ' 
         ' Label_showOverview
         ' 
         Label_showOverview.AutoSize = True
-        Label_showOverview.Location = New Point(6, 23)
+        Label_showOverview.Location = New Point(7, 51)
         Label_showOverview.Name = "Label_showOverview"
         Label_showOverview.Size = New Size(176, 15)
         Label_showOverview.TabIndex = 0
@@ -197,7 +220,7 @@ Partial Class SettingsDialog
         ' 
         CheckBox_showOverviewOnStartup.Anchor = AnchorStyles.Top Or AnchorStyles.Right
         CheckBox_showOverviewOnStartup.AutoSize = True
-        CheckBox_showOverviewOnStartup.Location = New Point(285, 23)
+        CheckBox_showOverviewOnStartup.Location = New Point(286, 51)
         CheckBox_showOverviewOnStartup.Name = "CheckBox_showOverviewOnStartup"
         CheckBox_showOverviewOnStartup.Size = New Size(15, 14)
         CheckBox_showOverviewOnStartup.TabIndex = 1
@@ -256,4 +279,6 @@ Partial Class SettingsDialog
     Friend WithEvents Label_DeafultFont As Label
     Friend WithEvents FontDialog1 As FontDialog
     Friend WithEvents Button_ShowFontDialog As Button
+    Friend WithEvents ComboBox_Colormode As ComboBox
+    Friend WithEvents Label_Colormode As Label
 End Class

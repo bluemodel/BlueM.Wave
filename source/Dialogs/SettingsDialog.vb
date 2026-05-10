@@ -29,6 +29,11 @@ Friend Class SettingsDialog
 
         Me.isLoading = True
 
+        'color modes
+        Me.ComboBox_Colormode.Items.Add("Auto")
+        Me.ComboBox_Colormode.Items.Add("Light")
+        Me.ComboBox_Colormode.Items.Add("Dark")
+
         'get installed fonts
         Dim installedFontCollection As New InstalledFontCollection()
         Dim fontFamilies() As FontFamily = installedFontCollection.Families
@@ -39,14 +44,20 @@ Friend Class SettingsDialog
         Next
 
         'set current setting values in the form
-        Me.ComboBox_Font.SelectedItem = My.Settings.defaultFont
+        Me.ComboBox_Colormode.SelectedItem = My.Settings.colorMode
         Me.CheckBox_showOverviewOnStartup.Checked = My.Settings.showOverviewOnStartup
-        Me.NumericUpDown_DefaultLineWidth.Value = My.Settings.defaultLineWidth
+        Me.ComboBox_Font.SelectedItem = My.Settings.defaultFont
         Me.NumericUpDown_DefaultFontSize.Value = My.Settings.defaultFontSize
+        Me.NumericUpDown_DefaultLineWidth.Value = My.Settings.defaultLineWidth
         Me.CheckBox_logShowDebugMessages.Checked = (My.Settings.loggingLevel = Log.levels.debug.ToString())
 
         Me.isLoading = False
 
+    End Sub
+
+    Private Sub ComboBox_Colormode_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox_Colormode.SelectedIndexChanged
+        My.Settings.colorMode = Me.ComboBox_Colormode.SelectedItem
+        My.Settings.Save()
     End Sub
 
     Private Sub CheckBox_showOverviewOnStartup_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox_showOverviewOnStartup.CheckedChanged

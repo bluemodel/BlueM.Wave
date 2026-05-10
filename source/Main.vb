@@ -37,6 +37,9 @@ Friend Module Main
             End Try
         End If
 
+        'set color mode (depends on user settings)
+        Application.SetColorMode(Helpers.GetCurrentColorMode)
+
         Dim wave As New Wave()
         Dim args As List(Of String) = Environment.GetCommandLineArgs().Skip(1).ToList()
         Dim files As New List(Of String)

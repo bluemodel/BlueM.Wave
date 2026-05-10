@@ -22,94 +22,92 @@ Partial Class LogWindow
     'Das Bearbeiten mit dem Code-Editor ist nicht möglich.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-        Dim ToolStrip1 As System.Windows.Forms.ToolStrip
+        Dim ToolStrip1 As ToolStrip
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(LogWindow))
-        Me.ToolStripButton_Clear = New System.Windows.Forms.ToolStripButton()
-        Me.ToolStripButton_Save = New System.Windows.Forms.ToolStripButton()
-        Me.ToolStripButton_Copy = New System.Windows.Forms.ToolStripButton()
-        Me.TextBox_Log = New System.Windows.Forms.RichTextBox()
-        Me.SaveFileDialog1 = New System.Windows.Forms.SaveFileDialog()
-        ToolStrip1 = New System.Windows.Forms.ToolStrip()
+        ToolStripButton_Clear = New ToolStripButton()
+        ToolStripButton_Save = New ToolStripButton()
+        ToolStripButton_Copy = New ToolStripButton()
+        TextBox_Log = New RichTextBox()
+        SaveFileDialog1 = New SaveFileDialog()
+        ToolStrip1 = New ToolStrip()
         ToolStrip1.SuspendLayout()
-        Me.SuspendLayout()
-        '
-        'ToolStrip1
-        '
-        ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButton_Clear, Me.ToolStripButton_Save, Me.ToolStripButton_Copy})
-        ToolStrip1.Location = New System.Drawing.Point(0, 0)
+        SuspendLayout()
+        ' 
+        ' ToolStrip1
+        ' 
+        ToolStrip1.Items.AddRange(New ToolStripItem() {ToolStripButton_Clear, ToolStripButton_Save, ToolStripButton_Copy})
+        ToolStrip1.Location = New Point(0, 0)
         ToolStrip1.Name = "ToolStrip1"
-        ToolStrip1.Size = New System.Drawing.Size(964, 25)
+        ToolStrip1.Size = New Size(1125, 25)
         ToolStrip1.TabIndex = 1
         ToolStrip1.Text = "ToolStrip1"
-        '
-        'ToolStripButton_Clear
-        '
-        Me.ToolStripButton_Clear.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.ToolStripButton_Clear.Image = CType(resources.GetObject("ToolStripButton_Clear.Image"), System.Drawing.Image)
-        Me.ToolStripButton_Clear.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.ToolStripButton_Clear.Name = "ToolStripButton_Clear"
-        Me.ToolStripButton_Clear.Size = New System.Drawing.Size(23, 22)
-        Me.ToolStripButton_Clear.Text = "Clear log"
-        Me.ToolStripButton_Clear.ToolTipText = "Clear log"
-        '
-        'ToolStripButton_Save
-        '
-        Me.ToolStripButton_Save.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.ToolStripButton_Save.Image = CType(resources.GetObject("ToolStripButton_Save.Image"), System.Drawing.Image)
-        Me.ToolStripButton_Save.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.ToolStripButton_Save.Name = "ToolStripButton_Save"
-        Me.ToolStripButton_Save.Size = New System.Drawing.Size(23, 22)
-        Me.ToolStripButton_Save.Text = "Save"
-        '
-        'ToolStripButton_Copy
-        '
-        Me.ToolStripButton_Copy.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.ToolStripButton_Copy.Enabled = False
-        Me.ToolStripButton_Copy.Image = CType(resources.GetObject("ToolStripButton_Copy.Image"), System.Drawing.Image)
-        Me.ToolStripButton_Copy.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.ToolStripButton_Copy.Name = "ToolStripButton_Copy"
-        Me.ToolStripButton_Copy.Size = New System.Drawing.Size(23, 22)
-        Me.ToolStripButton_Copy.Text = "Copy"
-        '
-        'TextBox_Log
-        '
-        Me.TextBox_Log.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TextBox_Log.BackColor = System.Drawing.Color.White
-        Me.TextBox_Log.Font = New System.Drawing.Font("Courier New", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.TextBox_Log.Location = New System.Drawing.Point(10, 30)
-        Me.TextBox_Log.Name = "TextBox_Log"
-        Me.TextBox_Log.ReadOnly = True
-        Me.TextBox_Log.Size = New System.Drawing.Size(942, 451)
-        Me.TextBox_Log.TabIndex = 0
-        Me.TextBox_Log.Text = ""
-        Me.TextBox_Log.WordWrap = False
-        '
-        'SaveFileDialog1
-        '
-        Me.SaveFileDialog1.DefaultExt = "txt"
-        Me.SaveFileDialog1.FileName = "log.txt"
-        Me.SaveFileDialog1.Filter = "Text-Dateien|*.txt"
-        Me.SaveFileDialog1.Title = "Log speichern"
-        '
-        'LogWindow
-        '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
-        Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(964, 491)
-        Me.Controls.Add(ToolStrip1)
-        Me.Controls.Add(Me.TextBox_Log)
-        Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
-        Me.MaximizeBox = False
-        Me.MinimumSize = New System.Drawing.Size(460, 380)
-        Me.Name = "LogWindow"
-        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = "WaveLog"
+        ' 
+        ' ToolStripButton_Clear
+        ' 
+        ToolStripButton_Clear.DisplayStyle = ToolStripItemDisplayStyle.Image
+        ToolStripButton_Clear.Image = CType(resources.GetObject("ToolStripButton_Clear.Image"), Image)
+        ToolStripButton_Clear.ImageTransparentColor = Color.Magenta
+        ToolStripButton_Clear.Name = "ToolStripButton_Clear"
+        ToolStripButton_Clear.Size = New Size(23, 22)
+        ToolStripButton_Clear.Text = "Clear"
+        ToolStripButton_Clear.ToolTipText = "Clear log"
+        ' 
+        ' ToolStripButton_Save
+        ' 
+        ToolStripButton_Save.DisplayStyle = ToolStripItemDisplayStyle.Image
+        ToolStripButton_Save.Image = CType(resources.GetObject("ToolStripButton_Save.Image"), Image)
+        ToolStripButton_Save.ImageTransparentColor = Color.Magenta
+        ToolStripButton_Save.Name = "ToolStripButton_Save"
+        ToolStripButton_Save.Size = New Size(23, 22)
+        ToolStripButton_Save.Text = "Save"
+        ' 
+        ' ToolStripButton_Copy
+        ' 
+        ToolStripButton_Copy.DisplayStyle = ToolStripItemDisplayStyle.Image
+        ToolStripButton_Copy.Image = CType(resources.GetObject("ToolStripButton_Copy.Image"), Image)
+        ToolStripButton_Copy.ImageTransparentColor = Color.Magenta
+        ToolStripButton_Copy.Name = "ToolStripButton_Copy"
+        ToolStripButton_Copy.Size = New Size(23, 22)
+        ToolStripButton_Copy.Text = "Copy"
+        ' 
+        ' TextBox_Log
+        ' 
+        TextBox_Log.Anchor = AnchorStyles.Top Or AnchorStyles.Bottom Or AnchorStyles.Left Or AnchorStyles.Right
+        TextBox_Log.Font = New Font("Courier New", 8.25F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        TextBox_Log.Location = New Point(12, 35)
+        TextBox_Log.Margin = New Padding(4, 3, 4, 3)
+        TextBox_Log.Name = "TextBox_Log"
+        TextBox_Log.ReadOnly = True
+        TextBox_Log.Size = New Size(1098, 520)
+        TextBox_Log.TabIndex = 0
+        TextBox_Log.Text = ""
+        TextBox_Log.WordWrap = False
+        ' 
+        ' SaveFileDialog1
+        ' 
+        SaveFileDialog1.DefaultExt = "txt"
+        SaveFileDialog1.FileName = "log.txt"
+        SaveFileDialog1.Filter = "Text-Dateien|*.txt"
+        SaveFileDialog1.Title = "Log speichern"
+        ' 
+        ' LogWindow
+        ' 
+        AutoScaleDimensions = New SizeF(7F, 15F)
+        AutoScaleMode = AutoScaleMode.Font
+        ClientSize = New Size(1125, 567)
+        Controls.Add(ToolStrip1)
+        Controls.Add(TextBox_Log)
+        Icon = CType(resources.GetObject("$this.Icon"), Icon)
+        Margin = New Padding(4, 3, 4, 3)
+        MaximizeBox = False
+        MinimumSize = New Size(534, 432)
+        Name = "LogWindow"
+        StartPosition = FormStartPosition.CenterParent
+        Text = "WaveLog"
         ToolStrip1.ResumeLayout(False)
         ToolStrip1.PerformLayout()
-        Me.ResumeLayout(False)
-        Me.PerformLayout()
+        ResumeLayout(False)
+        PerformLayout()
 
     End Sub
     Private WithEvents TextBox_Log As System.Windows.Forms.RichTextBox

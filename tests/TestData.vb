@@ -25,7 +25,7 @@ Module TestData
     ''' by going up 6 levels from the application directory
     ''' </summary>
     Friend Function getParentDir() As String
-        Dim appdir As String = My.Application.Info.DirectoryPath() 'e.g. BlueM.Wave\tests\bin\x64\Debug\net9.0-windows
+        Dim appdir As String = My.Application.Info.DirectoryPath() 'e.g. BlueM.Wave\tests\bin\x64\Debug\net10.0-windows
         Dim rootdir As String = appdir
         For i As Integer = 1 To 6
             rootdir = IO.Directory.GetParent(rootdir).FullName

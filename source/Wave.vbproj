@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net9.0-windows</TargetFramework>
+    <TargetFramework>net10.0-windows</TargetFramework>
     <OutputType>WinExe</OutputType>
     <StartupObject>Sub Main</StartupObject>
     <RootNamespace>BlueM.Wave</RootNamespace>
@@ -192,6 +192,7 @@ copy $(MSBuildProjectDirectory)\lib\PureHDF\PureHDF.LICENSE.md $(OutDir)PureHDF.
     </None>
     <None Update="My Project\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.vb</LastGenOutput>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -268,5 +269,11 @@ copy $(MSBuildProjectDirectory)\lib\PureHDF\PureHDF.LICENSE.md $(OutDir)PureHDF.
     <Reference Include="MathParserNet">
       <HintPath>lib\MathParserNet\MathParserNet.dll</HintPath>
     </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Update="My Project\Resources.resx">
+      <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.vb</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
 </Project>
