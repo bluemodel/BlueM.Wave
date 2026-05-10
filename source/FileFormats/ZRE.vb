@@ -129,7 +129,7 @@ Namespace Fileformats
             Do
                 j += 1
                 Zeile = StrReadSync.ReadLine.ToString()
-                If (j > Me.NLinesHeader And Zeile.Trim.Length > 0) Then
+                If (j > Me.NLinesHeader AndAlso Zeile.Trim.Length > 0) Then
 
                     'Datum erkennen
                     timestamp = Zeile.Substring(0, 14)

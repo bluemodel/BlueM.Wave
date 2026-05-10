@@ -2448,7 +2448,7 @@ Friend Class WaveController
         End If
 
         'check for infinity values and replace with NaN (#199)
-        If ts.Nodes.ContainsValue(Double.PositiveInfinity) Or ts.Nodes.ContainsValue(Double.NegativeInfinity) Then
+        If ts.Nodes.ContainsValue(Double.PositiveInfinity) OrElse ts.Nodes.ContainsValue(Double.NegativeInfinity) Then
             ts = ts.Clone(preserveId:=True)
             Dim t_inf As New List(Of DateTime)
             For Each kvp As KeyValuePair(Of DateTime, Double) In ts.Nodes

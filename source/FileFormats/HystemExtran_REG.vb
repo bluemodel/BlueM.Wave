@@ -190,7 +190,7 @@ Namespace Fileformats
 
                 If Zeile.Substring(19, 1) = "E" Then Exit Do
 
-                If (j > Me.NLinesHeader And Zeile.Length > 0) Then
+                If (j > Me.NLinesHeader AndAlso Zeile.Length > 0) Then
 
                     'Kennzeichnung lesen
                     kennzeichnung = Zeile.Substring(19, 1)

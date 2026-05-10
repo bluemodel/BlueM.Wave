@@ -153,7 +153,7 @@ Namespace Fileformats
                 iLine += 1
                 line = StrReadSync.ReadLine.ToString().Trim()
 
-                If iLine < Me.LineNumberData Or line.Trim().Length = 0 Then
+                If iLine < Me.LineNumberData OrElse line.Trim().Length = 0 Then
                     Continue Do
                 End If
 
