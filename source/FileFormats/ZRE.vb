@@ -158,27 +158,27 @@ Namespace Fileformats
         ''' <summary>
         ''' Exportiert eine Zeitreihe als ZRE-Datei
         ''' </summary>
-        ''' <param name="Reihe">Die zu exportierende Zeitreihe</param>
-        ''' <param name="File">Pfad zur anzulegenden Datei</param>
-        Public Overloads Shared Sub WriteFile(Reihe As TimeSeries, File As String)
+        ''' <param name="ts">Die zu exportierende Zeitreihe</param>
+        ''' <param name="file">Pfad zur anzulegenden Datei</param>
+        Public Overloads Shared Sub WriteFile(ts As TimeSeries, file As String)
 
             Dim strwrite As StreamWriter
             Dim i As Integer
 
-            strwrite = New StreamWriter(File, False, Helpers.DefaultEncoding)
+            strwrite = New StreamWriter(file, False, Helpers.DefaultEncoding)
 
             '1. Zeile
             strwrite.WriteLine("*ZRE")
             '2. Zeile: Titel und Einheit
-            strwrite.WriteLine(Reihe.Title.PadRight(15).Substring(0, 15) & Reihe.Unit)
+            strwrite.WriteLine(ts.Title.PadRight(15).Substring(0, 15) & ts.Unit)
             '3. Zeile: Parameter
             strwrite.WriteLine("0                      0.        0.        0.")
             '4. Zeile: Anfangs- und Enddatum
-            strwrite.WriteLine(Reihe.Dates(0).ToString(DateFormats("ZRE")) & " " & Reihe.Dates(Reihe.Length - 1).ToString(DateFormats("ZRE")))
+            strwrite.WriteLine(ts.Dates(0).ToString(DateFormats("ZRE")) & " " & ts.Dates(ts.Length - 1).ToString(DateFormats("ZRE")))
             'ab 5. Zeile: Werte
-            For i = 0 To Reihe.Length - 1
-                strwrite.Write(Reihe.Dates(i).ToString(DateFormats("ZRE")) & " " & Reihe.Values(i).ToString(DefaultNumberFormat).PadLeft(14))
-                If (i < Reihe.Length - 1) Then 'kein Zeilenumbruch nach der letzten Zeile!
+            For i = 0 To ts.Length - 1
+                strwrite.Write(ts.Dates(i).ToString(DateFormats("ZRE")) & " " & ts.Values(i).ToString(DefaultNumberFormat).PadLeft(14))
+                If (i < ts.Length - 1) Then 'kein Zeilenumbruch nach der letzten Zeile!
                     strwrite.WriteLine()
                 End If
             Next

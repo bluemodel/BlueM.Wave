@@ -79,7 +79,7 @@ Namespace Fileformats
         ''' <param name="file">Path to file</param>
         ''' <returns>Boolean</returns>
         ''' <remarks>Check is based on file extension and line 1 (must start with "time;")</remarks>
-        Public Shared Function verifyFormat(file As String) As Boolean
+        Public Shared Function VerifyFormat(file As String) As Boolean
             'Check if file name ends with ".bcs"
             Dim filename As String = Path.GetFileName(file).ToLower()
             If Not filename.EndsWith(".bcs") Then Return False
@@ -188,7 +188,7 @@ Namespace Fileformats
         ''' <param name="tsList">time series to write to file</param>
         ''' <param name="file">path to the bcs file</param>
         ''' <remarks></remarks>
-        Public Overloads Shared Sub writeFile(ByRef tsList As List(Of TimeSeries), file As String)
+        Public Overloads Shared Sub WriteFile(ByRef tsList As List(Of TimeSeries), file As String)
 
             Dim strwrite As StreamWriter
             Dim t As DateTime

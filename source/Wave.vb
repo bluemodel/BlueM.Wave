@@ -579,7 +579,7 @@ Public Class Wave
                         Call Fileformats.SWMM_INTERFACE.WriteFile(tsList, filename)
 
                     Case TimeSeriesFile.FileTypes.HYBNAT_BCS
-                        Call Fileformats.HYBNAT_BCS.writeFile(tsList, filename)
+                        Call Fileformats.HYBNAT_BCS.WriteFile(tsList, filename)
 
                     Case Else
                         Throw New TimeSeriesFileWritingException($"Export to file type {fileType} not yet implemented!")
@@ -611,7 +611,7 @@ Public Class Wave
                     Select Case fileType
 
                         Case TimeSeriesFile.FileTypes.BIN
-                            Call Fileformats.BIN.writeFile(ts, filename)
+                            Call Fileformats.BIN.WriteFile(ts, filename)
 
                         Case TimeSeriesFile.FileTypes.HYSTEM_REG
                             Call Fileformats.HystemExtran_REG.WriteFile(ts, filename)

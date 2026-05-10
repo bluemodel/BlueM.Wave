@@ -670,7 +670,7 @@ Public MustInherit Class TimeSeriesFile
         Select Case fileExt
 
             Case FileExtensions.ASC
-                If Fileformats.GISMO_WEL.verifyFormat(file) Then
+                If Fileformats.GISMO_WEL.VerifyFormat(file) Then
                     'GISMO result file in WEL format
                     Log.AddLogEntry(Levels.info, $"Detected GISMO result format for file {fileName}.")
                     fileType = FileTypes.GISMO_WEL
@@ -692,11 +692,11 @@ Public MustInherit Class TimeSeriesFile
 
             Case FileExtensions.CSV
                 'check file format
-                If Fileformats.GISMO_WEL.verifyFormat(file) Then
+                If Fileformats.GISMO_WEL.VerifyFormat(file) Then
                     'GISMO result file in CSV format
                     Log.AddLogEntry(Levels.info, $"Detected GISMO result format for file {fileName}.")
                     fileType = FileTypes.GISMO_WEL
-                ElseIf Fileformats.GINA_WEL.verifyFormat(file) Then
+                ElseIf Fileformats.GINA_WEL.VerifyFormat(file) Then
                     'GINA WEL file in CSV format
                     Log.AddLogEntry(Levels.info, $"Detected GINA  WEL format for file {fileName}.")
                     fileType = FileTypes.GINA_WEL
@@ -708,7 +708,7 @@ Public MustInherit Class TimeSeriesFile
 
             Case FileExtensions.DAT
                 'Check file format
-                If Fileformats.HystemExtran_REG.verifyFormat(file) Then
+                If Fileformats.HystemExtran_REG.VerifyFormat(file) Then
                     'Hystem-Extran rainfall file
                     Log.AddLogEntry(Levels.info, $"Detected Hystem-Extran rainfall format for file {fileName}.")
                     fileType = FileTypes.HYSTEM_REG
@@ -796,7 +796,7 @@ Public MustInherit Class TimeSeriesFile
 
             Case FileExtensions.WBL
                 'Check format
-                If Fileformats.WBL.verifyFormat(file) Then
+                If Fileformats.WBL.VerifyFormat(file) Then
                     'SYDRO binary WEL file
                     Log.AddLogEntry(Levels.info, $"Detected SYDRO binary WEL format for file {fileName}.")
                     fileType = FileTypes.WBL
@@ -804,11 +804,11 @@ Public MustInherit Class TimeSeriesFile
 
             Case FileExtensions.WEL, FileExtensions.KWL
                 'Check file format
-                If Fileformats.WEL.verifyFormat(file) Then
+                If Fileformats.WEL.VerifyFormat(file) Then
                     'WEL file
                     Log.AddLogEntry(Levels.info, $"Detected BlueM/Talsim WEL format for file {fileName}.")
                     fileType = FileTypes.WEL
-                ElseIf Fileformats.HystemExtran_WEL.verifyFormat(file) Then
+                ElseIf Fileformats.HystemExtran_WEL.VerifyFormat(file) Then
                     'Hystem-Extran rainfall file
                     Log.AddLogEntry(Levels.info, $"Detected Hystem-Extran rainfall format for file {fileName}.")
                     fileType = FileTypes.HYSTEM_WEL
@@ -828,7 +828,7 @@ Public MustInherit Class TimeSeriesFile
 
             Case FileExtensions.XML
                 'Check file format
-                If Fileformats.FEWS_PI.verifyFormat(file) Then
+                If Fileformats.FEWS_PI.VerifyFormat(file) Then
                     'FEWS PI XML file
                     Log.AddLogEntry(Levels.info, $"Detected FEWS PI XML format for file {fileName}.")
                     fileType = FileTypes.FEWS_PI

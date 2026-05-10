@@ -209,7 +209,7 @@ Friend Class CLI
                                 If IO.File.Exists(filepath) Then
                                     Log.AddLogEntry(Log.Levels.warning, "Overwriting existing file!")
                                 End If
-                                Fileformats.BIN.writeFile(ts, filepath)
+                                Fileformats.BIN.WriteFile(ts, filepath)
                             Next
                     End Select
                     Log.AddLogEntry(BlueM.Wave.Log.Levels.info, "Finished conversion!")

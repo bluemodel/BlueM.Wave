@@ -168,7 +168,7 @@ Namespace Fileformats
         ''' </summary>
         ''' <param name="ts">the timeseries to write</param>
         ''' <param name="file">path to the file</param>
-        Public Overloads Shared Sub writeFile(ByRef ts As TimeSeries, file As String)
+        Public Overloads Shared Sub WriteFile(ByRef ts As TimeSeries, file As String)
 
             Dim header() As Int32
             Dim rdate As Double

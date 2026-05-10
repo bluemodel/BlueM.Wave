@@ -257,28 +257,28 @@ Namespace Fileformats
         ''' <summary>
         ''' Exportiert eine Zeitreihe als REG-Datei
         ''' </summary>
-        ''' <param name="Reihe">Die zu exportierende Zeitreihe</param>
-        ''' <param name="File">Pfad zur anzulegenden Datei</param>
-        Public Overloads Shared Sub WriteFile(Reihe As TimeSeries, File As String)
+        ''' <param name="ts">Die zu exportierende Zeitreihe</param>
+        ''' <param name="file">Pfad zur anzulegenden Datei</param>
+        Public Overloads Shared Sub WriteFile(ts As TimeSeries, file As String)
 
             Dim dt As Integer
             Dim KontiReihe As TimeSeries
             Const iDim As Integer = -3        'Dezimalfaktor wird erstmal global auf -3 gesetzt
 
             'Zeitintervall aus ersten und zweiten Zeitschritt der Reihe ermitteln
-            dt = DateDiff(DateInterval.Minute, Reihe.Dates(0), Reihe.Dates(1))
+            dt = DateDiff(DateInterval.Minute, ts.Dates(0), ts.Dates(1))
 
             'Äquidistante Zeitreihe erzeugen
-            KontiReihe = Reihe.ChangeTimestep(BlueM.Wave.TimeSeries.TimeStepTypeEnum.Minute, dt, Reihe.StartDate, BlueM.Wave.TimeSeries.InterpretationEnum.BlockRight)
+            KontiReihe = ts.ChangeTimestep(BlueM.Wave.TimeSeries.TimeStepTypeEnum.Minute, dt, ts.StartDate, BlueM.Wave.TimeSeries.InterpretationEnum.BlockRight)
 
             Dim strwrite As StreamWriter
             Dim iZeile, j, n As Integer
             Dim WerteproZeile As Integer = HystemExtran_REG.WerteProZeile(dt)
-            strwrite = New StreamWriter(File)
+            strwrite = New StreamWriter(file)
             Dim IntWert As Long
 
             '1. Zeile
-            Dim title As String = Reihe.Title
+            Dim title As String = ts.Title
             If title.Length > 30 Then
                 title = title.Substring(0, 30)
             End If
@@ -300,7 +300,7 @@ Namespace Fileformats
             'Art der Daten, N = Niederschlag, Q = Abfluss
             strwrite.Write("N    ")
             'Einheit
-            strwrite.WriteLine(Reihe.Unit.PadRight(10))
+            strwrite.WriteLine(ts.Unit.PadRight(10))
 
             '3. Zeile: 
             strwrite.WriteLine("TUD   0 0   0 3 0 0 Beginn         Kommentarzeile 1                        Ende")
