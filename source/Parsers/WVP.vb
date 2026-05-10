@@ -51,9 +51,7 @@ Namespace Parsers
             ' series=series4
             ' series=series5
             '
-            file = ""
-
-            For Each line In Me.inputText.Split({vbCrLf, vbLf}, StringSplitOptions.RemoveEmptyEntries)
+            For Each line In Me.InputText.Split({vbCrLf, vbLf}, StringSplitOptions.RemoveEmptyEntries)
 
                 line = line.Trim() 'get rid of whitespace
 

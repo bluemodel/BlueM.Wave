@@ -250,7 +250,7 @@ Public Class TimeSeries
                 Dim isNanPeriod As Boolean = False
 
                 Dim start As DateTime = Nothing
-                Dim [end] As DateTime = Nothing
+                Dim [end] As DateTime
                 Dim count As Integer
 
                 'if the first value is NaN, start a NaN period

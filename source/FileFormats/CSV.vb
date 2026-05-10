@@ -57,7 +57,7 @@ Namespace Fileformats
 
             Dim i As Integer
             Dim sInfo As TimeSeriesInfo
-            Dim Zeile As String = ""
+            Dim Zeile As String
             Dim ZeileSpalten As String = ""
             Dim ZeileEinheiten As String = ""
 
@@ -91,7 +91,6 @@ Namespace Fileformats
             Dim Namen() As String
             Dim Einheiten() As String
 
-            ReDim Namen(0)
             ReDim Einheiten(0)
 
             If (Me.IsColumnSeparated) Then

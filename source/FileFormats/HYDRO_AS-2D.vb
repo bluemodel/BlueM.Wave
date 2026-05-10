@@ -159,29 +159,24 @@ Namespace Fileformats
                     Next
 
                     'Spaltennamen auslesen
-                    Dim anzSpalten As Integer
                     Dim Namen(0) As String
-
                     Select Case Me._HYDROAS_version
                         Case 2
                             'space separated names
                             Namen = ZeileSpalten.Split(New Char() {Me.Separator.ToChar}, System.StringSplitOptions.RemoveEmptyEntries)
-                            anzSpalten = Namen.Length + 1 'X-Spalte künstlich dazuzählen, da ohne Namen
                         Case 5
                             'names in columns of equal width
                             ZeileSpalten = ZeileSpalten.Substring(14) 'start from column 14
                             'split into equal lengths
                             l = 13
-                            anzSpalten = ZeileSpalten.Length / l
+                            Dim anzSpalten As Integer = ZeileSpalten.Length / l
                             ReDim Namen(anzSpalten - 1)
                             For i = 0 To anzSpalten - 1
                                 Namen(i) = ZeileSpalten.Substring(i * l, l).Trim()
                             Next
-                            anzSpalten += 1 'X-Spalte künstlich dazuzählen, da ohne Namen
                     End Select
 
                     'store series info
-
                     For i = 0 To Namen.Length - 1
                         sInfo = New TimeSeriesInfo With {
                             .Name = Namen(i).Trim(),
@@ -234,7 +229,7 @@ Namespace Fileformats
         Public Overrides Sub ReadFile()
 
             Dim i As Integer
-            Dim Zeile As String = ""
+            Dim Zeile As String
             Dim datum As DateTime
             Dim Werte() As String
             Dim ts As TimeSeries

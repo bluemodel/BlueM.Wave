@@ -494,7 +494,6 @@ Public MustInherit Class TimeSeriesFile
     ''' <remarks></remarks>
     Public Function SelectSeries(index As Integer) As Boolean
 
-        Dim i As Integer = 0
         For Each sInfo As TimeSeriesInfo In Me.TimeSeriesInfos
             If sInfo.Index = index Then
                 Me.SelectedSeries.Add(sInfo)

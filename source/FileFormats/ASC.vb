@@ -77,7 +77,7 @@ Namespace Fileformats
 
             Dim i As Integer
             Dim sInfo As TimeSeriesInfo
-            Dim Zeile As String = ""
+            Dim Zeile As String
             Dim ZeileSpalten As String = ""
             Dim ZeileEinheiten As String = ""
 
