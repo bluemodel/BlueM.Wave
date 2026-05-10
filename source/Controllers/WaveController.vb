@@ -560,7 +560,7 @@ Friend Class WaveController
                 Dim tsList As New List(Of TimeSeries)
                 For Each ts As TimeSeries In _model.TimeSeries.Values
                     Dim series As Steema.TeeChart.Styles.Series = View.GetSeries(ts.Id)
-                    If series IsNot Nothing AndAlso TypeOf series Is Steema.TeeChart.Styles.Line Then
+                    If TypeOf series Is Steema.TeeChart.Styles.Line Then
                         Dim line As Steema.TeeChart.Styles.Line = CType(series, Steema.TeeChart.Styles.Line)
                         ts.DisplayOptions.Color = line.Color
                         ts.DisplayOptions.LineStyle = line.LinePen.Style
