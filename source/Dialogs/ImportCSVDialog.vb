@@ -223,7 +223,7 @@ Friend Class ImportCSVDialog
         ComboBox_Dateformat.LostFocus,
         ComboBox_Encoding.SelectedIndexChanged
 
-        If (Me.IsInitializing = True) Then
+        If Me.IsInitializing Then
             Exit Sub
         Else
 

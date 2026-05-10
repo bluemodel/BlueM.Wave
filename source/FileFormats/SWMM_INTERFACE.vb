@@ -247,7 +247,7 @@ Namespace Fileformats
             Next
 
             'Einheiten?
-            If (Me.UseUnits = False) Then
+            If Not Me.UseUnits Then
                 Throw New TimeSeriesFileReadingException("When reading a SWMM-Interface-File, UseUnits must be True!")
             End If
 

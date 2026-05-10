@@ -121,7 +121,7 @@ Friend Class ChangeTimestep
         ignoreNaN = dlg.CheckBox_IgnoreNaN.Checked
 
         'if ignoreNaN is set, remove all NaN values from time series
-        If ignoreNaN = True Then
+        If ignoreNaN Then
             ts = ts.RemoveNaNValues()
         End If
 

@@ -129,7 +129,7 @@ Namespace Parsers
                         Try
                             Select Case key.ToLower()
                                 Case "iscolumnseparated"
-                                    fileInstance.IsColumnSeparated = If(value.Equals("true", StringComparison.CurrentCultureIgnoreCase), True, False)
+                                    fileInstance.IsColumnSeparated = value.Equals("true", StringComparison.CurrentCultureIgnoreCase)
                                 Case "separator"
                                     fileInstance.Separator = New Character(value)
                                 Case "dateformat"
@@ -143,7 +143,7 @@ Namespace Parsers
                                 Case "ilinedata"
                                     fileInstance.LineNumberData = Convert.ToInt32(value)
                                 Case "useunits"
-                                    fileInstance.UseUnits = If(value.Equals("true", StringComparison.CurrentCultureIgnoreCase), True, False)
+                                    fileInstance.UseUnits = value.Equals("true", StringComparison.CurrentCultureIgnoreCase)
                                 Case "columnwidth"
                                     fileInstance.ColumnWidth = Convert.ToInt32(value)
                                 Case "datetimecolumnindex"
