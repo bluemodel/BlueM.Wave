@@ -62,7 +62,7 @@ Namespace Parsers
                     Continue For
                 End If
 
-                If line.ToLower().StartsWith("file=") Then
+                If line.StartsWith("file=", StringComparison.CurrentCultureIgnoreCase) Then
                     'file
                     file = line.Split("=".ToCharArray(), 2)(1).Trim()
                     If Not IO.Path.IsPathRooted(file) Then
@@ -76,7 +76,7 @@ Namespace Parsers
                         .settings = New Dictionary(Of String, String)()
                     })
 
-                ElseIf line.ToLower().StartsWith("series=") Then
+                ElseIf line.StartsWith("series=", StringComparison.CurrentCultureIgnoreCase) Then
                     'series
                     line = line.Split("=".ToCharArray(), 2).Last.Trim()
                     'series name may be enclosed in quotes and be followed by an optional title, which may also be enclosed in quotes

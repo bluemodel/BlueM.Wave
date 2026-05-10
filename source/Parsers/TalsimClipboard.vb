@@ -275,7 +275,7 @@ Namespace Parsers
                     Dim zip As IO.Compression.ZipArchive = IO.Compression.ZipFile.OpenRead(file_wlzip)
 
                     For Each entry As IO.Compression.ZipArchiveEntry In zip.Entries
-                        If entry.Name.ToLower() = filename.ToLower() Then
+                        If entry.Name.Equals(filename, StringComparison.CurrentCultureIgnoreCase) Then
                             zipEntryFound = True
                             'extract file from zip archive
                             Log.AddLogEntry(Log.levels.info, $"Extracting file from {file_wlzip} ...")

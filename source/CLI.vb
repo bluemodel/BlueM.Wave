@@ -102,11 +102,11 @@ Friend Class CLI
                     Dim i As Integer = 1
                     Dim n_option_args As Integer = 0
                     Do While i < args.Count
-                        If args(i).ToLower() = "-i" Then
+                        If args(i).Equals("-i", StringComparison.CurrentCultureIgnoreCase) Then
                             'interactive mode
                             interactive = True
                             n_option_args += 1
-                        ElseIf args(i).ToLower = "-of" Then
+                        ElseIf args(i).Equals("-of", StringComparison.CurrentCultureIgnoreCase) Then
                             'parse outputformat
                             i += 1
                             Select Case args(i).ToUpper()

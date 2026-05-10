@@ -155,7 +155,7 @@ Namespace Fileformats
 
                     'Read dataset names and enumerate columns for each
                     For Each child As NativeObject In dataGroup.Children()
-                        If child.Name.ToLower() <> "time" Then
+                        If Not child.Name.Equals("time", StringComparison.CurrentCultureIgnoreCase) Then
                             'Check if it's a dataset
                             If TypeOf child Is NativeDataset Then
                                 Dim dataset As NativeDataset = CType(child, NativeDataset)
@@ -447,7 +447,7 @@ Namespace Fileformats
                             If dataGroup.LinkExists("time") Then
                                 'Check if there's at least one other dataset (element)
                                 For Each dataChild As NativeObject In dataGroup.Children()
-                                    If TypeOf dataChild Is NativeDataset AndAlso dataChild.Name.ToLower() <> "time" Then
+                                    If TypeOf dataChild Is NativeDataset AndAlso Not dataChild.Name.Equals("time", StringComparison.CurrentCultureIgnoreCase) Then
                                         Return True
                                     End If
                                 Next

@@ -94,7 +94,7 @@ Namespace Fileformats
                     Zeile = StrReadSync.ReadLine.ToString()
                     i += 1
                     If Zeile.StartsWith("$"c) Then Continue Do ' Kommentarzeile
-                    If Zeile.ToLower.StartsWith("*z") Then    ' Hier fängt der Header an
+                    If Zeile.StartsWith("*z", StringComparison.CurrentCultureIgnoreCase) Then    ' Hier fängt der Header an
                         headerFound = True
                         Exit Do
                     End If
@@ -144,7 +144,7 @@ Namespace Fileformats
                     'Kommentarzeile
                     'TODO: store comments as metadata
                     Continue Do
-                ElseIf Zeile.ToLower.StartsWith("*z") Then    ' Hier fängt der Header an
+                ElseIf Zeile.StartsWith("*z", StringComparison.CurrentCultureIgnoreCase) Then    ' Hier fängt der Header an
                     headerFound = True
                     iLineHeadings = i + 1
                     iLineUnits = i + 1

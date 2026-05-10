@@ -244,7 +244,7 @@ Namespace Fileformats
         ''' <remarks>Adapted from Fortran routine FILE_GETRECL (formerly ZRE_GETRECL)</remarks>
         Public Shared Function verifyFormat(file As String) As Boolean
             ' Check file extension
-            If Not file.ToLower().EndsWith(".gbl") Then Return False
+            If Not file.EndsWith(".gbl", StringComparison.CurrentCultureIgnoreCase) Then Return False
 
             Dim fileInfo As New IO.FileInfo(file)
             If fileInfo.Length < 20 Then Return False ' At least a 20-byte header must be present

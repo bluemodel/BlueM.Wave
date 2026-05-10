@@ -106,9 +106,9 @@ Namespace Fileformats
             Dim foundZeit As Boolean = False
             Do
                 Dim line As String = syncReader.ReadLine()
-                If line.Trim().ToLower().StartsWith("ganglinien:") Then
+                If line.Trim().StartsWith("ganglinien:", StringComparison.CurrentCultureIgnoreCase) Then
                     foundGanglinien = True
-                ElseIf line.Trim().ToLower().StartsWith("zeit") Then
+                ElseIf line.Trim().StartsWith("zeit", StringComparison.CurrentCultureIgnoreCase) Then
                     foundZeit = True
                 End If
             Loop Until syncReader.Peek() = -1
@@ -138,7 +138,7 @@ Namespace Fileformats
             'Loop throgh file until line starts with "Ganglinien:" and get element name and type
             Do
                 Dim line As String = syncReader.ReadLine()
-                If line.Trim().ToLower().StartsWith("ganglinien:") Then
+                If line.Trim().StartsWith("ganglinien:", StringComparison.CurrentCultureIgnoreCase) Then
                     'Determine element name and type
                     _elmentName = line.Split(":")(1).Split("/")(0).Trim()
                     _elementType = _elmentName(0)
@@ -164,7 +164,7 @@ Namespace Fileformats
             'Loop throgh file until line starts with "Zeit"
             Do
                 Dim line As String = syncReader.ReadLine()
-                If line.Trim().ToLower().StartsWith("zeit") Then
+                If line.Trim().StartsWith("zeit", StringComparison.CurrentCultureIgnoreCase) Then
                     'Set line numbers for headings, units and data
                     iLineUnits = iLineHeadings + 1
                     iLineData = iLineHeadings + 3

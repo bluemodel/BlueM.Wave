@@ -1318,7 +1318,7 @@ Friend Class WaveController
 
                 success = True
 
-                If IO.Path.GetExtension(file).ToUpper() = TimeSeriesFile.FileExtensions.TEN Then
+                If IO.Path.GetExtension(file).Equals(TimeSeriesFile.FileExtensions.TEN, StringComparison.CurrentCultureIgnoreCase) Then
                     'TODO: this currently loads all series from the TEN, instead of only the currently loaded ones
                     Call Load_TEN(file)
                 Else

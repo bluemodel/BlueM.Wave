@@ -132,7 +132,7 @@ Namespace Fileformats
             Dim StrReadSync = TextReader.Synchronized(StrRead)
 
             'Determine HYDRO_AS-2D version for Q_Strg.dat
-            If Path.GetFileName(Me.File).ToLower() = "q_strg.dat" Then
+            If Path.GetFileName(Me.File).Equals("Q_Strg.dat", StringComparison.CurrentCultureIgnoreCase) Then
                 'If the 5th line starts with "Name:", then it is HYDROAS-2D version 5 format
                 For i = 1 To 5
                     Zeile = StrReadSync.ReadLine.ToString()
