@@ -445,7 +445,7 @@ Public Class TimeSeries
             For Each value As Double In Me.NodesClean.Values
                 avg += value
             Next
-            avg = avg / Me.NodesClean.Count
+            avg /= Me.NodesClean.Count
             Return avg
         End Get
     End Property
