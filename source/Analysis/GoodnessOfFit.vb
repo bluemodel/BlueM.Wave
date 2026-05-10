@@ -31,7 +31,7 @@ Friend Class GoodnessOfFit
     ''' Data structure containing analysis results
     ''' Outer key is observed series name, inner key is period name (e.g. "Entire series" or hydrological year)
     ''' </summary>
-    Private GoFResults As Dictionary(Of String, Dictionary(Of String, GoF))
+    Private ReadOnly GoFResults As Dictionary(Of String, Dictionary(Of String, GoF))
 
     Public Overloads Shared Function Description() As String
         Return "Calculates multiple goodness of fit criteria between two or more time series. Only coincident data points where both values are not NaN are considered."

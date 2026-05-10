@@ -32,10 +32,8 @@ Namespace Fileformats
         Const iZeileReportTimeStep As Integer = 3
         Const iZeileAnzConstituents As Integer = 4
         Private Shared AnzConstituents As Integer
-        Private Shared Constituents() As Constituent
         Private AnzNodes As Integer
         Private _Zeitintervall As Integer
-        Private _noConstituents As Integer
 
         ''' <summary>
         ''' Structure for storing SWMM series information

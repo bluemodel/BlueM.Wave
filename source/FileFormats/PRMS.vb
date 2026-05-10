@@ -48,7 +48,7 @@ Namespace Fileformats
             statvar = 4
         End Enum
 
-        Private FileFormat As FileType
+        Private ReadOnly FileFormat As FileType
 
 #Region "Methoden"
 

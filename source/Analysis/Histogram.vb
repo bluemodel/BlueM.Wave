@@ -24,9 +24,9 @@ Imports System.Data
 Friend Class Histogram
     Inherits Analysis
 
-    Private n_breaks As Integer
-    Private n_bins As Integer
-    Private breaks As Double()
+    Private ReadOnly n_breaks As Integer
+    Private ReadOnly n_bins As Integer
+    Private ReadOnly breaks As Double()
 
     Private Structure histogramResults
         Dim title As String
@@ -36,7 +36,7 @@ Friend Class Histogram
         Dim PU As Double() ' probability of non-exceedance
     End Structure
 
-    Private results As histogramResults()
+    Private ReadOnly results As histogramResults()
 
     Public Overloads Shared Function Description() As String
         Return "Divides the entire range of values into a series of user-defined intervals (bins) and calculates the percentage of values falling into each interval." &

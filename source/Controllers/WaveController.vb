@@ -53,7 +53,7 @@ Friend Class WaveController
     ''' <summary>
     ''' History of view extents [(xmin, xmax), ...]
     ''' </summary>
-    Private ZoomHistory As List(Of (xmin As Double, xmax As Double))
+    Private ReadOnly ZoomHistory As List(Of (xmin As Double, xmax As Double))
 
     ''' <summary>
     ''' Index of current view extent in zoom history (may not be saved yet)
@@ -74,7 +74,7 @@ Friend Class WaveController
     'List of timestamps where markers are shown
     Private markerPositions As New List(Of DateTime)
     'Dictionary of marker series, the key corresponds to the associated time series id
-    Private markerSeries As New Dictionary(Of Integer, Steema.TeeChart.Styles.Points)
+    Private ReadOnly markerSeries As New Dictionary(Of Integer, Steema.TeeChart.Styles.Points)
 
     Private WithEvents AxisDialog As AxisDialog
 

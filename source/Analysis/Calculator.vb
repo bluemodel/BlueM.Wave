@@ -82,7 +82,7 @@ Friend Class Calculator
     ''' <summary>
     ''' List of variables
     ''' </summary>
-    Private tsVariables As List(Of CalculatorVariable)
+    Private ReadOnly tsVariables As List(Of CalculatorVariable)
 
 #End Region 'Properties
 

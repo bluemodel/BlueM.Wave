@@ -52,13 +52,13 @@ Friend Class MonthlyStatistics
     ''' <summary>
     ''' Result of the analysis
     ''' </summary>
-    Private result As Dictionary(Of Integer, MonthData)
+    Private ReadOnly result As Dictionary(Of Integer, MonthData)
 
     ''' <summary>
     ''' Flag indicating whether series values correspond to the previous month
     ''' </summary>
     ''' <remarks></remarks>
-    Private isPreviousMonth As Boolean
+    Private ReadOnly isPreviousMonth As Boolean
 
 #End Region 'Members
 
