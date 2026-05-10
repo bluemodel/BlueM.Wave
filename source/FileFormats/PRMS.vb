@@ -61,6 +61,8 @@ Namespace Fileformats
 
             MyBase.New(FileName)
 
+            Me.Separator = New Character(" ")
+
             Dim i As Integer
             Dim line As String
             Dim lines As Dictionary(Of Integer, String)
@@ -134,7 +136,7 @@ Namespace Fileformats
             Select Case Me.FileFormat
 
                 Case FileType.annual
-                    parts = lines(2).Split(New String() {"  "}, StringSplitOptions.RemoveEmptyEntries)
+                    parts = lines(2).Split(Me.Separator.ToChar(), StringSplitOptions.RemoveEmptyEntries)
                     For i = 1 To parts.Count() - 1 'first column is timestamp (year)
                         sInfo = New TimeSeriesInfo With {
                             .Index = i,
@@ -146,7 +148,7 @@ Namespace Fileformats
                     Me.DateTimeColumnIndex = 0
 
                 Case FileType.monthly
-                    parts = lines(2).Split(New Char() {" "}, StringSplitOptions.RemoveEmptyEntries)
+                    parts = lines(2).Split(Me.Separator.ToChar(), StringSplitOptions.RemoveEmptyEntries)
                     For i = 2 To parts.Count() - 1 'first two columns are timestamp (year and month)
                         sInfo = New TimeSeriesInfo With {
                             .Index = i,
@@ -158,7 +160,7 @@ Namespace Fileformats
                     Me.DateTimeColumnIndex = 0 'technically 0 and 1
 
                 Case FileType.dpout
-                    parts = lines(Me.LineNumberData).Split(New Char() {" "}, StringSplitOptions.RemoveEmptyEntries)
+                    parts = lines(Me.LineNumberData).Split(Me.Separator.ToChar(), StringSplitOptions.RemoveEmptyEntries)
                     For i = 3 To parts.Count() - 1 'first 3 columns are timestamp
                         Dim m As Match
                         m = Regex.Match(lines(i - 2).Trim(), ".{3} (.+)\s+\((.+)\).+")
@@ -172,7 +174,7 @@ Namespace Fileformats
                     Me.DateTimeColumnIndex = 0 ' technically 0, 1 and 2
 
                 Case FileType.statvar
-                    parts = lines(Me.LineNumberData).Split(New Char() {" "}, StringSplitOptions.RemoveEmptyEntries)
+                    parts = lines(Me.LineNumberData).Split(Me.Separator.ToChar(), StringSplitOptions.RemoveEmptyEntries)
                     For i = 7 To parts.Count() - 1 'first 7 columns are number and timestamp
                         sInfo = New TimeSeriesInfo With {
                             .Name = lines(i - 5).Trim(),
@@ -226,7 +228,7 @@ Namespace Fileformats
             Do
                 line = StrReadSync.ReadLine.ToString()
 
-                parts = line.Split(New Char() {" "}, StringSplitOptions.RemoveEmptyEntries)
+                parts = line.Split(Me.Separator.ToChar(), StringSplitOptions.RemoveEmptyEntries)
 
                 'Parse date
                 Select Case Me.FileFormat
