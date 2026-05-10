@@ -282,7 +282,7 @@ Namespace Fileformats
             If title.Length > 30 Then
                 title = title.Substring(0, 30)
             End If
-            strwrite.WriteLine($"TUD   0 0   0 1 0 0 {title.PadRight(30)}       0        0           0")
+            strwrite.WriteLine($"TUD   0 0   0 1 0 0 {title,-30}       0        0           0")
 
             '2. Zeile: 
             'Standard
