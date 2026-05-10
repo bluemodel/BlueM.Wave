@@ -133,7 +133,7 @@ Namespace Fileformats
             Next
 
             'Are columns separted by ";" or should fixed format be used?
-            If ZeileSpalten.Contains(";") Then
+            If ZeileSpalten.Contains(";"c) Then
                 Me.IsColumnSeparated = True
             Else
                 Me.IsColumnSeparated = False

@@ -103,7 +103,7 @@ Namespace Parsers
                             Dim optionString As String = m.Groups("optionstring").Value.Trim()
                             'remove quoted parts
                             Dim stripped As String = Regex.Replace(optionString, "(?<q>"").+?(?<-q>"")", "")
-                            If Not stripped.Contains("=") Then
+                            If Not stripped.Contains("="c) Then
                                 'no keyword options, title only
                                 options.title = optionString.Replace("""", "").Trim() 'remove any quotes around title
                             Else
@@ -149,7 +149,7 @@ Namespace Parsers
                         Log.AddLogEntry(Log.Levels.warning, $"Unable to parse series definition 'series={line}', this series will be ignored!")
                     End If
 
-                ElseIf line.Contains("=") Then
+                ElseIf line.Contains("="c) Then
                     'file import settings
                     Dim key, value As String
                     parts = line.Trim().Split("=".ToCharArray(), 2)
@@ -245,7 +245,7 @@ Namespace Parsers
                     'write series name
                     Dim line As String
                     Dim seriesName As String = ts.DataSource.Title
-                    If seriesName.Contains(":") Then
+                    If seriesName.Contains(":"c) Then
                         'enclose series names containing ":" in quotes
                         seriesName = $"""{seriesName}"""
                     End If

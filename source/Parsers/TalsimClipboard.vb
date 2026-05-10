@@ -115,7 +115,7 @@ Namespace Parsers
                 End If
 
                 If zreblock Then
-                    If line.Contains("=") Then
+                    If line.Contains("="c) Then
                         parts = line.Split("=")
                         data(i_series - 1).Add(parts(0), parts(1))
                     ElseIf line = "EndZeitreihe" Then

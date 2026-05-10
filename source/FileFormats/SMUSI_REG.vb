@@ -97,7 +97,7 @@ Namespace Fileformats
             'Reihentitel aus 1. Zeile nehmen.
             'Wenn Komma enthalten ist, nur den Teil vor dem Komma verwenden
             Zeile = StrReadSync.ReadLine()
-            If Zeile.Contains(",") Then
+            If Zeile.Contains(","c) Then
                 title = Zeile.Split(",")(0)
             Else
                 title = Zeile
