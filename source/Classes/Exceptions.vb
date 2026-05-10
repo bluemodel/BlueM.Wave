@@ -22,7 +22,7 @@ Imports System.Runtime.Serialization
 ''' Thrown when a general, internal exception occurs
 ''' </summary>
 <Serializable>
-Friend Class InternalException
+Public Class InternalException
     Inherits Exception
     Public Sub New()
     End Sub
@@ -35,7 +35,7 @@ Friend Class InternalException
 End Class
 
 <Serializable>
-Friend Class AnalysisCancelledException
+Public Class AnalysisCancelledException
     Inherits Exception
     Public Sub New()
     End Sub
@@ -51,7 +51,7 @@ End Class
 ''' Thrown when the input parameters for an analysis function are invalid
 ''' </summary>
 <Serializable>
-Friend Class AnalysisInvalidInputException
+Public Class AnalysisInvalidInputException
     Inherits Exception
     Public Sub New()
     End Sub
@@ -67,7 +67,7 @@ End Class
 ''' Thrown when an error occurs during the execution of an analysis function
 ''' </summary>
 <Serializable>
-Friend Class AnalysisFailedException
+Public Class AnalysisFailedException
     Inherits Exception
     Public Sub New()
     End Sub
