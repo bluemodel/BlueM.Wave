@@ -133,7 +133,7 @@ Namespace Fileformats
                         .Index = index
                     }
                     Me.TimeSeriesInfos.Add(sInfo)
-                    index = index + 1
+                    index += 1
                 Next
             Next
 
