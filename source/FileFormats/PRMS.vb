@@ -137,7 +137,7 @@ Namespace Fileformats
 
                 Case FileType.annual
                     parts = lines(2).Split(Me.Separator.ToChar(), StringSplitOptions.RemoveEmptyEntries)
-                    For i = 1 To parts.Count() - 1 'first column is timestamp (year)
+                    For i = 1 To parts.Length - 1 'first column is timestamp (year)
                         sInfo = New TimeSeriesInfo With {
                             .Index = i,
                             .Name = parts(i).Trim(),
@@ -149,7 +149,7 @@ Namespace Fileformats
 
                 Case FileType.monthly
                     parts = lines(2).Split(Me.Separator.ToChar(), StringSplitOptions.RemoveEmptyEntries)
-                    For i = 2 To parts.Count() - 1 'first two columns are timestamp (year and month)
+                    For i = 2 To parts.Length - 1 'first two columns are timestamp (year and month)
                         sInfo = New TimeSeriesInfo With {
                             .Index = i,
                             .Name = parts(i).Trim(),
@@ -161,7 +161,7 @@ Namespace Fileformats
 
                 Case FileType.dpout
                     parts = lines(Me.LineNumberData).Split(Me.Separator.ToChar(), StringSplitOptions.RemoveEmptyEntries)
-                    For i = 3 To parts.Count() - 1 'first 3 columns are timestamp
+                    For i = 3 To parts.Length - 1 'first 3 columns are timestamp
                         Dim m As Match
                         m = Regex.Match(lines(i - 2).Trim(), ".{3} (.+)\s+\((.+)\).+")
                         sInfo = New TimeSeriesInfo With {
@@ -175,7 +175,7 @@ Namespace Fileformats
 
                 Case FileType.statvar
                     parts = lines(Me.LineNumberData).Split(Me.Separator.ToChar(), StringSplitOptions.RemoveEmptyEntries)
-                    For i = 7 To parts.Count() - 1 'first 7 columns are number and timestamp
+                    For i = 7 To parts.Length - 1 'first 7 columns are number and timestamp
                         sInfo = New TimeSeriesInfo With {
                             .Name = lines(i - 5).Trim(),
                             .Unit = "-",
