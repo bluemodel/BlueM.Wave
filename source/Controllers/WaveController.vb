@@ -3088,7 +3088,7 @@ Friend Class WaveController
             Me.View.Activate()
 
             'Invoke the file import process asynchronously
-            View.BeginInvoke(New ImportDelegate(AddressOf _model.Import_Files), New String()() {files})
+            View.BeginInvoke(New ImportDelegate(AddressOf _model.Import_Files), {files})
         End If
 
     End Sub

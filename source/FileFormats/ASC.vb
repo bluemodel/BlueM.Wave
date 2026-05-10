@@ -104,8 +104,8 @@ Namespace Fileformats
             Dim Namen() As String
             Dim Einheiten() As String
 
-            Namen = ZeileSpalten.Split(New Char() {Me.Separator.ToChar}, StringSplitOptions.RemoveEmptyEntries)
-            Einheiten = ZeileEinheiten.Split(New Char() {Me.Separator.ToChar}, StringSplitOptions.RemoveEmptyEntries)
+            Namen = ZeileSpalten.Split(Me.Separator.ToChar, StringSplitOptions.RemoveEmptyEntries)
+            Einheiten = ZeileEinheiten.Split(Me.Separator.ToChar, StringSplitOptions.RemoveEmptyEntries)
 
             'Bei ASC hat die Datumsspalte (manchmal) keine Einheit
             If (Einheiten.Length = Namen.Length - 1) Then

@@ -115,6 +115,7 @@ Namespace Fileformats
             Me.IsColumnSeparated = False
             Me.ColumnOffset = 0
             Me.DecimalSeparator = Constants.period
+            Me.Separator = Constants.space
 
             Call Me.ReadSeriesInfo()
 
@@ -152,7 +153,7 @@ Namespace Fileformats
             For i = 1 To iZeileReportTimeStep
                 Zeile = StrReadSync.ReadLine.ToString()
             Next
-            strArray = Zeile.Split(New Char() {space.ToChar}, StringSplitOptions.RemoveEmptyEntries)
+            strArray = Zeile.Split(Me.Separator.ToChar, StringSplitOptions.RemoveEmptyEntries)
             Me.Zeitintervall = Convert.ToSingle(strArray(0))
 
             'Zeile mit der Anzahl der Constituents finden
@@ -160,14 +161,14 @@ Namespace Fileformats
                 Zeile = StrReadSync.ReadLine.ToString()
             Next
             'Anzahl der Constituents zu einem Knoten
-            strArray = Zeile.Split(New Char() {space.ToChar}, StringSplitOptions.RemoveEmptyEntries)
+            strArray = Zeile.Split(Me.Separator.ToChar, StringSplitOptions.RemoveEmptyEntries)
             AnzConstituents = Convert.ToSingle(strArray(0))
 
             ReDim Constituents(AnzConstituents - 1)
             'Inflows und Einheit einlesen
             For i = 0 To AnzConstituents - 1
                 Zeile = StrReadSync.ReadLine.ToString()
-                strArray = Zeile.Split(New Char() {space.ToChar}, StringSplitOptions.RemoveEmptyEntries)
+                strArray = Zeile.Split(Me.Separator.ToChar, StringSplitOptions.RemoveEmptyEntries)
                 Constituents(i).Type = strArray(0)
                 Constituents(i).Unit = strArray(1)
                 Constituents(i).Index = i
@@ -176,7 +177,7 @@ Namespace Fileformats
             'Anzahl der Zuflussknoten ermitteln
             'entspricht der Anzahl der Zeilen pro Zeitschritt
             Zeile = StrReadSync.ReadLine.ToString()
-            strArray = Zeile.Split(New Char() {space.ToChar}, StringSplitOptions.RemoveEmptyEntries)
+            strArray = Zeile.Split(Me.Separator.ToChar, StringSplitOptions.RemoveEmptyEntries)
             AnzNodes = Convert.ToInt32(strArray(0))
             ReDim Nodes(AnzNodes - 1)
             For i = 0 To AnzNodes - 1
@@ -272,7 +273,7 @@ Namespace Fileformats
                 IDWerte = 1
                 For i = 0 To AnzNodes - 1
                     Zeile = StrReadSync.ReadLine.ToString()
-                    tmpArray = Zeile.Split(New Char() {space.ToChar}, StringSplitOptions.RemoveEmptyEntries)
+                    tmpArray = Zeile.Split(Me.Separator.ToChar, StringSplitOptions.RemoveEmptyEntries)
                     If i = 0 Then
                         datum = New System.DateTime(tmpArray(1), tmpArray(2), tmpArray(3), tmpArray(4), tmpArray(5), tmpArray(6), 0, New System.Globalization.GregorianCalendar())
                     End If

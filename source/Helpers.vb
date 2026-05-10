@@ -30,7 +30,7 @@ Public Module Helpers
             DefaultNumberFormat = New NumberFormatInfo With {
                 .NumberDecimalSeparator = ".",
                 .NumberGroupSeparator = "",
-                .NumberGroupSizes = New Integer() {3}
+                .NumberGroupSizes = {3}
             }
         End Get
     End Property

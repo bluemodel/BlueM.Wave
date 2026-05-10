@@ -42,7 +42,7 @@ Friend Class ImportCSVDialog
 
             format = Me.ComboBox_Dateformat.Text
             'Escape any unescaped special characters
-            specialchars = New List(Of String)(New String() {"/", ":"})
+            specialchars = New List(Of String) From {"/", ":"}
             For Each c As String In specialchars
                 m = Regex.Matches(format, "[^\\]" + c)
                 If m.Count > 0 Then

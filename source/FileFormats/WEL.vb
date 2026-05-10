@@ -158,8 +158,8 @@ Namespace Fileformats
 
             If (Me.IsColumnSeparated) Then
                 'Zeichengetrennt
-                Namen = ZeileSpalten.Split(New Char() {Me.Separator.ToChar}, StringSplitOptions.RemoveEmptyEntries)
-                Einheiten = ZeileEinheiten.Split(New Char() {Me.Separator.ToChar}, StringSplitOptions.RemoveEmptyEntries)
+                Namen = ZeileSpalten.Split(Me.Separator.ToChar, StringSplitOptions.RemoveEmptyEntries)
+                Einheiten = ZeileEinheiten.Split(Me.Separator.ToChar, StringSplitOptions.RemoveEmptyEntries)
                 anzSpalten = Namen.Length
                 For i = 1 To anzSpalten - 1 'first column is timestamp
                     sInfo = New TimeSeriesInfo With {
@@ -241,7 +241,7 @@ Namespace Fileformats
                 If (Me.IsColumnSeparated) Then
                     'Zeichengetrennt
                     '---------------
-                    Werte = Zeile.Split(New Char() {Me.Separator.ToChar}, StringSplitOptions.RemoveEmptyEntries)
+                    Werte = Zeile.Split(Me.Separator.ToChar, StringSplitOptions.RemoveEmptyEntries)
                     'Erste Spalte: Datum_Zeit
                     timestamp = Werte(0).Trim()
                     ok = DateTime.TryParseExact(timestamp, Me.Dateformat, Helpers.DefaultNumberFormat, Globalization.DateTimeStyles.None, datum)

@@ -95,9 +95,9 @@ Namespace Fileformats
 
             If (Me.IsColumnSeparated) Then
                 'Zeichengetrennt
-                Namen = ZeileSpalten.Split(New Char() {Me.Separator.ToChar})
+                Namen = ZeileSpalten.Split(Me.Separator.ToChar)
                 If Me.UseUnits Then
-                    Einheiten = ZeileEinheiten.Split(New Char() {Me.Separator.ToChar})
+                    Einheiten = ZeileEinheiten.Split(Me.Separator.ToChar)
                 End If
                 anzSpalten = Namen.Length
             Else
@@ -199,7 +199,7 @@ Namespace Fileformats
 
                     'Zeichengetrennt
                     '---------------
-                    Werte = Zeile.Split(New Char() {Me.Separator.ToChar})
+                    Werte = Zeile.Split(Me.Separator.ToChar)
 
                     If (Werte.Length > 0 And Zeile.Trim.Length > 1) Then
                         'Erste Spalte: Datum_Zeit

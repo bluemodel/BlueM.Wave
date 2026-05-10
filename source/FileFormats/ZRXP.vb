@@ -77,7 +77,7 @@ Namespace Fileformats
             'settings
             Me.Dateformat = Helpers.DateFormats("ZRXP")
             Me.UseUnits = True
-            Me.Separator = New Character(" "c)
+            Me.Separator = Constants.space
 
             'set default metadata keys
             Me.FileMetadata.AddKeys(ZRXP.MetadataKeys)
@@ -252,7 +252,7 @@ Namespace Fileformats
                     Continue Do
                 End If
                 'split line
-                parts = line.Split(Me.Separator.ToChar(), StringSplitOptions.RemoveEmptyEntries)
+                parts = line.Split(Me.Separator.ToChar, StringSplitOptions.RemoveEmptyEntries)
 
                 Select Case Me.layout
                     Case LayoutEnum.Single

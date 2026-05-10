@@ -72,7 +72,7 @@ Namespace Fileformats
             Me.LineNumberHeaders = 4
             Me.UseUnits = False
             Me.IsColumnSeparated = True
-            Me.Separator = New BlueM.Wave.Character(" ")
+            Me.Separator = Constants.space
             Me.DateTimeColumnIndex = 0
 
             'Einheiten anhand des Dateinamens festlegen
@@ -163,7 +163,7 @@ Namespace Fileformats
                     Select Case Me._HYDROAS_version
                         Case 2
                             'space separated names
-                            Namen = ZeileSpalten.Split(New Char() {Me.Separator.ToChar}, System.StringSplitOptions.RemoveEmptyEntries)
+                            Namen = ZeileSpalten.Split(Me.Separator.ToChar, System.StringSplitOptions.RemoveEmptyEntries)
                         Case 5
                             'names in columns of equal width
                             ZeileSpalten = ZeileSpalten.Substring(14) 'start from column 14
@@ -269,7 +269,7 @@ Namespace Fileformats
                     'Daten
                     Do
                         Zeile = StrReadSync.ReadLine.ToString()
-                        Werte = Zeile.Split(New Char() {Me.Separator.ToChar}, System.StringSplitOptions.RemoveEmptyEntries)
+                        Werte = Zeile.Split(Me.Separator.ToChar, System.StringSplitOptions.RemoveEmptyEntries)
                         'Simulationszeit [h] wird zu Datum nach dem Referenzdatum (default: 01.01.2000 00:00:00) konvertiert
                         datum = Me.refDate + New TimeSpan(0, 0, Helpers.StringToDouble(Werte(0)) * 3600)
                         For Each sInfo As TimeSeriesInfo In Me.SelectedSeries

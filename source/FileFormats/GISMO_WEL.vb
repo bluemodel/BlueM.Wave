@@ -59,7 +59,7 @@ Namespace Fileformats
             Else
                 ' if not, the space " " is used as separator
                 Me.IsColumnSeparated = False
-                Me.Separator = space
+                Me.Separator = Constants.space
             End If
 
             Call Me.ReadSeriesInfo()
@@ -111,8 +111,8 @@ Namespace Fileformats
             If (Me.IsColumnSeparated) Then
                 ' data columns are separated by ";"
                 ' split string at every ";"
-                Namen = ZeileSpalten.Split(New Char() {Me.Separator.ToChar})
-                Einheiten = ZeileEinheiten.Split(New Char() {Me.Separator.ToChar})
+                Namen = ZeileSpalten.Split(Me.Separator.ToChar)
+                Einheiten = ZeileEinheiten.Split(Me.Separator.ToChar)
                 anzSpalten = Namen.Length
                 If Namen.Length <> Einheiten.Length Then
                     MessageBox.Show("Number of column names <> number of units!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning)
@@ -141,8 +141,8 @@ Namespace Fileformats
 
                 ' data columns are separated by " "
                 ' split string at every " "
-                Namen = ZeileSpalten.Split(New Char() {Me.Separator.ToChar})
-                Einheiten = ZeileEinheiten.Split(New Char() {Me.Separator.ToChar})
+                Namen = ZeileSpalten.Split(Me.Separator.ToChar)
+                Einheiten = ZeileEinheiten.Split(Me.Separator.ToChar)
                 anzSpalten = Namen.Length
                 If Namen.Length <> Einheiten.Length Then
                     MessageBox.Show("Number of column names <> number of units!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning)
@@ -207,7 +207,7 @@ Namespace Fileformats
                     ' data columns are separated by ";"
 
                     ' split data line into columns
-                    Werte = Zeile.Split(New Char() {Me.Separator.ToChar})
+                    Werte = Zeile.Split(Me.Separator.ToChar)
 
                     ' first column ist date time, add date time to times series
                     ok = DateTime.TryParseExact(Werte(Me.DateTimeColumnIndex), DateFormats("GISMO1"), Helpers.DefaultNumberFormat, Globalization.DateTimeStyles.None, datum)
@@ -229,7 +229,7 @@ Namespace Fileformats
                     Zeile = System.Text.RegularExpressions.Regex.Replace(Zeile, "\s{2,}", Me.Separator.ToChar)
 
                     ' the date time columns need to be moved to one column
-                    Werte_temp = Zeile.Split(New Char() {Me.Separator.ToChar})
+                    Werte_temp = Zeile.Split(Me.Separator.ToChar)
                     ReDim Werte(Werte_temp.Length - 2)
                     For i = 0 To Werte.Length - 1
                         Werte(i) = Werte_temp(i + 1)
