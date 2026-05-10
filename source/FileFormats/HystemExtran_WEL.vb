@@ -86,9 +86,8 @@ Namespace Fileformats
         Public Overrides Sub ReadSeriesInfo()
 
             Dim i, j As Integer
-            Dim Zeile As String = ""
+            Dim Zeile As String
             Dim ZeileSpalten As String = ""
-            Dim ZeileEinheiten As String = ""
             Dim iZeileAnzSpalten As Integer = 4
             Dim sInfo As TimeSeriesInfo
 
@@ -176,7 +175,7 @@ Namespace Fileformats
 
             'Header
             For iZeile = 1 To Me.LineNumberData - 1
-                Zeile = StrReadSync.ReadLine()
+                StrReadSync.ReadLine()
             Next
 
             'Daten
@@ -215,11 +214,11 @@ Namespace Fileformats
 
             Dim FiStr As New FileStream(file, FileMode.Open, IO.FileAccess.Read)
             Dim StrRead As New StreamReader(FiStr, detectEncodingFromByteOrderMarks:=True)
-            Dim Zeile As String = ""
+            Dim Zeile As String
 
             '3 Zeilen einlesen
-            Zeile = StrRead.ReadLine()
-            Zeile = StrRead.ReadLine()
+            StrRead.ReadLine()
+            StrRead.ReadLine()
             Zeile = StrRead.ReadLine()
 
             StrRead.Close()
