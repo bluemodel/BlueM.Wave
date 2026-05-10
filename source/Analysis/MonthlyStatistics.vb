@@ -175,7 +175,7 @@ Friend Class MonthlyStatistics
             'assign to previous month if necessary
             If Me.isPreviousMonth Then
                 If (month - 1) >= 1 Then
-                    month = month - 1
+                    month -= 1
                 Else
                     month = 12
                 End If

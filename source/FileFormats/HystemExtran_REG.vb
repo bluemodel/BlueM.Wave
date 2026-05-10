@@ -325,7 +325,7 @@ Namespace Fileformats
                         IntWert = KontiReihe.Values(n) * 10 ^ (-iDim)
                     End If
                     strwrite.Write(IntWert.ToString.PadLeft(5))
-                    n = n + 1
+                    n += 1
                 Next
                 strwrite.WriteLine()
             Next

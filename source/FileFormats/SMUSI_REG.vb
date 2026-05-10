@@ -273,9 +273,9 @@ Namespace Fileformats
                 strwrite.Write(Reihe.Dates(n).ToString(DateFormats("SMUSI")))
                 For j = 1 To WerteproZeile
                     IntWert = Reihe.Values(n) * 1000
-                    Summe = Summe + IntWert
+                    Summe += IntWert
                     strwrite.Write(IntWert.ToString.PadLeft(5))
-                    n = n + 1
+                    n += 1
                 Next
                 strwrite.WriteLine()
             Loop

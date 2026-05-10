@@ -210,7 +210,7 @@ Namespace Fileformats
                     swmmInfo.Variable = Constituents(j).Type
                     Me.swmmInfos.Add(index, swmmInfo)
 
-                    index = index + 1
+                    index += 1
                 Next
             Next
 
@@ -278,7 +278,7 @@ Namespace Fileformats
                     End If
                     For j = 0 To AnzConstituents - 1
                         Werte(IDWerte) = tmpArray(tmpArray.Length - AnzConstituents + j)
-                        IDWerte = IDWerte + 1
+                        IDWerte += 1
                     Next
                 Next
                 For Each sInfo As TimeSeriesInfo In Me.SelectedSeries
