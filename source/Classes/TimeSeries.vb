@@ -56,8 +56,6 @@ Public Class TimeSeries
     Private _nodesCleaned As SortedList(Of DateTime, Double)
     Private _unit As String
     Private _metadata As Metadata
-    Private _Objekt As String
-    Private _Type As String
     Private _Interpretation As InterpretationEnum
     Private _DataSource As TimeSeriesDataSource
     Private _displayOptions As TimeSeriesDisplayOptions
