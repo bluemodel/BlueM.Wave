@@ -21,6 +21,9 @@ Friend Module Main
     Public Sub Main()
         ' Starts the application.
 
+        'Set a default regex match timeout to prevent potential DoS attacks from untrusted input
+        AppDomain.CurrentDomain.SetData("REGEX_DEFAULT_MATCH_TIMEOUT", TimeSpan.FromMilliseconds(100))
+
         Application.EnableVisualStyles()
         Application.SetCompatibleTextRenderingDefault(False)
 
