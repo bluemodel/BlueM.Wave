@@ -79,8 +79,8 @@ Namespace Fileformats
             Me.TimeSeriesInfos.Clear()
 
             ' open file
-            Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
-            Dim StrRead As StreamReader = New StreamReader(FiStr, Me.Encoding)
+            Dim FiStr As New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
+            Dim StrRead As New StreamReader(FiStr, Me.Encoding)
             Dim StrReadSync = TextReader.Synchronized(StrRead)
 
             ' get element name to add to time series name
@@ -175,8 +175,8 @@ Namespace Fileformats
             Dim ts As TimeSeries
 
             ' open file
-            Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
-            Dim StrRead As StreamReader = New StreamReader(FiStr, Me.Encoding)
+            Dim FiStr As New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
+            Dim StrRead As New StreamReader(FiStr, Me.Encoding)
             Dim StrReadSync = TextReader.Synchronized(StrRead)
 
             ' initialize a time series for every selected series
@@ -268,8 +268,8 @@ Namespace Fileformats
         Public Function IsCSV() As Boolean
 
             ' open file
-            Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
-            Dim StrRead As StreamReader = New StreamReader(FiStr, detectEncodingFromByteOrderMarks:=True)
+            Dim FiStr As New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
+            Dim StrRead As New StreamReader(FiStr, detectEncodingFromByteOrderMarks:=True)
             Dim line As String
 
             ' read first line
@@ -303,8 +303,8 @@ Namespace Fileformats
         Public Shared Function verifyFormat(file As String) As Boolean
 
             ' open file
-            Dim FiStr As FileStream = New FileStream(file, FileMode.Open, IO.FileAccess.Read)
-            Dim StrRead As StreamReader = New StreamReader(FiStr, detectEncodingFromByteOrderMarks:=True)
+            Dim FiStr As New FileStream(file, FileMode.Open, IO.FileAccess.Read)
+            Dim StrRead As New StreamReader(FiStr, detectEncodingFromByteOrderMarks:=True)
             Dim lines As New List(Of String)
 
             ' read three lines

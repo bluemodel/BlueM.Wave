@@ -124,8 +124,8 @@ Namespace Fileformats
             Me.TimeSeriesInfos.Clear()
 
             'Datei öffnen
-            Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
-            Dim StrRead As StreamReader = New StreamReader(FiStr, Me.Encoding)
+            Dim FiStr As New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
+            Dim StrRead As New StreamReader(FiStr, Me.Encoding)
             Dim StrReadSync = TextReader.Synchronized(StrRead)
 
             sInfo = New TimeSeriesInfo With {
@@ -169,8 +169,8 @@ Namespace Fileformats
             Dim sInfo As TimeSeriesInfo
             Dim ts As TimeSeries
 
-            Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
-            Dim StrRead As StreamReader = New StreamReader(FiStr, Me.Encoding)
+            Dim FiStr As New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
+            Dim StrRead As New StreamReader(FiStr, Me.Encoding)
             Dim StrReadSync = TextReader.Synchronized(StrRead)
 
             'Zeitreihe instanzieren (nur eine)
@@ -341,8 +341,8 @@ Namespace Fileformats
         ''' <returns></returns>
         Public Shared Function verifyFormat(file As String) As Boolean
 
-            Dim FiStr As FileStream = New FileStream(file, FileMode.Open, IO.FileAccess.Read)
-            Dim StrRead As StreamReader = New StreamReader(FiStr, detectEncodingFromByteOrderMarks:=True)
+            Dim FiStr As New FileStream(file, FileMode.Open, IO.FileAccess.Read)
+            Dim StrRead As New StreamReader(FiStr, detectEncodingFromByteOrderMarks:=True)
             Dim Zeile As String = ""
 
             '1 Zeile einlesen

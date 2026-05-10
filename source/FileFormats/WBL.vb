@@ -105,8 +105,8 @@ Namespace Fileformats
             Log.AddLogEntry(Levels.info, $"Reading metadata from file {IO.Path.GetFileName(file_welinfo)}...")
 
             'Datei öffnen
-            Dim FiStr As FileStream = New FileStream(file_welinfo, FileMode.Open, IO.FileAccess.Read)
-            Dim StrRead As StreamReader = New StreamReader(FiStr, Me.Encoding)
+            Dim FiStr As New FileStream(file_welinfo, FileMode.Open, IO.FileAccess.Read)
+            Dim StrRead As New StreamReader(FiStr, Me.Encoding)
             Dim StrReadSync = TextReader.Synchronized(StrRead)
 
             Dim line As String

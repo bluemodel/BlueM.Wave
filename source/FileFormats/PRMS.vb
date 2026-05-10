@@ -66,8 +66,8 @@ Namespace Fileformats
             Dim lines As Dictionary(Of Integer, String)
 
             'Open the file to determine the file format
-            Dim FiStr As FileStream = New FileStream(File, FileMode.Open, IO.FileAccess.Read)
-            Dim StrRead As StreamReader = New StreamReader(FiStr, Me.Encoding)
+            Dim FiStr As New FileStream(File, FileMode.Open, IO.FileAccess.Read)
+            Dim StrRead As New StreamReader(FiStr, Me.Encoding)
             Dim StrReadSync = TextReader.Synchronized(StrRead)
 
             i = 0
@@ -118,8 +118,8 @@ Namespace Fileformats
             Me.TimeSeriesInfos.Clear()
 
             'Open the file
-            Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
-            Dim StrRead As StreamReader = New StreamReader(FiStr, Me.Encoding)
+            Dim FiStr As New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
+            Dim StrRead As New StreamReader(FiStr, Me.Encoding)
             Dim StrReadSync = TextReader.Synchronized(StrRead)
 
             lines = New Dictionary(Of Integer, String)
@@ -203,8 +203,8 @@ Namespace Fileformats
             Dim timestamp As DateTime
             Dim ts As TimeSeries
 
-            Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
-            Dim StrRead As StreamReader = New StreamReader(FiStr, Me.Encoding)
+            Dim FiStr As New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
+            Dim StrRead As New StreamReader(FiStr, Me.Encoding)
             Dim StrReadSync = TextReader.Synchronized(StrRead)
 
             'Instantiate time series
@@ -269,8 +269,8 @@ Namespace Fileformats
 
             Try
                 'Open the file
-                Dim FiStr As FileStream = New FileStream(file, FileMode.Open, IO.FileAccess.Read)
-                Dim StrRead As StreamReader = New StreamReader(FiStr, detectEncodingFromByteOrderMarks:=True)
+                Dim FiStr As New FileStream(file, FileMode.Open, IO.FileAccess.Read)
+                Dim StrRead As New StreamReader(FiStr, detectEncodingFromByteOrderMarks:=True)
                 Dim StrReadSync = TextReader.Synchronized(StrRead)
 
                 i = 0
