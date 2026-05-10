@@ -79,19 +79,20 @@ Public Module Helpers
     ''' <remarks>see https://docs.microsoft.com/en-us/dotnet/standard/base-types/custom-date-and-time-format-strings </remarks>
     Public ReadOnly Property DateFormats() As Dictionary(Of String, String)
         Get
-            Dim dict As New Dictionary(Of String, String)
-            dict.Add("current", Helpers.CurrentDateFormat)
-            dict.Add("default", "dd.MM.yyyy HH:mm")
-            dict.Add("GISMO1", "dd.MM.yyyy HH:mm")
-            dict.Add("GISMO2", "yyyyMMdd HH:mm")
-            dict.Add("HYSTEMEXTRAN", "ddMMyyyyHHmmss")
-            dict.Add("SMUSI", "dd MM yyyy   HH")
-            dict.Add("SWMM", "MM/dd/yyyy HH:mm:ss")
-            dict.Add("UVF", "yyyyMMddHHmm") 'eigentlich nur zweistellige Jahreszahl, aber das Jahrhundert wird beim Einlesen trotzdem bestimmt
-            dict.Add("WEL", "dd.MM.yyyy HH:mm")
-            dict.Add("ZRE", "yyyyMMdd HH:mm")
-            dict.Add("ZRXP", "yyyyMMddHHmmss")
-            dict.Add("ISO", "yyyy-MM-dd HH:mm:ss")
+            Dim dict As New Dictionary(Of String, String) From {
+                {"current", Helpers.CurrentDateFormat},
+                {"default", "dd.MM.yyyy HH:mm"},
+                {"GISMO1", "dd.MM.yyyy HH:mm"},
+                {"GISMO2", "yyyyMMdd HH:mm"},
+                {"HYSTEMEXTRAN", "ddMMyyyyHHmmss"},
+                {"SMUSI", "dd MM yyyy   HH"},
+                {"SWMM", "MM/dd/yyyy HH:mm:ss"},
+                {"UVF", "yyyyMMddHHmm"}, 'eigentlich nur zweistellige Jahreszahl, aber das Jahrhundert wird beim Einlesen trotzdem bestimmt
+                {"WEL", "dd.MM.yyyy HH:mm"},
+                {"ZRE", "yyyyMMdd HH:mm"},
+                {"ZRXP", "yyyyMMddHHmmss"},
+                {"ISO", "yyyy-MM-dd HH:mm:ss"}
+            }
             Return dict
         End Get
     End Property
