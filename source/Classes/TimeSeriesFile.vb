@@ -133,8 +133,8 @@ Public MustInherit Class TimeSeriesFile
     Private _columnOffset As Integer = 0
     Private _dateTimeColumnIndex As Integer = 0
     Private _seriesInfos As List(Of TimeSeriesInfo)
-    Private _selectedSeries As List(Of TimeSeriesInfo)
-    Private _metadata As Metadata
+    Private ReadOnly _selectedSeries As List(Of TimeSeriesInfo)
+    Private ReadOnly _metadata As Metadata
     Private _encoding As Text.Encoding
     Private _titleSuffix As String = ""
 

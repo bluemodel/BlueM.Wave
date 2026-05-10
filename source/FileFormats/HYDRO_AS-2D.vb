@@ -29,7 +29,7 @@ Namespace Fileformats
         ''' Die Einheit der Zeitreihen
         ''' </summary>
         ''' <remarks>Ist für jede Art von Datei fest vorgegeben</remarks>
-        Private _einheit As String
+        Private ReadOnly _einheit As String
 
         ''' <summary>
         ''' HYDRO_AS-2D Version 
