@@ -138,7 +138,7 @@ Public Class Wave
 
                     If (fileInstance.UseImportDialog) Then
                         'Falls Importdialog erforderlich, diesen anzeigen
-                        ok = Me.ShowImportDialog(fileInstance)
+                        ok = ShowImportDialog(fileInstance)
                         Call Application.DoEvents()
                     Else
                         'Ansonsten alle Spalten auswählen
@@ -674,7 +674,7 @@ Public Class Wave
     ''' Shows the import dialog for series selection
     ''' </summary>
     ''' <param name="tsFile">File instance from which to import</param>
-    Friend Function ShowImportDialog(ByRef tsFile As TimeSeriesFile) As Boolean
+    Friend Shared Function ShowImportDialog(ByRef tsFile As TimeSeriesFile) As Boolean
 
         Dim dialog As Form
         Dim dialogResult As DialogResult

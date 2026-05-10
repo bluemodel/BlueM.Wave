@@ -46,7 +46,7 @@ Namespace Fileformats
         ''' Zeitintervall von SMUSI-Regenreihen
         ''' </summary>
         ''' <remarks>5 Minuten</remarks>
-        Private ReadOnly Property Zeitintervall() As TimeSpan
+        Private Shared ReadOnly Property Zeitintervall() As TimeSpan
             Get
                 Return New TimeSpan(0, SMUSI_REG.dt_min, 0)
             End Get
@@ -170,7 +170,7 @@ Namespace Fileformats
 
                         If (leerzeile) Then
                             'Bei vorheriger leeren Zeile: 0-Stelle 5 min nach letztem Datum einfügen
-                            DatumTmp = DatumCurrent.Add(Me.Zeitintervall)
+                            DatumTmp = DatumCurrent.Add(Zeitintervall)
                             If (Not DatumTmp = DatumZeile) Then
                                 ts.AddNode(DatumTmp, 0)
                             End If
@@ -186,7 +186,7 @@ Namespace Fileformats
 
                         If (leerzeile) Then
                             'Bei vorheriger leeren Zeile: 0-Stelle 5 min vor Zeilendatum einfügen
-                            DatumTmp = DatumZeile.Subtract(Me.Zeitintervall)
+                            DatumTmp = DatumZeile.Subtract(Zeitintervall)
                             If (Not ts.Nodes.ContainsKey(DatumTmp)) Then
                                 ts.AddNode(DatumTmp, 0)
                             End If

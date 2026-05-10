@@ -41,7 +41,7 @@ Friend Class WaveController
     ''' </summary>
     ''' <remarks>only considers major, minor and build numbers, omitting the auto-generated revision number</remarks>
     ''' <returns>the current version number</returns>
-    Private ReadOnly Property CurrentVersion As Version
+    Private Shared ReadOnly Property CurrentVersion As Version
         Get
             Dim v As Version = Reflection.Assembly.GetExecutingAssembly.GetName().Version()
             Return New Version($"{v.Major}.{v.Minor}.{v.Build}")
@@ -1399,7 +1399,7 @@ Friend Class WaveController
     ''' Gets the version of the latest release from the GitHub API
     ''' </summary>
     ''' <returns>Version of the latest release</returns>
-    Private Async Function GetLatestReleaseVersion() As Threading.Tasks.Task(Of Version)
+    Private Shared Async Function GetLatestReleaseVersion() As Threading.Tasks.Task(Of Version)
 
         'retrieve version number of latest release from GitHub API
         Dim client As New Net.Http.HttpClient()
