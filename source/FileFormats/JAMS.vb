@@ -167,7 +167,7 @@ Namespace Fileformats
                     isData = False
                 End If
 
-                If line.StartsWith("@") Then
+                If line.StartsWith("@"c) Then
                     Continue Do
                 End If
 

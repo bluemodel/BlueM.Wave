@@ -241,7 +241,7 @@ Namespace Fileformats
             Do
                 'Get values and datetime (calculate from reference date and hours, round to full minutes)
                 Dim values() As String = syncReader.ReadLine.Split(New Char() {" "}, System.StringSplitOptions.RemoveEmptyEntries)
-                If values(0).StartsWith("-") Then Exit Do
+                If values(0).StartsWith("-"c) Then Exit Do
                 Dim datetime = refDate + New TimeSpan(0, Helpers.StringToDouble(values(0)) * 60, 0)
 
                 'Add nodes to time series

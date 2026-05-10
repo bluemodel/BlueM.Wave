@@ -159,7 +159,7 @@ Namespace Fileformats
                 line = StrReadSync.ReadLine.ToString()
                 i += 1
                 If line.StartsWith("##") Then Continue Do ' ignore lines starting with ##
-                If line.StartsWith("#") Then
+                If line.StartsWith("#"c) Then
                     line = line.Substring(1) ' remove "#" from the beginning of the line
                     If line.Contains("|*|") Then
                         data = line.Split("|*|")
@@ -246,7 +246,7 @@ Namespace Fileformats
             Do
                 line = StrReadSync.ReadLine.ToString()
                 'ignore header lines starting with "#" and empty lines
-                If line.StartsWith("#") Or line.Trim().Length = 0 Then
+                If line.StartsWith("#"c) Or line.Trim().Length = 0 Then
                     Continue Do
                 End If
                 'split line

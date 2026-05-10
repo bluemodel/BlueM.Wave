@@ -21,7 +21,7 @@ Imports System.Globalization
 Namespace Fileformats
 
     ''' <summary>
-    ''' Klasse für ASC-Dateiformat (SMUSI)
+    ''' Klasse fÃ¼r ASC-Dateiformat (SMUSI)
     ''' </summary>
     ''' <remarks>
     ''' Format siehe https://wiki.bluemodel.org/index.php/ASC-Format
@@ -83,12 +83,12 @@ Namespace Fileformats
 
             Me.TimeSeriesInfos.Clear()
 
-            'Datei öffnen
+            'Datei Ã¶ffnen
             Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
             Dim StrRead As StreamReader = New StreamReader(FiStr, Me.Encoding)
             Dim StrReadSync As TextReader = TextReader.Synchronized(StrRead)
 
-            'Spaltenüberschriften
+            'SpaltenÃ¼berschriften
             For i = 1 To Me.iLineData
                 Zeile = StrReadSync.ReadLine.ToString
                 If (i = Me.iLineHeadings) Then ZeileSpalten = Zeile
@@ -109,7 +109,7 @@ Namespace Fileformats
 
             'Bei ASC hat die Datumsspalte (manchmal) keine Einheit
             If (Einheiten.Length = Namen.Length - 1) Then
-                'Einheit für Datumsspalte ergänzen
+                'Einheit fÃ¼r Datumsspalte ergÃ¤nzen
                 Array.Reverse(Einheiten)
                 ReDim Preserve Einheiten(Einheiten.Length)
                 Array.Reverse(Einheiten)
@@ -175,7 +175,7 @@ Namespace Fileformats
                 Zeile = StrReadSync.ReadLine()
 
                 '* am Anfang ignorieren
-                If (Zeile.StartsWith("*")) Then Zeile = Zeile.Substring(1)
+                If (Zeile.StartsWith("*"c)) Then Zeile = Zeile.Substring(1)
 
                 Werte = Zeile.ToString.Split(New Char() {Me.Separator.ToChar}, StringSplitOptions.RemoveEmptyEntries)
 
@@ -190,29 +190,29 @@ Namespace Fileformats
                     'Wenn vorher eine leere Zeile eingelesen wurde
                     If (Ereignisende) Then
 
-                        'Mit Stützstellen vom Wert 0 Lücke zwischen Ereignissen abschliessen
+                        'Mit StÃ¼tzstellen vom Wert 0 LÃ¼cke zwischen Ereignissen abschliessen
                         datumLast = Me.TimeSeries.First.Value.EndDate
-                        If (datum.Subtract(datumLast) > dt) Then 'nur wenn Lücke größer als dt ist
+                        If (datum.Subtract(datumLast) > dt) Then 'nur wenn LÃ¼cke grÃ¶ÃŸer als dt ist
 
                             For Each sInfo As TimeSeriesInfo In Me.SelectedSeries
                                 'Eine Null nach dem letzten Datum
                                 Me.TimeSeries(sInfo.Index).AddNode(datumLast.Add(dt), 0.0)
-                                If (datum.Subtract(dt) > datumLast.Add(dt)) Then 'nur wenn Lücke damit noch nicht geschlossen ist
+                                If (datum.Subtract(dt) > datumLast.Add(dt)) Then 'nur wenn LÃ¼cke damit noch nicht geschlossen ist
                                     'Eine Null vor dem aktuellen Datum
                                     Me.TimeSeries(sInfo.Index).AddNode(datum.Subtract(dt), 0.0)
                                 End If
                             Next
 
                             'Log
-                            Call Log.AddLogEntry(Log.levels.info, $"Die Lücke zwischen {datumLast.ToString(Helpers.CurrentDateFormat)} und {datum.ToString(Helpers.CurrentDateFormat)} wurde mit 0-Werten abgeschlossen.")
+                            Call Log.AddLogEntry(Log.levels.info, $"Die LÃ¼cke zwischen {datumLast.ToString(Helpers.CurrentDateFormat)} und {datum.ToString(Helpers.CurrentDateFormat)} wurde mit 0-Werten abgeschlossen.")
                         End If
-                        Ereignisende = False 'zurücksetzen
+                        Ereignisende = False 'zurÃ¼cksetzen
 
                     End If
 
-                    'eingelesene Stützstellen hinzufügen
+                    'eingelesene StÃ¼tzstellen hinzufÃ¼gen
                     For Each sInfo As TimeSeriesInfo In Me.SelectedSeries
-                        Me.TimeSeries(sInfo.Index).AddNode(datum, StringToDouble(Werte(sInfo.Index + 1))) '+1 weil Datum auch ein Leerzeichen enthält
+                        Me.TimeSeries(sInfo.Index).AddNode(datum, StringToDouble(Werte(sInfo.Index + 1))) '+1 weil Datum auch ein Leerzeichen enthÃ¤lt
                     Next
 
                 Else
@@ -222,7 +222,7 @@ Namespace Fileformats
                 End If
             Loop
 
-            'Datei schließen
+            'Datei schlieÃŸen
             StrReadSync.Close()
             StrRead.Close()
             FiStr.Close()

@@ -83,7 +83,7 @@ Namespace Fileformats
             'find a commented header line
             Do
                 line = StrReadSync.ReadLine()
-                If line.StartsWith(";") Then
+                If line.StartsWith(";"c) Then
                     'use the first header line as time series title
                     title = line.Substring(1).Trim()
                     Exit Do
@@ -131,7 +131,7 @@ Namespace Fileformats
 
             Do
                 line = StrReadSync.ReadLine()
-                If line.StartsWith(";") Or line.Trim().Length = 0 Then
+                If line.StartsWith(";"c) Or line.Trim().Length = 0 Then
                     'skip comment/header and empty lines
                     Continue Do
                 End If
@@ -183,7 +183,7 @@ Namespace Fileformats
             Try
                 Do
                     line = StrReadSync.ReadLine()
-                    If line.StartsWith(";") Or line.Trim().Length = 0 Then
+                    If line.StartsWith(";"c) Or line.Trim().Length = 0 Then
                         'skip comment/header and empty lines
                         Continue Do
                     End If

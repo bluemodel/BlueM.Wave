@@ -45,7 +45,7 @@ Friend Module Main
         Dim files As New List(Of String)
 
         If args.Count > 0 Then
-            If Not args.First().StartsWith("-") Then
+            If Not args.First().StartsWith("-"c) Then
                 'don't run the CLI, instead assume that args are filenames to open in the app
                 For Each file As String In args
                     files.Add(file)

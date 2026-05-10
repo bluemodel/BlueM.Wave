@@ -57,7 +57,7 @@ Namespace Parsers
 
                 line = line.Trim() 'get rid of whitespace
 
-                If line.StartsWith("#") Then
+                If line.StartsWith("#"c) Then
                     'skip comments
                     Continue For
                 End If
@@ -87,7 +87,7 @@ Namespace Parsers
                     '"se:ries":"title"
                     'series:title="title", unit=m³/s, color=Red, linestyle=Dash, linewidth=3, interpretation=BlockRight
                     Dim pattern As String
-                    If line.StartsWith("""") Then
+                    If line.StartsWith(""""c) Then
                         'series name is enclosed in quotes
                         pattern = "^""(?<name>[^""]+)""(?<options>:(?<optionstring>.+))?$"
                     Else
