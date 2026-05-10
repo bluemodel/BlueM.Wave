@@ -173,7 +173,7 @@ Namespace Fileformats
                     Continue Do
                 End If
 
-                If iLine >= Me.LineNumberData And isData Then
+                If iLine >= Me.LineNumberData AndAlso isData Then
                     parts = line.Split(Me.Separator.ToChar())
                     'parse timestamp
                     success = DateTime.TryParseExact(parts(Me.DateTimeColumnIndex).Trim(), Me.Dateformat, Helpers.DefaultNumberFormat, Globalization.DateTimeStyles.None, timestamp)

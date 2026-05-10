@@ -133,7 +133,7 @@ Namespace Fileformats
 
             Do
                 line = StrReadSync.ReadLine()
-                If line.StartsWith(";"c) Or line.Trim().Length = 0 Then
+                If line.StartsWith(";"c) OrElse line.Trim().Length = 0 Then
                     'skip comment/header and empty lines
                     Continue Do
                 End If
@@ -185,7 +185,7 @@ Namespace Fileformats
             Try
                 Do
                     line = StrReadSync.ReadLine()
-                    If line.StartsWith(";"c) Or line.Trim().Length = 0 Then
+                    If line.StartsWith(";"c) OrElse line.Trim().Length = 0 Then
                         'skip comment/header and empty lines
                         Continue Do
                     End If

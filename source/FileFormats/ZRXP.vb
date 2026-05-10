@@ -248,7 +248,7 @@ Namespace Fileformats
             Do
                 line = StrReadSync.ReadLine.ToString()
                 'ignore header lines starting with "#" and empty lines
-                If line.StartsWith("#"c) Or line.Trim().Length = 0 Then
+                If line.StartsWith("#"c) OrElse line.Trim().Length = 0 Then
                     Continue Do
                 End If
                 'split line

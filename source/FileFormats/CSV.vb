@@ -116,12 +116,12 @@ Namespace Fileformats
             'remove extra spaces and quotes around names and units
             For i = 0 To anzSpalten - 1
                 Namen(i) = Namen(i).Trim()
-                If Namen(i).StartsWith(""""c) And Namen(i).EndsWith(""""c) Then
+                If Namen(i).StartsWith(""""c) AndAlso Namen(i).EndsWith(""""c) Then
                     Namen(i) = Namen(i).Replace("""", "")
                 End If
                 If Me.UseUnits Then
                     Einheiten(i) = Einheiten(i).Trim()
-                    If Einheiten(i).StartsWith(""""c) And Einheiten(i).EndsWith(""""c) Then
+                    If Einheiten(i).StartsWith(""""c) AndAlso Einheiten(i).EndsWith(""""c) Then
                         Einheiten(i) = Einheiten(i).Replace("""", "")
                     End If
                 End If
