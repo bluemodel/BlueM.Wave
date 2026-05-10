@@ -1234,6 +1234,10 @@ Friend Class WaveController
                 .TextAlign = StringAlignment.Center,
                 .Active = False 'will be activated once moved
             }
+            View.CrosshairDate.Shape.Brush.Color = If(Helpers.GetCurrentColorMode = SystemColorMode.Dark, Color.FromArgb(255, 32, 32, 32), Color.White)
+            View.CrosshairDate.Shape.Pen.Color = If(Helpers.GetCurrentColorMode = SystemColorMode.Dark, Color.White, Color.Black)
+            View.CrosshairDate.Shape.Font.Color = If(Helpers.GetCurrentColorMode = SystemColorMode.Dark, Color.White, Color.Black)
+            View.CrosshairDate.Shape.Shadow.Visible = False
         Else
             'remove crosshair line and date annotation
             If View.CrosshairLine IsNot Nothing Then
@@ -2795,6 +2799,7 @@ Friend Class WaveController
                         markers.Pointer.Pen.Color = series.Color
                         markers.Pointer.Pen.Width = 2
                         markers.Marks.Visible = True
+                        markers.Marks.Color = If(Helpers.GetCurrentColorMode = SystemColorMode.Dark, Color.FromArgb(255, 48, 48, 48), Color.White)
                         markers.Marks.Style = Steema.TeeChart.Styles.MarksStyles.Value
                         'markers.Marks.OnTop = True 'causes crash when markers are panned out of view on the left
                         markers.Marks.Callout.Visible = False
