@@ -1007,7 +1007,7 @@ Friend Class WaveController
                 If (oAnalysis.hasResultValues) Then
                     Call Log.AddLogEntry(Log.Levels.info, "Analysis results:")
                     For Each kvp As KeyValuePair(Of String, Double) In oAnalysis.getResultValues
-                        Call Log.AddLogEntry(Log.Levels.info, kvp.Key + ": " + Str(kvp.Value))
+                        Call Log.AddLogEntry(Log.Levels.info, $"{kvp.Key}: {kvp.Value}")
                     Next
                     Call LogShowWindow()
                 End If

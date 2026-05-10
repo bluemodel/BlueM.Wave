@@ -99,7 +99,7 @@ Namespace Fileformats
 
             'merge titles
             For i As Integer = 0 To titles1.Count - 1
-                titles.Add(titles1(i).Trim() + " " + titles2(i).Trim())
+                titles.Add(titles1(i).Trim() & " " & titles2(i).Trim())
             Next
 
             'insert missing title at beginning

@@ -44,7 +44,7 @@ Friend Class ImportCSVDialog
             'Escape any unescaped special characters
             specialchars = New List(Of String) From {"/", ":"}
             For Each c As String In specialchars
-                m = Regex.Matches(format, "[^\\]" + c)
+                m = Regex.Matches(format, "[^\\]" & c)
                 If m.Count > 0 Then
                     format = format.Replace(c, "\" & c)
                 End If

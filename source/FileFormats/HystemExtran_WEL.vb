@@ -191,7 +191,7 @@ Namespace Fileformats
                 'Alle Abflusswerte einlesen
                 WerteString = ""
                 For i = 0 To Me.nLinesPerTimestamp - 1
-                    WerteString = WerteString + StrReadSync.ReadLine.ToString()
+                    WerteString &= StrReadSync.ReadLine.ToString()
                 Next
                 For Each sInfo As TimeSeriesInfo In Me.SelectedSeries
                     Me.TimeSeries(sInfo.Index).AddNode(datum, StringToDouble(WerteString.Substring(((sInfo.Index - 1) * Me.ColumnWidth) + ColumnOffset, Me.ColumnWidth)))
