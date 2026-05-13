@@ -44,7 +44,7 @@ Friend Class SeriesEditorDialog
     ''' <remarks>Defaults to "-" if left empty</remarks>
     Private ReadOnly Property series_Unit() As String
         Get
-            If (Not Me.TextBox_Unit.Text.Trim() = "") Then
+            If Me.TextBox_Unit.Text.Trim() <> "" Then
                 Return Me.TextBox_Unit.Text
             Else
                 Return "-"

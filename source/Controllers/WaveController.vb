@@ -450,7 +450,7 @@ Friend Class WaveController
         '-------------------------------------
         If (View.TChart1.Series.Count() > 0) Then
             res = MessageBox.Show($"All existing series will be deleted!{eol}Continue?", "Warning", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning)
-            If (Not res = DialogResult.OK) Then Return
+            If res <> DialogResult.OK Then Return
         End If
 
         'Charts zurücksetzen

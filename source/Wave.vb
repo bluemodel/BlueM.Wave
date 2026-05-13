@@ -426,7 +426,7 @@ Public Class Wave
                 'show dialog for editing metadata of a single series
                 Dim dlg As New MetadataDialog(tsList.First, fileType, keys)
                 dlgResult = dlg.ShowDialog()
-                If Not dlgResult = DialogResult.OK Then
+                If dlgResult <> DialogResult.OK Then
                     Return
                 End If
                 'update metadata of series
@@ -435,7 +435,7 @@ Public Class Wave
                 'show dialog for editing metadata of multiple series
                 Dim dlg As New MultiMetadataDialog(tsList, fileType, keys)
                 dlgResult = dlg.ShowDialog()
-                If Not dlgResult = DialogResult.OK Then
+                If dlgResult <> DialogResult.OK Then
                     Return
                 End If
                 'update metadata of series

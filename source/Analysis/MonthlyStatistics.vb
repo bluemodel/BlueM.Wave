@@ -132,7 +132,7 @@ Friend Class MonthlyStatistics
         Dim dlg As New MonthlyStatisticsDialog()
         Dim dlg_result As DialogResult = dlg.ShowDialog()
 
-        If Not dlg_result = DialogResult.OK Then
+        If dlg_result <> DialogResult.OK Then
             Throw New AnalysisCancelledException("User abort")
         End If
 

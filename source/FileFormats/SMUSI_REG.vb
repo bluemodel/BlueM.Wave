@@ -171,7 +171,7 @@ Namespace Fileformats
                         If (leerzeile) Then
                             'Bei vorheriger leeren Zeile: 0-Stelle 5 min nach letztem Datum einfügen
                             DatumTmp = DatumCurrent.Add(Zeitintervall)
-                            If (Not DatumTmp = DatumZeile) Then
+                            If DatumTmp <> DatumZeile Then
                                 ts.AddNode(DatumTmp, 0)
                             End If
                         End If

@@ -170,7 +170,7 @@ Namespace Fileformats
 
             'Daten
             Ereignisende = False
-            Do While Not StrReadSync.Peek() = -1
+            Do While StrReadSync.Peek() <> -1
 
                 'Zeile einlesen
                 Zeile = StrReadSync.ReadLine()

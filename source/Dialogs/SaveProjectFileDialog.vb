@@ -97,7 +97,7 @@ Friend Class SaveProjectFileDialog
         'prompt for overwrite
         If IO.File.Exists(Me.FileName) Then
             Dim response As DialogResult = MessageBox.Show($"Replace existing file {Me.FileName}?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning)
-            If Not response = DialogResult.Yes Then
+            If response <> DialogResult.Yes Then
                 Me.DialogResult = DialogResult.None
             End If
         End If
