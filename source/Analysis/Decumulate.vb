@@ -89,7 +89,7 @@ Friend Class Decumulate
         For Each ts In MyBase.InputTimeSeries
 
             If ts.Interpretation <> TimeSeries.InterpretationEnum.Cumulative Then
-                Log.AddLogEntry(Levels.error, $"Time series {ts.Title} with interpretation {[Enum].GetName(GetType(TimeSeries.InterpretationEnum), ts.Interpretation)} cannot be deculumated!")
+                Log.AddLogEntry(Levels.error, $"Time series {ts.Title} with interpretation {[Enum].GetName(ts.Interpretation)} cannot be decumulated!")
                 Continue For
             End If
 

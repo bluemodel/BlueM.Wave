@@ -48,7 +48,7 @@ Friend Class PropertiesWindow
         ' This call is required by the Windows Form Designer.
         InitializeComponent()
         ' Add any initialization after the InitializeComponent() call.
-        Me.Interpretation.DataSource = System.Enum.GetValues(GetType(TimeSeries.InterpretationEnum))
+        Me.Interpretation.DataSource = [Enum].GetValues(Of TimeSeries.InterpretationEnum)()
 
         'set background color for editable columns
         Dim backColor As Color
