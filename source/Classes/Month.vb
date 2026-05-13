@@ -34,7 +34,7 @@ Public Class Month
     ''' <param name="name">Name of the month</param>
     Public Sub New(number As Integer, name As String)
         If number < 1 Or number > 12 Then
-            Throw New ArgumentOutOfRangeException("Month number must be between 1 and 12!")
+            Throw New ArgumentOutOfRangeException(NameOf(number), "Month number must be between 1 and 12!")
         End If
         Me.number = number
         Me.name = name
