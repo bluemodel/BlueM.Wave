@@ -100,11 +100,13 @@ Friend Class ImportCSVDialog
 
         'Combobox Trennzeichen initialisieren
         Me.ComboBox_Separator.BeginUpdate()
-        Me.ComboBox_Separator.Items.Add(Constants.semicolon)
-        Me.ComboBox_Separator.Items.Add(Constants.comma)
-        Me.ComboBox_Separator.Items.Add(Constants.period)
-        Me.ComboBox_Separator.Items.Add(Constants.space)
-        Me.ComboBox_Separator.Items.Add(Constants.tab)
+        With Me.ComboBox_Separator.Items
+            .Add(Constants.semicolon)
+            .Add(Constants.comma)
+            .Add(Constants.period)
+            .Add(Constants.space)
+            .Add(Constants.tab)
+        End With
         Me.ComboBox_Separator.EndUpdate()
 
         'Combobox Dezimaltrennzeichen initialisieren

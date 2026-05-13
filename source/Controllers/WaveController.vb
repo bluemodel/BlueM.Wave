@@ -2792,32 +2792,38 @@ Friend Class WaveController
                     If Not Me.markerSeries.ContainsKey(ts.Id) Then
                         'create a new point series for markers
                         markers = New Steema.TeeChart.Styles.Points(View.TChart1.Chart)
-                        markers.Legend.Visible = False
-                        markers.Title = $"{series.Title} (markers)"
-                        markers.Tag = "_markers"
-                        markers.VertAxis = series.VertAxis
-                        If series.VertAxis = Steema.TeeChart.Styles.VerticalAxis.Custom Then
-                            markers.CustomVertAxis = series.CustomVertAxis
-                        End If
-                        markers.Pointer.Style = Steema.TeeChart.Styles.PointerStyles.Circle
-                        markers.Pointer.Brush.Visible = False
-                        markers.Color = series.Color
-                        markers.Pointer.Color = series.Color
-                        markers.Pointer.Pen.Color = series.Color
-                        markers.Pointer.Pen.Width = 2
-                        markers.Marks.Visible = True
-                        markers.Marks.Color = If(Helpers.GetCurrentColorMode = SystemColorMode.Dark, Color.FromArgb(255, 48, 48, 48), Color.White)
-                        markers.Marks.Style = Steema.TeeChart.Styles.MarksStyles.Value
-                        'markers.Marks.OnTop = True 'causes crash when markers are panned out of view on the left
-                        markers.Marks.Callout.Visible = False
-                        markers.Marks.FontSeriesColor = True
-                        markers.Marks.Pen.Color = series.Color
-                        markers.Marks.Arrow.Visible = False
-                        markers.Marks.ArrowLength = 8
-                        markers.Marks.TailParams.Align = Steema.TeeChart.Styles.TailAlignment.Auto
-                        markers.Marks.TailParams.PointerHeight = 8
-                        markers.Marks.TailParams.PointerWidth = 6
-                        markers.Pointer.InflateMargins = False
+                        With markers
+                            .Legend.Visible = False
+                            .Title = $"{series.Title} (markers)"
+                            .Tag = "_markers"
+                            .VertAxis = series.VertAxis
+                            If series.VertAxis = Steema.TeeChart.Styles.VerticalAxis.Custom Then
+                                .CustomVertAxis = series.CustomVertAxis
+                            End If
+                            .Color = series.Color
+                            With .Pointer
+                                .Style = Steema.TeeChart.Styles.PointerStyles.Circle
+                                .Brush.Visible = False
+                                .Color = series.Color
+                                .Pen.Color = series.Color
+                                .Pen.Width = 2
+                                .InflateMargins = False
+                            End With
+                            With .Marks
+                                .Visible = True
+                                .Color = If(Helpers.GetCurrentColorMode = SystemColorMode.Dark, Color.FromArgb(255, 48, 48, 48), Color.White)
+                                .Style = Steema.TeeChart.Styles.MarksStyles.Value
+                                '.OnTop = True 'causes crash when markers are panned out of view on the left
+                                .Callout.Visible = False
+                                .FontSeriesColor = True
+                                .Pen.Color = series.Color
+                                .Arrow.Visible = False
+                                .ArrowLength = 8
+                                .TailParams.Align = Steema.TeeChart.Styles.TailAlignment.Auto
+                                .TailParams.PointerHeight = 8
+                                .TailParams.PointerWidth = 6
+                            End With
+                        End With
 
                         Me.markerSeries.Add(ts.Id, markers)
                     End If

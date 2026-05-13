@@ -231,14 +231,16 @@ Friend Class MonthlyStatistics
         'result table
         Me.ResultTable = New DataTable($"Monthly statistics: {Me.InputTimeSeries(0).Title}")
 
-        Me.ResultTable.Columns.Add("Month", GetType(Integer))
-        Me.ResultTable.Columns.Add("Name", GetType(String))
-        Me.ResultTable.Columns.Add("ValueCount", GetType(Integer))
-        Me.ResultTable.Columns.Add("Average", GetType(Double))
-        Me.ResultTable.Columns.Add("Median", GetType(Double))
-        Me.ResultTable.Columns.Add("Minimum", GetType(Double))
-        Me.ResultTable.Columns.Add("Maximum", GetType(Double))
-        Me.ResultTable.Columns.Add("Standard deviation", GetType(Double))
+        With Me.ResultTable.Columns
+            .Add("Month", GetType(Integer))
+            .Add("Name", GetType(String))
+            .Add("ValueCount", GetType(Integer))
+            .Add("Average", GetType(Double))
+            .Add("Median", GetType(Double))
+            .Add("Minimum", GetType(Double))
+            .Add("Maximum", GetType(Double))
+            .Add("Standard deviation", GetType(Double))
+        End With
 
         For Each monthData As MonthData In Me.result.Values
             If monthData.values.Count > 0 Then
@@ -276,14 +278,16 @@ Friend Class MonthlyStatistics
         'Diagram
         Me.ResultChart = New Steema.TeeChart.TChart()
         Call Helpers.ChartSetDefaultFormat(Me.ResultChart.Chart)
-        Me.ResultChart.Header.Visible = True
-        Me.ResultChart.Header.Text = $"Monthly statistics ({Me.InputTimeSeries(0).Title})"
+        With Me.ResultChart
+            .Header.Visible = True
+            .Header.Text = $"Monthly statistics ({Me.InputTimeSeries(0).Title})"
 
-        'Axes
-        Me.ResultChart.Axes.Bottom.Labels.Style = Steema.TeeChart.AxisLabelStyle.Text
-        Me.ResultChart.Axes.Bottom.Labels.Angle = 90
-        Me.ResultChart.Axes.Bottom.MinorTickCount = 0
-        Me.ResultChart.Axes.Left.Title.Text = Me.InputTimeSeries(0).Unit
+            'Axes
+            .Axes.Bottom.Labels.Style = Steema.TeeChart.AxisLabelStyle.Text
+            .Axes.Bottom.Labels.Angle = 90
+            .Axes.Bottom.MinorTickCount = 0
+            .Axes.Left.Title.Text = Me.InputTimeSeries(0).Unit
+        End With
 
         'Series
 

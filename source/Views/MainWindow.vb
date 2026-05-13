@@ -249,17 +249,21 @@ Friend Class MainWindow
                 foreColor = Color.FromArgb(100, 100, 100)
                 lightColor = Color.FromArgb(169, 169, 169)
         End Select
-        Me.TChart2.Panel.Brush.Color = backColor
-        Me.TChart2.Walls.Back.Color = backColor
-        Me.TChart2.Axes.Left.Labels.Font.Color = foreColor
-        Me.TChart2.Axes.Left.AxisPen.Color = foreColor
-        Me.TChart2.Axes.Left.Grid.Color = lightColor
-        Me.TChart2.Axes.Bottom.Labels.Font.Color = foreColor
-        Me.TChart2.Axes.Bottom.AxisPen.Color = foreColor
-        Me.TChart2.Axes.Bottom.Grid.Color = lightColor
+        With Me.TChart2
+            .Panel.Brush.Color = backColor
+            .Walls.Back.Color = backColor
+            With .Axes
+                .Left.Labels.Font.Color = foreColor
+                .Left.AxisPen.Color = foreColor
+                .Left.Grid.Color = lightColor
+                .Bottom.Labels.Font.Color = foreColor
+                .Bottom.AxisPen.Color = foreColor
+                .Bottom.Grid.Color = lightColor
+            End With
+        End With
 
-        'ColorBand einrichten
-        Call Me.Init_ColorBands()
+            'ColorBand einrichten
+            Call Me.Init_ColorBands()
 
     End Sub
 
@@ -270,25 +274,29 @@ Friend Class MainWindow
 
         colorBandOverview = New Steema.TeeChart.Tools.ColorBand()
         Me.TChart2.Tools.Add(colorBandOverview)
-        colorBandOverview.Axis = Me.TChart2.Axes.Bottom
-        colorBandOverview.Brush.Color = Color.Coral
-        colorBandOverview.Brush.Transparency = 50
-        colorBandOverview.ResizeEnd = False
-        colorBandOverview.ResizeStart = False
-        colorBandOverview.EndLinePen.Visible = False
-        colorBandOverview.StartLinePen.Visible = False
+        With colorBandOverview
+            .Axis = Me.TChart2.Axes.Bottom
+            .Brush.Color = Color.Coral
+            .Brush.Transparency = 50
+            .ResizeEnd = False
+            .ResizeStart = False
+            .EndLinePen.Visible = False
+            .StartLinePen.Visible = False
+        End With
 
         colorBandZoom = New Steema.TeeChart.Tools.ColorBand()
         Me.TChart1.Tools.Add(colorBandZoom)
-        colorBandZoom.Axis = Me.TChart1.Axes.Bottom
-        colorBandZoom.Color = Color.Black
-        colorBandZoom.Pen.Color = Color.Black
-        colorBandZoom.Pen.Style = Drawing2D.DashStyle.Dash
-        colorBandZoom.Brush.Visible = False
-        colorBandZoom.ResizeEnd = False
-        colorBandZoom.ResizeStart = False
-        colorBandZoom.EndLinePen.Visible = True
-        colorBandZoom.StartLinePen.Visible = True
+        With colorBandZoom
+            .Axis = Me.TChart1.Axes.Bottom
+            .Color = Color.Black
+            .Pen.Color = Color.Black
+            .Pen.Style = Drawing2D.DashStyle.Dash
+            .Brush.Visible = False
+            .ResizeEnd = False
+            .ResizeStart = False
+            .EndLinePen.Visible = True
+            .StartLinePen.Visible = True
+        End With
     End Sub
 
     ''' <summary>

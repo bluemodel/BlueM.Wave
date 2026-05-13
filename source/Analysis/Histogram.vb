@@ -237,22 +237,28 @@ Friend Class Histogram
         Me.ResultChart.Header.Text = "Histogram"
 
         'Achsen
-        Me.ResultChart.Axes.Left.Title.Caption = "Probability [%]"
-        Me.ResultChart.Axes.Left.Automatic = False
-        Me.ResultChart.Axes.Left.Minimum = 0
-        Me.ResultChart.Axes.Left.AutomaticMaximum = True
-        Me.ResultChart.Axes.Left.MaximumOffset = 2
+        With Me.ResultChart.Axes.Left
+            .Title.Caption = "Probability [%]"
+            .Automatic = False
+            .Minimum = 0
+            .AutomaticMaximum = True
+            .MaximumOffset = 2
+        End With
 
-        Me.ResultChart.Axes.Right.Visible = True
-        Me.ResultChart.Axes.Right.Title.Caption = "Probability of non-exceedance [%]"
-        Me.ResultChart.Axes.Right.Title.Angle = 90
-        Me.ResultChart.Axes.Right.Automatic = False
-        Me.ResultChart.Axes.Right.Minimum = 0
-        Me.ResultChart.Axes.Right.Maximum = 100
-        Me.ResultChart.Axes.Right.Grid.Visible = False
+        With Me.ResultChart.Axes.Right
+            .Visible = True
+            .Title.Caption = "Probability of non-exceedance [%]"
+            .Title.Angle = 90
+            .Automatic = False
+            .Minimum = 0
+            .Maximum = 100
+            .Grid.Visible = False
+        End With
 
-        Me.ResultChart.Axes.Bottom.Labels.Style = Steema.TeeChart.AxisLabelStyle.Value
-        Me.ResultChart.Axes.Bottom.Title.Caption = $"Value [{Me.InputTimeSeries(0).Unit}]"
+        With Me.ResultChart.Axes.Bottom
+            .Labels.Style = Steema.TeeChart.AxisLabelStyle.Value
+            .Title.Caption = $"Value [{Me.InputTimeSeries(0).Unit}]"
+        End With
 
         'Serien
         For Each res As histogramResults In Me.results

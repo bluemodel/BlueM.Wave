@@ -214,13 +214,15 @@ Friend Class AnnualRecurrenceProbability
 
         'Create result table
         ResultTable = New DataTable($"Annual maxima: {String.Join(", ", Me.InputTimeSeries.Select(Function(ts1) ts1.Title))}")
-        ResultTable.Columns.Add("Series", GetType(String))
-        ResultTable.Columns.Add("Year", GetType(Integer))
-        ResultTable.Columns.Add("Date", GetType(DateTime))
-        ResultTable.Columns.Add($"Maximum [{String.Join(", ", Me.InputTimeSeries.Select(Function(ts1) ts1.Unit).Distinct())}]", GetType(Double))
-        ResultTable.Columns.Add($"Rank", GetType(Integer))
-        ResultTable.Columns.Add("Probability of exceedance [-]", GetType(Double))
-        ResultTable.Columns.Add("Return period [years]", GetType(Double))
+        With ResultTable.Columns
+            .Add("Series", GetType(String))
+            .Add("Year", GetType(Integer))
+            .Add("Date", GetType(DateTime))
+            .Add($"Maximum [{String.Join(", ", Me.InputTimeSeries.Select(Function(ts1) ts1.Unit).Distinct())}]", GetType(Double))
+            .Add($"Rank", GetType(Integer))
+            .Add("Probability of exceedance [-]", GetType(Double))
+            .Add("Return period [years]", GetType(Double))
+        End With
 
         'Add rows to result table
         For Each ts As TimeSeries In Me.InputTimeSeries
@@ -250,24 +252,28 @@ Friend Class AnnualRecurrenceProbability
         ResultChart.Legend.Alignment = Steema.TeeChart.LegendAlignments.Top
 
         'x-Axis
-        ResultChart.Axes.Bottom.Labels.Style = Steema.TeeChart.AxisLabelStyle.Value
-        ResultChart.Axes.Bottom.Title.Caption = "Return period [years]"
-        ResultChart.Axes.Bottom.Labels.Angle = 90
-        ResultChart.Axes.Bottom.Logarithmic = True
-        ResultChart.Axes.Bottom.LogarithmicBase = 10
-        ResultChart.Axes.Bottom.Automatic = False
-        ResultChart.Axes.Bottom.Minimum = 1
-        ResultChart.Axes.Bottom.Maximum = 100
-        ResultChart.Axes.Bottom.Increment = 1
-        ResultChart.Axes.Bottom.Grid.DrawEvery = 1
+        With ResultChart.Axes.Bottom
+            .Labels.Style = Steema.TeeChart.AxisLabelStyle.Value
+            .Title.Caption = "Return period [years]"
+            .Labels.Angle = 90
+            .Logarithmic = True
+            .LogarithmicBase = 10
+            .Automatic = False
+            .Minimum = 1
+            .Maximum = 100
+            .Increment = 1
+            .Grid.DrawEvery = 1
+        End With
 
         'y-Axis
-        ResultChart.Axes.Left.AutomaticMaximum = True
-        ResultChart.Axes.Left.AutomaticMinimum = False
-        ResultChart.Axes.Left.Minimum = 0
-        ResultChart.Axes.Left.MaximumRound = True
-        ResultChart.Axes.Left.Grid.DrawEvery = 1
-        ResultChart.Axes.Left.Title.Caption = String.Join(", ", Me.InputTimeSeries.Select(Function(ts1) ts1.Unit).Distinct())
+        With ResultChart.Axes.Left
+            .AutomaticMaximum = True
+            .AutomaticMinimum = False
+            .Minimum = 0
+            .MaximumRound = True
+            .Grid.DrawEvery = 1
+            .Title.Caption = String.Join(", ", Me.InputTimeSeries.Select(Function(ts1) ts1.Unit).Distinct())
+        End With
 
         'point series
         For Each ts As TimeSeries In Me.InputTimeSeries

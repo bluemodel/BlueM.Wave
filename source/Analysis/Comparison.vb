@@ -164,16 +164,17 @@ Friend Class Comparison
 
         Me.ResultChart = New Steema.TeeChart.TChart()
         Call Helpers.ChartSetDefaultFormat(Me.ResultChart.Chart)
-        Me.ResultChart.Header.Visible = True
-        Me.ResultChart.Header.Text = $"Comparison ({x_title} / {y_title})"
-        Me.ResultChart.Legend.Visible = False
+        With Me.ResultChart
+            .Header.Visible = True
+            .Header.Text = $"Comparison ({x_title} / {y_title})"
+            .Legend.Visible = False
 
-        'Achsen
-        '------
-        Me.ResultChart.Axes.Bottom.Title.Caption = $"{x_title}  [{x_unit}]"
-        Me.ResultChart.Axes.Bottom.Labels.Style = Steema.TeeChart.AxisLabelStyle.Value
-        Me.ResultChart.Axes.Left.Title.Caption = $"{y_title}  [{y_unit}]"
-        Me.ResultChart.Axes.Left.Labels.Style = Steema.TeeChart.AxisLabelStyle.Value
+            'Achsen
+            .Axes.Bottom.Title.Caption = $"{x_title}  [{x_unit}]"
+            .Axes.Bottom.Labels.Style = Steema.TeeChart.AxisLabelStyle.Value
+            .Axes.Left.Title.Caption = $"{y_title}  [{y_unit}]"
+            .Axes.Left.Labels.Style = Steema.TeeChart.AxisLabelStyle.Value
+        End With
 
         'Reihen
         '------

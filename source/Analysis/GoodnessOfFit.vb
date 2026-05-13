@@ -471,22 +471,23 @@ Friend Class GoodnessOfFit
         'result table
         '------------
         Me.ResultTable = New DataTable($"Goodness of Fit: {Me.ts_obs.Title} vs. {String.Join(", ", Me.ts_sim_list)}")
-
-        Me.ResultTable.Columns.Add("Series", GetType(String))
-        Me.ResultTable.Columns.Add("Period", GetType(String))
-        Me.ResultTable.Columns.Add("Start", GetType(DateTime))
-        Me.ResultTable.Columns.Add("End", GetType(DateTime))
-        Me.ResultTable.Columns.Add("Length", GetType(Integer))
-        Me.ResultTable.Columns.Add("Volume observed", GetType(Double))
-        Me.ResultTable.Columns.Add("Volume simulated", GetType(Double))
-        Me.ResultTable.Columns.Add("Volume error [%]", GetType(Double))
-        Me.ResultTable.Columns.Add("Sum of squared errors", GetType(Double))
-        Me.ResultTable.Columns.Add("Nash-Sutcliffe efficiency", GetType(Double))
-        Me.ResultTable.Columns.Add("Logarithmic Nash-Sutcliffe efficiency", GetType(Double))
-        Me.ResultTable.Columns.Add("Kling-Gupta efficiency", GetType(Double))
-        Me.ResultTable.Columns.Add("Coefficient of correlation", GetType(Double))
-        Me.ResultTable.Columns.Add("Coefficient of determination", GetType(Double))
-        Me.ResultTable.Columns.Add("Hydrologic deviation", GetType(Double))
+        With Me.ResultTable.Columns
+            .Add("Series", GetType(String))
+            .Add("Period", GetType(String))
+            .Add("Start", GetType(DateTime))
+            .Add("End", GetType(DateTime))
+            .Add("Length", GetType(Integer))
+            .Add("Volume observed", GetType(Double))
+            .Add("Volume simulated", GetType(Double))
+            .Add("Volume error [%]", GetType(Double))
+            .Add("Sum of squared errors", GetType(Double))
+            .Add("Nash-Sutcliffe efficiency", GetType(Double))
+            .Add("Logarithmic Nash-Sutcliffe efficiency", GetType(Double))
+            .Add("Kling-Gupta efficiency", GetType(Double))
+            .Add("Coefficient of correlation", GetType(Double))
+            .Add("Coefficient of determination", GetType(Double))
+            .Add("Hydrologic deviation", GetType(Double))
+        End With
 
         For Each series_title As String In Me.GoFResults.Keys
             For Each kvp As KeyValuePair(Of String, GoF) In Me.GoFResults(series_title)

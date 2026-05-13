@@ -25,18 +25,20 @@ Friend Class ExportDiag
         ' Add any initialization after the InitializeComponent() call.
 
         'add formats to combobox
-        Me.ComboBox_Format.Items.Add(TimeSeriesFile.FileTypes.CSV)
-        Me.ComboBox_Format.Items.Add(TimeSeriesFile.FileTypes.BIN)
-        Me.ComboBox_Format.Items.Add(TimeSeriesFile.FileTypes.DFS0)
-        Me.ComboBox_Format.Items.Add(TimeSeriesFile.FileTypes.FEWS_PI)
-        Me.ComboBox_Format.Items.Add(TimeSeriesFile.FileTypes.HYBNAT_BCS)
-        Me.ComboBox_Format.Items.Add(TimeSeriesFile.FileTypes.HYSTEM_REG)
-        Me.ComboBox_Format.Items.Add(TimeSeriesFile.FileTypes.SMUSI_REG)
-        Me.ComboBox_Format.Items.Add(TimeSeriesFile.FileTypes.SWMM_INTERFACE)
-        Me.ComboBox_Format.Items.Add(TimeSeriesFile.FileTypes.SWMM_TIMESERIES)
-        Me.ComboBox_Format.Items.Add(TimeSeriesFile.FileTypes.UVF)
-        Me.ComboBox_Format.Items.Add(TimeSeriesFile.FileTypes.ZRE)
-        Me.ComboBox_Format.Items.Add(TimeSeriesFile.FileTypes.ZRXP)
+        With Me.ComboBox_Format.Items
+            .Add(TimeSeriesFile.FileTypes.CSV)
+            .Add(TimeSeriesFile.FileTypes.BIN)
+            .Add(TimeSeriesFile.FileTypes.DFS0)
+            .Add(TimeSeriesFile.FileTypes.FEWS_PI)
+            .Add(TimeSeriesFile.FileTypes.HYBNAT_BCS)
+            .Add(TimeSeriesFile.FileTypes.HYSTEM_REG)
+            .Add(TimeSeriesFile.FileTypes.SMUSI_REG)
+            .Add(TimeSeriesFile.FileTypes.SWMM_INTERFACE)
+            .Add(TimeSeriesFile.FileTypes.SWMM_TIMESERIES)
+            .Add(TimeSeriesFile.FileTypes.UVF)
+            .Add(TimeSeriesFile.FileTypes.ZRE)
+            .Add(TimeSeriesFile.FileTypes.ZRXP)
+        End With
         Me.ComboBox_Format.SelectedIndex = 0
 
         'Add series to listbox

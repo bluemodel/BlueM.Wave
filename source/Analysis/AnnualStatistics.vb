@@ -86,14 +86,16 @@ Friend Class AnnualStatistics
 
     Private Function calculateStats(ByRef series As TimeSeries) As struct_stat
         Dim stats As struct_stat
-        stats.startDate = series.StartDate
-        stats.endDate = series.EndDate
-        stats.len = series.Length
-        stats.min = series.Minimum
-        stats.max = series.Maximum
-        stats.avg = series.Average
-        stats.sum = series.Sum
-        stats.vol = series.Volume
+        With stats
+            .startDate = series.StartDate
+            .endDate = series.EndDate
+            .len = series.Length
+            .min = series.Minimum
+            .max = series.Maximum
+            .avg = series.Average
+            .sum = series.Sum
+            .vol = series.Volume
+        End With
         Return stats
     End Function
 
@@ -137,17 +139,18 @@ Friend Class AnnualStatistics
 
         'result table
         Me.ResultTable = New DataTable($"Annual statistics: {String.Join(", ", Me.InputTimeSeries.Select(Function(ts1) ts1.Title))}")
-
-        Me.ResultTable.Columns.Add("Series", GetType(String))
-        Me.ResultTable.Columns.Add("Period", GetType(String))
-        Me.ResultTable.Columns.Add("Start", GetType(DateTime))
-        Me.ResultTable.Columns.Add("End", GetType(DateTime))
-        Me.ResultTable.Columns.Add("Length", GetType(Integer))
-        Me.ResultTable.Columns.Add("Min", GetType(Double))
-        Me.ResultTable.Columns.Add("Max", GetType(Double))
-        Me.ResultTable.Columns.Add("Avg", GetType(Double))
-        Me.ResultTable.Columns.Add("Sum", GetType(Double))
-        Me.ResultTable.Columns.Add("Volume", GetType(Double))
+        With Me.ResultTable.Columns
+            .Add("Series", GetType(String))
+            .Add("Period", GetType(String))
+            .Add("Start", GetType(DateTime))
+            .Add("End", GetType(DateTime))
+            .Add("Length", GetType(Integer))
+            .Add("Min", GetType(Double))
+            .Add("Max", GetType(Double))
+            .Add("Avg", GetType(Double))
+            .Add("Sum", GetType(Double))
+            .Add("Volume", GetType(Double))
+        End With
 
         For Each ts As TimeSeries In Me.InputTimeSeries
             Dim tsStats As Dictionary(Of String, struct_stat) = Me.stats(ts.Title)

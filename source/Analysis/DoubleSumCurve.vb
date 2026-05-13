@@ -132,16 +132,17 @@ Friend Class DoubleSumCurve
 
         Me.ResultChart = New Steema.TeeChart.TChart()
         Call Helpers.ChartSetDefaultFormat(Me.ResultChart.Chart)
-        Me.ResultChart.Header.Visible = True
-        Me.ResultChart.Header.Text = $"Double Sum Curve ({Me.ts_1.Title} / {Me.ts_2.Title})"
-        Me.ResultChart.Legend.Visible = False
+        With Me.ResultChart
+            .Header.Visible = True
+            .Header.Text = $"Double Sum Curve ({Me.ts_1.Title} / {Me.ts_2.Title})"
+            .Legend.Visible = False
 
-        'Achsen
-        '------
-        Me.ResultChart.Axes.Bottom.Title.Caption = $"Sum {Me.ts_1.Title}"
-        Me.ResultChart.Axes.Bottom.Labels.Style = Steema.TeeChart.AxisLabelStyle.Value
-        Me.ResultChart.Axes.Left.Title.Caption = $"Sum {Me.ts_2.Title}"
-        Me.ResultChart.Axes.Left.Labels.Style = Steema.TeeChart.AxisLabelStyle.Value
+            'Achsen
+            .Axes.Bottom.Title.Caption = $"Sum {Me.ts_1.Title}"
+            .Axes.Bottom.Labels.Style = Steema.TeeChart.AxisLabelStyle.Value
+            .Axes.Left.Title.Caption = $"Sum {Me.ts_2.Title}"
+            .Axes.Left.Labels.Style = Steema.TeeChart.AxisLabelStyle.Value
+        End With
 
         'Reihen
         '------
