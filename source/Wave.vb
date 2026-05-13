@@ -344,7 +344,7 @@ Public Class Wave
         'Abort if no time series loaded
         If (Me.TimeSeries.Count < 1) Then
             MessageBox.Show("No time series available for export!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning)
-            Exit Sub
+            Return
         End If
 
         'Show Export dialog
@@ -352,7 +352,7 @@ Public Class Wave
         dlgResult = exportDlg.ShowDialog()
 
         If dlgResult <> DialogResult.OK Then
-            Exit Sub
+            Return
         End If
 
         Dim fileType As TimeSeriesFile.FileTypes = exportDlg.ComboBox_Format.SelectedItem
@@ -427,7 +427,7 @@ Public Class Wave
                 Dim dlg As New MetadataDialog(tsList.First, fileType, keys)
                 dlgResult = dlg.ShowDialog()
                 If Not dlgResult = DialogResult.OK Then
-                    Exit Sub
+                    Return
                 End If
                 'update metadata of series
                 tsList.First.Metadata = dlg.getMetadata()
@@ -436,7 +436,7 @@ Public Class Wave
                 Dim dlg As New MultiMetadataDialog(tsList, fileType, keys)
                 dlgResult = dlg.ShowDialog()
                 If Not dlgResult = DialogResult.OK Then
-                    Exit Sub
+                    Return
                 End If
                 'update metadata of series
                 For Each ts As TimeSeries In tsList
@@ -472,7 +472,7 @@ Public Class Wave
             'Show dialog
             dlgResult = dlg.ShowDialog()
             If dlgResult <> DialogResult.OK Then
-                Exit Sub
+                Return
             End If
 
             folder = IO.Path.GetDirectoryName(dlg.FileName)
@@ -540,7 +540,7 @@ Public Class Wave
             'Show Save dialog
             dlgResult = SaveFileDialog1.ShowDialog()
             If dlgResult <> DialogResult.OK Then
-                Exit Sub
+                Return
             End If
 
             filename = SaveFileDialog1.FileName
@@ -558,7 +558,7 @@ Public Class Wave
                     Dim resp As DialogResult = MessageBox.Show($"Overwrite existing file {IO.Path.GetFileName(filename)}?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning)
                     If resp = DialogResult.No Then
                         'abort
-                        Exit Sub
+                        Return
                     End If
                 End If
 

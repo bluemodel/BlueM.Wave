@@ -599,7 +599,7 @@ Public Class TimeSeries
     Public Sub AddNode(_date As DateTime, _value As Double)
         If (Me.Nodes.ContainsKey(_date)) Then
             Log.AddLogEntry(Log.Levels.warning, $"Duplicate data point at {_date.ToString(Helpers.CurrentDateFormat)}: Value of {_value.ToString(Helpers.DefaultNumberFormat)} will be discarded. Existing value: {Me.Nodes(_date).ToString(Helpers.DefaultNumberFormat)}")
-            Exit Sub
+            Return
         End If
         Me._nodes.Add(_date, _value)
     End Sub
@@ -1302,7 +1302,7 @@ Public Class TimeSeries
 
         If t_diff.Count = 0 Then
             'nothing to do
-            Exit Sub
+            Return
         End If
 
         t_common = ts1.Dates.Intersect(ts2.Dates).ToHashSet()

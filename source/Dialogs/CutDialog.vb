@@ -108,7 +108,7 @@ Friend Class CutDialog
     Private Sub ListBox_Series_SelectedIndexChanged(sender As System.Object, e As System.EventArgs) Handles ListBox_Series.SelectedIndexChanged
 
         If (Me.IsInitializing) Then
-            Exit Sub
+            Return
         End If
 
         Me.earliestStart = DateTime.MaxValue
@@ -160,7 +160,7 @@ Friend Class CutDialog
     Private Sub MaskedTextBox_cutStart_Validated(sender As System.Object, e As System.EventArgs) Handles MaskedTextBox_cutStart.Validated
 
         If (Me.IsInitializing) Then
-            Exit Sub
+            Return
         End If
 
         Me.cutStart = Me.MaskedTextBox_cutStart.Text
@@ -176,7 +176,7 @@ Friend Class CutDialog
     Private Sub MaskedTextBox_cutEnd_Validated(sender As System.Object, e As System.EventArgs) Handles MaskedTextBox_cutEnd.Validated
 
         If (Me.IsInitializing) Then
-            Exit Sub
+            Return
         End If
 
         Me.cutEnd = Me.MaskedTextBox_cutEnd.Text
@@ -206,7 +206,7 @@ Friend Class CutDialog
     Private Sub ComboBox_RefSeries_SelectedIndexChanged(sender As System.Object, e As System.EventArgs) Handles ComboBox_RefSeries.SelectedIndexChanged
 
         If Me.IsInitializing Or ComboBox_RefSeries.SelectedIndex = -1 Then
-            Exit Sub
+            Return
         End If
 
         Dim tsRef As TimeSeries = Me.ComboBox_RefSeries.SelectedItem
@@ -215,7 +215,7 @@ Friend Class CutDialog
         If tsRef.EndDate < Me.earliestStart Or tsRef.StartDate > Me.latestEnd Then
             MessageBox.Show("The selected series do not overlap!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning)
             'cancel
-            Exit Sub
+            Return
         End If
 
         'set new start and end
@@ -254,13 +254,13 @@ Friend Class CutDialog
         If Me.ListBox_Series.SelectedIndices.Count = 0 Then
             MessageBox.Show("Please select at least one time series to be cut!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning)
             Me.DialogResult = DialogResult.None
-            Exit Sub
+            Return
         End If
 
         If Me.cutStart >= Me.cutEnd Then
             MessageBox.Show("The end must be later than the start!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning)
             Me.DialogResult = DialogResult.None
-            Exit Sub
+            Return
         End If
 
         'cut selected time series

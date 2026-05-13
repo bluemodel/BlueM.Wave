@@ -230,7 +230,7 @@ Public Class TimeSeriesCollection
         If (direction = Direction.Up And index = 0) Or
            (direction = Direction.Down And index = _timeseriesdict.Count - 1) Then
             'series is already at top/bottom
-            Exit Sub
+            Return
         End If
         'reorder series
         Dim offset As Integer

@@ -319,7 +319,7 @@ Friend Class WaveController
                 Dim seriesEvent As Steema.TeeChart.Styles.SeriesEvent = CType(e, Steema.TeeChart.Styles.SeriesEvent)
                 If seriesEvent.Event = Steema.TeeChart.Styles.SeriesEventStyle.RemoveAll Then
                     'nothing to do, abort
-                    Exit Sub
+                    Return
                 ElseIf seriesEvent.Event = Steema.TeeChart.Styles.SeriesEventStyle.Swap Then
                     'series reordered, reorder series in model
                     Dim ids As New List(Of Integer)
@@ -327,18 +327,18 @@ Friend Class WaveController
                         ids.Add(series.Tag)
                     Next
                     _model.Reorder_Series(ids)
-                    Exit Sub
+                    Return
                 End If
                 'all other events can only be handled if the triggering series also exists in the model, i.e. has an id
                 Dim id As Integer
                 If IsNothing(seriesEvent.Series.Tag) Then
                     'ignore event
-                    Exit Sub
+                    Return
                 Else
                     Dim haveId As Boolean = Integer.TryParse(seriesEvent.Series.Tag, id)
                     If Not haveId Then
                         'ignore event
-                        Exit Sub
+                        Return
                     End If
                 End If
                 Select Case seriesEvent.Event
@@ -450,7 +450,7 @@ Friend Class WaveController
         '-------------------------------------
         If (View.TChart1.Series.Count() > 0) Then
             res = MessageBox.Show($"All existing series will be deleted!{eol}Continue?", "Warning", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning)
-            If (Not res = DialogResult.OK) Then Exit Sub
+            If (Not res = DialogResult.OK) Then Return
         End If
 
         'Charts zurücksetzen
@@ -517,7 +517,7 @@ Friend Class WaveController
             View.ToolStripDropDownButton_Open.DropDown.Close()
             Log.AddLogEntry(Log.Levels.error, $"File {filepath} not found!")
             MessageBox.Show($"File {filepath} not found!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning)
-            Exit Sub
+            Return
         End If
         Call _model.Import_File(filepath)
     End Sub
@@ -546,7 +546,7 @@ Friend Class WaveController
 
         If _model.TimeSeries.Count = 0 Then
             MessageBox.Show("No time series to save!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning)
-            Exit Sub
+            Return
         End If
 
         Try
@@ -624,7 +624,7 @@ Friend Class WaveController
 
         If (_model.TimeSeries.Count < 1) Then
             MessageBox.Show("No time series available for cutting!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning)
-            Exit Sub
+            Return
         End If
 
         'show dialog
@@ -668,7 +668,7 @@ Friend Class WaveController
         'Abort if no series are loaded
         If (_model.TimeSeries.Count < 1) Then
             MessageBox.Show("No time series available for merging!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning)
-            Exit Sub
+            Return
         End If
 
         Try
@@ -882,7 +882,7 @@ Friend Class WaveController
         'Abort if no time series available!
         If (_model.TimeSeries.Count < 1) Then
             MessageBox.Show("No time series available!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning)
-            Exit Sub
+            Return
         End If
 
         Dim dlg As New ConvertErrorValuesDialog(_model.TimeSeries.ToList)
@@ -944,7 +944,7 @@ Friend Class WaveController
         'Wenn keine Zeitreihen vorhanden, abbrechen!
         If (_model.TimeSeries.Count < 1) Then
             MessageBox.Show("No time series available for analysis!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning)
-            Exit Sub
+            Return
         End If
 
         Dim oAnalysisDialog As New AnalysisDialog(_model.TimeSeries.ToList)
@@ -1278,7 +1278,7 @@ Friend Class WaveController
         'Wenn keine Dateien vorhanden, abbrechen
         If (datasources.Count = 0) Then
             MessageBox.Show("There are no known files that could be reloaded!", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information)
-            Exit Sub
+            Return
         End If
 
 
@@ -1549,7 +1549,7 @@ Friend Class WaveController
                 xMax = xMin.AddSeconds(multiplier)
             Case Else
                 'do nothing and abort
-                Exit Sub
+                Return
         End Select
 
         'save the current zoom snapshot
@@ -1611,7 +1611,7 @@ Friend Class WaveController
                 xMinNew = xMinOld.AddSeconds(multiplier)
                 xMaxNew = xMaxOld.AddSeconds(multiplier)
             Case Else
-                Exit Sub
+                Return
         End Select
 
         'save the current zoom snapshot
@@ -1648,7 +1648,7 @@ Friend Class WaveController
 
         If startdates.Count = 0 Or enddates.Count = 0 Then
             'Do nothing
-            Exit Sub
+            Return
         End If
 
         'calculate current viewport extent in OADate units
@@ -1706,7 +1706,7 @@ Friend Class WaveController
                 If startValue < View.ChartMinX.ToOADate() Or
                     startValue > View.ChartMaxX.ToOADate() Then
                     'click outside of chart, don't start zoom process
-                    Exit Sub
+                    Return
                 End If
 
                 View.TChart1.Cursor = View.cursor_zoom
@@ -1771,7 +1771,7 @@ Friend Class WaveController
             ' update crosshair position
             If View.TChart1.Series.Count = 0 Then
                 'no series, nothing to do
-                Exit Sub
+                Return
             End If
             Dim xMouseValue As Double = View.TChart1.Series(0).XScreenToValue(e.X)
             Dim xValue As Double
@@ -2091,7 +2091,7 @@ Friend Class WaveController
             Dim numberOfTextLinesToMove As Integer = CInt(e.Delta * SystemInformation.MouseWheelScrollLines / 120)
 
             If numberOfTextLinesToMove = 0 Then
-                Exit Sub
+                Return
             End If
 
             'zoom while centering on mouse
@@ -2308,42 +2308,42 @@ Friend Class WaveController
         Select Case View.ComboBox_DisplayRangeUnit.SelectedItem
             Case "Centuries"
                 If xMin.AddYears(multiplier * 100) = xMax Then
-                    Exit Sub
+                    Return
                 End If
             Case "Decades"
                 If xMin.AddYears(multiplier * 10) = xMax Then
-                    Exit Sub
+                    Return
                 End If
             Case "Years"
                 If xMin.AddYears(multiplier) = xMax Then
-                    Exit Sub
+                    Return
                 End If
             Case "Months"
                 If xMin.AddMonths(multiplier) = xMax Then
-                    Exit Sub
+                    Return
                 End If
             Case "Weeks"
                 If xMin.AddDays(multiplier * 7) = xMax Then
-                    Exit Sub
+                    Return
                 End If
             Case "Days"
                 If xMin.AddDays(multiplier) = xMax Then
-                    Exit Sub
+                    Return
                 End If
             Case "Hours"
                 If xMin.AddHours(multiplier) = xMax Then
-                    Exit Sub
+                    Return
                 End If
             Case "Minutes"
                 If xMin.AddMinutes(multiplier) = xMax Then
-                    Exit Sub
+                    Return
                 End If
             Case "Seconds"
                 If xMin.AddSeconds(multiplier) = xMax Then
-                    Exit Sub
+                    Return
                 End If
             Case Else
-                Exit Sub
+                Return
         End Select
 
         'fields do not correspond to the chart, therefore reset the fields
@@ -2767,7 +2767,7 @@ Friend Class WaveController
 
         If timestamps.Count = 0 Then
             'no markers to display
-            Exit Sub
+            Return
         End If
 
         'loop over time series
@@ -2910,7 +2910,7 @@ Friend Class WaveController
         'get TimeSeries from model
         If Not _model.TimeSeries.ContainsId(id) Then
             Log.AddLogEntry(Log.Levels.error, $"Unable to update series properties for id {id}, series not found in model!")
-            Exit Sub
+            Return
         End If
         Dim ts As TimeSeries = _model.TimeSeries(id)
 
@@ -2918,7 +2918,7 @@ Friend Class WaveController
         Dim series As Steema.TeeChart.Styles.Series = View.GetSeries(id)
         If series Is Nothing Then
             Log.AddLogEntry(Log.Levels.error, $"Unable to update series properties for id {id}, series not found in view!")
-            Exit Sub
+            Return
         End If
 
         'set line display according to interpretation

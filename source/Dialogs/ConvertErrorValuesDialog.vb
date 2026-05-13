@@ -49,7 +49,7 @@ Friend Class ConvertErrorValuesDialog
         'Abort if no series is selected
         If Me.ComboBox_Series.SelectedIndex = -1 Then
             MessageBox.Show("Please select a series!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning)
-            Exit Sub
+            Return
         End If
 
         Dim i As Integer
@@ -64,7 +64,7 @@ Friend Class ConvertErrorValuesDialog
         For Each str As String In errorstrings
             If Not Double.TryParse(str, errorvalue) Then
                 MessageBox.Show($"Could not parse the value '{str}'!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning)
-                Exit Sub
+                Return
             Else
                 errorvalues(i) = errorvalue
                 i += 1

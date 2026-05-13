@@ -90,7 +90,7 @@ Friend Class HistogramDialog
     Private Sub sortBreaks()
         If Me.DataGridView_breaks.Rows.Count <= 1 Then
             'nothing to do
-            Exit Sub
+            Return
         End If
         'sort the grid
         Me.DataGridView_breaks.Sort(Me.DataGridView_breaks.Columns(1), System.ComponentModel.ListSortDirection.Ascending)
@@ -117,7 +117,7 @@ Friend Class HistogramDialog
         'try to get ClipboardContents in text format
         If (Not ClipboardContents.GetDataPresent(DataFormats.Text, True)) Then
             MessageBox.Show("Unable to process clipboard contents!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning)
-            Exit Sub
+            Return
         End If
 
         'convert ClipboardContents to text
@@ -160,13 +160,13 @@ Friend Class HistogramDialog
         'check if max is covered
         If Me.breaks(n_breaks - 1) < Me.max Then
             MessageBox.Show($"The last break is smaller than the maximum value!{eol}Please add a break greater than or equal to the maximum value of {Me.max.ToString("F")}", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning)
-            Exit Sub
+            Return
         End If
 
         'check that first break is not less than min
         If Me.DataGridView_breaks.Rows(0).Cells(1).Value < Me.min Then
             MessageBox.Show($"The first break is smaller than the minimum value!{eol}Please enter only breaks that are greater than the minimum value of {Me.min.ToString("F")}", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning)
-            Exit Sub
+            Return
         End If
 
         Me.DialogResult = System.Windows.Forms.DialogResult.OK
@@ -195,7 +195,7 @@ Friend Class HistogramDialog
     Private Sub DataGridView_bins_CellValueChanged(sender As System.Object, e As System.Windows.Forms.DataGridViewCellEventArgs) Handles DataGridView_breaks.CellValueChanged
         If e.RowIndex = -1 Then
             'occurs during initialization
-            Exit Sub
+            Return
         End If
         If String.IsNullOrEmpty(Me.DataGridView_breaks.Rows(e.RowIndex).Cells(1).Value.ToString) Then
             'delete rows with empty cells

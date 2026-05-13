@@ -164,7 +164,7 @@ Friend Class PropertiesWindow
     Private Sub DataGridView1_CellValueChanged(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridView1.CellValueChanged
 
         If e.RowIndex = -1 Then
-            Exit Sub
+            Return
         End If
 
         Dim idColumnIndex As Integer
@@ -238,7 +238,7 @@ Friend Class PropertiesWindow
                    (direction = Direction.Down And row.Index = Me.DataGridView1.RowCount - 1) Then
                     'if first row is selected, moving up does nothing
                     'if last row is selected, moving down does nothing
-                    Exit Sub
+                    Return
                 End If
                 indices.Add(row.Index)
                 ids.Add(CType(row.DataBoundItem, TimeSeries).Id)

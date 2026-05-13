@@ -76,12 +76,12 @@ Friend Class MultiMetadataDialog
 
         If grid.RowCount <> rowsInClipboard.Length Then
             MessageBox.Show($"Number of rows in clipboard ({rowsInClipboard.Length}) does not match number of rows in grid ({grid.Rows.Count}). Paste cancelled.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-            Exit Sub
+            Return
         End If
         Dim clipboardColumnCount As Integer = rowsInClipboard(0).Split(columnSplitter).Length
         If grid.ColumnCount <> clipboardColumnCount Then
             MessageBox.Show($"Number of columns in clipboard ({clipboardColumnCount}) does not match number of columns in grid ({grid.ColumnCount}). Paste cancelled.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-            Exit Sub
+            Return
         End If
 
         For iRow As Integer = 0 To rowsInClipboard.Length - 1
@@ -89,7 +89,7 @@ Friend Class MultiMetadataDialog
             'check series titles match in first column
             If valuesInRow(0) <> grid.Rows(iRow).Cells(0).Value Then
                 MessageBox.Show($"Series title in row {iRow + 1} in clipboard ('{valuesInRow(0)}') does not match title in grid ('{grid.Rows(iRow).Cells(0).Value}'). Paste cancelled.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-                Exit Sub
+                Return
             End If
             'paste values in other columns
             For iCol As Integer = 1 To valuesInRow.Length - 1

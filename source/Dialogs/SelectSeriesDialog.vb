@@ -66,7 +66,7 @@ Friend Class SelectSeriesDialog
         If (Me.ListBox_Series.SelectedItems.Count < 1) Then
             MessageBox.Show("Please select at least one series!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning)
             Me.DialogResult = DialogResult.None
-            Exit Sub
+            Return
         Else
             For Each sInfo As TimeSeriesInfo In Me.ListBox_Series.SelectedItems
                 Me.tsFile.SelectSeries(sInfo.Index)

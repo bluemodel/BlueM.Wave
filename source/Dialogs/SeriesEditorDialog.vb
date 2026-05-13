@@ -102,7 +102,7 @@ Friend Class SeriesEditorDialog
         'Prüfen, ob ClipboardContents im CSV-Format vorliegen oder konvertiert werden können
         If Not ClipboardContents.GetDataPresent(DataFormats.CommaSeparatedValue, True) Then
             MessageBox.Show("Unable to process the clipboard contents!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-            Exit Sub
+            Return
         End If
 
         Me.Cursor = Cursors.WaitCursor
@@ -197,13 +197,13 @@ Friend Class SeriesEditorDialog
             MessageBox.Show("Please enter a title for the series!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning)
             Me.TextBox_Title.Focus()
             Me.DialogResult = DialogResult.None
-            Exit Sub
+            Return
         End If
 
         'check the dates
         If Not Me.CheckDates() Then
             Me.DialogResult = DialogResult.None
-            Exit Sub
+            Return
         End If
 
         'create a new time series object

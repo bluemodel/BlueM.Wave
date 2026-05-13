@@ -186,7 +186,7 @@ Namespace Fileformats
         Private Sub DataGridView1_CellValueChanged(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridView1.CellValueChanged
 
             If e.RowIndex = -1 Then
-                Exit Sub
+                Return
             End If
 
             Dim item As eumItem = DataGridView1.Rows(e.RowIndex).Cells(Columns.eumItem).Value

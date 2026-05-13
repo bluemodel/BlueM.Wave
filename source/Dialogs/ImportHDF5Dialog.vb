@@ -144,13 +144,13 @@ Friend Class ImportHDF5Dialog
         If ListBox_Elements.SelectedItems.Count < 1 Then
             MessageBox.Show("Please select at least one element!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning)
             Me.DialogResult = DialogResult.None
-            Exit Sub
+            Return
         End If
 
         If CheckedListBox_Variables.CheckedItems.Count < 1 Then
             MessageBox.Show("Please select at least one variable!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning)
             Me.DialogResult = DialogResult.None
-            Exit Sub
+            Return
         End If
 
         'Build list of selected variable names (without unit suffix)

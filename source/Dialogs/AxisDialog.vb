@@ -41,7 +41,7 @@ Friend Class AxisDialog
     Private Sub DataGridView1_CellValueChanged(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridView1.CellValueChanged
 
         If e.RowIndex = -1 Then
-            Exit Sub
+            Return
         End If
 
         If Me.DataGridView1.Columns(e.ColumnIndex).Name = "UnitColumn" Then
