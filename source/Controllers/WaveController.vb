@@ -1443,7 +1443,13 @@ Friend Class WaveController
         Dim filepath As String
         filepath = IO.Path.Combine(Application.StartupPath, "CHANGELOG.md")
         Try
-            System.Diagnostics.Process.Start("notepad", filepath)
+            Dim process As New Process With {
+                .StartInfo = New ProcessStartInfo With {
+                    .FileName = filepath,
+                    .UseShellExecute = True
+                }
+            }
+            process.Start()
         Catch ex As Exception
             MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
