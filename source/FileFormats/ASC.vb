@@ -178,7 +178,7 @@ Namespace Fileformats
                 '* am Anfang ignorieren
                 If (Zeile.StartsWith("*"c)) Then Zeile = Zeile.Substring(1)
 
-                Werte = Zeile.ToString.Split(New Char() {Me.Separator.ToChar}, StringSplitOptions.RemoveEmptyEntries)
+                Werte = Zeile.ToString.Split(Me.Separator.ToChar, StringSplitOptions.RemoveEmptyEntries)
 
                 If Werte.Length > 0 Then
 
