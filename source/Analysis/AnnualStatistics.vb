@@ -38,7 +38,7 @@ Friend Class AnnualStatistics
     ''' <summary>
     ''' Nested dictionary with key of series title and values as dictionary with key of period (entire series or year) and value of struct_stat with the calculated statistics for the period
     ''' </summary>
-    Private stats As Dictionary(Of String, Dictionary(Of String, struct_stat))
+    Private ReadOnly stats As Dictionary(Of String, Dictionary(Of String, struct_stat))
     Private generateBoundingBoxes As Boolean
 
     Public Overloads Shared Function Description() As String
