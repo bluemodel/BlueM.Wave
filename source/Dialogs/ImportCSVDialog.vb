@@ -24,7 +24,7 @@ Friend Class ImportCSVDialog
     Private IsInitializing As Boolean
 
     Private tsFile As TimeSeriesFile
-    Private WithEvents inputTimer As Timers.Timer
+    Private WithEvents InputTimer As Timers.Timer
 
     ''' <summary>
     ''' Gets and sets the date format string in the corresponding combobox while escaping and unescaping any special characters.
@@ -69,7 +69,7 @@ Friend Class ImportCSVDialog
     ''' Gets and sets the selected Encoding
     ''' </summary>
     ''' <returns></returns>
-    Private Property selectedEncoding As System.Text.Encoding
+    Private Property SelectedEncoding As System.Text.Encoding
         Get
             Return CType(Me.ComboBox_Encoding.SelectedItem, System.Text.EncodingInfo).GetEncoding()
         End Get
@@ -89,7 +89,7 @@ Friend Class ImportCSVDialog
         Me.tsFile = fileInstance
 
         'initialize input delay timer
-        Me.inputTimer = New Timers.Timer(1000) With {
+        Me.InputTimer = New Timers.Timer(1000) With {
             .SynchronizingObject = Me,
             .AutoReset = False
         }
@@ -154,7 +154,7 @@ Friend Class ImportCSVDialog
 
         'Vorschau anzeigen
         Dim fs As New FileStream(Me.tsFile.File, FileMode.Open, FileAccess.Read)
-        Dim StrRead As New StreamReader(fs, Me.selectedEncoding)
+        Dim StrRead As New StreamReader(fs, Me.SelectedEncoding)
 
         text = ""
 
@@ -210,7 +210,7 @@ Friend Class ImportCSVDialog
     ''' </summary>
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
-    Private Sub inputChanged(sender As Object, e As EventArgs) Handles _
+    Private Sub InputChanged(sender As Object, e As EventArgs) Handles _
         NumericUpDown_LineTitles.TextChanged,
         NumericUpDown_LineUnits.TextChanged,
         NumericUpDown_LineData.TextChanged,
@@ -272,7 +272,7 @@ Friend Class ImportCSVDialog
                 Me.tsFile.DateTimeColumnIndex = Me.NumericUpDown_ColumnDateTime.Value - 1 'Immer eins weniger wie du ! 
 
                 'Encoding
-                Me.tsFile.Encoding = Me.selectedEncoding
+                Me.tsFile.Encoding = Me.SelectedEncoding
 
                 'Spalten neu auslesen
                 Call Me.tsFile.ReadSeriesInfo()
@@ -378,8 +378,8 @@ Friend Class ImportCSVDialog
     Private Sub TextBox_Search_TextChanged(sender As Object, e As EventArgs) Handles TextBox_Search.TextChanged
 
         'reset the input timer
-        Me.inputTimer.Stop()
-        Me.inputTimer.Start()
+        Me.InputTimer.Stop()
+        Me.InputTimer.Start()
 
     End Sub
 
@@ -389,7 +389,7 @@ Friend Class ImportCSVDialog
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
     ''' <remarks></remarks>
-    Private Sub searchSeries(sender As Object, e As Timers.ElapsedEventArgs) Handles inputTimer.Elapsed
+    Private Sub SearchSeries(sender As Object, e As Timers.ElapsedEventArgs) Handles InputTimer.Elapsed
 
         Dim search, itemname As String
 
@@ -470,7 +470,7 @@ Friend Class ImportCSVDialog
     End Sub
 
     Private Sub ImportDiag_FormClosed(sender As Object, e As FormClosedEventArgs) Handles MyBase.FormClosed
-        Me.inputTimer.Dispose()
+        Me.InputTimer.Dispose()
     End Sub
 
 End Class
