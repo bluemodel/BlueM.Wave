@@ -22,11 +22,11 @@ There are some shortcuts:
 The new file format must be registered
 * Add a new entry to the Enum [`TimeSeriesFile.FileTypes`](xref:BlueM.Wave.TimeSeriesFile.FileTypes).
 * Add the file format's file extension to [`TimeSeriesFile.FileExtensions`](xref:BlueM.Wave.TimeSeriesFile.FileExtensions) and to `TimeSeriesFile.FileFilter` if it is not yet included.
-* Add a case for handling the file format's extension to the [`TimeSeriesFile.getFileType()`](xref:BlueM.Wave.TimeSeriesFile#BlueM_Wave_TimeSeriesFile_getFileType_System_String_) method. If other file formats use the same extension, use calls to `.VerifyFormat()` to distinguish between them.
+* Add a case for handling the file format's extension to the [`TimeSeriesFile.GetFileType()`](xref:BlueM.Wave.TimeSeriesFile#BlueM_Wave_TimeSeriesFile_GetFileType_System_String_) method. If other file formats use the same extension, use calls to `.VerifyFormat()` to distinguish between them.
 
 ### Implementing file writing
 If you want the file format to also be exportable from Wave:
 * Implement `.WriteFile()` to write a list of time series to a file.
 * If the file format supports multiple series per file, add the format in [`TimeSeriesFile.SupportsMultipleSeries()`](xref:BlueM.Wave.TimeSeriesFile#BlueM_Wave_TimeSeriesFile_SupportsMultipleSeries_BlueM_Wave_TimeSeriesFile_FileTypes_).
 * Add a case for the file format to `Wave.ExportTimeseries()`.
- * Optional: add metadata handling by implementing `.MetadataKeys()` and `.setDefaultMetadata()` and adding corresponding cases to `Wave.ExportTimeseries()`.
+ * Optional: add metadata handling by implementing `.MetadataKeys()` and `.SetDefaultMetadata()` and adding corresponding cases to `Wave.ExportTimeseries()`.

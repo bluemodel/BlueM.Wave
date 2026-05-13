@@ -27,20 +27,20 @@ The repository contains an assembly `Wave.Tests` for unit testing.
 Some of the tests use test data from the [BlueM.Datasets](https://github.com/bluemodel/BlueM.Datasets) repository, which needs to be checked out alongside BlueM.Wave in the same parent folder.
 
 There are two ways to run tests:
-* from within Visual Studio using the *Text Explorer* window (see also [this article](https://learn.microsoft.com/en-us/visualstudio/test/run-unit-tests-with-test-explorer?view=vs-2022))
-* from the command-line with the following command (see also [this arcticle](https://learn.microsoft.com/en-us/visualstudio/test/vstest-console-options?view=vs-2022)):
+* from within Visual Studio using the *Text Explorer* window (see also [this article](https://learn.microsoft.com/en-us/visualstudio/test/run-unit-tests-with-test-explorer))
+* from the command-line with the following command (see also [this arcticle](https://learn.microsoft.com/en-us/dotnet/core/tools/dotnet-test)):
 ```bat
-vstest.console.exe BlueM.Wave\tests\bin\x64\Debug\Wave.Tests.dll /Settings:BlueM.Wave\tests\tests.runsettings
+dotnet test BlueM.Wave\tests\bin\x64\Debug\net10.0-windows\Wave.Tests.dll --settings BlueM.Wave\tests\tests.runsettings
 ```
 
-To add new tests, follow the pattern of the existing ones and/or refer to the [MSTest framework docs](https://docs.microsoft.com/en-us/visualstudio/test/using-microsoft-visualstudio-testtools-unittesting-members-in-unit-tests?view=vs-2022).
+To add new tests, follow the pattern of the existing ones and/or refer to the [MSTest framework docs](https://docs.microsoft.com/en-us/visualstudio/test/using-microsoft-visualstudio-testtools-unittesting-members-in-unit-tests).
 
 All tests defined in `Wave.Tests` are automatically run in a GitHub action whenever a push to the master branch or to a pull request occurs (see [workflow file](https://github.com/bluemodel/BlueM.Wave/blob/master/.github/workflows/run-tests.yml)).
 
 ## Debug log messages
 Debug log messages can be created by calling 
 ```vbnet
-Log.AddLogEntry(levels.debug, "message")
+Log.AddLogEntry(Levels.debug, "message")
 ```
 and are only visible in the log if the user setting `loggingLevel` is set to `debug`.
 
@@ -58,7 +58,7 @@ An installer (.msi) for BlueM.Wave can be built using the `Wave.Setup` project l
 
 ## Releases
 To create a new release:
-* Change the `AssemblyVersion` in the file `source\My Project\AssemblyInfo.vb`.
+* Change the Assembly version in the Wave project properties (or update the `<AssemblyVersion>` property in the project file `source\Wave.vbproj`).
 * Update the changelog in the file `source\CHANGELOG.md`.
 * In Visual Studio, select the `Wave.Setup` project and update its `Version` property to the new version number.
 * Visual Studio will ask to change the `ProductCode`, answer Yes.
