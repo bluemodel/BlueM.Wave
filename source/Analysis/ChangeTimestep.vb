@@ -87,7 +87,7 @@ Friend Class ChangeTimestep
         Call MyBase.New(seriesList)
 
         If seriesList.Count <> 1 Then
-            Throw New Exception("The ChangeTimestep analysis requires the selection of exactly 1 time series!")
+            Throw New AnalysisInvalidInputException("The ChangeTimestep analysis requires the selection of exactly 1 time series!")
         End If
 
     End Sub
@@ -121,8 +121,8 @@ Friend Class ChangeTimestep
         ignoreNaN = dlg.CheckBox_IgnoreNaN.Checked
 
         'if ignoreNaN is set, remove all NaN values from time series
-        If ignoreNaN = True Then
-            ts = ts.removeNaNValues()
+        If ignoreNaN Then
+            ts = ts.RemoveNaNValues()
         End If
 
         'change timestep

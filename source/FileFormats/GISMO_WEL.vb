@@ -48,9 +48,9 @@ Namespace Fileformats
             Me.UseUnits = True
 
             ' which lines contain heading, units, first data line
-            Me.iLineHeadings = 15
-            Me.iLineUnits = 16
-            Me.iLineData = 17
+            Me.LineNumberHeaders = 15
+            Me.LineNumberUnits = 16
+            Me.LineNumberData = 17
 
             If Me.IsCSV() Then
                 ' is it a CSV file? GISMO uses ";" to separate values if CSV mode is choosen
@@ -59,15 +59,15 @@ Namespace Fileformats
             Else
                 ' if not, the space " " is used as separator
                 Me.IsColumnSeparated = False
-                Me.Separator = space
+                Me.Separator = Constants.space
             End If
 
-            Call Me.readSeriesInfo()
+            Call Me.ReadSeriesInfo()
 
         End Sub
 
         ' get columns
-        Public Overrides Sub readSeriesInfo()
+        Public Overrides Sub ReadSeriesInfo()
 
             Dim i As Integer
             Dim Zeile As String = ""
@@ -79,8 +79,8 @@ Namespace Fileformats
             Me.TimeSeriesInfos.Clear()
 
             ' open file
-            Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
-            Dim StrRead As StreamReader = New StreamReader(FiStr, Me.Encoding)
+            Dim FiStr As New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
+            Dim StrRead As New StreamReader(FiStr, Me.Encoding)
             Dim StrReadSync = TextReader.Synchronized(StrRead)
 
             ' get element name to add to time series name
@@ -88,10 +88,10 @@ Namespace Fileformats
             SeriesName = Zeile.Substring(13, 16)
 
             ' find line with data headers and units
-            For i = 2 To Math.Max(Me.iLineData, Me.iLineHeadings + 1)
+            For i = 2 To Math.Max(Me.LineNumberData, Me.LineNumberHeaders + 1)
                 Zeile = StrReadSync.ReadLine.ToString
-                If (i = Me.iLineHeadings) Then ZeileSpalten = Zeile
-                If (i = Me.iLineUnits) Then ZeileEinheiten = Zeile
+                If (i = Me.LineNumberHeaders) Then ZeileSpalten = Zeile
+                If (i = Me.LineNumberUnits) Then ZeileEinheiten = Zeile
             Next
 
             ' close file
@@ -105,14 +105,14 @@ Namespace Fileformats
             Dim Einheiten() As String
 
             ' first space needs to be removed
-            ZeileSpalten = ZeileSpalten.Substring(1, ZeileSpalten.Length - 1)
-            ZeileEinheiten = ZeileEinheiten.Substring(1, ZeileEinheiten.Length - 1)
+            ZeileSpalten = ZeileSpalten.Substring(1)
+            ZeileEinheiten = ZeileEinheiten.Substring(1)
 
             If (Me.IsColumnSeparated) Then
                 ' data columns are separated by ";"
                 ' split string at every ";"
-                Namen = ZeileSpalten.Split(New Char() {Me.Separator.ToChar})
-                Einheiten = ZeileEinheiten.Split(New Char() {Me.Separator.ToChar})
+                Namen = ZeileSpalten.Split(Me.Separator.ToChar)
+                Einheiten = ZeileEinheiten.Split(Me.Separator.ToChar)
                 anzSpalten = Namen.Length
                 If Namen.Length <> Einheiten.Length Then
                     MessageBox.Show("Number of column names <> number of units!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning)
@@ -141,8 +141,8 @@ Namespace Fileformats
 
                 ' data columns are separated by " "
                 ' split string at every " "
-                Namen = ZeileSpalten.Split(New Char() {Me.Separator.ToChar})
-                Einheiten = ZeileEinheiten.Split(New Char() {Me.Separator.ToChar})
+                Namen = ZeileSpalten.Split(Me.Separator.ToChar)
+                Einheiten = ZeileEinheiten.Split(Me.Separator.ToChar)
                 anzSpalten = Namen.Length
                 If Namen.Length <> Einheiten.Length Then
                     MessageBox.Show("Number of column names <> number of units!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning)
@@ -151,9 +151,10 @@ Namespace Fileformats
 
             ' put headers and units into the Me.Spalten-array (starts with index 0, --> [anzSpalten -1])
             For i = 1 To (anzSpalten - 1) ' first column is timestamp
-                sInfo = New TimeSeriesInfo()
-                sInfo.Name = $"{SeriesName.Trim}_{Namen(i).Trim()}"
-                sInfo.Index = i
+                sInfo = New TimeSeriesInfo With {
+                    .Name = $"{SeriesName.Trim}_{Namen(i).Trim()}",
+                    .Index = i
+                }
                 If Einheiten(i).Trim = "cbm/s" Then
                     Einheiten(i) = "m3/s"
                 End If
@@ -164,7 +165,7 @@ Namespace Fileformats
         End Sub
 
         ' read file
-        Public Overrides Sub readFile()
+        Public Overrides Sub ReadFile()
 
             Dim i As Integer
             Dim Zeile As String
@@ -174,8 +175,8 @@ Namespace Fileformats
             Dim ts As TimeSeries
 
             ' open file
-            Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
-            Dim StrRead As StreamReader = New StreamReader(FiStr, Me.Encoding)
+            Dim FiStr As New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
+            Dim StrRead As New StreamReader(FiStr, Me.Encoding)
             Dim StrReadSync = TextReader.Synchronized(StrRead)
 
             ' initialize a time series for every selected series
@@ -189,13 +190,13 @@ Namespace Fileformats
             Next
 
             ' read over header lines
-            For i = 0 To Me.nLinesHeader - 1
+            For i = 0 To Me.NLinesHeader - 1
                 StrReadSync.ReadLine()
             Next
 
             ' read date lines
             Do
-                Zeile = StrReadSync.ReadLine.ToString()
+                Zeile = StrReadSync.ReadLine()
 
                 ' first empty space "" needs to be removed (otherwise date time format is not understood)
                 'Zeile = Zeile.Substring(1, Zeile.Length - 1)
@@ -206,14 +207,14 @@ Namespace Fileformats
                     ' data columns are separated by ";"
 
                     ' split data line into columns
-                    Werte = Zeile.Split(New Char() {Me.Separator.ToChar})
+                    Werte = Zeile.Split(Me.Separator.ToChar)
 
                     ' first column ist date time, add date time to times series
                     ok = DateTime.TryParseExact(Werte(Me.DateTimeColumnIndex), DateFormats("GISMO1"), Helpers.DefaultNumberFormat, Globalization.DateTimeStyles.None, datum)
                     If (Not ok) Then
                         ok = DateTime.TryParseExact(Werte(Me.DateTimeColumnIndex), DateFormats("GISMO2"), Helpers.DefaultNumberFormat, Globalization.DateTimeStyles.None, datum)
                         If Not ok Then
-                            Throw New Exception($"Kann das Datumsformat '{Werte(Me.DateTimeColumnIndex)}' nicht erkennen!{eol}Sollte in der Form '{DateFormats("GISMO1")} oder {DateFormats("GISMO2")}' vorliegen!")
+                            Throw New TimeSeriesFileReadingException($"Kann das Datumsformat '{Werte(Me.DateTimeColumnIndex)}' nicht erkennen!{eol}Sollte in der Form '{DateFormats("GISMO1")} oder {DateFormats("GISMO2")}' vorliegen!")
                         End If
                     End If
 
@@ -228,7 +229,7 @@ Namespace Fileformats
                     Zeile = System.Text.RegularExpressions.Regex.Replace(Zeile, "\s{2,}", Me.Separator.ToChar)
 
                     ' the date time columns need to be moved to one column
-                    Werte_temp = Zeile.Split(New Char() {Me.Separator.ToChar})
+                    Werte_temp = Zeile.Split(Me.Separator.ToChar)
                     ReDim Werte(Werte_temp.Length - 2)
                     For i = 0 To Werte.Length - 1
                         Werte(i) = Werte_temp(i + 1)
@@ -240,7 +241,7 @@ Namespace Fileformats
                     If (Not ok) Then
                         ok = DateTime.TryParseExact(Werte(Me.DateTimeColumnIndex), DateFormats("GISMO2"), Helpers.DefaultNumberFormat, Globalization.DateTimeStyles.None, datum)
                         If Not ok Then
-                            Throw New Exception($"Kann das Datumsformat '{Werte(Me.DateTimeColumnIndex)}' nicht erkennen! {eol}Sollte in der Form '{DateFormats("GISMO1")} oder {DateFormats("GISMO2")}' vorliegen!")
+                            Throw New TimeSeriesFileReadingException($"Kann das Datumsformat '{Werte(Me.DateTimeColumnIndex)}' nicht erkennen! {eol}Sollte in der Form '{DateFormats("GISMO1")} oder {DateFormats("GISMO2")}' vorliegen!")
                         End If
                     End If
 
@@ -267,8 +268,8 @@ Namespace Fileformats
         Public Function IsCSV() As Boolean
 
             ' open file
-            Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
-            Dim StrRead As StreamReader = New StreamReader(FiStr, detectEncodingFromByteOrderMarks:=True)
+            Dim FiStr As New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
+            Dim StrRead As New StreamReader(FiStr, detectEncodingFromByteOrderMarks:=True)
             Dim line As String
 
             ' read first line
@@ -288,7 +289,7 @@ Namespace Fileformats
                 Return False
 
             Else
-                Throw New Exception("Unable to determine GISMO result file variant!")
+                Throw New TimeSeriesFileReadingException("Unable to determine GISMO result file variant!")
             End If
 
         End Function
@@ -299,11 +300,11 @@ Namespace Fileformats
         ''' </summary>
         ''' <param name="file">file path</param>
         ''' <returns>True if the file is a GISMO result file</returns>
-        Public Shared Function verifyFormat(file As String) As Boolean
+        Public Shared Function VerifyFormat(file As String) As Boolean
 
             ' open file
-            Dim FiStr As FileStream = New FileStream(file, FileMode.Open, IO.FileAccess.Read)
-            Dim StrRead As StreamReader = New StreamReader(FiStr, detectEncodingFromByteOrderMarks:=True)
+            Dim FiStr As New FileStream(file, FileMode.Open, IO.FileAccess.Read)
+            Dim StrRead As New StreamReader(FiStr, detectEncodingFromByteOrderMarks:=True)
             Dim lines As New List(Of String)
 
             ' read three lines

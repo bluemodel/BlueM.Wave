@@ -16,6 +16,7 @@
 'along with this program.  If not, see <https://www.gnu.org/licenses/>.
 '
 Imports System.Text.RegularExpressions
+Imports BlueM.Wave.TimeSeriesFileWritingException
 
 Namespace Parsers
 
@@ -29,7 +30,7 @@ Namespace Parsers
             MyBase.New(inputtext:=clipboardtext)
         End Sub
 
-        Public Overloads Shared Function verifyFormat(clipboardtext As String) As Boolean
+        Public Overloads Shared Function VerifyFormat(clipboardtext As String) As Boolean
             'check if content contains expected header
             If clipboardtext.Contains("SydroTyp=SydroErgZre") Or
                clipboardtext.Contains("SydroTyp=SydroBinZre") Then
@@ -102,7 +103,7 @@ Namespace Parsers
             Dim file, name As String
 
             zreblock = False
-            For Each line As String In InputText.Split(New String() {vbCr, vbLf}, StringSplitOptions.RemoveEmptyEntries)
+            For Each line As String In InputText.Split({vbCr, vbLf}, StringSplitOptions.RemoveEmptyEntries)
 
                 line = line.Trim()
 
@@ -114,7 +115,7 @@ Namespace Parsers
                 End If
 
                 If zreblock Then
-                    If line.Contains("=") Then
+                    If line.Contains("="c) Then
                         parts = line.Split("=")
                         data(i_series - 1).Add(parts(0), parts(1))
                     ElseIf line = "EndZeitreihe" Then
@@ -126,7 +127,7 @@ Namespace Parsers
             Next
 
             If data.Count = 0 Then
-                Throw New Exception("No series could be parsed from TALSIM clipboard content!")
+                Throw New ParserException("No series could be parsed from TALSIM clipboard content!")
             End If
 
             'initiate parsing of series
@@ -141,7 +142,7 @@ Namespace Parsers
                 }
                 For Each key As String In expectedKeys
                     If Not params.ContainsKey(key) Then
-                        Throw New Exception($"Missing required entry '{key}' in clipboard content!")
+                        Throw New ParserException($"Missing required entry '{key}' in clipboard content!")
                     End If
                 Next
 
@@ -151,7 +152,7 @@ Namespace Parsers
                     Case "4" 'WEL file
 
                         If Not params.ContainsKey("Zustand") Then
-                            Throw New Exception("Missing required entry 'Zustand' in clipboard content!")
+                            Throw New ParserException("Missing required entry 'Zustand' in clipboard content!")
                         End If
 
                         'build series name
@@ -181,7 +182,7 @@ Namespace Parsers
                     Case "99" 'BIN file
 
                         If Not params.ContainsKey("Einheit") Then
-                            Throw New Exception("Missing required entry 'Einheit' in clipboard content!")
+                            Throw New ParserException("Missing required entry 'Einheit' in clipboard content!")
                         End If
 
                         name = params("Kennung")
@@ -203,7 +204,7 @@ Namespace Parsers
                         FileReferences.Add(fileRef)
 
                     Case Else
-                        Throw New Exception($"Unsupported value {params("ZRFormat")} for ZRFormat!")
+                        Throw New ParserException($"Unsupported value {params("ZRFormat")} for ZRFormat!")
 
                 End Select
 
@@ -225,7 +226,7 @@ Namespace Parsers
                 If Not IO.File.Exists(fileRef.path) Then
                     Dim fileExt As String = IO.Path.GetExtension(fileRef.path).ToUpper()
                     If fileExt = TimeSeriesFile.FileExtensions.WEL Or fileExt = TimeSeriesFile.FileExtensions.WBL Then
-                        If TalsimClipboard.extractFromWLZIP(fileRef.path) Then
+                        If TalsimClipboard.ExtractFromWLZIP(fileRef.path) Then
                             'remember the file so that we can delete it later
                             extractedFiles.Add(fileRef.path)
                         End If
@@ -241,7 +242,7 @@ Namespace Parsers
                 Try
                     IO.File.Delete(file)
                 Catch ex As Exception
-                    Log.AddLogEntry(Log.levels.warning, $"Could not delete extracted file {file}: {ex.Message}")
+                    Log.AddLogEntry(Log.Levels.warning, $"Could not delete extracted file {file}: {ex.Message}")
                 End Try
             Next
 
@@ -255,7 +256,7 @@ Namespace Parsers
         ''' <param name="file">path to WEL file</param>
         ''' <returns>True if successful</returns>
         ''' <remarks>TALSIM specific</remarks>
-        Public Shared Function extractFromWLZIP(file As String) As Boolean
+        Public Shared Function ExtractFromWLZIP(file As String) As Boolean
 
             Dim file_wlzip As String
             Dim filename As String
@@ -269,16 +270,16 @@ Namespace Parsers
 
                 If IO.File.Exists(file_wlzip) Then
 
-                    Log.AddLogEntry(Log.levels.info, $"Looking for file in {file_wlzip} ...")
+                    Log.AddLogEntry(Log.Levels.info, $"Looking for file in {file_wlzip} ...")
                     filename = IO.Path.GetFileName(file)
 
                     Dim zip As IO.Compression.ZipArchive = IO.Compression.ZipFile.OpenRead(file_wlzip)
 
                     For Each entry As IO.Compression.ZipArchiveEntry In zip.Entries
-                        If entry.Name.ToLower() = filename.ToLower() Then
+                        If entry.Name.Equals(filename, StringComparison.CurrentCultureIgnoreCase) Then
                             zipEntryFound = True
                             'extract file from zip archive
-                            Log.AddLogEntry(Log.levels.info, $"Extracting file from {file_wlzip} ...")
+                            Log.AddLogEntry(Log.Levels.info, $"Extracting file from {file_wlzip} ...")
                             Dim fs As New IO.FileStream(file, IO.FileMode.CreateNew)
                             entry.Open().CopyTo(fs)
                             fs.Flush()
@@ -289,7 +290,7 @@ Namespace Parsers
                     Next
 
                     If Not zipEntryFound Then
-                        Log.AddLogEntry(Log.levels.error, $"File {filename} not found in {file_wlzip}!")
+                        Log.AddLogEntry(Log.Levels.error, $"File {filename} not found in {file_wlzip}!")
                     End If
 
                 End If

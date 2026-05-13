@@ -62,12 +62,12 @@ Namespace Fileformats
             'set default metadata keys
             Me.FileMetadata.AddKeys(UVF.MetadataKeys)
 
-            Call Me.readSeriesInfo()
+            Call Me.ReadSeriesInfo()
 
             If (ReadAllNow) Then
                 'Direkt einlesen
-                Call Me.selectAllSeries()
-                Call Me.readFile()
+                Call Me.SelectAllSeries()
+                Call Me.ReadFile()
             End If
 
         End Sub
@@ -78,7 +78,7 @@ Namespace Fileformats
         ''' <param name="file">Pfad zur Datei</param>
         ''' <returns>Boolean</returns>
         ''' <remarks>Prüfung erfolgt anhand der Zeile *Z</remarks>
-        Public Shared Function verifyFormat(file As String) As Boolean
+        Public Shared Function VerifyFormat(file As String) As Boolean
 
             Dim i As Integer
             Dim Zeile As String
@@ -86,15 +86,15 @@ Namespace Fileformats
 
             Try
                 'Datei öffnen
-                Dim FiStr As FileStream = New FileStream(file, FileMode.Open, IO.FileAccess.Read)
-                Dim StrRead As StreamReader = New StreamReader(FiStr, detectEncodingFromByteOrderMarks:=True)
+                Dim FiStr As New FileStream(file, FileMode.Open, IO.FileAccess.Read)
+                Dim StrRead As New StreamReader(FiStr, detectEncodingFromByteOrderMarks:=True)
                 Dim StrReadSync = TextReader.Synchronized(StrRead)
 
                 Do
-                    Zeile = StrReadSync.ReadLine.ToString()
+                    Zeile = StrReadSync.ReadLine()
                     i += 1
-                    If Zeile.StartsWith("$") Then Continue Do ' Kommentarzeile
-                    If Zeile.ToLower.StartsWith("*z") Then    ' Hier fängt der Header an
+                    If Zeile.StartsWith("$"c) Then Continue Do ' Kommentarzeile
+                    If Zeile.StartsWith("*z", StringComparison.CurrentCultureIgnoreCase) Then    ' Hier fängt der Header an
                         headerFound = True
                         Exit Do
                     End If
@@ -106,7 +106,7 @@ Namespace Fileformats
                 FiStr.Close()
 
                 If Not headerFound Then
-                    Throw New Exception("The file does not contain a header line starting with '*Z'!")
+                    Throw New TimeSeriesFileReadingException("The file does not contain a header line starting with '*Z'!")
                 End If
 
                 Return True
@@ -122,7 +122,7 @@ Namespace Fileformats
         ''' Liest die Metadaten der in der Datei enthaltenen Zeitreihe aus
         ''' </summary>
         ''' <remarks></remarks>
-        Public Overrides Sub readSeriesInfo()
+        Public Overrides Sub ReadSeriesInfo()
 
             Dim i As Integer
             Dim Zeile As String
@@ -133,25 +133,25 @@ Namespace Fileformats
 
             'Header einlesen
             'Datei öffnen
-            Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
-            Dim StrRead As StreamReader = New StreamReader(FiStr, Me.Encoding)
+            Dim FiStr As New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
+            Dim StrRead As New StreamReader(FiStr, Me.Encoding)
             Dim StrReadSync = TextReader.Synchronized(StrRead)
 
             Do
-                Zeile = StrReadSync.ReadLine.ToString()
+                Zeile = StrReadSync.ReadLine()
                 i += 1
-                If Zeile.StartsWith("$") Then
+                If Zeile.StartsWith("$"c) Then
                     'Kommentarzeile
                     'TODO: store comments as metadata
                     Continue Do
-                ElseIf Zeile.ToLower.StartsWith("*z") Then    ' Hier fängt der Header an
+                ElseIf Zeile.StartsWith("*z", StringComparison.CurrentCultureIgnoreCase) Then    ' Hier fängt der Header an
                     headerFound = True
-                    iLineHeadings = i + 1
-                    iLineUnits = i + 1
-                    iLineData = i + 4
+                    LineNumberHeaders = i + 1
+                    LineNumberUnits = i + 1
+                    LineNumberData = i + 4
                     Continue Do
                 End If
-                If i = iLineHeadings Then
+                If i = LineNumberHeaders Then
                     'Zeitreihenname einlesen
                     Me.FileMetadata("name") = Zeile.Substring(0, 15).Trim()
                     'Einheit einlesen
@@ -170,11 +170,11 @@ Namespace Fileformats
                     'Anfangsjahrhundert auf 1900 setzen, falls nicht angegeben
                     If Me.FileMetadata("century") = "" Then
                         Me.FileMetadata("century") = "1900"
-                        Log.AddLogEntry(Log.levels.warning, "Starting century is not specified in file header, assuming 1900.")
+                        Log.AddLogEntry(Log.Levels.warning, "Starting century is not specified in file header, assuming 1900.")
                     End If
                     Continue Do
                 End If
-                If i = iLineHeadings + 1 Then
+                If i = LineNumberHeaders + 1 Then
                     'Ort und Lage einlesen
                     Try
                         Me.FileMetadata("location") = Zeile.Substring(0, Math.Min(Zeile.Length, 15)).Trim()
@@ -195,8 +195,9 @@ Namespace Fileformats
 
             'store series info
 
-            sInfo = New TimeSeriesInfo()
-            sInfo.Name = Me.FileMetadata("name")
+            sInfo = New TimeSeriesInfo With {
+                .Name = Me.FileMetadata("name")
+            }
             If Me.FileMetadata("location") <> "" Then
                 'append location to series title
                 sInfo.Name &= " - " & Me.FileMetadata("location")
@@ -206,7 +207,7 @@ Namespace Fileformats
             Me.TimeSeriesInfos.Add(sInfo)
 
             If Not headerFound Then
-                Throw New Exception("The file does not contain a header line starting with '*Z'!")
+                Throw New TimeSeriesFileReadingException("The file does not contain a header line starting with '*Z'!")
             End If
 
         End Sub
@@ -215,7 +216,7 @@ Namespace Fileformats
         ''' Liest die Datei ein
         ''' </summary>
         ''' <remarks></remarks>
-        Public Overrides Sub readFile()
+        Public Overrides Sub ReadFile()
 
             Dim i, year, year_prev, century As Integer
             Dim Zeile As String
@@ -229,23 +230,23 @@ Namespace Fileformats
 
             'Zeitreihe instanzieren
             sInfo = Me.TimeSeriesInfos(0)
-            ts = New TimeSeries(sInfo.Name)
-            ts.Unit = sInfo.Unit
-            ts.DataSource = New TimeSeriesDataSource(Me.File, sInfo.Name)
-
             'store metadata
-            ts.Metadata = Me.FileMetadata
+            ts = New TimeSeries(sInfo.Name) With {
+                .Unit = sInfo.Unit,
+                .DataSource = New TimeSeriesDataSource(Me.File, sInfo.Name),
+                .Metadata = Me.FileMetadata
+            }
 
             'Datei öffnen
-            Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
-            Dim StrRead As StreamReader = New StreamReader(FiStr, Me.Encoding)
+            Dim FiStr As New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
+            Dim StrRead As New StreamReader(FiStr, Me.Encoding)
             Dim StrReadSync = TextReader.Synchronized(StrRead)
 
             'Einlesen
             '--------
 
             'Header
-            For i = 0 To Me.nLinesHeader - 1
+            For i = 0 To Me.NLinesHeader - 1
                 StrReadSync.ReadLine()
             Next
 
@@ -254,7 +255,7 @@ Namespace Fileformats
             year_prev = Integer.Parse(century.ToString().Substring(2)) 'Aus Anfangsjahrhundert
             errorcount = 0
             Do
-                Zeile = StrReadSync.ReadLine.ToString()
+                Zeile = StrReadSync.ReadLine()
                 'Datum lesen
                 datumstring = Zeile.Substring(0, 10)
                 year = Integer.Parse(datumstring.Substring(0, 2))
@@ -269,7 +270,7 @@ Namespace Fileformats
                 'parse it
                 ok = DateTime.TryParseExact(datumstringExt, Me.Dateformat, Helpers.DefaultNumberFormat, Globalization.DateTimeStyles.None, datum)
                 If (Not ok) Then
-                    Throw New Exception($"Unable to parse the date '{datumstring}' using the given date format '{Me.Dateformat}'!")
+                    Throw New TimeSeriesFileReadingException($"Unable to parse the date '{datumstring}' using the given date format '{Me.Dateformat}'!")
                 End If
                 'Wert lesen
                 wert = Helpers.StringToDouble(Zeile.Substring(10))
@@ -288,7 +289,7 @@ Namespace Fileformats
             FiStr.Close()
 
             If errorcount > 0 Then
-                Log.AddLogEntry(Log.levels.warning, $"The file contained {errorcount} error values ({UVF.ErrorValue}), which were converted to NaN!")
+                Log.AddLogEntry(Log.Levels.warning, $"The file contained {errorcount} error values ({UVF.ErrorValue}), which were converted to NaN!")
             End If
 
             'store time series
@@ -301,15 +302,16 @@ Namespace Fileformats
         ''' </summary>
         Public Overloads Shared ReadOnly Property MetadataKeys() As List(Of String)
             Get
-                Dim keys As New List(Of String)
-                keys.Add("name")
-                keys.Add("unit")
-                keys.Add("defArt")
-                keys.Add("century")
-                keys.Add("location")
-                keys.Add("coord_X")
-                keys.Add("coord_Y")
-                keys.Add("coord_Z")
+                Dim keys As New List(Of String) From {
+                    "name",
+                    "unit",
+                    "defArt",
+                    "century",
+                    "location",
+                    "coord_X",
+                    "coord_Y",
+                    "coord_Z"
+                }
                 Return keys
             End Get
         End Property
@@ -317,7 +319,7 @@ Namespace Fileformats
         ''' <summary>
         ''' Sets default metadata values for a time series corresponding to the UVF file format
         ''' </summary>
-        Public Overloads Shared Sub setDefaultMetadata(ts As TimeSeries)
+        Public Overloads Shared Sub SetDefaultMetadata(ts As TimeSeries)
             'Make sure all required keys exist
             ts.Metadata.AddKeys(UVF.MetadataKeys)
             'Set default values
@@ -336,7 +338,7 @@ Namespace Fileformats
         ''' <param name="ts">the time series to export</param>
         ''' <param name="file">path to the file</param>
         ''' <remarks></remarks>
-        Public Overloads Shared Sub writeFile(ByRef ts As TimeSeries, file As String)
+        Public Overloads Shared Sub WriteFile(ByRef ts As TimeSeries, file As String)
 
             'Format specification:
             'http://aquaplan.de/public_papers/imex/sectionUVF.html

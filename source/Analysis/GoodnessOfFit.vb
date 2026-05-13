@@ -31,7 +31,7 @@ Friend Class GoodnessOfFit
     ''' Data structure containing analysis results
     ''' Outer key is observed series name, inner key is period name (e.g. "Entire series" or hydrological year)
     ''' </summary>
-    Private GoFResults As Dictionary(Of String, Dictionary(Of String, GoF))
+    Private ReadOnly GoFResults As Dictionary(Of String, Dictionary(Of String, GoF))
 
     Public Overloads Shared Function Description() As String
         Return "Calculates multiple goodness of fit criteria between two or more time series. Only coincident data points where both values are not NaN are considered."
@@ -98,13 +98,13 @@ Friend Class GoodnessOfFit
 
         'number of time series must be at least 2
         If seriesList.Count < 2 Then
-            Throw New Exception("The Goodness of Fit analysis requires the selection of at least 2 time series!")
+            Throw New AnalysisInvalidInputException("The Goodness of Fit analysis requires the selection of at least 2 time series!")
         End If
 
         'emit a warning if any time series has a volume of NaN
         For Each ts As TimeSeries In seriesList
             If Double.IsNaN(ts.Volume) Then
-                Log.AddLogEntry(levels.warning, "At least one time series has a volume of NaN, volume error can not be calculated!")
+                Log.AddLogEntry(Levels.warning, "At least one time series has a volume of NaN, volume error can not be calculated!")
                 Exit For
             End If
         Next
@@ -121,7 +121,7 @@ Friend Class GoodnessOfFit
     ''' <param name="ts_s">timeseries with simulated values</param>
     ''' <returns>GoF parameters</returns>
     ''' <remarks></remarks>
-    Private Shared Function calculateGOF(ts_o As TimeSeries, ts_s As TimeSeries) As GoF
+    Private Shared Function CalculateGOF(ts_o As TimeSeries, ts_s As TimeSeries) As GoF
 
         Dim i As Integer
         Dim errors() As Double
@@ -186,8 +186,8 @@ Friend Class GoodnessOfFit
         'for the remaining indicators, remove all NaN nodes and synchronize series
 
         'remove NaN values
-        ts_o = ts_o.removeNaNValues()
-        ts_s = ts_s.removeNaNValues()
+        ts_o = ts_o.RemoveNaNValues()
+        ts_s = ts_s.RemoveNaNValues()
 
         'store original number of non-NaN nodes
         Dim length_obs_original As Integer = ts_o.Length
@@ -198,15 +198,15 @@ Friend Class GoodnessOfFit
 
         'emit warning if number of nodes was reduced due to synchronizing
         If ts_o.Length < length_obs_original Then
-            Log.AddLogEntry(levels.warning, $"Series {ts_o.Title}: only {ts_o.Length} of {length_obs_original} nodes are coincident and can be used for GoodnessOfFit calculation")
+            Log.AddLogEntry(Levels.warning, $"Series {ts_o.Title}: only {ts_o.Length} of {length_obs_original} nodes are coincident and can be used for GoodnessOfFit calculation")
         End If
         If ts_s.Length < length_sim_original Then
-            Log.AddLogEntry(levels.warning, $"Series {ts_s.Title}: only {ts_s.Length} of {length_sim_original} nodes are coincident and can be used for GoodnessOfFit calculation")
+            Log.AddLogEntry(Levels.warning, $"Series {ts_s.Title}: only {ts_s.Length} of {length_sim_original} nodes are coincident and can be used for GoodnessOfFit calculation")
         End If
 
         'check synchronousness
         If ts_o.Length <> ts_s.Length Or ts_o.StartDate <> ts_s.StartDate Or ts_o.EndDate <> ts_s.EndDate Then
-            Throw New Exception("Simulated and observed time series are not synchronous!")
+            Throw New AnalysisFailedException("Simulated and observed time series are not synchronous!")
         End If
 
         'metadata
@@ -334,11 +334,11 @@ Friend Class GoodnessOfFit
             'make a local copy of observed series in order to not affect subsequent evaluations using other simulated series
             Dim ts_obs As TimeSeries = Me.ts_obs.Clone()
 
-            Log.AddLogEntry(levels.info, $"Calculating goodness of fit indicators for {ts_obs.Title} vs. {ts_sim.Title}...")
+            Log.AddLogEntry(Levels.info, $"Calculating goodness of fit indicators for {ts_obs.Title} vs. {ts_sim.Title}...")
 
             'check for overlap
             If ts_obs.StartDate > ts_sim.EndDate Or ts_obs.EndDate < ts_sim.StartDate Then
-                Throw New Exception("Series have no overlap!")
+                Throw New AnalysisFailedException("Series have no overlap!")
             End If
 
             'store original start and end dates
@@ -356,7 +356,7 @@ Friend Class GoodnessOfFit
                 Or ts_sim.StartDate <> start_sim_original _
                 Or ts_obs.EndDate <> end_obs_original _
                 Or ts_sim.EndDate <> end_sim_original Then
-                Log.AddLogEntry(levels.warning, $"Reduced overlap period used for GoodnessOfFit analysis: {ts_obs.StartDate} - {ts_obs.EndDate}")
+                Log.AddLogEntry(Levels.warning, $"Reduced overlap period used for GoodnessOfFit analysis: {ts_obs.StartDate} - {ts_obs.EndDate}")
             End If
 
             Dim series_o As New Dictionary(Of String, TimeSeries)
@@ -385,7 +385,7 @@ Friend Class GoodnessOfFit
             'Calculate GoF parameters for each series
             Me.GoFResults.Add(ts_sim.Title, New Dictionary(Of String, GoF))
             For Each period As String In series_o.Keys
-                Me.GoFResults(ts_sim.Title).Add(period, GoodnessOfFit.calculateGOF(series_o(period), series_s(period)))
+                Me.GoFResults(ts_sim.Title).Add(period, GoodnessOfFit.CalculateGOF(series_o(period), series_s(period)))
             Next
         Next
 
@@ -424,12 +424,11 @@ Friend Class GoodnessOfFit
                 Dim period = kvp.Key
                 Dim gof As GoF = kvp.Value
 
-                Dim series As New Steema.TeeChart.Styles.Radar(Me.ResultChart.Chart)
-                series.Title = $"{series_title} ({period})"
-
-                'make sure NaN values are handled
-                series.TreatNaNAsNull = True
-                series.TreatNulls = Steema.TeeChart.Styles.TreatNullsStyle.DoNotPaint
+                Dim series As New Steema.TeeChart.Styles.Radar(Me.ResultChart.Chart) With {
+                    .Title = $"{series_title} ({period})",
+                    .TreatNaNAsNull = True, 'make sure NaN values are handled
+                    .TreatNulls = Steema.TeeChart.Styles.TreatNullsStyle.DoNotPaint
+                }
 
                 'this is important because otherwise the series nodes are automatically ordered by their x values (angles), potentially messing up the labelling
                 series.XValues.Order = Steema.TeeChart.Styles.ValueListOrder.None

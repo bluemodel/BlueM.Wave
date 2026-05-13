@@ -76,14 +76,14 @@ Friend Class ConvertErrorValuesDialog
         If Me.ComboBox_Series.SelectedItem.ToString = labelAlle Then
             'clean all series
             For Each ts In Me.tsOriginal
-                ts_new = ts.convertErrorValues(errorvalues)
+                ts_new = ts.ConvertErrorValues(errorvalues)
                 ts_new.Title &= " (clean)"
                 Me.tsConverted.Add(ts_new)
             Next
         Else
             'clean only the selected series
             ts = Me.ComboBox_Series.SelectedItem
-            ts_new = ts.convertErrorValues(errorvalues)
+            ts_new = ts.ConvertErrorValues(errorvalues)
             ts_new.Title &= " (clean)"
             Me.tsConverted.Add(ts_new)
         End If

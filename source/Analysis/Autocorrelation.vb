@@ -90,7 +90,7 @@ Friend Class Autocorrelation
 
         'Prüfung: Anzahl erwarteter Zeitreihen
         If (zeitreihen.Count <> 1) Then
-            Throw New Exception("The Autocorrelation analysis requires the selection of exactly 1 time series!")
+            Throw New AnalysisInvalidInputException("The Autocorrelation analysis requires the selection of exactly 1 time series!")
         End If
 
     End Sub
@@ -150,7 +150,7 @@ Friend Class Autocorrelation
         Next
 
         If dtList.Max <> dtList.Min Then
-            Log.AddLogEntry(levels.warning, "Non-equidistant timesteps encountered. Autocorrelation analysis may be unreliable!")
+            Log.AddLogEntry(Levels.warning, "Non-equidistant timesteps encountered. Autocorrelation analysis may be unreliable!")
         End If
 
         'Bestimmung der Scheitelpunkte
@@ -214,10 +214,12 @@ Friend Class Autocorrelation
         Me.ResultChart.Axes.Left.Maximum = 1
 
         'Linie instanzieren und benennen
-        Dim line_ra As New Steema.TeeChart.Styles.Bar(Me.ResultChart.Chart)
-        line_ra.Title = "Autocorrelogram"
-        Dim line_raMax As New Steema.TeeChart.Styles.Points(Me.ResultChart.Chart)
-        line_raMax.Title = "Peaks (guessed)"
+        Dim line_ra As New Steema.TeeChart.Styles.Bar(Me.ResultChart.Chart) With {
+            .Title = "Autocorrelogram"
+        }
+        Dim line_raMax As New Steema.TeeChart.Styles.Points(Me.ResultChart.Chart) With {
+            .Title = "Peaks (guessed)"
+        }
 
         'Linie befüllen
         For i = 0 To Me.lagCount
@@ -234,15 +236,17 @@ Friend Class Autocorrelation
         line_ra.Marks.Visible = False
 
         'Markstips bei Mausaktion anzeigen
-        Dim markstips As New Steema.TeeChart.Tools.MarksTip(Me.ResultChart.Chart)
-        markstips.MouseAction = Steema.TeeChart.Tools.MarksTipMouseAction.Move
+        Dim markstips As New Steema.TeeChart.Tools.MarksTip(Me.ResultChart.Chart) With {
+            .MouseAction = Steema.TeeChart.Tools.MarksTipMouseAction.Move
+        }
 
         'Textfeld in Diagramm einfügen und Position bestimmen
-        Dim annot As New Steema.TeeChart.Tools.Annotation(Me.ResultChart.Chart)
-        annot.Text =
-            $"Time series was offset {lagCount} times by {lagSize} time steps." & eol &
-            $"Assumed periodicity: {periode_avg}"
-        annot.Position = Steema.TeeChart.Tools.AnnotationPositions.RightTop
+        Dim annot As New Steema.TeeChart.Tools.Annotation(Me.ResultChart.Chart) With {
+            .Text =
+                $"Time series was offset {lagCount} times by {lagSize} time steps." & eol &
+                $"Assumed periodicity: {periode_avg}",
+            .Position = Steema.TeeChart.Tools.AnnotationPositions.RightTop
+        }
 
         'Announce finish
         MyBase.AnalysisProgressFinish()

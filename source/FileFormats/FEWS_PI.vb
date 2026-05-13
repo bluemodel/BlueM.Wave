@@ -15,6 +15,7 @@
 'You should have received a copy of the GNU Lesser General Public License
 'along with this program.  If not, see <https://www.gnu.org/licenses/>.
 '
+Imports System.Data.Common
 Imports System.Xml
 Imports System.Xml.Serialization
 
@@ -56,12 +57,12 @@ Namespace Fileformats
             'set default metadata keys
             Me.FileMetadata.AddKeys(FEWS_PI.MetadataKeys)
 
-            Call Me.readSeriesInfo()
+            Call Me.ReadSeriesInfo()
 
             If (ReadAllNow) Then
                 'read immediately
-                Call Me.selectAllSeries()
-                Call Me.readFile()
+                Call Me.SelectAllSeries()
+                Call Me.ReadFile()
             End If
 
         End Sub
@@ -72,7 +73,7 @@ Namespace Fileformats
         ''' <param name="file">path to file</param>
         ''' <returns>Boolean</returns>
         ''' <remarks></remarks>
-        Public Shared Function verifyFormat(file As String) As Boolean
+        Public Shared Function VerifyFormat(file As String) As Boolean
             Try
                 'attempt to deserialize XML
                 Dim serializer As New XmlSerializer(GetType(XMLTimeSeries))
@@ -82,7 +83,7 @@ Namespace Fileformats
                 End Using
                 Return True
             Catch ex As Exception
-                Log.AddLogEntry(levels.debug, $"Failed to verify XML file as Delft-FEWS PI format due to error {ex}")
+                Log.AddLogEntry(Levels.debug, $"Failed to verify XML file as Delft-FEWS PI format due to error {ex}")
                 Return False
             End Try
         End Function
@@ -91,7 +92,7 @@ Namespace Fileformats
         ''' Reads the metadata from the file
         ''' </summary>
         ''' <remarks></remarks>
-        Public Overrides Sub readSeriesInfo()
+        Public Overrides Sub ReadSeriesInfo()
 
             Me.TimeSeriesInfos.Clear()
 
@@ -105,15 +106,16 @@ Namespace Fileformats
                 'store time series info
                 Dim index As Integer = 0
                 For Each series As XMLSeries In tsRoot.series
-                    Dim tsInfo As New TimeSeriesInfo
-                    tsInfo.Index = index
-                    tsInfo.Name = $"{series.header.locationId}.{series.header.parameterId}"
-                    tsInfo.Unit = series.header.units
+                    Dim tsInfo As New TimeSeriesInfo With {
+                        .Index = index,
+                        .Name = $"{series.header.locationId}.{series.header.parameterId}",
+                        .Unit = series.header.units
+                    }
                     Me.TimeSeriesInfos.Add(tsInfo)
                     index += 1
                 Next
             Catch ex As Exception
-                Throw New Exception("Error while reading Delft-FEWS PI XML file!", ex)
+                Throw New TimeSeriesFileReadingException("Error while reading Delft-FEWS PI XML file!", ex)
             End Try
 
         End Sub
@@ -122,7 +124,7 @@ Namespace Fileformats
         ''' reads the file
         ''' </summary>
         ''' <remarks></remarks>
-        Public Overrides Sub readFile()
+        Public Overrides Sub ReadFile()
 
             Me.TimeSeries.Clear()
 
@@ -138,10 +140,11 @@ Namespace Fileformats
                 Dim index As Integer = 0
                 For Each sInfo As TimeSeriesInfo In Me.SelectedSeries
                     Dim series As XMLSeries = xmlroot.series(sInfo.Index)
-                    Dim ts As New TimeSeries()
-                    ts.Title = $"{series.header.locationId}.{series.header.parameterId}"
-                    ts.Unit = series.header.units
-                    ts.DataSource = New TimeSeriesDataSource(Me.File, ts.Title)
+                    Dim ts As New TimeSeries With {
+                        .Title = $"{series.header.locationId}.{series.header.parameterId}",
+                        .Unit = series.header.units,
+                        .DataSource = New TimeSeriesDataSource(Me.File, .Title)
+                    }
                     'set interpretation
                     Select Case series.header.type
                         Case "instantaneous"
@@ -173,7 +176,7 @@ Namespace Fileformats
                     index += 1
                 Next
             Catch ex As Exception
-                Throw New Exception("Error while reading Delft-FEWS PI XML file!", ex)
+                Throw New TimeSeriesFileReadingException("Error while reading Delft-FEWS PI XML file!", ex)
             End Try
 
         End Sub
@@ -200,7 +203,7 @@ Namespace Fileformats
         ''' <summary>
         ''' Sets default metadata values for a time series corresponding to the Delft-FEWS PI timeseries format
         ''' </summary>
-        Public Overloads Shared Sub setDefaultMetadata(ts As TimeSeries)
+        Public Overloads Shared Sub SetDefaultMetadata(ts As TimeSeries)
             'Make sure all required keys exist
             ts.Metadata.AddKeys(FEWS_PI.MetadataKeys)
             'Set default values
@@ -228,12 +231,12 @@ Namespace Fileformats
         ''' <param name="dateString">date string</param>
         ''' <param name="timeString">time string</param>
         ''' <returns>DateTime object</returns>
-        Private Shared Function parseDateTime(dateString As String, timeString As String) As DateTime
+        Private Shared Function ParseDateTime(dateString As String, timeString As String) As DateTime
             Dim success As Boolean
             Dim timestamp As DateTime
             success = DateTime.TryParseExact($"{dateString} {timeString}", Helpers.DateFormats("ISO"), Helpers.DefaultNumberFormat, Globalization.DateTimeStyles.None, timestamp)
             If Not success Then
-                Throw New Exception($"Unable to parse timestamp {dateString} {timeString}!")
+                Throw New TimeSeriesFileReadingException($"Unable to parse timestamp {dateString} {timeString}!")
             End If
             Return timestamp
         End Function
@@ -244,7 +247,7 @@ Namespace Fileformats
         ''' <param name="tsList">time series to write to file</param>
         ''' <param name="file">path to the xml file</param>
         ''' <remarks></remarks>
-        Public Overloads Shared Sub writeFile(ByRef tsList As List(Of TimeSeries), file As String)
+        Public Overloads Shared Sub WriteFile(ByRef tsList As List(Of TimeSeries), file As String)
             Dim xmlserializer As New XmlSerializer(GetType(XMLTimeSeries))
             Dim xmlroot As New XMLTimeSeries With {
                 .version = "1.2",
@@ -374,7 +377,7 @@ Namespace Fileformats
             <XmlIgnore>
             ReadOnly Property dt As DateTime
                 Get
-                    Return parseDateTime(Me.date, Me.time)
+                    Return ParseDateTime(Me.date, Me.time)
                 End Get
             End Property
         End Class
@@ -395,7 +398,7 @@ Namespace Fileformats
             <XmlIgnore>
             ReadOnly Property dt As DateTime
                 Get
-                    Return parseDateTime(Me.date, Me.time)
+                    Return ParseDateTime(Me.date, Me.time)
                 End Get
             End Property
 

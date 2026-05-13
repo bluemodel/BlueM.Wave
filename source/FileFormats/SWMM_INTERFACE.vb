@@ -32,10 +32,8 @@ Namespace Fileformats
         Const iZeileReportTimeStep As Integer = 3
         Const iZeileAnzConstituents As Integer = 4
         Private Shared AnzConstituents As Integer
-        Private Shared Constituents() As Constituent
         Private AnzNodes As Integer
         Private _Zeitintervall As Integer
-        Private _noConstituents As Integer
 
         ''' <summary>
         ''' Structure for storing SWMM series information
@@ -112,18 +110,19 @@ Namespace Fileformats
             MyBase.New(FileName)
 
             'Voreinstellungen
-            Me.iLineHeadings = 2
+            Me.LineNumberHeaders = 2
             Me.UseUnits = True
             Me.IsColumnSeparated = False
             Me.ColumnOffset = 0
             Me.DecimalSeparator = Constants.period
+            Me.Separator = Constants.space
 
-            Call Me.readSeriesInfo()
+            Call Me.ReadSeriesInfo()
 
             If (ReadAllNow) Then
                 'Datei komplett einlesen
-                Call Me.selectAllSeries()
-                Call Me.readFile()
+                Call Me.SelectAllSeries()
+                Call Me.ReadFile()
             End If
 
         End Sub
@@ -131,12 +130,10 @@ Namespace Fileformats
         ''' <summary>
         ''' Spaltenköpfe auslesen
         ''' </summary>
-        Public Overrides Sub readSeriesInfo()
+        Public Overrides Sub ReadSeriesInfo()
 
             Dim i, j As Integer
             Dim Zeile As String = ""
-            Dim ZeileSpalten As String = ""
-            Dim ZeileEinheiten As String = ""
             Dim strArray() As String
             Dim Constituents() As Constituent
             'dim AnzConstituents As Integer
@@ -148,30 +145,30 @@ Namespace Fileformats
             Me.swmmInfos = New Dictionary(Of Integer, SWMMSeriesInfo)
 
             'Datei öffnen
-            Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
-            Dim StrRead As StreamReader = New StreamReader(FiStr, Me.Encoding)
+            Dim FiStr As New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
+            Dim StrRead As New StreamReader(FiStr, Me.Encoding)
             Dim StrReadSync As TextReader = TextReader.Synchronized(StrRead)
 
             'Zeile mit Reporting Time Step finden
             For i = 1 To iZeileReportTimeStep
-                Zeile = StrReadSync.ReadLine.ToString()
+                Zeile = StrReadSync.ReadLine()
             Next
-            strArray = Zeile.Split(New Char() {space.ToChar}, StringSplitOptions.RemoveEmptyEntries)
+            strArray = Zeile.Split(Me.Separator.ToChar, StringSplitOptions.RemoveEmptyEntries)
             Me.Zeitintervall = Convert.ToSingle(strArray(0))
 
             'Zeile mit der Anzahl der Constituents finden
             For i = 1 To iZeileAnzConstituents - iZeileReportTimeStep
-                Zeile = StrReadSync.ReadLine.ToString()
+                Zeile = StrReadSync.ReadLine()
             Next
             'Anzahl der Constituents zu einem Knoten
-            strArray = Zeile.Split(New Char() {space.ToChar}, StringSplitOptions.RemoveEmptyEntries)
+            strArray = Zeile.Split(Me.Separator.ToChar, StringSplitOptions.RemoveEmptyEntries)
             AnzConstituents = Convert.ToSingle(strArray(0))
 
             ReDim Constituents(AnzConstituents - 1)
             'Inflows und Einheit einlesen
             For i = 0 To AnzConstituents - 1
-                Zeile = StrReadSync.ReadLine.ToString()
-                strArray = Zeile.Split(New Char() {space.ToChar}, StringSplitOptions.RemoveEmptyEntries)
+                Zeile = StrReadSync.ReadLine()
+                strArray = Zeile.Split(Me.Separator.ToChar, StringSplitOptions.RemoveEmptyEntries)
                 Constituents(i).Type = strArray(0)
                 Constituents(i).Unit = strArray(1)
                 Constituents(i).Index = i
@@ -179,12 +176,12 @@ Namespace Fileformats
 
             'Anzahl der Zuflussknoten ermitteln
             'entspricht der Anzahl der Zeilen pro Zeitschritt
-            Zeile = StrReadSync.ReadLine.ToString()
-            strArray = Zeile.Split(New Char() {space.ToChar}, StringSplitOptions.RemoveEmptyEntries)
+            Zeile = StrReadSync.ReadLine()
+            strArray = Zeile.Split(Me.Separator.ToChar, StringSplitOptions.RemoveEmptyEntries)
             AnzNodes = Convert.ToInt32(strArray(0))
             ReDim Nodes(AnzNodes - 1)
             For i = 0 To AnzNodes - 1
-                Zeile = StrReadSync.ReadLine.ToString()
+                Zeile = StrReadSync.ReadLine()
                 Nodes(i).Bez = Trim(Zeile)
                 Nodes(i).Index = i
             Next
@@ -194,17 +191,18 @@ Namespace Fileformats
             anzSpalten = AnzConstituents * AnzNodes
 
             'iZeileDaten kann erst jetzt gesetzt werden, wenn AnzZeilen_dT bekannt ist
-            Me.iLineData = iZeileAnzConstituents + AnzConstituents + AnzNodes + 3
+            Me.LineNumberData = iZeileAnzConstituents + AnzConstituents + AnzNodes + 3
 
             'Spaltenköpfe (Zuflussknoten) und Indizes einlesen
             index = 1
             For i = 0 To AnzNodes - 1
                 For j = 0 To AnzConstituents - 1
 
-                    sInfo = New TimeSeriesInfo()
-                    sInfo.Name = $"{Nodes(i).Bez} {Constituents(j).Type}"
-                    sInfo.Unit = Constituents(j).Unit
-                    sInfo.Index = index
+                    sInfo = New TimeSeriesInfo With {
+                        .Name = $"{Nodes(i).Bez} {Constituents(j).Type}",
+                        .Unit = Constituents(j).Unit,
+                        .Index = index
+                    }
                     Me.TimeSeriesInfos.Add(sInfo)
 
                     'store SWMM info
@@ -213,7 +211,7 @@ Namespace Fileformats
                     swmmInfo.Variable = Constituents(j).Type
                     Me.swmmInfos.Add(index, swmmInfo)
 
-                    index = index + 1
+                    index += 1
                 Next
             Next
 
@@ -226,7 +224,7 @@ Namespace Fileformats
         ''' <summary>
         ''' Zeitreihen einlesen
         ''' </summary>
-        Public Overrides Sub readFile()
+        Public Overrides Sub ReadFile()
 
             Dim iZeile, i As Integer, j As Integer
             Dim Zeile As String
@@ -236,20 +234,21 @@ Namespace Fileformats
             Dim IDWerte As Long
             Dim ts As TimeSeries
 
-            Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
-            Dim StrRead As StreamReader = New StreamReader(FiStr, Me.Encoding)
+            Dim FiStr As New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
+            Dim StrRead As New StreamReader(FiStr, Me.Encoding)
             Dim StrReadSync = TextReader.Synchronized(StrRead)
 
             'Zeitreihen instanzieren
             For Each sInfo As TimeSeriesInfo In Me.SelectedSeries
-                ts = New TimeSeries(sInfo.Name)
-                ts.DataSource = New TimeSeriesDataSource(Me.File, sInfo.Name)
+                ts = New TimeSeries(sInfo.Name) With {
+                    .DataSource = New TimeSeriesDataSource(Me.File, sInfo.Name)
+                }
                 Me.TimeSeries.Add(sInfo.Index, ts)
             Next
 
             'Einheiten?
-            If (Me.UseUnits = False) Then
-                Throw New Exception("When reading a SWMM-Interface-File, UseUnits must be True!")
+            If Not Me.UseUnits Then
+                Throw New TimeSeriesFileReadingException("When reading a SWMM-Interface-File, UseUnits must be True!")
             End If
 
             For Each sInfo As TimeSeriesInfo In Me.SelectedSeries
@@ -264,8 +263,8 @@ Namespace Fileformats
             '--------
             ReDim Werte(AnzConstituents * AnzNodes)
             'Header
-            For iZeile = 1 To Me.iLineData - 1
-                Zeile = StrReadSync.ReadLine.ToString()
+            For iZeile = 1 To Me.LineNumberData - 1
+                StrReadSync.ReadLine()
             Next
 
             'Daten
@@ -273,14 +272,14 @@ Namespace Fileformats
             Do
                 IDWerte = 1
                 For i = 0 To AnzNodes - 1
-                    Zeile = StrReadSync.ReadLine.ToString()
-                    tmpArray = Zeile.Split(New Char() {space.ToChar}, StringSplitOptions.RemoveEmptyEntries)
+                    Zeile = StrReadSync.ReadLine()
+                    tmpArray = Zeile.Split(Me.Separator.ToChar, StringSplitOptions.RemoveEmptyEntries)
                     If i = 0 Then
                         datum = New System.DateTime(tmpArray(1), tmpArray(2), tmpArray(3), tmpArray(4), tmpArray(5), tmpArray(6), 0, New System.Globalization.GregorianCalendar())
                     End If
                     For j = 0 To AnzConstituents - 1
                         Werte(IDWerte) = tmpArray(tmpArray.Length - AnzConstituents + j)
-                        IDWerte = IDWerte + 1
+                        IDWerte += 1
                     Next
                 Next
                 For Each sInfo As TimeSeriesInfo In Me.SelectedSeries
@@ -298,7 +297,7 @@ Namespace Fileformats
         ''' <summary>
         ''' Sets default metadata values for a time series corresponding to the SWMM routing interface file format
         ''' </summary>
-        Public Overloads Shared Sub setDefaultMetadata(ts As TimeSeries)
+        Public Overloads Shared Sub SetDefaultMetadata(ts As TimeSeries)
             'Make sure all required keys exist
             ts.Metadata.AddKeys(SWMM_INTERFACE.MetadataKeys)
             'Set default values
@@ -321,7 +320,7 @@ Namespace Fileformats
         ''' </summary>
         ''' <param name="seriesList">list of time series to export</param>
         ''' <param name="file">path to file to export to</param>
-        Public Overloads Shared Sub writeFile(ByRef seriesList As List(Of TimeSeries), file As String)
+        Public Overloads Shared Sub WriteFile(ByRef seriesList As List(Of TimeSeries), file As String)
 
             Dim strwrite As StreamWriter
             Dim i, j, k As Integer
@@ -332,10 +331,10 @@ Namespace Fileformats
             'check for required metadata
             For Each ts As TimeSeries In seriesList
                 If Not ts.Metadata.ContainsKey("Node") Then
-                    Throw New Exception($"Series {ts.Title} is missing a required metadata entry 'Node'!")
+                    Throw New TimeSeriesFileWritingException($"Series {ts.Title} is missing a required metadata entry 'Node'!")
                 End If
                 If Not ts.Metadata.ContainsKey("Variable") Then
-                    Throw New Exception($"Series {ts.Title} is missing a required metadata entry 'Variable'!")
+                    Throw New TimeSeriesFileWritingException($"Series {ts.Title} is missing a required metadata entry 'Variable'!")
                 End If
             Next
 
@@ -369,7 +368,7 @@ Namespace Fileformats
 
             'check that "FLOW" is among the variables
             If Not variables.Contains("FLOW") Then
-                Throw New Exception($"SWMM routing interface text format requires a variable named 'FLOW'!")
+                Throw New TimeSeriesFileWritingException($"SWMM routing interface text format requires a variable named 'FLOW'!")
             End If
 
             'determine units for variables
@@ -470,14 +469,14 @@ Namespace Fileformats
         ''' </summary>
         ''' <param name="file">Pfad zur Datei</param>
         ''' <returns></returns>
-        Public Shared Function verifyFormat(file As String) As Boolean
+        Public Shared Function VerifyFormat(file As String) As Boolean
 
-            Dim FiStr As FileStream = New FileStream(file, FileMode.Open, IO.FileAccess.Read)
-            Dim StrRead As StreamReader = New StreamReader(FiStr, detectEncodingFromByteOrderMarks:=True)
-            Dim Zeile As String = ""
+            Dim FiStr As New FileStream(file, FileMode.Open, IO.FileAccess.Read)
+            Dim StrRead As New StreamReader(FiStr, detectEncodingFromByteOrderMarks:=True)
+            Dim Zeile As String
 
             '1. Zeile einlesen
-            Zeile = StrRead.ReadLine.ToString().Trim()
+            Zeile = StrRead.ReadLine().Trim()
 
             StrRead.Close()
             FiStr.Close()
@@ -504,7 +503,7 @@ Namespace Fileformats
                 Case "l/s", "LPS"
                     Return 1
                 Case Else
-                    Throw New Exception($"Unable to determine conversion factor for converting unit {unit} to LPS!")
+                    Throw New TimeSeriesFileWritingException($"Unable to determine conversion factor for converting unit {unit} to LPS!")
             End Select
 
         End Function

@@ -107,14 +107,15 @@ Friend Class Accumulate
                 'cut time series to startdate
                 ts.Cut(startdate, ts.EndDate)
 
-                'create new cumulative timeseries
-                ts_cum = New TimeSeries($"{ts.Title} (cumulative)")
-                ts_cum.Unit = ts.Unit
-                ts_cum.Interpretation = TimeSeries.InterpretationEnum.Cumulative
-                ts_cum.DataSource = New TimeSeriesDataSource(TimeSeriesDataSource.OriginEnum.AnalysisResult)
+            'create new cumulative timeseries
+            ts_cum = New TimeSeries($"{ts.Title} (cumulative)") With {
+                .Unit = ts.Unit,
+                .Interpretation = TimeSeries.InterpretationEnum.Cumulative,
+                .DataSource = New TimeSeriesDataSource(TimeSeriesDataSource.OriginEnum.AnalysisResult)
+            }
 
-                sum = 0.0
-                For i = 0 To ts.Length - 1
+            sum = 0.0
+            For i = 0 To ts.Length - 1
 
                     'determine value depending on interpretation
                     Select Case ts.Interpretation
@@ -129,8 +130,8 @@ Friend Class Accumulate
                                 value = ts.Values(i - 1)
                             End If
                         Case Else
-                            Throw New NotImplementedException($"Analysis function Accumulate is currently not supported for time series with interpretation {[Enum].GetName(GetType(TimeSeries.InterpretationEnum), ts.Interpretation)}!")
-                    End Select
+                        Throw New NotImplementedException($"Analysis function Accumulate is currently not supported for time series with interpretation {[Enum].GetName(Of TimeSeries.InterpretationEnum)(ts.Interpretation)}!")
+                End Select
 
                     If Double.IsNaN(value) Then
                         'omit NaN values

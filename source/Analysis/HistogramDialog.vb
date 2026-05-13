@@ -42,8 +42,8 @@ Friend Class HistogramDialog
         Me.min = Double.MaxValue
         Me.max = Double.MinValue
         For Each zre As TimeSeries In zres
-            Me.min = Math.Min(Me.min, zre.removeNaNValues().Minimum)
-            Me.max = Math.Max(Me.max, zre.removeNaNValues().Maximum)
+            Me.min = Math.Min(Me.min, zre.RemoveNaNValues().Minimum)
+            Me.max = Math.Max(Me.max, zre.RemoveNaNValues().Maximum)
         Next
         Me.Label_minmax.Text = $"Value range: {min:F} - {max:F}"
 

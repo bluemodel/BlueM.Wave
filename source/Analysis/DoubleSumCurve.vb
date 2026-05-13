@@ -82,7 +82,7 @@ Friend Class DoubleSumCurve
 
         'Prüfung: genau 2 Zeitreihen erlaubt
         If (zeitreihen.Count <> 2) Then
-            Throw New Exception("The Double Sum Curve analysis requires the selection of exactly 2 time series!")
+            Throw New AnalysisInvalidInputException("The Double Sum Curve analysis requires the selection of exactly 2 time series!")
         End If
 
     End Sub
@@ -95,8 +95,8 @@ Friend Class DoubleSumCurve
         Dim i, n As Integer
 
         'assign timeseries and remove NaN values
-        Me.ts_1 = Me.InputTimeSeries(0).removeNaNValues()
-        Me.ts_2 = Me.InputTimeSeries(1).removeNaNValues()
+        Me.ts_1 = Me.InputTimeSeries(0).RemoveNaNValues()
+        Me.ts_2 = Me.InputTimeSeries(1).RemoveNaNValues()
 
         'synchronize
         TimeSeries.Synchronize(Me.ts_1, Me.ts_2)
@@ -145,16 +145,18 @@ Friend Class DoubleSumCurve
 
         'Reihen
         '------
-        doppelsumme = New Steema.TeeChart.Styles.Line(Me.ResultChart.Chart)
-        doppelsumme.Title = $"Double Sum Curve {Me.ts_1.Title} - {Me.ts_2.Title}"
+        doppelsumme = New Steema.TeeChart.Styles.Line(Me.ResultChart.Chart) With {
+            .Title = $"Double Sum Curve {Me.ts_1.Title} - {Me.ts_2.Title}"
+        }
         doppelsumme.Pointer.Visible = True
         doppelsumme.Pointer.Style = Steema.TeeChart.Styles.PointerStyles.Circle
         doppelsumme.Pointer.HorizSize = 2
         doppelsumme.Pointer.VertSize = 2
 
-        gerade = New Steema.TeeChart.Styles.Line(Me.ResultChart.Chart)
-        gerade.Title = "45° line"
-        gerade.Color = Color.DarkGray
+        gerade = New Steema.TeeChart.Styles.Line(Me.ResultChart.Chart) With {
+            .Title = "45° line",
+            .Color = Color.DarkGray
+        }
         gerade.LinePen.Style = Drawing2D.DashStyle.Dash
 
         'Werte eintragen

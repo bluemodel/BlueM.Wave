@@ -141,7 +141,7 @@ Friend Class AnnualRecurrenceProbability
                 'start of hydrological year
                 Dim startDate As New DateTime(year, startMonth, 1)
                 If startDate < ts.StartDate Then
-                    Log.AddLogEntry(levels.warning, $"Hydrological year {year} begins before start of time series!")
+                    Log.AddLogEntry(Levels.warning, $"Hydrological year {year} begins before start of time series!")
                 End If
                 If startDate > ts.EndDate Then
                     'end of time series
@@ -150,13 +150,13 @@ Friend Class AnnualRecurrenceProbability
                 'end of hydrological year
                 Dim endDate As DateTime = New DateTime(year + 1, startMonth, 1) - New TimeSpan(0, 0, 1)
                 If endDate > ts.EndDate Then
-                    Log.AddLogEntry(levels.warning, $"Hydrological year {year} ends after end of time series!")
+                    Log.AddLogEntry(Levels.warning, $"Hydrological year {year} ends after end of time series!")
                 End If
                 'get node with max value in year
                 Dim maxNode As KeyValuePair(Of DateTime, Double) = ts.MaximumNode(startDate, endDate)
                 'store as new event
                 If Double.IsNaN(maxNode.Value) Then
-                    Log.AddLogEntry(levels.warning, $"Hydrological year {year} contains no usable data!")
+                    Log.AddLogEntry(Levels.warning, $"Hydrological year {year} contains no usable data!")
                 Else
                     Dim ev As New AnnualEvent() With {
                         .year = year,

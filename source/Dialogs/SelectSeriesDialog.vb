@@ -51,7 +51,7 @@ Friend Class SelectSeriesDialog
     Private Sub Form_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
         'Versuchen, die Spalten auszulesen (mit Standardeinstellungen)
-        Call Me.tsFile.readSeriesInfo()
+        Call Me.tsFile.ReadSeriesInfo()
 
         'Anzeige aktualisieren
         Call Me.RefreshDisplay()
@@ -69,7 +69,7 @@ Friend Class SelectSeriesDialog
             Exit Sub
         Else
             For Each sInfo As TimeSeriesInfo In Me.ListBox_Series.SelectedItems
-                Me.tsFile.selectSeries(sInfo.Index)
+                Me.tsFile.SelectSeries(sInfo.Index)
             Next
         End If
 
@@ -140,7 +140,7 @@ Friend Class SelectSeriesDialog
         'convert search string to regex pattern
         Dim pattern As String = Regex.Escape(search).Replace("\ ", " ").Replace("\?", ".").Replace("\*", ".*")
 
-        Log.AddLogEntry(Log.levels.debug, "Searching for series matching pattern: " & pattern)
+        Log.AddLogEntry(Log.Levels.debug, "Searching for series matching pattern: " & pattern)
 
         Me.IsInitializing = True
         Me.ListBox_Series.BeginUpdate()

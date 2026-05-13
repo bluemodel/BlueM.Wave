@@ -14,6 +14,9 @@ CHANGED:
 REMOVED:
 * Dropped support for reading SWMM OUT binary files
 
+API-CHANGES:
+* Removed obsolete method `TimeSeries.getWert()`
+
 Version 2.17.0
 --------------
 FIXED:

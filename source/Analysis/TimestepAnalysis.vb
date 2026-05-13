@@ -131,10 +131,11 @@ Friend Class TimeStepAnalysis
         For Each ts As TimeSeries In MyBase.InputTimeSeries
 
             'create a new result time series
-            result_ts = New TimeSeries($"{ts.Title} (dt {Me.TimeUnitName})")
-            result_ts.Unit = Me.TimeUnitName
-            result_ts.Interpretation = TimeSeries.InterpretationEnum.BlockLeft
-            result_ts.DataSource = New TimeSeriesDataSource(TimeSeriesDataSource.OriginEnum.AnalysisResult)
+            result_ts = New TimeSeries($"{ts.Title} (dt {Me.TimeUnitName})") With {
+                .Unit = Me.TimeUnitName,
+                .Interpretation = TimeSeries.InterpretationEnum.BlockLeft,
+                .DataSource = New TimeSeriesDataSource(TimeSeriesDataSource.OriginEnum.AnalysisResult)
+            }
 
             'Loop over timestamps
             For i As Integer = 0 To ts.Length - 1
@@ -161,7 +162,7 @@ Friend Class TimeStepAnalysis
                         Case TimeUnitEnum.Seconds
                             dt_val = dt.TotalSeconds
                         Case Else
-                            Throw New Exception($"Conversion of timestep to time unit {Me.TimeUnitName} is not yet implemented!")
+                            Throw New AnalysisFailedException($"Conversion of timestep to time unit {Me.TimeUnitName} is not yet implemented!")
                     End Select
                     'store dt value as new node in result series
                     result_ts.AddNode(timestamp, dt_val)

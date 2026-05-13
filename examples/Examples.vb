@@ -1,3 +1,5 @@
+Imports System.IO
+
 Public Class Examples
 
     ''' <summary>
@@ -27,10 +29,10 @@ Public Class Examples
             testdatadir = IO.Path.Combine(testdatadir, "BlueM.Datasets", "Wave")
             Dim filePath As String = IO.Path.Combine(testdatadir, "WEL", "DEMONA_PSI.wel")
             If Not IO.File.Exists(filePath) Then
-                Throw New Exception($"File not found: {filePath}")
+                Throw New FileNotFoundException($"File not found: {filePath}")
             End If
             Me.TextBox_File.Text = filePath
-        Catch ex As Exception
+        Catch ex As FileNotFoundException
             MsgBox("Unable to locate test file! " &
                    "Expected directory: BlueM.Datasets\Wave in the same directory as BlueM.Wave! " &
                    ex.Message,
@@ -68,16 +70,16 @@ Public Class Examples
         Dim ts1, ts2, ts3 As BlueM.Wave.TimeSeries
 
         'get a file instance
-        myFile = BlueM.Wave.TimeSeriesFile.getInstance(Me.FilePath)
+        myFile = BlueM.Wave.TimeSeriesFile.GetInstance(Me.FilePath)
 
         'get a time series by name (this will automatically attempt to read the series from the file if not already done)
-        ts1 = myFile.getTimeSeries("AA  _ETA")
+        ts1 = myFile.GetTimeSeries("AA  _ETA")
 
         'get a second time series
-        ts2 = myFile.getTimeSeries("AA  _ETP")
+        ts2 = myFile.GetTimeSeries("AA  _ETP")
 
         'get a third time series by column index
-        ts3 = myFile.getTimeSeries(83)
+        ts3 = myFile.GetTimeSeries(83)
 
         'import the time series in Wave
         Wave1.Import_Series(ts1)
@@ -96,7 +98,7 @@ Public Class Examples
         Dim ts As BlueM.Wave.TimeSeries
 
         'get a file instance
-        myFile = BlueM.Wave.TimeSeriesFile.getInstance(Me.FilePath)
+        myFile = BlueM.Wave.TimeSeriesFile.GetInstance(Me.FilePath)
 
         'check the time series contained in the file
         For Each sInfo As BlueM.Wave.TimeSeriesInfo In myFile.TimeSeriesInfos
@@ -104,10 +106,10 @@ Public Class Examples
         Next
 
         'select all series for import
-        myFile.selectAllSeries()
+        myFile.SelectAllSeries()
 
         'read the selected time series from the file
-        myFile.readFile()
+        myFile.ReadFile()
 
         'loop over all series read from the file and print some information about them
         For Each ts In myFile.TimeSeries.Values
@@ -118,7 +120,7 @@ Public Class Examples
         Next
 
         'get one particular time series
-        ts = myFile.getTimeSeries("S1  _1AB")
+        ts = myFile.GetTimeSeries("S1  _1AB")
 
         'import the series in Wave
         Wave1.Import_Series(ts)
@@ -133,9 +135,10 @@ Public Class Examples
         Dim Wave1 As New BlueM.Wave.Wave()
 
         'create a new time series
-        Dim ts As New BlueM.Wave.TimeSeries("my series")
-        ts.Unit = "m3/s"
-        ts.Interpretation = BlueM.Wave.TimeSeries.InterpretationEnum.BlockRight
+        Dim ts As New BlueM.Wave.TimeSeries("my series") With {
+            .Unit = "m3/s",
+            .Interpretation = BlueM.Wave.TimeSeries.InterpretationEnum.BlockRight
+        }
 
         'add some nodes to the time series
         ts.AddNode(New DateTime(2000, 1, 1), 10)
@@ -169,10 +172,10 @@ Public Class Examples
         Dim ts As BlueM.Wave.TimeSeries
 
         'get a file instance
-        myFile = BlueM.Wave.TimeSeriesFile.getInstance(Me.FilePath)
+        myFile = BlueM.Wave.TimeSeriesFile.GetInstance(Me.FilePath)
 
         'get a specific time series from the file
-        ts = myFile.getTimeSeries("S1  _1AB")
+        ts = myFile.GetTimeSeries("S1  _1AB")
 
         'cut the time series
         ts.Cut(New DateTime(1959, 1, 1), New DateTime(1959, 2, 1))
@@ -196,10 +199,10 @@ Public Class Examples
         Dim ts1, ts2 As BlueM.Wave.TimeSeries
 
         'get a file instance
-        myFile = BlueM.Wave.TimeSeriesFile.getInstance(Me.FilePath)
+        myFile = BlueM.Wave.TimeSeriesFile.GetInstance(Me.FilePath)
 
         'get a specific time series from the file
-        ts1 = myFile.getTimeSeries("S1  _1AB")
+        ts1 = myFile.GetTimeSeries("S1  _1AB")
 
         'import the series in Wave
         Wave1.Import_Series(ts1)
@@ -208,7 +211,7 @@ Public Class Examples
         Dim app As New BlueM.Wave.App(Wave1)
 
         'get a second time series from the file
-        ts2 = myFile.getTimeSeries("AA  _ETA")
+        ts2 = myFile.GetTimeSeries("AA  _ETA")
 
         'display the second time series in Wave
         Wave1.Import_Series(ts2)
@@ -223,10 +226,10 @@ Public Class Examples
         Dim app As New BlueM.Wave.App()
 
         'get a file instance
-        myFile = BlueM.Wave.TimeSeriesFile.getInstance(Me.FilePath)
+        myFile = BlueM.Wave.TimeSeriesFile.GetInstance(Me.FilePath)
 
         'get a specific time series from the file
-        ts1 = myFile.getTimeSeries("S1  _1AB")
+        ts1 = myFile.GetTimeSeries("S1  _1AB")
 
         'import the series in Wave
         app.Wave.Import_Series(ts1)

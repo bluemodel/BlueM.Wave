@@ -82,10 +82,10 @@ Namespace Fileformats
 
             'Voreinstellungen
             Me.iLineInfo = 1
-            Me.iLineHeadings = 2
+            Me.LineNumberHeaders = 2
             Me.UseUnits = True
-            Me.iLineUnits = 3
-            Me.iLineData = 4
+            Me.LineNumberUnits = 3
+            Me.LineNumberData = 4
             Me.IsColumnSeparated = True
             Me.ColumnOffset = 1
             Me.Separator = Constants.semicolon
@@ -94,12 +94,12 @@ Namespace Fileformats
             Me.DateTimeLength = 17
             Me.Encoding = Text.Encoding.GetEncoding("iso-8859-1")
 
-            Call Me.readSeriesInfo()
+            Call Me.ReadSeriesInfo()
 
             If (ReadAllNow) Then
                 'Datei komplett einlesen
-                Call Me.selectAllSeries()
-                Call Me.readFile()
+                Call Me.SelectAllSeries()
+                Call Me.ReadFile()
             End If
 
 
@@ -108,10 +108,10 @@ Namespace Fileformats
         ''' <summary>
         ''' Spalten auslesen
         ''' </summary>
-        Public Overrides Sub readSeriesInfo()
+        Public Overrides Sub ReadSeriesInfo()
 
             Dim i As Integer
-            Dim Zeile As String = ""
+            Dim Zeile As String
             Dim ZeileSpalten As String = ""
             Dim ZeileEinheiten As String = ""
             Dim LineInfo As String = ""
@@ -120,20 +120,20 @@ Namespace Fileformats
             Me.TimeSeriesInfos.Clear()
 
             'Datei öffnen
-            Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
-            Dim StrRead As StreamReader = New StreamReader(FiStr, Me.Encoding)
+            Dim FiStr As New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
+            Dim StrRead As New StreamReader(FiStr, Me.Encoding)
             Dim StrReadSync As TextReader = TextReader.Synchronized(StrRead)
 
             'Spaltenüberschriften auslesen
-            For i = 1 To Me.iLineUnits
-                Zeile = StrReadSync.ReadLine.ToString()
+            For i = 1 To Me.LineNumberUnits
+                Zeile = StrReadSync.ReadLine()
                 If (i = Me.iLineInfo) Then LineInfo = Zeile
-                If (i = Me.iLineHeadings) Then ZeileSpalten = Zeile
-                If (i = Me.iLineUnits) Then ZeileEinheiten = Zeile
+                If (i = Me.LineNumberHeaders) Then ZeileSpalten = Zeile
+                If (i = Me.LineNumberUnits) Then ZeileEinheiten = Zeile
             Next
 
             'Are columns separted by ";" or should fixed format be used?
-            If ZeileSpalten.Contains(";") Then
+            If ZeileSpalten.Contains(";"c) Then
                 Me.IsColumnSeparated = True
             Else
                 Me.IsColumnSeparated = False
@@ -158,24 +158,26 @@ Namespace Fileformats
 
             If (Me.IsColumnSeparated) Then
                 'Zeichengetrennt
-                Namen = ZeileSpalten.Split(New Char() {Me.Separator.ToChar}, StringSplitOptions.RemoveEmptyEntries)
-                Einheiten = ZeileEinheiten.Split(New Char() {Me.Separator.ToChar}, StringSplitOptions.RemoveEmptyEntries)
+                Namen = ZeileSpalten.Split(Me.Separator.ToChar, StringSplitOptions.RemoveEmptyEntries)
+                Einheiten = ZeileEinheiten.Split(Me.Separator.ToChar, StringSplitOptions.RemoveEmptyEntries)
                 anzSpalten = Namen.Length
                 For i = 1 To anzSpalten - 1 'first column is timestamp
-                    sInfo = New TimeSeriesInfo()
-                    sInfo.Name = Namen(i).Trim()
-                    sInfo.Unit = Einheiten(i).Trim()
-                    sInfo.Index = i
+                    sInfo = New TimeSeriesInfo With {
+                        .Name = Namen(i).Trim(),
+                        .Unit = Einheiten(i).Trim(),
+                        .Index = i
+                    }
                     Me.TimeSeriesInfos.Add(sInfo)
                 Next
             Else
                 'Spalten mit fester Breite
                 anzSpalten = Math.Ceiling((ZeileSpalten.Length - Me.DateTimeLength) / Me.ColumnWidth) + 1
                 For i = 1 To anzSpalten - 1 'first column is timestamp
-                    sInfo = New TimeSeriesInfo()
-                    sInfo.Name = ZeileSpalten.Substring(Me.DateTimeLength + (i - 1) * Me.ColumnWidth, Me.ColumnWidth).Trim()
+                    sInfo = New TimeSeriesInfo With {
+                        .Name = ZeileSpalten.Substring(Me.DateTimeLength + (i - 1) * Me.ColumnWidth, Me.ColumnWidth).Trim()
+                    }
                     If ZeileEinheiten.Length < Me.DateTimeLength + (i - 1) * Me.ColumnWidth + Me.ColumnWidth Then
-                        Log.AddLogEntry(levels.warning, $"Unable to read unit for series {sInfo.Name}!")
+                        Log.AddLogEntry(Levels.warning, $"Unable to read unit for series {sInfo.Name}!")
                         sInfo.Unit = "-"
                     Else
                         sInfo.Unit = ZeileEinheiten.Substring(Me.DateTimeLength + (i - 1) * Me.ColumnWidth, Me.ColumnWidth).Trim()
@@ -190,7 +192,7 @@ Namespace Fileformats
         ''' <summary>
         ''' WEL-Datei einlesen
         ''' </summary>
-        Public Overrides Sub readFile()
+        Public Overrides Sub ReadFile()
 
             Dim iZeile As Integer
             Dim Zeile As String
@@ -200,8 +202,8 @@ Namespace Fileformats
             Dim ok As Boolean
             Dim ts As TimeSeries
 
-            Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
-            Dim StrRead As StreamReader = New StreamReader(FiStr, Me.Encoding)
+            Dim FiStr As New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
+            Dim StrRead As New StreamReader(FiStr, Me.Encoding)
             Dim StrReadSync = TextReader.Synchronized(StrRead)
 
             'Zeitreihen instanzieren
@@ -224,13 +226,13 @@ Namespace Fileformats
             '--------
 
             'Header
-            For iZeile = 1 To Me.nLinesHeader
-                Zeile = StrReadSync.ReadLine.ToString()
+            For iZeile = 1 To Me.NLinesHeader
+                StrReadSync.ReadLine()
             Next
 
             'Daten
             Do
-                Zeile = StrReadSync.ReadLine.ToString()
+                Zeile = StrReadSync.ReadLine()
                 If Zeile.Trim().Length = 0 Then
                     'skip emtpy lines
                     Continue Do
@@ -239,12 +241,12 @@ Namespace Fileformats
                 If (Me.IsColumnSeparated) Then
                     'Zeichengetrennt
                     '---------------
-                    Werte = Zeile.Split(New Char() {Me.Separator.ToChar}, StringSplitOptions.RemoveEmptyEntries)
+                    Werte = Zeile.Split(Me.Separator.ToChar, StringSplitOptions.RemoveEmptyEntries)
                     'Erste Spalte: Datum_Zeit
                     timestamp = Werte(0).Trim()
                     ok = DateTime.TryParseExact(timestamp, Me.Dateformat, Helpers.DefaultNumberFormat, Globalization.DateTimeStyles.None, datum)
                     If (Not ok) Then
-                        Throw New Exception($"Unable to parse the timestamp '{timestamp}' using the given format '{Me.Dateformat}'!")
+                        Throw New TimeSeriesFileReadingException($"Unable to parse the timestamp '{timestamp}' using the given format '{Me.Dateformat}'!")
                     End If
                     'Restliche Spalten: Werte
                     'Alle ausgewählten Reihen durchlaufen
@@ -258,7 +260,7 @@ Namespace Fileformats
                     timestamp = Zeile.Substring(ColumnOffset, Me.ColumnWidth).Trim()
                     ok = DateTime.TryParseExact(timestamp, Me.Dateformat, Helpers.DefaultNumberFormat, Globalization.DateTimeStyles.None, datum)
                     If (Not ok) Then
-                        Throw New Exception($"Unable to parse the timestamp '{timestamp}' using the given format '{Me.Dateformat}'!")
+                        Throw New TimeSeriesFileReadingException($"Unable to parse the timestamp '{timestamp}' using the given format '{Me.Dateformat}'!")
                     End If
                     'Restliche Spalten: Werte
                     'Alle ausgewählten Reihen durchlaufen
@@ -280,7 +282,7 @@ Namespace Fileformats
         ''' </summary>
         ''' <param name="file">path to the file to check</param>
         ''' <returns>True if verification was successful</returns>
-        Public Shared Function verifyFormat(file As String) As Boolean
+        Public Shared Function VerifyFormat(file As String) As Boolean
 
             Dim FiStr As FileStream
             Dim StrRead As StreamReader
@@ -291,7 +293,7 @@ Namespace Fileformats
             StrRead = New StreamReader(FiStr, detectEncodingFromByteOrderMarks:=True)
 
             'read only the first line
-            Zeile = StrRead.ReadLine.ToString()
+            Zeile = StrRead.ReadLine()
 
             StrRead.Close()
             FiStr.Close()

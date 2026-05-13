@@ -20,7 +20,7 @@ Imports System.IO
 Namespace Fileformats
 
     ''' <summary>
-    ''' Klasse für das WEL-Dateiformat von Hystem-Extran
+    ''' Klasse fÃ¼r das WEL-Dateiformat von Hystem-Extran
     ''' Bei WEL-Dateien in Hystem handelt es sich immer um Zuflussdaten
     ''' Format ist festgeschrieben im HystemExtran-Anwenderhandbuch
     ''' </summary>
@@ -62,46 +62,45 @@ Namespace Fileformats
             MyBase.New(FileName)
 
             'Voreinstellungen
-            Me.iLineHeadings = 5
+            Me.LineNumberHeaders = 5
             Me.UseUnits = True
             Me.IsColumnSeparated = False
             Me.ColumnWidth = 10
             Me.ColumnOffset = 0
             Me.DecimalSeparator = Constants.period
 
-            Call Me.readSeriesInfo()
+            Call Me.ReadSeriesInfo()
 
             If (ReadAllNow) Then
                 'Datei komplett einlesen
-                Call Me.selectAllSeries()
-                Call Me.readFile()
+                Call Me.SelectAllSeries()
+                Call Me.ReadFile()
             End If
 
 
         End Sub
 
         ''' <summary>
-        ''' Spaltenköpfe auslesen
+        ''' SpaltenkÃ¶pfe auslesen
         ''' </summary>
-        Public Overrides Sub readSeriesInfo()
+        Public Overrides Sub ReadSeriesInfo()
 
             Dim i, j As Integer
-            Dim Zeile As String = ""
+            Dim Zeile As String
             Dim ZeileSpalten As String = ""
-            Dim ZeileEinheiten As String = ""
             Dim iZeileAnzSpalten As Integer = 4
             Dim sInfo As TimeSeriesInfo
 
             Me.TimeSeriesInfos.Clear()
 
-            'Datei öffnen
-            Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
-            Dim StrRead As StreamReader = New StreamReader(FiStr, Me.Encoding)
+            'Datei Ã¶ffnen
+            Dim FiStr As New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
+            Dim StrRead As New StreamReader(FiStr, Me.Encoding)
             Dim StrReadSync As TextReader = TextReader.Synchronized(StrRead)
 
             'Zeile mit der Anzahl der Zeireihen finden
-            For i = 1 To Me.iLineHeadings - 1
-                Zeile = StrReadSync.ReadLine.ToString()
+            For i = 1 To Me.LineNumberHeaders - 1
+                Zeile = StrReadSync.ReadLine()
                 If (i = iZeileAnzSpalten) Then ZeileSpalten = Zeile
             Next
 
@@ -121,23 +120,24 @@ Namespace Fileformats
                 AnzSpalten_dT(Me.nLinesPerTimestamp - 1) = anzSpalten - (maxSpalten_dT * (Me.nLinesPerTimestamp - 1))
             End If
 
-            'Spaltenköpfe (Zuflussknoten) und Indizes einlesen
+            'SpaltenkÃ¶pfe (Zuflussknoten) und Indizes einlesen
             Dim index As Integer
             index = 1
             For i = 0 To Me.nLinesPerTimestamp - 1
-                Zeile = StrReadSync.ReadLine.ToString()
+                Zeile = StrReadSync.ReadLine()
                 For j = 0 To AnzSpalten_dT(i) - 1
-                    sInfo = New TimeSeriesInfo()
-                    sInfo.Name = Zeile.Substring((j * Me.ColumnWidth) + ColumnOffset, Me.ColumnWidth).Trim()
-                    sInfo.Unit = HExt_welEinheit
-                    sInfo.Index = index
+                    sInfo = New TimeSeriesInfo With {
+                        .Name = Zeile.Substring((j * Me.ColumnWidth) + ColumnOffset, Me.ColumnWidth).Trim(),
+                        .Unit = HExt_welEinheit,
+                        .Index = index
+                    }
                     Me.TimeSeriesInfos.Add(sInfo)
-                    index = index + 1
+                    index += 1
                 Next
             Next
 
             'iZeileDaten kann erst jetzt gesetzt werden, wenn AnzZeilen_dT bekannt ist
-            Me.iLineData = iLineHeadings + Me.nLinesPerTimestamp
+            Me.LineNumberData = LineNumberHeaders + Me.nLinesPerTimestamp
 
             StrReadSync.Close()
             StrRead.Close()
@@ -148,7 +148,7 @@ Namespace Fileformats
         ''' <summary>
         ''' Zeitreihen einlesen
         ''' </summary>
-        Public Overrides Sub readFile()
+        Public Overrides Sub ReadFile()
 
             Dim iZeile, i As Integer
             Dim Zeile As String
@@ -156,8 +156,8 @@ Namespace Fileformats
             Dim datum As DateTime
             Dim ts As TimeSeries
 
-            Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
-            Dim StrRead As StreamReader = New StreamReader(FiStr, Me.Encoding)
+            Dim FiStr As New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
+            Dim StrRead As New StreamReader(FiStr, Me.Encoding)
             Dim StrReadSync = TextReader.Synchronized(StrRead)
 
             'Zeitreihen instanzieren
@@ -174,24 +174,24 @@ Namespace Fileformats
             '--------
 
             'Header
-            For iZeile = 1 To Me.iLineData - 1
-                Zeile = StrReadSync.ReadLine.ToString()
+            For iZeile = 1 To Me.LineNumberData - 1
+                StrReadSync.ReadLine()
             Next
 
             'Daten
             Do
-                Zeile = StrReadSync.ReadLine.ToString()
+                Zeile = StrReadSync.ReadLine()
                 If Zeile.Substring(0, 5) = "*****" Then
                     Exit Do
                 End If
                 'Erste Zeile: Datum_Zeit
                 datum = New System.DateTime(Zeile.Substring(6 + ColumnOffset, 4), Zeile.Substring(4 + ColumnOffset, 2), Zeile.Substring(2 + ColumnOffset, 2), Zeile.Substring(14 + ColumnOffset, 2), Zeile.Substring(16 + ColumnOffset, 2), 0, New System.Globalization.GregorianCalendar())
                 'Restliche Zeilen pro Zeitschritt: Werte
-                'Alle ausgewählten Spalten durchlaufen
+                'Alle ausgewÃ¤hlten Spalten durchlaufen
                 'Alle Abflusswerte einlesen
                 WerteString = ""
                 For i = 0 To Me.nLinesPerTimestamp - 1
-                    WerteString = WerteString + StrReadSync.ReadLine.ToString()
+                    WerteString &= StrReadSync.ReadLine()
                 Next
                 For Each sInfo As TimeSeriesInfo In Me.SelectedSeries
                     Me.TimeSeries(sInfo.Index).AddNode(datum, StringToDouble(WerteString.Substring(((sInfo.Index - 1) * Me.ColumnWidth) + ColumnOffset, Me.ColumnWidth)))
@@ -206,20 +206,20 @@ Namespace Fileformats
         End Sub
 
         ''' <summary>
-        ''' Prüft, ob es sich um eine WEL-Datei für Hystem-Extran handelt
+        ''' PrÃ¼ft, ob es sich um eine WEL-Datei fÃ¼r Hystem-Extran handelt
         ''' </summary>
         ''' <param name="file">Pfad zur Datei</param>
         ''' <returns></returns>
-        Public Shared Function verifyFormat(file As String) As Boolean
+        Public Shared Function VerifyFormat(file As String) As Boolean
 
-            Dim FiStr As FileStream = New FileStream(file, FileMode.Open, IO.FileAccess.Read)
-            Dim StrRead As StreamReader = New StreamReader(FiStr, detectEncodingFromByteOrderMarks:=True)
-            Dim Zeile As String = ""
+            Dim FiStr As New FileStream(file, FileMode.Open, IO.FileAccess.Read)
+            Dim StrRead As New StreamReader(FiStr, detectEncodingFromByteOrderMarks:=True)
+            Dim Zeile As String
 
             '3 Zeilen einlesen
-            Zeile = StrRead.ReadLine.ToString()
-            Zeile = StrRead.ReadLine.ToString()
-            Zeile = StrRead.ReadLine.ToString()
+            StrRead.ReadLine()
+            StrRead.ReadLine()
+            Zeile = StrRead.ReadLine()
 
             StrRead.Close()
             FiStr.Close()
@@ -233,7 +233,7 @@ Namespace Fileformats
                 End If
 
             Catch ex As Exception
-                'höchstwahrscheinlich keine Extran-Regenreihe
+                'hÃ¶chstwahrscheinlich keine Extran-Regenreihe
                 Return False
             End Try
 

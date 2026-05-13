@@ -29,8 +29,8 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
     <TestMethod()> Public Sub TestWVP_Parse()
 
         Dim filesWVP As New List(Of String) From {
-            IO.Path.Combine(TestData.getTestDataDir(), "WVP", "test_all_filetypes.wvp"),
-            IO.Path.Combine(TestData.getTestDataDir(), "WVP", "test_displayoptions.wvp")
+            IO.Path.Combine(TestData.GetTestDataDir(), "WVP", "test_all_filetypes.wvp"),
+            IO.Path.Combine(TestData.GetTestDataDir(), "WVP", "test_displayoptions.wvp")
         }
 
         For Each file As String In filesWVP
@@ -44,7 +44,7 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
     ''' </summary>
     <TestMethod()> Public Sub TestWVP_ReadOptions()
 
-        Dim fileWVP As String = IO.Path.Combine(TestData.getTestDataDir(), "WVP", "test_displayoptions.wvp")
+        Dim fileWVP As String = IO.Path.Combine(TestData.GetTestDataDir(), "WVP", "test_displayoptions.wvp")
 
         Dim wvp As New Parsers.WVP(fileWVP)
         Dim tsList As List(Of TimeSeries) = wvp.Process()
@@ -70,13 +70,13 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
     <TestMethod()> Public Sub TestWVP_WriteOptions()
 
         'read time series using a WVP file
-        Dim fileIn As String = IO.Path.Combine(TestData.getTestDataDir(), "WVP", "test_displayoptions.wvp")
+        Dim fileIn As String = IO.Path.Combine(TestData.GetTestDataDir(), "WVP", "test_displayoptions.wvp")
         Dim wvp As New Parsers.WVP(fileIn)
         Dim tsList As List(Of TimeSeries) = wvp.Process()
 
         'write the time series to a WVP file
-        Dim fileOut As String = IO.Path.Combine(TestData.getTestDataDir(), "WVP", "test_displayoptions_export.wvp")
-        Call Parsers.WVP.writeFile(tsList, fileOut,
+        Dim fileOut As String = IO.Path.Combine(TestData.GetTestDataDir(), "WVP", "test_displayoptions_export.wvp")
+        Call Parsers.WVP.WriteFile(tsList, fileOut,
                                    saveRelativePaths:=True,
                                    saveTitle:=True,
                                    saveUnit:=True,
@@ -93,7 +93,7 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
         Dim fileContents As String = New IO.StreamReader(fileOut, Text.Encoding.UTF8).ReadToEnd()
         Dim lines As String() = fileContents.Split({vbCrLf}, StringSplitOptions.None)
 
-        Assert.AreEqual(7, lines.Count)
+        Assert.HasCount(7, lines)
 
         Dim iLine As Integer = 0
         For Each line As String In lines
@@ -122,7 +122,7 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
     <TestMethod()> Public Sub TestWVP_Order()
 
         'read time series using a WVP file
-        Dim file As String = IO.Path.Combine(TestData.getTestDataDir(), "WVP", "test_preserve_order.wvp")
+        Dim file As String = IO.Path.Combine(TestData.GetTestDataDir(), "WVP", "test_preserve_order.wvp")
         Dim wvp As New Parsers.WVP(file)
         Dim tsList As List(Of TimeSeries) = wvp.Process()
 

@@ -15,16 +15,18 @@
 'You should have received a copy of the GNU Lesser General Public License
 'along with this program.  If not, see <https://www.gnu.org/licenses/>.
 '
+Imports System.IO
+
 ''' <summary>
 ''' Module to generate and read test data
 ''' </summary>
 Module TestData
 
     ''' <summary>
-    ''' Returns the absolute path to the parent directory of the repository
+    ''' Returns the absolute path to the root directory of the repository
     ''' by going up 6 levels from the application directory
     ''' </summary>
-    Friend Function getParentDir() As String
+    Friend Function GetRootDir() As String
         Dim appdir As String = My.Application.Info.DirectoryPath() 'e.g. BlueM.Wave\tests\bin\x64\Debug\net10.0-windows
         Dim rootdir As String = appdir
         For i As Integer = 1 To 6
@@ -37,9 +39,9 @@ Module TestData
     ''' Returns the absolute path to the test data directory BlueM.Datasets\Wave
     ''' which is expected to be in the same directory as BlueM.Wave
     ''' </summary>
-    Friend Function getTestDataDir() As String
+    Friend Function GetTestDataDir() As String
         Try
-            Dim testdatadir As String = IO.Path.Combine(getParentDir(), "BlueM.Datasets", "Wave")
+            Dim testdatadir As String = IO.Path.Combine(GetRootDir(), "BlueM.Datasets", "Wave")
             If Not IO.Directory.Exists(testdatadir) Then
                 Throw New AssertInconclusiveException($"Directory {testdatadir} does not exist.")
             End If
@@ -58,9 +60,10 @@ Module TestData
     ''' interpretation Undefined, no unit
     ''' </summary>
     ''' <returns></returns>
-    Friend Function getTestTimeSeries_15min() As TimeSeries
-        Dim ts As New TimeSeries("TestTimeSeries_15min")
-        ts.Interpretation = TimeSeries.InterpretationEnum.Undefined
+    Friend Function GetTestTimeSeries_15min() As TimeSeries
+        Dim ts As New TimeSeries("TestTimeSeries_15min") With {
+            .Interpretation = TimeSeries.InterpretationEnum.Undefined
+        }
         ts.AddNode(New DateTime(2000, 1, 1, 0, 0, 0), 0.0)
         ts.AddNode(New DateTime(2000, 1, 1, 0, 15, 0), 2.0)
         ts.AddNode(New DateTime(2000, 1, 1, 0, 30, 0), 3.0)
@@ -83,14 +86,14 @@ Module TestData
     ''' </summary>
     ''' <param name="relativePath">Path to the time series file, relative to BlueM.Datasets\Wave\</param>
     ''' <returns></returns>
-    Friend Function getTestTimeSeries(relativePath As String) As TimeSeries
-        Dim fullPath As String = IO.Path.Combine(getTestDataDir, relativePath)
+    Friend Function GetTestTimeSeries(relativePath As String) As TimeSeries
+        Dim fullPath As String = IO.Path.Combine(GetTestDataDir, relativePath)
         If Not IO.File.Exists(fullPath) Then
-            Throw New Exception($"File {fullPath} not found!")
+            Throw New FileNotFoundException($"File {fullPath} not found!")
         End If
-        Dim file As TimeSeriesFile = TimeSeriesFile.getInstance(fullPath)
+        Dim file As TimeSeriesFile = TimeSeriesFile.GetInstance(fullPath)
         ' read the first time series from the file
-        Dim ts As TimeSeries = file.getTimeSeries(0)
+        Dim ts As TimeSeries = file.GetTimeSeries(0)
         Return ts
     End Function
 

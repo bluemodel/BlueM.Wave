@@ -48,7 +48,7 @@ Namespace Fileformats
             statvar = 4
         End Enum
 
-        Private FileFormat As FileType
+        Private ReadOnly FileFormat As FileType
 
 #Region "Methoden"
 
@@ -61,19 +61,21 @@ Namespace Fileformats
 
             MyBase.New(FileName)
 
+            Me.Separator = Constants.space
+
             Dim i As Integer
             Dim line As String
             Dim lines As Dictionary(Of Integer, String)
 
             'Open the file to determine the file format
-            Dim FiStr As FileStream = New FileStream(File, FileMode.Open, IO.FileAccess.Read)
-            Dim StrRead As StreamReader = New StreamReader(FiStr, Me.Encoding)
+            Dim FiStr As New FileStream(File, FileMode.Open, IO.FileAccess.Read)
+            Dim StrRead As New StreamReader(FiStr, Me.Encoding)
             Dim StrReadSync = TextReader.Synchronized(StrRead)
 
             i = 0
             lines = New Dictionary(Of Integer, String)
             Do
-                line = StrReadSync.ReadLine.ToString()
+                line = StrReadSync.ReadLine()
                 i += 1
                 lines.Add(i, line)
             Loop Until i = 3
@@ -85,29 +87,29 @@ Namespace Fileformats
             If lines(1).Trim() = "ANNUAL SUMMARY" And
             lines(2).Trim() = "YEAR   OBS. PREC.   INT.LOSS   NET PREC.   POT.ET     NET ET   SNOWMELT    SIMRO   OBSRO     ERR.*100    CUMS    CUMS2" Then
                 Me.FileFormat = FileType.annual
-                Me.iLineData = 3
+                Me.LineNumberData = 3
             ElseIf lines(1).Trim() = "MONTHLY SUMMARY" And
             lines(2).Trim() = "MO   YEAR  O-PPT  N-PPT  INLOS    P-ET   A-ET   SMELT   GW-FL   RS-FL    SRO SIMRO[mm] OBSRO[mm] ERR*100" Then
                 Me.FileFormat = FileType.monthly
-                Me.iLineData = 3
+                Me.LineNumberData = 3
             ElseIf lines(1).Trim().Contains("PRED DISCH    (m3/s)") Then
                 Me.FileFormat = FileType.dpout
-                Me.iLineData = 12
-            ElseIf Path.GetExtension(FileName).ToLower = ".dat" Then
+                Me.LineNumberData = 12
+            ElseIf Path.GetExtension(FileName).Equals(".dat", StringComparison.CurrentCultureIgnoreCase) Then
                 Dim nSeries As Integer
                 If Integer.TryParse(lines(1).Trim(), nSeries) Then
                     Me.FileFormat = FileType.statvar
-                    Me.iLineData = nSeries + 2
+                    Me.LineNumberData = nSeries + 2
                 End If
             Else
-                Throw New Exception("Unexpected file format for a PRMS OUT file!")
+                Throw New TimeSeriesFileReadingException("Unexpected file format for a PRMS OUT file!")
             End If
 
-            Call Me.readSeriesInfo()
+            Call Me.ReadSeriesInfo()
 
         End Sub
 
-        Public Overrides Sub readSeriesInfo()
+        Public Overrides Sub ReadSeriesInfo()
 
             Dim i As Integer
             Dim line As String
@@ -118,14 +120,14 @@ Namespace Fileformats
             Me.TimeSeriesInfos.Clear()
 
             'Open the file
-            Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
-            Dim StrRead As StreamReader = New StreamReader(FiStr, Me.Encoding)
+            Dim FiStr As New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
+            Dim StrRead As New StreamReader(FiStr, Me.Encoding)
             Dim StrReadSync = TextReader.Synchronized(StrRead)
 
             lines = New Dictionary(Of Integer, String)
 
             'Read header data
-            For i = 1 To Me.iLineData
+            For i = 1 To Me.LineNumberData
                 line = StrReadSync.ReadLine.ToString
                 lines.Add(i, line)
             Next
@@ -134,47 +136,51 @@ Namespace Fileformats
             Select Case Me.FileFormat
 
                 Case FileType.annual
-                    parts = lines(2).Split(New String() {"  "}, StringSplitOptions.RemoveEmptyEntries)
-                    For i = 1 To parts.Count() - 1 'first column is timestamp (year)
-                        sInfo = New TimeSeriesInfo()
-                        sInfo.Index = i
-                        sInfo.Name = parts(i).Trim()
-                        sInfo.Unit = "-"
+                    parts = lines(2).Split(Me.Separator.ToChar, StringSplitOptions.RemoveEmptyEntries)
+                    For i = 1 To parts.Length - 1 'first column is timestamp (year)
+                        sInfo = New TimeSeriesInfo With {
+                            .Index = i,
+                            .Name = parts(i).Trim(),
+                            .Unit = "-"
+                        }
                         Me.TimeSeriesInfos.Add(sInfo)
                     Next
                     Me.DateTimeColumnIndex = 0
 
                 Case FileType.monthly
-                    parts = lines(2).Split(New Char() {" "}, StringSplitOptions.RemoveEmptyEntries)
-                    For i = 2 To parts.Count() - 1 'first two columns are timestamp (year and month)
-                        sInfo = New TimeSeriesInfo()
-                        sInfo.Index = i
-                        sInfo.Name = parts(i).Trim()
-                        sInfo.Unit = "-"
+                    parts = lines(2).Split(Me.Separator.ToChar, StringSplitOptions.RemoveEmptyEntries)
+                    For i = 2 To parts.Length - 1 'first two columns are timestamp (year and month)
+                        sInfo = New TimeSeriesInfo With {
+                            .Index = i,
+                            .Name = parts(i).Trim(),
+                            .Unit = "-"
+                        }
                         Me.TimeSeriesInfos.Add(sInfo)
                     Next
                     Me.DateTimeColumnIndex = 0 'technically 0 and 1
 
                 Case FileType.dpout
-                    parts = lines(Me.iLineData).Split(New Char() {" "}, StringSplitOptions.RemoveEmptyEntries)
-                    For i = 3 To parts.Count() - 1 'first 3 columns are timestamp
+                    parts = lines(Me.LineNumberData).Split(Me.Separator.ToChar, StringSplitOptions.RemoveEmptyEntries)
+                    For i = 3 To parts.Length - 1 'first 3 columns are timestamp
                         Dim m As Match
                         m = Regex.Match(lines(i - 2).Trim(), ".{3} (.+)\s+\((.+)\).+")
-                        sInfo = New TimeSeriesInfo
-                        sInfo.Name = m.Groups(1).Value.Trim()
-                        sInfo.Unit = m.Groups(2).Value.Trim()
-                        sInfo.Index = i
+                        sInfo = New TimeSeriesInfo With {
+                            .Name = m.Groups(1).Value.Trim(),
+                            .Unit = m.Groups(2).Value.Trim(),
+                            .Index = i
+                        }
                         Me.TimeSeriesInfos.Add(sInfo)
                     Next
                     Me.DateTimeColumnIndex = 0 ' technically 0, 1 and 2
 
                 Case FileType.statvar
-                    parts = lines(Me.iLineData).Split(New Char() {" "}, StringSplitOptions.RemoveEmptyEntries)
-                    For i = 7 To parts.Count() - 1 'first 7 columns are number and timestamp
-                        sInfo = New TimeSeriesInfo()
-                        sInfo.Name = lines(i - 5).Trim()
-                        sInfo.Unit = "-"
-                        sInfo.Index = i
+                    parts = lines(Me.LineNumberData).Split(Me.Separator.ToChar, StringSplitOptions.RemoveEmptyEntries)
+                    For i = 7 To parts.Length - 1 'first 7 columns are number and timestamp
+                        sInfo = New TimeSeriesInfo With {
+                            .Name = lines(i - 5).Trim(),
+                            .Unit = "-",
+                            .Index = i
+                        }
                         Me.TimeSeriesInfos.Add(sInfo)
                     Next
                     Me.DateTimeColumnIndex = 0 ' technically 1 to 6
@@ -190,7 +196,7 @@ Namespace Fileformats
         ''' Reads the file
         ''' </summary>
         ''' <remarks></remarks>
-        Public Overrides Sub readFile()
+        Public Overrides Sub ReadFile()
 
             Dim i As Integer
             Dim line As String
@@ -199,29 +205,30 @@ Namespace Fileformats
             Dim timestamp As DateTime
             Dim ts As TimeSeries
 
-            Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
-            Dim StrRead As StreamReader = New StreamReader(FiStr, Me.Encoding)
+            Dim FiStr As New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
+            Dim StrRead As New StreamReader(FiStr, Me.Encoding)
             Dim StrReadSync = TextReader.Synchronized(StrRead)
 
             'Instantiate time series
             For Each sInfo As TimeSeriesInfo In Me.SelectedSeries
-                ts = New TimeSeries()
-                ts.Title = sInfo.Name
-                ts.Unit = sInfo.Unit
-                ts.DataSource = New TimeSeriesDataSource(Me.File, sInfo.Name)
+                ts = New TimeSeries With {
+                    .Title = sInfo.Name,
+                    .Unit = sInfo.Unit,
+                    .DataSource = New TimeSeriesDataSource(Me.File, sInfo.Name)
+                }
                 Me.TimeSeries.Add(sInfo.Index, ts)
             Next
 
             'Skip header
-            For i = 1 To Me.iLineData - 1
+            For i = 1 To Me.LineNumberData - 1
                 StrReadSync.ReadLine()
             Next
 
             'Read data
             Do
-                line = StrReadSync.ReadLine.ToString()
+                line = StrReadSync.ReadLine()
 
-                parts = line.Split(New Char() {" "}, StringSplitOptions.RemoveEmptyEntries)
+                parts = line.Split(Me.Separator.ToChar, StringSplitOptions.RemoveEmptyEntries)
 
                 'Parse date
                 Select Case Me.FileFormat
@@ -255,24 +262,23 @@ Namespace Fileformats
         ''' <param name="file"></param>
         ''' <returns></returns>
         ''' <remarks>Assumes that headers are fixed (always the same variables)</remarks>
-        Public Shared Function verifyFormat(file As String) As Boolean
+        Public Shared Function VerifyFormat(file As String) As Boolean
 
             Dim i As Integer
             Dim line As String
             Dim lines As Dictionary(Of Integer, String)
-            Dim headerFound As Boolean = False
 
             Try
                 'Open the file
-                Dim FiStr As FileStream = New FileStream(file, FileMode.Open, IO.FileAccess.Read)
-                Dim StrRead As StreamReader = New StreamReader(FiStr, detectEncodingFromByteOrderMarks:=True)
+                Dim FiStr As New FileStream(file, FileMode.Open, IO.FileAccess.Read)
+                Dim StrRead As New StreamReader(FiStr, detectEncodingFromByteOrderMarks:=True)
                 Dim StrReadSync = TextReader.Synchronized(StrRead)
 
                 i = 0
                 lines = New Dictionary(Of Integer, String)
                 Do
                     i += 1
-                    line = StrReadSync.ReadLine.ToString()
+                    line = StrReadSync.ReadLine()
                     lines.Add(i, line)
                 Loop Until i = 3
 
@@ -288,7 +294,7 @@ Namespace Fileformats
                     Return True
                 ElseIf lines(1).Trim().Contains("PRED DISCH    (m3/s)") Then
                     Return True
-                ElseIf Path.GetExtension(file).ToLower = ".dat" Then
+                ElseIf Path.GetExtension(file).Equals(".dat", StringComparison.CurrentCultureIgnoreCase) Then
                     'first line should contain only an integer
                     Dim nLinesHeader As Integer
                     If Integer.TryParse(lines(1).Trim(), nLinesHeader) Then

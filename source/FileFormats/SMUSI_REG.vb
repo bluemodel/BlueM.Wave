@@ -46,7 +46,7 @@ Namespace Fileformats
         ''' Zeitintervall von SMUSI-Regenreihen
         ''' </summary>
         ''' <remarks>5 Minuten</remarks>
-        Private ReadOnly Property Zeitintervall() As TimeSpan
+        Private Shared ReadOnly Property Zeitintervall() As TimeSpan
             Get
                 Return New TimeSpan(0, SMUSI_REG.dt_min, 0)
             End Get
@@ -67,22 +67,22 @@ Namespace Fileformats
 
             'Voreinstellungen
             Me.Dateformat = DateFormats("SMUSI")
-            Me.iLineData = 4
+            Me.LineNumberData = 4
             Me.UseUnits = True
 
-            Call Me.readSeriesInfo()
+            Call Me.ReadSeriesInfo()
 
             If (ReadAllNow) Then
                 'Direkt einlesen
-                Call Me.selectAllSeries()
-                Call Me.readFile()
+                Call Me.SelectAllSeries()
+                Call Me.ReadFile()
             End If
 
         End Sub
 
         'Spalten auslesen
         '****************
-        Public Overrides Sub readSeriesInfo()
+        Public Overrides Sub ReadSeriesInfo()
 
             Dim Zeile, title As String
             Dim sInfo As TimeSeriesInfo
@@ -90,24 +90,25 @@ Namespace Fileformats
             Me.TimeSeriesInfos.Clear()
 
             'Datei öffnen
-            Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
-            Dim StrRead As StreamReader = New StreamReader(FiStr, Me.Encoding)
+            Dim FiStr As New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
+            Dim StrRead As New StreamReader(FiStr, Me.Encoding)
             Dim StrReadSync = TextReader.Synchronized(StrRead)
 
             'Reihentitel aus 1. Zeile nehmen.
             'Wenn Komma enthalten ist, nur den Teil vor dem Komma verwenden
             Zeile = StrReadSync.ReadLine()
-            If Zeile.Contains(",") Then
+            If Zeile.Contains(","c) Then
                 title = Zeile.Split(",")(0)
             Else
                 title = Zeile
             End If
 
             'store series info
-            sInfo = New TimeSeriesInfo()
-            sInfo.Name = title
-            sInfo.Unit = "mm" 'Einheit ist immer mm
-            sInfo.Index = 0
+            sInfo = New TimeSeriesInfo With {
+                .Name = title,
+                .Unit = "mm", 'Einheit ist immer mm
+                .Index = 0
+            }
             Me.TimeSeriesInfos.Add(sInfo)
 
             StrReadSync.Close()
@@ -118,7 +119,7 @@ Namespace Fileformats
 
         'SMUSI_REG-Datei einlesen
         '******************
-        Public Overrides Sub readFile()
+        Public Overrides Sub ReadFile()
 
             Dim i, j As Integer
             Dim leerzeile As Boolean
@@ -129,15 +130,16 @@ Namespace Fileformats
             Dim sInfo As TimeSeriesInfo
             Dim ts As TimeSeries
 
-            Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
-            Dim StrRead As StreamReader = New StreamReader(FiStr, Me.Encoding)
+            Dim FiStr As New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
+            Dim StrRead As New StreamReader(FiStr, Me.Encoding)
             Dim StrReadSync = TextReader.Synchronized(StrRead)
 
             'Zeitreihe instanzieren (bei REG gibt es nur eine Zeitreihe)
             sInfo = Me.TimeSeriesInfos(0)
-            ts = New TimeSeries(sInfo.Name)
-            ts.Unit = sInfo.Unit
-            ts.DataSource = New TimeSeriesDataSource(Me.File, sInfo.Name)
+            ts = New TimeSeries(sInfo.Name) With {
+                .Unit = sInfo.Unit,
+                .DataSource = New TimeSeriesDataSource(Me.File, sInfo.Name)
+            }
 
             'Einlesen
             '--------
@@ -146,9 +148,9 @@ Namespace Fileformats
 
             Do
                 j += 1
-                Zeile = StrReadSync.ReadLine.ToString()
+                Zeile = StrReadSync.ReadLine()
 
-                If (j > Me.nLinesHeader) Then
+                If (j > Me.NLinesHeader) Then
 
                     If (Zeile.Trim.Length < 1) Then
                         'Leere Zeile
@@ -168,7 +170,7 @@ Namespace Fileformats
 
                         If (leerzeile) Then
                             'Bei vorheriger leeren Zeile: 0-Stelle 5 min nach letztem Datum einfügen
-                            DatumTmp = DatumCurrent.Add(Me.Zeitintervall)
+                            DatumTmp = DatumCurrent.Add(Zeitintervall)
                             If (Not DatumTmp = DatumZeile) Then
                                 ts.AddNode(DatumTmp, 0)
                             End If
@@ -184,7 +186,7 @@ Namespace Fileformats
 
                         If (leerzeile) Then
                             'Bei vorheriger leeren Zeile: 0-Stelle 5 min vor Zeilendatum einfügen
-                            DatumTmp = DatumZeile.Subtract(Me.Zeitintervall)
+                            DatumTmp = DatumZeile.Subtract(Zeitintervall)
                             If (Not ts.Nodes.ContainsKey(DatumTmp)) Then
                                 ts.AddNode(DatumTmp, 0)
                             End If
@@ -207,10 +209,10 @@ Namespace Fileformats
         ''' <summary>
         ''' Exportiert eine Zeitreihe als SMUSI-REG-Datei
         ''' </summary>
-        ''' <param name="Reihe">Die zu exportierende Zeitreihe</param>
-        ''' <param name="File">Pfad zur anzulegenden Datei</param>
+        ''' <param name="ts">Die zu exportierende Zeitreihe</param>
+        ''' <param name="file">Pfad zur anzulegenden Datei</param>
         ''' <remarks>Zeitreihe muss äquidistant mit 5 min Zeitschritt vorliegen!</remarks>
-        Public Overloads Shared Sub writeFile(Reihe As TimeSeries, File As String)
+        Public Overloads Shared Sub WriteFile(ts As TimeSeries, file As String)
 
             Dim t1, t2 As DateTime
             Dim dt As Integer
@@ -227,13 +229,15 @@ Namespace Fileformats
             Dim alles As String
 
             'Zeitreihe muss äquidistant mit 5 min Zeitschritt vorliegen!
-            t1 = Reihe.StartDate
-            For Each t2 In Reihe.Dates.Skip(1)
+            t1 = ts.StartDate
+            For Each t2 In ts.Dates.Skip(1)
                 dt = (t2 - t1).Minutes
                 If dt <> 5 Then
-                    Throw New Exception($"Unable to export to SMUSI REG format!" & eol &
-                                    $"Time series must be equidistant with a time step of 5 minutes." & eol &
-                                    $"Timestep between {t1} and {t2} is not 5 minutes!")
+                    Throw New TimeSeriesFileWritingException(
+                        $"Unable to export to SMUSI REG format!" & eol &
+                        $"Time series must be equidistant with a time step of 5 minutes." & eol &
+                        $"Timestep between {t1} and {t2} is not 5 minutes!"
+                    )
                 End If
                 t1 = t2
             Next
@@ -242,14 +246,14 @@ Namespace Fileformats
 
             'ExportStartDatum
             'Start muss zur vollen Stunde sein
-            export_start = Reihe.StartDate
+            export_start = ts.StartDate
             If export_start.Minute > 0 Then
                 export_start = export_start.AddMinutes(60 - export_start.Minute)
             End If
 
             'ExportEndDatum
             'Ende muss um XX:55 sein
-            export_end = Reihe.EndDate
+            export_end = ts.EndDate
             If export_end.Minute > 55 Then
                 export_end = export_end.AddMinutes(55 - export_end.Minute)
             ElseIf export_end.Minute < 55 Then
@@ -258,31 +262,31 @@ Namespace Fileformats
             End If
 
             'Zeitreihe zuschneiden
-            Reihe.Cut(export_start, export_end)
+            ts.Cut(export_start, export_end)
 
             'Wertezeilen schreiben
-            strwrite = New StreamWriter(File, append:=False, Helpers.DefaultEncoding)
+            strwrite = New StreamWriter(file, append:=False, Helpers.DefaultEncoding)
             Summe = 0 'Summe für die spätere Berechnung der Jahresniederschlagshöhe
             n = 0
-            Do While n < Reihe.Length
-                strwrite.Write(Reihe.Title.Substring(0, 4) & " ")
-                strwrite.Write(Reihe.Dates(n).ToString(DateFormats("SMUSI")))
+            Do While n < ts.Length
+                strwrite.Write(ts.Title.Substring(0, 4) & " ")
+                strwrite.Write(ts.Dates(n).ToString(DateFormats("SMUSI")))
                 For j = 1 To WerteproZeile
-                    IntWert = Reihe.Values(n) * 1000
-                    Summe = Summe + IntWert
+                    IntWert = ts.Values(n) * 1000
+                    Summe += IntWert
                     strwrite.Write(IntWert.ToString.PadLeft(5))
-                    n = n + 1
+                    n += 1
                 Next
                 strwrite.WriteLine()
             Loop
             strwrite.Close()
 
             'Header anpassen (Summe und Betrachungszeitraum)
-            FiStr = New FileStream(File, FileMode.Open, IO.FileAccess.Read)
+            FiStr = New FileStream(file, FileMode.Open, IO.FileAccess.Read)
             StrRead = New StreamReader(FiStr, Helpers.DefaultEncoding)
 
             'Mittlere Jahresniederschlagshöhe berechnen
-            Spanne = Reihe.EndDate - Reihe.StartDate
+            Spanne = ts.EndDate - ts.StartDate
             nJahre = Math.Max(Spanne.TotalDays / 365, 1)
             hn_A_Mittel = Summe / 1000 * 1 / nJahre
 
@@ -292,8 +296,8 @@ Namespace Fileformats
             FiStr.Close()
 
             'Header schreiben
-            strwrite = New StreamWriter(File)
-            strwrite.WriteLine(Reihe.Title)
+            strwrite = New StreamWriter(file)
+            strwrite.WriteLine(ts.Title)
             strwrite.WriteLine($"hN = {hn_A_Mittel} mm/a")
             strwrite.WriteLine("================================================================================")
 
@@ -308,15 +312,15 @@ Namespace Fileformats
         ''' </summary>
         ''' <param name="file">Pfad zur Datei</param>
         ''' <returns></returns>
-        Public Shared Function verifyFormat(file As String) As Boolean
+        Public Shared Function VerifyFormat(file As String) As Boolean
 
-            Dim FiStr As FileStream = New FileStream(file, FileMode.Open, IO.FileAccess.Read)
-            Dim StrRead As StreamReader = New StreamReader(FiStr, detectEncodingFromByteOrderMarks:=True)
-            Dim Zeile As String = ""
+            Dim FiStr As New FileStream(file, FileMode.Open, IO.FileAccess.Read)
+            Dim StrRead As New StreamReader(FiStr, detectEncodingFromByteOrderMarks:=True)
+            Dim Zeile As String
 
             '2 Zeilen einlesen
-            Zeile = StrRead.ReadLine.ToString()
-            Zeile = StrRead.ReadLine.ToString()
+            StrRead.ReadLine()
+            Zeile = StrRead.ReadLine()
 
             StrRead.Close()
             FiStr.Close()

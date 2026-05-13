@@ -52,13 +52,13 @@ Friend Class MonthlyStatistics
     ''' <summary>
     ''' Result of the analysis
     ''' </summary>
-    Private result As Dictionary(Of Integer, MonthData)
+    Private ReadOnly result As Dictionary(Of Integer, MonthData)
 
     ''' <summary>
     ''' Flag indicating whether series values correspond to the previous month
     ''' </summary>
     ''' <remarks></remarks>
-    Private isPreviousMonth As Boolean
+    Private ReadOnly isPreviousMonth As Boolean
 
 #End Region 'Members
 
@@ -126,14 +126,14 @@ Friend Class MonthlyStatistics
 
         'Check: must be only one series
         If (series.Count <> 1) Then
-            Throw New Exception("The Monthly analysis requires that exactly 1 time series is selected!")
+            Throw New AnalysisInvalidInputException("The Monthly analysis requires that exactly 1 time series is selected!")
         End If
 
         Dim dlg As New MonthlyStatisticsDialog()
         Dim dlg_result As DialogResult = dlg.ShowDialog()
 
         If Not dlg_result = DialogResult.OK Then
-            Throw New Exception("User abort")
+            Throw New AnalysisCancelledException("User abort")
         End If
 
         Me.isPreviousMonth = (dlg.ComboBox_MonthType.SelectedItem = "previous month")
@@ -167,7 +167,7 @@ Friend Class MonthlyStatistics
         Dim N As Long
         Dim sum, sumofsquares As Double
 
-        reihe = Me.InputTimeSeries.Item(0).removeNaNValues()
+        reihe = Me.InputTimeSeries.Item(0).RemoveNaNValues()
 
         'Sort values into months
         For i = 0 To reihe.Length - 1
@@ -175,7 +175,7 @@ Friend Class MonthlyStatistics
             'assign to previous month if necessary
             If Me.isPreviousMonth Then
                 If (month - 1) >= 1 Then
-                    month = month - 1
+                    month -= 1
                 Else
                     month = 12
                 End If
@@ -213,7 +213,7 @@ Friend Class MonthlyStatistics
                         .median = .values(((N + 1) / 2) - 1)
                     End If
                 Else
-                    Log.AddLogEntry(Log.levels.warning, $"The series does not contain any data for the month of { .month}!")
+                    Log.AddLogEntry(Log.Levels.warning, $"The series does not contain any data for the month of { .month}!")
                     'TODO: ideally we would set all result values to Double.NaN here but this inexplicably causes the result chart to crash!
                 End If
 
@@ -288,10 +288,11 @@ Friend Class MonthlyStatistics
         'Series
 
         'MinMax
-        minmax = New Steema.TeeChart.Styles.HighLow(Me.ResultChart.Chart)
-        minmax.DefaultNullValue = Double.NaN
-        minmax.Title = "Min / Max"
-        minmax.Color = Color.DarkGray
+        minmax = New Steema.TeeChart.Styles.HighLow(Me.ResultChart.Chart) With {
+            .DefaultNullValue = Double.NaN,
+            .Title = "Min / Max",
+            .Color = Color.DarkGray
+        }
         minmax.Pen.Color = Color.DarkGray
         minmax.HighBrush.Visible = True
         minmax.HighBrush.Color = Color.LightGray
@@ -301,11 +302,12 @@ Friend Class MonthlyStatistics
         Next
 
         'Standard deviation
-        stdabw = New Steema.TeeChart.Styles.Error(Me.ResultChart.Chart)
-        stdabw.DefaultNullValue = Double.NaN
-        stdabw.Title = "Standard deviation"
-        stdabw.Color = Color.Red
-        stdabw.ErrorWidth = 50
+        stdabw = New Steema.TeeChart.Styles.Error(Me.ResultChart.Chart) With {
+            .DefaultNullValue = Double.NaN,
+            .Title = "Standard deviation",
+            .Color = Color.Red,
+            .ErrorWidth = 50
+        }
         For i = 1 To 12
             'Skip months with no or NaN data
             If Me.result(i).values.Count > 0 And Not Double.IsNaN(Me.result(i).stddev) Then
@@ -314,22 +316,24 @@ Friend Class MonthlyStatistics
         Next
 
         'Average
-        mittelwert = New Steema.TeeChart.Styles.Line(Me.ResultChart.Chart)
-        mittelwert.TreatNaNAsNull = True
-        mittelwert.TreatNulls = Steema.TeeChart.Styles.TreatNullsStyle.DoNotPaint
-        mittelwert.Title = "Average"
-        mittelwert.Color = Color.Blue
+        mittelwert = New Steema.TeeChart.Styles.Line(Me.ResultChart.Chart) With {
+            .TreatNaNAsNull = True,
+            .TreatNulls = Steema.TeeChart.Styles.TreatNullsStyle.DoNotPaint,
+            .Title = "Average",
+            .Color = Color.Blue
+        }
         mittelwert.LinePen.Width = 2
         For i = 1 To 12
             mittelwert.Add(Me.result(i).index, Me.result(i).average, Me.result(i).month.name)
         Next
 
         'Median
-        median = New Steema.TeeChart.Styles.Line(Me.ResultChart.Chart)
-        median.TreatNaNAsNull = True
-        median.TreatNulls = Steema.TeeChart.Styles.TreatNullsStyle.DoNotPaint
-        median.Title = "Median"
-        median.Color = Color.Green
+        median = New Steema.TeeChart.Styles.Line(Me.ResultChart.Chart) With {
+            .TreatNaNAsNull = True,
+            .TreatNulls = Steema.TeeChart.Styles.TreatNullsStyle.DoNotPaint,
+            .Title = "Median",
+            .Color = Color.Green
+        }
         For i = 1 To 12
             median.Add(Me.result(i).index, Me.result(i).median, Me.result(i).month.name)
         Next

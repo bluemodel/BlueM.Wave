@@ -96,7 +96,7 @@ Friend Class TestAnalysis
 
         'Check expected count of time series
         If (timeseries.Count <> 1) Then
-            Throw New Exception("The TestAnalysis requires the selection of exactly one time series!")
+            Throw New AnalysisInvalidInputException("The TestAnalysis requires the selection of exactly one time series!")
         End If
 
     End Sub

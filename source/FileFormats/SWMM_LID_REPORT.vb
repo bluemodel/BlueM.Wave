@@ -41,24 +41,24 @@ Namespace Fileformats
             MyBase.New(file)
 
             'default settings
-            Me.iLineHeadings = 2
+            Me.LineNumberHeaders = 2
             Me.UseUnits = True
             Me.IsColumnSeparated = True
             Me.Separator = Constants.tab
             Me.DecimalSeparator = Constants.period
-            Me.iLineHeadings = 6 ' and 7!
+            Me.LineNumberHeaders = 6 ' and 7!
             Me.UseUnits = True
-            Me.iLineUnits = 8
-            Me.iLineData = 10
+            Me.LineNumberUnits = 8
+            Me.LineNumberData = 10
             Me.Dateformat = "MM/dd/yyyy HH:mm:ss"
             Me.DateTimeColumnIndex = 0
 
-            Call Me.readSeriesInfo()
+            Call Me.ReadSeriesInfo()
 
             If (ReadAllNow) Then
                 'Datei komplett einlesen
-                Call Me.selectAllSeries()
-                Call Me.readFile()
+                Call Me.SelectAllSeries()
+                Call Me.ReadFile()
             End If
 
 
@@ -67,7 +67,7 @@ Namespace Fileformats
         ''' <summary>
         ''' Reads series information from the file
         ''' </summary>
-        Public Overrides Sub readSeriesInfo()
+        Public Overrides Sub ReadSeriesInfo()
 
             Dim iLine As Integer = 0
             Dim line As String
@@ -80,15 +80,15 @@ Namespace Fileformats
 
             Do Until StrReadSync.Peek() = -1
                 iLine += 1
-                line = StrReadSync.ReadLine.ToString().Trim()
+                line = StrReadSync.ReadLine().Trim()
 
-                If iLine = Me.iLineHeadings Then
+                If iLine = Me.LineNumberHeaders Then
                     titles1 = line.Split(Me.Separator.ToChar).ToList
-                ElseIf iLine = Me.iLineHeadings + 1 Then 'titles span two lines!
+                ElseIf iLine = Me.LineNumberHeaders + 1 Then 'titles span two lines!
                     titles2 = line.Split(Me.Separator.ToChar).ToList
-                ElseIf iLine = Me.iLineUnits Then
+                ElseIf iLine = Me.LineNumberUnits Then
                     units = line.Split(Me.Separator.ToChar).ToList
-                ElseIf iLine = Me.iLineData Then
+                ElseIf iLine = Me.LineNumberData Then
                     Exit Do
                 End If
             Loop
@@ -99,7 +99,7 @@ Namespace Fileformats
 
             'merge titles
             For i As Integer = 0 To titles1.Count - 1
-                titles.Add(titles1(i).Trim() + " " + titles2(i).Trim())
+                titles.Add(titles1(i).Trim() & " " & titles2(i).Trim())
             Next
 
             'insert missing title at beginning
@@ -111,10 +111,11 @@ Namespace Fileformats
             Me.TimeSeriesInfos.Clear()
             For i As Integer = 0 To titles.Count - 1
                 If i <> Me.DateTimeColumnIndex Then
-                    sInfo = New TimeSeriesInfo()
-                    sInfo.Index = i
-                    sInfo.Name = titles(i)
-                    sInfo.Unit = units(i).Trim()
+                    sInfo = New TimeSeriesInfo With {
+                        .Index = i,
+                        .Name = titles(i),
+                        .Unit = units(i).Trim()
+                    }
                     Me.TimeSeriesInfos.Add(sInfo)
                 End If
             Next
@@ -124,7 +125,7 @@ Namespace Fileformats
         ''' <summary>
         ''' Reads the file
         ''' </summary>
-        Public Overrides Sub readFile()
+        Public Overrides Sub ReadFile()
 
             Dim iLine As Integer = 0
             Dim line As String
@@ -150,9 +151,9 @@ Namespace Fileformats
 
             Do Until StrReadSync.Peek() = -1
                 iLine += 1
-                line = StrReadSync.ReadLine.ToString().Trim()
+                line = StrReadSync.ReadLine().Trim()
 
-                If iLine < Me.iLineData Or line.Trim().Length = 0 Then
+                If iLine < Me.LineNumberData OrElse line.Trim().Length = 0 Then
                     Continue Do
                 End If
 
@@ -160,7 +161,7 @@ Namespace Fileformats
 
                 ok = DateTime.TryParseExact(parts(Me.DateTimeColumnIndex).Trim(), Me.Dateformat, Helpers.DefaultNumberFormat, Globalization.DateTimeStyles.None, timestamp)
                 If Not ok Then
-                    Throw New Exception($"Could Not parse the timestamp '{parts(Me.DateTimeColumnIndex).Trim()}' using the given date format '{Me.Dateformat}'! Please check the date format!")
+                    Throw New TimeSeriesFileReadingException($"Could Not parse the timestamp '{parts(Me.DateTimeColumnIndex).Trim()}' using the given date format '{Me.Dateformat}'! Please check the date format!")
                 End If
                 For Each sInfo As TimeSeriesInfo In Me.SelectedSeries
                     Me.TimeSeries(sInfo.Index).AddNode(timestamp, StringToDouble(parts(sInfo.Index), Helpers.DefaultNumberFormat))
@@ -178,7 +179,7 @@ Namespace Fileformats
         ''' </summary>
         ''' <param name="file">path to file</param>
         ''' <returns></returns>
-        Public Shared Function verifyFormat(file As String) As Boolean
+        Public Shared Function VerifyFormat(file As String) As Boolean
 
             Dim line As String
 
@@ -186,7 +187,7 @@ Namespace Fileformats
             Dim StrRead As New StreamReader(FiStr, detectEncodingFromByteOrderMarks:=True)
 
             'read first line
-            line = StrRead.ReadLine.ToString().Trim()
+            line = StrRead.ReadLine().Trim()
 
             StrRead.Close()
             FiStr.Close()

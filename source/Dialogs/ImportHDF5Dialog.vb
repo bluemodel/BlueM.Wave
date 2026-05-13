@@ -48,7 +48,7 @@ Friend Class ImportHDF5Dialog
         Label_FileName.Text = "File: " & IO.Path.GetFileName(Me.tsFile.File)
 
         'Read series info from file
-        Call Me.tsFile.readSeriesInfo()
+        Call Me.tsFile.ReadSeriesInfo()
 
         'Clear existing data
         elementSeriesMap.Clear()
@@ -189,7 +189,7 @@ Friend Class ImportHDF5Dialog
 
             'Check if this series should be selected
             If selectedElements.Contains(baseElement) AndAlso selectedVariables.Contains(variableName) Then
-                Me.tsFile.selectSeries(sInfo.Index)
+                Me.tsFile.SelectSeries(sInfo.Index)
             End If
         Next
 

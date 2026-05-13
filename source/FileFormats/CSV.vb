@@ -48,31 +48,31 @@ Namespace Fileformats
             'Me.Dateformat = Helpers.CurrentDateFormat.ShortDatePattern & " " & Helpers.CurrentDateFormat.LongTimePattern
             'Me.Separator = New Character(Helpers.CurrentListSeparator)
             'Me.DecimalSeparator = New Character(Helpers.CurrentNumberFormat.NumberDecimalSeparator)
-            Call Me.readSeriesInfo()
+            Call Me.ReadSeriesInfo()
         End Sub
 
         'Spalten auslesen
         '****************
-        Public Overrides Sub readSeriesInfo()
+        Public Overrides Sub ReadSeriesInfo()
 
             Dim i As Integer
             Dim sInfo As TimeSeriesInfo
-            Dim Zeile As String = ""
+            Dim Zeile As String
             Dim ZeileSpalten As String = ""
             Dim ZeileEinheiten As String = ""
 
             Me.TimeSeriesInfos.Clear()
 
             'Datei öffnen
-            Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
-            Dim StrRead As StreamReader = New StreamReader(FiStr, Me.Encoding)
+            Dim FiStr As New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
+            Dim StrRead As New StreamReader(FiStr, Me.Encoding)
             Dim StrReadSync = TextReader.Synchronized(StrRead)
 
             'Spaltenüberschriften auslesen
-            For i = 1 To Math.Max(Me.iLineData, Me.iLineHeadings + 1)
+            For i = 1 To Math.Max(Me.LineNumberData, Me.LineNumberHeaders + 1)
                 Zeile = StrReadSync.ReadLine()
-                If (i = Me.iLineHeadings) Then ZeileSpalten = Zeile
-                If (i = Me.iLineUnits) Then ZeileEinheiten = Zeile
+                If (i = Me.LineNumberHeaders) Then ZeileSpalten = Zeile
+                If (i = Me.LineNumberUnits) Then ZeileEinheiten = Zeile
             Next
 
             StrReadSync.Close()
@@ -82,7 +82,7 @@ Namespace Fileformats
             'handle case where no units line was read
             If IsNothing(ZeileEinheiten) Then
                 Me.UseUnits = False
-                Me.iLineData = Me.iLineHeadings + 1
+                Me.LineNumberData = Me.LineNumberHeaders + 1
             End If
 
             'Spaltennamen auslesen
@@ -91,14 +91,13 @@ Namespace Fileformats
             Dim Namen() As String
             Dim Einheiten() As String
 
-            ReDim Namen(0)
             ReDim Einheiten(0)
 
             If (Me.IsColumnSeparated) Then
                 'Zeichengetrennt
-                Namen = ZeileSpalten.Split(New Char() {Me.Separator.ToChar})
+                Namen = ZeileSpalten.Split(Me.Separator.ToChar)
                 If Me.UseUnits Then
-                    Einheiten = ZeileEinheiten.Split(New Char() {Me.Separator.ToChar})
+                    Einheiten = ZeileEinheiten.Split(Me.Separator.ToChar)
                 End If
                 anzSpalten = Namen.Length
             Else
@@ -117,12 +116,12 @@ Namespace Fileformats
             'remove extra spaces and quotes around names and units
             For i = 0 To anzSpalten - 1
                 Namen(i) = Namen(i).Trim()
-                If Namen(i).StartsWith("""") And Namen(i).EndsWith("""") Then
+                If Namen(i).StartsWith(""""c) AndAlso Namen(i).EndsWith(""""c) Then
                     Namen(i) = Namen(i).Replace("""", "")
                 End If
                 If Me.UseUnits Then
                     Einheiten(i) = Einheiten(i).Trim()
-                    If Einheiten(i).StartsWith("""") And Einheiten(i).EndsWith("""") Then
+                    If Einheiten(i).StartsWith(""""c) AndAlso Einheiten(i).EndsWith(""""c) Then
                         Einheiten(i) = Einheiten(i).Replace("""", "")
                     End If
                 End If
@@ -131,9 +130,10 @@ Namespace Fileformats
             'store series info
             For i = 0 To anzSpalten - 1
                 If i <> Me.DateTimeColumnIndex Then
-                    sInfo = New TimeSeriesInfo()
-                    sInfo.Index = i
-                    sInfo.Name = Namen(i)
+                    sInfo = New TimeSeriesInfo With {
+                        .Index = i,
+                        .Name = Namen(i)
+                    }
                     If Me.UseUnits Then
                         sInfo.Unit = Einheiten(i)
                     End If
@@ -147,7 +147,7 @@ Namespace Fileformats
 
         'CSV-Datei einlesen
         '******************
-        Public Overrides Sub readFile()
+        Public Overrides Sub ReadFile()
 
             Dim i As Integer
             Dim Zeile As String
@@ -157,8 +157,8 @@ Namespace Fileformats
             Dim Werte() As String
             Dim ts As TimeSeries
 
-            Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
-            Dim StrRead As StreamReader = New StreamReader(FiStr, Me.Encoding)
+            Dim FiStr As New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
+            Dim StrRead As New StreamReader(FiStr, Me.Encoding)
             Dim StrReadSync As TextReader = TextReader.Synchronized(StrRead)
 
             'Zeitreihen instanzieren
@@ -187,25 +187,25 @@ Namespace Fileformats
             '--------
 
             'Header
-            For i = 0 To Me.nLinesHeader - 1
+            For i = 0 To Me.NLinesHeader - 1
                 StrReadSync.ReadLine()
             Next
 
             'Daten
             Do
-                Zeile = StrReadSync.ReadLine.ToString()
+                Zeile = StrReadSync.ReadLine()
 
                 If (Me.IsColumnSeparated) Then
 
                     'Zeichengetrennt
                     '---------------
-                    Werte = Zeile.Split(New Char() {Me.Separator.ToChar})
+                    Werte = Zeile.Split(Me.Separator.ToChar)
 
                     If (Werte.Length > 0 And Zeile.Trim.Length > 1) Then
                         'Erste Spalte: Datum_Zeit
                         ok = DateTime.TryParseExact(Werte(Me.DateTimeColumnIndex).Trim(), Me.Dateformat, Helpers.DefaultNumberFormat, Globalization.DateTimeStyles.None, datum)
                         If (Not ok) Then
-                            Throw New Exception($"Could Not parse the date '{Werte(Me.DateTimeColumnIndex)}' using the given date format '{Me.Dateformat}'! Please check the date format!")
+                            Throw New TimeSeriesFileReadingException($"Could Not parse the date '{Werte(Me.DateTimeColumnIndex)}' using the given date format '{Me.Dateformat}'! Please check the date format!")
                         End If
                         'Restliche Spalten: Werte
                         For Each sInfo As TimeSeriesInfo In Me.SelectedSeries
@@ -219,7 +219,7 @@ Namespace Fileformats
                     'Erste Spalte: Datum_Zeit
                     ok = DateTime.TryParseExact(Zeile.Substring(0, Me.ColumnWidth), Me.Dateformat, Helpers.DefaultNumberFormat, Globalization.DateTimeStyles.None, datum)
                     If (Not ok) Then
-                        Throw New Exception($"Could Not parse the date '{Zeile.Substring(0, Me.ColumnWidth)}' using the given date format '{Me.Dateformat}'! Please check the date format!")
+                        Throw New TimeSeriesFileReadingException($"Could Not parse the date '{Zeile.Substring(0, Me.ColumnWidth)}' using the given date format '{Me.Dateformat}'! Please check the date format!")
                     End If
                     'Restliche Spalten: Werte
                     For Each sInfo As TimeSeriesInfo In Me.SelectedSeries
@@ -245,7 +245,7 @@ Namespace Fileformats
         '''     if not set, these settings are taken from CurrentCulture
         ''' </param>
         ''' <remarks></remarks>
-        Public Overloads Shared Sub writeFile(ByRef tsList As List(Of TimeSeries), file As String, Optional cInfo As CultureInfo = Nothing)
+        Public Overloads Shared Sub WriteFile(ByRef tsList As List(Of TimeSeries), file As String, Optional cInfo As CultureInfo = Nothing)
 
             Dim strwrite As StreamWriter
             Dim t As DateTime

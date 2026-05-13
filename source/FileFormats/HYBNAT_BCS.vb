@@ -30,7 +30,7 @@ Namespace Fileformats
         ''' The unit of the time series
         ''' </summary>
         ''' <remarks> Is fixed for each type of file</remarks>
-        Private _unit As String
+        Private ReadOnly _unit As String
 
         ''' <summary>
         ''' Referencedate for the beginning of the simulation
@@ -60,8 +60,8 @@ Namespace Fileformats
             Call MyBase.New(file)
 
             'Default settings
-            iLineHeadings = 1
-            iLineData = 2
+            LineNumberHeaders = 1
+            LineNumberData = 2
             UseUnits = False
             _unit = "m³/s"
             IsColumnSeparated = True
@@ -69,7 +69,7 @@ Namespace Fileformats
             DateTimeColumnIndex = 0
             refDate = New DateTime(2000, 1, 1, 0, 0, 0)
 
-            Call readSeriesInfo()
+            Call ReadSeriesInfo()
 
         End Sub
 
@@ -79,7 +79,7 @@ Namespace Fileformats
         ''' <param name="file">Path to file</param>
         ''' <returns>Boolean</returns>
         ''' <remarks>Check is based on file extension and line 1 (must start with "time;")</remarks>
-        Public Shared Function verifyFormat(file As String) As Boolean
+        Public Shared Function VerifyFormat(file As String) As Boolean
             'Check if file name ends with ".bcs"
             Dim filename As String = Path.GetFileName(file).ToLower()
             If Not filename.EndsWith(".bcs") Then Return False
@@ -105,7 +105,7 @@ Namespace Fileformats
         ''' Read number of columns and their names
         ''' </summary>
         ''' <remarks></remarks>
-        Public Overrides Sub readSeriesInfo()
+        Public Overrides Sub ReadSeriesInfo()
             'Clear series infos
             TimeSeriesInfos.Clear()
 
@@ -123,7 +123,7 @@ Namespace Fileformats
             stream.Close()
 
             'Store series info
-            For i = 0 To columnNames.Count - 1
+            For i = 0 To columnNames.Length - 1
                 'Overjump time column and empty columns
                 If i = DateTimeColumnIndex Then Continue For
                 If columnNames(i).Trim() = "" Then Continue For
@@ -142,7 +142,7 @@ Namespace Fileformats
         ''' Reads the time series from the file
         ''' </summary>
         ''' <remarks></remarks>
-        Public Overrides Sub readFile()
+        Public Overrides Sub ReadFile()
             'Show dialog for setting the reference date
             Dim dlg As New ReferenceDateDialog()
             dlg.ShowDialog()
@@ -188,15 +188,16 @@ Namespace Fileformats
         ''' <param name="tsList">time series to write to file</param>
         ''' <param name="file">path to the bcs file</param>
         ''' <remarks></remarks>
-        Public Overloads Shared Sub writeFile(ByRef tsList As List(Of TimeSeries), file As String)
+        Public Overloads Shared Sub WriteFile(ByRef tsList As List(Of TimeSeries), file As String)
 
             Dim strwrite As StreamWriter
             Dim t As DateTime
             Dim value As String
             Dim line As String
 
-            Dim numberFormat As NumberFormatInfo = New NumberFormatInfo()
-            numberFormat.NumberDecimalSeparator = "."
+            Dim numberFormat As New NumberFormatInfo With {
+                .NumberDecimalSeparator = "."
+            }
 
             'collect unique timestamps
             Dim unique_timestamps As New HashSet(Of DateTime)

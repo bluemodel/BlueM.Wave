@@ -20,17 +20,17 @@
 ''' </summary>
 Public Module Log
 
-    Public logMessages As List(Of KeyValuePair(Of levels, String))
+    Public logMessages As List(Of KeyValuePair(Of Levels, String))
 
     ''' <summary>
     ''' Logging level, value set here may be overwritten by application settings
     ''' </summary>
-    Friend level As levels = levels.info
+    Friend level As Levels = Levels.info
 
     ''' <summary>
     ''' Log levels
     ''' </summary>
-    Public Enum levels As Short
+    Public Enum Levels As Short
         debug
         info
         warning
@@ -40,7 +40,7 @@ Public Module Log
     ''' <summary>
     ''' Is triggered after a log message was added
     ''' </summary>
-    Public Event LogMsgAdded(level As Log.levels, msg As String)
+    Public Event LogMsgAdded(level As Log.Levels, msg As String)
 
     ''' <summary>
     ''' Is triggered when the log was cleared
@@ -50,12 +50,12 @@ Public Module Log
     Sub New()
         'attempt to read loggingLevel from application settings
         Try
-            Log.level = [Enum].Parse(GetType(levels), My.Settings.loggingLevel)
+            Log.level = [Enum].Parse(Of Levels)(My.Settings.loggingLevel)
         Catch ex As Exception
             'set default logging level to info
-            Log.level = levels.info
+            Log.level = Levels.info
         End Try
-        Log.logMessages = New List(Of KeyValuePair(Of levels, String))
+        Log.logMessages = New List(Of KeyValuePair(Of Levels, String))
     End Sub
 
     ''' <summary>
@@ -63,10 +63,10 @@ Public Module Log
     ''' </summary>
     ''' <param name="level">log level</param>
     ''' <param name="msg">message</param>
-    Public Sub AddLogEntry(level As levels, msg As String)
+    Public Sub AddLogEntry(level As Levels, msg As String)
 
         If level >= Log.level Then
-            Log.logMessages.Add(New KeyValuePair(Of levels, String)(level, msg))
+            Log.logMessages.Add(New KeyValuePair(Of Levels, String)(level, msg))
             If (msg.Contains(Constants.eol)) Then
                 'Wenn Eintrag mehrzeilig, dann formatieren
                 msg = Constants.eol & "  " & msg.Replace(Constants.eol, Constants.eol & "  ")

@@ -28,18 +28,18 @@ Friend Class LogWindow
         AddHandler Log.LogCleared, AddressOf ClearLog
 
         ' Add any initialization after the InitializeComponent() call.
-        Me.AddLogEntry(Log.levels.info, "Logging level is set to " & Log.level.ToString())
+        Me.AddLogEntry(Log.Levels.info, "Logging level is set to " & Log.level.ToString())
 
         'add any already existing messages
         If Not IsNothing(Log.logMessages) Then
-            For Each msg As KeyValuePair(Of levels, String) In Log.logMessages
+            For Each msg As KeyValuePair(Of Levels, String) In Log.logMessages
                 Me.AddLogEntry(msg.Key, msg.Value)
             Next
         End If
 
     End Sub
 
-    Private Sub AddLogEntry(level As Log.levels, msg As String)
+    Private Sub AddLogEntry(level As Log.Levels, msg As String)
 
         Dim start, length As Integer
 
@@ -65,13 +65,13 @@ Friend Class LogWindow
 
         'apply formatting
         Select Case level
-            Case Log.levels.debug
+            Case Log.Levels.debug
                 Me.TextBox_Log.SelectionColor = Color.DarkGreen
                 Me.TextBox_Log.SelectionFont = boldFont
-            Case Log.levels.warning
+            Case Log.Levels.warning
                 Me.TextBox_Log.SelectionColor = Color.DarkOrange
                 Me.TextBox_Log.SelectionFont = boldFont
-            Case Log.levels.error
+            Case Log.Levels.error
                 Me.TextBox_Log.SelectionColor = Color.Red
                 Me.TextBox_Log.SelectionFont = boldFont
             Case Else

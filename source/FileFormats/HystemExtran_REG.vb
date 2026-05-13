@@ -80,7 +80,7 @@ Namespace Fileformats
                     Case 1440
                         Return 10 'TODO: Eigentlich 10 Werte für die ersten zwei Zeilen eines Monats, dann variabel für den Rest des Monats
                     Case Else
-                        Throw New Exception($"Number of entries per line for time step of {dt} minutes is undefined!")
+                        Throw New TimeSeriesFileReadingException($"Number of entries per line for time step of {dt} minutes is undefined!")
                 End Select
             End Get
         End Property
@@ -99,23 +99,23 @@ Namespace Fileformats
             MyBase.New(FileName)
 
             'Voreinstellungen
-            Me.iLineData = 6
+            Me.LineNumberData = 6
             Me.UseUnits = True
             Me.Dateformat = Helpers.DateFormats("HYSTEMEXTRAN")
 
-            Call Me.readSeriesInfo()
+            Call Me.ReadSeriesInfo()
 
             If (ReadAllNow) Then
                 'Direkt einlesen
-                Call Me.selectAllSeries()
-                Call Me.readFile()
+                Call Me.SelectAllSeries()
+                Call Me.ReadFile()
             End If
 
         End Sub
 
         'Spalten auslesen
         '****************
-        Public Overrides Sub readSeriesInfo()
+        Public Overrides Sub ReadSeriesInfo()
 
             Dim Zeile As String
             Dim title As String
@@ -124,21 +124,22 @@ Namespace Fileformats
             Me.TimeSeriesInfos.Clear()
 
             'Datei öffnen
-            Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
-            Dim StrRead As StreamReader = New StreamReader(FiStr, Me.Encoding)
+            Dim FiStr As New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
+            Dim StrRead As New StreamReader(FiStr, Me.Encoding)
             Dim StrReadSync = TextReader.Synchronized(StrRead)
 
-            sInfo = New TimeSeriesInfo()
-            sInfo.Index = 0
+            sInfo = New TimeSeriesInfo With {
+                .Index = 0
+            }
 
             'Reihentitel steht in 1. Zeile, ist aber optional:
-            Zeile = StrReadSync.ReadLine.ToString()
+            Zeile = StrReadSync.ReadLine()
             title = Zeile.Substring(20, 30).Trim()
             If title.Length = 0 Then title = Path.GetFileName(Me.File)
             sInfo.Name = title
 
             'Einheit steht in 2. Zeile:
-            Zeile = StrReadSync.ReadLine.ToString()
+            Zeile = StrReadSync.ReadLine()
             sInfo.Unit = Zeile.Substring(68, 10).Trim()
 
             'store series info
@@ -158,7 +159,7 @@ Namespace Fileformats
 
         'REG-Datei einlesen
         '******************
-        Public Overrides Sub readFile()
+        Public Overrides Sub ReadFile()
 
             Dim i, j As Integer
             Dim Zeile, wertString As String
@@ -168,15 +169,16 @@ Namespace Fileformats
             Dim sInfo As TimeSeriesInfo
             Dim ts As TimeSeries
 
-            Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
-            Dim StrRead As StreamReader = New StreamReader(FiStr, Me.Encoding)
+            Dim FiStr As New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
+            Dim StrRead As New StreamReader(FiStr, Me.Encoding)
             Dim StrReadSync = TextReader.Synchronized(StrRead)
 
             'Zeitreihe instanzieren (nur eine)
             sInfo = Me.TimeSeriesInfos(0)
-            ts = New TimeSeries(sInfo.Name)
-            ts.Unit = sInfo.Unit
-            ts.DataSource = New TimeSeriesDataSource(Me.File, sInfo.Name)
+            ts = New TimeSeries(sInfo.Name) With {
+                .Unit = sInfo.Unit,
+                .DataSource = New TimeSeriesDataSource(Me.File, sInfo.Name)
+            }
 
             'Einlesen
             '--------
@@ -184,11 +186,11 @@ Namespace Fileformats
 
             Do
                 j += 1
-                Zeile = StrReadSync.ReadLine.ToString()
+                Zeile = StrReadSync.ReadLine()
 
                 If Zeile.Substring(19, 1) = "E" Then Exit Do
 
-                If (j > Me.nLinesHeader And Zeile.Length > 0) Then
+                If (j > Me.NLinesHeader AndAlso Zeile.Length > 0) Then
 
                     'Kennzeichnung lesen
                     kennzeichnung = Zeile.Substring(19, 1)
@@ -197,7 +199,7 @@ Namespace Fileformats
                     Dim dateString As String = Zeile.Substring(5, 14)
                     Dim success As Boolean = DateTime.TryParseExact(dateString.Replace(" ", 0), Me.Dateformat, Helpers.DefaultNumberFormat, Globalization.DateTimeStyles.None, Zeilendatum)
                     If Not success Then
-                        Throw New Exception($"Unable to parse the date '{dateString}'!")
+                        Throw New TimeSeriesFileReadingException($"Unable to parse the date '{dateString}'!")
                     End If
 
                     'Datum und Wert zur Zeitreihe hinzufügen
@@ -237,7 +239,7 @@ Namespace Fileformats
                         Case "N" 'Nullsatz, keine Daten
                             Continue Do
                         Case Else
-                            Log.AddLogEntry(Log.levels.warning, $"Unrecognized character {kennzeichnung} in line {j} column 20!")
+                            Log.AddLogEntry(Log.Levels.warning, $"Unrecognized character {kennzeichnung} in line {j} column 20!")
                     End Select
 
                 End If
@@ -255,32 +257,32 @@ Namespace Fileformats
         ''' <summary>
         ''' Exportiert eine Zeitreihe als REG-Datei
         ''' </summary>
-        ''' <param name="Reihe">Die zu exportierende Zeitreihe</param>
-        ''' <param name="File">Pfad zur anzulegenden Datei</param>
-        Public Overloads Shared Sub writeFile(Reihe As TimeSeries, File As String)
+        ''' <param name="ts">Die zu exportierende Zeitreihe</param>
+        ''' <param name="file">Pfad zur anzulegenden Datei</param>
+        Public Overloads Shared Sub WriteFile(ts As TimeSeries, file As String)
 
             Dim dt As Integer
             Dim KontiReihe As TimeSeries
             Const iDim As Integer = -3        'Dezimalfaktor wird erstmal global auf -3 gesetzt
 
             'Zeitintervall aus ersten und zweiten Zeitschritt der Reihe ermitteln
-            dt = DateDiff(DateInterval.Minute, Reihe.Dates(0), Reihe.Dates(1))
+            dt = DateDiff(DateInterval.Minute, ts.Dates(0), ts.Dates(1))
 
             'Äquidistante Zeitreihe erzeugen
-            KontiReihe = Reihe.ChangeTimestep(BlueM.Wave.TimeSeries.TimeStepTypeEnum.Minute, dt, Reihe.StartDate, BlueM.Wave.TimeSeries.InterpretationEnum.BlockRight)
+            KontiReihe = ts.ChangeTimestep(BlueM.Wave.TimeSeries.TimeStepTypeEnum.Minute, dt, ts.StartDate, BlueM.Wave.TimeSeries.InterpretationEnum.BlockRight)
 
             Dim strwrite As StreamWriter
             Dim iZeile, j, n As Integer
             Dim WerteproZeile As Integer = HystemExtran_REG.WerteProZeile(dt)
-            strwrite = New StreamWriter(File)
+            strwrite = New StreamWriter(file)
             Dim IntWert As Long
 
             '1. Zeile
-            Dim title As String = Reihe.Title
+            Dim title As String = ts.Title
             If title.Length > 30 Then
                 title = title.Substring(0, 30)
             End If
-            strwrite.WriteLine($"TUD   0 0   0 1 0 0 {title.PadRight(30)}       0        0           0")
+            strwrite.WriteLine($"TUD   0 0   0 1 0 0 {title,-30}       0        0           0")
 
             '2. Zeile: 
             'Standard
@@ -298,7 +300,7 @@ Namespace Fileformats
             'Art der Daten, N = Niederschlag, Q = Abfluss
             strwrite.Write("N    ")
             'Einheit
-            strwrite.WriteLine(Reihe.Unit.PadRight(10))
+            strwrite.WriteLine(ts.Unit.PadRight(10))
 
             '3. Zeile: 
             strwrite.WriteLine("TUD   0 0   0 3 0 0 Beginn         Kommentarzeile 1                        Ende")
@@ -323,7 +325,7 @@ Namespace Fileformats
                         IntWert = KontiReihe.Values(n) * 10 ^ (-iDim)
                     End If
                     strwrite.Write(IntWert.ToString.PadLeft(5))
-                    n = n + 1
+                    n += 1
                 Next
                 strwrite.WriteLine()
             Next
@@ -337,14 +339,14 @@ Namespace Fileformats
         ''' </summary>
         ''' <param name="file">Pfad zur Datei</param>
         ''' <returns></returns>
-        Public Shared Function verifyFormat(file As String) As Boolean
+        Public Shared Function VerifyFormat(file As String) As Boolean
 
-            Dim FiStr As FileStream = New FileStream(file, FileMode.Open, IO.FileAccess.Read)
-            Dim StrRead As StreamReader = New StreamReader(FiStr, detectEncodingFromByteOrderMarks:=True)
-            Dim Zeile As String = ""
+            Dim FiStr As New FileStream(file, FileMode.Open, IO.FileAccess.Read)
+            Dim StrRead As New StreamReader(FiStr, detectEncodingFromByteOrderMarks:=True)
+            Dim Zeile As String
 
             '1 Zeile einlesen
-            Zeile = StrRead.ReadLine.ToString()
+            Zeile = StrRead.ReadLine()
 
             StrRead.Close()
             FiStr.Close()

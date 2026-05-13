@@ -96,7 +96,7 @@ Namespace Parsers
             Call Me.Parse()
         End Sub
 
-        Public Shared Function verifyFormat() As Boolean
+        Public Shared Function VerifyFormat() As Boolean
             'default implementation always returns true, can be overridden in subclasses to implement specific format verification
             Return True
         End Function
@@ -117,10 +117,10 @@ Namespace Parsers
             'loop over file list
             For Each fileRef As FileReference In FileReferences
 
-                Log.AddLogEntry(Log.levels.info, $"Reading file {fileRef.path} ...")
+                Log.AddLogEntry(Log.Levels.info, $"Reading file {fileRef.path} ...")
 
                 'get an instance of the file
-                Dim fileInstance As TimeSeriesFile = TimeSeriesFile.getInstance(fileRef.path)
+                Dim fileInstance As TimeSeriesFile = TimeSeriesFile.GetInstance(fileRef.path)
 
                 'apply custom file import settings
                 If fileRef.settings.Count > 0 Then
@@ -129,7 +129,7 @@ Namespace Parsers
                         Try
                             Select Case key.ToLower()
                                 Case "iscolumnseparated"
-                                    fileInstance.IsColumnSeparated = If(value.ToLower() = "true", True, False)
+                                    fileInstance.IsColumnSeparated = value.Equals("true", StringComparison.CurrentCultureIgnoreCase)
                                 Case "separator"
                                     fileInstance.Separator = New Character(value)
                                 Case "dateformat"
@@ -137,41 +137,41 @@ Namespace Parsers
                                 Case "decimalseparator"
                                     fileInstance.DecimalSeparator = New Character(value)
                                 Case "ilineheadings"
-                                    fileInstance.iLineHeadings = Convert.ToInt32(value)
+                                    fileInstance.LineNumberHeaders = Convert.ToInt32(value)
                                 Case "ilineunits"
-                                    fileInstance.iLineUnits = Convert.ToInt32(value)
+                                    fileInstance.LineNumberUnits = Convert.ToInt32(value)
                                 Case "ilinedata"
-                                    fileInstance.iLineData = Convert.ToInt32(value)
+                                    fileInstance.LineNumberData = Convert.ToInt32(value)
                                 Case "useunits"
-                                    fileInstance.UseUnits = If(value.ToLower() = "true", True, False)
+                                    fileInstance.UseUnits = value.Equals("true", StringComparison.CurrentCultureIgnoreCase)
                                 Case "columnwidth"
                                     fileInstance.ColumnWidth = Convert.ToInt32(value)
                                 Case "datetimecolumnindex"
                                     fileInstance.DateTimeColumnIndex = Convert.ToInt32(value)
                                 Case Else
-                                    Log.AddLogEntry(Log.levels.warning, $"Setting '{key}' was not recognized and was ignored!")
+                                    Log.AddLogEntry(Log.Levels.warning, $"Setting '{key}' was not recognized and was ignored!")
                             End Select
                         Catch ex As Exception
-                            Log.AddLogEntry(Log.levels.warning, $"Setting '{key}' with value '{value}' could not be parsed and was ignored!")
+                            Log.AddLogEntry(Log.Levels.warning, $"Setting '{key}' with value '{value}' could not be parsed and was ignored!")
                         End Try
                     Next
                     'reread columns with new settings
-                    fileInstance.readSeriesInfo()
+                    fileInstance.ReadSeriesInfo()
                 End If
 
                 'select series for importing
                 If fileRef.series.Count = 0 Then
                     'read all series contained in the file
-                    Call fileInstance.selectAllSeries()
+                    Call fileInstance.SelectAllSeries()
                 Else
                     'loop over series names
                     Dim seriesNames As List(Of String) = fileRef.series.Keys.ToList()
                     Dim seriesNotFound As New List(Of String)
                     For Each seriesName As String In seriesNames
-                        Dim found As Boolean = fileInstance.selectSeries(seriesName)
+                        Dim found As Boolean = fileInstance.SelectSeries(seriesName)
                         If Not found Then
                             seriesNotFound.Add(seriesName)
-                            Log.AddLogEntry(Log.levels.error, $"Series {seriesName} not found in file, skipping series!")
+                            Log.AddLogEntry(Log.Levels.error, $"Series {seriesName} not found in file, skipping series!")
                         End If
                     Next
                     'remove series that were not found from the list
@@ -180,17 +180,17 @@ Namespace Parsers
                     Next
                     'if no series remain to be imported, abort reading the file altogether
                     If seriesNames.Count = 0 Then
-                        Log.AddLogEntry(Log.levels.error, "No series left to import, skipping file!")
+                        Log.AddLogEntry(Log.Levels.error, "No series left to import, skipping file!")
                         Continue For
                     End If
 
                 End If
 
                 'read the file
-                fileInstance.readFile()
+                fileInstance.ReadFile()
 
                 'Log
-                Call Log.AddLogEntry(Log.levels.info, $"File '{fileRef.path}' imported successfully!")
+                Call Log.AddLogEntry(Log.Levels.info, $"File '{fileRef.path}' imported successfully!")
 
                 'store the series
                 For Each ts As TimeSeries In fileInstance.TimeSeries.Values

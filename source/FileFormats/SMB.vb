@@ -20,7 +20,7 @@ Imports System.IO
 Namespace Fileformats
 
     ''' <summary>
-    ''' Klasse für das Simba-Dateiformat (*.SMB)
+    ''' Klasse fÃ¼r das Simba-Dateiformat (*.SMB)
     ''' </summary>
     ''' <remarks>Format siehe https://wiki.bluemodel.org/index.php/SMB-Format</remarks>
     Public Class SMB
@@ -48,29 +48,29 @@ Namespace Fileformats
             MyBase.New(FileName)
 
             'Voreinstellungen
-            Me.iLineData = 2
+            Me.LineNumberData = 2
             Me.UseUnits = True
 
-            Call Me.readSeriesInfo()
+            Call Me.ReadSeriesInfo()
 
             If (ReadAllNow) Then
                 'Direkt einlesen
-                Call Me.selectAllSeries()
-                Call Me.readFile()
+                Call Me.SelectAllSeries()
+                Call Me.ReadFile()
             End If
 
         End Sub
 
         'Spalten auslesen
         '****************
-        Public Overrides Sub readSeriesInfo()
+        Public Overrides Sub ReadSeriesInfo()
 
             Dim Zeile As String = ""
             Dim sInfo As TimeSeriesInfo
 
             Me.TimeSeriesInfos.Clear()
 
-            'Datei öffnen
+            'Datei Ã¶ffnen
             Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
             Dim StrRead As StreamReader = New StreamReader(FiStr, Me.Encoding)
             Dim StrReadSync = TextReader.Synchronized(StrRead)
@@ -78,7 +78,7 @@ Namespace Fileformats
             sInfo = New TimeSeriesInfo()
 
             'Reihentitel steht in 1. Zeile:
-            Zeile = StrReadSync.ReadLine.ToString()
+            Zeile = StrReadSync.ReadLine()
             sInfo.Name = Zeile.Substring(15).Trim()
             'Annahme, dass SMB-Dateien Regenreihen sind, daher Einheit mm fest verdrahtet
             sInfo.Unit = "mm"
@@ -95,7 +95,7 @@ Namespace Fileformats
 
         'SMB-Datei einlesen
         '******************
-        Public Overrides Sub readFile()
+        Public Overrides Sub ReadFile()
 
             Dim i, j As Integer
             Dim Zeile As String
@@ -119,7 +119,7 @@ Namespace Fileformats
             j = 1
 
             'Anfangsdatum einlesen
-            Zeile = StrReadSync.ReadLine.ToString()
+            Zeile = StrReadSync.ReadLine()
             Tag = Zeile.Substring(0, 2)
             Monat = Zeile.Substring(2, 2)
             Jahr = Zeile.Substring(4, 4)
@@ -131,9 +131,9 @@ Namespace Fileformats
             'Einlesen
             '--------
             Do
-                Zeile = StrReadSync.ReadLine.ToString()
+                Zeile = StrReadSync.ReadLine()
                 j += 1
-                If (j > Me.nLinesHeader And Zeile.Length > 0) Then
+                If (j > Me.NLinesHeader And Zeile.Length > 0) Then
 
                     'Datum erkennen
                     '--------------
@@ -147,7 +147,7 @@ Namespace Fileformats
                     'Minute = Zeile.Substring(0, 3)
                     Datum = Anfangsdatum.AddMinutes(Minute)
 
-                    'Datum und Wert zur Zeitreihe hinzufügen
+                    'Datum und Wert zur Zeitreihe hinzufÃ¼gen
                     '---------------------------------------
                     ts.AddNode(Datum, StringToDouble(Zeile.Substring(i + 2)))
 

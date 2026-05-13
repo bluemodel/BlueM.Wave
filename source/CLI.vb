@@ -33,8 +33,9 @@ Friend Class CLI
 
         'Create a streamwriter for stdout in case output is piped
         Dim stdOut As IO.Stream = Console.OpenStandardOutput()
-        stdOutWriter = New IO.StreamWriter(stdOut)
-        stdOutWriter.AutoFlush = True
+        stdOutWriter = New IO.StreamWriter(stdOut) With {
+            .AutoFlush = True
+        }
 
         'Attach to parent console
         If Not AttachConsole(-1) Then AllocConsole()
@@ -77,7 +78,7 @@ Friend Class CLI
                     End If
 
                     'Import
-                    Log.AddLogEntry(BlueM.Wave.Log.levels.info, $"Starting import of {fileargs.Count} files...")
+                    Log.AddLogEntry(BlueM.Wave.Log.Levels.info, $"Starting import of {fileargs.Count} files...")
                     For Each file_in As String In fileargs
                         Select Case IO.Path.GetExtension(file_in).ToUpper
 
@@ -102,11 +103,11 @@ Friend Class CLI
                     Dim i As Integer = 1
                     Dim n_option_args As Integer = 0
                     Do While i < args.Count
-                        If args(i).ToLower() = "-i" Then
+                        If args(i).Equals("-i", StringComparison.CurrentCultureIgnoreCase) Then
                             'interactive mode
                             interactive = True
                             n_option_args += 1
-                        ElseIf args(i).ToLower = "-of" Then
+                        ElseIf args(i).Equals("-of", StringComparison.CurrentCultureIgnoreCase) Then
                             'parse outputformat
                             i += 1
                             Select Case args(i).ToUpper()
@@ -132,19 +133,19 @@ Friend Class CLI
 
                     showWave = False
 
-                    Log.AddLogEntry(BlueM.Wave.Log.levels.info, $"Starting conversion ...")
+                    Log.AddLogEntry(BlueM.Wave.Log.Levels.info, $"Starting conversion ...")
 
                     Dim files_in As List(Of String) = fileargs.Take(fileargs.Count - 1).ToList
                     Dim path_out As String = fileargs.Last
 
                     'Import
-                    Log.AddLogEntry(BlueM.Wave.Log.levels.info, $"Importing {files_in.Count} file(s)...")
+                    Log.AddLogEntry(BlueM.Wave.Log.Levels.info, $"Importing {files_in.Count} file(s)...")
 
                     Dim tsList As New List(Of TimeSeries)
 
                     Dim fileInstance As TimeSeriesFile
                     For Each file_in As String In files_in
-                        Log.AddLogEntry(BlueM.Wave.Log.levels.info, $"Importing file {file_in}...")
+                        Log.AddLogEntry(BlueM.Wave.Log.Levels.info, $"Importing file {file_in}...")
                         Select Case IO.Path.GetExtension(file_in).ToUpper
 
                             Case TimeSeriesFile.FileExtensions.TEN
@@ -154,23 +155,23 @@ Friend Class CLI
                             Case TimeSeriesFile.FileExtensions.WVP
                                 Dim wvp As New Parsers.WVP(file_in)
                                 Dim wvpSeries As List(Of TimeSeries) = wvp.Process()
-                                Log.AddLogEntry(Log.levels.info, $"Imported {wvpSeries.Count} time series")
+                                Log.AddLogEntry(Log.Levels.info, $"Imported {wvpSeries.Count} time series")
                                 tsList.AddRange(wvpSeries)
 
                             Case Else
-                                fileInstance = TimeSeriesFile.getInstance(file_in)
+                                fileInstance = TimeSeriesFile.GetInstance(file_in)
                                 Dim isOK As Boolean
                                 If interactive And fileInstance.UseImportDialog Then
                                     isOK = wave.ShowImportDialog(fileInstance)
                                     If Not isOK Then
-                                        Log.AddLogEntry(Log.levels.warning, $"Import of file {file_in} cancelled by user, skipping this file!")
+                                        Log.AddLogEntry(Log.Levels.warning, $"Import of file {file_in} cancelled by user, skipping this file!")
                                         Continue For
                                     End If
                                 Else
-                                    fileInstance.selectAllSeries()
+                                    fileInstance.SelectAllSeries()
                                 End If
-                                fileInstance.readFile()
-                                Log.AddLogEntry(Log.levels.info, $"Imported {fileInstance.TimeSeries.Count} time series")
+                                fileInstance.ReadFile()
+                                Log.AddLogEntry(Log.Levels.info, $"Imported {fileInstance.TimeSeries.Count} time series")
                                 For Each ts As TimeSeries In fileInstance.TimeSeries.Values
                                     tsList.Add(ts)
                                 Next
@@ -179,22 +180,22 @@ Friend Class CLI
 
                     'Export
                     If tsList.Count = 0 Then
-                        Throw New Exception("No time series to export!")
+                        Throw New TimeSeriesFileWritingException("No time series to export!")
                     End If
 
-                    Log.AddLogEntry(BlueM.Wave.Log.levels.info, $"Exporting to {path_out}...")
+                    Log.AddLogEntry(BlueM.Wave.Log.Levels.info, $"Exporting to {path_out}...")
 
                     Select Case outputformat
                         Case TimeSeriesFile.FileTypes.CSV
                             If IO.File.Exists(path_out) Then
-                                Log.AddLogEntry(BlueM.Wave.Log.levels.warning, "Overwriting existing file!")
+                                Log.AddLogEntry(BlueM.Wave.Log.Levels.warning, "Overwriting existing file!")
                             End If
-                            Fileformats.CSV.writeFile(tsList, path_out)
+                            Fileformats.CSV.WriteFile(tsList, path_out)
                         Case TimeSeriesFile.FileTypes.DFS0
                             If IO.File.Exists(path_out) Then
-                                Log.AddLogEntry(BlueM.Wave.Log.levels.warning, "Overwriting existing file!")
+                                Log.AddLogEntry(BlueM.Wave.Log.Levels.warning, "Overwriting existing file!")
                             End If
-                            Fileformats.DFS0.writeFile(tsList, path_out)
+                            Fileformats.DFS0.WriteFile(tsList, path_out)
                         Case TimeSeriesFile.FileTypes.BIN
                             'treat output path as a directory and export individual files, using the title as filename
                             IO.Directory.CreateDirectory(path_out)
@@ -204,14 +205,14 @@ Friend Class CLI
                                 'generate file name from cleaned title
                                 filename = Text.RegularExpressions.Regex.Replace(ts.Title, invalidFileNameCharsPattern, "_") & TimeSeriesFile.FileExtensions.BIN
                                 filepath = IO.Path.Combine(path_out, filename)
-                                Log.AddLogEntry(BlueM.Wave.Log.levels.info, $"Exporting to {filepath}...")
+                                Log.AddLogEntry(BlueM.Wave.Log.Levels.info, $"Exporting to {filepath}...")
                                 If IO.File.Exists(filepath) Then
-                                    Log.AddLogEntry(Log.levels.warning, "Overwriting existing file!")
+                                    Log.AddLogEntry(Log.Levels.warning, "Overwriting existing file!")
                                 End If
-                                Fileformats.BIN.writeFile(ts, filepath)
+                                Fileformats.BIN.WriteFile(ts, filepath)
                             Next
                     End Select
-                    Log.AddLogEntry(BlueM.Wave.Log.levels.info, "Finished conversion!")
+                    Log.AddLogEntry(BlueM.Wave.Log.Levels.info, "Finished conversion!")
 
 
                 Case "-help"
@@ -227,11 +228,11 @@ Friend Class CLI
             End Select
 
         Catch e As ArgumentException
-            Log.AddLogEntry(BlueM.Wave.Log.levels.error, e.Message)
+            Log.AddLogEntry(BlueM.Wave.Log.Levels.error, e.Message)
             ConsoleOutputHelp()
 
         Catch e As Exception
-            Log.AddLogEntry(BlueM.Wave.Log.levels.error, e.Message)
+            Log.AddLogEntry(BlueM.Wave.Log.Levels.error, e.Message)
 
         End Try
 
@@ -265,7 +266,7 @@ Friend Class CLI
     ''' </summary>
     ''' <param name="level">log level</param>
     ''' <param name="msg">log message</param>
-    Private Shared Sub ConsoleAddLog(level As BlueM.Wave.Log.levels, msg As String)
+    Private Shared Sub ConsoleAddLog(level As BlueM.Wave.Log.Levels, msg As String)
         ConsoleOutput($"{level.ToString().ToUpper(),-10} {msg}")
     End Sub
 

@@ -48,22 +48,22 @@ Namespace Fileformats
 
             'Voreinstellungen
             Me.Dateformat = DateFormats("ZRE")
-            Me.iLineData = 5
+            Me.LineNumberData = 5
             Me.UseUnits = True
 
-            Call Me.readSeriesInfo()
+            Call Me.ReadSeriesInfo()
 
             If (ReadAllNow) Then
                 'Direkt einlesen
-                Call Me.selectAllSeries()
-                Call Me.readFile()
+                Call Me.SelectAllSeries()
+                Call Me.ReadFile()
             End If
 
         End Sub
 
         'Spalten auslesen
         '****************
-        Public Overrides Sub readSeriesInfo()
+        Public Overrides Sub ReadSeriesInfo()
 
             Dim i As Integer
             Dim Zeile As String = ""
@@ -72,13 +72,13 @@ Namespace Fileformats
             Me.TimeSeriesInfos.Clear()
 
             'Datei öffnen
-            Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
-            Dim StrRead As StreamReader = New StreamReader(FiStr, Me.Encoding)
+            Dim FiStr As New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
+            Dim StrRead As New StreamReader(FiStr, Me.Encoding)
             Dim StrReadSync = TextReader.Synchronized(StrRead)
 
             'Reihentitel steht in 2. Zeile:
             For i = 0 To 1
-                Zeile = StrReadSync.ReadLine.ToString()
+                Zeile = StrReadSync.ReadLine()
             Next
 
             StrReadSync.Close()
@@ -87,21 +87,22 @@ Namespace Fileformats
 
             'checks
             If Zeile.Length < 16 Then
-                Throw New Exception("The second line must contain at least 16 characters!")
+                Throw New TimeSeriesFileReadingException("The second line must contain at least 16 characters!")
             End If
 
             'store series info
-            sInfo = New TimeSeriesInfo
-            sInfo.Name = Zeile.Substring(0, 15).Trim()
-            sInfo.Unit = Zeile.Substring(15).Trim()
-            sInfo.Index = 0
+            sInfo = New TimeSeriesInfo With {
+                .Name = Zeile.Substring(0, 15).Trim(),
+                .Unit = Zeile.Substring(15).Trim(),
+                .Index = 0
+            }
             Me.TimeSeriesInfos.Add(sInfo)
 
         End Sub
 
         'ZRE-Datei einlesen
         '******************
-        Public Overrides Sub readFile()
+        Public Overrides Sub ReadFile()
 
             Dim j As Integer
             Dim Zeile As String
@@ -111,29 +112,30 @@ Namespace Fileformats
             Dim ts As TimeSeries
             Dim sInfo As TimeSeriesInfo
 
-            Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
-            Dim StrRead As StreamReader = New StreamReader(FiStr, Me.Encoding)
+            Dim FiStr As New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
+            Dim StrRead As New StreamReader(FiStr, Me.Encoding)
             Dim StrReadSync = TextReader.Synchronized(StrRead)
 
             'Zeitreihe instanzieren (nur eine)
             sInfo = Me.TimeSeriesInfos(0)
-            ts = New TimeSeries(sInfo.Name)
-            ts.Unit = sInfo.Unit
-            ts.DataSource = New TimeSeriesDataSource(Me.File, sInfo.Name)
+            ts = New TimeSeries(sInfo.Name) With {
+                .Unit = sInfo.Unit,
+                .DataSource = New TimeSeriesDataSource(Me.File, sInfo.Name)
+            }
 
             'Einlesen
             '--------
             j = 0
             Do
                 j += 1
-                Zeile = StrReadSync.ReadLine.ToString()
-                If (j > Me.nLinesHeader And Zeile.Trim.Length > 0) Then
+                Zeile = StrReadSync.ReadLine()
+                If (j > Me.NLinesHeader AndAlso Zeile.Trim.Length > 0) Then
 
                     'Datum erkennen
                     timestamp = Zeile.Substring(0, 14)
                     ok = DateTime.TryParseExact(timestamp, Me.Dateformat, Helpers.DefaultNumberFormat, Globalization.DateTimeStyles.None, Datum)
                     If (Not ok) Then
-                        Throw New Exception($"Unable to parse the timestamp '{timestamp}' using the expected format '{Me.Dateformat}'!")
+                        Throw New TimeSeriesFileReadingException($"Unable to parse the timestamp '{timestamp}' using the expected format '{Me.Dateformat}'!")
                     End If
 
                     'Datum und Wert zur Zeitreihe hinzufügen
@@ -156,27 +158,27 @@ Namespace Fileformats
         ''' <summary>
         ''' Exportiert eine Zeitreihe als ZRE-Datei
         ''' </summary>
-        ''' <param name="Reihe">Die zu exportierende Zeitreihe</param>
-        ''' <param name="File">Pfad zur anzulegenden Datei</param>
-        Public Overloads Shared Sub writeFile(Reihe As TimeSeries, File As String)
+        ''' <param name="ts">Die zu exportierende Zeitreihe</param>
+        ''' <param name="file">Pfad zur anzulegenden Datei</param>
+        Public Overloads Shared Sub WriteFile(ts As TimeSeries, file As String)
 
             Dim strwrite As StreamWriter
             Dim i As Integer
 
-            strwrite = New StreamWriter(File, False, Helpers.DefaultEncoding)
+            strwrite = New StreamWriter(file, False, Helpers.DefaultEncoding)
 
             '1. Zeile
             strwrite.WriteLine("*ZRE")
             '2. Zeile: Titel und Einheit
-            strwrite.WriteLine(Reihe.Title.PadRight(15).Substring(0, 15) & Reihe.Unit)
+            strwrite.WriteLine(ts.Title.PadRight(15).Substring(0, 15) & ts.Unit)
             '3. Zeile: Parameter
             strwrite.WriteLine("0                      0.        0.        0.")
             '4. Zeile: Anfangs- und Enddatum
-            strwrite.WriteLine(Reihe.Dates(0).ToString(DateFormats("ZRE")) & " " & Reihe.Dates(Reihe.Length - 1).ToString(DateFormats("ZRE")))
+            strwrite.WriteLine(ts.Dates(0).ToString(DateFormats("ZRE")) & " " & ts.Dates(ts.Length - 1).ToString(DateFormats("ZRE")))
             'ab 5. Zeile: Werte
-            For i = 0 To Reihe.Length - 1
-                strwrite.Write(Reihe.Dates(i).ToString(DateFormats("ZRE")) & " " & Reihe.Values(i).ToString(DefaultNumberFormat).PadLeft(14))
-                If (i < Reihe.Length - 1) Then 'kein Zeilenumbruch nach der letzten Zeile!
+            For i = 0 To ts.Length - 1
+                strwrite.Write(ts.Dates(i).ToString(DateFormats("ZRE")) & " " & ts.Values(i).ToString(DefaultNumberFormat).PadLeft(14))
+                If (i < ts.Length - 1) Then 'kein Zeilenumbruch nach der letzten Zeile!
                     strwrite.WriteLine()
                 End If
             Next

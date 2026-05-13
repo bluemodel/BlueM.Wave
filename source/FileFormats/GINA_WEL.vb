@@ -41,11 +41,11 @@ Namespace Fileformats
             Me.UseUnits = True
 
             ' Index of header rows
-            Me.iLineHeadings = 6
-            Me.iLineUnits = 7
-            Me.iLineData = 8
+            Me.LineNumberHeaders = 6
+            Me.LineNumberUnits = 7
+            Me.LineNumberData = 8
 
-            Call Me.readSeriesInfo()
+            Call Me.ReadSeriesInfo()
 
         End Sub
 
@@ -54,7 +54,7 @@ Namespace Fileformats
         ''' </summary>
         ''' <param name="file">file path</param>
         ''' <returns>True if the file is a GINA WEL result file</returns>
-        Public Shared Function verifyFormat(file As String) As Boolean
+        Public Shared Function VerifyFormat(file As String) As Boolean
 
             ' open file
             Dim FiStr As FileStream = New FileStream(file, FileMode.Open, IO.FileAccess.Read)

@@ -45,15 +45,15 @@ Namespace Fileformats
             Me.IsColumnSeparated = True
             Me.Separator = Constants.tab
             Me.DecimalSeparator = Constants.period
-            Me.iLineHeadings = 6
+            Me.LineNumberHeaders = 6
             Me.UseUnits = False
-            Me.iLineData = 10
+            Me.LineNumberData = 10
             Me.Dateformat = "yyyy-MM-dd HH:mm"
             Me.DateTimeColumnIndex = 0
 
             'Determine iLineHeader and iLineData by reading the file contents and checking for tokens
-            Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
-            Dim StrRead As StreamReader = New StreamReader(FiStr, Me.Encoding)
+            Dim FiStr As New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
+            Dim StrRead As New StreamReader(FiStr, Me.Encoding)
             Dim StrReadSync = TextReader.Synchronized(StrRead)
 
             Dim iLine As Integer = 0
@@ -61,9 +61,9 @@ Namespace Fileformats
                 iLine += 1
                 Dim line As String = StrReadSync.ReadLine()
                 If line.StartsWith("@attributes") Then
-                    Me.iLineHeadings = iLine + 1
+                    Me.LineNumberHeaders = iLine + 1
                 ElseIf line.StartsWith("@data") Then
-                    Me.iLineData = iLine + 1
+                    Me.LineNumberData = iLine + 1
                     Exit Do
                 End If
             Loop
@@ -73,15 +73,15 @@ Namespace Fileformats
             FiStr.Close()
 
             'Read series information
-            Call Me.readSeriesInfo()
+            Call Me.ReadSeriesInfo()
 
             If ReadAllNow Then
-                Me.selectAllSeries()
-                Me.readFile()
+                Me.SelectAllSeries()
+                Me.ReadFile()
             End If
         End Sub
 
-        Public Overrides Sub readSeriesInfo()
+        Public Overrides Sub ReadSeriesInfo()
 
             Dim iLine, index As Integer
             Dim line As String
@@ -90,8 +90,8 @@ Namespace Fileformats
             Me.TimeSeriesInfos.Clear()
 
             'Open file
-            Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
-            Dim StrRead As StreamReader = New StreamReader(FiStr, Me.Encoding)
+            Dim FiStr As New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
+            Dim StrRead As New StreamReader(FiStr, Me.Encoding)
             Dim StrReadSync = TextReader.Synchronized(StrRead)
 
             iLine = 0
@@ -100,14 +100,15 @@ Namespace Fileformats
                 iLine += 1
                 line = StrReadSync.ReadLine()
 
-                If iLine = Me.iLineHeadings Then
+                If iLine = Me.LineNumberHeaders Then
                     Dim parts() As String = line.Split(Me.Separator.ToChar())
                     index = 0
                     For Each part As String In parts
                         If part.Trim() <> "" And index <> Me.DateTimeColumnIndex Then
-                            sInfo = New TimeSeriesInfo()
-                            sInfo.Name = part.Trim()
-                            sInfo.Index = index
+                            sInfo = New TimeSeriesInfo With {
+                                .Name = part.Trim(),
+                                .Index = index
+                            }
                             Me.TimeSeriesInfos.Add(sInfo)
                         End If
                         index += 1
@@ -123,7 +124,7 @@ Namespace Fileformats
 
         End Sub
 
-        Public Overrides Sub readFile()
+        Public Overrides Sub ReadFile()
 
             Dim iLine As Integer
             Dim line As String
@@ -136,8 +137,9 @@ Namespace Fileformats
 
             'instantiate time series
             For Each sInfo As TimeSeriesInfo In Me.SelectedSeries
-                ts = New TimeSeries(sInfo.Name)
-                ts.DataSource = New TimeSeriesDataSource(Me.File, sInfo.Name)
+                ts = New TimeSeries(sInfo.Name) With {
+                    .DataSource = New TimeSeriesDataSource(Me.File, sInfo.Name)
+                }
                 Me.TimeSeries.Add(sInfo.Index, ts)
             Next
 
@@ -149,8 +151,8 @@ Namespace Fileformats
             End If
 
             'read file
-            Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
-            Dim StrRead As StreamReader = New StreamReader(FiStr, Me.Encoding)
+            Dim FiStr As New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
+            Dim StrRead As New StreamReader(FiStr, Me.Encoding)
             Dim StrReadSync As TextReader = TextReader.Synchronized(StrRead)
 
             iLine = 0
@@ -167,16 +169,16 @@ Namespace Fileformats
                     isData = False
                 End If
 
-                If line.StartsWith("@") Then
+                If line.StartsWith("@"c) Then
                     Continue Do
                 End If
 
-                If iLine >= Me.iLineData And isData Then
+                If iLine >= Me.LineNumberData AndAlso isData Then
                     parts = line.Split(Me.Separator.ToChar())
                     'parse timestamp
                     success = DateTime.TryParseExact(parts(Me.DateTimeColumnIndex).Trim(), Me.Dateformat, Helpers.DefaultNumberFormat, Globalization.DateTimeStyles.None, timestamp)
                     If Not success Then
-                        Throw New Exception($"Could Not parse the date '{parts(Me.DateTimeColumnIndex)}' using the given date format '{Me.Dateformat}'! Please check the date format!")
+                        Throw New TimeSeriesFileReadingException($"Could Not parse the date '{parts(Me.DateTimeColumnIndex)}' using the given date format '{Me.Dateformat}'! Please check the date format!")
                     End If
                     'loop over selected series
                     For Each sinfo As TimeSeriesInfo In Me.SelectedSeries
@@ -206,21 +208,21 @@ Namespace Fileformats
         ''' </summary>
         ''' <param name="file">path to file</param>
         ''' <returns></returns>
-        Public Shared Function verifyFormat(file As String) As Boolean
-            Dim FiStr As FileStream = New FileStream(file, FileMode.Open, IO.FileAccess.Read)
-            Dim StrRead As StreamReader = New StreamReader(FiStr, detectEncodingFromByteOrderMarks:=True)
+        Public Shared Function VerifyFormat(file As String) As Boolean
+            Dim FiStr As New FileStream(file, FileMode.Open, IO.FileAccess.Read)
+            Dim StrRead As New StreamReader(FiStr, detectEncodingFromByteOrderMarks:=True)
             Dim line As String
             Dim verificationResult As Boolean
 
             verificationResult = False
 
             'check first line
-            line = StrRead.ReadLine.ToString()
+            line = StrRead.ReadLine()
             If line.StartsWith("@context") Then
                 verificationResult = True
             End If
             'check second line
-            line = StrRead.ReadLine.ToString()
+            line = StrRead.ReadLine()
             If line.StartsWith("jams.components.core.TemporalContext") Then
                 verificationResult = verificationResult And True
             End If

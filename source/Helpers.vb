@@ -27,10 +27,11 @@ Public Module Helpers
     Public ReadOnly Property DefaultNumberFormat() As NumberFormatInfo
         Get
             'NumberFormatInfo einrichten
-            DefaultNumberFormat = New NumberFormatInfo()
-            DefaultNumberFormat.NumberDecimalSeparator = "."
-            DefaultNumberFormat.NumberGroupSeparator = ""
-            DefaultNumberFormat.NumberGroupSizes = New Integer() {3}
+            DefaultNumberFormat = New NumberFormatInfo With {
+                .NumberDecimalSeparator = ".",
+                .NumberGroupSeparator = "",
+                .NumberGroupSizes = {3}
+            }
         End Get
     End Property
 
@@ -78,19 +79,20 @@ Public Module Helpers
     ''' <remarks>see https://docs.microsoft.com/en-us/dotnet/standard/base-types/custom-date-and-time-format-strings </remarks>
     Public ReadOnly Property DateFormats() As Dictionary(Of String, String)
         Get
-            Dim dict As New Dictionary(Of String, String)
-            dict.Add("current", Helpers.CurrentDateFormat)
-            dict.Add("default", "dd.MM.yyyy HH:mm")
-            dict.Add("GISMO1", "dd.MM.yyyy HH:mm")
-            dict.Add("GISMO2", "yyyyMMdd HH:mm")
-            dict.Add("HYSTEMEXTRAN", "ddMMyyyyHHmmss")
-            dict.Add("SMUSI", "dd MM yyyy   HH")
-            dict.Add("SWMM", "MM/dd/yyyy HH:mm:ss")
-            dict.Add("UVF", "yyyyMMddHHmm") 'eigentlich nur zweistellige Jahreszahl, aber das Jahrhundert wird beim Einlesen trotzdem bestimmt
-            dict.Add("WEL", "dd.MM.yyyy HH:mm")
-            dict.Add("ZRE", "yyyyMMdd HH:mm")
-            dict.Add("ZRXP", "yyyyMMddHHmmss")
-            dict.Add("ISO", "yyyy-MM-dd HH:mm:ss")
+            Dim dict As New Dictionary(Of String, String) From {
+                {"current", Helpers.CurrentDateFormat},
+                {"default", "dd.MM.yyyy HH:mm"},
+                {"GISMO1", "dd.MM.yyyy HH:mm"},
+                {"GISMO2", "yyyyMMdd HH:mm"},
+                {"HYSTEMEXTRAN", "ddMMyyyyHHmmss"},
+                {"SMUSI", "dd MM yyyy   HH"},
+                {"SWMM", "MM/dd/yyyy HH:mm:ss"},
+                {"UVF", "yyyyMMddHHmm"}, 'eigentlich nur zweistellige Jahreszahl, aber das Jahrhundert wird beim Einlesen trotzdem bestimmt
+                {"WEL", "dd.MM.yyyy HH:mm"},
+                {"ZRE", "yyyyMMdd HH:mm"},
+                {"ZRXP", "yyyyMMddHHmmss"},
+                {"ISO", "yyyy-MM-dd HH:mm:ss"}
+            }
             Return dict
         End Get
     End Property
@@ -131,10 +133,10 @@ Public Module Helpers
     ''' <returns>The corresponding TimeSeries.InterpretationEnum value</returns>
     Public Function ParseInterpretation(interpretationString As String) As TimeSeries.InterpretationEnum
         If Not [Enum].IsDefined(GetType(TimeSeries.InterpretationEnum), interpretationString) Then
-            Log.AddLogEntry(levels.warning, $"Interpretation {interpretationString} is not recognized!")
+            Log.AddLogEntry(Levels.warning, $"Interpretation {interpretationString} is not recognized!")
             Return TimeSeries.InterpretationEnum.Undefined
         Else
-            Return [Enum].Parse(GetType(TimeSeries.InterpretationEnum), interpretationString)
+            Return [Enum].Parse(Of TimeSeries.InterpretationEnum)(interpretationString)
         End If
     End Function
 
@@ -146,10 +148,10 @@ Public Module Helpers
     ''' <returns>The corresponding TimeSeries.InterpretationEnum value</returns>
     Public Function ParseInterpretation(interpretationValue As Integer) As TimeSeries.InterpretationEnum
         If Not [Enum].IsDefined(GetType(TimeSeries.InterpretationEnum), interpretationValue) Then
-            Log.AddLogEntry(levels.warning, $"Interpretation {interpretationValue} is not recognized!")
+            Log.AddLogEntry(Levels.warning, $"Interpretation {interpretationValue} is not recognized!")
             Return TimeSeries.InterpretationEnum.Undefined
         Else
-            Return [Enum].Parse(GetType(TimeSeries.InterpretationEnum), interpretationValue)
+            Return [Enum].Parse(Of TimeSeries.InterpretationEnum)(interpretationValue)
         End If
     End Function
 
@@ -158,7 +160,7 @@ Public Module Helpers
     ''' </summary>
     ''' <param name="name">Available color palettes are "Material", "Distinct", "Color Wheel" and "Random". Defaults to "Material".</param>
     ''' <returns>A color palette</returns>
-    Public Function getColorPalette(Optional name As String = "Material") As Color()
+    Public Function GetColorPalette(Optional name As String = "Material") As Color()
         Dim colorPalette As Color()
         Select Case name
             Case "Material"
@@ -226,7 +228,7 @@ Public Module Helpers
                     colorPalette(i) = Color.FromArgb(random.Next(256), random.Next(256), random.Next(256))
                 Next
             Case Else
-                colorPalette = getColorPalette()
+                colorPalette = GetColorPalette()
         End Select
         Return colorPalette
     End Function
@@ -260,7 +262,7 @@ Public Module Helpers
     Friend Sub ChartSetDefaultFormat(ByRef chart As Steema.TeeChart.Chart)
 
         'set default color palette
-        chart.ColorPalette = Helpers.getColorPalette()
+        chart.ColorPalette = Helpers.GetColorPalette()
 
         chart.Aspect.View3D = False
         chart.Panel.Gradient.Visible = False

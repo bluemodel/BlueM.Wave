@@ -155,7 +155,7 @@ Friend Class SeriesEditorDialog
                     t = DateTime.Parse(str)
                 Catch ex As Exception
                     cell.ErrorText = "Date format not recognized!"
-                    Throw New Exception($"The date '{str}' can not be parsed!")
+                    Throw New InternalException($"The date '{str}' can not be parsed!")
                 End Try
 
                 cell.ErrorText = String.Empty
@@ -207,11 +207,11 @@ Friend Class SeriesEditorDialog
         End If
 
         'create a new time series object
-        Me.mZeitreihe = New TimeSeries(Me.series_Title)
-        Me.mZeitreihe.DataSource = New TimeSeriesDataSource(TimeSeriesDataSource.OriginEnum.ManuallyEntered)
-
         'store the unit
-        Me.mZeitreihe.Unit = Me.series_Unit
+        Me.mZeitreihe = New TimeSeries(Me.series_Title) With {
+            .DataSource = New TimeSeriesDataSource(TimeSeriesDataSource.OriginEnum.ManuallyEntered),
+            .Unit = Me.series_Unit
+        }
 
         'add the nodes
         Me.Cursor = Cursors.WaitCursor

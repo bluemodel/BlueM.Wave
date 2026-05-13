@@ -24,9 +24,9 @@ Imports System.Data
 Friend Class Histogram
     Inherits Analysis
 
-    Private n_breaks As Integer
-    Private n_bins As Integer
-    Private breaks As Double()
+    Private ReadOnly n_breaks As Integer
+    Private ReadOnly n_bins As Integer
+    Private ReadOnly breaks As Double()
 
     Private Structure histogramResults
         Dim title As String
@@ -36,7 +36,7 @@ Friend Class Histogram
         Dim PU As Double() ' probability of non-exceedance
     End Structure
 
-    Private results As histogramResults()
+    Private ReadOnly results As histogramResults()
 
     Public Overloads Shared Function Description() As String
         Return "Divides the entire range of values into a series of user-defined intervals (bins) and calculates the percentage of values falling into each interval." &
@@ -104,7 +104,7 @@ Friend Class Histogram
             einheit = zeitreihen(1).Unit
             For Each zre As TimeSeries In zeitreihen
                 If (zre.Unit <> einheit) Then
-                    Throw New Exception("Please select only series with the same unit!")
+                    Throw New AnalysisInvalidInputException("Please select only series with the same unit!")
                 End If
             Next
         End If
@@ -115,7 +115,7 @@ Friend Class Histogram
         histogramDlg = New HistogramDialog(Me.InputTimeSeries)
         dlgResult = histogramDlg.ShowDialog()
         If dlgResult <> DialogResult.OK Then
-            Throw New Exception("Cancelled by user")
+            Throw New AnalysisCancelledException("Cancelled by user")
         End If
 
         'store parameters
@@ -257,17 +257,19 @@ Friend Class Histogram
         'Serien
         For Each res As histogramResults In Me.results
 
-            Dim serieP As New Steema.TeeChart.Styles.Histogram(Me.ResultChart.Chart)
-            serieP.Title = $"{res.title} (P(x))"
+            Dim serieP As New Steema.TeeChart.Styles.Histogram(Me.ResultChart.Chart) With {
+                .Title = $"{res.title} (P(x))"
+            }
             serieP.Marks.Visible = False
 
             For i As Integer = 0 To n_bins - 1
                 serieP.Add((Me.breaks(i) + Me.breaks(i + 1)) / 2, res.probability(i), res.probability(i).ToString("F2") & "%")
             Next
 
-            Dim seriePU As New Steema.TeeChart.Styles.Line(Me.ResultChart.Chart)
-            seriePU.VertAxis = Steema.TeeChart.Styles.VerticalAxis.Right
-            seriePU.Title = $"{res.title} (PU(x))"
+            Dim seriePU As New Steema.TeeChart.Styles.Line(Me.ResultChart.Chart) With {
+                .VertAxis = Steema.TeeChart.Styles.VerticalAxis.Right,
+                .Title = $"{res.title} (PU(x))"
+            }
             seriePU.LinePen.Width = 2
             seriePU.Pointer.Visible = True
             seriePU.Pointer.Style = Steema.TeeChart.Styles.PointerStyles.Circle
@@ -281,8 +283,9 @@ Friend Class Histogram
         Next
 
         'Markstips
-        Dim markstip As New Steema.TeeChart.Tools.MarksTip()
-        markstip.Style = Steema.TeeChart.Styles.MarksStyles.Label
+        Dim markstip As New Steema.TeeChart.Tools.MarksTip With {
+            .Style = Steema.TeeChart.Styles.MarksStyles.Label
+        }
         'markstip.MouseAction = Steema.TeeChart.Tools.MarksTipMouseAction.Move
         Me.ResultChart.Tools.Add(markstip)
 

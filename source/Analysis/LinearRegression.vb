@@ -88,7 +88,7 @@ Friend Class LinearRegression
 
         'Prüfung: Anzahl erwarteter Zeitreihen
         If (zeitreihen.Count <> 2) Then
-            Throw New Exception("The LinearRegression analysis requires the selection of exactly 2 time series!")
+            Throw New AnalysisInvalidInputException("The LinearRegression analysis requires the selection of exactly 2 time series!")
         End If
 
     End Sub
@@ -118,8 +118,8 @@ Friend Class LinearRegression
         Dim ts_y As TimeSeries = Me.ts_gaps.Clone()
 
         'Remove NaN values
-        ts_x = ts_x.removeNaNValues()
-        ts_y = ts_y.removeNaNValues()
+        ts_x = ts_x.RemoveNaNValues()
+        ts_y = ts_y.RemoveNaNValues()
 
         'Synchronize
         TimeSeries.Synchronize(ts_x, ts_y)
@@ -135,7 +135,7 @@ Friend Class LinearRegression
 
         'Emit warning if correlation coefficient is low
         If (r < 0.7) Then
-            Log.AddLogEntry(levels.warning,
+            Log.AddLogEntry(Levels.warning,
                 "The correlation coefficient is smaller than 0.7!" & eol &
                 "There is no good linear relationship between the two selected time series!" & eol &
                 "Filling gaps using linear regression is not recommended!")
@@ -148,7 +148,7 @@ Friend Class LinearRegression
         b = p.B
 
         'Copy all non-NaN nodes to a new time series
-        Me.ts_filled = Me.ts_gaps.removeNaNValues()
+        Me.ts_filled = Me.ts_gaps.RemoveNaNValues()
         Me.ts_filled.Title = Me.ts_gaps.Title & " (filled)"
         Me.ts_filled.DataSource = New TimeSeriesDataSource(TimeSeriesDataSource.OriginEnum.AnalysisResult)
 

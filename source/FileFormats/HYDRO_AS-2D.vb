@@ -29,7 +29,7 @@ Namespace Fileformats
         ''' Die Einheit der Zeitreihen
         ''' </summary>
         ''' <remarks>Ist für jede Art von Datei fest vorgegeben</remarks>
-        Private _einheit As String
+        Private ReadOnly _einheit As String
 
         ''' <summary>
         ''' HYDRO_AS-2D Version 
@@ -68,11 +68,11 @@ Namespace Fileformats
             Me._HYDROAS_version = 2
 
             'default settings apply to HYDRO_AS-2D version 2 
-            Me.iLineData = 9
-            Me.iLineHeadings = 4
+            Me.LineNumberData = 9
+            Me.LineNumberHeaders = 4
             Me.UseUnits = False
             Me.IsColumnSeparated = True
-            Me.Separator = New BlueM.Wave.Character(" ")
+            Me.Separator = Constants.space
             Me.DateTimeColumnIndex = 0
 
             'Einheiten anhand des Dateinamens festlegen
@@ -90,7 +90,7 @@ Namespace Fileformats
             'Default Referenzdatum für den Beginn der Simulation
             Me.refDate = New DateTime(2000, 1, 1, 0, 0, 0)
 
-            Call Me.readSeriesInfo()
+            Call Me.ReadSeriesInfo()
 
         End Sub
 
@@ -100,7 +100,7 @@ Namespace Fileformats
         ''' <param name="file">Pfad zur Datei</param>
         ''' <returns>Boolean</returns>
         ''' <remarks>Prüfung erfolgt anhand des Dateinamens (Q_Strg.dat, Pegel.dat oder BW_TMP.dat)</remarks>
-        Public Shared Function verifyFormat(file As String) As Boolean
+        Public Shared Function VerifyFormat(file As String) As Boolean
 
             'TODO: Prüfung etwas robuster machen
 
@@ -117,7 +117,7 @@ Namespace Fileformats
         ''' Liest die Anzahl der Spalten und ihre Namen aus
         ''' </summary>
         ''' <remarks></remarks>
-        Public Overrides Sub readSeriesInfo()
+        Public Overrides Sub ReadSeriesInfo()
 
             Dim i, l As Integer
             Dim sInfo As TimeSeriesInfo
@@ -127,20 +127,20 @@ Namespace Fileformats
             Me.TimeSeriesInfos.Clear()
 
             'Datei öffnen
-            Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
-            Dim StrRead As StreamReader = New StreamReader(FiStr, Me.Encoding)
+            Dim FiStr As New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
+            Dim StrRead As New StreamReader(FiStr, Me.Encoding)
             Dim StrReadSync = TextReader.Synchronized(StrRead)
 
             'Determine HYDRO_AS-2D version for Q_Strg.dat
-            If Path.GetFileName(Me.File).ToLower() = "q_strg.dat" Then
+            If Path.GetFileName(Me.File).Equals("Q_Strg.dat", StringComparison.CurrentCultureIgnoreCase) Then
                 'If the 5th line starts with "Name:", then it is HYDROAS-2D version 5 format
                 For i = 1 To 5
-                    Zeile = StrReadSync.ReadLine.ToString()
+                    Zeile = StrReadSync.ReadLine()
                 Next
                 If Zeile.Trim.StartsWith("Name:") Then
                     Me._HYDROAS_version = 5
                     'use names instead of node numbers as series titles
-                    Me.iLineHeadings = 5
+                    Me.LineNumberHeaders = 5
                 End If
                 'return to beginning of file
                 FiStr.Seek(0, SeekOrigin.Begin)
@@ -153,40 +153,36 @@ Namespace Fileformats
                 Case "q_strg.dat", "pegel.dat"
 
                     'Zeile mit Spaltenüberschriften lesen
-                    For i = 1 To Me.iLineHeadings
+                    For i = 1 To Me.LineNumberHeaders
                         Zeile = StrReadSync.ReadLine.ToString
-                        If (i = Me.iLineHeadings) Then ZeileSpalten = Zeile
+                        If (i = Me.LineNumberHeaders) Then ZeileSpalten = Zeile
                     Next
 
                     'Spaltennamen auslesen
-                    Dim anzSpalten As Integer
                     Dim Namen(0) As String
-
                     Select Case Me._HYDROAS_version
                         Case 2
                             'space separated names
-                            Namen = ZeileSpalten.Split(New Char() {Me.Separator.ToChar}, System.StringSplitOptions.RemoveEmptyEntries)
-                            anzSpalten = Namen.Length + 1 'X-Spalte künstlich dazuzählen, da ohne Namen
+                            Namen = ZeileSpalten.Split(Me.Separator.ToChar, System.StringSplitOptions.RemoveEmptyEntries)
                         Case 5
                             'names in columns of equal width
                             ZeileSpalten = ZeileSpalten.Substring(14) 'start from column 14
                             'split into equal lengths
                             l = 13
-                            anzSpalten = ZeileSpalten.Length / l
+                            Dim anzSpalten As Integer = ZeileSpalten.Length / l
                             ReDim Namen(anzSpalten - 1)
                             For i = 0 To anzSpalten - 1
                                 Namen(i) = ZeileSpalten.Substring(i * l, l).Trim()
                             Next
-                            anzSpalten += 1 'X-Spalte künstlich dazuzählen, da ohne Namen
                     End Select
 
                     'store series info
-
                     For i = 0 To Namen.Length - 1
-                        sInfo = New TimeSeriesInfo
-                        sInfo.Name = Namen(i).Trim()
-                        sInfo.Unit = Me._einheit
-                        sInfo.Index = i + 1
+                        sInfo = New TimeSeriesInfo With {
+                            .Name = Namen(i).Trim(),
+                            .Unit = Me._einheit,
+                            .Index = i + 1
+                        }
                         Me.TimeSeriesInfos.Add(sInfo)
                     Next
 
@@ -204,16 +200,17 @@ Namespace Fileformats
                     Do
                         parts = Zeile.Split(New Char() {" "}, StringSplitOptions.RemoveEmptyEntries)
                         names.Add($"{parts(0)}-{parts(1)}")
-                        Zeile = StrReadSync.ReadLine.ToString().Trim()
+                        Zeile = StrReadSync.ReadLine().Trim()
                     Loop Until Zeile.StartsWith("---")
 
                     'store series info
 
                     For i = 0 To names.Count - 1
-                        sInfo = New TimeSeriesInfo
-                        sInfo.Name = names(i).Trim()
-                        sInfo.Unit = Me._einheit
-                        sInfo.Index = i + 1 ' hier eigentlich irrelevant
+                        sInfo = New TimeSeriesInfo With {
+                            .Name = names(i).Trim(),
+                            .Unit = Me._einheit,
+                            .Index = i + 1 ' hier eigentlich irrelevant
+                            }
                         Me.TimeSeriesInfos.Add(sInfo)
                     Next
 
@@ -229,10 +226,10 @@ Namespace Fileformats
         ''' Liest die Datei ein
         ''' </summary>
         ''' <remarks></remarks>
-        Public Overrides Sub readFile()
+        Public Overrides Sub ReadFile()
 
             Dim i As Integer
-            Dim Zeile As String = ""
+            Dim Zeile As String
             Dim datum As DateTime
             Dim Werte() As String
             Dim ts As TimeSeries
@@ -245,15 +242,16 @@ Namespace Fileformats
 
             'Instantiate time series
             For Each sInfo As TimeSeriesInfo In Me.SelectedSeries
-                ts = New TimeSeries(sInfo.Name)
-                ts.Unit = sInfo.Unit
-                ts.DataSource = New TimeSeriesDataSource(Me.File, sInfo.Name)
+                ts = New TimeSeries(sInfo.Name) With {
+                    .Unit = sInfo.Unit,
+                    .DataSource = New TimeSeriesDataSource(Me.File, sInfo.Name)
+                }
                 Me.TimeSeries.Add(sInfo.Index, ts)
             Next
 
             'Datei öffnen
-            Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
-            Dim StrRead As StreamReader = New StreamReader(FiStr, Me.Encoding)
+            Dim FiStr As New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
+            Dim StrRead As New StreamReader(FiStr, Me.Encoding)
             Dim StrReadSync = TextReader.Synchronized(StrRead)
 
             'Einlesen
@@ -264,14 +262,14 @@ Namespace Fileformats
                 Case "q_strg.dat", "pegel.dat"
 
                     'Header
-                    For i = 0 To Me.nLinesHeader - 1
+                    For i = 0 To Me.NLinesHeader - 1
                         StrReadSync.ReadLine()
                     Next
 
                     'Daten
                     Do
-                        Zeile = StrReadSync.ReadLine.ToString()
-                        Werte = Zeile.Split(New Char() {Me.Separator.ToChar}, System.StringSplitOptions.RemoveEmptyEntries)
+                        Zeile = StrReadSync.ReadLine()
+                        Werte = Zeile.Split(Me.Separator.ToChar, System.StringSplitOptions.RemoveEmptyEntries)
                         'Simulationszeit [h] wird zu Datum nach dem Referenzdatum (default: 01.01.2000 00:00:00) konvertiert
                         datum = Me.refDate + New TimeSpan(0, 0, Helpers.StringToDouble(Werte(0)) * 3600)
                         For Each sInfo As TimeSeriesInfo In Me.SelectedSeries
@@ -286,7 +284,7 @@ Namespace Fileformats
                     Dim parts(), name As String
 
                     Do
-                        Zeile = StrReadSync.ReadLine.ToString().Trim()
+                        Zeile = StrReadSync.ReadLine().Trim()
                         If Zeile.Length = 0 Then Continue Do
                         'Headerzeilen
                         If Zeile.StartsWith("---") Then Continue Do

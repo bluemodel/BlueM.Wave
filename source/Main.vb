@@ -21,6 +21,9 @@ Friend Module Main
     Public Sub Main()
         ' Starts the application.
 
+        'Set a default regex match timeout to prevent potential DoS attacks from untrusted input
+        AppDomain.CurrentDomain.SetData("REGEX_DEFAULT_MATCH_TIMEOUT", TimeSpan.FromMilliseconds(100))
+
         Application.EnableVisualStyles()
         Application.SetCompatibleTextRenderingDefault(False)
 
@@ -31,9 +34,9 @@ Friend Module Main
             Try
                 My.Settings.Upgrade()
                 My.Settings.isNewVersion = False
-                Log.AddLogEntry(Log.levels.debug, "User settings upgraded from previous version.")
+                Log.AddLogEntry(Log.Levels.debug, "User settings upgraded from previous version.")
             Catch ex As System.Configuration.ConfigurationErrorsException
-                Log.AddLogEntry(Log.levels.error, "Error upgrading user settings: " & ex.Message)
+                Log.AddLogEntry(Log.Levels.error, "Error upgrading user settings: " & ex.Message)
             End Try
         End If
 
@@ -45,7 +48,7 @@ Friend Module Main
         Dim files As New List(Of String)
 
         If args.Count > 0 Then
-            If Not args.First().StartsWith("-") Then
+            If Not args.First().StartsWith("-"c) Then
                 'don't run the CLI, instead assume that args are filenames to open in the app
                 For Each file As String In args
                     files.Add(file)

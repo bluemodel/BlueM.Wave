@@ -51,18 +51,18 @@ Namespace Fileformats
 
             'Check for 64bit environment
             If Not Environment.Is64BitProcess() Then
-                Throw New Exception("Loading Dfs0 files is not supported in a 32bit environment. Please use the 64bit version of BlueM.Wave instead!")
+                Throw New TimeSeriesFileReadingException("Loading Dfs0 files is not supported in a 32bit environment. Please use the 64bit version of BlueM.Wave instead!")
             End If
 
             'Basic settings
             Me.UseUnits = True
 
-            Call Me.readSeriesInfo()
+            Call Me.ReadSeriesInfo()
 
             If (ReadAllNow) Then
                 'Direkt einlesen
-                Call Me.selectAllSeries()
-                Call Me.readFile()
+                Call Me.SelectAllSeries()
+                Call Me.ReadFile()
             End If
 
         End Sub
@@ -70,7 +70,7 @@ Namespace Fileformats
         ''' <summary>
         ''' Reads series info
         ''' </summary>
-        Public Overrides Sub readSeriesInfo()
+        Public Overrides Sub ReadSeriesInfo()
 
             Dim sInfo As TimeSeriesInfo
 
@@ -83,17 +83,18 @@ Namespace Fileformats
             Dim FileInfo As DFS.IDfsFileInfo = dfs0File.FileInfo
             If Not FileInfo.TimeAxis.IsCalendar Then
                 'TODO: if the file uses a TemporalTimeAxis, we could ask the user for a date offset, like we do for HYDRO_AS-2D
-                Throw New Exception("Dfs0 file does not have a calendar time axis, unable to open!")
+                Throw New TimeSeriesFileReadingException("Dfs0 file does not have a calendar time axis, unable to open!")
             End If
 
             'Loop over all items in the file
             Dim dynamicItemInfo As DFS.IDfsSimpleDynamicItemInfo
             For item_index As Integer = 0 To dfs0File.ItemInfo.Count - 1
                 dynamicItemInfo = dfs0File.ItemInfo(item_index)
-                sInfo = New TimeSeriesInfo()
-                sInfo.Name = dynamicItemInfo.Name
-                sInfo.Unit = dynamicItemInfo.Quantity.UnitAbbreviation
-                sInfo.Index = item_index
+                sInfo = New TimeSeriesInfo With {
+                    .Name = dynamicItemInfo.Name,
+                    .Unit = dynamicItemInfo.Quantity.UnitAbbreviation,
+                    .Index = item_index
+                }
                 Me.TimeSeriesInfos.Add(sInfo)
             Next
 
@@ -104,7 +105,7 @@ Namespace Fileformats
         ''' <summary>
         ''' Reads the file
         ''' </summary>
-        Public Overrides Sub readFile()
+        Public Overrides Sub ReadFile()
 
             'dictionary for temporarily storing datatypes 
             Dim DataTypes As New Dictionary(Of Integer, DFS.DfsSimpleType)
@@ -114,9 +115,10 @@ Namespace Fileformats
             'Instantiate Timeseries
             Dim ts As TimeSeries
             For Each sInfo As TimeSeriesInfo In Me.SelectedSeries
-                ts = New TimeSeries(sInfo.Name)
-                ts.Unit = sInfo.Unit
-                ts.DataSource = New TimeSeriesDataSource(Me.File, sInfo.Name)
+                ts = New TimeSeries(sInfo.Name) With {
+                    .Unit = sInfo.Unit,
+                    .DataSource = New TimeSeriesDataSource(Me.File, sInfo.Name)
+                }
                 Me.TimeSeries.Add(sInfo.Index, ts)
             Next
 
@@ -128,9 +130,9 @@ Namespace Fileformats
             For Each sInfo As TimeSeriesInfo In Me.SelectedSeries
                 dynamicItemInfo = dfs0File.ItemInfo(sInfo.Index)
                 Me.TimeSeries(sInfo.Index).Interpretation = DataValueTypeToInterpretation(dynamicItemInfo.ValueType)
-                Me.TimeSeries(sInfo.Index).Metadata.Add("eumItem", [Enum].GetName(GetType(eumItem), dynamicItemInfo.Quantity.Item))
+                Me.TimeSeries(sInfo.Index).Metadata.Add("eumItem", [Enum].GetName(dynamicItemInfo.Quantity.Item))
                 Me.TimeSeries(sInfo.Index).Metadata.Add("eumItemDescription", dynamicItemInfo.Quantity.ItemDescription)
-                Me.TimeSeries(sInfo.Index).Metadata.Add("eumUnit", [Enum].GetName(GetType(eumUnit), dynamicItemInfo.Quantity.Unit))
+                Me.TimeSeries(sInfo.Index).Metadata.Add("eumUnit", [Enum].GetName(dynamicItemInfo.Quantity.Unit))
                 Me.TimeSeries(sInfo.Index).Metadata.Add("eumUnitAbbreviation", dynamicItemInfo.Quantity.UnitAbbreviation)
                 DataTypes.Add(sInfo.Index, dynamicItemInfo.DataType)
             Next
@@ -268,7 +270,7 @@ Namespace Fileformats
                 Case "liter/sec/km^2", "l/s/km^2"
                     eumUnit = eumUnit.eumUliterPerSecPerKm2
                 Case Else
-                    Log.AddLogEntry(levels.debug, $"Unable to convert unit '{unit}' to a DHI EUM unit. Using undefined.")
+                    Log.AddLogEntry(Levels.debug, $"Unable to convert unit '{unit}' to a DHI EUM unit. Using undefined.")
                     eumUnit = eumUnit.eumUUnitUndefined
             End Select
             Return eumUnit
@@ -282,13 +284,13 @@ Namespace Fileformats
         ''' <param name="tsList">list of TimeSeries</param>
         ''' <param name="path">path to file</param>
         ''' <remarks></remarks>
-        Public Overloads Shared Sub writeFile(ByRef tsList As List(Of TimeSeries), path As String)
+        Public Overloads Shared Sub WriteFile(ByRef tsList As List(Of TimeSeries), path As String)
 
             'show DFS0 export dialog in order to allow the user to specify EUM Items and Units
             Dim dlg As New DFS0_ExportDialog(tsList)
             Dim dlgresult As DialogResult = dlg.ShowDialog()
             If dlgresult <> DialogResult.OK Then
-                Throw New Exception("Export to DFS0 cancelled by user!")
+                Throw New TimeSeriesFileWritingException("Export to DFS0 cancelled by user!")
             End If
             Dim quantities As Dictionary(Of Integer, eumQuantity) = dlg.Quantities
 

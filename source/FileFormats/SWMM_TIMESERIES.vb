@@ -33,7 +33,7 @@ Namespace Fileformats
         ''' Date time format to force "/" as date separator
         ''' </summary>
         ''' <returns></returns>
-        Private Shared ReadOnly Property dtfi As DateTimeFormatInfo
+        Private Shared ReadOnly Property SWMMDateTimeFormatInfo As DateTimeFormatInfo
             Get
                 Return CultureInfo.GetCultureInfo("en-US").DateTimeFormat
             End Get
@@ -53,21 +53,21 @@ Namespace Fileformats
             MyBase.New(FileName)
 
             'Voreinstellungen
-            Me.iLineData = 2
+            Me.LineNumberData = 2
             Me.UseUnits = False
             Me.Dateformat = SWMM_DATEFORMAT
 
-            Call Me.readSeriesInfo()
+            Call Me.ReadSeriesInfo()
 
             If (ReadAllNow) Then
                 'Direkt einlesen
-                Call Me.selectAllSeries()
-                Call Me.readFile()
+                Call Me.SelectAllSeries()
+                Call Me.ReadFile()
             End If
 
         End Sub
 
-        Public Overrides Sub readSeriesInfo()
+        Public Overrides Sub ReadSeriesInfo()
 
             Dim line As String
             Dim title As String = Nothing
@@ -76,14 +76,14 @@ Namespace Fileformats
             Me.TimeSeriesInfos.Clear()
 
             'Open the file
-            Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
-            Dim StrRead As StreamReader = New StreamReader(FiStr, Me.Encoding)
+            Dim FiStr As New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
+            Dim StrRead As New StreamReader(FiStr, Me.Encoding)
             Dim StrReadSync = TextReader.Synchronized(StrRead)
 
             'find a commented header line
             Do
                 line = StrReadSync.ReadLine()
-                If line.StartsWith(";") Then
+                If line.StartsWith(";"c) Then
                     'use the first header line as time series title
                     title = line.Substring(1).Trim()
                     Exit Do
@@ -100,14 +100,15 @@ Namespace Fileformats
             End If
 
             'store series info
-            sInfo = New TimeSeriesInfo()
-            sInfo.Name = title
-            sInfo.Index = 0
+            sInfo = New TimeSeriesInfo With {
+                .Name = title,
+                .Index = 0
+            }
             Me.TimeSeriesInfos.Add(sInfo)
 
         End Sub
 
-        Public Overrides Sub readFile()
+        Public Overrides Sub ReadFile()
 
             Dim line As String
             Dim dateString, valueString As String
@@ -120,26 +121,27 @@ Namespace Fileformats
 
             'instantiate a single timeseries
             sinfo = Me.TimeSeriesInfos.First
-            ts = New TimeSeries()
-            ts.Title = sinfo.Name
+            ts = New TimeSeries With {
+                .Title = sinfo.Name
+            }
             ts.DataSource = New TimeSeriesDataSource(Me.File, ts.Title)
 
             'Open the file
-            Dim FiStr As FileStream = New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
-            Dim StrRead As StreamReader = New StreamReader(FiStr, Me.Encoding)
+            Dim FiStr As New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
+            Dim StrRead As New StreamReader(FiStr, Me.Encoding)
             Dim StrReadSync = TextReader.Synchronized(StrRead)
 
             Do
                 line = StrReadSync.ReadLine()
-                If line.StartsWith(";") Or line.Trim().Length = 0 Then
+                If line.StartsWith(";"c) OrElse line.Trim().Length = 0 Then
                     'skip comment/header and empty lines
                     Continue Do
                 End If
 
                 'parse date
                 dateString = line.Substring(0, Me.Dateformat.Length)
-                If Not DateTime.TryParseExact(dateString, Me.Dateformat, SWMM_TIMESERIES.dtfi, Globalization.DateTimeStyles.None, timestamp) Then
-                    Throw New Exception($"Unable to parse the date {dateString} using the format {Me.Dateformat}!")
+                If Not DateTime.TryParseExact(dateString, Me.Dateformat, SWMM_TIMESERIES.SWMMDateTimeFormatInfo, Globalization.DateTimeStyles.None, timestamp) Then
+                    Throw New TimeSeriesFileReadingException($"Unable to parse the date {dateString} using the format {Me.Dateformat}!")
                 End If
                 'parse value
                 valueString = line.Substring(Me.Dateformat.Length).Trim()
@@ -164,7 +166,7 @@ Namespace Fileformats
         ''' </summary>
         ''' <param name="file">path to file</param>
         ''' <returns></returns>
-        Public Shared Function verifyFormat(file As String) As Boolean
+        Public Shared Function VerifyFormat(file As String) As Boolean
 
             Dim line As String
             Dim dateString, valueString As String
@@ -175,23 +177,23 @@ Namespace Fileformats
             verificationResult = False
 
             'Open the file
-            Dim FiStr As FileStream = New FileStream(file, FileMode.Open, IO.FileAccess.Read)
-            Dim StrRead As StreamReader = New StreamReader(FiStr, Helpers.DefaultEncoding)
+            Dim FiStr As New FileStream(file, FileMode.Open, IO.FileAccess.Read)
+            Dim StrRead As New StreamReader(FiStr, Helpers.DefaultEncoding)
             Dim StrReadSync = TextReader.Synchronized(StrRead)
 
             'try to read the first data line
             Try
                 Do
                     line = StrReadSync.ReadLine()
-                    If line.StartsWith(";") Or line.Trim().Length = 0 Then
+                    If line.StartsWith(";"c) OrElse line.Trim().Length = 0 Then
                         'skip comment/header and empty lines
                         Continue Do
                     End If
 
                     'try to parse the date
                     dateString = line.Substring(0, SWMM_DATEFORMAT.Length)
-                    If Not DateTime.TryParseExact(dateString, SWMM_DATEFORMAT, SWMM_TIMESERIES.dtfi, Globalization.DateTimeStyles.None, timestamp) Then
-                        Throw New Exception($"Unable to parse the date {dateString} using the format {SWMM_DATEFORMAT}!")
+                    If Not DateTime.TryParseExact(dateString, SWMM_DATEFORMAT, SWMM_TIMESERIES.SWMMDateTimeFormatInfo, Globalization.DateTimeStyles.None, timestamp) Then
+                        Throw New TimeSeriesFileReadingException($"Unable to parse the date {dateString} using the format {SWMM_DATEFORMAT}!")
                     End If
                     'try to parse the value
                     valueString = line.Substring(SWMM_DATEFORMAT.Length).Trim()
@@ -220,7 +222,7 @@ Namespace Fileformats
         ''' </summary>
         ''' <param name="ts">time series to export</param>
         ''' <param name="path">path to file to write</param>
-        Public Overloads Shared Sub writeFile(ts As TimeSeries, path As String)
+        Public Overloads Shared Sub WriteFile(ts As TimeSeries, path As String)
 
             Dim strwrite As New StreamWriter(path)
 
@@ -230,7 +232,7 @@ Namespace Fileformats
             For Each kvp As KeyValuePair(Of DateTime, Double) In ts.Nodes
                 Dim timestamp As DateTime = kvp.Key
                 Dim value As Double = kvp.Value
-                strwrite.WriteLine($"{timestamp.ToString(SWMM_DATEFORMAT, SWMM_TIMESERIES.dtfi)} {value.ToString(Helpers.DefaultNumberFormat)}")
+                strwrite.WriteLine($"{timestamp.ToString(SWMM_DATEFORMAT, SWMM_TIMESERIES.SWMMDateTimeFormatInfo)} {value.ToString(Helpers.DefaultNumberFormat)}")
             Next
             strwrite.Close()
 
