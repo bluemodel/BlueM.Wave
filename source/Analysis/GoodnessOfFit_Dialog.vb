@@ -34,7 +34,7 @@ Friend Class GoodnessOfFit_Dialog
     ''' Returns the Timeseries selected as "observed"
     ''' </summary>
     ''' <returns></returns>
-    Public ReadOnly Property seriesObserved() As TimeSeries
+    Public ReadOnly Property SeriesObserved() As TimeSeries
         Get
             Return Me.ComboBox_ObservedSeries.SelectedItem
         End Get
@@ -44,7 +44,7 @@ Friend Class GoodnessOfFit_Dialog
     ''' Returns the list of Timeseries _not_ selected as "observed"
     ''' </summary>
     ''' <returns></returns>
-    Public ReadOnly Property seriesSimulated() As List(Of TimeSeries)
+    Public ReadOnly Property SeriesSimulated() As List(Of TimeSeries)
         Get
             Dim ts_list As New List(Of TimeSeries)
             Dim index As Integer = 0

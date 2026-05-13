@@ -105,7 +105,7 @@ Friend Class PropertiesWindow
     ''' </summary>
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
-    Private Sub showStatisticis_Click(sender As Object, e As EventArgs) Handles ToolStripButton_showStatistics.Click
+    Private Sub ShowStatistics_Click(sender As Object, e As EventArgs) Handles ToolStripButton_showStatistics.Click
         Dim colindex As Integer = 6 'index of the first column with statistics
         If ToolStripButton_showStatistics.Checked Then
             For Each col As DataGridViewColumn In DataGridView1.Columns()

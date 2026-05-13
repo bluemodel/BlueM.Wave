@@ -22,7 +22,7 @@ Friend Class SelectSeriesDialog
     Private IsInitializing As Boolean
 
     Private tsFile As TimeSeriesFile
-    Private WithEvents inputTimer As Timers.Timer
+    Private WithEvents InputTimer As Timers.Timer
 
     Public Sub New(ByRef fileInstance As TimeSeriesFile)
 
@@ -39,7 +39,7 @@ Friend Class SelectSeriesDialog
         Me.Label_FileType.Text = Me.tsFile.GetType().Name
 
         'initialize input delay timer
-        Me.inputTimer = New Timers.Timer(1000) With {
+        Me.InputTimer = New Timers.Timer(1000) With {
             .SynchronizingObject = Me,
             .AutoReset = False
         }
@@ -112,8 +112,8 @@ Friend Class SelectSeriesDialog
     Private Sub TextBox_Search_TextChanged(sender As Object, e As EventArgs) Handles TextBox_Search.TextChanged
 
         'reset the input timer
-        Me.inputTimer.Stop()
-        Me.inputTimer.Start()
+        Me.InputTimer.Stop()
+        Me.InputTimer.Start()
 
     End Sub
 
@@ -126,7 +126,7 @@ Friend Class SelectSeriesDialog
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
     ''' <remarks></remarks>
-    Private Sub searchSeries(sender As Object, e As Timers.ElapsedEventArgs) Handles inputTimer.Elapsed
+    Private Sub SearchSeries(sender As Object, e As Timers.ElapsedEventArgs) Handles InputTimer.Elapsed
 
         Dim search, itemname As String
 
@@ -184,7 +184,7 @@ Friend Class SelectSeriesDialog
     End Sub
 
     Private Sub ImportDiag_FormClosed(sender As Object, e As FormClosedEventArgs) Handles MyBase.FormClosed
-        Me.inputTimer.Dispose()
+        Me.InputTimer.Dispose()
     End Sub
 
 End Class

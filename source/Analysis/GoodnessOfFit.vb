@@ -326,7 +326,7 @@ Friend Class GoodnessOfFit
         End If
 
         'assign time series
-        Me.ts_obs = dlg.seriesObserved
+        Me.ts_obs = dlg.SeriesObserved
         Me.ts_sim_list = dlg.seriesSimulated
 
         For Each ts_sim As TimeSeries In Me.ts_sim_list

@@ -25,7 +25,7 @@ Friend Class MergeSeriesDialog
     ''' <value></value>
     ''' <returns></returns>
     ''' <remarks></remarks>
-    Public ReadOnly Property selectedSeries() As List(Of Integer)
+    Public ReadOnly Property SelectedSeries() As List(Of Integer)
         Get
             Dim ids As New List(Of Integer)
             For Each ts As TimeSeries In Me.ListBox_SelectedSeries.Items
@@ -41,7 +41,7 @@ Friend Class MergeSeriesDialog
     ''' <value></value>
     ''' <returns></returns>
     ''' <remarks></remarks>
-    Public ReadOnly Property mergedSeriesTitle() As String
+    Public ReadOnly Property MergedSeriesTitle() As String
         Get
             Return Me.TextBox_MergedSeriesTitle.Text.Trim()
         End Get
@@ -141,11 +141,11 @@ Friend Class MergeSeriesDialog
 
     Private Sub OK_Button_Click(sender As System.Object, e As System.EventArgs) Handles OK_Button.Click
         'Check for valid inputs
-        If Me.selectedSeries.Count < 2 Then
+        If Me.SelectedSeries.Count < 2 Then
             MessageBox.Show("Please select at least two series to merge!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning)
             Return
         End If
-        If Me.mergedSeriesTitle = "" Then
+        If Me.MergedSeriesTitle = "" Then
             MessageBox.Show("Please enter a title for the merged series!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning)
             Me.TextBox_MergedSeriesTitle.Focus()
             Return

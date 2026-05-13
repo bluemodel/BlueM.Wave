@@ -680,8 +680,8 @@ Friend Class WaveController
 
             If dlgResult = DialogResult.OK Then
 
-                ids = dlg.selectedSeries
-                mergedSeriesTitle = dlg.mergedSeriesTitle
+                ids = dlg.SelectedSeries
+                mergedSeriesTitle = dlg.MergedSeriesTitle
 
                 'Clone the series with the highest priority
                 seriesMerged = _model.TimeSeries(ids(0)).Clone
