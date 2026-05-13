@@ -94,10 +94,11 @@ Friend Class Decumulate
             End If
 
             'create new decumulated timeseries
-            ts_decum = New TimeSeries($"{ts.Title} (decumulated)")
-            ts_decum.Unit = ts.Unit
-            ts_decum.Interpretation = TimeSeries.InterpretationEnum.CumulativePerTimestep
-            ts_decum.DataSource = New TimeSeriesDataSource(TimeSeriesDataSource.OriginEnum.AnalysisResult)
+            ts_decum = New TimeSeries($"{ts.Title} (decumulated)") With {
+                .Unit = ts.Unit,
+                .Interpretation = TimeSeries.InterpretationEnum.CumulativePerTimestep,
+                .DataSource = New TimeSeriesDataSource(TimeSeriesDataSource.OriginEnum.AnalysisResult)
+            }
 
             'copy first node unchanged
             ts_decum.AddNode(ts.StartDate, ts.FirstValue)
