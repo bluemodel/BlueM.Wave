@@ -39,9 +39,10 @@ Friend Class SelectSeriesDialog
         Me.Label_FileType.Text = Me.tsFile.GetType().Name
 
         'initialize input delay timer
-        Me.inputTimer = New Timers.Timer(1000)
-        Me.inputTimer.SynchronizingObject = Me
-        Me.inputTimer.AutoReset = False
+        Me.inputTimer = New Timers.Timer(1000) With {
+            .SynchronizingObject = Me,
+            .AutoReset = False
+        }
 
         'set intial focus
         Me.TextBox_Search.Focus()

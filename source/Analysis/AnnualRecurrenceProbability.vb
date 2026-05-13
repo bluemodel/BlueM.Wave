@@ -278,8 +278,9 @@ Friend Class AnnualRecurrenceProbability
         'point series
         For Each ts As TimeSeries In Me.InputTimeSeries
             Dim tsEvents As List(Of AnnualEvent) = Me.events(ts.Title)
-            Dim points As New Steema.TeeChart.Styles.Points(ResultChart.Chart)
-            points.Title = ts.Title
+            Dim points As New Steema.TeeChart.Styles.Points(ResultChart.Chart) With {
+                .Title = ts.Title
+            }
             For Each ev As AnnualEvent In tsEvents
                 points.Add(ev.returnPeriod, ev.maxValue, ev.year.ToString())
             Next
@@ -292,9 +293,10 @@ Friend Class AnnualRecurrenceProbability
         Me.ResultSeries = New List(Of TimeSeries)()
         For Each ts As TimeSeries In Me.InputTimeSeries
             Dim tsEvents As List(Of AnnualEvent) = Me.events(ts.Title)
-            Dim ts_events As New TimeSeries($"{ts.Title} (annual maxima)")
-            ts_events.Unit = ts.Unit
-            ts_events.Interpretation = TimeSeries.InterpretationEnum.Instantaneous
+            Dim ts_events As New TimeSeries($"{ts.Title} (annual maxima)") With {
+                .Unit = ts.Unit,
+                .Interpretation = TimeSeries.InterpretationEnum.Instantaneous
+            }
             ts_events.DisplayOptions.ShowPoints = True
             For Each ev As AnnualEvent In tsEvents
                 ts_events.AddNode(ev.maxDate, ev.maxValue)
