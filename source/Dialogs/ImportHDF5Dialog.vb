@@ -93,12 +93,8 @@ Friend Class ImportHDF5Dialog
         variableNames.Sort()
 
         'Populate elements list
-        ListBox_Elements.BeginUpdate()
         ListBox_Elements.Items.Clear()
-        For Each elementName In elementNames
-            ListBox_Elements.Items.Add(elementName)
-        Next
-        ListBox_Elements.EndUpdate()
+        ListBox_Elements.Items.AddRange(elementNames.ToArray())
 
         'Populate variables list with units
         CheckedListBox_Variables.BeginUpdate()

@@ -99,21 +99,19 @@ Friend Class ImportCSVDialog
     Private Sub Form_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
         'Combobox Trennzeichen initialisieren
-        Me.ComboBox_Separator.BeginUpdate()
-        With Me.ComboBox_Separator.Items
-            .Add(Constants.semicolon)
-            .Add(Constants.comma)
-            .Add(Constants.period)
-            .Add(Constants.space)
-            .Add(Constants.tab)
-        End With
-        Me.ComboBox_Separator.EndUpdate()
+        Me.ComboBox_Separator.Items.AddRange({
+            Constants.semicolon,
+            Constants.comma,
+            Constants.period,
+            Constants.space,
+            Constants.tab
+        })
 
         'Combobox Dezimaltrennzeichen initialisieren
-        Me.ComboBox_DecimalSeparator.BeginUpdate()
-        Me.ComboBox_DecimalSeparator.Items.Add(Constants.period)
-        Me.ComboBox_DecimalSeparator.Items.Add(Constants.comma)
-        Me.ComboBox_DecimalSeparator.EndUpdate()
+        Me.ComboBox_DecimalSeparator.Items.AddRange({
+            Constants.period,
+            Constants.comma
+        })
 
         'Combobox Datumsformat füllen
         For Each datumsformat As String In Helpers.DateFormats.Values
@@ -351,11 +349,7 @@ Friend Class ImportCSVDialog
         Next
         'update list box
         Me.ListBox_Series.Items.Clear()
-        Me.ListBox_Series.BeginUpdate()
-        For Each sInfo In Me.tsFile.TimeSeriesInfos
-            Me.ListBox_Series.Items.Add(sInfo)
-        Next
-        Me.ListBox_Series.EndUpdate()
+        Me.ListBox_Series.Items.AddRange(Me.tsFile.TimeSeriesInfos.ToArray())
         'reselect any previously selected items
         For Each sName As String In selectedSeries
             For i As Integer = 0 To Me.ListBox_Series.Items.Count - 1

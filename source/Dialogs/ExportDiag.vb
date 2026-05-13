@@ -25,26 +25,24 @@ Friend Class ExportDiag
         ' Add any initialization after the InitializeComponent() call.
 
         'add formats to combobox
-        With Me.ComboBox_Format.Items
-            .Add(TimeSeriesFile.FileTypes.CSV)
-            .Add(TimeSeriesFile.FileTypes.BIN)
-            .Add(TimeSeriesFile.FileTypes.DFS0)
-            .Add(TimeSeriesFile.FileTypes.FEWS_PI)
-            .Add(TimeSeriesFile.FileTypes.HYBNAT_BCS)
-            .Add(TimeSeriesFile.FileTypes.HYSTEM_REG)
-            .Add(TimeSeriesFile.FileTypes.SMUSI_REG)
-            .Add(TimeSeriesFile.FileTypes.SWMM_INTERFACE)
-            .Add(TimeSeriesFile.FileTypes.SWMM_TIMESERIES)
-            .Add(TimeSeriesFile.FileTypes.UVF)
-            .Add(TimeSeriesFile.FileTypes.ZRE)
-            .Add(TimeSeriesFile.FileTypes.ZRXP)
-        End With
+        Me.ComboBox_Format.Items.AddRange({
+            TimeSeriesFile.FileTypes.CSV,
+            TimeSeriesFile.FileTypes.BIN,
+            TimeSeriesFile.FileTypes.DFS0,
+            TimeSeriesFile.FileTypes.FEWS_PI,
+            TimeSeriesFile.FileTypes.HYBNAT_BCS,
+            TimeSeriesFile.FileTypes.HYSTEM_REG,
+            TimeSeriesFile.FileTypes.SMUSI_REG,
+            TimeSeriesFile.FileTypes.SWMM_INTERFACE,
+            TimeSeriesFile.FileTypes.SWMM_TIMESERIES,
+            TimeSeriesFile.FileTypes.UVF,
+            TimeSeriesFile.FileTypes.ZRE,
+            TimeSeriesFile.FileTypes.ZRXP
+        })
         Me.ComboBox_Format.SelectedIndex = 0
 
         'Add series to listbox
-        For Each zre As TimeSeries In timeseries.Values
-            Me.ListBox_Series.Items.Add(zre)
-        Next
+        Me.ListBox_Series.Items.AddRange(timeseries.Values.ToArray())
 
     End Sub
 

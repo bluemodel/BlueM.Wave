@@ -55,9 +55,7 @@ Friend Class MergeSeriesDialog
         ' Add any initialization after the InitializeComponent() call.
 
         'populate list of available series
-        For Each ts As TimeSeries In series
-            Me.CheckedListBox_AvailableSeries.Items.Add(ts)
-        Next
+        Me.CheckedListBox_AvailableSeries.Items.AddRange(series.ToArray())
 
     End Sub
 

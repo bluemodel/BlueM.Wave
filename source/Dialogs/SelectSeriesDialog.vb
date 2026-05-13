@@ -89,11 +89,7 @@ Friend Class SelectSeriesDialog
         Next
         'update list box
         Me.ListBox_Series.Items.Clear()
-        Me.ListBox_Series.BeginUpdate()
-        For Each sInfo In Me.tsFile.TimeSeriesInfos
-            Me.ListBox_Series.Items.Add(sInfo)
-        Next
-        Me.ListBox_Series.EndUpdate()
+        Me.ListBox_Series.Items.AddRange(Me.tsFile.TimeSeriesInfos.ToArray())
         'reselect any previously selected items
         For Each sName As String In selectedSeries
             For i As Integer = 0 To Me.ListBox_Series.Items.Count - 1

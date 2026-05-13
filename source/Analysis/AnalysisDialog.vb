@@ -28,9 +28,7 @@ Friend Class AnalysisDialog
         Me.ComboBox_Analysis.DataSource = [Enum].GetValues(Of AnalysisFactory.AnalysisFunctions)()
 
         'Populate listbox with time series
-        For Each series As TimeSeries In seriesList
-            Me.ListBox_Series.Items.Add(series)
-        Next
+        Me.ListBox_Series.Items.AddRange(seriesList.ToArray())
 
     End Sub
 

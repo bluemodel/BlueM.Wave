@@ -83,10 +83,8 @@ Friend Class CutDialog
         Me.MaskedTextBox_cutEnd.FormatProvider = Globalization.CultureInfo.CurrentCulture
 
         'populate controls
-        For Each ts As TimeSeries In tsList
-            Me.ListBox_Series.Items.Add(ts)
-            Me.ComboBox_RefSeries.Items.Add(ts)
-        Next
+        Me.ListBox_Series.Items.AddRange(tsList.ToArray())
+        Me.ComboBox_RefSeries.Items.AddRange(tsList.ToArray())
 
         'Update MaskedTextboxes
         Call Me.UpdateCutExtentControls()

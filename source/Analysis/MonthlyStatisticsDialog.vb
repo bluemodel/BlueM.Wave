@@ -22,9 +22,7 @@ Partial Friend Class MonthlyStatisticsDialog
     Public Sub New()
         Call InitializeComponent()
 
-        Me.ComboBox_startMonth.BeginUpdate()
         Me.ComboBox_startMonth.Items.AddRange(Helpers.CalendarMonths.ToArray)
-        Me.ComboBox_startMonth.EndUpdate()
 
         Me.ComboBox_startMonth.SelectedIndex = 10 'November
         Me.ComboBox_MonthType.SelectedIndex = 0

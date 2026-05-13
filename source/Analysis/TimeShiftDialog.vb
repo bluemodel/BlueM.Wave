@@ -24,15 +24,15 @@ Friend Class TimeShiftDialog
         Call InitializeComponent()
 
         'fill comboboxes
-        With Me.ComboBox_TimestepType.Items
-            .Add(TimeSeries.TimeStepTypeEnum.Year)
-            .Add(TimeSeries.TimeStepTypeEnum.Month)
-            .Add(TimeSeries.TimeStepTypeEnum.Week)
-            .Add(TimeSeries.TimeStepTypeEnum.Day)
-            .Add(TimeSeries.TimeStepTypeEnum.Hour)
-            .Add(TimeSeries.TimeStepTypeEnum.Minute)
-            .Add(TimeSeries.TimeStepTypeEnum.Second)
-        End With
+        Me.ComboBox_TimestepType.Items.AddRange({
+            TimeSeries.TimeStepTypeEnum.Year,
+            TimeSeries.TimeStepTypeEnum.Month,
+            TimeSeries.TimeStepTypeEnum.Week,
+            TimeSeries.TimeStepTypeEnum.Day,
+            TimeSeries.TimeStepTypeEnum.Hour,
+            TimeSeries.TimeStepTypeEnum.Minute,
+            TimeSeries.TimeStepTypeEnum.Second
+        })
         Me.ComboBox_TimestepType.SelectedIndex = 3 'default: Day
 
     End Sub

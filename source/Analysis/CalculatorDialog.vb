@@ -28,9 +28,7 @@ Friend Class CalculatorDialog
         ' Add any initialization after the InitializeComponent() call.
 
         'Add variables to listbox
-        For Each tsvar As CalculatorVariable In tsVariables
-            Me.ListBox_Variables.Items.Add(tsvar)
-        Next
+        Me.ListBox_Variables.Items.AddRange(tsVariables.ToArray())
 
         'Add unique units to combobox
         Dim units As New HashSet(Of String)
