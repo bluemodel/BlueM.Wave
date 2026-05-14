@@ -33,8 +33,8 @@ Partial Class MainWindow
         Dim ToolStripSeparator5 As ToolStripSeparator
         Dim ToolStripSeparator4 As ToolStripSeparator
         Dim ToolStripSeparator3 As ToolStripSeparator
+        Dim Margins3 As Steema.TeeChart.Margins = New Steema.TeeChart.Margins()
         Dim Margins1 As Steema.TeeChart.Margins = New Steema.TeeChart.Margins()
-        Dim Margins2 As Steema.TeeChart.Margins = New Steema.TeeChart.Margins()
         ToolStripStatusLabel_Errors = New ToolStripStatusLabel()
         ToolStripStatusLabel_Warnings = New ToolStripStatusLabel()
         ToolStripStatusLabel_Log = New ToolStripStatusLabel()
@@ -608,26 +608,26 @@ Partial Class MainWindow
         ' ToolStripMenuItem_Help
         ' 
         ToolStripMenuItem_Help.Name = "ToolStripMenuItem_Help"
-        ToolStripMenuItem_Help.Size = New Size(180, 22)
+        ToolStripMenuItem_Help.Size = New Size(165, 22)
         ToolStripMenuItem_Help.Text = "Help"
         ' 
         ' ToolStripMenuItem_Changelog
         ' 
         ToolStripMenuItem_Changelog.Name = "ToolStripMenuItem_Changelog"
-        ToolStripMenuItem_Changelog.Size = New Size(180, 22)
+        ToolStripMenuItem_Changelog.Size = New Size(165, 22)
         ToolStripMenuItem_Changelog.Text = "Changelog"
         ' 
         ' ToolStripMenuItem_CheckForUpdate
         ' 
         ToolStripMenuItem_CheckForUpdate.Name = "ToolStripMenuItem_CheckForUpdate"
-        ToolStripMenuItem_CheckForUpdate.Size = New Size(180, 22)
+        ToolStripMenuItem_CheckForUpdate.Size = New Size(165, 22)
         ToolStripMenuItem_CheckForUpdate.Text = "Check for update"
         ' 
         ' ToolStripMenuItem_About
         ' 
-        ToolStripMenuItem_About.Image = My.Resources.BlueM_icon
+        ToolStripMenuItem_About.Image = CType(resources.GetObject("ToolStripMenuItem_About.Image"), Image)
         ToolStripMenuItem_About.Name = "ToolStripMenuItem_About"
-        ToolStripMenuItem_About.Size = New Size(180, 22)
+        ToolStripMenuItem_About.Size = New Size(165, 22)
         ToolStripMenuItem_About.Text = "About"
         ' 
         ' ToolStripButton_ZoomNext
@@ -1665,11 +1665,11 @@ Partial Class MainWindow
         ' 
         ' 
         TChart2.Printer.Landscape = True
-        Margins1.Bottom = 100
-        Margins1.Left = 100
-        Margins1.Right = 100
-        Margins1.Top = 100
-        TChart2.Printer.Margins = Margins1
+        Margins3.Bottom = 100
+        Margins3.Left = 100
+        Margins3.Right = 100
+        Margins3.Top = 100
+        TChart2.Printer.Margins = Margins3
         TChart2.Size = New Size(1097, 157)
         ' 
         ' 
@@ -2970,11 +2970,11 @@ Partial Class MainWindow
         ' 
         ' 
         TChart1.Printer.Landscape = True
-        Margins2.Bottom = 10
-        Margins2.Left = 10
-        Margins2.Right = 10
-        Margins2.Top = 10
-        TChart1.Printer.Margins = Margins2
+        Margins1.Bottom = 10
+        Margins1.Left = 10
+        Margins1.Right = 10
+        Margins1.Top = 10
+        TChart1.Printer.Margins = Margins1
         TChart1.Size = New Size(1095, 439)
         ' 
         ' 
@@ -3294,8 +3294,7 @@ Partial Class MainWindow
         ' 
         ProgressBar1.Anchor = AnchorStyles.Bottom Or AnchorStyles.Right
         ProgressBar1.Enabled = False
-        ProgressBar1.Location = New Point(971, 740)
-        ProgressBar1.Margin = New Padding(4, 3, 4, 3)
+        ProgressBar1.Location = New Point(971, 743)
         ProgressBar1.Name = "ProgressBar1"
         ProgressBar1.Size = New Size(126, 18)
         ProgressBar1.Step = 1

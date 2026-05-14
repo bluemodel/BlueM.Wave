@@ -3345,8 +3345,13 @@ Friend Class WaveController
     Private Sub ShowBusy(isBusy As Boolean)
         If isBusy Then
             View.Cursor = Cursors.WaitCursor
+            View.ProgressBar1.Enabled = True
+            View.ProgressBar1.Style = ProgressBarStyle.Marquee
         Else
             View.Cursor = Cursors.Default
+            View.ProgressBar1.Style = ProgressBarStyle.Blocks
+            View.ProgressBar1.Value = 0
+            View.ProgressBar1.Enabled = False
         End If
     End Sub
 
