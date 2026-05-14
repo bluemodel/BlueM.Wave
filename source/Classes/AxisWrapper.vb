@@ -23,7 +23,7 @@ Imports System.Text.RegularExpressions
 ''' </summary>
 Friend Class AxisWrapper
 
-    Private _TAxis As Steema.TeeChart.Axis
+    Private ReadOnly _TAxis As Steema.TeeChart.Axis
 
     ''' <summary>
     ''' Constructor
