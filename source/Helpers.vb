@@ -24,7 +24,7 @@ Public Module Helpers
     ''' </summary>
     ''' <returns>NumberFormatInfo instance with decimal separator "." and no NumberGroupSeparator</returns>
     ''' <remarks></remarks>
-    Public ReadOnly Property DefaultNumberFormat() As NumberFormatInfo
+    Public ReadOnly Property DefaultNumberFormat As NumberFormatInfo
         Get
             'NumberFormatInfo einrichten
             DefaultNumberFormat = New NumberFormatInfo With {
@@ -47,7 +47,7 @@ Public Module Helpers
     ''' <summary>
     ''' Returns the number format as set by the operating system
     ''' </summary>
-    Public ReadOnly Property CurrentNumberFormat() As NumberFormatInfo
+    Public ReadOnly Property CurrentNumberFormat As NumberFormatInfo
         Get
             Return Globalization.CultureInfo.CurrentCulture.NumberFormat
         End Get
@@ -77,7 +77,7 @@ Public Module Helpers
     ''' </summary>
     ''' <returns>Dictionary of available DateFormats</returns>
     ''' <remarks>see https://docs.microsoft.com/en-us/dotnet/standard/base-types/custom-date-and-time-format-strings </remarks>
-    Public ReadOnly Property DateFormats() As Dictionary(Of String, String)
+    Public ReadOnly Property DateFormats As Dictionary(Of String, String)
         Get
             Dim dict As New Dictionary(Of String, String) From {
                 {"current", Helpers.CurrentDateFormat},

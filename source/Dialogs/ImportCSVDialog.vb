@@ -34,7 +34,7 @@ Friend Class ImportCSVDialog
     ''' <remarks>
     ''' see https://docs.microsoft.com/en-us/dotnet/standard/base-types/custom-date-and-time-format-strings
     ''' </remarks>
-    Private Property DateFormat() As String
+    Private Property DateFormat As String
         Get
             Dim format As String
             Dim m As MatchCollection

@@ -133,7 +133,7 @@ Public MustInherit Class TimeSeriesFile
     ''' <value></value>
     ''' <returns></returns>
     ''' <remarks></remarks>
-    Public ReadOnly Property FileMetadata() As Metadata
+    Public ReadOnly Property FileMetadata As Metadata
 
     ''' <summary>
     ''' Stores the TimeSeries read from the file.
@@ -148,64 +148,64 @@ Public MustInherit Class TimeSeriesFile
     ''' <summary>
     ''' Path to file
     ''' </summary>
-    Public Property File() As String
+    Public Property File As String
 
     ''' <summary>
     ''' Indicates whether the file contains columns separated by a character (True, default) or is fixed width (False)
     ''' </summary>
-    Public Property IsColumnSeparated() As Boolean = True
+    Public Property IsColumnSeparated As Boolean = True
 
     ''' <summary>
     ''' Separator (default is semicolon)
     ''' </summary>
-    Public Property Separator() As Character = Constants.semicolon
+    Public Property Separator As Character = Constants.semicolon
 
     ''' <summary>
     ''' Date format (default is Helpers.CurrentDateFormat)
     ''' </summary>
-    Public Property Dateformat() As String = Helpers.CurrentDateFormat
+    Public Property Dateformat As String = Helpers.CurrentDateFormat
 
     ''' <summary>
     ''' Decimal separator (default is period)
     ''' </summary>
-    Public Property DecimalSeparator() As Character = Constants.period
+    Public Property DecimalSeparator As Character = Constants.period
 
     ''' <summary>
     ''' Number of the line containing column headers
     ''' </summary>
-    Public Property LineNumberHeaders() As Integer = 1
+    Public Property LineNumberHeaders As Integer = 1
 
     ''' <summary>
     ''' Number of the line containing units
     ''' </summary>
-    Public Property LineNumberUnits() As Integer = 2
+    Public Property LineNumberUnits As Integer = 2
 
     ''' <summary>
     ''' Number of the first line containing data
     ''' </summary>
-    Public Property LineNumberData() As Integer = 3
+    Public Property LineNumberData As Integer = 3
 
     ''' <summary>
     ''' Number of header lines
     ''' </summary>
     ''' <returns>iLineData - 1</returns>
     ''' <remarks></remarks>
-    Public ReadOnly Property NLinesHeader() As Integer
+    Public ReadOnly Property NLinesHeader As Integer
         Get
-            Return _lineNumberData - 1
+            Return _LineNumberData - 1
         End Get
     End Property
 
     ''' <summary>
     ''' Read units from the file? (default is True)
     ''' </summary>
-    Public Property UseUnits() As Boolean = True
+    Public Property UseUnits As Boolean = True
 
     ''' <summary>
     ''' Column width (default is 16)
     ''' </summary>
     ''' <remarks>only relevant for fixed width files</remarks>
-    Public Property ColumnWidth() As Integer = 16
+    Public Property ColumnWidth As Integer = 16
 
     ''' <summary>
     ''' Number of characters before the first column (only relevant for fixed width columns)
@@ -215,19 +215,19 @@ Public MustInherit Class TimeSeriesFile
     ''' <summary>
     ''' Index of the column containing the datetime values
     ''' </summary>
-    Public Property DateTimeColumnIndex() As Integer = 0
+    Public Property DateTimeColumnIndex As Integer = 0
 
     ''' <summary>
     ''' List of TimeSeriesInfo of all series contained in a file
     ''' </summary>
     ''' <remarks></remarks>
-    Public Property TimeSeriesInfos() As List(Of TimeSeriesInfo)
+    Public Property TimeSeriesInfos As List(Of TimeSeriesInfo)
 
     ''' <summary>
     ''' List of TimeSeriesInfo of series currently selected for import
     ''' </summary>
     ''' <remarks></remarks>
-    Public ReadOnly Property SelectedSeries() As List(Of TimeSeriesInfo)
+    Public ReadOnly Property SelectedSeries As List(Of TimeSeriesInfo)
 
     ''' <summary>
     ''' Suffix to be added to the timeseries titles when imported from this file
@@ -300,13 +300,13 @@ Public MustInherit Class TimeSeriesFile
     ''' Indicates whether the ImportDialog should be shown when importing this file format
     ''' </summary>
     ''' <returns>True if the ImportDialog should be shown when importing this file format</returns>
-    Public MustOverride ReadOnly Property UseImportDialog() As Boolean
+    Public MustOverride ReadOnly Property UseImportDialog As Boolean
 
     ''' <summary>
     ''' Returns a list of format-specific metadata keys
     ''' </summary>
     ''' <remarks>Is an empty list by default, should be overridden by inheriting classes</remarks>
-    Public Shared ReadOnly Property MetadataKeys() As List(Of String)
+    Public Shared ReadOnly Property MetadataKeys As List(Of String)
         Get
             Return New List(Of String)
         End Get

@@ -59,12 +59,12 @@ Namespace Fileformats
             Dim Index As Integer
         End Structure
 
-        Public Property Zeitintervall() As Integer
+        Public Property Zeitintervall As Integer
 
         ''' <summary>
         ''' Returns a list of SWMM routing interface file specific metadata keys
         ''' </summary>
-        Public Overloads Shared ReadOnly Property MetadataKeys() As List(Of String)
+        Public Overloads Shared ReadOnly Property MetadataKeys As List(Of String)
             Get
                 Dim keys As New List(Of String) From {
                     "Node",
@@ -82,7 +82,7 @@ Namespace Fileformats
         ''' <summary>
         ''' Gibt an, ob beim Import des Dateiformats der Importdialog angezeigt werden soll
         ''' </summary>
-        Public Overrides ReadOnly Property UseImportDialog() As Boolean = True
+        Public Overrides ReadOnly Property UseImportDialog As Boolean = True
 
 #End Region 'Properties
 

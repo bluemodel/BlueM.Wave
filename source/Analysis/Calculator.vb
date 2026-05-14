@@ -34,25 +34,25 @@ Friend Class Calculator
     ''' <summary>
     ''' Flag indicating whether the analysis function has a result test
     ''' </summary>
-    Public Overrides ReadOnly Property hasResultText() As Boolean = True
+    Public Overrides ReadOnly Property hasResultText As Boolean = True
 
     ''' <summary>
     ''' Flag indicating whether the analysis function has result values
     ''' </summary>
-    Public Overrides ReadOnly Property hasResultValues() As Boolean = False
+    Public Overrides ReadOnly Property hasResultValues As Boolean = False
 
     ''' <summary>
     ''' Flag indicating whether the analysis function has a result diagram
     ''' </summary>
-    Public Overrides ReadOnly Property hasResultChart() As Boolean = False
+    Public Overrides ReadOnly Property hasResultChart As Boolean = False
 
     ''' <summary>
     ''' Flag indicating whether the analysis function has result series
     ''' that should be added to the main diagram
     ''' </summary>
-    Public Overrides ReadOnly Property hasResultSeries() As Boolean = True
+    Public Overrides ReadOnly Property hasResultSeries As Boolean = True
 
-    Public Overrides ReadOnly Property hasResultTable() As Boolean = False
+    Public Overrides ReadOnly Property hasResultTable As Boolean = False
 
     ''' <summary>
     ''' The mathematical expression used for the calculation

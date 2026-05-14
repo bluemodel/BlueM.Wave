@@ -32,17 +32,17 @@ Namespace Fileformats
         ''' <summary>
         ''' Gibt an, ob beim Import des Dateiformats der Importdialog angezeigt werden soll
         ''' </summary>
-        Public Overrides ReadOnly Property UseImportDialog() As Boolean = True
+        Public Overrides ReadOnly Property UseImportDialog As Boolean = True
 
         ''' <summary>
         ''' Number of the line containing general information
         ''' </summary>
-        Public Property iLineInfo() As Integer = 1
+        Public Property iLineInfo As Integer = 1
 
         ''' <summary>
         ''' Length of date time stamp
         ''' </summary>
-        Public Property DateTimeLength() As Integer = 17
+        Public Property DateTimeLength As Integer = 17
 
 #End Region 'Properties
 

@@ -35,7 +35,7 @@ Namespace Fileformats
         ''' <value></value>
         ''' <returns>True</returns>
         ''' <remarks></remarks>
-        Public Overrides ReadOnly Property UseImportDialog() As Boolean = True
+        Public Overrides ReadOnly Property UseImportDialog As Boolean = True
 
         ''' <summary>
         ''' Instantiates a new FEWS_PI object
@@ -182,7 +182,7 @@ Namespace Fileformats
         ''' <summary>
         ''' Returns a list of Delft-FEWS PI-specific metadata keys
         ''' </summary>
-        Public Overloads Shared ReadOnly Property MetadataKeys() As List(Of String)
+        Public Overloads Shared ReadOnly Property MetadataKeys As List(Of String)
             Get
                 Dim keys As New List(Of String) From {
                 "type",

@@ -36,13 +36,13 @@ Namespace Fileformats
         ''' <summary>
         ''' Gibt an, ob beim Import des Dateiformats der Importdialog angezeigt werden soll
         ''' </summary>
-        Public Overrides ReadOnly Property UseImportDialog() As Boolean = False
+        Public Overrides ReadOnly Property UseImportDialog As Boolean = False
 
         ''' <summary>
         ''' Zeitintervall von SMUSI-Regenreihen
         ''' </summary>
         ''' <remarks>5 Minuten</remarks>
-        Private Shared ReadOnly Property Zeitintervall() As TimeSpan
+        Private Shared ReadOnly Property Zeitintervall As TimeSpan
             Get
                 Return New TimeSpan(0, SMUSI_REG.dt_min, 0)
             End Get

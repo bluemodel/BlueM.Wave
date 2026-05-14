@@ -30,7 +30,7 @@ Friend Class SeriesEditorDialog
     ''' <value></value>
     ''' <returns></returns>
     ''' <remarks></remarks>
-    Private ReadOnly Property SeriesTitle() As String
+    Private ReadOnly Property SeriesTitle As String
         Get
             Return Me.TextBox_Title.Text
         End Get
@@ -42,7 +42,7 @@ Friend Class SeriesEditorDialog
     ''' <value></value>
     ''' <returns></returns>
     ''' <remarks>Defaults to "-" if left empty</remarks>
-    Private ReadOnly Property SeriesUnit() As String
+    Private ReadOnly Property SeriesUnit As String
         Get
             If Me.TextBox_Unit.Text.Trim() <> "" Then
                 Return Me.TextBox_Unit.Text
@@ -58,7 +58,7 @@ Friend Class SeriesEditorDialog
     ''' <value></value>
     ''' <returns></returns>
     ''' <remarks></remarks>
-    Public ReadOnly Property Zeitreihe() As TimeSeries
+    Public ReadOnly Property Zeitreihe As TimeSeries
         Get
             Return Me.mZeitreihe
         End Get

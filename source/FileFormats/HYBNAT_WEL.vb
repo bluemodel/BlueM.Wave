@@ -60,7 +60,7 @@ Namespace Fileformats
         ''' <value></value>
         ''' <returns>True</returns>
         ''' <remarks></remarks>
-        Public Overrides ReadOnly Property UseImportDialog() As Boolean = True
+        Public Overrides ReadOnly Property UseImportDialog As Boolean = True
 
         ''' <summary>
         ''' Instanciates a new HYBNAT WEL file

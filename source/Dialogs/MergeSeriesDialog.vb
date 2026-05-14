@@ -25,7 +25,7 @@ Friend Class MergeSeriesDialog
     ''' <value></value>
     ''' <returns></returns>
     ''' <remarks></remarks>
-    Public ReadOnly Property SelectedSeries() As List(Of Integer)
+    Public ReadOnly Property SelectedSeries As List(Of Integer)
         Get
             Dim ids As New List(Of Integer)
             For Each ts As TimeSeries In Me.ListBox_SelectedSeries.Items
@@ -41,7 +41,7 @@ Friend Class MergeSeriesDialog
     ''' <value></value>
     ''' <returns></returns>
     ''' <remarks></remarks>
-    Public ReadOnly Property MergedSeriesTitle() As String
+    Public ReadOnly Property MergedSeriesTitle As String
         Get
             Return Me.TextBox_MergedSeriesTitle.Text.Trim()
         End Get

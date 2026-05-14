@@ -72,25 +72,25 @@ Friend Class MonthlyStatistics
     ''' <summary>
     ''' Flag indicating whether the analysis function has a result text
     ''' </summary>
-    Public Overrides ReadOnly Property hasResultText() As Boolean = False
+    Public Overrides ReadOnly Property hasResultText As Boolean = False
 
     ''' <summary>
     ''' Flag indicating whether the analysis function has result values
     ''' </summary>
-    Public Overrides ReadOnly Property hasResultValues() As Boolean = False
+    Public Overrides ReadOnly Property hasResultValues As Boolean = False
 
     ''' <summary>
     ''' Flag indicating whether the analysis function has a result diagram
     ''' </summary>
-    Public Overrides ReadOnly Property hasResultChart() As Boolean = True
+    Public Overrides ReadOnly Property hasResultChart As Boolean = True
 
     ''' <summary>
     ''' Flag indicating whether the analysis function has result series
     ''' that should be added to the main diagram
     ''' </summary>
-    Public Overrides ReadOnly Property hasResultSeries() As Boolean = False
+    Public Overrides ReadOnly Property hasResultSeries As Boolean = False
 
-    Public Overrides ReadOnly Property hasResultTable() As Boolean = True
+    Public Overrides ReadOnly Property hasResultTable As Boolean = True
 
 #End Region ' Properties
 

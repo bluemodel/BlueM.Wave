@@ -47,30 +47,30 @@ Friend Class TimeStepAnalysis
     ''' <summary>
     ''' Flag indicating whether the analysis function has a result test
     ''' </summary>
-    Public Overrides ReadOnly Property hasResultText() As Boolean = False
+    Public Overrides ReadOnly Property hasResultText As Boolean = False
 
     ''' <summary>
     ''' Flag indicating whether the analysis function has result values
     ''' </summary>
-    Public Overrides ReadOnly Property hasResultValues() As Boolean = False
+    Public Overrides ReadOnly Property hasResultValues As Boolean = False
 
     ''' <summary>
     ''' Flag indicating whether the analysis function has a result diagram
     ''' </summary>
-    Public Overrides ReadOnly Property hasResultChart() As Boolean = False
+    Public Overrides ReadOnly Property hasResultChart As Boolean = False
 
     ''' <summary>
     ''' Flag indicating whether the analysis function has result series
     ''' that should be added to the main diagram
     ''' </summary>
-    Public Overrides ReadOnly Property hasResultSeries() As Boolean = True
+    Public Overrides ReadOnly Property hasResultSeries As Boolean = True
 
-    Public Overrides ReadOnly Property hasResultTable() As Boolean = False
+    Public Overrides ReadOnly Property hasResultTable As Boolean = False
 
     ''' <summary>
     ''' Name of the selected time unit
     ''' </summary>
-    Private ReadOnly Property TimeUnitName() As String
+    Private ReadOnly Property TimeUnitName As String
         Get
             Return Me.TimeUnit.ToString("g")
         End Get

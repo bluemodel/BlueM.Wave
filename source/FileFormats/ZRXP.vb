@@ -59,7 +59,7 @@ Namespace Fileformats
         ''' <value></value>
         ''' <returns>False</returns>
         ''' <remarks></remarks>
-        Public Overrides ReadOnly Property UseImportDialog() As Boolean = False
+        Public Overrides ReadOnly Property UseImportDialog As Boolean = False
 
         ''' <summary>
         ''' Instantiates a new ZRXP object
@@ -382,7 +382,7 @@ Namespace Fileformats
         ''' <summary>
         ''' Returns a list of ZRXP-specific metadata keys
         ''' </summary>
-        Public Overloads Shared ReadOnly Property MetadataKeys() As List(Of String)
+        Public Overloads Shared ReadOnly Property MetadataKeys As List(Of String)
             Get
                 Dim keys As New List(Of String) From {
                     "ZRXPVERSION",

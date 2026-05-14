@@ -39,7 +39,7 @@ Namespace Fileformats
         ''' <summary>
         ''' Flag indicating whether to show the import dialog
         ''' </summary>
-        Public Overrides ReadOnly Property UseImportDialog() As Boolean = True
+        Public Overrides ReadOnly Property UseImportDialog As Boolean = True
 
         Public Sub New(FileName As String, Optional ReadAllNow As Boolean = False)
 

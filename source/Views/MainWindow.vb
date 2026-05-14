@@ -61,7 +61,7 @@ Friend Class MainWindow
     ''' <value></value>
     ''' <returns></returns>
     ''' <remarks></remarks>
-    Friend ReadOnly Property AutoAdjustYAxes() As Boolean
+    Friend ReadOnly Property AutoAdjustYAxes As Boolean
         Get
             Return Me.ToolStripButton_AutoAdjustYAxes.Checked
         End Get
@@ -70,7 +70,7 @@ Friend Class MainWindow
     ''' <summary>
     ''' Checks whether the Add markers button is activated
     ''' </summary>
-    Friend ReadOnly Property AddMarkersActive() As Boolean
+    Friend ReadOnly Property AddMarkersActive As Boolean
         Get
             Return Me.ToolStripButton_AddMarkers.Checked
         End Get

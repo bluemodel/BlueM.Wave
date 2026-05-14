@@ -34,11 +34,11 @@ Namespace Fileformats
         ''' <summary>
         ''' Gibt an, ob beim Import des Dateiformats der Importdialog angezeigt werden soll
         ''' </summary>
-        Public Overrides ReadOnly Property UseImportDialog() As Boolean = False
+        Public Overrides ReadOnly Property UseImportDialog As Boolean = False
 
-        Private Property Zeitintervall() As Integer
+        Private Property Zeitintervall As Integer
 
-        Private Property DezFaktor() As Integer
+        Private Property DezFaktor As Integer
 
         Private Shared ReadOnly Property WerteProZeile(dt As Integer) As Integer
             Get

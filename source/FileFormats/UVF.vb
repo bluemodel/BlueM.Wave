@@ -40,7 +40,7 @@ Namespace Fileformats
         ''' <value></value>
         ''' <returns>False</returns>
         ''' <remarks></remarks>
-        Public Overrides ReadOnly Property UseImportDialog() As Boolean = False
+        Public Overrides ReadOnly Property UseImportDialog As Boolean = False
 
         ''' <summary>
         ''' Instanziert ein neues UVF Objekt
@@ -296,7 +296,7 @@ Namespace Fileformats
         ''' <summary>
         ''' Returns a list of UVF-specific metadata keys
         ''' </summary>
-        Public Overloads Shared ReadOnly Property MetadataKeys() As List(Of String)
+        Public Overloads Shared ReadOnly Property MetadataKeys As List(Of String)
             Get
                 Dim keys As New List(Of String) From {
                     "name",

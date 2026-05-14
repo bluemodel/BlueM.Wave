@@ -62,7 +62,7 @@ Public Class Character
     ''' <value></value>
     ''' <returns></returns>
     ''' <remarks></remarks>
-    Public ReadOnly Property ToChar() As Char
+    Public ReadOnly Property ToChar As Char
         Get
             Return _char
         End Get
