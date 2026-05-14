@@ -237,7 +237,7 @@ Friend Class WaveController
         AddHandler _model.SeriesReordered, AddressOf SeriesReordered
         AddHandler _model.HighlightTimestamps, AddressOf SetMarkers
         AddHandler _model.TENFileLoading, AddressOf Load_TEN
-        AddHandler _model.IsBusyChanged, AddressOf ShowBusy
+        AddHandler _model.IsBusyChanged, AddressOf UpdateBusyMode
 
         'user setting events
         AddHandler My.Settings.PropertyChanged, AddressOf UserSettingsChanged
@@ -676,7 +676,7 @@ Friend Class WaveController
             dlg = New MergeSeriesDialog(_model.TimeSeries.ToList)
             dlgResult = dlg.ShowDialog()
 
-            View.Cursor = Cursors.WaitCursor
+            Call UpdateBusyMode(True, withIndefiniteProgress:=True)
 
             If dlgResult = DialogResult.OK Then
 
@@ -705,7 +705,7 @@ Friend Class WaveController
             Log.AddLogEntry(Log.Levels.error, "Error during merge: " & ex.Message)
             MessageBox.Show("Error during merge: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         Finally
-            View.Cursor = Cursors.Default
+            Call UpdateBusyMode(False)
         End Try
 
     End Sub
@@ -954,8 +954,7 @@ Friend Class WaveController
         If (oAnalysisDialog.ShowDialog() = DialogResult.OK) Then
 
             Try
-                'Wait-Cursor
-                View.Cursor = Cursors.WaitCursor
+                Call UpdateBusyMode(True, withIndefiniteProgress:=False)
 
                 Call Log.AddLogEntry(Log.Levels.info, $"Starting analysis {oAnalysisDialog.SelectedAnalysisFunction} ...")
 
@@ -1027,8 +1026,7 @@ Friend Class WaveController
                 MessageBox.Show("Analysis failed:" & eol & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
 
             Finally
-                View.Cursor = Cursors.Default
-
+                Call UpdateBusyMode(False)
                 ProgressFinish()
             End Try
 
@@ -1817,6 +1815,8 @@ Friend Class WaveController
     ''' </summary>
     Private Sub Chart_MouseUp(sender As System.Object, e As System.Windows.Forms.MouseEventArgs)
 
+        View.TChart1.Cursor = View.Cursor
+
         If Me.ChartMouseZoomDragging Then
             'complete the zoom process
             Me.ChartMouseZoomDragging = False
@@ -1868,7 +1868,6 @@ Friend Class WaveController
 
         End If
 
-        View.TChart1.Cursor = Cursors.Default
     End Sub
 
     ''' <summary>
@@ -2017,7 +2016,7 @@ Friend Class WaveController
     ''' <param name="e"></param>
     Private Sub OverviewChart_MouseUp(sender As System.Object, e As System.Windows.Forms.MouseEventArgs)
 
-        View.TChart2.Cursor = Cursors.Default
+        View.TChart2.Cursor = View.Cursor
 
         If Me.OverviewChartMouseDragging Then
 
@@ -3193,8 +3192,22 @@ Friend Class WaveController
             View.ProgressBar1.Invoke(New Action(AddressOf ProgressFinish))
             Return
         End If
+        View.ProgressBar1.Style = ProgressBarStyle.Blocks
         View.ProgressBar1.Value = 0
         View.ProgressBar1.Enabled = False
+    End Sub
+
+    ''' <summary>
+    ''' Sets the progress bar to an indefinite marquee style (used when the duration of the process is unknown)
+    ''' </summary>
+    Private Sub ProgressIndefinite()
+        'Handle calls from different threads
+        If View.ProgressBar1.InvokeRequired Then
+            View.ProgressBar1.Invoke(New Action(AddressOf ProgressIndefinite))
+            Return
+        End If
+        View.ProgressBar1.Enabled = True
+        View.ProgressBar1.Style = ProgressBarStyle.Marquee
     End Sub
 
     ''' <summary>
@@ -3357,16 +3370,19 @@ Friend Class WaveController
 
     End Sub
 
-    Private Sub ShowBusy(isBusy As Boolean)
+    Private Sub UpdateBusyMode(isBusy As Boolean, Optional withIndefiniteProgress As Boolean = True)
         If isBusy Then
             View.Cursor = Cursors.WaitCursor
-            View.ProgressBar1.Enabled = True
-            View.ProgressBar1.Style = ProgressBarStyle.Marquee
+            View.TChart1.Cursor = Cursors.WaitCursor
+            View.TChart2.Cursor = Cursors.WaitCursor
+            If withIndefiniteProgress Then
+                Call ProgressIndefinite()
+            End If
         Else
             View.Cursor = Cursors.Default
-            View.ProgressBar1.Style = ProgressBarStyle.Blocks
-            View.ProgressBar1.Value = 0
-            View.ProgressBar1.Enabled = False
+            View.TChart1.Cursor = Cursors.Default
+            View.TChart2.Cursor = Cursors.Default
+            Call ProgressFinish()
         End If
     End Sub
 
