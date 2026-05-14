@@ -608,26 +608,26 @@ Partial Class MainWindow
         ' ToolStripMenuItem_Help
         ' 
         ToolStripMenuItem_Help.Name = "ToolStripMenuItem_Help"
-        ToolStripMenuItem_Help.Size = New Size(180, 22)
+        ToolStripMenuItem_Help.Size = New Size(165, 22)
         ToolStripMenuItem_Help.Text = "Help"
         ' 
         ' ToolStripMenuItem_Changelog
         ' 
         ToolStripMenuItem_Changelog.Name = "ToolStripMenuItem_Changelog"
-        ToolStripMenuItem_Changelog.Size = New Size(180, 22)
+        ToolStripMenuItem_Changelog.Size = New Size(165, 22)
         ToolStripMenuItem_Changelog.Text = "Changelog"
         ' 
         ' ToolStripMenuItem_CheckForUpdate
         ' 
         ToolStripMenuItem_CheckForUpdate.Name = "ToolStripMenuItem_CheckForUpdate"
-        ToolStripMenuItem_CheckForUpdate.Size = New Size(180, 22)
+        ToolStripMenuItem_CheckForUpdate.Size = New Size(165, 22)
         ToolStripMenuItem_CheckForUpdate.Text = "Check for update"
         ' 
         ' ToolStripMenuItem_About
         ' 
-        ToolStripMenuItem_About.Image = My.Resources.BlueM_icon
+        ToolStripMenuItem_About.Image = CType(resources.GetObject("ToolStripMenuItem_About.Image"), Image)
         ToolStripMenuItem_About.Name = "ToolStripMenuItem_About"
-        ToolStripMenuItem_About.Size = New Size(180, 22)
+        ToolStripMenuItem_About.Size = New Size(165, 22)
         ToolStripMenuItem_About.Text = "About"
         ' 
         ' ToolStripButton_ZoomNext
@@ -2001,7 +2001,7 @@ Partial Class MainWindow
         ' Button_NavBack
         ' 
         Button_NavBack.Image = CType(resources.GetObject("Button_NavBack.Image"), Image)
-        Button_NavBack.Location = New Point(42, 10)
+        Button_NavBack.Location = New Point(42, 9)
         Button_NavBack.Name = "Button_NavBack"
         Button_NavBack.Size = New Size(80, 27)
         Button_NavBack.TabIndex = 1
@@ -3294,8 +3294,7 @@ Partial Class MainWindow
         ' 
         ProgressBar1.Anchor = AnchorStyles.Bottom Or AnchorStyles.Right
         ProgressBar1.Enabled = False
-        ProgressBar1.Location = New Point(971, 740)
-        ProgressBar1.Margin = New Padding(4, 3, 4, 3)
+        ProgressBar1.Location = New Point(971, 743)
         ProgressBar1.Name = "ProgressBar1"
         ProgressBar1.Size = New Size(126, 18)
         ProgressBar1.Step = 1

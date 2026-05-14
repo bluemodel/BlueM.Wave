@@ -41,6 +41,12 @@ Friend Class LogWindow
 
     Private Sub AddLogEntry(level As Log.Levels, msg As String)
 
+        'Handle calls from different threads
+        If Me.TextBox_Log.InvokeRequired Then
+            Me.TextBox_Log.Invoke(New Action(Of Log.Levels, String)(AddressOf AddLogEntry), level, msg)
+            Return
+        End If
+
         Dim start, length As Integer
 
         start = Me.TextBox_Log.TextLength

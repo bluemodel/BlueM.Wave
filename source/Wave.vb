@@ -105,7 +105,7 @@ Public Class Wave
     ''' Import a file
     ''' </summary>
     ''' <param name="file">file path</param>
-    Public Sub Import_File(file As String)
+    Public Async Sub Import_File(file As String)
 
         Dim fileInstance As TimeSeriesFile
         Dim ok As Boolean
@@ -148,8 +148,8 @@ Public Class Wave
 
                     If (ok) Then
 
-                        'Datei einlesen
-                        Call fileInstance.ReadFile()
+                        'Read file (in a separate thread)
+                        Await Task.Run(Sub() fileInstance.ReadFile())
 
                         'Log
                         Call Log.AddLogEntry(Log.Levels.info, $"File '{file}' imported successfully!")
