@@ -31,7 +31,7 @@ jobs:
         run: dotnet build BlueM.Wave\tests\Wave.Tests.vbproj --arch x64 --configuration Release
         
       - name: Run Tests
-        run: dotnet test BlueM.Wave\tests\bin\x64\Release\net10.0-windows\Wave.Tests.dll --settings BlueM.Wave\tests\tests.runsettings
+        run: dotnet test BlueM.Wave\tests\bin\Release\net10.0-windows\win-x64\Wave.Tests.dll --settings BlueM.Wave\tests\tests.runsettings
           
       - name: Upload test results
         if: always()
