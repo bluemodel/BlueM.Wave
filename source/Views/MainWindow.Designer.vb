@@ -33,8 +33,8 @@ Partial Class MainWindow
         Dim ToolStripSeparator5 As ToolStripSeparator
         Dim ToolStripSeparator4 As ToolStripSeparator
         Dim ToolStripSeparator3 As ToolStripSeparator
-        Dim Margins3 As Steema.TeeChart.Margins = New Steema.TeeChart.Margins()
         Dim Margins1 As Steema.TeeChart.Margins = New Steema.TeeChart.Margins()
+        Dim Margins2 As Steema.TeeChart.Margins = New Steema.TeeChart.Margins()
         ToolStripStatusLabel_Errors = New ToolStripStatusLabel()
         ToolStripStatusLabel_Warnings = New ToolStripStatusLabel()
         ToolStripStatusLabel_Log = New ToolStripStatusLabel()
@@ -1665,11 +1665,11 @@ Partial Class MainWindow
         ' 
         ' 
         TChart2.Printer.Landscape = True
-        Margins3.Bottom = 100
-        Margins3.Left = 100
-        Margins3.Right = 100
-        Margins3.Top = 100
-        TChart2.Printer.Margins = Margins3
+        Margins1.Bottom = 100
+        Margins1.Left = 100
+        Margins1.Right = 100
+        Margins1.Top = 100
+        TChart2.Printer.Margins = Margins1
         TChart2.Size = New Size(1097, 157)
         ' 
         ' 
@@ -2001,7 +2001,7 @@ Partial Class MainWindow
         ' Button_NavBack
         ' 
         Button_NavBack.Image = CType(resources.GetObject("Button_NavBack.Image"), Image)
-        Button_NavBack.Location = New Point(42, 10)
+        Button_NavBack.Location = New Point(42, 9)
         Button_NavBack.Name = "Button_NavBack"
         Button_NavBack.Size = New Size(80, 27)
         Button_NavBack.TabIndex = 1
@@ -2970,11 +2970,11 @@ Partial Class MainWindow
         ' 
         ' 
         TChart1.Printer.Landscape = True
-        Margins1.Bottom = 10
-        Margins1.Left = 10
-        Margins1.Right = 10
-        Margins1.Top = 10
-        TChart1.Printer.Margins = Margins1
+        Margins2.Bottom = 10
+        Margins2.Left = 10
+        Margins2.Right = 10
+        Margins2.Top = 10
+        TChart1.Printer.Margins = Margins2
         TChart1.Size = New Size(1095, 439)
         ' 
         ' 
