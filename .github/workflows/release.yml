@@ -7,7 +7,7 @@ on:
 
 jobs:
   build-and-release:
-    runs-on: windows-latest
+    runs-on: windows-2025-vs2026
 
     steps:
       - name: Parse version from latest tag
@@ -16,9 +16,6 @@ jobs:
         
       - name: Checkout
         uses: actions/checkout@v6
-        
-      - name: Add msbuild to PATH
-        uses: microsoft/setup-msbuild@v3
         
       - name: Create TeeChart license file from secret
         uses: lukasa1993/secret-file-action@v1.0.4
@@ -31,10 +28,10 @@ jobs:
         run: copy ${{ steps.teechart-license.outputs.file }} "source\My Project\TeeChart.licenses"
         
       - name: Build Wave
-        run: msbuild source\Wave.vbproj -restore -property:Platform=x64 -property:Configuration=Release
+        run: dotnet build source\Wave.vbproj --arch x64 --configuration Release
         
       - name: Create zip archive
-        run: Compress-Archive -Path source\bin\x64\Release\* -DestinationPath BlueM.Wave_${{ steps.version.outputs.full }}_x64.zip
+        run: Compress-Archive -Path source\bin\Release\net10.0-windows\win-x64\* -DestinationPath BlueM.Wave_${{ steps.version.outputs.full }}_x64.zip
         
       - name: Setup VS Dev Environment
         uses: seanmiddleditch/gha-setup-vsdevenv@v5

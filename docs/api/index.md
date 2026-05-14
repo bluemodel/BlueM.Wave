@@ -30,7 +30,7 @@ ts.Cut(New DateTime(2000, 1, 2), New DateTime(2000, 1, 3))
 ```
 
 ### TimeSeriesFile
-You can use the [`BlueM.Wave.TimeSeriesFile`](xref:BlueM.Wave.TimeSeriesFile) class' factory method [`getInstance()`](xref:BlueM.Wave.TimeSeriesFile#BlueM_Wave_TimeSeriesFile_getInstance_System_String_BlueM_Wave_TimeSeriesFile_FileTypes_) to read time series from any of the supported file formats:
+You can use the [`BlueM.Wave.TimeSeriesFile`](xref:BlueM.Wave.TimeSeriesFile) class' factory method [`GetInstance()`](xref:BlueM.Wave.TimeSeriesFile#BlueM_Wave_TimeSeriesFile_GetInstance_System_String_BlueM_Wave_TimeSeriesFile_FileTypes_) to read time series from any of the supported file formats:
 ```vb
 Dim filepath as String = "path\to\file"
 Dim tsfile as BlueM.Wave.TimeSeriesFile = BlueM.Wave.TimeSeriesFile.getInstance(filepath)
@@ -41,11 +41,11 @@ For Each sInfo As BlueM.Wave.TimeSeriesInfo In tsfile.TimeSeriesInfos
 Next
 
 'select some or all series for import
-tsFile.selectSeries("name or index")
-tsfile.selectAllSeries()
+tsFile.SelectSeries("name or index")
+tsfile.SelectAllSeries()
 
 'read the selected time series from the file
-tsfile.readFile()
+tsfile.ReadFile()
 
 'loop over all series read from the file and print some information about them
 For Each ts As BlueM.Wave.TimeSeries In tsfile.TimeSeries.Values
@@ -56,7 +56,7 @@ For Each ts As BlueM.Wave.TimeSeries In tsfile.TimeSeries.Values
 Next
 
 'get one particular time series (selects the series and reads it from the file if necessary)
-Dim ts As BlueM.Wave.TimeSeries = tsfile.getTimeSeries("name or index")
+Dim ts As BlueM.Wave.TimeSeries = tsfile.GetTimeSeries("name or index")
 ```
 
 The namespace [`BlueM.Wave.Fileformats`](xref:BlueM.Wave.Fileformats) contains special classes for reading from specific file formats, which all inherit from [`TimeSeriesFile`](xref:BlueM.Wave.TimeSeriesFile).
