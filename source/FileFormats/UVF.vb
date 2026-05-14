@@ -40,11 +40,7 @@ Namespace Fileformats
         ''' <value></value>
         ''' <returns>False</returns>
         ''' <remarks></remarks>
-        Public Overrides ReadOnly Property UseImportDialog() As Boolean
-            Get
-                Return False
-            End Get
-        End Property
+        Public Overrides ReadOnly Property UseImportDialog() As Boolean = False
 
         ''' <summary>
         ''' Instanziert ein neues UVF Objekt

@@ -27,47 +27,22 @@ Namespace Fileformats
     Public Class WEL
         Inherits TimeSeriesFile
 
-#Region "Eigenschaften"
-
-        Private _iLineInfo As Integer = 1
-        Private _DateTimeLength As Integer = 17
-
-#End Region
-
 #Region "Properties"
 
         ''' <summary>
         ''' Gibt an, ob beim Import des Dateiformats der Importdialog angezeigt werden soll
         ''' </summary>
-        Public Overrides ReadOnly Property UseImportDialog() As Boolean
-            Get
-                Return True
-            End Get
-        End Property
+        Public Overrides ReadOnly Property UseImportDialog() As Boolean = True
 
         ''' <summary>
         ''' Number of the line containing general information
         ''' </summary>
-        Public Property iLineInfo() As Integer
-            Get
-                Return _iLineInfo
-            End Get
-            Set(value As Integer)
-                _iLineInfo = value
-            End Set
-        End Property
+        Public Property iLineInfo() As Integer = 1
 
         ''' <summary>
         ''' Length of date time stamp
         ''' </summary>
-        Public Property DateTimeLength() As Integer
-            Get
-                Return _DateTimeLength
-            End Get
-            Set(value As Integer)
-                _DateTimeLength = value
-            End Set
-        End Property
+        Public Property DateTimeLength() As Integer = 17
 
 #End Region 'Properties
 

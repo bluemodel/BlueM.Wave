@@ -39,11 +39,7 @@ Namespace Fileformats
         ''' <summary>
         ''' Gibt an, ob beim Import des Dateiformats der Importdialog angezeigt werden soll
         ''' </summary>
-        Public Overrides ReadOnly Property UseImportDialog() As Boolean
-            Get
-                Return False
-            End Get
-        End Property
+        Public Overrides ReadOnly Property UseImportDialog() As Boolean = False
 
 #Region "Methoden"
 

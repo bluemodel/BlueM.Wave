@@ -33,7 +33,6 @@ Namespace Fileformats
         Const iZeileAnzConstituents As Integer = 4
         Private Shared AnzConstituents As Integer
         Private AnzNodes As Integer
-        Private _Zeitintervall As Integer
 
         ''' <summary>
         ''' Structure for storing SWMM series information
@@ -61,13 +60,6 @@ Namespace Fileformats
         End Structure
 
         Public Property Zeitintervall() As Integer
-            Get
-                Return _Zeitintervall
-            End Get
-            Set(value As Integer)
-                _Zeitintervall = value
-            End Set
-        End Property
 
         ''' <summary>
         ''' Returns a list of SWMM routing interface file specific metadata keys
@@ -90,13 +82,7 @@ Namespace Fileformats
         ''' <summary>
         ''' Gibt an, ob beim Import des Dateiformats der Importdialog angezeigt werden soll
         ''' </summary>
-        Public Overrides ReadOnly Property UseImportDialog() As Boolean
-            Get
-                Return True
-            End Get
-        End Property
-
-
+        Public Overrides ReadOnly Property UseImportDialog() As Boolean = True
 
 #End Region 'Properties
 

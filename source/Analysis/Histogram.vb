@@ -46,45 +46,25 @@ Friend Class Histogram
     ''' <summary>
     ''' Flag, der anzeigt, ob die Analysefunktion einen Ergebnistext erzeugt
     ''' </summary>
-    Public Overrides ReadOnly Property hasResultText() As Boolean
-        Get
-            Return False
-        End Get
-    End Property
+    Public Overrides ReadOnly Property hasResultText() As Boolean = False
 
     ''' <summary>
     ''' Flag, der anzeigt, ob die Analysefunktion Ergebniswerte erzeugt
     ''' </summary>
-    Public Overrides ReadOnly Property hasResultValues() As Boolean
-        Get
-            Return False
-        End Get
-    End Property
+    Public Overrides ReadOnly Property hasResultValues() As Boolean = False
 
     ''' <summary>
     ''' Flag, der anzeigt, ob die Analysefunktion ein Ergebnisdiagramm erzeugt
     ''' </summary>
-    Public Overrides ReadOnly Property hasResultChart() As Boolean
-        Get
-            Return True
-        End Get
-    End Property
+    Public Overrides ReadOnly Property hasResultChart() As Boolean = True
 
     ''' <summary>
     ''' Flag indicating whether the analysis function has result series
     ''' that should be added to the main diagram
     ''' </summary>
-    Public Overrides ReadOnly Property hasResultSeries() As Boolean
-        Get
-            Return False
-        End Get
-    End Property
+    Public Overrides ReadOnly Property hasResultSeries() As Boolean = False
 
-    Public Overrides ReadOnly Property hasResultTable() As Boolean
-        Get
-            Return True
-        End Get
-    End Property
+    Public Overrides ReadOnly Property hasResultTable() As Boolean = True
 
     ''' <summary>
     ''' Konstruktor

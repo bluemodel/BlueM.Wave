@@ -53,7 +53,7 @@ Public Class Character
     ''' <param name="chr">Character</param>
     ''' <remarks></remarks>
     Public Sub New(chr As Char)
-        ToChar = chr
+        _char = chr
     End Sub
 
     ''' <summary>
@@ -62,13 +62,10 @@ Public Class Character
     ''' <value></value>
     ''' <returns></returns>
     ''' <remarks></remarks>
-    Public Property ToChar() As Char
+    Public ReadOnly Property ToChar() As Char
         Get
             Return _char
         End Get
-        Set(value As Char)
-            _char = value
-        End Set
     End Property
 
     ''' <summary>

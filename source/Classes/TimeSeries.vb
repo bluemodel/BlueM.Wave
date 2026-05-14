@@ -50,15 +50,8 @@ Public Class TimeSeries
 
 #Region "Members"
 
-    Private _id As Integer
-    Private _title As String
-    Private _nodes As SortedList(Of DateTime, Double)
     Private _nodesCleaned As SortedList(Of DateTime, Double)
     Private _unit As String
-    Private _metadata As Metadata
-    Private _Interpretation As InterpretationEnum
-    Private _DataSource As TimeSeriesDataSource
-    Private _displayOptions As TimeSeriesDisplayOptions
 
 #End Region 'Members
 
@@ -69,43 +62,21 @@ Public Class TimeSeries
     ''' </summary>
     ''' <returns></returns>
     Public ReadOnly Property Id() As Integer
-        Get
-            Return Me._id
-        End Get
-    End Property
 
     ''' <summary>
     ''' Title of the time series
     ''' </summary>
     Public Property Title() As String
-        Get
-            Return _title
-        End Get
-        Set(value As String)
-            _title = value
-        End Set
-    End Property
 
     ''' <summary>
     ''' The time series' interpretation
     ''' </summary>
     Public Property Interpretation() As InterpretationEnum
-        Get
-            Return Me._Interpretation
-        End Get
-        Set(value As InterpretationEnum)
-            Me._Interpretation = value
-        End Set
-    End Property
 
     ''' <summary>
     ''' The time series' nodes
     ''' </summary>
     Public Overloads ReadOnly Property Nodes() As SortedList(Of DateTime, Double)
-        Get
-            Return _nodes
-        End Get
-    End Property
 
     ''' <summary>
     ''' Returns the value at timestamp t
@@ -192,13 +163,6 @@ Public Class TimeSeries
     ''' The time series' metadata
     ''' </summary>
     Public Property Metadata() As Metadata
-        Get
-            Return Me._metadata
-        End Get
-        Set(value As Metadata)
-            Me._metadata = value
-        End Set
-    End Property
 
     ''' <summary>
     ''' The time series' metadata formatted as a single string
@@ -309,26 +273,12 @@ Public Class TimeSeries
     ''' </summary>
     ''' <returns></returns>
     Public Property DataSource As TimeSeriesDataSource
-        Get
-            Return _DataSource
-        End Get
-        Set(value As TimeSeriesDataSource)
-            _DataSource = value
-        End Set
-    End Property
 
     ''' <summary>
     ''' Options for displaying the time series
     ''' </summary>
     ''' <returns></returns>
     Public Property DisplayOptions As TimeSeriesDisplayOptions
-        Get
-            Return _displayOptions
-        End Get
-        Set(value As TimeSeriesDisplayOptions)
-            _displayOptions = value
-        End Set
-    End Property
 
     ''' <summary>
     ''' Returns the start date of the time series

@@ -29,44 +29,16 @@ Namespace Fileformats
         Const LenString As Integer = 5   'Länge des Strings eines Wertes in der reg/dat-Datei
         Const fehlWert As String = "-9999" 'Fehlwert / Ausfall
 
-#Region "Eigenschaften"
-
-        'Eigenschaften
-        '#############
-
-        Private _Zeitintervall As Integer
-        Private _DezFaktor As Integer
-
-#End Region
-
 #Region "Properties"
 
         ''' <summary>
         ''' Gibt an, ob beim Import des Dateiformats der Importdialog angezeigt werden soll
         ''' </summary>
-        Public Overrides ReadOnly Property UseImportDialog() As Boolean
-            Get
-                Return False
-            End Get
-        End Property
+        Public Overrides ReadOnly Property UseImportDialog() As Boolean = False
 
         Private Property Zeitintervall() As Integer
-            Get
-                Return _Zeitintervall
-            End Get
-            Set(value As Integer)
-                _Zeitintervall = value
-            End Set
-        End Property
 
         Private Property DezFaktor() As Integer
-            Get
-                Return _DezFaktor
-            End Get
-            Set(value As Integer)
-                _DezFaktor = value
-            End Set
-        End Property
 
         Private Shared ReadOnly Property WerteProZeile(dt As Integer) As Integer
             Get

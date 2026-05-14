@@ -27,11 +27,7 @@ Namespace Fileformats
     Public Class SWMM_LID_REPORT
         Inherits TimeSeriesFile
 
-        Public Overrides ReadOnly Property UseImportDialog As Boolean
-            Get
-                Return True
-            End Get
-        End Property
+        Public Overrides ReadOnly Property UseImportDialog As Boolean = True
 
         ''' <summary>
         ''' Constructor

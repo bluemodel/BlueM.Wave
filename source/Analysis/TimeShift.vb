@@ -33,49 +33,29 @@ Friend Class TimeShift
     ''' <summary>
     ''' Flag indicating whether the analysis function produces a result text
     ''' </summary>
-    Public Overrides ReadOnly Property hasResultText() As Boolean
-        Get
-            Return False
-        End Get
-    End Property
+    Public Overrides ReadOnly Property hasResultText() As Boolean = False
 
     ''' <summary>
     ''' Flag indicating whether the analysis function produces result values
     ''' </summary>
-    Public Overrides ReadOnly Property hasResultValues() As Boolean
-        Get
-            Return False
-        End Get
-    End Property
+    Public Overrides ReadOnly Property hasResultValues() As Boolean = False
 
     ''' <summary>
     ''' Flag indicating whether the analysis function produces a result chart
     ''' </summary>
-    Public Overrides ReadOnly Property hasResultChart() As Boolean
-        Get
-            Return False
-        End Get
-    End Property
+    Public Overrides ReadOnly Property hasResultChart() As Boolean = False
 
     ''' <summary>
     ''' Flag indicating whether the analysis function has result series
     ''' that should be added to the main diagram
     ''' </summary>
-    Public Overrides ReadOnly Property hasResultSeries() As Boolean
-        Get
-            Return True
-        End Get
-    End Property
+    Public Overrides ReadOnly Property hasResultSeries() As Boolean = True
 
     ''' <summary>
     ''' Flag indicating whether the analysis function has a result table
     ''' that should be shown in a separate window
     ''' </summary>
-    Public Overrides ReadOnly Property hasResultTable() As Boolean
-        Get
-            Return False
-        End Get
-    End Property
+    Public Overrides ReadOnly Property hasResultTable() As Boolean = False
 
     ''' <summary>
     ''' Class constructor

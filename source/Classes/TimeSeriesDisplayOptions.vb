@@ -20,63 +20,30 @@
 ''' </summary>
 Public Class TimeSeriesDisplayOptions
 
-    Private _color As Color
-    Private _linestyle As Drawing2D.DashStyle
-    Private _linewidth As Integer
-    Private _showPoints As Boolean
-
     ''' <summary>
     ''' Color
     ''' </summary>
     ''' <remarks>Default color is empty. When empty, color is automatically assigned by the chart</remarks>
     ''' <returns></returns>
     Public Property Color As Color
-        Get
-            Return _color
-        End Get
-        Set(value As Color)
-            _color = value
-        End Set
-    End Property
 
     ''' <summary>
     ''' Line style
     ''' </summary>
     ''' <returns></returns>
     Public Property LineStyle As Drawing2D.DashStyle
-        Get
-            Return _linestyle
-        End Get
-        Set(value As Drawing2D.DashStyle)
-            _linestyle = value
-        End Set
-    End Property
 
     ''' <summary>
     ''' Line width
     ''' </summary>
     ''' <returns></returns>
     Public Property LineWidth As Integer
-        Get
-            Return _linewidth
-        End Get
-        Set(value As Integer)
-            _linewidth = value
-        End Set
-    End Property
 
     ''' <summary>
     ''' Flag to show series points
     ''' </summary>
     ''' <returns></returns>
     Public Property ShowPoints As Boolean
-        Get
-            Return _showPoints
-        End Get
-        Set(value As Boolean)
-            _showPoints = value
-        End Set
-    End Property
 
     ''' <summary>
     ''' Creates a new TimeSeriesDisplayOption instance with default properties

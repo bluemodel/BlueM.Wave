@@ -35,11 +35,7 @@ Namespace Fileformats
         ''' <value></value>
         ''' <returns>True</returns>
         ''' <remarks></remarks>
-        Public Overrides ReadOnly Property UseImportDialog() As Boolean
-            Get
-                Return True
-            End Get
-        End Property
+        Public Overrides ReadOnly Property UseImportDialog() As Boolean = True
 
         ''' <summary>
         ''' Instantiates a new FEWS_PI object

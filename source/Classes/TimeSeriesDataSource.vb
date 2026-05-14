@@ -31,10 +31,6 @@ Public Class TimeSeriesDataSource
         Undefined
     End Enum
 
-    Private _origin As OriginEnum
-    Private _filepath As String
-    Private _title As String
-
     ''' <summary>
     ''' Creates a new TimeSeriesDataSource instance with origin type FileImport
     ''' </summary>
@@ -61,30 +57,18 @@ Public Class TimeSeriesDataSource
     ''' </summary>
     ''' <returns></returns>
     Public ReadOnly Property Origin As OriginEnum
-        Get
-            Return _origin
-        End Get
-    End Property
 
     ''' <summary>
     ''' The path to the file from which the series was imported
     ''' </summary>
     ''' <returns></returns>
     Public ReadOnly Property FilePath As String
-        Get
-            Return _filepath
-        End Get
-    End Property
 
     ''' <summary>
     ''' The title of the series in the file from which it was imported
     ''' </summary>
     ''' <returns></returns>
     Public ReadOnly Property Title As String
-        Get
-            Return _title
-        End Get
-    End Property
 
     ''' <summary>
     ''' Returns a copy of the datasource

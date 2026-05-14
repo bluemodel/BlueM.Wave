@@ -34,45 +34,25 @@ Friend Class ChangeTimestep
     ''' <summary>
     ''' Flag indicating whether the analysis function has a result test
     ''' </summary>
-    Public Overrides ReadOnly Property hasResultText() As Boolean
-        Get
-            Return False
-        End Get
-    End Property
+    Public Overrides ReadOnly Property hasResultText() As Boolean = False
 
     ''' <summary>
     ''' Flag indicating whether the analysis function has result values
     ''' </summary>
-    Public Overrides ReadOnly Property hasResultValues() As Boolean
-        Get
-            Return False
-        End Get
-    End Property
+    Public Overrides ReadOnly Property hasResultValues() As Boolean = False
 
     ''' <summary>
     ''' Flag indicating whether the analysis function has a result diagram
     ''' </summary>
-    Public Overrides ReadOnly Property hasResultChart() As Boolean
-        Get
-            Return False
-        End Get
-    End Property
+    Public Overrides ReadOnly Property hasResultChart() As Boolean = False
 
     ''' <summary>
     ''' Flag indicating whether the analysis function has result series
     ''' that should be added to the main diagram
     ''' </summary>
-    Public Overrides ReadOnly Property hasResultSeries() As Boolean
-        Get
-            Return True
-        End Get
-    End Property
+    Public Overrides ReadOnly Property hasResultSeries() As Boolean = True
 
-    Public Overrides ReadOnly Property hasResultTable() As Boolean
-        Get
-            Return False
-        End Get
-    End Property
+    Public Overrides ReadOnly Property hasResultTable() As Boolean = False
 
 #End Region 'Properties
 
