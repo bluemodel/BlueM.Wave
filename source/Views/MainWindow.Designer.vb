@@ -608,26 +608,26 @@ Partial Class MainWindow
         ' ToolStripMenuItem_Help
         ' 
         ToolStripMenuItem_Help.Name = "ToolStripMenuItem_Help"
-        ToolStripMenuItem_Help.Size = New Size(165, 22)
+        ToolStripMenuItem_Help.Size = New Size(180, 22)
         ToolStripMenuItem_Help.Text = "Help"
         ' 
         ' ToolStripMenuItem_Changelog
         ' 
         ToolStripMenuItem_Changelog.Name = "ToolStripMenuItem_Changelog"
-        ToolStripMenuItem_Changelog.Size = New Size(165, 22)
+        ToolStripMenuItem_Changelog.Size = New Size(180, 22)
         ToolStripMenuItem_Changelog.Text = "Changelog"
         ' 
         ' ToolStripMenuItem_CheckForUpdate
         ' 
         ToolStripMenuItem_CheckForUpdate.Name = "ToolStripMenuItem_CheckForUpdate"
-        ToolStripMenuItem_CheckForUpdate.Size = New Size(165, 22)
+        ToolStripMenuItem_CheckForUpdate.Size = New Size(180, 22)
         ToolStripMenuItem_CheckForUpdate.Text = "Check for update"
         ' 
         ' ToolStripMenuItem_About
         ' 
-        ToolStripMenuItem_About.Image = CType(resources.GetObject("ToolStripMenuItem_About.Image"), Image)
+        ToolStripMenuItem_About.Image = BlueM.Wave.Resources.BlueM_icon
         ToolStripMenuItem_About.Name = "ToolStripMenuItem_About"
-        ToolStripMenuItem_About.Size = New Size(165, 22)
+        ToolStripMenuItem_About.Size = New Size(180, 22)
         ToolStripMenuItem_About.Text = "About"
         ' 
         ' ToolStripButton_ZoomNext
