@@ -190,7 +190,7 @@ Partial Class ImportCSVDialog
         GroupBox_Preview.Location = New Point(0, 0)
         GroupBox_Preview.Name = "GroupBox_Preview"
         GroupBox_Preview.Padding = New Padding(4, 3, 4, 3)
-        GroupBox_Preview.Size = New Size(408, 254)
+        GroupBox_Preview.Size = New Size(407, 254)
         GroupBox_Preview.TabIndex = 0
         GroupBox_Preview.TabStop = False
         GroupBox_Preview.Text = "File preview"
@@ -237,12 +237,11 @@ Partial Class ImportCSVDialog
         ' TextBox_Preview
         ' 
         TextBox_Preview.Anchor = AnchorStyles.Top Or AnchorStyles.Bottom Or AnchorStyles.Left Or AnchorStyles.Right
-        TextBox_Preview.BackColor = Color.White
         TextBox_Preview.Font = New Font("Courier New", 8.25F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
         TextBox_Preview.Location = New Point(14, 50)
         TextBox_Preview.Name = "TextBox_Preview"
         TextBox_Preview.ReadOnly = True
-        TextBox_Preview.Size = New Size(387, 163)
+        TextBox_Preview.Size = New Size(386, 163)
         TextBox_Preview.TabIndex = 1
         TextBox_Preview.Text = ""
         TextBox_Preview.WordWrap = False
