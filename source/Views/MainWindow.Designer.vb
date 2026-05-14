@@ -625,7 +625,7 @@ Partial Class MainWindow
         ' 
         ' ToolStripMenuItem_About
         ' 
-        ToolStripMenuItem_About.Image = BlueM.Wave.Resources.BlueM_icon
+        ToolStripMenuItem_About.Image = My.Resources.BlueM_icon
         ToolStripMenuItem_About.Name = "ToolStripMenuItem_About"
         ToolStripMenuItem_About.Size = New Size(180, 22)
         ToolStripMenuItem_About.Text = "About"
