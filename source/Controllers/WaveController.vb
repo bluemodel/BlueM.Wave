@@ -939,7 +939,7 @@ Friend Class WaveController
 
     'Analysieren
     '***********
-    Private Sub Analysis_Click(sender As System.Object, e As System.EventArgs)
+    Private Async Sub Analysis_Click(sender As System.Object, e As System.EventArgs)
 
         'Wenn keine Zeitreihen vorhanden, abbrechen!
         If (_model.TimeSeries.Count < 1) Then
@@ -970,8 +970,8 @@ Friend Class WaveController
 
                 Call Log.AddLogEntry(Log.Levels.info, "... executing analysis ...")
 
-                'Analyse ausführen
-                Call oAnalysis.ProcessAnalysis()
+                'Process analysis (in a separate thread)
+                Await Task.Run(Sub() oAnalysis.ProcessAnalysis())
 
                 Call Log.AddLogEntry(Log.Levels.info, "... preparing analysis result ...")
 
@@ -3160,6 +3160,11 @@ Friend Class WaveController
     ''' </summary>
     ''' <param name="n_steps">Number of total steps expected</param>
     Private Sub ProgressReset(n_steps As Integer)
+        'Handle calls from different threads
+        If View.ProgressBar1.InvokeRequired Then
+            View.ProgressBar1.Invoke(New Action(Of Integer)(AddressOf ProgressReset), n_steps)
+            Return
+        End If
         View.ProgressBar1.Value = 0
         View.ProgressBar1.Maximum = n_steps
         View.ProgressBar1.Enabled = True
@@ -3170,6 +3175,11 @@ Friend Class WaveController
     ''' </summary>
     ''' <param name="value">Value to set the progress bar to</param>
     Private Sub ProgressUpdate(value As Integer)
+        'Handle calls from different threads
+        If View.ProgressBar1.InvokeRequired Then
+            View.ProgressBar1.Invoke(New Action(Of Integer)(AddressOf ProgressUpdate), value)
+            Return
+        End If
         View.ProgressBar1.Value = Math.Min(value, View.ProgressBar1.Maximum)
         Call Application.DoEvents()
     End Sub
@@ -3178,6 +3188,11 @@ Friend Class WaveController
     ''' Sets the progress bar to finished
     ''' </summary>
     Private Sub ProgressFinish()
+        'Handle calls from different threads
+        If View.ProgressBar1.InvokeRequired Then
+            View.ProgressBar1.Invoke(New Action(AddressOf ProgressFinish))
+            Return
+        End If
         View.ProgressBar1.Value = 0
         View.ProgressBar1.Enabled = False
     End Sub
