@@ -100,8 +100,8 @@ Namespace Fileformats
             Dim Namen() As String
             Dim Einheiten() As String
 
-            Namen = ZeileSpalten.Split(Me.Separator.ToChar, StringSplitOptions.RemoveEmptyEntries)
-            Einheiten = ZeileEinheiten.Split(Me.Separator.ToChar, StringSplitOptions.RemoveEmptyEntries)
+            Namen = ZeileSpalten.Split(Me.Separator.Char, StringSplitOptions.RemoveEmptyEntries)
+            Einheiten = ZeileEinheiten.Split(Me.Separator.Char, StringSplitOptions.RemoveEmptyEntries)
 
             'Bei ASC hat die Datumsspalte (manchmal) keine Einheit
             If (Einheiten.Length = Namen.Length - 1) Then
@@ -174,7 +174,7 @@ Namespace Fileformats
                 '* am Anfang ignorieren
                 If (Zeile.StartsWith("*"c)) Then Zeile = Zeile.Substring(1)
 
-                Werte = Zeile.ToString.Split(Me.Separator.ToChar, StringSplitOptions.RemoveEmptyEntries)
+                Werte = Zeile.ToString.Split(Me.Separator.Char, StringSplitOptions.RemoveEmptyEntries)
 
                 If Werte.Length > 0 Then
 

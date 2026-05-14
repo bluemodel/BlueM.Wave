@@ -248,7 +248,7 @@ Namespace Fileformats
                     Continue Do
                 End If
                 'split line
-                parts = line.Split(Me.Separator.ToChar, StringSplitOptions.RemoveEmptyEntries)
+                parts = line.Split(Me.Separator.Char, StringSplitOptions.RemoveEmptyEntries)
 
                 Select Case Me.layout
                     Case LayoutEnum.Single

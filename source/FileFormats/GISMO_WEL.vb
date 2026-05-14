@@ -107,8 +107,8 @@ Namespace Fileformats
             If (Me.IsColumnSeparated) Then
                 ' data columns are separated by ";"
                 ' split string at every ";"
-                Namen = ZeileSpalten.Split(Me.Separator.ToChar)
-                Einheiten = ZeileEinheiten.Split(Me.Separator.ToChar)
+                Namen = ZeileSpalten.Split(Me.Separator.Char)
+                Einheiten = ZeileEinheiten.Split(Me.Separator.Char)
                 anzSpalten = Namen.Length
                 If Namen.Length <> Einheiten.Length Then
                     MessageBox.Show("Number of column names <> number of units!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning)
@@ -117,8 +117,8 @@ Namespace Fileformats
             Else
                 ' data columns are separated by spaces
                 ' converge multiple spaces to one
-                ZeileSpalten = System.Text.RegularExpressions.Regex.Replace(ZeileSpalten, "\s{2,}", Me.Separator.ToChar)
-                ZeileEinheiten = System.Text.RegularExpressions.Regex.Replace(ZeileEinheiten, "\s{2,}", Me.Separator.ToChar)
+                ZeileSpalten = System.Text.RegularExpressions.Regex.Replace(ZeileSpalten, "\s{2,}", Me.Separator.Char)
+                ZeileEinheiten = System.Text.RegularExpressions.Regex.Replace(ZeileEinheiten, "\s{2,}", Me.Separator.Char)
                 ' remove leading and trailing spaces
                 ZeileSpalten = Trim(ZeileSpalten)
                 ZeileEinheiten = Trim(ZeileEinheiten)
@@ -132,13 +132,13 @@ Namespace Fileformats
                 If Replacepostion <> -1 Then
                     Mid(ZeileSpalten, Replacepostion + 1, 10) = "Datum_Zeit"
                     Mid(ZeileEinheiten, Replacepostion + 1, 3) = " - "
-                    ZeileEinheiten = Trim(System.Text.RegularExpressions.Regex.Replace(ZeileEinheiten, "\s{2,}", Me.Separator.ToChar))
+                    ZeileEinheiten = Trim(System.Text.RegularExpressions.Regex.Replace(ZeileEinheiten, "\s{2,}", Me.Separator.Char))
                 End If
 
                 ' data columns are separated by " "
                 ' split string at every " "
-                Namen = ZeileSpalten.Split(Me.Separator.ToChar)
-                Einheiten = ZeileEinheiten.Split(Me.Separator.ToChar)
+                Namen = ZeileSpalten.Split(Me.Separator.Char)
+                Einheiten = ZeileEinheiten.Split(Me.Separator.Char)
                 anzSpalten = Namen.Length
                 If Namen.Length <> Einheiten.Length Then
                     MessageBox.Show("Number of column names <> number of units!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning)
@@ -203,7 +203,7 @@ Namespace Fileformats
                     ' data columns are separated by ";"
 
                     ' split data line into columns
-                    Werte = Zeile.Split(Me.Separator.ToChar)
+                    Werte = Zeile.Split(Me.Separator.Char)
 
                     ' first column ist date time, add date time to times series
                     ok = DateTime.TryParseExact(Werte(Me.DateTimeColumnIndex), DateFormats("GISMO1"), Helpers.DefaultNumberFormat, Globalization.DateTimeStyles.None, datum)
@@ -222,10 +222,10 @@ Namespace Fileformats
                 Else
                     ' data columns are separated by spaces
                     ' converge multiple spaces to one
-                    Zeile = System.Text.RegularExpressions.Regex.Replace(Zeile, "\s{2,}", Me.Separator.ToChar)
+                    Zeile = System.Text.RegularExpressions.Regex.Replace(Zeile, "\s{2,}", Me.Separator.Char)
 
                     ' the date time columns need to be moved to one column
-                    Werte_temp = Zeile.Split(Me.Separator.ToChar)
+                    Werte_temp = Zeile.Split(Me.Separator.Char)
                     ReDim Werte(Werte_temp.Length - 2)
                     For i = 0 To Werte.Length - 1
                         Werte(i) = Werte_temp(i + 1)

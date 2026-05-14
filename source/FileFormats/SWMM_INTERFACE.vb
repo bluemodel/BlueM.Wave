@@ -139,7 +139,7 @@ Namespace Fileformats
             For i = 1 To iZeileReportTimeStep
                 Zeile = StrReadSync.ReadLine()
             Next
-            strArray = Zeile.Split(Me.Separator.ToChar, StringSplitOptions.RemoveEmptyEntries)
+            strArray = Zeile.Split(Me.Separator.Char, StringSplitOptions.RemoveEmptyEntries)
             Me.Zeitintervall = Convert.ToSingle(strArray(0))
 
             'Zeile mit der Anzahl der Constituents finden
@@ -147,14 +147,14 @@ Namespace Fileformats
                 Zeile = StrReadSync.ReadLine()
             Next
             'Anzahl der Constituents zu einem Knoten
-            strArray = Zeile.Split(Me.Separator.ToChar, StringSplitOptions.RemoveEmptyEntries)
+            strArray = Zeile.Split(Me.Separator.Char, StringSplitOptions.RemoveEmptyEntries)
             AnzConstituents = Convert.ToSingle(strArray(0))
 
             ReDim Constituents(AnzConstituents - 1)
             'Inflows und Einheit einlesen
             For i = 0 To AnzConstituents - 1
                 Zeile = StrReadSync.ReadLine()
-                strArray = Zeile.Split(Me.Separator.ToChar, StringSplitOptions.RemoveEmptyEntries)
+                strArray = Zeile.Split(Me.Separator.Char, StringSplitOptions.RemoveEmptyEntries)
                 Constituents(i).Type = strArray(0)
                 Constituents(i).Unit = strArray(1)
                 Constituents(i).Index = i
@@ -163,7 +163,7 @@ Namespace Fileformats
             'Anzahl der Zuflussknoten ermitteln
             'entspricht der Anzahl der Zeilen pro Zeitschritt
             Zeile = StrReadSync.ReadLine()
-            strArray = Zeile.Split(Me.Separator.ToChar, StringSplitOptions.RemoveEmptyEntries)
+            strArray = Zeile.Split(Me.Separator.Char, StringSplitOptions.RemoveEmptyEntries)
             AnzNodes = Convert.ToInt32(strArray(0))
             ReDim Nodes(AnzNodes - 1)
             For i = 0 To AnzNodes - 1
@@ -259,7 +259,7 @@ Namespace Fileformats
                 IDWerte = 1
                 For i = 0 To AnzNodes - 1
                     Zeile = StrReadSync.ReadLine()
-                    tmpArray = Zeile.Split(Me.Separator.ToChar, StringSplitOptions.RemoveEmptyEntries)
+                    tmpArray = Zeile.Split(Me.Separator.Char, StringSplitOptions.RemoveEmptyEntries)
                     If i = 0 Then
                         datum = New System.DateTime(tmpArray(1), tmpArray(2), tmpArray(3), tmpArray(4), tmpArray(5), tmpArray(6), 0, New System.Globalization.GregorianCalendar())
                     End If

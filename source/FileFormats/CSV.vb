@@ -91,9 +91,9 @@ Namespace Fileformats
 
             If (Me.IsColumnSeparated) Then
                 'Zeichengetrennt
-                Namen = ZeileSpalten.Split(Me.Separator.ToChar)
+                Namen = ZeileSpalten.Split(Me.Separator.Char)
                 If Me.UseUnits Then
-                    Einheiten = ZeileEinheiten.Split(Me.Separator.ToChar)
+                    Einheiten = ZeileEinheiten.Split(Me.Separator.Char)
                 End If
                 anzSpalten = Namen.Length
             Else
@@ -174,7 +174,7 @@ Namespace Fileformats
 
             'Use default number format by default
             numberformat = Helpers.DefaultNumberFormat.Clone()
-            If Me.DecimalSeparator.ToChar = Chr(44) Then
+            If Me.DecimalSeparator.Char = Chr(44) Then
                 'change decimal separator to comma
                 numberformat.NumberDecimalSeparator = ","
             End If
@@ -195,7 +195,7 @@ Namespace Fileformats
 
                     'Zeichengetrennt
                     '---------------
-                    Werte = Zeile.Split(Me.Separator.ToChar)
+                    Werte = Zeile.Split(Me.Separator.Char)
 
                     If (Werte.Length > 0 And Zeile.Trim.Length > 1) Then
                         'Erste Spalte: Datum_Zeit

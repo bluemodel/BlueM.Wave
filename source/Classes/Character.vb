@@ -21,7 +21,11 @@
 ''' <remarks></remarks>
 Public Class Character
 
-    Private _char As Char
+    ''' <summary>
+    ''' The Char
+    ''' </summary>
+    ''' <remarks></remarks>
+    Public ReadOnly Property [Char] As Char
 
     ''' <summary>
     ''' Constructor
@@ -57,18 +61,6 @@ Public Class Character
     End Sub
 
     ''' <summary>
-    ''' Returns a Char instance
-    ''' </summary>
-    ''' <value></value>
-    ''' <returns></returns>
-    ''' <remarks></remarks>
-    Public ReadOnly Property ToChar As Char
-        Get
-            Return _char
-        End Get
-    End Property
-
-    ''' <summary>
     ''' Returns a plaintext string representation (e.g. "comma")
     ''' </summary>
     ''' <returns></returns>
@@ -77,7 +69,7 @@ Public Class Character
 
         Dim output As String
 
-        Select Case Me.ToChar
+        Select Case Me.Char
             Case Chr(32)
                 output = "space"
             Case Chr(9)
@@ -89,7 +81,7 @@ Public Class Character
             Case Chr(59)
                 output = "semicolon"
             Case Else
-                output = Convert.ToString(Me.ToChar)
+                output = Convert.ToString(Me.Char)
         End Select
 
         Return output

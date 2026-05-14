@@ -79,11 +79,11 @@ Namespace Fileformats
                 line = StrReadSync.ReadLine().Trim()
 
                 If iLine = Me.LineNumberHeaders Then
-                    titles1 = line.Split(Me.Separator.ToChar).ToList
+                    titles1 = line.Split(Me.Separator.Char).ToList
                 ElseIf iLine = Me.LineNumberHeaders + 1 Then 'titles span two lines!
-                    titles2 = line.Split(Me.Separator.ToChar).ToList
+                    titles2 = line.Split(Me.Separator.Char).ToList
                 ElseIf iLine = Me.LineNumberUnits Then
-                    units = line.Split(Me.Separator.ToChar).ToList
+                    units = line.Split(Me.Separator.Char).ToList
                 ElseIf iLine = Me.LineNumberData Then
                     Exit Do
                 End If
@@ -153,7 +153,7 @@ Namespace Fileformats
                     Continue Do
                 End If
 
-                parts = line.Split(Me.Separator.ToChar).ToList
+                parts = line.Split(Me.Separator.Char).ToList
 
                 ok = DateTime.TryParseExact(parts(Me.DateTimeColumnIndex).Trim(), Me.Dateformat, Helpers.DefaultNumberFormat, Globalization.DateTimeStyles.None, timestamp)
                 If Not ok Then

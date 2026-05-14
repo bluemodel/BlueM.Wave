@@ -111,7 +111,7 @@ Namespace Fileformats
             Dim syncReader = TextReader.Synchronized(reader)
 
             'Read first line for column names
-            Dim columnNames() As String = syncReader.ReadLine.Split(Separator.ToChar)
+            Dim columnNames() As String = syncReader.ReadLine.Split(Separator.Char)
 
             'Close file
             syncReader.Close()
@@ -163,7 +163,7 @@ Namespace Fileformats
             'Read data until end of file
             Do
                 'Get values and datetime (calculate from reference date and seconds)
-                Dim values = syncReader.ReadLine.Split(Separator.ToChar)
+                Dim values = syncReader.ReadLine.Split(Separator.Char)
                 Dim datetime = refDate + New TimeSpan(0, 0, Helpers.StringToDouble(values(DateTimeColumnIndex)))
 
                 'Add nodes to time series

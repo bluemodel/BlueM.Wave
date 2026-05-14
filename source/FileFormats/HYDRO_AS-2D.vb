@@ -159,7 +159,7 @@ Namespace Fileformats
                     Select Case Me._HYDROAS_version
                         Case 2
                             'space separated names
-                            Namen = ZeileSpalten.Split(Me.Separator.ToChar, System.StringSplitOptions.RemoveEmptyEntries)
+                            Namen = ZeileSpalten.Split(Me.Separator.Char, System.StringSplitOptions.RemoveEmptyEntries)
                         Case 5
                             'names in columns of equal width
                             ZeileSpalten = ZeileSpalten.Substring(14) 'start from column 14
@@ -265,7 +265,7 @@ Namespace Fileformats
                     'Daten
                     Do
                         Zeile = StrReadSync.ReadLine()
-                        Werte = Zeile.Split(Me.Separator.ToChar, System.StringSplitOptions.RemoveEmptyEntries)
+                        Werte = Zeile.Split(Me.Separator.Char, System.StringSplitOptions.RemoveEmptyEntries)
                         'Simulationszeit [h] wird zu Datum nach dem Referenzdatum (default: 01.01.2000 00:00:00) konvertiert
                         datum = Me.refDate + New TimeSpan(0, 0, Helpers.StringToDouble(Werte(0)) * 3600)
                         For Each sInfo As TimeSeriesInfo In Me.SelectedSeries
