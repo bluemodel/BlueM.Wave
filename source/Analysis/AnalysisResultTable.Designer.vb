@@ -1,4 +1,4 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class AnalysisResultTable
     Inherits System.Windows.Forms.Form
 
@@ -41,12 +41,12 @@ Partial Class AnalysisResultTable
         DataGridView1.ClipboardCopyMode = DataGridViewClipboardCopyMode.EnableAlwaysIncludeHeaderText
         DataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize
         DataGridView1.Dock = DockStyle.Fill
-        DataGridView1.Location = New Point(4, 19)
-        DataGridView1.Margin = New Padding(4, 3, 4, 3)
+        DataGridView1.EnableHeadersVisualStyles = False
+        DataGridView1.Location = New Point(3, 19)
         DataGridView1.Name = "DataGridView1"
         DataGridView1.ReadOnly = True
         DataGridView1.RowHeadersVisible = False
-        DataGridView1.Size = New Size(896, 451)
+        DataGridView1.Size = New Size(898, 451)
         DataGridView1.TabIndex = 0
         ' 
         ' GroupBox1
