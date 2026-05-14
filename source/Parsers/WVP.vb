@@ -229,7 +229,7 @@ Namespace Parsers
             Dim filePath As String
             Dim lastFilePath As String = ""
             For Each ts As TimeSeries In tsList
-                If Not ts.DataSource.Origin = TimeSeriesDataSource.OriginEnum.FileImport Then
+                If ts.DataSource.Origin <> TimeSeriesDataSource.OriginEnum.FileImport Then
                     unsavedSeries.Add(ts.Title)
                     Log.AddLogEntry(Log.Levels.warning, $"Series '{ts.Title}' with datasource {ts.DataSource} does not originate from a file import and could not be saved to the project file!")
                 Else

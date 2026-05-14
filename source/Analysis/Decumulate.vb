@@ -28,45 +28,25 @@ Friend Class Decumulate
     ''' <summary>
     ''' Flag indicating whether the analysis function has a result test
     ''' </summary>
-    Public Overrides ReadOnly Property hasResultText() As Boolean
-        Get
-            Return False
-        End Get
-    End Property
+    Public Overrides ReadOnly Property hasResultText As Boolean = False
 
     ''' <summary>
     ''' Flag indicating whether the analysis function has result values
     ''' </summary>
-    Public Overrides ReadOnly Property hasResultValues() As Boolean
-        Get
-            Return False
-        End Get
-    End Property
+    Public Overrides ReadOnly Property hasResultValues As Boolean = False
 
     ''' <summary>
     ''' Flag indicating whether the analysis function has a result diagram
     ''' </summary>
-    Public Overrides ReadOnly Property hasResultChart() As Boolean
-        Get
-            Return False
-        End Get
-    End Property
+    Public Overrides ReadOnly Property hasResultChart As Boolean = False
 
     ''' <summary>
     ''' Flag indicating whether the analysis function has result series
     ''' that should be added to the main diagram
     ''' </summary>
-    Public Overrides ReadOnly Property hasResultSeries() As Boolean
-        Get
-            Return True
-        End Get
-    End Property
+    Public Overrides ReadOnly Property hasResultSeries As Boolean = True
 
-    Public Overrides ReadOnly Property hasResultTable() As Boolean
-        Get
-            Return False
-        End Get
-    End Property
+    Public Overrides ReadOnly Property hasResultTable As Boolean = False
 
     ''' <summary>
     ''' Constructor
@@ -88,16 +68,17 @@ Friend Class Decumulate
 
         For Each ts In MyBase.InputTimeSeries
 
-            If Not ts.Interpretation = TimeSeries.InterpretationEnum.Cumulative Then
-                Log.AddLogEntry(Levels.error, $"Time series {ts.Title} with interpretation {[Enum].GetName(GetType(TimeSeries.InterpretationEnum), ts.Interpretation)} cannot be deculumated!")
+            If ts.Interpretation <> TimeSeries.InterpretationEnum.Cumulative Then
+                Log.AddLogEntry(Levels.error, $"Time series {ts.Title} with interpretation {[Enum].GetName(ts.Interpretation)} cannot be decumulated!")
                 Continue For
             End If
 
             'create new decumulated timeseries
-            ts_decum = New TimeSeries($"{ts.Title} (decumulated)")
-            ts_decum.Unit = ts.Unit
-            ts_decum.Interpretation = TimeSeries.InterpretationEnum.CumulativePerTimestep
-            ts_decum.DataSource = New TimeSeriesDataSource(TimeSeriesDataSource.OriginEnum.AnalysisResult)
+            ts_decum = New TimeSeries($"{ts.Title} (decumulated)") With {
+                .Unit = ts.Unit,
+                .Interpretation = TimeSeries.InterpretationEnum.CumulativePerTimestep,
+                .DataSource = New TimeSeriesDataSource(TimeSeriesDataSource.OriginEnum.AnalysisResult)
+            }
 
             'copy first node unchanged
             ts_decum.AddNode(ts.StartDate, ts.FirstValue)

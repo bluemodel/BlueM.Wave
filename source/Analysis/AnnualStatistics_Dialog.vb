@@ -24,9 +24,7 @@ Friend Class AnnualStatistics_Dialog
 
         ' Add any initialization after the InitializeComponent() call.
 
-        Me.ComboBox_startMonth.BeginUpdate()
         Me.ComboBox_startMonth.Items.AddRange(Helpers.CalendarMonths.ToArray)
-        Me.ComboBox_startMonth.EndUpdate()
 
         Me.ComboBox_startMonth.SelectedIndex = 10 'November
     End Sub

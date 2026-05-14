@@ -57,8 +57,8 @@ Namespace Fileformats
         Public Shared Function VerifyFormat(file As String) As Boolean
 
             ' open file
-            Dim FiStr As FileStream = New FileStream(file, FileMode.Open, IO.FileAccess.Read)
-            Dim StrRead As StreamReader = New StreamReader(FiStr, detectEncodingFromByteOrderMarks:=True)
+            Dim FiStr As New FileStream(file, FileMode.Open, IO.FileAccess.Read)
+            Dim StrRead As New StreamReader(FiStr, detectEncodingFromByteOrderMarks:=True)
             Dim lines As New List(Of String)
 
             ' read four lines

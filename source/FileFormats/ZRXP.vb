@@ -59,11 +59,7 @@ Namespace Fileformats
         ''' <value></value>
         ''' <returns>False</returns>
         ''' <remarks></remarks>
-        Public Overrides ReadOnly Property UseImportDialog() As Boolean
-            Get
-                Return False
-            End Get
-        End Property
+        Public Overrides ReadOnly Property UseImportDialog As Boolean = False
 
         ''' <summary>
         ''' Instantiates a new ZRXP object
@@ -252,7 +248,7 @@ Namespace Fileformats
                     Continue Do
                 End If
                 'split line
-                parts = line.Split(Me.Separator.ToChar, StringSplitOptions.RemoveEmptyEntries)
+                parts = line.Split(Me.Separator.Char, StringSplitOptions.RemoveEmptyEntries)
 
                 Select Case Me.layout
                     Case LayoutEnum.Single
@@ -386,7 +382,7 @@ Namespace Fileformats
         ''' <summary>
         ''' Returns a list of ZRXP-specific metadata keys
         ''' </summary>
-        Public Overloads Shared ReadOnly Property MetadataKeys() As List(Of String)
+        Public Overloads Shared ReadOnly Property MetadataKeys As List(Of String)
             Get
                 Dim keys As New List(Of String) From {
                     "ZRXPVERSION",

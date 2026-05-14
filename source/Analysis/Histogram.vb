@@ -28,7 +28,7 @@ Friend Class Histogram
     Private ReadOnly n_bins As Integer
     Private ReadOnly breaks As Double()
 
-    Private Structure histogramResults
+    Private Structure HistogramResults
         Dim title As String
         Dim frequency, cumfrequency As Integer()
         Dim amount As Integer
@@ -36,7 +36,7 @@ Friend Class Histogram
         Dim PU As Double() ' probability of non-exceedance
     End Structure
 
-    Private ReadOnly results As histogramResults()
+    Private ReadOnly results As HistogramResults()
 
     Public Overloads Shared Function Description() As String
         Return "Divides the entire range of values into a series of user-defined intervals (bins) and calculates the percentage of values falling into each interval." &
@@ -46,45 +46,25 @@ Friend Class Histogram
     ''' <summary>
     ''' Flag, der anzeigt, ob die Analysefunktion einen Ergebnistext erzeugt
     ''' </summary>
-    Public Overrides ReadOnly Property hasResultText() As Boolean
-        Get
-            Return False
-        End Get
-    End Property
+    Public Overrides ReadOnly Property hasResultText As Boolean = False
 
     ''' <summary>
     ''' Flag, der anzeigt, ob die Analysefunktion Ergebniswerte erzeugt
     ''' </summary>
-    Public Overrides ReadOnly Property hasResultValues() As Boolean
-        Get
-            Return False
-        End Get
-    End Property
+    Public Overrides ReadOnly Property hasResultValues As Boolean = False
 
     ''' <summary>
     ''' Flag, der anzeigt, ob die Analysefunktion ein Ergebnisdiagramm erzeugt
     ''' </summary>
-    Public Overrides ReadOnly Property hasResultChart() As Boolean
-        Get
-            Return True
-        End Get
-    End Property
+    Public Overrides ReadOnly Property hasResultChart As Boolean = True
 
     ''' <summary>
     ''' Flag indicating whether the analysis function has result series
     ''' that should be added to the main diagram
     ''' </summary>
-    Public Overrides ReadOnly Property hasResultSeries() As Boolean
-        Get
-            Return False
-        End Get
-    End Property
+    Public Overrides ReadOnly Property hasResultSeries As Boolean = False
 
-    Public Overrides ReadOnly Property hasResultTable() As Boolean
-        Get
-            Return True
-        End Get
-    End Property
+    Public Overrides ReadOnly Property hasResultTable As Boolean = True
 
     ''' <summary>
     ''' Konstruktor
@@ -205,7 +185,7 @@ Friend Class Histogram
 
         Me.ResultTable.Columns.Add("From", GetType(Double))
         Me.ResultTable.Columns.Add("To", GetType(Double))
-        For Each result As histogramResults In Me.results
+        For Each result As HistogramResults In Me.results
             Me.ResultTable.Columns.Add($"{result.title}: frequency", GetType(Integer))
             Me.ResultTable.Columns.Add($"{result.title}: probability [%]", GetType(Double))
         Next
@@ -215,7 +195,7 @@ Friend Class Histogram
             row(0) = Me.breaks(i)
             row(1) = Me.breaks(i + 1)
             Dim cellindex As Integer = 2
-            For Each result As histogramResults In Me.results
+            For Each result As HistogramResults In Me.results
                 row(cellindex) = result.frequency(i)
                 row(cellindex + 1) = result.probability(i)
                 cellindex += 2
@@ -237,25 +217,31 @@ Friend Class Histogram
         Me.ResultChart.Header.Text = "Histogram"
 
         'Achsen
-        Me.ResultChart.Axes.Left.Title.Caption = "Probability [%]"
-        Me.ResultChart.Axes.Left.Automatic = False
-        Me.ResultChart.Axes.Left.Minimum = 0
-        Me.ResultChart.Axes.Left.AutomaticMaximum = True
-        Me.ResultChart.Axes.Left.MaximumOffset = 2
+        With Me.ResultChart.Axes.Left
+            .Title.Caption = "Probability [%]"
+            .Automatic = False
+            .Minimum = 0
+            .AutomaticMaximum = True
+            .MaximumOffset = 2
+        End With
 
-        Me.ResultChart.Axes.Right.Visible = True
-        Me.ResultChart.Axes.Right.Title.Caption = "Probability of non-exceedance [%]"
-        Me.ResultChart.Axes.Right.Title.Angle = 90
-        Me.ResultChart.Axes.Right.Automatic = False
-        Me.ResultChart.Axes.Right.Minimum = 0
-        Me.ResultChart.Axes.Right.Maximum = 100
-        Me.ResultChart.Axes.Right.Grid.Visible = False
+        With Me.ResultChart.Axes.Right
+            .Visible = True
+            .Title.Caption = "Probability of non-exceedance [%]"
+            .Title.Angle = 90
+            .Automatic = False
+            .Minimum = 0
+            .Maximum = 100
+            .Grid.Visible = False
+        End With
 
-        Me.ResultChart.Axes.Bottom.Labels.Style = Steema.TeeChart.AxisLabelStyle.Value
-        Me.ResultChart.Axes.Bottom.Title.Caption = $"Value [{Me.InputTimeSeries(0).Unit}]"
+        With Me.ResultChart.Axes.Bottom
+            .Labels.Style = Steema.TeeChart.AxisLabelStyle.Value
+            .Title.Caption = $"Value [{Me.InputTimeSeries(0).Unit}]"
+        End With
 
         'Serien
-        For Each res As histogramResults In Me.results
+        For Each res As HistogramResults In Me.results
 
             Dim serieP As New Steema.TeeChart.Styles.Histogram(Me.ResultChart.Chart) With {
                 .Title = $"{res.title} (P(x))"

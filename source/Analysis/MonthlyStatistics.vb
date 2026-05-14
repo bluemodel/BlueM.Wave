@@ -72,45 +72,25 @@ Friend Class MonthlyStatistics
     ''' <summary>
     ''' Flag indicating whether the analysis function has a result text
     ''' </summary>
-    Public Overrides ReadOnly Property hasResultText() As Boolean
-        Get
-            Return False
-        End Get
-    End Property
+    Public Overrides ReadOnly Property hasResultText As Boolean = False
 
     ''' <summary>
     ''' Flag indicating whether the analysis function has result values
     ''' </summary>
-    Public Overrides ReadOnly Property hasResultValues() As Boolean
-        Get
-            Return False
-        End Get
-    End Property
+    Public Overrides ReadOnly Property hasResultValues As Boolean = False
 
     ''' <summary>
     ''' Flag indicating whether the analysis function has a result diagram
     ''' </summary>
-    Public Overrides ReadOnly Property hasResultChart() As Boolean
-        Get
-            Return True
-        End Get
-    End Property
+    Public Overrides ReadOnly Property hasResultChart As Boolean = True
 
     ''' <summary>
     ''' Flag indicating whether the analysis function has result series
     ''' that should be added to the main diagram
     ''' </summary>
-    Public Overrides ReadOnly Property hasResultSeries() As Boolean
-        Get
-            Return False
-        End Get
-    End Property
+    Public Overrides ReadOnly Property hasResultSeries As Boolean = False
 
-    Public Overrides ReadOnly Property hasResultTable() As Boolean
-        Get
-            Return True
-        End Get
-    End Property
+    Public Overrides ReadOnly Property hasResultTable As Boolean = True
 
 #End Region ' Properties
 
@@ -132,7 +112,7 @@ Friend Class MonthlyStatistics
         Dim dlg As New MonthlyStatisticsDialog()
         Dim dlg_result As DialogResult = dlg.ShowDialog()
 
-        If Not dlg_result = DialogResult.OK Then
+        If dlg_result <> DialogResult.OK Then
             Throw New AnalysisCancelledException("User abort")
         End If
 
@@ -231,14 +211,16 @@ Friend Class MonthlyStatistics
         'result table
         Me.ResultTable = New DataTable($"Monthly statistics: {Me.InputTimeSeries(0).Title}")
 
-        Me.ResultTable.Columns.Add("Month", GetType(Integer))
-        Me.ResultTable.Columns.Add("Name", GetType(String))
-        Me.ResultTable.Columns.Add("ValueCount", GetType(Integer))
-        Me.ResultTable.Columns.Add("Average", GetType(Double))
-        Me.ResultTable.Columns.Add("Median", GetType(Double))
-        Me.ResultTable.Columns.Add("Minimum", GetType(Double))
-        Me.ResultTable.Columns.Add("Maximum", GetType(Double))
-        Me.ResultTable.Columns.Add("Standard deviation", GetType(Double))
+        With Me.ResultTable.Columns
+            .Add("Month", GetType(Integer))
+            .Add("Name", GetType(String))
+            .Add("ValueCount", GetType(Integer))
+            .Add("Average", GetType(Double))
+            .Add("Median", GetType(Double))
+            .Add("Minimum", GetType(Double))
+            .Add("Maximum", GetType(Double))
+            .Add("Standard deviation", GetType(Double))
+        End With
 
         For Each monthData As MonthData In Me.result.Values
             If monthData.values.Count > 0 Then
@@ -276,14 +258,16 @@ Friend Class MonthlyStatistics
         'Diagram
         Me.ResultChart = New Steema.TeeChart.TChart()
         Call Helpers.ChartSetDefaultFormat(Me.ResultChart.Chart)
-        Me.ResultChart.Header.Visible = True
-        Me.ResultChart.Header.Text = $"Monthly statistics ({Me.InputTimeSeries(0).Title})"
+        With Me.ResultChart
+            .Header.Visible = True
+            .Header.Text = $"Monthly statistics ({Me.InputTimeSeries(0).Title})"
 
-        'Axes
-        Me.ResultChart.Axes.Bottom.Labels.Style = Steema.TeeChart.AxisLabelStyle.Text
-        Me.ResultChart.Axes.Bottom.Labels.Angle = 90
-        Me.ResultChart.Axes.Bottom.MinorTickCount = 0
-        Me.ResultChart.Axes.Left.Title.Text = Me.InputTimeSeries(0).Unit
+            'Axes
+            .Axes.Bottom.Labels.Style = Steema.TeeChart.AxisLabelStyle.Text
+            .Axes.Bottom.Labels.Angle = 90
+            .Axes.Bottom.MinorTickCount = 0
+            .Axes.Left.Title.Text = Me.InputTimeSeries(0).Unit
+        End With
 
         'Series
 

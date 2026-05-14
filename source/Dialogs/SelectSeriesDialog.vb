@@ -22,7 +22,7 @@ Friend Class SelectSeriesDialog
     Private IsInitializing As Boolean
 
     Private tsFile As TimeSeriesFile
-    Private WithEvents inputTimer As Timers.Timer
+    Private WithEvents InputTimer As Timers.Timer
 
     Public Sub New(ByRef fileInstance As TimeSeriesFile)
 
@@ -39,9 +39,10 @@ Friend Class SelectSeriesDialog
         Me.Label_FileType.Text = Me.tsFile.GetType().Name
 
         'initialize input delay timer
-        Me.inputTimer = New Timers.Timer(1000)
-        Me.inputTimer.SynchronizingObject = Me
-        Me.inputTimer.AutoReset = False
+        Me.InputTimer = New Timers.Timer(1000) With {
+            .SynchronizingObject = Me,
+            .AutoReset = False
+        }
 
         'set intial focus
         Me.TextBox_Search.Focus()
@@ -66,7 +67,7 @@ Friend Class SelectSeriesDialog
         If (Me.ListBox_Series.SelectedItems.Count < 1) Then
             MessageBox.Show("Please select at least one series!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning)
             Me.DialogResult = DialogResult.None
-            Exit Sub
+            Return
         Else
             For Each sInfo As TimeSeriesInfo In Me.ListBox_Series.SelectedItems
                 Me.tsFile.SelectSeries(sInfo.Index)
@@ -89,11 +90,7 @@ Friend Class SelectSeriesDialog
         Next
         'update list box
         Me.ListBox_Series.Items.Clear()
-        Me.ListBox_Series.BeginUpdate()
-        For Each sInfo In Me.tsFile.TimeSeriesInfos
-            Me.ListBox_Series.Items.Add(sInfo)
-        Next
-        Me.ListBox_Series.EndUpdate()
+        Me.ListBox_Series.Items.AddRange(Me.tsFile.TimeSeriesInfos.ToArray())
         'reselect any previously selected items
         For Each sName As String In selectedSeries
             For i As Integer = 0 To Me.ListBox_Series.Items.Count - 1
@@ -115,8 +112,8 @@ Friend Class SelectSeriesDialog
     Private Sub TextBox_Search_TextChanged(sender As Object, e As EventArgs) Handles TextBox_Search.TextChanged
 
         'reset the input timer
-        Me.inputTimer.Stop()
-        Me.inputTimer.Start()
+        Me.InputTimer.Stop()
+        Me.InputTimer.Start()
 
     End Sub
 
@@ -129,7 +126,7 @@ Friend Class SelectSeriesDialog
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
     ''' <remarks></remarks>
-    Private Sub searchSeries(sender As Object, e As Timers.ElapsedEventArgs) Handles inputTimer.Elapsed
+    Private Sub SearchSeries(sender As Object, e As Timers.ElapsedEventArgs) Handles InputTimer.Elapsed
 
         Dim search, itemname As String
 
@@ -187,7 +184,7 @@ Friend Class SelectSeriesDialog
     End Sub
 
     Private Sub ImportDiag_FormClosed(sender As Object, e As FormClosedEventArgs) Handles MyBase.FormClosed
-        Me.inputTimer.Dispose()
+        Me.InputTimer.Dispose()
     End Sub
 
 End Class

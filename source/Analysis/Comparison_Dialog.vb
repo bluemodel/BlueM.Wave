@@ -30,7 +30,7 @@ Friend Class Comparison_Dialog
 
     End Sub
 
-    Public ReadOnly Property xAchse() As String
+    Public ReadOnly Property xAchse As String
         Get
             If Me.RadioButton_Reihe1.Checked Then
                 Return Me.RadioButton_Reihe1.Text

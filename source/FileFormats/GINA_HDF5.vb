@@ -63,11 +63,7 @@ Namespace Fileformats
         ''' <summary>
         ''' Flag indicating whether to show the import dialog
         ''' </summary>
-        Public Overrides ReadOnly Property UseImportDialog() As Boolean
-            Get
-                Return True
-            End Get
-        End Property
+        Public Overrides ReadOnly Property UseImportDialog As Boolean = True
 
         ''' <summary>
         ''' Constructor

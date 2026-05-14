@@ -20,26 +20,15 @@
 ''' </summary>
 Friend Class CalculatorVariable
 
-    Private _varName As String
-    Private _ts As TimeSeries
-
     ''' <summary>
     ''' The variable name
     ''' </summary>
     Public ReadOnly Property varName As String
-        Get
-            Return _varName
-        End Get
-    End Property
 
     ''' <summary>
     ''' The time series associated with the variable
     ''' </summary>
     Public ReadOnly Property ts As TimeSeries
-        Get
-            Return _ts
-        End Get
-    End Property
 
     ''' <summary>
     ''' Constructor

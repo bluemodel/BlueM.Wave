@@ -34,7 +34,7 @@ Friend Class ImportCSVDialog
     ''' <remarks>
     ''' see https://docs.microsoft.com/en-us/dotnet/standard/base-types/custom-date-and-time-format-strings
     ''' </remarks>
-    Private Property DateFormat() As String
+    Private Property DateFormat As String
         Get
             Dim format As String
             Dim m As MatchCollection
@@ -99,19 +99,19 @@ Friend Class ImportCSVDialog
     Private Sub Form_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
         'Combobox Trennzeichen initialisieren
-        Me.ComboBox_Separator.BeginUpdate()
-        Me.ComboBox_Separator.Items.Add(Constants.semicolon)
-        Me.ComboBox_Separator.Items.Add(Constants.comma)
-        Me.ComboBox_Separator.Items.Add(Constants.period)
-        Me.ComboBox_Separator.Items.Add(Constants.space)
-        Me.ComboBox_Separator.Items.Add(Constants.tab)
-        Me.ComboBox_Separator.EndUpdate()
+        Me.ComboBox_Separator.Items.AddRange({
+            Constants.semicolon,
+            Constants.comma,
+            Constants.period,
+            Constants.space,
+            Constants.tab
+        })
 
         'Combobox Dezimaltrennzeichen initialisieren
-        Me.ComboBox_DecimalSeparator.BeginUpdate()
-        Me.ComboBox_DecimalSeparator.Items.Add(Constants.period)
-        Me.ComboBox_DecimalSeparator.Items.Add(Constants.comma)
-        Me.ComboBox_DecimalSeparator.EndUpdate()
+        Me.ComboBox_DecimalSeparator.Items.AddRange({
+            Constants.period,
+            Constants.comma
+        })
 
         'Combobox Datumsformat füllen
         For Each datumsformat As String In Helpers.DateFormats.Values
@@ -193,7 +193,7 @@ Friend Class ImportCSVDialog
         If (Me.ListBox_Series.SelectedItems.Count < 1) Then
             MessageBox.Show("Please select at least one series!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning)
             Me.DialogResult = DialogResult.None
-            Exit Sub
+            Return
         Else
             For Each sInfo As TimeSeriesInfo In Me.ListBox_Series.SelectedItems
                 Me.tsFile.SelectSeries(sInfo.Index)
@@ -225,7 +225,7 @@ Friend Class ImportCSVDialog
         ComboBox_Encoding.SelectedIndexChanged
 
         If Me.IsInitializing Then
-            Exit Sub
+            Return
         Else
 
             'Eingaben speichern
@@ -349,11 +349,7 @@ Friend Class ImportCSVDialog
         Next
         'update list box
         Me.ListBox_Series.Items.Clear()
-        Me.ListBox_Series.BeginUpdate()
-        For Each sInfo In Me.tsFile.TimeSeriesInfos
-            Me.ListBox_Series.Items.Add(sInfo)
-        Next
-        Me.ListBox_Series.EndUpdate()
+        Me.ListBox_Series.Items.AddRange(Me.tsFile.TimeSeriesInfos.ToArray())
         'reselect any previously selected items
         For Each sName As String In selectedSeries
             For i As Integer = 0 To Me.ListBox_Series.Items.Count - 1

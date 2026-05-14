@@ -98,35 +98,35 @@ Friend MustInherit Class Analysis
     ''' <summary>
     ''' Flag indicating whether the analysis function has a result text
     ''' </summary>
-    Public MustOverride ReadOnly Property hasResultText() As Boolean
+    Public MustOverride ReadOnly Property hasResultText As Boolean
 
     ''' <summary>
     ''' Flag indicating whether the analysis function has result values
     ''' </summary>
-    Public MustOverride ReadOnly Property hasResultValues() As Boolean
+    Public MustOverride ReadOnly Property hasResultValues As Boolean
 
     ''' <summary>
     ''' Flag indicating whether the analysis function has a result diagram
     ''' </summary>
-    Public MustOverride ReadOnly Property hasResultChart() As Boolean
+    Public MustOverride ReadOnly Property hasResultChart As Boolean
 
     ''' <summary>
     ''' Flag indicating whether the analysis function has result series
     ''' that should be added to the main diagram
     ''' </summary>
-    Public MustOverride ReadOnly Property hasResultSeries() As Boolean
+    Public MustOverride ReadOnly Property hasResultSeries As Boolean
 
     ''' <summary>
     ''' Flag indicating whether the analysis function has a result table
     ''' that should be shown in a separate window
     ''' </summary>
-    Public MustOverride ReadOnly Property hasResultTable() As Boolean
+    Public MustOverride ReadOnly Property hasResultTable As Boolean
 
     ''' <summary>
     ''' Analysis result text
     ''' </summary>
     ''' <remarks>Optional</remarks>
-    Public ReadOnly Property getResultText() As String
+    Public ReadOnly Property getResultText As String
         Get
             Return Me.ResultText
         End Get
@@ -136,7 +136,7 @@ Friend MustInherit Class Analysis
     ''' Analysis result values
     ''' </summary>
     ''' <remarks>Optional</remarks>
-    Public ReadOnly Property getResultValues() As Dictionary(Of String, Double)
+    Public ReadOnly Property getResultValues As Dictionary(Of String, Double)
         Get
             Return Me.ResultValues
         End Get
@@ -146,7 +146,7 @@ Friend MustInherit Class Analysis
     ''' Analysis result chart
     ''' </summary>
     ''' <remarks>Optional</remarks>
-    Public ReadOnly Property getResultChart() As Steema.TeeChart.TChart
+    Public ReadOnly Property getResultChart As Steema.TeeChart.TChart
         Get
             Return Me.ResultChart
         End Get
@@ -156,7 +156,7 @@ Friend MustInherit Class Analysis
     ''' Analysis result series
     ''' </summary>
     ''' <remarks>Optional</remarks>
-    Public ReadOnly Property getResultSeries() As List(Of TimeSeries)
+    Public ReadOnly Property getResultSeries As List(Of TimeSeries)
         Get
             Return Me.ResultSeries
         End Get
@@ -166,7 +166,7 @@ Friend MustInherit Class Analysis
     ''' Analysis result table
     ''' </summary>
     ''' <remarks>Optional</remarks>
-    Public ReadOnly Property getResultTable() As DataTable
+    Public ReadOnly Property getResultTable As DataTable
         Get
             Return Me.ResultTable
         End Get

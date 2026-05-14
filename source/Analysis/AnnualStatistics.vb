@@ -24,7 +24,7 @@ Imports System.Data
 Friend Class AnnualStatistics
     Inherits Analysis
 
-    Public Structure struct_stat
+    Public Structure Statistics
         Public startDate As Date
         Public endDate As Date
         Public len As Long
@@ -38,62 +38,44 @@ Friend Class AnnualStatistics
     ''' <summary>
     ''' Nested dictionary with key of series title and values as dictionary with key of period (entire series or year) and value of struct_stat with the calculated statistics for the period
     ''' </summary>
-    Private stats As Dictionary(Of String, Dictionary(Of String, struct_stat))
+    Private ReadOnly stats As Dictionary(Of String, Dictionary(Of String, Statistics))
     Private generateBoundingBoxes As Boolean
 
     Public Overloads Shared Function Description() As String
         Return "Calculates annual statistics (min, max, avg, vol) based on hydrological years."
     End Function
 
-    Public Overrides ReadOnly Property hasResultChart() As Boolean
-        Get
-            Return False
-        End Get
-    End Property
+    Public Overrides ReadOnly Property hasResultChart As Boolean = False
 
-    Public Overrides ReadOnly Property hasResultText() As Boolean
-        Get
-            Return False
-        End Get
-    End Property
+    Public Overrides ReadOnly Property hasResultText As Boolean = False
 
-    Public Overrides ReadOnly Property hasResultValues() As Boolean
-        Get
-            Return False
-        End Get
-    End Property
+    Public Overrides ReadOnly Property hasResultValues As Boolean = False
 
     ''' <summary>
     ''' Flag indicating whether the analysis function has result series
     ''' that should be added to the main diagram
     ''' </summary>
-    Public Overrides ReadOnly Property hasResultSeries() As Boolean
-        Get
-            Return True
-        End Get
-    End Property
+    Public Overrides ReadOnly Property hasResultSeries As Boolean = True
 
-    Public Overrides ReadOnly Property hasResultTable() As Boolean
-        Get
-            Return True
-        End Get
-    End Property
+    Public Overrides ReadOnly Property hasResultTable As Boolean = True
 
     Public Sub New(ByRef series As List(Of TimeSeries))
         MyBase.New(series)
-        stats = New Dictionary(Of String, Dictionary(Of String, struct_stat))()
+        stats = New Dictionary(Of String, Dictionary(Of String, Statistics))()
     End Sub
 
-    Private Function calculateStats(ByRef series As TimeSeries) As struct_stat
-        Dim stats As struct_stat
-        stats.startDate = series.StartDate
-        stats.endDate = series.EndDate
-        stats.len = series.Length
-        stats.min = series.Minimum
-        stats.max = series.Maximum
-        stats.avg = series.Average
-        stats.sum = series.Sum
-        stats.vol = series.Volume
+    Private Function CalculateStatistics(ByRef series As TimeSeries) As Statistics
+        Dim stats As Statistics
+        With stats
+            .startDate = series.StartDate
+            .endDate = series.EndDate
+            .len = series.Length
+            .min = series.Minimum
+            .max = series.Maximum
+            .avg = series.Average
+            .sum = series.Sum
+            .vol = series.Volume
+        End With
         Return stats
     End Function
 
@@ -113,17 +95,17 @@ Friend Class AnnualStatistics
 
         For Each ts As TimeSeries In Me.InputTimeSeries
 
-            Dim tsStats As New Dictionary(Of String, struct_stat)()
+            Dim tsStats As New Dictionary(Of String, Statistics)()
 
             'stats for entire series
-            tsStats.Add("Entire series", calculateStats(ts))
+            tsStats.Add("Entire series", CalculateStatistics(ts))
 
             'stats for hydrological years
             hyoseries = ts.SplitHydroYears(startMonth)
             For Each kvp As KeyValuePair(Of Integer, TimeSeries) In hyoseries
                 year = kvp.Key
                 series = kvp.Value
-                tsStats.Add(year.ToString, calculateStats(series))
+                tsStats.Add(year.ToString, CalculateStatistics(series))
             Next
 
             Me.stats.Add(ts.Title, tsStats)
@@ -137,23 +119,24 @@ Friend Class AnnualStatistics
 
         'result table
         Me.ResultTable = New DataTable($"Annual statistics: {String.Join(", ", Me.InputTimeSeries.Select(Function(ts1) ts1.Title))}")
-
-        Me.ResultTable.Columns.Add("Series", GetType(String))
-        Me.ResultTable.Columns.Add("Period", GetType(String))
-        Me.ResultTable.Columns.Add("Start", GetType(DateTime))
-        Me.ResultTable.Columns.Add("End", GetType(DateTime))
-        Me.ResultTable.Columns.Add("Length", GetType(Integer))
-        Me.ResultTable.Columns.Add("Min", GetType(Double))
-        Me.ResultTable.Columns.Add("Max", GetType(Double))
-        Me.ResultTable.Columns.Add("Avg", GetType(Double))
-        Me.ResultTable.Columns.Add("Sum", GetType(Double))
-        Me.ResultTable.Columns.Add("Volume", GetType(Double))
+        With Me.ResultTable.Columns
+            .Add("Series", GetType(String))
+            .Add("Period", GetType(String))
+            .Add("Start", GetType(DateTime))
+            .Add("End", GetType(DateTime))
+            .Add("Length", GetType(Integer))
+            .Add("Min", GetType(Double))
+            .Add("Max", GetType(Double))
+            .Add("Avg", GetType(Double))
+            .Add("Sum", GetType(Double))
+            .Add("Volume", GetType(Double))
+        End With
 
         For Each ts As TimeSeries In Me.InputTimeSeries
-            Dim tsStats As Dictionary(Of String, struct_stat) = Me.stats(ts.Title)
-            For Each kvp As KeyValuePair(Of String, struct_stat) In tsStats
+            Dim tsStats As Dictionary(Of String, Statistics) = Me.stats(ts.Title)
+            For Each kvp As KeyValuePair(Of String, Statistics) In tsStats
                 Dim period As String = kvp.Key
-                Dim stat As struct_stat = kvp.Value
+                Dim stat As Statistics = kvp.Value
                 Me.ResultTable.Rows.Add(
                     ts.Title,
                     period,
@@ -173,7 +156,7 @@ Friend Class AnnualStatistics
         If Me.generateBoundingBoxes Then
             MyBase.ResultSeries = New List(Of TimeSeries)
             For Each ts As TimeSeries In Me.InputTimeSeries
-                Dim tsStats As Dictionary(Of String, struct_stat) = Me.stats(ts.Title)
+                Dim tsStats As Dictionary(Of String, Statistics) = Me.stats(ts.Title)
                 If tsStats.Count > 2 Then
                     'Prepare output timeseries
                     Dim basename As String = ts.Title
@@ -198,9 +181,9 @@ Friend Class AnnualStatistics
                     timeseries_min.DataSource = New TimeSeriesDataSource(TimeSeriesDataSource.OriginEnum.AnalysisResult)
 
                     'Fill timeseries with values of max, avg, min
-                    For Each kvp As KeyValuePair(Of String, struct_stat) In tsStats
+                    For Each kvp As KeyValuePair(Of String, Statistics) In tsStats
                         If IsNumeric(kvp.Key) Then
-                            Dim stat As struct_stat = kvp.Value
+                            Dim stat As Statistics = kvp.Value
                             timeseries_max.AddNode(stat.startDate, stat.max)
                             timeseries_avg.AddNode(stat.startDate, stat.avg)
                             timeseries_min.AddNode(stat.startDate, stat.min)

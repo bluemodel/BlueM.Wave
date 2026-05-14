@@ -20,7 +20,7 @@
 ''' </summary>
 Public Module Log
 
-    Public logMessages As List(Of KeyValuePair(Of Levels, String))
+    Public ReadOnly logMessages As List(Of KeyValuePair(Of Levels, String))
 
     ''' <summary>
     ''' Logging level, value set here may be overwritten by application settings

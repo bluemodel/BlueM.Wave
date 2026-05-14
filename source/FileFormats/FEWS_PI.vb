@@ -35,11 +35,7 @@ Namespace Fileformats
         ''' <value></value>
         ''' <returns>True</returns>
         ''' <remarks></remarks>
-        Public Overrides ReadOnly Property UseImportDialog() As Boolean
-            Get
-                Return True
-            End Get
-        End Property
+        Public Overrides ReadOnly Property UseImportDialog As Boolean = True
 
         ''' <summary>
         ''' Instantiates a new FEWS_PI object
@@ -155,14 +151,16 @@ Namespace Fileformats
                             ts.Interpretation = BlueM.Wave.TimeSeries.InterpretationEnum.BlockRight
                     End Select
                     'store FEWS PI specific metadata
-                    ts.Metadata.Add("type", series.header.type)
-                    ts.Metadata.Add("locationId", series.header.locationId)
-                    ts.Metadata.Add("parameterId", series.header.parameterId)
-                    ts.Metadata.Add("timeStep", series.header.timeStep.unit)
-                    ts.Metadata.Add("multiplier", series.header.timeStep.multiplier)
-                    ts.Metadata.Add("missVal", series.header.missVal.ToString(Globalization.CultureInfo.InvariantCulture))
-                    ts.Metadata.Add("stationName", series.header.stationName)
-                    ts.Metadata.Add("units", series.header.units)
+                    With ts.Metadata
+                        .Add("type", series.header.type)
+                        .Add("locationId", series.header.locationId)
+                        .Add("parameterId", series.header.parameterId)
+                        .Add("timeStep", series.header.timeStep.unit)
+                        .Add("multiplier", series.header.timeStep.multiplier)
+                        .Add("missVal", series.header.missVal.ToString(Globalization.CultureInfo.InvariantCulture))
+                        .Add("stationName", series.header.stationName)
+                        .Add("units", series.header.units)
+                    End With
                     'store events as nodes
                     Dim errorvalue As Double = series.header.missVal
                     For Each xmlevent As XMLEvent In series.events
@@ -184,7 +182,7 @@ Namespace Fileformats
         ''' <summary>
         ''' Returns a list of Delft-FEWS PI-specific metadata keys
         ''' </summary>
-        Public Overloads Shared ReadOnly Property MetadataKeys() As List(Of String)
+        Public Overloads Shared ReadOnly Property MetadataKeys As List(Of String)
             Get
                 Dim keys As New List(Of String) From {
                 "type",

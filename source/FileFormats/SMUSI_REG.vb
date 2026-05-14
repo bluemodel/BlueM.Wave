@@ -36,17 +36,13 @@ Namespace Fileformats
         ''' <summary>
         ''' Gibt an, ob beim Import des Dateiformats der Importdialog angezeigt werden soll
         ''' </summary>
-        Public Overrides ReadOnly Property UseImportDialog() As Boolean
-            Get
-                Return False
-            End Get
-        End Property
+        Public Overrides ReadOnly Property UseImportDialog As Boolean = False
 
         ''' <summary>
         ''' Zeitintervall von SMUSI-Regenreihen
         ''' </summary>
         ''' <remarks>5 Minuten</remarks>
-        Private Shared ReadOnly Property Zeitintervall() As TimeSpan
+        Private Shared ReadOnly Property Zeitintervall As TimeSpan
             Get
                 Return New TimeSpan(0, SMUSI_REG.dt_min, 0)
             End Get
@@ -171,7 +167,7 @@ Namespace Fileformats
                         If (leerzeile) Then
                             'Bei vorheriger leeren Zeile: 0-Stelle 5 min nach letztem Datum einfügen
                             DatumTmp = DatumCurrent.Add(Zeitintervall)
-                            If (Not DatumTmp = DatumZeile) Then
+                            If DatumTmp <> DatumZeile Then
                                 ts.AddNode(DatumTmp, 0)
                             End If
                         End If

@@ -23,8 +23,7 @@ Imports System.Text.RegularExpressions
 ''' </summary>
 Friend Class AxisWrapper
 
-    Private _name As String
-    Private _TAxis As Steema.TeeChart.Axis
+    Private ReadOnly _TAxis As Steema.TeeChart.Axis
 
     ''' <summary>
     ''' Constructor
@@ -40,10 +39,6 @@ Friend Class AxisWrapper
     ''' Axis Name, e.g. "Left", "Right", "Custom 0", etc.
     ''' </summary>
     Public ReadOnly Property Name As String
-        Get
-            Return Me._name
-        End Get
-    End Property
 
     ''' <summary>
     ''' Axis Title as displayed in the chart

@@ -52,49 +52,29 @@ Friend Class AnnualRecurrenceProbability
     ''' <summary>
     ''' Flag indicating whether the analysis function produces a result text
     ''' </summary>
-    Public Overrides ReadOnly Property hasResultText() As Boolean
-        Get
-            Return False
-        End Get
-    End Property
+    Public Overrides ReadOnly Property hasResultText As Boolean = False
 
     ''' <summary>
     ''' Flag indicating whether the analysis function produces result values
     ''' </summary>
-    Public Overrides ReadOnly Property hasResultValues() As Boolean
-        Get
-            Return False
-        End Get
-    End Property
+    Public Overrides ReadOnly Property hasResultValues As Boolean = False
 
     ''' <summary>
     ''' Flag indicating whether the analysis function produces a result chart
     ''' </summary>
-    Public Overrides ReadOnly Property hasResultChart() As Boolean
-        Get
-            Return True
-        End Get
-    End Property
+    Public Overrides ReadOnly Property hasResultChart As Boolean = True
 
     ''' <summary>
     ''' Flag indicating whether the analysis function has result series
     ''' that should be added to the main diagram
     ''' </summary>
-    Public Overrides ReadOnly Property hasResultSeries() As Boolean
-        Get
-            Return True
-        End Get
-    End Property
+    Public Overrides ReadOnly Property hasResultSeries As Boolean = True
 
     ''' <summary>
     ''' Flag indicating whether the analysis function has a result table
     ''' that should be shown in a separate window
     ''' </summary>
-    Public Overrides ReadOnly Property hasResultTable() As Boolean
-        Get
-            Return True
-        End Get
-    End Property
+    Public Overrides ReadOnly Property hasResultTable As Boolean = True
 
     ''' <summary>
     ''' Class constructor
@@ -214,13 +194,15 @@ Friend Class AnnualRecurrenceProbability
 
         'Create result table
         ResultTable = New DataTable($"Annual maxima: {String.Join(", ", Me.InputTimeSeries.Select(Function(ts1) ts1.Title))}")
-        ResultTable.Columns.Add("Series", GetType(String))
-        ResultTable.Columns.Add("Year", GetType(Integer))
-        ResultTable.Columns.Add("Date", GetType(DateTime))
-        ResultTable.Columns.Add($"Maximum [{String.Join(", ", Me.InputTimeSeries.Select(Function(ts1) ts1.Unit).Distinct())}]", GetType(Double))
-        ResultTable.Columns.Add($"Rank", GetType(Integer))
-        ResultTable.Columns.Add("Probability of exceedance [-]", GetType(Double))
-        ResultTable.Columns.Add("Return period [years]", GetType(Double))
+        With ResultTable.Columns
+            .Add("Series", GetType(String))
+            .Add("Year", GetType(Integer))
+            .Add("Date", GetType(DateTime))
+            .Add($"Maximum [{String.Join(", ", Me.InputTimeSeries.Select(Function(ts1) ts1.Unit).Distinct())}]", GetType(Double))
+            .Add($"Rank", GetType(Integer))
+            .Add("Probability of exceedance [-]", GetType(Double))
+            .Add("Return period [years]", GetType(Double))
+        End With
 
         'Add rows to result table
         For Each ts As TimeSeries In Me.InputTimeSeries
@@ -250,30 +232,35 @@ Friend Class AnnualRecurrenceProbability
         ResultChart.Legend.Alignment = Steema.TeeChart.LegendAlignments.Top
 
         'x-Axis
-        ResultChart.Axes.Bottom.Labels.Style = Steema.TeeChart.AxisLabelStyle.Value
-        ResultChart.Axes.Bottom.Title.Caption = "Return period [years]"
-        ResultChart.Axes.Bottom.Labels.Angle = 90
-        ResultChart.Axes.Bottom.Logarithmic = True
-        ResultChart.Axes.Bottom.LogarithmicBase = 10
-        ResultChart.Axes.Bottom.Automatic = False
-        ResultChart.Axes.Bottom.Minimum = 1
-        ResultChart.Axes.Bottom.Maximum = 100
-        ResultChart.Axes.Bottom.Increment = 1
-        ResultChart.Axes.Bottom.Grid.DrawEvery = 1
+        With ResultChart.Axes.Bottom
+            .Labels.Style = Steema.TeeChart.AxisLabelStyle.Value
+            .Title.Caption = "Return period [years]"
+            .Labels.Angle = 90
+            .Logarithmic = True
+            .LogarithmicBase = 10
+            .Automatic = False
+            .Minimum = 1
+            .Maximum = 100
+            .Increment = 1
+            .Grid.DrawEvery = 1
+        End With
 
         'y-Axis
-        ResultChart.Axes.Left.AutomaticMaximum = True
-        ResultChart.Axes.Left.AutomaticMinimum = False
-        ResultChart.Axes.Left.Minimum = 0
-        ResultChart.Axes.Left.MaximumRound = True
-        ResultChart.Axes.Left.Grid.DrawEvery = 1
-        ResultChart.Axes.Left.Title.Caption = String.Join(", ", Me.InputTimeSeries.Select(Function(ts1) ts1.Unit).Distinct())
+        With ResultChart.Axes.Left
+            .AutomaticMaximum = True
+            .AutomaticMinimum = False
+            .Minimum = 0
+            .MaximumRound = True
+            .Grid.DrawEvery = 1
+            .Title.Caption = String.Join(", ", Me.InputTimeSeries.Select(Function(ts1) ts1.Unit).Distinct())
+        End With
 
         'point series
         For Each ts As TimeSeries In Me.InputTimeSeries
             Dim tsEvents As List(Of AnnualEvent) = Me.events(ts.Title)
-            Dim points As New Steema.TeeChart.Styles.Points(ResultChart.Chart)
-            points.Title = ts.Title
+            Dim points As New Steema.TeeChart.Styles.Points(ResultChart.Chart) With {
+                .Title = ts.Title
+            }
             For Each ev As AnnualEvent In tsEvents
                 points.Add(ev.returnPeriod, ev.maxValue, ev.year.ToString())
             Next
@@ -286,9 +273,10 @@ Friend Class AnnualRecurrenceProbability
         Me.ResultSeries = New List(Of TimeSeries)()
         For Each ts As TimeSeries In Me.InputTimeSeries
             Dim tsEvents As List(Of AnnualEvent) = Me.events(ts.Title)
-            Dim ts_events As New TimeSeries($"{ts.Title} (annual maxima)")
-            ts_events.Unit = ts.Unit
-            ts_events.Interpretation = TimeSeries.InterpretationEnum.Instantaneous
+            Dim ts_events As New TimeSeries($"{ts.Title} (annual maxima)") With {
+                .Unit = ts.Unit,
+                .Interpretation = TimeSeries.InterpretationEnum.Instantaneous
+            }
             ts_events.DisplayOptions.ShowPoints = True
             For Each ev As AnnualEvent In tsEvents
                 ts_events.AddNode(ev.maxDate, ev.maxValue)

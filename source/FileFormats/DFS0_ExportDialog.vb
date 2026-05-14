@@ -154,7 +154,7 @@ Namespace Fileformats
                 'try to determine eumItem from metadata (only available if timeseries was read from DFS0)
                 If ts.Metadata.ContainsKey("eumItem") Then
                     Dim eumItemString As String = ts.Metadata("eumItem")
-                    Dim eumItem As eumItem = [Enum].Parse(GetType(eumItem), eumItemString)
+                    Dim eumItem As eumItem = [Enum].Parse(Of eumItem)(eumItemString)
                     If items.Contains(eumItem) Then
                         item = eumItem
                     Else
@@ -186,7 +186,7 @@ Namespace Fileformats
         Private Sub DataGridView1_CellValueChanged(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridView1.CellValueChanged
 
             If e.RowIndex = -1 Then
-                Exit Sub
+                Return
             End If
 
             Dim item As eumItem = DataGridView1.Rows(e.RowIndex).Cells(Columns.eumItem).Value

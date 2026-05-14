@@ -35,11 +35,7 @@ Namespace Fileformats
         ''' <summary>
         ''' Gibt an, ob beim Import des Dateiformats der Importdialog angezeigt werden soll
         ''' </summary>
-        Public Overrides ReadOnly Property UseImportDialog() As Boolean
-            Get
-                Return True
-            End Get
-        End Property
+        Public Overrides ReadOnly Property UseImportDialog As Boolean = True
 
         Private Enum FileType As Integer
             monthly = 1
@@ -136,7 +132,7 @@ Namespace Fileformats
             Select Case Me.FileFormat
 
                 Case FileType.annual
-                    parts = lines(2).Split(Me.Separator.ToChar, StringSplitOptions.RemoveEmptyEntries)
+                    parts = lines(2).Split(Me.Separator.Char, StringSplitOptions.RemoveEmptyEntries)
                     For i = 1 To parts.Length - 1 'first column is timestamp (year)
                         sInfo = New TimeSeriesInfo With {
                             .Index = i,
@@ -148,7 +144,7 @@ Namespace Fileformats
                     Me.DateTimeColumnIndex = 0
 
                 Case FileType.monthly
-                    parts = lines(2).Split(Me.Separator.ToChar, StringSplitOptions.RemoveEmptyEntries)
+                    parts = lines(2).Split(Me.Separator.Char, StringSplitOptions.RemoveEmptyEntries)
                     For i = 2 To parts.Length - 1 'first two columns are timestamp (year and month)
                         sInfo = New TimeSeriesInfo With {
                             .Index = i,
@@ -160,7 +156,7 @@ Namespace Fileformats
                     Me.DateTimeColumnIndex = 0 'technically 0 and 1
 
                 Case FileType.dpout
-                    parts = lines(Me.LineNumberData).Split(Me.Separator.ToChar, StringSplitOptions.RemoveEmptyEntries)
+                    parts = lines(Me.LineNumberData).Split(Me.Separator.Char, StringSplitOptions.RemoveEmptyEntries)
                     For i = 3 To parts.Length - 1 'first 3 columns are timestamp
                         Dim m As Match
                         m = Regex.Match(lines(i - 2).Trim(), ".{3} (.+)\s+\((.+)\).+")
@@ -174,7 +170,7 @@ Namespace Fileformats
                     Me.DateTimeColumnIndex = 0 ' technically 0, 1 and 2
 
                 Case FileType.statvar
-                    parts = lines(Me.LineNumberData).Split(Me.Separator.ToChar, StringSplitOptions.RemoveEmptyEntries)
+                    parts = lines(Me.LineNumberData).Split(Me.Separator.Char, StringSplitOptions.RemoveEmptyEntries)
                     For i = 7 To parts.Length - 1 'first 7 columns are number and timestamp
                         sInfo = New TimeSeriesInfo With {
                             .Name = lines(i - 5).Trim(),
@@ -228,7 +224,7 @@ Namespace Fileformats
             Do
                 line = StrReadSync.ReadLine()
 
-                parts = line.Split(Me.Separator.ToChar, StringSplitOptions.RemoveEmptyEntries)
+                parts = line.Split(Me.Separator.Char, StringSplitOptions.RemoveEmptyEntries)
 
                 'Parse date
                 Select Case Me.FileFormat

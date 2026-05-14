@@ -50,15 +50,8 @@ Public Class TimeSeries
 
 #Region "Members"
 
-    Private _id As Integer
-    Private _title As String
-    Private _nodes As SortedList(Of DateTime, Double)
     Private _nodesCleaned As SortedList(Of DateTime, Double)
     Private _unit As String
-    Private _metadata As Metadata
-    Private _Interpretation As InterpretationEnum
-    Private _DataSource As TimeSeriesDataSource
-    Private _displayOptions As TimeSeriesDisplayOptions
 
 #End Region 'Members
 
@@ -68,51 +61,29 @@ Public Class TimeSeries
     ''' Unique Id
     ''' </summary>
     ''' <returns></returns>
-    Public ReadOnly Property Id() As Integer
-        Get
-            Return Me._id
-        End Get
-    End Property
+    Public ReadOnly Property Id As Integer
 
     ''' <summary>
     ''' Title of the time series
     ''' </summary>
-    Public Property Title() As String
-        Get
-            Return _title
-        End Get
-        Set(value As String)
-            _title = value
-        End Set
-    End Property
+    Public Property Title As String
 
     ''' <summary>
     ''' The time series' interpretation
     ''' </summary>
-    Public Property Interpretation() As InterpretationEnum
-        Get
-            Return Me._Interpretation
-        End Get
-        Set(value As InterpretationEnum)
-            Me._Interpretation = value
-        End Set
-    End Property
+    Public Property Interpretation As InterpretationEnum
 
     ''' <summary>
     ''' The time series' nodes
     ''' </summary>
-    Public Overloads ReadOnly Property Nodes() As SortedList(Of DateTime, Double)
-        Get
-            Return _nodes
-        End Get
-    End Property
+    Public Overloads ReadOnly Property Nodes As SortedList(Of DateTime, Double)
 
     ''' <summary>
     ''' Returns the value at timestamp t
     ''' </summary>
     Public Overloads ReadOnly Property Nodes(t As DateTime) As Double
         Get
-            Return _nodes(t)
+            Return _Nodes(t)
         End Get
     End Property
 
@@ -138,7 +109,7 @@ Public Class TimeSeries
     ''' The time series' nodes without NaN and Infinity values
     ''' </summary>
     ''' <remarks>The cleaned nodes are cached and only created once per instance</remarks>
-    Public Overloads ReadOnly Property NodesClean() As SortedList(Of DateTime, Double)
+    Public Overloads ReadOnly Property NodesClean As SortedList(Of DateTime, Double)
         Get
             If IsNothing(Me._nodesCleaned) Then
                 Me._nodesCleaned = New SortedList(Of DateTime, Double)
@@ -173,41 +144,34 @@ Public Class TimeSeries
     ''' <summary>
     ''' The time series' dates
     ''' </summary>
-    Public ReadOnly Property Dates() As IList(Of DateTime)
+    Public ReadOnly Property Dates As IList(Of DateTime)
         Get
-            Return Me._nodes.Keys
+            Return Me._Nodes.Keys
         End Get
     End Property
 
     ''' <summary>
     ''' The time series' values
     ''' </summary>
-    Public ReadOnly Property Values() As IList(Of Double)
+    Public ReadOnly Property Values As IList(Of Double)
         Get
-            Return Me._nodes.Values
+            Return Me._Nodes.Values
         End Get
     End Property
 
     ''' <summary>
     ''' The time series' metadata
     ''' </summary>
-    Public Property Metadata() As Metadata
-        Get
-            Return Me._metadata
-        End Get
-        Set(value As Metadata)
-            Me._metadata = value
-        End Set
-    End Property
+    Public Property Metadata As Metadata
 
     ''' <summary>
     ''' The time series' metadata formatted as a single string
     ''' </summary>
     ''' <remarks>Empty entries are omitted from the string</remarks>
-    Public ReadOnly Property MetadataText() As String
+    Public ReadOnly Property MetadataText As String
         Get
             Dim text As String = ""
-            For Each kvp As KeyValuePair(Of String, String) In Me._metadata
+            For Each kvp As KeyValuePair(Of String, String) In Me._Metadata
                 If kvp.Value <> "" Then
                     'omit empty entries
                     text &= $"{kvp.Key}: {kvp.Value}, "
@@ -220,9 +184,9 @@ Public Class TimeSeries
     ''' <summary>
     ''' The time series' length (number of nodes)
     ''' </summary>
-    Public ReadOnly Property Length() As Integer
+    Public ReadOnly Property Length As Integer
         Get
-            Return Me._nodes.Count
+            Return Me._Nodes.Count
         End Get
     End Property
 
@@ -294,7 +258,7 @@ Public Class TimeSeries
     ''' <summary>
     ''' The unit of the the time series' values
     ''' </summary>
-    Public Property Unit() As String
+    Public Property Unit As String
         Get
             Return _unit
         End Get
@@ -309,31 +273,17 @@ Public Class TimeSeries
     ''' </summary>
     ''' <returns></returns>
     Public Property DataSource As TimeSeriesDataSource
-        Get
-            Return _DataSource
-        End Get
-        Set(value As TimeSeriesDataSource)
-            _DataSource = value
-        End Set
-    End Property
 
     ''' <summary>
     ''' Options for displaying the time series
     ''' </summary>
     ''' <returns></returns>
     Public Property DisplayOptions As TimeSeriesDisplayOptions
-        Get
-            Return _displayOptions
-        End Get
-        Set(value As TimeSeriesDisplayOptions)
-            _displayOptions = value
-        End Set
-    End Property
 
     ''' <summary>
     ''' Returns the start date of the time series
     ''' </summary>
-    Public ReadOnly Property StartDate() As DateTime
+    Public ReadOnly Property StartDate As DateTime
         Get
             Return Me.Dates.First()
         End Get
@@ -342,7 +292,7 @@ Public Class TimeSeries
     ''' <summary>
     ''' Returns the end date of the time series
     ''' </summary>
-    Public ReadOnly Property EndDate() As DateTime
+    Public ReadOnly Property EndDate As DateTime
         Get
             Return Me.Dates.Last()
         End Get
@@ -351,7 +301,7 @@ Public Class TimeSeries
     ''' <summary>
     ''' Returns the maximum value of the time series
     ''' </summary>
-    Public Overloads ReadOnly Property Maximum() As Double
+    Public Overloads ReadOnly Property Maximum As Double
         Get
             If Me.NodesClean.Count > 0 Then
                 Return Me.NodesClean().Values.Max
@@ -377,7 +327,7 @@ Public Class TimeSeries
     ''' <summary>
     ''' Returns the node with the maximum value of the time series
     ''' </summary>
-    Public Overloads ReadOnly Property MaximumNode() As KeyValuePair(Of DateTime, Double)
+    Public Overloads ReadOnly Property MaximumNode As KeyValuePair(Of DateTime, Double)
         Get
             Dim nodes As SortedList(Of DateTime, Double) = Me.NodesClean()
             If nodes.Count > 0 Then
@@ -411,7 +361,7 @@ Public Class TimeSeries
     ''' <summary>
     ''' Returns the minimum value of the time series
     ''' </summary>
-    Public Overloads ReadOnly Property Minimum() As Double
+    Public Overloads ReadOnly Property Minimum As Double
         Get
             If Me.NodesClean.Count > 0 Then
                 Return Me.NodesClean().Values.Min
@@ -438,7 +388,7 @@ Public Class TimeSeries
     ''' Returns the average value of the time series
     ''' </summary>
     ''' <remarks>Simple average calculation without regard for time</remarks>
-    Public ReadOnly Property Average() As Double
+    Public ReadOnly Property Average As Double
         Get
             Dim avg As Double
             avg = 0
@@ -453,7 +403,7 @@ Public Class TimeSeries
     ''' <summary>
     ''' Returns the first value of the time series
     ''' </summary>
-    Public ReadOnly Property FirstValue() As Double
+    Public ReadOnly Property FirstValue As Double
         Get
             Return Me.Values.First()
         End Get
@@ -462,7 +412,7 @@ Public Class TimeSeries
     ''' <summary>
     ''' Returns the last value of the time series
     ''' </summary>
-    Public ReadOnly Property LastValue() As Double
+    Public ReadOnly Property LastValue As Double
         Get
             Return Me.Values.Last()
         End Get
@@ -471,7 +421,7 @@ Public Class TimeSeries
     ''' <summary>
     ''' Returns the sum of the time series' values
     ''' </summary>
-    Public ReadOnly Property Sum() As Double
+    Public ReadOnly Property Sum As Double
         Get
             Dim _sum As Double
             _sum = 0.0
@@ -492,7 +442,7 @@ Public Class TimeSeries
     ''' and interpretations Instantaneous, BlockLeft and BlockRight. 
     ''' Otherwise returns NaN.
     ''' </remarks>
-    Public ReadOnly Property Volume() As Double
+    Public ReadOnly Property Volume As Double
         Get
             Dim v1, v2, partial_volume, total_volume As Double
             Dim t1, t2 As DateTime
@@ -599,7 +549,7 @@ Public Class TimeSeries
     Public Sub AddNode(_date As DateTime, _value As Double)
         If (Me.Nodes.ContainsKey(_date)) Then
             Log.AddLogEntry(Log.Levels.warning, $"Duplicate data point at {_date.ToString(Helpers.CurrentDateFormat)}: Value of {_value.ToString(Helpers.DefaultNumberFormat)} will be discarded. Existing value: {Me.Nodes(_date).ToString(Helpers.DefaultNumberFormat)}")
-            Exit Sub
+            Return
         End If
         Me._nodes.Add(_date, _value)
     End Sub
@@ -1302,7 +1252,7 @@ Public Class TimeSeries
 
         If t_diff.Count = 0 Then
             'nothing to do
-            Exit Sub
+            Return
         End If
 
         t_common = ts1.Dates.Intersect(ts2.Dates).ToHashSet()

@@ -28,9 +28,7 @@ Friend Class AnalysisDialog
         Me.ComboBox_Analysis.DataSource = [Enum].GetValues(Of AnalysisFactory.AnalysisFunctions)()
 
         'Populate listbox with time series
-        For Each series As TimeSeries In seriesList
-            Me.ListBox_Series.Items.Add(series)
-        Next
+        Me.ListBox_Series.Items.AddRange(seriesList.ToArray())
 
     End Sub
 
@@ -38,7 +36,7 @@ Friend Class AnalysisDialog
     ''' Selected analysis function
     ''' </summary>
     ''' <returns></returns>
-    Friend ReadOnly Property SelectedAnalysisFunction() As AnalysisFactory.AnalysisFunctions
+    Friend ReadOnly Property SelectedAnalysisFunction As AnalysisFactory.AnalysisFunctions
         Get
             Return Me.ComboBox_Analysis.SelectedItem
         End Get
@@ -48,7 +46,7 @@ Friend Class AnalysisDialog
     ''' List of selected time series
     ''' </summary>
     ''' <returns></returns>
-    Friend ReadOnly Property SelectedTimeseries() As List(Of TimeSeries)
+    Friend ReadOnly Property SelectedTimeseries As List(Of TimeSeries)
         Get
             Dim seriesList As New List(Of TimeSeries)()
             For Each item As Object In Me.ListBox_Series.SelectedItems

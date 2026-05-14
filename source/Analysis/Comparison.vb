@@ -32,45 +32,25 @@ Friend Class Comparison
     ''' <summary>
     ''' Flag, der anzeigt, ob die Analysefunktion einen Ergebnistext erzeugt
     ''' </summary>
-    Public Overrides ReadOnly Property hasResultText() As Boolean
-        Get
-            Return True
-        End Get
-    End Property
+    Public Overrides ReadOnly Property hasResultText As Boolean = True
 
     ''' <summary>
     ''' Flag, der anzeigt, ob die Analysefunktion Ergebniswerte erzeugt
     ''' </summary>
-    Public Overrides ReadOnly Property hasResultValues() As Boolean
-        Get
-            Return True
-        End Get
-    End Property
+    Public Overrides ReadOnly Property hasResultValues As Boolean = True
 
     ''' <summary>
     ''' Flag, der anzeigt, ob die Analysefunktion ein Ergebnisdiagramm erzeugt
     ''' </summary>
-    Public Overrides ReadOnly Property hasResultChart() As Boolean
-        Get
-            Return True
-        End Get
-    End Property
+    Public Overrides ReadOnly Property hasResultChart As Boolean = True
 
     ''' <summary>
     ''' Flag indicating whether the analysis function has result series
     ''' that should be added to the main diagram
     ''' </summary>
-    Public Overrides ReadOnly Property hasResultSeries() As Boolean
-        Get
-            Return False
-        End Get
-    End Property
+    Public Overrides ReadOnly Property hasResultSeries As Boolean = False
 
-    Public Overrides ReadOnly Property hasResultTable() As Boolean
-        Get
-            Return False
-        End Get
-    End Property
+    Public Overrides ReadOnly Property hasResultTable As Boolean = False
 
     ''' <summary>
     ''' Konstruktor
@@ -164,16 +144,17 @@ Friend Class Comparison
 
         Me.ResultChart = New Steema.TeeChart.TChart()
         Call Helpers.ChartSetDefaultFormat(Me.ResultChart.Chart)
-        Me.ResultChart.Header.Visible = True
-        Me.ResultChart.Header.Text = $"Comparison ({x_title} / {y_title})"
-        Me.ResultChart.Legend.Visible = False
+        With Me.ResultChart
+            .Header.Visible = True
+            .Header.Text = $"Comparison ({x_title} / {y_title})"
+            .Legend.Visible = False
 
-        'Achsen
-        '------
-        Me.ResultChart.Axes.Bottom.Title.Caption = $"{x_title}  [{x_unit}]"
-        Me.ResultChart.Axes.Bottom.Labels.Style = Steema.TeeChart.AxisLabelStyle.Value
-        Me.ResultChart.Axes.Left.Title.Caption = $"{y_title}  [{y_unit}]"
-        Me.ResultChart.Axes.Left.Labels.Style = Steema.TeeChart.AxisLabelStyle.Value
+            'Achsen
+            .Axes.Bottom.Title.Caption = $"{x_title}  [{x_unit}]"
+            .Axes.Bottom.Labels.Style = Steema.TeeChart.AxisLabelStyle.Value
+            .Axes.Left.Title.Caption = $"{y_title}  [{y_unit}]"
+            .Axes.Left.Labels.Style = Steema.TeeChart.AxisLabelStyle.Value
+        End With
 
         'Reihen
         '------

@@ -31,11 +31,7 @@ Namespace Fileformats
         ''' <summary>
         ''' Gibt an, ob beim Import des Dateiformats der Importdialog angezeigt werden soll
         ''' </summary>
-        Public Overrides ReadOnly Property UseImportDialog() As Boolean
-            Get
-                Return True
-            End Get
-        End Property
+        Public Overrides ReadOnly Property UseImportDialog As Boolean = True
 
         Public Sub New(FileName As String, Optional ReadAllNow As Boolean = False)
 
@@ -101,7 +97,7 @@ Namespace Fileformats
                 line = StrReadSync.ReadLine()
 
                 If iLine = Me.LineNumberHeaders Then
-                    Dim parts() As String = line.Split(Me.Separator.ToChar())
+                    Dim parts() As String = line.Split(Me.Separator.Char())
                     index = 0
                     For Each part As String In parts
                         If part.Trim() <> "" And index <> Me.DateTimeColumnIndex Then
@@ -145,7 +141,7 @@ Namespace Fileformats
 
             'Number format
             numberformat = Helpers.DefaultNumberFormat.Clone()
-            If Me.DecimalSeparator.ToChar = Chr(44) Then
+            If Me.DecimalSeparator.Char = Chr(44) Then
                 'change decimal separator to comma
                 numberformat.NumberDecimalSeparator = ","
             End If
@@ -174,7 +170,7 @@ Namespace Fileformats
                 End If
 
                 If iLine >= Me.LineNumberData AndAlso isData Then
-                    parts = line.Split(Me.Separator.ToChar())
+                    parts = line.Split(Me.Separator.Char())
                     'parse timestamp
                     success = DateTime.TryParseExact(parts(Me.DateTimeColumnIndex).Trim(), Me.Dateformat, Helpers.DefaultNumberFormat, Globalization.DateTimeStyles.None, timestamp)
                     If Not success Then

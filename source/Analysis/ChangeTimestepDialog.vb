@@ -24,17 +24,20 @@ Friend Class ChangeTimestepDialog
         Call InitializeComponent()
 
         'fill comboboxes
-        Me.ComboBox_InputInterpretation.Items.Add(TimeSeries.InterpretationEnum.Instantaneous)
-        Me.ComboBox_InputInterpretation.Items.Add(TimeSeries.InterpretationEnum.BlockRight)
-        Me.ComboBox_InputInterpretation.Items.Add(TimeSeries.InterpretationEnum.BlockLeft)
-        Me.ComboBox_InputInterpretation.Items.Add(TimeSeries.InterpretationEnum.Cumulative)
-        Me.ComboBox_InputInterpretation.Items.Add(TimeSeries.InterpretationEnum.CumulativePerTimestep)
+        Me.ComboBox_InputInterpretation.Items.AddRange({
+            TimeSeries.InterpretationEnum.Instantaneous,
+            TimeSeries.InterpretationEnum.BlockRight,
+            TimeSeries.InterpretationEnum.BlockLeft,
+            TimeSeries.InterpretationEnum.Cumulative,
+            TimeSeries.InterpretationEnum.CumulativePerTimestep
+        })
 
-        'Me.ComboBox_OutputInterpretation.Items.Add(TimeSeries.InterpretationEnum.Instantaneous) 'not supported
-        Me.ComboBox_OutputInterpretation.Items.Add(TimeSeries.InterpretationEnum.BlockRight)
-        Me.ComboBox_OutputInterpretation.Items.Add(TimeSeries.InterpretationEnum.BlockLeft)
-        Me.ComboBox_OutputInterpretation.Items.Add(TimeSeries.InterpretationEnum.Cumulative)
-        Me.ComboBox_OutputInterpretation.Items.Add(TimeSeries.InterpretationEnum.CumulativePerTimestep)
+        Me.ComboBox_OutputInterpretation.Items.AddRange({
+            TimeSeries.InterpretationEnum.BlockRight,
+            TimeSeries.InterpretationEnum.BlockLeft,
+            TimeSeries.InterpretationEnum.Cumulative,
+            TimeSeries.InterpretationEnum.CumulativePerTimestep
+        }) 'TimeSeries.InterpretationEnum.Instantaneous is not supported here
 
         'set initial selection according to the timeseries' interpretation
         Select Case ts.Interpretation
@@ -54,13 +57,15 @@ Friend Class ChangeTimestepDialog
                 Me.ComboBox_OutputInterpretation.SelectedItem = TimeSeries.InterpretationEnum.BlockRight
         End Select
 
-        Me.ComboBox_TimestepType.Items.Add(TimeSeries.TimeStepTypeEnum.Year)
-        Me.ComboBox_TimestepType.Items.Add(TimeSeries.TimeStepTypeEnum.Month)
-        Me.ComboBox_TimestepType.Items.Add(TimeSeries.TimeStepTypeEnum.Week)
-        Me.ComboBox_TimestepType.Items.Add(TimeSeries.TimeStepTypeEnum.Day)
-        Me.ComboBox_TimestepType.Items.Add(TimeSeries.TimeStepTypeEnum.Hour)
-        Me.ComboBox_TimestepType.Items.Add(TimeSeries.TimeStepTypeEnum.Minute)
-        Me.ComboBox_TimestepType.Items.Add(TimeSeries.TimeStepTypeEnum.Second)
+        Me.ComboBox_TimestepType.Items.AddRange({
+            TimeSeries.TimeStepTypeEnum.Year,
+            TimeSeries.TimeStepTypeEnum.Month,
+            TimeSeries.TimeStepTypeEnum.Week,
+            TimeSeries.TimeStepTypeEnum.Day,
+            TimeSeries.TimeStepTypeEnum.Hour,
+            TimeSeries.TimeStepTypeEnum.Minute,
+            TimeSeries.TimeStepTypeEnum.Second
+        })
         Me.ComboBox_TimestepType.SelectedIndex = 3
 
         'set CurrentCulture for MaskedTextBoxes

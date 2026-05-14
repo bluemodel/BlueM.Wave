@@ -48,7 +48,7 @@ Friend Class PropertiesWindow
         ' This call is required by the Windows Form Designer.
         InitializeComponent()
         ' Add any initialization after the InitializeComponent() call.
-        Me.Interpretation.DataSource = System.Enum.GetValues(GetType(TimeSeries.InterpretationEnum))
+        Me.Interpretation.DataSource = [Enum].GetValues(Of TimeSeries.InterpretationEnum)()
 
         'set background color for editable columns
         Dim backColor As Color
@@ -105,7 +105,7 @@ Friend Class PropertiesWindow
     ''' </summary>
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
-    Private Sub showStatisticis_Click(sender As Object, e As EventArgs) Handles ToolStripButton_showStatistics.Click
+    Private Sub ShowStatistics_Click(sender As Object, e As EventArgs) Handles ToolStripButton_showStatistics.Click
         Dim colindex As Integer = 6 'index of the first column with statistics
         If ToolStripButton_showStatistics.Checked Then
             For Each col As DataGridViewColumn In DataGridView1.Columns()
@@ -164,7 +164,7 @@ Friend Class PropertiesWindow
     Private Sub DataGridView1_CellValueChanged(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridView1.CellValueChanged
 
         If e.RowIndex = -1 Then
-            Exit Sub
+            Return
         End If
 
         Dim idColumnIndex As Integer
@@ -238,7 +238,7 @@ Friend Class PropertiesWindow
                    (direction = Direction.Down And row.Index = Me.DataGridView1.RowCount - 1) Then
                     'if first row is selected, moving up does nothing
                     'if last row is selected, moving down does nothing
-                    Exit Sub
+                    Return
                 End If
                 indices.Add(row.Index)
                 ids.Add(CType(row.DataBoundItem, TimeSeries).Id)

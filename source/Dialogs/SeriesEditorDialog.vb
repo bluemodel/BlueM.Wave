@@ -30,7 +30,7 @@ Friend Class SeriesEditorDialog
     ''' <value></value>
     ''' <returns></returns>
     ''' <remarks></remarks>
-    Private ReadOnly Property series_Title() As String
+    Private ReadOnly Property SeriesTitle As String
         Get
             Return Me.TextBox_Title.Text
         End Get
@@ -42,9 +42,9 @@ Friend Class SeriesEditorDialog
     ''' <value></value>
     ''' <returns></returns>
     ''' <remarks>Defaults to "-" if left empty</remarks>
-    Private ReadOnly Property series_Unit() As String
+    Private ReadOnly Property SeriesUnit As String
         Get
-            If (Not Me.TextBox_Unit.Text.Trim() = "") Then
+            If Me.TextBox_Unit.Text.Trim() <> "" Then
                 Return Me.TextBox_Unit.Text
             Else
                 Return "-"
@@ -58,7 +58,7 @@ Friend Class SeriesEditorDialog
     ''' <value></value>
     ''' <returns></returns>
     ''' <remarks></remarks>
-    Public ReadOnly Property Zeitreihe() As TimeSeries
+    Public ReadOnly Property Zeitreihe As TimeSeries
         Get
             Return Me.mZeitreihe
         End Get
@@ -102,7 +102,7 @@ Friend Class SeriesEditorDialog
         'Prüfen, ob ClipboardContents im CSV-Format vorliegen oder konvertiert werden können
         If Not ClipboardContents.GetDataPresent(DataFormats.CommaSeparatedValue, True) Then
             MessageBox.Show("Unable to process the clipboard contents!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-            Exit Sub
+            Return
         End If
 
         Me.Cursor = Cursors.WaitCursor
@@ -197,20 +197,20 @@ Friend Class SeriesEditorDialog
             MessageBox.Show("Please enter a title for the series!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning)
             Me.TextBox_Title.Focus()
             Me.DialogResult = DialogResult.None
-            Exit Sub
+            Return
         End If
 
         'check the dates
         If Not Me.CheckDates() Then
             Me.DialogResult = DialogResult.None
-            Exit Sub
+            Return
         End If
 
         'create a new time series object
         'store the unit
-        Me.mZeitreihe = New TimeSeries(Me.series_Title) With {
+        Me.mZeitreihe = New TimeSeries(Me.SeriesTitle) With {
             .DataSource = New TimeSeriesDataSource(TimeSeriesDataSource.OriginEnum.ManuallyEntered),
-            .Unit = Me.series_Unit
+            .Unit = Me.SeriesUnit
         }
 
         'add the nodes

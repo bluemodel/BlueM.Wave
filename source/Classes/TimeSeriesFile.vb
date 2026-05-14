@@ -120,37 +120,12 @@ Public MustInherit Class TimeSeriesFile
 
 #Region "Eigenschaften"
 
-    Private _file As String
-    Private _isColumnSeparated As Boolean = True
-    Private _trennzeichen As Character = semicolon
-    Private _dateFormat As String = Helpers.CurrentDateFormat
-    Private _decimalSeparator As Character = period
-    Private _lineNumberHeaders As Integer = 1
-    Private _lineNumberUnits As Integer = 2
-    Private _lineNumberData As Integer = 3
-    Private _useUnits As Boolean = True
-    Private _columnWidth As Integer = 16
-    Private _columnOffset As Integer = 0
-    Private _dateTimeColumnIndex As Integer = 0
-    Private _seriesInfos As List(Of TimeSeriesInfo)
-    Private ReadOnly _selectedSeries As List(Of TimeSeriesInfo)
-    Private ReadOnly _metadata As Metadata
-    Private _encoding As Text.Encoding
-    Private _titleSuffix As String = ""
-
     ''' <summary>
     ''' Encoding to use for reading the file
     ''' </summary>
     ''' <remarks>Defaults to the system default (usually ISO-8859-1)</remarks>
     ''' <returns></returns>
     Public Property Encoding As Text.Encoding
-        Get
-            Return Me._encoding
-        End Get
-        Set(value As Text.Encoding)
-            Me._encoding = value
-        End Set
-    End Property
 
     ''' <summary>
     ''' File metadata
@@ -158,11 +133,7 @@ Public MustInherit Class TimeSeriesFile
     ''' <value></value>
     ''' <returns></returns>
     ''' <remarks></remarks>
-    Public ReadOnly Property FileMetadata() As Metadata
-        Get
-            Return Me._metadata
-        End Get
-    End Property
+    Public ReadOnly Property FileMetadata As Metadata
 
     ''' <summary>
     ''' Stores the TimeSeries read from the file.
@@ -177,181 +148,86 @@ Public MustInherit Class TimeSeriesFile
     ''' <summary>
     ''' Path to file
     ''' </summary>
-    Public Property File() As String
-        Get
-            Return _file
-        End Get
-        Set(value As String)
-            _file = value
-        End Set
-    End Property
+    Public Property File As String
 
     ''' <summary>
     ''' Indicates whether the file contains columns separated by a character (True, default) or is fixed width (False)
     ''' </summary>
-    Public Property IsColumnSeparated() As Boolean
-        Get
-            Return _isColumnSeparated
-        End Get
-        Set(value As Boolean)
-            _isColumnSeparated = value
-        End Set
-    End Property
+    Public Property IsColumnSeparated As Boolean = True
 
     ''' <summary>
     ''' Separator (default is semicolon)
     ''' </summary>
-    Public Property Separator() As Character
-        Get
-            Return _trennzeichen
-        End Get
-        Set(value As Character)
-            _trennzeichen = value
-        End Set
-    End Property
+    Public Property Separator As Character = Constants.semicolon
 
     ''' <summary>
     ''' Date format (default is Helpers.CurrentDateFormat)
     ''' </summary>
-    Public Property Dateformat() As String
-        Get
-            Return _dateFormat
-        End Get
-        Set(value As String)
-            Me._dateFormat = value
-        End Set
-    End Property
+    Public Property Dateformat As String = Helpers.CurrentDateFormat
 
     ''' <summary>
     ''' Decimal separator (default is period)
     ''' </summary>
-    Public Property DecimalSeparator() As Character
-        Get
-            Return _decimalSeparator
-        End Get
-        Set(value As Character)
-            _decimalSeparator = value
-        End Set
-    End Property
+    Public Property DecimalSeparator As Character = Constants.period
 
     ''' <summary>
     ''' Number of the line containing column headers
     ''' </summary>
-    Public Property LineNumberHeaders() As Integer
-        Get
-            Return _lineNumberHeaders
-        End Get
-        Set(value As Integer)
-            _lineNumberHeaders = value
-        End Set
-    End Property
+    Public Property LineNumberHeaders As Integer = 1
 
     ''' <summary>
     ''' Number of the line containing units
     ''' </summary>
-    Public Property LineNumberUnits() As Integer
-        Get
-            Return _lineNumberUnits
-        End Get
-        Set(value As Integer)
-            _lineNumberUnits = value
-        End Set
-    End Property
+    Public Property LineNumberUnits As Integer = 2
 
     ''' <summary>
     ''' Number of the first line containing data
     ''' </summary>
-    Public Property LineNumberData() As Integer
-        Get
-            Return _lineNumberData
-        End Get
-        Set(value As Integer)
-            _lineNumberData = value
-        End Set
-    End Property
+    Public Property LineNumberData As Integer = 3
 
     ''' <summary>
     ''' Number of header lines
     ''' </summary>
     ''' <returns>iLineData - 1</returns>
     ''' <remarks></remarks>
-    Public ReadOnly Property NLinesHeader() As Integer
+    Public ReadOnly Property NLinesHeader As Integer
         Get
-            Return _lineNumberData - 1
+            Return _LineNumberData - 1
         End Get
     End Property
 
     ''' <summary>
     ''' Read units from the file? (default is True)
     ''' </summary>
-    Public Property UseUnits() As Boolean
-        Get
-            Return _useUnits
-        End Get
-        Set(value As Boolean)
-            _useUnits = value
-        End Set
-    End Property
+    Public Property UseUnits As Boolean = True
 
     ''' <summary>
     ''' Column width (default is 16)
     ''' </summary>
     ''' <remarks>only relevant for fixed width files</remarks>
-    Public Property ColumnWidth() As Integer
-        Get
-            Return _columnWidth
-        End Get
-        Set(value As Integer)
-            _columnWidth = value
-        End Set
-    End Property
+    Public Property ColumnWidth As Integer = 16
 
     ''' <summary>
     ''' Number of characters before the first column (only relevant for fixed width columns)
     ''' </summary>
-    Public Property ColumnOffset As Integer
-        Get
-            Return _columnOffset
-        End Get
-        Set(value As Integer)
-            _columnOffset = value
-        End Set
-    End Property
+    Public Property ColumnOffset As Integer = 0
 
     ''' <summary>
     ''' Index of the column containing the datetime values
     ''' </summary>
-    Public Property DateTimeColumnIndex() As Integer
-        Get
-            Return _dateTimeColumnIndex
-        End Get
-        Set(value As Integer)
-            _dateTimeColumnIndex = value
-        End Set
-    End Property
+    Public Property DateTimeColumnIndex As Integer = 0
 
     ''' <summary>
     ''' List of TimeSeriesInfo of all series contained in a file
     ''' </summary>
     ''' <remarks></remarks>
-    Public Property TimeSeriesInfos() As List(Of TimeSeriesInfo)
-        Get
-            Return _seriesInfos
-        End Get
-        Set(value As List(Of TimeSeriesInfo))
-            _seriesInfos = value
-        End Set
-    End Property
+    Public Property TimeSeriesInfos As List(Of TimeSeriesInfo)
 
     ''' <summary>
     ''' List of TimeSeriesInfo of series currently selected for import
     ''' </summary>
     ''' <remarks></remarks>
-    Public ReadOnly Property SelectedSeries() As List(Of TimeSeriesInfo)
-        Get
-            Return _selectedSeries
-        End Get
-    End Property
+    Public ReadOnly Property SelectedSeries As List(Of TimeSeriesInfo)
 
     ''' <summary>
     ''' Suffix to be added to the timeseries titles when imported from this file
@@ -361,14 +237,7 @@ Public MustInherit Class TimeSeriesFile
     ''' For example, if you import two files with the same series names, you can set a suffix
     ''' for each file to differentiate them in the resulting timeseries.
     ''' </remarks>
-    Public Property TitleSuffix As String
-        Get
-            Return _titleSuffix
-        End Get
-        Set(value As String)
-            _titleSuffix = value
-        End Set
-    End Property
+    Public Property TitleSuffix As String = ""
 
     ''' <summary>
     ''' Get a timeseries from the file using its index
@@ -431,13 +300,13 @@ Public MustInherit Class TimeSeriesFile
     ''' Indicates whether the ImportDialog should be shown when importing this file format
     ''' </summary>
     ''' <returns>True if the ImportDialog should be shown when importing this file format</returns>
-    Public MustOverride ReadOnly Property UseImportDialog() As Boolean
+    Public MustOverride ReadOnly Property UseImportDialog As Boolean
 
     ''' <summary>
     ''' Returns a list of format-specific metadata keys
     ''' </summary>
     ''' <remarks>Is an empty list by default, should be overridden by inheriting classes</remarks>
-    Public Shared ReadOnly Property MetadataKeys() As List(Of String)
+    Public Shared ReadOnly Property MetadataKeys As List(Of String)
         Get
             Return New List(Of String)
         End Get
@@ -456,15 +325,15 @@ Public MustInherit Class TimeSeriesFile
 
         'Initialize data structures
         Me.TimeSeries = New Dictionary(Of Integer, TimeSeries)
-        Me._seriesInfos = New List(Of TimeSeriesInfo)
+        Me._TimeSeriesInfos = New List(Of TimeSeriesInfo)
         Me._selectedSeries = New List(Of TimeSeriesInfo)
-        Me._metadata = New Metadata()
+        Me._FileMetadata = New Metadata()
 
         'Store the filepath
-        Me.File = FileName
+        Me._File = FileName
 
         'set default properties
-        Me.Encoding = Helpers.DefaultEncoding
+        Me._Encoding = Helpers.DefaultEncoding
 
     End Sub
 

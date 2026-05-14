@@ -24,13 +24,15 @@ Friend Class TimeShiftDialog
         Call InitializeComponent()
 
         'fill comboboxes
-        Me.ComboBox_TimestepType.Items.Add(TimeSeries.TimeStepTypeEnum.Year)
-        Me.ComboBox_TimestepType.Items.Add(TimeSeries.TimeStepTypeEnum.Month)
-        Me.ComboBox_TimestepType.Items.Add(TimeSeries.TimeStepTypeEnum.Week)
-        Me.ComboBox_TimestepType.Items.Add(TimeSeries.TimeStepTypeEnum.Day)
-        Me.ComboBox_TimestepType.Items.Add(TimeSeries.TimeStepTypeEnum.Hour)
-        Me.ComboBox_TimestepType.Items.Add(TimeSeries.TimeStepTypeEnum.Minute)
-        Me.ComboBox_TimestepType.Items.Add(TimeSeries.TimeStepTypeEnum.Second)
+        Me.ComboBox_TimestepType.Items.AddRange({
+            TimeSeries.TimeStepTypeEnum.Year,
+            TimeSeries.TimeStepTypeEnum.Month,
+            TimeSeries.TimeStepTypeEnum.Week,
+            TimeSeries.TimeStepTypeEnum.Day,
+            TimeSeries.TimeStepTypeEnum.Hour,
+            TimeSeries.TimeStepTypeEnum.Minute,
+            TimeSeries.TimeStepTypeEnum.Second
+        })
         Me.ComboBox_TimestepType.SelectedIndex = 3 'default: Day
 
     End Sub
@@ -40,19 +42,19 @@ Friend Class TimeShiftDialog
         If Me.NumericUpDown_TimestepInterval.Value = 0 Then
             MessageBox.Show("Please select a non-zero timespan.", "Time Shift", MessageBoxButtons.OK, MessageBoxIcon.Warning)
             Me.DialogResult = DialogResult.None
-            Exit Sub
+            Return
         End If
         If Me.ComboBox_TimestepType.SelectedItem = TimeSeries.TimeStepTypeEnum.Year Then
             Dim dlgresult As DialogResult = MessageBox.Show("Shifting by years can cause the loss of data due to leap days! Are you sure?", "Time Shift", MessageBoxButtons.YesNo, MessageBoxIcon.Warning)
             If dlgresult = DialogResult.No Then
                 Me.DialogResult = DialogResult.None
-                Exit Sub
+                Return
             End If
         ElseIf Me.ComboBox_TimestepType.SelectedItem = TimeSeries.TimeStepTypeEnum.Month Then
             Dim dlgresult As DialogResult = MessageBox.Show("Shifting by months can cause the loss of data due to varying month lengths! Are you sure?", "Time Shift", MessageBoxButtons.YesNo, MessageBoxIcon.Warning)
             If dlgresult = DialogResult.No Then
                 Me.DialogResult = DialogResult.None
-                Exit Sub
+                Return
             End If
         End If
         Me.DialogResult = DialogResult.OK

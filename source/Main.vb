@@ -61,7 +61,7 @@ Friend Module Main
                 End Using
 
                 If Not showWave Then
-                    Exit Sub
+                    Return
                 End If
             End If
         End If

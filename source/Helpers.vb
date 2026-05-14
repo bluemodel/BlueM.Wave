@@ -24,7 +24,7 @@ Public Module Helpers
     ''' </summary>
     ''' <returns>NumberFormatInfo instance with decimal separator "." and no NumberGroupSeparator</returns>
     ''' <remarks></remarks>
-    Public ReadOnly Property DefaultNumberFormat() As NumberFormatInfo
+    Public ReadOnly Property DefaultNumberFormat As NumberFormatInfo
         Get
             'NumberFormatInfo einrichten
             DefaultNumberFormat = New NumberFormatInfo With {
@@ -47,7 +47,7 @@ Public Module Helpers
     ''' <summary>
     ''' Returns the number format as set by the operating system
     ''' </summary>
-    Public ReadOnly Property CurrentNumberFormat() As NumberFormatInfo
+    Public ReadOnly Property CurrentNumberFormat As NumberFormatInfo
         Get
             Return Globalization.CultureInfo.CurrentCulture.NumberFormat
         End Get
@@ -77,7 +77,7 @@ Public Module Helpers
     ''' </summary>
     ''' <returns>Dictionary of available DateFormats</returns>
     ''' <remarks>see https://docs.microsoft.com/en-us/dotnet/standard/base-types/custom-date-and-time-format-strings </remarks>
-    Public ReadOnly Property DateFormats() As Dictionary(Of String, String)
+    Public ReadOnly Property DateFormats As Dictionary(Of String, String)
         Get
             Dim dict As New Dictionary(Of String, String) From {
                 {"current", Helpers.CurrentDateFormat},
@@ -274,30 +274,38 @@ Public Module Helpers
         chart.Header.Text = ""
 
         'Legende
-        chart.Legend.LegendStyle = Steema.TeeChart.LegendStyles.Series
-        chart.Legend.Alignment = Steema.TeeChart.LegendAlignments.Right
-        chart.Legend.ResizeChart = True
-        chart.Legend.HorizMargin = 1
-        chart.Legend.VertMargin = 1
-        chart.Legend.VertSpacing = 3
-        chart.Legend.FontSeriesColor = True
-        chart.Legend.ActiveStyle = Steema.TeeChart.LegendActiveStyles.CheckBox
+        With chart.Legend
+            .LegendStyle = Steema.TeeChart.LegendStyles.Series
+            .Alignment = Steema.TeeChart.LegendAlignments.Right
+            .ResizeChart = True
+            .HorizMargin = 1
+            .VertMargin = 1
+            .VertSpacing = 3
+            .FontSeriesColor = True
+            .ActiveStyle = Steema.TeeChart.LegendActiveStyles.CheckBox
+        End With
 
         'Achsen
         chart.Axes.DrawBehind = False
 
-        chart.Axes.Left.AxisPen.Visible = True
-        chart.Axes.Left.Grid.Visible = True
-        chart.Axes.Left.Grid.Style = Drawing2D.DashStyle.Dash
+        With chart.Axes.Left
+            .AxisPen.Visible = True
+            .Grid.Visible = True
+            .Grid.Style = Drawing2D.DashStyle.Dash
+        End With
 
-        chart.Axes.Right.AxisPen.Visible = True
-        chart.Axes.Right.Grid.Visible = False
-        chart.Axes.Right.Grid.Style = Drawing2D.DashStyle.Dash
+        With chart.Axes.Right
+            .AxisPen.Visible = True
+            .Grid.Visible = False
+            .Grid.Style = Drawing2D.DashStyle.Dash
+        End With
 
-        chart.Axes.Bottom.Automatic = True
-        chart.Axes.Bottom.AxisPen.Visible = True
-        chart.Axes.Bottom.Grid.Visible = True
-        chart.Axes.Bottom.Grid.Style = Drawing2D.DashStyle.Dash
+        With chart.Axes.Bottom
+            .Automatic = True
+            .AxisPen.Visible = True
+            .Grid.Visible = True
+            .Grid.Style = Drawing2D.DashStyle.Dash
+        End With
 
         'set color mode
         Call ChartSetColorMode(chart, Helpers.GetCurrentColorMode)
@@ -334,37 +342,49 @@ Public Module Helpers
         chart.Walls.Back.Color = backColor
         chart.Panel.Brush.Color = backColor
         chart.Header.Font.Color = foreColor
-        chart.Axes.Left.AxisPen.Color = foreColor
-        chart.Axes.Left.Ticks.Color = foreColor
-        chart.Axes.Left.Grid.Color = lightColor
-        chart.Axes.Left.Title.Font.Color = foreColor
-        chart.Axes.Left.Labels.Font.Color = foreColor
-        chart.Axes.Right.AxisPen.Color = foreColor
-        chart.Axes.Right.Ticks.Color = foreColor
-        chart.Axes.Right.Title.Font.Color = foreColor
-        chart.Axes.Right.Labels.Font.Color = foreColor
-        chart.Axes.Right.Grid.Color = foreColor
-        chart.Axes.Bottom.AxisPen.Color = foreColor
-        chart.Axes.Bottom.Ticks.Color = foreColor
-        chart.Axes.Bottom.Title.Font.Color = foreColor
-        chart.Axes.Bottom.Labels.Font.Color = foreColor
-        chart.Axes.Bottom.Grid.Color = lightColor
-        chart.Axes.Top.AxisPen.Color = foreColor
-        chart.Axes.Top.Ticks.Color = foreColor
-        chart.Axes.Top.Title.Font.Color = foreColor
-        chart.Axes.Top.Labels.Font.Color = foreColor
-        chart.Axes.Top.Grid.Color = lightColor
-        chart.Axes.DepthTop.AxisPen.Color = foreColor
-        chart.Axes.DepthTop.Ticks.Color = foreColor
-        chart.Axes.DepthTop.Title.Font.Color = foreColor
-        chart.Axes.DepthTop.Labels.Font.Color = foreColor
-        chart.Axes.DepthTop.Grid.Color = lightColor
+        With chart.Axes.Left
+            .AxisPen.Color = foreColor
+            .Ticks.Color = foreColor
+            .Grid.Color = lightColor
+            .Title.Font.Color = foreColor
+            .Labels.Font.Color = foreColor
+        End With
+        With chart.Axes.Right
+            .AxisPen.Color = foreColor
+            .Ticks.Color = foreColor
+            .Title.Font.Color = foreColor
+            .Labels.Font.Color = foreColor
+            .Grid.Color = foreColor
+        End With
+        With chart.Axes.Bottom
+            .AxisPen.Color = foreColor
+            .Ticks.Color = foreColor
+            .Title.Font.Color = foreColor
+            .Labels.Font.Color = foreColor
+            .Grid.Color = lightColor
+        End With
+        With chart.Axes.Top
+            .AxisPen.Color = foreColor
+            .Ticks.Color = foreColor
+            .Title.Font.Color = foreColor
+            .Labels.Font.Color = foreColor
+            .Grid.Color = lightColor
+        End With
+        With chart.Axes.DepthTop
+            .AxisPen.Color = foreColor
+            .Ticks.Color = foreColor
+            .Title.Font.Color = foreColor
+            .Labels.Font.Color = foreColor
+            .Grid.Color = lightColor
+        End With
         For Each axis As Steema.TeeChart.Axis In chart.Axes.Custom
-            axis.AxisPen.Color = foreColor
-            axis.Ticks.Color = foreColor
-            axis.Title.Font.Color = foreColor
-            axis.Labels.Font.Color = foreColor
-            axis.Grid.Color = foreColor
+            With axis
+                .AxisPen.Color = foreColor
+                .Ticks.Color = foreColor
+                .Title.Font.Color = foreColor
+                .Labels.Font.Color = foreColor
+                .Grid.Color = foreColor
+            End With
         Next
     End Sub
 
@@ -377,18 +397,20 @@ Public Module Helpers
         'Set font for all chart elements
         chart.Header.Font.Name = font
         chart.Legend.Font.Name = font
-        chart.Axes.Left.Title.Font.Name = font
-        chart.Axes.Left.Labels.Font.Name = font
-        chart.Axes.Right.Title.Font.Name = font
-        chart.Axes.Right.Labels.Font.Name = font
-        chart.Axes.Bottom.Title.Font.Name = font
-        chart.Axes.Bottom.Labels.Font.Name = font
-        chart.Axes.Top.Title.Font.Name = font
-        chart.Axes.Top.Labels.Font.Name = font
-        chart.Axes.Depth.Title.Font.Name = font
-        chart.Axes.Depth.Labels.Font.Name = font
-        chart.Axes.DepthTop.Title.Font.Name = font
-        chart.Axes.DepthTop.Labels.Font.Name = font
+        With chart.Axes
+            .Left.Title.Font.Name = font
+            .Left.Labels.Font.Name = font
+            .Right.Title.Font.Name = font
+            .Right.Labels.Font.Name = font
+            .Bottom.Title.Font.Name = font
+            .Bottom.Labels.Font.Name = font
+            .Top.Title.Font.Name = font
+            .Top.Labels.Font.Name = font
+            .Depth.Title.Font.Name = font
+            .Depth.Labels.Font.Name = font
+            .DepthTop.Title.Font.Name = font
+            .DepthTop.Labels.Font.Name = font
+        End With
         For Each axis As Steema.TeeChart.Axis In chart.Axes.Custom
             axis.Title.Font.Name = font
             axis.Labels.Font.Name = font

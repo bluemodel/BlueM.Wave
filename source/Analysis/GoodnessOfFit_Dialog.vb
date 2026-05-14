@@ -23,14 +23,10 @@ Friend Class GoodnessOfFit_Dialog
         InitializeComponent()
 
         ' Add any initialization after the InitializeComponent() call.
-        Me.ComboBox_ObservedSeries.BeginUpdate()
         Me.ComboBox_ObservedSeries.Items.AddRange(seriesList.ToArray())
-        Me.ComboBox_ObservedSeries.EndUpdate()
         Me.ComboBox_ObservedSeries.SelectedIndex = 0
 
-        Me.ComboBox_startMonth.BeginUpdate()
         Me.ComboBox_startMonth.Items.AddRange(Helpers.CalendarMonths.ToArray)
-        Me.ComboBox_startMonth.EndUpdate()
         Me.ComboBox_startMonth.SelectedIndex = 10 'November
     End Sub
 
@@ -38,7 +34,7 @@ Friend Class GoodnessOfFit_Dialog
     ''' Returns the Timeseries selected as "observed"
     ''' </summary>
     ''' <returns></returns>
-    Public ReadOnly Property seriesObserved() As TimeSeries
+    Public ReadOnly Property SeriesObserved As TimeSeries
         Get
             Return Me.ComboBox_ObservedSeries.SelectedItem
         End Get
@@ -48,7 +44,7 @@ Friend Class GoodnessOfFit_Dialog
     ''' Returns the list of Timeseries _not_ selected as "observed"
     ''' </summary>
     ''' <returns></returns>
-    Public ReadOnly Property seriesSimulated() As List(Of TimeSeries)
+    Public ReadOnly Property SeriesSimulated As List(Of TimeSeries)
         Get
             Dim ts_list As New List(Of TimeSeries)
             Dim index As Integer = 0
