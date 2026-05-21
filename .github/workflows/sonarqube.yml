@@ -12,12 +12,6 @@ jobs:
     runs-on: windows-latest
     
     steps:
-      - name: Set up JDK 17
-        uses: actions/setup-java@v5.2.0
-        with:
-          java-version: 17
-          distribution: 'zulu'
-          
       - uses: actions/checkout@v6
         with:
           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
@@ -57,7 +51,7 @@ jobs:
           # https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_preference_variables?view=powershell-7.5
           $ErrorActionPreference = "Stop"
           $PSNativeCommandUseErrorActionPreference = $true
-          .\.sonar\scanner\dotnet-sonarscanner begin /k:"bluemodel_BlueM.Wave" /o:"bluemodel" /d:sonar.token="$env:SONAR_TOKEN" /d:sonar.scanner.skipJreProvisioning=true
+          .\.sonar\scanner\dotnet-sonarscanner begin /k:"bluemodel_BlueM.Wave" /o:"bluemodel" /d:sonar.token="$env:SONAR_TOKEN"
           dotnet build source\Wave.vbproj
           .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.token="$env:SONAR_TOKEN"
 
