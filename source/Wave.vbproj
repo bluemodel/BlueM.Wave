@@ -185,7 +185,6 @@ copy $(MSBuildProjectDirectory)\lib\PureHDF\PureHDF.LICENSE.md $(OutDir)PureHDF.
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="lib\Newtonsoft.Json\Newtonsoft.Json.LICENSE.md" />
-    <None Include="lib\SQLite\System.Data.SQLite.dll.config" />
     <None Update="My Project\Application.myapp">
       <Generator>MyApplicationCodeGenerator</Generator>
       <LastGenOutput>Application.Designer.vb</LastGenOutput>
@@ -200,9 +199,6 @@ copy $(MSBuildProjectDirectory)\lib\PureHDF\PureHDF.LICENSE.md $(OutDir)PureHDF.
     <Content Include="lib\MathNet\MathNet.Numerics.license.txt" />
     <Content Include="lib\MathParserNet\MathParserNet.dll" />
     <Content Include="lib\MathParserNet\MathParserNet.license.html" />
-    <Content Include="lib\SQLite\System.Data.SQLite.dll" />
-    <Content Include="lib\SQLite\x64\SQLite.Interop.dll" />
-    <Content Include="lib\SQLite\x86\SQLite.Interop.dll" />
     <Content Include="Resources\application_get.png" />
     <Content Include="Resources\application_split.png" />
     <Content Include="Resources\arrow_down.png" />
@@ -225,7 +221,6 @@ copy $(MSBuildProjectDirectory)\lib\PureHDF\PureHDF.LICENSE.md $(OutDir)PureHDF.
     <Content Include="Resources\chart_magnify.png" />
     <Content Include="Resources\chart_pie.png" />
     <Content Include="Resources\cog.png" />
-    <Content Include="Resources\cog.ico" />
     <Content Include="Resources\color_wheel.png" />
     <Content Include="Resources\comments.png" />
     <Content Include="Resources\controller.png" />
