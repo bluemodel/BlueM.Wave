@@ -320,8 +320,8 @@ Namespace Fileformats
             ts.Metadata.AddKeys(UVF.MetadataKeys)
             'Set default values
             ts.Metadata("century") = Math.Floor(ts.StartDate.Year / 100) * 100
-            If ts.Metadata("name") = "" Then ts.Metadata("name") = ts.Title
-            If ts.Metadata("unit") = "" Then ts.Metadata("unit") = ts.Unit
+            If ts.Metadata("name") = "" Then ts.Metadata("name") = ts.Title.Substring(0, Math.Min(15, ts.Title.Length))
+            If ts.Metadata("unit") = "" Then ts.Metadata("unit") = ts.Unit.Substring(0, Math.Min(15, ts.Unit.Length))
             If ts.Metadata("location") = "" Then ts.Metadata("location") = "unknown"
             If ts.Metadata("coord_X") = "" Then ts.Metadata("coord_X") = "0"
             If ts.Metadata("coord_Y") = "" Then ts.Metadata("coord_Y") = "0"
