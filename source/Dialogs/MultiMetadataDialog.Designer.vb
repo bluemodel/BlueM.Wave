@@ -27,8 +27,8 @@ Partial Class MultiMetadataDialog
         OK_Button = New Button()
         Cancel_Button = New Button()
         DataGridView1 = New DataGridView()
-        NameColumn = New DataGridViewTextBoxColumn()
         Label_Hint = New Label()
+        NameColumn = New DataGridViewTextBoxColumn()
         CType(DataGridView1, ComponentModel.ISupportInitialize).BeginInit()
         SuspendLayout()
         ' 
@@ -69,17 +69,6 @@ Partial Class MultiMetadataDialog
         DataGridView1.Size = New Size(525, 279)
         DataGridView1.TabIndex = 1
         ' 
-        ' NameColumn
-        ' 
-        NameColumn.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells
-        DataGridViewCellStyle1.BackColor = Color.FromArgb(CByte(224), CByte(224), CByte(224))
-        NameColumn.DefaultCellStyle = DataGridViewCellStyle1
-        NameColumn.Frozen = True
-        NameColumn.HeaderText = "Series"
-        NameColumn.Name = "NameColumn"
-        NameColumn.ReadOnly = True
-        NameColumn.Width = 62
-        ' 
         ' Label_Hint
         ' 
         Label_Hint.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
@@ -90,6 +79,17 @@ Partial Class MultiMetadataDialog
         Label_Hint.Size = New Size(198, 15)
         Label_Hint.TabIndex = 2
         Label_Hint.Text = "HINT: You can paste data from Excel"
+        ' 
+        ' NameColumn
+        ' 
+        NameColumn.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells
+        DataGridViewCellStyle1.BackColor = SystemColors.ControlLight
+        NameColumn.DefaultCellStyle = DataGridViewCellStyle1
+        NameColumn.Frozen = True
+        NameColumn.HeaderText = "Series"
+        NameColumn.Name = "NameColumn"
+        NameColumn.ReadOnly = True
+        NameColumn.Width = 62
         ' 
         ' MultiMetadataDialog
         ' 
@@ -117,6 +117,6 @@ Partial Class MultiMetadataDialog
     Friend WithEvents OK_Button As System.Windows.Forms.Button
     Friend WithEvents Cancel_Button As System.Windows.Forms.Button
     Friend WithEvents DataGridView1 As System.Windows.Forms.DataGridView
-    Friend WithEvents NameColumn As DataGridViewTextBoxColumn
     Friend WithEvents Label_Hint As Label
+    Friend WithEvents NameColumn As DataGridViewTextBoxColumn
 End Class

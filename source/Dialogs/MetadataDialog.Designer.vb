@@ -27,10 +27,10 @@ Partial Class MetadataDialog
         OK_Button = New Button()
         Cancel_Button = New Button()
         DataGridView1 = New DataGridView()
-        NameColumn = New DataGridViewTextBoxColumn()
-        ValueColumn = New DataGridViewTextBoxColumn()
         Label1 = New Label()
         LabelSeries = New Label()
+        NameColumn = New DataGridViewTextBoxColumn()
+        ValueColumn = New DataGridViewTextBoxColumn()
         CType(DataGridView1, ComponentModel.ISupportInitialize).BeginInit()
         SuspendLayout()
         ' 
@@ -69,23 +69,6 @@ Partial Class MetadataDialog
         DataGridView1.Size = New Size(279, 263)
         DataGridView1.TabIndex = 1
         ' 
-        ' NameColumn
-        ' 
-        NameColumn.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells
-        DataGridViewCellStyle1.BackColor = Color.FromArgb(CByte(224), CByte(224), CByte(224))
-        NameColumn.DefaultCellStyle = DataGridViewCellStyle1
-        NameColumn.HeaderText = "Name"
-        NameColumn.Name = "NameColumn"
-        NameColumn.ReadOnly = True
-        NameColumn.Width = 64
-        ' 
-        ' ValueColumn
-        ' 
-        ValueColumn.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells
-        ValueColumn.HeaderText = "Value"
-        ValueColumn.Name = "ValueColumn"
-        ValueColumn.Width = 60
-        ' 
         ' Label1
         ' 
         Label1.AutoSize = True
@@ -103,6 +86,23 @@ Partial Class MetadataDialog
         LabelSeries.Size = New Size(36, 15)
         LabelSeries.TabIndex = 3
         LabelSeries.Text = "series"
+        ' 
+        ' NameColumn
+        ' 
+        NameColumn.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells
+        DataGridViewCellStyle1.BackColor = SystemColors.ControlLight
+        NameColumn.DefaultCellStyle = DataGridViewCellStyle1
+        NameColumn.HeaderText = "Name"
+        NameColumn.Name = "NameColumn"
+        NameColumn.ReadOnly = True
+        NameColumn.Width = 64
+        ' 
+        ' ValueColumn
+        ' 
+        ValueColumn.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells
+        ValueColumn.HeaderText = "Value"
+        ValueColumn.Name = "ValueColumn"
+        ValueColumn.Width = 60
         ' 
         ' MetadataDialog
         ' 
@@ -133,8 +133,8 @@ Partial Class MetadataDialog
     Friend WithEvents OK_Button As System.Windows.Forms.Button
     Friend WithEvents Cancel_Button As System.Windows.Forms.Button
     Friend WithEvents DataGridView1 As System.Windows.Forms.DataGridView
-    Friend WithEvents NameColumn As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents ValueColumn As System.Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents Label1 As Label
     Friend WithEvents LabelSeries As Label
+    Friend WithEvents NameColumn As DataGridViewTextBoxColumn
+    Friend WithEvents ValueColumn As DataGridViewTextBoxColumn
 End Class
