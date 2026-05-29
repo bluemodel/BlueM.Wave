@@ -28,6 +28,7 @@ Partial Class MultiMetadataDialog
         Cancel_Button = New Button()
         DataGridView1 = New DataGridView()
         NameColumn = New DataGridViewTextBoxColumn()
+        Label_Hint = New Label()
         CType(DataGridView1, ComponentModel.ISupportInitialize).BeginInit()
         SuspendLayout()
         ' 
@@ -79,11 +80,23 @@ Partial Class MultiMetadataDialog
         NameColumn.ReadOnly = True
         NameColumn.Width = 62
         ' 
+        ' Label_Hint
+        ' 
+        Label_Hint.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
+        Label_Hint.AutoSize = True
+        Label_Hint.ForeColor = SystemColors.ControlDarkDark
+        Label_Hint.Location = New Point(15, 314)
+        Label_Hint.Name = "Label_Hint"
+        Label_Hint.Size = New Size(198, 15)
+        Label_Hint.TabIndex = 2
+        Label_Hint.Text = "HINT: You can paste data from Excel"
+        ' 
         ' MultiMetadataDialog
         ' 
         AutoScaleDimensions = New SizeF(7F, 15F)
         AutoScaleMode = AutoScaleMode.Font
         ClientSize = New Size(554, 347)
+        Controls.Add(Label_Hint)
         Controls.Add(Cancel_Button)
         Controls.Add(DataGridView1)
         Controls.Add(OK_Button)
@@ -98,10 +111,12 @@ Partial Class MultiMetadataDialog
         Text = "Edit metadata"
         CType(DataGridView1, ComponentModel.ISupportInitialize).EndInit()
         ResumeLayout(False)
+        PerformLayout()
 
     End Sub
     Friend WithEvents OK_Button As System.Windows.Forms.Button
     Friend WithEvents Cancel_Button As System.Windows.Forms.Button
     Friend WithEvents DataGridView1 As System.Windows.Forms.DataGridView
     Friend WithEvents NameColumn As DataGridViewTextBoxColumn
+    Friend WithEvents Label_Hint As Label
 End Class
