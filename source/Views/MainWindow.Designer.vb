@@ -33,8 +33,8 @@ Partial Class MainWindow
         Dim ToolStripSeparator5 As ToolStripSeparator
         Dim ToolStripSeparator4 As ToolStripSeparator
         Dim ToolStripSeparator3 As ToolStripSeparator
+        Dim Margins3 As Steema.TeeChart.Margins = New Steema.TeeChart.Margins()
         Dim Margins1 As Steema.TeeChart.Margins = New Steema.TeeChart.Margins()
-        Dim Margins2 As Steema.TeeChart.Margins = New Steema.TeeChart.Margins()
         ToolStripStatusLabel_Errors = New ToolStripStatusLabel()
         ToolStripStatusLabel_Warnings = New ToolStripStatusLabel()
         ToolStripStatusLabel_Log = New ToolStripStatusLabel()
@@ -215,7 +215,7 @@ Partial Class MainWindow
         ' ToolStripButton_New
         ' 
         ToolStripButton_New.DisplayStyle = ToolStripItemDisplayStyle.Image
-        ToolStripButton_New.Image = CType(resources.GetObject("ToolStripButton_New.Image"), Image)
+        ToolStripButton_New.Image = My.Resources.Resources.page_white
         ToolStripButton_New.ImageTransparentColor = Color.Magenta
         ToolStripButton_New.Name = "ToolStripButton_New"
         ToolStripButton_New.Size = New Size(23, 36)
@@ -225,7 +225,7 @@ Partial Class MainWindow
         ' 
         ToolStripDropDownButton_Open.DisplayStyle = ToolStripItemDisplayStyle.Image
         ToolStripDropDownButton_Open.DropDownItems.AddRange(New ToolStripItem() {ToolStripMenuItem_ImportSeries, ToolStripMenuItem_EnterSeries, ToolStripMenuItem_PasteFromClipboard, ToolStripSeparator6, ToolStripMenuItem_LoadTEN, ToolStripSeparator5, ToolStripMenuItem_ReloadFromFiles, ToolStripMenuItem_RecentlyUsedFiles})
-        ToolStripDropDownButton_Open.Image = CType(resources.GetObject("ToolStripDropDownButton_Open.Image"), Image)
+        ToolStripDropDownButton_Open.Image = My.Resources.Resources.folder
         ToolStripDropDownButton_Open.ImageTransparentColor = Color.Magenta
         ToolStripDropDownButton_Open.Name = "ToolStripDropDownButton_Open"
         ToolStripDropDownButton_Open.Size = New Size(29, 36)
@@ -286,7 +286,7 @@ Partial Class MainWindow
         ' 
         ToolStripDropDownButton_Save.DisplayStyle = ToolStripItemDisplayStyle.Image
         ToolStripDropDownButton_Save.DropDownItems.AddRange(New ToolStripItem() {ToolStripMenuItem_SaveProjectFile, ToolStripMenuItem_SaveChart, ToolStripMenuItem_ExportSeries})
-        ToolStripDropDownButton_Save.Image = CType(resources.GetObject("ToolStripDropDownButton_Save.Image"), Image)
+        ToolStripDropDownButton_Save.Image = My.Resources.Resources.disk
         ToolStripDropDownButton_Save.ImageTransparentColor = Color.Magenta
         ToolStripDropDownButton_Save.Name = "ToolStripDropDownButton_Save"
         ToolStripDropDownButton_Save.Size = New Size(29, 36)
@@ -296,21 +296,21 @@ Partial Class MainWindow
         ' 
         ToolStripMenuItem_SaveProjectFile.Image = CType(resources.GetObject("ToolStripMenuItem_SaveProjectFile.Image"), Image)
         ToolStripMenuItem_SaveProjectFile.Name = "ToolStripMenuItem_SaveProjectFile"
-        ToolStripMenuItem_SaveProjectFile.Size = New Size(167, 22)
+        ToolStripMenuItem_SaveProjectFile.Size = New Size(180, 22)
         ToolStripMenuItem_SaveProjectFile.Text = "Save project file"
         ' 
         ' ToolStripMenuItem_SaveChart
         ' 
         ToolStripMenuItem_SaveChart.Image = CType(resources.GetObject("ToolStripMenuItem_SaveChart.Image"), Image)
         ToolStripMenuItem_SaveChart.Name = "ToolStripMenuItem_SaveChart"
-        ToolStripMenuItem_SaveChart.Size = New Size(167, 22)
+        ToolStripMenuItem_SaveChart.Size = New Size(180, 22)
         ToolStripMenuItem_SaveChart.Text = "Save chart"
         ' 
         ' ToolStripMenuItem_ExportSeries
         ' 
         ToolStripMenuItem_ExportSeries.Image = CType(resources.GetObject("ToolStripMenuItem_ExportSeries.Image"), Image)
         ToolStripMenuItem_ExportSeries.Name = "ToolStripMenuItem_ExportSeries"
-        ToolStripMenuItem_ExportSeries.Size = New Size(167, 22)
+        ToolStripMenuItem_ExportSeries.Size = New Size(180, 22)
         ToolStripMenuItem_ExportSeries.Text = "Export time series"
         ' 
         ' ToolStripSeparator4
@@ -335,7 +335,7 @@ Partial Class MainWindow
         ' ToolStripButton_Copy
         ' 
         ToolStripButton_Copy.DisplayStyle = ToolStripItemDisplayStyle.Image
-        ToolStripButton_Copy.Image = CType(resources.GetObject("ToolStripButton_Copy.Image"), Image)
+        ToolStripButton_Copy.Image = My.Resources.Resources.page_copy
         ToolStripButton_Copy.ImageTransparentColor = Color.Magenta
         ToolStripButton_Copy.Name = "ToolStripButton_Copy"
         ToolStripButton_Copy.Size = New Size(23, 36)
@@ -344,7 +344,7 @@ Partial Class MainWindow
         ' ToolStripButton_Print
         ' 
         ToolStripButton_Print.DisplayStyle = ToolStripItemDisplayStyle.Image
-        ToolStripButton_Print.Image = CType(resources.GetObject("ToolStripButton_Print.Image"), Image)
+        ToolStripButton_Print.Image = My.Resources.Resources.printer
         ToolStripButton_Print.ImageTransparentColor = Color.Magenta
         ToolStripButton_Print.Name = "ToolStripButton_Print"
         ToolStripButton_Print.Size = New Size(23, 36)
@@ -608,26 +608,26 @@ Partial Class MainWindow
         ' ToolStripMenuItem_Help
         ' 
         ToolStripMenuItem_Help.Name = "ToolStripMenuItem_Help"
-        ToolStripMenuItem_Help.Size = New Size(180, 22)
+        ToolStripMenuItem_Help.Size = New Size(165, 22)
         ToolStripMenuItem_Help.Text = "Help"
         ' 
         ' ToolStripMenuItem_Changelog
         ' 
         ToolStripMenuItem_Changelog.Name = "ToolStripMenuItem_Changelog"
-        ToolStripMenuItem_Changelog.Size = New Size(180, 22)
+        ToolStripMenuItem_Changelog.Size = New Size(165, 22)
         ToolStripMenuItem_Changelog.Text = "Changelog"
         ' 
         ' ToolStripMenuItem_CheckForUpdate
         ' 
         ToolStripMenuItem_CheckForUpdate.Name = "ToolStripMenuItem_CheckForUpdate"
-        ToolStripMenuItem_CheckForUpdate.Size = New Size(180, 22)
+        ToolStripMenuItem_CheckForUpdate.Size = New Size(165, 22)
         ToolStripMenuItem_CheckForUpdate.Text = "Check for update"
         ' 
         ' ToolStripMenuItem_About
         ' 
-        ToolStripMenuItem_About.Image = My.Resources.BlueM_icon
+        ToolStripMenuItem_About.Image = My.Resources.Resources.BlueM_icon
         ToolStripMenuItem_About.Name = "ToolStripMenuItem_About"
-        ToolStripMenuItem_About.Size = New Size(180, 22)
+        ToolStripMenuItem_About.Size = New Size(165, 22)
         ToolStripMenuItem_About.Text = "About"
         ' 
         ' ToolStripButton_ZoomNext
@@ -1665,11 +1665,11 @@ Partial Class MainWindow
         ' 
         ' 
         TChart2.Printer.Landscape = True
-        Margins1.Bottom = 100
-        Margins1.Left = 100
-        Margins1.Right = 100
-        Margins1.Top = 100
-        TChart2.Printer.Margins = Margins1
+        Margins3.Bottom = 100
+        Margins3.Left = 100
+        Margins3.Right = 100
+        Margins3.Top = 100
+        TChart2.Printer.Margins = Margins3
         TChart2.Size = New Size(1097, 157)
         ' 
         ' 
@@ -2970,11 +2970,11 @@ Partial Class MainWindow
         ' 
         ' 
         TChart1.Printer.Landscape = True
-        Margins2.Bottom = 10
-        Margins2.Left = 10
-        Margins2.Right = 10
-        Margins2.Top = 10
-        TChart1.Printer.Margins = Margins2
+        Margins1.Bottom = 10
+        Margins1.Left = 10
+        Margins1.Right = 10
+        Margins1.Top = 10
+        TChart1.Printer.Margins = Margins1
         TChart1.Size = New Size(1095, 439)
         ' 
         ' 

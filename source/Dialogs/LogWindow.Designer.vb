@@ -45,7 +45,7 @@ Partial Class LogWindow
         ' ToolStripButton_Clear
         ' 
         ToolStripButton_Clear.DisplayStyle = ToolStripItemDisplayStyle.Image
-        ToolStripButton_Clear.Image = CType(resources.GetObject("ToolStripButton_Clear.Image"), Image)
+        ToolStripButton_Clear.Image = My.Resources.Resources.page_white
         ToolStripButton_Clear.ImageTransparentColor = Color.Magenta
         ToolStripButton_Clear.Name = "ToolStripButton_Clear"
         ToolStripButton_Clear.Size = New Size(23, 22)
@@ -55,7 +55,7 @@ Partial Class LogWindow
         ' ToolStripButton_Save
         ' 
         ToolStripButton_Save.DisplayStyle = ToolStripItemDisplayStyle.Image
-        ToolStripButton_Save.Image = CType(resources.GetObject("ToolStripButton_Save.Image"), Image)
+        ToolStripButton_Save.Image = My.Resources.Resources.disk
         ToolStripButton_Save.ImageTransparentColor = Color.Magenta
         ToolStripButton_Save.Name = "ToolStripButton_Save"
         ToolStripButton_Save.Size = New Size(23, 22)
@@ -64,7 +64,7 @@ Partial Class LogWindow
         ' ToolStripButton_Copy
         ' 
         ToolStripButton_Copy.DisplayStyle = ToolStripItemDisplayStyle.Image
-        ToolStripButton_Copy.Image = CType(resources.GetObject("ToolStripButton_Copy.Image"), Image)
+        ToolStripButton_Copy.Image = My.Resources.Resources.page_copy
         ToolStripButton_Copy.ImageTransparentColor = Color.Magenta
         ToolStripButton_Copy.Name = "ToolStripButton_Copy"
         ToolStripButton_Copy.Size = New Size(23, 22)
