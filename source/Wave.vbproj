@@ -232,7 +232,6 @@ copy $(MSBuildProjectDirectory)\lib\PureHDF\PureHDF.LICENSE.md $(OutDir)PureHDF.
     <EmbeddedResource Include="Resources\cursor_pan.cur" />
     <EmbeddedResource Include="Resources\cursor_zoom.cur" />
     <Content Include="Resources\cut.png" />
-    <Content Include="Resources\database_refresh.png" />
     <Content Include="Resources\error.png" />
     <Content Include="Resources\error_convert.png" />
     <Content Include="Resources\error_delete.png" />
@@ -242,8 +241,6 @@ copy $(MSBuildProjectDirectory)\lib\PureHDF\PureHDF.LICENSE.md $(OutDir)PureHDF.
     <Content Include="Resources\navigate_back.png" />
     <Content Include="Resources\navigate_forward.png" />
     <Content Include="Resources\page_paste.png" />
-    <Content Include="Resources\page_save.png" />
-    <Content Include="Resources\page_white_go.png" />
     <Content Include="Resources\pan.png" />
     <Content Include="Resources\script.png" />
     <Content Include="Resources\shape_align_bottom.png" />
