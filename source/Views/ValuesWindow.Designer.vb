@@ -29,6 +29,7 @@ Partial Class ValuesWindow
         ToolStrip1 = New ToolStrip()
         ToolStripButton_ExportValues = New ToolStripButton()
         ToolStripButton_showMarkers = New ToolStripButton()
+        ToolStripDropDownButton_Columns = New ToolStripDropDownButton()
         Label_DisplayCount = New Label()
         Button_next = New Button()
         Button_previous = New Button()
@@ -72,7 +73,7 @@ Partial Class ValuesWindow
         ' 
         ' ToolStrip1
         ' 
-        ToolStrip1.Items.AddRange(New ToolStripItem() {ToolStripButton_ExportValues, ToolStripButton_showMarkers})
+        ToolStrip1.Items.AddRange(New ToolStripItem() {ToolStripButton_ExportValues, ToolStripButton_showMarkers, ToolStripDropDownButton_Columns})
         ToolStrip1.Location = New Point(0, 0)
         ToolStrip1.Name = "ToolStrip1"
         ToolStrip1.Size = New Size(448, 25)
@@ -97,6 +98,16 @@ Partial Class ValuesWindow
         ToolStripButton_showMarkers.Name = "ToolStripButton_showMarkers"
         ToolStripButton_showMarkers.Size = New Size(23, 22)
         ToolStripButton_showMarkers.Text = "Show markers for selected rows in chart"
+        ' 
+        ' ToolStripDropDownButton_Columns
+        ' 
+        ToolStripDropDownButton_Columns.Alignment = ToolStripItemAlignment.Right
+        ToolStripDropDownButton_Columns.Image = My.Resources.Resources.table_gear
+        ToolStripDropDownButton_Columns.ImageTransparentColor = Color.Magenta
+        ToolStripDropDownButton_Columns.Name = "ToolStripDropDownButton_Columns"
+        ToolStripDropDownButton_Columns.Size = New Size(84, 22)
+        ToolStripDropDownButton_Columns.Text = "Columns"
+        ToolStripDropDownButton_Columns.ToolTipText = "Select columns to show in table"
         ' 
         ' Label_DisplayCount
         ' 
@@ -246,4 +257,5 @@ Partial Class ValuesWindow
     Friend WithEvents MaskedTextBox_JumpDate As MaskedTextBox
     Friend WithEvents Button_Jump As Button
     Friend WithEvents Label_JumpTo As Label
+    Friend WithEvents ToolStripDropDownButton_Columns As ToolStripDropDownButton
 End Class

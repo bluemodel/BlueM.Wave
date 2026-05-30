@@ -30,7 +30,7 @@ Friend Class ValuesWindow
     Private Const maxRows As Integer = 100
 
     Private isInitializing As Boolean
-    Private tsList As List(Of TimeSeries)
+    Private tsDict As Dictionary(Of String, TimeSeries)
     Private dataset As DataSet
     Private dataview As DataView
     Private databinding As BindingSource
@@ -79,6 +79,24 @@ Friend Class ValuesWindow
     End Property
 
     ''' <summary>
+    ''' List of currently selected time series to show in the datagridview, based on the checked menu items in the Columns dropdown
+    ''' </summary>
+    ''' <returns></returns>
+    Private ReadOnly Property SelectedTimeSeries As List(Of TimeSeries)
+        Get
+            Dim tsList As New List(Of TimeSeries)
+            For Each menuitem As ToolStripMenuItem In Me.ToolStripDropDownButton_Columns.DropDownItems
+                If menuitem.Checked Then
+                    If Me.tsDict.ContainsKey(menuitem.Name) Then
+                        tsList.Add(Me.tsDict(menuitem.Name))
+                    End If
+                End If
+            Next
+            Return tsList
+        End Get
+    End Property
+
+    ''' <summary>
     ''' Is raised when the selected rows changes
     ''' </summary>
     ''' <param name="timestamps">List of selected timestamps</param>
@@ -91,6 +109,8 @@ Friend Class ValuesWindow
         InitializeComponent()
         ' Add any initialization after the InitializeComponent() call.
         Me.isInitializing = False
+
+        Me.tsDict = New Dictionary(Of String, TimeSeries)
 
         Me.dataset = New DataSet()
         Dim table As New DataTable("data")
@@ -118,12 +138,49 @@ Friend Class ValuesWindow
     ''' <param name="seriesList">the new List of TimeSeries</param>
     Public Overloads Sub Update(ByRef seriesList As List(Of TimeSeries))
 
-        Me.tsList = seriesList
+        'update time series dictionary
+        For Each ts As TimeSeries In seriesList
+            If Not Me.tsDict.ContainsKey(ts.Title) Then
+                Me.tsDict(ts.Title) = ts
+            End If
+        Next
+        For Each title As String In Me.tsDict.Keys.ToList()
+            If Not seriesList.Any(Function(ts) ts.Title = title) Then
+                Me.tsDict.Remove(title)
+            End If
+        Next
+
+        'update menu items in Columns dropdown
+        Dim seriesTitles As List(Of String) = Me.tsDict.Keys.ToList()
+        Dim titlesInMenu As New List(Of String)
+        For Each item As ToolStripMenuItem In Me.ToolStripDropDownButton_Columns.DropDownItems
+            titlesInMenu.Add(item.Text)
+        Next
+        Dim titlesToRemove As List(Of String) = titlesInMenu.Except(seriesTitles).ToList()
+        Dim titlesToAdd As List(Of String) = seriesTitles.Except(titlesInMenu).ToList()
+        'remove old menu items
+        For Each title As String In titlesToRemove
+            Me.ToolStripDropDownButton_Columns.DropDownItems.RemoveByKey(title)
+        Next
+        'add new menu items
+        For Each title As String In titlesToAdd
+            Dim menuItem As New ToolStripMenuItem(title, Nothing, New EventHandler(AddressOf ColumnsMenuItem_Click)) With {
+                .CheckOnClick = True,
+                .Checked = True,
+                .Name = title
+            }
+            Me.ToolStripDropDownButton_Columns.DropDownItems.Add(menuItem)
+        Next
 
         If Me.Visible Then
             Call Me.UpdateDataTable()
         End If
 
+    End Sub
+
+    'Handles click on Columns menu item
+    Private Sub ColumnsMenuItem_Click(sender As Object, e As System.EventArgs)
+        Call UpdateDataTable()
     End Sub
 
     ''' <summary>
@@ -160,14 +217,14 @@ Friend Class ValuesWindow
         Me.dataTable.Columns.Clear()
         Me.dataTable.Columns.Add("index", GetType(Long))
         Me.dataTable.Columns.Add("Timestamp", GetType(DateTime))
-        Dim nColumns As Integer = Me.tsList.Count + nHeaderColumns
-        For Each ts As TimeSeries In Me.tsList
+        Dim nColumns As Integer = SelectedTimeSeries.Count + nHeaderColumns
+        For Each ts As TimeSeries In SelectedTimeSeries
             Me.dataTable.Columns.Add(ts.Title, GetType(Double))
         Next
 
         'collect unique timestamps
         Dim unique_timestamps As New HashSet(Of DateTime)
-        For Each ts As TimeSeries In Me.tsList
+        For Each ts As TimeSeries In SelectedTimeSeries
             unique_timestamps.UnionWith(New HashSet(Of DateTime)(ts.Dates))
         Next
 
@@ -191,7 +248,7 @@ Friend Class ValuesWindow
 
             'add a value for each series
             Dim icol As Integer = nHeaderColumns
-            For Each ts As TimeSeries In Me.tsList
+            For Each ts As TimeSeries In SelectedTimeSeries
                 If ts.Dates.Contains(t) Then
                     cellvalues(icol) = ts.Nodes(t)
                 Else

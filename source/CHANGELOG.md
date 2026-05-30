@@ -7,6 +7,7 @@ NEW:
 * Added dark mode and a corresponding user setting
 * Added a user setting for the default font of the chart
 * File import and analysis tasks now run in the background
+* Columns in the Values window can now be toggled on and off through a menu
 
 CHANGED:
 * Upgraded from .NET Framework 4.8 to .NET 10
