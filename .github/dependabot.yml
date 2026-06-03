@@ -13,3 +13,4 @@ updates:
       MSTest:
         patterns:
           - "MSTest.*"
+          - "Microsoft.NET.Test.Sdk"
