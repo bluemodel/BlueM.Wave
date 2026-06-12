@@ -59,14 +59,16 @@ Namespace Fileformats
             ' open file
             Dim FiStr As New FileStream(file, FileMode.Open, IO.FileAccess.Read)
             Dim StrRead As New StreamReader(FiStr, detectEncodingFromByteOrderMarks:=True)
+            Dim strReadSync As TextReader = TextReader.Synchronized(StrRead)
             Dim lines As New List(Of String)
 
             ' read four lines
             For i As Integer = 1 To 5
-                lines.Add(StrRead.ReadLine().Trim())
+                lines.Add(strReadSync.ReadLine().Trim())
             Next
 
             ' close file
+            strReadSync.Close()
             StrRead.Close()
             FiStr.Close()
 
