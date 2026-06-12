@@ -59,19 +59,21 @@ Friend Module Main
                 Using cli As New CLI()
                     showWave = cli.Run(args, wave)
                 End Using
-
                 If Not showWave Then
                     Return
                 End If
             End If
         End If
 
+        'import any files that were passed as commandline arguments
+        Dim importTasks As New List(Of Task)
+        For Each file As String In files
+            importTasks.Add(wave.Import_File(file))
+        Next
+        Task.WaitAll(importTasks)
+
         'launch the app
         Dim app As New App(wave)
-        'open any files that were passed as commandline arguments
-        For Each file As String In files
-            wave.Import_File(file)
-        Next
         Application.Run(app)
 
     End Sub

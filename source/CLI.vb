@@ -79,6 +79,7 @@ Friend Class CLI
 
                     'Import
                     Log.AddLogEntry(BlueM.Wave.Log.Levels.info, $"Starting import of {fileargs.Count} files...")
+                    Dim importTasks As New List(Of Task)
                     For Each file_in As String In fileargs
                         Select Case IO.Path.GetExtension(file_in).ToUpper
 
@@ -87,9 +88,10 @@ Friend Class CLI
                                 Throw New NotImplementedException("TEN files are currently not supported in the CLI!")
 
                             Case Else
-                                Call wave.Import_File(file_in)
+                                importTasks.Add(wave.Import_File(file_in))
                         End Select
                     Next
+                    Task.WaitAll(importTasks)
 
                     showWave = True
 
@@ -162,7 +164,7 @@ Friend Class CLI
                                 fileInstance = TimeSeriesFile.GetInstance(file_in)
                                 Dim isOK As Boolean
                                 If interactive And fileInstance.UseImportDialog Then
-                                    isOK = wave.ShowImportDialog(fileInstance)
+                                    isOK = Wave.ShowImportDialog(fileInstance)
                                     If Not isOK Then
                                         Log.AddLogEntry(Log.Levels.warning, $"Import of file {file_in} cancelled by user, skipping this file!")
                                         Continue For
