@@ -3364,8 +3364,8 @@ Friend Class WaveController
             Call FileImported(FileName)
 
         Catch ex As Exception
-            MessageBox.Show("Error while loading:" & eol & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-            Call Log.AddLogEntry(Log.Levels.error, "Error while loading:" & eol & ex.Message)
+            MessageBox.Show("Error while loading TEN file:" & eol & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            Call Log.AddLogEntry(Log.Levels.error, "Error while loading TEN file:" & eol & ex.Message)
         End Try
 
     End Sub
