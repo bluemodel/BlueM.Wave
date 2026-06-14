@@ -3248,6 +3248,7 @@ Friend Class WaveController
 
             Catch ex As Text.Json.JsonException
                 'catch old binary TEN files that cannot be read by the current JSON-based importer and show a message box with further instructions
+                Call Log.AddLogEntry(Log.Levels.error, "Error while loading TEN file:" & eol & ex.Message)
                 result = MessageBox.Show(
                     "The selected file is not a valid TEN file or is corrupted." & eol &
                     "Error: " & ex.Message & eol & eol &
