@@ -44,7 +44,7 @@ Friend NotInheritable Class AboutBox
     End Sub
 
     Private Sub LinkLabel1_Click(sender As System.Object, e As System.EventArgs) Handles LinkLabel1.Click
-        Process.Start(Me.LinkLabel1.Text)
+        Helpers.OpenUrl(Me.LinkLabel1.Text)
     End Sub
 
 End Class

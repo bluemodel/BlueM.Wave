@@ -480,4 +480,19 @@ Public Module Helpers
         End Try
     End Function
 
+    ''' <summary>
+    ''' Opens a URL in the default web browser. Logs an error if the URL could not be opened.
+    ''' </summary>
+    ''' <param name="url">the URL to open</param>
+    Friend Sub OpenUrl(url As String)
+        Try
+            Process.Start(New ProcessStartInfo With {
+                .FileName = url,
+                .UseShellExecute = True
+            })
+        Catch ex As Exception
+            Log.AddLogEntry(Levels.error, $"Error opening URL {url}: {ex.Message}")
+        End Try
+    End Sub
+
 End Module

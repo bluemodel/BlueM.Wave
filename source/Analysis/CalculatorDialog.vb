@@ -87,7 +87,7 @@ Friend Class CalculatorDialog
     End Sub
 
     Private Sub LinkLabel_Help_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel_Help.LinkClicked
-        Process.Start("https://wiki.bluemodel.org/index.php/Wave:Calculator")
+        Helpers.OpenUrl("https://wiki.bluemodel.org/index.php/Wave:Calculator")
     End Sub
 
     Private Sub OK_Button_Click(sender As System.Object, e As System.EventArgs) Handles OK_Button.Click
