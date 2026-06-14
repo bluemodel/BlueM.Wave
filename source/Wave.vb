@@ -95,9 +95,9 @@ Public Class Wave
     ''' </summary>
     ''' <param name="files">An enumerable of file paths</param>
     ''' <remarks></remarks>
-    Public Sub Import_Files(files As IEnumerable(Of String))
+    Public Async Sub Import_Files(files As IEnumerable(Of String))
         For Each file As String In files
-            Call Me.Import_File(file)
+            Await Me.Import_File(file)
         Next
     End Sub
 
@@ -105,7 +105,7 @@ Public Class Wave
     ''' Import a file
     ''' </summary>
     ''' <param name="file">file path</param>
-    Public Async Sub Import_File(file As String)
+    Public Async Function Import_File(file As String) As Task
 
         Dim fileInstance As TimeSeriesFile
         Dim ok As Boolean
@@ -186,7 +186,7 @@ Public Class Wave
 
         RaiseEvent IsBusyChanged(False)
 
-    End Sub
+    End Function
 
     ''' <summary>
     ''' Load a Wave project file
@@ -225,7 +225,7 @@ Public Class Wave
     ''' Attempts import of clipboard content
     ''' Detects TALSIM clipboard content or plain text
     ''' </summary>
-    Friend Sub Import_Clipboard()
+    Friend Async Sub Import_Clipboard()
 
         Dim dlgres As DialogResult
 
@@ -248,15 +248,17 @@ Public Class Wave
                     'ask the user whether to attempt CSV import
                     dlgres = MessageBox.Show("Attempt to load clipboard text content in Wave as CSV data?", "Load from clipboard", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
                     If dlgres = DialogResult.Yes Then
-                        'save as temp text file and then load file
+                        'save as temp CSV file and then load file
                         Dim tmpfile As String = IO.Path.Combine(IO.Path.GetTempPath(), IO.Path.GetRandomFileName() & ".csv")
                         Log.AddLogEntry(Levels.info, $"Saving clipboard text to temporary file {tmpfile}...")
                         Using fileStream As New IO.FileStream(tmpfile, IO.FileMode.CreateNew, IO.FileAccess.Write, IO.FileShare.None)
                             Using writer As New IO.StreamWriter(fileStream, Helpers.DefaultEncoding)
-                                writer.Write(clipboardtext)
+                                Using syncWriter As IO.TextWriter = IO.TextWriter.Synchronized(writer)
+                                    syncWriter.Write(clipboardtext)
+                                End Using
                             End Using
                         End Using
-                        Call Me.Import_File(tmpfile)
+                        Await Me.Import_File(tmpfile)
                         'delete temp file after import
                         IO.File.Delete(tmpfile)
                     End If

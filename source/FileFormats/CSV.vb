@@ -243,7 +243,6 @@ Namespace Fileformats
         ''' <remarks></remarks>
         Public Overloads Shared Sub WriteFile(ByRef tsList As List(Of TimeSeries), file As String, Optional cInfo As CultureInfo = Nothing)
 
-            Dim strwrite As StreamWriter
             Dim t As DateTime
             Dim value As String
             Dim line As String
@@ -273,20 +272,21 @@ Namespace Fileformats
             timestamps.Sort()
 
             'write the file
-            strwrite = New StreamWriter(file, False, Helpers.DefaultEncoding)
+            Dim strwrite As New StreamWriter(file, False, Helpers.DefaultEncoding)
+            Dim syncWriter As TextWriter = TextWriter.Synchronized(strwrite)
 
             '1st line: titles
             line = "datetime"
             For Each zre As TimeSeries In tsList
                 line &= separator & quote & zre.Title & quote
             Next
-            strwrite.WriteLine(line)
+            syncWriter.WriteLine(line)
             '2nd line: units
             line = "-"
             For Each zre As TimeSeries In tsList
                 line &= separator & quote & zre.Unit & quote
             Next
-            strwrite.WriteLine(line)
+            syncWriter.WriteLine(line)
             '3rd row onwards: data
             For Each t In timestamps
                 line = t.ToString(dateFormat)
@@ -302,9 +302,10 @@ Namespace Fileformats
                     End If
                     line &= separator & value
                 Next
-                strwrite.WriteLine(line)
+                syncWriter.WriteLine(line)
             Next
 
+            syncWriter.Close()
             strwrite.Close()
 
         End Sub

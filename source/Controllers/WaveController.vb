@@ -505,7 +505,7 @@ Friend Class WaveController
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
     ''' <remarks></remarks>
-    Private Sub OpenRecentlyUsedFile(sender As Object, e As ToolStripItemClickedEventArgs)
+    Private Async Sub OpenRecentlyUsedFile(sender As Object, e As ToolStripItemClickedEventArgs)
         Dim filepath As String = e.ClickedItem.Text
         If Not IO.File.Exists(filepath) Then
             'remove file from MRU list in user settings
@@ -519,7 +519,7 @@ Friend Class WaveController
             MessageBox.Show($"File {filepath} not found!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning)
             Return
         End If
-        Call _model.Import_File(filepath)
+        Await _model.Import_File(filepath)
     End Sub
 
     'TEN-Datei laden
