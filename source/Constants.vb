@@ -31,6 +31,7 @@ Public Module Constants
     Friend Const urlHelp As String = "https://wiki.bluemodel.org/index.php/Wave"
     Friend Const urlUpdateCheck As String = "https://api.github.com/repos/bluemodel/BlueM.Wave/releases/latest"
     Friend Const urlDownload As String = "https://github.com/bluemodel/BlueM.Wave/releases/latest"
+    Friend Const urlTENConverter As String = "https://github.com/bluemodel/TENConverter"
 
     Public Enum Direction
         Up

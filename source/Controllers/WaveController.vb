@@ -3242,8 +3242,27 @@ Friend Class WaveController
                 Me.selectionMade = False
             End If
 
-            'Load TEN file in main chart, this completely replaces the chart!
-            Call View.TChart1.Import.Template.Load(FileName)
+            Try
+                'Load TEN file in main chart, this completely replaces the chart!
+                Call View.TChart1.Import.Template.Load(FileName)
+
+            Catch ex As Text.Json.JsonException
+                'catch old binary TEN files that cannot be read by the current JSON-based importer and show a message box with further instructions
+                result = MessageBox.Show(
+                    "The selected file is not a valid TEN file or is corrupted." & eol &
+                    "Error: " & ex.Message & eol & eol &
+                    "If this TEN file was created using Wave v2.x, you may need to convert it using BlueM.TENConverter first." & eol & eol &
+                    "Press OK to go to the download site for BlueM.TENConverter.",
+                    "Error",
+                    MessageBoxButtons.OKCancel,
+                    MessageBoxIcon.Error
+                )
+                If result = DialogResult.OK Then
+                    Helpers.OpenUrl(Constants.urlTENConverter)
+                End If
+                Return
+            End Try
+
             'Clear overview chart
             Call View.TChart2.Series.Clear()
 
