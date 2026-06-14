@@ -77,7 +77,7 @@ Friend Class AnalysisDialog
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
     Private Sub LinkLabel_Helplink_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel_Helplink.LinkClicked
-        System.Diagnostics.Process.Start(e.Link.LinkData)
+        Helpers.OpenUrl(e.Link.LinkData)
     End Sub
 
     ''' <summary>

@@ -427,7 +427,7 @@ Friend Class ImportCSVDialog
     End Sub
 
     Private Sub PictureBox_DateFormatHelp_Click(sender As Object, e As EventArgs) Handles PictureBox_DateFormatHelp.Click
-        Process.Start("https://docs.microsoft.com/en-us/dotnet/standard/base-types/custom-date-and-time-format-strings")
+        Helpers.OpenUrl("https://docs.microsoft.com/en-us/dotnet/standard/base-types/custom-date-and-time-format-strings")
     End Sub
 
     Private Sub PictureBox_DateFormatHelp_MouseHover(sender As Object, e As EventArgs) Handles PictureBox_DateFormatHelp.MouseHover

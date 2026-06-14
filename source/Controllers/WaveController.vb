@@ -1380,7 +1380,7 @@ Friend Class WaveController
                 View.ToolStripButton_UpdateNotification.Visible = True
                 Dim resp As DialogResult = MessageBox.Show($"A new version {latestVersion} is available!{eol}Click OK to go to the download page.", "Information", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning)
                 If resp = DialogResult.OK Then
-                    Process.Start(urlDownload)
+                    Helpers.OpenUrl(urlDownload)
                 End If
             Else
                 'No update available
@@ -1429,7 +1429,7 @@ Friend Class WaveController
     ''' </summary>
     ''' <remarks></remarks>
     Private Sub Help_Click(sender As System.Object, e As System.EventArgs)
-        Process.Start(urlHelp)
+        Helpers.OpenUrl(urlHelp)
     End Sub
 
     ''' <summary>
