@@ -3220,7 +3220,6 @@ Friend Class WaveController
         Dim result As DialogResult
         Dim i As Integer
         Dim reihe As TimeSeries
-        Dim XMin, XMax As DateTime
 
         Try
 
@@ -3232,15 +3231,6 @@ Friend Class WaveController
             For Each id As Integer In _model.TimeSeries.Ids
                 existingIds.Add(id)
             Next
-
-            'Zoom der X-Achse merken
-            XMin = View.ChartMinX
-            XMax = View.ChartMaxX
-            If (XMin <> XMax) Then
-                Me.selectionMade = True
-            Else
-                Me.selectionMade = False
-            End If
 
             Try
                 'Load TEN file in main chart, this completely replaces the chart!
@@ -3359,12 +3349,6 @@ Friend Class WaveController
                 Call Me.SeriesAdded(_model.TimeSeries(id))
             Next
 
-            'Vorherigen Zoom wiederherstellen
-            If (Me.selectionMade) Then
-                View.SetChartMinX(XMin)
-                View.SetChartMaxX(XMax)
-            End If
-
             'ColorBands neu einrichten (durch TEN-Import verloren)
             Call View.Init_ColorBands()
 
@@ -3374,6 +3358,7 @@ Friend Class WaveController
             View.TChart1.Panning.MouseButton = MouseButtons.Right
 
             'Charts aktualisieren
+            Me.selectionMade = True 'keep the zoom that was set in the TEN file
             Call Me.UpdateChartExtents()
 
             Call Me.ViewportChanged()
