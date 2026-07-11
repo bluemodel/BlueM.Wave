@@ -4,13 +4,13 @@ BlueM.Wave Release Notes
 Version 3.0.0
 -------------
 NEW:
-* Added dark mode and a corresponding user setting
+* Added dark mode and a corresponding user setting #213
 * Added a user setting for the default font of the chart
 * File import and analysis tasks now run in the background
 * Columns in the Values window can now be toggled on and off through a menu
 
 CHANGED:
-* Upgraded from .NET Framework 4.8 to .NET 10
+* Upgraded from .NET Framework 4.8 to .NET 10 #214
 * Updated TeeChart to v4.2026.6.30
 
 REMOVED:
