@@ -11,7 +11,7 @@ NEW:
 
 CHANGED:
 * Upgraded from .NET Framework 4.8 to .NET 10
-* Updated TeeChart to v4.2026.6.1
+* Updated TeeChart to v4.2026.6.30
 
 REMOVED:
 * Dropped support for reading SWMM OUT binary files
