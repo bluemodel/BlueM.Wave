@@ -3220,7 +3220,6 @@ Friend Class WaveController
         Dim result As DialogResult
         Dim i As Integer
         Dim reihe As TimeSeries
-        Dim XMin, XMax As DateTime
 
         Try
 
@@ -3233,17 +3232,28 @@ Friend Class WaveController
                 existingIds.Add(id)
             Next
 
-            'Zoom der X-Achse merken
-            XMin = View.ChartMinX
-            XMax = View.ChartMaxX
-            If (XMin <> XMax) Then
-                Me.selectionMade = True
-            Else
-                Me.selectionMade = False
-            End If
+            Try
+                'Load TEN file in main chart, this completely replaces the chart!
+                Call View.TChart1.Import.Template.Load(FileName)
 
-            'Load TEN file in main chart, this completely replaces the chart!
-            Call View.TChart1.Import.Template.Load(FileName)
+            Catch ex As Text.Json.JsonException
+                'catch old binary TEN files that cannot be read by the current JSON-based importer and show a message box with further instructions
+                Call Log.AddLogEntry(Log.Levels.error, "Error while loading TEN file:" & eol & ex.Message)
+                result = MessageBox.Show(
+                    "The selected file is not a valid TEN file or is corrupted." & eol &
+                    "Error: " & ex.Message & eol & eol &
+                    "If this TEN file was created using Wave v2.x, you may need to convert it using BlueM.TENConverter first." & eol & eol &
+                    "Press OK to go to the download site for BlueM.TENConverter.",
+                    "Error",
+                    MessageBoxButtons.OKCancel,
+                    MessageBoxIcon.Error
+                )
+                If result = DialogResult.OK Then
+                    Helpers.OpenUrl(Constants.urlTENConverter)
+                End If
+                Return
+            End Try
+
             'Clear overview chart
             Call View.TChart2.Series.Clear()
 
@@ -3339,12 +3349,6 @@ Friend Class WaveController
                 Call Me.SeriesAdded(_model.TimeSeries(id))
             Next
 
-            'Vorherigen Zoom wiederherstellen
-            If (Me.selectionMade) Then
-                View.SetChartMinX(XMin)
-                View.SetChartMaxX(XMax)
-            End If
-
             'ColorBands neu einrichten (durch TEN-Import verloren)
             Call View.Init_ColorBands()
 
@@ -3354,9 +3358,13 @@ Friend Class WaveController
             View.TChart1.Panning.MouseButton = MouseButtons.Right
 
             'Charts aktualisieren
+            Me.selectionMade = True 'keep the zoom that was set in the TEN file
             Call Me.UpdateChartExtents()
 
             Call Me.ViewportChanged()
+
+            'restore chart event listener
+            Me.View.TChart1.Chart.Listeners.Add(Me)
 
             'Log
             Call Log.AddLogEntry(Log.Levels.info, $"TEN file '{FileName}' loaded successfully!")
@@ -3364,8 +3372,8 @@ Friend Class WaveController
             Call FileImported(FileName)
 
         Catch ex As Exception
-            MessageBox.Show("Error while loading:" & eol & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-            Call Log.AddLogEntry(Log.Levels.error, "Error while loading:" & eol & ex.Message)
+            MessageBox.Show("Error while loading TEN file:" & eol & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            Call Log.AddLogEntry(Log.Levels.error, "Error while loading TEN file:" & eol & ex.Message)
         End Try
 
     End Sub
