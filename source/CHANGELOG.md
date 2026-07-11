@@ -12,6 +12,7 @@ NEW:
 CHANGED:
 * Upgraded from .NET Framework 4.8 to .NET 10 #214
 * Updated TeeChart to v4.2026.6.30
+* TEN file format changed from binary to JSON (use TENConverter the convert old binary files to the new format) #234
 
 REMOVED:
 * Dropped support for reading SWMM OUT binary files
