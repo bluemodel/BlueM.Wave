@@ -3363,6 +3363,9 @@ Friend Class WaveController
 
             Call Me.ViewportChanged()
 
+            'restore chart event listener
+            Me.View.TChart1.Chart.Listeners.Add(Me)
+
             'Log
             Call Log.AddLogEntry(Log.Levels.info, $"TEN file '{FileName}' loaded successfully!")
 
