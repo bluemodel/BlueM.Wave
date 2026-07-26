@@ -86,10 +86,8 @@ Friend Class ValuesWindow
         Get
             Dim tsList As New List(Of TimeSeries)
             For Each menuitem As ToolStripMenuItem In Me.ToolStripDropDownButton_Columns.DropDownItems
-                If menuitem.Checked Then
-                    If Me.tsDict.ContainsKey(menuitem.Name) Then
-                        tsList.Add(Me.tsDict(menuitem.Name))
-                    End If
+                If menuitem.Checked AndAlso Me.tsDict.ContainsKey(menuitem.Name) Then
+                    tsList.Add(Me.tsDict(menuitem.Name))
                 End If
             Next
             Return tsList
