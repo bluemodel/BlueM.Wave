@@ -1,6 +1,11 @@
 BlueM.Wave Release Notes
 ========================
 
+Version X.X.X
+-------------
+NEW:
+* Added support for reading SMB files without a header line
+
 Version 3.0.0
 -------------
 NEW:
