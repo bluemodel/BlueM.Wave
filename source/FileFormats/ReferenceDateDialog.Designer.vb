@@ -93,10 +93,10 @@ Namespace Fileformats
             PerformLayout()
 
         End Sub
-        Friend WithEvents OK_Button As System.Windows.Forms.Button
-        Friend WithEvents DateTimePicker_refDate As System.Windows.Forms.DateTimePicker
-        Friend WithEvents Label1 As System.Windows.Forms.Label
-        Friend WithEvents Label2 As System.Windows.Forms.Label
+        Private WithEvents OK_Button As System.Windows.Forms.Button
+        Private WithEvents DateTimePicker_refDate As System.Windows.Forms.DateTimePicker
+        Private WithEvents Label1 As System.Windows.Forms.Label
+        Private WithEvents Label2 As System.Windows.Forms.Label
 
     End Class
 End Namespace

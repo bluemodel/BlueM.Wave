@@ -52,7 +52,7 @@ Friend Class HistogramDialog
         Me.NumericUpDown_n_bins.Value = Me.n_bins
 
         'update breaks
-        Call Me.recalculateBreaks()
+        Call Me.RecalculateBreaks()
 
     End Sub
 
@@ -61,7 +61,7 @@ Friend Class HistogramDialog
     ''' and displays them in the datagridview
     ''' </summary>
     ''' <remarks></remarks>
-    Private Sub recalculateBreaks()
+    Private Sub RecalculateBreaks()
 
         Dim i As Integer
         Dim n_breaks As Integer
@@ -87,7 +87,7 @@ Friend Class HistogramDialog
     ''' sorts the datagridview and updates the fromValue column
     ''' </summary>
     ''' <remarks></remarks>
-    Private Sub sortBreaks()
+    Private Sub SortBreaks()
         If Me.DataGridView_breaks.Rows.Count <= 1 Then
             'nothing to do
             Return
@@ -134,7 +134,7 @@ Friend Class HistogramDialog
             End If
         Next
         'sort breaks
-        Call Me.sortBreaks()
+        Call Me.SortBreaks()
         'update n_bins
         Me.NumericUpDown_n_bins.Value = Me.DataGridView_breaks.Rows.Count - 1
 
@@ -186,7 +186,7 @@ Friend Class HistogramDialog
 
     Private Sub Button_calcBreaks_Click(sender As System.Object, e As System.EventArgs) Handles Button_recalculate.Click
         Me.n_bins = Me.NumericUpDown_n_bins.Value
-        Call Me.recalculateBreaks()
+        Call Me.RecalculateBreaks()
     End Sub
 
     ''' <summary>
@@ -201,7 +201,7 @@ Friend Class HistogramDialog
             'delete rows with empty cells
             Me.DataGridView_breaks.Rows.RemoveAt(e.RowIndex)
         End If
-        Call Me.sortBreaks()
+        Call Me.SortBreaks()
     End Sub
 
     Private Sub DataGridView_bins_UserAddedRow(sender As System.Object, e As System.Windows.Forms.DataGridViewRowEventArgs) Handles DataGridView_breaks.UserAddedRow

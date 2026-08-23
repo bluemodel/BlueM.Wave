@@ -16,151 +16,147 @@
 'along with this program.  If not, see <https://www.gnu.org/licenses/>.
 '
 Imports System.IO
+Imports System.Text.RegularExpressions
 
 Namespace Fileformats
 
     ''' <summary>
-    ''' Klasse für das Simba-Dateiformat (*.SMB)
+    ''' Class for parsing the SIMBA file format (*.SMB)
     ''' </summary>
-    ''' <remarks>Format siehe https://wiki.bluemodel.org/index.php/SMB-Format</remarks>
+    ''' <remarks>Format see https://wiki.bluemodel.org/index.php/SMB-Format</remarks>
     Public Class SMB
         Inherits TimeSeriesFile
 
         ''' <summary>
-        ''' Gibt an, ob beim Import des Dateiformats der Importdialog angezeigt werden soll
+        ''' Flag indicating whether the file has a header line containing the start date and series title
+        ''' </summary>
+        Private hasHeader As Boolean
+
+        ''' <summary>
+        ''' Start date of the time series, either read from the header or provided by the user
+        ''' </summary>
+        Private startDate As DateTime
+
+        ''' <summary>
+        ''' No import dialog needed for SMB files, as there is only one time series per file
         ''' </summary>
         Public Overrides ReadOnly Property UseImportDialog As Boolean = False
 
-
-#Region "Methoden"
-
-        'Methoden
-        '########
-
-        'Konstruktor
-        '***********
         Public Sub New(FileName As String, Optional ReadAllNow As Boolean = False)
 
             MyBase.New(FileName)
 
-            'Voreinstellungen
+            'defaults
             Me.LineNumberData = 2
             Me.UseUnits = True
 
             Call Me.ReadSeriesInfo()
 
             If (ReadAllNow) Then
-                'Direkt einlesen
                 Call Me.SelectAllSeries()
                 Call Me.ReadFile()
             End If
 
         End Sub
 
-        'Spalten auslesen
-        '****************
         Public Overrides Sub ReadSeriesInfo()
 
-            Dim Zeile As String = ""
+            Dim line, title As String
             Dim sInfo As TimeSeriesInfo
 
             Me.TimeSeriesInfos.Clear()
 
-            'Datei öffnen
-            Dim FiStr As New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
-            Dim StrRead As New StreamReader(FiStr, Me.Encoding)
-            Dim StrReadSync = TextReader.Synchronized(StrRead)
+            Dim fiStr As New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
+            Dim strRead As New StreamReader(fiStr, Me.Encoding)
+            Dim strReadSync As TextReader = TextReader.Synchronized(strRead)
 
             sInfo = New TimeSeriesInfo()
 
-            'Reihentitel steht in 1. Zeile:
-            Zeile = StrReadSync.ReadLine()
-            sInfo.Name = Zeile.Substring(15).Trim()
-            'Annahme, dass SMB-Dateien Regenreihen sind, daher Einheit mm fest verdrahtet
+            'check whether first line is header containing start date and series title
+            line = strReadSync.ReadLine()
+            Dim m As Match = Regex.Match(line, "^(\d{12})(.+)$")
+            If m.Success Then
+                Me.hasHeader = True
+                'parse start date
+                Dim success As Boolean = DateTime.TryParseExact(m.Groups(1).Value, "ddMMyyyyHHmm", System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, Me.startDate)
+                If Not success Then
+                    Throw New TimeSeriesFileReadingException($"Could not parse start date from header of file {Me.File}.")
+                End If
+                'get title from line
+                title = m.Groups(2).Value.Trim()
+            Else
+                Me.hasHeader = False
+                'ask user for reference start date
+                Dim dlg As New ReferenceDateDialog()
+                dlg.ShowDialog()
+                Me.startDate = dlg.ReferenceDate
+                'use filename as series title
+                title = IO.Path.GetFileName(Me.File)
+            End If
+
+            sInfo.Name = title
+            'we assume SMB files always contain precipitation, thus set the unit to mm
             sInfo.Unit = "mm"
             sInfo.Index = 0
 
-            StrReadSync.Close()
-            StrRead.Close()
-            FiStr.Close()
+            strReadSync.Close()
+            strRead.Close()
+            fiStr.Close()
 
             'store series info
             Me.TimeSeriesInfos.Add(sInfo)
 
         End Sub
 
-        'SMB-Datei einlesen
-        '******************
         Public Overrides Sub ReadFile()
 
-            Dim i, j As Integer
-            Dim Zeile As String
-            Dim Stunde, Minute, Tag, Monat, Jahr As Integer
-            Dim Datum As DateTime
-            Dim Anfangsdatum As DateTime
-            Dim tmpWert As String
+            Dim line As String
+            Dim minutes As Integer
+            Dim value As Double
+            Dim timestamp As DateTime
             Dim sInfo As TimeSeriesInfo
             Dim ts As TimeSeries
 
-            Dim FiStr As New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
-            Dim StrRead As New StreamReader(FiStr, Me.Encoding)
-            Dim StrReadSync = TextReader.Synchronized(StrRead)
+            Dim fiStr As New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
+            Dim strRead As New StreamReader(fiStr, Me.Encoding)
+            Dim strReadSync As TextReader = TextReader.Synchronized(strRead)
 
-            'Zeitreihe instanzieren (bei SMB gibt es nur eine Zeitreihe)
+            'instantiate timeseries (only one)
             sInfo = Me.TimeSeriesInfos(0)
             ts = New TimeSeries(sInfo.Name) With {
                 .Unit = sInfo.Unit,
                 .DataSource = New TimeSeriesDataSource(Me.File, sInfo.Name)
             }
 
-            j = 1
-
-            'Anfangsdatum einlesen
-            Zeile = StrReadSync.ReadLine()
-            Tag = Zeile.Substring(0, 2)
-            Monat = Zeile.Substring(2, 2)
-            Jahr = Zeile.Substring(4, 4)
-            Stunde = Zeile.Substring(8, 2)
-            Minute = Zeile.Substring(10, 2)
-
-            Anfangsdatum = New System.DateTime(Jahr, Monat, Tag, Stunde, Minute, 0, New System.Globalization.GregorianCalendar())
-
-            'Einlesen
-            '--------
+            'read file
+            Dim iLine As Integer = 0
             Do
-                Zeile = StrReadSync.ReadLine()
-                j += 1
-                If (j > Me.NLinesHeader And Zeile.Length > 0) Then
-
-                    'Datum erkennen
-                    '--------------
-                    For i = 0 To Zeile.Length
-                        tmpWert = Zeile.Substring(i, 2)
-                        If tmpWert = "  " Then
-                            Minute = Zeile.Substring(0, i)
-                            Exit For
-                        End If
-                    Next
-                    'Minute = Zeile.Substring(0, 3)
-                    Datum = Anfangsdatum.AddMinutes(Minute)
-
-                    'Datum und Wert zur Zeitreihe hinzufügen
-                    '---------------------------------------
-                    ts.AddNode(Datum, StringToDouble(Zeile.Substring(i + 2)))
-
+                iLine += 1
+                line = strReadSync.ReadLine()
+                If Me.hasHeader AndAlso iLine = 1 Then
+                    'skip first line if header is present
+                    Continue Do
                 End If
-            Loop Until StrReadSync.Peek() = -1
+                If line.Length > 0 Then
+                    'each line consists of minutes and value, separated by two spaces
+                    Dim parts As String() = line.Split("  ", StringSplitOptions.None)
+                    If parts.Length = 2 Then
+                        minutes = Integer.Parse(parts(0).Trim())
+                        value = StringToDouble(parts(1).Trim())
+                        timestamp = Me.startDate.AddMinutes(minutes)
+                        ts.AddNode(timestamp, value)
+                    End If
+                End If
+            Loop Until strReadSync.Peek() = -1
 
-            StrReadSync.Close()
-            StrRead.Close()
-            FiStr.Close()
+            strReadSync.Close()
+            strRead.Close()
+            fiStr.Close()
 
             'store time series
             Me.TimeSeries.Add(sInfo.Index, ts)
 
         End Sub
-
-#End Region 'Methoden
 
     End Class
 

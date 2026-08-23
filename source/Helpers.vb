@@ -466,14 +466,14 @@ Public Module Helpers
     ''' Returns Windows Color Mode for Applications.
     ''' 0 = dark theme, 1 = light theme
     ''' </summary>
-    ''' <param name="GetSystemColorModeInstead">If True, returns system color mode; otherwise, returns app color mode.</param>
+    ''' <param name="getSystemColorModeInstead">If True, returns system color mode; otherwise, returns app color mode.</param>
     ''' <returns>0 for dark theme, 1 for light theme</returns>
     ''' <remarks>based on https://stackoverflow.com/a/77891877</remarks>
-    Private Function GetWindowsColorMode(Optional GetSystemColorModeInstead As Boolean = False) As Integer
+    Private Function GetWindowsColorMode(Optional getSystemColorModeInstead As Boolean = False) As Integer
         Try
             Return CInt(Microsoft.Win32.Registry.GetValue(
                 "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize",
-                If(GetSystemColorModeInstead, "SystemUsesLightTheme", "AppsUseLightTheme"),
+                If(getSystemColorModeInstead, "SystemUsesLightTheme", "AppsUseLightTheme"),
                 -1))
         Catch
             Return 1

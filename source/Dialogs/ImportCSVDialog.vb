@@ -154,13 +154,13 @@ Friend Class ImportCSVDialog
 
         'Vorschau anzeigen
         Dim fs As New FileStream(Me.tsFile.File, FileMode.Open, FileAccess.Read)
-        Dim StrRead As New StreamReader(fs, Me.SelectedEncoding)
+        Dim strRead As New StreamReader(fs, Me.SelectedEncoding)
 
         text = ""
 
         For i As Integer = 1 To anzZeilen
 
-            line = StrRead.ReadLine()
+            line = strRead.ReadLine()
 
             'gucken, ob Zeile zu lang
             If (line.Length > anzSpalten) Then
@@ -173,16 +173,16 @@ Friend Class ImportCSVDialog
             text &= line & Constants.eol
 
             'gucken, ob Dateiende
-            If (StrRead.Peek = -1) Then Exit For
+            If (strRead.Peek = -1) Then Exit For
         Next
 
-        If (StrRead.Peek <> -1) Then
+        If (strRead.Peek <> -1) Then
             text &= "..."
         End If
 
         Me.TextBox_Preview.Text = text
 
-        StrRead.Close()
+        strRead.Close()
         fs.Close()
 
     End Sub

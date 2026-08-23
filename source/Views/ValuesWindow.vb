@@ -46,7 +46,7 @@ Friend Class ValuesWindow
     ''' The datatable containing all the data
     ''' </summary>
     ''' <returns></returns>
-    Private ReadOnly Property dataTable As DataTable
+    Private ReadOnly Property DataTable As DataTable
         Get
             Return Me.dataset.Tables("data")
         End Get
@@ -56,9 +56,9 @@ Friend Class ValuesWindow
     ''' The number of rows currently contained in the datatable
     ''' </summary>
     ''' <returns></returns>
-    Private ReadOnly Property nRows As Integer
+    Private ReadOnly Property NRows As Integer
         Get
-            Return Me.dataTable.Rows.Count
+            Return Me.DataTable.Rows.Count
         End Get
     End Property
 
@@ -66,7 +66,7 @@ Friend Class ValuesWindow
     ''' The starting index of records to display in the datagridview
     ''' </summary>
     ''' <returns></returns>
-    Private Property startIndex As Integer
+    Private Property StartIndex As Integer
         Get
             Return Math.Max(NumericUpDown_StartRecord.Value - 1, 0)
         End Get
@@ -191,13 +191,13 @@ Friend Class ValuesWindow
             'update the datatable
             Call Me.UpdateDataTable()
             'reset start index and jump date
-            Me.startIndex = 0
+            Me.StartIndex = 0
             Me.IsJumpDateSet = False
-            If Me.nRows > 0 Then
-                Dim firstDate As DateTime = Me.dataTable.Rows(0)(colDateTime)
+            If Me.NRows > 0 Then
+                Dim firstDate As DateTime = Me.DataTable.Rows(0)(colDateTime)
                 MaskedTextBox_JumpDate.Text = firstDate.ToString()
             End If
-            Call Me.updateDataViewFilter()
+            Call Me.UpdateDataViewFilter()
         End If
     End Sub
 
@@ -211,13 +211,13 @@ Friend Class ValuesWindow
         Me.dataview.RowStateFilter = DataViewRowState.None
         Me.dataview.RowFilter = String.Empty
 
-        Me.dataTable.Clear()
-        Me.dataTable.Columns.Clear()
-        Me.dataTable.Columns.Add("index", GetType(Long))
-        Me.dataTable.Columns.Add("Timestamp", GetType(DateTime))
+        Me.DataTable.Clear()
+        Me.DataTable.Columns.Clear()
+        Me.DataTable.Columns.Add("index", GetType(Long))
+        Me.DataTable.Columns.Add("Timestamp", GetType(DateTime))
         Dim nColumns As Integer = SelectedTimeSeries.Count + nHeaderColumns
         For Each ts As TimeSeries In SelectedTimeSeries
-            Me.dataTable.Columns.Add(ts.Title, GetType(Double))
+            Me.DataTable.Columns.Add(ts.Title, GetType(Double))
         Next
 
         'collect unique timestamps
@@ -231,7 +231,7 @@ Friend Class ValuesWindow
         timestamps.Sort()
 
         'add a row for each timestamp
-        Me.dataTable.BeginLoadData()
+        Me.DataTable.BeginLoadData()
         Dim index As Long = 0
         Dim cellvalues() As Object
         For Each t As DateTime In timestamps
@@ -255,32 +255,32 @@ Friend Class ValuesWindow
                 icol += 1
             Next
 
-            Me.dataTable.Rows.Add(cellvalues)
+            Me.DataTable.Rows.Add(cellvalues)
 
             index += 1
         Next
-        Me.dataTable.EndLoadData()
+        Me.DataTable.EndLoadData()
 
         Me.dataview.RowFilter = $"index >= 0 and index < {maxRows}"
         Me.dataview.RowStateFilter = DataViewRowState.CurrentRows
         Me.databinding.ResumeBinding()
         Me.DataGridView1.ResumeLayout()
 
-        'set max startIndex
-        NumericUpDown_StartRecord.Maximum = Me.nRows
+        'set max StartIndex
+        NumericUpDown_StartRecord.Maximum = Me.NRows
 
         'determine start index
         Dim jumpDate As DateTime
         Dim isDate As Boolean = DateTime.TryParse(Me.MaskedTextBox_JumpDate.Text, jumpDate)
         If isDate And Me.IsJumpDateSet Then
             'set start index to correspond to currently set jump date
-            Me.startIndex = Me.getStartIndexForDate(jumpDate)
-            Call Me.updateDataViewFilter()
+            Me.StartIndex = Me.GetStartIndexForDate(jumpDate)
+            Call Me.UpdateDataViewFilter()
         Else
             'set start index to 0 and jump date to first date
-            Me.startIndex = 0
-            If Me.nRows > 0 Then
-                Dim firstDate As DateTime = Me.dataTable.Rows(0)(colDateTime)
+            Me.StartIndex = 0
+            If Me.NRows > 0 Then
+                Dim firstDate As DateTime = Me.DataTable.Rows(0)(colDateTime)
                 MaskedTextBox_JumpDate.Text = firstDate.ToString()
             End If
         End If
@@ -298,29 +298,29 @@ Friend Class ValuesWindow
     End Sub
 
     ''' <summary>
-    ''' Updates the DataViewFilter to show rows starting from the currently set startIndex
+    ''' Updates the DataViewFilter to show rows starting from the currently set StartIndex
     ''' </summary>
-    Private Sub updateDataViewFilter()
+    Private Sub UpdateDataViewFilter()
 
         Me.Cursor = Cursors.WaitCursor
         Me.DataGridView1.SuspendLayout()
 
         Dim numRows, endIndex As Integer
 
-        numRows = Math.Min(maxRows, Me.nRows - Me.startIndex)
-        endIndex = Me.startIndex + numRows
+        numRows = Math.Min(maxRows, Me.NRows - Me.StartIndex)
+        endIndex = Me.StartIndex + numRows
 
         'update filter
-        dataview.RowFilter = $"index >= {Me.startIndex} and index < {endIndex}"
+        dataview.RowFilter = $"index >= {Me.StartIndex} and index < {endIndex}"
 
         'Update label
         Dim startRecord As Integer
-        If Me.nRows = 0 Then
+        If Me.NRows = 0 Then
             startRecord = 0
         Else
-            startRecord = Me.startIndex + 1
+            startRecord = Me.StartIndex + 1
         End If
-        Me.Label_DisplayCount.Text = $"Displaying records {startRecord} to {startRecord + numRows - 1} of {Me.nRows}"
+        Me.Label_DisplayCount.Text = $"Displaying records {startRecord} to {startRecord + numRows - 1} of {Me.NRows}"
 
         Me.DataGridView1.ResumeLayout()
         Me.Cursor = Cursors.Default
@@ -333,7 +333,7 @@ Friend Class ValuesWindow
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
     Private Sub Button_first_Click(sender As Object, e As EventArgs) Handles Button_first.Click
-        Me.startIndex = 0
+        Me.StartIndex = 0
     End Sub
 
     ''' <summary>
@@ -342,7 +342,7 @@ Friend Class ValuesWindow
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
     Private Sub Button_previous_Click(sender As Object, e As EventArgs) Handles Button_previous.Click
-        Me.startIndex = Math.Max(0, Me.startIndex - maxRows)
+        Me.StartIndex = Math.Max(0, Me.StartIndex - maxRows)
     End Sub
 
     ''' <summary>
@@ -351,7 +351,7 @@ Friend Class ValuesWindow
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
     Private Sub Button_next_Click(sender As Object, e As EventArgs) Handles Button_next.Click
-        Me.startIndex = Math.Min(Me.nRows - 1, Me.startIndex + maxRows)
+        Me.StartIndex = Math.Min(Me.NRows - 1, Me.StartIndex + maxRows)
     End Sub
 
     ''' <summary>
@@ -360,7 +360,7 @@ Friend Class ValuesWindow
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
     Private Sub Button_last_Click(sender As Object, e As EventArgs) Handles Button_last.Click
-        Me.startIndex = Math.Max(0, Me.nRows - maxRows)
+        Me.StartIndex = Math.Max(0, Me.NRows - maxRows)
     End Sub
 
     ''' <summary>
@@ -370,7 +370,7 @@ Friend Class ValuesWindow
     ''' <param name="e"></param>
     Private Sub NumericUpDown_StartIndex_ValueChanged(sender As Object, e As EventArgs) Handles NumericUpDown_StartRecord.ValueChanged
         If Not Me.isInitializing Then
-            Call Me.updateDataViewFilter()
+            Call Me.UpdateDataViewFilter()
         End If
     End Sub
 
@@ -445,8 +445,8 @@ Friend Class ValuesWindow
         Dim jumpDate As DateTime = CType(Me.MaskedTextBox_JumpDate.Text, DateTime)
         Me.IsJumpDateSet = True
         'update data view filter
-        Me.startIndex = Me.getStartIndexForDate(jumpDate)
-        Call Me.updateDataViewFilter()
+        Me.StartIndex = Me.GetStartIndexForDate(jumpDate)
+        Call Me.UpdateDataViewFilter()
         Me.Cursor = Cursors.Default
     End Sub
 
@@ -455,13 +455,13 @@ Friend Class ValuesWindow
     ''' </summary>
     ''' <param name="timestamp">Date</param>
     ''' <returns>Index</returns>
-    Private Function getStartIndexForDate(timestamp As DateTime) As Integer
+    Private Function GetStartIndexForDate(timestamp As DateTime) As Integer
         Dim index As Integer
         'use last record as default (will be used if the timestamp is later than the last timestamp of the dataset)
-        index = Me.nRows - 1
-        'search for selected date in dataset and set startIndex accordingly
+        index = Me.NRows - 1
+        'search for selected date in dataset and set StartIndex accordingly
         Dim rowIndex As Integer = 0
-        For Each row As DataRow In Me.dataTable.Rows
+        For Each row As DataRow In Me.DataTable.Rows
             If row.ItemArray(colDateTime) = timestamp Then
                 index = rowIndex
                 Exit For
