@@ -80,7 +80,7 @@ Namespace Fileformats
                 'parse start date
                 Dim success As Boolean = DateTime.TryParseExact(m.Groups(1).Value, "ddMMyyyyHHmm", System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, Me.startDate)
                 If Not success Then
-                    Throw New Exception($"Could not parse start date from header of file {Me.File}.")
+                    Throw New TimeSeriesFileReadingException($"Could not parse start date from header of file {Me.File}.")
                 End If
                 'get title from line
                 title = m.Groups(2).Value.Trim()
