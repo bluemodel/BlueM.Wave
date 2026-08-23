@@ -90,13 +90,13 @@ Friend Class SaveProjectFileDialog
 
         'validate inputs
         If Me.FileName.Length = 0 Then
-            MessageBox.Show("Please specify a file name!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            MessageBox.Show(Me, "Please specify a file name!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning)
             Me.DialogResult = DialogResult.None
         End If
 
         'prompt for overwrite
         If IO.File.Exists(Me.FileName) Then
-            Dim response As DialogResult = MessageBox.Show($"Replace existing file {Me.FileName}?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning)
+            Dim response As DialogResult = MessageBox.Show(Me, $"Replace existing file {Me.FileName}?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning)
             If response <> DialogResult.Yes Then
                 Me.DialogResult = DialogResult.None
             End If

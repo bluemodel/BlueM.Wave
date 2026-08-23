@@ -211,7 +211,7 @@ Friend Class CutDialog
 
         'check whether selected time series overlap with reference time series
         If tsRef.EndDate < Me.earliestStart Or tsRef.StartDate > Me.latestEnd Then
-            MessageBox.Show("The selected series do not overlap!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            MessageBox.Show(Me, "The selected series do not overlap!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning)
             'cancel
             Return
         End If
@@ -250,13 +250,13 @@ Friend Class CutDialog
 
         'validation
         If Me.ListBox_Series.SelectedIndices.Count = 0 Then
-            MessageBox.Show("Please select at least one time series to be cut!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            MessageBox.Show(Me, "Please select at least one time series to be cut!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning)
             Me.DialogResult = DialogResult.None
             Return
         End If
 
         If Me.cutStart >= Me.cutEnd Then
-            MessageBox.Show("The end must be later than the start!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            MessageBox.Show(Me, "The end must be later than the start!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning)
             Me.DialogResult = DialogResult.None
             Return
         End If

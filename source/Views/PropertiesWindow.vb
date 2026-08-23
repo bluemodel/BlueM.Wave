@@ -136,7 +136,7 @@ Friend Class PropertiesWindow
                     Continue For
                 End If
                 If e.FormattedValue = row.Cells(e.ColumnIndex).Value Then
-                    MessageBox.Show("Title must be unique!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                    MessageBox.Show(Me, "Title must be unique!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
                     e.Cancel = True
                     Return
                 End If
@@ -310,7 +310,7 @@ Friend Class PropertiesWindow
         Next
         If ids.Count > 0 Then
             'ask for user confirmation
-            Dim result As DialogResult = MessageBox.Show($"Delete {ids.Count} series?{eol}{String.Join(eol, titles)}", "Warning", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning)
+            Dim result As DialogResult = MessageBox.Show(Me, $"Delete {ids.Count} series?{eol}{String.Join(eol, titles)}", "Warning", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning)
             If result = DialogResult.OK Then
                 RaiseEvent SeriesDeleted(ids)
             End If

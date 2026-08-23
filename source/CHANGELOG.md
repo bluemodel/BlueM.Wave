@@ -6,6 +6,9 @@ Version X.X.X
 NEW:
 * Added support for reading SMB files without a header line
 
+FIXED:
+* Fixed dialogs not being centered on the screen when opened
+
 Version 3.0.0
 -------------
 NEW:
