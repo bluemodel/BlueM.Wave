@@ -101,7 +101,7 @@ Friend Class SeriesEditorDialog
 
         'Prüfen, ob ClipboardContents im CSV-Format vorliegen oder konvertiert werden können
         If Not ClipboardContents.GetDataPresent(DataFormats.CommaSeparatedValue, True) Then
-            MessageBox.Show("Unable to process the clipboard contents!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            MessageBox.Show(Me, "Unable to process the clipboard contents!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
             Return
         End If
 
@@ -194,7 +194,7 @@ Friend Class SeriesEditorDialog
 
         'check the title
         If (Me.TextBox_Title.Text = String.Empty) Then
-            MessageBox.Show("Please enter a title for the series!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            MessageBox.Show(Me, "Please enter a title for the series!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning)
             Me.TextBox_Title.Focus()
             Me.DialogResult = DialogResult.None
             Return

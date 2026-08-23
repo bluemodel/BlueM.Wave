@@ -19,6 +19,7 @@
 ''' Interface for Views
 ''' </summary>
 Friend Interface IView
+    Inherits IWin32Window
 
     Sub SetController(controller As Controller)
 

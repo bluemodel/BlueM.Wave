@@ -55,7 +55,7 @@ Friend Class AnalysisResultTable
             Clipboard.SetDataObject(Me.DataGridView1.GetClipboardContent())
 
         Catch ex As System.Runtime.InteropServices.ExternalException
-            MessageBox.Show("The Clipboard could not be accessed. Please try again.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            MessageBox.Show(Me, "The Clipboard could not be accessed. Please try again.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
 
     End Sub

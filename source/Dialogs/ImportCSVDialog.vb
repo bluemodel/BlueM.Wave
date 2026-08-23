@@ -191,7 +191,7 @@ Friend Class ImportCSVDialog
 
         'Selected series
         If (Me.ListBox_Series.SelectedItems.Count < 1) Then
-            MessageBox.Show("Please select at least one series!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            MessageBox.Show(Me, "Please select at least one series!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning)
             Me.DialogResult = DialogResult.None
             Return
         Else
