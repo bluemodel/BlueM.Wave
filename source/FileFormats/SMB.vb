@@ -111,7 +111,6 @@ Namespace Fileformats
         Public Overrides Sub ReadFile()
 
             Dim line As String
-            Dim hasHeader As Boolean = False
             Dim minutes As Integer
             Dim value As Double
             Dim timestamp As DateTime
