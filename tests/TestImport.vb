@@ -52,7 +52,8 @@ Public Class TestImport
     ''' "HYDRO_AS-2D\HYDRO_AS-2D_v5\Q_Strg.dat"
     ''' "HYDRO_AS-2D\Pegel.dat"
     ''' "HYDRO_AS-2D\Q_Strg.dat"
-	''' 
+    ''' "SIMBA\SIMBA_noheader.SMB"
+    ''' 
     ''' TODO: The following files cannot be tested because Wave does not support them (yet):
     ''' "SMUSI\F10_WEL.ASC"
     ''' "SMUSI\SMUSI_3.ASC"
