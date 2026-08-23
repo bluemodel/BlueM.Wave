@@ -159,13 +159,13 @@ Friend Class HistogramDialog
 
         'check if max is covered
         If Me.breaks(n_breaks - 1) < Me.max Then
-            MessageBox.Show(Me, $"The last break is smaller than the maximum value!{eol}Please add a break greater than or equal to the maximum value of {Me.max.ToString("F")}", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            MessageBox.Show(Me, $"The last break is smaller than the maximum value!{eol}Please add a break greater than or equal to the maximum value of {Me.max:F}", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning)
             Return
         End If
 
         'check that first break is not less than min
         If Me.DataGridView_breaks.Rows(0).Cells(1).Value < Me.min Then
-            MessageBox.Show(Me, $"The first break is smaller than the minimum value!{eol}Please enter only breaks that are greater than the minimum value of {Me.min.ToString("F")}", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            MessageBox.Show(Me, $"The first break is smaller than the minimum value!{eol}Please enter only breaks that are greater than the minimum value of {Me.min:F}", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning)
             Return
         End If
 
