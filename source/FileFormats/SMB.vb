@@ -133,7 +133,7 @@ Namespace Fileformats
             Do
                 iLine += 1
                 line = strReadSync.ReadLine()
-                If Me.hasHeader And iLine = 1 Then
+                If Me.hasHeader AndAlso iLine = 1 Then
                     'skip first line if header is present
                     Continue Do
                 End If
