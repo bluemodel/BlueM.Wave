@@ -36,7 +36,7 @@ Namespace Fileformats
             End Get
         End Property
 
-        Private Sub dlgLoad(sender As System.Object, e As System.EventArgs) Handles MyBase.Load
+        Private Sub LoadDialog(sender As System.Object, e As System.EventArgs) Handles MyBase.Load
             Me.DateTimePicker_refDate.Focus()
         End Sub
 
