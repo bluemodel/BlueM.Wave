@@ -442,7 +442,7 @@ Public Class Wave
                 End If
                 'update metadata of series
                 For Each ts As TimeSeries In tsList
-                    ts.Metadata = dlg.getMetadata(ts.Title)
+                    ts.Metadata = dlg.GetMetadata(ts.Title)
                 Next
             End If
         End If

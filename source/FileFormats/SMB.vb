@@ -67,22 +67,22 @@ Namespace Fileformats
             Me.TimeSeriesInfos.Clear()
 
             'Datei öffnen
-            Dim FiStr As New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
-            Dim StrRead As New StreamReader(FiStr, Me.Encoding)
-            Dim StrReadSync = TextReader.Synchronized(StrRead)
+            Dim fiStr As New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
+            Dim strRead As New StreamReader(fiStr, Me.Encoding)
+            Dim strReadSync = TextReader.Synchronized(strRead)
 
             sInfo = New TimeSeriesInfo()
 
             'Reihentitel steht in 1. Zeile:
-            Zeile = StrReadSync.ReadLine()
+            Zeile = strReadSync.ReadLine()
             sInfo.Name = Zeile.Substring(15).Trim()
             'Annahme, dass SMB-Dateien Regenreihen sind, daher Einheit mm fest verdrahtet
             sInfo.Unit = "mm"
             sInfo.Index = 0
 
-            StrReadSync.Close()
-            StrRead.Close()
-            FiStr.Close()
+            strReadSync.Close()
+            strRead.Close()
+            fiStr.Close()
 
             'store series info
             Me.TimeSeriesInfos.Add(sInfo)
@@ -102,9 +102,9 @@ Namespace Fileformats
             Dim sInfo As TimeSeriesInfo
             Dim ts As TimeSeries
 
-            Dim FiStr As New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
-            Dim StrRead As New StreamReader(FiStr, Me.Encoding)
-            Dim StrReadSync = TextReader.Synchronized(StrRead)
+            Dim fiStr As New FileStream(Me.File, FileMode.Open, IO.FileAccess.Read)
+            Dim strRead As New StreamReader(fiStr, Me.Encoding)
+            Dim strReadSync = TextReader.Synchronized(strRead)
 
             'Zeitreihe instanzieren (bei SMB gibt es nur eine Zeitreihe)
             sInfo = Me.TimeSeriesInfos(0)
@@ -116,7 +116,7 @@ Namespace Fileformats
             j = 1
 
             'Anfangsdatum einlesen
-            Zeile = StrReadSync.ReadLine()
+            Zeile = strReadSync.ReadLine()
             Tag = Zeile.Substring(0, 2)
             Monat = Zeile.Substring(2, 2)
             Jahr = Zeile.Substring(4, 4)
@@ -128,7 +128,7 @@ Namespace Fileformats
             'Einlesen
             '--------
             Do
-                Zeile = StrReadSync.ReadLine()
+                Zeile = strReadSync.ReadLine()
                 j += 1
                 If (j > Me.NLinesHeader And Zeile.Length > 0) Then
 
@@ -149,11 +149,11 @@ Namespace Fileformats
                     ts.AddNode(Datum, StringToDouble(Zeile.Substring(i + 2)))
 
                 End If
-            Loop Until StrReadSync.Peek() = -1
+            Loop Until strReadSync.Peek() = -1
 
-            StrReadSync.Close()
-            StrRead.Close()
-            FiStr.Close()
+            strReadSync.Close()
+            strRead.Close()
+            fiStr.Close()
 
             'store time series
             Me.TimeSeries.Add(sInfo.Index, ts)

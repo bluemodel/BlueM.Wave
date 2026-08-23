@@ -114,7 +114,7 @@ Friend Class MultiMetadataDialog
     ''' </summary>
     ''' <param name="title">time series title</param>
     ''' <returns>Metadata instance</returns>
-    Friend Function getMetadata(title As String) As Metadata
+    Friend Function GetMetadata(title As String) As Metadata
         Dim md As New Metadata()
         Dim row As DataGridViewRow = Me.DataGridView1.Rows.Cast(Of DataGridViewRow)().Where(Function(r) r.Cells(0).Value = title).FirstOrDefault()
         If row IsNot Nothing Then
