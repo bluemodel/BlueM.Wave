@@ -30,6 +30,12 @@ Namespace Fileformats
 
         End Sub
 
+        Friend ReadOnly Property ReferenceDate As DateTime
+            Get
+                Return Me.DateTimePicker_refDate.Value
+            End Get
+        End Property
+
         Private Sub dlgLoad(sender As System.Object, e As System.EventArgs) Handles MyBase.Load
             Me.DateTimePicker_refDate.Focus()
         End Sub

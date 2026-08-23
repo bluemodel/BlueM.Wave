@@ -142,7 +142,7 @@ Namespace Fileformats
             'Show dialog for setting the reference date
             Dim dlg As New ReferenceDateDialog()
             dlg.ShowDialog()
-            refDate = dlg.DateTimePicker_refDate.Value
+            refDate = dlg.ReferenceDate
 
             'Instantiate time series
             For Each seriesInfo As TimeSeriesInfo In SelectedSeries

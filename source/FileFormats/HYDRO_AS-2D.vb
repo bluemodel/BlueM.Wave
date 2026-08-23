@@ -234,7 +234,7 @@ Namespace Fileformats
             Dim dlg As New ReferenceDateDialog()
             dlg.ShowDialog()
             'store refDate
-            Me.refDate = dlg.DateTimePicker_refDate.Value
+            Me.refDate = dlg.ReferenceDate
 
             'Instantiate time series
             For Each sInfo As TimeSeriesInfo In Me.SelectedSeries
