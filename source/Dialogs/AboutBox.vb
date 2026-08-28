@@ -33,7 +33,7 @@ Friend NotInheritable Class AboutBox
         ' TODO: Customize the application's assembly information in the "Application" pane of the project 
         '    properties dialog (under the "Project" menu).
         Me.LabelProductName.Text = info.ProductName
-        Me.LabelVersion.Text = $"Version {info.Version}"
+        Me.LabelVersion.Text = $"Version {info.Version.ToString(3)}"
         Me.LabelCopyright.Text = info.Copyright
         Me.LabelCompanyName.Text = info.CompanyName
         Me.TextBox_Description.Text = info.Description
