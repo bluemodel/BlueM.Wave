@@ -8,6 +8,11 @@ NEW:
 
 FIXED:
 * Fixed dialogs not being centered on the screen when opened
+* Fixed NaN values showing as vertical lines in chart overview #260
+* Fixed legend series colors becoming mismatched when ActiveStyle is set to None #265
+
+CHANGED:
+* Updated TeeChart to v6.2026.8.24
 
 Version 3.0.0
 -------------
