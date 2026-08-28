@@ -8,9 +8,6 @@
 #define MyAppPublisher "BlueM Dev Group"
 #define MyAppURL "https://github.com/bluemodel/BlueM.Wave"
 #define MyAppExeName "Wave.exe"
-#define MyAppAssocName "Wave project file"
-#define MyAppAssocExt ".wvp"
-#define MyAppAssocKey StringChange(MyAppAssocName, " ", "") + MyAppAssocExt
 #define DoubleAmp(Value) StringChange(Value, "&", "&&")
 #define EscapeConstArgument(Value) StringChange(StringChange(StringChange(Value, "%", "%25"), ",", "%2c"), "}", "%7d")
 
@@ -69,13 +66,24 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 [Files]
 Source: "..\source\bin\x64\Release\net10.0-windows\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\source\bin\x64\Release\net10.0-windows\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: ".\assets\wvp.ico"; DestDir: "{app}"; Flags: ignoreversion
+Source: ".\assets\ten.ico"; DestDir: "{app}"; Flags: ignoreversion
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files.
 
 [Registry]
-Root: HKA; Subkey: "Software\Classes\{#MyAppAssocExt}\OpenWithProgids"; ValueType: string; ValueName: "{#MyAppAssocKey}"; ValueData: ""; Flags: uninsdeletevalue
-Root: HKA; Subkey: "Software\Classes\{#MyAppAssocKey}"; ValueType: string; ValueName: ""; ValueData: "{#MyAppAssocName}"; Flags: uninsdeletekey
-Root: HKA; Subkey: "Software\Classes\{#MyAppAssocKey}\DefaultIcon"; ValueType: string; ValueName: ""; ValueData: "{app}\{#MyAppExeName},0"
-Root: HKA; Subkey: "Software\Classes\{#MyAppAssocKey}\shell\open\command"; ValueType: string; ValueName: ""; ValueData: """{app}\{#MyAppExeName}"" ""%1"""
+; Associate wvp files
+Root: HKA; Subkey: "Software\Classes\.wvp\OpenWithProgids"; ValueType: string; ValueName: "WaveProjectFile.wvp"; ValueData: ""; Flags: uninsdeletevalue
+Root: HKA; Subkey: "Software\Classes\WaveProjectFile.wvp"; ValueType: string; ValueName: ""; ValueData: "Wave project file"; Flags: uninsdeletekey
+Root: HKA; Subkey: "Software\Classes\WaveProjectFile.wvp\DefaultIcon"; ValueType: string; ValueName: ""; ValueData: "{app}\wvp.ico"
+Root: HKA; Subkey: "Software\Classes\WaveProjectFile.wvp\shell\open\command"; ValueType: string; ValueName: ""; ValueData: """{app}\{#MyAppExeName}"" ""%1"""
+Root: HKA; Subkey: "Software\Classes\Applications\{#MyAppExeName}\SupportedTypes"; ValueType: string; ValueName: ".wvp"; ValueData: "" 
+
+; Associate ten files
+Root: HKA; Subkey: "Software\Classes\.ten\OpenWithProgids"; ValueType: string; ValueName: "WaveChart.ten"; ValueData: ""; Flags: uninsdeletevalue
+Root: HKA; Subkey: "Software\Classes\WaveChart.ten"; ValueType: string; ValueName: ""; ValueData: "Wave chart"; Flags: uninsdeletekey
+Root: HKA; Subkey: "Software\Classes\WaveChart.ten\DefaultIcon"; ValueType: string; ValueName: ""; ValueData: "{app}\ten.ico"
+Root: HKA; Subkey: "Software\Classes\WaveChart.ten\shell\open\command"; ValueType: string; ValueName: ""; ValueData: """{app}\{#MyAppExeName}"" ""%1"""
+Root: HKA; Subkey: "Software\Classes\Applications\{#MyAppExeName}\SupportedTypes"; ValueType: string; ValueName: ".ten"; ValueData: "" 
 
 [Icons]
 Name: "{autoprograms}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
