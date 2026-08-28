@@ -44,6 +44,11 @@ OutputBaseFilename=BlueM.Wave_{#MyAppVersion}_x64_setup
 SetupIconFile=.\assets\wave.ico
 SolidCompression=yes
 WizardStyle=modern dynamic
+; Set wizard images
+WizardImageFile=.\assets\WizardImageFile.png
+WizardImageFileDynamicDark=.\assets\WizardImageFile.png
+WizardSmallImageFile=.\assets\WizardSmallImageFile.png
+WizardSmallImageFileDynamicDark=.\assets\WizardSmallImageFile.png
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
