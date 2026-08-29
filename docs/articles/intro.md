@@ -18,6 +18,7 @@ Optional setup steps:
 * To build the installer:
   * Install InnoSetup 6 from https://jrsoftware.org/isinfo.php
   * Open and compile the installer script `setup\Wave.Setup.iss`
+  * By default, the version is read from the Wave executable, to override, pass the version via commandline: `iscc.exe /DMyAppVersion=<X.X.X> setup\Wave.Setup.iss`
 
 ## TeeChart license
 BlueM.Wave uses [TeeChart .NET](https://www.steema.com/product/net) for all charts. To compile a fully functional version of BlueM.Wave, you need a valid TeeChart .NET Pro license file located at `BlueM.Wave\source\My Project\TeeChart.licenses`.

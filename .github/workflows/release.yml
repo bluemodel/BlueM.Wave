@@ -37,6 +37,8 @@ jobs:
         uses: Minionguyjpro/Inno-Setup-Action@v1.2.2
         with:
           path: setup\Wave.Setup.iss
+          options: |-
+            /DMyAppVersion=${{ steps.version.outputs.full }}
 
       - name: Release
         uses: softprops/action-gh-release@v3.0.1

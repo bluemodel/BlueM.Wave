@@ -8,8 +8,11 @@
 #define MyAppExeName "Wave.exe"
 #define MyAppPublisher "BlueM Dev Group"
 #define MyAppURL "https://github.com/bluemodel/BlueM.Wave"
-#define MyAppVersionFull GetVersionNumbersString(MySourceDir+"\"+MyAppExeName)
-#define MyAppVersion Copy(MyAppVersionFull, 0, RPos(".", MyAppVersionFull) - 1)
+// if version is not passed as commandline parameter using /DMyAppVersion=<X.X.X>, fall back to version stored in executable
+#ifndef MyAppVersion
+  #define MyAppVersionFull GetVersionNumbersString(MySourceDir+"\"+MyAppExeName)
+  #define MyAppVersion Copy(MyAppVersionFull, 0, RPos(".", MyAppVersionFull) - 1)
+#endif
 #define DoubleAmp(Value) StringChange(Value, "&", "&&")
 #define EscapeConstArgument(Value) StringChange(StringChange(StringChange(Value, "%", "%25"), ",", "%2c"), "}", "%7d")
 
