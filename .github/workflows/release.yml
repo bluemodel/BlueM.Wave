@@ -34,7 +34,7 @@ jobs:
         run: Compress-Archive -Path source\bin\Release\net10.0-windows\win-x64\* -DestinationPath BlueM.Wave_${{ steps.version.outputs.full }}_x64.zip
         
       - name: Build installer
-        uses: Minionguyjpro/Inno-Setup-Action@v1.2.2
+        uses: Minionguyjpro/Inno-Setup-Action@v1.2.9
         with:
           path: setup\Wave.Setup.iss
           options: |
