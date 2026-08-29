@@ -37,8 +37,9 @@ jobs:
         uses: Minionguyjpro/Inno-Setup-Action@v1.2.2
         with:
           path: setup\Wave.Setup.iss
-          options: |-
+          options: |
             /DMyAppVersion=${{ steps.version.outputs.full }}
+            /DMySourceDir=..\source\bin\Release\net10.0-windows\win-x64
 
       - name: Release
         uses: softprops/action-gh-release@v3.0.1

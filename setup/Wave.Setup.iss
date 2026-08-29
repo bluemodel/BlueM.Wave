@@ -4,12 +4,15 @@
 #include "CodeDependencies.iss"
 
 #define MyAppName "BlueM.Wave"
-#define MySourceDir "..\source\bin\x64\Release\net10.0-windows"
 #define MyAppExeName "Wave.exe"
 #define MyAppPublisher "BlueM Dev Group"
 #define MyAppURL "https://github.com/bluemodel/BlueM.Wave"
-// if version is not passed as commandline parameter using /DMyAppVersion=<X.X.X>, fall back to version stored in executable
+#ifndef MySourceDir
+  // if source dir is not defined as commandline parameter using /DMySourceDir=<path>, fall back to path used by Visual Studio build
+  #define MySourceDir "..\source\bin\x64\Release\net10.0-windows"
+#endif
 #ifndef MyAppVersion
+  // if version is not passed as commandline parameter using /DMyAppVersion=<X.X.X>, fall back to version stored in executable
   #define MyAppVersionFull GetVersionNumbersString(MySourceDir+"\"+MyAppExeName)
   #define MyAppVersion Copy(MyAppVersionFull, 0, RPos(".", MyAppVersionFull) - 1)
 #endif
