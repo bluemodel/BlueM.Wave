@@ -4,11 +4,12 @@
 #include "CodeDependencies.iss"
 
 #define MyAppName "BlueM.Wave"
+#define MySourceDir "..\source\bin\x64\Release\net10.0-windows"
 #define MyAppExeName "Wave.exe"
-#define MyAppVersionFull GetVersionNumbersString("..\source\bin\x64\Release\net10.0-windows\"+MyAppExeName)
-#define MyAppVersion Copy(MyAppVersionFull, 0, RPos(".", MyAppVersionFull) - 1)
 #define MyAppPublisher "BlueM Dev Group"
 #define MyAppURL "https://github.com/bluemodel/BlueM.Wave"
+#define MyAppVersionFull GetVersionNumbersString(MySourceDir+"\"+MyAppExeName)
+#define MyAppVersion Copy(MyAppVersionFull, 0, RPos(".", MyAppVersionFull) - 1)
 #define DoubleAmp(Value) StringChange(Value, "&", "&&")
 #define EscapeConstArgument(Value) StringChange(StringChange(StringChange(Value, "%", "%25"), ",", "%2c"), "}", "%7d")
 
@@ -65,8 +66,7 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-Source: "..\source\bin\x64\Release\net10.0-windows\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\source\bin\x64\Release\net10.0-windows\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "{#MySourceDir}\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: ".\assets\wvp.ico"; DestDir: "{app}"; Flags: ignoreversion
 Source: ".\assets\ten.ico"; DestDir: "{app}"; Flags: ignoreversion
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files.
