@@ -1,7 +1,7 @@
 BlueM.Wave Release Notes
 ========================
 
-Version 3.0.1
+Version 3.1.0
 -------------
 NEW:
 * Added support for reading SMB files without a header line
@@ -12,6 +12,7 @@ FIXED:
 * Fixed legend series colors becoming mismatched when ActiveStyle is set to None #265
 
 CHANGED:
+* Switched to new installer using Inno Setup, previous versions should be uninstalled manually before installing this version #152
 * Updated TeeChart to v6.2026.8.24
 
 Version 3.0.0
