@@ -4,10 +4,11 @@
 #include "CodeDependencies.iss"
 
 #define MyAppName "BlueM.Wave"
-#define MyAppVersion "3.0.1"
+#define MyAppExeName "Wave.exe"
+#define MyAppVersionFull GetVersionNumbersString("..\source\bin\x64\Release\net10.0-windows\"+MyAppExeName)
+#define MyAppVersion Copy(MyAppVersionFull, 0, RPos(".", MyAppVersionFull) - 1)
 #define MyAppPublisher "BlueM Dev Group"
 #define MyAppURL "https://github.com/bluemodel/BlueM.Wave"
-#define MyAppExeName "Wave.exe"
 #define DoubleAmp(Value) StringChange(Value, "&", "&&")
 #define EscapeConstArgument(Value) StringChange(StringChange(StringChange(Value, "%", "%25"), ",", "%2c"), "}", "%7d")
 
@@ -37,7 +38,7 @@ LicenseFile=..\COPYING.LESSER
 ; Uncomment the following line to run in non administrative install mode (install for current user only).
 ;PrivilegesRequired=lowest
 PrivilegesRequiredOverridesAllowed=dialog
-OutputDir=.\Release
+OutputDir=.\
 OutputBaseFilename=BlueM.Wave_{#MyAppVersion}_x64_setup 
 SetupIconFile=.\assets\wave.ico
 SolidCompression=yes

@@ -60,7 +60,6 @@ See the [API documentation](../api/index.md)
 To create a new release:
 * Change the Assembly version in the Wave project properties (or update the `<AssemblyVersion>` property in the project file `source\Wave.vbproj`).
 * Update the changelog in the file `source\CHANGELOG.md`.
-* Update the version number in the file `setup\Wave.Setup.iss` (**this should be automated!**)
 * Commit and push the changes to the master branch together with a new tag consisting of the version number (e.g. "2.4.3")
 
 When a new tag is pushed to the master branch, this triggers a [workflow](https://github.com/bluemodel/BlueM.Wave/actions/workflows/release.yml) which builds Wave and the installer and creates a new draft release on GitHub. This draft release must be published manually.
