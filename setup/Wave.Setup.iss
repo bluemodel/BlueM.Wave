@@ -39,6 +39,7 @@ LicenseFile=..\COPYING.LESSER
 ; Uncomment the following line to run in non administrative install mode (install for current user only).
 ;PrivilegesRequired=lowest
 PrivilegesRequiredOverridesAllowed=dialog
+CloseApplications=yes
 OutputDir=.\
 OutputBaseFilename=BlueM.Wave_{#MyAppVersion}_x64_setup 
 SetupIconFile=.\assets\wave.ico
