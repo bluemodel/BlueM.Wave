@@ -31,8 +31,8 @@ ArchitecturesAllowed=x64compatible
 ; "ArchitecturesInstallIn64BitMode=x64compatible" requests that the install be done in "64-bit mode" on x64 or Windows 11 on Arm.
 ; This means it should use the native 64-bit Program Files directory and the 64-bit view of the registry.
 ArchitecturesInstallIn64BitMode=x64compatible
-; Uncomment the following line to use a 64-bit installer.
-SetupArchitecture=x64
+; Uncomment the following line to use a 64-bit installer (requires Inno Setup 7).
+;SetupArchitecture=x64
 ChangesAssociations=yes
 DisableProgramGroupPage=yes
 LicenseFile=..\COPYING.LESSER

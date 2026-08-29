@@ -16,7 +16,7 @@ Optional setup steps:
   * Clone BlueM.Datasets from https://github.com/bluemodel/BlueM.Datasets into the same parent directory as BlueM.Wave
   * Run Tests (*Test -> Run all Tests*), see below for details
 * To build the installer:
-  * Install InnoSetup 7 from https://jrsoftware.org/isinfo.php
+  * Install InnoSetup 6 from https://jrsoftware.org/isinfo.php
   * Open and compile the installer script `setup\Wave.Setup.iss`
 
 ## TeeChart license
