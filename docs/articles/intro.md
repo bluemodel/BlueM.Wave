@@ -1,9 +1,11 @@
-## Getting started
+## Development environment
 1. Download [Visual Studio Installer (Community Edition)](https://visualstudio.microsoft.com/de/downloads/)
 1. Install Visual Studio with **.NET-desktop development tools**
 1. Start Visual Studio and go to *Extras -> Options -> NuGet Package Manager -> Package Sources*
 1. Add `https://api.nuget.org/v3/index.json` to package sources
-1. Clone BlueM.Wave source code from https://github.com/bluemodel/BlueM.Wave
+
+## Building BlueM.Wave
+1. Clone the BlueM.Wave source code from https://github.com/bluemodel/BlueM.Wave
 1. Copy a valid TeeChart Pro license file to `BlueM.Wave\source\My Project\TeeChart.licenses` (see below for instructions on using the evaluation version of TeeChart for testing purposes)
 1. Open `Wave.sln` in Visual Studio
 1. Set `Wave` as the startup project
@@ -13,8 +15,10 @@ Optional setup steps:
 * To run tests in `Wave.Tests`:
   * Clone BlueM.Datasets from https://github.com/bluemodel/BlueM.Datasets into the same parent directory as BlueM.Wave
   * Run Tests (*Test -> Run all Tests*), see below for details
-* To build the installer project `Wave.Setup`:
-  * Install the extension [Microsoft Visual Studio Installer Projects 2022](https://marketplace.visualstudio.com/items?itemName=VisualStudioClient.MicrosoftVisualStudio2022InstallerProjects), see below for details
+* To build the installer:
+  * Install InnoSetup 6 from https://jrsoftware.org/isinfo.php
+  * Open and compile the installer script `setup\Wave.Setup.iss`
+  * By default, the version is read from the Wave executable, to override, pass the version via commandline: `iscc.exe /DMyAppVersion=<X.X.X> setup\Wave.Setup.iss`
 
 ## TeeChart license
 BlueM.Wave uses [TeeChart .NET](https://www.steema.com/product/net) for all charts. To compile a fully functional version of BlueM.Wave, you need a valid TeeChart .NET Pro license file located at `BlueM.Wave\source\My Project\TeeChart.licenses`.
@@ -53,15 +57,10 @@ The repository contains a project `Wave.Examples` with some examples of API usag
 
 See the [API documentation](../api/index.md)
 
-## Building an installer
-An installer (.msi) for BlueM.Wave can be built using the `Wave.Setup` project located at `setup\Wave.Setup.vdproj`. This is a Visual Studio Installer Project which requires a [Visual Studio extension](https://marketplace.visualstudio.com/items?itemName=VisualStudioClient.MicrosoftVisualStudio2022InstallerProjects) to be installed (see [docs](https://aka.ms/vdproj-docs)).
-
 ## Releases
 To create a new release:
 * Change the Assembly version in the Wave project properties (or update the `<AssemblyVersion>` property in the project file `source\Wave.vbproj`).
 * Update the changelog in the file `source\CHANGELOG.md`.
-* In Visual Studio, select the `Wave.Setup` project and update its `Version` property to the new version number.
-* Visual Studio will ask to change the `ProductCode`, answer Yes.
 * Commit and push the changes to the master branch together with a new tag consisting of the version number (e.g. "2.4.3")
 
 When a new tag is pushed to the master branch, this triggers a [workflow](https://github.com/bluemodel/BlueM.Wave/actions/workflows/release.yml) which builds Wave and the installer and creates a new draft release on GitHub. This draft release must be published manually.

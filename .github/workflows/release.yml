@@ -33,34 +33,14 @@ jobs:
       - name: Create zip archive
         run: Compress-Archive -Path source\bin\Release\net10.0-windows\win-x64\* -DestinationPath BlueM.Wave_${{ steps.version.outputs.full }}_x64.zip
         
-      - name: Setup VS Dev Environment
-        uses: seanmiddleditch/gha-setup-vsdevenv@v5
-        
-      - name: DisableOutOfProc Fix # see https://stackoverflow.com/a/75641385
-        run: |
-          function Invoke-DisableOutOfProcBuild {
-            param ();
-            $visualStudioWherePath = ('{0}/Microsoft Visual Studio/Installer/vswhere.exe' -f ${Env:ProgramFiles(x86)});
-            $visualStudioInstallationPath = & $visualStudioWherePath -latest -products 'Microsoft.VisualStudio.Product.Enterprise' -property 'installationPath';
-            $currentWorkingDirectory = ('{0}/Common7/IDE/CommonExtensions/Microsoft/VSI/DisableOutOfProcBuild' -f $visualStudioInstallationPath);
-            
-            Set-Location -Path $currentWorkingDirectory;
-            
-            $disableOutOfProcBuildPath = ('{0}/DisableOutOfProcBuild.exe' -f $currentWorkingDirectory);
-            
-            & $disableOutOfProcBuildPath;
-            
-            return;
-          }
-          Invoke-DisableOutOfProcBuild
-          
       - name: Build installer
-        run: devenv.com setup\Wave.Setup.vdproj /build "Release|x64"
-        
-      - name: Copy and rename installer file
-        run: copy setup\release\BlueM.Wave_x64.msi BlueM.Wave_${{ steps.version.outputs.full }}_x64_setup.msi
-        shell: cmd
-        
+        uses: Minionguyjpro/Inno-Setup-Action@v1.2.9
+        with:
+          path: setup\Wave.Setup.iss
+          options: |
+            /DMyAppVersion=${{ steps.version.outputs.full }}
+            /DMySourceDir=..\source\bin\Release\net10.0-windows\win-x64
+
       - name: Release
         uses: softprops/action-gh-release@v3.0.1
         with:
@@ -69,4 +49,4 @@ jobs:
           body: "[Full changelog](https://github.com/bluemodel/BlueM.Wave/blob/${{ steps.version.outputs.full }}/source/CHANGELOG.md)"
           files: |
             BlueM.Wave_${{ steps.version.outputs.full }}_x64.zip
-            BlueM.Wave_${{ steps.version.outputs.full }}_x64_setup.msi
+            setup\BlueM.Wave_${{ steps.version.outputs.full }}_x64_setup.exe
