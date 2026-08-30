@@ -1,5 +1,5 @@
 ## Development environment
-1. Download [Visual Studio Installer (Community Edition)](https://visualstudio.microsoft.com/de/downloads/)
+1. Download [Visual Studio 2026 (Community Edition)](https://visualstudio.microsoft.com/en/downloads/)
 1. Install Visual Studio with **.NET-desktop development tools**
 1. Start Visual Studio and go to *Extras -> Options -> NuGet Package Manager -> Package Sources*
 1. Add `https://api.nuget.org/v3/index.json` to package sources
