@@ -54,6 +54,7 @@ Namespace Fileformats
             'Voreinstellungen
             Me.Dateformat = Helpers.DateFormats("UVF")
             Me.UseUnits = True
+            Me.Encoding = Text.Encoding.Latin1
 
             'set default metadata keys
             Me.FileMetadata.AddKeys(UVF.MetadataKeys)

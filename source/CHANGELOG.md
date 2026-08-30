@@ -10,6 +10,7 @@ FIXED:
 * Fixed dialogs not being centered on the screen when opened
 * Fixed NaN values showing as vertical lines in chart overview #260
 * Fixed legend series colors becoming mismatched when ActiveStyle is set to None #265
+* Fixed reading UVF files with correct encoding (ISO-8859-1)
 
 CHANGED:
 * Switched to new installer using Inno Setup, previous versions should be uninstalled manually before installing this version #152

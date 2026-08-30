@@ -123,7 +123,7 @@ Public MustInherit Class TimeSeriesFile
     ''' <summary>
     ''' Encoding to use for reading the file
     ''' </summary>
-    ''' <remarks>Defaults to the system default (usually ISO-8859-1)</remarks>
+    ''' <remarks>Defaults to the system default (UTF-8)</remarks>
     ''' <returns></returns>
     Public Property Encoding As Text.Encoding
 
