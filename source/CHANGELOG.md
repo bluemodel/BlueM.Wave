@@ -5,6 +5,7 @@ Version 3.1.0
 -------------
 NEW:
 * Added support for reading SMB files without a header line
+* ChangeTimestep analysis function can now be executed on multiple time series at once
 
 FIXED:
 * Fixed dialogs not being centered on the screen when opened

@@ -66,10 +66,6 @@ Friend Class ChangeTimestep
 
         Call MyBase.New(seriesList)
 
-        If seriesList.Count <> 1 Then
-            Throw New AnalysisInvalidInputException("The ChangeTimestep analysis requires the selection of exactly 1 time series!")
-        End If
-
     End Sub
 
     ''' <summary>
@@ -77,17 +73,14 @@ Friend Class ChangeTimestep
     ''' </summary>
     Public Overrides Sub ProcessAnalysis()
 
-        Dim ts, ts_new As TimeSeries
         Dim inputInterpretation, outputInterpretation As TimeSeries.InterpretationEnum
         Dim timesteptype As TimeSeries.TimeStepTypeEnum
         Dim timestepinterval As Integer
         Dim startdate As DateTime
         Dim ignoreNaN As Boolean
 
-        ts = Me.InputTimeSeries(0)
-
-        'show the ChangeTimeStepDialog
-        Dim dlg As New ChangeTimestepDialog(ts)
+        'show the ChangeTimeStepDialog using the first timeseries
+        Dim dlg As New ChangeTimestepDialog(Me.InputTimeSeries(0))
         If dlg.ShowDialog() <> DialogResult.OK Then
             Throw New AnalysisCancelledException("Analysis cancelled")
         End If
@@ -100,18 +93,22 @@ Friend Class ChangeTimestep
         startdate = CType(dlg.MaskedTextBox_Start.ValidateText(), DateTime)
         ignoreNaN = dlg.CheckBox_IgnoreNaN.Checked
 
-        'if ignoreNaN is set, remove all NaN values from time series
-        If ignoreNaN Then
-            ts = ts.RemoveNaNValues()
-        End If
+        For Each ts As TimeSeries In Me.InputTimeSeries
 
-        'change timestep
-        ts.Interpretation = inputInterpretation
-        ts_new = ts.ChangeTimestep(timesteptype, timestepinterval, startdate, outputInterpretation)
+            'if ignoreNaN is set, remove all NaN values from time series
+            If ignoreNaN Then
+                ts = ts.RemoveNaNValues()
+            End If
 
-        'Store result series
-        ts_new.DataSource = New TimeSeriesDataSource(TimeSeriesDataSource.OriginEnum.AnalysisResult)
-        Me.ResultSeries.Add(ts_new)
+            'change timestep
+            ts.Interpretation = inputInterpretation
+            Dim ts_new As TimeSeries = ts.ChangeTimestep(timesteptype, timestepinterval, startdate, outputInterpretation)
+
+            ts_new.DataSource = New TimeSeriesDataSource(TimeSeriesDataSource.OriginEnum.AnalysisResult)
+
+            'Store result series
+            Me.ResultSeries.Add(ts_new)
+        Next
 
     End Sub
 
