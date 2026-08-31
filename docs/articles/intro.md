@@ -7,7 +7,7 @@
 ## Building BlueM.Wave
 1. Clone the BlueM.Wave source code from https://github.com/bluemodel/BlueM.Wave
 1. Copy a valid TeeChart Pro license file to `BlueM.Wave\source\My Project\TeeChart.licenses` (see below for instructions on using the evaluation version of TeeChart for testing purposes)
-1. Open `Wave.sln` in Visual Studio
+1. Open `Wave.slnx` in Visual Studio
 1. Set `Wave` as the startup project
 1. Run project (*Debug -> Start Debugging*)
 
