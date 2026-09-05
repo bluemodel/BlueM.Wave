@@ -15,7 +15,24 @@
 'You should have received a copy of the GNU Lesser General Public License
 'along with this program.  If not, see <https://www.gnu.org/licenses/>.
 '
+Imports Microsoft.Extensions.Configuration
+
 Friend Module Main
+
+    Private _config As IConfiguration
+
+    ''' <summary>
+    ''' Configuration instance
+    ''' </summary>
+    ''' <returns></returns>
+    Friend Property Config As IConfiguration
+        Get
+            Return _config
+        End Get
+        Private Set(value As IConfiguration)
+            _config = value
+        End Set
+    End Property
 
     <STAThread()>
     Public Sub Main()
@@ -26,6 +43,12 @@ Friend Module Main
 
         Application.EnableVisualStyles()
         Application.SetCompatibleTextRenderingDefault(False)
+
+        'load the config from appsettings.json
+        Config = New ConfigurationBuilder().AddJsonFile("appsettings.json").Build()
+
+        'log the test setting from the config to verify that it was loaded correctly
+        Log.AddLogEntry(Log.Levels.debug, Config.GetSection("GeneralSettings").Item("TestSetting"))
 
         'load user settings
         My.Settings.Reload()
