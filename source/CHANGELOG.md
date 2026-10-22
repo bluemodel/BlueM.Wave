@@ -1,6 +1,15 @@
 BlueM.Wave Release Notes
 ========================
 
+Version 3.1.1
+-------------
+FIXED:
+* Fix not being able to load TEN files on launch #285
+* Fixed legend and title overlap in AnnualRecurrenceProbability result chart
+
+CHANGED:
+* Updated TeeChart to v6.2026.10.12
+
 Version 3.1.0
 -------------
 NEW:
