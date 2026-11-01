@@ -15,7 +15,7 @@ jobs:
         uses: release-kit/semver@v2
         
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         
       - name: Create TeeChart license file from secret
         uses: lukasa1993/secret-file-action@v1.0.4

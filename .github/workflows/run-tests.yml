@@ -12,12 +12,12 @@ jobs:
 
     steps:
       - name: Checkout BlueM.Wave
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           path: BlueM.Wave
           
       - name: Checkout BlueM.Datasets
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with: 
           repository: bluemodel/BlueM.Datasets
           ref: net
