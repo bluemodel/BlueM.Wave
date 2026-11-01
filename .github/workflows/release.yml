@@ -42,7 +42,7 @@ jobs:
             /DMySourceDir=..\source\bin\Release\net10.0-windows\win-x64
 
       - name: Release
-        uses: softprops/action-gh-release@v3.0.1
+        uses: softprops/action-gh-release@v3.0.3
         with:
           name: "v${{ steps.version.outputs.full }}"
           draft: true # for now
