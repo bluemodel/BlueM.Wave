@@ -16,6 +16,6 @@ updates:
           - "Microsoft.NET.Test.Sdk"
           
   - package-ecosystem: "github-actions"
-    directory: "/.github"
+    directory: "/"
     schedule:
       interval: "weekly"
