@@ -10,14 +10,15 @@
     <UseWindowsForms>true</UseWindowsForms>
     <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
     <ApplicationIcon>Resources\Wave.ico</ApplicationIcon>
-    <PostBuildEvent>copy $(MSBuildProjectDirectory)\..\COPYING $(OutDir)COPYING
-copy $(MSBuildProjectDirectory)\..\COPYING.LESSER $(OutDir)COPYING.LESSER
-copy $(MSBuildProjectDirectory)\lib\MathNet\MathNet.Numerics.license.txt $(OutDir)MathNet.Numerics.license.txt
-copy $(MSBuildProjectDirectory)\lib\MathParserNet\MathParserNet.license.html $(OutDir)MathParserNet.license.html
-copy $(MSBuildProjectDirectory)\lib\Newtonsoft.Json\Newtonsoft.Json.LICENSE.md $(OutDir)Newtonsoft.Json.LICENSE.md
-copy $(MSBuildProjectDirectory)\lib\DHI.DFS\DHI.DFS.license.txt $(OutDir)DHI.DFS.license.txt
-copy $(MSBuildProjectDirectory)\lib\PureHDF\PureHDF.LICENSE.md $(OutDir)PureHDF.LICENSE.md
-</PostBuildEvent>
+    <PostBuildEvent>
+        copy $(MSBuildProjectDirectory)\..\COPYING $(OutDir)COPYING
+        copy $(MSBuildProjectDirectory)\..\COPYING.LESSER $(OutDir)COPYING.LESSER
+        copy $(MSBuildProjectDirectory)\lib\MathNet\MathNet.Numerics.license.txt $(OutDir)MathNet.Numerics.license.txt
+        copy $(MSBuildProjectDirectory)\lib\MathParserNet\MathParserNet.LICENSE.md $(OutDir)MathParserNet.LICENSE.md
+        copy $(MSBuildProjectDirectory)\lib\Newtonsoft.Json\Newtonsoft.Json.LICENSE.md $(OutDir)Newtonsoft.Json.LICENSE.md
+        copy $(MSBuildProjectDirectory)\lib\DHI.DFS\DHI.DFS.license.txt $(OutDir)DHI.DFS.license.txt
+        copy $(MSBuildProjectDirectory)\lib\PureHDF\PureHDF.LICENSE.md $(OutDir)PureHDF.LICENSE.md
+	</PostBuildEvent>
     <AssemblyTitle>BlueM.Wave</AssemblyTitle>
     <Company>BlueM Dev Group</Company>
     <Product>BlueM.Wave</Product>
@@ -199,7 +200,7 @@ copy $(MSBuildProjectDirectory)\lib\PureHDF\PureHDF.LICENSE.md $(OutDir)PureHDF.
     <Content Include="lib\DHI.DFS\DHI.DFS.license.txt" />
     <Content Include="lib\MathNet\MathNet.Numerics.license.txt" />
     <Content Include="lib\MathParserNet\MathParserNet.dll" />
-    <Content Include="lib\MathParserNet\MathParserNet.license.html" />
+    <Content Include="lib\MathParserNet\MathParserNet.LICENSE.md" />
     <Content Include="Resources\application_get.png" />
     <Content Include="Resources\application_split.png" />
     <Content Include="Resources\arrow_down.png" />
