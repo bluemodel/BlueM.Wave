@@ -223,10 +223,11 @@ Friend Class AnnualRecurrenceProbability
         ResultChart.Walls.Back.Visible = True
         ResultChart.Header.Visible = True
         ResultChart.Header.Text = $"Annual maxima (plotting position)"
+        ResultChart.Header.TextAlign = Steema.TeeChart.Drawing.StringAlignment.Center
 
         'Legend
         ResultChart.Legend.ActiveStyle = Steema.TeeChart.LegendActiveStyles.None
-        ResultChart.Legend.Alignment = Steema.TeeChart.LegendAlignments.Top
+        ResultChart.Legend.Alignment = Steema.TeeChart.LegendAlignments.Bottom
 
         'x-Axis
         With ResultChart.Axes.Bottom
