@@ -65,16 +65,18 @@ Friend Module Main
             End If
         End If
 
+        'instantiate the app before loading files, so that the controllers are available (required for loading TEN files)
+        Dim app As New App(wave)
+
         'import any files that were passed as commandline arguments
-        Dim importTasks As New List(Of Task)
         For Each file As String In files
-            importTasks.Add(wave.Import_File(file))
+            Log.AddLogEntry(Log.Levels.debug, "Importing file from commandline argument: " & file)
+            'cannot use Await here, so we have to block the thread until the import is complete
+            wave.Import_File(file).GetAwaiter().GetResult()
         Next
-        Task.WaitAll(importTasks)
 
         'launch the app
-        Dim app As New App(wave)
-        Application.Run(app)
+        Application.Run(App)
 
     End Sub
 
