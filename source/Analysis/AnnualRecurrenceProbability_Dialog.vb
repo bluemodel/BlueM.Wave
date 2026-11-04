@@ -29,7 +29,4 @@ Friend Class AnnualRecurrenceProbability_Dialog
         Me.ComboBox_startMonth.SelectedIndex = 10 'November
     End Sub
 
-    Private Sub AnnualRecurrenceProbability_Dialog_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-
-    End Sub
 End Class
