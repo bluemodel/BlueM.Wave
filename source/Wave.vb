@@ -120,6 +120,7 @@ Public Class Wave
             'some edge cases:
             Case TimeSeriesFile.FileTypes.TEN
                 '.TEN file has to be loaded by the controller/view
+                Log.AddLogEntry(Log.Levels.debug, $"Detected TEN file '{file}' - delegating loading to controller...")
                 RaiseEvent TENFileLoading(file)
 
             Case TimeSeriesFile.FileTypes.WVP
