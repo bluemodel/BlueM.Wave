@@ -115,17 +115,13 @@ Friend Class AnnualRecurrenceProbability
             Else
                 year = ts.StartDate.Year - 1
             End If
+            'start of hydrological year
+            Dim startDate As New DateTime(year, startMonth, 1)
 
             'loop over years
-            Do
-                'start of hydrological year
-                Dim startDate As New DateTime(year, startMonth, 1)
+            Do While startDate <= ts.EndDate
                 If startDate < ts.StartDate Then
                     Log.AddLogEntry(Levels.warning, $"Hydrological year {year} begins before start of time series!")
-                End If
-                If startDate > ts.EndDate Then
-                    'end of time series
-                    Exit Do
                 End If
                 'end of hydrological year
                 Dim endDate As DateTime = New DateTime(year + 1, startMonth, 1) - New TimeSpan(0, 0, 1)
@@ -147,6 +143,7 @@ Friend Class AnnualRecurrenceProbability
                 End If
                 'next year
                 year += 1
+                startDate = New DateTime(year, startMonth, 1)
             Loop
 
             'Sort events by max value descending
