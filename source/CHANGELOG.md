@@ -1,6 +1,11 @@
 BlueM.Wave Release Notes
 ========================
 
+Version 2.17.1
+--------------
+CHANGED:
+* Updated TeeChart to v6.2026.10.12
+
 Version 2.17.0
 --------------
 FIXED:
