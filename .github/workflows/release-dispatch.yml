@@ -1,0 +1,80 @@
+name: Publish release
+
+on:
+  push:
+    tags:
+    - "*"
+
+jobs:
+  build-and-release:
+    runs-on: windows-2025-vs2026
+    permissions:
+      # This is required to be able to create an ID token to authenticate the workflow run with OSSign
+      id-token: write
+
+    steps:
+      - name: Parse version from latest tag
+        id: version
+        uses: release-kit/semver@v2
+        
+      # Build a release just for test purposes
+      - name: Checkout
+        uses: actions/checkout@v7
+        
+      - name: Create TeeChart license file from secret
+        uses: lukasa1993/secret-file-action@v1.0.4
+        id: teechart-license
+        with:
+          secret: ${{ secrets.TEECHARTLICENSE }}
+          b64-decode: false
+          
+      - name: Copy TeeChart license file
+        run: copy ${{ steps.teechart-license.outputs.file }} "source\My Project\TeeChart.licenses"
+        
+      - name: Build Wave
+        run: dotnet build source\Wave.vbproj --arch x64 --configuration Release
+        
+      - name: Create zip archive
+        run: Compress-Archive -Path source\bin\Release\net10.0-windows\win-x64\* -DestinationPath BlueM.Wave_${{ steps.version.outputs.full }}_x64.zip
+        
+      - name: Build installer
+        uses: Minionguyjpro/Inno-Setup-Action@v1.2.9
+        with:
+          path: setup\Wave.Setup.iss
+          options: |
+            /DMyAppVersion=${{ steps.version.outputs.full }}
+            /DMySourceDir=..\source\bin\Release\net10.0-windows\win-x64
+
+      # Skip the release of unsigned files
+      #- name: Release
+      #  uses: softprops/action-gh-release@v3.0.3
+      #  with:
+      #    name: "v${{ steps.version.outputs.full }}"
+      #    draft: true # for now
+      #    body: "[Full changelog](https://github.com/bluemodel/BlueM.Wave/blob/${{ steps.version.outputs.full }}/source/CHANGELOG.md)"
+      #    files: |
+      #      BlueM.Wave_${{ steps.version.outputs.full }}_x64.zip
+      #      setup\BlueM.Wave_${{ steps.version.outputs.full }}_x64_setup.exe
+
+      # Instead. dispatch a request to the OSSign repo for build + signing
+      - name: Dispatch to OSSign
+        id: dispatch
+        uses: ossign/actions/workflow/dispatch@main
+        with:
+          dispatch_only: true
+        
+      # Echo the workflow ID for debugging purposes
+      - run: |
+          echo "Received workflow ID: ${{ steps.dispatch.outputs.workflow_id }}"
+    
+      # Starts the waiting loop, only required with dispatch_only: true
+      # This will start the release-wait-publish.yml workflow. For more information, see that file.    
+      - name: Start the waiting loop
+        uses: benc-uk/workflow-dispatch@v1
+        with:
+          workflow: release-wait-publish.yml
+          inputs: |
+            { 
+              "workflow_id": "${{ steps.dispatch.outputs.workflow_id }}",
+              "version": ${{ steps.version.outputs.full }}
+            }
