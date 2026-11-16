@@ -59,7 +59,7 @@ jobs:
       # Instead. dispatch a request to the OSSign repo for build + signing
       - name: Dispatch to OSSign
         id: dispatch
-        uses: ossign/actions/workflow/dispatch@main
+        uses: OSSign/actions/workflow/trusted-dispatch@5dd7e6b3fa626cb429ec2956354855f40581bb1d # v4
         with:
           dispatch_only: true
         
