@@ -35,11 +35,9 @@ jobs:
         environment: Signatures
 
         permissions:
-          # Needs actions: write to be able to dispatch workflows
-          actions: write
-
-          #  Uses contents: write to be able to read and write workflow artifacts
-          contents: write
+          id-token: write # required to be able to create an ID token to authenticate the workflow run with OSSign
+          actions: write # required to be able to dispatch workflows
+          contents: write # required to be able to read and write workflow artifacts
 
         steps:
 
