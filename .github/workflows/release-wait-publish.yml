@@ -1,0 +1,123 @@
+# This file implements a waiting loop to check for signed files from OSSign.
+
+# You need to create the environment "Signatures" (or another name) in your repository
+# and set a waiting period to change the interval. If you do not set a waiting period, this workflow will run again directly after it has finished every time.
+name: OSSign Waiting Loop
+
+on:
+  # You can also manually start this workflow with the ID printed out in the dispatch workflow
+  workflow_dispatch:
+    inputs:
+      workflow_id:
+        description: 'The workflow ID from dispatch'
+        required: true
+        type: string
+      version:
+        description: 'Release tag/version (for example 1.2.3)'
+        required: true
+        type: string
+      attempt:
+        required: false
+        description: 'The attempt number'
+        type: number
+        default: 1
+      max_attempts:
+        required: false
+        description: 'The maximum number of attempts (times the waiting period duration you set in the environment gives the max wait time, e.g. 30 minutes * 48 = 24 hours)'
+        type: number
+        default: 100
+
+jobs:
+    wait-and-check:
+        runs-on: ubuntu-latest
+
+        # This job uses an environment with a wait period set in the policy to work around the fact that you cannot pause workflows
+        environment: Signatures
+
+        permissions:
+          # Needs actions: write to be able to dispatch workflows
+          actions: write
+
+          #  Uses contents: write to be able to read and write workflow artifacts
+          contents: write
+
+        steps:
+
+          # Checks if the attempt threshold was reached, if yes, exits with error
+          - name: Check if the threshold has been reached
+            shell: bash
+            run: |
+              if [ ${{ github.event.inputs.attempt }} -gt ${{ github.event.inputs.max_attempts }} ]; then
+                echo "Maximum number of attempts reached, exiting."
+                exit 1
+              fi
+        
+          - name: Check if signing is finished
+            id: check
+            uses: OSSign/actions/workflow/trusted-dispatch@5dd7e6b3fa626cb429ec2956354855f40581bb1d # v4
+            with:
+              single_check: ${{ github.event.inputs.workflow_id }}
+
+            # The data returned in steps.check.outputs.signed_artifacts is:
+            # [
+            #    {
+            #        "id": "Release artifact ID",
+            #        "name": "Filename.exe",
+            #        "url": "https://api.github.com/repos/OSSign/exampleuser--examplerepo/releases/assets/[releaseArtifactID]",
+            #        "browser_download_url": "https://github.com/OSSign/exampleuser--examplerepo/releases/download/[releaseArtifactID]/Filename.exe"
+            #    }
+            # ]
+        
+          - name: Download signed artifacts
+            if: steps.check.outputs.signed_artifacts != ''
+            id: download
+            shell: bash
+            env:
+              SIGNED_ARTIFACTS: ${{ steps.check.outputs.signed_artifacts }}
+            run: |
+              printf '%s\n' "$SIGNED_ARTIFACTS"
+              
+              delimiter=$(openssl rand -hex 16)
+              printf 'filenames<<%s\n' "$delimiter" >> "$GITHUB_OUTPUT"
+              
+              printf '%s' "$SIGNED_ARTIFACTS" |
+                jq -c '.[]' |
+                while IFS= read -r artifact; do
+                  name=$(jq -r '.name' <<< "$artifact")
+                  url=$(jq -r '.browser_download_url' <<< "$artifact")
+              
+                  curl -L0 --fail --show-error --output "$name" "$url"
+                  printf '%s\n' "$name" >> "$GITHUB_OUTPUT"
+                done
+              
+              printf '%s\n' "$delimiter" >> "$GITHUB_OUTPUT"
+              
+          - name: Create release
+            if: steps.check.outputs.signed_artifacts != ''
+            uses: softprops/action-gh-release@8a0cd651e5b2365bd640854a3fa5dfc70e4875f3 # v3.0.4
+            with:
+              name: "v${{ inputs.version }}"
+              draft: true
+              body: "[Full changelog](https://github.com/bluemodel/BlueM.Wave/blob/${{ inputs.version }}/source/CHANGELOG.md)"
+              files: |
+                ${{ steps.download.outputs.filenames }}
+      
+          # If the signature was not finished, increase the attempt counter and restart the workflow
+          - name: Increase attempt counter
+            if: steps.check.outputs.signed_artifacts == ''
+            id: increased
+            run: |
+              echo "Attempt ${{ github.event.inputs.attempt }} failed, will try again."
+              echo "attempt_no=$(( ${{ github.event.inputs.attempt }} + 1 ))" >> $GITHUB_OUTPUT
+
+          - name: If signing is not finished, restart the workflow
+            if: steps.check.outputs.signed_artifacts == ''
+            uses: benc-uk/workflow-dispatch@d004979be141727c7a17c28f603e2facc40d0855 # v1.3.3
+            with:
+              workflow: release-wait-publish.yml
+              inputs: |
+                {  
+                   "workflow_id": "${{ github.event.inputs.workflow_id }}",
+                   "version": "${{ inputs.version }}",
+                   "attempt": "${{ steps.increased.outputs.attempt_no }}"
+                }  

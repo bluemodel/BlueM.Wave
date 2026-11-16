@@ -3,8 +3,11 @@ BlueM.Wave Release Notes
 
 Version 3.1.1
 -------------
+NEW:
+* Release binaries and the installer are now signed by OSSign #103
+
 FIXED:
-* Fix not being able to load TEN files on launch #285
+* Fixed not being able to load TEN files on launch #285
 * Fixed legend and title overlap in AnnualRecurrenceProbability result chart
 
 CHANGED:
