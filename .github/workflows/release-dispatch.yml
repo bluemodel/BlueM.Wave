@@ -76,5 +76,5 @@ jobs:
           inputs: |
             { 
               "workflow_id": "${{ steps.dispatch.outputs.workflow_id }}",
-              "version": ${{ steps.version.outputs.full }}
+              "version": "${{ steps.version.outputs.full }}"
             }

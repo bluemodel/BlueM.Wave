@@ -114,7 +114,7 @@ jobs:
             if: steps.check.outputs.signed_artifacts == ''
             uses: benc-uk/workflow-dispatch@v1
             with:
-              workflow: wait-signature.yml
+              workflow: release-wait-publish.yml
               inputs: |
                 {  
                    "workflow_id": "${{ github.event.inputs.workflow_id }}",
