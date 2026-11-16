@@ -7,10 +7,12 @@ on:
 
 jobs:
   build-and-release:
+  
     runs-on: windows-2025-vs2026
+
     permissions:
-      # This is required to be able to create an ID token to authenticate the workflow run with OSSign
-      id-token: write
+      id-token: write # required to be able to create an ID token to authenticate the workflow run with OSSign
+      actions: write # required to be able to dispatch workflows
 
     steps:
       - name: Parse version from latest tag
