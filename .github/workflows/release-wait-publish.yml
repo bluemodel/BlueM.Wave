@@ -2,7 +2,7 @@
 
 # You need to create the environment "Signatures" (or another name) in your repository
 # and set a waiting period to change the interval. If you do not set a waiting period, this workflow will run again directly after it has finished every time.
-name: OSSign Waiting Loop
+name: OSSign Check and Publish
 
 on:
   # You can also manually start this workflow with the ID printed out in the dispatch workflow
@@ -28,7 +28,7 @@ on:
         default: 100
 
 jobs:
-    wait-and-check:
+    check-and-publish:
         runs-on: ubuntu-latest
 
         # This job uses an environment with a wait period set in the policy to work around the fact that you cannot pause workflows
@@ -50,6 +50,8 @@ jobs:
                 exit 1
               fi
         
+          # Check if the signing workflow in the OSSign repo is finished
+          # https://github.com/OSSign/bluemodel--bluem.wave
           - name: Check if signing is finished
             id: check
             uses: OSSign/actions/workflow/trusted-dispatch@5dd7e6b3fa626cb429ec2956354855f40581bb1d # v4

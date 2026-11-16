@@ -1,4 +1,4 @@
-name: Publish release
+name: OSSign Dispatch
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
     - "*"
 
 jobs:
-  build-and-release:
+  build-and-dispatch:
   
     runs-on: windows-2025-vs2026
 
@@ -58,7 +58,8 @@ jobs:
       #      BlueM.Wave_${{ steps.version.outputs.full }}_x64.zip
       #      setup\BlueM.Wave_${{ steps.version.outputs.full }}_x64_setup.exe
 
-      # Instead. dispatch a request to the OSSign repo for build + signing
+      # Instead, dispatch a request to the OSSign repo for build + signing
+      # https://github.com/OSSign/bluemodel--bluem.wave
       - name: Dispatch to OSSign
         id: dispatch
         uses: OSSign/actions/workflow/trusted-dispatch@5dd7e6b3fa626cb429ec2956354855f40581bb1d # v4
@@ -66,7 +67,8 @@ jobs:
           dispatch_only: true
         
       # Echo the workflow ID for debugging purposes
-      - run: |
+      - name: Echo the workflow ID
+        run: |
           echo "Received workflow ID: ${{ steps.dispatch.outputs.workflow_id }}"
     
       # Starts the waiting loop, only required with dispatch_only: true
