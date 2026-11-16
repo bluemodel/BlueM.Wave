@@ -94,7 +94,7 @@ jobs:
               
           - name: Create release
             if: steps.check.outputs.signed_artifacts != ''
-            uses: softprops/action-gh-release@v3.0.3
+            uses: softprops/action-gh-release@8a0cd651e5b2365bd640854a3fa5dfc70e4875f3 # v3.0.4
             with:
               name: "v${{ inputs.version }}"
               draft: true
@@ -112,7 +112,7 @@ jobs:
 
           - name: If signing is not finished, restart the workflow
             if: steps.check.outputs.signed_artifacts == ''
-            uses: benc-uk/workflow-dispatch@v1
+            uses: benc-uk/workflow-dispatch@d004979be141727c7a17c28f603e2facc40d0855 # v1.3.3
             with:
               workflow: release-wait-publish.yml
               inputs: |

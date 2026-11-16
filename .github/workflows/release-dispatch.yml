@@ -15,14 +15,14 @@ jobs:
     steps:
       - name: Parse version from latest tag
         id: version
-        uses: release-kit/semver@v2
+        uses: release-kit/semver@97491c46500b6e758ced599794164a234b8aa08c # v2
         
       # Build a release just for test purposes
       - name: Checkout
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         
       - name: Create TeeChart license file from secret
-        uses: lukasa1993/secret-file-action@v1.0.4
+        uses: lukasa1993/secret-file-action@eb2230640a85a7dd02728cbad59d593fa98df11a # v1.0.4
         id: teechart-license
         with:
           secret: ${{ secrets.TEECHARTLICENSE }}
@@ -38,7 +38,7 @@ jobs:
         run: Compress-Archive -Path source\bin\Release\net10.0-windows\win-x64\* -DestinationPath BlueM.Wave_${{ steps.version.outputs.full }}_x64.zip
         
       - name: Build installer
-        uses: Minionguyjpro/Inno-Setup-Action@v1.2.9
+        uses: Minionguyjpro/Inno-Setup-Action@36e43b836ce2c78d21787b1f7183caf85c60ba05 # v1.3.0
         with:
           path: setup\Wave.Setup.iss
           options: |
@@ -47,7 +47,7 @@ jobs:
 
       # Skip the release of unsigned files
       #- name: Release
-      #  uses: softprops/action-gh-release@v3.0.3
+      #  uses: softprops/action-gh-release@8a0cd651e5b2365bd640854a3fa5dfc70e4875f3 # v3.0.4
       #  with:
       #    name: "v${{ steps.version.outputs.full }}"
       #    draft: true # for now
@@ -70,7 +70,7 @@ jobs:
       # Starts the waiting loop, only required with dispatch_only: true
       # This will start the release-wait-publish.yml workflow. For more information, see that file.    
       - name: Start the waiting loop
-        uses: benc-uk/workflow-dispatch@v1
+        uses: benc-uk/workflow-dispatch@d004979be141727c7a17c28f603e2facc40d0855 # v1.3.3
         with:
           workflow: release-wait-publish.yml
           inputs: |
