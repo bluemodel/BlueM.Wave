@@ -20,6 +20,9 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
 <TestClass>
 Public Class TestApp
 
+    ''' <summary>
+    ''' Tests that a startup file passed to the Wave app is imported after the main window starts
+    ''' </summary>
     <STATestMethod>
     Public Sub TestStartupFileIsImportedAfterMainWindowStarts()
         Dim file As String = IO.Path.Combine(TestData.GetTestDataDir(), "UVF", "42007.0_q.uvf")
@@ -49,6 +52,43 @@ Public Class TestApp
         Assert.AreEqual(1, wave.TimeSeries.Count)
         Assert.AreEqual(IO.Path.GetFullPath(file), IO.Path.GetFullPath(wave.TimeSeries.Values.Single().DataSource.FilePath))
         Assert.IsTrue(wave.TimeSeries.Values.Single().Nodes.Count > 0, "The imported time series contains no data.")
+    End Sub
+
+    ''' <summary>
+    ''' Tests that a TEN startup file passed to the Wave app is imported after the main window starts
+    ''' </summary>
+    <STATestMethod>
+    Public Sub TestStartupTENFileIsLoaded()
+        Dim file As String = IO.Path.Combine(TestData.GetTestDataDir(), "TEN", "DEMONA_PSI.json.ten")
+        Dim wave As New Wave()
+        Dim app As New App(wave, New List(Of String) From {file})
+        Dim imported As Boolean = False
+        Dim startupTimer As New System.Windows.Forms.Timer With {.Interval = 100}
+        Dim stopwatch As System.Diagnostics.Stopwatch = System.Diagnostics.Stopwatch.StartNew()
+
+        AddHandler startupTimer.Tick,
+            Sub(sender As Object, e As EventArgs)
+                If wave.TimeSeries.Count > 0 Then
+                    imported = True
+                    startupTimer.Stop()
+                    app.MainForm.Close()
+                ElseIf stopwatch.Elapsed >= TimeSpan.FromSeconds(15) Then
+                    startupTimer.Stop()
+                    app.MainForm.Close()
+                Else
+                    'Retry until the TEN loader's confirmation dialog is active.
+                    System.Windows.Forms.SendKeys.SendWait("{ENTER}")
+                End If
+            End Sub
+
+        startupTimer.Start()
+        System.Windows.Forms.Application.Run(app)
+        startupTimer.Dispose()
+
+        Assert.IsTrue(imported, "The TEN startup file's time series were not imported before the timeout.")
+        Assert.IsTrue(wave.TimeSeries.Count > 0)
+        Assert.IsTrue(wave.TimeSeries.Values.Any(Function(ts) IO.Path.GetFullPath(ts.DataSource.FilePath).Equals(IO.Path.GetFullPath(file), StringComparison.OrdinalIgnoreCase)))
+        Assert.IsTrue(wave.TimeSeries.Values.All(Function(ts) ts.Nodes.Count > 0), "A time series imported from the TEN file contains no data.")
     End Sub
 
 End Class
