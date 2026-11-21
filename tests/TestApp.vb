@@ -21,6 +21,35 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
 Public Class TestApp
 
     ''' <summary>
+    ''' Tests that the Wave app starts and shows the main window successfully
+    ''' </summary>
+    <STATestMethod>
+    Public Sub TestAppStarts()
+        Dim app As New App()
+        Dim started As Boolean = False
+        Dim startupTimer As New System.Windows.Forms.Timer With {.Interval = 100}
+        Dim stopwatch As System.Diagnostics.Stopwatch = System.Diagnostics.Stopwatch.StartNew()
+
+        AddHandler startupTimer.Tick,
+            Sub(sender As Object, e As EventArgs)
+                If app.MainForm.Visible Then
+                    started = True
+                    startupTimer.Stop()
+                    app.MainForm.Close()
+                ElseIf stopwatch.Elapsed >= TimeSpan.FromSeconds(15) Then
+                    startupTimer.Stop()
+                    app.MainForm.Close()
+                End If
+            End Sub
+
+        startupTimer.Start()
+        System.Windows.Forms.Application.Run(app)
+        startupTimer.Dispose()
+
+        Assert.IsTrue(started, "The app's main window did not become visible before the timeout.")
+    End Sub
+
+    ''' <summary>
     ''' Tests that a startup file passed to the Wave app is imported after the main window starts
     ''' </summary>
     <STATestMethod>
