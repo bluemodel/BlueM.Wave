@@ -23,6 +23,8 @@ Public Class App
 
     'Model
     Private _wave As Wave
+    'List of files to import at startup (e.g. from commandline arguments)
+    Private _startupFiles As List(Of String)
 
     'Controllers
     Private WithEvents _waveController As WaveController
@@ -41,13 +43,27 @@ Public Class App
     ''' </summary>
     ''' <param name="wave">the Wave instance to use as the model</param>
     Public Sub New(wave As Wave)
+        Me.New(wave, New List(Of String)())
+    End Sub
+
+    ''' <summary>
+    ''' Instantiates a new Wave app with startup files to import after the main window is shown
+    ''' </summary>
+    ''' <param name="wave">the Wave instance to use as the model</param>
+    ''' <param name="startupFiles">file paths to import at startup</param>
+    Public Sub New(wave As Wave, startupFiles As List(Of String))
         MyBase.New()
         _wave = wave
+        _startupFiles = startupFiles
         _waveController = New WaveController(New MainWindow(), _wave)
         _propController = New PropertiesController(New PropertiesWindow(), _wave)
         _valuesController = New ValuesController(New ValuesWindow(), _wave)
 
         MyBase.MainForm = _waveController.View
+
+        If _startupFiles IsNot Nothing AndAlso _startupFiles.Count > 0 Then
+            AddHandler MyBase.MainForm.Shown, AddressOf MainWindow_Shown
+        End If
 
         showMainWindow()
     End Sub
@@ -81,6 +97,29 @@ Public Class App
     ''' </summary>
     Friend Sub showValuesWindow() Handles _waveController.TimeseriesValues_Clicked
         _valuesController.ShowView()
+    End Sub
+
+    ''' <summary>
+    ''' Handles the Shown event of the main window
+    ''' Removes the event handler and starts importing files passed as commandline arguments asynchronously
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    Private Sub MainWindow_Shown(sender As Object, e As EventArgs)
+        RemoveHandler MyBase.MainForm.Shown, AddressOf MainWindow_Shown
+        'Import files passed as commandline arguments after the main window is shown
+        MyBase.MainForm.BeginInvoke(New Action(AddressOf ImportStartupFiles))
+    End Sub
+
+    ''' <summary>
+    ''' Imports files passed as commandline arguments
+    ''' This is done asynchronously to avoid blocking the UI thread during startup
+    ''' </summary>
+    Private Async Sub ImportStartupFiles()
+        For Each file As String In _startupFiles
+            Log.AddLogEntry(Log.Levels.debug, "Importing file from commandline argument: " & file)
+            Await _wave.Import_File(file)
+        Next
     End Sub
 
 End Class
