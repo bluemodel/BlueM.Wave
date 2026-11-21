@@ -3257,85 +3257,65 @@ Friend Class WaveController
             'Clear overview chart
             Call View.TChart2.Series.Clear()
 
-            'Abfrage für Reihenimport
-            If (View.TChart1.Series.Count() > 0) Then
-                result = MessageBox.Show(View, "Also import time series?", "Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+            Dim nSeries As Integer = 0
 
-                Select Case result
+            'Import series loaded from TEN file into the model
+            For Each series As Steema.TeeChart.Styles.Series In View.TChart1.Series
 
-                    Case DialogResult.Yes
-                        'Reihen aus TEN-Datei sollen importiert werden
+                'Nur Zeitreihen behandeln
+                If (series.XValues.DateTime) Then
 
-                        Dim nSeries As Integer = 0
+                    'Zeitreihe aus dem importierten Diagramm nach intern übertragen
+                    Log.AddLogEntry(Log.Levels.info, $"Importing series '{series.Title}' from TEN file...")
+                    reihe = New TimeSeries(series.Title)
+                    For i = 0 To series.Count - 1
+                        reihe.AddNode(DateTime.FromOADate(series.XValues(i)), series.YValues(i))
+                    Next
+                    'Determine total number of NaN-values and write to log
+                    If reihe.NaNCount > 0 Then
+                        Log.AddLogEntry(Log.Levels.warning, $"Series '{reihe.Title}' contains {reihe.NaNCount} NaN values!")
+                    End If
+                    'Get the series' unit from the axis title
+                    Dim axistitle As String = ""
+                    Select Case series.VertAxis
+                        Case Steema.TeeChart.Styles.VerticalAxis.Left
+                            axistitle = View.TChart1.Axes.Left.Title.Text
+                        Case Steema.TeeChart.Styles.VerticalAxis.Right
+                            axistitle = View.TChart1.Axes.Right.Title.Text
+                        Case Steema.TeeChart.Styles.VerticalAxis.Custom
+                            axistitle = series.CustomVertAxis.Title.Text
+                    End Select
+                    reihe.Unit = AxisWrapper.parseUnit(axistitle)
 
-                        'Alle Reihen durchlaufen
-                        For Each series As Steema.TeeChart.Styles.Series In View.TChart1.Series
+                    'Save datasource
+                    reihe.DataSource = New TimeSeriesDataSource(FileName, series.Title)
 
-                            'Nur Zeitreihen behandeln
-                            If (series.XValues.DateTime) Then
+                    'Add the series to the model while temporarily disabling event handling
+                    RemoveHandler _model.SeriesAdded, AddressOf SeriesAdded
+                    Call _model.Import_Series(reihe)
+                    AddHandler _model.SeriesAdded, AddressOf SeriesAdded
 
-                                'Zeitreihe aus dem importierten Diagramm nach intern übertragen
-                                Log.AddLogEntry(Log.Levels.info, $"Importing series '{series.Title}' from TEN file...")
-                                reihe = New TimeSeries(series.Title)
-                                For i = 0 To series.Count - 1
-                                    reihe.AddNode(DateTime.FromOADate(series.XValues(i)), series.YValues(i))
-                                Next
-                                'Determine total number of NaN-values and write to log
-                                If reihe.NaNCount > 0 Then
-                                    Log.AddLogEntry(Log.Levels.warning, $"Series '{reihe.Title}' contains {reihe.NaNCount} NaN values!")
-                                End If
-                                'Get the series' unit from the axis title
-                                Dim axistitle As String = ""
-                                Select Case series.VertAxis
-                                    Case Steema.TeeChart.Styles.VerticalAxis.Left
-                                        axistitle = View.TChart1.Axes.Left.Title.Text
-                                    Case Steema.TeeChart.Styles.VerticalAxis.Right
-                                        axistitle = View.TChart1.Axes.Right.Title.Text
-                                    Case Steema.TeeChart.Styles.VerticalAxis.Custom
-                                        axistitle = series.CustomVertAxis.Title.Text
-                                End Select
-                                reihe.Unit = AxisWrapper.parseUnit(axistitle)
+                    'after import in the model, the title might have been changed,
+                    'then we need to edit the title in the chart as well
+                    If reihe.Title <> series.Title Then
+                        series.Title = reihe.Title
+                    End If
 
-                                'Save datasource
-                                reihe.DataSource = New TimeSeriesDataSource(FileName, series.Title)
+                    'Store the time series id in the Tag property
+                    series.Tag = reihe.Id
 
-                                'Add the series to the model while temporarily disabling event handling
-                                RemoveHandler _model.SeriesAdded, AddressOf SeriesAdded
-                                Call _model.Import_Series(reihe)
-                                AddHandler _model.SeriesAdded, AddressOf SeriesAdded
+                    'Add series to overview
+                    Call Me.AddSeriesToOverview(reihe)
 
-                                'after import in the model, the title might have been changed,
-                                'then we need to edit the title in the chart as well
-                                If reihe.Title <> series.Title Then
-                                    series.Title = reihe.Title
-                                End If
+                    nSeries += 1
 
-                                'Store the time series id in the Tag property
-                                series.Tag = reihe.Id
+                End If
+            Next
 
-                                'Add series to overview
-                                Call Me.AddSeriesToOverview(reihe)
+            Log.AddLogEntry(Levels.info, $"Imported {nSeries} time series from TEN file.")
 
-                                nSeries += 1
-
-                            End If
-                        Next
-
-                        Log.AddLogEntry(Levels.info, $"Imported {nSeries} time series from TEN file.")
-
-                        'Update window title
-                        View.Text = "BlueM.Wave - " & FileName
-
-                    Case DialogResult.No
-                        'Reihen aus TEN-Datei sollen nicht importiert werden
-
-                        'Alle Reihen aus den Diagrammen löschen (wurden bei TEN-Import automatisch mit eingeladen)
-                        View.TChart1.Series.RemoveAllSeries()
-                        View.TChart2.Series.RemoveAllSeries()
-
-                End Select
-
-            End If
+            'Update window title
+            View.Text = "BlueM.Wave - " & FileName
 
             'extract units from axis titles and store as tags
             View.TChart1.Axes.Left.Tag = AxisWrapper.parseUnit(View.TChart1.Axes.Left.TitleOrName)

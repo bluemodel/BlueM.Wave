@@ -75,9 +75,6 @@ Public Class TestApp
                 ElseIf stopwatch.Elapsed >= TimeSpan.FromSeconds(15) Then
                     startupTimer.Stop()
                     app.MainForm.Close()
-                Else
-                    'Retry until the TEN loader's confirmation dialog is active.
-                    System.Windows.Forms.SendKeys.SendWait("{ENTER}")
                 End If
             End Sub
 

@@ -11,6 +11,7 @@ FIXED:
 * Fixed legend and title overlap in AnnualRecurrenceProbability result chart
 
 CHANGED:
+* Loading a TEN file no longer asks for confirmation for importing time series
 * Updated TeeChart to v6.2026.11.11
 
 Version 3.1.0
