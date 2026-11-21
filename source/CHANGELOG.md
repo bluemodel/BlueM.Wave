@@ -11,7 +11,7 @@ FIXED:
 * Fixed legend and title overlap in AnnualRecurrenceProbability result chart
 
 CHANGED:
-* Updated TeeChart to v6.2026.10.12
+* Updated TeeChart to v6.2026.11.11
 
 Version 3.1.0
 -------------
